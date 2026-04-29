@@ -38,6 +38,15 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 3. `index.html`에 웹 페이지용 내용을 작성합니다.
 4. `data/newsletters.json`에 새 항목을 추가합니다.
 
+## Newsletter Sections
+
+| 카테고리 | 역할 |
+|---|---|
+| 이번 주 3줄 브리핑 | 핵심만 빠르게 요약 |
+| AOSP Camera Watch | Android Camera 최신 흐름 |
+| Tech Trend Radar | Camera / AI / Mobile / C++ 기술 동향 |
+| 이번 주 C++ / AI 실전 팁 | 개발자가 바로 흥미를 느낄 실전 팁 |
+
 ```json
 {
   "date": "YYYY-MM-DD",

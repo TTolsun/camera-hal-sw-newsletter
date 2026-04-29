@@ -43,83 +43,83 @@ jobs:
               return;
             }
 
-            const body = `
-            ## Goal
-
-            이번 주 Camera HAL SW Newsletter를 작성합니다.
-
-            ## Output Files
-
-            - \`newsletters/${date}/newsletter.md\`
-            - \`newsletters/${date}/index.html\`
-            - \`data/newsletters.json\` 업데이트
-
-            ## Required Sections
-
-            - [ ] 이번 주 3줄 브리핑
-            - [ ] AOSP Camera Watch
-            - [ ] Tech Trend Radar
-            - [ ] 이번 주 C++ / AI 실전 팁
-            - [ ] 이번 주 Action Items
-            - [ ] References
-
-            ## Section Roles
-
-            | 카테고리 | 역할 |
-            |---|---|
-            | 이번 주 3줄 브리핑 | 핵심만 빠르게 요약 |
-            | AOSP Camera Watch | Android Camera 최신 흐름 |
-            | Tech Trend Radar | Camera / AI / Mobile / C++ 기술 동향 |
-            | 이번 주 C++ / AI 실전 팁 | 개발자가 바로 흥미를 느낄 실전 팁 |
-
-            ## Content Checklist
-
-            - [ ] 3줄 브리핑은 정확히 3줄로 작성했다.
-            - [ ] AOSP Camera Watch는 Android Camera / AOSP / CameraX / HAL 영향 중심으로 작성했다.
-            - [ ] Tech Trend Radar는 Camera / AI / Mobile / C++ 기술 동향 중 실무 영향이 있는 내용으로 작성했다.
-            - [ ] C++ / AI 실전 팁은 개발자가 바로 써먹을 수 있는 예시를 포함했다.
-            - [ ] 각 주요 소식에는 배경지식과 Camera HAL 관점의 의미가 포함되어 있다.
-            - [ ] Action Item은 팀에서 실제로 검토 가능한 형태로 작성했다.
-
-            ## Quality Checklist
-
-            - [ ] 공식 문서 또는 신뢰 가능한 출처가 포함되어 있다.
-            - [ ] 과장된 표현이 없다.
-            - [ ] 추측과 사실이 구분되어 있다.
-            - [ ] 10분 안에 설명 가능한 분량이다.
-            - [ ] HTML 페이지에서 Archive 링크가 정상 동작한다.
-            - [ ] MD 원본 링크가 정상 동작한다.
-
-            ## Suggested News Sources
-
-            ### AOSP Camera Watch
-
-            - Android Developers Blog
-            - Android CameraX release notes
-            - AOSP / Android platform release notes
-            - Google Issue Tracker 또는 Android Camera 관련 공개 이슈
-
-            ### Tech Trend Radar
-
-            - Mobile camera / computational photography 기술 동향
-            - On-device AI / NPU / ISP 관련 동향
-            - LLVM / Clang / GCC release notes
-            - ISO C++ Blog 또는 C++ tooling 관련 글
-            - AI Agent / code review / test generation 관련 업데이트
-
-            ### C++ / AI Practical Tip
-
-            - C++ lifetime / lambda / std::function / concurrency / test pattern
-            - AI prompt template for log analysis, code review, TC generation, documentation
-
-            ## PR Rule
-
-            PR 제목은 아래 형식을 사용합니다.
-
-            \`\`\`
-            [Newsletter] Add Camera HAL SW Newsletter - ${date}
-            \`\`\`
-            `;
+            const body = [
+              '## Goal',
+              '',
+              '이번 주 Camera HAL SW Newsletter를 작성합니다.',
+              '',
+              '## Output Files',
+              '',
+              `- \`newsletters/${date}/newsletter.md\``,
+              `- \`newsletters/${date}/index.html\``,
+              '- `data/newsletters.json` 업데이트',
+              '',
+              '## Required Sections',
+              '',
+              '- [ ] 이번 주 3줄 브리핑',
+              '- [ ] AOSP Camera Watch',
+              '- [ ] Tech Trend Radar',
+              '- [ ] 이번 주 C++ / AI 실전 팁',
+              '- [ ] 이번 주 Action Items',
+              '- [ ] References',
+              '',
+              '## Section Roles',
+              '',
+              '| 카테고리 | 역할 |',
+              '|---|---|',
+              '| 이번 주 3줄 브리핑 | 핵심만 빠르게 요약 |',
+              '| AOSP Camera Watch | Android Camera 최신 흐름 |',
+              '| Tech Trend Radar | Camera / AI / Mobile / C++ 기술 동향 |',
+              '| 이번 주 C++ / AI 실전 팁 | 개발자가 바로 흥미를 느낄 실전 팁 |',
+              '',
+              '## Content Checklist',
+              '',
+              '- [ ] 3줄 브리핑은 정확히 3줄로 작성했다.',
+              '- [ ] AOSP Camera Watch는 Android Camera / AOSP / CameraX / HAL 영향 중심으로 작성했다.',
+              '- [ ] Tech Trend Radar는 Camera / AI / Mobile / C++ 기술 동향 중 실무 영향이 있는 내용으로 작성했다.',
+              '- [ ] C++ / AI 실전 팁은 개발자가 바로 써먹을 수 있는 예시를 포함했다.',
+              '- [ ] 각 주요 소식에는 배경지식과 Camera HAL 관점의 의미가 포함되어 있다.',
+              '- [ ] Action Item은 팀에서 실제로 검토 가능한 형태로 작성했다.',
+              '',
+              '## Quality Checklist',
+              '',
+              '- [ ] 공식 문서 또는 신뢰 가능한 출처가 포함되어 있다.',
+              '- [ ] 과장된 표현이 없다.',
+              '- [ ] 추측과 사실이 구분되어 있다.',
+              '- [ ] 10분 안에 설명 가능한 분량이다.',
+              '- [ ] HTML 페이지에서 Archive 링크가 정상 동작한다.',
+              '- [ ] MD 원본 링크가 정상 동작한다.',
+              '',
+              '## Suggested News Sources',
+              '',
+              '### AOSP Camera Watch',
+              '',
+              '- Android Developers Blog',
+              '- Android CameraX release notes',
+              '- AOSP / Android platform release notes',
+              '- Google Issue Tracker 또는 Android Camera 관련 공개 이슈',
+              '',
+              '### Tech Trend Radar',
+              '',
+              '- Mobile camera / computational photography 기술 동향',
+              '- On-device AI / NPU / ISP 관련 동향',
+              '- LLVM / Clang / GCC release notes',
+              '- ISO C++ Blog 또는 C++ tooling 관련 글',
+              '- AI Agent / code review / test generation 관련 업데이트',
+              '',
+              '### C++ / AI Practical Tip',
+              '',
+              '- C++ lifetime / lambda / std::function / concurrency / test pattern',
+              '- AI prompt template for log analysis, code review, TC generation, documentation',
+              '',
+              '## PR Rule',
+              '',
+              'PR 제목은 아래 형식을 사용합니다.',
+              '',
+              '```',
+              `[Newsletter] Add Camera HAL SW Newsletter - ${date}`,
+              '```'
+            ].join('\n');
 
             await github.rest.issues.create({
               owner: context.repo.owner,
