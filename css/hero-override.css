@@ -1,0 +1,134 @@
+/* Hero override: camera dashboard illustration instead of mascot-like character */
+:root {
+  --green: #2f9b56;
+  --green-soft: #c8dbc9;
+}
+
+.browser-screen {
+  background: linear-gradient(180deg, #d5e6d7, #bdd8c1);
+}
+
+.android-head,
+.antenna,
+.eye,
+.globe,
+.cursor {
+  display: none !important;
+}
+
+.camera-lens {
+  position: absolute;
+  left: 78px;
+  top: 22px;
+  width: 114px;
+  height: 114px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #63c16d, #2f8f4a 60%, #1f6033 100%);
+  display: grid;
+  place-items: center;
+  box-shadow:
+    inset 0 12px 20px rgba(255, 255, 255, 0.18),
+    0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+.lens-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.32);
+}
+
+.ring-1 {
+  width: 84px;
+  height: 84px;
+}
+
+.ring-2 {
+  width: 56px;
+  height: 56px;
+}
+
+.lens-core {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #16331f;
+  box-shadow: inset 0 4px 8px rgba(255, 255, 255, 0.12);
+}
+
+.sensor-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--green);
+  opacity: 0.92;
+}
+
+.sensor-a {
+  left: 36px;
+  top: 34px;
+}
+
+.sensor-b {
+  left: 28px;
+  top: 62px;
+}
+
+.sensor-c {
+  left: 38px;
+  top: 90px;
+}
+
+.mini-panel {
+  position: absolute;
+}
+
+.mini-node {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  box-shadow: 0 0 0 6px rgba(61, 130, 234, 0.12);
+}
+
+.node-a {
+  left: 30px;
+  top: 38px;
+}
+
+.node-b {
+  left: 86px;
+  top: 28px;
+  background: var(--green);
+  box-shadow: 0 0 0 6px rgba(47, 155, 86, 0.12);
+}
+
+.node-c {
+  left: 138px;
+  top: 62px;
+  background: var(--lime);
+  box-shadow: 0 0 0 6px rgba(214, 255, 0, 0.10);
+}
+
+.mini-link {
+  position: absolute;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  transform-origin: left center;
+}
+
+.link-ab {
+  left: 46px;
+  top: 45px;
+  width: 48px;
+  transform: rotate(-12deg);
+}
+
+.link-bc {
+  left: 100px;
+  top: 46px;
+  width: 50px;
+  transform: rotate(28deg);
+}
