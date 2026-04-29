@@ -56,22 +56,30 @@ jobs:
 
             ## Required Sections
 
-            - [ ] 이번 주 핵심 요약
-            - [ ] Camera HAL / Android Camera 소식
-            - [ ] C++ / Native SW 소식
-            - [ ] AI / Developer Productivity 소식
-            - [ ] Camera HAL 관점 영향 분석
-            - [ ] Action Items
+            - [ ] 이번 주 3줄 브리핑
+            - [ ] AOSP Camera Watch
+            - [ ] Tech Trend Radar
+            - [ ] 이번 주 C++ / AI 실전 팁
+            - [ ] 이번 주 Action Items
             - [ ] References
+
+            ## Section Roles
+
+            | 카테고리 | 역할 |
+            |---|---|
+            | 이번 주 3줄 브리핑 | 핵심만 빠르게 요약 |
+            | AOSP Camera Watch | Android Camera 최신 흐름 |
+            | Tech Trend Radar | Camera / AI / Mobile / C++ 기술 동향 |
+            | 이번 주 C++ / AI 실전 팁 | 개발자가 바로 흥미를 느낄 실전 팁 |
 
             ## Content Checklist
 
-            - [ ] Camera HAL / Android Camera 관련 소식이 최소 1개 이상 포함되어 있다.
-            - [ ] C++ / Native SW 관련 소식이 최소 1개 이상 포함되어 있다.
-            - [ ] AI 관련 소식이 최소 1개 이상 포함되어 있다.
-            - [ ] 각 소식에 배경지식이 포함되어 있다.
-            - [ ] 각 소식에 Camera HAL 관점의 의미가 포함되어 있다.
-            - [ ] 팀에서 검토할 Action Item이 포함되어 있다.
+            - [ ] 3줄 브리핑은 정확히 3줄로 작성했다.
+            - [ ] AOSP Camera Watch는 Android Camera / AOSP / CameraX / HAL 영향 중심으로 작성했다.
+            - [ ] Tech Trend Radar는 Camera / AI / Mobile / C++ 기술 동향 중 실무 영향이 있는 내용으로 작성했다.
+            - [ ] C++ / AI 실전 팁은 개발자가 바로 써먹을 수 있는 예시를 포함했다.
+            - [ ] 각 주요 소식에는 배경지식과 Camera HAL 관점의 의미가 포함되어 있다.
+            - [ ] Action Item은 팀에서 실제로 검토 가능한 형태로 작성했다.
 
             ## Quality Checklist
 
@@ -84,25 +92,25 @@ jobs:
 
             ## Suggested News Sources
 
-            ### Android / Camera
+            ### AOSP Camera Watch
 
             - Android Developers Blog
             - Android CameraX release notes
             - AOSP / Android platform release notes
             - Google Issue Tracker 또는 Android Camera 관련 공개 이슈
 
-            ### C++ / Native SW
+            ### Tech Trend Radar
 
-            - ISO C++ Blog
-            - LLVM / Clang release notes
-            - GCC release notes
-            - C++ Core Guidelines 관련 변경 또는 해설
+            - Mobile camera / computational photography 기술 동향
+            - On-device AI / NPU / ISP 관련 동향
+            - LLVM / Clang / GCC release notes
+            - ISO C++ Blog 또는 C++ tooling 관련 글
+            - AI Agent / code review / test generation 관련 업데이트
 
-            ### AI / Developer Productivity
+            ### C++ / AI Practical Tip
 
-            - OpenAI / Anthropic / Google AI 개발 도구 소식
-            - GitHub Copilot / Code Review / Agent 관련 업데이트
-            - AI 기반 테스트 생성, 로그 분석, 코드 리뷰 자동화 사례
+            - C++ lifetime / lambda / std::function / concurrency / test pattern
+            - AI prompt template for log analysis, code review, TC generation, documentation
 
             ## PR Rule
 
