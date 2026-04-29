@@ -1,0 +1,10 @@
+[
+  {
+    "date": "2026-04-30",
+    "title": "Camera HAL SW Newsletter - 2026-04-30",
+    "summary": "첫 뉴스레터 샘플입니다. Camera HAL, C++, AI 관련 소식을 매주 정리합니다.",
+    "html": "newsletters/2026-04-30/index.html",
+    "md": "newsletters/2026-04-30/newsletter.md",
+    "tags": ["Camera HAL", "Android", "C++", "AI"]
+  }
+]
