@@ -8,6 +8,7 @@ on:
 
 permissions:
   issues: write
+  contents: read
 
 jobs:
   create-newsletter-issue:
@@ -41,6 +42,27 @@ jobs:
             if (duplicated) {
               core.info(`Issue already exists: ${title}`);
               return;
+            }
+
+            for (const label of ['newsletter', 'weekly']) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label
+                });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label,
+                  color: label === 'newsletter' ? '1b58b5' : '32ad57',
+                  description: label === 'newsletter'
+                    ? 'Camera HAL SW Newsletter'
+                    : 'Weekly recurring work'
+                });
+              }
             }
 
             const body = [
@@ -127,5 +149,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title,
-              body
+              body,
+              labels: ['newsletter', 'weekly'],
+              assignees: ['TTolsun']
             });

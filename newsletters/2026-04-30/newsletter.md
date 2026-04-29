@@ -150,6 +150,9 @@ Clang/LLVM은 C++ 코드를 컴파일하고 분석하는 도구 모음입니다.
 **상황**  
 Camera HAL 로그는 길고 복잡합니다. AI에게 그냥 "원인 찾아줘"라고 하면 그럴듯하지만 넓은 답이 나오기 쉽습니다. 초보자에게 필요한 것은 멋진 결론보다 "어느 로그 라인 때문에 그렇게 봤는지"입니다.
 
+**배경지식**  
+Camera HAL 디버깅은 request, result, metadata, stream, buffer lifecycle을 시간 순서로 맞춰보는 작업입니다. 로그가 길어질수록 사람이 처음부터 끝까지 읽기 어렵기 때문에, AI에게 먼저 timeline과 근거 log line을 정리하게 하면 문제 후보를 더 빨리 좁힐 수 있습니다.
+
 **나쁜 요청 예**
 
 ```text
@@ -186,6 +189,17 @@ Camera HAL 로그는 길고 복잡합니다. AI에게 그냥 "원인 찾아줘"�
 - buffer가 언제 들어오고 언제 release되는지 표로 정리하게 합니다.
 - metadata key 변경 전후를 비교하게 합니다.
 - 최종 수정 전에 추가로 켤 log tag와 재현 조건을 먼저 정하게 합니다.
+
+**Camera HAL에서 확인해볼 아이템**
+
+- 적용할 로그/코드 경로: camera service log, provider log, HAL request/result 처리 경로
+- 확인할 metadata 또는 buffer 흐름: frame number별 request/result metadata, acquire/process/release 순서
+- 다음 실험: 추가 log tag 활성화, 같은 frame 재현, stream 조합 변경
+
+**출처**
+
+- AOSP Camera HAL: https://source.android.com/docs/core/camera/camera3
+- Perfetto tracing documentation: https://perfetto.dev/docs/
 
 ---
 

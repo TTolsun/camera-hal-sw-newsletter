@@ -170,12 +170,26 @@
         <span class="issue-kicker">C++ / AI TIP</span>
         <h3>AI에게 Camera HAL 로그를 맡길 때는 증거 표를 요구하자</h3>
         <p>Camera HAL 로그는 길고 복잡합니다. AI에게 그냥 "원인 찾아줘"라고 하면 넓은 답이 나오기 쉽습니다. 초보자에게 필요한 것은 멋진 결론보다 어느 로그 라인 때문에 그렇게 봤는지입니다.</p>
+        <p><strong>배경지식</strong> Camera HAL 디버깅은 request, result, metadata, stream, buffer lifecycle을 시간 순서로 맞춰보는 작업입니다. AI에게 먼저 timeline과 근거 log line을 정리하게 하면 문제 후보를 더 빨리 좁힐 수 있습니다.</p>
         <pre><code>출력 형식:
 1. Timeline 표: timestamp / thread / event / 근거 log line
 2. 의심 지점 표: 의심 지점 / 관련 module / 근거 / 반증할 방법
 3. frame number 기준 request와 result 연결
 4. buffer lifecycle: acquire / process / release / error 경로
 5. 다음에 해볼 실험 3개</code></pre>
+        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
+        <ul>
+          <li>적용할 로그/코드 경로: camera service log, provider log, HAL request/result 처리 경로</li>
+          <li>확인할 metadata 또는 buffer 흐름: frame number별 request/result metadata, acquire/process/release 순서</li>
+          <li>다음 실험: 추가 log tag 활성화, 같은 frame 재현, stream 조합 변경</li>
+        </ul>
+        <div class="source-list">
+          <strong>Sources</strong>
+          <ul>
+            <li><a href="https://source.android.com/docs/core/camera/camera3">AOSP Camera HAL</a></li>
+            <li><a href="https://perfetto.dev/docs/">Perfetto tracing documentation</a></li>
+          </ul>
+        </div>
       </div>
     </section>
 

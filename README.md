@@ -54,6 +54,23 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 4. `data/newsletters.json`에 새 항목을 추가합니다.
 5. 각 뉴스 항목에 `Sources`를 붙이고, 마지막 `References`에 전체 링크를 모읍니다.
 
+## Weekly Operation
+
+```powershell
+$DATE = "YYYY-MM-DD"
+New-Item -ItemType Directory -Force "newsletters/$DATE"
+Copy-Item templates/newsletter.md "newsletters/$DATE/newsletter.md"
+Copy-Item templates/newsletter.html "newsletters/$DATE/index.html"
+```
+
+1. GitHub Issue의 checklist 기준으로 뉴스 후보를 수집합니다.
+2. `docs/sources.md`를 기준으로 공식 문서와 release note를 먼저 확인합니다.
+3. `newsletter.md`를 먼저 작성합니다.
+4. `index.html`을 작성합니다.
+5. `data/newsletters.json`에 항목을 추가합니다.
+6. PR을 생성합니다.
+7. `Validate Site` workflow 결과를 확인합니다.
+
 ## Newsletter Sections
 
 | 카테고리 | 역할 |

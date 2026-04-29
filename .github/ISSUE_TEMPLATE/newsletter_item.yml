@@ -1,0 +1,48 @@
+name: Newsletter Item 제안
+description: Camera HAL SW Newsletter에 넣을 만한 소식을 제안합니다.
+title: "[Newsletter Item] "
+labels:
+  - newsletter
+  - content
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Source Link
+      description: 공식 문서, release note, 기술 글 링크를 입력하세요.
+      placeholder: https://developer.android.com/...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - AOSP Camera Watch
+        - Tech Trend Radar
+        - 이번 주 C++ / AI 실전 팁
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: 왜 Camera HAL 개발자가 봐야 하나요?
+      description: HAL, Android Camera, C++, AI 개발 생산성과 연결되는 이유를 적어주세요.
+      placeholder: 이 변경이 request/result, metadata, stream, buffer lifecycle, 테스트, 코드 리뷰 등에 어떤 영향을 주는지 적어주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: hal_checks
+    attributes:
+      label: Camera HAL에서 확인해볼 아이템
+      description: 가능하면 실제 확인 가능한 항목으로 적어주세요.
+      placeholder: |
+        - Capability:
+        - Request/result:
+        - Stream/buffer:
+        - Metadata:
+    validations:
+      required: false
