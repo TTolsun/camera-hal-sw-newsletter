@@ -20,7 +20,7 @@
       </div>
     </header>
 
-    <section class="section">
+    <section class="section issue-briefing">
       <h2>1. 이번 주 3줄 브리핑</h2>
       <div class="card">
         <ul>
@@ -33,7 +33,8 @@
 
     <section class="section">
       <h2>2. AOSP Camera Watch</h2>
-      <div class="card">
+      <div class="card issue-section aosp">
+        <span class="issue-kicker">AOSP CAMERA WATCH</span>
         <h3>Android 16 Camera2: 앱이 카메라를 더 세밀하게 제어한다</h3>
         <p><strong>배경지식</strong> 카메라 앱은 Camera2 API로 요청을 보냅니다. 예를 들어 "밝기는 자동으로 맞추되 ISO는 내가 정할게", "화이트밸런스를 이렇게 맞춰줘" 같은 요청입니다. Camera HAL은 이 요청을 실제 센서, ISP, 드라이버 동작으로 연결하는 계층입니다.</p>
         <ul>
@@ -48,6 +49,13 @@
           <li>Preview/capture 일관성: 색온도 변경 시 preview와 capture 결과가 같은 방향으로 변하는지 비교합니다.</li>
           <li>Scene detection: 조도 경계에서 night mode indicator가 안정적인지 확인합니다.</li>
         </ul>
+        <div class="source-list">
+          <strong>Sources</strong>
+          <ul>
+            <li><a href="https://developer.android.com/about/versions/16/features">Android 16 Features and APIs</a></li>
+            <li><a href="https://developer.android.com/about/versions/16/summary">Android 16 feature summary</a></li>
+          </ul>
+        </div>
 
         <h3>CameraX 1.6: 앱에서 카메라 기능 조합을 더 쉽게 묻는다</h3>
         <p><strong>배경지식</strong> CameraX는 앱 개발자가 Camera2를 직접 다루지 않고도 카메라 기능을 쓰게 해주는 Android 라이브러리입니다. CameraX가 좋아질수록 앱은 "HDR과 손떨림 보정과 동영상을 같이 쓸 수 있어?" 같은 질문을 더 쉽게 할 수 있습니다.</p>
@@ -63,12 +71,19 @@
           <li>Stream 조합: preview stabilization + video capture + image capture를 같이 켠 뒤 에러 로그를 확인합니다.</li>
           <li>Camera id lifecycle: 외장/가상/접이식 카메라처럼 camera id가 바뀌는 상황을 확인합니다.</li>
         </ul>
+        <div class="source-list">
+          <strong>Sources</strong>
+          <ul>
+            <li><a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX release notes</a></li>
+          </ul>
+        </div>
       </div>
     </section>
 
     <section class="section">
       <h2>3. Tech Trend Radar</h2>
-      <div class="card">
+      <div class="card issue-section trend">
+        <span class="issue-kicker">TECH TREND RADAR</span>
         <h3>AI agent 도구: 어떻게 운영할지가 중요해진다</h3>
         <p><strong>배경지식</strong> AI 도구가 단순히 질문에 답하는 수준을 넘어, 코드 리뷰를 하거나 로그를 분석하거나 작업을 대신 수행하는 방향으로 가고 있습니다. 이제 중요한 질문은 "AI가 똑똑한가?"가 아니라 "팀에서 어떻게 안전하게 쓰고, 비용과 품질을 어떻게 볼 것인가?"입니다.</p>
         <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
@@ -78,6 +93,14 @@
           <li>코드 리뷰: 기준 문서를 먼저 준비합니다. 기준 없이 맡기면 스타일 지적만 많아질 수 있습니다.</li>
           <li>비용/사용량: AI agent를 CI에 붙이면 Actions minutes, 호출량, 리뷰 품질을 같이 봅니다.</li>
         </ul>
+        <div class="source-list">
+          <strong>Sources</strong>
+          <ul>
+            <li><a href="https://github.blog/changelog/2026-04-23-copilot-cloud-agent-fields-added-to-usage-metrics/">GitHub Copilot cloud agent metrics</a></li>
+            <li><a href="https://github.blog/changelog/2026-04-27-github-copilot-code-review-will-start-consuming-github-actions-minutes-on-june-1-2026/">GitHub Copilot code review billing notice</a></li>
+            <li><a href="https://openai.com/index/open-source-codex-orchestration-symphony/">OpenAI Symphony</a></li>
+          </ul>
+        </div>
 
         <h3>Clang/LLVM 21: C++ 코드를 더 잘 들여다보는 도구들</h3>
         <p><strong>배경지식</strong> Clang/LLVM은 C++ 코드를 컴파일하고 분석하는 도구 모음입니다. Camera HAL처럼 C++ 코드가 많은 프로젝트에서는 컴파일러 경고와 정적 분석 결과가 버그를 빨리 찾는 데 도움이 됩니다.</p>
@@ -88,12 +111,20 @@
           <li>Lifetime: static analyzer로 callback lifetime, stack address escape 후보를 확인합니다.</li>
           <li>CI 적용: 모든 경고를 한 번에 켜지 말고 module 단위로 warning baseline을 만듭니다.</li>
         </ul>
+        <div class="source-list">
+          <strong>Sources</strong>
+          <ul>
+            <li><a href="https://releases.llvm.org/21.1.0/docs/ReleaseNotes.html">LLVM 21.1.0 release notes</a></li>
+            <li><a href="https://releases.llvm.org/21.1.0/tools/clang/docs/ReleaseNotes.html">Clang 21.1.0 release notes</a></li>
+          </ul>
+        </div>
       </div>
     </section>
 
     <section class="section">
       <h2>4. 이번 주 C++ / AI 실전 팁</h2>
-      <div class="card">
+      <div class="card issue-section tip">
+        <span class="issue-kicker">C++ / AI TIP</span>
         <h3>AI에게 Camera HAL 로그를 맡길 때는 증거 표를 요구하자</h3>
         <p>Camera HAL 로그는 길고 복잡합니다. AI에게 그냥 "원인 찾아줘"라고 하면 넓은 답이 나오기 쉽습니다. 초보자에게 필요한 것은 멋진 결론보다 어느 로그 라인 때문에 그렇게 봤는지입니다.</p>
         <pre><code>출력 형식:
@@ -107,7 +138,7 @@
 
     <section class="section">
       <h2>이번 주 Action Items</h2>
-      <div class="card">
+      <div class="card action-card">
         <ul>
           <li>Android 16 카메라 관련 새 metadata key를 target device에서 dump합니다.</li>
           <li>CameraX sample app으로 지원 기능 조합을 확인하고 HAL capability와 비교합니다.</li>
@@ -135,7 +166,7 @@
 
     <section class="section">
       <h2>References</h2>
-      <div class="card">
+      <div class="card reference-list">
         <ul>
           <li><a href="https://developer.android.com/about/versions/16/features">Android 16 Features and APIs</a></li>
           <li><a href="https://developer.android.com/about/versions/16/summary">Android 16 feature summary</a></li>

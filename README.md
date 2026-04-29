@@ -12,6 +12,8 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 │   └── hero-override.css
 ├── data/
 │   └── newsletters.json
+├── docs/
+│   └── sources.md
 ├── newsletters/
 │   └── YYYY-MM-DD/
 │       ├── index.html
@@ -19,7 +21,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 └── .github/
     └── workflows/
         ├── weekly-newsletter-issue.yml
-        └── weekly-newsletter-update.yml
+        └── validate-site.yml
 ```
 
 ## Structure
@@ -28,10 +30,21 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `css/styles.css`: 사이트 공통 레이아웃, 카드, 버튼, 반응형 스타일입니다.
 - `css/hero-override.css`: 메인 hero 비주얼을 카메라/센서 대시보드 형태로 조정하는 스타일입니다.
 - `data/newsletters.json`: 메인 페이지가 사용하는 뉴스레터 메타데이터 목록입니다.
+- `docs/sources.md`: 매주 뉴스 후보를 찾을 때 확인할 공식 문서와 신뢰 가능한 출처 목록입니다.
 - `newsletters/YYYY-MM-DD/index.html`: 개별 뉴스레터 HTML 페이지입니다.
 - `newsletters/YYYY-MM-DD/newsletter.md`: 개별 뉴스레터 Markdown 원본입니다.
 - `.github/workflows/weekly-newsletter-issue.yml`: 매주 뉴스레터 작성 이슈를 생성하는 GitHub Actions 워크플로입니다.
-- `.github/workflows/weekly-newsletter-update.yml`: 매주 최신 뉴스레터 파일과 `data/newsletters.json`을 자동 갱신하는 워크플로입니다.
+- `.github/workflows/validate-site.yml`: `newsletters.json`, 링크 파일 존재 여부, TODO 문자열, 중복 날짜를 검증하는 워크플로입니다.
+
+## Current Operation Mode
+
+현재는 **수동 작성 + Issue 자동 생성 + 배포 전 검증** 방식으로 운영합니다.
+
+- 사용: `weekly-newsletter-issue.yml`
+- 사용: `validate-site.yml`
+- 사용하지 않음: main 브랜치에 TODO 뉴스레터를 자동 생성하는 workflow
+
+뉴스레터 파일을 자동으로 main에 생성하는 방식은 사용하지 않습니다. 자동화가 필요해지면 draft branch 또는 PR 생성 방식으로 바꿉니다.
 
 ## Add a Newsletter
 
@@ -39,6 +52,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 2. `newsletter.md`에 원본 내용을 작성합니다.
 3. `index.html`에 웹 페이지용 내용을 작성합니다.
 4. `data/newsletters.json`에 새 항목을 추가합니다.
+5. 각 뉴스 항목에 `Sources`를 붙이고, 마지막 `References`에 전체 링크를 모읍니다.
 
 ## Newsletter Sections
 

@@ -1,0 +1,137 @@
+name: Validate Site
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-site:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate newsletter metadata and content
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const root = process.cwd();
+          const dataPath = path.join(root, 'data', 'newsletters.json');
+          const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+          const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
+          const errors = [];
+
+          function fail(message) {
+            errors.push(message);
+          }
+
+          function read(filePath) {
+            return fs.readFileSync(filePath, 'utf8');
+          }
+
+          if (!fs.existsSync(dataPath)) {
+            fail('Missing data/newsletters.json');
+          }
+
+          let newsletters = [];
+          try {
+            newsletters = JSON.parse(read(dataPath));
+          } catch (error) {
+            fail(`Invalid JSON in data/newsletters.json: ${error.message}`);
+          }
+
+          if (!Array.isArray(newsletters)) {
+            fail('data/newsletters.json must contain an array');
+            newsletters = [];
+          }
+
+          const seenDates = new Set();
+          for (const [index, item] of newsletters.entries()) {
+            for (const field of requiredFields) {
+              if (!(field in item)) {
+                fail(`Newsletter entry ${index} is missing "${field}"`);
+              }
+            }
+
+            if (!datePattern.test(item.date || '')) {
+              fail(`Newsletter entry ${index} has invalid date: ${item.date}`);
+            }
+
+            if (seenDates.has(item.date)) {
+              fail(`Duplicate newsletter date: ${item.date}`);
+            }
+            seenDates.add(item.date);
+
+            if (!Array.isArray(item.tags)) {
+              fail(`Newsletter ${item.date} tags must be an array`);
+            }
+
+            for (const key of ['html', 'md']) {
+              const relPath = item[key];
+              const absPath = path.resolve(root, relPath || '');
+              if (!absPath.startsWith(root)) {
+                fail(`Newsletter ${item.date} ${key} path escapes repository: ${relPath}`);
+                continue;
+              }
+              if (!fs.existsSync(absPath)) {
+                fail(`Newsletter ${item.date} ${key} file does not exist: ${relPath}`);
+                continue;
+              }
+
+              const content = read(absPath);
+              if (/\bTODO\b/.test(content)) {
+                fail(`Published newsletter contains TODO: ${relPath}`);
+              }
+            }
+          }
+
+          const htmlFiles = ['index.html'];
+          for (const item of newsletters) {
+            if (item.html) htmlFiles.push(item.html);
+          }
+
+          for (const relPath of htmlFiles) {
+            const absPath = path.resolve(root, relPath);
+            if (!fs.existsSync(absPath)) continue;
+            const content = read(absPath);
+            const openAnchors = content.match(/<a\b/gi)?.length || 0;
+            const closeAnchors = content.match(/<\/a>/gi)?.length || 0;
+            if (openAnchors !== closeAnchors) {
+              fail(`Anchor tag mismatch in ${relPath}`);
+            }
+            if (/\bTODO\b/.test(content)) {
+              fail(`Published HTML contains TODO: ${relPath}`);
+            }
+          }
+
+          const repoTextFiles = [
+            ...htmlFiles,
+            ...newsletters.map(item => item.md).filter(Boolean),
+            'data/newsletters.json'
+          ];
+
+          for (const relPath of repoTextFiles) {
+            const absPath = path.resolve(root, relPath);
+            if (!fs.existsSync(absPath)) continue;
+            const content = read(absPath);
+            if (content.includes('weekly-newsletter-update.yml')) {
+              fail(`${relPath} references deleted weekly-newsletter-update.yml`);
+            }
+          }
+
+          if (errors.length > 0) {
+            console.error(errors.map(error => `- ${error}`).join('\n'));
+            process.exit(1);
+          }
+
+          console.log(`Validated ${newsletters.length} newsletter entries.`);
+          EOF
