@@ -29,10 +29,12 @@
           실무 관점으로 정리합니다. 단순 링크 모음이 아니라 HAL 개발자가
           바로 이해하고 적용할 수 있는 배경지식과 Action Item까지 남깁니다.
         </p>
+
         <div class="hero-actions">
           <a class="button primary" href="#latest">최신호 보기</a>
           <a class="button secondary" href="#archive">아카이브 보기</a>
         </div>
+
         <div class="hero-tags" aria-label="newsletter topics">
           <span>Android Camera</span>
           <span>Camera HAL</span>
@@ -42,28 +44,42 @@
       </div>
 
       <div class="hero-art" aria-hidden="true">
-        <div class="chat-bubble"><span></span><span></span><span></span></div>
-        <div class="browser-card">
+        <div class="chat-bubble">
+          <span></span><span></span><span></span>
+        </div>
+
+        <div class="browser-card dashboard-card">
           <div class="browser-top">
             <span></span><span></span>
           </div>
-          <div class="browser-screen">
-            <div class="android-head">
-              <span class="antenna left"></span>
-              <span class="antenna right"></span>
-              <span class="eye left"></span>
-              <span class="eye right"></span>
+
+          <div class="browser-screen lens-screen">
+            <div class="camera-lens">
+              <span class="lens-ring ring-1"></span>
+              <span class="lens-ring ring-2"></span>
+              <span class="lens-core"></span>
             </div>
+
+            <div class="sensor-dot sensor-a"></div>
+            <div class="sensor-dot sensor-b"></div>
+            <div class="sensor-dot sensor-c"></div>
           </div>
+
           <div class="browser-lines">
             <span></span><span></span><span></span><span></span>
           </div>
+
           <div class="scroll-pill"><span></span></div>
         </div>
-        <div class="mini-window">
-          <span class="globe"></span>
-          <span class="cursor"></span>
+
+        <div class="mini-window mini-panel">
+          <span class="mini-node node-a"></span>
+          <span class="mini-node node-b"></span>
+          <span class="mini-node node-c"></span>
+          <span class="mini-link link-ab"></span>
+          <span class="mini-link link-bc"></span>
         </div>
+
         <div class="play-tile"><span></span></div>
       </div>
     </header>
@@ -74,11 +90,13 @@
         <h2>HAL 관점 해석</h2>
         <p>request/result, metadata, stream, buffer lifecycle 영향 중심으로 정리합니다.</p>
       </article>
+
       <article class="stat-card">
         <span class="stat-mark">02</span>
         <h2>Native SW 품질</h2>
         <p>C++, 테스트, 정적 분석, 성능 이슈를 HAL 코드 품질 관점으로 연결합니다.</p>
       </article>
+
       <article class="stat-card">
         <span class="stat-mark">03</span>
         <h2>AI 적용 아이디어</h2>
@@ -88,9 +106,12 @@
 
     <section id="latest" class="section section-panel">
       <div class="section-heading">
-        <p class="eyebrow">LATEST</p>
-        <h2>Latest Newsletter</h2>
+        <div>
+          <p class="eyebrow">LATEST</p>
+          <h2>Latest Newsletter</h2>
+        </div>
       </div>
+
       <div id="latest-card" class="featured-card loading-card">
         <p>최신 뉴스레터를 불러오는 중입니다.</p>
       </div>
@@ -102,11 +123,13 @@
         <h2>Android Camera / HAL</h2>
         <p>Camera API, CameraX, AOSP, Compatibility 변경을 HAL 실무 영향 중심으로 해석합니다.</p>
       </article>
+
       <article class="topic-card green-card">
         <span class="topic-icon">C++</span>
         <h2>C++ / Native SW</h2>
         <p>성능, 안정성, 테스트, 정적 분석 관련 내용을 native camera stack 관점으로 정리합니다.</p>
       </article>
+
       <article class="topic-card dark-card">
         <span class="topic-icon">AI</span>
         <h2>AI Productivity</h2>
@@ -116,9 +139,12 @@
 
     <section id="archive" class="section section-panel">
       <div class="section-heading">
-        <p class="eyebrow">ARCHIVE</p>
-        <h2>Newsletter Archive</h2>
+        <div>
+          <p class="eyebrow">ARCHIVE</p>
+          <h2>Newsletter Archive</h2>
+        </div>
       </div>
+
       <div id="archive-list" class="archive-list">
         <p class="muted">Archive를 불러오는 중입니다.</p>
       </div>
