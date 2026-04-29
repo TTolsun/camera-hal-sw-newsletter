@@ -121,6 +121,7 @@ a {
 }
 
 .hero,
+.card,
 .stat-card,
 .section-panel,
 .topic-card,
@@ -157,6 +158,10 @@ a {
   align-items: center;
   min-height: 560px;
   padding: 56px;
+}
+
+.newsletter-hero {
+  padding: 48px;
 }
 
 .hero-copy {
@@ -342,53 +347,6 @@ h3 {
   background: var(--green-soft);
 }
 
-.android-head {
-  position: absolute;
-  left: 68px;
-  bottom: -72px;
-  width: 145px;
-  height: 145px;
-  border-radius: 50% 50% 44% 44%;
-  background: linear-gradient(180deg, #58be61, #37a94f);
-  box-shadow: inset 0 18px 20px rgba(255, 255, 255, 0.1);
-}
-
-.antenna {
-  position: absolute;
-  top: -38px;
-  width: 18px;
-  height: 56px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #58be61, #37a94f);
-}
-
-.antenna.left {
-  left: 28px;
-  transform: rotate(-28deg);
-}
-
-.antenna.right {
-  right: 28px;
-  transform: rotate(28deg);
-}
-
-.eye {
-  position: absolute;
-  top: 42px;
-  width: 18px;
-  height: 22px;
-  border-radius: 50%;
-  background: #05070b;
-}
-
-.eye.left {
-  left: 43px;
-}
-
-.eye.right {
-  right: 43px;
-}
-
 .browser-lines {
   position: absolute;
   left: 44px;
@@ -455,32 +413,6 @@ h3 {
   right: 26px;
 }
 
-.globe {
-  position: absolute;
-  left: 20px;
-  top: 26px;
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 20% 35%, var(--green) 0 14px, transparent 15px),
-    radial-gradient(circle at 74% 45%, var(--green) 0 18px, transparent 19px),
-    radial-gradient(circle at 48% 76%, var(--green) 0 16px, transparent 17px),
-    var(--blue);
-}
-
-.cursor {
-  position: absolute;
-  left: 92px;
-  top: 52px;
-  width: 0;
-  height: 0;
-  border-left: 25px solid var(--white-soft);
-  border-top: 16px solid transparent;
-  border-bottom: 16px solid transparent;
-  transform: rotate(48deg);
-}
-
 .play-tile {
   position: absolute;
   right: 0;
@@ -526,6 +458,7 @@ h3 {
 }
 
 .stat-card,
+.card,
 .topic-card,
 .section-panel,
 .about-card,
@@ -536,6 +469,7 @@ h3 {
 }
 
 .stat-card,
+.card,
 .topic-card,
 .about-card {
   padding: 24px;
@@ -562,6 +496,7 @@ h3 {
 }
 
 .stat-card p,
+.card p,
 .topic-card p,
 .about-card p,
 .featured-card p,
@@ -571,6 +506,20 @@ h3 {
 li {
   color: var(--muted);
   line-height: 1.7;
+}
+
+.card ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.card p:last-child,
+.card li:last-child {
+  margin-bottom: 0;
+}
+
+.newsletter-actions {
+  margin-top: 24px;
 }
 
 .section-panel {
@@ -705,6 +654,10 @@ li {
   .hero-visual {
     padding: 28px;
     border-radius: 28px;
+  }
+
+  .newsletter-hero {
+    padding: 28px;
   }
 
   h1 {

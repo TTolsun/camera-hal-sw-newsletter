@@ -176,6 +176,11 @@
       .map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`)
       .join('');
 
+    const renderIssueActions = (issue, primaryLabel = '뉴스레터 보기', mdLabel = 'MD 원본') => `
+      <a class="button primary" href="${escapeHtml(issue.html)}">${primaryLabel}</a>
+      <a class="button ghost" href="${escapeHtml(issue.md)}">${mdLabel}</a>
+    `;
+
     async function loadNewsletters() {
       const latestEl = document.getElementById('latest-card');
       const archiveEl = document.getElementById('archive-list');
@@ -187,6 +192,10 @@
         }
 
         const newsletters = await response.json();
+        if (!Array.isArray(newsletters)) {
+          throw new Error('newsletters.json must contain an array');
+        }
+
         newsletters.sort((a, b) => b.date.localeCompare(a.date));
 
         if (newsletters.length === 0) {
@@ -207,8 +216,7 @@
           </div>
           <div class="featured-actions">
             <span class="issue-date">${escapeHtml(latest.date)}</span>
-            <a class="button primary" href="${escapeHtml(latest.html)}">뉴스레터 보기</a>
-            <a class="button ghost" href="${escapeHtml(latest.md)}">MD 원본</a>
+            ${renderIssueActions(latest)}
           </div>
         `;
 
@@ -221,8 +229,7 @@
               <div class="tag-row">${renderTags(item.tags)}</div>
             </div>
             <div class="archive-actions">
-              <a class="button primary" href="${escapeHtml(item.html)}">보기</a>
-              <a class="button ghost" href="${escapeHtml(item.md)}">MD</a>
+              ${renderIssueActions(item, '보기', 'MD')}
             </div>
           </article>
         `).join('');

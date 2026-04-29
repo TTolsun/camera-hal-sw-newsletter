@@ -11,14 +11,6 @@
   border: 2px solid rgba(255, 255, 255, 0.16);
 }
 
-.android-head,
-.antenna,
-.eye,
-.globe,
-.cursor {
-  display: none !important;
-}
-
 .camera-lens {
   position: absolute;
   left: 74px;
