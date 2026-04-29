@@ -49,6 +49,8 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 | Tech Trend Radar | Camera / AI / Mobile / C++ 기술 동향 |
 | 이번 주 C++ / AI 실전 팁 | 개발자가 바로 흥미를 느낄 실전 팁 |
 
+각 주요 항목에는 `배경지식`과 `Camera HAL에서 확인해볼 아이템`을 반드시 포함합니다. 확인 아이템은 capability, request/result, stream/buffer, metadata, 로그/테스트 영향처럼 실제로 점검 가능한 단위로 나눕니다.
+
 ```json
 {
   "date": "YYYY-MM-DD",

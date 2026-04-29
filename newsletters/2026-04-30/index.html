@@ -35,20 +35,33 @@
       <h2>2. AOSP Camera Watch</h2>
       <div class="card">
         <h3>Android 16 Camera2: 앱이 카메라를 더 세밀하게 제어한다</h3>
-        <p><strong>쉽게 말하면</strong> Android 16에서는 카메라 앱이 "밝기는 자동으로 맞추되 ISO는 내가 정할게" 같은 요청을 더 잘 할 수 있습니다. 색온도와 색조도 더 직접적으로 조절할 수 있고, 어두운 장면인지 알려주는 기능도 추가됩니다.</p>
-        <p>Camera HAL은 앱의 요청을 실제 센서, ISP, 드라이버 동작으로 연결하는 계층입니다. 그래서 Android API가 바뀌면 HAL도 그 요청을 제대로 이해하고 결과를 다시 알려줘야 합니다.</p>
+        <p><strong>배경지식</strong> 카메라 앱은 Camera2 API로 요청을 보냅니다. 예를 들어 "밝기는 자동으로 맞추되 ISO는 내가 정할게", "화이트밸런스를 이렇게 맞춰줘" 같은 요청입니다. Camera HAL은 이 요청을 실제 센서, ISP, 드라이버 동작으로 연결하는 계층입니다.</p>
         <ul>
           <li>Hybrid AE는 완전 자동과 완전 수동 사이에 있는 노출 제어 방식입니다.</li>
           <li>색온도와 tint는 사진의 색감이 너무 노랗거나 파랗게 보이지 않게 맞추는 값입니다.</li>
           <li>Night mode indicator는 지금 장면이 야간 모드가 필요한 정도로 어두운지 알려주는 신호입니다.</li>
         </ul>
+        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
+        <ul>
+          <li>Capability: target device에서 어떤 Camera2 key를 지원하는지 dump합니다.</li>
+          <li>Request/result: ISO priority, exposure time priority 요청과 결과 metadata가 맞는지 봅니다.</li>
+          <li>Preview/capture 일관성: 색온도 변경 시 preview와 capture 결과가 같은 방향으로 변하는지 비교합니다.</li>
+          <li>Scene detection: 조도 경계에서 night mode indicator가 안정적인지 확인합니다.</li>
+        </ul>
 
         <h3>CameraX 1.6: 앱에서 카메라 기능 조합을 더 쉽게 묻는다</h3>
-        <p><strong>쉽게 말하면</strong> CameraX는 앱 개발자가 Camera2를 직접 다루지 않고도 카메라 기능을 쓰게 해주는 Android 라이브러리입니다. CameraX가 좋아질수록 앱은 "HDR과 손떨림 보정과 동영상을 같이 쓸 수 있어?" 같은 질문을 더 쉽게 할 수 있습니다.</p>
+        <p><strong>배경지식</strong> CameraX는 앱 개발자가 Camera2를 직접 다루지 않고도 카메라 기능을 쓰게 해주는 Android 라이브러리입니다. CameraX가 좋아질수록 앱은 "HDR과 손떨림 보정과 동영상을 같이 쓸 수 있어?" 같은 질문을 더 쉽게 할 수 있습니다.</p>
         <ul>
           <li>지원한다고 광고한 기능 조합은 실제로도 동작해야 합니다.</li>
           <li>카메라가 추가되거나 제거되는 상황에서 camera id lifecycle이 안정적이어야 합니다.</li>
           <li>동영상, preview, image capture를 동시에 켰을 때 stream 재구성이 실패하지 않아야 합니다.</li>
+        </ul>
+        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
+        <ul>
+          <li>Feature matrix: CameraX sample app으로 지원 기능 조합을 뽑아봅니다.</li>
+          <li>Capability 비교: 같은 내용을 Camera2 native dump와 비교합니다.</li>
+          <li>Stream 조합: preview stabilization + video capture + image capture를 같이 켠 뒤 에러 로그를 확인합니다.</li>
+          <li>Camera id lifecycle: 외장/가상/접이식 카메라처럼 camera id가 바뀌는 상황을 확인합니다.</li>
         </ul>
       </div>
     </section>
@@ -57,19 +70,23 @@
       <h2>3. Tech Trend Radar</h2>
       <div class="card">
         <h3>AI agent 도구: 어떻게 운영할지가 중요해진다</h3>
-        <p><strong>쉽게 말하면</strong> AI 도구가 단순히 질문에 답하는 수준을 넘어, 코드 리뷰를 하거나 로그를 분석하거나 작업을 대신 수행하는 방향으로 가고 있습니다. 이제 중요한 질문은 "AI가 똑똑한가?"가 아니라 "팀에서 어떻게 안전하게 쓰고, 비용과 품질을 어떻게 볼 것인가?"입니다.</p>
+        <p><strong>배경지식</strong> AI 도구가 단순히 질문에 답하는 수준을 넘어, 코드 리뷰를 하거나 로그를 분석하거나 작업을 대신 수행하는 방향으로 가고 있습니다. 이제 중요한 질문은 "AI가 똑똑한가?"가 아니라 "팀에서 어떻게 안전하게 쓰고, 비용과 품질을 어떻게 볼 것인가?"입니다.</p>
+        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
         <ul>
-          <li>HAL 로그 분석은 AI가 도와주기 좋은 작업입니다. 로그가 길고 반복 패턴이 많기 때문입니다.</li>
-          <li>Flaky test 정리도 AI 후보입니다. 실패 로그, 재현 조건, 최근 변경 파일을 묶어보게 할 수 있습니다.</li>
-          <li>코드 리뷰는 기준 문서가 먼저 필요합니다. 기준 없이 맡기면 스타일 지적만 많아질 수 있습니다.</li>
+          <li>로그 분석: HAL 로그는 길고 반복 패턴이 많아 AI가 도와주기 좋은 작업입니다.</li>
+          <li>Flaky test: 실패 로그, 재현 조건, 최근 변경 파일을 묶어 원인 후보를 정리하게 합니다.</li>
+          <li>코드 리뷰: 기준 문서를 먼저 준비합니다. 기준 없이 맡기면 스타일 지적만 많아질 수 있습니다.</li>
+          <li>비용/사용량: AI agent를 CI에 붙이면 Actions minutes, 호출량, 리뷰 품질을 같이 봅니다.</li>
         </ul>
 
         <h3>Clang/LLVM 21: C++ 코드를 더 잘 들여다보는 도구들</h3>
-        <p>Clang/LLVM은 C++ 코드를 컴파일하고 분석하는 도구 모음입니다. Camera HAL처럼 C++ 코드가 많은 프로젝트에서는 컴파일러 경고와 정적 분석 결과가 버그를 빨리 찾는 데 도움이 됩니다.</p>
+        <p><strong>배경지식</strong> Clang/LLVM은 C++ 코드를 컴파일하고 분석하는 도구 모음입니다. Camera HAL처럼 C++ 코드가 많은 프로젝트에서는 컴파일러 경고와 정적 분석 결과가 버그를 빨리 찾는 데 도움이 됩니다.</p>
+        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
         <ul>
-          <li><code>-ftime-report-json</code>: 어떤 파일이나 단계에서 빌드 시간이 많이 쓰이는지 JSON으로 볼 수 있습니다.</li>
-          <li><code>-Wnrvo</code>: 불필요한 객체 복사가 생길 수 있는 코드를 알려줍니다.</li>
-          <li>Static analyzer 개선은 callback lifetime 문제를 찾는 데 도움이 됩니다.</li>
+          <li>Build time: <code>-ftime-report-json</code>으로 큰 HAL module의 빌드 병목을 봅니다.</li>
+          <li>Copy 비용: <code>-Wnrvo</code>로 큰 객체 반환 시 불필요한 복사 가능성을 봅니다.</li>
+          <li>Lifetime: static analyzer로 callback lifetime, stack address escape 후보를 확인합니다.</li>
+          <li>CI 적용: 모든 경고를 한 번에 켜지 말고 module 단위로 warning baseline을 만듭니다.</li>
         </ul>
       </div>
     </section>

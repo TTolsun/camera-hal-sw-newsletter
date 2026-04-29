@@ -99,9 +99,12 @@ TODO
 
 - TODO
 
-**우리 팀에서 볼 포인트**
+**Camera HAL에서 확인해볼 아이템**
 
-- TODO
+- Capability: TODO
+- Request/result: TODO
+- Stream/buffer: TODO
+- Metadata: TODO
 
 **출처**
 
@@ -116,12 +119,14 @@ TODO
 **무슨 소식인가?**  
 TODO
 
-**왜 지금 볼 만한가?**  
+**배경지식**  
 TODO
 
-**Camera HAL 업무와 연결하면?**
+**Camera HAL에서 확인해볼 아이템**
 
-- TODO
+- 적용 가능성: TODO
+- 로그/테스트/리뷰 영향: TODO
+- 비용/운영 리스크: TODO
 
 ---
 
@@ -130,6 +135,9 @@ TODO
 ### TODO: 개발자가 바로 써먹을 수 있는 팁
 
 **상황**  
+TODO
+
+**배경지식**  
 TODO
 
 **예시**
@@ -141,6 +149,12 @@ TODO
 **왜 좋은가?**
 
 - TODO
+
+**Camera HAL에서 확인해볼 아이템**
+
+- 적용할 로그/코드 경로: TODO
+- 확인할 metadata 또는 buffer 흐름: TODO
+- 다음 실험: TODO
 
 ---
 
@@ -193,21 +207,43 @@ TODO
     <section class="section">
       <h2>2. AOSP Camera Watch</h2>
       <div class="card">
-        <p>TODO: Android Camera 최신 흐름을 정리합니다.</p>
+        <h3>TODO: Android Camera 최신 흐름</h3>
+        <p><strong>배경지식</strong> TODO</p>
+        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
+        <ul>
+          <li>Capability: TODO</li>
+          <li>Request/result: TODO</li>
+          <li>Stream/buffer: TODO</li>
+          <li>Metadata: TODO</li>
+        </ul>
       </div>
     </section>
 
     <section class="section">
       <h2>3. Tech Trend Radar</h2>
       <div class="card">
-        <p>TODO: Camera / AI / Mobile / C++ 기술 동향을 정리합니다.</p>
+        <h3>TODO: Camera / AI / Mobile / C++ 기술 동향</h3>
+        <p><strong>배경지식</strong> TODO</p>
+        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
+        <ul>
+          <li>적용 가능성: TODO</li>
+          <li>로그/테스트/리뷰 영향: TODO</li>
+          <li>비용/운영 리스크: TODO</li>
+        </ul>
       </div>
     </section>
 
     <section class="section">
       <h2>4. 이번 주 C++ / AI 실전 팁</h2>
       <div class="card">
-        <p>TODO: 개발자가 바로 흥미를 느낄 실전 팁을 정리합니다.</p>
+        <h3>TODO: 개발자가 바로 흥미를 느낄 실전 팁</h3>
+        <p><strong>배경지식</strong> TODO</p>
+        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
+        <ul>
+          <li>적용할 로그/코드 경로: TODO</li>
+          <li>확인할 metadata 또는 buffer 흐름: TODO</li>
+          <li>다음 실험: TODO</li>
+        </ul>
       </div>
     </section>
   </main>
