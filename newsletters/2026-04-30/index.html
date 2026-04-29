@@ -37,19 +37,47 @@
         <span class="issue-kicker">AOSP CAMERA WATCH</span>
         <h3>Android 16 Camera2: 앱이 카메라를 더 세밀하게 제어한다</h3>
         <p><strong>배경지식</strong> 카메라 앱은 Camera2 API로 요청을 보냅니다. 예를 들어 "밝기는 자동으로 맞추되 ISO는 내가 정할게", "화이트밸런스를 이렇게 맞춰줘" 같은 요청입니다. Camera HAL은 이 요청을 실제 센서, ISP, 드라이버 동작으로 연결하는 계층입니다.</p>
-        <div class="diagram-block" aria-label="Camera request and result flow">
-          <div class="diagram-title">Block Diagram: Camera2 요청이 HAL 결과로 돌아오는 흐름</div>
-          <div class="diagram-flow">
-            <div class="diagram-node">Camera App<br />Request</div>
-            <div class="diagram-arrow">→</div>
-            <div class="diagram-node accent">Android<br />Camera Framework</div>
-            <div class="diagram-arrow">→</div>
-            <div class="diagram-node">Camera HAL<br />Sensor / ISP</div>
-            <div class="diagram-node">Result<br />Metadata</div>
-            <div class="diagram-arrow">←</div>
-            <div class="diagram-node accent">Framework<br />Validation</div>
-            <div class="diagram-arrow">←</div>
-            <div class="diagram-node">App Preview<br />Capture</div>
+        <div class="diagram-block camera-flow-diagram" aria-label="Camera request and result flow">
+          <div class="diagram-title">Block Diagram: Camera2 요청과 결과 metadata 흐름</div>
+
+          <div class="diagram-lane request-lane">
+            <span class="diagram-lane-label">Request path</span>
+            <div class="diagram-node">
+              <strong>Camera App</strong>
+              <span>ISO / 노출 / 색온도 요청</span>
+            </div>
+            <div class="diagram-connector" aria-hidden="true"></div>
+            <div class="diagram-node accent">
+              <strong>Camera Framework</strong>
+              <span>Camera2 request 정리</span>
+            </div>
+            <div class="diagram-connector" aria-hidden="true"></div>
+            <div class="diagram-node">
+              <strong>Camera HAL</strong>
+              <span>Sensor / ISP 제어</span>
+            </div>
+          </div>
+
+          <div class="diagram-return" aria-hidden="true">
+            <span></span>
+          </div>
+
+          <div class="diagram-lane result-lane">
+            <span class="diagram-lane-label">Result path</span>
+            <div class="diagram-node">
+              <strong>Result Metadata</strong>
+              <span>실제 적용값 보고</span>
+            </div>
+            <div class="diagram-connector reverse" aria-hidden="true"></div>
+            <div class="diagram-node accent">
+              <strong>Framework Validation</strong>
+              <span>요청값과 결과값 비교</span>
+            </div>
+            <div class="diagram-connector reverse" aria-hidden="true"></div>
+            <div class="diagram-node">
+              <strong>App Preview / Capture</strong>
+              <span>화면과 저장 사진에 반영</span>
+            </div>
           </div>
         </div>
         <ul>
