@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camera HAL SW Newsletter</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <p class="eyebrow">CAMERA HAL SW NEWSLETTER</p>
+      <h1>Camera HAL 개발자를 위한 주간 SW 소식</h1>
+      <p class="subtitle">
+        Android Camera, Camera HAL, C++, AI 개발 생산성 관련 소식을 매주 정리합니다.
+      </p>
+    </header>
+
+    <section class="section">
+      <h2>Latest Newsletter</h2>
+      <div id="latest" class="card">
+        <p>최신 뉴스레터를 불러오는 중입니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Archive</h2>
+      <div id="archive" class="archive-list">
+        <p>Archive를 불러오는 중입니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>About</h2>
+      <div class="card">
+        <p>
+          이 페이지는 Camera HAL 개발자가 참고할 만한 SW 최신 소식을
+          주간 단위로 정리하기 위한 GitHub Pages 기반 뉴스레터입니다.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    async function loadNewsletters() {
+      const latestEl = document.getElementById('latest');
+      const archiveEl = document.getElementById('archive');
+
+      try {
+        const response = await fetch('data/newsletters.json', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch newsletters.json: ${response.status}`);
+        }
+
+        const newsletters = await response.json();
+        newsletters.sort((a, b) => b.date.localeCompare(a.date));
+
+        if (newsletters.length === 0) {
+          latestEl.innerHTML = '<p>등록된 뉴스레터가 없습니다.</p>';
+          archiveEl.innerHTML = '<p>Archive가 비어 있습니다.</p>';
+          return;
+        }
+
+        const latest = newsletters[0];
+
+        latestEl.innerHTML = `
+          <h3>${latest.title}</h3>
+          <p>${latest.summary}</p>
+          <p class="tags">${latest.tags.map(tag => `#${tag}`).join(' ')}</p>
+          <div class="actions">
+            <a class="button primary" href="${latest.html}">뉴스레터 보기</a>
+            <a class="button" href="${latest.md}">MD 원본 보기</a>
+          </div>
+        `;
+
+        archiveEl.innerHTML = newsletters.map(item => `
+          <article class="archive-item">
+            <div>
+              <h3>${item.title}</h3>
+              <p>${item.summary}</p>
+              <p class="tags">${item.tags.map(tag => `#${tag}`).join(' ')}</p>
+            </div>
+            <div class="actions">
+              <a class="button primary" href="${item.html}">보기</a>
+              <a class="button" href="${item.md}">MD</a>
+            </div>
+          </article>
+        `).join('');
+      } catch (error) {
+        latestEl.innerHTML = '<p>뉴스레터 정보를 불러오지 못했습니다.</p>';
+        archiveEl.innerHTML = '<p>Archive 정보를 불러오지 못했습니다.</p>';
+        console.error(error);
+      }
+    }
+
+    loadNewsletters();
+  </script>
+</body>
+</html>
