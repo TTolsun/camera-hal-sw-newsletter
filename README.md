@@ -18,7 +18,8 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 │       └── newsletter.md
 └── .github/
     └── workflows/
-        └── weekly-newsletter-issue.yml
+        ├── weekly-newsletter-issue.yml
+        └── weekly-newsletter-update.yml
 ```
 
 ## Structure
@@ -30,6 +31,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `newsletters/YYYY-MM-DD/index.html`: 개별 뉴스레터 HTML 페이지입니다.
 - `newsletters/YYYY-MM-DD/newsletter.md`: 개별 뉴스레터 Markdown 원본입니다.
 - `.github/workflows/weekly-newsletter-issue.yml`: 매주 뉴스레터 작성 이슈를 생성하는 GitHub Actions 워크플로입니다.
+- `.github/workflows/weekly-newsletter-update.yml`: 매주 최신 뉴스레터 파일과 `data/newsletters.json`을 자동 갱신하는 워크플로입니다.
 
 ## Add a Newsletter
 

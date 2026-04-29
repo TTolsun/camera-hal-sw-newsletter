@@ -1,0 +1,259 @@
+name: Weekly Newsletter Update
+
+on:
+  schedule:
+    # KST Monday 07:10 = UTC Sunday 22:10
+    - cron: "10 22 * * 0"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Newsletter date in YYYY-MM-DD. Defaults to today in KST."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-newsletter-update
+  cancel-in-progress: false
+
+jobs:
+  update-newsletter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate weekly newsletter files
+        env:
+          NEWSLETTER_DATE: ${{ github.event.inputs.date || '' }}
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const manualDate = (process.env.NEWSLETTER_DATE || '').trim();
+          const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+          function getKstDate() {
+            const now = new Date();
+            const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+            const yyyy = kst.getUTCFullYear();
+            const mm = String(kst.getUTCMonth() + 1).padStart(2, '0');
+            const dd = String(kst.getUTCDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+          }
+
+          const date = manualDate || getKstDate();
+          if (!datePattern.test(date)) {
+            throw new Error(`Invalid newsletter date: ${date}`);
+          }
+
+          if (process.env.GITHUB_ENV) {
+            fs.appendFileSync(process.env.GITHUB_ENV, `GENERATED_NEWSLETTER_DATE=${date}\n`, 'utf8');
+          }
+
+          const title = `Camera HAL SW Newsletter - ${date}`;
+          const summary = '이번 주 AOSP Camera Watch, Tech Trend Radar, C++ / AI 실전 팁을 정리합니다.';
+          const issueDir = path.join('newsletters', date);
+          const mdPath = path.join(issueDir, 'newsletter.md');
+          const htmlPath = path.join(issueDir, 'index.html');
+          const dataPath = path.join('data', 'newsletters.json');
+
+          fs.mkdirSync(issueDir, { recursive: true });
+
+          function writeIfMissing(filePath, content) {
+            if (fs.existsSync(filePath)) {
+              console.log(`Skip existing file: ${filePath}`);
+              return;
+            }
+            fs.writeFileSync(filePath, content, 'utf8');
+            console.log(`Created: ${filePath}`);
+          }
+
+          const md = `# ${title}
+
+## 1. 이번 주 3줄 브리핑
+
+- TODO: 이번 주 핵심 소식 1줄 요약
+- TODO: 이번 주 핵심 소식 1줄 요약
+- TODO: 이번 주 핵심 소식 1줄 요약
+
+---
+
+## 2. AOSP Camera Watch
+
+### TODO: Android Camera 최신 흐름
+
+**요약**  
+TODO
+
+**배경지식**  
+TODO
+
+**Camera HAL 관점에서 중요한 이유**
+
+- TODO
+
+**우리 팀에서 볼 포인트**
+
+- TODO
+
+**출처**
+
+- TODO
+
+---
+
+## 3. Tech Trend Radar
+
+### TODO: Camera / AI / Mobile / C++ 기술 동향
+
+**무슨 소식인가?**  
+TODO
+
+**왜 지금 볼 만한가?**  
+TODO
+
+**Camera HAL 업무와 연결하면?**
+
+- TODO
+
+---
+
+## 4. 이번 주 C++ / AI 실전 팁
+
+### TODO: 개발자가 바로 써먹을 수 있는 팁
+
+**상황**  
+TODO
+
+**예시**
+
+\`\`\`text
+TODO
+\`\`\`
+
+**왜 좋은가?**
+
+- TODO
+
+---
+
+## 이번 주 Action Items
+
+| No | Action Item | 대상 | 우선순위 |
+|---|---|---|---|
+| 1 | TODO | TODO | Medium |
+
+---
+
+## References
+
+- TODO
+`;
+
+          const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
+  <link rel="stylesheet" href="../../css/styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero newsletter-hero">
+      <p class="eyebrow">WEEKLY NEWSLETTER</p>
+      <h1>${title}</h1>
+      <p class="subtitle">
+        ${date} 뉴스레터입니다. AOSP Camera 흐름, 기술 동향, C++ / AI 실전 팁을 정리합니다.
+      </p>
+      <div class="actions newsletter-actions">
+        <a class="button" href="../../index.html">Archive로 돌아가기</a>
+        <a class="button primary" href="newsletter.md">MD 원본 보기</a>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>1. 이번 주 3줄 브리핑</h2>
+      <div class="card">
+        <ul>
+          <li>TODO: 이번 주 핵심 소식 1줄 요약</li>
+          <li>TODO: 이번 주 핵심 소식 1줄 요약</li>
+          <li>TODO: 이번 주 핵심 소식 1줄 요약</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>2. AOSP Camera Watch</h2>
+      <div class="card">
+        <p>TODO: Android Camera 최신 흐름을 정리합니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3. Tech Trend Radar</h2>
+      <div class="card">
+        <p>TODO: Camera / AI / Mobile / C++ 기술 동향을 정리합니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>4. 이번 주 C++ / AI 실전 팁</h2>
+      <div class="card">
+        <p>TODO: 개발자가 바로 흥미를 느낄 실전 팁을 정리합니다.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+`;
+
+          writeIfMissing(mdPath, md);
+          writeIfMissing(htmlPath, html);
+
+          const newsletters = fs.existsSync(dataPath)
+            ? JSON.parse(fs.readFileSync(dataPath, 'utf8'))
+            : [];
+
+          if (!Array.isArray(newsletters)) {
+            throw new Error('data/newsletters.json must contain an array');
+          }
+
+          const entry = {
+            date,
+            title,
+            summary,
+            html: `newsletters/${date}/index.html`,
+            md: `newsletters/${date}/newsletter.md`,
+            tags: ['Camera HAL', 'Android', 'C++', 'AI']
+          };
+
+          const updated = newsletters
+            .filter(item => item.date !== date)
+            .concat(entry)
+            .sort((a, b) => b.date.localeCompare(a.date));
+
+          fs.writeFileSync(dataPath, `${JSON.stringify(updated, null, 2)}\n`, 'utf8');
+          console.log(`Updated: ${dataPath}`);
+          EOF
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet; then
+            echo "No newsletter changes to commit."
+            exit 0
+          fi
+
+          git add data/newsletters.json newsletters/
+          git commit -m "Add weekly newsletter ${GENERATED_NEWSLETTER_DATE}"
+          git push
