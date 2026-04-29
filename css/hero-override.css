@@ -1,11 +1,14 @@
-/* Hero override: camera dashboard illustration instead of mascot-like character */
+/* Hero override: make the visual look like a camera / sensor dashboard, not a mascot. */
 :root {
   --green: #2f9b56;
   --green-soft: #c8dbc9;
 }
 
 .browser-screen {
-  background: linear-gradient(180deg, #d5e6d7, #bdd8c1);
+  background:
+    radial-gradient(circle at 72% 24%, rgba(214, 255, 0, 0.18), transparent 32px),
+    linear-gradient(180deg, #223147 0%, #151d2b 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.16);
 }
 
 .android-head,
@@ -18,69 +21,117 @@
 
 .camera-lens {
   position: absolute;
-  left: 78px;
-  top: 22px;
-  width: 114px;
-  height: 114px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #63c16d, #2f8f4a 60%, #1f6033 100%);
+  left: 74px;
+  top: 16px;
+  width: 124px;
+  height: 124px;
+  z-index: 3;
   display: grid;
   place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.9) 0 8px, transparent 9px),
+    radial-gradient(circle at 62% 62%, #0a1221 0 22px, #12233c 23px 42px, #2f9b56 43px 58px, #0b1320 59px 100%);
+  border: 8px solid #eaf0f8;
   box-shadow:
-    inset 0 12px 20px rgba(255, 255, 255, 0.18),
-    0 8px 18px rgba(0, 0, 0, 0.14);
+    0 0 0 8px rgba(61, 130, 234, 0.28),
+    0 14px 28px rgba(0, 0, 0, 0.36),
+    inset 0 0 22px rgba(255, 255, 255, 0.12);
+}
+
+.camera-lens::before {
+  content: "";
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.34);
+}
+
+.camera-lens::after {
+  content: "";
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(214, 255, 0, 0.42);
 }
 
 .lens-ring {
   position: absolute;
   border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.32);
+  pointer-events: none;
 }
 
 .ring-1 {
-  width: 84px;
-  height: 84px;
+  width: 102px;
+  height: 102px;
+  border: 2px dashed rgba(255, 255, 255, 0.28);
 }
 
 .ring-2 {
-  width: 56px;
-  height: 56px;
+  width: 62px;
+  height: 62px;
+  border: 2px solid rgba(61, 130, 234, 0.55);
 }
 
 .lens-core {
   width: 24px;
   height: 24px;
+  z-index: 2;
   border-radius: 50%;
-  background: #16331f;
-  box-shadow: inset 0 4px 8px rgba(255, 255, 255, 0.12);
+  background: #020813;
+  box-shadow:
+    inset 0 4px 8px rgba(255, 255, 255, 0.18),
+    0 0 16px rgba(214, 255, 0, 0.22);
 }
 
 .sensor-dot {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  z-index: 4;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: var(--green);
-  opacity: 0.92;
+  background: var(--lime);
+  border: 3px solid rgba(255, 255, 255, 0.72);
+  box-shadow: 0 0 18px rgba(214, 255, 0, 0.55);
+}
+
+.sensor-dot::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 5px;
+  width: 42px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.32);
 }
 
 .sensor-a {
-  left: 36px;
-  top: 34px;
+  left: 28px;
+  top: 28px;
 }
 
 .sensor-b {
-  left: 28px;
-  top: 62px;
+  left: 24px;
+  top: 66px;
+  background: var(--green);
 }
 
 .sensor-c {
-  left: 38px;
-  top: 90px;
+  left: 34px;
+  top: 104px;
+  background: var(--blue-light);
 }
 
 .mini-panel {
   position: absolute;
+}
+
+.mini-window {
+  background:
+    linear-gradient(180deg, rgba(23, 29, 41, 0.96), rgba(12, 17, 27, 0.96)) !important;
 }
 
 .mini-node {
