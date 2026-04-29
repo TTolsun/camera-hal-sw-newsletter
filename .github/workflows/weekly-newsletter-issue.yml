@@ -1,0 +1,122 @@
+name: Weekly Newsletter Issue
+
+on:
+  schedule:
+    # KST Monday 07:00 = UTC Sunday 22:00
+    - cron: "0 22 * * 0"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  create-newsletter-issue:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create weekly newsletter issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const now = new Date();
+
+            // GitHub Actions schedule uses UTC. Convert to KST for newsletter date.
+            const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+            const yyyy = kst.getUTCFullYear();
+            const mm = String(kst.getUTCMonth() + 1).padStart(2, '0');
+            const dd = String(kst.getUTCDate()).padStart(2, '0');
+            const date = `${yyyy}-${mm}-${dd}`;
+
+            const title = `[Newsletter] Camera HAL SW Newsletter - ${date}`;
+
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+
+            const duplicated = existingIssues.data.some(issue => issue.title === title);
+
+            if (duplicated) {
+              core.info(`Issue already exists: ${title}`);
+              return;
+            }
+
+            const body = `
+            ## Goal
+
+            이번 주 Camera HAL SW Newsletter를 작성합니다.
+
+            ## Output Files
+
+            - \`newsletters/${date}/newsletter.md\`
+            - \`newsletters/${date}/index.html\`
+            - \`data/newsletters.json\` 업데이트
+
+            ## Required Sections
+
+            - [ ] 이번 주 핵심 요약
+            - [ ] Camera HAL / Android Camera 소식
+            - [ ] C++ / Native SW 소식
+            - [ ] AI / Developer Productivity 소식
+            - [ ] Camera HAL 관점 영향 분석
+            - [ ] Action Items
+            - [ ] References
+
+            ## Content Checklist
+
+            - [ ] Camera HAL / Android Camera 관련 소식이 최소 1개 이상 포함되어 있다.
+            - [ ] C++ / Native SW 관련 소식이 최소 1개 이상 포함되어 있다.
+            - [ ] AI 관련 소식이 최소 1개 이상 포함되어 있다.
+            - [ ] 각 소식에 배경지식이 포함되어 있다.
+            - [ ] 각 소식에 Camera HAL 관점의 의미가 포함되어 있다.
+            - [ ] 팀에서 검토할 Action Item이 포함되어 있다.
+
+            ## Quality Checklist
+
+            - [ ] 공식 문서 또는 신뢰 가능한 출처가 포함되어 있다.
+            - [ ] 과장된 표현이 없다.
+            - [ ] 추측과 사실이 구분되어 있다.
+            - [ ] 10분 안에 설명 가능한 분량이다.
+            - [ ] HTML 페이지에서 Archive 링크가 정상 동작한다.
+            - [ ] MD 원본 링크가 정상 동작한다.
+
+            ## Suggested News Sources
+
+            ### Android / Camera
+
+            - Android Developers Blog
+            - Android CameraX release notes
+            - AOSP / Android platform release notes
+            - Google Issue Tracker 또는 Android Camera 관련 공개 이슈
+
+            ### C++ / Native SW
+
+            - ISO C++ Blog
+            - LLVM / Clang release notes
+            - GCC release notes
+            - C++ Core Guidelines 관련 변경 또는 해설
+
+            ### AI / Developer Productivity
+
+            - OpenAI / Anthropic / Google AI 개발 도구 소식
+            - GitHub Copilot / Code Review / Agent 관련 업데이트
+            - AI 기반 테스트 생성, 로그 분석, 코드 리뷰 자동화 사례
+
+            ## PR Rule
+
+            PR 제목은 아래 형식을 사용합니다.
+
+            \`\`\`
+            [Newsletter] Add Camera HAL SW Newsletter - ${date}
+            \`\`\`
+            `;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              labels: ['newsletter'],
+              body
+            });
