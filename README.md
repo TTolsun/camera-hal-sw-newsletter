@@ -65,6 +65,8 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 
 각 주요 항목에는 `배경지식`과 `Camera HAL에서 확인해볼 아이템`을 반드시 포함합니다. 확인 아이템은 capability, request/result, stream/buffer, metadata, 로그/테스트 영향처럼 실제로 점검 가능한 단위로 나눕니다.
 
+가능하면 기사에는 그림이나 block diagram을 포함합니다. HTML 페이지에는 CSS 기반 `.diagram-block`을 우선 사용하고, Markdown 원본에는 간단한 텍스트 다이어그램을 함께 남깁니다.
+
 ```json
 {
   "date": "YYYY-MM-DD",

@@ -15,6 +15,18 @@
 **배경지식**  
 카메라 앱은 Camera2 API로 요청을 보냅니다. 예를 들어 "밝기는 자동으로 맞추되 ISO는 내가 정할게", "노출 시간을 이렇게 해줘", "화이트밸런스를 이렇게 맞춰줘" 같은 요청입니다. Camera HAL은 이 요청을 실제 센서, ISP, 드라이버 쪽 동작으로 연결하는 계층입니다. 그래서 Android API가 바뀌면 HAL도 그 요청을 제대로 이해하고 결과를 다시 알려줘야 합니다.
 
+```text
+Camera App Request
+        ↓
+Android Camera Framework
+        ↓
+Camera HAL → Sensor / ISP
+        ↓
+Result Metadata
+        ↓
+Framework Validation → App Preview / Capture
+```
+
 **이번 변화에서 볼 것**
 
 - Hybrid AE: AE는 Auto Exposure의 줄임말입니다. 자동 노출 기능입니다. Hybrid AE는 완전 자동과 완전 수동 사이에 있는 모드라고 보면 됩니다.

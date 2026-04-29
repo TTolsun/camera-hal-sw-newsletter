@@ -632,6 +632,57 @@ li {
   text-underline-offset: 3px;
 }
 
+.diagram-block {
+  margin: 18px 0 20px;
+  padding: 18px;
+  border: 1px solid rgba(214, 255, 0, 0.2);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(61, 130, 234, 0.14), rgba(47, 155, 86, 0.1)),
+    rgba(8, 12, 20, 0.5);
+}
+
+.diagram-title {
+  margin-bottom: 14px;
+  color: var(--muted-strong);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.diagram-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+.diagram-node {
+  display: grid;
+  place-items: center;
+  min-height: 74px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted-strong);
+  text-align: center;
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.diagram-node.accent {
+  background: rgba(214, 255, 0, 0.12);
+  color: var(--text);
+}
+
+.diagram-arrow {
+  display: grid;
+  place-items: center;
+  color: var(--lime);
+  font-weight: 900;
+}
+
 .newsletter-actions {
   margin-top: 24px;
 }
@@ -811,6 +862,15 @@ li {
   .archive-actions {
     align-items: flex-start;
     margin-top: 18px;
+  }
+
+  .diagram-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .diagram-arrow {
+    min-height: 20px;
+    transform: rotate(90deg);
   }
 
   .button {

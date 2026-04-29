@@ -37,6 +37,21 @@
         <span class="issue-kicker">AOSP CAMERA WATCH</span>
         <h3>Android 16 Camera2: 앱이 카메라를 더 세밀하게 제어한다</h3>
         <p><strong>배경지식</strong> 카메라 앱은 Camera2 API로 요청을 보냅니다. 예를 들어 "밝기는 자동으로 맞추되 ISO는 내가 정할게", "화이트밸런스를 이렇게 맞춰줘" 같은 요청입니다. Camera HAL은 이 요청을 실제 센서, ISP, 드라이버 동작으로 연결하는 계층입니다.</p>
+        <div class="diagram-block" aria-label="Camera request and result flow">
+          <div class="diagram-title">Block Diagram: Camera2 요청이 HAL 결과로 돌아오는 흐름</div>
+          <div class="diagram-flow">
+            <div class="diagram-node">Camera App<br />Request</div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node accent">Android<br />Camera Framework</div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node">Camera HAL<br />Sensor / ISP</div>
+            <div class="diagram-node">Result<br />Metadata</div>
+            <div class="diagram-arrow">←</div>
+            <div class="diagram-node accent">Framework<br />Validation</div>
+            <div class="diagram-arrow">←</div>
+            <div class="diagram-node">App Preview<br />Capture</div>
+          </div>
+        </div>
         <ul>
           <li>Hybrid AE는 완전 자동과 완전 수동 사이에 있는 노출 제어 방식입니다.</li>
           <li>색온도와 tint는 사진의 색감이 너무 노랗거나 파랗게 보이지 않게 맞추는 값입니다.</li>
