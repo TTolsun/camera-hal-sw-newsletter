@@ -53,6 +53,34 @@ a {
   color: inherit;
 }
 
+code,
+pre {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+code {
+  padding: 0.1rem 0.28rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--muted-strong);
+}
+
+pre {
+  margin: 18px 0 0;
+  overflow-x: auto;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(8, 12, 20, 0.52);
+  color: var(--muted-strong);
+  line-height: 1.65;
+}
+
+pre code {
+  padding: 0;
+  background: transparent;
+}
+
 .page-bg {
   position: fixed;
   inset: 0;

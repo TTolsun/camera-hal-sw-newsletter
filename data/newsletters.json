@@ -2,7 +2,7 @@
   {
     "date": "2026-04-30",
     "title": "Camera HAL SW Newsletter - 2026-04-30",
-    "summary": "첫 뉴스레터 샘플입니다. AOSP Camera Watch, Tech Trend Radar, C++ / AI 실전 팁을 매주 정리합니다.",
+    "summary": "Android 16 Camera2 변화, CameraX 1.6 흐름, AI agent 운영 트렌드, Camera HAL 로그 분석 팁을 정리합니다.",
     "html": "newsletters/2026-04-30/index.html",
     "md": "newsletters/2026-04-30/newsletter.md",
     "tags": ["Camera HAL", "Android", "C++", "AI"]
