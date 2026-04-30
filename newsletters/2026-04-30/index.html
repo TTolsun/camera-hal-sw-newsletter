@@ -11,9 +11,7 @@
     <header class="hero newsletter-hero">
       <p class="eyebrow">WEEKLY NEWSLETTER</p>
       <h1>Camera HAL SW Newsletter - 2026-04-30</h1>
-      <p class="subtitle">
-        Android 16 Camera2 변화, CameraX 1.6 흐름, AI agent 운영 트렌드를 초보자도 따라갈 수 있게 풀어 정리합니다.
-      </p>
+      <p class="subtitle">Android Camera, CameraX, AI agent, C++ tooling 흐름을 Camera HAL 관점에서 자동 생성한 주간 브리핑입니다.</p>
       <div class="actions newsletter-actions">
         <a class="button" href="../../index.html">Archive로 돌아가기</a>
         <a class="button primary" href="newsletter.md">MD 원본 보기</a>
@@ -24,9 +22,9 @@
       <h2>1. 이번 주 3줄 브리핑</h2>
       <div class="card">
         <ul>
-          <li>Android 16 카메라는 앱이 밝기, 색감, 야간 촬영을 더 세밀하게 다룰 수 있게 바뀌고 있습니다.</li>
-          <li>CameraX 1.6은 앱 개발자가 카메라 기능 조합을 더 쉽게 쓰도록 개선되고 있습니다.</li>
-          <li>AI 도구는 코드 리뷰, 로그 분석, 테스트 정리에 쓰이고 있으며 출력 형식과 판단 기준을 먼저 정해야 효과가 납니다.</li>
+          <li>Android Camera / CameraX 변화는 HAL의 capability, stream 조합, metadata 정합성 관점에서 확인합니다.</li>
+          <li>AI agent와 개발 도구 변화는 코드 리뷰, 로그 분석, 테스트 생성 workflow에 붙일 수 있는지 봅니다.</li>
+          <li>C++ tooling 변화는 lifetime, callback ownership, warning baseline 관리와 연결해 봅니다.</li>
         </ul>
       </div>
     </section>
@@ -35,91 +33,15 @@
       <h2>2. AOSP Camera Watch</h2>
       <div class="card issue-section aosp">
         <span class="issue-kicker">AOSP CAMERA WATCH</span>
-        <h3>Android 16 Camera2: 앱이 카메라를 더 세밀하게 제어한다</h3>
-        <p><strong>배경지식</strong> 카메라 앱은 Camera2 API로 요청을 보냅니다. 예를 들어 "밝기는 자동으로 맞추되 ISO는 내가 정할게", "화이트밸런스를 이렇게 맞춰줘" 같은 요청입니다. Camera HAL은 이 요청을 실제 센서, ISP, 드라이버 동작으로 연결하는 계층입니다.</p>
-        <div class="diagram-block camera-flow-diagram" aria-label="Camera request and result flow">
-          <div class="diagram-title">Block Diagram: Camera2 요청과 결과 metadata 흐름</div>
-
-          <div class="diagram-lane request-lane">
-            <span class="diagram-lane-label">Request path</span>
-            <div class="diagram-node">
-              <strong>Camera App</strong>
-              <span>ISO / 노출 / 색온도 요청</span>
-            </div>
-            <div class="diagram-connector" aria-hidden="true"></div>
-            <div class="diagram-node accent">
-              <strong>Camera Framework</strong>
-              <span>Camera2 request 정리</span>
-            </div>
-            <div class="diagram-connector" aria-hidden="true"></div>
-            <div class="diagram-node">
-              <strong>Camera HAL</strong>
-              <span>Sensor / ISP 제어</span>
-            </div>
-          </div>
-
-          <div class="diagram-return" aria-hidden="true">
-            <span></span>
-          </div>
-
-          <div class="diagram-lane result-lane">
-            <span class="diagram-lane-label">Result path</span>
-            <div class="diagram-node">
-              <strong>Result Metadata</strong>
-              <span>실제 적용값 보고</span>
-            </div>
-            <div class="diagram-connector reverse" aria-hidden="true"></div>
-            <div class="diagram-node accent">
-              <strong>Framework Validation</strong>
-              <span>요청값과 결과값 비교</span>
-            </div>
-            <div class="diagram-connector reverse" aria-hidden="true"></div>
-            <div class="diagram-node">
-              <strong>App Preview / Capture</strong>
-              <span>화면과 저장 사진에 반영</span>
-            </div>
-          </div>
-        </div>
-        <ul>
-          <li>Hybrid AE는 완전 자동과 완전 수동 사이에 있는 노출 제어 방식입니다.</li>
-          <li>색온도와 tint는 사진의 색감이 너무 노랗거나 파랗게 보이지 않게 맞추는 값입니다.</li>
-          <li>Night mode indicator는 지금 장면이 야간 모드가 필요한 정도로 어두운지 알려주는 신호입니다.</li>
-        </ul>
+        <h3>Android Camera / CameraX 업데이트 흐름</h3>
+        <p><strong>배경지식</strong> Camera HAL 입장에서 Android Camera 업데이트는 API 이름보다 request/result metadata, stream 조합, buffer lifecycle에 어떤 영향을 주는지가 더 중요합니다.</p>
         <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
         <ul>
-          <li>Capability: target device에서 어떤 Camera2 key를 지원하는지 dump합니다.</li>
-          <li>Request/result: ISO priority, exposure time priority 요청과 결과 metadata가 맞는지 봅니다.</li>
-          <li>Preview/capture 일관성: 색온도 변경 시 preview와 capture 결과가 같은 방향으로 변하는지 비교합니다.</li>
-          <li>Scene detection: 조도 경계에서 night mode indicator가 안정적인지 확인합니다.</li>
+          <li>Capability dump와 실제 request/result metadata가 서로 모순되지 않는지 확인합니다.</li>
+          <li>Preview, video, still capture 동시 조합에서 stream reconfiguration 실패가 없는지 봅니다.</li>
+          <li>CameraX sample app 기준으로 앱이 보는 지원 기능과 HAL 내부 capability를 비교합니다.</li>
         </ul>
-        <div class="source-list">
-          <strong>Sources</strong>
-          <ul>
-            <li><a href="https://developer.android.com/about/versions/16/features">Android 16 Features and APIs</a></li>
-            <li><a href="https://developer.android.com/about/versions/16/summary">Android 16 feature summary</a></li>
-          </ul>
-        </div>
-
-        <h3>CameraX 1.6: 앱에서 카메라 기능 조합을 더 쉽게 묻는다</h3>
-        <p><strong>배경지식</strong> CameraX는 앱 개발자가 Camera2를 직접 다루지 않고도 카메라 기능을 쓰게 해주는 Android 라이브러리입니다. CameraX가 좋아질수록 앱은 "HDR과 손떨림 보정과 동영상을 같이 쓸 수 있어?" 같은 질문을 더 쉽게 할 수 있습니다.</p>
-        <ul>
-          <li>지원한다고 광고한 기능 조합은 실제로도 동작해야 합니다.</li>
-          <li>카메라가 추가되거나 제거되는 상황에서 camera id lifecycle이 안정적이어야 합니다.</li>
-          <li>동영상, preview, image capture를 동시에 켰을 때 stream 재구성이 실패하지 않아야 합니다.</li>
-        </ul>
-        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
-        <ul>
-          <li>Feature matrix: CameraX sample app으로 지원 기능 조합을 뽑아봅니다.</li>
-          <li>Capability 비교: 같은 내용을 Camera2 native dump와 비교합니다.</li>
-          <li>Stream 조합: preview stabilization + video capture + image capture를 같이 켠 뒤 에러 로그를 확인합니다.</li>
-          <li>Camera id lifecycle: 외장/가상/접이식 카메라처럼 camera id가 바뀌는 상황을 확인합니다.</li>
-        </ul>
-        <div class="source-list">
-          <strong>Sources</strong>
-          <ul>
-            <li><a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX release notes</a></li>
-          </ul>
-        </div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera">Android CameraX release notes</a></li><li><a href="https://developer.android.com/about/versions">Android platform release notes</a></li><li><a href="https://source.android.com/docs/core/camera/camera3">AOSP Camera HAL documentation</a></li></ul></div>
       </div>
     </section>
 
@@ -127,40 +49,15 @@
       <h2>3. Tech Trend Radar</h2>
       <div class="card issue-section trend">
         <span class="issue-kicker">TECH TREND RADAR</span>
-        <h3>AI agent 도구: 어떻게 운영할지가 중요해진다</h3>
-        <p><strong>배경지식</strong> AI 도구가 단순히 질문에 답하는 수준을 넘어, 코드 리뷰를 하거나 로그를 분석하거나 작업을 대신 수행하는 방향으로 가고 있습니다. 이제 중요한 질문은 "AI가 똑똑한가?"가 아니라 "팀에서 어떻게 안전하게 쓰고, 비용과 품질을 어떻게 볼 것인가?"입니다.</p>
+        <h3>AI agent / 개발 생산성 도구 흐름</h3>
+        <p><strong>배경지식</strong> AI 도구는 코드 리뷰, 로그 요약, 테스트 초안 생성처럼 workflow에 붙는 방향으로 이동하고 있습니다.</p>
         <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
         <ul>
-          <li>로그 분석: HAL 로그는 길고 반복 패턴이 많아 AI가 도와주기 좋은 작업입니다.</li>
-          <li>Flaky test: 실패 로그, 재현 조건, 최근 변경 파일을 묶어 원인 후보를 정리하게 합니다.</li>
-          <li>코드 리뷰: 기준 문서를 먼저 준비합니다. 기준 없이 맡기면 스타일 지적만 많아질 수 있습니다.</li>
-          <li>비용/사용량: AI agent를 CI에 붙이면 Actions minutes, 호출량, 리뷰 품질을 같이 봅니다.</li>
+          <li>로그 분석 prompt에는 timestamp, frame number, thread, 근거 log line을 표로 요구합니다.</li>
+          <li>코드 리뷰 prompt에는 CODING_RULES, HAL contract, concurrency, performance 항목을 고정 rubric으로 넣습니다.</li>
+          <li>AI agent를 CI에 붙일 경우 실행 시간, 실패율, 사람이 수정한 비율을 함께 기록합니다.</li>
         </ul>
-        <div class="source-list">
-          <strong>Sources</strong>
-          <ul>
-            <li><a href="https://github.blog/changelog/2026-04-23-copilot-cloud-agent-fields-added-to-usage-metrics/">GitHub Copilot cloud agent metrics</a></li>
-            <li><a href="https://github.blog/changelog/2026-04-27-github-copilot-code-review-will-start-consuming-github-actions-minutes-on-june-1-2026/">GitHub Copilot code review billing notice</a></li>
-            <li><a href="https://openai.com/index/open-source-codex-orchestration-symphony/">OpenAI Symphony</a></li>
-          </ul>
-        </div>
-
-        <h3>Clang/LLVM 21: C++ 코드를 더 잘 들여다보는 도구들</h3>
-        <p><strong>배경지식</strong> Clang/LLVM은 C++ 코드를 컴파일하고 분석하는 도구 모음입니다. Camera HAL처럼 C++ 코드가 많은 프로젝트에서는 컴파일러 경고와 정적 분석 결과가 버그를 빨리 찾는 데 도움이 됩니다.</p>
-        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
-        <ul>
-          <li>Build time: <code>-ftime-report-json</code>으로 큰 HAL module의 빌드 병목을 봅니다.</li>
-          <li>Copy 비용: <code>-Wnrvo</code>로 큰 객체 반환 시 불필요한 복사 가능성을 봅니다.</li>
-          <li>Lifetime: static analyzer로 callback lifetime, stack address escape 후보를 확인합니다.</li>
-          <li>CI 적용: 모든 경고를 한 번에 켜지 말고 module 단위로 warning baseline을 만듭니다.</li>
-        </ul>
-        <div class="source-list">
-          <strong>Sources</strong>
-          <ul>
-            <li><a href="https://releases.llvm.org/21.1.0/docs/ReleaseNotes.html">LLVM 21.1.0 release notes</a></li>
-            <li><a href="https://releases.llvm.org/21.1.0/tools/clang/docs/ReleaseNotes.html">Clang 21.1.0 release notes</a></li>
-          </ul>
-        </div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://github.blog/changelog/">GitHub Changelog</a></li><li><a href="https://perfetto.dev/docs/">Perfetto documentation</a></li></ul></div>
       </div>
     </section>
 
@@ -168,75 +65,26 @@
       <h2>4. 이번 주 C++ / AI 실전 팁</h2>
       <div class="card issue-section tip">
         <span class="issue-kicker">C++ / AI TIP</span>
-        <h3>AI에게 Camera HAL 로그를 맡길 때는 증거 표를 요구하자</h3>
-        <p>Camera HAL 로그는 길고 복잡합니다. AI에게 그냥 "원인 찾아줘"라고 하면 넓은 답이 나오기 쉽습니다. 초보자에게 필요한 것은 멋진 결론보다 어느 로그 라인 때문에 그렇게 봤는지입니다.</p>
-        <p><strong>배경지식</strong> Camera HAL 디버깅은 request, result, metadata, stream, buffer lifecycle을 시간 순서로 맞춰보는 작업입니다. AI에게 먼저 timeline과 근거 log line을 정리하게 하면 문제 후보를 더 빨리 좁힐 수 있습니다.</p>
-        <pre><code>출력 형식:
-1. Timeline 표: timestamp / thread / event / 근거 log line
-2. 의심 지점 표: 의심 지점 / 관련 module / 근거 / 반증할 방법
-3. frame number 기준 request와 result 연결
-4. buffer lifecycle: acquire / process / release / error 경로
-5. 다음에 해볼 실험 3개</code></pre>
+        <h3>Callback lifetime과 자동 리뷰 prompt를 같이 점검하기</h3>
+        <p><strong>배경지식</strong> Camera HAL C++ 코드에서는 callback, lambda capture, std::function, 참조 멤버가 섞이기 쉽습니다.</p>
         <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
         <ul>
-          <li>적용할 로그/코드 경로: camera service log, provider log, HAL request/result 처리 경로</li>
-          <li>확인할 metadata 또는 buffer 흐름: frame number별 request/result metadata, acquire/process/release 순서</li>
-          <li>다음 실험: 추가 log tag 활성화, 같은 frame 재현, stream 조합 변경</li>
+          <li>생성자 option으로 전달된 callback이 객체 수명보다 오래 살아야 하는지 확인합니다.</li>
+          <li>const reference로 저장한 값이 temporary 또는 stack object를 참조하지 않는지 봅니다.</li>
+          <li>AI 리뷰 prompt에 callback ownership, lambda capture, reference member lifetime을 우선 점검하라고 명시합니다.</li>
         </ul>
-        <div class="source-list">
-          <strong>Sources</strong>
-          <ul>
-            <li><a href="https://source.android.com/docs/core/camera/camera3">AOSP Camera HAL</a></li>
-            <li><a href="https://perfetto.dev/docs/">Perfetto tracing documentation</a></li>
-          </ul>
-        </div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org/blog">ISO C++ Blog</a></li><li><a href="https://releases.llvm.org/">Clang release notes</a></li></ul></div>
       </div>
     </section>
 
     <section class="section">
       <h2>이번 주 Action Items</h2>
-      <div class="card action-card">
-        <ul>
-          <li>Android 16 카메라 관련 새 metadata key를 target device에서 dump합니다.</li>
-          <li>CameraX sample app으로 지원 기능 조합을 확인하고 HAL capability와 비교합니다.</li>
-          <li>AI 로그 분석용 prompt template을 <code>LOG_TRIAGE.md</code> 초안으로 정리합니다.</li>
-          <li>AI code review를 CI에 붙일 경우 비용과 사용량 지표를 같이 확인합니다.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>용어 미니 사전</h2>
-      <div class="card">
-        <ul>
-          <li><strong>Camera2</strong>: Android에서 고급 카메라 기능을 제어하는 API</li>
-          <li><strong>CameraX</strong>: 앱 개발자가 Camera2보다 쉽게 카메라를 쓰게 해주는 Jetpack 라이브러리</li>
-          <li><strong>Camera HAL</strong>: Android framework와 실제 카메라 하드웨어/드라이버 사이를 연결하는 계층</li>
-          <li><strong>Metadata</strong>: 앱의 요청값과 카메라 결과값을 담는 key-value 정보</li>
-          <li><strong>Stream</strong>: preview, video, capture처럼 카메라 이미지가 흘러가는 출력 경로</li>
-          <li><strong>AE</strong>: Auto Exposure, 자동 노출</li>
-          <li><strong>AWB</strong>: Auto White Balance, 자동 화이트밸런스</li>
-          <li><strong>ISP</strong>: Image Signal Processor, 센서 이미지를 보정하고 처리하는 블록</li>
-        </ul>
-      </div>
+      <div class="card action-card"><ul><li>CameraX release note에서 target device에 영향 있는 항목을 하나 골라 capability와 비교합니다.</li><li>AI 로그 분석 prompt template을 팀 공통 문서로 하나 추가합니다.</li><li>callback lifetime 관련 warning/review checklist를 C++ 리뷰 항목에 추가합니다.</li></ul></div>
     </section>
 
     <section class="section">
       <h2>References</h2>
-      <div class="card reference-list">
-        <ul>
-          <li><a href="https://developer.android.com/about/versions/16/features">Android 16 Features and APIs</a></li>
-          <li><a href="https://developer.android.com/about/versions/16/summary">Android 16 feature summary</a></li>
-          <li><a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX release notes</a></li>
-          <li><a href="https://source.android.com/docs/core/camera/ultra-hdr">AOSP Ultra HDR</a></li>
-          <li><a href="https://source.android.com/docs/core/camera/camera3">AOSP Camera HAL</a></li>
-          <li><a href="https://github.blog/changelog/2026-04-23-copilot-cloud-agent-fields-added-to-usage-metrics/">GitHub Copilot cloud agent metrics</a></li>
-          <li><a href="https://github.blog/changelog/2026-04-27-github-copilot-code-review-will-start-consuming-github-actions-minutes-on-june-1-2026/">GitHub Copilot code review billing notice</a></li>
-          <li><a href="https://openai.com/index/open-source-codex-orchestration-symphony/">OpenAI Symphony</a></li>
-          <li><a href="https://releases.llvm.org/21.1.0/docs/ReleaseNotes.html">LLVM 21.1.0 release notes</a></li>
-          <li><a href="https://releases.llvm.org/21.1.0/tools/clang/docs/ReleaseNotes.html">Clang 21.1.0 release notes</a></li>
-        </ul>
-      </div>
+      <div class="card reference-list"><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera">Android CameraX release notes</a></li><li><a href="https://developer.android.com/about/versions">Android platform release notes</a></li><li><a href="https://source.android.com/docs/core/camera/camera3">AOSP Camera HAL documentation</a></li><li><a href="https://github.blog/changelog/">GitHub Changelog</a></li><li><a href="https://isocpp.org/blog">ISO C++ Blog</a></li><li><a href="https://releases.llvm.org/">Clang release notes</a></li><li><a href="https://perfetto.dev/docs/">Perfetto documentation</a></li></ul></div>
     </section>
   </main>
 </body>
