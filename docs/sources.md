@@ -4,6 +4,8 @@
 
 ## AOSP Camera Watch
 
+### Primary Sources
+
 - Android Developers Blog: https://android-developers.googleblog.com/
 - Android Developers News: https://developer.android.com/news
 - Android CameraX release notes: https://developer.android.com/jetpack/androidx/releases/camera
@@ -12,17 +14,32 @@
 - AOSP Camera HAL documentation: https://source.android.com/docs/core/camera/camera3
 - AOSP Ultra HDR documentation: https://source.android.com/docs/core/camera/ultra-hdr
 
+### Selection Rule
+
+- Android Camera API, CameraX, AOSP Camera, HAL3 contract와 직접 연결되는 항목을 우선합니다.
+- request/result, metadata, stream, buffer lifecycle 영향이 설명 가능한 항목을 우선합니다.
+- HAL capability, session configuration, capture request/result, vendor tag, CTS/VTS 영향으로 연결할 수 있는 항목을 우선합니다.
+
 ## Tech Trend Radar
 
-- C++ Reference: https://cppreference.com/
+### Primary Sources
+
+- ISO C++ Blog: https://isocpp.org/blog
 - LLVM release notes: https://releases.llvm.org/
 - Clang release notes: https://clang.llvm.org/docs/ReleaseNotes.html
-- ISO C++ Blog: https://isocpp.org/blog
 - GitHub Blog Changelog: https://github.blog/changelog/
 - OpenAI News: https://openai.com/news/
 - Google AI for Developers Blog: https://developers.googleblog.com/
+- C++ Reference: https://cppreference.com/
+
+### Selection Rule
+
+- Camera HAL / Android Camera 개발 생산성에 영향을 줄 수 있는 C++, LLVM/Clang, GitHub, AI 개발 도구 소식을 우선합니다.
+- 빌드, 디버깅, 테스트, 코드 리뷰, 문서화, 자동화 품질을 개선할 수 있는 항목을 우선합니다.
 
 ## C++ / AI 실전 팁
+
+### Primary Sources
 
 - 내부 Camera HAL 코드 리뷰 사례
 - 내부 Camera HAL 로그 분석 사례
@@ -30,6 +47,11 @@
 - Perfetto tracing 사례: https://perfetto.dev/docs/
 - GoogleTest documentation: https://google.github.io/googletest/
 - clang-tidy documentation: https://clang.llvm.org/extra/clang-tidy/
+
+### Selection Rule
+
+- 바로 실험하거나 팀 작업 규칙으로 바꿀 수 있는 항목을 우선합니다.
+- HAL 로그, 테스트 실패, 성능 추적, 코드 품질 개선과 연결되는 항목을 우선합니다.
 
 ## Selection Rules
 
@@ -45,6 +67,7 @@
 
 - Camera HAL / Android Camera / C++ / AI 개발 생산성과 연결하기 어려운 일반 IT 뉴스
 - 공식 문서나 신뢰 가능한 출처로 확인하기 어려운 내용
+- 출처가 불명확한 내용
 - 제품 홍보성 내용이 대부분이고 기술 설명이 부족한 글
 - 우리 팀 Action Item으로 연결할 수 없는 내용
 - 지난 호와 거의 같은 내용
