@@ -14,6 +14,7 @@ const {
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
+const sourceRegistryPath = path.join(root, 'data', 'news-sources.json');
 
 function fail(message) {
   console.error(message);
@@ -156,20 +157,24 @@ async function main() {
   if (!fs.existsSync(candidatePath)) {
     fail(`Missing ${path.relative(root, candidatePath)}. Run scripts/collect-news-candidates.js first.`);
   }
-  if (!fs.existsSync(sourcesPath)) {
-    fail('Missing docs/sources.md.');
+  if (!fs.existsSync(sourceRegistryPath) && !fs.existsSync(sourcesPath)) {
+    fail('Missing data/news-sources.json and docs/sources.md.');
   }
 
   const candidates = readJson(candidatePath);
-  const sourcesMarkdown = fs.readFileSync(sourcesPath, 'utf8');
+  const sourcesMarkdown = fs.existsSync(sourcesPath) ? fs.readFileSync(sourcesPath, 'utf8') : '';
+  const sourceRegistry = fs.existsSync(sourceRegistryPath) ? readJson(sourceRegistryPath) : null;
   fs.mkdirSync(newsroomDir, { recursive: true });
   fs.mkdirSync(newsletterDir, { recursive: true });
 
   const commonContext = [
     `Newsletter date: ${date}`,
     'Audience: Camera HAL / Android Camera / C++ engineer',
-    'Use only the collected candidate JSON and docs/sources.md. Do not browse the web.',
-    'Keep source URLs unchanged. Distinguish facts from interpretation.'
+    'Use only the collected candidate JSON, data/news-sources.json, and docs/sources.md. Do not browse the web.',
+    'Keep source names and source URLs unchanged. Distinguish facts from interpretation.',
+    'Use candidate section/category metadata for filtering and grouping, but keep the existing newsletter output structure.',
+    'Treat candidateOnly=true or requiresCrossCheck=true items as leads unless official or project-official sources support the same claim.',
+    'Final newsletter text must be Korean.'
   ].join('\n');
 
   const reporter = validateReporter(await callGeminiJson(
@@ -178,9 +183,10 @@ async function main() {
       'You are the AI reporter for Camera HAL SW Newsletter.',
       'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, and developer productivity.',
       'Give low scores to product promotion, general IT news, and weak Camera HAL relevance.',
+      'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
       'Return only JSON matching the schema.'
     ].join('\n'),
-    `${commonContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndocs/sources.md:\n${sourcesMarkdown}`,
+    `${commonContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndata/news-sources.json:\n${JSON.stringify(sourceRegistry, null, 2)}\n\ndocs/sources.md:\n${sourcesMarkdown}`,
     reporterSchema
   ), date);
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
@@ -192,7 +198,8 @@ async function main() {
       'Write a Korean technical newsletter draft that a Camera HAL engineer can read in 10 minutes.',
       'Avoid marketing tone. Include background knowledge and Camera HAL checks in every section.',
       'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
-      'briefing must have exactly 3 items. sections must have exactly 3 items in this order: AOSP Camera Watch, Tech Trend Radar, C++ / AI Practical Tip.'
+      'briefing must have exactly 3 items. sections must have exactly 3 items in this order: AOSP Camera Watch, Tech Trend Radar, C++ / AI Practical Tip.',
+      'Use registry sections such as Linux Camera / Driver, Embedded / Semiconductor, AI / SW Engineering Trends, and Korean Tech Trends as candidate grouping signals inside the existing three-section newsletter format.'
     ].join('\n'),
     `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}`,
     editorSchema

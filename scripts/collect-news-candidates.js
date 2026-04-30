@@ -2,16 +2,60 @@ const fs = require('fs');
 const path = require('path');
 
 const root = process.cwd();
-const sourcesPath = path.join(root, 'docs', 'sources.md');
+const structuredSourcesPath = path.join(root, 'data', 'news-sources.json');
+const legacySourcesPath = path.join(root, 'docs', 'sources.md');
 const AUDIENCE = 'Camera HAL / Android Camera / C++ engineer';
 
+const DEFAULT_SECTION_MAP = {
+  android: 'Android / AOSP / Camera',
+  'camera-api': 'Android / AOSP / Camera',
+  'camera-hal': 'Android / AOSP / Camera',
+  aosp: 'Android / AOSP / Camera',
+  compatibility: 'Android / AOSP / Camera',
+  security: 'Android / AOSP / Camera',
+  'vendor-security': 'Android / AOSP / Camera',
+  'linux-camera': 'Linux Camera / Driver',
+  'linux-kernel': 'Linux Camera / Driver',
+  driver: 'Linux Camera / Driver',
+  v4l2: 'Linux Camera / Driver',
+  cpp: 'C++ / Native / Toolchain',
+  toolchain: 'C++ / Native / Toolchain',
+  native: 'C++ / Native / Toolchain',
+  llvm: 'C++ / Native / Toolchain',
+  embedded: 'Embedded / Semiconductor',
+  'embedded-ai': 'Embedded / Semiconductor',
+  semiconductor: 'Embedded / Semiconductor',
+  electronics: 'Embedded / Semiconductor',
+  ai: 'AI / SW Engineering Trends',
+  'ai-research': 'AI / SW Engineering Trends',
+  'ai-engineering': 'AI / SW Engineering Trends',
+  'ai-coding': 'AI / SW Engineering Trends',
+  'ai-trends': 'AI / SW Engineering Trends',
+  'tech-trends': 'AI / SW Engineering Trends',
+  'software-engineering': 'AI / SW Engineering Trends',
+  'open-source': 'AI / SW Engineering Trends',
+  'korea-tech': 'Korean Tech Trends',
+  'korea-engineering': 'Korean Tech Trends'
+};
+
+const PRIORITY_WEIGHT = { high: 3, medium: 2, low: 1 };
+const RELIABILITY_WEIGHT = { official: 3, 'project-official': 2, 'official-community': 2 };
+const CANDIDATE_ONLY_RELIABILITY = new Set([
+  'community',
+  'newsletter',
+  'expert-media',
+  'community-doc'
+]);
+
 const CAMERA_KEYWORDS = [
-  'camera', 'camerax', 'camera2', 'hal', 'image', 'capture', 'raw', 'raw10', 'raw12', 'raw14',
-  'ultra hdr', 'hdr', 'dynamic range', 'stream', 'buffer', 'metadata', 'session', 'android'
+  'camera', 'camerax', 'camera2', 'hal', 'aosp', 'image', 'capture', 'raw', 'raw10', 'raw12', 'raw14',
+  'ultra hdr', 'hdr', 'dynamic range', 'stream', 'buffer', 'metadata', 'session', 'android',
+  'its', 'cts', 'vts', 'cdd', 'libcamera', 'v4l2', 'isp', 'image sensor', 'qualcomm', 'samsung', 'soc'
 ];
 const TECH_KEYWORDS = [
   'c++', 'cpp', 'clang', 'llvm', 'ndk', 'build', 'test', 'gtest', 'googletest', 'perfetto',
-  'github', 'copilot', 'agent', 'ai', 'model', 'developer', 'tool', 'automation'
+  'github', 'copilot', 'agent', 'ai', 'model', 'developer', 'tool', 'automation', 'sanitizer',
+  'ai agent', 'coding agent', 'codex', 'claude code'
 ];
 
 const FEED_HINTS = [
@@ -36,6 +80,9 @@ const FEED_HINTS = [
     feed: 'https://openai.com/news/rss.xml'
   }
 ];
+
+let sectionMap = { ...DEFAULT_SECTION_MAP };
+let activeSourcesPath = legacySourcesPath;
 
 function kstDate(now = new Date()) {
   const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
@@ -63,21 +110,68 @@ function tag(block, name) {
   return match ? decode(match[1]) : '';
 }
 
-function parseSources() {
-  if (!fs.existsSync(sourcesPath)) {
-    throw new Error('Missing docs/sources.md');
+function normalizeSource(source, allowFeedHint = false) {
+  return {
+    id: source.id || '',
+    name: source.name,
+    url: source.sourceUrl || source.url,
+    sourceUrl: source.sourceUrl || source.url,
+    rssUrl: source.rssUrl || null,
+    category: source.category || 'tech-trends',
+    section: source.section || sectionMap[source.category] || 'AI / SW Engineering Trends',
+    priority: source.priority || 'medium',
+    reliability: source.reliability || 'unknown',
+    candidateOnly: source.candidateOnly === true,
+    requiresCrossCheck: source.requiresCrossCheck === true,
+    allowFeedHint,
+    usageHint: source.usageHint || '',
+    keywords: Array.isArray(source.keywords) ? source.keywords : []
+  };
+}
+
+function parseStructuredSources() {
+  const registry = JSON.parse(fs.readFileSync(structuredSourcesPath, 'utf8'));
+  sectionMap = { ...DEFAULT_SECTION_MAP, ...(registry.sectionMap || {}) };
+  const sources = (registry.sources || [])
+    .filter(source => source.enabled !== false)
+    .map(source => normalizeSource(source, false))
+    .filter(source => source.name && source.url)
+    .sort((a, b) => (PRIORITY_WEIGHT[b.priority] || 0) - (PRIORITY_WEIGHT[a.priority] || 0));
+
+  if (sources.length === 0) {
+    throw new Error('No enabled sources found in data/news-sources.json');
   }
-  const markdown = fs.readFileSync(sourcesPath, 'utf8');
+  activeSourcesPath = structuredSourcesPath;
+  return sources;
+}
+
+function parseLegacySources() {
+  if (!fs.existsSync(legacySourcesPath)) {
+    throw new Error('Missing data/news-sources.json and docs/sources.md');
+  }
+
+  const markdown = fs.readFileSync(legacySourcesPath, 'utf8');
   const sources = [];
   const regex = /^-\s+([^:]+):\s+(https?:\/\/\S+)/gm;
   let match;
   while ((match = regex.exec(markdown)) !== null) {
-    sources.push({ name: match[1].trim(), url: match[2].trim() });
+    sources.push(normalizeSource({
+      name: match[1].trim(),
+      sourceUrl: match[2].trim(),
+      rssUrl: feedFor(match[2].trim()),
+      candidateOnly: false,
+      requiresCrossCheck: true
+    }, true));
   }
   if (sources.length === 0) {
     throw new Error('No sources found in docs/sources.md');
   }
+  activeSourcesPath = legacySourcesPath;
   return sources;
+}
+
+function parseSources() {
+  return fs.existsSync(structuredSourcesPath) ? parseStructuredSources() : parseLegacySources();
 }
 
 function feedFor(url) {
@@ -85,11 +179,15 @@ function feedFor(url) {
   return hint ? hint.feed : null;
 }
 
+function sourceFeed(source) {
+  return source.rssUrl || (source.allowFeedHint ? feedFor(source.url) : null);
+}
+
 async function fetchText(url) {
   const res = await fetch(url, {
     headers: {
       'user-agent': 'camera-hal-sw-newsletter/1.0',
-      'accept': 'text/html,application/rss+xml,application/xml,text/xml,*/*'
+      accept: 'text/html,application/rss+xml,application/xml,text/xml,*/*'
     }
   });
   if (!res.ok) {
@@ -107,8 +205,7 @@ function parseRss(xml, source) {
     const date = tag(block, 'pubDate') || tag(block, 'updated') || tag(block, 'published');
     const summary = tag(block, 'description') || tag(block, 'summary') || tag(block, 'content');
     return normalizeCandidate({
-      source: source.name,
-      sourceUrl: source.url,
+      source,
       title,
       url: link,
       publishedAt: date,
@@ -122,11 +219,10 @@ function parseHtmlPage(html, source) {
   const description = decode(
     (html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["'][^>]*>/i) || [])[1] ||
     (html.match(/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["'][^>]*>/i) || [])[1] ||
-    'RSS feed가 없는 공식 페이지입니다. 변경 이력 또는 release note 확인 후보로 사용합니다.'
+    'No RSS feed is configured. Use this source page as a change/release-note watch target.'
   );
   return [normalizeCandidate({
-    source: source.name,
-    sourceUrl: source.url,
+    source,
     title,
     url: source.url,
     publishedAt: '',
@@ -134,31 +230,85 @@ function parseHtmlPage(html, source) {
   })];
 }
 
+function keywordHits(text, keywords) {
+  return keywords.filter(keyword => text.includes(keyword.toLowerCase())).length;
+}
+
 function normalizeCandidate(raw) {
-  const text = `${raw.title} ${raw.summary}`.toLowerCase();
-  const cameraHits = CAMERA_KEYWORDS.filter(keyword => text.includes(keyword)).length;
-  const techHits = TECH_KEYWORDS.filter(keyword => text.includes(keyword)).length;
-  const score = cameraHits * 3 + techHits;
-  const category = cameraHits > 0 ? 'AOSP Camera Watch' : 'Tech Trend Radar';
+  const source = raw.source;
+  const title = decode(raw.title);
+  const summary = decode(raw.summary).slice(0, 500);
+  const text = `${title} ${summary} ${source.keywords.join(' ')}`.toLowerCase();
+  const cameraHits = keywordHits(text, CAMERA_KEYWORDS);
+  const techHits = keywordHits(text, TECH_KEYWORDS);
+  const sourceKeywordHits = keywordHits(text, source.keywords);
+  const categoryBoost = ['camera-hal', 'camera-api', 'aosp', 'compatibility', 'security'].includes(source.category) ? 35 : 0;
+  const priorityBoost = (PRIORITY_WEIGHT[source.priority] || 0) * 4;
+  const reliabilityBoost = (RELIABILITY_WEIGHT[source.reliability] || 0) * 3;
+  const rawScore = categoryBoost + cameraHits * 8 + techHits * 4 + sourceKeywordHits * 3 + priorityBoost + reliabilityBoost;
+  const score = Math.min(100, rawScore);
+  const candidateOnly = source.candidateOnly || CANDIDATE_ONLY_RELIABILITY.has(source.reliability);
+  const section = source.section || sectionMap[source.category] || 'AI / SW Engineering Trends';
+
   return {
-    ...raw,
-    title: decode(raw.title),
-    summary: decode(raw.summary).slice(0, 500),
+    source: source.name,
+    source_name: source.name,
+    sourceUrl: source.sourceUrl,
+    source_url: source.sourceUrl,
+    articleUrl: raw.url,
+    article_url: raw.url,
+    source_id: source.id,
+    category: source.category,
+    section,
+    source_category: source.category,
+    source_section: section,
+    priority: source.priority,
+    reliability: source.reliability,
+    source_priority: source.priority,
+    source_reliability: source.reliability,
+    usageHint: source.usageHint,
+    source_usage_hint: source.usageHint,
+    candidateOnly,
+    candidate_only: candidateOnly,
+    requiresCrossCheck: source.requiresCrossCheck,
+    requires_cross_check: source.requiresCrossCheck,
+    verification_hint: candidateOnly || source.requiresCrossCheck
+      ? 'Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.'
+      : 'Can be used directly if the collected item supports the claim.',
+    title,
+    url: raw.url,
+    publishedAt: raw.publishedAt || '',
     published_date: raw.publishedAt || '',
-    source_url: raw.sourceUrl || '',
+    summary,
     relevanceScore: score,
     relevance_score: score,
-    category,
-    reason: buildReason(cameraHits, techHits),
-    collection_reason: buildReason(cameraHits, techHits)
+    cameraHalRelevanceScore: score,
+    camera_hal_relevance_score: score,
+    candidateTier: candidateTier(score),
+    reason: buildReason(cameraHits, techHits, source, score),
+    collection_reason: buildReason(cameraHits, techHits, source, score)
   };
 }
 
-function buildReason(cameraHits, techHits) {
-  if (cameraHits > 0 && techHits > 0) return 'Camera HAL 관점과 개발 생산성 관점 모두에서 검토할 가치가 있습니다.';
-  if (cameraHits > 0) return 'Android Camera, CameraX, HAL contract, stream/buffer/metadata 영향 가능성이 있습니다.';
-  if (techHits > 0) return 'C++, AI, GitHub, 빌드/테스트/자동화 생산성 관점에서 검토할 가치가 있습니다.';
-  return '공식 출처이지만 Camera HAL 연결성은 편집자가 추가 판단해야 합니다.';
+function candidateTier(score) {
+  if (score >= 80) return 'main-article';
+  if (score >= 50) return 'short-news';
+  if (score >= 30) return 'reference-candidate';
+  return 'exclude';
+}
+
+function buildReason(cameraHits, techHits, source, score) {
+  const prefix = `${source.name} (${source.reliability}, ${source.priority}, score ${score})`;
+  if (cameraHits > 0 && techHits > 0) {
+    return `${prefix}: Camera HAL relevance and engineering productivity signals were both detected.`;
+  }
+  if (cameraHits > 0) {
+    return `${prefix}: Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.`;
+  }
+  if (techHits > 0) {
+    return `${prefix}: C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.`;
+  }
+  return `${prefix}: Keep as a watch-list candidate; editor should confirm direct Camera HAL relevance.`;
 }
 
 function parseDate(value) {
@@ -174,44 +324,57 @@ function withinLookback(candidate, now, lookbackDays) {
   return ageMs >= 0 && ageMs <= lookbackDays * 24 * 60 * 60 * 1000;
 }
 
+function titleKey(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function dedupe(candidates) {
-  const seen = new Set();
+  const seenUrls = new Set();
+  const seenTitles = new Set();
   const result = [];
   for (const item of candidates) {
-    const key = item.url.replace(/[?#].*$/, '').toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
+    const urlKey = item.url.replace(/[?#].*$/, '').toLowerCase();
+    const normalizedTitle = titleKey(item.title);
+    if (seenUrls.has(urlKey)) continue;
+    if (normalizedTitle && seenTitles.has(normalizedTitle)) continue;
+    seenUrls.add(urlKey);
+    if (normalizedTitle) seenTitles.add(normalizedTitle);
     result.push(item);
   }
   return result;
 }
 
 function mdEscape(value = '') {
-  return value.replace(/\|/g, '\\|').replace(/\n/g, ' ');
+  return String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ');
 }
 
 function markdown(date, candidates, failures, lookbackDays) {
   const groups = candidates.reduce((acc, item) => {
-    acc[item.category] = acc[item.category] || [];
-    acc[item.category].push(item);
+    acc[item.section] = acc[item.section] || [];
+    acc[item.section].push(item);
     return acc;
   }, {});
 
   const lines = [];
   lines.push(`# News Candidates - ${date}`);
   lines.push('');
-  lines.push('이 파일은 `docs/sources.md`의 공식 출처를 기준으로 수집한 뉴스 후보입니다. AI 뉴스룸 파이프라인은 이 JSON만 입력으로 사용하고 웹 검색을 하지 않습니다.');
+  lines.push('This file is generated from the structured newsletter source registry. Gemini uses the candidate JSON and source metadata as inputs and does not browse the web.');
   lines.push('');
-  lines.push(`- Lookback: 최근 ${lookbackDays}일 기준`);
+  lines.push(`- Lookback: ${lookbackDays} days`);
   lines.push(`- Candidate count: ${candidates.length}`);
-  lines.push('- Next step: `scripts/gemini-newsroom-newsletter.js`가 이 후보 JSON을 읽어 기자/편집자/검수자 산출물과 뉴스레터 파일을 생성합니다.');
+  lines.push(`- Source registry: ${path.relative(root, activeSourcesPath)}`);
+  lines.push('- Candidate-only media/community sources require official-source verification before final article selection.');
   lines.push('');
   lines.push('## Gemini Newsroom Input Summary');
   lines.push('');
   lines.push('```text');
   lines.push(`Newsletter date: ${date}`);
-  lines.push('Audience: Camera HAL / Android Camera / C++ engineer');
-  lines.push('Inputs: collected-news/YYYY-MM-DD/candidates.json, docs/sources.md');
+  lines.push(`Audience: ${AUDIENCE}`);
+  lines.push('Inputs: collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/sources.md');
   lines.push('Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, newsletter.md, index.html, editor-in-chief-brief.md, release-qa-report.md');
   lines.push('```');
   lines.push('');
@@ -219,10 +382,10 @@ function markdown(date, candidates, failures, lookbackDays) {
   for (const [category, items] of Object.entries(groups)) {
     lines.push(`## ${category}`);
     lines.push('');
-    lines.push('| Score | Source | Title | Published | Why it matters | Link |');
-    lines.push('|---:|---|---|---|---|---|');
+    lines.push('| Score | Source | Priority | Reliability | Candidate only | Title | Published | Link |');
+    lines.push('|---:|---|---|---|---|---|---|---|');
     for (const item of items) {
-      lines.push(`| ${item.relevanceScore} | ${mdEscape(item.source)} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || '확인 필요')} | ${mdEscape(item.reason)} | [link](${item.url}) |`);
+      lines.push(`| ${item.relevanceScore} | ${mdEscape(item.source)} | ${item.source_priority} | ${item.source_reliability} | ${item.candidate_only ? 'yes' : 'no'} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || 'review needed')} | [link](${item.url}) |`);
     }
     lines.push('');
   }
@@ -233,11 +396,18 @@ function markdown(date, candidates, failures, lookbackDays) {
     lines.push(`### ${index + 1}. ${item.title}`);
     lines.push('');
     lines.push(`- Source: ${item.source}`);
-    lines.push(`- Published: ${item.publishedAt || '확인 필요'}`);
+    lines.push(`- Source URL: ${item.source_url}`);
+    lines.push(`- Published: ${item.publishedAt || 'review needed'}`);
     lines.push(`- Link: ${item.url}`);
-    lines.push(`- Category: ${item.category}`);
+    lines.push(`- Section: ${item.section}`);
+    lines.push(`- Source category: ${item.source_category}`);
+    lines.push(`- Source priority: ${item.source_priority}`);
+    lines.push(`- Source reliability: ${item.source_reliability}`);
+    lines.push(`- Candidate only: ${item.candidate_only ? 'yes' : 'no'}`);
+    lines.push(`- Requires cross-check: ${item.requires_cross_check ? 'yes' : 'no'}`);
+    lines.push(`- Verification hint: ${item.verification_hint}`);
     lines.push(`- Relevance Score: ${item.relevanceScore}`);
-    lines.push(`- Summary: ${item.summary || '요약 없음'}`);
+    lines.push(`- Summary: ${item.summary || 'No summary'}`);
     lines.push(`- Selection reason: ${item.reason}`);
     lines.push('');
   }
@@ -245,7 +415,7 @@ function markdown(date, candidates, failures, lookbackDays) {
   lines.push('## Collector Failures');
   lines.push('');
   if (failures.length === 0) {
-    lines.push('- 없음');
+    lines.push('- None');
   } else {
     for (const failure of failures) {
       lines.push(`- ${failure.source}: ${failure.message}`);
@@ -254,11 +424,11 @@ function markdown(date, candidates, failures, lookbackDays) {
   lines.push('');
   lines.push('## Editor-in-Chief Checklist');
   lines.push('');
-  lines.push('- [ ] 후보가 공식 출처 기반인가?');
-  lines.push('- [ ] Camera HAL 관점 해석이 가능한가?');
-  lines.push('- [ ] 단순 제품 홍보나 일반 IT 뉴스는 제외했는가?');
-  lines.push('- [ ] 최종 뉴스레터에 출처와 References가 남아 있는가?');
-  lines.push('- [ ] 발행 전 `Weekly Gemini Newsroom PR`과 `02 - Validate Site`를 통과했는가?');
+  lines.push('- [ ] High-priority official sources were reviewed first.');
+  lines.push('- [ ] Candidate-only sources were cross-checked against official documentation or blogs when possible.');
+  lines.push('- [ ] Each final section preserves source name and source URL.');
+  lines.push('- [ ] Final Markdown/HTML includes Sources and References.');
+  lines.push('- [ ] Camera HAL relevance is tied to capability, request/result, stream/buffer, metadata, CTS/VTS/ITS/CDD, or implementation impact.');
   lines.push('');
   return lines.join('\n');
 }
@@ -273,7 +443,7 @@ async function main() {
 
   for (const source of sources) {
     try {
-      const feed = feedFor(source.url);
+      const feed = sourceFeed(source);
       const target = feed || source.url;
       const text = await fetchText(target);
       const parsed = feed ? parseRss(text, source) : parseHtmlPage(text, source);
@@ -285,11 +455,16 @@ async function main() {
 
   candidates = dedupe(candidates)
     .filter(item => withinLookback(item, now, lookbackDays))
-    .sort((a, b) => b.relevanceScore - a.relevanceScore)
+    .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high')
+    .sort((a, b) => {
+      const priorityDelta = (PRIORITY_WEIGHT[b.source_priority] || 0) - (PRIORITY_WEIGHT[a.source_priority] || 0);
+      const reliabilityDelta = (RELIABILITY_WEIGHT[b.source_reliability] || 0) - (RELIABILITY_WEIGHT[a.source_reliability] || 0);
+      return priorityDelta || reliabilityDelta || b.relevanceScore - a.relevanceScore;
+    })
     .slice(0, 40);
 
   if (candidates.length === 0) {
-    throw new Error('No news candidates collected. Check docs/sources.md or network access.');
+    throw new Error('No news candidates collected. Check data/news-sources.json, docs/sources.md, or network access.');
   }
 
   const outDir = path.join(root, 'collected-news', date);
@@ -299,13 +474,14 @@ async function main() {
   fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
 
   fs.writeFileSync(path.join(outDir, 'candidates.json'), JSON.stringify({
-    schema_version: 2,
+    schema_version: 3,
     date,
     newsletter_date: date,
     audience: AUDIENCE,
     lookback_days: lookbackDays,
     generated_at: new Date().toISOString(),
-    sources_path: 'docs/sources.md',
+    sources_path: path.relative(root, activeSourcesPath).replace(/\\/g, '/'),
+    section_map: sectionMap,
     candidates,
     failures
   }, null, 2) + '\n', 'utf8');

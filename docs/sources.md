@@ -1,74 +1,118 @@
 # Newsletter Sources
 
-이 문서는 매주 뉴스 후보를 찾을 때 우선 확인할 출처 목록입니다. 뉴스레터 본문에는 각 항목별 `Sources`를 붙이고, 마지막 `References`에는 전체 링크를 모읍니다.
+`data/news-sources.json` is the machine-readable source registry used by `scripts/collect-news-candidates.js`.
+This document is the human-readable editorial view of the same source list. Keep the two files in sync when adding, removing, disabling, or reclassifying sources.
 
-## AOSP Camera Watch
+If the JSON registry is missing, the collector can fall back to this Markdown by reading `- Name: URL` lines, but normal operation should use `data/news-sources.json`.
+
+## Sync Rules
+
+- Add new sources to `data/news-sources.json` first.
+- Mirror enabled editorial sources in this document under the same section.
+- Mark disabled or candidate-only sources clearly.
+- Do not add an `rssUrl` unless it is verified in `data/news-sources.json`.
+- Media, community, newsletter, and paywall-prone sources should be treated as leads and cross-checked against official/project sources before final publication.
+
+## Android / AOSP / Camera
 
 ### Primary Sources
 
 - Android Developers Blog: https://android-developers.googleblog.com/
-- Android Developers News: https://developer.android.com/news
-- Android CameraX release notes: https://developer.android.com/jetpack/androidx/releases/camera
-- Android version release notes: https://developer.android.com/about/versions
-- AOSP Camera documentation: https://source.android.com/docs/core/camera
-- AOSP Camera HAL documentation: https://source.android.com/docs/core/camera/camera3
-- AOSP Ultra HDR documentation: https://source.android.com/docs/core/camera/ultra-hdr
+- Android Developers Latest Updates: https://developer.android.com/latest-updates
+- CameraX Release Notes: https://developer.android.com/jetpack/androidx/releases/camera
+- AOSP Camera Documentation: https://source.android.com/docs/core/camera
+- AOSP What's New / Release Notes: https://source.android.com/docs/whatsnew
+- Android Compatibility Definition Document: https://source.android.com/docs/compatibility/cdd
+- Android Security Bulletin: https://source.android.com/docs/security/bulletin
+- Samsung Mobile Security Updates: https://security.samsungmobile.com/securityUpdate.smsb
+- Qualcomm Security Bulletins: https://docs.qualcomm.com/product/publicresources/securitybulletin
+- Android Developer Newsletter: https://developer.android.com/newsletter
 
-### Selection Rule
+### Candidate / Cross-check Sources
 
-- Android Camera API, CameraX, AOSP Camera, HAL3 contract와 직접 연결되는 항목을 우선합니다.
-- request/result, metadata, stream, buffer lifecycle 영향이 설명 가능한 항목을 우선합니다.
-- HAL capability, session configuration, capture request/result, vendor tag, CTS/VTS 영향으로 연결할 수 있는 항목을 우선합니다.
+- Android Weekly: https://androidweekly.net/
 
-## Tech Trend Radar
+## Linux Camera / Driver
+
+### Primary Sources
+
+- libcamera Blog: https://libcamera.org/blog/
+- libcamera Documentation: https://libcamera.org/introduction.html
+- Collabora Blog: https://www.collabora.com/news-and-blog/
+
+### Candidate / Cross-check Sources
+
+- LWN Camera / Media Articles: https://lwn.net/
+- Phoronix Linux Camera / Media: https://www.phoronix.com/
+- KernelNewbies LinuxChanges: https://kernelnewbies.org/LinuxChanges
+
+## C++ / Native / Toolchain
 
 ### Primary Sources
 
 - ISO C++ Blog: https://isocpp.org/blog
-- LLVM release notes: https://releases.llvm.org/
-- Clang release notes: https://clang.llvm.org/docs/ReleaseNotes.html
-- GitHub Blog Changelog: https://github.blog/changelog/
-- OpenAI News: https://openai.com/news/
-- Google AI for Developers Blog: https://developers.googleblog.com/
-- C++ Reference: https://cppreference.com/
+- CppCon News: https://cppcon.org/category/news/
+- LLVM Project Blog: https://blog.llvm.org/
+- LLVM Release Notes: https://releases.llvm.org/
+- Microsoft C++ Team Blog: https://devblogs.microsoft.com/cppblog/
 
-### Selection Rule
-
-- Camera HAL / Android Camera 개발 생산성에 영향을 줄 수 있는 C++, LLVM/Clang, GitHub, AI 개발 도구 소식을 우선합니다.
-- 빌드, 디버깅, 테스트, 코드 리뷰, 문서화, 자동화 품질을 개선할 수 있는 항목을 우선합니다.
-
-## C++ / AI 실전 팁
+## Embedded / Semiconductor
 
 ### Primary Sources
 
-- 내부 Camera HAL 코드 리뷰 사례
-- 내부 Camera HAL 로그 분석 사례
-- CTS / VTS / vendor test 실패 사례
-- Perfetto tracing 사례: https://perfetto.dev/docs/
-- GoogleTest documentation: https://google.github.io/googletest/
-- clang-tidy documentation: https://clang.llvm.org/extra/clang-tidy/
+- IEEE Spectrum - Embedded Systems: https://spectrum.ieee.org/tag/embedded-systems
+- IEEE Spectrum - Embedded AI: https://spectrum.ieee.org/tag/embedded-ai
 
-### Selection Rule
+### Candidate / Cross-check Sources
 
-- 바로 실험하거나 팀 작업 규칙으로 바꿀 수 있는 항목을 우선합니다.
-- HAL 로그, 테스트 실패, 성능 추적, 코드 품질 개선과 연결되는 항목을 우선합니다.
+- EE Times - Embedded: https://www.eetimes.com/tag/embedded/
+- EE Times - Semiconductors: https://www.eetimes.com/tag/semiconductors/
+- Embedded.com: https://www.embedded.com/
+
+## AI / SW Engineering Trends
+
+### Primary Sources
+
+- Google Open Source Blog: https://opensource.google/
+- Google Research Blog: https://research.google/blog/
+- Google DeepMind Blog: https://deepmind.google/blog/
+- OpenAI News: https://openai.com/news/
+- Anthropic News: https://www.anthropic.com/news
+- Claude Code Changelog: https://code.claude.com/docs/en/changelog
+- Google Cloud AI & Machine Learning Blog: https://cloud.google.com/blog/products/ai-machine-learning
+
+### Candidate / Cross-check Sources
+
+- TLDR: https://tldr.tech/
+- InfoQ: https://www.infoq.com/
+- Hacker News: https://news.ycombinator.com/
+- The Register: https://www.theregister.com/
+- The New Stack: https://thenewstack.io/
+- VentureBeat AI: https://venturebeat.com/ (disabled in registry)
+- Software Engineering Daily: https://softwareengineeringdaily.com/ (disabled in registry)
+
+## Korean Tech Trends
+
+### Candidate / Cross-check Sources
+
+- ZDNet Korea: https://zdnet.co.kr/
+- 요즘IT: https://yozm.wishket.com/
+- NAVER DEVIEW: https://developers.naver.com/d2/deview/ (disabled in registry)
 
 ## Selection Rules
 
-- 공식 문서나 release note를 우선 사용합니다.
-- 각 주요 항목에는 `배경지식`과 `Camera HAL에서 확인해볼 아이템`을 반드시 포함합니다.
-- 가능하면 그림이나 block diagram을 포함합니다.
-- 사실과 추정은 구분해서 씁니다.
-- 출처가 불명확한 내용은 뉴스 항목으로 채택하지 않습니다.
+- Prefer official documentation, official blogs, release notes, and project-official sources.
+- Use media/community/newsletter sources as discovery leads unless the registry marks them otherwise.
+- For `requiresCrossCheck: true` sources, confirm important claims with official documentation, vendor/project sources, or release notes before final publication.
+- Every final newsletter section must preserve source links in `Sources`; the issue must also include `References`.
+- Final newsletter summaries should be written in Korean and should not copy article bodies.
 
 ## Drop Rules
 
-아래 항목은 뉴스레터에 넣지 않습니다.
+Do not publish items that are:
 
-- Camera HAL / Android Camera / C++ / AI 개발 생산성과 연결하기 어려운 일반 IT 뉴스
-- 공식 문서나 신뢰 가능한 출처로 확인하기 어려운 내용
-- 출처가 불명확한 내용
-- 제품 홍보성 내용이 대부분이고 기술 설명이 부족한 글
-- 우리 팀 Action Item으로 연결할 수 없는 내용
-- 지난 호와 거의 같은 내용
-- 제목은 자극적이지만 HAL 관점 해석이 어려운 내용
+- unrelated to Camera HAL, Android Camera, Linux camera, C++, embedded systems, AI tooling, or software engineering practice;
+- mostly product promotion without technical details;
+- unsupported by a traceable source;
+- impossible to connect to Camera HAL engineering checks, action items, or implementation context;
+- duplicate or near-duplicate of a stronger official source.

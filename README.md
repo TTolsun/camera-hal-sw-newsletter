@@ -11,9 +11,11 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 │   ├── styles.css
 │   └── hero-override.css
 ├── data/
-│   └── newsletters.json
+│   ├── newsletters.json
+│   └── news-sources.json
 ├── docs/
-│   └── sources.md
+│   ├── sources.md
+│   └── news-sources.md
 ├── collected-news/
 │   └── YYYY-MM-DD/
 │       └── candidates.json
@@ -48,7 +50,9 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `css/styles.css`: 사이트 공통 레이아웃, 카드, 버튼, 반응형 스타일입니다.
 - `css/hero-override.css`: 메인 hero 비주얼을 카메라/센서 대시보드 형태로 조정하는 스타일입니다.
 - `data/newsletters.json`: 메인 페이지가 사용하는 뉴스레터 메타데이터 목록입니다.
+- `data/news-sources.json`: 뉴스 후보 수집에 사용하는 구조화된 source registry입니다.
 - `docs/sources.md`: 매주 뉴스 후보를 찾을 때 확인할 공식 문서와 신뢰 가능한 출처 목록입니다.
+- `docs/news-sources.md`: source registry 스키마와 운영 규칙을 설명합니다.
 - `collected-news/YYYY-MM-DD/candidates.json`: GitHub Action이 무료로 수집한 원본 뉴스 후보 JSON입니다.
 - `newsroom/YYYY-MM-DD/news-candidates.md`: GitHub Action 기자가 만든 뉴스 후보 Markdown입니다.
 - `newsroom/YYYY-MM-DD/reporter-candidates.json`: Gemini AI 기자가 선별/점수화한 후보입니다.
@@ -62,7 +66,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `newsletters/YYYY-MM-DD/newsletter.md`: 개별 뉴스레터 Markdown 원본입니다.
 - `.github/workflows/02-validate-site.yml`: `newsletters.json`, 링크 파일 존재 여부, TODO 문자열, 중복 날짜, 필수 섹션을 검증하는 워크플로입니다.
 - `.github/workflows/weekly-newsroom-pr.yml`: 후보 수집, Gemini 뉴스룸 생성, 검증, PR 생성을 수행하는 정규 워크플로입니다.
-- `scripts/collect-news-candidates.js`: `docs/sources.md`의 출처를 읽고 RSS/HTML 기반 뉴스 후보를 수집합니다. OpenAI API를 사용하지 않습니다.
+- `scripts/collect-news-candidates.js`: `data/news-sources.json`의 enabled source를 우선 읽고 RSS/HTML 기반 뉴스 후보를 수집합니다. JSON registry가 없으면 `docs/sources.md`로 fallback합니다. OpenAI API를 사용하지 않습니다.
 - `scripts/gemini-newsroom-newsletter.js`: 수집 후보 JSON을 기반으로 Gemini 기자/편집자/검수자 파이프라인을 실행하고 뉴스레터 파일을 생성합니다.
 - `scripts/lib/`: Gemini 호출, schema, Markdown/HTML 렌더링 공통 모듈입니다.
 - `scripts/validate-site.js`: 발행 메타데이터와 필수 파일/섹션을 검증합니다.
