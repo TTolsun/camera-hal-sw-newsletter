@@ -1,9 +1,6 @@
 name: Weekly Newsletter Issue
 
 on:
-  schedule:
-    # KST Monday 07:00 = UTC Sunday 22:00
-    - cron: "0 22 * * 0"
   workflow_dispatch:
 
 permissions:
@@ -21,7 +18,7 @@ jobs:
           script: |
             const now = new Date();
 
-            // GitHub Actions schedule uses UTC. Convert to KST for newsletter date.
+            // Convert to KST for newsletter date.
             const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
             const yyyy = kst.getUTCFullYear();
             const mm = String(kst.getUTCMonth() + 1).padStart(2, '0');
@@ -68,7 +65,7 @@ jobs:
             const body = [
               '## Goal',
               '',
-              '이번 주 Camera HAL SW Newsletter를 작성합니다.',
+              '이번 주 Camera HAL SW Newsletter를 수동 보완합니다.',
               '',
               '## Output Files',
               '',
@@ -85,63 +82,17 @@ jobs:
               '- [ ] 이번 주 Action Items',
               '- [ ] References',
               '',
-              '## Section Roles',
+              '## Note',
               '',
-              '| 카테고리 | 역할 |',
-              '|---|---|',
-              '| 이번 주 3줄 브리핑 | 핵심만 빠르게 요약 |',
-              '| AOSP Camera Watch | Android Camera 최신 흐름 |',
-              '| Tech Trend Radar | Camera / AI / Mobile / C++ 기술 동향 |',
-              '| 이번 주 C++ / AI 실전 팁 | 개발자가 바로 흥미를 느낄 실전 팁 |',
-              '',
-              '## Content Checklist',
-              '',
-              '- [ ] 3줄 브리핑은 정확히 3줄로 작성했다.',
-              '- [ ] AOSP Camera Watch는 Android Camera / AOSP / CameraX / HAL 영향 중심으로 작성했다.',
-              '- [ ] Tech Trend Radar는 Camera / AI / Mobile / C++ 기술 동향 중 실무 영향이 있는 내용으로 작성했다.',
-              '- [ ] C++ / AI 실전 팁은 개발자가 바로 써먹을 수 있는 예시를 포함했다.',
-              '- [ ] 각 주요 소식에는 배경지식이 반드시 포함되어 있다.',
-              '- [ ] 각 주요 소식에는 Camera HAL에서 확인해볼 아이템이 항목별로 정리되어 있다.',
-              '- [ ] 가능하면 그림 또는 block diagram이 포함되어 있다.',
-              '- [ ] Action Item은 팀에서 실제로 검토 가능한 형태로 작성했다.',
-              '',
-              '## Quality Checklist',
-              '',
-              '- [ ] 공식 문서 또는 신뢰 가능한 출처가 포함되어 있다.',
-              '- [ ] 과장된 표현이 없다.',
-              '- [ ] 추측과 사실이 구분되어 있다.',
-              '- [ ] 10분 안에 설명 가능한 분량이다.',
-              '- [ ] HTML 페이지에서 Archive 링크가 정상 동작한다.',
-              '- [ ] MD 원본 링크가 정상 동작한다.',
-              '',
-              '## Suggested News Sources',
-              '',
-              '### AOSP Camera Watch',
-              '',
-              '- Android Developers Blog',
-              '- Android CameraX release notes',
-              '- AOSP / Android platform release notes',
-              '- Google Issue Tracker 또는 Android Camera 관련 공개 이슈',
-              '',
-              '### Tech Trend Radar',
-              '',
-              '- Mobile camera / computational photography 기술 동향',
-              '- On-device AI / NPU / ISP 관련 동향',
-              '- LLVM / Clang / GCC release notes',
-              '- ISO C++ Blog 또는 C++ tooling 관련 글',
-              '- AI Agent / code review / test generation 관련 업데이트',
-              '',
-              '### C++ / AI Practical Tip',
-              '',
-              '- C++ lifetime / lambda / std::function / concurrency / test pattern',
-              '- AI prompt template for log analysis, code review, TC generation, documentation',
+              '자동 업데이트는 `Weekly Newsletter Auto Update` workflow가 담당합니다.',
+              '이 Issue workflow는 사람이 수동으로 보완 작업을 잡고 싶을 때만 실행합니다.',
               '',
               '## PR Rule',
               '',
               'PR 제목은 아래 형식을 사용합니다.',
               '',
               '```',
-              `[Newsletter] Add Camera HAL SW Newsletter - ${date}`,
+              `[Newsletter] Update Camera HAL SW Newsletter - ${date}`,
               '```'
             ].join('\n');
 
