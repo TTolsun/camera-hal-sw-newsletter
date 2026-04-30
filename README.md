@@ -25,12 +25,17 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 │   └── YYYY-MM-DD/
 │       ├── index.html
 │       └── newsletter.md
-└── .github/
+├── .github/
     └── workflows/
         ├── 01-weekly-newsletter-newsroom.yml
         ├── 02-validate-site.yml
         ├── 03-manual-newsletter-issue.yml
         └── weekly-newsletter-update.yml
+├── scripts/
+│   ├── register-manual-newsletter.js
+│   ├── validate-site.js
+│   ├── generate-weekly-newsletter.js
+│   └── ai-newsroom-newsletter.js
 ```
 
 ## Structure
@@ -47,20 +52,24 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `newsroom/YYYY-MM-DD/release-qa-report.md`: 최종 발행 전 검수 결과입니다.
 - `newsletters/YYYY-MM-DD/index.html`: 개별 뉴스레터 HTML 페이지입니다.
 - `newsletters/YYYY-MM-DD/newsletter.md`: 개별 뉴스레터 Markdown 원본입니다.
-- `.github/workflows/01-weekly-newsletter-newsroom.yml`: AI 뉴스룸이 뉴스 후보 수집, 초안 작성, 검수 산출물 생성 후 PR을 만드는 정규 워크플로입니다.
+- `.github/workflows/01-weekly-newsletter-newsroom.yml`: 수동으로 저장한 뉴스레터 파일을 등록하고 PR을 만드는 정규 워크플로입니다.
 - `.github/workflows/02-validate-site.yml`: `newsletters.json`, 링크 파일 존재 여부, TODO 문자열, 중복 날짜를 검증하는 워크플로입니다.
 - `.github/workflows/03-manual-newsletter-issue.yml`: 수동 작업이 필요할 때 뉴스레터 작성 Issue를 만드는 워크플로입니다.
 - `.github/workflows/weekly-newsletter-update.yml`: 비상용 또는 테스트용 기본 뉴스레터 생성 워크플로입니다.
+- `scripts/register-manual-newsletter.js`: 수동 작성된 `newsletters/YYYY-MM-DD/` 파일을 검사하고 `data/newsletters.json`과 누락된 `newsroom/YYYY-MM-DD/` 산출물을 등록합니다.
+- `scripts/validate-site.js`: 발행 메타데이터와 필수 파일/섹션을 검증합니다.
+- `scripts/ai-newsroom-newsletter.js`: OpenAI API 기반 자동 기자용 실험 스크립트입니다. 정규 workflow에서는 호출하지 않습니다.
 
 ## Current Operation Mode
 
-현재는 **Newsroom 기반 자동 초안 생성 + 편집장 승인 + GitHub Actions 검수 + GitHub Pages 발행** 방식으로 운영합니다.
+현재는 **ChatGPT 수동 작성 + GitHub Actions 등록/검수 + 편집장 승인 + GitHub Pages 발행** 방식으로 운영합니다.
 
-- `01 - Weekly Newsletter Newsroom`
-  - 매주 월요일 KST 06:30 실행합니다.
-  - AI 기자와 편집자가 뉴스 후보를 수집하고 뉴스레터 초안을 생성합니다.
-  - `newsroom/YYYY-MM-DD/`에 역할별 산출물을 남깁니다.
-  - `weekly-newsletter/YYYY-MM-DD` 브랜치를 만들고 PR을 생성합니다.
+- `01 - Manual Newsletter Publish`
+  - 수동 실행만 지원합니다.
+  - ChatGPT에서 만든 `newsletters/YYYY-MM-DD/newsletter.md`와 `newsletters/YYYY-MM-DD/index.html`을 등록합니다.
+  - 누락된 `newsroom/YYYY-MM-DD/` 역할별 산출물 템플릿을 보완합니다.
+  - `data/newsletters.json`을 업데이트합니다.
+  - `manual-newsletter/YYYY-MM-DD` 브랜치를 만들고 PR을 생성합니다.
 
 - `02 - Validate Site`
   - PR, `main` push, 수동 실행 시 사이트 품질을 검증합니다.
@@ -72,7 +81,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 
 - `Weekly Newsletter Basic Auto Update`
   - 비상용 또는 테스트용 기본 뉴스레터를 생성합니다.
-  - 정규 운영에서는 Newsroom workflow를 우선 사용합니다.
+  - 정규 운영에서는 `01 - Manual Newsletter Publish` workflow를 우선 사용합니다.
 
 ## Operation Rules
 
@@ -84,13 +93,14 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 
 ## Add a Newsletter
 
-정규 운영에서는 `01 - Weekly Newsletter Newsroom`이 아래 파일을 자동 생성하고 PR을 만듭니다. 수동 보완이 필요할 때만 같은 구조를 직접 맞춥니다.
+정규 운영에서는 ChatGPT에서 뉴스 후보, Markdown, HTML, 검토 산출물을 만들고 저장소에 파일을 추가한 뒤 `01 - Manual Newsletter Publish`를 수동 실행합니다.
 
 1. `newsletters/YYYY-MM-DD/` 디렉터리를 만듭니다.
 2. `newsletter.md`에 원본 내용을 작성합니다.
 3. `index.html`에 웹 페이지용 내용을 작성합니다.
-4. `data/newsletters.json`에 새 항목을 추가합니다.
+4. 가능하면 `newsroom/YYYY-MM-DD/`에 역할별 산출물을 함께 저장합니다.
 5. 각 뉴스 항목에 `Sources`를 붙이고, 마지막 `References`에 전체 링크를 모읍니다.
+6. `data/newsletters.json`은 직접 수정하지 않습니다. `scripts/register-manual-newsletter.js`가 자동으로 업데이트합니다.
 
 ## Weekly Operation
 
@@ -101,11 +111,12 @@ Copy-Item templates/newsletter.md "newsletters/$DATE/newsletter.md"
 Copy-Item templates/newsletter.html "newsletters/$DATE/index.html"
 ```
 
-1. `01 - Weekly Newsletter Newsroom` workflow가 정규 초안 PR을 생성합니다.
-2. 편집장은 PR 본문과 `newsroom/YYYY-MM-DD/` 산출물을 확인합니다.
-3. 수정이 필요하면 PR에서 변경 요청을 남기거나 수동 보완합니다.
-4. `02 - Validate Site` workflow 결과를 확인합니다.
-5. 편집장 승인 후 PR을 merge합니다.
+1. ChatGPT에서 뉴스 후보, 뉴스레터 Markdown, 뉴스레터 HTML, 검토 산출물을 작성합니다.
+2. `newsletters/YYYY-MM-DD/newsletter.md`와 `newsletters/YYYY-MM-DD/index.html`을 저장합니다.
+3. `newsroom/YYYY-MM-DD/`에 역할별 산출물을 저장합니다. 누락된 파일은 등록 스크립트가 템플릿으로 보완합니다.
+4. GitHub Actions에서 `01 - Manual Newsletter Publish`를 실행하고 `newsletter_date`를 입력합니다.
+5. 생성된 PR에서 `data/newsletters.json` 업데이트와 `02 - Validate Site` 결과를 확인합니다.
+6. 편집장 승인 후 PR을 merge합니다.
 
 ## Newsletter Sections
 
