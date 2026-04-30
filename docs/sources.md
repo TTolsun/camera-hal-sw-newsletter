@@ -5,6 +5,7 @@
 ## AOSP Camera Watch
 
 - Android Developers Blog: https://android-developers.googleblog.com/
+- Android Developers News: https://developer.android.com/news
 - Android CameraX release notes: https://developer.android.com/jetpack/androidx/releases/camera
 - Android version release notes: https://developer.android.com/about/versions
 - AOSP Camera documentation: https://source.android.com/docs/core/camera
@@ -13,6 +14,7 @@
 
 ## Tech Trend Radar
 
+- C++ Reference: https://cppreference.com/
 - LLVM release notes: https://releases.llvm.org/
 - Clang release notes: https://clang.llvm.org/docs/ReleaseNotes.html
 - ISO C++ Blog: https://isocpp.org/blog
