@@ -4,88 +4,158 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Camera HAL SW Newsletter - 2026-04-30</title>
-  <link rel="stylesheet" href="../../css/styles.css" />
+  <style>
+:root{--bg:#0b1020;--panel:#121a31;--panel2:#182241;--text:#eaf0ff;--muted:#a9b5d6;--line:#2a3764;--accent:#7cc6ff;--accent2:#8dffcf;--chip:#22315e;--warn:#ffd27a;--shadow:0 14px 40px rgba(0,0,0,.28)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 12% 0%,rgba(124,198,255,.22),transparent 32%),radial-gradient(circle at 88% 10%,rgba(141,255,207,.14),transparent 28%),linear-gradient(180deg,#081023 0%,var(--bg) 42%,#080b16 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;line-height:1.65}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(1120px,calc(100% - 36px));margin:0 auto;padding:28px 0 64px}.topbar{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:28px}.navlinks{display:flex;gap:10px;flex-wrap:wrap}.navlinks a,.pill{border:1px solid var(--line);background:rgba(18,26,49,.74);color:var(--text);padding:9px 13px;border-radius:999px;font-size:13px}.hero{position:relative;overflow:hidden;border:1px solid var(--line);background:linear-gradient(135deg,rgba(18,26,49,.94),rgba(24,34,65,.88));box-shadow:var(--shadow);border-radius:28px;padding:34px}.eyebrow{color:var(--accent2);font-weight:800;letter-spacing:.12em;font-size:12px;text-transform:uppercase}h1{margin:10px 0 12px;font-size:clamp(32px,6vw,58px);line-height:1.05;letter-spacing:-.04em}.subtitle{color:var(--muted);max-width:820px;font-size:18px;margin:0}.hero-grid,.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.brief-card,.card,.panel{border:1px solid var(--line);background:rgba(18,26,49,.82);border-radius:22px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.16)}.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.kpi{background:rgba(34,49,94,.72);border:1px solid var(--line);border-radius:18px;padding:14px}.kpi strong{display:block;font-size:24px;color:var(--accent)}.kpi span,.muted{color:var(--muted);font-size:13px}.section{margin-top:36px}.section h2{font-size:clamp(24px,4vw,36px);margin:0 0 16px;letter-spacing:-.03em}.section-lead{color:var(--muted);margin-top:-4px;max-width:860px}.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:12px}.card h3,.panel h3{margin:0 0 10px;font-size:21px}.tag{color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:16px;margin-top:14px}th,td{border:1px solid var(--line);padding:12px;vertical-align:top}th{background:rgba(124,198,255,.12);color:var(--accent2);text-align:left}td{background:rgba(18,26,49,.62)}.callout{border-left:5px solid var(--accent);background:rgba(124,198,255,.10);padding:16px 18px;border-radius:16px;color:var(--text)}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.flow div{text-align:center;padding:13px 10px;border:1px solid var(--line);background:rgba(34,49,94,.72);border-radius:16px;font-size:13px}.ref-list{columns:2;column-gap:28px}.ref-list li{break-inside:avoid;margin-bottom:9px}code,pre{background:rgba(0,0,0,.24);border:1px solid var(--line);border-radius:12px}code{padding:2px 6px}footer{color:var(--muted);border-top:1px solid var(--line);margin-top:46px;padding-top:22px}@media(max-width:820px){.hero-grid,.grid-2,.grid-3{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.ref-list{columns:1}.hero{padding:24px}.topbar{align-items:flex-start;flex-direction:column}}
+</style>
 </head>
 <body>
-  <main class="wrap">
-    <header class="hero newsletter-hero">
-      <p class="eyebrow">WEEKLY NEWSLETTER</p>
-      <h1>Camera HAL SW Newsletter - 2026-04-30</h1>
-      <p class="subtitle">Android Camera, CameraX, AI agent, C++ tooling 흐름을 Camera HAL 관점에서 자동 생성한 주간 브리핑입니다.</p>
-      <div class="actions newsletter-actions">
-        <a class="button" href="../../index.html">Archive로 돌아가기</a>
-        <a class="button primary" href="newsletter.md">MD 원본 보기</a>
+  <div class="wrap">
+    <nav class="topbar">
+      <div class="pill">2026-04-30 · Weekly Issue</div>
+      <div class="navlinks">
+        <a href="../../index.html">Archive로 돌아가기</a>
+        <a href="newsletter.md">MD 원본 보기</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="eyebrow">Camera HAL SW Newsletter</div>
+      <h1>CameraX 1.6과 Android 17, HAL의 진실 탐지기가 켜졌다</h1>
+      <p class="subtitle">Android 17 Beta 4, CameraX SessionConfig, Android agent workflow, on-device AI, C++ concurrency를 Camera HAL 엔지니어가 바로 점검할 수 있는 형태로 정리했습니다.</p>
+      <div class="chiprow">
+        <span class="chip">Android 17</span><span class="chip">CameraX 1.6</span><span class="chip">SessionConfig</span><span class="chip">On-device AI</span><span class="chip">C++ Atomics</span><span class="chip">AI Agent Workflow</span>
+      </div>
+      <div class="hero-grid">
+        <div class="brief-card">
+          <h2>이번 주 3줄 브리핑</h2>
+          <ul>
+            <li><strong>Android 17 Beta 4</strong>는 앱 호환성 막바지 점검 단계입니다. Camera App, SDK, native library loading, memory limit을 지금 확인해야 합니다.</li>
+            <li><strong>CameraX 1.6</strong>은 CameraPipe, Feature Group, stable SessionConfig, <code>isSessionConfigSupported()</code>로 HAL capability 정합성을 더 강하게 드러냅니다.</li>
+            <li><strong>AI agent</strong>는 Android CLI, Skills, Planning Mode, sandbox 기반 workflow로 이동 중입니다. 이제 장난감이 아니라 업무 파이프라인 부품입니다.</li>
+          </ul>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi"><strong>5</strong><span>주요 기사</span></div>
+          <div class="kpi"><strong>11</strong><span>공식 References</span></div>
+          <div class="kpi"><strong>4</strong><span>HAL 점검 축</span></div>
+          <div class="kpi"><strong>1</strong><span>가장 중요한 결론: capability 거짓말 금지</span></div>
+        </div>
       </div>
     </header>
 
-    <section class="section issue-briefing">
-      <h2>1. 이번 주 3줄 브리핑</h2>
-      <div class="card">
-        <ul>
-          <li>Android Camera / CameraX 변화는 HAL의 capability, stream 조합, metadata 정합성 관점에서 확인합니다.</li>
-          <li>AI agent와 개발 도구 변화는 코드 리뷰, 로그 분석, 테스트 생성 workflow에 붙일 수 있는지 봅니다.</li>
-          <li>C++ tooling 변화는 lifetime, callback ownership, warning baseline 관리와 연결해 봅니다.</li>
-        </ul>
+    <section class="section">
+      <h2>Top Story</h2>
+      <div class="panel">
+        <div class="tag">AOSP Camera Watch</div>
+        <h3>CameraX 1.6 + Android 17: 이제 “지원한다고 말한 기능”이 더 빨리 검증된다</h3>
+        <p>CameraX는 앱 개발자용 라이브러리지만, HAL 입장에서는 상위 호환성 테스트 도구처럼 동작합니다. CameraX 1.6은 CameraPipe 기반 unified stack, Media3 Muxer, Feature Group 개선, stable SessionConfig, <code>isSessionConfigSupported()</code>를 포함합니다.</p>
+        <div class="callout">핵심은 간단합니다. 앱이 bind 전에 조합 지원 여부를 더 쉽게 묻고, HAL은 capability와 실제 동작을 더 일관되게 맞춰야 합니다. 추상화는 친절하지만, 거짓말에는 집요합니다.</div>
+        <table>
+          <thead><tr><th>영역</th><th>Camera HAL 점검 포인트</th></tr></thead>
+          <tbody>
+            <tr><td>Capability</td><td><code>isSessionConfigSupported()</code> 결과와 HAL <code>configure_streams()</code> 성공 여부가 일치하는지 확인</td></tr>
+            <tr><td>Dynamic Range</td><td>Android 17 dynamic range mode가 metadata / framework path에서 unknown으로 누락되지 않는지 확인</td></tr>
+            <tr><td>Stabilization</td><td>Preview stabilization, Video stabilization, 4K recording 동시 요청에서 capability와 실제 동작이 모순되지 않는지 확인</td></tr>
+            <tr><td>Stream / Buffer</td><td>Preview + VideoCapture + ImageAnalysis + Extension 조합에서 buffer starvation, reconfigure loop, abandoned surface 로그 확인</td></tr>
+          </tbody>
+        </table>
+        <p class="muted">Sources: <a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX release notes</a>, <a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">Android 17 Beta 4</a></p>
       </div>
     </section>
 
     <section class="section">
-      <h2>2. AOSP Camera Watch</h2>
-      <div class="card issue-section aosp">
-        <span class="issue-kicker">AOSP CAMERA WATCH</span>
-        <h3>Android Camera / CameraX 업데이트 흐름</h3>
-        <p><strong>배경지식</strong> Camera HAL 입장에서 Android Camera 업데이트는 API 이름보다 request/result metadata, stream 조합, buffer lifecycle에 어떤 영향을 주는지가 더 중요합니다.</p>
-        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
-        <ul>
-          <li>Capability dump와 실제 request/result metadata가 서로 모순되지 않는지 확인합니다.</li>
-          <li>Preview, video, still capture 동시 조합에서 stream reconfiguration 실패가 없는지 봅니다.</li>
-          <li>CameraX sample app 기준으로 앱이 보는 지원 기능과 HAL 내부 capability를 비교합니다.</li>
-        </ul>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera">Android CameraX release notes</a></li><li><a href="https://developer.android.com/about/versions">Android platform release notes</a></li><li><a href="https://source.android.com/docs/core/camera/camera3">AOSP Camera HAL documentation</a></li></ul></div>
+      <h2>AOSP Camera Watch</h2>
+      <p class="section-lead">Android 17 Beta 4는 마지막 scheduled beta로 소개되었고, SDK/library/tool 개발자에게 호환성 준비가 권고되었습니다.</p>
+      <div class="grid-2">
+        <article class="card">
+          <div class="tag">Android 17 Beta 4</div>
+          <h3>Camera App smoke test를 지금 고정해야 한다</h3>
+          <p>Android 17 target에서는 native library loading 보호가 강화되고, app memory limit과 profiling trigger가 추가됩니다. Camera App의 long-run preview, video, high-resolution capture에서 메모리와 binder spam을 같이 봐야 합니다.</p>
+          <ul><li>native library file permission 확인</li><li><code>ApplicationExitInfo</code>의 <code>MemoryLimiter</code> 흔적 확인</li><li><code>ProfilingManager</code> anomaly trigger로 excessive binder calls 분석</li></ul>
+        </article>
+        <article class="card">
+          <div class="tag">CameraX 1.6</div>
+          <h3>SessionConfig가 HAL 조합 검증의 입구가 된다</h3>
+          <p><code>SessionConfig</code>가 stable public API가 되고, feature group이 video stabilization과 4K recording을 지원하면서 앱이 더 많은 조합을 더 쉽게 요청할 수 있습니다.</p>
+          <ul><li>HDR + stabilization + resolution 조합표 작성</li><li>logical/physical camera id별 차이 확인</li><li>vendor tag와 public metadata 간 불일치 점검</li></ul>
+        </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>3. Tech Trend Radar</h2>
-      <div class="card issue-section trend">
-        <span class="issue-kicker">TECH TREND RADAR</span>
-        <h3>AI agent / 개발 생산성 도구 흐름</h3>
-        <p><strong>배경지식</strong> AI 도구는 코드 리뷰, 로그 요약, 테스트 초안 생성처럼 workflow에 붙는 방향으로 이동하고 있습니다.</p>
-        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
-        <ul>
-          <li>로그 분석 prompt에는 timestamp, frame number, thread, 근거 log line을 표로 요구합니다.</li>
-          <li>코드 리뷰 prompt에는 CODING_RULES, HAL contract, concurrency, performance 항목을 고정 rubric으로 넣습니다.</li>
-          <li>AI agent를 CI에 붙일 경우 실행 시간, 실패율, 사람이 수정한 비율을 함께 기록합니다.</li>
-        </ul>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://github.blog/changelog/">GitHub Changelog</a></li><li><a href="https://perfetto.dev/docs/">Perfetto documentation</a></li></ul></div>
+      <h2>AI & Developer Workflow</h2>
+      <div class="grid-2">
+        <article class="card">
+          <div class="tag">Android CLI / Skills</div>
+          <h3>Agent에게도 표준작업서를 먹이는 시대</h3>
+          <p>Android CLI는 SDK 설치, project 생성, emulator 관리, app 실행을 terminal 중심으로 제공하고, Android Skills는 <code>SKILL.md</code> 기반으로 agent workflow를 고정합니다.</p>
+          <div class="flow"><div>Prompt</div><div>SKILL.md</div><div>CLI</div><div>Build/Test</div><div>Evidence</div></div>
+        </article>
+        <article class="card">
+          <div class="tag">Android Studio Panda 4</div>
+          <h3>Planning Mode는 Camera HAL refactoring에 잘 맞는다</h3>
+          <p>복잡한 변경 전에 agent가 implementation plan을 먼저 만들고 사용자가 코멘트할 수 있습니다. Vendor code common화, TC 확보, rollback plan 같은 작업에 특히 적합합니다.</p>
+          <ul><li>dependency map</li><li>vendor dependency 잔존 목록</li><li>TC 확보 전략</li><li>HAL contract 영향</li></ul>
+        </article>
       </div>
     </section>
 
     <section class="section">
-      <h2>4. 이번 주 C++ / AI 실전 팁</h2>
-      <div class="card issue-section tip">
-        <span class="issue-kicker">C++ / AI TIP</span>
-        <h3>Callback lifetime과 자동 리뷰 prompt를 같이 점검하기</h3>
-        <p><strong>배경지식</strong> Camera HAL C++ 코드에서는 callback, lambda capture, std::function, 참조 멤버가 섞이기 쉽습니다.</p>
-        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
-        <ul>
-          <li>생성자 option으로 전달된 callback이 객체 수명보다 오래 살아야 하는지 확인합니다.</li>
-          <li>const reference로 저장한 값이 temporary 또는 stack object를 참조하지 않는지 봅니다.</li>
-          <li>AI 리뷰 prompt에 callback ownership, lambda capture, reference member lifetime을 우선 점검하라고 명시합니다.</li>
-        </ul>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org/blog">ISO C++ Blog</a></li><li><a href="https://releases.llvm.org/">Clang release notes</a></li></ul></div>
+      <h2>On-device AI Watch</h2>
+      <div class="panel">
+        <div class="tag">Hybrid inference / LiteRT / NPU</div>
+        <h3>AI 기능은 이제 Camera 성능 이슈와 같은 방에 들어왔다</h3>
+        <p>Firebase hybrid inference는 on-device Gemini Nano와 cloud-hosted Gemini model을 unified API로 전환할 수 있게 합니다. LiteRT는 CPU/GPU/NPU acceleration을 제공하며, real-time video effects 같은 기능에서 thermal, battery, frame drop이 핵심이라고 설명합니다.</p>
+        <table>
+          <thead><tr><th>영역</th><th>점검 포인트</th></tr></thead>
+          <tbody>
+            <tr><td>Thermal</td><td>Preview + AI inference 동시 구동 시 FPS drop / throttling 상관관계 측정</td></tr>
+            <tr><td>Buffer</td><td>Bitmap 변환, format conversion, stride mismatch, copy count 확인</td></tr>
+            <tr><td>Privacy</td><td>on-device/cloud fallback 정책과 image data 반출 정책 충돌 여부 확인</td></tr>
+            <tr><td>Scheduling</td><td>NPU/GPU 사용이 ISP/GPU display path와 경쟁하는지 Perfetto로 확인</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Tech Trend Radar</h2>
+      <div class="grid-3">
+        <article class="card"><div class="tag">GitHub Copilot</div><h3>Cloud agent startup 20% 개선</h3><p>Actions custom images로 Copilot cloud agent startup이 20% 이상 빨라졌습니다. HAL CI runner image 최적화와 같은 방향으로 볼 수 있습니다.</p></article>
+        <article class="card"><div class="tag">OpenAI Agents SDK</div><h3>Sandbox와 harness 분리가 핵심</h3><p>agent가 파일을 읽고, 명령을 실행하고, 코드를 수정하는 구조에서는 credential 격리, snapshot, rehydration, evidence가 중요합니다.</p></article>
+        <article class="card"><div class="tag">C++ Native</div><h3>Atomics와 JSON은 리뷰 항목이다</h3><p>atomic memory order, callback lifetime, JSON parsing 실패는 Camera HAL 품질에서 사소한 취향 문제가 아니라 재현성 문제입니다.</p></article>
       </div>
     </section>
 
     <section class="section">
       <h2>이번 주 Action Items</h2>
-      <div class="card action-card"><ul><li>CameraX release note에서 target device에 영향 있는 항목을 하나 골라 capability와 비교합니다.</li><li>AI 로그 분석 prompt template을 팀 공통 문서로 하나 추가합니다.</li><li>callback lifetime 관련 warning/review checklist를 C++ 리뷰 항목에 추가합니다.</li></ul></div>
+      <div class="grid-2">
+        <div class="card"><h3>1. CameraX 1.6 조합 검증표</h3><p>SessionConfig, stabilization, 4K, HDR, extension, slow motion 조합을 target device별로 정리합니다.</p></div>
+        <div class="card"><h3>2. Android 17 smoke test</h3><p>Camera App 실행, preview/video/still capture, long-run memory, native loading, binder profiling trigger를 확인합니다.</p></div>
+        <div class="card"><h3>3. Camera HAL SKILL.md</h3><p><code>camera-hal-code-reviewer</code>, <code>negative-integration-tc-generator</code>, <code>log-cause-owner-finder</code>부터 시작합니다.</p></div>
+        <div class="card"><h3>4. On-device AI 성능 측정</h3><p>Preview + AI inference 동시 구동에서 FPS, thermal, battery, buffer queue latency, dropped frame을 측정합니다.</p></div>
+      </div>
     </section>
 
     <section class="section">
       <h2>References</h2>
-      <div class="card reference-list"><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera">Android CameraX release notes</a></li><li><a href="https://developer.android.com/about/versions">Android platform release notes</a></li><li><a href="https://source.android.com/docs/core/camera/camera3">AOSP Camera HAL documentation</a></li><li><a href="https://github.blog/changelog/">GitHub Changelog</a></li><li><a href="https://isocpp.org/blog">ISO C++ Blog</a></li><li><a href="https://releases.llvm.org/">Clang release notes</a></li><li><a href="https://perfetto.dev/docs/">Perfetto documentation</a></li></ul></div>
+      <ul class="ref-list">
+        <li><a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">Android 17 Beta 4</a></li>
+        <li><a href="https://developer.android.com/jetpack/androidx/releases/camera">Android CameraX release notes</a></li>
+        <li><a href="https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html">Android CLI and skills</a></li>
+        <li><a href="https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html">Android Studio Panda 4</a></li>
+        <li><a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Hybrid inference and Gemini models for Android</a></li>
+        <li><a href="https://developers.googleblog.com/en/building-real-world-on-device-ai-with-litert-and-npu/">Building real-world on-device AI with LiteRT and NPU</a></li>
+        <li><a href="https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/">Copilot cloud agent starts 20% faster</a></li>
+        <li><a href="https://github.blog/changelog/2026-04-24-gpt-5-5-is-generally-available-for-github-copilot/">GPT-5.5 is generally available for GitHub Copilot</a></li>
+        <li><a href="https://openai.com/index/the-next-evolution-of-the-agents-sdk/">OpenAI Agents SDK</a></li>
+        <li><a href="https://isocpp.org/blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks">Implementing Your Own C++ Atomics</a></li>
+        <li><a href="https://isocpp.org/blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen">How C++ Finally Beats Rust at JSON Serialization</a></li>
+      </ul>
     </section>
-  </main>
+
+    <footer>Camera HAL SW Newsletter · 2026-04-30 · Generated from GitHub Issue #5 candidates and verified against official sources.</footer>
+  </div>
 </body>
 </html>
