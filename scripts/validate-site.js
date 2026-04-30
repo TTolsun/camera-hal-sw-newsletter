@@ -3,6 +3,7 @@ const path = require('path');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
+const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
 const requiredSections = [
@@ -38,6 +39,12 @@ function hasSourceEntry(section) {
 
 if (!fs.existsSync(dataPath)) {
   fail('Missing data/newsletters.json');
+}
+
+if (process.env.REQUIRE_NEWSLETTER_DATE_FILE === '1' && !fs.existsSync(newsletterDatePath)) {
+  fail(
+    'Missing .tmp/newsletter-date.txt. The newsletter generate step likely failed before or during Gemini generation, so validate cannot resolve the generated newsletter date.'
+  );
 }
 
 let newsletters = [];

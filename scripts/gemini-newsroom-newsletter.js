@@ -42,6 +42,12 @@ function writeJson(filePath, value) {
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
+function writeNewsletterDate(date) {
+  const tmpDir = path.join(root, '.tmp');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  fs.writeFileSync(path.join(tmpDir, 'newsletter-date.txt'), date, 'utf8');
+}
+
 function validateReporter(value, date) {
   if (value.date !== date) value.date = date;
   if (!Array.isArray(value.candidates) || value.candidates.length === 0) {
@@ -149,8 +155,10 @@ function runValidate() {
 
 async function main() {
   const date = process.env.NEWSLETTER_DATE || kstDate();
+  writeNewsletterDate(date);
+
   const candidatePath = path.join(root, 'collected-news', date, 'candidates.json');
-  const sourcesPath = path.join(root, 'docs', 'sources.md');
+  const sourcesPath = path.join(root, 'docs', 'news-sources.md');
   const newsroomDir = path.join(root, 'newsroom', date);
   const newsletterDir = path.join(root, 'newsletters', date);
 
@@ -158,7 +166,7 @@ async function main() {
     fail(`Missing ${path.relative(root, candidatePath)}. Run scripts/collect-news-candidates.js first.`);
   }
   if (!fs.existsSync(sourceRegistryPath) && !fs.existsSync(sourcesPath)) {
-    fail('Missing data/news-sources.json and docs/sources.md.');
+    fail('Missing data/news-sources.json and docs/news-sources.md.');
   }
 
   const candidates = readJson(candidatePath);
@@ -170,7 +178,7 @@ async function main() {
   const commonContext = [
     `Newsletter date: ${date}`,
     'Audience: Camera HAL / Android Camera / C++ engineer',
-    'Use only the collected candidate JSON, data/news-sources.json, and docs/sources.md. Do not browse the web.',
+    'Use only the collected candidate JSON, data/news-sources.json, and docs/news-sources.md. Do not browse the web.',
     'Keep source names and source URLs unchanged. Distinguish facts from interpretation.',
     'Use candidate section/category metadata for filtering and grouping, but keep the existing newsletter output structure.',
     'Treat candidateOnly=true or requiresCrossCheck=true items as leads unless official or project-official sources support the same claim.',
@@ -186,7 +194,7 @@ async function main() {
       'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
       'Return only JSON matching the schema.'
     ].join('\n'),
-    `${commonContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndata/news-sources.json:\n${JSON.stringify(sourceRegistry, null, 2)}\n\ndocs/sources.md:\n${sourcesMarkdown}`,
+    `${commonContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndata/news-sources.json:\n${JSON.stringify(sourceRegistry, null, 2)}\n\ndocs/news-sources.md:\n${sourcesMarkdown}`,
     reporterSchema
   ), date);
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
@@ -254,9 +262,6 @@ async function main() {
     buildReleaseQaReport(date, files, validateResult.text, factCheck, todoFound, emptySourceSections),
     'utf8'
   );
-
-  fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
-  fs.writeFileSync(path.join(root, '.tmp', 'newsletter-date.txt'), date, 'utf8');
 
   if (todoFound) fail('Generated newsletter contains TODO.');
   if (emptySourceSections.length > 0) fail(`Generated sections without sources: ${emptySourceSections.join(', ')}`);
