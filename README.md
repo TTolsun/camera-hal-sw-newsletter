@@ -14,6 +14,9 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 │   └── newsletters.json
 ├── docs/
 │   └── sources.md
+├── collected-news/
+│   └── YYYY-MM-DD/
+│       └── candidates.json
 ├── newsroom/
 │   └── YYYY-MM-DD/
 │       ├── news-candidates.md
@@ -26,16 +29,18 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 │       ├── index.html
 │       └── newsletter.md
 ├── .github/
-    └── workflows/
-        ├── 01-weekly-newsletter-newsroom.yml
-        ├── 02-validate-site.yml
-        ├── 03-manual-newsletter-issue.yml
-        └── weekly-newsletter-update.yml
-├── scripts/
-│   ├── register-manual-newsletter.js
-│   ├── validate-site.js
-│   ├── generate-weekly-newsletter.js
-│   └── ai-newsroom-newsletter.js
+│   └── workflows/
+│       ├── 00-collect-news-candidates.yml
+│       ├── 01-weekly-newsletter-newsroom.yml
+│       ├── 02-validate-site.yml
+│       ├── 03-manual-newsletter-issue.yml
+│       └── weekly-newsletter-update.yml
+└── scripts/
+    ├── collect-news-candidates.js
+    ├── register-manual-newsletter.js
+    ├── validate-site.js
+    ├── generate-weekly-newsletter.js
+    └── ai-newsroom-newsletter.js
 ```
 
 ## Structure
@@ -45,31 +50,43 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `css/hero-override.css`: 메인 hero 비주얼을 카메라/센서 대시보드 형태로 조정하는 스타일입니다.
 - `data/newsletters.json`: 메인 페이지가 사용하는 뉴스레터 메타데이터 목록입니다.
 - `docs/sources.md`: 매주 뉴스 후보를 찾을 때 확인할 공식 문서와 신뢰 가능한 출처 목록입니다.
-- `newsroom/YYYY-MM-DD/news-candidates.md`: AI 기자가 수집한 뉴스 후보입니다.
-- `newsroom/YYYY-MM-DD/editor-draft.md`: AI 편집자가 작성한 뉴스레터 초안입니다.
-- `newsroom/YYYY-MM-DD/fact-check-report.md`: 1차 검수자의 사실, 출처, 과장 여부 검수 결과입니다.
+- `collected-news/YYYY-MM-DD/candidates.json`: GitHub Action이 무료로 수집한 원본 뉴스 후보 JSON입니다.
+- `newsroom/YYYY-MM-DD/news-candidates.md`: GitHub Action 기자가 만든 뉴스 후보 Markdown입니다.
+- `newsroom/YYYY-MM-DD/editor-draft.md`: ChatGPT 편집자가 작성한 뉴스레터 초안입니다.
+- `newsroom/YYYY-MM-DD/fact-check-report.md`: 사실, 출처, 과장 여부 검수 결과입니다.
 - `newsroom/YYYY-MM-DD/editor-in-chief-brief.md`: 편집장 승인을 위한 요약 보고입니다.
 - `newsroom/YYYY-MM-DD/release-qa-report.md`: 최종 발행 전 검수 결과입니다.
 - `newsletters/YYYY-MM-DD/index.html`: 개별 뉴스레터 HTML 페이지입니다.
 - `newsletters/YYYY-MM-DD/newsletter.md`: 개별 뉴스레터 Markdown 원본입니다.
-- `.github/workflows/01-weekly-newsletter-newsroom.yml`: 수동으로 저장한 뉴스레터 파일을 등록하고 PR을 만드는 정규 워크플로입니다.
-- `.github/workflows/02-validate-site.yml`: `newsletters.json`, 링크 파일 존재 여부, TODO 문자열, 중복 날짜를 검증하는 워크플로입니다.
+- `.github/workflows/00-collect-news-candidates.yml`: OpenAI API 없이 공식 출처에서 뉴스 후보를 수집하고 Issue/PR을 생성하는 워크플로입니다.
+- `.github/workflows/01-weekly-newsletter-newsroom.yml`: 수동으로 저장한 뉴스레터 파일을 등록하고 최종 발행 PR을 만드는 워크플로입니다.
+- `.github/workflows/02-validate-site.yml`: `newsletters.json`, 링크 파일 존재 여부, TODO 문자열, 중복 날짜, 필수 섹션을 검증하는 워크플로입니다.
 - `.github/workflows/03-manual-newsletter-issue.yml`: 수동 작업이 필요할 때 뉴스레터 작성 Issue를 만드는 워크플로입니다.
 - `.github/workflows/weekly-newsletter-update.yml`: 비상용 또는 테스트용 기본 뉴스레터 생성 워크플로입니다.
+- `scripts/collect-news-candidates.js`: `docs/sources.md`의 출처를 읽고 RSS/HTML 기반 뉴스 후보를 수집합니다. OpenAI API를 사용하지 않습니다.
 - `scripts/register-manual-newsletter.js`: 수동 작성된 `newsletters/YYYY-MM-DD/` 파일을 검사하고 `data/newsletters.json`과 누락된 `newsroom/YYYY-MM-DD/` 산출물을 등록합니다.
 - `scripts/validate-site.js`: 발행 메타데이터와 필수 파일/섹션을 검증합니다.
 - `scripts/ai-newsroom-newsletter.js`: OpenAI API 기반 자동 기자용 실험 스크립트입니다. 정규 workflow에서는 호출하지 않습니다.
 
 ## Current Operation Mode
 
-현재는 **ChatGPT 수동 작성 + GitHub Actions 등록/검수 + 편집장 승인 + GitHub Pages 발행** 방식으로 운영합니다.
+현재는 **GitHub Action 무료 후보 수집 + ChatGPT 편집 + GitHub Actions 등록/검수 + 편집장 승인 + GitHub Pages 발행** 방식으로 운영합니다.
+
+- `00 - Collect News Candidates`
+  - 매주 월요일 KST 06:00에 자동 실행됩니다.
+  - 수동 실행도 지원합니다.
+  - `docs/sources.md`에 적힌 공식 출처를 기준으로 후보를 수집합니다.
+  - OpenAI API를 사용하지 않습니다.
+  - `collected-news/YYYY-MM-DD/candidates.json`과 `newsroom/YYYY-MM-DD/news-candidates.md`를 생성합니다.
+  - ChatGPT에 붙여넣을 수 있는 편집 요청 프롬프트를 Issue 본문에 포함합니다.
+  - 후보 보관용 PR을 생성합니다. 이 PR은 최종 발행 PR이 아닙니다.
 
 - `01 - Manual Newsletter Publish`
   - 수동 실행만 지원합니다.
   - ChatGPT에서 만든 `newsletters/YYYY-MM-DD/newsletter.md`와 `newsletters/YYYY-MM-DD/index.html`을 등록합니다.
   - 누락된 `newsroom/YYYY-MM-DD/` 역할별 산출물 템플릿을 보완합니다.
   - `data/newsletters.json`을 업데이트합니다.
-  - `manual-newsletter/YYYY-MM-DD` 브랜치를 만들고 PR을 생성합니다.
+  - `manual-newsletter/YYYY-MM-DD` 브랜치를 만들고 최종 발행 PR을 생성합니다.
 
 - `02 - Validate Site`
   - PR, `main` push, 수동 실행 시 사이트 품질을 검증합니다.
@@ -77,11 +94,10 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 
 - `03 - Manual Newsletter Issue`
   - 수동 보완 작업이 필요할 때 뉴스레터 작성 Issue를 생성합니다.
-  - 정규 운영은 Newsroom workflow를 우선 사용합니다.
 
 - `Weekly Newsletter Basic Auto Update`
   - 비상용 또는 테스트용 기본 뉴스레터를 생성합니다.
-  - 정규 운영에서는 `01 - Manual Newsletter Publish` workflow를 우선 사용합니다.
+  - 정규 운영에서는 `00 - Collect News Candidates`와 `01 - Manual Newsletter Publish` workflow를 우선 사용합니다.
 
 ## Operation Rules
 
@@ -90,6 +106,40 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - 편집장 승인 없는 자동 merge는 하지 않습니다.
 - 출처 없는 뉴스 항목은 발행하지 않습니다.
 - HAL 관점 Action Item 없는 뉴스 항목은 발행하지 않습니다.
+- OpenAI API 비용이 들지 않도록 정규 후보 수집 workflow에서는 API를 호출하지 않습니다.
+
+## Weekly Operation
+
+1. 매주 월요일 KST 06:00에 `00 - Collect News Candidates`가 자동 실행됩니다.
+2. 생성된 `[News Candidates] Camera HAL SW Newsletter - YYYY-MM-DD` Issue를 엽니다.
+3. Issue의 `ChatGPT 편집 요청 프롬프트`와 후보 목록을 ChatGPT에 붙여넣습니다.
+4. ChatGPT에서 뉴스레터 Markdown, HTML, 검토 산출물을 작성합니다.
+5. `newsletters/YYYY-MM-DD/newsletter.md`와 `newsletters/YYYY-MM-DD/index.html`을 저장합니다.
+6. 가능하면 `newsroom/YYYY-MM-DD/`에 `editor-draft.md`, `fact-check-report.md`, `editor-in-chief-brief.md`, `release-qa-report.md`를 함께 저장합니다.
+7. GitHub Actions에서 `01 - Manual Newsletter Publish`를 실행하고 `newsletter_date`를 입력합니다.
+8. 생성된 최종 발행 PR에서 `data/newsletters.json` 업데이트와 `02 - Validate Site` 결과를 확인합니다.
+9. 편집장 승인 후 PR을 merge합니다.
+
+## Manual Candidate Collection
+
+필요하면 후보 수집만 수동으로 실행할 수 있습니다.
+
+```text
+GitHub → Actions → 00 - Collect News Candidates → Run workflow
+```
+
+입력값:
+
+- `newsletter_date`: `YYYY-MM-DD`, 비우면 KST 기준 오늘 날짜
+- `lookback_days`: 후보 수집 기간, 기본값 21일
+
+로컬에서 실행하려면 다음 명령을 사용합니다.
+
+```powershell
+$env:NEWSLETTER_DATE="YYYY-MM-DD"
+$env:LOOKBACK_DAYS="21"
+node scripts/collect-news-candidates.js
+```
 
 ## Add a Newsletter
 
@@ -102,21 +152,12 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 5. 각 뉴스 항목에 `Sources`를 붙이고, 마지막 `References`에 전체 링크를 모읍니다.
 6. `data/newsletters.json`은 직접 수정하지 않습니다. `scripts/register-manual-newsletter.js`가 자동으로 업데이트합니다.
 
-## Weekly Operation
-
 ```powershell
 $DATE = "YYYY-MM-DD"
 New-Item -ItemType Directory -Force "newsletters/$DATE"
 Copy-Item templates/newsletter.md "newsletters/$DATE/newsletter.md"
 Copy-Item templates/newsletter.html "newsletters/$DATE/index.html"
 ```
-
-1. ChatGPT에서 뉴스 후보, 뉴스레터 Markdown, 뉴스레터 HTML, 검토 산출물을 작성합니다.
-2. `newsletters/YYYY-MM-DD/newsletter.md`와 `newsletters/YYYY-MM-DD/index.html`을 저장합니다.
-3. `newsroom/YYYY-MM-DD/`에 역할별 산출물을 저장합니다. 누락된 파일은 등록 스크립트가 템플릿으로 보완합니다.
-4. GitHub Actions에서 `01 - Manual Newsletter Publish`를 실행하고 `newsletter_date`를 입력합니다.
-5. 생성된 PR에서 `data/newsletters.json` 업데이트와 `02 - Validate Site` 결과를 확인합니다.
-6. 편집장 승인 후 PR을 merge합니다.
 
 ## Newsletter Sections
 
