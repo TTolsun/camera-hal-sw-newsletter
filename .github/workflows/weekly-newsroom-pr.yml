@@ -86,6 +86,20 @@ jobs:
           echo "date=${DATE}" >> "$GITHUB_OUTPUT"
           echo "branch=newsletter/${DATE}" >> "$GITHUB_OUTPUT"
 
+      - name: Resolve generation status
+        id: generation-status
+        if: steps.generate.outcome == 'success' && steps.validate.outcome == 'success'
+        run: |
+          node - <<'NODE' >> "$GITHUB_OUTPUT"
+          const fs = require('fs');
+          const statusPath = '.tmp/newsletter-generation-status.json';
+          const status = fs.existsSync(statusPath)
+            ? JSON.parse(fs.readFileSync(statusPath, 'utf8'))
+            : { status: 'UNKNOWN', must_fix_count: 0 };
+          console.log(`status=${status.status || 'UNKNOWN'}`);
+          console.log(`must_fix_count=${status.must_fix_count || 0}`);
+          NODE
+
       - name: Prepare pull request body
         id: pr-body
         if: steps.generate.outcome == 'success' && steps.validate.outcome == 'success'
@@ -94,6 +108,14 @@ jobs:
           {
             echo "body<<EOF"
             cat "newsroom/${DATE}/editor-in-chief-brief.md"
+            echo ""
+            echo "## Generation Status"
+            echo ""
+            echo "- Status: \`${{ steps.generation-status.outputs.status }}\`"
+            echo "- Fact-check must-fix count: \`${{ steps.generation-status.outputs.must_fix_count }}\`"
+            if [ "${{ steps.generation-status.outputs.status }}" = "NEEDS_FIX" ]; then
+              echo "- This PR is generated for editor review only. Resolve \`newsroom/${DATE}/fact-check-report.md\` before publishing."
+            fi
             echo ""
             echo "## Generated Artifacts"
             echo ""
@@ -158,8 +180,8 @@ jobs:
               labels: ['newsletter', 'editor-review']
             });
 
-      - name: Fail if generation or validation failed
-        if: steps.generate.outcome == 'failure' || steps.validate.outcome == 'failure'
+      - name: Fail if generation, validation, or fact check failed
+        if: steps.generate.outcome == 'failure' || steps.validate.outcome == 'failure' || steps.generation-status.outputs.status == 'NEEDS_FIX'
         run: |
-          echo "Gemini generation or site validation failed. Review the generated PR artifacts and workflow logs."
+          echo "Gemini generation, site validation, or fact-check gate failed. Review the generated PR artifacts and workflow logs."
           exit 1

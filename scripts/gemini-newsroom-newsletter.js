@@ -48,6 +48,16 @@ function writeNewsletterDate(date) {
   fs.writeFileSync(path.join(tmpDir, 'newsletter-date.txt'), date, 'utf8');
 }
 
+function writeGenerationStatus(value) {
+  const tmpDir = path.join(root, '.tmp');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(tmpDir, 'newsletter-generation-status.json'),
+    `${JSON.stringify(value, null, 2)}\n`,
+    'utf8'
+  );
+}
+
 function validateReporter(value, date) {
   if (value.date !== date) value.date = date;
   if (!Array.isArray(value.candidates) || value.candidates.length === 0) {
@@ -156,6 +166,7 @@ function runValidate() {
 async function main() {
   const date = process.env.NEWSLETTER_DATE || kstDate();
   writeNewsletterDate(date);
+  writeGenerationStatus({ date, status: 'STARTED', must_fix_count: 0 });
 
   const candidatePath = path.join(root, 'collected-news', date, 'candidates.json');
   const sourcesPath = path.join(root, 'docs', 'news-sources.md');
@@ -263,11 +274,25 @@ async function main() {
     'utf8'
   );
 
+  const mustFixCount = ensureArray(factCheck.must_fix).length;
+  const generationStatus = factCheck.status === 'NEEDS_FIX' && mustFixCount > 0
+    ? 'NEEDS_FIX'
+    : 'PASS';
+  writeGenerationStatus({
+    date,
+    status: generationStatus,
+    fact_check_status: factCheck.status,
+    must_fix_count: mustFixCount,
+    validate_ok: validateResult.ok,
+    todo_found: todoFound,
+    empty_source_sections: emptySourceSections
+  });
+
   if (todoFound) fail('Generated newsletter contains TODO.');
   if (emptySourceSections.length > 0) fail(`Generated sections without sources: ${emptySourceSections.join(', ')}`);
   if (!validateResult.ok) fail(`validate-site.js failed:\n${validateResult.text}`);
-  if (factCheck.status === 'NEEDS_FIX' && factCheck.must_fix.length > 0) {
-    fail('Gemini fact checker returned NEEDS_FIX with must_fix items. Artifacts were written for review.');
+  if (generationStatus === 'NEEDS_FIX') {
+    console.warn('Gemini fact checker returned NEEDS_FIX with must_fix items. Artifacts were written for editor review.');
   }
 
   console.log(`Gemini newsroom newsletter generated for ${date}`);
