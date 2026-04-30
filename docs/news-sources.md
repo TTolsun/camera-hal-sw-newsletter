@@ -1,89 +1,118 @@
-# News Source Registry
+# Newsletter Sources
 
-`data/news-sources.json` is the structured registry used by `scripts/collect-news-candidates.js`.
-The older `docs/sources.md` remains as human-readable editorial guidance and as a fallback only when the JSON registry is absent.
+`data/news-sources.json` is the machine-readable source registry used by `scripts/collect-news-candidates.js`.
+This document is the human-readable editorial view of the same source list. Keep the two files in sync when adding, removing, disabling, or reclassifying sources.
 
-## Schema
+If the JSON registry is missing, the collector can fall back to this Markdown by reading `- Name: URL` lines, but normal operation should use `data/news-sources.json`.
 
-Each source entry uses this shape:
+## Sync Rules
 
-```json
-{
-  "id": "android-developers-blog",
-  "name": "Android Developers Blog",
-  "sourceUrl": "https://android-developers.googleblog.com/",
-  "rssUrl": "https://android-developers.googleblog.com/feeds/posts/default?alt=rss",
-  "category": "android",
-  "section": "Android / AOSP / Camera",
-  "priority": "high",
-  "reliability": "official",
-  "enabled": true,
-  "candidateOnly": false,
-  "requiresCrossCheck": false,
-  "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-  "keywords": ["Android", "Camera", "CameraX", "AOSP", "HAL"]
-}
-```
+- Add new sources to `data/news-sources.json` first.
+- Mirror enabled editorial sources in this document under the same section.
+- Mark disabled or candidate-only sources clearly.
+- Do not add an `rssUrl` unless it is verified in `data/news-sources.json`.
+- Media, community, newsletter, and paywall-prone sources should be treated as leads and cross-checked against official/project sources before final publication.
 
-- `enabled: false` excludes a source from collection.
-- `candidateOnly: true` keeps a source as a lead/reference candidate; it must not be auto-selected as a final article.
-- `requiresCrossCheck: true` means the editor or generator should look for official documentation, official blogs, release notes, or direct vendor/project sources before final selection.
-- `priority` controls collection and ranking order: `high`, `medium`, then `low`.
-- `rssUrl` is included only when the feed URL is known; otherwise the collector watches `sourceUrl`.
-- `reliability` values such as `community`, `newsletter`, `tech-media`, `expert-media`, and `community-doc` are treated as candidate-only leads.
-- `keywords` contribute to `camera_hal_relevance_score`.
+## Android / AOSP / Camera
 
-Common `reliability` values:
+### Primary Sources
 
-- `official`: official product, platform, company, or standards source.
-- `project-official`: official open source project source.
-- `official-community`: standards/community source with official status for the domain.
-- `engineering-blog`: engineering organization blog.
-- `engineering-media`, `electronics-media`, `tech-media`, `expert-media`: media sources; cross-check if claims affect final newsletter decisions.
-- `newsletter`, `community`, `community-doc`: candidate/reference sources; cross-check before final use.
-- `conference`: conference/session archive or announcement source.
-- `vendor-blog`: vendor-specific engineering or product blog.
+- Android Developers Blog: https://android-developers.googleblog.com/
+- Android Developers Latest Updates: https://developer.android.com/latest-updates
+- CameraX Release Notes: https://developer.android.com/jetpack/androidx/releases/camera
+- AOSP Camera Documentation: https://source.android.com/docs/core/camera
+- AOSP What's New / Release Notes: https://source.android.com/docs/whatsnew
+- Android Compatibility Definition Document: https://source.android.com/docs/compatibility/cdd
+- Android Security Bulletin: https://source.android.com/docs/security/bulletin
+- Samsung Mobile Security Updates: https://security.samsungmobile.com/securityUpdate.smsb
+- Qualcomm Security Bulletins: https://docs.qualcomm.com/product/publicresources/securitybulletin
+- Android Developer Newsletter: https://developer.android.com/newsletter
 
-`priority` values:
+### Candidate / Cross-check Sources
 
-- `high`: official or primary sources that should be processed first.
-- `medium`: useful recurring sources for candidate collection and context.
-- `low`: optional sources, broad trend sources, or sources that are disabled by default.
+- Android Weekly: https://androidweekly.net/
 
-## Section Mapping
+## Linux Camera / Driver
 
-`sectionMap` maps source categories into these editorial grouping sections:
+### Primary Sources
 
-- `Android / AOSP / Camera`
-- `Linux Camera / Driver`
-- `C++ / Native / Toolchain`
-- `Embedded / Semiconductor`
-- `AI / SW Engineering Trends`
-- `Korean Tech Trends`
+- libcamera Blog: https://libcamera.org/blog/
+- libcamera Documentation: https://libcamera.org/introduction.html
+- Collabora Blog: https://www.collabora.com/news-and-blog/
 
-The collector preserves source name, source URL, category, priority, reliability, usage hint, and candidate-only status in `collected-news/YYYY-MM-DD/candidates.json`.
-The Gemini newsroom step must keep source links unchanged and prefer official or project-official sources when validating media/community leads.
+### Candidate / Cross-check Sources
 
-## Adding Sources
+- LWN Camera / Media Articles: https://lwn.net/
+- Phoronix Linux Camera / Media: https://www.phoronix.com/
+- KernelNewbies LinuxChanges: https://kernelnewbies.org/LinuxChanges
 
-1. Add a stable `id` in lowercase kebab-case.
-2. Set `sourceUrl` to the public source or tag page.
-3. Set `rssUrl` only when the feed URL is confirmed. Do not invent RSS URLs.
-4. Choose `category` and `section` from the mapping above.
-5. Set `enabled: false` for optional, noisy, paywalled, or broad trend sources until the editor wants them in regular collection.
-6. Use `candidateOnly: true` for community/newsletter/paywall-prone sources that should be leads only.
-7. Use `requiresCrossCheck: true` for media/community/vendor-reporting sources.
-8. Keep `usageHint` short and focused on why Camera HAL / Android / C++ / AI engineers should care.
+## C++ / Native / Toolchain
 
-Do not copy article bodies into repository artifacts. Do not implement deep scraping for complex sites. The final newsletter should summarize in Korean and preserve source links in `Sources` or `References`.
+### Primary Sources
 
-## Relevance Score
+- ISO C++ Blog: https://isocpp.org/blog
+- CppCon News: https://cppcon.org/category/news/
+- LLVM Project Blog: https://blog.llvm.org/
+- LLVM Release Notes: https://releases.llvm.org/
+- Microsoft C++ Team Blog: https://devblogs.microsoft.com/cppblog/
 
-The collector emits `cameraHalRelevanceScore` and `candidateTier`.
+## Embedded / Semiconductor
 
-- `80+`: main article candidate.
-- `50+`: short news candidate.
-- `30+`: reference/candidate.
-- `<30`: excluded by default unless the source is high priority.
+### Primary Sources
 
-Categories such as `camera-hal`, `camera-api`, `aosp`, `compatibility`, and `security` receive a base boost. Keywords such as Camera, CameraX, Camera2, HAL, AOSP, Android, CDD, CTS, VTS, ITS, libcamera, V4L2, ISP, image sensor, Qualcomm, Samsung, SoC, C++, LLVM, Clang, sanitizer, AI agent, coding agent, Codex, and Claude Code add weight.
+- IEEE Spectrum - Embedded Systems: https://spectrum.ieee.org/tag/embedded-systems
+- IEEE Spectrum - Embedded AI: https://spectrum.ieee.org/tag/embedded-ai
+
+### Candidate / Cross-check Sources
+
+- EE Times - Embedded: https://www.eetimes.com/tag/embedded/
+- EE Times - Semiconductors: https://www.eetimes.com/tag/semiconductors/
+- Embedded.com: https://www.embedded.com/
+
+## AI / SW Engineering Trends
+
+### Primary Sources
+
+- Google Open Source Blog: https://opensource.google/
+- Google Research Blog: https://research.google/blog/
+- Google DeepMind Blog: https://deepmind.google/blog/
+- OpenAI News: https://openai.com/news/
+- Anthropic News: https://www.anthropic.com/news
+- Claude Code Changelog: https://code.claude.com/docs/en/changelog
+- Google Cloud AI & Machine Learning Blog: https://cloud.google.com/blog/products/ai-machine-learning
+
+### Candidate / Cross-check Sources
+
+- TLDR: https://tldr.tech/
+- InfoQ: https://www.infoq.com/
+- Hacker News: https://news.ycombinator.com/
+- The Register: https://www.theregister.com/
+- The New Stack: https://thenewstack.io/
+- VentureBeat AI: https://venturebeat.com/ (disabled in registry)
+- Software Engineering Daily: https://softwareengineeringdaily.com/ (disabled in registry)
+
+## Korean Tech Trends
+
+### Candidate / Cross-check Sources
+
+- ZDNet Korea: https://zdnet.co.kr/
+- 요즘IT: https://yozm.wishket.com/
+- NAVER DEVIEW: https://developers.naver.com/d2/deview/ (disabled in registry)
+
+## Selection Rules
+
+- Prefer official documentation, official blogs, release notes, and project-official sources.
+- Use media/community/newsletter sources as discovery leads unless the registry marks them otherwise.
+- For `requiresCrossCheck: true` sources, confirm important claims with official documentation, vendor/project sources, or release notes before final publication.
+- Every final newsletter section must preserve source links in `Sources`; the issue must also include `References`.
+- Final newsletter summaries should be written in Korean and should not copy article bodies.
+
+## Drop Rules
+
+Do not publish items that are:
+
+- unrelated to Camera HAL, Android Camera, Linux camera, C++, embedded systems, AI tooling, or software engineering practice;
+- mostly product promotion without technical details;
+- unsupported by a traceable source;
+- impossible to connect to Camera HAL engineering checks, action items, or implementation context;
+- duplicate or near-duplicate of a stronger official source.

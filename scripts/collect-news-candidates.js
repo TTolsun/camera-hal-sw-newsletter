@@ -3,7 +3,7 @@ const path = require('path');
 
 const root = process.cwd();
 const structuredSourcesPath = path.join(root, 'data', 'news-sources.json');
-const legacySourcesPath = path.join(root, 'docs', 'sources.md');
+const legacySourcesPath = path.join(root, 'docs', 'news-sources.md');
 const AUDIENCE = 'Camera HAL / Android Camera / C++ engineer';
 
 const DEFAULT_SECTION_MAP = {
@@ -147,7 +147,7 @@ function parseStructuredSources() {
 
 function parseLegacySources() {
   if (!fs.existsSync(legacySourcesPath)) {
-    throw new Error('Missing data/news-sources.json and docs/sources.md');
+    throw new Error('Missing data/news-sources.json and docs/news-sources.md');
   }
 
   const markdown = fs.readFileSync(legacySourcesPath, 'utf8');
@@ -164,7 +164,7 @@ function parseLegacySources() {
     }, true));
   }
   if (sources.length === 0) {
-    throw new Error('No sources found in docs/sources.md');
+    throw new Error('No sources found in docs/news-sources.md');
   }
   activeSourcesPath = legacySourcesPath;
   return sources;
@@ -374,7 +374,7 @@ function markdown(date, candidates, failures, lookbackDays) {
   lines.push('```text');
   lines.push(`Newsletter date: ${date}`);
   lines.push(`Audience: ${AUDIENCE}`);
-  lines.push('Inputs: collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/sources.md');
+  lines.push('Inputs: collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/news-sources.md');
   lines.push('Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, newsletter.md, index.html, editor-in-chief-brief.md, release-qa-report.md');
   lines.push('```');
   lines.push('');
@@ -464,7 +464,7 @@ async function main() {
     .slice(0, 40);
 
   if (candidates.length === 0) {
-    throw new Error('No news candidates collected. Check data/news-sources.json, docs/sources.md, or network access.');
+    throw new Error('No news candidates collected. Check data/news-sources.json, docs/news-sources.md, or network access.');
   }
 
   const outDir = path.join(root, 'collected-news', date);
