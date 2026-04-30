@@ -83,6 +83,28 @@ jobs:
             const title = `[News Candidates] Camera HAL SW Newsletter - ${date}`;
             const bodyPath = `newsroom/${date}/news-candidates.md`;
             const body = fs.readFileSync(bodyPath, 'utf8');
+            const labels = ['newsletter', 'news-candidates'];
+
+            async function ensureLabels() {
+              for (const label of labels) {
+                try {
+                  await github.rest.issues.getLabel({ owner, repo, name: label });
+                } catch (error) {
+                  if (error.status !== 404) throw error;
+                  await github.rest.issues.createLabel({
+                    owner,
+                    repo,
+                    name: label,
+                    color: label === 'newsletter' ? '0e8a16' : '1d76db',
+                    description: label === 'newsletter'
+                      ? 'Newsletter operation'
+                      : 'Automatically collected news candidates'
+                  });
+                }
+              }
+            }
+
+            await ensureLabels();
 
             const issues = await github.rest.search.issuesAndPullRequests({
               q: `repo:${owner}/${repo} is:issue is:open in:title "${title}"`,
@@ -96,7 +118,8 @@ jobs:
                 repo,
                 issue_number: issue.number,
                 title,
-                body
+                body,
+                labels
               });
               core.info(`Updated existing issue #${issue.number}`);
               return;
@@ -107,7 +130,7 @@ jobs:
               repo,
               title,
               body,
-              labels: ['newsletter', 'news-candidates']
+              labels
             });
 
             core.info(`Created issue #${issue.data.number}`);
@@ -121,6 +144,7 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const title = `[News Candidates] Collect Camera HAL SW news candidates - ${date}`;
+            const labels = ['newsletter', 'news-candidates'];
 
             const prs = await github.rest.pulls.list({
               owner,
@@ -168,6 +192,12 @@ jobs:
                 title,
                 body
               });
+              await github.rest.issues.setLabels({
+                owner,
+                repo,
+                issue_number: pr.number,
+                labels
+              });
               core.info(`Updated existing PR #${pr.number}`);
               return;
             }
@@ -182,11 +212,11 @@ jobs:
               draft: false
             });
 
-            await github.rest.issues.addLabels({
+            await github.rest.issues.setLabels({
               owner,
               repo,
               issue_number: pr.data.number,
-              labels: ['newsletter', 'news-candidates']
+              labels
             });
 
             core.info(`Created PR #${pr.data.number}`);
