@@ -2,12 +2,13 @@
   {
     "date": "2026-04-30",
     "title": "Camera HAL SW Newsletter - 2026-04-30",
-    "summary": "Android Camera, CameraX, AI agent, C++ tooling 흐름을 Camera HAL 관점에서 자동 생성한 주간 브리핑입니다.",
+    "summary": "CameraX 1.6과 Android 17 Beta 4를 중심으로 HAL capability, stream 조합, AI agent workflow, on-device AI, C++ native review 포인트를 정리했습니다.",
     "html": "newsletters/2026-04-30/index.html",
     "md": "newsletters/2026-04-30/newsletter.md",
     "tags": [
       "Camera HAL",
-      "Android",
+      "Android 17",
+      "CameraX",
       "C++",
       "AI"
     ]
