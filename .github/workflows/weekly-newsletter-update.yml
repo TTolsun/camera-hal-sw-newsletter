@@ -1,9 +1,6 @@
-name: Weekly Newsletter Auto Update
+name: Weekly Newsletter Basic Auto Update
 
 on:
-  schedule:
-    # KST Monday 07:00 = UTC Sunday 22:00
-    - cron: "0 22 * * 0"
   workflow_dispatch:
     inputs:
       newsletter_date:
@@ -16,7 +13,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: weekly-newsletter-auto-update
+  group: weekly-newsletter-basic-auto-update
   cancel-in-progress: false
 
 jobs:
@@ -34,7 +31,7 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Generate weekly newsletter
+      - name: Generate basic weekly newsletter
         env:
           NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
         run: |
@@ -57,7 +54,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/newsletters.json newsletters/
           DATE=$(node -e "const fs=require('fs');const data=JSON.parse(fs.readFileSync('data/newsletters.json','utf8'));console.log(data[0].date)")
-          git commit -m "Add weekly newsletter ${DATE}"
+          git commit -m "Add basic weekly newsletter ${DATE}"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "date=${DATE}" >> "$GITHUB_OUTPUT"
@@ -71,20 +68,14 @@ jobs:
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `[Newsletter] Auto updated - ${date}`,
+              title: `[Newsletter] Basic auto updated - ${date}`,
               body: [
-                `Camera HAL SW Newsletter ${date} 자동 업데이트가 완료되었습니다.`,
-                '',
-                '## Updated files',
-                '',
-                `- newsletters/${date}/index.html`,
-                `- newsletters/${date}/newsletter.md`,
-                '- data/newsletters.json',
+                `Camera HAL SW Newsletter ${date} 기본 자동 업데이트가 완료되었습니다.`,
                 '',
                 '## Note',
                 '',
-                '자동 생성본은 고정된 출처 목록과 Camera HAL 관점 템플릿을 기반으로 생성됩니다.',
-                '공식 문서의 세부 변경점은 필요 시 사람이 한 번 더 다듬는 운영을 권장합니다.'
+                '이 workflow는 수동 실행용입니다.',
+                '주간 정규 운영은 `Weekly Newsletter Newsroom` workflow를 사용합니다.'
               ].join('\n'),
               labels: ['newsletter', 'weekly']
             });
