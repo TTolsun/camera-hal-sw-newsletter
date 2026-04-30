@@ -30,17 +30,16 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 │       └── newsletter.md
 ├── .github/
 │   └── workflows/
-│       ├── 00-collect-news-candidates.yml
-│       ├── 01-weekly-newsletter-newsroom.yml
 │       ├── 02-validate-site.yml
-│       ├── 03-manual-newsletter-issue.yml
-│       └── weekly-newsletter-update.yml
+│       └── weekly-newsroom-pr.yml
 └── scripts/
     ├── collect-news-candidates.js
-    ├── register-manual-newsletter.js
+    ├── gemini-newsroom-newsletter.js
+    ├── lib/
+    │   ├── gemini-client.js
+    │   ├── newsletter-renderer.js
+    │   └── newsletter-schema.js
     ├── validate-site.js
-    ├── generate-weekly-newsletter.js
-    └── ai-newsroom-newsletter.js
 ```
 
 ## Structure
@@ -52,52 +51,38 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `docs/sources.md`: 매주 뉴스 후보를 찾을 때 확인할 공식 문서와 신뢰 가능한 출처 목록입니다.
 - `collected-news/YYYY-MM-DD/candidates.json`: GitHub Action이 무료로 수집한 원본 뉴스 후보 JSON입니다.
 - `newsroom/YYYY-MM-DD/news-candidates.md`: GitHub Action 기자가 만든 뉴스 후보 Markdown입니다.
-- `newsroom/YYYY-MM-DD/editor-draft.md`: ChatGPT 편집자가 작성한 뉴스레터 초안입니다.
+- `newsroom/YYYY-MM-DD/reporter-candidates.json`: Gemini AI 기자가 선별/점수화한 후보입니다.
+- `newsroom/YYYY-MM-DD/editor-draft.json`: Gemini AI 편집자가 작성한 구조화 초안입니다.
+- `newsroom/YYYY-MM-DD/editor-draft.md`: 편집자 초안을 Markdown으로 렌더링한 참고 파일입니다.
+- `newsroom/YYYY-MM-DD/fact-check-report.json`: Gemini AI 검수자의 구조화 검수 결과입니다.
 - `newsroom/YYYY-MM-DD/fact-check-report.md`: 사실, 출처, 과장 여부 검수 결과입니다.
 - `newsroom/YYYY-MM-DD/editor-in-chief-brief.md`: 편집장 승인을 위한 요약 보고입니다.
 - `newsroom/YYYY-MM-DD/release-qa-report.md`: 최종 발행 전 검수 결과입니다.
 - `newsletters/YYYY-MM-DD/index.html`: 개별 뉴스레터 HTML 페이지입니다.
 - `newsletters/YYYY-MM-DD/newsletter.md`: 개별 뉴스레터 Markdown 원본입니다.
-- `.github/workflows/00-collect-news-candidates.yml`: OpenAI API 없이 공식 출처에서 뉴스 후보를 수집하고 후보 branch와 Issue를 생성하는 워크플로입니다.
-- `.github/workflows/01-weekly-newsletter-newsroom.yml`: 수동으로 저장한 뉴스레터 파일을 등록하고 최종 발행 PR을 만드는 워크플로입니다.
 - `.github/workflows/02-validate-site.yml`: `newsletters.json`, 링크 파일 존재 여부, TODO 문자열, 중복 날짜, 필수 섹션을 검증하는 워크플로입니다.
-- `.github/workflows/03-manual-newsletter-issue.yml`: 수동 작업이 필요할 때 뉴스레터 작성 Issue를 만드는 워크플로입니다.
-- `.github/workflows/weekly-newsletter-update.yml`: 비상용 또는 테스트용 기본 뉴스레터 생성 워크플로입니다.
+- `.github/workflows/weekly-newsroom-pr.yml`: 후보 수집, Gemini 뉴스룸 생성, 검증, PR 생성을 수행하는 정규 워크플로입니다.
 - `scripts/collect-news-candidates.js`: `docs/sources.md`의 출처를 읽고 RSS/HTML 기반 뉴스 후보를 수집합니다. OpenAI API를 사용하지 않습니다.
-- `scripts/register-manual-newsletter.js`: 수동 작성된 `newsletters/YYYY-MM-DD/` 파일을 검사하고 `data/newsletters.json`과 누락된 `newsroom/YYYY-MM-DD/` 산출물을 등록합니다.
+- `scripts/gemini-newsroom-newsletter.js`: 수집 후보 JSON을 기반으로 Gemini 기자/편집자/검수자 파이프라인을 실행하고 뉴스레터 파일을 생성합니다.
+- `scripts/lib/`: Gemini 호출, schema, Markdown/HTML 렌더링 공통 모듈입니다.
 - `scripts/validate-site.js`: 발행 메타데이터와 필수 파일/섹션을 검증합니다.
-- `scripts/ai-newsroom-newsletter.js`: OpenAI API 기반 자동 기자용 실험 스크립트입니다. 정규 workflow에서는 호출하지 않습니다.
 
 ## Current Operation Mode
 
-현재는 **GitHub Action 무료 후보 수집 + ChatGPT 편집 + GitHub Actions 등록/검수 + 편집장 승인 + GitHub Pages 발행** 방식으로 운영합니다.
+현재는 **GitHub Actions 후보 수집 + Gemini AI 기자/편집자/검수자 + validate-site 검증 + 편집장 PR 승인 + GitHub Pages 발행** 방식으로 운영합니다.
 
-- `00 - Collect News Candidates`
-  - 매주 월요일 KST 06:00에 자동 실행됩니다.
-  - 수동 실행도 지원합니다.
+- `Weekly Gemini Newsroom PR`
+  - 매주 월요일 07:00 KST에 자동 실행됩니다.
   - `docs/sources.md`에 적힌 공식 출처를 기준으로 후보를 수집합니다.
-  - OpenAI API를 사용하지 않습니다.
-  - `collected-news/YYYY-MM-DD/candidates.json`과 `newsroom/YYYY-MM-DD/news-candidates.md`를 생성합니다.
-  - ChatGPT에 붙여넣을 수 있는 편집 요청 프롬프트를 Issue 본문에 포함합니다.
-  - 후보 보관용 branch와 Issue를 생성합니다. 최종 발행 PR은 만들지 않습니다.
-
-- `01 - Manual Newsletter Publish`
-  - 수동 실행만 지원합니다.
-  - ChatGPT에서 만든 `newsletters/YYYY-MM-DD/newsletter.md`와 `newsletters/YYYY-MM-DD/index.html`을 등록합니다.
-  - 누락된 `newsroom/YYYY-MM-DD/` 역할별 산출물 템플릿을 보완합니다.
-  - `data/newsletters.json`을 업데이트합니다.
-  - `manual-newsletter/YYYY-MM-DD` 브랜치를 만들고 최종 발행 PR을 생성합니다.
+  - OpenAI API와 ChatGPT UI를 사용하지 않습니다.
+  - Gemini는 `collected-news/YYYY-MM-DD/candidates.json`과 `docs/sources.md`만 입력으로 사용합니다.
+  - `newsroom/YYYY-MM-DD/`에 기자, 편집자, 검수자, 편집장 브리프, QA 산출물을 생성합니다.
+  - `newsletters/YYYY-MM-DD/newsletter.md`, `newsletters/YYYY-MM-DD/index.html`, `data/newsletters.json`을 생성 또는 갱신합니다.
+  - `newsletter/YYYY-MM-DD` 브랜치와 편집장 검토용 PR을 생성합니다.
 
 - `02 - Validate Site`
   - PR, `main` push, 수동 실행 시 사이트 품질을 검증합니다.
-  - `data/newsletters.json`, 발행 파일 존재 여부, TODO 문자열, 중복 날짜, 필수 섹션을 확인합니다.
-
-- `03 - Manual Newsletter Issue`
-  - 수동 보완 작업이 필요할 때 뉴스레터 작성 Issue를 생성합니다.
-
-- `Weekly Newsletter Basic Auto Update`
-  - 비상용 또는 테스트용 기본 뉴스레터를 생성합니다.
-  - 정규 운영에서는 `00 - Collect News Candidates`와 `01 - Manual Newsletter Publish` workflow를 우선 사용합니다.
+  - `data/newsletters.json`, 발행 파일 존재 여부, TODO 문자열, 중복 날짜, 필수 섹션, source list를 확인합니다.
 
 ## Operation Rules
 
@@ -106,58 +91,16 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - 편집장 승인 없는 자동 merge는 하지 않습니다.
 - 출처 없는 뉴스 항목은 발행하지 않습니다.
 - HAL 관점 Action Item 없는 뉴스 항목은 발행하지 않습니다.
-- OpenAI API 비용이 들지 않도록 정규 후보 수집 workflow에서는 API를 호출하지 않습니다.
+- OpenAI API는 정규 운영에서 호출하지 않습니다.
 
 ## Weekly Operation
 
-1. 매주 월요일 KST 06:00에 `00 - Collect News Candidates`가 자동 실행됩니다.
-2. 생성된 `[News Candidates] Camera HAL SW Newsletter - YYYY-MM-DD` Issue를 엽니다.
-3. Issue의 `ChatGPT 편집 요청 프롬프트`와 후보 목록을 ChatGPT에 붙여넣습니다.
-4. ChatGPT에서 뉴스레터 Markdown, HTML, 검토 산출물을 작성합니다.
-5. `newsletters/YYYY-MM-DD/newsletter.md`와 `newsletters/YYYY-MM-DD/index.html`을 저장합니다.
-6. 가능하면 `newsroom/YYYY-MM-DD/`에 `editor-draft.md`, `fact-check-report.md`, `editor-in-chief-brief.md`, `release-qa-report.md`를 함께 저장합니다.
-7. GitHub Actions에서 `01 - Manual Newsletter Publish`를 실행하고 `newsletter_date`를 입력합니다.
-8. 생성된 최종 발행 PR에서 `data/newsletters.json` 업데이트와 `02 - Validate Site` 결과를 확인합니다.
-9. 편집장 승인 후 PR을 merge합니다.
-
-## Manual Candidate Collection
-
-필요하면 후보 수집만 수동으로 실행할 수 있습니다.
-
-```text
-GitHub → Actions → 00 - Collect News Candidates → Run workflow
-```
-
-입력값:
-
-- `newsletter_date`: `YYYY-MM-DD`, 비우면 KST 기준 오늘 날짜
-- `lookback_days`: 후보 수집 기간, 기본값 21일
-
-로컬에서 실행하려면 다음 명령을 사용합니다.
-
-```powershell
-$env:NEWSLETTER_DATE="YYYY-MM-DD"
-$env:LOOKBACK_DAYS="21"
-node scripts/collect-news-candidates.js
-```
-
-## Add a Newsletter
-
-정규 운영에서는 ChatGPT에서 뉴스 후보, Markdown, HTML, 검토 산출물을 만들고 저장소에 파일을 추가한 뒤 `01 - Manual Newsletter Publish`를 수동 실행합니다.
-
-1. `newsletters/YYYY-MM-DD/` 디렉터리를 만듭니다.
-2. `newsletter.md`에 원본 내용을 작성합니다.
-3. `index.html`에 웹 페이지용 내용을 작성합니다.
-4. 가능하면 `newsroom/YYYY-MM-DD/`에 역할별 산출물을 함께 저장합니다.
-5. 각 뉴스 항목에 `Sources`를 붙이고, 마지막 `References`에 전체 링크를 모읍니다.
-6. `data/newsletters.json`은 직접 수정하지 않습니다. `scripts/register-manual-newsletter.js`가 자동으로 업데이트합니다.
-
-```powershell
-$DATE = "YYYY-MM-DD"
-New-Item -ItemType Directory -Force "newsletters/$DATE"
-Copy-Item templates/newsletter.md "newsletters/$DATE/newsletter.md"
-Copy-Item templates/newsletter.html "newsletters/$DATE/index.html"
-```
+1. 매주 월요일 KST 07:00에 `Weekly Gemini Newsroom PR`이 자동 실행됩니다.
+2. workflow가 후보 수집, Gemini 기자/편집자/검수자 실행, 뉴스레터 렌더링, `data/newsletters.json` 갱신을 수행합니다.
+3. `node scripts/validate-site.js`가 통과해야 PR 생성 단계로 넘어갑니다.
+4. PR 본문과 `newsroom/YYYY-MM-DD/editor-in-chief-brief.md`를 확인합니다.
+5. 편집장은 검수 결과와 출처를 확인한 뒤 PR을 승인하거나 수정 요청합니다.
+6. 편집장 승인 후 PR을 merge합니다.
 
 ## Newsletter Sections
 
@@ -189,4 +132,61 @@ Copy-Item templates/newsletter.html "newsletters/$DATE/index.html"
 
 ```powershell
 npx serve .
+```
+
+## Automated Editor-in-Chief Mode
+
+정규 운영은 GitHub Actions가 후보 수집, Gemini 기반 기자/편집자/검수자 작업, 뉴스레터 파일 생성, 검증, PR 생성을 한 번에 수행하는 방식입니다. 사용자는 ChatGPT UI를 거치지 않고 PR에서 편집장 역할만 수행합니다.
+
+이 모드는 OpenAI API를 사용하지 않습니다. 뉴스 수집은 `collect-news-candidates.js`가 수행하고, Gemini는 수집된 후보 JSON과 `docs/sources.md`만 입력으로 사용합니다.
+
+### GitHub Secrets
+
+Repository Settings > Secrets and variables > Actions에 다음 값을 등록합니다.
+
+- `GEMINI_API_KEY`: 필수. Gemini API 호출에 사용합니다.
+- `GEMINI_MODEL`: 선택. Variables에 등록할 수 있으며 기본값은 `gemini-2.5-flash`입니다.
+
+### Weekly Automation
+
+`.github/workflows/weekly-newsroom-pr.yml`은 매주 월요일 07:00 KST에 실행됩니다. UTC cron은 `0 22 * * 0`입니다. workflow는 다음 순서로 동작합니다.
+
+1. `npm run collect`로 `collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
+2. `npm run generate`로 Gemini 기자, 편집자, 검수자 산출물을 생성합니다.
+3. `npm run validate`로 정적 사이트와 뉴스레터 형식을 검증합니다.
+4. 변경사항이 있으면 `newsletter/YYYY-MM-DD` 브랜치와 PR을 생성합니다.
+
+### On-demand Run
+
+GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요하면 `newsletter_date`와 `lookback_days`를 입력합니다. 비우면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다.
+
+### PR Review
+
+PR 본문과 `newsroom/YYYY-MM-DD/editor-in-chief-brief.md`를 먼저 봅니다. 편집장은 핵심 메시지, 메인 기사, Camera HAL 실무 연결성, 검수 결과, 출처 누락 여부를 확인한 뒤 승인 또는 수정 요청을 결정합니다. `fact-check-report.json`이 `NEEDS_FIX`이고 `must_fix`가 있으면 workflow는 실패하며 산출물은 branch에 남지 않을 수 있으므로 로그와 로컬 실행 결과를 확인합니다.
+
+### Local Test
+
+```powershell
+$env:NEWSLETTER_DATE="2026-05-04"
+$env:LOOKBACK_DAYS="21"
+$env:GEMINI_API_KEY="xxx"
+npm run collect
+npm run generate
+npm run validate
+```
+
+macOS/Linux:
+
+```bash
+NEWSLETTER_DATE=2026-05-04 LOOKBACK_DAYS=21 GEMINI_API_KEY=xxx npm run collect
+NEWSLETTER_DATE=2026-05-04 GEMINI_API_KEY=xxx npm run generate
+npm run validate
+```
+
+직접 Node 스크립트를 실행해도 됩니다.
+
+```bash
+NEWSLETTER_DATE=2026-05-04 LOOKBACK_DAYS=21 GEMINI_API_KEY=xxx node scripts/collect-news-candidates.js
+NEWSLETTER_DATE=2026-05-04 GEMINI_API_KEY=xxx node scripts/gemini-newsroom-newsletter.js
+node scripts/validate-site.js
 ```

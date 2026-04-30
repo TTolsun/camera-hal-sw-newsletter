@@ -3,6 +3,7 @@ const path = require('path');
 
 const root = process.cwd();
 const sourcesPath = path.join(root, 'docs', 'sources.md');
+const AUDIENCE = 'Camera HAL / Android Camera / C++ engineer';
 
 const CAMERA_KEYWORDS = [
   'camera', 'camerax', 'camera2', 'hal', 'image', 'capture', 'raw', 'raw10', 'raw12', 'raw14',
@@ -143,9 +144,13 @@ function normalizeCandidate(raw) {
     ...raw,
     title: decode(raw.title),
     summary: decode(raw.summary).slice(0, 500),
+    published_date: raw.publishedAt || '',
+    source_url: raw.sourceUrl || '',
     relevanceScore: score,
+    relevance_score: score,
     category,
-    reason: buildReason(cameraHits, techHits)
+    reason: buildReason(cameraHits, techHits),
+    collection_reason: buildReason(cameraHits, techHits)
   };
 }
 
@@ -195,19 +200,19 @@ function markdown(date, candidates, failures, lookbackDays) {
   const lines = [];
   lines.push(`# News Candidates - ${date}`);
   lines.push('');
-  lines.push('이 Issue는 GitHub Action이 `docs/sources.md`의 공식 출처를 기준으로 무료 수집한 뉴스 후보입니다. OpenAI API는 사용하지 않았습니다. 돈을 아끼기 위해 기계가 링크 줍기만 하는, 꽤 건전한 노동 분업입니다.');
+  lines.push('이 파일은 `docs/sources.md`의 공식 출처를 기준으로 수집한 뉴스 후보입니다. AI 뉴스룸 파이프라인은 이 JSON만 입력으로 사용하고 웹 검색을 하지 않습니다.');
   lines.push('');
   lines.push(`- Lookback: 최근 ${lookbackDays}일 기준`);
   lines.push(`- Candidate count: ${candidates.length}`);
-  lines.push('- Next step: 이 후보 목록을 ChatGPT에 붙여넣고 뉴스레터 Markdown/HTML을 편집합니다.');
+  lines.push('- Next step: `scripts/gemini-newsroom-newsletter.js`가 이 후보 JSON을 읽어 기자/편집자/검수자 산출물과 뉴스레터 파일을 생성합니다.');
   lines.push('');
-  lines.push('## ChatGPT 편집 요청 프롬프트');
+  lines.push('## Gemini Newsroom Input Summary');
   lines.push('');
   lines.push('```text');
-  lines.push(`Camera HAL SW Newsletter ${date} 발행용 기사로 편집해줘.`);
-  lines.push('아래 GitHub Action 수집 후보를 기반으로 작성하고, 부족한 부분은 공식 출처를 우선 확인해줘.');
-  lines.push('조건: 한국어, Camera HAL 엔지니어 대상, AOSP/CameraX/C++/AI 포함, 각 주요 뉴스마다 배경지식과 Camera HAL에서 확인해볼 아이템 포함, 마지막에 References 포함.');
-  lines.push('산출물: newsletter.md, index.html, fact-check-report.md, editor-in-chief-brief.md, release-qa-report.md');
+  lines.push(`Newsletter date: ${date}`);
+  lines.push('Audience: Camera HAL / Android Camera / C++ engineer');
+  lines.push('Inputs: collected-news/YYYY-MM-DD/candidates.json, docs/sources.md');
+  lines.push('Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, newsletter.md, index.html, editor-in-chief-brief.md, release-qa-report.md');
   lines.push('```');
   lines.push('');
 
@@ -253,7 +258,7 @@ function markdown(date, candidates, failures, lookbackDays) {
   lines.push('- [ ] Camera HAL 관점 해석이 가능한가?');
   lines.push('- [ ] 단순 제품 홍보나 일반 IT 뉴스는 제외했는가?');
   lines.push('- [ ] 최종 뉴스레터에 출처와 References가 남아 있는가?');
-  lines.push('- [ ] 발행 전 `01 - Manual Newsletter Publish`와 `02 - Validate Site`를 통과했는가?');
+  lines.push('- [ ] 발행 전 `Weekly Gemini Newsroom PR`과 `02 - Validate Site`를 통과했는가?');
   lines.push('');
   return lines.join('\n');
 }
@@ -293,7 +298,17 @@ async function main() {
   fs.mkdirSync(newsroomDir, { recursive: true });
   fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
 
-  fs.writeFileSync(path.join(outDir, 'candidates.json'), JSON.stringify({ date, lookbackDays, candidates, failures }, null, 2) + '\n', 'utf8');
+  fs.writeFileSync(path.join(outDir, 'candidates.json'), JSON.stringify({
+    schema_version: 2,
+    date,
+    newsletter_date: date,
+    audience: AUDIENCE,
+    lookback_days: lookbackDays,
+    generated_at: new Date().toISOString(),
+    sources_path: 'docs/sources.md',
+    candidates,
+    failures
+  }, null, 2) + '\n', 'utf8');
   fs.writeFileSync(path.join(newsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
   fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
 

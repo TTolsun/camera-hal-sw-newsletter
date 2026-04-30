@@ -30,6 +30,12 @@ function sectionText(content, heading, nextHeadingPattern = /^## /m) {
   return next === -1 ? afterHeading : afterHeading.slice(0, next);
 }
 
+function hasSourceEntry(section) {
+  const sourceHeading = section.match(/\*\*(Sources|출처)\*\*([\s\S]*)/);
+  if (!sourceHeading) return false;
+  return /-\s+(?:\[.+?\]\(https?:\/\/|.+?:\s+https?:\/\/)/.test(sourceHeading[2]);
+}
+
 if (!fs.existsSync(dataPath)) {
   fail('Missing data/newsletters.json');
 }
@@ -118,6 +124,9 @@ for (const [index, item] of newsletters.entries()) {
         if (!section.includes('출처') && !section.includes('Sources')) {
           fail(`Newsletter ${item.date} section missing sources: ${heading}`);
         }
+        if (!hasSourceEntry(section)) {
+          fail(`Newsletter ${item.date} section has no source entries: ${heading}`);
+        }
       }
     }
   }
@@ -145,6 +154,20 @@ for (const relPath of htmlFiles) {
     for (const className of ['issue-briefing', 'issue-section', 'source-list', 'reference-list']) {
       if (!content.includes(className)) {
         fail(`Newsletter HTML missing ${className}: ${relPath}`);
+      }
+    }
+    const sourceBlocks = [];
+    const sourceClassPattern = /class=["'][^"']*source-list[^"']*["']/gi;
+    let sourceMatch;
+    while ((sourceMatch = sourceClassPattern.exec(content)) !== null) {
+      sourceBlocks.push(content.slice(sourceMatch.index, sourceMatch.index + 1200));
+    }
+    if (sourceBlocks.length === 0) {
+      fail(`Newsletter HTML has no source-list blocks: ${relPath}`);
+    }
+    for (const block of sourceBlocks) {
+      if (!/<a\s+[^>]*href=["']https?:\/\//i.test(block)) {
+        fail(`Newsletter HTML source-list has no source links: ${relPath}`);
       }
     }
     if (!content.includes('Archive로 돌아가기')) {

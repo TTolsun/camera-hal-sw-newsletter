@@ -1,0 +1,127 @@
+const string = { type: 'STRING' };
+const stringArray = { type: 'ARRAY', items: string };
+const source = {
+  type: 'OBJECT',
+  properties: {
+    title: string,
+    url: string
+  },
+  required: ['title', 'url']
+};
+
+const reporterCandidate = {
+  type: 'OBJECT',
+  properties: {
+    title: string,
+    source: string,
+    published_date: string,
+    url: string,
+    summary: string,
+    camera_hal_relevance_score: { type: 'NUMBER' },
+    relevance_reason: string,
+    impact_areas: stringArray,
+    selected: { type: 'BOOLEAN' }
+  },
+  required: [
+    'title',
+    'source',
+    'published_date',
+    'url',
+    'summary',
+    'camera_hal_relevance_score',
+    'relevance_reason',
+    'impact_areas',
+    'selected'
+  ]
+};
+
+const section = {
+  type: 'OBJECT',
+  properties: {
+    category: string,
+    headline: string,
+    what_changed: string,
+    background: string,
+    why_it_matters: string,
+    camera_hal_checks: stringArray,
+    action_hints: stringArray,
+    sources: {
+      type: 'ARRAY',
+      items: source
+    }
+  },
+  required: [
+    'category',
+    'headline',
+    'what_changed',
+    'background',
+    'why_it_matters',
+    'camera_hal_checks',
+    'action_hints',
+    'sources'
+  ]
+};
+
+const mustFix = {
+  type: 'OBJECT',
+  properties: {
+    location: string,
+    problem: string,
+    suggestion: string,
+    source_url: string
+  },
+  required: ['location', 'problem', 'suggestion', 'source_url']
+};
+
+const reporterSchema = {
+  type: 'OBJECT',
+  properties: {
+    date: string,
+    candidates: {
+      type: 'ARRAY',
+      items: reporterCandidate
+    }
+  },
+  required: ['date', 'candidates']
+};
+
+const editorSchema = {
+  type: 'OBJECT',
+  properties: {
+    date: string,
+    title: string,
+    summary: string,
+    briefing: stringArray,
+    sections: {
+      type: 'ARRAY',
+      items: section
+    },
+    action_items: stringArray,
+    references: {
+      type: 'ARRAY',
+      items: source
+    }
+  },
+  required: ['date', 'title', 'summary', 'briefing', 'sections', 'action_items', 'references']
+};
+
+const factCheckSchema = {
+  type: 'OBJECT',
+  properties: {
+    status: string,
+    must_fix: {
+      type: 'ARRAY',
+      items: mustFix
+    },
+    recommended_fixes: stringArray,
+    source_gaps: stringArray,
+    final_comment: string
+  },
+  required: ['status', 'must_fix', 'recommended_fixes', 'source_gaps', 'final_comment']
+};
+
+module.exports = {
+  reporterSchema,
+  editorSchema,
+  factCheckSchema
+};
