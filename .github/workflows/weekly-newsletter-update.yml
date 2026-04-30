@@ -1,0 +1,90 @@
+name: Weekly Newsletter Auto Update
+
+on:
+  schedule:
+    # KST Monday 07:00 = UTC Sunday 22:00
+    - cron: "0 22 * * 0"
+  workflow_dispatch:
+    inputs:
+      newsletter_date:
+        description: "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: weekly-newsletter-auto-update
+  cancel-in-progress: false
+
+jobs:
+  generate-newsletter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate weekly newsletter
+        env:
+          NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+        run: |
+          node scripts/generate-weekly-newsletter.js
+
+      - name: Validate generated site
+        run: |
+          node scripts/validate-site.js
+
+      - name: Commit and push changes
+        id: commit
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/newsletters.json newsletters/
+          DATE=$(node -e "const fs=require('fs');const data=JSON.parse(fs.readFileSync('data/newsletters.json','utf8'));console.log(data[0].date)")
+          git commit -m "Add weekly newsletter ${DATE}"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "date=${DATE}" >> "$GITHUB_OUTPUT"
+
+      - name: Create completion issue
+        if: steps.commit.outputs.changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = '${{ steps.commit.outputs.date }}';
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[Newsletter] Auto updated - ${date}`,
+              body: [
+                `Camera HAL SW Newsletter ${date} 자동 업데이트가 완료되었습니다.`,
+                '',
+                '## Updated files',
+                '',
+                `- newsletters/${date}/index.html`,
+                `- newsletters/${date}/newsletter.md`,
+                '- data/newsletters.json',
+                '',
+                '## Note',
+                '',
+                '자동 생성본은 고정된 출처 목록과 Camera HAL 관점 템플릿을 기반으로 생성됩니다.',
+                '공식 문서의 세부 변경점은 필요 시 사람이 한 번 더 다듬는 운영을 권장합니다.'
+              ].join('\n'),
+              labels: ['newsletter', 'weekly']
+            });
