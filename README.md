@@ -51,7 +51,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `css/hero-override.css`: 메인 hero 비주얼을 카메라/센서 대시보드 형태로 조정하는 스타일입니다.
 - `data/newsletters.json`: 메인 페이지가 사용하는 뉴스레터 메타데이터 목록입니다.
 - `data/news-sources.json`: 뉴스 후보 수집에 사용하는 구조화된 source registry입니다.
-- `docs/news-sources.md`: 매주 뉴스 후보를 찾을 때 확인할 공식 문서와 신뢰 가능한 출처 목록입니다.
+- `docs/news-sources.md`: 매일 뉴스 후보를 찾을 때 확인할 공식 문서와 신뢰 가능한 출처 목록입니다.
 - `docs/news-sources-guide.md`: source registry 스키마와 운영 규칙을 설명합니다.
 - `collected-news/YYYY-MM-DD/candidates.json`: GitHub Action이 무료로 수집한 원본 뉴스 후보 JSON입니다.
 - `newsroom/YYYY-MM-DD/news-candidates.md`: GitHub Action 기자가 만든 뉴스 후보 Markdown입니다.
@@ -76,7 +76,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 현재는 **GitHub Actions 후보 수집 + Gemini AI 기자/편집자/검수자 + validate-site 검증 + 편집장 PR 승인 + GitHub Pages 발행** 방식으로 운영합니다.
 
 - `Weekly Gemini Newsroom PR`
-  - 매주 월요일 07:00 KST에 자동 실행됩니다.
+  - 매일 09:00 KST에 자동 실행됩니다.
   - `docs/news-sources.md`에 적힌 공식 출처를 기준으로 후보를 수집합니다.
   - OpenAI API와 ChatGPT UI를 사용하지 않습니다.
   - Gemini는 `collected-news/YYYY-MM-DD/candidates.json`과 `docs/news-sources.md`만 입력으로 사용합니다.
@@ -97,9 +97,9 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - HAL 관점 Action Item 없는 뉴스 항목은 발행하지 않습니다.
 - OpenAI API는 정규 운영에서 호출하지 않습니다.
 
-## Weekly Operation
+## Daily Operation
 
-1. 매주 월요일 KST 07:00에 `Weekly Gemini Newsroom PR`이 자동 실행됩니다.
+1. 매일 KST 09:00에 `Weekly Gemini Newsroom PR`이 자동 실행됩니다.
 2. workflow가 후보 수집, Gemini 기자/편집자/검수자 실행, 뉴스레터 렌더링, `data/newsletters.json` 갱신을 수행합니다.
 3. `node scripts/validate-site.js`가 통과해야 PR 생성 단계로 넘어갑니다.
 4. PR 본문과 `newsroom/YYYY-MM-DD/editor-in-chief-brief.md`를 확인합니다.
@@ -151,9 +151,9 @@ Repository Settings > Secrets and variables > Actions에 다음 값을 등록합
 - `GEMINI_API_KEY`: 필수. Gemini API 호출에 사용합니다.
 - `GEMINI_MODEL`: 선택. Variables에 등록할 수 있으며 기본값은 `gemini-2.5-flash`입니다.
 
-### Weekly Automation
+### Daily Automation
 
-`.github/workflows/weekly-newsroom-pr.yml`은 매주 월요일 07:00 KST에 실행됩니다. UTC cron은 `0 22 * * 0`입니다. workflow는 다음 순서로 동작합니다.
+`.github/workflows/weekly-newsroom-pr.yml`은 매일 09:00 KST에 실행됩니다. UTC cron은 `0 0 * * *`입니다. workflow는 다음 순서로 동작합니다.
 
 1. `npm run collect`로 `collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
 2. `npm run generate`로 Gemini 기자, 편집자, 검수자 산출물을 생성합니다.

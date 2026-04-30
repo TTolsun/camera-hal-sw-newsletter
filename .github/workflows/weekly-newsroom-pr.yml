@@ -2,7 +2,7 @@ name: Weekly Gemini Newsroom PR
 
 on:
   schedule:
-    - cron: "0 22 * * 0" # KST Monday 07:00
+    - cron: "0 0 * * *" # KST daily 09:00
   workflow_dispatch:
     inputs:
       newsletter_date:
