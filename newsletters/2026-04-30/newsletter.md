@@ -13,11 +13,11 @@
 
 ---
 
-## 2. 이번 주 Top Story
+## 2. AOSP Camera Watch
 
 ### CameraX 1.6 + Android 17: 이제 “지원한다고 말한 기능”이 더 빨리 검증된다
 
-**왜 중요한가**
+**배경지식**
 
 Camera HAL 입장에서 CameraX는 단순 앱 라이브러리가 아닙니다. 앱 개발자가 직접 HAL API를 만지지 않아도, CameraX가 framework를 통해 session 조합, dynamic range, stabilization, extension, resolution 조합을 계속 찔러보는 상위 테스트 도구처럼 동작합니다. 인간이 만든 추상화 계층은 결국 아래 계층의 거짓말을 아주 성실하게 들춰냅니다. 이게 소프트웨어 문명의 우아한 복수죠.
 
@@ -52,8 +52,6 @@ CameraX 1.6.0 release note에서 가장 큰 변화는 다음입니다.
 
 ---
 
-## 3. AOSP Camera Watch
-
 ### Android 17 Beta 4: Camera App 호환성 점검은 지금 해야 한다
 
 Android 17 Beta 4는 마지막 scheduled beta로 안내되었습니다. Google은 SDK, library, tool, engine 개발자에게 downstream 개발자가 막히지 않도록 업데이트를 준비하라고 설명했습니다. Camera App이나 Camera SDK를 가진 조직이라면, “나중에 보자”는 말은 보통 “출시 직전에 모두가 슬퍼지자”의 예쁜 표현입니다.
@@ -76,9 +74,11 @@ Android 17 Beta 4는 마지막 scheduled beta로 안내되었습니다. Google�
 
 ---
 
-## 4. AI & Developer Workflow
+## 3. Tech Trend Radar
 
 ### Android CLI + Skills: Android 개발용 agent workflow가 공식화되고 있다
+
+**배경지식**
 
 Google은 Android CLI, Android Skills, Android Knowledge Base를 공개했습니다. 핵심은 “LLM에게 Android 개발을 그냥 시키지 말고, 공식 CLI와 markdown skill로 작업 방식을 고정하라”입니다. 드디어 agent에게도 업무 표준을 먹이는 시대입니다. 인간에게도 잘 안 먹히던 그 표준 말입니다.
 
@@ -120,9 +120,7 @@ Panda 4는 Planning Mode, Next Edit Prediction, Agent Web Search를 포함합니
 
 ---
 
-## 5. On-device AI Watch
-
-### Hybrid inference + LiteRT/NPU: Camera 기능과 AI 기능의 경계가 흐려진다
+### On-device AI Watch: Hybrid inference + LiteRT/NPU
 
 Android 쪽 AI 흐름은 cloud-only에서 on-device / hybrid로 이동하고 있습니다. Android Developers Blog는 Firebase AI Logic 기반 hybrid inference를 소개했고, Google Developers Blog는 LiteRT와 NPU를 이용한 real-world on-device AI를 다뤘습니다.
 
@@ -149,8 +147,6 @@ Android 쪽 AI 흐름은 cloud-only에서 on-device / hybrid로 이동하고 있
 - Building real-world on-device AI with LiteRT and NPU: https://developers.googleblog.com/en/building-real-world-on-device-ai-with-litert-and-npu/
 
 ---
-
-## 6. Tech Trend Radar
 
 ### GitHub Copilot / OpenAI Agents SDK: agent 운영의 핵심은 “속도”보다 “격리와 근거”
 
@@ -179,16 +175,18 @@ Camera HAL workflow에 agent를 넣을 때 진짜 병목은 모델이 똑똑한�
 
 ---
 
-## 7. 이번 주 C++ / Native Tip
+## 4. 이번 주 C++ / AI 실전 팁
 
 ### Atomics와 JSON 성능 이야기: Camera HAL에서는 “빠름”보다 “틀리지 않음 + 측정 가능함”이 먼저다
+
+**배경지식**
 
 ISO C++ Blog 후보 중 이번 주 Camera HAL 개발자에게 연결하기 좋은 항목은 두 가지입니다.
 
 - **Implementing Your Own C++ Atomics**: embedded toolchain에서 `<atomic>` 지원이 부족할 수 있고, lock-free 구조가 표준 라이브러리와 toolchain 지원에 의존한다는 점을 다시 상기시킵니다.
 - **How C++ Finally Beats Rust at JSON Serialization**: JSON parsing/serialization은 단순한 utility처럼 보이지만, 성능과 안전성에서 쉽게 병목이 됩니다.
 
-**Camera HAL 연결 포인트**
+**Camera HAL에서 확인해볼 아이템**
 
 - HAL native code에서 atomic을 직접 다루는 경우, memory order를 코드 리뷰 checklist로 명시합니다.
 - callback state, flush hint, frame number, stream state처럼 thread 간 공유되는 값은 `std::atomic`, mutex, thread confinement 중 어떤 정책인지 분명히 합니다.
@@ -211,7 +209,7 @@ JSON 설정이 깨졌을 때 fallback 동작과 로그는 확인했는가?
 
 ---
 
-## 8. 이번 주 Action Items
+## 5. 이번 주 Action Items
 
 1. **CameraX 1.6 조합 검증표 작성**  
    `SessionConfig`, stabilization, 4K, HDR, extension, slow motion 조합을 target device별로 정리합니다.
@@ -230,7 +228,7 @@ JSON 설정이 깨졌을 때 fallback 동작과 로그는 확인했는가?
 
 ---
 
-## 9. References
+## References
 
 - Android 17 Beta 4: https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html
 - Android CameraX release notes: https://developer.android.com/jetpack/androidx/releases/camera

@@ -58,7 +58,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
 - `newsroom/YYYY-MM-DD/release-qa-report.md`: 최종 발행 전 검수 결과입니다.
 - `newsletters/YYYY-MM-DD/index.html`: 개별 뉴스레터 HTML 페이지입니다.
 - `newsletters/YYYY-MM-DD/newsletter.md`: 개별 뉴스레터 Markdown 원본입니다.
-- `.github/workflows/00-collect-news-candidates.yml`: OpenAI API 없이 공식 출처에서 뉴스 후보를 수집하고 Issue/PR을 생성하는 워크플로입니다.
+- `.github/workflows/00-collect-news-candidates.yml`: OpenAI API 없이 공식 출처에서 뉴스 후보를 수집하고 후보 branch와 Issue를 생성하는 워크플로입니다.
 - `.github/workflows/01-weekly-newsletter-newsroom.yml`: 수동으로 저장한 뉴스레터 파일을 등록하고 최종 발행 PR을 만드는 워크플로입니다.
 - `.github/workflows/02-validate-site.yml`: `newsletters.json`, 링크 파일 존재 여부, TODO 문자열, 중복 날짜, 필수 섹션을 검증하는 워크플로입니다.
 - `.github/workflows/03-manual-newsletter-issue.yml`: 수동 작업이 필요할 때 뉴스레터 작성 Issue를 만드는 워크플로입니다.
@@ -79,7 +79,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성 관련 소식을 정리하�
   - OpenAI API를 사용하지 않습니다.
   - `collected-news/YYYY-MM-DD/candidates.json`과 `newsroom/YYYY-MM-DD/news-candidates.md`를 생성합니다.
   - ChatGPT에 붙여넣을 수 있는 편집 요청 프롬프트를 Issue 본문에 포함합니다.
-  - 후보 보관용 PR을 생성합니다. 이 PR은 최종 발행 PR이 아닙니다.
+  - 후보 보관용 branch와 Issue를 생성합니다. 최종 발행 PR은 만들지 않습니다.
 
 - `01 - Manual Newsletter Publish`
   - 수동 실행만 지원합니다.

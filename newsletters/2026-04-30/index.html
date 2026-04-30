@@ -27,7 +27,7 @@
         <span class="chip">Android 17</span><span class="chip">CameraX 1.6</span><span class="chip">SessionConfig</span><span class="chip">On-device AI</span><span class="chip">C++ Atomics</span><span class="chip">AI Agent Workflow</span>
       </div>
       <div class="hero-grid">
-        <div class="brief-card">
+        <div class="brief-card issue-briefing">
           <h2>이번 주 3줄 브리핑</h2>
           <ul>
             <li><strong>Android 17 Beta 4</strong>는 앱 호환성 막바지 점검 단계입니다. Camera App, SDK, native library loading, memory limit을 지금 확인해야 합니다.</li>
@@ -46,7 +46,7 @@
 
     <section class="section">
       <h2>Top Story</h2>
-      <div class="panel">
+      <div class="panel issue-section">
         <div class="tag">AOSP Camera Watch</div>
         <h3>CameraX 1.6 + Android 17: 이제 “지원한다고 말한 기능”이 더 빨리 검증된다</h3>
         <p>CameraX는 앱 개발자용 라이브러리지만, HAL 입장에서는 상위 호환성 테스트 도구처럼 동작합니다. CameraX 1.6은 CameraPipe 기반 unified stack, Media3 Muxer, Feature Group 개선, stable SessionConfig, <code>isSessionConfigSupported()</code>를 포함합니다.</p>
@@ -60,7 +60,7 @@
             <tr><td>Stream / Buffer</td><td>Preview + VideoCapture + ImageAnalysis + Extension 조합에서 buffer starvation, reconfigure loop, abandoned surface 로그 확인</td></tr>
           </tbody>
         </table>
-        <p class="muted">Sources: <a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX release notes</a>, <a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">Android 17 Beta 4</a></p>
+        <p class="muted source-list">Sources: <a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX release notes</a>, <a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">Android 17 Beta 4</a></p>
       </div>
     </section>
 
@@ -68,13 +68,13 @@
       <h2>AOSP Camera Watch</h2>
       <p class="section-lead">Android 17 Beta 4는 마지막 scheduled beta로 소개되었고, SDK/library/tool 개발자에게 호환성 준비가 권고되었습니다.</p>
       <div class="grid-2">
-        <article class="card">
+        <article class="card issue-section">
           <div class="tag">Android 17 Beta 4</div>
           <h3>Camera App smoke test를 지금 고정해야 한다</h3>
           <p>Android 17 target에서는 native library loading 보호가 강화되고, app memory limit과 profiling trigger가 추가됩니다. Camera App의 long-run preview, video, high-resolution capture에서 메모리와 binder spam을 같이 봐야 합니다.</p>
           <ul><li>native library file permission 확인</li><li><code>ApplicationExitInfo</code>의 <code>MemoryLimiter</code> 흔적 확인</li><li><code>ProfilingManager</code> anomaly trigger로 excessive binder calls 분석</li></ul>
         </article>
-        <article class="card">
+        <article class="card issue-section">
           <div class="tag">CameraX 1.6</div>
           <h3>SessionConfig가 HAL 조합 검증의 입구가 된다</h3>
           <p><code>SessionConfig</code>가 stable public API가 되고, feature group이 video stabilization과 4K recording을 지원하면서 앱이 더 많은 조합을 더 쉽게 요청할 수 있습니다.</p>
@@ -103,7 +103,7 @@
 
     <section class="section">
       <h2>On-device AI Watch</h2>
-      <div class="panel">
+      <div class="panel issue-section">
         <div class="tag">Hybrid inference / LiteRT / NPU</div>
         <h3>AI 기능은 이제 Camera 성능 이슈와 같은 방에 들어왔다</h3>
         <p>Firebase hybrid inference는 on-device Gemini Nano와 cloud-hosted Gemini model을 unified API로 전환할 수 있게 합니다. LiteRT는 CPU/GPU/NPU acceleration을 제공하며, real-time video effects 같은 기능에서 thermal, battery, frame drop이 핵심이라고 설명합니다.</p>
@@ -121,7 +121,7 @@
 
     <section class="section">
       <h2>Tech Trend Radar</h2>
-      <div class="grid-3">
+      <div class="grid-3 issue-section">
         <article class="card"><div class="tag">GitHub Copilot</div><h3>Cloud agent startup 20% 개선</h3><p>Actions custom images로 Copilot cloud agent startup이 20% 이상 빨라졌습니다. HAL CI runner image 최적화와 같은 방향으로 볼 수 있습니다.</p></article>
         <article class="card"><div class="tag">OpenAI Agents SDK</div><h3>Sandbox와 harness 분리가 핵심</h3><p>agent가 파일을 읽고, 명령을 실행하고, 코드를 수정하는 구조에서는 credential 격리, snapshot, rehydration, evidence가 중요합니다.</p></article>
         <article class="card"><div class="tag">C++ Native</div><h3>Atomics와 JSON은 리뷰 항목이다</h3><p>atomic memory order, callback lifetime, JSON parsing 실패는 Camera HAL 품질에서 사소한 취향 문제가 아니라 재현성 문제입니다.</p></article>
@@ -140,7 +140,7 @@
 
     <section class="section">
       <h2>References</h2>
-      <ul class="ref-list">
+      <ul class="ref-list reference-list">
         <li><a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">Android 17 Beta 4</a></li>
         <li><a href="https://developer.android.com/jetpack/androidx/releases/camera">Android CameraX release notes</a></li>
         <li><a href="https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html">Android CLI and skills</a></li>
