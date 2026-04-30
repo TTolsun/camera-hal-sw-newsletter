@@ -79,7 +79,11 @@ function configuredModels() {
 
 function apiVersionForModel(modelName) {
   if (process.env.GEMINI_API_VERSION) return process.env.GEMINI_API_VERSION;
-  return /preview/i.test(modelName) ? 'v1beta' : 'v1';
+  return undefined;
+}
+
+function clientOptions(apiVersion) {
+  return apiVersion ? { apiKey, apiVersion } : { apiKey };
 }
 
 function errorStatus(error) {
@@ -167,7 +171,7 @@ function failureSummary(stage, failures) {
     lines.push(`- ${item.model}: status ${item.status}; ${item.message}`);
   }
 
-  lines.push('Gemini API capacity issue일 가능성이 높으며, job 재실행 또는 fallback model 확인 필요.');
+  lines.push('Gemini API capacity issue is likely. Re-run the job or check fallback model availability.');
   return lines.join('\n');
 }
 
@@ -179,8 +183,8 @@ async function callGeminiJson(stage, systemInstruction, prompt, responseSchema) 
   const failures = [];
   for (const modelName of configuredModels()) {
     const apiVersion = apiVersionForModel(modelName);
-    const ai = new GoogleGenAI({ apiKey, httpOptions: { apiVersion } });
-    console.log(`[${stage}] Gemini model selected: ${modelName} (apiVersion ${apiVersion}).`);
+    const ai = new GoogleGenAI(clientOptions(apiVersion));
+    console.log(`[${stage}] Gemini model selected: ${modelName} (apiVersion ${apiVersion || 'sdk-default'}).`);
 
     let response;
     try {
