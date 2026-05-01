@@ -18,7 +18,7 @@
 
 Validated 2 newsletter entries.
 
-## 남은 TODO 여부
+## 잔여 TODO 여부
 
 없음
 
@@ -26,7 +26,8 @@ Validated 2 newsletter entries.
 
 없음
 
-## Gemini 검수 결과
+## Gemini 검증 결과
 
 - Status: PASS
 - Must fix count: 0
+- Source gap count: 0
