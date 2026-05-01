@@ -567,6 +567,101 @@ pre code {
   gap: 20px;
 }
 
+.article-card.has-image,
+.article-card.has-fallback-image {
+  overflow: hidden;
+}
+
+.article-media {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.article-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.article-image-caption {
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.article-image-caption a {
+  color: var(--primary);
+  text-underline-offset: 3px;
+}
+
+.article-fallback-visual {
+  position: relative;
+  display: grid;
+  min-height: 170px;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  background:
+    linear-gradient(135deg, rgba(24, 128, 56, 0.13), rgba(37, 99, 235, 0.12)),
+    repeating-linear-gradient(90deg, rgba(15, 23, 42, 0.06) 0 1px, transparent 1px 42px),
+    var(--surface-soft);
+}
+
+.article-fallback-visual::before,
+.article-fallback-visual::after,
+.article-fallback-visual span {
+  content: "";
+  display: block;
+  border: 2px solid rgba(15, 23, 42, 0.32);
+}
+
+.article-fallback-visual::before {
+  width: min(34%, 150px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: inset 0 0 0 16px rgba(255, 255, 255, 0.28);
+}
+
+.article-fallback-visual::after {
+  position: absolute;
+  width: min(54%, 240px);
+  height: 28%;
+  border-radius: 8px;
+}
+
+.article-fallback-visual span {
+  position: absolute;
+  width: min(74%, 320px);
+  height: 1px;
+  border-width: 1px 0 0;
+  border-style: dashed;
+  opacity: 0.55;
+}
+
+.article-fallback-ai {
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(24, 128, 56, 0.12)),
+    repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.05) 0 1px, transparent 1px 38px),
+    var(--surface-soft);
+}
+
+.article-fallback-camera-hal,
+.article-fallback-android-camera,
+.article-fallback-aosp-camera {
+  background:
+    linear-gradient(135deg, rgba(24, 128, 56, 0.15), rgba(14, 116, 144, 0.12)),
+    repeating-linear-gradient(90deg, rgba(15, 23, 42, 0.05) 0 1px, transparent 1px 42px),
+    var(--surface-soft);
+}
+
 .issue-section h3 {
   margin-bottom: 0;
   font-size: 1.5rem;

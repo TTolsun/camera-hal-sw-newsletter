@@ -1,5 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const {
+  extractImageCandidatesFromHtml,
+  extractImageCandidatesFromRssBlock,
+  validateImageCandidates
+} = require('./lib/image-candidates');
 
 const root = process.cwd();
 const structuredSourcesPath = path.join(root, 'data', 'news-sources.json');
@@ -183,17 +188,24 @@ function sourceFeed(source) {
   return source.rssUrl || (source.allowFeedHint ? feedFor(source.url) : null);
 }
 
-async function fetchText(url) {
-  const res = await fetch(url, {
-    headers: {
-      'user-agent': 'camera-hal-sw-newsletter/1.0',
-      accept: 'text/html,application/rss+xml,application/xml,text/xml,*/*'
+async function fetchText(url, timeoutMs = 0) {
+  const controller = timeoutMs > 0 ? new AbortController() : null;
+  const timeout = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+  try {
+    const res = await fetch(url, {
+      signal: controller ? controller.signal : undefined,
+      headers: {
+        'user-agent': 'camera-hal-sw-newsletter/1.0',
+        accept: 'text/html,application/rss+xml,application/xml,text/xml,*/*'
+      }
+    });
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`);
     }
-  });
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
+    return await res.text();
+  } finally {
+    if (timeout) clearTimeout(timeout);
   }
-  return await res.text();
 }
 
 function parseRss(xml, source) {
@@ -209,7 +221,8 @@ function parseRss(xml, source) {
       title,
       url: link,
       publishedAt: date,
-      summary
+      summary,
+      imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
     });
   }).filter(item => item.title && item.url);
 }
@@ -226,7 +239,8 @@ function parseHtmlPage(html, source) {
     title,
     url: source.url,
     publishedAt: '',
-    summary: description
+    summary: description,
+    imageCandidates: extractImageCandidatesFromHtml(html, source.url, source)
   })];
 }
 
@@ -284,9 +298,34 @@ function normalizeCandidate(raw) {
     relevance_score: score,
     cameraHalRelevanceScore: score,
     camera_hal_relevance_score: score,
+    imageCandidates: Array.isArray(raw.imageCandidates) ? raw.imageCandidates : [],
+    image_candidates: Array.isArray(raw.imageCandidates) ? raw.imageCandidates : [],
     candidateTier: candidateTier(score),
     reason: buildReason(cameraHits, techHits, source, score),
     collection_reason: buildReason(cameraHits, techHits, source, score)
+  };
+}
+
+async function enrichImageCandidates(candidate) {
+  const source = {
+    name: candidate.source,
+    sourceUrl: candidate.sourceUrl || candidate.source_url,
+    url: candidate.sourceUrl || candidate.source_url
+  };
+  let imageCandidates = Array.isArray(candidate.imageCandidates) ? candidate.imageCandidates : [];
+
+  try {
+    const html = await fetchText(candidate.articleUrl || candidate.url, 4500);
+    imageCandidates = imageCandidates.concat(extractImageCandidatesFromHtml(html, candidate.articleUrl || candidate.url, source));
+  } catch {
+    // Article pages often block lightweight collectors. Keep RSS/source-page candidates when available.
+  }
+
+  const validated = await validateImageCandidates(imageCandidates);
+  return {
+    ...candidate,
+    imageCandidates: validated,
+    image_candidates: validated
   };
 }
 
@@ -462,6 +501,12 @@ async function main() {
       return priorityDelta || reliabilityDelta || b.relevanceScore - a.relevanceScore;
     })
     .slice(0, 40);
+
+  const enrichedCandidates = [];
+  for (const candidate of candidates) {
+    enrichedCandidates.push(await enrichImageCandidates(candidate));
+  }
+  candidates = enrichedCandidates;
 
   if (candidates.length === 0) {
     throw new Error('No news candidates collected. Check data/news-sources.json, docs/news-sources.md, or network access.');

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('./lib/image-candidates');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -37,6 +38,12 @@ function readJsonIfExists(filePath) {
     warn(`Could not parse ${path.relative(root, filePath)} for quality warnings: ${error.message}`);
     return null;
   }
+}
+
+function htmlAttr(tag, name) {
+  const pattern = new RegExp(`${name}\\s*=\\s*("[^"]*"|'[^']*'|[^\\s>]+)`, 'i');
+  const match = tag.match(pattern);
+  return match ? match[1].replace(/^["']|["']$/g, '') : '';
 }
 
 function sectionText(content, heading, nextHeadingPattern = /^## /m) {
@@ -146,6 +153,68 @@ function validateSourceGapArtifact(date) {
   }
 }
 
+function validateEditorImageArtifact(date) {
+  const editor = readJsonIfExists(path.join(root, 'newsroom', date, 'editor-draft.json'));
+  if (!editor || !Array.isArray(editor.sections)) return;
+
+  for (const [index, section] of editor.sections.entries()) {
+    const label = section.category || `section ${index + 1}`;
+    const selectedImage = section.selectedImage || '';
+    if (!selectedImage) continue;
+
+    const imageCandidates = Array.isArray(section.imageCandidates) ? section.imageCandidates : [];
+    if (!imageCandidates.some(image => image && image.url === selectedImage)) {
+      fail(`Newsletter ${date} selectedImage is not in imageCandidates: ${label}`);
+    }
+    if (!isSafeExternalImageUrl(selectedImage) || REJECT_PATH_PATTERN.test(selectedImage)) {
+      fail(`Newsletter ${date} selectedImage is not an allowed HTTPS article image: ${label}`);
+    }
+    for (const field of ['imageSource', 'imageAttribution', 'imageAlt', 'imageUsageDecisionReason']) {
+      if (!String(section[field] || '').trim()) {
+        fail(`Newsletter ${date} selectedImage missing ${field}: ${label}`);
+      }
+    }
+    if (!['unknown', 'allowed'].includes(section.imageLicenseStatus || '')) {
+      fail(`Newsletter ${date} selectedImage has invalid imageLicenseStatus: ${label}`);
+    }
+  }
+}
+
+function validateArticleImages(relPath, content) {
+  const imageTags = content.match(/<img\b(?=[^>]*class=["'][^"']*\barticle-image\b)[^>]*>/gi) || [];
+  for (const tag of imageTags) {
+    const src = htmlAttr(tag, 'src');
+    const alt = htmlAttr(tag, 'alt');
+    const loading = htmlAttr(tag, 'loading');
+    if (!src) {
+      fail(`Newsletter article image missing src: ${relPath}`);
+      continue;
+    }
+    if (/^data:/i.test(src) || /^http:/i.test(src)) {
+      fail(`Newsletter article image uses disallowed URL scheme: ${relPath}`);
+    }
+    if (/^https:\/\//i.test(src)) {
+      if (!isSafeExternalImageUrl(src) || REJECT_PATH_PATTERN.test(src)) {
+        fail(`Newsletter article image uses rejected external URL: ${relPath}`);
+      }
+    } else if (!/^(?:\.\.?\/|assets\/|\/?assets\/)/.test(src)) {
+      fail(`Newsletter article image must be HTTPS or repo-local fallback: ${relPath}`);
+    }
+    if (!alt.trim()) {
+      fail(`Newsletter article image missing alt text: ${relPath}`);
+    }
+    if (loading !== 'lazy') {
+      fail(`Newsletter article image missing loading="lazy": ${relPath}`);
+    }
+
+    const start = content.indexOf(tag);
+    const nearby = start >= 0 ? content.slice(start, start + 900) : '';
+    if (!/article-image-caption/.test(nearby) || !/<a\s+[^>]*href=["']https:\/\//i.test(nearby)) {
+      fail(`Newsletter article image missing caption attribution link: ${relPath}`);
+    }
+  }
+}
+
 if (!fs.existsSync(dataPath)) {
   fail('Missing data/newsletters.json');
 }
@@ -234,6 +303,7 @@ for (const [index, item] of newsletters.entries()) {
       }
       validateArticleQuality(item, md, !isLegacy);
       validateSourceGapArtifact(item.date);
+      validateEditorImageArtifact(item.date);
     }
   }
 }
@@ -276,6 +346,7 @@ for (const relPath of htmlFiles) {
         fail(`Newsletter HTML source-list has no source links: ${relPath}`);
       }
     }
+    validateArticleImages(relPath, content);
     if (!hasAny(content, ['Archive로 돌아가기', 'Archive濡??뚯븘媛湲?'])) {
       fail(`Newsletter HTML missing archive link text: ${relPath}`);
     }

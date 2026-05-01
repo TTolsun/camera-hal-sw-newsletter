@@ -9,6 +9,24 @@ const source = {
   required: ['title', 'url']
 };
 
+const imageCandidate = {
+  type: 'OBJECT',
+  properties: {
+    url: string,
+    sourceUrl: string,
+    articleUrl: string,
+    sourceKind: string,
+    width: { type: 'NUMBER' },
+    height: { type: 'NUMBER' },
+    alt: string,
+    contentType: string,
+    licenseStatus: string,
+    attribution: string,
+    validationStatus: string
+  },
+  required: ['url', 'sourceUrl', 'articleUrl', 'sourceKind', 'licenseStatus', 'attribution', 'validationStatus']
+};
+
 const reporterCandidate = {
   type: 'OBJECT',
   properties: {
@@ -26,6 +44,10 @@ const reporterCandidate = {
     cpp_fallback_value_score: { type: 'NUMBER' },
     relevance_reason: string,
     impact_areas: stringArray,
+    imageCandidates: {
+      type: 'ARRAY',
+      items: imageCandidate
+    },
     selected: { type: 'BOOLEAN' }
   },
   required: [
@@ -43,6 +65,7 @@ const reporterCandidate = {
     'cpp_fallback_value_score',
     'relevance_reason',
     'impact_areas',
+    'imageCandidates',
     'selected'
   ]
 };
@@ -63,6 +86,16 @@ const section = {
     team_summary: string,
     is_ai_related: { type: 'BOOLEAN' },
     article_type: string,
+    imageCandidates: {
+      type: 'ARRAY',
+      items: imageCandidate
+    },
+    selectedImage: string,
+    imageSource: string,
+    imageAttribution: string,
+    imageAlt: string,
+    imageLicenseStatus: string,
+    imageUsageDecisionReason: string,
     sources: {
       type: 'ARRAY',
       items: source
@@ -82,6 +115,13 @@ const section = {
     'team_summary',
     'is_ai_related',
     'article_type',
+    'imageCandidates',
+    'selectedImage',
+    'imageSource',
+    'imageAttribution',
+    'imageAlt',
+    'imageLicenseStatus',
+    'imageUsageDecisionReason',
     'sources'
   ]
 };

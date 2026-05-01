@@ -44,6 +44,37 @@ function paragraphHtml(value) {
   return `<p>${escapeHtml(value || '')}</p>`;
 }
 
+function slugClass(value) {
+  return String(value || 'generic')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'generic';
+}
+
+function articleImageMarkdown(section) {
+  if (!section.selectedImage) return '';
+  const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
+  const source = section.imageSource || section.sources?.[0]?.url || section.selectedImage;
+  return `\n_Image: [${attribution}](${source})_\n`;
+}
+
+function articleMediaHtml(section) {
+  if (section.selectedImage) {
+    const imageSource = section.imageSource || section.sources?.[0]?.url || section.selectedImage;
+    const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
+    const alt = section.imageAlt || `${section.headline || 'Article'} image`;
+    return `<figure class="article-media">
+            <img class="article-image" src="${escapeHtml(section.selectedImage)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">Image: <a href="${escapeHtml(imageSource)}">${escapeHtml(attribution)}</a></figcaption>
+          </figure>`;
+  }
+
+  const variant = slugClass(section.article_type || section.category || 'generic');
+  return `<div class="article-media article-fallback-visual article-fallback-${escapeHtml(variant)}" role="img" aria-label="${escapeHtml(section.category || 'Article visual')}">
+            <span></span>
+          </div>`;
+}
+
 function articleFacts(section) {
   return ensureArray(section.confirmed_facts).length > 0 ? section.confirmed_facts : section.what_changed;
 }
@@ -106,6 +137,7 @@ ${bulletsMarkdown(issue.briefing)}
 ${normalizedSections(issue).map(({ heading, section }) => `${heading}
 
 ### ${section.headline}
+${articleImageMarkdown(section)}
 
 **이번 주 확인한 사실**
 
@@ -189,7 +221,8 @@ function buildHtml(issue) {
 
 ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, section }) => `      <section class="section">
         <h2>${escapeHtml(htmlHeading)}</h2>
-        <div class="card issue-section ${escapeHtml(className)}">
+        <div class="card issue-section article-card ${section.selectedImage ? 'has-image' : 'has-fallback-image'} ${escapeHtml(className)}">
+          ${articleMediaHtml(section)}
           ${articleTagsHtml(section, headingCategory)}
           <h3>${escapeHtml(section.headline)}</h3>
           <div class="article-block"><strong class="article-block-title">확인된 사실</strong>${Array.isArray(articleFacts(section)) ? `<ul>${bulletsHtml(articleFacts(section))}</ul>` : paragraphHtml(articleFacts(section))}</div>

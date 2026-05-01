@@ -3,6 +3,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const { callGeminiJson } = require('./lib/gemini-client');
 const { reporterSchema, editorSchema, factCheckSchema } = require('./lib/newsletter-schema');
+const { isSafeExternalImageUrl } = require('./lib/image-candidates');
 const {
   buildMarkdown,
   buildHtml,
@@ -66,7 +67,22 @@ function numberOrDefault(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
 }
 
-function validateReporter(value, date) {
+function imageCandidatesForReporterCandidate(candidate, collectedByUrl) {
+  const collected = collectedByUrl.get(candidate.url) || collectedByUrl.get(candidate.article_url) || {};
+  const images = ensureArray(candidate.imageCandidates).length > 0
+    ? ensureArray(candidate.imageCandidates)
+    : ensureArray(collected.imageCandidates);
+  return images.filter(image => image && image.url && isSafeExternalImageUrl(image.url));
+}
+
+function validateReporter(value, date, collectedCandidates = []) {
+  const collectedByUrl = new Map();
+  for (const candidate of ensureArray(collectedCandidates)) {
+    if (candidate.url) collectedByUrl.set(candidate.url, candidate);
+    if (candidate.article_url) collectedByUrl.set(candidate.article_url, candidate);
+    if (candidate.articleUrl) collectedByUrl.set(candidate.articleUrl, candidate);
+  }
+
   if (value.date !== date) value.date = date;
   if (!Array.isArray(value.candidates) || value.candidates.length === 0) {
     fail('Reporter output must contain at least one candidate.');
@@ -82,6 +98,7 @@ function validateReporter(value, date) {
     candidate.freshness_score = numberOrDefault(candidate.freshness_score);
     candidate.ai_required_slot_fit_score = numberOrDefault(candidate.ai_required_slot_fit_score);
     candidate.cpp_fallback_value_score = numberOrDefault(candidate.cpp_fallback_value_score);
+    candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
     if (typeof candidate.selected !== 'boolean') {
       const total =
         candidate.camera_hal_relevance_score +
@@ -97,7 +114,44 @@ function validateReporter(value, date) {
   return value;
 }
 
-function validateEditor(value, date) {
+function reporterImageCandidatesForSection(section, reporter) {
+  const sourceUrls = new Set(ensureArray(section.sources).map(source => source && source.url).filter(Boolean));
+  const matching = ensureArray(reporter.candidates)
+    .filter(candidate => sourceUrls.has(candidate.url))
+    .flatMap(candidate => ensureArray(candidate.imageCandidates));
+  const fallback = ensureArray(reporter.candidates).flatMap(candidate => ensureArray(candidate.imageCandidates));
+  const seen = new Set();
+  const images = (matching.length > 0 ? matching : fallback)
+    .filter(image => image && image.url && isSafeExternalImageUrl(image.url))
+    .filter(image => {
+      if (seen.has(image.url)) return false;
+      seen.add(image.url);
+      return true;
+    });
+  return images.slice(0, 6);
+}
+
+function normalizeSectionImageFields(section, reporter) {
+  const sectionImages = ensureArray(section.imageCandidates).filter(image => image && image.url && isSafeExternalImageUrl(image.url));
+  const imageCandidates = sectionImages.length > 0 ? sectionImages : reporterImageCandidatesForSection(section, reporter);
+  const allowed = new Set(imageCandidates.map(image => image.url));
+  const selectedImage = allowed.has(section.selectedImage) ? section.selectedImage : '';
+  const selected = imageCandidates.find(image => image.url === selectedImage);
+
+  return {
+    imageCandidates,
+    selectedImage,
+    imageSource: selectedImage ? (section.imageSource || selected.articleUrl || selected.sourceUrl || '') : '',
+    imageAttribution: selectedImage ? (section.imageAttribution || selected.attribution || section.sources?.[0]?.title || '') : '',
+    imageAlt: selectedImage ? (section.imageAlt || selected.alt || section.headline || 'Article image') : '',
+    imageLicenseStatus: selectedImage ? (section.imageLicenseStatus || selected.licenseStatus || 'unknown') : 'none',
+    imageUsageDecisionReason: section.imageUsageDecisionReason || (selectedImage
+      ? 'Collector-provided source image selected for article context.'
+      : 'No suitable collector-provided image selected; local fallback visual will be used.')
+  };
+}
+
+function validateEditor(value, date, reporter = { candidates: [] }) {
   if (value.date !== date) value.date = date;
   value.title = value.title || `Camera HAL SW Newsletter - ${date}`;
   if (!value.title.includes(date)) value.title = `Camera HAL SW Newsletter - ${date}`;
@@ -113,7 +167,7 @@ function validateEditor(value, date) {
   value.sections = value.sections.map((section, index) => {
     const actionItems = ensureArray(section.action_items);
     const actionHints = ensureArray(section.action_hints);
-    return {
+    const normalized = {
       ...section,
       category: section.category || fallbackCategories[index] || `Main Article ${index + 1}`,
       confirmed_facts: ensureArray(section.confirmed_facts).length > 0
@@ -126,6 +180,10 @@ function validateEditor(value, date) {
       is_ai_related: Boolean(section.is_ai_related),
       article_type: section.article_type || (section.is_ai_related ? 'ai' : 'camera-hal'),
       sources: ensureArray(section.sources).filter(source => source && source.url)
+    };
+    return {
+      ...normalized,
+      ...normalizeSectionImageFields(normalized, reporter)
     };
   });
 
@@ -248,6 +306,7 @@ async function main() {
       'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, on-device AI, NPU/GPU, and developer productivity.',
       'Give low scores to product promotion, general IT news, and weak Camera HAL relevance.',
       'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
+      'Preserve imageCandidates exactly from the collected candidate JSON. Do not invent image URLs, rewrite image URLs, or add image candidates.',
       'For every candidate, provide these numeric scores:',
       '- camera_hal_relevance_score: 0-5',
       '- android_camera_relevance_score: 0-5',
@@ -260,7 +319,7 @@ async function main() {
     ].join('\n'),
     `${commonContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndata/news-sources.json:\n${JSON.stringify(sourceRegistry, null, 2)}\n\ndocs/news-sources.md:\n${sourcesMarkdown}`,
     reporterSchema
-  ), date);
+  ), date, ensureArray(candidates.candidates));
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
 
   const editor = validateEditor(await callGeminiJson(
@@ -273,12 +332,17 @@ async function main() {
       'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
       'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it has concrete HAL native-code value.',
       'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
+      'For each article, choose at most one selectedImage from that article imageCandidates. If relevance, rights risk, logo-only content, screenshot text density, or source fit is unclear, set selectedImage to an empty string.',
+      'Do not invent image URLs. selectedImage must exactly match one imageCandidates.url value, or be an empty string.',
+      'Prefer directly relevant 16:9 or 4:3 clean images from the source article over generic, logo-only, or promotional images.',
+      'When selectedImage is set, provide imageSource, imageAttribution, imageAlt, imageLicenseStatus, and a short imageUsageDecisionReason. imageAlt must describe the image in article context.',
+      'When no image is selected, keep selectedImage, imageSource, imageAttribution, and imageAlt empty, set imageLicenseStatus to none, and explain the rejection briefly in imageUsageDecisionReason.',
       'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
       'briefing must have exactly 3 items.'
     ].join('\n'),
     `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}`,
     editorSchema
-  ), date);
+  ), date, reporter);
   writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
   fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(editor), 'utf8');
 

@@ -64,6 +64,12 @@ Common `reliability` values:
 The collector preserves source name, source URL, category, priority, reliability, usage hint, and candidate-only status in `collected-news/YYYY-MM-DD/candidates.json`.
 The Gemini newsroom step must keep source links unchanged and prefer official or project-official sources when validating media/community leads.
 
+## Article Signature Images
+
+The collector may attach `imageCandidates` to article candidates when the source feed or article page exposes usable image metadata. It keeps only normalized HTTPS image URLs that pass lightweight content-type and size checks, and it rejects obvious favicon, icon, logo, sprite, tracker, pixel, spacer, and placeholder URLs.
+
+The newsroom generator must not browse for images or invent image URLs. The editor can set one `selectedImage` per article only from that article's `imageCandidates`; otherwise it leaves `selectedImage` empty and the HTML renderer shows a local CSS fallback visual. External images are referenced by HTTPS URL with source attribution in the article card. The repository does not download or permanently copy article images as part of the automated flow.
+
 ## Adding Sources
 
 1. Add a stable `id` in lowercase kebab-case.
