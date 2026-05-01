@@ -61,13 +61,37 @@ function articleTeamSummary(section) {
   return section.team_summary || section.why_it_matters || '';
 }
 
+function issueTags(issue) {
+  return ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android', 'C++', 'AI'];
+}
+
+function tagsHtml(tags) {
+  return ensureArray(tags).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
+}
+
+function normalizedLabel(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function articleTagsHtml(section, headingCategory) {
+  const tags = ensureArray(section.tags)
+    .filter(tag => normalizedLabel(tag) !== normalizedLabel(headingCategory));
+
+  if (tags.length === 0) return '';
+  return `<div class="article-tags">${tagsHtml(tags)}</div>`;
+}
+
 function normalizedSections(issue) {
-  return ensureArray(issue.sections).map((section, index) => ({
-    heading: `## ${index + 2}. ${section.category || `메인 기사 ${index + 1}`}`,
-    htmlHeading: `${index + 2}. ${section.category || `메인 기사 ${index + 1}`}`,
-    className: section.article_type || (section.is_ai_related ? 'ai' : 'article'),
-    section
-  }));
+  return ensureArray(issue.sections).map((section, index) => {
+    const category = section.category || `메인 기사 ${index + 1}`;
+    return {
+      heading: `## ${index + 2}. ${category}`,
+      htmlHeading: `${index + 2}. ${category}`,
+      headingCategory: category,
+      className: section.article_type || (section.is_ai_related ? 'ai' : 'article'),
+      section
+    };
+  });
 }
 
 function buildMarkdown(issue) {
@@ -76,6 +100,7 @@ function buildMarkdown(issue) {
 ${issue.summary}
 
 ## 1. 이번 주 3줄 브리핑
+
 ${bulletsMarkdown(issue.briefing)}
 
 ${normalizedSections(issue).map(({ heading, section }) => `${heading}
@@ -127,47 +152,69 @@ function buildHtml(issue) {
   <link rel="stylesheet" href="../../css/styles.css" />
 </head>
 <body>
-  <main class="wrap">
-    <header class="hero newsletter-hero">
-      <p class="eyebrow">WEEKLY NEWSLETTER</p>
-      <h1>${escapeHtml(issue.title)}</h1>
-      <p class="subtitle">${escapeHtml(issue.summary)}</p>
-      <div class="actions newsletter-actions">
-        <a class="button" href="../../index.html">Archive로 돌아가기</a>
-        <a class="button primary" href="newsletter.md">MD 원본 보기</a>
+  <header class="site-header">
+    <nav class="site-nav content-wrap" aria-label="Primary navigation">
+      <a class="site-brand" href="../../index.html">Camera HAL SW Newsletter</a>
+      <div class="nav-links">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="../../docs/news-sources.md">Sources</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
-    </header>
+    </nav>
+  </header>
 
-    <section class="section issue-briefing">
-      <h2>1. 이번 주 3줄 브리핑</h2>
-      <div class="card">
-        <ul>${bulletsHtml(issue.briefing)}</ul>
-      </div>
-    </section>
+  <main class="article-page">
+    <article class="wrap">
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="issue-kicker">WEEKLY NEWSLETTER</span>
+          <span class="issue-date">${escapeHtml(issue.date)}</span>
+        </div>
+        <h1>Camera HAL SW Newsletter</h1>
+        <p class="subtitle">${escapeHtml(issue.summary)}</p>
+        <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
+        <div class="actions newsletter-actions issue-actions">
+          <a class="button button-secondary" href="../../index.html#archive">Archive로 돌아가기</a>
+          <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
+        </div>
+      </header>
 
-${normalizedSections(issue).map(({ htmlHeading, className, section }) => `    <section class="section">
-      <h2>${escapeHtml(htmlHeading)}</h2>
-      <div class="card issue-section ${escapeHtml(className)}">
-        <span class="issue-kicker">${escapeHtml(section.category)}</span>
-        <h3>${escapeHtml(section.headline)}</h3>
-        <div><strong>이번 주 확인한 사실</strong>${Array.isArray(articleFacts(section)) ? `<ul>${bulletsHtml(articleFacts(section))}</ul>` : paragraphHtml(articleFacts(section))}</div>
-        <div><strong>배경지식</strong>${paragraphHtml(section.background)}</div>
-        <div><strong>Camera HAL 관점 해석</strong>${paragraphHtml(articlePerspective(section))}</div>
-        <div><strong>우리 팀이 확인할 Action Item</strong><ul>${bulletsHtml(articleActions(section))}</ul></div>
-        <p><strong>팀 공유용 한 줄</strong> ${escapeHtml(articleTeamSummary(section))}</p>
-        <div class="source-list"><strong>Sources</strong><ul>${sourceListHtml(section.sources)}</ul></div>
-      </div>
-    </section>`).join('\n\n')}
+      <section class="section issue-briefing">
+        <h2>1. 이번 주 3줄 브리핑</h2>
+        <div class="card">
+          <ul>${bulletsHtml(issue.briefing)}</ul>
+        </div>
+      </section>
 
-    <section class="section">
-      <h2>이번 주 Action Items</h2>
-      <div class="card action-card"><ul>${bulletsHtml(issue.action_items)}</ul></div>
-    </section>
+${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, section }) => `      <section class="section">
+        <h2>${escapeHtml(htmlHeading)}</h2>
+        <div class="card issue-section ${escapeHtml(className)}">
+          ${articleTagsHtml(section, headingCategory)}
+          <h3>${escapeHtml(section.headline)}</h3>
+          <div class="article-block"><strong class="article-block-title">확인된 사실</strong>${Array.isArray(articleFacts(section)) ? `<ul>${bulletsHtml(articleFacts(section))}</ul>` : paragraphHtml(articleFacts(section))}</div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong>${paragraphHtml(section.background)}</div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong>${paragraphHtml(articlePerspective(section))}</div>
+          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul>${bulletsHtml(articleActions(section))}</ul></div>
+          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong>${paragraphHtml(articleTeamSummary(section))}</div>
+          <div class="source-list"><strong>Sources</strong><ul>${sourceListHtml(section.sources)}</ul></div>
+        </div>
+      </section>`).join('\n\n')}
 
-    <section class="section">
-      <h2>References</h2>
-      <div class="card reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
-    </section>
+      <section class="section">
+        <h2>이번 주 Action Items</h2>
+        <div class="card action-card"><ul>${bulletsHtml(issue.action_items)}</ul></div>
+      </section>
+
+      <section class="section">
+        <h2>References</h2>
+        <div class="card reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
+      </section>
+
+      <nav class="bottom-nav" aria-label="Issue navigation">
+        <a class="button button-secondary" href="../../index.html#archive">Archive로 돌아가기</a>
+      </nav>
+    </article>
   </main>
 </body>
 </html>
@@ -216,7 +263,8 @@ ${issue.summary}
 
 ${firstSection.headline || '첫 번째 메인 기사 확인 필요'}
 
-## Camera HAL 실무 연결 포인트
+## Camera HAL 업무 연결 포인트
+
 ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 
 ## 검증 결과 요약

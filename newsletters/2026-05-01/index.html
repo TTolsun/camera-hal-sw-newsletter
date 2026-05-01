@@ -7,14 +7,36 @@
   <link rel="stylesheet" href="../../css/styles.css" />
 </head>
 <body>
-  <main class="wrap">
-    <header class="hero newsletter-hero">
-      <p class="eyebrow">WEEKLY NEWSLETTER</p>
-      <h1>Camera HAL SW Newsletter - 2026-05-01</h1>
+  <header class="site-header">
+    <nav class="site-nav content-wrap" aria-label="Primary navigation">
+      <a class="site-brand" href="../../index.html">Camera HAL SW Newsletter</a>
+      <div class="nav-links">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="../../docs/news-sources.md">Sources</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="article-page">
+    <article class="wrap">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="issue-kicker">WEEKLY NEWSLETTER</span>
+        <span class="issue-date">2026-05-01</span>
+      </div>
+      <h1>Camera HAL SW Newsletter</h1>
       <p class="subtitle">이번 주 뉴스레터는 Android 개발 생산성을 높이는 AI 도구, Camera HAL 개발에 영향을 줄 수 있는 AOSP 및 CameraX 업데이트, 그리고 최신 C++ 표준 지원 소식을 다룹니다. AI 기반 개발 워크플로 개선과 카메라 프레임워크의 잠재적 변화에 주목하며, 팀의 개발 및 검증 전략에 대한 actionable insights를 제공합니다.</p>
-      <div class="actions newsletter-actions">
-        <a class="button" href="../../index.html">Archive로 돌아가기</a>
-        <a class="button primary" href="newsletter.md">MD 원본 보기</a>
+      <div class="tag-row issue-tags">
+        <span class="tag">Camera HAL</span>
+        <span class="tag">Android</span>
+        <span class="tag">C++</span>
+        <span class="tag">AI</span>
+      </div>
+      <div class="actions newsletter-actions issue-actions">
+        <a class="button button-secondary" href="../../index.html#archive">Archive로 돌아가기</a>
+        <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
       </div>
     </header>
 
@@ -28,7 +50,6 @@
     <section class="section">
       <h2>2. AI</h2>
       <div class="card issue-section AI">
-        <span class="issue-kicker">AI</span>
         <h3>Android 개발 생산성 향상을 위한 AI 기반 도구 및 Gemini 모델 업데이트</h3>
         <div><strong>이번 주 확인한 사실</strong><ul><li>Android 개발 생산성 향상을 위해 AI 에이전트, CLI 도구, 새로운 Gemini 모델이 도입되었습니다.</li><li>하이브리드 추론 API는 Firebase AI Logic을 통해 온디바이스 및 클라우드 추론을 결합합니다.</li><li>Gemini Nano 모델은 이미지 생성을 포함한 새로운 기능을 지원합니다.</li></ul></div>
         <div><strong>배경지식</strong><p>Android 개발 환경은 Gemini in Android Studio, Gemini CLI, Antigravity, Claude Code, Codex 등 다양한 AI 에이전트와 도구를 지원하며 발전하고 있습니다. 이러한 도구들은 개발자가 더 빠르고 효율적으로 고품질의 Android 앱을 개발하도록 돕는 것을 목표로 합니다.</p></div>
@@ -42,7 +63,6 @@
     <section class="section">
       <h2>3. Android Camera</h2>
       <div class="card issue-section Android Camera">
-        <span class="issue-kicker">Android Camera</span>
         <h3>AOSP Camera 프레임워크 및 CameraX 최신 동향 주시</h3>
         <div><strong>이번 주 확인한 사실</strong><ul><li>AOSP Camera 문서는 HAL 인터페이스, 스트림, 요청, 결과 처리에 대한 정보를 제공합니다.</li><li>AOSP &#39;What&#39;s New&#39; 페이지는 카메라 프레임워크 및 관련 구성 요소의 변경 사항을 추적합니다.</li><li>CameraX 릴리스 노트는 API 변경, 새로운 기능 및 버그 수정을 포함합니다.</li></ul></div>
         <div><strong>배경지식</strong><p>Android 카메라 개발은 AOSP Camera HAL 인터페이스와 CameraX 라이브러리를 중심으로 이루어집니다. HAL 엔지니어는 프레임워크의 변경 사항을 이해하고, 앱 개발자는 CameraX를 통해 카메라 기능을 쉽게 활용하며, 이 둘 사이의 호환성을 유지하는 것이 중요합니다.</p></div>
@@ -56,7 +76,6 @@
     <section class="section">
       <h2>4. C++</h2>
       <div class="card issue-section C++">
-        <span class="issue-kicker">C++</span>
         <h3>GCC 16.1 릴리스: C++26 표준 기능 도입 및 기본값 변경</h3>
         <div><strong>이번 주 확인한 사실</strong><ul><li>GCC 16.1 릴리스가 발표되었습니다.</li><li>C++20이 기본 컴파일 표준으로 설정되었습니다.</li><li>C++26의 Reflection (P2996R13) 및 Annotations for Reflection (P3394R4) 기능이 지원됩니다.</li><li>C++20 모듈 지원은 -fmodules 옵션으로 실험적으로 활성화 가능합니다.</li></ul></div>
         <div><strong>배경지식</strong><p>GCC(GNU Compiler Collection)는 C, C++, Fortran 등 다양한 프로그래밍 언어를 지원하는 오픈 소스 컴파일러 모음입니다. C++ 표준은 지속적으로 발전하고 있으며, 새로운 표준 기능은 코드의 표현력, 안전성, 성능을 향상시키는 데 기여합니다.</p></div>
@@ -70,7 +89,6 @@
     <section class="section">
       <h2>5. Android Camera</h2>
       <div class="card issue-section Android Camera">
-        <span class="issue-kicker">Android Camera</span>
         <h3>Android 15 Camera HAL 개발자를 위한 잠재적 변경 사항 및 고려 사항</h3>
         <div><strong>이번 주 확인한 사실</strong><ul><li>Android 15의 공식적인 카메라 관련 변경 사항은 아직 공개되지 않았습니다.</li><li>과거 Android 버전 업데이트는 카메라 프레임워크, HAL 인터페이스, 메타데이터, 성능 요구 사항에 영향을 미쳤습니다.</li></ul></div>
         <div><strong>배경지식</strong><p>Android 플랫폼은 매년 새로운 버전이 출시되며, 카메라 프레임워크는 이러한 업데이트의 주요 대상 중 하나입니다. HAL 개발자는 새로운 API, 변경된 동작, 강화된 호환성 요구 사항에 맞춰 자신의 구현을 업데이트해야 합니다.</p></div>
@@ -90,6 +108,10 @@
       <h2>References</h2>
       <div class="card reference-list"><ul><li><a href="https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html">Android CLI and skills: Build Android apps 3x faster using any agent</a></li><li><a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Experimental hybrid inference and new Gemini models for Android</a></li><li><a href="https://source.android.com/docs/core/camera">Camera | Android Open Source Project</a></li><li><a href="https://source.android.com/docs/whatsnew">Nouveautés | Android Open Source Project</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX | Jetpack | Android Developers</a></li><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li></ul></div>
     </section>
+      <nav class="bottom-nav" aria-label="Issue navigation">
+        <a class="button button-secondary" href="../../index.html#archive">Archive로 돌아가기</a>
+      </nav>
+    </article>
   </main>
 </body>
 </html>
