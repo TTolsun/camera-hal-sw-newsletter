@@ -18,6 +18,12 @@ const reporterCandidate = {
     url: string,
     summary: string,
     camera_hal_relevance_score: { type: 'NUMBER' },
+    android_camera_relevance_score: { type: 'NUMBER' },
+    practical_actionability_score: { type: 'NUMBER' },
+    source_reliability_score: { type: 'NUMBER' },
+    freshness_score: { type: 'NUMBER' },
+    ai_required_slot_fit_score: { type: 'NUMBER' },
+    cpp_fallback_value_score: { type: 'NUMBER' },
     relevance_reason: string,
     impact_areas: stringArray,
     selected: { type: 'BOOLEAN' }
@@ -29,6 +35,12 @@ const reporterCandidate = {
     'url',
     'summary',
     'camera_hal_relevance_score',
+    'android_camera_relevance_score',
+    'practical_actionability_score',
+    'source_reliability_score',
+    'freshness_score',
+    'ai_required_slot_fit_score',
+    'cpp_fallback_value_score',
     'relevance_reason',
     'impact_areas',
     'selected'
@@ -41,10 +53,16 @@ const section = {
     category: string,
     headline: string,
     what_changed: string,
+    confirmed_facts: stringArray,
     background: string,
     why_it_matters: string,
+    camera_hal_perspective: string,
     camera_hal_checks: stringArray,
     action_hints: stringArray,
+    action_items: stringArray,
+    team_summary: string,
+    is_ai_related: { type: 'BOOLEAN' },
+    article_type: string,
     sources: {
       type: 'ARRAY',
       items: source
@@ -54,10 +72,16 @@ const section = {
     'category',
     'headline',
     'what_changed',
+    'confirmed_facts',
     'background',
     'why_it_matters',
+    'camera_hal_perspective',
     'camera_hal_checks',
     'action_hints',
+    'action_items',
+    'team_summary',
+    'is_ai_related',
+    'article_type',
     'sources'
   ]
 };
@@ -115,9 +139,10 @@ const factCheckSchema = {
     },
     recommended_fixes: stringArray,
     source_gaps: stringArray,
+    source_gap_count: { type: 'NUMBER' },
     final_comment: string
   },
-  required: ['status', 'must_fix', 'recommended_fixes', 'source_gaps', 'final_comment']
+  required: ['status', 'must_fix', 'recommended_fixes', 'source_gaps', 'source_gap_count', 'final_comment']
 };
 
 module.exports = {

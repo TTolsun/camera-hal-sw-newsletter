@@ -37,6 +37,10 @@ function readJson(filePath) {
   }
 }
 
+function readTextIfExists(filePath) {
+  return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : '';
+}
+
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
@@ -58,6 +62,10 @@ function writeGenerationStatus(value) {
   );
 }
 
+function numberOrDefault(value, fallback = 0) {
+  return Number.isFinite(Number(value)) ? Number(value) : fallback;
+}
+
 function validateReporter(value, date) {
   if (value.date !== date) value.date = date;
   if (!Array.isArray(value.candidates) || value.candidates.length === 0) {
@@ -67,8 +75,23 @@ function validateReporter(value, date) {
     if (!candidate.title || !candidate.url || !candidate.source) {
       fail('Reporter candidate is missing title, source, or url.');
     }
+    candidate.camera_hal_relevance_score = numberOrDefault(candidate.camera_hal_relevance_score);
+    candidate.android_camera_relevance_score = numberOrDefault(candidate.android_camera_relevance_score);
+    candidate.practical_actionability_score = numberOrDefault(candidate.practical_actionability_score);
+    candidate.source_reliability_score = numberOrDefault(candidate.source_reliability_score);
+    candidate.freshness_score = numberOrDefault(candidate.freshness_score);
+    candidate.ai_required_slot_fit_score = numberOrDefault(candidate.ai_required_slot_fit_score);
+    candidate.cpp_fallback_value_score = numberOrDefault(candidate.cpp_fallback_value_score);
     if (typeof candidate.selected !== 'boolean') {
-      candidate.selected = Number(candidate.camera_hal_relevance_score || 0) >= 5;
+      const total =
+        candidate.camera_hal_relevance_score +
+        candidate.android_camera_relevance_score +
+        candidate.practical_actionability_score +
+        candidate.source_reliability_score +
+        candidate.freshness_score +
+        candidate.ai_required_slot_fit_score +
+        candidate.cpp_fallback_value_score;
+      candidate.selected = total >= 12;
     }
   }
   return value;
@@ -82,16 +105,29 @@ function validateEditor(value, date) {
   if (!Array.isArray(value.briefing) || value.briefing.length !== 3) {
     fail('Editor output must contain exactly 3 briefing items.');
   }
-  if (!Array.isArray(value.sections) || value.sections.length !== 3) {
-    fail('Editor output must contain exactly 3 sections.');
+  if (!Array.isArray(value.sections) || value.sections.length < 3) {
+    fail('Editor output must contain at least 3 sections.');
   }
 
-  const categories = ['AOSP Camera Watch', 'Tech Trend Radar', 'C++ / AI Practical Tip'];
-  value.sections = value.sections.map((section, index) => ({
-    ...section,
-    category: categories[index],
-    sources: ensureArray(section.sources).filter(source => source && source.url)
-  }));
+  const fallbackCategories = ['AOSP Camera Watch', 'Android Camera / AI Watch', 'C++ / AI Practical Tip'];
+  value.sections = value.sections.map((section, index) => {
+    const actionItems = ensureArray(section.action_items);
+    const actionHints = ensureArray(section.action_hints);
+    return {
+      ...section,
+      category: section.category || fallbackCategories[index] || `Main Article ${index + 1}`,
+      confirmed_facts: ensureArray(section.confirmed_facts).length > 0
+        ? ensureArray(section.confirmed_facts)
+        : [section.what_changed].filter(Boolean),
+      camera_hal_perspective: section.camera_hal_perspective || section.why_it_matters || '',
+      action_items: actionItems.length > 0 ? actionItems : actionHints,
+      action_hints: actionHints.length > 0 ? actionHints : actionItems,
+      team_summary: section.team_summary || section.why_it_matters || '',
+      is_ai_related: Boolean(section.is_ai_related),
+      article_type: section.article_type || (section.is_ai_related ? 'ai' : 'camera-hal'),
+      sources: ensureArray(section.sources).filter(source => source && source.url)
+    };
+  });
 
   const emptySourceSections = value.sections
     .filter(section => section.sources.length === 0)
@@ -121,6 +157,7 @@ function validateFactCheck(value) {
   value.must_fix = ensureArray(value.must_fix);
   value.recommended_fixes = ensureArray(value.recommended_fixes);
   value.source_gaps = ensureArray(value.source_gaps);
+  value.source_gap_count = numberOrDefault(value.source_gap_count, value.source_gaps.length);
   value.final_comment = value.final_comment || '';
   return value;
 }
@@ -170,6 +207,8 @@ async function main() {
 
   const candidatePath = path.join(root, 'collected-news', date, 'candidates.json');
   const sourcesPath = path.join(root, 'docs', 'news-sources.md');
+  const editorialPolicyPath = path.join(root, 'docs', 'editorial-policy.md');
+  const newsletterTemplatePath = path.join(root, 'docs', 'newsletter-template.md');
   const newsroomDir = path.join(root, 'newsroom', date);
   const newsletterDir = path.join(root, 'newsletters', date);
 
@@ -181,7 +220,9 @@ async function main() {
   }
 
   const candidates = readJson(candidatePath);
-  const sourcesMarkdown = fs.existsSync(sourcesPath) ? fs.readFileSync(sourcesPath, 'utf8') : '';
+  const sourcesMarkdown = readTextIfExists(sourcesPath);
+  const editorialPolicy = readTextIfExists(editorialPolicyPath);
+  const newsletterTemplate = readTextIfExists(newsletterTemplatePath);
   const sourceRegistry = fs.existsSync(sourceRegistryPath) ? readJson(sourceRegistryPath) : null;
   fs.mkdirSync(newsroomDir, { recursive: true });
   fs.mkdirSync(newsletterDir, { recursive: true });
@@ -189,20 +230,32 @@ async function main() {
   const commonContext = [
     `Newsletter date: ${date}`,
     'Audience: Camera HAL / Android Camera / C++ engineer',
-    'Use only the collected candidate JSON, data/news-sources.json, and docs/news-sources.md. Do not browse the web.',
-    'Keep source names and source URLs unchanged. Distinguish facts from interpretation.',
-    'Use candidate section/category metadata for filtering and grouping, but keep the existing newsletter output structure.',
-    'Treat candidateOnly=true or requiresCrossCheck=true items as leads unless official or project-official sources support the same claim.',
-    'Final newsletter text must be Korean.'
+    'Use only the collected candidate JSON, data/news-sources.json, docs/news-sources.md, and the editorial documents below. Do not browse the web.',
+    'Keep source names and source URLs unchanged. Distinguish confirmed facts from interpretation.',
+    'Final newsletter text must be Korean.',
+    '',
+    'docs/editorial-policy.md:',
+    editorialPolicy,
+    '',
+    'docs/newsletter-template.md:',
+    newsletterTemplate
   ].join('\n');
 
   const reporter = validateReporter(await callGeminiJson(
     'reporter',
     [
       'You are the AI reporter for Camera HAL SW Newsletter.',
-      'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, and developer productivity.',
+      'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, on-device AI, NPU/GPU, and developer productivity.',
       'Give low scores to product promotion, general IT news, and weak Camera HAL relevance.',
       'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
+      'For every candidate, provide these numeric scores:',
+      '- camera_hal_relevance_score: 0-5',
+      '- android_camera_relevance_score: 0-5',
+      '- practical_actionability_score: 0-5',
+      '- source_reliability_score: 0-5',
+      '- freshness_score: 0-3',
+      '- ai_required_slot_fit_score: 0-3',
+      '- cpp_fallback_value_score: 0-3',
       'Return only JSON matching the schema.'
     ].join('\n'),
     `${commonContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndata/news-sources.json:\n${JSON.stringify(sourceRegistry, null, 2)}\n\ndocs/news-sources.md:\n${sourcesMarkdown}`,
@@ -215,10 +268,13 @@ async function main() {
     [
       'You are the AI editor for Camera HAL SW Newsletter.',
       'Write a Korean technical newsletter draft that a Camera HAL engineer can read in 10 minutes.',
-      'Avoid marketing tone. Include background knowledge and Camera HAL checks in every section.',
+      'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
+      'Create about 5 main articles. 4-6 articles are acceptable if the source set requires it.',
+      'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
+      'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it has concrete HAL native-code value.',
+      'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
       'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
-      'briefing must have exactly 3 items. sections must have exactly 3 items in this order: AOSP Camera Watch, Tech Trend Radar, C++ / AI Practical Tip.',
-      'Use registry sections such as Linux Camera / Driver, Embedded / Semiconductor, AI / SW Engineering Trends, and Korean Tech Trends as candidate grouping signals inside the existing three-section newsletter format.'
+      'briefing must have exactly 3 items.'
     ].join('\n'),
     `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}`,
     editorSchema
@@ -232,7 +288,10 @@ async function main() {
       'You are the AI fact checker for Camera HAL SW Newsletter.',
       'Check factuality, missing sources, exaggerated language, and missing dates.',
       'Any claim without a source must be classified as must_fix.',
-      'Do not rewrite for style. Focus only on factual errors and source problems.',
+      'Flag general AI/C++ news that lacks Camera HAL or Android Camera interpretation.',
+      'Flag any main article without concrete Action Item content.',
+      'Flag any main article with weak Camera HAL perspective or missing engineering relevance.',
+      'Do not rewrite for style. Focus only on factual errors, source problems, and editorial-policy violations.',
       'Return only JSON matching the schema.'
     ].join('\n'),
     `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
@@ -285,7 +344,8 @@ async function main() {
     must_fix_count: mustFixCount,
     validate_ok: validateResult.ok,
     todo_found: todoFound,
-    empty_source_sections: emptySourceSections
+    empty_source_sections: emptySourceSections,
+    source_gap_count: factCheck.source_gap_count
   });
 
   if (todoFound) fail('Generated newsletter contains TODO.');

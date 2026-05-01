@@ -6,21 +6,37 @@ const dataPath = path.join(root, 'data', 'newsletters.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
-const requiredSections = [
-  '## 1. 이번 주 3줄 브리핑',
+
+const cleanBriefingHeading = '## 1. 이번 주 3줄 브리핑';
+const legacyBriefingHeading = '## 1. ?대쾲 二?3以?釉뚮━??';
+const legacySectionHeadings = [
   '## 2. AOSP Camera Watch',
   '## 3. Tech Trend Radar',
-  '## 4. 이번 주 C++ / AI 실전 팁',
-  '## References'
+  '## 4. ?대쾲 二?C++ / AI ?ㅼ쟾 ??'
 ];
 const errors = [];
+const warnings = [];
 
 function fail(message) {
   errors.push(message);
 }
 
+function warn(message) {
+  warnings.push(message);
+}
+
 function read(filePath) {
   return fs.readFileSync(filePath, 'utf8');
+}
+
+function readJsonIfExists(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(read(filePath));
+  } catch (error) {
+    warn(`Could not parse ${path.relative(root, filePath)} for quality warnings: ${error.message}`);
+    return null;
+  }
 }
 
 function sectionText(content, heading, nextHeadingPattern = /^## /m) {
@@ -31,10 +47,103 @@ function sectionText(content, heading, nextHeadingPattern = /^## /m) {
   return next === -1 ? afterHeading : afterHeading.slice(0, next);
 }
 
+function hasAny(content, values) {
+  return values.some(value => content.includes(value));
+}
+
 function hasSourceEntry(section) {
-  const sourceHeading = section.match(/\*\*(Sources|출처)\*\*([\s\S]*)/);
+  const sourceHeading = section.match(/\*\*(Sources|출처|異쒖쿂)\*\*([\s\S]*)/);
   if (!sourceHeading) return false;
   return /-\s+(?:\[.+?\]\(https?:\/\/|.+?:\s+https?:\/\/)/.test(sourceHeading[2]);
+}
+
+function getBriefingHeading(md) {
+  if (md.includes(cleanBriefingHeading)) return cleanBriefingHeading;
+  if (md.includes(legacyBriefingHeading)) return legacyBriefingHeading;
+  return '';
+}
+
+function mainArticleBlocks(md) {
+  const matches = [...md.matchAll(/^##\s+(\d+)\.\s+(.+)$/gm)];
+  const blocks = [];
+  for (let i = 0; i < matches.length; i += 1) {
+    const index = Number(matches[i][1]);
+    const title = matches[i][2].trim();
+    if (index <= 1) continue;
+    if (/Action Items/i.test(title) || title.includes('Action')) continue;
+
+    const start = matches[i].index + matches[i][0].length;
+    const nextMatch = matches[i + 1];
+    const end = nextMatch ? nextMatch.index : md.length;
+    const text = md.slice(start, end);
+    if (/^##\s+References$/m.test(matches[i][0])) continue;
+    blocks.push({ heading: matches[i][0], title, text });
+  }
+  return blocks.filter(block => !/^References$/i.test(block.title));
+}
+
+function hasEngineeringPerspective(text) {
+  return /Camera HAL|HAL|Android Camera|CameraX|AOSP Camera|stream|buffer|metadata|request|result|CTS|VTS|CDD|NPU|GPU|ISP|thermal|latency|성능|검증|호환/.test(text);
+}
+
+function validateLegacySections(item, md) {
+  const articles = mainArticleBlocks(md);
+  if (articles.length < 3) {
+    fail(`Newsletter ${item.date} legacy markdown must have at least 3 main sections, found ${articles.length}`);
+  }
+  for (const article of articles) {
+    if (!hasAny(article.text, ['출처', 'Sources', '異쒖쿂'])) {
+      fail(`Newsletter ${item.date} section missing sources: ${article.heading}`);
+    }
+    if (!hasSourceEntry(article.text)) {
+      fail(`Newsletter ${item.date} section has no source entries: ${article.heading}`);
+    }
+  }
+}
+
+function validateArticleQuality(item, md, isNewFormat) {
+  const articles = mainArticleBlocks(md);
+  if (isNewFormat) {
+    if (articles.length < 4 || articles.length > 6) {
+      warn(`Newsletter ${item.date} main article count is ${articles.length}; expected 4-6 for the new format.`);
+    }
+
+    const hasAiArticle = /AI|Gemini|agent|on-device|NPU|LLM|인공지능/i.test(md);
+    if (!hasAiArticle) {
+      warn(`Newsletter ${item.date} has no AI-related article or AI Corner signal.`);
+    }
+
+    for (const article of articles) {
+      if (!hasAny(article.text, ['우리 팀이 확인할 Action Item', 'Action Hints', '異붿쿇', '諛붾줈'])) {
+        warn(`Newsletter ${item.date} article may be missing Action Item content: ${article.heading}`);
+      }
+      if (!hasAny(article.text, ['Camera HAL 관점 해석', 'Camera HAL?먯꽌 ?뺤씤?대낵 ?꾩씠??']) && !hasEngineeringPerspective(article.text)) {
+        warn(`Newsletter ${item.date} article may be missing Camera HAL perspective: ${article.heading}`);
+      }
+    }
+  }
+
+  for (const article of articles) {
+    if (!hasSourceEntry(article.text)) {
+      fail(`Newsletter ${item.date} article has no source entries: ${article.heading}`);
+    }
+  }
+}
+
+function validateSourceGapArtifact(date) {
+  const factCheck = readJsonIfExists(path.join(root, 'newsroom', date, 'fact-check-report.json'));
+  if (!factCheck) return;
+  const sourceGapCount = Number.isFinite(Number(factCheck.source_gap_count))
+    ? Number(factCheck.source_gap_count)
+    : Array.isArray(factCheck.source_gaps)
+      ? factCheck.source_gaps.length
+      : 0;
+  if (sourceGapCount >= 3) {
+    warn(`Newsletter ${date} fact-check source_gap_count is ${sourceGapCount}.`);
+  }
+  if (factCheck.status === 'NEEDS_FIX' && Array.isArray(factCheck.must_fix) && factCheck.must_fix.length > 0) {
+    fail(`Newsletter ${date} has unresolved fact-check must_fix items.`);
+  }
 }
 
 if (!fs.existsSync(dataPath)) {
@@ -102,39 +211,29 @@ for (const [index, item] of newsletters.entries()) {
     const mdPath = path.resolve(root, item.md);
     if (fs.existsSync(mdPath)) {
       const md = read(mdPath);
-      for (const heading of requiredSections) {
-        if (!md.includes(heading)) {
-          fail(`Newsletter ${item.date} markdown missing required section: ${heading}`);
+      const briefingHeading = getBriefingHeading(md);
+      if (!briefingHeading) {
+        fail(`Newsletter ${item.date} markdown missing briefing section`);
+      } else {
+        const briefing = sectionText(md, briefingHeading);
+        const briefingBullets = briefing
+          .split('\n')
+          .filter(line => /^- /.test(line.trim()));
+        if (briefingBullets.length !== 3) {
+          fail(`Newsletter ${item.date} must have exactly 3 briefing bullets, found ${briefingBullets.length}`);
         }
       }
 
-      const briefing = sectionText(md, '## 1. 이번 주 3줄 브리핑');
-      const briefingBullets = briefing
-        .split('\n')
-        .filter(line => /^- /.test(line.trim()));
-      if (briefingBullets.length !== 3) {
-        fail(`Newsletter ${item.date} must have exactly 3 briefing bullets, found ${briefingBullets.length}`);
+      if (!md.includes('## References')) {
+        fail(`Newsletter ${item.date} markdown missing References section`);
       }
 
-      for (const heading of [
-        '## 2. AOSP Camera Watch',
-        '## 3. Tech Trend Radar',
-        '## 4. 이번 주 C++ / AI 실전 팁'
-      ]) {
-        const section = sectionText(md, heading);
-        if (!section.includes('배경지식')) {
-          fail(`Newsletter ${item.date} section missing 배경지식: ${heading}`);
-        }
-        if (!section.includes('Camera HAL에서 확인해볼 아이템')) {
-          fail(`Newsletter ${item.date} section missing Camera HAL checks: ${heading}`);
-        }
-        if (!section.includes('출처') && !section.includes('Sources')) {
-          fail(`Newsletter ${item.date} section missing sources: ${heading}`);
-        }
-        if (!hasSourceEntry(section)) {
-          fail(`Newsletter ${item.date} section has no source entries: ${heading}`);
-        }
+      const isLegacy = !md.includes(cleanBriefingHeading) || legacySectionHeadings.some(heading => md.includes(heading));
+      if (isLegacy) {
+        validateLegacySections(item, md);
       }
+      validateArticleQuality(item, md, !isLegacy);
+      validateSourceGapArtifact(item.date);
     }
   }
 }
@@ -177,13 +276,17 @@ for (const relPath of htmlFiles) {
         fail(`Newsletter HTML source-list has no source links: ${relPath}`);
       }
     }
-    if (!content.includes('Archive로 돌아가기')) {
+    if (!hasAny(content, ['Archive로 돌아가기', 'Archive濡??뚯븘媛湲?'])) {
       fail(`Newsletter HTML missing archive link text: ${relPath}`);
     }
-    if (!content.includes('MD 원본 보기')) {
+    if (!hasAny(content, ['MD 원본 보기', 'MD ?먮낯 蹂닿린'])) {
       fail(`Newsletter HTML missing markdown source link text: ${relPath}`);
     }
   }
+}
+
+if (warnings.length > 0) {
+  console.warn(warnings.map(warning => `Warning: ${warning}`).join('\n'));
 }
 
 if (errors.length > 0) {

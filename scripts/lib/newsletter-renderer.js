@@ -35,13 +35,39 @@ function bulletsHtml(items) {
   return ensureArray(items).map(item => `<li>${escapeHtml(item)}</li>`).join('');
 }
 
+function textOrBulletsMarkdown(value) {
+  if (Array.isArray(value)) return bulletsMarkdown(value);
+  return String(value || '').trim();
+}
+
+function paragraphHtml(value) {
+  return `<p>${escapeHtml(value || '')}</p>`;
+}
+
+function articleFacts(section) {
+  return ensureArray(section.confirmed_facts).length > 0 ? section.confirmed_facts : section.what_changed;
+}
+
+function articlePerspective(section) {
+  return section.camera_hal_perspective || section.why_it_matters || '';
+}
+
+function articleActions(section) {
+  const actions = ensureArray(section.action_items);
+  return actions.length > 0 ? actions : ensureArray(section.action_hints);
+}
+
+function articleTeamSummary(section) {
+  return section.team_summary || section.why_it_matters || '';
+}
+
 function normalizedSections(issue) {
-  const sections = ensureArray(issue.sections);
-  return [
-    { heading: '## 2. AOSP Camera Watch', htmlHeading: '2. AOSP Camera Watch', className: 'aosp', section: sections[0] },
-    { heading: '## 3. Tech Trend Radar', htmlHeading: '3. Tech Trend Radar', className: 'trend', section: sections[1] },
-    { heading: '## 4. 이번 주 C++ / AI 실전 팁', htmlHeading: '4. 이번 주 C++ / AI 실전 팁', className: 'tip', section: sections[2] }
-  ];
+  return ensureArray(issue.sections).map((section, index) => ({
+    heading: `## ${index + 2}. ${section.category || `메인 기사 ${index + 1}`}`,
+    htmlHeading: `${index + 2}. ${section.category || `메인 기사 ${index + 1}`}`,
+    className: section.article_type || (section.is_ai_related ? 'ai' : 'article'),
+    section
+  }));
 }
 
 function buildMarkdown(issue) {
@@ -50,7 +76,6 @@ function buildMarkdown(issue) {
 ${issue.summary}
 
 ## 1. 이번 주 3줄 브리핑
-
 ${bulletsMarkdown(issue.briefing)}
 
 ${normalizedSections(issue).map(({ heading, section }) => `${heading}
@@ -59,23 +84,23 @@ ${normalizedSections(issue).map(({ heading, section }) => `${heading}
 
 **이번 주 확인한 사실**
 
-${section.what_changed}
+${textOrBulletsMarkdown(articleFacts(section))}
 
 **배경지식**
 
 ${section.background}
 
-**업무 관점 해석**
+**Camera HAL 관점 해석**
 
-${section.why_it_matters}
+${articlePerspective(section)}
 
-**Camera HAL에서 확인해볼 아이템**
+**우리 팀이 확인할 Action Item**
 
-${bulletsMarkdown(section.camera_hal_checks)}
+${bulletsMarkdown(articleActions(section))}
 
-**Action Hints**
+**팀 공유용 한 줄**
 
-${bulletsMarkdown(section.action_hints)}
+${articleTeamSummary(section)}
 
 **Sources**
 
@@ -122,16 +147,14 @@ function buildHtml(issue) {
 
 ${normalizedSections(issue).map(({ htmlHeading, className, section }) => `    <section class="section">
       <h2>${escapeHtml(htmlHeading)}</h2>
-      <div class="card issue-section ${className}">
+      <div class="card issue-section ${escapeHtml(className)}">
         <span class="issue-kicker">${escapeHtml(section.category)}</span>
         <h3>${escapeHtml(section.headline)}</h3>
-        <p><strong>이번 주 확인한 사실</strong> ${escapeHtml(section.what_changed)}</p>
-        <p><strong>배경지식</strong> ${escapeHtml(section.background)}</p>
-        <p><strong>업무 관점 해석</strong> ${escapeHtml(section.why_it_matters)}</p>
-        <p><strong>Camera HAL에서 확인해볼 아이템</strong></p>
-        <ul>${bulletsHtml(section.camera_hal_checks)}</ul>
-        <p><strong>Action Hints</strong></p>
-        <ul>${bulletsHtml(section.action_hints)}</ul>
+        <div><strong>이번 주 확인한 사실</strong>${Array.isArray(articleFacts(section)) ? `<ul>${bulletsHtml(articleFacts(section))}</ul>` : paragraphHtml(articleFacts(section))}</div>
+        <div><strong>배경지식</strong>${paragraphHtml(section.background)}</div>
+        <div><strong>Camera HAL 관점 해석</strong>${paragraphHtml(articlePerspective(section))}</div>
+        <div><strong>우리 팀이 확인할 Action Item</strong><ul>${bulletsHtml(articleActions(section))}</ul></div>
+        <p><strong>팀 공유용 한 줄</strong> ${escapeHtml(articleTeamSummary(section))}</p>
         <div class="source-list"><strong>Sources</strong><ul>${sourceListHtml(section.sources)}</ul></div>
       </div>
     </section>`).join('\n\n')}
@@ -185,31 +208,30 @@ function buildEditorChiefBrief(date, issue, factCheck) {
   const decision = factCheck.status === 'PASS' ? 'APPROVE' : 'REQUEST_CHANGES';
   return `# Editor-in-Chief Brief - ${date}
 
-## 이번 호 핵심 메시지
+## 이번 주 핵심 메시지
 
 ${issue.summary}
 
 ## 메인으로 봐야 할 기사
 
-${firstSection.headline || 'AOSP Camera Watch 항목을 우선 확인하세요.'}
+${firstSection.headline || '첫 번째 메인 기사 확인 필요'}
 
 ## Camera HAL 실무 연결 포인트
-
 ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 
-## 검수 결과 요약
+## 검증 결과 요약
 
 - Status: ${factCheck.status}
 - Must fix count: ${ensureArray(factCheck.must_fix).length}
 - Source gap count: ${ensureArray(factCheck.source_gaps).length}
 - Comment: ${factCheck.final_comment}
 
-## 편집장 확인 checklist
+## 편집자 확인 checklist
 
-- [ ] 이번 호 핵심 메시지가 Camera HAL 업무와 직접 연결되는가?
+- [ ] 이번 주 핵심 메시지가 Camera HAL 업무와 직접 연결되는가?
 - [ ] 주요 항목의 출처가 충분하고 과장 표현이 없는가?
-- [ ] 검수 결과의 must_fix가 모두 해소되었는가?
-- [ ] 팀에 공유해도 되는 action item으로 정리되었는가?
+- [ ] 검증 결과의 must_fix가 모두 해소되었는가?
+- [ ] 팀 공유에도 충분한 action item으로 정리되었는가?
 
 ## 권장 판단
 
@@ -228,7 +250,7 @@ ${files.map(file => `- ${file}`).join('\n')}
 
 ${validateResult}
 
-## 남은 TODO 여부
+## 잔여 TODO 여부
 
 ${todoFound ? 'TODO 문자열이 남아 있습니다.' : '없음'}
 
@@ -236,10 +258,11 @@ ${todoFound ? 'TODO 문자열이 남아 있습니다.' : '없음'}
 
 ${emptySourceSections.length === 0 ? '없음' : emptySourceSections.map(section => `- ${section}`).join('\n')}
 
-## Gemini 검수 결과
+## Gemini 검증 결과
 
 - Status: ${factCheck.status}
 - Must fix count: ${ensureArray(factCheck.must_fix).length}
+- Source gap count: ${ensureArray(factCheck.source_gaps).length}
 `;
 }
 
