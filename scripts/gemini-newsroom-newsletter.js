@@ -131,23 +131,62 @@ function reporterImageCandidatesForSection(section, reporter) {
   return images.slice(0, 6);
 }
 
+function isHttpsUrl(value) {
+  try {
+    return new URL(String(value || '').trim()).protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+function firstHttpsUrl(...values) {
+  for (const value of values) {
+    const trimmed = String(value || '').trim();
+    if (isHttpsUrl(trimmed)) return trimmed;
+  }
+  return '';
+}
+
 function normalizeSectionImageFields(section, reporter) {
   const sectionImages = ensureArray(section.imageCandidates).filter(image => image && image.url && isSafeExternalImageUrl(image.url));
   const imageCandidates = sectionImages.length > 0 ? sectionImages : reporterImageCandidatesForSection(section, reporter);
   const allowed = new Set(imageCandidates.map(image => image.url));
-  const selectedImage = allowed.has(section.selectedImage) ? section.selectedImage : '';
-  const selected = imageCandidates.find(image => image.url === selectedImage);
+  const requestedImage = allowed.has(section.selectedImage) ? section.selectedImage : '';
+  const selected = imageCandidates.find(image => image.url === requestedImage);
+
+  if (requestedImage) {
+    const imageSource = firstHttpsUrl(
+      section.imageSource,
+      selected?.articleUrl,
+      selected?.sourceUrl,
+      ensureArray(section.sources)[0]?.url
+    );
+    const imageAttribution = String(section.imageAttribution || selected?.attribution || ensureArray(section.sources)[0]?.title || '').trim();
+    const imageAlt = String(section.imageAlt || selected?.alt || section.headline || 'Article image').trim();
+    const imageLicenseStatus = String(section.imageLicenseStatus || selected?.licenseStatus || 'unknown').trim();
+
+    if (imageSource && imageAttribution && imageAlt && imageLicenseStatus) {
+      return {
+        imageCandidates,
+        selectedImage: requestedImage,
+        imageSource,
+        imageAttribution,
+        imageAlt,
+        imageLicenseStatus,
+        imageUsageDecisionReason: section.imageUsageDecisionReason || 'Editor-selected image with HTTPS source attribution.'
+      };
+    }
+  }
 
   return {
     imageCandidates,
-    selectedImage,
-    imageSource: selectedImage ? (section.imageSource || selected.articleUrl || selected.sourceUrl || '') : '',
-    imageAttribution: selectedImage ? (section.imageAttribution || selected.attribution || section.sources?.[0]?.title || '') : '',
-    imageAlt: selectedImage ? (section.imageAlt || selected.alt || section.headline || 'Article image') : '',
-    imageLicenseStatus: selectedImage ? (section.imageLicenseStatus || selected.licenseStatus || 'unknown') : 'none',
-    imageUsageDecisionReason: section.imageUsageDecisionReason || (selectedImage
-      ? 'Collector-provided source image selected for article context.'
-      : 'No suitable collector-provided image selected; local fallback visual will be used.')
+    selectedImage: '',
+    imageSource: '',
+    imageAttribution: '',
+    imageAlt: '',
+    imageLicenseStatus: 'none',
+    imageUsageDecisionReason: section.imageUsageDecisionReason ||
+      'No suitable image with complete HTTPS attribution metadata selected; local fallback visual will be used.'
   };
 }
 
@@ -335,7 +374,11 @@ async function main() {
       'For each article, choose at most one selectedImage from that article imageCandidates. If relevance, rights risk, logo-only content, screenshot text density, or source fit is unclear, set selectedImage to an empty string.',
       'Do not invent image URLs. selectedImage must exactly match one imageCandidates.url value, or be an empty string.',
       'Prefer directly relevant 16:9 or 4:3 clean images from the source article over generic, logo-only, or promotional images.',
-      'When selectedImage is set, provide imageSource, imageAttribution, imageAlt, imageLicenseStatus, and a short imageUsageDecisionReason. imageAlt must describe the image in article context.',
+      'When selectedImage is set, ALWAYS provide imageSource, imageAttribution, imageAlt, imageLicenseStatus, and a short imageUsageDecisionReason. imageAlt must describe the image in article context.',
+      'imageSource MUST be an HTTPS URL that links to the image source or article.',
+      'imageAttribution MUST be non-empty source or article title text.',
+      'If you cannot provide imageSource, imageAttribution, imageAlt, and imageLicenseStatus, do not select an image; leave selectedImage empty.',
+      'Incomplete selected image metadata will be removed during validation and may cause publication validation failure.',
       'When no image is selected, keep selectedImage, imageSource, imageAttribution, and imageAlt empty, set imageLicenseStatus to none, and explain the rejection briefly in imageUsageDecisionReason.',
       'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
       'briefing must have exactly 3 items.'

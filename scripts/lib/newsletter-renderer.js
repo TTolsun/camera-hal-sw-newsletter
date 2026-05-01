@@ -51,16 +51,20 @@ function slugClass(value) {
     .replace(/^-+|-+$/g, '') || 'generic';
 }
 
+function httpsUrlOrFallback(value, fallback) {
+  return /^https:\/\//i.test(String(value || '').trim()) ? String(value).trim() : fallback;
+}
+
 function articleImageMarkdown(section) {
   if (!section.selectedImage) return '';
   const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
-  const source = section.imageSource || section.sources?.[0]?.url || section.selectedImage;
+  const source = httpsUrlOrFallback(section.imageSource || section.sources?.[0]?.url, section.selectedImage);
   return `\n_Image: [${attribution}](${source})_\n`;
 }
 
 function articleMediaHtml(section) {
   if (section.selectedImage) {
-    const imageSource = section.imageSource || section.sources?.[0]?.url || section.selectedImage;
+    const imageSource = httpsUrlOrFallback(section.imageSource || section.sources?.[0]?.url, section.selectedImage);
     const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
     const alt = section.imageAlt || `${section.headline || 'Article'} image`;
     return `<figure class="article-media">

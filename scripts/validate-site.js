@@ -174,6 +174,9 @@ function validateEditorImageArtifact(date) {
         fail(`Newsletter ${date} selectedImage missing ${field}: ${label}`);
       }
     }
+    if (!/^https:\/\//i.test(String(section.imageSource || '').trim())) {
+      fail(`Newsletter ${date} selectedImage imageSource must be an HTTPS URL: ${label}`);
+    }
     if (!['unknown', 'allowed'].includes(section.imageLicenseStatus || '')) {
       fail(`Newsletter ${date} selectedImage has invalid imageLicenseStatus: ${label}`);
     }
