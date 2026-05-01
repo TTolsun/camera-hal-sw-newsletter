@@ -6,14 +6,13 @@
       "source": "Android Developers Blog",
       "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
-      "summary": "Android에서 하이브리드 추론 및 새로운 Gemini 모델 지원은 카메라 앱이 AI를 활용하여 이미지 처리를 수행하는 방식에 직접적인 영향을 미치며, AI 가속 및 데이터 흐름에 대한 Camera HAL 요구 사항에 영향을 줄 수 있습니다.",
+      "summary": "Posted by Thomas Ezan, Senior Developer Relations Engineer If you are an Android developer looking to implement innovative AI features into your app, we recently launched powerful new updates: Hybrid inference, a new API for Firebase AI Logic to leverage both on-device and Cloud inference, and support for new Gemini models including the latest Nano Banana models for image generation. Let’s jump in! Experiment with hybrid inference With the new Firebase API for hybrid inference , we implemented a",
       "camera_hal_relevance_score": 100,
-      "relevance_reason": "Android에서 하이브리드 추론 및 새로운 Gemini 모델 지원은 카메라 앱이 AI를 활용하여 이미지 처리를 수행하는 방식에 직접적인 영향을 미치며, AI 가속 및 데이터 흐름에 대한 Camera HAL 요구 사항에 영향을 줄 수 있습니다.",
+      "relevance_reason": "Android AI 모델 및 하이브리드 추론 API 업데이트는 카메라 HAL이 처리하는 이미지/비디오 스트림에 대한 온디바이스 AI 처리 요구사항에 직접적인 영향을 미칠 수 있습니다. 특히 이미지 생성 모델은 카메라 파이프라인 후처리 단계와 관련될 수 있습니다.",
       "impact_areas": [
         "Android Camera",
         "AI Agent",
-        "Camera HAL",
-        "Developer Productivity"
+        "stream/buffer/metadata/request/result"
       ],
       "selected": true
     },
@@ -22,13 +21,13 @@
       "source": "Android Developers Blog",
       "published_date": "Thu, 16 Apr 2026 17:00:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html",
-      "summary": "AI 에이전트(Android Studio의 Gemini, Gemini CLI 등)를 활용하여 앱 개발 속도를 높이는 새로운 Android 도구 및 리소스는 Camera HAL 엔지니어의 개발 생산성에 매우 중요합니다.",
+      "summary": "Posted by Adarsh Fernando, Group Product Manager and Esteban de la Canal, Senior Staff Software Engineer As Android developers, you have many choices when it comes to the agents, tools, and LLMs you use for app development. Whether you are using Gemini in Android Studio, Gemini CLI, Antigravity, or third-party agents like Claude Code or Codex, our mission is to ensure that high-quality Android development is possible everywhere. Today, we are introducing a new suite of Android tools and resource",
       "camera_hal_relevance_score": 100,
-      "relevance_reason": "AI 에이전트(Android Studio의 Gemini, Gemini CLI 등)를 활용하여 앱 개발 속도를 높이는 새로운 Android 도구 및 리소스는 Camera HAL 엔지니어의 개발 생산성에 매우 중요합니다.",
+      "relevance_reason": "AI 에이전트를 활용한 Android 앱 개발 생산성 향상은 Camera HAL 개발자의 생산성 도구 및 워크플로우에 간접적으로 영향을 미칠 수 있습니다. 특히 C++ 개발 환경에도 유사한 에이전트 도구가 적용될 가능성이 있습니다.",
       "impact_areas": [
         "AI Agent",
-        "Developer Productivity",
-        "Android Camera"
+        "developer productivity",
+        "C++"
       ],
       "selected": true
     },
@@ -37,24 +36,24 @@
       "source": "Android Developers Blog",
       "published_date": "Tue, 14 Apr 2026 12:30:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/get-ready-for-google-io-livestream-schedule-revealed.html",
-      "summary": "Google I/O 2026 발표는 AI, Android 등 주요 업데이트를 예고하며, 이는 Camera HAL 관련 미래 기술 동향 및 개발자 도구에 대한 중요한 정보를 제공할 수 있습니다.",
-      "camera_hal_relevance_score": 95,
-      "relevance_reason": "Google I/O 2026 발표는 AI, Android 등 주요 업데이트를 예고하며, 이는 Camera HAL 관련 미래 기술 동향 및 개발자 도구에 대한 중요한 정보를 제공할 수 있습니다.",
+      "summary": "Google I/O 2026: Livestream Schedule Revealed Posted by The Google I/O team The Google I/O schedule is here! Tune in May 19–20 as we unveil Google’s biggest updates across AI, Android, Chrome, and Cloud. Discover new tools and features designed to unlock the future of development with agentic coding. We’re kicking things off with the Google keynote at 10:00 am PT on May 19, followed by the Developer keynote at 1:30 pm PT. Block your calendars for two days of live sessions, straight from Mountain",
+      "camera_hal_relevance_score": 100,
+      "relevance_reason": "Google I/O는 Android, AI, 개발 도구 등 주요 업데이트가 발표되는 행사로, Camera HAL 및 Android Camera 관련 중요한 발표가 포함될 가능성이 높습니다. 개발자 키노트에서 에이전트 코딩에 대한 언급이 있어 생산성 향상과도 관련됩니다.",
       "impact_areas": [
         "Android Camera",
         "AI Agent",
-        "Developer Productivity"
+        "developer productivity"
       ],
       "selected": true
     },
     {
-      "title": "Appareil photo &nbsp;|&nbsp; Android Open Source Project",
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
       "source": "AOSP Camera Documentation",
       "published_date": "",
       "url": "https://source.android.com/docs/core/camera",
-      "summary": "Camera HAL, Camera 프레임워크, 스트림/버퍼/메타데이터/요청/결과 구조에 대한 공식 문서로, Camera HAL 엔지니어에게 필수적인 참조 자료입니다.",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
       "camera_hal_relevance_score": 100,
-      "relevance_reason": "Camera HAL, Camera 프레임워크, 스트림/버퍼/메타데이터/요청/결과 구조에 대한 공식 문서로, Camera HAL 엔지니어에게 필수적인 참조 자료입니다.",
+      "relevance_reason": "AOSP 카메라 공식 문서는 Camera HAL 개발의 핵심 참조 자료입니다. 변경 사항이 없더라도 항상 최신 정보를 확인해야 하는 중요 문서입니다.",
       "impact_areas": [
         "Camera HAL",
         "Android Camera",
@@ -64,47 +63,74 @@
       "selected": true
     },
     {
-      "title": "มีอะไรใหม่ &nbsp;|&nbsp; Android Open Source Project",
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
       "source": "AOSP What's New / Release Notes",
       "published_date": "",
       "url": "https://source.android.com/docs/whatsnew",
-      "summary": "Android 플랫폼 릴리스, CTS/VTS/ITS 및 호환성 변경 사항을 추적하는 데 필수적인 공식 자료로, Camera HAL 구현에 직접적인 영향을 미칩니다.",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
       "camera_hal_relevance_score": 100,
-      "relevance_reason": "Android 플랫폼 릴리스, CTS/VTS/ITS 및 호환성 변경 사항을 추적하는 데 필수적인 공식 자료로, Camera HAL 구현에 직접적인 영향을 미칩니다.",
+      "relevance_reason": "AOSP의 새로운 기능 및 릴리스 노트는 Android 플랫폼 전반의 변경 사항을 포함하며, Camera HAL 및 관련 프레임워크에 영향을 미칠 수 있는 중요한 업데이트를 담고 있을 수 있습니다.",
       "impact_areas": [
         "AOSP Camera",
         "Android Camera",
-        "Compatibility"
+        "Camera HAL"
       ],
       "selected": true
     },
     {
-      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "title": "Документ определения совместимости с Android &nbsp;|&nbsp; Android Open Source Project",
       "source": "Android Compatibility Definition Document",
       "published_date": "",
       "url": "https://source.android.com/docs/compatibility/cdd",
-      "summary": "Android 기기의 카메라 기능 및 호환성 요구 사항을 직접 정의하는 문서로, Camera HAL 개발에 있어 가장 중요한 기준 중 하나입니다.",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
       "camera_hal_relevance_score": 98,
-      "relevance_reason": "Android 기기의 카메라 기능 및 호환성 요구 사항을 직접 정의하는 문서로, Camera HAL 개발에 있어 가장 중요한 기준 중 하나입니다.",
+      "relevance_reason": "Android CDD는 Camera HAL 구현의 필수 호환성 요구사항을 정의합니다. 이 문서의 변경 사항은 HAL 구현에 직접적인 영향을 미칩니다.",
       "impact_areas": [
-        "Android Camera",
         "Camera HAL",
-        "Compatibility"
+        "Android Camera",
+        "AOSP Camera",
+        "compatibility"
       ],
       "selected": true
     },
     {
-      "title": "कैमराएक्स &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
+      "title": "Kamera X &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
       "source": "CameraX Release Notes",
       "published_date": "",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-      "summary": "CameraX API 업데이트, 호환성 해결 방법 및 앱 측 카메라 동작 변경 사항에 대한 공식 정보로, Camera HAL에 대한 상위 계층의 요구 사항이나 디버깅에 영향을 줄 수 있습니다.",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
       "camera_hal_relevance_score": 96,
-      "relevance_reason": "CameraX API 업데이트, 호환성 해결 방법 및 앱 측 카메라 동작 변경 사항에 대한 공식 정보로, Camera HAL에 대한 상위 계층의 요구 사항이나 디버깅에 영향을 줄 수 있습니다.",
+      "relevance_reason": "CameraX 릴리스 노트는 상위 레벨 카메라 API의 변경 사항을 제공하며, 이는 Camera HAL이 지원해야 하는 기능 및 동작에 간접적으로 영향을 줄 수 있습니다.",
       "impact_areas": [
         "CameraX",
         "Android Camera",
-        "Developer Productivity"
+        "Camera HAL"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Streamline User Journeys with Verified Email via Credential Manager",
+      "source": "Android Developers Blog",
+      "published_date": "Wed, 22 Apr 2026 20:00:00 +0000",
+      "url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "summary": "Posted by Niharika Arora, Senior Developer Relations Engineer and Jean-Pierre Pralle, Product Manager, Credential Manager In the modern digital landscape, the first encounter a user has with an app is often the most critical. Yet, for decades, this initial interaction has been hindered by the friction of traditional verification methods. Today, we're excited to announce a new verified email credential issued by Google , which developers can now retrieve directly from Android’s Credential Manager",
+      "camera_hal_relevance_score": 92,
+      "relevance_reason": "사용자 인증 및 계정 관리 관련 업데이트로, Camera HAL 자체와는 직접적인 관련이 적지만, Android 앱 개발 전반의 생산성 및 사용자 경험 개선에 기여할 수 있습니다. Camera HAL 엔지니어에게는 일반적인 Android 개발 동향 정보로 간주됩니다.",
+      "impact_areas": [
+        "developer productivity"
+      ],
+      "selected": true
+    },
+    {
+      "title": "What's new in the Jetpack Compose April '26 release",
+      "source": "Android Developers Blog",
+      "published_date": "Wed, 22 Apr 2026 23:00:00 +0000",
+      "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "summary": "Posted by Meghan Mehta,&nbsp;Android Developer Relations Engineer Today, the Jetpack Compose April ‘26 release is stable. This release contains version 1.11 of core Compose modules (see the full BOM mapping ), shared element debug tools, trackpad events, and more. We also have a few experimental APIs that we’d love you to try out and give us feedback on. To use today’s release, upgrade your Compose BOM version to: implementation(platform(\"androidx.compose:compose-bom:2026.04.01\")) Changes in Com",
+      "camera_hal_relevance_score": 88,
+      "relevance_reason": "Jetpack Compose는 UI 툴킷으로, Camera HAL과는 직접적인 관련이 없습니다. 하지만 Android 앱 개발의 주요 트렌드이므로, 개발 생산성 측면에서 간접적인 관심사일 수 있습니다.",
+      "impact_areas": [
+        "developer productivity"
       ],
       "selected": true
     },
@@ -113,13 +139,12 @@
       "source": "Android Developers Blog",
       "published_date": "Tue, 21 Apr 2026 14:00:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
-      "summary": "Android Studio의 AI 기반 개발 생산성 향상 기능은 Camera HAL 엔지니어를 포함한 모든 Android 개발자에게 유용합니다.",
-      "camera_hal_relevance_score": 90,
-      "relevance_reason": "Android Studio의 AI 기반 개발 생산성 향상 기능은 Camera HAL 엔지니어를 포함한 모든 Android 개발자에게 유용합니다.",
+      "summary": "Posted by Matt Dyor, Senior Product Manager Android Studio Panda 4 is now stable and ready for you to use in production. This release brings Planning Mode, Next Edit Prediction, and more, making it easier than ever to build high-quality Android apps. Here’s a deep dive into what’s new: Planning Mode Before the Agent starts working on complex tasks for you, it would be helpful if it could come up with a detailed plan. Jumping straight into a large coding project without a design often leads to te",
+      "camera_hal_relevance_score": 88,
+      "relevance_reason": "Android Studio의 AI 기반 개발 도구 개선은 Android 앱 개발자의 생산성 향상에 직접적으로 기여합니다. Camera HAL 개발자에게도 C++ 개발 환경에 유사한 AI 도구가 적용될 가능성을 시사하며, 전반적인 개발 생산성 향상 트렌드에 부합합니다.",
       "impact_areas": [
-        "Developer Productivity",
         "AI Agent",
-        "Android Camera"
+        "developer productivity"
       ],
       "selected": true
     },
@@ -128,14 +153,14 @@
       "source": "Android Developers Blog",
       "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
-      "summary": "Android 17의 최신 베타 릴리스는 플랫폼 안정성 및 앱 호환성에 중요한 이정표이며, Camera HAL 인터페이스 및 동작에 미치는 영향을 이해하는 데 필수적입니다.",
-      "camera_hal_relevance_score": 95,
-      "relevance_reason": "Android 17의 최신 베타 릴리스는 플랫폼 안정성 및 앱 호환성에 중요한 이정표이며, Camera HAL 인터페이스 및 동작에 미치는 영향을 이해하는 데 필수적입니다.",
+      "summary": "Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability. Whether you're fine-tuning your app's user experience, ensuring smooth edge-to-edge rendering, or leveraging the newest APIs, Beta 4 provides the near-final environment you need to be testing with. Get your apps, libraries, tools, and game engines ready! If you develop an Android SDK, library, tool, or ",
+      "camera_hal_relevance_score": 88,
+      "relevance_reason": "Android 17의 베타 릴리스는 플랫폼 안정성 및 새로운 API에 대한 정보를 제공합니다. 이는 Camera HAL이 지원해야 할 새로운 기능이나 변경된 동작에 대한 사전 정보를 제공할 수 있으므로 중요합니다.",
       "impact_areas": [
         "Android Camera",
+        "Camera HAL",
         "AOSP Camera",
-        "Compatibility",
-        "Camera HAL"
+        "compatibility"
       ],
       "selected": true
     },
@@ -144,160 +169,40 @@
       "source": "Android Developers Blog",
       "published_date": "Mon, 13 Apr 2026 13:00:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html",
-      "summary": "Android Emulator의 다중 기기 상호 작용 테스트 개선은 카메라 앱을 포함한 다양한 Android 애플리케이션의 개발 및 테스트 생산성을 향상시킵니다.",
-      "camera_hal_relevance_score": 80,
-      "relevance_reason": "Android Emulator의 다중 기기 상호 작용 테스트 개선은 카메라 앱을 포함한 다양한 Android 애플리케이션의 개발 및 테스트 생산성을 향상시킵니다.",
+      "summary": "Posted by Steven Jenkins, Product Manager, Android Studio Testing multi-device interactions is now easier than ever with the Android Emulator. Whether you are building a multiplayer game, extending your mobile application across form factors, or launching virtual devices that require a device connection, the Android Emulator now natively supports these developer experiences. Previously, interconnecting multiple Android Virtual Devices (AVDs) caused significant friction. It required manually mana",
+      "camera_hal_relevance_score": 88,
+      "relevance_reason": "Android Emulator의 다중 장치 상호작용 테스트 기능은 일반적인 Android 앱 개발 생산성 향상에 기여합니다. Camera HAL 자체와는 직접적인 관련이 적지만, 테스트 환경 개선은 개발 프로세스 전반에 긍정적인 영향을 줄 수 있습니다.",
       "impact_areas": [
-        "Developer Productivity",
-        "Android Camera"
+        "developer productivity"
       ],
       "selected": true
     },
     {
-      "title": "Android Security and Update Bulletins &nbsp;|&nbsp; Android Open Source Project",
+      "title": "Android Güvenlik ve Güncelleme Bültenleri &nbsp;|&nbsp; Android Open Source Project",
       "source": "Android Security Bulletin",
       "published_date": "",
       "url": "https://source.android.com/docs/security/bulletin",
-      "summary": "Android 보안 업데이트에 대한 공식 자료로, 카메라 관련 취약점을 포함할 수 있어 Camera HAL 엔지니어에게 보안 준수를 위해 중요합니다.",
-      "camera_hal_relevance_score": 95,
-      "relevance_reason": "Android 보안 업데이트에 대한 공식 자료로, 카메라 관련 취약점을 포함할 수 있어 Camera HAL 엔지니어에게 보안 준수를 위해 중요합니다.",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+      "camera_hal_relevance_score": 87,
+      "relevance_reason": "Android 보안 게시판은 Camera HAL을 포함한 시스템 구성 요소의 보안 취약점 및 패치 정보를 제공합니다. 카메라 관련 보안 이슈는 HAL 개발에 직접적인 영향을 미칩니다.",
       "impact_areas": [
-        "Security",
+        "Camera HAL",
         "Android Camera",
-        "Camera HAL"
+        "security"
       ],
       "selected": true
     },
     {
-      "title": "2026 Annual C++ Developer Survey \"Lite\"",
-      "source": "ISO C++ Blog",
-      "published_date": "Wed, 22 Apr 2026 00:59:16 +0000",
-      "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
-      "summary": "C++ 개발자 커뮤니티의 동향을 파악하는 데 도움이 되며, C++ 표준화 및 도구 공급업체에 피드백을 제공할 기회입니다.",
-      "camera_hal_relevance_score": 57,
-      "relevance_reason": "C++ 개발자 커뮤니티의 동향을 파악하는 데 도움이 되며, C++ 표준화 및 도구 공급업체에 피드백을 제공할 기회입니다.",
+      "title": "Boosting user privacy and business protection with updated Play policies",
+      "source": "Android Developers Blog",
+      "published_date": "Wed, 15 Apr 2026 17:00:00 +0000",
+      "url": "https://android-developers.googleblog.com/2026/04/giving-users-clearer-choice-and-everyone-a-safer-more-trusted-app-ecosystem.html",
+      "summary": "Posted by Bennet Manuel, Group Product Manager, App & Ecosystem Trust We strive to make Google Play the safest and most trusted experience possible. Today, we’re announcing a new set of policy updates and an account transfer feature to boost user privacy and protect your business from fraud. By providing better features for users and easy-to-integrate tools for you, we’re making it simpler to build safer apps so you can focus on creating great experiences. We’re also expanding our features to he",
+      "camera_hal_relevance_score": 84,
+      "relevance_reason": "Google Play 정책 업데이트는 앱 개발 전반의 개인 정보 보호 및 보안에 대한 가이드라인을 제공합니다. Camera HAL 자체와는 직접적인 관련이 적지만, Android 생태계의 중요한 변화입니다.",
       "impact_areas": [
-        "C++",
-        "Developer Productivity"
-      ],
-      "selected": true
-    },
-    {
-      "title": "Devirtualization and Static Polymorphism &#45;&#45; David Álvarez Rosa",
-      "source": "ISO C++ Blog",
-      "published_date": "Thu, 16 Apr 2026 19:42:23 +0000",
-      "url": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa",
-      "summary": "C++ 성능 최적화 기법(가상화 제거, 정적 다형성)에 대한 심층 분석으로, Camera HAL과 같이 성능이 중요한 C++ 컴포넌트 개발자에게 매우 유용합니다.",
-      "camera_hal_relevance_score": 85,
-      "relevance_reason": "C++ 성능 최적화 기법(가상화 제거, 정적 다형성)에 대한 심층 분석으로, Camera HAL과 같이 성능이 중요한 C++ 컴포넌트 개발자에게 매우 유용합니다.",
-      "impact_areas": [
-        "C++",
-        "Performance"
-      ],
-      "selected": true
-    },
-    {
-      "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? &#45;&#45; Elmar Westphal",
-      "source": "ISO C++ Blog",
-      "published_date": "Thu, 23 Apr 2026 21:23:33 +0000",
-      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-      "summary": "GPU 가속을 위한 C++ 활용 가능성에 대한 논의는 ISP 또는 AI 작업에 GPU 처리가 필요한 Camera HAL 개발에 있어 C++의 미래 방향을 제시할 수 있습니다.",
-      "camera_hal_relevance_score": 75,
-      "relevance_reason": "GPU 가속을 위한 C++ 활용 가능성에 대한 논의는 ISP 또는 AI 작업에 GPU 처리가 필요한 Camera HAL 개발에 있어 C++의 미래 방향을 제시할 수 있습니다.",
-      "impact_areas": [
-        "C++",
-        "GPU Acceleration",
-        "Camera HAL"
-      ],
-      "selected": true
-    },
-    {
-      "title": "CppCon 2025 Implementing Your Own C++ Atomics &#45;&#45; Ben Saks",
-      "source": "ISO C++ Blog",
-      "published_date": "Tue, 14 Apr 2026 16:24:09 +0000",
-      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks",
-      "summary": "C++ Atomics 구현에 대한 내용은 Camera HAL과 같이 멀티스레드 환경에서 동작하는 네이티브 코드의 동시성 관리에 중요합니다.",
-      "camera_hal_relevance_score": 80,
-      "relevance_reason": "C++ Atomics 구현에 대한 내용은 Camera HAL과 같이 멀티스레드 환경에서 동작하는 네이티브 코드의 동시성 관리에 중요합니다.",
-      "impact_areas": [
-        "C++",
-        "Concurrency",
-        "Camera HAL"
-      ],
-      "selected": true
-    },
-    {
-      "title": "Power of C++26 Reflection: Strong (opaque) type definitions &#45;&#45; r/cpp",
-      "source": "ISO C++ Blog",
-      "published_date": "Thu, 09 Apr 2026 21:36:20 +0000",
-      "url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
-      "summary": "C++26 Reflection을 활용한 강력한(불투명) 타입 정의는 Camera HAL과 같은 복잡한 시스템에서 코드 작성 및 생성 방식을 개선하고 안전성과 표현력을 높일 수 있습니다.",
-      "camera_hal_relevance_score": 70,
-      "relevance_reason": "C++26 Reflection을 활용한 강력한(불투명) 타입 정의는 Camera HAL과 같은 복잡한 시스템에서 코드 작성 및 생성 방식을 개선하고 안전성과 표현력을 높일 수 있습니다.",
-      "impact_areas": [
-        "C++",
-        "C++26",
-        "Developer Productivity"
-      ],
-      "selected": true
-    },
-    {
-      "title": "Glaze 7.2 &#45; C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "source": "ISO C++ Blog",
-      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "summary": "C++26 Reflection을 지원하는 고성능 직렬화 라이브러리 Glaze 7.2 출시는 Camera HAL에서 구성 또는 메타데이터 처리에 C++26 Reflection을 활용할 가능성을 보여줍니다.",
-      "camera_hal_relevance_score": 65,
-      "relevance_reason": "C++26 Reflection을 지원하는 고성능 직렬화 라이브러리 Glaze 7.2 출시는 Camera HAL에서 구성 또는 메타데이터 처리에 C++26 Reflection을 활용할 가능성을 보여줍니다.",
-      "impact_areas": [
-        "C++",
-        "C++26",
-        "Serialization"
-      ],
-      "selected": true
-    },
-    {
-      "title": "CppCon 2025 C++: Some Assembly Required &#45;&#45; Matt Godbolt",
-      "source": "ISO C++ Blog",
-      "published_date": "Tue, 21 Apr 2026 21:13:30 +0000",
-      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt",
-      "summary": "C++ 코드를 어셈블리 수준에서 이해하는 것은 Camera HAL 엔지니어에게 성능 최적화 및 디버깅에 매우 중요합니다.",
-      "camera_hal_relevance_score": 85,
-      "relevance_reason": "C++ 코드를 어셈블리 수준에서 이해하는 것은 Camera HAL 엔지니어에게 성능 최적화 및 디버깅에 매우 중요합니다.",
-      "impact_areas": [
-        "C++",
-        "Performance",
-        "Debugging"
-      ],
-      "selected": true
-    },
-    {
-      "title": "CppCon 2025 How C++ Finally Beats Rust at JSON Serialization &#45;&#45; Lemire & Thiesen",
-      "source": "ISO C++ Blog",
-      "published_date": "Fri, 17 Apr 2026 19:34:43 +0000",
-      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen",
-      "summary": "JSON 직렬화 성능에 대한 C++의 개선은 Camera HAL과 같은 네이티브 코드에서 데이터 처리 효율성을 높이는 데 기여할 수 있습니다.",
-      "camera_hal_relevance_score": 70,
-      "relevance_reason": "JSON 직렬화 성능에 대한 C++의 개선은 Camera HAL과 같은 네이티브 코드에서 데이터 처리 효율성을 높이는 데 기여할 수 있습니다.",
-      "impact_areas": [
-        "C++",
-        "Performance",
-        "Serialization"
-      ],
-      "selected": true
-    },
-    {
-      "title": "Behold the power of meta::substitute &#45;&#45; Barry Revzin",
-      "source": "ISO C++ Blog",
-      "published_date": "Wed, 22 Apr 2026 19:50:46 +0000",
-      "url": "https://isocpp.org//blog/2026/04/behold-the-power-of-metasubstitute-barry-revzin",
-      "summary": "C++의 문자열 보간 및 컴파일 타임 처리와 같은 고급 기능은 코드 생성 및 효율성을 향상시켜 개발 생산성에 기여할 수 있습니다.",
-      "camera_hal_relevance_score": 60,
-      "relevance_reason": "C++의 문자열 보간 및 컴파일 타임 처리와 같은 고급 기능은 코드 생성 및 효율성을 향상시켜 개발 생산성에 기여할 수 있습니다.",
-      "impact_areas": [
-        "C++",
-        "C++26",
-        "Developer Productivity"
+        "Android Camera",
+        "security"
       ],
       "selected": true
     },
@@ -306,13 +211,57 @@
       "source": "Samsung Mobile Security Updates",
       "published_date": "",
       "url": "https://security.samsungmobile.com/securityUpdate.smsb",
-      "summary": "삼성 기기별 보안 업데이트는 카메라 관련 취약점을 포함할 수 있으므로 Camera HAL 엔지니어에게 중요합니다.",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
       "camera_hal_relevance_score": 83,
-      "relevance_reason": "삼성 기기별 보안 업데이트는 카메라 관련 취약점을 포함할 수 있으므로 Camera HAL 엔지니어에게 중요합니다.",
+      "relevance_reason": "삼성 모바일 보안 업데이트는 특정 단말의 보안 패치 정보를 제공하며, 이는 Camera HAL 관련 취약점 수정이나 보안 강화 조치를 포함할 수 있습니다.",
       "impact_areas": [
-        "Security",
-        "Android Camera",
+        "Camera HAL",
+        "security",
+        "Android Camera"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Semiconductor News & Industry Updates - EE Times",
+      "source": "EE Times - Semiconductors",
+      "published_date": "",
+      "url": "https://www.eetimes.com/tag/semiconductors/",
+      "summary": "EE Times connects the global electronics community through news, analysis, education, and peer-to-peer discussion around technology, business, products and design",
+      "camera_hal_relevance_score": 81,
+      "relevance_reason": "반도체 산업 뉴스는 카메라 센서, SoC, AI 칩 등 Camera HAL의 하드웨어 기반에 대한 정보를 제공합니다. 새로운 하드웨어 동향은 HAL 설계 및 구현에 영향을 미칠 수 있습니다.",
+      "impact_areas": [
+        "Embedded",
+        "Semiconductor",
         "Camera HAL"
+      ],
+      "selected": true
+    },
+    {
+      "title": "All Posts &mdash; libcamera",
+      "source": "libcamera Blog",
+      "published_date": "",
+      "url": "https://libcamera.org/blog/",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+      "camera_hal_relevance_score": 60,
+      "relevance_reason": "libcamera는 Linux 카메라 스택의 중요한 부분이며, Android Camera HAL과도 연관될 수 있습니다. 관련 업데이트는 HAL 아키텍처 및 드라이버 통합에 대한 통찰력을 제공할 수 있습니다.",
+      "impact_areas": [
+        "Linux Camera",
+        "Camera HAL",
+        "AOSP Camera"
+      ],
+      "selected": true
+    },
+    {
+      "title": "2026 Annual C++ Developer Survey \"Lite\"",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 22 Apr 2026 00:59:01 +0000",
+      "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "summary": "The annual global C++ developer survey is now open: 2026 Annual C++ Developer Survey \"Lite\" Please share your feedback in this annual 10-minute survey to help inform C++ standardization and C++ tool vendors. This is the biggest opportunity we all have each year to make our voices heard and help improve our industry and community! A summary of the results, including aggregated highlights of common answers in the write-in responses, will be posted publicly here on isocpp.org and shared with the C+",
+      "camera_hal_relevance_score": 57,
+      "relevance_reason": "C++ 개발자 설문조사는 C++ 표준화 및 도구 벤더에 대한 피드백을 수집합니다. Camera HAL이 C++로 구현되므로, C++ 언어의 발전 방향에 대한 이해는 중요합니다.",
+      "impact_areas": [
+        "C++",
+        "developer productivity"
       ],
       "selected": true
     },
@@ -321,12 +270,111 @@
       "source": "Qualcomm Security Bulletins",
       "published_date": "",
       "url": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
-      "summary": "Qualcomm SoC 및 벤더 컴포넌트의 보안 이슈는 Camera HAL과 밀접하게 연관되어 있으므로, 관련 보안 게시판은 매우 중요합니다.",
-      "camera_hal_relevance_score": 90,
-      "relevance_reason": "Qualcomm SoC 및 벤더 컴포넌트의 보안 이슈는 Camera HAL과 밀접하게 연관되어 있으므로, 관련 보안 게시판은 매우 중요합니다.",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+      "camera_hal_relevance_score": 56,
+      "relevance_reason": "Qualcomm 보안 게시판은 SoC 및 벤더 구성 요소의 보안 취약점을 다루며, 이는 Camera HAL이 실행되는 하드웨어 플랫폼의 보안에 영향을 미칠 수 있습니다.",
       "impact_areas": [
-        "Security",
-        "Vendor Security",
+        "Camera HAL",
+        "security",
+        "Semiconductor"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Newsroom \\ Anthropic",
+      "source": "Anthropic News",
+      "published_date": "",
+      "url": "https://www.anthropic.com/news",
+      "summary": "Anthropic is an AI safety and research company that&#x27;s working to build reliable, interpretable, and steerable AI systems.",
+      "camera_hal_relevance_score": 55,
+      "relevance_reason": "Anthropic의 AI 뉴스룸은 Claude Code와 같은 AI 코딩 에이전트의 업데이트를 포함할 수 있습니다. 이는 개발 생산성 향상 트렌드와 관련이 있습니다.",
+      "impact_areas": [
+        "AI Agent",
+        "developer productivity"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Devirtualization and Static Polymorphism &#45;&#45; David Álvarez Rosa",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 16 Apr 2026 19:42:23 +0000",
+      "url": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa",
+      "summary": "Ever wondered why your clean, object-oriented design sometimes slows things down? This piece breaks down how virtual dispatch impacts performance&mdash;and how techniques like devirtualization and static polymorphism can eliminate that overhead entirely. Devirtualization and Static Polymorphism by David &Aacute;lvarez Rosa From the article: Ever wondered why your &ldquo;clean&rdquo; polymorphic design underperforms in benchmarks? Virtual dispatch enables polymorphism, but it comes with hidden ov",
+      "camera_hal_relevance_score": 53,
+      "relevance_reason": "가상 디스패치 성능 최적화 및 정적 다형성 기법은 C++ 기반의 Camera HAL에서 성능에 민감한 코드 최적화에 대한 통찰력을 제공할 수 있습니다.",
+      "impact_areas": [
+        "C++",
+        "Camera HAL"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Android latest updates &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers",
+      "source": "Android Developers Latest Updates",
+      "published_date": "",
+      "url": "https://developer.android.com/latest-updates",
+      "summary": "Discover what's new across the Android ecosystem.",
+      "camera_hal_relevance_score": 53,
+      "relevance_reason": "Android 개발자 생태계의 최신 업데이트를 종합적으로 제공합니다. Camera HAL에 직접적인 내용은 적을 수 있지만, 전반적인 Android 개발 동향을 파악하는 데 유용합니다.",
+      "impact_areas": [
+        "Android Camera",
+        "developer productivity"
+      ],
+      "selected": true
+    },
+    {
+      "title": "News — Google DeepMind",
+      "source": "Google DeepMind Blog",
+      "published_date": "",
+      "url": "https://deepmind.google/blog/",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+      "camera_hal_relevance_score": 51,
+      "relevance_reason": "Google DeepMind의 AI 연구 뉴스는 AI 기술의 최신 동향을 보여줍니다. 이는 장기적으로 카메라 관련 AI 처리 방식에 영향을 미칠 수 있습니다.",
+      "impact_areas": [
+        "AI Agent",
+        "AI research"
+      ],
+      "selected": true
+    },
+    {
+      "title": "AI & Machine Learning | Google Cloud Blog",
+      "source": "Google Cloud AI & Machine Learning Blog",
+      "published_date": "",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning",
+      "summary": "Find all the latest news about Google Cloud and Machine Learning & AI with customer stories, product announcements, solutions and more.",
+      "camera_hal_relevance_score": 51,
+      "relevance_reason": "Google Cloud의 AI/ML 블로그는 엔터프라이즈 AI 및 에이전트 플랫폼에 대한 정보를 제공합니다. 이는 클라우드 기반 AI 처리와 온디바이스 AI의 연동 가능성을 시사할 수 있습니다.",
+      "impact_areas": [
+        "AI Agent",
+        "AI engineering"
+      ],
+      "selected": true
+    },
+    {
+      "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? &#45;&#45; Elmar Westphal",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 23 Apr 2026 21:23:33 +0000",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "summary": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Can Standard C++ Replace CUDA for GPU Acceleration? by Elmar Westphal Summary of the talk: On top",
+      "camera_hal_relevance_score": 49,
+      "relevance_reason": "표준 C++로 GPU 가속을 대체하는 주제는 Camera HAL에서 이미지 처리 파이프라인의 성능 최적화 및 이식성 측면에서 중요할 수 있습니다. 특히 특정 벤더 종속적인 CUDA 대신 표준 C++를 활용하는 것은 장기적인 관점에서 의미가 있습니다.",
+      "impact_areas": [
+        "C++",
+        "Camera HAL",
+        "GPU acceleration"
+      ],
+      "selected": true
+    },
+    {
+      "title": "CppCon 2025 Implementing Your Own C++ Atomics &#45;&#45; Ben Saks",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 14 Apr 2026 16:24:09 +0000",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks",
+      "summary": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Implementing Your Own C++ Atomics by Ben Saks Summary of the talk: Atomic objects are extremely u",
+      "camera_hal_relevance_score": 49,
+      "relevance_reason": "C++ Atomics 구현에 대한 내용은 멀티스레딩 환경에서 Camera HAL의 동기화 및 성능 최적화에 대한 깊은 이해를 돕습니다.",
+      "impact_areas": [
+        "C++",
         "Camera HAL"
       ],
       "selected": true
@@ -336,12 +384,70 @@
       "source": "Claude Code Changelog",
       "published_date": "",
       "url": "https://code.claude.com/docs/en/changelog",
-      "summary": "AI 코딩 에이전트의 변경 로그는 개발 생산성 향상 및 AI 에이전트 트렌드를 이해하는 데 도움이 됩니다.",
-      "camera_hal_relevance_score": 70,
-      "relevance_reason": "AI 코딩 에이전트의 변경 로그는 개발 생산성 향상 및 AI 에이전트 트렌드를 이해하는 데 도움이 됩니다.",
+      "summary": "Release notes for Claude Code, including new features, improvements, and bug fixes by version.",
+      "camera_hal_relevance_score": 48,
+      "relevance_reason": "Claude Code의 변경 로그는 AI 코딩 에이전트의 기능 개선을 보여줍니다. 이는 개발 생산성 향상 트렌드와 관련이 있으며, C++ 개발에도 적용될 수 있는 AI 도구의 발전을 시사합니다.",
       "impact_areas": [
         "AI Agent",
-        "Developer Productivity"
+        "developer productivity",
+        "C++"
+      ],
+      "selected": true
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "summary": "GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R",
+      "camera_hal_relevance_score": 45,
+      "relevance_reason": "GCC 16.1 릴리스는 C++26의 Reflection, Contracts 등 새로운 기능을 포함합니다. Camera HAL은 C++로 구현되므로, 이러한 컴파일러 및 언어 표준의 발전은 장기적으로 HAL 개발에 영향을 미칠 수 있습니다. 특히 Reflection은 메타데이터 처리 등에 활용될 가능성이 있습니다.",
+      "impact_areas": [
+        "C++",
+        "LLVM/Clang",
+        "Camera HAL"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Announcement: cppreference.com update",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 14 Apr 2026 22:36:46 +0000",
+      "url": "https://isocpp.org//blog/2026/04/announcement-cppreference.com-update",
+      "summary": "cppreference.com &nbsp;is the premier public reference site for documenting and tracking the C++ language. It is run by Nate Kohl, with the help of many volunteer wiki editors. I want to thank Nate and all the volunteers for making it such an enduringly valuable resource. Like all software, the site requires maintenance. It has been in read-only mode for some time while Nate has been leading the work to migrate it to MediaWiki. Because the Standard C++ Foundation 's web wizard, James Riordon, re",
+      "camera_hal_relevance_score": 45,
+      "relevance_reason": "cppreference.com 업데이트는 C++ 개발자에게 유용한 리소스의 개선 소식입니다. 직접적인 기술 내용은 아니지만, 개발 생산성 측면에서 간접적인 관련이 있습니다.",
+      "impact_areas": [
+        "C++",
+        "developer productivity"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Newsletters para desenvolvedores Android &nbsp;|&nbsp; Android Developers",
+      "source": "Android Developer Newsletter",
+      "published_date": "",
+      "url": "https://developer.android.com/newsletter",
+      "summary": "Veja as notícias e dicas mais recentes para desenvolvedores e faça sucesso no Google Play.",
+      "camera_hal_relevance_score": 45,
+      "relevance_reason": "Android 개발자 뉴스레터는 전반적인 Android 개발 소식을 다루지만, Camera HAL에 직접적인 내용은 적을 수 있습니다.",
+      "impact_areas": [
+        "Android Camera",
+        "developer productivity"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Introduction &mdash; libcamera",
+      "source": "libcamera Documentation",
+      "published_date": "",
+      "url": "https://libcamera.org/introduction.html",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+      "camera_hal_relevance_score": 45,
+      "relevance_reason": "libcamera 문서는 Linux 카메라 스택의 구조와 배경을 설명합니다. Camera HAL과 직접적인 연관은 낮지만, Linux 커널 드라이버 및 카메라 파이프라인에 대한 이해를 높이는 데 도움이 됩니다.",
+      "impact_areas": [
+        "Linux Camera",
+        "Camera HAL"
       ],
       "selected": true
     },
@@ -350,13 +456,85 @@
       "source": "LLVM Release Notes",
       "published_date": "",
       "url": "https://releases.llvm.org/",
-      "summary": "LLVM/Clang 릴리스 노트는 네이티브 빌드 및 툴체인 업데이트에 대한 정보를 제공하여 C++ 개발 환경에 영향을 미칩니다.",
-      "camera_hal_relevance_score": 75,
-      "relevance_reason": "LLVM/Clang 릴리스 노트는 네이티브 빌드 및 툴체인 업데이트에 대한 정보를 제공하여 C++ 개발 환경에 영향을 미칩니다.",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+      "camera_hal_relevance_score": 45,
+      "relevance_reason": "LLVM 릴리스 노트는 Clang/LLVM 컴파일러 및 툴체인의 업데이트를 제공합니다. Camera HAL은 C++로 구현되므로, 툴체인 변경 사항은 빌드, 성능, 디버깅 등에 영향을 미칠 수 있습니다.",
       "impact_areas": [
         "LLVM/Clang",
         "C++",
-        "Toolchain"
+        "developer productivity"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Google Open Source",
+      "source": "Google Open Source Blog",
+      "published_date": "",
+      "url": "https://opensource.google/",
+      "summary": "Google <3 Open Source",
+      "camera_hal_relevance_score": 44,
+      "relevance_reason": "Google 오픈소스 블로그는 다양한 프로젝트를 다루며, Camera HAL과 직접적인 관련은 낮지만, AOSP 및 관련 오픈소스 생태계의 동향을 파악하는 데 간접적으로 도움이 될 수 있습니다.",
+      "impact_areas": [
+        "AOSP Camera",
+        "open-source"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Latest News from Google Research Blog - Google Research",
+      "source": "Google Research Blog",
+      "published_date": "",
+      "url": "https://research.google/blog/",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+      "camera_hal_relevance_score": 43,
+      "relevance_reason": "Google Research 블로그는 AI, 컴퓨터 비전, 생성형 AI 등 다양한 연구 동향을 다룹니다. 이는 장기적으로 카메라 관련 AI 처리 및 이미지 기술 발전에 영향을 미칠 수 있습니다.",
+      "impact_areas": [
+        "AI research",
+        "computer vision"
+      ],
+      "selected": true
+    },
+    {
+      "title": "Glaze 7.2 &#45; C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "summary": "Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more From the article: Glaze now supports C++26 reflection with experimental GCC and Clang compilers. GCC 16 will soon be released with this support. When enabled, Glaze replaces the traditional&nbsp; __PRETTY_FUNCTION__ &nbsp;parsing an",
+      "camera_hal_relevance_score": 41,
+      "relevance_reason": "C++26 Reflection을 활용한 고성능 직렬화 라이브러리 Glaze 업데이트는 Camera HAL에서 메타데이터 처리나 설정 파일 파싱 등에 활용될 가능성이 있습니다.",
+      "impact_areas": [
+        "C++",
+        "Camera HAL",
+        "metadata"
+      ],
+      "selected": true
+    },
+    {
+      "title": "CppCon 2025 C++: Some Assembly Required &#45;&#45; Matt Godbolt",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 21 Apr 2026 21:13:30 +0000",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt",
+      "summary": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! C++: Some Assembly Required by Matt Godbolt Summary of the talk: Join Matt in exploring how the C",
+      "camera_hal_relevance_score": 41,
+      "relevance_reason": "C++와 어셈블리 코드의 관계 탐구는 저수준 최적화에 대한 이해를 높이는 데 도움이 됩니다. Camera HAL과 같은 성능에 민감한 영역에서 유용할 수 있습니다.",
+      "impact_areas": [
+        "C++",
+        "Camera HAL"
+      ],
+      "selected": true
+    },
+    {
+      "title": "CppCon 2025 How C++ Finally Beats Rust at JSON Serialization &#45;&#45; Lemire & Thiesen",
+      "source": "ISO C++ Blog",
+      "published_date": "Fri, 17 Apr 2026 19:34:43 +0000",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen",
+      "summary": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! How C++ Finally Beats Rust at JSON Serialization by Daniel Lemire & Francisco Geiman Thiesen Summ",
+      "camera_hal_relevance_score": 41,
+      "relevance_reason": "C++ JSON 직렬화 성능에 대한 내용은 Camera HAL에서 메타데이터나 설정 데이터를 효율적으로 처리하는 데 대한 통찰력을 제공할 수 있습니다.",
+      "impact_areas": [
+        "C++",
+        "Camera HAL",
+        "metadata"
       ],
       "selected": true
     }

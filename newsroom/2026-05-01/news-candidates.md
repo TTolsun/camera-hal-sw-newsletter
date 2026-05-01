@@ -23,21 +23,21 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | 100 | Android Developers Blog | high | official | no | Experimental hybrid inference and new Gemini models for Android | Fri, 17 Apr 2026 20:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html) |
 | 100 | Android Developers Blog | high | official | no | Android CLI and skills: Build Android apps 3x faster using any agent | Thu, 16 Apr 2026 17:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html) |
 | 100 | Android Developers Blog | high | official | no | Get ready for Google I/O: Livestream schedule revealed | Tue, 14 Apr 2026 12:30:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/get-ready-for-google-io-livestream-schedule-revealed.html) |
-| 100 | AOSP Camera Documentation | high | official | no | Appareil photo &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/core/camera) |
-| 100 | AOSP What's New / Release Notes | high | official | no | มีอะไรใหม่ &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/whatsnew) |
-| 98 | Android Compatibility Definition Document | high | official | no | Android Compatibility Definition Document &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/compatibility/cdd) |
-| 96 | CameraX Release Notes | high | official | no | कैमराएक्स &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/jetpack/androidx/releases/camera) |
+| 100 | AOSP Camera Documentation | high | official | no | Camera &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/core/camera) |
+| 100 | AOSP What's New / Release Notes | high | official | no | What&apos;s new &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/whatsnew) |
+| 98 | Android Compatibility Definition Document | high | official | no | Документ определения совместимости с Android &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/compatibility/cdd) |
+| 96 | CameraX Release Notes | high | official | no | Kamera X &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/jetpack/androidx/releases/camera) |
 | 92 | Android Developers Blog | high | official | no | Streamline User Journeys with Verified Email via Credential Manager | Wed, 22 Apr 2026 20:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html) |
 | 88 | Android Developers Blog | high | official | no | What's new in the Jetpack Compose April '26 release | Wed, 22 Apr 2026 23:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html) |
 | 88 | Android Developers Blog | high | official | no | Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4 | Tue, 21 Apr 2026 14:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html) |
 | 88 | Android Developers Blog | high | official | no | The Fourth Beta of Android 17 | Thu, 16 Apr 2026 20:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html) |
 | 88 | Android Developers Blog | high | official | no | Test Multi-Device Interactions with the Android Emulator | Mon, 13 Apr 2026 13:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html) |
-| 87 | Android Security Bulletin | high | official | no | Android Security and Update Bulletins &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/security/bulletin) |
+| 87 | Android Security Bulletin | high | official | no | Android Güvenlik ve Güncelleme Bültenleri &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/security/bulletin) |
 | 84 | Android Developers Blog | high | official | no | Boosting user privacy and business protection with updated Play policies | Wed, 15 Apr 2026 17:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/giving-users-clearer-choice-and-everyone-a-safer-more-trusted-app-ecosystem.html) |
 | 53 | Android Developers Latest Updates | high | official | no | Android latest updates &nbsp;\|&nbsp; Latest updates &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/latest-updates) |
 | 83 | Samsung Mobile Security Updates | medium | official | no | Samsung Mobile Security | review needed | [link](https://security.samsungmobile.com/securityUpdate.smsb) |
 | 56 | Qualcomm Security Bulletins | medium | official | no | Qualcomm Documentation | review needed | [link](https://docs.qualcomm.com/product/publicresources/securitybulletin) |
-| 45 | Android Developer Newsletter | medium | official | no | Android Developer Newsletters &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/newsletter) |
+| 45 | Android Developer Newsletter | medium | official | no | Newsletters para desenvolvedores Android &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/newsletter) |
 
 ## Linux Camera / Driver
 
@@ -50,13 +50,13 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 
 | Score | Source | Priority | Reliability | Candidate only | Title | Published | Link |
 |---:|---|---|---|---|---|---|---|
-| 57 | ISO C++ Blog | high | official-community | no | 2026 Annual C++ Developer Survey "Lite" | Wed, 22 Apr 2026 00:59:16 +0000 | [link](https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1) |
+| 57 | ISO C++ Blog | high | official-community | no | 2026 Annual C++ Developer Survey "Lite" | Wed, 22 Apr 2026 00:59:01 +0000 | [link](https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1) |
 | 53 | ISO C++ Blog | high | official-community | no | Devirtualization and Static Polymorphism &#45;&#45; David Álvarez Rosa | Thu, 16 Apr 2026 19:42:23 +0000 | [link](https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa) |
 | 49 | ISO C++ Blog | high | official-community | no | CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? &#45;&#45; Elmar Westphal | Thu, 23 Apr 2026 21:23:33 +0000 | [link](https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph) |
 | 49 | ISO C++ Blog | high | official-community | no | CppCon 2025 Implementing Your Own C++ Atomics &#45;&#45; Ben Saks | Tue, 14 Apr 2026 16:24:09 +0000 | [link](https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks) |
+| 45 | ISO C++ Blog | high | official-community | no | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! | Thu, 30 Apr 2026 22:36:23 +0000 | [link](https://isocpp.org//blog/2026/04/gcc-16.1) |
 | 45 | ISO C++ Blog | high | official-community | no | CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now &#45;&#45; Mike Shah | Wed, 15 Apr 2026 19:31:45 +0000 | [link](https://isocpp.org//blog/2026/04/cppcon-2025-why-every-cpp-game-developer-should-learn-sdl-3-now-mike-shah) |
 | 45 | ISO C++ Blog | high | official-community | no | Announcement: cppreference.com update | Tue, 14 Apr 2026 22:36:46 +0000 | [link](https://isocpp.org//blog/2026/04/announcement-cppreference.com-update) |
-| 45 | ISO C++ Blog | high | official-community | no | Power of C++26 Reflection: Strong (opaque) type definitions &#45;&#45; r/cpp | Thu, 09 Apr 2026 21:36:20 +0000 | [link](https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp) |
 | 41 | ISO C++ Blog | high | official-community | no | Glaze 7.2 &#45; C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more | Tue, 28 Apr 2026 22:25:57 +0000 | [link](https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more) |
 | 41 | ISO C++ Blog | high | official-community | no | CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ &#45;&#45; Madeline Schneider | Mon, 27 Apr 2026 21:25:11 +0000 | [link](https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m) |
 | 41 | ISO C++ Blog | high | official-community | no | CppCon 2025 C++: Some Assembly Required &#45;&#45; Matt Godbolt | Tue, 21 Apr 2026 21:13:30 +0000 | [link](https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt) |
@@ -134,7 +134,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Google I/O 2026: Livestream Schedule Revealed Posted by The Google I/O team The Google I/O schedule is here! Tune in May 19–20 as we unveil Google’s biggest updates across AI, Android, Chrome, and Cloud. Discover new tools and features designed to unlock the future of development with agentic coding. We’re kicking things off with the Google keynote at 10:00 am PT on May 19, followed by the Developer keynote at 1:30 pm PT. Block your calendars for two days of live sessions, straight from Mountain
 - Selection reason: Android Developers Blog (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 4. Appareil photo &nbsp;|&nbsp; Android Open Source Project
+### 4. Camera &nbsp;|&nbsp; Android Open Source Project
 
 - Source: AOSP Camera Documentation
 - Source URL: https://source.android.com/docs/core/camera
@@ -151,7 +151,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP Camera Documentation (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 5. มีอะไรใหม่ &nbsp;|&nbsp; Android Open Source Project
+### 5. What&apos;s new &nbsp;|&nbsp; Android Open Source Project
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
@@ -168,7 +168,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 6. Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project
+### 6. Документ определения совместимости с Android &nbsp;|&nbsp; Android Open Source Project
 
 - Source: Android Compatibility Definition Document
 - Source URL: https://source.android.com/docs/compatibility/cdd
@@ -185,7 +185,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Android Compatibility Definition Document (official, high, score 98): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 7. कैमराएक्स &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers
+### 7. Kamera X &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers
 
 - Source: CameraX Release Notes
 - Source URL: https://developer.android.com/jetpack/androidx/releases/camera
@@ -287,7 +287,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Posted by Steven Jenkins, Product Manager, Android Studio Testing multi-device interactions is now easier than ever with the Android Emulator. Whether you are building a multiplayer game, extending your mobile application across form factors, or launching virtual devices that require a device connection, the Android Emulator now natively supports these developer experiences. Previously, interconnecting multiple Android Virtual Devices (AVDs) caused significant friction. It required manually mana
 - Selection reason: Android Developers Blog (official, high, score 88): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 13. Android Security and Update Bulletins &nbsp;|&nbsp; Android Open Source Project
+### 13. Android Güvenlik ve Güncelleme Bültenleri &nbsp;|&nbsp; Android Open Source Project
 
 - Source: Android Security Bulletin
 - Source URL: https://source.android.com/docs/security/bulletin
@@ -359,7 +359,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 
 - Source: ISO C++ Blog
 - Source URL: https://isocpp.org/blog
-- Published: Wed, 22 Apr 2026 00:59:16 +0000
+- Published: Wed, 22 Apr 2026 00:59:01 +0000
 - Link: https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1
 - Section: C++ / Native / Toolchain
 - Source category: cpp
@@ -423,7 +423,24 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Implementing Your Own C++ Atomics by Ben Saks Summary of the talk: Atomic objects are extremely u
 - Selection reason: ISO C++ Blog (official-community, high, score 49): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 21. CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now &#45;&#45; Mike Shah
+### 21. GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
+
+- Source: ISO C++ Blog
+- Source URL: https://isocpp.org/blog
+- Published: Thu, 30 Apr 2026 22:36:23 +0000
+- Link: https://isocpp.org//blog/2026/04/gcc-16.1
+- Section: C++ / Native / Toolchain
+- Source category: cpp
+- Source priority: high
+- Source reliability: official-community
+- Candidate only: no
+- Requires cross-check: no
+- Verification hint: Can be used directly if the collected item supports the claim.
+- Relevance Score: 45
+- Summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R
+- Selection reason: ISO C++ Blog (official-community, high, score 45): Camera HAL relevance and engineering productivity signals were both detected.
+
+### 22. CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now &#45;&#45; Mike Shah
 
 - Source: ISO C++ Blog
 - Source URL: https://isocpp.org/blog
@@ -440,7 +457,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Why Every C++ Game Developer Should Learn SDL 3 Now by Mike Shah Summary of the talk: The C++ pro
 - Selection reason: ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 22. Announcement: cppreference.com update
+### 23. Announcement: cppreference.com update
 
 - Source: ISO C++ Blog
 - Source URL: https://isocpp.org/blog
@@ -455,23 +472,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Verification hint: Can be used directly if the collected item supports the claim.
 - Relevance Score: 45
 - Summary: cppreference.com &nbsp;is the premier public reference site for documenting and tracking the C++ language. It is run by Nate Kohl, with the help of many volunteer wiki editors. I want to thank Nate and all the volunteers for making it such an enduringly valuable resource. Like all software, the site requires maintenance. It has been in read-only mode for some time while Nate has been leading the work to migrate it to MediaWiki. Because the Standard C++ Foundation 's web wizard, James Riordon, re
-- Selection reason: ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
-
-### 23. Power of C++26 Reflection: Strong (opaque) type definitions &#45;&#45; r/cpp
-
-- Source: ISO C++ Blog
-- Source URL: https://isocpp.org/blog
-- Published: Thu, 09 Apr 2026 21:36:20 +0000
-- Link: https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Candidate only: no
-- Requires cross-check: no
-- Verification hint: Can be used directly if the collected item supports the claim.
-- Relevance Score: 45
-- Summary: Inspired by a similar previous thread showcasing cool uses for C++26 reflection. Power of C++26 Reflection: Strong (opaque) type definitions&nbsp; From the article: With reflection, you can easily create "opaque" type definitions, i.e "strong types". It works by having an inner value stored, and wrapping over all public member functions. Note: I am using queue_injection { ... } with the EDG experimental reflection, which afaik wasn't actually integrated into the C++26 standard, but without it yo
 - Selection reason: ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
 ### 24. Glaze 7.2 &#45; C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
@@ -661,7 +661,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Release notes for Claude Code, including new features, improvements, and bug fixes by version.
 - Selection reason: Claude Code Changelog (official, medium, score 48): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 35. Android Developer Newsletters &nbsp;|&nbsp; Android Developers
+### 35. Newsletters para desenvolvedores Android &nbsp;|&nbsp; Android Developers
 
 - Source: Android Developer Newsletter
 - Source URL: https://developer.android.com/newsletter
@@ -675,7 +675,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Requires cross-check: no
 - Verification hint: Can be used directly if the collected item supports the claim.
 - Relevance Score: 45
-- Summary: The latest developer news and tips to help you succeed on Google Play.
+- Summary: Veja as notícias e dicas mais recentes para desenvolvedores e faça sucesso no Google Play.
 - Selection reason: Android Developer Newsletter (official, medium, score 45): Camera HAL relevance and engineering productivity signals were both detected.
 
 ### 36. Google Open Source
@@ -768,6 +768,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - KernelNewbies LinuxChanges: 502 Bad Gateway
 - LLVM Project Blog: 404 Not Found
 - OpenAI News: 403 Forbidden
+- 요즘IT: 403 Forbidden
 
 ## Editor-in-Chief Checklist
 
