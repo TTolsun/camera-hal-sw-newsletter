@@ -2,7 +2,7 @@
   {
     "date": "2026-05-01",
     "title": "Camera HAL SW Newsletter - 2026-05-01",
-    "summary": "이번 뉴스레터에서는 AOSP 카메라 프레임워크의 최신 업데이트, 개발 생산성을 높이는 AI 및 C++ 트렌드, 그리고 Camera HAL 엔지니어에게 중요한 C++ 표준 및 툴체인 변화를 다룹니다. 특히 libcamera의 소프트웨어 ISP 개선과 OpenCL의 ML 확장 기능은 저수준 카메라 스택 및 AI 가속화에 대한 통찰을 제공합니다.",
+    "summary": "이번 뉴스레터에서는 Android 17 베타 4 출시와 AOSP 카메라 관련 문서 모니터링 현황을 다루는 'AOSP Camera Watch' 섹션, 온디바이스 AI 강화 및 AI 에이전트 기반 개발 생산성 향상 트렌드를 분석하는 'Tech Trend Radar' 섹션, 그리고 C++26 기능 활용 및 성능 최적화를 위한 심층 기술 동향을 제공하는 'C++ / AI Practical Tip' 섹션을 통해 Camera HAL 엔지니어에게 필요한 최신 기술 정보를 제공합니다.",
     "html": "newsletters/2026-05-01/index.html",
     "md": "newsletters/2026-05-01/newsletter.md",
     "tags": [
