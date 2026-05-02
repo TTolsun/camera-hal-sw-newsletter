@@ -3,164 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Camera HAL, Android Camera, C++, AI 개발 생산성 관련 주간 SW 뉴스레터" />
+  <meta name="description" content="Camera HAL SW Newsletter는 Android Camera, Camera HAL, C++, AI 개발 생산성 흐름을 실무 관점으로 정리합니다." />
   <title>Camera HAL SW Newsletter</title>
   <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/hero-override.css" />
 </head>
 <body>
-  <div class="page-bg" aria-hidden="true">
-    <span class="orb orb-blue"></span>
-    <span class="orb orb-green"></span>
-    <span class="spark spark-a"></span>
-    <span class="spark spark-b"></span>
-    <span class="spark spark-c"></span>
-  </div>
+  <header class="site-header">
+    <nav class="site-nav content-wrap" aria-label="Primary navigation">
+      <a class="site-brand" href="index.html">Camera HAL SW Newsletter</a>
+      <div class="nav-links">
+        <a href="#latest">Latest</a>
+        <a href="#archive">Archive</a>
+        <a href="docs/news-sources.md">Sources</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </nav>
+  </header>
 
-  <main class="wrap">
-    <header class="hero hero-visual">
+  <main class="site-main">
+    <section class="site-hero content-wrap">
       <div class="hero-copy">
         <p class="eyebrow">CAMERA HAL SW NEWSLETTER</p>
-        <h1>
-          Camera HAL 개발자를 위한<br />
-          주간 SW 소식
-        </h1>
-        <p class="subtitle">
-          Android Camera, Camera HAL, C++, AI 개발 생산성 관련 소식을
-          실무 관점으로 정리합니다. 단순 링크 모음이 아니라 HAL 개발자가
-          바로 이해하고 적용할 수 있는 배경지식과 Action Item까지 남깁니다.
+        <h1>Camera HAL 개발자를 위한 주간 기술 브리핑</h1>
+        <p class="hero-description">
+          Android Camera, Camera HAL, C++, AI 개발 생산성 흐름을 실무 관점으로 정리합니다.
         </p>
-
         <div class="hero-actions">
-          <a class="button primary" href="#latest">최신호 보기</a>
-          <a class="button secondary" href="#archive">아카이브 보기</a>
-        </div>
-
-        <div class="hero-tags" aria-label="newsletter topics">
-          <span>Android Camera</span>
-          <span>Camera HAL</span>
-          <span>C++</span>
-          <span>AI</span>
+          <a class="button button-primary" href="#latest">최신호 보기</a>
+          <a class="button button-secondary" href="#archive">아카이브 보기</a>
         </div>
       </div>
-
-      <div class="hero-art" aria-hidden="true">
-        <div class="chat-bubble">
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="browser-card dashboard-card">
-          <div class="browser-top">
-            <span></span><span></span>
-          </div>
-
-          <div class="browser-screen lens-screen">
-            <div class="camera-lens">
-              <span class="lens-ring ring-1"></span>
-              <span class="lens-ring ring-2"></span>
-              <span class="lens-core"></span>
-            </div>
-
-            <div class="sensor-dot sensor-a"></div>
-            <div class="sensor-dot sensor-b"></div>
-            <div class="sensor-dot sensor-c"></div>
-          </div>
-
-          <div class="browser-lines">
-            <span></span><span></span><span></span><span></span>
-          </div>
-
-          <div class="scroll-pill"><span></span></div>
-        </div>
-
-        <div class="mini-window mini-panel">
-          <span class="mini-node node-a"></span>
-          <span class="mini-node node-b"></span>
-          <span class="mini-node node-c"></span>
-          <span class="mini-link link-ab"></span>
-          <span class="mini-link link-bc"></span>
-        </div>
-
-        <div class="play-tile"><span></span></div>
-      </div>
-    </header>
-
-    <section class="section quick-stats" aria-label="newsletter principles">
-      <article class="stat-card">
-        <span class="stat-mark">01</span>
-        <h2>3줄 브리핑</h2>
-        <p>이번 주 핵심 소식을 빠르게 읽을 수 있도록 세 줄로 먼저 요약합니다.</p>
-      </article>
-
-      <article class="stat-card">
-        <span class="stat-mark">02</span>
-        <h2>AOSP Camera Watch</h2>
-        <p>Android Camera 최신 흐름을 HAL 개발자 관점에서 추적합니다.</p>
-      </article>
-
-      <article class="stat-card">
-        <span class="stat-mark">03</span>
-        <h2>Trend & Tips</h2>
-        <p>Camera / AI / Mobile / C++ 기술 동향과 실전 팁을 함께 정리합니다.</p>
-      </article>
     </section>
 
-    <section id="latest" class="section section-panel">
+    <section id="latest" class="section content-wrap" aria-labelledby="latest-title">
       <div class="section-heading">
-        <div>
-          <p class="eyebrow">LATEST</p>
-          <h2>Latest Newsletter</h2>
-        </div>
+        <p class="eyebrow">LATEST</p>
+        <h2 id="latest-title">Latest Newsletter</h2>
       </div>
-
-      <div id="latest-card" class="featured-card loading-card">
-        <p>최신 뉴스레터를 불러오는 중입니다.</p>
+      <div id="latest-card" class="newsletter-card loading-card">
+        <p class="muted">최신 뉴스레터를 불러오는 중입니다.</p>
       </div>
     </section>
 
-    <section class="section topic-grid" aria-label="main newsletter categories">
-      <article class="topic-card blue-card">
-        <span class="topic-icon">CAM</span>
-        <h2>AOSP Camera Watch</h2>
-        <p>Android Camera, CameraX, AOSP, HAL contract 변화를 최신 흐름 중심으로 정리합니다.</p>
-      </article>
-
-      <article class="topic-card green-card">
-        <span class="topic-icon">RAD</span>
-        <h2>Tech Trend Radar</h2>
-        <p>Camera / AI / Mobile / C++ 기술 동향 중 HAL 업무에 영향을 줄 만한 흐름을 추적합니다.</p>
-      </article>
-
-      <article class="topic-card dark-card">
-        <span class="topic-icon">TIP</span>
-        <h2>이번 주 C++ / AI 실전 팁</h2>
-        <p>개발자가 바로 흥미를 느끼고 써먹을 수 있는 C++ / AI 활용 팁을 짧게 다룹니다.</p>
-      </article>
-    </section>
-
-    <section id="archive" class="section section-panel">
+    <section class="section content-wrap" aria-labelledby="category-title">
       <div class="section-heading">
-        <div>
-          <p class="eyebrow">ARCHIVE</p>
-          <h2>Newsletter Archive</h2>
-        </div>
+        <p class="eyebrow">FOCUS AREAS</p>
+        <h2 id="category-title">Newsletter Categories</h2>
       </div>
-
-      <div id="archive-list" class="archive-list">
-        <p class="muted">Archive를 불러오는 중입니다.</p>
+      <div class="category-grid">
+        <article class="category-card">
+          <span class="category-label">AOSP</span>
+          <h3>AOSP Camera Watch</h3>
+          <p>Android Camera / AOSP Camera API / CameraX 흐름을 Camera HAL 관점으로 해석합니다.</p>
+        </article>
+        <article class="category-card">
+          <span class="category-label">TREND</span>
+          <h3>Tech Trend Radar</h3>
+          <p>Mobile, AI, imaging, platform 기술 흐름 중 Camera HAL 개발자가 볼 만한 내용을 정리합니다.</p>
+        </article>
+        <article class="category-card">
+          <span class="category-label">TIP</span>
+          <h3>C++ / AI Practical Tip</h3>
+          <p>C++ 시스템 개발과 AI 기반 개발 생산성 팁을 실무 적용 관점으로 소개합니다.</p>
+        </article>
       </div>
     </section>
 
-    <section class="section about-card">
-      <div>
-        <p class="eyebrow">ABOUT</p>
-        <h2>매주 쌓이는 Camera HAL 기술 맥락</h2>
+    <section id="archive" class="section content-wrap" aria-labelledby="archive-title">
+      <div class="section-heading">
+        <p class="eyebrow">ARCHIVE</p>
+        <h2 id="archive-title">Newsletter Archive</h2>
       </div>
-      <p>
-        이 페이지는 Camera HAL 개발자가 참고할 만한 SW 최신 소식을 주간 단위로 정리하기 위한
-        GitHub Pages 기반 뉴스레터입니다. AOSP Camera 흐름과 기술 트렌드를 추적하고,
-        팀에서 검토할 만한 후속 Action Item까지 남기는 것을 목표로 합니다.
-      </p>
+      <div id="archive-list" class="archive-grid">
+        <p class="muted">아카이브를 불러오는 중입니다.</p>
+      </div>
     </section>
   </main>
 
@@ -173,13 +89,18 @@
       .replaceAll("'", '&#039;');
 
     const renderTags = (tags = []) => tags
-      .map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`)
+      .map(tag => `<span class="tag">${escapeHtml(tag)}</span>`)
       .join('');
 
-    const renderIssueActions = (issue, primaryLabel = '뉴스레터 보기', mdLabel = 'MD 원본') => `
-      <a class="button primary" href="${escapeHtml(issue.html)}">${primaryLabel}</a>
-      <a class="button ghost" href="${escapeHtml(issue.md)}">${mdLabel}</a>
-    `;
+    const renderIssueActions = (issue, primaryLabel = 'HTML 이슈 보기', mdLabel = 'Markdown 원문') => {
+      const htmlLink = issue.html
+        ? `<a class="button button-primary" href="${escapeHtml(issue.html)}">${primaryLabel}</a>`
+        : '';
+      const mdLink = issue.md
+        ? `<a class="button button-secondary" href="${escapeHtml(issue.md)}">${mdLabel}</a>`
+        : '';
+      return `${htmlLink}${mdLink}`;
+    };
 
     async function loadNewsletters() {
       const latestEl = document.getElementById('latest-card');
@@ -199,8 +120,8 @@
         newsletters.sort((a, b) => b.date.localeCompare(a.date));
 
         if (newsletters.length === 0) {
-          latestEl.innerHTML = '<p>등록된 뉴스레터가 없습니다.</p>';
-          archiveEl.innerHTML = '<p class="muted">Archive가 비어 있습니다.</p>';
+          latestEl.innerHTML = '<p class="muted">등록된 뉴스레터가 없습니다.</p>';
+          archiveEl.innerHTML = '<p class="muted">아카이브가 비어 있습니다.</p>';
           return;
         }
 
@@ -208,34 +129,34 @@
 
         latestEl.classList.remove('loading-card');
         latestEl.innerHTML = `
-          <div class="featured-copy">
-            <span class="badge">LATEST ISSUE</span>
-            <h3>${escapeHtml(latest.title)}</h3>
-            <p>${escapeHtml(latest.summary)}</p>
-            <div class="tag-row">${renderTags(latest.tags)}</div>
-          </div>
-          <div class="featured-actions">
+          <div class="card-meta">
             <span class="issue-date">${escapeHtml(latest.date)}</span>
-            ${renderIssueActions(latest)}
+            <span class="status-chip">Latest issue</span>
+          </div>
+          <h3>${escapeHtml(latest.title)}</h3>
+          <p>${escapeHtml(latest.summary)}</p>
+          <div class="tag-row">${renderTags(latest.tags)}</div>
+          <div class="card-actions">
+            ${renderIssueActions(latest, '최신호 보기')}
           </div>
         `;
 
         archiveEl.innerHTML = newsletters.map(item => `
-          <article class="archive-item">
-            <div class="archive-copy">
+          <article class="archive-card">
+            <div class="card-meta">
               <span class="issue-date">${escapeHtml(item.date)}</span>
-              <h3>${escapeHtml(item.title)}</h3>
-              <p>${escapeHtml(item.summary)}</p>
-              <div class="tag-row">${renderTags(item.tags)}</div>
             </div>
-            <div class="archive-actions">
-              ${renderIssueActions(item, '보기', 'MD')}
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.summary)}</p>
+            <div class="tag-row">${renderTags(item.tags)}</div>
+            <div class="card-actions">
+              ${renderIssueActions(item, '이슈 보기', 'Markdown')}
             </div>
           </article>
         `).join('');
       } catch (error) {
-        latestEl.innerHTML = '<p>뉴스레터 정보를 불러오지 못했습니다.</p>';
-        archiveEl.innerHTML = '<p class="muted">Archive 정보를 불러오지 못했습니다.</p>';
+        latestEl.innerHTML = '<p class="muted">뉴스레터 정보를 불러오지 못했습니다.</p>';
+        archiveEl.innerHTML = '<p class="muted">아카이브 정보를 불러오지 못했습니다.</p>';
         console.error(error);
       }
     }

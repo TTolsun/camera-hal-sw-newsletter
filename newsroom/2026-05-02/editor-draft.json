@@ -69,12 +69,12 @@
           "alt": "hero android logo"
         }
       ],
-      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csbOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+      "selectedImage": "",
       "imageSource": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
       "imageAttribution": "Android Developers Blog",
-      "imageAlt": "온디바이스 및 클라우드 AI 추론을 결합한 하이브리드 추론 솔루션 다이어그램",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "기사 내용을 잘 나타내는 하이브리드 추론의 개념적 다이어그램입니다.",
+      "imageAlt": "",
+      "imageLicenseStatus": "not_selected",
+      "imageUsageDecisionReason": "Live validation returned 404 for all eligible image candidates, so the published issue uses the fallback visual.",
       "sources": [
         {
           "title": "Experimental hybrid inference and new Gemini models for Android",
@@ -144,12 +144,12 @@
           "alt": "hero android logo"
         }
       ],
-      "selectedImage": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA2YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
+      "selectedImage": "",
       "imageSource": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
       "imageAttribution": "Android Developers Blog",
-      "imageAlt": "Android 17 베타 로고와 함께 플랫폼 안정성을 강조하는 이미지",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "Android 17 베타 출시를 직접적으로 나타내는 이미지로, 플랫폼 안정성이라는 핵심 메시지를 전달합니다.",
+      "imageAlt": "",
+      "imageLicenseStatus": "not_selected",
+      "imageUsageDecisionReason": "Live validation returned 404 for all eligible image candidates, so the published issue uses the fallback visual.",
       "sources": [
         {
           "title": "The Fourth Beta of Android 17",

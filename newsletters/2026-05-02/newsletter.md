@@ -12,8 +12,6 @@
 
 ### Android의 하이브리드 AI 추론 및 새로운 Gemini 모델
 
-_Image: [Android Developers Blog](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
-
 
 **이번 주 확인한 사실**
 
@@ -47,8 +45,6 @@ Android의 하이브리드 AI 추론 및 새로운 Gemini 모델은 카메라 HA
 ## 3. Android Platform / Camera HAL
 
 ### Android 17 네 번째 베타 출시: 플랫폼 안정성 및 호환성 최종 점검
-
-_Image: [Android Developers Blog](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)_
 
 
 **이번 주 확인한 사실**
