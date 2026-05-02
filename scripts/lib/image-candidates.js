@@ -262,33 +262,105 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 2500) {
 }
 
 function responseLooksLikeImage(response) {
+  return validateImageResponse(response).ok;
+}
+
+function validateImageResponse(response) {
   const contentType = response.headers.get('content-type') || '';
   const contentLength = Number(response.headers.get('content-length') || 0);
-  if (!response.ok) return false;
-  if (!/^image\//i.test(contentType)) return false;
-  return !contentLength || contentLength >= MIN_CONTENT_LENGTH;
+  const result = {
+    ok: false,
+    status: response.status,
+    contentType,
+    contentLength,
+    reason: ''
+  };
+  if (!response.ok) {
+    result.reason = `HTTP ${response.status}`;
+    return result;
+  }
+  if (!/^image\//i.test(contentType)) {
+    result.reason = contentType ? `non-image content-type ${contentType}` : 'missing content-type';
+    return result;
+  }
+  if (contentLength > 0 && contentLength < MIN_CONTENT_LENGTH) {
+    result.reason = `content-length ${contentLength} is smaller than ${MIN_CONTENT_LENGTH}`;
+    return result;
+  }
+  result.ok = true;
+  result.reason = 'ok';
+  return result;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function validateImageUrl(url, options = {}) {
+  const timeoutMs = options.timeoutMs || 2500;
+  const attempts = Math.max(1, options.attempts || 1);
+  const backoffMs = options.backoffMs || 250;
+  const headers = {
+    'user-agent': 'camera-hal-sw-newsletter/1.0',
+    accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+    ...(options.headers || {})
+  };
+  let lastResult = {
+    ok: false,
+    status: 0,
+    contentType: '',
+    contentLength: 0,
+    reason: 'not checked'
+  };
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const headResponse = await fetchWithTimeout(url, { method: 'HEAD', headers }, timeoutMs);
+      lastResult = validateImageResponse(headResponse);
+      if (lastResult.ok) return lastResult;
+    } catch (error) {
+      lastResult = {
+        ok: false,
+        status: 0,
+        contentType: '',
+        contentLength: 0,
+        reason: error.name === 'AbortError' ? `timeout after ${timeoutMs}ms` : error.message
+      };
+    }
+
+    try {
+      const getResponse = await fetchWithTimeout(
+        url,
+        { method: 'GET', headers: { ...headers, range: 'bytes=0-2047' } },
+        timeoutMs
+      );
+      lastResult = validateImageResponse(getResponse);
+      if (lastResult.ok) return lastResult;
+    } catch (error) {
+      lastResult = {
+        ok: false,
+        status: 0,
+        contentType: '',
+        contentLength: 0,
+        reason: error.name === 'AbortError' ? `timeout after ${timeoutMs}ms` : error.message
+      };
+    }
+
+    if (attempt < attempts) await sleep(backoffMs * attempt);
+  }
+
+  return lastResult;
 }
 
 async function validateImageCandidate(candidate) {
-  const headers = {
-    'user-agent': 'camera-hal-sw-newsletter/1.0',
-    accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'
+  const result = await validateImageUrl(candidate.url);
+  if (!result.ok) return null;
+  return {
+    ...candidate,
+    contentType: result.contentType,
+    contentLength: result.contentLength,
+    validationStatus: 'ok'
   };
-
-  try {
-    let response = await fetchWithTimeout(candidate.url, { method: 'HEAD', headers });
-    if (!responseLooksLikeImage(response)) {
-      response = await fetchWithTimeout(candidate.url, { method: 'GET', headers: { ...headers, range: 'bytes=0-2047' } });
-    }
-    if (!responseLooksLikeImage(response)) return null;
-    return {
-      ...candidate,
-      contentType: response.headers.get('content-type') || '',
-      validationStatus: 'ok'
-    };
-  } catch {
-    return null;
-  }
 }
 
 async function validateImageCandidates(candidates) {
@@ -306,8 +378,13 @@ function isSafeExternalImageUrl(value) {
 }
 
 module.exports = {
+  MIN_CONTENT_LENGTH,
   extractImageCandidatesFromHtml,
   extractImageCandidatesFromRssBlock,
+  fetchWithTimeout,
+  responseLooksLikeImage,
+  validateImageResponse,
+  validateImageUrl,
   validateImageCandidates,
   isSafeExternalImageUrl,
   normalizeImageUrl,
