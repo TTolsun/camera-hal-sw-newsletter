@@ -208,6 +208,7 @@ jobs:
           path: |
             .tmp/newsletter-date.txt
             .tmp/newsletter-generation-status.json
+            .tmp/gemini-raw/**
             collected-news/**
             newsroom/**
             newsletters/**

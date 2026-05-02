@@ -209,6 +209,17 @@ const editorSchema = {
   required: ['date', 'title', 'summary', 'briefing', 'sections', 'action_items', 'references']
 };
 
+const editorCompletionSchema = {
+  type: 'OBJECT',
+  properties: {
+    sections: {
+      type: 'ARRAY',
+      items: section
+    }
+  },
+  required: ['sections']
+};
+
 const factCheckSchema = {
   type: 'OBJECT',
   properties: {
@@ -228,5 +239,6 @@ const factCheckSchema = {
 module.exports = {
   reporterSchema,
   editorSchema,
+  editorCompletionSchema,
   factCheckSchema
 };

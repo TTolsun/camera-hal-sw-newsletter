@@ -9,6 +9,7 @@
   "scripts": {
     "collect": "node scripts/collect-news-candidates.js",
     "generate": "node scripts/gemini-newsroom-newsletter.js",
+    "test": "node --test",
     "validate": "npm run validate:site && npm run validate:images && npm run validate:quality",
     "validate:site": "node scripts/validate-site.js",
     "validate:images": "node scripts/validate-external-images.js",

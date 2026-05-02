@@ -7,8 +7,8 @@ const {
   readTextIfExists,
   writeJson
 } = require('./lib/common');
-const { callGeminiJson, getGeminiModelUsage } = require('./lib/gemini-client');
-const { reporterSchema, editorSchema, factCheckSchema } = require('./lib/newsletter-schema');
+const { callGeminiJson, getGeminiDiagnostics, getGeminiModelUsage } = require('./lib/gemini-client');
+const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } = require('./lib/newsletter-schema');
 const { isSafeExternalImageUrl } = require('./lib/image-candidates');
 const { resolveIssueArticleImages } = require('./lib/article-image-resolver');
 const {
@@ -33,10 +33,16 @@ const {
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
 const sourceRegistryPath = path.join(root, 'data', 'news-sources.json');
+const generationRunState = {
+  date: '',
+  retryHistory: [],
+  currentQualityAttempt: 0,
+  qualityReport: null,
+  factCheck: null
+};
 
 function fail(message) {
-  console.error(message);
-  process.exit(1);
+  throw new Error(message);
 }
 
 function writeNewsletterDate(date) {
@@ -53,6 +59,43 @@ function writeGenerationStatus(value) {
     `${JSON.stringify(value, null, 2)}\n`,
     'utf8'
   );
+}
+
+function failureStageFromError(error) {
+  if (error?.stage) return error.stage;
+  const match = String(error?.message || '').match(/^\[([^\]]+)]/);
+  return match ? match[1] : 'generation';
+}
+
+function buildGenerationStatus({
+  date,
+  status,
+  failureStage = '',
+  failureReason = '',
+  retryHistory = [],
+  qualityReport = null,
+  factCheck = null,
+  extra = {}
+}) {
+  const diagnostics = getGeminiDiagnostics();
+  const mustFixCount = ensureArray(factCheck?.must_fix).length;
+  return {
+    date,
+    status,
+    failure_stage: failureStage,
+    failure_reason: failureReason,
+    fact_check_status: factCheck?.status || 'UNKNOWN',
+    must_fix_count: mustFixCount,
+    quality_status: qualityReport?.status || 'UNKNOWN',
+    quality_attempt_count: retryHistory.length,
+    quality_score: qualityReport?.score ?? null,
+    quality_threshold: qualityReport?.threshold ?? QUALITY_THRESHOLD,
+    quality_deduction_count: ensureArray(qualityReport?.deductions).length,
+    quota_error_count: diagnostics.quota_error_count,
+    invalid_json_count: diagnostics.invalid_json_count,
+    model_usage: diagnostics.model_usage,
+    ...extra
+  };
 }
 
 function numberOrDefault(value, fallback = 0) {
@@ -231,6 +274,8 @@ function firstHttpsUrl(...values) {
   return '';
 }
 
+const fallbackCategories = ['AOSP Camera Watch', 'Android Camera / AI Watch', 'C++ / AI Practical Tip'];
+
 function normalizeSectionImageFields(section, reporter) {
   const sectionImages = ensureArray(section.imageCandidates).filter(image => image && image.url && isSafeExternalImageUrl(image.url));
   const imageCandidates = sectionImages.length > 0 ? sectionImages : reporterImageCandidatesForSection(section, reporter);
@@ -274,6 +319,32 @@ function normalizeSectionImageFields(section, reporter) {
   };
 }
 
+function normalizeEditorSection(section, index, reporter) {
+  const actionItems = ensureArray(section.action_items);
+  const actionHints = ensureArray(section.action_hints);
+  const normalized = {
+    ...section,
+    category: section.category || fallbackCategories[index] || `Main Article ${index + 1}`,
+    confirmed_facts: ensureArray(section.confirmed_facts).length > 0
+      ? ensureArray(section.confirmed_facts)
+      : [section.what_changed].filter(Boolean),
+    evidence_summary: stringOrEmpty(section.evidence_summary),
+    specificity_checks: ensureArray(section.specificity_checks),
+    source_verification_notes: ensureArray(section.source_verification_notes),
+    camera_hal_perspective: section.camera_hal_perspective || section.why_it_matters || '',
+    action_items: actionItems.length > 0 ? actionItems : actionHints,
+    action_hints: actionHints.length > 0 ? actionHints : actionItems,
+    team_summary: section.team_summary || section.why_it_matters || '',
+    is_ai_related: Boolean(section.is_ai_related),
+    article_type: section.article_type || (section.is_ai_related ? 'ai' : 'camera-hal'),
+    sources: ensureArray(section.sources).filter(source => source && source.url)
+  };
+  return {
+    ...normalized,
+    ...normalizeSectionImageFields(normalized, reporter)
+  };
+}
+
 function validateEditor(value, date, reporter = { candidates: [] }) {
   if (value.date !== date) value.date = date;
   value.title = value.title || `Camera HAL SW Newsletter - ${date}`;
@@ -286,32 +357,7 @@ function validateEditor(value, date, reporter = { candidates: [] }) {
     fail('Editor output must contain at least 3 sections.');
   }
 
-  const fallbackCategories = ['AOSP Camera Watch', 'Android Camera / AI Watch', 'C++ / AI Practical Tip'];
-  value.sections = value.sections.map((section, index) => {
-    const actionItems = ensureArray(section.action_items);
-    const actionHints = ensureArray(section.action_hints);
-    const normalized = {
-      ...section,
-      category: section.category || fallbackCategories[index] || `Main Article ${index + 1}`,
-      confirmed_facts: ensureArray(section.confirmed_facts).length > 0
-        ? ensureArray(section.confirmed_facts)
-        : [section.what_changed].filter(Boolean),
-      evidence_summary: stringOrEmpty(section.evidence_summary),
-      specificity_checks: ensureArray(section.specificity_checks),
-      source_verification_notes: ensureArray(section.source_verification_notes),
-      camera_hal_perspective: section.camera_hal_perspective || section.why_it_matters || '',
-      action_items: actionItems.length > 0 ? actionItems : actionHints,
-      action_hints: actionHints.length > 0 ? actionHints : actionItems,
-      team_summary: section.team_summary || section.why_it_matters || '',
-      is_ai_related: Boolean(section.is_ai_related),
-      article_type: section.article_type || (section.is_ai_related ? 'ai' : 'camera-hal'),
-      sources: ensureArray(section.sources).filter(source => source && source.url)
-    };
-    return {
-      ...normalized,
-      ...normalizeSectionImageFields(normalized, reporter)
-    };
-  });
+  value.sections = value.sections.map((section, index) => normalizeEditorSection(section, index, reporter));
 
   const emptySourceSections = value.sections
     .filter(section => section.sources.length === 0)
@@ -771,6 +817,46 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFin
   }).filter(item => item.action !== 'preserve');
 }
 
+function hasTooFewMainArticlesDeduction(qualityReport) {
+  return ensureArray(qualityReport?.deductions).some(deduction =>
+    deduction?.category === 'composition' &&
+    /main articles/i.test(String(deduction.reason || '')) &&
+    Number(qualityReport?.metrics?.article_count || 0) < MIN_MAIN_ARTICLES
+  );
+}
+
+function availableCompletionCandidates(reporter, currentSections, excludedSections = []) {
+  return ensureArray(reporter?.candidates).filter(candidate => {
+    if (!candidate.selected) return false;
+    if (reporterCandidateRejectionReason(candidate)) return false;
+    if (candidateDuplicatesSections(candidate, currentSections)) return false;
+    if (candidateDuplicatesSections(candidate, excludedSections)) return false;
+    return true;
+  });
+}
+
+function buildCompletionExclusionContext(lockedSections, duplicateSections, sourceGapOrIneligibleSections) {
+  const context = {
+    locked_sections: lockedSections.map((section, index) => sectionSummary(section, index)),
+    duplicate_or_rejected_sections: duplicateSections.map((section, index) => sectionSummary(section, index)),
+    source_gap_or_ineligible_sections: sourceGapOrIneligibleSections.map((section, index) => sectionSummary(section, index))
+  };
+  return JSON.stringify(context, null, 2);
+}
+
+function validateCompletionSections(value, date, reporter) {
+  const sections = ensureArray(value?.sections);
+  if (sections.length === 0) fail('Editor completion output must contain at least one section.');
+  const normalizedSections = sections.map((section, index) => normalizeEditorSection(section, index, reporter));
+  const emptySourceSections = normalizedSections
+    .filter(section => section.sources.length === 0)
+    .map(section => section.category);
+  if (emptySourceSections.length > 0) {
+    fail(`Editor completion output has sections without sources: ${emptySourceSections.join(', ')}`);
+  }
+  return normalizedSections;
+}
+
 function buildRetryHistoryMarkdown(date, attempts) {
   const rows = attempts.map(item => [
     item.attempt,
@@ -807,6 +893,7 @@ ${attempts.map(item => `## Attempt ${item.attempt}
 
 async function main() {
   const date = process.env.NEWSLETTER_DATE || kstDate();
+  generationRunState.date = date;
   writeNewsletterDate(date);
   writeGenerationStatus({ date, status: 'STARTED', must_fix_count: 0 });
 
@@ -856,6 +943,7 @@ async function main() {
   const maxQualityRetries = integerOrDefault(process.env.NEWSROOM_MAX_QUALITY_RETRIES, 3);
   const totalAttempts = 1 + maxQualityRetries;
   const retryHistory = [];
+  generationRunState.retryHistory = retryHistory;
   let lockedSections = [];
   let reporter = null;
   let editor = null;
@@ -864,6 +952,7 @@ async function main() {
   let excludedSections = [];
 
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
+    generationRunState.currentQualityAttempt = attempt;
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
     const reporterStage = `reporter attempt ${attempt}/${totalAttempts}`;
     const editorStage = `editor attempt ${attempt}/${totalAttempts}`;
@@ -968,12 +1057,14 @@ async function main() {
     ));
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
     factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
+    generationRunState.factCheck = factCheck;
     writeJson(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.json`), factCheck);
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
     qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
       threshold: QUALITY_THRESHOLD
     });
+    generationRunState.qualityReport = qualityReport;
     writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
     fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
 
@@ -1034,18 +1125,90 @@ async function main() {
       ));
       eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
       factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
+      generationRunState.factCheck = factCheck;
       writeJson(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.json`), factCheck);
       fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
       qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
         threshold: QUALITY_THRESHOLD
       });
+      generationRunState.qualityReport = qualityReport;
       writeJson(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.json`), qualityReport);
       fs.writeFileSync(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
       demotedSections = appendUniqueSections(
         demotedSections,
         sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
       );
+    }
+
+    if (hasTooFewMainArticlesDeduction(qualityReport)) {
+      const missingArticleCount = MIN_MAIN_ARTICLES - ensureArray(editor.sections).length;
+      const completionExcludedSections = appendUniqueSections(
+        excludedSections,
+        demotedSections.concat(eligibilityFindings.map(finding => finding.section))
+      );
+      const completionCandidates = availableCompletionCandidates(reporter, editor.sections, completionExcludedSections);
+      if (missingArticleCount > 0 && completionCandidates.length > 0) {
+        const completionStage = `editor completion attempt ${attempt}/${totalAttempts}`;
+        const completionFactCheckStage = `fact-checker completion attempt ${attempt}/${totalAttempts}`;
+        console.warn(`Quality attempt ${attempt}/${totalAttempts} has only ${editor.sections.length} main article(s); requesting ${missingArticleCount} completion article(s).`);
+        const completionSections = validateCompletionSections(await callGeminiJson(
+          completionStage,
+          [
+            'You are the AI completion editor for Camera HAL SW Newsletter.',
+            `Return only ${missingArticleCount} additional main article section(s), never a full newsletter rewrite.`,
+            'Preserve existing valid sections by excluding their URLs, titles, source names, and source-date-title combinations.',
+            'Use only the eligible reporter candidates supplied in this prompt. Do not use candidates omitted from the eligible list.',
+            'Do not duplicate locked, duplicate/rejected, source-gap, or ineligible sections from the exclusion context.',
+            'Each new section must satisfy the same editorial contract: confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, and sources.',
+            'For each article, choose at most one selectedImage from that article imageCandidates; use an empty selectedImage when attribution or relevance is uncertain.',
+            'Final newsletter text must be Korean. Return only JSON matching the schema.'
+          ].join('\n'),
+          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor sections JSON:\n${JSON.stringify(editor.sections, null, 2)}\n\nEligible reporter candidates for additional articles JSON:\n${JSON.stringify({ date: reporter.date, candidates: completionCandidates }, null, 2)}\n\nCurrent quality report JSON:\n${JSON.stringify(qualityReport, null, 2)}`,
+          editorCompletionSchema
+        ), date, reporter);
+        const completionMerged = mergeLockedSections(editor.sections, completionSections, completionExcludedSections);
+        rejectedGeneratedSections = rejectedGeneratedSections.concat(completionMerged.rejected);
+        editor = validateEditor({
+          ...editor,
+          sections: completionMerged.sections
+        }, date, reporter);
+        await resolveIssueArticleImages(editor, { root });
+        warnResolvedImageFallbacks(editor);
+        writeJson(path.join(newsroomDir, `editor-completion-attempt-${attempt}.json`), editor);
+        fs.writeFileSync(path.join(newsroomDir, `editor-completion-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
+
+        factCheck = validateFactCheck(await callGeminiJson(
+          completionFactCheckStage,
+          [
+            'You are the AI fact checker for the completed Camera HAL SW Newsletter draft.',
+            'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
+            'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the 4-5 main article contract.',
+            'Return only JSON matching the schema.'
+          ].join('\n'),
+          `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+          factCheckSchema
+        ));
+        eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
+        factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
+        generationRunState.factCheck = factCheck;
+        writeJson(path.join(newsroomDir, `fact-check-completion-attempt-${attempt}.json`), factCheck);
+        fs.writeFileSync(path.join(newsroomDir, `fact-check-completion-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
+
+        qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
+          threshold: QUALITY_THRESHOLD
+        });
+        generationRunState.qualityReport = qualityReport;
+        writeJson(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.json`), qualityReport);
+        fs.writeFileSync(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
+        repairActions.push(`complete-missing-articles: requested ${missingArticleCount}, added ${Math.max(0, editor.sections.length - (MIN_MAIN_ARTICLES - missingArticleCount))}`);
+        demotedSections = appendUniqueSections(
+          demotedSections,
+          sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
+        );
+      } else {
+        console.warn(`Quality attempt ${attempt}/${totalAttempts} has too few main articles, but no eligible non-duplicate completion candidates remain.`);
+      }
     }
 
     excludedSections = appendUniqueSections(excludedSections, demotedSections);
@@ -1148,23 +1311,27 @@ async function main() {
   } else if (qualityReport.status !== 'PASS') {
     generationStatus = 'QUALITY_NEEDS_FIX';
   }
-  writeGenerationStatus({
+  writeGenerationStatus(buildGenerationStatus({
     date,
     status: generationStatus,
-    fact_check_status: factCheck.status,
-    must_fix_count: mustFixCount,
-    quality_status: qualityReport.status,
-    quality_score: qualityReport.score,
-    quality_threshold: qualityReport.threshold,
-    quality_deduction_count: ensureArray(qualityReport.deductions).length,
-    quality_attempt_count: retryHistory.length,
-    locked_article_count: retryHistory.at(-1)?.locked_article_headlines.length || 0,
-    rejected_duplicate_article_count: retryHistory.reduce((sum, item) => sum + item.rejected_duplicate_headlines.length, 0),
-    validate_ok: validateResult.ok,
-    todo_found: todoFound,
-    empty_source_sections: emptySourceSections,
-    source_gap_count: factCheck.source_gap_count
-  });
+    retryHistory,
+    qualityReport,
+    factCheck,
+    extra: {
+      failure_stage: '',
+      failure_reason: '',
+      quality_status: qualityReport.status,
+      quality_score: qualityReport.score,
+      quality_threshold: qualityReport.threshold,
+      quality_deduction_count: ensureArray(qualityReport.deductions).length,
+      locked_article_count: retryHistory.at(-1)?.locked_article_headlines.length || 0,
+      rejected_duplicate_article_count: retryHistory.reduce((sum, item) => sum + item.rejected_duplicate_headlines.length, 0),
+      validate_ok: validateResult.ok,
+      todo_found: todoFound,
+      empty_source_sections: emptySourceSections,
+      source_gap_count: factCheck.source_gap_count
+    }
+  }));
 
   if (todoFound) fail('Generated newsletter contains TODO.');
   if (emptySourceSections.length > 0) fail(`Generated sections without sources: ${emptySourceSections.join(', ')}`);
@@ -1178,7 +1345,43 @@ async function main() {
   console.log(`Gemini newsroom newsletter generated for ${date}`);
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exit(1);
-});
+function writeTerminalFailureStatus(error) {
+  const date = generationRunState.date || process.env.NEWSLETTER_DATE || kstDate();
+  writeGenerationStatus(buildGenerationStatus({
+    date,
+    status: 'FAILED',
+    failureStage: failureStageFromError(error),
+    failureReason: String(error?.message || error || 'Unknown generation failure.'),
+    retryHistory: generationRunState.retryHistory,
+    qualityReport: generationRunState.qualityReport,
+    factCheck: generationRunState.factCheck,
+    extra: {
+      quality_attempt_count: Math.max(
+        generationRunState.retryHistory.length,
+        generationRunState.currentQualityAttempt
+      )
+    }
+  }));
+}
+
+if (require.main === module) {
+  main().catch(error => {
+    console.error(error);
+    try {
+      writeTerminalFailureStatus(error);
+    } catch (statusError) {
+      console.error(`Failed to write terminal generation status: ${statusError.message}`);
+    }
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  buildGenerationStatus,
+  failureStageFromError,
+  hasTooFewMainArticlesDeduction,
+  main,
+  validateCompletionSections,
+  writeGenerationStatus,
+  writeTerminalFailureStatus
+};

@@ -184,7 +184,12 @@ npx serve .
 - `GEMINI_API_KEY`: 필수. Gemini API 호출에 사용합니다.
 - `GEMINI_MODEL`: 선택. 기본값은 workflow의 explicit Flash 모델입니다.
 - `GEMINI_FALLBACK_MODELS`: 선택. 쉼표로 구분한 fallback 모델 목록입니다.
+- `GEMINI_MAX_RETRIES`: Optional. Retry budget per Gemini model for retryable API failures and invalid JSON model output. Default is `3`.
+- `GEMINI_RETRY_DELAYS_MS`: Optional. Comma-separated fallback retry delays when Gemini does not provide a retry hint. Default is `2000,5000,10000`.
+- `GEMINI_RETRY_MAX_DELAY_MS`: Optional. Maximum server-hinted retry delay in milliseconds. Default is `60000`.
 - `NEWSROOM_MAX_QUALITY_RETRIES`: 선택. quality retry 횟수입니다. 기본값은 `3`입니다.
+
+Invalid Gemini JSON responses are saved as raw debug artifacts under `.tmp/gemini-raw/` and uploaded by the newsroom workflow. These files contain model output only, not request headers or API keys.
 
 ## PR 검토
 
