@@ -300,7 +300,12 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     (hasBehaviorChange ? 2 : 0);
   const fallbackIneligible = FALLBACK_INELIGIBLE_SOURCE_KINDS.has(sourceKind);
   const itemLevel = ITEM_LEVEL_SOURCE_KINDS.has(sourceKind);
-  const parserItemMissingCoreEvidence = itemLevel && (!hasPublishedDate || !hasVersionOrRelease || !hasApiOrComponent || !hasBehaviorChange);
+  const releaseNoteItemMissingEvidence = sourceKind === 'release_note_item' &&
+    (!hasPublishedDate || !hasVersionOrRelease || !hasApiOrComponent || !hasBehaviorChange);
+  const datedItemMissingEvidence = itemLevel &&
+    sourceKind !== 'release_note_item' &&
+    (!hasPublishedDate || !hasApiOrComponent || !hasBehaviorChange);
+  const parserItemMissingCoreEvidence = releaseNoteItemMissingEvidence || datedItemMissingEvidence;
   const sourceGapRisk = fallbackIneligible || parserItemMissingCoreEvidence || evidenceScore < 6;
   const mainEligible = !candidateOnly && !sourceGapRisk && evidenceScore >= 6 && score >= 30;
 
@@ -460,12 +465,25 @@ function titleKey(title) {
     .trim();
 }
 
+function urlDedupeKey(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    parsed.search = '';
+    return parsed.toString().replace(/\/(?=#|$)/, '').toLowerCase();
+  } catch {
+    const [withoutHash, hash = ''] = raw.split('#');
+    return `${withoutHash.replace(/\?.*$/, '').replace(/\/$/, '')}${hash ? `#${hash}` : ''}`.toLowerCase();
+  }
+}
+
 function dedupe(candidates) {
   const seenUrls = new Set();
   const seenTitles = new Set();
   const result = [];
   for (const item of candidates) {
-    const urlKey = item.url.replace(/[?#].*$/, '').toLowerCase();
+    const urlKey = urlDedupeKey(item.url);
     const normalizedTitle = titleKey(item.title);
     if (seenUrls.has(urlKey)) continue;
     if (normalizedTitle && seenTitles.has(normalizedTitle)) continue;
