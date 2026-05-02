@@ -10,6 +10,7 @@ const {
   extractImageCandidatesFromRssBlock,
   validateImageCandidates
 } = require('./lib/image-candidates');
+const { parseSourceSpecificItems } = require('./lib/source-item-parsers');
 
 const root = process.cwd();
 const structuredSourcesPath = path.join(root, 'data', 'news-sources.json');
@@ -90,6 +91,11 @@ const FEED_HINTS = [
     feed: 'https://openai.com/news/rss.xml'
   }
 ];
+const FALLBACK_INELIGIBLE_SOURCE_KINDS = new Set(['documentation_page', 'rolling_page', 'blog_index']);
+const ITEM_LEVEL_SOURCE_KINDS = new Set(['rss_item', 'release_note_item', 'blog_post_item']);
+const VERSION_OR_RELEASE_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|v?\d+\.\d+\.\d+(?:[-\w.]*)?|release notes?|security bulletin)\b/i;
+const API_OR_COMPONENT_PATTERN = /\b(?:CameraX|androidx\.camera|Camera2|Camera HAL|AOSP Camera|CDD|CTS|VTS|Camera ITS|Android framework|Android Security Bulletin|libcamera|V4L2|media controller|LLVM|Clang|NDK|SDK|API)\b/i;
+const BEHAVIOR_CHANGE_PATTERN = /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|remove(?:d|s)?|deprecat(?:ed|es)|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?|migrat(?:ed|es|ion)|security|vulnerability|CVE|bulletin|release(?:d|s)?|compatibility|requirement|API|behavior)\b/i;
 
 let sectionMap = { ...DEFAULT_SECTION_MAP };
 let activeSourcesPath = legacySourcesPath;
@@ -214,6 +220,7 @@ function parseRss(xml, source) {
       url: link,
       publishedAt: date,
       summary,
+      sourceKind: 'rss_item',
       imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
     });
   }).filter(item => item.title && item.url);
@@ -232,12 +239,86 @@ function parseHtmlPage(html, source) {
     url: source.url,
     publishedAt: '',
     summary: description,
+    sourceKind: inferFallbackSourceKind(source),
     imageCandidates: extractImageCandidatesFromHtml(html, source.url, source)
   })];
 }
 
 function keywordHits(text, keywords) {
   return keywords.filter(keyword => text.includes(keyword.toLowerCase())).length;
+}
+
+function firstMatch(pattern, value) {
+  const match = String(value || '').match(pattern);
+  return match ? match[0] : '';
+}
+
+function firstBehavior(value) {
+  const sentences = String(value || '')
+    .split(/(?<=[.!?])\s+|[•\n]/)
+    .map(item => item.trim())
+    .filter(Boolean);
+  return sentences.find(sentence => BEHAVIOR_CHANGE_PATTERN.test(sentence)) || sentences[0] || '';
+}
+
+function componentFromText(value, source) {
+  const match = firstMatch(API_OR_COMPONENT_PATTERN, value);
+  if (match) return match;
+  if (['camera-hal', 'camera-api', 'aosp', 'compatibility'].includes(source.category)) return 'Android Camera / Camera HAL';
+  if (['linux-camera', 'linux-kernel', 'driver', 'v4l2'].includes(source.category)) return 'Linux camera / V4L2';
+  if (['cpp', 'toolchain', 'native', 'llvm'].includes(source.category)) return 'C++ / native toolchain';
+  return '';
+}
+
+function inferFallbackSourceKind(source) {
+  const url = source.url || source.sourceUrl || '';
+  const id = source.id || '';
+  const name = source.name || '';
+  if (/documentation|docs\/core\/camera|introduction|cdd|compatibility\/cdd/i.test(`${id} ${url} ${name}`)) {
+    return 'documentation_page';
+  }
+  if (/blog|news-and-blog|research\.google\/blog|deepmind\.google\/blog/i.test(`${id} ${url} ${name}`)) {
+    return 'blog_index';
+  }
+  return 'rolling_page';
+}
+
+function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
+  const sourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
+  const evidenceText = `${title} ${summary} ${raw.version_or_release || ''} ${raw.api_or_component || ''} ${raw.behavior_change || ''}`;
+  const versionOrRelease = String(raw.version_or_release || firstMatch(VERSION_OR_RELEASE_PATTERN, evidenceText)).trim();
+  const apiOrComponent = String(raw.api_or_component || componentFromText(evidenceText, source)).trim();
+  const behaviorChange = String(raw.behavior_change || firstBehavior(summary || title)).trim();
+  const hasPublishedDate = Boolean(String(raw.publishedAt || raw.published_date || '').trim());
+  const hasVersionOrRelease = Boolean(versionOrRelease);
+  const hasApiOrComponent = Boolean(apiOrComponent);
+  const hasBehaviorChange = Boolean(behaviorChange && BEHAVIOR_CHANGE_PATTERN.test(behaviorChange));
+  const evidenceScore =
+    (hasPublishedDate ? 2 : 0) +
+    (hasVersionOrRelease ? 2 : 0) +
+    (hasApiOrComponent ? 2 : 0) +
+    (hasBehaviorChange ? 2 : 0);
+  const fallbackIneligible = FALLBACK_INELIGIBLE_SOURCE_KINDS.has(sourceKind);
+  const itemLevel = ITEM_LEVEL_SOURCE_KINDS.has(sourceKind);
+  const parserItemMissingCoreEvidence = itemLevel && (!hasPublishedDate || !hasVersionOrRelease || !hasApiOrComponent || !hasBehaviorChange);
+  const sourceGapRisk = fallbackIneligible || parserItemMissingCoreEvidence || evidenceScore < 6;
+  const mainEligible = !candidateOnly && !sourceGapRisk && evidenceScore >= 6 && score >= 30;
+
+  return {
+    source_kind: sourceKind,
+    version_or_release: versionOrRelease,
+    api_or_component: apiOrComponent,
+    behavior_change: behaviorChange,
+    has_published_date: hasPublishedDate,
+    has_version_or_release: hasVersionOrRelease,
+    has_api_or_component: hasApiOrComponent,
+    has_behavior_change: hasBehaviorChange,
+    source_gap_risk: sourceGapRisk,
+    main_eligible: mainEligible,
+    briefing_only: sourceGapRisk && !mainEligible,
+    reference_only: fallbackIneligible || (sourceGapRisk && evidenceScore < 4),
+    evidence_score: evidenceScore
+  };
 }
 
 function normalizeCandidate(raw) {
@@ -255,6 +336,7 @@ function normalizeCandidate(raw) {
   const score = Math.min(100, rawScore);
   const candidateOnly = source.candidateOnly || CANDIDATE_ONLY_RELIABILITY.has(source.reliability);
   const section = source.section || sectionMap[source.category] || 'AI / SW Engineering Trends';
+  const metadata = evidenceMetadata(raw, source, title, summary, score, candidateOnly);
 
   return {
     source: source.name,
@@ -276,9 +358,24 @@ function normalizeCandidate(raw) {
     source_usage_hint: source.usageHint,
     candidateOnly,
     candidate_only: candidateOnly,
+    source_kind: metadata.source_kind,
+    has_published_date: metadata.has_published_date,
+    has_version_or_release: metadata.has_version_or_release,
+    has_api_or_component: metadata.has_api_or_component,
+    has_behavior_change: metadata.has_behavior_change,
+    source_gap_risk: metadata.source_gap_risk,
+    main_eligible: metadata.main_eligible,
+    briefing_only: metadata.briefing_only,
+    reference_only: metadata.reference_only,
+    evidence_score: metadata.evidence_score,
+    version_or_release: metadata.version_or_release,
+    api_or_component: metadata.api_or_component,
+    behavior_change: metadata.behavior_change,
     requiresCrossCheck: source.requiresCrossCheck,
     requires_cross_check: source.requiresCrossCheck,
-    verification_hint: candidateOnly || source.requiresCrossCheck
+    verification_hint: metadata.source_gap_risk
+      ? 'Source gap risk: use as briefing/reference unless a concrete item has release date, version/release, API/component, and behavior-change evidence.'
+      : candidateOnly || source.requiresCrossCheck
       ? 'Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.'
       : 'Can be used directly if the collected item supports the claim.',
     title,
@@ -413,10 +510,10 @@ function markdown(date, candidates, failures, lookbackDays) {
   for (const [category, items] of Object.entries(groups)) {
     lines.push(`## ${category}`);
     lines.push('');
-    lines.push('| Score | Source | Priority | Reliability | Candidate only | Title | Published | Link |');
-    lines.push('|---:|---|---|---|---|---|---|---|');
+    lines.push('| Score | Evidence | Main | Gap | Source kind | Source | Priority | Reliability | Candidate only | Title | Published | Link |');
+    lines.push('|---:|---:|---|---|---|---|---|---|---|---|---|---|');
     for (const item of items) {
-      lines.push(`| ${item.relevanceScore} | ${mdEscape(item.source)} | ${item.source_priority} | ${item.source_reliability} | ${item.candidate_only ? 'yes' : 'no'} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || 'review needed')} | [link](${item.url}) |`);
+      lines.push(`| ${item.relevanceScore} | ${item.evidence_score} | ${item.main_eligible ? 'yes' : 'no'} | ${item.source_gap_risk ? 'yes' : 'no'} | ${mdEscape(item.source_kind)} | ${mdEscape(item.source)} | ${item.source_priority} | ${item.source_reliability} | ${item.candidate_only ? 'yes' : 'no'} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || 'review needed')} | [link](${item.url}) |`);
     }
     lines.push('');
   }
@@ -435,6 +532,15 @@ function markdown(date, candidates, failures, lookbackDays) {
     lines.push(`- Source priority: ${item.source_priority}`);
     lines.push(`- Source reliability: ${item.source_reliability}`);
     lines.push(`- Candidate only: ${item.candidate_only ? 'yes' : 'no'}`);
+    lines.push(`- Source kind: ${item.source_kind}`);
+    lines.push(`- Main eligible: ${item.main_eligible ? 'yes' : 'no'}`);
+    lines.push(`- Briefing only: ${item.briefing_only ? 'yes' : 'no'}`);
+    lines.push(`- Reference only: ${item.reference_only ? 'yes' : 'no'}`);
+    lines.push(`- Source gap risk: ${item.source_gap_risk ? 'yes' : 'no'}`);
+    lines.push(`- Evidence score: ${item.evidence_score}`);
+    lines.push(`- Version/release: ${item.version_or_release || 'not extracted'}`);
+    lines.push(`- API/component: ${item.api_or_component || 'not extracted'}`);
+    lines.push(`- Behavior change: ${item.behavior_change || 'not extracted'}`);
     lines.push(`- Requires cross-check: ${item.requires_cross_check ? 'yes' : 'no'}`);
     lines.push(`- Verification hint: ${item.verification_hint}`);
     lines.push(`- Relevance Score: ${item.relevanceScore}`);
@@ -477,7 +583,10 @@ async function main() {
       const feed = sourceFeed(source);
       const target = feed || source.url;
       const text = await fetchText(target);
-      const parsed = feed ? parseRss(text, source) : parseHtmlPage(text, source);
+      const sourceSpecificItems = parseSourceSpecificItems(text, source);
+      const parsed = sourceSpecificItems.length > 0
+        ? sourceSpecificItems.map(item => normalizeCandidate(item))
+        : feed ? parseRss(text, source) : parseHtmlPage(text, source);
       candidates.push(...parsed);
     } catch (error) {
       failures.push({ source: source.name, message: error.message });
@@ -511,7 +620,7 @@ async function main() {
   fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
 
   fs.writeFileSync(path.join(outDir, 'candidates.json'), JSON.stringify({
-    schema_version: 3,
+    schema_version: 4,
     date,
     newsletter_date: date,
     audience: AUDIENCE,

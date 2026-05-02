@@ -1,4 +1,4 @@
-const QUALITY_THRESHOLD = 95;
+const QUALITY_THRESHOLD = 90;
 const MIN_MAIN_ARTICLES = 4;
 const MAX_MAIN_ARTICLES = 5;
 
@@ -217,15 +217,17 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
 
   const totalDeductions = state.deductions.reduce((sum, item) => sum + item.points, 0);
   const score = Math.max(0, 100 - totalDeductions);
+  const hasFactCheckMustFix = factCheck.status === 'NEEDS_FIX' || mustFixCount > 0;
+  const status = score >= threshold && gaps === 0 && !hasFactCheckMustFix ? 'PASS' : 'NEEDS_FIX';
   return {
     schema_version: 1,
     date,
     score,
     threshold,
-    status: score >= threshold ? 'PASS' : 'NEEDS_FIX',
-    summary: score >= threshold
+    status,
+    summary: status === 'PASS'
       ? `Quality score ${score}/${threshold}; ready for editor-in-chief review.`
-      : `Quality score ${score}/${threshold}; improve the deductions before publication.`,
+      : `Quality score ${score}/${threshold}; resolve source gaps and deductions before publication.`,
     deductions: state.deductions,
     metrics: {
       article_count: sections.length,

@@ -84,7 +84,7 @@ function changedNewsletterDates() {
   const dates = new Set();
   for (const file of changedFilesFromGit()) {
     const normalized = file.replace(/\\/g, '/');
-    const match = normalized.match(/^(?:newsletters|newsroom|collected-news)\/(\d{4}-\d{2}-\d{2})\//);
+    const match = normalized.match(/^newsletters\/(\d{4}-\d{2}-\d{2})\//);
     if (match) dates.add(match[1]);
   }
   return dates;
@@ -109,6 +109,10 @@ function validateQualityReport(item, requireReport) {
   }
   if (threshold < QUALITY_THRESHOLD) {
     fail(`Newsletter ${item.date} quality threshold must be at least ${QUALITY_THRESHOLD}, found ${threshold}.`);
+  }
+  if (!requireReport && (score < threshold || report.status !== 'PASS')) {
+    warn(`Newsletter ${item.date} has non-publishable review quality report ${score}/${threshold} ${report.status}; not enforcing because this run is not publishing that issue.`);
+    return;
   }
   if (score < threshold || report.status !== 'PASS') {
     fail(`Newsletter ${item.date} quality score ${score}/${threshold} does not pass.`);

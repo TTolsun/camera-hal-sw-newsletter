@@ -13,9 +13,12 @@ const { isSafeExternalImageUrl } = require('./lib/image-candidates');
 const { resolveIssueArticleImages } = require('./lib/article-image-resolver');
 const {
   QUALITY_THRESHOLD,
+  MIN_MAIN_ARTICLES,
   MAX_MAIN_ARTICLES,
   buildNewsletterQualityReport,
   buildQualityReportMarkdown,
+  deductionMatchesSection,
+  sectionHasSourceGap,
   sectionPassesArticleGate
 } = require('./lib/newsletter-quality');
 const {
@@ -73,6 +76,25 @@ function imageCandidatesForReporterCandidate(candidate, collectedByUrl) {
   return images.filter(image => image && image.url && isSafeExternalImageUrl(image.url));
 }
 
+function collectedCandidateFor(candidate, collectedByUrl) {
+  return collectedByUrl.get(candidate.url) ||
+    collectedByUrl.get(candidate.article_url) ||
+    collectedByUrl.get(candidate.articleUrl) ||
+    {};
+}
+
+function reporterCandidateRejectionReason(candidate) {
+  const halActionability =
+    Number(candidate.camera_hal_relevance_score || 0) +
+    Number(candidate.android_camera_relevance_score || 0) +
+    Number(candidate.practical_actionability_score || 0);
+  if (candidate.main_eligible === false) return 'main_eligible=false';
+  if (candidate.source_gap_risk === true) return 'source_gap_risk=true';
+  if (Number(candidate.evidence_score || 0) < 6) return `evidence_score=${Number(candidate.evidence_score || 0)} < 6`;
+  if (halActionability < 8) return `HAL/actionability score ${halActionability} < 8`;
+  return '';
+}
+
 function validateReporter(value, date, collectedCandidates = []) {
   const collectedByUrl = new Map();
   for (const candidate of ensureArray(collectedCandidates)) {
@@ -85,10 +107,12 @@ function validateReporter(value, date, collectedCandidates = []) {
   if (!Array.isArray(value.candidates) || value.candidates.length === 0) {
     fail('Reporter output must contain at least one candidate.');
   }
+  const rejectedMainIneligible = [];
   for (const candidate of value.candidates) {
     if (!candidate.title || !candidate.url || !candidate.source) {
       fail('Reporter candidate is missing title, source, or url.');
     }
+    const collected = collectedCandidateFor(candidate, collectedByUrl);
     candidate.camera_hal_relevance_score = numberOrDefault(candidate.camera_hal_relevance_score);
     candidate.android_camera_relevance_score = numberOrDefault(candidate.android_camera_relevance_score);
     candidate.practical_actionability_score = numberOrDefault(candidate.practical_actionability_score);
@@ -96,9 +120,23 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.freshness_score = numberOrDefault(candidate.freshness_score);
     candidate.ai_required_slot_fit_score = numberOrDefault(candidate.ai_required_slot_fit_score);
     candidate.cpp_fallback_value_score = numberOrDefault(candidate.cpp_fallback_value_score);
-    candidate.version_or_release = stringOrEmpty(candidate.version_or_release);
-    candidate.api_or_component = stringOrEmpty(candidate.api_or_component);
-    candidate.behavior_change = stringOrEmpty(candidate.behavior_change);
+    candidate.version_or_release = stringOrEmpty(candidate.version_or_release || collected.version_or_release);
+    candidate.api_or_component = stringOrEmpty(candidate.api_or_component || collected.api_or_component);
+    candidate.behavior_change = stringOrEmpty(candidate.behavior_change || collected.behavior_change);
+    candidate.source_kind = stringOrEmpty(collected.source_kind || candidate.source_kind);
+    candidate.source_gap_risk = typeof collected.source_gap_risk === 'boolean'
+      ? collected.source_gap_risk
+      : Boolean(candidate.source_gap_risk);
+    candidate.main_eligible = typeof collected.main_eligible === 'boolean'
+      ? collected.main_eligible
+      : Boolean(candidate.main_eligible);
+    candidate.briefing_only = typeof collected.briefing_only === 'boolean'
+      ? collected.briefing_only
+      : Boolean(candidate.briefing_only);
+    candidate.reference_only = typeof collected.reference_only === 'boolean'
+      ? collected.reference_only
+      : Boolean(candidate.reference_only);
+    candidate.evidence_score = numberOrDefault(collected.evidence_score ?? candidate.evidence_score);
     candidate.evidence_notes = ensureArray(candidate.evidence_notes);
     candidate.cross_check_status = stringOrEmpty(candidate.cross_check_status || 'not-required');
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
@@ -113,7 +151,18 @@ function validateReporter(value, date, collectedCandidates = []) {
         candidate.cpp_fallback_value_score;
       candidate.selected = total >= 12;
     }
+    const rejectionReason = reporterCandidateRejectionReason(candidate);
+    if (candidate.selected && rejectionReason) {
+      candidate.selected = false;
+      rejectedMainIneligible.push({
+        title: candidate.title,
+        url: candidate.url,
+        source: candidate.source,
+        reason: rejectionReason
+      });
+    }
   }
+  value.rejected_main_ineligible_candidates = rejectedMainIneligible;
   return value;
 }
 
@@ -370,28 +419,33 @@ function sectionsAreDuplicate(left, right) {
     titleSimilarity(leftKey.title, rightKey.title) >= 0.68;
 }
 
-function candidateDuplicatesLocked(candidate, lockedSections) {
+function candidateDuplicatesSections(candidate, sections) {
   const candidateSection = {
     headline: candidate.title,
     published_date: candidate.published_date,
     sources: [{ title: candidate.source, url: candidate.url }]
   };
-  return lockedSections.some(section => sectionsAreDuplicate(candidateSection, section));
+  return sections.some(section => sectionsAreDuplicate(candidateSection, section));
 }
 
-function removeDuplicateSelections(reporter, lockedSections) {
+function removeDisallowedSelections(reporter, lockedSections, excludedSections = []) {
   const rejected = [];
   for (const candidate of ensureArray(reporter.candidates)) {
     if (!candidate.selected) continue;
-    if (candidateDuplicatesLocked(candidate, lockedSections)) {
+    if (candidateDuplicatesSections(candidate, lockedSections)) {
       candidate.selected = false;
-      rejected.push(candidate.title);
+      rejected.push({ title: candidate.title, reason: 'duplicate locked article' });
+      continue;
+    }
+    if (candidateDuplicatesSections(candidate, excludedSections)) {
+      candidate.selected = false;
+      rejected.push({ title: candidate.title, reason: 'excluded source-gap or demoted article' });
     }
   }
   return rejected;
 }
 
-function mergeLockedSections(lockedSections, generatedSections) {
+function mergeLockedSections(lockedSections, generatedSections, excludedSections = []) {
   const merged = [];
   const rejected = [];
   for (const section of lockedSections) {
@@ -401,7 +455,11 @@ function mergeLockedSections(lockedSections, generatedSections) {
   for (const section of generatedSections) {
     if (merged.length >= MAX_MAIN_ARTICLES) break;
     if (merged.some(existing => sectionsAreDuplicate(existing, section))) {
-      rejected.push(section.headline || section.category || 'untitled article');
+      rejected.push({ title: section.headline || section.category || 'untitled article', reason: 'duplicate locked article' });
+      continue;
+    }
+    if (excludedSections.some(existing => sectionsAreDuplicate(existing, section))) {
+      rejected.push({ title: section.headline || section.category || 'untitled article', reason: 'excluded source-gap or demoted article' });
       continue;
     }
     merged.push(section);
@@ -409,22 +467,31 @@ function mergeLockedSections(lockedSections, generatedSections) {
   return { sections: merged, rejected };
 }
 
-function buildLockedArticleContext(lockedSections) {
-  if (lockedSections.length === 0) return '';
-  const lockedSummary = lockedSections.map((section, index) => ({
+function sectionSummary(section, index) {
+  return {
     index: index + 1,
     headline: section.headline,
     category: section.category,
     urls: sectionUrls(section),
     source_titles: ensureArray(section.sources).map(source => source.title).filter(Boolean)
+  };
+}
+
+function buildLockedArticleContext(lockedSections, excludedSections = []) {
+  if (lockedSections.length === 0 && excludedSections.length === 0) return '';
+  const lockedSummary = lockedSections.map((section, index) => ({
+    ...sectionSummary(section, index)
   }));
+  const excludedSummary = excludedSections.map((section, index) => sectionSummary(section, index));
   return [
-    'Passed articles locked from previous quality attempts:',
-    JSON.stringify(lockedSummary, null, 2),
-    '',
-    'Keep these passed articles unchanged. Do not rewrite them except for formatting consistency.',
+    lockedSections.length > 0 ? 'Passed articles locked from previous quality attempts:' : '',
+    lockedSections.length > 0 ? JSON.stringify(lockedSummary, null, 2) : '',
+    lockedSections.length > 0 ? 'Keep these passed articles unchanged. Do not rewrite them except for formatting consistency.' : '',
+    excludedSections.length > 0 ? 'Excluded source-gap/demoted articles from previous attempts:' : '',
+    excludedSections.length > 0 ? JSON.stringify(excludedSummary, null, 2) : '',
+    excludedSections.length > 0 ? 'Do not select candidates or generate articles that duplicate these excluded URLs, titles, source names, or same source + published_date + similar title.' : '',
     'Generate only missing replacement articles. Avoid duplicate URLs, duplicate or near-identical headlines, and same source + same published_date + similar title.'
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 }
 
 function lockedArticleHeadlines(lockedSections) {
@@ -437,7 +504,6 @@ function issueLevelLockBlockers(qualityReport) {
     if (deduction.category === 'composition') {
       return /main articles|No AI article/i.test(deduction.reason);
     }
-    if (deduction.category === 'source-integrity') return true;
     if (deduction.category === 'hal-relevance') {
       return /No AI|Expected at least|weak HAL|Camera HAL \/ Android Camera/i.test(deduction.reason);
     }
@@ -469,14 +535,105 @@ function appendUniqueLockedArticles(currentLocked, candidates) {
   return locked;
 }
 
+function appendUniqueSections(currentSections, candidates) {
+  const sections = [...currentSections];
+  for (const section of candidates) {
+    if (!sections.some(existing => sectionsAreDuplicate(existing, section))) {
+      sections.push(section);
+    }
+  }
+  return sections;
+}
+
+function sectionLabel(section) {
+  return section.headline || section.category || 'untitled article';
+}
+
+function sourceGapSections(editor, factCheck) {
+  return ensureArray(editor.sections).filter(section => sectionHasSourceGap(section, factCheck));
+}
+
+function finalArticleSlotDistribution(sections) {
+  const distribution = {
+    android_camera_platform_api: 0,
+    camerax_aosp_camera_compatibility: 0,
+    linux_camera_libcamera_v4l2: 0,
+    ai_camera_path_hal_workflow: 0,
+    cpp_toolchain_fallback: 0,
+    other: 0
+  };
+  for (const section of ensureArray(sections)) {
+    const body = [
+      section.category,
+      section.headline,
+      section.evidence_summary,
+      section.camera_hal_perspective,
+      section.article_type,
+      ensureArray(section.sources).map(source => `${source.title} ${source.url}`).join(' ')
+    ].join(' ');
+    if (/AI|agent|LLM|NPU|GPU|on-device|inference|model/i.test(body) &&
+      /camera|HAL|stream|buffer|ImageAnalysis|workflow|latency|thermal|power/i.test(body)) {
+      distribution.ai_camera_path_hal_workflow += 1;
+    } else if (/libcamera|V4L2|Linux camera|media controller/i.test(body)) {
+      distribution.linux_camera_libcamera_v4l2 += 1;
+    } else if (/CameraX|AOSP Camera|CDD|CTS|VTS|Camera ITS|compatibility/i.test(body)) {
+      distribution.camerax_aosp_camera_compatibility += 1;
+    } else if (/Android Camera|Camera2|platform API|Camera HAL|request|result|metadata|stream|buffer/i.test(body)) {
+      distribution.android_camera_platform_api += 1;
+    } else if (/C\+\+|LLVM|Clang|NDK|toolchain/i.test(body)) {
+      distribution.cpp_toolchain_fallback += 1;
+    } else {
+      distribution.other += 1;
+    }
+  }
+  return distribution;
+}
+
+function recommendedFixMentionsSection(item, section) {
+  const haystack = normalizeTitle(item);
+  const labels = [
+    section.headline,
+    section.category,
+    ...ensureArray(section.sources).flatMap(source => [source.title, source.url])
+  ].map(normalizeTitle).filter(Boolean);
+  return labels.some(label => haystack.includes(label) || label.includes(haystack));
+}
+
+function buildSectionRepairPlan(editor, qualityReport, factCheck) {
+  const repairableCategories = new Set(['required-fields', 'evidence-specificity', 'hal-depth', 'actionability']);
+  return ensureArray(editor.sections).map(section => {
+    const deductions = ensureArray(qualityReport?.deductions)
+      .filter(deduction => repairableCategories.has(deduction.category) && deductionMatchesSection(deduction, section));
+    const recommendedFixes = ensureArray(factCheck?.recommended_fixes)
+      .filter(item => recommendedFixMentionsSection(item, section));
+    const hasSourceGap = sectionHasSourceGap(section, factCheck);
+    const action = hasSourceGap
+      ? 'replace-or-demote'
+      : deductions.length > 0 || recommendedFixes.length > 0 ? 'repair-section' : 'preserve';
+    return {
+      headline: sectionLabel(section),
+      sources: sectionUrls(section),
+      action,
+      source_gap: hasSourceGap,
+      deductions: deductions.map(deduction => ({
+        category: deduction.category,
+        points: deduction.points,
+        reason: deduction.reason,
+        location: deduction.location || ''
+      })),
+      recommended_fixes: recommendedFixes
+    };
+  }).filter(item => item.action !== 'preserve');
+}
+
 function buildRetryHistoryMarkdown(date, attempts) {
   const rows = attempts.map(item => [
     item.attempt,
     item.model || 'default',
     `${item.score}/${item.threshold}`,
     item.status,
-    item.locked_article_headlines.length,
-    item.rejected_duplicate_headlines.length,
+    ensureArray(item.locked_sections).length,
+    ensureArray(item.rejected_duplicate_headlines).length,
     item.source_gap_count,
     item.must_fix_count
   ]);
@@ -490,8 +647,14 @@ ${attempts.map(item => `## Attempt ${item.attempt}
 
 - Selected articles: ${item.selected_article_headlines.join('; ') || 'none'}
 - Locked articles: ${item.locked_article_headlines.join('; ') || 'none'}
+- Source gap sections: ${ensureArray(item.source_gap_sections).join('; ') || 'none'}
+- Demoted sections: ${ensureArray(item.demoted_sections).join('; ') || 'none'}
+- Replaced sections: ${ensureArray(item.replaced_sections).join('; ') || 'none'}
+- Repair actions: ${ensureArray(item.repair_actions).join('; ') || 'none'}
+- Final slot distribution: ${JSON.stringify(item.final_article_slot_distribution || {})}
+- Rejected main-ineligible candidates: ${ensureArray(item.rejected_main_ineligible_candidates).map(candidate => `${candidate.title || candidate} (${candidate.reason || 'rejected'})`).join('; ') || 'none'}
 - Lock blockers: ${ensureArray(item.lock_blockers).join('; ') || 'none'}
-- Rejected duplicate articles: ${item.rejected_duplicate_headlines.join('; ') || 'none'}
+- Rejected duplicate articles: ${ensureArray(item.rejected_duplicate_headlines).map(entry => typeof entry === 'string' ? entry : `${entry.title || 'untitled'} (${entry.reason || 'rejected'})`).join('; ') || 'none'}
 - Deductions: ${item.deductions.length === 0 ? 'none' : item.deductions.map(deduction => `${deduction.points}pt ${deduction.category}${deduction.location ? ` (${deduction.location})` : ''}: ${deduction.reason}`).join('; ')}
 `).join('\n')}`;
 }
@@ -505,6 +668,7 @@ async function main() {
   const sourcesPath = path.join(root, 'docs', 'news-sources.md');
   const editorialPolicyPath = path.join(root, 'docs', 'editorial-policy.md');
   const newsletterTemplatePath = path.join(root, 'docs', 'newsletter-template.md');
+  const goldenExamplePath = path.join(root, 'docs', 'golden-examples', 'manual-quality-newsletter.md');
   const newsroomDir = path.join(root, 'newsroom', date);
   const newsletterDir = path.join(root, 'newsletters', date);
 
@@ -519,6 +683,7 @@ async function main() {
   const sourcesMarkdown = readTextIfExists(sourcesPath);
   const editorialPolicy = readTextIfExists(editorialPolicyPath);
   const newsletterTemplate = readTextIfExists(newsletterTemplatePath);
+  const goldenExample = readTextIfExists(goldenExamplePath);
   const sourceRegistry = fs.existsSync(sourceRegistryPath) ? readJson(sourceRegistryPath) : null;
   fs.mkdirSync(newsroomDir, { recursive: true });
   fs.mkdirSync(newsletterDir, { recursive: true });
@@ -534,7 +699,12 @@ async function main() {
     editorialPolicy,
     '',
     'docs/newsletter-template.md:',
-    newsletterTemplate
+    newsletterTemplate,
+    '',
+    'docs/golden-examples/manual-quality-newsletter.md:',
+    goldenExample,
+    '',
+    'Use the golden example only as a style and structure reference. Do not copy facts, dates, versions, API/component names, behavior changes, sources, or action items unless they are present in the current candidate JSON.'
   ].join('\n');
 
   const maxQualityRetries = integerOrDefault(process.env.NEWSROOM_MAX_QUALITY_RETRIES, 3);
@@ -545,9 +715,10 @@ async function main() {
   let editor = null;
   let factCheck = null;
   let qualityReport = null;
+  let excludedSections = [];
 
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
-    const lockedContext = buildLockedArticleContext(lockedSections);
+    const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
     const reporterStage = `reporter attempt ${attempt}/${totalAttempts}`;
     const editorStage = `editor attempt ${attempt}/${totalAttempts}`;
     const factCheckStage = `fact-checker attempt ${attempt}/${totalAttempts}`;
@@ -560,7 +731,10 @@ async function main() {
         'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, on-device AI, NPU/GPU, and developer productivity.',
         'Give low scores to product promotion, general IT news, and weak Camera HAL relevance.',
         'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
+        'For main article selection, selected=true is allowed only when main_eligible=true, source_gap_risk=false, evidence_score >= 6, and camera_hal_relevance_score + android_camera_relevance_score + practical_actionability_score >= 8.',
+        'Set selected=false for documentation_page, rolling_page, blog_index, briefing_only, reference_only, source_gap_risk=true, and main_eligible=false candidates.',
         'For every selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
+        'Preserve source_kind, source_gap_risk, main_eligible, briefing_only, reference_only, and evidence_score from the collected candidate metadata.',
         'If the source is a rolling page such as release notes or a watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides a date.',
         'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
         'Candidate-only or requiresCrossCheck leads must not be selected unless cross_check_status is official-source or cross-checked.',
@@ -579,7 +753,7 @@ async function main() {
       `${commonContext}\n\n${lockedContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndata/news-sources.json:\n${JSON.stringify(sourceRegistry, null, 2)}\n\ndocs/news-sources.md:\n${sourcesMarkdown}`,
       reporterSchema
     ), date, ensureArray(candidates.candidates));
-    const rejectedReporterDuplicates = removeDuplicateSelections(reporter, lockedSections);
+    const rejectedReporterDuplicates = removeDisallowedSelections(reporter, lockedSections, excludedSections);
     writeJson(path.join(newsroomDir, `reporter-candidates-attempt-${attempt}.json`), reporter);
 
     editor = validateEditor(await callGeminiJson(
@@ -589,6 +763,9 @@ async function main() {
         'Write a Korean technical newsletter draft that a Camera HAL engineer can read in 10 minutes.',
         'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
         'Create exactly 5 main articles when enough non-duplicate source material exists; 4 main articles are acceptable only when strong candidates are insufficient.',
+        `Final main article count must stay between ${MIN_MAIN_ARTICLES} and ${MAX_MAIN_ARTICLES}; do not force 5 articles when only 4 strong eligible candidates exist.`,
+        'Use selected reporter candidates as main article inputs. Do not turn selected=false, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
+        'Target article slot mix: Android Camera / platform API 1-2; CameraX / AOSP Camera / compatibility 1-2; Linux camera / libcamera / V4L2 0-1; AI plus camera input path or HAL workflow at least 1; C++ / toolchain fallback 0-1.',
         'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
         'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it has concrete HAL native-code value.',
         lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles.' : '',
@@ -615,7 +792,8 @@ async function main() {
       editorSchema
     ), date, reporter);
 
-    const merged = mergeLockedSections(lockedSections, editor.sections);
+    const merged = mergeLockedSections(lockedSections, editor.sections, excludedSections);
+    let rejectedGeneratedSections = [...merged.rejected];
     editor.sections = merged.sections;
     await resolveIssueArticleImages(editor, { root });
     warnResolvedImageFallbacks(editor);
@@ -648,9 +826,72 @@ async function main() {
     writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
     fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
 
+    let repairActions = [];
+    let demotedSections = sourceGapSections(editor, factCheck);
+    let replacedSections = [];
+    const repairPlan = buildSectionRepairPlan(editor, qualityReport, factCheck);
+    if (qualityReport.status !== 'PASS' && repairPlan.length > 0) {
+      repairActions = repairPlan.map(item => `${item.action}: ${item.headline}`);
+      const repairStage = `editor repair attempt ${attempt}/${totalAttempts}`;
+      const repairFactCheckStage = `fact-checker repair attempt ${attempt}/${totalAttempts}`;
+      console.warn(`Quality attempt ${attempt}/${totalAttempts} is below threshold; running editor repair pass for ${repairPlan.length} section(s).`);
+      const repairEditor = validateEditor(await callGeminiJson(
+        repairStage,
+        [
+          'You are the AI repair editor for Camera HAL SW Newsletter.',
+          'Return a full editor JSON draft, but only change sections listed in the repair plan.',
+          'For required-fields, evidence-specificity, hal-depth, and actionability deductions, repair only the affected section.',
+          'For source_gap=true sections, prefer replacement or demotion to briefing/reference over text repair.',
+          'Replacement main articles must use reporter candidates with selected=true, main_eligible=true, source_gap_risk=false, evidence_score >= 6, and HAL/actionability score >= 8.',
+          'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
+          `Keep ${MIN_MAIN_ARTICLES}-${MAX_MAIN_ARTICLES} main articles; 5 is the target only when enough strong eligible candidates exist.`,
+          'Maintain the slot policy: Android Camera/platform API 1-2; CameraX/AOSP/compatibility 1-2; Linux camera/libcamera/V4L2 0-1; at least 1 AI camera path/HAL workflow article; C++/toolchain fallback 0-1.',
+          'Use the golden example only for article structure and evidence/actionability style. Do not copy facts absent from current reporter candidates.',
+          'Return only JSON matching the schema.'
+        ].join('\n'),
+        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nCurrent editor draft JSON:\n${JSON.stringify(editor, null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality report JSON:\n${JSON.stringify(qualityReport, null, 2)}`,
+        editorSchema
+      ), date, reporter);
+      const repairMerged = mergeLockedSections(lockedSections, repairEditor.sections, excludedSections.concat(demotedSections));
+      rejectedGeneratedSections = rejectedGeneratedSections.concat(repairMerged.rejected);
+      replacedSections = repairMerged.rejected
+        .filter(item => item.reason === 'excluded source-gap or demoted article')
+        .map(item => item.title);
+      editor = {
+        ...repairEditor,
+        sections: repairMerged.sections
+      };
+      await resolveIssueArticleImages(editor, { root });
+      warnResolvedImageFallbacks(editor);
+      writeJson(path.join(newsroomDir, `editor-repair-attempt-${attempt}.json`), editor);
+      fs.writeFileSync(path.join(newsroomDir, `editor-repair-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
+
+      factCheck = validateFactCheck(await callGeminiJson(
+        repairFactCheckStage,
+        [
+          'You are the AI fact checker for the repaired Camera HAL SW Newsletter draft.',
+          'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
+          'Treat any remaining source gap in a main article as must_fix.',
+          'Return only JSON matching the schema.'
+        ].join('\n'),
+        `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+        factCheckSchema
+      ));
+      writeJson(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.json`), factCheck);
+      fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
+
+      qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
+        threshold: QUALITY_THRESHOLD
+      });
+      writeJson(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.json`), qualityReport);
+      fs.writeFileSync(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
+      demotedSections = demotedSections.concat(sourceGapSections(editor, factCheck));
+    }
+
+    excludedSections = appendUniqueSections(excludedSections, demotedSections);
     const lockSelection = selectLockedArticles(editor, qualityReport, factCheck);
     lockedSections = appendUniqueLockedArticles(lockedSections, lockSelection.articles);
-    const rejectedDuplicateHeadlines = [...rejectedReporterDuplicates, ...merged.rejected];
+    const rejectedDuplicateHeadlines = [...rejectedReporterDuplicates, ...rejectedGeneratedSections];
     const lockBlockers = lockSelection.blockers.map(deduction => `${deduction.category}: ${deduction.reason}`);
     retryHistory.push({
       attempt,
@@ -665,6 +906,13 @@ async function main() {
       deductions: ensureArray(qualityReport.deductions),
       selected_article_headlines: lockedArticleHeadlines(editor.sections),
       locked_article_headlines: lockedArticleHeadlines(lockedSections),
+      source_gap_sections: sourceGapSections(editor, factCheck).map(sectionLabel),
+      demoted_sections: demotedSections.map(sectionLabel),
+      replaced_sections: replacedSections,
+      locked_sections: lockedSections.map((section, index) => sectionSummary(section, index)),
+      repair_actions: repairActions,
+      final_article_slot_distribution: finalArticleSlotDistribution(editor.sections),
+      rejected_main_ineligible_candidates: ensureArray(reporter.rejected_main_ineligible_candidates),
       lock_blockers: lockBlockers,
       rejected_duplicate_headlines: rejectedDuplicateHeadlines,
       source_gap_count: qualityReport.metrics.source_gap_count,
