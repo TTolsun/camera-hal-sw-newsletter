@@ -95,6 +95,13 @@ function reporterCandidateRejectionReason(candidate) {
   return '';
 }
 
+function reporterCandidateMainArticleBlockReason(candidate) {
+  const reason = reporterCandidateRejectionReason(candidate);
+  if (reason) return reason;
+  if (candidate.selected !== true) return 'selected=false';
+  return '';
+}
+
 function validateReporter(value, date, collectedCandidates = []) {
   const collectedByUrl = new Map();
   for (const candidate of ensureArray(collectedCandidates)) {
@@ -405,6 +412,52 @@ function sectionUrls(section) {
   return ensureArray(section.sources).map(source => source && source.url).filter(Boolean);
 }
 
+function urlKeys(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return [];
+  const keys = new Set([raw]);
+  try {
+    const parsed = new URL(raw);
+    parsed.hash = '';
+    parsed.search = '';
+    const normalized = parsed.toString().replace(/\/$/, '');
+    keys.add(normalized);
+    keys.add(normalized.toLowerCase());
+  } catch {
+    keys.add(raw.replace(/[?#].*$/, '').replace(/\/$/, '').toLowerCase());
+  }
+  return [...keys].filter(Boolean);
+}
+
+function reporterCandidateUrlMap(reporter) {
+  const map = new Map();
+  function add(key, candidate) {
+    if (!key) return;
+    if (!map.has(key)) {
+      map.set(key, candidate);
+      return;
+    }
+    if (map.get(key) !== candidate) {
+      map.set(key, null);
+    }
+  }
+
+  for (const candidate of ensureArray(reporter.candidates)) {
+    for (const value of [candidate.url, candidate.article_url, candidate.articleUrl]) {
+      for (const key of urlKeys(value)) add(key, candidate);
+    }
+  }
+  return map;
+}
+
+function candidateForSourceUrl(sourceUrl, candidateMap) {
+  for (const key of urlKeys(sourceUrl)) {
+    const candidate = candidateMap.get(key);
+    if (candidate) return candidate;
+  }
+  return null;
+}
+
 function sectionsAreDuplicate(left, right) {
   const leftUrls = new Set(sectionUrls(left));
   if (sectionUrls(right).some(url => leftUrls.has(url))) return true;
@@ -553,6 +606,65 @@ function sourceGapSections(editor, factCheck) {
   return ensureArray(editor.sections).filter(section => sectionHasSourceGap(section, factCheck));
 }
 
+function reporterEligibilityFindings(editor, reporter, lockedSections = []) {
+  const candidateMap = reporterCandidateUrlMap(reporter);
+  const findings = [];
+  for (const section of ensureArray(editor.sections)) {
+    if (lockedSections.some(locked => sectionsAreDuplicate(section, locked))) continue;
+    for (const source of ensureArray(section.sources)) {
+      const candidate = candidateForSourceUrl(source?.url, candidateMap);
+      if (!candidate) continue;
+      const reason = reporterCandidateMainArticleBlockReason(candidate);
+      if (!reason) continue;
+      findings.push({
+        section,
+        headline: sectionLabel(section),
+        source_title: source.title || candidate.source || candidate.title || 'unknown source',
+        source_url: source.url,
+        candidate_title: candidate.title,
+        candidate_url: candidate.url,
+        reason
+      });
+    }
+  }
+  return findings;
+}
+
+function eligibilitySourceGapMessage(finding) {
+  return [
+    'Reporter eligibility violation',
+    `section="${finding.headline}"`,
+    `source="${finding.source_title}"`,
+    `url=${finding.source_url || finding.candidate_url || 'unknown'}`,
+    `candidate="${finding.candidate_title || 'unknown'}"`,
+    `reason=${finding.reason}`,
+    'action=replace-or-demote'
+  ].join('; ');
+}
+
+function applyReporterEligibilityFindingsToFactCheck(factCheck, findings) {
+  if (findings.length === 0) return factCheck;
+  const sourceGaps = [...ensureArray(factCheck.source_gaps)];
+  const seen = new Set(sourceGaps);
+  for (const finding of findings) {
+    const message = eligibilitySourceGapMessage(finding);
+    if (!seen.has(message)) {
+      seen.add(message);
+      sourceGaps.push(message);
+    }
+  }
+  return {
+    ...factCheck,
+    status: 'NEEDS_FIX',
+    source_gaps: sourceGaps,
+    source_gap_count: sourceGaps.length,
+    final_comment: [
+      factCheck.final_comment,
+      'Reporter eligibility violations were added as source gaps and require replacement or demotion.'
+    ].filter(Boolean).join(' ')
+  };
+}
+
 function finalArticleSlotDistribution(sections) {
   const distribution = {
     android_camera_platform_api: 0,
@@ -599,15 +711,17 @@ function recommendedFixMentionsSection(item, section) {
   return labels.some(label => haystack.includes(label) || label.includes(haystack));
 }
 
-function buildSectionRepairPlan(editor, qualityReport, factCheck) {
+function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings = []) {
   const repairableCategories = new Set(['required-fields', 'evidence-specificity', 'hal-depth', 'actionability']);
   return ensureArray(editor.sections).map(section => {
     const deductions = ensureArray(qualityReport?.deductions)
       .filter(deduction => repairableCategories.has(deduction.category) && deductionMatchesSection(deduction, section));
     const recommendedFixes = ensureArray(factCheck?.recommended_fixes)
       .filter(item => recommendedFixMentionsSection(item, section));
+    const sectionEligibilityFindings = eligibilityFindings.filter(finding => finding.section === section);
     const hasSourceGap = sectionHasSourceGap(section, factCheck);
-    const action = hasSourceGap
+    const hasReporterEligibilityBlock = sectionEligibilityFindings.length > 0;
+    const action = hasSourceGap || hasReporterEligibilityBlock
       ? 'replace-or-demote'
       : deductions.length > 0 || recommendedFixes.length > 0 ? 'repair-section' : 'preserve';
     return {
@@ -615,6 +729,12 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck) {
       sources: sectionUrls(section),
       action,
       source_gap: hasSourceGap,
+      reporter_eligibility_violations: sectionEligibilityFindings.map(finding => ({
+        source_title: finding.source_title,
+        source_url: finding.source_url,
+        candidate_title: finding.candidate_title,
+        reason: finding.reason
+      })),
       deductions: deductions.map(deduction => ({
         category: deduction.category,
         points: deduction.points,
@@ -652,6 +772,7 @@ ${attempts.map(item => `## Attempt ${item.attempt}
 - Replaced sections: ${ensureArray(item.replaced_sections).join('; ') || 'none'}
 - Repair actions: ${ensureArray(item.repair_actions).join('; ') || 'none'}
 - Final slot distribution: ${JSON.stringify(item.final_article_slot_distribution || {})}
+- Reporter eligibility blocked sections: ${ensureArray(item.reporter_eligibility_blocked_sections).map(item => `${item.headline || 'untitled'} (${item.reason || 'blocked'})`).join('; ') || 'none'}
 - Rejected main-ineligible candidates: ${ensureArray(item.rejected_main_ineligible_candidates).map(candidate => `${candidate.title || candidate} (${candidate.reason || 'rejected'})`).join('; ') || 'none'}
 - Lock blockers: ${ensureArray(item.lock_blockers).join('; ') || 'none'}
 - Rejected duplicate articles: ${ensureArray(item.rejected_duplicate_headlines).map(entry => typeof entry === 'string' ? entry : `${entry.title || 'untitled'} (${entry.reason || 'rejected'})`).join('; ') || 'none'}
@@ -817,6 +938,8 @@ async function main() {
       `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
       factCheckSchema
     ));
+    let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
+    factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
     writeJson(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.json`), factCheck);
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
@@ -827,9 +950,12 @@ async function main() {
     fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
 
     let repairActions = [];
-    let demotedSections = sourceGapSections(editor, factCheck);
+    let demotedSections = appendUniqueSections(
+      sourceGapSections(editor, factCheck),
+      eligibilityFindings.map(finding => finding.section)
+    );
     let replacedSections = [];
-    const repairPlan = buildSectionRepairPlan(editor, qualityReport, factCheck);
+    const repairPlan = buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings);
     if (qualityReport.status !== 'PASS' && repairPlan.length > 0) {
       repairActions = repairPlan.map(item => `${item.action}: ${item.headline}`);
       const repairStage = `editor repair attempt ${attempt}/${totalAttempts}`;
@@ -842,6 +968,7 @@ async function main() {
           'Return a full editor JSON draft, but only change sections listed in the repair plan.',
           'For required-fields, evidence-specificity, hal-depth, and actionability deductions, repair only the affected section.',
           'For source_gap=true sections, prefer replacement or demotion to briefing/reference over text repair.',
+          'For reporter_eligibility_violations, replace or demote the section. Do not repair text around an ineligible source.',
           'Replacement main articles must use reporter candidates with selected=true, main_eligible=true, source_gap_risk=false, evidence_score >= 6, and HAL/actionability score >= 8.',
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           `Keep ${MIN_MAIN_ARTICLES}-${MAX_MAIN_ARTICLES} main articles; 5 is the target only when enough strong eligible candidates exist.`,
@@ -877,6 +1004,8 @@ async function main() {
         `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
         factCheckSchema
       ));
+      eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
+      factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
       writeJson(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.json`), factCheck);
       fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
@@ -885,7 +1014,10 @@ async function main() {
       });
       writeJson(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.json`), qualityReport);
       fs.writeFileSync(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
-      demotedSections = demotedSections.concat(sourceGapSections(editor, factCheck));
+      demotedSections = appendUniqueSections(
+        demotedSections,
+        sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
+      );
     }
 
     excludedSections = appendUniqueSections(excludedSections, demotedSections);
@@ -912,6 +1044,11 @@ async function main() {
       locked_sections: lockedSections.map((section, index) => sectionSummary(section, index)),
       repair_actions: repairActions,
       final_article_slot_distribution: finalArticleSlotDistribution(editor.sections),
+      reporter_eligibility_blocked_sections: eligibilityFindings.map(finding => ({
+        headline: finding.headline,
+        source_url: finding.source_url,
+        reason: finding.reason
+      })),
       rejected_main_ineligible_candidates: ensureArray(reporter.rejected_main_ineligible_candidates),
       lock_blockers: lockBlockers,
       rejected_duplicate_headlines: rejectedDuplicateHeadlines,
