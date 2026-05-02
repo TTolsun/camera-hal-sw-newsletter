@@ -435,7 +435,7 @@ function issueLevelLockBlockers(qualityReport) {
   return ensureArray(qualityReport?.deductions).filter(deduction => {
     if (stringOrEmpty(deduction.location)) return false;
     if (deduction.category === 'composition') {
-      return /main articles/i.test(deduction.reason);
+      return /main articles|No AI article/i.test(deduction.reason);
     }
     if (deduction.category === 'source-integrity') return true;
     if (deduction.category === 'hal-relevance') {
