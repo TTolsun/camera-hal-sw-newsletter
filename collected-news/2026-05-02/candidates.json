@@ -4,7 +4,7 @@
   "newsletter_date": "2026-05-02",
   "audience": "Camera HAL / Android Camera / C++ engineer",
   "lookback_days": 21,
-  "generated_at": "2026-05-02T01:44:46.167Z",
+  "generated_at": "2026-05-02T02:54:17.732Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -433,7 +433,7 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "title": "دوربین &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/core/camera",
       "publishedAt": "",
       "published_date": "",
@@ -458,32 +458,32 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "Android Camera HAL icon",
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Camera Documentation",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png?hl=fa",
+          "sourceUrl": "https://source.android.com/docs/core/camera",
+          "articleUrl": "https://source.android.com/docs/core/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "نماد دوربین اندروید HAL",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
           "validationStatus": "ok",
           "contentLength": 2242
-        },
-        {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android camera architecture",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok",
-          "contentLength": 43971
         }
       ],
       "image_candidates": [
@@ -502,32 +502,32 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "Android Camera HAL icon",
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Camera Documentation",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png?hl=fa",
+          "sourceUrl": "https://source.android.com/docs/core/camera",
+          "articleUrl": "https://source.android.com/docs/core/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "نماد دوربین اندروید HAL",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
           "validationStatus": "ok",
           "contentLength": 2242
-        },
-        {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android camera architecture",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok",
-          "contentLength": 43971
         }
       ],
       "candidateTier": "main-article",
@@ -557,7 +557,7 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Neue Funktionen &nbsp;|&nbsp; Android Open Source Project",
+      "title": "O que há de novo &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/whatsnew",
       "publishedAt": "",
       "published_date": "",
@@ -582,21 +582,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=de",
-          "sourceUrl": "https://source.android.com/docs/whatsnew",
-          "articleUrl": "https://source.android.com/docs/whatsnew",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP What's New / Release Notes",
-          "validationStatus": "ok",
-          "contentLength": 1165
-        },
-        {
-          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=tr",
+          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -626,21 +612,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=de",
-          "sourceUrl": "https://source.android.com/docs/whatsnew",
-          "articleUrl": "https://source.android.com/docs/whatsnew",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP What's New / Release Notes",
-          "validationStatus": "ok",
-          "contentLength": 1165
-        },
-        {
-          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=tr",
+          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -681,7 +653,7 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "เอกสารนิยามความเข้ากันได้กับ Android &nbsp;|&nbsp; Android Open Source Project",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/compatibility/cdd",
       "publishedAt": "",
       "published_date": "",
@@ -704,20 +676,6 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
-          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -734,20 +692,6 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
-          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "main-article",
@@ -788,7 +732,7 @@
       "camera_hal_relevance_score": 96,
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=vi",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "sourceKind": "og",
@@ -832,7 +776,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=vi",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "sourceKind": "og",
@@ -1521,7 +1465,7 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Android 보안 및 업데이트 게시판 &nbsp;|&nbsp; Android Open Source Project",
+      "title": "Android Security and Update Bulletins &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/security/bulletin",
       "publishedAt": "",
       "published_date": "",
@@ -1546,7 +1490,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/identity/identity-hero.svg?hl=ko",
+          "url": "https://developer.android.com/images/identity/identity-hero.svg",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin",
           "sourceKind": "article-img",
@@ -1560,7 +1504,7 @@
           "contentLength": 6142
         },
         {
-          "url": "https://developer.android.com/images/cluster-illustrations/developer-preview.svg?hl=ko",
+          "url": "https://developer.android.com/images/cluster-illustrations/developer-preview.svg",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin",
           "sourceKind": "article-img",
@@ -1590,7 +1534,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/identity/identity-hero.svg?hl=ko",
+          "url": "https://developer.android.com/images/identity/identity-hero.svg",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin",
           "sourceKind": "article-img",
@@ -1604,7 +1548,7 @@
           "contentLength": 6142
         },
         {
-          "url": "https://developer.android.com/images/cluster-illustrations/developer-preview.svg?hl=ko",
+          "url": "https://developer.android.com/images/cluster-illustrations/developer-preview.svg",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin",
           "sourceKind": "article-img",
@@ -1769,18 +1713,18 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Android latest updates &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers",
+      "title": "آخرین به‌روزرسانی‌های اندروید &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers",
       "url": "https://developer.android.com/latest-updates",
       "publishedAt": "",
       "published_date": "",
-      "summary": "Discover what's new across the Android ecosystem.",
+      "summary": "با جدیدترین‌های اکوسیستم اندروید آشنا شوید.",
       "relevanceScore": 53,
       "relevance_score": 53,
       "cameraHalRelevanceScore": 53,
       "camera_hal_relevance_score": 53,
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=fa",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "og",
@@ -1808,7 +1752,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=fa",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "article-img",
@@ -1819,12 +1763,12 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 3855
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=fa",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "og",
@@ -1852,7 +1796,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=fa",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "article-img",
@@ -1863,7 +1807,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 3855
+          "contentLength": 1760
         }
       ],
       "candidateTier": "short-news",
@@ -2945,11 +2889,11 @@
           "width": 1920,
           "height": 1080,
           "alt": "Introducing Claude Opus 4.7",
-          "contentType": "image/png",
+          "contentType": "image/webp",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
           "validationStatus": "ok",
-          "contentLength": 268878
+          "contentLength": 88588
         },
         {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/a62b6eb169818f14c35b7a192af269e283f8fa93-1000x1000.svg",
@@ -2989,11 +2933,11 @@
           "width": 1920,
           "height": 1080,
           "alt": "Introducing Claude Opus 4.7",
-          "contentType": "image/png",
+          "contentType": "image/webp",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
           "validationStatus": "ok",
-          "contentLength": 268878
+          "contentLength": 88588
         },
         {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/a62b6eb169818f14c35b7a192af269e283f8fa93-1000x1000.svg",
@@ -3279,7 +3223,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6301
+          "contentLength": 0
         }
       ],
       "image_candidates": [
@@ -3323,7 +3267,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6301
+          "contentLength": 0
         }
       ],
       "candidateTier": "reference-candidate",
@@ -3755,6 +3699,10 @@
     {
       "source": "LLVM Project Blog",
       "message": "404 Not Found"
+    },
+    {
+      "source": "요즘IT",
+      "message": "403 Forbidden"
     }
   ]
 }
