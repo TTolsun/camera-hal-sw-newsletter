@@ -1,17 +1,11 @@
 {
   "schema_version": 1,
   "date": "2026-05-02",
-  "score": 84,
-  "threshold": 90,
+  "score": 88,
+  "threshold": 95,
   "status": "NEEDS_FIX",
-  "summary": "Quality score 84/90; resolve source gaps and deductions before publication.",
+  "summary": "Quality score 88/95; improve the deductions before publication.",
   "deductions": [
-    {
-      "category": "composition",
-      "points": 4,
-      "reason": "Expected 4-5 main articles, found 6.",
-      "location": ""
-    },
     {
       "category": "source-integrity",
       "points": 10,

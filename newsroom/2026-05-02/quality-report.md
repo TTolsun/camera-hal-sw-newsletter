@@ -2,10 +2,10 @@
 
 ## Score
 
-- Score: 84/100
-- Threshold: 90
+- Score: 88/100
+- Threshold: 95
 - Status: NEEDS_FIX
-- Summary: Quality score 84/90; resolve source gaps and deductions before publication.
+- Summary: Quality score 88/95; improve the deductions before publication.
 
 ## Metrics
 
@@ -19,6 +19,5 @@
 
 ## Deductions
 
-- 4 pt [composition] Expected 4-5 main articles, found 6.
 - 10 pt [source-integrity] Fact checker reported 6 source gap(s).
 - 2 pt [hal-relevance] 1 selected reporter candidate(s) have weak HAL/actionability scores.

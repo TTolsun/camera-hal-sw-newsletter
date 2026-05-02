@@ -45,7 +45,7 @@ Validated 12 article images.
 
 ## Quality Gate
 
-- Quality score: 84/100
-- Quality threshold: 90
+- Quality score: 88/100
+- Quality threshold: 95
 - Quality status: NEEDS_FIX
 - Top deductions: 10pt source-integrity; 2pt hal-relevance

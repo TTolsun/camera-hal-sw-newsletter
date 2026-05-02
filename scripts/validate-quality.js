@@ -84,7 +84,7 @@ function changedNewsletterDates() {
   const dates = new Set();
   for (const file of changedFilesFromGit()) {
     const normalized = file.replace(/\\/g, '/');
-    const match = normalized.match(/^newsletters\/(\d{4}-\d{2}-\d{2})\//);
+    const match = normalized.match(/^(?:newsletters|newsroom|collected-news)\/(\d{4}-\d{2}-\d{2})\//);
     if (match) dates.add(match[1]);
   }
   return dates;

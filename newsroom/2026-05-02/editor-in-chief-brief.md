@@ -24,8 +24,8 @@ Android 개발 생산성 향상을 위한 새로운 AI 기반 CLI 도구 및 에
 
 ## Quality Gate
 
-- Quality score: 84/100
-- Quality threshold: 90
+- Quality score: 88/100
+- Quality threshold: 95
 - Quality status: NEEDS_FIX
 - Top deductions: 10pt source-integrity; 2pt hal-relevance
 
