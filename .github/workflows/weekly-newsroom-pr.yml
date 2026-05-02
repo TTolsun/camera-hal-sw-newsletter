@@ -180,6 +180,21 @@ jobs:
               labels: ['newsletter', 'editor-review']
             });
 
+      - name: Upload newsroom debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsroom-debug-${{ github.run_id }}
+          path: |
+            .tmp/newsletter-date.txt
+            .tmp/newsletter-generation-status.json
+            collected-news/**
+            newsroom/**
+            newsletters/**
+            data/newsletters.json
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Fail if generation, validation, or fact check failed
         if: steps.generate.outcome == 'failure' || steps.validate.outcome == 'failure' || steps.generation-status.outputs.status == 'NEEDS_FIX'
         run: |
