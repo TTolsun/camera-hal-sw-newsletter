@@ -136,8 +136,14 @@ npm.cmd run validate:quality
 
 ## Collector와 Source Eligibility
 
-collector는 후보마다 main article eligibility metadata를 붙입니다.
+collector는 후보마다 schema v5 eligibility metadata를 붙입니다.
 
+- `collectionMode`
+- `isArticleCandidate`
+- `isWatchPage`
+- `hasDatedEvidence`
+- `evidenceLevel`
+- `finalSelectionEligibility`
 - `source_kind`
 - `has_published_date`
 - `has_version_or_release`
@@ -149,7 +155,11 @@ collector는 후보마다 main article eligibility metadata를 붙입니다.
 - `reference_only`
 - `evidence_score`
 
-`documentation_page`, `rolling_page`, `blog_index`는 기본적으로 main article 후보가 아닙니다. Source-specific parser가 구체 release item을 추출한 경우에만 `release_note_item`으로 승격될 수 있습니다.
+`finalSelectionEligibility`는 `main`, `short`, `watchlist`, `exclude` 중 하나입니다. main newsletter article에는 `main` 또는 `short` 후보만 사용할 수 있습니다.
+
+Static documentation page, release-note index page, homepage는 monitoring target으로 유지하지만, published date, version/release, API/component, behavior change가 모두 추출되지 않으면 `watchlist`에 머뭅니다. Source keyword는 real article candidate의 contextual relevance에만 쓰고 watch page를 main/short tier로 올리지 않습니다.
+
+`source_kind`, `main_eligible`, `reference_only`, `evidence_score`는 backward compatibility를 위해 유지하며 같은 classification rule에서 파생합니다.
 
 현재 item-level parser 대상은 다음과 같습니다.
 
@@ -159,7 +169,7 @@ collector는 후보마다 main article eligibility metadata를 붙입니다.
 - `libcamera-blog`
 - `llvm-release-notes`
 
-Reporter와 editor 단계는 prompt에만 의존하지 않고, reporter candidate URL과 editor section source URL을 대조해 ineligible source가 main article로 올라오면 replacement/demotion 대상으로 처리합니다.
+Reporter, editor, quality gate는 prompt에만 의존하지 않습니다. reporter candidate URL과 editor section source URL을 대조해 watchlist/exclude 후보가 `selected=true`가 되지 못하게 막고, ineligible source가 main article로 올라오면 blocking `source-integrity` deduction으로 replacement/demotion 대상 처리합니다.
 
 ## 로컬 미리보기
 

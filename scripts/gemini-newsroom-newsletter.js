@@ -68,6 +68,12 @@ function stringOrEmpty(value) {
   return String(value || '').trim();
 }
 
+function booleanFromCandidate(collected, candidate, field, fallback = false) {
+  if (typeof collected[field] === 'boolean') return collected[field];
+  if (typeof candidate[field] === 'boolean') return candidate[field];
+  return fallback;
+}
+
 function imageCandidatesForReporterCandidate(candidate, collectedByUrl) {
   const collected = collectedByUrl.get(candidate.url) || collectedByUrl.get(candidate.article_url) || {};
   const images = ensureArray(candidate.imageCandidates).length > 0
@@ -88,6 +94,12 @@ function reporterCandidateRejectionReason(candidate) {
     Number(candidate.camera_hal_relevance_score || 0) +
     Number(candidate.android_camera_relevance_score || 0) +
     Number(candidate.practical_actionability_score || 0);
+  if (!['main', 'short'].includes(candidate.finalSelectionEligibility)) {
+    return `finalSelectionEligibility=${candidate.finalSelectionEligibility || 'unknown'}`;
+  }
+  if (candidate.isWatchPage === true && candidate.hasDatedEvidence !== true) {
+    return 'watch page without dated evidence';
+  }
   if (candidate.main_eligible === false) return 'main_eligible=false';
   if (candidate.source_gap_risk === true) return 'source_gap_risk=true';
   if (Number(candidate.evidence_score || 0) < 6) return `evidence_score=${Number(candidate.evidence_score || 0)} < 6`;
@@ -130,6 +142,19 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.version_or_release = stringOrEmpty(candidate.version_or_release || collected.version_or_release);
     candidate.api_or_component = stringOrEmpty(candidate.api_or_component || collected.api_or_component);
     candidate.behavior_change = stringOrEmpty(candidate.behavior_change || collected.behavior_change);
+    candidate.collectionMode = stringOrEmpty(collected.collectionMode || collected.collection_mode || candidate.collectionMode);
+    candidate.isArticleCandidate = booleanFromCandidate(collected, candidate, 'isArticleCandidate',
+      Boolean(collected.is_article_candidate));
+    candidate.isWatchPage = booleanFromCandidate(collected, candidate, 'isWatchPage',
+      Boolean(collected.is_watch_page));
+    candidate.hasDatedEvidence = booleanFromCandidate(collected, candidate, 'hasDatedEvidence',
+      Boolean(collected.has_dated_evidence));
+    candidate.evidenceLevel = stringOrEmpty(collected.evidenceLevel || collected.evidence_level || candidate.evidenceLevel);
+    candidate.finalSelectionEligibility = stringOrEmpty(
+      collected.finalSelectionEligibility ||
+      collected.final_selection_eligibility ||
+      candidate.finalSelectionEligibility
+    );
     candidate.source_kind = stringOrEmpty(collected.source_kind || candidate.source_kind);
     candidate.source_gap_risk = typeof collected.source_gap_risk === 'boolean'
       ? collected.source_gap_risk
@@ -852,13 +877,15 @@ async function main() {
         'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, on-device AI, NPU/GPU, and developer productivity.',
         'Give low scores to product promotion, general IT news, and weak Camera HAL relevance.',
         'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
-        'For main article selection, selected=true is allowed only when main_eligible=true, source_gap_risk=false, evidence_score >= 6, and camera_hal_relevance_score + android_camera_relevance_score + practical_actionability_score >= 8.',
-        'Set selected=false for documentation_page, rolling_page, blog_index, briefing_only, reference_only, source_gap_risk=true, and main_eligible=false candidates.',
+        'For main article selection, selected=true is allowed only when finalSelectionEligibility is main or short, main_eligible=true, source_gap_risk=false, evidence_score >= 6, and camera_hal_relevance_score + android_camera_relevance_score + practical_actionability_score >= 8.',
+        'Set selected=false for finalSelectionEligibility=watchlist, finalSelectionEligibility=exclude, isWatchPage=true with hasDatedEvidence=false, documentation_page, rolling_page, blog_index, briefing_only, reference_only, source_gap_risk=true, and main_eligible=false candidates.',
         'For every selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
-        'Preserve source_kind, source_gap_risk, main_eligible, briefing_only, reference_only, and evidence_score from the collected candidate metadata.',
-        'If the source is a rolling page such as release notes or a watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides a date.',
+        'Preserve collectionMode, isArticleCandidate, isWatchPage, hasDatedEvidence, evidenceLevel, finalSelectionEligibility, source_kind, source_gap_risk, main_eligible, briefing_only, reference_only, and evidence_score from the collected candidate metadata.',
+        'If the source is a rolling page, release-note watch page, documentation watch page, homepage, or other watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides date/version/API/component/behavior evidence.',
+        'Rolling release-note pages require evidence_notes that name the exact date, version/release, API/component, and behavior change before they can be selected.',
         'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
         'Candidate-only or requiresCrossCheck leads must not be selected unless cross_check_status is official-source or cross-checked.',
+        'Fallback C++, native, toolchain, Linux, and AI items can be selected only when they are real dated articles and include explicit Camera HAL/native engineering action items.',
         'Preserve imageCandidates exactly from the collected candidate JSON. Do not invent image URLs, rewrite image URLs, or add image candidates.',
         lockedSections.length > 0 ? 'Do not select candidates that duplicate the locked article URLs, titles, sources, or source-date-title combinations listed in the retry context.' : '',
         'For every candidate, provide these numeric scores:',
@@ -885,15 +912,15 @@ async function main() {
         'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
         'Create exactly 5 main articles when enough non-duplicate source material exists; 4 main articles are acceptable only when strong candidates are insufficient.',
         `Final main article count must stay between ${MIN_MAIN_ARTICLES} and ${MAX_MAIN_ARTICLES}; do not force 5 articles when only 4 strong eligible candidates exist.`,
-        'Use selected reporter candidates as main article inputs. Do not turn selected=false, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
+        'Use selected reporter candidates as main article inputs. Do not turn selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
         'Target article slot mix: Android Camera / platform API 1-2; CameraX / AOSP Camera / compatibility 1-2; Linux camera / libcamera / V4L2 0-1; AI plus camera input path or HAL workflow at least 1; C++ / toolchain fallback 0-1.',
         'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
-        'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it has concrete HAL native-code value.',
+        'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it is a real dated article and has concrete HAL native-code value.',
         lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles.' : '',
         lockedSections.length > 0 ? 'Do not duplicate locked article URLs, titles/headlines, source names, or same source + published date + similar title.' : '',
         'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
         'Every article must include evidence_summary, specificity_checks, and source_verification_notes.',
-        'specificity_checks must name concrete evidence such as version, release date, API/component, source page, behavior change, or the exact source gap if the source is a rolling page.',
+        'specificity_checks must name concrete evidence such as version, release date, API/component, source page, behavior change, or the exact source gap if the source is a rolling/watch page.',
         'Do not write generic advice like "monitor AOSP updates" or "review CameraX changes" unless the sentence names the exact source, version/release, API/component, date, or behavior to watch.',
         'For AI, C++, Linux, or tooling articles, explicitly connect the item to Camera HAL through stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, or HAL workflow.',
         'Each action_items entry must be executable within 2 weeks and include at least one concrete test, log, metric, device class, API/component, stream combination, or code-owner style handoff.',
@@ -927,6 +954,7 @@ async function main() {
         'You are the AI fact checker for Camera HAL SW Newsletter.',
         'Check factuality, missing sources, exaggerated language, and missing dates.',
         'Treat missing version, release date, API/component name, or behavior change as must_fix when an article presents a rolling page or generic watch item as a concrete update.',
+        'Treat any finalSelectionEligibility=watchlist/exclude candidate or watch page without dated evidence used as a main article as must_fix.',
         'Any claim without a source must be classified as must_fix.',
         'Flag general AI/C++ news that lacks Camera HAL or Android Camera interpretation.',
         'Flag any main article without concrete Action Item content.',
@@ -969,10 +997,10 @@ async function main() {
           'For required-fields, evidence-specificity, hal-depth, and actionability deductions, repair only the affected section.',
           'For source_gap=true sections, prefer replacement or demotion to briefing/reference over text repair.',
           'For reporter_eligibility_violations, replace or demote the section. Do not repair text around an ineligible source.',
-          'Replacement main articles must use reporter candidates with selected=true, main_eligible=true, source_gap_risk=false, evidence_score >= 6, and HAL/actionability score >= 8.',
+          'Replacement main articles must use reporter candidates with selected=true, finalSelectionEligibility main or short, isWatchPage=false or hasDatedEvidence=true, main_eligible=true, source_gap_risk=false, evidence_score >= 6, and HAL/actionability score >= 8.',
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           `Keep ${MIN_MAIN_ARTICLES}-${MAX_MAIN_ARTICLES} main articles; 5 is the target only when enough strong eligible candidates exist.`,
-          'Maintain the slot policy: Android Camera/platform API 1-2; CameraX/AOSP/compatibility 1-2; Linux camera/libcamera/V4L2 0-1; at least 1 AI camera path/HAL workflow article; C++/toolchain fallback 0-1.',
+          'Maintain the slot policy: Android Camera/platform API 1-2; CameraX/AOSP/compatibility 1-2; Linux camera/libcamera/V4L2 0-1; at least 1 AI camera path/HAL workflow article; C++/toolchain fallback 0-1 from real dated articles only.',
           'Use the golden example only for article structure and evidence/actionability style. Do not copy facts absent from current reporter candidates.',
           'Return only JSON matching the schema.'
         ].join('\n'),
@@ -998,7 +1026,7 @@ async function main() {
         [
           'You are the AI fact checker for the repaired Camera HAL SW Newsletter draft.',
           'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
-          'Treat any remaining source gap in a main article as must_fix.',
+          'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
           'Return only JSON matching the schema.'
         ].join('\n'),
         `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,

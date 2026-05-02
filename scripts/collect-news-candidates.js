@@ -91,6 +91,9 @@ const FEED_HINTS = [
     feed: 'https://openai.com/news/rss.xml'
   }
 ];
+const WATCH_SOURCE_MODES = new Set(['release-note-watch', 'documentation-watch', 'homepage-watch']);
+const WATCH_CANDIDATE_MODES = new Set(['html-watch-page', 'release-note-page', 'homepage-watch']);
+const FINAL_SELECTION_ELIGIBILITIES = new Set(['main', 'short', 'watchlist', 'exclude']);
 const FALLBACK_INELIGIBLE_SOURCE_KINDS = new Set(['documentation_page', 'rolling_page', 'blog_index']);
 const ITEM_LEVEL_SOURCE_KINDS = new Set(['rss_item', 'release_note_item', 'blog_post_item']);
 const VERSION_OR_RELEASE_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|v?\d+\.\d+\.\d+(?:[-\w.]*)?|release notes?|security bulletin)\b/i;
@@ -114,11 +117,12 @@ function tag(block, name) {
 }
 
 function normalizeSource(source, allowFeedHint = false) {
+  const sourceUrl = source.sourceUrl || source.url;
   return {
     id: source.id || '',
     name: source.name,
-    url: source.sourceUrl || source.url,
-    sourceUrl: source.sourceUrl || source.url,
+    url: sourceUrl,
+    sourceUrl,
     rssUrl: source.rssUrl || null,
     category: source.category || 'tech-trends',
     section: source.section || sectionMap[source.category] || 'AI / SW Engineering Trends',
@@ -128,6 +132,8 @@ function normalizeSource(source, allowFeedHint = false) {
     requiresCrossCheck: source.requiresCrossCheck === true,
     allowFeedHint,
     usageHint: source.usageHint || '',
+    collectionModeHint: normalizeCollectionModeHint(source.collectionModeHint || source.sourceKind || ''),
+    sourceKind: source.sourceKind || '',
     keywords: Array.isArray(source.keywords) ? source.keywords : []
   };
 }
@@ -186,6 +192,48 @@ function sourceFeed(source) {
   return source.rssUrl || (source.allowFeedHint ? feedFor(source.url) : null);
 }
 
+function normalizeCollectionModeHint(value) {
+  const normalized = String(value || '').trim().toLowerCase().replace(/_/g, '-');
+  const aliases = {
+    rss: 'rss-source',
+    feed: 'rss-source',
+    'rss-item': 'rss-source',
+    release: 'release-note-watch',
+    'release-note': 'release-note-watch',
+    'release-notes': 'release-note-watch',
+    changelog: 'release-note-watch',
+    documentation: 'documentation-watch',
+    docs: 'documentation-watch',
+    doc: 'documentation-watch',
+    homepage: 'homepage-watch',
+    home: 'homepage-watch',
+    blog: 'homepage-watch',
+    media: 'media-lead',
+    'media-source': 'media-lead',
+    lead: 'media-lead'
+  };
+  const mode = aliases[normalized] || normalized;
+  return ['rss-source', 'release-note-watch', 'documentation-watch', 'homepage-watch', 'media-lead'].includes(mode)
+    ? mode
+    : '';
+}
+
+function sourceCollectionMode(source) {
+  if (source.collectionModeHint) return source.collectionModeHint;
+  if (source.rssUrl || sourceFeed(source)) return 'rss-source';
+  const value = `${source.id || ''} ${source.name || ''} ${source.url || ''} ${source.reliability || ''}`;
+  if (/release|changelog|bulletin|securityupdate|linuxchanges|latest-updates|what'?s new/i.test(value)) {
+    return 'release-note-watch';
+  }
+  if (/documentation|docs\/core\/camera|introduction|cdd|compatibility\/cdd|newsletter/i.test(value)) {
+    return 'documentation-watch';
+  }
+  if (/media|newsletter|community|lwn|phoronix|infoq|register|stack|spectrum|eetimes|embedded|zdnet|yozm/i.test(value)) {
+    return 'media-lead';
+  }
+  return 'homepage-watch';
+}
+
 async function fetchText(url, timeoutMs = 0) {
   const controller = timeoutMs > 0 ? new AbortController() : null;
   const timeout = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
@@ -221,6 +269,7 @@ function parseRss(xml, source) {
       publishedAt: date,
       summary,
       sourceKind: 'rss_item',
+      collectionMode: 'rss-item',
       imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
     });
   }).filter(item => item.title && item.url);
@@ -240,6 +289,7 @@ function parseHtmlPage(html, source) {
     publishedAt: '',
     summary: description,
     sourceKind: inferFallbackSourceKind(source),
+    collectionMode: fallbackCandidateCollectionMode(source),
     imageCandidates: extractImageCandidatesFromHtml(html, source.url, source)
   })];
 }
@@ -281,6 +331,101 @@ function inferFallbackSourceKind(source) {
     return 'blog_index';
   }
   return 'rolling_page';
+}
+
+function fallbackCandidateCollectionMode(source) {
+  const mode = sourceCollectionMode(source);
+  if (mode === 'release-note-watch') return 'release-note-page';
+  if (mode === 'homepage-watch' || mode === 'media-lead') return 'homepage-watch';
+  return 'html-watch-page';
+}
+
+function candidateCollectionMode(raw, source, sourceKind) {
+  const explicit = String(raw.collectionMode || raw.collection_mode || '').trim();
+  if (explicit) return explicit;
+  if (sourceKind === 'rss_item') return 'rss-item';
+  if (sourceKind === 'release_note_item') return 'release-note-item';
+  if (sourceKind === 'blog_post_item') return 'article-item';
+  return fallbackCandidateCollectionMode(source);
+}
+
+function hasConcreteReleaseEvidence(metadata) {
+  return metadata.has_published_date &&
+    metadata.has_version_or_release &&
+    metadata.has_api_or_component &&
+    metadata.has_behavior_change;
+}
+
+function selectionExclusionReason(classification, metadata) {
+  if (classification.finalSelectionEligibility === 'main') return 'Eligible for main article selection.';
+  if (classification.finalSelectionEligibility === 'short') return 'Eligible for short newsletter use.';
+  if (classification.isWatchPage && !classification.hasDatedEvidence) {
+    return 'No RSS item, no published date, no concrete release/API/behavior change detected.';
+  }
+  if (classification.finalSelectionEligibility === 'watchlist') {
+    return 'Watchlist/reference material; select only after extracting concrete dated release/API/behavior evidence.';
+  }
+  if (metadata.source_gap_risk) {
+    return 'Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.';
+  }
+  return 'Excluded or low-confidence item below the main/short candidate tier.';
+}
+
+function evidenceLevelFor(classification, metadata) {
+  if (classification.hasDatedEvidence && classification.collectionMode === 'release-note-item') return 'dated-release-evidence';
+  if (classification.hasDatedEvidence && classification.collectionMode === 'rss-item') return 'dated-rss-article';
+  if (classification.hasDatedEvidence) return 'dated-concrete-evidence';
+  if (classification.isWatchPage) return 'undated-watch-page';
+  if (metadata.evidence_score >= 4) return 'partial-evidence';
+  return 'low-confidence';
+}
+
+function classifySelection(raw, source, metadata, score, candidateOnly) {
+  const sourceMode = sourceCollectionMode(source);
+  let collectionMode = candidateCollectionMode(raw, source, metadata.source_kind);
+  const isReleaseNoteItem = metadata.source_kind === 'release_note_item';
+  const isDatedArticleItem = ['rss_item', 'blog_post_item'].includes(metadata.source_kind);
+  const releaseNoteItemHasConcreteEvidence = isReleaseNoteItem && hasConcreteReleaseEvidence(metadata);
+  if (isReleaseNoteItem && sourceMode === 'release-note-watch' && !releaseNoteItemHasConcreteEvidence) {
+    collectionMode = 'release-note-page';
+  }
+  const isWatchPage = WATCH_CANDIDATE_MODES.has(collectionMode) || FALLBACK_INELIGIBLE_SOURCE_KINDS.has(metadata.source_kind);
+  const hasDatedEvidence = isWatchPage || isReleaseNoteItem
+    ? hasConcreteReleaseEvidence(metadata)
+    : isDatedArticleItem ? metadata.has_published_date : hasConcreteReleaseEvidence(metadata);
+  const isArticleCandidate = Boolean(raw.url) &&
+    !candidateOnly &&
+    !isWatchPage &&
+    (isReleaseNoteItem ? hasDatedEvidence : isDatedArticleItem && metadata.has_published_date);
+  let finalSelectionEligibility = 'exclude';
+
+  if (isWatchPage && !hasDatedEvidence) {
+    finalSelectionEligibility = 'watchlist';
+  } else if (metadata.source_gap_risk || candidateOnly || !hasDatedEvidence) {
+    finalSelectionEligibility = isWatchPage ? 'watchlist' : 'exclude';
+  } else if (score >= 80) {
+    finalSelectionEligibility = 'main';
+  } else if (score >= 50) {
+    finalSelectionEligibility = 'short';
+  }
+
+  if (!FINAL_SELECTION_ELIGIBILITIES.has(finalSelectionEligibility)) {
+    finalSelectionEligibility = 'exclude';
+  }
+
+  const classification = {
+    collectionMode,
+    sourceCollectionMode: sourceMode,
+    isArticleCandidate,
+    isWatchPage,
+    hasDatedEvidence,
+    finalSelectionEligibility
+  };
+  return {
+    ...classification,
+    evidenceLevel: evidenceLevelFor(classification, metadata),
+    selectionExclusionReason: selectionExclusionReason(classification, metadata)
+  };
 }
 
 function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
@@ -330,10 +475,12 @@ function normalizeCandidate(raw) {
   const source = raw.source;
   const title = decode(raw.title);
   const summary = decode(raw.summary).slice(0, 500);
-  const text = `${title} ${summary} ${source.keywords.join(' ')}`.toLowerCase();
+  const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
+  const fallbackOrWatch = FALLBACK_INELIGIBLE_SOURCE_KINDS.has(rawSourceKind);
+  const text = `${title} ${summary} ${fallbackOrWatch ? '' : source.keywords.join(' ')}`.toLowerCase();
   const cameraHits = keywordHits(text, CAMERA_KEYWORDS);
   const techHits = keywordHits(text, TECH_KEYWORDS);
-  const sourceKeywordHits = keywordHits(text, source.keywords);
+  const sourceKeywordHits = fallbackOrWatch ? 0 : keywordHits(text, source.keywords);
   const categoryBoost = ['camera-hal', 'camera-api', 'aosp', 'compatibility', 'security'].includes(source.category) ? 35 : 0;
   const priorityBoost = (PRIORITY_WEIGHT[source.priority] || 0) * 4;
   const reliabilityBoost = (RELIABILITY_WEIGHT[source.reliability] || 0) * 3;
@@ -342,8 +489,16 @@ function normalizeCandidate(raw) {
   const candidateOnly = source.candidateOnly || CANDIDATE_ONLY_RELIABILITY.has(source.reliability);
   const section = source.section || sectionMap[source.category] || 'AI / SW Engineering Trends';
   const metadata = evidenceMetadata(raw, source, title, summary, score, candidateOnly);
+  const classification = classifySelection(raw, source, metadata, score, candidateOnly);
+  const sourceGapRisk = metadata.source_gap_risk ||
+    classification.finalSelectionEligibility === 'watchlist' ||
+    classification.finalSelectionEligibility === 'exclude';
+  const mainEligible = ['main', 'short'].includes(classification.finalSelectionEligibility);
+  const briefingOnly = classification.finalSelectionEligibility === 'watchlist';
+  const referenceOnly = classification.finalSelectionEligibility === 'watchlist' || metadata.reference_only;
 
   return {
+    schema_version: 5,
     source: source.name,
     source_name: source.name,
     sourceUrl: source.sourceUrl,
@@ -363,23 +518,41 @@ function normalizeCandidate(raw) {
     source_usage_hint: source.usageHint,
     candidateOnly,
     candidate_only: candidateOnly,
+    collectionMode: classification.collectionMode,
+    collection_mode: classification.collectionMode,
+    sourceCollectionMode: classification.sourceCollectionMode,
+    source_collection_mode: classification.sourceCollectionMode,
+    isArticleCandidate: classification.isArticleCandidate,
+    is_article_candidate: classification.isArticleCandidate,
+    isWatchPage: classification.isWatchPage,
+    is_watch_page: classification.isWatchPage,
+    hasDatedEvidence: classification.hasDatedEvidence,
+    has_dated_evidence: classification.hasDatedEvidence,
+    evidenceLevel: classification.evidenceLevel,
+    evidence_level: classification.evidenceLevel,
+    finalSelectionEligibility: classification.finalSelectionEligibility,
+    final_selection_eligibility: classification.finalSelectionEligibility,
     source_kind: metadata.source_kind,
     has_published_date: metadata.has_published_date,
     has_version_or_release: metadata.has_version_or_release,
     has_api_or_component: metadata.has_api_or_component,
     has_behavior_change: metadata.has_behavior_change,
-    source_gap_risk: metadata.source_gap_risk,
-    main_eligible: metadata.main_eligible,
-    briefing_only: metadata.briefing_only,
-    reference_only: metadata.reference_only,
+    source_gap_risk: sourceGapRisk,
+    main_eligible: mainEligible,
+    briefing_only: briefingOnly,
+    reference_only: referenceOnly,
     evidence_score: metadata.evidence_score,
     version_or_release: metadata.version_or_release,
     api_or_component: metadata.api_or_component,
     behavior_change: metadata.behavior_change,
     requiresCrossCheck: source.requiresCrossCheck,
     requires_cross_check: source.requiresCrossCheck,
-    verification_hint: metadata.source_gap_risk
-      ? 'Source gap risk: use as briefing/reference unless a concrete item has release date, version/release, API/component, and behavior-change evidence.'
+    selection_exclusion_reason: classification.selectionExclusionReason,
+    watchlist_reason: classification.finalSelectionEligibility === 'watchlist'
+      ? classification.selectionExclusionReason
+      : '',
+    verification_hint: sourceGapRisk
+      ? classification.selectionExclusionReason
       : candidateOnly || source.requiresCrossCheck
       ? 'Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.'
       : 'Can be used directly if the collected item supports the claim.',
@@ -394,7 +567,7 @@ function normalizeCandidate(raw) {
     camera_hal_relevance_score: score,
     imageCandidates: Array.isArray(raw.imageCandidates) ? raw.imageCandidates : [],
     image_candidates: Array.isArray(raw.imageCandidates) ? raw.imageCandidates : [],
-    candidateTier: candidateTier(score),
+    candidateTier: candidateTier(score, classification.finalSelectionEligibility),
     reason: buildReason(cameraHits, techHits, source, score),
     collection_reason: buildReason(cameraHits, techHits, source, score)
   };
@@ -423,7 +596,11 @@ async function enrichImageCandidates(candidate) {
   };
 }
 
-function candidateTier(score) {
+function candidateTier(score, finalSelectionEligibility = '') {
+  if (finalSelectionEligibility === 'main') return 'main-article';
+  if (finalSelectionEligibility === 'short') return 'short-news';
+  if (finalSelectionEligibility === 'watchlist') return 'watchlist-reference';
+  if (finalSelectionEligibility === 'exclude') return 'exclude';
   if (score >= 80) return 'main-article';
   if (score >= 50) return 'short-news';
   if (score >= 30) return 'reference-candidate';
@@ -499,13 +676,25 @@ function mdEscape(value = '') {
 }
 
 function markdown(date, candidates, failures, lookbackDays) {
-  const groups = candidates.reduce((acc, item) => {
-    acc[item.section] = acc[item.section] || [];
-    acc[item.section].push(item);
-    return acc;
-  }, {});
-
   const lines = [];
+  const articleCandidates = candidates.filter(item => ['main', 'short'].includes(item.finalSelectionEligibility));
+  const watchlist = candidates.filter(item => item.finalSelectionEligibility === 'watchlist');
+  const excluded = candidates.filter(item => item.finalSelectionEligibility === 'exclude');
+
+  function candidateTable(items) {
+    lines.push('| Eligibility | Score | Evidence | Mode | Dated | Source kind | Source | Title | Published | Reason | Link |');
+    lines.push('|---|---:|---:|---|---|---|---|---|---|---|---|');
+    if (items.length === 0) {
+      lines.push('| - | - | - | - | - | - | - | None | - | - | - |');
+      lines.push('');
+      return;
+    }
+    for (const item of items) {
+      lines.push(`| ${mdEscape(item.finalSelectionEligibility)} | ${item.relevanceScore} | ${item.evidence_score} | ${mdEscape(item.collectionMode)} | ${item.hasDatedEvidence ? 'yes' : 'no'} | ${mdEscape(item.source_kind)} | ${mdEscape(item.source)} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || 'review needed')} | ${mdEscape(item.selection_exclusion_reason || item.verification_hint || '')} | [link](${item.url}) |`);
+    }
+    lines.push('');
+  }
+
   lines.push(`# News Candidates - ${date}`);
   lines.push('');
   lines.push('This file is generated from the structured newsletter source registry. Gemini uses the candidate JSON and source metadata as inputs and does not browse the web.');
@@ -514,6 +703,7 @@ function markdown(date, candidates, failures, lookbackDays) {
   lines.push(`- Candidate count: ${candidates.length}`);
   lines.push(`- Source registry: ${path.relative(root, activeSourcesPath)}`);
   lines.push('- Candidate-only media/community sources require official-source verification before final article selection.');
+  lines.push('- Static HTML pages without concrete dated release/API/behavior evidence are watchlist/reference material, not main article candidates.');
   lines.push('');
   lines.push('## Gemini Newsroom Input Summary');
   lines.push('');
@@ -525,16 +715,17 @@ function markdown(date, candidates, failures, lookbackDays) {
   lines.push('```');
   lines.push('');
 
-  for (const [category, items] of Object.entries(groups)) {
-    lines.push(`## ${category}`);
-    lines.push('');
-    lines.push('| Score | Evidence | Main | Gap | Source kind | Source | Priority | Reliability | Candidate only | Title | Published | Link |');
-    lines.push('|---:|---:|---|---|---|---|---|---|---|---|---|---|');
-    for (const item of items) {
-      lines.push(`| ${item.relevanceScore} | ${item.evidence_score} | ${item.main_eligible ? 'yes' : 'no'} | ${item.source_gap_risk ? 'yes' : 'no'} | ${mdEscape(item.source_kind)} | ${mdEscape(item.source)} | ${item.source_priority} | ${item.source_reliability} | ${item.candidate_only ? 'yes' : 'no'} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || 'review needed')} | [link](${item.url}) |`);
-    }
-    lines.push('');
-  }
+  lines.push('## Main/short article candidates');
+  lines.push('');
+  candidateTable(articleCandidates);
+
+  lines.push('## Watchlist/reference pages');
+  lines.push('');
+  candidateTable(watchlist);
+
+  lines.push('## Excluded or low-confidence items');
+  lines.push('');
+  candidateTable(excluded);
 
   lines.push('## Raw Candidates');
   lines.push('');
@@ -550,6 +741,12 @@ function markdown(date, candidates, failures, lookbackDays) {
     lines.push(`- Source priority: ${item.source_priority}`);
     lines.push(`- Source reliability: ${item.source_reliability}`);
     lines.push(`- Candidate only: ${item.candidate_only ? 'yes' : 'no'}`);
+    lines.push(`- Collection mode: ${item.collectionMode}`);
+    lines.push(`- Article candidate: ${item.isArticleCandidate ? 'yes' : 'no'}`);
+    lines.push(`- Watch page: ${item.isWatchPage ? 'yes' : 'no'}`);
+    lines.push(`- Has dated evidence: ${item.hasDatedEvidence ? 'yes' : 'no'}`);
+    lines.push(`- Evidence level: ${item.evidenceLevel}`);
+    lines.push(`- Final selection eligibility: ${item.finalSelectionEligibility}`);
     lines.push(`- Source kind: ${item.source_kind}`);
     lines.push(`- Main eligible: ${item.main_eligible ? 'yes' : 'no'}`);
     lines.push(`- Briefing only: ${item.briefing_only ? 'yes' : 'no'}`);
@@ -560,6 +757,7 @@ function markdown(date, candidates, failures, lookbackDays) {
     lines.push(`- API/component: ${item.api_or_component || 'not extracted'}`);
     lines.push(`- Behavior change: ${item.behavior_change || 'not extracted'}`);
     lines.push(`- Requires cross-check: ${item.requires_cross_check ? 'yes' : 'no'}`);
+    lines.push(`- Selection exclusion reason: ${item.selection_exclusion_reason}`);
     lines.push(`- Verification hint: ${item.verification_hint}`);
     lines.push(`- Relevance Score: ${item.relevanceScore}`);
     lines.push(`- Summary: ${item.summary || 'No summary'}`);
@@ -638,7 +836,7 @@ async function main() {
   fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
 
   fs.writeFileSync(path.join(outDir, 'candidates.json'), JSON.stringify({
-    schema_version: 4,
+    schema_version: 5,
     date,
     newsletter_date: date,
     audience: AUDIENCE,

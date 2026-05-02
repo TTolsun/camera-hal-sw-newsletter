@@ -13,20 +13,30 @@ If the JSON registry is missing, the collector can fall back to this Markdown by
 - Do not add an `rssUrl` unless it is verified in `data/news-sources.json`.
 - Media, community, newsletter, and paywall-prone sources should be treated as leads and cross-checked against official/project sources before final publication.
 
+## Collector Classification
+
+The collector writes schema v5 candidate metadata so reporter/editor stages can distinguish dated article evidence from watch/reference pages.
+
+- `collectionModeHint` in `data/news-sources.json` may be `rss-source`, `release-note-watch`, `documentation-watch`, `homepage-watch`, or `media-lead`.
+- Candidate records include `collectionMode`, `isArticleCandidate`, `isWatchPage`, `hasDatedEvidence`, `evidenceLevel`, and `finalSelectionEligibility`.
+- `finalSelectionEligibility` is `main`, `short`, `watchlist`, or `exclude`. Only `main` and `short` candidates may become main newsletter articles.
+- Static documentation, release-note index pages, and homepages stay in the JSON and Markdown as monitoring targets, but they remain `watchlist` unless the collector extracts concrete dated evidence naming a date, version/release, API/component, and behavior change.
+- `source_kind`, `main_eligible`, `reference_only`, and `evidence_score` remain for compatibility and are derived from the same classification rules.
+
 ## Android / AOSP / Camera
 
 ### Primary Sources
 
-- Android Developers Blog: https://android-developers.googleblog.com/
-- Android Developers Latest Updates: https://developer.android.com/latest-updates
-- CameraX Release Notes: https://developer.android.com/jetpack/androidx/releases/camera
-- AOSP Camera Documentation: https://source.android.com/docs/core/camera
-- AOSP What's New / Release Notes: https://source.android.com/docs/whatsnew
-- Android Compatibility Definition Document: https://source.android.com/docs/compatibility/cdd
-- Android Security Bulletin: https://source.android.com/docs/security/bulletin
-- Samsung Mobile Security Updates: https://security.samsungmobile.com/securityUpdate.smsb
-- Qualcomm Security Bulletins: https://docs.qualcomm.com/product/publicresources/securitybulletin
-- Android Developer Newsletter: https://developer.android.com/newsletter
+- Android Developers Blog (`rss-source`): https://android-developers.googleblog.com/
+- Android Developers Latest Updates (`release-note-watch`): https://developer.android.com/latest-updates
+- CameraX Release Notes (`release-note-watch`): https://developer.android.com/jetpack/androidx/releases/camera
+- AOSP Camera Documentation (`documentation-watch`): https://source.android.com/docs/core/camera
+- AOSP What's New / Release Notes (`release-note-watch`): https://source.android.com/docs/whatsnew
+- Android Compatibility Definition Document (`documentation-watch`): https://source.android.com/docs/compatibility/cdd
+- Android Security Bulletin (`release-note-watch`): https://source.android.com/docs/security/bulletin
+- Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb
+- Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
+- Android Developer Newsletter (`documentation-watch`): https://developer.android.com/newsletter
 
 ### Candidate / Cross-check Sources
 
@@ -37,7 +47,7 @@ If the JSON registry is missing, the collector can fall back to this Markdown by
 ### Primary Sources
 
 - libcamera Blog: https://libcamera.org/blog/
-- libcamera Documentation: https://libcamera.org/introduction.html
+- libcamera Documentation (`documentation-watch`): https://libcamera.org/introduction.html
 - Collabora Blog: https://www.collabora.com/news-and-blog/
 
 ### Candidate / Cross-check Sources
@@ -53,7 +63,7 @@ If the JSON registry is missing, the collector can fall back to this Markdown by
 - ISO C++ Blog: https://isocpp.org/blog
 - CppCon News: https://cppcon.org/category/news/
 - LLVM Project Blog: https://blog.llvm.org/
-- LLVM Release Notes: https://releases.llvm.org/
+- LLVM Release Notes (`release-note-watch`): https://releases.llvm.org/
 - Microsoft C++ Team Blog: https://devblogs.microsoft.com/cppblog/
 
 ## Embedded / Semiconductor
@@ -78,7 +88,7 @@ If the JSON registry is missing, the collector can fall back to this Markdown by
 - Google DeepMind Blog: https://deepmind.google/blog/
 - OpenAI News: https://openai.com/news/
 - Anthropic News: https://www.anthropic.com/news
-- Claude Code Changelog: https://code.claude.com/docs/en/changelog
+- Claude Code Changelog (`release-note-watch`): https://code.claude.com/docs/en/changelog
 - Google Cloud AI & Machine Learning Blog: https://cloud.google.com/blog/products/ai-machine-learning
 
 ### Candidate / Cross-check Sources

@@ -50,6 +50,66 @@ function normalizeForMatch(value) {
     .trim();
 }
 
+function urlKeys(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return [];
+  const keys = new Set([raw, raw.toLowerCase()]);
+  try {
+    const parsed = new URL(raw);
+    parsed.hash = '';
+    parsed.search = '';
+    const normalized = parsed.toString().replace(/\/$/, '');
+    keys.add(normalized);
+    keys.add(normalized.toLowerCase());
+  } catch {
+    keys.add(raw.replace(/[?#].*$/, '').replace(/\/$/, '').toLowerCase());
+  }
+  return [...keys].filter(Boolean);
+}
+
+function reporterCandidateUrlMap(reporter) {
+  const map = new Map();
+  function add(key, candidate) {
+    if (!key) return;
+    if (!map.has(key)) {
+      map.set(key, candidate);
+      return;
+    }
+    if (map.get(key) !== candidate) {
+      map.set(key, null);
+    }
+  }
+
+  for (const candidate of ensureArray(reporter?.candidates)) {
+    for (const value of [candidate.url, candidate.article_url, candidate.articleUrl]) {
+      for (const key of urlKeys(value)) add(key, candidate);
+    }
+  }
+  return map;
+}
+
+function candidateForSourceUrl(sourceUrl, candidateMap) {
+  for (const key of urlKeys(sourceUrl)) {
+    const candidate = candidateMap.get(key);
+    if (candidate) return candidate;
+  }
+  return null;
+}
+
+function candidateSelectionViolation(candidate) {
+  if (!candidate) return '';
+  if (!['main', 'short'].includes(candidate.finalSelectionEligibility)) {
+    return `finalSelectionEligibility=${candidate.finalSelectionEligibility || 'unknown'}`;
+  }
+  if (candidate.isWatchPage === true && candidate.hasDatedEvidence !== true) {
+    return 'watch page lacks dated evidence';
+  }
+  if (candidate.main_eligible === false) return 'main_eligible=false';
+  if (candidate.source_gap_risk === true) return 'source_gap_risk=true';
+  if (candidate.reference_only === true) return 'reference_only=true';
+  return '';
+}
+
 function hasPattern(value, pattern) {
   return pattern.test(text(value));
 }
@@ -162,6 +222,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : QUALITY_THRESHOLD;
   const sections = ensureArray(editor.sections);
   const state = { deductions: [] };
+  const candidateMap = reporterCandidateUrlMap(reporter);
+  let sourceIntegrityViolationCount = 0;
 
   if (sections.length < MIN_MAIN_ARTICLES || sections.length > MAX_MAIN_ARTICLES) {
     boundedDeduct(state, 'composition', 4, `Expected 4-5 main articles, found ${sections.length}.`);
@@ -204,6 +266,19 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     }
     if (/C\+\+|LLVM|Clang|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU/i.test(sectionText(section)) && !hasHalDepth(section)) {
       boundedDeduct(state, 'hal-relevance', 4, 'Non-camera article does not clearly connect back to Camera HAL work.', location);
+    }
+    for (const source of ensureArray(section.sources)) {
+      const candidate = candidateForSourceUrl(source?.url, candidateMap);
+      const violation = candidateSelectionViolation(candidate);
+      if (!violation) continue;
+      sourceIntegrityViolationCount += 1;
+      boundedDeduct(
+        state,
+        'source-integrity',
+        8,
+        `Main article source maps to ineligible reporter candidate: ${violation}.`,
+        location
+      );
     }
   });
 
@@ -251,6 +326,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       fact_check_status: factCheck.status || 'UNKNOWN',
       must_fix_count: mustFixCount,
       source_gap_count: gaps,
+      source_integrity_violation_count: sourceIntegrityViolationCount,
       blocking_deduction_count: blockers.length,
       blocking_deduction_categories: [...new Set(blockers.map(deduction => deduction.category))]
     }
@@ -277,6 +353,7 @@ function buildQualityReportMarkdown(report) {
 - Fact-check status: ${report.metrics.fact_check_status}
 - Must-fix count: ${report.metrics.must_fix_count}
 - Source gap count: ${report.metrics.source_gap_count}
+- Source integrity violation count: ${report.metrics.source_integrity_violation_count || 0}
 - Blocking deduction count: ${report.metrics.blocking_deduction_count || 0}
 - Blocking deduction categories: ${ensureArray(report.metrics.blocking_deduction_categories).join(', ') || 'none'}
 
