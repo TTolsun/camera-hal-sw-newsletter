@@ -6,22 +6,19 @@
       "source": "Android Developers Blog",
       "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
-      "summary": "Posted by Thomas Ezan, Senior Developer Relations Engineer If you are an Android developer looking to implement innovative AI features into your app, we recently launched powerful new updates: Hybrid inference, a new API for Firebase AI Logic to leverage both on-device and Cloud inference, and support for new Gemini models including the latest Nano Banana models for image generation. Let’s jump in! Experiment with hybrid inference With the new Firebase API for hybrid inference , we implemented a",
+      "summary": "Google is introducing hybrid inference and new Gemini models for Android, including Nano Banana models for image generation. This new API for Firebase AI Logic allows developers to leverage both on-device and cloud inference, potentially impacting how camera data is processed for AI features.",
       "camera_hal_relevance_score": 4,
-      "android_camera_relevance_score": 5,
-      "practical_actionability_score": 4,
+      "android_camera_relevance_score": 4,
+      "practical_actionability_score": 3,
       "source_reliability_score": 5,
-      "freshness_score": 1,
+      "freshness_score": 3,
       "ai_required_slot_fit_score": 3,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "Android의 하이브리드 추론 및 새로운 AI 모델은 카메라 HAL이 온디바이스 AI 처리(NPU/GPU)를 위해 카메라 스트림 및 버퍼를 관리하는 방식에 직접적인 영향을 미치며, 이미지 생성 모델은 향후 카메라 기능에 대한 새로운 요구사항을 제시할 수 있습니다.",
+      "relevance_reason": "This article discusses new AI capabilities on Android, including hybrid inference and new AI models. This is relevant to Camera HAL as on-device AI processing can impact camera pipeline performance and resource utilization, and new models might require specific camera data formats or pre-processing.",
       "impact_areas": [
-        "on-device AI",
-        "NPU/GPU scheduling",
-        "camera stream/buffer management",
-        "metadata",
-        "image pipeline",
-        "Android Camera"
+        "AI Integration",
+        "On-device Processing",
+        "Camera Pipeline"
       ],
       "imageCandidates": [
         {
@@ -31,11 +28,7 @@
           "sourceKind": "og",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
@@ -44,11 +37,7 @@
           "sourceKind": "og",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -57,11 +46,7 @@
           "sourceKind": "article-img",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         }
       ],
       "selected": true
@@ -71,21 +56,19 @@
       "source": "Android Developers Blog",
       "published_date": "Thu, 16 Apr 2026 17:00:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html",
-      "summary": "Posted by Adarsh Fernando, Group Product Manager and Esteban de la Canal, Senior Staff Software Engineer As Android developers, you have many choices when it comes to the agents, tools, and LLMs you use for app development. Whether you are using Gemini in Android Studio, Gemini CLI, Antigravity, or third-party agents like Claude Code or Codex, our mission is to ensure that high-quality Android development is possible everywhere. Today, we are introducing a new suite of Android tools and resource",
+      "summary": "Google is enhancing Android development productivity with new tools and resources for using AI agents. This includes improvements to the Android CLI and support for various AI models, aiming to speed up app development. This is relevant for Camera HAL engineers as it relates to developer productivity and potentially AI-assisted development workflows.",
       "camera_hal_relevance_score": 3,
-      "android_camera_relevance_score": 4,
-      "practical_actionability_score": 4,
+      "android_camera_relevance_score": 3,
+      "practical_actionability_score": 3,
       "source_reliability_score": 5,
-      "freshness_score": 1,
+      "freshness_score": 3,
       "ai_required_slot_fit_score": 3,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "Android Studio의 AI 기반 개발 생산성 도구는 Camera HAL 개발자의 코드 작성, 디버깅, 테스트 워크플로 효율성을 높이는 데 기여할 수 있습니다.",
+      "relevance_reason": "This article focuses on improving developer productivity through AI agents and CLI tools. While not directly about Camera HAL, it impacts the overall development workflow and tooling, which is a key area for developer productivity. Understanding how AI agents can assist in development is becoming increasingly important.",
       "impact_areas": [
-        "developer productivity",
-        "AI agent",
-        "tooling",
-        "debugging",
-        "workflow"
+        "Developer Productivity",
+        "AI Tooling",
+        "Workflow Automation"
       ],
       "imageCandidates": [
         {
@@ -95,11 +78,7 @@
           "sourceKind": "og",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPyFElAHYM4meoiCciQQ2lncUtR6wtpR1c8Sd1K4SbNEUKDat7QeDRM3yGyMMu0J--WblBE3U09p2W6BMqbVjHysCaNZl8lmhcWr3xFkOhZmk4AXhT77UDU_50fkmzaSbhntd4FRMIdDILFUiSpwJ9abWPTOBaK9I7mC1oxMOwWg1CG3VDDq27EBB2n0o/w1200-h630-p-k-no-nu/hours-CLI_Dark-meta@2x.png",
@@ -108,11 +87,7 @@
           "sourceKind": "og",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -121,11 +96,160 @@
           "sourceKind": "article-img",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
+        }
+      ],
+      "selected": true
+    },
+    {
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "source": "AOSP Camera Documentation",
+      "published_date": "",
+      "url": "https://source.android.com/docs/core/camera",
+      "summary": "This page provides an overview of the Android Camera framework, HAL, and related components. It's a crucial resource for understanding the camera architecture and interfaces, directly impacting Camera HAL development and compatibility testing.",
+      "camera_hal_relevance_score": 5,
+      "android_camera_relevance_score": 5,
+      "practical_actionability_score": 4,
+      "source_reliability_score": 5,
+      "freshness_score": 1,
+      "ai_required_slot_fit_score": 0,
+      "cpp_fallback_value_score": 0,
+      "relevance_reason": "This is the official documentation for the Android Camera subsystem. It is essential for understanding the Camera HAL interface, stream configurations, request/result metadata, and overall camera architecture, which are core to Camera HAL development.",
+      "impact_areas": [
+        "Camera HAL Interface",
+        "Stream Configuration",
+        "Metadata",
+        "Request/Result Handling",
+        "Architecture"
+      ],
+      "imageCandidates": [
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+          "sourceUrl": "https://source.android.com/docs/core/camera",
+          "articleUrl": "https://source.android.com/docs/core/camera",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Camera Documentation",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
+          "sourceUrl": "https://source.android.com/docs/core/camera",
+          "articleUrl": "https://source.android.com/docs/core/camera",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Camera Documentation",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
+          "sourceUrl": "https://source.android.com/docs/core/camera",
+          "articleUrl": "https://source.android.com/docs/core/camera",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Camera Documentation",
+          "validationStatus": "ok"
+        }
+      ],
+      "selected": true
+    },
+    {
+      "title": "What's new in the Jetpack Compose April '26 release",
+      "source": "Android Developers Blog",
+      "published_date": "Wed, 22 Apr 2026 23:00:00 +0000",
+      "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "summary": "The Jetpack Compose April '26 release is now stable, including version 1.11 of core Compose modules, shared element debug tools, and trackpad events. While not directly camera-related, updates to UI toolkits can indirectly affect how camera previews or controls are displayed and interacted with in apps.",
+      "camera_hal_relevance_score": 2,
+      "android_camera_relevance_score": 3,
+      "practical_actionability_score": 2,
+      "source_reliability_score": 5,
+      "freshness_score": 3,
+      "ai_required_slot_fit_score": 0,
+      "cpp_fallback_value_score": 0,
+      "relevance_reason": "This article announces updates to Jetpack Compose, a UI toolkit for Android. While not directly related to Camera HAL, UI updates can influence how camera features are presented and interacted with in applications, potentially affecting user experience and the need for specific camera API usage.",
+      "impact_areas": [
+        "UI Development",
+        "App Integration",
+        "User Experience"
+      ],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEhgVW3uXlpqZ7PcHixqBlJ2AG19VCQosSAZfuCaqN5WnsvBCiGJdFo4WersXe30hoBz9w6iNYN6QfyY7ae3pNYaa6BQpveTPDKFXXEhJkMXFfxoJIUOXzoaslEJ6NkAA85VvXU4Kv5oZnfG1BDe5dlxsEVxkeyZ1OECfXLSmbcP46IPw5JBj2eBWascC6A",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEhgVW3uXlpqZ7PcHixqBlJ2AG19VCQosSAZfuCaqN5WnsvBCiGJdFo4WersXe30hoBz9w6iNYN6QfyY7ae3pNYaa6BQpveTPDKFXXEhJkMXFfxoJIUOXzoaslEJ6NkAA85VvXU4Kv5oZnfG1BDe5dlxsEVxkeyZ1OECfXLSmbcP46IPw5JBj2eBWascC6A=w1200-h630-p-k-no-nu",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        }
+      ],
+      "selected": true
+    },
+    {
+      "title": "Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 21 Apr 2026 14:00:00 +0000",
+      "url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+      "summary": "Android Studio Panda 4 is released, featuring Planning Mode and Next Edit Prediction to enhance developer productivity. These AI-powered features aim to streamline the development process, which is relevant for improving the efficiency of Camera HAL engineers.",
+      "camera_hal_relevance_score": 3,
+      "android_camera_relevance_score": 3,
+      "practical_actionability_score": 3,
+      "source_reliability_score": 5,
+      "freshness_score": 3,
+      "ai_required_slot_fit_score": 3,
+      "cpp_fallback_value_score": 0,
+      "relevance_reason": "This article highlights advancements in Android Studio that leverage AI for developer productivity. Features like Planning Mode and Next Edit Prediction can significantly impact how engineers write, debug, and optimize code, including C++ code relevant to Camera HAL development.",
+      "impact_areas": [
+        "Developer Productivity",
+        "AI-Assisted Development",
+        "IDE Tooling",
+        "C++ Development"
+      ],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCeyqbTYSKHw74pe8taXGIeibsDPTF3E2HfJ6FdOSS1Ks5oZf57MawULThH8WnWs-H8Rd-mh4gDAYWhJgKqVUoFPWY5uBRawb0qOagSEKEjJ3F4__Zd3u1rxkA15l_9L_6h8cVpsNA3_60pFredcBWYlC7_MOqRhD_ZCxdH28qvfVMBRhMPhtU7FpoYd0/s2048/Panda-Statics-METACARD_Panda4.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCeyqbTYSKHw74pe8taXGIeibsDPTF3E2HfJ6FdOSS1Ks5oZf57MawULThH8WnWs-H8Rd-mh4gDAYWhJgKqVUoFPWY5uBRawb0qOagSEKEjJ3F4__Zd3u1rxkA15l_9L_6h8cVpsNA3_60pFredcBWYlC7_MOqRhD_ZCxdH28qvfVMBRhMPhtU7FpoYd0/w1200-h630-p-k-no-nu/Panda-Statics-METACARD_Panda4.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
         }
       ],
       "selected": true
@@ -135,22 +259,20 @@
       "source": "Android Developers Blog",
       "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
       "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
-      "summary": "Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability. Whether you're fine-tuning your app's user experience, ensuring smooth edge-to-edge rendering, or leveraging the newest APIs, Beta 4 provides the near-final environment you need to be testing with. Get your apps, libraries, tools, and game engines ready! If you develop an Android SDK, library, tool, or ",
+      "summary": "Android 17 Beta 4 has been released, marking the final scheduled beta for this cycle. This release is crucial for app compatibility testing, ensuring smooth operation across devices and readiness for the final Android 17 release. Camera HAL developers should test their implementations against this beta for compatibility.",
       "camera_hal_relevance_score": 4,
-      "android_camera_relevance_score": 5,
-      "practical_actionability_score": 5,
+      "android_camera_relevance_score": 4,
+      "practical_actionability_score": 4,
       "source_reliability_score": 5,
-      "freshness_score": 1,
+      "freshness_score": 3,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "Android 17 Beta 4 출시는 Camera HAL 구현 및 호환성 테스트에 직접적인 영향을 미치며, 새로운 API나 플랫폼 동작 변경 사항을 확인해야 합니다. 이는 CTS/VTS 검증과 vendor HAL의 안정성에 중요합니다.",
+      "relevance_reason": "The release of a new Android beta is always significant for Camera HAL developers. It provides an opportunity to test camera functionality, HAL implementations, and compatibility with the latest platform changes, ensuring stability and adherence to new APIs or behaviors.",
       "impact_areas": [
-        "Android platform",
-        "compatibility",
-        "CTS/VTS",
-        "HAL interface",
-        "testing",
-        "vendor camera behavior"
+        "Android Compatibility",
+        "Platform Stability",
+        "Camera API Behavior",
+        "Testing"
       ],
       "imageCandidates": [
         {
@@ -160,11 +282,7 @@
           "sourceKind": "og",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
@@ -173,11 +291,7 @@
           "sourceKind": "og",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -186,35 +300,81 @@
           "sourceKind": "article-img",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         }
       ],
       "selected": true
     },
     {
-      "title": "Devirtualization and Static Polymorphism -- David Álvarez Rosa",
+      "title": "Test Multi-Device Interactions with the Android Emulator",
+      "source": "Android Developers Blog",
+      "published_date": "Mon, 13 Apr 2026 13:00:00 +0000",
+      "url": "https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html",
+      "summary": "The Android Emulator now natively supports interconnecting multiple virtual devices, simplifying the testing of multi-device interactions. This is beneficial for Camera HAL engineers who need to test camera behavior across different form factors or connected device scenarios.",
+      "camera_hal_relevance_score": 3,
+      "android_camera_relevance_score": 3,
+      "practical_actionability_score": 3,
+      "source_reliability_score": 5,
+      "freshness_score": 3,
+      "ai_required_slot_fit_score": 0,
+      "cpp_fallback_value_score": 0,
+      "relevance_reason": "Improvements to the Android Emulator, particularly in testing multi-device interactions, can directly benefit Camera HAL development. This allows for more realistic testing of camera features that might involve multiple devices or complex form factors, improving the robustness of HAL implementations.",
+      "impact_areas": [
+        "Testing",
+        "Emulator Features",
+        "Multi-Device Scenarios",
+        "Camera Functionality"
+      ],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjBR5Gu_q_DDh7EY-Ww_MeEEIgLmChUzPgscdMrwDuUFwZHkXEi0Z69jaS6Kk0rBdY2NSq4mtljZqGegARIzPRDWfUJhKYtWjgwwxA6OI4ga1tO31baXjOwu2jjupVomtDU_3PyJr6aaAozzY9vck1jmKe2oRSInlMFmT5bApVgAS3SRp7smp8kPWOy5Ow",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjBR5Gu_q_DDh7EY-Ww_MeEEIgLmChUzPgscdMrwDuUFwZHkXEi0Z69jaS6Kk0rBdY2NSq4mtljZqGegARIzPRDWfUJhKYtWjgwwxA6OI4ga1tO31baXjOwu2jjupVomtDU_3PyJr6aaAozzY9vck1jmKe2oRSInlMFmT5bApVgAS3SRp7smp8kPWOy5Ow=w1200-h630-p-k-no-nu",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        }
+      ],
+      "selected": true
+    },
+    {
+      "title": "Devirtualization and Static Polymorphism &#45;&#45; David Álvarez Rosa",
       "source": "ISO C++ Blog",
       "published_date": "Thu, 16 Apr 2026 19:42:23 +0000",
       "url": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa",
-      "summary": "Ever wondered why your clean, object-oriented design sometimes slows things down? This piece breaks down how virtual dispatch impacts performance&mdash;and how techniques like devirtualization and static polymorphism can eliminate that overhead entirely. Devirtualization and Static Polymorphism by David &Aacute;lvarez Rosa From the article: Ever wondered why your &ldquo;clean&rdquo; polymorphic design underperforms in benchmarks? Virtual dispatch enables polymorphism, but it comes with hidden ov",
-      "camera_hal_relevance_score": 4,
-      "android_camera_relevance_score": 2,
-      "practical_actionability_score": 4,
+      "summary": "This article explores how virtual dispatch impacts performance and how techniques like devirtualization and static polymorphism can eliminate overhead. Understanding these C++ performance optimizations is crucial for writing efficient native code in Camera HAL.",
+      "camera_hal_relevance_score": 3,
+      "android_camera_relevance_score": 1,
+      "practical_actionability_score": 3,
       "source_reliability_score": 4,
-      "freshness_score": 1,
+      "freshness_score": 3,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 3,
-      "relevance_reason": "C++ 가상 함수 호출의 성능 오버헤드와 정적 다형성을 통한 최적화 기법은 Camera HAL의 C++ 네이티브 코드 성능 개선에 직접적으로 적용될 수 있으며, 특히 지연 시간에 민감한 카메라 파이프라인에 중요합니다.",
+      "relevance_reason": "This C++ article discusses performance optimization techniques like devirtualization and static polymorphism. These are highly relevant for Camera HAL engineers working with C++ to optimize low-level camera processing pipelines for better performance and reduced overhead.",
       "impact_areas": [
-        "C++ native code quality",
-        "performance optimization",
-        "latency",
-        "concurrency",
-        "memory"
+        "C++ Performance",
+        "Optimization",
+        "Native Code",
+        "Polymorphism"
       ],
       "imageCandidates": [
         {
@@ -224,39 +384,9 @@
           "sourceKind": "article-img",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok",
-          "alt": "rosa-devirtualization.png",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "validationStatus": "ok"
         }
       ],
-      "selected": true
-    },
-    {
-      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "source": "ISO C++ Blog",
-      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "summary": "GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R",
-      "camera_hal_relevance_score": 5,
-      "android_camera_relevance_score": 3,
-      "practical_actionability_score": 5,
-      "source_reliability_score": 4,
-      "freshness_score": 3,
-      "ai_required_slot_fit_score": 0,
-      "cpp_fallback_value_score": 3,
-      "relevance_reason": "GCC 16.1의 C++26 기능(리플렉션, 컨트랙트) 및 안전 강화 기능은 Camera HAL의 C++ 네이티브 코드 품질, 안정성, 유지보수성을 크게 향상시킬 잠재력이 있습니다. C++20 기본 적용은 AOSP 빌드 시스템 및 HAL 컴파일에 직접적인 영향을 줍니다.",
-      "impact_areas": [
-        "C++ native code quality",
-        "toolchain",
-        "compiler",
-        "safety",
-        "developer productivity",
-        "AOSP Camera",
-        "compatibility"
-      ],
-      "imageCandidates": [],
       "selected": true
     }
   ]

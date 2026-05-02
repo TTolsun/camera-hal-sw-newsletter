@@ -4,7 +4,7 @@
   "newsletter_date": "2026-05-02",
   "audience": "Camera HAL / Android Camera / C++ engineer",
   "lookback_days": 21,
-  "generated_at": "2026-05-01T16:32:46.359Z",
+  "generated_at": "2026-05-02T01:44:46.167Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -82,7 +82,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 145934
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
@@ -95,7 +96,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 95274
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -108,7 +110,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -123,7 +126,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 145934
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
@@ -136,7 +140,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 95274
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -149,7 +154,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -200,7 +206,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 537780
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPyFElAHYM4meoiCciQQ2lncUtR6wtpR1c8Sd1K4SbNEUKDat7QeDRM3yGyMMu0J--WblBE3U09p2W6BMqbVjHysCaNZl8lmhcWr3xFkOhZmk4AXhT77UDU_50fkmzaSbhntd4FRMIdDILFUiSpwJ9abWPTOBaK9I7mC1oxMOwWg1CG3VDDq27EBB2n0o/w1200-h630-p-k-no-nu/hours-CLI_Dark-meta@2x.png",
@@ -213,7 +220,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 103068
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -226,7 +234,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -241,7 +250,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 537780
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPyFElAHYM4meoiCciQQ2lncUtR6wtpR1c8Sd1K4SbNEUKDat7QeDRM3yGyMMu0J--WblBE3U09p2W6BMqbVjHysCaNZl8lmhcWr3xFkOhZmk4AXhT77UDU_50fkmzaSbhntd4FRMIdDILFUiSpwJ9abWPTOBaK9I7mC1oxMOwWg1CG3VDDq27EBB2n0o/w1200-h630-p-k-no-nu/hours-CLI_Dark-meta@2x.png",
@@ -254,7 +264,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 103068
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -267,7 +278,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -318,7 +330,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 151002
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEinBfbmZsMJ5-reN40gywIYP-ZVaI_aPzWseCWBPTVGqEp3vrtoiNdK5rtQXRhDXRzXBjzbJ_vvQEvn4u-Mj79Iw-JS2qgwoNmfRMgDHJG8L01GXqCSkfqON2qxwPQ5dhCoXFnREXYFbq1ueQ5FKLWLyOjI3FSxgsuKYcJkoLwi09vIMtbx21XvC6gZ8wI=w1200-h630-p-k-no-nu",
@@ -331,7 +344,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 109099
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -344,7 +358,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -359,7 +374,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 151002
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEinBfbmZsMJ5-reN40gywIYP-ZVaI_aPzWseCWBPTVGqEp3vrtoiNdK5rtQXRhDXRzXBjzbJ_vvQEvn4u-Mj79Iw-JS2qgwoNmfRMgDHJG8L01GXqCSkfqON2qxwPQ5dhCoXFnREXYFbq1ueQ5FKLWLyOjI3FSxgsuKYcJkoLwi09vIMtbx21XvC6gZ8wI=w1200-h630-p-k-no-nu",
@@ -372,7 +388,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 109099
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -385,7 +402,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -415,7 +433,7 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "الكاميرا &nbsp;|&nbsp; Android Open Source Project",
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/core/camera",
       "publishedAt": "",
       "published_date": "",
@@ -436,33 +454,36 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png?hl=ar",
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "رمز طبقة تجريد أجهزة الكاميرا في Android",
+          "alt": "Android Camera HAL icon",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2242
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png?hl=ar",
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "بنية الكاميرا في Android",
+          "alt": "Android camera architecture",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 43971
         }
       ],
       "image_candidates": [
@@ -477,38 +498,165 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png?hl=ar",
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "رمز طبقة تجريد أجهزة الكاميرا في Android",
+          "alt": "Android Camera HAL icon",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2242
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png?hl=ar",
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "بنية الكاميرا في Android",
+          "alt": "Android camera architecture",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 43971
         }
       ],
       "candidateTier": "main-article",
       "reason": "AOSP Camera Documentation (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.",
       "collection_reason": "AOSP Camera Documentation (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected."
+    },
+    {
+      "source": "AOSP What's New / Release Notes",
+      "source_name": "AOSP What's New / Release Notes",
+      "sourceUrl": "https://source.android.com/docs/whatsnew",
+      "source_url": "https://source.android.com/docs/whatsnew",
+      "articleUrl": "https://source.android.com/docs/whatsnew",
+      "article_url": "https://source.android.com/docs/whatsnew",
+      "source_id": "aosp-whats-new-release-notes",
+      "category": "aosp",
+      "section": "Android / AOSP / Camera",
+      "source_category": "aosp",
+      "source_section": "Android / AOSP / Camera",
+      "priority": "high",
+      "reliability": "official",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "usageHint": "Android platform release, CTS/VTS/ITS, compatibility 변화 확인",
+      "source_usage_hint": "Android platform release, CTS/VTS/ITS, compatibility 변화 확인",
+      "candidateOnly": false,
+      "candidate_only": false,
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "verification_hint": "Can be used directly if the collected item supports the claim.",
+      "title": "Neue Funktionen &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/whatsnew",
+      "publishedAt": "",
+      "published_date": "",
+      "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+      "relevanceScore": 100,
+      "relevance_score": 100,
+      "cameraHalRelevanceScore": 100,
+      "camera_hal_relevance_score": 100,
+      "imageCandidates": [
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Open Source Project",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 4824
+        },
+        {
+          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=de",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1165
+        },
+        {
+          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=tr",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1165
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Open Source Project",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 4824
+        },
+        {
+          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=de",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1165
+        },
+        {
+          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=tr",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1165
+        }
+      ],
+      "candidateTier": "main-article",
+      "reason": "AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.",
+      "collection_reason": "AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected."
     },
     {
       "source": "Android Compatibility Definition Document",
@@ -533,7 +681,7 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Android 互換性定義ドキュメント &nbsp;|&nbsp; Android Open Source Project",
+      "title": "เอกสารนิยามความเข้ากันได้กับ Android &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/compatibility/cdd",
       "publishedAt": "",
       "published_date": "",
@@ -554,7 +702,22 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
+          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Compatibility Definition Document",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -569,7 +732,22 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
+          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Compatibility Definition Document",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "main-article",
@@ -610,7 +788,7 @@
       "camera_hal_relevance_score": 96,
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=vi",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "sourceKind": "og",
@@ -620,7 +798,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 31847
         },
         {
           "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
@@ -633,7 +812,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 5562
         },
         {
           "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
@@ -646,12 +826,13 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=vi",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "sourceKind": "og",
@@ -661,7 +842,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 31847
         },
         {
           "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
@@ -674,7 +856,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 5562
         },
         {
           "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
@@ -687,7 +870,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2833
         }
       ],
       "candidateTier": "main-article",
@@ -738,7 +922,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 182357
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEgseJ0HOa6wGI4egBEWBTC4Pawhiiv3BQIDm5R3XjY2D0uBRcZJaNTWcsHkMXY8VnbtA98-sojfdwKttHh6x82yQSg1sCsAWSKb8QXgVo5bQk4wtoi2LoM5u-TXYeIDD-fbqkA3SJssiUWgFTWsf44BAjzk06Iov-uDeIXJm6elMrcsNQoEU2KbVYN6SQo=w1200-h630-p-k-no-nu",
@@ -751,7 +936,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 129771
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -764,7 +950,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -779,7 +966,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 182357
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEgseJ0HOa6wGI4egBEWBTC4Pawhiiv3BQIDm5R3XjY2D0uBRcZJaNTWcsHkMXY8VnbtA98-sojfdwKttHh6x82yQSg1sCsAWSKb8QXgVo5bQk4wtoi2LoM5u-TXYeIDD-fbqkA3SJssiUWgFTWsf44BAjzk06Iov-uDeIXJm6elMrcsNQoEU2KbVYN6SQo=w1200-h630-p-k-no-nu",
@@ -792,7 +980,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 129771
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -805,7 +994,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -856,7 +1046,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 205043
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEhgVW3uXlpqZ7PcHixqBlJ2AG19VCQosSAZfuCaqN5WnsvBCiGJdFo4WersXe30hoBz9w6iNYN6QfyY7ae3pNYaa6BQpveTPDKFXXEhJkMXFfxoJIUOXzoaslEJ6NkAA85VvXU4Kv5oZnfG1BDe5dlxsEVxkeyZ1OECfXLSmbcP46IPw5JBj2eBWascC6A=w1200-h630-p-k-no-nu",
@@ -869,7 +1060,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 117078
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -882,7 +1074,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -897,7 +1090,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 205043
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEhgVW3uXlpqZ7PcHixqBlJ2AG19VCQosSAZfuCaqN5WnsvBCiGJdFo4WersXe30hoBz9w6iNYN6QfyY7ae3pNYaa6BQpveTPDKFXXEhJkMXFfxoJIUOXzoaslEJ6NkAA85VvXU4Kv5oZnfG1BDe5dlxsEVxkeyZ1OECfXLSmbcP46IPw5JBj2eBWascC6A=w1200-h630-p-k-no-nu",
@@ -910,7 +1104,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 117078
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -923,7 +1118,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -974,7 +1170,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 645197
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCeyqbTYSKHw74pe8taXGIeibsDPTF3E2HfJ6FdOSS1Ks5oZf57MawULThH8WnWs-H8Rd-mh4gDAYWhJgKqVUoFPWY5uBRawb0qOagSEKEjJ3F4__Zd3u1rxkA15l_9L_6h8cVpsNA3_60pFredcBWYlC7_MOqRhD_ZCxdH28qvfVMBRhMPhtU7FpoYd0/w1200-h630-p-k-no-nu/Panda-Statics-METACARD_Panda4.png",
@@ -987,7 +1184,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 310696
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -1000,7 +1198,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -1015,7 +1214,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 645197
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCeyqbTYSKHw74pe8taXGIeibsDPTF3E2HfJ6FdOSS1Ks5oZf57MawULThH8WnWs-H8Rd-mh4gDAYWhJgKqVUoFPWY5uBRawb0qOagSEKEjJ3F4__Zd3u1rxkA15l_9L_6h8cVpsNA3_60pFredcBWYlC7_MOqRhD_ZCxdH28qvfVMBRhMPhtU7FpoYd0/w1200-h630-p-k-no-nu/Panda-Statics-METACARD_Panda4.png",
@@ -1028,7 +1228,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 310696
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -1041,7 +1242,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -1092,7 +1294,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 152980
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
@@ -1105,7 +1308,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 113199
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -1118,7 +1322,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -1133,7 +1338,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 152980
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
@@ -1146,7 +1352,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 113199
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -1159,7 +1366,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -1210,7 +1418,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 75592
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjBR5Gu_q_DDh7EY-Ww_MeEEIgLmChUzPgscdMrwDuUFwZHkXEi0Z69jaS6Kk0rBdY2NSq4mtljZqGegARIzPRDWfUJhKYtWjgwwxA6OI4ga1tO31baXjOwu2jjupVomtDU_3PyJr6aaAozzY9vck1jmKe2oRSInlMFmT5bApVgAS3SRp7smp8kPWOy5Ow=w1200-h630-p-k-no-nu",
@@ -1223,7 +1432,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 51671
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -1236,7 +1446,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -1251,7 +1462,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 75592
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjBR5Gu_q_DDh7EY-Ww_MeEEIgLmChUzPgscdMrwDuUFwZHkXEi0Z69jaS6Kk0rBdY2NSq4mtljZqGegARIzPRDWfUJhKYtWjgwwxA6OI4ga1tO31baXjOwu2jjupVomtDU_3PyJr6aaAozzY9vck1jmKe2oRSInlMFmT5bApVgAS3SRp7smp8kPWOy5Ow=w1200-h630-p-k-no-nu",
@@ -1264,7 +1476,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 51671
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -1277,7 +1490,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -1307,7 +1521,7 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Android Güvenlik ve Güncelleme Bültenleri &nbsp;|&nbsp; Android Open Source Project",
+      "title": "Android 보안 및 업데이트 게시판 &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/security/bulletin",
       "publishedAt": "",
       "published_date": "",
@@ -1328,10 +1542,11 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Security Bulletin",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/identity/identity-hero.svg?hl=tr",
+          "url": "https://developer.android.com/images/identity/identity-hero.svg?hl=ko",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin",
           "sourceKind": "article-img",
@@ -1341,10 +1556,11 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Security Bulletin",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6142
         },
         {
-          "url": "https://developer.android.com/images/cluster-illustrations/developer-preview.svg?hl=tr",
+          "url": "https://developer.android.com/images/cluster-illustrations/developer-preview.svg?hl=ko",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin",
           "sourceKind": "article-img",
@@ -1354,7 +1570,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Security Bulletin",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 5358
         }
       ],
       "image_candidates": [
@@ -1369,10 +1586,11 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Security Bulletin",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/identity/identity-hero.svg?hl=tr",
+          "url": "https://developer.android.com/images/identity/identity-hero.svg?hl=ko",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin",
           "sourceKind": "article-img",
@@ -1382,10 +1600,11 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Security Bulletin",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6142
         },
         {
-          "url": "https://developer.android.com/images/cluster-illustrations/developer-preview.svg?hl=tr",
+          "url": "https://developer.android.com/images/cluster-illustrations/developer-preview.svg?hl=ko",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin",
           "sourceKind": "article-img",
@@ -1395,7 +1614,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Security Bulletin",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 5358
         }
       ],
       "candidateTier": "main-article",
@@ -1446,7 +1666,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 49877
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_n6hjuC6FHnlMKgk_VZr8Wa7NCN90ggZ3Y5HcmsRfJc5FfvEk-9tMhnIyALvjpYgFdaveyLHbf9-AqbWBm1-Fjq7xgxnRwug0fOlGdqe3MsCWGbx6Zy9-pqXSLlTrpFCWYDGpiqejr51fcBUqHlS2qiqBJtuicaRAnNyJr0Z8ex4j2trd3x1Bf29KeZk/w1200-h630-p-k-no-nu/260409_Uyo%20policy%20bundle_Metadata.png",
@@ -1459,7 +1680,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 103564
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -1472,7 +1694,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "image_candidates": [
@@ -1487,7 +1710,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 49877
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_n6hjuC6FHnlMKgk_VZr8Wa7NCN90ggZ3Y5HcmsRfJc5FfvEk-9tMhnIyALvjpYgFdaveyLHbf9-AqbWBm1-Fjq7xgxnRwug0fOlGdqe3MsCWGbx6Zy9-pqXSLlTrpFCWYDGpiqejr51fcBUqHlS2qiqBJtuicaRAnNyJr0Z8ex4j2trd3x1Bf29KeZk/w1200-h630-p-k-no-nu/260409_Uyo%20policy%20bundle_Metadata.png",
@@ -1500,7 +1724,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 103564
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -1513,7 +1738,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 12454
         }
       ],
       "candidateTier": "main-article",
@@ -1543,18 +1769,18 @@
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "آخر تحديثات Android &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers",
+      "title": "Android latest updates &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers",
       "url": "https://developer.android.com/latest-updates",
       "publishedAt": "",
       "published_date": "",
-      "summary": "اكتشِف الميزات الجديدة في منظومة Android المتكاملة.",
+      "summary": "Discover what's new across the Android ecosystem.",
       "relevanceScore": 53,
       "relevance_score": 53,
       "cameraHalRelevanceScore": 53,
       "camera_hal_relevance_score": 53,
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "og",
@@ -1564,7 +1790,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 31847
         },
         {
           "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
@@ -1577,10 +1804,11 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg?hl=ar",
+          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "article-img",
@@ -1590,12 +1818,13 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 3855
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "og",
@@ -1605,7 +1834,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 31847
         },
         {
           "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
@@ -1618,10 +1848,11 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg?hl=ar",
+          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "article-img",
@@ -1631,7 +1862,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 3855
         }
       ],
       "candidateTier": "short-news",
@@ -1682,7 +1914,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "libcamera Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 14779
         },
         {
           "url": "https://libcamera.org/_images/bugzilla.png",
@@ -1695,7 +1928,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "libcamera Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 15088
         },
         {
           "url": "https://libcamera.org/_images/libcamera-banner.png",
@@ -1708,7 +1942,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "libcamera Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 8203
         }
       ],
       "image_candidates": [
@@ -1723,7 +1958,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "libcamera Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 14779
         },
         {
           "url": "https://libcamera.org/_images/bugzilla.png",
@@ -1736,7 +1972,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "libcamera Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 15088
         },
         {
           "url": "https://libcamera.org/_images/libcamera-banner.png",
@@ -1749,7 +1986,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "libcamera Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 8203
         }
       ],
       "candidateTier": "short-news",
@@ -1838,7 +2076,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 74917
         }
       ],
       "image_candidates": [
@@ -1853,7 +2092,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 74917
         }
       ],
       "candidateTier": "short-news",
@@ -1904,7 +2144,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 510075
         }
       ],
       "image_candidates": [
@@ -1919,7 +2160,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 510075
         }
       ],
       "candidateTier": "reference-candidate",
@@ -1970,7 +2212,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 406096
         }
       ],
       "image_candidates": [
@@ -1985,7 +2228,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 406096
         }
       ],
       "candidateTier": "reference-candidate",
@@ -2074,7 +2318,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 531085
         }
       ],
       "image_candidates": [
@@ -2089,7 +2334,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 531085
         }
       ],
       "candidateTier": "reference-candidate",
@@ -2216,7 +2462,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 386711
         }
       ],
       "image_candidates": [
@@ -2231,7 +2478,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 386711
         }
       ],
       "candidateTier": "reference-candidate",
@@ -2282,7 +2530,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 509627
         }
       ],
       "image_candidates": [
@@ -2297,7 +2546,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 509627
         }
       ],
       "candidateTier": "reference-candidate",
@@ -2348,7 +2598,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 461145
         }
       ],
       "image_candidates": [
@@ -2363,7 +2614,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 461145
         }
       ],
       "candidateTier": "reference-candidate",
@@ -2414,7 +2666,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 7854
         }
       ],
       "image_candidates": [
@@ -2429,7 +2682,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "ISO C++ Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 7854
         }
       ],
       "candidateTier": "reference-candidate",
@@ -2518,7 +2772,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "OpenAI News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2900100
         },
         {
           "url": "https://images.ctfassets.net/kftzwdyauwt9/4qS0zHVYqjyQCXbjR0GBgo/afaf8ff54069198f148dec57aa40461b/ArtCard-Introducing_Advanced_Account_Security_for_ChatGPT_accounts.png?w=3840&q=90&fm=webp",
@@ -2531,7 +2786,8 @@
           "contentType": "image/webp",
           "licenseStatus": "unknown",
           "attribution": "OpenAI News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 211456
         },
         {
           "url": "https://images.ctfassets.net/kftzwdyauwt9/4PQEkUjwzZCUh88wyOXoc9/d06376c2bc7249d357cbad6019ecccde/Frame.png?w=3840&q=90&fm=webp",
@@ -2544,7 +2800,8 @@
           "contentType": "image/webp",
           "licenseStatus": "unknown",
           "attribution": "OpenAI News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 98302
         }
       ],
       "image_candidates": [
@@ -2559,7 +2816,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "OpenAI News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2900100
         },
         {
           "url": "https://images.ctfassets.net/kftzwdyauwt9/4qS0zHVYqjyQCXbjR0GBgo/afaf8ff54069198f148dec57aa40461b/ArtCard-Introducing_Advanced_Account_Security_for_ChatGPT_accounts.png?w=3840&q=90&fm=webp",
@@ -2572,7 +2830,8 @@
           "contentType": "image/webp",
           "licenseStatus": "unknown",
           "attribution": "OpenAI News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 211456
         },
         {
           "url": "https://images.ctfassets.net/kftzwdyauwt9/4PQEkUjwzZCUh88wyOXoc9/d06376c2bc7249d357cbad6019ecccde/Frame.png?w=3840&q=90&fm=webp",
@@ -2585,7 +2844,8 @@
           "contentType": "image/webp",
           "licenseStatus": "unknown",
           "attribution": "OpenAI News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 98302
         }
       ],
       "candidateTier": "short-news",
@@ -2674,7 +2934,8 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 30702
         },
         {
           "url": "https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F96ea2509a90e527642c822303e56296a07bcfce4-1920x1080.png&w=3840&q=75",
@@ -2687,7 +2948,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 268878
         },
         {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/a62b6eb169818f14c35b7a192af269e283f8fa93-1000x1000.svg",
@@ -2700,7 +2962,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6213
         }
       ],
       "image_candidates": [
@@ -2715,7 +2978,8 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 30702
         },
         {
           "url": "https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F96ea2509a90e527642c822303e56296a07bcfce4-1920x1080.png&w=3840&q=75",
@@ -2728,7 +2992,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 268878
         },
         {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/a62b6eb169818f14c35b7a192af269e283f8fa93-1000x1000.svg",
@@ -2741,7 +3006,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6213
         }
       ],
       "candidateTier": "short-news",
@@ -2792,33 +3058,8 @@
           "contentType": "image/webp",
           "licenseStatus": "unknown",
           "attribution": "Google DeepMind Blog",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://storage.googleapis.com/gdm-deepmind-com-prod-public/media/original_images/nav__dm__gemini__large.svg",
-          "sourceUrl": "https://deepmind.google/blog/",
-          "articleUrl": "https://deepmind.google/blog/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Google DeepMind Blog",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://storage.googleapis.com/gdm-deepmind-com-prod-public/media/original_images/nav__dm__nano-banana__large.svg",
-          "sourceUrl": "https://deepmind.google/blog/",
-          "articleUrl": "https://deepmind.google/blog/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Google DeepMind Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 208576
         }
       ],
       "image_candidates": [
@@ -2833,33 +3074,8 @@
           "contentType": "image/webp",
           "licenseStatus": "unknown",
           "attribution": "Google DeepMind Blog",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://storage.googleapis.com/gdm-deepmind-com-prod-public/media/original_images/nav__dm__gemini__large.svg",
-          "sourceUrl": "https://deepmind.google/blog/",
-          "articleUrl": "https://deepmind.google/blog/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Google DeepMind Blog",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://storage.googleapis.com/gdm-deepmind-com-prod-public/media/original_images/nav__dm__nano-banana__large.svg",
-          "sourceUrl": "https://deepmind.google/blog/",
-          "articleUrl": "https://deepmind.google/blog/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Google DeepMind Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 208576
         }
       ],
       "candidateTier": "short-news",
@@ -2910,7 +3126,8 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Google Cloud AI & Machine Learning Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6179
         },
         {
           "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/0_gemini_enterprise_agent_platform.max-1800x1800.jpg",
@@ -2923,7 +3140,8 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Google Cloud AI & Machine Learning Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 46372
         },
         {
           "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/google_ai_this_month.max-900x900.jpg",
@@ -2936,7 +3154,8 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Google Cloud AI & Machine Learning Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 71967
         }
       ],
       "image_candidates": [
@@ -2951,7 +3170,8 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Google Cloud AI & Machine Learning Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6179
         },
         {
           "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/0_gemini_enterprise_agent_platform.max-1800x1800.jpg",
@@ -2964,7 +3184,8 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Google Cloud AI & Machine Learning Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 46372
         },
         {
           "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/google_ai_this_month.max-900x900.jpg",
@@ -2977,7 +3198,8 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Google Cloud AI & Machine Learning Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 71967
         }
       ],
       "candidateTier": "short-news",
@@ -3028,7 +3250,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 0
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/light.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=78fd01ff4f4340295a4f66e2ea54903c",
@@ -3041,7 +3264,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6300
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
@@ -3054,7 +3278,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6301
         }
       ],
       "image_candidates": [
@@ -3069,7 +3294,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 0
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/light.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=78fd01ff4f4340295a4f66e2ea54903c",
@@ -3082,7 +3308,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6300
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
@@ -3095,7 +3322,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 6301
         }
       ],
       "candidateTier": "reference-candidate",
@@ -3146,7 +3374,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 31847
         },
         {
           "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
@@ -3159,7 +3388,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 5562
         },
         {
           "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
@@ -3172,7 +3402,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
@@ -3187,7 +3418,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 31847
         },
         {
           "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
@@ -3200,7 +3432,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 5562
         },
         {
           "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
@@ -3213,7 +3446,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2833
         }
       ],
       "candidateTier": "reference-candidate",
@@ -3264,7 +3498,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Google Open Source Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2708
         },
         {
           "url": "https://opensource.google/static/images/os-anim-main.gif",
@@ -3277,7 +3512,8 @@
           "contentType": "image/gif",
           "licenseStatus": "unknown",
           "attribution": "Google Open Source Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 1081069
         }
       ],
       "image_candidates": [
@@ -3292,7 +3528,8 @@
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Google Open Source Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 2708
         },
         {
           "url": "https://opensource.google/static/images/os-anim-main.gif",
@@ -3305,7 +3542,8 @@
           "contentType": "image/gif",
           "licenseStatus": "unknown",
           "attribution": "Google Open Source Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 1081069
         }
       ],
       "candidateTier": "reference-candidate",
@@ -3356,7 +3594,22 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Google Research Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 13550
+        },
+        {
+          "url": "https://storage.googleapis.com/gweb-research2023-media/original_images/Open_science_1.png",
+          "sourceUrl": "https://research.google/blog/",
+          "articleUrl": "https://research.google/blog/",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Google Research Blog",
+          "validationStatus": "ok",
+          "contentLength": 1873168
         },
         {
           "url": "https://storage.googleapis.com/gweb-research2023-media/original_images/ERAapp_Hero.png",
@@ -3369,20 +3622,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Google Research Blog",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://storage.googleapis.com/gweb-research2023-media/original_images/Reangle-hero.gif",
-          "sourceUrl": "https://research.google/blog/",
-          "articleUrl": "https://research.google/blog/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/gif",
-          "licenseStatus": "unknown",
-          "attribution": "Google Research Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 39068
         }
       ],
       "image_candidates": [
@@ -3397,7 +3638,22 @@
           "contentType": "image/jpeg",
           "licenseStatus": "unknown",
           "attribution": "Google Research Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 13550
+        },
+        {
+          "url": "https://storage.googleapis.com/gweb-research2023-media/original_images/Open_science_1.png",
+          "sourceUrl": "https://research.google/blog/",
+          "articleUrl": "https://research.google/blog/",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Google Research Blog",
+          "validationStatus": "ok",
+          "contentLength": 1873168
         },
         {
           "url": "https://storage.googleapis.com/gweb-research2023-media/original_images/ERAapp_Hero.png",
@@ -3410,20 +3666,8 @@
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Google Research Blog",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://storage.googleapis.com/gweb-research2023-media/original_images/Reangle-hero.gif",
-          "sourceUrl": "https://research.google/blog/",
-          "articleUrl": "https://research.google/blog/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/gif",
-          "licenseStatus": "unknown",
-          "attribution": "Google Research Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentLength": 39068
         }
       ],
       "candidateTier": "reference-candidate",
@@ -3505,79 +3749,9 @@
       "candidateTier": "reference-candidate",
       "reason": "LLVM Release Notes (project-official, medium, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.",
       "collection_reason": "LLVM Release Notes (project-official, medium, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected."
-    },
-    {
-      "source": "EE Times - Semiconductors",
-      "source_name": "EE Times - Semiconductors",
-      "sourceUrl": "https://www.eetimes.com/tag/semiconductors/",
-      "source_url": "https://www.eetimes.com/tag/semiconductors/",
-      "articleUrl": "https://www.eetimes.com/tag/semiconductors/",
-      "article_url": "https://www.eetimes.com/tag/semiconductors/",
-      "source_id": "ee-times-semiconductors",
-      "category": "semiconductor",
-      "section": "Embedded / Semiconductor",
-      "source_category": "semiconductor",
-      "source_section": "Embedded / Semiconductor",
-      "priority": "medium",
-      "reliability": "electronics-media",
-      "source_priority": "medium",
-      "source_reliability": "electronics-media",
-      "usageHint": "SoC, semiconductor, AI chip, sensor, hardware ecosystem 동향 확인",
-      "source_usage_hint": "SoC, semiconductor, AI chip, sensor, hardware ecosystem 동향 확인",
-      "candidateOnly": false,
-      "candidate_only": false,
-      "requiresCrossCheck": true,
-      "requires_cross_check": true,
-      "verification_hint": "Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.",
-      "title": "Semiconductor News & Industry Updates - EE Times",
-      "url": "https://www.eetimes.com/tag/semiconductors/",
-      "publishedAt": "",
-      "published_date": "",
-      "summary": "EE Times connects the global electronics community through news, analysis, education, and peer-to-peer discussion around technology, business, products and design",
-      "relevanceScore": 81,
-      "relevance_score": 81,
-      "cameraHalRelevanceScore": 81,
-      "camera_hal_relevance_score": 81,
-      "imageCandidates": [
-        {
-          "url": "https://www.eetimes.com/wp-content/uploads/EE-Times-1.png?fit=1200%2C675",
-          "sourceUrl": "https://www.eetimes.com/tag/semiconductors/",
-          "articleUrl": "https://www.eetimes.com/tag/semiconductors/",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "EE Times - Semiconductors",
-          "validationStatus": "ok"
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://www.eetimes.com/wp-content/uploads/EE-Times-1.png?fit=1200%2C675",
-          "sourceUrl": "https://www.eetimes.com/tag/semiconductors/",
-          "articleUrl": "https://www.eetimes.com/tag/semiconductors/",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "EE Times - Semiconductors",
-          "validationStatus": "ok"
-        }
-      ],
-      "candidateTier": "main-article",
-      "reason": "EE Times - Semiconductors (electronics-media, medium, score 81): Camera HAL relevance and engineering productivity signals were both detected.",
-      "collection_reason": "EE Times - Semiconductors (electronics-media, medium, score 81): Camera HAL relevance and engineering productivity signals were both detected."
     }
   ],
   "failures": [
-    {
-      "source": "KernelNewbies LinuxChanges",
-      "message": "502 Bad Gateway"
-    },
     {
       "source": "LLVM Project Blog",
       "message": "404 Not Found"
