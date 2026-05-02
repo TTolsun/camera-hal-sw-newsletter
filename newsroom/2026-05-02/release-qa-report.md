@@ -8,6 +8,8 @@
 - newsroom/2026-05-02/editor-draft.md
 - newsroom/2026-05-02/fact-check-report.json
 - newsroom/2026-05-02/fact-check-report.md
+- newsroom/2026-05-02/quality-report.json
+- newsroom/2026-05-02/quality-report.md
 - newsroom/2026-05-02/editor-in-chief-brief.md
 - newsroom/2026-05-02/release-qa-report.md
 - newsletters/2026-05-02/newsletter.md
@@ -16,19 +18,16 @@
 
 ## npm run validate 실행 결과
 
-> camera-hal-sw-newsletter@1.0.0 validate
-> npm run validate:site && npm run validate:images
-
-
 > camera-hal-sw-newsletter@1.0.0 validate:site
 > node scripts/validate-site.js
 
 Validated 3 newsletter entries.
 
+
 > camera-hal-sw-newsletter@1.0.0 validate:images
 > node scripts/validate-external-images.js
 
-Validated 10 article images.
+Validated 12 article images.
 
 ## 잔여 TODO 여부
 
@@ -42,4 +41,11 @@ Validated 10 article images.
 
 - Status: PASS
 - Must fix count: 0
-- Source gap count: 0
+- Source gap count: 6
+
+## Quality Gate
+
+- Quality score: 88/100
+- Quality threshold: 95
+- Quality status: NEEDS_FIX
+- Top deductions: 10pt source-integrity; 2pt hal-relevance
