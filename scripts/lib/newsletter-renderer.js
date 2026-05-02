@@ -298,9 +298,21 @@ ${report.final_comment}
 `;
 }
 
-function buildEditorChiefBrief(date, issue, factCheck) {
+function qualitySummaryMarkdown(qualityReport) {
+  if (!qualityReport) return '- Quality score: not generated';
+  return [
+    `- Quality score: ${qualityReport.score}/100`,
+    `- Quality threshold: ${qualityReport.threshold}`,
+    `- Quality status: ${qualityReport.status}`,
+    `- Top deductions: ${ensureArray(qualityReport.deductions).slice(0, 5).map(item => `${item.points}pt ${item.category}${item.location ? ` (${item.location})` : ''}`).join('; ') || 'none'}`
+  ].join('\n');
+}
+
+function buildEditorChiefBrief(date, issue, factCheck, qualityReport = null) {
   const firstSection = ensureArray(issue.sections)[0] || {};
-  const decision = factCheck.status === 'PASS' ? 'APPROVE' : 'REQUEST_CHANGES';
+  const decision = factCheck.status === 'PASS' && (!qualityReport || qualityReport.status === 'PASS')
+    ? 'APPROVE'
+    : 'REQUEST_CHANGES';
   return `# Editor-in-Chief Brief - ${date}
 
 ## 이번 주 핵심 메시지
@@ -321,6 +333,10 @@ ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 - Source gap count: ${ensureArray(factCheck.source_gaps).length}
 - Comment: ${factCheck.final_comment}
 
+## Quality Gate
+
+${qualitySummaryMarkdown(qualityReport)}
+
 ## 편집장 확인 checklist
 
 - [ ] 이번 주 핵심 메시지가 Camera HAL 업무와 직접 연결되는가?
@@ -334,7 +350,7 @@ ${decision}
 `;
 }
 
-function buildReleaseQaReport(date, files, validateResult, factCheck, todoFound, emptySourceSections) {
+function buildReleaseQaReport(date, files, validateResult, factCheck, todoFound, emptySourceSections, qualityReport = null) {
   return `# Release QA Report - ${date}
 
 ## 생성 파일 목록
@@ -358,6 +374,10 @@ ${emptySourceSections.length === 0 ? '없음' : emptySourceSections.map(section 
 - Status: ${factCheck.status}
 - Must fix count: ${ensureArray(factCheck.must_fix).length}
 - Source gap count: ${ensureArray(factCheck.source_gaps).length}
+
+## Quality Gate
+
+${qualitySummaryMarkdown(qualityReport)}
 `;
 }
 

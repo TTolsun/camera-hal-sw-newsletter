@@ -1,5 +1,14 @@
 # Camera HAL SW Newsletter
 
+## Quality Gate
+
+Generated issues include `newsroom/YYYY-MM-DD/quality-report.json` and `quality-report.md`.
+The deterministic quality score must be at least `95/100` before the issue is ready to publish.
+
+The quality gate checks Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, and article composition. Articles should name concrete evidence where available: version or release, release date, API/component, behavior change, or an explicit source gap. Generic guidance such as "monitor AOSP updates" is not sufficient unless it names the exact source, version, API, date, or behavior to watch.
+
+`npm run validate` runs site, image, and quality validation. If fact-check or quality fails, the weekly workflow may still create a review PR labeled `needs-fix`, but the workflow fails and the PR is not ready for publication.
+
 Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 정리하는 정적 뉴스레터 사이트입니다.
 
 ## File Tree

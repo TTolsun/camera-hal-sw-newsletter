@@ -78,9 +78,12 @@ async function resolveArticleImage(section = {}, options = {}) {
 
   if (!selectedImage) {
     return {
-      src: '',
-      usedFallback: false,
-      reason: 'no selected image'
+      src: fallbackSrc,
+      originalSrc: '',
+      usedFallback: true,
+      reason: fallbackExists(root, fallbackAsset)
+        ? 'no selected image; local fallback visual used'
+        : `fallback missing: ${fallbackAsset}; no selected image`
     };
   }
 

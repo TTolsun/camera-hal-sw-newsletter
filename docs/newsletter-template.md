@@ -1,5 +1,11 @@
 # Camera HAL SW Newsletter Template
 
+## Required Evidence Fields
+
+Every generated article JSON must include `evidence_summary`, `specificity_checks`, and `source_verification_notes`.
+Use these fields to name the concrete version/release, release date, API/component, behavior change, or explicit source gap behind the article.
+Do not use generic monitoring language unless it names the exact source, version, API, date, or behavior to watch.
+
 # Camera HAL SW Newsletter - YYYY-MM-DD
 
 이슈 전체 요약을 2-4문장으로 작성합니다. 이번 주 변화가 Camera HAL / Android Camera / C++ native 개발자에게 왜 중요한지 먼저 말합니다.

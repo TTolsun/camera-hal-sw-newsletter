@@ -1,5 +1,11 @@
 # Camera HAL SW Newsletter Editorial Policy
 
+## Evidence Specificity Requirement
+
+Each main article must include concrete evidence whenever the source provides it: version or release name, release date, API/component, behavior change, or an explicit source gap. Generic wording such as "monitor AOSP updates" or "review CameraX changes" is not publishable unless it names the exact source, version, API, date, or behavior to watch.
+
+AI, C++, Linux, and tooling articles must explain their Camera HAL relevance through camera input paths, stream/buffer/metadata/request/result behavior, CTS/VTS/Camera ITS validation, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, or HAL team workflow.
+
 ## 목표
 
 이 뉴스레터는 Camera HAL, Android Camera, CameraX, AOSP Camera, native C++ 개발자가 한 주의 변화를 실무 관점에서 판단하도록 돕는 기술 리포트입니다. 일반 IT 뉴스 요약이나 제품 홍보 모음이 아니라 HAL 구현, 검증, 성능, 안정성, 개발 workflow에 바로 연결되는 내용을 우선합니다.

@@ -165,7 +165,7 @@ function fallbackWarningsFromEditor(date, editor) {
       continue;
     }
     warn([
-      `External article image was replaced with local fallback: newsletter ${date}`,
+      `${resolved.originalSrc ? 'External article image was replaced with local fallback' : 'Local article image fallback was used'}: newsletter ${date}`,
       `  section/article: ${label} / ${section.headline || 'unknown article'}`,
       `  original: ${resolved.originalSrc || section.selectedImage || 'n/a'}`,
       `  fallback: ${resolved.src}`,

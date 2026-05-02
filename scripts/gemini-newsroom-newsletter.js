@@ -12,6 +12,11 @@ const { reporterSchema, editorSchema, factCheckSchema } = require('./lib/newslet
 const { isSafeExternalImageUrl } = require('./lib/image-candidates');
 const { resolveIssueArticleImages } = require('./lib/article-image-resolver');
 const {
+  QUALITY_THRESHOLD,
+  buildNewsletterQualityReport,
+  buildQualityReportMarkdown
+} = require('./lib/newsletter-quality');
+const {
   buildMarkdown,
   buildHtml,
   buildFactCheckMarkdown,
@@ -49,6 +54,10 @@ function numberOrDefault(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
 }
 
+function stringOrEmpty(value) {
+  return String(value || '').trim();
+}
+
 function imageCandidatesForReporterCandidate(candidate, collectedByUrl) {
   const collected = collectedByUrl.get(candidate.url) || collectedByUrl.get(candidate.article_url) || {};
   const images = ensureArray(candidate.imageCandidates).length > 0
@@ -80,6 +89,11 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.freshness_score = numberOrDefault(candidate.freshness_score);
     candidate.ai_required_slot_fit_score = numberOrDefault(candidate.ai_required_slot_fit_score);
     candidate.cpp_fallback_value_score = numberOrDefault(candidate.cpp_fallback_value_score);
+    candidate.version_or_release = stringOrEmpty(candidate.version_or_release);
+    candidate.api_or_component = stringOrEmpty(candidate.api_or_component);
+    candidate.behavior_change = stringOrEmpty(candidate.behavior_change);
+    candidate.evidence_notes = ensureArray(candidate.evidence_notes);
+    candidate.cross_check_status = stringOrEmpty(candidate.cross_check_status || 'not-required');
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
     if (typeof candidate.selected !== 'boolean') {
       const total =
@@ -194,6 +208,9 @@ function validateEditor(value, date, reporter = { candidates: [] }) {
       confirmed_facts: ensureArray(section.confirmed_facts).length > 0
         ? ensureArray(section.confirmed_facts)
         : [section.what_changed].filter(Boolean),
+      evidence_summary: stringOrEmpty(section.evidence_summary),
+      specificity_checks: ensureArray(section.specificity_checks),
+      source_verification_notes: ensureArray(section.source_verification_notes),
       camera_hal_perspective: section.camera_hal_perspective || section.why_it_matters || '',
       action_items: actionItems.length > 0 ? actionItems : actionHints,
       action_hints: actionHints.length > 0 ? actionHints : actionItems,
@@ -266,12 +283,18 @@ function updateNewsletterData(date, issue) {
 function runValidate() {
   const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   try {
-    const output = execFileSync(npmCommand, ['run', 'validate'], {
+    const siteOutput = execFileSync(npmCommand, ['run', 'validate:site'], {
       cwd: root,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe']
     });
-    return { ok: true, text: output.trim() || 'npm run validate passed.' };
+    const imageOutput = execFileSync(npmCommand, ['run', 'validate:images'], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    const output = [siteOutput, imageOutput].join('\n').trim();
+    return { ok: true, text: output || 'npm run validate:site and validate:images passed.' };
   } catch (error) {
     return {
       ok: false,
@@ -343,6 +366,10 @@ async function main() {
       'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, on-device AI, NPU/GPU, and developer productivity.',
       'Give low scores to product promotion, general IT news, and weak Camera HAL relevance.',
       'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
+      'For every selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
+      'If the source is a rolling page such as release notes or a watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides a date.',
+      'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
+      'Candidate-only or requiresCrossCheck leads must not be selected unless cross_check_status is official-source or cross-checked.',
       'Preserve imageCandidates exactly from the collected candidate JSON. Do not invent image URLs, rewrite image URLs, or add image candidates.',
       'For every candidate, provide these numeric scores:',
       '- camera_hal_relevance_score: 0-5',
@@ -369,6 +396,11 @@ async function main() {
       'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
       'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it has concrete HAL native-code value.',
       'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
+      'Every article must include evidence_summary, specificity_checks, and source_verification_notes.',
+      'specificity_checks must name concrete evidence such as version, release date, API/component, source page, behavior change, or the exact source gap if the source is a rolling page.',
+      'Do not write generic advice like "monitor AOSP updates" or "review CameraX changes" unless the sentence names the exact source, version/release, API/component, date, or behavior to watch.',
+      'For AI, C++, Linux, or tooling articles, explicitly connect the item to Camera HAL through stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, or HAL workflow.',
+      'Each action_items entry must be executable within 2 weeks and include at least one concrete test, log, metric, device class, API/component, stream combination, or code-owner style handoff.',
       'For each article, choose at most one selectedImage from that article imageCandidates. If relevance, rights risk, logo-only content, screenshot text density, or source fit is unclear, set selectedImage to an empty string.',
       'Do not invent image URLs. selectedImage must exactly match one imageCandidates.url value, or be an empty string.',
       'Prefer directly relevant 16:9 or 4:3 clean images from the source article over generic, logo-only, or promotional images.',
@@ -394,10 +426,12 @@ async function main() {
     [
       'You are the AI fact checker for Camera HAL SW Newsletter.',
       'Check factuality, missing sources, exaggerated language, and missing dates.',
+      'Treat missing version, release date, API/component name, or behavior change as must_fix when an article presents a rolling page or generic watch item as a concrete update.',
       'Any claim without a source must be classified as must_fix.',
       'Flag general AI/C++ news that lacks Camera HAL or Android Camera interpretation.',
       'Flag any main article without concrete Action Item content.',
       'Flag any main article with weak Camera HAL perspective or missing engineering relevance.',
+      'Flag candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.',
       'Do not rewrite for style. Focus only on factual errors, source problems, and editorial-policy violations.',
       'Return only JSON matching the schema.'
     ].join('\n'),
@@ -413,6 +447,12 @@ async function main() {
   fs.writeFileSync(newsletterHtml, buildHtml(editor), 'utf8');
   updateNewsletterData(date, editor);
 
+  const qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
+    threshold: QUALITY_THRESHOLD
+  });
+  writeJson(path.join(newsroomDir, 'quality-report.json'), qualityReport);
+  fs.writeFileSync(path.join(newsroomDir, 'quality-report.md'), buildQualityReportMarkdown(qualityReport), 'utf8');
+
   const files = [
     `collected-news/${date}/candidates.json`,
     `newsroom/${date}/reporter-candidates.json`,
@@ -420,6 +460,8 @@ async function main() {
     `newsroom/${date}/editor-draft.md`,
     `newsroom/${date}/fact-check-report.json`,
     `newsroom/${date}/fact-check-report.md`,
+    `newsroom/${date}/quality-report.json`,
+    `newsroom/${date}/quality-report.md`,
     `newsroom/${date}/editor-in-chief-brief.md`,
     `newsroom/${date}/release-qa-report.md`,
     `newsletters/${date}/newsletter.md`,
@@ -427,7 +469,7 @@ async function main() {
     'data/newsletters.json'
   ];
 
-  fs.writeFileSync(path.join(newsroomDir, 'editor-in-chief-brief.md'), buildEditorChiefBrief(date, editor, factCheck), 'utf8');
+  fs.writeFileSync(path.join(newsroomDir, 'editor-in-chief-brief.md'), buildEditorChiefBrief(date, editor, factCheck, qualityReport), 'utf8');
 
   const emptySourceSections = editor.sections
     .filter(section => ensureArray(section.sources).filter(source => source && source.url).length === 0)
@@ -436,19 +478,26 @@ async function main() {
   const validateResult = runValidate();
   fs.writeFileSync(
     path.join(newsroomDir, 'release-qa-report.md'),
-    buildReleaseQaReport(date, files, validateResult.text, factCheck, todoFound, emptySourceSections),
+    buildReleaseQaReport(date, files, validateResult.text, factCheck, todoFound, emptySourceSections, qualityReport),
     'utf8'
   );
 
   const mustFixCount = ensureArray(factCheck.must_fix).length;
-  const generationStatus = factCheck.status === 'NEEDS_FIX' && mustFixCount > 0
-    ? 'NEEDS_FIX'
-    : 'PASS';
+  let generationStatus = 'PASS';
+  if (factCheck.status === 'NEEDS_FIX' && mustFixCount > 0) {
+    generationStatus = 'NEEDS_FIX';
+  } else if (qualityReport.status !== 'PASS') {
+    generationStatus = 'QUALITY_NEEDS_FIX';
+  }
   writeGenerationStatus({
     date,
     status: generationStatus,
     fact_check_status: factCheck.status,
     must_fix_count: mustFixCount,
+    quality_status: qualityReport.status,
+    quality_score: qualityReport.score,
+    quality_threshold: qualityReport.threshold,
+    quality_deduction_count: ensureArray(qualityReport.deductions).length,
     validate_ok: validateResult.ok,
     todo_found: todoFound,
     empty_source_sections: emptySourceSections,
@@ -460,6 +509,8 @@ async function main() {
   if (!validateResult.ok) fail(`npm run validate failed:\n${validateResult.text}`);
   if (generationStatus === 'NEEDS_FIX') {
     console.warn('Gemini fact checker returned NEEDS_FIX with must_fix items. Artifacts were written for editor review.');
+  } else if (generationStatus === 'QUALITY_NEEDS_FIX') {
+    console.warn(`Newsletter quality score ${qualityReport.score}/${qualityReport.threshold} is below the required gate. Artifacts were written for editor review.`);
   }
 
   console.log(`Gemini newsroom newsletter generated for ${date}`);
