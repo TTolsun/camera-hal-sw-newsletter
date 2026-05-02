@@ -431,10 +431,28 @@ function lockedArticleHeadlines(lockedSections) {
   return lockedSections.map(section => section.headline || section.category || 'untitled article');
 }
 
+function issueLevelLockBlockers(qualityReport) {
+  return ensureArray(qualityReport?.deductions).filter(deduction => {
+    if (stringOrEmpty(deduction.location)) return false;
+    if (['composition', 'source-integrity'].includes(deduction.category)) return true;
+    if (deduction.category === 'hal-relevance') {
+      return /No AI|Expected at least|weak HAL|Camera HAL \/ Android Camera/i.test(deduction.reason);
+    }
+    return false;
+  });
+}
+
 function selectLockedArticles(editor, qualityReport, factCheck) {
-  return ensureArray(editor.sections)
-    .filter(section => sectionPassesArticleGate(section, qualityReport, factCheck))
-    .slice(0, MAX_MAIN_ARTICLES);
+  const blockers = issueLevelLockBlockers(qualityReport);
+  if (blockers.length > 0) {
+    return { articles: [], blockers };
+  }
+  return {
+    articles: ensureArray(editor.sections)
+      .filter(section => sectionPassesArticleGate(section, qualityReport, factCheck))
+      .slice(0, MAX_MAIN_ARTICLES),
+    blockers
+  };
 }
 
 function appendUniqueLockedArticles(currentLocked, candidates) {
@@ -469,6 +487,7 @@ ${attempts.map(item => `## Attempt ${item.attempt}
 
 - Selected articles: ${item.selected_article_headlines.join('; ') || 'none'}
 - Locked articles: ${item.locked_article_headlines.join('; ') || 'none'}
+- Lock blockers: ${ensureArray(item.lock_blockers).join('; ') || 'none'}
 - Rejected duplicate articles: ${item.rejected_duplicate_headlines.join('; ') || 'none'}
 - Deductions: ${item.deductions.length === 0 ? 'none' : item.deductions.map(deduction => `${deduction.points}pt ${deduction.category}${deduction.location ? ` (${deduction.location})` : ''}: ${deduction.reason}`).join('; ')}
 `).join('\n')}`;
@@ -626,9 +645,10 @@ async function main() {
     writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
     fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
 
-    const passedThisAttempt = selectLockedArticles(editor, qualityReport, factCheck);
-    lockedSections = appendUniqueLockedArticles(lockedSections, passedThisAttempt);
+    const lockSelection = selectLockedArticles(editor, qualityReport, factCheck);
+    lockedSections = appendUniqueLockedArticles(lockedSections, lockSelection.articles);
     const rejectedDuplicateHeadlines = [...rejectedReporterDuplicates, ...merged.rejected];
+    const lockBlockers = lockSelection.blockers.map(deduction => `${deduction.category}: ${deduction.reason}`);
     retryHistory.push({
       attempt,
       model: [
@@ -642,11 +662,15 @@ async function main() {
       deductions: ensureArray(qualityReport.deductions),
       selected_article_headlines: lockedArticleHeadlines(editor.sections),
       locked_article_headlines: lockedArticleHeadlines(lockedSections),
+      lock_blockers: lockBlockers,
       rejected_duplicate_headlines: rejectedDuplicateHeadlines,
       source_gap_count: qualityReport.metrics.source_gap_count,
       must_fix_count: qualityReport.metrics.must_fix_count
     });
     console.log(`Quality attempt ${attempt}/${totalAttempts}: score ${qualityReport.score}/${qualityReport.threshold}, status ${qualityReport.status}, deductions ${ensureArray(qualityReport.deductions).length}, locked articles ${lockedSections.length}, rejected duplicates ${rejectedDuplicateHeadlines.length}.`);
+    if (lockBlockers.length > 0) {
+      console.warn(`Quality attempt ${attempt}/${totalAttempts} has issue-level lock blocker(s): ${lockBlockers.join('; ')}.`);
+    }
 
     if (qualityReport.status === 'PASS' && qualityReport.score >= qualityReport.threshold) break;
     if (attempt < totalAttempts) {
