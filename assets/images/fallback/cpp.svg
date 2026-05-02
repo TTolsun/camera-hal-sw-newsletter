@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">C++ article fallback image</title>
+  <desc id="desc">A simple C++ native code fallback illustration.</desc>
+  <rect width="1280" height="720" fill="#f8fafc"/>
+  <rect x="170" y="116" width="940" height="488" rx="34" fill="#e9f0f8"/>
+  <g fill="none" stroke="#1f2937" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M430 275l-90 85 90 85M850 275l90 85-90 85"/>
+    <path d="M700 240l-120 240"/>
+  </g>
+  <g fill="#2563eb">
+    <text x="640" y="560" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="700" text-anchor="middle">C++</text>
+  </g>
+  <g fill="#188038" opacity=".82">
+    <rect x="250" y="170" width="160" height="22" rx="11"/>
+    <rect x="250" y="210" width="250" height="22" rx="11"/>
+    <rect x="780" y="170" width="250" height="22" rx="11"/>
+    <rect x="870" y="210" width="160" height="22" rx="11"/>
+  </g>
+</svg>

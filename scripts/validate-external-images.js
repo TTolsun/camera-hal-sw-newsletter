@@ -4,14 +4,20 @@ const {
   MIN_CONTENT_LENGTH,
   validateImageUrl
 } = require('./lib/image-candidates');
+const { repoLocalPath } = require('./lib/article-image-resolver');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const errors = [];
+const warnings = [];
 
 function fail(message) {
   errors.push(message);
+}
+
+function warn(message) {
+  warnings.push(message);
 }
 
 function read(filePath) {
@@ -81,20 +87,56 @@ function nearbyHeading(content, imageIndex) {
   return stripTags(matches[matches.length - 1][0]) || '(no nearby heading)';
 }
 
+function nearbyMarkdownHeading(content, imageIndex) {
+  const before = content.slice(0, imageIndex);
+  const matches = [...before.matchAll(/^#{2,3}\s+(.+)$/gm)];
+  if (matches.length === 0) return '(no nearby heading)';
+  return matches[matches.length - 1][1].trim() || '(no nearby heading)';
+}
+
+function isLocalImageSrc(value) {
+  const src = String(value || '').trim();
+  return src && !/^https?:\/\//i.test(src) && !/^data:/i.test(src);
+}
+
+function resolveLocalImage(relPath, src) {
+  const fromFile = path.resolve(root, relPath);
+  const absPath = path.resolve(path.dirname(fromFile), src);
+  const rootPath = path.resolve(root);
+  if (absPath === rootPath || absPath.startsWith(`${rootPath}${path.sep}`)) return absPath;
+  return repoLocalPath(root, src);
+}
+
 function articleImages(relPath, content) {
   const tags = [];
   const pattern = /<img\b(?=[^>]*class=["'][^"']*\barticle-image\b)[^>]*>/gi;
   let match;
   while ((match = pattern.exec(content)) !== null) {
     const src = htmlAttr(match[0], 'src');
-    if (!isHttpsUrl(src)) continue;
+    if (!src) continue;
     tags.push({
       relPath,
       src,
+      sourceKind: 'html',
       heading: nearbyHeading(content, match.index)
     });
   }
   return tags;
+}
+
+function markdownImages(relPath, content) {
+  const images = [];
+  const pattern = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+  let match;
+  while ((match = pattern.exec(content)) !== null) {
+    images.push({
+      relPath,
+      src: decodeHtml(match[2]),
+      sourceKind: 'markdown',
+      heading: nearbyMarkdownHeading(content, match.index)
+    });
+  }
+  return images;
 }
 
 function formatResult(result) {
@@ -104,24 +146,91 @@ function formatResult(result) {
   return `status=${status}; content-type=${contentType}; content-length=${contentLength}; reason=${result.reason}`;
 }
 
+function readEditor(date) {
+  const editorPath = path.join(root, 'newsroom', date, 'editor-draft.json');
+  if (!fs.existsSync(editorPath)) return null;
+  try {
+    return JSON.parse(read(editorPath));
+  } catch (error) {
+    fail(`Could not parse newsroom/${date}/editor-draft.json: ${error.message}`);
+    return null;
+  }
+}
+
+function fallbackWarningsFromEditor(date, editor) {
+  if (!editor || !Array.isArray(editor.sections)) return;
+  for (const [index, section] of editor.sections.entries()) {
+    const resolved = section.resolvedImage || {};
+    if (!resolved.usedFallback) continue;
+    const localPath = resolveLocalImage(`newsletters/${date}/index.html`, resolved.src);
+    const fallbackExists = localPath && fs.existsSync(localPath);
+    const label = section.category || `section ${index + 1}`;
+    if (!fallbackExists) {
+      fail([
+        `Article image fallback is missing: newsletter ${date}`,
+        `  section/article: ${label} / ${section.headline || 'unknown article'}`,
+        `  original: ${resolved.originalSrc || section.selectedImage || 'n/a'}`,
+        `  fallback: ${resolved.src}`,
+        `  reason: ${resolved.reason || 'unknown'}`
+      ].join('\n'));
+      continue;
+    }
+    warn([
+      `External article image was replaced with local fallback: newsletter ${date}`,
+      `  section/article: ${label} / ${section.headline || 'unknown article'}`,
+      `  original: ${resolved.originalSrc || section.selectedImage || 'n/a'}`,
+      `  fallback: ${resolved.src}`,
+      `  reason: ${resolved.reason || 'unknown'}`
+    ].join('\n'));
+  }
+}
+
 async function main() {
   const images = [];
   for (const item of newsletterItems()) {
-    if (!item.html) continue;
-    const relPath = item.html;
-    const absPath = path.resolve(root, relPath);
-    if (!absPath.startsWith(root)) {
-      fail(`Newsletter ${item.date} html path escapes repository: ${relPath}`);
-      continue;
+    fallbackWarningsFromEditor(item.date, readEditor(item.date));
+
+    for (const key of ['html', 'md']) {
+      if (!item[key]) continue;
+      const relPath = item[key];
+      const absPath = path.resolve(root, relPath);
+      if (!absPath.startsWith(root)) {
+        fail(`Newsletter ${item.date} ${key} path escapes repository: ${relPath}`);
+        continue;
+      }
+      if (!fs.existsSync(absPath)) {
+        fail(`Newsletter ${item.date} ${key} file does not exist: ${relPath}`);
+        continue;
+      }
+      const content = read(absPath);
+      images.push(...(key === 'html' ? articleImages(relPath, content) : markdownImages(relPath, content)));
     }
-    if (!fs.existsSync(absPath)) {
-      fail(`Newsletter ${item.date} html file does not exist: ${relPath}`);
-      continue;
-    }
-    images.push(...articleImages(relPath, read(absPath)));
   }
 
   for (const image of images) {
+    if (isLocalImageSrc(image.src)) {
+      const absPath = resolveLocalImage(image.relPath, image.src);
+      if (!absPath || !fs.existsSync(absPath)) {
+        fail([
+          `Local article image is missing: ${image.relPath}`,
+          `  source: ${image.sourceKind}`,
+          `  heading: ${image.heading}`,
+          `  path: ${image.src}`
+        ].join('\n'));
+      }
+      continue;
+    }
+
+    if (!isHttpsUrl(image.src)) {
+      fail([
+        `Article image uses disallowed URL scheme: ${image.relPath}`,
+        `  source: ${image.sourceKind}`,
+        `  heading: ${image.heading}`,
+        `  url: ${image.src}`
+      ].join('\n'));
+      continue;
+    }
+
     const result = await validateImageUrl(image.src, {
       timeoutMs: 8000,
       attempts: 2,
@@ -130,6 +239,7 @@ async function main() {
     if (!result.ok) {
       fail([
         `External article image failed live validation: ${image.relPath}`,
+        `  source: ${image.sourceKind}`,
         `  heading: ${image.heading}`,
         `  url: ${image.src}`,
         `  ${formatResult(result)}`
@@ -137,6 +247,7 @@ async function main() {
     } else if (result.contentLength > 0 && result.contentLength < MIN_CONTENT_LENGTH) {
       fail([
         `External article image is suspiciously small: ${image.relPath}`,
+        `  source: ${image.sourceKind}`,
         `  heading: ${image.heading}`,
         `  url: ${image.src}`,
         `  ${formatResult(result)}`
@@ -144,12 +255,16 @@ async function main() {
     }
   }
 
+  if (warnings.length > 0) {
+    console.warn(warnings.map(warning => `Warning: ${warning}`).join('\n'));
+  }
+
   if (errors.length > 0) {
     console.error(errors.map(error => `- ${error}`).join('\n'));
     process.exit(1);
   }
 
-  console.log(`Validated ${images.length} external article images.`);
+  console.log(`Validated ${images.length} article images.`);
 }
 
 main().catch(error => {

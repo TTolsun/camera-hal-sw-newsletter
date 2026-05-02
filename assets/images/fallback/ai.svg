@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">AI article fallback image</title>
+  <desc id="desc">A simple neural grid and camera frame fallback illustration.</desc>
+  <rect width="1280" height="720" fill="#f7fafc"/>
+  <g stroke="#d6e1f0" stroke-width="2">
+    <path d="M160 120h960M160 240h960M160 360h960M160 480h960M160 600h960"/>
+    <path d="M200 90v540M380 90v540M560 90v540M740 90v540M920 90v540M1100 90v540"/>
+  </g>
+  <g fill="none" stroke="#2563eb" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="386" y="190" width="508" height="340" rx="36"/>
+    <path d="M500 190l42-62h196l42 62"/>
+    <circle cx="640" cy="360" r="90"/>
+  </g>
+  <g fill="#188038">
+    <circle cx="332" cy="240" r="22"/>
+    <circle cx="948" cy="240" r="22"/>
+    <circle cx="332" cy="480" r="22"/>
+    <circle cx="948" cy="480" r="22"/>
+  </g>
+  <g stroke="#188038" stroke-width="8" stroke-linecap="round" opacity=".72">
+    <path d="M354 240h120M806 240h120M354 480h120M806 480h120"/>
+  </g>
+</svg>

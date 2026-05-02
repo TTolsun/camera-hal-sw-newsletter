@@ -4,6 +4,7 @@ const { execFileSync } = require('child_process');
 const { callGeminiJson } = require('./lib/gemini-client');
 const { reporterSchema, editorSchema, factCheckSchema } = require('./lib/newsletter-schema');
 const { isSafeExternalImageUrl } = require('./lib/image-candidates');
+const { resolveIssueArticleImages } = require('./lib/article-image-resolver');
 const {
   buildMarkdown,
   buildHtml,
@@ -298,6 +299,21 @@ function runValidate() {
   }
 }
 
+function warnResolvedImageFallbacks(issue) {
+  for (const section of ensureArray(issue.sections)) {
+    const resolved = section.resolvedImage || {};
+    if (!resolved.usedFallback) continue;
+    console.warn([
+      'Warning: article image fallback applied',
+      `  section: ${section.category || 'unknown section'}`,
+      `  article: ${section.headline || 'unknown article'}`,
+      `  original: ${resolved.originalSrc || section.selectedImage || 'n/a'}`,
+      `  fallback: ${resolved.src}`,
+      `  reason: ${resolved.reason || 'unknown'}`
+    ].join('\n'));
+  }
+}
+
 async function main() {
   const date = process.env.NEWSLETTER_DATE || kstDate();
   writeNewsletterDate(date);
@@ -387,6 +403,8 @@ async function main() {
     `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}`,
     editorSchema
   ), date, reporter);
+  await resolveIssueArticleImages(editor, { root });
+  warnResolvedImageFallbacks(editor);
   writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
   fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(editor), 'utf8');
 

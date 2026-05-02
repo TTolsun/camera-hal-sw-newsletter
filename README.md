@@ -179,6 +179,24 @@ npm run generate
 npm run validate
 ```
 
+### Image Fallback Validation
+
+Article images are resolved during `npm run generate`. If a selected external image fails live validation, the generated HTML/Markdown must use a repo-local fallback under `assets/images/fallback/` instead of the broken URL. `npm run validate:images` then verifies both external images and local fallback file existence.
+
+Manual checks:
+
+```powershell
+# Broken external image should be replaced by a local fallback and validation should warn, not fail.
+rg "404-test-url|blogger.googleusercontent.com" newsletters
+npm.cmd run validate:images
+
+# Temporarily move a fallback SVG out of assets/images/fallback/ and confirm validation fails.
+# Restore the file before committing.
+
+# A healthy external image should remain as the original HTTPS URL.
+rg "<img class=""article-image""" newsletters
+```
+
 macOS/Linux:
 
 ```bash

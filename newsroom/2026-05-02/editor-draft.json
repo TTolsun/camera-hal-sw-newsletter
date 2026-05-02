@@ -225,6 +225,12 @@
       "imageAlt": "AI 에이전트와 CLI 도구를 사용하여 Android 앱 개발 속도를 높이는 개념을 나타내는 이미지",
       "imageLicenseStatus": "unknown",
       "imageUsageDecisionReason": "기사의 핵심 내용인 AI 에이전트 기반 개발 도구를 시각적으로 잘 표현하고 있습니다.",
+      "resolvedImage": {
+        "src": "../../assets/images/fallback/ai.svg",
+        "originalSrc": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPyFElAHYM4meoiCciQQ2lncUtR6wtpR1c8Sd1K4SbNEUKDat7QeDRM3yGyMMu0J--WblBE3U09p2W6BMqbVjHysCaNZl8lmhcWr3xFkOhZmk4AXhT77UDU_50fkmzaSbhntd4FRMIdDILFUiSpwJ9abWPTOBaK9I7mC1oxMOwWg1CG3VDDq27EBB2n0o/s4097/hours-CLI_Dark-meta@2x.png",
+        "usedFallback": true,
+        "reason": "external image failed live validation"
+      },
       "sources": [
         {
           "title": "Android CLI and skills: Build Android apps 3x faster using any agent",

@@ -81,6 +81,8 @@ Android 17 Beta 4 출시는 HAL 호환성 및 안정성 최종 검증을 위한 
 
 ### AI 에이전트를 활용한 Android 앱 개발 가속화: 새로운 CLI 도구 및 스킬
 
+![AI article fallback image](../../assets/images/fallback/ai.svg)
+
 _Image: [Android Developers Blog](https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html)_
 
 
