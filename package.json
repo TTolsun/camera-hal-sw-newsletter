@@ -9,7 +9,9 @@
   "scripts": {
     "collect": "node scripts/collect-news-candidates.js",
     "generate": "node scripts/gemini-newsroom-newsletter.js",
-    "validate": "node scripts/validate-site.js"
+    "validate": "npm run validate:site && npm run validate:images",
+    "validate:site": "node scripts/validate-site.js",
+    "validate:images": "node scripts/validate-external-images.js"
   },
   "dependencies": {
     "@google/genai": "^1.0.0"

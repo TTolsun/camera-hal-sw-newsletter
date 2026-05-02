@@ -282,13 +282,14 @@ function updateNewsletterData(date, issue) {
 }
 
 function runValidate() {
+  const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   try {
-    const output = execFileSync(process.execPath, ['scripts/validate-site.js'], {
+    const output = execFileSync(npmCommand, ['run', 'validate'], {
       cwd: root,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe']
     });
-    return { ok: true, text: output.trim() || 'validate-site.js passed.' };
+    return { ok: true, text: output.trim() || 'npm run validate passed.' };
   } catch (error) {
     return {
       ok: false,
@@ -457,7 +458,7 @@ async function main() {
 
   if (todoFound) fail('Generated newsletter contains TODO.');
   if (emptySourceSections.length > 0) fail(`Generated sections without sources: ${emptySourceSections.join(', ')}`);
-  if (!validateResult.ok) fail(`validate-site.js failed:\n${validateResult.text}`);
+  if (!validateResult.ok) fail(`npm run validate failed:\n${validateResult.text}`);
   if (generationStatus === 'NEEDS_FIX') {
     console.warn('Gemini fact checker returned NEEDS_FIX with must_fix items. Artifacts were written for editor review.');
   }
