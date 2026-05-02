@@ -27,7 +27,7 @@
           <span class="issue-date">2026-05-02</span>
         </div>
         <h1>Camera HAL SW Newsletter</h1>
-        <p class="subtitle">이번 주 뉴스레터에서는 Android의 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 카메라 HAL에 미치는 영향과 Android 17 Beta 4 출시로 인한 플랫폼 호환성 점검의 중요성을 다룹니다. 또한 C++ 네이티브 코드 최적화 및 최신 컴파일러 기능에 대한 심층 분석을 통해 HAL 개발의 성능과 안정성을 강화할 방안을 모색합니다. 마지막으로 Android 보안 업데이트를 통해 HAL의 취약점 관리에 대한 중요성을 강조합니다.</p>
+        <p class="subtitle">이번 주 뉴스레터에서는 AOSP 및 CameraX의 최신 변경사항이 Camera HAL에 미치는 영향을 분석하고, libcamera의 소프트웨어 ISP 개선이 드라이버에 주는 의미를 살펴봅니다. 또한, OpenCL의 AI 가속화 확장 기능과 C++26 Reflection 기반 직렬화 라이브러리가 HAL의 성능 및 개발 생산성에 미칠 잠재적 영향에 대해 다룹니다. HAL 엔지니어는 이러한 변화를 통해 시스템 안정성과 효율성을 확보해야 합니다.</p>
         <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span><span class="tag">C++</span><span class="tag">AI</span></div>
         <div class="actions newsletter-actions issue-actions">
           <a class="button button-secondary" href="../../index.html#archive">Archive로 돌아가기</a>
@@ -38,106 +38,107 @@
       <section class="section issue-briefing">
         <h2>1. 이번 주 3줄 브리핑</h2>
         <div class="card">
-          <ul><li>Android의 하이브리드 AI 추론 도입은 카메라 HAL이 온디바이스 AI 워크로드를 효율적으로 지원하기 위한 NPU/GPU 및 버퍼 관리 최적화를 요구합니다.</li><li>Android 17 Beta 4 출시에 따라 카메라 HAL은 새로운 API 및 동작 변경 사항에 대한 호환성 테스트와 성능 검증을 우선적으로 수행해야 합니다.</li><li>C++ devirtualization, 정적 다형성, C++26 컴파일러 기능(reflection, contracts)은 HAL 네이티브 코드의 성능, 안전성, 개발 생산성을 향상시킬 기회를 제공합니다.</li></ul>
+          <ul><li>AOSP 및 CameraX 업데이트는 HAL의 스트림 구성, 메타데이터 처리, 호환성 테스트에 직접적인 영향을 미치므로 지속적인 모니터링이 필수입니다.</li><li>libcamera 0.7.1의 소프트웨어 ISP 개선은 Linux 카메라 드라이버와 HAL의 이미지 처리 파이프라인 성능 및 품질에 영향을 줄 수 있습니다.</li><li>OpenCL의 머신러닝용 Cooperative Matrix 확장은 온디바이스 AI 추론 성능을 향상시키지만, HAL은 AI 워크로드로 인한 버퍼 압력, 지연 시간, 열 관리 문제를 확인해야 합니다.</li></ul>
         </div>
       </section>
 
       <section class="section">
-        <h2>2. AI / Android Camera</h2>
-        <div class="card issue-section article-card has-image AI / Android Camera">
+        <h2>2. AOSP Camera</h2>
+        <div class="card issue-section article-card has-image AOSP Camera">
           <figure class="article-media">
-            <img class="article-image" src="../../assets/images/fallback/ai.svg" alt="Android용 하이브리드 추론 솔루션 다이어그램" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Android Developers Blog</a></figcaption>
+            <img class="article-image" src="https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png" alt="Android camera architecture" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">Image: <a href="https://source.android.com/docs/core/camera">AOSP Camera Documentation</a></figcaption>
           </figure>
           
-          <h3>Android 하이브리드 AI 추론 및 새로운 Gemini 모델 지원</h3>
-          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>Firebase API를 통한 하이브리드 추론이 도입되었습니다.</li><li>온디바이스 및 클라우드 추론을 함께 사용할 수 있습니다.</li><li>이미지 생성을 위한 새로운 Gemini Nano Banana 모델이 Android에서 지원됩니다.</li><li>출처: Experimental hybrid inference and new Gemini models for Android</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>기존 온디바이스 AI 추론은 장치 리소스 제약으로 인해 복잡한 모델 실행에 한계가 있었습니다. 클라우드 AI는 더 강력하지만 지연 시간과 데이터 프라이버시 문제가 있습니다. 하이브리드 추론은 이 두 가지 장점을 결합하여 최적의 성능과 유연성을 제공합니다. Gemini 모델은 Google의 최신 대규모 언어 모델(LLM) 제품군으로, 특히 Nano 버전은 온디바이스 실행에 최적화되어 있습니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL은 온디바이스 AI 워크로드를 위해 NPU/GPU 스케줄링 및 리소스 할당을 최적화해야 합니다. 카메라 스트림 버퍼가 AI 추론 엔진으로 효율적으로 전달되고, 추론 결과가 다시 카메라 파이프라인으로 통합될 수 있도록 버퍼 관리 및 동기화 메커니즘을 검토해야 합니다. 새로운 이미지 생성 모델이 요구하는 특정 이미지 포맷, 해상도, 프레임 속도 요구 사항을 HAL이 지원하는지 확인해야 합니다. AI 추론 과정에서 발생하는 지연 시간(latency) 및 전력 소모를 최소화하기 위한 HAL 수준의 최적화 기회를 탐색해야 합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>이번 달까지 하이브리드 추론 및 Gemini Nano 모델의 카메라 HAL 통합을 위한 초기 기술 스펙을 검토하고, 잠재적 성능 병목 지점을 식별합니다.</li><li>다음 분기까지 NPU/GPU 리소스 관리 및 버퍼 전달 효율성 개선을 위한 PoC(개념 증명)를 진행합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>Android의 하이브리드 AI 추론 및 Gemini 모델 지원은 카메라 HAL이 온디바이스 AI 성능을 극대화하고 새로운 이미지 처리 시나리오를 지원하기 위한 NPU/GPU 및 버퍼 관리 최적화를 요구합니다.</p></div>
-          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Experimental hybrid inference and new Gemini models for Android</a></li></ul></div>
+          <h3>AOSP 최신 변경사항 및 호환성 업데이트 모니터링</h3>
+          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>AOSP 공식 문서인 &#39;새로운 기능&#39; 페이지는 Android 플랫폼의 최신 변경사항, CTS/VTS/ITS 업데이트, 호환성 요구사항을 포함한다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>Android 플랫폼은 매년 새로운 버전과 분기별 업데이트를 통해 기능 개선 및 보안 패치를 제공한다. Camera HAL은 이러한 플랫폼 변경사항에 맞춰 인터페이스, 동작, 성능 및 호환성을 유지해야 한다. 특히 CTS(Compatibility Test Suite), VTS(Vendor Test Suite), Camera ITS(Image Test Suite)는 HAL 구현의 필수 검증 기준이다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL 개발팀은 AOSP의 변경사항을 주기적으로 확인하여, HAL 인터페이스 정의(HIDL/AIDL), 스트림 구성 제약사항, 메타데이터 필드 변경, 버퍼 처리 방식, 물리 카메라 ID 매핑 등에 대한 잠재적 영향을 평가해야 한다. 특히 CTS/VTS/ITS 테스트 케이스의 추가 또는 변경 여부를 면밀히 검토하여, 기존 HAL 구현이 새로운 요구사항을 충족하는지 확인해야 한다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>다음 분기별 AOSP 업데이트 시, &#39;새로운 기능&#39; 페이지를 통해 Camera HAL 관련 변경사항을 식별하고 팀에 공유한다.</li><li>CTS/VTS/Camera ITS 테스트 계획에 AOSP 업데이트 내용을 반영하여, 기존 구현의 호환성 회귀 여부를 확인하는 테스트를 수행한다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>AOSP &#39;새로운 기능&#39; 페이지를 통해 플랫폼 변경사항을 지속적으로 추적하고, HAL 호환성 및 테스트 계획에 반영해야 한다.</p></div>
+          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://source.android.com/docs/whatsnew">AOSP What&#39;s New / Release Notes</a></li></ul></div>
         </div>
       </section>
 
       <section class="section">
-        <h2>3. Android Camera / AOSP Camera</h2>
-        <div class="card issue-section article-card has-image Android Camera / AOSP Camera">
+        <h2>3. Android Camera</h2>
+        <div class="card issue-section article-card has-image Android Camera">
           <figure class="article-media">
-            <img class="article-image" src="../../assets/images/fallback/android.svg" alt="Android 17 Beta 4 로고와 안드로이드 로봇 이미지" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">Android Developers Blog</a></figcaption>
+            <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=he" alt="Android Developers 로고" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX Release Notes</a></figcaption>
           </figure>
           
-          <h3>Android 17 Beta 4 출시: 플랫폼 안정성 및 카메라 HAL 호환성 점검</h3>
-          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>Android 17 Beta 4가 출시되었습니다.</li><li>이것은 Android 17 릴리스 주기의 마지막 베타 버전입니다.</li><li>앱 호환성 및 플랫폼 안정성을 위한 중요한 마일스톤입니다.</li><li>출처: The Fourth Beta of Android 17</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>Android 베타 릴리스는 최종 안정화 버전 출시 전 개발자들이 새로운 플랫폼 변경 사항에 대비하고 호환성 문제를 해결할 수 있도록 돕습니다. 특히 마지막 베타 버전은 최종 릴리스에 매우 근접하므로, 이 단계에서의 테스트는 실제 사용자 경험에 직접적인 영향을 미칩니다. 카메라 HAL은 Android 프레임워크와 하드웨어 사이의 핵심 인터페이스이므로, 플랫폼 변경 사항에 가장 민감하게 반응합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>Android 17에서 도입될 수 있는 새로운 카메라 API, 특성(characteristics), 요청(request) 또는 결과(result) 메타데이터 필드를 검토하고 HAL이 이를 올바르게 처리하는지 확인해야 합니다. 기존 카메라 HAL 인터페이스(HIDL 또는 AIDL)의 변경 사항이 있는지 확인하고, 필요한 경우 HAL 구현을 업데이트해야 합니다. 새로운 Android 버전에서 카메라 스트림 구성, 버퍼 할당 및 관리에 대한 변경 사항이 있는지 확인하고, 성능 저하 또는 메모리 누수 가능성을 테스트해야 합니다. CTS/VTS 테스트 스위트가 Android 17 Beta 4에 맞춰 업데이트되었을 가능성이 높으므로, 최신 테스트를 수행하여 호환성 문제를 조기에 발견해야 합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>이번 주 내로 Android 17 Beta 4의 카메라 관련 변경 사항 문서를 분석하고, HAL 영향 분석 보고서를 작성합니다.</li><li>다음 2주 동안 Android 17 Beta 4 기반 기기에서 핵심 카메라 기능 및 CTS/VTS 테스트를 수행하고, 발견된 문제점을 추적 시스템에 등록합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>Android 17 Beta 4 출시에 따라 카메라 HAL 팀은 새로운 API 및 동작 변경 사항에 대한 호환성 테스트와 성능 검증을 우선적으로 수행하여 최종 릴리스에 대비해야 합니다.</p></div>
-          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">The Fourth Beta of Android 17</a></li></ul></div>
+          <h3>CameraX 업데이트: HAL 스트림 및 메타데이터 처리 영향 분석</h3>
+          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>CameraX는 Android Jetpack 라이브러리의 일부이며, 정기적인 릴리스를 통해 기능 업데이트 및 버그 수정을 제공한다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>CameraX는 개발자가 더 쉽게 카메라 기능을 구현할 수 있도록 추상화된 API를 제공한다. 내부적으로는 Camera2 API를 사용하며, 이는 다시 Camera HAL과 통신한다. 따라서 CameraX의 변경사항은 Camera2 프레임워크를 거쳐 HAL에 새로운 stream configuration 조합, request/result metadata 패턴, buffer lifecycle 관리 요구사항을 발생시킬 수 있다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>Camera HAL 팀은 CameraX 릴리스 노트를 검토하여, 새로운 UseCase나 API가 HAL에 어떤 stream configuration 제약사항이나 request/result metadata 변경을 유발하는지 파악해야 한다. 특히 Preview, ImageCapture, VideoCapture, ImageAnalysis 등 여러 UseCase의 동시 사용 시나리오에서 HAL의 안정성과 성능을 유지하는 것이 중요하다. CameraX compatibility 테스트를 통해 HAL의 동작을 검증해야 한다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>최신 CameraX 릴리스를 기반으로 Preview + ImageCapture + VideoCapture + ImageAnalysis 동시 사용 시나리오에서 HAL의 stream configuration 및 frame drop 여부를 테스트한다.</li><li>CameraX가 특정 request/result metadata 필드를 어떻게 활용하는지 확인하고, HAL이 이를 정확히 보고하는지 검증한다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>CameraX 업데이트는 HAL의 스트림 구성 및 메타데이터 처리 요구사항에 영향을 주므로, 호환성 테스트를 통해 안정성을 확보해야 한다.</p></div>
+          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX Release Notes</a></li></ul></div>
         </div>
       </section>
 
       <section class="section">
-        <h2>4. C++ Native Code</h2>
-        <div class="card issue-section article-card has-image C++ Native Code">
+        <h2>4. Linux Camera</h2>
+        <div class="card issue-section article-card has-image Linux Camera">
           <figure class="article-media">
-            <img class="article-image" src="https://isocpp.org/files/img/rosa-devirtualization.png" alt="C++ devirtualization 및 정적 다형성 관련 코드 예시 또는 다이어그램" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">Image: <a href="https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa">ISO C++ Blog</a></figcaption>
+            <img class="article-image" src="https://www.phoronix.net/image.php?id=2024&amp;image=libcamera" alt="libcamera 로고" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">Image: <a href="https://www.phoronix.com/news/libcamera-0.7.1-Released">Phoronix Linux Camera / Media</a></figcaption>
           </figure>
           
-          <h3>C++ 가상 디스패치 오버헤드 제거: Devirtualization과 정적 다형성</h3>
-          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>가상 디스패치는 다형성을 가능하게 하지만 숨겨진 오버헤드가 있습니다.</li><li>Devirtualization 및 정적 다형성 기법을 통해 이 오버헤드를 제거할 수 있습니다.</li><li>출처: Devirtualization and Static Polymorphism -- David Álvarez Rosa</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>C++에서 가상 함수(virtual function)는 런타임 다형성을 구현하는 핵심 메커니즘입니다. 그러나 가상 함수 호출은 가상 테이블(vtable) 조회를 필요로 하며, 이는 직접 함수 호출보다 추가적인 오버헤드를 발생시킵니다. 또한 컴파일러가 호출 대상을 미리 알 수 없어 인라인화(inlining)와 같은 최적화를 방해할 수 있습니다. 실시간 성능이 중요한 시스템에서는 이러한 미세한 오버헤드도 누적되어 큰 영향을 미칠 수 있습니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>카메라 HAL의 핵심 경로(critical path)에 있는 이미지 처리, 메타데이터 처리, 버퍼 관리 코드에서 가상 함수 호출 패턴을 분석해야 합니다. 성능 병목 지점으로 식별된 부분에서 가상 함수 사용을 정적 다형성(예: 템플릿 기반 디자인)으로 대체하거나, 컴파일러가 devirtualization을 수행할 수 있도록 코드를 재구성할 가능성을 탐색해야 합니다. 특히 드라이버 인터페이스나 모듈 간 통신에서 사용되는 추상화 계층이 가상 함수를 과도하게 사용하는지 검토하고, 성능에 미치는 영향을 평가해야 합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>이번 달까지 카메라 HAL의 주요 성능 경로에서 가상 함수 호출을 식별하고, 잠재적 최적화 대상을 목록화합니다.</li><li>다음 분기까지 식별된 대상 중 하나에 대해 devirtualization 또는 정적 다형성 기법을 적용하여 성능 개선 효과를 측정하고 보고합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>C++ 가상 디스패치 오버헤드를 제거하기 위한 devirtualization 및 정적 다형성 기법은 카메라 HAL의 고성능 네이티브 코드 최적화에 필수적입니다.</p></div>
-          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa">Devirtualization and Static Polymorphism -- David Álvarez Rosa</a></li></ul></div>
+          <h3>libcamera 0.7.1 출시, 소프트웨어 ISP 개선으로 HAL 드라이버 영향</h3>
+          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>libcamera 0.7.1이 출시되었고, 소프트웨어 ISP가 개선되었다.</li><li>이는 Raspberry Pi, Chrome OS 등에서 활용된다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>Android Camera HAL은 종종 Linux 커널의 V4L2(Video4Linux2) 서브시스템을 통해 카메라 하드웨어와 통신한다. libcamera는 V4L2 위에 추상화 계층을 제공하여 다양한 카메라 센서와 ISP를 통합하는 데 도움을 준다. 소프트웨어 ISP는 하드웨어 ISP가 없거나 제한적인 경우 이미지 처리 파이프라인의 중요한 부분을 소프트웨어적으로 구현하는 것을 의미한다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL 드라이버 개발자는 libcamera의 소프트웨어 ISP 개선사항이 이미지 처리 파이프라인에 미치는 영향을 평가해야 한다. 이는 YUV/RAW 데이터 처리, 노이즈 감소, 색상 보정 등 HAL이 수행하거나 의존하는 이미지 처리 작업의 효율성과 품질에 영향을 줄 수 있다. 특히, stream configuration에 따라 요구되는 이미지 처리 부하가 달라질 수 있으므로, 다양한 스트림 조합에서 성능 및 이미지 품질을 확인해야 한다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>libcamera 0.7.1이 통합된 Linux 커널 환경에서 Preview 및 ImageCapture 스트림의 frame delivery latency와 이미지 품질을 이전 버전과 비교 측정한다.</li><li>소프트웨어 ISP 개선이 thermal throttling에 미치는 영향을 확인하기 위해 장시간 카메라 사용 시나리오를 테스트한다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>libcamera 0.7.1의 소프트웨어 ISP 개선은 HAL 드라이버의 이미지 처리 성능과 품질에 영향을 주므로, 면밀한 검증이 필요하다.</p></div>
+          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://www.phoronix.com/news/libcamera-0.7.1-Released">Phoronix Linux Camera / Media</a></li></ul></div>
         </div>
       </section>
 
       <section class="section">
-        <h2>5. C++ Toolchain / Code Quality</h2>
-        <div class="card issue-section article-card has-fallback-image C++ Toolchain">
-          <div class="article-media article-fallback-visual article-fallback-c-toolchain" role="img" aria-label="C++ Toolchain / Code Quality">
+        <h2>5. AI</h2>
+        <div class="card issue-section article-card has-image AI">
+          <figure class="article-media">
+            <img class="article-image" src="https://www.phoronix.net/image.php?id=2026&amp;image=opencl_coop_matrix" alt="OpenCL Cooperative Matrix 로고/이미지" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">Image: <a href="https://www.phoronix.com/news/OpenCL-Cooperative-Matrix">Phoronix Linux Camera / Media</a></figcaption>
+          </figure>
+          
+          <h3>OpenCL, 머신러닝용 Cooperative Matrix 확장 도입으로 온디바이스 AI 성능 향상 기대</h3>
+          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>OpenCL API에 머신러닝/AI 추론을 위한 Cooperative Matrix 확장이 추가되었다.</li><li>이 기능은 2023년 Vulkan API에 도입된 Cooperative Matrix 지원과 유사하다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>온디바이스 AI 추론은 스마트폰과 같은 엣지 디바이스에서 데이터를 클라우드로 보내지 않고 직접 처리하는 것을 의미한다. 이는 latency 감소, privacy 보호, power efficiency 향상에 기여한다. NPU/GPU는 이러한 AI 추론을 가속화하는 핵심 하드웨어이며, OpenCL과 Vulkan 같은 API는 소프트웨어가 이 하드웨어에 접근하여 효율적으로 연산을 수행하도록 돕는다. Cooperative Matrix는 대규모 행렬 연산을 여러 워크그룹/스레드가 협력하여 처리하도록 최적화된 방식으로, 특히 딥러닝 모델의 핵심 연산인 행렬 곱셈에 매우 효과적이다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL이 AI 모델을 직접 실행해야 한다는 의미는 아니다. 하지만 AI 기능이 카메라 input frame 수요를 늘리고 NPU/GPU 자원 경쟁을 심화시킬 수 있으므로, HAL은 latency, buffer pressure, stream combination, thermal, power 관점에서 안정성을 확인해야 한다. Cooperative Matrix와 같은 저수준 최적화는 NPU/GPU 드라이버 및 HAL의 image pipeline 설계에 영향을 줄 수 있으며, vendor camera behavior에 따라 최적화 방식이 달라질 수 있다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>AI 기반 ImageAnalysis 스트림을 사용하는 카메라 앱을 실행하여 Preview + ImageAnalysis 동시 사용 시 frame delivery latency와 thermal 성능을 측정하고 기준치 대비 변화를 기록한다.</li><li>NPU/GPU 드라이버가 OpenCL Cooperative Matrix 확장을 지원하는지 확인하고, 지원 시 AI 워크로드의 성능 향상 여부를 벤치마크한다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>OpenCL Cooperative Matrix 확장은 온디바이스 AI 성능 향상에 기여하며, HAL은 AI 워크로드로 인한 시스템 부하(latency, thermal, buffer)를 관리해야 한다.</p></div>
+          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://www.phoronix.com/news/OpenCL-Cooperative-Matrix">Phoronix Linux Camera / Media</a></li></ul></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>6. C++</h2>
+        <div class="card issue-section article-card has-fallback-image C++">
+          <div class="article-media article-fallback-visual article-fallback-c" role="img" aria-label="C++">
             <span></span>
           </div>
           
-          <h3>GCC 16.1 출시: C++26 Reflection, Contracts, 안전 강화 기능 및 C++20 기본 지원</h3>
-          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>GCC 16.1이 출시되었습니다.</li><li>C++20이 기본 컴파일러 표준으로 설정되었습니다.</li><li>C++26의 reflection (P2996R13, P3394R4) 및 contracts (P3096R2) 기능이 구현되었습니다.</li><li>C++20 모듈 지원은 `-fmodules` 플래그로 활성화해야 하는 실험적 기능입니다.</li><li>출처: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>C++ 표준은 지속적으로 발전하며, 새로운 버전은 언어 기능, 성능, 안전성 및 개발자 생산성을 향상시킵니다. 컴파일러는 이러한 표준 변경 사항을 구현하여 개발자가 최신 기능을 활용할 수 있도록 합니다. Reflection은 런타임에 타입 정보를 검사하고 조작할 수 있게 하며, Contracts는 코드의 사전 조건, 사후 조건, 불변성을 명시적으로 정의하여 버그를 조기에 발견하고 코드 안전성을 높이는 데 기여합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>C++26 reflection을 활용하여 HAL의 복잡한 메타데이터 구조를 런타임에 동적으로 검사하거나, 설정 파일을 파싱하는 코드를 간소화할 수 있는지 탐색해야 합니다. Contracts를 HAL 인터페이스 및 내부 함수에 적용하여 드라이버와의 상호 작용, 버퍼 유효성 검사 등 핵심 로직의 안전성과 신뢰성을 높일 수 있는지 검토해야 합니다. C++20 모듈은 빌드 시간을 단축하고 의존성 관리를 개선할 잠재력이 있으므로, HAL 빌드 시스템에 통합 가능성을 평가해야 합니다. (단, 아직 실험적이므로 주의 필요) 새로운 컴파일러 버전으로 빌드 시 기존 HAL 코드의 동작 변경 또는 성능 회귀가 없는지 확인해야 합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>이번 달까지 GCC 16.1 및 C++26 기능(reflection, contracts)에 대한 기술 스터디를 진행하고, HAL 코드베이스에 적용할 수 있는 잠재적 영역을 식별합니다.</li><li>다음 분기까지 GCC 16.1로 HAL을 빌드하고, 주요 기능 및 성능 테스트를 수행하여 호환성 및 안정성을 검증합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>GCC 16.1 출시는 C++26 reflection, contracts, 안전 강화 기능 및 C++20 기본 지원을 통해 카메라 HAL의 네이티브 코드 품질, 디버깅 용이성 및 안전성을 향상시킬 기회를 제공합니다.</p></div>
-          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li></ul></div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>6. Security / HAL Stability</h2>
-        <div class="card issue-section article-card has-fallback-image Security / HAL Stability">
-          <div class="article-media article-fallback-visual article-fallback-security-hal-stability" role="img" aria-label="Security / HAL Stability">
-            <span></span>
-          </div>
-          
-          <h3>Android 보안 게시판 및 벤더별 보안 업데이트 정기 검토의 중요성</h3>
-          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>Android 보안 게시판은 Android 플랫폼의 보안 취약점 및 수정 사항을 공개합니다.</li><li>삼성 모바일 보안 업데이트 및 퀄컴 보안 게시판은 벤더별 하드웨어 및 소프트웨어 구성 요소의 보안 정보를 제공합니다.</li><li>출처: Android Security and Update Bulletins, Samsung Mobile Security, Qualcomm Documentation</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>모바일 기기의 보안은 사용자 데이터 보호와 시스템 안정성 유지에 필수적입니다. Android 생태계는 다양한 하드웨어 및 소프트웨어 구성 요소로 이루어져 있어, 각 계층에서 발생할 수 있는 보안 취약점을 지속적으로 모니터링하고 패치하는 것이 중요합니다. 특히 카메라와 같은 민감한 하드웨어에 접근하는 HAL은 잠재적인 공격 벡터가 될 수 있으므로, 보안 업데이트에 대한 신속한 대응이 요구됩니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>카메라 HAL은 카메라 드라이버 및 ISP(Image Signal Processor)와 밀접하게 연동되므로, 이들 구성 요소의 보안 취약점은 HAL의 안정성과 보안에 직접적인 영향을 미칩니다. HAL은 카메라 데이터 경로의 무결성을 보장하고, 민감한 이미지 데이터가 비인가된 접근으로부터 보호되도록 설계되어야 합니다. 보안 업데이트는 종종 HAL 인터페이스의 변경이나 드라이버 동작의 수정을 포함할 수 있으므로, 업데이트 적용 후 호환성 및 기능 회귀 테스트가 필수적입니다. 벤더별 보안 게시판은 특정 SoC 또는 하드웨어 플랫폼에 특화된 취약점을 다루므로, 해당 벤더의 HAL을 사용하는 경우 더욱 면밀한 검토가 필요합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>매월 첫째 주에 최신 Android 보안 게시판 및 주요 벤더의 보안 업데이트를 검토하고, 카메라 HAL에 영향을 미치는 항목을 식별하여 팀에 보고합니다.</li><li>식별된 취약점에 대한 패치 계획을 수립하고, 다음 보안 업데이트 주기 내에 적용 가능성을 평가합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>Android 보안 게시판 및 벤더별 보안 업데이트를 정기적으로 검토하고 신속하게 대응하는 것은 카메라 HAL의 안정성과 사용자 데이터 보호를 위해 매우 중요합니다.</p></div>
-          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://source.android.com/docs/security/bulletin">Android Security and Update Bulletins</a></li><li><a href="https://security.samsungmobile.com/securityUpdate.smsb">Samsung Mobile Security</a></li><li><a href="https://docs.qualcomm.com/product/publicresources/securitybulletin">Qualcomm Documentation</a></li></ul></div>
+          <h3>Glaze 7.2, C++26 Reflection 지원으로 HAL 메타데이터 직렬화 효율성 증대 가능성</h3>
+          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>Glaze 7.2는 C++26 Reflection을 지원하며, YAML, CBOR, MessagePack, TOML 등 여러 직렬화 형식을 처리할 수 있다.</li><li>이 기능은 실험적인 GCC 및 Clang 컴파일러에서 작동한다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>C++ Reflection은 컴파일 시간에 타입의 구조(멤버 변수, 함수 등)에 대한 정보를 얻을 수 있게 하는 기능이다. 이를 통해 런타임에 복잡한 보일러플레이트 코드 없이 객체를 직렬화하거나 역직렬화할 수 있다. Camera HAL에서는 request/result metadata를 포함한 다양한 설정 및 진단 정보를 직렬화하여 저장하거나 통신하는 경우가 많다. 기존에는 수동으로 각 필드를 처리하거나 코드 생성 도구를 사용해야 했다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL 개발팀은 request/result metadata, stream configuration 파라미터, 내부 디버깅 로그 등 구조화된 데이터를 처리하는 부분에서 C++26 Reflection 기반 직렬화 라이브러리의 적용 가능성을 탐색할 수 있다. 특히 session parameter나 vendor tag와 같이 동적으로 확장될 수 있는 메타데이터 구조에 대한 코드 유지보수 비용을 절감하는 데 도움이 될 수 있다. 하지만 ABI stability와 툴체인(Clang/LLVM)의 C++26 Reflection 지원 현황을 신중하게 고려해야 한다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>현재 사용 중인 camera_metadata 직렬화 로직의 코드 복잡성과 성능(CPU, 메모리)을 측정하고, C++26 Reflection 기반 라이브러리(예: Glaze)를 적용한 PoC와 비교 분석한다.</li><li>Android NDK에서 사용되는 Clang 컴파일러의 C++26 Reflection 지원 현황을 확인하고, 해당 기능이 안정화될 때까지 장기적인 도입 가능성을 검토한다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>Glaze 7.2의 C++26 Reflection 지원은 HAL 메타데이터 직렬화 효율성을 높일 잠재력이 있지만, Android 툴체인 호환성 및 ABI 안정성을 신중히 고려해야 한다.</p></div>
+          <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more">ISO C++ Blog</a></li></ul></div>
         </div>
       </section>
 
       <section class="section">
         <h2>이번 주 Action Items</h2>
-        <div class="card action-card"><ul><li>Android 17 Beta 4의 카메라 관련 변경 사항을 분석하고, HAL 호환성 및 성능 테스트를 즉시 시작합니다.</li><li>Android의 하이브리드 AI 추론 및 Gemini 모델 지원에 맞춰 NPU/GPU 리소스 관리 및 카메라 버퍼 전달 최적화 방안을 검토합니다.</li><li>카메라 HAL의 C++ 네이티브 코드에서 가상 함수 오버헤드를 줄이기 위한 devirtualization 및 정적 다형성 적용 가능성을 탐색합니다.</li><li>GCC 16.1의 C++26 reflection 및 contracts 기능을 스터디하고, HAL 코드 품질 및 안전성 향상에 활용할 방안을 모색합니다.</li><li>매월 Android 보안 게시판 및 주요 벤더의 보안 업데이트를 정기적으로 검토하여 카메라 HAL 관련 취약점에 신속하게 대응합니다.</li></ul></div>
+        <div class="card action-card"><ul><li>다음 분기별 AOSP 업데이트 시, &#39;새로운 기능&#39; 페이지를 통해 Camera HAL 관련 변경사항을 식별하고 팀에 공유하며, CTS/VTS/Camera ITS 테스트 계획에 반영한다.</li><li>최신 CameraX 릴리스를 기반으로 Preview + ImageCapture + VideoCapture + ImageAnalysis 동시 사용 시나리오에서 HAL의 stream configuration 및 frame drop 여부를 테스트한다.</li><li>libcamera 0.7.1이 통합된 Linux 커널 환경에서 Preview 및 ImageCapture 스트림의 frame delivery latency와 이미지 품질을 이전 버전과 비교 측정한다.</li><li>AI 기반 ImageAnalysis 스트림을 사용하는 카메라 앱을 실행하여 Preview + ImageAnalysis 동시 사용 시 frame delivery latency와 thermal 성능을 측정하고 기준치 대비 변화를 기록한다.</li><li>현재 사용 중인 camera_metadata 직렬화 로직의 코드 복잡성과 성능을 측정하고, C++26 Reflection 기반 라이브러리(예: Glaze)를 적용한 PoC와 비교 분석한다.</li></ul></div>
       </section>
 
       <section class="section">
         <h2>References</h2>
-        <div class="card reference-list"><ul><li><a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Experimental hybrid inference and new Gemini models for Android</a></li><li><a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">The Fourth Beta of Android 17</a></li><li><a href="https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa">Devirtualization and Static Polymorphism -- David Álvarez Rosa</a></li><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li><li><a href="https://source.android.com/docs/security/bulletin">Android Security and Update Bulletins</a></li><li><a href="https://security.samsungmobile.com/securityUpdate.smsb">Samsung Mobile Security</a></li><li><a href="https://docs.qualcomm.com/product/publicresources/securitybulletin">Qualcomm Documentation</a></li></ul></div>
+        <div class="card reference-list"><ul><li><a href="https://source.android.com/docs/whatsnew">AOSP What&#39;s New / Release Notes</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX Release Notes</a></li><li><a href="https://www.phoronix.com/news/libcamera-0.7.1-Released">Phoronix Linux Camera / Media</a></li><li><a href="https://www.phoronix.com/news/OpenCL-Cooperative-Matrix">Phoronix Linux Camera / Media</a></li><li><a href="https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more">ISO C++ Blog</a></li><li><a href="https://www.phoronix.com/">Phoronix Linux Camera / Media</a></li><li><a href="https://source.android.com/docs/core/camera">AOSP Camera Documentation</a></li></ul></div>
       </section>
 
       <nav class="bottom-nav" aria-label="Issue navigation">
