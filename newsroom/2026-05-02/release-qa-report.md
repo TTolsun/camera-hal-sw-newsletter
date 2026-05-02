@@ -16,7 +16,19 @@
 
 ## validate-site.js 실행 결과
 
+> camera-hal-sw-newsletter@1.0.0 validate
+> npm run validate:site && npm run validate:images
+
+
+> camera-hal-sw-newsletter@1.0.0 validate:site
+> node scripts/validate-site.js
+
 Validated 3 newsletter entries.
+
+> camera-hal-sw-newsletter@1.0.0 validate:images
+> node scripts/validate-external-images.js
+
+Validated 10 article images.
 
 ## 잔여 TODO 여부
 
