@@ -14,7 +14,7 @@
 - newsletters/2026-05-02/index.html
 - data/newsletters.json
 
-## validate-site.js 실행 결과
+## npm run validate 실행 결과
 
 > camera-hal-sw-newsletter@1.0.0 validate
 > npm run validate:site && npm run validate:images
@@ -28,7 +28,7 @@ Validated 3 newsletter entries.
 > camera-hal-sw-newsletter@1.0.0 validate:images
 > node scripts/validate-external-images.js
 
-Validated 8 article images.
+Validated 10 article images.
 
 ## 잔여 TODO 여부
 
@@ -42,4 +42,4 @@ Validated 8 article images.
 
 - Status: PASS
 - Must fix count: 0
-- Source gap count: 1
+- Source gap count: 0

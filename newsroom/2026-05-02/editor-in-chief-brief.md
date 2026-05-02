@@ -2,33 +2,32 @@
 
 ## 이번 주 핵심 메시지
 
-이번 주 뉴스레터에서는 AOSP 및 CameraX의 최신 변경사항이 Camera HAL에 미치는 영향을 분석하고, libcamera의 소프트웨어 ISP 개선이 드라이버에 주는 의미를 살펴봅니다. 또한, OpenCL의 AI 가속화 확장 기능과 C++26 Reflection 기반 직렬화 라이브러리가 HAL의 성능 및 개발 생산성에 미칠 잠재적 영향에 대해 다룹니다. HAL 엔지니어는 이러한 변화를 통해 시스템 안정성과 효율성을 확보해야 합니다.
+이번 주 뉴스레터는 Android 17 베타 4 출시와 함께 Camera HAL의 플랫폼 호환성 및 안정성 검증의 중요성을 강조합니다. 또한, Android의 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 카메라 데이터 경로와 NPU/GPU 스케줄링에 미칠 영향에 대해 다룹니다. C++ 관점에서는 GPU 가속화에 표준 C++를 활용하는 방안과 HAL 코드의 성능 및 동시성 최적화를 위한 기법들을 살펴봅니다.
 
 ## 메인으로 봐야 할 기사
 
-AOSP 최신 변경사항 및 호환성 업데이트 모니터링
+Android 17 Beta 4 출시: 플랫폼 안정성 및 앱 호환성 최종 점검
 
 ## Camera HAL 업무 연결 포인트
-
-- 다음 분기별 AOSP 업데이트 시, '새로운 기능' 페이지를 통해 Camera HAL 관련 변경사항을 식별하고 팀에 공유하며, CTS/VTS/Camera ITS 테스트 계획에 반영한다.
-- 최신 CameraX 릴리스를 기반으로 Preview + ImageCapture + VideoCapture + ImageAnalysis 동시 사용 시나리오에서 HAL의 stream configuration 및 frame drop 여부를 테스트한다.
-- libcamera 0.7.1이 통합된 Linux 커널 환경에서 Preview 및 ImageCapture 스트림의 frame delivery latency와 이미지 품질을 이전 버전과 비교 측정한다.
-- AI 기반 ImageAnalysis 스트림을 사용하는 카메라 앱을 실행하여 Preview + ImageAnalysis 동시 사용 시 frame delivery latency와 thermal 성능을 측정하고 기준치 대비 변화를 기록한다.
-- 현재 사용 중인 camera_metadata 직렬화 로직의 코드 복잡성과 성능을 측정하고, C++26 Reflection 기반 라이브러리(예: Glaze)를 적용한 PoC와 비교 분석한다.
+- Android 17 Beta 4가 설치된 기기에서 최신 Camera ITS 테스트를 전체 수행하고, 실패 항목을 분석하여 HAL 수정 필요 여부를 판단합니다. (담당: [팀명], 기한: 2주 이내)
+- Firebase AI Logic을 사용하는 샘플 앱을 통해 Preview + AI-analysis stream 조합에서 온디바이스 추론 시나리오의 frame drop, capture latency, thermal throttling을 측정하고 baseline을 확보합니다. (담당: [팀명], 기한: 2주 이내)
+- 표준 C++ 병렬 알고리즘을 사용하여 간단한 이미지 처리 필터를 구현하고, 기존 GPU 가속 코드와 성능을 비교하는 PoC를 수행합니다. (담당: [팀명], 기한: 2주 이내)
+- Camera HAL의 주요 이미지 처리 경로에서 프로파일링 도구를 사용하여 가상 함수 호출로 인한 오버헤드가 발생하는지 분석합니다. (담당: [팀명], 기한: 2주 이내)
+- Camera HAL 코드에서 `std::atomic`을 사용하는 모든 공유 변수와 해당 메모리 오더링 설정을 검토하여 데이터 경쟁 가능성을 최소화하고 올바른 동기화가 이루어지는지 확인합니다. (담당: [팀명], 기한: 2주 이내)
 
 ## 검증 결과 요약
 
 - Status: PASS
 - Must fix count: 0
-- Source gap count: 1
-- Comment: 전반적으로 뉴스레터 초안은 편집 정책을 잘 준수하고 있습니다. 모든 주요 기사는 구체적인 Camera HAL 관점 해석과 실행 가능한 Action Item을 포함하고 있습니다. AI 관련 기사도 과장 없이 HAL 영향을 잘 설명했습니다. 다만, AOSP 및 CameraX 업데이트 모니터링 기사는 특정 시점의 뉴스라기보다는 지속적인 추적의 중요성을 강조하는 성격이므로, 이 점을 도입부에서 더욱 명확히 하면 좋습니다.
+- Source gap count: 0
+- Comment: 제공된 뉴스레터 초안은 편집 정책을 매우 잘 준수하고 있습니다. 모든 주장은 명확하게 출처가 명시되어 있으며, 과장된 표현 없이 사실에 기반하고 있습니다. Camera HAL 관점 해석이 구체적이고 엔지니어링 관련성이 높으며, Action Item은 모두 2주 이내에 확인 가능한 측정 가능하고 구체적인 작업으로 구성되어 있습니다. AI 관련 기사도 Camera HAL에 대한 적절한 해석을 포함하고 있습니다. 전반적으로 높은 품질의 초안입니다.
 
-## 편집자 확인 checklist
+## 편집장 확인 checklist
 
 - [ ] 이번 주 핵심 메시지가 Camera HAL 업무와 직접 연결되는가?
 - [ ] 주요 항목의 출처가 충분하고 과장 표현이 없는가?
 - [ ] 검증 결과의 must_fix가 모두 해소되었는가?
-- [ ] 팀 공유에도 충분한 action item으로 정리되었는가?
+- [ ] 팀 공유용으로도 충분한 action item이 정리되었는가?
 
 ## 권장 판단
 

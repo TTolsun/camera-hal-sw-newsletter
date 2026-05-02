@@ -1,523 +1,352 @@
 {
   "date": "2026-05-02",
-  "title": "Camera HAL SW 뉴스레터 - 2026-05-02",
-  "summary": "이번 주 뉴스레터에서는 AOSP 및 CameraX의 최신 변경사항이 Camera HAL에 미치는 영향을 분석하고, libcamera의 소프트웨어 ISP 개선이 드라이버에 주는 의미를 살펴봅니다. 또한, OpenCL의 AI 가속화 확장 기능과 C++26 Reflection 기반 직렬화 라이브러리가 HAL의 성능 및 개발 생산성에 미칠 잠재적 영향에 대해 다룹니다. HAL 엔지니어는 이러한 변화를 통해 시스템 안정성과 효율성을 확보해야 합니다.",
+  "title": "Camera HAL SW Newsletter - 2026-05-02",
+  "summary": "이번 주 뉴스레터는 Android 17 베타 4 출시와 함께 Camera HAL의 플랫폼 호환성 및 안정성 검증의 중요성을 강조합니다. 또한, Android의 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 카메라 데이터 경로와 NPU/GPU 스케줄링에 미칠 영향에 대해 다룹니다. C++ 관점에서는 GPU 가속화에 표준 C++를 활용하는 방안과 HAL 코드의 성능 및 동시성 최적화를 위한 기법들을 살펴봅니다.",
   "briefing": [
-    "AOSP 및 CameraX 업데이트는 HAL의 스트림 구성, 메타데이터 처리, 호환성 테스트에 직접적인 영향을 미치므로 지속적인 모니터링이 필수입니다.",
-    "libcamera 0.7.1의 소프트웨어 ISP 개선은 Linux 카메라 드라이버와 HAL의 이미지 처리 파이프라인 성능 및 품질에 영향을 줄 수 있습니다.",
-    "OpenCL의 머신러닝용 Cooperative Matrix 확장은 온디바이스 AI 추론 성능을 향상시키지만, HAL은 AI 워크로드로 인한 버퍼 압력, 지연 시간, 열 관리 문제를 확인해야 합니다."
+    "Android 17 Beta 4 출시로 Camera HAL은 최종 플랫폼 안정성 및 호환성 검증에 집중해야 합니다.",
+    "Android의 하이브리드 AI 추론 및 Gemini 모델 지원은 카메라 HAL의 AI 워크로드 처리 방식과 NPU/GPU 리소스 관리에 변화를 요구합니다.",
+    "C++ 가상 함수 최적화 및 아토믹 객체 활용은 카메라 HAL의 네이티브 코드 성능과 멀티스레드 안정성을 강화하는 데 기여할 수 있습니다."
   ],
   "sections": [
     {
-      "category": "AOSP Camera",
-      "headline": "AOSP 최신 변경사항 및 호환성 업데이트 모니터링",
-      "what_changed": "AOSP '새로운 기능' 페이지는 Android 플랫폼의 최신 변경사항, CTS/VTS/ITS 업데이트 및 호환성 요구사항을 지속적으로 업데이트한다. 특정 버전 업데이트가 아닌, 지속적인 변경사항 추적의 중요성을 강조한다.",
+      "category": "Android Platform",
+      "headline": "Android 17 Beta 4 출시: 플랫폼 안정성 및 앱 호환성 최종 점검",
+      "what_changed": "Android 17의 네 번째 베타 버전이 출시되었으며, 이는 이번 릴리스 사이클의 마지막 예정된 베타 버전입니다. 개발자들은 거의 최종 환경에서 앱, 라이브러리, 도구, 게임 엔진을 테스트해야 합니다.",
       "confirmed_facts": [
-        "AOSP 공식 문서인 '새로운 기능' 페이지는 Android 플랫폼의 최신 변경사항, CTS/VTS/ITS 업데이트, 호환성 요구사항을 포함한다."
+        "Android 17 Beta 4가 출시되었다.",
+        "이것은 릴리스 사이클의 마지막 예정된 베타 버전이다.",
+        "앱 호환성 및 플랫폼 안정성을 위한 중요한 이정표이다.",
+        "개발자들은 거의 최종 환경에서 앱, 라이브러리, 도구, 게임 엔진을 테스트해야 한다."
       ],
-      "background": "Android 플랫폼은 매년 새로운 버전과 분기별 업데이트를 통해 기능 개선 및 보안 패치를 제공한다. Camera HAL은 이러한 플랫폼 변경사항에 맞춰 인터페이스, 동작, 성능 및 호환성을 유지해야 한다. 특히 CTS(Compatibility Test Suite), VTS(Vendor Test Suite), Camera ITS(Image Test Suite)는 HAL 구현의 필수 검증 기준이다.",
-      "why_it_matters": "AOSP의 변경사항은 Camera HAL 인터페이스, 요구사항, 테스트 케이스에 직접적인 영향을 미친다. 새로운 기능 지원, 기존 버그 수정, 성능 최적화, 보안 패치 등이 HAL 개발 및 유지보수 로드맵에 반영되어야 한다. 호환성 테스트 실패는 제품 출시 지연으로 이어질 수 있다.",
-      "camera_hal_perspective": "HAL 개발팀은 AOSP의 변경사항을 주기적으로 확인하여, HAL 인터페이스 정의(HIDL/AIDL), 스트림 구성 제약사항, 메타데이터 필드 변경, 버퍼 처리 방식, 물리 카메라 ID 매핑 등에 대한 잠재적 영향을 평가해야 한다. 특히 CTS/VTS/ITS 테스트 케이스의 추가 또는 변경 여부를 면밀히 검토하여, 기존 HAL 구현이 새로운 요구사항을 충족하는지 확인해야 한다.",
-      "camera_hal_checks": [
-        "새로운 Android 버전 또는 분기별 업데이트에서 Camera HAL 인터페이스(HIDL/AIDL) 변경사항 확인.",
-        "CTS/VTS/Camera ITS 테스트 케이스 추가 또는 변경 여부 검토 및 내부 테스트 계획 업데이트.",
-        "새로운 camera_metadata 필드 또는 기존 필드의 동작 변경 여부 확인.",
-        "stream configuration 및 buffer lifecycle에 영향을 미칠 수 있는 프레임워크 변경사항 식별."
-      ],
+      "background": "Android 플랫폼의 베타 릴리스는 새로운 기능 도입과 함께 기존 API의 변경, 시스템 동작의 미세 조정이 이루어지는 기간입니다. 베타 4는 일반적으로 최종 안정화 단계에 진입했음을 의미하며, OEM 및 앱 개발자는 이 버전을 기준으로 최종 호환성 테스트를 수행합니다.",
+      "why_it_matters": "Camera HAL은 Android 프레임워크와 직접적으로 상호작용하므로, 플랫폼 안정화는 HAL 인터페이스, 동작, 성능에 대한 최종 검증이 필요함을 의미합니다. 새로운 API나 변경된 동작이 있다면 HAL 구현에 반영하고, 기존 기능의 호환성을 보장해야 합니다.",
+      "camera_hal_perspective": "HAL interface: Android 17에서 도입된 새로운 Camera HAL API 또는 기존 API의 변경 사항이 있는지 최종 확인해야 합니다. CTS/VTS/Camera ITS: Beta 4 기준으로 업데이트된 CTS/VTS/Camera ITS 테스트 케이스를 통과하는지 검증해야 합니다. 특히 Camera ITS는 이미지 품질 및 일관성을 중점적으로 다루므로 중요합니다. Stream configuration: 새로운 스트림 조합 또는 기존 스트림 조합에 대한 성능 저하, 메모리 누수, 프레임 드롭 등의 문제가 없는지 확인해야 합니다. Request/result metadata: Android 17에서 추가되거나 변경된 메타데이터 필드가 HAL에서 올바르게 처리되고 노출되는지 검증해야 합니다. Compatibility: CameraX와 같은 상위 레벨 라이브러리 및 주요 카메라 앱들이 Beta 4 환경에서 HAL과 문제없이 동작하는지 확인해야 합니다.",
+      "camera_hal_checks": [],
       "action_hints": [
-        "AOSP Gerrit, Android Developers 블로그, Android Security Bulletin 등 관련 채널을 함께 모니터링하여 변경사항을 조기에 감지한다."
+        "Android 17 Beta 4 환경에서 모든 Camera HAL 기능 테스트를 재수행합니다.",
+        "특히 Camera ITS 최신 버전을 사용하여 이미지 품질 및 동작 일관성을 확인합니다.",
+        "새로운 API 사용 시나리오에서 HAL의 안정성을 검증합니다."
       ],
       "action_items": [
-        "다음 분기별 AOSP 업데이트 시, '새로운 기능' 페이지를 통해 Camera HAL 관련 변경사항을 식별하고 팀에 공유한다.",
-        "CTS/VTS/Camera ITS 테스트 계획에 AOSP 업데이트 내용을 반영하여, 기존 구현의 호환성 회귀 여부를 확인하는 테스트를 수행한다."
+        "Android 17 Beta 4가 설치된 기기에서 최신 Camera ITS 테스트를 전체 수행하고, 실패 항목을 분석하여 HAL 수정 필요 여부를 판단합니다. (담당: [팀명], 기한: 2주 이내)",
+        "Android 17 CDD(Compatibility Definition Document) 초안을 검토하여 Camera HAL 관련 새로운 요구사항이나 변경된 동작이 있는지 확인하고, 필요한 경우 구현 계획을 수립합니다. (담당: [팀명], 기한: 2주 이내)"
       ],
-      "team_summary": "AOSP '새로운 기능' 페이지를 통해 플랫폼 변경사항을 지속적으로 추적하고, HAL 호환성 및 테스트 계획에 반영해야 한다.",
-      "is_ai_related": false,
-      "article_type": "AOSP Camera",
-      "imageCandidates": [
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok",
-          "alt": "Android Open Source Project",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok",
-          "alt": "Android Camera HAL icon",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok",
-          "alt": "Android camera architecture",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        }
-      ],
-      "selectedImage": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
-      "imageSource": "https://source.android.com/docs/core/camera",
-      "imageAttribution": "AOSP Camera Documentation",
-      "imageAlt": "Android camera architecture",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "Android 카메라 아키텍처를 시각적으로 잘 보여주어 기사 내용과 직접적인 관련성이 높습니다.",
-      "sources": [
-        {
-          "title": "AOSP What's New / Release Notes",
-          "url": "https://source.android.com/docs/whatsnew"
-        }
-      ],
-      "resolvedImage": {
-        "src": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
-        "usedFallback": false
-      }
-    },
-    {
-      "category": "Android Camera",
-      "headline": "CameraX 업데이트: HAL 스트림 및 메타데이터 처리 영향 분석",
-      "what_changed": "CameraX는 Android Camera 프레임워크 위에 구축된 Jetpack 라이브러리로, 그 릴리스 노트는 새로운 기능, 개선사항, 버그 수정 등을 포함한다. 이러한 변경사항은 앱 개발자가 카메라를 사용하는 방식에 영향을 미치며, 궁극적으로 HAL의 스트림 구성 및 메타데이터 처리 요구사항에 영향을 줄 수 있다.",
-      "confirmed_facts": [
-        "CameraX는 Android Jetpack 라이브러리의 일부이며, 정기적인 릴리스를 통해 기능 업데이트 및 버그 수정을 제공한다."
-      ],
-      "background": "CameraX는 개발자가 더 쉽게 카메라 기능을 구현할 수 있도록 추상화된 API를 제공한다. 내부적으로는 Camera2 API를 사용하며, 이는 다시 Camera HAL과 통신한다. 따라서 CameraX의 변경사항은 Camera2 프레임워크를 거쳐 HAL에 새로운 stream configuration 조합, request/result metadata 패턴, buffer lifecycle 관리 요구사항을 발생시킬 수 있다.",
-      "why_it_matters": "CameraX는 많은 Android 앱에서 사용되는 카메라 API이므로, CameraX의 변경사항은 HAL이 지원해야 하는 사용 시나리오와 성능 요구사항을 변화시킬 수 있다. 예를 들어, 새로운 UseCase가 추가되거나 기존 UseCase의 동작이 변경되면, HAL은 해당 stream combination을 효율적으로 처리하고 안정적인 frame delivery latency를 보장해야 한다.",
-      "camera_hal_perspective": "Camera HAL 팀은 CameraX 릴리스 노트를 검토하여, 새로운 UseCase나 API가 HAL에 어떤 stream configuration 제약사항이나 request/result metadata 변경을 유발하는지 파악해야 한다. 특히 Preview, ImageCapture, VideoCapture, ImageAnalysis 등 여러 UseCase의 동시 사용 시나리오에서 HAL의 안정성과 성능을 유지하는 것이 중요하다. CameraX compatibility 테스트를 통해 HAL의 동작을 검증해야 한다.",
-      "camera_hal_checks": [
-        "새로운 CameraX UseCase 또는 API가 HAL의 stream combination 지원에 미치는 영향 분석.",
-        "CameraX가 사용하는 request/result metadata 필드의 변화 여부 확인.",
-        "CameraX compatibility 테스트를 수행하여 HAL의 안정성 및 성능 회귀 여부 검증.",
-        "buffer lifecycle 관리 및 frame delivery latency에 대한 잠재적 영향 평가."
-      ],
-      "action_hints": [
-        "CameraX 샘플 앱을 사용하여 새로운 기능이 HAL에 미치는 영향을 직접 테스트하고, Camera2 API 호출 패턴을 분석한다."
-      ],
-      "action_items": [
-        "최신 CameraX 릴리스를 기반으로 Preview + ImageCapture + VideoCapture + ImageAnalysis 동시 사용 시나리오에서 HAL의 stream configuration 및 frame drop 여부를 테스트한다.",
-        "CameraX가 특정 request/result metadata 필드를 어떻게 활용하는지 확인하고, HAL이 이를 정확히 보고하는지 검증한다."
-      ],
-      "team_summary": "CameraX 업데이트는 HAL의 스트림 구성 및 메타데이터 처리 요구사항에 영향을 주므로, 호환성 테스트를 통해 안정성을 확보해야 한다.",
+      "team_summary": "Android 17 Beta 4는 플랫폼 안정화의 마지막 단계입니다. HAL 팀은 최신 CTS/VTS/Camera ITS를 통과하고, CDD 변경 사항을 확인하여 최종 호환성을 확보해야 합니다.",
       "is_ai_related": false,
       "article_type": "Android Camera",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=he",
-          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
           "sourceKind": "og",
           "licenseStatus": "unknown",
-          "attribution": "CameraX Release Notes",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "alt": ""
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "sourceKind": "article-img",
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "sourceKind": "og",
           "licenseStatus": "unknown",
-          "attribution": "CameraX Release Notes",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "alt": ""
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
           "sourceKind": "article-img",
           "licenseStatus": "unknown",
-          "attribution": "CameraX Release Notes",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "alt": "hero android logo"
         }
       ],
-      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=he",
-      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera",
-      "imageAttribution": "CameraX Release Notes",
-      "imageAlt": "Android Developers 로고",
+      "selectedImage": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+      "imageSource": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Android 17 Beta 4 로고 또는 추상 이미지",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "CameraX 릴리스 노트를 제공하는 Android Developers 사이트의 대표 이미지로, 기사 내용을 시각적으로 연결합니다.",
+      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련된 Android 17 베타 4 출시를 알리는 공식 메타 이미지입니다.",
       "sources": [
         {
-          "title": "CameraX Release Notes",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera"
+          "title": "The Fourth Beta of Android 17",
+          "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
         }
       ],
       "resolvedImage": {
-        "src": "https://developer.android.com/static/images/social/android-developers.png?hl=he",
+        "src": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
         "usedFallback": false
       }
     },
     {
-      "category": "Linux Camera",
-      "headline": "libcamera 0.7.1 출시, 소프트웨어 ISP 개선으로 HAL 드라이버 영향",
-      "what_changed": "오픈소스 카메라 라이브러리인 libcamera 0.7.1이 출시되었으며, 소프트웨어 이미지 신호 처리기(ISP)가 개선되었다. 이 업데이트는 Raspberry Pi, Chrome OS 및 최신 데스크톱 Linux 배포판에서 중요하게 사용되는 libcamera의 이미지 처리 기능을 향상시킨다.",
+      "category": "AI / Android Camera",
+      "headline": "Android 하이브리드 추론 및 새로운 Gemini 모델 지원으로 카메라 AI 워크로드 변화 예고",
+      "what_changed": "Android에서 온디바이스 및 클라우드 추론을 모두 활용하는 하이브리드 추론을 위한 새로운 Firebase API가 출시되었으며, 이미지 생성을 위한 최신 Gemini Nano Banana 모델을 포함한 새로운 Gemini 모델이 지원됩니다.",
       "confirmed_facts": [
-        "libcamera 0.7.1이 출시되었고, 소프트웨어 ISP가 개선되었다.",
-        "이는 Raspberry Pi, Chrome OS 등에서 활용된다."
+        "하이브리드 추론을 위한 새로운 Firebase API가 출시되었다.",
+        "이 API는 온디바이스 및 클라우드 추론을 모두 활용한다.",
+        "새로운 Gemini 모델(최신 Nano Banana 모델 포함)이 Android에서 지원된다.",
+        "Nano Banana 모델은 이미지 생성에 사용된다."
       ],
-      "background": "Android Camera HAL은 종종 Linux 커널의 V4L2(Video4Linux2) 서브시스템을 통해 카메라 하드웨어와 통신한다. libcamera는 V4L2 위에 추상화 계층을 제공하여 다양한 카메라 센서와 ISP를 통합하는 데 도움을 준다. 소프트웨어 ISP는 하드웨어 ISP가 없거나 제한적인 경우 이미지 처리 파이프라인의 중요한 부분을 소프트웨어적으로 구현하는 것을 의미한다.",
-      "why_it_matters": "libcamera의 소프트웨어 ISP 개선은 HAL 드라이버가 처리해야 하는 이미지 데이터의 품질과 성능에 직접적인 영향을 미칠 수 있다. 특히, 특정 SoC나 하드웨어 ISP가 없는 플랫폼에서 Android Camera HAL을 구현하는 경우, libcamera와 같은 상위 계층 라이브러리의 이미지 처리 능력은 최종 이미지 품질과 frame delivery latency에 결정적인 역할을 한다.",
-      "camera_hal_perspective": "HAL 드라이버 개발자는 libcamera의 소프트웨어 ISP 개선사항이 이미지 처리 파이프라인에 미치는 영향을 평가해야 한다. 이는 YUV/RAW 데이터 처리, 노이즈 감소, 색상 보정 등 HAL이 수행하거나 의존하는 이미지 처리 작업의 효율성과 품질에 영향을 줄 수 있다. 특히, stream configuration에 따라 요구되는 이미지 처리 부하가 달라질 수 있으므로, 다양한 스트림 조합에서 성능 및 이미지 품질을 확인해야 한다.",
-      "camera_hal_checks": [
-        "libcamera 0.7.1의 소프트웨어 ISP 개선사항이 HAL 드라이버의 이미지 처리 로직에 미치는 영향 분석.",
-        "YUV 및 RAW 스트림 출력 시 이미지 품질(노이즈, 색상 정확도) 및 frame delivery latency 변화 측정.",
-        "libcamera를 사용하는 레퍼런스 플랫폼(예: Raspberry Pi 기반 Android)에서 thermal 및 power 소모량 변화 모니터링.",
-        "stream combination 테스트 시 소프트웨어 ISP 부하로 인한 frame drop 여부 확인."
-      ],
+      "background": "온디바이스 AI는 지연 시간 감소, 개인 정보 보호 강화, 오프라인 작동 등의 이점이 있지만, 모델 크기와 컴퓨팅 리소스 제약이 있습니다. 클라우드 AI는 더 강력한 모델을 사용할 수 있지만, 네트워크 지연과 데이터 전송 비용이 발생합니다. 하이브리드 추론은 이 두 가지 접근 방식의 장점을 결합하여 최적의 AI 워크로드를 제공하려는 시도입니다.",
+      "why_it_matters": "카메라 HAL은 AI 추론을 위한 원본 이미지 데이터 또는 전처리된 데이터를 제공하는 주요 소스입니다. 하이브리드 추론은 HAL이 제공하는 버퍼의 사용 방식, NPU/GPU 스케줄링, 전력 관리, 그리고 AI 모델의 요구사항에 따른 스트림 구성에 직접적인 영향을 미칠 수 있습니다. 특히 이미지 생성 모델은 고해상도 이미지 데이터 처리 및 복잡한 연산을 요구할 수 있습니다.",
+      "camera_hal_perspective": "Camera data path: AI 모델이 카메라 HAL에서 제공하는 YUV 또는 PRIVATE 스트림을 직접 소비할 가능성이 높아집니다. 이 경우, HAL은 AI 모델의 입력 요구사항(해상도, 형식, 전처리)에 맞춰 효율적인 버퍼 제공 및 관리를 보장해야 합니다. NPU/GPU scheduling: 온디바이스 추론이 활성화될 때, 카메라 ISP/NPU/GPU 리소스 간의 경합이 발생할 수 있습니다. HAL은 카메라 파이프라인과 AI 추론 간의 리소스 스케줄링 및 우선순위 관리에 대한 새로운 요구사항에 직면할 수 있습니다. Performance/Thermal: 하이브리드 추론은 온디바이스 추론 시 높은 컴퓨팅 부하를 유발할 수 있으며, 이는 카메라 캡처 지연 시간 증가, 프레임 드롭, 기기 발열로 이어질 수 있습니다. HAL은 이러한 시나리오에서 성능 및 열 관리를 최적화해야 합니다. Stream configuration: AI 워크로드에 특화된 새로운 스트림 구성 또는 기존 스트림의 확장된 사용 패턴이 나타날 수 있습니다. HAL은 이러한 요구사항을 지원할 수 있는지 검토해야 합니다.",
+      "camera_hal_checks": [],
       "action_hints": [
-        "libcamera의 변경 로그를 상세히 검토하고, 가능한 경우 테스트 플랫폼에서 벤치마크를 수행하여 실제 성능 변화를 측정한다."
+        "AI 추론을 위한 카메라 스트림 소비 시나리오에서 HAL의 성능(지연 시간, 프레임 드롭)을 측정합니다.",
+        "NPU/GPU 리소스 사용량과 카메라 파이프라인 간의 경합을 모니터링합니다.",
+        "새로운 Gemini 모델이 요구하는 이미지 형식 및 해상도를 확인하고 HAL이 지원 가능한지 검토합니다."
       ],
       "action_items": [
-        "libcamera 0.7.1이 통합된 Linux 커널 환경에서 Preview 및 ImageCapture 스트림의 frame delivery latency와 이미지 품질을 이전 버전과 비교 측정한다.",
-        "소프트웨어 ISP 개선이 thermal throttling에 미치는 영향을 확인하기 위해 장시간 카메라 사용 시나리오를 테스트한다."
+        "Firebase AI Logic을 사용하는 샘플 앱을 통해 Preview + AI-analysis stream 조합에서 온디바이스 추론 시나리오의 frame drop, capture latency, thermal throttling을 측정하고 baseline을 확보합니다. (담당: [팀명], 기한: 2주 이내)",
+        "새로운 Gemini Nano Banana 모델의 이미지 입력 요구사항(해상도, 색 공간, 전처리 필요 여부)을 파악하고, Camera HAL이 해당 포맷의 버퍼를 효율적으로 제공할 수 있는지 검토합니다. (담당: [팀명], 기한: 2주 이내)"
       ],
-      "team_summary": "libcamera 0.7.1의 소프트웨어 ISP 개선은 HAL 드라이버의 이미지 처리 성능과 품질에 영향을 주므로, 면밀한 검증이 필요하다.",
-      "is_ai_related": false,
-      "article_type": "Linux Camera",
-      "imageCandidates": [
-        {
-          "url": "https://libcamera.org/_images/fosdem-2023.png",
-          "sourceUrl": "https://libcamera.org/blog/",
-          "articleUrl": "https://libcamera.org/blog/",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "libcamera Blog",
-          "validationStatus": "ok",
-          "alt": "../_images/fosdem-2023.png",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://libcamera.org/_images/bugzilla.png",
-          "sourceUrl": "https://libcamera.org/blog/",
-          "articleUrl": "https://libcamera.org/blog/",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "libcamera Blog",
-          "validationStatus": "ok",
-          "alt": "../_images/bugzilla.png",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://libcamera.org/_images/libcamera-banner.png",
-          "sourceUrl": "https://libcamera.org/blog/",
-          "articleUrl": "https://libcamera.org/blog/",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "libcamera Blog",
-          "validationStatus": "ok",
-          "alt": "../_images/libcamera-banner.png",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://www.phoronix.net/image.php?id=2024&image=libcamera",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/libcamera-0.7.1-Released",
-          "sourceKind": "og",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/webp",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/libcamera-0.7.1-Released",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "alt": "Phoronix",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        }
-      ],
-      "selectedImage": "https://www.phoronix.net/image.php?id=2024&image=libcamera",
-      "imageSource": "https://www.phoronix.com/news/libcamera-0.7.1-Released",
-      "imageAttribution": "Phoronix Linux Camera / Media",
-      "imageAlt": "libcamera 로고",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "libcamera 프로젝트를 대표하는 로고 이미지로, 기사 내용과 직접적인 관련성이 높습니다.",
-      "sources": [
-        {
-          "title": "Phoronix Linux Camera / Media",
-          "url": "https://www.phoronix.com/news/libcamera-0.7.1-Released"
-        }
-      ],
-      "resolvedImage": {
-        "src": "https://www.phoronix.net/image.php?id=2024&image=libcamera",
-        "usedFallback": false
-      }
-    },
-    {
-      "category": "AI",
-      "headline": "OpenCL, 머신러닝용 Cooperative Matrix 확장 도입으로 온디바이스 AI 성능 향상 기대",
-      "what_changed": "OpenCL API가 머신러닝/AI 추론을 위한 Cooperative Matrix 확장을 도입했다. 이는 2023년 Vulkan API에 처음 도입된 유사한 기능으로, AI/ML 분야에서 NPU/GPU 활용을 돕기 위해 설계되었다.",
-      "confirmed_facts": [
-        "OpenCL API에 머신러닝/AI 추론을 위한 Cooperative Matrix 확장이 추가되었다.",
-        "이 기능은 2023년 Vulkan API에 도입된 Cooperative Matrix 지원과 유사하다."
-      ],
-      "background": "온디바이스 AI 추론은 스마트폰과 같은 엣지 디바이스에서 데이터를 클라우드로 보내지 않고 직접 처리하는 것을 의미한다. 이는 latency 감소, privacy 보호, power efficiency 향상에 기여한다. NPU/GPU는 이러한 AI 추론을 가속화하는 핵심 하드웨어이며, OpenCL과 Vulkan 같은 API는 소프트웨어가 이 하드웨어에 접근하여 효율적으로 연산을 수행하도록 돕는다. Cooperative Matrix는 대규모 행렬 연산을 여러 워크그룹/스레드가 협력하여 처리하도록 최적화된 방식으로, 특히 딥러닝 모델의 핵심 연산인 행렬 곱셈에 매우 효과적이다.",
-      "why_it_matters": "카메라 데이터는 온디바이스 AI의 주요 입력 소스이다. OpenCL의 Cooperative Matrix 확장은 Camera HAL을 통해 전달되는 YUV/PRIVATE 스트림 데이터를 NPU/GPU에서 더 빠르고 효율적으로 처리할 수 있게 한다. 이는 얼굴 인식, 객체 감지, 실시간 이미지 필터링 등 AI 기반 카메라 기능의 성능을 직접적으로 향상시킬 수 있다. HAL은 이러한 AI 워크로드의 buffer pressure, thermal, power 영향을 관리해야 한다.",
-      "camera_hal_perspective": "HAL이 AI 모델을 직접 실행해야 한다는 의미는 아니다. 하지만 AI 기능이 카메라 input frame 수요를 늘리고 NPU/GPU 자원 경쟁을 심화시킬 수 있으므로, HAL은 latency, buffer pressure, stream combination, thermal, power 관점에서 안정성을 확인해야 한다. Cooperative Matrix와 같은 저수준 최적화는 NPU/GPU 드라이버 및 HAL의 image pipeline 설계에 영향을 줄 수 있으며, vendor camera behavior에 따라 최적화 방식이 달라질 수 있다.",
-      "camera_hal_checks": [
-        "AI 기반 ImageAnalysis 스트림 시나리오에서 frame drop 발생 여부 및 capture latency 변화 측정.",
-        "OpenCL Cooperative Matrix를 활용하는 AI 워크로드 실행 시 NPU/GPU 사용률 및 thermal throttling 발생 여부 모니터링.",
-        "YUV/PRIVATE 스트림과 AI 분석 스트림의 동시 사용 시 buffer lifecycle 관리 및 메모리 사용량 최적화 여부 확인."
-      ],
-      "action_hints": [
-        "SoC 벤더의 NPU/GPU 드라이버 업데이트 로드맵을 확인하고, OpenCL SDK를 통해 Cooperative Matrix 기능을 활용하는 AI 벤치마크를 수행한다."
-      ],
-      "action_items": [
-        "AI 기반 ImageAnalysis 스트림을 사용하는 카메라 앱을 실행하여 Preview + ImageAnalysis 동시 사용 시 frame delivery latency와 thermal 성능을 측정하고 기준치 대비 변화를 기록한다.",
-        "NPU/GPU 드라이버가 OpenCL Cooperative Matrix 확장을 지원하는지 확인하고, 지원 시 AI 워크로드의 성능 향상 여부를 벤치마크한다."
-      ],
-      "team_summary": "OpenCL Cooperative Matrix 확장은 온디바이스 AI 성능 향상에 기여하며, HAL은 AI 워크로드로 인한 시스템 부하(latency, thermal, buffer)를 관리해야 한다.",
+      "team_summary": "Android의 하이브리드 AI 추론 및 Gemini 모델 지원은 카메라 HAL이 AI 워크로드를 위한 이미지 데이터를 효율적으로 제공하고 NPU/GPU 리소스를 관리하는 방식에 중요한 변화를 가져올 것입니다. 성능 및 리소스 경합 관리에 집중해야 합니다.",
       "is_ai_related": true,
-      "article_type": "AI",
+      "article_type": "AI / Android Camera",
       "imageCandidates": [
         {
-          "url": "https://www.phoronix.net/image.php?id=2026&image=opencl_coop_matrix",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/OpenCL-Cooperative-Matrix",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKEjKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csOChWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
           "sourceKind": "og",
           "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/webp",
-          "height": 0,
-          "width": 0
+          "alt": ""
         },
         {
-          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/OpenCL-Cooperative-Matrix",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKEjKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csOChWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": ""
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
           "sourceKind": "article-img",
           "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "alt": "Phoronix",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "alt": "hero android logo"
         }
       ],
-      "selectedImage": "https://www.phoronix.net/image.php?id=2026&image=opencl_coop_matrix",
-      "imageSource": "https://www.phoronix.com/news/OpenCL-Cooperative-Matrix",
-      "imageAttribution": "Phoronix Linux Camera / Media",
-      "imageAlt": "OpenCL Cooperative Matrix 로고/이미지",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKEjKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csOChWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+      "imageSource": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Android 하이브리드 추론 솔루션 아키텍처 다이어그램",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "OpenCL Cooperative Matrix 확장을 시각적으로 나타내는 이미지로, 기사 내용과 직접적인 관련성이 높습니다.",
+      "imageUsageDecisionReason": "기사의 핵심 주제인 하이브리드 추론 아키텍처를 시각적으로 잘 설명하는 공식 메타 이미지입니다.",
       "sources": [
         {
-          "title": "Phoronix Linux Camera / Media",
-          "url": "https://www.phoronix.com/news/OpenCL-Cooperative-Matrix"
+          "title": "Experimental hybrid inference and new Gemini models for Android",
+          "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
         }
       ],
       "resolvedImage": {
-        "src": "https://www.phoronix.net/image.php?id=2026&image=opencl_coop_matrix",
+        "src": "../../assets/images/fallback/ai.svg",
+        "originalSrc": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKEjKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csOChWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+        "usedFallback": true,
+        "reason": "status=404; content-type=text/html; charset=utf-8; content-length=n/a; reason=HTTP 404"
+      }
+    },
+    {
+      "category": "C++ / NPU/GPU",
+      "headline": "표준 C++를 이용한 GPU 가속화 가능성 논의: 카메라 HAL의 NPU/GPU 활용 전략에 미치는 영향",
+      "what_changed": "CppCon 2025에서 Elmar Westphal이 '표준 C++가 GPU 가속화를 위해 CUDA를 대체할 수 있는가?'라는 주제로 발표했습니다. 이 발표는 표준 C++를 사용하여 GPU에서 고성능 컴퓨팅을 수행하는 가능성을 탐구합니다.",
+      "confirmed_facts": [
+        "CppCon 2025에서 Elmar Westphal이 표준 C++로 CUDA를 대체하는 GPU 가속화에 대해 발표했다.",
+        "발표는 표준 C++를 통한 GPU 고성능 컴퓨팅 가능성을 탐구한다."
+      ],
+      "background": "CUDA는 NVIDIA GPU를 위한 병렬 컴퓨팅 플랫폼 및 프로그래밍 모델로, GPU 가속화 분야에서 사실상의 표준으로 자리 잡았습니다. 그러나 CUDA는 특정 벤더에 종속적이며, 이식성(portability)에 제약이 있습니다. 표준 C++를 통한 GPU 가속화는 벤더 종속성을 줄이고 더 넓은 하드웨어 생태계에서 고성능 컴퓨팅을 가능하게 하는 잠재력을 가집니다.",
+      "why_it_matters": "카메라 HAL은 이미지 처리 및 AI 추론을 위해 NPU/GPU와 같은 가속 하드웨어를 광범위하게 사용합니다. 현재 많은 HAL 구현이 벤더별 확장 또는 특정 라이브러리(예: OpenCL, Vulkan Compute, 또는 CUDA와 유사한 벤더 전용 API)에 의존하고 있습니다. 표준 C++를 통한 GPU 가속화가 현실화된다면, HAL 개발자는 더 이식성 있고 유지보수하기 쉬운 코드를 작성할 수 있게 될 것입니다. 이는 장기적으로 HAL의 복잡성을 줄이고, 다양한 Android 기기 및 칩셋에 대한 통합 비용을 낮출 수 있습니다.",
+      "camera_hal_perspective": "NPU/GPU: 카메라 HAL은 이미지 처리 파이프라인(노이즈 감소, 샤프닝, 색 보정 등) 및 AI 전처리/추론을 위해 NPU/GPU를 적극적으로 활용합니다. 표준 C++ 기반의 GPU 가속화는 이러한 작업의 구현 방식을 변화시킬 수 있습니다. C++ code quality: 벤더별 확장 대신 표준 C++를 사용하면 코드의 가독성, 유지보수성, 테스트 용이성이 향상될 수 있습니다. 이는 장기적으로 HAL 코드베이스의 안정성에 기여합니다. Toolchain: Clang/LLVM 기반의 Android 빌드 시스템에서 표준 C++ GPU 가속화 기능이 얼마나 잘 지원될지, 그리고 어떤 컴파일러 플래그나 라이브러리가 필요할지 모니터링해야 합니다. Performance optimization: 표준 C++ 기반 솔루션이 기존 벤더별 솔루션과 비교하여 성능(처리량, 지연 시간, 전력 효율) 측면에서 경쟁력을 가질 수 있는지 평가해야 합니다.",
+      "camera_hal_checks": [],
+      "action_hints": [
+        "표준 C++ GPU 가속화 기술의 발전 동향을 지속적으로 모니터링합니다.",
+        "초기 PoC(Proof of Concept)를 통해 간단한 이미지 처리 커널을 표준 C++로 구현하고 성능을 측정합니다.",
+        "Android NDK 및 Clang/LLVM 툴체인에서 표준 C++ 병렬 알고리즘 지원 현황을 확인합니다."
+      ],
+      "action_items": [
+        "표준 C++ 병렬 알고리즘(예: `std::for_each`, `std::transform`의 병렬 버전)을 사용하여 간단한 이미지 처리 필터(예: 그레이스케일 변환)를 구현하고, 기존 GPU 가속 코드와 성능(처리 시간, CPU/GPU 부하)을 비교하는 PoC를 수행합니다. (담당: [팀명], 기한: 2주 이내)",
+        "Android NDK의 최신 Clang/LLVM 툴체인에서 C++ 표준 병렬 라이브러리 지원 현황 및 GPU 오프로딩 가능성을 조사하고, 관련 문서 및 예제를 수집합니다. (담당: [팀명], 기한: 2주 이내)"
+      ],
+      "team_summary": "표준 C++를 통한 GPU 가속화는 카메라 HAL의 NPU/GPU 활용 방식에 장기적인 변화를 가져올 수 있는 중요한 기술 동향입니다. 벤더 종속성을 줄이고 코드 품질을 향상시킬 잠재력이 있으므로, 기술 발전을 모니터링하고 초기 PoC를 통해 가능성을 탐색해야 합니다.",
+      "is_ai_related": true,
+      "article_type": "C++ / NPU/GPU",
+      "imageCandidates": [
+        {
+          "url": "https://isocpp.org/files/img/cuda-westphal.png",
+          "sourceUrl": "https://isocpp.org/blog",
+          "articleUrl": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "ISO C++ Blog",
+          "validationStatus": "ok",
+          "alt": "cuda-westphal.png"
+        }
+      ],
+      "selectedImage": "https://isocpp.org/files/img/cuda-westphal.png",
+      "imageSource": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "imageAttribution": "ISO C++ Blog",
+      "imageAlt": "CppCon 2025 발표 'Can Standard C++ Replace CUDA for GPU Acceleration?' 슬라이드 또는 관련 이미지",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련된 CppCon 발표의 제목과 주제를 보여주는 이미지입니다.",
+      "sources": [
+        {
+          "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
+          "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph"
+        }
+      ],
+      "resolvedImage": {
+        "src": "https://isocpp.org/files/img/cuda-westphal.png",
         "usedFallback": false
       }
     },
     {
-      "category": "C++",
-      "headline": "Glaze 7.2, C++26 Reflection 지원으로 HAL 메타데이터 직렬화 효율성 증대 가능성",
-      "what_changed": "고성능 C++23 직렬화 라이브러리인 Glaze 7.2가 C++26 Reflection 지원을 통합했다. 이 업데이트는 YAML, CBOR, MessagePack, TOML 등 다양한 형식의 직렬화를 지원하며, 실험적인 GCC 및 Clang 컴파일러에서 C++26 Reflection 기능을 활용한다.",
+      "category": "C++ Performance",
+      "headline": "C++ 가상 함수 호출 최적화: Devirtualization과 정적 다형성으로 카메라 HAL 성능 향상",
+      "what_changed": "ISO C++ 블로그에서 David Álvarez Rosa가 가상 함수 호출(virtual dispatch)이 성능에 미치는 영향과 이를 제거하기 위한 Devirtualization 및 정적 다형성(Static Polymorphism) 기법에 대해 설명했습니다.",
       "confirmed_facts": [
-        "Glaze 7.2는 C++26 Reflection을 지원하며, YAML, CBOR, MessagePack, TOML 등 여러 직렬화 형식을 처리할 수 있다.",
-        "이 기능은 실험적인 GCC 및 Clang 컴파일러에서 작동한다."
+        "David Álvarez Rosa가 가상 함수 호출의 성능 영향과 Devirtualization, 정적 다형성 기법을 설명했다.",
+        "가상 함수 호출은 다형성을 가능하게 하지만, 숨겨진 오버헤드가 있다."
       ],
-      "background": "C++ Reflection은 컴파일 시간에 타입의 구조(멤버 변수, 함수 등)에 대한 정보를 얻을 수 있게 하는 기능이다. 이를 통해 런타임에 복잡한 보일러플레이트 코드 없이 객체를 직렬화하거나 역직렬화할 수 있다. Camera HAL에서는 request/result metadata를 포함한 다양한 설정 및 진단 정보를 직렬화하여 저장하거나 통신하는 경우가 많다. 기존에는 수동으로 각 필드를 처리하거나 코드 생성 도구를 사용해야 했다.",
-      "why_it_matters": "Camera HAL은 request/result metadata와 같은 복잡한 데이터 구조를 효율적으로 처리해야 한다. C++26 Reflection을 활용하는 Glaze와 같은 라이브러리는 이러한 메타데이터의 직렬화/역직렬화 코드를 단순화하고, 런타임 성능을 향상시킬 수 있다. 이는 HAL의 developer productivity를 높이고, metadata 처리 과정에서 발생할 수 있는 버그를 줄이는 데 기여할 수 있다. Android native 개발은 주로 Clang/LLVM 툴체인을 사용하므로, Clang 지원은 특히 중요하다.",
-      "camera_hal_perspective": "HAL 개발팀은 request/result metadata, stream configuration 파라미터, 내부 디버깅 로그 등 구조화된 데이터를 처리하는 부분에서 C++26 Reflection 기반 직렬화 라이브러리의 적용 가능성을 탐색할 수 있다. 특히 session parameter나 vendor tag와 같이 동적으로 확장될 수 있는 메타데이터 구조에 대한 코드 유지보수 비용을 절감하는 데 도움이 될 수 있다. 하지만 ABI stability와 툴체인(Clang/LLVM)의 C++26 Reflection 지원 현황을 신중하게 고려해야 한다.",
-      "camera_hal_checks": [
-        "현재 HAL에서 request/result metadata 및 stream configuration 파라미터 직렬화/역직렬화에 사용되는 방식과 Glaze 7.2 같은 Reflection 기반 라이브러리 도입 시의 성능 및 코드 복잡성 비교.",
-        "Clang/LLVM 툴체인의 C++26 Reflection 지원 로드맵 확인 및 Android native 빌드 환경에서의 호환성 테스트.",
-        "Glaze 라이브러리가 HAL의 memory footprint 및 startup latency에 미치는 영향 평가."
-      ],
+      "background": "C++의 가상 함수는 런타임 다형성을 구현하는 강력한 메커니즘이지만, 가상 테이블 조회(vtable lookup) 및 간접 호출(indirect call)로 인해 직접 함수 호출보다 약간의 오버헤드가 발생합니다. 성능에 민감한 코드에서는 이러한 작은 오버헤드도 누적되어 전체 시스템 성능에 영향을 미칠 수 있습니다. Devirtualization은 컴파일러가 런타임에 결정될 가상 함수 호출을 컴파일 타임에 결정하여 직접 호출로 바꾸는 최적화 기법입니다. 정적 다형성은 템플릿(CRTP 등)을 사용하여 런타임 오버헤드 없이 다형성을 구현하는 방법입니다.",
+      "why_it_matters": "카메라 HAL은 이미지 처리 파이프라인, 버퍼 관리, 메타데이터 처리 등 성능에 매우 민감한 영역에서 C++ 코드를 사용합니다. HAL의 네이티브 코드에서 가상 함수 호출이 빈번하게 발생한다면, 이는 프레임 처리 지연, 전력 소모 증가, 심지어 프레임 드롭으로 이어질 수 있습니다. Devirtualization 및 정적 다형성 기법은 이러한 성능 병목 현상을 해결하고 HAL 코드의 효율성을 극대화하는 데 중요한 역할을 할 수 있습니다.",
+      "camera_hal_perspective": "Native Android runtime: Camera HAL은 C++로 구현되며, Android의 네이티브 런타임 환경에서 동작합니다. HAL 코드 내의 가상 함수 호출은 캡처 지연 시간, 프레임 처리량에 직접적인 영향을 미칠 수 있습니다. C++ code quality: HAL 인터페이스 구현 시 추상화 계층에서 가상 함수를 사용하는 경우가 많습니다. 성능 크리티컬 경로에서 이러한 패턴을 식별하고, Devirtualization이 가능한지 또는 정적 다형성으로 리팩토링할 수 있는지 검토해야 합니다. Performance optimization: 이미지 버퍼 처리 루틴, 메타데이터 파싱/생성 루틴 등 반복적이고 성능이 중요한 코드 섹션에서 가상 함수 오버헤드를 줄이는 것은 전체 카메라 파이프라인의 효율성을 높이는 데 기여합니다. Toolchain: Clang/LLVM 컴파일러가 Devirtualization을 얼마나 효과적으로 수행하는지 이해하고, 필요한 경우 컴파일러 최적화 옵션을 조정하거나 코드 패턴을 변경하여 최적화를 유도해야 합니다.",
+      "camera_hal_checks": [],
       "action_hints": [
-        "소규모 PoC(Proof of Concept) 프로젝트를 통해 vendor tag 직렬화에 Glaze 7.2를 적용해보고, 코드량 감소 및 성능 변화를 측정한다."
+        "HAL 코드베이스에서 가상 함수 호출이 빈번하게 발생하는 성능 크리티컬 경로를 식별합니다.",
+        "프로파일링 도구를 사용하여 가상 함수 호출이 실제 성능 병목인지 확인합니다.",
+        "정적 다형성(예: CRTP)을 적용하여 가상 함수 오버헤드를 제거하는 PoC를 수행합니다."
       ],
       "action_items": [
-        "현재 사용 중인 camera_metadata 직렬화 로직의 코드 복잡성과 성능(CPU, 메모리)을 측정하고, C++26 Reflection 기반 라이브러리(예: Glaze)를 적용한 PoC와 비교 분석한다.",
-        "Android NDK에서 사용되는 Clang 컴파일러의 C++26 Reflection 지원 현황을 확인하고, 해당 기능이 안정화될 때까지 장기적인 도입 가능성을 검토한다."
+        "Camera HAL의 주요 이미지 처리 경로(예: `processCaptureRequest`, `processCaptureResult` 내부)에서 `perf` 또는 `simpleperf`와 같은 프로파일링 도구를 사용하여 가상 함수 호출로 인한 오버헤드가 발생하는지 분석합니다. (담당: [팀명], 기한: 2주 이내)",
+        "성능에 민감한 특정 모듈에서 가상 함수를 사용하는 인터페이스를 정적 다형성(예: CRTP)으로 리팩토링하는 PoC를 수행하고, 리팩토링 전후의 성능(함수 호출 시간, CPU 사용량)을 비교 측정합니다. (담당: [팀명], 기한: 2주 이내)"
       ],
-      "team_summary": "Glaze 7.2의 C++26 Reflection 지원은 HAL 메타데이터 직렬화 효율성을 높일 잠재력이 있지만, Android 툴체인 호환성 및 ABI 안정성을 신중히 고려해야 한다.",
+      "team_summary": "C++ 가상 함수 호출 오버헤드는 카메라 HAL 성능에 영향을 줄 수 있습니다. Devirtualization 및 정적 다형성 기법을 통해 성능 크리티컬 경로를 최적화하여 HAL의 효율성을 높일 수 있는지 검토해야 합니다.",
       "is_ai_related": false,
       "article_type": "C++",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
+          "url": "https://isocpp.org/files/img/rosa-devirtualization.png",
+          "sourceUrl": "https://isocpp.org/blog",
+          "articleUrl": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa",
           "sourceKind": "article-img",
           "licenseStatus": "unknown",
-          "attribution": "AOSP Camera Documentation",
+          "attribution": "ISO C++ Blog",
           "validationStatus": "ok",
-          "alt": "Android Open Source Project",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok",
-          "alt": "Android Camera HAL icon",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Camera Documentation",
-          "validationStatus": "ok",
-          "alt": "Android camera architecture",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=zh-tw",
-          "sourceUrl": "https://source.android.com/docs/whatsnew",
-          "articleUrl": "https://source.android.com/docs/whatsnew",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP What's New / Release Notes",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://developer.android.com/images/picto-icons/stars.svg",
-          "sourceUrl": "https://source.android.com/docs/whatsnew",
-          "articleUrl": "https://source.android.com/docs/whatsnew",
-          "sourceKind": "article-img",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP What's New / Release Notes",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "height": 0,
-          "width": 0
-        },
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=he",
-          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "sourceKind": "og",
-          "licenseStatus": "unknown",
-          "attribution": "CameraX Release Notes",
-          "validationStatus": "ok",
-          "alt": "",
-          "contentType": "image/png",
-          "height": 0,
-          "width": 0
+          "alt": "rosa-devirtualization.png"
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련성이 높은 시각적 자료가 없으며, 대부분 코드 스니펫이나 일반적인 로고 이미지입니다.",
+      "selectedImage": "https://isocpp.org/files/img/rosa-devirtualization.png",
+      "imageSource": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa",
+      "imageAttribution": "ISO C++ Blog",
+      "imageAlt": "Devirtualization 및 정적 다형성 관련 C++ 코드 예시 또는 다이어그램",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련된 C++ 최적화 기법을 설명하는 이미지입니다.",
       "sources": [
         {
-          "title": "ISO C++ Blog",
-          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+          "title": "Devirtualization and Static Polymorphism -- David Álvarez Rosa",
+          "url": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa"
         }
       ],
       "resolvedImage": {
-        "src": "",
-        "usedFallback": false,
-        "reason": "no selected image"
+        "src": "https://isocpp.org/files/img/rosa-devirtualization.png",
+        "usedFallback": false
+      }
+    },
+    {
+      "category": "C++ Concurrency",
+      "headline": "C++ Atomics 직접 구현 논의: 카메라 HAL의 멀티스레드 동시성 및 메모리 안전성 강화",
+      "what_changed": "CppCon 2025에서 Ben Saks가 'Implementing Your Own C++ Atomics'라는 주제로 발표했습니다. 이 발표는 아토믹 객체의 중요성과 직접 구현 시 고려사항을 다룹니다.",
+      "confirmed_facts": [
+        "CppCon 2025에서 Ben Saks가 C++ Atomics 직접 구현에 대해 발표했다.",
+        "아토믹 객체는 멀티스레드 환경에서 매우 유용하다."
+      ],
+      "background": "멀티스레드 프로그래밍에서 공유 데이터에 대한 동시 접근은 데이터 경쟁(data race)을 유발하여 예측 불가능한 동작이나 프로그램 충돌로 이어질 수 있습니다. C++ 표준 라이브러리의 `std::atomic`은 이러한 문제를 해결하기 위해 아토믹 연산을 제공하여, 여러 스레드가 동시에 접근하더라도 데이터 무결성을 보장합니다. `std::atomic`은 일반적으로 하드웨어 아토믹 명령어를 활용하여 효율성을 높입니다.",
+      "why_it_matters": "카메라 HAL은 여러 스레드(예: 캡처 스레드, 처리 스레드, 콜백 스레드)가 동시에 작동하며, 버퍼 큐, 메타데이터 상태, 장치 레지스터 접근 등 공유 리소스에 대한 동시성 제어가 필수적입니다. 잘못된 동시성 제어는 프레임 손상, HAL 크래시, 데이터 불일치와 같은 심각한 문제를 야기할 수 있습니다. `std::atomic`의 올바른 이해와 활용은 HAL 코드의 안정성과 예측 가능성을 크게 향상시킬 수 있습니다. 특히, 특정 플랫폼에서 `std::atomic`의 성능 특성을 이해하고 필요한 경우 직접 구현을 고려하는 것은 최적화에 중요할 수 있습니다.",
+      "camera_hal_perspective": "Concurrency: 카메라 HAL은 여러 스레드에서 동시에 `request`를 처리하고 `result`를 반환하며, 버퍼를 관리합니다. `std::atomic`은 이러한 공유 상태 변수를 안전하게 업데이트하는 데 필수적입니다. Memory safety: 버퍼 카운터, 스트림 상태 플래그 등 HAL 내부의 공유 변수에 대한 아토믹 연산은 메모리 손상이나 경쟁 조건을 방지하여 시스템 안정성을 보장합니다. Native Android runtime: Android NDK를 통해 빌드되는 HAL 코드에서 `std::atomic`의 동작과 성능은 매우 중요합니다. 특정 아키텍처(ARM)에서의 아토믹 명령어 매핑 및 메모리 오더링에 대한 이해가 필요할 수 있습니다. C++ code quality: `std::atomic`을 직접 구현하는 것은 복잡하고 오류 발생 가능성이 높지만, 특정 성능 요구사항이나 플랫폼 제약이 있을 경우 고려될 수 있습니다. HAL 개발자는 표준 라이브러리 구현의 한계를 이해하고, 필요한 경우에만 직접 구현을 검토해야 합니다.",
+      "camera_hal_checks": [],
+      "action_hints": [
+        "HAL 코드베이스에서 `std::atomic`이 사용되는 모든 지점을 검토하고, 메모리 오더링(memory ordering)이 올바르게 지정되었는지 확인합니다.",
+        "`std::atomic`을 사용하지 않고 뮤텍스 등으로 보호되는 공유 변수 중 아토믹으로 대체하여 성능을 개선할 수 있는 부분을 식별합니다.",
+        "`std::atomic`의 성능 프로파일링을 수행하여 특정 연산의 오버헤드를 이해합니다."
+      ],
+      "action_items": [
+        "Camera HAL 코드에서 `std::atomic`을 사용하는 모든 공유 변수와 해당 메모리 오더링(예: `memory_order_acquire`, `memory_order_release`) 설정을 검토하여 데이터 경쟁 가능성을 최소화하고 올바른 동기화가 이루어지는지 확인합니다. (담당: [팀명], 기한: 2주 이내)",
+        "`std::atomic` 대신 뮤텍스(mutex)로 보호되는 공유 카운터 또는 플래그 중 `std::atomic`으로 대체하여 동시성 오버헤드를 줄일 수 있는 후보를 식별하고, PoC를 통해 성능 개선 효과를 측정합니다. (담당: [팀명], 기한: 2주 이내)"
+      ],
+      "team_summary": "C++ 아토믹 객체는 카메라 HAL의 멀티스레드 환경에서 데이터 무결성과 안정성을 보장하는 데 필수적입니다. `std::atomic`의 올바른 사용과 성능 특성을 이해하고, 필요한 경우 직접 구현 가능성을 검토하여 HAL 코드의 동시성 및 메모리 안전성을 강화해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "C++",
+      "imageCandidates": [
+        {
+          "url": "https://isocpp.org/files/img/atomics-saks.png",
+          "sourceUrl": "https://isocpp.org/blog",
+          "articleUrl": "https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "ISO C++ Blog",
+          "validationStatus": "ok",
+          "alt": "atomics-saks.png"
+        }
+      ],
+      "selectedImage": "https://isocpp.org/files/img/atomics-saks.png",
+      "imageSource": "https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks",
+      "imageAttribution": "ISO C++ Blog",
+      "imageAlt": "C++ Atomics 구현 관련 코드 예시 또는 다이어그램",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련된 C++ 아토믹스 주제를 설명하는 이미지입니다.",
+      "sources": [
+        {
+          "title": "CppCon 2025 Implementing Your Own C++ Atomics -- Ben Saks",
+          "url": "https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks"
+        }
+      ],
+      "resolvedImage": {
+        "src": "https://isocpp.org/files/img/atomics-saks.png",
+        "usedFallback": false
       }
     }
   ],
   "action_items": [
-    "다음 분기별 AOSP 업데이트 시, '새로운 기능' 페이지를 통해 Camera HAL 관련 변경사항을 식별하고 팀에 공유하며, CTS/VTS/Camera ITS 테스트 계획에 반영한다.",
-    "최신 CameraX 릴리스를 기반으로 Preview + ImageCapture + VideoCapture + ImageAnalysis 동시 사용 시나리오에서 HAL의 stream configuration 및 frame drop 여부를 테스트한다.",
-    "libcamera 0.7.1이 통합된 Linux 커널 환경에서 Preview 및 ImageCapture 스트림의 frame delivery latency와 이미지 품질을 이전 버전과 비교 측정한다.",
-    "AI 기반 ImageAnalysis 스트림을 사용하는 카메라 앱을 실행하여 Preview + ImageAnalysis 동시 사용 시 frame delivery latency와 thermal 성능을 측정하고 기준치 대비 변화를 기록한다.",
-    "현재 사용 중인 camera_metadata 직렬화 로직의 코드 복잡성과 성능을 측정하고, C++26 Reflection 기반 라이브러리(예: Glaze)를 적용한 PoC와 비교 분석한다."
+    "Android 17 Beta 4가 설치된 기기에서 최신 Camera ITS 테스트를 전체 수행하고, 실패 항목을 분석하여 HAL 수정 필요 여부를 판단합니다. (담당: [팀명], 기한: 2주 이내)",
+    "Firebase AI Logic을 사용하는 샘플 앱을 통해 Preview + AI-analysis stream 조합에서 온디바이스 추론 시나리오의 frame drop, capture latency, thermal throttling을 측정하고 baseline을 확보합니다. (담당: [팀명], 기한: 2주 이내)",
+    "표준 C++ 병렬 알고리즘을 사용하여 간단한 이미지 처리 필터를 구현하고, 기존 GPU 가속 코드와 성능을 비교하는 PoC를 수행합니다. (담당: [팀명], 기한: 2주 이내)",
+    "Camera HAL의 주요 이미지 처리 경로에서 프로파일링 도구를 사용하여 가상 함수 호출로 인한 오버헤드가 발생하는지 분석합니다. (담당: [팀명], 기한: 2주 이내)",
+    "Camera HAL 코드에서 `std::atomic`을 사용하는 모든 공유 변수와 해당 메모리 오더링 설정을 검토하여 데이터 경쟁 가능성을 최소화하고 올바른 동기화가 이루어지는지 확인합니다. (담당: [팀명], 기한: 2주 이내)"
   ],
   "references": [
     {
-      "title": "AOSP What's New / Release Notes",
-      "url": "https://source.android.com/docs/whatsnew"
+      "title": "The Fourth Beta of Android 17",
+      "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
     },
     {
-      "title": "CameraX Release Notes",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera"
+      "title": "Experimental hybrid inference and new Gemini models for Android",
+      "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
     },
     {
-      "title": "Phoronix Linux Camera / Media",
-      "url": "https://www.phoronix.com/news/libcamera-0.7.1-Released"
+      "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph"
     },
     {
-      "title": "Phoronix Linux Camera / Media",
-      "url": "https://www.phoronix.com/news/OpenCL-Cooperative-Matrix"
+      "title": "Devirtualization and Static Polymorphism -- David Álvarez Rosa",
+      "url": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa"
     },
     {
-      "title": "ISO C++ Blog",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-    },
-    {
-      "title": "Phoronix Linux Camera / Media",
-      "url": "https://www.phoronix.com/"
-    },
-    {
-      "title": "AOSP Camera Documentation",
-      "url": "https://source.android.com/docs/core/camera"
+      "title": "CppCon 2025 Implementing Your Own C++ Atomics -- Ben Saks",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks"
     }
   ]
 }
