@@ -2,63 +2,60 @@
 
 ## Project Structure & Module Organization
 
-This repository is a static Camera HAL SW newsletter site with Node.js automation scripts.
+This repository publishes a static Camera HAL SW newsletter with Node.js automation.
 
 - `index.html` is the archive landing page and reads `data/newsletters.json`.
-- `css/` contains shared site styling; keep newsletter-specific HTML aligned with these classes.
-- `data/newsletters.json` stores published newsletter metadata.
-- `newsletters/YYYY-MM-DD/` contains each published issue: `newsletter.md` and `index.html`.
-- `newsroom/YYYY-MM-DD/` contains editorial artifacts such as candidate lists, fact checks, briefs, and QA reports.
-- `templates/` provides starting Markdown and HTML files for new issues.
-- `scripts/` contains Node scripts for candidate collection, Gemini generation, rendering, and validation.
-- `.github/workflows/` runs the Gemini newsroom PR flow and site validation.
+- `css/` contains shared site styling; avoid layout churn unless the task is UI-specific.
+- `assets/images/fallback/` stores local article-image fallbacks used by validation.
+- `data/news-sources.json` is the machine-readable source registry; `docs/news-sources.md` is the editorial view.
+- `collected-news/YYYY-MM-DD/` stores raw candidate output.
+- `newsroom/YYYY-MM-DD/` stores review artifacts: reporter candidates, editor drafts, fact checks, briefs, and QA reports.
+- `newsletters/YYYY-MM-DD/` stores published issue artifacts: `newsletter.md` and `index.html`.
+- `scripts/` contains collection, Gemini generation, rendering, image resolution, and validation logic.
+- `.github/workflows/` contains the newsroom PR workflow and validation workflow.
 
 ## Build, Test, and Development Commands
 
-Use Node 20, matching the GitHub Actions configuration.
+Use Node 20.
 
 ```powershell
-node scripts/validate-site.js
+npm.cmd run collect
 ```
 
-Validates `data/newsletters.json`, required newsletter files, required sections, duplicate dates, TODO markers, and basic HTML anchor balance.
+Collects candidates from `data/news-sources.json`; set `NEWSLETTER_DATE=YYYY-MM-DD` and optionally `LOOKBACK_DAYS=21`.
 
 ```powershell
-$env:NEWSLETTER_DATE="YYYY-MM-DD"
-$env:LOOKBACK_DAYS="21"
-node scripts/collect-news-candidates.js
+npm.cmd run generate
 ```
 
-Collects candidate news from `docs/sources.md` without using the OpenAI API.
+Runs the Gemini newsroom pipeline. Requires `GEMINI_API_KEY`; optional model overrides include `GEMINI_MODEL` and `GEMINI_FALLBACK_MODELS`.
 
 ```powershell
-$env:NEWSLETTER_DATE="YYYY-MM-DD"
-$env:GEMINI_API_KEY="xxx"
-node scripts/gemini-newsroom-newsletter.js
+npm.cmd run validate
 ```
 
-Runs the Gemini reporter, editor, and fact-checker pipeline and updates newsletter files.
+Runs site, external image, and quality validation. This is the required gate before publication.
 
 ```powershell
 npx serve .
 ```
 
-Serves the static site locally so `fetch()` calls can load JSON correctly.
+Serves the static site locally so browser `fetch()` calls can load JSON.
 
 ## Coding Style & Naming Conventions
 
-JavaScript scripts use CommonJS (`require`), two-space indentation, semicolons, and explicit filesystem paths via `path.join` or `path.resolve`. Keep filenames lowercase with hyphens where applicable, such as `validate-site.js`. Date-based content directories must use `YYYY-MM-DD`. Do not edit `data/newsletters.json` by hand when publishing; the Gemini generation script updates it.
+JavaScript uses CommonJS (`require`), two-space indentation, semicolons, and explicit paths via `path.join` or `path.resolve`. Prefer lowercase hyphenated filenames, such as `validate-quality.js`. Date directories must use `YYYY-MM-DD`. Preserve validator-sensitive HTML hooks such as `issue-briefing`, `issue-section`, `source-list`, and `reference-list`.
 
 ## Testing Guidelines
 
-There is no separate unit test suite. Treat `node scripts/validate-site.js` as the required quality gate before opening or updating a PR. Published Markdown must include the required sections checked by the validator, exactly three briefing bullets, sources or source labels in major sections, and no `TODO` text.
+There is no separate unit test suite. Treat `npm.cmd run validate` as the authoritative test command. Published artifacts must contain no `TODO`, include required sections and references, satisfy article-image fallback rules, and meet the deterministic quality threshold.
 
 ## Commit & Pull Request Guidelines
 
-Recent commits use concise imperative subjects, for example `Add Camera HAL newsletter for 2026-04-30`, `Generate Camera HAL newsletter YYYY-MM-DD`, and `Fix newsletter validation issues`. Keep commits scoped to one issue or workflow step.
+Recent history uses concise imperative subjects, for example `Generate Camera HAL newsletter 2026-05-02`, `Add newsletter quality gate`, and `Align newsletter operations docs and validation`. Keep commits scoped and stage only relevant files.
 
-PRs should follow `.github/pull_request_template.md`: include the dated newsletter files, metadata update, required sections, source checks, archive and Markdown links, and validation status. Newsletters are published through PRs only; do not push directly to `main` for publication.
+Newsletter publication is PR-based. PRs should include generated `newsletters/`, `newsroom/`, and `data/newsletters.json` changes when applicable, plus validation status and any `needs-fix` context from fact-check or quality reports.
 
 ## Agent-Specific Instructions
 
-Preserve user-authored newsletter content and editorial artifacts. When adding a new issue, use the Gemini pipeline, verify generated files under the matching date directory, run validation, and avoid unrelated formatting churn.
+Do not weaken validation to hide publication risks. Preserve review artifacts when generation needs editorial fixes, and avoid inventing replacement external images; use the resolver and local fallback contract.
