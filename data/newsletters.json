@@ -2,7 +2,7 @@
   {
     "date": "2026-05-02",
     "title": "Camera HAL SW Newsletter - 2026-05-02",
-    "summary": "이번 주 뉴스레터는 Android 17 베타 4 출시와 함께 Camera HAL의 플랫폼 호환성 및 안정성 검증의 중요성을 강조합니다. 또한, Android의 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 카메라 데이터 경로와 NPU/GPU 스케줄링에 미칠 영향에 대해 다룹니다. C++ 관점에서는 GPU 가속화에 표준 C++를 활용하는 방안과 HAL 코드의 성능 및 동시성 최적화를 위한 기법들을 살펴봅니다.",
+    "summary": "이번 주에는 Android 개발 생산성을 높이는 새로운 AI 도구와 하이브리드 추론 기능이 발표되었습니다. 또한, Camera HAL 엔지니어에게 필수적인 AOSP, CameraX, CDD 문서 업데이트를 주시해야 합니다. AI 기능 통합 및 개발 워크플로우 개선에 대한 최신 정보를 확인하고, 카메라 관련 보안 업데이트에 주의를 기울여야 합니다.",
     "html": "newsletters/2026-05-02/index.html",
     "md": "newsletters/2026-05-02/newsletter.md",
     "tags": [

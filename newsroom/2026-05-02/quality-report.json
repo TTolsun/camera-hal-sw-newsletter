@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-02",
+  "score": 88,
+  "threshold": 95,
+  "status": "NEEDS_FIX",
+  "summary": "Quality score 88/95; improve the deductions before publication.",
+  "deductions": [
+    {
+      "category": "source-integrity",
+      "points": 10,
+      "reason": "Fact checker reported 6 source gap(s).",
+      "location": ""
+    },
+    {
+      "category": "hal-relevance",
+      "points": 2,
+      "reason": "1 selected reporter candidate(s) have weak HAL/actionability scores.",
+      "location": ""
+    }
+  ],
+  "metrics": {
+    "article_count": 6,
+    "briefing_count": 3,
+    "camera_article_count": 6,
+    "ai_article_count": 3,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 6
+  }
+}

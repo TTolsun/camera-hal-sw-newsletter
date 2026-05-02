@@ -23,21 +23,21 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | 100 | Android Developers Blog | high | official | no | Experimental hybrid inference and new Gemini models for Android | Fri, 17 Apr 2026 20:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html) |
 | 100 | Android Developers Blog | high | official | no | Android CLI and skills: Build Android apps 3x faster using any agent | Thu, 16 Apr 2026 17:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html) |
 | 100 | Android Developers Blog | high | official | no | Get ready for Google I/O: Livestream schedule revealed | Tue, 14 Apr 2026 12:30:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/get-ready-for-google-io-livestream-schedule-revealed.html) |
-| 100 | AOSP Camera Documentation | high | official | no | Camera &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/core/camera) |
+| 100 | AOSP Camera Documentation | high | official | no | Fotocamera &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/core/camera) |
 | 100 | AOSP What's New / Release Notes | high | official | no | What&apos;s new &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/whatsnew) |
-| 98 | Android Compatibility Definition Document | high | official | no | سند تعریف سازگاری اندروید &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/compatibility/cdd) |
+| 98 | Android Compatibility Definition Document | high | official | no | Android Compatibility Definition Document &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/compatibility/cdd) |
 | 96 | CameraX Release Notes | high | official | no | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/jetpack/androidx/releases/camera) |
 | 92 | Android Developers Blog | high | official | no | Streamline User Journeys with Verified Email via Credential Manager | Wed, 22 Apr 2026 20:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html) |
 | 88 | Android Developers Blog | high | official | no | What's new in the Jetpack Compose April '26 release | Wed, 22 Apr 2026 23:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html) |
 | 88 | Android Developers Blog | high | official | no | Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4 | Tue, 21 Apr 2026 14:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html) |
 | 88 | Android Developers Blog | high | official | no | The Fourth Beta of Android 17 | Thu, 16 Apr 2026 20:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html) |
 | 88 | Android Developers Blog | high | official | no | Test Multi-Device Interactions with the Android Emulator | Mon, 13 Apr 2026 13:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html) |
-| 87 | Android Security Bulletin | high | official | no | Android 보안 및 업데이트 게시판 &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/security/bulletin) |
+| 87 | Android Security Bulletin | high | official | no | Android Security and Update Bulletins &nbsp;\|&nbsp; Android Open Source Project | review needed | [link](https://source.android.com/docs/security/bulletin) |
 | 84 | Android Developers Blog | high | official | no | Boosting user privacy and business protection with updated Play policies | Wed, 15 Apr 2026 17:00:00 +0000 | [link](https://android-developers.googleblog.com/2026/04/giving-users-clearer-choice-and-everyone-a-safer-more-trusted-app-ecosystem.html) |
-| 53 | Android Developers Latest Updates | high | official | no | Android latest updates &nbsp;\|&nbsp; Latest updates &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/latest-updates) |
+| 53 | Android Developers Latest Updates | high | official | no | অ্যান্ড্রয়েডের সর্বশেষ আপডেট &nbsp;\|&nbsp; Latest updates &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/latest-updates) |
 | 83 | Samsung Mobile Security Updates | medium | official | no | Samsung Mobile Security | review needed | [link](https://security.samsungmobile.com/securityUpdate.smsb) |
 | 56 | Qualcomm Security Bulletins | medium | official | no | Qualcomm Documentation | review needed | [link](https://docs.qualcomm.com/product/publicresources/securitybulletin) |
-| 45 | Android Developer Newsletter | medium | official | no | Android Developer Newsletters &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/newsletter) |
+| 41 | Android Developer Newsletter | medium | official | no | Android 개발자 뉴스레터 &nbsp;\|&nbsp; Android Developers | review needed | [link](https://developer.android.com/newsletter) |
 
 ## Linux Camera / Driver
 
@@ -68,18 +68,13 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 
 | Score | Source | Priority | Reliability | Candidate only | Title | Published | Link |
 |---:|---|---|---|---|---|---|---|
+| 63 | OpenAI News | medium | official | no | OpenAI News \| OpenAI | review needed | [link](https://openai.com/news/) |
 | 55 | Anthropic News | medium | official | no | Newsroom \ Anthropic | review needed | [link](https://www.anthropic.com/news) |
 | 51 | Google DeepMind Blog | medium | official | no | News — Google DeepMind | review needed | [link](https://deepmind.google/blog/) |
 | 51 | Google Cloud AI & Machine Learning Blog | medium | official | no | AI & Machine Learning \| Google Cloud Blog | review needed | [link](https://cloud.google.com/blog/products/ai-machine-learning) |
 | 48 | Claude Code Changelog | medium | official | no | Changelog - Claude Code Docs | review needed | [link](https://code.claude.com/docs/en/changelog) |
 | 44 | Google Open Source Blog | medium | official | no | Google Open Source | review needed | [link](https://opensource.google/) |
 | 43 | Google Research Blog | medium | official | no | Latest News from Google Research Blog - Google Research | review needed | [link](https://research.google/blog/) |
-
-## Embedded / Semiconductor
-
-| Score | Source | Priority | Reliability | Candidate only | Title | Published | Link |
-|---:|---|---|---|---|---|---|---|
-| 81 | EE Times - Semiconductors | medium | electronics-media | no | Semiconductor News & Industry Updates - EE Times | review needed | [link](https://www.eetimes.com/tag/semiconductors/) |
 
 ## Raw Candidates
 
@@ -134,7 +129,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Google I/O 2026: Livestream Schedule Revealed Posted by The Google I/O team The Google I/O schedule is here! Tune in May 19–20 as we unveil Google’s biggest updates across AI, Android, Chrome, and Cloud. Discover new tools and features designed to unlock the future of development with agentic coding. We’re kicking things off with the Google keynote at 10:00 am PT on May 19, followed by the Developer keynote at 1:30 pm PT. Block your calendars for two days of live sessions, straight from Mountain
 - Selection reason: Android Developers Blog (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 4. Camera &nbsp;|&nbsp; Android Open Source Project
+### 4. Fotocamera &nbsp;|&nbsp; Android Open Source Project
 
 - Source: AOSP Camera Documentation
 - Source URL: https://source.android.com/docs/core/camera
@@ -168,7 +163,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 6. سند تعریف سازگاری اندروید &nbsp;|&nbsp; Android Open Source Project
+### 6. Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project
 
 - Source: Android Compatibility Definition Document
 - Source URL: https://source.android.com/docs/compatibility/cdd
@@ -287,7 +282,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Posted by Steven Jenkins, Product Manager, Android Studio Testing multi-device interactions is now easier than ever with the Android Emulator. Whether you are building a multiplayer game, extending your mobile application across form factors, or launching virtual devices that require a device connection, the Android Emulator now natively supports these developer experiences. Previously, interconnecting multiple Android Virtual Devices (AVDs) caused significant friction. It required manually mana
 - Selection reason: Android Developers Blog (official, high, score 88): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 13. Android 보안 및 업데이트 게시판 &nbsp;|&nbsp; Android Open Source Project
+### 13. Android Security and Update Bulletins &nbsp;|&nbsp; Android Open Source Project
 
 - Source: Android Security Bulletin
 - Source URL: https://source.android.com/docs/security/bulletin
@@ -321,7 +316,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Posted by Bennet Manuel, Group Product Manager, App & Ecosystem Trust We strive to make Google Play the safest and most trusted experience possible. Today, we’re announcing a new set of policy updates and an account transfer feature to boost user privacy and protect your business from fraud. By providing better features for users and easy-to-integrate tools for you, we’re making it simpler to build safer apps so you can focus on creating great experiences. We’re also expanding our features to he
 - Selection reason: Android Developers Blog (official, high, score 84): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 15. Android latest updates &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers
+### 15. অ্যান্ড্রয়েডের সর্বশেষ আপডেট &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers
 
 - Source: Android Developers Latest Updates
 - Source URL: https://developer.android.com/latest-updates
@@ -335,7 +330,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Requires cross-check: no
 - Verification hint: Can be used directly if the collected item supports the claim.
 - Relevance Score: 53
-- Summary: Discover what's new across the Android ecosystem.
+- Summary: অ্যান্ড্রয়েড ইকোসিস্টেম জুড়ে নতুন কী আছে তা আবিষ্কার করুন।
 - Selection reason: Android Developers Latest Updates (official, high, score 53): Camera HAL relevance and engineering productivity signals were both detected.
 
 ### 16. All Posts &mdash; libcamera
@@ -576,7 +571,24 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Samsung Mobile Security Updates (official, medium, score 83): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 30. Qualcomm Documentation
+### 30. OpenAI News | OpenAI
+
+- Source: OpenAI News
+- Source URL: https://openai.com/news/
+- Published: review needed
+- Link: https://openai.com/news/
+- Section: AI / SW Engineering Trends
+- Source category: ai
+- Source priority: medium
+- Source reliability: official
+- Candidate only: no
+- Requires cross-check: no
+- Verification hint: Can be used directly if the collected item supports the claim.
+- Relevance Score: 63
+- Summary: Stay up to speed on the rapid advancement of AI technology and the benefits it offers to humanity.
+- Selection reason: OpenAI News (official, medium, score 63): Camera HAL relevance and engineering productivity signals were both detected.
+
+### 31. Qualcomm Documentation
 
 - Source: Qualcomm Security Bulletins
 - Source URL: https://docs.qualcomm.com/product/publicresources/securitybulletin
@@ -593,7 +605,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Qualcomm Security Bulletins (official, medium, score 56): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 31. Newsroom \ Anthropic
+### 32. Newsroom \ Anthropic
 
 - Source: Anthropic News
 - Source URL: https://www.anthropic.com/news
@@ -610,7 +622,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems.
 - Selection reason: Anthropic News (official, medium, score 55): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 32. News — Google DeepMind
+### 33. News — Google DeepMind
 
 - Source: Google DeepMind Blog
 - Source URL: https://deepmind.google/blog/
@@ -627,7 +639,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Google DeepMind Blog (official, medium, score 51): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 33. AI & Machine Learning | Google Cloud Blog
+### 34. AI & Machine Learning | Google Cloud Blog
 
 - Source: Google Cloud AI & Machine Learning Blog
 - Source URL: https://cloud.google.com/blog/products/ai-machine-learning
@@ -644,7 +656,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: Find all the latest news about Google Cloud and Machine Learning & AI with customer stories, product announcements, solutions and more.
 - Selection reason: Google Cloud AI & Machine Learning Blog (official, medium, score 51): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 34. Changelog - Claude Code Docs
+### 35. Changelog - Claude Code Docs
 
 - Source: Claude Code Changelog
 - Source URL: https://code.claude.com/docs/en/changelog
@@ -660,23 +672,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Relevance Score: 48
 - Summary: Release notes for Claude Code, including new features, improvements, and bug fixes by version.
 - Selection reason: Claude Code Changelog (official, medium, score 48): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
-
-### 35. Android Developer Newsletters &nbsp;|&nbsp; Android Developers
-
-- Source: Android Developer Newsletter
-- Source URL: https://developer.android.com/newsletter
-- Published: review needed
-- Link: https://developer.android.com/newsletter
-- Section: Android / AOSP / Camera
-- Source category: android
-- Source priority: medium
-- Source reliability: official
-- Candidate only: no
-- Requires cross-check: no
-- Verification hint: Can be used directly if the collected item supports the claim.
-- Relevance Score: 45
-- Summary: The latest developer news and tips to help you succeed on Google Play.
-- Selection reason: Android Developer Newsletter (official, medium, score 45): Camera HAL relevance and engineering productivity signals were both detected.
 
 ### 36. Google Open Source
 
@@ -712,7 +707,24 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Google Research Blog (official, medium, score 43): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 38. Introduction &mdash; libcamera
+### 38. Android 개발자 뉴스레터 &nbsp;|&nbsp; Android Developers
+
+- Source: Android Developer Newsletter
+- Source URL: https://developer.android.com/newsletter
+- Published: review needed
+- Link: https://developer.android.com/newsletter
+- Section: Android / AOSP / Camera
+- Source category: android
+- Source priority: medium
+- Source reliability: official
+- Candidate only: no
+- Requires cross-check: no
+- Verification hint: Can be used directly if the collected item supports the claim.
+- Relevance Score: 41
+- Summary: Google Play에서 성공하는 데 도움이 되는 최신 개발자 뉴스 및 도움말
+- Selection reason: Android Developer Newsletter (official, medium, score 41): Camera HAL relevance and engineering productivity signals were both detected.
+
+### 39. Introduction &mdash; libcamera
 
 - Source: libcamera Documentation
 - Source URL: https://libcamera.org/introduction.html
@@ -729,7 +741,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: libcamera Documentation (project-official, medium, score 45): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 39. Download LLVM releases
+### 40. Download LLVM releases
 
 - Source: LLVM Release Notes
 - Source URL: https://releases.llvm.org/
@@ -746,27 +758,9 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: LLVM Release Notes (project-official, medium, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 40. Semiconductor News & Industry Updates - EE Times
-
-- Source: EE Times - Semiconductors
-- Source URL: https://www.eetimes.com/tag/semiconductors/
-- Published: review needed
-- Link: https://www.eetimes.com/tag/semiconductors/
-- Section: Embedded / Semiconductor
-- Source category: semiconductor
-- Source priority: medium
-- Source reliability: electronics-media
-- Candidate only: no
-- Requires cross-check: yes
-- Verification hint: Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.
-- Relevance Score: 81
-- Summary: EE Times connects the global electronics community through news, analysis, education, and peer-to-peer discussion around technology, business, products and design
-- Selection reason: EE Times - Semiconductors (electronics-media, medium, score 81): Camera HAL relevance and engineering productivity signals were both detected.
-
 ## Collector Failures
 
 - LLVM Project Blog: 404 Not Found
-- OpenAI News: 403 Forbidden
 - 요즘IT: 403 Forbidden
 
 ## Editor-in-Chief Checklist
