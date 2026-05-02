@@ -1,178 +1,105 @@
 # Camera HAL SW Newsletter Newsroom Workflow
 
-이 문서는 Camera HAL SW Newsletter를 사람이 깊게 이해하고 작성한 것처럼 만들기 위한 역할 기반 workflow입니다.
+이 문서는 Camera HAL SW Newsletter를 매일 낮은 수작업 비용으로 만들기 위한 역할 기반 workflow입니다.
 
 ## Goal
 
-단순히 날짜별 newsletter 파일을 자동 생성하는 것이 아니라, 아래 흐름을 통해 최신 뉴스를 수집하고 Camera HAL 엔지니어 관점으로 해석한 초안을 만듭니다.
+목표는 단순히 날짜별 newsletter 파일을 자동 생성하는 것이 아닙니다. 최신 소식을 수집하고, Camera HAL 엔지니어 관점으로 해석하고, 검증 가능한 초안을 PR로 남기는 것입니다. 사용자는 최종 편집장 역할로 PR을 승인하거나 수정 요청합니다.
 
 ```text
-기자
-  ↓
-편집자
-  ↓
-1차 검수자
-  ↓
-편집장: 김경환
-  ↓
-업데이터
-  ↓
-최종 검수자
-  ↓
-GitHub Pages 발행
+source registry
+  -> candidate collector
+  -> Gemini reporter
+  -> Gemini editor
+  -> Gemini fact checker
+  -> static artifact writer
+  -> npm run validate
+  -> newsletter/YYYY-MM-DD PR
 ```
 
-## Role 1. 기자
+## Role 1. Candidate Collector
 
-### Responsibility
+- `data/news-sources.json`의 enabled source를 읽습니다.
+- JSON registry가 없을 때만 `docs/news-sources.md`의 `- Name: URL` 형식을 fallback으로 사용합니다.
+- RSS 또는 HTML page에서 후보를 수집하고 `collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
+- media/community/candidate-only source는 최종 기사로 쓰기 전에 공식 출처 교차 확인이 필요합니다.
 
-- Android Camera, CameraX, AOSP Camera, C++, LLVM/Clang, AI Agent 관련 최신 뉴스 후보 수집
-- 공식 문서와 신뢰 가능한 출처 우선 확인
-- Camera HAL 관련도 점수화
-- request/result, metadata, stream, buffer lifecycle, performance, test, debugging 영향 영역 분류
+## Role 2. Gemini Reporter
 
-### Output
+- 수집 후보 중 Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI workflow와 관련된 항목을 점수화합니다.
+- source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
+- 출력: `newsroom/YYYY-MM-DD/reporter-candidates.json`.
 
-- `newsroom/YYYY-MM-DD/news-candidates.md`
+## Role 3. Gemini Editor
 
-## Role 2. 편집자
+- 한국어 newsletter 초안을 작성합니다.
+- 각 주요 기사에 확인한 사실, 배경지식, Camera HAL 관점, Action Item, Sources를 포함합니다.
+- 이미지 URL을 새로 만들지 않고 collector가 제공한 `imageCandidates`에서만 선택합니다.
+- 출력: `newsroom/YYYY-MM-DD/editor-draft.json`, `newsroom/YYYY-MM-DD/editor-draft.md`.
 
-### Responsibility
+## Role 4. Gemini Fact Checker
 
-- 기자가 수집한 후보 중 이번 호에 들어갈 뉴스 선정
-- 단순 요약이 아니라 Camera HAL 실무 관점으로 재해석
-- 초보자도 이해 가능한 배경지식 추가
-- 팀원이 바로 확인해볼 수 있는 action item 작성
+- 출처 누락, 과장 표현, 사실과 해석 혼동, Action Item 누락, Camera HAL 관점 약화를 확인합니다.
+- `NEEDS_FIX`와 `must_fix`가 있으면 workflow의 최종 gate가 실패합니다.
+- 출력: `newsroom/YYYY-MM-DD/fact-check-report.json`, `newsroom/YYYY-MM-DD/fact-check-report.md`.
 
-### Output
+## Role 5. Artifact Writer
 
-- `newsroom/YYYY-MM-DD/editor-draft.md`
+- `newsletters/YYYY-MM-DD/newsletter.md`를 생성합니다.
+- `newsletters/YYYY-MM-DD/index.html`을 생성합니다.
+- `data/newsletters.json`을 갱신합니다.
+- `newsroom/YYYY-MM-DD/editor-in-chief-brief.md`와 `release-qa-report.md`를 생성합니다.
 
-## Role 3. 1차 검수자
+## Role 6. Validator
 
-### Responsibility
+`npm run validate`가 최종 품질 gate입니다.
 
-- 주요 주장에 출처가 있는지 확인
-- 출처가 실제 주장을 뒷받침하는지 확인
-- Android / CameraX / AOSP / C++ / AI 관련 명칭 오류 확인
-- 추측과 사실이 섞인 문장 표시
-- 과장된 표현 제거
-
-### Output
-
-- `newsroom/YYYY-MM-DD/fact-check-report.md`
-
-## Role 4. 편집장: 김경환
-
-### Responsibility
-
-편집장은 직접 모든 기사를 쓰는 사람이 아니라, 이번 호의 방향성과 발행 여부를 판단하는 사람입니다.
-
-- 이번 호 메인 메시지 판단
-- 팀원들이 읽을 이유가 있는지 확인
-- 너무 업무적이거나 너무 일반 IT 뉴스 같은 항목 제거 지시
-- 최종 발행 승인
-
-### Approval Comment
-
-PR에서 아래 중 하나로 승인합니다.
-
-```text
-/approve-newsletter
-```
-
-수정이 필요하면 아래처럼 댓글을 남깁니다.
-
-```text
-/request-change
-- AOSP Camera Watch를 더 쉽게 풀어줘
-- C++ 팁에 callback lifetime 예시를 추가해줘
-- 제목을 더 흥미롭게 바꿔줘
-```
-
-## Role 5. 업데이터
-
-### Responsibility
-
-- 편집장 검토용 초안을 GitHub Pages 파일로 변환
-- `newsletters/YYYY-MM-DD/newsletter.md` 생성
-- `newsletters/YYYY-MM-DD/index.html` 생성
-- `data/newsletters.json` 업데이트
-- PR 생성
-
-### Output
-
-- `newsletters/YYYY-MM-DD/newsletter.md`
-- `newsletters/YYYY-MM-DD/index.html`
-- `data/newsletters.json`
-
-## Role 6. 최종 검수자
-
-### Responsibility
-
-- `data/newsletters.json` 형식 확인
-- 날짜 중복 확인
-- HTML / MD 파일 존재 여부 확인
-- Archive 링크, MD 원본 보기 링크 확인
-- References 링크 확인
-- TODO 문자열 확인
-- 필수 섹션 확인
-
-### Output
-
-- `newsroom/YYYY-MM-DD/release-qa-report.md`
+- `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
+- `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
 
 ## GitHub Actions Operation
 
-### Scheduled Draft PR
+### Daily Draft PR
 
-`Weekly Newsletter Newsroom` workflow가 매주 월요일 오전 6시 30분 KST에 실행됩니다.
-
-```text
-KST Monday 06:30 = UTC Sunday 21:30
-```
-
-이 workflow는 main에 바로 push하지 않고 draft branch와 PR을 생성합니다.
+`Weekly Gemini Newsroom PR` workflow는 매일 09:00 KST에 실행됩니다.
 
 ```text
-weekly-newsletter/YYYY-MM-DD
+KST daily 09:00 = UTC daily 00:00
+branch: newsletter/YYYY-MM-DD
 ```
 
-### Editor-in-Chief Review
+workflow는 `main`에 직접 push하지 않고, 편집장 검토용 PR을 만듭니다.
 
-김경환 편집장은 PR에서 아래만 확인하면 됩니다.
+### Required Secret
+
+Repository Settings > Secrets and variables > Actions:
+
+```text
+GEMINI_API_KEY
+```
+
+선택 변수:
+
+```text
+GEMINI_MODEL=gemini-2.5-flash
+GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-3.1-flash-lite-preview
+```
+
+### On-demand Run
+
+GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요한 경우 `newsletter_date`와 `lookback_days`를 입력합니다. 비워 두면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다.
+
+## Editor-in-Chief Review
+
+PR에서 다음 항목을 확인합니다.
 
 - 이번 호 핵심 메시지가 명확한가?
 - Camera HAL 엔지니어가 읽을 이유가 있는가?
-- 단순 요약이 아니라 HAL 관점 해석이 있는가?
-- 출처와 사실 검증 결과가 충분한가?
-- 팀 공유용으로 발행해도 되는가?
+- 단순 요약이 아니라 HAL 관점의 해석과 Action Item이 있는가?
+- Sources와 References가 충분한가?
+- fact-check 결과에 unresolved `must_fix`가 없는가?
+- article image가 출처와 fallback 정책을 지키는가?
 
-### Release
+## Release
 
-편집장이 승인하면 PR을 merge합니다. GitHub Pages는 main 기준으로 반영됩니다.
-
-## Required Secret
-
-AI 기반 뉴스 수집과 초안 생성을 위해 GitHub Repository Secret에 아래 값을 등록해야 합니다.
-
-```text
-OPENAI_API_KEY
-```
-
-등록 위치:
-
-```text
-Repository Settings
-→ Secrets and variables
-→ Actions
-→ New repository secret
-```
-
-선택적으로 모델을 바꾸고 싶으면 workflow env에서 `OPENAI_MODEL` 값을 변경합니다.
-
-기본값:
-
-```text
-OPENAI_MODEL=gpt-5-mini
-```
+편집장이 PR을 승인하면 merge합니다. GitHub Pages는 `main` 기준으로 반영됩니다.

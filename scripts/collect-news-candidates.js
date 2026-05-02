@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const {
+  decodeHtml,
+  kstDate,
+  readJson
+} = require('./lib/common');
+const {
   extractImageCandidatesFromHtml,
   extractImageCandidatesFromRssBlock,
   validateImageCandidates
@@ -89,25 +94,12 @@ const FEED_HINTS = [
 let sectionMap = { ...DEFAULT_SECTION_MAP };
 let activeSourcesPath = legacySourcesPath;
 
-function kstDate(now = new Date()) {
-  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-  const yyyy = kst.getUTCFullYear();
-  const mm = String(kst.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(kst.getUTCDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-}
-
 function decode(value = '') {
-  return value
+  return decodeHtml(value
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
     .replace(/\s+/g, ' ')
-    .trim();
+    .trim());
 }
 
 function tag(block, name) {
@@ -135,7 +127,7 @@ function normalizeSource(source, allowFeedHint = false) {
 }
 
 function parseStructuredSources() {
-  const registry = JSON.parse(fs.readFileSync(structuredSourcesPath, 'utf8'));
+  const registry = readJson(structuredSourcesPath);
   sectionMap = { ...DEFAULT_SECTION_MAP, ...(registry.sectionMap || {}) };
   const sources = (registry.sources || [])
     .filter(source => source.enabled !== false)

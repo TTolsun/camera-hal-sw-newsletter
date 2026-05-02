@@ -5,6 +5,12 @@ const {
   validateImageUrl
 } = require('./lib/image-candidates');
 const { repoLocalPath } = require('./lib/article-image-resolver');
+const {
+  decodeHtml,
+  htmlAttr,
+  readJson,
+  repoPath
+} = require('./lib/common');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -22,23 +28,6 @@ function warn(message) {
 
 function read(filePath) {
   return fs.readFileSync(filePath, 'utf8');
-}
-
-function htmlAttr(tag, name) {
-  const pattern = new RegExp(`${name}\\s*=\\s*("[^"]*"|'[^']*'|[^\\s>]+)`, 'i');
-  const match = tag.match(pattern);
-  return match ? decodeHtml(match[1].replace(/^["']|["']$/g, '')) : '';
-}
-
-function decodeHtml(value = '') {
-  return String(value)
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&#x27;/g, "'")
-    .trim();
 }
 
 function stripTags(value = '') {
@@ -61,7 +50,7 @@ function newsletterItems() {
 
   let newsletters;
   try {
-    newsletters = JSON.parse(read(dataPath));
+    newsletters = readJson(dataPath);
   } catch (error) {
     fail(`Invalid JSON in data/newsletters.json: ${error.message}`);
     return [];
@@ -150,7 +139,7 @@ function readEditor(date) {
   const editorPath = path.join(root, 'newsroom', date, 'editor-draft.json');
   if (!fs.existsSync(editorPath)) return null;
   try {
-    return JSON.parse(read(editorPath));
+    return readJson(editorPath);
   } catch (error) {
     fail(`Could not parse newsroom/${date}/editor-draft.json: ${error.message}`);
     return null;
@@ -193,8 +182,8 @@ async function main() {
     for (const key of ['html', 'md']) {
       if (!item[key]) continue;
       const relPath = item[key];
-      const absPath = path.resolve(root, relPath);
-      if (!absPath.startsWith(root)) {
+      const absPath = repoPath(root, relPath);
+      if (!absPath) {
         fail(`Newsletter ${item.date} ${key} path escapes repository: ${relPath}`);
         continue;
       }

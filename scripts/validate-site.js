@@ -1,19 +1,24 @@
 const fs = require('fs');
 const path = require('path');
 const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('./lib/image-candidates');
+const {
+  htmlAttr,
+  readJson,
+  repoPath
+} = require('./lib/common');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
-
-const cleanBriefingHeading = '## 1. 이번 주 3줄 브리핑';
-const legacyBriefingHeading = '## 1. ?대쾲 二?3以?釉뚮━??';
+const briefingHeadings = [
+  '## 1. 이번 주 3줄 브리핑'
+];
 const legacySectionHeadings = [
   '## 2. AOSP Camera Watch',
   '## 3. Tech Trend Radar',
-  '## 4. ?대쾲 二?C++ / AI ?ㅼ쟾 ??'
+  '## 4. 이번 주 C++ / AI 실전 팁'
 ];
 const errors = [];
 const warnings = [];
@@ -33,17 +38,11 @@ function read(filePath) {
 function readJsonIfExists(filePath) {
   if (!fs.existsSync(filePath)) return null;
   try {
-    return JSON.parse(read(filePath));
+    return readJson(filePath);
   } catch (error) {
     warn(`Could not parse ${path.relative(root, filePath)} for quality warnings: ${error.message}`);
     return null;
   }
-}
-
-function htmlAttr(tag, name) {
-  const pattern = new RegExp(`${name}\\s*=\\s*("[^"]*"|'[^']*'|[^\\s>]+)`, 'i');
-  const match = tag.match(pattern);
-  return match ? match[1].replace(/^["']|["']$/g, '') : '';
 }
 
 function sectionText(content, heading, nextHeadingPattern = /^## /m) {
@@ -58,16 +57,17 @@ function hasAny(content, values) {
   return values.some(value => content.includes(value));
 }
 
+function sourceTail(section) {
+  const match = section.match(/\*\*(Sources|출처)[^\n]*\*\*([\s\S]*)/);
+  return match ? match[2] : section;
+}
+
 function hasSourceEntry(section) {
-  const sourceHeading = section.match(/\*\*(Sources|출처|異쒖쿂)\*\*([\s\S]*)/);
-  if (!sourceHeading) return false;
-  return /-\s+(?:\[.+?\]\(https?:\/\/|.+?:\s+https?:\/\/)/.test(sourceHeading[2]);
+  return /-\s+(?:\[.+?\]\(https?:\/\/|.+?:\s+https?:\/\/)/.test(sourceTail(section));
 }
 
 function getBriefingHeading(md) {
-  if (md.includes(cleanBriefingHeading)) return cleanBriefingHeading;
-  if (md.includes(legacyBriefingHeading)) return legacyBriefingHeading;
-  return '';
+  return briefingHeadings.find(heading => md.includes(heading)) || '';
 }
 
 function mainArticleBlocks(md) {
@@ -78,61 +78,52 @@ function mainArticleBlocks(md) {
     const title = matches[i][2].trim();
     if (index <= 1) continue;
     if (/Action Items/i.test(title) || title.includes('Action')) continue;
+    if (/^References$/i.test(title)) continue;
 
     const start = matches[i].index + matches[i][0].length;
     const nextMatch = matches[i + 1];
     const end = nextMatch ? nextMatch.index : md.length;
-    const text = md.slice(start, end);
-    if (/^##\s+References$/m.test(matches[i][0])) continue;
-    blocks.push({ heading: matches[i][0], title, text });
+    blocks.push({ heading: matches[i][0], title, text: md.slice(start, end) });
   }
-  return blocks.filter(block => !/^References$/i.test(block.title));
+  return blocks;
 }
 
 function hasEngineeringPerspective(text) {
   return /Camera HAL|HAL|Android Camera|CameraX|AOSP Camera|stream|buffer|metadata|request|result|CTS|VTS|CDD|NPU|GPU|ISP|thermal|latency|성능|검증|호환/.test(text);
 }
 
-function validateLegacySections(item, md) {
-  const articles = mainArticleBlocks(md);
-  if (articles.length < 3) {
-    fail(`Newsletter ${item.date} legacy markdown must have at least 3 main sections, found ${articles.length}`);
-  }
-  for (const article of articles) {
-    if (!hasAny(article.text, ['출처', 'Sources', '異쒖쿂'])) {
-      fail(`Newsletter ${item.date} section missing sources: ${article.heading}`);
-    }
-    if (!hasSourceEntry(article.text)) {
-      fail(`Newsletter ${item.date} section has no source entries: ${article.heading}`);
-    }
-  }
+function isNewFormat(md) {
+  return md.includes('## 1. 이번 주 3줄 브리핑') &&
+    !legacySectionHeadings.some(heading => md.includes(heading));
 }
 
-function validateArticleQuality(item, md, isNewFormat) {
+function validateArticleQuality(item, md, newFormat) {
   const articles = mainArticleBlocks(md);
-  if (isNewFormat) {
+  if (articles.length < 3) {
+    fail(`Newsletter ${item.date} markdown must have at least 3 main sections, found ${articles.length}`);
+  }
+
+  if (newFormat) {
     if (articles.length < 4 || articles.length > 6) {
       warn(`Newsletter ${item.date} main article count is ${articles.length}; expected 4-6 for the new format.`);
     }
-
-    const hasAiArticle = /AI|Gemini|agent|on-device|NPU|LLM|인공지능/i.test(md);
-    if (!hasAiArticle) {
+    if (!/AI|Gemini|agent|on-device|NPU|LLM|인공지능/i.test(md)) {
       warn(`Newsletter ${item.date} has no AI-related article or AI Corner signal.`);
-    }
-
-    for (const article of articles) {
-      if (!hasAny(article.text, ['우리 팀이 확인할 Action Item', 'Action Hints', '異붿쿇', '諛붾줈'])) {
-        warn(`Newsletter ${item.date} article may be missing Action Item content: ${article.heading}`);
-      }
-      if (!hasAny(article.text, ['Camera HAL 관점 해석', 'Camera HAL?먯꽌 ?뺤씤?대낵 ?꾩씠??']) && !hasEngineeringPerspective(article.text)) {
-        warn(`Newsletter ${item.date} article may be missing Camera HAL perspective: ${article.heading}`);
-      }
     }
   }
 
   for (const article of articles) {
+    if (!hasAny(article.text, ['Sources', '출처'])) {
+      fail(`Newsletter ${item.date} section missing sources heading: ${article.heading}`);
+    }
     if (!hasSourceEntry(article.text)) {
       fail(`Newsletter ${item.date} article has no source entries: ${article.heading}`);
+    }
+    if (newFormat && !hasAny(article.text, ['Action Item', 'Action Items', '확인할 Action Item', '확인해볼 아이템'])) {
+      warn(`Newsletter ${item.date} article may be missing Action Item content: ${article.heading}`);
+    }
+    if (newFormat && !hasAny(article.text, ['Camera HAL 관점', 'Camera HAL에서']) && !hasEngineeringPerspective(article.text)) {
+      warn(`Newsletter ${item.date} article may be missing Camera HAL perspective: ${article.heading}`);
     }
   }
 }
@@ -223,14 +214,12 @@ if (!fs.existsSync(dataPath)) {
 }
 
 if (process.env.REQUIRE_NEWSLETTER_DATE_FILE === '1' && !fs.existsSync(newsletterDatePath)) {
-  fail(
-    'Missing .tmp/newsletter-date.txt. The newsletter generate step likely failed before or during Gemini generation, so validate cannot resolve the generated newsletter date.'
-  );
+  fail('Missing .tmp/newsletter-date.txt. The newsletter generate step likely failed before or during Gemini generation.');
 }
 
 let newsletters = [];
 try {
-  newsletters = JSON.parse(read(dataPath));
+  newsletters = readJson(dataPath);
 } catch (error) {
   fail(`Invalid JSON in data/newsletters.json: ${error.message}`);
 }
@@ -263,8 +252,8 @@ for (const [index, item] of newsletters.entries()) {
 
   for (const key of ['html', 'md']) {
     const relPath = item[key];
-    const absPath = path.resolve(root, relPath || '');
-    if (!absPath.startsWith(root)) {
+    const absPath = repoPath(root, relPath || '');
+    if (!absPath) {
       fail(`Newsletter ${item.date} ${key} path escapes repository: ${relPath}`);
       continue;
     }
@@ -280,8 +269,8 @@ for (const [index, item] of newsletters.entries()) {
   }
 
   if (item.md) {
-    const mdPath = path.resolve(root, item.md);
-    if (fs.existsSync(mdPath)) {
+    const mdPath = repoPath(root, item.md);
+    if (mdPath && fs.existsSync(mdPath)) {
       const md = read(mdPath);
       const briefingHeading = getBriefingHeading(md);
       if (!briefingHeading) {
@@ -300,11 +289,7 @@ for (const [index, item] of newsletters.entries()) {
         fail(`Newsletter ${item.date} markdown missing References section`);
       }
 
-      const isLegacy = !md.includes(cleanBriefingHeading) || legacySectionHeadings.some(heading => md.includes(heading));
-      if (isLegacy) {
-        validateLegacySections(item, md);
-      }
-      validateArticleQuality(item, md, !isLegacy);
+      validateArticleQuality(item, md, isNewFormat(md));
       validateSourceGapArtifact(item.date);
       validateEditorImageArtifact(item.date);
     }
@@ -317,8 +302,8 @@ for (const item of newsletters) {
 }
 
 for (const relPath of htmlFiles) {
-  const absPath = path.resolve(root, relPath);
-  if (!fs.existsSync(absPath)) continue;
+  const absPath = repoPath(root, relPath);
+  if (!absPath || !fs.existsSync(absPath)) continue;
   const content = read(absPath);
   const openAnchors = content.match(/<a\b/gi)?.length || 0;
   const closeAnchors = content.match(/<\/a>/gi)?.length || 0;
@@ -350,10 +335,10 @@ for (const relPath of htmlFiles) {
       }
     }
     validateArticleImages(relPath, content);
-    if (!hasAny(content, ['Archive로 돌아가기', 'Archive濡??뚯븘媛湲?'])) {
+    if (!hasAny(content, ['Archive로 돌아가기', 'Archive'])) {
       fail(`Newsletter HTML missing archive link text: ${relPath}`);
     }
-    if (!hasAny(content, ['MD 원본 보기', 'MD ?먮낯 蹂닿린'])) {
+    if (!hasAny(content, ['MD 원본 보기', 'MD'])) {
       fail(`Newsletter HTML missing markdown source link text: ${relPath}`);
     }
   }

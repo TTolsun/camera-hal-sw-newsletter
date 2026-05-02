@@ -1,6 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+const {
+  kstDate,
+  readJson,
+  readTextIfExists,
+  writeJson
+} = require('./lib/common');
 const { callGeminiJson } = require('./lib/gemini-client');
 const { reporterSchema, editorSchema, factCheckSchema } = require('./lib/newsletter-schema');
 const { isSafeExternalImageUrl } = require('./lib/image-candidates');
@@ -21,31 +27,6 @@ const sourceRegistryPath = path.join(root, 'data', 'news-sources.json');
 function fail(message) {
   console.error(message);
   process.exit(1);
-}
-
-function kstDate(now = new Date()) {
-  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-  const yyyy = kst.getUTCFullYear();
-  const mm = String(kst.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(kst.getUTCDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-}
-
-function readJson(filePath) {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch (error) {
-    fail(`Failed to read JSON ${filePath}: ${error.message}`);
-  }
-}
-
-function readTextIfExists(filePath) {
-  return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : '';
-}
-
-function writeJson(filePath, value) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
 function writeNewsletterDate(date) {

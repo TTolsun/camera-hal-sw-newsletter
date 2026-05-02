@@ -124,14 +124,13 @@ function normalizedLabel(value) {
 function articleTagsHtml(section, headingCategory) {
   const tags = ensureArray(section.tags)
     .filter(tag => normalizedLabel(tag) !== normalizedLabel(headingCategory));
-
   if (tags.length === 0) return '';
   return `<div class="article-tags">${tagsHtml(tags)}</div>`;
 }
 
 function normalizedSections(issue) {
   return ensureArray(issue.sections).map((section, index) => {
-    const category = section.category || `메인 기사 ${index + 1}`;
+    const category = section.category || `Main Article ${index + 1}`;
     return {
       heading: `## ${index + 2}. ${category}`,
       htmlHeading: `${index + 2}. ${category}`,
@@ -148,7 +147,6 @@ function buildMarkdown(issue) {
 ${issue.summary}
 
 ## 1. 이번 주 3줄 브리핑
-
 ${bulletsMarkdown(issue.briefing)}
 
 ${normalizedSections(issue).map(({ heading, section }) => `${heading}
@@ -242,7 +240,7 @@ ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, sect
           ${articleMediaHtml(section)}
           ${articleTagsHtml(section, headingCategory)}
           <h3>${escapeHtml(section.headline)}</h3>
-          <div class="article-block"><strong class="article-block-title">확인된 사실</strong>${Array.isArray(articleFacts(section)) ? `<ul>${bulletsHtml(articleFacts(section))}</ul>` : paragraphHtml(articleFacts(section))}</div>
+          <div class="article-block"><strong class="article-block-title">확인한 사실</strong>${Array.isArray(articleFacts(section)) ? `<ul>${bulletsHtml(articleFacts(section))}</ul>` : paragraphHtml(articleFacts(section))}</div>
           <div class="article-block"><strong class="article-block-title">Background Knowledge</strong>${paragraphHtml(section.background)}</div>
           <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong>${paragraphHtml(articlePerspective(section))}</div>
           <div class="article-block"><strong class="article-block-title">Action Items</strong><ul>${bulletsHtml(articleActions(section))}</ul></div>
@@ -314,7 +312,6 @@ ${issue.summary}
 ${firstSection.headline || '첫 번째 메인 기사 확인 필요'}
 
 ## Camera HAL 업무 연결 포인트
-
 ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 
 ## 검증 결과 요약
@@ -324,12 +321,12 @@ ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 - Source gap count: ${ensureArray(factCheck.source_gaps).length}
 - Comment: ${factCheck.final_comment}
 
-## 편집자 확인 checklist
+## 편집장 확인 checklist
 
 - [ ] 이번 주 핵심 메시지가 Camera HAL 업무와 직접 연결되는가?
 - [ ] 주요 항목의 출처가 충분하고 과장 표현이 없는가?
 - [ ] 검증 결과의 must_fix가 모두 해소되었는가?
-- [ ] 팀 공유에도 충분한 action item으로 정리되었는가?
+- [ ] 팀 공유용으로도 충분한 action item이 정리되었는가?
 
 ## 권장 판단
 
@@ -344,13 +341,13 @@ function buildReleaseQaReport(date, files, validateResult, factCheck, todoFound,
 
 ${files.map(file => `- ${file}`).join('\n')}
 
-## validate-site.js 실행 결과
+## npm run validate 실행 결과
 
 ${validateResult}
 
 ## 잔여 TODO 여부
 
-${todoFound ? 'TODO 문자열이 남아 있습니다.' : '없음'}
+${todoFound ? 'TODO 문자가 남아 있습니다.' : '없음'}
 
 ## 출처 누락 여부
 
