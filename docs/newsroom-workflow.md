@@ -3,10 +3,10 @@
 ## Quality Gate
 
 The newsroom pipeline now produces `newsroom/YYYY-MM-DD/quality-report.json` and `quality-report.md`.
-The deterministic score must be at least `90/100` for publication readiness, and source gaps keep the draft out of publish-ready status even when the numeric score is high enough.
+The deterministic score must be at least `90/100` for publication readiness. Source gaps, fact-check must-fix items, and publication-critical deductions keep the draft out of publish-ready status even when the numeric score is high enough.
 If a draft misses the gate, the generator retries up to `NEWSROOM_MAX_QUALITY_RETRIES` times, default `3`, preserving article sections that already pass per-article quality checks and writing `retry-history.json` / `retry-history.md`.
 
-The quality gate checks Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, and article composition. If the score is below 90 or source gaps remain after retry attempts, the weekly workflow can still open a review PR, labels it `needs-fix`, and fails the run so the issue is not treated as publishable.
+The quality gate checks Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, and article composition. Those categories are hard blockers; the 90-point threshold only leaves room for non-critical future deductions. If the score is below 90 or blockers remain after retry attempts, the weekly workflow can still open a review PR, labels it `needs-fix`, and fails the run so the issue is not treated as publishable.
 
 이 문서는 Camera HAL SW Newsletter를 매일 낮은 수작업 비용으로 만들기 위한 역할 기반 workflow입니다.
 

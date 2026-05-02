@@ -1,6 +1,15 @@
 const QUALITY_THRESHOLD = 90;
 const MIN_MAIN_ARTICLES = 4;
 const MAX_MAIN_ARTICLES = 5;
+const BLOCKING_DEDUCTION_CATEGORIES = new Set([
+  'required-fields',
+  'evidence-specificity',
+  'hal-depth',
+  'actionability',
+  'composition',
+  'hal-relevance',
+  'source-integrity'
+]);
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -145,6 +154,10 @@ function sectionPassesArticleGate(section, qualityReport, factCheck) {
     !sectionHasSourceGap(section, factCheck);
 }
 
+function blockingDeductions(deductions) {
+  return ensureArray(deductions).filter(deduction => BLOCKING_DEDUCTION_CATEGORIES.has(deduction?.category));
+}
+
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : QUALITY_THRESHOLD;
   const sections = ensureArray(editor.sections);
@@ -218,7 +231,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const totalDeductions = state.deductions.reduce((sum, item) => sum + item.points, 0);
   const score = Math.max(0, 100 - totalDeductions);
   const hasFactCheckMustFix = factCheck.status === 'NEEDS_FIX' || mustFixCount > 0;
-  const status = score >= threshold && gaps === 0 && !hasFactCheckMustFix ? 'PASS' : 'NEEDS_FIX';
+  const blockers = blockingDeductions(state.deductions);
+  const status = score >= threshold && gaps === 0 && !hasFactCheckMustFix && blockers.length === 0 ? 'PASS' : 'NEEDS_FIX';
   return {
     schema_version: 1,
     date,
@@ -236,7 +250,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       ai_article_count: sections.filter(hasValidAiRelevance).length,
       fact_check_status: factCheck.status || 'UNKNOWN',
       must_fix_count: mustFixCount,
-      source_gap_count: gaps
+      source_gap_count: gaps,
+      blocking_deduction_count: blockers.length,
+      blocking_deduction_categories: [...new Set(blockers.map(deduction => deduction.category))]
     }
   };
 }
@@ -261,6 +277,8 @@ function buildQualityReportMarkdown(report) {
 - Fact-check status: ${report.metrics.fact_check_status}
 - Must-fix count: ${report.metrics.must_fix_count}
 - Source gap count: ${report.metrics.source_gap_count}
+- Blocking deduction count: ${report.metrics.blocking_deduction_count || 0}
+- Blocking deduction categories: ${ensureArray(report.metrics.blocking_deduction_categories).join(', ') || 'none'}
 
 ## Deductions
 
@@ -278,5 +296,6 @@ module.exports = {
   sectionHasQualityDeductions,
   sectionHasFactCheckMustFix,
   sectionHasSourceGap,
-  sectionPassesArticleGate
+  sectionPassesArticleGate,
+  blockingDeductions
 };

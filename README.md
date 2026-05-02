@@ -3,10 +3,10 @@
 ## Quality Gate
 
 Generated issues include `newsroom/YYYY-MM-DD/quality-report.json` and `quality-report.md`.
-The deterministic quality score must be at least `90/100` before the issue is ready to publish, and any source gap keeps the issue in `NEEDS_FIX` until the affected main article is repaired, demoted, or replaced.
+The deterministic quality score must be at least `90/100` before the issue is ready to publish. Source gaps, fact-check must-fix items, and publication-critical deductions keep the issue in `NEEDS_FIX` until the affected main article is repaired, demoted, or replaced.
 If an attempt misses the gate, Gemini retries up to `NEWSROOM_MAX_QUALITY_RETRIES` times, default `3`, and writes `newsroom/YYYY-MM-DD/retry-history.json` plus `retry-history.md`.
 
-The quality gate checks Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, and article composition. Articles should name concrete evidence where available: version or release, release date, API/component, behavior change, or an explicit source gap. Generic guidance such as "monitor AOSP updates" is not sufficient unless it names the exact source, version, API, date, or behavior to watch.
+The quality gate checks Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, and article composition. Those categories are hard blockers even when the numeric score is at least 90. Articles should name concrete evidence where available: version or release, release date, API/component, behavior change, or an explicit source gap. Generic guidance such as "monitor AOSP updates" is not sufficient unless it names the exact source, version, API, date, or behavior to watch.
 
 `npm run validate` runs site, image, and quality validation. If fact-check or quality fails, the weekly workflow may still create a review PR labeled `needs-fix`, but the workflow fails and the PR is not ready for publication.
 
