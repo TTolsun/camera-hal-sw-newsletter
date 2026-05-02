@@ -44,16 +44,12 @@
 
       <section class="section">
         <h2>2. Android Camera / AI</h2>
-        <div class="card issue-section article-card has-image Android Camera / AI">
-          <figure class="article-media">
-            <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csbOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png" alt="온디바이스 및 클라우드 AI 추론을 결합한 하이브리드 추론 솔루션 다이어그램" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Android Developers Blog</a></figcaption>
-          </figure>
-          
+        <div class="card issue-section article-card has-fallback-image Android Camera / AI">
+          <div class="article-media article-fallback-visual article-fallback-ai" role="img" aria-label="Android Camera / AI"><span></span></div>
           <h3>Android의 하이브리드 AI 추론 및 새로운 Gemini 모델</h3>
           <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>Firebase API를 통해 하이브리드 추론(온디바이스 + 클라우드)이 가능해졌습니다.</li><li>새로운 Gemini 모델, 특히 이미지 생성을 위한 Nano Banana 모델이 Android에서 지원됩니다.</li></ul></div>
           <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>기존 AI 추론은 온디바이스 또는 클라우드 중 한 가지 방식에 의존했습니다. 하이브리드 추론은 두 가지 장점을 결합하여 지연 시간, 개인 정보 보호, 비용 효율성 사이의 균형을 최적화할 수 있습니다. 새로운 Gemini 모델은 특히 이미지 및 멀티모달 데이터 처리에 특화되어 있습니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL은 AI 추론을 위해 카메라 스트림을 효율적으로 관리하고, 적절한 형식과 해상도로 버퍼를 제공해야 합니다. 하이브리드 추론 시나리오에서는 온디바이스 NPU/GPU 스케줄링 및 리소스 할당이 더욱 중요해집니다. 카메라 프레임워크와 HAL 사이의 메타데이터 교환을 통해 AI 처리 요구사항(예: 특정 해상도, 포맷, 추론 시간 제약)을 효과적으로 전달하고 처리해야 합니다. 이미지 생성 모델은 HAL이 제공하는 RAW 또는 처리된 이미지 데이터 외에, AI 모델이 요구하는 특정 전처리 단계를 HAL 또는 ISP에서 수행해야 할 수도 있음을 시사합니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL은 AI 추론을 위해 카메라 스트림을 효율적으로 관리하고, 적절한 형식과 해상도로 버퍼를 제공해야 합니다. 하이브리드 추론 시나리오에서는 온디바이스 NPU/GPU 스케줄링 및 리소스 할당이 더욱 중요해집니다. 카메라 프레임워크와 HAL 사이의 메타데이터 교환을 통해 AI 처리 요구사항을 효과적으로 전달하고 처리해야 합니다.</p></div>
           <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>온디바이스 AI 추론을 위한 카메라 버퍼 공유 및 동기화 메커니즘을 최적화하여 지연 시간을 최소화합니다.</li><li>하이브리드 추론 환경에서 NPU/GPU 사용량 및 카메라 프레임 드롭률을 모니터링하는 테스트 케이스를 추가합니다.</li><li>새로운 이미지 생성 AI 모델의 잠재적 카메라 HAL 통합 요구사항에 대해 선행 연구를 시작합니다.</li></ul></div>
           <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>Android의 하이브리드 AI 추론 및 새로운 Gemini 모델은 카메라 HAL의 스트림 및 버퍼 관리, 온디바이스 AI 리소스 스케줄링에 새로운 최적화 기회를 제공합니다.</p></div>
           <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Experimental hybrid inference and new Gemini models for Android</a></li></ul></div>
@@ -62,16 +58,12 @@
 
       <section class="section">
         <h2>3. Android Platform / Camera HAL</h2>
-        <div class="card issue-section article-card has-image Android Camera / AOSP Camera">
-          <figure class="article-media">
-            <img class="article-image" src="https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA2YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu" alt="Android 17 베타 로고와 함께 플랫폼 안정성을 강조하는 이미지" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">Android Developers Blog</a></figcaption>
-          </figure>
-          
+        <div class="card issue-section article-card has-fallback-image Android Camera / AOSP Camera">
+          <div class="article-media article-fallback-visual article-fallback-android-camera" role="img" aria-label="Android Platform / Camera HAL"><span></span></div>
           <h3>Android 17 네 번째 베타 출시: 플랫폼 안정성 및 호환성 최종 점검</h3>
           <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>Android 17 Beta 4가 출시되었습니다.</li><li>이것은 Android 17 릴리스 사이클의 마지막 예정된 베타 버전입니다.</li><li>주요 목표는 앱 호환성 및 플랫폼 안정성 확보입니다.</li></ul></div>
           <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>Android 베타 릴리스는 개발자가 최종 안정화 버전 이전에 앱, 라이브러리, 도구 및 게임 엔진을 테스트하고 조정할 수 있는 기회를 제공합니다. 마지막 베타 단계는 일반적으로 API 동작이 거의 확정되고, 주요 버그 수정 및 성능 최적화에 집중하는 시기입니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL은 Android 17 Beta 4 환경에서 기존 및 신규 카메라 API 동작을 철저히 테스트해야 합니다. 특히, `CameraManager`, `CameraDevice`, `CaptureRequest`, `CaptureResult` 등 핵심 인터페이스의 변경 사항이 있는지 확인하고, 새로운 메타데이터 필드나 스트림 구성 제약 사항이 추가되었는지 검토해야 합니다. vendor HAL의 안정성, 성능, 전력 소모가 새로운 플랫폼 버전에서 문제가 없는지 광범위한 테스트가 필요합니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL은 Android 17 Beta 4 환경에서 기존 및 신규 카메라 API 동작을 철저히 테스트해야 합니다. 특히 CameraManager, CameraDevice, CaptureRequest, CaptureResult 등 핵심 인터페이스의 변경 사항을 확인하고, 새로운 메타데이터 필드나 스트림 구성 제약 사항이 추가되었는지 검토해야 합니다.</p></div>
           <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>Android 17 Beta 4 환경에서 모든 카메라 HAL 기능에 대한 포괄적인 회귀 테스트 계획을 수립하고 실행합니다.</li><li>CTS/VTS 테스트 실패 항목이 발생할 경우, Android 17 플랫폼 변경 사항과의 연관성을 분석하고 HAL 수정 방안을 마련합니다.</li><li>새로운 Android 17 CDD 초안을 검토하여 HAL 구현이 준수해야 할 추가적인 요구사항을 식별합니다.</li></ul></div>
           <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>Android 17 Beta 4 출시는 HAL 호환성 및 안정성 최종 검증을 위한 중요한 시점으로, 모든 카메라 관련 테스트를 강화해야 합니다.</p></div>
           <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html">The Fourth Beta of Android 17</a></li></ul></div>
@@ -80,16 +72,12 @@
 
       <section class="section">
         <h2>4. Developer Productivity / AI</h2>
-        <div class="card issue-section article-card has-image Developer Productivity / AI">
-          <figure class="article-media">
-            <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPyFElAHYM4meoiCciQQ2lncUtR6wtpR1c8Sd1K4SbNEUKDat7QeDRM3yGyMMu0J--WblBE3U09p2W6BMqbVjHysCaNZl8lmhcWr3xFkOhZmk4AXhT77UDU_50fkmzaSbhntd4FRMIdDILFUiSpwJ9abWPTOBaK9I7mC1oxMOwWg1CG3VDDq27EBB2n0o/s4097/hours-CLI_Dark-meta@2x.png" alt="AI 에이전트와 CLI 도구를 사용하여 Android 앱 개발 속도를 높이는 개념을 나타내는 이미지" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html">Android Developers Blog</a></figcaption>
-          </figure>
-          
+        <div class="card issue-section article-card has-fallback-image Developer Productivity / AI">
+          <div class="article-media article-fallback-visual article-fallback-ai" role="img" aria-label="Developer Productivity / AI"><span></span></div>
           <h3>AI 에이전트를 활용한 Android 앱 개발 가속화: 새로운 CLI 도구 및 스킬</h3>
           <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>Android CLI 및 새로운 스킬 세트가 도입되었습니다.</li><li>Gemini CLI, Antigravity, Claude Code, Codex 등 다양한 AI 에이전트와 LLM을 지원합니다.</li><li>개발 생산성을 최대 3배 향상시키는 것을 목표로 합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>AI 에이전트는 코드 생성, 디버깅, 테스트 작성 등 개발 워크플로의 다양한 측면을 자동화하고 가속화하는 데 활용되고 있습니다. Android 개발 환경에서도 이러한 AI 도구의 통합이 점차 확대되고 있으며, 개발자들이 더 효율적으로 작업할 수 있도록 지원하는 것이 목표입니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL 개발자는 새로운 CLI 도구와 AI 스킬을 활용하여 AOSP 코드베이스 탐색, 특정 카메라 메타데이터 필드에 대한 문서 검색, 복잡한 C++ 템플릿 코드 이해, VTS/CTS 테스트 실패 원인 분석 등을 더 빠르게 수행할 수 있습니다. 이는 디버깅 시간을 단축하고, 새로운 기능 구현 시 초기 프로토타이핑 속도를 높이는 데 도움이 될 것입니다. 또한, AI 에이전트가 생성한 코드를 검토하고 통합하는 과정에서 코드 품질 및 보안에 대한 추가적인 주의가 필요합니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>AI 에이전트는 코드 생성, 디버깅, 테스트 작성 등 개발 워크플로의 다양한 측면을 자동화하고 가속화하는 데 활용되고 있습니다. Android 개발 환경에서도 이러한 AI 도구의 통합이 점차 확대되고 있습니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL 개발자는 새로운 CLI 도구와 AI 스킬을 활용하여 AOSP 코드베이스 탐색, 카메라 메타데이터 문서 검색, 복잡한 C++ 템플릿 코드 이해, VTS/CTS 테스트 실패 원인 분석 등을 더 빠르게 수행할 수 있습니다.</p></div>
           <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>Android CLI 및 AI 에이전트 도구를 활용하여 HAL 코드베이스 탐색 및 디버깅 시간을 단축하는 방법을 모색하고, 팀 내에 공유합니다.</li><li>AI 에이전트가 제안하는 HAL 코드 변경 사항에 대한 코드 리뷰 프로세스를 강화하여 안정성과 보안을 확보합니다.</li><li>HAL 개발자를 위한 AI 에이전트 활용 교육 세션을 계획하고 진행합니다.</li></ul></div>
           <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>새로운 Android CLI 및 AI 에이전트 도구는 HAL 개발 생산성을 높일 잠재력이 있으며, 코드 탐색, 디버깅, 테스트 작성에 활용될 수 있습니다.</p></div>
           <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html">Android CLI and skills: Build Android apps 3x faster using any agent</a></li></ul></div>
@@ -98,18 +86,14 @@
 
       <section class="section">
         <h2>5. C++ Native Code</h2>
-        <div class="card issue-section article-card has-image C++ Native Code">
-          <figure class="article-media">
-            <img class="article-image" src="https://isocpp.org/files/img/rosa-devirtualization.png" alt="가상 함수 호출의 성능 오버헤드와 가상화 제거를 설명하는 다이어그램" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">Image: <a href="https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa">ISO C++ Blog</a></figcaption>
-          </figure>
-          
+        <div class="card issue-section article-card has-fallback-image C++ Native Code">
+          <div class="article-media article-fallback-visual article-fallback-c-native-code" role="img" aria-label="C++ Native Code"><span></span></div>
           <h3>가상화 제거(Devirtualization) 및 정적 다형성을 통한 C++ 성능 최적화</h3>
-          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>가상 함수 호출(virtual dispatch)은 런타임 다형성을 제공하지만 성능 오버헤드를 발생시킬 수 있습니다.</li><li>가상화 제거(devirtualization) 및 정적 다형성(static polymorphism)은 이러한 오버헤드를 제거하는 데 사용될 수 있습니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>C++의 가상 함수는 런타임에 호출될 함수를 결정하는 동적 다형성을 구현하는 핵심 메커니즘입니다. 그러나 가상 테이블(vtable) 조회 및 간접 호출로 인해 직접 함수 호출보다 약간의 오버헤드가 발생합니다. 컴파일러는 특정 조건에서 가상 호출을 직접 호출로 최적화하는 가상화 제거를 시도하지만, 항상 가능한 것은 아닙니다. 정적 다형성은 템플릿 기반의 CRTP(Curiously Recurring Template Pattern) 등을 사용하여 런타임 오버헤드 없이 다형성을 구현하는 기법입니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>Camera HAL은 `ICameraDeviceSession`과 같은 인터페이스를 통해 프레임워크와 통신하며, 내부적으로도 다양한 컴포넌트 간에 다형성을 활용합니다. HAL 구현에서 성능에 중요한 코드 경로(예: 이미지 버퍼 처리, 메타데이터 업데이트, ISP 제어)에 가상 함수 호출이 있다면, 이 기법들을 적용하여 성능을 개선할 수 있습니다. 특히, 짧은 시간 내에 여러 번 호출되는 함수나 루프 내에서 호출되는 함수에 대해 정적 다형성을 고려하여 런타임 오버헤드를 최소화해야 합니다. 컴파일러가 가상화 제거를 수행할 수 있도록 코드를 작성하는 것도 중요합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>Camera HAL의 주요 성능 경로에서 가상 함수 호출로 인한 오버헤드를 분석하고, 최적화 기회를 식별하는 보고서를 작성합니다.</li><li>정적 다형성(예: CRTP)을 활용하여 특정 HAL 컴포넌트의 성능을 개선하는 코드 변경을 시도하고, 벤치마크를 통해 효과를 검증합니다.</li><li>HAL 개발 가이드라인에 가상 함수 사용 시 성능 고려 사항 및 정적 다형성 활용 방안을 추가합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>C++ 가상 함수 호출의 성능 오버헤드를 이해하고 가상화 제거 및 정적 다형성 기법을 활용하여 Camera HAL 네이티브 코드의 성능을 최적화할 수 있습니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>가상 함수 호출은 런타임 다형성을 제공하지만 성능 오버헤드를 발생시킬 수 있습니다.</li><li>가상화 제거 및 정적 다형성은 이러한 오버헤드를 제거하는 데 사용될 수 있습니다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>C++의 가상 함수는 런타임에 호출될 함수를 결정하는 동적 다형성을 구현하는 핵심 메커니즘입니다. 컴파일러는 특정 조건에서 가상 호출을 직접 호출로 최적화하는 가상화 제거를 시도할 수 있고, 정적 다형성은 템플릿 기반 기법으로 런타임 오버헤드를 줄입니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>Camera HAL 내부의 이미지 버퍼 처리, 메타데이터 업데이트, ISP 제어와 같은 hot path에서 반복 호출되는 다형성 구조가 있다면 정적 다형성이나 devirtualization 가능성을 검토할 가치가 있습니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>Camera HAL의 주요 성능 경로에서 가상 함수 호출로 인한 오버헤드를 분석하고 최적화 기회를 식별합니다.</li><li>정적 다형성 적용 후보를 선정하고 벤치마크로 효과를 검증합니다.</li><li>HAL 개발 가이드라인에 가상 함수 사용 시 성능 고려 사항을 추가합니다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>C++ 가상 함수 호출의 성능 오버헤드를 이해하고 정적 다형성 기법을 활용하여 Camera HAL 네이티브 코드의 성능을 최적화할 수 있습니다.</p></div>
           <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa">Devirtualization and Static Polymorphism -- David Álvarez Rosa</a></li></ul></div>
         </div>
       </section>
@@ -117,16 +101,13 @@
       <section class="section">
         <h2>6. C++ Toolchain / AOSP Camera</h2>
         <div class="card issue-section article-card has-fallback-image C++ Native Code">
-          <div class="article-media article-fallback-visual article-fallback-c-native-code" role="img" aria-label="C++ Toolchain / AOSP Camera">
-            <span></span>
-          </div>
-          
+          <div class="article-media article-fallback-visual article-fallback-c-native-code" role="img" aria-label="C++ Toolchain / AOSP Camera"><span></span></div>
           <h3>GCC 16.1 출시: C++26 리플렉션, 컨트랙트, 안전 강화 기능 및 C++20 기본 적용</h3>
-          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>GCC 16.1이 출시되었습니다.</li><li>C++26의 리플렉션(P2996R13) 및 컨트랙트(P3096R5) 기능이 구현되었습니다.</li><li>C++20이 기본 언어 표준으로 적용됩니다.</li><li>C++20 모듈 지원은 아직 실험적이며 `-fmodules` 플래그를 통해 활성화해야 합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>C++ 표준은 지속적으로 발전하며 새로운 기능과 개선 사항을 도입합니다. 컴파일러는 이러한 표준 변경 사항을 구현하여 개발자가 더 현대적이고 안전하며 효율적인 코드를 작성할 수 있도록 지원합니다. C++26의 리플렉션은 컴파일 타임에 타입 정보를 프로그램 내에서 질의하고 조작할 수 있게 하며, 컨트랙트는 함수의 사전/사후 조건을 명시적으로 정의하여 런타임 오류를 방지하고 코드의 견고성을 높입니다. C++20의 기본 적용은 모던 C++ 기능 사용을 장려합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL 개발팀은 GCC 16.1로의 전환을 고려해야 합니다. C++20의 기본 적용은 기존 HAL 코드의 컴파일 호환성을 확인하고, 새로운 C++20 기능을 활용하여 코드를 현대화할 기회를 제공합니다. C++26의 리플렉션은 복잡한 카메라 메타데이터 구조나 HAL 인터페이스 정의를 컴파일 타임에 분석하고, 이를 기반으로 코드 생성이나 런타임 검증 로직을 자동화하는 데 활용될 수 있습니다. 컨트랙트는 HAL의 각 함수가 기대하는 조건과 보장하는 조건을 명확히 하여, 버그를 조기에 발견하고 코드의 견고성을 높이는 데 필수적입니다. 특히, 안전 강화 기능은 HAL의 안정성 및 보안 취약점 감소에 기여할 것입니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>GCC 16.1로의 컴파일러 전환 시 HAL 코드의 호환성을 검증하고, 필요한 코드 수정 사항을 식별합니다.</li><li>C++26 컨트랙트를 활용하여 Camera HAL의 주요 인터페이스 및 함수에 대한 견고성 검증 로직을 추가하는 방안을 검토합니다.</li><li>C++20 기본 적용에 맞춰 HAL 코드베이스의 현대화 계획을 수립하고, 새로운 언어 기능을 점진적으로 도입합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>GCC 16.1은 C++20 기본 적용 및 C++26 리플렉션/컨트랙트 기능을 통해 Camera HAL 네이티브 코드의 품질, 안정성, 유지보수성을 크게 향상시킬 잠재력을 제공합니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">확인된 사실</strong><ul><li>GCC 16.1이 출시되었습니다.</li><li>C++26의 리플렉션 및 컨트랙트 기능이 구현되었습니다.</li><li>C++20이 기본 언어 표준으로 적용됩니다.</li><li>C++20 모듈 지원은 아직 실험적이며 -fmodules 플래그를 통해 활성화해야 합니다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong><p>C++ 표준과 컴파일러는 지속적으로 발전하며 새로운 기능과 개선 사항을 도입합니다. 리플렉션과 컨트랙트는 코드 생성, 인터페이스 검증, 런타임 오류 예방 같은 영역에서 장기적으로 활용 가능성이 있습니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong><p>HAL 개발팀은 GCC 16.1로의 전환 가능성을 검토하면서 기존 HAL 코드의 컴파일 호환성, C++20 기본 적용 영향, 장기적인 인터페이스 검증 자동화 가능성을 함께 확인해야 합니다.</p></div>
+          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul><li>GCC 16.1로의 컴파일러 전환 시 HAL 코드의 호환성을 검증하고 필요한 코드 수정 사항을 식별합니다.</li><li>C++26 컨트랙트를 활용하여 Camera HAL 주요 인터페이스의 견고성 검증 방안을 검토합니다.</li><li>C++20 기본 적용에 맞춰 HAL 코드베이스의 현대화 계획을 수립합니다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong><p>GCC 16.1은 C++20 기본 적용 및 C++26 기능을 통해 Camera HAL 네이티브 코드의 품질, 안정성, 유지보수성을 향상시킬 잠재력을 제공합니다.</p></div>
           <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li></ul></div>
         </div>
       </section>
