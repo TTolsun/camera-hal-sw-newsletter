@@ -1,5 +1,18 @@
 [
   {
+    "date": "2026-05-03",
+    "title": "Camera HAL SW Newsletter - 2026-05-03",
+    "summary": "이번 주 뉴스레터는 Android의 새로운 AI 기능 통합, 개발 생산성 향상을 위한 도구, 그리고 Camera HAL 개발에 필수적인 AOSP 및 CameraX 업데이트를 다룹니다. AI 기능이 카메라 파이프라인에 미치는 영향과 네이티브 C++ 성능 최적화 방안을 중심으로 기술 동향을 파악하고 실무 적용 방안을 모색합니다.",
+    "html": "newsletters/2026-05-03/index.html",
+    "md": "newsletters/2026-05-03/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android",
+      "C++",
+      "AI"
+    ]
+  },
+  {
     "date": "2026-05-02",
     "title": "Camera HAL SW Newsletter - 2026-05-02",
     "summary": "이번 주에는 Android 개발 생산성을 높이는 새로운 AI 도구와 하이브리드 추론 기능이 발표되었습니다. 또한, Camera HAL 엔지니어에게 필수적인 AOSP, CameraX, CDD 문서 업데이트를 주시해야 합니다. AI 기능 통합 및 개발 워크플로우 개선에 대한 최신 정보를 확인하고, 카메라 관련 보안 업데이트에 주의를 기울여야 합니다.",
