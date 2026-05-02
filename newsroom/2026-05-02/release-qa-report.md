@@ -28,7 +28,7 @@ Validated 3 newsletter entries.
 > camera-hal-sw-newsletter@1.0.0 validate:images
 > node scripts/validate-external-images.js
 
-Validated 10 article images.
+Validated 6 article images.
 
 ## 잔여 TODO 여부
 
@@ -42,4 +42,4 @@ Validated 10 article images.
 
 - Status: PASS
 - Must fix count: 0
-- Source gap count: 0
+- Source gap count: 9
