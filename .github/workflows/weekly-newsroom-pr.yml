@@ -34,6 +34,7 @@ jobs:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
       GEMINI_FALLBACK_MODELS: ${{ vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite,gemini-3.1-flash-lite-preview' }}
+      NEWSROOM_MAX_QUALITY_RETRIES: ${{ vars.NEWSROOM_MAX_QUALITY_RETRIES || '3' }}
 
     steps:
       - name: Checkout repository
@@ -101,6 +102,8 @@ jobs:
           console.log(`quality_status=${status.quality_status || 'UNKNOWN'}`);
           console.log(`quality_score=${status.quality_score ?? 'n/a'}`);
           console.log(`quality_threshold=${status.quality_threshold ?? 'n/a'}`);
+          console.log(`quality_attempt_count=${status.quality_attempt_count ?? 'n/a'}`);
+          console.log(`locked_article_count=${status.locked_article_count ?? 'n/a'}`);
           NODE
 
       - name: Prepare pull request body
@@ -118,6 +121,8 @@ jobs:
             echo "- Fact-check must-fix count: \`${{ steps.generation-status.outputs.must_fix_count }}\`"
             echo "- Quality score: \`${{ steps.generation-status.outputs.quality_score }}/${{ steps.generation-status.outputs.quality_threshold }}\`"
             echo "- Quality status: \`${{ steps.generation-status.outputs.quality_status }}\`"
+            echo "- Quality attempts: \`${{ steps.generation-status.outputs.quality_attempt_count }}\`"
+            echo "- Locked articles: \`${{ steps.generation-status.outputs.locked_article_count }}\`"
             echo "- Validation outcome: \`${{ steps.validate.outcome }}\`"
             if [ "${{ steps.generation-status.outputs.status }}" = "NEEDS_FIX" ] || [ "${{ steps.generation-status.outputs.status }}" = "QUALITY_NEEDS_FIX" ] || [ "${{ steps.validate.outcome }}" = "failure" ]; then
               echo "- This PR is generated for editor review only. Resolve \`newsroom/${DATE}/fact-check-report.md\`, \`newsroom/${DATE}/quality-report.md\`, and validation failures before publishing."
@@ -131,6 +136,8 @@ jobs:
             echo "- \`newsroom/${DATE}/fact-check-report.json\`"
             echo "- \`newsroom/${DATE}/quality-report.json\`"
             echo "- \`newsroom/${DATE}/quality-report.md\`"
+            echo "- \`newsroom/${DATE}/retry-history.json\`"
+            echo "- \`newsroom/${DATE}/retry-history.md\`"
             echo "- \`newsletters/${DATE}/newsletter.md\`"
             echo "- \`newsletters/${DATE}/index.html\`"
             echo "- \`data/newsletters.json\`"

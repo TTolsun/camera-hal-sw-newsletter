@@ -7,14 +7,16 @@ const {
   readTextIfExists,
   writeJson
 } = require('./lib/common');
-const { callGeminiJson } = require('./lib/gemini-client');
+const { callGeminiJson, getGeminiModelUsage } = require('./lib/gemini-client');
 const { reporterSchema, editorSchema, factCheckSchema } = require('./lib/newsletter-schema');
 const { isSafeExternalImageUrl } = require('./lib/image-candidates');
 const { resolveIssueArticleImages } = require('./lib/article-image-resolver');
 const {
   QUALITY_THRESHOLD,
+  MAX_MAIN_ARTICLES,
   buildNewsletterQualityReport,
-  buildQualityReportMarkdown
+  buildQualityReportMarkdown,
+  sectionPassesArticleGate
 } = require('./lib/newsletter-quality');
 const {
   buildMarkdown,
@@ -52,6 +54,11 @@ function writeGenerationStatus(value) {
 
 function numberOrDefault(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
+}
+
+function integerOrDefault(value, fallback) {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : fallback;
 }
 
 function stringOrEmpty(value) {
@@ -318,6 +325,155 @@ function warnResolvedImageFallbacks(issue) {
   }
 }
 
+function normalizeTitle(value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9가-힣]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function titleSimilarity(a, b) {
+  const left = new Set(normalizeTitle(a).split(' ').filter(token => token.length > 1));
+  const right = new Set(normalizeTitle(b).split(' ').filter(token => token.length > 1));
+  if (left.size === 0 || right.size === 0) return 0;
+  const overlap = [...left].filter(token => right.has(token)).length;
+  return overlap / Math.max(left.size, right.size);
+}
+
+function sourceDateTitle(section) {
+  const firstSource = ensureArray(section.sources)[0] || {};
+  return {
+    source: normalizeTitle(firstSource.title || section.source),
+    publishedDate: String(section.published_date || section.publishedDate || '').trim(),
+    title: section.headline || firstSource.title || ''
+  };
+}
+
+function sectionUrls(section) {
+  return ensureArray(section.sources).map(source => source && source.url).filter(Boolean);
+}
+
+function sectionsAreDuplicate(left, right) {
+  const leftUrls = new Set(sectionUrls(left));
+  if (sectionUrls(right).some(url => leftUrls.has(url))) return true;
+  if (normalizeTitle(left.headline) && normalizeTitle(left.headline) === normalizeTitle(right.headline)) return true;
+  if (titleSimilarity(left.headline, right.headline) >= 0.82) return true;
+  const leftKey = sourceDateTitle(left);
+  const rightKey = sourceDateTitle(right);
+  return leftKey.source &&
+    leftKey.source === rightKey.source &&
+    leftKey.publishedDate &&
+    leftKey.publishedDate === rightKey.publishedDate &&
+    titleSimilarity(leftKey.title, rightKey.title) >= 0.68;
+}
+
+function candidateDuplicatesLocked(candidate, lockedSections) {
+  const candidateSection = {
+    headline: candidate.title,
+    published_date: candidate.published_date,
+    sources: [{ title: candidate.source, url: candidate.url }]
+  };
+  return lockedSections.some(section => sectionsAreDuplicate(candidateSection, section));
+}
+
+function removeDuplicateSelections(reporter, lockedSections) {
+  const rejected = [];
+  for (const candidate of ensureArray(reporter.candidates)) {
+    if (!candidate.selected) continue;
+    if (candidateDuplicatesLocked(candidate, lockedSections)) {
+      candidate.selected = false;
+      rejected.push(candidate.title);
+    }
+  }
+  return rejected;
+}
+
+function mergeLockedSections(lockedSections, generatedSections) {
+  const merged = [];
+  const rejected = [];
+  for (const section of lockedSections) {
+    if (merged.length >= MAX_MAIN_ARTICLES) break;
+    merged.push(section);
+  }
+  for (const section of generatedSections) {
+    if (merged.length >= MAX_MAIN_ARTICLES) break;
+    if (merged.some(existing => sectionsAreDuplicate(existing, section))) {
+      rejected.push(section.headline || section.category || 'untitled article');
+      continue;
+    }
+    merged.push(section);
+  }
+  return { sections: merged, rejected };
+}
+
+function buildLockedArticleContext(lockedSections) {
+  if (lockedSections.length === 0) return '';
+  const lockedSummary = lockedSections.map((section, index) => ({
+    index: index + 1,
+    headline: section.headline,
+    category: section.category,
+    urls: sectionUrls(section),
+    source_titles: ensureArray(section.sources).map(source => source.title).filter(Boolean)
+  }));
+  return [
+    'Passed articles locked from previous quality attempts:',
+    JSON.stringify(lockedSummary, null, 2),
+    '',
+    'Keep these passed articles unchanged. Do not rewrite them except for formatting consistency.',
+    'Generate only missing replacement articles. Avoid duplicate URLs, duplicate or near-identical headlines, and same source + same published_date + similar title.'
+  ].join('\n');
+}
+
+function lockedArticleHeadlines(lockedSections) {
+  return lockedSections.map(section => section.headline || section.category || 'untitled article');
+}
+
+function selectLockedArticles(editor, qualityReport, factCheck) {
+  return ensureArray(editor.sections)
+    .filter(section => sectionPassesArticleGate(section, qualityReport, factCheck))
+    .slice(0, MAX_MAIN_ARTICLES);
+}
+
+function appendUniqueLockedArticles(currentLocked, candidates) {
+  const locked = [...currentLocked];
+  for (const section of candidates) {
+    if (locked.length >= MAX_MAIN_ARTICLES) break;
+    if (!locked.some(existing => sectionsAreDuplicate(existing, section))) {
+      locked.push(section);
+    }
+  }
+  return locked;
+}
+
+function buildRetryHistoryMarkdown(date, attempts) {
+  const rows = attempts.map(item => [
+    item.attempt,
+    item.model || 'default',
+    `${item.score}/${item.threshold}`,
+    item.status,
+    item.locked_article_headlines.length,
+    item.rejected_duplicate_headlines.length,
+    item.source_gap_count,
+    item.must_fix_count
+  ]);
+  return `# Newsletter Retry History - ${date}
+
+| Attempt | Model | Score | Status | Locked | Rejected duplicates | Source gaps | Must-fix |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+${rows.map(row => `| ${row.join(' | ')} |`).join('\n')}
+
+${attempts.map(item => `## Attempt ${item.attempt}
+
+- Selected articles: ${item.selected_article_headlines.join('; ') || 'none'}
+- Locked articles: ${item.locked_article_headlines.join('; ') || 'none'}
+- Rejected duplicate articles: ${item.rejected_duplicate_headlines.join('; ') || 'none'}
+- Deductions: ${item.deductions.length === 0 ? 'none' : item.deductions.map(deduction => `${deduction.points}pt ${deduction.category}${deduction.location ? ` (${deduction.location})` : ''}: ${deduction.reason}`).join('; ')}
+`).join('\n')}`;
+}
+
 async function main() {
   const date = process.env.NEWSLETTER_DATE || kstDate();
   writeNewsletterDate(date);
@@ -359,99 +515,160 @@ async function main() {
     newsletterTemplate
   ].join('\n');
 
-  const reporter = validateReporter(await callGeminiJson(
-    'reporter',
-    [
-      'You are the AI reporter for Camera HAL SW Newsletter.',
-      'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, on-device AI, NPU/GPU, and developer productivity.',
-      'Give low scores to product promotion, general IT news, and weak Camera HAL relevance.',
-      'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
-      'For every selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
-      'If the source is a rolling page such as release notes or a watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides a date.',
-      'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
-      'Candidate-only or requiresCrossCheck leads must not be selected unless cross_check_status is official-source or cross-checked.',
-      'Preserve imageCandidates exactly from the collected candidate JSON. Do not invent image URLs, rewrite image URLs, or add image candidates.',
-      'For every candidate, provide these numeric scores:',
-      '- camera_hal_relevance_score: 0-5',
-      '- android_camera_relevance_score: 0-5',
-      '- practical_actionability_score: 0-5',
-      '- source_reliability_score: 0-5',
-      '- freshness_score: 0-3',
-      '- ai_required_slot_fit_score: 0-3',
-      '- cpp_fallback_value_score: 0-3',
-      'Return only JSON matching the schema.'
-    ].join('\n'),
-    `${commonContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndata/news-sources.json:\n${JSON.stringify(sourceRegistry, null, 2)}\n\ndocs/news-sources.md:\n${sourcesMarkdown}`,
-    reporterSchema
-  ), date, ensureArray(candidates.candidates));
-  writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
+  const maxQualityRetries = integerOrDefault(process.env.NEWSROOM_MAX_QUALITY_RETRIES, 3);
+  const totalAttempts = 1 + maxQualityRetries;
+  const retryHistory = [];
+  let lockedSections = [];
+  let reporter = null;
+  let editor = null;
+  let factCheck = null;
+  let qualityReport = null;
 
-  const editor = validateEditor(await callGeminiJson(
-    'editor',
-    [
-      'You are the AI editor for Camera HAL SW Newsletter.',
-      'Write a Korean technical newsletter draft that a Camera HAL engineer can read in 10 minutes.',
-      'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
-      'Create about 5 main articles. 4-6 articles are acceptable if the source set requires it.',
-      'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
-      'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it has concrete HAL native-code value.',
-      'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
-      'Every article must include evidence_summary, specificity_checks, and source_verification_notes.',
-      'specificity_checks must name concrete evidence such as version, release date, API/component, source page, behavior change, or the exact source gap if the source is a rolling page.',
-      'Do not write generic advice like "monitor AOSP updates" or "review CameraX changes" unless the sentence names the exact source, version/release, API/component, date, or behavior to watch.',
-      'For AI, C++, Linux, or tooling articles, explicitly connect the item to Camera HAL through stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, or HAL workflow.',
-      'Each action_items entry must be executable within 2 weeks and include at least one concrete test, log, metric, device class, API/component, stream combination, or code-owner style handoff.',
-      'For each article, choose at most one selectedImage from that article imageCandidates. If relevance, rights risk, logo-only content, screenshot text density, or source fit is unclear, set selectedImage to an empty string.',
-      'Do not invent image URLs. selectedImage must exactly match one imageCandidates.url value, or be an empty string.',
-      'Prefer directly relevant 16:9 or 4:3 clean images from the source article over generic, logo-only, or promotional images.',
-      'When selectedImage is set, ALWAYS provide imageSource, imageAttribution, imageAlt, imageLicenseStatus, and a short imageUsageDecisionReason. imageAlt must describe the image in article context.',
-      'imageSource MUST be an HTTPS URL that links to the image source or article.',
-      'imageAttribution MUST be non-empty source or article title text.',
-      'If you cannot provide imageSource, imageAttribution, imageAlt, and imageLicenseStatus, do not select an image; leave selectedImage empty.',
-      'Incomplete selected image metadata will be removed during validation and may cause publication validation failure.',
-      'When no image is selected, keep selectedImage, imageSource, imageAttribution, and imageAlt empty, set imageLicenseStatus to none, and explain the rejection briefly in imageUsageDecisionReason.',
-      'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
-      'briefing must have exactly 3 items.'
-    ].join('\n'),
-    `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}`,
-    editorSchema
-  ), date, reporter);
-  await resolveIssueArticleImages(editor, { root });
-  warnResolvedImageFallbacks(editor);
+  for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
+    const lockedContext = buildLockedArticleContext(lockedSections);
+    const reporterStage = `reporter attempt ${attempt}/${totalAttempts}`;
+    const editorStage = `editor attempt ${attempt}/${totalAttempts}`;
+    const factCheckStage = `fact-checker attempt ${attempt}/${totalAttempts}`;
+    console.log(`Starting Gemini newsroom quality attempt ${attempt}/${totalAttempts}. Locked articles: ${lockedSections.length}.`);
+
+    reporter = validateReporter(await callGeminiJson(
+      reporterStage,
+      [
+        'You are the AI reporter for Camera HAL SW Newsletter.',
+        'Select and score only items meaningful to Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI Agent, on-device AI, NPU/GPU, and developer productivity.',
+        'Give low scores to product promotion, general IT news, and weak Camera HAL relevance.',
+        'Use priority, reliability, candidateOnly, requiresCrossCheck, section, and cameraHalRelevanceScore when selecting items.',
+        'For every selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
+        'If the source is a rolling page such as release notes or a watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides a date.',
+        'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
+        'Candidate-only or requiresCrossCheck leads must not be selected unless cross_check_status is official-source or cross-checked.',
+        'Preserve imageCandidates exactly from the collected candidate JSON. Do not invent image URLs, rewrite image URLs, or add image candidates.',
+        lockedSections.length > 0 ? 'Do not select candidates that duplicate the locked article URLs, titles, sources, or source-date-title combinations listed in the retry context.' : '',
+        'For every candidate, provide these numeric scores:',
+        '- camera_hal_relevance_score: 0-5',
+        '- android_camera_relevance_score: 0-5',
+        '- practical_actionability_score: 0-5',
+        '- source_reliability_score: 0-5',
+        '- freshness_score: 0-3',
+        '- ai_required_slot_fit_score: 0-3',
+        '- cpp_fallback_value_score: 0-3',
+        'Return only JSON matching the schema.'
+      ].filter(Boolean).join('\n'),
+      `${commonContext}\n\n${lockedContext}\n\nCollected candidates JSON:\n${JSON.stringify(candidates, null, 2)}\n\ndata/news-sources.json:\n${JSON.stringify(sourceRegistry, null, 2)}\n\ndocs/news-sources.md:\n${sourcesMarkdown}`,
+      reporterSchema
+    ), date, ensureArray(candidates.candidates));
+    const rejectedReporterDuplicates = removeDuplicateSelections(reporter, lockedSections);
+    writeJson(path.join(newsroomDir, `reporter-candidates-attempt-${attempt}.json`), reporter);
+
+    editor = validateEditor(await callGeminiJson(
+      editorStage,
+      [
+        'You are the AI editor for Camera HAL SW Newsletter.',
+        'Write a Korean technical newsletter draft that a Camera HAL engineer can read in 10 minutes.',
+        'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
+        'Create exactly 5 main articles when enough non-duplicate source material exists; 4 main articles are acceptable only when strong candidates are insufficient.',
+        'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
+        'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it has concrete HAL native-code value.',
+        lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles.' : '',
+        lockedSections.length > 0 ? 'Do not duplicate locked article URLs, titles/headlines, source names, or same source + published date + similar title.' : '',
+        'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
+        'Every article must include evidence_summary, specificity_checks, and source_verification_notes.',
+        'specificity_checks must name concrete evidence such as version, release date, API/component, source page, behavior change, or the exact source gap if the source is a rolling page.',
+        'Do not write generic advice like "monitor AOSP updates" or "review CameraX changes" unless the sentence names the exact source, version/release, API/component, date, or behavior to watch.',
+        'For AI, C++, Linux, or tooling articles, explicitly connect the item to Camera HAL through stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, or HAL workflow.',
+        'Each action_items entry must be executable within 2 weeks and include at least one concrete test, log, metric, device class, API/component, stream combination, or code-owner style handoff.',
+        'For each article, choose at most one selectedImage from that article imageCandidates. If relevance, rights risk, logo-only content, screenshot text density, or source fit is unclear, set selectedImage to an empty string.',
+        'Do not invent image URLs. selectedImage must exactly match one imageCandidates.url value, or be an empty string.',
+        'Prefer directly relevant 16:9 or 4:3 clean images from the source article over generic, logo-only, or promotional images.',
+        'When selectedImage is set, ALWAYS provide imageSource, imageAttribution, imageAlt, imageLicenseStatus, and a short imageUsageDecisionReason. imageAlt must describe the image in article context.',
+        'imageSource MUST be an HTTPS URL that links to the image source or article.',
+        'imageAttribution MUST be non-empty source or article title text.',
+        'If you cannot provide imageSource, imageAttribution, imageAlt, and imageLicenseStatus, do not select an image; leave selectedImage empty.',
+        'Incomplete selected image metadata will be removed during validation and may cause publication validation failure.',
+        'When no image is selected, keep selectedImage, imageSource, imageAttribution, and imageAlt empty, set imageLicenseStatus to none, and explain the rejection briefly in imageUsageDecisionReason.',
+        'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
+        'briefing must have exactly 3 items.'
+      ].filter(Boolean).join('\n'),
+      `${commonContext}\n\n${lockedContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}`,
+      editorSchema
+    ), date, reporter);
+
+    const merged = mergeLockedSections(lockedSections, editor.sections);
+    editor.sections = merged.sections;
+    await resolveIssueArticleImages(editor, { root });
+    warnResolvedImageFallbacks(editor);
+    writeJson(path.join(newsroomDir, `editor-draft-attempt-${attempt}.json`), editor);
+    fs.writeFileSync(path.join(newsroomDir, `editor-draft-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
+
+    factCheck = validateFactCheck(await callGeminiJson(
+      factCheckStage,
+      [
+        'You are the AI fact checker for Camera HAL SW Newsletter.',
+        'Check factuality, missing sources, exaggerated language, and missing dates.',
+        'Treat missing version, release date, API/component name, or behavior change as must_fix when an article presents a rolling page or generic watch item as a concrete update.',
+        'Any claim without a source must be classified as must_fix.',
+        'Flag general AI/C++ news that lacks Camera HAL or Android Camera interpretation.',
+        'Flag any main article without concrete Action Item content.',
+        'Flag any main article with weak Camera HAL perspective or missing engineering relevance.',
+        'Flag candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.',
+        'Do not rewrite for style. Focus only on factual errors, source problems, and editorial-policy violations.',
+        'Return only JSON matching the schema.'
+      ].join('\n'),
+      `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+      factCheckSchema
+    ));
+    writeJson(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.json`), factCheck);
+    fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
+
+    qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
+      threshold: QUALITY_THRESHOLD
+    });
+    writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
+    fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
+
+    const passedThisAttempt = selectLockedArticles(editor, qualityReport, factCheck);
+    lockedSections = appendUniqueLockedArticles(lockedSections, passedThisAttempt);
+    const rejectedDuplicateHeadlines = [...rejectedReporterDuplicates, ...merged.rejected];
+    retryHistory.push({
+      attempt,
+      model: [
+        `reporter=${getGeminiModelUsage(reporterStage) || 'unknown'}`,
+        `editor=${getGeminiModelUsage(editorStage) || 'unknown'}`,
+        `fact-checker=${getGeminiModelUsage(factCheckStage) || 'unknown'}`
+      ].join(', '),
+      score: qualityReport.score,
+      threshold: qualityReport.threshold,
+      status: qualityReport.status,
+      deductions: ensureArray(qualityReport.deductions),
+      selected_article_headlines: lockedArticleHeadlines(editor.sections),
+      locked_article_headlines: lockedArticleHeadlines(lockedSections),
+      rejected_duplicate_headlines: rejectedDuplicateHeadlines,
+      source_gap_count: qualityReport.metrics.source_gap_count,
+      must_fix_count: qualityReport.metrics.must_fix_count
+    });
+    console.log(`Quality attempt ${attempt}/${totalAttempts}: score ${qualityReport.score}/${qualityReport.threshold}, status ${qualityReport.status}, deductions ${ensureArray(qualityReport.deductions).length}, locked articles ${lockedSections.length}, rejected duplicates ${rejectedDuplicateHeadlines.length}.`);
+
+    if (qualityReport.status === 'PASS' && qualityReport.score >= qualityReport.threshold) break;
+    if (attempt < totalAttempts) {
+      console.warn(`Quality attempt ${attempt}/${totalAttempts} did not pass; retrying with ${lockedSections.length} locked article(s).`);
+    }
+  }
+
+  writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
   writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
   fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(editor), 'utf8');
-
-  const factCheck = validateFactCheck(await callGeminiJson(
-    'fact-checker',
-    [
-      'You are the AI fact checker for Camera HAL SW Newsletter.',
-      'Check factuality, missing sources, exaggerated language, and missing dates.',
-      'Treat missing version, release date, API/component name, or behavior change as must_fix when an article presents a rolling page or generic watch item as a concrete update.',
-      'Any claim without a source must be classified as must_fix.',
-      'Flag general AI/C++ news that lacks Camera HAL or Android Camera interpretation.',
-      'Flag any main article without concrete Action Item content.',
-      'Flag any main article with weak Camera HAL perspective or missing engineering relevance.',
-      'Flag candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.',
-      'Do not rewrite for style. Focus only on factual errors, source problems, and editorial-policy violations.',
-      'Return only JSON matching the schema.'
-    ].join('\n'),
-    `${commonContext}\n\nReporter candidates JSON:\n${JSON.stringify(reporter, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
-    factCheckSchema
-  ));
   writeJson(path.join(newsroomDir, 'fact-check-report.json'), factCheck);
   fs.writeFileSync(path.join(newsroomDir, 'fact-check-report.md'), buildFactCheckMarkdown(date, factCheck), 'utf8');
+  writeJson(path.join(newsroomDir, 'quality-report.json'), qualityReport);
+  fs.writeFileSync(path.join(newsroomDir, 'quality-report.md'), buildQualityReportMarkdown(qualityReport), 'utf8');
+  writeJson(path.join(newsroomDir, 'retry-history.json'), retryHistory);
+  fs.writeFileSync(path.join(newsroomDir, 'retry-history.md'), buildRetryHistoryMarkdown(date, retryHistory), 'utf8');
 
   const newsletterMd = path.join(newsletterDir, 'newsletter.md');
   const newsletterHtml = path.join(newsletterDir, 'index.html');
   fs.writeFileSync(newsletterMd, buildMarkdown(editor), 'utf8');
   fs.writeFileSync(newsletterHtml, buildHtml(editor), 'utf8');
   updateNewsletterData(date, editor);
-
-  const qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-    threshold: QUALITY_THRESHOLD
-  });
-  writeJson(path.join(newsroomDir, 'quality-report.json'), qualityReport);
-  fs.writeFileSync(path.join(newsroomDir, 'quality-report.md'), buildQualityReportMarkdown(qualityReport), 'utf8');
 
   const files = [
     `collected-news/${date}/candidates.json`,
@@ -462,6 +679,8 @@ async function main() {
     `newsroom/${date}/fact-check-report.md`,
     `newsroom/${date}/quality-report.json`,
     `newsroom/${date}/quality-report.md`,
+    `newsroom/${date}/retry-history.json`,
+    `newsroom/${date}/retry-history.md`,
     `newsroom/${date}/editor-in-chief-brief.md`,
     `newsroom/${date}/release-qa-report.md`,
     `newsletters/${date}/newsletter.md`,
@@ -498,6 +717,9 @@ async function main() {
     quality_score: qualityReport.score,
     quality_threshold: qualityReport.threshold,
     quality_deduction_count: ensureArray(qualityReport.deductions).length,
+    quality_attempt_count: retryHistory.length,
+    locked_article_count: retryHistory.at(-1)?.locked_article_headlines.length || 0,
+    rejected_duplicate_article_count: retryHistory.reduce((sum, item) => sum + item.rejected_duplicate_headlines.length, 0),
     validate_ok: validateResult.ok,
     todo_found: todoFound,
     empty_source_sections: emptySourceSections,

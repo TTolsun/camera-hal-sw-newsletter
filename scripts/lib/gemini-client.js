@@ -18,6 +18,7 @@ const retryDelaysMs = (process.env.GEMINI_RETRY_DELAYS_MS || '2000,5000,10000')
   .map(value => Number(value.trim()))
   .filter(value => Number.isFinite(value) && value >= 0);
 const effectiveRetryDelaysMs = retryDelaysMs.length > 0 ? retryDelaysMs : [2000, 5000, 10000];
+const modelUsageByStage = new Map();
 
 function fail(message) {
   console.error(message);
@@ -212,6 +213,7 @@ async function callGeminiJson(stage, systemInstruction, prompt, responseSchema) 
     }
 
     console.log(`[${stage}] Gemini API succeeded with model ${modelName}.`);
+    modelUsageByStage.set(stage, modelName);
     const text = typeof response.text === 'function' ? response.text() : response.text;
     return extractJson(text, stage);
   }
@@ -221,5 +223,8 @@ async function callGeminiJson(stage, systemInstruction, prompt, responseSchema) 
 
 module.exports = {
   callGeminiJson,
+  getGeminiModelUsage(stage) {
+    return modelUsageByStage.get(stage) || '';
+  },
   extractJson
 };

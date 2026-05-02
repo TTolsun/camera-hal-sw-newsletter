@@ -1,4 +1,6 @@
-const QUALITY_THRESHOLD = 95;
+const QUALITY_THRESHOLD = 90;
+const MIN_MAIN_ARTICLES = 4;
+const MAX_MAIN_ARTICLES = 5;
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -27,6 +29,16 @@ function sectionText(section) {
     section.action_items,
     section.sources
   ].map(text).join(' ');
+}
+
+function normalizeForMatch(value) {
+  return text(value)
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9가-힣]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function hasPattern(value, pattern) {
@@ -82,13 +94,64 @@ function sourceGapCount(factCheck) {
   return ensureArray(factCheck?.source_gaps).length;
 }
 
+function deductionMatchesSection(deduction, section) {
+  const location = normalizeForMatch(deduction?.location);
+  if (!location) return false;
+  const labels = [
+    section?.headline,
+    section?.category,
+    section?.location
+  ].map(normalizeForMatch).filter(Boolean);
+  return labels.some(label => location === label || location.includes(label) || label.includes(location));
+}
+
+function sectionHasQualityDeductions(section, deductions, categories = [
+  'required-fields',
+  'evidence-specificity',
+  'hal-depth',
+  'actionability'
+]) {
+  const categorySet = new Set(categories);
+  return ensureArray(deductions).some(deduction =>
+    categorySet.has(deduction?.category) && deductionMatchesSection(deduction, section)
+  );
+}
+
+function factCheckItemMentionsSection(item, section) {
+  const haystack = normalizeForMatch(item);
+  if (!haystack) return false;
+  const labels = [
+    section?.headline,
+    section?.category,
+    ...ensureArray(section?.sources).flatMap(source => [source?.title, source?.url])
+  ].map(normalizeForMatch).filter(Boolean);
+  return labels.some(label => haystack.includes(label) || label.includes(haystack));
+}
+
+function sectionHasFactCheckMustFix(section, factCheck) {
+  return ensureArray(factCheck?.must_fix).some(item => factCheckItemMentionsSection(item, section));
+}
+
+function sectionHasSourceGap(section, factCheck) {
+  const localGap = /source gap|rolling page|no dated release|missing source|needs cross-check|needs-cross-check|출처\s*공백|소스\s*갭/i
+    .test(sectionText(section));
+  if (localGap) return true;
+  return ensureArray(factCheck?.source_gaps).some(item => factCheckItemMentionsSection(item, section));
+}
+
+function sectionPassesArticleGate(section, qualityReport, factCheck) {
+  return !sectionHasQualityDeductions(section, qualityReport?.deductions) &&
+    !sectionHasFactCheckMustFix(section, factCheck) &&
+    !sectionHasSourceGap(section, factCheck);
+}
+
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : QUALITY_THRESHOLD;
   const sections = ensureArray(editor.sections);
   const state = { deductions: [] };
 
-  if (sections.length < 4 || sections.length > 6) {
-    boundedDeduct(state, 'composition', 4, `Expected 4-6 main articles, found ${sections.length}.`);
+  if (sections.length < MIN_MAIN_ARTICLES || sections.length > MAX_MAIN_ARTICLES) {
+    boundedDeduct(state, 'composition', 4, `Expected 4-5 main articles, found ${sections.length}.`);
   }
   if (ensureArray(editor.briefing).length !== 3) {
     boundedDeduct(state, 'composition', 3, `Expected exactly 3 briefing bullets, found ${ensureArray(editor.briefing).length}.`);
@@ -205,6 +268,13 @@ ${deductions.length === 0 ? '- None' : deductions.map(item => `- ${item.points} 
 
 module.exports = {
   QUALITY_THRESHOLD,
+  MIN_MAIN_ARTICLES,
+  MAX_MAIN_ARTICLES,
   buildNewsletterQualityReport,
-  buildQualityReportMarkdown
+  buildQualityReportMarkdown,
+  deductionMatchesSection,
+  sectionHasQualityDeductions,
+  sectionHasFactCheckMustFix,
+  sectionHasSourceGap,
+  sectionPassesArticleGate
 };

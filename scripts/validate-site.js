@@ -104,8 +104,8 @@ function validateArticleQuality(item, md, newFormat) {
   }
 
   if (newFormat) {
-    if (articles.length < 4 || articles.length > 6) {
-      warn(`Newsletter ${item.date} main article count is ${articles.length}; expected 4-6 for the new format.`);
+    if (articles.length < 4 || articles.length > 5) {
+      warn(`Newsletter ${item.date} main article count is ${articles.length}; expected 4-5 for the new format.`);
     }
     if (!/AI|Gemini|agent|on-device|NPU|LLM|인공지능/i.test(md)) {
       warn(`Newsletter ${item.date} has no AI-related article or AI Corner signal.`);

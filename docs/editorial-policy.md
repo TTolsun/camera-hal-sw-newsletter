@@ -31,7 +31,7 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 
 ## 기사 구성
 
-- 주요 기사는 4-6개를 목표로 하며 기본 목표는 5개입니다.
+- 주요 기사는 4-5개를 목표로 하며 기본 목표는 5개입니다.
 - 브리핑은 정확히 3개 bullet로 유지합니다.
 - 각 주요 기사는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, 과장 금지 메모, Sources를 포함합니다.
 - 최소 1개 AI 관련 기사를 포함합니다. 단, 일반 AI 제품 발표만으로는 충분하지 않으며 camera input path, on-device inference, NPU/GPU scheduling, image privacy, agent-assisted HAL workflow 중 하나와 연결되어야 합니다.

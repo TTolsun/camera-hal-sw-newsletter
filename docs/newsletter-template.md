@@ -67,7 +67,7 @@ HAL interface, stream/buffer, metadata, request/result, performance, compatibili
 
 ---
 
-주요 기사는 같은 구조를 반복합니다. 한 이슈는 4-6개 기사, 기본 목표는 5개입니다. 최소 1개는 AI 관련 기사여야 하며, 가능한 경우 3개 이상은 Camera HAL / Android Camera / CameraX / AOSP Camera 기사여야 합니다.
+주요 기사는 같은 구조를 반복합니다. 한 이슈는 4-5개 기사, 기본 목표는 5개입니다. 최소 1개는 AI 관련 기사여야 하며, 가능한 경우 3개 이상은 Camera HAL / Android Camera / CameraX / AOSP Camera 기사여야 합니다.
 
 ## 이번 주 Action Items
 

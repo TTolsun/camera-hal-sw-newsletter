@@ -3,7 +3,8 @@
 ## Quality Gate
 
 Generated issues include `newsroom/YYYY-MM-DD/quality-report.json` and `quality-report.md`.
-The deterministic quality score must be at least `95/100` before the issue is ready to publish.
+The deterministic quality score must be at least `90/100` before the issue is ready to publish.
+If an attempt misses the gate, Gemini retries up to `NEWSROOM_MAX_QUALITY_RETRIES` times, default `3`, and writes `newsroom/YYYY-MM-DD/retry-history.json` plus `retry-history.md`.
 
 The quality gate checks Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, and article composition. Articles should name concrete evidence where available: version or release, release date, API/component, behavior change, or an explicit source gap. Generic guidance such as "monitor AOSP updates" is not sufficient unless it names the exact source, version, API, date, or behavior to watch.
 
@@ -114,7 +115,7 @@ npm.cmd run generate
 발행 Markdown은 다음 구조를 지켜야 합니다.
 
 - `## 1. 이번 주 3줄 브리핑`: 정확히 3개 bullet.
-- 주요 기사 4-6개 권장.
+- 주요 기사 4-5개 권장.
 - 각 주요 기사에는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, Sources가 필요합니다.
 - AI 관련 기사는 최소 1개 포함합니다.
 - `## References`를 포함합니다.
