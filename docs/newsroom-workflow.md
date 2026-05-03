@@ -35,7 +35,7 @@ source registry
 
 ## Role 2. Gemini Reporter
 
-Gemini 실행 전에 `scripts/lib/newsroom-selection.js`가 `collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다.
+Gemini 실행 전에 `scripts/newsroom/generate/newsroom-selection.js`가 `collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. 기존 `scripts/lib/newsroom-selection.js` 경로는 호환 shim으로 유지합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다.
 
 shortlist는 최대 12개 후보로 제한됩니다. local selector는 editor prompt가 실행되기 전에 4-5개의 final main article input을 선택합니다. Camera HAL, Android Camera, AOSP, CameraX 항목을 우선하고, AI 관련 기사 최소 1개를 요구합니다. C++ 또는 developer-productivity material은 강한 camera/platform 항목이 4개보다 적을 때 보완용으로 사용합니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
 

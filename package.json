@@ -10,7 +10,7 @@
     "collect": "node scripts/collect-news-candidates.js",
     "doctor:config": "node scripts/doctor-config.js",
     "generate": "node scripts/gemini-newsroom-newsletter.js",
-    "test": "node --test",
+    "test": "node --test tests/*.test.js scripts/test-*.js",
     "test:artifact": "node scripts/test-artifact-manifest.js",
     "test:selection-diagnostics": "node scripts/test-selection-diagnostics.js",
     "validate": "npm run validate:config && npm run validate:site && npm run validate:images && npm run validate:quality && npm run validate:localization",
