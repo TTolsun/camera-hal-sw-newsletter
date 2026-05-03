@@ -33,7 +33,10 @@ jobs:
       LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '21' }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
-      GEMINI_FALLBACK_MODELS: ${{ vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite,gemini-3.1-flash-lite-preview' }}
+      GEMINI_FALLBACK_MODELS: ${{ vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite,gemini-2.5-pro' }}
+      GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '2' }}
+      GEMINI_RETRY_DELAYS_MS: ${{ vars.GEMINI_RETRY_DELAYS_MS || '20000,10000' }}
+      GEMINI_RETRY_MAX_DELAY_MS: ${{ vars.GEMINI_RETRY_MAX_DELAY_MS || '180000' }}
       NEWSROOM_MAX_QUALITY_RETRIES: ${{ vars.NEWSROOM_MAX_QUALITY_RETRIES || '3' }}
 
     steps:

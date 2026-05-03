@@ -4,26 +4,26 @@ const { GoogleGenAI } = require('@google/genai');
 
 const apiKey = process.env.GEMINI_API_KEY;
 const defaultModel = 'gemini-2.5-flash';
-const defaultFallbackModels = ['gemini-2.5-flash-lite', 'gemini-3.1-flash-lite-preview'];
+const defaultFallbackModels = ['gemini-2.5-flash-lite', 'gemini-2.5-pro'];
 const primaryModel = process.env.GEMINI_MODEL || defaultModel;
 const fallbackModels = (process.env.GEMINI_FALLBACK_MODELS || defaultFallbackModels.join(','))
   .split(',')
   .map(item => item.trim())
   .filter(Boolean);
 const retryableStatuses = new Set([429, 500, 502, 503, 504]);
-const configuredMaxRetries = Number(process.env.GEMINI_MAX_RETRIES || 3);
+const configuredMaxRetries = Number(process.env.GEMINI_MAX_RETRIES || 2);
 const maxRetries = Number.isFinite(configuredMaxRetries) && configuredMaxRetries >= 0
   ? Math.floor(configuredMaxRetries)
-  : 3;
-const retryDelaysMs = (process.env.GEMINI_RETRY_DELAYS_MS || '2000,5000,10000')
+  : 2;
+const retryDelaysMs = (process.env.GEMINI_RETRY_DELAYS_MS || '20000,10000')
   .split(',')
   .map(value => Number(value.trim()))
   .filter(value => Number.isFinite(value) && value >= 0);
-const effectiveRetryDelaysMs = retryDelaysMs.length > 0 ? retryDelaysMs : [2000, 5000, 10000];
-const configuredMaxRetryDelayMs = Number(process.env.GEMINI_RETRY_MAX_DELAY_MS || 60000);
+const effectiveRetryDelaysMs = retryDelaysMs.length > 0 ? retryDelaysMs : [20000, 10000];
+const configuredMaxRetryDelayMs = Number(process.env.GEMINI_RETRY_MAX_DELAY_MS || 180000);
 const maxRetryDelayMs = Number.isFinite(configuredMaxRetryDelayMs) && configuredMaxRetryDelayMs >= 0
   ? configuredMaxRetryDelayMs
-  : 60000;
+  : 180000;
 const rawOutputRoot = process.env.GEMINI_RAW_OUTPUT_DIR || path.join(process.cwd(), '.tmp', 'gemini-raw');
 
 class GeminiJsonParseError extends Error {

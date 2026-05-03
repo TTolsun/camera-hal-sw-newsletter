@@ -111,7 +111,7 @@ GEMINI_API_KEY
 
 ```text
 GEMINI_MODEL=gemini-2.5-flash
-GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-3.1-flash-lite-preview
+GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-2.5-pro
 ```
 
 ### On-demand Run
