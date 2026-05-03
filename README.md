@@ -2,6 +2,14 @@
 
 Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수집하고, Gemini 기반 newsroom 자동화로 검토 가능한 정적 뉴스레터를 만드는 저장소입니다.
 
+## 처음 보는 사람은 여기부터
+
+- [처음 보는 사람은 여기부터](docs/START_HERE.ko.md)
+- [GitHub Actions Secrets and Variables](docs/config/action-variables.ko.md)
+- [news-sources.json 필드 안내](docs/config/news-sources-fields.ko.md)
+- [Source editorial view](docs/news-sources.md)
+- [Newsroom workflow](docs/newsroom-workflow.md)
+
 ## 품질 게이트
 
 생성된 이슈는 `newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 포함합니다.
@@ -14,6 +22,8 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 `npm.cmd run validate`는 site, image, quality validation을 모두 실행합니다. fact-check 또는 quality가 실패하면 workflow가 `needs-fix` 라벨의 review PR을 만들 수는 있지만, run은 실패하며 publication-ready로 보지 않습니다.
 
 ## 프로젝트 구조
+
+상세 폴더 안내는 [처음 보는 사람은 여기부터](docs/START_HERE.ko.md)에 정리되어 있습니다.
 
 ```text
 .
@@ -181,15 +191,10 @@ npx serve .
 
 ## GitHub Secrets and Variables
 
-- `GEMINI_API_KEY`: 필수. Gemini API 호출에 사용합니다.
-- `GEMINI_MODEL`: 선택. 기본값은 workflow의 explicit Flash 모델입니다.
-- `GEMINI_FALLBACK_MODELS`: 선택. 쉼표로 구분한 fallback 모델 목록입니다.
-- `GEMINI_MAX_RETRIES`: Optional. Retry budget per Gemini model for retryable API failures and invalid JSON model output. Default is `2`.
-- `GEMINI_RETRY_DELAYS_MS`: Optional. Comma-separated fallback retry delays when Gemini does not provide a retry hint. Default is `20000,10000`.
-- `GEMINI_RETRY_MAX_DELAY_MS`: Optional. Maximum server-hinted retry delay in milliseconds. Default is `180000`.
-- `NEWSROOM_MAX_QUALITY_RETRIES`: 선택. quality retry 횟수입니다. 기본값은 `3`입니다.
+GitHub repository의 `Settings -> Secrets and variables -> Actions`에서 설정합니다.
+`GEMINI_API_KEY`는 Secret으로만 관리하고, 모델과 retry 관련 값은 필요할 때 Variables로 override합니다.
 
-Invalid Gemini JSON responses are saved as raw debug artifacts under `.tmp/gemini-raw/` and uploaded by the newsroom workflow. These files contain model output only, not request headers or API keys.
+현재 workflow 기본값과 변경 시 주의점은 [GitHub Actions Secrets and Variables](docs/config/action-variables.ko.md)에 정리되어 있습니다.
 
 ## PR 검토
 
