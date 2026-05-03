@@ -71,7 +71,7 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 
 `npm run validate`가 최종 safety gate입니다.
 
-- `npm run validate:config`: `data/news-sources.json` 구조, 필수 field, source ID, URL, section mapping, canonical JSON formatting을 확인합니다.
+- `npm run validate:config`: `data/news-sources.json` 구조, 필수 field, source ID, URL, category-to-section mapping, source entry의 중복 `section` 금지, canonical JSON formatting을 확인합니다.
 - `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
 - `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
 - `npm run validate:quality`: deterministic quality report를 재계산하고 4개 미만 또는 5개 초과 main article, AI 관련 기사 누락, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap mapped candidate, dated evidence 없는 selected candidate를 차단합니다.

@@ -11,43 +11,17 @@ const {
   validateImageCandidates
 } = require('./lib/image-candidates');
 const { parseSourceSpecificItems } = require('./lib/source-item-parsers');
+const {
+  DEFAULT_SECTION_MAP,
+  normalizeEnabledSources,
+  normalizeSourceEntry,
+  readSourceRegistry
+} = require('./lib/news-source-section-resolver');
 
 const root = process.cwd();
 const structuredSourcesPath = path.join(root, 'data', 'news-sources.json');
 const legacySourcesPath = path.join(root, 'docs', 'news-sources.md');
 const AUDIENCE = 'Camera HAL / Android Camera / C++ engineer';
-
-const DEFAULT_SECTION_MAP = {
-  android: 'Android / AOSP / Camera',
-  'camera-api': 'Android / AOSP / Camera',
-  'camera-hal': 'Android / AOSP / Camera',
-  aosp: 'Android / AOSP / Camera',
-  compatibility: 'Android / AOSP / Camera',
-  security: 'Android / AOSP / Camera',
-  'vendor-security': 'Android / AOSP / Camera',
-  'linux-camera': 'Linux Camera / Driver',
-  'linux-kernel': 'Linux Camera / Driver',
-  driver: 'Linux Camera / Driver',
-  v4l2: 'Linux Camera / Driver',
-  cpp: 'C++ / Native / Toolchain',
-  toolchain: 'C++ / Native / Toolchain',
-  native: 'C++ / Native / Toolchain',
-  llvm: 'C++ / Native / Toolchain',
-  embedded: 'Embedded / Semiconductor',
-  'embedded-ai': 'Embedded / Semiconductor',
-  semiconductor: 'Embedded / Semiconductor',
-  electronics: 'Embedded / Semiconductor',
-  ai: 'AI / SW Engineering Trends',
-  'ai-research': 'AI / SW Engineering Trends',
-  'ai-engineering': 'AI / SW Engineering Trends',
-  'ai-coding': 'AI / SW Engineering Trends',
-  'ai-trends': 'AI / SW Engineering Trends',
-  'tech-trends': 'AI / SW Engineering Trends',
-  'software-engineering': 'AI / SW Engineering Trends',
-  'open-source': 'AI / SW Engineering Trends',
-  'korea-tech': 'Korean Tech Trends',
-  'korea-engineering': 'Korean Tech Trends'
-};
 
 const PRIORITY_WEIGHT = { high: 3, medium: 2, low: 1 };
 const RELIABILITY_WEIGHT = { official: 3, 'project-official': 2, 'official-community': 2 };
@@ -116,34 +90,11 @@ function tag(block, name) {
   return match ? decode(match[1]) : '';
 }
 
-function normalizeSource(source, allowFeedHint = false) {
-  const sourceUrl = source.sourceUrl || source.url;
-  return {
-    id: source.id || '',
-    name: source.name,
-    url: sourceUrl,
-    sourceUrl,
-    rssUrl: source.rssUrl || null,
-    category: source.category || 'tech-trends',
-    section: source.section || sectionMap[source.category] || 'AI / SW Engineering Trends',
-    priority: source.priority || 'medium',
-    reliability: source.reliability || 'unknown',
-    candidateOnly: source.candidateOnly === true,
-    requiresCrossCheck: source.requiresCrossCheck === true,
-    allowFeedHint,
-    usageHint: source.usageHint || '',
-    collectionModeHint: normalizeCollectionModeHint(source.collectionModeHint || source.sourceKind || ''),
-    sourceKind: source.sourceKind || '',
-    keywords: Array.isArray(source.keywords) ? source.keywords : []
-  };
-}
-
 function parseStructuredSources() {
-  const registry = readJson(structuredSourcesPath);
-  sectionMap = { ...DEFAULT_SECTION_MAP, ...(registry.sectionMap || {}) };
-  const sources = (registry.sources || [])
-    .filter(source => source.enabled !== false)
-    .map(source => normalizeSource(source, false))
+  const registry = readSourceRegistry(structuredSourcesPath, readJson);
+  const normalized = normalizeEnabledSources(registry, { normalizeCollectionModeHint });
+  sectionMap = normalized.sectionMap;
+  const sources = normalized.sources
     .filter(source => source.name && source.url)
     .sort((a, b) => (PRIORITY_WEIGHT[b.priority] || 0) - (PRIORITY_WEIGHT[a.priority] || 0));
 
@@ -164,13 +115,19 @@ function parseLegacySources() {
   const regex = /^-\s+([^:]+):\s+(https?:\/\/\S+)/gm;
   let match;
   while ((match = regex.exec(markdown)) !== null) {
-    sources.push(normalizeSource({
+    sources.push(normalizeSourceEntry({
       name: match[1].trim(),
       sourceUrl: match[2].trim(),
       rssUrl: feedFor(match[2].trim()),
       candidateOnly: false,
       requiresCrossCheck: true
-    }, true));
+    }, sectionMap, {
+      allowFeedHint: true,
+      defaultCategory: 'tech-trends',
+      index: sources.length,
+      label: `legacySources[${sources.length}]`,
+      normalizeCollectionModeHint
+    }));
   }
   if (sources.length === 0) {
     throw new Error('No sources found in docs/news-sources.md');
@@ -487,7 +444,7 @@ function normalizeCandidate(raw) {
   const rawScore = categoryBoost + cameraHits * 8 + techHits * 4 + sourceKeywordHits * 3 + priorityBoost + reliabilityBoost;
   const score = Math.min(100, rawScore);
   const candidateOnly = source.candidateOnly || CANDIDATE_ONLY_RELIABILITY.has(source.reliability);
-  const section = source.section || sectionMap[source.category] || 'AI / SW Engineering Trends';
+  const section = source.section;
   const metadata = evidenceMetadata(raw, source, title, summary, score, candidateOnly);
   const classification = classifySelection(raw, source, metadata, score, candidateOnly);
   const sourceGapRisk = metadata.source_gap_risk ||

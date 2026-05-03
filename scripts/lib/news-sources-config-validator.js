@@ -1,10 +1,13 @@
+const {
+  sectionMapValidationErrors
+} = require('./news-source-section-resolver');
+
 const REQUIRED_SOURCE_FIELDS = [
   'id',
   'name',
   'sourceUrl',
   'rssUrl',
   'category',
-  'section',
   'priority',
   'reliability',
   'enabled',
@@ -104,12 +107,12 @@ function validateSource(errors, source, index, sectionMap, seenIds) {
   }
 
   validateString(errors, `${label}.category`, source.category);
-  validateString(errors, `${label}.section`, source.section);
+  if (Object.prototype.hasOwnProperty.call(source, 'section')) {
+    errors.push(`${label}.section duplicates sectionMap-derived data and is not allowed.`);
+  }
   if (typeof source.category === 'string' && source.category.trim()) {
     if (!Object.prototype.hasOwnProperty.call(sectionMap, source.category)) {
       errors.push(`${label}.category must exist in sectionMap.`);
-    } else if (source.section !== sectionMap[source.category]) {
-      errors.push(`${label}.section must match sectionMap.${source.category}.`);
     }
   }
 
@@ -156,22 +159,11 @@ function validateNewsSourcesConfigText(text, options = {}) {
     return { ok: errors.length === 0, errors, registry };
   }
 
-  if (registry.schemaVersion !== 1) {
-    errors.push('schemaVersion must be 1.');
+  if (registry.schemaVersion !== 2) {
+    errors.push('schemaVersion must be 2.');
   }
 
-  if (!isPlainObject(registry.sectionMap) || Object.keys(registry.sectionMap || {}).length === 0) {
-    errors.push('sectionMap must be a non-empty object.');
-  } else {
-    for (const [category, section] of Object.entries(registry.sectionMap)) {
-      if (typeof category !== 'string' || !category.trim()) {
-        errors.push('sectionMap keys must be non-empty strings.');
-      }
-      if (typeof section !== 'string' || !section.trim()) {
-        errors.push(`sectionMap.${category} must be a non-empty string.`);
-      }
-    }
-  }
+  errors.push(...sectionMapValidationErrors(registry.sectionMap));
 
   if (!Array.isArray(registry.sources) || registry.sources.length === 0) {
     errors.push('sources must be a non-empty array.');
