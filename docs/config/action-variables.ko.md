@@ -21,8 +21,8 @@ workflow는 후보 수집과 Gemini 생성 전에 `npm run doctor:config`로 run
 | `GEMINI_FALLBACK_MODELS` | 선택 | `gemini-2.5-flash-lite,gemini-2.5-pro` | 기본 모델 실패 시 순서대로 시도할 fallback 모델 목록입니다. | quota, 비용, 품질 특성에 맞춰 fallback 순서를 조정할 때 변경합니다. | Pro 계열은 비용과 지연 시간이 커질 수 있고, 너무 약한 모델은 JSON 품질이나 editorial 품질을 떨어뜨릴 수 있습니다. |
 | `GEMINI_MAX_RETRIES` | 선택 | `2` | retryable API failure 또는 invalid JSON model output에 대해 모델별로 재시도할 횟수입니다. | 일시적인 API 오류가 잦아졌고 artifact를 보며 재시도가 실질적으로 복구에 도움이 된다고 판단할 때 변경합니다. | 값을 높이면 workflow 시간이 길어지고 quota/cost 사용량이 늘어납니다. 품질 실패를 숨기는 용도로 쓰면 안 됩니다. |
 | `GEMINI_RETRY_DELAYS_MS` | 선택 | `20000,10000` | Gemini가 retry hint를 주지 않을 때 사용할 fallback retry delay 목록입니다. | 일시 장애가 짧거나 길게 반복되는 패턴을 보고 간격을 조정할 때 변경합니다. | 너무 짧으면 같은 장애를 빠르게 반복하고, 너무 길면 PR 생성이 늦어집니다. |
-| `GEMINI_RETRY_MAX_DELAY_MS` | 선택 | `180000` | 서버가 긴 retry hint를 줄 때 허용하는 최대 대기 시간입니다. | quota pressure가 강하지만 기다리면 복구되는 상황이 반복될 때 변경합니다. | 값을 높이면 workflow가 오래 붙잡힙니다. 값을 낮추면 회복 가능한 API 제한도 실패로 끝날 수 있습니다. |
-| `NEWSROOM_MAX_QUALITY_RETRIES` | 선택 | `3` | quality gate를 통과하지 못한 draft에 대해 Gemini가 다시 작성할 최대 횟수입니다. | 품질 retry artifact를 검토한 결과 추가 시도가 실제로 source gap이나 composition blocker를 줄인다고 확인됐을 때 변경합니다. | 값을 높여도 source 자체가 부족하면 해결되지 않습니다. validation threshold를 낮춰 통과시키는 방식으로 대체하면 안 됩니다. |
+| `GEMINI_RETRY_MAX_DELAY_MS` | 선택 | `300000` | 서버가 긴 retry hint를 줄 때 허용하는 최대 대기 시간입니다. 300000ms는 5분입니다. | quota pressure가 강하지만 기다리면 복구되는 상황이 반복될 때 변경합니다. | 값을 높이면 workflow가 오래 붙잡힙니다. 값을 낮추면 회복 가능한 API 제한도 실패로 끝날 수 있습니다. |
+| `NEWSROOM_MAX_QUALITY_RETRIES` | 선택 | `1` | quality gate를 통과하지 못한 draft에 대해 Gemini가 다시 작성할 최대 횟수입니다. Gemini quality repair retry는 기본 1회 실행됩니다. | 품질 retry artifact를 검토한 결과 추가 시도가 실제로 source gap이나 composition blocker를 줄인다고 확인됐을 때 변경합니다. | 값을 높여도 source 자체가 부족하면 해결되지 않습니다. Quality threshold: 85는 운영 튜닝이며 validation을 우회하거나 hard blocker를 통과시키는 방식으로 쓰면 안 됩니다. |
 
 ## Tradeoff 검토 기준
 

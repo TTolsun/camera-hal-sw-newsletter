@@ -20,8 +20,8 @@ test('defaults match workflow runtime defaults', () => {
   assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite', 'gemini-2.5-pro']);
   assert.equal(config.geminiMaxRetries, 2);
   assert.deepEqual(config.geminiRetryDelaysMs, [20000, 10000]);
-  assert.equal(config.geminiRetryMaxDelayMs, 180000);
-  assert.equal(config.newsroomMaxQualityRetries, 3);
+  assert.equal(config.geminiRetryMaxDelayMs, 300000);
+  assert.equal(config.newsroomMaxQualityRetries, 1);
   assert.equal(config.geminiApiKeyConfigured, false);
 });
 

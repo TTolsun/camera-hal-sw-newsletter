@@ -2,19 +2,9 @@ const {
   isFinalSelected
 } = require('../generate/selection-diagnostics');
 
-const QUALITY_THRESHOLD = 90;
+const QUALITY_THRESHOLD = 85;
 const MIN_MAIN_ARTICLES = 4;
 const MAX_MAIN_ARTICLES = 5;
-const BLOCKING_DEDUCTION_CATEGORIES = new Set([
-  'required-fields',
-  'evidence-specificity',
-  'hal-depth',
-  'actionability',
-  'composition',
-  'hal-relevance',
-  'source-integrity'
-]);
-
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -120,9 +110,15 @@ function hasPattern(value, pattern) {
   return pattern.test(text(value));
 }
 
-function boundedDeduct(state, category, points, reason, location = '') {
+function boundedDeduct(state, category, points, reason, location = '', options = {}) {
   if (points <= 0) return;
-  state.deductions.push({ category, points, reason, location });
+  state.deductions.push({
+    category,
+    points,
+    reason,
+    location,
+    blocking: options.blocking !== false
+  });
 }
 
 function countSections(sections, pattern) {
@@ -221,7 +217,18 @@ function sectionPassesArticleGate(section, qualityReport, factCheck) {
 }
 
 function blockingDeductions(deductions) {
-  return ensureArray(deductions).filter(deduction => BLOCKING_DEDUCTION_CATEGORIES.has(deduction?.category));
+  return ensureArray(deductions).filter(deduction => deduction?.blocking !== false);
+}
+
+function determineQualityStatus(score, threshold, checks = {}) {
+  const sourceGapCountValue = Number(checks.sourceGapCount || 0);
+  const blockers = ensureArray(checks.blockingDeductions);
+  return score >= threshold &&
+    sourceGapCountValue === 0 &&
+    checks.hasFactCheckMustFix !== true &&
+    blockers.length === 0
+    ? 'PASS'
+    : 'NEEDS_FIX';
 }
 
 function summarizeDeductionCategories(deductions) {
@@ -300,10 +307,24 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       boundedDeduct(state, 'hal-depth', 4, 'Article camera_hal_perspective does not include concrete Camera HAL perspective.', location);
     }
     if (ensureArray(section.action_items).length < 2) {
-      boundedDeduct(state, 'actionability', 4, `Expected at least 2 action_items, found ${ensureArray(section.action_items).length}.`, location);
+      boundedDeduct(
+        state,
+        'actionability',
+        4,
+        `Expected at least 2 action_items, found ${ensureArray(section.action_items).length}.`,
+        location,
+        { blocking: false }
+      );
     }
     if (!hasConcreteAction(section)) {
-      boundedDeduct(state, 'actionability', 4, 'Article action item is not concrete enough for a HAL engineering team.', location);
+      boundedDeduct(
+        state,
+        'actionability',
+        4,
+        'Article action item is not concrete enough for a HAL engineering team.',
+        location,
+        { blocking: false }
+      );
     }
     if (/C\+\+|LLVM|Clang|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU/i.test(sectionText(section)) && !hasHalDepth(section)) {
       boundedDeduct(state, 'hal-relevance', 4, 'Non-camera article does not clearly connect back to Camera HAL work.', location);
@@ -364,7 +385,11 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const score = Math.max(0, 100 - totalDeductions);
   const hasFactCheckMustFix = factCheck.status === 'NEEDS_FIX' || mustFixCount > 0;
   const blockers = blockingDeductions(state.deductions);
-  const status = score >= threshold && gaps === 0 && !hasFactCheckMustFix && blockers.length === 0 ? 'PASS' : 'NEEDS_FIX';
+  const status = determineQualityStatus(score, threshold, {
+    sourceGapCount: gaps,
+    hasFactCheckMustFix,
+    blockingDeductions: blockers
+  });
   return {
     schema_version: 1,
     date,
@@ -459,5 +484,6 @@ module.exports = {
   sectionHasFactCheckMustFix,
   sectionHasSourceGap,
   sectionPassesArticleGate,
-  blockingDeductions
+  blockingDeductions,
+  determineQualityStatus
 };

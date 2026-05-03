@@ -48,7 +48,7 @@ function seedAgreeingSnapshot(snapshotDir) {
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'quality-report.json').split('/')), {
     date,
     score: 74,
-    threshold: 90,
+    threshold: 85,
     status: 'NEEDS_FIX',
     metrics: {
       article_count: 3,

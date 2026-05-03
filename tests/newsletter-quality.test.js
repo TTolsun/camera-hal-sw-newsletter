@@ -2,8 +2,10 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  QUALITY_THRESHOLD,
   buildNewsletterQualityReport,
-  buildQualityReportMarkdown
+  buildQualityReportMarkdown,
+  determineQualityStatus
 } = require('../scripts/lib/newsletter-quality');
 
 function source(url, title = 'Source') {
@@ -66,6 +68,99 @@ function reportFor(sections, reporterCandidates) {
   );
 }
 
+function validSections(count = 4) {
+  const sections = [
+    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
+    section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' }),
+    section({ headline: 'Android Camera API change C', url: 'https://example.com/c' }),
+    section({
+      headline: 'AI camera workflow D',
+      url: 'https://example.com/ai',
+      is_ai_related: true,
+      article_type: 'ai',
+      what_changed: 'AI camera workflow changed on 2026-05-01 for Camera HAL stream testing.',
+      evidence_summary: 'Version: AI workflow 1.0; release date: 2026-05-01; API/component: Android Camera frame pipeline; behavior change: camera frame inference validation.',
+      specificity_checks: ['Version: AI workflow 1.0', 'Release date: 2026-05-01']
+    })
+  ];
+  return sections.slice(0, count);
+}
+
+function reporterCandidatesFor(sections) {
+  return sections.map(item => reporterCandidate(item.sources[0].url));
+}
+
+test('quality threshold defaults to 85 and preserves numeric boundary behavior', () => {
+  assert.equal(QUALITY_THRESHOLD, 85);
+  assert.equal(determineQualityStatus(84, QUALITY_THRESHOLD, {
+    sourceGapCount: 0,
+    hasFactCheckMustFix: false,
+    blockingDeductions: []
+  }), 'NEEDS_FIX');
+  assert.equal(determineQualityStatus(85, QUALITY_THRESHOLD, {
+    sourceGapCount: 0,
+    hasFactCheckMustFix: false,
+    blockingDeductions: []
+  }), 'PASS');
+});
+
+test('quality threshold does not override hard blockers at high scores', () => {
+  assert.equal(determineQualityStatus(90, QUALITY_THRESHOLD, {
+    sourceGapCount: 0,
+    hasFactCheckMustFix: false,
+    blockingDeductions: [{ category: 'composition', points: 4 }]
+  }), 'NEEDS_FIX');
+});
+
+test('quality gate allows non-blocking actionability deductions above threshold', () => {
+  const sections = validSections().map((item, index) => index < 3
+    ? {
+        ...item,
+        action_items: [
+          'Within 2 weeks, assign a camera owner to compare Camera ITS logs before and after this change.'
+        ]
+      }
+    : item);
+  const report = reportFor(sections, reporterCandidatesFor(sections));
+
+  assert.equal(report.score, 88);
+  assert.equal(report.status, 'PASS');
+  assert.equal(report.metrics.blocking_deduction_count, 0);
+  assert.ok(report.deductions.every(item => item.category === 'actionability'));
+  assert.ok(report.deductions.every(item => item.blocking === false));
+});
+
+test('quality gate keeps underfilled drafts in NEEDS_FIX even above threshold', () => {
+  const sections = validSections(3);
+  const report = reportFor(sections, reporterCandidatesFor(sections));
+
+  assert.equal(report.score >= QUALITY_THRESHOLD, true);
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item => item.reason.includes('Expected 4-5 main articles')));
+});
+
+test('quality gate keeps fact-check must_fix in NEEDS_FIX even above threshold', () => {
+  const sections = validSections();
+  const report = buildNewsletterQualityReport(
+    '2026-05-03',
+    {
+      briefing: ['one', 'two', 'three'],
+      sections
+    },
+    { candidates: reporterCandidatesFor(sections) },
+    {
+      status: 'NEEDS_FIX',
+      must_fix: ['CameraX release A has an unsupported source claim.'],
+      source_gaps: [],
+      source_gap_count: 0
+    }
+  );
+
+  assert.equal(report.score >= QUALITY_THRESHOLD, true);
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.equal(report.metrics.must_fix_count, 1);
+});
+
 test('quality gate fails duplicate source URLs across main sections', () => {
   const sections = [
     section({ headline: 'CameraX release A', url: 'https://example.com/same' }),
@@ -127,9 +222,9 @@ test('quality report markdown separates score threshold max score and result', (
     date: '2026-05-03',
     score: 70,
     max_score: 100,
-    threshold: 90,
+    threshold: 85,
     status: 'NEEDS_FIX',
-    summary: '품질 점수 70, 기준 90, 만점 100.',
+    summary: '품질 점수 70, 기준 85, 만점 100.',
     deductions: [
       { category: 'composition', points: 4, reason: 'Expected 4-5 main articles, found 3.' }
     ],
@@ -150,9 +245,9 @@ test('quality report markdown separates score threshold max score and result', (
   });
 
   assert.match(markdown, /Quality score: 70/);
-  assert.match(markdown, /Quality threshold: 90/);
+  assert.match(markdown, /Quality threshold: 85/);
   assert.match(markdown, /Max score: 100/);
   assert.match(markdown, /Result: NEEDS_FIX/);
   assert.match(markdown, /Underfilled\/composition failure: only 3 main articles/);
-  assert.doesNotMatch(markdown, /70\/90/);
+  assert.doesNotMatch(markdown, /70\/85/);
 });

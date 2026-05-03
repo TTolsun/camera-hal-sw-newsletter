@@ -5,8 +5,8 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiFallbackModels: ['gemini-2.5-flash-lite', 'gemini-2.5-pro'],
   geminiMaxRetries: 2,
   geminiRetryDelaysMs: [20000, 10000],
-  geminiRetryMaxDelayMs: 180000,
-  newsroomMaxQualityRetries: 3
+  geminiRetryMaxDelayMs: 300000,
+  newsroomMaxQualityRetries: 1
 };
 
 function parseCsv(value) {

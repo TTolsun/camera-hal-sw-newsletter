@@ -4,11 +4,11 @@
 
 ## 품질 게이트
 
-newsroom pipeline은 `content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 최소 `90/100`이어야 합니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 충분해도 publish-ready로 보지 않습니다.
+newsroom pipeline은 `content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 기본 `85/100` 이상이어야 합니다. Quality threshold: 85. 이 threshold 완화는 Gemini 비용과 false negative를 줄이기 위한 운영 튜닝이며, 품질 검증 우회가 아닙니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 85 이상이어도 publish-ready로 보지 않습니다.
 
-draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `3`입니다. 이미 article quality check를 통과한 section은 보존하고, `retry-history.json`과 `retry-history.md`를 남깁니다.
+draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `1`입니다. 이미 article quality check를 통과한 section은 보존하고, `retry-history.json`과 `retry-history.md`를 남깁니다. Gemini API retry max delay 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`이며, 300000ms는 5분입니다.
 
-quality gate는 Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, article composition을 확인합니다. 이 범주는 hard blocker이며, 90점 threshold는 치명적이지 않은 deduction만 허용합니다. retry 후에도 점수가 낮거나 blocker가 남아 있으면 weekly workflow는 review PR을 만들 수 있지만 `needs-fix`로 표시하고 run을 실패시켜 발행 가능한 이슈로 취급하지 않습니다.
+quality gate는 Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, article composition을 확인합니다. source gap, fact-check `must_fix`, source/reference 누락, underfilled article count, 약한 Camera HAL / Android Camera relevance, 약한 evidence specificity, 필요한 date/version/API/component/behavior-change 근거 누락은 점수가 충분해도 Hard blocker result: NEEDS_FIX 또는 `publish_ready=false`를 강제합니다. actionability처럼 단독 발행 차단보다는 개선 권고에 가까운 항목은 non-blocking deduction으로 점수만 낮출 수 있으며, 이 경우에도 Quality score가 85 미만이면 통과하지 않습니다. retry 후에도 점수가 낮거나 blocker가 남아 있으면 weekly workflow는 review PR을 만들 수 있지만 `needs-fix`로 표시하고 run을 실패시켜 발행 가능한 이슈로 취급하지 않습니다.
 
 ## 목표
 

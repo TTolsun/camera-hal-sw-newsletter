@@ -27,8 +27,8 @@ test('generation status output includes multiline selection diagnostics', () => 
     status: 'QUALITY_NEEDS_FIX',
     must_fix_count: 0,
     quality_status: 'NEEDS_FIX',
-    quality_score: 70,
-    quality_threshold: 90,
+    quality_score: 90,
+    quality_threshold: 85,
     publish_ready: false,
     underfilled: true,
     selected_article_count: 3,
@@ -56,8 +56,8 @@ test('newsroom PR body separates quality score threshold and result', () => {
       fact_check_status: 'PASS',
       must_fix_count: 0,
       quality_status: 'NEEDS_FIX',
-      quality_score: 70,
-      quality_threshold: 90,
+      quality_score: 90,
+      quality_threshold: 85,
       publish_ready: false,
       underfilled: true,
       selected_article_count: 3,
@@ -70,9 +70,9 @@ test('newsroom PR body separates quality score threshold and result', () => {
     }
   });
 
-  assert.match(body, /Quality score: 70/);
-  assert.match(body, /Quality threshold: 90/);
+  assert.match(body, /Quality score: 90/);
+  assert.match(body, /Quality threshold: 85/);
   assert.match(body, /Result: NEEDS_FIX/);
   assert.match(body, /Only 3 publishable articles were selected; expected at least 4\./);
-  assert.doesNotMatch(body, /70\/90/);
+  assert.doesNotMatch(body, /90\/85/);
 });
