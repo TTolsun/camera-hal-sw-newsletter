@@ -2,16 +2,16 @@
 
 ## 생성 파일 목록
 
-- collected-news/2026-05-02/candidates.json
-- newsroom/2026-05-02/reporter-candidates.json
-- newsroom/2026-05-02/editor-draft.json
-- newsroom/2026-05-02/editor-draft.md
-- newsroom/2026-05-02/fact-check-report.json
-- newsroom/2026-05-02/fact-check-report.md
-- newsroom/2026-05-02/quality-report.json
-- newsroom/2026-05-02/quality-report.md
-- newsroom/2026-05-02/editor-in-chief-brief.md
-- newsroom/2026-05-02/release-qa-report.md
+- content/collected-news/2026-05-02/candidates.json
+- content/newsroom/2026-05-02/reporter-candidates.json
+- content/newsroom/2026-05-02/editor-draft.json
+- content/newsroom/2026-05-02/editor-draft.md
+- content/newsroom/2026-05-02/fact-check-report.json
+- content/newsroom/2026-05-02/fact-check-report.md
+- content/newsroom/2026-05-02/quality-report.json
+- content/newsroom/2026-05-02/quality-report.md
+- content/newsroom/2026-05-02/editor-in-chief-brief.md
+- content/newsroom/2026-05-02/release-qa-report.md
 - newsletters/2026-05-02/newsletter.md
 - newsletters/2026-05-02/index.html
 - data/newsletters.json

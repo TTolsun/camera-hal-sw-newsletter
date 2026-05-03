@@ -61,7 +61,7 @@ registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd 
 - `AI / SW Engineering Trends`
 - `Korean Tech Trends`
 
-collector는 source name, source URL, category, 파생된 section, priority, reliability, usage hint, candidate-only 상태를 `collected-news/YYYY-MM-DD/candidates.json`에 보존합니다. Gemini newsroom 단계는 source link를 변경하지 않고, media/community lead를 검증할 때 official 또는 project-official source를 우선합니다.
+collector는 source name, source URL, category, 파생된 section, priority, reliability, usage hint, candidate-only 상태를 `content/collected-news/YYYY-MM-DD/candidates.json`에 보존합니다. Gemini newsroom 단계는 source link를 변경하지 않고, media/community lead를 검증할 때 official 또는 project-official source를 우선합니다.
 
 ## 기사 대표 이미지
 

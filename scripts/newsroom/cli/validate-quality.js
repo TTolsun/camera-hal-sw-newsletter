@@ -6,6 +6,11 @@ const {
   buildNewsletterQualityReport
 } = require('../validate/newsletter-quality');
 const { readJson } = require('../common/common');
+const {
+  changedArtifactDate,
+  newsroomDir,
+  newsroomRelPath
+} = require('../common/artifact-paths');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -83,18 +88,18 @@ function changedFilesFromGit() {
 function changedNewsletterDates() {
   const dates = new Set();
   for (const file of changedFilesFromGit()) {
-    const normalized = file.replace(/\\/g, '/');
-    const match = normalized.match(/^(?:newsletters|newsroom|collected-news)\/(\d{4}-\d{2}-\d{2})\//);
-    if (match) dates.add(match[1]);
+    const date = changedArtifactDate(file);
+    if (date) dates.add(date);
   }
   return dates;
 }
 
 function validateQualityReport(item, requireReport) {
-  const reportPath = path.join(root, 'newsroom', item.date, 'quality-report.json');
+  const dateNewsroomDir = newsroomDir(root, item.date);
+  const reportPath = path.join(dateNewsroomDir, 'quality-report.json');
   if (!fs.existsSync(reportPath)) {
     if (requireReport) {
-      fail(`Missing quality report for generated newsletter ${item.date}: newsroom/${item.date}/quality-report.json`);
+      fail(`Missing quality report for generated newsletter ${item.date}: ${newsroomRelPath(item.date, 'quality-report.json')}`);
     }
     return;
   }
@@ -121,9 +126,9 @@ function validateQualityReport(item, requireReport) {
     fail(`Newsletter ${item.date} quality report must include deductions array.`);
   }
 
-  const editor = readJsonIfExists(path.join(root, 'newsroom', item.date, 'editor-draft.json'));
-  const factCheck = readJsonIfExists(path.join(root, 'newsroom', item.date, 'fact-check-report.json'));
-  const reporter = readJsonIfExists(path.join(root, 'newsroom', item.date, 'reporter-candidates.json')) || {};
+  const editor = readJsonIfExists(path.join(dateNewsroomDir, 'editor-draft.json'));
+  const factCheck = readJsonIfExists(path.join(dateNewsroomDir, 'fact-check-report.json'));
+  const reporter = readJsonIfExists(path.join(dateNewsroomDir, 'reporter-candidates.json')) || {};
   if (editor && factCheck) {
     const recomputed = buildNewsletterQualityReport(item.date, editor, reporter, factCheck, { threshold });
     if (recomputed.score !== score || recomputed.status !== report.status) {

@@ -16,6 +16,7 @@ const markdownRoots = [
 
 const generatedPathParts = new Set([
   'collected-news',
+  'content',
   'newsletters',
   'newsroom',
   'node_modules'

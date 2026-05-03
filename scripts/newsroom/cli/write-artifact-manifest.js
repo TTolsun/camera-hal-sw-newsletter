@@ -2,6 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
+const {
+  collectedCandidatesRelPath,
+  newsroomRelPath
+} = require('../common/artifact-paths');
 
 const SCHEMA_VERSION = 1;
 
@@ -18,13 +22,13 @@ function criticalFiles(date) {
   return [
     '.tmp/newsletter-date.txt',
     '.tmp/newsletter-generation-status.json',
-    `collected-news/${date}/candidates.json`,
-    `newsroom/${date}/shortlisted-candidates.json`,
-    `newsroom/${date}/reporter-candidates.json`,
-    `newsroom/${date}/quality-report.json`,
-    `newsroom/${date}/quality-report.md`,
-    `newsroom/${date}/retry-history.json`,
-    `newsroom/${date}/retry-history.md`,
+    collectedCandidatesRelPath(date),
+    newsroomRelPath(date, 'shortlisted-candidates.json'),
+    newsroomRelPath(date, 'reporter-candidates.json'),
+    newsroomRelPath(date, 'quality-report.json'),
+    newsroomRelPath(date, 'quality-report.md'),
+    newsroomRelPath(date, 'retry-history.json'),
+    newsroomRelPath(date, 'retry-history.md'),
     `newsletters/${date}/newsletter.md`,
     `newsletters/${date}/index.html`
   ];
@@ -148,7 +152,7 @@ function buildManifest(snapshotDir, date) {
   const warnings = [];
   const resolvedSnapshotDir = path.resolve(snapshotDir);
   const statusRelPath = '.tmp/newsletter-generation-status.json';
-  const qualityRelPath = `newsroom/${date}/quality-report.json`;
+  const qualityRelPath = newsroomRelPath(date, 'quality-report.json');
   const status = readJsonIfPresent(resolvedSnapshotDir, statusRelPath, warnings);
   const quality = readJsonIfPresent(resolvedSnapshotDir, qualityRelPath, warnings);
   const dateText = readTextIfPresent(resolvedSnapshotDir, '.tmp/newsletter-date.txt');

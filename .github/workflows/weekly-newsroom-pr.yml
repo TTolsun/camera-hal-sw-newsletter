@@ -76,7 +76,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: cache/news-summary
-          key: news-summary-${{ runner.os }}-${{ hashFiles('collected-news/**/candidates.json') }}
+          key: news-summary-${{ runner.os }}-${{ hashFiles('content/collected-news/**/candidates.json') }}
           restore-keys: |
             news-summary-${{ runner.os }}-
 
@@ -186,8 +186,8 @@ jobs:
           copy_tree_if_present ".tmp/gemini-raw"
           copy_tree_if_present "cache/news-summary"
           if [ "$HAS_GENERATED_DATE" = "1" ]; then
-            copy_if_present "collected-news/${DATE}/candidates.json"
-            copy_tree_if_present "newsroom/${DATE}"
+            copy_if_present "content/collected-news/${DATE}/candidates.json"
+            copy_tree_if_present "content/newsroom/${DATE}"
             copy_if_present "newsletters/${DATE}/newsletter.md"
             copy_if_present "newsletters/${DATE}/index.html"
             copy_if_present "data/newsletters.json"
@@ -204,7 +204,7 @@ jobs:
           DATE="${{ steps.meta.outputs.date }}"
           {
             echo "body<<EOF"
-            cat "newsroom/${DATE}/editor-in-chief-brief.md"
+            cat "content/newsroom/${DATE}/editor-in-chief-brief.md"
             echo ""
             echo "## Generation Status"
             echo ""
@@ -233,21 +233,21 @@ jobs:
             echo "- Selection warnings: ${{ steps.generation-status.outputs.selection_warnings }}"
             echo "- Top final exclusion reasons: ${{ steps.generation-status.outputs.final_exclusion_reason_summary }}"
             if [ "${{ steps.generation-status.outputs.status }}" != "PASS" ] || [ "${{ steps.validate.outcome }}" = "failure" ]; then
-              echo "- This PR is generated for editor review only. Resolve \`newsroom/${DATE}/fact-check-report.md\`, \`newsroom/${DATE}/quality-report.md\`, and validation failures before publishing."
+              echo "- This PR is generated for editor review only. Resolve \`content/newsroom/${DATE}/fact-check-report.md\`, \`content/newsroom/${DATE}/quality-report.md\`, and validation failures before publishing."
             fi
             echo ""
             echo "## Generated Artifacts"
             echo ""
-            echo "- \`collected-news/${DATE}/candidates.json\`"
-            echo "- \`newsroom/${DATE}/shortlisted-candidates.json\`"
-            echo "- \`newsroom/${DATE}/reporter-candidates.json\`"
-            echo "- \`newsroom/${DATE}/editor-draft.json\`"
-            echo "- \`newsroom/${DATE}/fact-check-report.json\`"
-            echo "- \`newsroom/${DATE}/quality-report.json\`"
-            echo "- \`newsroom/${DATE}/quality-report.md\`"
-            echo "- \`newsroom/${DATE}/retry-history.json\`"
-            echo "- \`newsroom/${DATE}/retry-history.md\`"
-            echo "- \`newsroom/${DATE}/recovery-prompt.md\` (only when recovery is needed)"
+            echo "- \`content/collected-news/${DATE}/candidates.json\`"
+            echo "- \`content/newsroom/${DATE}/shortlisted-candidates.json\`"
+            echo "- \`content/newsroom/${DATE}/reporter-candidates.json\`"
+            echo "- \`content/newsroom/${DATE}/editor-draft.json\`"
+            echo "- \`content/newsroom/${DATE}/fact-check-report.json\`"
+            echo "- \`content/newsroom/${DATE}/quality-report.json\`"
+            echo "- \`content/newsroom/${DATE}/quality-report.md\`"
+            echo "- \`content/newsroom/${DATE}/retry-history.json\`"
+            echo "- \`content/newsroom/${DATE}/retry-history.md\`"
+            echo "- \`content/newsroom/${DATE}/recovery-prompt.md\` (only when recovery is needed)"
             echo "- \`newsletters/${DATE}/newsletter.md\`"
             echo "- \`newsletters/${DATE}/index.html\`"
             echo "- \`data/newsletters.json\`"

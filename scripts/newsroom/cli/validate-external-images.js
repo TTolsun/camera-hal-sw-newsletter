@@ -11,6 +11,10 @@ const {
   readJson,
   repoPath
 } = require('../common/common');
+const {
+  newsroomDir,
+  newsroomRelPath
+} = require('../common/artifact-paths');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -136,12 +140,12 @@ function formatResult(result) {
 }
 
 function readEditor(date) {
-  const editorPath = path.join(root, 'newsroom', date, 'editor-draft.json');
+  const editorPath = path.join(newsroomDir(root, date), 'editor-draft.json');
   if (!fs.existsSync(editorPath)) return null;
   try {
     return readJson(editorPath);
   } catch (error) {
-    fail(`Could not parse newsroom/${date}/editor-draft.json: ${error.message}`);
+    fail(`Could not parse ${newsroomRelPath(date, 'editor-draft.json')}: ${error.message}`);
     return null;
   }
 }

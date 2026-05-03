@@ -12,7 +12,7 @@ This file is generated from the structured newsletter source registry. Gemini us
 ```text
 Newsletter date: 2026-05-02
 Audience: Camera HAL / Android Camera / C++ engineer
-Inputs: collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/news-sources.md
+Inputs: content/collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/news-sources.md
 Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, newsletter.md, index.html, editor-in-chief-brief.md, release-qa-report.md
 ```
 

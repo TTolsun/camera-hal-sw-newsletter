@@ -12,10 +12,10 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 
 ## 품질 게이트
 
-생성된 이슈는 `newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 포함합니다.
+생성된 이슈는 `content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 포함합니다.
 발행 준비 상태가 되려면 deterministic quality score가 최소 `90/100`이어야 합니다. 다만 source gap, fact-check `must_fix`, 발행 품질에 치명적인 deduction이 있으면 점수가 90 이상이어도 `NEEDS_FIX` 상태로 유지됩니다.
 
-게이트를 통과하지 못하면 Gemini는 기본 `3`회, `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도하고 `newsroom/YYYY-MM-DD/retry-history.json` 및 `retry-history.md`를 남깁니다.
+게이트를 통과하지 못하면 Gemini는 기본 `3`회, `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도하고 `content/newsroom/YYYY-MM-DD/retry-history.json` 및 `retry-history.md`를 남깁니다.
 
 품질 게이트는 Camera HAL 관련성, 근거 구체성, HAL engineering depth, 실행 가능성, source integrity, article composition을 확인합니다. 이 항목들은 hard blocker입니다. 기사에는 가능한 경우 version/release, release date, API/component, behavior change, 명시적 source gap 같은 구체 evidence가 있어야 합니다. "AOSP 업데이트를 모니터링한다" 같은 일반 문장은 정확한 source, version, API, date, behavior를 함께 적지 않으면 충분하지 않습니다.
 
@@ -43,9 +43,9 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 │   ├── newsletter-template.md
 │   ├── newsroom-workflow.md
 │   └── golden-examples/
-├── collected-news/
+├── content/collected-news/
 │   └── YYYY-MM-DD/candidates.json
-├── newsroom/
+├── content/newsroom/
 │   └── YYYY-MM-DD/
 │       ├── news-candidates.md
 │       ├── reporter-candidates.json
@@ -90,8 +90,8 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 - 매일 09:00 KST에 실행됩니다. UTC cron은 `0 0 * * *`입니다.
 - `data/news-sources.json`의 enabled source를 우선 사용하고, registry가 없을 때만 `docs/news-sources.md`를 fallback으로 사용합니다.
 - `GEMINI_API_KEY`로 Gemini newsroom pipeline을 실행합니다.
-- Gemini는 `collected-news/YYYY-MM-DD/candidates.json`, source registry, editorial docs만 입력으로 사용하며 웹을 직접 browse하지 않습니다.
-- `newsroom/YYYY-MM-DD/`에 candidates, reporter/editor/fact-check 결과, editor-in-chief brief, QA report를 저장합니다.
+- Gemini는 `content/collected-news/YYYY-MM-DD/candidates.json`, source registry, editorial docs만 입력으로 사용하며 웹을 직접 browse하지 않습니다.
+- `content/newsroom/YYYY-MM-DD/`에 candidates, reporter/editor/fact-check 결과, editor-in-chief brief, QA report를 저장합니다.
 - `newsletters/YYYY-MM-DD/newsletter.md`, `newsletters/YYYY-MM-DD/index.html`, `data/newsletters.json`을 생성 또는 갱신합니다.
 - `newsletter/YYYY-MM-DD` 브랜치로 편집자 검토용 PR을 만듭니다.
 
@@ -99,7 +99,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 
 - PR, `main` push, manual run에서 `npm.cmd run validate`를 실행합니다.
 - `data/newsletters.json`, published files, TODO leak, duplicate date, required sections, source/reference, HTML anchor, article image/fallback contract, 유지 문서 한글화 규칙을 검증합니다.
-- 변경된 `newsletters/`, `newsroom/`, `collected-news/` 날짜의 quality report는 hard gate로 검사합니다. 변경되지 않은 과거 review artifact는 warning-only로 둡니다.
+- 변경된 `newsletters/`, `content/newsroom/`, `content/collected-news/` 날짜의 quality report는 hard gate로 검사합니다. 변경되지 않은 과거 review artifact는 warning-only로 둡니다.
 
 ## 운영 규칙
 
@@ -214,7 +214,7 @@ GitHub repository의 `Settings -> Secrets and variables -> Actions`에서 설정
 
 ## PR 검토
 
-PR 본문과 `newsroom/YYYY-MM-DD/editor-in-chief-brief.md`를 먼저 확인합니다. 편집자는 다음 항목을 검토한 뒤 승인하거나 수정 요청합니다.
+PR 본문과 `content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`를 먼저 확인합니다. 편집자는 다음 항목을 검토한 뒤 승인하거나 수정 요청합니다.
 
 - 핵심 메시지와 main article 구성
 - Camera HAL 업무와의 연결성
