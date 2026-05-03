@@ -7,6 +7,12 @@ const {
   readTextIfExists,
   writeJson
 } = require('../common/common');
+const {
+  collectedCandidatesPath,
+  collectedCandidatesRelPath,
+  newsroomDir: artifactNewsroomDir,
+  newsroomRelPath
+} = require('../common/artifact-paths');
 const { readRuntimeConfig } = require('../common/runtime-config');
 const { callGeminiJson, getGeminiDiagnostics, getGeminiModelUsage } = require('../generate/gemini-client');
 const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } = require('../render/newsletter-schema');
@@ -1053,12 +1059,12 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     '',
     '## Artifact 체크리스트',
     '',
-    `- newsroom/${date}/shortlisted-candidates.json`,
-    `- newsroom/${date}/reporter-candidates.json`,
-    `- newsroom/${date}/editor-draft.json`,
-    `- newsroom/${date}/fact-check-report.json`,
-    `- newsroom/${date}/quality-report.json`,
-    `- newsroom/${date}/retry-history.json`,
+    `- ${newsroomRelPath(date, 'shortlisted-candidates.json')}`,
+    `- ${newsroomRelPath(date, 'reporter-candidates.json')}`,
+    `- ${newsroomRelPath(date, 'editor-draft.json')}`,
+    `- ${newsroomRelPath(date, 'fact-check-report.json')}`,
+    `- ${newsroomRelPath(date, 'quality-report.json')}`,
+    `- ${newsroomRelPath(date, 'retry-history.json')}`,
     '- .tmp/newsletter-generation-status.json',
     '- .tmp/gemini-raw/**'
   ];
@@ -1073,12 +1079,12 @@ async function main() {
   writeNewsletterDate(date);
   writeGenerationStatus({ date, status: 'STARTED', must_fix_count: 0 });
 
-  const candidatePath = path.join(root, 'collected-news', date, 'candidates.json');
+  const candidatePath = collectedCandidatesPath(root, date);
   const sourcesPath = path.join(root, 'docs', 'news-sources.md');
   const editorialPolicyPath = path.join(root, 'docs', 'editorial-policy.md');
   const newsletterTemplatePath = path.join(root, 'docs', 'newsletter-template.md');
   const goldenExamplePath = path.join(root, 'docs', 'golden-examples', 'manual-quality-newsletter.md');
-  const newsroomDir = path.join(root, 'newsroom', date);
+  const newsroomDir = artifactNewsroomDir(root, date);
   const newsletterDir = path.join(root, 'newsletters', date);
 
   if (!fs.existsSync(candidatePath)) {
@@ -1515,20 +1521,20 @@ async function main() {
   updateNewsletterData(date, editor);
 
   const files = [
-    `collected-news/${date}/candidates.json`,
-    `newsroom/${date}/shortlisted-candidates.json`,
-    `newsroom/${date}/reporter-candidates.json`,
-    `newsroom/${date}/editor-draft.json`,
-    `newsroom/${date}/editor-draft.md`,
-    `newsroom/${date}/fact-check-report.json`,
-    `newsroom/${date}/fact-check-report.md`,
-    `newsroom/${date}/quality-report.json`,
-    `newsroom/${date}/quality-report.md`,
-    `newsroom/${date}/retry-history.json`,
-    `newsroom/${date}/retry-history.md`,
-    `newsroom/${date}/recovery-prompt.md`,
-    `newsroom/${date}/editor-in-chief-brief.md`,
-    `newsroom/${date}/release-qa-report.md`,
+    collectedCandidatesRelPath(date),
+    newsroomRelPath(date, 'shortlisted-candidates.json'),
+    newsroomRelPath(date, 'reporter-candidates.json'),
+    newsroomRelPath(date, 'editor-draft.json'),
+    newsroomRelPath(date, 'editor-draft.md'),
+    newsroomRelPath(date, 'fact-check-report.json'),
+    newsroomRelPath(date, 'fact-check-report.md'),
+    newsroomRelPath(date, 'quality-report.json'),
+    newsroomRelPath(date, 'quality-report.md'),
+    newsroomRelPath(date, 'retry-history.json'),
+    newsroomRelPath(date, 'retry-history.md'),
+    newsroomRelPath(date, 'recovery-prompt.md'),
+    newsroomRelPath(date, 'editor-in-chief-brief.md'),
+    newsroomRelPath(date, 'release-qa-report.md'),
     `newsletters/${date}/newsletter.md`,
     `newsletters/${date}/index.html`,
     'data/newsletters.json'
@@ -1614,7 +1620,7 @@ async function main() {
 
 function writeTerminalFailureStatus(error) {
   const date = generationRunState.date || runtimeConfig.newsletterDate || kstDate();
-  const newsroomDir = path.join(root, 'newsroom', date);
+  const newsroomDir = artifactNewsroomDir(root, date);
   try {
     writeRecoveryPrompt(newsroomDir, {
       date,

@@ -5,6 +5,10 @@ const {
   kstDate,
   readJson
 } = require('../common/common');
+const {
+  collectedNewsDir,
+  newsroomDir
+} = require('../common/artifact-paths');
 const { readRuntimeConfig } = require('../common/runtime-config');
 const {
   extractImageCandidatesFromHtml,
@@ -669,7 +673,7 @@ function markdown(date, candidates, failures, lookbackDays) {
   lines.push('```text');
   lines.push(`뉴스레터 날짜: ${date}`);
   lines.push(`대상 독자: ${AUDIENCE}`);
-  lines.push('Inputs: collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/news-sources.md');
+  lines.push('Inputs: content/collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/news-sources.md');
   lines.push('Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, newsletter.md, index.html, editor-in-chief-brief.md, release-qa-report.md');
   lines.push('```');
   lines.push('');
@@ -788,10 +792,10 @@ async function main() {
     throw new Error('No news candidates collected. Check data/news-sources.json, docs/news-sources.md, or network access.');
   }
 
-  const outDir = path.join(root, 'collected-news', date);
-  const newsroomDir = path.join(root, 'newsroom', date);
+  const outDir = collectedNewsDir(root, date);
+  const dateNewsroomDir = newsroomDir(root, date);
   fs.mkdirSync(outDir, { recursive: true });
-  fs.mkdirSync(newsroomDir, { recursive: true });
+  fs.mkdirSync(dateNewsroomDir, { recursive: true });
   fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
 
   fs.writeFileSync(path.join(outDir, 'candidates.json'), JSON.stringify({
@@ -806,7 +810,7 @@ async function main() {
     candidates,
     failures
   }, null, 2) + '\n', 'utf8');
-  fs.writeFileSync(path.join(newsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
+  fs.writeFileSync(path.join(dateNewsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
   fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
 
   console.log(`Collected ${candidates.length} candidates for ${date}`);

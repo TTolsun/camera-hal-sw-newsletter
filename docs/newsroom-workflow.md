@@ -4,7 +4,7 @@
 
 ## 품질 게이트
 
-newsroom pipeline은 `newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 최소 `90/100`이어야 합니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 충분해도 publish-ready로 보지 않습니다.
+newsroom pipeline은 `content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 최소 `90/100`이어야 합니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 충분해도 publish-ready로 보지 않습니다.
 
 draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `3`입니다. 이미 article quality check를 통과한 section은 보존하고, `retry-history.json`과 `retry-history.md`를 남깁니다.
 
@@ -30,18 +30,18 @@ source registry
 
 - `data/news-sources.json`의 enabled source를 읽습니다.
 - JSON registry가 없을 때만 `docs/news-sources.md`의 `- Name: URL` 형식을 fallback으로 사용합니다.
-- RSS 또는 HTML page에서 후보를 수집하고 `collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
+- RSS 또는 HTML page에서 후보를 수집하고 `content/collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
 - media/community/candidate-only source는 최종 기사로 올리기 전에 공식 출처 교차 확인이 필요합니다.
 
 ## Role 2. Gemini Reporter
 
-Gemini 실행 전에 `scripts/newsroom/generate/newsroom-selection.js`가 `collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. 기존 `scripts/lib/newsroom-selection.js` 경로는 호환 shim으로 유지합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다.
+Gemini 실행 전에 `scripts/newsroom/generate/newsroom-selection.js`가 `content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. 기존 `scripts/lib/newsroom-selection.js` 경로는 호환 shim으로 유지합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다.
 
-shortlist는 최대 12개 후보로 제한됩니다. local selector는 editor prompt가 실행되기 전에 4-5개의 final main article input을 선택합니다. Camera HAL, Android Camera, AOSP, CameraX 항목을 우선하고, AI 관련 기사 최소 1개를 요구합니다. C++ 또는 developer-productivity material은 강한 camera/platform 항목이 4개보다 적을 때 보완용으로 사용합니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
+shortlist는 최대 12개 후보로 제한됩니다. local selector는 editor prompt가 실행되기 전에 4-5개의 final main article input을 선택합니다. Camera HAL, Android Camera, AOSP, CameraX 항목을 우선하고, AI 관련 기사 최소 1개를 요구합니다. C++ 또는 developer-productivity material은 강한 camera/platform 항목이 4개보다 적을 때 보완용으로 사용합니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
 
 - 수집 후보 중 Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI workflow와 관련된 항목을 점수화합니다.
 - source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
-- 출력: `newsroom/YYYY-MM-DD/reporter-candidates.json`.
+- 출력: `content/newsroom/YYYY-MM-DD/reporter-candidates.json`.
 
 Gemini reporter는 전체 collected candidate가 아니라 deterministic shortlist만 받습니다. 요약, tag, evidence field를 보강하되 local `selected=true` final article decision을 보존해야 합니다.
 
@@ -50,7 +50,7 @@ Gemini reporter는 전체 collected candidate가 아니라 deterministic shortli
 - 한국어 newsletter 초안을 작성합니다.
 - 각 주요 기사는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, Sources를 포함합니다.
 - 이미지 URL을 새로 만들지 않고 collector가 제공한 `imageCandidates`에서만 선택합니다.
-- 출력: `newsroom/YYYY-MM-DD/editor-draft.json`, `newsroom/YYYY-MM-DD/editor-draft.md`.
+- 출력: `content/newsroom/YYYY-MM-DD/editor-draft.json`, `content/newsroom/YYYY-MM-DD/editor-draft.md`.
 
 editor는 deterministic final article input과 locked/retry context만 받습니다. retry가 필요하면 통과한 section은 lock하고, repair prompt는 실패한 section만 재생성하도록 요청합니다. retry artifact는 `locked_sections`, `failed_sections`, `regenerated_sections`, rejected retry output을 기록합니다.
 
@@ -58,14 +58,14 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 
 - 출처 누락, 과장 표현, 사실과 해석 혼동, Action Item 누락, Camera HAL 관점 약화를 확인합니다.
 - `NEEDS_FIX`와 `must_fix`가 있으면 workflow의 최종 gate가 실패해야 합니다.
-- 출력: `newsroom/YYYY-MM-DD/fact-check-report.json`, `newsroom/YYYY-MM-DD/fact-check-report.md`.
+- 출력: `content/newsroom/YYYY-MM-DD/fact-check-report.json`, `content/newsroom/YYYY-MM-DD/fact-check-report.md`.
 
 ## Role 5. Artifact Writer
 
 - `newsletters/YYYY-MM-DD/newsletter.md`를 생성합니다.
 - `newsletters/YYYY-MM-DD/index.html`을 생성합니다.
 - `data/newsletters.json`을 갱신합니다.
-- `newsroom/YYYY-MM-DD/editor-in-chief-brief.md`와 `release-qa-report.md`를 생성합니다.
+- `content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`와 `release-qa-report.md`를 생성합니다.
 
 ## Role 6. Validator
 
@@ -85,7 +85,7 @@ cache hit은 normalized URL과 content fingerprint가 일치할 때만 사용합
 
 ## Recovery Artifacts
 
-`newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, Gemini JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
+`content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, Gemini JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
 
 ## GitHub Actions 운영
 

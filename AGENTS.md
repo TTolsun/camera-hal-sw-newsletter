@@ -8,8 +8,8 @@
 - `css/`는 공통 사이트 스타일입니다. UI 작업이 아니라면 레이아웃 변경을 최소화합니다.
 - `assets/images/fallback/`은 기사 이미지 검증에서 사용하는 로컬 fallback 이미지를 보관합니다.
 - `data/news-sources.json`은 기계가 읽는 출처 registry이고, `docs/news-sources.md`는 사람이 검토하는 editorial view입니다.
-- `collected-news/YYYY-MM-DD/`는 원본 후보 수집 결과를 저장합니다.
-- `newsroom/YYYY-MM-DD/`는 reporter 후보, editor draft, fact-check, brief, QA report 같은 검토 산출물을 저장합니다.
+- `content/collected-news/YYYY-MM-DD/`는 원본 후보 수집 결과를 저장합니다.
+- `content/newsroom/YYYY-MM-DD/`는 reporter 후보, editor draft, fact-check, brief, QA report 같은 검토 산출물을 저장합니다.
 - `newsletters/YYYY-MM-DD/`는 발행 이슈 산출물인 `newsletter.md`와 `index.html`을 저장합니다.
 - `scripts/`는 기존 command entry wrapper와 `scripts/lib` 호환 shim을 포함합니다. 실제 수집, Gemini 생성, 렌더링, 이미지 해석, 검증 로직은 `scripts/newsroom/{cli,collect,generate,render,validate,common}/`에 책임별로 둡니다.
 - `.github/workflows/`는 newsroom PR workflow와 검증 workflow를 포함합니다.
@@ -52,7 +52,7 @@ JavaScript는 CommonJS `require`, 2칸 들여쓰기, 세미콜론, `path.join` �
 
 JSON은 값만 한글화합니다. `id`, `category`, `priority`, `reliability`, `collectionModeHint`, `schemaVersion` 같은 내부 계약 값은 번역하지 않습니다. `usageHint`, `title`, `summary`, 사람이 읽는 설명 문구는 한국어를 우선합니다.
 
-과거 생성 산출물인 `newsroom/**`, `collected-news/**`, 기존 `newsletters/**` 파일은 별도 작업 요청이 없으면 대량 번역하지 않습니다. 앞으로 생성되는 Markdown 라벨과 템플릿은 한국어를 유지합니다.
+과거 생성 산출물인 `content/newsroom/**`, `content/collected-news/**`, 기존 `newsletters/**` 파일은 별도 작업 요청이 없으면 대량 번역하지 않습니다. 앞으로 생성되는 Markdown 라벨과 템플릿은 한국어를 유지합니다.
 
 ## 테스트 지침
 
@@ -62,7 +62,7 @@ JSON은 값만 한글화합니다. `id`, `category`, `priority`, `reliability`, 
 
 최근 이력은 `Generate Camera HAL newsletter 2026-05-02`, `Add newsletter quality gate`, `Align newsletter operations docs and validation`처럼 간결한 명령형 제목을 사용합니다. commit은 좁게 유지하고 관련 파일만 stage합니다.
 
-뉴스레터 발행은 PR 기반입니다. PR에는 필요한 경우 생성된 `newsletters/`, `newsroom/`, `data/newsletters.json` 변경, 검증 상태, fact-check 또는 quality report의 `needs-fix` 맥락을 포함합니다.
+뉴스레터 발행은 PR 기반입니다. PR에는 필요한 경우 생성된 `newsletters/`, `content/newsroom/`, `content/collected-news/`, `data/newsletters.json` 변경, 검증 상태, fact-check 또는 quality report의 `needs-fix` 맥락을 포함합니다.
 
 ## Agent 전용 지침
 

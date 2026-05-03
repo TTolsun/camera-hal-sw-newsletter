@@ -6926,11 +6926,11 @@ npm.cmd run validate
 
 ## Artifact Checklist
 
-- newsroom/2026-05-03/shortlisted-candidates.json
-- newsroom/2026-05-03/reporter-candidates.json
-- newsroom/2026-05-03/editor-draft.json
-- newsroom/2026-05-03/fact-check-report.json
-- newsroom/2026-05-03/quality-report.json
-- newsroom/2026-05-03/retry-history.json
+- content/newsroom/2026-05-03/shortlisted-candidates.json
+- content/newsroom/2026-05-03/reporter-candidates.json
+- content/newsroom/2026-05-03/editor-draft.json
+- content/newsroom/2026-05-03/fact-check-report.json
+- content/newsroom/2026-05-03/quality-report.json
+- content/newsroom/2026-05-03/retry-history.json
 - .tmp/newsletter-generation-status.json
 - .tmp/gemini-raw/**

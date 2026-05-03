@@ -3,6 +3,10 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { buildManifest } = require('./write-artifact-manifest');
+const {
+  collectedCandidatesRelPath,
+  newsroomRelPath
+} = require('../common/artifact-paths');
 
 const date = '2026-05-03';
 
@@ -41,7 +45,7 @@ function seedAgreeingSnapshot(snapshotDir) {
     underfilled: true,
     publish_ready: false
   });
-  writeJson(path.join(snapshotDir, 'newsroom', date, 'quality-report.json'), {
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'quality-report.json').split('/')), {
     date,
     score: 74,
     threshold: 90,
@@ -51,13 +55,13 @@ function seedAgreeingSnapshot(snapshotDir) {
       must_fix_count: 0
     }
   });
-  writeText(path.join(snapshotDir, 'newsroom', date, 'quality-report.md'), '# Quality\n');
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'quality-report.md').split('/')), '# Quality\n');
 }
 
 function testManifestCreationAndHashes() {
   const snapshotDir = makeSnapshot();
   seedAgreeingSnapshot(snapshotDir);
-  writeJson(path.join(snapshotDir, 'newsroom', date, 'retry-history.json'), []);
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'retry-history.json').split('/')), []);
   writeJson(path.join(snapshotDir, '.tmp', 'gemini-raw', 'attempt-1.json'), { text: '{' });
   writeJson(path.join(snapshotDir, 'cache', 'news-summary', 'summary.json'), { title: 'cached' });
 
@@ -68,7 +72,7 @@ function testManifestCreationAndHashes() {
   assert.ok(manifest.files.some(file => file.path === '.tmp/gemini-raw/attempt-1.json'));
   assert.ok(manifest.files.some(file => file.path === 'cache/news-summary/summary.json'));
   assert.ok(manifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
-  assert.ok(manifest.missing_critical_files.includes(`collected-news/${date}/candidates.json`));
+  assert.ok(manifest.missing_critical_files.includes(collectedCandidatesRelPath(date)));
 }
 
 function testWarningsWhenReportsDisagree() {

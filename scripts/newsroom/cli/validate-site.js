@@ -6,6 +6,7 @@ const {
   readJson,
   repoPath
 } = require('../common/common');
+const { newsroomDir } = require('../common/artifact-paths');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -129,7 +130,7 @@ function validateArticleQuality(item, md, newFormat) {
 }
 
 function validateSourceGapArtifact(date) {
-  const factCheck = readJsonIfExists(path.join(root, 'newsroom', date, 'fact-check-report.json'));
+  const factCheck = readJsonIfExists(path.join(newsroomDir(root, date), 'fact-check-report.json'));
   if (!factCheck) return;
   const sourceGapCount = Number.isFinite(Number(factCheck.source_gap_count))
     ? Number(factCheck.source_gap_count)
@@ -145,7 +146,7 @@ function validateSourceGapArtifact(date) {
 }
 
 function validateEditorImageArtifact(date) {
-  const editor = readJsonIfExists(path.join(root, 'newsroom', date, 'editor-draft.json'));
+  const editor = readJsonIfExists(path.join(newsroomDir(root, date), 'editor-draft.json'));
   if (!editor || !Array.isArray(editor.sections)) return;
 
   for (const [index, section] of editor.sections.entries()) {
