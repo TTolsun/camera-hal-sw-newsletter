@@ -21,6 +21,13 @@ const {
   writeCacheRecord
 } = require('./lib/news-summary-cache');
 const {
+  isFinalSelected,
+  normalizeReporterReport,
+  normalizeShortlistReport,
+  renderCandidateSelectionDiagnostics,
+  selectionDiagnosticsFromReports
+} = require('./lib/selection-diagnostics');
+const {
   QUALITY_THRESHOLD,
   MIN_MAIN_ARTICLES,
   MAX_MAIN_ARTICLES,
@@ -111,16 +118,25 @@ function buildGenerationStatus({
 
 function selectionStatusExtra(shortlistReport = generationRunState.shortlistReport) {
   const report = shortlistReport || {};
+  const diagnostics = selectionDiagnosticsFromReports(report, null);
   return {
     input_candidate_count: report.input_candidate_count ?? null,
     eligible_candidate_count: report.eligible_candidate_count ?? null,
     selected_article_count: report.selected_article_count ?? null,
+    reporter_candidate_count: diagnostics.reporter_candidate_count,
+    reporter_selected_count: diagnostics.reporter_selected_count,
+    final_input_candidate_count: diagnostics.final_input_candidate_count,
+    final_eligible_candidate_count: diagnostics.final_eligible_candidate_count,
+    final_selected_article_count: diagnostics.final_selected_article_count,
+    reporter_selected_but_final_excluded_count: diagnostics.reporter_selected_but_final_excluded_count,
     ai_selected_article_count: report.ai_selected_article_count ?? null,
     underfilled: Boolean(report.underfilled),
     publish_ready: report.publish_ready !== undefined ? Boolean(report.publish_ready) : null,
     selection_warnings: ensureArray(report.selection_warnings),
     selection_errors: ensureArray(report.selection_errors),
-    exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10)
+    exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
+    final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
+    candidate_selection_note: diagnostics.note
   };
 }
 
@@ -179,7 +195,7 @@ function reporterCandidateRejectionReason(candidate) {
 function reporterCandidateMainArticleBlockReason(candidate) {
   const reason = reporterCandidateRejectionReason(candidate);
   if (reason) return reason;
-  if (candidate.selected !== true) return 'selected=false';
+  if (!isFinalSelected(candidate)) return 'final_selected=false';
   return '';
 }
 
@@ -268,32 +284,29 @@ function validateReporter(value, date, collectedCandidates = []) {
 }
 
 function enforceDeterministicReporterSelection(reporter, shortlistReport) {
-  const selectedUrls = new Set(ensureArray(shortlistReport?.selected_articles)
-    .map(candidate => normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl))
-    .filter(Boolean));
-  const shortlistByUrl = new Map(ensureArray(shortlistReport?.shortlisted_candidates)
-    .map(candidate => [normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl), candidate]));
+  const finalByUrl = new Map([
+    ...ensureArray(shortlistReport?.shortlisted_candidates),
+    ...ensureArray(shortlistReport?.excluded_candidates)
+  ].map(candidate => [normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl), candidate]));
 
   reporter.candidates = ensureArray(reporter.candidates).map(candidate => {
     const url = normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl);
-    const deterministic = shortlistByUrl.get(url) || {};
+    const deterministic = finalByUrl.get(url) || {};
     return {
       ...deterministic,
       ...candidate,
       deterministic_score: deterministic.deterministic_score ?? candidate.deterministic_score,
       score_breakdown: deterministic.score_breakdown || candidate.score_breakdown,
-      selected: selectedUrls.has(url),
-      selected_for_editor: selectedUrls.has(url),
-      selection_slot: selectedUrls.has(url) ? deterministic.selection_slot || candidate.selection_slot || 'deterministic-final' : ''
+      selection_slot: isFinalSelected(deterministic) ? deterministic.selection_slot || candidate.selection_slot || 'deterministic-final' : ''
     };
   });
-  return reporter;
+  return normalizeReporterReport(reporter, shortlistReport);
 }
 
 function selectedReporterInputs(reporter) {
   return {
     date: reporter.date,
-    candidates: ensureArray(reporter.candidates).filter(candidate => candidate.selected === true)
+    candidates: ensureArray(reporter.candidates).filter(isFinalSelected)
   };
 }
 
@@ -611,14 +624,16 @@ function candidateDuplicatesSections(candidate, sections) {
 function removeDisallowedSelections(reporter, lockedSections, excludedSections = []) {
   const rejected = [];
   for (const candidate of ensureArray(reporter.candidates)) {
-    if (!candidate.selected) continue;
+    if (!isFinalSelected(candidate)) continue;
     if (candidateDuplicatesSections(candidate, lockedSections)) {
-      candidate.selected = false;
+      candidate.final_selected = false;
+      candidate.selected_for_editor = false;
       rejected.push({ title: candidate.title, reason: 'duplicate locked article' });
       continue;
     }
     if (candidateDuplicatesSections(candidate, excludedSections)) {
-      candidate.selected = false;
+      candidate.final_selected = false;
+      candidate.selected_for_editor = false;
       rejected.push({ title: candidate.title, reason: 'excluded source-gap or demoted article' });
     }
   }
@@ -902,7 +917,7 @@ function hasTooFewMainArticlesDeduction(qualityReport) {
 
 function availableCompletionCandidates(reporter, currentSections, excludedSections = []) {
   return ensureArray(reporter?.candidates).filter(candidate => {
-    if (!candidate.selected) return false;
+    if (!isFinalSelected(candidate)) return false;
     if (reporterCandidateRejectionReason(candidate)) return false;
     if (candidateDuplicatesSections(candidate, currentSections)) return false;
     if (candidateDuplicatesSections(candidate, excludedSections)) return false;
@@ -932,7 +947,7 @@ function validateCompletionSections(value, date, reporter) {
   return normalizedSections;
 }
 
-function buildRetryHistoryMarkdown(date, attempts) {
+function buildRetryHistoryMarkdown(date, attempts, selectionDiagnostics = null) {
   const rows = attempts.map(item => [
     item.attempt,
     item.model || 'default',
@@ -948,6 +963,8 @@ function buildRetryHistoryMarkdown(date, attempts) {
 | Attempt | Model | Score | Status | Locked | Rejected duplicates | Source gaps | Must-fix |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 ${rows.map(row => `| ${row.join(' | ')} |`).join('\n')}
+
+${selectionDiagnostics ? renderCandidateSelectionDiagnostics(selectionDiagnostics) : ''}
 
 ${attempts.map(item => `## Attempt ${item.attempt}
 
@@ -974,6 +991,7 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
   const date = context.date || generationRunState.date || process.env.NEWSLETTER_DATE || kstDate();
   const shortlist = context.shortlistReport || generationRunState.shortlistReport || null;
   const selectionDiagnostics = selectionStatusExtra(shortlist);
+  const selectionDiagnosticsMarkdown = renderCandidateSelectionDiagnostics(selectionDiagnostics);
   const lines = [
     `# Recovery Prompt - ${date}`,
     '',
@@ -984,17 +1002,19 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     `- Stage: ${context.stage || 'generation'}`,
     `- Reason: ${context.reason || 'Unknown failure.'}`,
     '',
-    '## Deterministic Selection Diagnostics',
+    selectionDiagnosticsMarkdown,
     '',
-    `- Input candidates: ${selectionDiagnostics.input_candidate_count ?? 'unknown'}`,
-    `- Eligible candidates: ${selectionDiagnostics.eligible_candidate_count ?? 'unknown'}`,
-    `- Selected final inputs: ${selectionDiagnostics.selected_article_count ?? 'unknown'}`,
+    '## Deterministic Final Selection Status',
+    '',
+    `- Final input candidates: ${selectionDiagnostics.final_input_candidate_count ?? selectionDiagnostics.input_candidate_count ?? 'unknown'}`,
+    `- Final eligible candidates: ${selectionDiagnostics.final_eligible_candidate_count ?? selectionDiagnostics.eligible_candidate_count ?? 'unknown'}`,
+    `- Final selected articles: ${selectionDiagnostics.final_selected_article_count ?? selectionDiagnostics.selected_article_count ?? 'unknown'}`,
     `- AI selected inputs: ${selectionDiagnostics.ai_selected_article_count ?? 'unknown'}`,
     `- Publish ready: ${selectionDiagnostics.publish_ready ?? 'unknown'}`,
     `- Underfilled: ${selectionDiagnostics.underfilled}`,
     `- Selection warnings: ${selectionDiagnostics.selection_warnings.join('; ') || 'none'}`,
     `- Selection errors: ${selectionDiagnostics.selection_errors.join('; ') || 'none'}`,
-    `- Top exclusion reasons: ${selectionDiagnostics.exclusion_reason_summary.map(item => `${item.reason} (${item.count})`).join('; ') || 'none'}`,
+    `- Top final exclusion reasons: ${selectionDiagnostics.final_exclusion_reason_summary.map(item => `${item.reason} (${item.count})`).join('; ') || 'none'}`,
     '',
     '## Rerun',
     '',
@@ -1081,7 +1101,7 @@ async function main() {
   fs.mkdirSync(newsletterDir, { recursive: true });
 
   const cacheDir = path.join(root, 'cache', 'news-summary');
-  const shortlistReport = buildShortlistReport(date, candidates);
+  let shortlistReport = buildShortlistReport(date, candidates);
   generationRunState.shortlistReport = shortlistReport;
   generationRunState.selectedInputs = shortlistReport.selected_articles;
   writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
@@ -1161,16 +1181,16 @@ async function main() {
       [
         'You are the AI reporter for Camera HAL SW Newsletter.',
         'The local deterministic selector has already filtered, ranked, and chosen final article inputs. Do not make final selection decisions.',
-        'Preserve selected exactly as supplied: selected=true only for deterministic final article inputs; selected=false for the rest of the shortlist.',
+        'Use selected only for reporter-stage judgment. Deterministic final article inputs are marked separately as final_selected=true and selected_for_editor=true after validation.',
         'Summarize, tag, and refine evidence fields only for the supplied shortlisted candidates.',
         'Use priority, reliability, candidateOnly, requiresCrossCheck, section, cameraHalRelevanceScore, deterministic_score, score_breakdown, and summary_cache only as context.',
-        'For every selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
+        'For every final_selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
         'Preserve collectionMode, isArticleCandidate, isWatchPage, hasDatedEvidence, evidenceLevel, finalSelectionEligibility, source_kind, source_gap_risk, main_eligible, briefing_only, reference_only, and evidence_score from the collected candidate metadata.',
         'If the source is a rolling page, release-note watch page, documentation watch page, homepage, or other watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides date/version/API/component/behavior evidence.',
         'Rolling release-note pages require evidence_notes that name the exact date, version/release, API/component, and behavior change before they can be selected.',
         'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
         'Candidate-only or requiresCrossCheck leads must not be selected unless cross_check_status is official-source or cross-checked.',
-        'Fallback C++, native, toolchain, Linux, and AI items can remain selected only when the deterministic input already marks selected=true.',
+        'Fallback C++, native, toolchain, Linux, and AI items can remain reporter-selected only when they satisfy the reporter-stage evidence and relevance rules.',
         'Preserve imageCandidates exactly from the collected candidate JSON. Do not invent image URLs, rewrite image URLs, or add image candidates.',
         lockedSections.length > 0 ? 'Do not select candidates that duplicate the locked article URLs, titles, sources, or source-date-title combinations listed in the retry context.' : '',
         'For every candidate, provide these numeric scores:',
@@ -1187,6 +1207,10 @@ async function main() {
       reporterSchema
     ), date, reporterInput.candidates);
     reporter = enforceDeterministicReporterSelection(reporter, shortlistReport);
+    shortlistReport = normalizeShortlistReport(shortlistReport, reporter);
+    generationRunState.shortlistReport = shortlistReport;
+    generationRunState.selectedInputs = shortlistReport.selected_articles;
+    writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
     for (const candidate of ensureArray(reporter.candidates)) {
       writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getGeminiModelUsage(reporterStage) || 'unknown' });
     }
@@ -1201,7 +1225,7 @@ async function main() {
         'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
         'Create exactly 5 main articles when enough non-duplicate source material exists; 4 main articles are acceptable only when strong candidates are insufficient.',
         `Final main article count must stay between ${MIN_MAIN_ARTICLES} and ${MAX_MAIN_ARTICLES}; do not force 5 articles when only 4 strong eligible candidates exist.`,
-        'Use selected reporter candidates as main article inputs. Do not turn selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
+        'Use final-selected reporter candidates as main article inputs. Do not turn final_selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
         'Target article slot mix: Android Camera / platform API 1-2; CameraX / AOSP Camera / compatibility 1-2; Linux camera / libcamera / V4L2 0-1; AI plus camera input path or HAL workflow at least 1; C++ / toolchain fallback 0-1.',
         'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
         'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it is a real dated article and has concrete HAL native-code value.',
@@ -1225,7 +1249,7 @@ async function main() {
         'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
         'briefing must have exactly 3 items.'
       ].filter(Boolean).join('\n'),
-      `${commonContext}\n\n${lockedContext}\n\nSelected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}`,
+      `${commonContext}\n\n${lockedContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}`,
       editorSchema
     ), date, reporter);
 
@@ -1252,7 +1276,7 @@ async function main() {
         'Do not rewrite for style. Focus only on factual errors, source problems, and editorial-policy violations.',
         'Return only JSON matching the schema.'
       ].join('\n'),
-      `${commonContext}\n\nSelected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+      `${commonContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
       factCheckSchema
     ));
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
@@ -1300,7 +1324,7 @@ async function main() {
           'Use the golden example only for article structure and evidence/actionability style. Do not copy facts absent from current reporter candidates.',
           'Return only JSON matching the schema.'
         ].join('\n'),
-        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections, null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections, null, 2)}\n\nSelected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nSelected unused shortlist candidate pool JSON:\n${JSON.stringify(availableCompletionCandidates(reporter, preservedSections, excludedSections.concat(demotedSections)), null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality report JSON:\n${JSON.stringify(qualityReport, null, 2)}`,
+        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections, null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections, null, 2)}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nFinal-selected unused shortlist candidate pool JSON:\n${JSON.stringify(availableCompletionCandidates(reporter, preservedSections, excludedSections.concat(demotedSections)), null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality report JSON:\n${JSON.stringify(qualityReport, null, 2)}`,
         editorCompletionSchema
       ), date, reporter);
       const repairMerged = mergeLockedSections(preservedSections, repairSections, excludedSections.concat(demotedSections));
@@ -1333,7 +1357,7 @@ async function main() {
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
           'Return only JSON matching the schema.'
         ].join('\n'),
-        `${commonContext}\n\nSelected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+        `${commonContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
         factCheckSchema
       ));
       eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
@@ -1377,7 +1401,7 @@ async function main() {
             'For each article, choose at most one selectedImage from that article imageCandidates; use an empty selectedImage when attribution or relevance is uncertain.',
             'Final newsletter text must be Korean. Return only JSON matching the schema.'
           ].join('\n'),
-          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor sections JSON:\n${JSON.stringify(editor.sections, null, 2)}\n\nEligible selected reporter candidates for additional articles JSON:\n${JSON.stringify({ date: reporter.date, candidates: completionCandidates }, null, 2)}\n\nCurrent quality report JSON:\n${JSON.stringify(qualityReport, null, 2)}`,
+          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor sections JSON:\n${JSON.stringify(editor.sections, null, 2)}\n\nEligible final-selected reporter candidates for additional articles JSON:\n${JSON.stringify({ date: reporter.date, candidates: completionCandidates }, null, 2)}\n\nCurrent quality report JSON:\n${JSON.stringify(qualityReport, null, 2)}`,
           editorCompletionSchema
         ), date, reporter);
         const completionMerged = mergeLockedSections(editor.sections, completionSections, completionExcludedSections);
@@ -1399,7 +1423,7 @@ async function main() {
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the 4-5 main article contract.',
             'Return only JSON matching the schema.'
           ].join('\n'),
-          `${commonContext}\n\nSelected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+          `${commonContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
           factCheckSchema
         ));
         eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
@@ -1481,7 +1505,11 @@ async function main() {
   writeJson(path.join(newsroomDir, 'quality-report.json'), qualityReport);
   fs.writeFileSync(path.join(newsroomDir, 'quality-report.md'), buildQualityReportMarkdown(qualityReport), 'utf8');
   writeJson(path.join(newsroomDir, 'retry-history.json'), retryHistory);
-  fs.writeFileSync(path.join(newsroomDir, 'retry-history.md'), buildRetryHistoryMarkdown(date, retryHistory), 'utf8');
+  fs.writeFileSync(
+    path.join(newsroomDir, 'retry-history.md'),
+    buildRetryHistoryMarkdown(date, retryHistory, selectionStatusExtra(shortlistReport)),
+    'utf8'
+  );
 
   const newsletterMd = path.join(newsletterDir, 'newsletter.md');
   const newsletterHtml = path.join(newsletterDir, 'index.html');
@@ -1509,7 +1537,11 @@ async function main() {
     'data/newsletters.json'
   ];
 
-  fs.writeFileSync(path.join(newsroomDir, 'editor-in-chief-brief.md'), buildEditorChiefBrief(date, editor, factCheck, qualityReport), 'utf8');
+  fs.writeFileSync(
+    path.join(newsroomDir, 'editor-in-chief-brief.md'),
+    buildEditorChiefBrief(date, editor, factCheck, qualityReport, selectionStatusExtra(shortlistReport)),
+    'utf8'
+  );
 
   const emptySourceSections = editor.sections
     .filter(section => ensureArray(section.sources).filter(source => source && source.url).length === 0)

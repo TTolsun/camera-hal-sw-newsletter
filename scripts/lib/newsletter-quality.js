@@ -1,3 +1,7 @@
+const {
+  isFinalSelected
+} = require('./selection-diagnostics');
+
 const QUALITY_THRESHOLD = 90;
 const MIN_MAIN_ARTICLES = 4;
 const MAX_MAIN_ARTICLES = 5;
@@ -316,8 +320,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     boundedDeduct(state, 'source-integrity', Math.min(10, gaps * 3), `Fact checker reported ${gaps} source gap(s).`);
   }
 
-  const selectedReporterCandidates = ensureArray(reporter.candidates).filter(candidate => candidate.selected);
-  const lowScoreSelected = selectedReporterCandidates.filter(candidate => {
+  const finalSelectedCandidates = ensureArray(reporter.candidates).filter(isFinalSelected);
+  const lowScoreSelected = finalSelectedCandidates.filter(candidate => {
     const total =
       Number(candidate.camera_hal_relevance_score || 0) +
       Number(candidate.android_camera_relevance_score || 0) +
@@ -325,7 +329,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     return total < 8;
   });
   if (lowScoreSelected.length > 0) {
-    boundedDeduct(state, 'hal-relevance', Math.min(8, lowScoreSelected.length * 2), `${lowScoreSelected.length} selected reporter candidate(s) have weak HAL/actionability scores.`);
+    boundedDeduct(state, 'hal-relevance', Math.min(8, lowScoreSelected.length * 2), `${lowScoreSelected.length} final-selected candidate(s) have weak HAL/actionability scores.`);
   }
 
   const totalDeductions = state.deductions.reduce((sum, item) => sum + item.points, 0);

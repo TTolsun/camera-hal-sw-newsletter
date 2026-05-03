@@ -104,6 +104,7 @@ jobs:
         run: |
           node - <<'NODE' >> "$GITHUB_OUTPUT"
           const fs = require('fs');
+          const { renderCandidateSelectionDiagnostics } = require('./scripts/lib/selection-diagnostics');
           const statusPath = '.tmp/newsletter-generation-status.json';
           const status = fs.existsSync(statusPath)
             ? JSON.parse(fs.readFileSync(statusPath, 'utf8'))
@@ -120,11 +121,23 @@ jobs:
           console.log(`input_candidate_count=${status.input_candidate_count ?? 'n/a'}`);
           console.log(`eligible_candidate_count=${status.eligible_candidate_count ?? 'n/a'}`);
           console.log(`selected_article_count=${status.selected_article_count ?? 'n/a'}`);
+          console.log(`reporter_candidate_count=${status.reporter_candidate_count ?? 'n/a'}`);
+          console.log(`reporter_selected_count=${status.reporter_selected_count ?? 'n/a'}`);
+          console.log(`final_input_candidate_count=${status.final_input_candidate_count ?? status.input_candidate_count ?? 'n/a'}`);
+          console.log(`final_eligible_candidate_count=${status.final_eligible_candidate_count ?? status.eligible_candidate_count ?? 'n/a'}`);
+          console.log(`final_selected_article_count=${status.final_selected_article_count ?? status.selected_article_count ?? 'n/a'}`);
+          console.log(`reporter_selected_but_final_excluded_count=${status.reporter_selected_but_final_excluded_count ?? 'n/a'}`);
           console.log(`selection_warnings<<EOF`);
           console.log((status.selection_warnings || []).join('; ') || 'none');
           console.log(`EOF`);
           console.log(`exclusion_reason_summary<<EOF`);
           console.log((status.exclusion_reason_summary || []).slice(0, 5).map(item => `${item.reason} (${item.count})`).join('; ') || 'none');
+          console.log(`EOF`);
+          console.log(`final_exclusion_reason_summary<<EOF`);
+          console.log((status.final_exclusion_reason_summary || status.exclusion_reason_summary || []).slice(0, 5).map(item => `${item.reason} (${item.count})`).join('; ') || 'none');
+          console.log(`EOF`);
+          console.log(`candidate_selection_diagnostics<<EOF`);
+          console.log(renderCandidateSelectionDiagnostics(status));
           console.log(`EOF`);
           NODE
 
@@ -202,13 +215,20 @@ jobs:
             echo "- Publish ready: \`${{ steps.generation-status.outputs.publish_ready }}\`"
             echo "- Underfilled thin-week path: \`${{ steps.generation-status.outputs.underfilled }}\`"
             echo ""
-            echo "## Deterministic Selection Diagnostics"
+            node - <<'NODE'
+            const fs = require('fs');
+            const { renderCandidateSelectionDiagnostics } = require('./scripts/lib/selection-diagnostics');
+            const status = JSON.parse(fs.readFileSync('.tmp/newsletter-generation-status.json', 'utf8'));
+            console.log(renderCandidateSelectionDiagnostics(status));
+            NODE
             echo ""
-            echo "- Input candidates: \`${{ steps.generation-status.outputs.input_candidate_count }}\`"
-            echo "- Eligible candidates: \`${{ steps.generation-status.outputs.eligible_candidate_count }}\`"
-            echo "- Selected final inputs: \`${{ steps.generation-status.outputs.selected_article_count }}\`"
+            echo "## Deterministic Final Selection Status"
+            echo ""
+            echo "- Final input candidates: \`${{ steps.generation-status.outputs.final_input_candidate_count }}\`"
+            echo "- Final eligible candidates: \`${{ steps.generation-status.outputs.final_eligible_candidate_count }}\`"
+            echo "- Final selected articles: \`${{ steps.generation-status.outputs.final_selected_article_count }}\`"
             echo "- Selection warnings: ${{ steps.generation-status.outputs.selection_warnings }}"
-            echo "- Top exclusion reasons: ${{ steps.generation-status.outputs.exclusion_reason_summary }}"
+            echo "- Top final exclusion reasons: ${{ steps.generation-status.outputs.final_exclusion_reason_summary }}"
             if [ "${{ steps.generation-status.outputs.status }}" != "PASS" ] || [ "${{ steps.validate.outcome }}" = "failure" ]; then
               echo "- This PR is generated for editor review only. Resolve \`newsroom/${DATE}/fact-check-report.md\`, \`newsroom/${DATE}/quality-report.md\`, and validation failures before publishing."
             fi

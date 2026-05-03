@@ -1,44 +1,51 @@
-# Handoff
+# Reporter vs Final Selection Diagnostics Handoff
 
 ## Changed files
 
-- `.github/workflows/weekly-newsroom-pr.yml`
-  - Adds `Snapshot newsroom debug artifacts` before `peter-evans/create-pull-request`.
-  - Uploads only `.tmp/artifact-snapshot`.
-  - Copies `.tmp/gemini-raw/`, `cache/news-summary/`, and the full current-date `newsroom/<DATE>/` directory into the snapshot when present.
-  - Keeps `if: always()` and `retention-days: 14`.
-- `scripts/write-artifact-manifest.js`
-  - Writes `artifact-manifest.json` with file hashes, run metadata, missing critical files, and consistency warnings.
-- `scripts/test-artifact-manifest.js`
-  - Adds Node-based manifest behavior tests.
-- `package.json`
-  - Adds `test:artifact`.
 - `plan.md`
-  - Records the pre-edit inspection and implementation plan.
+- `scripts/lib/selection-diagnostics.js`
+- `scripts/lib/newsroom-selection.js`
+- `scripts/gemini-newsroom-newsletter.js`
+- `scripts/lib/newsletter-quality.js`
+- `scripts/lib/newsletter-renderer.js`
+- `.github/workflows/weekly-newsroom-pr.yml`
+- `scripts/test-selection-diagnostics.js`
+- `package.json`
 
 ## Commands run
 
-- `node --check scripts\write-artifact-manifest.js`
-- `node --check scripts\test-artifact-manifest.js`
-- `npm.cmd run test:artifact`
+- `node --check scripts/lib/selection-diagnostics.js`
+- `node --check scripts/lib/newsroom-selection.js`
+- `node --check scripts/gemini-newsroom-newsletter.js`
+- `node --check scripts/test-selection-diagnostics.js`
+- `node --check scripts/lib/newsletter-renderer.js`
+- `node --check scripts/lib/newsletter-quality.js`
+- `git diff --check`
+- `npm.cmd run test:selection-diagnostics`
+- `npm.cmd test`
 - `npm.cmd run validate`
 
 ## Test results
 
-- `node --check scripts\write-artifact-manifest.js`: passed.
-- `node --check scripts\test-artifact-manifest.js`: passed.
-- `npm.cmd run test:artifact`: passed.
-- `npm.cmd run validate`: passed.
+- Selection diagnostics fixture passed.
+- Full `node --test` suite passed: 33 tests passed.
+- `npm.cmd run validate` passed.
+- Existing validation warnings remain for review-only/generated artifacts, including the 2026-05-03 underfilled/non-publishable review quality report. This PR does not try to make that issue pass.
 
-Validation emitted existing review-quality warnings for generated newsletter artifacts, including non-publishable historical/review quality reports. The quality gate behavior was not changed.
+## Compatibility notes
+
+- `reporter-candidates.json` keeps `selected` as a deprecated alias for reporter-stage `reporter_selected`.
+- `shortlisted-candidates.json` keeps `selected` as a deterministic final-selection alias for `final_selected`.
+- Editor input, retry completion, and quality weak-score deductions now use `final_selected` / `selected_for_editor`, preserving deterministic final-selection behavior while clarifying reporter artifact terminology.
+- Existing count fields are preserved; final-prefixed aliases and reporter/final comparison counts were added.
+- Quality thresholds, final article minimums, slot classifier logic, source extraction, and watch-page parsing were not changed.
 
 ## Remaining risks
 
-- The snapshot step is a shell workflow step and has not been exercised inside GitHub Actions in this local run.
-- If generation fails before writing `.tmp/newsletter-date.txt`, the workflow derives a date from `NEWSLETTER_DATE` or KST current date so the manifest can still be written; date-scoped files are not copied, avoiding stale base-branch artifacts, and missing critical files are recorded.
-- Review feedback about omitted Gemini raw output, summary cache, and attempt-level newsroom files was addressed by adding those paths to the frozen snapshot instead of widening the upload path.
-- The manifest intentionally records consistency warnings instead of failing artifact upload, so reviewers must inspect `artifact-manifest.json` when diagnosing mismatched files.
+- Reporter data is only available after the reporter stage runs, so early deterministic-selection failure artifacts can still show reporter counts as `unknown`.
+- Retry duplicate suppression can mark a reporter candidate as no longer editor-usable after deterministic final selection; this preserves existing behavior but can make retry-attempt reporter flags differ from the original deterministic shortlist.
+- Generated historical artifacts are not rewritten by this PR; new schema fields appear on newly generated newsroom artifacts.
 
 ## Next suggested PR
 
-Reporter/final candidate terminology and diagnostics: align artifact field names and PR/status wording so `reporter-candidates`, shortlisted candidates, final selected inputs, and generated article counts are easier to compare without cross-reading multiple JSON files.
+Slot classifier false-positive cleanup.

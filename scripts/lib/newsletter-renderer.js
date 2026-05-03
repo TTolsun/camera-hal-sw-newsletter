@@ -1,3 +1,7 @@
+const {
+  renderCandidateSelectionDiagnostics
+} = require('./selection-diagnostics');
+
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -308,7 +312,7 @@ function qualitySummaryMarkdown(qualityReport) {
   ].join('\n');
 }
 
-function buildEditorChiefBrief(date, issue, factCheck, qualityReport = null) {
+function buildEditorChiefBrief(date, issue, factCheck, qualityReport = null, selectionDiagnostics = null) {
   const firstSection = ensureArray(issue.sections)[0] || {};
   const decision = factCheck.status === 'PASS' && (!qualityReport || qualityReport.status === 'PASS')
     ? 'APPROVE'
@@ -336,6 +340,9 @@ ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 ## Quality Gate
 
 ${qualitySummaryMarkdown(qualityReport)}
+
+${selectionDiagnostics ? `${renderCandidateSelectionDiagnostics(selectionDiagnostics)}
+` : ''}
 
 ## 편집장 확인 checklist
 

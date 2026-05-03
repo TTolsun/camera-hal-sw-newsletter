@@ -1,55 +1,38 @@
-# Newsroom Debug Artifact Snapshot Plan
+# Reporter vs Final Selection Diagnostics Plan
 
 ## Files inspected
 
+- `scripts/gemini-newsroom-newsletter.js`
+- `scripts/lib/newsroom-selection.js`
+- `scripts/lib/newsletter-quality.js`
+- `scripts/lib/newsletter-renderer.js`
 - `.github/workflows/weekly-newsroom-pr.yml`
 - `package.json`
-- `scripts/gemini-newsroom-newsletter.js`
-- `scripts/validate-quality.js`
-- `newsroom/2026-05-03/`
-- `collected-news/2026-05-03/`
-- `newsletters/2026-05-03/`
 
-## Current workflow artifact order
+## Current selected field writers/readers
 
-The current workflow runs generation, optional validation, metadata resolution, PR body preparation, label setup, `peter-evans/create-pull-request`, PR labeling, and then uploads debug artifacts. The upload step points at broad live checkout paths such as `collected-news/**`, `newsroom/**`, `newsletters/**`, and `data/newsletters.json`, so uploaded files can reflect a checkout state after PR creation rather than the exact state immediately after generation and validation.
+- `scripts/lib/newsroom-selection.js` writes `selected` and `selected_for_editor` for deterministic final shortlist output.
+- `scripts/gemini-newsroom-newsletter.js` validates Gemini reporter output where `candidate.selected` is reporter-stage intent, then currently enforces deterministic final selection before writing reporter artifacts and editor inputs.
+- `scripts/gemini-newsroom-newsletter.js` reads `candidate.selected` for editor input, retry completion candidates, duplicate removal, and reporter eligibility checks.
+- `scripts/lib/newsletter-quality.js` reads reporter `candidate.selected` for selected reporter candidate quality deductions.
+- `.github/workflows/weekly-newsroom-pr.yml` reads generation status counts and prints deterministic diagnostics in the PR body.
 
-## Proposed snapshot location
+## Schema compatibility plan
 
-Use `.tmp/artifact-snapshot` as a frozen, ignored snapshot directory. Create it after generation/validation diagnostics are available and before `peter-evans/create-pull-request`. Copy only current-date artifacts into:
+- In `reporter-candidates.json`, keep `selected` as a deprecated reporter-stage alias and add `reporter_selected`, `final_selected`, `selection_stage`, `final_selection_eligibility`, and `final_exclusion_reasons`.
+- In `shortlisted-candidates.json`, keep `selected` as a deterministic final alias and add `final_selected`, `reporter_selected`, `selection_stage`, and `selected_for_editor`.
+- Add final-prefixed count aliases while preserving existing count fields.
+- Update internal final-selection readers to prefer `final_selected` / `selected_for_editor` so editor behavior does not change when reporter `selected` becomes reporter-stage terminology.
 
-- `.tmp/artifact-snapshot/.tmp/`
-- `.tmp/artifact-snapshot/collected-news/<DATE>/`
-- `.tmp/artifact-snapshot/newsroom/<DATE>/`
-- `.tmp/artifact-snapshot/newsletters/<DATE>/`
-- `.tmp/artifact-snapshot/data/`
+## Diagnostics output plan
 
-Then upload only `.tmp/artifact-snapshot` with `actions/upload-artifact`.
+- Add shared candidate-selection diagnostics helpers under `scripts/lib/selection-diagnostics.js`.
+- Add reporter/final count metadata to reporter and shortlist artifacts.
+- Add a `Candidate Selection Diagnostics` Markdown block to recovery prompts, retry history, editor-in-chief brief, generation status, and the generated PR body.
+- Include the note that reporter-selected candidates are not necessarily publishable and publication readiness is determined by deterministic final selection and quality validation.
 
-The snapshot also preserves failure-debugging context by copying `.tmp/gemini-raw/`, `cache/news-summary/`, and the full current-date `newsroom/<DATE>/` directory when present. This keeps raw Gemini responses, cache records, and attempt-level newsroom files inside the same frozen snapshot rather than uploading broad live checkout paths.
+## Test plan
 
-## Manifest schema
-
-Add `scripts/write-artifact-manifest.js`, invoked as:
-
-```powershell
-node scripts/write-artifact-manifest.js <snapshot_dir> <date>
-```
-
-The script writes `<snapshot_dir>/artifact-manifest.json` with:
-
-- `schema_version`
-- `date`
-- `generated_at`
-- optional `git_sha`, `github_run_id`, and `github_job`
-- `status_summary` from `.tmp/newsletter-generation-status.json`, when present
-- `quality_summary` from `newsroom/<DATE>/quality-report.json`, when present
-- `files` entries containing `path`, `size`, and `sha256`
-- `missing_critical_files`
-- `consistency_warnings`
-
-Critical file misses are recorded in the manifest rather than failing artifact upload. Consistency diagnostics compare date, score, selected/article count, and status naming where both status and quality report data exist.
-
-## Tests to add
-
-Add `scripts/test-artifact-manifest.js` and `npm run test:artifact`. The test creates temporary fake snapshots and verifies manifest creation, SHA-256 hashes, missing critical file reporting, mismatch warnings, and the no-warning path when status and quality report data agree.
+- Add `scripts/test-selection-diagnostics.js` with a small fixture covering one final-selected RSS item, one final-excluded watch page, one final-excluded reference page, and one non-reporter-selected excluded candidate.
+- Add `npm.cmd run test:selection-diagnostics`.
+- Run `node --check` on touched JavaScript files, `npm.cmd run test:selection-diagnostics`, and `npm.cmd run validate`.

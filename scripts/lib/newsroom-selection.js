@@ -1,4 +1,7 @@
 const crypto = require('crypto');
+const {
+  normalizeShortlistReport
+} = require('./selection-diagnostics');
 
 const SHORTLIST_CAP = 12;
 const MIN_FINAL_ARTICLES = 4;
@@ -353,7 +356,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     };
   });
 
-  return {
+  return normalizeShortlistReport({
     schema_version: 1,
     date,
     generated_at: new Date().toISOString(),
@@ -378,7 +381,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     selection_warnings: warnings,
     selection_errors: errors,
     exclusion_reason_summary: summarizeExclusionReasons(excluded)
-  };
+  });
 }
 
 function reporterInputFromShortlist(shortlistReport) {
@@ -387,7 +390,8 @@ function reporterInputFromShortlist(shortlistReport) {
     date: shortlistReport.date,
     candidates: ensureArray(shortlistReport.shortlisted_candidates).map(candidate => ({
       ...candidate,
-      selected: selectedUrls.has(candidate.normalized_url),
+      selected: false,
+      final_selected: selectedUrls.has(candidate.normalized_url),
       selected_for_editor: selectedUrls.has(candidate.normalized_url)
     }))
   };
