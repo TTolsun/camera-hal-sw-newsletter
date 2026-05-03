@@ -67,6 +67,13 @@ function firstDate(text = '') {
   return '';
 }
 
+function firstMonthYearDate(text = '') {
+  const monthYear = String(text).match(MONTH_YEAR_PATTERN);
+  if (!monthYear) return '';
+  const mm = MONTH_NUMBER[monthYear[1].toLowerCase()];
+  return mm ? `${monthYear[2]}-${mm}-01` : '';
+}
+
 function firstSmrDate(text = '') {
   const dated = firstDate(text);
   if (dated) return dated;
@@ -87,7 +94,7 @@ function firstVersion(text = '') {
 }
 
 function firstBehavior(text = '') {
-  const sentences = clean(text).split(/(?<=[.!?])\s+|[•\n]/).map(item => item.trim()).filter(Boolean);
+  const sentences = clean(text).split(/(?<=[.!?])\s+|\n+/).map(item => item.trim()).filter(Boolean);
   return sentences.find(sentence => BEHAVIOR_PATTERN.test(sentence)) || sentences[0] || '';
 }
 
@@ -164,6 +171,10 @@ function releaseItemsFromHeadings(html, source, options = {}) {
     .slice(0, options.limit || 12);
 }
 
+function hasReleaseItemEvidence(item) {
+  return Boolean(item.publishedAt && item.version_or_release && item.api_or_component && item.behavior_change);
+}
+
 function linkedItems(html, source, options = {}) {
   const anchorPattern = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
   const items = [];
@@ -203,7 +214,7 @@ function parseCameraXReleaseNotes(html, source) {
     component: 'CameraX / androidx.camera',
     sourceKind: 'release_note_item',
     limit: 10
-  });
+  }).filter(hasReleaseItemEvidence);
 }
 
 function parseAospWhatsNew(html, source) {
@@ -213,7 +224,7 @@ function parseAospWhatsNew(html, source) {
     keep: (title, href) => /release|what'?s new|Android\s+\d|camera|compatibility|CDD|CTS|VTS|ITS/i.test(`${title} ${href}`),
     versionFallback: (title) => (title.match(/\bAndroid\s+\d+(?:\s+QPR\d+)?\b/i) || [])[0] || '',
     limit: 12
-  });
+  }).filter(hasReleaseItemEvidence);
 }
 
 function parseAndroidLatestUpdates(html, source) {
@@ -234,10 +245,18 @@ function parseAndroidSecurityBulletin(html, source) {
     versionFallback: (title, href) => firstDate(`${title} ${href}`) || 'Android Security Bulletin',
     dateFallback: (title, href) => {
       const compact = String(href).match(/\b(20\d{2})(\d{2})(\d{2})\b/);
-      return compact ? `${compact[1]}-${compact[2]}-${compact[3]}` : '';
+      if (compact) return `${compact[1]}-${compact[2]}-${compact[3]}`;
+      return firstMonthYearDate(`${title} ${href}`);
     },
     limit: 12
-  });
+  })
+    .map(item => ({
+      ...item,
+      api_or_component: /Android Security Bulletin/i.test(item.api_or_component || '')
+        ? item.api_or_component
+        : `Android Security Bulletin / ${item.api_or_component || 'Android framework'}`
+    }))
+    .filter(hasReleaseItemEvidence);
 }
 
 function parseLibcameraBlog(html, source) {
@@ -259,7 +278,7 @@ function parseLlvmReleaseNotes(html, source) {
       return version ? `LLVM ${version[0]}` : '';
     },
     limit: 12
-  });
+  }).filter(hasReleaseItemEvidence);
 }
 
 function parseClaudeCodeChangelog(html, source) {

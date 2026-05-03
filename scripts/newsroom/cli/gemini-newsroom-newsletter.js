@@ -1236,7 +1236,9 @@ async function main() {
         lockedSections.length > 0 ? 'Do not duplicate locked article URLs, titles/headlines, source names, or same source + published date + similar title.' : '',
         'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
         'Every article must include evidence_summary, specificity_checks, and source_verification_notes.',
+        'Every main article must explicitly name the release date, version/release, API/component or library/artifact, concrete behavior change, and Camera HAL / Android camera / C++ / AI workflow relevance when those fields exist in the candidate metadata.',
         'specificity_checks must name concrete evidence such as version, release date, API/component, source page, behavior change, or the exact source gap if the source is a rolling/watch page.',
+        'If release date, version/release, API/component, behavior change, or Camera HAL relevance cannot be verified from the supplied candidate/source data, demote the item to briefing/watchlist or exclude it instead of writing it as a main article.',
         'Do not write generic advice like "monitor AOSP updates" or "review CameraX changes" unless the sentence names the exact source, version/release, API/component, date, or behavior to watch.',
         'For AI, C++, Linux, or tooling articles, explicitly connect the item to Camera HAL through stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, or HAL workflow.',
         'Each action_items entry must be executable within 2 weeks and include at least one concrete test, log, metric, device class, API/component, stream combination, or code-owner style handoff.',
@@ -1322,6 +1324,9 @@ async function main() {
           'For reporter_eligibility_violations, replace or demote the section. Do not repair text around an ineligible source.',
           'Replacement main articles must use only the selected deterministic reporter inputs or selected unused shortlist candidates supplied in this prompt.',
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
+          'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
+          'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, and Camera HAL / Android camera / C++ / AI workflow relevance.',
+          'If those facts cannot be verified from the supplied candidate/source data, demote to briefing/watchlist or exclude; do not invent or infer missing release evidence.',
           `Keep ${MIN_MAIN_ARTICLES}-${MAX_MAIN_ARTICLES} main articles; 5 is the target only when enough strong eligible candidates exist.`,
           'Maintain the slot policy: Android Camera/platform API 1-2; CameraX/AOSP/compatibility 1-2; Linux camera/libcamera/V4L2 0-1; at least 1 AI camera path/HAL workflow article; C++/toolchain fallback 0-1 from real dated articles only.',
           'Use the golden example only for article structure and evidence/actionability style. Do not copy facts absent from current reporter candidates.',
@@ -1357,6 +1362,7 @@ async function main() {
         [
           'You are the AI fact checker for the repaired Camera HAL SW Newsletter draft.',
           'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
+          'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or Camera HAL relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
           'Return only JSON matching the schema.'
         ].join('\n'),
@@ -1401,6 +1407,9 @@ async function main() {
             'Use only the eligible reporter candidates supplied in this prompt. Do not use candidates omitted from the eligible list.',
             'Do not duplicate locked, duplicate/rejected, source-gap, or ineligible sections from the exclusion context.',
             'Each new section must satisfy the same editorial contract: confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, and sources.',
+            'Each new section must name release date, version/release, API/component or library/artifact, concrete behavior change, and Camera HAL / Android camera / C++ / AI workflow relevance using only supplied candidate metadata/source text.',
+            'Reject duplicate URLs, duplicate titles, and duplicate source-date-title combinations from the exclusion context.',
+            'If the facts cannot be verified, do not create a main article from that candidate; leave the newsletter underfilled for editor review instead.',
             'For each article, choose at most one selectedImage from that article imageCandidates; use an empty selectedImage when attribution or relevance is uncertain.',
             'Final newsletter text must be Korean. Return only JSON matching the schema.'
           ].join('\n'),
@@ -1608,8 +1617,8 @@ async function main() {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'fact-check', reason: 'Gemini fact checker returned NEEDS_FIX with must_fix items.', shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     console.warn('Gemini fact checker returned NEEDS_FIX with must_fix items. Artifacts were written for editor review.');
   } else if (generationStatus === 'QUALITY_NEEDS_FIX') {
-    writeRecoveryPrompt(newsroomDir, { date, stage: 'quality', reason: `Newsletter quality score ${qualityReport.score}/${qualityReport.threshold} is below the required gate.`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
-    console.warn(`Newsletter quality score ${qualityReport.score}/${qualityReport.threshold} is below the required gate. Artifacts were written for editor review.`);
+    writeRecoveryPrompt(newsroomDir, { date, stage: 'quality', reason: `Newsletter quality score ${qualityReport.score}, threshold ${qualityReport.threshold}, result ${qualityReport.status}.`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
+    console.warn(`Newsletter quality score ${qualityReport.score}, threshold ${qualityReport.threshold}, result ${qualityReport.status}. Artifacts were written for editor review.`);
   } else if (generationStatus === 'UNDERFILLED_NEEDS_FIX') {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'thin-week selection', reason: shortlistReport.selection_warnings.join('; '), shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     console.warn('Underfilled thin-week draft is review-only. Artifacts were written for editor review.');

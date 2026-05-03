@@ -224,6 +224,34 @@ function blockingDeductions(deductions) {
   return ensureArray(deductions).filter(deduction => BLOCKING_DEDUCTION_CATEGORIES.has(deduction?.category));
 }
 
+function summarizeDeductionCategories(deductions) {
+  const counts = new Map();
+  for (const deduction of ensureArray(deductions)) {
+    const category = text(deduction?.category) || 'unknown';
+    counts.set(category, (counts.get(category) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([category, count]) => ({ category, count }))
+    .sort((a, b) => b.count - a.count || a.category.localeCompare(b.category));
+}
+
+function summarizeCandidateExclusions(reporter) {
+  const counts = new Map();
+  for (const candidate of ensureArray(reporter?.candidates)) {
+    if (isFinalSelected(candidate)) continue;
+    const reasons = ensureArray(candidate.final_exclusion_reasons).length > 0
+      ? candidate.final_exclusion_reasons
+      : ensureArray(candidate.exclusion_reasons);
+    for (const reason of reasons) {
+      const key = text(reason) || 'unknown';
+      counts.set(key, (counts.get(key) || 0) + 1);
+    }
+  }
+  return [...counts.entries()]
+    .map(([reason, count]) => ({ reason, count }))
+    .sort((a, b) => b.count - a.count || a.reason.localeCompare(b.reason));
+}
+
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : QUALITY_THRESHOLD;
   const sections = ensureArray(editor.sections);
@@ -341,11 +369,12 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     schema_version: 1,
     date,
     score,
+    max_score: 100,
     threshold,
     status,
     summary: status === 'PASS'
-      ? `품질 점수 ${score}/${threshold}; 편집장 검토 준비가 끝났습니다.`
-      : `품질 점수 ${score}/${threshold}; 발행 전 source gap과 deduction을 해결해야 합니다.`,
+      ? `Quality score ${score}, threshold ${threshold}, max score 100. Editor review is ready.`
+      : `Quality score ${score}, threshold ${threshold}, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.`,
     deductions: state.deductions,
     metrics: {
       article_count: sections.length,
@@ -357,38 +386,65 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       source_gap_count: gaps,
       source_integrity_violation_count: sourceIntegrityViolationCount,
       blocking_deduction_count: blockers.length,
-      blocking_deduction_categories: [...new Set(blockers.map(deduction => deduction.category))]
+      blocking_deduction_categories: [...new Set(blockers.map(deduction => deduction.category))],
+      top_deduction_categories: summarizeDeductionCategories(state.deductions).slice(0, 5),
+      candidate_exclusion_summary: summarizeCandidateExclusions(reporter).slice(0, 5)
     }
   };
 }
 
 function buildQualityReportMarkdown(report) {
   const deductions = ensureArray(report.deductions);
-  return `# 뉴스레터 품질 보고서 - ${report.date}
+  const metrics = report.metrics || {};
+  const articleCount = Number(metrics.article_count);
+  const compositionFailure = Number.isFinite(articleCount) && articleCount < MIN_MAIN_ARTICLES
+    ? `- Underfilled/composition failure: only ${articleCount} main articles were generated; expected at least ${MIN_MAIN_ARTICLES}.`
+    : '- Underfilled/composition failure: none';
+  const topDeductionCategories = ensureArray(metrics.top_deduction_categories)
+    .map(item => `- ${item.category} (${item.count})`)
+    .join('\n') || '- none';
+  const candidateExclusionSummary = ensureArray(metrics.candidate_exclusion_summary)
+    .map(item => `- ${item.reason} (${item.count})`)
+    .join('\n') || '- none';
 
-## 점수
+  return `# 뉴스레터 품질 리포트 - ${report.date}
 
-- 점수: ${report.score}/100
-- 기준: ${report.threshold}
-- 상태: ${report.status}
-- 요약: ${report.summary}
+## Gate Result
 
-## 지표
+- Quality score: ${report.score}
+- Quality threshold: ${report.threshold}
+- Max score: ${report.max_score || 100}
+- Result: ${report.status}
+- Summary: ${report.summary}
 
-- 기사 수: ${report.metrics.article_count}
-- 브리핑 수: ${report.metrics.briefing_count}
-- Camera 기사 수: ${report.metrics.camera_article_count}
-- AI 기사 수: ${report.metrics.ai_article_count}
-- fact-check 상태: ${report.metrics.fact_check_status}
-- must-fix 수: ${report.metrics.must_fix_count}
-- source gap 수: ${report.metrics.source_gap_count}
-- source integrity 위반 수: ${report.metrics.source_integrity_violation_count || 0}
-- blocking deduction 수: ${report.metrics.blocking_deduction_count || 0}
-- blocking deduction category: ${ensureArray(report.metrics.blocking_deduction_categories).join(', ') || '없음'}
+## Composition
 
-## 감점
+- Main article count: ${metrics.article_count}
+- Briefing count: ${metrics.briefing_count}
+- Camera article count: ${metrics.camera_article_count}
+- AI article count: ${metrics.ai_article_count}
+${compositionFailure}
 
-${deductions.length === 0 ? '- 없음' : deductions.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n')}
+## Fact Check And Source Integrity
+
+- Fact-check status: ${metrics.fact_check_status}
+- Must-fix count: ${metrics.must_fix_count}
+- Source-gap count: ${metrics.source_gap_count}
+- Source integrity violation count: ${metrics.source_integrity_violation_count || 0}
+- Blocking deduction count: ${metrics.blocking_deduction_count || 0}
+- Blocking deduction categories: ${ensureArray(metrics.blocking_deduction_categories).join(', ') || 'none'}
+
+## Top Deduction Categories
+
+${topDeductionCategories}
+
+## Candidate Exclusion Summary
+
+${candidateExclusionSummary}
+
+## Deductions
+
+${deductions.length === 0 ? '- none' : deductions.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n')}
 `;
 }
 

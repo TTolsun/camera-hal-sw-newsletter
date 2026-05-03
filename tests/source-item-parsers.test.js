@@ -40,6 +40,85 @@ test('Android Latest Updates parser extracts dated Camera library rows', () => {
   assert.match(items[0].api_or_component, /CameraX|androidx\.camera|Android developer update/);
 });
 
+test('CameraX release notes parser keeps only dated release child entries', () => {
+  const html = `
+    <article>
+      <h2 id="1.5.0-beta01">CameraX 1.5.0-beta01 - May 1, 2026</h2>
+      <p>Fixed Camera2 interop behavior and updated androidx.camera compatibility handling.</p>
+      <h2 id="old">Older notes</h2>
+      <p>General release note index without a concrete date.</p>
+    </article>
+  `;
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'camerax-release-notes',
+    name: 'CameraX Release Notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera'
+  }));
+
+  assert.equal(items.length, 1);
+  assertParsedItemContract(items[0]);
+  assert.equal(items[0].publishedAt, 'May 1, 2026');
+  assert.match(items[0].version_or_release, /CameraX 1\.5\.0-beta01/);
+  assert.match(items[0].behavior_change, /Fixed Camera2 interop behavior/);
+});
+
+test('AOSP camera documentation links stay on watchlist fallback path', () => {
+  const html = `
+    <main>
+      <p>Last updated 2026-05-01 UTC.</p>
+      <a href="/docs/core/camera/camera3">Camera HAL3 documentation</a>
+      <p>Updated Android Camera HAL API/component guidance for request and result metadata behavior.</p>
+    </main>
+  `;
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'aosp-camera-documentation',
+    name: 'AOSP Camera Documentation',
+    url: 'https://source.android.com/docs/core/camera',
+    sourceUrl: 'https://source.android.com/docs/core/camera'
+  }));
+
+  assert.deepEqual(items, []);
+});
+
+test('official security and toolchain release-note child entries preserve concrete evidence', () => {
+  const securityItems = parseSourceSpecificItems(`
+    <main>
+      <h2>May 2026</h2>
+      <a href="/docs/security/bulletin/2026-05-01">May 2026 Security Bulletin</a>
+      <p>Security fixes update Android framework behavior for CVE handling.</p>
+    </main>
+  `, source({
+    id: 'android-security-bulletin',
+    name: 'Android Security Bulletin',
+    url: 'https://source.android.com/docs/security/bulletin',
+    sourceUrl: 'https://source.android.com/docs/security/bulletin'
+  }));
+  const llvmItems = parseSourceSpecificItems(`
+    <main>
+      <h2>May 1, 2026</h2>
+      <a href="/21.1.0/docs/ReleaseNotes.html">LLVM 21.1.0 Release Notes</a>
+      <p>Changed Clang diagnostics and sanitizer behavior for native C++ builds.</p>
+    </main>
+  `, source({
+    id: 'llvm-release-notes',
+    name: 'LLVM Release Notes',
+    url: 'https://releases.llvm.org/',
+    sourceUrl: 'https://releases.llvm.org/'
+  }));
+
+  assert.equal(securityItems.length, 1);
+  assertParsedItemContract(securityItems[0]);
+  assert.equal(securityItems[0].publishedAt, '2026-05-01');
+  assert.match(securityItems[0].api_or_component, /Android Security Bulletin/);
+  assert.equal(llvmItems.length, 1);
+  assertParsedItemContract(llvmItems[0]);
+  assert.match(llvmItems[0].version_or_release, /LLVM 21\.1\.0/);
+  assert.match(llvmItems[0].api_or_component, /LLVM|Clang/);
+});
+
 test('Claude Code changelog parser extracts version and date blocks', () => {
   const html = `
     <article>

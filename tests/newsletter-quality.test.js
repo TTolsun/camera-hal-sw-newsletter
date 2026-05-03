@@ -2,7 +2,8 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  buildNewsletterQualityReport
+  buildNewsletterQualityReport,
+  buildQualityReportMarkdown
 } = require('../scripts/lib/newsletter-quality');
 
 function source(url, title = 'Source') {
@@ -119,4 +120,39 @@ test('quality gate fails missing Camera HAL perspective and fewer than 2 action 
   assert.equal(report.status, 'NEEDS_FIX');
   assert.ok(report.deductions.some(item => item.reason.includes('camera_hal_perspective')));
   assert.ok(report.deductions.some(item => item.reason.includes('at least 2 action_items')));
+});
+
+test('quality report markdown separates score threshold max score and result', () => {
+  const markdown = buildQualityReportMarkdown({
+    date: '2026-05-03',
+    score: 70,
+    max_score: 100,
+    threshold: 90,
+    status: 'NEEDS_FIX',
+    summary: '품질 점수 70, 기준 90, 만점 100.',
+    deductions: [
+      { category: 'composition', points: 4, reason: 'Expected 4-5 main articles, found 3.' }
+    ],
+    metrics: {
+      article_count: 3,
+      briefing_count: 3,
+      camera_article_count: 2,
+      ai_article_count: 1,
+      fact_check_status: 'PASS',
+      must_fix_count: 0,
+      source_gap_count: 1,
+      source_integrity_violation_count: 0,
+      blocking_deduction_count: 1,
+      blocking_deduction_categories: ['composition'],
+      top_deduction_categories: [{ category: 'composition', count: 1 }],
+      candidate_exclusion_summary: [{ reason: 'missing dated evidence', count: 2 }]
+    }
+  });
+
+  assert.match(markdown, /Quality score: 70/);
+  assert.match(markdown, /Quality threshold: 90/);
+  assert.match(markdown, /Max score: 100/);
+  assert.match(markdown, /Result: NEEDS_FIX/);
+  assert.match(markdown, /Underfilled\/composition failure: only 3 main articles/);
+  assert.doesNotMatch(markdown, /70\/90/);
 });
