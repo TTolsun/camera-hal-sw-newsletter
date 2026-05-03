@@ -4,7 +4,7 @@ This file is generated from the structured newsletter source registry. Gemini us
 
 - Lookback: 21 days
 - Candidate count: 40
-- Source registry: data\news-sources.json
+- Source registry: data/news-sources.json
 - Candidate-only media/community sources require official-source verification before final article selection.
 - Static HTML pages without concrete dated release/API/behavior evidence are watchlist/reference material, not main article candidates.
 
@@ -31,24 +31,24 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 |---|---:|---:|---|---|---|---|---|---|---|---|
 | watchlist | 100 | 6 | release-note-page | no | release_note_item | CameraX Release Notes | CameraX Release Notes - 1.6.0 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/jetpack/androidx/releases/camera#camerax) |
 | watchlist | 100 | 6 | release-note-page | no | release_note_item | CameraX Release Notes | CameraX Release Notes - 1.7.0-alpha01 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/jetpack/androidx/releases/camera#groovy) |
-| watchlist | 100 | 2 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Note di rilascio | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/release-notes?hl=it) |
-| watchlist | 100 | 4 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Compatibility Definition Document (CDD) più recente | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/latest-cdd?hl=it) |
-| watchlist | 100 | 4 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Compatibility Definition Document (CDD) | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/compatibility/cdd?hl=it) |
-| watchlist | 100 | 4 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Suite di test di compatibilità (Compatibility Test Suite, CTS) | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/compatibility/cts?hl=it) |
-| watchlist | 100 | 4 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Dettagli della release | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/automotive/start/releases?hl=it) |
-| watchlist | 100 | 2 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Compatibilità | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/compatibility?hl=it) |
-| watchlist | 100 | 6 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Note di rilascio di Android 16 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-16-release) |
-| watchlist | 100 | 6 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Note di rilascio di Android 15 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-15-release) |
-| watchlist | 100 | 6 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Note sulla release di Android 14 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-14-release) |
-| watchlist | 100 | 6 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Note di rilascio di Android 13 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-13-release) |
-| watchlist | 100 | 6 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Note di rilascio di Android 12 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-12-release) |
+| watchlist | 100 | 2 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | 출시 노트 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/release-notes?hl=ko) |
+| watchlist | 100 | 2 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | 최신 호환성 정의 문서(CDD) | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/latest-cdd?hl=ko) |
+| watchlist | 100 | 2 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | 호환성 정의 문서(CDD) | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/compatibility/cdd?hl=ko) |
+| watchlist | 100 | 2 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | 호환성 테스트 모음(CTS) | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/compatibility/cts?hl=ko) |
+| watchlist | 100 | 2 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | 출시 세부정보 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/automotive/start/releases?hl=ko) |
+| watchlist | 100 | 2 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | 호환성 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/compatibility?hl=ko) |
+| watchlist | 100 | 4 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Android 16 출시 노트 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-16-release) |
+| watchlist | 100 | 6 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Android 15 출시 노트 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-15-release) |
+| watchlist | 100 | 4 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Android 14 출시 노트 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-14-release) |
+| watchlist | 100 | 4 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Android 13 출시 노트 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-13-release) |
+| watchlist | 100 | 4 | release-note-page | no | release_note_item | AOSP What's New / Release Notes | Android 12 출시 노트 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/android-12-release) |
 | watchlist | 100 | 6 | release-note-page | no | release_note_item | Android Security Bulletin | Latest security bulletins | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew/latest-security-bulletins) |
 | watchlist | 99 | 4 | release-note-page | no | release_note_item | Android Security Bulletin | Bulletins | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/security/bulletin) |
 | watchlist | 92 | 6 | release-note-page | no | release_note_item | CameraX Release Notes | CameraX Release Notes - Camera Viewfinder Compose Version 1.0 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/jetpack/androidx/releases/camera#camera_viewfinder_compose_version_10_2) |
 | watchlist | 92 | 6 | release-note-page | no | release_note_item | CameraX Release Notes | CameraX Release Notes - Camera Viewfinder Version 1.4 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/jetpack/androidx/releases/camera#camera_viewfinder_version_14_2) |
 | watchlist | 92 | 6 | release-note-page | no | release_note_item | CameraX Release Notes | CameraX Release Notes - Version 1.7 | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/jetpack/androidx/releases/camera#version_17_2) |
 | watchlist | 72 | 4 | html-watch-page | no | documentation_page | AOSP Camera Documentation | Camera &nbsp;\|&nbsp; Android Open Source Project | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/core/camera) |
-| watchlist | 37 | 0 | release-note-page | no | rolling_page | Android Developers Latest Updates | آخرین به‌روزرسانی‌های اندروید &nbsp;\|&nbsp; Latest updates &nbsp;\|&nbsp; Android Developers | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/latest-updates) |
+| watchlist | 37 | 0 | release-note-page | no | rolling_page | Android Developers Latest Updates | Ultimi aggiornamenti di Android &nbsp;\|&nbsp; Latest updates &nbsp;\|&nbsp; Android Developers | review needed | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/latest-updates) |
 
 ## Excluded or low-confidence items
 
@@ -239,12 +239,12 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: dependencies { // CameraX core library using the camera2 implementation def camerax_version = "1.7.0-alpha01" // The following line is optional, as the core library is included indirectly by camera-camera2 implementation "androidx.camera:camera-core:${camerax_version}" implementation "androidx.camera:camera-camera2:${camerax_version}" // If you want to additionally use the CameraX Lifecycle library implementation "androidx.camera:camera-lifecycle:${camerax_version}" // If you want to additionall
 - Selection reason: CameraX Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 6. Note di rilascio
+### 6. 출시 노트
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
 - Published: review needed
-- Link: https://source.android.com/docs/whatsnew/release-notes?hl=it
+- Link: https://source.android.com/docs/whatsnew/release-notes?hl=ko
 - Section: Android / AOSP / Camera
 - Source category: aosp
 - Source priority: high
@@ -264,20 +264,20 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Evidence score: 2
 - Version/release: not extracted
 - API/component: AOSP Camera / Android platform compatibility
-- Behavior change: aria-label="submenu" hidden> Novità Note di rilascio Bollettini sulla sicurezza più recenti
+- Behavior change: aria-label="submenu" hidden> 새로운 기능 출시 노트 최신 보안 게시판
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: aria-label="submenu" hidden> Novità Note di rilascio Bollettini sulla sicurezza più recenti
+- Summary: aria-label="submenu" hidden> 새로운 기능 출시 노트 최신 보안 게시판
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 7. Compatibility Definition Document (CDD) più recente
+### 7. 최신 호환성 정의 문서(CDD)
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
 - Published: review needed
-- Link: https://source.android.com/docs/whatsnew/latest-cdd?hl=it
+- Link: https://source.android.com/docs/whatsnew/latest-cdd?hl=ko
 - Section: Android / AOSP / Camera
 - Source category: aosp
 - Source priority: high
@@ -294,23 +294,23 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 4
+- Evidence score: 2
 - Version/release: not extracted
 - API/component: CDD
-- Behavior change: k-metadata-module="tertiary nav" track-metadata-module_headline="novità" tooltip > Bollettini sulla sicurezza più recenti Compatibility Definition Document (CDD) più recente Aggiornamenti dei siti <ul class=
+- Behavior change: 문서" track-metadata-module="tertiary nav" track-metadata-module_headline="새로운 기능" tooltip > 최신 보안 게시판 최신 호환성 정의 문서(CDD) 사이트 업데이트 <ul class="devsite-tabs-dropdow
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: k-metadata-module="tertiary nav" track-metadata-module_headline="novità" tooltip > Bollettini sulla sicurezza più recenti Compatibility Definition Document (CDD) più recente Aggiornamenti dei siti <ul class=
+- Summary: 문서" track-metadata-module="tertiary nav" track-metadata-module_headline="새로운 기능" tooltip > 최신 보안 게시판 최신 호환성 정의 문서(CDD) 사이트 업데이트 <ul class="devsite-tabs-dropdow
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 8. Compatibility Definition Document (CDD)
+### 8. 호환성 정의 문서(CDD)
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
 - Published: review needed
-- Link: https://source.android.com/docs/compatibility/cdd?hl=it
+- Link: https://source.android.com/docs/compatibility/cdd?hl=ko
 - Section: Android / AOSP / Camera
 - Source category: aosp
 - Source priority: high
@@ -327,23 +327,23 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 4
+- Evidence score: 2
 - Version/release: not extracted
 - API/component: CDD
-- Behavior change: Compatibilità Compatibility Definition Document (CDD) Suite di test di compatibilità (Compatibility Test Suite, CTS)
+- Behavior change: 호환성 호환성 정의 문서(CDD) 호환성 테스트 모음(CTS) <ul class="devsite-tabs-dropdown-se
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: Compatibilità Compatibility Definition Document (CDD) Suite di test di compatibilità (Compatibility Test Suite, CTS)
-- Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
+- Summary: 호환성 호환성 정의 문서(CDD) 호환성 테스트 모음(CTS) <ul class="devsite-tabs-dropdown-se
+- Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 9. Suite di test di compatibilità (Compatibility Test Suite, CTS)
+### 9. 호환성 테스트 모음(CTS)
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
 - Published: review needed
-- Link: https://source.android.com/docs/compatibility/cts?hl=it
+- Link: https://source.android.com/docs/compatibility/cts?hl=ko
 - Section: Android / AOSP / Camera
 - Source category: aosp
 - Source priority: high
@@ -360,56 +360,23 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 4
+- Evidence score: 2
 - Version/release: not extracted
 - API/component: CDD
-- Behavior change: ta-module="tertiary nav" track-metadata-module_headline="compatibilità" tooltip > Compatibility Definition Document (CDD) Suite di test di compatibilità (Compatibility Test Suite, CTS) Dispositivi Android
+- Behavior change: " track-metadata-module="tertiary nav" track-metadata-module_headline="호환성" tooltip > 호환성 정의 문서(CDD) 호환성 테스트 모음(CTS) Android 기기 <div
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: ta-module="tertiary nav" track-metadata-module_headline="compatibilità" tooltip > Compatibility Definition Document (CDD) Suite di test di compatibilità (Compatibility Test Suite, CTS) Dispositivi Android
+- Summary: " track-metadata-module="tertiary nav" track-metadata-module_headline="호환성" tooltip > 호환성 정의 문서(CDD) 호환성 테스트 모음(CTS) Android 기기 <div
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 10. Dettagli della release
+### 10. 출시 세부정보
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
 - Published: review needed
-- Link: https://source.android.com/docs/automotive/start/releases?hl=it
-- Section: Android / AOSP / Camera
-- Source category: aosp
-- Source priority: high
-- Source reliability: official
-- Candidate only: no
-- Collection mode: release-note-page
-- Article candidate: no
-- Watch page: yes
-- Has dated evidence: no
-- Evidence level: undated-watch-page
-- Final selection eligibility: watchlist
-- Source kind: release_note_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 4
-- Version/release: not extracted
-- API/component: AOSP Camera / Android platform compatibility
-- Behavior change: etadata-module="tertiary nav" track-metadata-module_headline="compatibilità" tooltip > Strumenti e infrastruttura di test Dettagli della release Riferimento <div
-- Requires cross-check: no
-- Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
-- Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
-- Relevance Score: 100
-- Summary: etadata-module="tertiary nav" track-metadata-module_headline="compatibilità" tooltip > Strumenti e infrastruttura di test Dettagli della release Riferimento <div
-- Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
-
-### 11. Compatibilità
-
-- Source: AOSP What's New / Release Notes
-- Source URL: https://source.android.com/docs/whatsnew
-- Published: review needed
-- Link: https://source.android.com/docs/compatibility?hl=it
+- Link: https://source.android.com/docs/automotive/start/releases?hl=ko
 - Section: Android / AOSP / Camera
 - Source category: aosp
 - Source priority: high
@@ -429,15 +396,48 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Evidence score: 2
 - Version/release: not extracted
 - API/component: AOSP Camera / Android platform compatibility
-- Behavior change: ource.android.com/docs/core?hl=it" track-type="nav" track-metadata-position="nav - argomenti principali" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: Argomenti principali" track-name="argomenti principali" > Argomenti principali Compatibilità Dispositivi Android <a href="https://source.android.com/docs/automotive?hl=it" class="devsite-tabs-content gc-analytics-event " track-metadata-eventdetail="https://source.an
+- Behavior change: 문서" track-metadata-module="tertiary nav" track-metadata-module_headline="호환성" tooltip > 테스트 도구 및 인프라 출시 세부정보 참조 <div class="devsite-nav-item-t
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: ource.android.com/docs/core?hl=it" track-type="nav" track-metadata-position="nav - argomenti principali" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: Argomenti principali" track-name="argomenti principali" > Argomenti principali Compatibilità Dispositivi Android <a href="https://source.android.com/docs/automotive?hl=it" class="devsite-tabs-content gc-analytics-event " track-metadata-eventdetail="https://source.an
+- Summary: 문서" track-metadata-module="tertiary nav" track-metadata-module_headline="호환성" tooltip > 테스트 도구 및 인프라 출시 세부정보 참조 <div class="devsite-nav-item-t
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 12. Note di rilascio di Android 16
+### 11. 호환성
+
+- Source: AOSP What's New / Release Notes
+- Source URL: https://source.android.com/docs/whatsnew
+- Published: review needed
+- Link: https://source.android.com/docs/compatibility?hl=ko
+- Section: Android / AOSP / Camera
+- Source category: aosp
+- Source priority: high
+- Source reliability: official
+- Candidate only: no
+- Collection mode: release-note-page
+- Article candidate: no
+- Watch page: yes
+- Has dated evidence: no
+- Evidence level: undated-watch-page
+- Final selection eligibility: watchlist
+- Source kind: release_note_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 2
+- Version/release: not extracted
+- API/component: AOSP Camera / Android platform compatibility
+- Behavior change: nalytics-event " track-metadata-eventdetail="https://source.android.com/docs/core?hl=ko" track-type="nav" track-metadata-position="nav - 핵심 주제" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 핵심 주제" track-name="핵심 주제" > 핵심 주제 호환성 Android 기기 <a href="https://source.android.com/docs/automotive?hl=ko" class="devsite-tabs-content gc-analytics-event " track-metadata-eventdetail="https://source.android.com/docs/automotive?hl=ko"
+- Requires cross-check: no
+- Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Relevance Score: 100
+- Summary: nalytics-event " track-metadata-eventdetail="https://source.android.com/docs/core?hl=ko" track-type="nav" track-metadata-position="nav - 핵심 주제" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 핵심 주제" track-name="핵심 주제" > 핵심 주제 호환성 Android 기기 <a href="https://source.android.com/docs/automotive?hl=ko" class="devsite-tabs-content gc-analytics-event " track-metadata-eventdetail="https://source.android.com/docs/automotive?hl=ko"
+- Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
+
+### 12. Android 16 출시 노트
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
@@ -459,18 +459,18 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 6
+- Evidence score: 4
 - Version/release: Android 16
 - API/component: AOSP Camera / Android platform compatibility
-- Behavior change: able-nav"> Note di rilascio Panoramica Note di rilascio di Android 16 Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 <a href="/docs/whatsnew/android-11-release" class="devsite-n
+- Behavior change: ass="devsite-expandable-nav"> 출시 노트 개요 Android 16 출시 노트 Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 An
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: able-nav"> Note di rilascio Panoramica Note di rilascio di Android 16 Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 <a href="/docs/whatsnew/android-11-release" class="devsite-n
+- Summary: ass="devsite-expandable-nav"> 출시 노트 개요 Android 16 출시 노트 Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 An
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 13. Note di rilascio di Android 15
+### 13. Android 15 출시 노트
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
@@ -495,15 +495,15 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Evidence score: 6
 - Version/release: Android 15
 - API/component: AOSP Camera / Android platform compatibility
-- Behavior change: otes" class="devsite-nav-title" > Panoramica Note di rilascio di Android 16 Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 Note di rilascio di Android 11 <a href="/docs/whatsnew/android-10-release" class="devsite-n
+- Behavior change: f="/docs/whatsnew/release-notes" class="devsite-nav-title" > 개요 Android 16 출시 노트 Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 Android 11 출시 노트 An
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: otes" class="devsite-nav-title" > Panoramica Note di rilascio di Android 16 Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 Note di rilascio di Android 11 <a href="/docs/whatsnew/android-10-release" class="devsite-n
+- Summary: f="/docs/whatsnew/release-notes" class="devsite-nav-title" > 개요 Android 16 출시 노트 Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 Android 11 출시 노트 An
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 14. Note sulla release di Android 14
+### 14. Android 14 출시 노트
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
@@ -525,18 +525,18 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 6
+- Evidence score: 4
 - Version/release: Android 14
 - API/component: AOSP Camera / Android platform compatibility
-- Behavior change: -16-release" class="devsite-nav-title" > Note di rilascio di Android 16 Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 Note di rilascio di Android 11 Note di rilascio di Android 10 <a href="/docs/whatsnew/p-release-notes" class="devsite-nav-ti
+- Behavior change: "> Android 16 출시 노트 Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 Android 11 출시 노트 Android 10 출시 노트 Andro
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: -16-release" class="devsite-nav-title" > Note di rilascio di Android 16 Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 Note di rilascio di Android 11 Note di rilascio di Android 10 <a href="/docs/whatsnew/p-release-notes" class="devsite-nav-ti
+- Summary: "> Android 16 출시 노트 Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 Android 11 출시 노트 Android 10 출시 노트 Andro
 - Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 15. Note di rilascio di Android 13
+### 15. Android 13 출시 노트
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
@@ -558,18 +558,18 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 6
+- Evidence score: 4
 - Version/release: Android 13
 - API/component: AOSP Camera / Android platform compatibility
-- Behavior change: data-title="Novità!" aria-hidden="true"> Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 Note di rilascio di Android 11 Note di rilascio di Android 10 Note sulla release di Android 9 <a href="/docs/whatsnew/latest-security-bulletins"
+- Behavior change: al-icons" data-icon="new" data-title="신규" aria-hidden="true"> Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 Android 11 출시 노트 Android 10 출시 노트 Android 9 출시 노트 <span class="devsi
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: data-title="Novità!" aria-hidden="true"> Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 Note di rilascio di Android 11 Note di rilascio di Android 10 Note sulla release di Android 9 <a href="/docs/whatsnew/latest-security-bulletins"
-- Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
+- Summary: al-icons" data-icon="new" data-title="신규" aria-hidden="true"> Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 Android 11 출시 노트 Android 10 출시 노트 Android 9 출시 노트 <span class="devsi
+- Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 16. Note di rilascio di Android 12
+### 16. Android 12 출시 노트
 
 - Source: AOSP What's New / Release Notes
 - Source URL: https://source.android.com/docs/whatsnew
@@ -591,16 +591,16 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 6
+- Evidence score: 4
 - Version/release: Android 12
-- API/component: AOSP Camera / Android platform compatibility
-- Behavior change: evsite-nav-text" tooltip>Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 Note di rilascio di Android 11 Note di rilascio di Android 10 Note sulla release di Android 9 Bollettino sulla sicurezza più recente <a href="/docs/whatsnew/latest-cd
+- API/component: CDD
+- Behavior change: ss="devsite-nav-title" > Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 Android 11 출시 노트 Android 10 출시 노트 Android 9 출시 노트 최신 보안 게시판 <span class="devsite-nav-text
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 100
-- Summary: evsite-nav-text" tooltip>Note di rilascio di Android 15 Note sulla release di Android 14 Note di rilascio di Android 13 Note di rilascio di Android 12 Note di rilascio di Android 11 Note di rilascio di Android 10 Note sulla release di Android 9 Bollettino sulla sicurezza più recente <a href="/docs/whatsnew/latest-cd
-- Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.
+- Summary: ss="devsite-nav-title" > Android 15 출시 노트 Android 14 출시 노트 Android 13 출시 노트 Android 12 출시 노트 Android 11 출시 노트 Android 10 출시 노트 Android 9 출시 노트 최신 보안 게시판 <span class="devsite-nav-text
+- Selection reason: AOSP What's New / Release Notes (official, high, score 100): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
 ### 17. Latest security bulletins
 
@@ -998,7 +998,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Summary: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP Camera Documentation (official, high, score 72): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 29. آخرین به‌روزرسانی‌های اندروید &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers
+### 29. Ultimi aggiornamenti di Android &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers
 
 - Source: Android Developers Latest Updates
 - Source URL: https://developer.android.com/latest-updates
@@ -1023,12 +1023,12 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Evidence score: 0
 - Version/release: not extracted
 - API/component: not extracted
-- Behavior change: با جدیدترین‌های اکوسیستم اندروید آشنا شوید.
+- Behavior change: Scopri le novità dell'ecosistema Android.
 - Requires cross-check: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 37
-- Summary: با جدیدترین‌های اکوسیستم اندروید آشنا شوید.
+- Summary: Scopri le novità dell'ecosistema Android.
 - Selection reason: Android Developers Latest Updates (official, high, score 37): Camera HAL relevance and engineering productivity signals were both detected.
 
 ### 30. 2026 Annual C++ Developer Survey "Lite"
@@ -1398,7 +1398,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 
 - LLVM Project Blog: 404 Not Found
 - OpenAI News: 403 Forbidden
-- Anthropic News: 502 Bad Gateway
 
 ## Editor-in-Chief Checklist
 

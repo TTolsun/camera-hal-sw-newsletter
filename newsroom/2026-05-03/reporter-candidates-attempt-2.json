@@ -46,19 +46,19 @@
       "briefing_only": false,
       "reference_only": false,
       "evidence_score": 6,
-      "version_or_release": "최신 Nano Banana 모델",
-      "api_or_component": "Firebase AI Logic API",
-      "behavior_change": "하이브리드 추론, Firebase AI Logic용 새 API, 최신 Nano Banana 모델을 포함한 새 Gemini 모델 지원",
+      "version_or_release": "",
+      "api_or_component": "API",
+      "behavior_change": "Posted by Thomas Ezan, Senior Developer Relations Engineer If you are an Android developer looking to implement innovative AI features into your app, we recently launched powerful new updates: Hybrid inference, a new API for Firebase AI Logic to leverage both on-device and Cloud inference, and support for new Gemini models including the latest Nano Banana models for image generation.",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for main article selection.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델",
+      "title": "Experimental hybrid inference and new Gemini models for Android",
       "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
       "publishedAt": "Fri, 17 Apr 2026 20:00:00 +0000",
       "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
-      "summary": "Android 개발자가 앱에 혁신적인 AI 기능을 구현하려는 경우, 온디바이스 및 클라우드 추론을 모두 활용하는 Firebase AI Logic용 새 API인 하이브리드 추론과 최신 Nano Banana 모델을 포함한 새 Gemini 모델 지원과 같은 강력한 새 업데이트가 최근 출시되었습니다.",
+      "summary": "Android 앱 개발자를 위한 하이브리드 추론 및 새로운 Gemini 모델 지원 업데이트가 출시되었습니다. Firebase AI Logic용 새 API를 통해 온디바이스 및 클라우드 추론을 모두 활용할 수 있으며, 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델이 지원됩니다.",
       "relevanceScore": 100,
       "relevance_score": 100,
       "cameraHalRelevanceScore": 100,
@@ -100,8 +100,8 @@
           "validationStatus": "ok",
           "alt": "hero android logo",
           "contentType": "image/svg+xml",
-          "height": 24,
-          "width": 24
+          "height": 12454,
+          "width": 12454
         }
       ],
       "image_candidates": [
@@ -172,7 +172,7 @@
       "cpp_fallback_candidate": true,
       "selection_slot": "ai-required",
       "evidence_notes": [
-        "2026년 4월 17일 Android Developers Blog 게시물에서 하이브리드 추론, Firebase AI Logic용 새 API, 최신 Nano Banana 모델을 포함한 새 Gemini 모델 지원에 대한 구체적인 증거를 확인했습니다."
+        "2026년 4월 17일 Android Developers Blog 게시물에 따르면, Android 앱을 위한 하이브리드 추론 및 새로운 Gemini 모델 지원 업데이트가 출시되었습니다. Firebase AI Logic용 새 API는 온디바이스 및 클라우드 추론을 모두 활용하며, 이미지 생성을 위한 최신 Nano Banana 모델이 포함됩니다."
       ],
       "cross_check_status": "official-source",
       "android_camera_relevance_score": 5,
@@ -181,12 +181,14 @@
       "freshness_score": 2,
       "ai_required_slot_fit_score": 3,
       "cpp_fallback_value_score": 2,
-      "relevance_reason": "AI 모델이 이미지 생성 및 온디바이스 추론에 사용될 수 있으며, 이는 Camera HAL의 데이터 경로, NPU/GPU 스케줄링, 성능 및 전력 관리에 직접적인 영향을 미칩니다.",
+      "relevance_reason": "Android Developers Blog (official, high, score 100): Camera HAL relevance and engineering productivity signals were both detected.",
       "impact_areas": [
-        "AI Integration",
-        "Performance",
-        "Power Management",
-        "NPU/GPU Scheduling"
+        "AI features",
+        "on-device inference",
+        "NPU/GPU scheduling",
+        "image processing pipeline",
+        "power consumption",
+        "latency"
       ]
     },
     {
@@ -234,19 +236,19 @@
       "briefing_only": false,
       "reference_only": false,
       "evidence_score": 8,
-      "version_or_release": "Android 17 Beta 4",
-      "api_or_component": "Android SDK",
-      "behavior_change": "Android 17 Beta 4는 앱 호환성 및 플랫폼 안정성을 위한 중요한 이정표입니다. 최신 API를 활용하여 앱, 라이브러리, 도구 및 게임 엔진을 테스트할 수 있는 거의 최종적인 환경을 제공합니다.",
+      "version_or_release": "Android 17",
+      "api_or_component": "SDK",
+      "behavior_change": "Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability.",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for main article selection.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Android 17 네 번째 베타 버전 출시",
+      "title": "The Fourth Beta of Android 17",
       "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
       "publishedAt": "Thu, 16 Apr 2026 20:00:00 +0000",
       "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
-      "summary": "Android 17이 베타 4에 도달했습니다. 이는 이번 릴리스 주기의 마지막 예정된 베타 버전으로, 앱 호환성 및 플랫폼 안정성을 위한 중요한 이정표입니다. 앱의 사용자 경험을 미세 조정하든, 부드러운 에지 투 에지 렌더링을 보장하든, 최신 API를 활용하든, 베타 4는 테스트에 필요한 거의 최종적인 환경을 제공합니다. 앱, 라이브러리, 도구 및 게임 엔진을 준비하세요!",
+      "summary": "Android 17의 네 번째 베타 버전이 출시되어 앱 호환성 및 플랫폼 안정성을 위한 중요한 이정표에 도달했습니다. 이는 최종 릴리스에 가까운 환경을 제공하므로 앱, 라이브러리, 도구 및 게임 엔진 개발자는 이를 활용하여 테스트를 진행해야 합니다.",
       "relevanceScore": 88,
       "relevance_score": 88,
       "cameraHalRelevanceScore": 88,
@@ -288,8 +290,8 @@
           "validationStatus": "ok",
           "alt": "hero android logo",
           "contentType": "image/svg+xml",
-          "height": 24,
-          "width": 24
+          "height": 12454,
+          "width": 12454
         }
       ],
       "image_candidates": [
@@ -360,7 +362,7 @@
       "cpp_fallback_candidate": true,
       "selection_slot": "platform-adjacent",
       "evidence_notes": [
-        "2026년 4월 16일 Android Developers Blog 게시물에서 Android 17 Beta 4 출시 및 앱 호환성, 플랫폼 안정성에 대한 구체적인 증거를 확인했습니다."
+        "2026년 4월 16일 Android Developers Blog 게시물에 따르면, Android 17의 네 번째 베타 버전이 출시되었습니다. 이는 앱 호환성 및 플랫폼 안정성을 위한 마지막 예정된 베타 버전입니다."
       ],
       "cross_check_status": "official-source",
       "android_camera_relevance_score": 5,
@@ -369,12 +371,13 @@
       "freshness_score": 2,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 2,
-      "relevance_reason": "Android 17 Beta 4는 앱 호환성과 플랫폼 안정성에 중점을 둡니다. 이는 Camera HAL 구현이 새로운 Android 프레임워크 요구사항 및 API와 호환되는지 확인하기 위한 중요한 테스트 시점을 의미합니다. 특히 CTS/VTS 통과 및 CameraX와 같은 상위 계층 프레임워크의 안정성에 영향을 미칠 수 있습니다.",
+      "relevance_reason": "Android Developers Blog (official, high, score 88): Camera HAL relevance and engineering productivity signals were both detected.",
       "impact_areas": [
-        "Compatibility",
-        "Platform Stability",
+        "platform stability",
+        "app compatibility",
         "CTS/VTS",
-        "API Compliance"
+        "Camera HAL compatibility",
+        "API changes"
       ]
     },
     {
@@ -422,19 +425,19 @@
       "briefing_only": false,
       "reference_only": false,
       "evidence_score": 6,
-      "version_or_release": "2026 Annual C++ Developer Survey",
-      "api_or_component": "C++ 표준화 및 도구",
-      "behavior_change": "C++ 개발자 커뮤니티의 피드백을 수집하여 C++ 표준화 및 도구 공급업체에 정보를 제공합니다.",
+      "version_or_release": "",
+      "api_or_component": "C++ / native toolchain",
+      "behavior_change": "This is the biggest opportunity we all have each year to make our voices heard and help improve our industry and community!",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for short newsletter use.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "2026년 연례 C++ 개발자 설문조사 \"Lite\" 시작",
+      "title": "2026 Annual C++ Developer Survey \"Lite\"",
       "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
       "publishedAt": "Wed, 22 Apr 2026 00:59:01 +0000",
       "published_date": "Wed, 22 Apr 2026 00:59:01 +0000",
-      "summary": "연례 글로벌 C++ 개발자 설문조사가 시작되었습니다. 이 10분 설문조사에 피드백을 공유하여 C++ 표준화 및 C++ 도구 공급업체에 정보를 제공하는 데 도움을 주세요. 이는 우리 모두가 매년 목소리를 내고 산업과 커뮤니티를 개선하는 데 가장 큰 기회입니다!",
+      "summary": "2026년 연례 글로벌 C++ 개발자 설문조사가 시작되었습니다. 이 10분 설문조사를 통해 C++ 표준화 및 도구 공급업체에 피드백을 제공할 수 있습니다. 이는 산업 및 커뮤니티 개선에 기여할 수 있는 중요한 기회입니다.",
       "relevanceScore": 57,
       "relevance_score": 57,
       "cameraHalRelevanceScore": 57,
@@ -465,21 +468,20 @@
       "cpp_fallback_candidate": true,
       "selection_slot": "ai-required",
       "evidence_notes": [
-        "2026년 4월 22일 ISO C++ Blog 게시물에서 2026년 연례 C++ 개발자 설문조사 시작에 대한 구체적인 증거를 확인했습니다."
+        "2026년 4월 22일 ISO C++ Blog 게시물에 따르면, 2026년 연례 C++ 개발자 설문조사가 시작되었습니다. 이 설문조사는 C++ 표준화 및 도구 공급업체에 피드백을 제공하는 기회입니다."
       ],
       "cross_check_status": "official-source",
       "android_camera_relevance_score": 5,
-      "practical_actionability_score": 3,
+      "practical_actionability_score": 5,
       "source_reliability_score": 4,
       "freshness_score": 2,
       "ai_required_slot_fit_score": 3,
       "cpp_fallback_value_score": 2,
-      "relevance_reason": "Camera HAL은 C++로 구현되므로 C++ 표준화 및 도구 개선은 HAL 개발자의 생산성, 코드 품질, 성능 및 안정성에 영향을 미칩니다. 설문조사 참여는 향후 Android HAL 개발에 유용한 C++ 기능을 제안할 기회가 될 수 있습니다.",
+      "relevance_reason": "ISO C++ Blog (official-community, high, score 57): Camera HAL relevance and engineering productivity signals were both detected.",
       "impact_areas": [
-        "C++ Development",
-        "Toolchain",
-        "Code Quality",
-        "Developer Productivity"
+        "C++ toolchain",
+        "native code quality",
+        "developer workflow"
       ]
     }
   ],
