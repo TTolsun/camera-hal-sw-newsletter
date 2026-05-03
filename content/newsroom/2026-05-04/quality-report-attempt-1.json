@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-04",
+  "score": 77,
+  "max_score": 100,
+  "threshold": 85,
+  "status": "NEEDS_FIX",
+  "summary": "Quality score 77, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "deductions": [
+    {
+      "category": "hal-relevance",
+      "points": 8,
+      "reason": "Expected at least 2 Camera HAL / Android Camera articles, found 1.",
+      "location": "",
+      "blocking": true
+    },
+    {
+      "category": "source-integrity",
+      "points": 15,
+      "reason": "Fact checker returned 6 must_fix item(s).",
+      "location": "",
+      "blocking": true
+    }
+  ],
+  "metrics": {
+    "article_count": 4,
+    "briefing_count": 3,
+    "camera_article_count": 1,
+    "ai_article_count": 2,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 6,
+    "source_gap_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 2,
+    "blocking_deduction_categories": [
+      "hal-relevance",
+      "source-integrity"
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "hal-relevance",
+        "count": 1
+      },
+      {
+        "category": "source-integrity",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

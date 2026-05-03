@@ -1,0 +1,75 @@
+{
+  "locked_sections": [
+    {
+      "index": 1,
+      "headline": "Android 17 베타 4 출시: 플랫폼 안정성 최종 점검",
+      "category": "Android Camera / platform API",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
+      ],
+      "source_titles": [
+        "The Fourth Beta of Android 17"
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Linux 7.1-rc2, 구형 AMD GPU 드라이버 개선 및 수정",
+      "category": "Linux camera / libcamera / V4L2",
+      "urls": [
+        "https://www.phoronix.com/news/Linux-7.1-rc2-GPU-Driver-Fixes"
+      ],
+      "source_titles": [
+        "Linux 7.1-rc2 Bringing Some More Improvements/Fixes For Older AMD GPUs"
+      ]
+    }
+  ],
+  "failed_sections": [
+    {
+      "index": 1,
+      "headline": "Android 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "AI plus camera input path or HAL workflow",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "source_titles": [
+        "Experimental hybrid inference and new Gemini models for Android"
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "VideoLAN, 오픈 소스 AV2 디코더 Dav2d 공개",
+      "category": "Linux camera / libcamera / V4L2",
+      "urls": [
+        "https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode"
+      ],
+      "source_titles": [
+        "VideoLAN Publishes Dav2d For Open-Source AV2 Decoder"
+      ]
+    }
+  ],
+  "regenerated_sections": [
+    {
+      "index": 1,
+      "headline": "2026년 4월 17일: Android 하이브리드 추론 및 Gemini 모델 지원 (Firebase AI Logic API)",
+      "category": "AI plus camera input path or HAL workflow",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "source_titles": [
+        "Experimental hybrid inference and new Gemini models for Android"
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "2026년 5월 2일: VideoLAN, 오픈 소스 AV2 디코더 Dav2d 공개",
+      "category": "Linux camera / libcamera / V4L2",
+      "urls": [
+        "https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode"
+      ],
+      "source_titles": [
+        "VideoLAN Publishes Dav2d For Open-Source AV2 Decoder"
+      ]
+    }
+  ],
+  "rejected_retry_outputs": []
+}

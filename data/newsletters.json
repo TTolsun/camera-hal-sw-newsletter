@@ -1,5 +1,18 @@
 [
   {
+    "date": "2026-05-04",
+    "title": "Camera HAL SW 뉴스레터 - 2026-05-04",
+    "summary": "이번 주 뉴스레터는 Android 플랫폼의 AI 및 카메라 관련 주요 업데이트와 Linux 커널의 미디어 스택 개선 사항을 다룹니다. Android 17 베타 4 출시로 HAL 호환성 최종 점검이 중요해졌으며, 하이브리드 AI 추론 도입은 카메라 프레임 처리 및 NPU/GPU 리소스 관리에 새로운 과제를 제시합니다. 또한, Linux 커널의 GPU 드라이버 개선과 새로운 AV2 비디오 디코더 공개는 HAL의 이미지 처리 및 비디오 인코딩/디코딩 파이프라인에 장기적인 영향을 미칠 수 있습니다.",
+    "html": "newsletters/2026-05-04/index.html",
+    "md": "newsletters/2026-05-04/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android",
+      "C++",
+      "AI"
+    ]
+  },
+  {
     "date": "2026-05-03",
     "title": "Camera HAL SW 뉴스레터 - 2026-05-03",
     "summary": "2026년 5월 3일자 Camera HAL SW 뉴스레터입니다. Android 17 Beta 4 출시로 플랫폼 안정성과 앱 호환성 최종 검증이 중요해졌고, Android용 하이브리드 AI 추론 및 새로운 Gemini 모델 지원은 Camera HAL의 AI 데이터 경로와 리소스 관리에 새 과제를 제시합니다. 또한 2026년 연례 C++ 개발자 설문조사는 HAL 개발자가 C++ 표준과 도구 개선에 직접 의견을 낼 기회를 제공합니다.",
