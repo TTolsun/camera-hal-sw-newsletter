@@ -74,6 +74,8 @@ The editor receives only deterministic final article inputs plus locked/retry co
 - `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
 - `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
 
+- `npm run validate:config`: validates `data/news-sources.json` structure, required fields, source IDs, URLs, section mapping, and canonical JSON formatting.
+
 `npm run validate:quality` recomputes the deterministic quality report and blocks drafts with fewer than 4 or more than 5 main articles, no AI-related article, duplicate source URLs across main sections, missing sources, missing Camera HAL perspective, fewer than 2 action items, source-gap mapped candidates, or selected candidates without dated evidence.
 
 ## URL Summary Cache

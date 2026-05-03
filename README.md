@@ -19,7 +19,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 
 품질 게이트는 Camera HAL 관련성, evidence specificity, HAL engineering depth, actionability, source integrity, article composition을 확인합니다. 이 항목들은 hard blocker입니다. 기사에는 가능한 경우 version/release, release date, API/component, behavior change, 명시적 source gap 같은 구체 evidence가 있어야 합니다. "AOSP 업데이트를 모니터링한다" 같은 일반 문장은 정확한 source, version, API, date, behavior를 함께 적지 않으면 충분하지 않습니다.
 
-`npm.cmd run validate`는 site, image, quality validation을 모두 실행합니다. fact-check 또는 quality가 실패하면 workflow가 `needs-fix` 라벨의 review PR을 만들 수는 있지만, run은 실패하며 publication-ready로 보지 않습니다.
+`npm.cmd run validate`는 config, site, image, quality validation을 모두 실행합니다. fact-check 또는 quality가 실패하면 workflow가 `needs-fix` 라벨의 review PR을 만들 수는 있지만, run은 실패하며 publication-ready로 보지 않습니다.
 
 ## 프로젝트 구조
 
@@ -127,6 +127,7 @@ npm.cmd run generate
 개별 검증이 필요할 때는 아래 명령을 사용할 수 있습니다.
 
 ```powershell
+npm.cmd run validate:config
 npm.cmd run validate:site
 npm.cmd run validate:images
 npm.cmd run validate:quality

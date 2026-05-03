@@ -3,6 +3,8 @@
 `data/news-sources.json` is the structured registry used by `scripts/collect-news-candidates.js`.
 The older-style `docs/news-sources.md` remains as human-readable editorial guidance and as a fallback only when the JSON registry is absent.
 
+Registry edits must keep canonical JSON formatting and pass `npm.cmd run validate:config`.
+
 ## Schema
 
 Each source entry uses this shape:

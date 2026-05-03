@@ -12,7 +12,8 @@
     "test": "node --test",
     "test:artifact": "node scripts/test-artifact-manifest.js",
     "test:selection-diagnostics": "node scripts/test-selection-diagnostics.js",
-    "validate": "npm run validate:site && npm run validate:images && npm run validate:quality",
+    "validate": "npm run validate:config && npm run validate:site && npm run validate:images && npm run validate:quality",
+    "validate:config": "node scripts/validate-config.js",
     "validate:site": "node scripts/validate-site.js",
     "validate:images": "node scripts/validate-external-images.js",
     "validate:quality": "node scripts/validate-quality.js"
