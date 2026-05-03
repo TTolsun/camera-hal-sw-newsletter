@@ -17,6 +17,7 @@ The quality gate checks Camera HAL relevance, evidence specificity, HAL engineer
 ```text
 source registry
   -> candidate collector
+  -> deterministic shortlist and final article selection
   -> Gemini reporter
   -> Gemini editor
   -> Gemini fact checker
@@ -34,9 +35,15 @@ source registry
 
 ## Role 2. Gemini Reporter
 
+Before Gemini runs, `scripts/lib/newsroom-selection.js` reads `collected-news/YYYY-MM-DD/candidates.json`, removes source-gap/watch/reference candidates, dedupes URL and near-duplicate titles, scores eligible candidates, and writes `newsroom/YYYY-MM-DD/shortlisted-candidates.json`.
+
+The shortlist is capped at 12 candidates. The local selector chooses 4-5 final main article inputs from that shortlist before the editor prompt runs. It prefers Camera HAL, Android Camera, AOSP, and CameraX items, requires at least one AI-related article, and uses C++ or developer-productivity material only when fewer than four strong camera/platform items remain. If fewer than four eligible non-duplicate final inputs remain, generation fails early and writes `newsroom/YYYY-MM-DD/recovery-prompt.md`.
+
 - 수집 후보 중 Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI workflow와 관련된 항목을 점수화합니다.
 - source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
 - 출력: `newsroom/YYYY-MM-DD/reporter-candidates.json`.
+
+Gemini reporter receives only the deterministic shortlist, not all collected candidates. It summarizes, tags, and refines evidence fields, but it must preserve the local `selected=true` final article decisions.
 
 ## Role 3. Gemini Editor
 
@@ -44,6 +51,8 @@ source registry
 - 각 주요 기사에 확인한 사실, 배경지식, Camera HAL 관점, Action Item, Sources를 포함합니다.
 - 이미지 URL을 새로 만들지 않고 collector가 제공한 `imageCandidates`에서만 선택합니다.
 - 출력: `newsroom/YYYY-MM-DD/editor-draft.json`, `newsroom/YYYY-MM-DD/editor-draft.md`.
+
+The editor receives only deterministic final article inputs plus locked/retry context. If retry is needed, passed sections are locked and the repair prompt asks only for regenerated failed sections. Retry artifacts record `locked_sections`, `failed_sections`, `regenerated_sections`, and rejected retry outputs.
 
 ## Role 4. Gemini Fact Checker
 
@@ -64,6 +73,18 @@ source registry
 
 - `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
 - `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
+
+`npm run validate:quality` recomputes the deterministic quality report and blocks drafts with fewer than 4 or more than 5 main articles, no AI-related article, duplicate source URLs across main sections, missing sources, missing Camera HAL perspective, fewer than 2 action items, source-gap mapped candidates, or selected candidates without dated evidence.
+
+## URL Summary Cache
+
+Reporter summary records are cached under `cache/news-summary/{sha256(normalized_url)}.json`. Cache files are intentionally untracked and restored in CI with `actions/cache`.
+
+A cache hit is used only when the normalized URL and content fingerprint match. The fingerprint includes URL, title, published date, source, summary, version/release, API/component, and behavior evidence, so changed article evidence forces refresh instead of reusing stale summaries.
+
+## Recovery Artifacts
+
+`newsroom/YYYY-MM-DD/recovery-prompt.md` is written when deterministic selection, Gemini JSON parsing, fact-check, quality, or validation fails after retries. It includes the shortlist, selected inputs, failed sections, quality deductions, fact-check findings, and exact rerun commands.
 
 ## GitHub Actions Operation
 

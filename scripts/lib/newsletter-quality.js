@@ -98,16 +98,18 @@ function candidateForSourceUrl(sourceUrl, candidateMap) {
 
 function candidateSelectionViolation(candidate) {
   if (!candidate) return '';
+  const violations = [];
   if (!['main', 'short'].includes(candidate.finalSelectionEligibility)) {
-    return `finalSelectionEligibility=${candidate.finalSelectionEligibility || 'unknown'}`;
+    violations.push(`finalSelectionEligibility=${candidate.finalSelectionEligibility || 'unknown'}`);
   }
+  if (candidate.hasDatedEvidence !== true) violations.push('missing dated evidence');
   if (candidate.isWatchPage === true && candidate.hasDatedEvidence !== true) {
-    return 'watch page lacks dated evidence';
+    violations.push('watch page lacks dated evidence');
   }
-  if (candidate.main_eligible === false) return 'main_eligible=false';
-  if (candidate.source_gap_risk === true) return 'source_gap_risk=true';
-  if (candidate.reference_only === true) return 'reference_only=true';
-  return '';
+  if (candidate.main_eligible === false) violations.push('main_eligible=false');
+  if (candidate.source_gap_risk === true) violations.push('source_gap_risk=true');
+  if (candidate.reference_only === true) violations.push('reference_only=true');
+  return violations.join('; ');
 }
 
 function hasPattern(value, pattern) {
@@ -224,6 +226,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const state = { deductions: [] };
   const candidateMap = reporterCandidateUrlMap(reporter);
   let sourceIntegrityViolationCount = 0;
+  const sourceUrlOwners = new Map();
 
   if (sections.length < MIN_MAIN_ARTICLES || sections.length > MAX_MAIN_ARTICLES) {
     boundedDeduct(state, 'composition', 4, `Expected 4-5 main articles, found ${sections.length}.`);
@@ -240,7 +243,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   }
 
   sections.forEach((section, index) => {
-    const location = section.category || section.headline || `article ${index + 1}`;
+    const location = section.headline || section.category || `article ${index + 1}`;
     const requiredTextFields = ['headline', 'what_changed', 'evidence_summary', 'background', 'camera_hal_perspective', 'team_summary'];
     for (const field of requiredTextFields) {
       if (!text(section[field])) {
@@ -261,6 +264,12 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     if (!hasHalDepth(section)) {
       boundedDeduct(state, 'hal-depth', 4, 'Article lacks concrete Camera HAL engineering depth.', location);
     }
+    if (!hasHalDepth({ ...section, headline: '', category: '', what_changed: '', background: '', why_it_matters: '', evidence_summary: '', specificity_checks: [], source_verification_notes: [], team_summary: '', confirmed_facts: [], camera_hal_checks: [], action_items: [], sources: [], camera_hal_perspective: section.camera_hal_perspective })) {
+      boundedDeduct(state, 'hal-depth', 4, 'Article camera_hal_perspective does not include concrete Camera HAL perspective.', location);
+    }
+    if (ensureArray(section.action_items).length < 2) {
+      boundedDeduct(state, 'actionability', 4, `Expected at least 2 action_items, found ${ensureArray(section.action_items).length}.`, location);
+    }
     if (!hasConcreteAction(section)) {
       boundedDeduct(state, 'actionability', 4, 'Article action item is not concrete enough for a HAL engineering team.', location);
     }
@@ -268,6 +277,22 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       boundedDeduct(state, 'hal-relevance', 4, 'Non-camera article does not clearly connect back to Camera HAL work.', location);
     }
     for (const source of ensureArray(section.sources)) {
+      const sourceUrl = source?.url || '';
+      for (const key of urlKeys(sourceUrl)) {
+        if (!sourceUrlOwners.has(key)) {
+          sourceUrlOwners.set(key, location);
+        } else if (sourceUrlOwners.get(key) !== location) {
+          sourceIntegrityViolationCount += 1;
+          boundedDeduct(
+            state,
+            'source-integrity',
+            8,
+            `Duplicate source URL is used across main sections: ${sourceUrl}.`,
+            location
+          );
+          break;
+        }
+      }
       const candidate = candidateForSourceUrl(source?.url, candidateMap);
       const violation = candidateSelectionViolation(candidate);
       if (!violation) continue;

@@ -1,3 +1,4 @@
 node_modules/
 .tmp/
+cache/news-summary/
 npm-debug.log*

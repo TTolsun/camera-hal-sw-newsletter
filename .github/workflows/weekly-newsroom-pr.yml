@@ -66,6 +66,14 @@ jobs:
       - name: Collect news candidates
         run: npm run collect
 
+      - name: Restore URL summary cache
+        uses: actions/cache@v4
+        with:
+          path: cache/news-summary
+          key: news-summary-${{ runner.os }}-${{ hashFiles('collected-news/**/candidates.json') }}
+          restore-keys: |
+            news-summary-${{ runner.os }}-
+
       - name: Generate newsletter with Gemini newsroom
         id: generate
         continue-on-error: true
@@ -131,6 +139,7 @@ jobs:
             echo "## Generated Artifacts"
             echo ""
             echo "- \`collected-news/${DATE}/candidates.json\`"
+            echo "- \`newsroom/${DATE}/shortlisted-candidates.json\`"
             echo "- \`newsroom/${DATE}/reporter-candidates.json\`"
             echo "- \`newsroom/${DATE}/editor-draft.json\`"
             echo "- \`newsroom/${DATE}/fact-check-report.json\`"
@@ -138,6 +147,7 @@ jobs:
             echo "- \`newsroom/${DATE}/quality-report.md\`"
             echo "- \`newsroom/${DATE}/retry-history.json\`"
             echo "- \`newsroom/${DATE}/retry-history.md\`"
+            echo "- \`newsroom/${DATE}/recovery-prompt.md\` (only when recovery is needed)"
             echo "- \`newsletters/${DATE}/newsletter.md\`"
             echo "- \`newsletters/${DATE}/index.html\`"
             echo "- \`data/newsletters.json\`"
@@ -209,6 +219,7 @@ jobs:
             .tmp/newsletter-date.txt
             .tmp/newsletter-generation-status.json
             .tmp/gemini-raw/**
+            cache/news-summary/**
             collected-news/**
             newsroom/**
             newsletters/**
