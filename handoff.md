@@ -1,6 +1,6 @@
-# Reporter vs Final Selection Diagnostics Handoff
+# Reporter와 최종 선택 진단 인수인계
 
-## Changed files
+## 변경 파일
 
 - `plan.md`
 - `scripts/lib/selection-diagnostics.js`
@@ -12,7 +12,7 @@
 - `scripts/test-selection-diagnostics.js`
 - `package.json`
 
-## Commands run
+## 실행한 명령
 
 - `node --check scripts/lib/selection-diagnostics.js`
 - `node --check scripts/lib/newsroom-selection.js`
@@ -25,27 +25,27 @@
 - `npm.cmd test`
 - `npm.cmd run validate`
 
-## Test results
+## 테스트 결과
 
-- Selection diagnostics fixture passed.
-- Full `node --test` suite passed: 33 tests passed.
-- `npm.cmd run validate` passed.
-- Existing validation warnings remain for review-only/generated artifacts, including the 2026-05-03 underfilled/non-publishable review quality report. This PR does not try to make that issue pass.
+- Selection diagnostics fixture가 통과했습니다.
+- 전체 `node --test` suite가 통과했습니다. 결과: 33 tests passed.
+- `npm.cmd run validate`가 통과했습니다.
+- 2026-05-03 underfilled/non-publishable review quality report를 포함해 review-only/generated artifact warning은 기존 상태로 남아 있습니다. 이 PR은 해당 이슈를 통과 상태로 만들지 않습니다.
 
-## Compatibility notes
+## 호환성 note
 
-- `reporter-candidates.json` keeps `selected` as a deprecated alias for reporter-stage `reporter_selected`.
-- `shortlisted-candidates.json` keeps `selected` as a deterministic final-selection alias for `final_selected`.
-- Editor input, retry completion, and quality weak-score deductions now use `final_selected` / `selected_for_editor`, preserving deterministic final-selection behavior while clarifying reporter artifact terminology.
-- Existing count fields are preserved; final-prefixed aliases and reporter/final comparison counts were added.
-- Quality thresholds, final article minimums, slot classifier logic, source extraction, and watch-page parsing were not changed.
+- `reporter-candidates.json`은 `selected`를 reporter-stage `reporter_selected`의 deprecated alias로 유지합니다.
+- `shortlisted-candidates.json`은 `selected`를 deterministic final-selection `final_selected`의 alias로 유지합니다.
+- Editor input, retry completion, quality weak-score deduction은 이제 `final_selected` / `selected_for_editor`를 사용하므로 deterministic final-selection behavior는 유지하면서 reporter artifact terminology가 명확해졌습니다.
+- 기존 count field는 보존했고 final-prefixed alias와 reporter/final comparison count를 추가했습니다.
+- Quality threshold, final article minimum, slot classifier logic, source extraction, watch-page parsing은 바꾸지 않았습니다.
 
-## Remaining risks
+## 남은 risk
 
-- Reporter data is only available after the reporter stage runs, so early deterministic-selection failure artifacts can still show reporter counts as `unknown`.
-- Retry duplicate suppression can mark a reporter candidate as no longer editor-usable after deterministic final selection; this preserves existing behavior but can make retry-attempt reporter flags differ from the original deterministic shortlist.
-- Generated historical artifacts are not rewritten by this PR; new schema fields appear on newly generated newsroom artifacts.
+- Reporter data는 reporter stage 이후에만 있으므로 early deterministic-selection failure artifact에서는 reporter count가 여전히 `unknown`일 수 있습니다.
+- Retry duplicate suppression은 deterministic final selection 이후 reporter candidate를 editor-usable하지 않게 표시할 수 있습니다. 기존 behavior를 보존하지만 retry-attempt reporter flag가 original deterministic shortlist와 다를 수 있습니다.
+- 기존 generated historical artifact는 다시 쓰지 않았습니다. 새 schema field는 새로 생성되는 newsroom artifact에만 나타납니다.
 
-## Next suggested PR
+## 다음 권장 PR
 
 Slot classifier false-positive cleanup.

@@ -45,7 +45,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Android platform, Jetpack, CameraX, developer tooling official updates",
+      "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "keywords": [
         "Android",
         "Camera",
@@ -67,7 +67,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Android developer ecosystem and platform update watch",
+      "usageHint": "Android developer 생태계와 platform update 감시",
       "keywords": [
         "Android",
         "developer",
@@ -88,7 +88,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "CameraX API, compatibility workaround, app-side camera behavior changes",
+      "usageHint": "CameraX API, compatibility workaround, app-side camera behavior change 확인",
       "keywords": [
         "CameraX",
         "Camera",
@@ -109,7 +109,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Camera HAL, camera framework, provider HAL, stream/request/result official baseline",
+      "usageHint": "Camera HAL, camera framework, provider HAL, stream/request/result 공식 기준 확인",
       "keywords": [
         "Camera",
         "HAL",
@@ -133,7 +133,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Android platform release, CTS/VTS/ITS, compatibility changes",
+      "usageHint": "Android platform release, CTS/VTS/ITS, compatibility change 확인",
       "keywords": [
         "Android",
         "AOSP",
@@ -156,7 +156,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Camera capability, device compatibility, MUST/SHOULD requirement checks",
+      "usageHint": "Camera capability, device compatibility, MUST/SHOULD requirement 확인",
       "keywords": [
         "CDD",
         "Camera",
@@ -179,7 +179,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Android framework/system/vendor security fixes and camera-related security leads",
+      "usageHint": "Android framework/system/vendor security fix와 camera 관련 security lead 확인",
       "keywords": [
         "Android",
         "security",
@@ -201,7 +201,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Galaxy terminal security update and SMR watch",
+      "usageHint": "Galaxy 단말 security update와 SMR 감시",
       "keywords": [
         "Samsung",
         "Galaxy",
@@ -223,7 +223,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Qualcomm SoC/vendor component security issue watch",
+      "usageHint": "Qualcomm SoC/vendor component security issue 감시",
       "keywords": [
         "Qualcomm",
         "security",
@@ -244,7 +244,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Linux camera stack, complex camera pipeline, Android/ChromeOS camera stack signal",
+      "usageHint": "Linux camera stack, complex camera pipeline, Android/ChromeOS camera stack signal 확인",
       "keywords": [
         "libcamera",
         "Linux",
@@ -267,7 +267,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "libcamera architecture and Linux kernel driver background reference",
+      "usageHint": "libcamera architecture와 Linux kernel driver 배경 reference 확인",
       "keywords": [
         "libcamera",
         "Linux",
@@ -288,7 +288,7 @@
       "enabled": true,
       "candidateOnly": true,
       "requiresCrossCheck": true,
-      "usageHint": "Linux camera/media subsystem deep analysis lead; candidate-only because of possible paywall",
+      "usageHint": "Linux camera/media subsystem 심층 분석 lead 확인; paywall 가능성이 있어 candidate-only로 취급",
       "keywords": [
         "Linux",
         "kernel",
@@ -309,7 +309,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": true,
-      "usageHint": "Linux kernel, V4L2, media subsystem, driver release leads",
+      "usageHint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
       "keywords": [
         "Linux",
         "kernel",
@@ -331,7 +331,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "libcamera, PipeWire, V4L2, kernel testing engineering posts",
+      "usageHint": "libcamera, PipeWire, V4L2, kernel testing 관련 engineering post 확인",
       "keywords": [
         "libcamera",
         "PipeWire",
@@ -352,7 +352,7 @@
       "enabled": true,
       "candidateOnly": true,
       "requiresCrossCheck": true,
-      "usageHint": "Linux kernel release change summary lead",
+      "usageHint": "Linux kernel release change summary lead 확인",
       "keywords": [
         "Linux",
         "kernel",
@@ -373,7 +373,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "C++ standard, C++26/C++29, committee, compiler support watch",
+      "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "keywords": [
         "C++",
         "C++26",
@@ -394,7 +394,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "C++ performance, safety, tooling, architecture talks and materials",
+      "usageHint": "C++ performance, safety, tooling, architecture talk와 material 확인",
       "keywords": [
         "C++",
         "performance",
@@ -415,7 +415,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Clang/LLVM, sanitizer, compiler, static analysis, toolchain changes",
+      "usageHint": "Clang/LLVM, sanitizer, compiler, static analysis, toolchain change 확인",
       "keywords": [
         "LLVM",
         "Clang",
@@ -437,7 +437,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "LLVM/Clang release native build/toolchain impact watch",
+      "usageHint": "LLVM/Clang release가 native build/toolchain에 미치는 영향 감시",
       "keywords": [
         "LLVM",
         "Clang",
@@ -458,7 +458,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "C++ language features, compiler/tooling, IDE improvements",
+      "usageHint": "C++ language feature, compiler/tooling, IDE improvement 확인",
       "keywords": [
         "C++",
         "compiler",
@@ -479,7 +479,7 @@
       "enabled": true,
       "candidateOnly": true,
       "requiresCrossCheck": true,
-      "usageHint": "Android ecosystem weekly digest lead source",
+      "usageHint": "Android ecosystem weekly digest lead source로 활용",
       "keywords": [
         "Android",
         "weekly",
@@ -499,7 +499,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Google official Android developer newsletter reference",
+      "usageHint": "Google official Android developer newsletter reference 확인",
       "keywords": [
         "Android",
         "developer",
@@ -519,7 +519,7 @@
       "enabled": true,
       "candidateOnly": true,
       "requiresCrossCheck": true,
-      "usageHint": "AI, programming, software engineering trend lead source",
+      "usageHint": "AI, programming, software engineering trend lead source로 활용",
       "keywords": [
         "AI",
         "programming",
@@ -539,7 +539,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": true,
-      "usageHint": "Architecture, AI engineering, platform engineering, software process leads",
+      "usageHint": "Architecture, AI engineering, platform engineering, software process lead 확인",
       "keywords": [
         "architecture",
         "AI engineering",
@@ -559,7 +559,7 @@
       "enabled": true,
       "candidateOnly": true,
       "requiresCrossCheck": true,
-      "usageHint": "Developer interest lead source; final articles require extra verification",
+      "usageHint": "Developer 관심 주제 lead source; final article에는 추가 verification 필요",
       "keywords": [
         "developer",
         "AI",
@@ -579,7 +579,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Google open source, Android adjacent ecosystem, AI/SW engineering signals",
+      "usageHint": "Google open source, Android adjacent ecosystem, AI/SW engineering signal 확인",
       "keywords": [
         "Google",
         "open source",
@@ -600,7 +600,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": true,
-      "usageHint": "Linux, software development, AI, security, enterprise technology leads; cross-check official sources",
+      "usageHint": "Linux, software development, AI, security, enterprise technology lead 확인; official source 교차 확인 필요",
       "keywords": [
         "Linux",
         "Android",
@@ -623,7 +623,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": true,
-      "usageHint": "DevOps, open source, cloud native, AI engineering, platform engineering trends",
+      "usageHint": "DevOps, open source, cloud native, AI engineering, platform engineering trend 확인",
       "keywords": [
         "AI engineering",
         "DevOps",
@@ -645,7 +645,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Embedded systems, sensors, semiconductor, robotics, AI background articles",
+      "usageHint": "Embedded systems, sensor, semiconductor, robotics, AI 배경 article 확인",
       "keywords": [
         "embedded systems",
         "sensors",
@@ -667,7 +667,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Edge AI, embedded AI, on-device AI technical background",
+      "usageHint": "Edge AI, embedded AI, on-device AI 기술 배경 확인",
       "keywords": [
         "embedded AI",
         "edge AI",
@@ -688,7 +688,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": true,
-      "usageHint": "Embedded systems, embedded software, electronics industry trends",
+      "usageHint": "Embedded systems, embedded software, electronics industry trend 확인",
       "keywords": [
         "embedded",
         "embedded software",
@@ -709,7 +709,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": true,
-      "usageHint": "SoC, semiconductor, AI chip, sensor, hardware ecosystem trends",
+      "usageHint": "SoC, semiconductor, AI chip, sensor, hardware ecosystem trend 확인",
       "keywords": [
         "semiconductor",
         "SoC",
@@ -732,7 +732,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": true,
-      "usageHint": "Embedded systems design, development, programming, technology, industry insight",
+      "usageHint": "Embedded systems design, development, programming, technology, industry insight 확인",
       "keywords": [
         "embedded",
         "firmware",
@@ -754,7 +754,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Google AI research, computer vision, generative AI, photography research trends",
+      "usageHint": "Google AI research, computer vision, generative AI, photography research trend 확인",
       "keywords": [
         "Google Research",
         "AI",
@@ -776,7 +776,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "AI breakthrough, model research, agent, safety official updates",
+      "usageHint": "AI breakthrough, model research, agent, safety 공식 업데이트 확인",
       "keywords": [
         "DeepMind",
         "AI",
@@ -798,7 +798,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "OpenAI model, Codex, API, enterprise AI, research/product updates",
+      "usageHint": "OpenAI model, Codex, API, enterprise AI, research/product update 확인",
       "keywords": [
         "OpenAI",
         "Codex",
@@ -820,7 +820,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Claude, Claude Code, AI coding, agentic workflow, safety updates",
+      "usageHint": "Claude, Claude Code, AI coding, agentic workflow, safety update 확인",
       "keywords": [
         "Anthropic",
         "Claude",
@@ -843,7 +843,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Claude Code release notes, feature changes, bug fixes, agentic coding workflow changes",
+      "usageHint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
       "keywords": [
         "Claude Code",
         "changelog",
@@ -864,7 +864,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Enterprise AI, agent platform, Vertex AI, AI DevOps, orchestration watch",
+      "usageHint": "Enterprise AI, agent platform, Vertex AI, AI DevOps, orchestration 감시",
       "keywords": [
         "Google Cloud",
         "Vertex AI",
@@ -886,7 +886,7 @@
       "enabled": false,
       "candidateOnly": true,
       "requiresCrossCheck": true,
-      "usageHint": "Enterprise AI, data, security, AI product trends; disabled by default and requires official cross-check",
+      "usageHint": "Enterprise AI, data, security, AI product trend 확인; 기본 비활성이며 official cross-check 필요",
       "keywords": [
         "AI",
         "enterprise AI",
@@ -908,7 +908,7 @@
       "enabled": false,
       "candidateOnly": true,
       "requiresCrossCheck": true,
-      "usageHint": "Software engineering, infrastructure, AI coding tools, architecture topic discovery",
+      "usageHint": "Software engineering, infrastructure, AI coding tool, architecture topic discovery 용도",
       "keywords": [
         "software engineering",
         "AI coding",

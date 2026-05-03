@@ -1,6 +1,6 @@
 # news-sources.json 필드 안내
 
-`data/news-sources.json`은 collector와 newsroom automation이 읽는 machine-readable registry입니다. 코드가 읽는 key는 영어 이름 그대로 유지해야 합니다. 한국어 설명을 넣더라도 field name을 번역하거나 임의로 바꾸면 안 됩니다.
+`data/news-sources.json`은 collector와 newsroom automation이 읽는 기계 판독용 registry입니다. 코드가 읽는 key는 영어 이름 그대로 유지해야 합니다. 한국어 설명을 넣더라도 field name을 번역하거나 임의로 바꾸면 안 됩니다.
 
 `docs/news-sources.md`는 사람이 검토하기 위한 editorial view입니다. JSON registry가 없을 때 fallback으로도 쓰이지만, 운영 기준 source of truth는 `data/news-sources.json`입니다.
 
@@ -22,7 +22,7 @@
 }
 ```
 
-## Source Entry 필드
+## 출처 entry 필드
 
 | 필드 | 의미 | 작성 기준 |
 | --- | --- | --- |

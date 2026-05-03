@@ -5,10 +5,10 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 ## 처음 보는 사람은 여기부터
 
 - [처음 보는 사람은 여기부터](docs/START_HERE.ko.md)
-- [GitHub Actions Secrets and Variables](docs/config/action-variables.ko.md)
+- [GitHub Actions Secret과 Variable](docs/config/action-variables.ko.md)
 - [news-sources.json 필드 안내](docs/config/news-sources-fields.ko.md)
-- [Source editorial view](docs/news-sources.md)
-- [Newsroom workflow](docs/newsroom-workflow.md)
+- [출처 editorial view](docs/news-sources.md)
+- [뉴스룸 workflow](docs/newsroom-workflow.md)
 
 ## 품질 게이트
 
@@ -17,9 +17,9 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 
 게이트를 통과하지 못하면 Gemini는 기본 `3`회, `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도하고 `newsroom/YYYY-MM-DD/retry-history.json` 및 `retry-history.md`를 남깁니다.
 
-품질 게이트는 Camera HAL 관련성, evidence specificity, HAL engineering depth, actionability, source integrity, article composition을 확인합니다. 이 항목들은 hard blocker입니다. 기사에는 가능한 경우 version/release, release date, API/component, behavior change, 명시적 source gap 같은 구체 evidence가 있어야 합니다. "AOSP 업데이트를 모니터링한다" 같은 일반 문장은 정확한 source, version, API, date, behavior를 함께 적지 않으면 충분하지 않습니다.
+품질 게이트는 Camera HAL 관련성, 근거 구체성, HAL engineering depth, 실행 가능성, source integrity, article composition을 확인합니다. 이 항목들은 hard blocker입니다. 기사에는 가능한 경우 version/release, release date, API/component, behavior change, 명시적 source gap 같은 구체 evidence가 있어야 합니다. "AOSP 업데이트를 모니터링한다" 같은 일반 문장은 정확한 source, version, API, date, behavior를 함께 적지 않으면 충분하지 않습니다.
 
-`npm.cmd run validate`는 config, site, image, quality validation을 모두 실행합니다. fact-check 또는 quality가 실패하면 workflow가 `needs-fix` 라벨의 review PR을 만들 수는 있지만, run은 실패하며 publication-ready로 보지 않습니다.
+`npm.cmd run validate`는 config, site, image, quality, localization validation을 모두 실행합니다. fact-check 또는 quality가 실패하면 workflow가 `needs-fix` 라벨의 review PR을 만들 수는 있지만, run은 실패하며 publication-ready로 보지 않습니다.
 
 ## 프로젝트 구조
 
@@ -76,9 +76,9 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 
 ## 현재 운영 방식
 
-현재 운영 방식은 **GitHub Actions 후보 수집 + Gemini reporter/editor/fact-checker + site/image/quality 검증 + 편집자 검토 PR + GitHub Pages 발행**입니다.
+현재 운영 방식은 **GitHub Actions 후보 수집 + Gemini reporter/editor/fact-checker + site/image/quality/localization 검증 + 편집자 검토 PR + GitHub Pages 발행**입니다.
 
-### Weekly Gemini Newsroom PR
+### 주간 Gemini Newsroom PR
 
 - 매일 09:00 KST에 실행됩니다. UTC cron은 `0 0 * * *`입니다.
 - `data/news-sources.json`의 enabled source를 우선 사용하고, registry가 없을 때만 `docs/news-sources.md`를 fallback으로 사용합니다.
@@ -88,10 +88,10 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 - `newsletters/YYYY-MM-DD/newsletter.md`, `newsletters/YYYY-MM-DD/index.html`, `data/newsletters.json`을 생성 또는 갱신합니다.
 - `newsletter/YYYY-MM-DD` 브랜치로 편집자 검토용 PR을 만듭니다.
 
-### 02 - Validate Site and Images
+### 02 - 사이트와 이미지 검증
 
 - PR, `main` push, manual run에서 `npm.cmd run validate`를 실행합니다.
-- `data/newsletters.json`, published files, TODO leak, duplicate date, required sections, source/reference, HTML anchor, article image/fallback contract를 검증합니다.
+- `data/newsletters.json`, published files, TODO leak, duplicate date, required sections, source/reference, HTML anchor, article image/fallback contract, 유지 문서 한글화 규칙을 검증합니다.
 - 변경된 `newsletters/`, `newsroom/`, `collected-news/` 날짜의 quality report는 hard gate로 검사합니다. 변경되지 않은 과거 review artifact는 warning-only로 둡니다.
 
 ## 운영 규칙
@@ -103,6 +103,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 - `docs/news-sources.md`는 사람이 검토하기 위한 editorial view이며, JSON registry가 없을 때 fallback 문서입니다.
 - external article image는 임의로 대체하지 않습니다. resolver와 local fallback contract를 사용합니다.
 - validator를 약화해서 publication risk를 숨기지 않습니다.
+- 유지 문서와 표시용 JSON 값은 한국어를 기본으로 작성합니다. 내부 계약 문자열인 JSON key, enum, source ID, URL, 명령어, 파일명은 번역하지 않습니다.
 
 ## 명령어
 
@@ -131,6 +132,7 @@ npm.cmd run validate:config
 npm.cmd run validate:site
 npm.cmd run validate:images
 npm.cmd run validate:quality
+npm.cmd run validate:localization
 ```
 
 ## 뉴스레터 계약
@@ -145,7 +147,7 @@ npm.cmd run validate:quality
 - 발행 artifact에 `TODO` 문자를 남기지 않습니다.
 - Camera HAL 관련성은 capability, request/result, stream/buffer, metadata, CTS/VTS/ITS/CDD, latency, frame drop, thermal, power, native runtime, C++ tooling처럼 실제 검증 가능한 단위로 작성합니다.
 
-## Collector와 Source Eligibility
+## Collector와 출처 적격성
 
 collector는 후보마다 schema v5 eligibility metadata를 붙입니다.
 
@@ -190,12 +192,12 @@ Reporter, editor, quality gate는 prompt에만 의존하지 않습니다. report
 npx serve .
 ```
 
-## GitHub Secrets and Variables
+## GitHub Secret과 Variable
 
 GitHub repository의 `Settings -> Secrets and variables -> Actions`에서 설정합니다.
 `GEMINI_API_KEY`는 Secret으로만 관리하고, 모델과 retry 관련 값은 필요할 때 Variables로 override합니다.
 
-현재 workflow 기본값과 변경 시 주의점은 [GitHub Actions Secrets and Variables](docs/config/action-variables.ko.md)에 정리되어 있습니다.
+현재 workflow 기본값과 변경 시 주의점은 [GitHub Actions Secret과 Variable](docs/config/action-variables.ko.md)에 정리되어 있습니다.
 
 ## PR 검토
 

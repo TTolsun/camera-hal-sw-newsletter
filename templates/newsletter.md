@@ -1,4 +1,4 @@
-# Camera HAL SW Newsletter - YYYY-MM-DD
+# Camera HAL SW 뉴스레터 - YYYY-MM-DD
 
 ## 1. 이번 주 3줄 브리핑
 
@@ -8,7 +8,7 @@
 
 ---
 
-## 2. AOSP Camera Watch
+## 2. AOSP Camera 관찰
 
 ### 항목 제목
 
@@ -29,11 +29,11 @@ Android Camera 최신 흐름을 초보자도 이해할 수 있게 설명합니�
 
 **출처**
 
-- Source title: https://example.com
+- 출처 제목: https://example.com
 
 ---
 
-## 3. Tech Trend Radar
+## 3. 기술 동향 레이더
 
 ### 항목 제목
 
@@ -53,7 +53,7 @@ Camera / AI / Mobile / C++ 기술 동향의 맥락을 설명합니다.
 
 **출처**
 
-- Source title: https://example.com
+- 출처 제목: https://example.com
 
 ---
 
@@ -78,18 +78,18 @@ Camera / AI / Mobile / C++ 기술 동향의 맥락을 설명합니다.
 
 **출처**
 
-- Source title: https://example.com
+- 출처 제목: https://example.com
 
 ---
 
-## 이번 주 Action Items
+## 이번 주 실행 항목
 
-| No | Action Item | 대상 | 우선순위 |
+| No | 실행 항목 | 대상 | 우선순위 |
 |---|---|---|---|
-| 1 | Action item | Owner | Medium |
+| 1 | 실행 항목 | Owner | Medium |
 
 ---
 
-## References
+## 참고자료
 
-- Source title: https://example.com
+- 출처 제목: https://example.com

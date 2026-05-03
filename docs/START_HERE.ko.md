@@ -7,7 +7,7 @@
 ## 발행 흐름
 
 ```text
-Collect candidates -> Generate newsletter with Gemini -> Validate site/images/quality -> Create review PR -> Human editor review -> Merge -> GitHub Pages publish
+후보 수집 -> Gemini 뉴스레터 생성 -> 사이트/이미지/품질/한글화 검증 -> 검토 PR 생성 -> 편집자 검토 -> Merge -> GitHub Pages 발행
 ```
 
 ## 처음 볼 파일
@@ -15,8 +15,8 @@ Collect candidates -> Generate newsletter with Gemini -> Validate site/images/qu
 | 경로 | 역할 |
 | --- | --- |
 | `.github/workflows/` | 후보 수집, Gemini 생성, 검증, PR 생성, Pages 검증 workflow를 둡니다. |
-| `data/` | `newsletters.json`과 machine-readable source registry인 `news-sources.json`을 둡니다. |
-| `docs/` | 운영 정책, editorial source view, 뉴스룸 흐름, 템플릿, 온보딩 문서를 둡니다. |
+| `data/` | `newsletters.json`과 기계 판독용 source registry인 `news-sources.json`을 둡니다. |
+| `docs/` | 운영 정책, 출처 editorial view, 뉴스룸 흐름, 템플릿, 온보딩 문서를 둡니다. |
 | `collected-news/` | 날짜별 raw candidate output인 `YYYY-MM-DD/candidates.json`을 둡니다. |
 | `newsroom/` | 날짜별 reporter 후보, editor draft, fact-check, quality report, retry history, QA report를 둡니다. |
 | `newsletters/` | 발행될 날짜별 `newsletter.md`와 `index.html`을 둡니다. |
@@ -36,7 +36,7 @@ Collect candidates -> Generate newsletter with Gemini -> Validate site/images/qu
 
 ## 관련 문서
 
-- [GitHub Actions Secrets and Variables](config/action-variables.ko.md)
+- [GitHub Actions Secret과 Variable](config/action-variables.ko.md)
 - [news-sources.json 필드 안내](config/news-sources-fields.ko.md)
-- [Source editorial view](news-sources.md)
+- [출처 editorial view](news-sources.md)
 - [Newsroom workflow](newsroom-workflow.md)

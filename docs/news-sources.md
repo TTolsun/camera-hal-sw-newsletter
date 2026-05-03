@@ -1,31 +1,30 @@
-# Newsletter Sources
+# 뉴스 출처 목록
 
-`data/news-sources.json` is the machine-readable source registry used by `scripts/collect-news-candidates.js`.
-This document is the human-readable editorial view of the same source list. Keep the two files in sync when adding, removing, disabling, or reclassifying sources.
+`data/news-sources.json`은 `scripts/collect-news-candidates.js`가 사용하는 기계 판독용 출처 registry입니다. 이 문서는 같은 출처 목록을 사람이 검토하기 위한 editorial view입니다. 출처를 추가, 제거, 비활성화, 재분류할 때는 두 파일을 함께 맞춥니다.
 
-If the JSON registry is missing, the collector can fall back to this Markdown by reading `- Name: URL` lines, but normal operation should use `data/news-sources.json`.
+JSON registry가 없을 때 collector는 이 Markdown의 `- Name: URL` 형식을 fallback으로 읽을 수 있습니다. 정상 운영에서는 `data/news-sources.json`을 우선합니다.
 
-## Sync Rules
+## 동기화 규칙
 
-- Add new sources to `data/news-sources.json` first.
-- Mirror enabled editorial sources in this document under the same section.
-- Mark disabled or candidate-only sources clearly.
-- Do not add an `rssUrl` unless it is verified in `data/news-sources.json`.
-- Media, community, newsletter, and paywall-prone sources should be treated as leads and cross-checked against official/project sources before final publication.
+- 새 출처는 먼저 `data/news-sources.json`에 추가합니다.
+- 활성 editorial source는 이 문서의 같은 섹션 아래에 반영합니다.
+- 비활성 출처와 candidate-only 출처는 명확히 표시합니다.
+- `rssUrl`은 `data/news-sources.json`에서 검증된 경우에만 추가합니다.
+- media, community, newsletter, paywall 가능성이 있는 출처는 lead로 취급하고 최종 발행 전 official/project source로 교차 확인합니다.
 
-## Collector Classification
+## Collector 분류
 
-The collector writes schema v5 candidate metadata so reporter/editor stages can distinguish dated article evidence from watch/reference pages.
+collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 날짜가 있는 기사 근거와 watch/reference page를 구분할 수 있게 합니다.
 
-- `collectionModeHint` in `data/news-sources.json` may be `rss-source`, `release-note-watch`, `documentation-watch`, `homepage-watch`, or `media-lead`.
-- Candidate records include `collectionMode`, `isArticleCandidate`, `isWatchPage`, `hasDatedEvidence`, `evidenceLevel`, and `finalSelectionEligibility`.
-- `finalSelectionEligibility` is `main`, `short`, `watchlist`, or `exclude`. Only `main` and `short` candidates may become main newsletter articles.
-- Static documentation, release-note index pages, and homepages stay in the JSON and Markdown as monitoring targets, but they remain `watchlist` unless the collector extracts concrete dated evidence naming a date, version/release, API/component, and behavior change.
-- `source_kind`, `main_eligible`, `reference_only`, and `evidence_score` remain for compatibility and are derived from the same classification rules.
+- `collectionModeHint`는 `rss-source`, `release-note-watch`, `documentation-watch`, `homepage-watch`, `media-lead` 중 하나입니다.
+- 후보 record는 `collectionMode`, `isArticleCandidate`, `isWatchPage`, `hasDatedEvidence`, `evidenceLevel`, `finalSelectionEligibility`를 포함합니다.
+- `finalSelectionEligibility`는 `main`, `short`, `watchlist`, `exclude` 중 하나입니다. main newsletter article에는 `main` 또는 `short` 후보만 사용할 수 있습니다.
+- 정적 문서, release-note index page, homepage는 모니터링 대상으로 유지하지만, collector가 날짜, version/release, API/component, behavior change를 포함한 구체 근거를 추출하지 못하면 `watchlist`에 머뭅니다.
+- `source_kind`, `main_eligible`, `reference_only`, `evidence_score`는 호환성을 위해 유지하며 같은 분류 규칙에서 파생합니다.
 
 ## Android / AOSP / Camera
 
-### Primary Sources
+### 1차 출처
 
 - Android Developers Blog (`rss-source`): https://android-developers.googleblog.com/
 - Android Developers Latest Updates (`release-note-watch`): https://developer.android.com/latest-updates
@@ -38,19 +37,19 @@ The collector writes schema v5 candidate metadata so reporter/editor stages can 
 - Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
 - Android Developer Newsletter (`documentation-watch`): https://developer.android.com/newsletter
 
-### Candidate / Cross-check Sources
+### 후보 / 교차 확인 출처
 
 - Android Weekly: https://androidweekly.net/
 
 ## Linux Camera / Driver
 
-### Primary Sources
+### 1차 출처
 
 - libcamera Blog: https://libcamera.org/blog/
 - libcamera Documentation (`documentation-watch`): https://libcamera.org/introduction.html
 - Collabora Blog: https://www.collabora.com/news-and-blog/
 
-### Candidate / Cross-check Sources
+### 후보 / 교차 확인 출처
 
 - LWN Camera / Media Articles: https://lwn.net/
 - Phoronix Linux Camera / Media: https://www.phoronix.com/
@@ -58,7 +57,7 @@ The collector writes schema v5 candidate metadata so reporter/editor stages can 
 
 ## C++ / Native / Toolchain
 
-### Primary Sources
+### 1차 출처
 
 - ISO C++ Blog: https://isocpp.org/blog
 - CppCon News: https://cppcon.org/category/news/
@@ -68,12 +67,12 @@ The collector writes schema v5 candidate metadata so reporter/editor stages can 
 
 ## Embedded / Semiconductor
 
-### Primary Sources
+### 1차 출처
 
 - IEEE Spectrum - Embedded Systems: https://spectrum.ieee.org/tag/embedded-systems
 - IEEE Spectrum - Embedded AI: https://spectrum.ieee.org/tag/embedded-ai
 
-### Candidate / Cross-check Sources
+### 후보 / 교차 확인 출처
 
 - EE Times - Embedded: https://www.eetimes.com/tag/embedded/
 - EE Times - Semiconductors: https://www.eetimes.com/tag/semiconductors/
@@ -81,7 +80,7 @@ The collector writes schema v5 candidate metadata so reporter/editor stages can 
 
 ## AI / SW Engineering Trends
 
-### Primary Sources
+### 1차 출처
 
 - Google Open Source Blog: https://opensource.google/
 - Google Research Blog: https://research.google/blog/
@@ -91,38 +90,38 @@ The collector writes schema v5 candidate metadata so reporter/editor stages can 
 - Claude Code Changelog (`release-note-watch`): https://code.claude.com/docs/en/changelog
 - Google Cloud AI & Machine Learning Blog: https://cloud.google.com/blog/products/ai-machine-learning
 
-### Candidate / Cross-check Sources
+### 후보 / 교차 확인 출처
 
 - TLDR: https://tldr.tech/
 - InfoQ: https://www.infoq.com/
 - Hacker News: https://news.ycombinator.com/
 - The Register: https://www.theregister.com/
 - The New Stack: https://thenewstack.io/
-- VentureBeat AI: https://venturebeat.com/ (disabled in registry)
-- Software Engineering Daily: https://softwareengineeringdaily.com/ (disabled in registry)
+- VentureBeat AI: https://venturebeat.com/ (registry에서 비활성)
+- Software Engineering Daily: https://softwareengineeringdaily.com/ (registry에서 비활성)
 
-## Korean Tech Trends
+## 한국 기술 동향
 
-### Candidate / Cross-check Sources
+### 후보 / 교차 확인 출처
 
 - ZDNet Korea: https://zdnet.co.kr/
 - 요즘IT: https://yozm.wishket.com/
-- NAVER DEVIEW: https://developers.naver.com/d2/deview/ (disabled in registry)
+- NAVER DEVIEW: https://developers.naver.com/d2/deview/ (registry에서 비활성)
 
-## Selection Rules
+## 선택 규칙
 
-- Prefer official documentation, official blogs, release notes, and project-official sources.
-- Use media/community/newsletter sources as discovery leads unless the registry marks them otherwise.
-- For `requiresCrossCheck: true` sources, confirm important claims with official documentation, vendor/project sources, or release notes before final publication.
-- Every final newsletter section must preserve source links in `Sources`; the issue must also include `References`.
-- Final newsletter summaries should be written in Korean and should not copy article bodies.
+- official documentation, official blog, release note, project-official source를 우선합니다.
+- media/community/newsletter source는 registry가 다르게 지정하지 않는 한 discovery lead로 사용합니다.
+- `requiresCrossCheck: true` 출처의 중요한 주장은 final publication 전에 official documentation, vendor/project source, release note로 확인합니다.
+- 모든 최종 newsletter section은 `Sources` 또는 `출처`에 source link를 보존해야 하며, 이슈 끝에는 `References` 또는 `참고자료`가 있어야 합니다.
+- 최종 newsletter 요약은 한국어로 작성하고 article body를 복사하지 않습니다.
 
-## Drop Rules
+## 제외 규칙
 
-Do not publish items that are:
+다음 항목은 발행하지 않습니다.
 
-- unrelated to Camera HAL, Android Camera, Linux camera, C++, embedded systems, AI tooling, or software engineering practice;
-- mostly product promotion without technical details;
-- unsupported by a traceable source;
-- impossible to connect to Camera HAL engineering checks, action items, or implementation context;
-- duplicate or near-duplicate of a stronger official source.
+- Camera HAL, Android Camera, Linux camera, C++, embedded systems, AI tooling, software engineering practice와 관련이 없는 항목
+- 기술 세부 내용 없이 제품 홍보에 가까운 항목
+- 추적 가능한 출처가 없는 항목
+- Camera HAL engineering check, action item, implementation context로 연결할 수 없는 항목
+- 더 강한 official source와 중복되거나 거의 같은 항목

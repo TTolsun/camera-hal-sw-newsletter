@@ -1,18 +1,18 @@
-# Camera HAL SW Newsletter Newsroom Workflow
+# Camera HAL SW 뉴스레터 Newsroom workflow
 
-## Quality Gate
+이 문서는 Camera HAL SW 뉴스레터를 낮은 수작업 비용으로 매일 생성하기 위한 역할 기반 workflow를 설명합니다.
 
-The newsroom pipeline now produces `newsroom/YYYY-MM-DD/quality-report.json` and `quality-report.md`.
-The deterministic score must be at least `90/100` for publication readiness. Source gaps, fact-check must-fix items, and publication-critical deductions keep the draft out of publish-ready status even when the numeric score is high enough.
-If a draft misses the gate, the generator retries up to `NEWSROOM_MAX_QUALITY_RETRIES` times, default `3`, preserving article sections that already pass per-article quality checks and writing `retry-history.json` / `retry-history.md`.
+## 품질 게이트
 
-The quality gate checks Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, and article composition. Those categories are hard blockers; the 90-point threshold only leaves room for non-critical future deductions. If the score is below 90 or blockers remain after retry attempts, the weekly workflow can still open a review PR, labels it `needs-fix`, and fails the run so the issue is not treated as publishable.
+newsroom pipeline은 `newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 최소 `90/100`이어야 합니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 충분해도 publish-ready로 보지 않습니다.
 
-이 문서는 Camera HAL SW Newsletter를 매일 낮은 수작업 비용으로 만들기 위한 역할 기반 workflow입니다.
+draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `3`입니다. 이미 article quality check를 통과한 section은 보존하고, `retry-history.json`과 `retry-history.md`를 남깁니다.
 
-## Goal
+quality gate는 Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, article composition을 확인합니다. 이 범주는 hard blocker이며, 90점 threshold는 치명적이지 않은 deduction만 허용합니다. retry 후에도 점수가 낮거나 blocker가 남아 있으면 weekly workflow는 review PR을 만들 수 있지만 `needs-fix`로 표시하고 run을 실패시켜 발행 가능한 이슈로 취급하지 않습니다.
 
-목표는 단순히 날짜별 newsletter 파일을 자동 생성하는 것이 아닙니다. 최신 소식을 수집하고, Camera HAL 엔지니어 관점으로 해석하고, 검증 가능한 초안을 PR로 남기는 것입니다. 사용자는 최종 편집장 역할로 PR을 승인하거나 수정 요청합니다.
+## 목표
+
+목표는 단순히 날짜별 newsletter 파일을 자동 생성하는 것이 아닙니다. 최신 소식을 수집하고, Camera HAL 엔지니어 관점으로 해석하고, 검증 가능한 초안을 PR로 남기는 것입니다. 사용자는 최종 편집장으로 PR을 승인하거나 수정 요청합니다.
 
 ```text
 source registry
@@ -31,33 +31,33 @@ source registry
 - `data/news-sources.json`의 enabled source를 읽습니다.
 - JSON registry가 없을 때만 `docs/news-sources.md`의 `- Name: URL` 형식을 fallback으로 사용합니다.
 - RSS 또는 HTML page에서 후보를 수집하고 `collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
-- media/community/candidate-only source는 최종 기사로 쓰기 전에 공식 출처 교차 확인이 필요합니다.
+- media/community/candidate-only source는 최종 기사로 올리기 전에 공식 출처 교차 확인이 필요합니다.
 
 ## Role 2. Gemini Reporter
 
-Before Gemini runs, `scripts/lib/newsroom-selection.js` reads `collected-news/YYYY-MM-DD/candidates.json`, removes source-gap/watch/reference candidates, dedupes URL and near-duplicate titles, scores eligible candidates, and writes `newsroom/YYYY-MM-DD/shortlisted-candidates.json`.
+Gemini 실행 전에 `scripts/lib/newsroom-selection.js`가 `collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다.
 
-The shortlist is capped at 12 candidates. The local selector chooses 4-5 final main article inputs from that shortlist before the editor prompt runs. It prefers Camera HAL, Android Camera, AOSP, and CameraX items, requires at least one AI-related article, and uses C++ or developer-productivity material only when fewer than four strong camera/platform items remain. If fewer than four eligible non-duplicate final inputs remain, generation fails early and writes `newsroom/YYYY-MM-DD/recovery-prompt.md`.
+shortlist는 최대 12개 후보로 제한됩니다. local selector는 editor prompt가 실행되기 전에 4-5개의 final main article input을 선택합니다. Camera HAL, Android Camera, AOSP, CameraX 항목을 우선하고, AI 관련 기사 최소 1개를 요구합니다. C++ 또는 developer-productivity material은 강한 camera/platform 항목이 4개보다 적을 때 보완용으로 사용합니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
 
 - 수집 후보 중 Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI workflow와 관련된 항목을 점수화합니다.
 - source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
 - 출력: `newsroom/YYYY-MM-DD/reporter-candidates.json`.
 
-Gemini reporter receives only the deterministic shortlist, not all collected candidates. It summarizes, tags, and refines evidence fields, but it must preserve the local `selected=true` final article decisions.
+Gemini reporter는 전체 collected candidate가 아니라 deterministic shortlist만 받습니다. 요약, tag, evidence field를 보강하되 local `selected=true` final article decision을 보존해야 합니다.
 
 ## Role 3. Gemini Editor
 
 - 한국어 newsletter 초안을 작성합니다.
-- 각 주요 기사에 확인한 사실, 배경지식, Camera HAL 관점, Action Item, Sources를 포함합니다.
+- 각 주요 기사는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, Sources를 포함합니다.
 - 이미지 URL을 새로 만들지 않고 collector가 제공한 `imageCandidates`에서만 선택합니다.
 - 출력: `newsroom/YYYY-MM-DD/editor-draft.json`, `newsroom/YYYY-MM-DD/editor-draft.md`.
 
-The editor receives only deterministic final article inputs plus locked/retry context. If retry is needed, passed sections are locked and the repair prompt asks only for regenerated failed sections. Retry artifacts record `locked_sections`, `failed_sections`, `regenerated_sections`, and rejected retry outputs.
+editor는 deterministic final article input과 locked/retry context만 받습니다. retry가 필요하면 통과한 section은 lock하고, repair prompt는 실패한 section만 재생성하도록 요청합니다. retry artifact는 `locked_sections`, `failed_sections`, `regenerated_sections`, rejected retry output을 기록합니다.
 
 ## Role 4. Gemini Fact Checker
 
 - 출처 누락, 과장 표현, 사실과 해석 혼동, Action Item 누락, Camera HAL 관점 약화를 확인합니다.
-- `NEEDS_FIX`와 `must_fix`가 있으면 workflow의 최종 gate가 실패합니다.
+- `NEEDS_FIX`와 `must_fix`가 있으면 workflow의 최종 gate가 실패해야 합니다.
 - 출력: `newsroom/YYYY-MM-DD/fact-check-report.json`, `newsroom/YYYY-MM-DD/fact-check-report.md`.
 
 ## Role 5. Artifact Writer
@@ -69,28 +69,27 @@ The editor receives only deterministic final article inputs plus locked/retry co
 
 ## Role 6. Validator
 
-`npm run validate`가 최종 품질 gate입니다.
+`npm run validate`가 최종 safety gate입니다.
 
+- `npm run validate:config`: `data/news-sources.json` 구조, 필수 field, source ID, URL, section mapping, canonical JSON formatting을 확인합니다.
 - `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
 - `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
-
-- `npm run validate:config`: validates `data/news-sources.json` structure, required fields, source IDs, URLs, section mapping, and canonical JSON formatting.
-
-`npm run validate:quality` recomputes the deterministic quality report and blocks drafts with fewer than 4 or more than 5 main articles, no AI-related article, duplicate source URLs across main sections, missing sources, missing Camera HAL perspective, fewer than 2 action items, source-gap mapped candidates, or selected candidates without dated evidence.
+- `npm run validate:quality`: deterministic quality report를 재계산하고 4개 미만 또는 5개 초과 main article, AI 관련 기사 누락, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap mapped candidate, dated evidence 없는 selected candidate를 차단합니다.
+- `npm run validate:localization`: 유지 문서와 표시용 JSON 값이 한국어 규칙을 지키는지 확인합니다.
 
 ## URL Summary Cache
 
-Reporter summary records are cached under `cache/news-summary/{sha256(normalized_url)}.json`. Cache files are intentionally untracked and restored in CI with `actions/cache`.
+Reporter summary record는 `cache/news-summary/{sha256(normalized_url)}.json`에 cache됩니다. cache file은 의도적으로 untracked이며 CI에서는 `actions/cache`로 복원합니다.
 
-A cache hit is used only when the normalized URL and content fingerprint match. The fingerprint includes URL, title, published date, source, summary, version/release, API/component, and behavior evidence, so changed article evidence forces refresh instead of reusing stale summaries.
+cache hit은 normalized URL과 content fingerprint가 일치할 때만 사용합니다. fingerprint는 URL, title, published date, source, summary, version/release, API/component, behavior evidence를 포함하므로 article evidence가 바뀌면 stale summary를 재사용하지 않습니다.
 
 ## Recovery Artifacts
 
-`newsroom/YYYY-MM-DD/recovery-prompt.md` is written when deterministic selection, Gemini JSON parsing, fact-check, quality, or validation fails after retries. It includes the shortlist, selected inputs, failed sections, quality deductions, fact-check findings, and exact rerun commands.
+`newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, Gemini JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
 
-## GitHub Actions Operation
+## GitHub Actions 운영
 
-### Daily Draft PR
+### 일일 Draft PR
 
 `Weekly Gemini Newsroom PR` workflow는 매일 09:00 KST에 실행됩니다.
 
@@ -99,9 +98,9 @@ KST daily 09:00 = UTC daily 00:00
 branch: newsletter/YYYY-MM-DD
 ```
 
-workflow는 `main`에 직접 push하지 않고, 편집장 검토용 PR을 만듭니다.
+workflow는 `main`에 직접 push하지 않고 편집자 검토용 PR을 만듭니다.
 
-### Required Secret
+### 필수 Secret
 
 Repository Settings > Secrets and variables > Actions:
 
@@ -116,21 +115,21 @@ GEMINI_MODEL=gemini-2.5-flash
 GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-2.5-pro
 ```
 
-### On-demand Run
+### 수동 실행
 
-GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요한 경우 `newsletter_date`와 `lookback_days`를 입력합니다. 비워 두면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다.
+GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요하면 `newsletter_date`와 `lookback_days`를 입력합니다. 비워 두면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다.
 
 ## Editor-in-Chief Review
 
 PR에서 다음 항목을 확인합니다.
 
-- 이번 호 핵심 메시지가 명확한가?
+- 이번 주 핵심 메시지가 명확한가?
 - Camera HAL 엔지니어가 읽을 이유가 있는가?
 - 단순 요약이 아니라 HAL 관점의 해석과 Action Item이 있는가?
 - Sources와 References가 충분한가?
 - fact-check 결과에 unresolved `must_fix`가 없는가?
-- article image가 출처와 fallback 정책을 지키는가?
+- article image가 source attribution과 fallback contract를 지키는가?
 
 ## Release
 
-편집장이 PR을 승인하면 merge합니다. GitHub Pages는 `main` 기준으로 반영됩니다.
+편집자가 PR을 승인하면 merge합니다. GitHub Pages는 `main` 기준으로 반영됩니다.

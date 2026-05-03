@@ -416,8 +416,8 @@ function normalizeEditorSection(section, index, reporter) {
 
 function validateEditor(value, date, reporter = { candidates: [] }) {
   if (value.date !== date) value.date = date;
-  value.title = value.title || `Camera HAL SW Newsletter - ${date}`;
-  if (!value.title.includes(date)) value.title = `Camera HAL SW Newsletter - ${date}`;
+  value.title = value.title || `Camera HAL SW 뉴스레터 - ${date}`;
+  if (!value.title.includes(date)) value.title = `Camera HAL SW 뉴스레터 - ${date}`;
   if (!value.summary) fail('Editor output is missing summary.');
   if (!Array.isArray(value.briefing) || value.briefing.length !== 3) {
     fail('Editor output must contain exactly 3 briefing items.');
@@ -958,31 +958,31 @@ function buildRetryHistoryMarkdown(date, attempts, selectionDiagnostics = null) 
     item.source_gap_count,
     item.must_fix_count
   ]);
-  return `# Newsletter Retry History - ${date}
+  return `# 뉴스레터 재시도 기록 - ${date}
 
-| Attempt | Model | Score | Status | Locked | Rejected duplicates | Source gaps | Must-fix |
+| 시도 | 모델 | 점수 | 상태 | Locked | 중복 거절 | Source gap | Must-fix |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 ${rows.map(row => `| ${row.join(' | ')} |`).join('\n')}
 
 ${selectionDiagnostics ? renderCandidateSelectionDiagnostics(selectionDiagnostics) : ''}
 
-${attempts.map(item => `## Attempt ${item.attempt}
+${attempts.map(item => `## 시도 ${item.attempt}
 
-- Selected articles: ${item.selected_article_headlines.join('; ') || 'none'}
-- Locked articles: ${item.locked_article_headlines.join('; ') || 'none'}
-- Source gap sections: ${ensureArray(item.source_gap_sections).join('; ') || 'none'}
-- Demoted sections: ${ensureArray(item.demoted_sections).join('; ') || 'none'}
-- Replaced sections: ${ensureArray(item.replaced_sections).join('; ') || 'none'}
-- Failed sections: ${ensureArray(item.failed_sections).map(section => section.headline || section.category || 'untitled').join('; ') || 'none'}
-- Regenerated sections: ${ensureArray(item.regenerated_sections).map(section => section.headline || section.category || 'untitled').join('; ') || 'none'}
-- Rejected retry outputs: ${ensureArray(item.rejected_retry_outputs).map(entry => `${entry.title || 'untitled'} (${entry.reason || 'rejected'})`).join('; ') || 'none'}
-- Repair actions: ${ensureArray(item.repair_actions).join('; ') || 'none'}
+- 선택 기사: ${item.selected_article_headlines.join('; ') || '없음'}
+- Lock된 기사: ${item.locked_article_headlines.join('; ') || '없음'}
+- Source gap section: ${ensureArray(item.source_gap_sections).join('; ') || '없음'}
+- Demoted section: ${ensureArray(item.demoted_sections).join('; ') || '없음'}
+- Replaced section: ${ensureArray(item.replaced_sections).join('; ') || '없음'}
+- 실패 section: ${ensureArray(item.failed_sections).map(section => section.headline || section.category || 'untitled').join('; ') || '없음'}
+- 재생성 section: ${ensureArray(item.regenerated_sections).map(section => section.headline || section.category || 'untitled').join('; ') || '없음'}
+- 거절된 retry output: ${ensureArray(item.rejected_retry_outputs).map(entry => `${entry.title || 'untitled'} (${entry.reason || 'rejected'})`).join('; ') || '없음'}
+- Repair action: ${ensureArray(item.repair_actions).join('; ') || '없음'}
 - Final slot distribution: ${JSON.stringify(item.final_article_slot_distribution || {})}
-- Reporter eligibility blocked sections: ${ensureArray(item.reporter_eligibility_blocked_sections).map(item => `${item.headline || 'untitled'} (${item.reason || 'blocked'})`).join('; ') || 'none'}
-- Rejected main-ineligible candidates: ${ensureArray(item.rejected_main_ineligible_candidates).map(candidate => `${candidate.title || candidate} (${candidate.reason || 'rejected'})`).join('; ') || 'none'}
-- Lock blockers: ${ensureArray(item.lock_blockers).join('; ') || 'none'}
-- Rejected duplicate articles: ${ensureArray(item.rejected_duplicate_headlines).map(entry => typeof entry === 'string' ? entry : `${entry.title || 'untitled'} (${entry.reason || 'rejected'})`).join('; ') || 'none'}
-- Deductions: ${item.deductions.length === 0 ? 'none' : item.deductions.map(deduction => `${deduction.points}pt ${deduction.category}${deduction.location ? ` (${deduction.location})` : ''}: ${deduction.reason}`).join('; ')}
+- Reporter eligibility blocked section: ${ensureArray(item.reporter_eligibility_blocked_sections).map(item => `${item.headline || 'untitled'} (${item.reason || 'blocked'})`).join('; ') || '없음'}
+- Rejected main-ineligible candidate: ${ensureArray(item.rejected_main_ineligible_candidates).map(candidate => `${candidate.title || candidate} (${candidate.reason || 'rejected'})`).join('; ') || '없음'}
+- Lock blocker: ${ensureArray(item.lock_blockers).join('; ') || '없음'}
+- 거절된 중복 기사: ${ensureArray(item.rejected_duplicate_headlines).map(entry => typeof entry === 'string' ? entry : `${entry.title || 'untitled'} (${entry.reason || 'rejected'})`).join('; ') || '없음'}
+- 감점: ${item.deductions.length === 0 ? '없음' : item.deductions.map(deduction => `${deduction.points}pt ${deduction.category}${deduction.location ? ` (${deduction.location})` : ''}: ${deduction.reason}`).join('; ')}
 `).join('\n')}`;
 }
 
@@ -993,30 +993,30 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
   const selectionDiagnostics = selectionStatusExtra(shortlist);
   const selectionDiagnosticsMarkdown = renderCandidateSelectionDiagnostics(selectionDiagnostics);
   const lines = [
-    `# Recovery Prompt - ${date}`,
+    `# 복구 프롬프트 - ${date}`,
     '',
-    'The newsroom automation stopped before publication readiness. Use the artifacts below to repair or rerun without losing diagnostics.',
+    'newsroom automation이 publication readiness 전에 멈췄습니다. 아래 artifact를 사용해 diagnostics를 잃지 않고 수정하거나 다시 실행합니다.',
     '',
-    '## Failure',
+    '## 실패',
     '',
-    `- Stage: ${context.stage || 'generation'}`,
-    `- Reason: ${context.reason || 'Unknown failure.'}`,
+    `- 단계: ${context.stage || 'generation'}`,
+    `- 사유: ${context.reason || 'Unknown failure.'}`,
     '',
     selectionDiagnosticsMarkdown,
     '',
-    '## Deterministic Final Selection Status',
+    '## Deterministic Final Selection 상태',
     '',
-    `- Final input candidates: ${selectionDiagnostics.final_input_candidate_count ?? selectionDiagnostics.input_candidate_count ?? 'unknown'}`,
-    `- Final eligible candidates: ${selectionDiagnostics.final_eligible_candidate_count ?? selectionDiagnostics.eligible_candidate_count ?? 'unknown'}`,
-    `- Final selected articles: ${selectionDiagnostics.final_selected_article_count ?? selectionDiagnostics.selected_article_count ?? 'unknown'}`,
-    `- AI selected inputs: ${selectionDiagnostics.ai_selected_article_count ?? 'unknown'}`,
+    `- Final input candidate: ${selectionDiagnostics.final_input_candidate_count ?? selectionDiagnostics.input_candidate_count ?? 'unknown'}`,
+    `- Final eligible candidate: ${selectionDiagnostics.final_eligible_candidate_count ?? selectionDiagnostics.eligible_candidate_count ?? 'unknown'}`,
+    `- Final selected article: ${selectionDiagnostics.final_selected_article_count ?? selectionDiagnostics.selected_article_count ?? 'unknown'}`,
+    `- AI selected input: ${selectionDiagnostics.ai_selected_article_count ?? 'unknown'}`,
     `- Publish ready: ${selectionDiagnostics.publish_ready ?? 'unknown'}`,
     `- Underfilled: ${selectionDiagnostics.underfilled}`,
-    `- Selection warnings: ${selectionDiagnostics.selection_warnings.join('; ') || 'none'}`,
-    `- Selection errors: ${selectionDiagnostics.selection_errors.join('; ') || 'none'}`,
-    `- Top final exclusion reasons: ${selectionDiagnostics.final_exclusion_reason_summary.map(item => `${item.reason} (${item.count})`).join('; ') || 'none'}`,
+    `- Selection warning: ${selectionDiagnostics.selection_warnings.join('; ') || '없음'}`,
+    `- Selection error: ${selectionDiagnostics.selection_errors.join('; ') || '없음'}`,
+    `- 주요 final exclusion reason: ${selectionDiagnostics.final_exclusion_reason_summary.map(item => `${item.reason} (${item.count})`).join('; ') || '없음'}`,
     '',
-    '## Rerun',
+    '## 다시 실행',
     '',
     '```powershell',
     `$env:NEWSLETTER_DATE="${date}"`,
@@ -1030,31 +1030,31 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     JSON.stringify(shortlist, null, 2),
     '```',
     '',
-    '## Selected Inputs',
+    '## Selected Input',
     '',
     '```json',
     JSON.stringify(context.selectedInputs || generationRunState.selectedInputs || [], null, 2),
     '```',
     '',
-    '## Failed Sections',
+    '## 실패 Section',
     '',
     '```json',
     JSON.stringify(context.failedSections || [], null, 2),
     '```',
     '',
-    '## Quality Deductions',
+    '## 품질 감점',
     '',
     '```json',
     JSON.stringify(ensureArray((context.qualityReport || generationRunState.qualityReport)?.deductions), null, 2),
     '```',
     '',
-    '## Fact-check Findings',
+    '## Fact-check 결과',
     '',
     '```json',
     JSON.stringify(context.factCheck || generationRunState.factCheck || null, null, 2),
     '```',
     '',
-    '## Artifact Checklist',
+    '## Artifact 체크리스트',
     '',
     `- newsroom/${date}/shortlisted-candidates.json`,
     `- newsroom/${date}/reporter-candidates.json`,

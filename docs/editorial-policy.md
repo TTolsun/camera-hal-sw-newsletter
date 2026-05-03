@@ -1,16 +1,16 @@
-# Camera HAL SW Newsletter Editorial Policy
+# Camera HAL SW 뉴스레터 편집 정책
 
-## Evidence Specificity Requirement
+## 근거 구체성 요구사항
 
-Each main article must include concrete evidence whenever the source provides it: version or release name, release date, API/component, behavior change, or an explicit source gap. Generic wording such as "monitor AOSP updates" or "review CameraX changes" is not publishable unless it names the exact source, version, API, date, or behavior to watch.
+각 main article은 source가 제공하는 경우 version 또는 release name, release date, API/component, behavior change, explicit source gap 같은 concrete evidence를 포함해야 합니다. "AOSP update를 모니터링한다" 또는 "CameraX change를 review한다" 같은 generic wording은 exact source, version, API, date, behavior를 함께 이름 붙이지 않으면 publishable하지 않습니다.
 
-AI, C++, Linux, and tooling articles must explain their Camera HAL relevance through camera input paths, stream/buffer/metadata/request/result behavior, CTS/VTS/Camera ITS validation, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, or HAL team workflow.
+AI, C++, Linux, tooling article은 camera input path, stream/buffer/metadata/request/result behavior, CTS/VTS/Camera ITS validation, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, HAL team workflow 중 하나로 Camera HAL relevance를 설명해야 합니다.
 
 ## 목표
 
 이 뉴스레터는 Camera HAL, Android Camera, CameraX, AOSP Camera, native C++ 개발자가 한 주의 변화를 실무 관점에서 판단하도록 돕는 기술 리포트입니다. 일반 IT 뉴스 요약이나 제품 홍보 모음이 아니라 HAL 구현, 검증, 성능, 안정성, 개발 workflow에 바로 연결되는 내용을 우선합니다.
 
-## Editor 역할
+## 편집자 역할
 
 AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트웨어 편집자 역할을 수행합니다. 모든 문장은 실무 엔지니어가 읽는다는 전제로 작성합니다.
 
@@ -27,32 +27,32 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 - logical / physical camera behavior
 - native Android runtime
 - C++ code quality
-- AI features only when they affect camera input paths or engineering workflow
+- camera input path 또는 engineering workflow에 영향을 주는 AI feature
 
 ## 기사 구성
 
 - 주요 기사는 4-5개를 목표로 하며 기본 목표는 5개입니다.
-- 브리핑은 정확히 3개 bullet로 유지합니다.
+- briefing은 정확히 3개 bullet로 유지합니다.
 - 각 주요 기사는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, 과장 금지 메모, Sources를 포함합니다.
-- 최소 1개 AI 관련 기사를 포함합니다. 단, 일반 AI 제품 발표만으로는 충분하지 않으며 camera input path, on-device inference, NPU/GPU scheduling, image privacy, agent-assisted HAL workflow 중 하나와 연결되어야 합니다.
-- 가능한 경우 3개 이상은 Camera HAL / Android Camera / CameraX / AOSP Camera 기사로 구성합니다.
+- 최소 1개 AI 관련 기사를 포함합니다. 일반 AI 제품 발표만으로는 충분하지 않으며 camera input path, on-device inference, NPU/GPU scheduling, image privacy, agent-assisted HAL workflow 중 하나와 연결되어야 합니다.
+- 가능하면 3개 이상은 Camera HAL / Android Camera / CameraX / AOSP Camera 기사로 구성합니다.
 
 ## 우선순위
 
-1. AOSP Camera, Android Camera framework, CameraX, Android compatibility, vendor camera behavior.
-2. Linux camera, driver, buffer, stream, metadata, request/result, performance, security 이슈.
-3. Android on-device AI, NPU/GPU, image pipeline, inference runtime처럼 camera data path와 만나는 AI 이슈.
-4. Camera HAL 개발 생산성에 영향을 주는 agent workflow, Android tooling, CI, debugging, testing 변화.
-5. C++ native code 안정성, concurrency, memory, toolchain, compiler, serialization, profiling 이슈.
+1. AOSP Camera, Android Camera framework, CameraX, Android compatibility, vendor camera behavior
+2. Linux camera, driver, buffer, stream, metadata, request/result, performance, security issue
+3. Android on-device AI, NPU/GPU, image pipeline, inference runtime처럼 camera data path와 만나는 AI issue
+4. Camera HAL 개발 생산성에 영향을 주는 agent workflow, Android tooling, CI, debugging, testing 변화
+5. C++ native code 안정성, concurrency, memory, toolchain, compiler, serialization, profiling issue
 
 ## Camera HAL 해석 기준
 
 각 주요 기사는 다음 중 하나 이상을 명확히 설명해야 합니다.
 
-- HAL interface, request/result metadata, stream configuration, buffer lifecycle에 미치는 영향.
-- CTS/VTS, Camera ITS, CDD, vendor test, app compatibility 검증 포인트.
-- thermal, latency, dropped frame, memory, binder, scheduling, NPU/GPU/ISP contention 리스크.
-- camera app, CameraX, framework, vendor HAL 사이의 계약 변화나 디버깅 포인트.
+- HAL interface, request/result metadata, stream configuration, buffer lifecycle에 미치는 영향
+- CTS/VTS, Camera ITS, CDD, vendor test, app compatibility 검증 포인트
+- thermal, latency, dropped frame, memory, binder, scheduling, NPU/GPU/ISP contention risk
+- camera app, CameraX, framework, vendor HAL 사이의 계약 변화나 debug point
 
 나쁜 표현:
 
@@ -62,15 +62,15 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 
 - Preview + ImageCapture + VideoCapture 동시 사용에서 YUV frame drop, capture latency, thermal throttling 여부를 측정한다.
 
-## C++ Fallback 규칙
+## C++ fallback 규칙
 
-Camera HAL / Android Camera 후보가 부족할 때 C++ 기사를 fallback으로 사용할 수 있습니다. C++ 기사는 concurrency, memory safety, performance, compiler/toolchain, diagnostics처럼 native HAL 코드 안정성과 직접 연결되어야 합니다. 일반 C++ 커뮤니티 뉴스는 제외합니다.
+Camera HAL / Android Camera 후보가 부족할 때 C++ 기사를 fallback으로 사용할 수 있습니다. C++ 기사는 concurrency, memory safety, performance, compiler/toolchain, diagnostics처럼 native HAL code 안정성과 직접 연결되어야 합니다. 일반 C++ community news는 제외합니다.
 
-Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합니다. GCC나 일반 C++ 표준 기사를 Android HAL toolchain 전환으로 단정하지 않습니다.
+Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합니다. GCC 또는 일반 C++ 표준 기사를 Android HAL toolchain 전환으로 단정하지 않습니다.
 
-## Action Item 기준
+## 실행 항목 기준
 
-모든 주요 기사는 2주 안에 확인 가능한 Action Item을 포함해야 합니다. Action Item은 test, log, metric, device class, code owner, API, stream 조합 중 하나 이상을 포함해야 합니다.
+모든 주요 기사는 2주 안에 확인 가능한 실행 항목을 포함해야 합니다. 실행 항목은 test, log, metric, device class, code owner, API, stream 조합 중 하나 이상을 포함해야 합니다.
 
 권장 예:
 
@@ -98,7 +98,7 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 
 - 출처 없는 사실 주장이 없는가?
 - 후보의 source URL과 source name을 유지했는가?
-- 사실과 해석을 분리했는가?
+- 사실과 해석이 분리되었는가?
 - 모든 주요 기사에 Action Item이 있는가?
 - 모든 주요 기사에 Camera HAL 관점이 있는가?
 - 한국어로 작성했는가?

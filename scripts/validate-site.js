@@ -77,8 +77,8 @@ function mainArticleBlocks(md) {
     const index = Number(matches[i][1]);
     const title = matches[i][2].trim();
     if (index <= 1) continue;
-    if (/Action Items/i.test(title) || title.includes('Action')) continue;
-    if (/^References$/i.test(title)) continue;
+    if (/Action Items/i.test(title) || title.includes('Action') || title.includes('실행 항목')) continue;
+    if (/^References$/i.test(title) || title === '참고자료') continue;
 
     const start = matches[i].index + matches[i][0].length;
     const nextMatch = matches[i + 1];
@@ -119,7 +119,7 @@ function validateArticleQuality(item, md, newFormat) {
     if (!hasSourceEntry(article.text)) {
       fail(`Newsletter ${item.date} article has no source entries: ${article.heading}`);
     }
-    if (newFormat && !hasAny(article.text, ['Action Item', 'Action Items', '확인할 Action Item', '확인해볼 아이템'])) {
+    if (newFormat && !hasAny(article.text, ['Action Item', 'Action Items', '확인할 Action Item', '확인해볼 아이템', '실행 항목'])) {
       warn(`Newsletter ${item.date} article may be missing Action Item content: ${article.heading}`);
     }
     if (newFormat && !hasAny(article.text, ['Camera HAL 관점', 'Camera HAL에서']) && !hasEngineeringPerspective(article.text)) {
@@ -285,8 +285,8 @@ for (const [index, item] of newsletters.entries()) {
         }
       }
 
-      if (!md.includes('## References')) {
-        fail(`Newsletter ${item.date} markdown missing References section`);
+      if (!hasAny(md, ['## References', '## 참고자료'])) {
+        fail(`Newsletter ${item.date} markdown missing References/참고자료 section`);
       }
 
       validateArticleQuality(item, md, isNewFormat(md));
@@ -335,7 +335,7 @@ for (const relPath of htmlFiles) {
       }
     }
     validateArticleImages(relPath, content);
-    if (!hasAny(content, ['Archive로 돌아가기', 'Archive'])) {
+    if (!hasAny(content, ['Archive로 돌아가기', '아카이브로 돌아가기', 'Archive'])) {
       fail(`Newsletter HTML missing archive link text: ${relPath}`);
     }
     if (!hasAny(content, ['MD 원본 보기', 'MD'])) {

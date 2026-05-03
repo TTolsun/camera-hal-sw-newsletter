@@ -1,4 +1,4 @@
-# GitHub Actions Secrets and Variables
+# GitHub Actions Secret과 Variable
 
 설정 위치는 `GitHub repository -> Settings -> Secrets and variables -> Actions`입니다.
 
@@ -10,7 +10,7 @@ Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR
 | --- | --- | --- | --- | --- |
 | `GEMINI_API_KEY` | 필수 | Gemini newsroom pipeline이 Gemini API를 호출할 때 쓰는 API key입니다. | key를 rotate하거나 권한이 다른 key로 교체할 때만 변경합니다. | 절대 commit, workflow log, artifact, GitHub Variables에 남기지 않습니다. 노출되면 즉시 폐기하고 새 key를 발급합니다. |
 
-## Variables
+## Variable
 
 아래 값은 `.github/workflows/weekly-newsroom-pr.yml`의 현재 기본값입니다. GitHub Variables에 값을 넣지 않으면 workflow가 이 기본값을 사용합니다.
 
@@ -23,7 +23,7 @@ Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR
 | `GEMINI_RETRY_MAX_DELAY_MS` | 선택 | `180000` | 서버가 긴 retry hint를 줄 때 허용하는 최대 대기 시간입니다. | quota pressure가 강하지만 기다리면 복구되는 상황이 반복될 때 변경합니다. | 값을 높이면 workflow가 오래 붙잡힙니다. 값을 낮추면 회복 가능한 API 제한도 실패로 끝날 수 있습니다. |
 | `NEWSROOM_MAX_QUALITY_RETRIES` | 선택 | `3` | quality gate를 통과하지 못한 draft에 대해 Gemini가 다시 작성할 최대 횟수입니다. | 품질 retry artifact를 검토한 결과 추가 시도가 실제로 source gap이나 composition blocker를 줄인다고 확인됐을 때 변경합니다. | 값을 높여도 source 자체가 부족하면 해결되지 않습니다. validation threshold를 낮춰 통과시키는 방식으로 대체하면 안 됩니다. |
 
-## Tradeoff
+## Tradeoff 검토 기준
 
 - 비용: retry 횟수, fallback 모델 수, Pro 계열 모델 사용이 늘수록 비용이 증가할 수 있습니다.
 - 품질: 더 강한 모델이나 quality retry는 품질을 올릴 수 있지만, source gap이 있는 후보를 사실로 만들 수는 없습니다.

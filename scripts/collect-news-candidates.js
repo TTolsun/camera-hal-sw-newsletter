@@ -682,59 +682,59 @@ function markdown(date, candidates, failures, lookbackDays) {
   const excluded = candidates.filter(item => item.finalSelectionEligibility === 'exclude');
 
   function candidateTable(items) {
-    lines.push('| Eligibility | Score | Evidence | Mode | Dated | Source kind | Source | Title | Published | Reason | Link |');
+    lines.push('| 선택 가능성 | 점수 | 근거 | 수집 mode | 날짜 근거 | 출처 종류 | 출처 | 제목 | 발행일 | 사유 | Link |');
     lines.push('|---|---:|---:|---|---|---|---|---|---|---|---|');
     if (items.length === 0) {
-      lines.push('| - | - | - | - | - | - | - | None | - | - | - |');
+      lines.push('| - | - | - | - | - | - | - | 없음 | - | - | - |');
       lines.push('');
       return;
     }
     for (const item of items) {
-      lines.push(`| ${mdEscape(item.finalSelectionEligibility)} | ${item.relevanceScore} | ${item.evidence_score} | ${mdEscape(item.collectionMode)} | ${item.hasDatedEvidence ? 'yes' : 'no'} | ${mdEscape(item.source_kind)} | ${mdEscape(item.source)} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || 'review needed')} | ${mdEscape(item.selection_exclusion_reason || item.verification_hint || '')} | [link](${item.url}) |`);
+      lines.push(`| ${mdEscape(item.finalSelectionEligibility)} | ${item.relevanceScore} | ${item.evidence_score} | ${mdEscape(item.collectionMode)} | ${item.hasDatedEvidence ? 'yes' : 'no'} | ${mdEscape(item.source_kind)} | ${mdEscape(item.source)} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || '검토 필요')} | ${mdEscape(item.selection_exclusion_reason || item.verification_hint || '')} | [link](${item.url}) |`);
     }
     lines.push('');
   }
 
-  lines.push(`# News Candidates - ${date}`);
+  lines.push(`# 뉴스 후보 - ${date}`);
   lines.push('');
-  lines.push('This file is generated from the structured newsletter source registry. Gemini uses the candidate JSON and source metadata as inputs and does not browse the web.');
+  lines.push('이 파일은 구조화된 newsletter source registry에서 생성됩니다. Gemini는 candidate JSON과 source metadata만 입력으로 사용하며 웹을 직접 browse하지 않습니다.');
   lines.push('');
-  lines.push(`- Lookback: ${lookbackDays} days`);
-  lines.push(`- Candidate count: ${candidates.length}`);
+  lines.push(`- Lookback: ${lookbackDays}일`);
+  lines.push(`- 후보 수: ${candidates.length}`);
   lines.push(`- Source registry: ${path.relative(root, activeSourcesPath)}`);
-  lines.push('- Candidate-only media/community sources require official-source verification before final article selection.');
-  lines.push('- Static HTML pages without concrete dated release/API/behavior evidence are watchlist/reference material, not main article candidates.');
+  lines.push('- Candidate-only media/community source는 final article selection 전에 official-source verification이 필요합니다.');
+  lines.push('- 날짜가 있는 release/API/behavior evidence가 없는 static HTML page는 main article candidate가 아니라 watchlist/reference material입니다.');
   lines.push('');
-  lines.push('## Gemini Newsroom Input Summary');
+  lines.push('## Gemini Newsroom 입력 요약');
   lines.push('');
   lines.push('```text');
-  lines.push(`Newsletter date: ${date}`);
-  lines.push(`Audience: ${AUDIENCE}`);
+  lines.push(`뉴스레터 날짜: ${date}`);
+  lines.push(`대상 독자: ${AUDIENCE}`);
   lines.push('Inputs: collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/news-sources.md');
   lines.push('Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, newsletter.md, index.html, editor-in-chief-brief.md, release-qa-report.md');
   lines.push('```');
   lines.push('');
 
-  lines.push('## Main/short article candidates');
+  lines.push('## Main/short 기사 후보');
   lines.push('');
   candidateTable(articleCandidates);
 
-  lines.push('## Watchlist/reference pages');
+  lines.push('## Watchlist/reference page');
   lines.push('');
   candidateTable(watchlist);
 
-  lines.push('## Excluded or low-confidence items');
+  lines.push('## 제외 또는 낮은 신뢰도 항목');
   lines.push('');
   candidateTable(excluded);
 
-  lines.push('## Raw Candidates');
+  lines.push('## 원본 후보');
   lines.push('');
   for (const [index, item] of candidates.entries()) {
     lines.push(`### ${index + 1}. ${item.title}`);
     lines.push('');
-    lines.push(`- Source: ${item.source}`);
-    lines.push(`- Source URL: ${item.source_url}`);
-    lines.push(`- Published: ${item.publishedAt || 'review needed'}`);
+    lines.push(`- 출처: ${item.source}`);
+    lines.push(`- 출처 URL: ${item.source_url}`);
+    lines.push(`- 발행일: ${item.publishedAt || '검토 필요'}`);
     lines.push(`- Link: ${item.url}`);
     lines.push(`- Section: ${item.section}`);
     lines.push(`- Source category: ${item.source_category}`);
@@ -744,7 +744,7 @@ function markdown(date, candidates, failures, lookbackDays) {
     lines.push(`- Collection mode: ${item.collectionMode}`);
     lines.push(`- Article candidate: ${item.isArticleCandidate ? 'yes' : 'no'}`);
     lines.push(`- Watch page: ${item.isWatchPage ? 'yes' : 'no'}`);
-    lines.push(`- Has dated evidence: ${item.hasDatedEvidence ? 'yes' : 'no'}`);
+    lines.push(`- 날짜 근거 있음: ${item.hasDatedEvidence ? 'yes' : 'no'}`);
     lines.push(`- Evidence level: ${item.evidenceLevel}`);
     lines.push(`- Final selection eligibility: ${item.finalSelectionEligibility}`);
     lines.push(`- Source kind: ${item.source_kind}`);
@@ -753,35 +753,35 @@ function markdown(date, candidates, failures, lookbackDays) {
     lines.push(`- Reference only: ${item.reference_only ? 'yes' : 'no'}`);
     lines.push(`- Source gap risk: ${item.source_gap_risk ? 'yes' : 'no'}`);
     lines.push(`- Evidence score: ${item.evidence_score}`);
-    lines.push(`- Version/release: ${item.version_or_release || 'not extracted'}`);
-    lines.push(`- API/component: ${item.api_or_component || 'not extracted'}`);
-    lines.push(`- Behavior change: ${item.behavior_change || 'not extracted'}`);
-    lines.push(`- Requires cross-check: ${item.requires_cross_check ? 'yes' : 'no'}`);
+    lines.push(`- Version/release: ${item.version_or_release || '추출 안 됨'}`);
+    lines.push(`- API/component: ${item.api_or_component || '추출 안 됨'}`);
+    lines.push(`- Behavior change: ${item.behavior_change || '추출 안 됨'}`);
+    lines.push(`- Cross-check 필요: ${item.requires_cross_check ? 'yes' : 'no'}`);
     lines.push(`- Selection exclusion reason: ${item.selection_exclusion_reason}`);
     lines.push(`- Verification hint: ${item.verification_hint}`);
     lines.push(`- Relevance Score: ${item.relevanceScore}`);
-    lines.push(`- Summary: ${item.summary || 'No summary'}`);
+    lines.push(`- 요약: ${item.summary || '요약 없음'}`);
     lines.push(`- Selection reason: ${item.reason}`);
     lines.push('');
   }
 
-  lines.push('## Collector Failures');
+  lines.push('## Collector 실패');
   lines.push('');
   if (failures.length === 0) {
-    lines.push('- None');
+    lines.push('- 없음');
   } else {
     for (const failure of failures) {
       lines.push(`- ${failure.source}: ${failure.message}`);
     }
   }
   lines.push('');
-  lines.push('## Editor-in-Chief Checklist');
+  lines.push('## 편집장 체크리스트');
   lines.push('');
-  lines.push('- [ ] High-priority official sources were reviewed first.');
-  lines.push('- [ ] Candidate-only sources were cross-checked against official documentation or blogs when possible.');
-  lines.push('- [ ] Each final section preserves source name and source URL.');
-  lines.push('- [ ] Final Markdown/HTML includes Sources and References.');
-  lines.push('- [ ] Camera HAL relevance is tied to capability, request/result, stream/buffer, metadata, CTS/VTS/ITS/CDD, or implementation impact.');
+  lines.push('- [ ] High-priority official source를 먼저 검토했다.');
+  lines.push('- [ ] Candidate-only source는 가능하면 official documentation 또는 blog로 교차 확인했다.');
+  lines.push('- [ ] 각 final section이 source name과 source URL을 보존한다.');
+  lines.push('- [ ] Final Markdown/HTML에 출처와 참고자료가 포함되어 있다.');
+  lines.push('- [ ] Camera HAL relevance가 capability, request/result, stream/buffer, metadata, CTS/VTS/ITS/CDD, implementation impact와 연결된다.');
   lines.push('');
   return lines.join('\n');
 }

@@ -238,7 +238,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     .map(item => `- ${item.reason} (${item.count})`)
     .join('\n') || '- none';
   return [
-    '## Candidate Selection Diagnostics',
+    '## 후보 선택 진단',
     '',
     `- Reporter candidates: ${formatCount(diagnostics.reporter_candidate_count)}`,
     `- Reporter-selected candidates: ${formatCount(diagnostics.reporter_selected_count)}`,
@@ -247,7 +247,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Final selected articles: ${formatCount(diagnostics.final_selected_article_count ?? diagnostics.selected_article_count)}`,
     `- Reporter-selected but final-excluded: ${formatCount(diagnostics.reporter_selected_but_final_excluded_count)}`,
     '',
-    'Top final exclusion reasons:',
+    '주요 final exclusion reason:',
     reasons,
     '',
     diagnostics.note || REPORTER_SELECTION_NOTE

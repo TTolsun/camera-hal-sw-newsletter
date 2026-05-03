@@ -1,20 +1,20 @@
-# Camera HAL SW Newsletter Template
+# Camera HAL SW 뉴스레터 템플릿
 
-## Required Evidence Fields
+## 필수 근거 field
 
-Every generated article JSON must include `evidence_summary`, `specificity_checks`, and `source_verification_notes`.
-Use these fields to name the concrete version/release, release date, API/component, behavior change, or explicit source gap behind the article.
-Do not use generic monitoring language unless it names the exact source, version, API, date, or behavior to watch.
+모든 generated article JSON은 `evidence_summary`, `specificity_checks`, `source_verification_notes`를 포함해야 합니다. 이 field는 기사 근거가 되는 concrete version/release, release date, API/component, behavior change, explicit source gap을 적는 곳입니다.
 
-# Camera HAL SW Newsletter - YYYY-MM-DD
+정확한 source, version, API, date, behavior를 함께 이름 붙이지 않는 generic monitoring language는 사용하지 않습니다.
+
+# Camera HAL SW 뉴스레터 - YYYY-MM-DD
 
 이슈 전체 요약을 2-4문장으로 작성합니다. 이번 주 변화가 Camera HAL / Android Camera / C++ native 개발자에게 왜 중요한지 먼저 말합니다.
 
 ## 1. 이번 주 3줄 브리핑
 
-- 첫 번째 핵심 변화와 HAL 관점.
-- 두 번째 핵심 변화와 검증 포인트.
-- 세 번째 핵심 변화와 팀 action 방향.
+- 첫 번째 핵심 변화와 HAL 관점
+- 두 번째 핵심 변화와 검증 포인트
+- 세 번째 핵심 변화와 팀 action 방향
 
 ## 2. 기사 카테고리
 
@@ -61,20 +61,20 @@ HAL interface, stream/buffer, metadata, request/result, performance, compatibili
 
 회의나 메신저에 그대로 공유할 수 있는 한 문장으로 정리합니다.
 
-**Sources**
+**출처**
 
 - [Source title](https://example.com)
 
 ---
 
-주요 기사는 같은 구조를 반복합니다. 한 이슈는 4-5개 기사, 기본 목표는 5개입니다. 최소 1개는 AI 관련 기사여야 하며, 가능한 경우 3개 이상은 Camera HAL / Android Camera / CameraX / AOSP Camera 기사여야 합니다.
+주요 기사는 같은 구조를 반복합니다. 이슈는 4-5개 기사를 목표로 하며 기본 목표는 5개입니다. 최소 1개는 AI 관련 기사여야 하고, 가능하면 3개 이상은 Camera HAL / Android Camera / CameraX / AOSP Camera 기사여야 합니다.
 
-## 이번 주 Action Items
+## 이번 주 실행 항목
 
 - 이슈 전체에서 가장 중요한 팀 action을 3-6개로 정리합니다.
 - 각 action은 2주 안에 확인 가능한 형태여야 합니다.
 - stream 조합, metadata, CTS/VTS/Camera ITS, CameraX compatibility, native runtime, AI input path 중 가능한 구체 항목을 포함합니다.
 
-## References
+## 참고자료
 
-- [Source title](https://example.com)
+- [출처 제목](https://example.com)

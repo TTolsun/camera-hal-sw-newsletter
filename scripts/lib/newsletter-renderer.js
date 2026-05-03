@@ -178,16 +178,16 @@ ${bulletsMarkdown(articleActions(section))}
 
 ${articleTeamSummary(section)}
 
-**Sources**
+**출처**
 
 ${sourceListMarkdown(section.sources)}
 `).join('\n---\n\n')}
 
-## 이번 주 Action Items
+## 이번 주 실행 항목
 
 ${bulletsMarkdown(issue.action_items)}
 
-## References
+## 참고자료
 
 ${sourceListMarkdown(issue.references)}
 `;
@@ -207,9 +207,9 @@ function buildHtml(issue) {
     <nav class="site-nav content-wrap" aria-label="Primary navigation">
       <a class="site-brand" href="../../index.html">Camera HAL SW Newsletter</a>
       <div class="nav-links">
-        <a href="../../index.html#latest">Latest</a>
-        <a href="../../index.html#archive">Archive</a>
-        <a href="../../docs/news-sources.md">Sources</a>
+        <a href="../../index.html#latest">최신</a>
+        <a href="../../index.html#archive">아카이브</a>
+        <a href="../../docs/news-sources.md">출처</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </nav>
@@ -219,14 +219,14 @@ function buildHtml(issue) {
     <article class="wrap">
       <header class="article-header">
         <div class="article-meta">
-          <span class="issue-kicker">WEEKLY NEWSLETTER</span>
+          <span class="issue-kicker">주간 뉴스레터</span>
           <span class="issue-date">${escapeHtml(issue.date)}</span>
         </div>
         <h1>Camera HAL SW Newsletter</h1>
         <p class="subtitle">${escapeHtml(issue.summary)}</p>
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
         <div class="actions newsletter-actions issue-actions">
-          <a class="button button-secondary" href="../../index.html#archive">Archive로 돌아가기</a>
+          <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
           <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
         </div>
       </header>
@@ -245,26 +245,26 @@ ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, sect
           ${articleTagsHtml(section, headingCategory)}
           <h3>${escapeHtml(section.headline)}</h3>
           <div class="article-block"><strong class="article-block-title">확인한 사실</strong>${Array.isArray(articleFacts(section)) ? `<ul>${bulletsHtml(articleFacts(section))}</ul>` : paragraphHtml(articleFacts(section))}</div>
-          <div class="article-block"><strong class="article-block-title">Background Knowledge</strong>${paragraphHtml(section.background)}</div>
+          <div class="article-block"><strong class="article-block-title">배경지식</strong>${paragraphHtml(section.background)}</div>
           <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong>${paragraphHtml(articlePerspective(section))}</div>
-          <div class="article-block"><strong class="article-block-title">Action Items</strong><ul>${bulletsHtml(articleActions(section))}</ul></div>
+          <div class="article-block"><strong class="article-block-title">실행 항목</strong><ul>${bulletsHtml(articleActions(section))}</ul></div>
           <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong>${paragraphHtml(articleTeamSummary(section))}</div>
-          <div class="source-list"><strong>Sources</strong><ul>${sourceListHtml(section.sources)}</ul></div>
+          <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(section.sources)}</ul></div>
         </div>
       </section>`).join('\n\n')}
 
       <section class="section">
-        <h2>이번 주 Action Items</h2>
+        <h2>이번 주 실행 항목</h2>
         <div class="card action-card"><ul>${bulletsHtml(issue.action_items)}</ul></div>
       </section>
 
       <section class="section">
-        <h2>References</h2>
+        <h2>참고자료</h2>
         <div class="card reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
       </section>
 
       <nav class="bottom-nav" aria-label="Issue navigation">
-        <a class="button button-secondary" href="../../index.html#archive">Archive로 돌아가기</a>
+        <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
       </nav>
     </article>
   </main>
@@ -275,40 +275,40 @@ ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, sect
 
 function buildFactCheckMarkdown(date, report) {
   const mustFix = ensureArray(report.must_fix);
-  return `# Fact Check Report - ${date}
+  return `# 사실 검증 보고서 - ${date}
 
-## Status
+## 상태
 
 ${report.status}
 
-## Must Fix
+## 반드시 수정할 항목
 
-${mustFix.length === 0 ? '- 없음' : mustFix.map(item => `- Location: ${item.location}
-  - Problem: ${item.problem}
-  - Suggestion: ${item.suggestion}
-  - Source: ${item.source_url}`).join('\n')}
+${mustFix.length === 0 ? '- 없음' : mustFix.map(item => `- 위치: ${item.location}
+  - 문제: ${item.problem}
+  - 제안: ${item.suggestion}
+  - 출처: ${item.source_url}`).join('\n')}
 
-## Recommended Fixes
+## 권장 수정
 
 ${ensureArray(report.recommended_fixes).length === 0 ? '- 없음' : bulletsMarkdown(report.recommended_fixes)}
 
-## Source Gaps
+## 출처 공백
 
 ${ensureArray(report.source_gaps).length === 0 ? '- 없음' : bulletsMarkdown(report.source_gaps)}
 
-## Final Comment
+## 최종 의견
 
 ${report.final_comment}
 `;
 }
 
 function qualitySummaryMarkdown(qualityReport) {
-  if (!qualityReport) return '- Quality score: not generated';
+  if (!qualityReport) return '- 품질 점수: 생성되지 않음';
   return [
-    `- Quality score: ${qualityReport.score}/100`,
-    `- Quality threshold: ${qualityReport.threshold}`,
-    `- Quality status: ${qualityReport.status}`,
-    `- Top deductions: ${ensureArray(qualityReport.deductions).slice(0, 5).map(item => `${item.points}pt ${item.category}${item.location ? ` (${item.location})` : ''}`).join('; ') || 'none'}`
+    `- 품질 점수: ${qualityReport.score}/100`,
+    `- 품질 기준: ${qualityReport.threshold}`,
+    `- 품질 상태: ${qualityReport.status}`,
+    `- 주요 감점: ${ensureArray(qualityReport.deductions).slice(0, 5).map(item => `${item.points}pt ${item.category}${item.location ? ` (${item.location})` : ''}`).join('; ') || '없음'}`
   ].join('\n');
 }
 
@@ -317,7 +317,7 @@ function buildEditorChiefBrief(date, issue, factCheck, qualityReport = null, sel
   const decision = factCheck.status === 'PASS' && (!qualityReport || qualityReport.status === 'PASS')
     ? 'APPROVE'
     : 'REQUEST_CHANGES';
-  return `# Editor-in-Chief Brief - ${date}
+  return `# 편집장 브리프 - ${date}
 
 ## 이번 주 핵심 메시지
 
@@ -332,12 +332,12 @@ ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 
 ## 검증 결과 요약
 
-- Status: ${factCheck.status}
-- Must fix count: ${ensureArray(factCheck.must_fix).length}
-- Source gap count: ${ensureArray(factCheck.source_gaps).length}
-- Comment: ${factCheck.final_comment}
+- 상태: ${factCheck.status}
+- must_fix 개수: ${ensureArray(factCheck.must_fix).length}
+- source gap 개수: ${ensureArray(factCheck.source_gaps).length}
+- 의견: ${factCheck.final_comment}
 
-## Quality Gate
+## 품질 게이트
 
 ${qualitySummaryMarkdown(qualityReport)}
 
@@ -358,7 +358,7 @@ ${decision}
 }
 
 function buildReleaseQaReport(date, files, validateResult, factCheck, todoFound, emptySourceSections, qualityReport = null) {
-  return `# Release QA Report - ${date}
+  return `# 릴리스 QA 보고서 - ${date}
 
 ## 생성 파일 목록
 
@@ -378,11 +378,11 @@ ${emptySourceSections.length === 0 ? '없음' : emptySourceSections.map(section 
 
 ## Gemini 검증 결과
 
-- Status: ${factCheck.status}
-- Must fix count: ${ensureArray(factCheck.must_fix).length}
-- Source gap count: ${ensureArray(factCheck.source_gaps).length}
+- 상태: ${factCheck.status}
+- must_fix 개수: ${ensureArray(factCheck.must_fix).length}
+- source gap 개수: ${ensureArray(factCheck.source_gaps).length}
 
-## Quality Gate
+## 품질 게이트
 
 ${qualitySummaryMarkdown(qualityReport)}
 `;

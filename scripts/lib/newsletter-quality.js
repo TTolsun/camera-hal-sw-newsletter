@@ -344,8 +344,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     threshold,
     status,
     summary: status === 'PASS'
-      ? `Quality score ${score}/${threshold}; ready for editor-in-chief review.`
-      : `Quality score ${score}/${threshold}; resolve source gaps and deductions before publication.`,
+      ? `품질 점수 ${score}/${threshold}; 편집장 검토 준비가 끝났습니다.`
+      : `품질 점수 ${score}/${threshold}; 발행 전 source gap과 deduction을 해결해야 합니다.`,
     deductions: state.deductions,
     metrics: {
       article_count: sections.length,
@@ -364,31 +364,31 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
 
 function buildQualityReportMarkdown(report) {
   const deductions = ensureArray(report.deductions);
-  return `# Newsletter Quality Report - ${report.date}
+  return `# 뉴스레터 품질 보고서 - ${report.date}
 
-## Score
+## 점수
 
-- Score: ${report.score}/100
-- Threshold: ${report.threshold}
-- Status: ${report.status}
-- Summary: ${report.summary}
+- 점수: ${report.score}/100
+- 기준: ${report.threshold}
+- 상태: ${report.status}
+- 요약: ${report.summary}
 
-## Metrics
+## 지표
 
-- Article count: ${report.metrics.article_count}
-- Briefing count: ${report.metrics.briefing_count}
-- Camera article count: ${report.metrics.camera_article_count}
-- AI article count: ${report.metrics.ai_article_count}
-- Fact-check status: ${report.metrics.fact_check_status}
-- Must-fix count: ${report.metrics.must_fix_count}
-- Source gap count: ${report.metrics.source_gap_count}
-- Source integrity violation count: ${report.metrics.source_integrity_violation_count || 0}
-- Blocking deduction count: ${report.metrics.blocking_deduction_count || 0}
-- Blocking deduction categories: ${ensureArray(report.metrics.blocking_deduction_categories).join(', ') || 'none'}
+- 기사 수: ${report.metrics.article_count}
+- 브리핑 수: ${report.metrics.briefing_count}
+- Camera 기사 수: ${report.metrics.camera_article_count}
+- AI 기사 수: ${report.metrics.ai_article_count}
+- fact-check 상태: ${report.metrics.fact_check_status}
+- must-fix 수: ${report.metrics.must_fix_count}
+- source gap 수: ${report.metrics.source_gap_count}
+- source integrity 위반 수: ${report.metrics.source_integrity_violation_count || 0}
+- blocking deduction 수: ${report.metrics.blocking_deduction_count || 0}
+- blocking deduction category: ${ensureArray(report.metrics.blocking_deduction_categories).join(', ') || '없음'}
 
-## Deductions
+## 감점
 
-${deductions.length === 0 ? '- None' : deductions.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n')}
+${deductions.length === 0 ? '- 없음' : deductions.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n')}
 `;
 }
 
