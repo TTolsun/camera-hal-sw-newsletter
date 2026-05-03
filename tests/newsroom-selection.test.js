@@ -5,7 +5,8 @@ const {
   buildShortlistReport,
   exclusionReasons,
   normalizeUrl,
-  selectFinalArticles
+  selectFinalArticles,
+  summarizeExclusionReasons
 } = require('../scripts/lib/newsroom-selection');
 
 function candidate(overrides = {}) {
@@ -99,4 +100,99 @@ test('URL normalization removes tracking query and hash', () => {
 
 test('exclusion reason reports reference-only candidates', () => {
   assert.ok(exclusionReasons(candidate({ reference_only: true })).includes('reference_only=true'));
+});
+
+test('four eligible candidates are publish-ready with no deterministic selection errors', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
+    candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
+    candidate({ title: 'Android Camera API change C fixes metadata behavior', url: 'https://example.com/c' }),
+    candidate({ title: 'On-device AI camera path update D', url: 'https://example.com/d', summary: 'AI inference update affects Android camera frame processing.' })
+  ]);
+
+  assert.equal(report.selected_article_count, 4);
+  assert.equal(report.underfilled, false);
+  assert.equal(report.publish_ready, true);
+  assert.deepEqual(report.selection_warnings, []);
+  assert.deepEqual(report.selection_errors, []);
+});
+
+test('three eligible candidates with an AI candidate are reviewable but not publish-ready', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
+    candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
+    candidate({ title: 'On-device AI camera path update C', url: 'https://example.com/c', summary: 'AI inference update affects Android camera frame processing.' })
+  ]);
+
+  assert.equal(report.selected_article_count, 3);
+  assert.equal(report.underfilled, true);
+  assert.equal(report.publish_ready, false);
+  assert.equal(report.selection_errors.length, 0);
+  assert.match(report.selection_warnings[0], /Thin-week review path/);
+});
+
+test('two eligible candidates remain a hard deterministic selection error', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
+    candidate({ title: 'On-device AI camera path update B', url: 'https://example.com/b', summary: 'AI inference update affects Android camera frame processing.' })
+  ]);
+
+  assert.equal(report.selected_article_count, 2);
+  assert.equal(report.publish_ready, false);
+  assert.ok(report.selection_errors.some(error => error.includes('Only 2 eligible')));
+});
+
+test('four non-AI candidates fail the deterministic AI requirement', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
+    candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
+    candidate({ title: 'Android Camera API change C fixes metadata behavior', url: 'https://example.com/c' }),
+    candidate({ title: 'Camera HAL compatibility update D changes buffer handling', url: 'https://example.com/d' })
+  ]);
+
+  assert.equal(report.selected_article_count, 4);
+  assert.equal(report.publish_ready, false);
+  assert.ok(report.selection_errors.includes('No AI-related eligible final article input remains after deterministic filtering.'));
+});
+
+test('exclusion reason summary sorts by count descending then reason name', () => {
+  const summary = summarizeExclusionReasons([
+    { exclusion_reasons: ['z reason', 'a reason'] },
+    { exclusion_reasons: ['a reason'] },
+    { exclusion_reasons: ['m reason'] }
+  ]);
+
+  assert.deepEqual(summary, [
+    { reason: 'a reason', count: 2 },
+    { reason: 'm reason', count: 1 },
+    { reason: 'z reason', count: 1 }
+  ]);
+});
+
+test('undated watch and reference candidates remain excluded from final selection', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
+    candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
+    candidate({ title: 'On-device AI camera path update C', url: 'https://example.com/c', summary: 'AI inference update affects Android camera frame processing.' }),
+    candidate({ title: 'Android Camera API change D fixes metadata behavior', url: 'https://example.com/d' }),
+    candidate({
+      title: 'Undated rolling Camera documentation',
+      url: 'https://example.com/watch',
+      published_date: '',
+      isWatchPage: true,
+      hasDatedEvidence: false,
+      finalSelectionEligibility: 'watchlist'
+    }),
+    candidate({
+      title: 'Reference-only Camera background',
+      url: 'https://example.com/reference',
+      reference_only: true
+    })
+  ]);
+
+  const selectedUrls = new Set(report.selected_articles.map(item => item.url));
+  assert.equal(selectedUrls.has('https://example.com/watch'), false);
+  assert.equal(selectedUrls.has('https://example.com/reference'), false);
+  assert.ok(report.excluded_candidates.some(item => item.title === 'Undated rolling Camera documentation'));
+  assert.ok(report.excluded_candidates.some(item => item.title === 'Reference-only Camera background'));
 });

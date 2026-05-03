@@ -2,6 +2,7 @@ const crypto = require('crypto');
 
 const SHORTLIST_CAP = 12;
 const MIN_FINAL_ARTICLES = 4;
+const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = 3;
 const MAX_FINAL_ARTICLES = 5;
 
 function ensureArray(value) {
@@ -300,11 +301,48 @@ function selectFinalArticles(shortlist, options = {}) {
   return selected.slice(0, maxArticles);
 }
 
+function selectionWarnings(selected) {
+  const count = ensureArray(selected).length;
+  if (count >= ABSOLUTE_MIN_REVIEWABLE_ARTICLES && count < MIN_FINAL_ARTICLES) {
+    return [
+      `Thin-week review path: only ${count} eligible non-duplicate final article input(s) remain after deterministic filtering. Review artifacts may be generated, but publication is not ready.`
+    ];
+  }
+  return [];
+}
+
+function selectionErrors(selected) {
+  const items = ensureArray(selected);
+  const errors = [];
+  if (items.length < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
+    errors.push(`Only ${items.length} eligible non-duplicate final article input(s) remain after deterministic filtering.`);
+  }
+  if (items.every(candidate => !candidate.ai_slot_candidate)) {
+    errors.push('No AI-related eligible final article input remains after deterministic filtering.');
+  }
+  return errors;
+}
+
+function summarizeExclusionReasons(excluded) {
+  const counts = new Map();
+  for (const candidate of ensureArray(excluded)) {
+    for (const reason of ensureArray(candidate.exclusion_reasons)) {
+      const key = text(reason) || 'unknown';
+      counts.set(key, (counts.get(key) || 0) + 1);
+    }
+  }
+  return [...counts.entries()]
+    .map(([reason, count]) => ({ reason, count }))
+    .sort((a, b) => b.count - a.count || a.reason.localeCompare(b.reason));
+}
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const cap = options.cap || SHORTLIST_CAP;
   const { shortlist, excluded } = buildEligibleShortlist(rawCandidates, date, cap);
   const selected = selectFinalArticles(shortlist, options);
+  const warnings = selectionWarnings(selected);
+  const errors = selectionErrors(selected);
   const selectedUrls = new Set(selected.map(candidate => candidate.normalized_url));
   const markedShortlist = shortlist.map(candidate => {
     const match = selected.find(item => item.normalized_url === candidate.normalized_url);
@@ -324,8 +362,12 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     selected_article_count: selected.length,
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
     shortlist_cap: cap,
+    absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
+    underfilled: warnings.length > 0,
+    publish_ready: errors.length === 0 && warnings.length === 0,
     selection_policy: {
       min_final_articles: MIN_FINAL_ARTICLES,
+      absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
       max_final_articles: MAX_FINAL_ARTICLES,
       cxx_fallback: 'Use C++ / developer productivity only when fewer than 4 strong camera/platform articles remain.',
       ai_requirement: 'At least one final main article must be AI-related.'
@@ -333,11 +375,9 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     shortlisted_candidates: markedShortlist,
     selected_articles: selected,
     excluded_candidates: excluded,
-    selection_errors: selected.length < MIN_FINAL_ARTICLES
-      ? [`Only ${selected.length} eligible non-duplicate final article input(s) remain after deterministic filtering.`]
-      : selected.every(candidate => !candidate.ai_slot_candidate)
-      ? ['No AI-related eligible final article input remains after deterministic filtering.']
-      : []
+    selection_warnings: warnings,
+    selection_errors: errors,
+    exclusion_reason_summary: summarizeExclusionReasons(excluded)
   };
 }
 
@@ -354,6 +394,7 @@ function reporterInputFromShortlist(shortlistReport) {
 }
 
 module.exports = {
+  ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
   SHORTLIST_CAP,
   MIN_FINAL_ARTICLES,
   MAX_FINAL_ARTICLES,
@@ -366,5 +407,8 @@ module.exports = {
   reporterInputFromShortlist,
   scoreCandidate,
   selectFinalArticles,
+  selectionErrors,
+  selectionWarnings,
+  summarizeExclusionReasons,
   titleSimilarity
 };

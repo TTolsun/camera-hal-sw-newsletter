@@ -109,6 +109,21 @@ function buildGenerationStatus({
   };
 }
 
+function selectionStatusExtra(shortlistReport = generationRunState.shortlistReport) {
+  const report = shortlistReport || {};
+  return {
+    input_candidate_count: report.input_candidate_count ?? null,
+    eligible_candidate_count: report.eligible_candidate_count ?? null,
+    selected_article_count: report.selected_article_count ?? null,
+    ai_selected_article_count: report.ai_selected_article_count ?? null,
+    underfilled: Boolean(report.underfilled),
+    publish_ready: report.publish_ready !== undefined ? Boolean(report.publish_ready) : null,
+    selection_warnings: ensureArray(report.selection_warnings),
+    selection_errors: ensureArray(report.selection_errors),
+    exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10)
+  };
+}
+
 function numberOrDefault(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
 }
@@ -957,6 +972,8 @@ ${attempts.map(item => `## Attempt ${item.attempt}
 function writeRecoveryPrompt(newsroomDir, context = {}) {
   fs.mkdirSync(newsroomDir, { recursive: true });
   const date = context.date || generationRunState.date || process.env.NEWSLETTER_DATE || kstDate();
+  const shortlist = context.shortlistReport || generationRunState.shortlistReport || null;
+  const selectionDiagnostics = selectionStatusExtra(shortlist);
   const lines = [
     `# Recovery Prompt - ${date}`,
     '',
@@ -966,6 +983,18 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     '',
     `- Stage: ${context.stage || 'generation'}`,
     `- Reason: ${context.reason || 'Unknown failure.'}`,
+    '',
+    '## Deterministic Selection Diagnostics',
+    '',
+    `- Input candidates: ${selectionDiagnostics.input_candidate_count ?? 'unknown'}`,
+    `- Eligible candidates: ${selectionDiagnostics.eligible_candidate_count ?? 'unknown'}`,
+    `- Selected final inputs: ${selectionDiagnostics.selected_article_count ?? 'unknown'}`,
+    `- AI selected inputs: ${selectionDiagnostics.ai_selected_article_count ?? 'unknown'}`,
+    `- Publish ready: ${selectionDiagnostics.publish_ready ?? 'unknown'}`,
+    `- Underfilled: ${selectionDiagnostics.underfilled}`,
+    `- Selection warnings: ${selectionDiagnostics.selection_warnings.join('; ') || 'none'}`,
+    `- Selection errors: ${selectionDiagnostics.selection_errors.join('; ') || 'none'}`,
+    `- Top exclusion reasons: ${selectionDiagnostics.exclusion_reason_summary.map(item => `${item.reason} (${item.count})`).join('; ') || 'none'}`,
     '',
     '## Rerun',
     '',
@@ -978,7 +1007,7 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     '## Shortlist',
     '',
     '```json',
-    JSON.stringify(context.shortlistReport || generationRunState.shortlistReport || null, null, 2),
+    JSON.stringify(shortlist, null, 2),
     '```',
     '',
     '## Selected Inputs',
@@ -1056,6 +1085,25 @@ async function main() {
   generationRunState.shortlistReport = shortlistReport;
   generationRunState.selectedInputs = shortlistReport.selected_articles;
   writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
+  if (shortlistReport.selection_warnings.length > 0) {
+    writeGenerationStatus(buildGenerationStatus({
+      date,
+      status: 'UNDERFILLED_NEEDS_FIX',
+      extra: {
+        failure_stage: 'deterministic selection',
+        failure_reason: shortlistReport.selection_warnings.join('; '),
+        ...selectionStatusExtra(shortlistReport)
+      }
+    }));
+    writeRecoveryPrompt(newsroomDir, {
+      date,
+      stage: 'deterministic selection',
+      reason: shortlistReport.selection_warnings.join('; '),
+      shortlistReport,
+      selectedInputs: shortlistReport.selected_articles
+    });
+    console.warn(`Deterministic selection is underfilled: ${shortlistReport.selection_warnings.join('; ')}`);
+  }
   if (shortlistReport.selection_errors.length > 0) {
     writeRecoveryPrompt(newsroomDir, {
       date,
@@ -1476,7 +1524,9 @@ async function main() {
 
   const mustFixCount = ensureArray(factCheck.must_fix).length;
   let generationStatus = 'PASS';
-  if (factCheck.status === 'NEEDS_FIX' && mustFixCount > 0) {
+  if (shortlistReport.underfilled) {
+    generationStatus = 'UNDERFILLED_NEEDS_FIX';
+  } else if (factCheck.status === 'NEEDS_FIX' && mustFixCount > 0) {
     generationStatus = 'NEEDS_FIX';
   } else if (qualityReport.status !== 'PASS') {
     generationStatus = 'QUALITY_NEEDS_FIX';
@@ -1499,7 +1549,8 @@ async function main() {
       validate_ok: validateResult.ok,
       todo_found: todoFound,
       empty_source_sections: emptySourceSections,
-      source_gap_count: factCheck.source_gap_count
+      source_gap_count: factCheck.source_gap_count,
+      ...selectionStatusExtra(shortlistReport)
     }
   }));
 
@@ -1511,16 +1562,22 @@ async function main() {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'validation', reason: `Generated sections without sources: ${emptySourceSections.join(', ')}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     fail(`Generated sections without sources: ${emptySourceSections.join(', ')}`);
   }
-  if (!validateResult.ok) {
+  if (!validateResult.ok && !shortlistReport.underfilled) {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'validation', reason: `npm run validate failed:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     fail(`npm run validate failed:\n${validateResult.text}`);
   }
-  if (generationStatus === 'NEEDS_FIX') {
+  if (!validateResult.ok && shortlistReport.underfilled) {
+    writeRecoveryPrompt(newsroomDir, { date, stage: 'thin-week validation', reason: `Underfilled review-only draft did not pass publication validation:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
+    console.warn('Underfilled review-only draft did not pass publication validation. Artifacts were written and publish_ready remains false.');
+  } else if (generationStatus === 'NEEDS_FIX') {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'fact-check', reason: 'Gemini fact checker returned NEEDS_FIX with must_fix items.', shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     console.warn('Gemini fact checker returned NEEDS_FIX with must_fix items. Artifacts were written for editor review.');
   } else if (generationStatus === 'QUALITY_NEEDS_FIX') {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'quality', reason: `Newsletter quality score ${qualityReport.score}/${qualityReport.threshold} is below the required gate.`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     console.warn(`Newsletter quality score ${qualityReport.score}/${qualityReport.threshold} is below the required gate. Artifacts were written for editor review.`);
+  } else if (generationStatus === 'UNDERFILLED_NEEDS_FIX') {
+    writeRecoveryPrompt(newsroomDir, { date, stage: 'thin-week selection', reason: shortlistReport.selection_warnings.join('; '), shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
+    console.warn('Underfilled thin-week draft is review-only. Artifacts were written for editor review.');
   }
 
   console.log(`Gemini newsroom newsletter generated for ${date}`);
@@ -1554,7 +1611,8 @@ function writeTerminalFailureStatus(error) {
       quality_attempt_count: Math.max(
         generationRunState.retryHistory.length,
         generationRunState.currentQualityAttempt
-      )
+      ),
+      ...selectionStatusExtra(generationRunState.shortlistReport)
     }
   }));
 }
