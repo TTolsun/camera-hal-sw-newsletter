@@ -128,6 +128,59 @@ jobs:
           console.log(`EOF`);
           NODE
 
+      - name: Snapshot newsroom debug artifacts
+        if: always()
+        run: |
+          set -euo pipefail
+
+          SNAPSHOT=".tmp/artifact-snapshot"
+          rm -rf "$SNAPSHOT"
+          mkdir -p "$SNAPSHOT"
+
+          HAS_GENERATED_DATE="0"
+          if [ -f .tmp/newsletter-date.txt ]; then
+            DATE=$(cat .tmp/newsletter-date.txt)
+            HAS_GENERATED_DATE="1"
+          elif [ -n "${NEWSLETTER_DATE:-}" ]; then
+            DATE="${NEWSLETTER_DATE}"
+          else
+            DATE=$(TZ=Asia/Seoul date +%F)
+          fi
+
+          copy_if_present() {
+            local src="$1"
+            local dest="$SNAPSHOT/$src"
+            if [ -e "$src" ]; then
+              mkdir -p "$(dirname "$dest")"
+              cp "$src" "$dest"
+            fi
+          }
+
+          copy_tree_if_present() {
+            local src="$1"
+            local dest="$SNAPSHOT/$src"
+            if [ -d "$src" ]; then
+              mkdir -p "$(dirname "$dest")"
+              cp -R "$src" "$dest"
+            fi
+          }
+
+          copy_if_present ".tmp/newsletter-date.txt"
+          copy_if_present ".tmp/newsletter-generation-status.json"
+          copy_tree_if_present ".tmp/gemini-raw"
+          copy_tree_if_present "cache/news-summary"
+          if [ "$HAS_GENERATED_DATE" = "1" ]; then
+            copy_if_present "collected-news/${DATE}/candidates.json"
+            copy_tree_if_present "newsroom/${DATE}"
+            copy_if_present "newsletters/${DATE}/newsletter.md"
+            copy_if_present "newsletters/${DATE}/index.html"
+            copy_if_present "data/newsletters.json"
+          else
+            echo "No generated .tmp/newsletter-date.txt found; skipping date-scoped artifact copy to avoid stale base-branch files."
+          fi
+
+          node scripts/write-artifact-manifest.js "$SNAPSHOT" "$DATE"
+
       - name: Prepare pull request body
         id: pr-body
         if: steps.generate.outcome == 'success'
@@ -239,15 +292,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: newsroom-debug-${{ github.run_id }}
-          path: |
-            .tmp/newsletter-date.txt
-            .tmp/newsletter-generation-status.json
-            .tmp/gemini-raw/**
-            cache/news-summary/**
-            collected-news/**
-            newsroom/**
-            newsletters/**
-            data/newsletters.json
+          path: .tmp/artifact-snapshot
+          include-hidden-files: true
           if-no-files-found: warn
           retention-days: 14
 
