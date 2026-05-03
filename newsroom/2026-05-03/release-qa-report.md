@@ -3,6 +3,7 @@
 ## 생성 파일 목록
 
 - collected-news/2026-05-03/candidates.json
+- newsroom/2026-05-03/shortlisted-candidates.json
 - newsroom/2026-05-03/reporter-candidates.json
 - newsroom/2026-05-03/editor-draft.json
 - newsroom/2026-05-03/editor-draft.md
@@ -10,6 +11,9 @@
 - newsroom/2026-05-03/fact-check-report.md
 - newsroom/2026-05-03/quality-report.json
 - newsroom/2026-05-03/quality-report.md
+- newsroom/2026-05-03/retry-history.json
+- newsroom/2026-05-03/retry-history.md
+- newsroom/2026-05-03/recovery-prompt.md
 - newsroom/2026-05-03/editor-in-chief-brief.md
 - newsroom/2026-05-03/release-qa-report.md
 - newsletters/2026-05-03/newsletter.md
@@ -27,7 +31,7 @@ Validated 4 newsletter entries.
 > camera-hal-sw-newsletter@1.0.0 validate:images
 > node scripts/validate-external-images.js
 
-Validated 14 article images.
+Validated 6 article images.
 
 ## 잔여 TODO 여부
 
@@ -41,11 +45,11 @@ Validated 14 article images.
 
 - Status: PASS
 - Must fix count: 0
-- Source gap count: 6
+- Source gap count: 0
 
 ## Quality Gate
 
-- Quality score: 80/100
-- Quality threshold: 95
+- Quality score: 74/100
+- Quality threshold: 90
 - Quality status: NEEDS_FIX
-- Top deductions: 4pt composition; 10pt source-integrity; 6pt hal-relevance
+- Top deductions: 4pt composition; 5pt evidence-specificity (Android용 하이브리드 추론 및 새로운 Gemini 모델 지원); 4pt evidence-specificity (Android용 하이브리드 추론 및 새로운 Gemini 모델 지원); 5pt evidence-specificity (2026년 연례 C++ 개발자 설문조사 시작: HAL 개발자의 목소리를 전달할 기회); 4pt evidence-specificity (2026년 연례 C++ 개발자 설문조사 시작: HAL 개발자의 목소리를 전달할 기회)

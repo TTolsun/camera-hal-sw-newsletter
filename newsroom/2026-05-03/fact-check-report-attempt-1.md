@@ -1,0 +1,24 @@
+# Fact Check Report - 2026-05-03
+
+## Status
+
+NEEDS_FIX
+
+## Must Fix
+
+- Location: sections[2].action_items[1]
+  - Problem: C++ 관련 두 번째 Action Item의 기한(2026-05-31)이 뉴스레터 발행일(2026-05-03)로부터 2주(2026-05-17)를 초과합니다. 편집 정책에 따라 모든 주요 기사의 Action Item은 2주 안에 확인 가능해야 합니다.
+  - Suggestion: Action Item의 기한을 2주 이내로 조정하거나, 2주 이내에 완료 가능한 세분화된 중간 단계를 제시해야 합니다. 예를 들어, '2026-05-17까지 초기 분석을 완료하고, 2026-05-31까지 PoC 계획을 수립합니다'와 같이 변경할 수 있습니다.
+  - Source: docs/editorial-policy.md
+
+## Recommended Fixes
+
+- 없음
+
+## Source Gaps
+
+- 없음
+
+## Final Comment
+
+제출된 뉴스레터 초안은 전반적으로 편집 정책을 잘 준수하고 있으며, 모든 기사가 구체적인 출처와 Camera HAL 관점을 명확히 제시하고 있습니다. 다만, C++ 관련 기사의 Action Item 중 하나가 2주 이내 완료 기한 정책을 위반하여 수정이 필요합니다.

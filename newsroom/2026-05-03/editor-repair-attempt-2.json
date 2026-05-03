@@ -1,0 +1,359 @@
+{
+  "date": "2026-05-03",
+  "title": "Camera HAL SW 뉴스레터 - 2026-05-03",
+  "summary": "이번 주 뉴스레터는 Android 17 베타 4 출시와 함께 플랫폼 안정화 단계에서의 Camera HAL 호환성 및 성능 검증의 중요성을 강조합니다. 또한, Android용 하이브리드 AI 추론 및 새로운 Gemini 모델 지원 업데이트는 카메라 입력 경로를 사용하는 AI 기능의 리소스 관리 및 효율성 최적화에 대한 HAL 팀의 주의를 요구합니다. 마지막으로, 2026년 연례 C++ 개발자 설문조사는 HAL 개발자들이 NDK 툴체인 및 C++ 표준 개선에 기여할 수 있는 기회를 제공합니다.",
+  "briefing": [
+    "Android 17 베타 4가 출시되어 플랫폼 안정화 단계에 진입했습니다. Camera HAL은 CTS/VTS/Camera ITS 호환성 및 스트림 안정성을 최종 점검해야 합니다.",
+    "Android용 하이브리드 AI 추론 및 새로운 Gemini 모델 지원은 카메라 입력 경로의 NPU/GPU/ISP 리소스 경합 및 버퍼 수명 주기 최적화를 필요로 합니다.",
+    "2026년 연례 C++ 개발자 설문조사가 시작되어 HAL 개발자들이 NDK 툴체인 및 C++ 표준 개선에 대한 피드백을 제공할 수 있습니다."
+  ],
+  "sections": [
+    {
+      "category": "Android Camera / platform API",
+      "headline": "Android 17 베타 4 출시: 플랫폼 안정성 및 앱 호환성 최종 점검",
+      "what_changed": "Android 17의 네 번째 베타 버전이 출시되었으며, 이는 최종 릴리스 전 마지막 베타 단계입니다. 이 버전은 앱 호환성 및 플랫폼 안정성을 위한 중요한 이정표입니다.",
+      "confirmed_facts": [
+        "2026년 4월 16일 Android Developers Blog에 따르면, Android 17의 네 번째 베타 버전이 출시되었습니다.",
+        "이는 앱 호환성 및 플랫폼 안정성을 위한 마지막 예정된 베타 버전입니다."
+      ],
+      "evidence_summary": "2026년 4월 16일 Android Developers Blog의 공식 발표를 통해 Android 17 베타 4 출시가 확인되었습니다. 이 버전은 플랫폼 안정성 및 앱 호환성을 위한 중요한 이정표로, 최종 릴리스에 앞서 개발자들에게 테스트 환경을 제공합니다.",
+      "specificity_checks": [
+        "버전: Android 17 Beta 4",
+        "릴리스 날짜: 2026년 4월 16일",
+        "API/컴포넌트: Android SDK, 플랫폼 안정성",
+        "행동 변화: 최종 릴리스 전 마지막 베타 단계로, 앱 호환성 및 플랫폼 안정성 검증에 초점.",
+        "출처 페이지: Android Developers Blog 게시물 'The Fourth Beta of Android 17'"
+      ],
+      "source_verification_notes": [
+        "제공된 URL의 Android Developers Blog 게시물에서 Android 17 베타 4의 출시일과 주요 내용이 직접 확인되었습니다."
+      ],
+      "background": "Android 베타 프로그램은 주요 플랫폼 업데이트의 안정성을 확보하고 개발자들이 새로운 API 및 행동 변경에 대비할 수 있도록 돕습니다. 베타 4는 최종 릴리스에 매우 근접한 버전으로, 시스템 동작 및 API의 최종적인 안정화를 의미합니다. Camera HAL 측면에서는 프레임워크와의 인터페이스, 카메라 서비스 동작, 그리고 CTS/VTS 요구사항에 대한 최종 검증이 필요합니다.",
+      "why_it_matters": "플랫폼 안정화 단계에서는 기존 HAL 구현이 새로운 Android 버전에서 예상대로 작동하는지 확인하는 것이 중요합니다. 특히 Camera API 동작, 스트림 구성, 메타데이터 처리 등에서 예기치 않은 변경 사항이 없는지 면밀히 검토해야 합니다. 이는 최종 사용자 경험에 직접적인 영향을 미치며, 호환성 문제 발생 시 수정 비용이 커집니다.",
+      "camera_hal_perspective": "Android 17 베타 4는 Camera HAL이 새로운 플랫폼에서 안정적으로 작동하는지 검증할 수 있는 마지막 기회 중 하나입니다. Camera2 API의 동작, 특히 CameraCharacteristics, CaptureRequest, CaptureResult 메타데이터 필드의 변경 사항이나 새로운 요구사항이 있는지 확인해야 합니다. 또한, 다양한 스트림 조합(Preview, ImageCapture, VideoCapture, ImageAnalysis)에서 프레임 드롭, 지연 시간, 전력 소모, 열 관리 측면에서 회귀가 없는지 확인하는 것이 중요합니다. CTS/VTS 및 Camera ITS 테스트를 이 베타 버전에서 실행하여 모든 테스트 케이스가 통과하는지 확인해야 합니다.",
+      "camera_hal_checks": [
+        "CameraCharacteristics에서 새로운 기능 또는 변경된 기능 플래그가 있는지 확인하고, HAL이 이를 올바르게 보고하는지 검증합니다.",
+        "Preview + ImageCapture + VideoCapture + ImageAnalysis 스트림 조합에서 안정적인 프레임 속도와 낮은 지연 시간을 유지하는지 측정합니다.",
+        "모든 CaptureRequest 필드(예: CONTROL_AE_MODE, CONTROL_AF_MODE, LENS_OPTICAL_STABILIZATION_MODE)가 HAL에서 올바르게 해석되고 적용되는지 확인합니다.",
+        "CTS, VTS, Camera ITS 테스트를 Android 17 베타 4 환경에서 실행하여 모든 카메라 관련 테스트가 통과하는지 확인하고, 실패 시 원인을 분석합니다."
+      ],
+      "action_hints": [
+        "이번 주 내에 Android 17 베타 4가 설치된 레퍼런스 기기에서 모든 Camera HAL CTS/VTS/Camera ITS 테스트를 재실행하고, 실패하는 테스트 케이스를 HAL 팀에 보고합니다. (담당: [HAL QA 담당자])",
+        "Preview, VideoCapture, ImageAnalysis 스트림을 동시에 사용하는 시나리오에서 30분 이상 연속 촬영 시 프레임 드롭, 지연 시간, 열 스로틀링 발생 여부를 측정하는 자동화된 테스트를 추가합니다. (담당: [성능 테스트 담당자])",
+        "CameraCharacteristics 및 CaptureResult 메타데이터 필드에 대한 Android 17 변경 사항 문서를 검토하고, HAL이 새로운 필드를 올바르게 보고하거나 처리하는지 확인하는 코드 리뷰를 수행합니다. (담당: [HAL 개발자])"
+      ],
+      "action_items": [
+        "이번 주 내에 Android 17 베타 4가 설치된 레퍼런스 기기에서 모든 Camera HAL CTS/VTS/Camera ITS 테스트를 재실행하고, 실패하는 테스트 케이스를 HAL 팀에 보고합니다. (담당: [HAL QA 담당자])",
+        "Preview, VideoCapture, ImageAnalysis 스트림을 동시에 사용하는 시나리오에서 30분 이상 연속 촬영 시 프레임 드롭, 지연 시간, 열 스로틀링 발생 여부를 측정하는 자동화된 테스트를 추가합니다. (담당: [성능 테스트 담당자])",
+        "CameraCharacteristics 및 CaptureResult 메타데이터 필드에 대한 Android 17 변경 사항 문서를 검토하고, HAL이 새로운 필드를 올바르게 보고하거나 처리하는지 확인하는 코드 리뷰를 수행합니다. (담당: [HAL 개발자])"
+      ],
+      "team_summary": "Android 17 베타 4 출시로 플랫폼 안정성이 높아졌으므로, HAL 팀은 Camera API 동작, 스트림 구성, 메타데이터 처리 및 CTS/VTS/Camera ITS 호환성을 최종 점검해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "Android Camera / platform API",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "height": 12454,
+          "width": 12454
+        }
+      ],
+      "selectedImage": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+      "imageSource": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Android 17 베타 4 로고와 Android 로고",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련된 Android 17 베타 4 공식 이미지이며, 로고가 명확하고 관련성이 높습니다.",
+      "sources": [
+        {
+          "title": "The Fourth Beta of Android 17",
+          "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
+        }
+      ],
+      "resolvedImage": {
+        "src": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+        "usedFallback": false
+      }
+    },
+    {
+      "category": "AI plus camera input path or HAL workflow",
+      "headline": "Android용 하이브리드 추론 및 새로운 AI 모델 지원 업데이트",
+      "what_changed": "Android 앱 개발자를 위한 하이브리드 추론 및 새로운 Gemini 모델 지원 업데이트가 출시되었습니다. Firebase AI Logic용 새 API를 통해 온디바이스 및 클라우드 추론을 모두 활용할 수 있으며, 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델이 지원됩니다.",
+      "confirmed_facts": [
+        "2026년 4월 17일 Android Developers Blog 게시물에 따르면, Android 앱을 위한 하이브리드 추론 및 새로운 Gemini 모델 지원 업데이트가 출시되었습니다.",
+        "Firebase AI Logic용 새 API는 온디바이스 및 클라우드 추론을 모두 활용합니다.",
+        "이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델이 지원됩니다."
+      ],
+      "evidence_summary": "2026년 4월 17일 Android Developers Blog는 Android 앱 개발자를 위한 하이브리드 추론 및 새로운 Gemini 모델 지원 업데이트를 발표했습니다. 이 업데이트에는 온디바이스 및 클라우드 추론을 활용하는 Firebase AI Logic용 새 API와 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 Gemini 모델 지원이 포함됩니다.",
+      "specificity_checks": [
+        "릴리스 날짜: 2026년 4월 17일",
+        "API/컴포넌트: Firebase AI Logic API, Gemini 모델 (Nano Banana 포함)",
+        "행동 변화: 온디바이스 및 클라우드 하이브리드 추론 지원, 새로운 AI 모델 통합.",
+        "출처 페이지: Android Developers Blog 게시물 'Experimental hybrid inference and new Gemini models for Android'"
+      ],
+      "source_verification_notes": [
+        "제공된 URL의 Android Developers Blog 게시물에서 하이브리드 추론 및 새로운 Gemini 모델 지원에 대한 출시일과 주요 내용이 직접 확인되었습니다."
+      ],
+      "background": "온디바이스 AI 추론은 낮은 지연 시간과 데이터 프라이버시 이점을 제공하지만, 모델 크기와 계산 요구 사항으로 인해 기기 리소스에 제약이 있습니다. 클라우드 추론은 더 강력한 모델을 사용할 수 있지만, 네트워크 지연과 데이터 전송 비용이 발생합니다. 하이브리드 추론은 이 두 가지 접근 방식의 장점을 결합하여, 기기 리소스가 허용하는 경우 온디바이스에서, 그렇지 않은 경우 클라우드에서 추론을 실행할 수 있도록 합니다. 이는 카메라 입력 경로를 사용하는 AI 기능에 특히 중요합니다.",
+      "why_it_matters": "카메라 HAL은 AI 모델의 입력으로 사용될 프레임 데이터를 효율적으로 제공해야 합니다. 하이브리드 추론의 도입은 온디바이스 추론 시 NPU/GPU/ISP의 부하를 최적화하고, 클라우드 추론으로 전환될 때의 데이터 전송 효율성을 고려해야 함을 의미합니다. HAL은 ImageAnalysis 스트림을 통해 AI 모델에 데이터를 전달하며, 이 과정에서 지연 시간, 프레임 드롭, 메모리 사용량, 전력 소모가 중요한 요소가 됩니다. 새로운 Gemini 모델, 특히 이미지 생성 모델은 고해상도 이미지 데이터 처리에 대한 요구사항을 증가시킬 수 있습니다.",
+      "camera_hal_perspective": "하이브리드 추론은 카메라 HAL이 AI 워크로드에 대한 리소스 관리 전략을 재고하도록 요구합니다. 온디바이스 추론이 활성화될 때, HAL은 NPU/GPU/ISP 리소스 경합을 최소화하고, ImageAnalysis 스트림의 버퍼 수명 주기 및 메모리 효율성을 최적화해야 합니다. 특히, YUV_420_888 또는 RAW와 같은 AI 입력 스트림 형식의 처리 효율성이 중요합니다. 클라우드 추론으로 전환될 경우, HAL은 카메라 프레임의 네트워크 전송 전 처리에 대한 오버헤드를 최소화해야 합니다. 새로운 이미지 생성 모델은 더 높은 해상도 또는 더 많은 프레임 데이터를 요구할 수 있으므로, HAL은 이러한 요구사항을 충족하면서도 열 및 전력 제약을 준수해야 합니다.",
+      "camera_hal_checks": [
+        "ImageAnalysis 스트림을 사용하는 온디바이스 AI 추론 시나리오에서 NPU/GPU/ISP 사용률, 프레임 드롭, 추론 지연 시간을 측정합니다.",
+        "하이브리드 추론 전환 시나리오(예: 기기 리소스 부족 또는 특정 조건)에서 카메라 스트림의 연속성 및 지연 시간 변화를 모니터링합니다.",
+        "새로운 Gemini 모델(특히 이미지 생성 모델)이 요구하는 해상도 및 프레임 속도에서 YUV_420_888 또는 PRIVATE 스트림의 메모리 사용량 및 버퍼 할당/해제 효율성을 평가합니다.",
+        "AI 추론 워크로드와 일반 카메라 스트림(Preview, Video) 간의 NPU/GPU/ISP 리소스 경합이 발생하는지 확인하고, 필요시 HAL 수준에서 우선순위 조정을 검토합니다."
+      ],
+      "action_hints": [
+        "Firebase AI Logic을 사용하는 샘플 앱을 통해 온디바이스 및 클라우드 하이브리드 추론 시나리오를 구성하고, ImageAnalysis 스트림의 프레임 드롭 및 종단 간 지연 시간을 측정합니다. (담당: [AI 카메라 통합 담당자])",
+        "새로운 Gemini Nano Banana 모델과 같은 고해상도 이미지 생성 AI 모델이 카메라 입력 프레임을 사용할 때, NPU/GPU/ISP의 열 스로틀링 및 전력 소모를 벤치마킹하고 최적화 방안을 모색합니다. (담당: [성능 최적화 담당자])",
+        "PRIVATE 스트림을 AI 모델 입력으로 사용하는 경우, 버퍼 수명 주기 및 메모리 풀 관리가 효율적으로 이루어지는지 확인하는 로그를 추가하고 분석합니다. (담당: [HAL 개발자])"
+      ],
+      "action_items": [
+        "Firebase AI Logic을 사용하는 샘플 앱을 통해 온디바이스 및 클라우드 하이브리드 추론 시나리오를 구성하고, ImageAnalysis 스트림의 프레임 드롭 및 종단 간 지연 시간을 측정합니다. (담당: [AI 카메라 통합 담당자])",
+        "새로운 Gemini Nano Banana 모델과 같은 고해상도 이미지 생성 AI 모델이 카메라 입력 프레임을 사용할 때, NPU/GPU/ISP의 열 스로틀링 및 전력 소모를 벤치마킹하고 최적화 방안을 모색합니다. (담당: [성능 최적화 담당자])",
+        "PRIVATE 스트림을 AI 모델 입력으로 사용하는 경우, 버퍼 수명 주기 및 메모리 풀 관리가 효율적으로 이루어지는지 확인하는 로그를 추가하고 분석합니다. (담당: [HAL 개발자])"
+      ],
+      "team_summary": "Android용 하이브리드 AI 추론 및 새로운 Gemini 모델 지원은 카메라 HAL이 AI 워크로드의 리소스 관리, 스트림 효율성, 그리고 열/전력 제약을 최적화해야 함을 의미합니다.",
+      "is_ai_related": true,
+      "article_type": "AI plus camera input path or HAL workflow",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXjTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csbOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXjTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csbOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "height": 12454,
+          "width": 12454
+        }
+      ],
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXjTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csbOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+      "imageSource": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Android용 하이브리드 추론 솔루션 다이어그램",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련된 하이브리드 추론 개념을 시각적으로 잘 나타내는 공식 이미지입니다.",
+      "sources": [
+        {
+          "title": "Experimental hybrid inference and new Gemini models for Android",
+          "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+        }
+      ],
+      "resolvedImage": {
+        "src": "../../assets/images/fallback/ai.svg",
+        "originalSrc": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXjTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csbOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+        "usedFallback": true,
+        "reason": "status=404; content-type=text/html; charset=utf-8; content-length=n/a; reason=HTTP 404"
+      }
+    },
+    {
+      "category": "C++ / toolchain fallback",
+      "headline": "2026년 연례 C++ 개발자 설문조사 시작: HAL 개발자의 피드백 기회",
+      "what_changed": "2026년 연례 글로벌 C++ 개발자 설문조사가 시작되었습니다. 이 설문조사는 C++ 표준화 및 도구 공급업체에 피드백을 제공할 수 있는 중요한 기회입니다.",
+      "confirmed_facts": [
+        "2026년 4월 22일 ISO C++ Blog 게시물에 따르면, 2026년 연례 C++ 개발자 설문조사가 시작되었습니다.",
+        "이 설문조사는 C++ 표준화 및 도구 공급업체에 피드백을 제공하는 기회입니다."
+      ],
+      "evidence_summary": "2026년 4월 22일 ISO C++ Blog는 2026년 연례 C++ 개발자 설문조사 'Lite'의 시작을 발표했습니다. 이 설문조사는 C++ 표준화 및 도구 공급업체에 개발자 피드백을 수집하기 위한 것입니다.",
+      "specificity_checks": [
+        "릴리스 날짜: 2026년 4월 22일",
+        "API/컴포넌트: C++ 표준, C++ 개발 도구 (컴파일러, 링커, 디버거 등)",
+        "행동 변화: C++ 커뮤니티가 표준화 및 도구 개선에 대한 피드백을 수집하는 과정 시작.",
+        "출처 페이지: ISO C++ Blog 게시물 '2026 Annual C++ Developer Survey \"Lite\"'"
+      ],
+      "source_verification_notes": [
+        "제공된 URL의 ISO C++ Blog 게시물에서 2026년 연례 C++ 개발자 설문조사 시작일과 주요 내용이 직접 확인되었습니다."
+      ],
+      "background": "C++ 개발자 설문조사는 C++ 표준 위원회와 주요 도구 공급업체(Clang/LLVM, GCC 등)가 개발자들의 요구사항과 문제점을 파악하는 중요한 수단입니다. Android Camera HAL은 대부분 C++로 구현되며, Clang/LLVM 기반의 Android NDK 툴체인을 사용합니다. 따라서 C++ 표준의 발전, 컴파일러 기능, 런타임 라이브러리(libc++)의 변화는 HAL 코드의 성능, 안정성, 개발 생산성에 직접적인 영향을 미칩니다.",
+      "why_it_matters": "Camera HAL 개발자는 C++ 언어 기능, 표준 라이브러리, 컴파일러 최적화, 디버깅 도구 등에 대한 피드백을 제공함으로써 미래의 Android NDK 툴체인 환경을 개선하는 데 기여할 수 있습니다. 예를 들어, 특정 C++20/23/26 기능의 NDK 지원 우선순위, 특정 컴파일러 경고/오류 처리, 성능 프로파일링 도구의 개선 요구사항 등을 전달할 수 있습니다. 이는 HAL 코드의 안정성 향상, 빌드 시간 단축, 런타임 성능 최적화에 장기적으로 기여할 수 있습니다.",
+      "camera_hal_perspective": "Camera HAL은 고성능, 저지연, 메모리 효율성이 중요한 영역이므로, C++ 표준의 새로운 기능(예: Concurrency, Coroutines, Modules)이 NDK 툴체인에 통합될 때 HAL 코드에 어떤 영향을 미칠지 미리 파악하고 피드백을 제공하는 것이 중요합니다. 특히, libc++의 성능 특성, std::vector나 std::map 같은 컨테이너의 최적화, 동시성 프리미티브의 효율성 등은 HAL의 버퍼 관리, 메타데이터 처리, 스레딩 모델에 직접적인 영향을 미칩니다. 설문조사를 통해 HAL 개발자들이 겪는 특정 컴파일러 버그, 빌드 시스템 통합 문제, 디버깅 난이도 등에 대한 의견을 전달할 수 있습니다.",
+      "camera_hal_checks": [
+        "현재 HAL 코드베이스에서 사용 중인 C++ 표준 기능(예: C++17, C++20) 중 NDK 툴체인 지원이 미흡하거나 성능 문제가 있는 부분을 식별합니다.",
+        "Clang/LLVM 컴파일러의 특정 경고 또는 최적화 동작이 HAL 빌드 또는 런타임에 미치는 영향을 검토합니다.",
+        "libc++의 특정 컨테이너 또는 알고리즘 사용 시 메모리 할당/해제 패턴 또는 런타임 성능에 대한 프로파일링 데이터를 분석합니다."
+      ],
+      "action_hints": [
+        "이번 주 내에 HAL 팀 내에서 C++ 표준, NDK 툴체인, 디버깅 도구 사용 경험에 대한 비공식 설문조사를 실시하여 주요 개선 요구사항을 취합합니다. (담당: [HAL 리드 개발자])",
+        "ISO C++ 개발자 설문조사(2026 Annual C++ Developer Survey \"Lite\")에 참여하여 Camera HAL 개발 관점에서 필요한 C++ 기능, 툴체인 개선 사항, 표준 라이브러리 최적화에 대한 피드백을 제출합니다. (기한: 2주 이내)",
+        "현재 HAL 코드베이스에서 std::vector 또는 std::map과 같은 libc++ 컨테이너의 과도한 사용으로 인한 메모리 단편화 또는 성능 저하 가능성이 있는 부분을 식별하고, 개선 방안을 논의합니다. (담당: [HAL 개발자])"
+      ],
+      "action_items": [
+        "이번 주 내에 HAL 팀 내에서 C++ 표준, NDK 툴체인, 디버깅 도구 사용 경험에 대한 비공식 설문조사를 실시하여 주요 개선 요구사항을 취합합니다. (담당: [HAL 리드 개발자])",
+        "ISO C++ 개발자 설문조사(2026 Annual C++ Developer Survey \"Lite\")에 참여하여 Camera HAL 개발 관점에서 필요한 C++ 기능, 툴체인 개선 사항, 표준 라이브러리 최적화에 대한 피드백을 제출합니다. (기한: 2주 이내)",
+        "현재 HAL 코드베이스에서 std::vector 또는 std::map과 같은 libc++ 컨테이너의 과도한 사용으로 인한 메모리 단편화 또는 성능 저하 가능성이 있는 부분을 식별하고, 개선 방안을 논의합니다. (담당: [HAL 개발자])"
+      ],
+      "team_summary": "2026년 연례 C++ 개발자 설문조사는 Camera HAL 개발자가 NDK 툴체인 및 C++ 표준 개선에 직접 기여할 수 있는 기회이므로, 팀의 피드백을 취합하여 제출해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "C++ / toolchain fallback",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "height": 12454,
+          "width": 12454
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "alt": "",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련된 적절한 이미지가 없습니다. 로고나 일반적인 C++ 이미지는 기사의 기술적 맥락에 부합하지 않습니다.",
+      "sources": [
+        {
+          "title": "2026 Annual C++ Developer Survey \"Lite\"",
+          "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1"
+        }
+      ],
+      "resolvedImage": {
+        "src": "../../assets/images/fallback/android.svg",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      }
+    }
+  ],
+  "action_items": [
+    "Android 17 베타 4가 설치된 레퍼런스 기기에서 모든 Camera HAL CTS/VTS/Camera ITS 테스트를 재실행하고, 실패하는 테스트 케이스를 HAL 팀에 보고합니다. (담당: [HAL QA 담당자])",
+    "Preview, VideoCapture, ImageAnalysis 스트림을 동시에 사용하는 시나리오에서 30분 이상 연속 촬영 시 프레임 드롭, 지연 시간, 열 스로틀링 발생 여부를 측정하는 자동화된 테스트를 추가합니다. (담당: [성능 테스트 담당자])",
+    "Firebase AI Logic을 사용하는 샘플 앱을 통해 온디바이스 및 클라우드 하이브리드 추론 시나리오를 구성하고, ImageAnalysis 스트림의 프레임 드롭 및 종단 간 지연 시간을 측정합니다. (담당: [AI 카메라 통합 담당자])",
+    "새로운 Gemini Nano Banana 모델과 같은 고해상도 이미지 생성 AI 모델이 카메라 입력 프레임을 사용할 때, NPU/GPU/ISP의 열 스로틀링 및 전력 소모를 벤치마킹하고 최적화 방안을 모색합니다. (담당: [성능 최적화 담당자])",
+    "ISO C++ 개발자 설문조사(2026 Annual C++ Developer Survey \"Lite\")에 참여하여 Camera HAL 개발 관점에서 필요한 C++ 기능, 툴체인 개선 사항, 표준 라이브러리 최적화에 대한 피드백을 제출합니다. (기한: 2주 이내)",
+    "현재 HAL 코드베이스에서 std::vector 또는 std::map과 같은 libc++ 컨테이너의 과도한 사용으로 인한 메모리 단편화 또는 성능 저하 가능성이 있는 부분을 식별하고, 개선 방안을 논의합니다. (담당: [HAL 개발자])"
+  ],
+  "references": [
+    {
+      "title": "The Fourth Beta of Android 17",
+      "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
+    },
+    {
+      "title": "Experimental hybrid inference and new Gemini models for Android",
+      "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+    },
+    {
+      "title": "2026 Annual C++ Developer Survey \"Lite\"",
+      "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1"
+    }
+  ]
+}
