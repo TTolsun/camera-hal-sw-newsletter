@@ -8,6 +8,7 @@
   },
   "scripts": {
     "collect": "node scripts/collect-news-candidates.js",
+    "doctor:config": "node scripts/doctor-config.js",
     "generate": "node scripts/gemini-newsroom-newsletter.js",
     "test": "node --test",
     "test:artifact": "node scripts/test-artifact-manifest.js",

@@ -110,6 +110,12 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 Node 20을 사용합니다.
 
 ```powershell
+npm.cmd run doctor:config
+```
+
+CI와 같은 runtime 환경에서 `collect`와 `generate`를 실행하기 전에 날짜, lookback, Gemini 모델, retry, 품질 retry 설정을 검증합니다. `GEMINI_API_KEY`는 설정 여부만 확인하고 값을 출력하지 않습니다.
+
+```powershell
 npm.cmd run validate
 ```
 

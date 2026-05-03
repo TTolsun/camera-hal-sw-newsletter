@@ -7,6 +7,7 @@ const {
   readTextIfExists,
   writeJson
 } = require('./lib/common');
+const { readRuntimeConfig } = require('./lib/runtime-config');
 const { callGeminiJson, getGeminiDiagnostics, getGeminiModelUsage } = require('./lib/gemini-client');
 const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } = require('./lib/newsletter-schema');
 const { isSafeExternalImageUrl } = require('./lib/image-candidates');
@@ -47,6 +48,7 @@ const {
 } = require('./lib/newsletter-renderer');
 
 const root = process.cwd();
+const runtimeConfig = readRuntimeConfig(process.env);
 const dataPath = path.join(root, 'data', 'newsletters.json');
 const sourceRegistryPath = path.join(root, 'data', 'news-sources.json');
 const generationRunState = {
@@ -142,11 +144,6 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
 
 function numberOrDefault(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
-}
-
-function integerOrDefault(value, fallback) {
-  const number = Number(value);
-  return Number.isInteger(number) && number >= 0 ? number : fallback;
 }
 
 function stringOrEmpty(value) {
@@ -988,7 +985,7 @@ ${attempts.map(item => `## 시도 ${item.attempt}
 
 function writeRecoveryPrompt(newsroomDir, context = {}) {
   fs.mkdirSync(newsroomDir, { recursive: true });
-  const date = context.date || generationRunState.date || process.env.NEWSLETTER_DATE || kstDate();
+  const date = context.date || generationRunState.date || runtimeConfig.newsletterDate || kstDate();
   const shortlist = context.shortlistReport || generationRunState.shortlistReport || null;
   const selectionDiagnostics = selectionStatusExtra(shortlist);
   const selectionDiagnosticsMarkdown = renderCandidateSelectionDiagnostics(selectionDiagnostics);
@@ -1071,7 +1068,7 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
 }
 
 async function main() {
-  const date = process.env.NEWSLETTER_DATE || kstDate();
+  const date = runtimeConfig.newsletterDate || kstDate();
   generationRunState.date = date;
   writeNewsletterDate(date);
   writeGenerationStatus({ date, status: 'STARTED', must_fix_count: 0 });
@@ -1157,7 +1154,7 @@ async function main() {
     'Use the golden example only as a style and structure reference. Do not copy facts, dates, versions, API/component names, behavior changes, sources, or action items unless they are present in the current candidate JSON.'
   ].join('\n');
 
-  const maxQualityRetries = integerOrDefault(process.env.NEWSROOM_MAX_QUALITY_RETRIES, 3);
+  const maxQualityRetries = runtimeConfig.newsroomMaxQualityRetries;
   const totalAttempts = 1 + maxQualityRetries;
   const retryHistory = [];
   generationRunState.retryHistory = retryHistory;
@@ -1616,7 +1613,7 @@ async function main() {
 }
 
 function writeTerminalFailureStatus(error) {
-  const date = generationRunState.date || process.env.NEWSLETTER_DATE || kstDate();
+  const date = generationRunState.date || runtimeConfig.newsletterDate || kstDate();
   const newsroomDir = path.join(root, 'newsroom', date);
   try {
     writeRecoveryPrompt(newsroomDir, {

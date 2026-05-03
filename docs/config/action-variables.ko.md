@@ -13,6 +13,7 @@ Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR
 ## Variable
 
 아래 값은 `.github/workflows/weekly-newsroom-pr.yml`의 현재 기본값입니다. GitHub Variables에 값을 넣지 않으면 workflow가 이 기본값을 사용합니다.
+workflow는 후보 수집과 Gemini 생성 전에 `npm run doctor:config`로 runtime 설정을 검증합니다. 이 명령은 `GEMINI_API_KEY` 값을 출력하지 않고 설정 여부만 표시합니다.
 
 | 이름 | 필수 | 현재 기본값 | 의미 | 변경해도 되는 상황 | 위험/주의 |
 | --- | --- | --- | --- | --- | --- |

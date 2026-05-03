@@ -5,6 +5,7 @@ const {
   kstDate,
   readJson
 } = require('./lib/common');
+const { readRuntimeConfig } = require('./lib/runtime-config');
 const {
   extractImageCandidatesFromHtml,
   extractImageCandidatesFromRssBlock,
@@ -19,6 +20,7 @@ const {
 } = require('./lib/news-source-section-resolver');
 
 const root = process.cwd();
+const runtimeConfig = readRuntimeConfig(process.env);
 const structuredSourcesPath = path.join(root, 'data', 'news-sources.json');
 const legacySourcesPath = path.join(root, 'docs', 'news-sources.md');
 const AUDIENCE = 'Camera HAL / Android Camera / C++ engineer';
@@ -744,8 +746,8 @@ function markdown(date, candidates, failures, lookbackDays) {
 }
 
 async function main() {
-  const date = process.env.NEWSLETTER_DATE || kstDate();
-  const lookbackDays = Number(process.env.LOOKBACK_DAYS || 21);
+  const date = runtimeConfig.newsletterDate || kstDate();
+  const lookbackDays = runtimeConfig.lookbackDays;
   const now = new Date();
   const sources = parseSources();
   const failures = [];
