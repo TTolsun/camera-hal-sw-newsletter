@@ -4,6 +4,10 @@ const test = require('node:test');
 const {
   validateNewsSourcesConfigText
 } = require('../scripts/lib/news-sources-config-validator');
+const {
+  normalizeEnabledSources,
+  resolveSection
+} = require('../scripts/lib/news-source-section-resolver');
 
 function validSource(overrides = {}) {
   return {
@@ -13,7 +17,6 @@ function validSource(overrides = {}) {
     rssUrl: 'https://android-developers.googleblog.com/feeds/posts/default?alt=rss',
     collectionModeHint: 'rss-source',
     category: 'android',
-    section: 'Android / AOSP / Camera',
     priority: 'high',
     reliability: 'official',
     enabled: true,
@@ -27,7 +30,7 @@ function validSource(overrides = {}) {
 
 function validRegistry(overrides = {}) {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     sectionMap: {
       android: 'Android / AOSP / Camera',
       ai: 'AI / SW Engineering Trends'
@@ -48,11 +51,24 @@ function validate(value) {
   );
 }
 
-test('valid source registry config passes', () => {
+test('valid v2 source registry config without per-source section passes', () => {
   const result = validate(validRegistry());
 
   assert.equal(result.ok, true);
   assert.deepEqual(result.errors, []);
+});
+
+test('explicit per-source section fails as duplicate registry data', () => {
+  const result = validate(validRegistry({
+    sources: [
+      validSource({
+        section: 'Android / AOSP / Camera'
+      })
+    ]
+  }));
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /section duplicates sectionMap-derived data and is not allowed/);
 });
 
 test('non-canonical JSON formatting fails', () => {
@@ -99,25 +115,18 @@ test('invalid source URLs fail', () => {
   assert.match(result.errors.join('\n'), /rssUrl must be null or an http or https URL/);
 });
 
-test('unknown categories and section mismatches fail', () => {
+test('unknown categories fail', () => {
   const result = validate(validRegistry({
     sources: [
       validSource({
         id: 'unknown-category',
-        category: 'camera-hal',
-        section: 'Android / AOSP / Camera'
-      }),
-      validSource({
-        id: 'wrong-section',
-        category: 'ai',
-        section: 'Android / AOSP / Camera'
+        category: 'camera-hal'
       })
     ]
   }));
 
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /unknown-category.*category must exist in sectionMap/);
-  assert.match(result.errors.join('\n'), /wrong-section.*section must match sectionMap\.ai/);
 });
 
 test('invalid collectionModeHint fails when present', () => {
@@ -131,4 +140,19 @@ test('invalid collectionModeHint fails when present', () => {
 
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /collectionModeHint must be one of/);
+});
+
+test('section resolver derives source section from category', () => {
+  const registry = validRegistry({
+    sources: [
+      validSource({
+        id: 'ai-source',
+        category: 'ai'
+      })
+    ]
+  });
+  const normalized = normalizeEnabledSources(registry);
+
+  assert.equal(resolveSection(registry.sectionMap, 'ai', 'sources[0]'), 'AI / SW Engineering Trends');
+  assert.equal(normalized.sources[0].section, 'AI / SW Engineering Trends');
 });

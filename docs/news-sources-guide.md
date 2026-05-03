@@ -15,7 +15,6 @@ registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd 
   "sourceUrl": "https://android-developers.googleblog.com/",
   "rssUrl": "https://android-developers.googleblog.com/feeds/posts/default?alt=rss",
   "category": "android",
-  "section": "Android / AOSP / Camera",
   "priority": "high",
   "reliability": "official",
   "enabled": true,
@@ -53,7 +52,7 @@ registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd 
 
 ## Section mapping
 
-`sectionMap`은 source category를 editorial grouping section으로 매핑합니다.
+`sectionMap`은 source category를 editorial grouping section으로 매핑합니다. source entry는 `category`만 보관하고, collector가 `sectionMap[category]`에서 `section`과 `source_section`을 파생합니다.
 
 - `Android / AOSP / Camera`
 - `Linux Camera / Driver`
@@ -62,7 +61,7 @@ registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd 
 - `AI / SW Engineering Trends`
 - `Korean Tech Trends`
 
-collector는 source name, source URL, category, priority, reliability, usage hint, candidate-only 상태를 `collected-news/YYYY-MM-DD/candidates.json`에 보존합니다. Gemini newsroom 단계는 source link를 변경하지 않고, media/community lead를 검증할 때 official 또는 project-official source를 우선합니다.
+collector는 source name, source URL, category, 파생된 section, priority, reliability, usage hint, candidate-only 상태를 `collected-news/YYYY-MM-DD/candidates.json`에 보존합니다. Gemini newsroom 단계는 source link를 변경하지 않고, media/community lead를 검증할 때 official 또는 project-official source를 우선합니다.
 
 ## 기사 대표 이미지
 
@@ -75,7 +74,7 @@ newsroom generator는 이미지를 browse하거나 image URL을 만들어내면 
 1. 안정적인 `id`를 lowercase kebab-case로 추가합니다.
 2. `sourceUrl`은 public source 또는 tag page로 설정합니다.
 3. `rssUrl`은 feed URL이 확인된 경우에만 설정합니다. RSS URL을 추측하지 않습니다.
-4. 위 mapping에서 `category`와 `section`을 선택합니다.
+4. 위 mapping에서 `category`를 선택합니다. source entry에 `section`을 직접 추가하지 않습니다.
 5. optional, noisy, paywalled, broad trend source는 editor가 regular collection에 포함하기 전까지 `enabled: false`로 둡니다.
 6. community/newsletter/paywall-prone source는 `candidateOnly: true`를 사용합니다.
 7. media/community/vendor-reporting source는 `requiresCrossCheck: true`를 사용합니다.
