@@ -20,7 +20,7 @@
 | `collected-news/` | 날짜별 raw candidate output인 `YYYY-MM-DD/candidates.json`을 둡니다. |
 | `newsroom/` | 날짜별 reporter 후보, editor draft, fact-check, quality report, retry history, QA report를 둡니다. |
 | `newsletters/` | 발행될 날짜별 `newsletter.md`와 `index.html`을 둡니다. |
-| `scripts/` | 수집, Gemini 생성, 렌더링, 이미지 해석, validation 로직을 둡니다. |
+| `scripts/` | 기존 command entry wrapper와 `scripts/lib` 호환 shim을 둡니다. 실제 구현은 `scripts/newsroom/{cli,collect,generate,render,validate,common}/`에 책임별로 둡니다. |
 | `templates/` | 뉴스레터 구조나 생성 프롬프트가 참조하는 템플릿을 둘 때 사용하는 위치입니다. |
 | `tests/` | Node test runner 기반 검증 파일을 둘 때 사용하는 위치입니다. 현재 별도 unit test suite는 없고 `npm run test`가 Node test runner를 실행합니다. |
 | `assets/` | 사이트 이미지와 article-image fallback asset을 둡니다. |

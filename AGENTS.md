@@ -11,7 +11,7 @@
 - `collected-news/YYYY-MM-DD/`는 원본 후보 수집 결과를 저장합니다.
 - `newsroom/YYYY-MM-DD/`는 reporter 후보, editor draft, fact-check, brief, QA report 같은 검토 산출물을 저장합니다.
 - `newsletters/YYYY-MM-DD/`는 발행 이슈 산출물인 `newsletter.md`와 `index.html`을 저장합니다.
-- `scripts/`는 수집, Gemini 생성, 렌더링, 이미지 해석, 검증 로직을 포함합니다.
+- `scripts/`는 기존 command entry wrapper와 `scripts/lib` 호환 shim을 포함합니다. 실제 수집, Gemini 생성, 렌더링, 이미지 해석, 검증 로직은 `scripts/newsroom/{cli,collect,generate,render,validate,common}/`에 책임별로 둡니다.
 - `.github/workflows/`는 newsroom PR workflow와 검증 workflow를 포함합니다.
 
 ## 빌드, 테스트, 개발 명령

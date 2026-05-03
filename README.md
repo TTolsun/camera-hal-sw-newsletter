@@ -68,7 +68,14 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 │   ├── validate-site.js
 │   ├── validate-external-images.js
 │   ├── validate-quality.js
-│   └── lib/
+│   ├── lib/
+│   └── newsroom/
+│       ├── cli/
+│       ├── collect/
+│       ├── generate/
+│       ├── render/
+│       ├── validate/
+│       └── common/
 └── .github/workflows/
     ├── 02-validate-site.yml
     └── weekly-newsroom-pr.yml
