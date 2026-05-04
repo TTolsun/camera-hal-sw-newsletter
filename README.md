@@ -2,6 +2,23 @@
 
 Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수집하고, Gemini 기반 newsroom 자동화로 검토 가능한 정적 뉴스레터를 만드는 저장소입니다.
 
+## 핵심 용어
+
+이 저장소의 문서는 코드 식별자와 artifact 이름을 영어 원문으로 유지합니다. 처음 보는 운영자가 의미를 빠르게 잡을 수 있도록 주요 용어는 아래처럼 읽으면 됩니다.
+
+| 용어 | 의미 |
+| --- | --- |
+| `scheduled run`(예약 자동 실행) | GitHub Actions가 매일 09:00 KST에 자동으로 후보 수집, 생성, 검증, PR 생성을 시도하는 실행입니다. 기본값은 비용 안전성을 우선합니다. |
+| `manual high-quality run`(수동 고품질 실행) | 사람이 GitHub Actions에서 `Run workflow`로 직접 시작하는 실행입니다. `allow_pro=true`를 명시한 경우에만 Pro 모델을 사용할 수 있습니다. |
+| `fallback model`(대체 모델) | 기본 Gemini 모델 호출이 실패했을 때 순서대로 시도하는 모델입니다. 예약 자동 실행의 기본 fallback은 `gemini-2.5-flash-lite`까지만 허용합니다. |
+| `article composition`(기사 구성 방식) | main article이 4-5개인지, briefing이 3개인지, 각 기사에 필요한 field가 있는지 보는 구성 규칙입니다. |
+| `collectionMode`(기사 수집 방식) | source registry에서 후보를 RSS, HTML, watch page 등 어떤 방식으로 수집할지 알려주는 field입니다. |
+| `source gap`(출처 근거 부족) | 날짜, version, API/component, behavior change 같은 발행 근거가 부족하거나 원문으로 확인되지 않는 상태입니다. main article은 rewrite로 억지 통과시키지 않고 demote 또는 replace합니다. |
+| `quality gate`(품질 통과 기준) | `npm.cmd run validate`와 `quality-report.json`이 적용하는 발행 안전 기준입니다. 점수와 hard fail을 함께 봅니다. |
+| `cost report`(비용 리포트) | Gemini 호출별 stage/model/attempt, token, thinking token, cached token, estimated cost를 보여주는 비용 분석 artifact입니다. |
+| `selection report`(기사 선정 리포트) | deterministic scoring과 final selection 결과를 확인하는 artifact 묶음입니다. 현재는 `shortlisted-candidates.json`, `article-capsules.json`, PR 본문/brief의 selection diagnostics를 함께 봅니다. |
+| `generation status artifact`(생성 상태 결과 파일) | `.tmp/newsletter-generation-status.json`입니다. 생성 성공 여부, `publish_ready`, article count, quality/fact-check 상태를 workflow gate가 읽습니다. |
+
 ## 처음 보는 사람은 여기부터
 
 - [처음 보는 사람은 여기부터](docs/START_HERE.ko.md)
@@ -9,6 +26,72 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 - [news-sources.json 필드 안내](docs/config/news-sources-fields.ko.md)
 - [출처 editorial view](docs/news-sources.md)
 - [뉴스룸 workflow](docs/newsroom-workflow.md)
+
+## 최종 비용 절감 workflow
+
+현재 운영 기준의 생성 흐름은 아래 순서입니다.
+
+```text
+1. Collect candidates(후보 수집)
+2. Deterministic eligibility filter(코드 기반 적격성 필터)
+3. HAL-first scoring(Camera HAL 우선 점수화)
+4. Top 8-12 article capsules(압축 기사 capsule) 생성
+5. Gemini reporter/editor/fact-check 실행
+6. Quality gate(품질 통과 기준) 확인
+7. 실패 section만 repair 또는 replace
+8. Markdown/HTML 렌더링
+9. Cost/selection/quality/status artifact 저장
+10. Review PR 생성
+```
+
+비용 절감은 품질 기준을 낮추는 방식이 아닙니다. LLM 호출 전에 코드가 Camera HAL / Android Camera 관련 후보를 먼저 고르고, Gemini에는 compact capsule만 전달합니다. retry도 전체 뉴스레터 재생성이 아니라 실패 section 중심으로 제한합니다. 비용 초과 기준은 현재 warning-only이며, 발행 가능 여부는 `quality gate`와 fact-check 결과가 결정합니다.
+
+### 안전한 scheduled run 기본값
+
+예약 자동 실행에서는 Pro 모델을 자동 fallback으로 두지 않습니다. workflow 기본값은 `.github/workflows/weekly-newsroom-pr.yml`과 `scripts/newsroom/common/runtime-config.js`에 맞춰 아래처럼 운영합니다.
+
+| 환경변수 | 기본값 | 역할 |
+| --- | --- | --- |
+| `LOOKBACK_DAYS` | `21` | 후보를 몇 일 전까지 볼지 정합니다. 최신성은 보통 3-4주 안쪽을 허용하지만 기본 수집 창은 21일입니다. |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | 기본 생성 모델입니다. |
+| `GEMINI_FALLBACK_MODELS` | `gemini-2.5-flash-lite` | 예약 자동 실행의 fallback model(대체 모델)입니다. Pro는 포함하지 않습니다. |
+| `GEMINI_MAX_RETRIES` | `2` | retryable API failure 또는 invalid JSON에 대한 모델별 재시도 수입니다. |
+| `GEMINI_RETRY_DELAYS_MS` | `20000,10000` | Gemini가 retry hint를 주지 않을 때 사용하는 대기 시간입니다. |
+| `GEMINI_RETRY_MAX_DELAY_MS` | `300000` | 서버 retry hint를 따를 때 허용하는 최대 대기 시간입니다. 300000ms는 5분입니다. |
+| `GEMINI_THINKING_BUDGET_REPORTER` | `0` | reporter stage의 thinking budget입니다. 후보 tagging 성격이라 기본 0입니다. |
+| `GEMINI_THINKING_BUDGET_EDITOR` | `512` | editor/completion stage의 thinking budget입니다. 최종 문장 품질이 필요한 단계만 제한적으로 허용합니다. |
+| `GEMINI_THINKING_BUDGET_REPAIR` | `0` | section repair stage의 thinking budget입니다. 실패 section만 좁게 고치므로 기본 0입니다. |
+| `GEMINI_THINKING_BUDGET_FACTCHECK` | `0` | fact-check stage의 thinking budget입니다. deterministic gate를 대체하지 않습니다. |
+| `GEMINI_THINKING_BUDGET_SCORING` | `0` | scoring 성격 stage의 thinking budget입니다. 현재 main scoring은 코드가 수행합니다. |
+| `NEWSROOM_MAX_QUALITY_RETRIES` | `1` | quality retry 최대 횟수입니다. |
+| `NEWSROOM_MAX_SECTION_REPAIRS` | `1` | retry 한 번에서 repair/replace할 section 수입니다. |
+| `NEWSROOM_WARN_COST_USD` | `0.15` | estimated cost가 넘으면 warning을 남기는 기준입니다. |
+| `NEWSROOM_MAX_COST_USD` | `0.25` | 운영상 비용 상한 참고값입니다. 현재는 초과해도 warning-only입니다. |
+| `NEWSROOM_ALLOW_PRO_ON_SCHEDULE` | `false` | scheduled run(예약 자동 실행)에서 Pro 사용을 막습니다. |
+| `NEWSROOM_ALLOW_PRO_ON_MANUAL` | `false` | manual run의 기본값도 Pro 금지입니다. workflow input `allow_pro=true`일 때만 true가 됩니다. |
+| `NEWSROOM_PRO_ESCALATION` | `manual` | Pro 사용 정책을 log와 cost report에 표시하는 label입니다. |
+
+### Manual high-quality run에서 Pro 허용
+
+`manual high-quality run`(수동 고품질 실행)은 편집자가 비용 증가를 알고 명시적으로 선택할 때만 사용합니다.
+
+1. GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택합니다.
+2. `Run workflow`를 누릅니다.
+3. 필요하면 `newsletter_date`, `lookback_days`를 입력합니다.
+4. Pro 사용이 꼭 필요할 때만 `allow_pro=true`를 선택합니다.
+
+이 경우 workflow가 `GEMINI_FALLBACK_MODELS`에 `gemini-2.5-pro`를 붙이고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`로 실행합니다. Pro가 실제 호출되면 workflow log와 `cost-report.md`의 `pro_policy`, `pro_model` 항목에 남습니다. Pro 모델은 thinking disable이 제한될 수 있으므로 `thinking_tokens`, `thinking_budget_requested`, `thinking_budget_applied`를 반드시 확인합니다.
+
+## 주요 artifact 읽는 법
+
+| Artifact | 위치 | 읽는 방법 |
+| --- | --- | --- |
+| `cost report`(비용 리포트) | `.tmp/newsroom-cost-report.json`, `content/newsroom/YYYY-MM-DD/cost-report.md` | stage/model/attempt별 token과 estimated cost를 봅니다. `thinking_tokens`가 크면 `GEMINI_THINKING_BUDGET_*` 조정 후보입니다. |
+| `selection report`(기사 선정 리포트) | `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`, `article-capsules.json`, PR 본문 selection diagnostics | 후보가 왜 선택/제외됐는지, LLM에 전달된 capsule이 top 8-12개 안에 제한됐는지 봅니다. |
+| `quality report`(품질 리포트) | `content/newsroom/YYYY-MM-DD/quality-report.json`, `quality-report.md` | `score`, hard fail, soft deduction, `article_results`의 `PASS` / `DEMOTE` / `FAIL`을 확인합니다. |
+| `generation status artifact`(생성 상태 결과 파일) | `.tmp/newsletter-generation-status.json` | `status`, `publish_ready`, `quality_status`, `final_selected_article_count_for_gate`를 확인합니다. workflow 최종 실패 조건이 이 값을 읽습니다. |
+| `summary cache report`(요약 cache 리포트) | `.tmp/summary-cache-report.json`, `content/newsroom/YYYY-MM-DD/summary-cache-report.md` | summary cache hit/miss와 miss reason을 확인합니다. cache file 자체는 `cache/news-summary/` 아래 untracked 상태로 둡니다. |
+| `retry history`(재시도 이력) | `content/newsroom/YYYY-MM-DD/retry-history.json`, `retry-history.md` | locked article, failed section, repair/replace 정책, skipped repair section을 확인합니다. |
 
 ## 품질 게이트
 
@@ -55,6 +138,10 @@ Gemini thinking budget은 stage별로 제한합니다. 기본값은 reporter `0`
 │       ├── editor-draft.md
 │       ├── fact-check-report.json
 │       ├── fact-check-report.md
+│       ├── cost-report.md
+│       ├── shortlisted-candidates.json
+│       ├── article-capsules.json
+│       ├── summary-cache-report.md
 │       ├── quality-report.json
 │       ├── quality-report.md
 │       ├── retry-history.json
@@ -158,7 +245,7 @@ npm.cmd run validate:localization
 - 이번 주 briefing은 정확히 3개 bullet입니다.
 - main article은 4-5개입니다. 후보가 부족하면 억지로 5개를 채우지 않습니다.
 - 각 main article은 confirmed facts, background, Camera HAL perspective, Camera HAL checks, action items, sources를 포함해야 합니다.
-- AI 관련 기사는 최소 1개 포함합니다. 단, camera input path 또는 HAL workflow와 연결되어야 합니다.
+- AI 또는 C++ 기사는 필수가 아니라 optional bonus입니다. 가능하면 둘 중 하나를 포함하지만, Camera HAL / Android Camera 관련 후보가 충분하면 generic AI/C++ 기사를 main article로 올리지 않습니다.
 - `## References`를 포함합니다.
 - 발행 artifact에 `TODO` 문자를 남기지 않습니다.
 - Camera HAL 관련성은 capability, request/result, stream/buffer, metadata, CTS/VTS/ITS/CDD, latency, frame drop, thermal, power, native runtime, C++ tooling처럼 실제 검증 가능한 단위로 작성합니다.

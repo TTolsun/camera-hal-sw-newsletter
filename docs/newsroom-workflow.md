@@ -93,9 +93,55 @@ Gemini 호출이 성공적으로 응답을 반환하면 generator는 response us
 
 Gemini request에는 stage별 thinking budget을 적용합니다. 기본값은 reporter `0`, editor/completion `512`, repair `0`, fact-check `0`, scoring `0`입니다. `GEMINI_THINKING_BUDGET_*` 환경변수로 조정할 수 있고, cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다.
 
-`NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 PR1 단계에서는 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
+`NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 운영 기준으로 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
 
 scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합니다. `gemini-2.5-pro`는 manual `workflow_dispatch`에서 `allow_pro=true`를 명시한 경우에만 사용할 수 있으며, Pro가 실제 호출되면 workflow log와 cost report의 `pro_policy` / `pro_model` 필드에 남습니다. Pro 계열 모델은 thinking disable을 지원하지 않거나 최소 budget 제약이 있을 수 있으므로, requested budget이 `0`인 Pro 호출은 `thinkingConfig`를 생략하고 cost report warning에 남깁니다.
+
+## Final Cost Reduction Operating Model
+
+현재 운영 모델은 비용을 낮추기 위해 품질 기준을 낮추지 않습니다. 비용 절감은 네 가지 장치로 이루어집니다.
+
+- deterministic scoring이 LLM 호출 전에 Camera HAL / Android Camera 후보를 먼저 줄입니다.
+- `article-capsules.json`이 full context 대신 compact capsule만 Gemini에 전달합니다.
+- quality retry는 전체 뉴스레터 재생성이 아니라 실패 section repair 또는 replace로 제한합니다.
+- scheduled run은 Flash/Flash-Lite만 사용하고 Pro는 manual high-quality run에서 명시적으로 허용한 경우에만 사용합니다.
+
+운영자가 비용 원인을 확인할 때는 아래 순서로 artifact를 봅니다.
+
+| 확인 대상 | 위치 | 판단 기준 |
+| --- | --- | --- |
+| cost report(비용 리포트) | `.tmp/newsroom-cost-report.json`, `content/newsroom/YYYY-MM-DD/cost-report.md` | stage/model/attempt별 estimated cost, `thinking_tokens`, `cached_tokens`, Pro 호출 여부를 확인합니다. |
+| selection report(기사 선정 리포트) | `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`, `article-capsules.json`, PR 본문 selection diagnostics | 후보가 8-12개 수준으로 제한됐는지, generic AI/C++가 HAL 후보를 밀어내지 않았는지 확인합니다. |
+| quality report(품질 리포트) | `content/newsroom/YYYY-MM-DD/quality-report.json`, `quality-report.md` | hard fail과 soft deduction을 분리해 보고, `article_results`의 `PASS` / `DEMOTE` / `FAIL`과 repair action을 확인합니다. |
+| generation status artifact(생성 상태 결과 파일) | `.tmp/newsletter-generation-status.json` | `publish_ready`, `quality_status`, `final_selected_article_count_for_gate`, failure reason을 확인합니다. |
+| summary cache report(요약 cache 리포트) | `.tmp/summary-cache-report.json`, `content/newsroom/YYYY-MM-DD/summary-cache-report.md` | cache hit/miss와 miss reason을 보고 반복 요약 비용을 확인합니다. |
+
+## Safe Scheduled Defaults
+
+scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. GitHub Variables에 값을 넣지 않으면 `.github/workflows/weekly-newsroom-pr.yml`과 runtime config의 기본값을 사용합니다.
+
+```text
+LOOKBACK_DAYS=21
+GEMINI_MODEL=gemini-2.5-flash
+GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite
+GEMINI_MAX_RETRIES=2
+GEMINI_RETRY_DELAYS_MS=20000,10000
+GEMINI_RETRY_MAX_DELAY_MS=300000
+GEMINI_THINKING_BUDGET_REPORTER=0
+GEMINI_THINKING_BUDGET_EDITOR=512
+GEMINI_THINKING_BUDGET_REPAIR=0
+GEMINI_THINKING_BUDGET_FACTCHECK=0
+GEMINI_THINKING_BUDGET_SCORING=0
+NEWSROOM_MAX_QUALITY_RETRIES=1
+NEWSROOM_MAX_SECTION_REPAIRS=1
+NEWSROOM_WARN_COST_USD=0.15
+NEWSROOM_MAX_COST_USD=0.25
+NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false
+NEWSROOM_ALLOW_PRO_ON_MANUAL=false
+NEWSROOM_PRO_ESCALATION=manual
+```
+
+manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 선택할 수 있습니다. 이때 workflow는 `GEMINI_FALLBACK_MODELS`에 `gemini-2.5-pro`를 추가하고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`로 실행합니다. scheduled run에서는 repository variable에 Pro가 들어가 있더라도 `NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false` 정책 검증을 통과해야 하므로 기본 운영에서 Pro 자동 호출은 금지됩니다.
 
 ## Recovery Artifacts
 
@@ -127,14 +173,20 @@ GEMINI_API_KEY
 ```text
 GEMINI_MODEL=gemini-2.5-flash
 GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite
+GEMINI_MAX_RETRIES=2
+GEMINI_RETRY_DELAYS_MS=20000,10000
+GEMINI_RETRY_MAX_DELAY_MS=300000
 GEMINI_THINKING_BUDGET_REPORTER=0
 GEMINI_THINKING_BUDGET_EDITOR=512
 GEMINI_THINKING_BUDGET_REPAIR=0
 GEMINI_THINKING_BUDGET_FACTCHECK=0
 GEMINI_THINKING_BUDGET_SCORING=0
+NEWSROOM_MAX_QUALITY_RETRIES=1
+NEWSROOM_MAX_SECTION_REPAIRS=1
 NEWSROOM_WARN_COST_USD=0.15
 NEWSROOM_MAX_COST_USD=0.25
 NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false
+NEWSROOM_ALLOW_PRO_ON_MANUAL=false
 NEWSROOM_PRO_ESCALATION=manual
 ```
 

@@ -5,7 +5,7 @@
 - [ ] `data/newsletters.json`을 업데이트했다.
 - [ ] 3줄 브리핑은 정확히 3줄이다.
 - [ ] 주요 기사 4-5개가 포함되어 있다.
-- [ ] 최소 1개 AI 관련 기사가 Camera HAL workflow 또는 camera input path와 연결된다.
+- [ ] AI/C++ 기사가 포함된 경우 Camera HAL workflow, camera input path, Android Camera pipeline, native HAL tooling 중 하나와 연결된다.
 - [ ] 각 주요 항목에 `배경지식`이 있다.
 - [ ] 각 주요 항목에 `Camera HAL 관점` 또는 `Camera HAL에서 확인해볼 아이템`이 있다.
 - [ ] 각 주요 항목에 `Sources` 또는 `출처`가 있다.
