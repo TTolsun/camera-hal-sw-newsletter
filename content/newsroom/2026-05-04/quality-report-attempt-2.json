@@ -1,58 +1,75 @@
 {
   "schema_version": 1,
   "date": "2026-05-04",
-  "score": 82,
+  "score": 58,
   "max_score": 100,
   "threshold": 85,
   "status": "NEEDS_FIX",
-  "summary": "Quality score 82, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "summary": "Quality score 58, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
   "deductions": [
     {
-      "category": "evidence-specificity",
-      "points": 5,
-      "reason": "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
-      "location": "Android 하이브리드 추론 및 새로운 Gemini 모델 지원",
-      "blocking": true
-    },
-    {
-      "category": "evidence-specificity",
-      "points": 4,
-      "reason": "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.",
-      "location": "Android 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "hal-relevance",
+      "points": 8,
+      "reason": "Expected at least 2 Camera HAL / Android Camera articles, found 1.",
+      "location": "",
       "blocking": true
     },
     {
       "category": "evidence-specificity",
       "points": 5,
       "reason": "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
-      "location": "VideoLAN, 오픈 소스 AV2 디코더 Dav2d 공개",
+      "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 출시: 카메라 HAL의 AI 통합 및 성능 최적화 과제",
       "blocking": true
     },
     {
       "category": "evidence-specificity",
       "points": 4,
       "reason": "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.",
-      "location": "VideoLAN, 오픈 소스 AV2 디코더 Dav2d 공개",
+      "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 출시: 카메라 HAL의 AI 통합 및 성능 최적화 과제",
+      "blocking": true
+    },
+    {
+      "category": "source-integrity",
+      "points": 15,
+      "reason": "Fact checker returned 8 must_fix item(s).",
+      "location": "",
+      "blocking": true
+    },
+    {
+      "category": "source-integrity",
+      "points": 10,
+      "reason": "Fact checker reported 8 source gap(s).",
+      "location": "",
       "blocking": true
     }
   ],
   "metrics": {
     "article_count": 4,
     "briefing_count": 3,
-    "camera_article_count": 3,
+    "camera_article_count": 1,
     "ai_article_count": 3,
-    "fact_check_status": "PASS",
-    "must_fix_count": 0,
-    "source_gap_count": 0,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 8,
+    "source_gap_count": 8,
     "source_integrity_violation_count": 0,
-    "blocking_deduction_count": 4,
+    "blocking_deduction_count": 5,
     "blocking_deduction_categories": [
-      "evidence-specificity"
+      "hal-relevance",
+      "evidence-specificity",
+      "source-integrity"
     ],
     "top_deduction_categories": [
       {
         "category": "evidence-specificity",
-        "count": 4
+        "count": 2
+      },
+      {
+        "category": "source-integrity",
+        "count": 2
+      },
+      {
+        "category": "hal-relevance",
+        "count": 1
       }
     ],
     "candidate_exclusion_summary": []

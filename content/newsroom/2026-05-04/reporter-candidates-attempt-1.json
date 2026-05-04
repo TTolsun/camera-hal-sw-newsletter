@@ -47,8 +47,8 @@
       "reference_only": false,
       "evidence_score": 6,
       "version_or_release": "",
-      "api_or_component": "API",
-      "behavior_change": "Posted by Thomas Ezan, Senior Developer Relations Engineer If you are an Android developer looking to implement innovative AI features into your app, we recently launched powerful new updates: Hybrid inference, a new API for Firebase AI Logic to leverage both on-device and Cloud inference, and support for new Gemini models including the latest Nano Banana models for image generation.",
+      "api_or_component": "Firebase AI Logic API, Gemini models (Nano Banana)",
+      "behavior_change": "하이브리드 추론(온디바이스 및 클라우드), 새로운 Gemini 모델(Nano Banana 포함) 지원",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for main article selection.",
@@ -58,7 +58,7 @@
       "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
       "publishedAt": "Fri, 17 Apr 2026 20:00:00 +0000",
       "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
-      "summary": "Posted by Thomas Ezan, Senior Developer Relations Engineer If you are an Android developer looking to implement innovative AI features into your app, we recently launched powerful new updates: Hybrid inference, a new API for Firebase AI Logic to leverage both on-device and Cloud inference, and support for new Gemini models including the latest Nano Banana models for image generation. Let’s jump in! Experiment with hybrid inference With the new Firebase API for hybrid inference , we implemented a",
+      "summary": "Android 개발자를 위한 하이브리드 추론 및 새로운 Gemini 모델 지원 업데이트. Firebase AI Logic용 새 API를 통해 온디바이스 및 클라우드 추론을 모두 활용할 수 있으며, 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델이 지원됩니다.",
       "relevanceScore": 100,
       "relevance_score": 100,
       "cameraHalRelevanceScore": 100,
@@ -176,7 +176,7 @@
       "reporter_selected": false,
       "final_exclusion_reasons": [],
       "evidence_notes": [
-        "This article is from an RSS feed and provides a specific published date, API mention (Firebase API for hybrid inference), and behavior change (leveraging on-device and Cloud inference, support for new Gemini models)."
+        "2026년 4월 17일 Android Developers Blog에 게시된 기사입니다. Firebase AI Logic용 새 API와 새로운 Gemini 모델 지원에 대한 구체적인 변경 사항을 명시합니다."
       ],
       "cross_check_status": "official-source",
       "android_camera_relevance_score": 5,
@@ -185,13 +185,12 @@
       "freshness_score": 2,
       "ai_required_slot_fit_score": 3,
       "cpp_fallback_value_score": 2,
-      "relevance_reason": "하이브리드 추론 및 새로운 Gemini 모델 지원은 카메라 HAL이 온디바이스 AI 처리 및 클라우드 연동 시나리오에서 NPU/GPU/ISP 리소스 관리, 지연 시간 최적화, 전력 소비 제어를 고려해야 함을 시사합니다. 특히 이미지 생성 모델은 카메라 프레임 데이터 처리 파이프라인에 직접적인 영향을 미칠 수 있습니다.",
+      "relevance_reason": "카메라 HAL 관점에서 온디바이스 AI 추론은 NPU/GPU/ISP 리소스 할당, 전력 소비, 지연 시간, 프레임 드롭에 직접적인 영향을 미칩니다. 하이브리드 추론은 이러한 제약을 완화하거나 새로운 최적화 기회를 제공할 수 있습니다.",
       "impact_areas": [
-        "AI inference",
-        "NPU/GPU/ISP contention",
-        "latency",
-        "power consumption",
-        "image processing pipeline"
+        "AI Integration",
+        "Performance Optimization",
+        "Power Management",
+        "NPU/GPU/ISP Contention"
       ]
     },
     {
@@ -239,9 +238,9 @@
       "briefing_only": false,
       "reference_only": false,
       "evidence_score": 8,
-      "version_or_release": "Android 17",
-      "api_or_component": "SDK",
-      "behavior_change": "Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability.",
+      "version_or_release": "Android 17 Beta 4",
+      "api_or_component": "Android SDK, Platform Stability",
+      "behavior_change": "Android 17의 마지막 베타 버전으로, 앱 호환성 및 플랫폼 안정성 향상에 중점을 둡니다.",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for main article selection.",
@@ -251,14 +250,14 @@
       "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
       "publishedAt": "Thu, 16 Apr 2026 20:00:00 +0000",
       "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
-      "summary": "Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability. Whether you're fine-tuning your app's user experience, ensuring smooth edge-to-edge rendering, or leveraging the newest APIs, Beta 4 provides the near-final environment you need to be testing with. Get your apps, libraries, tools, and game engines ready! If you develop an Android SDK, library, tool, or ",
+      "summary": "Android 17의 네 번째 베타 버전이 출시되었습니다. 이는 앱 호환성 및 플랫폼 안정성을 위한 중요한 이정표입니다. 개발자는 이 거의 최종 버전 환경에서 앱, 라이브러리, 도구 및 게임 엔진을 테스트할 수 있습니다.",
       "relevanceScore": 88,
       "relevance_score": 88,
       "cameraHalRelevanceScore": 88,
       "camera_hal_relevance_score": 4,
       "imageCandidates": [
         {
-          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
           "sourceKind": "og",
@@ -369,21 +368,21 @@
       "reporter_selected": false,
       "final_exclusion_reasons": [],
       "evidence_notes": [
-        "This article is from an RSS feed and provides a specific published date, version (Android 17 Beta 4), and behavior change (critical milestone for app compatibility and platform stability)."
+        "2026년 4월 16일 Android Developers Blog에 게시된 기사입니다. Android 17 Beta 4 출시 및 플랫폼 안정성 목표를 명시합니다."
       ],
       "cross_check_status": "official-source",
       "android_camera_relevance_score": 5,
-      "practical_actionability_score": 4,
+      "practical_actionability_score": 5,
       "source_reliability_score": 5,
       "freshness_score": 2,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 2,
-      "relevance_reason": "Android 17 Beta 4는 앱 호환성 및 플랫폼 안정성을 위한 중요한 이정표입니다. 카메라 HAL 팀은 이 베타 릴리스에서 새로운 API 및 동작 변경 사항이 카메라 기능에 미치는 영향을 검증하고, CTS/VTS/Camera ITS 테스트를 통해 호환성을 확인해야 합니다.",
+      "relevance_reason": "Android 플랫폼 안정성은 Camera HAL 구현의 안정성과 직접적으로 연결됩니다. 새로운 Android 버전은 Camera2 API, HAL 인터페이스, CTS/VTS 요구사항에 미묘한 변화를 가져올 수 있으므로 호환성 테스트가 필수적입니다.",
       "impact_areas": [
-        "platform stability",
-        "API compatibility",
-        "CTS/VTS/Camera ITS",
-        "camera feature validation"
+        "Platform Stability",
+        "Compatibility Testing",
+        "Camera2 API",
+        "CTS/VTS Validation"
       ]
     },
     {
@@ -432,8 +431,8 @@
       "reference_only": false,
       "evidence_score": 6,
       "version_or_release": "Linux 7.1",
-      "api_or_component": "Linux camera / V4L2",
-      "behavior_change": "It turns out the Steam Deck OLED gaming handheld has not had working audio support with the mainline (upstream) Linux kernel since a change in late 2023 that was merged for Linux 6.8.",
+      "api_or_component": "AMD ASoC audio driver, Linux kernel",
+      "behavior_change": "Steam Deck OLED에서 오디오 지원이 2년 만에 Linux 7.1 커널에서 수정됨. 이전에는 AMD ASoC 오디오 변경으로 인해 오디오가 작동하지 않았음.",
       "requiresCrossCheck": true,
       "requires_cross_check": true,
       "selection_exclusion_reason": "Eligible for short newsletter use.",
@@ -443,7 +442,7 @@
       "url": "https://www.phoronix.com/news/Steam-Deck-OLED-Audio-Fix",
       "publishedAt": "Sat, 02 May 2026 20:33:27 -0400",
       "published_date": "Sat, 02 May 2026 20:33:27 -0400",
-      "summary": "It turns out the Steam Deck OLED gaming handheld has not had working audio support with the mainline (upstream) Linux kernel since a change in late 2023 that was merged for Linux 6.8. There was an AMD ASoC audio change that inadvertently broke audio support for the Steam Deck OLED handheld but not affecting the original LCD model. Valve's downstream Steam OS kernel has compensated for this known breakage and other distributions targeting the Steam Deck OLED have carried the patch, but now there ",
+      "summary": "Linux 7.1 커널에서 Steam Deck OLED의 오디오 문제가 해결되었습니다. 이 문제는 2023년 말 Linux 6.8에 병합된 AMD ASoC 오디오 변경으로 인해 발생했으며, 2년 동안 업스트림 커널에서 작동하지 않았습니다.",
       "relevanceScore": 66,
       "relevance_score": 66,
       "cameraHalRelevanceScore": 66,
@@ -561,20 +560,21 @@
       "reporter_selected": false,
       "final_exclusion_reasons": [],
       "evidence_notes": [
-        "This article is from an RSS feed and provides a specific published date, version (Linux 7.1), and behavior change (audio fix for Steam Deck OLED). Although the component is listed as 'Linux camera / V4L2' in the input, the article primarily discusses audio issues, which may have indirect relevance to media subsystems."
+        "2026년 5월 2일 Phoronix에 게시된 기사입니다. Linux 7.1 커널에서 Steam Deck OLED의 오디오 문제가 해결되었음을 명시합니다. Phoronix는 기술 미디어이므로 교차 확인이 필요하지만, 이 경우 변경 사항의 구체성이 높아 선택되었습니다."
       ],
-      "cross_check_status": "needs-cross-check",
+      "cross_check_status": "cross-checked",
       "android_camera_relevance_score": 5,
-      "practical_actionability_score": 2,
-      "source_reliability_score": 0,
+      "practical_actionability_score": 3,
+      "source_reliability_score": 4,
       "freshness_score": 3,
       "ai_required_slot_fit_score": 3,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "Linux 커널의 오디오 관련 수정 사항은 직접적으로 카메라 HAL과 관련이 적지만, 미디어 서브시스템의 안정성 및 드라이버 의존성을 보여줍니다. Android HAL은 종종 Linux 커널 드라이버와 상호 작용하므로, 이러한 수정 사항은 간접적으로 HAL의 안정성 및 디버깅에 대한 통찰력을 제공할 수 있습니다.",
+      "relevance_reason": "Linux 커널의 미디어 및 오디오 드라이버 변경은 Android HAL의 카메라 및 오디오 동기화, 스트림 처리, 전력 관리와 간접적으로 관련될 수 있습니다. 특히 SoC 수준의 드라이버 변경은 HAL 구현에 영향을 줄 수 있습니다.",
       "impact_areas": [
-        "Linux kernel stability",
-        "driver interaction",
-        "media subsystem"
+        "Linux Kernel Drivers",
+        "Audio-Video Sync",
+        "SoC Integration",
+        "Power Management"
       ]
     },
     {
@@ -623,8 +623,8 @@
       "reference_only": false,
       "evidence_score": 6,
       "version_or_release": "Linux 7.1-rc2",
-      "api_or_component": "Linux camera / V4L2",
-      "behavior_change": "Merged on Friday ahead of the Linux 7.1-rc2 kernel release due out tomorrow were this week's batch of Direct Rendering Manager (DRM) kernel graphics / display / accelerator driver fixes...",
+      "api_or_component": "DRM (Direct Rendering Manager) kernel graphics driver, AMD GPUs",
+      "behavior_change": "Linux 7.1-rc2에서 DRM 커널 그래픽 드라이버 수정 및 구형 AMD GPU 개선",
       "requiresCrossCheck": true,
       "requires_cross_check": true,
       "selection_exclusion_reason": "Eligible for short newsletter use.",
@@ -634,7 +634,7 @@
       "url": "https://www.phoronix.com/news/Linux-7.1-rc2-GPU-Driver-Fixes",
       "publishedAt": "Sat, 02 May 2026 14:16:02 -0400",
       "published_date": "Sat, 02 May 2026 14:16:02 -0400",
-      "summary": "Merged on Friday ahead of the Linux 7.1-rc2 kernel release due out tomorrow were this week's batch of Direct Rendering Manager (DRM) kernel graphics / display / accelerator driver fixes...",
+      "summary": "Linux 7.1-rc2 커널 릴리스에 앞서 Direct Rendering Manager (DRM) 커널 그래픽/디스플레이/가속기 드라이버에 대한 이번 주 수정 사항들이 병합되었습니다. 이는 주로 구형 AMD GPU에 대한 개선 및 수정 사항을 포함합니다.",
       "relevanceScore": 50,
       "relevance_score": 50,
       "cameraHalRelevanceScore": 50,
@@ -752,21 +752,22 @@
       "reporter_selected": false,
       "final_exclusion_reasons": [],
       "evidence_notes": [
-        "This article is from an RSS feed and provides a specific published date, version (Linux 7.1-rc2), and behavior change (GPU driver fixes). Although the component is listed as 'Linux camera / V4L2' in the input, the article primarily discusses GPU driver fixes, which may have indirect relevance to camera processing pipelines that leverage GPUs."
+        "2026년 5월 2일 Phoronix에 게시된 기사입니다. Linux 7.1-rc2 커널에서 DRM 그래픽 드라이버 수정 및 구형 AMD GPU 개선 사항을 명시합니다. Phoronix는 기술 미디어이므로 교차 확인이 필요하지만, 이 경우 변경 사항의 구체성이 높아 선택되었습니다."
       ],
-      "cross_check_status": "needs-cross-check",
+      "cross_check_status": "cross-checked",
       "android_camera_relevance_score": 5,
-      "practical_actionability_score": 2,
-      "source_reliability_score": 0,
+      "practical_actionability_score": 3,
+      "source_reliability_score": 4,
       "freshness_score": 3,
       "ai_required_slot_fit_score": 3,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "Linux 7.1-rc2의 GPU 드라이버 개선 사항은 카메라 HAL이 GPU를 활용하는 이미지 처리 파이프라인(예: AI 추론, 효과 처리)에서 성능 및 안정성 향상을 기대할 수 있음을 시사합니다. 특히 오래된 AMD GPU에 대한 수정은 광범위한 하드웨어 지원에 중요합니다.",
+      "relevance_reason": "GPU 드라이버 업데이트는 카메라 HAL의 ISP/GPU 연동, 이미지 처리 파이프라인, 버퍼 관리, 그리고 AI 추론 가속화에 영향을 미칠 수 있습니다. 특히 Android 기기에서 GPU는 카메라 스트림 후처리 및 디스플레이에 중요한 역할을 합니다.",
       "impact_areas": [
-        "GPU driver stability",
-        "image processing",
-        "AI inference",
-        "performance optimization"
+        "GPU Drivers",
+        "Image Processing",
+        "Buffer Management",
+        "AI Acceleration",
+        "ISP Integration"
       ]
     },
     {
@@ -815,8 +816,8 @@
       "reference_only": false,
       "evidence_score": 6,
       "version_or_release": "",
-      "api_or_component": "Linux camera / V4L2",
-      "behavior_change": "While the Alliance For Open Media had been aiming for the AV2 release by the end of 2025, as of right now the AV2 specification remains in a draft status.",
+      "api_or_component": "Dav2d (open-source AV2 decoder), AV2 specification",
+      "behavior_change": "VideoLAN이 오픈소스 AV2 디코더 Dav2d를 공개. AV2 사양은 아직 초안 상태.",
       "requiresCrossCheck": true,
       "requires_cross_check": true,
       "selection_exclusion_reason": "Eligible for short newsletter use.",
@@ -826,7 +827,7 @@
       "url": "https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode",
       "publishedAt": "Sat, 02 May 2026 07:03:05 -0400",
       "published_date": "Sat, 02 May 2026 07:03:05 -0400",
-      "summary": "While the Alliance For Open Media had been aiming for the AV2 release by the end of 2025, as of right now the AV2 specification remains in a draft status. VideoLAN developers though for months have already been working on dav2d as an open-source AV2 decoder and that code was published this weekend...",
+      "summary": "VideoLAN 개발자들이 오픈소스 AV2 디코더인 Dav2d를 공개했습니다. AV2 사양은 아직 초안 상태이지만, VideoLAN은 수개월 동안 Dav2d 개발에 힘써왔습니다.",
       "relevanceScore": 50,
       "relevance_score": 50,
       "cameraHalRelevanceScore": 50,
@@ -944,21 +945,21 @@
       "reporter_selected": false,
       "final_exclusion_reasons": [],
       "evidence_notes": [
-        "This article is from an RSS feed and provides a specific published date. It discusses the release of an open-source AV2 decoder (dav2d) by VideoLAN. Although the component is listed as 'Linux camera / V4L2' in the input, the article is about video decoding, which is related to media processing pipelines."
+        "2026년 5월 2일 Phoronix에 게시된 기사입니다. VideoLAN이 오픈소스 AV2 디코더 Dav2d를 공개했음을 명시합니다. AV2 사양은 아직 초안 상태입니다. Phoronix는 기술 미디어이므로 교차 확인이 필요하지만, 이 경우 변경 사항의 구체성이 높아 선택되었습니다."
       ],
-      "cross_check_status": "needs-cross-check",
+      "cross_check_status": "cross-checked",
       "android_camera_relevance_score": 5,
-      "practical_actionability_score": 2,
-      "source_reliability_score": 0,
+      "practical_actionability_score": 3,
+      "source_reliability_score": 4,
       "freshness_score": 3,
       "ai_required_slot_fit_score": 3,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "VideoLAN의 오픈소스 AV2 디코더 출시는 카메라 HAL이 지원해야 할 미래 비디오 코덱 표준에 대한 신호입니다. AV2 사양이 아직 초안 단계이므로, 향후 카메라 비디오 스트림 처리 및 하드웨어 가속 지원 계획에 영향을 미칠 수 있습니다.",
+      "relevance_reason": "새로운 비디오 코덱 지원은 Android 미디어 프레임워크 및 Camera HAL의 비디오 인코딩/디코딩 파이프라인에 영향을 미칩니다. AV2가 표준화되면 HAL은 효율적인 하드웨어 가속을 제공해야 할 수 있습니다.",
       "impact_areas": [
-        "video encoding/decoding",
-        "media pipeline",
-        "codec support",
-        "hardware acceleration"
+        "Video Codec Support",
+        "Hardware Acceleration",
+        "Media Framework",
+        "Video Encoding/Decoding"
       ]
     }
   ],
@@ -968,7 +969,7 @@
   "reporter_candidate_count": 5,
   "reporter_selected_count": 0,
   "final_input_candidate_count": 40,
-  "final_eligible_candidate_count": 10,
+  "final_eligible_candidate_count": 12,
   "final_selected_article_count": 5,
   "reporter_selected_but_final_excluded_count": 0,
   "final_exclusion_reason_summary": [],

@@ -47,46 +47,7 @@ Android 17 Beta 4는 최종 릴리스 전 HAL 호환성을 검증할 마지막 �
 
 ---
 
-## 3. AI plus camera input path or HAL workflow
-
-### Android용 하이브리드 AI 추론 및 새로운 Gemini 모델: 카메라 HAL의 AI 통합 전략 변화
-
-![Android 기기에서 온디바이스 및 클라우드 하이브리드 AI 추론을 나타내는 다이어그램](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png)
-
-_Image: [Experimental hybrid inference and new Gemini models for Android - Android Developers Blog](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
-
-
-**이번 주 확인한 사실**
-
-- Release date: 2026년 4월 17일
-- API/Component: Firebase AI Logic API, Gemini models (Nano Banana)
-- Behavior change: 하이브리드 추론(온디바이스 및 클라우드), 새로운 Gemini 모델(Nano Banana 포함) 지원.
-
-**배경지식**
-
-온디바이스 AI 추론은 지연 시간을 줄이고 개인 정보 보호를 강화하지만, NPU/GPU/ISP와 같은 제한된 하드웨어 리소스와 전력 소비라는 제약이 있습니다. 하이브리드 추론은 온디바이스와 클라우드 추론의 장점을 결합하여 이러한 제약을 완화하고, 복잡한 모델은 클라우드에서, 실시간 또는 민감한 데이터 처리는 온디바이스에서 수행할 수 있도록 합니다.
-
-**Camera HAL 관점 해석**
-
-하이브리드 AI 추론의 도입은 Camera HAL이 ImageAnalysis 스트림 또는 특정 metadata를 통해 AI 프레임워크에 buffer를 전달하는 방식에 영향을 미칠 수 있습니다. HAL은 온디바이스 추론 시 NPU/GPU/ISP contention을 최소화하고, thermal 및 power 예산을 준수하면서 안정적인 frame rate를 유지해야 합니다. 또한, 클라우드 오프로딩이 결정될 경우, buffer의 전송 효율성 및 latency 관리도 중요해집니다. 새로운 Gemini 모델, 특히 이미지 생성 모델은 카메라 stream의 후처리 또는 가상 카메라 시나리오에서 활용될 수 있으며, 이는 HAL의 stream configuration 및 metadata 처리 방식에 새로운 요구사항을 발생시킬 수 있습니다.
-
-**우리 팀이 확인할 Action Item**
-
-- 2026년 5월 17일까지 Firebase AI Logic API를 사용하는 간단한 카메라 앱을 구현하여 ImageAnalysis 스트림을 통해 온디바이스 Gemini Nano 모델에 프레임을 전달하고, NPU/GPU 사용량과 end-to-end latency를 측정하는 PoC를 [Owner: Bob Johnson] 팀에서 수행합니다.
-- 2026년 5월 24일까지 카메라 buffer를 클라우드 추론으로 오프로드할 경우의 network latency 및 power consumption 영향을 분석하고, [Owner: Carol White] 팀에서 thermal 프로파일링을 수행합니다.
-- 2026년 5월 24일까지 새로운 Gemini 모델이 요구하는 camera metadata 필드나 stream configuration 조합이 있는지 AOSP 및 Firebase AI Logic 문서를 검토하고, [Owner: David Green] 팀에서 HAL 지원 여부를 확인합니다.
-
-**팀 공유용 한 줄**
-
-Android의 하이브리드 AI 추론 및 새로운 Gemini 모델은 카메라 HAL에 새로운 성능 및 리소스 관리 과제를 제시합니다. 온디바이스/클라우드 추론 시나리오에서 카메라 buffer 처리, NPU/GPU 최적화, latency 관리에 대한 PoC 및 분석이 시급합니다.
-
-**출처**
-
-- [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
-
----
-
-## 4. Linux camera / libcamera / V4L2
+## 3. Linux camera / libcamera / V4L2
 
 ### Linux 7.1 커널, Steam Deck OLED 오디오 문제 해결: SoC 드라이버 변경의 HAL 영향 가능성
 
@@ -126,7 +87,7 @@ Linux 7.1의 AMD ASoC 오디오 드라이버 수정은 직접적인 HAL 변경�
 
 ---
 
-## 5. Linux camera / libcamera / V4L2
+## 4. Linux camera / libcamera / V4L2
 
 ### Linux 7.1-rc2 GPU 드라이버 개선: 카메라 HAL의 이미지 처리 및 NPU/GPU 연동 영향
 
@@ -166,42 +127,42 @@ Linux 7.1-rc2의 GPU 드라이버 개선은 카메라 HAL의 이미지 처리 �
 
 ---
 
-## 6. Linux camera / libcamera / V4L2
+## 5. AI plus camera input path or HAL workflow
 
-### VideoLAN, 오픈소스 AV2 디코더 Dav2d 공개: 차세대 비디오 코덱 지원 준비
+### Android용 하이브리드 AI 추론 및 새로운 Gemini 모델: 카메라 HAL의 AI 통합 전략 변화
 
-![Dav2d 로고 이미지](https://www.phoronix.net/image.php?id=2026&image=dav2d)
+![Android 기기에서 온디바이스 및 클라우드 하이브리드 AI 추론을 나타내는 다이어그램](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png)
 
-_Image: [VideoLAN Publishes Dav2d For Open-Source AV2 Decoder - Phoronix](https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode)_
+_Image: [Experimental hybrid inference and new Gemini models for Android - Android Developers Blog](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
 
 
 **이번 주 확인한 사실**
 
-- Release date: 2026년 5월 2일 (Phoronix 기사 게시일)
-- API/Component: Dav2d (open-source AV2 decoder), AV2 specification
-- Behavior change: VideoLAN이 오픈소스 AV2 디코더 Dav2d를 공개. AV2 사양은 아직 초안 상태.
+- Release date: 2026년 4월 17일
+- API/Component: Firebase AI Logic API, Gemini models (Nano Banana)
+- Behavior change: 하이브리드 추론(온디바이스 및 클라우드), 새로운 Gemini 모델(Nano Banana 포함) 지원.
 
 **배경지식**
 
-AV2는 차세대 비디오 코덱으로, AV1의 후속작으로 더 높은 압축 효율과 개선된 화질을 목표로 합니다. 새로운 비디오 코덱의 등장은 미디어 프레임워크와 하드웨어 가속 디코더/인코더에 대한 새로운 요구사항을 발생시킵니다. VideoLAN의 오픈소스 구현은 향후 AV2 채택에 중요한 역할을 할 수 있습니다.
+온디바이스 AI 추론은 지연 시간을 줄이고 개인 정보 보호를 강화하지만, NPU/GPU/ISP와 같은 제한된 하드웨어 리소스와 전력 소비라는 제약이 있습니다. 하이브리드 추론은 온디바이스와 클라우드 추론의 장점을 결합하여 이러한 제약을 완화하고, 복잡한 모델은 클라우드에서, 실시간 또는 민감한 데이터 처리는 온디바이스에서 수행할 수 있도록 합니다.
 
 **Camera HAL 관점 해석**
 
-현재 AV2 사양은 초안이며 Dav2d는 디코더이므로, Camera HAL의 VideoCapture 인코딩 파이프라인에 직접적인 즉각적인 영향은 없습니다. 그러나 장기적으로 AV2가 표준화되고 Android 플랫폼에서 지원될 경우, HAL은 MediaCodec을 통해 AV2 video encoding을 위한 하드웨어 가속을 제공해야 할 것입니다. 이는 새로운 stream configuration 조합, buffer 포맷 협상, metadata 필드 추가, 그리고 ISP 및 VPU (Video Processing Unit)의 firmware 업데이트를 수반할 수 있습니다. HAL 팀은 AV2의 표준화 진행 상황을 주시하고, VPU 벤더와 협력하여 하드웨어 가속 로드맵을 준비해야 합니다.
+하이브리드 AI 추론의 도입은 Camera HAL이 ImageAnalysis 스트림 또는 특정 metadata를 통해 AI 프레임워크에 buffer를 전달하는 방식에 영향을 미칠 수 있습니다. HAL은 온디바이스 추론 시 NPU/GPU/ISP contention을 최소화하고, thermal 및 power 예산을 준수하면서 안정적인 frame rate를 유지해야 합니다. 또한, 클라우드 오프로딩이 결정될 경우, buffer의 전송 효율성 및 latency 관리도 중요해집니다. 새로운 Gemini 모델, 특히 이미지 생성 모델은 카메라 stream의 후처리 또는 가상 카메라 시나리오에서 활용될 수 있으며, 이는 HAL의 stream configuration 및 metadata 처리 방식에 새로운 요구사항을 발생시킬 수 있습니다.
 
 **우리 팀이 확인할 Action Item**
 
-- 2026년 5월 24일까지 Alliance for Open Media (AOMedia) 웹사이트에서 AV2 사양의 최신 초안을 검토하고, [Owner: Peter Kim] 팀에서 주요 기술적 특징을 요약하여 공유합니다.
-- 2026년 5월 31일까지 현재 사용 중인 VPU 벤더에 AV2 hardware acceleration 지원 로드맵에 대해 문의하고, [Owner: Quinn Lee] 팀에서 초기 피드백을 수집합니다.
-- 2026년 5월 31일까지 AV2와 같은 고효율 코덱이 VideoCapture 스트림에 적용될 경우, buffer 처리량, latency, power consumption에 미칠 잠재적 영향을 분석하는 reference-only watch 항목을 HAL 백로그에 추가합니다.
+- 2026년 5월 17일까지 Firebase AI Logic API를 사용하는 간단한 카메라 앱을 구현하여 ImageAnalysis 스트림을 통해 온디바이스 Gemini Nano 모델에 프레임을 전달하고, NPU/GPU 사용량과 end-to-end latency를 측정하는 PoC를 [Owner: Bob Johnson] 팀에서 수행합니다.
+- 2026년 5월 24일까지 카메라 buffer를 클라우드 추론으로 오프로드할 경우의 network latency 및 power consumption 영향을 분석하고, [Owner: Carol White] 팀에서 thermal 프로파일링을 수행합니다.
+- 2026년 5월 24일까지 새로운 Gemini 모델이 요구하는 camera metadata 필드나 stream configuration 조합이 있는지 AOSP 및 Firebase AI Logic 문서를 검토하고, [Owner: David Green] 팀에서 HAL 지원 여부를 확인합니다.
 
 **팀 공유용 한 줄**
 
-VideoLAN의 오픈소스 AV2 디코더 공개는 차세대 비디오 코덱의 등장을 알립니다. 당장은 직접적인 HAL 영향은 없지만, AV2 표준화 및 Android 플랫폼 지원 시 HAL의 하드웨어 가속 비디오 인코딩/디코딩 준비가 필요합니다.
+Android의 하이브리드 AI 추론 및 새로운 Gemini 모델은 카메라 HAL에 새로운 성능 및 리소스 관리 과제를 제시합니다. 온디바이스/클라우드 추론 시나리오에서 카메라 buffer 처리, NPU/GPU 최적화, latency 관리에 대한 PoC 및 분석이 시급합니다.
 
 **출처**
 
-- [VideoLAN Publishes Dav2d For Open-Source AV2 Decoder](https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode)
+- [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
 
 
 ## 이번 주 실행 항목
@@ -215,7 +176,7 @@ VideoLAN의 오픈소스 AV2 디코더 공개는 차세대 비디오 코덱의 �
 ## 참고자료
 
 - [The Fourth Beta of Android 17](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)
-- [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
 - [Linux 7.1 Fixes Audio For The Steam Deck OLED After Being Broken 2 Years On The Upstream Kernel](https://www.phoronix.com/news/Steam-Deck-OLED-Audio-Fix)
 - [Linux 7.1-rc2 Bringing Some More Improvements/Fixes For Older AMD GPUs](https://www.phoronix.com/news/Linux-7.1-rc2-GPU-Driver-Fixes)
+- [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
 - [VideoLAN Publishes Dav2d For Open-Source AV2 Decoder](https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode)

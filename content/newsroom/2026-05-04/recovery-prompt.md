@@ -5,45 +5,37 @@ newsroom automation이 publication readiness 전에 멈췄습니다. 아래 arti
 ## 실패
 
 - 단계: generation
-- 사유: npm run validate failed:
-> camera-hal-sw-newsletter@1.0.0 validate:site
-> node scripts/validate-site.js
-
-
-Warning: Newsletter 2026-05-03 main article count is 3; expected 4-5 for the new format.
-Warning: Newsletter 2026-05-02 main article count is 6; expected 4-5 for the new format.
-Warning: Newsletter 2026-05-02 fact-check source_gap_count is 6.
-- Newsletter 2026-05-04 has unresolved fact-check must_fix items.
+- 사유: Editor output must contain at least 3 sections.
 
 ## 후보 선택 진단
 
-- Reporter candidates: 9
+- Reporter candidates: 5
 - Reporter-selected candidates: 0
 - Final input candidates: 40
-- Final eligible candidates: 10
+- Final eligible candidates: 12
 - Final selected articles: 5
 - Reporter-selected but final-excluded: 0
 
 주요 final exclusion reason:
-- main_eligible=false (30)
-- source_gap_risk=true (30)
-- finalSelectionEligibility=exclude (22)
-- reference_only=true (10)
-- briefing_only=true (8)
+- main_eligible=false (28)
+- source_gap_risk=true (28)
+- finalSelectionEligibility=exclude (21)
+- reference_only=true (9)
+- briefing_only=true (7)
 
 Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
 
 ## Deterministic Final Selection 상태
 
 - Final input candidate: 40
-- Final eligible candidate: 10
+- Final eligible candidate: 12
 - Final selected article: 5
 - AI selected input: 4
 - Publish ready: true
 - Underfilled: false
 - Selection warning: 없음
 - Selection error: 없음
-- 주요 final exclusion reason: main_eligible=false (30); source_gap_risk=true (30); finalSelectionEligibility=exclude (22); reference_only=true (10); briefing_only=true (8); finalSelectionEligibility=watchlist (8); missing dated evidence (8); watch page without dated evidence (8)
+- 주요 final exclusion reason: main_eligible=false (28); source_gap_risk=true (28); finalSelectionEligibility=exclude (21); reference_only=true (9); briefing_only=true (7); finalSelectionEligibility=watchlist (7); missing dated evidence (7); watch page without dated evidence (7)
 
 ## 다시 실행
 
@@ -59,9 +51,9 @@ npm.cmd run validate
 {
   "schema_version": 2,
   "date": "2026-05-04",
-  "generated_at": "2026-05-03T19:37:08.180Z",
+  "generated_at": "2026-05-04T03:25:27.692Z",
   "input_candidate_count": 40,
-  "eligible_candidate_count": 10,
+  "eligible_candidate_count": 12,
   "selected_article_count": 5,
   "ai_selected_article_count": 4,
   "shortlist_cap": 12,
@@ -1594,6 +1586,155 @@ npm.cmd run validate
       "source_name": "Phoronix Linux Camera / Media",
       "sourceUrl": "https://www.phoronix.com/",
       "source_url": "https://www.phoronix.com/",
+      "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+      "article_url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+      "source_id": "phoronix-linux-camera-media",
+      "category": "linux-kernel",
+      "section": "Linux Camera / Driver",
+      "source_category": "linux-kernel",
+      "source_section": "Linux Camera / Driver",
+      "priority": "medium",
+      "reliability": "tech-media",
+      "source_priority": "medium",
+      "source_reliability": "tech-media",
+      "usageHint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "source_usage_hint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "candidateOnly": false,
+      "candidate_only": false,
+      "collectionMode": "rss-item",
+      "collection_mode": "rss-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceLevel": "dated-rss-article",
+      "evidence_level": "dated-rss-article",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_kind": "rss_item",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": true,
+      "has_behavior_change": true,
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "evidence_score": 6,
+      "version_or_release": "",
+      "api_or_component": "Linux camera / V4L2",
+      "behavior_change": "Linux 7.1-rc2 is out for testing with its accumulation of initial bug and regression fixes that have been collected over the past week since the Linux 7.1 merge window was capped off...",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "selection_exclusion_reason": "Eligible for short newsletter use.",
+      "watchlist_reason": "",
+      "verification_hint": "Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.",
+      "title": "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes",
+      "url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+      "publishedAt": "Sun, 03 May 2026 17:30:00 -0400",
+      "published_date": "Sun, 03 May 2026 17:30:00 -0400",
+      "summary": "Linux 7.1-rc2 is out for testing with its accumulation of initial bug and regression fixes that have been collected over the past week since the Linux 7.1 merge window was capped off...",
+      "relevanceScore": 54,
+      "relevance_score": 54,
+      "cameraHalRelevanceScore": 54,
+      "camera_hal_relevance_score": 54,
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=2026&image=linux_71_rc2",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Phoronix",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 3092
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=2026&image=linux_71_rc2",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Phoronix",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 3092
+        }
+      ],
+      "candidateTier": "short-news",
+      "reason": "Phoronix Linux Camera / Media (tech-media, medium, score 54): Camera HAL relevance and engineering productivity signals were both detected.",
+      "collection_reason": "Phoronix Linux Camera / Media (tech-media, medium, score 54): Camera HAL relevance and engineering productivity signals were both detected.",
+      "selected": false,
+      "selected_for_editor": false,
+      "deterministic_score": 34,
+      "score_breakdown": {
+        "source_reliability": 0,
+        "freshness": 3,
+        "camera_hal_relevance": 3,
+        "android_camera_relevance": 5,
+        "ai_required_slot_fit": 0,
+        "cpp_fallback_value": 2,
+        "evidence_quality": 5,
+        "total": 34
+      },
+      "exclusion_reasons": [],
+      "normalized_url": "https://www.phoronix.com/news/linux-7.1-rc2-released",
+      "url_hash": "f99c80c73baf54c6e61f459c3b1b67c0c0448b5178f28a4a263c5881ce9dbe38",
+      "ai_slot_candidate": false,
+      "camera_platform_candidate": true,
+      "cpp_fallback_candidate": true,
+      "selection_stage": "deterministic-final",
+      "final_selected": false,
+      "reporter_selected": false,
+      "final_exclusion_reasons": []
+    },
+    {
+      "schema_version": 5,
+      "source": "Phoronix Linux Camera / Media",
+      "source_name": "Phoronix Linux Camera / Media",
+      "sourceUrl": "https://www.phoronix.com/",
+      "source_url": "https://www.phoronix.com/",
       "articleUrl": "https://www.phoronix.com/news/NVIDIA-595.44.06-Vulkan-Beta",
       "article_url": "https://www.phoronix.com/news/NVIDIA-595.44.06-Vulkan-Beta",
       "source_id": "phoronix-linux-camera-media",
@@ -1760,6 +1901,183 @@ npm.cmd run validate
       "ai_slot_candidate": false,
       "camera_platform_candidate": true,
       "cpp_fallback_candidate": true,
+      "selection_stage": "deterministic-final",
+      "final_selected": false,
+      "reporter_selected": false,
+      "final_exclusion_reasons": []
+    },
+    {
+      "schema_version": 5,
+      "source": "Phoronix Linux Camera / Media",
+      "source_name": "Phoronix Linux Camera / Media",
+      "sourceUrl": "https://www.phoronix.com/",
+      "source_url": "https://www.phoronix.com/",
+      "articleUrl": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+      "article_url": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+      "source_id": "phoronix-linux-camera-media",
+      "category": "linux-kernel",
+      "section": "Linux Camera / Driver",
+      "source_category": "linux-kernel",
+      "source_section": "Linux Camera / Driver",
+      "priority": "medium",
+      "reliability": "tech-media",
+      "source_priority": "medium",
+      "source_reliability": "tech-media",
+      "usageHint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "source_usage_hint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "candidateOnly": false,
+      "candidate_only": false,
+      "collectionMode": "rss-item",
+      "collection_mode": "rss-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceLevel": "dated-rss-article",
+      "evidence_level": "dated-rss-article",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_kind": "rss_item",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": true,
+      "has_behavior_change": true,
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "evidence_score": 6,
+      "version_or_release": "",
+      "api_or_component": "Linux camera / V4L2",
+      "behavior_change": "In addition to today's monthly ISO refresh of Arch Linux that is now pulling in the Linux 7.0 kernel and other updates, the downstream EndeavourOS also happens to be out with a new ISO release for starting the month of May...",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "selection_exclusion_reason": "Eligible for short newsletter use.",
+      "watchlist_reason": "",
+      "verification_hint": "Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.",
+      "title": "EndeavourOS \"Triton\" To Ship New Desktop/WM Options, Titan Neo Brings Various Updates",
+      "url": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+      "publishedAt": "Fri, 01 May 2026 16:13:30 -0400",
+      "published_date": "Fri, 01 May 2026 16:13:30 -0400",
+      "summary": "In addition to today's monthly ISO refresh of Arch Linux that is now pulling in the Linux 7.0 kernel and other updates, the downstream EndeavourOS also happens to be out with a new ISO release for starting the month of May...",
+      "relevanceScore": 50,
+      "relevance_score": 50,
+      "cameraHalRelevanceScore": 50,
+      "camera_hal_relevance_score": 50,
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=linux-2022-raptorlake&image=raptor_endeavour_os",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Phoronix",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 3092
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=linux-2022-raptorlake&image=raptor_endeavour_os_med",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "EndeavourOS",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=linux-2022-raptorlake&image=raptor_endeavour_os",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Phoronix",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 3092
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=linux-2022-raptorlake&image=raptor_endeavour_os_med",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Endeavour-OS-Titan-Neo",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "EndeavourOS",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        }
+      ],
+      "candidateTier": "short-news",
+      "reason": "Phoronix Linux Camera / Media (tech-media, medium, score 50): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.",
+      "collection_reason": "Phoronix Linux Camera / Media (tech-media, medium, score 50): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.",
+      "selected": false,
+      "selected_for_editor": false,
+      "deterministic_score": 32,
+      "score_breakdown": {
+        "source_reliability": 0,
+        "freshness": 3,
+        "camera_hal_relevance": 3,
+        "android_camera_relevance": 5,
+        "ai_required_slot_fit": 0,
+        "cpp_fallback_value": 0,
+        "evidence_quality": 5,
+        "total": 32
+      },
+      "exclusion_reasons": [],
+      "normalized_url": "https://www.phoronix.com/news/endeavour-os-titan-neo",
+      "url_hash": "d360f742750db9ec516c9274933b655e84d80196ee488e1bbad8559cba146a52",
+      "ai_slot_candidate": false,
+      "camera_platform_candidate": true,
+      "cpp_fallback_candidate": false,
       "selection_stage": "deterministic-final",
       "final_selected": false,
       "reporter_selected": false,
@@ -3106,7 +3424,7 @@ npm.cmd run validate
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 182357
+          "contentLength": 2048
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEgseJ0HOa6wGI4egBEWBTC4Pawhiiv3BQIDm5R3XjY2D0uBRcZJaNTWcsHkMXY8VnbtA98-sojfdwKttHh6x82yQSg1sCsAWSKb8QXgVo5bQk4wtoi2LoM5u-TXYeIDD-fbqkA3SJssiUWgFTWsf44BAjzk06Iov-uDeIXJm6elMrcsNQoEU2KbVYN6SQo=w1200-h630-p-k-no-nu",
@@ -3150,7 +3468,7 @@ npm.cmd run validate
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 182357
+          "contentLength": 2048
         },
         {
           "url": "https://blogger.googleusercontent.com/img/a/AVvXsEgseJ0HOa6wGI4egBEWBTC4Pawhiiv3BQIDm5R3XjY2D0uBRcZJaNTWcsHkMXY8VnbtA98-sojfdwKttHh6x82yQSg1sCsAWSKb8QXgVo5bQk4wtoi2LoM5u-TXYeIDD-fbqkA3SJssiUWgFTWsf44BAjzk06Iov-uDeIXJm6elMrcsNQoEU2KbVYN6SQo=w1200-h630-p-k-no-nu",
@@ -4004,25 +4322,25 @@ npm.cmd run validate
       "reference_only": true,
       "evidence_score": 4,
       "version_or_release": "",
-      "api_or_component": "CameraX",
+      "api_or_component": "Android Camera / Camera HAL",
       "behavior_change": "Use this source page as a change/release-note watch target.",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "title": "CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
+      "title": "ক্যামেরাএক্স &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera",
       "publishedAt": "",
       "published_date": "",
       "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
-      "relevanceScore": 84,
-      "relevance_score": 84,
-      "cameraHalRelevanceScore": 84,
-      "camera_hal_relevance_score": 84,
+      "relevanceScore": 68,
+      "relevance_score": 68,
+      "cameraHalRelevanceScore": 68,
+      "camera_hal_relevance_score": 68,
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "sourceKind": "og",
@@ -4050,23 +4368,23 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=bn",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "sourceKind": "og",
@@ -4094,35 +4412,35 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=bn",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "watchlist-reference",
-      "reason": "CameraX Release Notes (official, high, score 84): Camera HAL relevance and engineering productivity signals were both detected.",
-      "collection_reason": "CameraX Release Notes (official, high, score 84): Camera HAL relevance and engineering productivity signals were both detected.",
+      "reason": "CameraX Release Notes (official, high, score 68): Camera HAL relevance and engineering productivity signals were both detected.",
+      "collection_reason": "CameraX Release Notes (official, high, score 68): Camera HAL relevance and engineering productivity signals were both detected.",
       "selected": false,
       "selected_for_editor": false,
-      "deterministic_score": 40,
+      "deterministic_score": 37,
       "score_breakdown": {
         "source_reliability": 5,
         "freshness": 0,
-        "camera_hal_relevance": 4,
+        "camera_hal_relevance": 3,
         "android_camera_relevance": 5,
         "ai_required_slot_fit": 0,
         "cpp_fallback_value": 0,
         "evidence_quality": 4,
-        "total": 40
+        "total": 37
       },
       "exclusion_reasons": [
         "missing dated evidence",
@@ -4204,15 +4522,15 @@ npm.cmd run validate
       "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "title": "Appareil photo &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/core/camera",
       "publishedAt": "",
       "published_date": "",
       "summary": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
-      "relevanceScore": 72,
-      "relevance_score": 72,
-      "cameraHalRelevanceScore": 72,
-      "camera_hal_relevance_score": 72,
+      "relevanceScore": 64,
+      "relevance_score": 64,
+      "cameraHalRelevanceScore": 64,
+      "camera_hal_relevance_score": 64,
       "imageCandidates": [
         {
           "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
@@ -4229,13 +4547,13 @@ npm.cmd run validate
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png?hl=fr",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "Android Camera HAL icon",
+          "alt": "Icône Android Camera HAL",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
@@ -4243,13 +4561,13 @@ npm.cmd run validate
           "contentLength": 2242
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png?hl=fr",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "Android camera architecture",
+          "alt": "Architecture de l'appareil photo Android",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
@@ -4273,13 +4591,13 @@ npm.cmd run validate
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png",
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png?hl=fr",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "Android Camera HAL icon",
+          "alt": "Icône Android Camera HAL",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
@@ -4287,13 +4605,13 @@ npm.cmd run validate
           "contentLength": 2242
         },
         {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png",
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_camera2.png?hl=fr",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "Android camera architecture",
+          "alt": "Architecture de l'appareil photo Android",
           "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "AOSP Camera Documentation",
@@ -4302,20 +4620,20 @@ npm.cmd run validate
         }
       ],
       "candidateTier": "watchlist-reference",
-      "reason": "AOSP Camera Documentation (official, high, score 72): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.",
-      "collection_reason": "AOSP Camera Documentation (official, high, score 72): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.",
+      "reason": "AOSP Camera Documentation (official, high, score 64): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.",
+      "collection_reason": "AOSP Camera Documentation (official, high, score 64): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.",
       "selected": false,
       "selected_for_editor": false,
-      "deterministic_score": 40,
+      "deterministic_score": 37,
       "score_breakdown": {
         "source_reliability": 5,
         "freshness": 0,
-        "camera_hal_relevance": 4,
+        "camera_hal_relevance": 3,
         "android_camera_relevance": 5,
         "ai_required_slot_fit": 0,
         "cpp_fallback_value": 0,
         "evidence_quality": 4,
-        "total": 40
+        "total": 37
       },
       "exclusion_reasons": [
         "missing dated evidence",
@@ -4397,7 +4715,7 @@ npm.cmd run validate
       "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "title": "چه خبر &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/whatsnew",
       "publishedAt": "",
       "published_date": "",
@@ -4422,7 +4740,21 @@ npm.cmd run validate
           "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/picto-icons/stars.svg",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=fa",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -4452,7 +4784,21 @@ npm.cmd run validate
           "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/picto-icons/stars.svg",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/images/picto-icons/stars.svg?hl=fa",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -4693,24 +5039,24 @@ npm.cmd run validate
       "evidence_score": 0,
       "version_or_release": "",
       "api_or_component": "",
-      "behavior_change": "Discover what's new across the Android ecosystem.",
+      "behavior_change": "Android ekosistemindeki yenilikleri keşfedin.",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "title": "Android latest updates &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers",
+      "title": "Android&apos;deki en son güncellemeler &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers",
       "url": "https://developer.android.com/latest-updates",
       "publishedAt": "",
       "published_date": "",
-      "summary": "Discover what's new across the Android ecosystem.",
+      "summary": "Android ekosistemindeki yenilikleri keşfedin.",
       "relevanceScore": 37,
       "relevance_score": 37,
       "cameraHalRelevanceScore": 37,
       "camera_hal_relevance_score": 37,
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "og",
@@ -4738,7 +5084,7 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg",
+          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "article-img",
@@ -4754,7 +5100,7 @@ npm.cmd run validate
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "og",
@@ -4782,7 +5128,7 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg",
+          "url": "https://developer.android.com/static/images/cluster-illustrations/android-basics-kotlin.svg?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/latest-updates",
           "sourceKind": "article-img",
@@ -5559,234 +5905,6 @@ npm.cmd run validate
       "source_name": "ISO C++ Blog",
       "sourceUrl": "https://isocpp.org/blog",
       "source_url": "https://isocpp.org/blog",
-      "articleUrl": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
-      "article_url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
-      "source_id": "iso-cpp-blog",
-      "category": "cpp",
-      "section": "C++ / Native / Toolchain",
-      "source_category": "cpp",
-      "source_section": "C++ / Native / Toolchain",
-      "priority": "high",
-      "reliability": "official-community",
-      "source_priority": "high",
-      "source_reliability": "official-community",
-      "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "candidateOnly": false,
-      "candidate_only": false,
-      "collectionMode": "rss-item",
-      "collection_mode": "rss-item",
-      "sourceCollectionMode": "rss-source",
-      "source_collection_mode": "rss-source",
-      "isArticleCandidate": true,
-      "is_article_candidate": true,
-      "isWatchPage": false,
-      "is_watch_page": false,
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "evidenceLevel": "dated-rss-article",
-      "evidence_level": "dated-rss-article",
-      "finalSelectionEligibility": "exclude",
-      "final_selection_eligibility": "exclude",
-      "source_kind": "rss_item",
-      "has_published_date": true,
-      "has_version_or_release": false,
-      "has_api_or_component": true,
-      "has_behavior_change": false,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": false,
-      "reference_only": false,
-      "evidence_score": 4,
-      "version_or_release": "",
-      "api_or_component": "C++ / native toolchain",
-      "behavior_change": "Inspired by a similar previous thread showcasing cool uses for C++26 reflection.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "selection_exclusion_reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
-      "watchlist_reason": "",
-      "verification_hint": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
-      "title": "Power of C++26 Reflection: Strong (opaque) type definitions &#45;&#45; r/cpp",
-      "url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
-      "publishedAt": "Thu, 09 Apr 2026 21:36:20 +0000",
-      "published_date": "Thu, 09 Apr 2026 21:36:20 +0000",
-      "summary": "Inspired by a similar previous thread showcasing cool uses for C++26 reflection. Power of C++26 Reflection: Strong (opaque) type definitions&nbsp; From the article: With reflection, you can easily create \"opaque\" type definitions, i.e \"strong types\". It works by having an inner value stored, and wrapping over all public member functions. Note: I am using queue_injection { ... } with the EDG experimental reflection, which afaik wasn't actually integrated into the C++26 standard, but without it yo",
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "imageCandidates": [],
-      "image_candidates": [],
-      "candidateTier": "exclude",
-      "reason": "ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.",
-      "collection_reason": "ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.",
-      "selected": false,
-      "selected_for_editor": false,
-      "deterministic_score": 28,
-      "score_breakdown": {
-        "source_reliability": 4,
-        "freshness": 1,
-        "camera_hal_relevance": 2,
-        "android_camera_relevance": 0,
-        "ai_required_slot_fit": 3,
-        "cpp_fallback_value": 2,
-        "evidence_quality": 4,
-        "total": 28
-      },
-      "exclusion_reasons": [
-        "finalSelectionEligibility=exclude",
-        "source_gap_risk=true",
-        "main_eligible=false"
-      ],
-      "normalized_url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
-      "url_hash": "44f3597991199849a0b8d30fc1aea2352af2145be7b116de5c51049dd81a8337",
-      "ai_slot_candidate": true,
-      "camera_platform_candidate": false,
-      "cpp_fallback_candidate": true,
-      "final_selected": false,
-      "selection_stage": "deterministic-final",
-      "reporter_selected": false,
-      "final_exclusion_reasons": [
-        "finalSelectionEligibility=exclude",
-        "source_gap_risk=true",
-        "main_eligible=false"
-      ]
-    },
-    {
-      "schema_version": 5,
-      "source": "ISO C++ Blog",
-      "source_name": "ISO C++ Blog",
-      "sourceUrl": "https://isocpp.org/blog",
-      "source_url": "https://isocpp.org/blog",
-      "articleUrl": "https://isocpp.org//blog/2026/04/cppcon-2025-back-to-basics-custom-allocators-explained-from-basics-to-advan",
-      "article_url": "https://isocpp.org//blog/2026/04/cppcon-2025-back-to-basics-custom-allocators-explained-from-basics-to-advan",
-      "source_id": "iso-cpp-blog",
-      "category": "cpp",
-      "section": "C++ / Native / Toolchain",
-      "source_category": "cpp",
-      "source_section": "C++ / Native / Toolchain",
-      "priority": "high",
-      "reliability": "official-community",
-      "source_priority": "high",
-      "source_reliability": "official-community",
-      "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "candidateOnly": false,
-      "candidate_only": false,
-      "collectionMode": "rss-item",
-      "collection_mode": "rss-item",
-      "sourceCollectionMode": "rss-source",
-      "source_collection_mode": "rss-source",
-      "isArticleCandidate": true,
-      "is_article_candidate": true,
-      "isWatchPage": false,
-      "is_watch_page": false,
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "evidenceLevel": "dated-rss-article",
-      "evidence_level": "dated-rss-article",
-      "finalSelectionEligibility": "exclude",
-      "final_selection_eligibility": "exclude",
-      "source_kind": "rss_item",
-      "has_published_date": true,
-      "has_version_or_release": false,
-      "has_api_or_component": true,
-      "has_behavior_change": false,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": false,
-      "reference_only": false,
-      "evidence_score": 4,
-      "version_or_release": "",
-      "api_or_component": "C++ / native toolchain",
-      "behavior_change": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "selection_exclusion_reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
-      "watchlist_reason": "",
-      "verification_hint": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
-      "title": "CppCon 2025 Back to Basics: Custom Allocators Explained &#45; From Basics to Advanced &#45;&#45; Kevin Carpenter",
-      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-back-to-basics-custom-allocators-explained-from-basics-to-advan",
-      "publishedAt": "Tue, 07 Apr 2026 17:17:59 +0000",
-      "published_date": "Tue, 07 Apr 2026 17:17:59 +0000",
-      "summary": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Back to Basics: Custom Allocators Explained - From Basics to Advanced by Kevin Carpenter Summary ",
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "imageCandidates": [
-        {
-          "url": "https://isocpp.org/files/img/Custom_Allocators_carpenter.png",
-          "sourceUrl": "https://isocpp.org/blog",
-          "articleUrl": "https://isocpp.org//blog/2026/04/cppcon-2025-back-to-basics-custom-allocators-explained-from-basics-to-advan",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Custom_Allocators_carpenter.png",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "ISO C++ Blog",
-          "validationStatus": "ok",
-          "contentLength": 702117
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://isocpp.org/files/img/Custom_Allocators_carpenter.png",
-          "sourceUrl": "https://isocpp.org/blog",
-          "articleUrl": "https://isocpp.org//blog/2026/04/cppcon-2025-back-to-basics-custom-allocators-explained-from-basics-to-advan",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Custom_Allocators_carpenter.png",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "ISO C++ Blog",
-          "validationStatus": "ok",
-          "contentLength": 702117
-        }
-      ],
-      "candidateTier": "exclude",
-      "reason": "ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.",
-      "collection_reason": "ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.",
-      "selected": false,
-      "selected_for_editor": false,
-      "deterministic_score": 28,
-      "score_breakdown": {
-        "source_reliability": 4,
-        "freshness": 1,
-        "camera_hal_relevance": 2,
-        "android_camera_relevance": 0,
-        "ai_required_slot_fit": 3,
-        "cpp_fallback_value": 2,
-        "evidence_quality": 4,
-        "total": 28
-      },
-      "exclusion_reasons": [
-        "finalSelectionEligibility=exclude",
-        "source_gap_risk=true",
-        "main_eligible=false"
-      ],
-      "normalized_url": "https://isocpp.org//blog/2026/04/cppcon-2025-back-to-basics-custom-allocators-explained-from-basics-to-advan",
-      "url_hash": "d02785a56a958e3e5cba5ba9ecd3c97a032a9fdb53d756fb4fee962fd4ac262e",
-      "ai_slot_candidate": true,
-      "camera_platform_candidate": false,
-      "cpp_fallback_candidate": true,
-      "final_selected": false,
-      "selection_stage": "deterministic-final",
-      "reporter_selected": false,
-      "final_exclusion_reasons": [
-        "finalSelectionEligibility=exclude",
-        "source_gap_risk=true",
-        "main_eligible=false"
-      ]
-    },
-    {
-      "schema_version": 5,
-      "source": "ISO C++ Blog",
-      "source_name": "ISO C++ Blog",
-      "sourceUrl": "https://isocpp.org/blog",
-      "source_url": "https://isocpp.org/blog",
       "articleUrl": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "article_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "source_id": "iso-cpp-blog",
@@ -6505,199 +6623,6 @@ npm.cmd run validate
     },
     {
       "schema_version": 5,
-      "source": "Android Developer Newsletter",
-      "source_name": "Android Developer Newsletter",
-      "sourceUrl": "https://developer.android.com/newsletter",
-      "source_url": "https://developer.android.com/newsletter",
-      "articleUrl": "https://developer.android.com/newsletter",
-      "article_url": "https://developer.android.com/newsletter",
-      "source_id": "android-developer-newsletter",
-      "category": "android",
-      "section": "Android / AOSP / Camera",
-      "source_category": "android",
-      "source_section": "Android / AOSP / Camera",
-      "priority": "medium",
-      "reliability": "official",
-      "source_priority": "medium",
-      "source_reliability": "official",
-      "usageHint": "Google official Android developer newsletter reference 확인",
-      "source_usage_hint": "Google official Android developer newsletter reference 확인",
-      "candidateOnly": false,
-      "candidate_only": false,
-      "collectionMode": "html-watch-page",
-      "collection_mode": "html-watch-page",
-      "sourceCollectionMode": "documentation-watch",
-      "source_collection_mode": "documentation-watch",
-      "isArticleCandidate": false,
-      "is_article_candidate": false,
-      "isWatchPage": true,
-      "is_watch_page": true,
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "evidenceLevel": "undated-watch-page",
-      "evidence_level": "undated-watch-page",
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_kind": "rolling_page",
-      "has_published_date": false,
-      "has_version_or_release": false,
-      "has_api_or_component": false,
-      "has_behavior_change": false,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "evidence_score": 0,
-      "version_or_release": "",
-      "api_or_component": "",
-      "behavior_change": "The latest developer news and tips to help you succeed on Google Play.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "title": "Android Developer Newsletters &nbsp;|&nbsp; Android Developers",
-      "url": "https://developer.android.com/newsletter",
-      "publishedAt": "",
-      "published_date": "",
-      "summary": "The latest developer news and tips to help you succeed on Google Play.",
-      "relevanceScore": 33,
-      "relevance_score": 33,
-      "cameraHalRelevanceScore": 33,
-      "camera_hal_relevance_score": 33,
-      "imageCandidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
-          "sourceUrl": "https://developer.android.com/newsletter",
-          "articleUrl": "https://developer.android.com/newsletter",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/newsletter",
-          "articleUrl": "https://developer.android.com/newsletter",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/newsletter",
-          "articleUrl": "https://developer.android.com/newsletter",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok",
-          "contentLength": 2833
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
-          "sourceUrl": "https://developer.android.com/newsletter",
-          "articleUrl": "https://developer.android.com/newsletter",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/newsletter",
-          "articleUrl": "https://developer.android.com/newsletter",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/newsletter",
-          "articleUrl": "https://developer.android.com/newsletter",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developer Newsletter",
-          "validationStatus": "ok",
-          "contentLength": 2833
-        }
-      ],
-      "candidateTier": "watchlist-reference",
-      "reason": "Android Developer Newsletter (official, medium, score 33): Camera HAL relevance and engineering productivity signals were both detected.",
-      "collection_reason": "Android Developer Newsletter (official, medium, score 33): Camera HAL relevance and engineering productivity signals were both detected.",
-      "selected": false,
-      "selected_for_editor": false,
-      "deterministic_score": 28,
-      "score_breakdown": {
-        "source_reliability": 5,
-        "freshness": 0,
-        "camera_hal_relevance": 2,
-        "android_camera_relevance": 5,
-        "ai_required_slot_fit": 0,
-        "cpp_fallback_value": 2,
-        "evidence_quality": 0,
-        "total": 28
-      },
-      "exclusion_reasons": [
-        "missing dated evidence",
-        "watch page without dated evidence",
-        "finalSelectionEligibility=watchlist",
-        "source_gap_risk=true",
-        "main_eligible=false",
-        "briefing_only=true",
-        "reference_only=true"
-      ],
-      "normalized_url": "https://developer.android.com/newsletter",
-      "url_hash": "0dd63da9c4f049b52aa753af5379847ca2aba5388babe17712e0f69e89f988b4",
-      "ai_slot_candidate": false,
-      "camera_platform_candidate": true,
-      "cpp_fallback_candidate": true,
-      "final_selected": false,
-      "selection_stage": "deterministic-final",
-      "reporter_selected": false,
-      "final_exclusion_reasons": [
-        "missing dated evidence",
-        "watch page without dated evidence",
-        "finalSelectionEligibility=watchlist",
-        "source_gap_risk=true",
-        "main_eligible=false",
-        "briefing_only=true",
-        "reference_only=true"
-      ]
-    },
-    {
-      "schema_version": 5,
       "source": "libcamera Documentation",
       "source_name": "libcamera Documentation",
       "sourceUrl": "https://libcamera.org/introduction.html",
@@ -7144,6 +7069,191 @@ npm.cmd run validate
         "source_gap_risk=true",
         "main_eligible=false"
       ]
+    },
+    {
+      "schema_version": 5,
+      "source": "Phoronix Linux Camera / Media",
+      "source_name": "Phoronix Linux Camera / Media",
+      "sourceUrl": "https://www.phoronix.com/",
+      "source_url": "https://www.phoronix.com/",
+      "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+      "article_url": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+      "source_id": "phoronix-linux-camera-media",
+      "category": "linux-kernel",
+      "section": "Linux Camera / Driver",
+      "source_category": "linux-kernel",
+      "source_section": "Linux Camera / Driver",
+      "priority": "medium",
+      "reliability": "tech-media",
+      "source_priority": "medium",
+      "source_reliability": "tech-media",
+      "usageHint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "source_usage_hint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "candidateOnly": false,
+      "candidate_only": false,
+      "collectionMode": "rss-item",
+      "collection_mode": "rss-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceLevel": "dated-rss-article",
+      "evidence_level": "dated-rss-article",
+      "finalSelectionEligibility": "exclude",
+      "final_selection_eligibility": "exclude",
+      "source_kind": "rss_item",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": true,
+      "has_behavior_change": false,
+      "source_gap_risk": true,
+      "main_eligible": false,
+      "briefing_only": false,
+      "reference_only": false,
+      "evidence_score": 4,
+      "version_or_release": "",
+      "api_or_component": "Linux camera / V4L2",
+      "behavior_change": "My initial testing of the Linux 7.1 development kernel on various systems in the lab continues going well.",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "selection_exclusion_reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
+      "watchlist_reason": "",
+      "verification_hint": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
+      "title": "Linux 7.1-rc1 Showing Off Some Wins On AMD Ryzen Threadripper",
+      "url": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+      "publishedAt": "Thu, 30 Apr 2026 08:23:00 -0400",
+      "published_date": "Thu, 30 Apr 2026 08:23:00 -0400",
+      "summary": "My initial testing of the Linux 7.1 development kernel on various systems in the lab continues going well. Aside from one main regression in a synthetic micro-benchmark appearing on multiple systems, not seeing much in the way of Linux 7.1 performance concerns thus far and seeing some nice performance gains in select workloads...",
+      "relevanceScore": 50,
+      "relevance_score": 50,
+      "cameraHalRelevanceScore": 50,
+      "camera_hal_relevance_score": 50,
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=ubuntu-2604-windows-11&image=hp_z6_g5a",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Phoronix",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 3092
+        },
+        {
+          "url": "https://phoronix.com/benchmark/result/linux-71-amd-threadripper-benchmarks-hp-z6-g5-a/result.svgz",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Linux 7.1 AMD Threadripper Benchmarks HP Z6 G5 A",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 2530
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=ubuntu-2604-windows-11&image=hp_z6_g5a",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Phoronix",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 3092
+        },
+        {
+          "url": "https://phoronix.com/benchmark/result/linux-71-amd-threadripper-benchmarks-hp-z6-g5-a/result.svgz",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc1-Threadripper",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Linux 7.1 AMD Threadripper Benchmarks HP Z6 G5 A",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 2530
+        }
+      ],
+      "candidateTier": "exclude",
+      "reason": "Phoronix Linux Camera / Media (tech-media, medium, score 50): Camera HAL relevance and engineering productivity signals were both detected.",
+      "collection_reason": "Phoronix Linux Camera / Media (tech-media, medium, score 50): Camera HAL relevance and engineering productivity signals were both detected.",
+      "selected": false,
+      "selected_for_editor": false,
+      "deterministic_score": 35,
+      "score_breakdown": {
+        "source_reliability": 0,
+        "freshness": 3,
+        "camera_hal_relevance": 3,
+        "android_camera_relevance": 5,
+        "ai_required_slot_fit": 3,
+        "cpp_fallback_value": 2,
+        "evidence_quality": 4,
+        "total": 35
+      },
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ],
+      "normalized_url": "https://www.phoronix.com/news/linux-7.1-rc1-threadripper",
+      "url_hash": "216cbbe039d08b707442760fa27fd2e7b380f739cb7e1bc0320c92c69312d3af",
+      "ai_slot_candidate": true,
+      "camera_platform_candidate": true,
+      "cpp_fallback_candidate": true,
+      "final_selected": false,
+      "selection_stage": "deterministic-final",
+      "reporter_selected": false,
+      "final_exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
     }
   ],
   "selection_warnings": [],
@@ -7151,76 +7261,76 @@ npm.cmd run validate
   "exclusion_reason_summary": [
     {
       "reason": "main_eligible=false",
-      "count": 30
+      "count": 28
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 30
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 22
+      "count": 21
     },
     {
       "reason": "reference_only=true",
-      "count": 10
+      "count": 9
     },
     {
       "reason": "briefing_only=true",
-      "count": 8
+      "count": 7
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 8
+      "count": 7
     },
     {
       "reason": "missing dated evidence",
-      "count": 8
+      "count": 7
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 8
+      "count": 7
     }
   ],
   "selection_stage": "deterministic-final",
   "final_input_candidate_count": 40,
-  "final_eligible_candidate_count": 10,
+  "final_eligible_candidate_count": 12,
   "final_selected_article_count": 5,
-  "reporter_candidate_count": 9,
+  "reporter_candidate_count": 5,
   "reporter_selected_count": 0,
   "reporter_selected_but_final_excluded_count": 0,
   "final_exclusion_reason_summary": [
     {
       "reason": "main_eligible=false",
-      "count": 30
+      "count": 28
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 30
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 22
+      "count": 21
     },
     {
       "reason": "reference_only=true",
-      "count": 10
+      "count": 9
     },
     {
       "reason": "briefing_only=true",
-      "count": 8
+      "count": 7
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 8
+      "count": 7
     },
     {
       "reason": "missing dated evidence",
-      "count": 8
+      "count": 7
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 8
+      "count": 7
     }
   ]
 }
@@ -8134,37 +8244,37 @@ npm.cmd run validate
 ```json
 [
   {
-    "category": "evidence-specificity",
-    "points": 5,
-    "reason": "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
-    "location": "2026년 4월 17일: Android 하이브리드 추론 및 Gemini 모델 지원 (Firebase AI Logic API)",
-    "blocking": true
-  },
-  {
-    "category": "evidence-specificity",
-    "points": 4,
-    "reason": "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.",
-    "location": "2026년 4월 17일: Android 하이브리드 추론 및 Gemini 모델 지원 (Firebase AI Logic API)",
+    "category": "hal-relevance",
+    "points": 8,
+    "reason": "Expected at least 2 Camera HAL / Android Camera articles, found 1.",
+    "location": "",
     "blocking": true
   },
   {
     "category": "evidence-specificity",
     "points": 5,
     "reason": "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
-    "location": "2026년 5월 2일: VideoLAN, 오픈 소스 AV2 디코더 Dav2d 공개",
+    "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 출시: 카메라 HAL의 AI 통합 및 성능 최적화 과제",
     "blocking": true
   },
   {
     "category": "evidence-specificity",
     "points": 4,
     "reason": "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.",
-    "location": "2026년 5월 2일: VideoLAN, 오픈 소스 AV2 디코더 Dav2d 공개",
+    "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 출시: 카메라 HAL의 AI 통합 및 성능 최적화 과제",
     "blocking": true
   },
   {
     "category": "source-integrity",
-    "points": 5,
-    "reason": "Fact checker returned 1 must_fix item(s).",
+    "points": 15,
+    "reason": "Fact checker returned 8 must_fix item(s).",
+    "location": "",
+    "blocking": true
+  },
+  {
+    "category": "source-integrity",
+    "points": 10,
+    "reason": "Fact checker reported 8 source gap(s).",
     "location": "",
     "blocking": true
   }
@@ -8178,16 +8288,67 @@ npm.cmd run validate
   "status": "NEEDS_FIX",
   "must_fix": [
     {
-      "location": "sections[2].selectedImage",
-      "problem": "AI 관련 기사의 'selectedImage' URL이 잘못되어 이미지를 로드할 수 없습니다 (HTTP 404). 'resolvedImage.usedFallback'이 true로 표시됩니다. 이는 원본 'imageCandidates'에 있는 URL과 미묘하게 다릅니다.",
-      "suggestion": "원래 'imageCandidates' 중 유효한 URL로 'selectedImage'를 수정해야 합니다. 예를 들어, 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png'를 사용하십시오.",
-      "source_url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      "location": "sections[0]",
+      "problem": "This article is not based on any provided candidate JSON. It presents information as confirmed facts without a provided source.",
+      "suggestion": "Remove this article or provide a valid candidate JSON for 'Android 17 Beta 4' from an official source like Android Developers Blog.",
+      "source_url": ""
+    },
+    {
+      "location": "sections[1]",
+      "problem": "This article is not based on any provided candidate JSON. It presents information as confirmed facts without a provided source.",
+      "suggestion": "Remove this article or provide a valid candidate JSON for 'Linux 7.1 kernel' updates from a reliable source like Phoronix (with cross-check explanation if it's not an official source).",
+      "source_url": ""
+    },
+    {
+      "location": "sections[2]",
+      "problem": "This article is not based on any provided candidate JSON. It presents information as confirmed facts without a provided source.",
+      "suggestion": "Remove this article or provide a valid candidate JSON for 'Linux 7.1-rc2 GPU driver' updates from a reliable source like Phoronix (with cross-check explanation if it's not an official source).",
+      "source_url": ""
+    },
+    {
+      "location": "briefing[0]",
+      "problem": "The briefing item refers to 'Android 17 Beta 4' which is not sourced by any provided candidate JSON.",
+      "suggestion": "Remove this briefing item or ensure it is supported by a valid candidate JSON.",
+      "source_url": ""
+    },
+    {
+      "location": "briefing[2]",
+      "problem": "The briefing item refers to 'Linux 7.1 커널 및 7.1-rc2 GPU 드라이버 개선' which is not sourced by any provided candidate JSON.",
+      "suggestion": "Remove this briefing item or ensure it is supported by a valid candidate JSON.",
+      "source_url": ""
+    },
+    {
+      "location": "action_items[0]",
+      "problem": "This action item refers to 'Android 17 Beta 4' which is not sourced by any provided candidate JSON.",
+      "suggestion": "Remove this action item or ensure it is supported by a valid candidate JSON.",
+      "source_url": ""
+    },
+    {
+      "location": "action_items[2]",
+      "problem": "This action item refers to 'Linux 7.1 커널' which is not sourced by any provided candidate JSON.",
+      "suggestion": "Remove this action item or ensure it is supported by a valid candidate JSON.",
+      "source_url": ""
+    },
+    {
+      "location": "action_items[3]",
+      "problem": "This action item refers to 'Linux 7.1-rc2 커널 업데이트' which is not sourced by any provided candidate JSON.",
+      "suggestion": "Remove this action item or ensure it is supported by a valid candidate JSON.",
+      "source_url": ""
     }
   ],
   "recommended_fixes": [],
-  "source_gaps": [],
-  "source_gap_count": 0,
-  "final_comment": "제공된 뉴스레터 초안은 전반적으로 편집 정책을 잘 따르고 있으며, 모든 주요 기사에 구체적인 근거, Camera HAL 관점, 실행 항목이 포함되어 있습니다. 단, AI 관련 기사의 'selectedImage' URL이 잘못되어 이미지를 로드할 수 없는 문제가 발견되었습니다. 이 부분을 수정해야 합니다."
+  "source_gaps": [
+    "Android 17 Beta 4 출시",
+    "Linux 7.1 커널, Steam Deck OLED 오디오 문제 해결",
+    "Linux 7.1-rc2 GPU 드라이버 개선",
+    "Android 17 Beta 4가 플랫폼 안정성 단계에 진입하여 HAL 호환성 최종 검증이 필요합니다.",
+    "Linux 7.1 커널 및 7.1-rc2 GPU 드라이버 개선은 SoC 및 GPU 활용 카메라 HAL의 안정성과 성능에 간접적인 영향을 미칠 수 있습니다.",
+    "Android 17 Beta 4 빌드에서 모든 Camera ITS, CTS, VTS 카메라 관련 테스트를 실행하고, 실패하는 테스트 케이스에 대한 근본 원인을 분석하여 HAL 수정 계획을 수립합니다.",
+    "Linux 7.1 커널 기반의 테스트 빌드에서 비디오 녹화 중 오디오 재생 시나리오를 포함한 모든 카메라 CTS/VTS 테스트를 실행하고, 실패 또는 성능 저하가 발생하는지 확인합니다.",
+    "GPU 기반 이미지 후처리 및 AI 워크로드를 사용하는 카메라 시나리오의 엔드투엔드 지연 시간을 측정하고, Linux 7.1-rc2 커널 업데이트 후 성능 향상 또는 회귀 여부를 보고합니다."
+  ],
+  "source_gap_count": 8,
+  "final_comment": "제공된 후보 JSON에는 'Android용 하이브리드 추론 및 새로운 Gemini 모델 출시' 기사만 포함되어 있습니다. 편집 초안의 첫 번째, 두 번째, 세 번째 주요 기사(Android 17 Beta 4, Linux 7.1 커널 오디오 문제, Linux 7.1-rc2 GPU 드라이버 개선)는 제공된 후보 JSON에 근거가 없으므로 'must_fix'로 분류됩니다. 이로 인해 뉴스레터 요약, 브리핑, 전체 실행 항목에도 출처 없는 내용이 포함되어 있습니다. 유효한 출처가 있는 기사만 포함하도록 수정해야 합니다."
 }
 ```
 
