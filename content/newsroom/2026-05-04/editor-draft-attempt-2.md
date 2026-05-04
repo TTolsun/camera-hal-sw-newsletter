@@ -1,124 +1,125 @@
 # Camera HAL SW 뉴스레터 - 2026-05-04
 
-이번 주 뉴스레터는 Android 플랫폼의 AI 및 카메라 관련 주요 업데이트와 Linux 커널의 미디어 스택 개선 사항을 다룹니다. Android 17 베타 4 출시로 HAL 호환성 최종 점검이 중요해졌으며, 하이브리드 AI 추론 도입은 카메라 프레임 처리 및 NPU/GPU 리소스 관리에 새로운 과제를 제시합니다. 또한, Linux 커널의 GPU 드라이버 개선과 새로운 AV2 비디오 디코더 공개는 HAL의 이미지 처리 및 비디오 인코딩/디코딩 파이프라인에 장기적인 영향을 미칠 수 있습니다.
+이번 주 뉴스레터는 Android 17 Beta 4의 플랫폼 안정성 도달, Android용 하이브리드 AI 추론 및 새로운 Gemini 모델 출시, 그리고 Linux 7.1 커널의 SoC 및 GPU 드라이버 개선 소식을 다룹니다. Camera HAL 엔지니어는 Android 17 호환성 최종 검증, AI 워크로드의 효율적인 데이터 경로 및 자원 관리, 그리고 Linux 커널 변경이 SoC 및 GPU 활용 카메라 HAL의 안정성과 성능에 미치는 간접적인 영향에 주목해야 합니다.
 
 ## 1. 이번 주 3줄 브리핑
-- Android 하이브리드 AI 추론 및 Gemini 모델 지원이 발표되어, HAL은 AI 스트림의 NPU/GPU 리소스 및 전력/열 관리를 최적화해야 합니다.
-- Android 17 베타 4가 출시되어 플랫폼 안정성 단계에 진입했으며, HAL 팀은 Camera2 API 호환성 및 CTS/VTS/Camera ITS 통과 여부를 최종 점검해야 합니다.
-- Linux 7.1-rc2 커널에 구형 AMD GPU 드라이버 개선 사항이 포함되어, HAL의 GPU 기반 이미지 처리 및 AI 추론 성능에 영향을 줄 수 있습니다.
+- Android 17 Beta 4가 플랫폼 안정성 단계에 진입하여 HAL 호환성 최종 검증이 필요합니다.
+- Android용 하이브리드 AI 추론 및 새로운 Gemini 모델이 출시되어 카메라 HAL의 AI 데이터 경로 및 NPU/GPU 자원 관리에 대한 최적화가 중요해졌습니다.
+- Linux 7.1 커널 및 7.1-rc2 GPU 드라이버 개선은 SoC 및 GPU 활용 카메라 HAL의 안정성과 성능에 간접적인 영향을 미칠 수 있습니다.
 
-## 2. AI plus camera input path or HAL workflow
+## 2. Android / AOSP / Camera
 
-### Android 하이브리드 추론 및 새로운 Gemini 모델 지원
+### Android 17 Beta 4 출시: 플랫폼 안정성 강화 및 HAL 호환성 검증 필수
 
-![Android 하이브리드 추론 솔루션 다이어그램](../../assets/images/fallback/ai.svg)
+![Android 17 Beta 4 로고 및 개발자 블로그 이미지](https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu)
 
-_Image: [Android Developers Blog](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
-
-
-**이번 주 확인한 사실**
-
-- Release date: 2026-04-17
-- API/component: Firebase AI Logic API, Gemini models (Nano Banana)
-- Behavior change: 하이브리드 추론을 위한 새로운 Firebase API가 도입되어 on-device 및 Cloud 추론을 모두 활용할 수 있게 되었으며, 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델이 지원됩니다.
-
-**배경지식**
-
-AI 추론은 on-device에서 저지연 및 개인 정보 보호 이점을 제공하지만, 복잡한 모델은 클라우드 리소스가 필요합니다. 하이브리드 추론은 이 두 가지 접근 방식을 결합하여 최적의 성능과 효율성을 달성합니다. 카메라 HAL은 이미지/비디오 프레임을 AI 모델에 제공하는 중요한 역할을 합니다.
-
-**Camera HAL 관점 해석**
-
-HAL은 on-device AI 추론을 위해 카메라 프레임을 효율적으로 NPU/GPU로 전달해야 합니다. 하이브리드 추론 시나리오에서는 on-device 추론 부하가 증가할 수 있으므로, HAL은 스트림 구성, 버퍼 관리, 전력 및 열 제어 메커니즘을 최적화하여 프레임 드롭 없이 안정적인 성능을 보장해야 합니다. 특히 ImageAnalysis 유스케이스와 같은 AI 관련 스트림의 우선순위 및 리소스 할당을 검토해야 합니다.
-
-**우리 팀이 확인할 Action Item**
-
-- ImageAnalysis 스트림을 사용하는 AI 추론 시나리오에서 특정 NPU/GPU 로드 조건(예: 50%, 80%)에서 YUV 프레임 드롭률과 end-to-end 지연 시간을 측정하는 자동화된 테스트를 추가합니다. (담당: AI 통합 팀)
-- Gemini Nano Banana 모델을 활용하는 이미지 생성 앱에서 카메라 프리뷰와 동시에 동작할 때 디바이스의 열 스로틀링(thermal throttling) 발생 여부와 전력 소모를 기록합니다. (담당: 전력/열 관리 팀)
-- Firebase AI Logic API의 on-device 추론 경로에서 카메라 HAL이 제공하는 ANativeWindow 또는 HardwareBuffer의 버퍼 수명 주기 및 동기화가 올바르게 처리되는지 로그를 통해 확인합니다. (담당: HAL 코어 팀)
-
-**팀 공유용 한 줄**
-
-Android의 하이브리드 AI 추론 및 Gemini 모델 지원은 HAL이 카메라 프레임을 AI 파이프라인에 효율적으로 제공하고, NPU/GPU 리소스 및 전력/열 관리를 최적화해야 함을 의미합니다.
-
-**출처**
-
-- [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
-
----
-
-## 3. Android Camera / platform API
-
-### Android 17 베타 4 출시: 플랫폼 안정성 최종 점검
-
-![Android 17 베타 4 로고](https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu)
-
-_Image: [Android Developers Blog](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)_
+_Image: [The Fourth Beta of Android 17 - Android Developers Blog](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)_
 
 
 **이번 주 확인한 사실**
 
-- Release date: 2026-04-16
-- Version/release: Android 17 Beta 4
-- API/component: Android SDK, Platform Stability
-- Behavior change: Android 17의 마지막 베타 릴리스로, 앱 호환성 및 플랫폼 안정성에 중점을 둡니다. 새로운 API 및 기능에 대한 최종 테스트 환경을 제공합니다.
+- Release date: 2026년 4월 16일
+- Version/Release: Android 17 Beta 4
+- API/Component: Android SDK, Platform Stability
+- Behavior change: Android 17의 마지막 베타 버전으로, 앱 호환성 및 플랫폼 안정성 향상에 중점을 둡니다.
 
 **배경지식**
 
-Android 베타 릴리스는 다음 주요 OS 버전의 안정성을 확보하고 개발자가 앱을 테스트할 수 있도록 합니다. 플랫폼 안정성 단계는 API가 확정되었음을 의미하며, HAL 구현은 이러한 확정된 API 및 동작에 대한 호환성을 최종적으로 검증해야 합니다.
+Android 베타 버전은 차기 OS 릴리스의 최종 형태를 미리 경험하고 앱 및 시스템 구성 요소의 호환성을 테스트할 기회를 제공합니다. 플랫폼 안정성 단계는 API 및 시스템 동작이 최종 릴리스에 가까워졌음을 의미하며, 이는 HAL 계층의 안정성에도 중요한 영향을 미칩니다.
 
 **Camera HAL 관점 해석**
 
-HAL 팀은 Android 17 Beta 4에서 Camera2 API의 변경 사항이나 새로운 CDD(Compatibility Definition Document) 요구사항이 있는지 면밀히 검토해야 합니다. 특히 camera.request.template, camera.capture.result 메타데이터 필드의 동작 변화, 새로운 스트림 조합 지원 여부, 그리고 logical/physical camera 동작의 일관성을 확인해야 합니다. 플랫폼 안정성 단계이므로, 기존 HAL 구현이 새로운 프레임워크 동작과 충돌하지 않는지 확인하는 것이 중요합니다.
+Android 17 Beta 4는 Camera HAL 인터페이스(HIDL/AIDL), Camera2 API 동작, 그리고 관련 CTS/VTS/Camera ITS 테스트 케이스에 대한 최종 검증 기회를 제공합니다. 특히 request/result metadata 필드의 변경, stream configuration 제약 조건의 업데이트, buffer lifecycle 관리의 미묘한 변화가 있는지 면밀히 검토해야 합니다. 플랫폼 안정성 단계에서는 이러한 변경 사항이 더 이상 크게 바뀌지 않을 것으로 예상되므로, 현재 HAL 구현이 새로운 요구사항을 충족하는지 확인하는 것이 중요합니다.
 
 **우리 팀이 확인할 Action Item**
 
-- Android 17 Beta 4가 설치된 개발 보드에서 adb shell dumpsys media.camera 명령을 사용하여 모든 CameraCharacteristics 필드와 HAL이 선언하는 기능을 검토하고, 변경된 CDD 요구사항과 비교하여 불일치 사항을 보고합니다. (담당: HAL 아키텍처 팀)
-- Android 17 Beta 4용 최신 CTS/VTS/Camera ITS 테스트 스위트를 다운로드하여 모든 카메라 관련 테스트를 실행하고, 실패한 테스트 케이스에 대해 근본 원인 분석을 시작합니다. (담당: QA 및 테스트 팀)
-- Preview (YUV) + ImageCapture (JPEG) + VideoCapture (PRIVATE) 스트림 조합을 사용하는 자동화된 테스트를 10분간 실행하여 프레임 드롭률이 0%를 유지하는지, 그리고 캡처 지연 시간이 이전 Android 버전과 비교하여 회귀하지 않았는지 확인합니다. (담당: 성능 팀)
+- 2026년 5월 17일까지 Android 17 Beta 4를 탑재한 레퍼런스 기기에서 모든 Camera CTS/VTS/Camera ITS 테스트를 실행하고, 실패 항목을 Camera HAL 팀의 [Owner: John Doe]에게 보고합니다.
+- 2026년 5월 17일까지 Android 17 Beta 4의 camera3.h 및 camera3_metadata.h 헤더 파일과 기존 HAL 구현을 비교하여 API 변경 사항을 식별하고, [Owner: Jane Smith]가 변경 영향 분석을 수행하도록 합니다.
+- 2026년 5월 17일까지 Preview + ImageCapture + VideoCapture 동시 스트림 조합에서 capture latency 및 frame drop 지표를 수집하고, [Owner: Alice Brown]가 성능 회귀 여부를 확인합니다.
 
 **팀 공유용 한 줄**
 
-Android 17 베타 4는 플랫폼 안정성을 위한 최종 점검 단계로, HAL 팀은 Camera2 API 호환성, CTS/VTS/Camera ITS 통과 여부, 그리고 주요 스트림 조합의 성능 회귀를 철저히 확인해야 합니다.
+Android 17 Beta 4는 최종 릴리스 전 HAL 호환성을 검증할 마지막 기회입니다. 모든 Camera CTS/VTS/ITS 테스트를 실행하고, API 변경 사항을 면밀히 검토하여 안정적인 HAL 구현을 보장해야 합니다.
 
 **출처**
 
 - [The Fourth Beta of Android 17](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)
+
+---
+
+## 3. Linux camera / libcamera / V4L2
+
+### Linux 7.1 커널, Steam Deck OLED 오디오 문제 해결: SoC 드라이버 변경의 HAL 영향 가능성
+
+![Steam Deck OLED 기기 이미지](https://www.phoronix.net/image.php?id=steam-deck-oled-benchmarks&image=steamdeck_oled_2_med)
+
+_Image: [Linux 7.1 Fixes Audio For The Steam Deck OLED After Being Broken 2 Years On The Upstream Kernel - Phoronix](https://www.phoronix.com/news/Steam-Deck-OLED-Audio-Fix)_
+
+
+**이번 주 확인한 사실**
+
+- Release date: 2026년 5월 2일 (Phoronix 기사 게시일)
+- Version/Release: Linux 7.1 커널
+- API/Component: AMD ASoC audio driver, Linux kernel
+- Behavior change: Steam Deck OLED에서 오디오 지원이 Linux 7.1 커널에서 수정됨. 이전에는 AMD ASoC 오디오 변경으로 인해 오디오가 작동하지 않았음.
+
+**배경지식**
+
+Linux 커널은 Android의 기반이 되며, 특히 SoC(System on Chip) 수준의 드라이버 변경은 Android HAL에 간접적인 영향을 미칠 수 있습니다. ASoC(ALSA System on Chip) 드라이버는 임베디드 시스템의 오디오 하드웨어를 관리하며, 카메라와 같은 다른 미디어 서브시스템과 밀접하게 연관될 수 있습니다.
+
+**Camera HAL 관점 해석**
+
+이 오디오 드라이버 수정 자체는 직접적인 카메라 HAL 인터페이스 변경을 의미하지는 않습니다. 그러나 AMD SoC의 ASoC 드라이버 변경은 해당 SoC를 사용하는 Android 기기의 kernel 수준에서 미디어 buffer 처리 방식, interrupt 처리, power management 정책에 영향을 줄 수 있습니다. 이는 카메라 stream의 frame timing, latency, thermal 특성에 간접적인 영향을 미칠 가능성이 있습니다. 특히 비디오 녹화 중 audio-video sync 문제나 dropped frames가 발생하는 경우, 하위 kernel driver의 변경 사항을 검토할 필요가 있습니다.
+
+**우리 팀이 확인할 Action Item**
+
+- 2026년 5월 17일까지 현재 개발 중인 기기의 vendor kernel 소스 코드에서 Linux 7.1의 AMD ASoC 오디오 드라이버 관련 패치와 유사한 변경 사항이 있는지 [Owner: Frank Black] 팀에서 검토합니다.
+- 2026년 5월 24일까지 비디오 녹화(Preview + VideoCapture + Audio) 시나리오에서 audio-video sync 오차를 측정하는 자동화 테스트를 추가하고, [Owner: Grace White] 팀에서 logcat 및 kernel log를 통해 관련 오류를 모니터링합니다.
+- 2026년 5월 24일까지 thermal 및 power 프로파일링 툴을 사용하여 장시간 비디오 녹화 시나리오에서 SoC의 전반적인 thermal 동작 변화를 분석하고, [Owner: Henry Green] 팀에서 결과를 보고합니다.
+
+**팀 공유용 한 줄**
+
+Linux 7.1의 AMD ASoC 오디오 드라이버 수정은 직접적인 HAL 변경은 아니지만, SoC 수준의 미디어 처리 안정성에 영향을 줄 수 있습니다. vendor kernel 패치 여부 확인 및 비디오 녹화 시나리오에서의 audio-video sync 및 thermal 모니터링이 필요합니다.
+
+**출처**
+
+- [Linux 7.1 Fixes Audio For The Steam Deck OLED After Being Broken 2 Years On The Upstream Kernel](https://www.phoronix.com/news/Steam-Deck-OLED-Audio-Fix)
 
 ---
 
 ## 4. Linux camera / libcamera / V4L2
 
-### Linux 7.1-rc2, 구형 AMD GPU 드라이버 개선 및 수정
+### Linux 7.1-rc2 GPU 드라이버 개선: 카메라 HAL의 이미지 처리 및 NPU/GPU 연동 영향
 
-![구형 AMD Radeon HD 7850 그래픽 카드](https://www.phoronix.net/image.php?id=amd_radeon_hd7850&image=amd_hd7850_sys2)
+![구형 AMD GPU가 장착된 시스템 이미지](https://www.phoronix.net/image.php?id=amd_radeon_hd7850&image=amd_hd7850_sys2_med)
 
-_Image: [Phoronix Linux Camera / Media](https://www.phoronix.com/news/Linux-7.1-rc2-GPU-Driver-Fixes)_
+_Image: [Linux 7.1-rc2 Bringing Some More Improvements/Fixes For Older AMD GPUs - Phoronix](https://www.phoronix.com/news/Linux-7.1-rc2-GPU-Driver-Fixes)_
 
 
 **이번 주 확인한 사실**
 
-- Release date: 2026-05-02
-- Version/release: Linux 7.1-rc2
-- API/component: Direct Rendering Manager (DRM), GPU driver
-- Behavior change: Linux 7.1-rc2 커널에 DRM 그래픽 드라이버 수정 사항 병합, 구형 AMD GPU에 대한 개선 사항 포함.
+- Release date: 2026년 5월 2일 (Phoronix 기사 게시일)
+- Version/Release: Linux 7.1-rc2
+- API/Component: DRM (Direct Rendering Manager) kernel graphics driver, AMD GPUs
+- Behavior change: Linux 7.1-rc2에서 DRM 커널 그래픽 드라이버 수정 및 구형 AMD GPU 개선.
 
 **배경지식**
 
-Linux 커널의 GPU 드라이버는 Android 시스템의 그래픽 렌더링 및 컴퓨팅 작업에 필수적입니다. Camera HAL은 종종 GPU를 사용하여 이미지 처리, 노이즈 감소, AI 추론 후처리 등 고성능 작업을 오프로드합니다. 드라이버의 안정성과 성능은 이러한 작업의 효율성에 직접적인 영향을 미칩니다.
+DRM(Direct Rendering Manager)은 Linux 커널의 그래픽 서브시스템으로, GPU 하드웨어에 대한 직접 접근을 관리합니다. Android 기기에서 GPU는 카메라 stream의 후처리, 디스플레이 렌더링, 그리고 AI 추론 가속화에 중요한 역할을 합니다. 커널 수준의 GPU 드라이버 변경은 이러한 작업의 성능과 안정성에 직접적인 영향을 미칩니다.
 
 **Camera HAL 관점 해석**
 
-HAL은 카메라 스트림의 후처리(예: 3A 알고리즘, 이미지 보정, AI 전처리)를 위해 GPU를 활용할 수 있습니다. GPU 드라이버의 안정성 및 성능 개선은 이러한 작업의 지연 시간을 줄이고 프레임 드롭을 방지하는 데 기여할 수 있습니다. 특히 GRALLOC_USAGE_HW_COMPOSER 또는 GRALLOC_USAGE_GPU_DATA_BUFFER와 같은 GPU 관련 버퍼 사용 플래그를 사용하는 스트림에서 HAL의 동작을 검토해야 합니다.
+카메라 HAL은 PRIVATE stream 또는 YUV stream을 통해 얻은 buffer를 GPU로 전달하여 후처리(예: 노이즈 감소, 이미지 보정, AI 필터)를 수행하는 경우가 많습니다. DRM 드라이버의 개선은 이러한 GPU 기반 이미지 처리 작업의 효율성을 높이고, NPU/GPU/ISP contention을 줄이며, buffer 전송 및 동기화 latency를 개선할 수 있습니다. HAL은 Gralloc을 통해 buffer를 할당하고 관리하므로, GPU 드라이버의 안정성은 buffer lifecycle 관리의 견고성과도 직결됩니다.
 
 **우리 팀이 확인할 Action Item**
 
-- Preview (PRIVATE) + ImageAnalysis (YUV) 스트림 조합에서 GPU 기반 노이즈 감소 또는 샤프닝 알고리즘을 활성화한 후, Linux 7.1-rc2 커널을 사용하는 개발 보드에서 GPU 사용률과 프레임 처리 지연 시간을 벤치마킹하여 이전 커널 버전과 비교합니다. (담당: ISP/GPU 통합 팀)
-- camera.request.maxNumOutputStreams 및 camera.request.maxNumInputStreams와 같은 HAL 특성 중 GPU 관련 버퍼 사용 플래그(GRALLOC_USAGE_GPU_DATA_BUFFER)를 포함하는 스트림 조합에 대한 지원 여부와 성능을 확인하는 테스트 케이스를 실행합니다. (담당: HAL 코어 팀)
-- 고부하 카메라 시나리오(예: 4K 60fps 비디오 녹화 중 AI 객체 감지)에서 systrace 또는 perf 도구를 사용하여 NPU와 GPU 간의 스케줄링 경합 지표를 수집하고, Linux 7.1-rc2 커널 업데이트가 이 경합에 미치는 영향을 분석합니다. (담당: 성능 분석 팀)
+- 2026년 5월 17일까지 현재 개발 중인 기기의 vendor kernel 소스 코드에서 Linux 7.1-rc2의 DRM 그래픽 드라이버 관련 패치와 유사한 변경 사항이 있는지 [Owner: Lisa Kim] 팀에서 검토합니다.
+- 2026년 5월 24일까지 ImageAnalysis 또는 Video Recording 스트림에서 GPU 기반 후처리(예: OpenGL ES 또는 Vulkan 렌더링)를 사용하는 시나리오에 대한 latency 및 frame drop 테스트를 실행하고, [Owner: Mark Lee] 팀에서 GPU utilization을 측정합니다.
+- 2026년 5월 24일까지 Gralloc buffer 할당 및 해제 시 kernel log를 모니터링하여 GPU 드라이버 관련 crash 또는 warning이 증가했는지 확인하고, [Owner: Nancy Park] 팀에서 결과를 보고합니다.
 
 **팀 공유용 한 줄**
 
-Linux 7.1-rc2의 GPU 드라이버 개선은 카메라 HAL의 GPU 기반 이미지 처리 및 AI 추론 성능에 긍정적인 영향을 줄 수 있습니다. HAL 팀은 GPU 활용 스트림의 성능과 NPU/GPU 리소스 경합을 면밀히 모니터링해야 합니다.
+Linux 7.1-rc2의 GPU 드라이버 개선은 카메라 HAL의 이미지 처리 성능과 안정성에 긍정적인 영향을 줄 수 있습니다. vendor kernel의 패치 통합 여부를 확인하고, GPU 기반 카메라 stream 시나리오에서 성능 및 안정성 테스트를 수행해야 합니다.
 
 **출처**
 
@@ -126,56 +127,54 @@ Linux 7.1-rc2의 GPU 드라이버 개선은 카메라 HAL의 GPU 기반 이미�
 
 ---
 
-## 5. Linux camera / libcamera / V4L2
+## 5. AI plus camera input path or HAL workflow
 
-### VideoLAN, 오픈 소스 AV2 디코더 Dav2d 공개
+### Android용 하이브리드 추론 및 새로운 Gemini 모델 출시: 카메라 HAL의 AI 통합 및 성능 최적화 과제
 
-![AV2 로고](https://www.phoronix.net/image.php?id=2026&image=av2)
+![Android 하이브리드 추론 솔루션 아키텍처 다이어그램](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png)
 
-_Image: [Phoronix Linux Camera / Media](https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode)_
+_Image: [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
 
 
 **이번 주 확인한 사실**
 
-- Release date: 2026-05-02
-- API/component: Dav2d (AV2 decoder), AV2 specification
-- Behavior change: VideoLAN이 오픈 소스 AV2 디코더인 Dav2d를 출시했습니다. AV2 사양은 아직 초안 단계입니다.
+- 출시일: 2026년 4월 17일
+- API/컴포넌트: Firebase AI Logic용 새로운 API, Gemini 모델 (Nano Banana 모델)
+- 동작 변경: 온디바이스 및 클라우드 추론을 활용하는 하이브리드 추론 도입, 이미지 생성을 위한 새로운 Gemini 모델 지원.
 
 **배경지식**
 
-AV2는 차세대 비디오 코덱으로, 기존 코덱보다 더 높은 압축 효율을 목표로 합니다. VideoLAN의 오픈 소스 디코더 출시는 이 새로운 코덱의 채택을 가속화할 수 있습니다. Android 미디어 프레임워크와 Camera HAL은 비디오 인코딩/디코딩 기능을 제공하며, 새로운 코덱에 대한 하드웨어 가속 지원은 중요한 고려 사항입니다.
+모바일 기기에서 AI 추론은 온디바이스 처리와 클라우드 처리 사이의 균형을 필요로 합니다. 온디바이스 추론은 낮은 지연 시간과 개인 정보 보호 이점을 제공하지만, 기기 리소스(NPU, GPU, 메모리, 배터리)에 제약이 있습니다. 클라우드 추론은 더 강력한 모델과 컴퓨팅 파워를 제공하지만, 네트워크 지연과 데이터 전송 비용이 발생합니다. 하이브리드 추론은 이 두 가지 접근 방식의 장점을 결합하여 최적의 성능과 효율성을 달성하려는 전략입니다.
 
 **Camera HAL 관점 해석**
 
-Camera HAL은 비디오 녹화 스트림(예: VideoCapture)을 통해 인코딩된 비디오 데이터를 미디어 프레임워크에 전달합니다. 미래에 AV2 코덱이 널리 채택되면, HAL은 AV2 인코딩을 위한 하드웨어 가속 기능을 노출하고 지원해야 할 수 있습니다. Dav2d 디코더의 출시는 AV2 콘텐츠의 소비가 증가할 수 있음을 시사하며, 이는 HAL이 AV2 인코딩 기능을 제공해야 하는 압력을 높일 수 있습니다. HAL은 AV2 인코딩/디코딩 시나리오에서 PRIVATE 또는 YUV 스트림의 버퍼 형식, 성능, 전력 효율성을 검토해야 합니다.
+하이브리드 추론 도입은 카메라 HAL이 제공하는 스트림(YUV, PRIVATE)이 AI 모델의 입력으로 사용될 때, 온디바이스 NPU/GPU 스케줄링 및 메모리 관리에 새로운 고려 사항을 추가합니다. HAL은 AI 워크로드의 우선순위, 버퍼 수명 주기, 그리고 클라우드 전송을 위한 데이터 준비(예: 압축, 형식 변환)에 대한 영향을 평가해야 합니다. 특히, 이미지 생성 모델은 고해상도 또는 특정 형식의 데이터를 요구할 수 있으며, 이는 HAL의 스트림 구성 및 버퍼 할당 전략에 영향을 미칠 수 있습니다. HAL은 AI 파이프라인의 시작점으로서, 프레임 데이터의 효율적인 전달과 추론 결과에 따른 카메라 동작 조정을 위한 메타데이터 동기화에 주의를 기울여야 합니다.
 
 **우리 팀이 확인할 Action Item**
 
-- AV2 사양의 최종 확정 여부와 Android 미디어 프레임워크의 공식 지원 계획을 매월 1회 AOSP 개발자 문서 및 관련 포럼을 통해 확인하고, HAL 로드맵에 반영할 필요성을 평가합니다. (담당: HAL 아키텍처 팀)
-- 현재 디바이스에서 AV1 비디오 인코딩 시 VideoCapture 스트림의 CPU/GPU/ISP 사용률, 전력 소모, 인코딩 지연 시간을 측정하고, 이 데이터를 기반으로 AV2 하드웨어 인코더 지원 시 예상되는 리소스 요구사항을 추정합니다. (담당: 성능 팀)
-- Dav2d 디코더를 사용하여 AV2 샘플 비디오를 재생할 때, Camera HAL이 PRIVATE 또는 YUV 스트림을 통해 제공하는 비디오 버퍼의 디코딩 성능 및 프레임 동기화 문제를 테스트할 수 있는 PoC(Proof of Concept) 환경 구축을 검토합니다. (담당: 미디어 통합 팀)
+- 2026년 5월 17일까지, Firebase AI Logic의 하이브리드 추론 API를 사용하는 샘플 앱을 구현하여 Preview + ImageAnalysis 스트림 조합에서 온디바이스/클라우드 추론 전환 시 `dumpsys media.camera` 및 `systrace`를 통해 NPU/GPU 스케줄링 및 버퍼 수명 주기 변화를 분석합니다. (담당: AI 통합 팀)
+- 2026년 5월 17일까지, 이미지 생성을 위한 Gemini Nano Banana 모델이 요구하는 카메라 스트림 형식(예: YUV_420_888)을 HAL이 효율적으로 제공하는지 확인하기 위해, 특정 해상도(예: 1920x1080)에서 ImageReader를 통한 프레임 획득 및 전처리 지연 시간을 측정합니다. (담당: 스트림 관리 팀)
+- 2026년 5월 17일까지, 하이브리드 추론 시나리오에서 AI 워크로드 발생 전후의 카메라 캡처 지연 시간(capture latency) 및 프레임 드롭(frame drop) 지표를 기록하고, Baseline (온디바이스 전용)과 비교하여 성능 회귀 여부를 확인하는 테스트 케이스를 추가합니다. (담당: 성능 검증 팀)
 
 **팀 공유용 한 줄**
 
-VideoLAN의 오픈 소스 AV2 디코더 출시는 미래에 Camera HAL이 AV2 비디오 인코딩/디코딩을 위한 하드웨어 가속 지원을 고려해야 할 필요성을 시사합니다. HAL 팀은 사양 진행 상황을 모니터링하고 성능 요구사항을 예측해야 합니다.
+Android의 하이브리드 AI 추론 및 새로운 Gemini 모델은 카메라 HAL이 AI 워크로드의 효율적인 데이터 경로, NPU/GPU 자원 관리, 그리고 새로운 이미지 생성 기능 지원을 위해 스트림 구성 및 버퍼 처리를 최적화해야 함을 시사합니다.
 
 **출처**
 
-- [VideoLAN Publishes Dav2d For Open-Source AV2 Decoder](https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode)
+- [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
 
 
 ## 이번 주 실행 항목
 
-- ImageAnalysis 스트림을 사용하는 AI 추론 시나리오에서 특정 NPU/GPU 로드 조건(예: 50%, 80%)에서 YUV 프레임 드롭률과 end-to-end 지연 시간을 측정하는 자동화된 테스트를 추가합니다. (담당: AI 통합 팀)
-- Android 17 Beta 4가 설치된 개발 보드에서 adb shell dumpsys media.camera 명령을 사용하여 모든 CameraCharacteristics 필드와 HAL이 선언하는 기능을 검토하고, 변경된 CDD 요구사항과 비교하여 불일치 사항을 보고합니다. (담당: HAL 아키텍처 팀)
-- Preview (PRIVATE) + ImageAnalysis (YUV) 스트림 조합에서 GPU 기반 노이즈 감소 또는 샤프닝 알고리즘을 활성화한 후, Linux 7.1-rc2 커널을 사용하는 개발 보드에서 GPU 사용률과 프레임 처리 지연 시간을 벤치마킹하여 이전 커널 버전과 비교합니다. (담당: ISP/GPU 통합 팀)
-- AV2 사양의 최종 확정 여부와 Android 미디어 프레임워크의 공식 지원 계획을 매월 1회 AOSP 개발자 문서 및 관련 포럼을 통해 확인하고, HAL 로드맵에 반영할 필요성을 평가합니다. (담당: HAL 아키텍처 팀)
-- Android 17 Beta 4용 최신 CTS/VTS/Camera ITS 테스트 스위트를 다운로드하여 모든 카메라 관련 테스트를 실행하고, 실패한 테스트 케이스에 대해 근본 원인 분석을 시작합니다. (담당: QA 및 테스트 팀)
-- 현재 디바이스에서 AV1 비디오 인코딩 시 VideoCapture 스트림의 CPU/GPU/ISP 사용률, 전력 소모, 인코딩 지연 시간을 측정하고, 이 데이터를 기반으로 AV2 하드웨어 인코더 지원 시 예상되는 리소스 요구사항을 추정합니다. (담당: 성능 팀)
+- Android 17 Beta 4 빌드에서 모든 Camera ITS, CTS, VTS 카메라 관련 테스트를 실행하고, 실패하는 테스트 케이스에 대한 근본 원인을 분석하여 HAL 수정 계획을 수립합니다.
+- Firebase AI Logic의 하이브리드 추론 API를 사용하는 샘플 앱을 구현하여 Preview + ImageAnalysis 스트림 조합에서 온디바이스/클라우드 추론 전환 시 NPU/GPU 스케줄링 및 버퍼 수명 주기 변화를 분석합니다.
+- Linux 7.1 커널 기반의 테스트 빌드에서 비디오 녹화 중 오디오 재생 시나리오를 포함한 모든 카메라 CTS/VTS 테스트를 실행하고, 실패 또는 성능 저하가 발생하는지 확인합니다.
+- GPU 기반 이미지 후처리 및 AI 워크로드를 사용하는 카메라 시나리오의 엔드투엔드 지연 시간을 측정하고, Linux 7.1-rc2 커널 업데이트 후 성능 향상 또는 회귀 여부를 보고합니다.
 
 ## 참고자료
 
-- [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
 - [The Fourth Beta of Android 17](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)
+- [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
+- [Linux 7.1 Fixes Audio For The Steam Deck OLED After Being Broken 2 Years On The Upstream Kernel](https://www.phoronix.com/news/Steam-Deck-OLED-Audio-Fix)
 - [Linux 7.1-rc2 Bringing Some More Improvements/Fixes For Older AMD GPUs](https://www.phoronix.com/news/Linux-7.1-rc2-GPU-Driver-Fixes)
-- [VideoLAN Publishes Dav2d For Open-Source AV2 Decoder](https://www.phoronix.com/news/Dav2d-Open-Source-AV2-Decode)

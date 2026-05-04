@@ -2,32 +2,32 @@
 
 ## Gate Result
 
-- Quality score: 79
+- Quality score: 86
 - Quality threshold: 85
 - Max score: 100
 - Result: NEEDS_FIX
-- Summary: Quality score 79, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
+- Summary: Quality score 86, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
 
 ## Composition
 
-- Main article count: 5
+- Main article count: 4
 - Briefing count: 3
-- Camera article count: 3
+- Camera article count: 2
 - AI article count: 3
 - Underfilled/composition failure: none
 
 ## Fact Check And Source Integrity
 
-- Fact-check status: PASS
-- Must-fix count: 0
-- Source-gap count: 1
+- Fact-check status: NEEDS_FIX
+- Must-fix count: 1
+- Source-gap count: 0
 - Source integrity violation count: 0
-- Blocking deduction count: 5
+- Blocking deduction count: 3
 - Blocking deduction categories: evidence-specificity, source-integrity
 
 ## Top Deduction Categories
 
-- evidence-specificity (4)
+- evidence-specificity (2)
 - source-integrity (1)
 
 ## Candidate Exclusion Summary
@@ -38,6 +38,4 @@
 
 - 5 pt [evidence-specificity] Android용 하이브리드 AI 추론 및 새로운 Gemini 모델: 카메라 HAL의 AI 통합 전략 변화: Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.
 - 4 pt [evidence-specificity] Android용 하이브리드 AI 추론 및 새로운 Gemini 모델: 카메라 HAL의 AI 통합 전략 변화: Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.
-- 5 pt [evidence-specificity] VideoLAN, 오픈소스 AV2 디코더 Dav2d 공개: 차세대 비디오 코덱 지원 준비: Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.
-- 4 pt [evidence-specificity] VideoLAN, 오픈소스 AV2 디코더 Dav2d 공개: 차세대 비디오 코덱 지원 준비: Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.
-- 3 pt [source-integrity] Fact checker reported 1 source gap(s).
+- 5 pt [source-integrity] Fact checker returned 1 must_fix item(s).
