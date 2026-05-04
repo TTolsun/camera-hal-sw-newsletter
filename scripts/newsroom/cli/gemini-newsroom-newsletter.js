@@ -38,6 +38,8 @@ const {
 } = require('../generate/article-capsules');
 const {
   annotateCandidatesWithCache,
+  buildSummaryCacheReport,
+  buildSummaryCacheReportMarkdown,
   writeCacheRecord
 } = require('../generate/news-summary-cache');
 const {
@@ -128,6 +130,34 @@ function writeCostReport(date) {
     console.warn(`[cost] ${warning}`);
   }
   console.log(`[cost] Estimated Gemini API cost: $${Number(report.totals.estimated_cost_usd || 0).toFixed(6)} USD across ${report.totals.request_count || 0} request(s).`);
+  return report;
+}
+
+function writeSummaryCacheReport(date, diagnostics) {
+  const report = buildSummaryCacheReport(date, diagnostics);
+  const tmpDir = path.join(root, '.tmp');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(tmpDir, 'summary-cache-report.json'),
+    `${JSON.stringify(report, null, 2)}\n`,
+    'utf8'
+  );
+
+  const targetNewsroomDir = artifactNewsroomDir(root, date);
+  if (fs.existsSync(targetNewsroomDir)) {
+    fs.writeFileSync(
+      path.join(targetNewsroomDir, 'summary-cache-report.json'),
+      `${JSON.stringify(report, null, 2)}\n`,
+      'utf8'
+    );
+    fs.writeFileSync(
+      path.join(targetNewsroomDir, 'summary-cache-report.md'),
+      buildSummaryCacheReportMarkdown(report),
+      'utf8'
+    );
+  }
+
+  console.log(`[cache] Summary cache hits: ${report.totals.hit_count}/${report.totals.candidate_count}; misses: ${report.totals.miss_count}.`);
   return report;
 }
 
@@ -1277,6 +1307,8 @@ async function main() {
 
   const reporterInput = reporterInputFromShortlist(shortlistReport);
   reporterInput.candidates = annotateCandidatesWithCache(reporterInput.candidates, cacheDir);
+  const summaryCacheDiagnostics = reporterInput.candidates.cache_diagnostics || [];
+  writeSummaryCacheReport(date, summaryCacheDiagnostics);
   let articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, reporterInput);
   writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
 

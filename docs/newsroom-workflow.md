@@ -81,9 +81,11 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 
 ## URL Summary Cache
 
-Reporter summary record는 `cache/news-summary/{sha256(normalized_url)}.json`에 cache됩니다. cache file은 의도적으로 untracked이며 CI에서는 `actions/cache`로 복원합니다.
+Reporter summary record는 `cache/news-summary/by-url/{sha256(normalized_url)}.json`과 `cache/news-summary/by-content/{content_hash}.json`에 cache됩니다. cache file은 의도적으로 untracked이며 CI에서는 `actions/cache`로 복원합니다.
 
-cache hit은 normalized URL과 content fingerprint가 일치할 때만 사용합니다. fingerprint는 URL, title, published date, source, summary, version/release, API/component, behavior evidence를 포함하므로 article evidence가 바뀌면 stale summary를 재사용하지 않습니다.
+cache hit은 같은 normalized URL을 먼저 확인하고, URL이 달라도 `content_hash`가 같으면 by-content record를 재사용합니다. `content_hash`는 title, summary, version/release, API/component, behavior evidence 중심으로 계산하며 URL, published date, source metadata는 제외합니다. published date나 source label만 바뀐 경우에는 summary를 다시 만들지 않고 freshness와 metadata는 현재 candidate에서 다시 판단합니다. article evidence가 바뀌면 `content-hash-mismatch`로 miss 처리합니다.
+
+generator는 `content/newsroom/YYYY-MM-DD/summary-cache-report.json`, `summary-cache-report.md`, `.tmp/summary-cache-report.json`에 cache hit/miss와 miss reason을 남깁니다. 이 report는 비용 분석용 debug artifact이며, generated cache file 자체는 `cache/news-summary/` 아래에 남아 PR diff에 포함되지 않습니다.
 
 ## Cost Report
 

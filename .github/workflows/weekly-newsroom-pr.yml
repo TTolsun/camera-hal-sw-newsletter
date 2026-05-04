@@ -180,6 +180,7 @@ jobs:
           copy_if_present ".tmp/newsletter-date.txt"
           copy_if_present ".tmp/newsletter-generation-status.json"
           copy_if_present ".tmp/newsroom-cost-report.json"
+          copy_if_present ".tmp/summary-cache-report.json"
           copy_tree_if_present ".tmp/gemini-raw"
           copy_tree_if_present "cache/news-summary"
           if [ "$HAS_GENERATED_DATE" = "1" ]; then
