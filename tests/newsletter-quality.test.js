@@ -126,8 +126,11 @@ test('quality gate allows non-blocking actionability deductions above threshold'
   assert.equal(report.score, 88);
   assert.equal(report.status, 'PASS');
   assert.equal(report.metrics.blocking_deduction_count, 0);
+  assert.equal(report.metrics.hard_fail_count, 0);
+  assert.equal(report.metrics.soft_deduction_count, 3);
   assert.ok(report.deductions.every(item => item.category === 'actionability'));
   assert.ok(report.deductions.every(item => item.blocking === false));
+  assert.ok(report.deductions.every(item => item.severity === 'soft'));
 });
 
 test('quality gate allows no-AI HAL lineups when other hard gates pass', () => {
@@ -191,6 +194,10 @@ test('quality gate fails duplicate source URLs across main sections', () => {
 
   assert.equal(report.status, 'NEEDS_FIX');
   assert.ok(report.deductions.some(item => item.reason.includes('Duplicate source URL')));
+  assert.ok(report.article_results.some(item =>
+    item.status === 'FAIL' &&
+    item.hard_fail_reasons.some(reason => reason.includes('Duplicate source URL'))
+  ));
 });
 
 test('quality gate fails missing dated evidence and source gap mapped candidates', () => {
@@ -211,6 +218,8 @@ test('quality gate fails missing dated evidence and source gap mapped candidates
   assert.equal(report.status, 'NEEDS_FIX');
   assert.ok(report.deductions.some(item => item.reason.includes('missing dated evidence')));
   assert.ok(report.deductions.some(item => item.reason.includes('source_gap_risk=true')));
+  assert.equal(report.article_results[0].status, 'FAIL');
+  assert.equal(report.article_results[0].repair_action, 'replace-or-demote');
 });
 
 test('quality gate fails missing Camera HAL perspective and fewer than 2 action items', () => {
@@ -230,6 +239,92 @@ test('quality gate fails missing Camera HAL perspective and fewer than 2 action 
   assert.equal(report.status, 'NEEDS_FIX');
   assert.ok(report.deductions.some(item => item.reason.includes('camera_hal_perspective')));
   assert.ok(report.deductions.some(item => item.reason.includes('at least 2 action_items')));
+  assert.equal(report.deductions.find(item => item.reason.includes('at least 2 action_items')).severity, 'soft');
+  assert.equal(report.article_results[0].status, 'DEMOTE');
+});
+
+test('quality report marks article PASS DEMOTE FAIL and separates hard and soft causes', () => {
+  const sections = [
+    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
+    section({
+      headline: 'Generic AI assistant release',
+      url: 'https://example.com/generic-ai',
+      category: 'AI',
+      article_type: 'ai',
+      is_ai_related: true,
+      what_changed: 'A generic LLM assistant release was announced on 2026-05-01.',
+      confirmed_facts: ['The source announces AI assistant 1.0 on 2026-05-01.'],
+      evidence_summary: 'Version: AI assistant 1.0; release date: 2026-05-01; API/component: assistant; behavior change: generic productivity.',
+      specificity_checks: ['Version: AI assistant 1.0', 'Release date: 2026-05-01'],
+      background: 'The release is about generic office productivity.',
+      camera_hal_perspective: 'No concrete device imaging workflow is named.',
+      camera_hal_checks: ['Track only as a briefing item.'],
+      action_items: [
+        'Review whether this belongs in briefing instead of main article.',
+        'Do not create device validation work from this generic AI source.'
+      ],
+      team_summary: 'Generic AI item should stay outside main article slots.'
+    }),
+    section({
+      headline: 'Source gap article',
+      url: 'https://example.com/gap',
+      evidence_summary: 'source gap: no dated release evidence.',
+      source_verification_notes: ['source gap'],
+      specificity_checks: ['source gap']
+    }),
+    section({
+      headline: 'Fallback image article',
+      url: 'https://example.com/fallback',
+      resolvedImage: { usedFallback: true }
+    })
+  ];
+  const report = reportFor(sections, reporterCandidatesFor(sections));
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.metrics.hard_fail_count > 0);
+  assert.ok(report.metrics.soft_deduction_count > 0);
+  assert.equal(report.article_results[0].status, 'PASS');
+  assert.equal(report.article_results[1].status, 'DEMOTE');
+  assert.equal(report.article_results[2].status, 'FAIL');
+  assert.equal(report.article_results[3].status, 'PASS');
+  assert.ok(report.article_results[1].hard_fail_reasons.some(reason => /Generic AI/.test(reason)));
+  assert.ok(report.article_results[3].soft_deductions.some(item => item.category === 'image-fallback'));
+});
+
+test('quality report treats negative Camera HAL wording as no generic AI connection', () => {
+  const sections = [
+    section({
+      headline: 'Generic AI assistant with no camera impact',
+      url: 'https://example.com/generic-ai-negative',
+      category: 'AI',
+      article_type: 'ai',
+      is_ai_related: true,
+      what_changed: 'A generic LLM assistant release was announced on 2026-05-01.',
+      confirmed_facts: ['The source announces AI assistant 1.0 on 2026-05-01.'],
+      evidence_summary: 'Version: AI assistant 1.0; release date: 2026-05-01; API/component: assistant; behavior change: generic productivity.',
+      specificity_checks: ['Version: AI assistant 1.0', 'Release date: 2026-05-01'],
+      source_verification_notes: ['Official source, dated release evidence.'],
+      background: 'The release is about generic office productivity.',
+      why_it_matters: 'It may affect developer productivity outside device imaging systems.',
+      camera_hal_perspective: 'No Camera HAL or Android Camera impact is identified.',
+      camera_hal_checks: ['Keep this as a briefing item unless a concrete imaging component is named.'],
+      action_items: [
+        'Review whether this belongs in briefing instead of main article.',
+        'Do not create device validation work from this generic AI source.'
+      ],
+      team_summary: 'Generic AI item should stay outside main article slots.'
+    }),
+    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
+    section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' }),
+    section({ headline: 'Android Camera API change C', url: 'https://example.com/c' })
+  ];
+  const report = reportFor(sections, reporterCandidatesFor(sections));
+  const genericResult = report.article_results.find(item => item.headline === 'Generic AI assistant with no camera impact');
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(genericResult);
+  assert.equal(genericResult.status, 'DEMOTE');
+  assert.ok(genericResult.hard_fail_reasons.some(reason => /Generic AI/.test(reason)));
 });
 
 test('quality report markdown separates score threshold max score and result', () => {
@@ -254,15 +349,30 @@ test('quality report markdown separates score threshold max score and result', (
       source_integrity_violation_count: 0,
       blocking_deduction_count: 1,
       blocking_deduction_categories: ['composition'],
+      hard_fail_count: 1,
+      soft_deduction_count: 0,
+      article_gate_counts: { PASS: 0, DEMOTE: 0, FAIL: 0 },
       top_deduction_categories: [{ category: 'composition', count: 1 }],
       candidate_exclusion_summary: [{ reason: 'missing dated evidence', count: 2 }]
-    }
+    },
+    article_results: [{
+      index: 1,
+      headline: 'Generic AI assistant release',
+      status: 'DEMOTE',
+      repair_action: 'demote-or-replace',
+      hard_fail_reasons: ['Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.'],
+      soft_deductions: []
+    }]
   });
 
   assert.match(markdown, /Quality score: 70/);
   assert.match(markdown, /Quality threshold: 85/);
   assert.match(markdown, /Max score: 100/);
   assert.match(markdown, /Result: NEEDS_FIX/);
+  assert.match(markdown, /## Article Gate Results/);
+  assert.match(markdown, /Generic AI assistant release/);
+  assert.match(markdown, /## Hard Fails/);
+  assert.match(markdown, /## Soft Deductions/);
   assert.match(markdown, /Underfilled\/composition failure: only 3 main articles/);
   assert.doesNotMatch(markdown, /70\/85/);
 });

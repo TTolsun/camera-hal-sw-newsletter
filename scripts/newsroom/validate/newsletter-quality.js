@@ -112,12 +112,14 @@ function hasPattern(value, pattern) {
 
 function boundedDeduct(state, category, points, reason, location = '', options = {}) {
   if (points <= 0) return;
+  const blocking = options.blocking !== false;
   state.deductions.push({
     category,
     points,
     reason,
     location,
-    blocking: options.blocking !== false
+    blocking,
+    severity: options.severity || (blocking ? 'hard' : 'soft')
   });
 }
 
@@ -158,6 +160,38 @@ function hasValidAiRelevance(section) {
   }
   return /camera input|image|frame|stream|buffer|ImageAnalysis|NPU|GPU|ISP|privacy|HAL workflow|developer productivity|latency|thermal|power|agent|Camera HAL|Android Camera/i
     .test(sectionText(section));
+}
+
+function hasHalConnectionTerm(body) {
+  return /Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|image frame|stream|buffer|metadata|request|result|ImageAnalysis|ISP|HAL workflow|Camera ITS|CTS|VTS/i
+    .test(body);
+}
+
+function hasNegativeHalConnectionWording(body) {
+  return [
+    /\b(?:no|without|lacks?|missing)\b[^.\n]{0,100}(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)/i,
+    /\b(?:does not|doesn't|cannot|can't)\b[^.\n]{0,120}(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)/i,
+    /(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)[^.\n]{0,120}\b(?:not identified|not found|not applicable|absent|missing|none|unclear|irrelevant)\b/i
+  ].some(pattern => pattern.test(body));
+}
+
+function hasGenericAiWithoutHalConnection(section) {
+  const body = sectionText(section);
+  const aiRelated = section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(body);
+  if (!aiRelated) return false;
+  if (!hasHalConnectionTerm(body)) return true;
+  return hasNegativeHalConnectionWording(body);
+}
+
+function isValidSourceUrl(value) {
+  const raw = text(value);
+  if (!raw) return false;
+  try {
+    const parsed = new URL(raw);
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+  } catch {
+    return false;
+  }
 }
 
 function sourceGapCount(factCheck) {
@@ -218,6 +252,69 @@ function sectionPassesArticleGate(section, qualityReport, factCheck) {
 
 function blockingDeductions(deductions) {
   return ensureArray(deductions).filter(deduction => deduction?.blocking !== false);
+}
+
+function softDeductions(deductions) {
+  return ensureArray(deductions).filter(deduction => deduction?.blocking === false);
+}
+
+function sectionDeductions(section, deductions) {
+  return ensureArray(deductions).filter(deduction => deductionMatchesSection(deduction, section));
+}
+
+function sectionSourceSummary(section) {
+  return ensureArray(section?.sources).map(source => ({
+    title: text(source?.title),
+    url: text(source?.url)
+  }));
+}
+
+function articleStatusFor(section, hardItems, factCheck) {
+  if (sectionHasSourceGap(section, factCheck)) return 'FAIL';
+  if (hardItems.some(item => item.category === 'source-integrity')) return 'FAIL';
+  if (hardItems.some(item => item.category === 'required-fields' && /sources|source/i.test(item.reason))) return 'FAIL';
+  if (hardItems.some(item => item.category === 'evidence-specificity' && /release date|dated|source gap|rolling page|evidence/i.test(item.reason))) return 'FAIL';
+  if (hardItems.some(item => item.category === 'hal-relevance' || item.category === 'hal-depth')) return 'DEMOTE';
+  return hardItems.length > 0 || sectionHasFactCheckMustFix(section, factCheck) ? 'FAIL' : 'PASS';
+}
+
+function repairActionForArticleStatus(status, hardItems, factCheck, section) {
+  if (status === 'PASS') return 'preserve';
+  if (sectionHasSourceGap(section, factCheck) || hardItems.some(item => item.category === 'source-integrity')) {
+    return 'replace-or-demote';
+  }
+  if (status === 'DEMOTE') return 'demote-or-replace';
+  return 'repair-section';
+}
+
+function buildArticleResults(sections, deductions, factCheck) {
+  return ensureArray(sections).map((section, index) => {
+    const items = sectionDeductions(section, deductions);
+    const hardItems = blockingDeductions(items);
+    const softItems = softDeductions(items);
+    const factCheckMustFix = sectionHasFactCheckMustFix(section, factCheck);
+    const sourceGap = sectionHasSourceGap(section, factCheck);
+    const status = articleStatusFor(section, hardItems, factCheck);
+    const hardReasons = [
+      ...hardItems.map(item => item.reason),
+      factCheckMustFix ? 'Fact-check must_fix item mentions this section.' : '',
+      sourceGap ? 'Source gap or ineligible source evidence mentions this section.' : ''
+    ].filter(Boolean);
+    return {
+      index: index + 1,
+      headline: section.headline || section.category || `article ${index + 1}`,
+      category: section.category || '',
+      status,
+      repair_action: repairActionForArticleStatus(status, hardItems, factCheck, section),
+      sources: sectionSourceSummary(section),
+      hard_fail_reasons: [...new Set(hardReasons)],
+      soft_deductions: softItems.map(item => ({
+        category: item.category,
+        points: item.points,
+        reason: item.reason
+      }))
+    };
+  });
 }
 
 function determineQualityStatus(score, threshold, checks = {}) {
@@ -291,6 +388,12 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         boundedDeduct(state, 'required-fields', 4, `Missing required article list: ${field}.`, location);
       }
     }
+    for (const source of ensureArray(section.sources)) {
+      if (!isValidSourceUrl(source?.url)) {
+        sourceIntegrityViolationCount += 1;
+        boundedDeduct(state, 'source-integrity', 8, `Missing or invalid source URL: ${source?.url || 'empty'}.`, location);
+      }
+    }
     if (!hasSpecificEvidence(section)) {
       boundedDeduct(state, 'evidence-specificity', 5, 'Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.', location);
     }
@@ -325,6 +428,19 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     }
     if (/C\+\+|LLVM|Clang|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU/i.test(sectionText(section)) && !hasHalDepth(section)) {
       boundedDeduct(state, 'hal-relevance', 4, 'Non-camera article does not clearly connect back to Camera HAL work.', location);
+    }
+    if (hasGenericAiWithoutHalConnection(section)) {
+      boundedDeduct(state, 'hal-relevance', 8, 'Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.', location);
+    }
+    if (section.resolvedImage?.usedFallback === true) {
+      boundedDeduct(
+        state,
+        'image-fallback',
+        1,
+        'Article image uses a local fallback visual.',
+        location,
+        { blocking: false }
+      );
     }
     for (const source of ensureArray(section.sources)) {
       const sourceUrl = source?.url || '';
@@ -382,6 +498,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const score = Math.max(0, 100 - totalDeductions);
   const hasFactCheckMustFix = factCheck.status === 'NEEDS_FIX' || mustFixCount > 0;
   const blockers = blockingDeductions(state.deductions);
+  const softItems = softDeductions(state.deductions);
+  const articleResults = buildArticleResults(sections, state.deductions, factCheck);
   const status = determineQualityStatus(score, threshold, {
     sourceGapCount: gaps,
     hasFactCheckMustFix,
@@ -398,6 +516,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       ? `Quality score ${score}, threshold ${threshold}, max score 100. Editor review is ready.`
       : `Quality score ${score}, threshold ${threshold}, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.`,
     deductions: state.deductions,
+    article_results: articleResults,
     metrics: {
       article_count: sections.length,
       briefing_count: ensureArray(editor.briefing).length,
@@ -409,6 +528,12 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       source_integrity_violation_count: sourceIntegrityViolationCount,
       blocking_deduction_count: blockers.length,
       blocking_deduction_categories: [...new Set(blockers.map(deduction => deduction.category))],
+      hard_fail_count: blockers.length,
+      soft_deduction_count: softItems.length,
+      article_gate_counts: articleResults.reduce((counts, item) => {
+        counts[item.status] = (counts[item.status] || 0) + 1;
+        return counts;
+      }, { PASS: 0, DEMOTE: 0, FAIL: 0 }),
       top_deduction_categories: summarizeDeductionCategories(state.deductions).slice(0, 5),
       candidate_exclusion_summary: summarizeCandidateExclusions(reporter).slice(0, 5)
     }
@@ -417,6 +542,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
 
 function buildQualityReportMarkdown(report) {
   const deductions = ensureArray(report.deductions);
+  const hardItems = blockingDeductions(deductions);
+  const softItems = softDeductions(deductions);
   const metrics = report.metrics || {};
   const articleCount = Number(metrics.article_count);
   const compositionFailure = Number.isFinite(articleCount) && articleCount < MIN_MAIN_ARTICLES
@@ -428,6 +555,16 @@ function buildQualityReportMarkdown(report) {
   const candidateExclusionSummary = ensureArray(metrics.candidate_exclusion_summary)
     .map(item => `- ${item.reason} (${item.count})`)
     .join('\n') || '- none';
+  const articleGateRows = ensureArray(report.article_results).map(item => [
+    `| ${item.index || ''} `,
+    ` ${item.status || 'UNKNOWN'} `,
+    ` ${item.repair_action || ''} `,
+    ` ${item.headline || ''} `,
+    ` ${ensureArray(item.hard_fail_reasons).join('; ') || 'none'} `,
+    ` ${ensureArray(item.soft_deductions).map(deduction => `${deduction.category}: ${deduction.reason}`).join('; ') || 'none'} |`
+  ].join('|')).join('\n') || '| none | none | none | none | none | none |';
+  const hardDeductionLines = hardItems.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n') || '- none';
+  const softDeductionLines = softItems.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n') || '- none';
 
   return `# 뉴스레터 품질 리포트 - ${report.date}
 
@@ -455,6 +592,22 @@ ${compositionFailure}
 - Source integrity violation count: ${metrics.source_integrity_violation_count || 0}
 - Blocking deduction count: ${metrics.blocking_deduction_count || 0}
 - Blocking deduction categories: ${ensureArray(metrics.blocking_deduction_categories).join(', ') || 'none'}
+- Hard fail count: ${metrics.hard_fail_count || 0}
+- Soft deduction count: ${metrics.soft_deduction_count || 0}
+
+## Article Gate Results
+
+| # | Result | Repair action | Headline | Hard fail reasons | Soft deductions |
+| ---: | --- | --- | --- | --- | --- |
+${articleGateRows}
+
+## Hard Fails
+
+${hardDeductionLines}
+
+## Soft Deductions
+
+${softDeductionLines}
 
 ## Top Deduction Categories
 
