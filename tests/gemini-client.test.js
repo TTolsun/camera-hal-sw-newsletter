@@ -21,6 +21,11 @@ function loadClient(env = {}) {
     'NEWSROOM_ALLOW_PRO_ON_SCHEDULE',
     'NEWSROOM_ALLOW_PRO_ON_MANUAL',
     'NEWSROOM_PRO_ESCALATION',
+    'GEMINI_THINKING_BUDGET_REPORTER',
+    'GEMINI_THINKING_BUDGET_EDITOR',
+    'GEMINI_THINKING_BUDGET_REPAIR',
+    'GEMINI_THINKING_BUDGET_FACTCHECK',
+    'GEMINI_THINKING_BUDGET_SCORING',
     'GITHUB_EVENT_NAME'
   ]) {
     delete process.env[key];
@@ -174,11 +179,79 @@ test('successful Gemini calls record usage metadata and estimated cost', async (
   assert.equal(call.prompt_tokens, 1000);
   assert.equal(call.output_tokens, 200);
   assert.equal(call.thinking_tokens, 50);
+  assert.equal(call.thinking_budget_requested, 0);
+  assert.equal(call.thinking_budget_applied, 0);
   assert.equal(call.cached_tokens, 100);
   assert.equal(call.total_tokens, 1250);
   assert.equal(call.billable_input_tokens, 900);
   assert.equal(call.billable_output_tokens, 250);
   assert.equal(call.estimated_cost_usd, 0.000898);
+});
+
+test('stage-specific thinking budgets are applied to Gemini request config', async () => {
+  const client = loadClient({
+    GEMINI_THINKING_BUDGET_EDITOR: '1024'
+  });
+  const FakeGoogleGenAI = fakeGemini([
+    '{"ok":"reporter"}',
+    '{"ok":"editor"}',
+    '{"ok":"repair"}',
+    '{"ok":"factcheck"}',
+    '{"ok":"scoring"}'
+  ]);
+
+  await client.callGeminiJson('reporter attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson('editor attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson('editor repair attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson('fact-checker attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson('deterministic scoring', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+
+  assert.deepEqual(
+    FakeGoogleGenAI.requests.map(request => request.config.thinkingConfig),
+    [
+      { thinkingBudget: 0 },
+      { thinkingBudget: 1024 },
+      { thinkingBudget: 0 },
+      { thinkingBudget: 0 },
+      { thinkingBudget: 0 }
+    ]
+  );
+  assert.equal(client.thinkingBudgetForStage('editor completion attempt 1/1'), 1024);
+  assert.equal(client.thinkingBudgetForStage('unknown stage'), 0);
+});
+
+test('Pro models omit thinkingBudget 0 and record the limitation in cost report', async () => {
+  const client = loadClient({
+    GEMINI_MODEL: 'gemini-2.5-pro',
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
+  });
+  const FakeGoogleGenAI = fakeGemini([{
+    text: () => '{"ok":true}',
+    usageMetadata: {
+      promptTokenCount: 1000,
+      candidatesTokenCount: 100,
+      thoughtsTokenCount: 25,
+      totalTokenCount: 1125
+    }
+  }]);
+
+  const result = await client.callGeminiJson('reporter attempt 1/1', 'system', 'prompt', {}, {
+    GoogleGenAI: FakeGoogleGenAI
+  });
+
+  assert.deepEqual(result, { ok: true });
+  assert.equal(FakeGoogleGenAI.requests[0].config.thinkingConfig, undefined);
+  const [call] = client.getGeminiCostCalls();
+  assert.equal(call.thinking_tokens, 25);
+  assert.equal(call.thinking_budget_requested, 0);
+  assert.equal(call.thinking_budget_applied, null);
+  assert.match(call.thinking_budget_note, /Pro may not support disabling thinking/);
+  const report = client.buildCostReport({
+    date: '2026-05-04',
+    calls: client.getGeminiCostCalls()
+  });
+  assert.ok(report.warnings.some(item => item.includes('did not apply thinkingBudget=0')));
 });
 
 test('usage metadata extraction supports Gemini SDK camelCase fields', () => {

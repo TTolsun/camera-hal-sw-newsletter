@@ -13,6 +13,11 @@ const DEFAULT_RUNTIME_CONFIG = {
   newsroomAllowProOnSchedule: false,
   newsroomAllowProOnManual: false,
   newsroomProEscalation: 'manual',
+  geminiThinkingBudgetReporter: 0,
+  geminiThinkingBudgetEditor: 512,
+  geminiThinkingBudgetRepair: 0,
+  geminiThinkingBudgetFactcheck: 0,
+  geminiThinkingBudgetScoring: 0,
   githubEventName: ''
 };
 
@@ -164,6 +169,31 @@ function readRuntimeConfig(env = process.env, options = {}) {
       { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnManual }
     ),
     newsroomProEscalation: String(envValue(env, 'NEWSROOM_PRO_ESCALATION', DEFAULT_RUNTIME_CONFIG.newsroomProEscalation) || '').trim(),
+    geminiThinkingBudgetReporter: parseInteger(
+      envValue(env, 'GEMINI_THINKING_BUDGET_REPORTER', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetReporter),
+      'GEMINI_THINKING_BUDGET_REPORTER',
+      { min: 0 }
+    ),
+    geminiThinkingBudgetEditor: parseInteger(
+      envValue(env, 'GEMINI_THINKING_BUDGET_EDITOR', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetEditor),
+      'GEMINI_THINKING_BUDGET_EDITOR',
+      { min: 0 }
+    ),
+    geminiThinkingBudgetRepair: parseInteger(
+      envValue(env, 'GEMINI_THINKING_BUDGET_REPAIR', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetRepair),
+      'GEMINI_THINKING_BUDGET_REPAIR',
+      { min: 0 }
+    ),
+    geminiThinkingBudgetFactcheck: parseInteger(
+      envValue(env, 'GEMINI_THINKING_BUDGET_FACTCHECK', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetFactcheck),
+      'GEMINI_THINKING_BUDGET_FACTCHECK',
+      { min: 0 }
+    ),
+    geminiThinkingBudgetScoring: parseInteger(
+      envValue(env, 'GEMINI_THINKING_BUDGET_SCORING', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetScoring),
+      'GEMINI_THINKING_BUDGET_SCORING',
+      { min: 0 }
+    ),
     githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
     geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim())
   };
@@ -231,6 +261,17 @@ function validateRuntimeConfig(config, options = {}) {
   if (!String(config.newsroomProEscalation || '').trim()) {
     errors.push('NEWSROOM_PRO_ESCALATION must be non-empty.');
   }
+  for (const [field, name] of [
+    [config.geminiThinkingBudgetReporter, 'GEMINI_THINKING_BUDGET_REPORTER'],
+    [config.geminiThinkingBudgetEditor, 'GEMINI_THINKING_BUDGET_EDITOR'],
+    [config.geminiThinkingBudgetRepair, 'GEMINI_THINKING_BUDGET_REPAIR'],
+    [config.geminiThinkingBudgetFactcheck, 'GEMINI_THINKING_BUDGET_FACTCHECK'],
+    [config.geminiThinkingBudgetScoring, 'GEMINI_THINKING_BUDGET_SCORING']
+  ]) {
+    if (!Number.isInteger(field) || field < 0) {
+      errors.push(`${name} must be an integer >= 0.`);
+    }
+  }
   const configuredModels = configuredModelList(config);
   const proModels = configuredModels.filter(isProModel);
   if (proModels.length > 0) {
@@ -267,6 +308,11 @@ function sanitizeRuntimeConfig(config) {
     newsroomAllowProOnSchedule: config.newsroomAllowProOnSchedule,
     newsroomAllowProOnManual: config.newsroomAllowProOnManual,
     newsroomProEscalation: config.newsroomProEscalation,
+    geminiThinkingBudgetReporter: config.geminiThinkingBudgetReporter,
+    geminiThinkingBudgetEditor: config.geminiThinkingBudgetEditor,
+    geminiThinkingBudgetRepair: config.geminiThinkingBudgetRepair,
+    geminiThinkingBudgetFactcheck: config.geminiThinkingBudgetFactcheck,
+    geminiThinkingBudgetScoring: config.geminiThinkingBudgetScoring,
     githubEventName: config.githubEventName,
     proModelConfigured: configuredModelList(config).some(isProModel),
     proModelAllowed: configuredModelList(config).some(isProModel)

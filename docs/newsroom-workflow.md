@@ -89,9 +89,11 @@ cache hit은 normalized URL과 content fingerprint가 일치할 때만 사용합
 
 Gemini 호출이 성공적으로 응답을 반환하면 generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
 
+Gemini request에는 stage별 thinking budget을 적용합니다. 기본값은 reporter `0`, editor/completion `512`, repair `0`, fact-check `0`, scoring `0`입니다. `GEMINI_THINKING_BUDGET_*` 환경변수로 조정할 수 있고, cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다.
+
 `NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 PR1 단계에서는 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
 
-scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합니다. `gemini-2.5-pro`는 manual `workflow_dispatch`에서 `allow_pro=true`를 명시한 경우에만 사용할 수 있으며, Pro가 실제 호출되면 workflow log와 cost report의 `pro_policy` / `pro_model` 필드에 남습니다.
+scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합니다. `gemini-2.5-pro`는 manual `workflow_dispatch`에서 `allow_pro=true`를 명시한 경우에만 사용할 수 있으며, Pro가 실제 호출되면 workflow log와 cost report의 `pro_policy` / `pro_model` 필드에 남습니다. Pro 계열 모델은 thinking disable을 지원하지 않거나 최소 budget 제약이 있을 수 있으므로, requested budget이 `0`인 Pro 호출은 `thinkingConfig`를 생략하고 cost report warning에 남깁니다.
 
 ## Recovery Artifacts
 
@@ -123,6 +125,11 @@ GEMINI_API_KEY
 ```text
 GEMINI_MODEL=gemini-2.5-flash
 GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite
+GEMINI_THINKING_BUDGET_REPORTER=0
+GEMINI_THINKING_BUDGET_EDITOR=512
+GEMINI_THINKING_BUDGET_REPAIR=0
+GEMINI_THINKING_BUDGET_FACTCHECK=0
+GEMINI_THINKING_BUDGET_SCORING=0
 NEWSROOM_WARN_COST_USD=0.15
 NEWSROOM_MAX_COST_USD=0.25
 NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false

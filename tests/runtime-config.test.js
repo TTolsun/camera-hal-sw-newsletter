@@ -30,6 +30,11 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.newsroomAllowProOnSchedule, false);
   assert.equal(config.newsroomAllowProOnManual, false);
   assert.equal(config.newsroomProEscalation, 'manual');
+  assert.equal(config.geminiThinkingBudgetReporter, 0);
+  assert.equal(config.geminiThinkingBudgetEditor, 512);
+  assert.equal(config.geminiThinkingBudgetRepair, 0);
+  assert.equal(config.geminiThinkingBudgetFactcheck, 0);
+  assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.geminiApiKeyConfigured, false);
 });
 
@@ -80,6 +85,11 @@ test('runtime env overrides are parsed into typed config', () => {
     NEWSROOM_ALLOW_PRO_ON_SCHEDULE: 'false',
     NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true',
     NEWSROOM_PRO_ESCALATION: 'manual',
+    GEMINI_THINKING_BUDGET_REPORTER: '0',
+    GEMINI_THINKING_BUDGET_EDITOR: '1024',
+    GEMINI_THINKING_BUDGET_REPAIR: '0',
+    GEMINI_THINKING_BUDGET_FACTCHECK: '0',
+    GEMINI_THINKING_BUDGET_SCORING: '0',
     GITHUB_EVENT_NAME: 'workflow_dispatch'
   }, { requireGeminiApiKey: true });
 
@@ -97,6 +107,11 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.newsroomAllowProOnSchedule, false);
   assert.equal(config.newsroomAllowProOnManual, true);
   assert.equal(config.newsroomProEscalation, 'manual');
+  assert.equal(config.geminiThinkingBudgetReporter, 0);
+  assert.equal(config.geminiThinkingBudgetEditor, 1024);
+  assert.equal(config.geminiThinkingBudgetRepair, 0);
+  assert.equal(config.geminiThinkingBudgetFactcheck, 0);
+  assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.githubEventName, 'workflow_dispatch');
   assert.equal(config.geminiApiKeyConfigured, true);
 });
@@ -117,6 +132,11 @@ test('invalid date and ranges return field-specific validation errors', () => {
     newsroomAllowProOnSchedule: false,
     newsroomAllowProOnManual: false,
     newsroomProEscalation: 'manual',
+    geminiThinkingBudgetReporter: -1,
+    geminiThinkingBudgetEditor: -1,
+    geminiThinkingBudgetRepair: -1,
+    geminiThinkingBudgetFactcheck: -1,
+    geminiThinkingBudgetScoring: -1,
     githubEventName: '',
     geminiApiKeyConfigured: false
   }, { requireGeminiApiKey: true });
@@ -132,6 +152,11 @@ test('invalid date and ranges return field-specific validation errors', () => {
   assert.match(result.errors.join('\n'), /NEWSROOM_MAX_SECTION_REPAIRS/);
   assert.match(result.errors.join('\n'), /NEWSROOM_WARN_COST_USD/);
   assert.match(result.errors.join('\n'), /NEWSROOM_MAX_COST_USD/);
+  assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_REPORTER/);
+  assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_EDITOR/);
+  assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_REPAIR/);
+  assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_FACTCHECK/);
+  assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_SCORING/);
   assert.match(result.errors.join('\n'), /GEMINI_API_KEY/);
 });
 
@@ -151,6 +176,11 @@ test('validator returns structured errors for malformed fallback model input', (
     newsroomAllowProOnSchedule: false,
     newsroomAllowProOnManual: false,
     newsroomProEscalation: 'manual',
+    geminiThinkingBudgetReporter: 0,
+    geminiThinkingBudgetEditor: 512,
+    geminiThinkingBudgetRepair: 0,
+    geminiThinkingBudgetFactcheck: 0,
+    geminiThinkingBudgetScoring: 0,
     githubEventName: 'schedule',
     geminiApiKeyConfigured: true
   });
@@ -177,6 +207,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
   assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
   assert.equal(sanitized.newsroomMaxSectionRepairs, 1);
+  assert.equal(sanitized.geminiThinkingBudgetEditor, 512);
   assert.equal(text.includes('super-secret-api-key'), false);
 });
 

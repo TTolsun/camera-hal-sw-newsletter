@@ -17,6 +17,8 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 
 게이트를 통과하지 못하면 Gemini는 기본 `1`회, `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 quality repair retry를 실행합니다. retry 한 번에서 repair 또는 replace할 section 수는 기본 `NEWSROOM_MAX_SECTION_REPAIRS=1`로 제한하며, source gap article은 rewrite하지 않고 demote 또는 replace합니다. `content/newsroom/YYYY-MM-DD/retry-history.json` 및 `retry-history.md`는 locked article, failed section, repair policy를 남깁니다. Gemini API retry max delay 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`이며, 300000ms는 5분입니다.
 
+Gemini thinking budget은 stage별로 제한합니다. 기본값은 reporter `0`, editor/completion `512`, repair `0`, fact-check `0`, scoring `0`이며 `GEMINI_THINKING_BUDGET_*` 변수로 조정합니다. Pro 계열 모델은 thinking disable이 불가능하거나 제한될 수 있으므로 manual escalation 시 cost report의 `thinking_tokens`와 budget 기록을 확인해야 합니다.
+
 품질 게이트는 Camera HAL 관련성, 근거 구체성, HAL engineering depth, 실행 가능성, source integrity, article composition을 확인합니다. 점수가 85 이상이어도 hard blocker가 있으면 `NEEDS_FIX` 또는 `publish_ready=false`가 유지됩니다. hard blocker에는 source gap, fact-check `must_fix`, source/reference 누락, underfilled article count, 약한 Camera HAL / Android Camera relevance, 약한 evidence specificity, 필요한 date/version/API/component/behavior-change 근거 누락이 포함됩니다. 기사에는 가능한 경우 version/release, release date, API/component, behavior change, 명시적 source gap 같은 구체 evidence가 있어야 합니다. "AOSP 업데이트를 모니터링한다" 같은 일반 문장은 정확한 source, version, API, date, behavior를 함께 적지 않으면 충분하지 않습니다.
 
 `npm.cmd run validate`는 config, site, image, quality, localization validation을 모두 실행합니다. fact-check 또는 quality가 실패하면 workflow가 `needs-fix` 라벨의 review PR을 만들 수는 있지만, run은 실패하며 publication-ready로 보지 않습니다.

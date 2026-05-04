@@ -102,6 +102,32 @@ function proPolicySummary() {
   };
 }
 
+function thinkingBudgetForStage(stage) {
+  const normalized = String(stage || '').toLowerCase();
+  if (/fact[-\s]?check|factchecker/.test(normalized)) return runtimeConfig.geminiThinkingBudgetFactcheck;
+  if (/\brepair\b/.test(normalized)) return runtimeConfig.geminiThinkingBudgetRepair;
+  if (/\breporter\b/.test(normalized)) return runtimeConfig.geminiThinkingBudgetReporter;
+  if (/scoring|selection|deterministic/.test(normalized)) return runtimeConfig.geminiThinkingBudgetScoring;
+  if (/editor|completion/.test(normalized)) return runtimeConfig.geminiThinkingBudgetEditor;
+  return 0;
+}
+
+function thinkingConfigForStage(stage, modelName) {
+  const requested = thinkingBudgetForStage(stage);
+  if (isProModelName(modelName) && requested === 0) {
+    return {
+      requested,
+      applied: null,
+      note: 'Gemini Pro may not support disabling thinking; thinkingConfig omitted for requested budget 0.'
+    };
+  }
+  return {
+    requested,
+    applied: requested,
+    note: ''
+  };
+}
+
 function roundUsd(value) {
   return Number(value.toFixed(8));
 }
@@ -263,6 +289,9 @@ function buildCostReport({ date = '', calls = [], warnCostUsd = 0.15, maxCostUsd
     if (call.usage_metadata_present === false) {
       warnings.push(`No usage metadata for ${call.stage || 'unknown'} using ${call.model || 'unknown'}.`);
     }
+    if (call.pro_model === true && call.thinking_budget_requested === 0 && call.thinking_budget_applied === null) {
+      warnings.push(`Gemini Pro call ${call.stage || 'unknown'} did not apply thinkingBudget=0 because Pro may not support disabling thinking.`);
+    }
   }
   const finalTotals = finalizeCostTotals(totals);
   if (warnCostUsd > 0 && finalTotals.estimated_cost_usd >= warnCostUsd) {
@@ -303,10 +332,12 @@ function buildCostReportMarkdown(report) {
     ` ${call.prompt_tokens || 0} `,
     ` ${call.output_tokens || 0} `,
     ` ${call.thinking_tokens || 0} `,
+    ` ${call.thinking_budget_requested ?? 'n/a'} `,
+    ` ${call.thinking_budget_applied ?? 'n/a'} `,
     ` ${call.cached_tokens || 0} `,
     ` ${call.pro_model === true ? 'yes' : 'no'} `,
     ` ${Number.isFinite(Number(call.estimated_cost_usd)) ? Number(call.estimated_cost_usd).toFixed(6) : 'n/a'} |`
-  ].join('|')).join('\n') || '| none | none | 0 | 0 | 0 | 0 | 0 | no | 0.000000 |';
+  ].join('|')).join('\n') || '| none | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no | 0.000000 |';
   const warnings = ensureArray(report.warnings).map(item => `- ${item}`).join('\n') || '- none';
   const proPolicy = report.pro_policy || {};
   return `# Gemini 비용 리포트 - ${report.date || 'unknown'}
@@ -330,8 +361,8 @@ function buildCostReportMarkdown(report) {
 
 ## Calls
 
-| Stage | Model | Attempt | Prompt | Output | Thinking | Cached | Pro | Estimated USD |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |
+| Stage | Model | Attempt | Prompt | Output | Thinking | Requested Budget | Applied Budget | Cached | Pro | Estimated USD |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
 ${callRows}
 
 ## Warnings
@@ -562,7 +593,7 @@ function saveRawGeminiOutput(stage, attempt, modelName, text) {
   return filePath;
 }
 
-function recordUsageMetadata(stage, modelName, attempt, response) {
+function recordUsageMetadata(stage, modelName, attempt, response, thinkingBudget = {}) {
   const usage = usageMetadataFromResponse(response);
   const cost = estimateCallCost(modelName, usage);
   diagnostics.cost_report.calls.push({
@@ -574,6 +605,9 @@ function recordUsageMetadata(stage, modelName, attempt, response) {
     prompt_tokens: cost.prompt_tokens,
     output_tokens: cost.output_tokens,
     thinking_tokens: cost.thinking_tokens,
+    thinking_budget_requested: thinkingBudget.requested,
+    thinking_budget_applied: thinkingBudget.applied,
+    thinking_budget_note: thinkingBudget.note || '',
     cached_tokens: cost.cached_tokens,
     total_tokens: cost.total_tokens,
     billable_input_tokens: cost.billable_input_tokens,
@@ -585,14 +619,14 @@ function recordUsageMetadata(stage, modelName, attempt, response) {
   });
 }
 
-async function generateContentJsonWithRetry(stage, ai, request, modelName) {
+async function generateContentJsonWithRetry(stage, ai, request, modelName, thinkingBudget) {
   let lastError;
   for (let attempt = 1; attempt <= maxRetries + 1; attempt += 1) {
     try {
       usageFor(stage, modelName).requests += 1;
       console.log(`[${stage}] Gemini request attempt ${attempt}/${maxRetries + 1} using model ${modelName}.`);
       const response = await ai.models.generateContent(request);
-      recordUsageMetadata(stage, modelName, attempt, response);
+      recordUsageMetadata(stage, modelName, attempt, response, thinkingBudget);
       const text = typeof response.text === 'function' ? response.text() : response.text;
       const json = extractJson(text, stage);
       usageFor(stage, modelName).successes += 1;
@@ -667,14 +701,21 @@ async function callGeminiJson(stage, systemInstruction, prompt, responseSchema, 
     }
 
     try {
+      const thinkingBudget = thinkingConfigForStage(stage, modelName);
+      const config = {
+        systemInstruction,
+        ...schemaConfig(responseSchema)
+      };
+      if (Number.isInteger(thinkingBudget.applied)) {
+        config.thinkingConfig = {
+          thinkingBudget: thinkingBudget.applied
+        };
+      }
       const json = await generateContentJsonWithRetry(stage, ai, {
         model: modelName,
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        config: {
-          systemInstruction,
-          ...schemaConfig(responseSchema)
-        }
-      }, modelName);
+        config
+      }, modelName, thinkingBudget);
       console.log(`[${stage}] Gemini API succeeded with model ${modelName}.`);
       modelUsageByStage.set(stage, modelName);
       return json;
@@ -708,6 +749,7 @@ module.exports = {
   getGeminiCostCalls() {
     return cloneDiagnostics().cost_report.calls;
   },
+  thinkingBudgetForStage,
   getGeminiModelUsage(stage) {
     return modelUsageByStage.get(stage) || '';
   },
