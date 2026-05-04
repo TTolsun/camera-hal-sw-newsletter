@@ -1,0 +1,95 @@
+{
+  "locked_sections": [
+    {
+      "index": 1,
+      "headline": "Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선",
+      "category": "Android Camera / platform API",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
+      ],
+      "source_titles": [
+        "The Fourth Beta of Android 17"
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Linux 커널 7.1-rc2 출시: 카메라 드라이버 안정성 관련 잠재적 영향",
+      "category": "Linux camera / libcamera / V4L2",
+      "urls": [
+        "https://www.phoronix.com/news/Linux-7.1-rc2-Released"
+      ],
+      "source_titles": [
+        "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes"
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "GCC 16.1 컴파일러 출시: C++ 네이티브 코드 성능 최적화 인사이트",
+      "category": "C++ / toolchain fallback",
+      "urls": [
+        "https://www.phoronix.com/review/gcc-16-benchmarks"
+      ],
+      "source_titles": [
+        "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15"
+      ]
+    }
+  ],
+  "failed_sections": [
+    {
+      "index": 1,
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "AI plus camera input path",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "source_titles": [
+        "Experimental hybrid inference and new Gemini models for Android"
+      ]
+    }
+  ],
+  "regenerated_sections": [
+    {
+      "index": 1,
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "AI plus camera input path",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "source_titles": [
+        "Experimental hybrid inference and new Gemini models for Android"
+      ]
+    }
+  ],
+  "rejected_retry_outputs": [],
+  "max_section_repairs": 1,
+  "repair_plan": [
+    {
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "sources": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "action": "repair-section",
+      "failure_type": "evidence-specificity",
+      "allow_rewrite": true,
+      "policy_reason": "same-source evidence or required-field repair is allowed once",
+      "source_gap": false,
+      "reporter_eligibility_violations": [],
+      "deductions": [
+        {
+          "category": "evidence-specificity",
+          "points": 5,
+          "reason": "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
+          "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원"
+        },
+        {
+          "category": "evidence-specificity",
+          "points": 4,
+          "reason": "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.",
+          "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원"
+        }
+      ],
+      "recommended_fixes": []
+    }
+  ],
+  "skipped_repair_plan": []
+}

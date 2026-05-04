@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-05",
+  "score": 72,
+  "max_score": 100,
+  "threshold": 85,
+  "status": "NEEDS_FIX",
+  "summary": "Quality score 72, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "deductions": [
+    {
+      "category": "composition",
+      "points": 4,
+      "reason": "Expected 4-5 main articles, found 3.",
+      "location": "",
+      "blocking": true,
+      "severity": "hard"
+    },
+    {
+      "category": "hal-relevance",
+      "points": 8,
+      "reason": "Expected at least 2 Camera HAL / Android Camera articles, found 0.",
+      "location": "",
+      "blocking": true,
+      "severity": "hard"
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "blocking": false,
+      "severity": "soft"
+    },
+    {
+      "category": "actionability",
+      "points": 4,
+      "reason": "Article action item is not concrete enough for a HAL engineering team.",
+      "location": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
+      "blocking": false,
+      "severity": "soft"
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
+      "blocking": false,
+      "severity": "soft"
+    },
+    {
+      "category": "source-integrity",
+      "points": 10,
+      "reason": "Fact checker returned 2 must_fix item(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard"
+    }
+  ],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "AI plus camera input path or HAL workflow",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Experimental hybrid inference and new Gemini models for Android",
+          "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+        }
+      ],
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "GCC 16.1 컴파일러 출시: 성능 향상 및 C++ 네이티브 코드에 대한 시사점",
+      "category": "C++ / toolchain fallback",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
+          "url": "https://www.phoronix.com/review/gcc-16-benchmarks"
+        }
+      ],
+      "hard_fail_reasons": [],
+      "soft_deductions": []
+    },
+    {
+      "index": 3,
+      "headline": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
+      "category": "Linux camera / libcamera / V4L2",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "FreeBSD 15.1 Beta Released For Early Testing",
+          "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+        }
+      ],
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "actionability",
+          "points": 4,
+          "reason": "Article action item is not concrete enough for a HAL engineering team."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "article_count": 3,
+    "briefing_count": 3,
+    "camera_article_count": 0,
+    "ai_article_count": 1,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 2,
+    "source_gap_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 3,
+    "blocking_deduction_categories": [
+      "composition",
+      "hal-relevance",
+      "source-integrity"
+    ],
+    "hard_fail_count": 3,
+    "soft_deduction_count": 3,
+    "article_gate_counts": {
+      "PASS": 3,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 2
+      },
+      {
+        "category": "actionability",
+        "count": 1
+      },
+      {
+        "category": "composition",
+        "count": 1
+      },
+      {
+        "category": "hal-relevance",
+        "count": 1
+      },
+      {
+        "category": "source-integrity",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

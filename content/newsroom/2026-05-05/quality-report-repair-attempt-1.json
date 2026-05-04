@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-05",
+  "score": 75,
+  "max_score": 100,
+  "threshold": 85,
+  "status": "NEEDS_FIX",
+  "summary": "Quality score 75, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "deductions": [
+    {
+      "category": "evidence-specificity",
+      "points": 5,
+      "reason": "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
+      "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "blocking": true,
+      "severity": "hard"
+    },
+    {
+      "category": "evidence-specificity",
+      "points": 4,
+      "reason": "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.",
+      "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "blocking": true,
+      "severity": "hard"
+    },
+    {
+      "category": "source-integrity",
+      "points": 10,
+      "reason": "Fact checker returned 2 must_fix item(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard"
+    },
+    {
+      "category": "source-integrity",
+      "points": 6,
+      "reason": "Fact checker reported 2 source gap(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard"
+    }
+  ],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선",
+      "category": "Android Camera / platform API",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "The Fourth Beta of Android 17",
+          "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
+        }
+      ],
+      "hard_fail_reasons": [],
+      "soft_deductions": []
+    },
+    {
+      "index": 2,
+      "headline": "Linux 커널 7.1-rc2 출시: 카메라 드라이버 안정성 관련 잠재적 영향",
+      "category": "Linux camera / libcamera / V4L2",
+      "status": "FAIL",
+      "repair_action": "replace-or-demote",
+      "sources": [
+        {
+          "title": "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes",
+          "url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released"
+        }
+      ],
+      "hard_fail_reasons": [
+        "Fact-check must_fix item mentions this section.",
+        "Source gap or ineligible source evidence mentions this section."
+      ],
+      "soft_deductions": []
+    },
+    {
+      "index": 3,
+      "headline": "GCC 16.1 컴파일러 출시: C++ 네이티브 코드 성능 최적화 인사이트",
+      "category": "C++ / toolchain fallback",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
+          "url": "https://www.phoronix.com/review/gcc-16-benchmarks"
+        }
+      ],
+      "hard_fail_reasons": [
+        "Fact-check must_fix item mentions this section."
+      ],
+      "soft_deductions": []
+    },
+    {
+      "index": 4,
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "AI plus camera input path",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Experimental hybrid inference and new Gemini models for Android",
+          "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+        }
+      ],
+      "hard_fail_reasons": [
+        "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
+        "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change."
+      ],
+      "soft_deductions": []
+    }
+  ],
+  "metrics": {
+    "article_count": 4,
+    "briefing_count": 3,
+    "camera_article_count": 2,
+    "ai_article_count": 1,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 2,
+    "source_gap_count": 2,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 4,
+    "blocking_deduction_categories": [
+      "evidence-specificity",
+      "source-integrity"
+    ],
+    "hard_fail_count": 4,
+    "soft_deduction_count": 0,
+    "article_gate_counts": {
+      "PASS": 1,
+      "DEMOTE": 0,
+      "FAIL": 3
+    },
+    "top_deduction_categories": [
+      {
+        "category": "evidence-specificity",
+        "count": 2
+      },
+      {
+        "category": "source-integrity",
+        "count": 2
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-05",
+  "generated_at": "2026-05-04T17:01:57.608Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 9,
+    "hit_count": 0,
+    "miss_count": 9,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 9
+    }
+  ],
+  "entries": [
+    {
+      "title": "Experimental hybrid inference and new Gemini models for Android",
+      "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "source": "Android Developers Blog",
+      "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/04/hybrid-inference-and-new-ai-models-are-coming-to-android.html",
+        "url_hash": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
+        "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
+        "content_hash": "fd7f6d8fc2a89eac3efb488a16f6ab90d7d10d20cb385723a6331abe899d6deb"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "FreeBSD 15.1 Beta Released For Early Testing",
+      "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Sat, 02 May 2026 06:53:24 -0400",
+      "cache_key": {
+        "normalized_url": "https://www.phoronix.com/news/freebsd-15.1-beta-1",
+        "url_hash": "522d2883a39b3460888cc292226c92c12a188d7846d732c11029eda332df1577",
+        "published_date": "Sat, 02 May 2026 06:53:24 -0400",
+        "content_hash": "0674fc06c1c0b4da49762274a24eac00103f530ede64c822381f44451548f939"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
+      "url": "https://www.phoronix.com/review/gcc-16-benchmarks",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Mon, 04 May 2026 09:42:21 -0400",
+      "cache_key": {
+        "normalized_url": "https://www.phoronix.com/review/gcc-16-benchmarks",
+        "url_hash": "cba65e7c42b12df9be7be52634278ee8b793683ea72f8eee1c4531378a8452c7",
+        "published_date": "Mon, 04 May 2026 09:42:21 -0400",
+        "content_hash": "eec7ceb22bdec6ba1cf114ea1ffa4a02760aec3458676f5470ab456d3f2fad96"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes",
+      "url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Sun, 03 May 2026 17:30:00 -0400",
+      "cache_key": {
+        "normalized_url": "https://www.phoronix.com/news/linux-7.1-rc2-released",
+        "url_hash": "f99c80c73baf54c6e61f459c3b1b67c0c0448b5178f28a4a263c5881ce9dbe38",
+        "published_date": "Sun, 03 May 2026 17:30:00 -0400",
+        "content_hash": "4582ed8b2a859360cdcb960e27774104e7e7f31bae42cd42b8a54a81e5701fbb"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "The Fourth Beta of Android 17",
+      "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+      "source": "Android Developers Blog",
+      "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+        "url_hash": "ad09b081a7bc4d2676378136a03ba3852106869ee9ef28ec44b1e36d2525e34c",
+        "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
+        "content_hash": "2dc441ee18cda47df8e388ae30e277ffa0c962a00fa4aa99105f9658d3019666"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "AMD&#039;s GAIA Defaults To Better Model, Continued Improvements For Local AI",
+      "url": "https://www.phoronix.com/news/AMD-GAIA-0.17.5",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Sat, 02 May 2026 16:19:39 -0400",
+      "cache_key": {
+        "normalized_url": "https://www.phoronix.com/news/amd-gaia-0.17.5",
+        "url_hash": "b4bcab0ec76fe6146b8b315e580b7fabdb503a2385717300780920f81f31dec2",
+        "published_date": "Sat, 02 May 2026 16:19:39 -0400",
+        "content_hash": "40e24cf872d3e23b400ae6d87b2c9a1ebbc127b2099866d69b5b000cbd7e1f49"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2026 Annual C++ Developer Survey \"Lite\"",
+      "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 22 Apr 2026 00:59:01 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+        "url_hash": "6ed585f7fc4c73532b42969eacd3d421cd62e12208a024e8ede74c2867b5aec9",
+        "published_date": "Wed, 22 Apr 2026 00:59:01 +0000",
+        "content_hash": "bb4200521fba198e18cc6f0ab98e8cc1378fad27ca672da57b1147cbb0f203e4"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Linux 7.1 Fixes Audio For The Steam Deck OLED After Being Broken 2 Years On The Upstream Kernel",
+      "url": "https://www.phoronix.com/news/Steam-Deck-OLED-Audio-Fix",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Sat, 02 May 2026 20:33:27 -0400",
+      "cache_key": {
+        "normalized_url": "https://www.phoronix.com/news/steam-deck-oled-audio-fix",
+        "url_hash": "52cb0091ee9119e29cf9b285df14a592d4cffc1b05f796d6bf117257b40c4f3e",
+        "published_date": "Sat, 02 May 2026 20:33:27 -0400",
+        "content_hash": "0617ab05e05f570b638b21bb293b4934df8fe7d2101d8d5c58fab3c2897cf4a9"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Claude Code Changelog - 2.1.126",
+      "url": "https://code.claude.com/docs/en/changelog",
+      "source": "Claude Code Changelog",
+      "published_date": "May 1, 2026",
+      "cache_key": {
+        "normalized_url": "https://code.claude.com/docs/en/changelog",
+        "url_hash": "3d68ad8e1324eb33b763f82183f512fc6276fa6e33aa56b7b51a994d2a3e9fb9",
+        "published_date": "May 1, 2026",
+        "content_hash": "f6a095be2b4f7a68d71db537c321c29a500c4603d2f2e1cdd8d7d4e333f8df4b"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

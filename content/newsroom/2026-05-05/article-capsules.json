@@ -1,0 +1,806 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-05",
+  "generated_at": "2026-05-04T17:06:42.969Z",
+  "capsule_token_target": "500-800",
+  "shortlisted_capsule_count": 5,
+  "selected_capsule_count": 5,
+  "shortlisted_capsules": [
+    {
+      "title": "Experimental hybrid inference and new Gemini models for Android",
+      "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "source": "Android Developers Blog",
+      "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
+      "topic_type": "camera-hal",
+      "component": "Firebase AI Logic API",
+      "what_changed": "하이브리드 추론(온디바이스 및 클라우드 추론 활용) 및 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델 지원",
+      "why_hal_engineer_cares": "카메라 HAL은 이미지 데이터를 AI 모델로 전달하는 주요 경로이므로, 온디바이스 AI 추론의 변화는 HAL의 버퍼 관리, 성능, 전력 소비에 직접적인 영향을 미칩니다. 새로운 Gemini 모델과 하이브리드 추론 API는 카메라 스트림 처리 방식과 NPU/GPU 스케줄링에 대한 고려를 필요로 합니다.",
+      "evidence": [
+        "version_or_release: N/A",
+        "api_or_component: Firebase AI Logic API",
+        "behavior_change: 하이브리드 추론(온디바이스 및 클라우드 추론 활용) 및 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델 지원",
+        "evidence_note: API 또는 컴포넌트: Firebase AI Logic API",
+        "evidence_note: 동작 변경: 하이브리드 추론(온디바이스 및 클라우드 추론 활용) 및 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델 지원",
+        "evidence_note: summary: Android 개발자를 위한 하이브리드 추론 및 새로운 Gemini 모델 지원 업데이트. Firebase AI Logic을 위한 새로운 API인 하이브리드 추론은 온디바이스 및 클라우드 추론을 모두 활용하며, 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델을 지원합니다."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": false,
+        "final_selection_eligibility": "main"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "main",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "official-source"
+      },
+      "score": {
+        "total": 93,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 2,
+        "practical_actionability": 5,
+        "source_reliability": 5,
+        "optional_ai_cpp_bonus": 3
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYpby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYpby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 931
+    },
+    {
+      "title": "FreeBSD 15.1 Beta Released For Early Testing",
+      "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Sat, 02 May 2026 06:53:24 -0400",
+      "topic_type": "camera-hal",
+      "component": "Linux camera / V4L2",
+      "what_changed": "FreeBSD 15.1 Beta 1 출시",
+      "why_hal_engineer_cares": "FreeBSD는 Android의 직접적인 기반은 아니지만, Linux 커널 및 V4L2 서브시스템의 변화는 Android HAL 구현에 간접적인 영향을 줄 수 있습니다. 특히 카메라 드라이버 및 미디어 파이프라인 관련 변경 사항은 크로스 플랫폼 개발 시 참고할 수 있습니다.",
+      "evidence": [
+        "version_or_release: FreeBSD 15.1 Beta 1",
+        "api_or_component: Linux camera / V4L2",
+        "behavior_change: FreeBSD 15.1 Beta 1 출시",
+        "evidence_note: API 또는 컴포넌트: Linux camera / V4L2",
+        "evidence_note: 동작 변경: FreeBSD 15.1 Beta 1 출시",
+        "evidence_note: summary: FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 초기 테스트가 가능합니다. FreeBSD 15.0 릴리스 이후의 개선 사항을 포함합니다."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": true,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "short",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "needs-cross-check"
+      },
+      "score": {
+        "total": 93,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 0,
+        "optional_ai_cpp_bonus": 3
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "522d2883a39b3460888cc292226c92c12a188d7846d732c11029eda332df1577",
+      "imageCandidates": [],
+      "estimated_tokens": 456
+    },
+    {
+      "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
+      "url": "https://www.phoronix.com/review/gcc-16-benchmarks",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Mon, 04 May 2026 09:42:21 -0400",
+      "topic_type": "camera-hal",
+      "component": "C++ / native toolchain",
+      "what_changed": "GCC 16.1 컴파일러 출시 및 GCC 15 대비 성능 향상",
+      "why_hal_engineer_cares": "Android HAL은 주로 Clang/LLVM을 사용하지만, GCC의 성능 향상은 C++ 표준 라이브러리 및 최적화 기술 발전에 대한 인사이트를 제공할 수 있습니다. 이는 HAL 코드의 잠재적 성능 최적화 기회를 탐색하는 데 도움이 될 수 있습니다.",
+      "evidence": [
+        "version_or_release: GCC 16.1",
+        "api_or_component: C++ / native toolchain",
+        "behavior_change: GCC 16.1 컴파일러 출시 및 GCC 15 대비 성능 향상",
+        "evidence_note: API 또는 컴포넌트: C++ / native toolchain",
+        "evidence_note: 동작 변경: GCC 16.1 컴파일러 출시 및 GCC 15 대비 성능 향상",
+        "evidence_note: summary: GCC 16.1 컴파일러가 지난 목요일에 출시되었으며, GCC 15에 비해 상당한 성능 향상을 제공합니다. 이는 AMD Zen 6 아키텍처 지원을 포함한 연례 기능 릴리스입니다."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": true,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "short",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "needs-cross-check"
+      },
+      "score": {
+        "total": 93,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 0,
+        "optional_ai_cpp_bonus": 3
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "cba65e7c42b12df9be7be52634278ee8b793683ea72f8eee1c4531378a8452c7",
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=gcc-16-benchmarks&image=gcc_16_fedora",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-benchmarks",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-benchmarks",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=gcc-16-benchmarks&image=gcc_16_fedora_med",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-benchmarks",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 679
+    },
+    {
+      "title": "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes",
+      "url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Sun, 03 May 2026 17:30:00 -0400",
+      "topic_type": "camera-hal",
+      "component": "Linux camera / V4L2",
+      "what_changed": "Linux 7.1-rc2 출시 (버그 및 회귀 수정 포함)",
+      "why_hal_engineer_cares": "Linux 커널의 업데이트는 Android HAL의 기반이 되는 드라이버 및 미디어 서브시스템에 영향을 미칠 수 있습니다. 특히 버그 및 회귀 수정은 안정성 측면에서 중요하며, 카메라 관련 패치가 포함될 경우 HAL 구현에 직접적인 영향을 줄 수 있습니다.",
+      "evidence": [
+        "version_or_release: Linux 7.1-rc2",
+        "api_or_component: Linux camera / V4L2",
+        "behavior_change: Linux 7.1-rc2 출시 (버그 및 회귀 수정 포함)",
+        "evidence_note: API 또는 컴포넌트: Linux camera / V4L2",
+        "evidence_note: 동작 변경: Linux 7.1-rc2 출시 (버그 및 회귀 수정 포함)",
+        "evidence_note: summary: Linux 7.1-rc2가 출시되었으며, 지난주 Linux 7.1 병합 기간 이후 수집된 초기 버그 및 회귀 수정 사항이 포함되어 있습니다. Steam Deck OLED의 오디오 수정 사항도 포함됩니다."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": true,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "short",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "needs-cross-check"
+      },
+      "score": {
+        "total": 91,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 0,
+        "optional_ai_cpp_bonus": 1
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "f99c80c73baf54c6e61f459c3b1b67c0c0448b5178f28a4a263c5881ce9dbe38",
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=2026&image=linux_71_rc2",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 607
+    },
+    {
+      "title": "The Fourth Beta of Android 17",
+      "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+      "source": "Android Developers Blog",
+      "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
+      "topic_type": "camera-hal",
+      "component": "Android SDK",
+      "what_changed": "Android 17 Beta 4 출시, 앱 호환성 및 플랫폼 안정성 개선",
+      "why_hal_engineer_cares": "Android 17 베타 4 출시는 Camera HAL 팀에게 중요한 이정표입니다. 플랫폼 안정성 및 앱 호환성 개선은 Camera HAL 인터페이스, CTS/VTS/Camera ITS 테스트, 그리고 CameraX 호환성에 영향을 미칠 수 있습니다. 새로운 API 동작이나 기존 동작의 변경 사항을 면밀히 검토해야 합니다.",
+      "evidence": [
+        "version_or_release: Android 17 Beta 4",
+        "api_or_component: Android SDK",
+        "behavior_change: Android 17 Beta 4 출시, 앱 호환성 및 플랫폼 안정성 개선",
+        "evidence_note: 버전 또는 릴리스: Android 17 Beta 4",
+        "evidence_note: API 또는 컴포넌트: Android SDK",
+        "evidence_note: 동작 변경: Android 17 Beta 4 출시, 앱 호환성 및 플랫폼 안정성 개선"
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": false,
+        "final_selection_eligibility": "main"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "main",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 8,
+        "cross_check_status": "official-source"
+      },
+      "score": {
+        "total": 91,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 2,
+        "practical_actionability": 5,
+        "source_reliability": 5,
+        "optional_ai_cpp_bonus": 1
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "ad09b081a7bc4d2676378136a03ba3852106869ee9ef28ec44b1e36d2525e34c",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 788
+    }
+  ],
+  "selected_capsules": [
+    {
+      "title": "Experimental hybrid inference and new Gemini models for Android",
+      "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "source": "Android Developers Blog",
+      "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
+      "topic_type": "camera-hal",
+      "component": "Firebase AI Logic API",
+      "what_changed": "하이브리드 추론(온디바이스 및 클라우드 추론 활용) 및 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델 지원",
+      "why_hal_engineer_cares": "카메라 HAL은 이미지 데이터를 AI 모델로 전달하는 주요 경로이므로, 온디바이스 AI 추론의 변화는 HAL의 버퍼 관리, 성능, 전력 소비에 직접적인 영향을 미칩니다. 새로운 Gemini 모델과 하이브리드 추론 API는 카메라 스트림 처리 방식과 NPU/GPU 스케줄링에 대한 고려를 필요로 합니다.",
+      "evidence": [
+        "version_or_release: N/A",
+        "api_or_component: Firebase AI Logic API",
+        "behavior_change: 하이브리드 추론(온디바이스 및 클라우드 추론 활용) 및 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델 지원",
+        "evidence_note: API 또는 컴포넌트: Firebase AI Logic API",
+        "evidence_note: 동작 변경: 하이브리드 추론(온디바이스 및 클라우드 추론 활용) 및 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델 지원",
+        "evidence_note: summary: Android 개발자를 위한 하이브리드 추론 및 새로운 Gemini 모델 지원 업데이트. Firebase AI Logic을 위한 새로운 API인 하이브리드 추론은 온디바이스 및 클라우드 추론을 모두 활용하며, 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델을 지원합니다."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": false,
+        "final_selection_eligibility": "main"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "main",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "official-source"
+      },
+      "score": {
+        "total": 93,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 2,
+        "practical_actionability": 5,
+        "source_reliability": 5,
+        "optional_ai_cpp_bonus": 3
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYpby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYpby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 931
+    },
+    {
+      "title": "FreeBSD 15.1 Beta Released For Early Testing",
+      "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Sat, 02 May 2026 06:53:24 -0400",
+      "topic_type": "camera-hal",
+      "component": "Linux camera / V4L2",
+      "what_changed": "FreeBSD 15.1 Beta 1 출시",
+      "why_hal_engineer_cares": "FreeBSD는 Android의 직접적인 기반은 아니지만, Linux 커널 및 V4L2 서브시스템의 변화는 Android HAL 구현에 간접적인 영향을 줄 수 있습니다. 특히 카메라 드라이버 및 미디어 파이프라인 관련 변경 사항은 크로스 플랫폼 개발 시 참고할 수 있습니다.",
+      "evidence": [
+        "version_or_release: FreeBSD 15.1 Beta 1",
+        "api_or_component: Linux camera / V4L2",
+        "behavior_change: FreeBSD 15.1 Beta 1 출시",
+        "evidence_note: API 또는 컴포넌트: Linux camera / V4L2",
+        "evidence_note: 동작 변경: FreeBSD 15.1 Beta 1 출시",
+        "evidence_note: summary: FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 초기 테스트가 가능합니다. FreeBSD 15.0 릴리스 이후의 개선 사항을 포함합니다."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": true,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "short",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "needs-cross-check"
+      },
+      "score": {
+        "total": 93,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 0,
+        "optional_ai_cpp_bonus": 3
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "522d2883a39b3460888cc292226c92c12a188d7846d732c11029eda332df1577",
+      "imageCandidates": [],
+      "estimated_tokens": 456
+    },
+    {
+      "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
+      "url": "https://www.phoronix.com/review/gcc-16-benchmarks",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Mon, 04 May 2026 09:42:21 -0400",
+      "topic_type": "camera-hal",
+      "component": "C++ / native toolchain",
+      "what_changed": "GCC 16.1 컴파일러 출시 및 GCC 15 대비 성능 향상",
+      "why_hal_engineer_cares": "Android HAL은 주로 Clang/LLVM을 사용하지만, GCC의 성능 향상은 C++ 표준 라이브러리 및 최적화 기술 발전에 대한 인사이트를 제공할 수 있습니다. 이는 HAL 코드의 잠재적 성능 최적화 기회를 탐색하는 데 도움이 될 수 있습니다.",
+      "evidence": [
+        "version_or_release: GCC 16.1",
+        "api_or_component: C++ / native toolchain",
+        "behavior_change: GCC 16.1 컴파일러 출시 및 GCC 15 대비 성능 향상",
+        "evidence_note: API 또는 컴포넌트: C++ / native toolchain",
+        "evidence_note: 동작 변경: GCC 16.1 컴파일러 출시 및 GCC 15 대비 성능 향상",
+        "evidence_note: summary: GCC 16.1 컴파일러가 지난 목요일에 출시되었으며, GCC 15에 비해 상당한 성능 향상을 제공합니다. 이는 AMD Zen 6 아키텍처 지원을 포함한 연례 기능 릴리스입니다."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": true,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "short",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "needs-cross-check"
+      },
+      "score": {
+        "total": 93,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 0,
+        "optional_ai_cpp_bonus": 3
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "cba65e7c42b12df9be7be52634278ee8b793683ea72f8eee1c4531378a8452c7",
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=gcc-16-benchmarks&image=gcc_16_fedora",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-benchmarks",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-benchmarks",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=gcc-16-benchmarks&image=gcc_16_fedora_med",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-benchmarks",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 679
+    },
+    {
+      "title": "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes",
+      "url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Sun, 03 May 2026 17:30:00 -0400",
+      "topic_type": "camera-hal",
+      "component": "Linux camera / V4L2",
+      "what_changed": "Linux 7.1-rc2 출시 (버그 및 회귀 수정 포함)",
+      "why_hal_engineer_cares": "Linux 커널의 업데이트는 Android HAL의 기반이 되는 드라이버 및 미디어 서브시스템에 영향을 미칠 수 있습니다. 특히 버그 및 회귀 수정은 안정성 측면에서 중요하며, 카메라 관련 패치가 포함될 경우 HAL 구현에 직접적인 영향을 줄 수 있습니다.",
+      "evidence": [
+        "version_or_release: Linux 7.1-rc2",
+        "api_or_component: Linux camera / V4L2",
+        "behavior_change: Linux 7.1-rc2 출시 (버그 및 회귀 수정 포함)",
+        "evidence_note: API 또는 컴포넌트: Linux camera / V4L2",
+        "evidence_note: 동작 변경: Linux 7.1-rc2 출시 (버그 및 회귀 수정 포함)",
+        "evidence_note: summary: Linux 7.1-rc2가 출시되었으며, 지난주 Linux 7.1 병합 기간 이후 수집된 초기 버그 및 회귀 수정 사항이 포함되어 있습니다. Steam Deck OLED의 오디오 수정 사항도 포함됩니다."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": true,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "short",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "needs-cross-check"
+      },
+      "score": {
+        "total": 91,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 0,
+        "optional_ai_cpp_bonus": 1
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "f99c80c73baf54c6e61f459c3b1b67c0c0448b5178f28a4a263c5881ce9dbe38",
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=2026&image=linux_71_rc2",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 607
+    },
+    {
+      "title": "The Fourth Beta of Android 17",
+      "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+      "source": "Android Developers Blog",
+      "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
+      "topic_type": "camera-hal",
+      "component": "Android SDK",
+      "what_changed": "Android 17 Beta 4 출시, 앱 호환성 및 플랫폼 안정성 개선",
+      "why_hal_engineer_cares": "Android 17 베타 4 출시는 Camera HAL 팀에게 중요한 이정표입니다. 플랫폼 안정성 및 앱 호환성 개선은 Camera HAL 인터페이스, CTS/VTS/Camera ITS 테스트, 그리고 CameraX 호환성에 영향을 미칠 수 있습니다. 새로운 API 동작이나 기존 동작의 변경 사항을 면밀히 검토해야 합니다.",
+      "evidence": [
+        "version_or_release: Android 17 Beta 4",
+        "api_or_component: Android SDK",
+        "behavior_change: Android 17 Beta 4 출시, 앱 호환성 및 플랫폼 안정성 개선",
+        "evidence_note: 버전 또는 릴리스: Android 17 Beta 4",
+        "evidence_note: API 또는 컴포넌트: Android SDK",
+        "evidence_note: 동작 변경: Android 17 Beta 4 출시, 앱 호환성 및 플랫폼 안정성 개선"
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": false,
+        "final_selection_eligibility": "main"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "main",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 8,
+        "cross_check_status": "official-source"
+      },
+      "score": {
+        "total": 91,
+        "camera_hal_directness": 5,
+        "evidence_specificity": 5,
+        "freshness": 2,
+        "practical_actionability": 5,
+        "source_reliability": 5,
+        "optional_ai_cpp_bonus": 1
+      },
+      "selection": {
+        "final_selected": true,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "ad09b081a7bc4d2676378136a03ba3852106869ee9ef28ec44b1e36d2525e34c",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE=w1200-h630-p-k-no-nu",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 788
+    }
+  ]
+}

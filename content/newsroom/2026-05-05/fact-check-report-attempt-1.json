@@ -1,0 +1,21 @@
+{
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "sections[2].why_it_matters",
+      "problem": "candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.",
+      "suggestion": "The source 'Phoronix Linux Camera / Media' has a 'requires_cross_check' status. The current explanation does not include explicit cross-checked verification. Please add a note explaining how this information was cross-checked or verified with an official source, or rephrase to reflect its candidate-only status.",
+      "source_url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released"
+    },
+    {
+      "location": "sections[3].why_it_matters",
+      "problem": "candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.",
+      "suggestion": "The source 'Phoronix Linux Camera / Media' has a 'requires_cross_check' status. The current explanation does not include explicit cross-checked verification. Please add a note explaining how this information was cross-checked or verified with an official source, or rephrase to reflect its candidate-only status.",
+      "source_url": "https://www.phoronix.com/review/gcc-16-benchmarks"
+    }
+  ],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "final_comment": "The draft is well-structured and follows the editorial policy. However, two main articles use sources with 'requires_cross_check' status ('Phoronix Linux Camera / Media') without explicitly stating how the information was cross-checked or verified. This needs to be addressed in the 'why_it_matters' or 'source_verification_notes' section for each affected article to meet the policy requirements."
+}

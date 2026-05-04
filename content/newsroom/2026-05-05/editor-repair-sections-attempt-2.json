@@ -1,0 +1,166 @@
+{
+  "locked_sections": [
+    {
+      "index": 1,
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "AI plus camera input path or HAL workflow",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "source_titles": [
+        "Experimental hybrid inference and new Gemini models for Android"
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "GCC 16.1 컴파일러 출시: 성능 향상 및 C++ 네이티브 코드에 대한 시사점",
+      "category": "C++ / toolchain fallback",
+      "urls": [
+        "https://www.phoronix.com/review/gcc-16-benchmarks"
+      ],
+      "source_titles": [
+        "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15"
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
+      "category": "Linux camera / libcamera / V4L2",
+      "urls": [
+        "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+      ],
+      "source_titles": [
+        "FreeBSD 15.1 Beta Released For Early Testing"
+      ]
+    }
+  ],
+  "failed_sections": [
+    {
+      "index": 1,
+      "headline": "Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선",
+      "category": "Android Camera / platform API",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
+      ],
+      "source_titles": [
+        "The Fourth Beta of Android 17"
+      ]
+    }
+  ],
+  "regenerated_sections": [
+    {
+      "index": 1,
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "AI plus camera input path or HAL workflow",
+      "urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "source_titles": [
+        "Android Developers Blog"
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
+      "category": "Linux camera / libcamera / V4L2",
+      "urls": [
+        "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+      ],
+      "source_titles": [
+        "Phoronix Linux Camera / Media"
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
+      "category": "C++ / native toolchain",
+      "urls": [
+        "https://www.phoronix.com/review/gcc-16-benchmarks"
+      ],
+      "source_titles": [
+        "Phoronix Linux Camera / Media"
+      ]
+    }
+  ],
+  "rejected_retry_outputs": [
+    {
+      "title": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "reason": "duplicate locked article"
+    },
+    {
+      "title": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
+      "reason": "duplicate locked article"
+    },
+    {
+      "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
+      "reason": "duplicate locked article"
+    }
+  ],
+  "max_section_repairs": 1,
+  "repair_plan": [
+    {
+      "headline": "Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선",
+      "sources": [
+        "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
+      ],
+      "action": "replace-or-demote",
+      "failure_type": "source-gap",
+      "allow_rewrite": false,
+      "policy_reason": "source gap or reporter eligibility violation must be demoted or replaced",
+      "source_gap": true,
+      "reporter_eligibility_violations": [],
+      "deductions": [],
+      "recommended_fixes": []
+    }
+  ],
+  "skipped_repair_plan": [
+    {
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "sources": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "action": "repair-section",
+      "failure_type": "image-fallback",
+      "allow_rewrite": true,
+      "policy_reason": "section-scoped repair is allowed",
+      "source_gap": false,
+      "reporter_eligibility_violations": [],
+      "deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual.",
+          "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원"
+        }
+      ],
+      "recommended_fixes": []
+    },
+    {
+      "headline": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
+      "sources": [
+        "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+      ],
+      "action": "repair-section",
+      "failure_type": "missing-actionability",
+      "allow_rewrite": true,
+      "policy_reason": "same-source actionability repair is allowed once",
+      "source_gap": false,
+      "reporter_eligibility_violations": [],
+      "deductions": [
+        {
+          "category": "actionability",
+          "points": 4,
+          "reason": "Article action item is not concrete enough for a HAL engineering team.",
+          "location": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향"
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual.",
+          "location": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향"
+        }
+      ],
+      "recommended_fixes": []
+    }
+  ]
+}
