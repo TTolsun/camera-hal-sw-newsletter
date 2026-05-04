@@ -31,6 +31,12 @@ const {
   reporterInputFromShortlist
 } = require('../generate/newsroom-selection');
 const {
+  buildArticleCapsuleReport,
+  capsuleInputForCandidates,
+  capsuleInputFromReport,
+  compactSelectionContext
+} = require('../generate/article-capsules');
+const {
   annotateCandidatesWithCache,
   writeCacheRecord
 } = require('../generate/news-summary-cache');
@@ -344,11 +350,12 @@ function enforceDeterministicReporterSelection(reporter, shortlistReport) {
   return normalizeReporterReport(reporter, shortlistReport);
 }
 
-function selectedReporterInputs(reporter) {
-  return {
-    date: reporter.date,
-    candidates: ensureArray(reporter.candidates).filter(isFinalSelected)
-  };
+function selectedReporterCapsules(date, reporter, capsuleReport) {
+  return capsuleInputForCandidates(date, ensureArray(reporter.candidates).filter(isFinalSelected), capsuleReport);
+}
+
+function reporterCandidateCapsules(date, candidates, capsuleReport) {
+  return capsuleInputForCandidates(date, candidates, capsuleReport);
 }
 
 function reporterImageCandidatesForSection(section, reporter) {
@@ -713,6 +720,15 @@ function sectionSummary(section, index) {
   };
 }
 
+function sectionLockRecord(section, index, status = 'PASS', reason = '') {
+  return {
+    ...sectionSummary(section, index),
+    status,
+    reason,
+    locked: status === 'PASS'
+  };
+}
+
 function buildLockedArticleContext(lockedSections, excludedSections = []) {
   if (lockedSections.length === 0 && excludedSections.length === 0) return '';
   const lockedSummary = lockedSections.map((section, index) => ({
@@ -884,6 +900,64 @@ function finalArticleSlotDistribution(sections) {
   return distribution;
 }
 
+function deductionRepairPolicy(deduction = {}) {
+  const category = stringOrEmpty(deduction.category);
+  const reason = stringOrEmpty(deduction.reason);
+  const haystack = `${category} ${reason}`;
+  if (/source gap|source_gap|watchlist|watch page|ineligible|main_eligible=false|missing dated evidence|no dated release/i.test(haystack)) {
+    return {
+      failure_type: 'source-gap',
+      action: 'replace-or-demote',
+      allow_rewrite: false,
+      reason: 'source gap or ineligible source must be demoted or replaced'
+    };
+  }
+  if (/duplicate|source URL is used across main sections/i.test(haystack)) {
+    return {
+      failure_type: 'duplicate',
+      action: 'replace-section',
+      allow_rewrite: false,
+      reason: 'duplicate source or article must be replaced'
+    };
+  }
+  if (/hal-depth|hal-relevance|weak HAL|Camera HAL perspective|engineering depth/i.test(haystack)) {
+    return {
+      failure_type: 'weak-hal-relevance',
+      action: 'replace-section',
+      allow_rewrite: false,
+      reason: 'weak HAL relevance should use a stronger candidate'
+    };
+  }
+  if (/actionability|action item/i.test(haystack)) {
+    return {
+      failure_type: 'missing-actionability',
+      action: 'repair-section',
+      allow_rewrite: true,
+      reason: 'same-source actionability repair is allowed once'
+    };
+  }
+  if (/required-fields|evidence-specificity/i.test(haystack)) {
+    return {
+      failure_type: category || 'evidence',
+      action: 'repair-section',
+      allow_rewrite: true,
+      reason: 'same-source evidence or required-field repair is allowed once'
+    };
+  }
+  return {
+    failure_type: category || 'unknown',
+    action: 'repair-section',
+    allow_rewrite: true,
+    reason: 'section-scoped repair is allowed'
+  };
+}
+
+function mergeRepairPolicies(policies) {
+  const priority = ['replace-or-demote', 'replace-section', 'repair-section'];
+  const items = ensureArray(policies);
+  return items.sort((a, b) => priority.indexOf(a.action) - priority.indexOf(b.action))[0] || null;
+}
+
 function recommendedFixMentionsSection(item, section) {
   const haystack = normalizeTitle(item);
   const labels = [
@@ -894,23 +968,37 @@ function recommendedFixMentionsSection(item, section) {
   return labels.some(label => haystack.includes(label) || label.includes(haystack));
 }
 
-function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings = []) {
-  const repairableCategories = new Set(['required-fields', 'evidence-specificity', 'hal-depth', 'actionability']);
-  return ensureArray(editor.sections).map(section => {
+function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings = [], options = {}) {
+  const maxSectionRepairs = Number.isInteger(options.maxSectionRepairs) ? options.maxSectionRepairs : Infinity;
+  const sectionPlans = ensureArray(editor.sections).map(section => {
     const deductions = ensureArray(qualityReport?.deductions)
-      .filter(deduction => repairableCategories.has(deduction.category) && deductionMatchesSection(deduction, section));
+      .filter(deduction => deductionMatchesSection(deduction, section));
     const recommendedFixes = ensureArray(factCheck?.recommended_fixes)
       .filter(item => recommendedFixMentionsSection(item, section));
     const sectionEligibilityFindings = eligibilityFindings.filter(finding => finding.section === section);
     const hasSourceGap = sectionHasSourceGap(section, factCheck);
     const hasReporterEligibilityBlock = sectionEligibilityFindings.length > 0;
-    const action = hasSourceGap || hasReporterEligibilityBlock
-      ? 'replace-or-demote'
-      : deductions.length > 0 || recommendedFixes.length > 0 ? 'repair-section' : 'preserve';
+    const policies = [
+      ...deductions.map(deductionRepairPolicy),
+      ...recommendedFixes.map(item => deductionRepairPolicy({ category: 'recommended-fix', reason: item }))
+    ];
+    if (hasSourceGap || hasReporterEligibilityBlock) {
+      policies.push({
+        failure_type: 'source-gap',
+        action: 'replace-or-demote',
+        allow_rewrite: false,
+        reason: 'source gap or reporter eligibility violation must be demoted or replaced'
+      });
+    }
+    const policy = mergeRepairPolicies(policies);
+    const action = policy ? policy.action : 'preserve';
     return {
       headline: sectionLabel(section),
       sources: sectionUrls(section),
       action,
+      failure_type: policy?.failure_type || '',
+      allow_rewrite: policy?.allow_rewrite !== false,
+      policy_reason: policy?.reason || '',
       source_gap: hasSourceGap,
       reporter_eligibility_violations: sectionEligibilityFindings.map(finding => ({
         source_title: finding.source_title,
@@ -927,6 +1015,16 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFin
       recommended_fixes: recommendedFixes
     };
   }).filter(item => item.action !== 'preserve');
+  const priority = { 'replace-or-demote': 0, 'replace-section': 1, 'repair-section': 2 };
+  return sectionPlans
+    .sort((a, b) => (priority[a.action] ?? 9) - (priority[b.action] ?? 9))
+    .slice(0, maxSectionRepairs);
+}
+
+function buildFullSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings = []) {
+  return buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings, {
+    maxSectionRepairs: Infinity
+  });
 }
 
 function sectionMatchesRepairItem(section, item) {
@@ -1098,6 +1196,7 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     '## Artifact 체크리스트',
     '',
     `- ${newsroomRelPath(date, 'shortlisted-candidates.json')}`,
+    `- ${newsroomRelPath(date, 'article-capsules.json')}`,
     `- ${newsroomRelPath(date, 'reporter-candidates.json')}`,
     `- ${newsroomRelPath(date, 'editor-draft.json')}`,
     `- ${newsroomRelPath(date, 'fact-check-report.json')}`,
@@ -1178,6 +1277,8 @@ async function main() {
 
   const reporterInput = reporterInputFromShortlist(shortlistReport);
   reporterInput.candidates = annotateCandidatesWithCache(reporterInput.candidates, cacheDir);
+  let articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, reporterInput);
+  writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
 
   const commonContext = [
     `Newsletter date: ${date}`,
@@ -1223,10 +1324,10 @@ async function main() {
         'You are the AI reporter for Camera HAL SW Newsletter.',
         'The local deterministic selector has already filtered, ranked, and chosen final article inputs. Do not make final selection decisions.',
         'Use selected only for reporter-stage judgment. Deterministic final article inputs are marked separately as final_selected=true and selected_for_editor=true after validation.',
-        'Summarize, tag, and refine evidence fields only for the supplied shortlisted candidates.',
-        'Use priority, reliability, candidateOnly, requiresCrossCheck, section, cameraHalRelevanceScore, deterministic_score, score_breakdown, and summary_cache only as context.',
+        'Summarize, tag, and refine evidence fields only for the supplied shortlisted article capsules.',
+        'Use article capsule fields, risk, score, selection, imageCandidates, and evidence only as context. Do not assume omitted source text exists.',
         'For every final_selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
-        'Preserve collectionMode, isArticleCandidate, isWatchPage, hasDatedEvidence, evidenceLevel, finalSelectionEligibility, source_kind, source_gap_risk, main_eligible, briefing_only, reference_only, and evidence_score from the collected candidate metadata.',
+        'Preserve eligibility and risk values from the article capsule. If a required schema field is not present, infer only from the capsule evidence and risk object.',
         'If the source is a rolling page, release-note watch page, documentation watch page, homepage, or other watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides date/version/API/component/behavior evidence.',
         'Rolling release-note pages require evidence_notes that name the exact date, version/release, API/component, and behavior change before they can be selected.',
         'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
@@ -1244,7 +1345,7 @@ async function main() {
         '- cpp_fallback_value_score: 0-3',
         'Return only JSON matching the schema.'
       ].filter(Boolean).join('\n'),
-      `${commonContext}\n\n${lockedContext}\n\nDeterministic shortlist JSON:\n${JSON.stringify(reporterInput, null, 2)}\n\nShortlist selection report JSON:\n${JSON.stringify(shortlistReport, null, 2)}`,
+      `${commonContext}\n\n${lockedContext}\n\nArticle capsule shortlist JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'shortlisted'), null, 2)}\n\nCompact selection context JSON:\n${JSON.stringify(compactSelectionContext(shortlistReport), null, 2)}`,
       reporterSchema
     ), date, reporterInput.candidates);
     reporter = enforceDeterministicReporterSelection(reporter, shortlistReport);
@@ -1252,6 +1353,8 @@ async function main() {
     generationRunState.shortlistReport = shortlistReport;
     generationRunState.selectedInputs = shortlistReport.selected_articles;
     writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
+    articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates });
+    writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
     for (const candidate of ensureArray(reporter.candidates)) {
       writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getGeminiModelUsage(reporterStage) || 'unknown' });
     }
@@ -1266,9 +1369,9 @@ async function main() {
         'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
         'Create exactly 5 main articles when enough non-duplicate source material exists; 4 main articles are acceptable only when strong candidates are insufficient.',
         `Final main article count must stay between ${MIN_MAIN_ARTICLES} and ${MAX_MAIN_ARTICLES}; do not force 5 articles when only 4 strong eligible candidates exist.`,
-        'Use final-selected reporter candidates as main article inputs. Do not turn final_selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
-        'Target article slot mix: Android Camera / platform API 1-2; CameraX / AOSP Camera / compatibility 1-2; Linux camera / libcamera / V4L2 0-1; AI plus camera input path or HAL workflow at least 1; C++ / toolchain fallback 0-1.',
-        'Include at least 1 AI-related article, and if possible at least 2 Camera HAL / Android Camera / CameraX / AOSP Camera articles.',
+        'Use final-selected article capsules as main article inputs. Do not turn final_selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
+        'Target article slot mix: Android Camera / platform API 1-2; CameraX / AOSP Camera / compatibility 1-2; Linux camera / libcamera / V4L2 0-1; AI plus camera input path or HAL workflow 0-1; C++ / toolchain fallback 0-1.',
+        'AI/C++ articles are optional bonus items only when final-selected inputs contain a concrete Camera HAL / Android Camera connection. Do not invent or force a generic AI article.',
         'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it is a real dated article and has concrete HAL native-code value.',
         lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles.' : '',
         lockedSections.length > 0 ? 'Do not duplicate locked article URLs, titles/headlines, source names, or same source + published date + similar title.' : '',
@@ -1292,7 +1395,7 @@ async function main() {
         'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
         'briefing must have exactly 3 items.'
       ].filter(Boolean).join('\n'),
-      `${commonContext}\n\n${lockedContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}`,
+      `${commonContext}\n\n${lockedContext}\n\nFinal-selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}`,
       editorSchema
     ), date, reporter);
 
@@ -1320,7 +1423,7 @@ async function main() {
         'Do not rewrite for style. Focus only on factual errors, source problems, and editorial-policy violations.',
         'Return only JSON matching the schema.'
       ].join('\n'),
-      `${commonContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+      `${commonContext}\n\nFinal-selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
       factCheckSchema
     ));
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
@@ -1345,7 +1448,11 @@ async function main() {
     let failedSections = [];
     let regeneratedSections = [];
     let rejectedRetryOutputs = [];
-    const repairPlan = buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings);
+    const fullRepairPlan = buildFullSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings);
+    const repairPlan = buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings, {
+      maxSectionRepairs: runtimeConfig.newsroomMaxSectionRepairs
+    });
+    const skippedRepairPlan = fullRepairPlan.slice(repairPlan.length);
     if (qualityReport.status !== 'PASS' && repairPlan.length > 0) {
       repairActions = repairPlan.map(item => `${item.action}: ${item.headline}`);
       failedSections = sectionsMatchingRepairPlan(editor.sections, repairPlan);
@@ -1358,20 +1465,21 @@ async function main() {
         [
           'You are the AI repair editor for Camera HAL SW Newsletter.',
           'Return only regenerated section JSON for the failed sections listed in the repair plan. Never return a full newsletter draft.',
-          'For required-fields, evidence-specificity, hal-depth, and actionability deductions, repair only the affected section.',
-          'For source_gap=true sections, prefer replacement or demotion to briefing/reference over text repair.',
+          'For repair-section actions, repair only the affected section using the same source.',
+          'For replace-section actions, replace the section with a stronger supplied candidate instead of rewriting weak evidence.',
+          'For replace-or-demote actions, demote the article to briefing/watchlist or replace it. Never rewrite source gaps into publishable facts.',
           'For reporter_eligibility_violations, replace or demote the section. Do not repair text around an ineligible source.',
-          'Replacement main articles must use only the selected deterministic reporter inputs or selected unused shortlist candidates supplied in this prompt.',
+          'Replacement main articles must use only the selected deterministic article capsules or selected unused capsule candidates supplied in this prompt.',
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
           'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, and Camera HAL / Android camera / C++ / AI workflow relevance.',
           'If those facts cannot be verified from the supplied candidate/source data, demote to briefing/watchlist or exclude; do not invent or infer missing release evidence.',
           `Keep ${MIN_MAIN_ARTICLES}-${MAX_MAIN_ARTICLES} main articles; 5 is the target only when enough strong eligible candidates exist.`,
-          'Maintain the slot policy: Android Camera/platform API 1-2; CameraX/AOSP/compatibility 1-2; Linux camera/libcamera/V4L2 0-1; at least 1 AI camera path/HAL workflow article; C++/toolchain fallback 0-1 from real dated articles only.',
+          'Maintain the slot policy: Android Camera/platform API 1-2; CameraX/AOSP/compatibility 1-2; Linux camera/libcamera/V4L2 0-1; AI camera path/HAL workflow 0-1 when present in final-selected inputs; C++/toolchain fallback 0-1 from real dated articles only.',
           'Use the golden example only for article structure and evidence/actionability style. Do not copy facts absent from current reporter candidates.',
           'Return only JSON matching the schema.'
         ].join('\n'),
-        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections, null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections, null, 2)}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nFinal-selected unused shortlist candidate pool JSON:\n${JSON.stringify(availableCompletionCandidates(reporter, preservedSections, excludedSections.concat(demotedSections)), null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality report JSON:\n${JSON.stringify(qualityReport, null, 2)}`,
+        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nFinal-selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nUnused final-selected article capsule pool JSON:\n${JSON.stringify(reporterCandidateCapsules(date, availableCompletionCandidates(reporter, preservedSections, excludedSections.concat(demotedSections)), articleCapsuleReport), null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
         editorCompletionSchema
       ), date, reporter);
       const repairMerged = mergeLockedSections(preservedSections, repairSections, excludedSections.concat(demotedSections));
@@ -1392,7 +1500,10 @@ async function main() {
         locked_sections: preservedSections.map((section, index) => sectionSummary(section, index)),
         failed_sections: failedSections.map((section, index) => sectionSummary(section, index)),
         regenerated_sections: regeneratedSections.map((section, index) => sectionSummary(section, index)),
-        rejected_retry_outputs: rejectedRetryOutputs
+        rejected_retry_outputs: rejectedRetryOutputs,
+        max_section_repairs: runtimeConfig.newsroomMaxSectionRepairs,
+        repair_plan: repairPlan,
+        skipped_repair_plan: skippedRepairPlan
       });
       fs.writeFileSync(path.join(newsroomDir, `editor-repair-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
 
@@ -1406,7 +1517,7 @@ async function main() {
           'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
           'Return only JSON matching the schema.'
         ].join('\n'),
-        `${commonContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+        `${commonContext}\n\nFinal-selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
         factCheckSchema
       ));
       eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
@@ -1453,7 +1564,7 @@ async function main() {
             'For each article, choose at most one selectedImage from that article imageCandidates; use an empty selectedImage when attribution or relevance is uncertain.',
             'Final newsletter text must be Korean. Return only JSON matching the schema.'
           ].join('\n'),
-          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor sections JSON:\n${JSON.stringify(editor.sections, null, 2)}\n\nEligible final-selected reporter candidates for additional articles JSON:\n${JSON.stringify({ date: reporter.date, candidates: completionCandidates }, null, 2)}\n\nCurrent quality report JSON:\n${JSON.stringify(qualityReport, null, 2)}`,
+          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor section summaries JSON:\n${JSON.stringify(editor.sections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nEligible final-selected article capsules for additional articles JSON:\n${JSON.stringify(reporterCandidateCapsules(date, completionCandidates, articleCapsuleReport), null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
           editorCompletionSchema
         ), date, reporter);
         const completionMerged = mergeLockedSections(editor.sections, completionSections, completionExcludedSections);
@@ -1476,7 +1587,7 @@ async function main() {
             'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
             'Return only JSON matching the schema.'
           ].join('\n'),
-          `${commonContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+          `${commonContext}\n\nFinal-selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
           factCheckSchema
         ));
         eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
@@ -1527,6 +1638,10 @@ async function main() {
       regenerated_sections: regeneratedSections.map((section, index) => sectionSummary(section, index)),
       rejected_retry_outputs: rejectedRetryOutputs,
       repair_actions: repairActions,
+      max_section_repairs: runtimeConfig.newsroomMaxSectionRepairs,
+      repair_plan: repairPlan,
+      skipped_repair_sections: skippedRepairPlan,
+      article_locks: lockedSections.map((section, index) => sectionLockRecord(section, index)),
       final_article_slot_distribution: finalArticleSlotDistribution(editor.sections),
       reporter_eligibility_blocked_sections: eligibilityFindings.map(finding => ({
         headline: finding.headline,
@@ -1574,6 +1689,7 @@ async function main() {
   const files = [
     collectedCandidatesRelPath(date),
     newsroomRelPath(date, 'shortlisted-candidates.json'),
+    newsroomRelPath(date, 'article-capsules.json'),
     newsroomRelPath(date, 'reporter-candidates.json'),
     newsroomRelPath(date, 'editor-draft.json'),
     newsroomRelPath(date, 'editor-draft.md'),
@@ -1632,6 +1748,9 @@ async function main() {
       quality_threshold: qualityReport.threshold,
       quality_deduction_count: ensureArray(qualityReport.deductions).length,
       locked_article_count: retryHistory.at(-1)?.locked_article_headlines.length || 0,
+      repaired_section_count: retryHistory.reduce((sum, item) => sum + ensureArray(item.regenerated_sections).length, 0),
+      failed_section_count: retryHistory.at(-1)?.failed_sections.length || 0,
+      skipped_repair_section_count: retryHistory.reduce((sum, item) => sum + ensureArray(item.skipped_repair_sections).length, 0),
       rejected_duplicate_article_count: retryHistory.reduce((sum, item) => sum + item.rejected_duplicate_headlines.length, 0),
       validate_ok: validateResult.ok,
       todo_found: todoFound,

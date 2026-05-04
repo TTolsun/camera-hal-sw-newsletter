@@ -24,6 +24,7 @@ function criticalFiles(date) {
     '.tmp/newsletter-generation-status.json',
     collectedCandidatesRelPath(date),
     newsroomRelPath(date, 'shortlisted-candidates.json'),
+    newsroomRelPath(date, 'article-capsules.json'),
     newsroomRelPath(date, 'reporter-candidates.json'),
     newsroomRelPath(date, 'quality-report.json'),
     newsroomRelPath(date, 'quality-report.md'),

@@ -6,7 +6,7 @@
 
 newsroom pipeline은 `content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 기본 `85/100` 이상이어야 합니다. Quality threshold: 85. 이 threshold 완화는 Gemini 비용과 false negative를 줄이기 위한 운영 튜닝이며, 품질 검증 우회가 아닙니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 85 이상이어도 publish-ready로 보지 않습니다.
 
-draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `1`입니다. 이미 article quality check를 통과한 section은 보존하고, `retry-history.json`과 `retry-history.md`를 남깁니다. Gemini API retry max delay 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`이며, 300000ms는 5분입니다.
+draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `1`입니다. 이미 article quality check를 통과한 section은 보존하고, quality retry 한 번에서 repair 또는 replace할 section 수는 `NEWSROOM_MAX_SECTION_REPAIRS=1`로 제한합니다. `retry-history.json`과 `retry-history.md`에는 locked article, failed section, repair policy, skipped repair section을 남깁니다. Gemini API retry max delay 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`이며, 300000ms는 5분입니다.
 
 quality gate는 Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, article composition을 확인합니다. source gap, fact-check `must_fix`, source/reference 누락, underfilled article count, 약한 Camera HAL / Android Camera relevance, 약한 evidence specificity, 필요한 date/version/API/component/behavior-change 근거 누락은 점수가 충분해도 Hard blocker result: NEEDS_FIX 또는 `publish_ready=false`를 강제합니다. actionability처럼 단독 발행 차단보다는 개선 권고에 가까운 항목은 non-blocking deduction으로 점수만 낮출 수 있으며, 이 경우에도 Quality score가 85 미만이면 통과하지 않습니다. retry 후에도 점수가 낮거나 blocker가 남아 있으면 weekly workflow는 review PR을 만들 수 있지만 `needs-fix`로 표시하고 run을 실패시켜 발행 가능한 이슈로 취급하지 않습니다.
 
@@ -35,13 +35,14 @@ source registry
 
 ## Role 2. Gemini Reporter
 
-Gemini 실행 전에 `scripts/newsroom/generate/newsroom-selection.js`가 `content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. 기존 `scripts/lib/newsroom-selection.js` 경로는 호환 shim으로 유지합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다.
+Gemini 실행 전에 `scripts/newsroom/generate/newsroom-selection.js`가 `content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. 기존 `scripts/lib/newsroom-selection.js` 경로는 호환 shim으로 유지합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다. Gemini prompt에는 full candidate 대신 `content/newsroom/YYYY-MM-DD/article-capsules.json`의 compact capsule을 전달합니다.
 
-shortlist는 최대 12개 후보로 제한됩니다. local selector는 editor prompt가 실행되기 전에 4-5개의 final main article input을 선택합니다. Camera HAL, Android Camera, AOSP, CameraX 항목을 우선하고, AI 관련 기사 최소 1개를 요구합니다. C++ 또는 developer-productivity material은 강한 camera/platform 항목이 4개보다 적을 때 보완용으로 사용합니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
+shortlist는 기본 8-12개 수준, hard cap 12개 후보로 제한됩니다. local selector는 Gemini reporter/editor prompt가 실행되기 전에 deterministic scoring으로 후보를 줄이고 4-5개의 final main article input을 선택합니다. scoring은 Camera HAL / Android Camera 직접성, 구체 evidence, 최신성, 실무 actionability, source reliability를 우선합니다. source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음은 main article에서 제외되거나 강하게 감점됩니다. AI/C++ 기사는 필수가 아니라 Camera HAL / Android Camera 맥락이 있을 때만 optional bonus로 취급하며, HAL 관련 후보가 충분하면 generic AI/C++ 기사는 final main article input으로 올라오지 않습니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
 
 - 수집 후보 중 Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI workflow와 관련된 항목을 점수화합니다.
 - source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
 - 출력: `content/newsroom/YYYY-MM-DD/reporter-candidates.json`.
+- `article-capsules.json`은 title, url, source, published_date, topic_type, component, what_changed, why_hal_engineer_cares, evidence, risk, score 중심의 compact prompt 입력입니다. reporter stage에는 top shortlist capsule 8-12개, editor/fact-check/repair/completion stage에는 final-selected 또는 필요한 completion capsule만 전달합니다.
 
 Gemini reporter는 전체 collected candidate가 아니라 deterministic shortlist만 받습니다. 요약, tag, evidence field를 보강하되 local `selected=true` final article decision을 보존해야 합니다.
 
@@ -52,7 +53,7 @@ Gemini reporter는 전체 collected candidate가 아니라 deterministic shortli
 - 이미지 URL을 새로 만들지 않고 collector가 제공한 `imageCandidates`에서만 선택합니다.
 - 출력: `content/newsroom/YYYY-MM-DD/editor-draft.json`, `content/newsroom/YYYY-MM-DD/editor-draft.md`.
 
-editor는 deterministic final article input과 locked/retry context만 받습니다. retry가 필요하면 통과한 section은 lock하고, repair prompt는 실패한 section만 재생성하도록 요청합니다. retry artifact는 `locked_sections`, `failed_sections`, `regenerated_sections`, rejected retry output을 기록합니다.
+editor는 deterministic final article input과 locked/retry context만 받습니다. retry가 필요하면 통과한 section은 lock하고, repair prompt는 실패한 section만 재생성하도록 요청합니다. source gap 또는 ineligible source는 rewrite하지 않고 demote 또는 replace 대상으로 처리합니다. weak HAL relevance와 duplicate는 replace, missing actionability와 required/evidence 부족은 same-source section repair 대상으로 분리합니다. retry artifact는 `locked_sections`, `failed_sections`, `regenerated_sections`, `repair_plan`, `skipped_repair_plan`, rejected retry output을 기록합니다.
 
 ## Role 4. Gemini Fact Checker
 
@@ -75,7 +76,7 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 - `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
 - `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
   외부 이미지가 404, timeout, invalid content-type 등으로 실패해도 local fallback이 존재하고 최종 `selectedImage`가 fallback 경로로 정리되면 warning only입니다. 원본 URL은 `originalImage` 또는 `resolvedImage.originalUrl`에 보존하며, fallback 파일 누락이나 깨진 외부 URL이 publish 산출물에 남은 경우에만 fail합니다.
-- `npm run validate:quality`: deterministic quality report를 재계산하고 4개 미만 또는 5개 초과 main article, AI 관련 기사 누락, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap mapped candidate, dated evidence 없는 selected candidate를 차단합니다.
+- `npm run validate:quality`: deterministic quality report를 재계산하고 4개 미만 또는 5개 초과 main article, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap mapped candidate, dated evidence 없는 selected candidate를 차단합니다. AI/C++ 기사는 optional bonus이며 필수 gate가 아닙니다.
 - `npm run validate:localization`: 유지 문서와 표시용 JSON 값이 한국어 규칙을 지키는지 확인합니다.
 
 ## URL Summary Cache
