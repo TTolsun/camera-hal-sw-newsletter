@@ -130,6 +130,21 @@ test('quality gate allows non-blocking actionability deductions above threshold'
   assert.ok(report.deductions.every(item => item.blocking === false));
 });
 
+test('quality gate allows no-AI HAL lineups when other hard gates pass', () => {
+  const sections = [
+    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
+    section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' }),
+    section({ headline: 'Android Camera API change C', url: 'https://example.com/c' }),
+    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/d' })
+  ];
+  const report = reportFor(sections, reporterCandidatesFor(sections));
+
+  assert.equal(report.status, 'PASS');
+  assert.equal(report.metrics.ai_article_count, 0);
+  assert.equal(report.metrics.blocking_deduction_count, 0);
+  assert.equal(report.deductions.some(item => /AI article/i.test(item.reason)), false);
+});
+
 test('quality gate keeps underfilled drafts in NEEDS_FIX even above threshold', () => {
   const sections = validSections(3);
   const report = reportFor(sections, reporterCandidatesFor(sections));

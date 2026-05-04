@@ -7,6 +7,8 @@ const SHORTLIST_CAP = 12;
 const MIN_FINAL_ARTICLES = 4;
 const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = 3;
 const MAX_FINAL_ARTICLES = 5;
+const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
+const MIN_CAMERA_HAL_DIRECTNESS = 2;
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -24,6 +26,15 @@ function bool(value, fallback = false) {
 function number(value, fallback = 0) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function rounded(value, digits = 2) {
+  const scale = 10 ** digits;
+  return Math.round(value * scale) / scale;
 }
 
 function normalizeUrl(value) {
@@ -157,30 +168,125 @@ function hasCppFallbackValue(candidate) {
   return /C\+\+|cpp|LLVM|Clang|NDK|native|toolchain|build|test|sanitizer/i.test(candidateBody(candidate));
 }
 
-function scoreCandidate(candidate, newsletterDate) {
-  const cameraRaw = Math.max(
+function hasConcreteApiComponent(candidate) {
+  if (text(candidate.api_or_component || candidate.apiOrComponent)) return true;
+  return /Camera HAL|CameraX|Camera2|AIDL|HIDL|ICamera|camera3|camera provider|metadata|capture request|capture result|stream|buffer|ImageReader|Surface|Camera ITS|CTS|VTS|CDD|libcamera|V4L2|NDK camera/i
+    .test(candidateBody(candidate));
+}
+
+function hasBehaviorEvidence(candidate) {
+  if (text(candidate.behavior_change || candidate.behaviorChange)) return true;
+  return /release|fix|regression|compatibility|validation|behavior|breaking|deprecated|migration|latency|frame|crash|bug|test|CTS|VTS|Camera ITS|CDD/i
+    .test(candidateBody(candidate));
+}
+
+function cameraHalDirectnessScore(candidate) {
+  const body = candidateBody(candidate);
+  const rawScore = Math.max(
     number(candidate.camera_hal_relevance_score),
     number(candidate.cameraHalRelevanceScore),
     number(candidate.relevanceScore),
     number(candidate.relevance_score)
   );
-  const cameraHal = Math.min(5, Math.round(cameraRaw / 20));
+  let score = rawScore > 0 ? rawScore / 20 : 0;
+  if (/Camera HAL|camera provider|camera3|ICamera|HAL3|HAL/i.test(body)) score = Math.max(score, 5);
+  if (/Android Camera|AOSP Camera|CameraX|Camera2|Camera ITS/i.test(body)) score = Math.max(score, 4);
+  if (/metadata|capture request|capture result|stream|buffer|CTS|VTS|CDD|libcamera|V4L2/i.test(body)) score = Math.max(score, 3);
+  if (/\bcamera\b/i.test(body)) score = Math.max(score, 1);
+  return clamp(rounded(score), 0, 5);
+}
+
+function evidenceSpecificityScore(candidate) {
+  let score = clamp(number(candidate.evidence_score), 0, 5);
+  if (publishedDate(candidate) && fieldBoolean(candidate, 'hasDatedEvidence', 'has_dated_evidence')) score += 1;
+  if (hasConcreteApiComponent(candidate)) score += 1;
+  if (hasBehaviorEvidence(candidate)) score += 1;
+  if (text(candidate.version_or_release || candidate.versionOrRelease)) score += 1;
+  return clamp(score, 0, 5);
+}
+
+function practicalActionabilityScore(candidate) {
+  const raw = Math.max(
+    number(candidate.practical_actionability_score),
+    number(candidate.actionability_score)
+  );
+  if (raw > 0) return clamp(raw > 5 ? raw / 20 : raw, 0, 5);
+
+  let score = 0;
+  const body = candidateBody(candidate);
+  if (hasConcreteApiComponent(candidate)) score += 2;
+  if (hasBehaviorEvidence(candidate)) score += 1;
+  if (/test|validate|CTS|VTS|Camera ITS|migration|compatibility|debug|trace|perf|latency|frame|buffer|metadata/i.test(body)) score += 2;
+  return clamp(score, 0, 5);
+}
+
+function optionalAiCppBonus(candidate) {
+  const cameraDirectness = cameraHalDirectnessScore(candidate);
+  if (cameraDirectness < MIN_CAMERA_HAL_DIRECTNESS) return 0;
+  let score = 0;
+  if (hasAiValue(candidate)) score += 2;
+  if (hasCppFallbackValue(candidate)) score += 1;
+  return clamp(score, 0, 5);
+}
+
+function genericAiPenalty(candidate) {
+  return hasAiValue(candidate) && cameraHalDirectnessScore(candidate) < MIN_CAMERA_HAL_DIRECTNESS ? 12 : 0;
+}
+
+function watchPagePenalty(candidate) {
+  return fieldBoolean(candidate, 'isWatchPage', 'is_watch_page') ? 10 : 0;
+}
+
+function noDatePenalty(candidate) {
+  return !publishedDate(candidate) || !fieldBoolean(candidate, 'hasDatedEvidence', 'has_dated_evidence') ? 20 : 0;
+}
+
+function noApiComponentPenalty(candidate) {
+  return hasConcreteApiComponent(candidate) ? 0 : 14;
+}
+
+function sourceGapPenalty(candidate) {
+  return bool(candidate.source_gap_risk) ? 25 : 0;
+}
+
+function scoreCandidate(candidate, newsletterDate) {
+  const cameraHal = cameraHalDirectnessScore(candidate);
   const androidCamera = hasCameraPlatformValue(candidate) ? 5 : 0;
   const ai = hasAiValue(candidate) ? 3 : 0;
   const cppFallback = hasCppFallbackValue(candidate) ? 2 : 0;
-  const evidence = Math.min(5, number(candidate.evidence_score));
+  const optionalBonus = optionalAiCppBonus(candidate);
+  const evidence = evidenceSpecificityScore(candidate);
   const sourceReliability = reliabilityScore(candidate);
   const freshness = freshnessScore(candidate, newsletterDate);
-  const total =
-    sourceReliability * 2 +
-    freshness +
-    cameraHal * 3 +
-    androidCamera * 2 +
-    ai +
-    cppFallback +
-    evidence * 2;
+  const actionability = practicalActionabilityScore(candidate);
+  const penalties = {
+    generic_ai_penalty: genericAiPenalty(candidate),
+    watch_page_penalty: watchPagePenalty(candidate),
+    no_date_penalty: noDatePenalty(candidate),
+    no_api_component_penalty: noApiComponentPenalty(candidate),
+    source_gap_penalty: sourceGapPenalty(candidate)
+  };
+  const penaltyTotal = Object.values(penalties).reduce((sum, value) => sum + value, 0);
+  const total = rounded(
+    cameraHal * 9 +
+    evidence * 4 +
+    freshness * 5 +
+    actionability * 2 +
+    sourceReliability +
+    optionalBonus -
+    penaltyTotal
+  );
 
   return {
+    camera_hal_directness: cameraHal,
+    evidence_specificity: evidence,
+    freshness_score: freshness,
+    practical_actionability: actionability,
+    optional_ai_cpp_bonus: optionalBonus,
+    ...penalties,
+    penalty_total: penaltyTotal,
+    main_article_score_threshold: MAIN_ARTICLE_SCORE_THRESHOLD,
+    minimum_camera_hal_directness: MIN_CAMERA_HAL_DIRECTNESS,
     source_reliability: sourceReliability,
     freshness,
     camera_hal_relevance: cameraHal,
@@ -190,6 +296,20 @@ function scoreCandidate(candidate, newsletterDate) {
     evidence_quality: evidence,
     total
   };
+}
+
+function scoreFilterReasons(scoreBreakdown) {
+  const reasons = [];
+  if (scoreBreakdown.total < MAIN_ARTICLE_SCORE_THRESHOLD) {
+    reasons.push(`deterministic_score<${MAIN_ARTICLE_SCORE_THRESHOLD}`);
+  }
+  if (scoreBreakdown.camera_hal_directness < MIN_CAMERA_HAL_DIRECTNESS) {
+    reasons.push(`camera_hal_directness<${MIN_CAMERA_HAL_DIRECTNESS}`);
+  }
+  if (scoreBreakdown.no_date_penalty > 0) reasons.push('missing dated evidence');
+  if (scoreBreakdown.source_gap_penalty > 0) reasons.push('source_gap_risk=true');
+  if (scoreBreakdown.no_api_component_penalty > 0) reasons.push('missing concrete API/component evidence');
+  return [...new Set(reasons)];
 }
 
 function candidatesAreDuplicate(left, right) {
@@ -209,6 +329,7 @@ function candidatesAreDuplicate(left, right) {
 
 function decorateCandidate(candidate, newsletterDate) {
   const score_breakdown = scoreCandidate(candidate, newsletterDate);
+  const score_filter_reasons = scoreFilterReasons(score_breakdown);
   return {
     ...candidate,
     url: candidateUrl(candidate),
@@ -218,12 +339,15 @@ function decorateCandidate(candidate, newsletterDate) {
     selected_for_editor: false,
     deterministic_score: score_breakdown.total,
     score_breakdown,
+    main_article_score_eligible: score_filter_reasons.length === 0,
+    score_filter_reasons,
     exclusion_reasons: exclusionReasons(candidate),
     normalized_url: normalizeUrl(candidateUrl(candidate)),
     url_hash: normalizedUrlHash(candidateUrl(candidate)),
     ai_slot_candidate: hasAiValue(candidate),
     camera_platform_candidate: hasCameraPlatformValue(candidate),
-    cpp_fallback_candidate: hasCppFallbackValue(candidate)
+    cpp_fallback_candidate: hasCppFallbackValue(candidate),
+    optional_ai_cpp_candidate: optionalAiCppBonus(candidate) > 0
   };
 }
 
@@ -247,8 +371,8 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
 
   eligible.sort((a, b) =>
     b.deterministic_score - a.deterministic_score ||
-    b.score_breakdown.camera_hal_relevance - a.score_breakdown.camera_hal_relevance ||
-    b.score_breakdown.ai_required_slot_fit - a.score_breakdown.ai_required_slot_fit ||
+    b.score_breakdown.camera_hal_directness - a.score_breakdown.camera_hal_directness ||
+    b.score_breakdown.evidence_specificity - a.score_breakdown.evidence_specificity ||
     normalizeTitle(a.title).localeCompare(normalizeTitle(b.title))
   );
 
@@ -277,28 +401,25 @@ function selectFinalArticles(shortlist, options = {}) {
     candidate.score_breakdown ? candidate : decorateCandidate(candidate, options.date || '')
   );
   const selected = [];
-  const cameraPool = candidates.filter(candidate => candidate.camera_platform_candidate && !candidate.cpp_fallback_candidate);
-  const aiPool = candidates.filter(candidate => candidate.ai_slot_candidate);
-  const fallbackPool = candidates.filter(candidate => !candidate.camera_platform_candidate && candidate.cpp_fallback_candidate);
-  const remainingPool = candidates.filter(candidate => !cameraPool.includes(candidate) && !fallbackPool.includes(candidate));
+  const mainEligible = candidates.filter(candidate => candidate.main_article_score_eligible !== false);
+  const strongCameraPool = mainEligible.filter(candidate => candidate.camera_platform_candidate);
+  const optionalCameraPool = mainEligible.filter(candidate =>
+    candidate.optional_ai_cpp_candidate && candidate.camera_platform_candidate
+  );
+  const adjacentPool = mainEligible.filter(candidate => !strongCameraPool.includes(candidate));
 
-  pushUnique(selected, aiPool.find(candidate => candidate.camera_platform_candidate) || aiPool[0], 'ai-required');
-  for (const candidate of cameraPool) {
-    if (selected.length >= Math.min(maxArticles, 4)) break;
-    pushUnique(selected, candidate, 'camera-platform');
-  }
-  for (const candidate of remainingPool) {
-    if (selected.length >= minArticles) break;
-    pushUnique(selected, candidate, candidate.ai_slot_candidate ? 'ai-required' : 'platform-adjacent');
-  }
-  for (const candidate of fallbackPool) {
-    if (selected.length >= minArticles) break;
-    pushUnique(selected, candidate, 'cpp-fallback');
-  }
-  for (const candidate of candidates) {
+  for (const candidate of strongCameraPool) {
     if (selected.length >= maxArticles) break;
-    if (selected.length >= minArticles && !candidate.camera_platform_candidate && !candidate.ai_slot_candidate) continue;
-    pushUnique(selected, candidate, candidate.ai_slot_candidate ? 'ai-required' : 'camera-platform');
+    const slot = candidate.optional_ai_cpp_candidate ? 'camera-platform-optional-ai-cpp' : 'camera-platform';
+    pushUnique(selected, candidate, slot);
+  }
+  for (const candidate of optionalCameraPool) {
+    if (selected.length >= Math.min(maxArticles, minArticles)) break;
+    pushUnique(selected, candidate, 'camera-platform-optional-ai-cpp');
+  }
+  for (const candidate of adjacentPool) {
+    if (selected.length >= minArticles) break;
+    pushUnique(selected, candidate, candidate.optional_ai_cpp_candidate ? 'optional-ai-cpp' : 'platform-adjacent');
   }
 
   return selected.slice(0, maxArticles);
@@ -320,8 +441,8 @@ function selectionErrors(selected) {
   if (items.length < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
     errors.push(`Only ${items.length} eligible non-duplicate final article input(s) remain after deterministic filtering.`);
   }
-  if (items.every(candidate => !candidate.ai_slot_candidate)) {
-    errors.push('No AI-related eligible final article input remains after deterministic filtering.');
+  if (items.length > 0 && items.every(candidate => !candidate.camera_platform_candidate)) {
+    errors.push('No Camera HAL / Android Camera eligible final article input remains after deterministic filtering.');
   }
   return errors;
 }
@@ -364,6 +485,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     eligible_candidate_count: shortlist.length,
     selected_article_count: selected.length,
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
+    optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
     shortlist_cap: cap,
     absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
     underfilled: warnings.length > 0,
@@ -372,8 +494,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       min_final_articles: MIN_FINAL_ARTICLES,
       absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
       max_final_articles: MAX_FINAL_ARTICLES,
-      cxx_fallback: 'Use C++ / developer productivity only when fewer than 4 strong camera/platform articles remain.',
-      ai_requirement: 'At least one final main article must be AI-related.'
+      shortlist_target_range: '8-12 candidates before Gemini reporter/editor prompts.',
+      main_article_score_threshold: MAIN_ARTICLE_SCORE_THRESHOLD,
+      minimum_camera_hal_directness: MIN_CAMERA_HAL_DIRECTNESS,
+      cxx_fallback: 'Use C++ / developer productivity only as an optional bonus when it is connected to Camera HAL / Android Camera.',
+      ai_requirement: 'AI is optional; generic AI does not displace sufficient Camera HAL / Android Camera candidates.'
     },
     shortlisted_candidates: markedShortlist,
     selected_articles: selected,
@@ -402,6 +527,8 @@ module.exports = {
   SHORTLIST_CAP,
   MIN_FINAL_ARTICLES,
   MAX_FINAL_ARTICLES,
+  MAIN_ARTICLE_SCORE_THRESHOLD,
+  MIN_CAMERA_HAL_DIRECTNESS,
   buildShortlistReport,
   candidatesAreDuplicate,
   exclusionReasons,

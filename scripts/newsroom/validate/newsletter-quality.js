@@ -153,7 +153,7 @@ function hasConcreteAction(section) {
 }
 
 function hasValidAiRelevance(section) {
-  if (!section.is_ai_related && !/AI|agent|LLM|NPU|GPU|on-device|inference|model/i.test(sectionText(section))) {
+  if (!section.is_ai_related && !/\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) {
     return false;
   }
   return /camera input|image|frame|stream|buffer|ImageAnalysis|NPU|GPU|ISP|privacy|HAL workflow|developer productivity|latency|thermal|power|agent|Camera HAL|Android Camera/i
@@ -272,9 +272,6 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   }
   if (ensureArray(editor.briefing).length !== 3) {
     boundedDeduct(state, 'composition', 3, `Expected exactly 3 briefing bullets, found ${ensureArray(editor.briefing).length}.`);
-  }
-  if (!sections.some(hasValidAiRelevance)) {
-    boundedDeduct(state, 'composition', 5, 'No AI article has a clear Camera HAL, camera input path, or HAL workflow relevance.');
   }
   const cameraCoverage = countSections(sections, /Camera HAL|Android Camera|CameraX|AOSP Camera|Camera2|CTS|VTS|Camera ITS/i);
   if (cameraCoverage < 2) {

@@ -5,6 +5,7 @@ const {
   buildShortlistReport,
   exclusionReasons,
   normalizeUrl,
+  scoreCandidate,
   selectFinalArticles,
   summarizeExclusionReasons
 } = require('../scripts/lib/newsroom-selection');
@@ -65,7 +66,7 @@ test('deterministic score ordering is stable and shortlist is capped', () => {
   assert.ok(report.shortlisted_candidates[0].deterministic_score >= report.shortlisted_candidates[1].deterministic_score);
 });
 
-test('final selection enforces AI slot and uses C++ fallback only when needed', () => {
+test('final selection prioritizes HAL candidates and treats AI/C++ as optional', () => {
   const shortlist = [
     candidate({ title: 'CameraX release A', url: 'https://example.com/a' }),
     candidate({ title: 'AOSP Camera change B', url: 'https://example.com/b' }),
@@ -77,8 +78,8 @@ test('final selection enforces AI slot and uses C++ fallback only when needed', 
   const selected = selectFinalArticles(shortlist);
 
   assert.ok(selected.length >= 4 && selected.length <= 5);
-  assert.ok(selected.some(item => item.ai_slot_candidate));
-  assert.ok(selected.some(item => item.title.includes('C++')) || selected.filter(item => item.camera_platform_candidate).length >= 4);
+  assert.ok(selected.every(item => item.camera_platform_candidate));
+  assert.ok(selected.some(item => item.optional_ai_cpp_candidate));
 });
 
 test('near-duplicate titles are prevented', () => {
@@ -142,7 +143,7 @@ test('two eligible candidates remain a hard deterministic selection error', () =
   assert.ok(report.selection_errors.some(error => error.includes('Only 2 eligible')));
 });
 
-test('four non-AI candidates fail the deterministic AI requirement', () => {
+test('four non-AI HAL candidates are publish-ready without an AI requirement', () => {
   const report = buildShortlistReport('2026-05-03', [
     candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
     candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
@@ -151,8 +152,52 @@ test('four non-AI candidates fail the deterministic AI requirement', () => {
   ]);
 
   assert.equal(report.selected_article_count, 4);
-  assert.equal(report.publish_ready, false);
-  assert.ok(report.selection_errors.includes('No AI-related eligible final article input remains after deterministic filtering.'));
+  assert.equal(report.publish_ready, true);
+  assert.deepEqual(report.selection_errors, []);
+  assert.equal(report.ai_selected_article_count, 0);
+});
+
+test('generic AI does not displace sufficient Camera HAL candidates', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'Camera HAL update A changes metadata handling', url: 'https://example.com/a', api_or_component: 'Camera HAL metadata' }),
+    candidate({ title: 'CameraX release B improves Android Camera validation', url: 'https://example.com/b', api_or_component: 'CameraX' }),
+    candidate({ title: 'AOSP Camera provider C updates stream behavior', url: 'https://example.com/c', api_or_component: 'camera provider stream' }),
+    candidate({ title: 'Android Camera API D fixes buffer compatibility', url: 'https://example.com/d', api_or_component: 'Camera2 buffer' }),
+    candidate({
+      title: 'Generic AI model launch for productivity',
+      url: 'https://example.com/ai-generic',
+      summary: 'LLM agent workflow for office productivity.',
+      camera_hal_relevance_score: 0,
+      api_or_component: '',
+      behavior_change: ''
+    })
+  ]);
+
+  assert.equal(report.selected_articles.some(item => item.url === 'https://example.com/ai-generic'), false);
+  assert.ok(report.shortlisted_candidates.find(item => item.url === 'https://example.com/ai-generic').score_filter_reasons.includes('missing concrete API/component evidence'));
+});
+
+test('score breakdown exposes HAL-first deterministic fields and penalties', () => {
+  const halScore = scoreCandidate(candidate({
+    title: 'Camera HAL stream update',
+    summary: 'Camera HAL stream buffer validation update.',
+    api_or_component: 'Camera HAL stream',
+    behavior_change: 'Updates stream buffer validation.'
+  }), '2026-05-03');
+  const genericAiScore = scoreCandidate(candidate({
+    title: 'Generic AI model update',
+    summary: 'LLM model launch for office productivity.',
+    camera_hal_relevance_score: 0,
+    api_or_component: '',
+    behavior_change: ''
+  }), '2026-05-03');
+
+  assert.ok(halScore.camera_hal_directness >= 2);
+  assert.ok(halScore.evidence_specificity >= 4);
+  assert.equal(halScore.generic_ai_penalty, 0);
+  assert.ok(genericAiScore.generic_ai_penalty > 0);
+  assert.ok(genericAiScore.no_api_component_penalty > 0);
+  assert.ok(halScore.total > genericAiScore.total);
 });
 
 test('exclusion reason summary sorts by count descending then reason name', () => {
