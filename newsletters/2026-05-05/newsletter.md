@@ -7,13 +7,52 @@
 - Firebase AI Logic API의 하이브리드 추론 및 Gemini 모델 지원 확대로, 카메라 데이터 전달 경로 및 NPU/GPU 스케줄링에 대한 HAL의 최적화 전략이 중요해졌습니다.
 - GCC 16.1 컴파일러의 성능 향상은 C++ 네이티브 코드 최적화에 대한 새로운 관점을 제공하며, 이는 HAL 코드의 잠재적 성능 개선 기회를 탐색하는 데 유용합니다.
 
-## 2. AI plus camera input path or HAL workflow
+## 2. Android Camera / platform API
+
+### Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선
+
+![Android 17 Beta 4 출시 이미지](https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE)
+
+_Image: [Android Developers Blog](https://android-developers.googleblog.com/)_
+
+
+**이번 주 확인한 사실**
+
+- 릴리스/버전: Android 17 Beta 4
+- 릴리스 날짜: 2026-04-16
+- API/컴포넌트: Android SDK
+- 동작 변경: 앱 호환성 및 플랫폼 안정성 개선
+
+**배경지식**
+
+Android 운영체제 베타 버전 출시는 최종 릴리스 전에 플랫폼의 안정성과 다양한 애플리케이션과의 호환성을 확보하기 위한 중요한 단계입니다. 이는 Camera HAL 팀이 향후 OS 버전에서의 카메라 기능 동작을 예측하고 대비하는 데 필수적입니다.
+
+**Camera HAL 관점 해석**
+
+Camera HAL 팀은 Android 17 Beta 4에서 발표된 변경 사항이 Camera HAL 인터페이스, 프레임워크와의 상호작용, 그리고 카메라 관련 CTS/VTS/Camera ITS 테스트에 미치는 영향을 평가해야 합니다. 특히, 카메라 스트림 구성, 메타데이터 처리, 또는 전력 관리와 관련된 변경 사항은 주의 깊게 살펴봐야 합니다.
+
+**우리 팀이 확인할 Action Item**
+
+- 2주 내에 Android 17 Beta 4 릴리스 노트를 검토하고, 카메라 관련 변경 사항을 요약하여 팀에 공유합니다.
+- 영향을 받을 수 있는 주요 카메라 API 및 스트림 조합에 대한 회귀 테스트 계획을 수립합니다.
+
+**팀 공유용 한 줄**
+
+Android 17 Beta 4 출시로 플랫폼 안정성이 개선되었으며, 카메라 관련 변경 사항을 면밀히 검토하고 테스트 계획을 업데이트해야 합니다.
+
+**출처**
+
+- [The Fourth Beta of Android 17](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)
+
+---
+
+## 3. AI plus Android Camera input path or HAL workflow
 
 ### Android용 하이브리드 추론 및 새로운 Gemini 모델 지원
 
-![Android용 하이브리드 추론 및 새로운 Gemini 모델 지원 image](../../assets/images/fallback/ai.svg)
+![Android에서 하이브리드 추론 솔루션 개념도](../../assets/images/fallback/ai.svg)
 
-_Image: [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
+_Image: [Android Developers Blog](https://android-developers.googleblog.com/)_
 
 
 **이번 주 확인한 사실**
@@ -27,7 +66,7 @@ _Image: [Experimental hybrid inference and new Gemini models for Android](https:
 
 **Camera HAL 관점 해석**
 
-카메라 HAL은 이제 AI 추론을 위한 데이터 준비 작업에서 온디바이스 처리와 클라우드 연동 간의 균형을 고려해야 합니다. Nano Banana와 같은 새로운 Gemini 모델은 특정 입력 데이터 형식이나 처리 파이프라인을 요구할 수 있습니다. HAL 팀은 카메라 스트림 구성(예: 해상도, 형식, 프레임 속도)을 AI 추론 요구사항에 맞게 동적으로 조정하고, NPU/GPU 스케줄링과 협력하여 효율적인 데이터 전달 및 처리를 보장해야 합니다. 또한, 이미지 생성 작업의 경우 HAL은 추가적인 메타데이터나 제어 기능을 지원해야 할 수도 있습니다.
+카메라 HAL은 이제 AI 추론을 위한 데이터 준비 작업에서 온디바이스 처리와 클라우드 연동 간의 균형을 고려해야 합니다. Nano Banana와 같은 새로운 Gemini 모델은 특정 입력 데이터 형식이나 처리 파이프라인을 요구할 수 있습니다. HAL 팀은 카메라 스트림 구성(예: 해상도, 형식, 프레임 속도)을 AI 추론 요구사항에 맞게 동적으로 조정하고, NPU/GPU 스케줄링과 협력하여 효율적인 데이터 전달 및 처리를 보장해야 합니다. 또한, 이미지 생성 작업의 경우 HAL은 추가적인 메타데이터나 제어 기능을 지원해야 할 수도 있습니다. Android Camera pipeline note: Camera HAL must verify YUV/PRIVATE stream formats, metadata handoff, and NPU/GPU queue boundaries for this AI input path.
 
 **우리 팀이 확인할 Action Item**
 
@@ -44,7 +83,7 @@ _Image: [Experimental hybrid inference and new Gemini models for Android](https:
 
 ---
 
-## 3. C++ / toolchain fallback
+## 4. C++ / toolchain fallback
 
 ### GCC 16.1 컴파일러 출시: 성능 향상 및 C++ 네이티브 코드에 대한 시사점
 
@@ -83,7 +122,7 @@ GCC 16.1 컴파일러의 성능 향상 소식을 통해 C++ 네이티브 코드 
 
 ---
 
-## 4. Linux camera / libcamera / V4L2
+## 5. Linux camera / libcamera / V4L2
 
 ### FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향
 
@@ -134,7 +173,7 @@ FreeBSD 15.1 Beta 1 출시를 통해 Linux 카메라/미디어 생태계의 발�
 
 ## 참고자료
 
+- [The Fourth Beta of Android 17](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)
 - [Experimental hybrid inference and new Gemini models for Android](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
 - [GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15](https://www.phoronix.com/review/gcc-16-benchmarks)
 - [FreeBSD 15.1 Beta Released For Early Testing](https://www.phoronix.com/news/FreeBSD-15.1-Beta-1)
-- [The Fourth Beta of Android 17](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html)

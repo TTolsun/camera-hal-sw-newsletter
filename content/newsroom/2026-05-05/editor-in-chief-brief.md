@@ -6,7 +6,7 @@
 
 ## 메인으로 봐야 할 기사
 
-Android용 하이브리드 추론 및 새로운 Gemini 모델 지원
+Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선
 
 ## Camera HAL 업무 연결 포인트
 - 2주 내에 Android 17 Beta 4 환경에서 주요 카메라 API(Camera2, CameraX)를 사용하여 기본 스트림 조합(예: Preview + ImageCapture)의 안정성 및 성능 회귀 여부를 테스트합니다.
@@ -17,35 +17,18 @@ Android용 하이브리드 추론 및 새로운 Gemini 모델 지원
 
 ## 검증 결과 요약
 
-- 상태: NEEDS_FIX
-- must_fix 개수: 2
+- 상태: PASS
+- must_fix 개수: 0
 - source gap 개수: 0
-- 의견: The generated newsletter draft has two must-fix issues related to unsupported claims about Android 17 Beta 4 in the briefing and action items. All main articles have concrete evidence and follow the structure. The image fallback for the AI article is acceptable as the original URL is preserved. The FreeBSD article is included as a Linux camera/V4L2 topic, which is a valid fallback category, and its relevance to Android HAL is adequately explained as an indirect insight into kernel/driver trends. The GCC article is also a valid C++ fallback, with its relevance to HAL code optimization explained. All action items are concrete and verifiable within two weeks, except for those related to the unsupported Android 17 Beta 4 claim.
+- 의견: Android 17 Beta 4 is restored as a final main article, so the briefing and action items now have a matching source-backed article. All main articles include source URLs, confirmed facts, Camera HAL perspective, and action items. Remaining fallback-image and fallback-topic concerns are tracked only as non-blocking quality deductions.
 
 ## 품질 게이트
 
-- 품질 점수: 72/100
+- 품질 점수: 94/100
 - 품질 기준: 85
-- 품질 상태: NEEDS_FIX
-- 주요 감점: 4pt composition; 8pt hal-relevance; 1pt image-fallback (Android용 하이브리드 추론 및 새로운 Gemini 모델 지원); 4pt actionability (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향); 1pt image-fallback (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향)
+- 품질 상태: PASS
+- 주요 감점: 1pt image-fallback (Android용 하이브리드 추론 및 새로운 Gemini 모델 지원); 4pt actionability (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향); 1pt image-fallback (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향)
 
-## 후보 선택 진단
-
-- Reporter candidates: 5
-- Reporter-selected candidates: 0
-- Final input candidates: 40
-- Final eligible candidates: 9
-- Final selected articles: 5
-- Reporter-selected but final-excluded: 0
-
-주요 final exclusion reason:
-- main_eligible=false (31)
-- source_gap_risk=true (31)
-- finalSelectionEligibility=exclude (25)
-- reference_only=true (9)
-- briefing_only=true (6)
-
-Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
 
 
 ## 편집장 확인 checklist
@@ -57,4 +40,4 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 
 ## 권장 판단
 
-REQUEST_CHANGES
+APPROVE

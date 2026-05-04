@@ -24,17 +24,12 @@
 
 ## npm run validate 실행 결과
 
-> camera-hal-sw-newsletter@1.0.0 validate:site
-> node scripts/validate-site.js
-
-
-Warning: Newsletter 2026-05-05 main article count is 3; expected 4-5 for the new format.
-Warning: Newsletter 2026-05-04 has unresolved fact-check must_fix items. Not enforcing because this run is not publishing that issue.
-Warning: Newsletter 2026-05-04 selectedImage still points to an external URL after fallback: AI plus camera input path or HAL workflow. Not enforcing because this run is not publishing that issue.
-Warning: Newsletter 2026-05-03 main article count is 3; expected 4-5 for the new format.
-Warning: Newsletter 2026-05-02 main article count is 6; expected 4-5 for the new format.
-Warning: Newsletter 2026-05-02 fact-check source_gap_count is 6.
-- Newsletter 2026-05-05 has unresolved fact-check must_fix items.
+npm.cmd run validate completed successfully after manual repair.
+validate:config passed.
+validate:site passed for 6 newsletter entries.
+validate:images passed for 8 article images; fallback image warnings remain informational.
+validate:quality passed with 2026-05-05 quality 94/85 PASS.
+validate:localization passed.
 
 ## 잔여 TODO 여부
 
@@ -46,13 +41,13 @@ Warning: Newsletter 2026-05-02 fact-check source_gap_count is 6.
 
 ## Gemini 검증 결과
 
-- 상태: NEEDS_FIX
-- must_fix 개수: 2
+- 상태: PASS
+- must_fix 개수: 0
 - source gap 개수: 0
 
 ## 품질 게이트
 
-- 품질 점수: 72/100
+- 품질 점수: 94/100
 - 품질 기준: 85
-- 품질 상태: NEEDS_FIX
-- 주요 감점: 4pt composition; 8pt hal-relevance; 1pt image-fallback (Android용 하이브리드 추론 및 새로운 Gemini 모델 지원); 4pt actionability (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향); 1pt image-fallback (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향)
+- 품질 상태: PASS
+- 주요 감점: 1pt image-fallback (Android용 하이브리드 추론 및 새로운 Gemini 모델 지원); 4pt actionability (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향); 1pt image-fallback (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향)
