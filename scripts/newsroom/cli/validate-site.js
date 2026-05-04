@@ -1,12 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('../render/image-candidates');
+const { repoLocalPath } = require('../render/article-image-resolver');
 const {
   htmlAttr,
   readJson,
   repoPath
 } = require('../common/common');
-const { newsroomDir } = require('../common/artifact-paths');
+const {
+  changedArtifactDate,
+  newsroomDir
+} = require('../common/artifact-paths');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -44,6 +49,52 @@ function readJsonIfExists(filePath) {
     warn(`Could not parse ${path.relative(root, filePath)} for quality warnings: ${error.message}`);
     return null;
   }
+}
+
+function changedFilesFromGit() {
+  const candidates = [];
+  const eventName = process.env.GITHUB_EVENT_NAME || '';
+  const baseRef = process.env.GITHUB_BASE_REF || '';
+
+  if (eventName === 'pull_request' && baseRef) {
+    candidates.push(`origin/${baseRef}...HEAD`);
+  } else if (eventName === 'push') {
+    candidates.push('HEAD^..HEAD');
+  }
+
+  candidates.push('origin/main...HEAD');
+
+  for (const range of candidates) {
+    try {
+      const output = execFileSync('git', ['diff', '--name-only', range], {
+        cwd: root,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore']
+      });
+      return output.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
+    } catch (_) {
+      // Try the next range; local validation may not have origin/main or a parent commit.
+    }
+  }
+  return [];
+}
+
+function changedNewsletterDates() {
+  const dates = new Set();
+  for (const file of changedFilesFromGit()) {
+    const date = changedArtifactDate(file);
+    if (date) dates.add(date);
+  }
+  return dates;
+}
+
+function strictValidationDates() {
+  const dates = changedNewsletterDates();
+  if (fs.existsSync(newsletterDatePath)) {
+    const date = read(newsletterDatePath).trim();
+    if (date) dates.add(date);
+  }
+  return dates;
 }
 
 function sectionText(content, heading, nextHeadingPattern = /^## /m) {
@@ -129,7 +180,7 @@ function validateArticleQuality(item, md, newFormat) {
   }
 }
 
-function validateSourceGapArtifact(date) {
+function validateSourceGapArtifact(date, strictArtifactValidation) {
   const factCheck = readJsonIfExists(path.join(newsroomDir(root, date), 'fact-check-report.json'));
   if (!factCheck) return;
   const sourceGapCount = Number.isFinite(Number(factCheck.source_gap_count))
@@ -141,11 +192,50 @@ function validateSourceGapArtifact(date) {
     warn(`Newsletter ${date} fact-check source_gap_count is ${sourceGapCount}.`);
   }
   if (factCheck.status === 'NEEDS_FIX' && Array.isArray(factCheck.must_fix) && factCheck.must_fix.length > 0) {
-    fail(`Newsletter ${date} has unresolved fact-check must_fix items.`);
+    const message = `Newsletter ${date} has unresolved fact-check must_fix items.`;
+    if (strictArtifactValidation) {
+      fail(message);
+    } else {
+      warn(`${message} Not enforcing because this run is not publishing that issue.`);
+    }
   }
 }
 
-function validateEditorImageArtifact(date) {
+function isHttpsUrl(value) {
+  try {
+    return new URL(String(value || '').trim()).protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+function isFallbackImagePath(value) {
+  return /^(?:(?:\.\.\/){1,3})?assets\/images\/fallback\//.test(String(value || '').replace(/\\/g, '/'));
+}
+
+function validateLocalFallbackSelectedImage(date, section, label, selectedImage) {
+  if (!isFallbackImagePath(selectedImage)) {
+    fail(`Newsletter ${date} selectedImage must be an allowed HTTPS article image or repo-local fallback: ${label}`);
+    return;
+  }
+
+  const localPath = repoLocalPath(root, selectedImage);
+  if (!localPath || !fs.existsSync(localPath)) {
+    fail(`Newsletter ${date} selectedImage fallback file is missing: ${label} (${selectedImage})`);
+    return;
+  }
+
+  const resolved = section.resolvedImage || {};
+  const resolvedUrl = resolved.url || resolved.src || '';
+  if (resolved.usedFallback !== true) {
+    fail(`Newsletter ${date} fallback selectedImage missing resolvedImage.usedFallback=true: ${label}`);
+  }
+  if (resolvedUrl !== selectedImage) {
+    fail(`Newsletter ${date} fallback selectedImage does not match resolvedImage.url: ${label}`);
+  }
+}
+
+function validateEditorImageArtifact(date, strictArtifactValidation) {
   const editor = readJsonIfExists(path.join(newsroomDir(root, date), 'editor-draft.json'));
   if (!editor || !Array.isArray(editor.sections)) return;
 
@@ -153,6 +243,22 @@ function validateEditorImageArtifact(date) {
     const label = section.category || `section ${index + 1}`;
     const selectedImage = section.selectedImage || '';
     if (!selectedImage) continue;
+
+    const resolved = section.resolvedImage || {};
+    if (!isHttpsUrl(selectedImage)) {
+      validateLocalFallbackSelectedImage(date, section, label, selectedImage);
+      continue;
+    }
+
+    if (resolved.usedFallback === true) {
+      const message = `Newsletter ${date} selectedImage still points to an external URL after fallback: ${label}`;
+      if (strictArtifactValidation) {
+        fail(message);
+      } else {
+        warn(`${message}. Not enforcing because this run is not publishing that issue.`);
+      }
+      continue;
+    }
 
     const imageCandidates = Array.isArray(section.imageCandidates) ? section.imageCandidates : [];
     if (!imageCandidates.some(image => image && image.url === selectedImage)) {
@@ -231,6 +337,7 @@ if (!Array.isArray(newsletters)) {
 }
 
 const seenDates = new Set();
+const strictDates = strictValidationDates();
 for (const [index, item] of newsletters.entries()) {
   for (const field of requiredFields) {
     if (!(field in item)) {
@@ -291,8 +398,9 @@ for (const [index, item] of newsletters.entries()) {
       }
 
       validateArticleQuality(item, md, isNewFormat(md));
-      validateSourceGapArtifact(item.date);
-      validateEditorImageArtifact(item.date);
+      const strictArtifactValidation = strictDates.has(item.date);
+      validateSourceGapArtifact(item.date, strictArtifactValidation);
+      validateEditorImageArtifact(item.date, strictArtifactValidation);
     }
   }
 }

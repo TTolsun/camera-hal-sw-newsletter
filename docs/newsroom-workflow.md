@@ -74,6 +74,7 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 - `npm run validate:config`: `data/news-sources.json` 구조, 필수 field, source ID, URL, category-to-section mapping, source entry의 중복 `section` 금지, canonical JSON formatting을 확인합니다.
 - `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
 - `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
+  외부 이미지가 404, timeout, invalid content-type 등으로 실패해도 local fallback이 존재하고 최종 `selectedImage`가 fallback 경로로 정리되면 warning only입니다. 원본 URL은 `originalImage` 또는 `resolvedImage.originalUrl`에 보존하며, fallback 파일 누락이나 깨진 외부 URL이 publish 산출물에 남은 경우에만 fail합니다.
 - `npm run validate:quality`: deterministic quality report를 재계산하고 4개 미만 또는 5개 초과 main article, AI 관련 기사 누락, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap mapped candidate, dated evidence 없는 selected candidate를 차단합니다.
 - `npm run validate:localization`: 유지 문서와 표시용 JSON 값이 한국어 규칙을 지키는지 확인합니다.
 

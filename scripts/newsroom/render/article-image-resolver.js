@@ -63,6 +63,11 @@ function fallbackExists(root, assetPath) {
   return fs.existsSync(path.resolve(root, assetPath));
 }
 
+function localImageExists(root, src) {
+  const localPath = repoLocalPath(root, src);
+  return Boolean(localPath && fs.existsSync(localPath));
+}
+
 function formatValidationReason(result) {
   const status = result.status || 'n/a';
   const contentType = result.contentType || 'n/a';
@@ -70,74 +75,107 @@ function formatValidationReason(result) {
   return `status=${status}; content-type=${contentType}; content-length=${contentLength}; reason=${result.reason || 'unknown'}`;
 }
 
+function resolvedImage({ url, originalUrl = '', usedFallback = false, reason = '' }) {
+  return {
+    url,
+    src: url,
+    originalUrl,
+    originalSrc: originalUrl,
+    usedFallback,
+    reason
+  };
+}
+
 async function resolveArticleImage(section = {}, options = {}) {
   const root = options.root || process.cwd();
   const selectedImage = String(section.selectedImage || '').trim();
+  const preservedOriginal = String(
+    section.originalImage ||
+    section.resolvedImage?.originalUrl ||
+    section.resolvedImage?.originalSrc ||
+    ''
+  ).trim();
   const fallbackAsset = fallbackAssetForSection(section);
   const fallbackSrc = issueRelativePath(fallbackAsset, options.relativeDepth ?? 2);
 
   if (!selectedImage) {
-    return {
-      src: fallbackSrc,
-      originalSrc: '',
+    return resolvedImage({
+      url: fallbackSrc,
+      originalUrl: preservedOriginal,
       usedFallback: true,
       reason: fallbackExists(root, fallbackAsset)
         ? 'no selected image; local fallback visual used'
         : `fallback missing: ${fallbackAsset}; no selected image`
-    };
+    });
   }
 
   if (!isHttpsUrl(selectedImage)) {
+    if (localImageExists(root, selectedImage)) {
+      return resolvedImage({
+        url: selectedImage,
+        originalUrl: preservedOriginal,
+        usedFallback: Boolean(section.resolvedImage?.usedFallback || /(?:^|\/)assets\/images\/fallback\//.test(normalizePath(selectedImage))),
+        reason: section.resolvedImage?.reason || 'repo-local article image selected'
+      });
+    }
     if (!fallbackExists(root, fallbackAsset)) {
-      return {
-        src: selectedImage,
-        originalSrc: selectedImage,
+      return resolvedImage({
+        url: selectedImage,
+        originalUrl: preservedOriginal || selectedImage,
         usedFallback: false,
         reason: `fallback missing: ${fallbackAsset}`
-      };
+      });
     }
-    return {
-      src: fallbackSrc,
-      originalSrc: selectedImage,
+    return resolvedImage({
+      url: fallbackSrc,
+      originalUrl: preservedOriginal || selectedImage,
       usedFallback: true,
       reason: 'selected image is not an HTTPS URL'
-    };
+    });
   }
 
-  const result = await validateImageUrl(selectedImage, {
+  const validate = options.validateImageUrl || validateImageUrl;
+  const result = await validate(selectedImage, {
     timeoutMs: options.timeoutMs || 8000,
     attempts: options.attempts || 2,
     backoffMs: options.backoffMs || 500
   });
 
   if (result.ok) {
-    return {
-      src: selectedImage,
+    return resolvedImage({
+      url: selectedImage,
+      originalUrl: preservedOriginal,
       usedFallback: false
-    };
+    });
   }
 
   if (!fallbackExists(root, fallbackAsset)) {
-    return {
-      src: selectedImage,
-      originalSrc: selectedImage,
+    return resolvedImage({
+      url: selectedImage,
+      originalUrl: preservedOriginal || selectedImage,
       usedFallback: false,
       reason: `fallback missing: ${fallbackAsset}; ${formatValidationReason(result)}`
-    };
+    });
   }
 
-  return {
-    src: fallbackSrc,
-    originalSrc: selectedImage,
+  return resolvedImage({
+    url: fallbackSrc,
+    originalUrl: preservedOriginal || selectedImage,
     usedFallback: true,
     reason: formatValidationReason(result)
-  };
+  });
 }
 
 async function resolveIssueArticleImages(issue = {}, options = {}) {
   if (!Array.isArray(issue.sections)) return issue;
   for (const section of issue.sections) {
     section.resolvedImage = await resolveArticleImage(section, options);
+    if (section.resolvedImage.originalUrl) {
+      section.originalImage = section.resolvedImage.originalUrl;
+    }
+    if (section.resolvedImage.url) {
+      section.selectedImage = section.resolvedImage.url;
+    }
   }
   return issue;
 }
@@ -150,6 +188,7 @@ module.exports = {
   formatValidationReason,
   isHttpsUrl,
   issueRelativePath,
+  localImageExists,
   repoLocalPath,
   resolveArticleImage,
   resolveIssueArticleImages

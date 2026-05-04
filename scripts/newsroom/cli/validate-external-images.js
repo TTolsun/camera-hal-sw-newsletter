@@ -155,24 +155,26 @@ function fallbackWarningsFromEditor(date, editor) {
   for (const [index, section] of editor.sections.entries()) {
     const resolved = section.resolvedImage || {};
     if (!resolved.usedFallback) continue;
-    const localPath = resolveLocalImage(`newsletters/${date}/index.html`, resolved.src);
+    const fallbackSrc = resolved.url || resolved.src;
+    const original = resolved.originalUrl || resolved.originalSrc || section.originalImage || 'n/a';
+    const localPath = resolveLocalImage(`newsletters/${date}/index.html`, fallbackSrc);
     const fallbackExists = localPath && fs.existsSync(localPath);
     const label = section.category || `section ${index + 1}`;
     if (!fallbackExists) {
       fail([
         `Article image fallback is missing: newsletter ${date}`,
         `  section/article: ${label} / ${section.headline || 'unknown article'}`,
-        `  original: ${resolved.originalSrc || section.selectedImage || 'n/a'}`,
-        `  fallback: ${resolved.src}`,
+        `  original: ${original}`,
+        `  fallback: ${fallbackSrc || 'n/a'}`,
         `  reason: ${resolved.reason || 'unknown'}`
       ].join('\n'));
       continue;
     }
     warn([
-      `${resolved.originalSrc ? 'External article image was replaced with local fallback' : 'Local article image fallback was used'}: newsletter ${date}`,
+      `${original !== 'n/a' ? 'External article image was replaced with local fallback' : 'Local article image fallback was used'}: newsletter ${date}`,
       `  section/article: ${label} / ${section.headline || 'unknown article'}`,
-      `  original: ${resolved.originalSrc || section.selectedImage || 'n/a'}`,
-      `  fallback: ${resolved.src}`,
+      `  original: ${original}`,
+      `  fallback: ${fallbackSrc}`,
       `  reason: ${resolved.reason || 'unknown'}`
     ].join('\n'));
   }

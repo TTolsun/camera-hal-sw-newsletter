@@ -109,6 +109,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 - `data/news-sources.json`이 machine-readable source of truth입니다.
 - `docs/news-sources.md`는 사람이 검토하기 위한 editorial view이며, JSON registry가 없을 때 fallback 문서입니다.
 - external article image는 임의로 대체하지 않습니다. resolver와 local fallback contract를 사용합니다.
+- `selectedImage`는 최종 렌더링 이미지 경로입니다. 외부 이미지가 404, timeout, invalid content-type 등으로 실패하고 local fallback이 존재하면 `selectedImage`는 fallback 경로로 바뀌며 원본 URL은 `originalImage` 또는 `resolvedImage.originalUrl`에 보존됩니다. fallback 성공은 warning only이고, fallback 파일 누락이나 깨진 외부 URL 잔존만 fail입니다.
 - validator를 약화해서 publication risk를 숨기지 않습니다.
 - 유지 문서와 표시용 JSON 값은 한국어를 기본으로 작성합니다. 내부 계약 문자열인 JSON key, enum, source ID, URL, 명령어, 파일명은 번역하지 않습니다.
 

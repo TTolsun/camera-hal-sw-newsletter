@@ -60,8 +60,13 @@ function httpsUrlOrFallback(value, fallback) {
 }
 
 function resolvedArticleImage(section) {
-  const resolved = section.resolvedImage && section.resolvedImage.src ? section.resolvedImage : null;
-  if (resolved) return resolved;
+  const resolved = section.resolvedImage && (section.resolvedImage.url || section.resolvedImage.src) ? section.resolvedImage : null;
+  if (resolved) {
+    return {
+      ...resolved,
+      src: resolved.url || resolved.src
+    };
+  }
   if (!section.selectedImage) return null;
   return {
     src: section.selectedImage,
@@ -69,11 +74,22 @@ function resolvedArticleImage(section) {
   };
 }
 
+function articleImageSource(section) {
+  return httpsUrlOrFallback(
+    section.imageSource ||
+      section.sources?.[0]?.url ||
+      section.originalImage ||
+      section.resolvedImage?.originalUrl ||
+      section.resolvedImage?.originalSrc,
+    section.imageSource || section.sources?.[0]?.url || ''
+  );
+}
+
 function articleImageMarkdown(section) {
   const image = resolvedArticleImage(section);
   if (!image || !image.src) return '';
   const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
-  const source = httpsUrlOrFallback(section.imageSource || section.sources?.[0]?.url, section.selectedImage);
+  const source = articleImageSource(section);
   const alt = section.imageAlt || `${section.headline || 'Article'} image`;
   return `\n![${alt}](${image.src})\n\n_Image: [${attribution}](${source})_\n`;
 }
@@ -81,7 +97,7 @@ function articleImageMarkdown(section) {
 function articleMediaHtml(section) {
   const image = resolvedArticleImage(section);
   if (image && image.src) {
-    const imageSource = httpsUrlOrFallback(section.imageSource || section.sources?.[0]?.url, section.selectedImage);
+    const imageSource = articleImageSource(section);
     const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
     const alt = section.imageAlt || `${section.headline || 'Article'} image`;
     return `<figure class="article-media">

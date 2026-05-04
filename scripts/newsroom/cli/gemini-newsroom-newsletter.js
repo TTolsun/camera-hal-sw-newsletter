@@ -517,8 +517,8 @@ function warnResolvedImageFallbacks(issue) {
       'Warning: article image fallback applied',
       `  section: ${section.category || 'unknown section'}`,
       `  article: ${section.headline || 'unknown article'}`,
-      `  original: ${resolved.originalSrc || section.selectedImage || 'n/a'}`,
-      `  fallback: ${resolved.src}`,
+      `  original: ${resolved.originalUrl || resolved.originalSrc || section.originalImage || 'n/a'}`,
+      `  fallback: ${resolved.url || resolved.src}`,
       `  reason: ${resolved.reason || 'unknown'}`
     ].join('\n'));
   }
@@ -1278,6 +1278,7 @@ async function main() {
         'Flag any main article without concrete Action Item content.',
         'Flag any main article with weak Camera HAL perspective or missing engineering relevance.',
         'Flag candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.',
+        'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
         'Do not rewrite for style. Focus only on factual errors, source problems, and editorial-policy violations.',
         'Return only JSON matching the schema.'
       ].join('\n'),
@@ -1364,6 +1365,7 @@ async function main() {
           'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
           'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or Camera HAL relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
+          'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
           'Return only JSON matching the schema.'
         ].join('\n'),
         `${commonContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
@@ -1433,6 +1435,7 @@ async function main() {
             'You are the AI fact checker for the completed Camera HAL SW Newsletter draft.',
             'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the 4-5 main article contract.',
+            'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
             'Return only JSON matching the schema.'
           ].join('\n'),
           `${commonContext}\n\nFinal-selected reporter article inputs JSON:\n${JSON.stringify(selectedReporterInputs(reporter), null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,

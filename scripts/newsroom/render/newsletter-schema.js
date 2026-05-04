@@ -27,6 +27,18 @@ const imageCandidate = {
   required: ['url', 'sourceUrl', 'articleUrl', 'sourceKind', 'licenseStatus', 'attribution', 'validationStatus']
 };
 
+const resolvedImage = {
+  type: 'OBJECT',
+  properties: {
+    url: string,
+    src: string,
+    originalUrl: string,
+    originalSrc: string,
+    usedFallback: { type: 'BOOLEAN' },
+    reason: string
+  }
+};
+
 const reporterCandidate = {
   type: 'OBJECT',
   properties: {
@@ -128,6 +140,8 @@ const section = {
       items: imageCandidate
     },
     selectedImage: string,
+    originalImage: string,
+    resolvedImage,
     imageSource: string,
     imageAttribution: string,
     imageAlt: string,
