@@ -6,7 +6,9 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiMaxRetries: 2,
   geminiRetryDelaysMs: [20000, 10000],
   geminiRetryMaxDelayMs: 300000,
-  newsroomMaxQualityRetries: 1
+  newsroomMaxQualityRetries: 1,
+  newsroomWarnCostUsd: 0.15,
+  newsroomMaxCostUsd: 0.25
 };
 
 function parseCsv(value) {
@@ -53,6 +55,29 @@ function parseIntegerList(value, fieldName) {
   return items.map((item, index) => parseInteger(item, `${fieldName}[${index}]`, { min: 0 }));
 }
 
+function parseNumber(value, fieldName, options = {}) {
+  const hasDefault = Object.prototype.hasOwnProperty.call(options, 'defaultValue');
+  if (value === undefined || value === null) {
+    if (hasDefault) return options.defaultValue;
+    throw new Error(`${fieldName} is required.`);
+  }
+
+  const text = String(value).trim();
+  if (!text) {
+    if (hasDefault && options.defaultOnEmpty) return options.defaultValue;
+    throw new Error(`${fieldName} must be a number.`);
+  }
+
+  const number = Number(text);
+  if (!Number.isFinite(number)) {
+    throw new Error(`${fieldName} must be a number.`);
+  }
+  if (options.min !== undefined && number < options.min) {
+    throw new Error(`${fieldName} must be >= ${options.min}.`);
+  }
+  return number;
+}
+
 function envValue(env, key, defaultValue) {
   return Object.prototype.hasOwnProperty.call(env, key) ? env[key] : defaultValue;
 }
@@ -79,6 +104,16 @@ function readRuntimeConfig(env = process.env, options = {}) {
     newsroomMaxQualityRetries: parseInteger(
       envValue(env, 'NEWSROOM_MAX_QUALITY_RETRIES', DEFAULT_RUNTIME_CONFIG.newsroomMaxQualityRetries),
       'NEWSROOM_MAX_QUALITY_RETRIES',
+      { min: 0 }
+    ),
+    newsroomWarnCostUsd: parseNumber(
+      envValue(env, 'NEWSROOM_WARN_COST_USD', DEFAULT_RUNTIME_CONFIG.newsroomWarnCostUsd),
+      'NEWSROOM_WARN_COST_USD',
+      { min: 0 }
+    ),
+    newsroomMaxCostUsd: parseNumber(
+      envValue(env, 'NEWSROOM_MAX_COST_USD', DEFAULT_RUNTIME_CONFIG.newsroomMaxCostUsd),
+      'NEWSROOM_MAX_COST_USD',
       { min: 0 }
     ),
     geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim())
@@ -129,6 +164,12 @@ function validateRuntimeConfig(config, options = {}) {
   if (!Number.isInteger(config.newsroomMaxQualityRetries) || config.newsroomMaxQualityRetries < 0) {
     errors.push('NEWSROOM_MAX_QUALITY_RETRIES must be an integer >= 0.');
   }
+  if (!Number.isFinite(Number(config.newsroomWarnCostUsd)) || Number(config.newsroomWarnCostUsd) < 0) {
+    errors.push('NEWSROOM_WARN_COST_USD must be a number >= 0.');
+  }
+  if (!Number.isFinite(Number(config.newsroomMaxCostUsd)) || Number(config.newsroomMaxCostUsd) < 0) {
+    errors.push('NEWSROOM_MAX_COST_USD must be a number >= 0.');
+  }
   if (options.requireGeminiApiKey && !config.geminiApiKeyConfigured) {
     errors.push('GEMINI_API_KEY must be configured for Gemini newsroom generation.');
   }
@@ -149,6 +190,8 @@ function sanitizeRuntimeConfig(config) {
     geminiRetryDelaysMs: config.geminiRetryDelaysMs,
     geminiRetryMaxDelayMs: config.geminiRetryMaxDelayMs,
     newsroomMaxQualityRetries: config.newsroomMaxQualityRetries,
+    newsroomWarnCostUsd: config.newsroomWarnCostUsd,
+    newsroomMaxCostUsd: config.newsroomMaxCostUsd,
     geminiApiKeyConfigured: Boolean(config.geminiApiKeyConfigured)
   };
 }
@@ -160,5 +203,6 @@ module.exports = {
   sanitizeRuntimeConfig,
   parseCsv,
   parseInteger,
-  parseIntegerList
+  parseIntegerList,
+  parseNumber
 };

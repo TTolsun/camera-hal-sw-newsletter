@@ -3,6 +3,39 @@ const path = require('path');
 const { GoogleGenAI } = require('@google/genai');
 const { readRuntimeConfig } = require('../common/runtime-config');
 
+const PRICING_SOURCE_URL = 'https://ai.google.dev/gemini-api/docs/pricing';
+const TOKENS_PER_MILLION = 1000000;
+const PRICE_TABLE = [
+  {
+    match: /^gemini-2\.5-pro\b/i,
+    inputUsdPerMillion: 1.25,
+    inputUsdPerMillionLargePrompt: 2.5,
+    outputUsdPerMillion: 10,
+    outputUsdPerMillionLargePrompt: 15,
+    cachedInputUsdPerMillion: 0.125,
+    cachedInputUsdPerMillionLargePrompt: 0.25,
+    largePromptThresholdTokens: 200000
+  },
+  {
+    match: /^gemini-2\.5-flash-lite\b/i,
+    inputUsdPerMillion: 0.1,
+    outputUsdPerMillion: 0.4,
+    cachedInputUsdPerMillion: 0.01
+  },
+  {
+    match: /^gemini-2\.5-flash\b/i,
+    inputUsdPerMillion: 0.3,
+    outputUsdPerMillion: 2.5,
+    cachedInputUsdPerMillion: 0.03
+  },
+  {
+    match: /^gemini-2\.0-flash\b/i,
+    inputUsdPerMillion: 0.1,
+    outputUsdPerMillion: 0.4,
+    cachedInputUsdPerMillion: 0.025
+  }
+];
+
 const runtimeConfig = readRuntimeConfig(process.env);
 const apiKey = process.env.GEMINI_API_KEY;
 const primaryModel = runtimeConfig.geminiModel;
@@ -25,12 +58,252 @@ class GeminiJsonParseError extends Error {
 const diagnostics = {
   quota_error_count: 0,
   invalid_json_count: 0,
-  model_usage: {}
+  model_usage: {},
+  cost_report: {
+    calls: []
+  }
 };
 const modelUsageByStage = new Map();
 
 function fail(message) {
   throw new Error(message);
+}
+
+function ensureArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function number(value, fallback = 0) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
+function roundUsd(value) {
+  return Number(value.toFixed(8));
+}
+
+function findPricing(model, promptTokens = 0) {
+  const modelName = String(model || '').trim();
+  const pricing = PRICE_TABLE.find(item => item.match.test(modelName));
+  if (!pricing) return null;
+  const largePrompt = pricing.largePromptThresholdTokens &&
+    number(promptTokens) > pricing.largePromptThresholdTokens;
+  return {
+    input_usd_per_million: largePrompt && pricing.inputUsdPerMillionLargePrompt
+      ? pricing.inputUsdPerMillionLargePrompt
+      : pricing.inputUsdPerMillion,
+    output_usd_per_million: largePrompt && pricing.outputUsdPerMillionLargePrompt
+      ? pricing.outputUsdPerMillionLargePrompt
+      : pricing.outputUsdPerMillion,
+    cached_input_usd_per_million: largePrompt && pricing.cachedInputUsdPerMillionLargePrompt
+      ? pricing.cachedInputUsdPerMillionLargePrompt
+      : pricing.cachedInputUsdPerMillion,
+    large_prompt_threshold_tokens: pricing.largePromptThresholdTokens || null,
+    large_prompt_applied: Boolean(largePrompt)
+  };
+}
+
+function firstNumber(source, names) {
+  if (!source || typeof source !== 'object') return 0;
+  for (const name of names) {
+    if (Number.isFinite(Number(source[name]))) return number(source[name]);
+  }
+  return 0;
+}
+
+function usageMetadataFromResponse(response) {
+  const metadata = response?.usageMetadata || response?.usage_metadata || null;
+  if (!metadata || typeof metadata !== 'object') {
+    return {
+      usage_metadata_present: false,
+      prompt_tokens: 0,
+      output_tokens: 0,
+      thinking_tokens: 0,
+      cached_tokens: 0,
+      total_tokens: 0
+    };
+  }
+  const promptTokens = firstNumber(metadata, ['promptTokenCount', 'prompt_token_count']);
+  const outputTokens = firstNumber(metadata, ['candidatesTokenCount', 'candidateTokenCount', 'candidates_token_count', 'candidate_token_count']);
+  const thinkingTokens = firstNumber(metadata, ['thoughtsTokenCount', 'thinkingTokenCount', 'thoughts_token_count', 'thinking_token_count']);
+  const cachedTokens = firstNumber(metadata, ['cachedContentTokenCount', 'cached_content_token_count']);
+  const totalTokens = firstNumber(metadata, ['totalTokenCount', 'total_token_count']) ||
+    promptTokens + outputTokens + thinkingTokens;
+  return {
+    usage_metadata_present: true,
+    prompt_tokens: promptTokens,
+    output_tokens: outputTokens,
+    thinking_tokens: thinkingTokens,
+    cached_tokens: cachedTokens,
+    total_tokens: totalTokens
+  };
+}
+
+function estimateCallCost(model, usage) {
+  const tokens = {
+    prompt_tokens: number(usage?.prompt_tokens),
+    output_tokens: number(usage?.output_tokens),
+    thinking_tokens: number(usage?.thinking_tokens),
+    cached_tokens: number(usage?.cached_tokens),
+    total_tokens: number(usage?.total_tokens)
+  };
+  const pricing = findPricing(model, tokens.prompt_tokens);
+  const billableInputTokens = Math.max(0, tokens.prompt_tokens - tokens.cached_tokens);
+  const billableOutputTokens = tokens.output_tokens + tokens.thinking_tokens;
+  if (!pricing) {
+    return {
+      ...tokens,
+      billable_input_tokens: billableInputTokens,
+      billable_output_tokens: billableOutputTokens,
+      estimated_cost_usd: null,
+      pricing_usd_per_million: null,
+      pricing_source: PRICING_SOURCE_URL,
+      pricing_warning: `No local Gemini pricing entry for model ${model || 'unknown'}.`
+    };
+  }
+  const estimatedCost =
+    (billableInputTokens * pricing.input_usd_per_million +
+      tokens.cached_tokens * pricing.cached_input_usd_per_million +
+      billableOutputTokens * pricing.output_usd_per_million) / TOKENS_PER_MILLION;
+  return {
+    ...tokens,
+    billable_input_tokens: billableInputTokens,
+    billable_output_tokens: billableOutputTokens,
+    estimated_cost_usd: roundUsd(estimatedCost),
+    pricing_usd_per_million: pricing,
+    pricing_source: PRICING_SOURCE_URL,
+    pricing_warning: ''
+  };
+}
+
+function emptyCostTotals() {
+  return {
+    request_count: 0,
+    prompt_tokens: 0,
+    output_tokens: 0,
+    thinking_tokens: 0,
+    cached_tokens: 0,
+    total_tokens: 0,
+    billable_input_tokens: 0,
+    billable_output_tokens: 0,
+    estimated_cost_usd: 0
+  };
+}
+
+function addCostTotals(target, call) {
+  target.request_count += 1;
+  for (const field of [
+    'prompt_tokens',
+    'output_tokens',
+    'thinking_tokens',
+    'cached_tokens',
+    'total_tokens',
+    'billable_input_tokens',
+    'billable_output_tokens'
+  ]) {
+    target[field] += number(call[field]);
+  }
+  if (Number.isFinite(Number(call.estimated_cost_usd))) {
+    target.estimated_cost_usd += Number(call.estimated_cost_usd);
+  }
+}
+
+function finalizeCostTotals(totals) {
+  return {
+    ...totals,
+    estimated_cost_usd: roundUsd(Number(totals.estimated_cost_usd || 0))
+  };
+}
+
+function groupedCostTotals(calls, field) {
+  const groups = new Map();
+  for (const call of ensureArray(calls)) {
+    const key = String(call[field] || 'unknown');
+    if (!groups.has(key)) groups.set(key, emptyCostTotals());
+    addCostTotals(groups.get(key), call);
+  }
+  return [...groups.entries()]
+    .map(([name, totals]) => ({
+      [field]: name,
+      ...finalizeCostTotals(totals)
+    }))
+    .sort((a, b) => b.estimated_cost_usd - a.estimated_cost_usd || String(a[field]).localeCompare(String(b[field])));
+}
+
+function buildCostReport({ date = '', calls = [], warnCostUsd = 0.15, maxCostUsd = 0.25, generatedAt = new Date().toISOString() } = {}) {
+  const totals = emptyCostTotals();
+  const warnings = [];
+  for (const call of ensureArray(calls)) {
+    addCostTotals(totals, call);
+    if (call.pricing_warning) warnings.push(call.pricing_warning);
+    if (call.usage_metadata_present === false) {
+      warnings.push(`No usage metadata for ${call.stage || 'unknown'} using ${call.model || 'unknown'}.`);
+    }
+  }
+  const finalTotals = finalizeCostTotals(totals);
+  if (warnCostUsd > 0 && finalTotals.estimated_cost_usd >= warnCostUsd) {
+    warnings.push(`Estimated Gemini cost ${finalTotals.estimated_cost_usd} USD reached NEWSROOM_WARN_COST_USD ${warnCostUsd} USD.`);
+  }
+  if (maxCostUsd > 0 && finalTotals.estimated_cost_usd >= maxCostUsd) {
+    warnings.push(`Estimated Gemini cost ${finalTotals.estimated_cost_usd} USD reached NEWSROOM_MAX_COST_USD ${maxCostUsd} USD. This PR is warning-only.`);
+  }
+  return {
+    schema_version: 1,
+    date,
+    generated_at: generatedAt,
+    currency: 'USD',
+    pricing_source: PRICING_SOURCE_URL,
+    enforcement: 'warning-only',
+    warning_threshold_usd: warnCostUsd,
+    max_threshold_usd: maxCostUsd,
+    totals: finalTotals,
+    by_stage: groupedCostTotals(calls, 'stage'),
+    by_model: groupedCostTotals(calls, 'model'),
+    calls: ensureArray(calls),
+    warnings: [...new Set(warnings)]
+  };
+}
+
+function buildCostReportMarkdown(report) {
+  const totals = report.totals || emptyCostTotals();
+  const calls = ensureArray(report.calls);
+  const callRows = calls.map(call => [
+    `| ${call.stage || 'unknown'} `,
+    ` ${call.model || 'unknown'} `,
+    ` ${call.attempt || 0} `,
+    ` ${call.prompt_tokens || 0} `,
+    ` ${call.output_tokens || 0} `,
+    ` ${call.thinking_tokens || 0} `,
+    ` ${call.cached_tokens || 0} `,
+    ` ${Number.isFinite(Number(call.estimated_cost_usd)) ? Number(call.estimated_cost_usd).toFixed(6) : 'n/a'} |`
+  ].join('|')).join('\n') || '| none | none | 0 | 0 | 0 | 0 | 0 | 0.000000 |';
+  const warnings = ensureArray(report.warnings).map(item => `- ${item}`).join('\n') || '- none';
+  return `# Gemini 비용 리포트 - ${report.date || 'unknown'}
+
+## Summary
+
+- Enforcement: ${report.enforcement || 'warning-only'}
+- Pricing source: ${report.pricing_source || PRICING_SOURCE_URL}
+- Warning threshold USD: ${report.warning_threshold_usd}
+- Max threshold USD: ${report.max_threshold_usd}
+- Request count: ${totals.request_count || 0}
+- Prompt tokens: ${totals.prompt_tokens || 0}
+- Output tokens: ${totals.output_tokens || 0}
+- Thinking tokens: ${totals.thinking_tokens || 0}
+- Cached tokens: ${totals.cached_tokens || 0}
+- Total tokens: ${totals.total_tokens || 0}
+- Estimated cost USD: ${Number(totals.estimated_cost_usd || 0).toFixed(6)}
+
+## Calls
+
+| Stage | Model | Attempt | Prompt | Output | Thinking | Cached | Estimated USD |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+${callRows}
+
+## Warnings
+
+${warnings}
+`;
 }
 
 function safeFilenamePart(value) {
@@ -229,6 +502,7 @@ function resetGeminiDiagnostics() {
   diagnostics.quota_error_count = 0;
   diagnostics.invalid_json_count = 0;
   diagnostics.model_usage = {};
+  diagnostics.cost_report = { calls: [] };
   modelUsageByStage.clear();
 }
 
@@ -254,6 +528,28 @@ function saveRawGeminiOutput(stage, attempt, modelName, text) {
   return filePath;
 }
 
+function recordUsageMetadata(stage, modelName, attempt, response) {
+  const usage = usageMetadataFromResponse(response);
+  const cost = estimateCallCost(modelName, usage);
+  diagnostics.cost_report.calls.push({
+    stage,
+    model: modelName,
+    attempt,
+    usage_metadata_present: usage.usage_metadata_present,
+    prompt_tokens: cost.prompt_tokens,
+    output_tokens: cost.output_tokens,
+    thinking_tokens: cost.thinking_tokens,
+    cached_tokens: cost.cached_tokens,
+    total_tokens: cost.total_tokens,
+    billable_input_tokens: cost.billable_input_tokens,
+    billable_output_tokens: cost.billable_output_tokens,
+    estimated_cost_usd: cost.estimated_cost_usd,
+    pricing_usd_per_million: cost.pricing_usd_per_million,
+    pricing_source: cost.pricing_source,
+    pricing_warning: cost.pricing_warning
+  });
+}
+
 async function generateContentJsonWithRetry(stage, ai, request, modelName) {
   let lastError;
   for (let attempt = 1; attempt <= maxRetries + 1; attempt += 1) {
@@ -261,6 +557,7 @@ async function generateContentJsonWithRetry(stage, ai, request, modelName) {
       usageFor(stage, modelName).requests += 1;
       console.log(`[${stage}] Gemini request attempt ${attempt}/${maxRetries + 1} using model ${modelName}.`);
       const response = await ai.models.generateContent(request);
+      recordUsageMetadata(stage, modelName, attempt, response);
       const text = typeof response.text === 'function' ? response.text() : response.text;
       const json = extractJson(text, stage);
       usageFor(stage, modelName).successes += 1;
@@ -363,14 +660,22 @@ async function callGeminiJson(stage, systemInstruction, prompt, responseSchema, 
 
 module.exports = {
   GeminiJsonParseError,
+  buildCostReport,
+  buildCostReportMarkdown,
   callGeminiJson,
+  estimateCallCost,
   extractJson,
+  findPricing,
   getGeminiDiagnostics: cloneDiagnostics,
+  getGeminiCostCalls() {
+    return cloneDiagnostics().cost_report.calls;
+  },
   getGeminiModelUsage(stage) {
     return modelUsageByStage.get(stage) || '';
   },
   parseRetryDelayMs,
   resetGeminiDiagnostics,
   safeFilenamePart,
-  saveRawGeminiOutput
+  saveRawGeminiOutput,
+  usageMetadataFromResponse
 };

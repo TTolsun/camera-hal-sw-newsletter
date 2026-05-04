@@ -84,6 +84,12 @@ Reporter summary record는 `cache/news-summary/{sha256(normalized_url)}.json`에
 
 cache hit은 normalized URL과 content fingerprint가 일치할 때만 사용합니다. fingerprint는 URL, title, published date, source, summary, version/release, API/component, behavior evidence를 포함하므로 article evidence가 바뀌면 stale summary를 재사용하지 않습니다.
 
+## Cost Report
+
+Gemini 호출이 성공적으로 응답을 반환하면 generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
+
+`NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 PR1 단계에서는 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
+
 ## Recovery Artifacts
 
 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, Gemini JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
@@ -114,6 +120,8 @@ GEMINI_API_KEY
 ```text
 GEMINI_MODEL=gemini-2.5-flash
 GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-2.5-pro
+NEWSROOM_WARN_COST_USD=0.15
+NEWSROOM_MAX_COST_USD=0.25
 ```
 
 ### 수동 실행

@@ -8,7 +8,8 @@ const {
   sanitizeRuntimeConfig,
   parseCsv,
   parseInteger,
-  parseIntegerList
+  parseIntegerList,
+  parseNumber
 } = require('../scripts/lib/runtime-config');
 
 test('defaults match workflow runtime defaults', () => {
@@ -22,6 +23,8 @@ test('defaults match workflow runtime defaults', () => {
   assert.deepEqual(config.geminiRetryDelaysMs, [20000, 10000]);
   assert.equal(config.geminiRetryMaxDelayMs, 300000);
   assert.equal(config.newsroomMaxQualityRetries, 1);
+  assert.equal(config.newsroomWarnCostUsd, 0.15);
+  assert.equal(config.newsroomMaxCostUsd, 0.25);
   assert.equal(config.geminiApiKeyConfigured, false);
 });
 
@@ -43,6 +46,12 @@ test('integer list parsing rejects invalid members', () => {
   assert.throws(() => parseIntegerList('20000,nope', 'DELAYS'), /DELAYS\[1] must be an integer/);
 });
 
+test('number parsing accepts decimals and rejects negative values', () => {
+  assert.equal(parseNumber('0.25', 'FIELD', { min: 0 }), 0.25);
+  assert.throws(() => parseNumber('nope', 'FIELD'), /FIELD must be a number/);
+  assert.throws(() => parseNumber('-0.1', 'FIELD', { min: 0 }), /FIELD must be >= 0/);
+});
+
 test('runtime env overrides are parsed into typed config', () => {
   const config = readRuntimeConfig({
     NEWSLETTER_DATE: '2026-05-04',
@@ -53,7 +62,9 @@ test('runtime env overrides are parsed into typed config', () => {
     GEMINI_MAX_RETRIES: '0',
     GEMINI_RETRY_DELAYS_MS: '0',
     GEMINI_RETRY_MAX_DELAY_MS: '1000',
-    NEWSROOM_MAX_QUALITY_RETRIES: '1'
+    NEWSROOM_MAX_QUALITY_RETRIES: '1',
+    NEWSROOM_WARN_COST_USD: '0.12',
+    NEWSROOM_MAX_COST_USD: '0.2'
   }, { requireGeminiApiKey: true });
 
   assert.equal(config.newsletterDate, '2026-05-04');
@@ -64,6 +75,8 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.deepEqual(config.geminiRetryDelaysMs, [0]);
   assert.equal(config.geminiRetryMaxDelayMs, 1000);
   assert.equal(config.newsroomMaxQualityRetries, 1);
+  assert.equal(config.newsroomWarnCostUsd, 0.12);
+  assert.equal(config.newsroomMaxCostUsd, 0.2);
   assert.equal(config.geminiApiKeyConfigured, true);
 });
 
@@ -77,6 +90,8 @@ test('invalid date and ranges return field-specific validation errors', () => {
     geminiRetryDelaysMs: [],
     geminiRetryMaxDelayMs: -1,
     newsroomMaxQualityRetries: -1,
+    newsroomWarnCostUsd: -0.1,
+    newsroomMaxCostUsd: -0.2,
     geminiApiKeyConfigured: false
   }, { requireGeminiApiKey: true });
 
@@ -88,6 +103,8 @@ test('invalid date and ranges return field-specific validation errors', () => {
   assert.match(result.errors.join('\n'), /GEMINI_RETRY_DELAYS_MS/);
   assert.match(result.errors.join('\n'), /GEMINI_RETRY_MAX_DELAY_MS/);
   assert.match(result.errors.join('\n'), /NEWSROOM_MAX_QUALITY_RETRIES/);
+  assert.match(result.errors.join('\n'), /NEWSROOM_WARN_COST_USD/);
+  assert.match(result.errors.join('\n'), /NEWSROOM_MAX_COST_USD/);
   assert.match(result.errors.join('\n'), /GEMINI_API_KEY/);
 });
 
@@ -106,5 +123,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   const text = JSON.stringify(sanitized);
 
   assert.equal(sanitized.geminiApiKeyConfigured, true);
+  assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
+  assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
   assert.equal(text.includes('super-secret-api-key'), false);
 });

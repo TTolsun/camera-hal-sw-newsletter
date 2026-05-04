@@ -14,7 +14,14 @@ const {
   newsroomRelPath
 } = require('../common/artifact-paths');
 const { readRuntimeConfig } = require('../common/runtime-config');
-const { callGeminiJson, getGeminiDiagnostics, getGeminiModelUsage } = require('../generate/gemini-client');
+const {
+  buildCostReport,
+  buildCostReportMarkdown,
+  callGeminiJson,
+  getGeminiDiagnostics,
+  getGeminiCostCalls,
+  getGeminiModelUsage
+} = require('../generate/gemini-client');
 const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } = require('../render/newsletter-schema');
 const { isSafeExternalImageUrl } = require('../render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
@@ -85,6 +92,37 @@ function writeGenerationStatus(value) {
     `${JSON.stringify(value, null, 2)}\n`,
     'utf8'
   );
+}
+
+function writeCostReport(date) {
+  const report = buildCostReport({
+    date,
+    calls: getGeminiCostCalls(),
+    warnCostUsd: runtimeConfig.newsroomWarnCostUsd,
+    maxCostUsd: runtimeConfig.newsroomMaxCostUsd
+  });
+  const tmpDir = path.join(root, '.tmp');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(tmpDir, 'newsroom-cost-report.json'),
+    `${JSON.stringify(report, null, 2)}\n`,
+    'utf8'
+  );
+
+  const targetNewsroomDir = artifactNewsroomDir(root, date);
+  if (fs.existsSync(targetNewsroomDir)) {
+    fs.writeFileSync(
+      path.join(targetNewsroomDir, 'cost-report.md'),
+      buildCostReportMarkdown(report),
+      'utf8'
+    );
+  }
+
+  for (const warning of ensureArray(report.warnings)) {
+    console.warn(`[cost] ${warning}`);
+  }
+  console.log(`[cost] Estimated Gemini API cost: $${Number(report.totals.estimated_cost_usd || 0).toFixed(6)} USD across ${report.totals.request_count || 0} request(s).`);
+  return report;
 }
 
 function failureStageFromError(error) {
@@ -1525,6 +1563,7 @@ async function main() {
     buildRetryHistoryMarkdown(date, retryHistory, selectionStatusExtra(shortlistReport)),
     'utf8'
   );
+  writeCostReport(date);
 
   const newsletterMd = path.join(newsletterDir, 'newsletter.md');
   const newsletterHtml = path.join(newsletterDir, 'index.html');
@@ -1544,6 +1583,7 @@ async function main() {
     newsroomRelPath(date, 'quality-report.md'),
     newsroomRelPath(date, 'retry-history.json'),
     newsroomRelPath(date, 'retry-history.md'),
+    newsroomRelPath(date, 'cost-report.md'),
     newsroomRelPath(date, 'recovery-prompt.md'),
     newsroomRelPath(date, 'editor-in-chief-brief.md'),
     newsroomRelPath(date, 'release-qa-report.md'),
@@ -1662,6 +1702,7 @@ function writeTerminalFailureStatus(error) {
       ...selectionStatusExtra(generationRunState.shortlistReport)
     }
   }));
+  writeCostReport(date);
 }
 
 if (require.main === module) {

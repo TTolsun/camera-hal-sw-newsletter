@@ -38,6 +38,8 @@ jobs:
       GEMINI_RETRY_DELAYS_MS: ${{ vars.GEMINI_RETRY_DELAYS_MS || '20000,10000' }}
       GEMINI_RETRY_MAX_DELAY_MS: ${{ vars.GEMINI_RETRY_MAX_DELAY_MS || '300000' }}
       NEWSROOM_MAX_QUALITY_RETRIES: ${{ vars.NEWSROOM_MAX_QUALITY_RETRIES || '1' }}
+      NEWSROOM_WARN_COST_USD: ${{ vars.NEWSROOM_WARN_COST_USD || '0.15' }}
+      NEWSROOM_MAX_COST_USD: ${{ vars.NEWSROOM_MAX_COST_USD || '0.25' }}
 
     steps:
       - name: Checkout repository
@@ -160,6 +162,7 @@ jobs:
 
           copy_if_present ".tmp/newsletter-date.txt"
           copy_if_present ".tmp/newsletter-generation-status.json"
+          copy_if_present ".tmp/newsroom-cost-report.json"
           copy_tree_if_present ".tmp/gemini-raw"
           copy_tree_if_present "cache/news-summary"
           if [ "$HAS_GENERATED_DATE" = "1" ]; then
