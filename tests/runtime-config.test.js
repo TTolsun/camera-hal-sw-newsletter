@@ -24,6 +24,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.deepEqual(config.geminiRetryDelaysMs, [20000, 10000]);
   assert.equal(config.geminiRetryMaxDelayMs, 300000);
   assert.equal(config.newsroomMaxQualityRetries, 1);
+  assert.equal(config.newsroomMaxSectionRepairs, 1);
   assert.equal(config.newsroomWarnCostUsd, 0.15);
   assert.equal(config.newsroomMaxCostUsd, 0.25);
   assert.equal(config.newsroomAllowProOnSchedule, false);
@@ -73,6 +74,7 @@ test('runtime env overrides are parsed into typed config', () => {
     GEMINI_RETRY_DELAYS_MS: '0',
     GEMINI_RETRY_MAX_DELAY_MS: '1000',
     NEWSROOM_MAX_QUALITY_RETRIES: '1',
+    NEWSROOM_MAX_SECTION_REPAIRS: '1',
     NEWSROOM_WARN_COST_USD: '0.12',
     NEWSROOM_MAX_COST_USD: '0.2',
     NEWSROOM_ALLOW_PRO_ON_SCHEDULE: 'false',
@@ -89,6 +91,7 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.deepEqual(config.geminiRetryDelaysMs, [0]);
   assert.equal(config.geminiRetryMaxDelayMs, 1000);
   assert.equal(config.newsroomMaxQualityRetries, 1);
+  assert.equal(config.newsroomMaxSectionRepairs, 1);
   assert.equal(config.newsroomWarnCostUsd, 0.12);
   assert.equal(config.newsroomMaxCostUsd, 0.2);
   assert.equal(config.newsroomAllowProOnSchedule, false);
@@ -108,6 +111,7 @@ test('invalid date and ranges return field-specific validation errors', () => {
     geminiRetryDelaysMs: [],
     geminiRetryMaxDelayMs: -1,
     newsroomMaxQualityRetries: -1,
+    newsroomMaxSectionRepairs: -1,
     newsroomWarnCostUsd: -0.1,
     newsroomMaxCostUsd: -0.2,
     newsroomAllowProOnSchedule: false,
@@ -125,6 +129,7 @@ test('invalid date and ranges return field-specific validation errors', () => {
   assert.match(result.errors.join('\n'), /GEMINI_RETRY_DELAYS_MS/);
   assert.match(result.errors.join('\n'), /GEMINI_RETRY_MAX_DELAY_MS/);
   assert.match(result.errors.join('\n'), /NEWSROOM_MAX_QUALITY_RETRIES/);
+  assert.match(result.errors.join('\n'), /NEWSROOM_MAX_SECTION_REPAIRS/);
   assert.match(result.errors.join('\n'), /NEWSROOM_WARN_COST_USD/);
   assert.match(result.errors.join('\n'), /NEWSROOM_MAX_COST_USD/);
   assert.match(result.errors.join('\n'), /GEMINI_API_KEY/);
@@ -140,6 +145,7 @@ test('validator returns structured errors for malformed fallback model input', (
     geminiRetryDelaysMs: [20000],
     geminiRetryMaxDelayMs: 300000,
     newsroomMaxQualityRetries: 1,
+    newsroomMaxSectionRepairs: 1,
     newsroomWarnCostUsd: 0.15,
     newsroomMaxCostUsd: 0.25,
     newsroomAllowProOnSchedule: false,
@@ -170,6 +176,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.geminiApiKeyConfigured, true);
   assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
   assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
+  assert.equal(sanitized.newsroomMaxSectionRepairs, 1);
   assert.equal(text.includes('super-secret-api-key'), false);
 });
 

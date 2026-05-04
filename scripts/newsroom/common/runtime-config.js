@@ -7,6 +7,7 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiRetryDelaysMs: [20000, 10000],
   geminiRetryMaxDelayMs: 300000,
   newsroomMaxQualityRetries: 1,
+  newsroomMaxSectionRepairs: 1,
   newsroomWarnCostUsd: 0.15,
   newsroomMaxCostUsd: 0.25,
   newsroomAllowProOnSchedule: false,
@@ -137,6 +138,11 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'NEWSROOM_MAX_QUALITY_RETRIES',
       { min: 0 }
     ),
+    newsroomMaxSectionRepairs: parseInteger(
+      envValue(env, 'NEWSROOM_MAX_SECTION_REPAIRS', DEFAULT_RUNTIME_CONFIG.newsroomMaxSectionRepairs),
+      'NEWSROOM_MAX_SECTION_REPAIRS',
+      { min: 0 }
+    ),
     newsroomWarnCostUsd: parseNumber(
       envValue(env, 'NEWSROOM_WARN_COST_USD', DEFAULT_RUNTIME_CONFIG.newsroomWarnCostUsd),
       'NEWSROOM_WARN_COST_USD',
@@ -207,6 +213,9 @@ function validateRuntimeConfig(config, options = {}) {
   if (!Number.isInteger(config.newsroomMaxQualityRetries) || config.newsroomMaxQualityRetries < 0) {
     errors.push('NEWSROOM_MAX_QUALITY_RETRIES must be an integer >= 0.');
   }
+  if (!Number.isInteger(config.newsroomMaxSectionRepairs) || config.newsroomMaxSectionRepairs < 0) {
+    errors.push('NEWSROOM_MAX_SECTION_REPAIRS must be an integer >= 0.');
+  }
   if (!Number.isFinite(Number(config.newsroomWarnCostUsd)) || Number(config.newsroomWarnCostUsd) < 0) {
     errors.push('NEWSROOM_WARN_COST_USD must be a number >= 0.');
   }
@@ -252,6 +261,7 @@ function sanitizeRuntimeConfig(config) {
     geminiRetryDelaysMs: config.geminiRetryDelaysMs,
     geminiRetryMaxDelayMs: config.geminiRetryMaxDelayMs,
     newsroomMaxQualityRetries: config.newsroomMaxQualityRetries,
+    newsroomMaxSectionRepairs: config.newsroomMaxSectionRepairs,
     newsroomWarnCostUsd: config.newsroomWarnCostUsd,
     newsroomMaxCostUsd: config.newsroomMaxCostUsd,
     newsroomAllowProOnSchedule: config.newsroomAllowProOnSchedule,
