@@ -90,6 +90,8 @@ Gemini 호출이 성공적으로 응답을 반환하면 generator는 response us
 
 `NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 PR1 단계에서는 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
 
+scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합니다. `gemini-2.5-pro`는 manual `workflow_dispatch`에서 `allow_pro=true`를 명시한 경우에만 사용할 수 있으며, Pro가 실제 호출되면 workflow log와 cost report의 `pro_policy` / `pro_model` 필드에 남습니다.
+
 ## Recovery Artifacts
 
 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, Gemini JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
@@ -119,14 +121,16 @@ GEMINI_API_KEY
 
 ```text
 GEMINI_MODEL=gemini-2.5-flash
-GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-2.5-pro
+GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite
 NEWSROOM_WARN_COST_USD=0.15
 NEWSROOM_MAX_COST_USD=0.25
+NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false
+NEWSROOM_PRO_ESCALATION=manual
 ```
 
 ### 수동 실행
 
-GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요하면 `newsletter_date`와 `lookback_days`를 입력합니다. 비워 두면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다.
+GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요하면 `newsletter_date`와 `lookback_days`를 입력합니다. 비워 두면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다. Pro 계열 모델을 수동으로 허용해야 하는 경우에만 `allow_pro=true`를 선택합니다.
 
 ## Editor-in-Chief Review
 

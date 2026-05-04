@@ -2,13 +2,17 @@ const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
   lookbackDays: 21,
   geminiModel: 'gemini-2.5-flash',
-  geminiFallbackModels: ['gemini-2.5-flash-lite', 'gemini-2.5-pro'],
+  geminiFallbackModels: ['gemini-2.5-flash-lite'],
   geminiMaxRetries: 2,
   geminiRetryDelaysMs: [20000, 10000],
   geminiRetryMaxDelayMs: 300000,
   newsroomMaxQualityRetries: 1,
   newsroomWarnCostUsd: 0.15,
-  newsroomMaxCostUsd: 0.25
+  newsroomMaxCostUsd: 0.25,
+  newsroomAllowProOnSchedule: false,
+  newsroomAllowProOnManual: false,
+  newsroomProEscalation: 'manual',
+  githubEventName: ''
 };
 
 function parseCsv(value) {
@@ -78,8 +82,35 @@ function parseNumber(value, fieldName, options = {}) {
   return number;
 }
 
+function parseBoolean(value, fieldName, options = {}) {
+  const hasDefault = Object.prototype.hasOwnProperty.call(options, 'defaultValue');
+  if (value === undefined || value === null || String(value).trim() === '') {
+    if (hasDefault) return options.defaultValue;
+    throw new Error(`${fieldName} must be true or false.`);
+  }
+  const normalized = String(value).trim().toLowerCase();
+  if (['true', '1', 'yes', 'y'].includes(normalized)) return true;
+  if (['false', '0', 'no', 'n'].includes(normalized)) return false;
+  throw new Error(`${fieldName} must be true or false.`);
+}
+
 function envValue(env, key, defaultValue) {
   return Object.prototype.hasOwnProperty.call(env, key) ? env[key] : defaultValue;
+}
+
+function normalizeModelName(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function isProModel(value) {
+  return /^gemini-[\w.-]*pro\b/.test(normalizeModelName(value));
+}
+
+function configuredModelList(config) {
+  return [
+    config?.geminiModel,
+    ...(Array.isArray(config?.geminiFallbackModels) ? config.geminiFallbackModels : [])
+  ].filter(Boolean);
 }
 
 function readRuntimeConfig(env = process.env, options = {}) {
@@ -116,6 +147,18 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'NEWSROOM_MAX_COST_USD',
       { min: 0 }
     ),
+    newsroomAllowProOnSchedule: parseBoolean(
+      envValue(env, 'NEWSROOM_ALLOW_PRO_ON_SCHEDULE', DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnSchedule),
+      'NEWSROOM_ALLOW_PRO_ON_SCHEDULE',
+      { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnSchedule }
+    ),
+    newsroomAllowProOnManual: parseBoolean(
+      envValue(env, 'NEWSROOM_ALLOW_PRO_ON_MANUAL', DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnManual),
+      'NEWSROOM_ALLOW_PRO_ON_MANUAL',
+      { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnManual }
+    ),
+    newsroomProEscalation: String(envValue(env, 'NEWSROOM_PRO_ESCALATION', DEFAULT_RUNTIME_CONFIG.newsroomProEscalation) || '').trim(),
+    githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
     geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim())
   };
 
@@ -170,6 +213,25 @@ function validateRuntimeConfig(config, options = {}) {
   if (!Number.isFinite(Number(config.newsroomMaxCostUsd)) || Number(config.newsroomMaxCostUsd) < 0) {
     errors.push('NEWSROOM_MAX_COST_USD must be a number >= 0.');
   }
+  if (typeof config.newsroomAllowProOnSchedule !== 'boolean') {
+    errors.push('NEWSROOM_ALLOW_PRO_ON_SCHEDULE must be true or false.');
+  }
+  if (typeof config.newsroomAllowProOnManual !== 'boolean') {
+    errors.push('NEWSROOM_ALLOW_PRO_ON_MANUAL must be true or false.');
+  }
+  if (!String(config.newsroomProEscalation || '').trim()) {
+    errors.push('NEWSROOM_PRO_ESCALATION must be non-empty.');
+  }
+  const configuredModels = configuredModelList(config);
+  const proModels = configuredModels.filter(isProModel);
+  if (proModels.length > 0) {
+    const eventName = String(config.githubEventName || '').trim();
+    const allowScheduled = eventName === 'schedule' && config.newsroomAllowProOnSchedule === true;
+    const allowManual = eventName === 'workflow_dispatch' && config.newsroomAllowProOnManual === true;
+    if (!allowScheduled && !allowManual) {
+      errors.push(`Gemini Pro models require explicit manual escalation; configured Pro model(s): ${proModels.join(', ')}.`);
+    }
+  }
   if (options.requireGeminiApiKey && !config.geminiApiKeyConfigured) {
     errors.push('GEMINI_API_KEY must be configured for Gemini newsroom generation.');
   }
@@ -192,6 +254,15 @@ function sanitizeRuntimeConfig(config) {
     newsroomMaxQualityRetries: config.newsroomMaxQualityRetries,
     newsroomWarnCostUsd: config.newsroomWarnCostUsd,
     newsroomMaxCostUsd: config.newsroomMaxCostUsd,
+    newsroomAllowProOnSchedule: config.newsroomAllowProOnSchedule,
+    newsroomAllowProOnManual: config.newsroomAllowProOnManual,
+    newsroomProEscalation: config.newsroomProEscalation,
+    githubEventName: config.githubEventName,
+    proModelConfigured: configuredModelList(config).some(isProModel),
+    proModelAllowed: configuredModelList(config).some(isProModel)
+      ? (config.githubEventName === 'schedule' && config.newsroomAllowProOnSchedule === true) ||
+        (config.githubEventName === 'workflow_dispatch' && config.newsroomAllowProOnManual === true)
+      : false,
     geminiApiKeyConfigured: Boolean(config.geminiApiKeyConfigured)
   };
 }
@@ -202,7 +273,9 @@ module.exports = {
   validateRuntimeConfig,
   sanitizeRuntimeConfig,
   parseCsv,
+  parseBoolean,
   parseInteger,
   parseIntegerList,
-  parseNumber
+  parseNumber,
+  isProModel
 };

@@ -7,6 +7,7 @@ const {
   validateRuntimeConfig,
   sanitizeRuntimeConfig,
   parseCsv,
+  parseBoolean,
   parseInteger,
   parseIntegerList,
   parseNumber
@@ -18,13 +19,16 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.newsletterDate, DEFAULT_RUNTIME_CONFIG.newsletterDate);
   assert.equal(config.lookbackDays, 21);
   assert.equal(config.geminiModel, 'gemini-2.5-flash');
-  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite', 'gemini-2.5-pro']);
+  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
   assert.equal(config.geminiMaxRetries, 2);
   assert.deepEqual(config.geminiRetryDelaysMs, [20000, 10000]);
   assert.equal(config.geminiRetryMaxDelayMs, 300000);
   assert.equal(config.newsroomMaxQualityRetries, 1);
   assert.equal(config.newsroomWarnCostUsd, 0.15);
   assert.equal(config.newsroomMaxCostUsd, 0.25);
+  assert.equal(config.newsroomAllowProOnSchedule, false);
+  assert.equal(config.newsroomAllowProOnManual, false);
+  assert.equal(config.newsroomProEscalation, 'manual');
   assert.equal(config.geminiApiKeyConfigured, false);
 });
 
@@ -52,6 +56,12 @@ test('number parsing accepts decimals and rejects negative values', () => {
   assert.throws(() => parseNumber('-0.1', 'FIELD', { min: 0 }), /FIELD must be >= 0/);
 });
 
+test('boolean parsing accepts common true and false values', () => {
+  assert.equal(parseBoolean('true', 'FIELD'), true);
+  assert.equal(parseBoolean('0', 'FIELD'), false);
+  assert.throws(() => parseBoolean('maybe', 'FIELD'), /FIELD must be true or false/);
+});
+
 test('runtime env overrides are parsed into typed config', () => {
   const config = readRuntimeConfig({
     NEWSLETTER_DATE: '2026-05-04',
@@ -64,7 +74,11 @@ test('runtime env overrides are parsed into typed config', () => {
     GEMINI_RETRY_MAX_DELAY_MS: '1000',
     NEWSROOM_MAX_QUALITY_RETRIES: '1',
     NEWSROOM_WARN_COST_USD: '0.12',
-    NEWSROOM_MAX_COST_USD: '0.2'
+    NEWSROOM_MAX_COST_USD: '0.2',
+    NEWSROOM_ALLOW_PRO_ON_SCHEDULE: 'false',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true',
+    NEWSROOM_PRO_ESCALATION: 'manual',
+    GITHUB_EVENT_NAME: 'workflow_dispatch'
   }, { requireGeminiApiKey: true });
 
   assert.equal(config.newsletterDate, '2026-05-04');
@@ -77,6 +91,10 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.newsroomMaxQualityRetries, 1);
   assert.equal(config.newsroomWarnCostUsd, 0.12);
   assert.equal(config.newsroomMaxCostUsd, 0.2);
+  assert.equal(config.newsroomAllowProOnSchedule, false);
+  assert.equal(config.newsroomAllowProOnManual, true);
+  assert.equal(config.newsroomProEscalation, 'manual');
+  assert.equal(config.githubEventName, 'workflow_dispatch');
   assert.equal(config.geminiApiKeyConfigured, true);
 });
 
@@ -92,6 +110,10 @@ test('invalid date and ranges return field-specific validation errors', () => {
     newsroomMaxQualityRetries: -1,
     newsroomWarnCostUsd: -0.1,
     newsroomMaxCostUsd: -0.2,
+    newsroomAllowProOnSchedule: false,
+    newsroomAllowProOnManual: false,
+    newsroomProEscalation: 'manual',
+    githubEventName: '',
     geminiApiKeyConfigured: false
   }, { requireGeminiApiKey: true });
 
@@ -106,6 +128,29 @@ test('invalid date and ranges return field-specific validation errors', () => {
   assert.match(result.errors.join('\n'), /NEWSROOM_WARN_COST_USD/);
   assert.match(result.errors.join('\n'), /NEWSROOM_MAX_COST_USD/);
   assert.match(result.errors.join('\n'), /GEMINI_API_KEY/);
+});
+
+test('validator returns structured errors for malformed fallback model input', () => {
+  const result = validateRuntimeConfig({
+    newsletterDate: '',
+    lookbackDays: 21,
+    geminiModel: 'gemini-2.5-flash',
+    geminiFallbackModels: 'gemini-2.5-pro',
+    geminiMaxRetries: 2,
+    geminiRetryDelaysMs: [20000],
+    geminiRetryMaxDelayMs: 300000,
+    newsroomMaxQualityRetries: 1,
+    newsroomWarnCostUsd: 0.15,
+    newsroomMaxCostUsd: 0.25,
+    newsroomAllowProOnSchedule: false,
+    newsroomAllowProOnManual: false,
+    newsroomProEscalation: 'manual',
+    githubEventName: 'schedule',
+    geminiApiKeyConfigured: true
+  });
+
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.errors, ['GEMINI_FALLBACK_MODELS must be a comma-separated list.']);
 });
 
 test('readRuntimeConfig rejects explicit empty retry delay list', () => {
@@ -126,4 +171,52 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
   assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
   assert.equal(text.includes('super-secret-api-key'), false);
+});
+
+test('scheduled runs reject configured Pro models by default', () => {
+  assert.throws(
+    () => readRuntimeConfig({
+      GEMINI_MODEL: 'gemini-2.5-flash',
+      GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro',
+      GITHUB_EVENT_NAME: 'schedule'
+    }),
+    /Gemini Pro models require explicit manual escalation/
+  );
+});
+
+test('manual workflow dispatch allows Pro only when explicitly enabled', () => {
+  assert.throws(
+    () => readRuntimeConfig({
+      GEMINI_MODEL: 'gemini-2.5-flash',
+      GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro',
+      GITHUB_EVENT_NAME: 'workflow_dispatch',
+      NEWSROOM_ALLOW_PRO_ON_MANUAL: 'false'
+    }),
+    /Gemini Pro models require explicit manual escalation/
+  );
+
+  const config = readRuntimeConfig({
+    GEMINI_MODEL: 'gemini-2.5-flash',
+    GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro',
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
+  });
+
+  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-pro']);
+  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, true);
+  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
+});
+
+test('manual workflow allow_pro equivalent appends Pro to the default Flash-Lite fallback', () => {
+  const baseFallback = DEFAULT_RUNTIME_CONFIG.geminiFallbackModels.join(',');
+  const config = readRuntimeConfig({
+    GEMINI_MODEL: 'gemini-2.5-flash',
+    GEMINI_FALLBACK_MODELS: `${baseFallback},gemini-2.5-pro`,
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
+  });
+
+  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite', 'gemini-2.5-pro']);
+  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, true);
+  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
 });

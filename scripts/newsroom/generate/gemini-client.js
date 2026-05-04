@@ -78,6 +78,30 @@ function number(value, fallback = 0) {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 }
 
+function isProModelName(value) {
+  return /^gemini-[\w.-]*pro\b/.test(String(value || '').trim().toLowerCase());
+}
+
+function proPolicySummary() {
+  const configuredModels = [primaryModel, ...fallbackModels].filter(Boolean);
+  const proModels = configuredModels.filter(isProModelName);
+  const eventName = String(runtimeConfig.githubEventName || '').trim();
+  const allowed = proModels.length > 0 &&
+    (
+      (eventName === 'schedule' && runtimeConfig.newsroomAllowProOnSchedule === true) ||
+      (eventName === 'workflow_dispatch' && runtimeConfig.newsroomAllowProOnManual === true)
+    );
+  return {
+    escalation: runtimeConfig.newsroomProEscalation,
+    github_event_name: eventName,
+    allow_pro_on_schedule: runtimeConfig.newsroomAllowProOnSchedule,
+    allow_pro_on_manual: runtimeConfig.newsroomAllowProOnManual,
+    pro_model_configured: proModels.length > 0,
+    pro_model_allowed: Boolean(allowed),
+    pro_models: proModels
+  };
+}
+
 function roundUsd(value) {
   return Number(value.toFixed(8));
 }
@@ -230,7 +254,7 @@ function groupedCostTotals(calls, field) {
     .sort((a, b) => b.estimated_cost_usd - a.estimated_cost_usd || String(a[field]).localeCompare(String(b[field])));
 }
 
-function buildCostReport({ date = '', calls = [], warnCostUsd = 0.15, maxCostUsd = 0.25, generatedAt = new Date().toISOString() } = {}) {
+function buildCostReport({ date = '', calls = [], warnCostUsd = 0.15, maxCostUsd = 0.25, generatedAt = new Date().toISOString(), proPolicy = proPolicySummary() } = {}) {
   const totals = emptyCostTotals();
   const warnings = [];
   for (const call of ensureArray(calls)) {
@@ -247,6 +271,10 @@ function buildCostReport({ date = '', calls = [], warnCostUsd = 0.15, maxCostUsd
   if (maxCostUsd > 0 && finalTotals.estimated_cost_usd >= maxCostUsd) {
     warnings.push(`Estimated Gemini cost ${finalTotals.estimated_cost_usd} USD reached NEWSROOM_MAX_COST_USD ${maxCostUsd} USD. This PR is warning-only.`);
   }
+  const proCalls = ensureArray(calls).filter(call => call.pro_model === true);
+  if (proCalls.length > 0) {
+    warnings.push(`Gemini Pro was used in ${proCalls.length} call(s); escalation=${proPolicy?.escalation || 'unknown'}.`);
+  }
   return {
     schema_version: 1,
     date,
@@ -256,6 +284,7 @@ function buildCostReport({ date = '', calls = [], warnCostUsd = 0.15, maxCostUsd
     enforcement: 'warning-only',
     warning_threshold_usd: warnCostUsd,
     max_threshold_usd: maxCostUsd,
+    pro_policy: proPolicy,
     totals: finalTotals,
     by_stage: groupedCostTotals(calls, 'stage'),
     by_model: groupedCostTotals(calls, 'model'),
@@ -275,9 +304,11 @@ function buildCostReportMarkdown(report) {
     ` ${call.output_tokens || 0} `,
     ` ${call.thinking_tokens || 0} `,
     ` ${call.cached_tokens || 0} `,
+    ` ${call.pro_model === true ? 'yes' : 'no'} `,
     ` ${Number.isFinite(Number(call.estimated_cost_usd)) ? Number(call.estimated_cost_usd).toFixed(6) : 'n/a'} |`
-  ].join('|')).join('\n') || '| none | none | 0 | 0 | 0 | 0 | 0 | 0.000000 |';
+  ].join('|')).join('\n') || '| none | none | 0 | 0 | 0 | 0 | 0 | no | 0.000000 |';
   const warnings = ensureArray(report.warnings).map(item => `- ${item}`).join('\n') || '- none';
+  const proPolicy = report.pro_policy || {};
   return `# Gemini 비용 리포트 - ${report.date || 'unknown'}
 
 ## Summary
@@ -286,6 +317,9 @@ function buildCostReportMarkdown(report) {
 - Pricing source: ${report.pricing_source || PRICING_SOURCE_URL}
 - Warning threshold USD: ${report.warning_threshold_usd}
 - Max threshold USD: ${report.max_threshold_usd}
+- Pro escalation: ${proPolicy.escalation || 'n/a'}
+- Pro model configured: ${proPolicy.pro_model_configured === true ? 'yes' : 'no'}
+- Pro model allowed: ${proPolicy.pro_model_allowed === true ? 'yes' : 'no'}
 - Request count: ${totals.request_count || 0}
 - Prompt tokens: ${totals.prompt_tokens || 0}
 - Output tokens: ${totals.output_tokens || 0}
@@ -296,8 +330,8 @@ function buildCostReportMarkdown(report) {
 
 ## Calls
 
-| Stage | Model | Attempt | Prompt | Output | Thinking | Cached | Estimated USD |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Stage | Model | Attempt | Prompt | Output | Thinking | Cached | Pro | Estimated USD |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |
 ${callRows}
 
 ## Warnings
@@ -535,6 +569,7 @@ function recordUsageMetadata(stage, modelName, attempt, response) {
     stage,
     model: modelName,
     attempt,
+    pro_model: isProModelName(modelName),
     usage_metadata_present: usage.usage_metadata_present,
     prompt_tokens: cost.prompt_tokens,
     output_tokens: cost.output_tokens,
@@ -627,6 +662,9 @@ async function callGeminiJson(stage, systemInstruction, prompt, responseSchema, 
     const apiVersion = apiVersionForModel(modelName);
     const ai = options.ai || new ClientCtor(apiVersion ? { apiKey: key, apiVersion } : { apiKey: key });
     console.log(`[${stage}] Gemini model selected: ${modelName} (apiVersion ${apiVersion || 'sdk-default'}).`);
+    if (isProModelName(modelName)) {
+      console.warn(`[${stage}] Gemini Pro model selected through ${runtimeConfig.newsroomProEscalation || 'manual'} escalation policy: ${modelName}.`);
+    }
 
     try {
       const json = await generateContentJsonWithRetry(stage, ai, {

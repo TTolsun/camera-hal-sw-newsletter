@@ -14,6 +14,14 @@ on:
         required: false
         default: "21"
         type: string
+      allow_pro:
+        description: "Allow Gemini Pro for this manual run."
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
 
 permissions:
   contents: write
@@ -33,13 +41,16 @@ jobs:
       LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '21' }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
-      GEMINI_FALLBACK_MODELS: ${{ vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite,gemini-2.5-pro' }}
+      GEMINI_FALLBACK_MODELS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.allow_pro == 'true' && format('{0},gemini-2.5-pro', vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite') || vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite' }}
       GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '2' }}
       GEMINI_RETRY_DELAYS_MS: ${{ vars.GEMINI_RETRY_DELAYS_MS || '20000,10000' }}
       GEMINI_RETRY_MAX_DELAY_MS: ${{ vars.GEMINI_RETRY_MAX_DELAY_MS || '300000' }}
       NEWSROOM_MAX_QUALITY_RETRIES: ${{ vars.NEWSROOM_MAX_QUALITY_RETRIES || '1' }}
       NEWSROOM_WARN_COST_USD: ${{ vars.NEWSROOM_WARN_COST_USD || '0.15' }}
       NEWSROOM_MAX_COST_USD: ${{ vars.NEWSROOM_MAX_COST_USD || '0.25' }}
+      NEWSROOM_ALLOW_PRO_ON_SCHEDULE: ${{ vars.NEWSROOM_ALLOW_PRO_ON_SCHEDULE || 'false' }}
+      NEWSROOM_ALLOW_PRO_ON_MANUAL: ${{ github.event.inputs.allow_pro || 'false' }}
+      NEWSROOM_PRO_ESCALATION: manual
 
     steps:
       - name: Checkout repository

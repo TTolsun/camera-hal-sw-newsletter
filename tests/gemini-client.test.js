@@ -17,7 +17,11 @@ function loadClient(env = {}) {
     'GEMINI_RETRY_MAX_DELAY_MS',
     'GEMINI_RAW_OUTPUT_DIR',
     'NEWSROOM_WARN_COST_USD',
-    'NEWSROOM_MAX_COST_USD'
+    'NEWSROOM_MAX_COST_USD',
+    'NEWSROOM_ALLOW_PRO_ON_SCHEDULE',
+    'NEWSROOM_ALLOW_PRO_ON_MANUAL',
+    'NEWSROOM_PRO_ESCALATION',
+    'GITHUB_EVENT_NAME'
   ]) {
     delete process.env[key];
   }
@@ -269,4 +273,37 @@ test('cost report aggregates calls and emits warning-only threshold messages', (
   assert.ok(report.warnings.some(item => item.includes('NEWSROOM_WARN_COST_USD')));
   assert.equal(report.warnings.some(item => item.includes('NEWSROOM_MAX_COST_USD')), false);
   assert.match(client.buildCostReportMarkdown(report), /Estimated cost USD: 0\.001650/);
+});
+
+test('manual Pro usage is marked in cost calls and report warnings', async () => {
+  const client = loadClient({
+    GEMINI_MODEL: 'gemini-2.5-pro',
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
+  });
+  const FakeGoogleGenAI = fakeGemini([{
+    text: () => '{"ok":true}',
+    usageMetadata: {
+      promptTokenCount: 1000,
+      candidatesTokenCount: 100,
+      totalTokenCount: 1100
+    }
+  }]);
+
+  const result = await client.callGeminiJson('manual pro stage', 'system', 'prompt', {}, {
+    GoogleGenAI: FakeGoogleGenAI
+  });
+
+  assert.deepEqual(result, { ok: true });
+  const [call] = client.getGeminiCostCalls();
+  assert.equal(call.model, 'gemini-2.5-pro');
+  assert.equal(call.pro_model, true);
+  const report = client.buildCostReport({
+    date: '2026-05-04',
+    calls: client.getGeminiCostCalls()
+  });
+  assert.equal(report.pro_policy.pro_model_configured, true);
+  assert.equal(report.pro_policy.pro_model_allowed, true);
+  assert.ok(report.warnings.some(item => item.includes('Gemini Pro was used')));
+  assert.match(client.buildCostReportMarkdown(report), /Pro model configured: yes/);
 });

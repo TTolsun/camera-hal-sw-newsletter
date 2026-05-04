@@ -18,17 +18,20 @@ workflow는 후보 수집과 Gemini 생성 전에 `npm run doctor:config`로 run
 | 이름 | 필수 | 현재 기본값 | 의미 | 변경해도 되는 상황 | 위험/주의 |
 | --- | --- | --- | --- | --- | --- |
 | `GEMINI_MODEL` | 선택 | `gemini-2.5-flash` | 기본 Gemini reporter/editor/fact-checker 호출 모델입니다. | Flash 모델 품질이나 quota 특성이 바뀌어 명시 모델을 바꿔야 할 때 변경합니다. | alias나 preview/latest 계열로 무심코 바꾸면 결과 재현성과 운영 안정성이 떨어질 수 있습니다. |
-| `GEMINI_FALLBACK_MODELS` | 선택 | `gemini-2.5-flash-lite,gemini-2.5-pro` | 기본 모델 실패 시 순서대로 시도할 fallback 모델 목록입니다. | quota, 비용, 품질 특성에 맞춰 fallback 순서를 조정할 때 변경합니다. | Pro 계열은 비용과 지연 시간이 커질 수 있고, 너무 약한 모델은 JSON 품질이나 editorial 품질을 떨어뜨릴 수 있습니다. |
+| `GEMINI_FALLBACK_MODELS` | 선택 | `gemini-2.5-flash-lite` | 기본 모델 실패 시 순서대로 시도할 fallback 모델 목록입니다. | quota, 비용, 품질 특성에 맞춰 fallback 순서를 조정할 때 변경합니다. | scheduled run에서는 Pro 계열을 자동 fallback으로 두지 않습니다. Pro는 manual escalation으로만 허용합니다. 너무 약한 모델은 JSON 품질이나 editorial 품질을 떨어뜨릴 수 있습니다. |
 | `GEMINI_MAX_RETRIES` | 선택 | `2` | retryable API failure 또는 invalid JSON model output에 대해 모델별로 재시도할 횟수입니다. | 일시적인 API 오류가 잦아졌고 artifact를 보며 재시도가 실질적으로 복구에 도움이 된다고 판단할 때 변경합니다. | 값을 높이면 workflow 시간이 길어지고 quota/cost 사용량이 늘어납니다. 품질 실패를 숨기는 용도로 쓰면 안 됩니다. |
 | `GEMINI_RETRY_DELAYS_MS` | 선택 | `20000,10000` | Gemini가 retry hint를 주지 않을 때 사용할 fallback retry delay 목록입니다. | 일시 장애가 짧거나 길게 반복되는 패턴을 보고 간격을 조정할 때 변경합니다. | 너무 짧으면 같은 장애를 빠르게 반복하고, 너무 길면 PR 생성이 늦어집니다. |
 | `GEMINI_RETRY_MAX_DELAY_MS` | 선택 | `300000` | 서버가 긴 retry hint를 줄 때 허용하는 최대 대기 시간입니다. 300000ms는 5분입니다. | quota pressure가 강하지만 기다리면 복구되는 상황이 반복될 때 변경합니다. | 값을 높이면 workflow가 오래 붙잡힙니다. 값을 낮추면 회복 가능한 API 제한도 실패로 끝날 수 있습니다. |
 | `NEWSROOM_MAX_QUALITY_RETRIES` | 선택 | `1` | quality gate를 통과하지 못한 draft에 대해 Gemini가 다시 작성할 최대 횟수입니다. Gemini quality repair retry는 기본 1회 실행됩니다. | 품질 retry artifact를 검토한 결과 추가 시도가 실제로 source gap이나 composition blocker를 줄인다고 확인됐을 때 변경합니다. | 값을 높여도 source 자체가 부족하면 해결되지 않습니다. Quality threshold: 85는 운영 튜닝이며 validation을 우회하거나 hard blocker를 통과시키는 방식으로 쓰면 안 됩니다. |
 | `NEWSROOM_WARN_COST_USD` | 선택 | `0.15` | Gemini usage metadata 기반 추정 비용이 이 값을 넘으면 workflow log와 cost report에 warning을 남깁니다. | 실제 생성 비용을 관찰하면서 알림 기준을 조정할 때 변경합니다. | 이번 단계에서는 warning-only입니다. 값을 낮게 잡아도 생성이나 발행 gate를 실패시키지 않습니다. |
 | `NEWSROOM_MAX_COST_USD` | 선택 | `0.25` | Gemini usage metadata 기반 추정 비용의 운영 상한 참고값입니다. | PR1 이후 실제 비용 분포를 보고 hard gate 전환 여부를 검토할 때 변경합니다. | 이번 단계에서는 초과해도 실패하지 않고 warning만 남깁니다. 품질 gate나 publish readiness와 독립입니다. |
+| `NEWSROOM_ALLOW_PRO_ON_SCHEDULE` | 선택 | `false` | scheduled run에서 Pro 계열 모델 사용을 허용할지 결정합니다. | 긴급 운영 실험이 필요하고 비용 증가를 명시적으로 감수할 때만 변경합니다. | 기본값을 `true`로 두면 scheduled run 비용이 예기치 않게 커질 수 있습니다. |
+| `NEWSROOM_ALLOW_PRO_ON_MANUAL` | 선택 | `false` | manual `workflow_dispatch` 실행에서 Pro 계열 모델 사용을 허용할지 결정합니다. workflow 입력 `allow_pro=true`가 이 값을 설정합니다. | 편집자가 특정 수동 실행에서 Pro 비용을 명시적으로 승인했을 때만 `true`가 됩니다. | manual 실행에서도 명시 허용 없이는 Pro를 사용할 수 없습니다. |
+| `NEWSROOM_PRO_ESCALATION` | 선택 | `manual` | Pro 사용 정책을 cost report와 log에 표시하기 위한 escalation label입니다. | 운영 정책 이름을 문서화해야 할 때 변경합니다. | 정책 표시용 값이며, Pro 허용 여부는 `NEWSROOM_ALLOW_PRO_ON_*` 값과 workflow event로 결정됩니다. |
 
 ## Tradeoff 검토 기준
 
-- 비용: retry 횟수, fallback 모델 수, Pro 계열 모델 사용이 늘수록 비용이 증가할 수 있습니다.
+- 비용: retry 횟수, fallback 모델 수, Pro 계열 모델 사용이 늘수록 비용이 증가할 수 있습니다. scheduled run의 기본 fallback은 Flash-Lite까지만 허용합니다.
 - 품질: 더 강한 모델이나 quality retry는 품질을 올릴 수 있지만, source gap이 있는 후보를 사실로 만들 수는 없습니다.
 - 시간: retry delay와 retry 횟수가 늘수록 PR 생성 시간이 길어집니다.
 
