@@ -2,3 +2,9 @@ node_modules/
 .tmp/
 cache/news-summary/
 npm-debug.log*
+content/newsroom/**/editor-draft-attempt-*.md
+content/newsroom/**/editor-repair-attempt-*.md
+content/newsroom/**/fact-check-report-attempt-*.md
+content/newsroom/**/fact-check-repair-attempt-*.md
+content/newsroom/**/quality-report-attempt-*.md
+content/newsroom/**/quality-report-repair-attempt-*.md

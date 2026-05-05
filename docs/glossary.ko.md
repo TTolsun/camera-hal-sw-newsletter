@@ -1,0 +1,31 @@
+# 용어집
+
+이 문서는 newsroom 자동화와 발행 artifact에서 반복되는 용어를 설명합니다. code identifiers, JSON keys, enum values, file names, URLs, commands는 원문을 유지합니다.
+
+| 용어 | 설명 |
+| --- | --- |
+| `scheduled run` | GitHub Actions가 정해진 시간에 자동으로 후보 수집, 생성, 검증, PR 생성을 시도하는 실행입니다. 기본값은 비용 안전성과 review artifact 보존을 우선합니다. |
+| `manual high-quality run` | 사람이 GitHub Actions에서 `Run workflow`로 직접 시작하는 실행입니다. Pro 계열 모델은 명시적으로 허용한 경우에만 사용할 수 있습니다. |
+| `fallback model` | 기본 Gemini 모델 호출이 실패했을 때 순서대로 시도하는 대체 모델입니다. scheduled run의 기본 fallback은 Pro 계열을 자동 포함하지 않습니다. |
+| `article composition` | main article 수, briefing 수, required section, source/reference 같은 newsletter 구성 규칙입니다. |
+| `collectionMode` | source registry에서 후보를 RSS, HTML, watch page 등 어떤 방식으로 수집할지 나타내는 field입니다. |
+| `source gap` | 날짜, version, API/component, behavior change, 원문 근거가 부족해 main article로 발행하기 위험한 상태입니다. rewrite로 통과시키지 않고 demote 또는 replace합니다. |
+| `quality gate` | `npm.cmd run validate`와 `quality-report.json`이 적용하는 발행 안전 기준입니다. score와 hard blocker를 함께 봅니다. |
+| `cost report` | Gemini 호출의 stage/model/attempt, token, thinking token, cached token, estimated cost를 기록하는 비용 artifact입니다. |
+| `selection report` | deterministic shortlist와 final selection 판단을 확인하는 artifact 묶음입니다. 주로 `shortlisted-candidates.json`, `article-capsules.json`, PR body diagnostics를 봅니다. |
+| `generation status artifact` | `.tmp/newsletter-generation-status.json`입니다. generation status, `publish_ready`, article count, quality/fact-check 상태를 workflow가 읽습니다. |
+| `summary cache` | `cache/news-summary/` 아래에 저장되는 후보 요약 cache입니다. 반복 실행의 Gemini 요약 비용을 줄이기 위한 untracked cache입니다. |
+| `retry history` | `retry-history.json`과 `retry-history.md`에 남는 재시도 기록입니다. locked article, failed section, repair/replace 정책을 확인합니다. |
+| `publish-ready` | 발행 가능한 PR 상태를 뜻하는 label 또는 사람이 읽는 상태 표현입니다. PR 생성 성공과 별개로 quality/fact-check/publish gate가 모두 통과해야 합니다. |
+| `needs-fix` | 편집장 수리 또는 검토가 필요한 PR 상태입니다. review artifact는 남기지만 발행 가능한 상태로 보지 않습니다. |
+| `fallback-composition` | direct camera/driver 후보가 부족해 SoC/platform/tooling fallback article로 구성을 보강한 상태입니다. |
+| `thin-week` | eligible main article 수가 부족해 자동 발행 대상이 아닌 얇은 주간 review path입니다. |
+| `source candidate binding` | editor section의 source URL과 deterministic shortlist/reporter candidate를 연결해 source integrity를 검증하는 계약입니다. |
+| `watchlist` | 모니터링은 하되 dated evidence나 article candidate 조건이 부족해 main article로 올리지 않는 후보 tier입니다. |
+| `reference_only` | 참고자료로만 쓰는 후보 또는 source metadata입니다. main article 후보로 직접 승격하지 않습니다. |
+| `candidateOnly` | source registry에서 후보 발굴용 source임을 나타내는 값입니다. 최종 신뢰 source로 쓰기 전에 cross-check가 필요합니다. |
+| `requiresCrossCheck` | media/community/paywall 등 단독 최종 근거로 쓰기 위험한 source에 교차 확인이 필요함을 나타냅니다. |
+| `finalSelectionEligibility` | 후보의 최종 article 선택 가능성을 나타내는 field입니다. main article에는 `main` 또는 `short` 후보만 사용할 수 있습니다. |
+| `section_text_fallback` | renderer나 validator가 structured field 대신 section text에서 필요한 정보를 보완해 읽는 fallback 경로입니다. primary 계약을 대체하지 않습니다. |
+| `deterministic shortlist` | Gemini 호출 전에 코드가 source gap, watch/reference page, duplicate URL, relevance score를 기준으로 줄인 후보 목록입니다. |
+| `article capsule` | Gemini에 전달하는 compact article input입니다. title, URL, source, date, component, evidence, risk, score 같은 핵심 정보만 담습니다. |
