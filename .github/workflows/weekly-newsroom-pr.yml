@@ -272,7 +272,7 @@ jobs:
           retention-days: 14
 
       - name: Fail if generation, validation, fact check, quality gate, or thin-week readiness failed
-        if: steps.generate.outcome == 'failure' || steps.validate.outcome == 'failure' || steps.generation-status.outputs.status == 'NEEDS_FIX' || steps.generation-status.outputs.status == 'QUALITY_NEEDS_FIX' || steps.generation-status.outputs.status == 'UNDERFILLED_NEEDS_FIX' || steps.generation-status.outputs.quality_status == 'NEEDS_FIX' || steps.generation-status.outputs.publish_ready != 'true' || fromJSON(steps.generation-status.outputs.final_selected_article_count_for_gate) < 4
+        if: steps.generate.outcome == 'failure' || steps.validate.outcome == 'failure' || steps.generation-status.outputs.status == 'NEEDS_FIX' || steps.generation-status.outputs.status == 'QUALITY_NEEDS_FIX' || steps.generation-status.outputs.status == 'UNDERFILLED_NEEDS_FIX' || steps.generation-status.outputs.quality_status == 'NEEDS_FIX' || steps.generation-status.outputs.final_publish_ready != 'true' || fromJSON(steps.generation-status.outputs.final_selected_article_count_for_gate) < 4
         run: |
           echo "Gemini generation, site validation, fact-check, quality gate, or thin-week readiness failed. Review the generated PR artifacts and workflow logs."
           exit 1

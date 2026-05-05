@@ -27,6 +27,17 @@ const OUTPUT_FIELDS = [
   'quality_deduction_count',
   'locked_article_count',
   'publish_ready',
+  'selection_publish_ready',
+  'final_publish_ready',
+  'composition_mode',
+  'selection_composition_mode',
+  'editor_review_required',
+  'direct_aosp_camera_count',
+  'camera_driver_image_pipeline_count',
+  'android_platform_camera_adjacent_count',
+  'soc_platform_signal_count',
+  'cpp_ai_tooling_fallback_count',
+  'generic_tech_watchlist_count',
   'underfilled',
   'input_candidate_count',
   'eligible_candidate_count',
@@ -99,6 +110,9 @@ function buildGenerationStatusOutputs(status) {
   outputs.quality_score = scalar(status.quality_score, 'n/a');
   outputs.quality_threshold = scalar(status.quality_threshold, 'n/a');
   outputs.publish_ready = status.publish_ready === true ? 'true' : 'false';
+  outputs.selection_publish_ready = status.selection_publish_ready === true ? 'true' : 'false';
+  outputs.final_publish_ready = status.final_publish_ready === true ? 'true' : 'false';
+  outputs.editor_review_required = status.editor_review_required === true ? 'true' : 'false';
   outputs.underfilled = status.underfilled === true ? 'true' : 'false';
   outputs.selection_warnings = multilineValue(status.selection_warnings);
   outputs.selection_errors = multilineValue(status.selection_errors);

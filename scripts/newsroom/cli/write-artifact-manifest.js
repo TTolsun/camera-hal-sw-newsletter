@@ -99,6 +99,10 @@ function statusSummary(status) {
     'input_candidate_count',
     'eligible_candidate_count',
     'selected_article_count',
+    'composition_mode',
+    'selection_composition_mode',
+    'editor_review_required',
+    'final_publish_ready',
     'underfilled',
     'publish_ready'
   ];

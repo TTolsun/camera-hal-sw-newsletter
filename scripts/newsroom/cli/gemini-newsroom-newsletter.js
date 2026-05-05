@@ -26,6 +26,7 @@ const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } 
 const { isSafeExternalImageUrl } = require('../render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
+  COMPOSITION_MODES,
   buildShortlistReport,
   normalizeUrl,
   reporterInputFromShortlist
@@ -210,6 +211,10 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   const qualityArticleCount = generationRunState.qualityReport?.metrics?.article_count ?? null;
   const renderedMainArticleCount = options.renderedMainArticleCount ?? qualityArticleCount;
   const finalPublishReady = options.finalPublishReady ?? null;
+  const selectionCompositionMode = report.selection_composition_mode || report.composition_mode || diagnostics.selection_composition_mode || diagnostics.composition_mode || null;
+  const compositionMode = options.compositionMode || selectionCompositionMode;
+  const editorReviewRequired = options.editorReviewRequired ?? report.editor_review_required ?? diagnostics.editor_review_required ?? compositionMode !== COMPOSITION_MODES.NORMAL;
+  const compositionSummary = report.composition_summary || diagnostics.composition_summary || {};
   return {
     input_candidate_count: report.input_candidate_count ?? null,
     eligible_candidate_count: report.eligible_candidate_count ?? null,
@@ -219,11 +224,8 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
     demoted_article_count: options.demotedArticleCount ?? diagnostics.demoted_candidate_count ?? report.demoted_candidate_count ?? null,
     locked_article_count: options.lockedArticleCount ?? null,
-    fallback_topic_count: ensureArray(report.selected_articles).filter(candidate =>
+    fallback_topic_count: compositionSummary.fallback_topic_count ?? ensureArray(report.selected_articles).filter(candidate =>
       ['soc_platform_signal', 'cpp_ai_tooling_fallback'].includes(candidate.relevance_bucket)
-    ).length,
-    soc_platform_signal_count: ensureArray(report.selected_articles).filter(candidate =>
-      candidate.relevance_bucket === 'soc_platform_signal'
     ).length,
     reporter_candidate_count: diagnostics.reporter_candidate_count,
     reporter_selected_count: diagnostics.reporter_selected_count,
@@ -236,6 +238,19 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     publish_ready: report.publish_ready !== undefined ? Boolean(report.publish_ready) : null,
     selection_publish_ready: report.publish_ready !== undefined ? Boolean(report.publish_ready) : null,
     final_publish_ready: finalPublishReady,
+    composition_mode: compositionMode,
+    selection_composition_mode: selectionCompositionMode,
+    composition_reason: options.compositionReason || report.composition_reason || diagnostics.composition_reason || '',
+    composition_summary: compositionSummary,
+    editor_review_required: Boolean(editorReviewRequired),
+    direct_aosp_camera_count: compositionSummary.direct_aosp_camera_count ?? null,
+    camera_driver_image_pipeline_count: compositionSummary.camera_driver_image_pipeline_count ?? null,
+    android_platform_camera_adjacent_count: compositionSummary.android_platform_camera_adjacent_count ?? null,
+    soc_platform_signal_count: compositionSummary.soc_platform_signal_count ?? ensureArray(report.selected_articles).filter(candidate =>
+      candidate.relevance_bucket === 'soc_platform_signal'
+    ).length,
+    cpp_ai_tooling_fallback_count: compositionSummary.cpp_ai_tooling_fallback_count ?? null,
+    generic_tech_watchlist_count: compositionSummary.generic_tech_watchlist_count ?? null,
     selection_warnings: ensureArray(report.selection_warnings),
     selection_errors: ensureArray(report.selection_errors),
     exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
@@ -2039,6 +2054,15 @@ async function main() {
     !todoFound &&
     emptySourceSections.length === 0 &&
     mustFixCount === 0;
+  const finalCompositionMode = finalPublishReady
+    ? shortlistReport.composition_mode
+    : generationStatus === 'UNDERFILLED_NEEDS_FIX'
+      ? COMPOSITION_MODES.THIN_WEEK_REVIEW
+      : COMPOSITION_MODES.NEEDS_FIX;
+  const finalEditorReviewRequired =
+    shortlistReport.editor_review_required === true ||
+    finalCompositionMode !== COMPOSITION_MODES.NORMAL ||
+    finalPublishReady !== true;
   fs.writeFileSync(
     path.join(newsroomDir, 'release-qa-report.md'),
     buildReleaseQaReport(date, files, validateResult.text, factCheck, todoFound, emptySourceSections, qualityReport),
@@ -2071,7 +2095,9 @@ async function main() {
         renderedMainArticleCount: ensureArray(editor.sections).length,
         lockedArticleCount: retryHistory.at(-1)?.locked_article_headlines.length || 0,
         demotedArticleCount: retryHistory.at(-1)?.demoted_article_count ?? retryHistory.at(-1)?.demoted_sections?.length ?? 0,
-        finalPublishReady
+        finalPublishReady,
+        compositionMode: finalCompositionMode,
+        editorReviewRequired: finalEditorReviewRequired
       })
     }
   }));

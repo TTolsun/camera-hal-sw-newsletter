@@ -16,6 +16,12 @@ const MAX_FINAL_ARTICLES = 5;
 const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
 const MIN_CAMERA_HAL_DIRECTNESS = 2;
 const MIN_SCOPE_RELEVANCE = 2;
+const COMPOSITION_MODES = Object.freeze({
+  NORMAL: 'NORMAL',
+  FALLBACK_COMPOSITION: 'FALLBACK_COMPOSITION',
+  THIN_WEEK_REVIEW: 'THIN_WEEK_REVIEW',
+  NEEDS_FIX: 'NEEDS_FIX'
+});
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -212,13 +218,31 @@ function hasCameraPlatformValue(candidate) {
 }
 
 function hasCppFallbackValue(candidate) {
-  return /C\+\+|cpp|LLVM|Clang|NDK|native|toolchain|build|test|sanitizer/i.test(candidateBody(candidate));
+  return /C\+\+|cpp|LLVM|Clang|GCC|NDK|toolchain|sanitizer|AI coding|LLM agent|on-device AI/i.test(candidateBody(candidate));
+}
+
+function hasPlatformSignalTerm(candidate) {
+  return /\b(power|thermal|scheduler|cache|memory|memory bandwidth|performance|latency|interconnect|DVFS|EAS|native|build|test|tooling)\b/i
+    .test(candidateBody(candidate));
+}
+
+function hasFallbackRelevanceHint(candidate) {
+  return hasPlatformSignalTerm(candidate) ||
+    /C\+\+|\b(SoC|CPU|cpp|LLVM|Clang|GCC|NDK|toolchain|sanitizer|AI coding|LLM agent|on-device AI)\b/i
+      .test(candidateBody(candidate));
+}
+
+function hasGoogleTensorSocComponent(candidate) {
+  const body = candidateBody(candidate);
+  return /\bGoogle\s+Tensor\b|\bTensor\s+G\d+\b|\bPixel\s+Tensor\s+(?:SoC|chip|processor)\b|\bTensor\s+(?:SoC|chip|processor)\b/i
+    .test(body);
 }
 
 function hasConcreteApiComponent(candidate) {
   if (text(candidate.api_or_component || candidate.apiOrComponent)) return true;
-  return /Camera HAL|CameraX|Camera2|AIDL|HIDL|ICamera|camera3|camera provider|metadata|capture request|capture result|stream|buffer|ImageReader|Surface|Camera ITS|CTS|VTS|CDD|libcamera|V4L2|NDK camera/i
-    .test(candidateBody(candidate));
+  return hasGoogleTensorSocComponent(candidate) ||
+    /Camera HAL|CameraProvider|CameraService|CameraX|Camera2|AOSP Camera|AIDL|HIDL|ICamera|camera3|camera provider|capture request|capture result|stream configuration|camera metadata|ImageReader|AHardwareBuffer|NDK camera|Camera ITS|CTS.{0,80}camera|camera.{0,80}CTS|VTS.{0,80}camera|camera.{0,80}VTS|CDD.{0,80}camera|camera.{0,80}CDD|libcamera|V4L2|media controller|MIPI\s*CSI-?2|CSI-2|DMA-?BUF|image sensor|\bISP\b|\bGPU\b|\bNPU\b|\bDSP\b|Exynos|Snapdragon|\b(?:LLVM|Clang|GCC)\s*\d+(?:\.\d+)*|\b\d+(?:\.\d+)*\s*(?:LLVM|Clang|GCC)\b|AddressSanitizer|ThreadSanitizer|UndefinedBehaviorSanitizer|MemorySanitizer|\b(?:ASan|TSan|UBSan|MSan)\b/i
+      .test(candidateBody(candidate));
 }
 
 function hasBehaviorEvidence(candidate) {
@@ -590,6 +614,82 @@ function summarizeBuckets(candidates) {
     .sort((a, b) => number(a.bucket === BUCKETS.GENERIC_TECH_WATCHLIST) - number(b.bucket === BUCKETS.GENERIC_TECH_WATCHLIST) || a.bucket.localeCompare(b.bucket));
 }
 
+function bucketCountMap(candidates) {
+  const counts = {
+    [BUCKETS.DIRECT_AOSP_CAMERA]: 0,
+    [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 0,
+    [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 0,
+    [BUCKETS.SOC_PLATFORM_SIGNAL]: 0,
+    [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 0,
+    [BUCKETS.GENERIC_TECH_WATCHLIST]: 0
+  };
+  for (const candidate of ensureArray(candidates)) {
+    const bucket = text(candidate.relevance_bucket || candidateScope(candidate).relevance_bucket);
+    if (Object.prototype.hasOwnProperty.call(counts, bucket)) {
+      counts[bucket] += 1;
+    }
+  }
+  return counts;
+}
+
+function compositionSummary(candidates) {
+  const bucket_counts = bucketCountMap(candidates);
+  const primary_camera_stack_topic_count =
+    bucket_counts[BUCKETS.DIRECT_AOSP_CAMERA] +
+    bucket_counts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE] +
+    bucket_counts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT];
+  const fallback_topic_count =
+    bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL] +
+    bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
+  const selected_article_count = ensureArray(candidates).length;
+  return {
+    selected_article_count,
+    bucket_counts,
+    direct_aosp_camera_count: bucket_counts[BUCKETS.DIRECT_AOSP_CAMERA],
+    camera_driver_image_pipeline_count: bucket_counts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE],
+    android_platform_camera_adjacent_count: bucket_counts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT],
+    soc_platform_signal_count: bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL],
+    cpp_ai_tooling_fallback_count: bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK],
+    generic_tech_watchlist_count: bucket_counts[BUCKETS.GENERIC_TECH_WATCHLIST],
+    primary_camera_stack_topic_count,
+    fallback_topic_count
+  };
+}
+
+function compositionMode(selected, errors = []) {
+  const summary = compositionSummary(selected);
+  if (
+    ensureArray(errors).length > 0 ||
+    summary.selected_article_count < ABSOLUTE_MIN_REVIEWABLE_ARTICLES ||
+    (
+      summary.selected_article_count > 0 &&
+      summary.generic_tech_watchlist_count === summary.selected_article_count
+    )
+  ) {
+    return COMPOSITION_MODES.NEEDS_FIX;
+  }
+  if (summary.selected_article_count < MIN_FINAL_ARTICLES) {
+    return COMPOSITION_MODES.THIN_WEEK_REVIEW;
+  }
+  if (summary.primary_camera_stack_topic_count < 2 && summary.fallback_topic_count > 0) {
+    return COMPOSITION_MODES.FALLBACK_COMPOSITION;
+  }
+  return COMPOSITION_MODES.NORMAL;
+}
+
+function compositionReason(mode, summary) {
+  if (mode === COMPOSITION_MODES.FALLBACK_COMPOSITION) {
+    return `Primary AOSP Camera/driver/platform-adjacent candidates were below the normal target (${summary.primary_camera_stack_topic_count}); SoC/platform or C++/AI fallback topics filled the 4-5 article review set.`;
+  }
+  if (mode === COMPOSITION_MODES.THIN_WEEK_REVIEW) {
+    return `Only ${summary.selected_article_count} main article candidate(s) are available after deterministic filtering; keep this PR review-only.`;
+  }
+  if (mode === COMPOSITION_MODES.NEEDS_FIX) {
+    return 'Deterministic selection is not publish-ready because too few eligible candidates remain or the composition is generic/watchlist-only.';
+  }
+  return 'Normal composition: primary AOSP Camera, camera driver/image pipeline, or Android camera-adjacent topics meet the expected coverage.';
+}
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const cap = options.cap || SHORTLIST_CAP;
@@ -598,6 +698,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const reserve = reserveCandidates(shortlist, selected, options);
   const warnings = selectionWarnings(selected);
   const errors = selectionErrors(selected);
+  const composition = compositionSummary(selected);
+  const mode = compositionMode(selected, errors);
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const markedShortlist = shortlist.map(candidate => {
     const match = selected.find(item => item.normalized_url === candidate.normalized_url);
@@ -628,6 +730,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     primary_selected_article_count: selected.length,
     reserve_candidate_count: reserve.length,
     demoted_candidate_count: 0,
+    composition_mode: mode,
+    selection_composition_mode: mode,
+    composition_reason: compositionReason(mode, composition),
+    composition_summary: composition,
+    editor_review_required: mode !== COMPOSITION_MODES.NORMAL,
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
     optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
     relevance_bucket_summary: summarizeBuckets(shortlist),
@@ -636,7 +743,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     shortlist_cap: cap,
     absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
     underfilled: warnings.length > 0,
-    publish_ready: errors.length === 0 && warnings.length === 0,
+    publish_ready: errors.length === 0 && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX,
     selection_policy: {
       min_final_articles: MIN_FINAL_ARTICLES,
       absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
@@ -685,6 +792,7 @@ function reporterInputFromShortlist(shortlistReport) {
 
 module.exports = {
   ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
+  COMPOSITION_MODES,
   SHORTLIST_CAP,
   RESERVE_MIN_CANDIDATES,
   RESERVE_MAX_CANDIDATES,
@@ -694,7 +802,12 @@ module.exports = {
   MIN_CAMERA_HAL_DIRECTNESS,
   buildShortlistReport,
   candidatesAreDuplicate,
+  compositionMode,
+  compositionSummary,
   exclusionReasons,
+  hasConcreteApiComponent,
+  hasFallbackRelevanceHint,
+  hasPlatformSignalTerm,
   normalizeTitle,
   normalizeUrl,
   normalizedUrlHash,

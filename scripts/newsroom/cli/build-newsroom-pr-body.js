@@ -60,6 +60,9 @@ function buildNewsroomPrBody(options = {}) {
     `Skipped repair sections: ${valueOrUnknown(status.skipped_repair_section_count ?? 0)}`,
     `Validation outcome: ${validateOutcome}`,
     `Publish ready: ${status.publish_ready === true ? 'true' : 'false'}`,
+    `Selection publish ready: ${status.selection_publish_ready === true ? 'true' : 'false'}`,
+    `Final publish ready: ${status.final_publish_ready === true ? 'true' : 'false'}`,
+    `Editor review required: ${status.editor_review_required === true ? 'true' : 'false'}`,
     `Underfilled thin-week path: ${status.underfilled === true ? 'true' : 'false'}`,
     ''
   );
@@ -67,6 +70,37 @@ function buildNewsroomPrBody(options = {}) {
   if (status.underfilled === true) {
     lines.push(
       `Only ${Number.isFinite(finalSelectedCount) ? finalSelectedCount : valueOrUnknown(status.final_selected_article_count ?? status.selected_article_count)} publishable articles were selected; expected at least ${minFinalArticles}.`,
+      ''
+    );
+  }
+
+  lines.push(
+    '## Composition Summary',
+    '',
+    `- composition_mode: ${valueOrUnknown(status.composition_mode)}`,
+    `- selection_composition_mode: ${valueOrUnknown(status.selection_composition_mode ?? status.composition_mode)}`,
+    `- final_publish_ready: ${status.final_publish_ready === true ? 'true' : 'false'}`,
+    `- editor_review_required: ${status.editor_review_required === true ? 'true' : 'false'}`,
+    `- direct_aosp_camera count: ${valueOrUnknown(status.direct_aosp_camera_count ?? status.composition_summary?.direct_aosp_camera_count)}`,
+    `- camera_driver_image_pipeline count: ${valueOrUnknown(status.camera_driver_image_pipeline_count ?? status.composition_summary?.camera_driver_image_pipeline_count)}`,
+    `- android_platform_camera_adjacent count: ${valueOrUnknown(status.android_platform_camera_adjacent_count ?? status.composition_summary?.android_platform_camera_adjacent_count)}`,
+    `- soc_platform_signal count: ${valueOrUnknown(status.soc_platform_signal_count ?? status.composition_summary?.soc_platform_signal_count)}`,
+    `- cpp_ai_tooling_fallback count: ${valueOrUnknown(status.cpp_ai_tooling_fallback_count ?? status.composition_summary?.cpp_ai_tooling_fallback_count)}`,
+    `- generic_tech_watchlist count: ${valueOrUnknown(status.generic_tech_watchlist_count ?? status.composition_summary?.generic_tech_watchlist_count)}`,
+    `- composition reason: ${valueOrUnknown(status.composition_reason)}`,
+    ''
+  );
+
+  if (status.composition_mode === 'FALLBACK_COMPOSITION') {
+    lines.push(
+      'Fallback composition: direct AOSP Camera/driver candidates were limited, so SoC/platform or C++/AI tooling articles are included as lower-priority reviewable main articles. Do not add artificial Camera HAL wording; keep the practical SoC/platform/native development connection explicit.',
+      ''
+    );
+  }
+
+  if (status.composition_mode === 'THIN_WEEK_REVIEW') {
+    lines.push(
+      'Thin-week review path: this PR is reviewable but not publish-ready. Automatic publish/deploy must stay blocked.',
       ''
     );
   }
@@ -99,7 +133,7 @@ function buildNewsroomPrBody(options = {}) {
     ''
   );
 
-  if (status.status !== 'PASS' || validateOutcome === 'failure' || status.publish_ready !== true) {
+  if (status.status !== 'PASS' || validateOutcome === 'failure' || status.final_publish_ready !== true) {
     lines.push(
       `- Review content/newsroom/${date}/fact-check-report.md, content/newsroom/${date}/quality-report.md, and validation output before publishing.`,
       ''
