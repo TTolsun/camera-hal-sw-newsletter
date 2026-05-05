@@ -115,7 +115,7 @@ Gemini thinking budget은 stage별로 제한합니다. 기본값은 reporter `0`
 
 품질 게이트는 AOSP Camera / Camera Driver / SoC Platform 관련성, 근거 구체성, engineering depth, 실행 가능성, source integrity, article composition을 확인합니다. 점수가 85 이상이어도 hard blocker가 있으면 `NEEDS_FIX` 또는 `publish_ready=false`가 유지됩니다. hard blocker에는 source gap, fact-check `must_fix`, source/reference 누락, underfilled article count, 약한 AOSP Camera / driver / SoC / native relevance, 약한 evidence specificity, 필요한 date/version/API/component/behavior-change 근거 누락이 포함됩니다. 기사에는 가능한 경우 version/release, release date, API/component, behavior change, 명시적 source gap 같은 구체 evidence가 있어야 합니다. "AOSP 업데이트를 모니터링한다" 같은 일반 문장은 정확한 source, version, API, date, behavior를 함께 적지 않으면 충분하지 않습니다.
 
-`npm.cmd run validate`는 config, site, image, quality, localization validation을 모두 실행합니다. fact-check 또는 quality가 실패하면 workflow가 `needs-fix` 라벨의 review PR을 만들 수는 있지만, run은 실패하며 publication-ready로 보지 않습니다.
+`npm.cmd run validate`는 config, site, image, quality, localization validation을 모두 실행합니다. weekly newsroom workflow에서 review 가능한 artifact와 PR이 생성되면 fact-check 또는 quality가 `needs-fix`여도 PR 생성 job은 성공할 수 있습니다. 이 상태는 발행 가능을 뜻하지 않으며, `publish-ready` 라벨과 PR body의 `final_publish_ready=true`가 있을 때만 publication-ready로 봅니다. `fallback-composition`은 낮은 우선순위 SoC/platform/tooling 기사로 보강된 상태이고, `thin-week`는 자동 발행 대상이 아닌 편집장 검토용 경로입니다.
 
 ## 프로젝트 구조
 

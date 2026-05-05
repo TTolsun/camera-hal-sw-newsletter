@@ -7,11 +7,15 @@ const {
 
 const DEFAULT_STATUS = {
   status: 'UNKNOWN',
+  fact_check_status: 'UNKNOWN',
   must_fix_count: 0,
   quality_status: 'UNKNOWN',
   quality_score: 'n/a',
   quality_threshold: 'n/a',
-  publish_ready: false
+  publish_ready: false,
+  selection_publish_ready: false,
+  final_publish_ready: false,
+  editor_review_required: false
 };
 
 const OUTPUT_FIELDS = [
@@ -26,6 +30,9 @@ const OUTPUT_FIELDS = [
   'quality_attempt_count',
   'quality_deduction_count',
   'locked_article_count',
+  'deterministic_selected_count',
+  'rendered_main_article_count',
+  'reserve_candidate_count',
   'publish_ready',
   'selection_publish_ready',
   'final_publish_ready',
@@ -48,7 +55,10 @@ const OUTPUT_FIELDS = [
   'final_eligible_candidate_count',
   'final_selected_article_count',
   'reporter_selected_but_final_excluded_count',
-  'source_gap_count'
+  'source_gap_count',
+  'stale_claim_status',
+  'stale_claim_removed_count',
+  'stale_claim_hard_failure_count'
 ];
 
 function ensureArray(value) {
@@ -114,6 +124,18 @@ function buildGenerationStatusOutputs(status) {
   outputs.final_publish_ready = status.final_publish_ready === true ? 'true' : 'false';
   outputs.editor_review_required = status.editor_review_required === true ? 'true' : 'false';
   outputs.underfilled = status.underfilled === true ? 'true' : 'false';
+  outputs.deterministic_selected_count = scalar(
+    status.deterministic_selected_count ?? status.selected_article_count,
+    '0'
+  );
+  outputs.rendered_main_article_count = scalar(
+    status.rendered_main_article_count ?? status.final_selected_article_count ?? status.selected_article_count,
+    '0'
+  );
+  outputs.reserve_candidate_count = scalar(status.reserve_candidate_count, '0');
+  outputs.stale_claim_status = scalar(status.stale_claim_status, 'UNKNOWN');
+  outputs.stale_claim_removed_count = scalar(status.stale_claim_removed_count, '0');
+  outputs.stale_claim_hard_failure_count = scalar(status.stale_claim_hard_failure_count, '0');
   outputs.selection_warnings = multilineValue(status.selection_warnings);
   outputs.selection_errors = multilineValue(status.selection_errors);
   outputs.exclusion_reason_summary = formatReasonSummary(status.exclusion_reason_summary);

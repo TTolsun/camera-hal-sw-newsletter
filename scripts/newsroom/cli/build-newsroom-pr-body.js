@@ -17,9 +17,89 @@ function readTextIfExists(filePath) {
   return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8').trim() : '';
 }
 
+function readJsonIfExists(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (_) {
+    return null;
+  }
+}
+
 function valueOrUnknown(value) {
   if (value === null || value === undefined || value === '') return 'unknown';
   return String(value);
+}
+
+function booleanText(value) {
+  return value === true ? 'true' : 'false';
+}
+
+function numericStatusValue(...values) {
+  for (const value of values) {
+    if (Number.isFinite(Number(value))) return Number(value);
+  }
+  return null;
+}
+
+function resolveStaleClaimSummary(status, newsroomDir) {
+  const staleReport = readJsonIfExists(path.join(newsroomDir, 'stale-claim-report.json'));
+  return {
+    status: status.stale_claim_status || staleReport?.status || 'UNKNOWN',
+    removedCount: numericStatusValue(
+      status.stale_claim_removed_count,
+      ensureArray(staleReport?.stale_claim_items_removed).length +
+        ensureArray(staleReport?.unsupported_release_claims_removed).length +
+        ensureArray(staleReport?.unused_references_removed).length
+    ) ?? 0,
+    hardFailureCount: numericStatusValue(
+      status.stale_claim_hard_failure_count,
+      ensureArray(staleReport?.hard_failures).length
+    ) ?? 0
+  };
+}
+
+function resolveMustFixSummary(status, newsroomDir) {
+  const factCheck = readJsonIfExists(path.join(newsroomDir, 'fact-check-report.json'));
+  const mustFixItems = ensureArray(factCheck?.must_fix);
+  const sourceGaps = ensureArray(factCheck?.source_gaps);
+  const mustFixCount = numericStatusValue(status.must_fix_count, mustFixItems.length) ?? 0;
+  const sourceGapCount = numericStatusValue(status.source_gap_count, factCheck?.source_gap_count, sourceGaps.length) ?? 0;
+  const sample = mustFixItems
+    .slice(0, 3)
+    .map(item => typeof item === 'string' ? item : item?.issue || item?.claim || item?.headline || item?.reason)
+    .filter(Boolean);
+  return {
+    mustFixCount,
+    sourceGapCount,
+    text: [
+      `must_fix=${mustFixCount}`,
+      `source_gap=${sourceGapCount}`,
+      sample.length > 0 ? `sample=${sample.join(' | ')}` : ''
+    ].filter(Boolean).join('; ')
+  };
+}
+
+function recommendedEditorAction(status, validateOutcome, staleSummary, mustFixSummary) {
+  if (status.final_publish_ready === true && validateOutcome === 'success') {
+    return 'Publish/deploy gate is green; review final content and merge when editorial review is complete.';
+  }
+  if (staleSummary.hardFailureCount > 0 || staleSummary.status === 'NEEDS_FIX') {
+    return 'Remove or rewrite stale global claims before publishing; confirm stale-claim-report before retrying publish.';
+  }
+  if (mustFixSummary.mustFixCount > 0 || mustFixSummary.sourceGapCount > 0 || status.fact_check_status === 'NEEDS_FIX') {
+    return 'Resolve fact-check must_fix/source-gap items first, then rerun validation.';
+  }
+  if (status.composition_mode === 'THIN_WEEK_REVIEW') {
+    return 'Use this as an editor-review PR only; add stronger candidates or wait for a fuller article pool before publishing.';
+  }
+  if (status.composition_mode === 'FALLBACK_COMPOSITION') {
+    return 'Review fallback SoC/platform/tooling framing and publish only if the practical developer relevance is explicit.';
+  }
+  if (validateOutcome === 'failure' || status.quality_status !== 'PASS') {
+    return 'Review quality-report.md and validation output, then repair or demote weak sections.';
+  }
+  return 'Review the generated artifacts and labels before deciding whether to publish.';
 }
 
 function resolveDate(options = {}) {
@@ -38,6 +118,10 @@ function buildNewsroomPrBody(options = {}) {
   const editorBrief = date ? readTextIfExists(path.join(newsroomDir, 'editor-in-chief-brief.md')) : '';
   const finalSelectedCount = Number(status.final_selected_article_count ?? status.selected_article_count);
   const minFinalArticles = Number(status.selection_policy?.min_final_articles || 4);
+  const renderedMainArticleCount = status.rendered_main_article_count ?? status.final_selected_article_count ?? status.selected_article_count;
+  const staleSummary = resolveStaleClaimSummary(status, newsroomDir);
+  const mustFixSummary = resolveMustFixSummary(status, newsroomDir);
+  const editorAction = recommendedEditorAction(status, validateOutcome, staleSummary, mustFixSummary);
   const lines = [];
 
   if (editorBrief) {
@@ -50,20 +134,25 @@ function buildNewsroomPrBody(options = {}) {
     `Status: ${valueOrUnknown(status.status)}`,
     `Fact-check status: ${valueOrUnknown(status.fact_check_status)}`,
     `Fact-check must-fix count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
+    `Must-fix summary: ${mustFixSummary.text}`,
     `Quality score: ${valueOrUnknown(status.quality_score)}`,
     `Quality threshold: ${valueOrUnknown(status.quality_threshold)}`,
     'Max score: 100',
+    `Quality status: ${valueOrUnknown(status.quality_status)}`,
     `Result: ${valueOrUnknown(status.quality_status)}`,
     `Quality attempts: ${valueOrUnknown(status.quality_attempt_count)}`,
     `Locked articles: ${valueOrUnknown(status.locked_article_count)}`,
     `Repaired sections: ${valueOrUnknown(status.repaired_section_count ?? 0)}`,
     `Skipped repair sections: ${valueOrUnknown(status.skipped_repair_section_count ?? 0)}`,
     `Validation outcome: ${validateOutcome}`,
-    `Publish ready: ${status.publish_ready === true ? 'true' : 'false'}`,
-    `Selection publish ready: ${status.selection_publish_ready === true ? 'true' : 'false'}`,
-    `Final publish ready: ${status.final_publish_ready === true ? 'true' : 'false'}`,
-    `Editor review required: ${status.editor_review_required === true ? 'true' : 'false'}`,
-    `Underfilled thin-week path: ${status.underfilled === true ? 'true' : 'false'}`,
+    `Publish ready: ${booleanText(status.publish_ready)}`,
+    `Selection publish ready: ${booleanText(status.selection_publish_ready)}`,
+    `Final publish ready: ${booleanText(status.final_publish_ready)}`,
+    `Editor review required: ${booleanText(status.editor_review_required)}`,
+    `Underfilled thin-week path: ${booleanText(status.underfilled)}`,
+    `Stale claim status: ${staleSummary.status}`,
+    `Stale claim summary: removed=${staleSummary.removedCount}; hard_failures=${staleSummary.hardFailureCount}`,
+    `Recommended editor action: ${editorAction}`,
     ''
   );
 
@@ -79,8 +168,8 @@ function buildNewsroomPrBody(options = {}) {
     '',
     `- composition_mode: ${valueOrUnknown(status.composition_mode)}`,
     `- selection_composition_mode: ${valueOrUnknown(status.selection_composition_mode ?? status.composition_mode)}`,
-    `- final_publish_ready: ${status.final_publish_ready === true ? 'true' : 'false'}`,
-    `- editor_review_required: ${status.editor_review_required === true ? 'true' : 'false'}`,
+    `- final_publish_ready: ${booleanText(status.final_publish_ready)}`,
+    `- editor_review_required: ${booleanText(status.editor_review_required)}`,
     `- direct_aosp_camera count: ${valueOrUnknown(status.direct_aosp_camera_count ?? status.composition_summary?.direct_aosp_camera_count)}`,
     `- camera_driver_image_pipeline count: ${valueOrUnknown(status.camera_driver_image_pipeline_count ?? status.composition_summary?.camera_driver_image_pipeline_count)}`,
     `- android_platform_camera_adjacent count: ${valueOrUnknown(status.android_platform_camera_adjacent_count ?? status.composition_summary?.android_platform_camera_adjacent_count)}`,
@@ -108,6 +197,9 @@ function buildNewsroomPrBody(options = {}) {
   lines.push(
     '## Deterministic Final Selection Status',
     '',
+    `- deterministic_selected_count: ${valueOrUnknown(status.deterministic_selected_count ?? status.selected_article_count)}`,
+    `- rendered_main_article_count: ${valueOrUnknown(renderedMainArticleCount)}`,
+    `- reserve_candidate_count: ${valueOrUnknown(status.reserve_candidate_count)}`,
     `- Input candidates: ${valueOrUnknown(status.input_candidate_count)}`,
     `- Eligible candidates: ${valueOrUnknown(status.eligible_candidate_count)}`,
     `- Selected articles: ${valueOrUnknown(status.selected_article_count)}`,
@@ -126,6 +218,7 @@ function buildNewsroomPrBody(options = {}) {
     '',
     '## Editor Action Guidance',
     '',
+    `- Recommended action: ${editorAction}`,
     '- This PR is generated for editor review and is not auto-merged.',
     '- Resolve fact-check must-fix items separately from editorial quality deductions.',
     '- If facts cannot be verified, demote the item to briefing/watchlist or exclude it instead of promoting a source-gap article.',

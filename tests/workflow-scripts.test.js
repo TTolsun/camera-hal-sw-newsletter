@@ -1,4 +1,6 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const test = require('node:test');
 
 const {
@@ -35,6 +37,12 @@ test('generation status output includes multiline selection diagnostics', () => 
     composition_mode: 'THIN_WEEK_REVIEW',
     editor_review_required: true,
     underfilled: true,
+    deterministic_selected_count: 5,
+    rendered_main_article_count: 3,
+    reserve_candidate_count: 4,
+    stale_claim_status: 'PASS',
+    stale_claim_removed_count: 2,
+    stale_claim_hard_failure_count: 0,
     selected_article_count: 3,
     final_selected_article_count: 3,
     selection_warnings: ['Thin-week review path'],
@@ -48,6 +56,12 @@ test('generation status output includes multiline selection diagnostics', () => 
   assert.equal(outputs.final_selected_article_count_for_gate, '3');
   assert.equal(outputs.composition_mode, 'THIN_WEEK_REVIEW');
   assert.equal(outputs.editor_review_required, 'true');
+  assert.equal(outputs.deterministic_selected_count, '5');
+  assert.equal(outputs.rendered_main_article_count, '3');
+  assert.equal(outputs.reserve_candidate_count, '4');
+  assert.equal(outputs.stale_claim_status, 'PASS');
+  assert.equal(outputs.stale_claim_removed_count, '2');
+  assert.equal(outputs.stale_claim_hard_failure_count, '0');
   assert.match(rendered, /candidate_selection_diagnostics<<EOF/);
   assert.match(rendered, /missing dated evidence \(4\)/);
   assert.match(rendered, /selection_warnings=Thin-week review path/);
@@ -70,6 +84,9 @@ test('newsroom PR body separates quality score threshold and result', () => {
       composition_mode: 'THIN_WEEK_REVIEW',
       selection_composition_mode: 'THIN_WEEK_REVIEW',
       editor_review_required: true,
+      deterministic_selected_count: 5,
+      rendered_main_article_count: 3,
+      reserve_candidate_count: 2,
       direct_aosp_camera_count: 1,
       camera_driver_image_pipeline_count: 1,
       android_platform_camera_adjacent_count: 0,
@@ -84,18 +101,30 @@ test('newsroom PR body separates quality score threshold and result', () => {
       eligible_candidate_count: 3,
       final_exclusion_reason_summary: [
         { reason: 'missing dated evidence', count: 7 }
-      ]
+      ],
+      stale_claim_status: 'PASS',
+      stale_claim_removed_count: 1,
+      stale_claim_hard_failure_count: 0,
+      source_gap_count: 0
     }
   });
 
   assert.match(body, /Quality score: 90/);
   assert.match(body, /Quality threshold: 85/);
+  assert.match(body, /Quality status: NEEDS_FIX/);
   assert.match(body, /Result: NEEDS_FIX/);
+  assert.match(body, /Must-fix summary: must_fix=0; source_gap=0/);
+  assert.match(body, /Stale claim status: PASS/);
+  assert.match(body, /Stale claim summary: removed=1; hard_failures=0/);
+  assert.match(body, /Recommended editor action:/);
   assert.match(body, /## Composition Summary/);
   assert.match(body, /composition_mode: THIN_WEEK_REVIEW/);
   assert.match(body, /final_publish_ready: false/);
   assert.match(body, /editor_review_required: true/);
   assert.match(body, /direct_aosp_camera count: 1/);
+  assert.match(body, /deterministic_selected_count: 5/);
+  assert.match(body, /rendered_main_article_count: 3/);
+  assert.match(body, /reserve_candidate_count: 2/);
   assert.match(body, /Thin-week review path/);
   assert.match(body, /Only 3 publishable articles were selected; expected at least 4\./);
   assert.doesNotMatch(body, /90\/85/);
@@ -126,8 +155,14 @@ test('newsroom PR body marks fallback composition explicitly', () => {
       cpp_ai_tooling_fallback_count: 1,
       generic_tech_watchlist_count: 0,
       composition_reason: 'Primary AOSP Camera/driver/platform-adjacent candidates were below the normal target.',
+      deterministic_selected_count: 4,
+      rendered_main_article_count: 4,
+      reserve_candidate_count: 5,
       selected_article_count: 4,
-      final_selected_article_count: 4
+      final_selected_article_count: 4,
+      stale_claim_status: 'PASS',
+      stale_claim_removed_count: 0,
+      stale_claim_hard_failure_count: 0
     }
   });
 
@@ -136,4 +171,29 @@ test('newsroom PR body marks fallback composition explicitly', () => {
   assert.match(body, /cpp_ai_tooling_fallback count: 1/);
   assert.match(body, /Fallback composition:/);
   assert.match(body, /Do not add artificial Camera HAL wording/);
+});
+
+test('weekly newsroom workflow separates review PR success from publish-ready gate', () => {
+  const workflowPath = path.join(__dirname, '..', '.github', 'workflows', 'weekly-newsroom-pr.yml');
+  const workflow = fs.readFileSync(workflowPath, 'utf8');
+
+  assert.match(workflow, /uses: actions\/cache\/restore@v4/);
+  assert.match(workflow, /key: news-summary-\$\{\{ runner\.os \}\}-/);
+  assert.match(workflow, /uses: actions\/cache\/save@v4/);
+  assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
+  assert.match(workflow, /newsletter/);
+  assert.match(workflow, /aosp-camera/);
+  assert.match(workflow, /editor-review/);
+  assert.match(workflow, /needs-fix/);
+  assert.match(workflow, /fallback-composition/);
+  assert.match(workflow, /thin-week/);
+  assert.match(workflow, /publish-ready/);
+  assert.match(workflow, /const stateLabels = \['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week'\];/);
+  assert.match(workflow, /github\.rest\.issues\.removeLabel/);
+  assert.match(workflow, /const finalPublishReady = '\$\{\{ steps\.generation-status\.outputs\.final_publish_ready \}\}' === 'true';/);
+  assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION'/);
+  assert.match(workflow, /compositionMode === 'THIN_WEEK_REVIEW'/);
+  assert.match(workflow, /Fail if reviewable newsroom artifacts were not created/);
+  assert.doesNotMatch(workflow, /final_publish_ready != 'true'/);
+  assert.doesNotMatch(workflow, /fromJSON\(steps\.generation-status\.outputs\.final_selected_article_count_for_gate\) < 4/);
 });

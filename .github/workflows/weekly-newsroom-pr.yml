@@ -92,10 +92,10 @@ jobs:
         run: npm run collect
 
       - name: Restore URL summary cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: cache/news-summary
-          key: news-summary-${{ runner.os }}-${{ hashFiles('content/collected-news/**/candidates.json') }}
+          key: news-summary-${{ runner.os }}-
           restore-keys: |
             news-summary-${{ runner.os }}-
 
@@ -131,6 +131,16 @@ jobs:
         id: generation-status
         if: always()
         run: node scripts/write-generation-status-output.js >> "$GITHUB_OUTPUT"
+
+      - name: Check URL summary cache directory
+        id: summary-cache
+        if: always()
+        run: |
+          if [ -d cache/news-summary ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Validate generated site
         id: validate
@@ -195,6 +205,13 @@ jobs:
 
           node scripts/write-artifact-manifest.js "$SNAPSHOT" "$DATE"
 
+      - name: Save URL summary cache
+        if: always() && steps.summary-cache.outputs.exists == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: cache/news-summary
+          key: news-summary-${{ runner.os }}-${{ steps.meta.outputs.date }}-${{ github.run_id }}
+
       - name: Prepare pull request body
         id: pr-body
         if: steps.meta.outputs.has_reviewable_artifacts == 'true'
@@ -215,8 +232,12 @@ jobs:
           script: |
             const labels = [
               { name: 'newsletter', color: '1b58b5', description: 'Camera HAL SW Newsletter' },
+              { name: 'aosp-camera', color: '0e8a16', description: 'AOSP Camera and camera stack scope' },
               { name: 'editor-review', color: 'fbca04', description: 'Editor-in-chief review required' },
-              { name: 'needs-fix', color: 'd73a4a', description: 'Generated newsletter is not ready to publish' }
+              { name: 'needs-fix', color: 'd73a4a', description: 'Generated newsletter is not ready to publish' },
+              { name: 'fallback-composition', color: '5319e7', description: 'Uses lower-priority SoC/platform/tooling fallback articles' },
+              { name: 'thin-week', color: 'c5def5', description: 'Review-only thin-week newsletter candidate' },
+              { name: 'publish-ready', color: '0e8a16', description: 'Final publish gate passed' }
             ];
             for (const label of labels) {
               try {
@@ -250,14 +271,39 @@ jobs:
         continue-on-error: true
         with:
           script: |
-            const labels = ['newsletter', 'editor-review'];
-            if ('${{ steps.generation-status.outputs.status }}' !== 'PASS' || '${{ steps.validate.outcome }}' !== 'success') {
+            const issue_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
+            const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week'];
+            const labels = ['newsletter', 'aosp-camera', 'editor-review'];
+            const finalPublishReady = '${{ steps.generation-status.outputs.final_publish_ready }}' === 'true';
+            const validationPassed = '${{ steps.validate.outcome }}' === 'success';
+            const compositionMode = '${{ steps.generation-status.outputs.composition_mode }}';
+            if (finalPublishReady && validationPassed) {
+              labels.push('publish-ready');
+            } else {
               labels.push('needs-fix');
+            }
+            if (compositionMode === 'FALLBACK_COMPOSITION') {
+              labels.push('fallback-composition');
+            }
+            if (compositionMode === 'THIN_WEEK_REVIEW') {
+              labels.push('thin-week');
+            }
+            for (const name of stateLabels) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number,
+                  name
+                });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+              }
             }
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: Number('${{ steps.cpr.outputs.pull-request-number }}'),
+              issue_number,
               labels
             });
 
@@ -271,8 +317,8 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      - name: Fail if generation, validation, fact check, quality gate, or thin-week readiness failed
-        if: steps.generate.outcome == 'failure' || steps.validate.outcome == 'failure' || steps.generation-status.outputs.status == 'NEEDS_FIX' || steps.generation-status.outputs.status == 'QUALITY_NEEDS_FIX' || steps.generation-status.outputs.status == 'UNDERFILLED_NEEDS_FIX' || steps.generation-status.outputs.quality_status == 'NEEDS_FIX' || steps.generation-status.outputs.final_publish_ready != 'true' || fromJSON(steps.generation-status.outputs.final_selected_article_count_for_gate) < 4
+      - name: Fail if reviewable newsroom artifacts were not created
+        if: steps.meta.outputs.has_reviewable_artifacts != 'true'
         run: |
-          echo "Gemini generation, site validation, fact-check, quality gate, or thin-week readiness failed. Review the generated PR artifacts and workflow logs."
+          echo "Gemini newsroom generation did not produce reviewable artifacts. This is a fatal generation failure."
           exit 1

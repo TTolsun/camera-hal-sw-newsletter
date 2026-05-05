@@ -2176,6 +2176,11 @@ async function main() {
       todo_found: todoFound,
       empty_source_sections: emptySourceSections,
       source_gap_count: factCheck.source_gap_count,
+      stale_claim_status: staleScrub.report?.status || 'UNKNOWN',
+      stale_claim_removed_count: ensureArray(staleScrub.report?.stale_claim_items_removed).length +
+        ensureArray(staleScrub.report?.unsupported_release_claims_removed).length +
+        ensureArray(staleScrub.report?.unused_references_removed).length,
+      stale_claim_hard_failure_count: ensureArray(staleScrub.report?.hard_failures).length,
       ...selectionStatusExtra(shortlistReport, {
         renderedMainArticleCount: ensureArray(editor.sections).length,
         lockedArticleCount: retryHistory.at(-1)?.locked_article_headlines.length || 0,
