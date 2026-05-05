@@ -59,7 +59,7 @@ AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sens
 
 ### 안전한 scheduled run 기본값
 
-예약 자동 실행에서는 Pro 모델을 자동 fallback으로 두지 않습니다. workflow 기본값은 `.github/workflows/weekly-newsroom-pr.yml`과 `scripts/newsroom/common/runtime-config.js`에 맞춰 아래처럼 운영합니다.
+예약 자동 실행에서는 Pro 모델을 자동 fallback으로 두지 않습니다. workflow 기본값은 `.github/workflows/01-weekly-newsroom-pr.yml`과 `scripts/newsroom/common/runtime-config.js`에 맞춰 아래처럼 운영합니다.
 
 | 환경변수 | 기본값 | 역할 |
 | --- | --- | --- |
@@ -86,7 +86,7 @@ AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sens
 
 `manual high-quality run`(수동 고품질 실행)은 편집자가 비용 증가를 알고 명시적으로 선택할 때만 사용합니다.
 
-1. GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택합니다.
+1. GitHub Actions에서 `01 - Weekly Gemini Newsroom PR`을 선택합니다.
 2. `Run workflow`를 누릅니다.
 3. 필요하면 `newsletter_date`, `lookback_days`를 입력합니다.
 4. Pro 사용이 꼭 필요할 때만 `allow_pro=true`를 선택합니다.
@@ -177,8 +177,8 @@ Gemini thinking budget은 stage별로 제한합니다. 기본값은 reporter `0`
 │       ├── validate/
 │       └── common/
 └── .github/workflows/
-    ├── 02-validate-site.yml
-    └── weekly-newsroom-pr.yml
+    ├── 01-weekly-newsroom-pr.yml
+    └── 02-validate-site.yml
 ```
 
 ## 현재 운영 방식

@@ -12,7 +12,7 @@ Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR
 
 ## Variable
 
-아래 값은 `.github/workflows/weekly-newsroom-pr.yml`의 현재 기본값입니다. GitHub Variables에 값을 넣지 않으면 workflow가 이 기본값을 사용합니다.
+아래 값은 `.github/workflows/01-weekly-newsroom-pr.yml`의 현재 기본값입니다. GitHub Variables에 값을 넣지 않으면 workflow가 이 기본값을 사용합니다.
 workflow는 후보 수집과 Gemini 생성 전에 `npm run doctor:config`로 runtime 설정을 검증합니다. 이 명령은 `GEMINI_API_KEY` 값을 출력하지 않고 설정 여부만 표시합니다.
 
 영어 변수명은 GitHub Actions와 코드가 읽는 계약이므로 바꾸지 않습니다. 대신 의미를 함께 읽어야 합니다. 예를 들어 `fallback model`은 기본 모델 실패 시 쓰는 대체 모델, `quality gate`는 발행 안전 기준, `cost report`는 Gemini 비용 리포트, `manual high-quality run`은 사람이 비용 증가를 승인하고 직접 시작하는 수동 고품질 실행을 뜻합니다.

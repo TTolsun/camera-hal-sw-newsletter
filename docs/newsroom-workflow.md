@@ -122,7 +122,7 @@ scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합�
 
 ## Safe Scheduled Defaults
 
-scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. GitHub Variables에 값을 넣지 않으면 `.github/workflows/weekly-newsroom-pr.yml`과 runtime config의 기본값을 사용합니다.
+scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. GitHub Variables에 값을 넣지 않으면 `.github/workflows/01-weekly-newsroom-pr.yml`과 runtime config의 기본값을 사용합니다.
 
 ```text
 LOOKBACK_DAYS=21
@@ -155,7 +155,7 @@ manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 �
 
 ### 일일 Draft PR
 
-`Weekly Gemini Newsroom PR` workflow는 매일 09:00 KST에 실행됩니다.
+`01 - Weekly Gemini Newsroom PR` workflow는 매일 09:00 KST에 실행됩니다.
 
 ```text
 KST daily 09:00 = UTC daily 00:00
@@ -196,7 +196,7 @@ NEWSROOM_PRO_ESCALATION=manual
 
 ### 수동 실행
 
-GitHub Actions에서 `Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요하면 `newsletter_date`와 `lookback_days`를 입력합니다. 비워 두면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다. Pro 계열 모델을 수동으로 허용해야 하는 경우에만 `allow_pro=true`를 선택합니다.
+GitHub Actions에서 `01 - Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요하면 `newsletter_date`와 `lookback_days`를 입력합니다. 비워 두면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다. Pro 계열 모델을 수동으로 허용해야 하는 경우에만 `allow_pro=true`를 선택합니다.
 
 ## Editor-in-Chief Review
 

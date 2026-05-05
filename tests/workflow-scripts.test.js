@@ -174,9 +174,24 @@ test('newsroom PR body marks fallback composition explicitly', () => {
 });
 
 test('weekly newsroom workflow separates review PR success from publish-ready gate', () => {
-  const workflowPath = path.join(__dirname, '..', '.github', 'workflows', 'weekly-newsroom-pr.yml');
+  const workflowPath = path.join(__dirname, '..', '.github', 'workflows', '01-weekly-newsroom-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
+  const doctorStepIndex = workflow.indexOf('- name: Doctor runtime config');
+  const preflightStepIndex = workflow.indexOf('- name: Run unit and regression tests');
+  const jitterStepIndex = workflow.indexOf('- name: Jitter scheduled run');
+  const nextStepIndex = workflow.indexOf('\n      - name:', preflightStepIndex + 1);
+  const preflightStep = workflow.slice(
+    preflightStepIndex,
+    nextStepIndex === -1 ? undefined : nextStepIndex
+  );
 
+  assert.notEqual(doctorStepIndex, -1);
+  assert.notEqual(preflightStepIndex, -1);
+  assert.notEqual(jitterStepIndex, -1);
+  assert.ok(doctorStepIndex < preflightStepIndex);
+  assert.ok(preflightStepIndex < jitterStepIndex);
+  assert.match(preflightStep, /^\s*run: npm run test$/m);
+  assert.doesNotMatch(preflightStep, /continue-on-error:\s*true/);
   assert.match(workflow, /uses: actions\/cache\/restore@v4/);
   assert.match(workflow, /key: news-summary-\$\{\{ runner\.os \}\}-/);
   assert.match(workflow, /uses: actions\/cache\/save@v4/);
