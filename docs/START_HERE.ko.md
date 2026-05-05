@@ -1,6 +1,6 @@
 # 처음 보는 사람은 여기부터
 
-이 저장소는 Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수집하고, Gemini 기반 newsroom 자동화로 검토 가능한 정적 뉴스레터를 만드는 프로젝트입니다.
+이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC/CPU/GPU/NPU, power/thermal/performance, C++, AI 개발 생산성과 관련된 소식을 수집하고, Gemini 기반 newsroom 자동화로 검토 가능한 정적 뉴스레터를 만드는 프로젝트입니다.
 
 발행은 자동으로 `main`에 직접 들어가지 않습니다. 후보 수집, Gemini 생성, 검증, 편집자 검토 PR을 거쳐 사람이 확인한 뒤 merge하면 GitHub Pages가 발행합니다.
 

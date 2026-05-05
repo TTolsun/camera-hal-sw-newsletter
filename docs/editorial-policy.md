@@ -1,14 +1,14 @@
-# Camera HAL SW 뉴스레터 편집 정책
+# AOSP Camera / Driver / SoC Platform 뉴스레터 편집 정책
 
 ## 근거 구체성 요구사항
 
 각 main article은 source가 제공하는 경우 version 또는 release name, release date, API/component, behavior change, explicit source gap 같은 concrete evidence를 포함해야 합니다. "AOSP update를 모니터링한다" 또는 "CameraX change를 review한다" 같은 generic wording은 exact source, version, API, date, behavior를 함께 이름 붙이지 않으면 publishable하지 않습니다.
 
-AI, C++, Linux, tooling article은 camera input path, stream/buffer/metadata/request/result behavior, CTS/VTS/Camera ITS validation, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, HAL team workflow 중 하나로 Camera HAL relevance를 설명해야 합니다.
+AI, C++, Linux, SoC/platform, tooling article은 camera input path, stream/buffer/metadata/request/result behavior, V4L2/libcamera, ISP/image sensor, CTS/VTS/Camera ITS validation, latency, frame drop, thermal, memory, CPU/GPU/NPU/ISP contention, HAL/driver/native team workflow 중 하나로 relevance를 설명해야 합니다.
 
 ## 목표
 
-이 뉴스레터는 Camera HAL, Android Camera, CameraX, AOSP Camera, native C++ 개발자가 한 주의 변화를 실무 관점에서 판단하도록 돕는 기술 리포트입니다. 일반 IT 뉴스 요약이나 제품 홍보 모음이 아니라 HAL 구현, 검증, 성능, 안정성, 개발 workflow에 바로 연결되는 내용을 우선합니다.
+이 뉴스레터는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform, native C++ 개발자가 한 주의 변화를 실무 관점에서 판단하도록 돕는 기술 리포트입니다. 일반 IT 뉴스 요약이나 제품 홍보 모음이 아니라 framework/HAL/driver 구현, 검증, 성능, 전력/발열, 안정성, 개발 workflow에 바로 연결되는 내용을 우선합니다.
 
 ## 편집자 역할
 
@@ -28,6 +28,7 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 - native Android runtime
 - C++ code quality
 - camera input path 또는 engineering workflow에 영향을 주는 AI feature
+- SoC/CPU/GPU/NPU/ISP, memory bandwidth, power/thermal/performance 공개 정보
 
 ## 기사 구성
 
@@ -39,11 +40,12 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 
 ## 우선순위
 
-1. AOSP Camera, Android Camera framework, CameraX, Android compatibility, vendor camera behavior
-2. Linux camera, driver, buffer, stream, metadata, request/result, performance, security issue
-3. Android on-device AI, NPU/GPU, image pipeline, inference runtime처럼 camera data path와 만나는 AI issue
-4. Camera HAL 개발 생산성에 영향을 주는 agent workflow, Android tooling, CI, debugging, testing 변화
-5. C++ native code 안정성, concurrency, memory, toolchain, compiler, serialization, profiling issue
+1. `direct_aosp_camera`: Camera HAL/HAL3/AIDL/HIDL, CameraProvider/CameraService, Android Camera Framework, Camera2/CameraX, ImageReader/Surface/AHardwareBuffer, stream/buffer/metadata/request/result, camera CTS/VTS/ITS/CDD 직접 기사입니다.
+2. `camera_driver_image_pipeline`: Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, Linux media subsystem 기사입니다.
+3. `android_platform_camera_adjacent`: Android release, compatibility, graphics buffer/Surface, media framework, power/thermal, scheduler, memory pressure, security bulletin 중 camera 영향 설명이 가능한 기사입니다.
+4. `soc_platform_signal`: CPU/GPU/NPU/ISP/DSP, memory bandwidth, cache/interconnect, power/thermal/DVFS, scheduler/EAS, Qualcomm/Samsung/Arm/MediaTek, Exynos/Snapdragon/Tensor 같은 공개 SoC/platform 기사입니다. 낮은 우선순위 fallback이지만 배제하지 않습니다.
+5. `cpp_ai_tooling_fallback`: C++, LLVM/Clang/GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, LLM agent workflow fallback 기사입니다.
+6. `generic_tech_watchlist`: camera/driver/soc/native 개발 관점 연결이 약한 일반 IT 뉴스입니다. main article보다는 briefing/watchlist로 사용합니다.
 
 ## Camera HAL 해석 기준
 
@@ -62,7 +64,9 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 
 - Preview + ImageCapture + VideoCapture 동시 사용에서 YUV frame drop, capture latency, thermal throttling 여부를 측정한다.
 
-## C++ fallback 규칙
+## SoC / C++ fallback 규칙
+
+SoC/CPU/GPU/NPU/ISP, memory bandwidth, power/thermal/performance 정보는 낮은 우선순위 fallback이지만 배제하지 않습니다. 단, 사내 정보가 아니라 공개 기사 또는 공개 문서 기반이어야 하며, Camera framework, HAL, driver, image pipeline, 성능/전력/발열 검증 관점 중 하나로 설명 가능해야 합니다.
 
 Camera HAL / Android Camera 후보가 부족할 때 C++ 기사를 fallback으로 사용할 수 있습니다. C++ 기사는 concurrency, memory safety, performance, compiler/toolchain, diagnostics처럼 native HAL code 안정성과 직접 연결되어야 합니다. 일반 C++ community news는 제외합니다.
 

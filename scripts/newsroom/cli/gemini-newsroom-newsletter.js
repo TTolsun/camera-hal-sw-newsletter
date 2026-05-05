@@ -333,6 +333,18 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.evidence_score = numberOrDefault(collected.evidence_score ?? candidate.evidence_score);
     candidate.evidence_notes = ensureArray(candidate.evidence_notes);
     candidate.cross_check_status = stringOrEmpty(candidate.cross_check_status || 'not-required');
+    candidate.editorial_priority = numberOrDefault(collected.editorial_priority ?? candidate.editorial_priority, 6);
+    candidate.relevance_bucket = stringOrEmpty(collected.relevance_bucket || candidate.relevance_bucket || 'generic_tech_watchlist');
+    candidate.aosp_camera_directness = numberOrDefault(collected.aosp_camera_directness ?? candidate.aosp_camera_directness);
+    candidate.driver_stack_relevance = numberOrDefault(collected.driver_stack_relevance ?? candidate.driver_stack_relevance);
+    candidate.soc_platform_relevance = numberOrDefault(collected.soc_platform_relevance ?? candidate.soc_platform_relevance);
+    candidate.native_tooling_relevance = numberOrDefault(collected.native_tooling_relevance ?? candidate.native_tooling_relevance);
+    candidate.counts_as_primary_camera_topic = booleanFromCandidate(collected, candidate, 'counts_as_primary_camera_topic');
+    candidate.counts_as_driver_topic = booleanFromCandidate(collected, candidate, 'counts_as_driver_topic');
+    candidate.counts_as_soc_topic = booleanFromCandidate(collected, candidate, 'counts_as_soc_topic');
+    candidate.counts_as_fallback_topic = booleanFromCandidate(collected, candidate, 'counts_as_fallback_topic');
+    candidate.evidence_origin = stringOrEmpty(collected.evidence_origin || candidate.evidence_origin || 'unknown');
+    candidate.source_hint = stringOrEmpty(collected.source_hint || candidate.source_hint || collected.usageHint || collected.source_usage_hint);
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
     if (typeof candidate.selected !== 'boolean') {
       const total =
@@ -421,7 +433,7 @@ function firstHttpsUrl(...values) {
   return '';
 }
 
-const fallbackCategories = ['AOSP Camera Watch', 'Android Camera / AI Watch', 'C++ / AI Practical Tip'];
+const fallbackCategories = ['AOSP Camera Watch', 'Camera Driver / SoC Platform Watch', 'C++ / AI Practical Tip'];
 
 function normalizeSectionImageFields(section, reporter) {
   const sectionImages = ensureArray(section.imageCandidates).filter(image => image && image.url && isSafeExternalImageUrl(image.url));
@@ -1314,7 +1326,7 @@ async function main() {
 
   const commonContext = [
     `Newsletter date: ${date}`,
-    'Audience: Camera HAL / Android Camera / C++ engineer',
+    'Audience: AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
     'Use only the collected candidate JSON, data/news-sources.json, docs/news-sources.md, and the editorial documents below. Do not browse the web.',
     'Keep source names and source URLs unchanged. Distinguish confirmed facts from interpretation.',
     'Final newsletter text must be Korean.',
@@ -1353,7 +1365,7 @@ async function main() {
     reporter = validateReporter(await callGeminiJson(
       reporterStage,
       [
-        'You are the AI reporter for Camera HAL SW Newsletter.',
+        'You are the AI reporter for AOSP Camera / Driver / SoC Platform Newsletter.',
         'The local deterministic selector has already filtered, ranked, and chosen final article inputs. Do not make final selection decisions.',
         'Use selected only for reporter-stage judgment. Deterministic final article inputs are marked separately as final_selected=true and selected_for_editor=true after validation.',
         'Summarize, tag, and refine evidence fields only for the supplied shortlisted article capsules.',
@@ -1364,7 +1376,8 @@ async function main() {
         'Rolling release-note pages require evidence_notes that name the exact date, version/release, API/component, and behavior change before they can be selected.',
         'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
         'Candidate-only or requiresCrossCheck leads must not be selected unless cross_check_status is official-source or cross-checked.',
-        'Fallback C++, native, toolchain, Linux, and AI items can remain reporter-selected only when they satisfy the reporter-stage evidence and relevance rules.',
+        'Fallback SoC/platform, C++, native, toolchain, Linux, and AI items can remain reporter-selected only when they satisfy the reporter-stage evidence and relevance rules.',
+        'Preserve editorial_priority, relevance_bucket, aosp_camera_directness, driver_stack_relevance, soc_platform_relevance, native_tooling_relevance, counts_as_* flags, evidence_origin, and source_hint from the capsule/candidate metadata.',
         'Preserve imageCandidates exactly from the collected candidate JSON. Do not invent image URLs, rewrite image URLs, or add image candidates.',
         lockedSections.length > 0 ? 'Do not select candidates that duplicate the locked article URLs, titles, sources, or source-date-title combinations listed in the retry context.' : '',
         'For every candidate, provide these numeric scores:',
@@ -1396,24 +1409,24 @@ async function main() {
     editor = validateEditor(await callGeminiJson(
       editorStage,
       [
-        'You are the AI editor for Camera HAL SW Newsletter.',
-        'Write a Korean technical newsletter draft that a Camera HAL engineer can read in 10 minutes.',
+        'You are the AI editor for AOSP Camera / Driver / SoC Platform Newsletter.',
+        'Write a Korean technical newsletter draft that an AOSP Camera, Camera HAL, Camera Driver, or SoC platform engineer can read in 10 minutes.',
         'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
         'Create exactly 5 main articles when enough non-duplicate source material exists; 4 main articles are acceptable only when strong candidates are insufficient.',
         `Final main article count must stay between ${MIN_MAIN_ARTICLES} and ${MAX_MAIN_ARTICLES}; do not force 5 articles when only 4 strong eligible candidates exist.`,
         'Use final-selected article capsules as main article inputs. Do not turn final_selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
-        'Target article slot mix: Android Camera / platform API 1-2; CameraX / AOSP Camera / compatibility 1-2; Linux camera / libcamera / V4L2 0-1; AI plus camera input path or HAL workflow 0-1; C++ / toolchain fallback 0-1.',
-        'AI/C++ articles are optional bonus items only when final-selected inputs contain a concrete Camera HAL / Android Camera connection. Do not invent or force a generic AI article.',
-        'If there are not enough strong Camera HAL / Android Camera candidates, use C++ fallback only when it is a real dated article and has concrete HAL native-code value.',
+        'Priority order: direct_aosp_camera, camera_driver_image_pipeline, android_platform_camera_adjacent, soc_platform_signal, cpp_ai_tooling_fallback, then generic_tech_watchlist for briefing/watchlist only.',
+        'SoC/platform articles are lower-priority fallback, but do not exclude public CPU/GPU/NPU/ISP/power/thermal/performance information when it is final-selected and can be explained from Camera framework, HAL, driver, image pipeline, or platform performance perspective.',
+        'AI/C++ articles are optional fallback items only when final-selected inputs contain concrete native camera, driver, SoC, build/test, debugging, performance, or workflow value. Do not invent or force a generic AI article.',
         lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles.' : '',
         lockedSections.length > 0 ? 'Do not duplicate locked article URLs, titles/headlines, source names, or same source + published date + similar title.' : '',
         'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
         'Every article must include evidence_summary, specificity_checks, and source_verification_notes.',
-        'Every main article must explicitly name the release date, version/release, API/component or library/artifact, concrete behavior change, and Camera HAL / Android camera / C++ / AI workflow relevance when those fields exist in the candidate metadata.',
+        'Every main article must explicitly name the release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance when those fields exist in the candidate metadata.',
         'specificity_checks must name concrete evidence such as version, release date, API/component, source page, behavior change, or the exact source gap if the source is a rolling/watch page.',
-        'If release date, version/release, API/component, behavior change, or Camera HAL relevance cannot be verified from the supplied candidate/source data, demote the item to briefing/watchlist or exclude it instead of writing it as a main article.',
+        'If release date, version/release, API/component, behavior change, or expanded editorial-scope relevance cannot be verified from the supplied candidate/source data, demote the item to briefing/watchlist or exclude it instead of writing it as a main article.',
         'Do not write generic advice like "monitor AOSP updates" or "review CameraX changes" unless the sentence names the exact source, version/release, API/component, date, or behavior to watch.',
-        'For AI, C++, Linux, or tooling articles, explicitly connect the item to Camera HAL through stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, latency, frame drop, thermal, memory, NPU/GPU/ISP contention, or HAL workflow.',
+        'For SoC, AI, C++, Linux, or tooling articles, explicitly connect the item to AOSP Camera, Camera HAL, Camera Driver, V4L2/libcamera, image pipeline/ISP/sensor, SoC performance/power/thermal, or native development productivity.',
         'Each action_items entry must be executable within 2 weeks and include at least one concrete test, log, metric, device class, API/component, stream combination, or code-owner style handoff.',
         'For each article, choose at most one selectedImage from that article imageCandidates. If relevance, rights risk, logo-only content, screenshot text density, or source fit is unclear, set selectedImage to an empty string.',
         'Do not invent image URLs. selectedImage must exactly match one imageCandidates.url value, or be an empty string.',
@@ -1442,12 +1455,12 @@ async function main() {
     factCheck = validateFactCheck(await callGeminiJson(
       factCheckStage,
       [
-        'You are the AI fact checker for Camera HAL SW Newsletter.',
+        'You are the AI fact checker for AOSP Camera / Driver / SoC Platform Newsletter.',
         'Check factuality, missing sources, exaggerated language, and missing dates.',
         'Treat missing version, release date, API/component name, or behavior change as must_fix when an article presents a rolling page or generic watch item as a concrete update.',
         'Treat any finalSelectionEligibility=watchlist/exclude candidate or watch page without dated evidence used as a main article as must_fix.',
         'Any claim without a source must be classified as must_fix.',
-        'Flag general AI/C++ news that lacks Camera HAL or Android Camera interpretation.',
+        'Flag general AI/C++/SoC news that lacks AOSP Camera, camera driver, SoC platform, or native development interpretation.',
         'Flag any main article without concrete Action Item content.',
         'Flag any main article with weak Camera HAL perspective or missing engineering relevance.',
         'Flag candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.',
@@ -1495,7 +1508,7 @@ async function main() {
       const repairSections = validateCompletionSections(await callGeminiJson(
         repairStage,
         [
-          'You are the AI repair editor for Camera HAL SW Newsletter.',
+          'You are the AI repair editor for AOSP Camera / Driver / SoC Platform Newsletter.',
           'Return only regenerated section JSON for the failed sections listed in the repair plan. Never return a full newsletter draft.',
           'For repair-section actions, repair only the affected section using the same source.',
           'For replace-section actions, replace the section with a stronger supplied candidate instead of rewriting weak evidence.',
@@ -1504,10 +1517,10 @@ async function main() {
           'Replacement main articles must use only the selected deterministic article capsules or selected unused capsule candidates supplied in this prompt.',
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
-          'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, and Camera HAL / Android camera / C++ / AI workflow relevance.',
+          'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance.',
           'If those facts cannot be verified from the supplied candidate/source data, demote to briefing/watchlist or exclude; do not invent or infer missing release evidence.',
           `Keep ${MIN_MAIN_ARTICLES}-${MAX_MAIN_ARTICLES} main articles; 5 is the target only when enough strong eligible candidates exist.`,
-          'Maintain the slot policy: Android Camera/platform API 1-2; CameraX/AOSP/compatibility 1-2; Linux camera/libcamera/V4L2 0-1; AI camera path/HAL workflow 0-1 when present in final-selected inputs; C++/toolchain fallback 0-1 from real dated articles only.',
+          'Maintain the priority policy: direct_aosp_camera first, then camera_driver_image_pipeline, android_platform_camera_adjacent, soc_platform_signal as public lower-priority fallback, then cpp_ai_tooling_fallback. generic_tech_watchlist is for briefing/watchlist only.',
           'Use the golden example only for article structure and evidence/actionability style. Do not copy facts absent from current reporter candidates.',
           'Return only JSON matching the schema.'
         ].join('\n'),
@@ -1542,9 +1555,9 @@ async function main() {
       factCheck = validateFactCheck(await callGeminiJson(
         repairFactCheckStage,
         [
-          'You are the AI fact checker for the repaired Camera HAL SW Newsletter draft.',
+          'You are the AI fact checker for the repaired AOSP Camera / Driver / SoC Platform Newsletter draft.',
           'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
-          'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or Camera HAL relevance as must_fix for any main article.',
+          'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or expanded editorial-scope relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
           'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
           'Return only JSON matching the schema.'
@@ -1584,13 +1597,13 @@ async function main() {
         const completionSections = validateCompletionSections(await callGeminiJson(
           completionStage,
           [
-            'You are the AI completion editor for Camera HAL SW Newsletter.',
+            'You are the AI completion editor for AOSP Camera / Driver / SoC Platform Newsletter.',
             `Return only ${missingArticleCount} additional main article section(s), never a full newsletter rewrite.`,
             'Preserve existing valid sections by excluding their URLs, titles, source names, and source-date-title combinations.',
             'Use only the eligible reporter candidates supplied in this prompt. Do not use candidates omitted from the eligible list.',
             'Do not duplicate locked, duplicate/rejected, source-gap, or ineligible sections from the exclusion context.',
             'Each new section must satisfy the same editorial contract: confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, and sources.',
-            'Each new section must name release date, version/release, API/component or library/artifact, concrete behavior change, and Camera HAL / Android camera / C++ / AI workflow relevance using only supplied candidate metadata/source text.',
+            'Each new section must name release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance using only supplied candidate metadata/source text.',
             'Reject duplicate URLs, duplicate titles, and duplicate source-date-title combinations from the exclusion context.',
             'If the facts cannot be verified, do not create a main article from that candidate; leave the newsletter underfilled for editor review instead.',
             'For each article, choose at most one selectedImage from that article imageCandidates; use an empty selectedImage when attribution or relevance is uncertain.',
@@ -1613,7 +1626,7 @@ async function main() {
         factCheck = validateFactCheck(await callGeminiJson(
           completionFactCheckStage,
           [
-            'You are the AI fact checker for the completed Camera HAL SW Newsletter draft.',
+            'You are the AI fact checker for the completed AOSP Camera / Driver / SoC Platform Newsletter draft.',
             'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the 4-5 main article contract.',
             'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',

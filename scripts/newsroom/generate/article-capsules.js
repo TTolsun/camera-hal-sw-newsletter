@@ -161,6 +161,19 @@ function buildArticleCapsule(candidate) {
     source: compactText(candidate.source || candidate.source_name, 120),
     published_date: text(candidate.published_date || candidate.publishedAt || candidate.published_at),
     topic_type: topicType(candidate),
+    editorial_priority: number(candidate.editorial_priority, 6),
+    relevance_bucket: text(candidate.relevance_bucket),
+    scope_relevance: {
+      aosp_camera_directness: number(candidate.aosp_camera_directness),
+      driver_stack_relevance: number(candidate.driver_stack_relevance),
+      soc_platform_relevance: number(candidate.soc_platform_relevance),
+      native_tooling_relevance: number(candidate.native_tooling_relevance),
+      counts_as_primary_camera_topic: bool(candidate.counts_as_primary_camera_topic),
+      counts_as_driver_topic: bool(candidate.counts_as_driver_topic),
+      counts_as_soc_topic: bool(candidate.counts_as_soc_topic),
+      counts_as_fallback_topic: bool(candidate.counts_as_fallback_topic),
+      evidence_origin: text(candidate.evidence_origin)
+    },
     component: compactText(candidate.api_or_component || candidate.version_or_release, 160),
     what_changed: compactText(candidate.behavior_change || candidate.summary || summaryCacheText(candidate), MAX_TEXT),
     why_hal_engineer_cares: compactText(
@@ -264,8 +277,11 @@ function compactSelectionContext(shortlistReport) {
       title: compactText(candidate.title, 180),
       url: candidateUrl(candidate),
       deterministic_score: number(candidate.deterministic_score),
-      selection_slot: text(candidate.selection_slot)
+      selection_slot: text(candidate.selection_slot),
+      editorial_priority: number(candidate.editorial_priority, 6),
+      relevance_bucket: text(candidate.relevance_bucket)
     })),
+    selected_relevance_bucket_summary: ensureArray(shortlistReport?.selected_relevance_bucket_summary),
     exclusion_reason_summary: ensureArray(shortlistReport?.exclusion_reason_summary).slice(0, 10)
   };
 }

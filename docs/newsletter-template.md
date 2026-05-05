@@ -1,4 +1,4 @@
-# Camera HAL SW 뉴스레터 템플릿
+# AOSP Camera / Driver / SoC Platform 뉴스레터 템플릿
 
 ## 필수 근거 field
 
@@ -6,9 +6,9 @@
 
 정확한 source, version, API, date, behavior를 함께 이름 붙이지 않는 generic monitoring language는 사용하지 않습니다.
 
-# Camera HAL SW 뉴스레터 - YYYY-MM-DD
+# AOSP Camera / Driver / SoC Platform 뉴스레터 - YYYY-MM-DD
 
-이슈 전체 요약을 2-4문장으로 작성합니다. 이번 주 변화가 Camera HAL / Android Camera / C++ native 개발자에게 왜 중요한지 먼저 말합니다.
+이슈 전체 요약을 2-4문장으로 작성합니다. 이번 주 변화가 AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ native 개발자에게 왜 중요한지 먼저 말합니다.
 
 ## 1. 이번 주 3줄 브리핑
 
@@ -67,7 +67,7 @@ HAL interface, stream/buffer, metadata, request/result, performance, compatibili
 
 ---
 
-주요 기사는 같은 구조를 반복합니다. 이슈는 4-5개 기사를 목표로 하며 기본 목표는 5개입니다. 가능하면 3개 이상은 Camera HAL / Android Camera / CameraX / AOSP Camera 기사여야 합니다. AI/C++ 기사는 Camera HAL / Android Camera 맥락이 있는 경우에만 보완 기사로 포함합니다.
+주요 기사는 같은 구조를 반복합니다. 이슈는 4-5개 기사를 목표로 하며 기본 목표는 5개입니다. `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`를 우선하고, 후보가 부족하면 공개 `soc_platform_signal`, 그다음 `cpp_ai_tooling_fallback`으로 보강합니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 사용합니다.
 
 ## 이번 주 실행 항목
 

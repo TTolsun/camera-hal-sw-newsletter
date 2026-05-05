@@ -1,6 +1,10 @@
 const {
   isFinalSelected
 } = require('../generate/selection-diagnostics');
+const {
+  BUCKETS,
+  classifyAospCameraStackCandidate
+} = require('../common/aosp-camera-scope');
 
 const QUALITY_THRESHOLD = 85;
 const MIN_MAIN_ARTICLES = 4;
@@ -144,7 +148,7 @@ function hasGenericMonitoringWithoutEvidence(section) {
 }
 
 function hasHalDepth(section) {
-  return /Camera HAL|HAL|Android Camera|CameraX|AOSP Camera|stream|buffer|metadata|request|result|CTS|VTS|Camera ITS|CDD|latency|frame drop|thermal|power|memory|binder|scheduling|NPU|GPU|ISP|YUV|RAW|PRIVATE|logical|physical|vendor tag|session parameter/i
+  return /Camera HAL|HAL|Android Camera|CameraX|AOSP Camera|Camera2|stream|buffer|metadata|request|result|CTS|VTS|Camera ITS|CDD|latency|frame drop|thermal|power|memory|memory bandwidth|binder|scheduling|scheduler|EAS|DVFS|CPU|GPU|NPU|DSP|SoC|ISP|image sensor|MIPI|CSI-2|DMA-BUF|V4L2|libcamera|media controller|YUV|RAW|PRIVATE|logical|physical|vendor tag|session parameter|native|C\+\+|LLVM|Clang|GCC|sanitizer|toolchain|debugging|test productivity/i
     .test(sectionText(section));
 }
 
@@ -163,7 +167,7 @@ function hasValidAiRelevance(section) {
 }
 
 function hasHalConnectionTerm(body) {
-  return /Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|image frame|stream|buffer|metadata|request|result|ImageAnalysis|ISP|HAL workflow|Camera ITS|CTS|VTS/i
+  return /Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|image frame|stream|buffer|metadata|request|result|ImageAnalysis|ISP|image sensor|V4L2|libcamera|driver|SoC|CPU|GPU|NPU|DSP|thermal|power|DVFS|scheduler|memory bandwidth|native|C\+\+|LLVM|Clang|GCC|sanitizer|HAL workflow|Camera ITS|CTS|VTS/i
     .test(body);
 }
 
@@ -269,6 +273,43 @@ function sectionSourceSummary(section) {
   }));
 }
 
+function scopeScore(scope) {
+  return Math.max(
+    Number(scope?.aosp_camera_directness || 0),
+    Number(scope?.driver_stack_relevance || 0),
+    Number(scope?.soc_platform_relevance || 0),
+    Number(scope?.native_tooling_relevance || 0)
+  );
+}
+
+function sectionScope(section, candidateMap) {
+  for (const source of ensureArray(section?.sources)) {
+    const candidate = candidateForSourceUrl(source?.url, candidateMap);
+    if (candidate?.relevance_bucket) {
+      return {
+        editorial_priority: Number(candidate.editorial_priority || 6),
+        relevance_bucket: candidate.relevance_bucket,
+        aosp_camera_directness: Number(candidate.aosp_camera_directness || 0),
+        driver_stack_relevance: Number(candidate.driver_stack_relevance || 0),
+        soc_platform_relevance: Number(candidate.soc_platform_relevance || 0),
+        native_tooling_relevance: Number(candidate.native_tooling_relevance || 0),
+        evidence_origin: candidate.evidence_origin || 'candidate_metadata'
+      };
+    }
+  }
+  return classifyAospCameraStackCandidate({
+    title: section?.headline,
+    summary: sectionText(section),
+    api_or_component: section?.category,
+    behavior_change: section?.what_changed
+  });
+}
+
+function hasExpandedScope(section, candidateMap) {
+  const scope = sectionScope(section, candidateMap);
+  return scope.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST && scopeScore(scope) >= 2;
+}
+
 function articleStatusFor(section, hardItems, factCheck) {
   if (sectionHasSourceGap(section, factCheck)) return 'FAIL';
   if (hardItems.some(item => item.category === 'source-integrity')) return 'FAIL';
@@ -371,9 +412,15 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     boundedDeduct(state, 'composition', 3, `Expected exactly 3 briefing bullets, found ${ensureArray(editor.briefing).length}.`);
   }
   const cameraCoverage = countSections(sections, /Camera HAL|Android Camera|CameraX|AOSP Camera|Camera2|CTS|VTS|Camera ITS/i);
-  if (cameraCoverage < 2) {
-    boundedDeduct(state, 'hal-relevance', 8, `Expected at least 2 Camera HAL / Android Camera articles, found ${cameraCoverage}.`);
-  }
+  const sectionScopes = sections.map(section => sectionScope(section, candidateMap));
+  const expandedScopeCoverage = sectionScopes.filter(scope =>
+    scope.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST && scopeScore(scope) >= 2
+  ).length;
+  const scopeBucketCounts = sectionScopes.reduce((counts, scope) => {
+    const bucket = text(scope?.relevance_bucket) || 'unknown';
+    counts[bucket] = (counts[bucket] || 0) + 1;
+    return counts;
+  }, {});
 
   sections.forEach((section, index) => {
     const location = section.headline || section.category || `article ${index + 1}`;
@@ -401,10 +448,13 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       boundedDeduct(state, 'evidence-specificity', 4, 'Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.', location);
     }
     if (!hasHalDepth(section)) {
-      boundedDeduct(state, 'hal-depth', 4, 'Article lacks concrete Camera HAL engineering depth.', location);
+      boundedDeduct(state, 'hal-depth', 4, 'Article lacks concrete AOSP Camera / driver / SoC / native engineering depth.', location);
     }
     if (!hasHalDepth({ ...section, headline: '', category: '', what_changed: '', background: '', why_it_matters: '', evidence_summary: '', specificity_checks: [], source_verification_notes: [], team_summary: '', confirmed_facts: [], camera_hal_checks: [], action_items: [], sources: [], camera_hal_perspective: section.camera_hal_perspective })) {
-      boundedDeduct(state, 'hal-depth', 4, 'Article camera_hal_perspective does not include concrete Camera HAL perspective.', location);
+      boundedDeduct(state, 'hal-depth', 4, 'Article camera_hal_perspective does not include concrete AOSP Camera / driver / SoC / native perspective.', location);
+    }
+    if (!hasExpandedScope(section, candidateMap)) {
+      boundedDeduct(state, 'scope-relevance', 8, 'Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.', location);
     }
     if (ensureArray(section.action_items).length < 2) {
       boundedDeduct(
@@ -426,10 +476,10 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         { blocking: false }
       );
     }
-    if (/C\+\+|LLVM|Clang|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU/i.test(sectionText(section)) && !hasHalDepth(section)) {
-      boundedDeduct(state, 'hal-relevance', 4, 'Non-camera article does not clearly connect back to Camera HAL work.', location);
+    if (/C\+\+|LLVM|Clang|GCC|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU|CPU|SoC|thermal|power/i.test(sectionText(section)) && !hasHalDepth(section)) {
+      boundedDeduct(state, 'scope-relevance', 4, 'Fallback article does not clearly connect back to AOSP Camera, driver, SoC platform, or native development work.', location);
     }
-    if (hasGenericAiWithoutHalConnection(section)) {
+    if (hasGenericAiWithoutHalConnection(section) || ((section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) && !hasExpandedScope(section, candidateMap))) {
       boundedDeduct(state, 'hal-relevance', 8, 'Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.', location);
     }
     if (section.resolvedImage?.usedFallback === true) {
@@ -484,6 +534,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
 
   const finalSelectedCandidates = ensureArray(reporter.candidates).filter(isFinalSelected);
   const lowScoreSelected = finalSelectedCandidates.filter(candidate => {
+    if (candidate.relevance_bucket && candidate.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST) {
+      return scopeScore(candidate) < 2;
+    }
     const total =
       Number(candidate.camera_hal_relevance_score || 0) +
       Number(candidate.android_camera_relevance_score || 0) +
@@ -491,7 +544,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     return total < 8;
   });
   if (lowScoreSelected.length > 0) {
-    boundedDeduct(state, 'hal-relevance', Math.min(8, lowScoreSelected.length * 2), `${lowScoreSelected.length} final-selected candidate(s) have weak HAL/actionability scores.`);
+    boundedDeduct(state, 'scope-relevance', Math.min(8, lowScoreSelected.length * 2), `${lowScoreSelected.length} final-selected candidate(s) have weak HAL/actionability scores under the expanded AOSP Camera / driver / SoC / native relevance model.`);
   }
 
   const totalDeductions = state.deductions.reduce((sum, item) => sum + item.points, 0);
@@ -521,6 +574,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       article_count: sections.length,
       briefing_count: ensureArray(editor.briefing).length,
       camera_article_count: cameraCoverage,
+      expanded_scope_article_count: expandedScopeCoverage,
+      relevance_bucket_counts: scopeBucketCounts,
       ai_article_count: sections.filter(hasValidAiRelevance).length,
       fact_check_status: factCheck.status || 'UNKNOWN',
       must_fix_count: mustFixCount,
@@ -581,6 +636,8 @@ function buildQualityReportMarkdown(report) {
 - Main article count: ${metrics.article_count}
 - Briefing count: ${metrics.briefing_count}
 - Camera article count: ${metrics.camera_article_count}
+- Expanded-scope article count: ${metrics.expanded_scope_article_count}
+- Relevance bucket counts: ${JSON.stringify(metrics.relevance_bucket_counts || {})}
 - AI article count: ${metrics.ai_article_count}
 ${compositionFailure}
 

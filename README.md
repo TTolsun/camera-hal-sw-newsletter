@@ -1,6 +1,6 @@
-# Camera HAL SW Newsletter
+# AOSP Camera / Driver / SoC Platform Newsletter
 
-Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수집하고, Gemini 기반 newsroom 자동화로 검토 가능한 정적 뉴스레터를 만드는 저장소입니다.
+AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC/CPU/GPU/NPU, power/thermal/performance, C++/AI tooling 소식을 수집하고 Gemini 기반 newsroom 자동화로 검토 가능한 정적 뉴스레터를 만드는 저장소입니다.
 
 ## 핵심 용어
 
@@ -34,7 +34,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 ```text
 1. Collect candidates(후보 수집)
 2. Deterministic eligibility filter(코드 기반 적격성 필터)
-3. HAL-first scoring(Camera HAL 우선 점수화)
+3. Scope-first scoring(AOSP Camera / Driver / SoC bucket 우선 점수화)
 4. Top 8-12 article capsules(압축 기사 capsule) 생성
 5. Gemini reporter/editor/fact-check 실행
 6. Quality gate(품질 통과 기준) 확인
@@ -44,7 +44,18 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 10. Review PR 생성
 ```
 
-비용 절감은 품질 기준을 낮추는 방식이 아닙니다. LLM 호출 전에 코드가 Camera HAL / Android Camera 관련 후보를 먼저 고르고, Gemini에는 compact capsule만 전달합니다. retry도 전체 뉴스레터 재생성이 아니라 실패 section 중심으로 제한합니다. 비용 초과 기준은 현재 warning-only이며, 발행 가능 여부는 `quality gate`와 fact-check 결과가 결정합니다.
+비용 절감은 품질 기준을 낮추는 방식이 아닙니다. LLM 호출 전에 코드가 후보를 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket으로 분류하고, Gemini에는 compact capsule만 전달합니다. retry도 전체 뉴스레터 재생성이 아니라 실패 section 중심으로 제한합니다. 비용 초과 기준은 현재 warning-only이며, 발행 가능 여부는 `quality gate`와 fact-check 결과가 결정합니다.
+
+### Editorial scope bucket
+
+| Bucket | 용도 |
+| --- | --- |
+| `direct_aosp_camera` | Camera HAL/HAL3/AIDL/HIDL, CameraProvider/CameraService, Android Camera Framework, Camera2/CameraX, ImageReader/Surface/AHardwareBuffer, stream/buffer/metadata/request/result, camera CTS/VTS/ITS/CDD 직접 기사입니다. |
+| `camera_driver_image_pipeline` | Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, Linux media subsystem 기사입니다. |
+| `android_platform_camera_adjacent` | Android release, compatibility, graphics buffer/Surface, media framework, power/thermal, scheduler, memory pressure, security bulletin 중 camera 영향 설명이 가능한 기사입니다. |
+| `soc_platform_signal` | CPU/GPU/NPU/ISP/DSP, memory bandwidth, cache/interconnect, power/thermal/DVFS, scheduler/EAS, Qualcomm/Samsung/Arm/MediaTek, Exynos/Snapdragon/Tensor 같은 공개 SoC/platform 기사입니다. 낮은 우선순위 fallback이지만 배제하지 않습니다. |
+| `cpp_ai_tooling_fallback` | C++, LLVM/Clang/GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, LLM agent workflow fallback 기사입니다. |
+| `generic_tech_watchlist` | camera/driver/soc/native 개발 관점 연결이 약한 일반 IT 뉴스입니다. main article보다 briefing/watchlist로 둡니다. |
 
 ### 안전한 scheduled run 기본값
 
@@ -102,7 +113,7 @@ Camera HAL, Android Camera, C++, AI 개발 생산성과 관련된 소식을 수�
 
 Gemini thinking budget은 stage별로 제한합니다. 기본값은 reporter `0`, editor/completion `512`, repair `0`, fact-check `0`, scoring `0`이며 `GEMINI_THINKING_BUDGET_*` 변수로 조정합니다. Pro 계열 모델은 thinking disable이 불가능하거나 제한될 수 있으므로 manual escalation 시 cost report의 `thinking_tokens`와 budget 기록을 확인해야 합니다.
 
-품질 게이트는 Camera HAL 관련성, 근거 구체성, HAL engineering depth, 실행 가능성, source integrity, article composition을 확인합니다. 점수가 85 이상이어도 hard blocker가 있으면 `NEEDS_FIX` 또는 `publish_ready=false`가 유지됩니다. hard blocker에는 source gap, fact-check `must_fix`, source/reference 누락, underfilled article count, 약한 Camera HAL / Android Camera relevance, 약한 evidence specificity, 필요한 date/version/API/component/behavior-change 근거 누락이 포함됩니다. 기사에는 가능한 경우 version/release, release date, API/component, behavior change, 명시적 source gap 같은 구체 evidence가 있어야 합니다. "AOSP 업데이트를 모니터링한다" 같은 일반 문장은 정확한 source, version, API, date, behavior를 함께 적지 않으면 충분하지 않습니다.
+품질 게이트는 AOSP Camera / Camera Driver / SoC Platform 관련성, 근거 구체성, engineering depth, 실행 가능성, source integrity, article composition을 확인합니다. 점수가 85 이상이어도 hard blocker가 있으면 `NEEDS_FIX` 또는 `publish_ready=false`가 유지됩니다. hard blocker에는 source gap, fact-check `must_fix`, source/reference 누락, underfilled article count, 약한 AOSP Camera / driver / SoC / native relevance, 약한 evidence specificity, 필요한 date/version/API/component/behavior-change 근거 누락이 포함됩니다. 기사에는 가능한 경우 version/release, release date, API/component, behavior change, 명시적 source gap 같은 구체 evidence가 있어야 합니다. "AOSP 업데이트를 모니터링한다" 같은 일반 문장은 정확한 source, version, API, date, behavior를 함께 적지 않으면 충분하지 않습니다.
 
 `npm.cmd run validate`는 config, site, image, quality, localization validation을 모두 실행합니다. fact-check 또는 quality가 실패하면 workflow가 `needs-fix` 라벨의 review PR을 만들 수는 있지만, run은 실패하며 publication-ready로 보지 않습니다.
 
@@ -248,7 +259,7 @@ npm.cmd run validate:localization
 - AI 또는 C++ 기사는 필수가 아니라 optional bonus입니다. 가능하면 둘 중 하나를 포함하지만, Camera HAL / Android Camera 관련 후보가 충분하면 generic AI/C++ 기사를 main article로 올리지 않습니다.
 - `## References`를 포함합니다.
 - 발행 artifact에 `TODO` 문자를 남기지 않습니다.
-- Camera HAL 관련성은 capability, request/result, stream/buffer, metadata, CTS/VTS/ITS/CDD, latency, frame drop, thermal, power, native runtime, C++ tooling처럼 실제 검증 가능한 단위로 작성합니다.
+- Scope 관련성은 AOSP Camera capability, request/result, stream/buffer, metadata, CTS/VTS/ITS/CDD, V4L2/libcamera, ISP/image sensor, SoC CPU/GPU/NPU, thermal/power/performance, native runtime, C++ tooling처럼 실제 검증 가능한 단위로 작성합니다.
 
 ## Collector와 출처 적격성
 

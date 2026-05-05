@@ -1,6 +1,6 @@
 # Camera HAL SW 뉴스레터 Newsroom workflow
 
-이 문서는 Camera HAL SW 뉴스레터를 낮은 수작업 비용으로 매일 생성하기 위한 역할 기반 workflow를 설명합니다.
+이 문서는 AOSP Camera / Camera Driver / SoC Platform 뉴스레터를 낮은 수작업 비용으로 매일 생성하기 위한 역할 기반 workflow를 설명합니다.
 
 ## 품질 게이트
 
@@ -8,7 +8,7 @@ newsroom pipeline은 `content/newsroom/YYYY-MM-DD/quality-report.json`과 `quali
 
 draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `1`입니다. 이미 article quality check를 통과한 section은 보존하고, quality retry 한 번에서 repair 또는 replace할 section 수는 `NEWSROOM_MAX_SECTION_REPAIRS=1`로 제한합니다. `retry-history.json`과 `retry-history.md`에는 locked article, failed section, repair policy, skipped repair section을 남깁니다. Gemini API retry max delay 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`이며, 300000ms는 5분입니다.
 
-quality gate는 Camera HAL relevance, evidence specificity, HAL engineering depth, actionability, source integrity, article composition을 확인합니다. source 없음, source gap, duplicate main article, invalid/broken source URL, underfilled article count, HAL 연결이 없는 generic AI main article은 hard fail로 유지되며 점수가 충분해도 Hard blocker result: NEEDS_FIX 또는 `publish_ready=false`를 강제합니다. actionability, 약한 설명, local fallback image처럼 단독 발행 차단보다는 개선 권고에 가까운 항목은 soft deduction으로 점수와 report에 남깁니다. 이 경우에도 Quality score가 85 미만이면 통과하지 않습니다. `quality-report.json`의 `article_results`는 article별 `PASS` / `DEMOTE` / `FAIL`, hard fail reason, soft deduction, repair action을 표시합니다. retry 후에도 점수가 낮거나 blocker가 남아 있으면 weekly workflow는 review PR을 만들 수 있지만 `needs-fix`로 표시하고 run을 실패시켜 발행 가능한 이슈로 취급하지 않습니다.
+quality gate는 AOSP Camera / Camera Driver / SoC Platform relevance, evidence specificity, engineering depth, actionability, source integrity, article composition을 확인합니다. source 없음, source gap, duplicate main article, invalid/broken source URL, underfilled article count, expanded scope 연결이 없는 generic AI/main article은 hard fail로 유지되며 점수가 충분해도 Hard blocker result: NEEDS_FIX 또는 `publish_ready=false`를 강제합니다. actionability, 약한 설명, local fallback image처럼 단독 발행 차단보다는 개선 권고에 가까운 항목은 soft deduction으로 점수와 report에 남깁니다. 이 경우에도 Quality score가 85 미만이면 통과하지 않습니다. `quality-report.json`의 `article_results`는 article별 `PASS` / `DEMOTE` / `FAIL`, hard fail reason, soft deduction, repair action을 표시합니다. retry 후에도 점수가 낮거나 blocker가 남아 있으면 weekly workflow는 review PR을 만들 수 있지만 `needs-fix`로 표시하고 run을 실패시켜 발행 가능한 이슈로 취급하지 않습니다.
 
 ## 목표
 
@@ -37,9 +37,9 @@ source registry
 
 Gemini 실행 전에 `scripts/newsroom/generate/newsroom-selection.js`가 `content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. 기존 `scripts/lib/newsroom-selection.js` 경로는 호환 shim으로 유지합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다. Gemini prompt에는 full candidate 대신 `content/newsroom/YYYY-MM-DD/article-capsules.json`의 compact capsule을 전달합니다.
 
-shortlist는 기본 8-12개 수준, hard cap 12개 후보로 제한됩니다. local selector는 Gemini reporter/editor prompt가 실행되기 전에 deterministic scoring으로 후보를 줄이고 4-5개의 final main article input을 선택합니다. scoring은 Camera HAL / Android Camera 직접성, 구체 evidence, 최신성, 실무 actionability, source reliability를 우선합니다. source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음은 main article에서 제외되거나 강하게 감점됩니다. AI/C++ 기사는 필수가 아니라 Camera HAL / Android Camera 맥락이 있을 때만 optional bonus로 취급하며, HAL 관련 후보가 충분하면 generic AI/C++ 기사는 final main article input으로 올라오지 않습니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
+shortlist는 기본 8-12개 수준, hard cap 12개 후보로 제한됩니다. local selector는 Gemini reporter/editor prompt가 실행되기 전에 deterministic scoring으로 후보를 줄이고 4-5개의 final main article input을 선택합니다. scoring은 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket과 구체 evidence, 최신성, 실무 actionability, source reliability를 함께 봅니다. source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음은 main article에서 제외되거나 강하게 감점됩니다. SoC/CPU/GPU/NPU/ISP/power/thermal/performance 기사는 낮은 우선순위 fallback이지만 배제하지 않습니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 유지합니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
 
-- 수집 후보 중 Camera HAL, Android Camera, CameraX, AOSP Camera, stream/buffer/metadata/request/result, C++, LLVM/Clang, AI workflow와 관련된 항목을 점수화합니다.
+- 수집 후보 중 AOSP Camera, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, Android platform camera-adjacent, SoC platform, C++, LLVM/Clang/GCC, AI workflow와 관련된 항목을 점수화합니다.
 - source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
 - 출력: `content/newsroom/YYYY-MM-DD/reporter-candidates.json`.
 - `article-capsules.json`은 title, url, source, published_date, topic_type, component, what_changed, why_hal_engineer_cares, evidence, risk, score 중심의 compact prompt 입력입니다. reporter stage에는 top shortlist capsule 8-12개, editor/fact-check/repair/completion stage에는 final-selected 또는 필요한 completion capsule만 전달합니다.

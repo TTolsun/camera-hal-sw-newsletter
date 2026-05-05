@@ -31,7 +31,7 @@ registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd 
 - `priority`는 수집과 ranking 순서를 조정하며 `high`, `medium`, `low`를 사용합니다.
 - `rssUrl`은 확인된 feed URL이 있을 때만 넣습니다. 없으면 collector가 `sourceUrl`을 감시합니다.
 - `reliability`가 `community`, `newsletter`, `tech-media`, `expert-media`, `community-doc`에 가까울수록 후보 lead로 취급하고 교차 확인합니다.
-- `keywords`는 `camera_hal_relevance_score` 계산에 도움을 줍니다.
+- `keywords`는 후보 발굴과 하위 호환 `camera_hal_relevance_score` 계산에 도움을 줍니다. 새 로직은 기사 단위 evidence에서 나온 `relevance_bucket`, `editorial_priority`, `aosp_camera_directness`를 우선합니다.
 
 자주 쓰는 `reliability` 값:
 
@@ -78,7 +78,7 @@ newsroom generator는 이미지를 browse하거나 image URL을 만들어내면 
 5. optional, noisy, paywalled, broad trend source는 editor가 regular collection에 포함하기 전까지 `enabled: false`로 둡니다.
 6. community/newsletter/paywall-prone source는 `candidateOnly: true`를 사용합니다.
 7. media/community/vendor-reporting source는 `requiresCrossCheck: true`를 사용합니다.
-8. `usageHint`는 Camera HAL / Android / C++ / AI engineer가 왜 관심을 가져야 하는지 짧게 적습니다.
+8. `usageHint`는 AOSP Camera / Camera Driver / SoC Platform / C++ / AI engineer가 왜 관심을 가져야 하는지 짧게 적습니다.
 
 article body를 repository artifact에 복사하지 않습니다. 복잡한 site에 deep scraping을 구현하지 않습니다. 최종 newsletter는 한국어로 요약하고 source link를 `Sources` 또는 `References`에 보존합니다.
 

@@ -2,6 +2,10 @@ const crypto = require('crypto');
 const {
   normalizeShortlistReport
 } = require('./selection-diagnostics');
+const {
+  BUCKETS,
+  classifyAospCameraStackCandidate
+} = require('../common/aosp-camera-scope');
 
 const SHORTLIST_CAP = 12;
 const MIN_FINAL_ARTICLES = 4;
@@ -9,6 +13,7 @@ const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = 3;
 const MAX_FINAL_ARTICLES = 5;
 const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
 const MIN_CAMERA_HAL_DIRECTNESS = 2;
+const MIN_SCOPE_RELEVANCE = 2;
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -154,12 +159,52 @@ function candidateBody(candidate) {
   ].map(text).join(' ');
 }
 
+function candidateScope(candidate) {
+  if (candidate && candidate.relevance_bucket) {
+    return {
+      editorial_priority: number(candidate.editorial_priority, 6),
+      relevance_bucket: text(candidate.relevance_bucket),
+      aosp_camera_directness: number(candidate.aosp_camera_directness),
+      driver_stack_relevance: number(candidate.driver_stack_relevance),
+      soc_platform_relevance: number(candidate.soc_platform_relevance),
+      native_tooling_relevance: number(candidate.native_tooling_relevance),
+      counts_as_primary_camera_topic: bool(candidate.counts_as_primary_camera_topic),
+      counts_as_driver_topic: bool(candidate.counts_as_driver_topic),
+      counts_as_soc_topic: bool(candidate.counts_as_soc_topic),
+      counts_as_fallback_topic: bool(candidate.counts_as_fallback_topic),
+      evidence_origin: text(candidate.evidence_origin),
+      source_hint: text(candidate.source_hint),
+      scope_evidence_terms: ensureArray(candidate.scope_evidence_terms)
+    };
+  }
+  return classifyAospCameraStackCandidate(candidate);
+}
+
+function scopeRelevanceScore(candidate) {
+  const scope = candidateScope(candidate);
+  return Math.max(
+    number(scope.aosp_camera_directness),
+    number(scope.driver_stack_relevance),
+    number(scope.soc_platform_relevance),
+    number(scope.native_tooling_relevance)
+  );
+}
+
+function isGenericTechWatchlist(candidate) {
+  return candidateScope(candidate).relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST;
+}
+
+function hasSelectableScope(candidate) {
+  return !isGenericTechWatchlist(candidate) && scopeRelevanceScore(candidate) >= MIN_SCOPE_RELEVANCE;
+}
+
 function hasAiValue(candidate) {
   const body = candidateBody(candidate);
   return /AI|agent|LLM|Gemini|NPU|GPU|on-device|inference|model|Firebase AI|Copilot|Codex/i.test(body);
 }
 
 function hasCameraPlatformValue(candidate) {
+  if (hasSelectableScope(candidate)) return true;
   return /Camera HAL|Android Camera|CameraX|AOSP Camera|Camera2|camera|stream|buffer|metadata|request|result|CTS|VTS|Camera ITS|CDD|libcamera|V4L2/i
     .test(candidateBody(candidate));
 }
@@ -182,7 +227,9 @@ function hasBehaviorEvidence(candidate) {
 
 function cameraHalDirectnessScore(candidate) {
   const body = candidateBody(candidate);
+  const scope = candidateScope(candidate);
   const rawScore = Math.max(
+    number(scope.aosp_camera_directness),
     number(candidate.camera_hal_relevance_score),
     number(candidate.cameraHalRelevanceScore),
     number(candidate.relevanceScore),
@@ -222,15 +269,18 @@ function practicalActionabilityScore(candidate) {
 
 function optionalAiCppBonus(candidate) {
   const cameraDirectness = cameraHalDirectnessScore(candidate);
-  if (cameraDirectness < MIN_CAMERA_HAL_DIRECTNESS) return 0;
+  const scope = candidateScope(candidate);
+  if (cameraDirectness < MIN_CAMERA_HAL_DIRECTNESS && !scope.counts_as_soc_topic && !scope.counts_as_fallback_topic) return 0;
   let score = 0;
   if (hasAiValue(candidate)) score += 2;
   if (hasCppFallbackValue(candidate)) score += 1;
+  if (scope.counts_as_soc_topic) score += 1;
+  if (scope.counts_as_fallback_topic) score += 1;
   return clamp(score, 0, 5);
 }
 
 function genericAiPenalty(candidate) {
-  return hasAiValue(candidate) && cameraHalDirectnessScore(candidate) < MIN_CAMERA_HAL_DIRECTNESS ? 12 : 0;
+  return hasAiValue(candidate) && !hasSelectableScope(candidate) && cameraHalDirectnessScore(candidate) < MIN_CAMERA_HAL_DIRECTNESS ? 12 : 0;
 }
 
 function watchPagePenalty(candidate) {
@@ -250,7 +300,9 @@ function sourceGapPenalty(candidate) {
 }
 
 function scoreCandidate(candidate, newsletterDate) {
+  const scope = candidateScope(candidate);
   const cameraHal = cameraHalDirectnessScore(candidate);
+  const scopeScore = scopeRelevanceScore(candidate);
   const androidCamera = hasCameraPlatformValue(candidate) ? 5 : 0;
   const ai = hasAiValue(candidate) ? 3 : 0;
   const cppFallback = hasCppFallbackValue(candidate) ? 2 : 0;
@@ -264,11 +316,13 @@ function scoreCandidate(candidate, newsletterDate) {
     watch_page_penalty: watchPagePenalty(candidate),
     no_date_penalty: noDatePenalty(candidate),
     no_api_component_penalty: noApiComponentPenalty(candidate),
-    source_gap_penalty: sourceGapPenalty(candidate)
+    source_gap_penalty: sourceGapPenalty(candidate),
+    generic_tech_watchlist_penalty: isGenericTechWatchlist(candidate) ? 30 : 0
   };
   const penaltyTotal = Object.values(penalties).reduce((sum, value) => sum + value, 0);
   const total = rounded(
     cameraHal * 9 +
+    scopeScore * 8 +
     evidence * 4 +
     freshness * 5 +
     actionability * 2 +
@@ -279,6 +333,13 @@ function scoreCandidate(candidate, newsletterDate) {
 
   return {
     camera_hal_directness: cameraHal,
+    scope_relevance: scopeScore,
+    editorial_priority: scope.editorial_priority,
+    relevance_bucket: scope.relevance_bucket,
+    aosp_camera_directness: scope.aosp_camera_directness,
+    driver_stack_relevance: scope.driver_stack_relevance,
+    soc_platform_relevance: scope.soc_platform_relevance,
+    native_tooling_relevance: scope.native_tooling_relevance,
     evidence_specificity: evidence,
     freshness_score: freshness,
     practical_actionability: actionability,
@@ -287,6 +348,7 @@ function scoreCandidate(candidate, newsletterDate) {
     penalty_total: penaltyTotal,
     main_article_score_threshold: MAIN_ARTICLE_SCORE_THRESHOLD,
     minimum_camera_hal_directness: MIN_CAMERA_HAL_DIRECTNESS,
+    minimum_scope_relevance: MIN_SCOPE_RELEVANCE,
     source_reliability: sourceReliability,
     freshness,
     camera_hal_relevance: cameraHal,
@@ -303,8 +365,17 @@ function scoreFilterReasons(scoreBreakdown) {
   if (scoreBreakdown.total < MAIN_ARTICLE_SCORE_THRESHOLD) {
     reasons.push(`deterministic_score<${MAIN_ARTICLE_SCORE_THRESHOLD}`);
   }
-  if (scoreBreakdown.camera_hal_directness < MIN_CAMERA_HAL_DIRECTNESS) {
+  if (scoreBreakdown.scope_relevance < MIN_SCOPE_RELEVANCE) {
+    reasons.push(`scope_relevance<${MIN_SCOPE_RELEVANCE}`);
+  }
+  if (
+    scoreBreakdown.relevance_bucket === BUCKETS.DIRECT_AOSP_CAMERA &&
+    scoreBreakdown.camera_hal_directness < MIN_CAMERA_HAL_DIRECTNESS
+  ) {
     reasons.push(`camera_hal_directness<${MIN_CAMERA_HAL_DIRECTNESS}`);
+  }
+  if (scoreBreakdown.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
+    reasons.push('relevance_bucket=generic_tech_watchlist');
   }
   if (scoreBreakdown.no_date_penalty > 0) reasons.push('missing dated evidence');
   if (scoreBreakdown.source_gap_penalty > 0) reasons.push('source_gap_risk=true');
@@ -328,10 +399,12 @@ function candidatesAreDuplicate(left, right) {
 }
 
 function decorateCandidate(candidate, newsletterDate) {
+  const scope = candidateScope(candidate);
   const score_breakdown = scoreCandidate(candidate, newsletterDate);
   const score_filter_reasons = scoreFilterReasons(score_breakdown);
   return {
     ...candidate,
+    ...scope,
     url: candidateUrl(candidate),
     published_date: publishedDate(candidate),
     source: candidateSource(candidate),
@@ -370,8 +443,10 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
   }
 
   eligible.sort((a, b) =>
+    number(a.editorial_priority, 6) - number(b.editorial_priority, 6) ||
     b.deterministic_score - a.deterministic_score ||
     b.score_breakdown.camera_hal_directness - a.score_breakdown.camera_hal_directness ||
+    b.score_breakdown.scope_relevance - a.score_breakdown.scope_relevance ||
     b.score_breakdown.evidence_specificity - a.score_breakdown.evidence_specificity ||
     normalizeTitle(a.title).localeCompare(normalizeTitle(b.title))
   );
@@ -441,8 +516,8 @@ function selectionErrors(selected) {
   if (items.length < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
     errors.push(`Only ${items.length} eligible non-duplicate final article input(s) remain after deterministic filtering.`);
   }
-  if (items.length > 0 && items.every(candidate => !candidate.camera_platform_candidate)) {
-    errors.push('No Camera HAL / Android Camera eligible final article input remains after deterministic filtering.');
+  if (items.length > 0 && items.every(candidate => !hasSelectableScope(candidate))) {
+    errors.push('No AOSP Camera / Camera Driver / SoC Platform / native tooling eligible final article input remains after deterministic filtering.');
   }
   return errors;
 }
@@ -458,6 +533,17 @@ function summarizeExclusionReasons(excluded) {
   return [...counts.entries()]
     .map(([reason, count]) => ({ reason, count }))
     .sort((a, b) => b.count - a.count || a.reason.localeCompare(b.reason));
+}
+
+function summarizeBuckets(candidates) {
+  const counts = new Map();
+  for (const candidate of ensureArray(candidates)) {
+    const bucket = text(candidate.relevance_bucket || candidateScope(candidate).relevance_bucket) || 'unknown';
+    counts.set(bucket, (counts.get(bucket) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([bucket, count]) => ({ bucket, count }))
+    .sort((a, b) => number(a.bucket === BUCKETS.GENERIC_TECH_WATCHLIST) - number(b.bucket === BUCKETS.GENERIC_TECH_WATCHLIST) || a.bucket.localeCompare(b.bucket));
 }
 
 function buildShortlistReport(date, collectedCandidates, options = {}) {
@@ -486,6 +572,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     selected_article_count: selected.length,
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
     optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
+    relevance_bucket_summary: summarizeBuckets(shortlist),
+    selected_relevance_bucket_summary: summarizeBuckets(selected),
     shortlist_cap: cap,
     absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
     underfilled: warnings.length > 0,
@@ -497,8 +585,19 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       shortlist_target_range: '8-12 candidates before Gemini reporter/editor prompts.',
       main_article_score_threshold: MAIN_ARTICLE_SCORE_THRESHOLD,
       minimum_camera_hal_directness: MIN_CAMERA_HAL_DIRECTNESS,
-      cxx_fallback: 'Use C++ / developer productivity only as an optional bonus when it is connected to Camera HAL / Android Camera.',
-      ai_requirement: 'AI is optional; generic AI does not displace sufficient Camera HAL / Android Camera candidates.'
+      minimum_scope_relevance: MIN_SCOPE_RELEVANCE,
+      editorial_scope: 'AOSP Camera + Camera Driver + SoC Platform, with C++/AI/tooling as lower-priority fallback.',
+      priority_order: [
+        BUCKETS.DIRECT_AOSP_CAMERA,
+        BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
+        BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+        BUCKETS.SOC_PLATFORM_SIGNAL,
+        BUCKETS.CPP_AI_TOOLING_FALLBACK,
+        BUCKETS.GENERIC_TECH_WATCHLIST
+      ],
+      soc_platform_fallback: 'Public SoC / CPU / GPU / NPU / ISP / power / thermal / performance signals are lower-priority fallback, not excluded.',
+      cxx_fallback: 'Use C++ / AI / developer productivity as fallback when it supports native camera, driver, SoC, build, test, debugging, or performance work.',
+      generic_watchlist: 'generic_tech_watchlist is not automatically promoted to main article selection.'
     },
     shortlisted_candidates: markedShortlist,
     selected_articles: selected,

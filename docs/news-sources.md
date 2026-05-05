@@ -120,8 +120,8 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 
 다음 항목은 발행하지 않습니다.
 
-- Camera HAL, Android Camera, Linux camera, C++, embedded systems, AI tooling, software engineering practice와 관련이 없는 항목
+- AOSP Camera, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform, C++, embedded systems, AI tooling, software engineering practice와 관련이 없는 항목
 - 기술 세부 내용 없이 제품 홍보에 가까운 항목
 - 추적 가능한 출처가 없는 항목
-- Camera HAL engineering check, action item, implementation context로 연결할 수 없는 항목
+- AOSP Camera / driver / SoC / native engineering check, action item, implementation context로 연결할 수 없는 항목
 - 더 강한 official source와 중복되거나 거의 같은 항목

@@ -22,12 +22,16 @@ const {
   normalizeSourceEntry,
   readSourceRegistry
 } = require('../collect/news-source-section-resolver');
+const {
+  BUCKETS,
+  classifyAospCameraStackCandidate
+} = require('../common/aosp-camera-scope');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
 const structuredSourcesPath = path.join(root, 'data', 'news-sources.json');
 const legacySourcesPath = path.join(root, 'docs', 'news-sources.md');
-const AUDIENCE = 'Camera HAL / Android Camera / C++ engineer';
+const AUDIENCE = 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer';
 
 const PRIORITY_WEIGHT = { high: 3, medium: 2, low: 1 };
 const RELIABILITY_WEIGHT = { official: 3, 'project-official': 2, 'official-community': 2 };
@@ -41,7 +45,9 @@ const CANDIDATE_ONLY_RELIABILITY = new Set([
 const CAMERA_KEYWORDS = [
   'camera', 'camerax', 'camera2', 'hal', 'aosp', 'image', 'capture', 'raw', 'raw10', 'raw12', 'raw14',
   'ultra hdr', 'hdr', 'dynamic range', 'stream', 'buffer', 'metadata', 'session', 'android',
-  'its', 'cts', 'vts', 'cdd', 'libcamera', 'v4l2', 'isp', 'image sensor', 'qualcomm', 'samsung', 'soc'
+  'its', 'cts', 'vts', 'cdd', 'libcamera', 'v4l2', 'isp', 'image sensor', 'mipi', 'csi-2',
+  'dma-buf', 'soc', 'cpu', 'gpu', 'npu', 'dsp', 'dvfs', 'eas', 'thermal', 'power',
+  'qualcomm', 'samsung', 'arm', 'mediatek', 'exynos', 'snapdragon', 'tensor'
 ];
 const TECH_KEYWORDS = [
   'c++', 'cpp', 'clang', 'llvm', 'ndk', 'build', 'test', 'gtest', 'googletest', 'perfetto',
@@ -77,7 +83,7 @@ const FINAL_SELECTION_ELIGIBILITIES = new Set(['main', 'short', 'watchlist', 'ex
 const FALLBACK_INELIGIBLE_SOURCE_KINDS = new Set(['documentation_page', 'rolling_page', 'blog_index']);
 const ITEM_LEVEL_SOURCE_KINDS = new Set(['rss_item', 'release_note_item', 'blog_post_item']);
 const VERSION_OR_RELEASE_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|v?\d+\.\d+\.\d+(?:[-\w.]*)?|release notes?|security bulletin)\b/i;
-const API_OR_COMPONENT_PATTERN = /\b(?:CameraX|androidx\.camera|Camera2|Camera HAL|AOSP Camera|CDD|CTS|VTS|Camera ITS|Android framework|Android Security Bulletin|libcamera|V4L2|media controller|LLVM|Clang|NDK|SDK|API)\b/i;
+const API_OR_COMPONENT_PATTERN = /\b(?:CameraX|androidx\.camera|Camera2|Camera HAL|AOSP Camera|CDD|CTS|VTS|Camera ITS|Android framework|Android Security Bulletin|libcamera|V4L2|media controller|image sensor|ISP|MIPI\s*CSI-?2|DMA-?BUF|SoC|CPU|GPU|NPU|DSP|DVFS|EAS|LLVM|Clang|GCC|NDK|SDK|API)\b/i;
 const BEHAVIOR_CHANGE_PATTERN = /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|remove(?:d|s)?|deprecat(?:ed|es)|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?|migrat(?:ed|es|ion)|security|vulnerability|CVE|bulletin|release(?:d|s)?|compatibility|requirement|API|behavior)\b/i;
 
 let sectionMap = { ...DEFAULT_SECTION_MAP };
@@ -279,6 +285,7 @@ function componentFromText(value, source) {
   if (match) return match;
   if (['camera-hal', 'camera-api', 'aosp', 'compatibility'].includes(source.category)) return 'Android Camera / Camera HAL';
   if (['linux-camera', 'linux-kernel', 'driver', 'v4l2'].includes(source.category)) return 'Linux camera / V4L2';
+  if (['soc', 'chipset', 'platform', 'gpu', 'npu'].includes(source.category)) return 'SoC platform / CPU / GPU / NPU';
   if (['cpp', 'toolchain', 'native', 'llvm'].includes(source.category)) return 'C++ / native toolchain';
   return '';
 }
@@ -452,7 +459,30 @@ function normalizeCandidate(raw) {
   const candidateOnly = source.candidateOnly || CANDIDATE_ONLY_RELIABILITY.has(source.reliability);
   const section = source.section;
   const metadata = evidenceMetadata(raw, source, title, summary, score, candidateOnly);
-  const classification = classifySelection(raw, source, metadata, score, candidateOnly);
+  const scopeMetadata = classifyAospCameraStackCandidate({
+    ...raw,
+    title,
+    summary,
+    source: source.name,
+    source_name: source.name,
+    category: source.category,
+    section,
+    source_category: source.category,
+    source_section: section,
+    usageHint: source.usageHint,
+    source_usage_hint: source.usageHint,
+    version_or_release: metadata.version_or_release,
+    api_or_component: metadata.api_or_component,
+    behavior_change: metadata.behavior_change
+  });
+  let classification = classifySelection(raw, source, metadata, score, candidateOnly);
+  if (scopeMetadata.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
+    classification = {
+      ...classification,
+      finalSelectionEligibility: classification.hasDatedEvidence ? 'watchlist' : 'exclude',
+      selectionExclusionReason: 'Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.'
+    };
+  }
   const sourceGapRisk = metadata.source_gap_risk ||
     classification.finalSelectionEligibility === 'watchlist' ||
     classification.finalSelectionEligibility === 'exclude';
@@ -528,11 +558,12 @@ function normalizeCandidate(raw) {
     relevance_score: score,
     cameraHalRelevanceScore: score,
     camera_hal_relevance_score: score,
+    ...scopeMetadata,
     imageCandidates: Array.isArray(raw.imageCandidates) ? raw.imageCandidates : [],
     image_candidates: Array.isArray(raw.imageCandidates) ? raw.imageCandidates : [],
     candidateTier: candidateTier(score, classification.finalSelectionEligibility),
-    reason: buildReason(cameraHits, techHits, source, score),
-    collection_reason: buildReason(cameraHits, techHits, source, score)
+    reason: buildReason(cameraHits, techHits, source, score, scopeMetadata),
+    collection_reason: buildReason(cameraHits, techHits, source, score, scopeMetadata)
   };
 }
 
@@ -570,8 +601,14 @@ function candidateTier(score, finalSelectionEligibility = '') {
   return 'exclude';
 }
 
-function buildReason(cameraHits, techHits, source, score) {
+function buildReason(cameraHits, techHits, source, score, scopeMetadata = {}) {
   const prefix = `${source.name} (${source.reliability}, ${source.priority}, score ${score})`;
+  if (scopeMetadata.relevance_bucket && scopeMetadata.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST) {
+    return `${prefix}: ${scopeMetadata.relevance_bucket} (${scopeMetadata.aosp_camera_relevance_reason})`;
+  }
+  if (scopeMetadata.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
+    return `${prefix}: generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.`;
+  }
   if (cameraHits > 0 && techHits > 0) {
     return `${prefix}: Camera HAL relevance and engineering productivity signals were both detected.`;
   }
@@ -645,15 +682,15 @@ function markdown(date, candidates, failures, lookbackDays) {
   const excluded = candidates.filter(item => item.finalSelectionEligibility === 'exclude');
 
   function candidateTable(items) {
-    lines.push('| 선택 가능성 | 점수 | 근거 | 수집 mode | 날짜 근거 | 출처 종류 | 출처 | 제목 | 발행일 | 사유 | Link |');
-    lines.push('|---|---:|---:|---|---|---|---|---|---|---|---|');
+    lines.push('| 선택 가능성 | Bucket | Priority | 점수 | 근거 | 수집 mode | 날짜 근거 | 출처 종류 | 출처 | 제목 | 발행일 | 사유 | Link |');
+    lines.push('|---|---|---:|---:|---:|---|---|---|---|---|---|---|---|');
     if (items.length === 0) {
-      lines.push('| - | - | - | - | - | - | - | 없음 | - | - | - |');
+      lines.push('| - | - | - | - | - | - | - | - | - | 없음 | - | - | - |');
       lines.push('');
       return;
     }
     for (const item of items) {
-      lines.push(`| ${mdEscape(item.finalSelectionEligibility)} | ${item.relevanceScore} | ${item.evidence_score} | ${mdEscape(item.collectionMode)} | ${item.hasDatedEvidence ? 'yes' : 'no'} | ${mdEscape(item.source_kind)} | ${mdEscape(item.source)} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || '검토 필요')} | ${mdEscape(item.selection_exclusion_reason || item.verification_hint || '')} | [link](${item.url}) |`);
+      lines.push(`| ${mdEscape(item.finalSelectionEligibility)} | ${mdEscape(item.relevance_bucket)} | ${item.editorial_priority || '-'} | ${item.relevanceScore} | ${item.evidence_score} | ${mdEscape(item.collectionMode)} | ${item.hasDatedEvidence ? 'yes' : 'no'} | ${mdEscape(item.source_kind)} | ${mdEscape(item.source)} | ${mdEscape(item.title)} | ${mdEscape(item.publishedAt || '검토 필요')} | ${mdEscape(item.selection_exclusion_reason || item.verification_hint || '')} | [link](${item.url}) |`);
     }
     lines.push('');
   }
@@ -703,6 +740,18 @@ function markdown(date, candidates, failures, lookbackDays) {
     lines.push(`- Source category: ${item.source_category}`);
     lines.push(`- Source priority: ${item.source_priority}`);
     lines.push(`- Source reliability: ${item.source_reliability}`);
+    lines.push(`- Editorial priority: ${item.editorial_priority}`);
+    lines.push(`- Relevance bucket: ${item.relevance_bucket}`);
+    lines.push(`- AOSP camera directness: ${item.aosp_camera_directness}`);
+    lines.push(`- Driver stack relevance: ${item.driver_stack_relevance}`);
+    lines.push(`- SoC platform relevance: ${item.soc_platform_relevance}`);
+    lines.push(`- Native tooling relevance: ${item.native_tooling_relevance}`);
+    lines.push(`- Counts as primary camera topic: ${item.counts_as_primary_camera_topic ? 'yes' : 'no'}`);
+    lines.push(`- Counts as driver topic: ${item.counts_as_driver_topic ? 'yes' : 'no'}`);
+    lines.push(`- Counts as SoC topic: ${item.counts_as_soc_topic ? 'yes' : 'no'}`);
+    lines.push(`- Counts as fallback topic: ${item.counts_as_fallback_topic ? 'yes' : 'no'}`);
+    lines.push(`- Evidence origin: ${item.evidence_origin}`);
+    lines.push(`- Source hint: ${item.source_hint || 'none'}`);
     lines.push(`- Candidate only: ${item.candidate_only ? 'yes' : 'no'}`);
     lines.push(`- Collection mode: ${item.collectionMode}`);
     lines.push(`- Article candidate: ${item.isArticleCandidate ? 'yes' : 'no'}`);
