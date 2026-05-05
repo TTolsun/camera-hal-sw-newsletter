@@ -6,7 +6,7 @@
 
 ## 메인으로 봐야 할 기사
 
-Claude Code 2.1.128: agent-assisted Camera HAL workflow impact
+Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향
 
 ## Camera HAL 업무 연결 포인트
 - 2026년 5월 Android 보안 게시판이 공개되는 즉시, 카메라 HAL 관련 CVE 항목을 확인하고 해당 취약점이 현재 제품에 영향을 미치는지 분석합니다. (Owner: 보안 담당 엔지니어)

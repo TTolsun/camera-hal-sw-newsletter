@@ -9,7 +9,7 @@
 
 ## 2. AI plus camera input path or HAL workflow
 
-### Claude Code 2.1.128: agent-assisted Camera HAL workflow impact
+### Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향
 
 
 **이번 주 확인한 사실**
@@ -35,7 +35,7 @@ AI 코딩 에이전트는 Camera HAL 개발 워크플로우에 다음과 같은 
 
 **팀 공유용 한 줄**
 
-Claude Code 2.1.128 is a workflow signal for Camera HAL code authoring, debugging, refactoring, and test automation with an AI coding agent.
+Claude Code 2.1.128 업데이트는 Camera HAL 코드 작성, 디버깅, 리팩토링, 테스트 자동화에 쓰는 AI 코딩 에이전트 워크플로우 점검 신호입니다.
 
 **출처**
 
@@ -45,7 +45,7 @@ Claude Code 2.1.128 is a workflow signal for Camera HAL code authoring, debuggin
 
 ## 3. Linux Camera / V4L2
 
-### FreeBSD 15.1 Beta 1: Android Linux camera/V4L2 stack review signal
+### FreeBSD 15.1 Beta 1 출시: Android Linux 카메라/V4L2 스택 점검 신호
 
 
 **이번 주 확인한 사실**
@@ -71,7 +71,7 @@ FreeBSD의 업데이트는 직접적인 Android HAL 요구사항은 아니지만
 
 **팀 공유용 한 줄**
 
-FreeBSD 15.1 Beta 1 is not Android-based, but it is a useful cross-kernel signal for reviewing Android Linux camera and V4L2 stack assumptions.
+FreeBSD 15.1 Beta 1은 Android 기반은 아니지만 Android Linux 카메라와 V4L2 스택 가정을 점검하는 참고 신호입니다.
 
 **출처**
 
@@ -119,7 +119,7 @@ Android 보안 게시판은 매월 발행되며, Android 기기의 보안을 강
 
 ## 5. Android Camera / Platform API
 
-### Firebase AI Logic hybrid inference: Camera HAL input path and NPU/GPU scheduling impact
+### Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향
 
 ![Android용 하이브리드 추론 솔루션 다이어그램](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png)
 
@@ -130,7 +130,7 @@ _Image: [Android Developers Blog](https://android-developers.googleblog.com/2026
 
 - published date: 2026-04-17.
 - API/component: Firebase AI Logic API.
-- behavior change: Android apps can combine on-device inference and cloud inference paths while using new Gemini models.
+- behavior change: Android 앱이 온디바이스 추론과 클라우드 추론 경로를 조합하고 새로운 Gemini 모델을 사용할 수 있습니다.
 
 **배경지식**
 
@@ -148,7 +148,7 @@ AI 모델의 추론은 온디바이스에서 직접 실행되거나 클라우드
 
 **팀 공유용 한 줄**
 
-Firebase AI Logic hybrid inference affects Camera HAL input buffers, AI analysis streams, NPU/GPU/ISP contention, latency, and power measurements.
+Firebase AI Logic 하이브리드 추론은 Camera HAL 입력 버퍼, AI analysis stream, NPU/GPU/ISP 경합, 지연 시간, 전력 측정을 함께 점검해야 하는 Android AI 경로 변화입니다.
 
 **출처**
 
@@ -158,7 +158,7 @@ Firebase AI Logic hybrid inference affects Camera HAL input buffers, AI analysis
 
 ## 6. C++ / Toolchain Fallback
 
-### C++26 assert() update: native Camera HAL code stability debugging signal
+### C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호
 
 
 **이번 주 확인한 사실**
@@ -183,7 +183,7 @@ Camera HAL은 성능에 민감하고 안정성이 중요한 시스템이므로, 
 
 **팀 공유용 한 줄**
 
-The C++26 assert() update is a native-toolchain signal for improving Camera HAL failure diagnostics and state capture around assert sites.
+C++26 assert() 개선은 네이티브 Camera HAL 코드의 실패 지점 진단과 상태값 기록 방식을 점검할 수 있는 도구chain 신호입니다.
 
 **출처**
 

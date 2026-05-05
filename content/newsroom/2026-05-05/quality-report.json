@@ -10,7 +10,7 @@
   "article_results": [
     {
       "index": 1,
-      "headline": "Claude Code 2.1.128: agent-assisted Camera HAL workflow impact",
+      "headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
       "category": "AI plus camera input path or HAL workflow",
       "status": "PASS",
       "repair_action": "preserve",
@@ -25,7 +25,7 @@
     },
     {
       "index": 2,
-      "headline": "FreeBSD 15.1 Beta 1: Android Linux camera/V4L2 stack review signal",
+      "headline": "FreeBSD 15.1 Beta 1 출시: Android Linux 카메라/V4L2 스택 점검 신호",
       "category": "Linux Camera / V4L2",
       "status": "PASS",
       "repair_action": "preserve",
@@ -55,7 +55,7 @@
     },
     {
       "index": 4,
-      "headline": "Firebase AI Logic hybrid inference: Camera HAL input path and NPU/GPU scheduling impact",
+      "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향",
       "category": "Android Camera / Platform API",
       "status": "PASS",
       "repair_action": "preserve",
@@ -70,7 +70,7 @@
     },
     {
       "index": 5,
-      "headline": "C++26 assert() update: native Camera HAL code stability debugging signal",
+      "headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
       "category": "C++ / Toolchain Fallback",
       "status": "PASS",
       "repair_action": "preserve",

@@ -31,11 +31,11 @@
 
 | # | Result | Repair action | Headline | Hard fail reasons | Soft deductions |
 | ---: | --- | --- | --- | --- | --- |
-| 1 | PASS | preserve | Claude Code 2.1.128: agent-assisted Camera HAL workflow impact | none | none |
-| 2 | PASS | preserve | FreeBSD 15.1 Beta 1: Android Linux camera/V4L2 stack review signal | none | none |
+| 1 | PASS | preserve | Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향 | none | none |
+| 2 | PASS | preserve | FreeBSD 15.1 Beta 1 출시: Android Linux 카메라/V4L2 스택 점검 신호 | none | none |
 | 3 | PASS | preserve | 2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수 | none | none |
-| 4 | PASS | preserve | Firebase AI Logic hybrid inference: Camera HAL input path and NPU/GPU scheduling impact | none | none |
-| 5 | PASS | preserve | C++26 assert() update: native Camera HAL code stability debugging signal | none | none |
+| 4 | PASS | preserve | Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향 | none | none |
+| 5 | PASS | preserve | C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호 | none | none |
 
 ## Hard Fails
 
