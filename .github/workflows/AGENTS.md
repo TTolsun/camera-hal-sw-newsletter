@@ -4,6 +4,10 @@
 
 ## Safety Rules
 
+- `GEMINI_API_KEY`와 `INTERNAL_LLM_API_KEY`는 workflow input으로 받지 말고 GitHub Secrets에서만 읽습니다.
+- scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않고 code default를 따라야 합니다.
+- `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS`는 `workflow_dispatch` 수동 실행에서만 runtime env로 전달합니다.
+
 - workflow gate에서 `npm run test`를 제거하지 마세요.
 - workflow gate에서 `npm run validate`를 제거하지 마세요.
 - Secret을 log, artifact, PR body에 노출하지 마세요.

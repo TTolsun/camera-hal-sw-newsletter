@@ -17,11 +17,11 @@ const { readRuntimeConfig } = require('../common/runtime-config');
 const {
   buildCostReport,
   buildCostReportMarkdown,
-  callGeminiJson,
-  getGeminiDiagnostics,
-  getGeminiCostCalls,
-  getGeminiModelUsage
-} = require('../generate/gemini-client');
+  callLlmJson,
+  getLlmDiagnostics,
+  getLlmCostCalls,
+  getLlmModelUsage
+} = require('../llm/llm-client');
 const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } = require('../render/newsletter-schema');
 const { isSafeExternalImageUrl } = require('../render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
@@ -113,7 +113,7 @@ function writeGenerationStatus(value) {
 function writeCostReport(date) {
   const report = buildCostReport({
     date,
-    calls: getGeminiCostCalls(),
+    calls: getLlmCostCalls(),
     warnCostUsd: runtimeConfig.newsroomWarnCostUsd,
     maxCostUsd: runtimeConfig.newsroomMaxCostUsd
   });
@@ -137,7 +137,7 @@ function writeCostReport(date) {
   for (const warning of ensureArray(report.warnings)) {
     console.warn(`[cost] ${warning}`);
   }
-  console.log(`[cost] Estimated Gemini API cost: $${Number(report.totals.estimated_cost_usd || 0).toFixed(6)} USD across ${report.totals.request_count || 0} request(s).`);
+  console.log(`[cost] Estimated LLM API cost: $${Number(report.totals.estimated_cost_usd || 0).toFixed(6)} USD across ${report.totals.request_count || 0} request(s).`);
   return report;
 }
 
@@ -185,7 +185,7 @@ function buildGenerationStatus({
   factCheck = null,
   extra = {}
 }) {
-  const diagnostics = getGeminiDiagnostics();
+  const diagnostics = getLlmDiagnostics();
   const mustFixCount = ensureArray(factCheck?.must_fix).length;
   return {
     date,
@@ -1620,9 +1620,9 @@ async function main() {
     const reporterStage = `reporter attempt ${attempt}/${totalAttempts}`;
     const editorStage = `editor attempt ${attempt}/${totalAttempts}`;
     const factCheckStage = `fact-checker attempt ${attempt}/${totalAttempts}`;
-    console.log(`Starting Gemini newsroom quality attempt ${attempt}/${totalAttempts}. Locked articles: ${lockedSections.length}.`);
+    console.log(`Starting LLM newsroom quality attempt ${attempt}/${totalAttempts}. Locked articles: ${lockedSections.length}.`);
 
-    reporter = validateReporter(await callGeminiJson(
+    reporter = validateReporter(await callLlmJson(
       reporterStage,
       [
         'You are the AI reporter for AOSP Camera / Driver / SoC Platform Newsletter.',
@@ -1662,12 +1662,12 @@ async function main() {
     articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates });
     writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
     for (const candidate of ensureArray(reporter.candidates)) {
-      writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getGeminiModelUsage(reporterStage) || 'unknown' });
+      writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getLlmModelUsage(reporterStage) || 'unknown' });
     }
     const rejectedReporterDuplicates = removeDisallowedSelections(reporter, lockedSections, excludedSections);
     writeJson(path.join(newsroomDir, `reporter-candidates-attempt-${attempt}.json`), reporter);
 
-    editor = validateEditor(await callGeminiJson(
+    editor = validateEditor(await callLlmJson(
       editorStage,
       [
         'You are the AI editor for AOSP Camera / Driver / SoC Platform Newsletter.',
@@ -1716,7 +1716,7 @@ async function main() {
     writeJson(path.join(newsroomDir, `editor-draft-attempt-${attempt}.json`), editor);
     fs.writeFileSync(path.join(newsroomDir, `editor-draft-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
 
-    factCheck = validateFactCheck(await callGeminiJson(
+    factCheck = validateFactCheck(await callLlmJson(
       factCheckStage,
       [
         'You are the AI fact checker for AOSP Camera / Driver / SoC Platform Newsletter.',
@@ -1796,7 +1796,7 @@ async function main() {
         reserveOpenReason = reserveOpenReason || 'repair_after_primary_demote_or_source_gap';
       }
       candidateRejections = candidateRejections.concat(repairCandidateRejections);
-      const repairSections = validateCompletionSections(await callGeminiJson(
+      const repairSections = validateCompletionSections(await callLlmJson(
         repairStage,
         [
           'You are the AI repair editor for AOSP Camera / Driver / SoC Platform Newsletter.',
@@ -1845,7 +1845,7 @@ async function main() {
       });
       fs.writeFileSync(path.join(newsroomDir, `editor-repair-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
 
-      factCheck = validateFactCheck(await callGeminiJson(
+      factCheck = validateFactCheck(await callLlmJson(
         repairFactCheckStage,
         [
           'You are the AI fact checker for the repaired AOSP Camera / Driver / SoC Platform Newsletter draft.',
@@ -1903,7 +1903,7 @@ async function main() {
         const completionStage = `editor completion attempt ${attempt}/${totalAttempts}`;
         const completionFactCheckStage = `fact-checker completion attempt ${attempt}/${totalAttempts}`;
         console.warn(`Quality attempt ${attempt}/${totalAttempts} has only ${editor.sections.length} main article(s); requesting ${missingArticleCount} completion article(s).`);
-        const completionSections = validateCompletionSections(await callGeminiJson(
+        const completionSections = validateCompletionSections(await callLlmJson(
           completionStage,
           [
             'You are the AI completion editor for AOSP Camera / Driver / SoC Platform Newsletter.',
@@ -1934,7 +1934,7 @@ async function main() {
         writeJson(path.join(newsroomDir, `editor-completion-attempt-${attempt}.json`), editor);
         fs.writeFileSync(path.join(newsroomDir, `editor-completion-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
 
-        factCheck = validateFactCheck(await callGeminiJson(
+        factCheck = validateFactCheck(await callLlmJson(
           completionFactCheckStage,
           [
             'You are the AI fact checker for the completed AOSP Camera / Driver / SoC Platform Newsletter draft.',
@@ -1982,9 +1982,9 @@ async function main() {
     retryHistory.push({
       attempt,
       model: [
-        `reporter=${getGeminiModelUsage(reporterStage) || 'unknown'}`,
-        `editor=${getGeminiModelUsage(editorStage) || 'unknown'}`,
-        `fact-checker=${getGeminiModelUsage(factCheckStage) || 'unknown'}`
+        `reporter=${getLlmModelUsage(reporterStage) || 'unknown'}`,
+        `editor=${getLlmModelUsage(editorStage) || 'unknown'}`,
+        `fact-checker=${getLlmModelUsage(factCheckStage) || 'unknown'}`
       ].join(', '),
       score: qualityReport.score,
       threshold: qualityReport.threshold,
@@ -2212,8 +2212,8 @@ async function main() {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'thin-week validation', reason: `Underfilled review-only draft did not pass publication validation:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     console.warn('Underfilled review-only draft did not pass publication validation. Artifacts were written and publish_ready remains false.');
   } else if (generationStatus === 'NEEDS_FIX') {
-    writeRecoveryPrompt(newsroomDir, { date, stage: 'fact-check', reason: 'Gemini fact checker returned NEEDS_FIX with must_fix items.', shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
-    console.warn('Gemini fact checker returned NEEDS_FIX with must_fix items. Artifacts were written for editor review.');
+    writeRecoveryPrompt(newsroomDir, { date, stage: 'fact-check', reason: 'LLM fact checker returned NEEDS_FIX with must_fix items.', shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
+    console.warn('LLM fact checker returned NEEDS_FIX with must_fix items. Artifacts were written for editor review.');
   } else if (generationStatus === 'QUALITY_NEEDS_FIX') {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'quality', reason: `Newsletter quality score ${qualityReport.score}, threshold ${qualityReport.threshold}, result ${qualityReport.status}.`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     console.warn(`Newsletter quality score ${qualityReport.score}, threshold ${qualityReport.threshold}, result ${qualityReport.status}. Artifacts were written for editor review.`);
@@ -2222,7 +2222,7 @@ async function main() {
     console.warn('Underfilled thin-week draft is review-only. Artifacts were written for editor review.');
   }
 
-  console.log(`Gemini newsroom newsletter generated for ${date}`);
+  console.log(`LLM newsroom newsletter generated for ${date}`);
 }
 
 function writeTerminalFailureStatus(error) {

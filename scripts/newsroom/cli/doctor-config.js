@@ -5,7 +5,7 @@ const {
 
 function main() {
   try {
-    const config = readRuntimeConfig(process.env, { requireGeminiApiKey: true });
+    const config = readRuntimeConfig(process.env, { requireLlmCredentials: true });
     console.log('Runtime config validation passed.');
     console.log(JSON.stringify(sanitizeRuntimeConfig(config), null, 2));
   } catch (error) {

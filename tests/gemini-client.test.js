@@ -10,6 +10,13 @@ function loadClient(env = {}) {
   delete require.cache[clientPath];
   for (const key of [
     'GEMINI_API_KEY',
+    'LLM_PROVIDER',
+    'LLM_MODEL',
+    'LLM_FALLBACK_MODELS',
+    'LLM_RAW_OUTPUT_DIR',
+    'INTERNAL_LLM_API_KEY',
+    'INTERNAL_LLM_ENDPOINT',
+    'INTERNAL_LLM_API_VERSION',
     'GEMINI_MODEL',
     'GEMINI_FALLBACK_MODELS',
     'GEMINI_MAX_RETRIES',

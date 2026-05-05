@@ -22,6 +22,25 @@ on:
         options:
           - "false"
           - "true"
+      llm_provider:
+        description: "LLM provider override for manual runs. default uses code defaults."
+        required: false
+        default: "default"
+        type: choice
+        options:
+          - "default"
+          - "gemini"
+          - "internal"
+      llm_model:
+        description: "Optional LLM model override for this manual run."
+        required: false
+        default: ""
+        type: string
+      llm_fallback_models:
+        description: "Optional comma-separated fallback model override for this manual run."
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write
@@ -40,8 +59,9 @@ jobs:
       NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
       LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '21' }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
-      GEMINI_FALLBACK_MODELS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.allow_pro == 'true' && format('{0},gemini-2.5-pro', vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite') || vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite' }}
+      INTERNAL_LLM_API_KEY: ${{ secrets.INTERNAL_LLM_API_KEY }}
+      INTERNAL_LLM_ENDPOINT: ${{ vars.INTERNAL_LLM_ENDPOINT }}
+      INTERNAL_LLM_API_VERSION: ${{ vars.INTERNAL_LLM_API_VERSION }}
       GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '2' }}
       GEMINI_RETRY_DELAYS_MS: ${{ vars.GEMINI_RETRY_DELAYS_MS || '20000,10000' }}
       GEMINI_RETRY_MAX_DELAY_MS: ${{ vars.GEMINI_RETRY_MAX_DELAY_MS || '300000' }}
@@ -78,6 +98,37 @@ jobs:
             npm install
           fi
 
+      - name: Apply manual LLM overrides
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          INPUT_LLM_PROVIDER: ${{ github.event.inputs.llm_provider }}
+          INPUT_LLM_MODEL: ${{ github.event.inputs.llm_model }}
+          INPUT_LLM_FALLBACK_MODELS: ${{ github.event.inputs.llm_fallback_models }}
+          INPUT_ALLOW_PRO: ${{ github.event.inputs.allow_pro }}
+        run: |
+          set -euo pipefail
+
+          for value in "${INPUT_LLM_PROVIDER:-}" "${INPUT_LLM_MODEL:-}" "${INPUT_LLM_FALLBACK_MODELS:-}"; do
+            case "$value" in
+              *$'\n'*|*$'\r'*)
+                echo "LLM override inputs must be single-line values."
+                exit 1
+                ;;
+            esac
+          done
+
+          if [ -n "${INPUT_LLM_PROVIDER:-}" ]; then
+            echo "LLM_PROVIDER=${INPUT_LLM_PROVIDER}" >> "$GITHUB_ENV"
+          fi
+          if [ -n "${INPUT_LLM_MODEL:-}" ]; then
+            echo "LLM_MODEL=${INPUT_LLM_MODEL}" >> "$GITHUB_ENV"
+          fi
+          if [ -n "${INPUT_LLM_FALLBACK_MODELS:-}" ]; then
+            echo "LLM_FALLBACK_MODELS=${INPUT_LLM_FALLBACK_MODELS}" >> "$GITHUB_ENV"
+          elif [ "${INPUT_ALLOW_PRO:-false}" = "true" ] && { [ -z "${INPUT_LLM_PROVIDER:-}" ] || [ "${INPUT_LLM_PROVIDER}" = "default" ] || [ "${INPUT_LLM_PROVIDER}" = "gemini" ]; }; then
+            echo "LLM_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-2.5-pro" >> "$GITHUB_ENV"
+          fi
+
       - name: Doctor runtime config
         run: npm run doctor:config
 
@@ -109,7 +160,7 @@ jobs:
           restore-keys: |
             news-summary-${{ runner.os }}-
 
-      - name: Generate newsletter with Gemini newsroom
+      - name: Generate newsletter with LLM newsroom
         id: generate
         continue-on-error: true
         run: npm run generate
@@ -330,5 +381,5 @@ jobs:
       - name: Fail if reviewable newsroom artifacts were not created
         if: steps.meta.outputs.has_reviewable_artifacts != 'true'
         run: |
-          echo "Gemini newsroom generation did not produce reviewable artifacts. This is a fatal generation failure."
+          echo "LLM newsroom generation did not produce reviewable artifacts. This is a fatal generation failure."
           exit 1

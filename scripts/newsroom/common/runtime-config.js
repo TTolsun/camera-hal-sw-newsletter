@@ -1,11 +1,20 @@
+const DEFAULT_LLM_PROVIDER = 'gemini';
+const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
+const DEFAULT_LLM_FALLBACK_MODELS = ['gemini-2.5-flash-lite'];
+
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
   lookbackDays: 21,
-  geminiModel: 'gemini-2.5-flash',
-  geminiFallbackModels: ['gemini-2.5-flash-lite'],
+  llmProvider: DEFAULT_LLM_PROVIDER,
+  llmModel: DEFAULT_LLM_MODEL,
+  llmFallbackModels: DEFAULT_LLM_FALLBACK_MODELS,
+  geminiModel: DEFAULT_LLM_MODEL,
+  geminiFallbackModels: DEFAULT_LLM_FALLBACK_MODELS,
   geminiMaxRetries: 2,
   geminiRetryDelaysMs: [20000, 10000],
   geminiRetryMaxDelayMs: 300000,
+  internalLlmEndpoint: '',
+  internalLlmApiVersion: '',
   newsroomMaxQualityRetries: 1,
   newsroomMaxSectionRepairs: 1,
   newsroomWarnCostUsd: 0.15,
@@ -108,26 +117,48 @@ function normalizeModelName(value) {
   return String(value || '').trim().toLowerCase();
 }
 
+function normalizeLlmProvider(value, defaultValue = DEFAULT_RUNTIME_CONFIG.llmProvider) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (!normalized || normalized === 'default') return defaultValue;
+  return normalized;
+}
+
 function isProModel(value) {
   return /^gemini-[\w.-]*pro\b/.test(normalizeModelName(value));
 }
 
 function configuredModelList(config) {
   return [
-    config?.geminiModel,
-    ...(Array.isArray(config?.geminiFallbackModels) ? config.geminiFallbackModels : [])
+    config?.llmModel ?? config?.geminiModel,
+    ...(Array.isArray(config?.llmFallbackModels)
+      ? config.llmFallbackModels
+      : Array.isArray(config?.geminiFallbackModels)
+        ? config.geminiFallbackModels
+        : [])
   ].filter(Boolean);
 }
 
 function readRuntimeConfig(env = process.env, options = {}) {
   const newsletterDate = String(envValue(env, 'NEWSLETTER_DATE', DEFAULT_RUNTIME_CONFIG.newsletterDate) || '').trim();
-  const geminiFallbackValue = envValue(env, 'GEMINI_FALLBACK_MODELS', DEFAULT_RUNTIME_CONFIG.geminiFallbackModels.join(','));
+  const llmProvider = normalizeLlmProvider(envValue(env, 'LLM_PROVIDER', DEFAULT_RUNTIME_CONFIG.llmProvider));
+  const llmModel = String(
+    envValue(env, 'LLM_MODEL', envValue(env, 'GEMINI_MODEL', DEFAULT_RUNTIME_CONFIG.llmModel)) || ''
+  ).trim();
+  const llmFallbackValue = envValue(
+    env,
+    'LLM_FALLBACK_MODELS',
+    envValue(env, 'GEMINI_FALLBACK_MODELS', DEFAULT_RUNTIME_CONFIG.llmFallbackModels.join(','))
+  );
+  const llmFallbackModels = parseCsv(llmFallbackValue);
 
   const config = {
     newsletterDate,
     lookbackDays: parseInteger(envValue(env, 'LOOKBACK_DAYS', DEFAULT_RUNTIME_CONFIG.lookbackDays), 'LOOKBACK_DAYS', { min: 1 }),
-    geminiModel: String(envValue(env, 'GEMINI_MODEL', DEFAULT_RUNTIME_CONFIG.geminiModel) || '').trim(),
-    geminiFallbackModels: parseCsv(geminiFallbackValue),
+    llmProvider,
+    llmModel,
+    llmFallbackModels,
+    geminiModel: llmModel,
+    geminiFallbackModels: llmFallbackModels,
     geminiMaxRetries: parseInteger(envValue(env, 'GEMINI_MAX_RETRIES', DEFAULT_RUNTIME_CONFIG.geminiMaxRetries), 'GEMINI_MAX_RETRIES', { min: 0 }),
     geminiRetryDelaysMs: parseIntegerList(
       envValue(env, 'GEMINI_RETRY_DELAYS_MS', DEFAULT_RUNTIME_CONFIG.geminiRetryDelaysMs.join(',')),
@@ -138,6 +169,8 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'GEMINI_RETRY_MAX_DELAY_MS',
       { min: 0 }
     ),
+    internalLlmEndpoint: String(envValue(env, 'INTERNAL_LLM_ENDPOINT', DEFAULT_RUNTIME_CONFIG.internalLlmEndpoint) || '').trim(),
+    internalLlmApiVersion: String(envValue(env, 'INTERNAL_LLM_API_VERSION', DEFAULT_RUNTIME_CONFIG.internalLlmApiVersion) || '').trim(),
     newsroomMaxQualityRetries: parseInteger(
       envValue(env, 'NEWSROOM_MAX_QUALITY_RETRIES', DEFAULT_RUNTIME_CONFIG.newsroomMaxQualityRetries),
       'NEWSROOM_MAX_QUALITY_RETRIES',
@@ -195,7 +228,8 @@ function readRuntimeConfig(env = process.env, options = {}) {
       { min: 0 }
     ),
     githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
-    geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim())
+    geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim()),
+    internalLlmApiKeyConfigured: Boolean(String(env.INTERNAL_LLM_API_KEY || '').trim())
   };
 
   const result = validateRuntimeConfig(config, options);
@@ -221,13 +255,16 @@ function validateRuntimeConfig(config, options = {}) {
   if (!Number.isInteger(config.lookbackDays) || config.lookbackDays < 1) {
     errors.push('LOOKBACK_DAYS must be an integer >= 1.');
   }
-  if (!String(config.geminiModel || '').trim()) {
-    errors.push('GEMINI_MODEL must be non-empty.');
+  if (!['gemini', 'internal'].includes(config.llmProvider)) {
+    errors.push('LLM_PROVIDER must be one of: gemini, internal.');
   }
-  if (!Array.isArray(config.geminiFallbackModels)) {
-    errors.push('GEMINI_FALLBACK_MODELS must be a comma-separated list.');
-  } else if (config.geminiFallbackModels.some(item => !String(item || '').trim())) {
-    errors.push('GEMINI_FALLBACK_MODELS must not contain empty model names.');
+  if (!String(config.llmModel || '').trim()) {
+    errors.push('LLM_MODEL/GEMINI_MODEL must be non-empty.');
+  }
+  if (!Array.isArray(config.llmFallbackModels)) {
+    errors.push('LLM_FALLBACK_MODELS/GEMINI_FALLBACK_MODELS must be a comma-separated list.');
+  } else if (config.llmFallbackModels.some(item => !String(item || '').trim())) {
+    errors.push('LLM_FALLBACK_MODELS/GEMINI_FALLBACK_MODELS must not contain empty model names.');
   }
   if (!Number.isInteger(config.geminiMaxRetries) || config.geminiMaxRetries < 0) {
     errors.push('GEMINI_MAX_RETRIES must be an integer >= 0.');
@@ -273,7 +310,7 @@ function validateRuntimeConfig(config, options = {}) {
     }
   }
   const configuredModels = configuredModelList(config);
-  const proModels = configuredModels.filter(isProModel);
+  const proModels = config.llmProvider === 'gemini' ? configuredModels.filter(isProModel) : [];
   if (proModels.length > 0) {
     const eventName = String(config.githubEventName || '').trim();
     const allowScheduled = eventName === 'schedule' && config.newsroomAllowProOnSchedule === true;
@@ -282,8 +319,19 @@ function validateRuntimeConfig(config, options = {}) {
       errors.push(`Gemini Pro models require explicit manual escalation; configured Pro model(s): ${proModels.join(', ')}.`);
     }
   }
-  if (options.requireGeminiApiKey && !config.geminiApiKeyConfigured) {
+  if (options.requireGeminiApiKey && config.llmProvider === 'gemini' && !config.geminiApiKeyConfigured) {
     errors.push('GEMINI_API_KEY must be configured for Gemini newsroom generation.');
+  }
+  if (options.requireLlmCredentials && config.llmProvider === 'gemini' && !config.geminiApiKeyConfigured) {
+    errors.push('GEMINI_API_KEY must be configured for Gemini newsroom generation.');
+  }
+  if (options.requireLlmCredentials && config.llmProvider === 'internal') {
+    if (!config.internalLlmApiKeyConfigured) {
+      errors.push('INTERNAL_LLM_API_KEY must be configured for internal LLM generation.');
+    }
+    if (!String(config.internalLlmEndpoint || '').trim()) {
+      errors.push('INTERNAL_LLM_ENDPOINT must be configured for internal LLM generation.');
+    }
   }
 
   return {
@@ -296,6 +344,9 @@ function sanitizeRuntimeConfig(config) {
   return {
     newsletterDate: config.newsletterDate,
     lookbackDays: config.lookbackDays,
+    llmProvider: config.llmProvider,
+    llmModel: config.llmModel,
+    llmFallbackModels: config.llmFallbackModels,
     geminiModel: config.geminiModel,
     geminiFallbackModels: config.geminiFallbackModels,
     geminiMaxRetries: config.geminiMaxRetries,
@@ -313,13 +364,16 @@ function sanitizeRuntimeConfig(config) {
     geminiThinkingBudgetRepair: config.geminiThinkingBudgetRepair,
     geminiThinkingBudgetFactcheck: config.geminiThinkingBudgetFactcheck,
     geminiThinkingBudgetScoring: config.geminiThinkingBudgetScoring,
+    internalLlmEndpointConfigured: Boolean(String(config.internalLlmEndpoint || '').trim()),
+    internalLlmApiVersion: config.internalLlmApiVersion,
     githubEventName: config.githubEventName,
-    proModelConfigured: configuredModelList(config).some(isProModel),
-    proModelAllowed: configuredModelList(config).some(isProModel)
+    proModelConfigured: config.llmProvider === 'gemini' && configuredModelList(config).some(isProModel),
+    proModelAllowed: config.llmProvider === 'gemini' && configuredModelList(config).some(isProModel)
       ? (config.githubEventName === 'schedule' && config.newsroomAllowProOnSchedule === true) ||
         (config.githubEventName === 'workflow_dispatch' && config.newsroomAllowProOnManual === true)
       : false,
-    geminiApiKeyConfigured: Boolean(config.geminiApiKeyConfigured)
+    geminiApiKeyConfigured: Boolean(config.geminiApiKeyConfigured),
+    internalLlmApiKeyConfigured: Boolean(config.internalLlmApiKeyConfigured)
   };
 }
 
@@ -333,5 +387,6 @@ module.exports = {
   parseInteger,
   parseIntegerList,
   parseNumber,
+  normalizeLlmProvider,
   isProModel
 };

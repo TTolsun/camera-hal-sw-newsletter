@@ -176,6 +176,7 @@ test('newsroom PR body marks fallback composition explicitly', () => {
 test('weekly newsroom workflow separates review PR success from publish-ready gate', () => {
   const workflowPath = path.join(__dirname, '..', '.github', 'workflows', '01-weekly-newsroom-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
+  const manualOverrideStepIndex = workflow.indexOf('- name: Apply manual LLM overrides');
   const doctorStepIndex = workflow.indexOf('- name: Doctor runtime config');
   const preflightStepIndex = workflow.indexOf('- name: Run unit and regression tests');
   const jitterStepIndex = workflow.indexOf('- name: Jitter scheduled run');
@@ -185,11 +186,28 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
     nextStepIndex === -1 ? undefined : nextStepIndex
   );
 
+  assert.notEqual(manualOverrideStepIndex, -1);
   assert.notEqual(doctorStepIndex, -1);
   assert.notEqual(preflightStepIndex, -1);
   assert.notEqual(jitterStepIndex, -1);
+  assert.ok(manualOverrideStepIndex < doctorStepIndex);
   assert.ok(doctorStepIndex < preflightStepIndex);
   assert.ok(preflightStepIndex < jitterStepIndex);
+  assert.match(workflow, /llm_provider:/);
+  assert.match(workflow, /llm_model:/);
+  assert.match(workflow, /llm_fallback_models:/);
+  assert.match(workflow, /LLM_PROVIDER=\$\{INPUT_LLM_PROVIDER\}/);
+  assert.match(workflow, /LLM_MODEL=\$\{INPUT_LLM_MODEL\}/);
+  assert.match(workflow, /LLM_FALLBACK_MODELS=\$\{INPUT_LLM_FALLBACK_MODELS\}/);
+  assert.match(workflow, /LLM override inputs must be single-line values\./);
+  assert.match(workflow, /\[ "\$\{INPUT_LLM_PROVIDER\}" = "gemini" \]/);
+  assert.match(workflow, /INTERNAL_LLM_API_KEY: \$\{\{ secrets\.INTERNAL_LLM_API_KEY \}\}/);
+  assert.match(workflow, /INTERNAL_LLM_ENDPOINT: \$\{\{ vars\.INTERNAL_LLM_ENDPOINT \}\}/);
+  assert.doesNotMatch(workflow, /vars\.LLM_PROVIDER/);
+  assert.doesNotMatch(workflow, /vars\.LLM_MODEL/);
+  assert.doesNotMatch(workflow, /vars\.LLM_FALLBACK_MODELS/);
+  assert.doesNotMatch(workflow, /GEMINI_MODEL: \$\{\{ vars\.GEMINI_MODEL/);
+  assert.doesNotMatch(workflow, /GEMINI_FALLBACK_MODELS: \$\{\{ vars\.GEMINI_FALLBACK_MODELS/);
   assert.match(preflightStep, /^\s*run: npm run test$/m);
   assert.doesNotMatch(preflightStep, /continue-on-error:\s*true/);
   assert.match(workflow, /uses: actions\/cache\/restore@v4/);

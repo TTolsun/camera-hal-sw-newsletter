@@ -4,13 +4,13 @@
 
 ## 품질 게이트
 
-newsroom pipeline은 `content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 기본 `85/100` 이상이어야 합니다. Quality threshold: 85. 이 threshold 완화는 Gemini 비용과 false negative를 줄이기 위한 운영 튜닝이며, 품질 검증 우회가 아닙니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 85 이상이어도 publish-ready로 보지 않습니다.
+newsroom pipeline은 `content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 기본 `85/100` 이상이어야 합니다. Quality threshold: 85. 이 threshold 완화는 LLM 비용과 false negative를 줄이기 위한 운영 튜닝이며, 품질 검증 우회가 아닙니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 85 이상이어도 publish-ready로 보지 않습니다.
 
 draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `1`입니다. 이미 article quality check를 통과한 section은 보존하고, quality retry 한 번에서 repair 또는 replace할 section 수는 `NEWSROOM_MAX_SECTION_REPAIRS=1`로 제한합니다. `retry-history.json`과 `retry-history.md`에는 locked article, failed section, repair policy, skipped repair section을 남깁니다. Gemini API retry max delay 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`이며, 300000ms는 5분입니다.
 
 quality gate는 AOSP Camera / Camera Driver / SoC Platform relevance, evidence specificity, engineering depth, actionability, source integrity, article composition을 확인합니다. source 없음, source gap, duplicate main article, invalid/broken source URL, underfilled article count, expanded scope 연결이 없는 generic AI/main article은 hard fail로 유지되며 점수가 충분해도 Hard blocker result: NEEDS_FIX 또는 `publish_ready=false`를 강제합니다. actionability, 약한 설명, local fallback image처럼 단독 발행 차단보다는 개선 권고에 가까운 항목은 soft deduction으로 점수와 report에 남깁니다. 이 경우에도 Quality score가 85 미만이면 통과하지 않습니다. `quality-report.json`의 `article_results`는 article별 `PASS` / `DEMOTE` / `FAIL`, hard fail reason, soft deduction, repair action을 표시합니다. retry 후에도 점수가 낮거나 blocker가 남아 있으면 weekly workflow는 review PR을 만들 수 있고 `needs-fix`로 표시합니다. review 가능한 PR 생성 성공은 발행 가능 품질 통과와 분리되며, `publish-ready` 라벨과 PR body의 `final_publish_ready=true`가 있을 때만 발행 가능한 이슈로 취급합니다.
 
-workflow의 `create-newsroom-pr` job은 후보 수집, Gemini 생성, 검증, review PR 생성을 담당합니다. review 가능한 `content/newsroom/YYYY-MM-DD/` artifact와 PR body가 만들어지면 fact-check 또는 quality가 실패해도 job은 성공할 수 있습니다. 반대로 fatal generation error로 review artifact가 없으면 job은 실패합니다. publish/deploy gate는 `final_publish_ready=true`, fact-check `PASS`, quality `PASS`, policy minimum article count, publish 가능한 `composition_mode`, source integrity, stale claim 없음이 모두 만족될 때만 통과합니다.
+workflow의 `create-newsroom-pr` job은 후보 수집, LLM 생성, 검증, review PR 생성을 담당합니다. review 가능한 `content/newsroom/YYYY-MM-DD/` artifact와 PR body가 만들어지면 fact-check 또는 quality가 실패해도 job은 성공할 수 있습니다. 반대로 fatal generation error로 review artifact가 없으면 job은 실패합니다. publish/deploy gate는 `final_publish_ready=true`, fact-check `PASS`, quality `PASS`, policy minimum article count, publish 가능한 `composition_mode`, source integrity, stale claim 없음이 모두 만족될 때만 통과합니다.
 
 PR label은 상태를 분리해서 보여 줍니다. `needs-fix`는 편집장 수리 또는 검토가 필요한 PR, `fallback-composition`은 direct camera/driver 후보가 부족해 SoC/platform/tooling fallback을 사용한 PR, `thin-week`는 자동 발행 대상이 아닌 얇은 주간 review path, `publish-ready`는 최종 발행 gate를 통과한 PR에만 사용합니다. summary cache는 restore와 save를 분리하고 save를 `if: always()`로 실행해 실패 run 이후 retry 비용을 줄입니다.
 
@@ -22,13 +22,21 @@ PR label은 상태를 분리해서 보여 줍니다. `needs-fix`는 편집장 �
 source registry
   -> candidate collector
   -> deterministic shortlist and final article selection
-  -> Gemini reporter
-  -> Gemini editor
-  -> Gemini fact checker
+  -> LLM reporter (default: Gemini)
+  -> LLM editor (default: Gemini)
+  -> LLM fact checker (default: Gemini)
   -> static artifact writer
   -> npm run validate
   -> newsletter/YYYY-MM-DD PR
 ```
+
+## LLM provider 운영
+
+기본 provider는 `gemini`이며 scheduled run은 `runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`에 정의된 provider/model/fallback model을 사용합니다. scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않습니다.
+
+`workflow_dispatch` 수동 실행에서만 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달됩니다. `LLM_PROVIDER=gemini`은 `GEMINI_API_KEY`만 요구하고, `LLM_PROVIDER=internal`은 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 요구합니다. token은 GitHub Secrets에서만 읽고 log, artifact, PR body에 출력하지 않습니다.
+
+사내 API의 request/response 차이는 `scripts/newsroom/llm/providers/internal-provider.js` 안에서만 수정합니다. generation orchestration, source binding, quality gate, fact-check blocker, publish-ready 판단은 provider와 무관하게 유지합니다.
 
 ## Role 1. Candidate Collector
 
@@ -37,20 +45,20 @@ source registry
 - RSS 또는 HTML page에서 후보를 수집하고 `content/collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
 - media/community/candidate-only source는 최종 기사로 올리기 전에 공식 출처 교차 확인이 필요합니다.
 
-## Role 2. Gemini Reporter
+## Role 2. LLM Reporter
 
-Gemini 실행 전에 `scripts/newsroom/generate/newsroom-selection.js`가 `content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. 기존 `scripts/lib/newsroom-selection.js` 경로는 호환 shim으로 유지합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다. Gemini prompt에는 full candidate 대신 `content/newsroom/YYYY-MM-DD/article-capsules.json`의 compact capsule을 전달합니다.
+LLM 실행 전에 `scripts/newsroom/generate/newsroom-selection.js`가 `content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. 기존 `scripts/lib/newsroom-selection.js` 경로는 호환 shim으로 유지합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다. LLM prompt에는 full candidate 대신 `content/newsroom/YYYY-MM-DD/article-capsules.json`의 compact capsule을 전달합니다.
 
-shortlist는 기본 8-12개 수준, hard cap 12개 후보로 제한됩니다. local selector는 Gemini reporter/editor prompt가 실행되기 전에 deterministic scoring으로 후보를 줄이고 4-5개의 final main article input을 선택합니다. scoring은 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket과 구체 evidence, 최신성, 실무 actionability, source reliability를 함께 봅니다. source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음은 main article에서 제외되거나 강하게 감점됩니다. SoC/CPU/GPU/NPU/ISP/power/thermal/performance 기사는 낮은 우선순위 fallback이지만 배제하지 않습니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 유지합니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
+shortlist는 기본 8-12개 수준, hard cap 12개 후보로 제한됩니다. local selector는 LLM reporter/editor prompt가 실행되기 전에 deterministic scoring으로 후보를 줄이고 4-5개의 final main article input을 선택합니다. scoring은 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket과 구체 evidence, 최신성, 실무 actionability, source reliability를 함께 봅니다. source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음은 main article에서 제외되거나 강하게 감점됩니다. SoC/CPU/GPU/NPU/ISP/power/thermal/performance 기사는 낮은 우선순위 fallback이지만 배제하지 않습니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 유지합니다. eligible non-duplicate final input이 4개 미만이면 생성은 조기에 실패하고 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
 
 - 수집 후보 중 AOSP Camera, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, Android platform camera-adjacent, SoC platform, C++, LLVM/Clang/GCC, AI workflow와 관련된 항목을 점수화합니다.
 - source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
 - 출력: `content/newsroom/YYYY-MM-DD/reporter-candidates.json`.
 - `article-capsules.json`은 title, url, source, published_date, topic_type, component, what_changed, why_hal_engineer_cares, evidence, risk, score 중심의 compact prompt 입력입니다. reporter stage에는 top shortlist capsule 8-12개, editor/fact-check/repair/completion stage에는 final-selected 또는 필요한 completion capsule만 전달합니다.
 
-Gemini reporter는 전체 collected candidate가 아니라 deterministic shortlist만 받습니다. 요약, tag, evidence field를 보강하되 local `selected=true` final article decision을 보존해야 합니다.
+LLM reporter는 전체 collected candidate가 아니라 deterministic shortlist만 받습니다. 요약, tag, evidence field를 보강하되 local `selected=true` final article decision을 보존해야 합니다.
 
-## Role 3. Gemini Editor
+## Role 3. LLM Editor
 
 - 한국어 newsletter 초안을 작성합니다.
 - 각 주요 기사는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, Sources를 포함합니다.
@@ -59,7 +67,7 @@ Gemini reporter는 전체 collected candidate가 아니라 deterministic shortli
 
 editor는 deterministic final article input과 locked/retry context만 받습니다. retry가 필요하면 통과한 section은 lock하고, repair prompt는 실패한 section만 재생성하도록 요청합니다. source gap 또는 ineligible source는 rewrite하지 않고 demote 또는 replace 대상으로 처리합니다. weak HAL relevance와 duplicate는 replace, missing actionability와 required/evidence 부족은 same-source section repair 대상으로 분리합니다. retry artifact는 `locked_sections`, `failed_sections`, `regenerated_sections`, `repair_plan`, `skipped_repair_plan`, rejected retry output을 기록합니다.
 
-## Role 4. Gemini Fact Checker
+## Role 4. LLM Fact Checker
 
 - 출처 누락, 과장 표현, 사실과 해석 혼동, Action Item 누락, Camera HAL 관점 약화를 확인합니다.
 - `NEEDS_FIX`와 `must_fix`가 있으면 workflow의 최종 gate가 실패해야 합니다.
@@ -93,6 +101,8 @@ generator는 `content/newsroom/YYYY-MM-DD/summary-cache-report.json`, `summary-c
 
 ## Cost Report
 
+비용 artifact는 provider-neutral한 LLM 비용 리포트입니다. Gemini provider에서는 Gemini usage metadata와 local pricing table로 estimated cost를 계산하고, internal provider는 pricing table이 없으면 `estimated_cost_usd=null`과 pricing warning을 남깁니다.
+
 Gemini 호출이 성공적으로 응답을 반환하면 generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
 
 Gemini request에는 stage별 thinking budget을 적용합니다. 기본값은 reporter `0`, editor/completion `512`, repair `0`, fact-check `0`, scoring `0`입니다. `GEMINI_THINKING_BUDGET_*` 환경변수로 조정할 수 있고, cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다.
@@ -122,12 +132,15 @@ scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합�
 
 ## Safe Scheduled Defaults
 
-scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. GitHub Variables에 값을 넣지 않으면 `.github/workflows/01-weekly-newsroom-pr.yml`과 runtime config의 기본값을 사용합니다.
+현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다. 기본값은 `LLM_PROVIDER=gemini`, `LLM_MODEL=gemini-2.5-flash`, `LLM_FALLBACK_MODELS=gemini-2.5-flash-lite`와 같습니다. 수동 `allow_pro=true`는 provider가 `default` 또는 `gemini`일 때만 Gemini Pro fallback을 `LLM_FALLBACK_MODELS`로 추가합니다.
+
+scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default이고, 나머지는 workflow와 runtime config의 기본값을 사용합니다.
 
 ```text
 LOOKBACK_DAYS=21
-GEMINI_MODEL=gemini-2.5-flash
-GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite
+LLM_PROVIDER=gemini
+LLM_MODEL=gemini-2.5-flash
+LLM_FALLBACK_MODELS=gemini-2.5-flash-lite
 GEMINI_MAX_RETRIES=2
 GEMINI_RETRY_DELAYS_MS=20000,10000
 GEMINI_RETRY_MAX_DELAY_MS=300000
@@ -145,11 +158,11 @@ NEWSROOM_ALLOW_PRO_ON_MANUAL=false
 NEWSROOM_PRO_ESCALATION=manual
 ```
 
-manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 선택할 수 있습니다. 이때 workflow는 `GEMINI_FALLBACK_MODELS`에 `gemini-2.5-pro`를 추가하고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`로 실행합니다. scheduled run에서는 repository variable에 Pro가 들어가 있더라도 `NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false` 정책 검증을 통과해야 하므로 기본 운영에서 Pro 자동 호출은 금지됩니다.
+manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 선택할 수 있습니다. 이때 provider가 `default` 또는 `gemini`이면 workflow는 `LLM_FALLBACK_MODELS`에 `gemini-2.5-pro`를 추가하고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`로 실행합니다. scheduled run에서는 `NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false` 정책 검증을 통과해야 하므로 기본 운영에서 Pro 자동 호출은 금지됩니다.
 
 ## Recovery Artifacts
 
-`content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, Gemini JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
+`content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, LLM JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
 
 ## GitHub Actions 운영
 
@@ -164,19 +177,20 @@ branch: newsletter/YYYY-MM-DD
 
 workflow는 `main`에 직접 push하지 않고 편집자 검토용 PR을 만듭니다.
 
-### 필수 Secret
+### Secret
 
 Repository Settings > Secrets and variables > Actions:
 
 ```text
 GEMINI_API_KEY
+INTERNAL_LLM_API_KEY
 ```
 
 선택 변수:
 
 ```text
-GEMINI_MODEL=gemini-2.5-flash
-GEMINI_FALLBACK_MODELS=gemini-2.5-flash-lite
+INTERNAL_LLM_ENDPOINT=https://internal.example/api
+INTERNAL_LLM_API_VERSION=v1
 GEMINI_MAX_RETRIES=2
 GEMINI_RETRY_DELAYS_MS=20000,10000
 GEMINI_RETRY_MAX_DELAY_MS=300000

@@ -1,5 +1,7 @@
 # AOSP Camera / Driver / SoC Platform Newsletter
 
+> 기본 newsroom provider는 Gemini입니다. 기본 실행과 scheduled run은 code default를 따르며, `workflow_dispatch` 수동 실행에서만 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` override가 runtime env로 전달됩니다. 사내 API 설정은 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, `INTERNAL_LLM_API_VERSION`를 사용하며 token은 GitHub Secrets에서만 읽습니다.
+
 이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform 소식을 수집해 정적 뉴스레터로 발행합니다. 후보 수집과 Gemini 기반 newsroom 자동화는 검토 가능한 PR artifact를 만들고, 발행은 사람이 승인한 PR merge를 통해서만 진행합니다. 비용 절감은 deterministic shortlist, compact article capsule, retry scope 제한으로 처리하며 quality gate를 낮추지 않습니다.
 
 처음 보는 사람은 모든 파일을 뒤지지 말고 아래 문서부터 읽으면 됩니다. README는 긴 운영 매뉴얼이 아니라, 각 세부 문서로 연결하는 짧은 entry 역할만 합니다.
@@ -23,7 +25,7 @@
 ```text
 candidate collection
   -> deterministic shortlist
-  -> Gemini reporter/editor/fact-check
+  -> LLM reporter/editor/fact-check (default: Gemini)
   -> quality gate
   -> review PR
   -> GitHub Pages
@@ -45,7 +47,9 @@ npm.cmd run collect
 npm.cmd run generate
 ```
 
-`collect`는 `data/news-sources.json`에서 후보를 수집합니다. `generate`는 Gemini newsroom pipeline을 실행하며 `GEMINI_API_KEY`가 필요합니다. 전체 로컬 확인은 `npm.cmd run ci`를 사용합니다.
+기본 `generate` 실행은 Gemini provider를 사용하므로 `GEMINI_API_KEY`가 필요합니다. `workflow_dispatch` 수동 실행에서 provider/model을 바꾸는 방법과 사내 API secret/variable 설정은 [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md)를 확인합니다.
+
+`collect`는 `data/news-sources.json`에서 후보를 수집합니다. `generate`는 LLM newsroom pipeline(default: Gemini)을 실행합니다. 기본 provider인 Gemini를 사용할 때는 `GEMINI_API_KEY`가 필요합니다. 전체 로컬 확인은 `npm.cmd run ci`를 사용합니다.
 
 폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현은 `scripts/newsroom/`에 있고, 검토 산출물과 공개 발행물은 `content/`와 `newsletters/`에 분리됩니다.
 
