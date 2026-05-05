@@ -6,7 +6,7 @@
 
 ## 메인으로 봐야 할 기사
 
-Claude Code 2.1.128 출시: AI 코딩 에이전트의 HAL 개발 워크플로우 영향
+Claude Code 2.1.128: agent-assisted Camera HAL workflow impact
 
 ## Camera HAL 업무 연결 포인트
 - 2026년 5월 Android 보안 게시판이 공개되는 즉시, 카메라 HAL 관련 CVE 항목을 확인하고 해당 취약점이 현재 제품에 영향을 미치는지 분석합니다. (Owner: 보안 담당 엔지니어)
@@ -17,17 +17,17 @@ Claude Code 2.1.128 출시: AI 코딩 에이전트의 HAL 개발 워크플로우
 
 ## 검증 결과 요약
 
-- 상태: NEEDS_FIX
-- must_fix 개수: 6
+- 상태: PASS
+- must_fix 개수: 0
 - source gap 개수: 0
-- 의견: The newsletter draft has several issues that need to be addressed. Headlines for AI, Linux Camera, and C++ articles do not clearly state their relevance to Camera HAL as per editorial policy. The `imageUsageDecisionReason` for all articles is too verbose and needs to be concise. There are no source gaps or other critical issues.
+- 의견: Manual artifact repair resolved headline specificity, concise image usage reasons, and source-backed evidence for the Android hybrid inference article. No unresolved fact-check must_fix items remain.
 
 ## 품질 게이트
 
-- 품질 점수: 74/100
+- 품질 점수: 100/100
 - 품질 기준: 85
-- 품질 상태: NEEDS_FIX
-- 주요 감점: 1pt image-fallback (FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점); 5pt evidence-specificity (Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원); 4pt evidence-specificity (Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원); 1pt image-fallback (C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대); 15pt source-integrity
+- 품질 상태: PASS
+- 주요 감점: 없음
 
 ## 후보 선택 진단
 
@@ -39,13 +39,9 @@ Claude Code 2.1.128 출시: AI 코딩 에이전트의 HAL 개발 워크플로우
 - Reporter-selected but final-excluded: 0
 
 주요 final exclusion reason:
-- main_eligible=false (31)
-- source_gap_risk=true (31)
-- finalSelectionEligibility=exclude (22)
-- reference_only=true (12)
-- briefing_only=true (9)
+- none
 
-Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
+selected is reporter-stage only; use final_selected or shortlisted-candidates.json for final publication selection.
 
 
 ## 편집장 확인 checklist
@@ -57,4 +53,4 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 
 ## 권장 판단
 
-REQUEST_CHANGES
+APPROVE

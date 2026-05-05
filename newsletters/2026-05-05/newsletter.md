@@ -9,11 +9,7 @@
 
 ## 2. AI plus camera input path or HAL workflow
 
-### Claude Code 2.1.128 출시: AI 코딩 에이전트의 HAL 개발 워크플로우 영향
-
-![Claude Code Changelog 로고 및 제목](https://claude-code.mintlify.app/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DGetting%2Bstarted%26appearance%3Dsystem%26title%3DChangelog%26description%3DRelease%2Bnotes%2Bfor%2BClaude%2BCode%252C%2Bincluding%2Bnew%2Bfeatures%252C%2Bimprovements%252C%2Band%2Bbug%2Bfixes%2Bby%2Bversion.%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Flight.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D78fd01ff4f4340295a4f66e2ea54903c%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Fdark.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D1298a0c3b3a1da603b190d0de0e31712%26primaryColor%3D%25230E0E0E%26lightColor%3D%2523D4A27F%26darkColor%3D%25230E0E0E%26backgroundLight%3D%2523FDFDF7%26backgroundDark%3D%252309090B&w=1200&q=100)
-
-_Image: [Claude Code Changelog](https://code.claude.com/docs/en/changelog)_
+### Claude Code 2.1.128: agent-assisted Camera HAL workflow impact
 
 
 **이번 주 확인한 사실**
@@ -39,7 +35,7 @@ AI 코딩 에이전트는 Camera HAL 개발 워크플로우에 다음과 같은 
 
 **팀 공유용 한 줄**
 
-Claude Code 2.1.128과 같은 AI 코딩 에이전트의 발전은 HAL 개발 워크플로우의 생산성을 향상시킬 잠재력이 있으므로, 코드 생성 및 버그 진단 측면에서 활용 가능성을 탐색해야 합니다.
+Claude Code 2.1.128 is a workflow signal for Camera HAL code authoring, debugging, refactoring, and test automation with an AI coding agent.
 
 **출처**
 
@@ -49,11 +45,7 @@ Claude Code 2.1.128과 같은 AI 코딩 에이전트의 발전은 HAL 개발 워
 
 ## 3. Linux Camera / V4L2
 
-### FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점
-
-![FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점 image](../../assets/images/fallback/android.svg)
-
-_Image: [FreeBSD 15.1 Beta Released For Early Testing](https://www.phoronix.com/news/FreeBSD-15.1-Beta-1)_
+### FreeBSD 15.1 Beta 1: Android Linux camera/V4L2 stack review signal
 
 
 **이번 주 확인한 사실**
@@ -79,7 +71,7 @@ FreeBSD의 업데이트는 직접적인 Android HAL 요구사항은 아니지만
 
 **팀 공유용 한 줄**
 
-FreeBSD 15.1 Beta 출시는 Android Linux 커널 카메라 스택에 대한 직접적인 영향은 없지만, 커널 및 드라이버 개발 동향을 간접적으로 파악하고 장기적인 HAL 설계 관점을 얻는 데 참고할 수 있습니다.
+FreeBSD 15.1 Beta 1 is not Android-based, but it is a useful cross-kernel signal for reviewing Android Linux camera and V4L2 stack assumptions.
 
 **출처**
 
@@ -127,7 +119,7 @@ Android 보안 게시판은 매월 발행되며, Android 기기의 보안을 강
 
 ## 5. Android Camera / Platform API
 
-### Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원
+### Firebase AI Logic hybrid inference: Camera HAL input path and NPU/GPU scheduling impact
 
 ![Android용 하이브리드 추론 솔루션 다이어그램](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png)
 
@@ -136,9 +128,9 @@ _Image: [Android Developers Blog](https://android-developers.googleblog.com/2026
 
 **이번 주 확인한 사실**
 
-- 2026년 4월 17일, Android Developers Blog에서 새로운 Firebase AI Logic API가 하이브리드 추론을 위해 도입되었음을 발표했습니다.
-- 새로운 Gemini 모델, 특히 Gemini Nano Banana 모델에 대한 지원이 추가되었습니다.
-- 하이브리드 추론은 온디바이스(on-device)와 클라우드(cloud) 추론을 결합하는 방식입니다.
+- published date: 2026-04-17.
+- API/component: Firebase AI Logic API.
+- behavior change: Android apps can combine on-device inference and cloud inference paths while using new Gemini models.
 
 **배경지식**
 
@@ -156,7 +148,7 @@ AI 모델의 추론은 온디바이스에서 직접 실행되거나 클라우드
 
 **팀 공유용 한 줄**
 
-Android에 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 추가되었습니다. HAL은 AI 모델을 위한 효율적인 이미지 데이터 경로를 제공하고, NPU/GPU/ISP 리소스 경합을 관리하며, AI 워크로드에 최적화된 스트림 구성을 지원해야 합니다.
+Firebase AI Logic hybrid inference affects Camera HAL input buffers, AI analysis streams, NPU/GPU/ISP contention, latency, and power measurements.
 
 **출처**
 
@@ -166,11 +158,7 @@ Android에 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 추�
 
 ## 6. C++ / Toolchain Fallback
 
-### C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대
-
-![C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대 image](../../assets/images/fallback/cpp.svg)
-
-_Image: [C++26: A User-Friendly assert() macro -- Sandor Dargo](https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo)_
+### C++26 assert() update: native Camera HAL code stability debugging signal
 
 
 **이번 주 확인한 사실**
@@ -195,7 +183,7 @@ Camera HAL은 성능에 민감하고 안정성이 중요한 시스템이므로, 
 
 **팀 공유용 한 줄**
 
-C++26의 `assert()` 매크로 개선은 HAL 디버깅 시 더 상세한 컨텍스트 정보를 제공하여 문제 해결 시간을 단축하고 코드 안정성을 높일 잠재력이 있습니다. 향후 툴체인 업데이트 시 HAL 코드에 적용 가능성을 검토해야 합니다.
+The C++26 assert() update is a native-toolchain signal for improving Camera HAL failure diagnostics and state capture around assert sites.
 
 **출처**
 

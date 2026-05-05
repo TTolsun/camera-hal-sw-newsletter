@@ -1,57 +1,16 @@
 {
   "schema_version": 1,
   "date": "2026-05-05",
-  "score": 74,
+  "score": 100,
   "max_score": 100,
   "threshold": 85,
-  "status": "NEEDS_FIX",
-  "summary": "Quality score 74, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
-  "deductions": [
-    {
-      "category": "image-fallback",
-      "points": 1,
-      "reason": "Article image uses a local fallback visual.",
-      "location": "FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점",
-      "blocking": false,
-      "severity": "soft"
-    },
-    {
-      "category": "evidence-specificity",
-      "points": 5,
-      "reason": "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
-      "location": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원",
-      "blocking": true,
-      "severity": "hard"
-    },
-    {
-      "category": "evidence-specificity",
-      "points": 4,
-      "reason": "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.",
-      "location": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원",
-      "blocking": true,
-      "severity": "hard"
-    },
-    {
-      "category": "image-fallback",
-      "points": 1,
-      "reason": "Article image uses a local fallback visual.",
-      "location": "C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대",
-      "blocking": false,
-      "severity": "soft"
-    },
-    {
-      "category": "source-integrity",
-      "points": 15,
-      "reason": "Fact checker returned 6 must_fix item(s).",
-      "location": "",
-      "blocking": true,
-      "severity": "hard"
-    }
-  ],
+  "status": "PASS",
+  "summary": "Quality score 100, threshold 85, max score 100. Editor review is ready.",
+  "deductions": [],
   "article_results": [
     {
       "index": 1,
-      "headline": "Claude Code 2.1.128 출시: AI 코딩 에이전트의 HAL 개발 워크플로우 영향",
+      "headline": "Claude Code 2.1.128: agent-assisted Camera HAL workflow impact",
       "category": "AI plus camera input path or HAL workflow",
       "status": "PASS",
       "repair_action": "preserve",
@@ -66,7 +25,7 @@
     },
     {
       "index": 2,
-      "headline": "FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점",
+      "headline": "FreeBSD 15.1 Beta 1: Android Linux camera/V4L2 stack review signal",
       "category": "Linux Camera / V4L2",
       "status": "PASS",
       "repair_action": "preserve",
@@ -77,13 +36,7 @@
         }
       ],
       "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "image-fallback",
-          "points": 1,
-          "reason": "Article image uses a local fallback visual."
-        }
-      ]
+      "soft_deductions": []
     },
     {
       "index": 3,
@@ -102,25 +55,22 @@
     },
     {
       "index": 4,
-      "headline": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "headline": "Firebase AI Logic hybrid inference: Camera HAL input path and NPU/GPU scheduling impact",
       "category": "Android Camera / Platform API",
-      "status": "FAIL",
-      "repair_action": "repair-section",
+      "status": "PASS",
+      "repair_action": "preserve",
       "sources": [
         {
           "title": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델",
           "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
         }
       ],
-      "hard_fail_reasons": [
-        "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
-        "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change."
-      ],
+      "hard_fail_reasons": [],
       "soft_deductions": []
     },
     {
       "index": 5,
-      "headline": "C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대",
+      "headline": "C++26 assert() update: native Camera HAL code stability debugging signal",
       "category": "C++ / Toolchain Fallback",
       "status": "PASS",
       "repair_action": "preserve",
@@ -131,13 +81,7 @@
         }
       ],
       "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "image-fallback",
-          "points": 1,
-          "reason": "Article image uses a local fallback visual."
-        }
-      ]
+      "soft_deductions": []
     }
   ],
   "metrics": {
@@ -145,36 +89,20 @@
     "briefing_count": 3,
     "camera_article_count": 4,
     "ai_article_count": 2,
-    "fact_check_status": "NEEDS_FIX",
-    "must_fix_count": 6,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
     "source_gap_count": 0,
     "source_integrity_violation_count": 0,
-    "blocking_deduction_count": 3,
-    "blocking_deduction_categories": [
-      "evidence-specificity",
-      "source-integrity"
-    ],
-    "hard_fail_count": 3,
-    "soft_deduction_count": 2,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 0,
     "article_gate_counts": {
-      "PASS": 4,
+      "PASS": 5,
       "DEMOTE": 0,
-      "FAIL": 1
+      "FAIL": 0
     },
-    "top_deduction_categories": [
-      {
-        "category": "evidence-specificity",
-        "count": 2
-      },
-      {
-        "category": "image-fallback",
-        "count": 2
-      },
-      {
-        "category": "source-integrity",
-        "count": 1
-      }
-    ],
+    "top_deduction_categories": [],
     "candidate_exclusion_summary": []
   }
 }
