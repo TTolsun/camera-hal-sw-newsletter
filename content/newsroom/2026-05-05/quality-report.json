@@ -1,48 +1,64 @@
 {
   "schema_version": 1,
   "date": "2026-05-05",
-  "score": 94,
+  "score": 74,
   "max_score": 100,
   "threshold": 85,
-  "status": "PASS",
-  "summary": "Quality score 94, threshold 85, max score 100. Editor review is ready.",
+  "status": "NEEDS_FIX",
+  "summary": "Quality score 74, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
   "deductions": [
     {
       "category": "image-fallback",
       "points": 1,
       "reason": "Article image uses a local fallback visual.",
-      "location": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "location": "FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점",
       "blocking": false,
       "severity": "soft"
     },
     {
-      "category": "actionability",
+      "category": "evidence-specificity",
+      "points": 5,
+      "reason": "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
+      "location": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "blocking": true,
+      "severity": "hard"
+    },
+    {
+      "category": "evidence-specificity",
       "points": 4,
-      "reason": "Article action item is not concrete enough for a HAL engineering team.",
-      "location": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
-      "blocking": false,
-      "severity": "soft"
+      "reason": "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.",
+      "location": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "blocking": true,
+      "severity": "hard"
     },
     {
       "category": "image-fallback",
       "points": 1,
       "reason": "Article image uses a local fallback visual.",
-      "location": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
+      "location": "C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대",
       "blocking": false,
       "severity": "soft"
+    },
+    {
+      "category": "source-integrity",
+      "points": 15,
+      "reason": "Fact checker returned 6 must_fix item(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard"
     }
   ],
   "article_results": [
     {
       "index": 1,
-      "headline": "Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선",
-      "category": "Android Camera / platform API",
+      "headline": "Claude Code 2.1.128 출시: AI 코딩 에이전트의 HAL 개발 워크플로우 영향",
+      "category": "AI plus camera input path or HAL workflow",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
         {
-          "title": "The Fourth Beta of Android 17",
-          "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
+          "title": "Claude Code Changelog - 2.1.128",
+          "url": "https://code.claude.com/docs/en/changelog"
         }
       ],
       "hard_fail_reasons": [],
@@ -50,14 +66,14 @@
     },
     {
       "index": 2,
-      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
-      "category": "AI plus Android Camera input path or HAL workflow",
+      "headline": "FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점",
+      "category": "Linux Camera / V4L2",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
         {
-          "title": "Experimental hybrid inference and new Gemini models for Android",
-          "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+          "title": "FreeBSD 15.1 Beta Released For Early Testing",
+          "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
         }
       ],
       "hard_fail_reasons": [],
@@ -71,14 +87,14 @@
     },
     {
       "index": 3,
-      "headline": "GCC 16.1 컴파일러 출시: 성능 향상 및 C++ 네이티브 코드에 대한 시사점",
-      "category": "C++ / toolchain fallback",
+      "headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "category": "Android Camera / Platform API",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
         {
-          "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
-          "url": "https://www.phoronix.com/review/gcc-16-benchmarks"
+          "title": "Overview",
+          "url": "https://source.android.com/docs/security/bulletin/asb-overview"
         }
       ],
       "hard_fail_reasons": [],
@@ -86,23 +102,36 @@
     },
     {
       "index": 4,
-      "headline": "FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향",
-      "category": "Linux camera / libcamera / V4L2",
+      "headline": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원",
+      "category": "Android Camera / Platform API",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델",
+          "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+        }
+      ],
+      "hard_fail_reasons": [
+        "Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.",
+        "Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change."
+      ],
+      "soft_deductions": []
+    },
+    {
+      "index": 5,
+      "headline": "C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대",
+      "category": "C++ / Toolchain Fallback",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
         {
-          "title": "FreeBSD 15.1 Beta Released For Early Testing",
-          "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+          "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+          "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
         }
       ],
       "hard_fail_reasons": [],
       "soft_deductions": [
-        {
-          "category": "actionability",
-          "points": 4,
-          "reason": "Article action item is not concrete enough for a HAL engineering team."
-        },
         {
           "category": "image-fallback",
           "points": 1,
@@ -112,30 +141,37 @@
     }
   ],
   "metrics": {
-    "article_count": 4,
+    "article_count": 5,
     "briefing_count": 3,
-    "camera_article_count": 2,
-    "ai_article_count": 1,
-    "fact_check_status": "PASS",
-    "must_fix_count": 0,
+    "camera_article_count": 4,
+    "ai_article_count": 2,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 6,
     "source_gap_count": 0,
     "source_integrity_violation_count": 0,
-    "blocking_deduction_count": 0,
-    "blocking_deduction_categories": [],
-    "hard_fail_count": 0,
-    "soft_deduction_count": 3,
+    "blocking_deduction_count": 3,
+    "blocking_deduction_categories": [
+      "evidence-specificity",
+      "source-integrity"
+    ],
+    "hard_fail_count": 3,
+    "soft_deduction_count": 2,
     "article_gate_counts": {
       "PASS": 4,
       "DEMOTE": 0,
-      "FAIL": 0
+      "FAIL": 1
     },
     "top_deduction_categories": [
+      {
+        "category": "evidence-specificity",
+        "count": 2
+      },
       {
         "category": "image-fallback",
         "count": 2
       },
       {
-        "category": "actionability",
+        "category": "source-integrity",
         "count": 1
       }
     ],

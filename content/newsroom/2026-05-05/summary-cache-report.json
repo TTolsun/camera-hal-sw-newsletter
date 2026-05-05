@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-05",
-  "generated_at": "2026-05-04T17:01:57.608Z",
+  "generated_at": "2026-05-05T02:53:44.854Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 9,
@@ -18,6 +18,54 @@
     }
   ],
   "entries": [
+    {
+      "title": "C++26: A User&#45;Friendly assert() macro &#45;&#45; Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 04 May 2026 22:31:55 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+        "url_hash": "61c963a289f63e09aee4c5730039cd09b8fb3a4a4f30a9e71a54604380462b42",
+        "published_date": "Mon, 04 May 2026 22:31:55 +0000",
+        "content_hash": "51bb2e338ed3e8816b00f15260e4ab25134dc8742d4dbed3824d8cbf4f0d1c9b"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Overview",
+      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "source": "Android Security Bulletin",
+      "published_date": "2026-05-01",
+      "cache_key": {
+        "normalized_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+        "url_hash": "827f3a39ff2811801dcadf811725f8ed7f6f974e696a41e8790d5572f6445bdb",
+        "published_date": "2026-05-01",
+        "content_hash": "7e21cd7f60cbc60f5572785cb1833d2d3e16a510c832e9acc40217bc203ef0f4"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Claude Code Changelog - 2.1.128",
+      "url": "https://code.claude.com/docs/en/changelog",
+      "source": "Claude Code Changelog",
+      "published_date": "May 4, 2026",
+      "cache_key": {
+        "normalized_url": "https://code.claude.com/docs/en/changelog",
+        "url_hash": "3d68ad8e1324eb33b763f82183f512fc6276fa6e33aa56b7b51a994d2a3e9fb9",
+        "published_date": "May 4, 2026",
+        "content_hash": "57ac5cdcd15befc6c8b02ea82c76474bbf3e6dec58351397dbe4368d9aff85c5"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
     {
       "title": "Experimental hybrid inference and new Gemini models for Android",
       "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
@@ -44,38 +92,6 @@
         "url_hash": "522d2883a39b3460888cc292226c92c12a188d7846d732c11029eda332df1577",
         "published_date": "Sat, 02 May 2026 06:53:24 -0400",
         "content_hash": "0674fc06c1c0b4da49762274a24eac00103f530ede64c822381f44451548f939"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
-      "url": "https://www.phoronix.com/review/gcc-16-benchmarks",
-      "source": "Phoronix Linux Camera / Media",
-      "published_date": "Mon, 04 May 2026 09:42:21 -0400",
-      "cache_key": {
-        "normalized_url": "https://www.phoronix.com/review/gcc-16-benchmarks",
-        "url_hash": "cba65e7c42b12df9be7be52634278ee8b793683ea72f8eee1c4531378a8452c7",
-        "published_date": "Mon, 04 May 2026 09:42:21 -0400",
-        "content_hash": "eec7ceb22bdec6ba1cf114ea1ffa4a02760aec3458676f5470ab456d3f2fad96"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes",
-      "url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
-      "source": "Phoronix Linux Camera / Media",
-      "published_date": "Sun, 03 May 2026 17:30:00 -0400",
-      "cache_key": {
-        "normalized_url": "https://www.phoronix.com/news/linux-7.1-rc2-released",
-        "url_hash": "f99c80c73baf54c6e61f459c3b1b67c0c0448b5178f28a4a263c5881ce9dbe38",
-        "published_date": "Sun, 03 May 2026 17:30:00 -0400",
-        "content_hash": "4582ed8b2a859360cdcb960e27774104e7e7f31bae42cd42b8a54a81e5701fbb"
       },
       "hit": false,
       "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
@@ -140,22 +156,6 @@
         "url_hash": "52cb0091ee9119e29cf9b285df14a592d4cffc1b05f796d6bf117257b40c4f3e",
         "published_date": "Sat, 02 May 2026 20:33:27 -0400",
         "content_hash": "0617ab05e05f570b638b21bb293b4934df8fe7d2101d8d5c58fab3c2897cf4a9"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "Claude Code Changelog - 2.1.126",
-      "url": "https://code.claude.com/docs/en/changelog",
-      "source": "Claude Code Changelog",
-      "published_date": "May 1, 2026",
-      "cache_key": {
-        "normalized_url": "https://code.claude.com/docs/en/changelog",
-        "url_hash": "3d68ad8e1324eb33b763f82183f512fc6276fa6e33aa56b7b51a994d2a3e9fb9",
-        "published_date": "May 1, 2026",
-        "content_hash": "f6a095be2b4f7a68d71db537c321c29a500c4603d2f2e1cdd8d7d4e333f8df4b"
       },
       "hit": false,
       "reason": "by-url:missing-cache-record; by-content:missing-cache-record",

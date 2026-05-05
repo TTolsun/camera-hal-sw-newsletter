@@ -2,7 +2,7 @@
   {
     "date": "2026-05-05",
     "title": "Camera HAL SW 뉴스레터 - 2026-05-05",
-    "summary": "이번 주 뉴스레터는 Android에서 AI 추론 기능의 발전과 GCC 컴파일러의 성능 향상에 초점을 맞춥니다. Camera HAL 엔지니어는 새로운 하이브리드 추론 모델이 카메라 데이터 파이프라인에 미치는 영향과 C++ 툴체인 업데이트가 네이티브 코드 최적화에 주는 시사점을 파악해야 합니다.",
+    "summary": "이번 주 뉴스레터에서는 Android의 새로운 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트의 업데이트, FreeBSD 15.1 Beta 출시 소식, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 그리고 보안 취약점 관리에 직접적인 영향을 미칠 수 있습니다.",
     "html": "newsletters/2026-05-05/index.html",
     "md": "newsletters/2026-05-05/newsletter.md",
     "tags": [

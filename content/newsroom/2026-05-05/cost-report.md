@@ -10,27 +10,27 @@
 - Pro model configured: no
 - Pro model allowed: no
 - Request count: 10
-- Prompt tokens: 142976
-- Output tokens: 37389
-- Thinking tokens: 940
-- Cached tokens: 26822
-- Total tokens: 181305
-- Estimated cost USD: 0.080130
+- Prompt tokens: 155226
+- Output tokens: 40198
+- Thinking tokens: 991
+- Cached tokens: 8503
+- Total tokens: 196415
+- Estimated cost USD: 0.147244
 
 ## Calls
 
 | Stage | Model | Attempt | Prompt | Output | Thinking | Requested Budget | Applied Budget | Cached | Pro | Estimated USD |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
-| reporter attempt 1/2 | gemini-2.5-flash | 3 | 16068 | 5820 | 0 | 0 | 0 | 15904 | no | 0.015076 |
-| editor attempt 1/2 | gemini-2.5-flash-lite | 1 | 10761 | 7210 | 510 | 512 | 512 | 0 | no | 0.004164 |
-| fact-checker attempt 1/2 | gemini-2.5-flash | 1 | 18561 | 447 | 0 | 0 | 0 | 0 | no | 0.006686 |
-| editor repair attempt 1/2 | gemini-2.5-flash | 3 | 14385 | 2008 | 0 | 0 | 0 | 0 | no | 0.009336 |
-| fact-checker repair attempt 1/2 | gemini-2.5-flash | 1 | 18629 | 768 | 0 | 0 | 0 | 0 | no | 0.007509 |
-| reporter attempt 2/2 | gemini-2.5-flash | 2 | 11653 | 5562 | 0 | 0 | 0 | 10918 | no | 0.014453 |
-| editor attempt 2/2 | gemini-2.5-flash-lite | 1 | 8588 | 7492 | 430 | 512 | 512 | 0 | no | 0.004028 |
-| fact-checker attempt 2/2 | gemini-2.5-flash | 1 | 17851 | 1579 | 0 | 0 | 0 | 0 | no | 0.009303 |
-| editor repair attempt 2/2 | gemini-2.5-flash-lite | 1 | 10788 | 5937 | 0 | 0 | 0 | 0 | no | 0.003454 |
-| fact-checker repair attempt 2/2 | gemini-2.5-flash | 1 | 15692 | 566 | 0 | 0 | 0 | 0 | no | 0.006123 |
+| reporter attempt 1/2 | gemini-2.5-flash | 1 | 16044 | 6504 | 0 | 0 | 0 | 0 | no | 0.021073 |
+| editor attempt 1/2 | gemini-2.5-flash | 1 | 11109 | 11920 | 511 | 512 | 512 | 0 | no | 0.034410 |
+| fact-checker attempt 1/2 | gemini-2.5-flash | 1 | 24122 | 969 | 0 | 0 | 0 | 0 | no | 0.009659 |
+| editor repair attempt 1/2 | gemini-2.5-flash | 1 | 13927 | 1696 | 0 | 0 | 0 | 0 | no | 0.008418 |
+| fact-checker repair attempt 1/2 | gemini-2.5-flash | 1 | 24432 | 93 | 0 | 0 | 0 | 0 | no | 0.007562 |
+| reporter attempt 2/2 | gemini-2.5-flash | 1 | 12174 | 6629 | 0 | 0 | 0 | 0 | no | 0.020225 |
+| editor attempt 2/2 | gemini-2.5-flash | 1 | 6556 | 9777 | 480 | 512 | 512 | 0 | no | 0.027609 |
+| fact-checker attempt 2/2 | gemini-2.5-flash | 1 | 19702 | 117 | 0 | 0 | 0 | 0 | no | 0.006203 |
+| editor repair attempt 2/2 | gemini-2.5-flash | 1 | 7387 | 1831 | 0 | 0 | 0 | 4559 | no | 0.005563 |
+| fact-checker repair attempt 2/2 | gemini-2.5-flash | 1 | 19773 | 662 | 0 | 0 | 0 | 3944 | no | 0.006522 |
 
 ## Warnings
 

@@ -2,54 +2,57 @@
 
 ## Gate Result
 
-- Quality score: 94
+- Quality score: 74
 - Quality threshold: 85
 - Max score: 100
-- Result: PASS
-- Summary: Quality score 94, threshold 85, max score 100. Editor review is ready.
+- Result: NEEDS_FIX
+- Summary: Quality score 74, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
 
 ## Composition
 
-- Main article count: 4
+- Main article count: 5
 - Briefing count: 3
-- Camera article count: 2
-- AI article count: 1
+- Camera article count: 4
+- AI article count: 2
 - Underfilled/composition failure: none
 
 ## Fact Check And Source Integrity
 
-- Fact-check status: PASS
-- Must-fix count: 0
+- Fact-check status: NEEDS_FIX
+- Must-fix count: 6
 - Source-gap count: 0
 - Source integrity violation count: 0
-- Blocking deduction count: 0
-- Blocking deduction categories: none
-- Hard fail count: 0
-- Soft deduction count: 3
+- Blocking deduction count: 3
+- Blocking deduction categories: evidence-specificity, source-integrity
+- Hard fail count: 3
+- Soft deduction count: 2
 
 ## Article Gate Results
 
 | # | Result | Repair action | Headline | Hard fail reasons | Soft deductions |
 | ---: | --- | --- | --- | --- | --- |
-| 1 | PASS | preserve | Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선 | none | none |
-| 2 | PASS | preserve | Android용 하이브리드 추론 및 새로운 Gemini 모델 지원 | none | image-fallback: Article image uses a local fallback visual. |
-| 3 | PASS | preserve | GCC 16.1 컴파일러 출시: 성능 향상 및 C++ 네이티브 코드에 대한 시사점 | none | none |
-| 4 | PASS | preserve | FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향 | none | actionability: Article action item is not concrete enough for a HAL engineering team.; image-fallback: Article image uses a local fallback visual. |
+| 1 | PASS | preserve | Claude Code 2.1.128 출시: AI 코딩 에이전트의 HAL 개발 워크플로우 영향 | none | none |
+| 2 | PASS | preserve | FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점 | none | image-fallback: Article image uses a local fallback visual. |
+| 3 | PASS | preserve | 2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수 | none | none |
+| 4 | FAIL | repair-section | Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원 | Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.; Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change. | none |
+| 5 | PASS | preserve | C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대 | none | image-fallback: Article image uses a local fallback visual. |
 
 ## Hard Fails
 
-- none
+- 5 pt [evidence-specificity] Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원: Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.
+- 4 pt [evidence-specificity] Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원: Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.
+- 15 pt [source-integrity] Fact checker returned 6 must_fix item(s).
 
 ## Soft Deductions
 
-- 1 pt [image-fallback] Android용 하이브리드 추론 및 새로운 Gemini 모델 지원: Article image uses a local fallback visual.
-- 4 pt [actionability] FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향: Article action item is not concrete enough for a HAL engineering team.
-- 1 pt [image-fallback] FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향: Article image uses a local fallback visual.
+- 1 pt [image-fallback] FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점: Article image uses a local fallback visual.
+- 1 pt [image-fallback] C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대: Article image uses a local fallback visual.
 
 ## Top Deduction Categories
 
+- evidence-specificity (2)
 - image-fallback (2)
-- actionability (1)
+- source-integrity (1)
 
 ## Candidate Exclusion Summary
 
@@ -57,6 +60,8 @@
 
 ## Deductions
 
-- 1 pt [image-fallback] Android용 하이브리드 추론 및 새로운 Gemini 모델 지원: Article image uses a local fallback visual.
-- 4 pt [actionability] FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향: Article action item is not concrete enough for a HAL engineering team.
-- 1 pt [image-fallback] FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향: Article image uses a local fallback visual.
+- 1 pt [image-fallback] FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점: Article image uses a local fallback visual.
+- 5 pt [evidence-specificity] Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원: Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.
+- 4 pt [evidence-specificity] Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 지원: Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.
+- 1 pt [image-fallback] C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대: Article image uses a local fallback visual.
+- 15 pt [source-integrity] Fact checker returned 6 must_fix item(s).
