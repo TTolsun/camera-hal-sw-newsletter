@@ -45,6 +45,8 @@ const OUTPUT_FIELDS = [
   'soc_platform_signal_count',
   'cpp_ai_tooling_fallback_count',
   'generic_tech_watchlist_count',
+  'non_fallback_reviewable_article_count',
+  'eligible_non_fallback_reviewable_article_count',
   'underfilled',
   'input_candidate_count',
   'eligible_candidate_count',
@@ -138,6 +140,7 @@ function buildGenerationStatusOutputs(status) {
   outputs.stale_claim_hard_failure_count = scalar(status.stale_claim_hard_failure_count, '0');
   outputs.selection_warnings = multilineValue(status.selection_warnings);
   outputs.selection_errors = multilineValue(status.selection_errors);
+  outputs.selection_shortage_hints = multilineValue(status.selection_shortage_hints);
   outputs.exclusion_reason_summary = formatReasonSummary(status.exclusion_reason_summary);
   outputs.final_exclusion_reason_summary = formatReasonSummary(
     ensureArray(status.final_exclusion_reason_summary).length > 0

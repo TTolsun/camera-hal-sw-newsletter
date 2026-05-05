@@ -38,13 +38,16 @@ const DIRECT_AOSP_PATTERNS = [
   /\bAOSP Camera\b/i,
   /\bCamera2\b/i,
   /\bCameraX\b/i,
+  /\bCamera images automation\b/i,
+  /\bcamera image(?:s)? automation\b/i,
   /\bImageReader\b/i,
   /\bcapture request\b/i,
   /\bcapture result\b/i,
   /\bstream configuration\b/i,
   /\bcamera metadata\b/i,
   /\b(?:CTS|VTS|CDD|Camera ITS)\b[^.\n]{0,120}\bcamera\b/i,
-  /\bcamera\b[^.\n]{0,120}\b(?:CTS|VTS|CDD|Camera ITS)\b/i
+  /\bcamera\b[^.\n]{0,120}\b(?:CTS|VTS|CDD|Camera ITS)\b/i,
+  /\bCDD\b[^.\n]{0,120}\bcamera orientation\b/i
 ];
 
 const DRIVER_PATTERNS = [
@@ -174,6 +177,13 @@ function relevanceScoreFromHits(hits, max = 5) {
   return Math.min(max, hits.length === 0 ? 0 : hits.length + 1);
 }
 
+function validBucketHint(value) {
+  const bucket = text(value);
+  return Object.values(BUCKETS).includes(bucket) && bucket !== BUCKETS.GENERIC_TECH_WATCHLIST
+    ? bucket
+    : '';
+}
+
 function bucketReason(bucket, terms, evidenceOrigin) {
   if (bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
     return `${BUCKET_DEFINITIONS[bucket]} Article-level evidence was weak; source hints alone do not make a main article.`;
@@ -190,6 +200,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const cameraImpactTerms = patternHits(CAMERA_IMPACT_PATTERNS, body);
   const socTerms = patternHits(SOC_PATTERNS, body);
   const nativeTerms = patternHits(NATIVE_TOOLING_PATTERNS, body);
+  const bucketHint = validBucketHint(candidate.relevance_bucket_hint || candidate.relevanceBucketHint);
   const sourceHintTerms = patternHits([
     ...DIRECT_AOSP_PATTERNS,
     ...DRIVER_PATTERNS,
@@ -200,7 +211,18 @@ function classifyAospCameraStackCandidate(candidate = {}) {
 
   let bucket = BUCKETS.GENERIC_TECH_WATCHLIST;
   let evidenceTerms = [];
-  if (driverTerms.length > 0 && directTerms.length === 0) {
+  const articleTerms = [
+    ...directTerms,
+    ...driverTerms,
+    ...androidAdjacentTerms,
+    ...cameraImpactTerms,
+    ...socTerms,
+    ...nativeTerms
+  ];
+  if (bucketHint && articleTerms.length > 0) {
+    bucket = bucketHint;
+    evidenceTerms = articleTerms;
+  } else if (driverTerms.length > 0 && directTerms.length === 0) {
     bucket = BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE;
     evidenceTerms = driverTerms;
   } else if (directTerms.length > 0) {

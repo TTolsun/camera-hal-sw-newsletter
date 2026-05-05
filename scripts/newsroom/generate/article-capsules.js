@@ -284,6 +284,7 @@ function compactSelectionContext(shortlistReport) {
     composition_mode: shortlistReport?.composition_mode || '',
     composition_reason: shortlistReport?.composition_reason || '',
     composition_summary: shortlistReport?.composition_summary || {},
+    eligible_composition_summary: shortlistReport?.eligible_composition_summary || {},
     editor_review_required: shortlistReport?.editor_review_required === true,
     shortlist_cap: shortlistReport?.shortlist_cap ?? null,
     underfilled: Boolean(shortlistReport?.underfilled),
@@ -291,6 +292,7 @@ function compactSelectionContext(shortlistReport) {
     selection_policy: shortlistReport?.selection_policy || {},
     selection_warnings: ensureArray(shortlistReport?.selection_warnings),
     selection_errors: ensureArray(shortlistReport?.selection_errors),
+    selection_shortage_hints: ensureArray(shortlistReport?.selection_shortage_hints),
     selected_articles: ensureArray(shortlistReport?.selected_articles).map(candidate => ({
       title: compactText(candidate.title, 180),
       url: candidateUrl(candidate),

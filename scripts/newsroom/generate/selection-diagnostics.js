@@ -295,6 +295,10 @@ function formatCount(value) {
 }
 
 function renderCandidateSelectionDiagnostics(diagnostics = {}) {
+  const composition = diagnostics.composition_summary || {};
+  const hints = ensureArray(diagnostics.selection_shortage_hints)
+    .map(item => `- ${item}`)
+    .join('\n') || '- none';
   const reasons = ensureArray(diagnostics.final_exclusion_reason_summary)
     .slice(0, 5)
     .map(item => `- ${item.reason} (${item.count})`)
@@ -313,6 +317,15 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Composition mode: ${formatCount(diagnostics.composition_mode)}`,
     `- Editor review required: ${diagnostics.editor_review_required === true ? 'true' : 'false'}`,
     `- Reporter-selected but final-excluded: ${formatCount(diagnostics.reporter_selected_but_final_excluded_count)}`,
+    `- direct_aosp_camera: ${formatCount(diagnostics.direct_aosp_camera_count ?? composition.direct_aosp_camera_count)}`,
+    `- android_platform_camera_adjacent: ${formatCount(diagnostics.android_platform_camera_adjacent_count ?? composition.android_platform_camera_adjacent_count)}`,
+    `- camera_driver_image_pipeline: ${formatCount(diagnostics.camera_driver_image_pipeline_count ?? composition.camera_driver_image_pipeline_count)}`,
+    `- soc_platform_signal: ${formatCount(diagnostics.soc_platform_signal_count ?? composition.soc_platform_signal_count)}`,
+    `- cpp_ai_tooling_fallback: ${formatCount(diagnostics.cpp_ai_tooling_fallback_count ?? composition.cpp_ai_tooling_fallback_count)}`,
+    `- Non-fallback reviewable: ${formatCount(diagnostics.non_fallback_reviewable_article_count ?? composition.non_fallback_reviewable_article_count)}`,
+    '',
+    'Source/parser recovery hint:',
+    hints,
     '',
     '주요 final exclusion reason:',
     reasons,

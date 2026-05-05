@@ -176,6 +176,8 @@ function buildNewsroomPrBody(options = {}) {
     `- soc_platform_signal count: ${valueOrUnknown(status.soc_platform_signal_count ?? status.composition_summary?.soc_platform_signal_count)}`,
     `- cpp_ai_tooling_fallback count: ${valueOrUnknown(status.cpp_ai_tooling_fallback_count ?? status.composition_summary?.cpp_ai_tooling_fallback_count)}`,
     `- generic_tech_watchlist count: ${valueOrUnknown(status.generic_tech_watchlist_count ?? status.composition_summary?.generic_tech_watchlist_count)}`,
+    `- non_fallback_reviewable_article_count: ${valueOrUnknown(status.non_fallback_reviewable_article_count ?? status.composition_summary?.non_fallback_reviewable_article_count)}`,
+    `- source/parser hints: ${ensureArray(status.selection_shortage_hints).join('; ') || 'none'}`,
     `- composition reason: ${valueOrUnknown(status.composition_reason)}`,
     ''
   );

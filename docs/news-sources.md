@@ -27,10 +27,12 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 ### 1차 출처
 
 - Android Developers Blog (`rss-source`): https://android-developers.googleblog.com/
+- Android Developers Blog - Camera (`rss-source`): https://android-developers.googleblog.com/search?q=CameraX
 - Android Developers Latest Updates (`release-note-watch`): https://developer.android.com/latest-updates
 - CameraX Release Notes (`release-note-watch`): https://developer.android.com/jetpack/androidx/releases/camera
-- AOSP Camera Documentation (`documentation-watch`): https://source.android.com/docs/core/camera
+- AOSP Camera Documentation (`documentation-watch`, `reference_index`): https://source.android.com/docs/core/camera
 - AOSP What's New / Release Notes (`release-note-watch`): https://source.android.com/docs/whatsnew
+- AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
 - Android Compatibility Definition Document (`documentation-watch`): https://source.android.com/docs/compatibility/cdd
 - Android Security Bulletin (`release-note-watch`): https://source.android.com/docs/security/bulletin
 - Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb

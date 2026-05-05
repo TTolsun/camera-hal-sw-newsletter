@@ -216,6 +216,7 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   const compositionMode = options.compositionMode || selectionCompositionMode;
   const editorReviewRequired = options.editorReviewRequired ?? report.editor_review_required ?? diagnostics.editor_review_required ?? compositionMode !== COMPOSITION_MODES.NORMAL;
   const compositionSummary = report.composition_summary || diagnostics.composition_summary || {};
+  const eligibleCompositionSummary = report.eligible_composition_summary || {};
   return {
     input_candidate_count: report.input_candidate_count ?? null,
     eligible_candidate_count: report.eligible_candidate_count ?? null,
@@ -243,7 +244,10 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     selection_composition_mode: selectionCompositionMode,
     composition_reason: options.compositionReason || report.composition_reason || diagnostics.composition_reason || '',
     composition_summary: compositionSummary,
+    eligible_composition_summary: eligibleCompositionSummary,
     editor_review_required: Boolean(editorReviewRequired),
+    non_fallback_reviewable_article_count: compositionSummary.non_fallback_reviewable_article_count ?? null,
+    eligible_non_fallback_reviewable_article_count: eligibleCompositionSummary.non_fallback_reviewable_article_count ?? null,
     direct_aosp_camera_count: compositionSummary.direct_aosp_camera_count ?? null,
     camera_driver_image_pipeline_count: compositionSummary.camera_driver_image_pipeline_count ?? null,
     android_platform_camera_adjacent_count: compositionSummary.android_platform_camera_adjacent_count ?? null,
@@ -254,6 +258,7 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     generic_tech_watchlist_count: compositionSummary.generic_tech_watchlist_count ?? null,
     selection_warnings: ensureArray(report.selection_warnings),
     selection_errors: ensureArray(report.selection_errors),
+    selection_shortage_hints: ensureArray(report.selection_shortage_hints),
     exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
     final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
     candidate_selection_note: diagnostics.note
@@ -1454,6 +1459,13 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     `- Underfilled: ${selectionDiagnostics.underfilled}`,
     `- Selection warning: ${selectionDiagnostics.selection_warnings.join('; ') || '없음'}`,
     `- Selection error: ${selectionDiagnostics.selection_errors.join('; ') || '없음'}`,
+    `- direct_aosp_camera: ${selectionDiagnostics.direct_aosp_camera_count ?? 'unknown'}`,
+    `- android_platform_camera_adjacent: ${selectionDiagnostics.android_platform_camera_adjacent_count ?? 'unknown'}`,
+    `- camera_driver_image_pipeline: ${selectionDiagnostics.camera_driver_image_pipeline_count ?? 'unknown'}`,
+    `- soc_platform_signal: ${selectionDiagnostics.soc_platform_signal_count ?? 'unknown'}`,
+    `- cpp_ai_tooling_fallback: ${selectionDiagnostics.cpp_ai_tooling_fallback_count ?? 'unknown'}`,
+    `- Non-fallback reviewable: ${selectionDiagnostics.non_fallback_reviewable_article_count ?? 'unknown'}`,
+    `- Source/parser hint: ${selectionDiagnostics.selection_shortage_hints.join('; ') || 'none'}`,
     `- 주요 final exclusion reason: ${selectionDiagnostics.final_exclusion_reason_summary.map(item => `${item.reason} (${item.count})`).join('; ') || '없음'}`,
     '',
     '## 다시 실행',

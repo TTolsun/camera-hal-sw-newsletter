@@ -91,6 +91,10 @@ function publishedDate(candidate) {
   return text(candidate.published_date || candidate.publishedAt || candidate.published_at);
 }
 
+function datePrecision(candidate) {
+  return text(candidate.datePrecision || candidate.date_precision);
+}
+
 function candidateUrl(candidate) {
   return text(candidate.url || candidate.article_url || candidate.articleUrl);
 }
@@ -145,6 +149,9 @@ function freshnessScore(candidate, newsletterDate) {
   const base = newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date();
   if (!published || Number.isNaN(published.getTime()) || Number.isNaN(base.getTime())) return 0;
   const ageDays = Math.max(0, (base.getTime() - published.getTime()) / (24 * 60 * 60 * 1000));
+  if (datePrecision(candidate) === 'month') {
+    return ageDays <= 45 ? 1 : 0;
+  }
   if (ageDays <= 7) return 3;
   if (ageDays <= 21) return 2;
   if (ageDays <= 45) return 1;
@@ -204,6 +211,16 @@ function isGenericTechWatchlist(candidate) {
 
 function hasSelectableScope(candidate) {
   return !isGenericTechWatchlist(candidate) && scopeRelevanceScore(candidate) >= MIN_SCOPE_RELEVANCE;
+}
+
+function isNonFallbackReviewableScope(candidate) {
+  const bucket = candidateScope(candidate).relevance_bucket;
+  return [
+    BUCKETS.DIRECT_AOSP_CAMERA,
+    BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
+    BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    BUCKETS.SOC_PLATFORM_SIGNAL
+  ].includes(bucket);
 }
 
 function hasAiValue(candidate) {
@@ -570,7 +587,8 @@ function selectFinalArticles(shortlist, options = {}) {
 
 function selectionWarnings(selected) {
   const count = ensureArray(selected).length;
-  if (count >= ABSOLUTE_MIN_REVIEWABLE_ARTICLES && count < MIN_FINAL_ARTICLES) {
+  const nonFallbackCount = ensureArray(selected).filter(isNonFallbackReviewableScope).length;
+  if (nonFallbackCount >= ABSOLUTE_MIN_REVIEWABLE_ARTICLES && count < MIN_FINAL_ARTICLES) {
     return [
       `Thin-week review path: only ${count} eligible non-duplicate final article input(s) remain after deterministic filtering. Review artifacts may be generated, but publication is not ready.`
     ];
@@ -581,8 +599,12 @@ function selectionWarnings(selected) {
 function selectionErrors(selected) {
   const items = ensureArray(selected);
   const errors = [];
+  const nonFallbackCount = items.filter(isNonFallbackReviewableScope).length;
   if (items.length < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
     errors.push(`Only ${items.length} eligible non-duplicate final article input(s) remain after deterministic filtering.`);
+  }
+  if (nonFallbackCount < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
+    errors.push(`Only ${nonFallbackCount} non-fallback Camera/Android/driver/SoC final article input(s) remain after deterministic filtering. C++/AI tooling fallback does not count toward ABSOLUTE_MIN_REVIEWABLE_ARTICLES.`);
   }
   if (items.length > 0 && items.every(candidate => !hasSelectableScope(candidate))) {
     errors.push('No AOSP Camera / Camera Driver / SoC Platform / native tooling eligible final article input remains after deterministic filtering.');
@@ -638,6 +660,9 @@ function compositionSummary(candidates) {
     bucket_counts[BUCKETS.DIRECT_AOSP_CAMERA] +
     bucket_counts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE] +
     bucket_counts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT];
+  const non_fallback_reviewable_article_count =
+    primary_camera_stack_topic_count +
+    bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL];
   const fallback_topic_count =
     bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL] +
     bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
@@ -652,8 +677,29 @@ function compositionSummary(candidates) {
     cpp_ai_tooling_fallback_count: bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK],
     generic_tech_watchlist_count: bucket_counts[BUCKETS.GENERIC_TECH_WATCHLIST],
     primary_camera_stack_topic_count,
+    non_fallback_reviewable_article_count,
     fallback_topic_count
   };
+}
+
+function selectionShortageHints(summary = {}) {
+  const hints = [];
+  if (number(summary.direct_aosp_camera_count) === 0) {
+    hints.push('Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.');
+  }
+  if (number(summary.android_platform_camera_adjacent_count) === 0) {
+    hints.push('Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.');
+  }
+  if (number(summary.camera_driver_image_pipeline_count) === 0) {
+    hints.push('Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.');
+  }
+  if (number(summary.soc_platform_signal_count) === 0) {
+    hints.push('Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.');
+  }
+  if (number(summary.non_fallback_reviewable_article_count) < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
+    hints.push('C++/AI tooling fallback is support material only; collect at least three non-fallback Camera/Android/driver/SoC candidates before LLM generation.');
+  }
+  return hints;
 }
 
 function compositionMode(selected, errors = []) {
@@ -661,6 +707,7 @@ function compositionMode(selected, errors = []) {
   if (
     ensureArray(errors).length > 0 ||
     summary.selected_article_count < ABSOLUTE_MIN_REVIEWABLE_ARTICLES ||
+    summary.non_fallback_reviewable_article_count < ABSOLUTE_MIN_REVIEWABLE_ARTICLES ||
     (
       summary.selected_article_count > 0 &&
       summary.generic_tech_watchlist_count === summary.selected_article_count
@@ -699,6 +746,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const warnings = selectionWarnings(selected);
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
+  const eligibleComposition = compositionSummary(shortlist);
   const mode = compositionMode(selected, errors);
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const markedShortlist = shortlist.map(candidate => {
@@ -734,6 +782,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     selection_composition_mode: mode,
     composition_reason: compositionReason(mode, composition),
     composition_summary: composition,
+    eligible_composition_summary: eligibleComposition,
+    selection_shortage_hints: selectionShortageHints(eligibleComposition),
     editor_review_required: mode !== COMPOSITION_MODES.NORMAL,
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
     optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
@@ -763,6 +813,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       ],
       soc_platform_fallback: 'Public SoC / CPU / GPU / NPU / ISP / power / thermal / performance signals are lower-priority fallback, not excluded.',
       cxx_fallback: 'Use C++ / AI / developer productivity as fallback when it supports native camera, driver, SoC, build, test, debugging, or performance work.',
+      cxx_fallback_minimum_counting: 'cpp_ai_tooling_fallback does not count toward ABSOLUTE_MIN_REVIEWABLE_ARTICLES; deterministic hard gate requires three non-fallback Camera/Android/driver/SoC candidates.',
       generic_watchlist: 'generic_tech_watchlist is not automatically promoted to main article selection.'
     },
     primary_selected_articles: selected,
@@ -815,6 +866,7 @@ module.exports = {
   scoreCandidate,
   selectFinalArticles,
   selectionErrors,
+  selectionShortageHints,
   selectionWarnings,
   summarizeExclusionReasons,
   titleSimilarity

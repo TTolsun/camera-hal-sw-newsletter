@@ -12,8 +12,10 @@ const {
   selectFinalArticles,
   summarizeExclusionReasons
 } = require('../scripts/lib/newsroom-selection');
+const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers');
+const { normalizeCandidate } = require('../scripts/newsroom/cli/collect-news-candidates');
 const { candidate } = require('./helpers/newsroom-builders');
-const { readJsonFixture } = require('./helpers/fixture-loader');
+const { readJsonFixture, readTextFixture } = require('./helpers/fixture-loader');
 
 test('prefilter excludes source gaps, undated watch pages, missing evidence, and duplicate URLs', () => {
   const report = buildShortlistReport('2026-05-03', [
@@ -130,6 +132,86 @@ test('two eligible candidates remain a hard deterministic selection error', () =
   assert.equal(report.publish_ready, false);
   assert.equal(report.composition_mode, 'NEEDS_FIX');
   assert.ok(report.selection_errors.some(error => error.includes('Only 2 eligible')));
+});
+
+test('cpp fallback-only candidates do not count toward reviewable minimum', () => {
+  const fallbackItems = [
+    ['GCC 17.1 C++ compiler release', 'https://example.com/gcc-17', 'GCC 17.1'],
+    ['LLVM 22 sanitizer runtime update', 'https://example.com/llvm-22', 'LLVM 22.0'],
+    ['Clang native build diagnostics release', 'https://example.com/clang-diagnostics', 'Clang 22.0'],
+    ['NDK toolchain debugging workflow update', 'https://example.com/ndk-debugging', 'NDK toolchain']
+  ];
+  const report = buildShortlistReport('2026-05-03', fallbackItems.map(([title, url, component]) => candidate({
+    title,
+    url,
+    summary: `${title} changes native build and sanitizer workflow behavior.`,
+    api_or_component: component,
+    behavior_change: 'C++ compiler release changes native build and sanitizer workflow behavior.',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    editorial_priority: 5,
+    aosp_camera_directness: 0,
+    driver_stack_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 5,
+    counts_as_primary_camera_topic: false,
+    counts_as_driver_topic: false,
+    counts_as_soc_topic: false,
+    counts_as_fallback_topic: true,
+    camera_hal_relevance_score: 0
+  })));
+
+  assert.equal(report.selected_article_count, 4);
+  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 4);
+  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 0);
+  assert.equal(report.publish_ready, false);
+  assert.equal(report.composition_mode, 'NEEDS_FIX');
+  assert.ok(report.selection_errors.some(error => error.includes('non-fallback Camera/Android/driver/SoC')));
+  assert.ok(report.selection_shortage_hints.some(hint => hint.includes('C++/AI tooling fallback')));
+});
+
+test('AOSP site update camera rows can form three reviewable non-fallback candidates', () => {
+  const source = {
+    id: 'aosp-site-updates',
+    name: 'AOSP Site Updates',
+    url: 'https://source.android.com/docs/whatsnew/site-updates',
+    sourceUrl: 'https://source.android.com/docs/whatsnew/site-updates',
+    category: 'aosp',
+    section: 'Android / AOSP / Camera',
+    priority: 'high',
+    reliability: 'official',
+    candidateOnly: false,
+    requiresCrossCheck: false,
+    usageHint: 'AOSP Camera site update rows',
+    keywords: ['AOSP', 'Camera', 'Camera ITS', 'CDD']
+  };
+  const rows = parseSourceSpecificItems(readTextFixture('source-html/aosp-site-updates-camera.html'), source);
+  const report = buildShortlistReport('2026-05-03', rows.map(item => normalizeCandidate(item)));
+
+  assert.equal(rows.length, 3);
+  assert.equal(report.selected_article_count, 3);
+  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 3);
+  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 0);
+  assert.deepEqual(report.selection_errors, []);
+  assert.equal(report.publish_ready, false);
+  assert.equal(report.composition_mode, 'THIN_WEEK_REVIEW');
+});
+
+test('month-level dated candidates do not receive exact-day freshness scoring', () => {
+  const exact = scoreCandidate(candidate({
+    title: 'Camera ITS exact release note',
+    url: 'https://example.com/exact',
+    published_date: '2026-05-01'
+  }), '2026-05-03');
+  const month = scoreCandidate(candidate({
+    title: 'Camera ITS monthly site update',
+    url: 'https://example.com/month',
+    published_date: '2026-05-01',
+    datePrecision: 'month'
+  }), '2026-05-03');
+
+  assert.equal(exact.freshness_score, 3);
+  assert.equal(month.freshness_score, 1);
+  assert.ok(month.total < exact.total);
 });
 
 test('fallback composition uses SoC and native tooling when direct camera stack topics are scarce', () => {

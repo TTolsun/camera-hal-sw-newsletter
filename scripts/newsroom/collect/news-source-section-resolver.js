@@ -101,6 +101,7 @@ function normalizeSourceEntry(source, sectionMap, options = {}) {
     allowFeedHint: options.allowFeedHint === true,
     usageHint: source.usageHint || '',
     collectionModeHint: normalizeCollectionModeHint(source.collectionModeHint || source.sourceKind || ''),
+    sourceRole: source.sourceRole || '',
     sourceKind: source.sourceKind || '',
     keywords: Array.isArray(source.keywords) ? source.keywords : []
   };

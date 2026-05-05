@@ -5,6 +5,8 @@ const {
   BUCKETS
 } = require('../scripts/lib/aosp-camera-scope');
 const {
+  canonicalContentUrl,
+  fetchUrlForContent,
   normalizeCandidate
 } = require('../scripts/newsroom/cli/collect-news-candidates');
 
@@ -102,6 +104,74 @@ test('collector keeps CameraX and V4L2 article text in the expected buckets', ()
   assert.equal(cameraX.counts_as_primary_camera_topic, true);
   assert.equal(v4l2.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
   assert.equal(v4l2.counts_as_driver_topic, true);
+});
+
+test('collector canonicalizes Android docs locale URLs and keeps Latest Updates CameraX rows adjacent', () => {
+  assert.equal(
+    canonicalContentUrl('https://developer.android.google.cn/jetpack/androidx/releases/camera?hl=ko#1.5.0-beta01'),
+    'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta01'
+  );
+  assert.equal(
+    fetchUrlForContent('https://source.android.com/docs/whatsnew/site-updates'),
+    'https://source.android.com/docs/whatsnew/site-updates?hl=en'
+  );
+
+  const candidate = normalizeCandidate(raw({
+    source: source({
+      id: 'android-developers-latest-updates',
+      name: 'Android Developers Latest Updates',
+      url: 'https://developer.android.com/latest-updates',
+      sourceUrl: 'https://developer.android.com/latest-updates',
+      category: 'android',
+      section: 'Android / AOSP / Camera',
+      reliability: 'official',
+      keywords: ['Android', 'CameraX']
+    }),
+    title: 'Camera Maven Group versions',
+    url: 'https://developer.android.google.cn/jetpack/androidx/releases/camera?hl=ko#1.5.0-beta01',
+    summary: 'Added CameraX compatibility updates for Android camera apps.',
+    version_or_release: 'CameraX 1.5.0-beta01',
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: 'Added CameraX compatibility updates for Android camera apps.',
+    sourceKind: 'release_note_item',
+    collectionMode: 'release-note-item',
+    relevanceBucketHint: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+  }));
+
+  assert.equal(candidate.url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta01');
+  assert.equal(candidate.relevance_bucket, BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT);
+  assert.ok(['main', 'short'].includes(candidate.finalSelectionEligibility));
+});
+
+test('collector forces reference_index source out of final article inputs', () => {
+  const candidate = normalizeCandidate(raw({
+    source: source({
+      id: 'aosp-camera-documentation',
+      name: 'AOSP Camera Documentation',
+      url: 'https://source.android.com/docs/core/camera',
+      sourceUrl: 'https://source.android.com/docs/core/camera',
+      sourceRole: 'reference_index',
+      category: 'camera-hal',
+      section: 'Android / AOSP / Camera',
+      reliability: 'official',
+      keywords: ['Camera HAL', 'Camera ITS']
+    }),
+    title: 'AOSP Camera Documentation',
+    url: 'https://source.android.com/docs/core/camera?hl=ko',
+    publishedAt: '2026-05-01',
+    summary: 'Camera HAL, Camera version support, and Camera ITS background documentation.',
+    sourceKind: 'documentation_page',
+    collectionMode: 'html-watch-page',
+    version_or_release: 'AOSP Camera docs',
+    api_or_component: 'Camera HAL',
+    behavior_change: 'Updated documentation index.'
+  }));
+
+  assert.equal(candidate.source_role, 'reference_index');
+  assert.equal(candidate.finalSelectionEligibility, 'exclude');
+  assert.equal(candidate.main_eligible, false);
+  assert.equal(candidate.reference_only, true);
+  assert.equal(candidate.url, 'https://source.android.com/docs/core/camera');
 });
 
 test('collector keeps article-level ICamera and Linux camera pipeline candidates selectable', () => {

@@ -79,6 +79,27 @@
       ]
     },
     {
+      "id": "android-developers-blog-camera",
+      "name": "Android Developers Blog - Camera",
+      "sourceUrl": "https://android-developers.googleblog.com/search?q=CameraX",
+      "rssUrl": "https://android-developers.googleblog.com/feeds/posts/default/-/Camera?alt=rss",
+      "collectionModeHint": "rss-source",
+      "category": "camera-api",
+      "priority": "high",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "CameraX, Camera2, Android Camera 중심 Android Developers Blog 공식 글 확인",
+      "keywords": [
+        "Android",
+        "Camera",
+        "CameraX",
+        "Camera2",
+        "Android Camera"
+      ]
+    },
+    {
       "id": "camerax-release-notes",
       "name": "CameraX Release Notes",
       "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
@@ -110,6 +131,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
+      "sourceRole": "reference_index",
       "usageHint": "Camera HAL, camera framework, provider HAL, stream/request/result 공식 기준 확인",
       "keywords": [
         "Camera",
@@ -141,6 +163,28 @@
         "VTS",
         "ITS",
         "compatibility"
+      ]
+    },
+    {
+      "id": "aosp-site-updates",
+      "name": "AOSP Site Updates",
+      "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+      "rssUrl": null,
+      "collectionModeHint": "release-note-watch",
+      "category": "aosp",
+      "priority": "high",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "Camera ITS, CDD camera, Camera HAL, Android camera 문서 변경을 AOSP What's New site update row 단위로 확인",
+      "keywords": [
+        "Android",
+        "AOSP",
+        "Camera",
+        "Camera ITS",
+        "CDD",
+        "Camera HAL"
       ]
     },
     {

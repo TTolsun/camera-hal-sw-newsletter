@@ -161,6 +161,40 @@ function sourceFeed(source) {
   return source.rssUrl || (source.allowFeedHint ? feedFor(source.url) : null);
 }
 
+function canonicalContentUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    if (parsed.hostname === 'developer.android.google.cn') {
+      parsed.hostname = 'developer.android.com';
+    }
+    if (parsed.hostname === 'source.android.google.cn') {
+      parsed.hostname = 'source.android.com';
+    }
+    if (['developer.android.com', 'source.android.com'].includes(parsed.hostname)) {
+      parsed.searchParams.delete('hl');
+    }
+    return parsed.toString();
+  } catch {
+    return raw;
+  }
+}
+
+function fetchUrlForContent(value) {
+  const canonical = canonicalContentUrl(value);
+  if (!canonical) return canonical;
+  try {
+    const parsed = new URL(canonical);
+    if (['developer.android.com', 'source.android.com'].includes(parsed.hostname)) {
+      parsed.searchParams.set('hl', 'en');
+    }
+    return parsed.toString();
+  } catch {
+    return canonical;
+  }
+}
+
 function normalizeCollectionModeHint(value) {
   const normalized = String(value || '').trim().toLowerCase().replace(/_/g, '-');
   const aliases = {
@@ -348,6 +382,21 @@ function evidenceLevelFor(classification, metadata) {
 function classifySelection(raw, source, metadata, score, candidateOnly) {
   const sourceMode = sourceCollectionMode(source);
   let collectionMode = candidateCollectionMode(raw, source, metadata.source_kind);
+  if (metadata.source_role === 'reference_index') {
+    const classification = {
+      collectionMode,
+      sourceCollectionMode: sourceMode,
+      isArticleCandidate: false,
+      isWatchPage: true,
+      hasDatedEvidence: false,
+      finalSelectionEligibility: 'exclude'
+    };
+    return {
+      ...classification,
+      evidenceLevel: 'reference-index',
+      selectionExclusionReason: 'Reference index source; use only as context/background and exclude from final article inputs.'
+    };
+  }
   const isReleaseNoteItem = metadata.source_kind === 'release_note_item';
   const isDatedArticleItem = ['rss_item', 'blog_post_item'].includes(metadata.source_kind);
   const releaseNoteItemHasConcreteEvidence = isReleaseNoteItem && hasConcreteReleaseEvidence(metadata);
@@ -395,6 +444,7 @@ function classifySelection(raw, source, metadata, score, candidateOnly) {
 
 function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
   const sourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
+  const sourceRole = String(raw.sourceRole || raw.source_role || source.sourceRole || source.source_role || '').trim();
   const evidenceText = `${title} ${summary} ${raw.version_or_release || ''} ${raw.api_or_component || ''} ${raw.behavior_change || ''}`;
   const versionOrRelease = String(raw.version_or_release || firstMatch(VERSION_OR_RELEASE_PATTERN, evidenceText)).trim();
   const apiOrComponent = String(raw.api_or_component || componentFromText(evidenceText, source)).trim();
@@ -416,11 +466,13 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     sourceKind !== 'release_note_item' &&
     (!hasPublishedDate || !hasApiOrComponent || !hasBehaviorChange);
   const parserItemMissingCoreEvidence = releaseNoteItemMissingEvidence || datedItemMissingEvidence;
-  const sourceGapRisk = fallbackIneligible || parserItemMissingCoreEvidence || evidenceScore < 6;
-  const mainEligible = !candidateOnly && !sourceGapRisk && evidenceScore >= 6 && score >= 30;
+  const referenceIndex = sourceRole === 'reference_index';
+  const sourceGapRisk = referenceIndex || fallbackIneligible || parserItemMissingCoreEvidence || evidenceScore < 6;
+  const mainEligible = !referenceIndex && !candidateOnly && !sourceGapRisk && evidenceScore >= 6 && score >= 30;
 
   return {
     source_kind: sourceKind,
+    source_role: sourceRole,
     version_or_release: versionOrRelease,
     api_or_component: apiOrComponent,
     behavior_change: behaviorChange,
@@ -431,7 +483,7 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     source_gap_risk: sourceGapRisk,
     main_eligible: mainEligible,
     briefing_only: sourceGapRisk && !mainEligible,
-    reference_only: fallbackIneligible || (sourceGapRisk && evidenceScore < 4),
+    reference_only: referenceIndex || fallbackIneligible || (sourceGapRisk && evidenceScore < 4),
     evidence_score: evidenceScore,
     source_hint_api_or_component: source.category
   };
@@ -442,6 +494,9 @@ function normalizeCandidate(raw) {
   const title = decode(raw.title);
   const summary = decode(raw.summary).slice(0, 500);
   const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
+  const url = canonicalContentUrl(raw.url);
+  const sourceUrl = canonicalContentUrl(source.sourceUrl || source.url);
+  const parentUrl = canonicalContentUrl(raw.parentUrl || raw.parent_url || '');
   const articleText = `${title} ${summary} ${raw.version_or_release || ''} ${raw.api_or_component || ''} ${raw.behavior_change || ''}`.toLowerCase();
   const cameraHits = keywordHits(articleText, CAMERA_KEYWORDS);
   const techHits = keywordHits(articleText, TECH_KEYWORDS);
@@ -469,7 +524,8 @@ function normalizeCandidate(raw) {
     source_usage_hint: source.usageHint,
     version_or_release: metadata.version_or_release,
     api_or_component: metadata.api_or_component,
-    behavior_change: metadata.behavior_change
+    behavior_change: metadata.behavior_change,
+    relevance_bucket_hint: raw.relevanceBucketHint || raw.relevance_bucket_hint || ''
   });
   let classification = classifySelection(raw, source, metadata, score, candidateOnly);
   if (scopeMetadata.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
@@ -490,10 +546,10 @@ function normalizeCandidate(raw) {
     schema_version: 5,
     source: source.name,
     source_name: source.name,
-    sourceUrl: source.sourceUrl,
-    source_url: source.sourceUrl,
-    articleUrl: raw.url,
-    article_url: raw.url,
+    sourceUrl,
+    source_url: sourceUrl,
+    articleUrl: url,
+    article_url: url,
     source_id: source.id,
     category: source.category,
     section,
@@ -505,6 +561,8 @@ function normalizeCandidate(raw) {
     source_reliability: source.reliability,
     usageHint: source.usageHint,
     source_usage_hint: source.usageHint,
+    sourceRole: source.sourceRole || '',
+    source_role: metadata.source_role,
     candidateOnly,
     candidate_only: candidateOnly,
     collectionMode: classification.collectionMode,
@@ -522,6 +580,14 @@ function normalizeCandidate(raw) {
     finalSelectionEligibility: classification.finalSelectionEligibility,
     final_selection_eligibility: classification.finalSelectionEligibility,
     source_kind: metadata.source_kind,
+    datePrecision: raw.datePrecision || raw.date_precision || '',
+    date_precision: raw.datePrecision || raw.date_precision || '',
+    parentUrl: parentUrl || '',
+    parent_url: parentUrl || '',
+    parentTitle: raw.parentTitle || raw.parent_title || '',
+    parent_title: raw.parentTitle || raw.parent_title || '',
+    sourceMonth: raw.sourceMonth || raw.source_month || '',
+    source_month: raw.sourceMonth || raw.source_month || '',
     has_published_date: metadata.has_published_date,
     has_version_or_release: metadata.has_version_or_release,
     has_api_or_component: metadata.has_api_or_component,
@@ -547,7 +613,7 @@ function normalizeCandidate(raw) {
       ? 'Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.'
       : 'Can be used directly if the collected item supports the claim.',
     title,
-    url: raw.url,
+    url,
     publishedAt: raw.publishedAt || '',
     published_date: raw.publishedAt || '',
     summary,
@@ -806,7 +872,7 @@ async function main() {
   for (const source of sources) {
     try {
       const feed = sourceFeed(source);
-      const target = feed || source.url;
+      const target = feed || fetchUrlForContent(source.url);
       const text = await fetchText(target);
       const sourceSpecificItems = parseSourceSpecificItems(text, source);
       const parsed = sourceSpecificItems.length > 0
@@ -870,7 +936,9 @@ if (require.main === module) {
 }
 
 module.exports = {
+  canonicalContentUrl,
   componentFromText,
   evidenceMetadata,
+  fetchUrlForContent,
   normalizeCandidate
 };

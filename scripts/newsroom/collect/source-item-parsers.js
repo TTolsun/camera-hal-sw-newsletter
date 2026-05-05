@@ -106,7 +106,9 @@ function componentFromText(text = '', fallback = '') {
     'Camera2',
     'Camera HAL',
     'AOSP Camera',
+    'Camera images automation',
     'CDD',
+    'CDD camera orientation',
     'CTS',
     'VTS',
     'Camera ITS',
@@ -123,6 +125,93 @@ function componentFromText(text = '', fallback = '') {
     'Samsung SMR'
   ];
   return components.find(component => new RegExp(component.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(value)) || fallback;
+}
+
+function slugFragment(value = '') {
+  const slug = clean(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 80);
+  return slug || 'item';
+}
+
+function urlWithFragment(baseUrl, value) {
+  try {
+    const parsed = new URL(baseUrl);
+    parsed.hash = slugFragment(value);
+    return parsed.toString();
+  } catch {
+    return `${String(baseUrl).replace(/#.*$/, '')}#${slugFragment(value)}`;
+  }
+}
+
+function firstAnchor(chunk = '', baseUrl = '') {
+  const match = String(chunk).match(/<a\b([^>]*)>([\s\S]*?)<\/a>/i);
+  if (!match) return null;
+  const href = htmlAttr(match[1], 'href');
+  const title = clean(match[2]);
+  return {
+    href,
+    title,
+    url: href ? absoluteUrl(href, baseUrl) : ''
+  };
+}
+
+function tableCells(row = '') {
+  return [...String(row).matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)]
+    .map(match => clean(match[1]))
+    .filter(Boolean);
+}
+
+function childChunks(body = '') {
+  const rows = [...String(body).matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)]
+    .map(match => match[0])
+    .filter(row => !/<th\b/i.test(row) || /<td\b/i.test(row));
+  const listItems = [...String(body).matchAll(/<li\b[^>]*>[\s\S]*?<\/li>/gi)]
+    .map(match => match[0]);
+  return rows.length > 0 ? rows : listItems;
+}
+
+function childTitle(chunk = '', fallback = '') {
+  const anchor = firstAnchor(chunk, fallback);
+  if (anchor?.title) return anchor.title;
+  const cells = tableCells(chunk);
+  const titleCell = cells.find(cell => !firstDate(cell) && !firstMonthYearDate(cell)) || cells[0];
+  return titleCell || clean(chunk).slice(0, 140);
+}
+
+function monthLabel(value = '') {
+  const match = String(value).match(MONTH_YEAR_PATTERN);
+  return match ? `${match[1]} ${match[2]}` : '';
+}
+
+function cameraVersionFromText(text = '', fallback = '') {
+  const version = firstVersion(text);
+  if (!version && fallback) return fallback;
+  if (/CameraX|androidx\.camera/i.test(text) && /^\d+\.\d+\.\d+/.test(version)) {
+    return `CameraX ${version}`;
+  }
+  return version || fallback;
+}
+
+function isCameraUpdateRow(text = '') {
+  return /\b(?:CameraX|androidx\.camera|Camera2|Android Camera|AOSP Camera|Camera HAL|Camera ITS|CDD\b[^.\n]{0,80}\bcamera|camera\b[^.\n]{0,80}\bCDD|Camera images automation|image(?:s)? automation|camera orientation|stream|buffer|metadata|capture request|capture result)\b/i
+    .test(String(text));
+}
+
+function parserItemKey(item) {
+  return `${item.url}|${item.title}`.toLowerCase();
+}
+
+function uniqueParserItems(items) {
+  const seen = new Set();
+  return items.filter(item => {
+    const key = parserItemKey(item);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function headingBlocks(html, baseUrl) {
@@ -227,14 +316,102 @@ function parseAospWhatsNew(html, source) {
   }).filter(hasReleaseItemEvidence);
 }
 
+function parseAospSiteUpdates(html, source) {
+  const parentUrl = source.url;
+  const parentTitle = source.name;
+  const items = [];
+
+  for (const block of headingBlocks(html, parentUrl)) {
+    const date = firstMonthYearDate(block.title);
+    if (!date) continue;
+    const sourceMonth = monthLabel(block.title);
+    for (const chunk of childChunks(block.body)) {
+      const title = childTitle(chunk, parentUrl);
+      const evidenceText = `${block.title} ${title} ${clean(chunk)}`;
+      if (!isCameraUpdateRow(evidenceText)) continue;
+      const anchor = firstAnchor(chunk, parentUrl);
+      const url = anchor?.url || urlWithFragment(parentUrl, `${sourceMonth} ${title}`);
+      const component = componentFromText(evidenceText, /CDD/i.test(evidenceText)
+        ? 'CDD camera'
+        : /Camera ITS/i.test(evidenceText) ? 'Camera ITS' : 'AOSP Camera');
+      const extractedBehavior = firstBehavior(evidenceText);
+      const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
+        ? extractedBehavior
+        : `Updated ${title} in ${sourceMonth}.`;
+      items.push({
+        source,
+        title,
+        url,
+        publishedAt: date,
+        datePrecision: 'month',
+        parentUrl,
+        parentTitle,
+        sourceSection: source.section || '',
+        sourceMonth,
+        summary: behavior,
+        sourceKind: 'release_note_item',
+        collectionMode: 'release-note-item',
+        version_or_release: `AOSP Site Updates - ${sourceMonth}`,
+        api_or_component: component,
+        behavior_change: behavior
+      });
+    }
+  }
+
+  return uniqueParserItems(items).slice(0, 12);
+}
+
 function parseAndroidLatestUpdates(html, source) {
-  return linkedItems(html, source, {
-    component: 'Android developer update',
+  const linked = linkedItems(html, source, {
+    component: 'CameraX / androidx.camera',
     sourceKind: 'release_note_item',
-    keep: (title, href) => /camera|camerax|androidx\.camera|jetpack|android studio|platform|sdk|tools|release|latest update/i.test(`${title} ${href}`),
-    versionFallback: (title, href) => firstVersion(`${title} ${href}`),
+    keep: (title, href) => /Camera Maven Group versions|CameraX|androidx\.camera|camera/i.test(`${title} ${href}`),
+    versionFallback: (title, href) => cameraVersionFromText(`${title} ${href}`, 'CameraX / androidx.camera'),
     limit: 12
-  }).filter(item => item.publishedAt && item.version_or_release && item.api_or_component && item.behavior_change);
+  }).map(item => ({
+    ...item,
+    parentUrl: source.url,
+    parentTitle: source.name,
+    sourceSection: source.section || '',
+    api_or_component: 'CameraX / androidx.camera',
+    relevanceBucketHint: 'android_platform_camera_adjacent'
+  }));
+  const rows = [];
+  for (const block of headingBlocks(html, source.url)) {
+    const blockDate = firstDate(block.title);
+    for (const chunk of childChunks(block.body)) {
+      const title = childTitle(chunk, source.url);
+      const anchor = firstAnchor(chunk, source.url);
+      const rowIdentity = `${title} ${anchor?.href || ''} ${tableCells(chunk).slice(0, 2).join(' ')}`;
+      const evidenceText = `${block.title} ${title} ${clean(chunk)}`;
+      if (!/\b(?:Camera Maven Group versions|CameraX|androidx\.camera|camera)\b/i.test(rowIdentity)) continue;
+      const url = anchor?.url || urlWithFragment(source.url, `${block.title} ${title}`);
+      const version = cameraVersionFromText(evidenceText, 'CameraX / androidx.camera');
+      const extractedBehavior = firstBehavior(evidenceText);
+      const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
+        ? extractedBehavior
+        : `Updated ${title}.`;
+      rows.push({
+        source,
+        title,
+        url,
+        publishedAt: firstDate(evidenceText) || blockDate,
+        parentUrl: source.url,
+        parentTitle: source.name,
+        sourceSection: source.section || '',
+        summary: behavior,
+        sourceKind: 'release_note_item',
+        collectionMode: 'release-note-item',
+        version_or_release: version,
+        api_or_component: 'CameraX / androidx.camera',
+        behavior_change: behavior,
+        relevanceBucketHint: 'android_platform_camera_adjacent'
+      });
+    }
+  }
+  return uniqueParserItems([...linked, ...rows])
+    .filter(item => item.publishedAt && item.version_or_release && item.api_or_component && item.behavior_change)
+    .slice(0, 12);
 }
 
 function parseAndroidSecurityBulletin(html, source) {
@@ -325,6 +502,7 @@ const PARSERS = {
   'android-developers-latest-updates': parseAndroidLatestUpdates,
   'camerax-release-notes': parseCameraXReleaseNotes,
   'aosp-whats-new-release-notes': parseAospWhatsNew,
+  'aosp-site-updates': parseAospSiteUpdates,
   'android-security-bulletin': parseAndroidSecurityBulletin,
   'claude-code-changelog': parseClaudeCodeChangelog,
   'libcamera-blog': parseLibcameraBlog,

@@ -35,6 +35,52 @@ test('Android Latest Updates parser extracts dated Camera library rows', () => {
   assert.match(items[0].api_or_component, /CameraX|androidx\.camera|Android developer update/);
 });
 
+test('Android Latest Updates parser extracts CameraX table rows without generic page promotion', () => {
+  const html = readTextFixture('source-html/android-latest-updates-camerax-table.html');
+
+  const items = parseSourceSpecificItems(html, source());
+
+  assert.equal(items.length, 2);
+  for (const item of items) {
+    assertParsedItemContract(item);
+    assert.equal(item.parentUrl, 'https://developer.android.com/latest-updates');
+    assert.equal(item.parentTitle, 'Android Developers Latest Updates');
+    assert.equal(item.relevanceBucketHint, 'android_platform_camera_adjacent');
+    assert.match(item.api_or_component, /CameraX|androidx\.camera/);
+  }
+  assert.ok(items.some(item => item.title === 'Camera Maven Group versions'));
+  assert.ok(items.some(item => item.title === 'androidx.camera:camera-core'));
+  assert.equal(items.some(item => /Android Studio/i.test(item.title)), false);
+});
+
+test('AOSP Site updates parser extracts month-level camera child rows only', () => {
+  const html = readTextFixture('source-html/aosp-site-updates-camera.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'aosp-site-updates',
+    name: 'AOSP Site Updates',
+    url: 'https://source.android.com/docs/whatsnew/site-updates',
+    sourceUrl: 'https://source.android.com/docs/whatsnew/site-updates',
+    section: 'Android / AOSP / Camera'
+  }));
+
+  assert.equal(items.length, 3);
+  for (const item of items) {
+    assertParsedItemContract(item);
+    assert.equal(item.publishedAt, '2026-04-01');
+    assert.equal(item.datePrecision, 'month');
+    assert.equal(item.parentUrl, 'https://source.android.com/docs/whatsnew/site-updates');
+    assert.equal(item.parentTitle, 'AOSP Site Updates');
+    assert.equal(item.sourceMonth, 'April 2026');
+    assert.match(item.version_or_release, /AOSP Site Updates - April 2026/);
+  }
+  assert.deepEqual(items.map(item => item.title), [
+    'Camera ITS',
+    'Camera images automation',
+    'CDD camera orientation'
+  ]);
+});
+
 test('CameraX release notes parser keeps only dated release child entries', () => {
   const html = readTextFixture('source-html/camerax-release-notes.html');
 
