@@ -2,6 +2,10 @@ const {
   isFinalSelected
 } = require('../generate/selection-diagnostics');
 const {
+  normalizeUrl,
+  normalizedUrlHash
+} = require('../generate/newsroom-selection');
+const {
   BUCKETS,
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate
@@ -66,43 +70,334 @@ function urlKeys(value) {
   return [...keys].filter(Boolean);
 }
 
-function reporterCandidateUrlMap(reporter) {
-  const map = new Map();
-  function add(key, candidate) {
-    if (!key) return;
-    if (!map.has(key)) {
-      map.set(key, candidate);
-      return;
-    }
-    if (map.get(key) !== candidate) {
-      map.set(key, null);
-    }
-  }
-
-  for (const candidate of ensureArray(reporter?.candidates)) {
-    for (const value of [candidate.url, candidate.article_url, candidate.articleUrl]) {
-      for (const key of urlKeys(value)) add(key, candidate);
-    }
-  }
-  return map;
+function normalizedUrlKey(value) {
+  return normalizeUrl(value) || text(value).replace(/[?#].*$/, '').replace(/\/$/, '').toLowerCase();
 }
 
-function candidateForSourceUrl(sourceUrl, candidateMap) {
-  for (const key of urlKeys(sourceUrl)) {
-    const candidate = candidateMap.get(key);
-    if (candidate) return candidate;
+function candidateUrls(candidate = {}) {
+  return [...new Set([
+    candidate.url,
+    candidate.article_url,
+    candidate.articleUrl,
+    candidate.normalized_url
+  ].map(text).filter(Boolean))];
+}
+
+function candidateCanonicalUrl(candidate = {}) {
+  return text(candidate.url || candidate.article_url || candidate.articleUrl || candidate.normalized_url);
+}
+
+function candidateHash(candidate = {}) {
+  const candidateUrl = candidateCanonicalUrl(candidate);
+  return text(candidate.source_candidate_hash || candidate.url_hash || candidate.normalized_url_hash) ||
+    (candidateUrl ? normalizedUrlHash(candidateUrl) : '');
+}
+
+function candidateIdentity(candidate = {}) {
+  return [
+    normalizedUrlKey(candidateCanonicalUrl(candidate)),
+    normalizeForMatch(candidate.source_id),
+    normalizeForMatch(candidate.title),
+    normalizeForMatch(candidate.published_date || candidate.publishedAt),
+    normalizeForMatch(candidate.version_or_release || candidate.versionOrRelease),
+    normalizeForMatch(candidate.api_or_component || candidate.apiOrComponent)
+  ].join('|');
+}
+
+function pushCandidateEntries(entries, candidates, priority, source) {
+  const seen = new Set(entries.map(entry => `${entry.priority}|${candidateIdentity(entry.candidate)}`));
+  for (const candidate of ensureArray(candidates)) {
+    const id = `${priority}|${candidateIdentity(candidate)}`;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    entries.push({ candidate, priority, source });
   }
-  return null;
+}
+
+function candidateBindingIndex(reporter = {}, shortlistReport = null) {
+  const entries = [];
+  const primarySelected = ensureArray(shortlistReport?.primary_selected_articles);
+  const flaggedSelected = ensureArray(shortlistReport?.shortlisted_candidates).filter(candidate =>
+    candidate?.final_selected === true || candidate?.primary_selected === true || candidate?.selected_for_editor === true
+  );
+  pushCandidateEntries(
+    entries,
+    [
+      ...primarySelected,
+      ...ensureArray(shortlistReport?.selected_articles),
+      ...flaggedSelected
+    ],
+    1,
+    'shortlist_selected'
+  );
+  pushCandidateEntries(
+    entries,
+    [
+      ...ensureArray(shortlistReport?.reserve_candidates),
+      ...ensureArray(shortlistReport?.demoted_candidates),
+      ...ensureArray(shortlistReport?.excluded_candidates),
+      ...ensureArray(shortlistReport?.shortlisted_candidates).filter(candidate =>
+        candidate?.final_selected !== true && candidate?.primary_selected !== true && candidate?.selected_for_editor !== true
+      )
+    ],
+    2,
+    'shortlist_other'
+  );
+  pushCandidateEntries(entries, ensureArray(reporter?.candidates), 3, 'reporter_candidate');
+
+  const byUrl = new Map();
+  for (const entry of entries) {
+    const entryUrlKeys = new Set();
+    for (const url of candidateUrls(entry.candidate)) {
+      const key = normalizedUrlKey(url);
+      if (!key || entryUrlKeys.has(key)) continue;
+      entryUrlKeys.add(key);
+      if (!byUrl.has(key)) byUrl.set(key, []);
+      byUrl.get(key).push(entry);
+    }
+  }
+  return { byUrl, entries };
+}
+
+function sourceEvidence(section) {
+  return [
+    section?.headline,
+    section?.category,
+    section?.what_changed,
+    section?.confirmed_facts,
+    section?.evidence_summary,
+    section?.specificity_checks,
+    section?.source_verification_notes,
+    section?.sources
+  ].map(text).join(' ');
+}
+
+function normalizedTokens(value) {
+  return normalizeForMatch(value)
+    .split(/\s+/)
+    .filter(token => token.length >= 3);
+}
+
+function tokenSimilarity(left, right) {
+  const leftTokens = new Set(normalizedTokens(left));
+  const rightTokens = new Set(normalizedTokens(right));
+  if (leftTokens.size === 0 || rightTokens.size === 0) return 0;
+  let intersection = 0;
+  for (const token of leftTokens) {
+    if (rightTokens.has(token)) intersection += 1;
+  }
+  return intersection / Math.max(leftTokens.size, rightTokens.size);
+}
+
+function candidateTitleSimilarity(section, candidate) {
+  const sectionLabels = [
+    section?.headline,
+    ...ensureArray(section?.sources).flatMap(source => [source?.title, source?.url])
+  ];
+  return Math.max(0, ...sectionLabels.map(label => tokenSimilarity(label, candidate?.title)));
+}
+
+function dateTokens(value) {
+  const raw = text(value);
+  const tokens = new Set();
+  for (const match of raw.matchAll(/\b(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})\b/g)) {
+    tokens.add(`${match[1]}-${String(match[2]).padStart(2, '0')}-${String(match[3]).padStart(2, '0')}`);
+  }
+  for (const match of raw.matchAll(/\b(20\d{2})\s*\uB144\s*(\d{1,2})\s*\uC6D4\s*(\d{1,2})\s*\uC77C\b/g)) {
+    tokens.add(`${match[1]}-${String(match[2]).padStart(2, '0')}-${String(match[3]).padStart(2, '0')}`);
+  }
+  const monthPattern = /\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2}),?\s+(20\d{2})\b/gi;
+  const months = {
+    jan: '01',
+    feb: '02',
+    mar: '03',
+    apr: '04',
+    may: '05',
+    jun: '06',
+    jul: '07',
+    aug: '08',
+    sep: '09',
+    oct: '10',
+    nov: '11',
+    dec: '12'
+  };
+  for (const match of raw.matchAll(monthPattern)) {
+    tokens.add(`${match[3]}-${months[match[1].slice(0, 3).toLowerCase()]}-${String(match[2]).padStart(2, '0')}`);
+  }
+  const parsed = raw.length <= 80 && /\b20\d{2}\b/.test(raw) ? Date.parse(raw) : NaN;
+  if (Number.isFinite(parsed)) {
+    const date = new Date(parsed);
+    tokens.add(`${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`);
+  }
+  return tokens;
+}
+
+function valueAppearsInSection(section, value) {
+  const needle = normalizeForMatch(value);
+  if (!needle || needle.length < 3) return false;
+  return normalizeForMatch(sourceEvidence(section)).includes(needle);
+}
+
+function candidateDateMatchesSection(section, candidate) {
+  const candidateDates = dateTokens(candidate?.published_date || candidate?.publishedAt);
+  if (candidateDates.size === 0) return false;
+  const sectionDates = dateTokens(sourceEvidence(section));
+  return [...candidateDates].some(date => sectionDates.has(date));
+}
+
+function candidateVersionMatchesSection(section, candidate) {
+  return valueAppearsInSection(section, candidate?.version_or_release || candidate?.versionOrRelease);
+}
+
+function candidateApiMatchesSection(section, candidate) {
+  const api = text(candidate?.api_or_component || candidate?.apiOrComponent);
+  if (!api || /^api$/i.test(api)) return false;
+  return valueAppearsInSection(section, api);
+}
+
+function sectionSourceIdMatches(section, candidate) {
+  const haystack = normalizeForMatch([
+    section?.headline,
+    section?.sources
+  ]);
+  return [
+    candidate?.source_id,
+    candidate?.source,
+    candidate?.source_name
+  ].some(value => {
+    const normalized = normalizeForMatch(value);
+    return normalized && haystack.includes(normalized);
+  });
+}
+
+function bindingTieBreakScore(section, entry) {
+  const candidate = entry.candidate;
+  let score = 0;
+  if (sectionSourceIdMatches(section, candidate)) score += 8;
+  score += candidateTitleSimilarity(section, candidate) * 6;
+  if (candidateDateMatchesSection(section, candidate)) score += 4;
+  if (candidateVersionMatchesSection(section, candidate)) score += 4;
+  if (candidateApiMatchesSection(section, candidate)) score += 2;
+  return Number(score.toFixed(4));
+}
+
+function isSharedWatchOrReleaseNoteUrl(entry, sameUrlEntries) {
+  const candidate = entry?.candidate || {};
+  if (ensureArray(sameUrlEntries).length > 1) return true;
+  return /release-note|watch|documentation_page|watchlist/i.test([
+    candidate.collectionMode,
+    candidate.collection_mode,
+    candidate.sourceCollectionMode,
+    candidate.source_collection_mode,
+    candidate.source_kind
+  ].map(text).join(' '));
+}
+
+function sharedUrlEvidenceMatches(section, entry, sameUrlEntries) {
+  if (!isSharedWatchOrReleaseNoteUrl(entry, sameUrlEntries)) return true;
+  return candidateVersionMatchesSection(section, entry.candidate) || candidateDateMatchesSection(section, entry.candidate);
+}
+
+function candidateConsistencyViolation(section, candidate) {
+  const sectionTextValue = sourceEvidence(section);
+  const sectionDates = dateTokens(sectionTextValue);
+  const candidateDates = dateTokens(candidate?.published_date || candidate?.publishedAt);
+  if (candidateDates.size > 0 && sectionDates.size > 0 && ![...candidateDates].some(date => sectionDates.has(date))) {
+    return 'published_date mismatch';
+  }
+  const version = text(candidate?.version_or_release || candidate?.versionOrRelease);
+  if (version && !candidateVersionMatchesSection(section, candidate) && /\b(?:v?\d+(?:\.\d+)+|20\d{2}|C\+\+\d{2}|Android\s+\d+)\b/i.test(sectionTextValue)) {
+    return 'version_or_release mismatch';
+  }
+  const api = text(candidate?.api_or_component || candidate?.apiOrComponent);
+  if (api && !/^api$/i.test(api) && !candidateApiMatchesSection(section, candidate) && candidateTitleSimilarity(section, candidate) < 0.2) {
+    return 'api_or_component mismatch';
+  }
+  return '';
+}
+
+function bindCandidateForSection(section, bindingIndex) {
+  const sourceUrls = [
+    section?.source_candidate_url,
+    ...ensureArray(section?.sources).map(source => source?.url)
+  ].map(text).filter(Boolean);
+  const checked = new Set();
+  for (const sourceUrl of sourceUrls) {
+    const key = normalizedUrlKey(sourceUrl);
+    if (!key || checked.has(key)) continue;
+    checked.add(key);
+    const matches = ensureArray(bindingIndex?.byUrl?.get(key));
+    if (matches.length === 0) continue;
+    const bestPriority = Math.min(...matches.map(entry => entry.priority));
+    const priorityMatches = matches.filter(entry => entry.priority === bestPriority);
+    const scored = priorityMatches
+      .map(entry => ({ ...entry, tie_score: bindingTieBreakScore(section, entry) }))
+      .sort((a, b) => b.tie_score - a.tie_score || String(a.candidate?.title || '').localeCompare(String(b.candidate?.title || '')));
+    const best = scored[0];
+    const tied = scored.filter(entry => entry.tie_score === best.tie_score);
+    if (tied.length > 1) {
+      return {
+        status: 'ambiguous',
+        reason: `Ambiguous source candidate match for normalized URL: ${key}.`,
+        source_url: sourceUrl,
+        candidates: tied.map(entry => ({
+          title: text(entry.candidate?.title),
+          source: text(entry.source),
+          published_date: text(entry.candidate?.published_date || entry.candidate?.publishedAt),
+          version_or_release: text(entry.candidate?.version_or_release || entry.candidate?.versionOrRelease)
+        }))
+      };
+    }
+    if (!sharedUrlEvidenceMatches(section, best, matches)) {
+      return {
+        status: 'evidence_mismatch',
+        reason: 'Shared watch/release-note URL requires matching version_or_release or published_date evidence.',
+        source_url: sourceUrl,
+        candidate: best.candidate,
+        binding_source: best.source
+      };
+    }
+    const consistencyViolation = candidateConsistencyViolation(section, best.candidate);
+    if (consistencyViolation) {
+      return {
+        status: 'evidence_mismatch',
+        reason: `Article evidence conflicts with bound candidate metadata: ${consistencyViolation}.`,
+        source_url: sourceUrl,
+        candidate: best.candidate,
+        binding_source: best.source
+      };
+    }
+    return {
+      status: 'bound',
+      reason: '',
+      source_url: sourceUrl,
+      candidate: best.candidate,
+      binding_source: best.source,
+      tie_score: best.tie_score
+    };
+  }
+  return {
+    status: 'missing',
+    reason: 'No reporter/shortlist source candidate matches this main article source URL.',
+    source_url: sourceUrls[0] || ''
+  };
 }
 
 function candidateSelectionViolation(candidate) {
   if (!candidate) return '';
   const violations = [];
-  if (!['main', 'short'].includes(candidate.finalSelectionEligibility)) {
-    violations.push(`finalSelectionEligibility=${candidate.finalSelectionEligibility || 'unknown'}`);
+  const finalSelectionEligibility = text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
+  const hasDatedEvidence = typeof candidate.hasDatedEvidence === 'boolean'
+    ? candidate.hasDatedEvidence
+    : candidate.has_dated_evidence;
+  const isWatchPage = typeof candidate.isWatchPage === 'boolean'
+    ? candidate.isWatchPage
+    : candidate.is_watch_page;
+  if (!['main', 'short'].includes(finalSelectionEligibility)) {
+    violations.push(`finalSelectionEligibility=${finalSelectionEligibility || 'unknown'}`);
   }
-  if (candidate.hasDatedEvidence !== true) violations.push('missing dated evidence');
-  if (candidate.isWatchPage === true && candidate.hasDatedEvidence !== true) {
+  if (hasDatedEvidence !== true) violations.push('missing dated evidence');
+  if (isWatchPage === true && hasDatedEvidence !== true) {
     violations.push('watch page lacks dated evidence');
   }
   if (candidate.main_eligible === false) violations.push('main_eligible=false');
@@ -262,6 +557,7 @@ function hasHalConnectionTerm(body) {
 function hasNegativeHalConnectionWording(body) {
   return [
     /\b(?:no|without|lacks?|missing)\b[^.\n]{0,100}(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)/i,
+    /\b(?:no|without|lacks?|missing)\b[^.\n]{0,100}(?:device imaging|imaging workflow|image pipeline|camera workflow)/i,
     /\b(?:does not|doesn't|cannot|can't)\b[^.\n]{0,120}(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)/i,
     /(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)[^.\n]{0,120}\b(?:not identified|not found|not applicable|absent|missing|none|unclear|irrelevant)\b/i
   ].some(pattern => pattern.test(body));
@@ -415,6 +711,7 @@ function scopeScore(scope) {
 function scopeFromStructuredFields(value, origin) {
   const bucket = knownBucket(value?.relevance_bucket);
   if (!bucket) return null;
+  const candidateUrl = candidateCanonicalUrl(value);
   const scores = {};
   const missingScoreFields = [];
   for (const field of SCOPE_SCORE_FIELDS) {
@@ -423,8 +720,9 @@ function scopeFromStructuredFields(value, origin) {
     scores[field] = parsed ?? 0;
   }
   return {
-    source_candidate_url: text(value.source_candidate_url || value.url || value.article_url || value.articleUrl),
-    source_candidate_hash: text(value.source_candidate_hash || value.url_hash || value.normalized_url_hash),
+    source_candidate_url: text(value.source_candidate_url) || candidateUrl,
+    source_candidate_hash: text(value.source_candidate_hash || value.url_hash || value.normalized_url_hash) ||
+      (candidateUrl ? normalizedUrlHash(candidateUrl) : ''),
     editorial_priority: number(value.editorial_priority, BUCKET_PRIORITY[bucket] || 6),
     relevance_bucket: bucket,
     ...scores,
@@ -450,43 +748,53 @@ function scoreFromMetadata(metadata, field) {
   return metadataHasScore(metadata, field) ? number(metadata[field]) : null;
 }
 
-function candidateMetadataForSection(section, candidateMap) {
-  const candidateUrls = [
-    section?.source_candidate_url,
-    ...ensureArray(section?.sources).map(source => source?.url)
-  ];
-  for (const url of candidateUrls) {
-    const candidate = candidateForSourceUrl(url, candidateMap);
-    const candidateMetadata = scopeFromStructuredFields(candidate, 'reporter_candidate');
-    if (candidateMetadata) return candidateMetadata;
-  }
-  return null;
+function candidateMetadataForBinding(binding) {
+  if (binding?.status !== 'bound' || !binding.candidate) return null;
+  const metadata = scopeFromStructuredFields(binding.candidate, binding.binding_source || 'bound_candidate');
+  if (!metadata) return null;
+  return {
+    ...metadata,
+    source_candidate_url: candidateCanonicalUrl(binding.candidate),
+    source_candidate_hash: candidateHash(binding.candidate),
+    binding_status: 'bound',
+    binding_source: binding.binding_source || 'bound_candidate',
+    binding_tie_score: binding.tie_score ?? null,
+    publishable_scope: true
+  };
 }
 
 function mergeScopeMetadata(sectionMetadata, candidateMetadata) {
-  if (!sectionMetadata && !candidateMetadata) return null;
-  const bucket = sectionMetadata?.relevance_bucket || candidateMetadata?.relevance_bucket || BUCKETS.GENERIC_TECH_WATCHLIST;
+  if (!candidateMetadata) return null;
+  const candidateBucket = candidateMetadata.relevance_bucket || BUCKETS.GENERIC_TECH_WATCHLIST;
+  const sectionBucket = sectionMetadata?.relevance_bucket;
+  const sectionCanFill = sectionMetadata &&
+    (!sectionBucket || (BUCKET_PRIORITY[sectionBucket] || 99) >= (BUCKET_PRIORITY[candidateBucket] || 99));
+  const bucket = candidateBucket;
   const merged = {
-    ...(candidateMetadata || {}),
-    ...(sectionMetadata || {}),
+    ...candidateMetadata,
+    ...(sectionCanFill ? sectionMetadata : {}),
     relevance_bucket: bucket,
-    editorial_priority: optionalNumber(sectionMetadata?.editorial_priority) ??
+    editorial_priority: (sectionCanFill ? optionalNumber(sectionMetadata?.editorial_priority) : null) ??
       optionalNumber(candidateMetadata?.editorial_priority) ??
       BUCKET_PRIORITY[bucket] ??
       6,
-    source_candidate_url: text(sectionMetadata?.source_candidate_url || candidateMetadata?.source_candidate_url),
-    source_candidate_hash: text(sectionMetadata?.source_candidate_hash || candidateMetadata?.source_candidate_hash),
-    evidence_origin: text(sectionMetadata?.evidence_origin || candidateMetadata?.evidence_origin) || 'merged_metadata',
-    metadata_source: sectionMetadata && candidateMetadata
+    source_candidate_url: text(candidateMetadata?.source_candidate_url),
+    source_candidate_hash: text(candidateMetadata?.source_candidate_hash),
+    evidence_origin: text(candidateMetadata?.evidence_origin) || 'bound_candidate_metadata',
+    metadata_source: sectionCanFill && candidateMetadata
       ? 'merged'
-      : sectionMetadata ? 'section' : 'reporter_candidate',
-    count_source: sectionMetadata && candidateMetadata
+      : candidateMetadata.metadata_source || candidateMetadata.binding_source || 'bound_candidate',
+    count_source: sectionCanFill && candidateMetadata
       ? 'merged'
-      : sectionMetadata ? 'section' : 'reporter_candidate'
+      : candidateMetadata.count_source || candidateMetadata.binding_source || 'bound_candidate',
+    binding_status: candidateMetadata.binding_status || 'bound',
+    binding_source: candidateMetadata.binding_source || '',
+    binding_tie_score: candidateMetadata.binding_tie_score ?? null,
+    publishable_scope: true
   };
   const missingScoreFields = [];
   for (const field of SCOPE_SCORE_FIELDS) {
-    const value = scoreFromMetadata(sectionMetadata, field) ?? scoreFromMetadata(candidateMetadata, field);
+    const value = (sectionCanFill ? scoreFromMetadata(sectionMetadata, field) : null) ?? scoreFromMetadata(candidateMetadata, field);
     if (value === null) missingScoreFields.push(field);
     merged[field] = value ?? 0;
   }
@@ -494,29 +802,41 @@ function mergeScopeMetadata(sectionMetadata, candidateMetadata) {
   return merged;
 }
 
-function sectionScope(section, candidateMap) {
-  const sectionMetadata = scopeFromStructuredFields(section, 'section_metadata');
-  const candidateMetadata = candidateMetadataForSection(section, candidateMap);
-  const mergedMetadata = mergeScopeMetadata(sectionMetadata, candidateMetadata);
-  if (mergedMetadata) return mergedMetadata;
-  for (const source of ensureArray(section?.sources)) {
-    const candidate = candidateForSourceUrl(source?.url, candidateMap);
-    const candidateMetadata = scopeFromStructuredFields(candidate, 'candidate_metadata');
-    if (candidateMetadata) return candidateMetadata;
-  }
+function diagnosticFallbackScope(section, binding = null) {
   return {
     ...fallbackSectionScope(section),
-    count_source: 'section_text_fallback'
+    source_candidate_url: binding?.status === 'bound' ? candidateCanonicalUrl(binding.candidate) : '',
+    source_candidate_hash: binding?.status === 'bound' ? candidateHash(binding.candidate) : '',
+    count_source: 'section_text_fallback',
+    metadata_source: 'section_text_fallback',
+    binding_status: binding?.status || 'missing',
+    binding_source: binding?.binding_source || '',
+    binding_reason: binding?.reason || '',
+    publishable_scope: false,
+    counts_as_primary_camera_topic: false,
+    counts_as_driver_topic: false,
+    counts_as_soc_topic: false,
+    counts_as_fallback_topic: false
   };
 }
 
-function hasExpandedScope(section, candidateMap) {
-  const scope = sectionScope(section, candidateMap);
-  return scope.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST && scopeScore(scope) >= 2;
+function sectionScope(section, binding) {
+  const sectionMetadata = scopeFromStructuredFields(section, 'section_metadata');
+  const candidateMetadata = candidateMetadataForBinding(binding);
+  const mergedMetadata = mergeScopeMetadata(sectionMetadata, candidateMetadata);
+  if (mergedMetadata) return mergedMetadata;
+  return diagnosticFallbackScope(section, binding);
+}
+
+function hasExpandedScope(scope) {
+  return scope?.publishable_scope === true &&
+    scope.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST &&
+    scopeScore(scope) >= 2;
 }
 
 function sectionCountDetail(section, scope, index) {
   const bucket = knownBucket(scope?.relevance_bucket) || BUCKETS.GENERIC_TECH_WATCHLIST;
+  const publishableScope = scope?.publishable_scope === true;
   const countsAsPrimaryStack = bucket === BUCKETS.DIRECT_AOSP_CAMERA ||
     bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE ||
     bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
@@ -524,7 +844,10 @@ function sectionCountDetail(section, scope, index) {
     bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK;
   let countReason = `${scope?.count_source || scope?.evidence_origin || 'unknown'} classified this section as ${bucket}.`;
   let exclusionReason = '';
-  if (countsAsPrimaryStack) {
+  if (!publishableScope) {
+    countReason = `${scope?.count_source || scope?.evidence_origin || 'unknown'} classified this section as ${bucket} for diagnostics only.`;
+    exclusionReason = 'Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available.';
+  } else if (countsAsPrimaryStack) {
     countReason = `${bucket} counts toward primary_camera_stack_count.`;
   } else if (countsAsFallback) {
     countReason = `${bucket} counts toward fallback_relevance_count, not direct camera count.`;
@@ -545,6 +868,10 @@ function sectionCountDetail(section, scope, index) {
     counts_as_fallback_topic: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK,
     evidence_origin: scope?.evidence_origin || 'unknown',
     metadata_source: scope?.metadata_source || scope?.count_source || 'unknown',
+    binding_status: scope?.binding_status || 'unknown',
+    binding_source: scope?.binding_source || '',
+    binding_reason: scope?.binding_reason || '',
+    publishable_scope: publishableScope,
     missing_score_fields: ensureArray(scope?.missing_score_fields),
     count_reason: countReason,
     exclusion_reason_if_not_counted: exclusionReason
@@ -643,7 +970,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : QUALITY_THRESHOLD;
   const sections = ensureArray(editor.sections);
   const state = { deductions: [] };
-  const candidateMap = reporterCandidateUrlMap(reporter);
+  const bindingIndex = candidateBindingIndex(reporter, options.shortlistReport || null);
   const staleClaimReport = options.staleClaimReport || null;
   let sourceIntegrityViolationCount = 0;
   const sourceUrlOwners = new Map();
@@ -654,9 +981,11 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   if (ensureArray(editor.briefing).length !== 3) {
     boundedDeduct(state, 'composition', 3, `Expected exactly 3 briefing bullets, found ${ensureArray(editor.briefing).length}.`);
   }
-  const sectionScopes = sections.map(section => sectionScope(section, candidateMap));
+  const sectionBindings = sections.map(section => bindCandidateForSection(section, bindingIndex));
+  const sectionScopes = sections.map((section, index) => sectionScope(section, sectionBindings[index]));
   const sectionCountDetails = sections.map((section, index) => sectionCountDetail(section, sectionScopes[index], index));
   const scopeBucketCounts = sectionScopes.reduce((counts, scope) => {
+    if (scope?.publishable_scope !== true) return counts;
     const bucket = text(scope?.relevance_bucket) || 'unknown';
     counts[bucket] = (counts[bucket] || 0) + 1;
     return counts;
@@ -679,17 +1008,22 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     androidPlatformCameraAdjacentCount;
   const fallbackRelevanceCount = socPlatformSignalCount + cppAiToolingFallbackCount;
   const expandedScopeCoverage = primaryCameraStackCount + fallbackRelevanceCount;
-  const compositionMode = genericTechWatchlistCount === sections.length && sections.length > 0
+  const publishableScopeCount = sectionScopes.filter(scope => scope?.publishable_scope === true).length;
+  const compositionMode = publishableScopeCount === 0 && sections.length > 0
     ? 'NEEDS_FIX'
-    : primaryCameraStackCount < 2 && fallbackRelevanceCount > 0
-      ? 'FALLBACK_COMPOSITION'
-      : 'NORMAL';
-  if (genericTechWatchlistCount === sections.length && sections.length > 0) {
+    : genericTechWatchlistCount === publishableScopeCount && publishableScopeCount > 0
+      ? 'NEEDS_FIX'
+      : primaryCameraStackCount < 2 && fallbackRelevanceCount > 0
+        ? 'FALLBACK_COMPOSITION'
+        : 'NORMAL';
+  if (genericTechWatchlistCount === publishableScopeCount && publishableScopeCount > 0) {
     boundedDeduct(state, 'composition', 8, 'All main articles are generic_tech_watchlist; reviewable fallback composition requires AOSP Camera, driver, SoC platform, or native tooling relevance.');
   }
 
   sections.forEach((section, index) => {
     const location = section.headline || section.category || `article ${index + 1}`;
+    const binding = sectionBindings[index];
+    const scope = sectionScopes[index];
     const requiredTextFields = ['headline', 'what_changed', 'evidence_summary', 'background', 'camera_hal_perspective', 'team_summary'];
     for (const field of requiredTextFields) {
       if (!text(section[field])) {
@@ -707,6 +1041,42 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         boundedDeduct(state, 'source-integrity', 8, `Missing or invalid source URL: ${source?.url || 'empty'}.`, location);
       }
     }
+    if (binding.status !== 'bound') {
+      sourceIntegrityViolationCount += 1;
+      boundedDeduct(
+        state,
+        'source-integrity',
+        8,
+        binding.status === 'ambiguous'
+          ? binding.reason
+          : binding.status === 'evidence_mismatch'
+            ? binding.reason
+            : 'Main article source URL does not bind to reporter/shortlist candidate metadata.',
+        location
+      );
+    } else {
+      const violation = candidateSelectionViolation(binding.candidate);
+      if (violation) {
+        sourceIntegrityViolationCount += 1;
+        boundedDeduct(
+          state,
+          'source-integrity',
+          8,
+          `Main article source maps to ineligible reporter/shortlist candidate: ${violation}.`,
+          location
+        );
+      }
+      if (scope?.publishable_scope !== true) {
+        sourceIntegrityViolationCount += 1;
+        boundedDeduct(
+          state,
+          'source-integrity',
+          8,
+          'Bound source candidate lacks publishable relevance_bucket and scope score metadata.',
+          location
+        );
+      }
+    }
     if (!hasSpecificEvidence(section)) {
       boundedDeduct(state, 'evidence-specificity', 5, 'Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.', location);
     }
@@ -719,7 +1089,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     if (!hasHalDepth({ ...section, headline: '', category: '', what_changed: '', background: '', why_it_matters: '', evidence_summary: '', specificity_checks: [], source_verification_notes: [], team_summary: '', confirmed_facts: [], camera_hal_checks: [], action_items: [], sources: [], camera_hal_perspective: section.camera_hal_perspective })) {
       boundedDeduct(state, 'hal-depth', 4, 'Article camera_hal_perspective does not include concrete AOSP Camera / driver / SoC / native perspective.', location);
     }
-    if (!hasExpandedScope(section, candidateMap)) {
+    if (!hasExpandedScope(scope)) {
       boundedDeduct(state, 'scope-relevance', 8, 'Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.', location);
     }
     if (ensureArray(section.action_items).length < 2) {
@@ -745,8 +1115,11 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     if (/C\+\+|LLVM|Clang|GCC|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU|CPU|SoC|thermal|power/i.test(sectionText(section)) && !hasHalDepth(section)) {
       boundedDeduct(state, 'scope-relevance', 4, 'Fallback article does not clearly connect back to AOSP Camera, driver, SoC platform, or native development work.', location);
     }
-    if (hasGenericAiWithoutHalConnection(section) || ((section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) && !hasExpandedScope(section, candidateMap))) {
+    if (hasGenericAiWithoutHalConnection(section) || ((section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) && !hasExpandedScope(scope))) {
       boundedDeduct(state, 'hal-relevance', 8, 'Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.', location);
+    }
+    if (scope?.publishable_scope === true && scope.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
+      boundedDeduct(state, 'scope-relevance', 8, 'Bound candidate is generic_tech_watchlist and cannot remain as a main article.', location);
     }
     if (section.resolvedImage?.usedFallback === true) {
       boundedDeduct(
@@ -775,17 +1148,6 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
           break;
         }
       }
-      const candidate = candidateForSourceUrl(source?.url, candidateMap);
-      const violation = candidateSelectionViolation(candidate);
-      if (!violation) continue;
-      sourceIntegrityViolationCount += 1;
-      boundedDeduct(
-        state,
-        'source-integrity',
-        8,
-        `Main article source maps to ineligible reporter candidate: ${violation}.`,
-        location
-      );
     }
   });
 
@@ -859,6 +1221,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       generic_tech_watchlist_count: genericTechWatchlistCount,
       primary_camera_stack_count: primaryCameraStackCount,
       fallback_relevance_count: fallbackRelevanceCount,
+      publishable_scope_count: publishableScopeCount,
       composition_mode: compositionMode,
       section_count_details: sectionCountDetails,
       relevance_bucket_counts: scopeBucketCounts,
@@ -911,6 +1274,9 @@ function buildQualityReportMarkdown(report) {
     ` ${item.scope_count?.counts_as_driver_topic === true} `,
     ` ${item.scope_count?.counts_as_soc_topic === true} `,
     ` ${item.scope_count?.counts_as_fallback_topic === true} `,
+    ` ${item.scope_count?.publishable_scope === true} `,
+    ` ${item.scope_count?.binding_status || ''} `,
+    ` ${item.scope_count?.binding_source || ''} `,
     ` ${item.scope_count?.metadata_source || ''} `,
     ` ${ensureArray(item.scope_count?.missing_score_fields).join(', ') || 'none'} `,
     ` ${item.scope_count?.count_reason || ''} `,
@@ -946,6 +1312,7 @@ function buildQualityReportMarkdown(report) {
 - generic_tech_watchlist count: ${metrics.generic_tech_watchlist_count ?? 0}
 - primary_camera_stack_count: ${metrics.primary_camera_stack_count ?? 0}
 - fallback_relevance_count: ${metrics.fallback_relevance_count ?? 0}
+- publishable_scope_count: ${metrics.publishable_scope_count ?? 0}
 - composition_mode: ${metrics.composition_mode || 'UNKNOWN'}
 - Relevance bucket counts: ${JSON.stringify(metrics.relevance_bucket_counts || {})}
 - AI article count: ${metrics.ai_article_count}
@@ -967,8 +1334,8 @@ ${compositionFailure}
 
 ## Article Gate Results
 
-| # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
-| ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
+| ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 ${articleGateRows}
 
 ## Hard Fails

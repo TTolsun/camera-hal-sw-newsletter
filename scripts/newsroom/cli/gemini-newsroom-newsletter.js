@@ -1742,7 +1742,8 @@ async function main() {
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
     qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-      threshold: QUALITY_THRESHOLD
+      threshold: QUALITY_THRESHOLD,
+      shortlistReport
     });
     generationRunState.qualityReport = qualityReport;
     writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
@@ -1866,7 +1867,8 @@ async function main() {
       fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
       qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-        threshold: QUALITY_THRESHOLD
+        threshold: QUALITY_THRESHOLD,
+        shortlistReport
       });
       generationRunState.qualityReport = qualityReport;
       writeJson(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.json`), qualityReport);
@@ -1953,7 +1955,8 @@ async function main() {
         fs.writeFileSync(path.join(newsroomDir, `fact-check-completion-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
         qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-          threshold: QUALITY_THRESHOLD
+          threshold: QUALITY_THRESHOLD,
+          shortlistReport
         });
         generationRunState.qualityReport = qualityReport;
         writeJson(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.json`), qualityReport);
@@ -2063,6 +2066,7 @@ async function main() {
   );
   qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
     threshold: QUALITY_THRESHOLD,
+    shortlistReport,
     staleClaimReport: staleScrub.report
   });
   generationRunState.qualityReport = qualityReport;

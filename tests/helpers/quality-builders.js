@@ -95,7 +95,7 @@ function scopedCandidate(url, bucket, overrides = {}) {
   });
 }
 
-function reportFor(sections, reporterCandidates) {
+function reportFor(sections, reporterCandidates, options = {}) {
   return buildNewsletterQualityReport(
     '2026-05-03',
     {
@@ -103,7 +103,8 @@ function reportFor(sections, reporterCandidates) {
       sections
     },
     { candidates: reporterCandidates },
-    { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 }
+    { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 },
+    options
   );
 }
 
@@ -126,7 +127,7 @@ function validSections(count = 4) {
 }
 
 function reporterCandidatesFor(sections) {
-  return sections.map(item => reporterCandidate(item.sources[0].url));
+  return sections.map(item => scopedCandidate(item.sources[0].url, 'direct_aosp_camera'));
 }
 
 module.exports = {

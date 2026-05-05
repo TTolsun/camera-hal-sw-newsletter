@@ -23,6 +23,8 @@ public archive 삭제는 hard blocker가 명확한 경우로 제한합니다. `q
 
 ### 2026-05-05
 
+- Source candidate binding hardening (2026-05-05): 새 gate 기준으로 4/4 main article의 `source_candidate_url`/`source_candidate_hash`를 bound shortlist/reporter candidate에서 복구했습니다. 제거, `DEMOTE`, `FAIL` 처리된 section은 없으며, AI/C++/tooling article은 `cpp_ai_tooling_fallback` 또는 `soc_platform_signal` fallback bucket으로만 계산되고 `direct_aosp_camera_count`를 올리지 않습니다. `quality-report.json`/`.md`, `editor-draft.md`, `newsletter.md`, `index.html`은 `editor-draft.json`에서 재계산했습니다. Recompute result: `100/85 PASS`, `article_gate_counts={PASS:4, DEMOTE:0, FAIL:0}`, `publishable_scope_count=4`, `direct_aosp_camera_count=0`, `primary_camera_stack_count=1`, `fallback_relevance_count=3`, `composition_mode=FALLBACK_COMPOSITION`, `source_integrity_violation_count=0`. Final validation: `npm.cmd run validate` PASS.
+
 - 판단: public issue 유지.
 - 조치: FreeBSD 15.1 Beta article 제거 후 4개 main article 기준으로 `newsletter.md`, `index.html`, `editor-draft.*`, `quality-report.*`를 재생성했습니다.
 - 이유: source registry의 `Phoronix Linux Camera / Media` label과 generic `Linux camera / V4L2` metadata가 FreeBSD OS release를 main article PASS 경로로 끌어올린 regression입니다. 기사 본문은 current policy 기준의 구체적인 Camera HAL / Android Camera / frame / stream / buffer / metadata / NPU/GPU/ISP resource connection을 충분히 증명하지 못합니다.

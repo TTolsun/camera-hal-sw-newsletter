@@ -12,19 +12,20 @@
 
 - Main article count: 4
 - Briefing count: 3
-- Structured camera article count: 4
+- Structured camera article count: 1
 - Legacy regex camera article count: 4
 - Expanded-scope article count: 4
-- direct_aosp_camera count: 4
+- direct_aosp_camera count: 0
 - camera_driver_image_pipeline count: 0
-- android_platform_camera_adjacent count: 0
-- soc_platform_signal count: 0
-- cpp_ai_tooling_fallback count: 0
+- android_platform_camera_adjacent count: 1
+- soc_platform_signal count: 1
+- cpp_ai_tooling_fallback count: 2
 - generic_tech_watchlist count: 0
-- primary_camera_stack_count: 4
-- fallback_relevance_count: 0
-- composition_mode: NORMAL
-- Relevance bucket counts: {"direct_aosp_camera":4,"camera_driver_image_pipeline":0,"android_platform_camera_adjacent":0,"soc_platform_signal":0,"cpp_ai_tooling_fallback":0,"generic_tech_watchlist":0}
+- primary_camera_stack_count: 1
+- fallback_relevance_count: 3
+- publishable_scope_count: 4
+- composition_mode: FALLBACK_COMPOSITION
+- Relevance bucket counts: {"direct_aosp_camera":0,"camera_driver_image_pipeline":0,"android_platform_camera_adjacent":1,"soc_platform_signal":1,"cpp_ai_tooling_fallback":2,"generic_tech_watchlist":0}
 - AI article count: 2
 - Underfilled/composition failure: none
 
@@ -44,12 +45,12 @@
 
 ## Article Gate Results
 
-| # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
-| ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | PASS | preserve | Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향 | direct_aosp_camera | 1 | true | false | false | false | section_text_fallback | none | direct_aosp_camera counts toward primary_camera_stack_count. | none | none | none |
-| 2 | PASS | preserve | 2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수 | direct_aosp_camera | 1 | true | false | false | false | section_text_fallback | none | direct_aosp_camera counts toward primary_camera_stack_count. | none | none | none |
-| 3 | PASS | preserve | Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향 | direct_aosp_camera | 1 | true | false | false | false | section_text_fallback | none | direct_aosp_camera counts toward primary_camera_stack_count. | none | none | none |
-| 4 | PASS | preserve | C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호 | direct_aosp_camera | 1 | true | false | false | false | section_text_fallback | none | direct_aosp_camera counts toward primary_camera_stack_count. | none | none | none |
+| # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
+| ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | PASS | preserve | Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향 | cpp_ai_tooling_fallback | 5 | false | false | false | true | true | bound | shortlist_selected | merged | none | cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count. | Fallback bucket is reviewable support material but not a primary camera stack topic. | none | none |
+| 2 | PASS | preserve | 2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수 | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | none | none |
+| 3 | PASS | preserve | Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향 | soc_platform_signal | 4 | false | false | true | false | true | bound | shortlist_selected | merged | none | soc_platform_signal counts toward fallback_relevance_count, not direct camera count. | Fallback bucket is reviewable support material but not a primary camera stack topic. | none | none |
+| 4 | PASS | preserve | C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호 | cpp_ai_tooling_fallback | 5 | false | false | false | true | true | bound | shortlist_selected | merged | none | cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count. | Fallback bucket is reviewable support material but not a primary camera stack topic. | none | none |
 
 ## Hard Fails
 

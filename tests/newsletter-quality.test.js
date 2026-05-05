@@ -160,7 +160,7 @@ test('quality gate falls back to reporter scores when section metadata has only 
   ), false);
 });
 
-test('quality gate can use complete section metadata without reporter candidate scores', () => {
+test('quality gate rejects complete section metadata without source candidate binding', () => {
   const sectionOnly = section({
     headline: 'Section-only V4L2 driver metadata',
     url: 'https://example.com/section-only-v4l2',
@@ -182,10 +182,15 @@ test('quality gate can use complete section metadata without reporter candidate 
   ]);
   const result = report.article_results.find(item => item.headline === sectionOnly.headline);
 
-  assert.equal(result.status, 'PASS');
-  assert.equal(result.scope_count.relevance_bucket, 'camera_driver_image_pipeline');
-  assert.equal(result.scope_count.metadata_source, 'section');
-  assert.ok(!result.scope_count.missing_score_fields.includes('driver_stack_relevance'));
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.equal(result.status, 'FAIL');
+  assert.equal(result.scope_count.publishable_scope, false);
+  assert.equal(result.scope_count.evidence_origin, 'section_text_fallback');
+  assert.ok(report.deductions.some(item =>
+    item.location === sectionOnly.headline &&
+    item.category === 'source-integrity' &&
+    item.reason.includes('does not bind')
+  ));
 });
 
 test('quality gate merges section bucket override with reporter score fields', () => {
@@ -236,18 +241,144 @@ test('quality gate reports missing scope scores when no reporter fallback exists
   ]);
   const result = report.article_results.find(item => item.headline === missingScores.headline);
 
-  assert.equal(result.status, 'DEMOTE');
-  assert.equal(result.scope_count.metadata_source, 'section');
-  assert.deepEqual(result.scope_count.missing_score_fields, [
-    'aosp_camera_directness',
-    'driver_stack_relevance',
-    'soc_platform_relevance',
-    'native_tooling_relevance'
-  ]);
+  assert.equal(result.status, 'FAIL');
+  assert.equal(result.scope_count.metadata_source, 'section_text_fallback');
+  assert.equal(result.scope_count.publishable_scope, false);
   assert.ok(report.deductions.some(item =>
     item.location === missingScores.headline &&
-    item.category === 'scope-relevance'
+    item.category === 'source-integrity'
   ));
+});
+
+test('quality gate uses shortlist selected candidate before reporter candidate for binding', () => {
+  const sameUrl = 'https://example.com/shared-release';
+  const sections = [
+    section({
+      headline: 'CameraX 2.0 shared release',
+      url: sameUrl,
+      evidence_summary: 'Version: CameraX 2.0; release date: 2026-05-01; API/component: CameraX; behavior change: stream validation.'
+    }),
+    section({ headline: 'CameraX release B', url: 'https://example.com/b' }),
+    section({ headline: 'AOSP Camera change C', url: 'https://example.com/c' }),
+    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/d' })
+  ];
+  const report = reportFor(
+    sections,
+    [
+      scopedCandidate(sameUrl, 'generic_tech_watchlist', { title: 'Reporter generic shared release' }),
+      scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
+      scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
+      scopedCandidate('https://example.com/d', 'direct_aosp_camera')
+    ],
+    {
+      shortlistReport: {
+        shortlisted_candidates: [
+          scopedCandidate(sameUrl, 'direct_aosp_camera', {
+            title: 'CameraX 2.0 shared release',
+            version_or_release: 'CameraX 2.0',
+            published_date: '2026-05-01',
+            final_selected: true,
+            primary_selected: true
+          })
+        ]
+      }
+    }
+  );
+  const result = report.article_results.find(item => item.headline === 'CameraX 2.0 shared release');
+
+  assert.equal(result.status, 'PASS');
+  assert.equal(result.scope_count.binding_source, 'shortlist_selected');
+  assert.equal(result.scope_count.relevance_bucket, 'direct_aosp_camera');
+});
+
+test('quality gate tie-breaks duplicate normalized URLs with version evidence', () => {
+  const sharedUrl = 'https://example.com/changelog';
+  const target = section({
+    headline: 'Driver stack 2.0 changelog item',
+    url: sharedUrl,
+    evidence_summary: 'Version: Driver stack 2.0; release date: 2026-05-02; API/component: V4L2 driver; behavior change: buffer ownership validation.',
+    specificity_checks: ['Version: Driver stack 2.0', 'Release date: 2026-05-02']
+  });
+  const sections = [
+    target,
+    section({ headline: 'CameraX release B', url: 'https://example.com/b' }),
+    section({ headline: 'AOSP Camera change C', url: 'https://example.com/c' }),
+    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/d' })
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate(sharedUrl, 'generic_tech_watchlist', {
+      title: 'Driver stack 1.0 changelog item',
+      version_or_release: 'Driver stack 1.0',
+      published_date: '2026-05-01'
+    }),
+    scopedCandidate(sharedUrl, 'camera_driver_image_pipeline', {
+      title: 'Driver stack 2.0 changelog item',
+      version_or_release: 'Driver stack 2.0',
+      published_date: '2026-05-02'
+    }),
+    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/d', 'direct_aosp_camera')
+  ]);
+  const result = report.article_results.find(item => item.headline === target.headline);
+
+  assert.equal(result.status, 'PASS');
+  assert.equal(result.scope_count.relevance_bucket, 'camera_driver_image_pipeline');
+});
+
+test('quality gate fails ambiguous duplicate normalized URL binding', () => {
+  const sharedUrl = 'https://example.com/ambiguous';
+  const ambiguous = section({
+    headline: 'Ambiguous shared changelog item',
+    url: sharedUrl,
+    evidence_summary: 'Version: ambiguous; release date: 2026-05-01; API/component: CameraX; behavior change: compatibility validation.'
+  });
+  const report = reportFor([
+    ambiguous,
+    section({ headline: 'CameraX release B', url: 'https://example.com/b' }),
+    section({ headline: 'AOSP Camera change C', url: 'https://example.com/c' }),
+    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/d' })
+  ], [
+    scopedCandidate(sharedUrl, 'direct_aosp_camera', { title: 'Alpha shared item' }),
+    scopedCandidate(sharedUrl, 'direct_aosp_camera', { title: 'Beta shared item' }),
+    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/d', 'direct_aosp_camera')
+  ]);
+  const result = report.article_results.find(item => item.headline === ambiguous.headline);
+
+  assert.equal(result.status, 'FAIL');
+  assert.ok(result.hard_fail_reasons.some(reason => reason.includes('Ambiguous source candidate match')));
+});
+
+test('quality gate fails shared release-note URL without matching date or version evidence', () => {
+  const sharedUrl = 'https://example.com/release-notes';
+  const releaseNote = section({
+    headline: 'Release note article without matching item evidence',
+    url: sharedUrl,
+    evidence_summary: 'Version: CameraX 1.0; release date: 2026-05-01; API/component: CameraX; behavior change: stream validation.',
+    specificity_checks: ['Version: CameraX 1.0', 'Release date: 2026-05-01']
+  });
+  const report = reportFor([
+    releaseNote,
+    section({ headline: 'CameraX release B', url: 'https://example.com/b' }),
+    section({ headline: 'AOSP Camera change C', url: 'https://example.com/c' }),
+    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/d' })
+  ], [
+    scopedCandidate(sharedUrl, 'direct_aosp_camera', {
+      title: 'CameraX 2.0 release notes',
+      collectionMode: 'release-note-item',
+      version_or_release: 'CameraX 2.0',
+      published_date: '2026-05-02'
+    }),
+    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/d', 'direct_aosp_camera')
+  ]);
+  const result = report.article_results.find(item => item.headline === releaseNote.headline);
+
+  assert.equal(result.status, 'FAIL');
+  assert.ok(result.hard_fail_reasons.some(reason => reason.includes('Shared watch/release-note URL requires matching')));
 });
 
 test('generic bucket is not promoted by camera wording in generated text', () => {
@@ -396,9 +527,9 @@ test('quality gate fails duplicate source URLs across main sections', () => {
     section({ headline: 'AI camera workflow', url: 'https://example.com/ai', is_ai_related: true, article_type: 'ai', what_changed: 'AI camera workflow changed on 2026-05-01 for Camera HAL stream testing.' })
   ];
   const report = reportFor(sections, [
-    reporterCandidate('https://example.com/same'),
-    reporterCandidate('https://example.com/aosp'),
-    reporterCandidate('https://example.com/ai')
+    scopedCandidate('https://example.com/same', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/aosp', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/ai', 'direct_aosp_camera')
   ]);
 
   assert.equal(report.status, 'NEEDS_FIX');
@@ -418,10 +549,10 @@ test('quality gate fails missing dated evidence and source gap mapped candidates
     section({ headline: 'AI camera workflow', url: 'https://example.com/ai', is_ai_related: true, article_type: 'ai', what_changed: 'AI camera workflow changed on 2026-05-01 for Camera HAL stream testing.' })
   ];
   const report = reportFor(sections, [
-    reporterCandidate(badUrl, { hasDatedEvidence: false, source_gap_risk: true }),
-    reporterCandidate('https://example.com/b'),
-    reporterCandidate('https://example.com/c'),
-    reporterCandidate('https://example.com/ai')
+    scopedCandidate(badUrl, 'direct_aosp_camera', { hasDatedEvidence: false, source_gap_risk: true }),
+    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/ai', 'direct_aosp_camera')
   ]);
 
   assert.equal(report.status, 'NEEDS_FIX');
@@ -439,10 +570,10 @@ test('quality gate fails missing Camera HAL perspective and fewer than 2 action 
     section({ headline: 'AI camera workflow', url: 'https://example.com/ai', is_ai_related: true, article_type: 'ai', what_changed: 'AI camera workflow changed on 2026-05-01 for Camera HAL stream testing.' })
   ];
   const report = reportFor(sections, [
-    reporterCandidate('https://example.com/camerax'),
-    reporterCandidate('https://example.com/b'),
-    reporterCandidate('https://example.com/c'),
-    reporterCandidate('https://example.com/ai')
+    scopedCandidate('https://example.com/camerax', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/ai', 'direct_aosp_camera')
   ]);
 
   assert.equal(report.status, 'NEEDS_FIX');
@@ -552,17 +683,16 @@ test('bad regression fixtures cannot pass the main article quality gate', () => 
     section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' })
   ];
   const report = reportFor(sections, [
-    reporterCandidate(genericAi.section.sources[0].url, genericAi.policyFlags),
-    reporterCandidate(freebsd.section.sources[0].url, {
+    scopedCandidate(genericAi.section.sources[0].url, 'generic_tech_watchlist', genericAi.policyFlags),
+    scopedCandidate(freebsd.section.sources[0].url, 'generic_tech_watchlist', {
       ...freebsd.candidate,
-      relevance_bucket: 'generic_tech_watchlist',
       editorial_priority: 6,
       camera_hal_relevance_score: 0,
       android_camera_relevance_score: 0,
       practical_actionability_score: 0
     }),
-    reporterCandidate('https://example.com/a'),
-    reporterCandidate('https://example.com/b')
+    scopedCandidate('https://example.com/a', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/b', 'direct_aosp_camera')
   ]);
 
   assert.equal(report.status, 'NEEDS_FIX');

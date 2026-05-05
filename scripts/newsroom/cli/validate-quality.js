@@ -129,10 +129,12 @@ function validateQualityReport(item, requireReport) {
   const editor = readJsonIfExists(path.join(dateNewsroomDir, 'editor-draft.json'));
   const factCheck = readJsonIfExists(path.join(dateNewsroomDir, 'fact-check-report.json'));
   const reporter = readJsonIfExists(path.join(dateNewsroomDir, 'reporter-candidates.json')) || {};
+  const shortlistReport = readJsonIfExists(path.join(dateNewsroomDir, 'shortlisted-candidates.json')) || null;
   const staleClaimReport = readJsonIfExists(path.join(dateNewsroomDir, 'stale-claim-report.json')) || null;
   if (editor && factCheck) {
     const recomputed = buildNewsletterQualityReport(item.date, editor, reporter, factCheck, {
       threshold,
+      shortlistReport,
       staleClaimReport
     });
     if (recomputed.score !== score || recomputed.status !== report.status) {

@@ -98,7 +98,21 @@
           "title": "Claude Code Changelog - 2.1.128",
           "url": "https://code.claude.com/docs/en/changelog"
         }
-      ]
+      ],
+      "source_candidate_url": "https://code.claude.com/docs/en/changelog",
+      "source_candidate_hash": "3d68ad8e1324eb33b763f82183f512fc6276fa6e33aa56b7b51a994d2a3e9fb9",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 5,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": true,
+      "evidence_origin": "candidate_metadata_recovered",
+      "source_hint": "Claude Code release note with AI coding agent workflow relevance for native Camera HAL development."
     },
     {
       "category": "Android Camera / Platform API",
@@ -172,7 +186,21 @@
         "originalSrc": "",
         "usedFallback": false,
         "reason": ""
-      }
+      },
+      "source_candidate_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "source_candidate_hash": "827f3a39ff2811801dcadf811725f8ed7f6f974e696a41e8790d5572f6445bdb",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "editorial_priority": 3,
+      "aosp_camera_directness": 2,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "evidence_origin": "candidate_metadata_recovered",
+      "source_hint": "Android Security Bulletin is Android platform-adjacent security evidence requiring HAL impact review."
     },
     {
       "category": "Android Camera / Platform API",
@@ -267,7 +295,21 @@
         "originalSrc": "",
         "usedFallback": false,
         "reason": ""
-      }
+      },
+      "source_candidate_url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "source_candidate_hash": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
+      "relevance_bucket": "soc_platform_signal",
+      "editorial_priority": 4,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 5,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": true,
+      "counts_as_fallback_topic": false,
+      "evidence_origin": "candidate_metadata_recovered",
+      "source_hint": "Android hybrid inference update affects NPU/GPU/ISP scheduling, latency, thermal, and camera input workflows."
     },
     {
       "category": "C++ / Toolchain Fallback",
@@ -334,7 +376,21 @@
           "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
           "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
         }
-      ]
+      ],
+      "source_candidate_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "source_candidate_hash": "61c963a289f63e09aee4c5730039cd09b8fb3a4a4f30a9e71a54604380462b42",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 5,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": true,
+      "evidence_origin": "candidate_metadata_recovered",
+      "source_hint": "C++26 assert improvement is native tooling fallback evidence for Camera HAL debugging and code reliability."
     }
   ],
   "action_items": [
