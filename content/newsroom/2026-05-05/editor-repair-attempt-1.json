@@ -1,310 +1,53 @@
 {
   "date": "2026-05-05",
   "title": "Camera HAL SW 뉴스레터 - 2026-05-05",
-  "summary": "이번 주 뉴스레터는 Android 17 Beta 4 출시를 통해 플랫폼 안정성 및 호환성 개선에 대한 내용을 다룹니다. 또한, 카메라 입력 경로에 영향을 줄 수 있는 새로운 AI 모델 및 하이브리드 추론 기능, 그리고 Linux 커널 및 C++ 컴파일러의 최신 동향을 포함하여 Camera HAL 엔지니어에게 필요한 기술 정보를 제공합니다.",
+  "summary": "이번 주 뉴스레터는 Android 보안 게시판의 최신 업데이트, Android AI 모델의 하이브리드 추론 기능 확장, C++26의 assert() 매크로 개선, 그리고 AI 코딩 에이전트의 발전 소식을 다룹니다. Camera HAL 엔지니어는 보안 취약점 점검, AI 워크플로우 통합 가능성, 그리고 C++ 코드 안정성 향상에 주목해야 합니다.",
   "briefing": [
-    "Android 17 Beta 4 출시로 플랫폼 안정성 및 앱 호환성이 개선되어, Camera HAL 팀은 변경 사항 검토 및 테스트 계획 수립이 필요합니다.",
-    "새로운 Gemini 모델과 하이브리드 추론 지원은 카메라 스트림 처리 및 NPU/GPU 스케줄링에 대한 새로운 고려사항을 제시합니다.",
-    "Linux 커널 7.1-rc2 및 GCC 16.1 컴파일러의 최신 업데이트는 카메라 드라이버 및 네이티브 코드 최적화에 대한 잠재적 영향을 시사합니다."
+    "2026년 5월 Android 보안 게시판이 발행되어 Camera HAL 관련 잠재적 취약점 및 패치 적용 여부를 즉시 확인해야 합니다.",
+    "Android의 하이브리드 추론 및 새로운 Gemini 모델 지원은 카메라 프레임 처리, NPU/GPU/ISP 활용 및 전력 관리에 대한 HAL의 역할을 재정의할 수 있습니다.",
+    "C++26의 assert() 매크로 개선은 HAL 코드의 런타임 조건 검증 및 디버깅 효율성을 높일 잠재력이 있으며, AI 코딩 에이전트의 발전은 HAL 개발 워크플로우에 영향을 줄 수 있습니다."
   ],
   "sections": [
     {
-      "category": "Android Camera / platform API",
-      "headline": "Android 17 Beta 4 출시: 플랫폼 안정성 및 호환성 개선",
-      "what_changed": "Android 17 Beta 4가 2026년 4월 16일에 출시되었으며, 앱 호환성 및 플랫폼 안정성 개선에 중점을 두었습니다.",
-      "confirmed_facts": [
-        "릴리스/버전: Android 17 Beta 4",
-        "릴리스 날짜: 2026-04-16",
-        "API/컴포넌트: Android SDK",
-        "동작 변경: 앱 호환성 및 플랫폼 안정성 개선"
-      ],
-      "evidence_summary": "Android Developers Blog의 'The Fourth Beta of Android 17' 게시물은 Android 17 Beta 4의 출시와 주요 개선 사항을 명시하고 있습니다.",
-      "specificity_checks": [
-        "버전: Android 17 Beta 4",
-        "릴리스 날짜: 2026-04-16",
-        "API/컴포넌트: Android SDK",
-        "소스 페이지: https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
-        "동작 변경: 앱 호환성 및 플랫폼 안정성 개선"
-      ],
-      "source_verification_notes": [
-        "소스는 Android Developers Blog로 신뢰할 수 있습니다.",
-        "게시물 날짜가 명확하여 최신 정보를 반영합니다."
-      ],
-      "background": "Android 운영체제 베타 버전 출시는 최종 릴리스 전에 플랫폼의 안정성과 다양한 애플리케이션과의 호환성을 확보하기 위한 중요한 단계입니다. 이는 Camera HAL 팀이 향후 OS 버전에서의 카메라 기능 동작을 예측하고 대비하는 데 필수적입니다.",
-      "why_it_matters": "Android 17 Beta 4는 Camera HAL 팀에게 중요한 이정표입니다. 플랫폼 안정성 및 앱 호환성 개선은 Camera HAL 인터페이스, CTS/VTS/Camera ITS 테스트, 그리고 CameraX 호환성에 영향을 미칠 수 있습니다. 새로운 API 동작이나 기존 동작의 변경 사항을 면밀히 검토해야 합니다.",
-      "camera_hal_perspective": "Camera HAL 팀은 Android 17 Beta 4에서 발표된 변경 사항이 Camera HAL 인터페이스, 프레임워크와의 상호작용, 그리고 카메라 관련 CTS/VTS/Camera ITS 테스트에 미치는 영향을 평가해야 합니다. 특히, 카메라 스트림 구성, 메타데이터 처리, 또는 전력 관리와 관련된 변경 사항은 주의 깊게 살펴봐야 합니다.",
-      "camera_hal_checks": [
-        "Android 17 Beta 4에서 변경된 카메라 관련 API 또는 동작이 있는지 Android 개발자 문서를 확인합니다.",
-        "카메라 관련 CTS/VTS/Camera ITS 테스트에서 회귀가 발생하는지 검토합니다.",
-        "영향을 받는 기기 클래스 또는 카메라 파이프라인을 식별하고 테스트 계획을 업데이트합니다."
-      ],
-      "action_hints": [
-        "Android 17 Beta 4 릴리스 노트를 검토하여 카메라 관련 변경 사항을 파악합니다.",
-        "CameraX 호환성 테스트를 우선적으로 수행합니다."
-      ],
-      "action_items": [
-        "2주 내에 Android 17 Beta 4 릴리스 노트를 검토하고, 카메라 관련 변경 사항을 요약하여 팀에 공유합니다.",
-        "영향을 받을 수 있는 주요 카메라 API 및 스트림 조합에 대한 회귀 테스트 계획을 수립합니다."
-      ],
-      "team_summary": "Android 17 Beta 4 출시로 플랫폼 안정성이 개선되었으며, 카메라 관련 변경 사항을 면밀히 검토하고 테스트 계획을 업데이트해야 합니다.",
-      "is_ai_related": false,
-      "article_type": "Android Camera / platform API",
-      "imageCandidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "Android 17 Beta 4 출시 이미지",
-          "contentType": "image/png"
-        },
-        {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "alt": "Android 로고",
-          "contentType": "image/svg+xml"
-        }
-      ],
-      "selectedImage": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
-      "imageSource": "https://android-developers.googleblog.com/",
-      "imageAttribution": "Android Developers Blog",
-      "imageAlt": "Android 17 Beta 4 출시 이미지",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "The image is relevant to the article's topic (Android Beta release) and directly from the source. The license is unknown, but it's a typical blog image.",
-      "sources": [
-        {
-          "title": "The Fourth Beta of Android 17",
-          "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
-        }
-      ],
-      "resolvedImage": {
-        "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
-        "src": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
-      }
-    },
-    {
-      "category": "Linux camera / libcamera / V4L2",
-      "headline": "Linux 커널 7.1-rc2 출시: 카메라 드라이버 안정성 관련 잠재적 영향",
-      "what_changed": "Linux 커널 7.1-rc2가 2026년 5월 3일에 출시되었으며, 초기 버그 및 회귀 수정 사항을 포함합니다.",
-      "confirmed_facts": [
-        "릴리스/버전: Linux 7.1-rc2",
-        "릴리스 날짜: 2026-05-03",
-        "API/컴포넌트: Linux camera / V4L2",
-        "동작 변경: Linux 7.1-rc2 출시 (버그 및 회귀 수정 포함)"
-      ],
-      "evidence_summary": "Phoronix의 'Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes' 기사는 Linux 7.1-rc2의 출시와 포함된 수정 사항을 상세히 보도합니다.",
-      "specificity_checks": [
-        "버전: Linux 7.1-rc2",
-        "릴리스 날짜: 2026-05-03",
-        "API/컴포넌트: Linux camera / V4L2",
-        "소스 페이지: https://www.phoronix.com/news/Linux-7.1-rc2-Released",
-        "동작 변경: Linux 7.1-rc2 출시 (버그 및 회귀 수정 포함)"
-      ],
-      "source_verification_notes": [
-        "Phoronix는 Linux 및 오픈 소스 하드웨어 뉴스에 대한 신뢰할 수 있는 출처입니다.",
-        "기사 날짜가 명확합니다."
-      ],
-      "background": "Android는 Linux 커널을 기반으로 작동하며, 카메라 기능은 V4L2(Video for Linux Two) 서브시스템을 통해 관리됩니다. 커널의 안정성 및 버그 수정은 카메라 드라이버의 성능과 안정성에 직접적인 영향을 미칩니다.",
-      "why_it_matters": "Linux 커널의 업데이트는 Android HAL의 기반이 되는 드라이버 및 미디어 서브시스템에 영향을 미칠 수 있습니다. 특히 버그 및 회귀 수정은 안정성 측면에서 중요하며, 카메라 관련 패치가 포함될 경우 HAL 구현에 직접적인 영향을 줄 수 있습니다.",
-      "camera_hal_perspective": "Linux 커널 7.1-rc2의 변경 사항은 Android HAL이 사용하는 카메라 드라이버 및 V4L2 인터페이스에 영향을 줄 수 있습니다. 특히 버그 수정은 프레임 드롭, 메타데이터 오류, 또는 장치 불안정성과 같은 문제를 해결할 수 있습니다. Vendor HAL 팀은 커널 업데이트 시 관련 드라이버 패치를 검토하고, HAL 레벨에서의 호환성을 확인해야 합니다.",
-      "camera_hal_checks": [
-        "Linux 7.1-rc2에 포함된 카메라 관련 V4L2 또는 미디어 서브시스템 패치를 식별합니다.",
-        "해당 패치가 현재 사용 중인 Android 기기 커널에 적용되었는지 확인합니다.",
-        "영향을 받는 카메라 스트림 구성 또는 메타데이터 필드에 대한 회귀 테스트를 수행합니다."
-      ],
-      "action_hints": [
-        "커널 7.1-rc2의 변경 로그에서 카메라 관련 수정 사항을 검토합니다.",
-        "테스트 기기에서 카메라 스트림 구성 및 안정성 테스트를 수행합니다."
-      ],
-      "action_items": [
-        "2주 내에 Linux 7.1-rc2의 변경 로그를 검토하여 카메라 관련 V4L2/미디어 서브시스템 패치를 식별하고, 해당 패치가 현재 개발 중인 기기 커널에 적용 가능한지 조사합니다.",
-        "식별된 패치와 관련된 카메라 스트림 구성(예: YUV, RAW) 및 메타데이터 필드에 대한 안정성 테스트를 수행합니다."
-      ],
-      "team_summary": "Linux 커널 7.1-rc2 출시로 카메라 드라이버 안정성이 향상될 수 있으며, 관련 패치를 검토하고 테스트하여 HAL 호환성을 확인해야 합니다.",
-      "is_ai_related": false,
-      "article_type": "Linux camera / V4L2",
-      "imageCandidates": [
-        {
-          "url": "https://www.phoronix.net/image.php?id=2026&image=linux_71_rc2",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "alt": "Linux 7.1-rc2 출시 관련 이미지",
-          "contentType": "image/jpeg"
-        },
-        {
-          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/Linux-7.1-rc2-Released",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "alt": "Phoronix 로고",
-          "contentType": "image/png"
-        }
-      ],
-      "selectedImage": "https://www.phoronix.net/image.php?id=2026&image=linux_71_rc2",
-      "imageSource": "https://www.phoronix.com/",
-      "imageAttribution": "Phoronix Linux Camera / Media",
-      "imageAlt": "Linux 7.1-rc2 출시 관련 이미지",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "The image is a relevant visual from the source article about the Linux kernel release. License is unknown.",
-      "sources": [
-        {
-          "title": "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes",
-          "url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released"
-        }
-      ],
-      "resolvedImage": {
-        "url": "https://www.phoronix.net/image.php?id=2026&image=linux_71_rc2",
-        "src": "https://www.phoronix.net/image.php?id=2026&image=linux_71_rc2",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
-      }
-    },
-    {
-      "category": "C++ / toolchain fallback",
-      "headline": "GCC 16.1 컴파일러 출시: C++ 네이티브 코드 성능 최적화 인사이트",
-      "what_changed": "GCC 16.1 컴파일러가 2026년 5월 4일에 출시되었으며, GCC 15 대비 상당한 성능 향상을 제공합니다.",
-      "confirmed_facts": [
-        "릴리스/버전: GCC 16.1",
-        "릴리스 날짜: 2026-05-04",
-        "API/컴포넌트: C++ / native toolchain",
-        "동작 변경: GCC 16.1 컴파일러 출시 및 GCC 15 대비 성능 향상"
-      ],
-      "evidence_summary": "Phoronix의 'GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15' 기사는 GCC 16.1의 출시와 성능 벤치마크 결과를 상세히 분석합니다.",
-      "specificity_checks": [
-        "버전: GCC 16.1",
-        "릴리스 날짜: 2026-05-04",
-        "API/컴포넌트: C++ / native toolchain",
-        "소스 페이지: https://www.phoronix.com/review/gcc-16-benchmarks",
-        "동작 변경: GCC 16.1 컴파일러 출시 및 GCC 15 대비 성능 향상"
-      ],
-      "source_verification_notes": [
-        "Phoronix는 성능 벤치마크 및 컴파일러 뉴스에 대한 신뢰할 수 있는 출처입니다.",
-        "기사 날짜가 명확합니다."
-      ],
-      "background": "Android HAL 개발은 주로 Clang/LLVM 툴체인을 사용하지만, GCC와 같은 다른 주요 C++ 컴파일러의 발전은 C++ 언어 표준의 새로운 기능 도입, 최적화 기법의 발전, 그리고 라이브러리 구현 방식에 대한 귀중한 인사이트를 제공합니다. 이는 네이티브 코드의 성능 및 안정성 개선에 대한 잠재적 기회를 탐색하는 데 도움이 됩니다.",
-      "why_it_matters": "Android HAL은 주로 Clang/LLVM을 사용하지만, GCC의 성능 향상은 C++ 표준 라이브러리 및 최적화 기술 발전에 대한 인사이트를 제공할 수 있습니다. 이는 HAL 코드의 잠재적 성능 최적화 기회를 탐색하는 데 도움이 될 수 있습니다.",
-      "camera_hal_perspective": "GCC 16.1의 성능 개선은 컴파일러가 C++ 코드를 얼마나 효율적으로 최적화하는지에 대한 정보를 제공합니다. 비록 Android HAL이 Clang을 사용하더라도, GCC의 새로운 최적화 기법이나 라이브러리 구현 방식은 네이티브 카메라 모듈의 성능 병목 현상을 식별하거나 잠재적인 최적화 기회를 발견하는 데 영감을 줄 수 있습니다. 특히, 복잡한 이미지 처리 알고리즘이나 동시성 관련 코드가 많은 Camera HAL에서는 이러한 최적화 동향을 파악하는 것이 중요합니다.",
-      "camera_hal_checks": [
-        "GCC 16.1 릴리스 노트에서 카메라 HAL 코드에 적용될 수 있는 새로운 최적화 플래그나 기능이 있는지 확인합니다.",
-        "GCC 16.1의 성능 벤치마크 결과를 분석하여, 특정 C++ 패턴이 성능에 미치는 영향을 이해합니다.",
-        "현재 Clang 컴파일러에서 유사한 최적화가 가능한지 검토합니다."
-      ],
-      "action_hints": [
-        "GCC 16.1 릴리스 노트를 검토하여 카메라 HAL 코드에 적용 가능한 최적화 기법을 파악합니다.",
-        "현재 사용 중인 Clang 컴파일러에서 유사한 성능 개선을 달성할 수 있는지 실험합니다."
-      ],
-      "action_items": [
-        "2주 내에 GCC 16.1 릴리스 노트를 검토하여 카메라 HAL 코드에 적용 가능한 새로운 최적화 플래그나 C++ 기능 개선 사항을 식별하고, 현재 Clang 컴파일러 환경에서 유사한 최적화 기법의 적용 가능성을 조사합니다.",
-        "잠재적으로 성능 개선이 가능한 네이티브 카메라 모듈의 특정 코드 섹션(예: 이미지 필터링, 버퍼 처리)에 대해 Clang 컴파일러 옵션을 조정하여 성능 변화를 측정합니다."
-      ],
-      "team_summary": "GCC 16.1 컴파일러의 성능 향상은 C++ 최적화 동향에 대한 인사이트를 제공하며, 네이티브 카메라 모듈의 잠재적 성능 개선 기회를 탐색하는 데 활용할 수 있습니다.",
-      "is_ai_related": false,
-      "article_type": "C++ / toolchain fallback",
-      "imageCandidates": [
-        {
-          "url": "https://www.phoronix.net/image.php?id=gcc-16-benchmarks&image=gcc_16_fedora",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/review/gcc-16-benchmarks",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "alt": "GCC 16 벤치마크 결과 그래프",
-          "contentType": "image/jpeg"
-        },
-        {
-          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/review/gcc-16-benchmarks",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "alt": "Phoronix 로고",
-          "contentType": "image/png"
-        }
-      ],
-      "selectedImage": "https://www.phoronix.net/image.php?id=gcc-16-benchmarks&image=gcc_16_fedora",
-      "imageSource": "https://www.phoronix.com/",
-      "imageAttribution": "Phoronix Linux Camera / Media",
-      "imageAlt": "GCC 16 벤치마크 결과 그래프",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "The image is a performance benchmark graph directly related to the article's content and is from the official source. License is unknown.",
-      "sources": [
-        {
-          "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
-          "url": "https://www.phoronix.com/review/gcc-16-benchmarks"
-        }
-      ],
-      "resolvedImage": {
-        "url": "https://www.phoronix.net/image.php?id=gcc-16-benchmarks&image=gcc_16_fedora",
-        "src": "https://www.phoronix.net/image.php?id=gcc-16-benchmarks&image=gcc_16_fedora",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
-      }
-    },
-    {
-      "category": "AI plus camera input path",
-      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델 지원",
-      "what_changed": "2026년 4월 17일, Android 개발자 블로그에 따르면 Firebase AI Logic API를 통해 하이브리드 추론(온디바이스 및 클라우드 추론 활용) 및 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델이 지원됩니다.",
+      "category": "AI plus camera input path or HAL workflow",
+      "headline": "Android용 하이브리드 추론 및 새로운 Gemini 모델: 카메라 프레임 처리 영향",
+      "what_changed": "2026년 4월 17일, Android Developers Blog에 따르면 하이브리드 추론을 위한 새로운 Firebase AI Logic API 및 새로운 Gemini 모델(Nano Banana 포함) 지원이 Android에 추가되었습니다.",
       "confirmed_facts": [
         "릴리스 날짜: 2026년 4월 17일",
-        "API/컴포넌트: Firebase AI Logic API",
-        "동작 변경: 하이브리드 추론(온디바이스 및 클라우드 추론 활용) 및 이미지 생성을 위한 최신 Nano Banana 모델을 포함한 새로운 Gemini 모델 지원"
+        "API/구성 요소: Firebase AI Logic API, Gemini 모델 (Nano Banana 포함)",
+        "동작 변경: Android에 하이브리드 추론 지원 및 새로운 Gemini 모델이 추가되었습니다.",
+        "하이브리드 추론은 온디바이스 및 클라우드 기반 AI 모델 실행을 결합합니다."
       ],
-      "evidence_summary": "Android 개발자 블로그의 2026년 4월 17일 게시물은 Firebase AI Logic API를 통한 하이브리드 추론 및 새로운 Gemini 모델 지원을 명확히 언급합니다. 이는 온디바이스 및 클라우드 추론을 모두 활용하는 새로운 접근 방식과 이미지 생성을 위한 Nano Banana 모델을 포함합니다.",
+      "evidence_summary": "Android Developers Blog의 2026년 4월 17일 게시물에서 하이브리드 추론을 위한 새로운 Firebase AI Logic API와 새로운 Gemini 모델(Nano Banana 포함)의 Android 지원 추가를 확인했습니다.",
       "specificity_checks": [
         "릴리스 날짜: 2026년 4월 17일",
-        "API/컴포넌트: Firebase AI Logic API",
-        "동작 변경: 하이브리드 추론 및 새로운 Gemini 모델 지원"
+        "API/구성 요소: Firebase AI Logic API, Gemini 모델 (Nano Banana 포함)",
+        "동작 변경: 하이브리드 추론을 위한 새로운 Firebase AI Logic API 및 새로운 Gemini 모델(Nano Banana 포함) 지원이 추가되었습니다.",
+        "출처 페이지: https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
       ],
       "source_verification_notes": [
-        "Android Developers Blog는 공식 출처이며, 명시된 날짜와 API/컴포넌트, 동작 변경은 직접 확인되었습니다."
+        "Android Developers Blog는 Android 개발 관련 공식 정보를 제공하는 신뢰할 수 있는 출처입니다. 게시물에서 Firebase AI Logic API 및 Gemini 모델의 추가를 직접 확인했습니다."
       ],
-      "background": "Android에서 AI 모델을 실행하는 방식은 온디바이스 추론과 클라우드 추론으로 나뉩니다. 하이브리드 추론은 이 두 가지 방식을 결합하여 성능과 유연성을 최적화합니다. Firebase AI Logic API는 개발자가 이러한 추론 방식을 앱에 통합할 수 있도록 돕는 도구입니다. Gemini 모델은 Google의 최신 AI 모델 제품군으로, 다양한 모달리티를 지원하며, 특히 Nano Banana 모델은 이미지 생성 기능을 제공합니다.",
-      "why_it_matters": "카메라 HAL은 이미지 데이터를 AI 모델로 전달하는 주요 경로이므로, 온디바이스 AI 추론의 변화는 HAL의 버퍼 관리, 성능, 전력 소비에 직접적인 영향을 미칩니다. 새로운 Gemini 모델과 하이브리드 추론 API는 카메라 스트림 처리 방식과 NPU/GPU 스케줄링에 대한 고려를 필요로 합니다. 특히 이미지 생성 모델은 고해상도 이미지 데이터 처리에 대한 요구사항을 증가시킬 수 있습니다.",
-      "camera_hal_perspective": "이 변화는 카메라 HAL이 AI 워크로드에 대한 버퍼를 효율적으로 관리하고, NPU/GPU 리소스 경합을 최소화하며, 전력 소비를 최적화해야 함을 의미합니다. 하이브리드 추론은 온디바이스 추론 시나리오에서 HAL이 제공하는 프레임의 지연 시간, 처리량, 그리고 메타데이터 주석에 영향을 줄 수 있습니다. 이미지 생성 모델은 YUV 또는 RAW 스트림의 특정 해상도 및 형식 요구사항을 가질 수 있으며, 이는 HAL의 스트림 구성 및 버퍼 할당 전략에 영향을 미칠 수 있습니다.",
+      "background": "AI 모델을 모바일 기기에서 실행할 때 온디바이스 추론은 지연 시간이 짧고 개인 정보 보호에 유리하지만, 모델 크기와 컴퓨팅 리소스에 제약이 있습니다. 반면 클라우드 추론은 더 강력한 모델을 사용할 수 있지만 네트워크 지연과 데이터 전송 비용이 발생합니다. 하이브리드 추론은 이 두 가지 접근 방식을 결합하여 최적의 성능과 효율성을 제공하려는 시도입니다.",
+      "why_it_matters": "카메라 HAL은 AI 모델에 필요한 원본 이미지 또는 처리된 프레임 데이터를 제공하는 핵심 구성 요소입니다. 하이브리드 추론 및 새로운 Gemini 모델의 도입은 카메라 프레임의 획득, 전처리, NPU/GPU/ISP로의 전달 방식, 그리고 관련 지연 시간 및 전력 소비에 직접적인 영향을 미칠 수 있습니다.",
+      "camera_hal_perspective": "새로운 AI 모델과 하이브리드 추론은 Camera HAL의 ImageAnalysis 스트림 사용 방식에 변화를 가져올 수 있습니다. HAL은 AI 모델이 요구하는 특정 형식(예: YUV_420_888, RGBA_8888)의 프레임을 효율적으로 제공해야 하며, 온디바이스 NPU/GPU/ISP 리소스와 클라우드 전송 간의 부하 분산을 고려해야 합니다. 이는 HAL의 버퍼 수명 주기 관리, 스트림 구성 유효성 검사, 그리고 전력 및 열 관리 로직에 영향을 미칠 수 있습니다. 특히, AI 모델의 입력 요구사항에 따라 HAL이 추가적인 전처리 작업을 수행해야 할 수도 있습니다.",
       "camera_hal_checks": [
-        "AI 분석 스트림 시나리오에서 프레임 드롭, 캡처 지연 시간, 열 스로틀링을 기록하고, 하이브리드 추론 사용 시 온디바이스 추론 성능 변화를 측정합니다.",
-        "새로운 Gemini 모델, 특히 이미지 생성 모델이 요구하는 YUV/RAW 스트림 형식 및 해상도를 파악하고, HAL이 해당 조합을 효율적으로 지원하는지 확인합니다.",
-        "Firebase AI Logic API를 사용하는 앱과의 호환성 테스트를 수행하여 버퍼 라이프사이클 및 메타데이터 전파에 문제가 없는지 검증합니다."
+        "ImageAnalysis 스트림을 통해 새로운 Gemini 모델(Nano Banana)에 필요한 프레임 형식(예: YUV_420_888)을 효율적으로 제공할 수 있는지 확인합니다.",
+        "하이브리드 추론 시나리오에서 카메라 프레임 획득부터 AI 모델 입력까지의 지연 시간(latency) 및 프레임 드롭(frame drop)을 측정합니다.",
+        "NPU/GPU/ISP 리소스 경합이 발생하는지 모니터링하고, AI 워크로드와 카메라 파이프라인 간의 최적화 방안을 검토합니다."
       ],
       "action_hints": [
-        "Firebase AI Logic API를 사용하는 샘플 앱을 구축하여 하이브리드 추론 시나리오에서 카메라 HAL의 동작을 관찰합니다.",
-        "NPU/GPU 사용률 및 전력 소비 메트릭을 모니터링하여 AI 워크로드의 영향을 평가합니다.",
-        "이미지 생성 모델의 입력 요구사항에 맞춰 카메라 스트림 구성의 유연성을 검토합니다."
+        "새로운 Firebase AI Logic API 및 Gemini 모델의 입력 요구사항을 파악하고, HAL이 이를 효율적으로 지원할 수 있는지 검토합니다.",
+        "하이브리드 추론 시나리오에서 카메라 스트림과 AI 처리 간의 성능 및 전력 소비를 측정하는 PoC를 계획합니다."
       ],
       "action_items": [
-        "2주 이내에 Firebase AI Logic API를 활용하는 온디바이스 AI 추론 시나리오에서 Preview + ImageAnalysis 스트림 조합의 프레임 드롭 및 캡처 지연 시간을 측정하는 테스트를 추가합니다.",
-        "AI 분석 스트림 사용 시 NPU/GPU 스케줄링 및 전력 소비에 대한 HAL의 영향을 분석하고, 최적화 방안을 검토합니다.",
-        "새로운 Gemini Nano Banana 모델의 이미지 생성 기능이 HAL의 특정 스트림 형식 또는 해상도 지원에 미치는 영향을 확인하고, 필요한 경우 HAL 기능을 확장합니다."
+        "2주 이내에 새로운 Firebase AI Logic API 및 Gemini 모델(Nano Banana)의 문서화된 입력 형식 및 성능 요구사항을 검토하고, HAL이 지원해야 할 최소한의 스트림 조합(예: Preview + ImageAnalysis)을 식별합니다.",
+        "AI 분석 스트림 시나리오에서 특정 NPU/GPU/ISP 구성에서 프레임 드롭, 캡처 지연 시간, 열 스로틀링(thermal throttling) 발생 여부를 측정하는 테스트를 정의하고 2주 이내에 실행합니다.",
+        "Camera HAL이 AI 모델에 필요한 메타데이터(예: 카메라 자세, 조명 조건)를 정확하게 전달하는지 확인하는 로그를 추가하고 검토합니다."
       ],
-      "team_summary": "Android용 하이브리드 추론 및 새로운 Gemini 모델(Nano Banana 포함) 지원은 카메라 HAL의 버퍼 관리, 성능, 전력 소비 및 스트림 구성에 직접적인 영향을 미 미치므로, 관련 API 동작 및 NPU/GPU 스케줄링을 면밀히 검토하고 테스트해야 합니다.",
+      "team_summary": "Android의 하이브리드 추론 및 새로운 Gemini 모델은 카메라 프레임 처리 및 NPU/GPU/ISP 활용에 직접적인 영향을 미치므로, HAL은 AI 입력 요구사항을 충족하고 성능 및 전력 효율성을 최적화해야 합니다.",
       "is_ai_related": true,
-      "article_type": "main",
+      "article_type": "ai-camera-path-hal-workflow",
       "imageCandidates": [
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
@@ -314,18 +57,41 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "alt": "하이브리드 추론 솔루션 다이어그램",
           "contentType": "image/png",
-          "height": 900,
+          "height": 840,
           "width": 1600
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "rss_item",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sourceKind": "rss_item",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentType": "image/svg+xml",
+          "height": 100,
+          "width": 100
         }
       ],
       "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
       "imageSource": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
       "imageAttribution": "Android Developers Blog",
-      "imageAlt": "하이브리드 추론 솔루션 다이어그램",
+      "imageAlt": "Android 하이브리드 추론 솔루션 다이어그램",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "기사 내용과 직접적으로 관련된 다이어그램으로, 하이브리드 추론의 개념을 시각적으로 설명합니다.",
+      "imageUsageDecisionReason": "기사의 핵심 주제인 하이브리드 추론을 시각적으로 잘 설명하는 이미지입니다. 기사 내용과 직접적인 관련이 있습니다.",
       "sources": [
         {
           "title": "Experimental hybrid inference and new Gemini models for Android",
@@ -340,31 +106,384 @@
         "usedFallback": false,
         "reason": ""
       }
+    },
+    {
+      "category": "C++ / Toolchain Fallback",
+      "headline": "C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대",
+      "what_changed": "2026년 5월 4일, ISO C++ Blog에 따르면 C++26은 assert() 매크로에 오랫동안 기다려온 변경 사항을 가져옵니다. 이는 런타임 조건 검증을 위한 assert()의 사용성을 개선하는 데 중점을 둡니다.",
+      "confirmed_facts": [
+        "릴리스 날짜: 2026년 5월 4일",
+        "버전/릴리스: C++26",
+        "API/구성 요소: C++ / native toolchain, assert() 매크로",
+        "동작 변경: C++26은 assert() 매크로의 사용성을 개선하는 변경 사항을 도입합니다."
+      ],
+      "evidence_summary": "ISO C++ Blog의 2026년 5월 4일 게시물에서 C++26의 assert() 매크로 개선 사항을 확인했습니다. 이는 런타임 조건 검증에 대한 변경입니다.",
+      "specificity_checks": [
+        "릴리스 날짜: 2026년 5월 4일",
+        "버전/릴리스: C++26",
+        "API/구성 요소: C++ / native toolchain, assert() 매크로",
+        "동작 변경: C++26은 assert() 매크로에 오랫동안 기다려온 변경 사항을 가져옵니다.",
+        "출처 페이지: https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+      ],
+      "source_verification_notes": [
+        "ISO C++ Blog는 C++ 표준 위원회와 관련된 공식 정보를 제공하는 신뢰할 수 있는 출처입니다. 게시물에서 C++26의 assert() 매크로 변경 사항을 직접 확인했습니다."
+      ],
+      "background": "C++의 assert() 매크로는 개발 단계에서 프로그램의 런타임 조건을 검증하는 데 사용됩니다. 조건이 거짓일 경우 프로그램 실행을 중단하고 디버깅 정보를 출력하여 버그를 조기에 발견하도록 돕습니다. 기존 assert()는 특정 상황에서 사용하기 불편하거나 제한적인 부분이 있었습니다.",
+      "why_it_matters": "Camera HAL은 대부분 C++로 구현되므로 C++ 표준의 변경 사항은 HAL 코드의 안정성, 디버깅 및 개발 생산성에 직접적인 영향을 미칩니다. assert() 매크로의 개선은 HAL 개발자가 런타임 오류를 더 효과적으로 감지하고 진단하는 데 도움이 될 수 있습니다.",
+      "camera_hal_perspective": "Camera HAL은 복잡한 상태 머신, 동시성, 하드웨어 인터페이스를 다루기 때문에 런타임 조건 검증이 매우 중요합니다. 개선된 assert() 매크로는 HAL 내부의 불변식(invariant) 검사, 잘못된 스트림 구성 또는 메타데이터 값 검증, 버퍼 수명 주기 오류 감지 등에 더 유용하게 활용될 수 있습니다. 이는 특히 디버깅 빌드에서 예측 불가능한 동작을 조기에 포착하고, 크래시의 근본 원인을 더 쉽게 추적하는 데 기여할 수 있습니다.",
+      "camera_hal_checks": [
+        "Clang/LLVM 툴체인이 C++26 표준을 지원하게 되면, 새로운 assert() 매크로의 동작을 HAL 코드에 적용할 때의 호환성 및 성능 영향을 검토합니다.",
+        "기존 HAL 코드에서 assert()를 사용하는 부분을 새로운 C++26 기능으로 대체할 경우의 이점(예: 더 풍부한 진단 정보)을 평가합니다.",
+        "특정 스트림 조합(예: YUV + RAW)에서 버퍼 할당 실패와 같은 예외적인 런타임 조건에 대한 assert() 검증 로직을 개선할 수 있는지 확인합니다."
+      ],
+      "action_hints": [
+        "C++26 표준의 assert() 개선 사항을 이해하고, 향후 HAL 코드에 적용할 수 있는 시나리오를 식별합니다.",
+        "툴체인 업데이트 시 새로운 assert() 기능을 활용하여 디버깅 빌드의 진단 기능을 강화할 계획을 수립합니다."
+      ],
+      "action_items": [
+        "2주 이내에 C++26의 assert() 매크로 개선 사항에 대한 상세 문서를 검토하고, HAL 코드에서 현재 assert()를 사용하는 주요 지점(예: `Camera3Device::configureStreams`, `Camera3Stream::validateBuffer`)에 적용 가능성을 평가합니다.",
+        "Clang/LLVM 툴체인 업데이트 로드맵을 확인하여 C++26 지원 시점을 파악하고, 새로운 assert() 기능을 활용한 디버깅 빌드에서 경고 클래스, 바이너리 크기, 성능 영향을 측정하는 PoC를 계획합니다.",
+        "HAL의 동시성 안전성 검증을 위해 `std::mutex` 또는 `std::atomic` 사용 시 불변식 검증에 새로운 assert() 기능을 적용하여 잠재적 레이스 컨디션을 조기에 감지할 수 있는지 검토합니다."
+      ],
+      "team_summary": "C++26의 assert() 매크로 개선은 HAL 코드의 런타임 조건 검증 및 디버깅 효율성을 높일 잠재력이 있으므로, 툴체인 업데이트 시 활용 방안을 검토해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "cpp-toolchain-fallback",
+      "imageCandidates": [
+        {
+          "url": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+          "sourceUrl": "https://isocpp.org/blog",
+          "articleUrl": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+          "sourceKind": "rss_item",
+          "licenseStatus": "unknown",
+          "attribution": "ISO C++ Blog",
+          "validationStatus": "ok",
+          "contentType": "image/jpeg",
+          "height": 200,
+          "width": 200
+        }
+      ],
+      "selectedImage": "../../assets/images/fallback/cpp.svg",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "제공된 이미지는 저자의 인물 사진으로, 기사 내용과 직접적인 관련성이 낮고 기술적인 정보를 전달하는 데 적합하지 않아 선택하지 않았습니다.",
+      "sources": [
+        {
+          "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+          "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+        }
+      ],
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/cpp.svg",
+        "src": "../../assets/images/fallback/cpp.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      }
+    },
+    {
+      "category": "AI plus camera input path or HAL workflow",
+      "headline": "Claude Code 2.1.128 출시: AI 코딩 에이전트의 HAL 개발 워크플로우 영향",
+      "what_changed": "2026년 5월 4일, Claude Code 2.1.128 버전이 출시되었습니다. 이 업데이트는 새로운 기능 및 개선 사항을 포함하며, 특히 플러그인 아카이브 지원 및 명령어 개선이 이루어졌습니다.",
+      "confirmed_facts": [
+        "릴리스 날짜: 2026년 5월 4일",
+        "버전/릴리스: Claude Code 2.1.128",
+        "API/구성 요소: Claude Code / AI coding agent",
+        "동작 변경: 새로운 기능 및 개선 사항이 포함된 Claude Code 2.1.128 버전이 출시되었습니다. 플러그인 아카이브(.zip) 지원 및 명령어 개선이 포함됩니다."
+      ],
+      "evidence_summary": "Claude Code Changelog에서 2026년 5월 4일자 2.1.128 버전 출시 및 주요 개선 사항(플러그인 아카이브 지원 등)을 확인했습니다.",
+      "specificity_checks": [
+        "릴리스 날짜: May 4, 2026",
+        "버전/릴리스: 2.1.128",
+        "API/구성 요소: Claude Code / AI coding agent",
+        "동작 변경: 새로운 기능 및 개선 사항이 포함된 Claude Code 2.1.128 버전이 출시되었습니다. 특히 `--plugin-dir`이 `.zip` 플러그인 아카이브를 지원합니다.",
+        "출처 페이지: https://code.claude.com/docs/en/changelog"
+      ],
+      "source_verification_notes": [
+        "Claude Code Changelog는 제품 업데이트에 대한 공식 정보를 제공하는 신뢰할 수 있는 출처입니다. 2.1.128 버전의 출시 및 변경 사항을 직접 확인했습니다."
+      ],
+      "background": "AI 코딩 에이전트는 개발자가 코드 작성, 디버깅, 테스트, 문서화 등 다양한 개발 작업을 자동화하고 효율화하도록 돕는 도구입니다. 이러한 에이전트의 발전은 개발 워크플로우를 혁신하고 생산성을 크게 향상시킬 잠재력을 가지고 있습니다.",
+      "why_it_matters": "Camera HAL 개발은 복잡한 C++ 코드, 하드웨어 인터페이스, Android 프레임워크와의 상호작용을 포함합니다. AI 코딩 에이전트의 발전은 HAL 개발자가 코드 스니펫 생성, 버그 진단, 테스트 케이스 작성, 문서화 지원 등 다양한 측면에서 도움을 받아 개발 생산성을 향상시킬 수 있습니다.",
+      "camera_hal_perspective": "AI 코딩 에이전트는 Camera HAL 개발 워크플로우에 다음과 같은 방식으로 통합될 수 있습니다. 첫째, 특정 카메라 메타데이터 키 또는 스트림 구성에 대한 C++ 코드 스니펫을 생성하여 반복적인 코딩 작업을 줄일 수 있습니다. 둘째, 복잡한 버퍼 수명 주기 관리 또는 동시성 문제에서 잠재적인 버그 패턴을 식별하고 수정 제안을 제공할 수 있습니다. 셋째, CTS/VTS/Camera ITS 실패 로그를 분석하여 HAL의 특정 영역에서 발생한 문제를 진단하는 데 도움을 줄 수 있습니다. 플러그인 아카이브 지원은 HAL 팀이 내부 도구 및 지식을 에이전트에 통합하는 유연성을 제공합니다.",
+      "camera_hal_checks": [
+        "AI 코딩 에이전트가 Camera HAL의 C++ 코드 스타일, 명명 규칙, Android 특정 API 사용법을 얼마나 잘 이해하고 코드를 생성하는지 평가합니다.",
+        "HAL의 복잡한 버퍼 관리(예: `GraphicBuffer` 사용) 또는 Binder IPC 관련 코드에서 AI 에이전트가 잠재적인 메모리 안전성 또는 크래시 버그를 식별할 수 있는지 테스트합니다.",
+        "AI 에이전트를 사용하여 특정 스트림 조합(예: Preview + Video + Raw)에 대한 `Camera3Request` 생성 또는 `Camera3Result` 파싱 코드를 자동 생성하는 PoC를 수행합니다."
+      ],
+      "action_hints": [
+        "Claude Code와 같은 AI 코딩 에이전트의 최신 기능을 검토하고, HAL 개발 워크플로우에 통합할 수 있는 잠재적 영역을 식별합니다.",
+        "AI 에이전트가 HAL 코드의 품질 및 디버깅 효율성을 향상시킬 수 있는지 소규모 PoC를 통해 평가합니다."
+      ],
+      "action_items": [
+        "2주 이내에 Claude Code 2.1.128의 새로운 플러그인 기능을 활용하여 Camera HAL의 특정 코드베이스(예: `camera3_device.cpp` 또는 `vendor_camera_hal.cpp`)에 대한 코드 리뷰 또는 리팩토링 제안을 생성하는 실험을 수행합니다.",
+        "AI 에이전트가 Camera HAL의 `request/result metadata` 키 또는 `stream configuration` 관련 C++ 코드 스니펫을 얼마나 정확하게 생성하는지 평가하고, 생성된 코드의 빌드 성공률 및 런타임 동작을 확인합니다.",
+        "HAL 팀의 개발자 리뷰 시간을 측정하고, AI 에이전트의 도움을 받았을 때 코드 품질 또는 버그 발견율에 유의미한 변화가 있는지 2주 이내의 단기 PoC를 통해 간접적으로 평가합니다."
+      ],
+      "team_summary": "Claude Code 2.1.128과 같은 AI 코딩 에이전트의 발전은 HAL 개발 워크플로우의 생산성을 향상시킬 잠재력이 있으므로, 코드 생성 및 버그 진단 측면에서 활용 가능성을 탐색해야 합니다.",
+      "is_ai_related": true,
+      "article_type": "ai-camera-path-hal-workflow",
+      "imageCandidates": [
+        {
+          "url": "https://claude-code.mintlify.app/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DGetting%2Bstarted%26appearance%3Dsystem%26title%3DChangelog%26description%3DRelease%2Bnotes%2Bfor%2BClaude%2BCode%252C%2Bincluding%2Bnew%2Bfeatures%252C%2Bimprovements%252C%2Band%2Bbug%2Bfixes%2Bby%2Bversion.%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Flight.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D78fd01ff4f4340295a4f66e2ea54903c%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Fdark.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D1298a0c3b3a1da603b190d0de0e31712%26primaryColor%3D%25230E0E0E%26lightColor%3D%2523D4A27F%26darkColor%3D%25230E0E0E%26backgroundLight%3D%2523FDFDF7%26backgroundDark%3D%252309090B&w=1200&q=100",
+          "sourceUrl": "https://code.claude.com/docs/en/changelog",
+          "articleUrl": "https://code.claude.com/docs/en/changelog",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Code Changelog",
+          "validationStatus": "ok",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
+        },
+        {
+          "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/light.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=78fd01ff4f4340295a4f66e2ea54903c",
+          "sourceUrl": "https://code.claude.com/docs/en/changelog",
+          "articleUrl": "https://code.claude.com/docs/en/changelog",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Code Changelog",
+          "validationStatus": "ok",
+          "contentType": "image/svg+xml",
+          "height": 100,
+          "width": 100
+        },
+        {
+          "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
+          "sourceUrl": "https://code.claude.com/docs/en/changelog",
+          "articleUrl": "https://code.claude.com/docs/en/changelog",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Code Changelog",
+          "validationStatus": "ok",
+          "contentType": "image/svg+xml",
+          "height": 100,
+          "width": 100
+        }
+      ],
+      "selectedImage": "https://claude-code.mintlify.app/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DGetting%2Bstarted%26appearance%3Dsystem%26title%3DChangelog%26description%3DRelease%2Bnotes%2Bfor%2BClaude%2BCode%252C%2Bincluding%2Bnew%2Bfeatures%252C%2Bimprovements%252C%2Band%2Bbug%2Bfixes%2Bby%2Bversion.%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Flight.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D78fd01ff4f4340295a4f66e2ea54903c%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Fdark.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D1298a0c3b3a1da603b190d0de0e31712%26primaryColor%3D%25230E0E0E%26lightColor%3D%2523D4A27F%26darkColor%3D%25230E0E0E%26backgroundLight%3D%2523FDFDF7%26backgroundDark%3D%252309090B&w=1200&q=100",
+      "imageSource": "https://code.claude.com/docs/en/changelog",
+      "imageAttribution": "Claude Code Changelog",
+      "imageAlt": "Claude Code Changelog 로고 및 제목",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "Claude Code의 공식 로고와 Changelog 제목을 포함한 이미지로, 기사 주제를 명확히 나타냅니다.",
+      "sources": [
+        {
+          "title": "Claude Code Changelog - 2.1.128",
+          "url": "https://code.claude.com/docs/en/changelog"
+        }
+      ],
+      "resolvedImage": {
+        "url": "https://claude-code.mintlify.app/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DGetting%2Bstarted%26appearance%3Dsystem%26title%3DChangelog%26description%3DRelease%2Bnotes%2Bfor%2BClaude%2BCode%252C%2Bincluding%2Bnew%2Bfeatures%252C%2Bimprovements%252C%2Band%2Bbug%2Bfixes%2Bby%2Bversion.%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Flight.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D78fd01ff4f4340295a4f66e2ea54903c%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Fdark.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D1298a0c3b3a1da603b190d0de0e31712%26primaryColor%3D%25230E0E0E%26lightColor%3D%2523D4A27F%26darkColor%3D%25230E0E0E%26backgroundLight%3D%2523FDFDF7%26backgroundDark%3D%252309090B&w=1200&q=100",
+        "src": "https://claude-code.mintlify.app/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DGetting%2Bstarted%26appearance%3Dsystem%26title%3DChangelog%26description%3DRelease%2Bnotes%2Bfor%2BClaude%2BCode%252C%2Bincluding%2Bnew%2Bfeatures%252C%2Bimprovements%252C%2Band%2Bbug%2Bfixes%2Bby%2Bversion.%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Flight.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D78fd01ff4f4340295a4f66e2ea54903c%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Fdark.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D1298a0c3b3a1da603b190d0de0e31712%26primaryColor%3D%25230E0E0E%26lightColor%3D%2523D4A27F%26darkColor%3D%25230E0E0E%26backgroundLight%3D%2523FDFDF7%26backgroundDark%3D%252309090B&w=1200&q=100",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
+      }
+    },
+    {
+      "category": "Linux Camera / V4L2",
+      "headline": "FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점",
+      "what_changed": "2026년 5월 2일, FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다. 이 베타 버전은 다양한 커널 및 드라이버 개선 사항을 포함합니다.",
+      "confirmed_facts": [
+        "릴리스 날짜: 2026년 5월 2일",
+        "버전/릴리스: FreeBSD 15.1 Beta 1",
+        "API/구성 요소: Linux camera / V4L2 (간접적 관련)",
+        "동작 변경: FreeBSD 15.1 Beta 1이 출시되었으며, 6월 정식 릴리스를 목표로 합니다."
+      ],
+      "evidence_summary": "Phoronix의 2026년 5월 2일 기사에서 FreeBSD 15.1 Beta 1의 출시를 확인했습니다. 이는 커널 및 드라이버 변경 사항을 포함합니다.",
+      "specificity_checks": [
+        "릴리스 날짜: 2026년 5월 2일",
+        "버전/릴리스: FreeBSD 15.1 Beta 1",
+        "API/구성 요소: Linux camera / V4L2 (간접적 관련)",
+        "동작 변경: FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다.",
+        "출처 페이지: https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+      ],
+      "source_verification_notes": [
+        "Phoronix는 Linux 및 오픈 소스 하드웨어/소프트웨어 뉴스를 다루는 신뢰할 수 있는 출처입니다. FreeBSD 15.1 Beta 1의 출시를 직접 확인했습니다. FreeBSD는 Android의 Linux 커널과 직접적인 관계는 없지만, 커널 및 드라이버 개발 동향을 간접적으로 파악하는 데 유용합니다."
+      ],
+      "background": "FreeBSD는 Unix 계열 운영체제로, Linux와 마찬가지로 커널 및 드라이버 개발에 중점을 둡니다. 비록 Android가 Linux 커널을 기반으로 하지만, FreeBSD의 커널 및 드라이버 개발은 때때로 공통된 문제 해결 접근 방식이나 새로운 기술 동향을 공유할 수 있습니다. 특히 미디어 스택이나 하드웨어 드라이버 개선은 V4L2와 같은 표준 인터페이스에 영향을 미칠 수 있습니다.",
+      "why_it_matters": "FreeBSD의 커널 및 드라이버 변경 사항은 Android의 Linux 커널 기반 카메라 스택에 대한 잠재적인 개선 사항이나 고려 사항을 간접적으로 시사할 수 있습니다. 특히 V4L2 관련 변경 사항은 HAL 구현에 영향을 줄 수 있습니다. 예를 들어, 버퍼 관리, 센서 모드 선택, ISP 튜닝과 관련된 새로운 접근 방식이 FreeBSD에서 탐구된다면, 이는 Android의 카메라 드라이버 및 HAL 설계에 대한 아이디어를 제공할 수 있습니다.",
+      "camera_hal_perspective": "FreeBSD의 업데이트는 직접적인 Android HAL 요구사항은 아니지만, Linux 커널의 미디어 하위 시스템(V4L2)과 유사한 개념을 공유하는 카메라 드라이버 개발의 일반적인 동향을 파악하는 데 도움이 됩니다. HAL 엔지니어는 FreeBSD의 변경 사항을 통해 버퍼 큐 관리, 포맷 협상, 센서 모드 선택, ISP 튜닝 등에서 발생할 수 있는 새로운 최적화 기법이나 잠재적인 문제점을 간접적으로 예측할 수 있습니다. 이는 vendor kernel의 카메라 드라이버 개발 방향을 이해하고, Android HAL과의 인터페이스를 개선하는 데 장기적인 관점을 제공할 수 있습니다.",
+      "camera_hal_checks": [
+        "FreeBSD 15.1 Beta의 커널 변경 로그를 검토하여 V4L2 또는 미디어 프레임워크와 관련된 주목할 만한 변경 사항이 있는지 확인합니다.",
+        "vendor kernel 브랜치에 FreeBSD의 변경 사항과 유사한 V4L2/미디어 패치가 있는지 확인하고, Android 카메라 HAL에 미칠 수 있는 간접적인 영향을 평가합니다.",
+        "FreeBSD의 버퍼 관리 또는 스트림 처리 개선 사항이 Android HAL의 버퍼 수명 주기 또는 프레임 타이밍 최적화에 대한 새로운 아이디어를 제공하는지 검토합니다."
+      ],
+      "action_hints": [
+        "FreeBSD 15.1 Beta의 커널 및 드라이버 변경 사항 중 V4L2 또는 미디어 스택과 관련된 부분을 간략히 검토합니다.",
+        "Android Linux 커널의 카메라 드라이버 개발 동향과 비교하여 장기적인 관점에서 참고할 만한 점이 있는지 확인합니다."
+      ],
+      "action_items": [
+        "2주 이내에 FreeBSD 15.1 Beta의 커널 변경 로그 중 `sys/dev/video` 또는 `sys/dev/media` 경로에 해당하는 부분을 검토하여 V4L2 또는 미디어 컨트롤러와 관련된 새로운 기능이나 개선 사항이 있는지 확인합니다.",
+        "현재 개발 중인 vendor kernel 브랜치에서 FreeBSD의 변경 사항과 유사한 V4L2/미디어 패치가 있는지 확인하고, 해당 패치가 Preview + ImageCapture 스트림 조합의 성능 또는 안정성에 미치는 영향을 진단하는 로그를 추가합니다.",
+        "이 항목을 HAL 백로그 또는 커널 추적 목록에 '참고용'으로 추가하고, 6개월마다 FreeBSD/Linux 미디어 스택의 주요 업데이트를 확인하여 Android HAL에 적용 가능한 인사이트가 있는지 재평가합니다."
+      ],
+      "team_summary": "FreeBSD 15.1 Beta 출시는 Android Linux 커널 카메라 스택에 대한 직접적인 영향은 없지만, 커널 및 드라이버 개발 동향을 간접적으로 파악하고 장기적인 HAL 설계 관점을 얻는 데 참고할 수 있습니다.",
+      "is_ai_related": false,
+      "article_type": "linux-camera-v4l2",
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=2026&image=freebsd_151beta_1",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
+          "sourceKind": "rss_item",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentType": "image/jpeg",
+          "height": 100,
+          "width": 100
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
+          "sourceKind": "rss_item",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentType": "image/png",
+          "height": 100,
+          "width": 100
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=2026&image=freebsd_151beta_2",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
+          "sourceKind": "rss_item",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentType": "image/jpeg",
+          "height": 100,
+          "width": 100
+        }
+      ],
+      "selectedImage": "../../assets/images/fallback/android.svg",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "제공된 이미지는 FreeBSD 로고 또는 스크린샷으로, 기사 내용과 직접적인 관련성이 낮고 Android Camera HAL 엔지니어에게 구체적인 기술 정보를 전달하는 데 적합하지 않아 선택하지 않았습니다.",
+      "sources": [
+        {
+          "title": "FreeBSD 15.1 Beta Released For Early Testing",
+          "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+        }
+      ],
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      }
+    },
+    {
+      "category": "Android Camera / Platform API",
+      "headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "what_changed": "2026년 5월 Android 보안 게시판이 발행되었습니다. 이 게시판은 Android 시스템의 잠재적인 보안 취약점에 대한 세부 정보를 포함하며, Camera HAL과 관련된 취약점 패치 또는 새로운 보안 요구사항이 포함될 수 있습니다.",
+      "confirmed_facts": [
+        "2026년 5월 Android 보안 게시판이 2026년 5월 1일에 발행되었습니다.",
+        "게시판은 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다."
+      ],
+      "evidence_summary": "2026년 5월 1일자 Android Security Bulletin에 따르면, 2026년 5월 Android 보안 게시판이 발행되었으며, 이는 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다. 구체적인 Camera HAL 관련 취약점은 게시판 내용을 통해 확인해야 합니다.",
+      "specificity_checks": [
+        "Release/version: Android Security Bulletin (2026년 5월)",
+        "Release date: 2026년 5월 1일",
+        "API/component: Android Security Bulletin",
+        "Behavior change: Android 시스템의 보안 취약점 및 관련 패치 정보가 공개됨. Camera HAL에 영향을 미치는 취약점이 포함될 수 있음."
+      ],
+      "source_verification_notes": [
+        "Android Security Bulletin 웹사이트에서 2026년 5월 게시판 발행을 확인했습니다.",
+        "게시판의 'Overview' 페이지는 특정 취약점 목록을 직접 제공하지 않으므로, HAL 관련 세부 사항은 개별 게시판 항목을 추가로 검토해야 합니다."
+      ],
+      "background": "Android 보안 게시판은 매월 발행되며, Android 기기의 보안을 강화하기 위한 패치와 권고 사항을 제공합니다. 이는 커널, 프레임워크, 라이브러리, 미디어 구성 요소 등 다양한 시스템 영역의 취약점을 다룹니다. Camera HAL은 Android 시스템의 중요한 구성 요소이므로, 보안 게시판에 언급된 취약점은 HAL 구현에 직접적인 영향을 미칠 수 있습니다.",
+      "why_it_matters": "Camera HAL은 민감한 이미지 및 비디오 데이터에 접근하므로, HAL의 보안 취약점은 사용자 프라이버시 침해 또는 시스템 악용으로 이어질 수 있습니다. 따라서 매월 발행되는 보안 게시판을 통해 HAL 관련 취약점을 신속하게 파악하고 패치하는 것이 중요합니다. 이는 기기 제조업체가 Android 호환성 및 보안 표준을 유지하는 데 필수적입니다.",
+      "camera_hal_perspective": "이번 보안 게시판은 Camera HAL 팀이 HAL 구현의 잠재적 취약점을 검토하고 필요한 보안 패치를 적용해야 함을 의미합니다. 특히, 카메라 드라이버, 이미지 처리 파이프라인, 버퍼 관리, metadata 처리와 관련된 취약점이 있는지 주의 깊게 살펴봐야 합니다. 이러한 취약점은 카메라 앱의 비정상적인 동작, 데이터 유출 또는 서비스 거부 공격으로 이어질 수 있습니다. CTS/VTS 및 Camera ITS 테스트를 통해 패치 적용 후에도 기능적 회귀가 없는지 확인해야 합니다.",
+      "camera_hal_checks": [
+        "2026년 5월 Android 보안 게시판의 전체 내용을 검토하여 Camera HAL, 카메라 드라이버, 이미지 처리 파이프라인과 직접적으로 관련된 CVE 항목이 있는지 확인합니다.",
+        "영향을 받는 것으로 식별된 HAL 구성 요소에 대해 보안 패치 적용 여부를 확인하고, 필요한 경우 즉시 패치를 구현합니다.",
+        "패치 적용 후, 해당 CVE와 관련된 공격 시나리오를 재현하는 내부 테스트 케이스를 개발하거나 기존 테스트를 강화하여 취약점이 성공적으로 해결되었는지 검증합니다.",
+        "패치 적용으로 인해 카메라 기능(예: Preview, ImageCapture, VideoCapture 스트림 조합)에 회귀가 발생하지 않는지 CTS/VTS 및 Camera ITS 테스트를 통해 확인합니다."
+      ],
+      "action_hints": [
+        "보안 게시판의 상세 내용을 확인하여 HAL 관련 CVE를 식별합니다.",
+        "식별된 CVE에 대한 패치 적용 계획을 수립하고 실행합니다.",
+        "패치 적용 후 회귀 테스트를 수행하여 안정성을 확보합니다."
+      ],
+      "action_items": [
+        "HAL 보안 담당자는 2026년 5월 Android 보안 게시판의 'Kernel Components', 'Media Framework', 'Camera' 섹션을 우선적으로 검토하여 HAL 관련 CVE를 식별하고, 관련 패치 여부를 2026년 5월 10일까지 보고합니다.",
+        "식별된 HAL 관련 CVE에 대해 영향을 받는 기기 모델 및 HAL 버전을 파악하고, 2026년 5월 17일까지 패치 적용 계획을 수립합니다.",
+        "패치 적용 후, 해당 CVE와 관련된 보안 테스트 케이스를 CTS/VTS 및 Camera ITS에 추가하거나 기존 테스트를 강화하여 2026년 5월 24일까지 검증을 완료합니다."
+      ],
+      "team_summary": "2026년 5월 Android 보안 게시판이 발행되었습니다. HAL 팀은 게시판을 검토하여 카메라 관련 취약점을 식별하고, 신속하게 패치를 적용하며, 회귀 테스트를 통해 안정성을 확보해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "main",
+      "imageCandidates": [
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "alt": "Android Security Bulletin 로고"
+        }
+      ],
+      "selectedImage": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+      "imageSource": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "imageAttribution": "Android Security Bulletin",
+      "imageAlt": "Android Security Bulletin 로고",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "The image is directly from the source and relevant to the article content.",
+      "sources": [
+        {
+          "title": "Overview",
+          "url": "https://source.android.com/docs/security/bulletin/asb-overview"
+        }
+      ],
+      "resolvedImage": {
+        "url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+        "src": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
+      }
     }
   ],
   "action_items": [
-    "Android 17 Beta 4 릴리스 노트를 검토하고, 카메라 관련 변경 사항을 요약하여 팀에 공유합니다. (2주 내)",
-    "영향을 받을 수 있는 주요 카메라 API 및 스트림 조합에 대한 회귀 테스트 계획을 수립합니다. (2주 내)",
-    "카메라 미리보기 스트림을 사용하여 온디바이스 AI 추론 시나리오의 지연 시간 및 프레임 드롭을 측정하고, 결과 데이터를 기록합니다. (2주 내)",
-    "Linux 7.1-rc2의 변경 로그를 검토하여 카메라 관련 V4L2/미디어 서브시스템 패치를 식별하고, 해당 패치가 현재 개발 중인 기기 커널에 적용 가능한지 조사합니다. (2주 내)",
-    "GCC 16.1 릴리스 노트를 검토하여 카메라 HAL 코드에 적용 가능한 새로운 최적화 플래그나 C++ 기능 개선 사항을 식별하고, 현재 Clang 컴파일러 환경에서 유사한 최적화 기법의 적용 가능성을 조사합니다. (2주 내)"
+    "2026년 5월 Android 보안 게시판의 'Camera' 또는 'Media Framework' 섹션에 언급된 CVE를 식별하고, HAL 코드베이스에 해당 취약점이 존재하는지 1주 이내에 검토합니다.",
+    "AI 분석 스트림 시나리오에서 특정 NPU/GPU/ISP 구성에서 프레임 드롭, 캡처 지연 시간, 열 스로틀링(thermal throttling) 발생 여부를 측정하는 테스트를 정의하고 2주 이내에 실행합니다.",
+    "C++26의 assert() 매크로 개선 사항에 대한 상세 문서를 검토하고, HAL 코드에서 현재 assert()를 사용하는 주요 지점(예: `Camera3Device::configureStreams`)에 적용 가능성을 평가합니다.",
+    "Claude Code 2.1.128의 새로운 플러그인 기능을 활용하여 Camera HAL의 특정 코드베이스에 대한 코드 리뷰 또는 리팩토링 제안을 생성하는 실험을 2주 이내에 수행합니다."
   ],
   "references": [
     {
-      "title": "The Fourth Beta of Android 17",
-      "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html"
-    },
-    {
-      "title": "Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes",
-      "url": "https://www.phoronix.com/news/Linux-7.1-rc2-Released"
-    },
-    {
-      "title": "GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15",
-      "url": "https://www.phoronix.com/review/gcc-16-benchmarks"
-    },
-    {
       "title": "Experimental hybrid inference and new Gemini models for Android",
       "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+    },
+    {
+      "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+    },
+    {
+      "title": "Claude Code Changelog - 2.1.128",
+      "url": "https://code.claude.com/docs/en/changelog"
+    },
+    {
+      "title": "FreeBSD 15.1 Beta Released For Early Testing",
+      "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+    },
+    {
+      "title": "Overview",
+      "url": "https://source.android.com/docs/security/bulletin/asb-overview"
     }
   ]
 }

@@ -27,8 +27,8 @@
 npm.cmd run validate completed successfully after manual repair.
 validate:config passed.
 validate:site passed for 6 newsletter entries.
-validate:images passed for 8 article images; fallback image warnings remain informational.
-validate:quality passed with 2026-05-05 quality 94/85 PASS.
+validate:images passed for 4 article images.
+validate:quality passed with 2026-05-05 quality 100/85 PASS.
 validate:localization passed.
 
 ## 잔여 TODO 여부
@@ -47,7 +47,7 @@ validate:localization passed.
 
 ## 품질 게이트
 
-- 품질 점수: 94/100
+- 품질 점수: 100/100
 - 품질 기준: 85
 - 품질 상태: PASS
-- 주요 감점: 1pt image-fallback (Android용 하이브리드 추론 및 새로운 Gemini 모델 지원); 4pt actionability (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향); 1pt image-fallback (FreeBSD 15.1 Beta 1 출시: Linux 카메라/미디어 생태계 동향)
+- 주요 감점: 없음

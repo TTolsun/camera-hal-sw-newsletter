@@ -2,7 +2,7 @@
 
 이 파일은 구조화된 newsletter source registry에서 생성됩니다. Gemini는 candidate JSON과 source metadata만 입력으로 사용하며 웹을 직접 browse하지 않습니다.
 
-- Lookback: 28일
+- Lookback: 21일
 - 후보 수: 40
 - Source registry: data/news-sources.json
 - Candidate-only media/community source는 final article selection 전에 official-source verification이 필요합니다.
@@ -23,23 +23,26 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 |---|---:|---:|---|---|---|---|---|---|---|---|
 | main | 100 | 6 | rss-item | yes | rss_item | Android Developers Blog | Experimental hybrid inference and new Gemini models for Android | Fri, 17 Apr 2026 20:00:00 +0000 | Eligible for main article selection. | [link](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html) |
 | main | 88 | 8 | rss-item | yes | rss_item | Android Developers Blog | The Fourth Beta of Android 17 | Thu, 16 Apr 2026 20:00:00 +0000 | Eligible for main article selection. | [link](https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html) |
+| main | 87 | 8 | release-note-item | yes | release_note_item | Android Security Bulletin | Overview | 2026-05-01 | Eligible for main article selection. | [link](https://source.android.com/docs/security/bulletin/asb-overview) |
+| short | 57 | 6 | rss-item | yes | rss_item | ISO C++ Blog | C++26: A User&#45;Friendly assert() macro &#45;&#45; Sandor Dargo | Mon, 04 May 2026 22:31:55 +0000 | Eligible for short newsletter use. | [link](https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo) |
 | short | 57 | 6 | rss-item | yes | rss_item | ISO C++ Blog | 2026 Annual C++ Developer Survey "Lite" | Wed, 22 Apr 2026 00:59:01 +0000 | Eligible for short newsletter use. | [link](https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1) |
-| short | 52 | 8 | release-note-item | yes | release_note_item | Claude Code Changelog | Claude Code Changelog - 2.1.126 | May 1, 2026 | Eligible for short newsletter use. | [link](https://code.claude.com/docs/en/changelog) |
+| short | 64 | 8 | release-note-item | yes | release_note_item | Claude Code Changelog | Claude Code Changelog - 2.1.128 | May 4, 2026 | Eligible for short newsletter use. | [link](https://code.claude.com/docs/en/changelog) |
 | short | 66 | 6 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | Linux 7.1 Fixes Audio For The Steam Deck OLED After Being Broken 2 Years On The Upstream Kernel | Sat, 02 May 2026 20:33:27 -0400 | Eligible for short newsletter use. | [link](https://www.phoronix.com/news/Steam-Deck-OLED-Audio-Fix) |
 | short | 62 | 6 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | AMD&#039;s GAIA Defaults To Better Model, Continued Improvements For Local AI | Sat, 02 May 2026 16:19:39 -0400 | Eligible for short newsletter use. | [link](https://www.phoronix.com/news/AMD-GAIA-0.17.5) |
 | short | 58 | 6 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | FreeBSD 15.1 Beta Released For Early Testing | Sat, 02 May 2026 06:53:24 -0400 | Eligible for short newsletter use. | [link](https://www.phoronix.com/news/FreeBSD-15.1-Beta-1) |
-| short | 54 | 6 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes | Sun, 03 May 2026 17:30:00 -0400 | Eligible for short newsletter use. | [link](https://www.phoronix.com/news/Linux-7.1-rc2-Released) |
-| short | 50 | 6 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15 | Mon, 04 May 2026 09:42:21 -0400 | Eligible for short newsletter use. | [link](https://www.phoronix.com/review/gcc-16-benchmarks) |
 
 ## Watchlist/reference page
 
 | 선택 가능성 | 점수 | 근거 | 수집 mode | 날짜 근거 | 출처 종류 | 출처 | 제목 | 발행일 | 사유 | Link |
 |---|---:|---:|---|---|---|---|---|---|---|---|
-| watchlist | 84 | 4 | release-note-page | no | rolling_page | CameraX Release Notes | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/jetpack/androidx/releases/camera) |
-| watchlist | 64 | 4 | html-watch-page | no | documentation_page | AOSP Camera Documentation | 相機 &nbsp;\|&nbsp; Android Open Source Project | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/core/camera) |
+| watchlist | 87 | 6 | release-note-page | no | release_note_item | Android Security Bulletin | May | 2026-05-01 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/security/bulletin/2026/2026-05-01) |
+| watchlist | 84 | 4 | release-note-page | no | rolling_page | CameraX Release Notes | VideocameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/jetpack/androidx/releases/camera) |
+| watchlist | 64 | 4 | html-watch-page | no | documentation_page | AOSP Camera Documentation | ক্যামেরা &nbsp;\|&nbsp; Android Open Source Project | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/core/camera) |
+| watchlist | 64 | 4 | release-note-page | no | rolling_page | AOSP What's New / Release Notes | What&apos;s new &nbsp;\|&nbsp; Android Open Source Project | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/whatsnew) |
 | watchlist | 64 | 4 | html-watch-page | no | documentation_page | Android Compatibility Definition Document | Android Compatibility Definition Document &nbsp;\|&nbsp; Android Open Source Project | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://source.android.com/docs/compatibility/cdd) |
-| watchlist | 37 | 0 | release-note-page | no | rolling_page | Android Developers Latest Updates | Aktuelle Android-Updates &nbsp;\|&nbsp; Latest updates &nbsp;\|&nbsp; Android Developers | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/latest-updates) |
+| watchlist | 37 | 0 | release-note-page | no | rolling_page | Android Developers Latest Updates | Actualizaciones más recientes de Android &nbsp;\|&nbsp; Latest updates &nbsp;\|&nbsp; Android Developers | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/latest-updates) |
 | watchlist | 60 | 2 | release-note-page | no | rolling_page | Samsung Mobile Security Updates | Samsung Mobile Security | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://security.samsungmobile.com/securityUpdate.smsb) |
+| watchlist | 33 | 0 | html-watch-page | no | rolling_page | Android Developer Newsletter | Android Developer Newsletters &nbsp;\|&nbsp; Android Developers | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://developer.android.com/newsletter) |
 | watchlist | 30 | 4 | html-watch-page | no | documentation_page | libcamera Documentation | Introduction &mdash; libcamera | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://libcamera.org/introduction.html) |
 
 ## 제외 또는 낮은 신뢰도 항목
@@ -51,17 +54,15 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | exclude | 92 | 2 | rss-item | yes | rss_item | Android Developers Blog | Streamline User Journeys with Verified Email via Credential Manager | Wed, 22 Apr 2026 20:00:00 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html) |
 | exclude | 88 | 6 | rss-item | yes | rss_item | Android Developers Blog | What's new in the Jetpack Compose April '26 release | Wed, 22 Apr 2026 23:00:00 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html) |
 | exclude | 88 | 4 | rss-item | yes | rss_item | Android Developers Blog | Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4 | Tue, 21 Apr 2026 14:00:00 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html) |
-| exclude | 88 | 4 | rss-item | yes | rss_item | Android Developers Blog | Test Multi-Device Interactions with the Android Emulator | Mon, 13 Apr 2026 13:00:00 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html) |
 | exclude | 84 | 2 | rss-item | yes | rss_item | Android Developers Blog | Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks | Mon, 04 May 2026 17:00:00 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html) |
 | exclude | 84 | 4 | rss-item | yes | rss_item | Android Developers Blog | Boosting user privacy and business protection with updated Play policies | Wed, 15 Apr 2026 17:00:00 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://android-developers.googleblog.com/2026/04/giving-users-clearer-choice-and-everyone-a-safer-more-trusted-app-ecosystem.html) |
 | exclude | 53 | 4 | rss-item | yes | rss_item | ISO C++ Blog | Devirtualization and Static Polymorphism &#45;&#45; David Álvarez Rosa | Thu, 16 Apr 2026 19:42:23 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa) |
+| exclude | 49 | 4 | rss-item | yes | rss_item | ISO C++ Blog | Results summary: 2026 Annual C++ Developer Survey "Lite" | Mon, 04 May 2026 21:04:35 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/2026-survey-summary) |
 | exclude | 49 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? &#45;&#45; Elmar Westphal | Thu, 23 Apr 2026 21:23:33 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph) |
 | exclude | 49 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Implementing Your Own C++ Atomics &#45;&#45; Ben Saks | Tue, 14 Apr 2026 16:24:09 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks) |
 | exclude | 45 | 6 | rss-item | yes | rss_item | ISO C++ Blog | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! | Thu, 30 Apr 2026 22:36:23 +0000 | Excluded or low-confidence item below the main/short candidate tier. | [link](https://isocpp.org//blog/2026/04/gcc-16.1) |
 | exclude | 45 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now &#45;&#45; Mike Shah | Wed, 15 Apr 2026 19:31:45 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-why-every-cpp-game-developer-should-learn-sdl-3-now-mike-shah) |
 | exclude | 45 | 4 | rss-item | yes | rss_item | ISO C++ Blog | Announcement: cppreference.com update | Tue, 14 Apr 2026 22:36:46 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/announcement-cppreference.com-update) |
-| exclude | 45 | 4 | rss-item | yes | rss_item | ISO C++ Blog | Power of C++26 Reflection: Strong (opaque) type definitions &#45;&#45; r/cpp | Thu, 09 Apr 2026 21:36:20 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp) |
-| exclude | 45 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Back to Basics: Custom Allocators Explained &#45; From Basics to Advanced &#45;&#45; Kevin Carpenter | Tue, 07 Apr 2026 17:17:59 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-back-to-basics-custom-allocators-explained-from-basics-to-advan) |
 | exclude | 41 | 8 | rss-item | yes | rss_item | ISO C++ Blog | Glaze 7.2 &#45; C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more | Tue, 28 Apr 2026 22:25:57 +0000 | Excluded or low-confidence item below the main/short candidate tier. | [link](https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more) |
 | exclude | 41 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ &#45;&#45; Madeline Schneider | Mon, 27 Apr 2026 21:25:11 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m) |
 | exclude | 41 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 C++: Some Assembly Required &#45;&#45; Matt Godbolt | Tue, 21 Apr 2026 21:13:30 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt) |
@@ -69,8 +70,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | exclude | 37 | 4 | rss-item | yes | rss_item | ISO C++ Blog | Behold the power of meta::substitute &#45;&#45; Barry Revzin | Wed, 22 Apr 2026 19:50:46 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/04/behold-the-power-of-metasubstitute-barry-revzin) |
 | exclude | 66 | 4 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | Linux File-System Proliferation A Burden: Requirements Laid Out For Any Future File-Systems | Mon, 04 May 2026 06:28:00 -0400 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://www.phoronix.com/news/Linux-FS-Proliferation-Burden) |
 | exclude | 66 | 4 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | Many Exciting Google Summer of Code 2026 Projects & A Lot Of AI | Sun, 03 May 2026 09:23:00 -0400 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://www.phoronix.com/news/GSoC-2026-Exciting-Projects) |
-| exclude | 54 | 4 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | Steam On Linux In April Pulled Back From Its Record High Marketshare | Fri, 01 May 2026 20:16:53 -0400 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://www.phoronix.com/news/Steam-April-2026-Survey) |
-| exclude | 50 | 4 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | Mesa Begins Seeing Patch Activity For AMD GFX12.1 Graphics | Mon, 04 May 2026 05:58:01 -0400 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://www.phoronix.com/news/AMD-GFX12.1-Mesa-Start) |
+| exclude | 54 | 4 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | NVIDIA Looking To Create New Tool For Generating AutoFDO Profiles For GCC | Mon, 04 May 2026 16:29:29 -0400 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://www.phoronix.com/news/NVIDIA-AutoFDO-Tool-For-GCC) |
 
 ## 원본 후보
 
@@ -302,43 +302,76 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Selection exclusion reason: Eligible for main article selection.
 - Verification hint: Can be used directly if the collected item supports the claim.
 - Relevance Score: 88
-- 요약: Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability. Whether you're fine-tuning your app's user experience, ensuring smooth edge-to-edge rendering, or leveraging the newest APIs, Beta 4 provides the near-final environment you need to be testing with. Get your apps, libraries, tools, and game engines ready! If you develop an Android SDK, library, tool, or 
+- 요약: Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability. Whether you're fine-tuning your app's user experience, ensuring smooth edge-to-edge rendering, or leveraging the newest APIs, Beta 4 provides the near-final environment you need to be testing with. Get your apps, libraries, tools, and game engines ready! If you develop an Android SDK, library, tool, or
 - Selection reason: Android Developers Blog (official, high, score 88): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 8. Test Multi-Device Interactions with the Android Emulator
+### 8. Overview
 
-- 출처: Android Developers Blog
-- 출처 URL: https://android-developers.googleblog.com/
-- 발행일: Mon, 13 Apr 2026 13:00:00 +0000
-- Link: https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html
+- 출처: Android Security Bulletin
+- 출처 URL: https://source.android.com/docs/security/bulletin
+- 발행일: 2026-05-01
+- Link: https://source.android.com/docs/security/bulletin/asb-overview
 - Section: Android / AOSP / Camera
-- Source category: android
+- Source category: security
 - Source priority: high
 - Source reliability: official
 - Candidate only: no
-- Collection mode: rss-item
+- Collection mode: release-note-item
 - Article candidate: yes
 - Watch page: no
 - 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
+- Evidence level: dated-release-evidence
+- Final selection eligibility: main
+- Source kind: release_note_item
+- Main eligible: yes
 - Briefing only: no
 - Reference only: no
-- Source gap risk: yes
-- Evidence score: 4
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: Whether you are building a multiplayer game, extending your mobile application across form factors, or launching virtual devices that require a device connection, the Android Emulator now natively supports these developer experiences.
+- Source gap risk: no
+- Evidence score: 8
+- Version/release: Android Security Bulletin
+- API/component: Android Security Bulletin
+- Behavior change: ss="devsite-expandable-nav"> Android Security Bulletins Bulletins home Overview 2026 bulletins May April <li class="devsite-nav-
 - Cross-check 필요: no
-- Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Relevance Score: 88
-- 요약: Posted by Steven Jenkins, Product Manager, Android Studio Testing multi-device interactions is now easier than ever with the Android Emulator. Whether you are building a multiplayer game, extending your mobile application across form factors, or launching virtual devices that require a device connection, the Android Emulator now natively supports these developer experiences. Previously, interconnecting multiple Android Virtual Devices (AVDs) caused significant friction. It required manually mana
-- Selection reason: Android Developers Blog (official, high, score 88): Camera HAL relevance and engineering productivity signals were both detected.
+- Selection exclusion reason: Eligible for main article selection.
+- Verification hint: Can be used directly if the collected item supports the claim.
+- Relevance Score: 87
+- 요약: ss="devsite-expandable-nav"> Android Security Bulletins Bulletins home Overview 2026 bulletins May April <li class="devsite-nav-
+- Selection reason: Android Security Bulletin (official, high, score 87): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 9. Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks
+### 9. May
+
+- 출처: Android Security Bulletin
+- 출처 URL: https://source.android.com/docs/security/bulletin
+- 발행일: 2026-05-01
+- Link: https://source.android.com/docs/security/bulletin/2026/2026-05-01
+- Section: Android / AOSP / Camera
+- Source category: security
+- Source priority: high
+- Source reliability: official
+- Candidate only: no
+- Collection mode: release-note-page
+- Article candidate: no
+- Watch page: yes
+- 날짜 근거 있음: no
+- Evidence level: undated-watch-page
+- Final selection eligibility: watchlist
+- Source kind: release_note_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 6
+- Version/release: 2026-05-01
+- API/component: Android Security Bulletin
+- Behavior change: vsite-nav-title" > Overview 2026 bulletins May April March February January <a class="devsite-nav-toggle" aria-hidden="true"
+- Cross-check 필요: no
+- Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Relevance Score: 87
+- 요약: vsite-nav-title" > Overview 2026 bulletins May April March February January <a class="devsite-nav-toggle" aria-hidden="true"
+- Selection reason: Android Security Bulletin (official, high, score 87): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
+
+### 10. Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -371,7 +404,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Thomas Ezan, Sr Developer Relations Engineer and Tracy Agyemang, Product Marketing Manager Karrot is a hyperlocal, community-driven peer-to-peer marketplace app that enables users to buy, sell, and trade items with other verified users. Since launching in South Korea in 2015, the platform has expanded into global markets, amassing over 43 million registered users. After launching in North America, engineers at Karrot observed that 30% of users in the region use a non-English device lan
 - Selection reason: Android Developers Blog (official, high, score 84): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 10. Boosting user privacy and business protection with updated Play policies
+### 11. Boosting user privacy and business protection with updated Play policies
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -404,7 +437,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Bennet Manuel, Group Product Manager, App & Ecosystem Trust We strive to make Google Play the safest and most trusted experience possible. Today, we’re announcing a new set of policy updates and an account transfer feature to boost user privacy and protect your business from fraud. By providing better features for users and easy-to-integrate tools for you, we’re making it simpler to build safer apps so you can focus on creating great experiences. We’re also expanding our features to he
 - Selection reason: Android Developers Blog (official, high, score 84): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 11. CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers
+### 12. VideocameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers
 
 - 출처: CameraX Release Notes
 - 출처 URL: https://developer.android.com/jetpack/androidx/releases/camera
@@ -428,7 +461,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Source gap risk: yes
 - Evidence score: 4
 - Version/release: 추출 안 됨
-- API/component: CameraX
+- API/component: Android Camera / Camera HAL
 - Behavior change: Use this source page as a change/release-note watch target.
 - Cross-check 필요: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
@@ -437,7 +470,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: CameraX Release Notes (official, high, score 84): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 12. 相機 &nbsp;|&nbsp; Android Open Source Project
+### 13. ক্যামেরা &nbsp;|&nbsp; Android Open Source Project
 
 - 출처: AOSP Camera Documentation
 - 출처 URL: https://source.android.com/docs/core/camera
@@ -470,7 +503,40 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP Camera Documentation (official, high, score 64): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 13. Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project
+### 14. What&apos;s new &nbsp;|&nbsp; Android Open Source Project
+
+- 출처: AOSP What's New / Release Notes
+- 출처 URL: https://source.android.com/docs/whatsnew
+- 발행일: 검토 필요
+- Link: https://source.android.com/docs/whatsnew
+- Section: Android / AOSP / Camera
+- Source category: aosp
+- Source priority: high
+- Source reliability: official
+- Candidate only: no
+- Collection mode: release-note-page
+- Article candidate: no
+- Watch page: yes
+- 날짜 근거 있음: no
+- Evidence level: undated-watch-page
+- Final selection eligibility: watchlist
+- Source kind: rolling_page
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: Android Camera / Camera HAL
+- Behavior change: Use this source page as a change/release-note watch target.
+- Cross-check 필요: no
+- Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Relevance Score: 64
+- 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
+- Selection reason: AOSP What's New / Release Notes (official, high, score 64): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
+
+### 15. Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project
 
 - 출처: Android Compatibility Definition Document
 - 출처 URL: https://source.android.com/docs/compatibility/cdd
@@ -503,7 +569,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Android Compatibility Definition Document (official, high, score 64): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 14. Aktuelle Android-Updates &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers
+### 16. Actualizaciones más recientes de Android &nbsp;|&nbsp; Latest updates &nbsp;|&nbsp; Android Developers
 
 - 출처: Android Developers Latest Updates
 - 출처 URL: https://developer.android.com/latest-updates
@@ -528,15 +594,48 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Evidence score: 0
 - Version/release: 추출 안 됨
 - API/component: 추출 안 됨
-- Behavior change: Entdecken Sie die Neuheiten im Android-Ökosystem.
+- Behavior change: Descubre las novedades del ecosistema de Android.
 - Cross-check 필요: no
 - Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
 - Relevance Score: 37
-- 요약: Entdecken Sie die Neuheiten im Android-Ökosystem.
+- 요약: Descubre las novedades del ecosistema de Android.
 - Selection reason: Android Developers Latest Updates (official, high, score 37): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 15. 2026 Annual C++ Developer Survey "Lite"
+### 17. C++26: A User&#45;Friendly assert() macro &#45;&#45; Sandor Dargo
+
+- 출처: ISO C++ Blog
+- 출처 URL: https://isocpp.org/blog
+- 발행일: Mon, 04 May 2026 22:31:55 +0000
+- Link: https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo
+- Section: C++ / Native / Toolchain
+- Source category: cpp
+- Source priority: high
+- Source reliability: official-community
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: short
+- Source kind: rss_item
+- Main eligible: yes
+- Briefing only: no
+- Reference only: no
+- Source gap risk: no
+- Evidence score: 6
+- Version/release: 추출 안 됨
+- API/component: C++ / native toolchain
+- Behavior change: C++26 is bringing some long-overdue changes to&nbsp; assert() .
+- Cross-check 필요: no
+- Selection exclusion reason: Eligible for short newsletter use.
+- Verification hint: Can be used directly if the collected item supports the claim.
+- Relevance Score: 57
+- 요약: C++26 is bringing some long-overdue changes to&nbsp; assert() . But why are those changes needed? And when do we actually use&nbsp; assert , anyway? At its core,&nbsp; assert() &nbsp;exists to validate runtime conditions. If the given expression evaluates to&nbsp; false , the program aborts. I&rsquo;m almost certain you&rsquo;ve used it before &mdash; at work, in personal projects, or at the very least in examples and code snippets. So what&rsquo;s the problem? C++26: A User-Friendly assert() ma
+- Selection reason: ISO C++ Blog (official-community, high, score 57): Camera HAL relevance and engineering productivity signals were both detected.
+
+### 18. 2026 Annual C++ Developer Survey "Lite"
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -569,7 +668,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: The annual global C++ developer survey is now open: 2026 Annual C++ Developer Survey "Lite" Please share your feedback in this annual 10-minute survey to help inform C++ standardization and C++ tool vendors. This is the biggest opportunity we all have each year to make our voices heard and help improve our industry and community! A summary of the results, including aggregated highlights of common answers in the write-in responses, will be posted publicly here on isocpp.org and shared with the C+
 - Selection reason: ISO C++ Blog (official-community, high, score 57): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 16. Devirtualization and Static Polymorphism &#45;&#45; David Álvarez Rosa
+### 19. Devirtualization and Static Polymorphism &#45;&#45; David Álvarez Rosa
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -602,7 +701,40 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Ever wondered why your clean, object-oriented design sometimes slows things down? This piece breaks down how virtual dispatch impacts performance&mdash;and how techniques like devirtualization and static polymorphism can eliminate that overhead entirely. Devirtualization and Static Polymorphism by David &Aacute;lvarez Rosa From the article: Ever wondered why your &ldquo;clean&rdquo; polymorphic design underperforms in benchmarks? Virtual dispatch enables polymorphism, but it comes with hidden ov
 - Selection reason: ISO C++ Blog (official-community, high, score 53): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 17. CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? &#45;&#45; Elmar Westphal
+### 20. Results summary: 2026 Annual C++ Developer Survey "Lite"
+
+- 출처: ISO C++ Blog
+- 출처 URL: https://isocpp.org/blog
+- 발행일: Mon, 04 May 2026 21:04:35 +0000
+- Link: https://isocpp.org//blog/2026/05/2026-survey-summary
+- Section: C++ / Native / Toolchain
+- Source category: cpp
+- Source priority: high
+- Source reliability: official-community
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: exclude
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: no
+- Reference only: no
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: C++ / native toolchain
+- Behavior change: Thank you to everyone who reponded to&nbsp; our 2026 annual global C++ developer survey .
+- Cross-check 필요: no
+- Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
+- Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
+- Relevance Score: 49
+- 요약: Thank you to everyone who reponded to&nbsp; our 2026 annual global C++ developer survey . As promised, here is a summary of the results, including one-page summaries of your answers to the free-form questions: CppDevSurvey-2026-summary.pdf A 145-page version of this report that also includes all individual write-in responses has now been forwarded to the C++ standards committee and C++ product vendors, to help inform C++ evolution and tooling. Your feedback is valuable, and appreciated.
+- Selection reason: ISO C++ Blog (official-community, high, score 49): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
+
+### 21. CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? &#45;&#45; Elmar Westphal
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -635,7 +767,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Can Standard C++ Replace CUDA for GPU Acceleration? by Elmar Westphal Summary of the talk: On top
 - Selection reason: ISO C++ Blog (official-community, high, score 49): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 18. CppCon 2025 Implementing Your Own C++ Atomics &#45;&#45; Ben Saks
+### 22. CppCon 2025 Implementing Your Own C++ Atomics &#45;&#45; Ben Saks
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -668,7 +800,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Implementing Your Own C++ Atomics by Ben Saks Summary of the talk: Atomic objects are extremely u
 - Selection reason: ISO C++ Blog (official-community, high, score 49): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 19. GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
+### 23. GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -701,7 +833,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R
 - Selection reason: ISO C++ Blog (official-community, high, score 45): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 20. CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now &#45;&#45; Mike Shah
+### 24. CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now &#45;&#45; Mike Shah
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -734,7 +866,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Why Every C++ Game Developer Should Learn SDL 3 Now by Mike Shah Summary of the talk: The C++ pro
 - Selection reason: ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 21. Announcement: cppreference.com update
+### 25. Announcement: cppreference.com update
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -767,73 +899,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: cppreference.com &nbsp;is the premier public reference site for documenting and tracking the C++ language. It is run by Nate Kohl, with the help of many volunteer wiki editors. I want to thank Nate and all the volunteers for making it such an enduringly valuable resource. Like all software, the site requires maintenance. It has been in read-only mode for some time while Nate has been leading the work to migrate it to MediaWiki. Because the Standard C++ Foundation 's web wizard, James Riordon, re
 - Selection reason: ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 22. Power of C++26 Reflection: Strong (opaque) type definitions &#45;&#45; r/cpp
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Thu, 09 Apr 2026 21:36:20 +0000
-- Link: https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: no
-- Reference only: no
-- Source gap risk: yes
-- Evidence score: 4
-- Version/release: 추출 안 됨
-- API/component: C++ / native toolchain
-- Behavior change: Inspired by a similar previous thread showcasing cool uses for C++26 reflection.
-- Cross-check 필요: no
-- Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Relevance Score: 45
-- 요약: Inspired by a similar previous thread showcasing cool uses for C++26 reflection. Power of C++26 Reflection: Strong (opaque) type definitions&nbsp; From the article: With reflection, you can easily create "opaque" type definitions, i.e "strong types". It works by having an inner value stored, and wrapping over all public member functions. Note: I am using queue_injection { ... } with the EDG experimental reflection, which afaik wasn't actually integrated into the C++26 standard, but without it yo
-- Selection reason: ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
-
-### 23. CppCon 2025 Back to Basics: Custom Allocators Explained &#45; From Basics to Advanced &#45;&#45; Kevin Carpenter
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Tue, 07 Apr 2026 17:17:59 +0000
-- Link: https://isocpp.org//blog/2026/04/cppcon-2025-back-to-basics-custom-allocators-explained-from-basics-to-advan
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: no
-- Reference only: no
-- Source gap risk: yes
-- Evidence score: 4
-- Version/release: 추출 안 됨
-- API/component: C++ / native toolchain
-- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
-- Cross-check 필요: no
-- Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Relevance Score: 45
-- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Back to Basics: Custom Allocators Explained - From Basics to Advanced by Kevin Carpenter Summary 
-- Selection reason: ISO C++ Blog (official-community, high, score 45): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
-
-### 24. Glaze 7.2 &#45; C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
+### 26. Glaze 7.2 &#45; C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -866,7 +932,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more From the article: Glaze now supports C++26 reflection with experimental GCC and Clang compilers. GCC 16 will soon be released with this support. When enabled, Glaze replaces the traditional&nbsp; __PRETTY_FUNCTION__ &nbsp;parsing an
 - Selection reason: ISO C++ Blog (official-community, high, score 41): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 25. CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ &#45;&#45; Madeline Schneider
+### 27. CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ &#45;&#45; Madeline Schneider
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -899,7 +965,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! The Wonderful World of Designing a USB Stack Using Modern C++ by Madeline Schneider Summary of th
 - Selection reason: ISO C++ Blog (official-community, high, score 41): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 26. CppCon 2025 C++: Some Assembly Required &#45;&#45; Matt Godbolt
+### 28. CppCon 2025 C++: Some Assembly Required &#45;&#45; Matt Godbolt
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -932,7 +998,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! C++: Some Assembly Required by Matt Godbolt Summary of the talk: Join Matt in exploring how the C
 - Selection reason: ISO C++ Blog (official-community, high, score 41): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 27. CppCon 2025 How C++ Finally Beats Rust at JSON Serialization &#45;&#45; Lemire & Thiesen
+### 29. CppCon 2025 How C++ Finally Beats Rust at JSON Serialization &#45;&#45; Lemire & Thiesen
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -965,7 +1031,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! How C++ Finally Beats Rust at JSON Serialization by Daniel Lemire & Francisco Geiman Thiesen Summ
 - Selection reason: ISO C++ Blog (official-community, high, score 41): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 28. Behold the power of meta::substitute &#45;&#45; Barry Revzin
+### 30. Behold the power of meta::substitute &#45;&#45; Barry Revzin
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -998,7 +1064,40 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: What if string formatting could do far more than just substitute values&mdash;and do it all at compile time? This deep dive explores how modern C++ features like reflection unlock powerful new possibilities for parsing, analyzing, and transforming format strings before your program even runs. Behold the power of meta::substitute by Barry Revzin From the article: Over winter break, I started working on proposal for&nbsp; string interpolation . It was a lot of fun to work through implementing, bas
 - Selection reason: ISO C++ Blog (official-community, high, score 37): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
 
-### 29. Samsung Mobile Security
+### 31. Claude Code Changelog - 2.1.128
+
+- 출처: Claude Code Changelog
+- 출처 URL: https://code.claude.com/docs/en/changelog
+- 발행일: May 4, 2026
+- Link: https://code.claude.com/docs/en/changelog
+- Section: AI / SW Engineering Trends
+- Source category: ai-coding
+- Source priority: medium
+- Source reliability: official
+- Candidate only: no
+- Collection mode: release-note-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-release-evidence
+- Final selection eligibility: short
+- Source kind: release_note_item
+- Main eligible: yes
+- Briefing only: no
+- Reference only: no
+- Source gap risk: no
+- Evidence score: 8
+- Version/release: 2.1.128
+- API/component: Claude Code / AI coding agent
+- Behavior change: ​ 2.1.128 May 4, 2026 Bare /color (no args) now picks a random session color /mcp now shows the tool count for connected servers and flags servers that connected with 0 tools --plugin-dir now accepts .zip plugin archives in addition to directories --channels now works with console (API key) authentication — console orgs with managed settings must set channelsEnabled: true to enable Updated /model picker: collapsed duplicate Opus 4.7 entries, and current Opus now shows as “Opus” instead of “Opus 4.7” Subprocesses (Bash, hooks, MCP, LSP) no longer inherit OTEL_* environment variables, so OTEL-instrumented apps run via the Bash tool no longer pick up the CLI’s own OTLP endpoint MCP: workspace is now a reserved server name — existing servers with that name will be skipped with a warning Reconnecting MCP servers no longer flood the conv
+- Cross-check 필요: no
+- Selection exclusion reason: Eligible for short newsletter use.
+- Verification hint: Can be used directly if the collected item supports the claim.
+- Relevance Score: 64
+- 요약: ​ 2.1.128 May 4, 2026 Bare /color (no args) now picks a random session color /mcp now shows the tool count for connected servers and flags servers that connected with 0 tools --plugin-dir now accepts .zip plugin archives in addition to directories --channels now works with console (API key) authentication — console orgs with managed settings must set channelsEnabled: true to enable Updated /model picker: collapsed duplicate Opus 4.7 entries, and current Opus now shows as “Opus” instead of “Opus
+- Selection reason: Claude Code Changelog (official, medium, score 64): Camera HAL relevance and engineering productivity signals were both detected.
+
+### 32. Samsung Mobile Security
 
 - 출처: Samsung Mobile Security Updates
 - 출처 URL: https://security.samsungmobile.com/securityUpdate.smsb
@@ -1031,40 +1130,40 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Samsung Mobile Security Updates (official, medium, score 60): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 30. Claude Code Changelog - 2.1.126
+### 33. Android Developer Newsletters &nbsp;|&nbsp; Android Developers
 
-- 출처: Claude Code Changelog
-- 출처 URL: https://code.claude.com/docs/en/changelog
-- 발행일: May 1, 2026
-- Link: https://code.claude.com/docs/en/changelog
-- Section: AI / SW Engineering Trends
-- Source category: ai-coding
+- 출처: Android Developer Newsletter
+- 출처 URL: https://developer.android.com/newsletter
+- 발행일: 검토 필요
+- Link: https://developer.android.com/newsletter
+- Section: Android / AOSP / Camera
+- Source category: android
 - Source priority: medium
 - Source reliability: official
 - Candidate only: no
-- Collection mode: release-note-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-release-evidence
-- Final selection eligibility: short
-- Source kind: release_note_item
-- Main eligible: yes
-- Briefing only: no
-- Reference only: no
-- Source gap risk: no
-- Evidence score: 8
-- Version/release: 2.1.126
-- API/component: Claude Code
-- Behavior change: ​ 2.1.126 May 1, 2026 The /model picker now lists models from your gateway’s /v1/models endpoint when ANTHROPIC_BASE_URL points at an Anthropic-compatible gateway Added claude project purge [path] to delete all Claude Code state for a project (transcripts, tasks, file history, config entry) — supports --dry-run , -y/--yes , -i/--interactive , and --all --dangerously-skip-permissions now bypasses prompts for writes to .claude/ , .git/ , .vscode/ , shell config files, and other previously-protected paths (catastrophic removal commands still prompt as a safety net) claude auth login now accepts the OAuth code pasted into the terminal when the browser callback can’t reach localhost (WSL2, SSH, containers) claude_code.skill_activated OpenTelemetry event now fires fo
+- Collection mode: html-watch-page
+- Article candidate: no
+- Watch page: yes
+- 날짜 근거 있음: no
+- Evidence level: undated-watch-page
+- Final selection eligibility: watchlist
+- Source kind: rolling_page
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 0
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: The latest developer news and tips to help you succeed on Google Play.
 - Cross-check 필요: no
-- Selection exclusion reason: Eligible for short newsletter use.
-- Verification hint: Can be used directly if the collected item supports the claim.
-- Relevance Score: 52
-- 요약: ​ 2.1.126 May 1, 2026 The /model picker now lists models from your gateway’s /v1/models endpoint when ANTHROPIC_BASE_URL points at an Anthropic-compatible gateway Added claude project purge [path] to delete all Claude Code state for a project (transcripts, tasks, file history, config entry) — supports --dry-run , -y/--yes , -i/--interactive , and --all --dangerously-skip-permissions now bypasses prompts for writes to .claude/ , .git/ , .vscode/ , shell config files, and other previously-protecte
-- Selection reason: Claude Code Changelog (official, medium, score 52): C++, LLVM/Clang, AI, build, test, or developer tooling signals were detected.
+- Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Relevance Score: 33
+- 요약: The latest developer news and tips to help you succeed on Google Play.
+- Selection reason: Android Developer Newsletter (official, medium, score 33): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 31. Introduction &mdash; libcamera
+### 34. Introduction &mdash; libcamera
 
 - 출처: libcamera Documentation
 - 출처 URL: https://libcamera.org/introduction.html
@@ -1097,7 +1196,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: libcamera Documentation (project-official, medium, score 30): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
-### 32. Linux File-System Proliferation A Burden: Requirements Laid Out For Any Future File-Systems
+### 35. Linux File-System Proliferation A Burden: Requirements Laid Out For Any Future File-Systems
 
 - 출처: Phoronix Linux Camera / Media
 - 출처 URL: https://www.phoronix.com/
@@ -1130,7 +1229,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: The growing number of file-systems within the Linux kernel source tree is causing an ongoing burden for upstream developers maintaining the virtual file-system (VFS) code around it and associated code. As a result of the continuing rise of new file-systems being proposed for the Linux kernel, documentation is being introduced to establish clear guidelines for getting new file-systems accepted into the mainline kernel...
 - Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 66): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 33. Many Exciting Google Summer of Code 2026 Projects & A Lot Of AI
+### 36. Many Exciting Google Summer of Code 2026 Projects & A Lot Of AI
 
 - 출처: Phoronix Linux Camera / Media
 - 출처 URL: https://www.phoronix.com/
@@ -1163,7 +1262,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: This week Google announced the selected Google Summer of Code "GSoC" 2026 projects for providing stipends to student developers for engaging in different open-source projects. This year a lot of open-source projects involve AI/LLM adoption but there are also a number of other interesting student projects at large from GNOME Mutter GPU reset recovery to adding new features to FreeBSD...
 - Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 66): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 34. Linux 7.1 Fixes Audio For The Steam Deck OLED After Being Broken 2 Years On The Upstream Kernel
+### 37. Linux 7.1 Fixes Audio For The Steam Deck OLED After Being Broken 2 Years On The Upstream Kernel
 
 - 출처: Phoronix Linux Camera / Media
 - 출처 URL: https://www.phoronix.com/
@@ -1193,10 +1292,10 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Selection exclusion reason: Eligible for short newsletter use.
 - Verification hint: Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.
 - Relevance Score: 66
-- 요약: It turns out the Steam Deck OLED gaming handheld has not had working audio support with the mainline (upstream) Linux kernel since a change in late 2023 that was merged for Linux 6.8. There was an AMD ASoC audio change that inadvertently broke audio support for the Steam Deck OLED handheld but not affecting the original LCD model. Valve's downstream Steam OS kernel has compensated for this known breakage and other distributions targeting the Steam Deck OLED have carried the patch, but now there 
+- 요약: It turns out the Steam Deck OLED gaming handheld has not had working audio support with the mainline (upstream) Linux kernel since a change in late 2023 that was merged for Linux 6.8. There was an AMD ASoC audio change that inadvertently broke audio support for the Steam Deck OLED handheld but not affecting the original LCD model. Valve's downstream Steam OS kernel has compensated for this known breakage and other distributions targeting the Steam Deck OLED have carried the patch, but now there
 - Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 66): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 35. AMD&#039;s GAIA Defaults To Better Model, Continued Improvements For Local AI
+### 38. AMD&#039;s GAIA Defaults To Better Model, Continued Improvements For Local AI
 
 - 출처: Phoronix Linux Camera / Media
 - 출처 URL: https://www.phoronix.com/
@@ -1229,7 +1328,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: AMD software engineers on Friday released a new version of GAIA "Generative AI Is Awesome" as their open-source software for Windows and Linux leveraging the Lemonade SDK and aiming to make it easy to build AI agents on your PC with all local AI processing across AMD's CPUs, GPUs, and NPUs...
 - Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 62): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 36. FreeBSD 15.1 Beta Released For Early Testing
+### 39. FreeBSD 15.1 Beta Released For Early Testing
 
 - 출처: Phoronix Linux Camera / Media
 - 출처 URL: https://www.phoronix.com/
@@ -1262,45 +1361,12 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Following last year's release of FreeBSD 15.0, FreeBSD 15.1 is working its way toward release release in June. For kicking off the release dance, FreeBSD 15.1 Beta 1 is available today for testing...
 - Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 58): Camera HAL relevance and engineering productivity signals were both detected.
 
-### 37. Linux 7.1-rc2 Released With Audio Fix For Steam Deck OLED, Other Fixes
+### 40. NVIDIA Looking To Create New Tool For Generating AutoFDO Profiles For GCC
 
 - 출처: Phoronix Linux Camera / Media
 - 출처 URL: https://www.phoronix.com/
-- 발행일: Sun, 03 May 2026 17:30:00 -0400
-- Link: https://www.phoronix.com/news/Linux-7.1-rc2-Released
-- Section: Linux Camera / Driver
-- Source category: linux-kernel
-- Source priority: medium
-- Source reliability: tech-media
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: short
-- Source kind: rss_item
-- Main eligible: yes
-- Briefing only: no
-- Reference only: no
-- Source gap risk: no
-- Evidence score: 6
-- Version/release: 추출 안 됨
-- API/component: Linux camera / V4L2
-- Behavior change: Linux 7.1-rc2 is out for testing with its accumulation of initial bug and regression fixes that have been collected over the past week since the Linux 7.1 merge window was capped off...
-- Cross-check 필요: yes
-- Selection exclusion reason: Eligible for short newsletter use.
-- Verification hint: Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.
-- Relevance Score: 54
-- 요약: Linux 7.1-rc2 is out for testing with its accumulation of initial bug and regression fixes that have been collected over the past week since the Linux 7.1 merge window was capped off...
-- Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 54): Camera HAL relevance and engineering productivity signals were both detected.
-
-### 38. Steam On Linux In April Pulled Back From Its Record High Marketshare
-
-- 출처: Phoronix Linux Camera / Media
-- 출처 URL: https://www.phoronix.com/
-- 발행일: Fri, 01 May 2026 20:16:53 -0400
-- Link: https://www.phoronix.com/news/Steam-April-2026-Survey
+- 발행일: Mon, 04 May 2026 16:29:29 -0400
+- Link: https://www.phoronix.com/news/NVIDIA-AutoFDO-Tool-For-GCC
 - Section: Linux Camera / Driver
 - Source category: linux-kernel
 - Source priority: medium
@@ -1320,83 +1386,18 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Evidence score: 4
 - Version/release: 추출 안 됨
 - API/component: Linux camera / V4L2
-- Behavior change: Steam on Linux use in March had skyrocketed to 5.33%, a 3.1% boost month-over-month and easily the highest level we've seen Steam on Linux at since its inception more than a decade ago.
+- Behavior change: NVIDIA compiler engineers are looking to develop a standalone tool that could be upstreamed into the GNU Compiler Collection (GCC) codebase for generating AutoFDO profiles for consumption by GCC in turn for better benefiting from automatic feedback directed optimizations (FDO) in the name of better performance...
 - Cross-check 필요: yes
 - Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
 - Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
 - Relevance Score: 54
-- 요약: Steam on Linux use in March had skyrocketed to 5.33%, a 3.1% boost month-over-month and easily the highest level we've seen Steam on Linux at since its inception more than a decade ago. This record growth came amid the ongoing success of the Steam Deck handheld and Steam Play (Proton) for enabling more Windows games to run well on Linux. The April numbers are in and the Linux gaming marketshare pulled back somewhat but still remaining healthy...
+- 요약: NVIDIA compiler engineers are looking to develop a standalone tool that could be upstreamed into the GNU Compiler Collection (GCC) codebase for generating AutoFDO profiles for consumption by GCC in turn for better benefiting from automatic feedback directed optimizations (FDO) in the name of better performance...
 - Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 54): Camera HAL relevance and engineering productivity signals were both detected.
-
-### 39. GCC 16 Compiler Delivering Some Decent Performance Gains Over GCC 15
-
-- 출처: Phoronix Linux Camera / Media
-- 출처 URL: https://www.phoronix.com/
-- 발행일: Mon, 04 May 2026 09:42:21 -0400
-- Link: https://www.phoronix.com/review/gcc-16-benchmarks
-- Section: Linux Camera / Driver
-- Source category: linux-kernel
-- Source priority: medium
-- Source reliability: tech-media
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: short
-- Source kind: rss_item
-- Main eligible: yes
-- Briefing only: no
-- Reference only: no
-- Source gap risk: no
-- Evidence score: 6
-- Version/release: 추출 안 됨
-- API/component: Linux camera / V4L2
-- Behavior change: With the GCC 16.1 compiler released last Thursday, I have begun running more compiler benchmarks on this first GCC 16 stable feature release.
-- Cross-check 필요: yes
-- Selection exclusion reason: Eligible for short newsletter use.
-- Verification hint: Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.
-- Relevance Score: 50
-- 요약: With the GCC 16.1 compiler released last Thursday, I have begun running more compiler benchmarks on this first GCC 16 stable feature release. GCC 16 comes heavy on new changes in being the annual feature release and delivering changes from AMD Zen 6 and Arm AGI CPU support to new C++ features and even the Algol 68 programming language front-end. It&#039;s also looking quite good in the performance department relative to the GCC 15 compiler from last year.
-- Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 50): Camera HAL relevance and engineering productivity signals were both detected.
-
-### 40. Mesa Begins Seeing Patch Activity For AMD GFX12.1 Graphics
-
-- 출처: Phoronix Linux Camera / Media
-- 출처 URL: https://www.phoronix.com/
-- 발행일: Mon, 04 May 2026 05:58:01 -0400
-- Link: https://www.phoronix.com/news/AMD-GFX12.1-Mesa-Start
-- Section: Linux Camera / Driver
-- Source category: linux-kernel
-- Source priority: medium
-- Source reliability: tech-media
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: no
-- Reference only: no
-- Source gap risk: yes
-- Evidence score: 4
-- Version/release: 추출 안 됨
-- API/component: Linux camera / V4L2
-- Behavior change: Since last November we've begun seeing new open-source driver activity for their next-gen GPU IP with their GFX12.1 graphics engine.
-- Cross-check 필요: yes
-- Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Relevance Score: 50
-- 요약: Since last November we've begun seeing new open-source driver activity for their next-gen GPU IP with their GFX12.1 graphics engine. GFX12 (12.0) was for the Radeon RX 9000 series RDNA4 hardware while GFX 12.1 is some new revision for yet-to-be-known products while there is also GFX13 bring-up and GFX12.5 too...
-- Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 50): Camera, CameraX, HAL, Android, libcamera, V4L2, or compatibility signals were detected.
 
 ## Collector 실패
 
 - LLVM Project Blog: 404 Not Found
+- 요즘IT: 403 Forbidden
 
 ## 편집장 체크리스트
 
