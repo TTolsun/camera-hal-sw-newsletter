@@ -402,6 +402,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const sections = ensureArray(editor.sections);
   const state = { deductions: [] };
   const candidateMap = reporterCandidateUrlMap(reporter);
+  const staleClaimReport = options.staleClaimReport || null;
   let sourceIntegrityViolationCount = 0;
   const sourceUrlOwners = new Map();
 
@@ -531,6 +532,15 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   if (gaps > 0) {
     boundedDeduct(state, 'source-integrity', Math.min(10, gaps * 3), `Fact checker reported ${gaps} source gap(s).`);
   }
+  const staleHardFailures = ensureArray(staleClaimReport?.hard_failures);
+  if (staleClaimReport?.status === 'NEEDS_FIX' || staleHardFailures.length > 0) {
+    boundedDeduct(
+      state,
+      'source-integrity',
+      Math.min(12, Math.max(6, staleHardFailures.length * 6)),
+      `Stale claim report has ${staleHardFailures.length} hard failure(s).`
+    );
+  }
 
   const finalSelectedCandidates = ensureArray(reporter.candidates).filter(isFinalSelected);
   const lowScoreSelected = finalSelectedCandidates.filter(candidate => {
@@ -580,6 +590,10 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       fact_check_status: factCheck.status || 'UNKNOWN',
       must_fix_count: mustFixCount,
       source_gap_count: gaps,
+      stale_claim_status: staleClaimReport?.status || 'UNKNOWN',
+      stale_claim_removed_count: ensureArray(staleClaimReport?.stale_claim_items_removed).length +
+        ensureArray(staleClaimReport?.unsupported_release_claims_removed).length,
+      stale_claim_hard_failure_count: staleHardFailures.length,
       source_integrity_violation_count: sourceIntegrityViolationCount,
       blocking_deduction_count: blockers.length,
       blocking_deduction_categories: [...new Set(blockers.map(deduction => deduction.category))],
@@ -646,6 +660,9 @@ ${compositionFailure}
 - Fact-check status: ${metrics.fact_check_status}
 - Must-fix count: ${metrics.must_fix_count}
 - Source-gap count: ${metrics.source_gap_count}
+- Stale claim status: ${metrics.stale_claim_status || 'UNKNOWN'}
+- Stale claim removals: ${metrics.stale_claim_removed_count ?? 0}
+- Stale claim hard failures: ${metrics.stale_claim_hard_failure_count ?? 0}
 - Source integrity violation count: ${metrics.source_integrity_violation_count || 0}
 - Blocking deduction count: ${metrics.blocking_deduction_count || 0}
 - Blocking deduction categories: ${ensureArray(metrics.blocking_deduction_categories).join(', ') || 'none'}

@@ -50,6 +50,11 @@ const {
   selectionDiagnosticsFromReports
 } = require('../generate/selection-diagnostics');
 const {
+  buildStaleClaimReportMarkdown,
+  pruneResolvedStaleFactCheckItems,
+  scrubStaleClaims
+} = require('../common/stale-claims');
+const {
   QUALITY_THRESHOLD,
   MIN_MAIN_ARTICLES,
   MAX_MAIN_ARTICLES,
@@ -530,9 +535,6 @@ function validateEditor(value, date, reporter = { candidates: [] }) {
     for (const source of section.sources) {
       refs.set(source.url, { title: source.title || source.url, url: source.url });
     }
-  }
-  for (const source of ensureArray(value.references)) {
-    if (source && source.url) refs.set(source.url, { title: source.title || source.url, url: source.url });
   }
   value.references = [...refs.values()];
   if (value.references.length === 0) fail('Editor output must contain references.');
@@ -1353,6 +1355,7 @@ async function main() {
   let factCheck = null;
   let qualityReport = null;
   let excludedSections = [];
+  let attemptedSections = [];
 
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
     generationRunState.currentQualityAttempt = attempt;
@@ -1443,10 +1446,12 @@ async function main() {
       `${commonContext}\n\n${lockedContext}\n\nFinal-selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}`,
       editorSchema
     ), date, reporter);
+    attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
 
     const merged = mergeLockedSections(lockedSections, editor.sections, excludedSections);
     let rejectedGeneratedSections = [...merged.rejected];
     editor.sections = merged.sections;
+    attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
     await resolveIssueArticleImages(editor, { root });
     warnResolvedImageFallbacks(editor);
     writeJson(path.join(newsroomDir, `editor-draft-attempt-${attempt}.json`), editor);
@@ -1538,6 +1543,7 @@ async function main() {
         ...editor,
         sections: repairMerged.sections
       }, date, reporter);
+      attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
       await resolveIssueArticleImages(editor, { root });
       warnResolvedImageFallbacks(editor);
       writeJson(path.join(newsroomDir, `editor-repair-attempt-${attempt}.json`), editor);
@@ -1618,6 +1624,7 @@ async function main() {
           ...editor,
           sections: completionMerged.sections
         }, date, reporter);
+        attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
         await resolveIssueArticleImages(editor, { root });
         warnResolvedImageFallbacks(editor);
         writeJson(path.join(newsroomDir, `editor-completion-attempt-${attempt}.json`), editor);
@@ -1710,6 +1717,30 @@ async function main() {
     }
   }
 
+  const removedSections = appendUniqueSections(
+    attemptedSections.filter(section => !ensureArray(editor.sections).some(finalSection => sectionsAreDuplicate(section, finalSection))),
+    excludedSections
+  );
+  const staleScrub = scrubStaleClaims(editor, {
+    date,
+    removedSections,
+    reporter
+  });
+  editor = validateEditor(staleScrub.editor, date, reporter);
+  factCheck = pruneResolvedStaleFactCheckItems(factCheck, staleScrub.report);
+  generationRunState.factCheck = factCheck;
+  writeJson(path.join(newsroomDir, 'stale-claim-report.json'), staleScrub.report);
+  fs.writeFileSync(
+    path.join(newsroomDir, 'stale-claim-report.md'),
+    buildStaleClaimReportMarkdown(staleScrub.report),
+    'utf8'
+  );
+  qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
+    threshold: QUALITY_THRESHOLD,
+    staleClaimReport: staleScrub.report
+  });
+  generationRunState.qualityReport = qualityReport;
+
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
   writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
   fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(editor), 'utf8');
@@ -1742,6 +1773,8 @@ async function main() {
     newsroomRelPath(date, 'fact-check-report.md'),
     newsroomRelPath(date, 'quality-report.json'),
     newsroomRelPath(date, 'quality-report.md'),
+    newsroomRelPath(date, 'stale-claim-report.json'),
+    newsroomRelPath(date, 'stale-claim-report.md'),
     newsroomRelPath(date, 'retry-history.json'),
     newsroomRelPath(date, 'retry-history.md'),
     newsroomRelPath(date, 'cost-report.md'),
@@ -1755,7 +1788,7 @@ async function main() {
 
   fs.writeFileSync(
     path.join(newsroomDir, 'editor-in-chief-brief.md'),
-    buildEditorChiefBrief(date, editor, factCheck, qualityReport, selectionStatusExtra(shortlistReport)),
+    buildEditorChiefBrief(date, editor, factCheck, qualityReport, selectionStatusExtra(shortlistReport), staleScrub.report),
     'utf8'
   );
 

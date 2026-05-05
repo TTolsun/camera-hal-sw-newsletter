@@ -328,7 +328,18 @@ function qualitySummaryMarkdown(qualityReport) {
   ].join('\n');
 }
 
-function buildEditorChiefBrief(date, issue, factCheck, qualityReport = null, selectionDiagnostics = null) {
+function staleClaimSummaryMarkdown(staleClaimReport) {
+  if (!staleClaimReport) return '- Stale claim report: not generated';
+  return [
+    `- Stale claim status: ${staleClaimReport.status || 'UNKNOWN'}`,
+    `- Removed global stale items: ${ensureArray(staleClaimReport.stale_claim_items_removed).length}`,
+    `- Removed unsupported release claims: ${ensureArray(staleClaimReport.unsupported_release_claims_removed).length}`,
+    `- Unused references removed: ${ensureArray(staleClaimReport.unused_references_removed).length}`,
+    `- Hard failures: ${ensureArray(staleClaimReport.hard_failures).length}`
+  ].join('\n');
+}
+
+function buildEditorChiefBrief(date, issue, factCheck, qualityReport = null, selectionDiagnostics = null, staleClaimReport = null) {
   const firstSection = ensureArray(issue.sections)[0] || {};
   const decision = factCheck.status === 'PASS' && (!qualityReport || qualityReport.status === 'PASS')
     ? 'APPROVE'
@@ -356,6 +367,10 @@ ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 ## 품질 게이트
 
 ${qualitySummaryMarkdown(qualityReport)}
+
+## Stale Claim Gate
+
+${staleClaimSummaryMarkdown(staleClaimReport)}
 
 ${selectionDiagnostics ? `${renderCandidateSelectionDiagnostics(selectionDiagnostics)}
 ` : ''}

@@ -179,6 +179,32 @@ test('quality gate keeps fact-check must_fix in NEEDS_FIX even above threshold',
   assert.equal(report.metrics.must_fix_count, 1);
 });
 
+test('quality gate treats unresolved stale claim report failures as hard blockers', () => {
+  const sections = validSections();
+  const report = buildNewsletterQualityReport(
+    '2026-05-03',
+    {
+      briefing: ['one', 'two', 'three'],
+      sections
+    },
+    { candidates: reporterCandidatesFor(sections) },
+    { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 },
+    {
+      staleClaimReport: {
+        status: 'NEEDS_FIX',
+        stale_claim_items_removed: [],
+        unsupported_release_claims_removed: [],
+        hard_failures: [{ reason: 'removed-section-claim-remains', claims: ['Android 17 Beta 4'] }]
+      }
+    }
+  );
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.equal(report.metrics.stale_claim_status, 'NEEDS_FIX');
+  assert.equal(report.metrics.stale_claim_hard_failure_count, 1);
+  assert.ok(report.deductions.some(item => item.reason.includes('Stale claim report')));
+});
+
 test('quality gate fails duplicate source URLs across main sections', () => {
   const sections = [
     section({ headline: 'CameraX release A', url: 'https://example.com/same' }),
