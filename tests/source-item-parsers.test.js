@@ -53,6 +53,25 @@ test('Android Latest Updates parser extracts CameraX table rows without generic 
   assert.equal(items.some(item => /Android Studio/i.test(item.title)), false);
 });
 
+test('Android Latest Updates parser extracts CameraX card links with nearby date evidence', () => {
+  const html = readTextFixture('source-html/android-latest-updates-camerax-cards.html');
+
+  const items = parseSourceSpecificItems(html, source());
+
+  assert.equal(items.length, 2);
+  for (const item of items) {
+    assertParsedItemContract(item);
+    assert.equal(item.publishedAt, '2026-05-01');
+    assert.equal(item.parentUrl, 'https://developer.android.com/latest-updates');
+    assert.equal(item.parentTitle, 'Android Developers Latest Updates');
+    assert.equal(item.relevanceBucketHint, 'android_platform_camera_adjacent');
+    assert.match(item.version_or_release, /CameraX 1\.5\.0-beta01/);
+  }
+  assert.ok(items.some(item => item.url === 'https://developer.android.google.cn/jetpack/androidx/releases/camera?hl=ko#camera-video-1.5.0-beta01'));
+  assert.ok(items.some(item => item.url === 'https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.5.0-beta01'));
+  assert.equal(items.some(item => /Android Studio/i.test(item.title)), false);
+});
+
 test('AOSP Site updates parser extracts month-level camera child rows only', () => {
   const html = readTextFixture('source-html/aosp-site-updates-camera.html');
 

@@ -103,3 +103,17 @@ test('classifies GCC benchmark as native tooling fallback, not direct camera', (
   assert.equal(gcc.counts_as_primary_camera_topic, false);
   assert.equal(gcc.counts_as_driver_topic, false);
 });
+
+test('keeps compiler CPU and GPU benchmark coverage in native tooling fallback without strong SoC evidence', () => {
+  const gcc = classifyAospCameraStackCandidate({
+    title: 'GCC 16 compiler benchmark shows CPU and GPU performance gains',
+    summary: 'The benchmark compares native C++ compiler performance across build and runtime tests.',
+    source: 'Phoronix Linux Camera / Media',
+    source_section: 'Linux Camera / Driver',
+    source_usage_hint: 'Linux kernel, V4L2, media subsystem, driver release lead'
+  });
+
+  assert.equal(gcc.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
+  assert.equal(gcc.counts_as_soc_topic, false);
+  assert.equal(gcc.counts_as_fallback_topic, true);
+});

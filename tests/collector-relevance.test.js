@@ -83,6 +83,18 @@ test('collector classifies GCC benchmark as fallback, not direct camera topic', 
   assert.equal(candidate.counts_as_driver_topic, false);
 });
 
+test('collector keeps compiler CPU and GPU benchmarks out of SoC fallback without strong platform evidence', () => {
+  const candidate = normalizeCandidate(raw({
+    title: 'GCC 16 compiler benchmark shows CPU and GPU performance gains',
+    url: 'https://www.phoronix.com/review/gcc-16-benchmarks',
+    summary: 'The benchmark compares native C++ compiler performance across build and runtime tests.'
+  }));
+
+  assert.equal(candidate.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
+  assert.equal(candidate.counts_as_soc_topic, false);
+  assert.equal(candidate.counts_as_fallback_topic, true);
+});
+
 test('collector keeps CameraX and V4L2 article text in the expected buckets', () => {
   const cameraX = normalizeCandidate(raw({
     source: source({ category: 'camera-api', section: 'Android / AOSP / Camera', keywords: ['CameraX'] }),

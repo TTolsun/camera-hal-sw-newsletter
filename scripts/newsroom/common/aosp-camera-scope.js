@@ -113,6 +113,27 @@ const SOC_PATTERNS = [
   /\bTensor\b/i
 ];
 
+const STRONG_SOC_PATTERNS = [
+  /\bSoC\b/i,
+  /\bNPU\b/i,
+  /\bISP\b/i,
+  /\bDSP\b/i,
+  /\bmemory bandwidth\b/i,
+  /\binterconnect\b/i,
+  /\bpower\b/i,
+  /\bthermal\b/i,
+  /\bDVFS\b/i,
+  /\bscheduler\b/i,
+  /\bEAS\b/i,
+  /\bQualcomm\b/i,
+  /\bSamsung\b/i,
+  /\bArm\b/i,
+  /\bMediaTek\b/i,
+  /\bExynos\b/i,
+  /\bSnapdragon\b/i,
+  /\bTensor\b/i
+];
+
 const NATIVE_TOOLING_PATTERNS = [
   /\bC\+\+\b/i,
   /\bcpp\b/i,
@@ -199,6 +220,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const androidAdjacentTerms = patternHits(ANDROID_ADJACENT_PATTERNS, body);
   const cameraImpactTerms = patternHits(CAMERA_IMPACT_PATTERNS, body);
   const socTerms = patternHits(SOC_PATTERNS, body);
+  const strongSocTerms = patternHits(STRONG_SOC_PATTERNS, body);
   const nativeTerms = patternHits(NATIVE_TOOLING_PATTERNS, body);
   const bucketHint = validBucketHint(candidate.relevance_bucket_hint || candidate.relevanceBucketHint);
   const sourceHintTerms = patternHits([
@@ -231,9 +253,9 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   } else if (androidAdjacentTerms.length > 0 && cameraImpactTerms.length > 0) {
     bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
     evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms];
-  } else if (socTerms.length > 0) {
+  } else if (socTerms.length > 0 && !(nativeTerms.length > 0 && strongSocTerms.length === 0)) {
     bucket = BUCKETS.SOC_PLATFORM_SIGNAL;
-    evidenceTerms = socTerms;
+    evidenceTerms = strongSocTerms.length > 0 ? strongSocTerms : socTerms;
   } else if (nativeTerms.length > 0) {
     bucket = BUCKETS.CPP_AI_TOOLING_FALLBACK;
     evidenceTerms = nativeTerms;

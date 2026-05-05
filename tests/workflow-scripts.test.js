@@ -45,7 +45,10 @@ test('generation status output includes multiline selection diagnostics', () => 
     stale_claim_hard_failure_count: 0,
     selected_article_count: 3,
     final_selected_article_count: 3,
+    non_fallback_reviewable_article_count: 1,
+    eligible_non_fallback_reviewable_article_count: 1,
     selection_warnings: ['Thin-week review path'],
+    selection_shortage_hints: ['Collect at least three non-fallback Camera/Android/driver/SoC candidates.'],
     final_exclusion_reason_summary: [
       { reason: 'missing dated evidence', count: 4 },
       { reason: 'source_gap_risk=true', count: 2 }
@@ -62,9 +65,12 @@ test('generation status output includes multiline selection diagnostics', () => 
   assert.equal(outputs.stale_claim_status, 'PASS');
   assert.equal(outputs.stale_claim_removed_count, '2');
   assert.equal(outputs.stale_claim_hard_failure_count, '0');
+  assert.equal(outputs.non_fallback_reviewable_article_count, '1');
+  assert.equal(outputs.eligible_non_fallback_reviewable_article_count, '1');
   assert.match(rendered, /candidate_selection_diagnostics<<EOF/);
   assert.match(rendered, /missing dated evidence \(4\)/);
   assert.match(rendered, /selection_warnings=Thin-week review path/);
+  assert.match(rendered, /selection_shortage_hints=Collect at least three non-fallback Camera\/Android\/driver\/SoC candidates\./);
 });
 
 test('newsroom PR body separates quality score threshold and result', () => {

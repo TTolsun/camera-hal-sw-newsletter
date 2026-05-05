@@ -173,6 +173,24 @@ function childChunks(body = '') {
   return rows.length > 0 ? rows : listItems;
 }
 
+function indexedChildChunks(body = '') {
+  const value = String(body);
+  const rows = [...value.matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)]
+    .map(match => ({ chunk: match[0], index: match.index || 0 }))
+    .filter(item => !/<th\b/i.test(item.chunk) || /<td\b/i.test(item.chunk));
+  const listItems = [...value.matchAll(/<li\b[^>]*>[\s\S]*?<\/li>/gi)]
+    .map(match => ({ chunk: match[0], index: match.index || 0 }));
+  return rows.length > 0 ? rows : listItems;
+}
+
+function surroundingText(html = '', index = 0, length = 0, before = 1400, after = 900) {
+  const value = String(html);
+  return value.slice(
+    Math.max(0, index - before),
+    Math.min(value.length, index + length + after)
+  );
+}
+
 function childTitle(chunk = '', fallback = '') {
   const anchor = firstAnchor(chunk, fallback);
   if (anchor?.title) return anchor.title;
@@ -274,7 +292,7 @@ function linkedItems(html, source, options = {}) {
     const nearby = String(html).slice(Math.max(0, match.index - 500), Math.min(String(html).length, match.index + match[0].length + 900));
     const evidenceText = `${title} ${href} ${nearby}`;
     const version = firstVersion(evidenceText) || options.versionFallback?.(title, href) || '';
-    const date = firstDate(evidenceText) || options.dateFallback?.(title, href) || '';
+    const date = firstDate(evidenceText) || options.dateFallback?.(title, href, nearby) || '';
     const component = componentFromText(evidenceText, options.component || source.name);
     const behavior = firstBehavior(nearby || title);
     items.push({
@@ -291,7 +309,7 @@ function linkedItems(html, source, options = {}) {
   }
   const seen = new Set();
   return items.filter(item => {
-    const key = item.url.replace(/[?#].*$/, '');
+    const key = options.dedupeWithHash ? item.url : item.url.replace(/[?#].*$/, '');
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -367,6 +385,8 @@ function parseAndroidLatestUpdates(html, source) {
     sourceKind: 'release_note_item',
     keep: (title, href) => /Camera Maven Group versions|CameraX|androidx\.camera|camera/i.test(`${title} ${href}`),
     versionFallback: (title, href) => cameraVersionFromText(`${title} ${href}`, 'CameraX / androidx.camera'),
+    dateFallback: (_title, _href, nearby) => firstDate(nearby),
+    dedupeWithHash: true,
     limit: 12
   }).map(item => ({
     ...item,
@@ -374,41 +394,54 @@ function parseAndroidLatestUpdates(html, source) {
     parentTitle: source.name,
     sourceSection: source.section || '',
     api_or_component: 'CameraX / androidx.camera',
+    version_or_release: cameraVersionFromText(`${item.title} ${item.url} ${item.version_or_release}`, item.version_or_release),
     relevanceBucketHint: 'android_platform_camera_adjacent'
   }));
+
+  const rowsByKey = new Map();
+  const addRow = (chunk, contextText = '', contextTitle = '') => {
+    const title = childTitle(chunk, source.url);
+    const anchor = firstAnchor(chunk, source.url);
+    const cells = tableCells(chunk);
+    const rowIdentity = `${title} ${anchor?.href || ''} ${cells.slice(0, 2).join(' ')}`;
+    const evidenceText = `${contextTitle} ${title} ${clean(chunk)} ${clean(contextText)}`;
+    if (!/\b(?:Camera Maven Group versions|CameraX|androidx\.camera|camera)\b/i.test(rowIdentity)) return;
+    const date = firstDate(evidenceText);
+    const version = cameraVersionFromText(evidenceText, 'CameraX / androidx.camera');
+    const extractedBehavior = firstBehavior(`${clean(chunk)} ${clean(contextText)}`);
+    const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
+      ? extractedBehavior
+      : `Updated ${title}.`;
+    const item = {
+      source,
+      title,
+      url: anchor?.url || urlWithFragment(source.url, `${contextTitle} ${title}`),
+      publishedAt: date,
+      parentUrl: source.url,
+      parentTitle: source.name,
+      sourceSection: source.section || '',
+      summary: behavior,
+      sourceKind: 'release_note_item',
+      collectionMode: 'release-note-item',
+      version_or_release: version,
+      api_or_component: 'CameraX / androidx.camera',
+      behavior_change: behavior,
+      relevanceBucketHint: 'android_platform_camera_adjacent'
+    };
+    if (!hasReleaseItemEvidence(item)) return;
+    rowsByKey.set(parserItemKey(item), item);
+  };
+
   const rows = [];
   for (const block of headingBlocks(html, source.url)) {
-    const blockDate = firstDate(block.title);
     for (const chunk of childChunks(block.body)) {
-      const title = childTitle(chunk, source.url);
-      const anchor = firstAnchor(chunk, source.url);
-      const rowIdentity = `${title} ${anchor?.href || ''} ${tableCells(chunk).slice(0, 2).join(' ')}`;
-      const evidenceText = `${block.title} ${title} ${clean(chunk)}`;
-      if (!/\b(?:Camera Maven Group versions|CameraX|androidx\.camera|camera)\b/i.test(rowIdentity)) continue;
-      const url = anchor?.url || urlWithFragment(source.url, `${block.title} ${title}`);
-      const version = cameraVersionFromText(evidenceText, 'CameraX / androidx.camera');
-      const extractedBehavior = firstBehavior(evidenceText);
-      const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
-        ? extractedBehavior
-        : `Updated ${title}.`;
-      rows.push({
-        source,
-        title,
-        url,
-        publishedAt: firstDate(evidenceText) || blockDate,
-        parentUrl: source.url,
-        parentTitle: source.name,
-        sourceSection: source.section || '',
-        summary: behavior,
-        sourceKind: 'release_note_item',
-        collectionMode: 'release-note-item',
-        version_or_release: version,
-        api_or_component: 'CameraX / androidx.camera',
-        behavior_change: behavior,
-        relevanceBucketHint: 'android_platform_camera_adjacent'
-      });
+      addRow(chunk, `${block.title} ${block.body}`, block.title);
     }
   }
+  for (const item of indexedChildChunks(html)) {
+    addRow(item.chunk, surroundingText(html, item.index, item.chunk.length), '');
+  }
+  rows.push(...rowsByKey.values());
   return uniqueParserItems([...linked, ...rows])
     .filter(item => item.publishedAt && item.version_or_release && item.api_or_component && item.behavior_change)
     .slice(0, 12);
@@ -441,8 +474,14 @@ function parseLibcameraBlog(html, source) {
     component: 'libcamera / V4L2 camera pipeline',
     sourceKind: 'blog_post_item',
     keep: (title, href) => /blog|news|release|camera|pipeline|V4L2|libcamera/i.test(`${title} ${href}`),
+    dateFallback: (_title, _href, nearby) => firstDate(nearby) || firstMonthYearDate(nearby),
     limit: 10
-  });
+  }).filter(item =>
+    item.publishedAt &&
+    item.api_or_component &&
+    item.behavior_change &&
+    /\b(?:libcamera|V4L2|camera|pipeline|media controller|image sensor)\b/i.test(`${item.title} ${item.summary} ${item.api_or_component} ${item.behavior_change}`)
+  );
 }
 
 function parseLlvmReleaseNotes(html, source) {
