@@ -82,8 +82,11 @@ function candidatesByUrl(candidates) {
 
 function finalCandidateMap(shortlistReport) {
   return candidatesByUrl([
+    ...ensureArray(shortlistReport?.primary_selected_articles),
     ...ensureArray(shortlistReport?.selected_articles),
+    ...ensureArray(shortlistReport?.reserve_candidates),
     ...ensureArray(shortlistReport?.shortlisted_candidates),
+    ...ensureArray(shortlistReport?.demoted_candidates),
     ...ensureArray(shortlistReport?.excluded_candidates)
   ]);
 }
@@ -104,15 +107,24 @@ function summarizeFinalExclusionReasons(candidates) {
 
 function normalizeShortlistCandidate(candidate, reporterSelectedUrls = null) {
   const finalSelected = isFinalSelected(candidate);
+  const reserveCandidate = bool(candidate.reserve_candidate);
+  const primarySelected = finalSelected && bool(candidate.primary_selected, true);
   const key = candidateKey(candidate);
   const reporterSelected = reporterSelectedUrls
     ? reporterSelectedUrls.has(key)
     : bool(candidate.reporter_selected);
   const reasons = finalSelected ? [] : finalExclusionReasons(candidate);
+  const selectionStage = finalSelected
+    ? 'deterministic-primary'
+    : reserveCandidate
+      ? 'deterministic-reserve'
+      : candidate.selection_stage || 'deterministic-final';
   return {
     ...candidate,
-    selection_stage: 'deterministic-final',
+    selection_stage: selectionStage,
     final_selected: finalSelected,
+    primary_selected: primarySelected,
+    reserve_candidate: reserveCandidate,
     reporter_selected: reporterSelected,
     selected_for_editor: finalSelected,
     selected: finalSelected,
@@ -125,8 +137,15 @@ function normalizeShortlistReport(shortlistReport, reporter = null) {
   const reporterSelectedUrls = reporter ? reporterSelectedUrlSet(reporter) : null;
   const shortlistedCandidates = ensureArray(shortlistReport?.shortlisted_candidates)
     .map(candidate => normalizeShortlistCandidate(candidate, reporterSelectedUrls));
-  const selectedArticles = ensureArray(shortlistReport?.selected_articles)
+  const selectedSource = ensureArray(shortlistReport?.primary_selected_articles).length > 0
+    ? shortlistReport.primary_selected_articles
+    : shortlistReport?.selected_articles;
+  const selectedArticles = ensureArray(selectedSource)
     .map(candidate => normalizeShortlistCandidate({ ...candidate, final_selected: true }, reporterSelectedUrls));
+  const reserveCandidates = ensureArray(shortlistReport?.reserve_candidates)
+    .map(candidate => normalizeShortlistCandidate({ ...candidate, final_selected: false, reserve_candidate: true }, reporterSelectedUrls));
+  const demotedCandidates = ensureArray(shortlistReport?.demoted_candidates)
+    .map(candidate => normalizeShortlistCandidate({ ...candidate, final_selected: false }, reporterSelectedUrls));
   const excludedCandidates = ensureArray(shortlistReport?.excluded_candidates)
     .map(candidate => normalizeShortlistCandidate({ ...candidate, final_selected: false }, reporterSelectedUrls));
   const reporterSelectedCount = reporter
@@ -140,21 +159,37 @@ function normalizeShortlistReport(shortlistReport, reporter = null) {
     : shortlistReport?.reporter_selected_but_final_excluded_count ?? null;
   const finalExclusionReasonSummary = summarizeFinalExclusionReasons([
     ...shortlistedCandidates,
+    ...reserveCandidates,
+    ...demotedCandidates,
     ...excludedCandidates
   ]);
+  const deterministicSelectedCount =
+    shortlistReport?.deterministic_selected_count ??
+    shortlistReport?.primary_selected_article_count ??
+    shortlistReport?.selected_article_count ??
+    selectedArticles.length;
+  const reserveCandidateCount = shortlistReport?.reserve_candidate_count ?? reserveCandidates.length;
+  const demotedCandidateCount = shortlistReport?.demoted_candidate_count ?? demotedCandidates.length;
 
   return {
     ...shortlistReport,
-    schema_version: Math.max(Number(shortlistReport?.schema_version || 1), 2),
+    schema_version: Math.max(Number(shortlistReport?.schema_version || 1), 3),
     selection_stage: 'deterministic-final',
     final_input_candidate_count: shortlistReport?.input_candidate_count ?? null,
     final_eligible_candidate_count: shortlistReport?.eligible_candidate_count ?? null,
-    final_selected_article_count: shortlistReport?.selected_article_count ?? null,
+    final_selected_article_count: deterministicSelectedCount,
+    deterministic_selected_count: deterministicSelectedCount,
+    primary_selected_article_count: shortlistReport?.primary_selected_article_count ?? selectedArticles.length,
+    reserve_candidate_count: reserveCandidateCount,
+    demoted_candidate_count: demotedCandidateCount,
     reporter_candidate_count: reporterCandidateCount,
     reporter_selected_count: reporterSelectedCount,
     reporter_selected_but_final_excluded_count: reporterSelectedButFinalExcludedCount,
     shortlisted_candidates: shortlistedCandidates,
+    primary_selected_articles: selectedArticles,
     selected_articles: selectedArticles,
+    reserve_candidates: reserveCandidates,
+    demoted_candidates: demotedCandidates,
     excluded_candidates: excludedCandidates,
     final_exclusion_reason_summary: finalExclusionReasonSummary,
     exclusion_reason_summary: ensureArray(shortlistReport?.exclusion_reason_summary).length > 0
@@ -171,6 +206,8 @@ function normalizeReporterReport(reporter, shortlistReport = null) {
     const finalCandidate = finalByUrl.get(key) || {};
     const reporterSelected = isReporterSelected(candidate);
     const finalSelected = finalSelectedUrls.has(key);
+    const reserveCandidate = bool(finalCandidate.reserve_candidate, bool(candidate.reserve_candidate));
+    const primarySelected = finalSelected && bool(finalCandidate.primary_selected, true);
     const reasons = finalSelected
       ? []
       : finalExclusionReasons(finalCandidate).length > 0
@@ -181,6 +218,8 @@ function normalizeReporterReport(reporter, shortlistReport = null) {
       selection_stage: 'reporter',
       reporter_selected: reporterSelected,
       final_selected: finalSelected,
+      primary_selected: primarySelected,
+      reserve_candidate: reserveCandidate,
       selected_for_editor: finalSelected,
       selected: reporterSelected,
       final_selection_eligibility: finalSelectionEligibility(finalCandidate) || finalSelectionEligibility(candidate),
@@ -198,6 +237,10 @@ function normalizeReporterReport(reporter, shortlistReport = null) {
     final_input_candidate_count: shortlistReport?.final_input_candidate_count ?? shortlistReport?.input_candidate_count ?? null,
     final_eligible_candidate_count: shortlistReport?.final_eligible_candidate_count ?? shortlistReport?.eligible_candidate_count ?? null,
     final_selected_article_count: shortlistReport?.final_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
+    deterministic_selected_count: shortlistReport?.deterministic_selected_count ?? shortlistReport?.selected_article_count ?? null,
+    primary_selected_article_count: shortlistReport?.primary_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
+    reserve_candidate_count: shortlistReport?.reserve_candidate_count ?? null,
+    demoted_candidate_count: shortlistReport?.demoted_candidate_count ?? null,
     reporter_selected_but_final_excluded_count: candidates
       .filter(candidate => isReporterSelected(candidate) && !isFinalSelected(candidate)).length,
     final_exclusion_reason_summary: summarizeFinalExclusionReasons(candidates),
@@ -213,6 +256,10 @@ function selectionDiagnosticsFromReports(shortlistReport = null, reporterReport 
     final_input_candidate_count: shortlistReport?.final_input_candidate_count ?? shortlistReport?.input_candidate_count ?? null,
     final_eligible_candidate_count: shortlistReport?.final_eligible_candidate_count ?? shortlistReport?.eligible_candidate_count ?? null,
     final_selected_article_count: shortlistReport?.final_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
+    deterministic_selected_count: shortlistReport?.deterministic_selected_count ?? shortlistReport?.selected_article_count ?? null,
+    primary_selected_article_count: shortlistReport?.primary_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
+    reserve_candidate_count: shortlistReport?.reserve_candidate_count ?? null,
+    demoted_candidate_count: shortlistReport?.demoted_candidate_count ?? null,
     reporter_selected_but_final_excluded_count:
       reporterReport?.reporter_selected_but_final_excluded_count ??
       shortlistReport?.reporter_selected_but_final_excluded_count ??
@@ -245,6 +292,9 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Final input candidates: ${formatCount(diagnostics.final_input_candidate_count ?? diagnostics.input_candidate_count)}`,
     `- Final eligible candidates: ${formatCount(diagnostics.final_eligible_candidate_count ?? diagnostics.eligible_candidate_count)}`,
     `- Final selected articles: ${formatCount(diagnostics.final_selected_article_count ?? diagnostics.selected_article_count)}`,
+    `- Deterministic primary articles: ${formatCount(diagnostics.primary_selected_article_count ?? diagnostics.deterministic_selected_count)}`,
+    `- Reserve candidates: ${formatCount(diagnostics.reserve_candidate_count)}`,
+    `- Demoted candidates: ${formatCount(diagnostics.demoted_candidate_count)}`,
     `- Reporter-selected but final-excluded: ${formatCount(diagnostics.reporter_selected_but_final_excluded_count)}`,
     '',
     '주요 final exclusion reason:',

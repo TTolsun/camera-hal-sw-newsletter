@@ -8,6 +8,8 @@ const {
 } = require('../common/aosp-camera-scope');
 
 const SHORTLIST_CAP = 12;
+const RESERVE_MIN_CANDIDATES = 4;
+const RESERVE_MAX_CANDIDATES = 7;
 const MIN_FINAL_ARTICLES = 4;
 const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = 3;
 const MAX_FINAL_ARTICLES = 5;
@@ -469,6 +471,48 @@ function pushUnique(selected, candidate, slot) {
   return true;
 }
 
+function reserveCandidates(shortlist, selected, options = {}) {
+  const minReserve = options.minReserve || RESERVE_MIN_CANDIDATES;
+  const maxReserve = options.maxReserve || RESERVE_MAX_CANDIDATES;
+  const selectedUrls = new Set(ensureArray(selected).map(candidate => candidate.normalized_url));
+  const reserve = [];
+  for (const candidate of ensureArray(shortlist)) {
+    if (reserve.length >= maxReserve) break;
+    if (selectedUrls.has(candidate.normalized_url)) continue;
+    if (candidate.main_article_score_eligible === false) continue;
+    if (candidateScope(candidate).relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) continue;
+    reserve.push({
+      ...candidate,
+      selected: false,
+      selected_for_editor: false,
+      final_selected: false,
+      reserve_candidate: true,
+      selection_stage: 'deterministic-reserve',
+      selection_slot: 'reserve'
+    });
+  }
+  if (reserve.length < minReserve) {
+    for (const candidate of ensureArray(shortlist)) {
+      if (reserve.length >= maxReserve) break;
+      if (selectedUrls.has(candidate.normalized_url)) continue;
+      if (reserve.some(existing => existing.normalized_url === candidate.normalized_url)) continue;
+      if (candidate.main_article_score_eligible === false) continue;
+      reserve.push({
+        ...candidate,
+        selected: false,
+        selected_for_editor: false,
+        final_selected: false,
+        reserve_candidate: true,
+        selection_stage: 'deterministic-reserve',
+        selection_slot: candidateScope(candidate).relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST
+          ? 'thin-week-watchlist-reserve'
+          : 'reserve'
+      });
+    }
+  }
+  return reserve;
+}
+
 function selectFinalArticles(shortlist, options = {}) {
   const minArticles = options.minArticles || MIN_FINAL_ARTICLES;
   const maxArticles = options.maxArticles || MAX_FINAL_ARTICLES;
@@ -551,29 +595,44 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const cap = options.cap || SHORTLIST_CAP;
   const { shortlist, excluded } = buildEligibleShortlist(rawCandidates, date, cap);
   const selected = selectFinalArticles(shortlist, options);
+  const reserve = reserveCandidates(shortlist, selected, options);
   const warnings = selectionWarnings(selected);
   const errors = selectionErrors(selected);
-  const selectedUrls = new Set(selected.map(candidate => candidate.normalized_url));
+  const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const markedShortlist = shortlist.map(candidate => {
     const match = selected.find(item => item.normalized_url === candidate.normalized_url);
-    return match || {
+    if (match) {
+      return {
+        ...match,
+        primary_selected: true,
+        reserve_candidate: false
+      };
+    }
+    const reserveMatch = reserve.find(item => item.normalized_url === candidate.normalized_url);
+    return reserveMatch || {
       ...candidate,
       selected: false,
-      selected_for_editor: false
+      selected_for_editor: false,
+      reserve_candidate: reserveUrls.has(candidate.normalized_url)
     };
   });
 
   return normalizeShortlistReport({
-    schema_version: 1,
+    schema_version: 3,
     date,
     generated_at: new Date().toISOString(),
     input_candidate_count: rawCandidates.length,
     eligible_candidate_count: shortlist.length,
+    deterministic_selected_count: selected.length,
     selected_article_count: selected.length,
+    primary_selected_article_count: selected.length,
+    reserve_candidate_count: reserve.length,
+    demoted_candidate_count: 0,
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
     optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
     relevance_bucket_summary: summarizeBuckets(shortlist),
     selected_relevance_bucket_summary: summarizeBuckets(selected),
+    reserve_relevance_bucket_summary: summarizeBuckets(reserve),
     shortlist_cap: cap,
     absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
     underfilled: warnings.length > 0,
@@ -599,8 +658,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       cxx_fallback: 'Use C++ / AI / developer productivity as fallback when it supports native camera, driver, SoC, build, test, debugging, or performance work.',
       generic_watchlist: 'generic_tech_watchlist is not automatically promoted to main article selection.'
     },
+    primary_selected_articles: selected,
     shortlisted_candidates: markedShortlist,
     selected_articles: selected,
+    reserve_candidates: reserve,
+    demoted_candidates: [],
     excluded_candidates: excluded,
     selection_warnings: warnings,
     selection_errors: errors,
@@ -624,6 +686,8 @@ function reporterInputFromShortlist(shortlistReport) {
 module.exports = {
   ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
   SHORTLIST_CAP,
+  RESERVE_MIN_CANDIDATES,
+  RESERVE_MAX_CANDIDATES,
   MIN_FINAL_ARTICLES,
   MAX_FINAL_ARTICLES,
   MAIN_ARTICLE_SCORE_THRESHOLD,

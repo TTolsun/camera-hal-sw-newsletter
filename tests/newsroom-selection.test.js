@@ -64,6 +64,12 @@ test('deterministic score ordering is stable and shortlist is capped', () => {
   assert.equal(report.shortlisted_candidates.length, 12);
   assert.equal(report.shortlisted_candidates[0].title, 'CameraX release 0 component A');
   assert.ok(report.shortlisted_candidates[0].deterministic_score >= report.shortlisted_candidates[1].deterministic_score);
+  assert.equal(report.deterministic_selected_count, report.selected_article_count);
+  assert.equal(report.primary_selected_articles.length, report.selected_article_count);
+  assert.ok(report.reserve_candidates.length >= 4);
+  assert.ok(report.reserve_candidates.length <= 7);
+  assert.ok(report.reserve_candidates.every(item => item.reserve_candidate === true));
+  assert.ok(report.primary_selected_articles.every(item => item.primary_selected === true));
 });
 
 test('final selection prioritizes HAL candidates and treats AI/C++ as optional', () => {

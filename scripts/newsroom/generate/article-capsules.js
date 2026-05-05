@@ -190,6 +190,8 @@ function buildArticleCapsule(candidate) {
     score: score(candidate),
     selection: {
       final_selected: isFinalSelected(candidate),
+      primary_selected: bool(candidate.primary_selected, isFinalSelected(candidate)),
+      reserve_candidate: bool(candidate.reserve_candidate),
       selected_for_editor: bool(candidate.selected_for_editor, isFinalSelected(candidate)),
       selection_slot: text(candidate.selection_slot),
       main_article_score_eligible: candidate.main_article_score_eligible !== false,
@@ -226,22 +228,30 @@ function buildArticleCapsuleReport(date, shortlistReport, reporterInput = null) 
     ensureArray(shortlistReport?.selected_articles),
     shortlistedCapsules
   );
+  const reserveCapsules = capsulesForCandidates(
+    ensureArray(shortlistReport?.reserve_candidates),
+    shortlistedCapsules
+  );
   return {
-    schema_version: 1,
+    schema_version: 2,
     date,
     generated_at: new Date().toISOString(),
     capsule_token_target: CAPSULE_TOKEN_TARGET,
     shortlisted_capsule_count: shortlistedCapsules.length,
     selected_capsule_count: selectedCapsules.length,
+    reserve_capsule_count: reserveCapsules.length,
     shortlisted_capsules: shortlistedCapsules,
-    selected_capsules: selectedCapsules
+    selected_capsules: selectedCapsules,
+    reserve_capsules: reserveCapsules
   };
 }
 
 function capsuleInputFromReport(report, type = 'shortlisted') {
   const candidates = type === 'selected'
     ? ensureArray(report?.selected_capsules)
-    : ensureArray(report?.shortlisted_capsules);
+    : type === 'reserve'
+      ? ensureArray(report?.reserve_capsules)
+      : ensureArray(report?.shortlisted_capsules);
   return {
     date: report?.date || '',
     capsule_token_target: report?.capsule_token_target || CAPSULE_TOKEN_TARGET,
@@ -252,7 +262,8 @@ function capsuleInputFromReport(report, type = 'shortlisted') {
 function capsuleInputForCandidates(date, candidates, report = null) {
   const capsules = [
     ...ensureArray(report?.shortlisted_capsules),
-    ...ensureArray(report?.selected_capsules)
+    ...ensureArray(report?.selected_capsules),
+    ...ensureArray(report?.reserve_capsules)
   ];
   return {
     date,
@@ -267,6 +278,9 @@ function compactSelectionContext(shortlistReport) {
     input_candidate_count: shortlistReport?.input_candidate_count ?? null,
     eligible_candidate_count: shortlistReport?.eligible_candidate_count ?? null,
     selected_article_count: shortlistReport?.selected_article_count ?? null,
+    deterministic_selected_count: shortlistReport?.deterministic_selected_count ?? shortlistReport?.selected_article_count ?? null,
+    primary_selected_article_count: shortlistReport?.primary_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
+    reserve_candidate_count: shortlistReport?.reserve_candidate_count ?? null,
     shortlist_cap: shortlistReport?.shortlist_cap ?? null,
     underfilled: Boolean(shortlistReport?.underfilled),
     publish_ready: shortlistReport?.publish_ready !== undefined ? Boolean(shortlistReport.publish_ready) : null,
@@ -281,7 +295,24 @@ function compactSelectionContext(shortlistReport) {
       editorial_priority: number(candidate.editorial_priority, 6),
       relevance_bucket: text(candidate.relevance_bucket)
     })),
+    primary_selected_articles: ensureArray(shortlistReport?.primary_selected_articles).map(candidate => ({
+      title: compactText(candidate.title, 180),
+      url: candidateUrl(candidate),
+      deterministic_score: number(candidate.deterministic_score),
+      selection_slot: text(candidate.selection_slot),
+      editorial_priority: number(candidate.editorial_priority, 6),
+      relevance_bucket: text(candidate.relevance_bucket)
+    })),
+    reserve_candidates: ensureArray(shortlistReport?.reserve_candidates).map(candidate => ({
+      title: compactText(candidate.title, 180),
+      url: candidateUrl(candidate),
+      deterministic_score: number(candidate.deterministic_score),
+      selection_slot: text(candidate.selection_slot),
+      editorial_priority: number(candidate.editorial_priority, 6),
+      relevance_bucket: text(candidate.relevance_bucket)
+    })),
     selected_relevance_bucket_summary: ensureArray(shortlistReport?.selected_relevance_bucket_summary),
+    reserve_relevance_bucket_summary: ensureArray(shortlistReport?.reserve_relevance_bucket_summary),
     exclusion_reason_summary: ensureArray(shortlistReport?.exclusion_reason_summary).slice(0, 10)
   };
 }

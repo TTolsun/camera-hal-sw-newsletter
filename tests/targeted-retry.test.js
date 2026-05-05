@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  availableCompletionCandidates,
   buildSectionRepairPlan,
   mergeLockedSections,
   sectionsMatchingRepairPlan,
@@ -112,5 +113,101 @@ test('targeted retry rejects regenerated sections that duplicate locked URLs', (
 
   assert.deepEqual(merged.sections, [locked]);
   assert.equal(merged.rejected.length, 1);
-  assert.equal(merged.rejected[0].reason, 'duplicate locked article');
+  assert.equal(merged.rejected[0].reason, 'duplicate_locked_url');
+});
+
+function reporterCandidate(overrides = {}) {
+  return {
+    title: overrides.title || 'Camera HAL reserve candidate',
+    url: overrides.url || 'https://example.com/reserve',
+    source: overrides.source || 'Example Source',
+    published_date: overrides.published_date || '2026-05-05',
+    finalSelectionEligibility: 'main',
+    isWatchPage: false,
+    hasDatedEvidence: true,
+    main_eligible: true,
+    source_gap_risk: false,
+    evidence_score: 6,
+    camera_hal_relevance_score: 4,
+    android_camera_relevance_score: 3,
+    practical_actionability_score: 3,
+    relevance_bucket: 'direct_aosp_camera',
+    editorial_priority: 1,
+    deterministic_score: 90,
+    final_selected: false,
+    selected_for_editor: false,
+    reserve_candidate: true,
+    ...overrides
+  };
+}
+
+test('completion pool uses reserve candidates and records duplicate/source-gap rejections', () => {
+  const locked = section('CameraX locked article', 'https://example.com/locked');
+  const demoted = section('Android 17 Beta 4 unsupported claim', 'https://example.com/demoted');
+  const rejections = [];
+  const reporter = {
+    candidates: [
+      reporterCandidate({
+        title: 'CameraX locked article duplicate',
+        url: 'https://example.com/locked',
+        final_selected: true,
+        selected_for_editor: true
+      }),
+      reporterCandidate({
+        title: 'Android 17 Beta 4 unsupported claim',
+        url: 'https://example.com/demoted',
+        final_selected: true,
+        selected_for_editor: true
+      }),
+      reporterCandidate({
+        title: 'Rolling source gap candidate',
+        url: 'https://example.com/gap',
+        source_gap_risk: true
+      }),
+      reporterCandidate({
+        title: 'Snapdragon ISP thermal performance update',
+        url: 'https://example.com/soc',
+        relevance_bucket: 'soc_platform_signal',
+        editorial_priority: 4,
+        deterministic_score: 70
+      })
+    ]
+  };
+
+  const available = availableCompletionCandidates(reporter, [locked], [demoted], rejections, {
+    allowReserve: true
+  });
+
+  assert.deepEqual(available.map(candidate => candidate.url), ['https://example.com/soc']);
+  assert.ok(rejections.some(item => item.reason === 'duplicate_locked_url'));
+  assert.ok(rejections.some(item => item.reason === 'duplicate_demoted_url'));
+  assert.ok(rejections.some(item => item.reason === 'source_gap_candidate'));
+});
+
+test('completion pool keeps reserve candidates closed until replacement is allowed', () => {
+  const rejections = [];
+  const reporter = {
+    candidates: [
+      reporterCandidate({
+        title: 'Primary CameraX update',
+        url: 'https://example.com/primary',
+        final_selected: true,
+        selected_for_editor: true,
+        reserve_candidate: false,
+        deterministic_score: 80
+      }),
+      reporterCandidate({
+        title: 'Reserve SoC thermal update',
+        url: 'https://example.com/reserve-soc',
+        relevance_bucket: 'soc_platform_signal',
+        editorial_priority: 4,
+        deterministic_score: 70
+      })
+    ]
+  };
+
+  const available = availableCompletionCandidates(reporter, [], [], rejections);
+
+  assert.deepEqual(available.map(candidate => candidate.url), ['https://example.com/primary']);
+  assert.equal(rejections.length, 0);
 });

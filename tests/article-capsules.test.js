@@ -73,18 +73,23 @@ test('article capsule report separates shortlist and selected capsule inputs', (
     title: 'Android Camera non-selected',
     url: 'https://example.com/non-selected',
     final_selected: false,
-    selected_for_editor: false
+    selected_for_editor: false,
+    reserve_candidate: true,
+    selection_slot: 'reserve'
   });
   const report = buildArticleCapsuleReport('2026-05-03', {
     date: '2026-05-03',
     shortlisted_candidates: [selected, nonSelected],
-    selected_articles: [selected]
+    selected_articles: [selected],
+    reserve_candidates: [nonSelected]
   });
 
   assert.equal(report.shortlisted_capsule_count, 2);
   assert.equal(report.selected_capsule_count, 1);
+  assert.equal(report.reserve_capsule_count, 1);
   assert.equal(capsuleInputFromReport(report, 'shortlisted').candidates.length, 2);
   assert.equal(capsuleInputFromReport(report, 'selected').candidates.length, 1);
+  assert.equal(capsuleInputFromReport(report, 'reserve').candidates.length, 1);
   assert.equal(capsuleInputForCandidates('2026-05-03', [selected], report).candidates[0].url, selected.url);
 });
 
@@ -94,16 +99,21 @@ test('compact selection context omits full candidate arrays', () => {
     input_candidate_count: 20,
     eligible_candidate_count: 12,
     selected_article_count: 4,
+    deterministic_selected_count: 4,
+    reserve_candidate_count: 1,
     shortlist_cap: 12,
     publish_ready: true,
     selection_policy: { shortlist_target_range: '8-12 candidates before Gemini reporter/editor prompts.' },
     selected_articles: [candidate()],
+    primary_selected_articles: [candidate()],
+    reserve_candidates: [candidate({ title: 'Reserve SoC platform signal', url: 'https://example.com/reserve' })],
     shortlisted_candidates: [candidate({ summary: 'large source text'.repeat(100) })],
     excluded_candidates: [candidate({ title: 'Excluded', source_gap_risk: true })]
   });
 
   assert.equal(context.input_candidate_count, 20);
   assert.equal(context.selected_articles.length, 1);
+  assert.equal(context.reserve_candidates.length, 1);
   assert.equal(context.shortlisted_candidates, undefined);
   assert.equal(context.excluded_candidates, undefined);
 });

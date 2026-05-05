@@ -89,7 +89,12 @@ const reporterCandidate = {
       type: 'ARRAY',
       items: imageCandidate
     },
-    selected: { type: 'BOOLEAN' }
+    selected: { type: 'BOOLEAN' },
+    final_selected: { type: 'BOOLEAN' },
+    selected_for_editor: { type: 'BOOLEAN' },
+    primary_selected: { type: 'BOOLEAN' },
+    reserve_candidate: { type: 'BOOLEAN' },
+    selection_slot: string
   },
   required: [
     'title',
