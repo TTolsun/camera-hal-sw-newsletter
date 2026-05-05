@@ -16,7 +16,7 @@ Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR
 
 기존 `GEMINI_MODEL`과 `GEMINI_FALLBACK_MODELS`는 runtime compatibility alias로 유지됩니다. 다만 scheduled workflow의 provider/model 기본값을 바꾸는 경로는 더 이상 GitHub repo variable이 아니라 code default입니다.
 
-`INTERNAL_LLM_API_KEY`는 `LLM_PROVIDER=internal` 수동 실행에서만 필요한 GitHub Secret입니다. `INTERNAL_LLM_ENDPOINT`와 `INTERNAL_LLM_API_VERSION`는 GitHub Variable로 관리합니다. token은 workflow input, log, artifact, PR body에 출력하지 않습니다.
+`INTERNAL_LLM_API_KEY`는 `LLM_PROVIDER=internal` 수동 실행에서만 필요한 GitHub Secret입니다. `INTERNAL_LLM_ENDPOINT`와 `INTERNAL_LLM_API_VERSION`는 GitHub Variable로 관리합니다. internal provider는 이번 범위에서 `workflow_dispatch` manual override 전용이므로 explicit `LLM_MODEL`이 필수입니다. `GEMINI_MODEL`은 internal model 지정으로 인정하지 않습니다. token은 workflow input, log, artifact, PR body에 출력하지 않습니다.
 
 | input | 기본값 | runtime env | 설명 |
 | --- | --- | --- | --- |
@@ -24,7 +24,7 @@ Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR
 | `llm_model` | 빈 값 | `LLM_MODEL` | 수동 실행에서만 primary model을 override합니다. |
 | `llm_fallback_models` | 빈 값 | `LLM_FALLBACK_MODELS` | 수동 실행에서만 fallback model 목록을 comma-separated string으로 override합니다. |
 
-`LLM_PROVIDER=gemini`일 때는 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 요구하지 않습니다. `LLM_PROVIDER=internal`일 때만 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 필수로 검증합니다.
+`LLM_PROVIDER=gemini`일 때는 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 요구하지 않습니다. `LLM_PROVIDER=internal`일 때만 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, explicit `LLM_MODEL`을 필수로 검증합니다. internal provider를 scheduled/code default provider로 승격하는 작업은 별도 PR에서 `DEFAULT_RUNTIME_CONFIG`와 validation rule을 함께 수정해야 합니다.
 
 ## Variable
 
@@ -50,7 +50,7 @@ workflow는 후보 수집과 LLM 생성 전에 `npm run doctor:config`로 runtim
 | `NEWSROOM_WARN_COST_USD` | 선택 | `0.15` | Gemini usage metadata 기반 추정 비용이 이 값을 넘으면 workflow log와 cost report(비용 리포트)에 warning을 남깁니다. | 실제 생성 비용을 관찰하면서 알림 기준을 조정할 때 변경합니다. | 현재 운영 기준 warning-only입니다. 값을 낮게 잡아도 생성이나 발행 gate를 실패시키지 않습니다. |
 | `NEWSROOM_MAX_COST_USD` | 선택 | `0.25` | Gemini usage metadata 기반 추정 비용의 운영 상한 참고값입니다. | 실제 비용 분포를 보고 hard gate 전환 여부를 검토할 때 변경합니다. | 현재 운영 기준 초과해도 실패하지 않고 warning만 남깁니다. 품질 gate나 publish readiness와 독립입니다. |
 | `NEWSROOM_ALLOW_PRO_ON_SCHEDULE` | 선택 | `false` | scheduled run(예약 자동 실행)에서 Pro 계열 모델 사용을 허용할지 결정합니다. | 긴급 운영 실험이 필요하고 비용 증가를 명시적으로 감수할 때만 변경합니다. | 기본값을 `true`로 두면 scheduled run 비용이 예기치 않게 커질 수 있습니다. |
-| `NEWSROOM_ALLOW_PRO_ON_MANUAL` | 선택 | `false` | manual `workflow_dispatch` 실행에서 Pro 계열 모델 사용을 허용할지 결정합니다. workflow 입력 `allow_pro=true`가 이 값을 설정합니다. | 편집자가 manual high-quality run(수동 고품질 실행)에서 Pro 비용을 명시적으로 승인했을 때만 `true`가 됩니다. | manual 실행에서도 명시 허용 없이는 Pro를 사용할 수 없습니다. |
+| `NEWSROOM_ALLOW_PRO_ON_MANUAL` | 선택 | `false` | manual `workflow_dispatch` 실행에서 Pro 계열 모델 사용을 허용할지 결정합니다. workflow 입력 `allow_pro=true`가 이 값을 JS runtime 정책 플래그로 전달합니다. | 편집자가 manual high-quality run(수동 고품질 실행)에서 Pro 비용을 명시적으로 승인했을 때만 `true`가 됩니다. | workflow YAML은 fallback model list를 조합하지 않습니다. `workflow_dispatch`, 이 값 `true`, `LLM_PROVIDER=gemini` 조건을 모두 만족할 때만 JS model policy가 Pro fallback을 추가합니다. |
 | `NEWSROOM_PRO_ESCALATION` | 선택 | `manual` | Pro 사용 정책을 cost report와 log에 표시하기 위한 escalation label입니다. | 운영 정책 이름을 문서화해야 할 때 변경합니다. | 정책 표시용 값이며, Pro 허용 여부는 `NEWSROOM_ALLOW_PRO_ON_*` 값과 workflow event로 결정됩니다. |
 
 ## Tradeoff 검토 기준

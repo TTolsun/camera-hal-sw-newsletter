@@ -1,9 +1,17 @@
+const GEMINI_PRO_FALLBACK_MODEL = 'gemini-2.5-pro';
+
 function normalizeModelName(value) {
   return String(value || '').trim().toLowerCase();
 }
 
 function isGeminiProModel(value) {
   return /^gemini-[\w.-]*pro\b/.test(normalizeModelName(value));
+}
+
+function shouldAppendGeminiProFallback(config) {
+  return config?.llmProvider === 'gemini' &&
+    config?.githubEventName === 'workflow_dispatch' &&
+    config?.newsroomAllowProOnManual === true;
 }
 
 function configuredModels(config) {
@@ -15,6 +23,9 @@ function configuredModels(config) {
         ? config.geminiFallbackModels
         : [])
   ].filter(Boolean);
+  if (shouldAppendGeminiProFallback(config)) {
+    models.push(GEMINI_PRO_FALLBACK_MODEL);
+  }
   return models.filter((item, index, items) => items.indexOf(item) === index);
 }
 
@@ -39,8 +50,10 @@ function geminiProPolicySummary(config) {
 }
 
 module.exports = {
+  GEMINI_PRO_FALLBACK_MODEL,
   configuredModels,
   geminiProPolicySummary,
   isGeminiProModel,
-  normalizeModelName
+  normalizeModelName,
+  shouldAppendGeminiProFallback
 };

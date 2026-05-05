@@ -1,3 +1,8 @@
+const {
+  configuredModels: configuredModelList,
+  isGeminiProModel
+} = require('../llm/model-policy');
+
 const DEFAULT_LLM_PROVIDER = 'gemini';
 const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
 const DEFAULT_LLM_FALLBACK_MODELS = ['gemini-2.5-flash-lite'];
@@ -113,10 +118,6 @@ function envValue(env, key, defaultValue) {
   return Object.prototype.hasOwnProperty.call(env, key) ? env[key] : defaultValue;
 }
 
-function normalizeModelName(value) {
-  return String(value || '').trim().toLowerCase();
-}
-
 function normalizeLlmProvider(value, defaultValue = DEFAULT_RUNTIME_CONFIG.llmProvider) {
   const normalized = String(value || '').trim().toLowerCase();
   if (!normalized || normalized === 'default') return defaultValue;
@@ -124,30 +125,23 @@ function normalizeLlmProvider(value, defaultValue = DEFAULT_RUNTIME_CONFIG.llmPr
 }
 
 function isProModel(value) {
-  return /^gemini-[\w.-]*pro\b/.test(normalizeModelName(value));
-}
-
-function configuredModelList(config) {
-  return [
-    config?.llmModel ?? config?.geminiModel,
-    ...(Array.isArray(config?.llmFallbackModels)
-      ? config.llmFallbackModels
-      : Array.isArray(config?.geminiFallbackModels)
-        ? config.geminiFallbackModels
-        : [])
-  ].filter(Boolean);
+  return isGeminiProModel(value);
 }
 
 function readRuntimeConfig(env = process.env, options = {}) {
   const newsletterDate = String(envValue(env, 'NEWSLETTER_DATE', DEFAULT_RUNTIME_CONFIG.newsletterDate) || '').trim();
   const llmProvider = normalizeLlmProvider(envValue(env, 'LLM_PROVIDER', DEFAULT_RUNTIME_CONFIG.llmProvider));
+  const llmModelExplicitlyConfigured = String(env.LLM_MODEL || '').trim().length > 0;
   const llmModel = String(
     envValue(env, 'LLM_MODEL', envValue(env, 'GEMINI_MODEL', DEFAULT_RUNTIME_CONFIG.llmModel)) || ''
   ).trim();
+  const llmFallbackDefault = llmProvider === 'internal'
+    ? ''
+    : envValue(env, 'GEMINI_FALLBACK_MODELS', DEFAULT_RUNTIME_CONFIG.llmFallbackModels.join(','));
   const llmFallbackValue = envValue(
     env,
     'LLM_FALLBACK_MODELS',
-    envValue(env, 'GEMINI_FALLBACK_MODELS', DEFAULT_RUNTIME_CONFIG.llmFallbackModels.join(','))
+    llmFallbackDefault
   );
   const llmFallbackModels = parseCsv(llmFallbackValue);
 
@@ -156,6 +150,7 @@ function readRuntimeConfig(env = process.env, options = {}) {
     lookbackDays: parseInteger(envValue(env, 'LOOKBACK_DAYS', DEFAULT_RUNTIME_CONFIG.lookbackDays), 'LOOKBACK_DAYS', { min: 1 }),
     llmProvider,
     llmModel,
+    llmModelExplicitlyConfigured,
     llmFallbackModels,
     geminiModel: llmModel,
     geminiFallbackModels: llmFallbackModels,
@@ -261,6 +256,9 @@ function validateRuntimeConfig(config, options = {}) {
   if (!String(config.llmModel || '').trim()) {
     errors.push('LLM_MODEL/GEMINI_MODEL must be non-empty.');
   }
+  if (config.llmProvider === 'internal' && config.llmModelExplicitlyConfigured !== true) {
+    errors.push('LLM_MODEL is required when LLM_PROVIDER=internal.');
+  }
   if (!Array.isArray(config.llmFallbackModels)) {
     errors.push('LLM_FALLBACK_MODELS/GEMINI_FALLBACK_MODELS must be a comma-separated list.');
   } else if (config.llmFallbackModels.some(item => !String(item || '').trim())) {
@@ -346,6 +344,7 @@ function sanitizeRuntimeConfig(config) {
     lookbackDays: config.lookbackDays,
     llmProvider: config.llmProvider,
     llmModel: config.llmModel,
+    llmModelExplicitlyConfigured: Boolean(config.llmModelExplicitlyConfigured),
     llmFallbackModels: config.llmFallbackModels,
     geminiModel: config.geminiModel,
     geminiFallbackModels: config.geminiFallbackModels,

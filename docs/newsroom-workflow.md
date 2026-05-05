@@ -34,9 +34,9 @@ source registry
 
 기본 provider는 `gemini`이며 scheduled run은 `runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`에 정의된 provider/model/fallback model을 사용합니다. scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않습니다.
 
-`workflow_dispatch` 수동 실행에서만 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달됩니다. `LLM_PROVIDER=gemini`은 `GEMINI_API_KEY`만 요구하고, `LLM_PROVIDER=internal`은 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 요구합니다. token은 GitHub Secrets에서만 읽고 log, artifact, PR body에 출력하지 않습니다.
+`workflow_dispatch` 수동 실행에서만 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달됩니다. `LLM_PROVIDER=gemini`은 `GEMINI_API_KEY`만 요구하고, `LLM_PROVIDER=internal`은 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, explicit `LLM_MODEL`을 요구합니다. `GEMINI_MODEL`은 internal model 지정으로 인정하지 않습니다. token은 GitHub Secrets에서만 읽고 log, artifact, PR body에 출력하지 않습니다.
 
-사내 API의 request/response 차이는 `scripts/newsroom/llm/providers/internal-provider.js` 안에서만 수정합니다. generation orchestration, source binding, quality gate, fact-check blocker, publish-ready 판단은 provider와 무관하게 유지합니다.
+사내 API의 request/response 차이는 `scripts/newsroom/llm/providers/internal-provider.js` 안에서만 수정합니다. 이번 범위에서 internal provider는 manual override 전용이며 scheduled/code default provider 승격은 별도 PR에서 `DEFAULT_RUNTIME_CONFIG`와 validation rule을 함께 수정합니다. generation orchestration, source binding, quality gate, fact-check blocker, publish-ready 판단은 provider와 무관하게 유지합니다.
 
 ## Role 1. Candidate Collector
 
@@ -132,7 +132,7 @@ scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합�
 
 ## Safe Scheduled Defaults
 
-현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다. 기본값은 `LLM_PROVIDER=gemini`, `LLM_MODEL=gemini-2.5-flash`, `LLM_FALLBACK_MODELS=gemini-2.5-flash-lite`와 같습니다. 수동 `allow_pro=true`는 provider가 `default` 또는 `gemini`일 때만 Gemini Pro fallback을 `LLM_FALLBACK_MODELS`로 추가합니다.
+현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다. 기본값은 `LLM_PROVIDER=gemini`, `LLM_MODEL=gemini-2.5-flash`, `LLM_FALLBACK_MODELS=gemini-2.5-flash-lite`와 같습니다. workflow YAML은 `allow_pro` 값을 fallback list로 조합하지 않고 `NEWSROOM_ALLOW_PRO_ON_MANUAL` 정책 플래그만 JS runtime으로 전달합니다. JS model policy는 `workflow_dispatch`, `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`, `LLM_PROVIDER=gemini` 조건을 모두 만족할 때만 Gemini Pro fallback을 추가합니다.
 
 scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default이고, 나머지는 workflow와 runtime config의 기본값을 사용합니다.
 
@@ -158,7 +158,7 @@ NEWSROOM_ALLOW_PRO_ON_MANUAL=false
 NEWSROOM_PRO_ESCALATION=manual
 ```
 
-manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 선택할 수 있습니다. 이때 provider가 `default` 또는 `gemini`이면 workflow는 `LLM_FALLBACK_MODELS`에 `gemini-2.5-pro`를 추가하고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`로 실행합니다. scheduled run에서는 `NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false` 정책 검증을 통과해야 하므로 기본 운영에서 Pro 자동 호출은 금지됩니다.
+manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 선택할 수 있습니다. 이때 workflow는 fallback list를 만들지 않고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`만 전달합니다. JS model policy는 provider가 `gemini`인 `workflow_dispatch` 실행에서만 `gemini-2.5-pro` fallback을 추가합니다. scheduled run, internal provider, `allow_pro=false`에서는 Pro fallback을 추가하지 않습니다.
 
 ## Recovery Artifacts
 

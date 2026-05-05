@@ -200,7 +200,9 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /LLM_MODEL=\$\{INPUT_LLM_MODEL\}/);
   assert.match(workflow, /LLM_FALLBACK_MODELS=\$\{INPUT_LLM_FALLBACK_MODELS\}/);
   assert.match(workflow, /LLM override inputs must be single-line values\./);
-  assert.match(workflow, /\[ "\$\{INPUT_LLM_PROVIDER\}" = "gemini" \]/);
+  assert.match(workflow, /NEWSROOM_ALLOW_PRO_ON_MANUAL: \$\{\{ github\.event\.inputs\.allow_pro \|\| 'false' \}\}/);
+  assert.doesNotMatch(workflow, /LLM_FALLBACK_MODELS=gemini-2\.5-flash-lite,gemini-2\.5-pro/);
+  assert.doesNotMatch(workflow, /\[ "\$\{INPUT_LLM_PROVIDER\}" = "gemini" \]/);
   assert.match(workflow, /INTERNAL_LLM_API_KEY: \$\{\{ secrets\.INTERNAL_LLM_API_KEY \}\}/);
   assert.match(workflow, /INTERNAL_LLM_ENDPOINT: \$\{\{ vars\.INTERNAL_LLM_ENDPOINT \}\}/);
   assert.doesNotMatch(workflow, /vars\.LLM_PROVIDER/);

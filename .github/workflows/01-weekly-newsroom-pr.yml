@@ -125,8 +125,6 @@ jobs:
           fi
           if [ -n "${INPUT_LLM_FALLBACK_MODELS:-}" ]; then
             echo "LLM_FALLBACK_MODELS=${INPUT_LLM_FALLBACK_MODELS}" >> "$GITHUB_ENV"
-          elif [ "${INPUT_ALLOW_PRO:-false}" = "true" ] && { [ -z "${INPUT_LLM_PROVIDER:-}" ] || [ "${INPUT_LLM_PROVIDER}" = "default" ] || [ "${INPUT_LLM_PROVIDER}" = "gemini" ]; }; then
-            echo "LLM_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-2.5-pro" >> "$GITHUB_ENV"
           fi
 
       - name: Doctor runtime config

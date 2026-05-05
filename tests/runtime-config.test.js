@@ -13,6 +13,9 @@ const {
   parseNumber,
   normalizeLlmProvider
 } = require('../scripts/lib/runtime-config');
+const {
+  configuredModels
+} = require('../scripts/newsroom/llm/model-policy');
 
 test('defaults match workflow runtime defaults', () => {
   const config = readRuntimeConfig({});
@@ -21,6 +24,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.lookbackDays, 21);
   assert.equal(config.llmProvider, 'gemini');
   assert.equal(config.llmModel, 'gemini-2.5-flash');
+  assert.equal(config.llmModelExplicitlyConfigured, false);
   assert.deepEqual(config.llmFallbackModels, ['gemini-2.5-flash-lite']);
   assert.equal(config.geminiModel, 'gemini-2.5-flash');
   assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
@@ -117,6 +121,7 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.lookbackDays, 14);
   assert.equal(config.llmProvider, 'gemini');
   assert.equal(config.llmModel, 'primary-model');
+  assert.equal(config.llmModelExplicitlyConfigured, false);
   assert.deepEqual(config.llmFallbackModels, []);
   assert.equal(config.geminiModel, 'primary-model');
   assert.deepEqual(config.geminiFallbackModels, []);
@@ -148,6 +153,7 @@ test('LLM_MODEL and LLM_FALLBACK_MODELS override Gemini compatibility aliases', 
   });
 
   assert.equal(config.llmModel, 'llm-primary');
+  assert.equal(config.llmModelExplicitlyConfigured, true);
   assert.deepEqual(config.llmFallbackModels, ['llm-fallback']);
   assert.equal(config.geminiModel, 'llm-primary');
   assert.deepEqual(config.geminiFallbackModels, ['llm-fallback']);
@@ -165,6 +171,31 @@ test('internal provider credentials do not require a Gemini API key', () => {
   assert.equal(config.llmProvider, 'internal');
   assert.equal(config.geminiApiKeyConfigured, false);
   assert.equal(config.internalLlmApiKeyConfigured, true);
+  assert.equal(config.llmModelExplicitlyConfigured, true);
+  assert.deepEqual(config.llmFallbackModels, []);
+});
+
+test('internal provider requires explicit LLM_MODEL and does not accept Gemini model aliases', () => {
+  assert.throws(
+    () => readRuntimeConfig({
+      LLM_PROVIDER: 'internal',
+      INTERNAL_LLM_API_KEY: 'internal-test-key',
+      INTERNAL_LLM_ENDPOINT: 'https://internal.example.test/llm',
+      GEMINI_API_KEY: ''
+    }, { requireLlmCredentials: true }),
+    /LLM_MODEL is required when LLM_PROVIDER=internal/
+  );
+
+  assert.throws(
+    () => readRuntimeConfig({
+      LLM_PROVIDER: 'internal',
+      GEMINI_MODEL: 'internal-via-gemini-alias',
+      INTERNAL_LLM_API_KEY: 'internal-test-key',
+      INTERNAL_LLM_ENDPOINT: 'https://internal.example.test/llm',
+      GEMINI_API_KEY: ''
+    }, { requireLlmCredentials: true }),
+    /LLM_MODEL is required when LLM_PROVIDER=internal/
+  );
 });
 
 test('internal provider requires its own key and endpoint only when selected', () => {
@@ -195,7 +226,8 @@ test('internal provider requires its own key and endpoint only when selected', (
     geminiThinkingBudgetScoring: 0,
     githubEventName: '',
     geminiApiKeyConfigured: false,
-    internalLlmApiKeyConfigured: false
+    internalLlmApiKeyConfigured: false,
+    llmModelExplicitlyConfigured: true
   }, { requireLlmCredentials: true });
 
   assert.equal(missingBoth.ok, false);
@@ -311,6 +343,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   const text = JSON.stringify(sanitized);
 
   assert.equal(sanitized.geminiApiKeyConfigured, true);
+  assert.equal(sanitized.llmModelExplicitlyConfigured, false);
   assert.equal(sanitized.internalLlmApiKeyConfigured, false);
   assert.equal(sanitized.internalLlmEndpointConfigured, false);
   assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
@@ -355,15 +388,40 @@ test('manual workflow dispatch allows Pro only when explicitly enabled', () => {
 });
 
 test('manual workflow allow_pro equivalent appends Pro to the default Flash-Lite fallback', () => {
-  const baseFallback = DEFAULT_RUNTIME_CONFIG.geminiFallbackModels.join(',');
   const config = readRuntimeConfig({
     GEMINI_MODEL: 'gemini-2.5-flash',
-    GEMINI_FALLBACK_MODELS: `${baseFallback},gemini-2.5-pro`,
     GITHUB_EVENT_NAME: 'workflow_dispatch',
     NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
   });
 
-  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite', 'gemini-2.5-pro']);
+  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro']);
   assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, true);
   assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
+});
+
+test('manual Pro model policy dedupes and does not apply to schedule or internal providers', () => {
+  const manualGemini = readRuntimeConfig({
+    GEMINI_MODEL: 'gemini-2.5-flash',
+    GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro',
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
+  });
+  assert.deepEqual(configuredModels(manualGemini), ['gemini-2.5-flash', 'gemini-2.5-pro']);
+
+  const scheduledGemini = readRuntimeConfig({
+    GITHUB_EVENT_NAME: 'schedule',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
+  });
+  assert.deepEqual(configuredModels(scheduledGemini), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+
+  const internal = readRuntimeConfig({
+    LLM_PROVIDER: 'internal',
+    LLM_MODEL: 'internal-model',
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true',
+    INTERNAL_LLM_API_KEY: 'internal-test-key',
+    INTERNAL_LLM_ENDPOINT: 'https://internal.example.test/llm'
+  }, { requireLlmCredentials: true });
+  assert.deepEqual(configuredModels(internal), ['internal-model']);
 });
