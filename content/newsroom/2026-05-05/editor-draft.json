@@ -1,7 +1,7 @@
 {
   "date": "2026-05-05",
   "title": "Camera HAL SW 뉴스레터 - 2026-05-05",
-  "summary": "이번 주 뉴스레터에서는 Android의 새로운 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트의 업데이트, FreeBSD 15.1 Beta 출시 소식, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 그리고 보안 취약점 관리에 직접적인 영향을 미칠 수 있습니다.",
+  "summary": "이번 주 뉴스레터에서는 Android의 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트 업데이트, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 보안 취약점 관리에 직접적인 점검 항목을 제공합니다.",
   "briefing": [
     "Android에서 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 추가되어, 카메라 HAL은 AI 모델을 위한 효율적인 이미지 데이터 경로 및 NPU/GPU/ISP 활용을 검토해야 합니다.",
     "C++26의 assert() 매크로 개선은 HAL 코드의 디버깅 효율성을 높일 잠재력이 있으며, 기존 assert() 사용 패턴을 점검하고 개선된 기능을 활용할 방안을 모색해야 합니다.",
@@ -97,98 +97,6 @@
         {
           "title": "Claude Code Changelog - 2.1.128",
           "url": "https://code.claude.com/docs/en/changelog"
-        }
-      ]
-    },
-    {
-      "category": "Linux Camera / V4L2",
-      "headline": "FreeBSD 15.1 Beta 1 출시: Android Linux 카메라/V4L2 스택 점검 신호",
-      "what_changed": "2026년 5월 2일, FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다. 이 베타 버전은 다양한 커널 및 드라이버 개선 사항을 포함합니다.",
-      "confirmed_facts": [
-        "릴리스 날짜: 2026년 5월 2일",
-        "버전/릴리스: FreeBSD 15.1 Beta 1",
-        "API/구성 요소: Linux camera / V4L2 (간접적 관련)",
-        "동작 변경: FreeBSD 15.1 Beta 1이 출시되었으며, 6월 정식 릴리스를 목표로 합니다."
-      ],
-      "evidence_summary": "Phoronix의 2026년 5월 2일 기사에서 FreeBSD 15.1 Beta 1의 출시를 확인했습니다. 이는 커널 및 드라이버 변경 사항을 포함합니다.",
-      "specificity_checks": [
-        "릴리스 날짜: 2026년 5월 2일",
-        "버전/릴리스: FreeBSD 15.1 Beta 1",
-        "API/구성 요소: Linux camera / V4L2 (간접적 관련)",
-        "동작 변경: FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다.",
-        "출처 페이지: https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
-      ],
-      "source_verification_notes": [
-        "Phoronix는 Linux 및 오픈 소스 하드웨어/소프트웨어 뉴스를 다루는 신뢰할 수 있는 출처입니다. FreeBSD 15.1 Beta 1의 출시를 직접 확인했습니다. FreeBSD는 Android의 Linux 커널과 직접적인 관계는 없지만, 커널 및 드라이버 개발 동향을 간접적으로 파악하는 데 유용합니다."
-      ],
-      "background": "FreeBSD는 Unix 계열 운영체제로, Linux와 마찬가지로 커널 및 드라이버 개발에 중점을 둡니다. 비록 Android가 Linux 커널을 기반으로 하지만, FreeBSD의 커널 및 드라이버 개발은 때때로 공통된 문제 해결 접근 방식이나 새로운 기술 동향을 공유할 수 있습니다. 특히 미디어 스택이나 하드웨어 드라이버 개선은 V4L2와 같은 표준 인터페이스에 영향을 미칠 수 있습니다.",
-      "why_it_matters": "FreeBSD의 커널 및 드라이버 변경 사항은 Android의 Linux 커널 기반 카메라 스택에 대한 잠재적인 개선 사항이나 고려 사항을 간접적으로 시사할 수 있습니다. 특히 V4L2 관련 변경 사항은 HAL 구현에 영향을 줄 수 있습니다. 예를 들어, 버퍼 관리, 센서 모드 선택, ISP 튜닝과 관련된 새로운 접근 방식이 FreeBSD에서 탐구된다면, 이는 Android의 카메라 드라이버 및 HAL 설계에 대한 아이디어를 제공할 수 있습니다.",
-      "camera_hal_perspective": "FreeBSD의 업데이트는 직접적인 Android HAL 요구사항은 아니지만, Linux 커널의 미디어 하위 시스템(V4L2)과 유사한 개념을 공유하는 카메라 드라이버 개발의 일반적인 동향을 파악하는 데 도움이 됩니다. HAL 엔지니어는 FreeBSD의 변경 사항을 통해 버퍼 큐 관리, 포맷 협상, 센서 모드 선택, ISP 튜닝 등에서 발생할 수 있는 새로운 최적화 기법이나 잠재적인 문제점을 간접적으로 예측할 수 있습니다. 이는 vendor kernel의 카메라 드라이버 개발 방향을 이해하고, Android HAL과의 인터페이스를 개선하는 데 장기적인 관점을 제공할 수 있습니다.",
-      "camera_hal_checks": [
-        "FreeBSD 15.1 Beta의 커널 변경 로그를 검토하여 V4L2 또는 미디어 프레임워크와 관련된 주목할 만한 변경 사항이 있는지 확인합니다.",
-        "vendor kernel 브랜치에 FreeBSD의 변경 사항과 유사한 V4L2/미디어 패치가 있는지 확인하고, Android 카메라 HAL에 미칠 수 있는 간접적인 영향을 평가합니다.",
-        "FreeBSD의 버퍼 관리 또는 스트림 처리 개선 사항이 Android HAL의 버퍼 수명 주기 또는 프레임 타이밍 최적화에 대한 새로운 아이디어를 제공하는지 검토합니다."
-      ],
-      "action_hints": [
-        "FreeBSD 15.1 Beta의 커널 및 드라이버 변경 사항 중 V4L2 또는 미디어 스택과 관련된 부분을 간략히 검토합니다.",
-        "Android Linux 커널의 카메라 드라이버 개발 동향과 비교하여 장기적인 관점에서 참고할 만한 점이 있는지 확인합니다."
-      ],
-      "action_items": [
-        "2주 이내에 FreeBSD 15.1 Beta의 커널 변경 로그 중 `sys/dev/video` 또는 `sys/dev/media` 경로에 해당하는 부분을 검토하여 V4L2 또는 미디어 컨트롤러와 관련된 새로운 기능이나 개선 사항이 있는지 확인합니다.",
-        "현재 개발 중인 vendor kernel 브랜치에서 FreeBSD의 변경 사항과 유사한 V4L2/미디어 패치가 있는지 확인하고, 해당 패치가 Preview + ImageCapture 스트림 조합의 성능 또는 안정성에 미치는 영향을 진단하는 로그를 추가합니다.",
-        "이 항목을 HAL 백로그 또는 커널 추적 목록에 '참고용'으로 추가하고, 6개월마다 FreeBSD/Linux 미디어 스택의 주요 업데이트를 확인하여 Android HAL에 적용 가능한 인사이트가 있는지 재평가합니다."
-      ],
-      "team_summary": "FreeBSD 15.1 Beta 1은 Android 기반은 아니지만 Android Linux 카메라와 V4L2 스택 가정을 점검하는 참고 신호입니다.",
-      "is_ai_related": false,
-      "article_type": "linux-camera-v4l2",
-      "imageCandidates": [
-        {
-          "url": "https://www.phoronix.net/image.php?id=2026&image=freebsd_151beta_1",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "contentType": "image/jpeg",
-          "height": 100,
-          "width": 100
-        },
-        {
-          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "contentType": "image/png",
-          "height": 100,
-          "width": 100
-        },
-        {
-          "url": "https://www.phoronix.net/image.php?id=2026&image=freebsd_151beta_2",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "sourceKind": "rss_item",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "contentType": "image/jpeg",
-          "height": 100,
-          "width": 100
-        }
-      ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Android Camera HAL 관점에 직접 맞는 출처 이미지가 없어 fallback visual을 사용합니다.",
-      "sources": [
-        {
-          "title": "FreeBSD 15.1 Beta Released For Early Testing",
-          "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
         }
       ]
     },
@@ -433,17 +341,12 @@
     "2026년 5월 Android 보안 게시판이 공개되는 즉시, 카메라 HAL 관련 CVE 항목을 확인하고 해당 취약점이 현재 제품에 영향을 미치는지 분석합니다. (Owner: 보안 담당 엔지니어)",
     "현재 카메라 HAL 코드베이스에서 사용되는 `assert()` 매크로 호출 지점을 식별하고, 각 지점에서 실패 시 어떤 추가적인 변수 값이나 상태 정보가 디버깅에 유용할지 목록화합니다. (Owner: HAL 개발팀)",
     "Claude Code 2.1.128의 Changelog를 상세히 검토하여, 카메라 HAL 개발에 직접적으로 적용 가능한 코드 생성, 디버깅, 리팩토링 기능 개선 사항을 2주 이내에 식별하고 팀에 공유합니다. (Owner: HAL 개발팀)",
-    "FreeBSD 15.1 Beta 1의 커널 및 드라이버 관련 릴리스 노트를 2주 이내에 검토하여, 메모리 관리, 동시성, 전력 효율성 측면에서 Android Linux 커널 V4L2 드라이버에 적용 가능한 잠재적 개선 아이디어를 식별합니다. (Owner: 커널 드라이버 엔지니어)",
     "새로운 Firebase AI Logic API의 문서화를 2주 이내에 검토하여, AI 추론을 위한 카메라 스트림(예: `ImageAnalysis`)의 권장 해상도, 형식, 프레임 속도 및 버퍼 사용 패턴을 파악하고, HAL이 이를 효율적으로 지원할 수 있는지 분석합니다. (Owner: HAL 아키텍트)"
   ],
   "references": [
     {
       "title": "Claude Code Changelog - 2.1.128",
       "url": "https://code.claude.com/docs/en/changelog"
-    },
-    {
-      "title": "FreeBSD 15.1 Beta Released For Early Testing",
-      "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
     },
     {
       "title": "Overview",

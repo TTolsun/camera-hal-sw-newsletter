@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated regression"
+  },
+  "policyFlags": {
+    "source_gap_risk": true,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": false,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "EXCLUDE"
+  },
+  "candidate": {
+    "title": "Source gap article",
+    "url": "https://example.com/source-gap",
+    "published_date": "",
+    "hasDatedEvidence": false,
+    "finalSelectionEligibility": "main",
+    "source_gap_risk": true,
+    "reference_only": false
+  }
+}

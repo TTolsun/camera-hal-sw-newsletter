@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "generated": true,
+    "source": "content/newsroom/2026-05-05 minimal regression"
+  },
+  "policyFlags": {
+    "source_gap_risk": false,
+    "reference_only": false,
+    "finalSelectionEligibility": "short",
+    "hasDatedEvidence": true,
+    "generic_ai_without_hal_connection": false,
+    "generic_it_without_hal_connection": true
+  },
+  "expected": {
+    "status": "DEMOTE"
+  },
+  "candidate": {
+    "title": "FreeBSD 15.1 Beta Released For Early Testing",
+    "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
+    "source": "Phoronix Linux Camera / Media",
+    "finalSelectionEligibility": "short",
+    "hasDatedEvidence": true,
+    "source_gap_risk": false,
+    "reference_only": false,
+    "api_or_component": "Linux camera / V4L2",
+    "summary": "FreeBSD 15.1 Beta 1 is available for early testing.",
+    "relevance_bucket": "cpp_ai_tooling_fallback"
+  },
+  "section": {
+    "headline": "FreeBSD 15.1 Beta 1 release",
+    "what_changed": "FreeBSD 15.1 Beta 1 was released for early testing.",
+    "camera_hal_perspective": "The source does not identify a concrete Camera HAL, Android Camera, frame, stream, buffer, metadata, ISP, GPU, or NPU workflow.",
+    "sources": [
+      {
+        "title": "FreeBSD 15.1 Beta Released For Early Testing",
+        "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1"
+      }
+    ]
+  }
+}

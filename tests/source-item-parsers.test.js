@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers');
+const { readTextFixture } = require('./helpers/fixture-loader');
 
 function source(overrides = {}) {
   return {
@@ -24,13 +25,7 @@ function assertParsedItemContract(item) {
 }
 
 test('Android Latest Updates parser extracts dated Camera library rows', () => {
-  const html = `
-    <section>
-      <h2>May 1, 2026</h2>
-      <a href="/jetpack/androidx/releases/camera#1.5.0-beta01">CameraX 1.5.0-beta01</a>
-      <p>Added CameraX compatibility updates for Android camera apps.</p>
-    </section>
-  `;
+  const html = readTextFixture('source-html/android-latest-updates-camera.html');
 
   const items = parseSourceSpecificItems(html, source());
 
@@ -41,14 +36,7 @@ test('Android Latest Updates parser extracts dated Camera library rows', () => {
 });
 
 test('CameraX release notes parser keeps only dated release child entries', () => {
-  const html = `
-    <article>
-      <h2 id="1.5.0-beta01">CameraX 1.5.0-beta01 - May 1, 2026</h2>
-      <p>Fixed Camera2 interop behavior and updated androidx.camera compatibility handling.</p>
-      <h2 id="old">Older notes</h2>
-      <p>General release note index without a concrete date.</p>
-    </article>
-  `;
+  const html = readTextFixture('source-html/camerax-release-notes.html');
 
   const items = parseSourceSpecificItems(html, source({
     id: 'camerax-release-notes',
@@ -65,13 +53,7 @@ test('CameraX release notes parser keeps only dated release child entries', () =
 });
 
 test('AOSP camera documentation links stay on watchlist fallback path', () => {
-  const html = `
-    <main>
-      <p>Last updated 2026-05-01 UTC.</p>
-      <a href="/docs/core/camera/camera3">Camera HAL3 documentation</a>
-      <p>Updated Android Camera HAL API/component guidance for request and result metadata behavior.</p>
-    </main>
-  `;
+  const html = readTextFixture('source-html/aosp-camera-documentation.html');
 
   const items = parseSourceSpecificItems(html, source({
     id: 'aosp-camera-documentation',
@@ -84,25 +66,13 @@ test('AOSP camera documentation links stay on watchlist fallback path', () => {
 });
 
 test('official security and toolchain release-note child entries preserve concrete evidence', () => {
-  const securityItems = parseSourceSpecificItems(`
-    <main>
-      <h2>May 2026</h2>
-      <a href="/docs/security/bulletin/2026-05-01">May 2026 Security Bulletin</a>
-      <p>Security fixes update Android framework behavior for CVE handling.</p>
-    </main>
-  `, source({
+  const securityItems = parseSourceSpecificItems(readTextFixture('source-html/android-security-bulletin.html'), source({
     id: 'android-security-bulletin',
     name: 'Android Security Bulletin',
     url: 'https://source.android.com/docs/security/bulletin',
     sourceUrl: 'https://source.android.com/docs/security/bulletin'
   }));
-  const llvmItems = parseSourceSpecificItems(`
-    <main>
-      <h2>May 1, 2026</h2>
-      <a href="/21.1.0/docs/ReleaseNotes.html">LLVM 21.1.0 Release Notes</a>
-      <p>Changed Clang diagnostics and sanitizer behavior for native C++ builds.</p>
-    </main>
-  `, source({
+  const llvmItems = parseSourceSpecificItems(readTextFixture('source-html/llvm-release-notes.html'), source({
     id: 'llvm-release-notes',
     name: 'LLVM Release Notes',
     url: 'https://releases.llvm.org/',
@@ -120,15 +90,7 @@ test('official security and toolchain release-note child entries preserve concre
 });
 
 test('Claude Code changelog parser extracts version and date blocks', () => {
-  const html = `
-    <article>
-      <h2 id="v1-0-94">1.0.94 - May 1, 2026</h2>
-      <ul>
-        <li>Added hooks for AI workflows.</li>
-        <li>Fixed terminal resume behavior.</li>
-      </ul>
-    </article>
-  `;
+  const html = readTextFixture('source-html/claude-code-changelog-dated.html');
 
   const items = parseSourceSpecificItems(html, source({
     id: 'claude-code-changelog',
@@ -145,12 +107,7 @@ test('Claude Code changelog parser extracts version and date blocks', () => {
 });
 
 test('non-SMR parsers do not promote month-year mentions to dated evidence', () => {
-  const html = `
-    <article>
-      <h2 id="v1-0-95">1.0.95</h2>
-      <p>Added planning notes for workflows discussed in May 2026.</p>
-    </article>
-  `;
+  const html = readTextFixture('source-html/claude-code-changelog-undated.html');
 
   const items = parseSourceSpecificItems(html, source({
     id: 'claude-code-changelog',
@@ -163,13 +120,7 @@ test('non-SMR parsers do not promote month-year mentions to dated evidence', () 
 });
 
 test('Samsung Mobile Security parser extracts monthly SMR sections', () => {
-  const html = `
-    <main>
-      <h2 id="smr-may-2026">SMR-MAY-2026</h2>
-      <p>Samsung Mobile Security Bulletin May 2026.</p>
-      <p>Security CVE fixes affect Android framework components.</p>
-    </main>
-  `;
+  const html = readTextFixture('source-html/samsung-mobile-security.html');
 
   const items = parseSourceSpecificItems(html, source({
     id: 'samsung-mobile-security-updates',

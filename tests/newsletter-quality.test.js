@@ -8,135 +8,15 @@ const {
   determineQualityStatus,
   sectionPassesArticleGate
 } = require('../scripts/lib/newsletter-quality');
-
-function source(url, title = 'Source') {
-  return { title, url };
-}
-
-function section(overrides = {}) {
-  const title = overrides.headline || 'CameraX 1.5 release gives HAL teams a compatibility target';
-  return {
-    category: 'Android Camera',
-    headline: title,
-    what_changed: 'CameraX 1.5.0 was released on 2026-05-01 with Android Camera compatibility behavior.',
-    confirmed_facts: ['CameraX 1.5.0 release date: 2026-05-01.'],
-    evidence_summary: 'Version: CameraX 1.5.0; release date: 2026-05-01; API/component: CameraX; behavior change: compatibility validation target.',
-    specificity_checks: ['Version: CameraX 1.5.0', 'Release date: 2026-05-01'],
-    source_verification_notes: ['Official source, dated release evidence.'],
-    background: 'CameraX sits above camera2 and exposes compatibility regressions that can map back to Camera HAL stream and metadata behavior.',
-    why_it_matters: 'HAL teams can use this as a regression check input.',
-    camera_hal_perspective: 'Validate request/result metadata, stream combinations, Camera ITS scenes, latency, frame drop, thermal, and buffer behavior on representative devices.',
-    camera_hal_checks: ['Run Camera ITS focused scenes on CameraX-backed capture paths.'],
-    action_items: [
-      'Within 2 weeks, assign a camera owner to compare Camera ITS logs before and after CameraX 1.5.0.',
-      'Measure preview/capture latency and frame drop metrics on at least one legacy and one flagship device.'
-    ],
-    team_summary: 'Use CameraX 1.5.0 as a concrete compatibility validation trigger.',
-    is_ai_related: false,
-    article_type: 'camera-hal',
-    sources: [source(overrides.url || 'https://example.com/camerax')],
-    ...overrides
-  };
-}
-
-function reporterCandidate(url, overrides = {}) {
-  return {
-    title: 'Reporter candidate',
-    url,
-    finalSelectionEligibility: 'main',
-    isWatchPage: false,
-    hasDatedEvidence: true,
-    main_eligible: true,
-    source_gap_risk: false,
-    reference_only: false,
-    selected: true,
-    camera_hal_relevance_score: 5,
-    android_camera_relevance_score: 5,
-    practical_actionability_score: 5,
-    ...overrides
-  };
-}
-
-function scopedCandidate(url, bucket, overrides = {}) {
-  const bucketDefaults = {
-    direct_aosp_camera: {
-      editorial_priority: 1,
-      aosp_camera_directness: 5,
-      counts_as_primary_camera_topic: true
-    },
-    camera_driver_image_pipeline: {
-      editorial_priority: 2,
-      driver_stack_relevance: 5,
-      counts_as_driver_topic: true
-    },
-    android_platform_camera_adjacent: {
-      editorial_priority: 3,
-      aosp_camera_directness: 2,
-      counts_as_primary_camera_topic: true
-    },
-    soc_platform_signal: {
-      editorial_priority: 4,
-      soc_platform_relevance: 5,
-      counts_as_soc_topic: true
-    },
-    cpp_ai_tooling_fallback: {
-      editorial_priority: 5,
-      native_tooling_relevance: 5,
-      counts_as_fallback_topic: true
-    },
-    generic_tech_watchlist: {
-      editorial_priority: 6
-    }
-  };
-  return reporterCandidate(url, {
-    relevance_bucket: bucket,
-    aosp_camera_directness: 0,
-    driver_stack_relevance: 0,
-    soc_platform_relevance: 0,
-    native_tooling_relevance: 0,
-    counts_as_primary_camera_topic: false,
-    counts_as_driver_topic: false,
-    counts_as_soc_topic: false,
-    counts_as_fallback_topic: false,
-    evidence_origin: 'candidate_metadata',
-    ...bucketDefaults[bucket],
-    ...overrides
-  });
-}
-
-function reportFor(sections, reporterCandidates) {
-  return buildNewsletterQualityReport(
-    '2026-05-03',
-    {
-      briefing: ['one', 'two', 'three'],
-      sections
-    },
-    { candidates: reporterCandidates },
-    { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 }
-  );
-}
-
-function validSections(count = 4) {
-  const sections = [
-    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
-    section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' }),
-    section({ headline: 'Android Camera API change C', url: 'https://example.com/c' }),
-    section({
-      headline: 'AI camera workflow D',
-      url: 'https://example.com/ai',
-      is_ai_related: true,
-      article_type: 'ai',
-      what_changed: 'AI camera workflow changed on 2026-05-01 for Camera HAL stream testing.',
-      evidence_summary: 'Version: AI workflow 1.0; release date: 2026-05-01; API/component: Android Camera frame pipeline; behavior change: camera frame inference validation.',
-      specificity_checks: ['Version: AI workflow 1.0', 'Release date: 2026-05-01']
-    })
-  ];
-  return sections.slice(0, count);
-}
-
-function reporterCandidatesFor(sections) {
-  return sections.map(item => reporterCandidate(item.sources[0].url));
-}
+const {
+  reporterCandidate,
+  reporterCandidatesFor,
+  reportFor,
+  scopedCandidate,
+  section,
+  validSections
+} = require('./helpers/quality-builders');
+const { readJsonFixture } = require('./helpers/fixture-loader');
 
 test('quality threshold defaults to 85 and preserves numeric boundary behavior', () => {
   assert.equal(QUALITY_THRESHOLD, 85);
@@ -654,6 +534,40 @@ test('quality report treats negative Camera HAL wording as no generic AI connect
   assert.ok(genericResult);
   assert.equal(genericResult.status, 'DEMOTE');
   assert.ok(genericResult.hard_fail_reasons.some(reason => /Generic AI/.test(reason)));
+});
+
+test('bad regression fixtures cannot pass the main article quality gate', () => {
+  const genericAi = readJsonFixture('quality/bad/generic-ai-main-article.json');
+  const freebsd = readJsonFixture('quality/bad/freebsd-source-label-regression.json');
+  const sections = [
+    section({
+      ...genericAi.section,
+      url: genericAi.section.sources[0].url
+    }),
+    section({
+      ...freebsd.section,
+      url: freebsd.section.sources[0].url
+    }),
+    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
+    section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' })
+  ];
+  const report = reportFor(sections, [
+    reporterCandidate(genericAi.section.sources[0].url, genericAi.policyFlags),
+    reporterCandidate(freebsd.section.sources[0].url, {
+      ...freebsd.candidate,
+      relevance_bucket: 'generic_tech_watchlist',
+      editorial_priority: 6,
+      camera_hal_relevance_score: 0,
+      android_camera_relevance_score: 0,
+      practical_actionability_score: 0
+    }),
+    reporterCandidate('https://example.com/a'),
+    reporterCandidate('https://example.com/b')
+  ]);
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.notEqual(report.article_results.find(item => item.headline === genericAi.section.headline).status, 'PASS');
+  assert.notEqual(report.article_results.find(item => item.headline === freebsd.section.headline).status, 'PASS');
 });
 
 test('quality report markdown separates score threshold max score and result', () => {

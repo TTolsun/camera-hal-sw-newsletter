@@ -3,8 +3,8 @@
   "date": "2026-05-05",
   "generated_at": "2026-05-05T02:55:46.760Z",
   "capsule_token_target": "500-800",
-  "shortlisted_capsule_count": 5,
-  "selected_capsule_count": 5,
+  "shortlisted_capsule_count": 4,
+  "selected_capsule_count": 4,
   "shortlisted_capsules": [
     {
       "title": "C++26: assert() 매크로 개선으로 HAL 디버깅 효율성 향상 기대",
@@ -317,92 +317,6 @@
         }
       ],
       "estimated_tokens": 865
-    },
-    {
-      "title": "FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점",
-      "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-      "source": "Phoronix Linux Camera / Media",
-      "published_date": "Sat, 02 May 2026 06:53:24 -0400",
-      "topic_type": "camera-hal",
-      "component": "Linux camera / V4L2",
-      "what_changed": "FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다.",
-      "why_hal_engineer_cares": "FreeBSD의 커널 및 드라이버 변경 사항은 Android의 Linux 커널 기반 카메라 스택에 대한 잠재적인 개선 사항이나 고려 사항을 간접적으로 시사할 수 있습니다. 특히 V4L2 관련 변경 사항은 HAL 구현에 영향을 줄 수 있습니다.",
-      "evidence": [
-        "version_or_release: FreeBSD 15.1 Beta 1",
-        "api_or_component: Linux camera / V4L2",
-        "behavior_change: FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다.",
-        "evidence_note: version_or_release: FreeBSD 15.1 Beta 1",
-        "evidence_note: api_or_component: Linux camera / V4L2",
-        "evidence_note: behavior_change: FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다."
-      ],
-      "risk": {
-        "source_gap": false,
-        "watch_page": false,
-        "no_dated_evidence": false,
-        "candidate_only": false,
-        "requires_cross_check": true,
-        "final_selection_eligibility": "short"
-      },
-      "eligibility": {
-        "collectionMode": "rss-item",
-        "isArticleCandidate": true,
-        "isWatchPage": false,
-        "hasDatedEvidence": true,
-        "evidenceLevel": "dated-rss-article",
-        "finalSelectionEligibility": "short",
-        "source_kind": "rss_item",
-        "source_gap_risk": false,
-        "main_eligible": true,
-        "briefing_only": false,
-        "reference_only": false,
-        "evidence_score": 6,
-        "cross_check_status": "not-required"
-      },
-      "score": {
-        "total": 93,
-        "camera_hal_directness": 5,
-        "evidence_specificity": 5,
-        "freshness": 3,
-        "practical_actionability": 5,
-        "source_reliability": 0,
-        "optional_ai_cpp_bonus": 3
-      },
-      "selection": {
-        "final_selected": true,
-        "selected_for_editor": true,
-        "selection_slot": "camera-platform-optional-ai-cpp",
-        "main_article_score_eligible": true,
-        "score_filter_reasons": [],
-        "exclusion_reasons": []
-      },
-      "url_hash": "522d2883a39b3460888cc292226c92c12a188d7846d732c11029eda332df1577",
-      "imageCandidates": [
-        {
-          "url": "https://www.phoronix.net/image.php?id=2026&image=freebsd_151beta_1",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://www.phoronix.net/image.php?id=2026&image=freebsd_151beta_2",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok"
-        }
-      ],
-      "estimated_tokens": 664
     }
   ],
   "selected_capsules": [
@@ -717,92 +631,6 @@
         }
       ],
       "estimated_tokens": 865
-    },
-    {
-      "title": "FreeBSD 15.1 Beta 출시: Android Linux 커널 카메라 스택에 대한 간접적 시사점",
-      "url": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-      "source": "Phoronix Linux Camera / Media",
-      "published_date": "Sat, 02 May 2026 06:53:24 -0400",
-      "topic_type": "camera-hal",
-      "component": "Linux camera / V4L2",
-      "what_changed": "FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다.",
-      "why_hal_engineer_cares": "FreeBSD의 커널 및 드라이버 변경 사항은 Android의 Linux 커널 기반 카메라 스택에 대한 잠재적인 개선 사항이나 고려 사항을 간접적으로 시사할 수 있습니다. 특히 V4L2 관련 변경 사항은 HAL 구현에 영향을 줄 수 있습니다.",
-      "evidence": [
-        "version_or_release: FreeBSD 15.1 Beta 1",
-        "api_or_component: Linux camera / V4L2",
-        "behavior_change: FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다.",
-        "evidence_note: version_or_release: FreeBSD 15.1 Beta 1",
-        "evidence_note: api_or_component: Linux camera / V4L2",
-        "evidence_note: behavior_change: FreeBSD 15.1 Beta 1이 출시되어 6월 정식 릴리스를 앞두고 있습니다."
-      ],
-      "risk": {
-        "source_gap": false,
-        "watch_page": false,
-        "no_dated_evidence": false,
-        "candidate_only": false,
-        "requires_cross_check": true,
-        "final_selection_eligibility": "short"
-      },
-      "eligibility": {
-        "collectionMode": "rss-item",
-        "isArticleCandidate": true,
-        "isWatchPage": false,
-        "hasDatedEvidence": true,
-        "evidenceLevel": "dated-rss-article",
-        "finalSelectionEligibility": "short",
-        "source_kind": "rss_item",
-        "source_gap_risk": false,
-        "main_eligible": true,
-        "briefing_only": false,
-        "reference_only": false,
-        "evidence_score": 6,
-        "cross_check_status": "not-required"
-      },
-      "score": {
-        "total": 93,
-        "camera_hal_directness": 5,
-        "evidence_specificity": 5,
-        "freshness": 3,
-        "practical_actionability": 5,
-        "source_reliability": 0,
-        "optional_ai_cpp_bonus": 3
-      },
-      "selection": {
-        "final_selected": true,
-        "selected_for_editor": true,
-        "selection_slot": "camera-platform-optional-ai-cpp",
-        "main_article_score_eligible": true,
-        "score_filter_reasons": [],
-        "exclusion_reasons": []
-      },
-      "url_hash": "522d2883a39b3460888cc292226c92c12a188d7846d732c11029eda332df1577",
-      "imageCandidates": [
-        {
-          "url": "https://www.phoronix.net/image.php?id=2026&image=freebsd_151beta_1",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://www.phoronix.net/image.php?id=2026&image=freebsd_151beta_2",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/news/FreeBSD-15.1-Beta-1",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok"
-        }
-      ],
-      "estimated_tokens": 664
     }
   ]
 }

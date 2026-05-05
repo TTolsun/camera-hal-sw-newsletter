@@ -12,31 +12,8 @@ const {
   selectFinalArticles,
   summarizeExclusionReasons
 } = require('../scripts/lib/newsroom-selection');
-
-function candidate(overrides = {}) {
-  const title = overrides.title || 'CameraX 1.5 release improves Android Camera compatibility';
-  const urlTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  return {
-    title,
-    source: overrides.source || 'Android Developers',
-    url: overrides.url || `https://example.com/${urlTitle}`,
-    published_date: overrides.published_date || '2026-05-01T00:00:00Z',
-    summary: overrides.summary || 'CameraX release changes Android Camera behavior and compatibility validation.',
-    reliability: overrides.reliability || 'official',
-    finalSelectionEligibility: overrides.finalSelectionEligibility || 'main',
-    isWatchPage: overrides.isWatchPage || false,
-    hasDatedEvidence: overrides.hasDatedEvidence !== undefined ? overrides.hasDatedEvidence : true,
-    source_gap_risk: overrides.source_gap_risk || false,
-    main_eligible: overrides.main_eligible !== undefined ? overrides.main_eligible : true,
-    briefing_only: overrides.briefing_only || false,
-    reference_only: overrides.reference_only || false,
-    evidence_score: overrides.evidence_score !== undefined ? overrides.evidence_score : 6,
-    camera_hal_relevance_score: overrides.camera_hal_relevance_score !== undefined ? overrides.camera_hal_relevance_score : 100,
-    api_or_component: overrides.api_or_component || 'CameraX',
-    behavior_change: overrides.behavior_change || 'Release updates CameraX compatibility behavior.',
-    ...overrides
-  };
-}
+const { candidate } = require('./helpers/newsroom-builders');
+const { readJsonFixture } = require('./helpers/fixture-loader');
 
 test('prefilter excludes source gaps, undated watch pages, missing evidence, and duplicate URLs', () => {
   const report = buildShortlistReport('2026-05-03', [
@@ -543,4 +520,23 @@ test('undated watch and reference candidates remain excluded from final selectio
   assert.equal(selectedUrls.has('https://example.com/reference'), false);
   assert.ok(report.excluded_candidates.some(item => item.title === 'Undated rolling Camera documentation'));
   assert.ok(report.excluded_candidates.some(item => item.title === 'Reference-only Camera background'));
+});
+
+test('bad selection fixtures remain excluded from main article selection', () => {
+  const watchlist = readJsonFixture('selection/bad/watchlist-reference-main-article.json');
+  const sourceGap = readJsonFixture('selection/bad/source-gap-main-article.json');
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
+    candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
+    candidate({ title: 'Android Camera API change C fixes metadata behavior', url: 'https://example.com/c' }),
+    candidate({ title: 'Camera HAL stream update D changes buffer handling', url: 'https://example.com/d' }),
+    candidate(watchlist.candidate),
+    candidate(sourceGap.candidate)
+  ]);
+  const selectedUrls = new Set(report.selected_articles.map(item => item.url));
+
+  assert.equal(selectedUrls.has(watchlist.candidate.url), false);
+  assert.equal(selectedUrls.has(sourceGap.candidate.url), false);
+  assert.ok(report.excluded_candidates.some(item => item.url === watchlist.candidate.url));
+  assert.ok(report.excluded_candidates.some(item => item.url === sourceGap.candidate.url));
 });

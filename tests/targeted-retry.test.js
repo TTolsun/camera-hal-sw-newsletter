@@ -8,14 +8,10 @@ const {
   sectionsMatchingRepairPlan,
   sectionsOutsideRepairPlan
 } = require('../scripts/gemini-newsroom-newsletter');
-
-function section(headline, url) {
-  return {
-    category: headline,
-    headline,
-    sources: [{ title: headline, url }]
-  };
-}
+const {
+  reserveReporterCandidate: reporterCandidate,
+  retrySection: section
+} = require('./helpers/newsroom-builders');
 
 test('targeted retry keeps passed sections unchanged and regenerates failed sections only', () => {
   const passed = section('CameraX compatibility release', 'https://example.com/camerax');
@@ -162,31 +158,6 @@ test('targeted retry rejects regenerated sections that duplicate locked URLs', (
   assert.equal(merged.rejected.length, 1);
   assert.equal(merged.rejected[0].reason, 'duplicate_locked_url');
 });
-
-function reporterCandidate(overrides = {}) {
-  return {
-    title: overrides.title || 'Camera HAL reserve candidate',
-    url: overrides.url || 'https://example.com/reserve',
-    source: overrides.source || 'Example Source',
-    published_date: overrides.published_date || '2026-05-05',
-    finalSelectionEligibility: 'main',
-    isWatchPage: false,
-    hasDatedEvidence: true,
-    main_eligible: true,
-    source_gap_risk: false,
-    evidence_score: 6,
-    camera_hal_relevance_score: 4,
-    android_camera_relevance_score: 3,
-    practical_actionability_score: 3,
-    relevance_bucket: 'direct_aosp_camera',
-    editorial_priority: 1,
-    deterministic_score: 90,
-    final_selected: false,
-    selected_for_editor: false,
-    reserve_candidate: true,
-    ...overrides
-  };
-}
 
 test('completion pool uses reserve candidates and records duplicate/source-gap rejections', () => {
   const locked = section('CameraX locked article', 'https://example.com/locked');

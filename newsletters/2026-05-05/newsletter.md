@@ -1,6 +1,6 @@
 # Camera HAL SW 뉴스레터 - 2026-05-05
 
-이번 주 뉴스레터에서는 Android의 새로운 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트의 업데이트, FreeBSD 15.1 Beta 출시 소식, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 그리고 보안 취약점 관리에 직접적인 영향을 미칠 수 있습니다.
+이번 주 뉴스레터에서는 Android의 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트 업데이트, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 보안 취약점 관리에 직접적인 점검 항목을 제공합니다.
 
 ## 1. 이번 주 3줄 브리핑
 - Android에서 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 추가되어, 카메라 HAL은 AI 모델을 위한 효율적인 이미지 데이터 경로 및 NPU/GPU/ISP 활용을 검토해야 합니다.
@@ -43,43 +43,7 @@ Claude Code 2.1.128 업데이트는 Camera HAL 코드 작성, 디버깅, 리팩�
 
 ---
 
-## 3. Linux Camera / V4L2
-
-### FreeBSD 15.1 Beta 1 출시: Android Linux 카메라/V4L2 스택 점검 신호
-
-
-**이번 주 확인한 사실**
-
-- 릴리스 날짜: 2026년 5월 2일
-- 버전/릴리스: FreeBSD 15.1 Beta 1
-- API/구성 요소: Linux camera / V4L2 (간접적 관련)
-- 동작 변경: FreeBSD 15.1 Beta 1이 출시되었으며, 6월 정식 릴리스를 목표로 합니다.
-
-**배경지식**
-
-FreeBSD는 Unix 계열 운영체제로, Linux와 마찬가지로 커널 및 드라이버 개발에 중점을 둡니다. 비록 Android가 Linux 커널을 기반으로 하지만, FreeBSD의 커널 및 드라이버 개발은 때때로 공통된 문제 해결 접근 방식이나 새로운 기술 동향을 공유할 수 있습니다. 특히 미디어 스택이나 하드웨어 드라이버 개선은 V4L2와 같은 표준 인터페이스에 영향을 미칠 수 있습니다.
-
-**Camera HAL 관점 해석**
-
-FreeBSD의 업데이트는 직접적인 Android HAL 요구사항은 아니지만, Linux 커널의 미디어 하위 시스템(V4L2)과 유사한 개념을 공유하는 카메라 드라이버 개발의 일반적인 동향을 파악하는 데 도움이 됩니다. HAL 엔지니어는 FreeBSD의 변경 사항을 통해 버퍼 큐 관리, 포맷 협상, 센서 모드 선택, ISP 튜닝 등에서 발생할 수 있는 새로운 최적화 기법이나 잠재적인 문제점을 간접적으로 예측할 수 있습니다. 이는 vendor kernel의 카메라 드라이버 개발 방향을 이해하고, Android HAL과의 인터페이스를 개선하는 데 장기적인 관점을 제공할 수 있습니다.
-
-**우리 팀이 확인할 Action Item**
-
-- 2주 이내에 FreeBSD 15.1 Beta의 커널 변경 로그 중 `sys/dev/video` 또는 `sys/dev/media` 경로에 해당하는 부분을 검토하여 V4L2 또는 미디어 컨트롤러와 관련된 새로운 기능이나 개선 사항이 있는지 확인합니다.
-- 현재 개발 중인 vendor kernel 브랜치에서 FreeBSD의 변경 사항과 유사한 V4L2/미디어 패치가 있는지 확인하고, 해당 패치가 Preview + ImageCapture 스트림 조합의 성능 또는 안정성에 미치는 영향을 진단하는 로그를 추가합니다.
-- 이 항목을 HAL 백로그 또는 커널 추적 목록에 '참고용'으로 추가하고, 6개월마다 FreeBSD/Linux 미디어 스택의 주요 업데이트를 확인하여 Android HAL에 적용 가능한 인사이트가 있는지 재평가합니다.
-
-**팀 공유용 한 줄**
-
-FreeBSD 15.1 Beta 1은 Android 기반은 아니지만 Android Linux 카메라와 V4L2 스택 가정을 점검하는 참고 신호입니다.
-
-**출처**
-
-- [FreeBSD 15.1 Beta Released For Early Testing](https://www.phoronix.com/news/FreeBSD-15.1-Beta-1)
-
----
-
-## 4. Android Camera / Platform API
+## 3. Android Camera / Platform API
 
 ### 2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수
 
@@ -117,7 +81,7 @@ Android 보안 게시판은 매월 발행되며, Android 기기의 보안을 강
 
 ---
 
-## 5. Android Camera / Platform API
+## 4. Android Camera / Platform API
 
 ### Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향
 
@@ -156,7 +120,7 @@ Firebase AI Logic 하이브리드 추론은 Camera HAL 입력 버퍼, AI analysi
 
 ---
 
-## 6. C++ / Toolchain Fallback
+## 5. C++ / Toolchain Fallback
 
 ### C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호
 
@@ -195,13 +159,11 @@ C++26 assert() 개선은 네이티브 Camera HAL 코드의 실패 지점 진단�
 - 2026년 5월 Android 보안 게시판이 공개되는 즉시, 카메라 HAL 관련 CVE 항목을 확인하고 해당 취약점이 현재 제품에 영향을 미치는지 분석합니다. (Owner: 보안 담당 엔지니어)
 - 현재 카메라 HAL 코드베이스에서 사용되는 `assert()` 매크로 호출 지점을 식별하고, 각 지점에서 실패 시 어떤 추가적인 변수 값이나 상태 정보가 디버깅에 유용할지 목록화합니다. (Owner: HAL 개발팀)
 - Claude Code 2.1.128의 Changelog를 상세히 검토하여, 카메라 HAL 개발에 직접적으로 적용 가능한 코드 생성, 디버깅, 리팩토링 기능 개선 사항을 2주 이내에 식별하고 팀에 공유합니다. (Owner: HAL 개발팀)
-- FreeBSD 15.1 Beta 1의 커널 및 드라이버 관련 릴리스 노트를 2주 이내에 검토하여, 메모리 관리, 동시성, 전력 효율성 측면에서 Android Linux 커널 V4L2 드라이버에 적용 가능한 잠재적 개선 아이디어를 식별합니다. (Owner: 커널 드라이버 엔지니어)
 - 새로운 Firebase AI Logic API의 문서화를 2주 이내에 검토하여, AI 추론을 위한 카메라 스트림(예: `ImageAnalysis`)의 권장 해상도, 형식, 프레임 속도 및 버퍼 사용 패턴을 파악하고, HAL이 이를 효율적으로 지원할 수 있는지 분석합니다. (Owner: HAL 아키텍트)
 
 ## 참고자료
 
 - [Claude Code Changelog - 2.1.128](https://code.claude.com/docs/en/changelog)
-- [FreeBSD 15.1 Beta Released For Early Testing](https://www.phoronix.com/news/FreeBSD-15.1-Beta-1)
 - [Overview](https://source.android.com/docs/security/bulletin/asb-overview)
 - [Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
 - [C++26: A User-Friendly assert() macro -- Sandor Dargo](https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo)

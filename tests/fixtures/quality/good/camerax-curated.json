@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated"
+  },
+  "policyFlags": {
+    "source_gap_risk": false,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": true,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "PASS"
+  },
+  "section": {
+    "headline": "CameraX release gives HAL teams a compatibility target",
+    "sources": [
+      {
+        "title": "CameraX release notes",
+        "url": "https://example.com/camerax"
+      }
+    ]
+  }
+}

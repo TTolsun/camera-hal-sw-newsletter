@@ -2,61 +2,9 @@
   {
     "date": "2026-05-05",
     "title": "Camera HAL SW 뉴스레터 - 2026-05-05",
-    "summary": "이번 주 뉴스레터에서는 Android의 새로운 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트의 업데이트, FreeBSD 15.1 Beta 출시 소식, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 그리고 보안 취약점 관리에 직접적인 영향을 미칠 수 있습니다.",
+    "summary": "이번 주 뉴스레터에서는 Android의 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트 업데이트, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 보안 취약점 관리에 직접적인 점검 항목을 제공합니다.",
     "html": "newsletters/2026-05-05/index.html",
     "md": "newsletters/2026-05-05/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android",
-      "C++",
-      "AI"
-    ]
-  },
-  {
-    "date": "2026-05-04",
-    "title": "Camera HAL SW 뉴스레터 - 2026-05-04",
-    "summary": "이번 주 뉴스레터는 Android 플랫폼의 AI 및 카메라 관련 주요 업데이트와 Linux 커널의 미디어 스택 개선 사항을 다룹니다. Android 17 베타 4 출시로 HAL 호환성 최종 점검이 중요해졌으며, 하이브리드 AI 추론 도입은 카메라 프레임 처리 및 NPU/GPU 리소스 관리에 새로운 과제를 제시합니다. 또한, Linux 커널의 GPU 드라이버 개선과 새로운 AV2 비디오 디코더 공개는 HAL의 이미지 처리 및 비디오 인코딩/디코딩 파이프라인에 장기적인 영향을 미칠 수 있습니다.",
-    "html": "newsletters/2026-05-04/index.html",
-    "md": "newsletters/2026-05-04/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android",
-      "C++",
-      "AI"
-    ]
-  },
-  {
-    "date": "2026-05-03",
-    "title": "Camera HAL SW 뉴스레터 - 2026-05-03",
-    "summary": "2026년 5월 3일자 Camera HAL SW 뉴스레터입니다. Android 17 Beta 4 출시로 플랫폼 안정성과 앱 호환성 최종 검증이 중요해졌고, Android용 하이브리드 AI 추론 및 새로운 Gemini 모델 지원은 Camera HAL의 AI 데이터 경로와 리소스 관리에 새 과제를 제시합니다. 또한 2026년 연례 C++ 개발자 설문조사는 HAL 개발자가 C++ 표준과 도구 개선에 직접 의견을 낼 기회를 제공합니다.",
-    "html": "newsletters/2026-05-03/index.html",
-    "md": "newsletters/2026-05-03/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android",
-      "C++",
-      "AI"
-    ]
-  },
-  {
-    "date": "2026-05-02",
-    "title": "Camera HAL SW 뉴스레터 - 2026-05-02",
-    "summary": "이번 주에는 Android 개발 생산성을 높이는 AI 도구와 하이브리드 추론 기능이 발표되었습니다. Camera HAL 엔지니어는 AOSP, CameraX, CDD 문서 업데이트를 주시하고, AI 기능 통합과 개발 workflow 변화가 camera data path, 검증, 보안 업데이트에 어떤 영향을 주는지 확인해야 합니다.",
-    "html": "newsletters/2026-05-02/index.html",
-    "md": "newsletters/2026-05-02/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android",
-      "C++",
-      "AI"
-    ]
-  },
-  {
-    "date": "2026-05-01",
-    "title": "Camera HAL SW 뉴스레터 - 2026-05-01",
-    "summary": "이번 주 뉴스레터는 Android 개발 생산성을 높이는 AI 도구, Camera HAL 개발에 영향을 줄 수 있는 AOSP 및 CameraX 업데이트, 최신 C++ 표준 지원 소식을 다룹니다. AI 기반 개발 workflow 개선과 카메라 framework 변화 가능성을 살피고, 팀의 개발 및 검증 전략에 필요한 실행 포인트를 정리합니다.",
-    "html": "newsletters/2026-05-01/index.html",
-    "md": "newsletters/2026-05-01/newsletter.md",
     "tags": [
       "Camera HAL",
       "Android",

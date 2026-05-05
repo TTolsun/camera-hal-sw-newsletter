@@ -325,3 +325,10 @@ PR 본문과 `content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`를 먼저 �
 - `quality-report.md`와 `retry-history.md`
 
 `fact-check-report.json`이 `NEEDS_FIX`이고 `must_fix`가 있으면 workflow는 실패해야 합니다. 이 경우 publication-ready가 아니며, 생성 artifact는 GitHub Actions uploaded artifact 또는 workflow log에서 검토합니다.
+## 테스트와 fixture 신뢰 정책
+
+PR gate는 `npm.cmd run test`와 `npm.cmd run validate`를 모두 기준으로 봅니다. `npm.cmd run test`는 `test:unit`과 `test:script`를 순서대로 실행하며, script-level artifact manifest와 selection diagnostics 회귀 테스트도 포함합니다. `npm.cmd run validate`는 config, site, image, quality, localization gate를 실행합니다.
+
+`tests/fixtures/**/good`에는 사람이 검수한 curated sample만 둡니다. generated artifact는 good/golden fixture로 사용하지 않습니다. 과거 generated artifact에서 회귀 테스트 가치가 있는 경우 전체 artifact를 복사하지 말고 최소 입력만 `tests/fixtures/**/bad` 또는 regression fixture로 보존합니다.
+
+`bad` fixture의 `expected.status`는 `PASS`가 될 수 없습니다. `source_gap_risk=true`, `reference_only=true`, `finalSelectionEligibility=watchlist`, `finalSelectionEligibility=exclude`, `hasDatedEvidence=false` fixture는 main article PASS fixture가 될 수 없습니다. generic AI 또는 일반 IT sample이 Camera HAL / Android Camera / camera workflow / frame / stream / buffer / metadata / NPU/GPU/ISP resource management와 구체적으로 연결되지 않으면 main article PASS fixture가 될 수 없습니다.
