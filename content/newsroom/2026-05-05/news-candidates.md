@@ -302,7 +302,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Selection exclusion reason: Eligible for main article selection.
 - Verification hint: Can be used directly if the collected item supports the claim.
 - Relevance Score: 88
-- 요약: Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability. Whether you're fine-tuning your app's user experience, ensuring smooth edge-to-edge rendering, or leveraging the newest APIs, Beta 4 provides the near-final environment you need to be testing with. Get your apps, libraries, tools, and game engines ready! If you develop an Android SDK, library, tool, or 
+- 요약: Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability. Whether you're fine-tuning your app's user experience, ensuring smooth edge-to-edge rendering, or leveraging the newest APIs, Beta 4 provides the near-final environment you need to be testing with. Get your apps, libraries, tools, and game engines ready! If you develop an Android SDK, library, tool, or
 - Selection reason: Android Developers Blog (official, high, score 88): Camera HAL relevance and engineering productivity signals were both detected.
 
 ### 8. Overview
@@ -1094,7 +1094,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Selection exclusion reason: Eligible for short newsletter use.
 - Verification hint: Can be used directly if the collected item supports the claim.
 - Relevance Score: 64
-- 요약: ​ 2.1.128 May 4, 2026 Bare /color (no args) now picks a random session color /mcp now shows the tool count for connected servers and flags servers that connected with 0 tools --plugin-dir now accepts .zip plugin archives in addition to directories --channels now works with console (API key) authentication — console orgs with managed settings must set channelsEnabled: true to enable Updated /model picker: collapsed duplicate Opus 4.7 entries, and current Opus now shows as “Opus” instead of “Opus 
+- 요약: ​ 2.1.128 May 4, 2026 Bare /color (no args) now picks a random session color /mcp now shows the tool count for connected servers and flags servers that connected with 0 tools --plugin-dir now accepts .zip plugin archives in addition to directories --channels now works with console (API key) authentication — console orgs with managed settings must set channelsEnabled: true to enable Updated /model picker: collapsed duplicate Opus 4.7 entries, and current Opus now shows as “Opus” instead of “Opus
 - Selection reason: Claude Code Changelog (official, medium, score 64): Camera HAL relevance and engineering productivity signals were both detected.
 
 ### 32. Samsung Mobile Security
@@ -1292,7 +1292,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Selection exclusion reason: Eligible for short newsletter use.
 - Verification hint: Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.
 - Relevance Score: 66
-- 요약: It turns out the Steam Deck OLED gaming handheld has not had working audio support with the mainline (upstream) Linux kernel since a change in late 2023 that was merged for Linux 6.8. There was an AMD ASoC audio change that inadvertently broke audio support for the Steam Deck OLED handheld but not affecting the original LCD model. Valve's downstream Steam OS kernel has compensated for this known breakage and other distributions targeting the Steam Deck OLED have carried the patch, but now there 
+- 요약: It turns out the Steam Deck OLED gaming handheld has not had working audio support with the mainline (upstream) Linux kernel since a change in late 2023 that was merged for Linux 6.8. There was an AMD ASoC audio change that inadvertently broke audio support for the Steam Deck OLED handheld but not affecting the original LCD model. Valve's downstream Steam OS kernel has compensated for this known breakage and other distributions targeting the Steam Deck OLED have carried the patch, but now there
 - Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 66): Camera HAL relevance and engineering productivity signals were both detected.
 
 ### 38. AMD&#039;s GAIA Defaults To Better Model, Continued Improvements For Local AI
