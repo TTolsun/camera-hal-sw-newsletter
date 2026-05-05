@@ -21,12 +21,20 @@
 - `scripts/` root와 `scripts/lib/`는 compatibility wrapper/shim입니다. 실제 구현은 `scripts/newsroom/{cli,collect,generate,render,validate,common}/`에 둡니다.
 - `.github/workflows/`는 newsroom PR workflow와 validation workflow입니다.
 
-## Scoped Guidance
+## Scoped AGENTS Policy
 
-- [scripts/newsroom/AGENTS.md](scripts/newsroom/AGENTS.md): newsroom implementation 변경 규칙입니다.
-- [tests/AGENTS.md](tests/AGENTS.md): test와 fixture 신뢰 정책입니다.
-- [data/AGENTS.md](data/AGENTS.md): source registry와 표시용 JSON 값 규칙입니다.
-- [.github/workflows/AGENTS.md](.github/workflows/AGENTS.md): workflow safety와 secret handling 규칙입니다.
+Root `AGENTS.md` applies to the whole repository. Scoped `AGENTS.md` files are added only when a folder has safety-critical rules or contracts that differ from the repository-wide defaults.
+
+| Path | Why scoped guidance exists |
+| --- | --- |
+| `scripts/newsroom/AGENTS.md` | 실제 newsroom 구현, deterministic selection, source binding, quality gate, renderer 계약을 보호합니다. |
+| `tests/AGENTS.md` | fixture 신뢰 정책과 regression test 작성 규칙을 보호합니다. |
+| `data/AGENTS.md` | `news-sources.json` source registry 계약을 보호합니다. |
+| `.github/workflows/AGENTS.md` | workflow gate, secret handling, PR-based publishing 정책을 보호합니다. |
+| `docs/AGENTS.md` | 문서 한글화, current/archive guidance 구분, 링크 유지 규칙을 보호합니다. |
+| `content/AGENTS.md` | generated/review artifact 보존 기준과 cleanup 금지선을 보호합니다. |
+
+Do not add scoped `AGENTS.md` files only for visual symmetry. Add one only when the folder has rules that meaningfully reduce risk or ambiguity.
 
 ## Validation
 

@@ -31,6 +31,7 @@
 | `docs/plans/` | 승인된 계획 또는 완료된 계획 기록입니다. |
 | `docs/operations/` | 반복 운영 절차의 짧은 안내입니다. |
 | `docs/archive/` | 현재 guidance로 쓰지 않는 과거 note입니다. |
+| `docs/AGENTS.md` | docs 폴더의 current/archive guidance 구분과 링크 유지 규칙입니다. |
 
 ## 주요 폴더
 

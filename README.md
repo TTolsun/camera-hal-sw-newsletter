@@ -2,6 +2,8 @@
 
 이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform 소식을 수집해 정적 뉴스레터로 발행합니다. 후보 수집과 Gemini 기반 newsroom 자동화는 검토 가능한 PR artifact를 만들고, 발행은 사람이 승인한 PR merge를 통해서만 진행합니다. 비용 절감은 deterministic shortlist, compact article capsule, retry scope 제한으로 처리하며 quality gate를 낮추지 않습니다.
 
+처음 보는 사람은 모든 파일을 뒤지지 말고 아래 문서부터 읽으면 됩니다. README는 긴 운영 매뉴얼이 아니라, 각 세부 문서로 연결하는 짧은 entry 역할만 합니다.
+
 ## Start Here
 
 | 문서 | 역할 |
@@ -9,9 +11,12 @@
 | [docs/START_HERE.ko.md](docs/START_HERE.ko.md) | 처음 보는 운영자와 agent를 위한 진입점입니다. |
 | [docs/glossary.ko.md](docs/glossary.ko.md) | newsroom, artifact, gate 용어를 설명합니다. |
 | [docs/newsroom-workflow.md](docs/newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 workflow를 설명합니다. |
+| [docs/operations/README.ko.md](docs/operations/README.ko.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
 | [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
 | [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약을 설명합니다. |
 | [docs/testing/test-baseline.md](docs/testing/test-baseline.md) | 현재 validation baseline을 기록합니다. |
+
+뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
 
 ## Current Operating Model
 
@@ -25,6 +30,8 @@ candidate collection
 ```
 
 `content/collected-news/YYYY-MM-DD/`에는 raw candidate가, `content/newsroom/YYYY-MM-DD/`에는 review artifact가, `newsletters/YYYY-MM-DD/`에는 public issue output이 저장됩니다. `publish-ready` 상태가 아니면 PR이 만들어져도 발행 가능한 뉴스레터로 보지 않습니다.
+
+로컬에서 확인할 때는 아래 명령만 기억하면 됩니다. 변경 범위가 넓거나 확신이 없으면 `ci`를 우선 사용합니다.
 
 ## Main Commands
 
@@ -40,6 +47,8 @@ npm.cmd run generate
 
 `collect`는 `data/news-sources.json`에서 후보를 수집합니다. `generate`는 Gemini newsroom pipeline을 실행하며 `GEMINI_API_KEY`가 필요합니다. 전체 로컬 확인은 `npm.cmd run ci`를 사용합니다.
 
+폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현은 `scripts/newsroom/`에 있고, 검토 산출물과 공개 발행물은 `content/`와 `newsletters/`에 분리됩니다.
+
 ## Repository Map
 
 | 경로 | 역할 |
@@ -54,6 +63,8 @@ npm.cmd run generate
 | `assets/` | site image와 article fallback image입니다. |
 | `css/` | 정적 사이트 스타일입니다. |
 | `templates/` | newsletter Markdown/HTML template입니다. |
+
+마지막으로, 아래 규칙은 문서 정리나 리팩토링 중에도 약화하면 안 됩니다.
 
 ## Rules That Must Not Be Weakened
 
