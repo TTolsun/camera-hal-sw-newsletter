@@ -3,6 +3,7 @@ const {
 } = require('../generate/selection-diagnostics');
 const {
   BUCKETS,
+  BUCKET_PRIORITY,
   classifyAospCameraStackCandidate
 } = require('../common/aosp-camera-scope');
 
@@ -131,6 +132,93 @@ function countSections(sections, pattern) {
   return sections.filter(section => hasPattern(sectionText(section), pattern)).length;
 }
 
+function bool(value, fallback = false) {
+  if (typeof value === 'boolean') return value;
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return fallback;
+}
+
+function number(value, fallback = 0) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function knownBucket(value) {
+  const bucket = text(value);
+  return Object.values(BUCKETS).includes(bucket) ? bucket : '';
+}
+
+function fallbackSectionScope(section) {
+  const body = sectionText(section);
+  if (/카메라\s*HAL|안드로이드\s*카메라|카메라2|Camera\s*HAL|Android Camera|CameraX|Camera2|Camera ITS|CTS|VTS|AOSP Camera/i.test(body)) {
+    return {
+      editorial_priority: 1,
+      relevance_bucket: BUCKETS.DIRECT_AOSP_CAMERA,
+      aosp_camera_directness: 3,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 0,
+      counts_as_primary_camera_topic: true,
+      counts_as_driver_topic: false,
+      counts_as_soc_topic: false,
+      counts_as_fallback_topic: false,
+      evidence_origin: 'section_text_fallback'
+    };
+  }
+  if (/V4L2|libcamera|ISP|이미지\s*센서|image sensor|camera driver|media controller|MIPI|CSI-2|DMA-BUF/i.test(body)) {
+    return {
+      editorial_priority: 2,
+      relevance_bucket: BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 3,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 0,
+      counts_as_primary_camera_topic: false,
+      counts_as_driver_topic: true,
+      counts_as_soc_topic: false,
+      counts_as_fallback_topic: false,
+      evidence_origin: 'section_text_fallback'
+    };
+  }
+  if (/\bSoC\b|\bCPU\b|\bGPU\b|\bNPU\b|\bDSP\b|\bthermal\b|\bpower\b|\bDVFS\b|\bscheduler\b|\bmemory bandwidth\b|Exynos|Snapdragon|Google Tensor/i.test(body)) {
+    return {
+      editorial_priority: 4,
+      relevance_bucket: BUCKETS.SOC_PLATFORM_SIGNAL,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 3,
+      native_tooling_relevance: 0,
+      counts_as_primary_camera_topic: false,
+      counts_as_driver_topic: false,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false,
+      evidence_origin: 'section_text_fallback'
+    };
+  }
+  if (/C\+\+|LLVM|Clang|GCC|sanitizer|native|toolchain|build|test|AI coding|LLM agent/i.test(body)) {
+    return {
+      editorial_priority: 5,
+      relevance_bucket: BUCKETS.CPP_AI_TOOLING_FALLBACK,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 3,
+      counts_as_primary_camera_topic: false,
+      counts_as_driver_topic: false,
+      counts_as_soc_topic: false,
+      counts_as_fallback_topic: true,
+      evidence_origin: 'section_text_fallback'
+    };
+  }
+  return classifyAospCameraStackCandidate({
+    title: section?.headline,
+    summary: sectionText(section),
+    api_or_component: section?.category,
+    behavior_change: section?.what_changed
+  });
+}
+
 function hasSpecificEvidence(section) {
   const evidence = [
     section.evidence_summary,
@@ -248,7 +336,36 @@ function sectionHasSourceGap(section, factCheck) {
   return ensureArray(factCheck?.source_gaps).some(item => factCheckItemMentionsSection(item, section));
 }
 
+function articleResultMatchesSection(result, section) {
+  const resultUrls = new Set(ensureArray(result?.sources).map(source => text(source?.url)).filter(Boolean));
+  if (ensureArray(section?.sources).some(source => resultUrls.has(text(source?.url)))) return true;
+  const resultLabels = [
+    result?.headline,
+    result?.category
+  ].map(normalizeForMatch).filter(Boolean);
+  if (resultLabels.length === 0) return false;
+  const sectionLabels = [
+    section?.headline,
+    section?.category,
+    ...ensureArray(section?.sources).flatMap(source => [source?.title, source?.url])
+  ].map(normalizeForMatch).filter(Boolean);
+  return sectionLabels.some(sectionLabel =>
+    resultLabels.some(resultLabel =>
+      resultLabel === sectionLabel ||
+      resultLabel.includes(sectionLabel) ||
+      sectionLabel.includes(resultLabel)
+    )
+  );
+}
+
+function articleResultForSection(section, qualityReport) {
+  return ensureArray(qualityReport?.article_results)
+    .find(result => articleResultMatchesSection(result, section)) || null;
+}
+
 function sectionPassesArticleGate(section, qualityReport, factCheck) {
+  const articleResult = articleResultForSection(section, qualityReport);
+  if (articleResult && articleResult.status !== 'PASS') return false;
   return !sectionHasQualityDeductions(section, qualityReport?.deductions) &&
     !sectionHasFactCheckMustFix(section, factCheck) &&
     !sectionHasSourceGap(section, factCheck);
@@ -273,6 +390,19 @@ function sectionSourceSummary(section) {
   }));
 }
 
+const SCOPE_SCORE_FIELDS = Object.freeze([
+  'aosp_camera_directness',
+  'driver_stack_relevance',
+  'soc_platform_relevance',
+  'native_tooling_relevance'
+]);
+
+function optionalNumber(value) {
+  if (value === undefined || value === null || String(value).trim() === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 function scopeScore(scope) {
   return Math.max(
     Number(scope?.aosp_camera_directness || 0),
@@ -282,27 +412,102 @@ function scopeScore(scope) {
   );
 }
 
+function scopeFromStructuredFields(value, origin) {
+  const bucket = knownBucket(value?.relevance_bucket);
+  if (!bucket) return null;
+  const scores = {};
+  const missingScoreFields = [];
+  for (const field of SCOPE_SCORE_FIELDS) {
+    const parsed = optionalNumber(value?.[field]);
+    if (parsed === null) missingScoreFields.push(field);
+    scores[field] = parsed ?? 0;
+  }
+  return {
+    source_candidate_url: text(value.source_candidate_url || value.url || value.article_url || value.articleUrl),
+    source_candidate_hash: text(value.source_candidate_hash || value.url_hash || value.normalized_url_hash),
+    editorial_priority: number(value.editorial_priority, BUCKET_PRIORITY[bucket] || 6),
+    relevance_bucket: bucket,
+    ...scores,
+    counts_as_primary_camera_topic: bool(
+      value.counts_as_primary_camera_topic,
+      bucket === BUCKETS.DIRECT_AOSP_CAMERA || bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+    ),
+    counts_as_driver_topic: bool(value.counts_as_driver_topic, bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE),
+    counts_as_soc_topic: bool(value.counts_as_soc_topic, bucket === BUCKETS.SOC_PLATFORM_SIGNAL),
+    counts_as_fallback_topic: bool(value.counts_as_fallback_topic, bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK),
+    evidence_origin: text(value.evidence_origin) || origin,
+    missing_score_fields: missingScoreFields,
+    metadata_source: origin,
+    count_source: origin
+  };
+}
+
+function metadataHasScore(metadata, field) {
+  return Boolean(metadata) && !ensureArray(metadata.missing_score_fields).includes(field);
+}
+
+function scoreFromMetadata(metadata, field) {
+  return metadataHasScore(metadata, field) ? number(metadata[field]) : null;
+}
+
+function candidateMetadataForSection(section, candidateMap) {
+  const candidateUrls = [
+    section?.source_candidate_url,
+    ...ensureArray(section?.sources).map(source => source?.url)
+  ];
+  for (const url of candidateUrls) {
+    const candidate = candidateForSourceUrl(url, candidateMap);
+    const candidateMetadata = scopeFromStructuredFields(candidate, 'reporter_candidate');
+    if (candidateMetadata) return candidateMetadata;
+  }
+  return null;
+}
+
+function mergeScopeMetadata(sectionMetadata, candidateMetadata) {
+  if (!sectionMetadata && !candidateMetadata) return null;
+  const bucket = sectionMetadata?.relevance_bucket || candidateMetadata?.relevance_bucket || BUCKETS.GENERIC_TECH_WATCHLIST;
+  const merged = {
+    ...(candidateMetadata || {}),
+    ...(sectionMetadata || {}),
+    relevance_bucket: bucket,
+    editorial_priority: optionalNumber(sectionMetadata?.editorial_priority) ??
+      optionalNumber(candidateMetadata?.editorial_priority) ??
+      BUCKET_PRIORITY[bucket] ??
+      6,
+    source_candidate_url: text(sectionMetadata?.source_candidate_url || candidateMetadata?.source_candidate_url),
+    source_candidate_hash: text(sectionMetadata?.source_candidate_hash || candidateMetadata?.source_candidate_hash),
+    evidence_origin: text(sectionMetadata?.evidence_origin || candidateMetadata?.evidence_origin) || 'merged_metadata',
+    metadata_source: sectionMetadata && candidateMetadata
+      ? 'merged'
+      : sectionMetadata ? 'section' : 'reporter_candidate',
+    count_source: sectionMetadata && candidateMetadata
+      ? 'merged'
+      : sectionMetadata ? 'section' : 'reporter_candidate'
+  };
+  const missingScoreFields = [];
+  for (const field of SCOPE_SCORE_FIELDS) {
+    const value = scoreFromMetadata(sectionMetadata, field) ?? scoreFromMetadata(candidateMetadata, field);
+    if (value === null) missingScoreFields.push(field);
+    merged[field] = value ?? 0;
+  }
+  merged.missing_score_fields = missingScoreFields;
+  return merged;
+}
+
 function sectionScope(section, candidateMap) {
+  const sectionMetadata = scopeFromStructuredFields(section, 'section_metadata');
+  const candidateMetadata = candidateMetadataForSection(section, candidateMap);
+  const mergedMetadata = mergeScopeMetadata(sectionMetadata, candidateMetadata);
+  if (mergedMetadata) return mergedMetadata;
   for (const source of ensureArray(section?.sources)) {
     const candidate = candidateForSourceUrl(source?.url, candidateMap);
-    if (candidate?.relevance_bucket) {
-      return {
-        editorial_priority: Number(candidate.editorial_priority || 6),
-        relevance_bucket: candidate.relevance_bucket,
-        aosp_camera_directness: Number(candidate.aosp_camera_directness || 0),
-        driver_stack_relevance: Number(candidate.driver_stack_relevance || 0),
-        soc_platform_relevance: Number(candidate.soc_platform_relevance || 0),
-        native_tooling_relevance: Number(candidate.native_tooling_relevance || 0),
-        evidence_origin: candidate.evidence_origin || 'candidate_metadata'
-      };
-    }
+    const candidateMetadata = scopeFromStructuredFields(candidate, 'candidate_metadata');
+    if (candidateMetadata) return candidateMetadata;
   }
-  return classifyAospCameraStackCandidate({
-    title: section?.headline,
-    summary: sectionText(section),
-    api_or_component: section?.category,
-    behavior_change: section?.what_changed
-  });
+  return {
+    ...fallbackSectionScope(section),
+    count_source: 'section_text_fallback'
+  };
 }
 
 function hasExpandedScope(section, candidateMap) {
@@ -310,12 +515,48 @@ function hasExpandedScope(section, candidateMap) {
   return scope.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST && scopeScore(scope) >= 2;
 }
 
+function sectionCountDetail(section, scope, index) {
+  const bucket = knownBucket(scope?.relevance_bucket) || BUCKETS.GENERIC_TECH_WATCHLIST;
+  const countsAsPrimaryStack = bucket === BUCKETS.DIRECT_AOSP_CAMERA ||
+    bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE ||
+    bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
+  const countsAsFallback = bucket === BUCKETS.SOC_PLATFORM_SIGNAL ||
+    bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK;
+  let countReason = `${scope?.count_source || scope?.evidence_origin || 'unknown'} classified this section as ${bucket}.`;
+  let exclusionReason = '';
+  if (countsAsPrimaryStack) {
+    countReason = `${bucket} counts toward primary_camera_stack_count.`;
+  } else if (countsAsFallback) {
+    countReason = `${bucket} counts toward fallback_relevance_count, not direct camera count.`;
+    exclusionReason = 'Fallback bucket is reviewable support material but not a primary camera stack topic.';
+  } else {
+    exclusionReason = 'generic_tech_watchlist does not count toward main camera or fallback composition quality.';
+  }
+  return {
+    index: index + 1,
+    headline: section.headline || section.category || `article ${index + 1}`,
+    source_candidate_url: scope?.source_candidate_url || text(section.source_candidate_url),
+    source_candidate_hash: scope?.source_candidate_hash || text(section.source_candidate_hash),
+    relevance_bucket: bucket,
+    editorial_priority: number(scope?.editorial_priority, BUCKET_PRIORITY[bucket] || 6),
+    counts_as_primary_camera_topic: bool(scope?.counts_as_primary_camera_topic),
+    counts_as_driver_topic: bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
+    counts_as_soc_topic: bucket === BUCKETS.SOC_PLATFORM_SIGNAL,
+    counts_as_fallback_topic: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK,
+    evidence_origin: scope?.evidence_origin || 'unknown',
+    metadata_source: scope?.metadata_source || scope?.count_source || 'unknown',
+    missing_score_fields: ensureArray(scope?.missing_score_fields),
+    count_reason: countReason,
+    exclusion_reason_if_not_counted: exclusionReason
+  };
+}
+
 function articleStatusFor(section, hardItems, factCheck) {
   if (sectionHasSourceGap(section, factCheck)) return 'FAIL';
   if (hardItems.some(item => item.category === 'source-integrity')) return 'FAIL';
   if (hardItems.some(item => item.category === 'required-fields' && /sources|source/i.test(item.reason))) return 'FAIL';
   if (hardItems.some(item => item.category === 'evidence-specificity' && /release date|dated|source gap|rolling page|evidence/i.test(item.reason))) return 'FAIL';
-  if (hardItems.some(item => item.category === 'hal-relevance' || item.category === 'hal-depth')) return 'DEMOTE';
+  if (hardItems.some(item => item.category === 'hal-relevance' || item.category === 'hal-depth' || item.category === 'scope-relevance')) return 'DEMOTE';
   return hardItems.length > 0 || sectionHasFactCheckMustFix(section, factCheck) ? 'FAIL' : 'PASS';
 }
 
@@ -328,7 +569,7 @@ function repairActionForArticleStatus(status, hardItems, factCheck, section) {
   return 'repair-section';
 }
 
-function buildArticleResults(sections, deductions, factCheck) {
+function buildArticleResults(sections, deductions, factCheck, sectionCountDetails = []) {
   return ensureArray(sections).map((section, index) => {
     const items = sectionDeductions(section, deductions);
     const hardItems = blockingDeductions(items);
@@ -348,6 +589,7 @@ function buildArticleResults(sections, deductions, factCheck) {
       status,
       repair_action: repairActionForArticleStatus(status, hardItems, factCheck, section),
       sources: sectionSourceSummary(section),
+      scope_count: sectionCountDetails[index] || null,
       hard_fail_reasons: [...new Set(hardReasons)],
       soft_deductions: softItems.map(item => ({
         category: item.category,
@@ -412,16 +654,39 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   if (ensureArray(editor.briefing).length !== 3) {
     boundedDeduct(state, 'composition', 3, `Expected exactly 3 briefing bullets, found ${ensureArray(editor.briefing).length}.`);
   }
-  const cameraCoverage = countSections(sections, /Camera HAL|Android Camera|CameraX|AOSP Camera|Camera2|CTS|VTS|Camera ITS/i);
   const sectionScopes = sections.map(section => sectionScope(section, candidateMap));
-  const expandedScopeCoverage = sectionScopes.filter(scope =>
-    scope.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST && scopeScore(scope) >= 2
-  ).length;
+  const sectionCountDetails = sections.map((section, index) => sectionCountDetail(section, sectionScopes[index], index));
   const scopeBucketCounts = sectionScopes.reduce((counts, scope) => {
     const bucket = text(scope?.relevance_bucket) || 'unknown';
     counts[bucket] = (counts[bucket] || 0) + 1;
     return counts;
-  }, {});
+  }, {
+    [BUCKETS.DIRECT_AOSP_CAMERA]: 0,
+    [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 0,
+    [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 0,
+    [BUCKETS.SOC_PLATFORM_SIGNAL]: 0,
+    [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 0,
+    [BUCKETS.GENERIC_TECH_WATCHLIST]: 0
+  });
+  const directAospCameraCount = scopeBucketCounts[BUCKETS.DIRECT_AOSP_CAMERA] || 0;
+  const cameraDriverImagePipelineCount = scopeBucketCounts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE] || 0;
+  const androidPlatformCameraAdjacentCount = scopeBucketCounts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT] || 0;
+  const socPlatformSignalCount = scopeBucketCounts[BUCKETS.SOC_PLATFORM_SIGNAL] || 0;
+  const cppAiToolingFallbackCount = scopeBucketCounts[BUCKETS.CPP_AI_TOOLING_FALLBACK] || 0;
+  const genericTechWatchlistCount = scopeBucketCounts[BUCKETS.GENERIC_TECH_WATCHLIST] || 0;
+  const primaryCameraStackCount = directAospCameraCount +
+    cameraDriverImagePipelineCount +
+    androidPlatformCameraAdjacentCount;
+  const fallbackRelevanceCount = socPlatformSignalCount + cppAiToolingFallbackCount;
+  const expandedScopeCoverage = primaryCameraStackCount + fallbackRelevanceCount;
+  const compositionMode = genericTechWatchlistCount === sections.length && sections.length > 0
+    ? 'NEEDS_FIX'
+    : primaryCameraStackCount < 2 && fallbackRelevanceCount > 0
+      ? 'FALLBACK_COMPOSITION'
+      : 'NORMAL';
+  if (genericTechWatchlistCount === sections.length && sections.length > 0) {
+    boundedDeduct(state, 'composition', 8, 'All main articles are generic_tech_watchlist; reviewable fallback composition requires AOSP Camera, driver, SoC platform, or native tooling relevance.');
+  }
 
   sections.forEach((section, index) => {
     const location = section.headline || section.category || `article ${index + 1}`;
@@ -562,7 +827,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const hasFactCheckMustFix = factCheck.status === 'NEEDS_FIX' || mustFixCount > 0;
   const blockers = blockingDeductions(state.deductions);
   const softItems = softDeductions(state.deductions);
-  const articleResults = buildArticleResults(sections, state.deductions, factCheck);
+  const articleResults = buildArticleResults(sections, state.deductions, factCheck, sectionCountDetails);
   const status = determineQualityStatus(score, threshold, {
     sourceGapCount: gaps,
     hasFactCheckMustFix,
@@ -583,8 +848,19 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     metrics: {
       article_count: sections.length,
       briefing_count: ensureArray(editor.briefing).length,
-      camera_article_count: cameraCoverage,
+      camera_article_count: primaryCameraStackCount,
+      legacy_regex_camera_article_count: countSections(sections, /카메라\s*HAL|안드로이드\s*카메라|카메라2|Camera HAL|Android Camera|CameraX|AOSP Camera|Camera2|CTS|VTS|Camera ITS/i),
       expanded_scope_article_count: expandedScopeCoverage,
+      direct_aosp_camera_count: directAospCameraCount,
+      camera_driver_image_pipeline_count: cameraDriverImagePipelineCount,
+      android_platform_camera_adjacent_count: androidPlatformCameraAdjacentCount,
+      soc_platform_signal_count: socPlatformSignalCount,
+      cpp_ai_tooling_fallback_count: cppAiToolingFallbackCount,
+      generic_tech_watchlist_count: genericTechWatchlistCount,
+      primary_camera_stack_count: primaryCameraStackCount,
+      fallback_relevance_count: fallbackRelevanceCount,
+      composition_mode: compositionMode,
+      section_count_details: sectionCountDetails,
       relevance_bucket_counts: scopeBucketCounts,
       ai_article_count: sections.filter(hasValidAiRelevance).length,
       fact_check_status: factCheck.status || 'UNKNOWN',
@@ -629,9 +905,19 @@ function buildQualityReportMarkdown(report) {
     ` ${item.status || 'UNKNOWN'} `,
     ` ${item.repair_action || ''} `,
     ` ${item.headline || ''} `,
+    ` ${item.scope_count?.relevance_bucket || ''} `,
+    ` ${item.scope_count?.editorial_priority ?? ''} `,
+    ` ${item.scope_count?.counts_as_primary_camera_topic === true} `,
+    ` ${item.scope_count?.counts_as_driver_topic === true} `,
+    ` ${item.scope_count?.counts_as_soc_topic === true} `,
+    ` ${item.scope_count?.counts_as_fallback_topic === true} `,
+    ` ${item.scope_count?.metadata_source || ''} `,
+    ` ${ensureArray(item.scope_count?.missing_score_fields).join(', ') || 'none'} `,
+    ` ${item.scope_count?.count_reason || ''} `,
+    ` ${item.scope_count?.exclusion_reason_if_not_counted || 'none'} `,
     ` ${ensureArray(item.hard_fail_reasons).join('; ') || 'none'} `,
     ` ${ensureArray(item.soft_deductions).map(deduction => `${deduction.category}: ${deduction.reason}`).join('; ') || 'none'} |`
-  ].join('|')).join('\n') || '| none | none | none | none | none | none |';
+  ].join('|')).join('\n') || '| none | none | none | none | none | none | none | none | none | none | none | none | none | none | none | none |';
   const hardDeductionLines = hardItems.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n') || '- none';
   const softDeductionLines = softItems.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n') || '- none';
 
@@ -649,8 +935,18 @@ function buildQualityReportMarkdown(report) {
 
 - Main article count: ${metrics.article_count}
 - Briefing count: ${metrics.briefing_count}
-- Camera article count: ${metrics.camera_article_count}
+- Structured camera article count: ${metrics.camera_article_count}
+- Legacy regex camera article count: ${metrics.legacy_regex_camera_article_count ?? 'n/a'}
 - Expanded-scope article count: ${metrics.expanded_scope_article_count}
+- direct_aosp_camera count: ${metrics.direct_aosp_camera_count ?? 0}
+- camera_driver_image_pipeline count: ${metrics.camera_driver_image_pipeline_count ?? 0}
+- android_platform_camera_adjacent count: ${metrics.android_platform_camera_adjacent_count ?? 0}
+- soc_platform_signal count: ${metrics.soc_platform_signal_count ?? 0}
+- cpp_ai_tooling_fallback count: ${metrics.cpp_ai_tooling_fallback_count ?? 0}
+- generic_tech_watchlist count: ${metrics.generic_tech_watchlist_count ?? 0}
+- primary_camera_stack_count: ${metrics.primary_camera_stack_count ?? 0}
+- fallback_relevance_count: ${metrics.fallback_relevance_count ?? 0}
+- composition_mode: ${metrics.composition_mode || 'UNKNOWN'}
 - Relevance bucket counts: ${JSON.stringify(metrics.relevance_bucket_counts || {})}
 - AI article count: ${metrics.ai_article_count}
 ${compositionFailure}
@@ -671,8 +967,8 @@ ${compositionFailure}
 
 ## Article Gate Results
 
-| # | Result | Repair action | Headline | Hard fail reasons | Soft deductions |
-| ---: | --- | --- | --- | --- | --- |
+| # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
+| ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 ${articleGateRows}
 
 ## Hard Fails

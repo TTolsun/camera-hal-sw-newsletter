@@ -29,6 +29,7 @@ const {
   COMPOSITION_MODES,
   buildShortlistReport,
   normalizeUrl,
+  normalizedUrlHash,
   reporterInputFromShortlist
 } = require('../generate/newsroom-selection');
 const { BUCKETS, BUCKET_PRIORITY } = require('../common/aosp-camera-scope');
@@ -546,6 +547,31 @@ function normalizeSectionImageFields(section, reporter) {
   };
 }
 
+function sourceCandidateMetadataForSection(section, reporter) {
+  const candidateMap = reporterCandidateUrlMap(reporter);
+  const candidate = ensureArray(section.sources)
+    .map(source => candidateForSourceUrl(source?.url, candidateMap))
+    .find(Boolean);
+  if (!candidate) return {};
+  const candidateUrl = candidate.url || candidate.article_url || candidate.articleUrl || '';
+  return {
+    source_candidate_url: candidateUrl,
+    source_candidate_hash: candidate.url_hash || normalizedUrlHash(candidateUrl),
+    relevance_bucket: candidate.relevance_bucket || '',
+    editorial_priority: candidate.editorial_priority ?? null,
+    aosp_camera_directness: candidate.aosp_camera_directness ?? null,
+    driver_stack_relevance: candidate.driver_stack_relevance ?? null,
+    soc_platform_relevance: candidate.soc_platform_relevance ?? null,
+    native_tooling_relevance: candidate.native_tooling_relevance ?? null,
+    counts_as_primary_camera_topic: candidate.counts_as_primary_camera_topic === true,
+    counts_as_driver_topic: candidate.counts_as_driver_topic === true,
+    counts_as_soc_topic: candidate.counts_as_soc_topic === true,
+    counts_as_fallback_topic: candidate.counts_as_fallback_topic === true,
+    evidence_origin: candidate.evidence_origin || 'candidate_metadata',
+    source_hint: candidate.source_hint || ''
+  };
+}
+
 function normalizeEditorSection(section, index, reporter) {
   const actionItems = ensureArray(section.action_items);
   const actionHints = ensureArray(section.action_hints);
@@ -568,6 +594,7 @@ function normalizeEditorSection(section, index, reporter) {
   };
   return {
     ...normalized,
+    ...sourceCandidateMetadataForSection(normalized, reporter),
     ...normalizeSectionImageFields(normalized, reporter)
   };
 }
@@ -1105,6 +1132,14 @@ function deductionRepairPolicy(deduction = {}) {
       reason: 'duplicate source or article must be replaced'
     };
   }
+  if (/scope-relevance|generic_tech_watchlist|expanded AOSP Camera \/ driver \/ SoC \/ native relevance|lacks article-level AOSP Camera/i.test(haystack)) {
+    return {
+      failure_type: 'scope-demotion',
+      action: 'replace-or-demote',
+      allow_rewrite: false,
+      reason: 'structured scope demotion must open replacement or reserve path'
+    };
+  }
   if (/hal-depth|hal-relevance|weak HAL|Camera HAL perspective|engineering depth/i.test(haystack)) {
     return {
       failure_type: 'weak-hal-relevance',
@@ -1153,6 +1188,33 @@ function recommendedFixMentionsSection(item, section) {
   return labels.some(label => haystack.includes(label) || label.includes(haystack));
 }
 
+function articleResultMatchesSection(result, section) {
+  const resultUrls = new Set(ensureArray(result?.sources).map(source => stringOrEmpty(source?.url)).filter(Boolean));
+  if (ensureArray(section.sources).some(source => resultUrls.has(stringOrEmpty(source.url)))) return true;
+  const resultLabels = [
+    result?.headline,
+    result?.category
+  ].map(normalizeTitle).filter(Boolean);
+  if (resultLabels.length === 0) return false;
+  const sectionLabels = [
+    section.headline,
+    section.category,
+    ...ensureArray(section.sources).flatMap(source => [source.title, source.url])
+  ].map(normalizeTitle).filter(Boolean);
+  return sectionLabels.some(sectionLabel =>
+    resultLabels.some(resultLabel =>
+      resultLabel === sectionLabel ||
+      resultLabel.includes(sectionLabel) ||
+      sectionLabel.includes(resultLabel)
+    )
+  );
+}
+
+function articleResultForSection(section, qualityReport) {
+  return ensureArray(qualityReport?.article_results)
+    .find(result => articleResultMatchesSection(result, section)) || null;
+}
+
 function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings = [], options = {}) {
   const maxSectionRepairs = Number.isInteger(options.maxSectionRepairs) ? options.maxSectionRepairs : Infinity;
   const sectionPlans = ensureArray(editor.sections).map(section => {
@@ -1163,10 +1225,26 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFin
     const sectionEligibilityFindings = eligibilityFindings.filter(finding => finding.section === section);
     const hasSourceGap = sectionHasSourceGap(section, factCheck);
     const hasReporterEligibilityBlock = sectionEligibilityFindings.length > 0;
+    const articleResult = articleResultForSection(section, qualityReport);
     const policies = [
       ...deductions.map(deductionRepairPolicy),
       ...recommendedFixes.map(item => deductionRepairPolicy({ category: 'recommended-fix', reason: item }))
     ];
+    if (articleResult?.status === 'DEMOTE') {
+      policies.push({
+        failure_type: 'scope-demotion',
+        action: 'replace-or-demote',
+        allow_rewrite: false,
+        reason: `article gate status DEMOTE requires replacement path (${articleResult.repair_action || 'demote-or-replace'})`
+      });
+    } else if (articleResult?.status === 'FAIL') {
+      policies.push({
+        failure_type: 'article-gate-fail',
+        action: 'replace-or-demote',
+        allow_rewrite: false,
+        reason: `article gate status FAIL requires replacement path (${articleResult.repair_action || 'replace-or-demote'})`
+      });
+    }
     if (hasSourceGap || hasReporterEligibilityBlock) {
       policies.push({
         failure_type: 'source-gap',
@@ -1689,6 +1767,13 @@ async function main() {
       maxSectionRepairs: runtimeConfig.newsroomMaxSectionRepairs
     });
     const skippedRepairPlan = fullRepairPlan.slice(repairPlan.length);
+    demotedSections = appendUniqueSections(
+      demotedSections,
+      sectionsMatchingRepairPlan(
+        editor.sections,
+        repairPlan.filter(item => item.action === 'replace-or-demote')
+      )
+    );
     if (qualityReport.status !== 'PASS' && repairPlan.length > 0) {
       repairActions = repairPlan.map(item => `${item.action}: ${item.headline}`);
       failedSections = sectionsMatchingRepairPlan(editor.sections, repairPlan);

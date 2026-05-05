@@ -164,6 +164,16 @@ const section = {
     team_summary: string,
     is_ai_related: { type: 'BOOLEAN' },
     article_type: string,
+    source_candidate_url: string,
+    source_candidate_hash: string,
+    relevance_bucket: string,
+    editorial_priority: { type: 'NUMBER' },
+    counts_as_primary_camera_topic: { type: 'BOOLEAN' },
+    counts_as_driver_topic: { type: 'BOOLEAN' },
+    counts_as_soc_topic: { type: 'BOOLEAN' },
+    counts_as_fallback_topic: { type: 'BOOLEAN' },
+    evidence_origin: string,
+    source_hint: string,
     imageCandidates: {
       type: 'ARRAY',
       items: imageCandidate

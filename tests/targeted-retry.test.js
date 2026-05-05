@@ -81,6 +81,53 @@ test('targeted retry demotes or replaces source gaps instead of rewriting them',
   assert.equal(repairPlan[0].allow_rewrite, false);
 });
 
+test('targeted retry demotes or replaces structured scope failures', () => {
+  const failed = section('Generic watchlist article with camera wording', 'https://example.com/generic');
+  const editor = { sections: [failed] };
+  const qualityReport = {
+    deductions: [{
+      category: 'scope-relevance',
+      points: 8,
+      reason: 'Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.',
+      location: failed.headline
+    }],
+    article_results: [{
+      headline: failed.headline,
+      status: 'DEMOTE',
+      repair_action: 'demote-or-replace',
+      sources: failed.sources
+    }]
+  };
+
+  const repairPlan = buildSectionRepairPlan(editor, qualityReport, {}, []);
+
+  assert.equal(repairPlan.length, 1);
+  assert.equal(repairPlan[0].action, 'replace-or-demote');
+  assert.equal(repairPlan[0].failure_type, 'scope-demotion');
+  assert.equal(repairPlan[0].allow_rewrite, false);
+});
+
+test('targeted retry consumes article result demotion even without deductions', () => {
+  const failed = section('Scope demoted article result only', 'https://example.com/result-only');
+  const editor = { sections: [failed] };
+  const qualityReport = {
+    deductions: [],
+    article_results: [{
+      headline: failed.headline,
+      status: 'DEMOTE',
+      repair_action: 'demote-or-replace',
+      sources: failed.sources
+    }]
+  };
+
+  const repairPlan = buildSectionRepairPlan(editor, qualityReport, {}, []);
+
+  assert.equal(repairPlan.length, 1);
+  assert.equal(repairPlan[0].action, 'replace-or-demote');
+  assert.equal(repairPlan[0].failure_type, 'scope-demotion');
+  assert.equal(repairPlan[0].allow_rewrite, false);
+});
+
 test('targeted retry limits section repair count and prioritizes source gaps', () => {
   const gap = section('Source gap article', 'https://example.com/gap');
   const action = section('Actionability article', 'https://example.com/action');
