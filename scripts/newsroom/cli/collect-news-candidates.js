@@ -50,7 +50,7 @@ const CAMERA_KEYWORDS = [
   'qualcomm', 'samsung', 'arm', 'mediatek', 'exynos', 'snapdragon', 'tensor'
 ];
 const TECH_KEYWORDS = [
-  'c++', 'cpp', 'clang', 'llvm', 'ndk', 'build', 'test', 'gtest', 'googletest', 'perfetto',
+  'c++', 'cpp', 'clang', 'llvm', 'gcc', 'ndk', 'build', 'test', 'gtest', 'googletest', 'perfetto',
   'github', 'copilot', 'agent', 'ai', 'model', 'developer', 'tool', 'automation', 'sanitizer',
   'ai agent', 'coding agent', 'codex', 'claude code'
 ];
@@ -282,12 +282,7 @@ function firstBehavior(value) {
 
 function componentFromText(value, source) {
   const match = firstMatch(API_OR_COMPONENT_PATTERN, value);
-  if (match) return match;
-  if (['camera-hal', 'camera-api', 'aosp', 'compatibility'].includes(source.category)) return 'Android Camera / Camera HAL';
-  if (['linux-camera', 'linux-kernel', 'driver', 'v4l2'].includes(source.category)) return 'Linux camera / V4L2';
-  if (['soc', 'chipset', 'platform', 'gpu', 'npu'].includes(source.category)) return 'SoC platform / CPU / GPU / NPU';
-  if (['cpp', 'toolchain', 'native', 'llvm'].includes(source.category)) return 'C++ / native toolchain';
-  return '';
+  return match || '';
 }
 
 function inferFallbackSourceKind(source) {
@@ -437,7 +432,8 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     main_eligible: mainEligible,
     briefing_only: sourceGapRisk && !mainEligible,
     reference_only: fallbackIneligible || (sourceGapRisk && evidenceScore < 4),
-    evidence_score: evidenceScore
+    evidence_score: evidenceScore,
+    source_hint_api_or_component: source.category
   };
 }
 
@@ -446,15 +442,15 @@ function normalizeCandidate(raw) {
   const title = decode(raw.title);
   const summary = decode(raw.summary).slice(0, 500);
   const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
-  const fallbackOrWatch = FALLBACK_INELIGIBLE_SOURCE_KINDS.has(rawSourceKind);
-  const text = `${title} ${summary} ${fallbackOrWatch ? '' : source.keywords.join(' ')}`.toLowerCase();
-  const cameraHits = keywordHits(text, CAMERA_KEYWORDS);
-  const techHits = keywordHits(text, TECH_KEYWORDS);
-  const sourceKeywordHits = fallbackOrWatch ? 0 : keywordHits(text, source.keywords);
-  const categoryBoost = ['camera-hal', 'camera-api', 'aosp', 'compatibility', 'security'].includes(source.category) ? 35 : 0;
+  const articleText = `${title} ${summary} ${raw.version_or_release || ''} ${raw.api_or_component || ''} ${raw.behavior_change || ''}`.toLowerCase();
+  const cameraHits = keywordHits(articleText, CAMERA_KEYWORDS);
+  const techHits = keywordHits(articleText, TECH_KEYWORDS);
+  const sourcePriorHits = keywordHits(`${source.name} ${source.category} ${source.usageHint || ''}`.toLowerCase(), source.keywords);
+  const categoryBoost = ['camera-hal', 'camera-api', 'aosp', 'compatibility', 'security'].includes(source.category) ? 5 : 0;
   const priorityBoost = (PRIORITY_WEIGHT[source.priority] || 0) * 4;
   const reliabilityBoost = (RELIABILITY_WEIGHT[source.reliability] || 0) * 3;
-  const rawScore = categoryBoost + cameraHits * 8 + techHits * 4 + sourceKeywordHits * 3 + priorityBoost + reliabilityBoost;
+  const sourcePriorBoost = Math.min(3, sourcePriorHits);
+  const rawScore = categoryBoost + cameraHits * 12 + techHits * 6 + sourcePriorBoost + priorityBoost + reliabilityBoost;
   const score = Math.min(100, rawScore);
   const candidateOnly = source.candidateOnly || CANDIDATE_ONLY_RELIABILITY.has(source.reliability);
   const section = source.section;
@@ -537,6 +533,7 @@ function normalizeCandidate(raw) {
     evidence_score: metadata.evidence_score,
     version_or_release: metadata.version_or_release,
     api_or_component: metadata.api_or_component,
+    source_hint_api_or_component: metadata.source_hint_api_or_component,
     behavior_change: metadata.behavior_change,
     requiresCrossCheck: source.requiresCrossCheck,
     requires_cross_check: source.requiresCrossCheck,
@@ -865,7 +862,15 @@ async function main() {
   console.log(`Collected ${candidates.length} candidates for ${date}`);
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  componentFromText,
+  evidenceMetadata,
+  normalizeCandidate
+};

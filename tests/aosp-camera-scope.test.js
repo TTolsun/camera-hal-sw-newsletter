@@ -22,6 +22,17 @@ test('classifies direct AOSP Camera framework and CameraX evidence', () => {
   assert.equal(camerax.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
 });
 
+test('classifies article-level ICamera, camera3, and camera AIDL aliases as direct camera', () => {
+  const aidl = classifyAospCameraStackCandidate({
+    title: 'ICameraProvider AIDL update changes camera3 session behavior',
+    summary: 'The HAL interface change affects ICameraDeviceSession request handling.'
+  });
+
+  assert.equal(aidl.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
+  assert.equal(aidl.counts_as_primary_camera_topic, true);
+  assert.equal(aidl.evidence_origin, 'article_text');
+});
+
 test('classifies V4L2, libcamera, ISP, image sensor, and driver evidence', () => {
   const camera = classifyAospCameraStackCandidate({
     title: 'V4L2 media controller patch fixes camera sensor format negotiation',
@@ -31,6 +42,17 @@ test('classifies V4L2, libcamera, ISP, image sensor, and driver evidence', () =>
   assert.equal(camera.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
   assert.equal(camera.counts_as_driver_topic, true);
   assert.ok(camera.driver_stack_relevance > 0);
+});
+
+test('classifies article-level Linux camera subsystem and pipeline evidence as driver topic', () => {
+  const camera = classifyAospCameraStackCandidate({
+    title: 'Linux camera subsystem update improves sensor routing',
+    summary: 'The camera pipeline changes Linux frame routing for capture devices.'
+  });
+
+  assert.equal(camera.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
+  assert.equal(camera.counts_as_driver_topic, true);
+  assert.equal(camera.evidence_origin, 'article_text');
 });
 
 test('classifies public SoC platform signals without excluding them', () => {
@@ -56,10 +78,10 @@ test('classifies C++ AI and tooling as fallback', () => {
   assert.equal(fallback.counts_as_fallback_topic, true);
 });
 
-test('keeps generic Linux, FreeBSD, and GCC items in watchlist without source-keyword promotion', () => {
+test('keeps generic Linux, FreeBSD, and audio-fix items out of camera and driver buckets', () => {
   const generic = classifyAospCameraStackCandidate({
-    title: 'Linux 6.18, FreeBSD, and GCC updates arrive',
-    summary: 'General filesystem, networking, release engineering, and community updates are available.',
+    title: 'Linux 7.1-rc2 fixes Steam Deck audio and FreeBSD 15.1 Beta arrives',
+    summary: 'General filesystem, networking, release engineering, and audio driver updates are available.',
     source: 'Phoronix Linux Camera / Media',
     source_section: 'Linux Camera / Driver',
     source_usage_hint: 'Linux kernel, V4L2, media subsystem, driver release lead'
@@ -67,5 +89,17 @@ test('keeps generic Linux, FreeBSD, and GCC items in watchlist without source-ke
 
   assert.equal(generic.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
   assert.equal(generic.counts_as_primary_camera_topic, false);
+  assert.equal(generic.counts_as_driver_topic, false);
   assert.equal(generic.evidence_origin, 'source_hint_only');
+});
+
+test('classifies GCC benchmark as native tooling fallback, not direct camera', () => {
+  const gcc = classifyAospCameraStackCandidate({
+    title: 'GCC 16 benchmark shows compiler performance changes',
+    summary: 'The benchmark compares native C++ build and runtime performance.'
+  });
+
+  assert.equal(gcc.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
+  assert.equal(gcc.counts_as_primary_camera_topic, false);
+  assert.equal(gcc.counts_as_driver_topic, false);
 });

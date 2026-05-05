@@ -9,7 +9,7 @@
     "security": "Android / AOSP / Camera",
     "vendor-security": "Android / AOSP / Camera",
     "linux-camera": "Linux Camera / Driver",
-    "linux-kernel": "Linux Camera / Driver",
+    "linux-kernel": "Linux Kernel / Platform Watch",
     "driver": "Linux Camera / Driver",
     "v4l2": "Linux Camera / Driver",
     "cpp": "C++ / Native / Toolchain",
