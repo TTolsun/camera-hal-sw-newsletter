@@ -61,6 +61,9 @@ const {
   scrubStaleClaims
 } = require('../common/stale-claims');
 const {
+  pruneResolvedFallbackImageFactCheckItems
+} = require('../common/fact-check-repair');
+const {
   QUALITY_THRESHOLD,
   MIN_MAIN_ARTICLES,
   MAX_MAIN_ARTICLES,
@@ -1106,6 +1109,14 @@ function applyReporterEligibilityFindingsToFactCheck(factCheck, findings) {
   };
 }
 
+function pruneResolvedFallbackImageFalsePositives(factCheck, editor) {
+  const result = pruneResolvedFallbackImageFactCheckItems(factCheck, editor, { root });
+  if (result.removed.length > 0) {
+    console.warn(`Pruned ${result.removed.length} resolved fallback image fact-check false positive(s).`);
+  }
+  return result.factCheck;
+}
+
 function finalArticleSlotDistribution(sections) {
   const distribution = {
     android_camera_platform_api: 0,
@@ -1842,7 +1853,9 @@ async function main() {
         'If release date, version/release, API/component, behavior change, or expanded editorial-scope relevance cannot be verified from the supplied candidate/source data, demote the item to briefing/watchlist or exclude it instead of writing it as a main article.',
         'Do not write generic advice like "monitor AOSP updates" or "review CameraX changes" unless the sentence names the exact source, version/release, API/component, date, or behavior to watch.',
         'For SoC, AI, C++, Linux, or tooling articles, explicitly connect the item to AOSP Camera, Camera HAL, Camera Driver, V4L2/libcamera, image pipeline/ISP/sensor, SoC performance/power/thermal, or native development productivity.',
+        'For cpp_ai_tooling_fallback articles, explicitly state Android native development is Clang / LLVM / libc++ centric; do not imply GCC, C++ standard, or C++ library news means an Android HAL toolchain migration.',
         'Each action_items entry must be executable within 2 weeks and include at least one concrete test, log, metric, device class, API/component, stream combination, or code-owner style handoff.',
+        'For C++ tooling action_items, name the HAL/native owner, target structure or API, experiment or serialization target, and metrics such as CPU time, latency, binary size, or boilerplate LOC.',
         'For each article, choose at most one selectedImage from that article imageCandidates. If relevance, rights risk, logo-only content, screenshot text density, or source fit is unclear, set selectedImage to an empty string.',
         'Do not invent image URLs. selectedImage must exactly match one imageCandidates.url value, or be an empty string.',
         'Prefer directly relevant 16:9 or 4:3 clean images from the source article over generic, logo-only, or promotional images.',
@@ -1878,6 +1891,8 @@ async function main() {
         'Treat any finalSelectionEligibility=watchlist/exclude candidate or watch page without dated evidence used as a main article as must_fix.',
         'Any claim without a source must be classified as must_fix.',
         'Flag general AI/C++/SoC news that lacks AOSP Camera, camera driver, SoC platform, or native development interpretation.',
+        'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
+        'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
         'Flag any main article without concrete Action Item content.',
         'Flag any main article with weak Camera HAL perspective or missing engineering relevance.',
         'Flag candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.',
@@ -1890,6 +1905,7 @@ async function main() {
     ));
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
     factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
+    factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
     generationRunState.factCheck = factCheck;
     writeJson(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.json`), factCheck);
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
@@ -2005,6 +2021,8 @@ async function main() {
           'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
           'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or expanded editorial-scope relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
+          'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
+          'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
           'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
           'Return only JSON matching the schema.'
         ].join('\n'),
@@ -2015,6 +2033,7 @@ async function main() {
         allowReserve: repairAllowsReserve
       });
       factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
+      factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
       generationRunState.factCheck = factCheck;
       writeJson(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.json`), factCheck);
       fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
@@ -2093,6 +2112,8 @@ async function main() {
             'You are the AI fact checker for the completed AOSP Camera / Driver / SoC Platform Newsletter draft.',
             'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the 4-5 main article contract.',
+            'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
+            'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
             'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
             'Return only JSON matching the schema.'
           ].join('\n'),
@@ -2103,6 +2124,7 @@ async function main() {
           allowReserve: completionAllowsReserve
         });
         factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
+        factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
         generationRunState.factCheck = factCheck;
         writeJson(path.join(newsroomDir, `fact-check-completion-attempt-${attempt}.json`), factCheck);
         fs.writeFileSync(path.join(newsroomDir, `fact-check-completion-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
@@ -2211,6 +2233,7 @@ async function main() {
   });
   editor = validateEditor(staleScrub.editor, date, reporter);
   factCheck = pruneResolvedStaleFactCheckItems(factCheck, staleScrub.report);
+  factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
   generationRunState.factCheck = factCheck;
   writeJson(path.join(newsroomDir, 'stale-claim-report.json'), staleScrub.report);
   fs.writeFileSync(

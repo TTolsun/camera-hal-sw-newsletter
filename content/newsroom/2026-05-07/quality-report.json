@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "date": "2026-05-07",
-  "score": 83,
+  "score": 98,
   "max_score": 100,
   "threshold": 85,
-  "status": "NEEDS_FIX",
-  "summary": "Quality score 83, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "status": "PASS",
+  "summary": "Quality score 98, threshold 85, max score 100. Editor review is ready.",
   "deductions": [
     {
       "category": "image-fallback",
@@ -19,17 +19,9 @@
       "category": "image-fallback",
       "points": 1,
       "reason": "Article image uses a local fallback visual.",
-      "location": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+      "location": "Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보",
       "blocking": false,
       "severity": "soft"
-    },
-    {
-      "category": "source-integrity",
-      "points": 15,
-      "reason": "Fact checker returned 3 must_fix item(s).",
-      "location": "",
-      "blocking": true,
-      "severity": "hard"
     }
   ],
   "article_results": [
@@ -37,8 +29,8 @@
       "index": 1,
       "headline": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
       "category": "카메라 드라이버 및 이미지 파이프라인",
-      "status": "FAIL",
-      "repair_action": "repair-section",
+      "status": "PASS",
+      "repair_action": "preserve",
       "sources": [
         {
           "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
@@ -66,9 +58,7 @@
         "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       },
-      "hard_fail_reasons": [
-        "Fact-check must_fix item mentions this section."
-      ],
+      "hard_fail_reasons": [],
       "soft_deductions": [
         {
           "category": "image-fallback",
@@ -81,8 +71,8 @@
       "index": 2,
       "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
       "category": "카메라 드라이버 및 이미지 파이프라인",
-      "status": "FAIL",
-      "repair_action": "repair-section",
+      "status": "PASS",
+      "repair_action": "preserve",
       "sources": [
         {
           "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
@@ -110,9 +100,7 @@
         "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       },
-      "hard_fail_reasons": [
-        "Fact-check must_fix item mentions this section."
-      ],
+      "hard_fail_reasons": [],
       "soft_deductions": [
         {
           "category": "image-fallback",
@@ -159,10 +147,10 @@
     },
     {
       "index": 4,
-      "headline": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+      "headline": "Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보",
       "category": "C++ 및 개발 도구",
-      "status": "FAIL",
-      "repair_action": "repair-section",
+      "status": "PASS",
+      "repair_action": "preserve",
       "sources": [
         {
           "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
@@ -171,7 +159,7 @@
       ],
       "scope_count": {
         "index": 4,
-        "headline": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+        "headline": "Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보",
         "source_candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
         "source_candidate_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -190,9 +178,7 @@
         "count_reason": "cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count.",
         "exclusion_reason_if_not_counted": "Fallback bucket is reviewable support material but not a primary camera stack topic."
       },
-      "hard_fail_reasons": [
-        "Fact-check must_fix item mentions this section."
-      ],
+      "hard_fail_reasons": [],
       "soft_deductions": [
         {
           "category": "image-fallback",
@@ -289,7 +275,7 @@
       },
       {
         "index": 4,
-        "headline": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+        "headline": "Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보",
         "source_candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
         "source_candidate_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -318,32 +304,26 @@
       "generic_tech_watchlist": 0
     },
     "ai_article_count": 0,
-    "fact_check_status": "NEEDS_FIX",
-    "must_fix_count": 3,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
     "source_gap_count": 0,
     "stale_claim_status": "PASS",
     "stale_claim_removed_count": 0,
     "stale_claim_hard_failure_count": 0,
     "source_integrity_violation_count": 0,
-    "blocking_deduction_count": 1,
-    "blocking_deduction_categories": [
-      "source-integrity"
-    ],
-    "hard_fail_count": 1,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
     "soft_deduction_count": 2,
     "article_gate_counts": {
-      "PASS": 1,
+      "PASS": 4,
       "DEMOTE": 0,
-      "FAIL": 3
+      "FAIL": 0
     },
     "top_deduction_categories": [
       {
         "category": "image-fallback",
         "count": 2
-      },
-      {
-        "category": "source-integrity",
-        "count": 1
       }
     ],
     "candidate_exclusion_summary": []
