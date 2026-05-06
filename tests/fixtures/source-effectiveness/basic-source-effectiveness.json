@@ -1,0 +1,297 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated"
+  },
+  "date": "2026-05-06",
+  "sourceRegistry": {
+    "schemaVersion": 2,
+    "sources": [
+      {
+        "id": "effective-camera",
+        "name": "Effective Camera Source",
+        "sourceUrl": "https://camera.example.com/",
+        "rssUrl": "https://camera.example.com/rss.xml",
+        "collectionModeHint": "rss-source",
+        "category": "camera-hal",
+        "priority": "medium",
+        "reliability": "expert-media",
+        "enabled": true,
+        "candidateOnly": false,
+        "requiresCrossCheck": false,
+        "usageHint": "Camera HAL 기사 기여도를 검증하는 curated source",
+        "keywords": [
+          "Camera",
+          "HAL"
+        ]
+      },
+      {
+        "id": "official-broken",
+        "name": "Official Broken Parser",
+        "sourceUrl": "https://official.example.com/",
+        "rssUrl": null,
+        "collectionModeHint": "release-note-watch",
+        "category": "camera-api",
+        "priority": "high",
+        "reliability": "official",
+        "enabled": true,
+        "candidateOnly": false,
+        "requiresCrossCheck": false,
+        "usageHint": "parser repair 판정을 검증하는 official source",
+        "keywords": [
+          "CameraX"
+        ]
+      },
+      {
+        "id": "generic-ai-firehose",
+        "name": "Generic AI Firehose",
+        "sourceUrl": "https://ai.example.com/",
+        "rssUrl": "https://ai.example.com/rss.xml",
+        "collectionModeHint": "rss-source",
+        "category": "ai-trends",
+        "priority": "low",
+        "reliability": "media",
+        "enabled": true,
+        "candidateOnly": false,
+        "requiresCrossCheck": false,
+        "usageHint": "generic AI noise 판정을 검증하는 source",
+        "keywords": [
+          "AI"
+        ]
+      },
+      {
+        "id": "gap-heavy",
+        "name": "Gap Heavy Source",
+        "sourceUrl": "https://gap.example.com/",
+        "rssUrl": null,
+        "collectionModeHint": "homepage-watch",
+        "category": "linux-camera",
+        "priority": "medium",
+        "reliability": "expert-media",
+        "enabled": true,
+        "candidateOnly": false,
+        "requiresCrossCheck": false,
+        "usageHint": "source gap review 판정을 검증하는 source",
+        "keywords": [
+          "camera"
+        ]
+      },
+      {
+        "id": "idle-source",
+        "name": "Idle Source",
+        "sourceUrl": "https://idle.example.com/",
+        "rssUrl": null,
+        "collectionModeHint": "homepage-watch",
+        "category": "platform",
+        "priority": "low",
+        "reliability": "community",
+        "enabled": true,
+        "candidateOnly": false,
+        "requiresCrossCheck": false,
+        "usageHint": "no recent signal 판정을 검증하는 source",
+        "keywords": [
+          "platform"
+        ]
+      }
+    ]
+  },
+  "collectedCandidates": {
+    "candidates": [
+      {
+        "source_id": "effective-camera",
+        "source_name": "Effective Camera Source",
+        "sourceUrl": "https://camera.example.com/",
+        "url": "https://camera.example.com/articles/camera-hal-release?utm=collector",
+        "title": "Camera HAL release",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "main",
+        "hasDatedEvidence": true,
+        "main_eligible": true,
+        "source_gap_risk": false,
+        "reference_only": false,
+        "briefing_only": false,
+        "relevance_bucket": "direct_aosp_camera"
+      },
+      {
+        "source_id": "effective-camera",
+        "source_name": "Effective Camera Source",
+        "sourceUrl": "https://camera.example.com/",
+        "url": "https://camera.example.com/articles/camera-hal-release?utm=duplicate",
+        "title": "Camera HAL release duplicate",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "main",
+        "hasDatedEvidence": true,
+        "main_eligible": true,
+        "source_gap_risk": false,
+        "reference_only": false,
+        "briefing_only": false,
+        "relevance_bucket": "direct_aosp_camera"
+      },
+      {
+        "source_name": "Official Broken Parser",
+        "sourceUrl": "https://official.example.com/",
+        "url": "https://official.example.com/releases/camera",
+        "title": "Official rolling camera release page",
+        "published_date": "",
+        "finalSelectionEligibility": "watchlist",
+        "hasDatedEvidence": false,
+        "main_eligible": false,
+        "source_gap_risk": true,
+        "reference_only": true,
+        "briefing_only": true,
+        "selection_exclusion_reason": "Parser did not extract a dated release row from the official source."
+      },
+      {
+        "source_name": "Generic AI Firehose",
+        "sourceUrl": "https://ai.example.com/",
+        "url": "https://ai.example.com/posts/agent-news-1",
+        "title": "Generic agent news 1",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "watchlist",
+        "hasDatedEvidence": true,
+        "main_eligible": false,
+        "source_gap_risk": true,
+        "reference_only": true,
+        "briefing_only": true,
+        "relevance_bucket": "generic_tech_watchlist",
+        "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence."
+      },
+      {
+        "source_name": "Generic AI Firehose",
+        "sourceUrl": "https://ai.example.com/",
+        "url": "https://ai.example.com/posts/agent-news-2",
+        "title": "Generic agent news 2",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "watchlist",
+        "hasDatedEvidence": true,
+        "main_eligible": false,
+        "source_gap_risk": true,
+        "reference_only": true,
+        "briefing_only": true,
+        "relevance_bucket": "generic_tech_watchlist",
+        "selection_exclusion_reason": "Generic AI item without HAL connection."
+      },
+      {
+        "source_name": "Generic AI Firehose",
+        "sourceUrl": "https://ai.example.com/",
+        "url": "https://ai.example.com/posts/agent-news-3",
+        "title": "Generic agent news 3",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "watchlist",
+        "hasDatedEvidence": true,
+        "main_eligible": false,
+        "source_gap_risk": true,
+        "reference_only": true,
+        "briefing_only": true,
+        "relevance_bucket": "generic_tech_watchlist",
+        "selection_exclusion_reason": "Generic IT noise without article-level camera evidence."
+      },
+      {
+        "source_id": "gap-heavy",
+        "sourceUrl": "https://gap.example.com/",
+        "url": "https://gap.example.com/camera-news-1",
+        "title": "Gap camera news 1",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "main",
+        "hasDatedEvidence": true,
+        "main_eligible": true,
+        "source_gap_risk": true,
+        "reference_only": false,
+        "briefing_only": false,
+        "selection_exclusion_reason": "source_gap_risk=true"
+      },
+      {
+        "source_id": "gap-heavy",
+        "sourceUrl": "https://gap.example.com/",
+        "url": "https://gap.example.com/camera-news-2",
+        "title": "Gap camera news 2",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "main",
+        "hasDatedEvidence": true,
+        "main_eligible": true,
+        "source_gap_risk": true,
+        "reference_only": false,
+        "briefing_only": false,
+        "selection_exclusion_reason": "source_gap_risk=true"
+      },
+      {
+        "source_name": "Unknown Camera Blog",
+        "sourceUrl": "https://unknown.example.com/",
+        "url": "https://unknown.example.com/camera",
+        "title": "Unknown camera post",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "short",
+        "hasDatedEvidence": true,
+        "main_eligible": true,
+        "source_gap_risk": false,
+        "reference_only": false,
+        "briefing_only": false
+      },
+      {
+        "source_id": "gap-heavy",
+        "sourceUrl": "https://gap.example.com/",
+        "url": "https://camera.example.com/articles/camera-hal-release?copy=1",
+        "title": "Cross-source duplicate",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "main",
+        "hasDatedEvidence": true,
+        "main_eligible": true,
+        "source_gap_risk": true,
+        "reference_only": false,
+        "briefing_only": false,
+        "selection_exclusion_reason": "source_gap_risk=true"
+      }
+    ]
+  },
+  "shortlistReport": {
+    "primary_selected_articles": [
+      {
+        "source_id": "effective-camera",
+        "source_name": "Effective Camera Source",
+        "url": "https://camera.example.com/articles/camera-hal-release?utm=selected",
+        "title": "Camera HAL release",
+        "finalSelectionEligibility": "main",
+        "hasDatedEvidence": true,
+        "main_eligible": true,
+        "source_gap_risk": false,
+        "reference_only": false,
+        "final_selected": true,
+        "primary_selected": true,
+        "selected_for_editor": true
+      }
+    ],
+    "selected_articles": [],
+    "shortlisted_candidates": [],
+    "reserve_candidates": [],
+    "demoted_candidates": [],
+    "excluded_candidates": []
+  },
+  "reporterCandidates": {
+    "candidates": []
+  },
+  "editorDraft": {
+    "sections": [
+      {
+        "headline": "Camera HAL release",
+        "source_candidate_url": "https://camera.example.com/articles/camera-hal-release?ref=editor",
+        "sources": [
+          {
+            "title": "Camera HAL release",
+            "url": "https://camera.example.com/articles/camera-hal-release?ref=source-list"
+          }
+        ]
+      }
+    ]
+  },
+  "factCheckReport": {
+    "status": "PASS",
+    "must_fix": [],
+    "source_gaps": [],
+    "source_gap_count": 0
+  },
+  "qualityReport": {
+    "status": "PASS",
+    "score": 100,
+    "threshold": 85
+  }
+}
