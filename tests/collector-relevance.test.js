@@ -8,7 +8,8 @@ const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers
 const {
   canonicalContentUrl,
   fetchUrlForContent,
-  normalizeCandidate
+  normalizeCandidate,
+  withinLookback
 } = require('../scripts/newsroom/cli/collect-news-candidates');
 const { readTextFixture } = require('./helpers/fixture-loader');
 
@@ -97,6 +98,35 @@ test('collector keeps compiler CPU and GPU benchmarks out of SoC fallback withou
   assert.equal(candidate.counts_as_fallback_topic, true);
 });
 
+test('collector keeps generic GPU/NPU/SoC benchmark only coverage out of SoC non-fallback', () => {
+  const candidate = normalizeCandidate(raw({
+    source: source({
+      id: 'soc-platform-news',
+      name: 'Public SoC Platform News',
+      category: 'soc',
+      section: 'SoC Platform / Performance',
+      keywords: ['SoC', 'CPU', 'GPU', 'NPU', 'benchmark']
+    }),
+    title: 'SoC benchmark compares GPU, NPU, and CPU scores',
+    url: 'https://example.com/soc-gpu-npu-benchmark',
+    summary: 'The benchmark compares synthetic GPU, NPU, CPU, cache, and memory bandwidth scores.'
+  }));
+
+  assert.equal(candidate.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+  assert.equal(candidate.counts_as_soc_topic, false);
+  assert.equal(candidate.finalSelectionEligibility, 'watchlist');
+});
+
+test('collector applies exact-day and month-overlap lookback rules', () => {
+  const now = new Date('2026-05-06T00:00:00Z');
+
+  assert.equal(withinLookback({ publishedAt: '2026-04-01', datePrecision: 'month' }, now, 21), true);
+  assert.equal(withinLookback({ publishedAt: '2026-03-01', datePrecision: 'month' }, now, 21), false);
+  assert.equal(withinLookback({ publishedAt: 'March 25, 2026' }, now, 21), false);
+  assert.equal(withinLookback({ publishedAt: 'March 25, 2026' }, now, 28), false);
+  assert.equal(withinLookback({ publishedAt: '2026-04-28' }, now, 21), true);
+});
+
 test('collector keeps CameraX and V4L2 article text in the expected buckets', () => {
   const cameraX = normalizeCandidate(raw({
     source: source({ category: 'camera-api', section: 'Android / AOSP / Camera', keywords: ['CameraX'] }),
@@ -182,6 +212,11 @@ test('collector keeps official AOSP and CameraX camera child rows reviewable wit
   assert.equal(aospCameraRow.main_eligible, true);
   assert.ok(['main', 'short'].includes(aospCameraRow.finalSelectionEligibility));
 
+  const cameraProviderRow = cameraRows.find(item => item.title === 'Camera Provider');
+  assert.ok(cameraProviderRow);
+  assert.equal(cameraProviderRow.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
+  assert.ok(['main', 'short'].includes(cameraProviderRow.finalSelectionEligibility));
+
   const cameraXRows = parseSourceSpecificItems(
     readTextFixture('source-html/camerax-release-notes-1.6.html'),
     source({
@@ -217,6 +252,35 @@ test('collector keeps official AOSP and CameraX camera child rows reviewable wit
 
   assert.equal(nonCameraHal.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
   assert.ok(['watchlist', 'exclude'].includes(nonCameraHal.finalSelectionEligibility));
+});
+
+test('collector keeps libcamera v0.7.1 release as camera driver image pipeline candidate', () => {
+  const items = parseSourceSpecificItems(
+    readTextFixture('source-html/libcamera-release-v0.7.1.html'),
+    source({
+      id: 'libcamera-release-announcements',
+      name: 'libcamera Release Announcements',
+      url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
+      sourceUrl: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
+      category: 'linux-camera',
+      section: 'Linux Camera / Driver',
+      priority: 'high',
+      reliability: 'project-official',
+      keywords: ['libcamera', 'V4L2', 'SoftISP', 'camera', 'pipeline']
+    })
+  ).map(item => normalizeCandidate(item));
+
+  assert.equal(items.length, 3);
+  for (const item of items) {
+    assert.equal(item.publishedAt, '2026-04-28');
+    assert.equal(item.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
+    assert.equal(item.counts_as_driver_topic, true);
+    assert.ok(['main', 'short'].includes(item.finalSelectionEligibility));
+  }
+  assert.ok(items.some(item => /SoftISP/.test(item.title)));
+  assert.ok(items.some(item => /pipeline handler and sensor configuration/.test(item.title)));
+  assert.ok(items.some(item => item.url === 'https://gitlab.freedesktop.org/camera/libcamera/-/issues/311'));
+  assert.ok(items.some(item => item.url === 'https://gitlab.freedesktop.org/camera/libcamera/-/issues/300'));
 });
 
 test('collector forces reference_index source out of final article inputs', () => {
@@ -274,7 +338,7 @@ test('collector keeps article-level ICamera and Linux camera pipeline candidates
   assert.notEqual(linuxCamera.finalSelectionEligibility, 'watchlist');
 });
 
-test('collector allows public SoC platform signals as soc fallback', () => {
+test('collector allows public SoC platform signals only with camera impact evidence', () => {
   const candidate = normalizeCandidate(raw({
     source: source({
       id: 'soc-platform-news',
@@ -283,9 +347,9 @@ test('collector allows public SoC platform signals as soc fallback', () => {
       section: 'SoC Platform / Performance',
       keywords: ['SoC', 'CPU', 'GPU', 'thermal', 'power']
     }),
-    title: 'Snapdragon SoC update improves GPU DVFS and thermal behavior',
+    title: 'Snapdragon SoC update improves camera performance and video capture latency',
     url: 'https://example.com/snapdragon-gpu-dvfs',
-    summary: 'The public platform note discusses CPU scheduler, GPU power, thermal limits, and memory bandwidth.'
+    summary: 'The public platform note discusses NPU scheduling, GPU power, thermal limits, and camera latency for video capture workloads.'
   }));
 
   assert.equal(candidate.relevance_bucket, BUCKETS.SOC_PLATFORM_SIGNAL);

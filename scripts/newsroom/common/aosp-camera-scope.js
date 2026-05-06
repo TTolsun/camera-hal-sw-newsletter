@@ -20,7 +20,7 @@ const BUCKET_DEFINITIONS = Object.freeze({
   [BUCKETS.DIRECT_AOSP_CAMERA]: 'AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence.',
   [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 'Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence.',
   [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 'Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path.',
-  [BUCKETS.SOC_PLATFORM_SIGNAL]: 'Public SoC, CPU, GPU, NPU, ISP, DSP, memory bandwidth, cache/interconnect, power, thermal, DVFS, scheduler/EAS, Qualcomm, Samsung, Arm, MediaTek, Exynos, Snapdragon, or Tensor platform evidence.',
+  [BUCKETS.SOC_PLATFORM_SIGNAL]: 'Public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact.',
   [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 'C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence.',
   [BUCKETS.GENERIC_TECH_WATCHLIST]: 'General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion.'
 });
@@ -150,6 +150,21 @@ const STRONG_SOC_PATTERNS = [
   /\bTensor\b/i
 ];
 
+const SOC_CAMERA_IMPACT_PATTERNS = [
+  /\bISP\b/i,
+  /\bimage pipeline\b/i,
+  /\bcamera performance\b/i,
+  /\bcamera thermal\b/i,
+  /\bcamera latency\b/i,
+  /\bcamera power\b/i,
+  /\bcamera\b[^.\n]{0,120}\b(?:performance|thermal|latency|power|pipeline|sensor|capture)\b/i,
+  /\b(?:performance|thermal|latency|power|pipeline|sensor|capture)\b[^.\n]{0,120}\bcamera\b/i,
+  /\bimage sensor\b/i,
+  /\bcamera sensor\b/i,
+  /\bmedia pipeline\b/i,
+  /\bvideo capture\b/i
+];
+
 const NATIVE_TOOLING_PATTERNS = [
   /\bC\+\+\b/i,
   /\bcpp\b/i,
@@ -237,6 +252,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const cameraImpactTerms = patternHits(CAMERA_IMPACT_PATTERNS, body);
   const socTerms = patternHits(SOC_PATTERNS, body);
   const strongSocTerms = patternHits(STRONG_SOC_PATTERNS, body);
+  const socCameraImpactTerms = patternHits(SOC_CAMERA_IMPACT_PATTERNS, body);
   const nativeTerms = patternHits(NATIVE_TOOLING_PATTERNS, body);
   const bucketHint = validBucketHint(candidate.relevance_bucket_hint || candidate.relevanceBucketHint);
   const sourceHintTerms = patternHits([
@@ -255,9 +271,14 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ...androidAdjacentTerms,
     ...cameraImpactTerms,
     ...socTerms,
+    ...socCameraImpactTerms,
     ...nativeTerms
   ];
-  if (bucketHint && articleTerms.length > 0) {
+  const canUseBucketHint = bucketHint && articleTerms.length > 0 && (
+    bucketHint !== BUCKETS.SOC_PLATFORM_SIGNAL ||
+    (socTerms.length > 0 && socCameraImpactTerms.length > 0)
+  );
+  if (canUseBucketHint) {
     bucket = bucketHint;
     evidenceTerms = articleTerms;
   } else if (driverTerms.length > 0 && directTerms.length === 0) {
@@ -269,9 +290,13 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   } else if (androidAdjacentTerms.length > 0 && cameraImpactTerms.length > 0) {
     bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
     evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms];
-  } else if (socTerms.length > 0 && !(nativeTerms.length > 0 && strongSocTerms.length === 0)) {
+  } else if (
+    socTerms.length > 0 &&
+    socCameraImpactTerms.length > 0 &&
+    !(nativeTerms.length > 0 && strongSocTerms.length === 0)
+  ) {
     bucket = BUCKETS.SOC_PLATFORM_SIGNAL;
-    evidenceTerms = strongSocTerms.length > 0 ? strongSocTerms : socTerms;
+    evidenceTerms = [...strongSocTerms, ...socCameraImpactTerms];
   } else if (nativeTerms.length > 0) {
     bucket = BUCKETS.CPP_AI_TOOLING_FALLBACK;
     evidenceTerms = nativeTerms;

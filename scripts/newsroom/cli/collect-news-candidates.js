@@ -35,6 +35,7 @@ const AUDIENCE = 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer';
 
 const PRIORITY_WEIGHT = { high: 3, medium: 2, low: 1 };
 const RELIABILITY_WEIGHT = { official: 3, 'project-official': 2, 'official-community': 2 };
+const DAY_MS = 24 * 60 * 60 * 1000;
 const CANDIDATE_ONLY_RELIABILITY = new Set([
   'community',
   'newsletter',
@@ -693,8 +694,16 @@ function parseDate(value) {
 function withinLookback(candidate, now, lookbackDays) {
   const date = parseDate(candidate.publishedAt);
   if (!date) return true;
-  const ageMs = now.getTime() - date.getTime();
-  return ageMs >= 0 && ageMs <= lookbackDays * 24 * 60 * 60 * 1000;
+  const windowEndMs = now.getTime();
+  const windowStartMs = windowEndMs - lookbackDays * DAY_MS;
+  const precision = String(candidate.datePrecision || candidate.date_precision || '').toLowerCase();
+  if (precision === 'month') {
+    const monthStartMs = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1);
+    const monthEndMs = Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0, 23, 59, 59, 999);
+    return monthEndMs >= windowStartMs && monthStartMs <= windowEndMs;
+  }
+  const candidateMs = date.getTime();
+  return candidateMs >= windowStartMs && candidateMs <= windowEndMs;
 }
 
 function titleKey(title) {
@@ -864,7 +873,7 @@ function markdown(date, candidates, failures, lookbackDays) {
 async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
   const lookbackDays = runtimeConfig.lookbackDays;
-  const now = new Date();
+  const now = parseDate(date) || new Date();
   const sources = parseSources();
   const failures = [];
   let candidates = [];
@@ -940,5 +949,6 @@ module.exports = {
   componentFromText,
   evidenceMetadata,
   fetchUrlForContent,
-  normalizeCandidate
+  normalizeCandidate,
+  withinLookback
 };

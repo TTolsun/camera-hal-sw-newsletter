@@ -303,6 +303,28 @@
       ]
     },
     {
+      "id": "libcamera-release-announcements",
+      "name": "libcamera Release Announcements",
+      "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "rssUrl": null,
+      "collectionModeHint": "release-note-watch",
+      "category": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
+      "keywords": [
+        "libcamera",
+        "V4L2",
+        "SoftISP",
+        "camera",
+        "pipeline",
+        "image sensor"
+      ]
+    },
+    {
       "id": "libcamera-documentation",
       "name": "libcamera Documentation",
       "sourceUrl": "https://libcamera.org/introduction.html",

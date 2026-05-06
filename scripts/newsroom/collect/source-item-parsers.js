@@ -3,6 +3,9 @@ const { decodeHtml, htmlAttr } = require('../common/common');
 const MONTHS = '(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)';
 const ISO_DATE_PATTERN = /\b(20\d{2}-\d{2}-\d{2})\b/;
 const MONTH_DATE_PATTERN = new RegExp(`\\b(${MONTHS}\\s+\\d{1,2},\\s+20\\d{2})\\b`, 'i');
+const MONTH_DAY_YEAR_PATTERN = new RegExp(`\\b(${MONTHS})\\s+(\\d{1,2})\\s+(20\\d{2})\\b`, 'i');
+const MONTH_DAY_TIME_YEAR_PATTERN = new RegExp(`\\b(${MONTHS})\\s+(\\d{1,2})\\s+\\d{1,2}:\\d{2}(?::\\d{2})?(?:\\s+(?:[A-Z]{2,5}|[+-]\\d{4}))?\\s+(20\\d{2})\\b`, 'i');
+const RFC_DATE_PATTERN = new RegExp(`\\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\\s+(\\d{1,2})\\s+(${MONTHS})\\s+(20\\d{2})\\b`, 'i');
 const MONTH_YEAR_PATTERN = new RegExp(`\\b(${MONTHS})\\s+(20\\d{2})\\b`, 'i');
 const SMR_PATTERN = /\b(?:SMR[-\s]?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[-\s]?20\d{2}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+20\d{2}\s+SMR|Security Maintenance Release)\b/i;
 const VERSION_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|Claude Code\s+v?\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|SMR[-\s]?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[-\s]?20\d{2}|v?\d+\.\d+\.\d+(?:[-\w.]*)?)\b/i;
@@ -46,6 +49,12 @@ function clean(value = '') {
   return stripTags(value).replace(/\s+/g, ' ').trim();
 }
 
+function formatExactMonthDate(year, monthName, day) {
+  const mm = MONTH_NUMBER[String(monthName || '').toLowerCase()];
+  if (!mm) return '';
+  return `${year}-${mm}-${String(day).padStart(2, '0')}`;
+}
+
 function absoluteUrl(href, baseUrl) {
   try {
     return new URL(href, baseUrl).toString();
@@ -59,6 +68,12 @@ function firstDate(text = '') {
   if (iso) return iso[1];
   const month = String(text).match(MONTH_DATE_PATTERN);
   if (month) return month[1];
+  const monthDayTimeYear = String(text).match(MONTH_DAY_TIME_YEAR_PATTERN);
+  if (monthDayTimeYear) return formatExactMonthDate(monthDayTimeYear[3], monthDayTimeYear[1], monthDayTimeYear[2]);
+  const monthDayYear = String(text).match(MONTH_DAY_YEAR_PATTERN);
+  if (monthDayYear) return formatExactMonthDate(monthDayYear[3], monthDayYear[1], monthDayYear[2]);
+  const rfcDate = String(text).match(RFC_DATE_PATTERN);
+  if (rfcDate) return formatExactMonthDate(rfcDate[3], rfcDate[2], rfcDate[1]);
   const compactSmr = String(text).match(/\bSMR[-\s]?([A-Z][a-z]{2})[-\s]?(20\d{2})\b/i);
   if (compactSmr) {
     const mm = MONTH_NUMBER[compactSmr[1].toLowerCase()];
@@ -105,6 +120,8 @@ function componentFromText(text = '', fallback = '') {
     'androidx.camera',
     'Camera2',
     'Camera HAL',
+    'Camera Provider',
+    'CameraProvider',
     'AOSP Camera',
     'Camera images automation',
     'Test camera images',
@@ -289,7 +306,10 @@ const AOSP_SITE_CAMERA_UPDATE_PATTERNS = [
   /\bTest camera images\b/i,
   /\bCDD\b[^.\n]{0,120}\bcamera orientation\b/i,
   /\bcamera orientation\b[^.\n]{0,120}\bCDD\b/i,
-  /\bAutomotive Camera Service\b/i
+  /\bAutomotive Camera Service\b/i,
+  /\bCamera\s*Provider\b/i,
+  /\bCameraProvider\b/i,
+  /\bCamera\s*HAL\b/i
 ];
 
 const NON_CAMERA_HAL_PATTERNS = [
@@ -486,7 +506,10 @@ function parseAospSiteUpdates(html, source) {
       const url = anchor?.url || urlWithFragment(parentUrl, `${sourceMonth} ${title}`);
       const component = componentFromText(evidenceText, /CDD/i.test(evidenceText)
         ? 'CDD camera'
-        : /Camera ITS/i.test(evidenceText) ? 'Camera ITS' : /Automotive Camera Service/i.test(evidenceText) ? 'Automotive Camera Service' : 'AOSP Camera');
+        : /Camera ITS/i.test(evidenceText) ? 'Camera ITS'
+        : /Automotive Camera Service/i.test(evidenceText) ? 'Automotive Camera Service'
+        : /Camera\s*Provider|CameraProvider/i.test(evidenceText) ? 'Camera Provider'
+        : 'AOSP Camera');
       const extractedBehavior = firstBehavior(evidenceText);
       const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
         ? extractedBehavior
@@ -627,6 +650,69 @@ function parseLibcameraBlog(html, source) {
   );
 }
 
+function pageTitle(html = '', fallback = '') {
+  return clean((String(html).match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1] || fallback);
+}
+
+function libcameraIssueUrl(text = '', issueNumber = '') {
+  const match = String(text).match(new RegExp(`https://gitlab\\.freedesktop\\.org/camera/libcamera/-/issues/${issueNumber}\\b`, 'i'));
+  return match ? match[0] : '';
+}
+
+function parseLibcameraReleaseAnnouncement(html, source) {
+  const title = pageTitle(html, source.name);
+  const pageText = clean(html);
+  const evidenceText = `${title} ${pageText}`;
+  const version = firstVersion(evidenceText);
+  const date = firstDate(evidenceText);
+  const hasCameraPipelineEvidence = /\b(?:libcamera|SoftISP|V4L2|camera|pipeline|image pipeline|media controller|image sensor|sensor configuration|sensor)\b/i
+    .test(evidenceText);
+  if (!version || !date || !/\blibcamera\b/i.test(evidenceText) || !hasCameraPipelineEvidence) {
+    return [];
+  }
+  const extractedBehavior = firstBehavior(evidenceText);
+  const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
+    ? extractedBehavior
+    : `Released ${version} with libcamera camera pipeline updates.`;
+  const releaseItem = {
+    source,
+    title: `${source.name} - ${version}`,
+    url: source.url,
+    publishedAt: date,
+    summary: behavior,
+    sourceKind: 'release_note_item',
+    collectionMode: 'release-note-item',
+    parentUrl: source.url,
+    parentTitle: source.name,
+    version_or_release: version,
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: behavior,
+    relevanceBucketHint: 'camera_driver_image_pipeline'
+  };
+  const childItems = [];
+  if (/\b(?:SoftISP|software_isp|debaying|Debayer)\b/i.test(evidenceText)) {
+    childItems.push({
+      ...releaseItem,
+      title: `${version} - SoftISP debaying and throughput`,
+      url: libcameraIssueUrl(evidenceText, '311') || urlWithFragment(source.url, `${version} SoftISP debaying throughput`),
+      summary: 'Updated SoftISP debaying and throughput behavior for camera image processing.',
+      api_or_component: 'libcamera SoftISP / image pipeline',
+      behavior_change: 'Updated SoftISP debaying and throughput behavior for camera image processing.'
+    });
+  }
+  if (/\b(?:Mali-C55|pipeline handler|sensor mode configuration|sensor configuration|camera support)\b/i.test(evidenceText)) {
+    childItems.push({
+      ...releaseItem,
+      title: `${version} - pipeline handler and sensor configuration`,
+      url: libcameraIssueUrl(evidenceText, '300') || urlWithFragment(source.url, `${version} pipeline handler sensor configuration`),
+      summary: 'Updated pipeline handler and sensor configuration behavior for camera support.',
+      api_or_component: 'libcamera pipeline handler / image sensor configuration',
+      behavior_change: 'Updated pipeline handler and sensor configuration behavior for camera support.'
+    });
+  }
+  return uniqueParserItems([releaseItem, ...childItems]).slice(0, 4);
+}
+
 function parseLlvmReleaseNotes(html, source) {
   return linkedItems(html, source, {
     component: 'LLVM / Clang native toolchain',
@@ -688,6 +774,7 @@ const PARSERS = {
   'android-security-bulletin': parseAndroidSecurityBulletin,
   'claude-code-changelog': parseClaudeCodeChangelog,
   'libcamera-blog': parseLibcameraBlog,
+  'libcamera-release-announcements': parseLibcameraReleaseAnnouncement,
   'llvm-release-notes': parseLlvmReleaseNotes,
   'samsung-mobile-security-updates': parseSamsungMobileSecurityUpdates
 };

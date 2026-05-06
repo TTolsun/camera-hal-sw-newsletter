@@ -48,6 +48,7 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 ### 1차 출처
 
 - libcamera Blog: https://libcamera.org/blog/
+- libcamera Release Announcements: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
 - libcamera Documentation (`documentation-watch`): https://libcamera.org/introduction.html
 - Collabora Blog: https://www.collabora.com/news-and-blog/
 

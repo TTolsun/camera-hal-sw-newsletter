@@ -31,7 +31,9 @@ test('Android Latest Updates parser extracts dated Camera library rows', () => {
 
   assert.equal(items.length, 1);
   assertParsedItemContract(items[0]);
-  assert.equal(items[0].url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta01');
+  assert.equal(items[0].publishedAt, 'March 25, 2026');
+  assert.equal(items[0].version_or_release, 'CameraX 1.6.0');
+  assert.equal(items[0].url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0');
   assert.match(items[0].api_or_component, /CameraX|androidx\.camera|Android developer update/);
 });
 
@@ -116,18 +118,19 @@ test('AOSP Site updates parser extracts paragraph and anchor camera child rows o
     section: 'Android / AOSP / Camera'
   }));
 
-  assert.equal(items.length, 5);
+  assert.equal(items.length, 6);
   for (const item of items) {
     assertParsedItemContract(item);
-    assert.equal(item.publishedAt, '2026-05-01');
+    assert.equal(item.publishedAt, '2026-04-01');
     assert.equal(item.datePrecision, 'month');
-    assert.equal(item.sourceMonth, 'May 2026');
-    assert.equal(item.version_or_release, 'AOSP Site Updates - May 2026');
+    assert.equal(item.sourceMonth, 'April 2026');
+    assert.equal(item.version_or_release, 'AOSP Site Updates - April 2026');
   }
   const titles = items.map(item => item.title);
   assert.deepEqual(titles, [
     'Camera ITS',
     'Test camera images',
+    'Camera Provider',
     'CDD camera orientation',
     'Camera images automation',
     'Automotive Camera Service'
@@ -164,11 +167,36 @@ test('CameraX release notes parser normalizes Version headings and CameraX API e
 
   assert.equal(items.length, 1);
   assertParsedItemContract(items[0]);
-  assert.equal(items[0].publishedAt, 'May 6, 2026');
+  assert.equal(items[0].publishedAt, 'March 25, 2026');
   assert.equal(items[0].version_or_release, 'CameraX 1.6.0');
   assert.match(items[0].title, /CameraX Release Notes - CameraX 1\.6\.0/);
   assert.match(items[0].api_or_component, /CameraX \/ (CameraPipe|SessionConfig|ImageAnalysis|VideoCapture|PreviewView|CameraController|CameraEffect|androidx\.camera)/);
   assert.match(items[0].behavior_change, /Added CameraPipe SessionConfig support/);
+});
+
+test('libcamera release announcement parser extracts v0.7.1 dated camera pipeline evidence', () => {
+  const html = readTextFixture('source-html/libcamera-release-v0.7.1.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'libcamera-release-announcements',
+    name: 'libcamera Release Announcements',
+    url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
+    sourceUrl: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html'
+  }));
+
+  assert.equal(items.length, 3);
+  for (const item of items) {
+    assertParsedItemContract(item);
+    assert.equal(item.publishedAt, '2026-04-28');
+    assert.equal(item.version_or_release, 'libcamera v0.7.1');
+    assert.equal(item.relevanceBucketHint, 'camera_driver_image_pipeline');
+    assert.match(item.api_or_component, /libcamera|V4L2|SoftISP|pipeline|sensor/);
+    assert.match(item.behavior_change, /released|updated|updates|improves/i);
+  }
+  assert.ok(items.some(item => /SoftISP/.test(item.title)));
+  assert.ok(items.some(item => /pipeline handler and sensor configuration/.test(item.title)));
+  assert.ok(items.some(item => item.url === 'https://gitlab.freedesktop.org/camera/libcamera/-/issues/311'));
+  assert.ok(items.some(item => item.url === 'https://gitlab.freedesktop.org/camera/libcamera/-/issues/300'));
 });
 
 test('AOSP camera documentation links stay on watchlist fallback path', () => {

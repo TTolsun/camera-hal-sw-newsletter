@@ -57,14 +57,24 @@ test('classifies article-level Linux camera subsystem and pipeline evidence as d
 
 test('classifies public SoC platform signals without excluding them', () => {
   const soc = classifyAospCameraStackCandidate({
-    title: 'Qualcomm Snapdragon platform update improves GPU and NPU DVFS',
-    summary: 'The public SoC note discusses memory bandwidth, thermal limits, interconnect, and CPU scheduler behavior.'
+    title: 'Qualcomm Snapdragon platform update improves camera performance latency',
+    summary: 'The public SoC note discusses GPU power, thermal limits, NPU scheduling, and camera latency for video capture workloads.'
   });
 
   assert.equal(soc.relevance_bucket, BUCKETS.SOC_PLATFORM_SIGNAL);
   assert.equal(soc.editorial_priority, 4);
   assert.equal(soc.counts_as_soc_topic, true);
   assert.ok(soc.soc_platform_relevance > 0);
+});
+
+test('keeps generic SoC, GPU, and NPU benchmark coverage out of non-fallback SoC bucket', () => {
+  const soc = classifyAospCameraStackCandidate({
+    title: 'SoC benchmark compares GPU and NPU performance',
+    summary: 'The benchmark discusses CPU scores, GPU throughput, NPU performance, cache, memory bandwidth, and scheduler behavior.'
+  });
+
+  assert.equal(soc.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+  assert.equal(soc.counts_as_soc_topic, false);
 });
 
 test('classifies C++ AI and tooling as fallback', () => {
