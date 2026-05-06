@@ -26,7 +26,10 @@ const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } 
 const { isSafeExternalImageUrl } = require('../render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
+  ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
   COMPOSITION_MODES,
+  MIN_FINAL_ARTICLES,
+  MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
   buildShortlistReport,
   normalizeUrl,
   normalizedUrlHash,
@@ -217,10 +220,27 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   const editorReviewRequired = options.editorReviewRequired ?? report.editor_review_required ?? diagnostics.editor_review_required ?? compositionMode !== COMPOSITION_MODES.NORMAL;
   const compositionSummary = report.composition_summary || diagnostics.composition_summary || {};
   const eligibleCompositionSummary = report.eligible_composition_summary || {};
+  const selectedArticleCount = report.selected_article_count ?? diagnostics.final_selected_article_count ?? null;
+  const nonFallbackReviewableCount = compositionSummary.non_fallback_reviewable_article_count ?? null;
+  const selectionPolicy = report.selection_policy || {};
+  const minFinalArticles = report.min_final_articles ?? selectionPolicy.min_final_articles ?? MIN_FINAL_ARTICLES;
+  const absoluteMinReviewable = report.absolute_min_reviewable_articles ?? selectionPolicy.absolute_min_reviewable_articles ?? ABSOLUTE_MIN_REVIEWABLE_ARTICLES;
+  const minNonFallbackPublishReady = report.min_non_fallback_publish_ready_articles ??
+    selectionPolicy.min_non_fallback_publish_ready_articles ??
+    MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES;
+  const reviewGatePassed = report.review_gate_passed ?? (
+    Number(nonFallbackReviewableCount) >= absoluteMinReviewable &&
+    Number(selectedArticleCount) >= absoluteMinReviewable
+  );
+  const selectionPublishGatePassed = report.publish_gate_passed ?? (
+    Number(nonFallbackReviewableCount) >= minNonFallbackPublishReady &&
+    Number(selectedArticleCount) >= minFinalArticles
+  );
+  const publishGatePassed = options.publishGatePassed ?? selectionPublishGatePassed;
   return {
     input_candidate_count: report.input_candidate_count ?? null,
     eligible_candidate_count: report.eligible_candidate_count ?? null,
-    selected_article_count: report.selected_article_count ?? null,
+    selected_article_count: selectedArticleCount,
     deterministic_selected_count: diagnostics.deterministic_selected_count ?? report.deterministic_selected_count ?? report.selected_article_count ?? null,
     rendered_main_article_count: renderedMainArticleCount,
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
@@ -240,6 +260,11 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     publish_ready: report.publish_ready !== undefined ? Boolean(report.publish_ready) : null,
     selection_publish_ready: report.publish_ready !== undefined ? Boolean(report.publish_ready) : null,
     final_publish_ready: finalPublishReady,
+    review_gate_passed: Boolean(reviewGatePassed),
+    publish_gate_passed: Boolean(publishGatePassed),
+    min_final_articles: minFinalArticles,
+    absolute_min_reviewable_articles: absoluteMinReviewable,
+    min_non_fallback_publish_ready_articles: minNonFallbackPublishReady,
     composition_mode: compositionMode,
     selection_composition_mode: selectionCompositionMode,
     composition_reason: options.compositionReason || report.composition_reason || diagnostics.composition_reason || '',
@@ -1523,6 +1548,28 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
   return filePath;
 }
 
+function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = generationRunState.shortlistReport) {
+  fs.mkdirSync(newsroomDir, { recursive: true });
+  const date = shortlistReport?.date || generationRunState.date || runtimeConfig.newsletterDate || kstDate();
+  const selectionDiagnostics = selectionStatusExtra(shortlistReport);
+  const lines = [
+    `# Candidate Selection Diagnostics - ${date}`,
+    '',
+    renderCandidateSelectionDiagnostics(selectionDiagnostics),
+    '',
+    '## Gate Summary',
+    '',
+    `- Review Gate: ${selectionDiagnostics.review_gate_passed ? 'PASS' : 'FAIL'} (non-fallback Camera/Android/Driver/SoC >= ${selectionDiagnostics.absolute_min_reviewable_articles})`,
+    `- Publish Gate: ${selectionDiagnostics.publish_gate_passed ? 'PASS' : 'FAIL'} (non-fallback Camera/Android/Driver/SoC >= ${selectionDiagnostics.min_non_fallback_publish_ready_articles}; final articles >= ${selectionDiagnostics.min_final_articles})`,
+    `- selection_publish_ready: ${selectionDiagnostics.selection_publish_ready}`,
+    `- final_publish_ready: ${selectionDiagnostics.final_publish_ready}`,
+    ''
+  ];
+  const filePath = path.join(newsroomDir, 'selection-diagnostics.md');
+  fs.writeFileSync(filePath, `${lines.join('\n')}\n`, 'utf8');
+  return filePath;
+}
+
 async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
   generationRunState.date = date;
@@ -1558,6 +1605,7 @@ async function main() {
   generationRunState.shortlistReport = shortlistReport;
   generationRunState.selectedInputs = shortlistReport.selected_articles;
   writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
+  writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
   if (shortlistReport.selection_warnings.length > 0) {
     writeGenerationStatus(buildGenerationStatus({
       date,
@@ -1671,6 +1719,7 @@ async function main() {
     generationRunState.shortlistReport = shortlistReport;
     generationRunState.selectedInputs = shortlistReport.selected_articles;
     writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
+    writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
     articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates });
     writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
     for (const candidate of ensureArray(reporter.candidates)) {
@@ -2056,6 +2105,7 @@ async function main() {
     }, reporter);
     generationRunState.shortlistReport = shortlistReport;
     writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
+    writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
   }
 
   const removedSections = appendUniqueSections(
@@ -2149,6 +2199,8 @@ async function main() {
     generationStatus = 'QUALITY_NEEDS_FIX';
   }
   const finalPublishReady =
+    shortlistReport.publish_ready === true &&
+    ensureArray(editor.sections).length >= MIN_FINAL_ARTICLES &&
     generationStatus === 'PASS' &&
     qualityReport.status === 'PASS' &&
     validateResult.ok &&
@@ -2202,6 +2254,7 @@ async function main() {
         lockedArticleCount: retryHistory.at(-1)?.locked_article_headlines.length || 0,
         demotedArticleCount: retryHistory.at(-1)?.demoted_article_count ?? retryHistory.at(-1)?.demoted_sections?.length ?? 0,
         finalPublishReady,
+        publishGatePassed: finalPublishReady,
         compositionMode: finalCompositionMode,
         editorReviewRequired: finalEditorReviewRequired
       })
@@ -2250,6 +2303,7 @@ function writeTerminalFailureStatus(error) {
       qualityReport: generationRunState.qualityReport,
       factCheck: generationRunState.factCheck
     });
+    writeSelectionDiagnosticsArtifact(newsroomDir, generationRunState.shortlistReport);
   } catch (_) {
     // The status file below is the minimum required failure artifact.
   }

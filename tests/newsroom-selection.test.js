@@ -2,6 +2,8 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
+  MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
   buildShortlistReport,
   exclusionReasons,
   hasConcreteApiComponent,
@@ -122,16 +124,65 @@ test('three eligible candidates with an AI candidate are reviewable but not publ
   assert.equal(report.editor_review_required, true);
 });
 
-test('two eligible candidates remain a hard deterministic selection error', () => {
+test('one eligible non-fallback candidate remains a hard deterministic selection error', () => {
   const report = buildShortlistReport('2026-05-03', [
-    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
-    candidate({ title: 'On-device AI camera path update B', url: 'https://example.com/b', summary: 'AI inference update affects Android camera frame processing.' })
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' })
   ]);
 
-  assert.equal(report.selected_article_count, 2);
+  assert.equal(ABSOLUTE_MIN_REVIEWABLE_ARTICLES, 2);
+  assert.equal(report.selected_article_count, 1);
   assert.equal(report.publish_ready, false);
   assert.equal(report.composition_mode, 'NEEDS_FIX');
-  assert.ok(report.selection_errors.some(error => error.includes('Only 2 eligible')));
+  assert.ok(report.selection_errors.some(error => error.includes('Only 1 eligible')));
+});
+
+test('two non-fallback candidates plus fallback articles pass review gate but not publish gate', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
+    candidate({ title: 'Android Camera API change B fixes metadata behavior', url: 'https://example.com/b' }),
+    candidate({
+      title: 'GCC 17.1 C++ compiler release',
+      url: 'https://example.com/gcc-17',
+      summary: 'GCC C++ compiler release changes native build and sanitizer workflow behavior.',
+      api_or_component: 'GCC 17.1',
+      behavior_change: 'C++ compiler release changes native build and sanitizer workflow behavior.',
+      relevance_bucket: 'cpp_ai_tooling_fallback',
+      editorial_priority: 5,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 5,
+      counts_as_fallback_topic: true,
+      camera_hal_relevance_score: 0
+    }),
+    candidate({
+      title: 'LLVM 22 sanitizer runtime update',
+      url: 'https://example.com/llvm-22',
+      summary: 'LLVM sanitizer runtime update changes native test and debugging workflow behavior.',
+      api_or_component: 'LLVM 22.0',
+      behavior_change: 'Sanitizer runtime update changes native test and debugging workflow behavior.',
+      relevance_bucket: 'cpp_ai_tooling_fallback',
+      editorial_priority: 5,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 5,
+      counts_as_fallback_topic: true,
+      camera_hal_relevance_score: 0
+    })
+  ]);
+
+  assert.equal(MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES, 3);
+  assert.equal(report.selected_article_count, 4);
+  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 2);
+  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 2);
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.editor_review_required, true);
+  assert.deepEqual(report.selection_errors, []);
+  assert.ok(report.selection_shortage_hints.some(hint => hint.includes('Publish Gate requires 3')));
 });
 
 test('cpp fallback-only candidates do not count toward reviewable minimum', () => {

@@ -47,10 +47,13 @@ test('Android Latest Updates parser extracts CameraX table rows without generic 
     assert.equal(item.parentTitle, 'Android Developers Latest Updates');
     assert.equal(item.relevanceBucketHint, 'android_platform_camera_adjacent');
     assert.match(item.api_or_component, /CameraX|androidx\.camera/);
+    assert.match(item.title, /^CameraX 1\.5\.0-beta01 - /);
+    assert.match(item.url, /^https:\/\/developer\.android\.com\/jetpack\/androidx\/releases\/camera#/);
   }
-  assert.ok(items.some(item => item.title === 'Camera Maven Group versions'));
-  assert.ok(items.some(item => item.title === 'androidx.camera:camera-core'));
+  assert.ok(items.some(item => item.title === 'CameraX 1.5.0-beta01 - Camera Maven Group versions'));
+  assert.ok(items.some(item => item.title === 'CameraX 1.5.0-beta01 - androidx.camera:camera-core'));
   assert.equal(items.some(item => /Android Studio/i.test(item.title)), false);
+  assert.equal(items.some(item => item.title === 'View the Camera Library'), false);
 });
 
 test('Android Latest Updates parser extracts CameraX card links with nearby date evidence', () => {
@@ -66,8 +69,10 @@ test('Android Latest Updates parser extracts CameraX card links with nearby date
     assert.equal(item.parentTitle, 'Android Developers Latest Updates');
     assert.equal(item.relevanceBucketHint, 'android_platform_camera_adjacent');
     assert.match(item.version_or_release, /CameraX 1\.5\.0-beta01/);
+    assert.match(item.title, /^CameraX 1\.5\.0-beta01 - androidx\.camera:/);
+    assert.match(item.url, /^https:\/\/developer\.android\.com\/jetpack\/androidx\/releases\/camera#/);
   }
-  assert.ok(items.some(item => item.url === 'https://developer.android.google.cn/jetpack/androidx/releases/camera?hl=ko#camera-video-1.5.0-beta01'));
+  assert.ok(items.some(item => item.url === 'https://developer.android.com/jetpack/androidx/releases/camera#camera-video-1.5.0-beta01'));
   assert.ok(items.some(item => item.url === 'https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.5.0-beta01'));
   assert.equal(items.some(item => /Android Studio/i.test(item.title)), false);
 });

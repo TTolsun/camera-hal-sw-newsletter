@@ -25,7 +25,11 @@ function normalizeUrl(value) {
   if (!raw) return '';
   try {
     const parsed = new URL(raw);
-    parsed.hash = '';
+    const hash = parsed.hash;
+    const preserveHash = parsed.hostname.toLowerCase() === 'developer.android.com' &&
+      parsed.pathname === '/jetpack/androidx/releases/camera' &&
+      /^#(?:camera-[a-z0-9-]+-)?\d+\.\d+\.\d+(?:[-\w.]*)?$/i.test(hash);
+    if (!preserveHash) parsed.hash = '';
     parsed.search = '';
     parsed.hostname = parsed.hostname.toLowerCase();
     return parsed.toString().replace(/\/$/, '').toLowerCase();

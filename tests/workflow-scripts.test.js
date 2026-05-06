@@ -23,6 +23,8 @@ test('generation status output falls back when status JSON is missing', () => {
   assert.equal(outputs.quality_threshold, 'n/a');
   assert.equal(outputs.publish_ready, 'false');
   assert.equal(outputs.final_publish_ready, 'false');
+  assert.equal(outputs.review_gate_passed, 'false');
+  assert.equal(outputs.publish_gate_passed, 'false');
 });
 
 test('generation status output includes multiline selection diagnostics', () => {
@@ -34,6 +36,11 @@ test('generation status output includes multiline selection diagnostics', () => 
     quality_threshold: 85,
     publish_ready: false,
     final_publish_ready: false,
+    review_gate_passed: true,
+    publish_gate_passed: false,
+    min_final_articles: 4,
+    absolute_min_reviewable_articles: 2,
+    min_non_fallback_publish_ready_articles: 3,
     composition_mode: 'THIN_WEEK_REVIEW',
     editor_review_required: true,
     underfilled: true,
@@ -67,6 +74,11 @@ test('generation status output includes multiline selection diagnostics', () => 
   assert.equal(outputs.stale_claim_hard_failure_count, '0');
   assert.equal(outputs.non_fallback_reviewable_article_count, '1');
   assert.equal(outputs.eligible_non_fallback_reviewable_article_count, '1');
+  assert.equal(outputs.review_gate_passed, 'true');
+  assert.equal(outputs.publish_gate_passed, 'false');
+  assert.equal(outputs.min_final_articles, '4');
+  assert.equal(outputs.absolute_min_reviewable_articles, '2');
+  assert.equal(outputs.min_non_fallback_publish_ready_articles, '3');
   assert.match(rendered, /candidate_selection_diagnostics<<EOF/);
   assert.match(rendered, /missing dated evidence \(4\)/);
   assert.match(rendered, /selection_warnings=Thin-week review path/);
@@ -87,6 +99,11 @@ test('newsroom PR body separates quality score threshold and result', () => {
       publish_ready: false,
       selection_publish_ready: false,
       final_publish_ready: false,
+      review_gate_passed: true,
+      publish_gate_passed: false,
+      min_final_articles: 4,
+      absolute_min_reviewable_articles: 2,
+      min_non_fallback_publish_ready_articles: 3,
       composition_mode: 'THIN_WEEK_REVIEW',
       selection_composition_mode: 'THIN_WEEK_REVIEW',
       editor_review_required: true,
@@ -126,7 +143,11 @@ test('newsroom PR body separates quality score threshold and result', () => {
   assert.match(body, /## Composition Summary/);
   assert.match(body, /composition_mode: THIN_WEEK_REVIEW/);
   assert.match(body, /final_publish_ready: false/);
+  assert.match(body, /Review Gate: true \(non-fallback Camera\/Android\/Driver\/SoC >= 2\)/);
+  assert.match(body, /Publish Gate: false \(non-fallback Camera\/Android\/Driver\/SoC >= 3; final articles >= 4; quality\/fact-check\/site validation pass\)/);
   assert.match(body, /editor_review_required: true/);
+  assert.match(body, /review_gate_passed: true/);
+  assert.match(body, /publish_gate_passed: false/);
   assert.match(body, /direct_aosp_camera count: 1/);
   assert.match(body, /deterministic_selected_count: 5/);
   assert.match(body, /rendered_main_article_count: 3/);
@@ -150,6 +171,11 @@ test('newsroom PR body marks fallback composition explicitly', () => {
       publish_ready: true,
       selection_publish_ready: true,
       final_publish_ready: true,
+      review_gate_passed: true,
+      publish_gate_passed: true,
+      min_final_articles: 4,
+      absolute_min_reviewable_articles: 2,
+      min_non_fallback_publish_ready_articles: 3,
       editor_review_required: true,
       underfilled: false,
       composition_mode: 'FALLBACK_COMPOSITION',
@@ -177,6 +203,54 @@ test('newsroom PR body marks fallback composition explicitly', () => {
   assert.match(body, /cpp_ai_tooling_fallback count: 1/);
   assert.match(body, /Fallback composition:/);
   assert.match(body, /Do not add artificial Camera HAL wording/);
+});
+
+test('newsroom PR body explains review-only fallback when publish gate is blocked', () => {
+  const body = buildNewsroomPrBody({
+    date: '2026-05-03',
+    validateOutcome: 'success',
+    status: {
+      status: 'PASS',
+      fact_check_status: 'PASS',
+      must_fix_count: 0,
+      quality_status: 'PASS',
+      quality_score: 91,
+      quality_threshold: 85,
+      publish_ready: false,
+      selection_publish_ready: false,
+      final_publish_ready: false,
+      review_gate_passed: true,
+      publish_gate_passed: false,
+      min_final_articles: 4,
+      absolute_min_reviewable_articles: 2,
+      min_non_fallback_publish_ready_articles: 3,
+      editor_review_required: true,
+      underfilled: false,
+      composition_mode: 'NEEDS_FIX',
+      selection_composition_mode: 'FALLBACK_COMPOSITION',
+      direct_aosp_camera_count: 1,
+      camera_driver_image_pipeline_count: 1,
+      android_platform_camera_adjacent_count: 0,
+      soc_platform_signal_count: 0,
+      cpp_ai_tooling_fallback_count: 2,
+      generic_tech_watchlist_count: 0,
+      non_fallback_reviewable_article_count: 2,
+      composition_reason: 'Review Gate passed with 2 non-fallback candidates, but Publish Gate requires 3.',
+      deterministic_selected_count: 4,
+      rendered_main_article_count: 4,
+      reserve_candidate_count: 5,
+      selected_article_count: 4,
+      final_selected_article_count: 4,
+      stale_claim_status: 'PASS',
+      stale_claim_removed_count: 0,
+      stale_claim_hard_failure_count: 0
+    }
+  });
+
+  assert.match(body, /Recommended editor action: Use this as an editor-review PR only; add stronger non-fallback Camera\/Android\/Driver\/SoC candidates before publishing\./);
+  assert.match(body, /composition_mode: NEEDS_FIX/);
+  assert.match(body, /selection_composition_mode: FALLBACK_COMPOSITION/);
+  assert.match(body, /Review Gate passed, but Publish Gate is still blocked/);
 });
 
 test('weekly newsroom workflow separates review PR success from publish-ready gate', () => {

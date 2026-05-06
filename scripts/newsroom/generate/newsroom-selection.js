@@ -11,7 +11,8 @@ const SHORTLIST_CAP = 12;
 const RESERVE_MIN_CANDIDATES = 4;
 const RESERVE_MAX_CANDIDATES = 7;
 const MIN_FINAL_ARTICLES = 4;
-const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = 3;
+const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = 2;
+const MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES = 3;
 const MAX_FINAL_ARTICLES = 5;
 const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
 const MIN_CAMERA_HAL_DIRECTNESS = 2;
@@ -55,7 +56,11 @@ function normalizeUrl(value) {
   if (!raw) return '';
   try {
     const parsed = new URL(raw);
-    parsed.hash = '';
+    const hash = parsed.hash;
+    const preserveHash = parsed.hostname.toLowerCase() === 'developer.android.com' &&
+      parsed.pathname === '/jetpack/androidx/releases/camera' &&
+      /^#(?:camera-[a-z0-9-]+-)?\d+\.\d+\.\d+(?:[-\w.]*)?$/i.test(hash);
+    if (!preserveHash) parsed.hash = '';
     parsed.search = '';
     parsed.hostname = parsed.hostname.toLowerCase();
     return parsed.toString().replace(/\/$/, '').toLowerCase();
@@ -612,6 +617,11 @@ function selectionErrors(selected) {
   return errors;
 }
 
+function publishGatePasses(summary) {
+  return number(summary.selected_article_count) >= MIN_FINAL_ARTICLES &&
+    number(summary.non_fallback_reviewable_article_count) >= MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES;
+}
+
 function summarizeExclusionReasons(excluded) {
   const counts = new Map();
   for (const candidate of ensureArray(excluded)) {
@@ -697,7 +707,9 @@ function selectionShortageHints(summary = {}) {
     hints.push('Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.');
   }
   if (number(summary.non_fallback_reviewable_article_count) < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
-    hints.push('C++/AI tooling fallback is support material only; collect at least three non-fallback Camera/Android/driver/SoC candidates before LLM generation.');
+    hints.push(`C++/AI tooling fallback is support material only; collect at least ${ABSOLUTE_MIN_REVIEWABLE_ARTICLES} non-fallback Camera/Android/driver/SoC candidates before LLM generation.`);
+  } else if (number(summary.non_fallback_reviewable_article_count) < MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES) {
+    hints.push(`Review Gate can proceed with ${ABSOLUTE_MIN_REVIEWABLE_ARTICLES} non-fallback Camera/Android/driver/SoC candidates, but Publish Gate requires ${MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES}.`);
   }
   return hints;
 }
@@ -718,6 +730,12 @@ function compositionMode(selected, errors = []) {
   if (summary.selected_article_count < MIN_FINAL_ARTICLES) {
     return COMPOSITION_MODES.THIN_WEEK_REVIEW;
   }
+  if (
+    summary.non_fallback_reviewable_article_count < MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES &&
+    summary.fallback_topic_count > 0
+  ) {
+    return COMPOSITION_MODES.FALLBACK_COMPOSITION;
+  }
   if (summary.primary_camera_stack_topic_count < 2 && summary.fallback_topic_count > 0) {
     return COMPOSITION_MODES.FALLBACK_COMPOSITION;
   }
@@ -726,6 +744,9 @@ function compositionMode(selected, errors = []) {
 
 function compositionReason(mode, summary) {
   if (mode === COMPOSITION_MODES.FALLBACK_COMPOSITION) {
+    if (summary.non_fallback_reviewable_article_count < MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES) {
+      return `Review Gate passed with ${summary.non_fallback_reviewable_article_count} non-fallback Camera/Android/driver/SoC candidate(s), but Publish Gate requires ${MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES}. SoC/platform or C++/AI fallback topics are review-only until stronger candidates are available.`;
+    }
     return `Primary AOSP Camera/driver/platform-adjacent candidates were below the normal target (${summary.primary_camera_stack_topic_count}); SoC/platform or C++/AI fallback topics filled the 4-5 article review set.`;
   }
   if (mode === COMPOSITION_MODES.THIN_WEEK_REVIEW) {
@@ -748,6 +769,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const composition = compositionSummary(selected);
   const eligibleComposition = compositionSummary(shortlist);
   const mode = compositionMode(selected, errors);
+  const reviewGatePassed = errors.length === 0;
+  const publishGatePassed = reviewGatePassed && publishGatePasses(composition);
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const markedShortlist = shortlist.map(candidate => {
     const match = selected.find(item => item.normalized_url === candidate.normalized_url);
@@ -792,11 +815,16 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     reserve_relevance_bucket_summary: summarizeBuckets(reserve),
     shortlist_cap: cap,
     absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
+    min_non_fallback_publish_ready_articles: MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
+    min_final_articles: MIN_FINAL_ARTICLES,
+    review_gate_passed: reviewGatePassed,
+    publish_gate_passed: publishGatePassed,
     underfilled: warnings.length > 0,
-    publish_ready: errors.length === 0 && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX,
+    publish_ready: publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX,
     selection_policy: {
       min_final_articles: MIN_FINAL_ARTICLES,
       absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
+      min_non_fallback_publish_ready_articles: MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
       max_final_articles: MAX_FINAL_ARTICLES,
       shortlist_target_range: '8-12 candidates before Gemini reporter/editor prompts.',
       main_article_score_threshold: MAIN_ARTICLE_SCORE_THRESHOLD,
@@ -813,7 +841,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       ],
       soc_platform_fallback: 'Public SoC / CPU / GPU / NPU / ISP / power / thermal / performance signals are lower-priority fallback, not excluded.',
       cxx_fallback: 'Use C++ / AI / developer productivity as fallback when it supports native camera, driver, SoC, build, test, debugging, or performance work.',
-      cxx_fallback_minimum_counting: 'cpp_ai_tooling_fallback does not count toward ABSOLUTE_MIN_REVIEWABLE_ARTICLES; deterministic hard gate requires three non-fallback Camera/Android/driver/SoC candidates.',
+      cxx_fallback_minimum_counting: `cpp_ai_tooling_fallback does not count toward ABSOLUTE_MIN_REVIEWABLE_ARTICLES; Review Gate requires ${ABSOLUTE_MIN_REVIEWABLE_ARTICLES} non-fallback Camera/Android/driver/SoC candidates and Publish Gate requires ${MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES}.`,
       generic_watchlist: 'generic_tech_watchlist is not automatically promoted to main article selection.'
     },
     primary_selected_articles: selected,
@@ -843,6 +871,7 @@ function reporterInputFromShortlist(shortlistReport) {
 
 module.exports = {
   ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
+  MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
   COMPOSITION_MODES,
   SHORTLIST_CAP,
   RESERVE_MIN_CANDIDATES,

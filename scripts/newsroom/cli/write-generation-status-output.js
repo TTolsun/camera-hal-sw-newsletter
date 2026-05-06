@@ -36,6 +36,11 @@ const OUTPUT_FIELDS = [
   'publish_ready',
   'selection_publish_ready',
   'final_publish_ready',
+  'review_gate_passed',
+  'publish_gate_passed',
+  'min_final_articles',
+  'absolute_min_reviewable_articles',
+  'min_non_fallback_publish_ready_articles',
   'composition_mode',
   'selection_composition_mode',
   'editor_review_required',
@@ -124,6 +129,8 @@ function buildGenerationStatusOutputs(status) {
   outputs.publish_ready = status.publish_ready === true ? 'true' : 'false';
   outputs.selection_publish_ready = status.selection_publish_ready === true ? 'true' : 'false';
   outputs.final_publish_ready = status.final_publish_ready === true ? 'true' : 'false';
+  outputs.review_gate_passed = status.review_gate_passed === true ? 'true' : 'false';
+  outputs.publish_gate_passed = status.publish_gate_passed === true ? 'true' : 'false';
   outputs.editor_review_required = status.editor_review_required === true ? 'true' : 'false';
   outputs.underfilled = status.underfilled === true ? 'true' : 'false';
   outputs.deterministic_selected_count = scalar(

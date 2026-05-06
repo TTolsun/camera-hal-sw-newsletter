@@ -170,7 +170,9 @@ function childChunks(body = '') {
     .filter(row => !/<th\b/i.test(row) || /<td\b/i.test(row));
   const listItems = [...String(body).matchAll(/<li\b[^>]*>[\s\S]*?<\/li>/gi)]
     .map(match => match[0]);
-  return rows.length > 0 ? rows : listItems;
+  const articleCards = [...String(body).matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/gi)]
+    .map(match => match[0]);
+  return rows.length > 0 ? rows : listItems.length > 0 ? listItems : articleCards;
 }
 
 function indexedChildChunks(body = '') {
@@ -180,7 +182,9 @@ function indexedChildChunks(body = '') {
     .filter(item => !/<th\b/i.test(item.chunk) || /<td\b/i.test(item.chunk));
   const listItems = [...value.matchAll(/<li\b[^>]*>[\s\S]*?<\/li>/gi)]
     .map(match => ({ chunk: match[0], index: match.index || 0 }));
-  return rows.length > 0 ? rows : listItems;
+  const articleCards = [...value.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/gi)]
+    .map(match => ({ chunk: match[0], index: match.index || 0 }));
+  return rows.length > 0 ? rows : listItems.length > 0 ? listItems : articleCards;
 }
 
 function surroundingText(html = '', index = 0, length = 0, before = 1400, after = 900) {
@@ -211,6 +215,56 @@ function cameraVersionFromText(text = '', fallback = '') {
     return `CameraX ${version}`;
   }
   return version || fallback;
+}
+
+function cameraVersionToken(value = '') {
+  const match = String(value).match(/\b\d+\.\d+\.\d+(?:[-\w.]*)?\b/i);
+  return match ? match[0] : '';
+}
+
+function cameraComponentFromText(value = '', fallback = 'CameraX / androidx.camera') {
+  const match = String(value).match(/\bandroidx\.camera(?::[a-z0-9-]+)?\b/i);
+  if (match) return `CameraX / ${match[0]}`;
+  if (/CameraX|camera maven group|androidx\.camera|camera library/i.test(value)) return fallback;
+  return fallback;
+}
+
+function cameraLatestUpdateTitle(title = '', version = '', component = '') {
+  const cleanTitle = clean(title);
+  const versionToken = cameraVersionToken(version);
+  const componentLabel = String(component || 'CameraX / androidx.camera').replace(/^CameraX\s*\/\s*/i, '');
+  if (versionToken && /\b(?:View the Camera Library|Camera Maven Group versions|Camera Library)\b/i.test(cleanTitle)) {
+    return `CameraX ${versionToken} - ${cleanTitle}`;
+  }
+  if (versionToken && /^androidx\.camera/i.test(cleanTitle)) {
+    return `CameraX ${versionToken} - ${cleanTitle}`;
+  }
+  if (versionToken && (!cleanTitle || cleanTitle === componentLabel)) {
+    return `CameraX ${versionToken} - ${componentLabel}`;
+  }
+  return cleanTitle || [componentLabel, versionToken].filter(Boolean).join(' ');
+}
+
+function canonicalCameraReleaseUrl(value = '', version = '') {
+  const raw = String(value || '').trim();
+  if (!raw) return raw;
+  try {
+    const parsed = new URL(raw);
+    if (parsed.hostname === 'developer.android.google.cn') parsed.hostname = 'developer.android.com';
+    if (parsed.hostname === 'developer.android.com') parsed.searchParams.delete('hl');
+    const versionToken = cameraVersionToken(version);
+    if (
+      parsed.hostname === 'developer.android.com' &&
+      parsed.pathname === '/jetpack/androidx/releases/camera' &&
+      !parsed.hash &&
+      versionToken
+    ) {
+      parsed.hash = `#${versionToken}`;
+    }
+    return parsed.toString();
+  } catch {
+    return raw;
+  }
 }
 
 function isCameraUpdateRow(text = '') {
@@ -384,7 +438,7 @@ function parseAndroidLatestUpdates(html, source) {
     component: 'CameraX / androidx.camera',
     sourceKind: 'release_note_item',
     keep: (title, href) => /Camera Maven Group versions|CameraX|androidx\.camera|camera/i.test(`${title} ${href}`),
-    versionFallback: (title, href) => cameraVersionFromText(`${title} ${href}`, 'CameraX / androidx.camera'),
+    versionFallback: (title, href) => cameraVersionFromText(`${title} ${href}`, ''),
     dateFallback: (_title, _href, nearby) => firstDate(nearby),
     dedupeWithHash: true,
     limit: 12
@@ -393,21 +447,29 @@ function parseAndroidLatestUpdates(html, source) {
     parentUrl: source.url,
     parentTitle: source.name,
     sourceSection: source.section || '',
-    api_or_component: 'CameraX / androidx.camera',
+    api_or_component: cameraComponentFromText(`${item.title} ${item.url} ${item.summary} ${item.api_or_component}`),
     version_or_release: cameraVersionFromText(`${item.title} ${item.url} ${item.version_or_release}`, item.version_or_release),
     relevanceBucketHint: 'android_platform_camera_adjacent'
-  }));
+  }))
+    .map(item => ({
+      ...item,
+      title: cameraLatestUpdateTitle(item.title, item.version_or_release, item.api_or_component),
+      url: canonicalCameraReleaseUrl(item.url, item.version_or_release)
+    }))
+    .filter(hasReleaseItemEvidence);
 
   const rowsByKey = new Map();
   const addRow = (chunk, contextText = '', contextTitle = '') => {
-    const title = childTitle(chunk, source.url);
+    const rawTitle = childTitle(chunk, source.url);
     const anchor = firstAnchor(chunk, source.url);
     const cells = tableCells(chunk);
-    const rowIdentity = `${title} ${anchor?.href || ''} ${cells.slice(0, 2).join(' ')}`;
-    const evidenceText = `${contextTitle} ${title} ${clean(chunk)} ${clean(contextText)}`;
+    const rowIdentity = `${rawTitle} ${anchor?.href || ''} ${cells.slice(0, 2).join(' ')}`;
+    const evidenceText = `${contextTitle} ${rawTitle} ${clean(chunk)} ${clean(contextText)}`;
     if (!/\b(?:Camera Maven Group versions|CameraX|androidx\.camera|camera)\b/i.test(rowIdentity)) return;
     const date = firstDate(evidenceText);
-    const version = cameraVersionFromText(evidenceText, 'CameraX / androidx.camera');
+    const version = cameraVersionFromText(evidenceText, '');
+    const component = cameraComponentFromText(evidenceText);
+    const title = cameraLatestUpdateTitle(rawTitle, version, component);
     const extractedBehavior = firstBehavior(`${clean(chunk)} ${clean(contextText)}`);
     const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
       ? extractedBehavior
@@ -415,7 +477,7 @@ function parseAndroidLatestUpdates(html, source) {
     const item = {
       source,
       title,
-      url: anchor?.url || urlWithFragment(source.url, `${contextTitle} ${title}`),
+      url: canonicalCameraReleaseUrl(anchor?.url || urlWithFragment(source.url, `${contextTitle} ${title}`), version),
       publishedAt: date,
       parentUrl: source.url,
       parentTitle: source.name,
@@ -424,7 +486,7 @@ function parseAndroidLatestUpdates(html, source) {
       sourceKind: 'release_note_item',
       collectionMode: 'release-note-item',
       version_or_release: version,
-      api_or_component: 'CameraX / androidx.camera',
+      api_or_component: component,
       behavior_change: behavior,
       relevanceBucketHint: 'android_platform_camera_adjacent'
     };
@@ -442,7 +504,7 @@ function parseAndroidLatestUpdates(html, source) {
     addRow(item.chunk, surroundingText(html, item.index, item.chunk.length), '');
   }
   rows.push(...rowsByKey.values());
-  return uniqueParserItems([...linked, ...rows])
+  return uniqueParserItems([...rows, ...linked])
     .filter(item => item.publishedAt && item.version_or_release && item.api_or_component && item.behavior_change)
     .slice(0, 12);
 }

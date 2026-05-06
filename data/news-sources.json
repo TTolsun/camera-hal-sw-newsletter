@@ -70,12 +70,16 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Android developer 생태계와 platform update 감시",
+      "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
       "keywords": [
         "Android",
         "developer",
         "Jetpack",
-        "tools"
+        "tools",
+        "CameraX",
+        "androidx.camera",
+        "Camera2",
+        "Android Camera"
       ]
     },
     {
@@ -155,14 +159,16 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Android platform release, CTS/VTS/ITS, compatibility change 확인",
+      "usageHint": "Android platform release, CTS/VTS/ITS, Camera ITS, compatibility change 확인",
       "keywords": [
         "Android",
         "AOSP",
         "CTS",
         "VTS",
         "ITS",
-        "compatibility"
+        "compatibility",
+        "Camera HAL",
+        "Camera ITS"
       ]
     },
     {
@@ -221,7 +227,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "Android framework/system/vendor security fix와 camera 관련 security lead 확인",
+      "usageHint": "Android framework/system/vendor security fix와 camera/media/vendor component 관련 security lead 확인",
       "keywords": [
         "Android",
         "security",
@@ -290,7 +296,10 @@
         "camera",
         "pipeline",
         "ChromeOS",
-        "Android"
+        "Android",
+        "V4L2",
+        "media controller",
+        "image sensor"
       ]
     },
     {
@@ -372,7 +381,9 @@
         "PipeWire",
         "V4L2",
         "kernel",
-        "testing"
+        "testing",
+        "camera",
+        "media"
       ]
     },
     {
@@ -386,13 +397,15 @@
       "enabled": true,
       "candidateOnly": true,
       "requiresCrossCheck": true,
-      "usageHint": "Linux kernel release change summary lead 확인",
+      "usageHint": "Linux kernel release change summary에서 V4L2, media, camera driver lead 확인",
       "keywords": [
         "Linux",
         "kernel",
         "release",
         "driver",
-        "media"
+        "media",
+        "V4L2",
+        "camera"
       ]
     },
     {
@@ -726,7 +739,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": true,
-      "usageHint": "SoC, semiconductor, AI chip, sensor, hardware ecosystem trend 확인",
+      "usageHint": "SoC, semiconductor, AI chip, ISP, image sensor, hardware ecosystem trend 확인",
       "keywords": [
         "semiconductor",
         "SoC",
@@ -734,7 +747,8 @@
         "sensor",
         "Samsung",
         "Qualcomm",
-        "image sensor"
+        "image sensor",
+        "ISP"
       ]
     },
     {

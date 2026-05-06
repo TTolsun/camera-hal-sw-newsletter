@@ -93,6 +93,9 @@ function recommendedEditorAction(status, validateOutcome, staleSummary, mustFixS
   if (status.composition_mode === 'THIN_WEEK_REVIEW') {
     return 'Use this as an editor-review PR only; add stronger candidates or wait for a fuller article pool before publishing.';
   }
+  if (status.review_gate_passed === true && status.publish_gate_passed === false) {
+    return 'Use this as an editor-review PR only; add stronger non-fallback Camera/Android/Driver/SoC candidates before publishing.';
+  }
   if (status.composition_mode === 'FALLBACK_COMPOSITION') {
     return 'Review fallback SoC/platform/tooling framing and publish only if the practical developer relevance is explicit.';
   }
@@ -148,6 +151,8 @@ function buildNewsroomPrBody(options = {}) {
     `Publish ready: ${booleanText(status.publish_ready)}`,
     `Selection publish ready: ${booleanText(status.selection_publish_ready)}`,
     `Final publish ready: ${booleanText(status.final_publish_ready)}`,
+    `Review Gate: ${booleanText(status.review_gate_passed)} (non-fallback Camera/Android/Driver/SoC >= ${valueOrUnknown(status.absolute_min_reviewable_articles)})`,
+    `Publish Gate: ${booleanText(status.publish_gate_passed)} (non-fallback Camera/Android/Driver/SoC >= ${valueOrUnknown(status.min_non_fallback_publish_ready_articles)}; final articles >= ${valueOrUnknown(status.min_final_articles)}; quality/fact-check/site validation pass)`,
     `Editor review required: ${booleanText(status.editor_review_required)}`,
     `Underfilled thin-week path: ${booleanText(status.underfilled)}`,
     `Stale claim status: ${staleSummary.status}`,
@@ -170,6 +175,8 @@ function buildNewsroomPrBody(options = {}) {
     `- selection_composition_mode: ${valueOrUnknown(status.selection_composition_mode ?? status.composition_mode)}`,
     `- final_publish_ready: ${booleanText(status.final_publish_ready)}`,
     `- editor_review_required: ${booleanText(status.editor_review_required)}`,
+    `- review_gate_passed: ${booleanText(status.review_gate_passed)}`,
+    `- publish_gate_passed: ${booleanText(status.publish_gate_passed)}`,
     `- direct_aosp_camera count: ${valueOrUnknown(status.direct_aosp_camera_count ?? status.composition_summary?.direct_aosp_camera_count)}`,
     `- camera_driver_image_pipeline count: ${valueOrUnknown(status.camera_driver_image_pipeline_count ?? status.composition_summary?.camera_driver_image_pipeline_count)}`,
     `- android_platform_camera_adjacent count: ${valueOrUnknown(status.android_platform_camera_adjacent_count ?? status.composition_summary?.android_platform_camera_adjacent_count)}`,
@@ -177,14 +184,18 @@ function buildNewsroomPrBody(options = {}) {
     `- cpp_ai_tooling_fallback count: ${valueOrUnknown(status.cpp_ai_tooling_fallback_count ?? status.composition_summary?.cpp_ai_tooling_fallback_count)}`,
     `- generic_tech_watchlist count: ${valueOrUnknown(status.generic_tech_watchlist_count ?? status.composition_summary?.generic_tech_watchlist_count)}`,
     `- non_fallback_reviewable_article_count: ${valueOrUnknown(status.non_fallback_reviewable_article_count ?? status.composition_summary?.non_fallback_reviewable_article_count)}`,
+    `- gate thresholds: review >= ${valueOrUnknown(status.absolute_min_reviewable_articles)} non-fallback; publish >= ${valueOrUnknown(status.min_non_fallback_publish_ready_articles)} non-fallback and >= ${valueOrUnknown(status.min_final_articles)} final articles`,
     `- source/parser hints: ${ensureArray(status.selection_shortage_hints).join('; ') || 'none'}`,
     `- composition reason: ${valueOrUnknown(status.composition_reason)}`,
     ''
   );
 
-  if (status.composition_mode === 'FALLBACK_COMPOSITION') {
+  if (status.composition_mode === 'FALLBACK_COMPOSITION' || status.selection_composition_mode === 'FALLBACK_COMPOSITION') {
     lines.push(
       'Fallback composition: direct AOSP Camera/driver candidates were limited, so SoC/platform or C++/AI tooling articles are included as lower-priority reviewable main articles. Do not add artificial Camera HAL wording; keep the practical SoC/platform/native development connection explicit.',
+      status.publish_gate_passed === false
+        ? 'Review Gate passed, but Publish Gate is still blocked until stronger non-fallback Camera/Android/Driver/SoC coverage is available.'
+        : '',
       ''
     );
   }
