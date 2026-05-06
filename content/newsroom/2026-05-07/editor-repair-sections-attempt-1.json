@@ -1,0 +1,102 @@
+{
+  "locked_sections": [
+    {
+      "index": 1,
+      "headline": "libcamera v0.7.1 릴리스: 파이프라인 및 센서 구성 업데이트",
+      "category": "Camera Driver",
+      "urls": [
+        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
+      ],
+      "source_titles": [
+        "libcamera Release Announcements - libcamera v0.7.1",
+        "libcamera v0.7.1 - pipeline handler and sensor configuration"
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Glaze v7.2.0 릴리스: C++26 Reflection 통합 및 다중 형식 지원 강화",
+      "category": "Native Tooling",
+      "urls": [
+        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+      ],
+      "source_titles": [
+        "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more"
+      ]
+    }
+  ],
+  "failed_sections": [
+    {
+      "index": 1,
+      "headline": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+      "category": "Native Tooling",
+      "urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "source_titles": [
+        "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!"
+      ]
+    }
+  ],
+  "regenerated_sections": [
+    {
+      "index": 1,
+      "headline": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+      "category": "Native Tooling",
+      "urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "source_titles": [
+        "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!"
+      ]
+    }
+  ],
+  "rejected_retry_outputs": [],
+  "max_section_repairs": 1,
+  "repair_plan": [
+    {
+      "headline": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+      "sources": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "action": "repair-section",
+      "failure_type": "image-fallback",
+      "allow_rewrite": true,
+      "policy_reason": "section-scoped repair is allowed",
+      "source_gap": false,
+      "reporter_eligibility_violations": [],
+      "deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual.",
+          "location": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화"
+        }
+      ],
+      "recommended_fixes": []
+    }
+  ],
+  "skipped_repair_plan": [
+    {
+      "headline": "Glaze v7.2.0 릴리스: C++26 Reflection 통합 및 다중 형식 지원 강화",
+      "sources": [
+        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+      ],
+      "action": "repair-section",
+      "failure_type": "image-fallback",
+      "allow_rewrite": true,
+      "policy_reason": "section-scoped repair is allowed",
+      "source_gap": false,
+      "reporter_eligibility_violations": [],
+      "deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual.",
+          "location": "Glaze v7.2.0 릴리스: C++26 Reflection 통합 및 다중 형식 지원 강화"
+        }
+      ],
+      "recommended_fixes": []
+    }
+  ]
+}

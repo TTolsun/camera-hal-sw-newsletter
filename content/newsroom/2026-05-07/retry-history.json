@@ -1,0 +1,526 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash-lite",
+    "score": 83,
+    "threshold": 85,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 4,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [
+      {
+        "title": "libcamera Release Announcements - libcamera v0.7.1",
+        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "source": "libcamera Release Announcements",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "libcamera v0.7.1 - pipeline handler and sensor configuration",
+        "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+        "source": "libcamera Release Announcements",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+        "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "libcamera Release Announcements - libcamera v0.7.1",
+        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "source": "libcamera Release Announcements",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "libcamera v0.7.1 - pipeline handler and sensor configuration",
+        "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+        "source": "libcamera Release Announcements",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+        "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+        "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "libcamera v0.7.1 릴리스: SoftISP 디베이어링 및 처리량 개선",
+        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "source": "libcamera Release Announcements - libcamera v0.7.1",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Glaze v7.2.0 릴리스: C++26 Reflection 통합 및 다중 형식 지원 강화",
+        "blocking": false,
+        "severity": "soft"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+        "blocking": false,
+        "severity": "soft"
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 4 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard"
+      }
+    ],
+    "selected_article_headlines": [
+      "libcamera v0.7.1 릴리스: 파이프라인 및 센서 구성 업데이트",
+      "Glaze v7.2.0 릴리스: C++26 Reflection 통합 및 다중 형식 지원 강화",
+      "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+      "libcamera v0.7.1 릴리스: SoftISP 디베이어링 및 처리량 개선"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+        "category": "Native Tooling",
+        "urls": [
+          "https://isocpp.org//blog/2026/04/gcc-16.1"
+        ],
+        "source_titles": [
+          "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!"
+        ]
+      }
+    ],
+    "regenerated_sections": [
+      {
+        "index": 1,
+        "headline": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+        "category": "Native Tooling",
+        "urls": [
+          "https://isocpp.org//blog/2026/04/gcc-16.1"
+        ],
+        "source_titles": [
+          "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!"
+        ]
+      }
+    ],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "repair-section: GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+      "complete-missing-articles: requested 1, added 1"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+        "sources": [
+          "https://isocpp.org//blog/2026/04/gcc-16.1"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Glaze v7.2.0 릴리스: C++26 Reflection 통합 및 다중 형식 지원 강화",
+        "sources": [
+          "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Glaze v7.2.0 릴리스: C++26 Reflection 통합 및 다중 형식 지원 강화"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 3,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [
+      {
+        "title": "libcamera v0.7.1 릴리스: SoftISP 디베이어링 및 처리량 개선",
+        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "source": "libcamera Release Announcements - libcamera v0.7.1",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "source_gap_count": 0,
+    "must_fix_count": 4
+  },
+  {
+    "attempt": 2,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-2.5-flash, fact-checker=gemini-2.5-flash",
+    "score": 83,
+    "threshold": 85,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 4,
+    "locked_article_count": 0,
+    "demoted_article_count": 1,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [
+      {
+        "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "source": "libcamera Release Announcements",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+        "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+        "source": "libcamera Release Announcements",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+        "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+        "source": "libcamera Release Announcements",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "reason": "duplicate_demoted_url"
+      },
+      {
+        "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+        "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "source": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "reason": "duplicate_demoted_url"
+      }
+    ],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+        "blocking": false,
+        "severity": "soft"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+        "blocking": false,
+        "severity": "soft"
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 3 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard"
+      }
+    ],
+    "selected_article_headlines": [
+      "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+      "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+      "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+      "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [
+      "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+    ],
+    "replaced_sections": [
+      "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+    ],
+    "locked_sections": [],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "category": "C++ 및 개발 도구",
+        "urls": [
+          "https://isocpp.org//blog/2026/04/gcc-16.1"
+        ],
+        "source_titles": [
+          "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+        ]
+      }
+    ],
+    "regenerated_sections": [
+      {
+        "index": 1,
+        "headline": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "category": "브리핑",
+        "urls": [
+          "https://isocpp.org//blog/2026/04/gcc-16.1"
+        ],
+        "source_titles": [
+          "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+        ]
+      }
+    ],
+    "rejected_retry_outputs": [
+      {
+        "title": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "source": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "reason": "duplicate_demoted_url"
+      }
+    ],
+    "repair_actions": [
+      "replace-or-demote: GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "sources": [
+          "https://isocpp.org//blog/2026/04/gcc-16.1"
+        ],
+        "action": "replace-or-demote",
+        "failure_type": "scope-demotion",
+        "allow_rewrite": false,
+        "policy_reason": "structured scope demotion must open replacement or reserve path",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선"
+          },
+          {
+            "category": "source-integrity",
+            "points": 8,
+            "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+            "location": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+          },
+          {
+            "category": "scope-relevance",
+            "points": 8,
+            "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+            "location": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+        "sources": [
+          "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        ],
+        "action": "replace-or-demote",
+        "failure_type": "scope-demotion",
+        "allow_rewrite": false,
+        "policy_reason": "structured scope demotion must open replacement or reserve path",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선"
+          },
+          {
+            "category": "source-integrity",
+            "points": 8,
+            "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+            "location": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+          },
+          {
+            "category": "scope-relevance",
+            "points": 8,
+            "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+            "location": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+        "sources": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+        "sources": [
+          "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 2,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [
+      {
+        "title": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "source": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "reason": "duplicate_demoted_url"
+      }
+    ],
+    "source_gap_count": 0,
+    "must_fix_count": 3
+  }
+]

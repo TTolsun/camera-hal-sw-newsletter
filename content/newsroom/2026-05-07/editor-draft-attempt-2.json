@@ -1,0 +1,496 @@
+{
+  "date": "2026-05-07",
+  "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-07",
+  "summary": "이번 주 뉴스레터는 libcamera v0.7.1 릴리스의 주요 변경 사항에 초점을 맞춥니다. Raspberry Pi의 Atomic control lists 개선, 파이프라인 핸들러 및 센서 구성 업데이트, SoftISP 디베이어링 및 처리량 개선 등 Linux 카메라 드라이버 스택의 핵심 업데이트가 포함되어 있습니다. 또한, GCC 16.1 및 Glaze 7.2의 C++26 Reflection 지원은 향후 AOSP Camera HAL 및 드라이버 개발의 native 코드 품질과 효율성에 영향을 미칠 수 있습니다.",
+  "briefing": [
+    "libcamera v0.7.1이 2026년 4월 28일 릴리스되어 Raspberry Pi의 Atomic control lists 및 Simple pipeline AGC/AWB 통계가 개선되었습니다.",
+    "libcamera v0.7.1에는 파이프라인 핸들러 및 센서 구성 동작 업데이트가 포함되어 Android Camera HAL의 드라이버 인터페이스에 영향을 줄 수 있습니다.",
+    "GCC 16.1 및 Glaze 7.2의 C++26 Reflection 지원은 AOSP Camera HAL의 native 코드에서 데이터 직렬화 및 설정 관리를 효율화할 잠재력을 가집니다."
+  ],
+  "sections": [
+    {
+      "category": "카메라 드라이버 및 이미지 파이프라인",
+      "headline": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+      "what_changed": "libcamera v0.7.1이 2026년 4월 28일에 릴리스되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC(Auto Gain Control), AWB(Auto White Balance) 통계 수정 등 다양한 패치가 포함되어 있습니다.",
+      "confirmed_facts": [
+        "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
+        "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
+        "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다."
+      ],
+      "evidence_summary": "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 AGC/AWB 통계 수정 패치를 포함합니다. 이는 libcamera-devel 메일링 리스트를 통해 확인되었습니다.",
+      "specificity_checks": [
+        "버전: libcamera v0.7.1",
+        "릴리스 날짜: 2026년 4월 28일",
+        "API/컴포넌트: libcamera / V4L2 camera pipeline, Atomic control lists, Simple pipeline AGC/AWB 통계",
+        "동작 변경: Raspberry Pi의 Atomic control lists 개선, Simple pipeline의 비례 AGC 및 AWB 통계 수정",
+        "출처 페이지: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+      ],
+      "source_verification_notes": [
+        "libcamera-devel 메일링 리스트에서 v0.7.1 릴리스 공지를 확인했습니다.",
+        "공지 내용에 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 수정이 명시되어 있습니다."
+      ],
+      "background": "libcamera는 Linux 기반 시스템에서 카메라 하드웨어와 상호 작용하는 표준화된 프레임워크입니다. Android Camera HAL은 내부적으로 V4L2 또는 libcamera와 같은 Linux 미디어 스택을 사용하여 카메라 드라이버와 통신합니다. Atomic control lists는 여러 카메라 컨트롤을 단일 트랜잭션으로 적용하여 일관된 상태를 보장하는 메커니즘이며, AGC/AWB 통계는 이미지 처리 파이프라인에서 노출 및 화이트 밸런스를 조정하는 데 사용됩니다.",
+      "why_it_matters": "libcamera의 이러한 업데이트는 Android Camera HAL 구현 및 최적화에 간접적인 영향을 미칠 수 있습니다. 특히, Raspberry Pi와 같은 임베디드 플랫폼에서 libcamera를 사용하는 경우, 드라이버 수준의 개선 사항이 HAL의 안정성 및 성능에 긍정적인 영향을 줄 수 있습니다. AGC/AWB 통계 개선은 이미지 품질 향상으로 이어질 수 있습니다.",
+      "camera_hal_perspective": "HAL은 libcamera의 직접적인 사용자가 아닐 수 있지만, vendor kernel 드라이버가 libcamera 또는 유사한 V4L2 기반 추상화를 사용하는 경우, 이러한 개선 사항은 HAL의 안정성과 성능에 영향을 미칩니다. Atomic control lists의 개선은 HAL이 요청하는 여러 카메라 파라미터가 동시에 적용될 때 발생할 수 있는 경쟁 조건이나 불일치 문제를 줄이는 데 도움이 될 수 있습니다. AGC/AWB 통계 개선은 HAL이 노출 및 화이트 밸런스 제어를 위해 드라이버로부터 받는 메타데이터의 정확도를 높여, 더 나은 이미지 처리 결과를 얻는 데 기여할 수 있습니다.",
+      "camera_hal_checks": [
+        "현재 개발 중인 vendor kernel 드라이버가 libcamera 또는 유사한 V4L2 기반 Atomic control 메커니즘을 사용하는지 확인하고, 해당 구현이 최신 libcamera 개선 사항을 반영하는지 검토합니다.",
+        "자동 노출(AE) 및 자동 화이트 밸런스(AWB) 모드에서 Preview + ImageCapture 스트림 조합을 사용하여 이미지 품질 및 메타데이터 일관성을 테스트하고, libcamera v0.7.1의 통계 개선이 적용되었을 때의 변화를 관찰합니다.",
+        "Raspberry Pi 기반 개발 보드를 사용하는 경우, libcamera v0.7.1로 업데이트한 후 카메라 동작의 안정성 및 성능 회귀 여부를 확인합니다."
+      ],
+      "action_hints": [
+        "vendor kernel 드라이버의 libcamera/V4L2 구현을 검토하여 Atomic control lists 및 AGC/AWB 통계 관련 패치 적용 여부를 확인합니다.",
+        "AE/AWB 모드에서 이미지 품질 및 메타데이터 일관성 테스트를 수행합니다.",
+        "Raspberry Pi 기반 플랫폼에서 업데이트 후 카메라 동작을 검증합니다."
+      ],
+      "action_items": [
+        "카메라 드라이버 팀은 현재 vendor kernel의 V4L2/libcamera 구현에서 Atomic control lists 및 AGC/AWB 통계 처리 로직을 검토하고, libcamera v0.7.1의 관련 패치가 적용되었는지 확인합니다.",
+        "Preview + ImageCapture 스트림 조합을 사용하여 자동 노출 및 자동 화이트 밸런스 모드에서 YUV 및 JPEG 출력의 이미지 품질과 captureResult 메타데이터의 일관성을 측정하는 회귀 테스트를 2주 내에 수행합니다.",
+        "Raspberry Pi 기반 레퍼런스 장치에서 libcamera v0.7.1 업데이트 후, Preview, ImageCapture, VideoCapture 스트림의 동시 사용 시나리오에서 프레임 드롭, 지연 시간, 열 관리 성능에 변화가 있는지 로그를 통해 확인합니다."
+      ],
+      "team_summary": "libcamera v0.7.1은 Raspberry Pi Atomic control lists 및 AGC/AWB 통계 개선을 포함합니다. HAL 팀은 vendor 드라이버의 관련 구현을 검토하고, AE/AWB 모드에서 이미지 품질 및 메타데이터 일관성을 테스트해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "libcamera Release Announcements",
+          "validationStatus": "ok",
+          "alt": "libcamera logo",
+          "contentType": "image/jpeg",
+          "height": 630,
+          "width": 1200
+        }
+      ],
+      "selectedImage": "../../assets/images/fallback/newsletter-default.svg",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No suitable image candidates were provided for this article. The source is a mailing list archive and does not contain relevant images.",
+      "sources": [
+        {
+          "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        }
+      ],
+      "counts_as_driver_topic": true,
+      "counts_as_fallback_topic": false,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_soc_topic": false,
+      "editorial_priority": 2,
+      "evidence_origin": "article_text",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
+      "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source_hint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      }
+    },
+    {
+      "category": "카메라 드라이버 및 이미지 파이프라인",
+      "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+      "what_changed": "libcamera v0.7.1 릴리스(2026년 4월 28일)에서 카메라 지원을 위한 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다.",
+      "confirmed_facts": [
+        "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
+        "카메라 지원을 위한 파이프라인 핸들러 동작이 업데이트되었습니다.",
+        "센서 구성 동작이 업데이트되었습니다."
+      ],
+      "evidence_summary": "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, 파이프라인 핸들러 및 센서 구성 동작 업데이트를 포함합니다. 이는 libcamera GitLab 이슈 트래커를 통해 확인되었습니다.",
+      "specificity_checks": [
+        "버전: libcamera v0.7.1",
+        "릴리스 날짜: 2026년 4월 28일",
+        "API/컴포넌트: libcamera pipeline handler / image sensor configuration",
+        "동작 변경: 카메라 지원을 위한 파이프라인 핸들러 및 센서 구성 동작 업데이트",
+        "출처 페이지: https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
+      ],
+      "source_verification_notes": [
+        "libcamera GitLab 이슈 #300에서 v0.7.1 릴리스에 포함된 파이프라인 핸들러 및 센서 구성 업데이트를 확인했습니다.",
+        "릴리스 날짜는 다른 libcamera v0.7.1 릴리스 공지와 일치합니다."
+      ],
+      "background": "libcamera의 파이프라인 핸들러는 카메라 하드웨어와 소프트웨어 스택 간의 데이터 흐름을 관리하는 핵심 구성 요소입니다. 센서 구성은 이미지 센서의 해상도, 프레임 속도, 픽셀 형식 등 다양한 동작 파라미터를 설정하는 것을 의미합니다. 이러한 구성은 이미지 캡처 파이프라인의 초기 단계에서 이루어지며, 최종 이미지 품질과 성능에 직접적인 영향을 미칩니다.",
+      "why_it_matters": "libcamera의 파이프라인 핸들러 및 센서 구성 업데이트는 Android Camera HAL의 드라이버 인터페이스 및 이미지 센서 제어 방식에 영향을 미칠 수 있습니다. HAL은 카메라 센서의 모드를 설정하고, 스트림 구성을 드라이버에 전달하며, 버퍼를 관리합니다. 이러한 하위 레벨의 변경 사항은 HAL의 스트림 구성 유효성 검사, 센서 모드 선택 로직, 그리고 전반적인 카메라 파이프라인의 안정성에 영향을 줄 수 있습니다.",
+      "camera_hal_perspective": "HAL은 `camera3_device_ops_t`를 통해 드라이버와 상호 작용하며, `configure_streams` 및 `process_capture_request`와 같은 함수를 사용하여 센서 모드 및 파이프라인 동작을 제어합니다. libcamera의 파이프라인 핸들러 및 센서 구성 업데이트는 HAL이 드라이버에 전달하는 스트림 구성 및 캡처 요청이 하위 레벨에서 어떻게 해석되고 처리되는지에 영향을 미칩니다. 특히, 특정 센서 모드나 스트림 조합이 예상대로 작동하지 않거나, 성능 저하가 발생할 경우, 드라이버의 파이프라인 핸들러 변경 사항을 검토해야 할 수 있습니다.",
+      "camera_hal_checks": [
+        "HAL의 `configure_streams` 구현에서 지원하는 모든 스트림 조합과 센서 모드(예: `SENSOR_MODE_HIGH_RESOLUTION`, `SENSOR_MODE_VIDEO`)에 대해 CTS/VTS/Camera ITS 테스트를 다시 실행하여 회귀 여부를 확인합니다.",
+        "다양한 해상도 및 프레임 속도 설정에서 Preview + ImageCapture 스트림 조합을 사용하여 프레임 드롭, 지연 시간, 버퍼 할당/해제 패턴을 모니터링하고, 예상치 못한 동작이 있는지 확인합니다.",
+        "vendor kernel 드라이버의 센서 구성 및 파이프라인 핸들러 관련 코드를 검토하여 libcamera v0.7.1의 변경 사항이 올바르게 통합되었는지 확인합니다."
+      ],
+      "action_hints": [
+        "모든 스트림 조합 및 센서 모드에 대한 CTS/VTS/Camera ITS 테스트를 재실행합니다.",
+        "다양한 해상도 및 프레임 속도에서 프레임 드롭, 지연 시간, 버퍼 패턴을 모니터링합니다.",
+        "vendor kernel 드라이버의 센서 구성 및 파이프라인 핸들러 코드를 검토합니다."
+      ],
+      "action_items": [
+        "HAL 팀은 현재 지원하는 모든 `camera3_stream_t` 스트림 조합과 `ANDROID_SENSOR_MODE` 설정에 대해 Camera ITS `test_sensor_mode_selection.py` 및 `test_stream_configurations.py`를 포함한 관련 테스트를 2주 내에 재실행하여 회귀 여부를 확인합니다.",
+        "Preview (YUV) + ImageCapture (JPEG) 스트림 조합을 사용하여 30fps 및 60fps 모드에서 `logcat`을 통해 프레임 드롭 및 버퍼 할당/해제 로그를 수집하고, 예상치 못한 패턴 변화가 있는지 분석합니다.",
+        "카메라 드라이버 팀은 vendor kernel의 V4L2/libcamera 센서 구성 및 파이프라인 핸들러 관련 패치를 검토하여 libcamera v0.7.1의 변경 사항이 HAL의 스트림 구성 요청과 호환되는지 확인합니다."
+      ],
+      "team_summary": "libcamera v0.7.1의 파이프라인 핸들러 및 센서 구성 업데이트는 HAL의 스트림 구성 및 센서 제어에 영향을 미칠 수 있습니다. HAL 팀은 CTS/VTS/ITS 테스트를 재실행하고, 프레임 드롭 및 버퍼 패턴을 모니터링해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "libcamera Release Announcements",
+          "validationStatus": "ok",
+          "alt": "libcamera 로고가 있는 GitLab 트위터 카드 이미지"
+        }
+      ],
+      "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+      "imageSource": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+      "imageAttribution": "libcamera Release Announcements",
+      "imageAlt": "libcamera 로고가 있는 GitLab 트위터 카드 이미지",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "The image is from the source GitLab page and provides a visual context for libcamera. It is a clean, relevant image.",
+      "sources": [
+        {
+          "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
+        }
+      ],
+      "counts_as_driver_topic": true,
+      "counts_as_fallback_topic": false,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_soc_topic": false,
+      "editorial_priority": 2,
+      "evidence_origin": "article_text",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "source_candidate_hash": "d99c6b850c32004c156f6b7447cdc2e8c9701a62d90c6c31e526d481b4c1fb61",
+      "source_candidate_url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+      "source_hint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "resolvedImage": {
+        "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+        "src": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
+      }
+    },
+    {
+      "category": "카메라 드라이버 및 이미지 파이프라인",
+      "headline": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+      "what_changed": "libcamera v0.7.1 릴리스(2026년 4월 28일)에서 카메라 이미지 처리를 위한 SoftISP 디베이어링(debaying) 및 처리량 동작이 업데이트되었습니다.",
+      "confirmed_facts": [
+        "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
+        "SoftISP 디베이어링 동작이 업데이트되었습니다.",
+        "SoftISP 처리량 동작이 업데이트되었습니다."
+      ],
+      "evidence_summary": "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, SoftISP 디베이어링 및 처리량 동작 업데이트를 포함합니다. 이는 libcamera GitLab 이슈 트래커를 통해 확인되었습니다.",
+      "specificity_checks": [
+        "버전: libcamera v0.7.1",
+        "릴리스 날짜: 2026년 4월 28일",
+        "API/컴포넌트: libcamera SoftISP / image pipeline",
+        "동작 변경: 카메라 이미지 처리를 위한 SoftISP 디베이어링 및 처리량 동작 업데이트",
+        "출처 페이지: https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
+      ],
+      "source_verification_notes": [
+        "libcamera GitLab 이슈 #311에서 v0.7.1 릴리스에 포함된 SoftISP 디베이어링 및 처리량 업데이트를 확인했습니다.",
+        "릴리스 날짜는 다른 libcamera v0.7.1 릴리스 공지와 일치합니다."
+      ],
+      "background": "SoftISP는 소프트웨어 기반의 이미지 신호 처리(ISP) 파이프라인을 의미합니다. 디베이어링(Debayering)은 Bayer 패턴으로 배열된 RAW 이미지 데이터에서 각 픽셀의 완전한 RGB 색상 정보를 복원하는 과정으로, 이미지 품질에 결정적인 영향을 미칩니다. 처리량(throughput)은 단위 시간당 처리할 수 있는 데이터의 양을 나타내며, 카메라 시스템의 성능과 직결됩니다.",
+      "why_it_matters": "libcamera의 SoftISP 업데이트는 Android Camera HAL의 이미지 처리 파이프라인, 특히 RAW 데이터 처리 및 ISP 튜닝에 대한 이해에 영향을 미칠 수 있습니다. 많은 SoC는 하드웨어 ISP를 사용하지만, 일부 플랫폼이나 특정 시나리오에서는 소프트웨어 ISP 구성 요소가 활용될 수 있습니다. 디베이어링 개선은 RAW 스트림의 품질에 직접적인 영향을 미치며, 처리량 개선은 고해상도 또는 고프레임 속도 스트림의 성능 병목 현상을 완화하는 데 기여할 수 있습니다.",
+      "camera_hal_perspective": "HAL은 `RAW_SENSOR` 스트림을 지원할 때 디베이어링되지 않은 RAW 데이터를 앱에 노출합니다. 만약 HAL이 내부적으로 SoftISP 구성 요소를 사용하거나, vendor ISP 드라이버가 libcamera SoftISP의 로직을 참조한다면, 이러한 개선 사항은 RAW 이미지 품질 및 처리 성능에 직접적인 영향을 미칩니다. HAL은 `ANDROID_CONTROL_AE_ANTIBANDING_MODE`와 같은 메타데이터를 통해 ISP 동작에 영향을 줄 수 있으므로, SoftISP의 처리량 개선은 HAL이 요청하는 복잡한 이미지 처리 작업의 지연 시간을 줄이는 데 도움이 될 수 있습니다.",
+      "camera_hal_checks": [
+        "RAW 스트림을 지원하는 장치에서 `RAW_SENSOR` + `YUV_420_888` 스트림 조합을 사용하여 이미지 품질(특히 색상 정확도 및 노이즈)을 측정하고, SoftISP 디베이어링 개선이 적용되었을 때의 변화를 관찰합니다.",
+        "고해상도 및 고프레임 속도(예: 4K 30fps 이상)에서 `YUV_420_888` 또는 `PRIVATE` 스트림을 사용하여 `logcat`을 통해 프레임 드롭 및 전체 파이프라인 지연 시간을 모니터링하여 처리량 개선 효과를 확인합니다.",
+        "카메라 드라이버 팀과 협력하여 vendor ISP 드라이버가 libcamera SoftISP의 디베이어링 또는 처리량 로직을 참조하거나 통합하는지 확인하고, 해당 업데이트가 적용되었는지 검토합니다."
+      ],
+      "action_hints": [
+        "RAW 스트림에서 이미지 품질을 측정하고 디베이어링 개선 효과를 관찰합니다.",
+        "고해상도/고프레임 속도 스트림에서 프레임 드롭 및 지연 시간을 모니터링하여 처리량 개선 효과를 확인합니다.",
+        "vendor ISP 드라이버의 SoftISP 관련 로직 통합 여부를 확인합니다."
+      ],
+      "action_items": [
+        "RAW 스트림을 지원하는 장치에서 `RAW_SENSOR` + `YUV_420_888` 스트림 조합으로 Camera ITS `test_raw_capture.py`를 실행하고, 디베이어링 품질(색상 정확도, 모아레 패턴)에 대한 측정 지표를 2주 내에 수집하여 SoftISP 개선 전후를 비교합니다.",
+        "4K 30fps `PRIVATE` 스트림을 사용하는 VideoCapture 시나리오에서 `adb shell dumpsys media.camera`를 통해 프레임 드롭률과 엔드투엔드 지연 시간을 측정하고, SoftISP 처리량 개선이 성능에 미치는 영향을 분석합니다.",
+        "카메라 드라이버 팀은 vendor ISP 드라이버의 디베이어링 및 이미지 처리 파이프라인이 libcamera SoftISP의 최신 개선 사항을 어떻게 통합하거나 참조하는지 문서화하고, HAL 팀과 공유합니다."
+      ],
+      "team_summary": "libcamera v0.7.1의 SoftISP 디베이어링 및 처리량 개선은 RAW 이미지 품질과 고성능 스트림에 영향을 줄 수 있습니다. HAL 팀은 RAW 스트림 품질과 고해상도/고프레임 속도 스트림의 성능을 측정해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "libcamera Release Announcements",
+          "validationStatus": "ok",
+          "alt": "libcamera 로고가 있는 GitLab 트위터 카드 이미지"
+        }
+      ],
+      "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+      "imageSource": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+      "imageAttribution": "libcamera Release Announcements",
+      "imageAlt": "libcamera 로고가 있는 GitLab 트위터 카드 이미지",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "The image is from the source GitLab page and provides a visual context for libcamera. It is a clean, relevant image.",
+      "sources": [
+        {
+          "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
+        }
+      ],
+      "counts_as_driver_topic": true,
+      "counts_as_fallback_topic": false,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_soc_topic": false,
+      "editorial_priority": 2,
+      "evidence_origin": "article_text",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "source_candidate_hash": "ab8ff018bbb94f4c0e045247e2e7e9ba8721dbe0fcd8f7b2f94a6e715cea0b3d",
+      "source_candidate_url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+      "source_hint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "resolvedImage": {
+        "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+        "src": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
+      }
+    },
+    {
+      "category": "C++ 및 개발 도구",
+      "headline": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+      "what_changed": "GCC 16.1이 2026년 4월 30일에 릴리스되었으며, C++26 Reflection 및 Contracts 지원, C++20 표준 기본 설정 등 다양한 기능이 업데이트되었습니다.",
+      "confirmed_facts": [
+        "GCC 16.1은 2026년 4월 30일에 릴리스되었습니다.",
+        "C++26 Reflection 기능에 대한 지원이 추가되었습니다.",
+        "C++26 Contracts 기능에 대한 지원이 추가되었습니다.",
+        "C++20 표준이 기본 설정으로 적용되었습니다."
+      ],
+      "evidence_summary": "GCC 16.1 릴리스는 2026년 4월 30일에 ISO C++ Blog를 통해 발표되었으며, C++26 Reflection 및 Contracts 지원, C++20 기본 설정 등의 주요 변경 사항을 포함합니다.",
+      "specificity_checks": [
+        "버전: GCC 16.1",
+        "릴리스 날짜: 2026년 4월 30일",
+        "API/컴포넌트: GCC, C++26 Reflection, C++26 Contracts, C++20",
+        "동작 변경: C++26 Reflection 및 Contracts 지원 추가, C++20 기본 설정",
+        "출처 페이지: https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "source_verification_notes": [
+        "ISO C++ Blog 게시물에서 GCC 16.1 릴리스 공지를 확인했습니다.",
+        "게시물에 C++26 Reflection, Contracts 지원 및 C++20 기본 설정이 명시되어 있습니다."
+      ],
+      "background": "GCC(GNU Compiler Collection)는 널리 사용되는 컴파일러 모음입니다. C++26은 C++ 표준의 다음 주요 버전이며, Reflection과 Contracts는 이 버전에 도입될 예정인 중요한 기능들입니다. Reflection은 런타임에 프로그램의 구조를 검사하고 조작할 수 있게 하며, Contracts는 코드의 사전 조건, 사후 조건, 불변 조건을 명시적으로 정의하여 버그를 줄이고 코드 안정성을 높이는 데 도움을 줍니다. Android native 개발은 주로 Clang/LLVM을 사용하지만, C++ 표준의 발전은 모든 C++ 개발자에게 중요합니다.",
+      "why_it_matters": "Android native 개발은 Clang/LLVM을 중심으로 하지만, GCC의 C++26 기능 업데이트는 C++ 표준의 발전을 보여주며, 향후 AOSP Camera HAL 및 드라이버 개발에 사용될 수 있는 언어 기능에 대한 통찰력을 제공합니다. Reflection은 복잡한 메타데이터 구조를 동적으로 처리하거나, 설정 파일을 파싱하는 데 유용할 수 있으며, Contracts는 HAL 및 드라이버 코드의 안정성과 디버깅 용이성을 크게 향상시킬 잠재력을 가집니다.",
+      "camera_hal_perspective": "Camera HAL은 C++로 구현되며, `camera3_capture_request_t` 및 `camera3_capture_result_t`와 같은 복잡한 구조체와 메타데이터를 다룹니다. C++26 Reflection은 이러한 구조체의 필드를 런타임에 동적으로 접근하고 직렬화/역직렬화하는 데 활용될 수 있어, HAL의 메타데이터 처리 로직을 간소화하고 유지보수성을 높일 수 있습니다. Contracts는 HAL 인터페이스의 사전 조건(예: 유효한 스트림 구성) 및 사후 조건(예: 올바른 버퍼 반환)을 명시적으로 정의하여, 드라이버와의 계약 위반을 컴파일 또는 런타임에 조기에 감지하고 크래시를 방지하는 데 기여할 수 있습니다.",
+      "camera_hal_checks": [
+        "현재 Camera HAL 및 드라이버 코드베이스에서 Reflection 또는 Contracts와 유사한 기능을 수동으로 구현한 패턴을 식별하고, C++26 표준 기능으로 대체할 수 있는 잠재적 영역을 평가합니다.",
+        "Clang/LLVM 컴파일러의 C++26 Reflection 및 Contracts 지원 로드맵을 모니터링하여, AOSP 빌드 시스템에 통합될 시점을 예측하고 HAL 코드에 적용 가능성을 검토합니다.",
+        "HAL의 주요 인터페이스 함수(예: `process_capture_request`, `configure_streams`)에 Contracts를 적용했을 때의 코드 가독성 및 버그 감지 효과를 개념적으로 분석합니다."
+      ],
+      "action_hints": [
+        "HAL/드라이버 코드에서 Reflection/Contracts 유사 패턴을 식별하고 표준 기능으로 대체 가능성을 평가합니다.",
+        "Clang/LLVM의 C++26 지원 로드맵을 모니터링합니다.",
+        "주요 HAL 인터페이스 함수에 Contracts 적용 효과를 분석합니다."
+      ],
+      "action_items": [
+        "HAL 및 드라이버 팀은 현재 C++ 코드베이스에서 `camera3_capture_request_t` 및 `camera3_capture_result_t` 메타데이터 처리 로직에서 Reflection 또는 Contracts와 유사한 수동 검증/직렬화 패턴을 식별하고, C++26 표준 기능으로 대체할 경우의 코드 복잡도 감소 및 안정성 향상 효과를 2주 내에 PoC(Proof of Concept)를 통해 평가합니다.",
+        "AOSP 빌드 시스템에서 사용되는 Clang/LLVM 컴파일러의 C++26 Reflection 및 Contracts 지원 로드맵을 확인하고, 해당 기능이 안정화되어 AOSP에 통합될 때 HAL 코드에 적용하기 위한 기술 부채(technical debt) 항목을 생성합니다.",
+        "HAL의 `process_capture_request` 함수에 대한 가상의 Contracts 정의를 작성하고, 이를 통해 어떤 종류의 드라이버 버그(예: 유효하지 않은 버퍼 핸들 반환)를 컴파일 또는 런타임에 조기에 감지할 수 있을지 분석 보고서를 작성합니다."
+      ],
+      "team_summary": "GCC 16.1은 C++26 Reflection 및 Contracts를 지원합니다. HAL 팀은 이러한 기능이 HAL의 메타데이터 처리 및 코드 안정성에 미칠 잠재적 영향을 평가하고, Clang/LLVM 로드맵을 모니터링해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "cpp_ai_tooling_fallback",
+      "imageCandidates": [
+        {
+          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "libcamera Release Announcements",
+          "validationStatus": "ok",
+          "alt": "libcamera logo",
+          "contentType": "image/jpeg",
+          "height": 630,
+          "width": 1200
+        }
+      ],
+      "selectedImage": "../../assets/images/fallback/cpp.svg",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No suitable image candidates were provided for this article. The source is a blog post and does not contain relevant images.",
+      "sources": [
+        {
+          "title": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+        }
+      ],
+      "counts_as_driver_topic": false,
+      "counts_as_fallback_topic": true,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_soc_topic": false,
+      "editorial_priority": 5,
+      "evidence_origin": "article_text",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "source_candidate_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
+      "source_candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 5,
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/cpp.svg",
+        "src": "../../assets/images/fallback/cpp.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      }
+    },
+    {
+      "category": "C++ 및 개발 도구",
+      "headline": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+      "what_changed": "Glaze v7.2.0이 2026년 4월 28일에 릴리스되었으며, C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 더 많은 데이터 직렬화/역직렬화 형식을 지원합니다.",
+      "confirmed_facts": [
+        "Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.",
+        "C++26 Reflection 지원이 Glaze에 통합되었습니다.",
+        "YAML, CBOR, MessagePack, TOML 등 다양한 데이터 형식을 지원합니다."
+      ],
+      "evidence_summary": "Glaze v7.2.0 릴리스는 2026년 4월 28일에 ISO C++ Blog를 통해 발표되었으며, C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다.",
+      "specificity_checks": [
+        "버전: Glaze v7.2.0",
+        "릴리스 날짜: 2026년 4월 28일",
+        "API/컴포넌트: Glaze C++26 Reflection, YAML, CBOR, MessagePack, TOML",
+        "동작 변경: C++26 Reflection 지원 통합, 다양한 데이터 형식 지원",
+        "출처 페이지: https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+      ],
+      "source_verification_notes": [
+        "ISO C++ Blog 게시물에서 Glaze v7.2.0 릴리스 공지를 확인했습니다.",
+        "게시물에 C++26 Reflection 지원 및 다양한 데이터 형식 지원이 명시되어 있습니다."
+      ],
+      "background": "Glaze는 C++용 JSON/CBOR/YAML 직렬화 라이브러리로, 특히 C++26 Reflection을 활용하여 컴파일 타임에 타입 정보를 얻어 효율적인 직렬화/역직렬화를 수행합니다. YAML, CBOR, MessagePack, TOML은 각각 다른 특성을 가진 데이터 직렬화 형식으로, 설정 파일, 네트워크 통신, 데이터 저장 등 다양한 용도로 사용됩니다. Android Camera HAL 및 드라이버는 복잡한 설정 및 메타데이터를 다루므로, 효율적인 데이터 직렬화는 중요한 과제입니다.",
+      "why_it_matters": "Glaze 라이브러리의 C++26 Reflection 지원은 AOSP Camera HAL 및 드라이버의 native C++ 코드에서 데이터 직렬화/역직렬화 및 설정 관리를 효율적으로 처리하는 데 활용될 수 있습니다. 이는 특히 복잡한 메타데이터 구조를 다루거나, 다양한 형식의 설정 파일을 파싱해야 할 때 유용할 수 있습니다. C++26 Reflection을 통해 수동으로 작성해야 했던 보일러플레이트 코드를 줄이고, 코드 유지보수성을 향상시킬 수 있습니다.",
+      "camera_hal_perspective": "Camera HAL은 `vendor.camera.hal.config`와 같은 설정 파일을 통해 동작을 구성하거나, `camera3_capture_result_t`에 vendor-specific 메타데이터를 추가할 수 있습니다. Glaze 7.2의 C++26 Reflection 지원은 이러한 설정 파일(예: YAML, TOML 형식)을 파싱하고, HAL의 내부 데이터 구조로 매핑하는 과정을 자동화하고 최적화할 수 있습니다. 또한, `vendor.camera.hal.stats`와 같은 복잡한 메타데이터를 효율적으로 직렬화하여 로그나 디버깅 목적으로 저장하는 데 활용될 수 있어, 개발 생산성과 디버깅 용이성을 높일 수 있습니다.",
+      "camera_hal_checks": [
+        "현재 HAL 및 드라이버 코드에서 설정 파일 파싱(예: XML, JSON) 또는 복잡한 메타데이터 직렬화/역직렬화에 사용되는 라이브러리 또는 수동 구현을 식별하고, Glaze 7.2와 C++26 Reflection을 활용하여 개선할 수 있는 잠재적 영역을 평가합니다.",
+        "Glaze 7.2를 사용하여 `camera3_capture_result_t`의 일부 vendor-specific 메타데이터를 YAML 또는 CBOR 형식으로 직렬화/역직렬화하는 PoC를 구현하고, 성능(CPU 사용량, 지연 시간) 및 바이너리 크기 영향을 측정합니다.",
+        "AOSP 빌드 시스템에서 Glaze와 같은 외부 C++ 라이브러리를 통합할 때의 빌드 복잡도 및 ABI 호환성 위험을 평가합니다."
+      ],
+      "action_hints": [
+        "HAL/드라이버 코드에서 설정 파일 파싱 및 메타데이터 직렬화/역직렬화 개선 영역을 식별합니다.",
+        "Glaze 7.2를 사용하여 vendor 메타데이터 직렬화/역직렬화 PoC를 구현하고 성능을 측정합니다.",
+        "Glaze 통합 시 빌드 복잡도 및 ABI 호환성 위험을 평가합니다."
+      ],
+      "action_items": [
+        "HAL 팀은 `vendor.camera.hal.config`와 같은 설정 파일 파싱 로직 또는 `camera3_capture_result_t`의 vendor-specific 메타데이터 직렬화/역직렬화 로직을 검토하여, Glaze 7.2와 C++26 Reflection을 활용하여 개선할 수 있는 잠재적 후보군 2개 이상을 2주 내에 식별합니다.",
+        "Glaze 7.2를 사용하여 HAL의 특정 `vendor.camera.hal.stats` 메타데이터 구조체를 CBOR 형식으로 직렬화하고 역직렬화하는 PoC를 구현하고, 이 과정에서 발생하는 CPU 사용량 및 지연 시간을 측정하여 기존 방식과 비교하는 보고서를 작성합니다.",
+        "AOSP 빌드 시스템에 Glaze 라이브러리를 통합하기 위한 `Android.bp` 또는 `Android.mk` 파일 초안을 작성하고, 빌드 시간 증가 및 최종 바이너리 크기 변화를 평가하여 통합 비용을 분석합니다."
+      ],
+      "team_summary": "Glaze 7.2는 C++26 Reflection을 지원하여 다양한 데이터 형식의 직렬화/역직렬화를 효율화합니다. HAL 팀은 이를 활용하여 설정 파일 파싱 및 메타데이터 관리를 개선하고, 성능 및 통합 비용을 평가해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "cpp_ai_tooling_fallback",
+      "imageCandidates": [
+        {
+          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "sourceKind": "release_note_item",
+          "licenseStatus": "unknown",
+          "attribution": "libcamera Release Announcements",
+          "validationStatus": "ok",
+          "alt": "libcamera logo",
+          "contentType": "image/jpeg",
+          "height": 630,
+          "width": 1200
+        }
+      ],
+      "selectedImage": "../../assets/images/fallback/cpp.svg",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No suitable image candidates were provided for this article. The source is a blog post and does not contain relevant images.",
+      "sources": [
+        {
+          "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        }
+      ],
+      "counts_as_driver_topic": false,
+      "counts_as_fallback_topic": true,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_soc_topic": false,
+      "editorial_priority": 5,
+      "evidence_origin": "article_text",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "source_candidate_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
+      "source_candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 5,
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/cpp.svg",
+        "src": "../../assets/images/fallback/cpp.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      }
+    }
+  ],
+  "action_items": [
+    "카메라 드라이버 팀은 현재 vendor kernel의 V4L2/libcamera 구현에서 Atomic control lists 및 AGC/AWB 통계 처리 로직을 검토하고, libcamera v0.7.1의 관련 패치가 적용되었는지 확인합니다.",
+    "HAL 팀은 현재 지원하는 모든 `camera3_stream_t` 스트림 조합과 `ANDROID_SENSOR_MODE` 설정에 대해 Camera ITS `test_sensor_mode_selection.py` 및 `test_stream_configurations.py`를 포함한 관련 테스트를 2주 내에 재실행하여 회귀 여부를 확인합니다.",
+    "RAW 스트림을 지원하는 장치에서 `RAW_SENSOR` + `YUV_420_888` 스트림 조합으로 Camera ITS `test_raw_capture.py`를 실행하고, 디베이어링 품질(색상 정확도, 모아레 패턴)에 대한 측정 지표를 2주 내에 수집하여 SoftISP 개선 전후를 비교합니다.",
+    "HAL 및 드라이버 팀은 현재 C++ 코드베이스에서 `camera3_capture_request_t` 및 `camera3_capture_result_t` 메타데이터 처리 로직에서 Reflection 또는 Contracts와 유사한 수동 검증/직렬화 패턴을 식별하고, C++26 표준 기능으로 대체할 경우의 코드 복잡도 감소 및 안정성 향상 효과를 2주 내에 PoC(Proof of Concept)를 통해 평가합니다.",
+    "Glaze 7.2를 사용하여 HAL의 특정 `vendor.camera.hal.stats` 메타데이터 구조체를 CBOR 형식으로 직렬화하고 역직렬화하는 PoC를 구현하고, 이 과정에서 발생하는 CPU 사용량 및 지연 시간을 측정하여 기존 방식과 비교하는 보고서를 작성합니다."
+  ],
+  "references": [
+    {
+      "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
+    },
+    {
+      "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
+    },
+    {
+      "title": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+    }
+  ]
+}
