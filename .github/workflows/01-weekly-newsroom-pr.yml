@@ -209,6 +209,11 @@ jobs:
           REQUIRE_NEWSLETTER_DATE_FILE: "1"
         run: npm run validate
 
+      - name: Generate source effectiveness report
+        if: always() && steps.meta.outputs.has_reviewable_artifacts == 'true'
+        continue-on-error: true
+        run: npm run report:source-effectiveness -- --date "${{ steps.meta.outputs.date }}"
+
       - name: Snapshot newsroom debug artifacts
         if: always()
         run: |

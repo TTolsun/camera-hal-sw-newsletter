@@ -77,6 +77,35 @@ test('source gap heavy non-generic source is review source or parser', () => {
   assert.ok(gapHeavy.top_exclusion_reasons.some(item => item.reason === 'source_gap_risk=true'));
 });
 
+test('snake_case has_dated_evidence false excludes otherwise eligible candidates', () => {
+  const report = buildReport({
+    collectedCandidates: {
+      candidates: [
+        ...fixture.collectedCandidates.candidates,
+        {
+          source_id: 'effective-camera',
+          source_name: 'Effective Camera Source',
+          sourceUrl: 'https://camera.example.com/',
+          url: 'https://camera.example.com/articles/snake-case-undated',
+          title: 'Snake case undated camera item',
+          published_date: '2026-05-05',
+          finalSelectionEligibility: 'main',
+          has_dated_evidence: false,
+          main_eligible: true,
+          source_gap_risk: false,
+          reference_only: false,
+          briefing_only: false
+        }
+      ]
+    }
+  });
+  const effective = source(report, 'effective-camera');
+
+  assert.equal(effective.collected_count, 2);
+  assert.equal(effective.eligible_count, 1);
+  assert.ok(effective.top_exclusion_reasons.some(item => item.reason === 'hasDatedEvidence=false'));
+});
+
 test('rendered section URL matches normalized candidate URL', () => {
   const report = buildReport();
   const effective = source(report, 'effective-camera');
@@ -120,6 +149,12 @@ test('missing optional artifacts do not crash artifact generation', () => {
   const result = writeSourceEffectivenessArtifacts({ root: tempRoot, date });
   assert.equal(fs.existsSync(result.jsonPath), true);
   assert.equal(fs.existsSync(result.markdownPath), true);
+  assert.deepEqual(result.report.inputs.optional_artifacts, {
+    reporter_candidates: null,
+    editor_draft: null,
+    fact_check_report: null,
+    quality_report: null
+  });
   assert.ok(result.report.warnings.some(warning => warning.includes('reporter-candidates.json')));
   assert.ok(result.report.warnings.some(warning => warning.includes('editor-draft.json')));
 });
@@ -131,9 +166,21 @@ test('JSON and Markdown report output is deterministic', () => {
   const secondJson = JSON.stringify(second, null, 2);
   const firstMarkdown = renderSourceEffectivenessMarkdown(first);
   const secondMarkdown = renderSourceEffectivenessMarkdown(second);
+  const syntheticCollectedCount = first.sources
+    .filter(item => item.synthetic)
+    .reduce((sum, item) => sum + item.collected_count, 0);
 
   assert.equal(firstJson, secondJson);
   assert.equal(firstMarkdown, secondMarkdown);
+  assert.equal(first.summary.unregistered_candidate_count, syntheticCollectedCount);
+  assert.equal(first.summary.unregistered_candidate_count, 1);
+  assert.deepEqual(first.inputs.optional_artifacts, {
+    reporter_candidates: 'content/newsroom/2026-05-06/reporter-candidates.json',
+    editor_draft: 'content/newsroom/2026-05-06/editor-draft.json',
+    fact_check_report: 'content/newsroom/2026-05-06/fact-check-report.json',
+    quality_report: 'content/newsroom/2026-05-06/quality-report.json'
+  });
+  assert.match(firstMarkdown, /- Unregistered candidates: 1/);
   assert.ok(firstMarkdown.indexOf('| effective-camera | KEEP |') < firstMarkdown.indexOf('| official-broken | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR |'));
   assert.ok(first.warnings.some(warning => warning.includes('synthetic-unknown-camera-blog')));
 });

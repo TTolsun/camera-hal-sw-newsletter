@@ -120,12 +120,18 @@ function finalSelectionEligibility(candidate = {}) {
   return lower(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
 }
 
+function hasDatedEvidence(candidate = {}) {
+  if (candidate.hasDatedEvidence === false) return false;
+  if (candidate.has_dated_evidence === false) return false;
+  return true;
+}
+
 function isEligibleCandidate(candidate = {}) {
   const eligibility = finalSelectionEligibility(candidate);
   return candidate.main_eligible !== false &&
     candidate.source_gap_risk !== true &&
     candidate.reference_only !== true &&
-    candidate.hasDatedEvidence !== false &&
+    hasDatedEvidence(candidate) &&
     ['main', 'short'].includes(eligibility);
 }
 
@@ -167,7 +173,7 @@ function derivedExclusionReasons(candidate = {}) {
   const reasons = [];
   const eligibility = finalSelectionEligibility(candidate);
   if (!canonicalCandidateUrl(candidate)) reasons.push('missing URL evidence');
-  if (candidate.hasDatedEvidence === false || candidate.has_dated_evidence === false) {
+  if (!hasDatedEvidence(candidate)) {
     reasons.push('hasDatedEvidence=false');
   }
   if (candidate.source_gap_risk === true) reasons.push('source_gap_risk=true');
@@ -750,6 +756,9 @@ function buildSourceEffectivenessReport(options = {}) {
     source_count: sources.length,
     registry_source_count: registryIndex.sources.length,
     synthetic_source_count: sources.filter(source => source.synthetic).length,
+    unregistered_candidate_count: sources
+      .filter(source => source.synthetic)
+      .reduce((sum, source) => sum + source.collected_count, 0),
     collected_count: sources.reduce((sum, source) => sum + source.collected_count, 0),
     eligible_count: sources.reduce((sum, source) => sum + source.eligible_count, 0),
     selected_count: sources.reduce((sum, source) => sum + source.selected_count, 0),
@@ -770,12 +779,7 @@ function buildSourceEffectivenessReport(options = {}) {
       collected_candidates: collectedCandidatesRelPath(date),
       shortlisted_candidates: newsroomRelPath(date, 'shortlisted-candidates.json'),
       source_registry: 'data/news-sources.json',
-      optional_artifacts: {
-        reporter_candidates: Boolean(options.reporterCandidates),
-        editor_draft: Boolean(options.editorDraft),
-        fact_check_report: Boolean(options.factCheckReport),
-        quality_report: Boolean(options.qualityReport)
-      }
+      optional_artifacts: optionalArtifactPaths(date, options)
     },
     summary,
     sources,
@@ -816,6 +820,7 @@ function renderSourceEffectivenessMarkdown(report) {
     '',
     `- Sources: ${report.summary.source_count} (registry=${report.summary.registry_source_count}, synthetic=${report.summary.synthetic_source_count})`,
     `- Collected candidates: ${report.summary.collected_count}`,
+    `- Unregistered candidates: ${report.summary.unregistered_candidate_count}`,
     `- Eligible candidates: ${report.summary.eligible_count}`,
     `- Selected candidates: ${report.summary.selected_count}`,
     `- Rendered main articles: ${report.summary.rendered_main_count}`,
@@ -934,13 +939,49 @@ function readOptionalJson(root, filePath, label, warnings) {
   }
 }
 
+function optionalArtifactPaths(date, options = {}) {
+  const provided = options.optionalArtifactPaths || {};
+  return {
+    reporter_candidates: Object.prototype.hasOwnProperty.call(provided, 'reporter_candidates')
+      ? provided.reporter_candidates
+      : options.reporterCandidates ? newsroomRelPath(date, 'reporter-candidates.json') : null,
+    editor_draft: Object.prototype.hasOwnProperty.call(provided, 'editor_draft')
+      ? provided.editor_draft
+      : options.editorDraft ? newsroomRelPath(date, 'editor-draft.json') : null,
+    fact_check_report: Object.prototype.hasOwnProperty.call(provided, 'fact_check_report')
+      ? provided.fact_check_report
+      : options.factCheckReport ? newsroomRelPath(date, 'fact-check-report.json') : null,
+    quality_report: Object.prototype.hasOwnProperty.call(provided, 'quality_report')
+      ? provided.quality_report
+      : options.qualityReport ? newsroomRelPath(date, 'quality-report.json') : null
+  };
+}
+
+function existingOptionalArtifactPath(filePath, rel) {
+  return fs.existsSync(filePath) ? rel : null;
+}
+
 function loadSourceEffectivenessInputs(root, date) {
   const resolvedRoot = path.resolve(root || process.cwd());
   const dateNewsroomDir = newsroomDir(resolvedRoot, date);
   const warnings = [];
+  const reporterCandidatesRelPath = newsroomRelPath(date, 'reporter-candidates.json');
+  const editorDraftRelPath = newsroomRelPath(date, 'editor-draft.json');
+  const factCheckReportRelPath = newsroomRelPath(date, 'fact-check-report.json');
+  const qualityReportRelPath = newsroomRelPath(date, 'quality-report.json');
+  const reporterCandidatesPath = path.join(dateNewsroomDir, 'reporter-candidates.json');
+  const editorDraftPath = path.join(dateNewsroomDir, 'editor-draft.json');
+  const factCheckReportPath = path.join(dateNewsroomDir, 'fact-check-report.json');
+  const qualityReportPath = path.join(dateNewsroomDir, 'quality-report.json');
   return {
     date,
     warnings,
+    optionalArtifactPaths: {
+      reporter_candidates: existingOptionalArtifactPath(reporterCandidatesPath, reporterCandidatesRelPath),
+      editor_draft: existingOptionalArtifactPath(editorDraftPath, editorDraftRelPath),
+      fact_check_report: existingOptionalArtifactPath(factCheckReportPath, factCheckReportRelPath),
+      quality_report: existingOptionalArtifactPath(qualityReportPath, qualityReportRelPath)
+    },
     sourceRegistry: readRequiredJson(
       resolvedRoot,
       path.join(resolvedRoot, 'data', 'news-sources.json'),
@@ -958,26 +999,26 @@ function loadSourceEffectivenessInputs(root, date) {
     ),
     reporterCandidates: readOptionalJson(
       resolvedRoot,
-      path.join(dateNewsroomDir, 'reporter-candidates.json'),
-      newsroomRelPath(date, 'reporter-candidates.json'),
+      reporterCandidatesPath,
+      reporterCandidatesRelPath,
       warnings
     ),
     editorDraft: readOptionalJson(
       resolvedRoot,
-      path.join(dateNewsroomDir, 'editor-draft.json'),
-      newsroomRelPath(date, 'editor-draft.json'),
+      editorDraftPath,
+      editorDraftRelPath,
       warnings
     ),
     factCheckReport: readOptionalJson(
       resolvedRoot,
-      path.join(dateNewsroomDir, 'fact-check-report.json'),
-      newsroomRelPath(date, 'fact-check-report.json'),
+      factCheckReportPath,
+      factCheckReportRelPath,
       warnings
     ),
     qualityReport: readOptionalJson(
       resolvedRoot,
-      path.join(dateNewsroomDir, 'quality-report.json'),
-      newsroomRelPath(date, 'quality-report.json'),
+      qualityReportPath,
+      qualityReportRelPath,
       warnings
     )
   };
