@@ -654,11 +654,6 @@ function pageTitle(html = '', fallback = '') {
   return clean((String(html).match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1] || fallback);
 }
 
-function libcameraIssueUrl(text = '', issueNumber = '') {
-  const match = String(text).match(new RegExp(`https://gitlab\\.freedesktop\\.org/camera/libcamera/-/issues/${issueNumber}\\b`, 'i'));
-  return match ? match[0] : '';
-}
-
 function parseLibcameraReleaseAnnouncement(html, source) {
   const title = pageTitle(html, source.name);
   const pageText = clean(html);
@@ -670,11 +665,22 @@ function parseLibcameraReleaseAnnouncement(html, source) {
   if (!version || !date || !/\blibcamera\b/i.test(evidenceText) || !hasCameraPipelineEvidence) {
     return [];
   }
+  const releaseDetails = [];
+  if (/\b(?:SoftISP|software_isp|debaying|Debayer)\b/i.test(evidenceText)) {
+    releaseDetails.push('SoftISP debaying and image pipeline throughput');
+  }
+  if (/\b(?:Mali-C55|pipeline handler|camera support)\b/i.test(evidenceText)) {
+    releaseDetails.push('pipeline handler camera support');
+  }
+  if (/\b(?:sensor mode configuration|sensor configuration)\b/i.test(evidenceText)) {
+    releaseDetails.push('sensor mode configuration');
+  }
   const extractedBehavior = firstBehavior(evidenceText);
-  const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
-    ? extractedBehavior
+  const behavior = releaseDetails.length > 0
+    ? `Released ${version} with ${releaseDetails.join(', ')} updates.`
+    : BEHAVIOR_PATTERN.test(extractedBehavior) ? extractedBehavior
     : `Released ${version} with libcamera camera pipeline updates.`;
-  const releaseItem = {
+  return [{
     source,
     title: `${source.name} - ${version}`,
     url: source.url,
@@ -688,29 +694,7 @@ function parseLibcameraReleaseAnnouncement(html, source) {
     api_or_component: 'libcamera / V4L2 camera pipeline',
     behavior_change: behavior,
     relevanceBucketHint: 'camera_driver_image_pipeline'
-  };
-  const childItems = [];
-  if (/\b(?:SoftISP|software_isp|debaying|Debayer)\b/i.test(evidenceText)) {
-    childItems.push({
-      ...releaseItem,
-      title: `${version} - SoftISP debaying and throughput`,
-      url: libcameraIssueUrl(evidenceText, '311') || urlWithFragment(source.url, `${version} SoftISP debaying throughput`),
-      summary: 'Updated SoftISP debaying and throughput behavior for camera image processing.',
-      api_or_component: 'libcamera SoftISP / image pipeline',
-      behavior_change: 'Updated SoftISP debaying and throughput behavior for camera image processing.'
-    });
-  }
-  if (/\b(?:Mali-C55|pipeline handler|sensor mode configuration|sensor configuration|camera support)\b/i.test(evidenceText)) {
-    childItems.push({
-      ...releaseItem,
-      title: `${version} - pipeline handler and sensor configuration`,
-      url: libcameraIssueUrl(evidenceText, '300') || urlWithFragment(source.url, `${version} pipeline handler sensor configuration`),
-      summary: 'Updated pipeline handler and sensor configuration behavior for camera support.',
-      api_or_component: 'libcamera pipeline handler / image sensor configuration',
-      behavior_change: 'Updated pipeline handler and sensor configuration behavior for camera support.'
-    });
-  }
-  return uniqueParserItems([releaseItem, ...childItems]).slice(0, 4);
+  }];
 }
 
 function parseLlvmReleaseNotes(html, source) {

@@ -691,6 +691,12 @@ function parseDate(value) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+function newsletterDateWindowEnd(value) {
+  const dateText = String(value || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateText)) return null;
+  return parseDate(`${dateText}T23:59:59.999Z`);
+}
+
 function withinLookback(candidate, now, lookbackDays) {
   const date = parseDate(candidate.publishedAt);
   if (!date) return true;
@@ -873,7 +879,9 @@ function markdown(date, candidates, failures, lookbackDays) {
 async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
   const lookbackDays = runtimeConfig.lookbackDays;
-  const now = parseDate(date) || new Date();
+  const now = runtimeConfig.newsletterDate
+    ? newsletterDateWindowEnd(runtimeConfig.newsletterDate) || new Date()
+    : new Date();
   const sources = parseSources();
   const failures = [];
   let candidates = [];
@@ -949,6 +957,7 @@ module.exports = {
   componentFromText,
   evidenceMetadata,
   fetchUrlForContent,
+  newsletterDateWindowEnd,
   normalizeCandidate,
   withinLookback
 };

@@ -184,19 +184,15 @@ test('libcamera release announcement parser extracts v0.7.1 dated camera pipelin
     sourceUrl: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html'
   }));
 
-  assert.equal(items.length, 3);
-  for (const item of items) {
-    assertParsedItemContract(item);
-    assert.equal(item.publishedAt, '2026-04-28');
-    assert.equal(item.version_or_release, 'libcamera v0.7.1');
-    assert.equal(item.relevanceBucketHint, 'camera_driver_image_pipeline');
-    assert.match(item.api_or_component, /libcamera|V4L2|SoftISP|pipeline|sensor/);
-    assert.match(item.behavior_change, /released|updated|updates|improves/i);
-  }
-  assert.ok(items.some(item => /SoftISP/.test(item.title)));
-  assert.ok(items.some(item => /pipeline handler and sensor configuration/.test(item.title)));
-  assert.ok(items.some(item => item.url === 'https://gitlab.freedesktop.org/camera/libcamera/-/issues/311'));
-  assert.ok(items.some(item => item.url === 'https://gitlab.freedesktop.org/camera/libcamera/-/issues/300'));
+  assert.equal(items.length, 1);
+  assertParsedItemContract(items[0]);
+  assert.equal(items[0].publishedAt, '2026-04-28');
+  assert.equal(items[0].version_or_release, 'libcamera v0.7.1');
+  assert.equal(items[0].relevanceBucketHint, 'camera_driver_image_pipeline');
+  assert.equal(items[0].api_or_component, 'libcamera / V4L2 camera pipeline');
+  assert.match(items[0].behavior_change, /SoftISP/);
+  assert.match(items[0].behavior_change, /pipeline handler/);
+  assert.match(items[0].behavior_change, /sensor mode configuration/);
 });
 
 test('AOSP camera documentation links stay on watchlist fallback path', () => {

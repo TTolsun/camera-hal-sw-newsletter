@@ -8,6 +8,7 @@ const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers
 const {
   canonicalContentUrl,
   fetchUrlForContent,
+  newsletterDateWindowEnd,
   normalizeCandidate,
   withinLookback
 } = require('../scripts/newsroom/cli/collect-news-candidates');
@@ -118,13 +119,16 @@ test('collector keeps generic GPU/NPU/SoC benchmark only coverage out of SoC non
 });
 
 test('collector applies exact-day and month-overlap lookback rules', () => {
-  const now = new Date('2026-05-06T00:00:00Z');
+  const now = newsletterDateWindowEnd('2026-05-06');
 
+  assert.equal(now.toISOString(), '2026-05-06T23:59:59.999Z');
   assert.equal(withinLookback({ publishedAt: '2026-04-01', datePrecision: 'month' }, now, 21), true);
   assert.equal(withinLookback({ publishedAt: '2026-03-01', datePrecision: 'month' }, now, 21), false);
   assert.equal(withinLookback({ publishedAt: 'March 25, 2026' }, now, 21), false);
   assert.equal(withinLookback({ publishedAt: 'March 25, 2026' }, now, 28), false);
   assert.equal(withinLookback({ publishedAt: '2026-04-28' }, now, 21), true);
+  assert.equal(withinLookback({ publishedAt: '2026-05-06T23:30:00Z' }, now, 21), true);
+  assert.equal(withinLookback({ publishedAt: '2026-05-07T00:00:00Z' }, now, 21), false);
 });
 
 test('collector keeps CameraX and V4L2 article text in the expected buckets', () => {
@@ -270,17 +274,14 @@ test('collector keeps libcamera v0.7.1 release as camera driver image pipeline c
     })
   ).map(item => normalizeCandidate(item));
 
-  assert.equal(items.length, 3);
-  for (const item of items) {
-    assert.equal(item.publishedAt, '2026-04-28');
-    assert.equal(item.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
-    assert.equal(item.counts_as_driver_topic, true);
-    assert.ok(['main', 'short'].includes(item.finalSelectionEligibility));
-  }
-  assert.ok(items.some(item => /SoftISP/.test(item.title)));
-  assert.ok(items.some(item => /pipeline handler and sensor configuration/.test(item.title)));
-  assert.ok(items.some(item => item.url === 'https://gitlab.freedesktop.org/camera/libcamera/-/issues/311'));
-  assert.ok(items.some(item => item.url === 'https://gitlab.freedesktop.org/camera/libcamera/-/issues/300'));
+  assert.equal(items.length, 1);
+  assert.equal(items[0].publishedAt, '2026-04-28');
+  assert.equal(items[0].relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
+  assert.equal(items[0].counts_as_driver_topic, true);
+  assert.ok(['main', 'short'].includes(items[0].finalSelectionEligibility));
+  assert.match(items[0].behavior_change, /SoftISP/);
+  assert.match(items[0].behavior_change, /pipeline handler/);
+  assert.match(items[0].behavior_change, /sensor mode configuration/);
 });
 
 test('collector forces reference_index source out of final article inputs', () => {
