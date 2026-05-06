@@ -4,11 +4,13 @@ const test = require('node:test');
 const {
   BUCKETS
 } = require('../scripts/lib/aosp-camera-scope');
+const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers');
 const {
   canonicalContentUrl,
   fetchUrlForContent,
   normalizeCandidate
 } = require('../scripts/newsroom/cli/collect-news-candidates');
+const { readTextFixture } = require('./helpers/fixture-loader');
 
 function source(overrides = {}) {
   return {
@@ -153,6 +155,68 @@ test('collector canonicalizes Android docs locale URLs and keeps Latest Updates 
   assert.equal(candidate.url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta01');
   assert.equal(candidate.relevance_bucket, BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT);
   assert.ok(['main', 'short'].includes(candidate.finalSelectionEligibility));
+});
+
+test('collector keeps official AOSP and CameraX camera child rows reviewable without promoting non-camera HAL', () => {
+  const aospSource = source({
+    id: 'aosp-site-updates',
+    name: 'AOSP Site Updates',
+    url: 'https://source.android.com/docs/whatsnew/site-updates',
+    sourceUrl: 'https://source.android.com/docs/whatsnew/site-updates',
+    category: 'aosp',
+    section: 'Android / AOSP / Camera',
+    priority: 'high',
+    reliability: 'official',
+    keywords: ['AOSP', 'Camera', 'Camera ITS', 'CDD']
+  });
+  const cameraRows = [
+    ...parseSourceSpecificItems(
+      readTextFixture('source-html/aosp-site-updates-paragraph-camera.html'),
+      aospSource
+    )
+  ].map(item => normalizeCandidate(item));
+  const aospCameraRow = cameraRows.find(item => item.title === 'Camera ITS');
+
+  assert.ok(aospCameraRow);
+  assert.equal(aospCameraRow.source_gap_risk, false);
+  assert.equal(aospCameraRow.main_eligible, true);
+  assert.ok(['main', 'short'].includes(aospCameraRow.finalSelectionEligibility));
+
+  const cameraXRows = parseSourceSpecificItems(
+    readTextFixture('source-html/camerax-release-notes-1.6.html'),
+    source({
+      id: 'camerax-release-notes',
+      name: 'CameraX Release Notes',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+      sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera',
+      category: 'camera-api',
+      section: 'Android / AOSP / Camera',
+      priority: 'high',
+      reliability: 'official',
+      keywords: ['CameraX', 'androidx.camera']
+    })
+  ).map(item => normalizeCandidate(item));
+
+  assert.equal(cameraXRows.length, 1);
+  assert.ok([
+    BUCKETS.DIRECT_AOSP_CAMERA,
+    BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+  ].includes(cameraXRows[0].relevance_bucket));
+
+  const nonCameraHal = normalizeCandidate(raw({
+    source: aospSource,
+    title: 'KeyMint HAL documentation update',
+    url: 'https://source.android.com/docs/security/features/keystore',
+    summary: 'Updated KeyMint HAL behavior for secure key management.',
+    sourceKind: 'release_note_item',
+    collectionMode: 'release-note-item',
+    version_or_release: 'AOSP Site Updates - May 2026',
+    api_or_component: 'KeyMint HAL',
+    behavior_change: 'Updated KeyMint HAL behavior for secure key management.'
+  }));
+
+  assert.equal(nonCameraHal.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+  assert.ok(['watchlist', 'exclude'].includes(nonCameraHal.finalSelectionEligibility));
 });
 
 test('collector forces reference_index source out of final article inputs', () => {

@@ -105,6 +105,36 @@ test('AOSP Site updates parser extracts month-level camera child rows only', () 
   ]);
 });
 
+test('AOSP Site updates parser extracts paragraph and anchor camera child rows only', () => {
+  const html = readTextFixture('source-html/aosp-site-updates-paragraph-camera.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'aosp-site-updates',
+    name: 'AOSP Site Updates',
+    url: 'https://source.android.com/docs/whatsnew/site-updates',
+    sourceUrl: 'https://source.android.com/docs/whatsnew/site-updates',
+    section: 'Android / AOSP / Camera'
+  }));
+
+  assert.equal(items.length, 5);
+  for (const item of items) {
+    assertParsedItemContract(item);
+    assert.equal(item.publishedAt, '2026-05-01');
+    assert.equal(item.datePrecision, 'month');
+    assert.equal(item.sourceMonth, 'May 2026');
+    assert.equal(item.version_or_release, 'AOSP Site Updates - May 2026');
+  }
+  const titles = items.map(item => item.title);
+  assert.deepEqual(titles, [
+    'Camera ITS',
+    'Test camera images',
+    'CDD camera orientation',
+    'Camera images automation',
+    'Automotive Camera Service'
+  ]);
+  assert.equal(titles.some(title => /Weaver HAL|Audio HAL|KeyMint HAL/i.test(title)), false);
+});
+
 test('CameraX release notes parser keeps only dated release child entries', () => {
   const html = readTextFixture('source-html/camerax-release-notes.html');
 
@@ -120,6 +150,25 @@ test('CameraX release notes parser keeps only dated release child entries', () =
   assert.equal(items[0].publishedAt, 'May 1, 2026');
   assert.match(items[0].version_or_release, /CameraX 1\.5\.0-beta01/);
   assert.match(items[0].behavior_change, /Fixed Camera2 interop behavior/);
+});
+
+test('CameraX release notes parser normalizes Version headings and CameraX API evidence', () => {
+  const html = readTextFixture('source-html/camerax-release-notes-1.6.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'camerax-release-notes',
+    name: 'CameraX Release Notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera'
+  }));
+
+  assert.equal(items.length, 1);
+  assertParsedItemContract(items[0]);
+  assert.equal(items[0].publishedAt, 'May 6, 2026');
+  assert.equal(items[0].version_or_release, 'CameraX 1.6.0');
+  assert.match(items[0].title, /CameraX Release Notes - CameraX 1\.6\.0/);
+  assert.match(items[0].api_or_component, /CameraX \/ (CameraPipe|SessionConfig|ImageAnalysis|VideoCapture|PreviewView|CameraController|CameraEffect|androidx\.camera)/);
+  assert.match(items[0].behavior_change, /Added CameraPipe SessionConfig support/);
 });
 
 test('AOSP camera documentation links stay on watchlist fallback path', () => {

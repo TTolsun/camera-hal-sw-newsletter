@@ -247,6 +247,54 @@ test('AOSP site update camera rows can form three reviewable non-fallback candid
   assert.equal(report.composition_mode, 'THIN_WEEK_REVIEW');
 });
 
+test('two official AOSP and CameraX camera candidates pass review gate but not publish gate', () => {
+  const aospSource = {
+    id: 'aosp-site-updates',
+    name: 'AOSP Site Updates',
+    url: 'https://source.android.com/docs/whatsnew/site-updates',
+    sourceUrl: 'https://source.android.com/docs/whatsnew/site-updates',
+    category: 'aosp',
+    section: 'Android / AOSP / Camera',
+    priority: 'high',
+    reliability: 'official',
+    candidateOnly: false,
+    requiresCrossCheck: false,
+    usageHint: 'AOSP Camera site update rows',
+    keywords: ['AOSP', 'Camera', 'Camera ITS', 'CDD']
+  };
+  const cameraXSource = {
+    id: 'camerax-release-notes',
+    name: 'CameraX Release Notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    category: 'camera-api',
+    section: 'Android / AOSP / Camera',
+    priority: 'high',
+    reliability: 'official',
+    candidateOnly: false,
+    requiresCrossCheck: false,
+    usageHint: 'CameraX official release notes',
+    keywords: ['CameraX', 'androidx.camera']
+  };
+  const aospItem = parseSourceSpecificItems(readTextFixture('source-html/aosp-site-updates-paragraph-camera.html'), aospSource)
+    .find(item => item.title === 'Camera ITS');
+  const cameraXItem = parseSourceSpecificItems(readTextFixture('source-html/camerax-release-notes-1.6.html'), cameraXSource)[0];
+
+  const report = buildShortlistReport('2026-05-06', [
+    normalizeCandidate(aospItem),
+    normalizeCandidate(cameraXItem)
+  ]);
+
+  assert.equal(ABSOLUTE_MIN_REVIEWABLE_ARTICLES, 2);
+  assert.equal(report.selected_article_count, 2);
+  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 2);
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.deepEqual(report.selection_errors, []);
+  assert.ok(report.selection_warnings.some(warning => /Thin-week review path/i.test(warning)));
+});
+
 test('month-level dated candidates do not receive exact-day freshness scoring', () => {
   const exact = scoreCandidate(candidate({
     title: 'Camera ITS exact release note',

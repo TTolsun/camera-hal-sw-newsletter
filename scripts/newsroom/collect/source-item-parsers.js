@@ -107,6 +107,15 @@ function componentFromText(text = '', fallback = '') {
     'Camera HAL',
     'AOSP Camera',
     'Camera images automation',
+    'Test camera images',
+    'Automotive Camera Service',
+    'CameraPipe',
+    'SessionConfig',
+    'ImageAnalysis',
+    'VideoCapture',
+    'PreviewView',
+    'CameraController',
+    'CameraEffect',
     'CDD',
     'CDD camera orientation',
     'CTS',
@@ -225,6 +234,8 @@ function cameraVersionToken(value = '') {
 function cameraComponentFromText(value = '', fallback = 'CameraX / androidx.camera') {
   const match = String(value).match(/\bandroidx\.camera(?::[a-z0-9-]+)?\b/i);
   if (match) return `CameraX / ${match[0]}`;
+  const cameraXComponent = String(value).match(/\b(CameraPipe|SessionConfig|ImageAnalysis|VideoCapture|PreviewView|CameraController|CameraEffect)\b/i);
+  if (cameraXComponent) return `CameraX / ${cameraXComponent[1]}`;
   if (/CameraX|camera maven group|androidx\.camera|camera library/i.test(value)) return fallback;
   return fallback;
 }
@@ -270,6 +281,63 @@ function canonicalCameraReleaseUrl(value = '', version = '') {
 function isCameraUpdateRow(text = '') {
   return /\b(?:CameraX|androidx\.camera|Camera2|Android Camera|AOSP Camera|Camera HAL|Camera ITS|CDD\b[^.\n]{0,80}\bcamera|camera\b[^.\n]{0,80}\bCDD|Camera images automation|image(?:s)? automation|camera orientation|stream|buffer|metadata|capture request|capture result)\b/i
     .test(String(text));
+}
+
+const AOSP_SITE_CAMERA_UPDATE_PATTERNS = [
+  /\bCamera ITS\b/i,
+  /\bCamera image(?:s)? automation\b/i,
+  /\bTest camera images\b/i,
+  /\bCDD\b[^.\n]{0,120}\bcamera orientation\b/i,
+  /\bcamera orientation\b[^.\n]{0,120}\bCDD\b/i,
+  /\bAutomotive Camera Service\b/i
+];
+
+const NON_CAMERA_HAL_PATTERNS = [
+  /\bWeaver HAL\b/i,
+  /\bKeyMint HAL\b/i,
+  /\bGatekeeper HAL\b/i,
+  /\bAudio HAL\b/i
+];
+
+function isAospSiteCameraUpdateRow(text = '') {
+  const value = String(text);
+  const hasCameraEvidence = AOSP_SITE_CAMERA_UPDATE_PATTERNS.some(pattern => pattern.test(value));
+  const hasOnlyNonCameraHalEvidence = NON_CAMERA_HAL_PATTERNS.some(pattern => pattern.test(value)) && !hasCameraEvidence;
+  return hasCameraEvidence && !hasOnlyNonCameraHalEvidence;
+}
+
+function allMatchingChunks(body = '', pattern) {
+  return [...String(body).matchAll(pattern)].map(match => match[0]);
+}
+
+function aospSiteUpdateChunks(body = '') {
+  const value = String(body);
+  const chunks = [
+    ...childChunks(value),
+    ...allMatchingChunks(value, /<p\b[^>]*>[\s\S]*?<\/p>/gi),
+    ...allMatchingChunks(value, /<dt\b[^>]*>[\s\S]*?<\/dt>\s*<dd\b[^>]*>[\s\S]*?<\/dd>/gi),
+    ...allMatchingChunks(value, /<h[5-6]\b[^>]*>[\s\S]*?<\/h[5-6]>\s*(?:(?!<h[1-6]\b)[\s\S]){0,1200}/gi)
+  ];
+  const seen = new Set();
+  return chunks.filter(chunk => {
+    const key = clean(chunk).toLowerCase();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function cameraXReleaseEvidence(text = '') {
+  return /\b(?:CameraX|androidx\.camera|CameraPipe|SessionConfig|ImageAnalysis|VideoCapture|PreviewView|CameraController|CameraEffect|dynamic range|device bug fix|device-specific bug|camera)\b/i
+    .test(String(text));
+}
+
+function normalizeCameraXVersion(value = '', fallback = '') {
+  const token = cameraVersionToken(`${value} ${fallback}`);
+  if (token) return `CameraX ${token}`;
+  const version = cameraVersionFromText(value, fallback);
+  if (/^v?\d+\.\d+\.\d+/i.test(version)) return `CameraX ${version.replace(/^v/i, '')}`;
+  return version;
 }
 
 function parserItemKey(item) {
@@ -375,7 +443,20 @@ function parseCameraXReleaseNotes(html, source) {
     component: 'CameraX / androidx.camera',
     sourceKind: 'release_note_item',
     limit: 10
-  }).filter(hasReleaseItemEvidence);
+  })
+    .map(item => {
+      const evidenceText = `${item.title} ${item.url} ${item.summary} ${item.version_or_release} ${item.api_or_component} ${item.behavior_change}`;
+      const version = normalizeCameraXVersion(evidenceText, item.version_or_release);
+      return {
+        ...item,
+        title: version ? `${source.name} - ${version}` : item.title,
+        url: canonicalCameraReleaseUrl(item.url, version),
+        version_or_release: version,
+        api_or_component: cameraComponentFromText(evidenceText),
+        relevanceBucketHint: 'direct_aosp_camera'
+      };
+    })
+    .filter(item => hasReleaseItemEvidence(item) && cameraXReleaseEvidence(`${item.title} ${item.summary} ${item.api_or_component} ${item.behavior_change}`));
 }
 
 function parseAospWhatsNew(html, source) {
@@ -397,15 +478,15 @@ function parseAospSiteUpdates(html, source) {
     const date = firstMonthYearDate(block.title);
     if (!date) continue;
     const sourceMonth = monthLabel(block.title);
-    for (const chunk of childChunks(block.body)) {
+    for (const chunk of aospSiteUpdateChunks(block.body)) {
       const title = childTitle(chunk, parentUrl);
       const evidenceText = `${block.title} ${title} ${clean(chunk)}`;
-      if (!isCameraUpdateRow(evidenceText)) continue;
+      if (!isAospSiteCameraUpdateRow(evidenceText)) continue;
       const anchor = firstAnchor(chunk, parentUrl);
       const url = anchor?.url || urlWithFragment(parentUrl, `${sourceMonth} ${title}`);
       const component = componentFromText(evidenceText, /CDD/i.test(evidenceText)
         ? 'CDD camera'
-        : /Camera ITS/i.test(evidenceText) ? 'Camera ITS' : 'AOSP Camera');
+        : /Camera ITS/i.test(evidenceText) ? 'Camera ITS' : /Automotive Camera Service/i.test(evidenceText) ? 'Automotive Camera Service' : 'AOSP Camera');
       const extractedBehavior = firstBehavior(evidenceText);
       const behavior = BEHAVIOR_PATTERN.test(extractedBehavior)
         ? extractedBehavior

@@ -97,14 +97,14 @@ function fail(message) {
   throw new Error(message);
 }
 
-function writeNewsletterDate(date) {
-  const tmpDir = path.join(root, '.tmp');
+function writeNewsletterDate(date, rootDir = root) {
+  const tmpDir = path.join(rootDir, '.tmp');
   fs.mkdirSync(tmpDir, { recursive: true });
   fs.writeFileSync(path.join(tmpDir, 'newsletter-date.txt'), date, 'utf8');
 }
 
-function writeGenerationStatus(value) {
-  const tmpDir = path.join(root, '.tmp');
+function writeGenerationStatus(value, rootDir = root) {
+  const tmpDir = path.join(rootDir, '.tmp');
   fs.mkdirSync(tmpDir, { recursive: true });
   fs.writeFileSync(
     path.join(tmpDir, 'newsletter-generation-status.json'),
@@ -1548,10 +1548,66 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
   return filePath;
 }
 
+function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
+  const report = shortlistReport || {};
+  const selectionErrors = ensureArray(report.selection_errors);
+  const selectionWarnings = ensureArray(report.selection_warnings);
+  const selectionShortageHints = ensureArray(report.selection_shortage_hints);
+  const failureStage = selectionErrors.length > 0 ? 'deterministic selection' : '';
+  const failureReason = selectionErrors.join('; ');
+  return {
+    schema_version: 1,
+    date,
+    generated_at: new Date().toISOString(),
+    status: selectionErrors.length > 0
+      ? 'FAILED'
+      : selectionWarnings.length > 0 ? 'UNDERFILLED_NEEDS_FIX' : 'OK',
+    failure_stage: failureStage,
+    failure_reason: failureReason,
+    selection_errors: selectionErrors,
+    selection_warnings: selectionWarnings,
+    selection_shortage_hints: selectionShortageHints,
+    review_gate_passed: Boolean(selectionDiagnostics.review_gate_passed),
+    publish_gate_passed: Boolean(selectionDiagnostics.publish_gate_passed),
+    gate_summary: {
+      review_gate_passed: Boolean(selectionDiagnostics.review_gate_passed),
+      publish_gate_passed: Boolean(selectionDiagnostics.publish_gate_passed),
+      non_fallback_reviewable_article_count: selectionDiagnostics.non_fallback_reviewable_article_count,
+      eligible_non_fallback_reviewable_article_count: selectionDiagnostics.eligible_non_fallback_reviewable_article_count,
+      min_final_articles: selectionDiagnostics.min_final_articles,
+      absolute_min_reviewable_articles: selectionDiagnostics.absolute_min_reviewable_articles,
+      min_non_fallback_publish_ready_articles: selectionDiagnostics.min_non_fallback_publish_ready_articles,
+      selected_article_count: selectionDiagnostics.selected_article_count
+    },
+    composition_mode: selectionDiagnostics.composition_mode,
+    composition_reason: selectionDiagnostics.composition_reason,
+    composition_summary: selectionDiagnostics.composition_summary || {},
+    eligible_composition_summary: selectionDiagnostics.eligible_composition_summary || {},
+    counts: {
+      input_candidate_count: selectionDiagnostics.input_candidate_count,
+      eligible_candidate_count: selectionDiagnostics.eligible_candidate_count,
+      selected_article_count: selectionDiagnostics.selected_article_count,
+      deterministic_selected_count: selectionDiagnostics.deterministic_selected_count,
+      reserve_candidate_count: selectionDiagnostics.reserve_candidate_count,
+      direct_aosp_camera_count: selectionDiagnostics.direct_aosp_camera_count,
+      camera_driver_image_pipeline_count: selectionDiagnostics.camera_driver_image_pipeline_count,
+      android_platform_camera_adjacent_count: selectionDiagnostics.android_platform_camera_adjacent_count,
+      soc_platform_signal_count: selectionDiagnostics.soc_platform_signal_count,
+      cpp_ai_tooling_fallback_count: selectionDiagnostics.cpp_ai_tooling_fallback_count,
+      generic_tech_watchlist_count: selectionDiagnostics.generic_tech_watchlist_count,
+      non_fallback_reviewable_article_count: selectionDiagnostics.non_fallback_reviewable_article_count
+    },
+    exclusion_reason_summary: selectionDiagnostics.exclusion_reason_summary || [],
+    final_exclusion_reason_summary: selectionDiagnostics.final_exclusion_reason_summary || [],
+    candidate_selection_note: selectionDiagnostics.candidate_selection_note || ''
+  };
+}
+
 function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = generationRunState.shortlistReport) {
   fs.mkdirSync(newsroomDir, { recursive: true });
   const date = shortlistReport?.date || generationRunState.date || runtimeConfig.newsletterDate || kstDate();
   const selectionDiagnostics = selectionStatusExtra(shortlistReport);
+  const selectionReport = buildSelectionReport(date, shortlistReport, selectionDiagnostics);
   const lines = [
     `# Candidate Selection Diagnostics - ${date}`,
     '',
@@ -1563,10 +1619,46 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
     `- Publish Gate: ${selectionDiagnostics.publish_gate_passed ? 'PASS' : 'FAIL'} (non-fallback Camera/Android/Driver/SoC >= ${selectionDiagnostics.min_non_fallback_publish_ready_articles}; final articles >= ${selectionDiagnostics.min_final_articles})`,
     `- selection_publish_ready: ${selectionDiagnostics.selection_publish_ready}`,
     `- final_publish_ready: ${selectionDiagnostics.final_publish_ready}`,
+    `- selection_errors: ${selectionDiagnostics.selection_errors.length}`,
+    `- selection_shortage_hints: ${selectionDiagnostics.selection_shortage_hints.length}`,
     ''
   ];
   const filePath = path.join(newsroomDir, 'selection-diagnostics.md');
   fs.writeFileSync(filePath, `${lines.join('\n')}\n`, 'utf8');
+  writeJson(path.join(newsroomDir, 'selection-report.json'), selectionReport);
+  const reportLines = [
+    `# Selection Report - ${date}`,
+    '',
+    `- status: ${selectionReport.status}`,
+    `- failure_stage: ${selectionReport.failure_stage || 'n/a'}`,
+    `- failure_reason: ${selectionReport.failure_reason || 'n/a'}`,
+    `- review_gate_passed: ${selectionReport.review_gate_passed}`,
+    `- publish_gate_passed: ${selectionReport.publish_gate_passed}`,
+    '',
+    '## Selection Errors',
+    '',
+    ...(
+      selectionReport.selection_errors.length > 0
+        ? selectionReport.selection_errors.map(error => `- ${error}`)
+        : ['- none']
+    ),
+    '',
+    '## Shortage Hints',
+    '',
+    ...(
+      selectionReport.selection_shortage_hints.length > 0
+        ? selectionReport.selection_shortage_hints.map(hint => `- ${hint}`)
+        : ['- none']
+    ),
+    '',
+    '## Gate Summary',
+    '',
+    `- non_fallback_reviewable_article_count: ${selectionReport.gate_summary.non_fallback_reviewable_article_count ?? 'unknown'}`,
+    `- absolute_min_reviewable_articles: ${selectionReport.gate_summary.absolute_min_reviewable_articles ?? 'unknown'}`,
+    `- min_non_fallback_publish_ready_articles: ${selectionReport.gate_summary.min_non_fallback_publish_ready_articles ?? 'unknown'}`,
+    `- min_final_articles: ${selectionReport.gate_summary.min_final_articles ?? 'unknown'}`
+  ];
+  fs.writeFileSync(path.join(newsroomDir, 'selection-report.md'), `${reportLines.join('\n')}\n`, 'utf8');
   return filePath;
 }
 
@@ -2349,6 +2441,9 @@ module.exports = {
   sectionsMatchingRepairPlan,
   sectionsOutsideRepairPlan,
   validateCompletionSections,
+  selectionStatusExtra,
   writeGenerationStatus,
+  writeNewsletterDate,
+  writeSelectionDiagnosticsArtifact,
   writeTerminalFailureStatus
 };

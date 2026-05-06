@@ -61,6 +61,18 @@ function seedAgreeingSnapshot(snapshotDir) {
 function testManifestCreationAndHashes() {
   const snapshotDir = makeSnapshot();
   seedAgreeingSnapshot(snapshotDir);
+  writeJson(path.join(snapshotDir, ...collectedCandidatesRelPath(date).split('/')), { candidates: [] });
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'shortlisted-candidates.json').split('/')), {
+    date,
+    selected_article_count: 0
+  });
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-diagnostics.md').split('/')), '# Selection Diagnostics\n');
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.json').split('/')), {
+    date,
+    failure_stage: 'deterministic selection',
+    selection_errors: ['Only 1 eligible candidate remains.']
+  });
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.md').split('/')), '# Selection Report\n');
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'retry-history.json').split('/')), []);
   writeJson(path.join(snapshotDir, '.tmp', 'gemini-raw', 'attempt-1.json'), { text: '{' });
   writeJson(path.join(snapshotDir, 'cache', 'news-summary', 'summary.json'), { title: 'cached' });
@@ -69,10 +81,14 @@ function testManifestCreationAndHashes() {
   assert.strictEqual(manifest.date, date);
   assert.ok(fs.existsSync(path.join(snapshotDir, 'artifact-manifest.json')));
   assert.ok(manifest.files.some(file => file.path === '.tmp/newsletter-generation-status.json'));
+  assert.ok(manifest.files.some(file => file.path === collectedCandidatesRelPath(date)));
+  assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'selection-diagnostics.md')));
+  assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'selection-report.json')));
+  assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'selection-report.md')));
   assert.ok(manifest.files.some(file => file.path === '.tmp/gemini-raw/attempt-1.json'));
   assert.ok(manifest.files.some(file => file.path === 'cache/news-summary/summary.json'));
   assert.ok(manifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
-  assert.ok(manifest.missing_critical_files.includes(collectedCandidatesRelPath(date)));
+  assert.ok(manifest.missing_critical_files.includes(`newsletters/${date}/newsletter.md`));
 }
 
 function testWarningsWhenReportsDisagree() {
