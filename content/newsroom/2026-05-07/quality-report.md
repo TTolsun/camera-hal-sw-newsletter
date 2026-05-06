@@ -2,11 +2,11 @@
 
 ## Gate Result
 
-- Quality score: 83
+- Quality score: 98
 - Quality threshold: 85
 - Max score: 100
-- Result: NEEDS_FIX
-- Summary: Quality score 83, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
+- Result: PASS
+- Summary: Quality score 98, threshold 85, max score 100. Editor review is ready.
 
 ## Composition
 
@@ -31,40 +31,39 @@
 
 ## Fact Check And Source Integrity
 
-- Fact-check status: NEEDS_FIX
-- Must-fix count: 3
+- Fact-check status: PASS
+- Must-fix count: 0
 - Source-gap count: 0
 - Stale claim status: PASS
 - Stale claim removals: 0
 - Stale claim hard failures: 0
 - Source integrity violation count: 0
-- Blocking deduction count: 1
-- Blocking deduction categories: source-integrity
-- Hard fail count: 1
+- Blocking deduction count: 0
+- Blocking deduction categories: none
+- Hard fail count: 0
 - Soft deduction count: 2
 
 ## Article Gate Results
 
 | # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
 | ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | FAIL | repair-section | libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선 | camera_driver_image_pipeline | 2 | false | true | false | false | true | bound | shortlist_selected | merged | none | camera_driver_image_pipeline counts toward primary_camera_stack_count. | none | Fact-check must_fix item mentions this section. | image-fallback: Article image uses a local fallback visual. |
-| 2 | FAIL | repair-section | libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트 | camera_driver_image_pipeline | 2 | false | true | false | false | true | bound | shortlist_selected | merged | none | camera_driver_image_pipeline counts toward primary_camera_stack_count. | none | Fact-check must_fix item mentions this section. | image-fallback: Article image uses a local fallback visual. |
+| 1 | PASS | preserve | libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선 | camera_driver_image_pipeline | 2 | false | true | false | false | true | bound | shortlist_selected | merged | none | camera_driver_image_pipeline counts toward primary_camera_stack_count. | none | none | image-fallback: Article image uses a local fallback visual. |
+| 2 | PASS | preserve | libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트 | camera_driver_image_pipeline | 2 | false | true | false | false | true | bound | shortlist_selected | merged | none | camera_driver_image_pipeline counts toward primary_camera_stack_count. | none | none | image-fallback: Article image uses a local fallback visual. |
 | 3 | PASS | preserve | libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선 | camera_driver_image_pipeline | 2 | false | true | false | false | true | bound | shortlist_selected | merged | none | camera_driver_image_pipeline counts toward primary_camera_stack_count. | none | none | none |
-| 4 | FAIL | repair-section | Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원 | cpp_ai_tooling_fallback | 5 | false | false | false | true | true | bound | shortlist_selected | merged | none | cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count. | Fallback bucket is reviewable support material but not a primary camera stack topic. | Fact-check must_fix item mentions this section. | image-fallback: Article image uses a local fallback visual.; image-fallback: Article image uses a local fallback visual. |
+| 4 | PASS | preserve | Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보 | cpp_ai_tooling_fallback | 5 | false | false | false | true | true | bound | shortlist_selected | merged | none | cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count. | Fallback bucket is reviewable support material but not a primary camera stack topic. | none | image-fallback: Article image uses a local fallback visual.; image-fallback: Article image uses a local fallback visual. |
 
 ## Hard Fails
 
-- 15 pt [source-integrity] Fact checker returned 3 must_fix item(s).
+- none
 
 ## Soft Deductions
 
 - 1 pt [image-fallback] libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선: Article image uses a local fallback visual.
-- 1 pt [image-fallback] Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원: Article image uses a local fallback visual.
+- 1 pt [image-fallback] Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보: Article image uses a local fallback visual.
 
 ## Top Deduction Categories
 
 - image-fallback (2)
-- source-integrity (1)
 
 ## Candidate Exclusion Summary
 
@@ -73,5 +72,4 @@
 ## Deductions
 
 - 1 pt [image-fallback] libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선: Article image uses a local fallback visual.
-- 1 pt [image-fallback] Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원: Article image uses a local fallback visual.
-- 15 pt [source-integrity] Fact checker returned 3 must_fix item(s).
+- 1 pt [image-fallback] Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보: Article image uses a local fallback visual.

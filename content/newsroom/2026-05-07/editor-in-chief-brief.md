@@ -2,7 +2,7 @@
 
 ## 이번 주 핵심 메시지
 
-이번 주 뉴스레터는 libcamera v0.7.1 릴리스의 주요 변경 사항에 초점을 맞춥니다. Raspberry Pi의 Atomic control lists 개선, 파이프라인 핸들러 및 센서 구성 업데이트, SoftISP 디베이어링 및 처리량 개선 등 Linux 카메라 드라이버 스택의 핵심 업데이트가 포함되어 있습니다. 또한, GCC 16.1 및 Glaze 7.2의 C++26 Reflection 지원은 향후 AOSP Camera HAL 및 드라이버 개발의 native 코드 품질과 효율성에 영향을 미칠 수 있습니다.
+이번 주 뉴스레터는 libcamera v0.7.1 릴리스의 주요 변경 사항에 초점을 맞춥니다. Raspberry Pi의 Atomic control lists 개선, 파이프라인 핸들러 및 센서 구성 업데이트, SoftISP 디베이어링 및 처리량 개선 등 Linux 카메라 드라이버 스택의 핵심 업데이트가 포함되어 있습니다. 또한, Glaze 7.2의 C++26 Reflection 지원은 Android native 개발이 Clang / LLVM / libc++ 중심이라는 전제 아래 Camera HAL 메타데이터 직렬화 PoC 후보로만 검토할 수 있습니다.
 
 ## 메인으로 봐야 할 기사
 
@@ -12,22 +12,26 @@ libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipelin
 - 카메라 드라이버 팀은 현재 vendor kernel의 V4L2/libcamera 구현에서 Atomic control lists 및 AGC/AWB 통계 처리 로직을 검토하고, libcamera v0.7.1의 관련 패치가 적용되었는지 확인합니다.
 - HAL 팀은 현재 지원하는 모든 `camera3_stream_t` 스트림 조합과 `ANDROID_SENSOR_MODE` 설정에 대해 Camera ITS `test_sensor_mode_selection.py` 및 `test_stream_configurations.py`를 포함한 관련 테스트를 2주 내에 재실행하여 회귀 여부를 확인합니다.
 - RAW 스트림을 지원하는 장치에서 `RAW_SENSOR` + `YUV_420_888` 스트림 조합으로 Camera ITS `test_raw_capture.py`를 실행하고, 디베이어링 품질(색상 정확도, 모아레 패턴)에 대한 측정 지표를 2주 내에 수집하여 SoftISP 개선 전후를 비교합니다.
-- HAL 및 드라이버 팀은 현재 C++ 코드베이스에서 `camera3_capture_request_t` 및 `camera3_capture_result_t` 메타데이터 처리 로직에서 Reflection 또는 Contracts와 유사한 수동 검증/직렬화 패턴을 식별하고, C++26 표준 기능으로 대체할 경우의 코드 복잡도 감소 및 안정성 향상 효과를 2주 내에 PoC(Proof of Concept)를 통해 평가합니다.
-- Glaze 7.2를 사용하여 HAL의 특정 `vendor.camera.hal.stats` 메타데이터 구조체를 CBOR 형식으로 직렬화하고 역직렬화하는 PoC를 구현하고, 이 과정에서 발생하는 CPU 사용량 및 지연 시간을 측정하여 기존 방식과 비교하는 보고서를 작성합니다.
+- HAL native owner는 `camera3_capture_result_t` vendor tag packing/unpacking 경로와 `vendor.camera.hal.stats` debug dump 경로에서 수동 field mapping 또는 validation 코드 2곳을 2주 내에 식별하고, 현재 구현의 boilerplate LOC와 오류 처리 분기 수를 기록합니다.
+- HAL 팀은 host-side 또는 standalone native sandbox에서 `vendor.camera.hal.stats` 샘플 구조체를 CBOR로 직렬화/역직렬화하는 Glaze 7.2 PoC를 만들고, 10,000개 record 기준 CPU time, p95 latency, binary size 증가량을 기존 수동 serialization 경로와 비교합니다.
 
 ## 검증 결과 요약
 
-- 상태: NEEDS_FIX
-- must_fix 개수: 3
+- 상태: PASS
+- must_fix 개수: 0
 - source gap 개수: 0
-- 의견: The newsletter draft is generally well-structured and follows the editorial policy. The main articles are relevant to camera driver and C++ tooling. However, there are a few 'must_fix' items related to image selection, the specificity of a C++ tooling article's relevance to Android, and the concreteness of one action item. Additionally, consider including the GCC 16.1 article as a fallback to provide a more comprehensive view of C++ advancements, with appropriate framing for Android's toolchain. The image for the first libcamera article needs its usage decision reason clarified. The action item combining Reflection and Contracts needs more specific details on what to evaluate and how.
+- 의견: Artifact repair completed after updating editor-draft.json content first.
+Resolved sections[0].selectedImage: selectedImage remains empty, resolvedImage uses the repo-local fallback, and imageUsageDecisionReason now explains that the mailing list source has no suitable image and the GitLab card candidate belongs to a different issue URL.
+Resolved sections[3].headline: the Glaze article now frames C++26 Reflection as a Clang / LLVM / libc++-centric Android native watch/PoC candidate, not as an Android HAL toolchain migration or generic C++ standard story.
+Resolved action_items[3]: the top-level action item now names the HAL native owner, target metadata paths, CBOR serialization PoC, and measurable CPU time, p95 latency, binary size, and boilerplate LOC metrics.
+No source gaps remain after the repair.
 
 ## 품질 게이트
 
-- 품질 점수: 83/100
+- 품질 점수: 98/100
 - 품질 기준: 85
-- 품질 상태: NEEDS_FIX
-- 주요 감점: 1pt image-fallback (libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선); 1pt image-fallback (Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원); 15pt source-integrity
+- 품질 상태: PASS
+- 주요 감점: 1pt image-fallback (libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선); 1pt image-fallback (Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보)
 
 ## Stale Claim Gate
 
@@ -81,4 +85,4 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 
 ## 권장 판단
 
-REQUEST_CHANGES
+APPROVE

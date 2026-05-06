@@ -1,39 +1,41 @@
-# Camera HAL Source / Parser Candidate Quality Plan
+# PR #33 Artifact Repair Plan
 
 ## Goal
 
-- Keep `MIN_FINAL_ARTICLES`, `ABSOLUTE_MIN_REVIEWABLE_ARTICLES`, `MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES`, and `QUALITY_THRESHOLD` unchanged.
-- Keep `cpp_ai_tooling_fallback` excluded from review-gate non-fallback counts.
-- Improve source/parser quality so 2-4 non-fallback Camera/Android/driver/SoC candidates are collected without weakening publication safety.
-- Prevent one release event from inflating non-fallback reviewable counts through multiple parser child items.
-- Use end-of-day when `NEWSLETTER_DATE=YYYY-MM-DD` defines the lookback window end, so same-day timestamped items remain in scope.
-- Preserve deterministic selection diagnostics even when generation fails before LLM calls.
+- Repair the 2026-05-07 newsletter artifacts without lowering quality thresholds or publish gates.
+- Do not mark `fact-check-report.json` as `PASS` before fixing `editor-draft.json`.
+- Preserve the reason each original `must_fix` item is resolved in the final fact-check comment.
 
 ## Scope
 
-- Improve official Android/AOSP source parsing for `Android Developers Latest Updates`, `CameraX Release Notes`, and `AOSP Site Updates`.
-- Include `libcamera` / V4L2 dated release item parsing for `camera_driver_image_pipeline` coverage.
-- Harden SoC candidate classification so only camera-impact platform evidence counts as `soc_platform_signal`.
-- Keep static reference/watch/documentation pages out of `main` / `short` selection unless they provide concrete dated release/API/behavior evidence.
-- Treat `AOSP Site Updates` month-level evidence by checking whether the full source month overlaps the lookback window.
+- Update only the 2026-05-07 generated/review artifacts and narrow generator guard code.
+- Keep `QUALITY_THRESHOLD`, review/publish gate constants, JSON schema, and enum values unchanged.
+- Leave unrelated local untracked `2026-05-06` artifacts untouched.
 
 ## Implementation
 
-- Verify current Android official fixtures:
-  - `Android Developers Latest Updates` camera row is dated `March 25, 2026`.
-  - `CameraX 1.6.0` release note is dated `March 25, 2026`.
-  - These rows remain outside a `NEWSLETTER_DATE=2026-05-06`, `LOOKBACK_DAYS=21` or 28-day collection unless a separate long-tail policy is explicitly added.
-- Extend `parseAospSiteUpdates` fixtures for month-level Camera ITS, CDD camera, Automotive Camera Service, and Camera Provider rows.
-- Add libcamera v0.7.1 dated release parsing and fixture coverage; it is dated `April 28, 2026` and should remain within the 21-day lookback for `NEWSLETTER_DATE=2026-05-06`.
-- Emit one main/short-eligible `libcamera v0.7.1` release candidate only; keep SoftISP, pipeline handler, and sensor configuration evidence inside that release item instead of separate eligible child candidates.
-- Update `withinLookback` so month-level candidates include April 2026 and exclude March 2026 for the 2026-05-06 / 21-day run.
-- Compute explicit newsletter date lookback windows with `YYYY-MM-DDT23:59:59.999Z`; keep live/scheduled no-date runs on the actual current time.
-- Require SoC article-level camera impact terms such as `ISP`, `image pipeline`, `camera performance`, `sensor`, `media pipeline`, `video capture`, `camera thermal`, `camera latency`, or `camera power` before assigning `soc_platform_signal`.
+- Fix `content/newsroom/2026-05-07/editor-draft.json` first:
+  - Keep `sections[0].selectedImage` empty and use the local fallback through `resolvedImage`.
+  - Explain that the mailing list source has no suitable image and the GitLab card candidate belongs to a different issue URL.
+  - Reframe the Glaze article as `cpp_ai_tooling_fallback` watch/PoC material for `Clang / LLVM / libc++`-centric Android native development, not as an Android HAL toolchain migration.
+  - Make the Glaze action item concrete with HAL owner, target metadata structures, serialization target, and metrics.
+  - Remove unsourced `GCC 16.1` narrative mentions unless they are backed by a separate sourced article.
+- After content repair, update `fact-check-report.*`:
+  - Use LLM fact-check output if available.
+  - If only artifact repair is feasible, set `must_fix` to empty only after the content fix and record per-item resolution evidence in `final_comment`.
+- Regenerate derived artifacts from the repaired editor draft and fact-check data:
+  - `editor-draft.md`
+  - `newsletters/2026-05-07/newsletter.md`
+  - `newsletters/2026-05-07/index.html`
+  - `quality-report.json`
+  - `quality-report.md`
+  - `editor-in-chief-brief.md`
+  - `release-qa-report.md`
+  - `data/newsletters.json`
+- Add a narrow deterministic guard for safe resolved fallback image false positives, plus regression coverage.
 
 ## Validation
 
-- `node --test tests\source-item-parsers.test.js tests\collector-relevance.test.js tests\aosp-camera-scope.test.js tests\newsroom-selection.test.js`
 - `npm.cmd run test`
 - `npm.cmd run validate`
-- `NEWSLETTER_DATE=2026-05-06 npm.cmd run collect`
 - `git diff --check`
