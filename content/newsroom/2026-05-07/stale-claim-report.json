@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-07",
+  "status": "PASS",
+  "removed_sections": [
+    {
+      "index": 1,
+      "headline": "GCC 16.1 릴리스: C++26 기능 지원 및 안전성 강화",
+      "source_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "source_titles": [
+        "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!"
+      ],
+      "version_or_release": "",
+      "api_or_component": "",
+      "behavior_change": "",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "editorial_priority": 5
+    }
+  ],
+  "final_section_sources": [
+    {
+      "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
+    },
+    {
+      "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
+    },
+    {
+      "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

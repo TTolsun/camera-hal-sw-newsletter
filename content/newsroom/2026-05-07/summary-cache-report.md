@@ -1,0 +1,24 @@
+# Summary cache report - 2026-05-07
+
+## Summary
+
+- Candidate count: 5
+- Hit count: 0
+- Miss count: 5
+- URL hit count: 0
+- Content hash hit count: 0
+- Legacy hit count: 0
+
+## Reasons
+
+- by-url:missing-cache-record; by-content:missing-cache-record: 5
+
+## Entries
+
+| Status | Lookup | Reason | Source | Published date | Title |
+| --- | --- | --- | --- | --- | --- |
+| miss | none | by-url:missing-cache-record; by-content:missing-cache-record | libcamera Release Announcements | 2026-04-28 | libcamera Release Announcements - libcamera v0.7.1 |
+| miss | none | by-url:missing-cache-record; by-content:missing-cache-record | libcamera Release Announcements | 2026-04-28 | libcamera v0.7.1 - pipeline handler and sensor configuration |
+| miss | none | by-url:missing-cache-record; by-content:missing-cache-record | libcamera Release Announcements | 2026-04-28 | libcamera v0.7.1 - SoftISP debaying and throughput |
+| miss | none | by-url:missing-cache-record; by-content:missing-cache-record | ISO C++ Blog | Thu, 30 Apr 2026 22:36:23 +0000 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! |
+| miss | none | by-url:missing-cache-record; by-content:missing-cache-record | ISO C++ Blog | Tue, 28 Apr 2026 22:25:57 +0000 | Glaze 7.2 &#45; C++26 Reflection | YAML, CBOR, MessagePack, TOML and more |

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-07",
+  "generated_at": "2026-05-06T16:58:49.481Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 5,
+    "hit_count": 0,
+    "miss_count": 5,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 5
+    }
+  ],
+  "entries": [
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "published_date": "2026-04-28",
+      "cache_key": {
+        "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-april/058408.html",
+        "url_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
+        "published_date": "2026-04-28",
+        "content_hash": "e81333390a65378bc432c4c009427ee8b212f3a5cb0140a45e869d5f95ba57d9"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "libcamera v0.7.1 - pipeline handler and sensor configuration",
+      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+      "source": "libcamera Release Announcements",
+      "published_date": "2026-04-28",
+      "cache_key": {
+        "normalized_url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+        "url_hash": "d99c6b850c32004c156f6b7447cdc2e8c9701a62d90c6c31e526d481b4c1fb61",
+        "published_date": "2026-04-28",
+        "content_hash": "49fc504068d27175e6be3282a275a55e401920095b99e563928ea21ab0506b19"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "libcamera v0.7.1 - SoftISP debaying and throughput",
+      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+      "source": "libcamera Release Announcements",
+      "published_date": "2026-04-28",
+      "cache_key": {
+        "normalized_url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+        "url_hash": "ab8ff018bbb94f4c0e045247e2e7e9ba8721dbe0fcd8f7b2f94a6e715cea0b3d",
+        "published_date": "2026-04-28",
+        "content_hash": "1d704b07527d5552b426d24d2167c3cd27c2c78eae2e2a753316e09c2bc39c17"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
+        "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+        "content_hash": "47e7f31cb529b3dd872a3865e14893c72d4c5778602bd361481a4e7d2d2e260b"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Glaze 7.2 &#45; C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "url_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
+        "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+        "content_hash": "107d05d464b24959e16676848400821800bc992de6588f1dcb947028ba37284a"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
