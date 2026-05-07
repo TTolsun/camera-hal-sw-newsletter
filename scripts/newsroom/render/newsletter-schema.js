@@ -1,5 +1,6 @@
 const string = { type: 'STRING' };
 const stringArray = { type: 'ARRAY', items: string };
+const briefingArray = { type: 'ARRAY', items: string, minItems: 3, maxItems: 3 };
 const source = {
   type: 'OBJECT',
   properties: {
@@ -248,7 +249,7 @@ const editorSchema = {
     date: string,
     title: string,
     summary: string,
-    briefing: stringArray,
+    briefing: briefingArray,
     sections: {
       type: 'ARRAY',
       items: section

@@ -1,29 +1,35 @@
-# Newsletter Policy Follow-Up Fix Plan
+# Editor Output Semantic Repair Plan
 
 ## Goal
 
-Apply the narrow Newsletter Policy follow-up directly on `main`: keep injected policy rendering pure, document historical fact-check strictness, and record validation results in the final response.
+Prevent recurrence of GitHub Actions run `25506887594` / job `74854877755`, where the editor returned valid JSON that failed the editor `briefing` count contract before reviewable artifacts could be produced.
 
 ## Scope
 
-- Make `renderNewsletterPolicyBlock(policy)` use the injected policy for the article count range.
-- Make historical fact-check `must_fix` warning-only behavior explicit in validator messages, docs, and tests.
-- Keep strict target dates hard-failing on unresolved fact-check `must_fix`.
-- Do not create or update a PR body in this direct-`main` path.
-- Do not edit `content/newsroom/**`, `content/collected-news/**`, or historical newsletter artifacts.
+- Add semantic repair only for editor output contract failures where `field === 'briefing'`.
+- Keep `briefing` strict: exactly 3 items.
+- Do not change Newsletter Policy, article count policy, quality gate, source selection, or workflow guard behavior.
+- Do not edit generated artifacts under `content/newsroom/**`, `content/collected-news/**`, or `newsletters/**`.
+- Preserve future failure diagnostics in newsroom debug artifacts and generation status.
+
+## Implementation
+
+- Move editor output contract validation helpers to `scripts/newsroom/validate/editor-output-contract.js`.
+- Add `EditorSemanticValidationError`, diagnostic artifact writing, repair orchestration with injectable fake repair function, and sections/sources preservation checks.
+- Wire `scripts/newsroom/cli/gemini-newsroom-newsletter.js` to repair only `briefing` semantic failures once, then run preservation checks before continuing.
+- Include `editor_semantic_validation`, `repairAttempted`, and `repairSucceeded` in terminal failure status.
+- Add numeric `minItems: 3` and `maxItems: 3` to the editor `briefing` response schema.
 
 ## Validation
 
-- `node --check scripts/newsroom/common/newsletter-policy.js`
-- `node --check scripts/newsroom/cli/validate-site.js`
-- `npm.cmd run validate:policy`
-- `npm.cmd run check:policy-docs`
+- `node --check scripts/newsroom/cli/gemini-newsroom-newsletter.js`
+- `node --check scripts/newsroom/render/newsletter-schema.js`
+- `node --check scripts/newsroom/validate/editor-output-contract.js`
 - `npm.cmd run test`
 - `npm.cmd run validate`
 - `npm.cmd run ci`
-- `git diff --check`
 
 ## Risks
 
-- Fixing the historical `must_fix` warning wording must not relax current/changed/generated hard failures.
-- The generated policy block must remain generated from config; do not hand-edit the block or embed new article-count magic numbers outside it.
+- The repair prompt must not rewrite article facts, sections, sources, URLs, images, or source-derived claims.
+- Preservation check failures must remain fatal so repair cannot silently change publication inputs.

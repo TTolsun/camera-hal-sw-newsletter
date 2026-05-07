@@ -74,6 +74,10 @@ const {
   sectionPassesArticleGate
 } = require('../validate/newsletter-quality');
 const {
+  repairEditorOutputContract,
+  validateEditorOutputContract
+} = require('../validate/editor-output-contract');
+const {
   buildMarkdown,
   buildHtml,
   buildFactCheckMarkdown,
@@ -93,7 +97,10 @@ const generationRunState = {
   qualityReport: null,
   factCheck: null,
   shortlistReport: null,
-  selectedInputs: []
+  selectedInputs: [],
+  editorSemanticValidation: null,
+  repairAttempted: false,
+  repairSucceeded: false
 };
 
 function fail(message) {
@@ -209,6 +216,34 @@ function buildGenerationStatus({
     invalid_json_count: diagnostics.invalid_json_count,
     model_usage: diagnostics.model_usage,
     ...extra
+  };
+}
+
+function recordEditorSemanticStatus(status = {}) {
+  if ('editor_semantic_validation' in status) {
+    generationRunState.editorSemanticValidation = status.editor_semantic_validation;
+  }
+  if ('repairAttempted' in status) {
+    generationRunState.repairAttempted = Boolean(status.repairAttempted);
+  }
+  if ('repairSucceeded' in status) {
+    generationRunState.repairSucceeded = Boolean(status.repairSucceeded);
+  }
+}
+
+function editorSemanticStatusExtra(error = null) {
+  const editorSemanticValidation =
+    error?.editorSemanticValidation ||
+    generationRunState.editorSemanticValidation ||
+    null;
+  const repairAttempted =
+    error?.repairAttempted ?? generationRunState.repairAttempted;
+  const repairSucceeded =
+    error?.repairSucceeded ?? generationRunState.repairSucceeded;
+  return {
+    editor_semantic_validation: editorSemanticValidation,
+    repairAttempted: Boolean(repairAttempted),
+    repairSucceeded: Boolean(repairSucceeded)
   };
 }
 
@@ -648,35 +683,70 @@ function normalizeEditorSection(section, index, reporter) {
 }
 
 function validateEditor(value, date, reporter = { candidates: [] }) {
-  if (value.date !== date) value.date = date;
-  value.title = value.title || `Camera HAL SW 뉴스레터 - ${date}`;
-  if (!value.title.includes(date)) value.title = `Camera HAL SW 뉴스레터 - ${date}`;
-  if (!value.summary) fail('Editor output is missing summary.');
-  if (!Array.isArray(value.briefing) || value.briefing.length !== 3) {
-    fail('Editor output must contain exactly 3 briefing items.');
-  }
-  if (!Array.isArray(value.sections) || value.sections.length < 3) {
-    fail('Editor output must contain at least 3 sections.');
-  }
+  return validateEditorOutputContract(value, date, {
+    reporter,
+    normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter)
+  });
+}
 
-  value.sections = value.sections.map((section, index) => normalizeEditorSection(section, index, reporter));
+async function repairEditorBriefingWithLlm({
+  date,
+  editorStage,
+  commonContext,
+  lockedContext,
+  invalidEditor,
+  validationError
+}) {
+  return callLlmJson(
+    `${editorStage} semantic repair`,
+    [
+      'You are repairing a valid JSON editor draft for AOSP Camera / Driver / SoC Platform Newsletter.',
+      'Return the complete editor JSON object matching the same schema.',
+      'Only fix the briefing field so it contains exactly 3 Korean briefing items.',
+      'Do not change any field except briefing.',
+      'Do not change sections, sources, source URLs, factual claims, article order, image fields, action_items, or references.',
+      'Do not add new articles, remove articles, rewrite source facts, or invent new source material.',
+      'Preserve all non-briefing JSON values byte-for-byte when possible.',
+      'Return only JSON matching the schema.'
+    ].join('\n'),
+    [
+      commonContext,
+      lockedContext,
+      `Editor semantic validation error JSON:\n${JSON.stringify(validationError, null, 2)}`,
+      `Invalid editor draft JSON:\n${JSON.stringify(invalidEditor, null, 2)}`
+    ].filter(Boolean).join('\n\n'),
+    editorSchema
+  );
+}
 
-  const emptySourceSections = value.sections
-    .filter(section => section.sources.length === 0)
-    .map(section => section.category);
-  if (emptySourceSections.length > 0) {
-    fail(`Editor output has sections without sources: ${emptySourceSections.join(', ')}`);
-  }
-
-  const refs = new Map();
-  for (const section of value.sections) {
-    for (const source of section.sources) {
-      refs.set(source.url, { title: source.title || source.url, url: source.url });
-    }
-  }
-  value.references = [...refs.values()];
-  if (value.references.length === 0) fail('Editor output must contain references.');
-  return value;
+async function validateOrRepairEditor(value, {
+  date,
+  reporter,
+  attempt,
+  editorStage,
+  commonContext,
+  lockedContext,
+  newsroomDir
+}) {
+  const result = await repairEditorOutputContract({
+    value,
+    date,
+    reporter,
+    attempt,
+    stage: editorStage,
+    newsroomDir,
+    normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
+    repairFn: async ({ invalidEditor, validationError }) => repairEditorBriefingWithLlm({
+      date,
+      editorStage,
+      commonContext,
+      lockedContext,
+      invalidEditor,
+      validationError
+    })
+  });
+  recordEditorSemanticStatus(result);
+  return result.editor;
 }
 
 function validateFactCheck(value) {
@@ -1857,7 +1927,7 @@ async function main() {
     const rejectedReporterDuplicates = removeDisallowedSelections(reporter, lockedSections, excludedSections);
     writeJson(path.join(newsroomDir, `reporter-candidates-attempt-${attempt}.json`), reporter);
 
-    editor = validateEditor(await callLlmJson(
+    const editorDraft = await callLlmJson(
       editorStage,
       [
         'You are the AI editor for AOSP Camera / Driver / SoC Platform Newsletter.',
@@ -1896,7 +1966,16 @@ async function main() {
       ].filter(Boolean).join('\n'),
       `${commonContext}\n\n${lockedContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}`,
       editorSchema
-    ), date, reporter);
+    );
+    editor = await validateOrRepairEditor(editorDraft, {
+      date,
+      reporter,
+      attempt,
+      editorStage,
+      commonContext,
+      lockedContext,
+      newsroomDir
+    });
     attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
 
     const merged = mergeLockedSections(lockedSections, editor.sections, excludedSections);
@@ -2391,6 +2470,7 @@ async function main() {
         ensureArray(staleScrub.report?.unsupported_release_claims_removed).length +
         ensureArray(staleScrub.report?.unused_references_removed).length,
       stale_claim_hard_failure_count: ensureArray(staleScrub.report?.hard_failures).length,
+      ...editorSemanticStatusExtra(),
       ...selectionStatusExtra(shortlistReport, {
         renderedMainArticleCount: ensureArray(editor.sections).length,
         lockedArticleCount: retryHistory.at(-1)?.locked_article_headlines.length || 0,
@@ -2462,6 +2542,7 @@ function writeTerminalFailureStatus(error) {
         generationRunState.retryHistory.length,
         generationRunState.currentQualityAttempt
       ),
+      ...editorSemanticStatusExtra(error),
       ...selectionStatusExtra(generationRunState.shortlistReport)
     }
   }));
@@ -2483,6 +2564,7 @@ if (require.main === module) {
 module.exports = {
   buildGenerationStatus,
   buildSectionRepairPlan,
+  editorSemanticStatusExtra,
   failureStageFromError,
   hasTooFewMainArticlesDeduction,
   main,
@@ -2491,6 +2573,7 @@ module.exports = {
   sectionsMatchingRepairPlan,
   sectionsOutsideRepairPlan,
   validateCompletionSections,
+  validateEditor,
   selectionStatusExtra,
   writeGenerationStatus,
   writeNewsletterDate,
