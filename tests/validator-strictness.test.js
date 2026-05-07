@@ -86,7 +86,7 @@ function newsletterHtml(date) {
   ].join('\n');
 }
 
-function writeSiteFixture(root, { date = '2026-04-01', articleCount, todo = false, strict = false } = {}) {
+function writeSiteFixture(root, { date = '2026-04-01', articleCount, todo = false, strict = false, factCheckMustFix = false } = {}) {
   const count = articleCount ?? Math.max(0, articlePolicy.mainArticleCount.min - 1);
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
@@ -100,6 +100,14 @@ function writeSiteFixture(root, { date = '2026-04-01', articleCount, todo = fals
   fs.writeFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }), 'utf8');
   fs.writeFileSync(path.join(root, 'newsletters', date, 'index.html'), newsletterHtml(date), 'utf8');
   fs.writeFileSync(path.join(root, 'index.html'), `<!doctype html><html><body><a href="newsletters/${date}/">Archive</a></body></html>`, 'utf8');
+  if (factCheckMustFix) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+      status: 'NEEDS_FIX',
+      must_fix: ['CameraX release has an unresolved source claim.'],
+      source_gaps: [],
+      source_gap_count: 0
+    });
+  }
   if (strict) {
     fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
     fs.writeFileSync(path.join(root, '.tmp', 'newsletter-date.txt'), date, 'utf8');
@@ -164,6 +172,35 @@ test('historical validate-site structural errors remain hard failures', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Published newsletter contains TODO/);
+});
+
+test('historical validate-site fact-check must_fix is warning-only', () => {
+  const root = tempRoot('validate-site-historical-must-fix-');
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min,
+    factCheckMustFix: true
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /unresolved fact-check must_fix items/);
+  assert.match(result.stderr, /historical artifact outside current\/changed\/generated validation target, warning only/);
+});
+
+test('strict validate-site fact-check must_fix remains hard failure', () => {
+  const root = tempRoot('validate-site-strict-must-fix-');
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min,
+    factCheckMustFix: true,
+    strict: true
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /unresolved fact-check must_fix items/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target, warning only/);
 });
 
 test('historical validate-quality threshold and recompute drift are warning-only', () => {

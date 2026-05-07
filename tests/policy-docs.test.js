@@ -8,6 +8,8 @@ const {
   POLICY_BLOCK_BEGIN,
   POLICY_BLOCK_END,
   analyzeNewsletterPolicyBlock,
+  articleCountRangeText,
+  getDefaultNewsletterPolicy,
   renderNewsletterPolicyBlock,
   replaceNewsletterPolicyBlock
 } = require('../scripts/lib/newsletter-policy');
@@ -45,6 +47,31 @@ test('policy docs check reports generated block drift', () => {
 
   assert.equal(analysis.ok, false);
   assert.ok(analysis.errors.some(error => error.includes('generated Newsletter Policy block drift')));
+});
+
+test('policy block rendering uses the injected policy article count range', () => {
+  const defaultPolicy = getDefaultNewsletterPolicy();
+  const customPolicy = {
+    ...defaultPolicy,
+    articlePolicy: {
+      ...defaultPolicy.articlePolicy,
+      mainArticleCount: { min: 11, max: 13 },
+      primaryCameraStack: {
+        ...defaultPolicy.articlePolicy.primaryCameraStack,
+        buckets: [...defaultPolicy.articlePolicy.primaryCameraStack.buckets]
+      },
+      supportingMainBuckets: [...defaultPolicy.articlePolicy.supportingMainBuckets],
+      forbiddenMainBuckets: [...defaultPolicy.articlePolicy.forbiddenMainBuckets]
+    },
+    qualityGatePolicy: {
+      ...defaultPolicy.qualityGatePolicy,
+      hardFailConditions: [...defaultPolicy.qualityGatePolicy.hardFailConditions]
+    }
+  };
+  const rendered = renderNewsletterPolicyBlock(customPolicy);
+
+  assert.match(rendered, /Main article count: 11-13/);
+  assert.doesNotMatch(rendered, new RegExp(`Main article count: ${articleCountRangeText(defaultPolicy)}`));
 });
 
 test('policy docs sync inserts missing block and rejects malformed markers', () => {

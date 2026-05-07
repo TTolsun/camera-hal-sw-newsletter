@@ -160,7 +160,7 @@ function validateSourceGapArtifact(date, strictArtifactValidation) {
     if (strictArtifactValidation) {
       fail(message);
     } else {
-      warn(`${message} Not enforcing because this run is not publishing that issue.`);
+      warn(`${message} ${historicalPolicyWarningReason()}.`);
     }
   }
 }

@@ -223,7 +223,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     '### Newsletter Policy',
     '',
     `- Source of truth: \`${POLICY_REL_PATH.replace(/\\/g, '/')}\``,
-    `- Main article count: ${articleCountRangeText()}`,
+    `- Main article count: ${articleCountRangeText(policy)}`,
     `- Required Primary Camera Stack articles: at least ${articlePolicy.primaryCameraStack.minRequired}`,
     `- Primary Camera Stack buckets: ${articlePolicy.primaryCameraStack.buckets.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- Supporting main buckets: ${articlePolicy.supportingMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
