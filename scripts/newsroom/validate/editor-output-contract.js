@@ -1,5 +1,11 @@
 const path = require('path');
 const { writeJson } = require('../common/common');
+const {
+  articlePolicy,
+  articleCountRangeText,
+  isForbiddenMainBucket,
+  isPrimaryCameraStackBucket
+} = require('../common/newsletter-policy');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -27,6 +33,24 @@ function actualType(value) {
   return typeof value;
 }
 
+function text(value) {
+  return String(value || '').trim();
+}
+
+function normalizeUrlKey(value) {
+  const raw = text(value);
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    parsed.protocol = parsed.protocol.toLowerCase();
+    parsed.hostname = parsed.hostname.toLowerCase();
+    const normalized = parsed.toString().replace(/\/$/, '');
+    return normalized.toLowerCase();
+  } catch {
+    return raw.replace(/\/$/, '').toLowerCase();
+  }
+}
+
 function countDetails(value, field, expected = {}) {
   const actualValue = value?.[field];
   const isArray = Array.isArray(actualValue);
@@ -36,6 +60,61 @@ function countDetails(value, field, expected = {}) {
     actualCount: isArray ? actualValue.length : null,
     actualType: actualType(actualValue),
     sectionCount: Array.isArray(value?.sections) ? value.sections.length : null
+  };
+}
+
+function candidateHash(candidate = {}) {
+  return text(candidate.source_candidate_hash || candidate.url_hash || candidate.normalized_url_hash);
+}
+
+function candidateUrls(candidate = {}) {
+  return [
+    candidate.url,
+    candidate.article_url,
+    candidate.articleUrl,
+    candidate.normalized_url
+  ].map(text).filter(Boolean);
+}
+
+function buildCandidateIndex(reporter = {}) {
+  const byHash = new Map();
+  const byUrl = new Map();
+  for (const candidate of ensureArray(reporter?.candidates)) {
+    const hash = candidateHash(candidate);
+    if (hash && !byHash.has(hash)) byHash.set(hash, candidate);
+    for (const url of candidateUrls(candidate)) {
+      const key = normalizeUrlKey(url);
+      if (key && !byUrl.has(key)) byUrl.set(key, candidate);
+    }
+  }
+  return { byHash, byUrl };
+}
+
+function candidateForSection(section = {}, candidateIndex) {
+  const hash = text(section.source_candidate_hash || section.url_hash || section.normalized_url_hash);
+  if (hash && candidateIndex.byHash.has(hash)) return candidateIndex.byHash.get(hash);
+  for (const source of ensureArray(section.sources)) {
+    const key = normalizeUrlKey(source?.url);
+    if (key && candidateIndex.byUrl.has(key)) return candidateIndex.byUrl.get(key);
+  }
+  return null;
+}
+
+function sectionPolicyMetadata(section = {}, candidate = null) {
+  const sectionBucket = text(section.relevance_bucket);
+  const candidateBucket = text(candidate?.relevance_bucket);
+  const bucket = sectionBucket || candidateBucket;
+  const sectionPrimaryFlag = section.counts_as_primary_camera_topic === true;
+  const candidatePrimaryFlag = candidate?.counts_as_primary_camera_topic === true;
+  return {
+    bucket,
+    primary: sectionPrimaryFlag ||
+      candidatePrimaryFlag ||
+      isPrimaryCameraStackBucket(sectionBucket) ||
+      isPrimaryCameraStackBucket(candidateBucket),
+    forbidden: isForbiddenMainBucket(sectionBucket) || isForbiddenMainBucket(candidateBucket),
+    source_candidate_hash: text(section.source_candidate_hash || candidateHash(candidate)),
+    source_candidate_url: text(section.source_candidate_url || candidate?.url || candidate?.article_url || candidate?.articleUrl)
   };
 }
 
@@ -54,6 +133,70 @@ function briefingCountError(value) {
 
 function semanticError(message, details = {}) {
   return new EditorSemanticValidationError(message, details);
+}
+
+function validateSectionCount(value) {
+  if (
+    !Array.isArray(value.sections) ||
+    value.sections.length < articlePolicy.mainArticleCount.min ||
+    value.sections.length > articlePolicy.mainArticleCount.max
+  ) {
+    throw semanticError(
+      `Editor output must contain ${articleCountRangeText()} sections; got ${
+        Array.isArray(value.sections) ? value.sections.length : `non-array ${actualType(value.sections)}`
+      }.`,
+      {
+        ...countDetails(value, 'sections', {
+          expectedMinCount: articlePolicy.mainArticleCount.min,
+          expectedMaxCount: articlePolicy.mainArticleCount.max
+        })
+      }
+    );
+  }
+}
+
+function validateEditorArticlePolicy(value, reporter = {}) {
+  const candidateIndex = buildCandidateIndex(reporter);
+  const sectionDetails = ensureArray(value.sections).map((section, index) => {
+    const metadata = sectionPolicyMetadata(section, candidateForSection(section, candidateIndex));
+    return {
+      index: index + 1,
+      headline: text(section.headline || section.category || `article ${index + 1}`),
+      ...metadata
+    };
+  });
+  const primaryCount = sectionDetails.filter(item => item.primary).length;
+  const forbiddenSections = sectionDetails.filter(item => item.forbidden);
+
+  if (primaryCount < articlePolicy.primaryCameraStack.minRequired) {
+    throw semanticError(
+      `Editor output must contain at least ${articlePolicy.primaryCameraStack.minRequired} Primary Camera Stack section(s).`,
+      {
+        field: 'sections.relevance_bucket',
+        expectedMinCount: articlePolicy.primaryCameraStack.minRequired,
+        actualCount: primaryCount,
+        actualType: 'array',
+        sectionCount: ensureArray(value.sections).length,
+        primaryCameraStackBuckets: [...articlePolicy.primaryCameraStack.buckets],
+        sectionDetails
+      }
+    );
+  }
+
+  if (forbiddenSections.length > 0) {
+    throw semanticError(
+      `Editor output contains forbidden main bucket section(s): ${forbiddenSections.map(item => item.headline).join(', ')}.`,
+      {
+        field: 'sections.relevance_bucket',
+        forbiddenMainBuckets: [...articlePolicy.forbiddenMainBuckets],
+        actualCount: forbiddenSections.length,
+        actualType: 'array',
+        sectionCount: ensureArray(value.sections).length,
+        forbiddenSections
+      }
+    );
+  }
+  return { primaryCount, forbiddenSections, sectionDetails };
 }
 
 function validateEditorOutputContract(value, date, options = {}) {
@@ -82,13 +225,10 @@ function validateEditorOutputContract(value, date, options = {}) {
   if (!Array.isArray(value.briefing) || value.briefing.length !== REQUIRED_BRIEFING_COUNT) {
     throw briefingCountError(value);
   }
-  if (!Array.isArray(value.sections) || value.sections.length < 3) {
-    throw semanticError('Editor output must contain at least 3 sections.', {
-      ...countDetails(value, 'sections', { expectedMinCount: 3 })
-    });
-  }
+  validateSectionCount(value);
 
   value.sections = value.sections.map((section, index) => normalizeSection(section, index, reporter));
+  validateEditorArticlePolicy(value, reporter);
 
   const emptySourceSections = value.sections
     .filter(section => ensureArray(section.sources).length === 0)
@@ -310,6 +450,7 @@ module.exports = {
   assertSectionsAndSourcesPreserved,
   repairEditorOutputContract,
   serializeEditorValidationError,
+  validateEditorArticlePolicy,
   validateEditorOutputContract,
   writeEditorValidationDiagnostics
 };

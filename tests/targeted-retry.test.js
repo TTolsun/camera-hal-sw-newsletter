@@ -1,17 +1,64 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const test = require('node:test');
 
 const {
+  STATUS_FAILED_REPAIR_REVIEWABLE,
   availableCompletionCandidates,
   buildSectionRepairPlan,
   mergeLockedSections,
+  recordLastKnownValidEditor,
   sectionsMatchingRepairPlan,
-  sectionsOutsideRepairPlan
+  sectionsOutsideRepairPlan,
+  validateTargetedRepairResult,
+  writeReviewableRepairFailureArtifacts
 } = require('../scripts/gemini-newsroom-newsletter');
+const {
+  EditorSemanticValidationError
+} = require('../scripts/newsroom/validate/editor-output-contract');
 const {
   reserveReporterCandidate: reporterCandidate,
   retrySection: section
 } = require('./helpers/newsroom-builders');
+
+const DATE = '2026-05-08';
+
+function tempRoot() {
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'targeted-retry-'));
+}
+
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+}
+
+function policySection(headline, url, bucket = 'direct_aosp_camera', overrides = {}) {
+  const primaryBuckets = new Set([
+    'direct_aosp_camera',
+    'camera_driver_image_pipeline',
+    'android_platform_camera_adjacent'
+  ]);
+  return {
+    ...section(headline, url),
+    relevance_bucket: bucket,
+    counts_as_primary_camera_topic: primaryBuckets.has(bucket),
+    source_candidate_hash: overrides.source_candidate_hash || `${headline.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-hash`,
+    ...overrides
+  };
+}
+
+function editorWithSections(sections) {
+  return {
+    date: DATE,
+    title: `Camera HAL SW 뉴스레터 - ${DATE}`,
+    summary: 'Summary',
+    briefing: ['one', 'two', 'three'],
+    sections,
+    action_items: [],
+    references: []
+  };
+}
 
 test('targeted retry keeps passed sections unchanged and regenerates failed sections only', () => {
   const passed = section('CameraX compatibility release', 'https://example.com/camerax');
@@ -228,4 +275,161 @@ test('completion pool keeps reserve candidates closed until replacement is allow
 
   assert.deepEqual(available.map(candidate => candidate.url), ['https://example.com/primary']);
   assert.equal(rejections.length, 0);
+});
+
+test('targeted repair rejects output that shrinks 3 sections to 2', () => {
+  const before = [
+    policySection('CameraX release', 'https://example.com/camerax'),
+    policySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline'),
+    policySection('Android platform camera update', 'https://example.com/platform', 'android_platform_camera_adjacent')
+  ];
+  const after = before.slice(0, 2);
+
+  assert.throws(
+    () => validateTargetedRepairResult({
+      beforeSections: before,
+      repairSections: [],
+      afterSections: after,
+      lockedSections: after,
+      mode: 'targeted-repair',
+      allowCountChange: false,
+      date: DATE
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.reason, 'section_count_drift');
+      assert.equal(error.details.expectedCount, 3);
+      assert.equal(error.details.actualCount, 2);
+      return true;
+    }
+  );
+});
+
+test('targeted repair rejects locked section source URL drift', () => {
+  const locked = policySection('CameraX release', 'https://example.com/camerax', 'direct_aosp_camera', {
+    source_candidate_hash: 'locked-hash'
+  });
+  const drifted = policySection('CameraX release', 'https://example.com/changed', 'direct_aosp_camera', {
+    source_candidate_hash: 'changed-hash'
+  });
+  const other = policySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline');
+  const before = [locked, other, policySection('Android platform update', 'https://example.com/platform', 'android_platform_camera_adjacent')];
+
+  assert.throws(
+    () => validateTargetedRepairResult({
+      beforeSections: before,
+      repairSections: [drifted],
+      afterSections: [locked, other, drifted],
+      lockedSections: [locked, other],
+      mode: 'targeted-repair',
+      allowCountChange: false,
+      date: DATE
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.reason, 'locked_section_source_drift');
+      assert.equal(error.details.expected.source_candidate_hash, 'locked-hash');
+      assert.equal(error.details.actual.source_candidate_hash, 'changed-hash');
+      return true;
+    }
+  );
+});
+
+test('invalid repair output writes reviewable fallback without replacing last valid editor draft', () => {
+  const root = tempRoot();
+  const newsroomDir = path.join(root, 'content', 'newsroom', DATE);
+  const sections = [
+    policySection('CameraX release', 'https://example.com/camerax'),
+    policySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline'),
+    policySection('Android platform update', 'https://example.com/platform', 'android_platform_camera_adjacent')
+  ];
+  const validEditor = editorWithSections(sections);
+  const reporter = { candidates: [] };
+  const factCheck = { status: 'PASS', must_fix: [], recommended_fixes: [], source_gaps: [], source_gap_count: 0 };
+  const qualityReport = { status: 'NEEDS_FIX', score: 79, threshold: 85, deductions: [] };
+  recordLastKnownValidEditor(validEditor, { date: DATE, reporter, factCheck, qualityReport, attempt: 1 });
+
+  writeReviewableRepairFailureArtifacts({
+    date: DATE,
+    newsroomDir,
+    rootDir: root,
+    error: new EditorSemanticValidationError('Targeted repair changed main article count outside completion/replacement mode.', {
+      field: 'sections',
+      reason: 'section_count_drift',
+      expectedCount: 3,
+      actualCount: 2,
+      sectionCount: 2
+    }),
+    reporter,
+    factCheck,
+    qualityReport,
+    retryHistory: [],
+    shortlistReport: {
+      selected_article_count: 3,
+      composition_summary: {
+        selected_article_count: 3,
+        primary_camera_stack_topic_count: 1,
+        supporting_main_article_count: 2,
+        forbidden_main_article_count: 0
+      }
+    },
+    attempt: 1,
+    stage: 'editor repair attempt 1/2'
+  });
+
+  const fallbackEditor = readJson(path.join(newsroomDir, 'editor-draft.json'));
+  const status = readJson(path.join(root, '.tmp', 'newsletter-generation-status.json'));
+  assert.deepEqual(fallbackEditor.sections.map(item => item.sources[0].url), sections.map(item => item.sources[0].url));
+  assert.equal(fallbackEditor.sections.length, 3);
+  assert.equal(status.status, STATUS_FAILED_REPAIR_REVIEWABLE);
+  assert.equal(status.publish_ready, false);
+  assert.equal(status.selection_publish_ready, false);
+  assert.equal(status.final_publish_ready, false);
+  assert.equal(status.publish_gate_passed, false);
+  assert.equal(status.editor_review_required, true);
+  assert.equal(status.composition_mode, 'NEEDS_FIX');
+});
+
+test('3-section final draft with a Primary Camera Stack article passes targeted validation', () => {
+  const sections = [
+    policySection('CameraX release', 'https://example.com/camerax'),
+    policySection('SoC thermal update', 'https://example.com/soc', 'soc_platform_signal'),
+    policySection('C++ tooling update', 'https://example.com/cpp', 'cpp_ai_tooling_fallback')
+  ];
+
+  assert.equal(validateTargetedRepairResult({
+    beforeSections: sections,
+    repairSections: [],
+    afterSections: sections,
+    lockedSections: sections,
+    mode: 'targeted-repair',
+    allowCountChange: false,
+    date: DATE
+  }), true);
+});
+
+test('3-section final draft with no Primary Camera Stack article fails targeted validation', () => {
+  const sections = [
+    policySection('SoC thermal update', 'https://example.com/soc-1', 'soc_platform_signal'),
+    policySection('C++ tooling update', 'https://example.com/cpp', 'cpp_ai_tooling_fallback'),
+    policySection('SoC power update', 'https://example.com/soc-2', 'soc_platform_signal')
+  ];
+
+  assert.throws(
+    () => validateTargetedRepairResult({
+      beforeSections: sections,
+      repairSections: [],
+      afterSections: sections,
+      lockedSections: sections,
+      mode: 'targeted-repair',
+      allowCountChange: false,
+      date: DATE
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.relevance_bucket');
+      assert.equal(error.details.actualCount, 0);
+      return true;
+    }
+  );
 });

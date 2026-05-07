@@ -14,6 +14,9 @@ const {
   buildGenerationStatus,
   editorSemanticStatusExtra
 } = require('../scripts/gemini-newsroom-newsletter');
+const {
+  articlePolicy
+} = require('../scripts/newsroom/common/newsletter-policy');
 
 const DATE = '2026-05-08';
 
@@ -44,6 +47,9 @@ function section(index, overrides = {}) {
       title: `Source ${index}`,
       url: `https://example.com/source-${index}`
     }],
+    relevance_bucket: 'direct_aosp_camera',
+    counts_as_primary_camera_topic: true,
+    source_candidate_hash: `hash-${index}`,
     ...overrides
   };
 }
@@ -103,6 +109,88 @@ test('valid editor output with exactly 3 briefing items passes unchanged', () =>
       sources: item.sources
     }))),
     sourceSignature
+  );
+});
+
+test('editor section count follows Newsletter Policy min/max', () => {
+  const tooFew = editor({ sections: [section(1), section(2)] });
+  const minimum = editor({
+    sections: Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) => section(index + 1))
+  });
+  const tooMany = editor({
+    sections: Array.from({ length: articlePolicy.mainArticleCount.max + 1 }, (_, index) => section(index + 1))
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(tooFew, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections');
+      assert.equal(error.details.expectedMinCount, articlePolicy.mainArticleCount.min);
+      assert.equal(error.details.expectedMaxCount, articlePolicy.mainArticleCount.max);
+      assert.equal(error.details.actualCount, articlePolicy.mainArticleCount.min - 1);
+      assert.equal(error.details.actualType, 'array');
+      assert.equal(error.details.sectionCount, articlePolicy.mainArticleCount.min - 1);
+      return true;
+    }
+  );
+
+  assert.equal(validateEditorOutputContract(minimum, DATE, { normalizeSection }), minimum);
+
+  assert.throws(
+    () => validateEditorOutputContract(tooMany, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections');
+      assert.equal(error.details.expectedMinCount, articlePolicy.mainArticleCount.min);
+      assert.equal(error.details.expectedMaxCount, articlePolicy.mainArticleCount.max);
+      assert.equal(error.details.actualCount, articlePolicy.mainArticleCount.max + 1);
+      assert.equal(error.details.actualType, 'array');
+      assert.equal(error.details.sectionCount, articlePolicy.mainArticleCount.max + 1);
+      return true;
+    }
+  );
+});
+
+test('editor article policy requires at least one Primary Camera Stack section', () => {
+  const draft = editor({
+    sections: [
+      section(1, { relevance_bucket: 'soc_platform_signal', counts_as_primary_camera_topic: false }),
+      section(2, { relevance_bucket: 'cpp_ai_tooling_fallback', counts_as_primary_camera_topic: false }),
+      section(3, { relevance_bucket: 'soc_platform_signal', counts_as_primary_camera_topic: false })
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.relevance_bucket');
+      assert.equal(error.details.expectedMinCount, articlePolicy.primaryCameraStack.minRequired);
+      assert.equal(error.details.actualCount, 0);
+      return true;
+    }
+  );
+});
+
+test('editor article policy rejects forbidden main buckets', () => {
+  const draft = editor({
+    sections: [
+      section(1),
+      section(2, { relevance_bucket: 'generic_tech_watchlist', counts_as_primary_camera_topic: false }),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.relevance_bucket');
+      assert.deepEqual(error.details.forbiddenMainBuckets, articlePolicy.forbiddenMainBuckets);
+      assert.equal(error.details.actualCount, 1);
+      return true;
+    }
   );
 });
 

@@ -193,6 +193,75 @@ test('generation status output includes multiline selection diagnostics', () => 
   assert.match(rendered, /selection_shortage_hints=Add at least one Primary Camera Stack candidate before publishing\./);
 });
 
+test('FAILED_REPAIR_REVIEWABLE status is reviewable but never publish-ready', () => {
+  const outputs = buildGenerationStatusOutputs({
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    quality_status: 'NEEDS_FIX',
+    quality_score: 79,
+    quality_threshold: qualityGatePolicy.threshold,
+    publish_ready: true,
+    selection_publish_ready: true,
+    final_publish_ready: true,
+    review_gate_passed: true,
+    publish_gate_passed: true,
+    composition_mode: 'NORMAL',
+    editor_review_required: false,
+    rendered_main_article_count: articlePolicy.mainArticleCount.min,
+    selected_article_count: articlePolicy.mainArticleCount.min,
+    final_selected_article_count: articlePolicy.mainArticleCount.min,
+    primary_camera_stack_topic_count: articlePolicy.primaryCameraStack.minRequired,
+    supporting_main_article_count: articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired,
+    forbidden_main_article_count: 0
+  });
+
+  assert.equal(outputs.status, 'FAILED_REPAIR_REVIEWABLE');
+  assert.equal(outputs.publish_ready, 'false');
+  assert.equal(outputs.selection_publish_ready, 'false');
+  assert.equal(outputs.final_publish_ready, 'false');
+  assert.equal(outputs.publish_gate_passed, 'false');
+  assert.equal(outputs.review_gate_passed, 'true');
+  assert.equal(outputs.editor_review_required, 'true');
+  assert.equal(outputs.composition_mode, 'NEEDS_FIX');
+});
+
+test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow', () => {
+  const body = buildNewsroomPrBody({
+    date: '2026-05-08',
+    validateOutcome: 'failure',
+    status: {
+      status: 'FAILED_REPAIR_REVIEWABLE',
+      fact_check_status: 'PASS',
+      must_fix_count: 0,
+      source_gap_count: 0,
+      quality_status: 'NEEDS_FIX',
+      quality_score: 79,
+      quality_threshold: qualityGatePolicy.threshold,
+      publish_ready: false,
+      selection_publish_ready: false,
+      final_publish_ready: false,
+      review_gate_passed: true,
+      publish_gate_passed: false,
+      composition_mode: 'NEEDS_FIX',
+      editor_review_required: true,
+      rendered_main_article_count: articlePolicy.mainArticleCount.min,
+      selected_article_count: articlePolicy.mainArticleCount.min,
+      final_selected_article_count: articlePolicy.mainArticleCount.min,
+      primary_camera_stack_topic_count: articlePolicy.primaryCameraStack.minRequired,
+      supporting_main_article_count: articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired,
+      forbidden_main_article_count: 0,
+      stale_claim_status: 'PASS',
+      stale_claim_hard_failure_count: 0
+    }
+  });
+
+  assert.match(body, /전체 상태: NEEDS_FIX/);
+  assert.match(body, /생성 실행 상태: FAILED_REPAIR_REVIEWABLE/);
+  assert.match(body, /final_publish_ready: false/);
+  assert.match(body, /publish_gate_passed: false/);
+  assert.match(body, /권장 조치:/);
+  assert.doesNotMatch(body, /최종 발행 조건이 모두 통과했습니다/);
+});
+
 test('newsroom PR body separates quality score threshold and result in Korean status text', () => {
   const configuredMinimum = articlePolicy.mainArticleCount.min;
   const selectedBelowMinimum = configuredMinimum - 1;

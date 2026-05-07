@@ -121,6 +121,7 @@ function githubOutputLine(name, value) {
 
 function buildGenerationStatusOutputs(status) {
   const outputs = {};
+  const failedRepairReviewable = status.status === 'FAILED_REPAIR_REVIEWABLE';
   for (const field of OUTPUT_FIELDS) {
     outputs[field] = scalar(status[field], field === 'must_fix_count' ? '0' : 'n/a');
   }
@@ -129,12 +130,15 @@ function buildGenerationStatusOutputs(status) {
   outputs.quality_status = scalar(status.quality_status, 'UNKNOWN');
   outputs.quality_score = scalar(status.quality_score, 'n/a');
   outputs.quality_threshold = scalar(status.quality_threshold, 'n/a');
-  outputs.publish_ready = status.publish_ready === true ? 'true' : 'false';
-  outputs.selection_publish_ready = status.selection_publish_ready === true ? 'true' : 'false';
-  outputs.final_publish_ready = status.final_publish_ready === true ? 'true' : 'false';
+  outputs.publish_ready = !failedRepairReviewable && status.publish_ready === true ? 'true' : 'false';
+  outputs.selection_publish_ready = !failedRepairReviewable && status.selection_publish_ready === true ? 'true' : 'false';
+  outputs.final_publish_ready = !failedRepairReviewable && status.final_publish_ready === true ? 'true' : 'false';
   outputs.review_gate_passed = status.review_gate_passed === true ? 'true' : 'false';
-  outputs.publish_gate_passed = status.publish_gate_passed === true ? 'true' : 'false';
-  outputs.editor_review_required = status.editor_review_required === true ? 'true' : 'false';
+  outputs.publish_gate_passed = !failedRepairReviewable && status.publish_gate_passed === true ? 'true' : 'false';
+  outputs.editor_review_required = failedRepairReviewable || status.editor_review_required === true ? 'true' : 'false';
+  if (failedRepairReviewable) {
+    outputs.composition_mode = 'NEEDS_FIX';
+  }
   outputs.underfilled = status.underfilled === true ? 'true' : 'false';
   outputs.deterministic_selected_count = scalar(
     status.deterministic_selected_count ?? status.selected_article_count,
