@@ -2,33 +2,36 @@ const fs = require('fs');
 const path = require('path');
 
 const {
-  renderCandidateSelectionDiagnostics
-} = require('../generate/selection-diagnostics');
-const {
-  formatReasonSummary,
-  readStatus
-} = require('./write-generation-status-output');
+  ensureArray,
+  resolvePublishStatus
+} = require('../common/publish-status');
 const {
   articlePolicy,
   articleCountRangeText,
   publishGateCriteriaText
 } = require('../common/newsletter-policy');
 
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
+const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
+  '이번 주 핵심 메시지',
+  '메인으로 봐야 할 기사',
+  'Camera HAL 업무 연결 포인트',
+  '편집장 확인 checklist',
+  '권장 판단'
+]);
+
+const EDITOR_BRIEF_REMOVED_SECTIONS = new Set([
+  '검증 결과 요약',
+  '품질 게이트',
+  'Stale Claim Gate',
+  '후보 선택 진단',
+  'Generation Status',
+  'Composition Summary',
+  'Deterministic Final Selection Status',
+  'Editor Action Guidance'
+]);
 
 function readTextIfExists(filePath) {
   return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8').trim() : '';
-}
-
-function readJsonIfExists(filePath) {
-  if (!fs.existsSync(filePath)) return null;
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch (_) {
-    return null;
-  }
 }
 
 function valueOrUnknown(value) {
@@ -40,222 +43,229 @@ function booleanText(value) {
   return value === true ? 'true' : 'false';
 }
 
-function numericStatusValue(...values) {
-  for (const value of values) {
-    if (Number.isFinite(Number(value))) return Number(value);
-  }
-  return null;
+function normalizeHeading(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
-function resolveStaleClaimSummary(status, newsroomDir) {
-  const staleReport = readJsonIfExists(path.join(newsroomDir, 'stale-claim-report.json'));
-  return {
-    status: status.stale_claim_status || staleReport?.status || 'UNKNOWN',
-    removedCount: numericStatusValue(
-      status.stale_claim_removed_count,
-      ensureArray(staleReport?.stale_claim_items_removed).length +
-        ensureArray(staleReport?.unsupported_release_claims_removed).length +
-        ensureArray(staleReport?.unused_references_removed).length
-    ) ?? 0,
-    hardFailureCount: numericStatusValue(
-      status.stale_claim_hard_failure_count,
-      ensureArray(staleReport?.hard_failures).length
-    ) ?? 0
-  };
+function extractEditorBriefSections(markdown) {
+  if (!markdown) return '';
+  const sections = [];
+  let current = null;
+
+  for (const line of markdown.split(/\r?\n/)) {
+    const match = line.match(/^##\s+(.+?)\s*$/);
+    if (match) {
+      if (current) sections.push(current);
+      current = {
+        heading: normalizeHeading(match[1]),
+        lines: []
+      };
+      continue;
+    }
+    if (current) current.lines.push(line);
+  }
+  if (current) sections.push(current);
+
+  return sections
+    .filter(section =>
+      EDITOR_BRIEF_ALLOWED_SECTIONS.has(section.heading) &&
+      !EDITOR_BRIEF_REMOVED_SECTIONS.has(section.heading)
+    )
+    .map(section => {
+      const body = section.lines.join('\n').trim();
+      return body ? `## ${section.heading}\n\n${body}` : `## ${section.heading}`;
+    })
+    .join('\n\n');
 }
 
-function resolveMustFixSummary(status, newsroomDir) {
-  const factCheck = readJsonIfExists(path.join(newsroomDir, 'fact-check-report.json'));
-  const mustFixItems = ensureArray(factCheck?.must_fix);
-  const sourceGaps = ensureArray(factCheck?.source_gaps);
-  const mustFixCount = numericStatusValue(status.must_fix_count, mustFixItems.length) ?? 0;
-  const sourceGapCount = numericStatusValue(status.source_gap_count, factCheck?.source_gap_count, sourceGaps.length) ?? 0;
-  const sample = mustFixItems
-    .slice(0, 3)
-    .map(item => typeof item === 'string' ? item : item?.issue || item?.claim || item?.headline || item?.reason)
-    .filter(Boolean);
-  return {
-    mustFixCount,
-    sourceGapCount,
-    text: [
-      `must_fix=${mustFixCount}`,
-      `source_gap=${sourceGapCount}`,
-      sample.length > 0 ? `sample=${sample.join(' | ')}` : ''
-    ].filter(Boolean).join('; ')
-  };
+function formatReasonSummary(items) {
+  return ensureArray(items)
+    .slice(0, 5)
+    .map(item => `${item.reason || 'unknown'} (${item.count ?? 'n/a'})`)
+    .join('; ') || 'none';
 }
 
-function recommendedEditorAction(status, validateOutcome, staleSummary, mustFixSummary) {
-  if (status.final_publish_ready === true && validateOutcome === 'success') {
-    return 'Publish/deploy gate is green; review final content and merge when editorial review is complete.';
+function countFromStatus(status, key) {
+  return status[key] ?? status.composition_summary?.[key];
+}
+
+function mustFixSummaryText(status) {
+  return [
+    `must_fix_count=${valueOrUnknown(status.must_fix_count ?? 0)}`,
+    `source_gap_count=${valueOrUnknown(status.source_gap_count ?? 0)}`
+  ].join('; ');
+}
+
+function recommendedEditorAction(status) {
+  if (ensureArray(status.consistency_errors).length > 0) {
+    return 'status artifact와 현재 산출물 재계산 결과가 다릅니다. PR 생성 전에 status artifact와 review artifact를 함께 확인하세요.';
   }
-  if (staleSummary.hardFailureCount > 0 || staleSummary.status === 'NEEDS_FIX') {
-    return 'Remove or rewrite stale global claims before publishing; confirm stale-claim-report before retrying publish.';
+  if (status.final_publish_ready === true && status.validate_outcome === 'success') {
+    return '최종 발행 조건이 모두 통과했습니다. 편집 검토를 마친 뒤 병합할 수 있습니다.';
   }
-  if (mustFixSummary.mustFixCount > 0 || mustFixSummary.sourceGapCount > 0 || status.fact_check_status === 'NEEDS_FIX') {
-    return 'Resolve fact-check must_fix/source-gap items first, then rerun validation.';
+  if (status.stale_claim_hard_failure_count > 0 || status.stale_claim_status === 'NEEDS_FIX') {
+    return '발행 전에 stale-claim hard failure를 제거하거나 문장을 다시 작성하고 stale-claim-report를 다시 확인하세요.';
+  }
+  if (status.must_fix_count > 0 || status.source_gap_count > 0 || status.fact_check_status === 'NEEDS_FIX') {
+    return 'fact-check의 must_fix/source-gap 항목을 먼저 해결한 뒤 검증을 다시 실행하세요.';
   }
   if (status.composition_mode === 'THIN_WEEK_REVIEW') {
-    return 'Use this as an editor-review PR only; add stronger candidates or wait for a fuller article pool before publishing.';
+    return '검토용 PR로만 사용하세요. 더 강한 후보를 추가하거나 기사 풀이 충분해질 때까지 발행을 막아야 합니다.';
   }
   if (status.review_gate_passed === true && status.publish_gate_passed === false) {
-    return 'Use this as an editor-review PR only; satisfy the configured Newsletter Policy before publishing.';
+    return '검토용 PR로만 사용하세요. 후보 선택 발행 조건을 만족하기 전에는 최종 발행으로 보지 않습니다.';
   }
   if (status.composition_mode === 'FALLBACK_COMPOSITION') {
-    return 'Review supporting SoC/platform/tooling framing and publish only if the practical developer relevance is explicit.';
+    return 'SoC/platform/tooling 보조 기사 연결성이 실제 개발 업무에 명확한지 편집자가 확인한 뒤 판단하세요.';
   }
-  if (validateOutcome === 'failure' || status.quality_status !== 'PASS') {
-    return 'Review quality-report.md and validation output, then repair or demote weak sections.';
+  if (status.validate_outcome === 'failure' || status.quality_status !== 'PASS') {
+    return 'quality-report.md와 validation output을 확인하고 약한 section을 수정하거나 demote하세요.';
   }
-  return 'Review the generated artifacts and labels before deciding whether to publish.';
+  return '생성 산출물, label, validation output을 확인한 뒤 발행 여부를 결정하세요.';
 }
 
-function resolveDate(options = {}) {
-  if (options.date) return options.date;
-  const datePath = path.join(process.cwd(), '.tmp', 'newsletter-date.txt');
-  if (fs.existsSync(datePath)) return fs.readFileSync(datePath, 'utf8').trim();
-  return process.env.NEWSLETTER_DATE || '';
-}
-
-function buildNewsroomPrBody(options = {}) {
-  const root = options.root || process.cwd();
-  const date = resolveDate(options);
-  const status = options.status || readStatus(path.join(root, '.tmp', 'newsletter-generation-status.json'));
-  const validateOutcome = options.validateOutcome || process.env.VALIDATE_OUTCOME || 'unknown';
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
-  const editorBrief = date ? readTextIfExists(path.join(newsroomDir, 'editor-in-chief-brief.md')) : '';
-  const finalSelectedCount = Number(status.final_selected_article_count ?? status.selected_article_count);
-  const minFinalArticles = Number(status.selection_policy?.min_final_articles || articlePolicy.mainArticleCount.min);
-  const renderedMainArticleCount = status.rendered_main_article_count ?? status.final_selected_article_count ?? status.selected_article_count;
-  const staleSummary = resolveStaleClaimSummary(status, newsroomDir);
-  const mustFixSummary = resolveMustFixSummary(status, newsroomDir);
-  const editorAction = recommendedEditorAction(status, validateOutcome, staleSummary, mustFixSummary);
-  const lines = [];
-
-  if (editorBrief) {
-    lines.push(editorBrief, '');
-  }
-
-  lines.push(
-    '## Generation Status',
+function renderStatusSection(status) {
+  const editorAction = recommendedEditorAction(status);
+  return [
+    '## 생성 상태',
     '',
-    `Status: ${valueOrUnknown(status.status)}`,
-    `Fact-check status: ${valueOrUnknown(status.fact_check_status)}`,
-    `Fact-check must-fix count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
-    `Must-fix summary: ${mustFixSummary.text}`,
-    `Quality score: ${valueOrUnknown(status.quality_score)}`,
-    `Quality threshold: ${valueOrUnknown(status.quality_threshold)}`,
-    'Max score: 100',
-    `Quality status: ${valueOrUnknown(status.quality_status)}`,
-    `Result: ${valueOrUnknown(status.quality_status)}`,
-    `Quality attempts: ${valueOrUnknown(status.quality_attempt_count)}`,
-    `Locked articles: ${valueOrUnknown(status.locked_article_count)}`,
-    `Repaired sections: ${valueOrUnknown(status.repaired_section_count ?? 0)}`,
-    `Skipped repair sections: ${valueOrUnknown(status.skipped_repair_section_count ?? 0)}`,
-    `Validation outcome: ${validateOutcome}`,
-    `Publish ready: ${booleanText(status.publish_ready)}`,
-    `Selection publish ready: ${booleanText(status.selection_publish_ready)}`,
-    `Final publish ready: ${booleanText(status.final_publish_ready)}`,
-    `Review Gate: ${booleanText(status.review_gate_passed)} (Newsletter Policy selection checks)`,
-    `Publish Gate: ${booleanText(status.publish_gate_passed)} (${publishGateCriteriaText()}; quality/fact-check/site validation pass)`,
-    `Editor review required: ${booleanText(status.editor_review_required)}`,
-    `Underfilled selection path: ${booleanText(status.underfilled)}`,
-    `Stale claim status: ${staleSummary.status}`,
-    `Stale claim summary: removed=${staleSummary.removedCount}; hard_failures=${staleSummary.hardFailureCount}`,
-    `Recommended editor action: ${editorAction}`,
+    `전체 상태: ${valueOrUnknown(status.status)}`,
+    `생성 실행 상태: ${valueOrUnknown(status.generation_status)}`,
+    `팩트체크 상태: ${valueOrUnknown(status.fact_check_status)}`,
+    `팩트체크 must_fix_count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
+    `팩트체크 source_gap_count: ${valueOrUnknown(status.source_gap_count ?? 0)}`,
+    `must_fix 요약: ${mustFixSummaryText(status)}`,
+    `품질 점수: ${valueOrUnknown(status.quality_score)}`,
+    `품질 기준: ${valueOrUnknown(status.quality_threshold)}`,
+    '최대 점수: 100',
+    `품질 상태: ${valueOrUnknown(status.quality_status)}`,
+    `품질 시도 횟수: ${valueOrUnknown(status.quality_attempt_count)}`,
+    `잠금 기사 수: ${valueOrUnknown(status.locked_article_count)}`,
+    `수정된 section 수: ${valueOrUnknown(status.repaired_section_count ?? 0)}`,
+    `건너뛴 repair section 수: ${valueOrUnknown(status.skipped_repair_section_count ?? 0)}`,
+    `검증 결과: ${valueOrUnknown(status.validate_outcome)}`,
+    `selection_publish_ready: ${booleanText(status.selection_publish_ready)}`,
+    `최종 발행 가능 여부: ${booleanText(status.final_publish_ready)} (final_publish_ready: ${booleanText(status.final_publish_ready)})`,
+    `발행 게이트: ${booleanText(status.final_publish_ready)} (quality/fact-check/stale-claim/site validation 포함)`,
+    `검토 게이트: ${booleanText(status.review_gate_passed)} (review_gate_passed: ${booleanText(status.review_gate_passed)})`,
+    `후보 선택 발행 조건: ${booleanText(status.publish_gate_passed)} (publish_gate_passed: ${booleanText(status.publish_gate_passed)}; ${publishGateCriteriaText()})`,
+    `편집자 검토 필요: ${booleanText(status.editor_review_required)}`,
+    `부족한 후보 경로: ${booleanText(status.underfilled)}`,
+    `Stale claim 상태: ${valueOrUnknown(status.stale_claim_status)}`,
+    `Stale claim 요약: removed=${valueOrUnknown(status.stale_claim_removed_count ?? 0)}; hard_failures=${valueOrUnknown(status.stale_claim_hard_failure_count ?? 0)}`,
+    `consistency_errors: ${ensureArray(status.consistency_errors).length > 0 ? status.consistency_errors.join('; ') : 'none'}`,
+    `권장 조치: ${editorAction}`,
     ''
-  );
+  ].join('\n');
+}
 
-  if (status.underfilled === true) {
-    lines.push(
-      `Only ${Number.isFinite(finalSelectedCount) ? finalSelectedCount : valueOrUnknown(status.final_selected_article_count ?? status.selected_article_count)} publishable articles were selected; expected at least ${minFinalArticles}.`,
-      ''
-    );
-  }
-
-  lines.push(
-    '## Composition Summary',
+function renderCompositionSummary(status) {
+  return [
+    '## 기사 구성 요약',
     '',
     `- composition_mode: ${valueOrUnknown(status.composition_mode)}`,
     `- selection_composition_mode: ${valueOrUnknown(status.selection_composition_mode ?? status.composition_mode)}`,
     `- final_publish_ready: ${booleanText(status.final_publish_ready)}`,
     `- editor_review_required: ${booleanText(status.editor_review_required)}`,
     `- review_gate_passed: ${booleanText(status.review_gate_passed)}`,
-    `- publish_gate_passed: ${booleanText(status.publish_gate_passed)}`,
-    `- direct_aosp_camera count: ${valueOrUnknown(status.direct_aosp_camera_count ?? status.composition_summary?.direct_aosp_camera_count)}`,
-    `- camera_driver_image_pipeline count: ${valueOrUnknown(status.camera_driver_image_pipeline_count ?? status.composition_summary?.camera_driver_image_pipeline_count)}`,
-    `- android_platform_camera_adjacent count: ${valueOrUnknown(status.android_platform_camera_adjacent_count ?? status.composition_summary?.android_platform_camera_adjacent_count)}`,
-    `- soc_platform_signal count: ${valueOrUnknown(status.soc_platform_signal_count ?? status.composition_summary?.soc_platform_signal_count)}`,
-    `- cpp_ai_tooling_fallback count: ${valueOrUnknown(status.cpp_ai_tooling_fallback_count ?? status.composition_summary?.cpp_ai_tooling_fallback_count)}`,
-    `- generic_tech_watchlist count: ${valueOrUnknown(status.generic_tech_watchlist_count ?? status.composition_summary?.generic_tech_watchlist_count)}`,
-    `- primary_camera_stack_topic_count: ${valueOrUnknown(status.primary_camera_stack_topic_count ?? status.composition_summary?.primary_camera_stack_topic_count)}`,
-    `- supporting_main_article_count: ${valueOrUnknown(status.supporting_main_article_count ?? status.composition_summary?.supporting_main_article_count)}`,
-    `- forbidden_main_article_count: ${valueOrUnknown(status.forbidden_main_article_count ?? status.composition_summary?.forbidden_main_article_count)}`,
-    `- non_fallback_reviewable_article_count: ${valueOrUnknown(status.non_fallback_reviewable_article_count ?? status.composition_summary?.non_fallback_reviewable_article_count)}`,
+    `- publish_gate_passed: ${booleanText(status.publish_gate_passed)} (후보 선택 발행 조건)`,
+    `- direct_aosp_camera count: ${valueOrUnknown(countFromStatus(status, 'direct_aosp_camera_count'))}`,
+    `- camera_driver_image_pipeline count: ${valueOrUnknown(countFromStatus(status, 'camera_driver_image_pipeline_count'))}`,
+    `- android_platform_camera_adjacent count: ${valueOrUnknown(countFromStatus(status, 'android_platform_camera_adjacent_count'))}`,
+    `- soc_platform_signal count: ${valueOrUnknown(countFromStatus(status, 'soc_platform_signal_count'))}`,
+    `- cpp_ai_tooling_fallback count: ${valueOrUnknown(countFromStatus(status, 'cpp_ai_tooling_fallback_count'))}`,
+    `- generic_tech_watchlist count: ${valueOrUnknown(countFromStatus(status, 'generic_tech_watchlist_count'))}`,
+    `- primary_camera_stack_topic_count: ${valueOrUnknown(countFromStatus(status, 'primary_camera_stack_topic_count'))}`,
+    `- supporting_main_article_count: ${valueOrUnknown(countFromStatus(status, 'supporting_main_article_count'))}`,
+    `- forbidden_main_article_count: ${valueOrUnknown(countFromStatus(status, 'forbidden_main_article_count'))}`,
+    `- non_fallback_reviewable_article_count: ${valueOrUnknown(countFromStatus(status, 'non_fallback_reviewable_article_count'))}`,
     `- gate thresholds: ${publishGateCriteriaText()}; configured article range ${articleCountRangeText()}`,
     `- source/parser hints: ${ensureArray(status.selection_shortage_hints).join('; ') || 'none'}`,
     `- composition reason: ${valueOrUnknown(status.composition_reason)}`,
     ''
-  );
+  ].join('\n');
+}
 
+function renderCompositionNotes(status) {
+  const lines = [];
+  if (status.underfilled === true) {
+    const finalSelectedCount = Number(status.final_selected_article_count ?? status.selected_article_count);
+    const minFinalArticles = Number(status.selection_policy?.min_final_articles || articlePolicy.mainArticleCount.min);
+    lines.push(
+      `선택된 발행 가능 article 수는 ${Number.isFinite(finalSelectedCount) ? finalSelectedCount : valueOrUnknown(status.final_selected_article_count ?? status.selected_article_count)}개입니다. 최소 기준은 ${minFinalArticles}개입니다.`,
+      ''
+    );
+  }
   if (status.composition_mode === 'FALLBACK_COMPOSITION' || status.selection_composition_mode === 'FALLBACK_COMPOSITION') {
     lines.push(
-      'Fallback composition: supporting SoC/platform or C++/AI tooling articles are included as configured supporting main articles. Do not add artificial Camera HAL wording; keep the practical SoC/platform/native development connection explicit.',
+      'Fallback composition: 설정된 보조 main article로 SoC/platform 또는 C++/AI tooling article이 포함되었습니다. 인위적인 Camera HAL 표현을 추가하지 말고 실제 SoC/platform/native 개발 연결성을 명확히 유지하세요.',
       status.publish_gate_passed === false
-        ? 'Review Gate passed, but Publish Gate is still blocked until the configured Newsletter Policy is satisfied.'
+        ? '검토 게이트는 통과했더라도 후보 선택 발행 조건이 막혀 있으면 최종 발행 가능 상태가 아닙니다.'
         : '',
       ''
     );
   }
-
   if (status.composition_mode === 'THIN_WEEK_REVIEW') {
     lines.push(
-      'Underfilled review path: this PR is reviewable but not publish-ready. Automatic publish/deploy must stay blocked.',
+      'Thin-week review path: 이 PR은 검토 가능하지만 발행 준비 상태가 아닙니다. 자동 publish/deploy는 계속 차단되어야 합니다.',
       ''
     );
   }
+  return lines.filter(line => line !== '').join('\n');
+}
 
-  lines.push(
-    '## Deterministic Final Selection Status',
+function renderFinalSelectionStatus(status) {
+  return [
+    '## 최종 후보 선택 상태',
     '',
     `- deterministic_selected_count: ${valueOrUnknown(status.deterministic_selected_count ?? status.selected_article_count)}`,
-    `- rendered_main_article_count: ${valueOrUnknown(renderedMainArticleCount)}`,
+    `- rendered_main_article_count: ${valueOrUnknown(status.rendered_main_article_count ?? status.final_selected_article_count ?? status.selected_article_count)}`,
     `- reserve_candidate_count: ${valueOrUnknown(status.reserve_candidate_count)}`,
-    `- Input candidates: ${valueOrUnknown(status.input_candidate_count)}`,
-    `- Eligible candidates: ${valueOrUnknown(status.eligible_candidate_count)}`,
-    `- Selected articles: ${valueOrUnknown(status.selected_article_count)}`,
-    `- Reporter candidates: ${valueOrUnknown(status.reporter_candidate_count)}`,
-    `- Reporter-selected candidates: ${valueOrUnknown(status.reporter_selected_count)}`,
-    `- Final input candidates: ${valueOrUnknown(status.final_input_candidate_count ?? status.input_candidate_count)}`,
-    `- Final eligible candidates: ${valueOrUnknown(status.final_eligible_candidate_count ?? status.eligible_candidate_count)}`,
-    `- Final selected articles: ${valueOrUnknown(status.final_selected_article_count ?? status.selected_article_count)}`,
-    `- Reporter-selected but final-excluded: ${valueOrUnknown(status.reporter_selected_but_final_excluded_count)}`,
-    `- Selection warnings: ${ensureArray(status.selection_warnings).join('; ') || 'none'}`,
-    `- Selection errors: ${ensureArray(status.selection_errors).join('; ') || 'none'}`,
-    `- Top exclusion reasons: ${formatReasonSummary(status.exclusion_reason_summary)}`,
-    `- Top final exclusion reasons: ${formatReasonSummary(ensureArray(status.final_exclusion_reason_summary).length > 0 ? status.final_exclusion_reason_summary : status.exclusion_reason_summary)}`,
+    `- input_candidate_count: ${valueOrUnknown(status.input_candidate_count)}`,
+    `- eligible_candidate_count: ${valueOrUnknown(status.eligible_candidate_count)}`,
+    `- selected_article_count: ${valueOrUnknown(status.selected_article_count)}`,
+    `- reporter_candidate_count: ${valueOrUnknown(status.reporter_candidate_count)}`,
+    `- reporter_selected_count: ${valueOrUnknown(status.reporter_selected_count)}`,
+    `- final_input_candidate_count: ${valueOrUnknown(status.final_input_candidate_count ?? status.input_candidate_count)}`,
+    `- final_eligible_candidate_count: ${valueOrUnknown(status.final_eligible_candidate_count ?? status.eligible_candidate_count)}`,
+    `- final_selected_article_count: ${valueOrUnknown(status.final_selected_article_count ?? status.selected_article_count)}`,
+    `- reporter_selected_but_final_excluded_count: ${valueOrUnknown(status.reporter_selected_but_final_excluded_count)}`,
+    `- selection_warnings: ${ensureArray(status.selection_warnings).join('; ') || 'none'}`,
+    `- selection_errors: ${ensureArray(status.selection_errors).join('; ') || 'none'}`,
+    `- top exclusion reasons: ${formatReasonSummary(status.exclusion_reason_summary)}`,
+    `- top final exclusion reasons: ${formatReasonSummary(ensureArray(status.final_exclusion_reason_summary).length > 0 ? status.final_exclusion_reason_summary : status.exclusion_reason_summary)}`,
     '',
-    renderCandidateSelectionDiagnostics(status),
+    'Source/parser recovery hint:',
+    ensureArray(status.selection_shortage_hints).map(item => `- ${item}`).join('\n') || '- none',
     '',
-    '## Editor Action Guidance',
-    '',
-    `- Recommended action: ${editorAction}`,
-    '- This PR is generated for editor review and is not auto-merged.',
-    '- Resolve fact-check must-fix items separately from editorial quality deductions.',
-    '- If facts cannot be verified, demote the item to briefing/watchlist or exclude it instead of promoting a source-gap article.',
-    '- Keep valid locked articles unchanged and avoid duplicate URLs, titles, and source-date-title combinations.',
+    status.candidate_selection_note || 'Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.',
     ''
-  );
+  ].join('\n');
+}
 
-  if (status.status !== 'PASS' || validateOutcome === 'failure' || status.final_publish_ready !== true) {
+function renderEditorActionGuidance(status, date) {
+  const lines = [
+    '## 편집자 조치 가이드',
+    '',
+    `- 권장 조치: ${recommendedEditorAction(status)}`,
+    '- 이 PR은 editor review용으로 생성되며 자동 merge되지 않습니다.',
+    '- fact-check must_fix 항목과 editorial quality deduction을 분리해서 처리하세요.',
+    '- 사실 확인이 안 되면 source-gap article을 승격하지 말고 briefing/watchlist로 내리거나 제외하세요.',
+    '- 유효한 locked article은 유지하고 URL, title, source-date-title 조합 중복을 피하세요.'
+  ];
+
+  if (status.status !== 'PASS' || status.validate_outcome === 'failure' || status.final_publish_ready !== true) {
     lines.push(
-      `- Review content/newsroom/${date}/fact-check-report.md, content/newsroom/${date}/quality-report.md, and validation output before publishing.`,
-      ''
+      `- 발행 전에 content/newsroom/${date}/fact-check-report.md, content/newsroom/${date}/quality-report.md, validation output을 확인하세요.`
     );
   }
+  lines.push('');
+  return lines.join('\n');
+}
 
-  lines.push(
-    '## Generated Artifacts',
+function renderGeneratedArtifacts(date) {
+  return [
+    '## 생성 산출물',
     '',
     `- content/collected-news/${date}/candidates.json`,
     `- content/newsroom/${date}/shortlisted-candidates.json`,
@@ -271,6 +281,29 @@ function buildNewsroomPrBody(options = {}) {
     `- newsletters/${date}/newsletter.md`,
     `- newsletters/${date}/index.html`,
     '- data/newsletters.json'
+  ].join('\n');
+}
+
+function buildNewsroomPrBody(options = {}) {
+  const resolved = options.publishStatus || resolvePublishStatus(options);
+  const root = resolved.root || options.root || process.cwd();
+  const date = resolved.date || options.date || '';
+  const status = resolved.status;
+  const editorBrief = date ? readTextIfExists(path.join(root, 'content', 'newsroom', date, 'editor-in-chief-brief.md')) : '';
+  const editorBriefSections = extractEditorBriefSections(editorBrief);
+  const lines = [];
+
+  if (editorBriefSections) {
+    lines.push(editorBriefSections, '');
+  }
+
+  lines.push(
+    renderStatusSection(status),
+    renderCompositionSummary(status),
+    renderCompositionNotes(status),
+    renderFinalSelectionStatus(status),
+    renderEditorActionGuidance(status, date),
+    renderGeneratedArtifacts(date)
   );
 
   return `${lines.join('\n').replace(/\n{3,}/g, '\n\n').trim()}\n`;
@@ -286,5 +319,6 @@ if (require.main === module) {
 
 module.exports = {
   buildNewsroomPrBody,
-  resolveDate
+  extractEditorBriefSections,
+  recommendedEditorAction
 };

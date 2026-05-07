@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
@@ -16,6 +17,96 @@ const {
   qualityGatePolicy,
   publishGateCriteriaText
 } = require('../scripts/lib/newsletter-policy');
+const {
+  resolvePublishStatus
+} = require('../scripts/newsroom/common/publish-status');
+const {
+  validatePrBodyText
+} = require('../scripts/validate-pr-body');
+
+function writeJson(filePath, value) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+}
+
+function writeText(filePath, value) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, value, 'utf8');
+}
+
+function tempRoot() {
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'newsroom-pr-body-'));
+}
+
+function writeMinimalPublishArtifacts(root, date, overrides = {}) {
+  const status = {
+    date,
+    status: 'PASS',
+    selection_publish_ready: true,
+    final_publish_ready: overrides.finalPublishReady ?? false,
+    publish_gate_passed: true,
+    review_gate_passed: true,
+    quality_status: 'PASS',
+    quality_score: 90,
+    quality_threshold: qualityGatePolicy.threshold,
+    fact_check_status: 'PASS',
+    must_fix_count: 0,
+    source_gap_count: 0,
+    stale_claim_status: 'PASS',
+    stale_claim_hard_failure_count: 0,
+    composition_mode: 'NORMAL',
+    selected_article_count: articlePolicy.mainArticleCount.min,
+    final_selected_article_count: articlePolicy.mainArticleCount.min,
+    ...(overrides.status || {})
+  };
+  const quality = {
+    status: 'PASS',
+    score: 90,
+    threshold: qualityGatePolicy.threshold,
+    deductions: [],
+    ...(overrides.quality || {})
+  };
+  const factCheck = {
+    status: 'PASS',
+    must_fix: [],
+    source_gaps: [],
+    source_gap_count: 0,
+    ...(overrides.factCheck || {})
+  };
+  const staleClaim = {
+    status: 'PASS',
+    hard_failures: [],
+    stale_claim_items_removed: [],
+    unsupported_release_claims_removed: [],
+    unused_references_removed: [],
+    ...(overrides.staleClaim || {})
+  };
+  const shortlist = {
+    publish_ready: true,
+    publish_gate_passed: true,
+    review_gate_passed: true,
+    composition_mode: 'NORMAL',
+    selection_composition_mode: 'NORMAL',
+    selected_article_count: articlePolicy.mainArticleCount.min,
+    composition_summary: {
+      selected_article_count: articlePolicy.mainArticleCount.min,
+      primary_camera_stack_topic_count: articlePolicy.primaryCameraStack.minRequired,
+      supporting_main_article_count: articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired,
+      forbidden_main_article_count: 0,
+      non_fallback_reviewable_article_count: articlePolicy.mainArticleCount.min
+    },
+    ...(overrides.shortlist || {})
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'stale-claim-report.json'), staleClaim);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
+
+  return { status, quality, factCheck, staleClaim, shortlist };
+}
 
 test('generation status output falls back when status JSON is missing', () => {
   const status = readStatus('__missing__/newsletter-generation-status.json');
@@ -98,7 +189,7 @@ test('generation status output includes multiline selection diagnostics', () => 
   assert.match(rendered, /selection_shortage_hints=Add at least one Primary Camera Stack candidate before publishing\./);
 });
 
-test('newsroom PR body separates quality score threshold and result', () => {
+test('newsroom PR body separates quality score threshold and result in Korean status text', () => {
   const configuredMinimum = articlePolicy.mainArticleCount.min;
   const selectedBelowMinimum = configuredMinimum - 1;
   const body = buildNewsroomPrBody({
@@ -150,19 +241,22 @@ test('newsroom PR body separates quality score threshold and result', () => {
     }
   });
 
-  assert.match(body, /Quality score: 90/);
-  assert.match(body, new RegExp(`Quality threshold: ${qualityGatePolicy.threshold}`));
-  assert.match(body, /Quality status: NEEDS_FIX/);
-  assert.match(body, /Result: NEEDS_FIX/);
-  assert.match(body, /Must-fix summary: must_fix=0; source_gap=0/);
-  assert.match(body, /Stale claim status: PASS/);
-  assert.match(body, /Stale claim summary: removed=1; hard_failures=0/);
-  assert.match(body, /Recommended editor action:/);
-  assert.match(body, /## Composition Summary/);
+  assert.match(body, /^## 생성 상태$/m);
+  assert.equal((body.match(/^## 생성 상태$/gm) || []).length, 1);
+  assert.doesNotMatch(body, /^## Generation Status$/m);
+  assert.match(body, /품질 점수: 90/);
+  assert.match(body, new RegExp(`품질 기준: ${qualityGatePolicy.threshold}`));
+  assert.match(body, /품질 상태: NEEDS_FIX/);
+  assert.match(body, /must_fix 요약: must_fix_count=0; source_gap_count=0/);
+  assert.match(body, /Stale claim 상태: PASS/);
+  assert.match(body, /Stale claim 요약: removed=1; hard_failures=0/);
+  assert.match(body, /권장 조치:/);
+  assert.match(body, /## 기사 구성 요약/);
+  assert.doesNotMatch(body, /## Composition Summary/);
   assert.match(body, /composition_mode: NEEDS_FIX/);
   assert.match(body, /final_publish_ready: false/);
-  assert.match(body, /Review Gate: true \(Newsletter Policy selection checks\)/);
-  assert.match(body, new RegExp(`Publish Gate: false \\(${publishGateCriteriaText().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}; quality/fact-check/site validation pass\\)`));
+  assert.match(body, /검토 게이트: true \(review_gate_passed: true\)/);
+  assert.match(body, new RegExp(`후보 선택 발행 조건: false \\(publish_gate_passed: false; ${publishGateCriteriaText().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\)`));
   assert.match(body, /editor_review_required: true/);
   assert.match(body, /review_gate_passed: true/);
   assert.match(body, /publish_gate_passed: false/);
@@ -170,8 +264,8 @@ test('newsroom PR body separates quality score threshold and result', () => {
   assert.match(body, /deterministic_selected_count: 5/);
   assert.match(body, new RegExp(`rendered_main_article_count: ${selectedBelowMinimum}`));
   assert.match(body, /reserve_candidate_count: 2/);
-  assert.match(body, /Underfilled selection path: true/);
-  assert.match(body, new RegExp(`Only ${selectedBelowMinimum} publishable articles were selected; expected at least ${configuredMinimum}\\.`));
+  assert.match(body, /부족한 후보 경로: true/);
+  assert.match(body, new RegExp(`선택된 발행 가능 article 수는 ${selectedBelowMinimum}개입니다\\. 최소 기준은 ${configuredMinimum}개입니다\\.`));
   assert.doesNotMatch(body, new RegExp(`90/${qualityGatePolicy.threshold}`));
 });
 
@@ -228,7 +322,7 @@ test('newsroom PR body marks fallback composition explicitly', () => {
   assert.match(body, new RegExp(`soc_platform_signal count: ${configuredSupportingCount}`));
   assert.match(body, /cpp_ai_tooling_fallback count: 0/);
   assert.match(body, /Fallback composition:/);
-  assert.match(body, /Do not add artificial Camera HAL wording/);
+  assert.match(body, /인위적인 Camera HAL 표현/);
 });
 
 test('newsroom PR body explains review-only fallback when publish gate is blocked', () => {
@@ -277,10 +371,176 @@ test('newsroom PR body explains review-only fallback when publish gate is blocke
     }
   });
 
-  assert.match(body, /Recommended editor action: Use this as an editor-review PR only; satisfy the configured Newsletter Policy before publishing\./);
+  assert.match(body, /권장 조치: 검토용 PR로만 사용하세요\. 후보 선택 발행 조건을 만족하기 전에는 최종 발행으로 보지 않습니다\./);
   assert.match(body, /composition_mode: NEEDS_FIX/);
   assert.match(body, /selection_composition_mode: FALLBACK_COMPOSITION/);
-  assert.match(body, /Review Gate passed, but Publish Gate is still blocked/);
+  assert.match(body, /후보 선택 발행 조건이 막혀 있으면 최종 발행 가능 상태가 아닙니다/);
+});
+
+test('newsroom PR body keeps one Korean generation status heading', () => {
+  const body = buildNewsroomPrBody({
+    date: '2026-05-03',
+    validateOutcome: 'failure',
+    status: {
+      status: 'QUALITY_NEEDS_FIX',
+      fact_check_status: 'PASS',
+      must_fix_count: 0,
+      source_gap_count: 0,
+      quality_status: 'NEEDS_FIX',
+      quality_score: 80,
+      quality_threshold: qualityGatePolicy.threshold,
+      selection_publish_ready: false,
+      final_publish_ready: false,
+      stale_claim_status: 'PASS',
+      stale_claim_hard_failure_count: 0
+    }
+  });
+
+  assert.equal((body.match(/^## 생성 상태$/gm) || []).length, 1);
+  assert.doesNotMatch(body, /^## Generation Status$/m);
+});
+
+test('newsroom PR body strips stale editor brief gate sections', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeText(path.join(root, 'content', 'newsroom', date, 'editor-in-chief-brief.md'), [
+    '# Brief',
+    '',
+    '## 이번 주 핵심 메시지',
+    '',
+    '핵심 메시지입니다.',
+    '',
+    '## 품질 게이트',
+    '',
+    '- 오래된 PASS 문구',
+    '',
+    '## Stale Claim Gate',
+    '',
+    '- old stale status',
+    '',
+    '## 권장 판단',
+    '',
+    'REQUEST_CHANGES'
+  ].join('\n'));
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    status: {
+      status: 'QUALITY_NEEDS_FIX',
+      fact_check_status: 'PASS',
+      must_fix_count: 0,
+      source_gap_count: 0,
+      quality_status: 'NEEDS_FIX',
+      quality_score: 80,
+      quality_threshold: qualityGatePolicy.threshold,
+      selection_publish_ready: false,
+      final_publish_ready: false,
+      stale_claim_status: 'PASS',
+      stale_claim_hard_failure_count: 0
+    }
+  });
+
+  assert.match(body, /^## 이번 주 핵심 메시지$/m);
+  assert.match(body, /핵심 메시지입니다/);
+  assert.match(body, /^## 권장 판단$/m);
+  assert.doesNotMatch(body, /^## 품질 게이트$/m);
+  assert.doesNotMatch(body, /^## Stale Claim Gate$/m);
+  assert.doesNotMatch(body, /오래된 PASS 문구/);
+});
+
+test('publish status resolver blocks final publish when fact-check needs fix', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: false,
+    status: {
+      fact_check_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    factCheck: {
+      status: 'NEEDS_FIX',
+      must_fix: [{ issue: 'source gap remains' }]
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.quality_status, 'PASS');
+  assert.equal(resolved.status.fact_check_status, 'NEEDS_FIX');
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+});
+
+test('publish status resolver records consistency error when status final flag is stale', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true,
+    status: {
+      fact_check_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    factCheck: {
+      status: 'NEEDS_FIX',
+      must_fix: [{ issue: 'unresolved must_fix' }]
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.match(resolved.status.consistency_errors.join('\n'), /status\.final_publish_ready=true but artifact_recomputed_final_publish_ready=false/);
+});
+
+test('validate-pr-body fails when consistency errors are present', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true,
+    status: {
+      fact_check_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    factCheck: {
+      status: 'NEEDS_FIX',
+      must_fix: [{ issue: 'unresolved must_fix' }]
+    }
+  });
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
+  const result = validatePrBodyText(body);
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /consistency_errors/);
+});
+
+test('newsroom PR body primary headings are Korean', () => {
+  const body = buildNewsroomPrBody({
+    date: '2026-05-03',
+    validateOutcome: 'success',
+    status: {
+      status: 'PASS',
+      fact_check_status: 'PASS',
+      must_fix_count: 0,
+      source_gap_count: 0,
+      quality_status: 'PASS',
+      quality_score: 90,
+      quality_threshold: qualityGatePolicy.threshold,
+      selection_publish_ready: true,
+      final_publish_ready: true,
+      publish_gate_passed: true,
+      review_gate_passed: true,
+      stale_claim_status: 'PASS',
+      stale_claim_hard_failure_count: 0
+    }
+  });
+
+  for (const heading of ['생성 상태', '기사 구성 요약', '최종 후보 선택 상태', '편집자 조치 가이드', '생성 산출물']) {
+    assert.match(body, new RegExp(`^## ${heading}$`, 'm'));
+  }
+  for (const heading of ['Generation Status', 'Composition Summary', 'Editor Action Guidance', 'Generated Artifacts']) {
+    assert.doesNotMatch(body, new RegExp(`^## ${heading}$`, 'm'));
+  }
 });
 
 test('weekly newsroom workflow separates review PR success from publish-ready gate', () => {
@@ -355,6 +615,9 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /publish-ready/);
   assert.match(workflow, /const stateLabels = \['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week'\];/);
   assert.match(workflow, /github\.rest\.issues\.removeLabel/);
+  assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
+  assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md/);
+  assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /const finalPublishReady = '\$\{\{ steps\.generation-status\.outputs\.final_publish_ready \}\}' === 'true';/);
   assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION'/);
   assert.match(workflow, /compositionMode === 'THIN_WEEK_REVIEW'/);

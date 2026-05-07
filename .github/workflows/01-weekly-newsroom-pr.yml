@@ -288,9 +288,12 @@ jobs:
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
         run: |
+          mkdir -p .tmp
+          node scripts/build-newsroom-pr-body.js > .tmp/newsroom-pr-body.md
+          node scripts/validate-pr-body.js .tmp/newsroom-pr-body.md
           {
             echo "body<<EOF"
-            node scripts/build-newsroom-pr-body.js
+            cat .tmp/newsroom-pr-body.md
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
