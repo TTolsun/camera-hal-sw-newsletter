@@ -220,14 +220,16 @@ function buildGenerationStatus({
 }
 
 function recordEditorSemanticStatus(status = {}) {
-  if ('editor_semantic_validation' in status) {
+  if (status.editor_semantic_validation != null) {
     generationRunState.editorSemanticValidation = status.editor_semantic_validation;
   }
   if ('repairAttempted' in status) {
-    generationRunState.repairAttempted = Boolean(status.repairAttempted);
+    generationRunState.repairAttempted =
+      generationRunState.repairAttempted || Boolean(status.repairAttempted);
   }
   if ('repairSucceeded' in status) {
-    generationRunState.repairSucceeded = Boolean(status.repairSucceeded);
+    generationRunState.repairSucceeded =
+      generationRunState.repairSucceeded || Boolean(status.repairSucceeded);
   }
 }
 
@@ -237,9 +239,9 @@ function editorSemanticStatusExtra(error = null) {
     generationRunState.editorSemanticValidation ||
     null;
   const repairAttempted =
-    error?.repairAttempted ?? generationRunState.repairAttempted;
+    generationRunState.repairAttempted || Boolean(error?.repairAttempted);
   const repairSucceeded =
-    error?.repairSucceeded ?? generationRunState.repairSucceeded;
+    generationRunState.repairSucceeded || Boolean(error?.repairSucceeded);
   return {
     editor_semantic_validation: editorSemanticValidation,
     repairAttempted: Boolean(repairAttempted),
@@ -2568,6 +2570,7 @@ module.exports = {
   failureStageFromError,
   hasTooFewMainArticlesDeduction,
   main,
+  recordEditorSemanticStatus,
   availableCompletionCandidates,
   mergeLockedSections,
   sectionsMatchingRepairPlan,

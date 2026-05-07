@@ -78,6 +78,12 @@ function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
+function loadFreshNewsletterCli() {
+  const cliPath = require.resolve('../scripts/newsroom/cli/gemini-newsroom-newsletter');
+  delete require.cache[cliPath];
+  return require(cliPath);
+}
+
 test('valid editor output with exactly 3 briefing items passes unchanged', () => {
   const draft = editor();
   const sourceSignature = JSON.stringify(draft.sections.map(item => ({
@@ -98,6 +104,17 @@ test('valid editor output with exactly 3 briefing items passes unchanged', () =>
     }))),
     sourceSignature
   );
+});
+
+test('editor title fallback keeps existing Korean title contract', () => {
+  const missingTitle = editor({ title: '' });
+  const mismatchedTitle = editor({ title: 'Camera HAL SW Newsletter - 2026-05-07' });
+
+  validateEditorOutputContract(missingTitle, DATE, { normalizeSection });
+  validateEditorOutputContract(mismatchedTitle, DATE, { normalizeSection });
+
+  assert.equal(missingTitle.title, `Camera HAL SW 뉴스레터 - ${DATE}`);
+  assert.equal(mismatchedTitle.title, `Camera HAL SW 뉴스레터 - ${DATE}`);
 });
 
 test('excessive briefing items are repaired and initial diagnostics are written', async () => {
@@ -311,6 +328,72 @@ test('failure status can include editor semantic validation and repair fields', 
   assert.equal(status.editor_semantic_validation.details.field, 'briefing');
   assert.equal(status.repairAttempted, true);
   assert.equal(status.repairSucceeded, false);
+});
+
+test('run-level editor semantic status preserves details and OR accumulates repair flags', () => {
+  const {
+    editorSemanticStatusExtra: freshEditorSemanticStatusExtra,
+    recordEditorSemanticStatus
+  } = loadFreshNewsletterCli();
+  const initialDetails = {
+    message: 'Editor output must contain exactly 3 briefing items; got 4.',
+    details: {
+      field: 'briefing',
+      expectedCount: 3,
+      actualCount: 4,
+      actualType: 'array',
+      sectionCount: 3
+    }
+  };
+  const replacementDetails = {
+    message: 'Editor output must contain exactly 3 briefing items; got 2.',
+    details: {
+      field: 'briefing',
+      expectedCount: 3,
+      actualCount: 2,
+      actualType: 'array',
+      sectionCount: 3
+    }
+  };
+
+  recordEditorSemanticStatus({
+    editor_semantic_validation: initialDetails,
+    repairAttempted: true,
+    repairSucceeded: true
+  });
+  recordEditorSemanticStatus({
+    editor_semantic_validation: null,
+    repairAttempted: false,
+    repairSucceeded: false
+  });
+  recordEditorSemanticStatus({
+    editor_semantic_validation: undefined
+  });
+
+  let status = freshEditorSemanticStatusExtra();
+  assert.deepEqual(status.editor_semantic_validation, initialDetails);
+  assert.equal(status.repairAttempted, true);
+  assert.equal(status.repairSucceeded, true);
+
+  const laterError = new EditorSemanticValidationError('Later non-repair failure.', {
+    field: 'summary'
+  });
+  laterError.repairAttempted = false;
+  laterError.repairSucceeded = false;
+  status = freshEditorSemanticStatusExtra(laterError);
+  assert.deepEqual(status.editor_semantic_validation, initialDetails);
+  assert.equal(status.repairAttempted, true);
+  assert.equal(status.repairSucceeded, true);
+
+  recordEditorSemanticStatus({
+    editor_semantic_validation: replacementDetails,
+    repairAttempted: false,
+    repairSucceeded: false
+  });
+  status = freshEditorSemanticStatusExtra();
+  assert.deepEqual(status.editor_semantic_validation, replacementDetails);
+  assert.equal(status.repairAttempted, true);
+  assert.equal(status.repairSucceeded, true);
 });
 
 test('editor schema constrains briefing to exactly 3 numeric items', () => {
