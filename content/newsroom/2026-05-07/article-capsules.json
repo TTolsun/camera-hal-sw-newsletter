@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "date": "2026-05-07",
-  "generated_at": "2026-05-06T17:03:54.228Z",
+  "generated_at": "2026-05-07T03:34:37.748Z",
   "capsule_token_target": "500-800",
   "shortlisted_capsule_count": 5,
   "selected_capsule_count": 5,
-  "reserve_capsule_count": 0,
+  "reserve_capsule_count": 1,
   "shortlisted_capsules": [
     {
-      "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
       "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
       "source": "libcamera Release Announcements",
       "published_date": "2026-04-28",
-      "topic_type": "camera-hal",
+      "topic_type": "general",
       "editorial_priority": 2,
       "relevance_bucket": "camera_driver_image_pipeline",
       "scope_relevance": {
@@ -27,15 +27,15 @@
         "evidence_origin": "article_text"
       },
       "component": "libcamera / V4L2 camera pipeline",
-      "what_changed": "libcamera v0.7.1 릴리스에는 Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC, AWB 통계 수정 등 다양한 패치가 포함되어 있습니다.",
-      "why_hal_engineer_cares": "Linux 카메라 드라이버 스택의 핵심 구성 요소인 libcamera의 업데이트는 Android Camera HAL 구현 및 최적화에 간접적인 영향을 미칠 수 있습니다.",
+      "what_changed": "Released libcamera v0.7.1 with SoftISP debaying and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+      "why_hal_engineer_cares": "libcamera v0.7.1 릴리스는 SoftISP 디베이어링, 이미지 파이프라인 처리량 개선, 파이프라인 핸들러 카메라 지원, 센서 모드 구성 업데이트를 포함합니다. 이는 Linux 카메라 드라이버 및 V4L2 스택에 직접적인 영향을 미치며, Android HAL 구현의 하위 스택 동작에 영향을 줄 수 있습니다.",
       "evidence": [
         "version_or_release: libcamera v0.7.1",
         "api_or_component: libcamera / V4L2 camera pipeline",
-        "behavior_change: libcamera v0.7.1 릴리스에는 Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC, AWB 통계 수정 등 다양한 패치가 포함되어 있습니다.",
-        "evidence_note: libcamera v0.7.1이 2026년 4월 28일에 릴리스되었습니다.",
-        "evidence_note: Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC, AWB 통계 수정 패치 등이 포함되어 있습니다.",
-        "summary: libcamera v0.7.1 릴리스에는 Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC, AWB 통계 수정 등 다양한 패치가 포함되어 있습니다."
+        "behavior_change: Released libcamera v0.7.1 with SoftISP debaying and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+        "evidence_note: version_or_release: libcamera v0.7.1",
+        "evidence_note: api_or_component: libcamera / V4L2 camera pipeline",
+        "evidence_note: behavior_change: Released libcamera v0.7.1 with SoftISP debaying and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
       ],
       "risk": {
         "source_gap": false,
@@ -43,7 +43,7 @@
         "no_dated_evidence": false,
         "candidate_only": false,
         "requires_cross_check": false,
-        "final_selection_eligibility": "short"
+        "final_selection_eligibility": "main"
       },
       "eligibility": {
         "collectionMode": "release-note-item",
@@ -51,7 +51,7 @@
         "isWatchPage": false,
         "hasDatedEvidence": true,
         "evidenceLevel": "dated-release-evidence",
-        "finalSelectionEligibility": "short",
+        "finalSelectionEligibility": "main",
         "source_kind": "release_note_item",
         "source_gap_risk": false,
         "main_eligible": true,
@@ -61,8 +61,8 @@
         "cross_check_status": "not-required"
       },
       "score": {
-        "total": 95.05,
-        "camera_hal_directness": 3.45,
+        "total": 105.85,
+        "camera_hal_directness": 4.65,
         "evidence_specificity": 5,
         "freshness": 2,
         "practical_actionability": 3,
@@ -81,36 +81,138 @@
       },
       "url_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
       "imageCandidates": [],
-      "estimated_tokens": 632
+      "estimated_tokens": 660
     },
     {
-      "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
-      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-      "source": "libcamera Release Announcements",
-      "published_date": "2026-04-28",
+      "title": "1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
       "topic_type": "camera-hal",
-      "editorial_priority": 2,
-      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 3,
+      "relevance_bucket": "android_platform_camera_adjacent",
       "scope_relevance": {
-        "aosp_camera_directness": 0,
-        "driver_stack_relevance": 3,
+        "aosp_camera_directness": 2,
+        "driver_stack_relevance": 0,
         "soc_platform_relevance": 0,
         "native_tooling_relevance": 0,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": true,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": false,
         "evidence_origin": "article_text"
       },
-      "component": "libcamera pipeline handler / image sensor configuration",
-      "what_changed": "카메라 지원을 위한 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다.",
-      "why_hal_engineer_cares": "libcamera의 파이프라인 핸들러 및 센서 구성 업데이트는 Android Camera HAL의 드라이버 인터페이스 및 이미지 센서 제어 방식에 영향을 미칠 수 있습니다.",
+      "component": "CameraX / androidx.camera",
+      "what_changed": "camera-camera2 1.6.1 - - 1.7.0-alpha01 camera-core 1.6.1 - - 1.7.0-alpha01 camera-compose 1.6.1 - - 1.7.0-alpha01 camera-effects 1.6.1 - - 1.7.0-alpha01 camera-extensions 1.6.1 - - 1.7.0-alpha01 camera-feature-combination-query - - - 1.5.0-al...",
+      "why_hal_engineer_cares": "CameraX 1.6.1 릴리스는 camera-camera2, camera-core, camera-compose, camera-effects, camera-extensions, camera-lifecycle, camera-mlkit-vision, camera-view 등 여러 CameraX 라이브러리 모듈의 업데이트를 포함합니다. 이러한 업데이트는 Camera HAL의 스트림 구성, 메타데이터 처리 및 앱 호환성에 영향을 미칠 수 있습니다.",
       "evidence": [
-        "version_or_release: libcamera v0.7.1",
-        "api_or_component: libcamera pipeline handler / image sensor configuration",
-        "behavior_change: 카메라 지원을 위한 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다.",
-        "evidence_note: libcamera v0.7.1 릴리스에서 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다.",
-        "summary: libcamera v0.7.1에서 카메라 지원을 위한 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다."
+        "version_or_release: CameraX 1.6.1",
+        "api_or_component: CameraX / androidx.camera",
+        "behavior_change: camera-camera2 1.6.1 - - 1.7.0-alpha01 camera-core 1.6.1 - - 1.7.0-alpha01 camera-compose 1.6.1 - - 1.7.0-alpha01 camera-effects 1.6.1 - - 1.7.0-alpha01 camera-extensions 1.6.1 - - 1.7.0-alpha01 camera-feature-combination-query - - - 1.5.0-al...",
+        "evidence_note: version_or_release: CameraX 1.6.1",
+        "evidence_note: api_or_component: CameraX / androidx.camera",
+        "evidence_note: behavior_change: camera-camera2 1.6.1 - - 1.7.0-alpha01 camera-core 1.6.1 - - 1.7.0-alpha01 camera-compose 1.6.1 - - 1.7.0-alpha01 camera-effects 1.6.1 - - 1.7.0-alpha01 camera-extensions 1.6.1 - - 1.7.0-alpha01 camera-feature-combination-query..."
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": false,
+        "final_selection_eligibility": "main"
+      },
+      "eligibility": {
+        "collectionMode": "release-note-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-release-evidence",
+        "finalSelectionEligibility": "main",
+        "source_kind": "release_note_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 8,
+        "cross_check_status": "not-required"
+      },
+      "score": {
+        "total": 103.8,
+        "camera_hal_directness": 4.2,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 5,
+        "optional_ai_cpp_bonus": 0
+      },
+      "selection": {
+        "final_selected": true,
+        "primary_selected": true,
+        "reserve_candidate": false,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v78ce60439c72b9da3632137223a86ae38b78a872a1f6dee1b5c1c8cfa57fe81d/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 991
+    },
+    {
+      "title": "1.3.0-beta02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
+      "topic_type": "camera-hal",
+      "editorial_priority": 3,
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "scope_relevance": {
+        "aosp_camera_directness": 2,
+        "driver_stack_relevance": 0,
+        "soc_platform_relevance": 0,
+        "native_tooling_relevance": 0,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "evidence_origin": "article_text"
+      },
+      "component": "CameraX / androidx.camera",
+      "what_changed": "1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close <h3 class=\"hide-from-toc no-l...",
+      "why_hal_engineer_cares": "CameraX 1.3.0-beta02 릴리스는 camera-viewfinder 및 camera-video 모듈의 업데이트를 포함합니다. 이는 Camera HAL의 뷰파인더 스트림 처리, 비디오 캡처 파이프라인, 그리고 관련 성능 및 안정성에 영향을 미칠 수 있습니다.",
+      "evidence": [
+        "version_or_release: 1.3.0-beta02",
+        "api_or_component: CameraX / androidx.camera",
+        "behavior_change: 1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close <h3 class=\"hide-from-toc no-l...",
+        "evidence_note: version_or_release: 1.3.0-beta02",
+        "evidence_note: api_or_component: CameraX / androidx.camera",
+        "evidence_note: behavior_change: 1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close <h3 class=\"hid..."
       ],
       "risk": {
         "source_gap": false,
@@ -136,12 +238,12 @@
         "cross_check_status": "not-required"
       },
       "score": {
-        "total": 95.05,
-        "camera_hal_directness": 3.45,
+        "total": 102,
+        "camera_hal_directness": 4,
         "evidence_specificity": 5,
-        "freshness": 2,
-        "practical_actionability": 3,
-        "source_reliability": 4,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 5,
         "optional_ai_cpp_bonus": 0
       },
       "selection": {
@@ -154,47 +256,64 @@
         "score_filter_reasons": [],
         "exclusion_reasons": []
       },
-      "url_hash": "d99c6b850c32004c156f6b7447cdc2e8c9701a62d90c6c31e526d481b4c1fb61",
+      "url_hash": "d116a623b5025f895f131151e5af0dff5221d24c9ef56d17ef871245dce222ca",
       "imageCandidates": [
         {
-          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
-          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "licenseStatus": "unknown",
-          "attribution": "libcamera Release Announcements",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v78ce60439c72b9da3632137223a86ae38b78a872a1f6dee1b5c1c8cfa57fe81d/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok"
         }
       ],
-      "estimated_tokens": 654
+      "estimated_tokens": 977
     },
     {
-      "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
-      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
-      "source": "libcamera Release Announcements",
-      "published_date": "2026-04-28",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
       "topic_type": "camera-hal",
-      "editorial_priority": 2,
-      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 3,
+      "relevance_bucket": "android_platform_camera_adjacent",
       "scope_relevance": {
-        "aosp_camera_directness": 0,
-        "driver_stack_relevance": 3,
+        "aosp_camera_directness": 2,
+        "driver_stack_relevance": 0,
         "soc_platform_relevance": 0,
         "native_tooling_relevance": 0,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": true,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": false,
         "evidence_origin": "article_text"
       },
-      "component": "libcamera SoftISP / image pipeline",
-      "what_changed": "카메라 이미지 처리를 위한 SoftISP 디베이어링 및 처리량 동작이 업데이트되었습니다.",
-      "why_hal_engineer_cares": "libcamera의 SoftISP 업데이트는 Android Camera HAL의 이미지 처리 파이프라인, 특히 RAW 데이터 처리 및 ISP 튜닝에 대한 이해에 영향을 미칠 수 있습니다.",
+      "component": "CameraX / androidx.camera",
+      "what_changed": "> camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
+      "why_hal_engineer_cares": "CameraX 1.4.0-alpha07 릴리스는 camera-view, camera-viewfinder, camera-video 모듈의 업데이트를 포함합니다. 이는 Camera HAL의 뷰파인더 및 비디오 스트림 처리, 그리고 관련 성능 및 안정성에 영향을 미칠 수 있습니다.",
       "evidence": [
-        "version_or_release: libcamera v0.7.1",
-        "api_or_component: libcamera SoftISP / image pipeline",
-        "behavior_change: 카메라 이미지 처리를 위한 SoftISP 디베이어링 및 처리량 동작이 업데이트되었습니다.",
-        "evidence_note: libcamera v0.7.1 릴리스에서 SoftISP 디베이어링 및 처리량 동작이 업데이트되었습니다.",
-        "summary: libcamera v0.7.1에서 카메라 이미지 처리를 위한 SoftISP 디베이어링(debaying) 및 처리량 동작이 업데이트되었습니다."
+        "version_or_release: 1.4.0-alpha07",
+        "api_or_component: CameraX / androidx.camera",
+        "behavior_change: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
+        "evidence_note: version_or_release: 1.4.0-alpha07",
+        "evidence_note: api_or_component: CameraX / androidx.camera",
+        "evidence_note: behavior_change: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers"
       ],
       "risk": {
         "source_gap": false,
@@ -220,12 +339,12 @@
         "cross_check_status": "not-required"
       },
       "score": {
-        "total": 95.05,
-        "camera_hal_directness": 3.45,
+        "total": 102,
+        "camera_hal_directness": 4,
         "evidence_specificity": 5,
-        "freshness": 2,
-        "practical_actionability": 3,
-        "source_reliability": 4,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 5,
         "optional_ai_cpp_bonus": 0
       },
       "selection": {
@@ -238,21 +357,37 @@
         "score_filter_reasons": [],
         "exclusion_reasons": []
       },
-      "url_hash": "ab8ff018bbb94f4c0e045247e2e7e9ba8721dbe0fcd8f7b2f94a6e715cea0b3d",
+      "url_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
       "imageCandidates": [
         {
-          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
-          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "licenseStatus": "unknown",
-          "attribution": "libcamera Release Announcements",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v78ce60439c72b9da3632137223a86ae38b78a872a1f6dee1b5c1c8cfa57fe81d/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok"
         }
       ],
-      "estimated_tokens": 653
+      "estimated_tokens": 964
     },
     {
-      "title": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "source": "ISO C++ Blog",
       "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
@@ -271,15 +406,15 @@
         "evidence_origin": "article_text"
       },
       "component": "GCC",
-      "what_changed": "GCC 16.1이 릴리스되었으며, C++26 reflection 및 contracts 지원, C++20 기본 설정 등 다양한 기능이 업데이트되었습니다.",
-      "why_hal_engineer_cares": "Android native 개발은 Clang/LLVM을 중심으로 하지만, GCC의 C++26 기능 업데이트는 C++ 표준의 발전을 보여주며, 향후 AOSP Camera HAL 및 드라이버 개발에 사용될 수 있는 언어 기능에 대한 통찰력을 제공합니다.",
+      "what_changed": "GCC 16.1 has been released!",
+      "why_hal_engineer_cares": "GCC 16.1 릴리스는 C++26 리플렉션, 컨트랙트, 안전 강화 기능 및 C++20 기본 지원을 포함합니다. 이는 Android Camera HAL의 C++ native 코드 개발, 컴파일러 기능 활용, 코드 안전성 및 성능 최적화에 잠재적으로 영향을 미칠 수 있습니다.",
       "evidence": [
         "version_or_release: GCC 16.1",
         "api_or_component: GCC",
-        "behavior_change: GCC 16.1이 릴리스되었으며, C++26 reflection 및 contracts 지원, C++20 기본 설정 등 다양한 기능이 업데이트되었습니다.",
-        "evidence_note: GCC 16.1이 2026년 4월 30일에 릴리스되었습니다.",
-        "evidence_note: C++26 reflection 및 contracts 지원, C++20 기본 설정이 포함됩니다.",
-        "summary: GCC 16.1이 릴리스되었으며, C++26 reflection 및 contracts 지원, C++20 기본 설정 등 다양한 기능이 업데이트되었습니다."
+        "behavior_change: GCC 16.1 has been released!",
+        "evidence_note: api_or_component: GCC",
+        "evidence_note: behavior_change: GCC 16.1 has been released!",
+        "evidence_note: summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is stil..."
       ],
       "risk": {
         "source_gap": false,
@@ -325,92 +460,16 @@
       },
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
-      "estimated_tokens": 572
-    },
-    {
-      "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "source": "ISO C++ Blog",
-      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
-      "topic_type": "camera-hal",
-      "editorial_priority": 5,
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "scope_relevance": {
-        "aosp_camera_directness": 0,
-        "driver_stack_relevance": 0,
-        "soc_platform_relevance": 0,
-        "native_tooling_relevance": 5,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": true,
-        "evidence_origin": "article_text"
-      },
-      "component": "Glaze C++26 Reflection",
-      "what_changed": "Glaze v7.2.0에 C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 더 많은 형식과 기능을 지원합니다.",
-      "why_hal_engineer_cares": "Glaze 라이브러리의 C++26 Reflection 지원은 AOSP Camera HAL 및 드라이버의 native C++ 코드에서 데이터 직렬화/역직렬화 및 설정 관리를 효율적으로 처리하는 데 활용될 수 있습니다. 이는 특히 복잡한 메타데이터 구조를 다루는 데 유용할 수 있습니다.",
-      "evidence": [
-        "version_or_release: v7.2.0",
-        "api_or_component: Glaze C++26 Reflection",
-        "behavior_change: Glaze v7.2.0에 C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 더 많은 형식과 기능을 지원합니다.",
-        "evidence_note: Glaze v7.2.0이 2026년 4월 28일에 릴리스되었습니다.",
-        "evidence_note: C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 다양한 형식과 기능을 지원합니다.",
-        "summary: Glaze v7.2.0에 C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 더 많은 형식과 기능을 지원합니다."
-      ],
-      "risk": {
-        "source_gap": false,
-        "watch_page": false,
-        "no_dated_evidence": false,
-        "candidate_only": false,
-        "requires_cross_check": false,
-        "final_selection_eligibility": "short"
-      },
-      "eligibility": {
-        "collectionMode": "rss-item",
-        "isArticleCandidate": true,
-        "isWatchPage": false,
-        "hasDatedEvidence": true,
-        "evidenceLevel": "dated-rss-article",
-        "finalSelectionEligibility": "short",
-        "source_kind": "rss_item",
-        "source_gap_risk": false,
-        "main_eligible": true,
-        "briefing_only": false,
-        "reference_only": false,
-        "evidence_score": 8,
-        "cross_check_status": "not-required"
-      },
-      "score": {
-        "total": 110.95,
-        "camera_hal_directness": 2.55,
-        "evidence_specificity": 5,
-        "freshness": 2,
-        "practical_actionability": 5,
-        "source_reliability": 4,
-        "optional_ai_cpp_bonus": 4
-      },
-      "selection": {
-        "final_selected": true,
-        "primary_selected": true,
-        "reserve_candidate": false,
-        "selected_for_editor": true,
-        "selection_slot": "camera-platform-optional-ai-cpp",
-        "main_article_score_eligible": true,
-        "score_filter_reasons": [],
-        "exclusion_reasons": []
-      },
-      "url_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
-      "imageCandidates": [],
-      "estimated_tokens": 616
+      "estimated_tokens": 594
     }
   ],
   "selected_capsules": [
     {
-      "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
       "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
       "source": "libcamera Release Announcements",
       "published_date": "2026-04-28",
-      "topic_type": "camera-hal",
+      "topic_type": "general",
       "editorial_priority": 2,
       "relevance_bucket": "camera_driver_image_pipeline",
       "scope_relevance": {
@@ -425,15 +484,15 @@
         "evidence_origin": "article_text"
       },
       "component": "libcamera / V4L2 camera pipeline",
-      "what_changed": "libcamera v0.7.1 릴리스에는 Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC, AWB 통계 수정 등 다양한 패치가 포함되어 있습니다.",
-      "why_hal_engineer_cares": "Linux 카메라 드라이버 스택의 핵심 구성 요소인 libcamera의 업데이트는 Android Camera HAL 구현 및 최적화에 간접적인 영향을 미칠 수 있습니다.",
+      "what_changed": "Released libcamera v0.7.1 with SoftISP debaying and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+      "why_hal_engineer_cares": "libcamera v0.7.1 릴리스는 SoftISP 디베이어링, 이미지 파이프라인 처리량 개선, 파이프라인 핸들러 카메라 지원, 센서 모드 구성 업데이트를 포함합니다. 이는 Linux 카메라 드라이버 및 V4L2 스택에 직접적인 영향을 미치며, Android HAL 구현의 하위 스택 동작에 영향을 줄 수 있습니다.",
       "evidence": [
         "version_or_release: libcamera v0.7.1",
         "api_or_component: libcamera / V4L2 camera pipeline",
-        "behavior_change: libcamera v0.7.1 릴리스에는 Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC, AWB 통계 수정 등 다양한 패치가 포함되어 있습니다.",
-        "evidence_note: libcamera v0.7.1이 2026년 4월 28일에 릴리스되었습니다.",
-        "evidence_note: Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC, AWB 통계 수정 패치 등이 포함되어 있습니다.",
-        "summary: libcamera v0.7.1 릴리스에는 Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC, AWB 통계 수정 등 다양한 패치가 포함되어 있습니다."
+        "behavior_change: Released libcamera v0.7.1 with SoftISP debaying and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+        "evidence_note: version_or_release: libcamera v0.7.1",
+        "evidence_note: api_or_component: libcamera / V4L2 camera pipeline",
+        "evidence_note: behavior_change: Released libcamera v0.7.1 with SoftISP debaying and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
       ],
       "risk": {
         "source_gap": false,
@@ -441,7 +500,7 @@
         "no_dated_evidence": false,
         "candidate_only": false,
         "requires_cross_check": false,
-        "final_selection_eligibility": "short"
+        "final_selection_eligibility": "main"
       },
       "eligibility": {
         "collectionMode": "release-note-item",
@@ -449,7 +508,7 @@
         "isWatchPage": false,
         "hasDatedEvidence": true,
         "evidenceLevel": "dated-release-evidence",
-        "finalSelectionEligibility": "short",
+        "finalSelectionEligibility": "main",
         "source_kind": "release_note_item",
         "source_gap_risk": false,
         "main_eligible": true,
@@ -459,8 +518,8 @@
         "cross_check_status": "not-required"
       },
       "score": {
-        "total": 95.05,
-        "camera_hal_directness": 3.45,
+        "total": 105.85,
+        "camera_hal_directness": 4.65,
         "evidence_specificity": 5,
         "freshness": 2,
         "practical_actionability": 3,
@@ -479,36 +538,37 @@
       },
       "url_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
       "imageCandidates": [],
-      "estimated_tokens": 632
+      "estimated_tokens": 660
     },
     {
-      "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
-      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-      "source": "libcamera Release Announcements",
-      "published_date": "2026-04-28",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
       "topic_type": "camera-hal",
-      "editorial_priority": 2,
-      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 3,
+      "relevance_bucket": "android_platform_camera_adjacent",
       "scope_relevance": {
-        "aosp_camera_directness": 0,
-        "driver_stack_relevance": 3,
+        "aosp_camera_directness": 2,
+        "driver_stack_relevance": 0,
         "soc_platform_relevance": 0,
         "native_tooling_relevance": 0,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": true,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": false,
         "evidence_origin": "article_text"
       },
-      "component": "libcamera pipeline handler / image sensor configuration",
-      "what_changed": "카메라 지원을 위한 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다.",
-      "why_hal_engineer_cares": "libcamera의 파이프라인 핸들러 및 센서 구성 업데이트는 Android Camera HAL의 드라이버 인터페이스 및 이미지 센서 제어 방식에 영향을 미칠 수 있습니다.",
+      "component": "CameraX / androidx.camera",
+      "what_changed": "> camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
+      "why_hal_engineer_cares": "CameraX 1.4.0-alpha07 릴리스는 camera-view, camera-viewfinder, camera-video 모듈의 업데이트를 포함합니다. 이는 Camera HAL의 뷰파인더 및 비디오 스트림 처리, 그리고 관련 성능 및 안정성에 영향을 미칠 수 있습니다.",
       "evidence": [
-        "version_or_release: libcamera v0.7.1",
-        "api_or_component: libcamera pipeline handler / image sensor configuration",
-        "behavior_change: 카메라 지원을 위한 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다.",
-        "evidence_note: libcamera v0.7.1 릴리스에서 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다.",
-        "summary: libcamera v0.7.1에서 카메라 지원을 위한 파이프라인 핸들러 및 센서 구성 동작이 업데이트되었습니다."
+        "version_or_release: 1.4.0-alpha07",
+        "api_or_component: CameraX / androidx.camera",
+        "behavior_change: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
+        "evidence_note: version_or_release: 1.4.0-alpha07",
+        "evidence_note: api_or_component: CameraX / androidx.camera",
+        "evidence_note: behavior_change: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers"
       ],
       "risk": {
         "source_gap": false,
@@ -534,12 +594,12 @@
         "cross_check_status": "not-required"
       },
       "score": {
-        "total": 95.05,
-        "camera_hal_directness": 3.45,
+        "total": 102,
+        "camera_hal_directness": 4,
         "evidence_specificity": 5,
-        "freshness": 2,
-        "practical_actionability": 3,
-        "source_reliability": 4,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 5,
         "optional_ai_cpp_bonus": 0
       },
       "selection": {
@@ -552,47 +612,64 @@
         "score_filter_reasons": [],
         "exclusion_reasons": []
       },
-      "url_hash": "d99c6b850c32004c156f6b7447cdc2e8c9701a62d90c6c31e526d481b4c1fb61",
+      "url_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
       "imageCandidates": [
         {
-          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
-          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "licenseStatus": "unknown",
-          "attribution": "libcamera Release Announcements",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v78ce60439c72b9da3632137223a86ae38b78a872a1f6dee1b5c1c8cfa57fe81d/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok"
         }
       ],
-      "estimated_tokens": 654
+      "estimated_tokens": 964
     },
     {
-      "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
-      "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
-      "source": "libcamera Release Announcements",
-      "published_date": "2026-04-28",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
       "topic_type": "camera-hal",
-      "editorial_priority": 2,
-      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 3,
+      "relevance_bucket": "android_platform_camera_adjacent",
       "scope_relevance": {
-        "aosp_camera_directness": 0,
-        "driver_stack_relevance": 3,
+        "aosp_camera_directness": 2,
+        "driver_stack_relevance": 0,
         "soc_platform_relevance": 0,
         "native_tooling_relevance": 0,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": true,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": false,
         "evidence_origin": "article_text"
       },
-      "component": "libcamera SoftISP / image pipeline",
-      "what_changed": "카메라 이미지 처리를 위한 SoftISP 디베이어링 및 처리량 동작이 업데이트되었습니다.",
-      "why_hal_engineer_cares": "libcamera의 SoftISP 업데이트는 Android Camera HAL의 이미지 처리 파이프라인, 특히 RAW 데이터 처리 및 ISP 튜닝에 대한 이해에 영향을 미칠 수 있습니다.",
+      "component": "CameraX / androidx.camera",
+      "what_changed": "> camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
+      "why_hal_engineer_cares": "CameraX 1.4.0-alpha07 릴리스는 camera-view, camera-viewfinder, camera-video 모듈의 업데이트를 포함합니다. 이는 Camera HAL의 뷰파인더 및 비디오 스트림 처리, 그리고 관련 성능 및 안정성에 영향을 미칠 수 있습니다.",
       "evidence": [
-        "version_or_release: libcamera v0.7.1",
-        "api_or_component: libcamera SoftISP / image pipeline",
-        "behavior_change: 카메라 이미지 처리를 위한 SoftISP 디베이어링 및 처리량 동작이 업데이트되었습니다.",
-        "evidence_note: libcamera v0.7.1 릴리스에서 SoftISP 디베이어링 및 처리량 동작이 업데이트되었습니다.",
-        "summary: libcamera v0.7.1에서 카메라 이미지 처리를 위한 SoftISP 디베이어링(debaying) 및 처리량 동작이 업데이트되었습니다."
+        "version_or_release: 1.4.0-alpha07",
+        "api_or_component: CameraX / androidx.camera",
+        "behavior_change: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
+        "evidence_note: version_or_release: 1.4.0-alpha07",
+        "evidence_note: api_or_component: CameraX / androidx.camera",
+        "evidence_note: behavior_change: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers"
       ],
       "risk": {
         "source_gap": false,
@@ -618,12 +695,12 @@
         "cross_check_status": "not-required"
       },
       "score": {
-        "total": 95.05,
-        "camera_hal_directness": 3.45,
+        "total": 102,
+        "camera_hal_directness": 4,
         "evidence_specificity": 5,
-        "freshness": 2,
-        "practical_actionability": 3,
-        "source_reliability": 4,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 5,
         "optional_ai_cpp_bonus": 0
       },
       "selection": {
@@ -636,21 +713,138 @@
         "score_filter_reasons": [],
         "exclusion_reasons": []
       },
-      "url_hash": "ab8ff018bbb94f4c0e045247e2e7e9ba8721dbe0fcd8f7b2f94a6e715cea0b3d",
+      "url_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
       "imageCandidates": [
         {
-          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
-          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "licenseStatus": "unknown",
-          "attribution": "libcamera Release Announcements",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v78ce60439c72b9da3632137223a86ae38b78a872a1f6dee1b5c1c8cfa57fe81d/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok"
         }
       ],
-      "estimated_tokens": 653
+      "estimated_tokens": 964
     },
     {
-      "title": "GCC 16.1 릴리스: C++26 Reflection, Contracts, C++20 기본 설정 등",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
+      "topic_type": "camera-hal",
+      "editorial_priority": 3,
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "scope_relevance": {
+        "aosp_camera_directness": 2,
+        "driver_stack_relevance": 0,
+        "soc_platform_relevance": 0,
+        "native_tooling_relevance": 0,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "evidence_origin": "article_text"
+      },
+      "component": "CameraX / androidx.camera",
+      "what_changed": "> camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
+      "why_hal_engineer_cares": "CameraX 1.4.0-alpha07 릴리스는 camera-view, camera-viewfinder, camera-video 모듈의 업데이트를 포함합니다. 이는 Camera HAL의 뷰파인더 및 비디오 스트림 처리, 그리고 관련 성능 및 안정성에 영향을 미칠 수 있습니다.",
+      "evidence": [
+        "version_or_release: 1.4.0-alpha07",
+        "api_or_component: CameraX / androidx.camera",
+        "behavior_change: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
+        "evidence_note: version_or_release: 1.4.0-alpha07",
+        "evidence_note: api_or_component: CameraX / androidx.camera",
+        "evidence_note: behavior_change: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers"
+      ],
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": false,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "release-note-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-release-evidence",
+        "finalSelectionEligibility": "short",
+        "source_kind": "release_note_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 8,
+        "cross_check_status": "not-required"
+      },
+      "score": {
+        "total": 102,
+        "camera_hal_directness": 4,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 5,
+        "optional_ai_cpp_bonus": 0
+      },
+      "selection": {
+        "final_selected": true,
+        "primary_selected": true,
+        "reserve_candidate": false,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v78ce60439c72b9da3632137223a86ae38b78a872a1f6dee1b5c1c8cfa57fe81d/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 964
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "source": "ISO C++ Blog",
       "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
@@ -669,15 +863,15 @@
         "evidence_origin": "article_text"
       },
       "component": "GCC",
-      "what_changed": "GCC 16.1이 릴리스되었으며, C++26 reflection 및 contracts 지원, C++20 기본 설정 등 다양한 기능이 업데이트되었습니다.",
-      "why_hal_engineer_cares": "Android native 개발은 Clang/LLVM을 중심으로 하지만, GCC의 C++26 기능 업데이트는 C++ 표준의 발전을 보여주며, 향후 AOSP Camera HAL 및 드라이버 개발에 사용될 수 있는 언어 기능에 대한 통찰력을 제공합니다.",
+      "what_changed": "GCC 16.1 has been released!",
+      "why_hal_engineer_cares": "GCC 16.1 릴리스는 C++26 리플렉션, 컨트랙트, 안전 강화 기능 및 C++20 기본 지원을 포함합니다. 이는 Android Camera HAL의 C++ native 코드 개발, 컴파일러 기능 활용, 코드 안전성 및 성능 최적화에 잠재적으로 영향을 미칠 수 있습니다.",
       "evidence": [
         "version_or_release: GCC 16.1",
         "api_or_component: GCC",
-        "behavior_change: GCC 16.1이 릴리스되었으며, C++26 reflection 및 contracts 지원, C++20 기본 설정 등 다양한 기능이 업데이트되었습니다.",
-        "evidence_note: GCC 16.1이 2026년 4월 30일에 릴리스되었습니다.",
-        "evidence_note: C++26 reflection 및 contracts 지원, C++20 기본 설정이 포함됩니다.",
-        "summary: GCC 16.1이 릴리스되었으며, C++26 reflection 및 contracts 지원, C++20 기본 설정 등 다양한 기능이 업데이트되었습니다."
+        "behavior_change: GCC 16.1 has been released!",
+        "evidence_note: api_or_component: GCC",
+        "evidence_note: behavior_change: GCC 16.1 has been released!",
+        "evidence_note: summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is stil..."
       ],
       "risk": {
         "source_gap": false,
@@ -723,14 +917,16 @@
       },
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
-      "estimated_tokens": 572
-    },
+      "estimated_tokens": 594
+    }
+  ],
+  "reserve_capsules": [
     {
-      "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+      "title": "Glaze 7.2 &#45; C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "source": "ISO C++ Blog",
       "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
-      "topic_type": "camera-hal",
+      "topic_type": "cpp",
       "editorial_priority": 5,
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "scope_relevance": {
@@ -744,16 +940,14 @@
         "counts_as_fallback_topic": true,
         "evidence_origin": "article_text"
       },
-      "component": "Glaze C++26 Reflection",
-      "what_changed": "Glaze v7.2.0에 C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 더 많은 형식과 기능을 지원합니다.",
-      "why_hal_engineer_cares": "Glaze 라이브러리의 C++26 Reflection 지원은 AOSP Camera HAL 및 드라이버의 native C++ 코드에서 데이터 직렬화/역직렬화 및 설정 관리를 효율적으로 처리하는 데 활용될 수 있습니다. 이는 특히 복잡한 메타데이터 구조를 다루는 데 유용할 수 있습니다.",
+      "component": "GCC",
+      "what_changed": "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+      "why_hal_engineer_cares": "ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
       "evidence": [
         "version_or_release: v7.2.0",
-        "api_or_component: Glaze C++26 Reflection",
-        "behavior_change: Glaze v7.2.0에 C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 더 많은 형식과 기능을 지원합니다.",
-        "evidence_note: Glaze v7.2.0이 2026년 4월 28일에 릴리스되었습니다.",
-        "evidence_note: C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 다양한 형식과 기능을 지원합니다.",
-        "summary: Glaze v7.2.0에 C++26 Reflection 지원이 통합되어 YAML, CBOR, MessagePack, TOML 등 더 많은 형식과 기능을 지원합니다."
+        "api_or_component: GCC",
+        "behavior_change: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+        "summary: Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePa..."
       ],
       "risk": {
         "source_gap": false,
@@ -788,19 +982,18 @@
         "optional_ai_cpp_bonus": 4
       },
       "selection": {
-        "final_selected": true,
-        "primary_selected": true,
-        "reserve_candidate": false,
-        "selected_for_editor": true,
-        "selection_slot": "camera-platform-optional-ai-cpp",
+        "final_selected": false,
+        "primary_selected": false,
+        "reserve_candidate": true,
+        "selected_for_editor": false,
+        "selection_slot": "reserve",
         "main_article_score_eligible": true,
         "score_filter_reasons": [],
         "exclusion_reasons": []
       },
       "url_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
       "imageCandidates": [],
-      "estimated_tokens": 616
+      "estimated_tokens": 641
     }
-  ],
-  "reserve_capsules": []
+  ]
 }
