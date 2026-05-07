@@ -215,6 +215,13 @@ jobs:
           REQUIRE_NEWSLETTER_DATE_FILE: "1"
         run: npm run validate
 
+      - name: Resolve final publish status
+        id: final-publish-status
+        if: steps.meta.outputs.has_reviewable_artifacts == 'true'
+        env:
+          VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
+        run: node scripts/write-publish-status-output.js >> "$GITHUB_OUTPUT"
+
       - name: Generate source effectiveness report
         if: always() && steps.meta.outputs.has_reviewable_artifacts == 'true'
         continue-on-error: true
@@ -290,7 +297,7 @@ jobs:
         run: |
           mkdir -p .tmp
           node scripts/build-newsroom-pr-body.js > .tmp/newsroom-pr-body.md
-          node scripts/validate-pr-body.js .tmp/newsroom-pr-body.md
+          node scripts/validate-pr-body.js .tmp/newsroom-pr-body.md --date "${{ steps.meta.outputs.date }}"
           {
             echo "body<<EOF"
             cat .tmp/newsroom-pr-body.md
@@ -347,10 +354,9 @@ jobs:
             const issue_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
             const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week'];
             const labels = ['newsletter', 'aosp-camera', 'editor-review'];
-            const finalPublishReady = '${{ steps.generation-status.outputs.final_publish_ready }}' === 'true';
-            const validationPassed = '${{ steps.validate.outcome }}' === 'success';
-            const compositionMode = '${{ steps.generation-status.outputs.composition_mode }}';
-            if (finalPublishReady && validationPassed) {
+            const finalPublishReady = '${{ steps.final-publish-status.outputs.final_publish_ready }}' === 'true';
+            const compositionMode = '${{ steps.final-publish-status.outputs.composition_mode }}';
+            if (finalPublishReady) {
               labels.push('publish-ready');
             } else {
               labels.push('needs-fix');

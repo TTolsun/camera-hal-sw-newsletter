@@ -21,8 +21,12 @@ const {
   resolvePublishStatus
 } = require('../scripts/newsroom/common/publish-status');
 const {
+  validatePrBodyFile,
   validatePrBodyText
 } = require('../scripts/validate-pr-body');
+const {
+  buildPublishStatusOutputs
+} = require('../scripts/write-publish-status-output');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -256,7 +260,10 @@ test('newsroom PR body separates quality score threshold and result in Korean st
   assert.match(body, /composition_mode: NEEDS_FIX/);
   assert.match(body, /final_publish_ready: false/);
   assert.match(body, /검토 게이트: true \(review_gate_passed: true\)/);
-  assert.match(body, new RegExp(`후보 선택 발행 조건: false \\(publish_gate_passed: false; ${publishGateCriteriaText().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\)`));
+  assert.match(body, /최종 발행 가능 여부: false \(final_publish_ready: false\)/);
+  assert.match(body, new RegExp(`정책상 발행 조건: false \\(publish_gate_passed: false; ${publishGateCriteriaText().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\)`));
+  assert.doesNotMatch(body, /발행 게이트:/);
+  assert.match(body, /상태 일관성 오류: 없음 \(consistency_errors: none\)/);
   assert.match(body, /editor_review_required: true/);
   assert.match(body, /review_gate_passed: true/);
   assert.match(body, /publish_gate_passed: false/);
@@ -472,6 +479,40 @@ test('publish status resolver blocks final publish when fact-check needs fix', (
   assert.deepEqual(resolved.status.consistency_errors, []);
 });
 
+test('publish status resolver keeps site validation failure out of consistency errors', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'failure' });
+
+  assert.equal(resolved.status.artifact_final_publish_ready, true);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.validation_passed, false);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.validate_outcome_success, undefined);
+  assert.equal(resolved.status.final_publish_ready_conditions.validate_outcome_success, false);
+});
+
+test('publish status resolver ignores status final mismatch caused only by validation failure', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: false,
+    status: {
+      validate_ok: false
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'failure' });
+
+  assert.equal(resolved.status.artifact_final_publish_ready, true);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+});
+
 test('publish status resolver records consistency error when status final flag is stale', () => {
   const root = tempRoot();
   const date = '2026-05-08';
@@ -490,7 +531,8 @@ test('publish status resolver records consistency error when status final flag i
   const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
 
   assert.equal(resolved.status.final_publish_ready, false);
-  assert.match(resolved.status.consistency_errors.join('\n'), /status\.final_publish_ready=true but artifact_recomputed_final_publish_ready=false/);
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
+  assert.match(resolved.status.consistency_errors.join('\n'), /status\.final_publish_ready=true but artifact_final_publish_ready=false/);
 });
 
 test('validate-pr-body fails when consistency errors are present', () => {
@@ -512,6 +554,52 @@ test('validate-pr-body fails when consistency errors are present', () => {
 
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /consistency_errors/);
+});
+
+test('validate-pr-body allows review PR when final publish is false without consistency errors', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure' });
+  const filePath = path.join(root, '.tmp', 'newsroom-pr-body.md');
+  writeText(filePath, body);
+
+  const result = validatePrBodyFile(filePath, {
+    root,
+    date,
+    validateOutcome: 'failure'
+  });
+
+  assert.equal(result.ok, true);
+});
+
+test('publish status output renders final and artifact readiness fields', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'failure' });
+  const outputs = buildPublishStatusOutputs(resolved);
+
+  assert.equal(outputs.artifact_final_publish_ready, 'true');
+  assert.equal(outputs.final_publish_ready, 'false');
+  assert.equal(outputs.selection_publish_ready, 'true');
+  assert.equal(outputs.publish_gate_passed, 'true');
+  assert.equal(outputs.review_gate_passed, 'true');
+  assert.equal(outputs.validate_outcome, 'failure');
+  assert.equal(outputs.quality_status, 'PASS');
+  assert.equal(outputs.fact_check_status, 'PASS');
+  assert.equal(outputs.must_fix_count, '0');
+  assert.equal(outputs.source_gap_count, '0');
+  assert.equal(outputs.stale_claim_status, 'PASS');
+  assert.equal(outputs.stale_claim_hard_failure_count, '0');
+  assert.equal(outputs.consistency_error_count, '0');
+  assert.equal(outputs.consistency_errors, 'none');
+  assert.equal(outputs.composition_mode, 'NORMAL');
+  assert.equal(outputs.selection_composition_mode, 'NORMAL');
 });
 
 test('newsroom PR body primary headings are Korean', () => {
@@ -552,6 +640,10 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   const checkPolicyDocsStepIndex = workflow.indexOf('- name: Check policy docs');
   const preflightStepIndex = workflow.indexOf('- name: Run unit and regression tests');
   const jitterStepIndex = workflow.indexOf('- name: Jitter scheduled run');
+  const resolveFinalStatusStepIndex = workflow.indexOf('- name: Resolve final publish status');
+  const preparePrBodyStepIndex = workflow.indexOf('- name: Prepare pull request body');
+  const createPrStepIndex = workflow.indexOf('- name: Create pull request');
+  const addLabelsStepIndex = workflow.indexOf('- name: Add pull request labels');
   const validatePolicyNextStepIndex = workflow.indexOf('\n      - name:', validatePolicyStepIndex + 1);
   const validatePolicyStep = workflow.slice(
     validatePolicyStepIndex,
@@ -567,6 +659,16 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
     preflightStepIndex,
     nextStepIndex === -1 ? undefined : nextStepIndex
   );
+  const resolveFinalStatusNextStepIndex = workflow.indexOf('\n      - name:', resolveFinalStatusStepIndex + 1);
+  const resolveFinalStatusStep = workflow.slice(
+    resolveFinalStatusStepIndex,
+    resolveFinalStatusNextStepIndex === -1 ? undefined : resolveFinalStatusNextStepIndex
+  );
+  const preparePrBodyNextStepIndex = workflow.indexOf('\n      - name:', preparePrBodyStepIndex + 1);
+  const preparePrBodyStep = workflow.slice(
+    preparePrBodyStepIndex,
+    preparePrBodyNextStepIndex === -1 ? undefined : preparePrBodyNextStepIndex
+  );
 
   assert.notEqual(manualOverrideStepIndex, -1);
   assert.notEqual(doctorStepIndex, -1);
@@ -574,11 +676,17 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.notEqual(checkPolicyDocsStepIndex, -1);
   assert.notEqual(preflightStepIndex, -1);
   assert.notEqual(jitterStepIndex, -1);
+  assert.notEqual(resolveFinalStatusStepIndex, -1);
+  assert.notEqual(preparePrBodyStepIndex, -1);
+  assert.notEqual(createPrStepIndex, -1);
+  assert.notEqual(addLabelsStepIndex, -1);
   assert.ok(manualOverrideStepIndex < doctorStepIndex);
   assert.ok(doctorStepIndex < validatePolicyStepIndex);
   assert.ok(validatePolicyStepIndex < checkPolicyDocsStepIndex);
   assert.ok(checkPolicyDocsStepIndex < preflightStepIndex);
   assert.ok(preflightStepIndex < jitterStepIndex);
+  assert.ok(resolveFinalStatusStepIndex < preparePrBodyStepIndex);
+  assert.ok(preparePrBodyStepIndex < createPrStepIndex);
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /llm_model:/);
   assert.match(workflow, /llm_fallback_models:/);
@@ -615,10 +723,18 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /publish-ready/);
   assert.match(workflow, /const stateLabels = \['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week'\];/);
   assert.match(workflow, /github\.rest\.issues\.removeLabel/);
+  assert.match(workflow, /- name: Resolve final publish status/);
+  assert.match(workflow, /id: final-publish-status/);
+  assert.match(workflow, /node scripts\/write-publish-status-output\.js >> "\$GITHUB_OUTPUT"/);
+  assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
+  assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
-  assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md/);
+  assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);
-  assert.match(workflow, /const finalPublishReady = '\$\{\{ steps\.generation-status\.outputs\.final_publish_ready \}\}' === 'true';/);
+  assert.match(workflow, /const finalPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.final_publish_ready \}\}' === 'true';/);
+  assert.match(workflow, /const compositionMode = '\$\{\{ steps\.final-publish-status\.outputs\.composition_mode \}\}';/);
+  assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /steps\.generation-status\.outputs\.final_publish_ready/);
+  assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /validationPassed/);
   assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION'/);
   assert.match(workflow, /compositionMode === 'THIN_WEEK_REVIEW'/);
   assert.match(workflow, /Fail if reviewable newsroom artifacts were not created/);

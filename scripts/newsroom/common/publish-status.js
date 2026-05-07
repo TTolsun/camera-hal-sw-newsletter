@@ -244,7 +244,7 @@ function resolvePublishStatus(options = {}) {
   const selection = selectionSummary(status, inputs.shortlist.value);
   const validateOutcome = resolveValidateOutcome(status, options);
   const explicitStatusInput = inputs.statusInput.sourcePath === null;
-  const finalPublishReadyConditions = {
+  const artifactFinalPublishReadyConditions = {
     quality_report_present: explicitStatusInput || (inputs.quality.exists && !inputs.quality.error),
     fact_check_report_present: explicitStatusInput || (inputs.factCheck.exists && !inputs.factCheck.error),
     stale_claim_report_present: explicitStatusInput || (inputs.staleClaim.exists && !inputs.staleClaim.error),
@@ -256,17 +256,31 @@ function resolvePublishStatus(options = {}) {
     must_fix_count_zero: factCheck.mustFixCount === 0,
     source_gap_count_zero: factCheck.sourceGapCount === 0,
     stale_claim_status_not_needs_fix: staleClaim.status !== 'NEEDS_FIX',
-    stale_claim_hard_failure_count_zero: staleClaim.hardFailureCount === 0,
-    validate_outcome_success: validateOutcome === 'success'
+    stale_claim_hard_failure_count_zero: staleClaim.hardFailureCount === 0
+  };
+  const artifactFinalPublishReady = Object.values(artifactFinalPublishReadyConditions).every(Boolean);
+  const validationPassed = validateOutcome === 'success';
+  const finalPublishReadyConditions = {
+    artifact_final_publish_ready: artifactFinalPublishReady,
+    validate_outcome_success: validationPassed
   };
   const finalPublishReady = Object.values(finalPublishReadyConditions).every(Boolean);
   const statusFinalPublishReady = hasOwn(rawStatus, 'final_publish_ready')
     ? rawStatus.final_publish_ready
     : undefined;
 
-  if (hasOwn(rawStatus, 'final_publish_ready') && statusFinalPublishReady !== finalPublishReady) {
+  const validationOnlyStatusMismatch =
+    statusFinalPublishReady === false &&
+    artifactFinalPublishReady === true &&
+    status.validate_ok === false;
+
+  if (
+    hasOwn(rawStatus, 'final_publish_ready') &&
+    statusFinalPublishReady !== artifactFinalPublishReady &&
+    !validationOnlyStatusMismatch
+  ) {
     consistencyErrors.push(
-      `status.final_publish_ready=${String(statusFinalPublishReady)} but artifact_recomputed_final_publish_ready=${String(finalPublishReady)}`
+      `status.final_publish_ready=${String(statusFinalPublishReady)} but artifact_final_publish_ready=${String(artifactFinalPublishReady)}`
     );
   }
 
@@ -283,7 +297,9 @@ function resolvePublishStatus(options = {}) {
     quality_deduction_count: quality.deductionCount,
     publish_ready: selection.selectionPublishReady,
     selection_publish_ready: selection.selectionPublishReady,
+    artifact_final_publish_ready: artifactFinalPublishReady,
     final_publish_ready: finalPublishReady,
+    validation_passed: validationPassed,
     status_final_publish_ready: statusFinalPublishReady,
     review_gate_passed: selection.reviewGatePassed,
     publish_gate_passed: selection.publishGatePassed,
@@ -298,6 +314,7 @@ function resolvePublishStatus(options = {}) {
     stale_claim_removed_count: staleClaim.removedCount,
     stale_claim_hard_failure_count: staleClaim.hardFailureCount,
     validate_outcome: validateOutcome,
+    artifact_final_publish_ready_conditions: artifactFinalPublishReadyConditions,
     final_publish_ready_conditions: finalPublishReadyConditions,
     consistency_errors: consistencyErrors
   };
@@ -313,7 +330,10 @@ function resolvePublishStatus(options = {}) {
     staleClaim,
     selection,
     validateOutcome,
+    artifactFinalPublishReady,
     finalPublishReady,
+    validationPassed,
+    artifactFinalPublishReadyConditions,
     finalPublishReadyConditions,
     consistencyErrors
   };

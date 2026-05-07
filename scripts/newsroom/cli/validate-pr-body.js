@@ -1,4 +1,7 @@
 const fs = require('fs');
+const {
+  resolvePublishStatus
+} = require('../common/publish-status');
 
 const FORBIDDEN_ENGLISH_HEADINGS = [
   '## Generation Status',
@@ -41,7 +44,6 @@ function parseStatusSection(section) {
   return {
     overallStatus: firstMatch(section, /^전체 상태:\s*([A-Z_]+)/m),
     finalPublishReady: boolFromMatch(section.match(/final_publish_ready:\s*(true|false)/)),
-    humanPublishGate: boolFromMatch(section.match(/^발행 게이트:\s*(true|false)/m)),
     qualityStatus: firstMatch(section, /^품질 상태:\s*([A-Z_]+)/m),
     factCheckStatus: firstMatch(section, /^팩트체크 상태:\s*([A-Z_]+)/m),
     mustFixCount: numberFromMatch(section.match(/must_fix_count[:=]\s*(\d+)/)),
@@ -49,8 +51,28 @@ function parseStatusSection(section) {
     staleClaimStatus: firstMatch(section, /^Stale claim 상태:\s*([A-Z_]+)/m),
     staleClaimHardFailureCount: numberFromMatch(section.match(/hard_failures=(\d+)/)),
     validateOutcome: firstMatch(section, /^검증 결과:\s*([^\n]+)/m),
-    consistencyErrors: firstMatch(section, /^consistency_errors:\s*([^\n]+)/m)
+    consistencyErrors: firstMatch(section, /consistency_errors:\s*([^\)\n]+)/m)
   };
+}
+
+function parseArgs(argv) {
+  const options = {};
+  let filePath = '';
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === '--date') {
+      options.date = argv[index + 1] || '';
+      index += 1;
+    } else if (arg === '--root') {
+      options.root = argv[index + 1] || '';
+      index += 1;
+    } else if (!filePath) {
+      filePath = arg;
+    } else {
+      throw new Error(`Unknown argument: ${arg}`);
+    }
+  }
+  return { filePath, options };
 }
 
 function validatePrBodyText(text) {
@@ -75,9 +97,6 @@ function validatePrBodyText(text) {
   const parsed = parseStatusSection(statusSection);
   if (parsed.consistencyErrors !== 'none') {
     errors.push(`PR body has consistency_errors: ${parsed.consistencyErrors || 'missing'}`);
-  }
-  if (parsed.humanPublishGate === true && parsed.finalPublishReady === false) {
-    errors.push('발행 게이트 is true while final_publish_ready is false.');
   }
   if (parsed.overallStatus === 'PASS' && parsed.finalPublishReady === false) {
     errors.push('전체 상태 is PASS while final_publish_ready is false.');
@@ -119,18 +138,24 @@ function validatePrBodyText(text) {
   };
 }
 
-function validatePrBodyFile(filePath) {
+function validatePrBodyFile(filePath, options = {}) {
   const text = fs.readFileSync(filePath, 'utf8');
-  return validatePrBodyText(text);
+  const result = validatePrBodyText(text);
+  const resolved = resolvePublishStatus(options);
+  if (resolved.consistencyErrors.length > 0) {
+    result.errors.push(`Artifact consistency errors: ${resolved.consistencyErrors.join('; ')}`);
+    result.ok = false;
+  }
+  return result;
 }
 
 function main() {
-  const filePath = process.argv[2];
+  const { filePath, options } = parseArgs(process.argv.slice(2));
   if (!filePath) {
-    console.error('Usage: node scripts/validate-pr-body.js <pr-body.md>');
+    console.error('Usage: node scripts/validate-pr-body.js <pr-body.md> [--date YYYY-MM-DD] [--root <repo-root>]');
     process.exit(1);
   }
-  const result = validatePrBodyFile(filePath);
+  const result = validatePrBodyFile(filePath, options);
   if (!result.ok) {
     console.error(result.errors.map(error => `- ${error}`).join('\n'));
     process.exit(1);
