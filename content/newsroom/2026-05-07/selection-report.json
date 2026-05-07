@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-07",
-  "generated_at": "2026-05-06T17:07:40.979Z",
+  "generated_at": "2026-05-07T03:35:55.938Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -9,7 +9,6 @@
   "selection_warnings": [],
   "selection_shortage_hints": [
     "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
-    "Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.",
     "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
   ],
   "review_gate_passed": true,
@@ -17,8 +16,8 @@
   "gate_summary": {
     "review_gate_passed": true,
     "publish_gate_passed": true,
-    "non_fallback_reviewable_article_count": 3,
-    "eligible_non_fallback_reviewable_article_count": 3,
+    "non_fallback_reviewable_article_count": 4,
+    "eligible_non_fallback_reviewable_article_count": 4,
     "min_final_articles": 4,
     "absolute_min_reviewable_articles": 2,
     "min_non_fallback_publish_ready_articles": 3,
@@ -30,122 +29,122 @@
     "selected_article_count": 5,
     "bucket_counts": {
       "direct_aosp_camera": 0,
-      "camera_driver_image_pipeline": 3,
-      "android_platform_camera_adjacent": 0,
+      "camera_driver_image_pipeline": 1,
+      "android_platform_camera_adjacent": 3,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 2,
+      "cpp_ai_tooling_fallback": 1,
       "generic_tech_watchlist": 0
     },
     "direct_aosp_camera_count": 0,
-    "camera_driver_image_pipeline_count": 3,
-    "android_platform_camera_adjacent_count": 0,
+    "camera_driver_image_pipeline_count": 1,
+    "android_platform_camera_adjacent_count": 3,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 2,
+    "cpp_ai_tooling_fallback_count": 1,
     "generic_tech_watchlist_count": 0,
-    "primary_camera_stack_topic_count": 3,
-    "non_fallback_reviewable_article_count": 3,
-    "fallback_topic_count": 2
+    "primary_camera_stack_topic_count": 4,
+    "non_fallback_reviewable_article_count": 4,
+    "fallback_topic_count": 1
   },
   "eligible_composition_summary": {
-    "selected_article_count": 5,
+    "selected_article_count": 6,
     "bucket_counts": {
       "direct_aosp_camera": 0,
-      "camera_driver_image_pipeline": 3,
-      "android_platform_camera_adjacent": 0,
+      "camera_driver_image_pipeline": 1,
+      "android_platform_camera_adjacent": 3,
       "soc_platform_signal": 0,
       "cpp_ai_tooling_fallback": 2,
       "generic_tech_watchlist": 0
     },
     "direct_aosp_camera_count": 0,
-    "camera_driver_image_pipeline_count": 3,
-    "android_platform_camera_adjacent_count": 0,
+    "camera_driver_image_pipeline_count": 1,
+    "android_platform_camera_adjacent_count": 3,
     "soc_platform_signal_count": 0,
     "cpp_ai_tooling_fallback_count": 2,
     "generic_tech_watchlist_count": 0,
-    "primary_camera_stack_topic_count": 3,
-    "non_fallback_reviewable_article_count": 3,
+    "primary_camera_stack_topic_count": 4,
+    "non_fallback_reviewable_article_count": 4,
     "fallback_topic_count": 2
   },
   "counts": {
     "input_candidate_count": 40,
-    "eligible_candidate_count": 5,
+    "eligible_candidate_count": 6,
     "selected_article_count": 5,
     "deterministic_selected_count": 5,
-    "reserve_candidate_count": 0,
+    "reserve_candidate_count": 1,
     "direct_aosp_camera_count": 0,
-    "camera_driver_image_pipeline_count": 3,
-    "android_platform_camera_adjacent_count": 0,
+    "camera_driver_image_pipeline_count": 1,
+    "android_platform_camera_adjacent_count": 3,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 2,
+    "cpp_ai_tooling_fallback_count": 1,
     "generic_tech_watchlist_count": 0,
-    "non_fallback_reviewable_article_count": 3
+    "non_fallback_reviewable_article_count": 4
   },
   "exclusion_reason_summary": [
     {
       "reason": "main_eligible=false",
-      "count": 35
+      "count": 34
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 35
+      "count": 34
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 32
     },
     {
       "reason": "briefing_only=true",
-      "count": 25
+      "count": 20
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 25
+      "count": 20
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 10
+      "count": 14
     },
     {
       "reason": "missing dated evidence",
-      "count": 8
+      "count": 14
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 8
+      "count": 14
     }
   ],
   "final_exclusion_reason_summary": [
     {
       "reason": "main_eligible=false",
-      "count": 35
+      "count": 34
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 35
+      "count": 34
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 32
     },
     {
       "reason": "briefing_only=true",
-      "count": 25
+      "count": 20
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 25
+      "count": 20
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 10
+      "count": 14
     },
     {
       "reason": "missing dated evidence",
-      "count": 8
+      "count": 14
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 8
+      "count": 14
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."

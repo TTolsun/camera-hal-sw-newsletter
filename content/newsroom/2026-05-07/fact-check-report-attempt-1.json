@@ -1,15 +1,191 @@
 {
-  "status": "PASS",
-  "must_fix": [],
-  "recommended_fixes": [
-    "The briefing section mentions 'AOSP Camera 관련 보안 업데이트: (정보 없음)'. This should be removed as there is no candidate article to support this point. If there are no security updates to report, it's better to omit this point entirely or state that no relevant security updates were found.",
-    "The 'Camera HAL checks' for the GCC 16.1 article suggest evaluating 'potential use cases' and 'potential benefits'. These should be more concrete, like 'Identify specific Camera HAL modules where C++26 Reflection could simplify metadata handling' or 'Analyze how C++26 Contracts could improve error handling in HAL interfaces'.",
-    "The 'Camera HAL checks' for the Glaze v7.2.0 article suggest developing a PoC and writing a report on 'potential impact'. These should be more specific, such as 'Develop a PoC for serializing CaptureResult metadata using Glaze and C++26 Reflection' and 'Document the performance gains and code complexity reduction achieved by using Glaze for HAL settings serialization'."
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "briefing",
+      "problem": "The briefing states that GCC 16.1 was released with C++26 features and C++20 default support, and then implies that Android HAL is Clang/LLVM centric, suggesting that direct toolchain migration is not expected. This framing is correct, but the briefing should not contain policy statements or interpretations.",
+      "suggestion": "The briefing should only state the facts of the release and its direct, immediate impact or relevance, without editorial policy or interpretation.",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[0].what_changed",
+      "problem": "The 'what_changed' section states that libcamera v0.7.1 was released on '2026년 4월 28일' but the source URL does not contain a specific date in the URL or the title. The published_date in the candidate is '2026-04-28', which is used, but the source itself is a mailing list archive, and the date is derived from the email's timestamp, not an explicit release date on a dedicated release page.",
+      "suggestion": "Clarify the source of the date. If the date is from the email timestamp, state that. If it's an official release date, ensure the source explicitly states it.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].confirmed_facts[1]",
+      "problem": "The 'confirmed_facts' section states '릴리스 날짜: 2026년 4월 28일'. While the candidate's 'published_date' is '2026-04-28', the source is a mailing list archive, and the date is derived from the email's timestamp, not an explicit release date on a dedicated release page. This should be clarified to avoid misrepresenting the source of the date.",
+      "suggestion": "Clarify that the release date is derived from the email's timestamp in the mailing list archive, rather than an explicit release date on a dedicated release page.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].specificity_checks[1]",
+      "problem": "The 'specificity_checks' section states '릴리스 날짜: 2026년 4월 28일'. While the candidate's 'published_date' is '2026-04-28', the source is a mailing list archive, and the date is derived from the email's timestamp, not an explicit release date on a dedicated release page. This should be clarified to avoid misrepresenting the source of the date.",
+      "suggestion": "Clarify that the release date is derived from the email's timestamp in the mailing list archive, rather than an explicit release date on a dedicated release page.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].why_it_matters",
+      "problem": "The 'why_it_matters' section includes the phrase '특히 SoftISP 디베이어링 개선은 특정 하드웨어 ISP에 의존하지 않는 디바이스나 개발 단계에서 이미지 품질 및 성능에 중요한 영향을 미칠 수 있습니다.' This is an interpretation and should be moved to 'Camera HAL 관점 해석' or '배경지식'. The 'why_it_matters' section should focus on the direct impact on the Linux camera driver and V4L2 stack, as stated in the first sentence.",
+      "suggestion": "Move the interpretive statement about SoftISP debayering's impact on devices without hardware ISP or during development to the 'Camera HAL 관점 해석' or '배경지식' section. The 'why_it_matters' section should focus on direct impacts.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].camera_hal_perspective",
+      "problem": "The 'camera_hal_perspective' section states 'HAL은 하위 드라이버의 변경 사항을 이해하고, 필요한 경우 자체 파이프라인 최적화를 검토해야 합니다.' This is a generic action item or recommendation, not a direct interpretation of the HAL impact. Action items should be in the '우리 팀이 확인할 Action Item' section.",
+      "suggestion": "Move the generic recommendation to '우리 팀이 확인할 Action Item' and focus 'Camera HAL 관점 해석' on the direct implications for HAL interfaces, stream/buffer behavior, or metadata.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].camera_hal_checks[0]",
+      "problem": "The action item '현재 개발 중인 디바이스의 vendor kernel branch에 유사한 V4L2/media 패치 또는 libcamera 통합 계획이 있는지 확인합니다.' is a generic monitoring action. Action items should be concrete and measurable, specifying what to test, log, or measure.",
+      "suggestion": "Refine this action item to be more concrete and measurable. For example, specify which logs to check, what specific patches to look for, or what metric to track.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].camera_hal_checks[1]",
+      "problem": "The action item 'SoftISP 디베이어링을 사용하는 RAW 스트림 시나리오에서 YUV/PRIVATE 스트림의 이미지 품질 및 처리량 변화를 측정합니다.' is a good start but lacks specificity on *how* to measure image quality and throughput, and what specific metrics to look for.",
+      "suggestion": "Specify the metrics for image quality (e.g., noise, color accuracy, detail retention) and throughput (e.g., frame rate, latency, frame drop count) and the tools or methods to use for measurement.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].camera_hal_checks[2]",
+      "problem": "The action item 'HAL의 센서 모드 선택 및 구성 로직이 libcamera의 새로운 센서 모드 구성 업데이트와 호환되는지 검토하고, 필요한 경우 최적화합니다.' is a generic review and optimization task. It needs to specify *what* to review and *how* to optimize, with measurable outcomes.",
+      "suggestion": "Specify which HAL sensor mode selection APIs or configurations to review, what specific compatibility issues to look for, and what metrics would indicate successful optimization (e.g., successful stream configurations, reduced errors).",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].action_items[0]",
+      "problem": "The action item '카메라 드라이버 팀은 libcamera v0.7.1의 변경 로그를 검토하여 현재 개발 중인 Linux 커널 드라이버에 적용 가능한 최적화 또는 버그 수정 사항이 있는지 확인하고, 관련 패치를 내부적으로 테스트합니다.' is a generic review and testing task. It needs to specify *what* to test and *how* to test it, with measurable outcomes.",
+      "suggestion": "Specify which specific optimizations or bug fixes to look for, what kind of internal tests to perform (e.g., unit tests, integration tests, performance benchmarks), and what metrics to track.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].action_items[1]",
+      "problem": "The action item 'HAL 팀은 SoftISP 디베이어링이 활성화된 상태에서 Preview + ImageCapture (YUV) 스트림 조합을 사용하여 지연 시간(latency) 및 프레임 드롭(frame drop)을 측정하고, 이전 버전과 비교하여 성능 개선 여부를 확인합니다.' is a good start but lacks specificity on *how* to measure latency and frame drop, and what tools or methods to use.",
+      "suggestion": "Specify the tools or methods for measuring latency and frame drop (e.g., `dumpsys media.camera`, `systrace`, custom HAL logs) and the expected range or target for these metrics.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[0].action_items[2]",
+      "problem": "The action item 'ISP 튜닝 팀은 새로운 센서 모드 구성 업데이트가 이미지 품질에 미치는 영향을 평가하기 위해 특정 센서 모드에서 RAW 및 JPEG 출력의 노이즈, 색상 정확도, 디테일 유지력을 분석합니다.' is a good start but lacks specificity on *how* to analyze these image quality metrics.",
+      "suggestion": "Specify the tools or methods for analyzing image quality (e.g., Imatest, custom image analysis scripts, visual inspection by experts) and the target values or thresholds for noise, color accuracy, and detail retention.",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    },
+    {
+      "location": "sections[1].why_it_matters",
+      "problem": "The 'why_it_matters' section states 'CameraX는 내부적으로 Camera2 API를 사용하므로, 이러한 업데이트는 HAL이 지원해야 하는 스트림 조합, 해상도, 프레임 레이트, 버퍼 사용 방식 등에 대한 새로운 요구사항을 발생시킬 수 있습니다.' This is a speculative statement ('새로운 요구사항을 발생시킬 수 있습니다') rather than a confirmed fact or direct impact. It should be rephrased to reflect a potential impact or moved to 'Camera HAL 관점 해석'.",
+      "suggestion": "Rephrase the statement to indicate a potential impact or move it to the 'Camera HAL 관점 해석' section, as 'why_it_matters' should focus on direct and confirmed relevance.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "location": "sections[1].camera_hal_perspective",
+      "problem": "The 'camera_hal_perspective' section states 'CTS/VTS 및 Camera ITS 테스트에서 새로운 CameraX 버전과의 호환성 문제가 발생할 수 있으므로, 사전 검증이 중요합니다.' This is a generic recommendation and should be moved to '우리 팀이 확인할 Action Item'. The 'Camera HAL 관점 해석' should focus on the direct implications for HAL interfaces, stream/buffer behavior, or metadata.",
+      "suggestion": "Move the generic recommendation about CTS/VTS/Camera ITS testing to '우리 팀이 확인할 Action Item' and focus 'Camera HAL 관점 해석' on the direct implications for HAL interfaces, stream/buffer behavior, or metadata.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "location": "sections[1].camera_hal_checks[0]",
+      "problem": "The action item '참조 디바이스에서 CameraX 1.4.0-alpha07을 사용하는 앱을 빌드하고, Preview + VideoCapture 스트림 조합에서 프레임 드롭, 지연 시간, 열 스로틀링(thermal throttling) 여부를 측정합니다.' is a good start but lacks specificity on *how* to measure these metrics and what tools or methods to use.",
+      "suggestion": "Specify the tools or methods for measuring frame drop, latency, and thermal throttling (e.g., `dumpsys media.camera`, `systrace`, thermal sensors, custom HAL logs) and the expected range or target for these metrics.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "location": "sections[1].camera_hal_checks[1]",
+      "problem": "The action item 'CameraX의 `camera-viewfinder` 및 `camera-video` 모듈이 사용하는 내부 Camera2 API 스트림 구성(예: `STREAM_CONFIGURATION_MAP`)이 HAL이 선언한 기능과 일치하는지 확인합니다.' is a generic verification task. It needs to specify *how* to confirm this match and what specific configurations to check.",
+      "suggestion": "Specify the tools or methods for checking (e.g., `dumpsys media.camera`, `adb logcat`, HAL logs) and which specific `STREAM_CONFIGURATION_MAP` entries or Camera2 API parameters to focus on.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "location": "sections[1].camera_hal_checks[2]",
+      "problem": "The action item '특정 비디오 해상도 및 프레임 레이트 조합에서 HAL의 버퍼 할당 및 해제 로직이 CameraX의 요구 사항을 충족하는지 검토하고, 메모리 누수 또는 버퍼 부족 현상이 없는지 확인합니다.' is a generic review and verification task. It needs to specify *how* to review and confirm, and what specific tools or metrics to use.",
+      "suggestion": "Specify the tools or methods for reviewing buffer allocation/deallocation (e.g., `debugfs`, `procfs`, custom HAL logs, memory profilers) and what specific metrics or thresholds to monitor for memory leaks or buffer starvation.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "location": "sections[1].action_items[0]",
+      "problem": "The action item 'HAL 엔지니어는 CameraX 1.4.0-alpha07을 통합한 테스트 앱을 사용하여 Preview + VideoCapture (1080p@30fps) 스트림 조합에서 5분 이상 연속 녹화 시 프레임 드롭 수와 평균 지연 시간을 측정합니다.' is a good start but lacks specificity on *how* to measure these metrics and what tools or methods to use.",
+      "suggestion": "Specify the tools or methods for measuring frame drop and latency (e.g., `dumpsys media.camera`, `systrace`, custom HAL logs) and the expected range or target for these metrics.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "location": "sections[1].action_items[1]",
+      "problem": "The action item '카메라 드라이버 팀은 `camera-video` 모듈이 사용하는 `AHardwareBuffer` 할당 및 DMA-BUF 공유 경로를 모니터링하여, 비디오 스트림 시작/종료 시 메모리 사용량 변화 및 잠재적인 버퍼 누수 지점을 식별합니다.' is a good start but lacks specificity on *how* to monitor these paths and identify issues.",
+      "suggestion": "Specify the tools or methods for monitoring (e.g., `debugfs`, `procfs`, `ftrace`, custom kernel logs, memory profilers) and what specific metrics or patterns to look for to identify memory usage changes or buffer leaks.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "location": "sections[1].action_items[2]",
+      "problem": "The action item 'CameraX 호환성 담당자는 `camera-viewfinder`의 특정 해상도 및 종횡비 설정이 HAL의 `STREAM_CONFIGURATION_MAP`에 선언된 지원 해상도와 일치하는지 확인하고, 일치하지 않는 경우 fallback 동작을 검토합니다.' is a good start but lacks specificity on *how* to confirm this match and what specific configurations to check.",
+      "suggestion": "Specify the tools or methods for checking (e.g., `dumpsys media.camera`, `adb logcat`, HAL logs) and which specific `STREAM_CONFIGURATION_MAP` entries or Camera2 API parameters to focus on.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "location": "sections[2].what_changed",
+      "problem": "The 'what_changed' section states that GCC 16.1 was released on '2026년 4월 30일', but the source URL does not contain a specific date in the URL or the title. The published_date in the candidate is 'Thu, 30 Apr 2026 22:36:23 +0000', which is used, but the source itself is a blog post, and the date is derived from the blog post's timestamp, not an explicit release date on a dedicated release page.",
+      "suggestion": "Clarify the source of the date. If the date is from the blog post's timestamp, state that. If it's an official release date, ensure the source explicitly states it.",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].confirmed_facts[1]",
+      "problem": "The 'confirmed_facts' section states '릴리스 날짜: 2026년 4월 30일'. While the candidate's 'published_date' is 'Thu, 30 Apr 2026 22:36:23 +0000', the source is a blog post, and the date is derived from the blog post's timestamp, not an explicit release date on a dedicated release page. This should be clarified to avoid misrepresenting the source of the date.",
+      "suggestion": "Clarify that the release date is derived from the blog post's timestamp, rather than an explicit release date on a dedicated release page.",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].specificity_checks[1]",
+      "problem": "The 'specificity_checks' section states '릴리스 날짜: 2026년 4월 30일'. While the candidate's 'published_date' is 'Thu, 30 Apr 2026 22:36:23 +0000', the source is a blog post, and the date is derived from the blog post's timestamp, not an explicit release date on a dedicated release page. This should be clarified to avoid misrepresenting the source of the date.",
+      "suggestion": "Clarify that the release date is derived from the blog post's timestamp, rather than an explicit release date on a dedicated release page.",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].why_it_matters",
+      "problem": "The 'why_it_matters' section states 'Android native 개발은 Clang/LLVM 중심이므로, GCC의 직접적인 toolchain 마이그레이션보다는 Clang/LLVM의 유사한 기능 지원 여부를 주시해야 합니다.' This is an editorial policy statement and should not be in the 'why_it_matters' section. It belongs in the 'Camera HAL 관점 해석' or '배경지식'.",
+      "suggestion": "Move the editorial policy statement about Android native development being Clang/LLVM centric to the 'Camera HAL 관점 해석' or '배경지식' section.",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].camera_hal_checks[0]",
+      "problem": "The action item '현재 사용 중인 Clang/LLVM 버전이 C++20 기능을 얼마나 지원하는지 확인하고, HAL 코드베이스에서 C++20 기능을 활용할 수 있는 부분을 식별합니다.' is a generic review and identification task. It needs to specify *how* to confirm support and *how* to identify parts for utilization, with measurable outcomes.",
+      "suggestion": "Specify the tools or methods for checking Clang/LLVM C++20 support (e.g., compiler flags, feature test macros, documentation) and how to identify code sections (e.g., static analysis tools, code reviews, specific modules).",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].camera_hal_checks[1]",
+      "problem": "The action item 'C++26 리플렉션 및 컨트랙트 기능이 Clang/LLVM에 통합될 경우, Camera HAL의 request/result metadata 처리 로직에서 코드 생성 또는 런타임 검증을 자동화할 수 있는 PoC를 검토합니다.' is a long-term, speculative task. Action items should be confirmable within 2 weeks.",
+      "suggestion": "Rephrase this as a long-term watch item or a research task, rather than a 2-week action item. If a 2-week action is desired, it should be a concrete step towards this PoC, such as 'research current Clang/LLVM reflection/contract support status'.",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].camera_hal_checks[2]",
+      "problem": "The action item 'HAL의 native 코드에서 잠재적인 런타임 오류를 줄이기 위해 컨트랙트와 유사한 정적 분석 도구 또는 sanitizer 적용 가능성을 탐색합니다.' is a generic exploration task. It needs to specify *which* tools or sanitizers to explore and *how* to apply them, with measurable outcomes.",
+      "suggestion": "Specify particular static analysis tools or sanitizers (e.g., Clang-Tidy, AddressSanitizer, UndefinedBehaviorSanitizer) and define a concrete experiment or pilot application with specific metrics (e.g., number of warnings, crash rate reduction).",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].action_items[0]",
+      "problem": "The action item 'native HAL 소유자는 현재 Android 빌드 시스템의 Clang/LLVM 컴파일러가 C++20 기능을 얼마나 지원하는지 확인하고, `std::span` 또는 코루틴과 같은 C++20 기능을 사용하여 특정 HAL 유틸리티 코드의 가독성 및 성능을 개선하는 PoC를 수행합니다.' is a good start but lacks specificity on *how* to confirm support and *how* to measure improvement in readability and performance.",
+      "suggestion": "Specify the tools or methods for checking Clang/LLVM C++20 support (e.g., compiler flags, feature test macros, documentation) and how to measure readability (e.g., code review scores, cyclomatic complexity) and performance (e.g., benchmarks, `perf` output).",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].action_items[1]",
+      "problem": "The action item 'HAL 팀은 C++26 컨트랙트와 유사한 개념을 사용하여 `camera3_device_ops` 또는 `camera3_callback_ops` 인터페이스의 사전/사후 조건을 명시적으로 문서화하고, 이를 정적 분석 도구로 검증하는 방법을 연구합니다.' is a research task, not a concrete action item confirmable within 2 weeks.",
+      "suggestion": "Rephrase this as a research task or a long-term watch item. If a 2-week action is desired, it should be a concrete step towards this research, such as 'identify a specific static analysis tool to evaluate for contract-like verification'.",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    },
+    {
+      "location": "sections[2].action_items[2]",
+      "problem": "The action item '빌드 시스템 엔지니어는 Clang/LLVM의 향후 릴리스에서 C++26 리플렉션 기능이 추가될 경우, HAL의 vendor tag 정의를 자동화하거나 `camera_metadata_entry_t`와 같은 구조체에 대한 직렬화/역직렬화 코드를 간소화하는 방안을 검토합니다.' is a long-term, speculative task. Action items should be confirmable within 2 weeks.",
+      "suggestion": "Rephrase this as a long-term watch item or a research task, rather than a 2-week action item. If a 2-week action is desired, it should be a concrete step towards this, such as 'research current Clang/LLVM roadmap for C++26 reflection support'.",
+      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+    }
   ],
+  "recommended_fixes": [],
   "source_gaps": [
-    "No specific AOSP Camera or Camera HAL updates were found in the provided candidates. The selected articles focus on libcamera and C++ tooling, which are relevant but indirect.",
-    "There are no articles related to SoC platform updates or specific Android platform changes that impact the camera pipeline."
+    "Reporter eligibility violation; section=\"libcamera v0.7.1 릴리스: SoftISP 및 파이프라인 처리량 개선\"; source=\"libcamera Release Announcements - libcamera v0.7.1\"; url=https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html; candidate=\"libcamera Release Announcements - libcamera v0.7.1\"; reason=HAL/actionability score 3 < 8; action=replace-or-demote"
   ],
-  "source_gap_count": 2,
-  "final_comment": "The newsletter is well-structured and follows the editorial guidelines. The selected articles are relevant as driver and tooling fallbacks. However, the briefing section incorrectly states there's a lack of information on security updates when no such point was intended to be made without a source. The 'Camera HAL checks' for the C++ articles could be more concrete and actionable, aligning better with the newsletter's focus on practical engineering relevance."
+  "source_gap_count": 1,
+  "final_comment": "The newsletter draft is well-structured and follows the template. However, there are several instances where the 'what_changed', 'confirmed_facts', and 'specificity_checks' sections use a specific date (e.g., '2026년 4월 28일' or '2026년 4월 30일') derived from the candidate's 'published_date' or email timestamp, but the source URL itself is a mailing list archive or blog post, not a dedicated release page with an explicit 'release date'. This should be clarified to accurately represent the source of the date. Additionally, some 'why_it_matters' sections contain interpretive or policy statements that should be moved to 'Camera HAL 관점 해석' or '배경지식'. Several 'camera_hal_checks' and 'action_items' are too generic and need to be more concrete, measurable, and actionable within a two-week timeframe, as per the editorial policy. Some action items are also too speculative or long-term for a 2-week action item. The briefing also contains an editorial policy statement that should be removed. Reporter eligibility violations were added as source gaps and require replacement or demotion."
 }
