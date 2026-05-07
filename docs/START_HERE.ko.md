@@ -16,6 +16,8 @@
 | [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약입니다. |
 | [testing/test-baseline.md](testing/test-baseline.md) | 현재 test/validation baseline입니다. |
 
+Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
+
 ## 문서 역할
 
 | 경로 | 역할 |

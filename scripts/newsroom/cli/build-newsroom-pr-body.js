@@ -8,6 +8,11 @@ const {
   formatReasonSummary,
   readStatus
 } = require('./write-generation-status-output');
+const {
+  articlePolicy,
+  articleCountRangeText,
+  publishGateCriteriaText
+} = require('../common/newsletter-policy');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -94,10 +99,10 @@ function recommendedEditorAction(status, validateOutcome, staleSummary, mustFixS
     return 'Use this as an editor-review PR only; add stronger candidates or wait for a fuller article pool before publishing.';
   }
   if (status.review_gate_passed === true && status.publish_gate_passed === false) {
-    return 'Use this as an editor-review PR only; add stronger non-fallback Camera/Android/Driver/SoC candidates before publishing.';
+    return 'Use this as an editor-review PR only; satisfy the configured Newsletter Policy before publishing.';
   }
   if (status.composition_mode === 'FALLBACK_COMPOSITION') {
-    return 'Review fallback SoC/platform/tooling framing and publish only if the practical developer relevance is explicit.';
+    return 'Review supporting SoC/platform/tooling framing and publish only if the practical developer relevance is explicit.';
   }
   if (validateOutcome === 'failure' || status.quality_status !== 'PASS') {
     return 'Review quality-report.md and validation output, then repair or demote weak sections.';
@@ -120,7 +125,7 @@ function buildNewsroomPrBody(options = {}) {
   const newsroomDir = path.join(root, 'content', 'newsroom', date);
   const editorBrief = date ? readTextIfExists(path.join(newsroomDir, 'editor-in-chief-brief.md')) : '';
   const finalSelectedCount = Number(status.final_selected_article_count ?? status.selected_article_count);
-  const minFinalArticles = Number(status.selection_policy?.min_final_articles || 4);
+  const minFinalArticles = Number(status.selection_policy?.min_final_articles || articlePolicy.mainArticleCount.min);
   const renderedMainArticleCount = status.rendered_main_article_count ?? status.final_selected_article_count ?? status.selected_article_count;
   const staleSummary = resolveStaleClaimSummary(status, newsroomDir);
   const mustFixSummary = resolveMustFixSummary(status, newsroomDir);
@@ -151,10 +156,10 @@ function buildNewsroomPrBody(options = {}) {
     `Publish ready: ${booleanText(status.publish_ready)}`,
     `Selection publish ready: ${booleanText(status.selection_publish_ready)}`,
     `Final publish ready: ${booleanText(status.final_publish_ready)}`,
-    `Review Gate: ${booleanText(status.review_gate_passed)} (non-fallback Camera/Android/Driver/SoC >= ${valueOrUnknown(status.absolute_min_reviewable_articles)})`,
-    `Publish Gate: ${booleanText(status.publish_gate_passed)} (non-fallback Camera/Android/Driver/SoC >= ${valueOrUnknown(status.min_non_fallback_publish_ready_articles)}; final articles >= ${valueOrUnknown(status.min_final_articles)}; quality/fact-check/site validation pass)`,
+    `Review Gate: ${booleanText(status.review_gate_passed)} (Newsletter Policy selection checks)`,
+    `Publish Gate: ${booleanText(status.publish_gate_passed)} (${publishGateCriteriaText()}; quality/fact-check/site validation pass)`,
     `Editor review required: ${booleanText(status.editor_review_required)}`,
-    `Underfilled thin-week path: ${booleanText(status.underfilled)}`,
+    `Underfilled selection path: ${booleanText(status.underfilled)}`,
     `Stale claim status: ${staleSummary.status}`,
     `Stale claim summary: removed=${staleSummary.removedCount}; hard_failures=${staleSummary.hardFailureCount}`,
     `Recommended editor action: ${editorAction}`,
@@ -183,8 +188,11 @@ function buildNewsroomPrBody(options = {}) {
     `- soc_platform_signal count: ${valueOrUnknown(status.soc_platform_signal_count ?? status.composition_summary?.soc_platform_signal_count)}`,
     `- cpp_ai_tooling_fallback count: ${valueOrUnknown(status.cpp_ai_tooling_fallback_count ?? status.composition_summary?.cpp_ai_tooling_fallback_count)}`,
     `- generic_tech_watchlist count: ${valueOrUnknown(status.generic_tech_watchlist_count ?? status.composition_summary?.generic_tech_watchlist_count)}`,
+    `- primary_camera_stack_topic_count: ${valueOrUnknown(status.primary_camera_stack_topic_count ?? status.composition_summary?.primary_camera_stack_topic_count)}`,
+    `- supporting_main_article_count: ${valueOrUnknown(status.supporting_main_article_count ?? status.composition_summary?.supporting_main_article_count)}`,
+    `- forbidden_main_article_count: ${valueOrUnknown(status.forbidden_main_article_count ?? status.composition_summary?.forbidden_main_article_count)}`,
     `- non_fallback_reviewable_article_count: ${valueOrUnknown(status.non_fallback_reviewable_article_count ?? status.composition_summary?.non_fallback_reviewable_article_count)}`,
-    `- gate thresholds: review >= ${valueOrUnknown(status.absolute_min_reviewable_articles)} non-fallback; publish >= ${valueOrUnknown(status.min_non_fallback_publish_ready_articles)} non-fallback and >= ${valueOrUnknown(status.min_final_articles)} final articles`,
+    `- gate thresholds: ${publishGateCriteriaText()}; configured article range ${articleCountRangeText()}`,
     `- source/parser hints: ${ensureArray(status.selection_shortage_hints).join('; ') || 'none'}`,
     `- composition reason: ${valueOrUnknown(status.composition_reason)}`,
     ''
@@ -192,9 +200,9 @@ function buildNewsroomPrBody(options = {}) {
 
   if (status.composition_mode === 'FALLBACK_COMPOSITION' || status.selection_composition_mode === 'FALLBACK_COMPOSITION') {
     lines.push(
-      'Fallback composition: direct AOSP Camera/driver candidates were limited, so SoC/platform or C++/AI tooling articles are included as lower-priority reviewable main articles. Do not add artificial Camera HAL wording; keep the practical SoC/platform/native development connection explicit.',
+      'Fallback composition: supporting SoC/platform or C++/AI tooling articles are included as configured supporting main articles. Do not add artificial Camera HAL wording; keep the practical SoC/platform/native development connection explicit.',
       status.publish_gate_passed === false
-        ? 'Review Gate passed, but Publish Gate is still blocked until stronger non-fallback Camera/Android/Driver/SoC coverage is available.'
+        ? 'Review Gate passed, but Publish Gate is still blocked until the configured Newsletter Policy is satisfied.'
         : '',
       ''
     );
@@ -202,7 +210,7 @@ function buildNewsroomPrBody(options = {}) {
 
   if (status.composition_mode === 'THIN_WEEK_REVIEW') {
     lines.push(
-      'Thin-week review path: this PR is reviewable but not publish-ready. Automatic publish/deploy must stay blocked.',
+      'Underfilled review path: this PR is reviewable but not publish-ready. Automatic publish/deploy must stay blocked.',
       ''
     );
   }

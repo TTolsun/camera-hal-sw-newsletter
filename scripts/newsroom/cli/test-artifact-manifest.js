@@ -7,6 +7,10 @@ const {
   collectedCandidatesRelPath,
   newsroomRelPath
 } = require('../common/artifact-paths');
+const {
+  articlePolicy,
+  qualityGatePolicy
+} = require('../common/newsletter-policy');
 
 const date = '2026-05-03';
 
@@ -40,18 +44,18 @@ function seedAgreeingSnapshot(snapshotDir) {
     date,
     status: 'UNDERFILLED_NEEDS_FIX',
     quality_status: 'NEEDS_FIX',
-    quality_score: 74,
-    selected_article_count: 3,
+    quality_score: qualityGatePolicy.threshold - 11,
+    selected_article_count: articlePolicy.mainArticleCount.min,
     underfilled: true,
     publish_ready: false
   });
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'quality-report.json').split('/')), {
     date,
-    score: 74,
-    threshold: 85,
+    score: qualityGatePolicy.threshold - 11,
+    threshold: qualityGatePolicy.threshold,
     status: 'NEEDS_FIX',
     metrics: {
-      article_count: 3,
+      article_count: articlePolicy.mainArticleCount.min,
       must_fix_count: 0
     }
   });
@@ -97,8 +101,8 @@ function testWarningsWhenReportsDisagree() {
   writeJson(path.join(snapshotDir, '.tmp', 'newsletter-generation-status.json'), {
     date,
     quality_status: 'PASS',
-    quality_score: 95,
-    selected_article_count: 4
+    quality_score: qualityGatePolicy.threshold + 10,
+    selected_article_count: articlePolicy.mainArticleCount.min + 1
   });
 
   const manifest = runWriter(snapshotDir);

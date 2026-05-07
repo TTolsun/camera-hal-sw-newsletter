@@ -26,10 +26,7 @@ const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } 
 const { isSafeExternalImageUrl } = require('../render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
-  ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
   COMPOSITION_MODES,
-  MIN_FINAL_ARTICLES,
-  MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
   buildShortlistReport,
   normalizeUrl,
   normalizedUrlHash,
@@ -61,12 +58,15 @@ const {
   scrubStaleClaims
 } = require('../common/stale-claims');
 const {
+  articlePolicy,
+  articleCountRangeText,
+  qualityGatePolicy,
+  publishGateCriteriaText
+} = require('../common/newsletter-policy');
+const {
   pruneResolvedFallbackImageFactCheckItems
 } = require('../common/fact-check-repair');
 const {
-  QUALITY_THRESHOLD,
-  MIN_MAIN_ARTICLES,
-  MAX_MAIN_ARTICLES,
   buildNewsletterQualityReport,
   buildQualityReportMarkdown,
   deductionMatchesSection,
@@ -203,7 +203,7 @@ function buildGenerationStatus({
     quality_status: qualityReport?.status || 'UNKNOWN',
     quality_attempt_count: retryHistory.length,
     quality_score: qualityReport?.score ?? null,
-    quality_threshold: qualityReport?.threshold ?? QUALITY_THRESHOLD,
+    quality_threshold: qualityReport?.threshold ?? qualityGatePolicy.threshold,
     quality_deduction_count: ensureArray(qualityReport?.deductions).length,
     quota_error_count: diagnostics.quota_error_count,
     invalid_json_count: diagnostics.invalid_json_count,
@@ -225,19 +225,30 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   const eligibleCompositionSummary = report.eligible_composition_summary || {};
   const selectedArticleCount = report.selected_article_count ?? diagnostics.final_selected_article_count ?? null;
   const nonFallbackReviewableCount = compositionSummary.non_fallback_reviewable_article_count ?? null;
+  const primaryCameraStackTopicCount = compositionSummary.primary_camera_stack_topic_count ?? null;
+  const supportingMainArticleCount = compositionSummary.supporting_main_article_count ?? null;
+  const forbiddenMainArticleCount = compositionSummary.forbidden_main_article_count ?? null;
   const selectionPolicy = report.selection_policy || {};
-  const minFinalArticles = report.min_final_articles ?? selectionPolicy.min_final_articles ?? MIN_FINAL_ARTICLES;
-  const absoluteMinReviewable = report.absolute_min_reviewable_articles ?? selectionPolicy.absolute_min_reviewable_articles ?? ABSOLUTE_MIN_REVIEWABLE_ARTICLES;
+  const minFinalArticles = report.min_final_articles ?? selectionPolicy.min_final_articles ?? articlePolicy.mainArticleCount.min;
+  const maxFinalArticles = selectionPolicy.max_final_articles ?? articlePolicy.mainArticleCount.max;
+  const absoluteMinReviewable = report.absolute_min_reviewable_articles ??
+    selectionPolicy.absolute_min_reviewable_articles ??
+    articlePolicy.primaryCameraStack.minRequired;
   const minNonFallbackPublishReady = report.min_non_fallback_publish_ready_articles ??
     selectionPolicy.min_non_fallback_publish_ready_articles ??
-    MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES;
+    articlePolicy.primaryCameraStack.minRequired;
   const reviewGatePassed = report.review_gate_passed ?? (
-    Number(nonFallbackReviewableCount) >= absoluteMinReviewable &&
-    Number(selectedArticleCount) >= absoluteMinReviewable
+    Number(selectedArticleCount) >= minFinalArticles &&
+    Number(selectedArticleCount) <= maxFinalArticles &&
+    Number(primaryCameraStackTopicCount) >= articlePolicy.primaryCameraStack.minRequired &&
+    Number(forbiddenMainArticleCount) === 0
   );
   const selectionPublishGatePassed = report.publish_gate_passed ?? (
-    Number(nonFallbackReviewableCount) >= minNonFallbackPublishReady &&
-    Number(selectedArticleCount) >= minFinalArticles
+    Number(selectedArticleCount) >= minFinalArticles &&
+    Number(selectedArticleCount) <= maxFinalArticles &&
+    Number(primaryCameraStackTopicCount) >= articlePolicy.primaryCameraStack.minRequired &&
+    Number(forbiddenMainArticleCount) === 0 &&
+    Number(primaryCameraStackTopicCount) + Number(supportingMainArticleCount) === Number(selectedArticleCount)
   );
   const publishGatePassed = options.publishGatePassed ?? selectionPublishGatePassed;
   return {
@@ -266,6 +277,7 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     review_gate_passed: Boolean(reviewGatePassed),
     publish_gate_passed: Boolean(publishGatePassed),
     min_final_articles: minFinalArticles,
+    max_final_articles: maxFinalArticles,
     absolute_min_reviewable_articles: absoluteMinReviewable,
     min_non_fallback_publish_ready_articles: minNonFallbackPublishReady,
     composition_mode: compositionMode,
@@ -276,6 +288,9 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     editor_review_required: Boolean(editorReviewRequired),
     non_fallback_reviewable_article_count: compositionSummary.non_fallback_reviewable_article_count ?? null,
     eligible_non_fallback_reviewable_article_count: eligibleCompositionSummary.non_fallback_reviewable_article_count ?? null,
+    primary_camera_stack_topic_count: primaryCameraStackTopicCount,
+    supporting_main_article_count: supportingMainArticleCount,
+    forbidden_main_article_count: forbiddenMainArticleCount,
     direct_aosp_camera_count: compositionSummary.direct_aosp_camera_count ?? null,
     camera_driver_image_pipeline_count: compositionSummary.camera_driver_image_pipeline_count ?? null,
     android_platform_camera_adjacent_count: compositionSummary.android_platform_camera_adjacent_count ?? null,
@@ -931,11 +946,11 @@ function mergeLockedSections(lockedSections, generatedSections, excludedSections
   const merged = [];
   const rejected = [];
   for (const section of lockedSections) {
-    if (merged.length >= MAX_MAIN_ARTICLES) break;
+    if (merged.length >= articlePolicy.mainArticleCount.max) break;
     merged.push(section);
   }
   for (const section of generatedSections) {
-    if (merged.length >= MAX_MAIN_ARTICLES) break;
+    if (merged.length >= articlePolicy.mainArticleCount.max) break;
     const lockedReason = merged
       .map(existing => duplicateReasonForSections(existing, section, 'locked'))
       .find(Boolean);
@@ -1016,7 +1031,7 @@ function selectLockedArticles(editor, qualityReport, factCheck) {
   return {
     articles: ensureArray(editor.sections)
       .filter(section => sectionPassesArticleGate(section, qualityReport, factCheck))
-      .slice(0, MAX_MAIN_ARTICLES),
+      .slice(0, articlePolicy.mainArticleCount.max),
     blockers
   };
 }
@@ -1024,7 +1039,7 @@ function selectLockedArticles(editor, qualityReport, factCheck) {
 function appendUniqueLockedArticles(currentLocked, candidates) {
   const locked = [...currentLocked];
   for (const section of candidates) {
-    if (locked.length >= MAX_MAIN_ARTICLES) break;
+    if (locked.length >= articlePolicy.mainArticleCount.max) break;
     if (!locked.some(existing => sectionsAreDuplicate(existing, section))) {
       locked.push(section);
     }
@@ -1354,7 +1369,7 @@ function hasTooFewMainArticlesDeduction(qualityReport) {
   return ensureArray(qualityReport?.deductions).some(deduction =>
     deduction?.category === 'composition' &&
     /main articles/i.test(String(deduction.reason || '')) &&
-    Number(qualityReport?.metrics?.article_count || 0) < MIN_MAIN_ARTICLES
+    Number(qualityReport?.metrics?.article_count || 0) < articlePolicy.mainArticleCount.min
   );
 }
 
@@ -1584,8 +1599,12 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
       review_gate_passed: Boolean(selectionDiagnostics.review_gate_passed),
       publish_gate_passed: Boolean(selectionDiagnostics.publish_gate_passed),
       non_fallback_reviewable_article_count: selectionDiagnostics.non_fallback_reviewable_article_count,
+      primary_camera_stack_topic_count: selectionDiagnostics.primary_camera_stack_topic_count,
+      supporting_main_article_count: selectionDiagnostics.supporting_main_article_count,
+      forbidden_main_article_count: selectionDiagnostics.forbidden_main_article_count,
       eligible_non_fallback_reviewable_article_count: selectionDiagnostics.eligible_non_fallback_reviewable_article_count,
       min_final_articles: selectionDiagnostics.min_final_articles,
+      max_final_articles: selectionDiagnostics.max_final_articles,
       absolute_min_reviewable_articles: selectionDiagnostics.absolute_min_reviewable_articles,
       min_non_fallback_publish_ready_articles: selectionDiagnostics.min_non_fallback_publish_ready_articles,
       selected_article_count: selectionDiagnostics.selected_article_count
@@ -1606,6 +1625,9 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
       soc_platform_signal_count: selectionDiagnostics.soc_platform_signal_count,
       cpp_ai_tooling_fallback_count: selectionDiagnostics.cpp_ai_tooling_fallback_count,
       generic_tech_watchlist_count: selectionDiagnostics.generic_tech_watchlist_count,
+      primary_camera_stack_topic_count: selectionDiagnostics.primary_camera_stack_topic_count,
+      supporting_main_article_count: selectionDiagnostics.supporting_main_article_count,
+      forbidden_main_article_count: selectionDiagnostics.forbidden_main_article_count,
       non_fallback_reviewable_article_count: selectionDiagnostics.non_fallback_reviewable_article_count
     },
     exclusion_reason_summary: selectionDiagnostics.exclusion_reason_summary || [],
@@ -1626,8 +1648,8 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
     '',
     '## Gate Summary',
     '',
-    `- Review Gate: ${selectionDiagnostics.review_gate_passed ? 'PASS' : 'FAIL'} (non-fallback Camera/Android/Driver/SoC >= ${selectionDiagnostics.absolute_min_reviewable_articles})`,
-    `- Publish Gate: ${selectionDiagnostics.publish_gate_passed ? 'PASS' : 'FAIL'} (non-fallback Camera/Android/Driver/SoC >= ${selectionDiagnostics.min_non_fallback_publish_ready_articles}; final articles >= ${selectionDiagnostics.min_final_articles})`,
+    `- Review Gate: ${selectionDiagnostics.review_gate_passed ? 'PASS' : 'FAIL'} (Newsletter Policy selection checks)`,
+    `- Publish Gate: ${selectionDiagnostics.publish_gate_passed ? 'PASS' : 'FAIL'} (${publishGateCriteriaText()})`,
     `- selection_publish_ready: ${selectionDiagnostics.selection_publish_ready}`,
     `- final_publish_ready: ${selectionDiagnostics.final_publish_ready}`,
     `- selection_errors: ${selectionDiagnostics.selection_errors.length}`,
@@ -1665,9 +1687,13 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
     '## Gate Summary',
     '',
     `- non_fallback_reviewable_article_count: ${selectionReport.gate_summary.non_fallback_reviewable_article_count ?? 'unknown'}`,
+    `- primary_camera_stack_topic_count: ${selectionReport.gate_summary.primary_camera_stack_topic_count ?? 'unknown'}`,
+    `- supporting_main_article_count: ${selectionReport.gate_summary.supporting_main_article_count ?? 'unknown'}`,
+    `- forbidden_main_article_count: ${selectionReport.gate_summary.forbidden_main_article_count ?? 'unknown'}`,
     `- absolute_min_reviewable_articles: ${selectionReport.gate_summary.absolute_min_reviewable_articles ?? 'unknown'}`,
     `- min_non_fallback_publish_ready_articles: ${selectionReport.gate_summary.min_non_fallback_publish_ready_articles ?? 'unknown'}`,
-    `- min_final_articles: ${selectionReport.gate_summary.min_final_articles ?? 'unknown'}`
+    `- min_final_articles: ${selectionReport.gate_summary.min_final_articles ?? 'unknown'}`,
+    `- max_final_articles: ${selectionReport.gate_summary.max_final_articles ?? 'unknown'}`
   ];
   fs.writeFileSync(path.join(newsroomDir, 'selection-report.md'), `${reportLines.join('\n')}\n`, 'utf8');
   return filePath;
@@ -1837,11 +1863,11 @@ async function main() {
         'You are the AI editor for AOSP Camera / Driver / SoC Platform Newsletter.',
         'Write a Korean technical newsletter draft that an AOSP Camera, Camera HAL, Camera Driver, or SoC platform engineer can read in 10 minutes.',
         'Follow docs/editorial-policy.md and docs/newsletter-template.md exactly.',
-        'Create exactly 5 main articles when enough non-duplicate source material exists; 4 main articles are acceptable only when strong candidates are insufficient.',
-        `Final main article count must stay between ${MIN_MAIN_ARTICLES} and ${MAX_MAIN_ARTICLES}; do not force 5 articles when only 4 strong eligible candidates exist.`,
+        `Create main articles within the Newsletter Policy range (${articleCountRangeText()}) when enough non-duplicate source material exists.`,
+        `Final main article count must satisfy ${publishGateCriteriaText()}.`,
         'Use final-selected article capsules as main article inputs. Do not turn final_selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
         'Initial editor drafts must use only primary selected article capsules. Reserve candidates are not available until a primary article is demoted/removed during repair or completion.',
-        'Priority order: direct_aosp_camera, camera_driver_image_pipeline, android_platform_camera_adjacent, soc_platform_signal, cpp_ai_tooling_fallback, then generic_tech_watchlist for briefing/watchlist only.',
+        `Priority order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
         'SoC/platform articles are lower-priority fallback, but do not exclude public CPU/GPU/NPU/ISP/power/thermal/performance information when it is final-selected and can be explained from Camera framework, HAL, driver, image pipeline, or platform performance perspective.',
         'AI/C++ articles are optional fallback items only when final-selected inputs contain concrete native camera, driver, SoC, build/test, debugging, performance, or workflow value. Do not invent or force a generic AI article.',
         lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles.' : '',
@@ -1911,7 +1937,7 @@ async function main() {
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
     qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-      threshold: QUALITY_THRESHOLD,
+      threshold: qualityGatePolicy.threshold,
       shortlistReport
     });
     generationRunState.qualityReport = qualityReport;
@@ -1979,8 +2005,8 @@ async function main() {
           'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
           'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance.',
           'If those facts cannot be verified from the supplied candidate/source data, demote to briefing/watchlist or exclude; do not invent or infer missing release evidence.',
-          `Keep ${MIN_MAIN_ARTICLES}-${MAX_MAIN_ARTICLES} main articles; 5 is the target only when enough strong eligible candidates exist.`,
-          'Maintain the priority policy: direct_aosp_camera first, then camera_driver_image_pipeline, android_platform_camera_adjacent, soc_platform_signal as public lower-priority fallback, then cpp_ai_tooling_fallback. generic_tech_watchlist is for briefing/watchlist only.',
+          `Keep main article count within the Newsletter Policy range (${articleCountRangeText()}).`,
+          `Maintain the Newsletter Policy bucket order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
           'Use the golden example only for article structure and evidence/actionability style. Do not copy facts absent from current reporter candidates.',
           'Return only JSON matching the schema.'
         ].join('\n'),
@@ -2039,7 +2065,7 @@ async function main() {
       fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
       qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-        threshold: QUALITY_THRESHOLD,
+        threshold: qualityGatePolicy.threshold,
         shortlistReport
       });
       generationRunState.qualityReport = qualityReport;
@@ -2052,7 +2078,7 @@ async function main() {
     }
 
     if (hasTooFewMainArticlesDeduction(qualityReport)) {
-      const missingArticleCount = MIN_MAIN_ARTICLES - ensureArray(editor.sections).length;
+      const missingArticleCount = articlePolicy.mainArticleCount.min - ensureArray(editor.sections).length;
       const completionExcludedSections = appendUniqueSections(
         excludedSections,
         demotedSections.concat(eligibilityFindings.map(finding => finding.section))
@@ -2111,7 +2137,7 @@ async function main() {
           [
             'You are the AI fact checker for the completed AOSP Camera / Driver / SoC Platform Newsletter draft.',
             'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
-            'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the 4-5 main article contract.',
+            'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the Newsletter Policy article composition contract.',
             'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
             'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
             'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
@@ -2130,13 +2156,13 @@ async function main() {
         fs.writeFileSync(path.join(newsroomDir, `fact-check-completion-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
         qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-          threshold: QUALITY_THRESHOLD,
+          threshold: qualityGatePolicy.threshold,
           shortlistReport
         });
         generationRunState.qualityReport = qualityReport;
         writeJson(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.json`), qualityReport);
         fs.writeFileSync(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
-        repairActions.push(`complete-missing-articles: requested ${missingArticleCount}, added ${Math.max(0, editor.sections.length - (MIN_MAIN_ARTICLES - missingArticleCount))}`);
+        repairActions.push(`complete-missing-articles: requested ${missingArticleCount}, added ${Math.max(0, editor.sections.length - (articlePolicy.mainArticleCount.min - missingArticleCount))}`);
         demotedSections = appendUniqueSections(
           demotedSections,
           sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
@@ -2242,7 +2268,7 @@ async function main() {
     'utf8'
   );
   qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-    threshold: QUALITY_THRESHOLD,
+    threshold: qualityGatePolicy.threshold,
     shortlistReport,
     staleClaimReport: staleScrub.report
   });
@@ -2315,7 +2341,8 @@ async function main() {
   }
   const finalPublishReady =
     shortlistReport.publish_ready === true &&
-    ensureArray(editor.sections).length >= MIN_FINAL_ARTICLES &&
+    ensureArray(editor.sections).length >= articlePolicy.mainArticleCount.min &&
+    ensureArray(editor.sections).length <= articlePolicy.mainArticleCount.max &&
     generationStatus === 'PASS' &&
     qualityReport.status === 'PASS' &&
     validateResult.ok &&

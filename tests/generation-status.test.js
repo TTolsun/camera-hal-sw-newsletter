@@ -6,6 +6,7 @@ const {
   failureStageFromError,
   validateCompletionSections
 } = require('../scripts/gemini-newsroom-newsletter');
+const { qualityGatePolicy } = require('../scripts/lib/newsletter-policy');
 
 test('failure status includes required Gemini diagnostic fields', () => {
   const status = buildGenerationStatus({
@@ -16,8 +17,8 @@ test('failure status includes required Gemini diagnostic fields', () => {
     retryHistory: [{ attempt: 1 }],
     qualityReport: {
       status: 'NEEDS_FIX',
-      score: 86,
-      threshold: 85,
+      score: qualityGatePolicy.threshold + 1,
+      threshold: qualityGatePolicy.threshold,
       deductions: [{ category: 'composition', points: 4 }]
     },
     factCheck: {
@@ -30,8 +31,8 @@ test('failure status includes required Gemini diagnostic fields', () => {
   assert.equal(status.failure_stage, 'editor attempt 1/4');
   assert.equal(status.failure_reason, 'Gemini output was not valid JSON.');
   assert.equal(status.quality_attempt_count, 1);
-  assert.equal(status.quality_score, 86);
-  assert.equal(status.quality_threshold, 85);
+  assert.equal(status.quality_score, qualityGatePolicy.threshold + 1);
+  assert.equal(status.quality_threshold, qualityGatePolicy.threshold);
   assert.equal(typeof status.quota_error_count, 'number');
   assert.equal(typeof status.invalid_json_count, 'number');
   assert.equal(typeof status.model_usage, 'object');

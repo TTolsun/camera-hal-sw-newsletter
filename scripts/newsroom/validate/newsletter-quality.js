@@ -10,10 +10,20 @@ const {
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate
 } = require('../common/aosp-camera-scope');
+const {
+  articlePolicy,
+  qualityGatePolicy,
+  articleCountRangeText,
+  isForbiddenMainBucket,
+  isPrimaryCameraStackBucket,
+  isSupportingMainBucket,
+  publishGateCriteriaText
+} = require('../common/newsletter-policy');
 
-const QUALITY_THRESHOLD = 85;
-const MIN_MAIN_ARTICLES = 4;
-const MAX_MAIN_ARTICLES = 5;
+// Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
+const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
+const MIN_MAIN_ARTICLES = articlePolicy.mainArticleCount.min;
+const MAX_MAIN_ARTICLES = articlePolicy.mainArticleCount.max;
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -830,18 +840,16 @@ function sectionScope(section, binding) {
 
 function hasExpandedScope(scope) {
   return scope?.publishable_scope === true &&
-    scope.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST &&
+    !isForbiddenMainBucket(scope.relevance_bucket) &&
     scopeScore(scope) >= 2;
 }
 
 function sectionCountDetail(section, scope, index) {
   const bucket = knownBucket(scope?.relevance_bucket) || BUCKETS.GENERIC_TECH_WATCHLIST;
   const publishableScope = scope?.publishable_scope === true;
-  const countsAsPrimaryStack = bucket === BUCKETS.DIRECT_AOSP_CAMERA ||
-    bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE ||
-    bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
-  const countsAsFallback = bucket === BUCKETS.SOC_PLATFORM_SIGNAL ||
-    bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK;
+  const countsAsPrimaryStack = isPrimaryCameraStackBucket(bucket);
+  const countsAsSupportingMain = isSupportingMainBucket(bucket);
+  const countsAsForbiddenMain = isForbiddenMainBucket(bucket);
   let countReason = `${scope?.count_source || scope?.evidence_origin || 'unknown'} classified this section as ${bucket}.`;
   let exclusionReason = '';
   if (!publishableScope) {
@@ -849,11 +857,13 @@ function sectionCountDetail(section, scope, index) {
     exclusionReason = 'Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available.';
   } else if (countsAsPrimaryStack) {
     countReason = `${bucket} counts toward primary_camera_stack_count.`;
-  } else if (countsAsFallback) {
-    countReason = `${bucket} counts toward fallback_relevance_count, not direct camera count.`;
-    exclusionReason = 'Fallback bucket is reviewable support material but not a primary camera stack topic.';
+  } else if (countsAsSupportingMain) {
+    countReason = `${bucket} counts toward supporting_main_article_count, not primary_camera_stack_count.`;
+    exclusionReason = 'Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic.';
   } else {
-    exclusionReason = 'generic_tech_watchlist does not count toward main camera or fallback composition quality.';
+    exclusionReason = countsAsForbiddenMain
+      ? `${bucket} is forbidden by Newsletter Policy and cannot remain as a main article.`
+      : `${bucket} is not allowed by Newsletter Policy for main article composition.`;
   }
   return {
     index: index + 1,
@@ -862,10 +872,12 @@ function sectionCountDetail(section, scope, index) {
     source_candidate_hash: scope?.source_candidate_hash || text(section.source_candidate_hash),
     relevance_bucket: bucket,
     editorial_priority: number(scope?.editorial_priority, BUCKET_PRIORITY[bucket] || 6),
-    counts_as_primary_camera_topic: bool(scope?.counts_as_primary_camera_topic),
+    counts_as_primary_camera_topic: countsAsPrimaryStack,
     counts_as_driver_topic: bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
     counts_as_soc_topic: bucket === BUCKETS.SOC_PLATFORM_SIGNAL,
     counts_as_fallback_topic: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK,
+    counts_as_supporting_main_article: countsAsSupportingMain,
+    counts_as_forbidden_main_article: countsAsForbiddenMain,
     evidence_origin: scope?.evidence_origin || 'unknown',
     metadata_source: scope?.metadata_source || scope?.count_source || 'unknown',
     binding_status: scope?.binding_status || 'unknown',
@@ -967,7 +979,7 @@ function summarizeCandidateExclusions(reporter) {
 }
 
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
-  const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : QUALITY_THRESHOLD;
+  const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : qualityGatePolicy.threshold;
   const sections = ensureArray(editor.sections);
   const state = { deductions: [] };
   const bindingIndex = candidateBindingIndex(reporter, options.shortlistReport || null);
@@ -975,8 +987,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   let sourceIntegrityViolationCount = 0;
   const sourceUrlOwners = new Map();
 
-  if (sections.length < MIN_MAIN_ARTICLES || sections.length > MAX_MAIN_ARTICLES) {
-    boundedDeduct(state, 'composition', 4, `Expected 4-5 main articles, found ${sections.length}.`);
+  if (sections.length < articlePolicy.mainArticleCount.min || sections.length > articlePolicy.mainArticleCount.max) {
+    boundedDeduct(state, 'composition', 8, `Main article count ${sections.length} is outside Newsletter Policy range (${articleCountRangeText()}).`);
   }
   if (ensureArray(editor.briefing).length !== 3) {
     boundedDeduct(state, 'composition', 3, `Expected exactly 3 briefing bullets, found ${ensureArray(editor.briefing).length}.`);
@@ -1003,21 +1015,29 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const socPlatformSignalCount = scopeBucketCounts[BUCKETS.SOC_PLATFORM_SIGNAL] || 0;
   const cppAiToolingFallbackCount = scopeBucketCounts[BUCKETS.CPP_AI_TOOLING_FALLBACK] || 0;
   const genericTechWatchlistCount = scopeBucketCounts[BUCKETS.GENERIC_TECH_WATCHLIST] || 0;
-  const primaryCameraStackCount = directAospCameraCount +
-    cameraDriverImagePipelineCount +
-    androidPlatformCameraAdjacentCount;
+  const primaryCameraStackCount = articlePolicy.primaryCameraStack.buckets
+    .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
+  const supportingMainArticleCount = articlePolicy.supportingMainBuckets
+    .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
+  const forbiddenMainArticleCount = articlePolicy.forbiddenMainBuckets
+    .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
   const fallbackRelevanceCount = socPlatformSignalCount + cppAiToolingFallbackCount;
-  const expandedScopeCoverage = primaryCameraStackCount + fallbackRelevanceCount;
+  const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount;
   const publishableScopeCount = sectionScopes.filter(scope => scope?.publishable_scope === true).length;
   const compositionMode = publishableScopeCount === 0 && sections.length > 0
     ? 'NEEDS_FIX'
-    : genericTechWatchlistCount === publishableScopeCount && publishableScopeCount > 0
+    : forbiddenMainArticleCount > 0
       ? 'NEEDS_FIX'
-      : primaryCameraStackCount < 2 && fallbackRelevanceCount > 0
+      : primaryCameraStackCount < articlePolicy.primaryCameraStack.minRequired
+        ? 'NEEDS_FIX'
+        : supportingMainArticleCount > 0
         ? 'FALLBACK_COMPOSITION'
         : 'NORMAL';
-  if (genericTechWatchlistCount === publishableScopeCount && publishableScopeCount > 0) {
-    boundedDeduct(state, 'composition', 8, 'All main articles are generic_tech_watchlist; reviewable fallback composition requires AOSP Camera, driver, SoC platform, or native tooling relevance.');
+  if (primaryCameraStackCount < articlePolicy.primaryCameraStack.minRequired) {
+    boundedDeduct(state, 'composition', 8, `Primary Camera Stack article count ${primaryCameraStackCount} is below Newsletter Policy requirement (${articlePolicy.primaryCameraStack.minRequired}).`);
+  }
+  if (forbiddenMainArticleCount > 0) {
+    boundedDeduct(state, 'composition', 8, `Forbidden main bucket count ${forbiddenMainArticleCount} violates Newsletter Policy: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`);
   }
 
   sections.forEach((section, index) => {
@@ -1118,8 +1138,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     if (hasGenericAiWithoutHalConnection(section) || ((section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) && !hasExpandedScope(scope))) {
       boundedDeduct(state, 'hal-relevance', 8, 'Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.', location);
     }
-    if (scope?.publishable_scope === true && scope.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
-      boundedDeduct(state, 'scope-relevance', 8, 'Bound candidate is generic_tech_watchlist and cannot remain as a main article.', location);
+    if (scope?.publishable_scope === true && isForbiddenMainBucket(scope.relevance_bucket)) {
+      boundedDeduct(state, 'scope-relevance', 8, `Bound candidate is ${scope.relevance_bucket} and cannot remain as a main article.`, location);
     }
     if (section.resolvedImage?.usedFallback === true) {
       boundedDeduct(
@@ -1220,6 +1240,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       cpp_ai_tooling_fallback_count: cppAiToolingFallbackCount,
       generic_tech_watchlist_count: genericTechWatchlistCount,
       primary_camera_stack_count: primaryCameraStackCount,
+      supporting_main_article_count: supportingMainArticleCount,
+      forbidden_main_article_count: forbiddenMainArticleCount,
       fallback_relevance_count: fallbackRelevanceCount,
       publishable_scope_count: publishableScopeCount,
       composition_mode: compositionMode,
@@ -1254,8 +1276,8 @@ function buildQualityReportMarkdown(report) {
   const softItems = softDeductions(deductions);
   const metrics = report.metrics || {};
   const articleCount = Number(metrics.article_count);
-  const compositionFailure = Number.isFinite(articleCount) && articleCount < MIN_MAIN_ARTICLES
-    ? `- Underfilled/composition failure: only ${articleCount} main articles were generated; expected at least ${MIN_MAIN_ARTICLES}.`
+  const compositionFailure = Number.isFinite(articleCount) && (articleCount < articlePolicy.mainArticleCount.min || articleCount > articlePolicy.mainArticleCount.max)
+    ? `- Article composition failure: ${articleCount} main articles were generated; Newsletter Policy range is ${articleCountRangeText()}.`
     : '- Underfilled/composition failure: none';
   const topDeductionCategories = ensureArray(metrics.top_deduction_categories)
     .map(item => `- ${item.category} (${item.count})`)
@@ -1311,9 +1333,12 @@ function buildQualityReportMarkdown(report) {
 - cpp_ai_tooling_fallback count: ${metrics.cpp_ai_tooling_fallback_count ?? 0}
 - generic_tech_watchlist count: ${metrics.generic_tech_watchlist_count ?? 0}
 - primary_camera_stack_count: ${metrics.primary_camera_stack_count ?? 0}
+- supporting_main_article_count: ${metrics.supporting_main_article_count ?? 0}
+- forbidden_main_article_count: ${metrics.forbidden_main_article_count ?? 0}
 - fallback_relevance_count: ${metrics.fallback_relevance_count ?? 0}
 - publishable_scope_count: ${metrics.publishable_scope_count ?? 0}
 - composition_mode: ${metrics.composition_mode || 'UNKNOWN'}
+- Newsletter Policy gate: ${publishGateCriteriaText()}
 - Relevance bucket counts: ${JSON.stringify(metrics.relevance_bucket_counts || {})}
 - AI article count: ${metrics.ai_article_count}
 ${compositionFailure}

@@ -12,6 +12,10 @@ const {
   changedArtifactDate,
   newsroomDir
 } = require('../common/artifact-paths');
+const {
+  articlePolicy,
+  articleCountRangeText
+} = require('../common/newsletter-policy');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -151,13 +155,13 @@ function isNewFormat(md) {
 
 function validateArticleQuality(item, md, newFormat) {
   const articles = mainArticleBlocks(md);
-  if (articles.length < 3) {
-    fail(`Newsletter ${item.date} markdown must have at least 3 main sections, found ${articles.length}`);
+  if (articles.length < articlePolicy.mainArticleCount.min) {
+    fail(`Newsletter ${item.date} markdown must satisfy Newsletter Policy main section minimum, found ${articles.length}`);
   }
 
   if (newFormat) {
-    if (articles.length < 4 || articles.length > 5) {
-      warn(`Newsletter ${item.date} main article count is ${articles.length}; expected 4-5 for the new format.`);
+    if (articles.length < articlePolicy.mainArticleCount.min || articles.length > articlePolicy.mainArticleCount.max) {
+      warn(`Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${articleCountRangeText()} for the new format.`);
     }
     if (!/AI|Gemini|agent|on-device|NPU|LLM|인공지능/i.test(md)) {
       warn(`Newsletter ${item.date} has no AI-related article or AI Corner signal.`);

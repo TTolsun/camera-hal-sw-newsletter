@@ -11,6 +11,11 @@ const {
   readStatus,
   renderGithubOutputs
 } = require('../scripts/write-generation-status-output');
+const {
+  articlePolicy,
+  qualityGatePolicy,
+  publishGateCriteriaText
+} = require('../scripts/lib/newsletter-policy');
 
 test('generation status output falls back when status JSON is missing', () => {
   const status = readStatus('__missing__/newsletter-generation-status.json');
@@ -28,34 +33,39 @@ test('generation status output falls back when status JSON is missing', () => {
 });
 
 test('generation status output includes multiline selection diagnostics', () => {
+  const configuredMinimum = articlePolicy.mainArticleCount.min;
+  const requiredPrimary = articlePolicy.primaryCameraStack.minRequired;
   const outputs = buildGenerationStatusOutputs({
     status: 'QUALITY_NEEDS_FIX',
     must_fix_count: 0,
     quality_status: 'NEEDS_FIX',
     quality_score: 90,
-    quality_threshold: 85,
+    quality_threshold: qualityGatePolicy.threshold,
     publish_ready: false,
     final_publish_ready: false,
     review_gate_passed: true,
     publish_gate_passed: false,
-    min_final_articles: 4,
-    absolute_min_reviewable_articles: 2,
-    min_non_fallback_publish_ready_articles: 3,
-    composition_mode: 'THIN_WEEK_REVIEW',
+    min_final_articles: configuredMinimum,
+    absolute_min_reviewable_articles: requiredPrimary,
+    min_non_fallback_publish_ready_articles: configuredMinimum,
+    composition_mode: 'NEEDS_FIX',
     editor_review_required: true,
     underfilled: true,
     deterministic_selected_count: 5,
-    rendered_main_article_count: 3,
+    rendered_main_article_count: configuredMinimum,
     reserve_candidate_count: 4,
     stale_claim_status: 'PASS',
     stale_claim_removed_count: 2,
     stale_claim_hard_failure_count: 0,
-    selected_article_count: 3,
-    final_selected_article_count: 3,
+    selected_article_count: configuredMinimum,
+    final_selected_article_count: configuredMinimum,
+    primary_camera_stack_topic_count: 0,
+    supporting_main_article_count: configuredMinimum,
+    forbidden_main_article_count: 0,
     non_fallback_reviewable_article_count: 1,
     eligible_non_fallback_reviewable_article_count: 1,
-    selection_warnings: ['Thin-week review path'],
-    selection_shortage_hints: ['Collect at least three non-fallback Camera/Android/driver/SoC candidates.'],
+    selection_warnings: ['Newsletter Policy review path'],
+    selection_shortage_hints: ['Add at least one Primary Camera Stack candidate before publishing.'],
     final_exclusion_reason_summary: [
       { reason: 'missing dated evidence', count: 4 },
       { reason: 'source_gap_risk=true', count: 2 }
@@ -63,11 +73,11 @@ test('generation status output includes multiline selection diagnostics', () => 
   });
   const rendered = renderGithubOutputs(outputs);
 
-  assert.equal(outputs.final_selected_article_count_for_gate, '3');
-  assert.equal(outputs.composition_mode, 'THIN_WEEK_REVIEW');
+  assert.equal(outputs.final_selected_article_count_for_gate, String(configuredMinimum));
+  assert.equal(outputs.composition_mode, 'NEEDS_FIX');
   assert.equal(outputs.editor_review_required, 'true');
   assert.equal(outputs.deterministic_selected_count, '5');
-  assert.equal(outputs.rendered_main_article_count, '3');
+  assert.equal(outputs.rendered_main_article_count, String(configuredMinimum));
   assert.equal(outputs.reserve_candidate_count, '4');
   assert.equal(outputs.stale_claim_status, 'PASS');
   assert.equal(outputs.stale_claim_removed_count, '2');
@@ -76,16 +86,21 @@ test('generation status output includes multiline selection diagnostics', () => 
   assert.equal(outputs.eligible_non_fallback_reviewable_article_count, '1');
   assert.equal(outputs.review_gate_passed, 'true');
   assert.equal(outputs.publish_gate_passed, 'false');
-  assert.equal(outputs.min_final_articles, '4');
-  assert.equal(outputs.absolute_min_reviewable_articles, '2');
-  assert.equal(outputs.min_non_fallback_publish_ready_articles, '3');
+  assert.equal(outputs.min_final_articles, String(configuredMinimum));
+  assert.equal(outputs.absolute_min_reviewable_articles, String(requiredPrimary));
+  assert.equal(outputs.min_non_fallback_publish_ready_articles, String(configuredMinimum));
+  assert.equal(outputs.primary_camera_stack_topic_count, '0');
+  assert.equal(outputs.supporting_main_article_count, String(configuredMinimum));
+  assert.equal(outputs.forbidden_main_article_count, '0');
   assert.match(rendered, /candidate_selection_diagnostics<<EOF/);
   assert.match(rendered, /missing dated evidence \(4\)/);
-  assert.match(rendered, /selection_warnings=Thin-week review path/);
-  assert.match(rendered, /selection_shortage_hints=Collect at least three non-fallback Camera\/Android\/driver\/SoC candidates\./);
+  assert.match(rendered, /selection_warnings=Newsletter Policy review path/);
+  assert.match(rendered, /selection_shortage_hints=Add at least one Primary Camera Stack candidate before publishing\./);
 });
 
 test('newsroom PR body separates quality score threshold and result', () => {
+  const configuredMinimum = articlePolicy.mainArticleCount.min;
+  const selectedBelowMinimum = configuredMinimum - 1;
   const body = buildNewsroomPrBody({
     date: '2026-05-03',
     validateOutcome: 'failure',
@@ -95,20 +110,20 @@ test('newsroom PR body separates quality score threshold and result', () => {
       must_fix_count: 0,
       quality_status: 'NEEDS_FIX',
       quality_score: 90,
-      quality_threshold: 85,
+      quality_threshold: qualityGatePolicy.threshold,
       publish_ready: false,
       selection_publish_ready: false,
       final_publish_ready: false,
       review_gate_passed: true,
       publish_gate_passed: false,
-      min_final_articles: 4,
-      absolute_min_reviewable_articles: 2,
-      min_non_fallback_publish_ready_articles: 3,
-      composition_mode: 'THIN_WEEK_REVIEW',
-      selection_composition_mode: 'THIN_WEEK_REVIEW',
+      min_final_articles: configuredMinimum,
+      absolute_min_reviewable_articles: articlePolicy.primaryCameraStack.minRequired,
+      min_non_fallback_publish_ready_articles: configuredMinimum,
+      composition_mode: 'NEEDS_FIX',
+      selection_composition_mode: 'NEEDS_FIX',
       editor_review_required: true,
       deterministic_selected_count: 5,
-      rendered_main_article_count: 3,
+      rendered_main_article_count: selectedBelowMinimum,
       reserve_candidate_count: 2,
       direct_aosp_camera_count: 1,
       camera_driver_image_pipeline_count: 1,
@@ -116,12 +131,15 @@ test('newsroom PR body separates quality score threshold and result', () => {
       soc_platform_signal_count: 1,
       cpp_ai_tooling_fallback_count: 0,
       generic_tech_watchlist_count: 0,
-      composition_reason: 'Only 3 main article candidates are available.',
+      primary_camera_stack_topic_count: 1,
+      supporting_main_article_count: selectedBelowMinimum,
+      forbidden_main_article_count: 0,
+      composition_reason: 'Deterministic selection needs editor review before publishing.',
       underfilled: true,
-      selected_article_count: 3,
-      final_selected_article_count: 3,
+      selected_article_count: selectedBelowMinimum,
+      final_selected_article_count: selectedBelowMinimum,
       input_candidate_count: 20,
-      eligible_candidate_count: 3,
+      eligible_candidate_count: selectedBelowMinimum,
       final_exclusion_reason_summary: [
         { reason: 'missing dated evidence', count: 7 }
       ],
@@ -133,7 +151,7 @@ test('newsroom PR body separates quality score threshold and result', () => {
   });
 
   assert.match(body, /Quality score: 90/);
-  assert.match(body, /Quality threshold: 85/);
+  assert.match(body, new RegExp(`Quality threshold: ${qualityGatePolicy.threshold}`));
   assert.match(body, /Quality status: NEEDS_FIX/);
   assert.match(body, /Result: NEEDS_FIX/);
   assert.match(body, /Must-fix summary: must_fix=0; source_gap=0/);
@@ -141,23 +159,28 @@ test('newsroom PR body separates quality score threshold and result', () => {
   assert.match(body, /Stale claim summary: removed=1; hard_failures=0/);
   assert.match(body, /Recommended editor action:/);
   assert.match(body, /## Composition Summary/);
-  assert.match(body, /composition_mode: THIN_WEEK_REVIEW/);
+  assert.match(body, /composition_mode: NEEDS_FIX/);
   assert.match(body, /final_publish_ready: false/);
-  assert.match(body, /Review Gate: true \(non-fallback Camera\/Android\/Driver\/SoC >= 2\)/);
-  assert.match(body, /Publish Gate: false \(non-fallback Camera\/Android\/Driver\/SoC >= 3; final articles >= 4; quality\/fact-check\/site validation pass\)/);
+  assert.match(body, /Review Gate: true \(Newsletter Policy selection checks\)/);
+  assert.match(body, new RegExp(`Publish Gate: false \\(${publishGateCriteriaText().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}; quality/fact-check/site validation pass\\)`));
   assert.match(body, /editor_review_required: true/);
   assert.match(body, /review_gate_passed: true/);
   assert.match(body, /publish_gate_passed: false/);
   assert.match(body, /direct_aosp_camera count: 1/);
   assert.match(body, /deterministic_selected_count: 5/);
-  assert.match(body, /rendered_main_article_count: 3/);
+  assert.match(body, new RegExp(`rendered_main_article_count: ${selectedBelowMinimum}`));
   assert.match(body, /reserve_candidate_count: 2/);
-  assert.match(body, /Thin-week review path/);
-  assert.match(body, /Only 3 publishable articles were selected; expected at least 4\./);
-  assert.doesNotMatch(body, /90\/85/);
+  assert.match(body, /Underfilled selection path: true/);
+  assert.match(body, new RegExp(`Only ${selectedBelowMinimum} publishable articles were selected; expected at least ${configuredMinimum}\\.`));
+  assert.doesNotMatch(body, new RegExp(`90/${qualityGatePolicy.threshold}`));
 });
 
 test('newsroom PR body marks fallback composition explicitly', () => {
+  const configuredSelectedCount = Math.min(
+    articlePolicy.mainArticleCount.max,
+    articlePolicy.mainArticleCount.min + articlePolicy.primaryCameraStack.minRequired
+  );
+  const configuredSupportingCount = configuredSelectedCount - articlePolicy.primaryCameraStack.minRequired;
   const body = buildNewsroomPrBody({
     date: '2026-05-03',
     validateOutcome: 'success',
@@ -167,15 +190,15 @@ test('newsroom PR body marks fallback composition explicitly', () => {
       must_fix_count: 0,
       quality_status: 'PASS',
       quality_score: 91,
-      quality_threshold: 85,
+      quality_threshold: qualityGatePolicy.threshold,
       publish_ready: true,
       selection_publish_ready: true,
       final_publish_ready: true,
       review_gate_passed: true,
       publish_gate_passed: true,
-      min_final_articles: 4,
-      absolute_min_reviewable_articles: 2,
-      min_non_fallback_publish_ready_articles: 3,
+      min_final_articles: articlePolicy.mainArticleCount.min,
+      absolute_min_reviewable_articles: articlePolicy.primaryCameraStack.minRequired,
+      min_non_fallback_publish_ready_articles: articlePolicy.mainArticleCount.min,
       editor_review_required: true,
       underfilled: false,
       composition_mode: 'FALLBACK_COMPOSITION',
@@ -183,15 +206,18 @@ test('newsroom PR body marks fallback composition explicitly', () => {
       direct_aosp_camera_count: 1,
       camera_driver_image_pipeline_count: 0,
       android_platform_camera_adjacent_count: 0,
-      soc_platform_signal_count: 2,
-      cpp_ai_tooling_fallback_count: 1,
+      soc_platform_signal_count: configuredSupportingCount,
+      cpp_ai_tooling_fallback_count: 0,
       generic_tech_watchlist_count: 0,
+      primary_camera_stack_topic_count: articlePolicy.primaryCameraStack.minRequired,
+      supporting_main_article_count: configuredSupportingCount,
+      forbidden_main_article_count: 0,
       composition_reason: 'Primary AOSP Camera/driver/platform-adjacent candidates were below the normal target.',
-      deterministic_selected_count: 4,
-      rendered_main_article_count: 4,
+      deterministic_selected_count: configuredSelectedCount,
+      rendered_main_article_count: configuredSelectedCount,
       reserve_candidate_count: 5,
-      selected_article_count: 4,
-      final_selected_article_count: 4,
+      selected_article_count: configuredSelectedCount,
+      final_selected_article_count: configuredSelectedCount,
       stale_claim_status: 'PASS',
       stale_claim_removed_count: 0,
       stale_claim_hard_failure_count: 0
@@ -199,13 +225,14 @@ test('newsroom PR body marks fallback composition explicitly', () => {
   });
 
   assert.match(body, /composition_mode: FALLBACK_COMPOSITION/);
-  assert.match(body, /soc_platform_signal count: 2/);
-  assert.match(body, /cpp_ai_tooling_fallback count: 1/);
+  assert.match(body, new RegExp(`soc_platform_signal count: ${configuredSupportingCount}`));
+  assert.match(body, /cpp_ai_tooling_fallback count: 0/);
   assert.match(body, /Fallback composition:/);
   assert.match(body, /Do not add artificial Camera HAL wording/);
 });
 
 test('newsroom PR body explains review-only fallback when publish gate is blocked', () => {
+  const configuredMinimum = articlePolicy.mainArticleCount.min;
   const body = buildNewsroomPrBody({
     date: '2026-05-03',
     validateOutcome: 'success',
@@ -215,39 +242,42 @@ test('newsroom PR body explains review-only fallback when publish gate is blocke
       must_fix_count: 0,
       quality_status: 'PASS',
       quality_score: 91,
-      quality_threshold: 85,
+      quality_threshold: qualityGatePolicy.threshold,
       publish_ready: false,
       selection_publish_ready: false,
       final_publish_ready: false,
       review_gate_passed: true,
       publish_gate_passed: false,
-      min_final_articles: 4,
-      absolute_min_reviewable_articles: 2,
-      min_non_fallback_publish_ready_articles: 3,
+      min_final_articles: configuredMinimum,
+      absolute_min_reviewable_articles: articlePolicy.primaryCameraStack.minRequired,
+      min_non_fallback_publish_ready_articles: configuredMinimum,
       editor_review_required: true,
       underfilled: false,
       composition_mode: 'NEEDS_FIX',
       selection_composition_mode: 'FALLBACK_COMPOSITION',
-      direct_aosp_camera_count: 1,
-      camera_driver_image_pipeline_count: 1,
+      direct_aosp_camera_count: 0,
+      camera_driver_image_pipeline_count: 0,
       android_platform_camera_adjacent_count: 0,
       soc_platform_signal_count: 0,
-      cpp_ai_tooling_fallback_count: 2,
+      cpp_ai_tooling_fallback_count: configuredMinimum,
       generic_tech_watchlist_count: 0,
-      non_fallback_reviewable_article_count: 2,
-      composition_reason: 'Review Gate passed with 2 non-fallback candidates, but Publish Gate requires 3.',
-      deterministic_selected_count: 4,
-      rendered_main_article_count: 4,
+      primary_camera_stack_topic_count: 0,
+      supporting_main_article_count: configuredMinimum,
+      forbidden_main_article_count: 0,
+      non_fallback_reviewable_article_count: 0,
+      composition_reason: 'Review Gate passed, but Publish Gate requires configured Primary Camera Stack coverage.',
+      deterministic_selected_count: configuredMinimum,
+      rendered_main_article_count: configuredMinimum,
       reserve_candidate_count: 5,
-      selected_article_count: 4,
-      final_selected_article_count: 4,
+      selected_article_count: configuredMinimum,
+      final_selected_article_count: configuredMinimum,
       stale_claim_status: 'PASS',
       stale_claim_removed_count: 0,
       stale_claim_hard_failure_count: 0
     }
   });
 
-  assert.match(body, /Recommended editor action: Use this as an editor-review PR only; add stronger non-fallback Camera\/Android\/Driver\/SoC candidates before publishing\./);
+  assert.match(body, /Recommended editor action: Use this as an editor-review PR only; satisfy the configured Newsletter Policy before publishing\./);
   assert.match(body, /composition_mode: NEEDS_FIX/);
   assert.match(body, /selection_composition_mode: FALLBACK_COMPOSITION/);
   assert.match(body, /Review Gate passed, but Publish Gate is still blocked/);

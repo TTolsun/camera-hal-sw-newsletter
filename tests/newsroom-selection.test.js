@@ -2,22 +2,68 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
-  MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
   buildShortlistReport,
+  compositionSummary,
   exclusionReasons,
   hasConcreteApiComponent,
   hasFallbackRelevanceHint,
   hasPlatformSignalTerm,
   normalizeUrl,
+  publishGatePasses,
   scoreCandidate,
   selectFinalArticles,
+  selectionErrors,
   summarizeExclusionReasons
 } = require('../scripts/lib/newsroom-selection');
+const {
+  articlePolicy
+} = require('../scripts/lib/newsletter-policy');
 const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers');
 const { normalizeCandidate } = require('../scripts/newsroom/cli/collect-news-candidates');
 const { candidate } = require('./helpers/newsroom-builders');
 const { readJsonFixture, readTextFixture } = require('./helpers/fixture-loader');
+
+function policyPrimaryCandidate(index = 0, overrides = {}) {
+  return candidate({
+    title: `CameraX policy primary release ${index}`,
+    url: `https://example.com/policy-primary-${index}`,
+    relevance_bucket: articlePolicy.primaryCameraStack.buckets[0],
+    editorial_priority: 1,
+    aosp_camera_directness: 5,
+    driver_stack_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 0,
+    counts_as_primary_camera_topic: true,
+    ...overrides
+  });
+}
+
+function policySupportingCandidate(index = 0, overrides = {}) {
+  const topics = [
+    'LLVM sanitizer diagnostics',
+    'Clang static analyzer',
+    'LLDB native debugger',
+    'CMake camera build pipeline',
+    'libc++ concurrency update'
+  ];
+  const topic = topics[index % topics.length];
+  return candidate({
+    title: `${topic} policy supporting workflow`,
+    url: `https://example.com/policy-supporting-${index}`,
+    summary: `${topic} improves native C++ build and test productivity for camera workflow debugging.`,
+    api_or_component: topic,
+    behavior_change: 'Native debugging workflow behavior changed.',
+    relevance_bucket: articlePolicy.supportingMainBuckets[1] || articlePolicy.supportingMainBuckets[0],
+    editorial_priority: 5,
+    aosp_camera_directness: 0,
+    driver_stack_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 5,
+    counts_as_fallback_topic: true,
+    camera_hal_relevance_score: 0,
+    ...overrides
+  });
+}
 
 test('prefilter excludes source gaps, undated watch pages, missing evidence, and duplicate URLs', () => {
   const report = buildShortlistReport('2026-05-03', [
@@ -93,105 +139,113 @@ test('exclusion reason reports reference-only candidates', () => {
   assert.ok(exclusionReasons(candidate({ reference_only: true })).includes('reference_only=true'));
 });
 
-test('four eligible candidates are publish-ready with no deterministic selection errors', () => {
+test('configured minimum composition with required primary and supporting articles is publish-ready', () => {
+  const supportingCount = articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired;
   const report = buildShortlistReport('2026-05-03', [
-    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
-    candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
-    candidate({ title: 'Android Camera API change C fixes metadata behavior', url: 'https://example.com/c' }),
-    candidate({ title: 'On-device AI camera path update D', url: 'https://example.com/d', summary: 'AI inference update affects Android camera frame processing.' })
+    ...Array.from({ length: articlePolicy.primaryCameraStack.minRequired }, (_, index) => policyPrimaryCandidate(index)),
+    ...Array.from({ length: supportingCount }, (_, index) => policySupportingCandidate(index))
   ]);
 
-  assert.equal(report.selected_article_count, 4);
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.primaryCameraStack.minRequired);
+  assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
   assert.equal(report.underfilled, false);
   assert.equal(report.publish_ready, true);
   assert.deepEqual(report.selection_warnings, []);
   assert.deepEqual(report.selection_errors, []);
 });
 
-test('three eligible candidates with an AI candidate are reviewable but not publish-ready', () => {
+test('configured minimum composition with mixed supporting buckets is publish-ready', () => {
   const report = buildShortlistReport('2026-05-03', [
-    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
-    candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
-    candidate({ title: 'On-device AI camera path update C', url: 'https://example.com/c', summary: 'AI inference update affects Android camera frame processing.' })
+    policyPrimaryCandidate(0),
+    policySupportingCandidate(0, {
+      title: 'Snapdragon ISP policy supporting signal',
+      url: 'https://example.com/policy-supporting-soc',
+      summary: 'Snapdragon SoC ISP thermal and power behavior changes image pipeline performance.',
+      api_or_component: 'Snapdragon ISP',
+      behavior_change: 'Image pipeline thermal behavior changed.',
+      relevance_bucket: 'soc_platform_signal',
+      editorial_priority: 4,
+      soc_platform_relevance: 5,
+      native_tooling_relevance: 0,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false
+    }),
+    policySupportingCandidate(1)
   ]);
 
-  assert.equal(report.selected_article_count, 3);
-  assert.equal(report.underfilled, true);
-  assert.equal(report.publish_ready, false);
-  assert.equal(report.selection_errors.length, 0);
-  assert.match(report.selection_warnings[0], /Thin-week review path/);
-  assert.equal(report.composition_mode, 'THIN_WEEK_REVIEW');
-  assert.equal(report.editor_review_required, true);
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.publish_ready, true);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.primaryCameraStack.minRequired);
+  assert.equal(report.composition_summary.supporting_main_article_count, articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired);
 });
 
-test('one eligible non-fallback candidate remains a hard deterministic selection error', () => {
+test('below configured minimum remains a hard deterministic selection error', () => {
   const report = buildShortlistReport('2026-05-03', [
-    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' })
+    policyPrimaryCandidate(0)
   ]);
 
-  assert.equal(ABSOLUTE_MIN_REVIEWABLE_ARTICLES, 2);
   assert.equal(report.selected_article_count, 1);
   assert.equal(report.publish_ready, false);
   assert.equal(report.composition_mode, 'NEEDS_FIX');
-  assert.ok(report.selection_errors.some(error => error.includes('Only 1 eligible')));
+  assert.ok(report.selection_errors.some(error => error.includes('Newsletter Policy requires')));
+  assert.equal(report.editor_review_required, true);
 });
 
-test('two non-fallback candidates plus fallback articles pass review gate but not publish gate', () => {
+test('supporting-only composition is not publish-ready', () => {
   const report = buildShortlistReport('2026-05-03', [
-    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
-    candidate({ title: 'Android Camera API change B fixes metadata behavior', url: 'https://example.com/b' }),
-    candidate({
-      title: 'GCC 17.1 C++ compiler release',
-      url: 'https://example.com/gcc-17',
-      summary: 'GCC C++ compiler release changes native build and sanitizer workflow behavior.',
-      api_or_component: 'GCC 17.1',
-      behavior_change: 'C++ compiler release changes native build and sanitizer workflow behavior.',
-      relevance_bucket: 'cpp_ai_tooling_fallback',
-      editorial_priority: 5,
-      aosp_camera_directness: 0,
-      driver_stack_relevance: 0,
-      soc_platform_relevance: 0,
-      native_tooling_relevance: 5,
-      counts_as_fallback_topic: true,
-      camera_hal_relevance_score: 0
-    }),
-    candidate({
-      title: 'LLVM 22 sanitizer runtime update',
-      url: 'https://example.com/llvm-22',
-      summary: 'LLVM sanitizer runtime update changes native test and debugging workflow behavior.',
-      api_or_component: 'LLVM 22.0',
-      behavior_change: 'Sanitizer runtime update changes native test and debugging workflow behavior.',
-      relevance_bucket: 'cpp_ai_tooling_fallback',
-      editorial_priority: 5,
-      aosp_camera_directness: 0,
-      driver_stack_relevance: 0,
-      soc_platform_relevance: 0,
-      native_tooling_relevance: 5,
-      counts_as_fallback_topic: true,
-      camera_hal_relevance_score: 0
-    })
+    ...Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) => policySupportingCandidate(index))
   ]);
 
-  assert.equal(MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES, 3);
-  assert.equal(report.selected_article_count, 4);
-  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 2);
-  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 2);
-  assert.equal(report.review_gate_passed, true);
-  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, 0);
+  assert.equal(report.composition_summary.supporting_main_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.publish_ready, false);
-  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
-  assert.equal(report.editor_review_required, true);
-  assert.deepEqual(report.selection_errors, []);
-  assert.ok(report.selection_shortage_hints.some(hint => hint.includes('Publish Gate requires 3')));
+  assert.equal(report.composition_mode, 'NEEDS_FIX');
+  assert.ok(report.selection_errors.some(error => error.includes('Primary Camera Stack')));
 });
 
-test('cpp fallback-only candidates do not count toward reviewable minimum', () => {
-  const fallbackItems = [
-    ['GCC 17.1 C++ compiler release', 'https://example.com/gcc-17', 'GCC 17.1'],
-    ['LLVM 22 sanitizer runtime update', 'https://example.com/llvm-22', 'LLVM 22.0'],
-    ['Clang native build diagnostics release', 'https://example.com/clang-diagnostics', 'Clang 22.0'],
-    ['NDK toolchain debugging workflow update', 'https://example.com/ndk-debugging', 'NDK toolchain']
+test('forbidden bucket in main candidates is not publish-ready', () => {
+  const selected = [
+    policyPrimaryCandidate(0),
+    policySupportingCandidate(0),
+    candidate({
+      title: 'Generic technology watchlist item',
+      url: 'https://example.com/generic-watchlist-main',
+      summary: 'Generic IT watchlist item without article-level camera stack evidence.',
+      api_or_component: 'Generic IT',
+      behavior_change: 'General technology market behavior changed.',
+      relevance_bucket: articlePolicy.forbiddenMainBuckets[0],
+      editorial_priority: 6,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 0,
+      camera_hal_relevance_score: 0
+    })
   ];
+  const summary = compositionSummary(selected);
+  const errors = selectionErrors(selected);
+
+  assert.equal(summary.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(summary.forbidden_main_article_count, 1);
+  assert.equal(publishGatePasses(summary), false);
+  assert.ok(errors.some(error => error.includes('forbidden bucket')));
+});
+
+test('supporting fallback-only candidates do not satisfy required primary coverage', () => {
+  const fallbackTopics = [
+    'LLVM sanitizer diagnostics',
+    'Clang analyzer warning model',
+    'LLDB camera HAL debugging workflow',
+    'CMake native build cache',
+    'libc++ thread safety annotation'
+  ];
+  const fallbackItems = Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) => [
+    fallbackTopics[index % fallbackTopics.length],
+    `https://example.com/supporting-only-${index}`,
+    fallbackTopics[index % fallbackTopics.length]
+  ]);
   const report = buildShortlistReport('2026-05-03', fallbackItems.map(([title, url, component]) => candidate({
     title,
     url,
@@ -211,16 +265,16 @@ test('cpp fallback-only candidates do not count toward reviewable minimum', () =
     camera_hal_relevance_score: 0
   })));
 
-  assert.equal(report.selected_article_count, 4);
-  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 4);
-  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 0);
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, 0);
   assert.equal(report.publish_ready, false);
   assert.equal(report.composition_mode, 'NEEDS_FIX');
-  assert.ok(report.selection_errors.some(error => error.includes('non-fallback Camera/Android/driver/SoC')));
-  assert.ok(report.selection_shortage_hints.some(hint => hint.includes('C++/AI tooling fallback')));
+  assert.ok(report.selection_errors.some(error => error.includes('Primary Camera Stack')));
+  assert.ok(report.selection_shortage_hints.some(hint => hint.includes('Primary Camera Stack')));
 });
 
-test('AOSP site update camera rows can form three reviewable non-fallback candidates', () => {
+test('AOSP site update camera rows can satisfy configured composition', () => {
   const source = {
     id: 'aosp-site-updates',
     name: 'AOSP Site Updates',
@@ -238,16 +292,16 @@ test('AOSP site update camera rows can form three reviewable non-fallback candid
   const rows = parseSourceSpecificItems(readTextFixture('source-html/aosp-site-updates-camera.html'), source);
   const report = buildShortlistReport('2026-05-03', rows.map(item => normalizeCandidate(item)));
 
-  assert.equal(rows.length, 3);
-  assert.equal(report.selected_article_count, 3);
-  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 3);
+  assert.equal(rows.length, articlePolicy.mainArticleCount.min);
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 0);
   assert.deepEqual(report.selection_errors, []);
-  assert.equal(report.publish_ready, false);
-  assert.equal(report.composition_mode, 'THIN_WEEK_REVIEW');
+  assert.equal(report.publish_ready, true);
+  assert.equal(report.composition_mode, 'NORMAL');
 });
 
-test('two official AOSP and CameraX camera candidates pass review gate but not publish gate', () => {
+test('official camera candidates below configured minimum are not publish-ready', () => {
   const aospSource = {
     id: 'aosp-site-updates',
     name: 'AOSP Site Updates',
@@ -285,14 +339,12 @@ test('two official AOSP and CameraX camera candidates pass review gate but not p
     normalizeCandidate(cameraXItem)
   ]);
 
-  assert.equal(ABSOLUTE_MIN_REVIEWABLE_ARTICLES, 2);
   assert.equal(report.selected_article_count, 2);
   assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 2);
-  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.review_gate_passed, false);
   assert.equal(report.publish_gate_passed, false);
   assert.equal(report.publish_ready, false);
-  assert.deepEqual(report.selection_errors, []);
-  assert.ok(report.selection_warnings.some(warning => /Thin-week review path/i.test(warning)));
+  assert.ok(report.selection_errors.some(error => error.includes('Newsletter Policy requires')));
 });
 
 test('month-level dated candidates do not receive exact-day freshness scoring', () => {
@@ -604,7 +656,7 @@ test('versioned C++ toolchain evidence is concrete but not counted as direct cam
   assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 1);
 });
 
-test('four non-AI HAL candidates are publish-ready without an AI requirement', () => {
+test('non-AI HAL candidates are publish-ready without an AI requirement', () => {
   const report = buildShortlistReport('2026-05-03', [
     candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
     candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
@@ -612,7 +664,7 @@ test('four non-AI HAL candidates are publish-ready without an AI requirement', (
     candidate({ title: 'Camera HAL compatibility update D changes buffer handling', url: 'https://example.com/d' })
   ]);
 
-  assert.equal(report.selected_article_count, 4);
+  assert.ok(report.selected_article_count >= articlePolicy.mainArticleCount.min);
   assert.equal(report.publish_ready, true);
   assert.deepEqual(report.selection_errors, []);
   assert.equal(report.ai_selected_article_count, 0);

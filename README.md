@@ -78,3 +78,19 @@ npm.cmd run generate
 - Do not promote watch/reference pages to main articles without dated evidence.
 - Do not weaken quality gate, source binding, image validation, or hard blockers.
 - Generated artifacts are not automatically trusted as good/golden fixtures.
+
+<!-- NEWSLETTER_POLICY:BEGIN -->
+<!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
+
+### Newsletter Policy
+
+- Source of truth: `config/newsletter-policy.json`
+- Main article count: 3-5
+- Required Primary Camera Stack articles: at least 1
+- Primary Camera Stack buckets: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
+- Supporting main buckets: `soc_platform_signal`, `cpp_ai_tooling_fallback`
+- Forbidden main buckets: `generic_tech_watchlist`
+- Quality threshold: 85
+- Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article
+
+<!-- NEWSLETTER_POLICY:END -->

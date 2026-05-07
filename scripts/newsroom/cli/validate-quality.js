@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const {
-  QUALITY_THRESHOLD,
   buildNewsletterQualityReport
 } = require('../validate/newsletter-quality');
+const { qualityGatePolicy } = require('../common/newsletter-policy');
 const { readJson } = require('../common/common');
 const {
   changedArtifactDate,
@@ -106,14 +106,14 @@ function validateQualityReport(item, requireReport) {
 
   const report = readJsonIfExists(reportPath);
   if (!report) return;
-  const threshold = Number.isFinite(Number(report.threshold)) ? Number(report.threshold) : QUALITY_THRESHOLD;
+  const threshold = Number.isFinite(Number(report.threshold)) ? Number(report.threshold) : qualityGatePolicy.threshold;
   const score = Number(report.score);
   if (!Number.isFinite(score)) {
     fail(`Newsletter ${item.date} quality report has invalid score.`);
     return;
   }
-  if (threshold < QUALITY_THRESHOLD) {
-    fail(`Newsletter ${item.date} quality threshold must be at least ${QUALITY_THRESHOLD}, found ${threshold}.`);
+  if (threshold < qualityGatePolicy.threshold) {
+    fail(`Newsletter ${item.date} quality threshold must be at least ${qualityGatePolicy.threshold}, found ${threshold}.`);
   }
   if (!requireReport && (score < threshold || report.status !== 'PASS')) {
     warn(`Newsletter ${item.date} has non-publishable review quality report ${score}/${threshold} ${report.status}; not enforcing because this run is not publishing that issue.`);

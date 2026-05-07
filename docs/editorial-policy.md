@@ -32,11 +32,11 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 
 ## 기사 구성
 
-- 주요 기사는 4-5개를 목표로 하며 기본 목표는 5개입니다.
+- 주요 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket은 아래 generated Newsletter Policy block과 `config/newsletter-policy.json`을 따릅니다.
 - briefing은 정확히 3개 bullet로 유지합니다.
 - 각 주요 기사는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, 과장 금지 메모, Sources를 포함합니다.
 - AI 관련 기사는 필수가 아니라 보완 항목입니다. 포함하는 경우 일반 AI 제품 발표만으로는 충분하지 않으며 camera input path, on-device inference, NPU/GPU scheduling, image privacy, agent-assisted HAL workflow 중 하나와 연결되어야 합니다.
-- 가능하면 3개 이상은 Camera HAL / Android Camera / CameraX / AOSP Camera 기사로 구성합니다.
+- Primary Camera Stack 기사 필수 조건은 `config/newsletter-policy.json`의 `articlePolicy.primaryCameraStack`을 따릅니다.
 
 ## 우선순위
 
@@ -107,3 +107,19 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 - 모든 주요 기사에 Camera HAL 관점이 있는가?
 - 한국어로 작성했는가?
 - 문체가 구체적이고 기술적인가?
+
+<!-- NEWSLETTER_POLICY:BEGIN -->
+<!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
+
+### Newsletter Policy
+
+- Source of truth: `config/newsletter-policy.json`
+- Main article count: 3-5
+- Required Primary Camera Stack articles: at least 1
+- Primary Camera Stack buckets: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
+- Supporting main buckets: `soc_platform_signal`, `cpp_ai_tooling_fallback`
+- Forbidden main buckets: `generic_tech_watchlist`
+- Quality threshold: 85
+- Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article
+
+<!-- NEWSLETTER_POLICY:END -->

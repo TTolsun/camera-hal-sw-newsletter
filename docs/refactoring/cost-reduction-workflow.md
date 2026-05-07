@@ -62,7 +62,7 @@
 | Camera HAL 관련성 | 최우선 |
 | AI/C++ 기사 | 가능하면 둘 중 하나 포함 |
 | 최신성 | 3~4주 이내 허용 |
-| Main article 수 | 4개 기본, 최대 5개 |
+| Main article 수 | `config/newsletter-policy.json`의 Article Composition Policy 기준 |
 | Source gap | main article 금지 |
 | Watch page | 날짜/릴리스 근거 없으면 main article 금지 |
 | 비용 추적 | stage별 token/cost report 생성 |
@@ -358,7 +358,7 @@ LLM에 넘기는 입력 token을 줄인다.
 ```text
 - candidate 1개당 500~800 tokens 이하
 - editor stage에는 최대 8~12개 candidate만 전달
-- 최종 article generation에는 selected 4~5개만 전달
+- 최종 article generation에는 Article Composition Policy를 만족하는 selected article input만 전달
 ```
 
 ### 3. Retry 입력 최소화
@@ -561,7 +561,7 @@ cache/news-summary/
 
 ```text
 Quality threshold:
-  - 기본 90 유지 또는 85~90 범위에서 운영
+  - `config/newsletter-policy.json`의 `qualityGatePolicy.threshold`를 source of truth로 운영
   - 단, source gap / duplicate / no source는 hard fail
 
 Hard fail:
@@ -734,7 +734,7 @@ content/newsroom/YYYY-MM-DD/cost-report.md
 - Scheduled run 기준 1회 비용 300원 이하
 - Retry 발생 시에도 500원 이하
 - Pro 자동 호출 0회
-- Camera HAL main article 최소 3개 이상
+- Camera HAL / Primary Camera Stack main article 필수 조건은 Article Composition Policy 기준
 - AI 또는 C++ 보완 기사 가능 시 1개 포함
 - Source gap main article 0개
 - Duplicate main article 0개

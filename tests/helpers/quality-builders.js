@@ -1,4 +1,5 @@
 const { buildNewsletterQualityReport } = require('../../scripts/lib/newsletter-quality');
+const { articlePolicy } = require('../../scripts/lib/newsletter-policy');
 
 function source(url, title = 'Source') {
   return { title, url };
@@ -108,7 +109,7 @@ function reportFor(sections, reporterCandidates, options = {}) {
   );
 }
 
-function validSections(count = 4) {
+function validSections(count = articlePolicy.mainArticleCount.min) {
   const sections = [
     section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
     section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' }),

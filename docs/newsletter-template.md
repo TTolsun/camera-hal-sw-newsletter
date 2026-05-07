@@ -67,7 +67,7 @@ HAL interface, stream/buffer, metadata, request/result, performance, compatibili
 
 ---
 
-주요 기사는 같은 구조를 반복합니다. 이슈는 4-5개 기사를 목표로 하며 기본 목표는 5개입니다. `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`를 우선하고, 후보가 부족하면 공개 `soc_platform_signal`, 그다음 `cpp_ai_tooling_fallback`으로 보강합니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 사용합니다.
+주요 기사는 같은 구조를 반복합니다. 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket은 `config/newsletter-policy.json`과 대표 운영 문서의 generated Newsletter Policy block을 따릅니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 사용합니다.
 
 ## 이번 주 실행 항목
 

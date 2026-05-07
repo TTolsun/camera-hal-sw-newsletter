@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "name": "Newsletter Policy",
+  "articlePolicy": {
+    "mainArticleCount": {
+      "min": 3,
+      "max": 5
+    },
+    "primaryCameraStack": {
+      "minRequired": 1,
+      "buckets": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ]
+    },
+    "supportingMainBuckets": [
+      "soc_platform_signal",
+      "cpp_ai_tooling_fallback"
+    ],
+    "forbiddenMainBuckets": [
+      "generic_tech_watchlist"
+    ]
+  },
+  "qualityGatePolicy": {
+    "threshold": 85,
+    "hardFailConditions": [
+      "source-less main article",
+      "source candidate binding failure",
+      "missing dated evidence",
+      "source_gap_risk",
+      "fact-check must_fix",
+      "duplicate source URL",
+      "stale claim hard failure",
+      "undated watch/reference page promoted to main article"
+    ]
+  }
+}

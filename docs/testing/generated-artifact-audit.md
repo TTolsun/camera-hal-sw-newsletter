@@ -15,7 +15,7 @@ public archive 삭제는 hard blocker가 명확한 경우로 제한합니다. `q
 - `hasDatedEvidence=false` 또는 `source_gap_risk=true` 후보가 main article로 사용됨.
 - generic AI 또는 일반 IT 기사인데 Camera HAL, Android Camera, camera workflow, frame, stream, buffer, metadata, NPU/GPU/ISP resource management와 구체적으로 연결되지 않음.
 - 필수 section/source/reference 계약 위반이 있음.
-- 단일 기사 제거 후 main article 수가 4개 미만이 되어 quality gate를 통과할 수 없음.
+- 단일 기사 제거 후 main article 수가 configured Article Composition Policy 범위를 만족하지 못해 quality gate를 통과할 수 없음.
 
 삭제 또는 기사 제거 후에는 현재 산출물 기준으로 `quality-report.json`과 `quality-report.md`를 재계산 또는 재생성합니다. 숫자만 수동으로 맞추는 방식은 금지합니다. 삭제 기준을 맞추기 위해 quality threshold, hard blocker, validator를 완화하지 않습니다.
 
@@ -23,10 +23,10 @@ public archive 삭제는 hard blocker가 명확한 경우로 제한합니다. `q
 
 ### 2026-05-05
 
-- Source candidate binding hardening (2026-05-05): 새 gate 기준으로 4/4 main article의 `source_candidate_url`/`source_candidate_hash`를 bound shortlist/reporter candidate에서 복구했습니다. 제거, `DEMOTE`, `FAIL` 처리된 section은 없으며, AI/C++/tooling article은 `cpp_ai_tooling_fallback` 또는 `soc_platform_signal` fallback bucket으로만 계산되고 `direct_aosp_camera_count`를 올리지 않습니다. `quality-report.json`/`.md`, `editor-draft.md`, `newsletter.md`, `index.html`은 `editor-draft.json`에서 재계산했습니다. Recompute result: `100/85 PASS`, `article_gate_counts={PASS:4, DEMOTE:0, FAIL:0}`, `publishable_scope_count=4`, `direct_aosp_camera_count=0`, `primary_camera_stack_count=1`, `fallback_relevance_count=3`, `composition_mode=FALLBACK_COMPOSITION`, `source_integrity_violation_count=0`. Final validation: `npm.cmd run validate` PASS.
+- Source candidate binding hardening (2026-05-05): 당시 gate 기준으로 모든 main article의 `source_candidate_url`/`source_candidate_hash`를 bound shortlist/reporter candidate에서 복구했습니다. 제거, `DEMOTE`, `FAIL` 처리된 section은 없으며, AI/C++/tooling article은 `cpp_ai_tooling_fallback` 또는 `soc_platform_signal` fallback bucket으로만 계산되고 `direct_aosp_camera_count`를 올리지 않습니다. `quality-report.json`/`.md`, `editor-draft.md`, `newsletter.md`, `index.html`은 `editor-draft.json`에서 재계산했습니다. Recompute result는 당시 quality threshold를 통과했고 source integrity violation은 없었습니다. Final validation: `npm.cmd run validate` PASS.
 
 - 판단: public issue 유지.
-- 조치: FreeBSD 15.1 Beta article 제거 후 4개 main article 기준으로 `newsletter.md`, `index.html`, `editor-draft.*`, `quality-report.*`를 재생성했습니다.
+- 조치: FreeBSD 15.1 Beta article 제거 후 당시 Article Composition Policy 기준으로 `newsletter.md`, `index.html`, `editor-draft.*`, `quality-report.*`를 재생성했습니다.
 - 이유: source registry의 `Phoronix Linux Camera / Media` label과 generic `Linux camera / V4L2` metadata가 FreeBSD OS release를 main article PASS 경로로 끌어올린 regression입니다. 기사 본문은 current policy 기준의 구체적인 Camera HAL / Android Camera / frame / stream / buffer / metadata / NPU/GPU/ISP resource connection을 충분히 증명하지 못합니다.
 - 보존: 전체 발행물은 fixture로 복사하지 않고, 최소 candidate/section sample만 `tests/fixtures/quality/bad/freebsd-source-label-regression.json`에 보존했습니다.
 
@@ -38,7 +38,7 @@ public archive 삭제는 hard blocker가 명확한 경우로 제한합니다. `q
 ### 2026-05-03
 
 - 판단: public archive에서 제거.
-- 이유: main article count가 3개이고 `shortlisted-candidates.json`의 `publish_ready=false`, `underfilled=true` 상태입니다. 단일 기사 제거/보존으로 현재 gate를 통과할 수 없는 underfilled issue입니다.
+- 이유: main article count가 configured Article Composition Policy 범위에 미달하고 `shortlisted-candidates.json`의 `publish_ready=false`, `underfilled=true` 상태입니다. 단일 기사 제거/보존으로 현재 gate를 통과할 수 없는 underfilled issue입니다.
 
 ### 2026-05-02
 

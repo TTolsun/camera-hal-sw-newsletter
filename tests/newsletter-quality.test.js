@@ -2,7 +2,6 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  QUALITY_THRESHOLD,
   buildNewsletterQualityReport,
   buildQualityReportMarkdown,
   determineQualityStatus,
@@ -17,15 +16,19 @@ const {
   validSections
 } = require('./helpers/quality-builders');
 const { readJsonFixture } = require('./helpers/fixture-loader');
+const {
+  articlePolicy,
+  articleCountRangeText,
+  qualityGatePolicy
+} = require('../scripts/lib/newsletter-policy');
 
-test('quality threshold defaults to 85 and preserves numeric boundary behavior', () => {
-  assert.equal(QUALITY_THRESHOLD, 85);
-  assert.equal(determineQualityStatus(84, QUALITY_THRESHOLD, {
+test('quality threshold follows configured numeric boundary behavior', () => {
+  assert.equal(determineQualityStatus(qualityGatePolicy.threshold - 1, qualityGatePolicy.threshold, {
     sourceGapCount: 0,
     hasFactCheckMustFix: false,
     blockingDeductions: []
   }), 'NEEDS_FIX');
-  assert.equal(determineQualityStatus(85, QUALITY_THRESHOLD, {
+  assert.equal(determineQualityStatus(qualityGatePolicy.threshold, qualityGatePolicy.threshold, {
     sourceGapCount: 0,
     hasFactCheckMustFix: false,
     blockingDeductions: []
@@ -33,7 +36,7 @@ test('quality threshold defaults to 85 and preserves numeric boundary behavior',
 });
 
 test('quality threshold does not override hard blockers at high scores', () => {
-  assert.equal(determineQualityStatus(90, QUALITY_THRESHOLD, {
+  assert.equal(determineQualityStatus(qualityGatePolicy.threshold + 5, qualityGatePolicy.threshold, {
     sourceGapCount: 0,
     hasFactCheckMustFix: false,
     blockingDeductions: [{ category: 'composition', points: 4 }]
@@ -410,7 +413,7 @@ test('generic bucket is not promoted by camera wording in generated text', () =>
   assert.equal(report.metrics.legacy_regex_camera_article_count >= 3, true);
   const genericResult = report.article_results.find(item => item.headline === generic.headline);
   assert.equal(genericResult.scope_count.relevance_bucket, 'generic_tech_watchlist');
-  assert.match(genericResult.scope_count.exclusion_reason_if_not_counted, /does not count/);
+  assert.match(genericResult.scope_count.exclusion_reason_if_not_counted, /forbidden by Newsletter Policy/);
   assert.equal(genericResult.status, 'DEMOTE');
   assert.equal(sectionPassesArticleGate(generic, report, { status: 'PASS', must_fix: [], source_gaps: [] }), false);
 });
@@ -462,13 +465,26 @@ test('quality report supports fallback composition from structured SoC and tooli
   assert.equal(report.metrics.composition_mode, 'FALLBACK_COMPOSITION');
 });
 
-test('quality gate keeps underfilled drafts in NEEDS_FIX even above threshold', () => {
-  const sections = validSections(3);
+test('quality gate keeps drafts below configured article minimum in NEEDS_FIX even above threshold', () => {
+  const sections = validSections(articlePolicy.mainArticleCount.min - 1);
   const report = reportFor(sections, reporterCandidatesFor(sections));
 
-  assert.equal(report.score >= QUALITY_THRESHOLD, true);
+  assert.equal(report.score >= qualityGatePolicy.threshold, true);
   assert.equal(report.status, 'NEEDS_FIX');
-  assert.ok(report.deductions.some(item => item.reason.includes('Expected 4-5 main articles')));
+  assert.ok(report.deductions.some(item => item.reason.includes('outside Newsletter Policy range')));
+});
+
+test('quality gate keeps drafts without required primary camera stack in NEEDS_FIX even above threshold', () => {
+  const sections = validSections(articlePolicy.mainArticleCount.min);
+  const supportingBuckets = articlePolicy.supportingMainBuckets;
+  const report = reportFor(sections, sections.map((item, index) =>
+    scopedCandidate(item.sources[0].url, supportingBuckets[index % supportingBuckets.length])
+  ));
+
+  assert.equal(report.score >= qualityGatePolicy.threshold, true);
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.equal(report.metrics.primary_camera_stack_count, 0);
+  assert.ok(report.deductions.some(item => item.reason.includes('Primary Camera Stack article count')));
 });
 
 test('quality gate keeps fact-check must_fix in NEEDS_FIX even above threshold', () => {
@@ -488,7 +504,7 @@ test('quality gate keeps fact-check must_fix in NEEDS_FIX even above threshold',
     }
   );
 
-  assert.equal(report.score >= QUALITY_THRESHOLD, true);
+  assert.equal(report.score >= qualityGatePolicy.threshold, true);
   assert.equal(report.status, 'NEEDS_FIX');
   assert.equal(report.metrics.must_fix_count, 1);
 });
@@ -701,18 +717,24 @@ test('bad regression fixtures cannot pass the main article quality gate', () => 
 });
 
 test('quality report markdown separates score threshold max score and result', () => {
+  const score = qualityGatePolicy.threshold - 15;
+  const underfilledCount = articlePolicy.mainArticleCount.min - 1;
   const markdown = buildQualityReportMarkdown({
     date: '2026-05-03',
-    score: 70,
+    score,
     max_score: 100,
-    threshold: 85,
+    threshold: qualityGatePolicy.threshold,
     status: 'NEEDS_FIX',
-    summary: '품질 점수 70, 기준 85, 만점 100.',
+    summary: 'Quality score is below the configured threshold.',
     deductions: [
-      { category: 'composition', points: 4, reason: 'Expected 4-5 main articles, found 3.' }
+      {
+        category: 'composition',
+        points: 4,
+        reason: `Main article count ${underfilledCount} is outside Newsletter Policy range (${articleCountRangeText()}).`
+      }
     ],
     metrics: {
-      article_count: 3,
+      article_count: underfilledCount,
       briefing_count: 3,
       camera_article_count: 2,
       ai_article_count: 1,
@@ -738,14 +760,14 @@ test('quality report markdown separates score threshold max score and result', (
     }]
   });
 
-  assert.match(markdown, /Quality score: 70/);
-  assert.match(markdown, /Quality threshold: 85/);
+  assert.ok(markdown.includes(`Quality score: ${score}`));
+  assert.ok(markdown.includes(`Quality threshold: ${qualityGatePolicy.threshold}`));
   assert.match(markdown, /Max score: 100/);
   assert.match(markdown, /Result: NEEDS_FIX/);
   assert.match(markdown, /## Article Gate Results/);
   assert.match(markdown, /Generic AI assistant release/);
   assert.match(markdown, /## Hard Fails/);
   assert.match(markdown, /## Soft Deductions/);
-  assert.match(markdown, /Underfilled\/composition failure: only 3 main articles/);
-  assert.doesNotMatch(markdown, /70\/85/);
+  assert.match(markdown, /Article composition failure:/);
+  assert.doesNotMatch(markdown, new RegExp(`${score}/${qualityGatePolicy.threshold}`));
 });

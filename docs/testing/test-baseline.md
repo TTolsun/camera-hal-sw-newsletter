@@ -31,8 +31,8 @@ npm.cmd run test:selection-diagnostics
 
 - `2026-05-04`: unresolved fact-check `must_fix`가 있음.
 - `2026-05-04`: `selectedImage`가 fallback 이후에도 external URL을 가리킨다는 image warning이 있음.
-- `2026-05-03`: main article count가 3개로 현재 format의 4-5개 기준에 미달함.
-- `2026-05-02`: main article count가 6개로 현재 format의 4-5개 기준을 초과함.
+- `2026-05-03`: main article count가 현재 Article Composition Policy 기준에 미달함.
+- `2026-05-02`: main article count가 현재 Article Composition Policy 기준을 초과함.
 - `2026-05-02`: fact-check `source_gap_count`가 6개임.
 
 ## 정책

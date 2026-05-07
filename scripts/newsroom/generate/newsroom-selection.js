@@ -6,14 +6,25 @@ const {
   BUCKETS,
   classifyAospCameraStackCandidate
 } = require('../common/aosp-camera-scope');
+const {
+  POLICY_REL_PATH,
+  articlePolicy,
+  articleCountRangeText,
+  isForbiddenMainBucket,
+  isMainArticleAllowedBucket,
+  isPrimaryCameraStackBucket,
+  isSupportingMainBucket,
+  publishGateCriteriaText
+} = require('../common/newsletter-policy');
 
 const SHORTLIST_CAP = 12;
 const RESERVE_MIN_CANDIDATES = 4;
 const RESERVE_MAX_CANDIDATES = 7;
-const MIN_FINAL_ARTICLES = 4;
-const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = 2;
-const MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES = 3;
-const MAX_FINAL_ARTICLES = 5;
+// Legacy compatibility exports only. New selection code should prefer articlePolicy.
+const MIN_FINAL_ARTICLES = articlePolicy.mainArticleCount.min;
+const MAX_FINAL_ARTICLES = articlePolicy.mainArticleCount.max;
+const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = articlePolicy.primaryCameraStack.minRequired;
+const MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES = articlePolicy.primaryCameraStack.minRequired;
 const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
 const MIN_CAMERA_HAL_DIRECTNESS = 2;
 const MIN_SCOPE_RELEVANCE = 2;
@@ -214,18 +225,35 @@ function isGenericTechWatchlist(candidate) {
   return candidateScope(candidate).relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST;
 }
 
+function candidateBucket(candidate) {
+  return candidateScope(candidate).relevance_bucket;
+}
+
 function hasSelectableScope(candidate) {
-  return !isGenericTechWatchlist(candidate) && scopeRelevanceScore(candidate) >= MIN_SCOPE_RELEVANCE;
+  return isMainArticleAllowedBucket(candidateBucket(candidate)) &&
+    scopeRelevanceScore(candidate) >= MIN_SCOPE_RELEVANCE;
 }
 
 function isNonFallbackReviewableScope(candidate) {
-  const bucket = candidateScope(candidate).relevance_bucket;
+  const bucket = candidateBucket(candidate);
   return [
     BUCKETS.DIRECT_AOSP_CAMERA,
     BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
     BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
     BUCKETS.SOC_PLATFORM_SIGNAL
   ].includes(bucket);
+}
+
+function isPrimaryCameraStackScope(candidate) {
+  return isPrimaryCameraStackBucket(candidateBucket(candidate));
+}
+
+function isSupportingMainScope(candidate) {
+  return isSupportingMainBucket(candidateBucket(candidate));
+}
+
+function isForbiddenMainScope(candidate) {
+  return isForbiddenMainBucket(candidateBucket(candidate));
 }
 
 function hasAiValue(candidate) {
@@ -526,7 +554,7 @@ function reserveCandidates(shortlist, selected, options = {}) {
     if (reserve.length >= maxReserve) break;
     if (selectedUrls.has(candidate.normalized_url)) continue;
     if (candidate.main_article_score_eligible === false) continue;
-    if (candidateScope(candidate).relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) continue;
+    if (isForbiddenMainScope(candidate)) continue;
     reserve.push({
       ...candidate,
       selected: false,
@@ -550,7 +578,7 @@ function reserveCandidates(shortlist, selected, options = {}) {
         final_selected: false,
         reserve_candidate: true,
         selection_stage: 'deterministic-reserve',
-        selection_slot: candidateScope(candidate).relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST
+        selection_slot: isForbiddenMainScope(candidate)
           ? 'thin-week-watchlist-reserve'
           : 'reserve'
       });
@@ -591,35 +619,42 @@ function selectFinalArticles(shortlist, options = {}) {
 }
 
 function selectionWarnings(selected) {
-  const count = ensureArray(selected).length;
-  const nonFallbackCount = ensureArray(selected).filter(isNonFallbackReviewableScope).length;
-  if (nonFallbackCount >= ABSOLUTE_MIN_REVIEWABLE_ARTICLES && count < MIN_FINAL_ARTICLES) {
-    return [
-      `Thin-week review path: only ${count} eligible non-duplicate final article input(s) remain after deterministic filtering. Review artifacts may be generated, but publication is not ready.`
-    ];
-  }
   return [];
 }
 
 function selectionErrors(selected) {
   const items = ensureArray(selected);
   const errors = [];
-  const nonFallbackCount = items.filter(isNonFallbackReviewableScope).length;
-  if (items.length < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
-    errors.push(`Only ${items.length} eligible non-duplicate final article input(s) remain after deterministic filtering.`);
+  const primaryCount = items.filter(isPrimaryCameraStackScope).length;
+  const forbiddenCount = items.filter(isForbiddenMainScope).length;
+  if (items.length < articlePolicy.mainArticleCount.min) {
+    errors.push(`Only ${items.length} eligible non-duplicate final article input(s) remain after deterministic filtering; Newsletter Policy requires at least ${articlePolicy.mainArticleCount.min}.`);
   }
-  if (nonFallbackCount < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
-    errors.push(`Only ${nonFallbackCount} non-fallback Camera/Android/driver/SoC final article input(s) remain after deterministic filtering. C++/AI tooling fallback does not count toward ABSOLUTE_MIN_REVIEWABLE_ARTICLES.`);
+  if (items.length > articlePolicy.mainArticleCount.max) {
+    errors.push(`${items.length} eligible final article input(s) were selected; Newsletter Policy allows at most ${articlePolicy.mainArticleCount.max}.`);
+  }
+  if (primaryCount < articlePolicy.primaryCameraStack.minRequired) {
+    errors.push(`Only ${primaryCount} Primary Camera Stack final article input(s) remain after deterministic filtering; Newsletter Policy requires at least ${articlePolicy.primaryCameraStack.minRequired}.`);
+  }
+  if (forbiddenCount > 0) {
+    errors.push(`${forbiddenCount} forbidden bucket final article input(s) remain after deterministic filtering; forbidden buckets: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`);
   }
   if (items.length > 0 && items.every(candidate => !hasSelectableScope(candidate))) {
-    errors.push('No AOSP Camera / Camera Driver / SoC Platform / native tooling eligible final article input remains after deterministic filtering.');
+    errors.push('No Newsletter Policy-allowed final article input remains after deterministic filtering.');
   }
   return errors;
 }
 
 function publishGatePasses(summary) {
-  return number(summary.selected_article_count) >= MIN_FINAL_ARTICLES &&
-    number(summary.non_fallback_reviewable_article_count) >= MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES;
+  const selectedCount = number(summary.selected_article_count);
+  const primaryCount = number(summary.primary_camera_stack_topic_count);
+  const supportingCount = number(summary.supporting_main_article_count);
+  const forbiddenCount = number(summary.forbidden_main_article_count);
+  return selectedCount >= articlePolicy.mainArticleCount.min &&
+    selectedCount <= articlePolicy.mainArticleCount.max &&
+    primaryCount >= articlePolicy.primaryCameraStack.minRequired &&
+    forbiddenCount === 0 &&
+    primaryCount + supportingCount === selectedCount;
 }
 
 function summarizeExclusionReasons(excluded) {
@@ -666,10 +701,12 @@ function bucketCountMap(candidates) {
 
 function compositionSummary(candidates) {
   const bucket_counts = bucketCountMap(candidates);
-  const primary_camera_stack_topic_count =
-    bucket_counts[BUCKETS.DIRECT_AOSP_CAMERA] +
-    bucket_counts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE] +
-    bucket_counts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT];
+  const primary_camera_stack_topic_count = articlePolicy.primaryCameraStack.buckets
+    .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
+  const supporting_main_article_count = articlePolicy.supportingMainBuckets
+    .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
+  const forbidden_main_article_count = articlePolicy.forbiddenMainBuckets
+    .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
   const non_fallback_reviewable_article_count =
     primary_camera_stack_topic_count +
     bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL];
@@ -687,6 +724,8 @@ function compositionSummary(candidates) {
     cpp_ai_tooling_fallback_count: bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK],
     generic_tech_watchlist_count: bucket_counts[BUCKETS.GENERIC_TECH_WATCHLIST],
     primary_camera_stack_topic_count,
+    supporting_main_article_count,
+    forbidden_main_article_count,
     non_fallback_reviewable_article_count,
     fallback_topic_count
   };
@@ -706,10 +745,14 @@ function selectionShortageHints(summary = {}) {
   if (number(summary.soc_platform_signal_count) === 0) {
     hints.push('Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.');
   }
-  if (number(summary.non_fallback_reviewable_article_count) < ABSOLUTE_MIN_REVIEWABLE_ARTICLES) {
-    hints.push(`C++/AI tooling fallback is support material only; collect at least ${ABSOLUTE_MIN_REVIEWABLE_ARTICLES} non-fallback Camera/Android/driver/SoC candidates before LLM generation.`);
-  } else if (number(summary.non_fallback_reviewable_article_count) < MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES) {
-    hints.push(`Review Gate can proceed with ${ABSOLUTE_MIN_REVIEWABLE_ARTICLES} non-fallback Camera/Android/driver/SoC candidates, but Publish Gate requires ${MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES}.`);
+  if (number(summary.primary_camera_stack_topic_count) < articlePolicy.primaryCameraStack.minRequired) {
+    hints.push(`Collect at least ${articlePolicy.primaryCameraStack.minRequired} Primary Camera Stack candidate(s): ${articlePolicy.primaryCameraStack.buckets.join(', ')}.`);
+  }
+  if (number(summary.selected_article_count) < articlePolicy.mainArticleCount.min) {
+    hints.push(`Collect enough eligible candidates to satisfy the Newsletter Policy article count range (${articleCountRangeText()}).`);
+  }
+  if (number(summary.forbidden_main_article_count) > 0) {
+    hints.push(`Keep forbidden buckets out of main article selection: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`);
   }
   return hints;
 }
@@ -718,25 +761,11 @@ function compositionMode(selected, errors = []) {
   const summary = compositionSummary(selected);
   if (
     ensureArray(errors).length > 0 ||
-    summary.selected_article_count < ABSOLUTE_MIN_REVIEWABLE_ARTICLES ||
-    summary.non_fallback_reviewable_article_count < ABSOLUTE_MIN_REVIEWABLE_ARTICLES ||
-    (
-      summary.selected_article_count > 0 &&
-      summary.generic_tech_watchlist_count === summary.selected_article_count
-    )
+    !publishGatePasses(summary)
   ) {
     return COMPOSITION_MODES.NEEDS_FIX;
   }
-  if (summary.selected_article_count < MIN_FINAL_ARTICLES) {
-    return COMPOSITION_MODES.THIN_WEEK_REVIEW;
-  }
-  if (
-    summary.non_fallback_reviewable_article_count < MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES &&
-    summary.fallback_topic_count > 0
-  ) {
-    return COMPOSITION_MODES.FALLBACK_COMPOSITION;
-  }
-  if (summary.primary_camera_stack_topic_count < 2 && summary.fallback_topic_count > 0) {
+  if (summary.supporting_main_article_count > 0) {
     return COMPOSITION_MODES.FALLBACK_COMPOSITION;
   }
   return COMPOSITION_MODES.NORMAL;
@@ -744,18 +773,15 @@ function compositionMode(selected, errors = []) {
 
 function compositionReason(mode, summary) {
   if (mode === COMPOSITION_MODES.FALLBACK_COMPOSITION) {
-    if (summary.non_fallback_reviewable_article_count < MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES) {
-      return `Review Gate passed with ${summary.non_fallback_reviewable_article_count} non-fallback Camera/Android/driver/SoC candidate(s), but Publish Gate requires ${MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES}. SoC/platform or C++/AI fallback topics are review-only until stronger candidates are available.`;
-    }
-    return `Primary AOSP Camera/driver/platform-adjacent candidates were below the normal target (${summary.primary_camera_stack_topic_count}); SoC/platform or C++/AI fallback topics filled the 4-5 article review set.`;
+    return `Article Composition Policy passed with ${summary.primary_camera_stack_topic_count} Primary Camera Stack article(s) and ${summary.supporting_main_article_count} supporting main article(s).`;
   }
   if (mode === COMPOSITION_MODES.THIN_WEEK_REVIEW) {
     return `Only ${summary.selected_article_count} main article candidate(s) are available after deterministic filtering; keep this PR review-only.`;
   }
   if (mode === COMPOSITION_MODES.NEEDS_FIX) {
-    return 'Deterministic selection is not publish-ready because too few eligible candidates remain or the composition is generic/watchlist-only.';
+    return `Deterministic selection is not publish-ready because it does not satisfy Newsletter Policy: ${publishGateCriteriaText()}.`;
   }
-  return 'Normal composition: primary AOSP Camera, camera driver/image pipeline, or Android camera-adjacent topics meet the expected coverage.';
+  return 'Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.';
 }
 
 function buildShortlistReport(date, collectedCandidates, options = {}) {
@@ -826,23 +852,20 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
       min_non_fallback_publish_ready_articles: MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
       max_final_articles: MAX_FINAL_ARTICLES,
+      policy_config: POLICY_REL_PATH.replace(/\\/g, '/'),
+      article_policy: articlePolicy,
       shortlist_target_range: '8-12 candidates before Gemini reporter/editor prompts.',
       main_article_score_threshold: MAIN_ARTICLE_SCORE_THRESHOLD,
       minimum_camera_hal_directness: MIN_CAMERA_HAL_DIRECTNESS,
       minimum_scope_relevance: MIN_SCOPE_RELEVANCE,
-      editorial_scope: 'AOSP Camera + Camera Driver + SoC Platform, with C++/AI/tooling as lower-priority fallback.',
+      editorial_scope: 'AOSP Camera + Camera Driver + SoC Platform, with configured supporting main buckets allowed by Newsletter Policy.',
       priority_order: [
-        BUCKETS.DIRECT_AOSP_CAMERA,
-        BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
-        BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
-        BUCKETS.SOC_PLATFORM_SIGNAL,
-        BUCKETS.CPP_AI_TOOLING_FALLBACK,
-        BUCKETS.GENERIC_TECH_WATCHLIST
+        ...articlePolicy.primaryCameraStack.buckets,
+        ...articlePolicy.supportingMainBuckets,
+        ...articlePolicy.forbiddenMainBuckets
       ],
-      soc_platform_fallback: 'Public SoC / CPU / GPU / NPU / ISP / power / thermal / performance signals are lower-priority fallback, not excluded.',
-      cxx_fallback: 'Use C++ / AI / developer productivity as fallback when it supports native camera, driver, SoC, build, test, debugging, or performance work.',
-      cxx_fallback_minimum_counting: `cpp_ai_tooling_fallback does not count toward ABSOLUTE_MIN_REVIEWABLE_ARTICLES; Review Gate requires ${ABSOLUTE_MIN_REVIEWABLE_ARTICLES} non-fallback Camera/Android/driver/SoC candidates and Publish Gate requires ${MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES}.`,
-      generic_watchlist: 'generic_tech_watchlist is not automatically promoted to main article selection.'
+      supporting_main: `Supporting main buckets are allowed when the required Primary Camera Stack count is satisfied: ${articlePolicy.supportingMainBuckets.join(', ')}.`,
+      forbidden_main: `Forbidden buckets are not promoted to main article selection: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`
     },
     primary_selected_articles: selected,
     shortlisted_candidates: markedShortlist,
@@ -891,6 +914,7 @@ module.exports = {
   normalizeTitle,
   normalizeUrl,
   normalizedUrlHash,
+  publishGatePasses,
   reporterInputFromShortlist,
   scoreCandidate,
   selectFinalArticles,

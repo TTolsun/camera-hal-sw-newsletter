@@ -11,6 +11,7 @@ const {
   writeNewsletterDate,
   writeSelectionDiagnosticsArtifact
 } = require('../scripts/newsroom/cli/gemini-newsroom-newsletter');
+const { articlePolicy } = require('../scripts/lib/newsletter-policy');
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -25,6 +26,9 @@ function deterministicFailureShortlist(date) {
     soc_platform_signal_count: 0,
     cpp_ai_tooling_fallback_count: 0,
     generic_tech_watchlist_count: 0,
+    primary_camera_stack_topic_count: 1,
+    supporting_main_article_count: 0,
+    forbidden_main_article_count: 0,
     non_fallback_reviewable_article_count: 1
   };
   return {
@@ -52,8 +56,8 @@ function deterministicFailureShortlist(date) {
     reserve_candidates: [],
     excluded_candidates: [],
     selection_warnings: [],
-    selection_errors: ['Only 1 eligible non-duplicate final article input(s) remain after deterministic filtering.'],
-    selection_shortage_hints: ['C++/AI tooling fallback is support material only; collect at least 2 non-fallback Camera/Android/driver/SoC candidates before LLM generation.'],
+    selection_errors: [`Only 1 eligible non-duplicate final article input(s) remain after deterministic filtering; Newsletter Policy requires at least ${articlePolicy.mainArticleCount.min}.`],
+    selection_shortage_hints: ['Collect enough eligible candidates to satisfy the Newsletter Policy article count range.'],
     exclusion_reason_summary: []
   };
 }
@@ -89,6 +93,9 @@ test('deterministic pre-LLM failure artifacts include date, status, and selectio
   assert.deepEqual(report.selection_errors, shortlistReport.selection_errors);
   assert.deepEqual(report.selection_shortage_hints, shortlistReport.selection_shortage_hints);
   assert.equal(report.gate_summary.non_fallback_reviewable_article_count, 1);
+  assert.equal(report.gate_summary.primary_camera_stack_topic_count, 1);
+  assert.equal(report.gate_summary.supporting_main_article_count, 0);
+  assert.equal(report.gate_summary.forbidden_main_article_count, 0);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'selection-report.md')), true);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'selection-diagnostics.md')), true);
 });
