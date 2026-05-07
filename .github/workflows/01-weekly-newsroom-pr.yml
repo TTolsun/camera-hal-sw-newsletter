@@ -130,6 +130,12 @@ jobs:
       - name: Doctor runtime config
         run: npm run doctor:config
 
+      - name: Validate newsletter policy
+        run: npm run validate:policy
+
+      - name: Check policy docs
+        run: npm run check:policy-docs
+
       - name: Run unit and regression tests
         run: npm run test
 

@@ -1,16 +1,18 @@
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
 const {
   buildNewsletterQualityReport
 } = require('../validate/newsletter-quality');
 const { qualityGatePolicy } = require('../common/newsletter-policy');
 const { readJson } = require('../common/common');
 const {
-  changedArtifactDate,
   newsroomDir,
   newsroomRelPath
 } = require('../common/artifact-paths');
+const {
+  historicalPolicyWarningReason,
+  strictTargetDates
+} = require('../common/validation-targets');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -57,44 +59,7 @@ function newsletterItems() {
   return items;
 }
 
-function changedFilesFromGit() {
-  const candidates = [];
-  const eventName = process.env.GITHUB_EVENT_NAME || '';
-  const baseRef = process.env.GITHUB_BASE_REF || '';
-
-  if (eventName === 'pull_request' && baseRef) {
-    candidates.push(`origin/${baseRef}...HEAD`);
-  } else if (eventName === 'push') {
-    candidates.push('HEAD^..HEAD');
-  }
-
-  candidates.push('origin/main...HEAD');
-
-  for (const range of candidates) {
-    try {
-      const output = execFileSync('git', ['diff', '--name-only', range], {
-        cwd: root,
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'ignore']
-      });
-      return output.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
-    } catch (_) {
-      // Try the next range; local validation may not have origin/main or a parent commit.
-    }
-  }
-  return [];
-}
-
-function changedNewsletterDates() {
-  const dates = new Set();
-  for (const file of changedFilesFromGit()) {
-    const date = changedArtifactDate(file);
-    if (date) dates.add(date);
-  }
-  return dates;
-}
-
-function validateQualityReport(item, requireReport) {
+function validateQualityReport(item, { requireReport = false, strictPolicy = false } = {}) {
   const dateNewsroomDir = newsroomDir(root, item.date);
   const reportPath = path.join(dateNewsroomDir, 'quality-report.json');
   if (!fs.existsSync(reportPath)) {
@@ -113,14 +78,20 @@ function validateQualityReport(item, requireReport) {
     return;
   }
   if (threshold < qualityGatePolicy.threshold) {
-    fail(`Newsletter ${item.date} quality threshold must be at least ${qualityGatePolicy.threshold}, found ${threshold}.`);
-  }
-  if (!requireReport && (score < threshold || report.status !== 'PASS')) {
-    warn(`Newsletter ${item.date} has non-publishable review quality report ${score}/${threshold} ${report.status}; not enforcing because this run is not publishing that issue.`);
-    return;
+    const message = `Newsletter ${item.date} quality threshold is below current Newsletter Policy threshold ${qualityGatePolicy.threshold}, found ${threshold}.`;
+    if (strictPolicy) {
+      fail(message);
+    } else {
+      warn(`${message} ${historicalPolicyWarningReason()}.`);
+    }
   }
   if (score < threshold || report.status !== 'PASS') {
-    fail(`Newsletter ${item.date} quality score ${score}/${threshold} does not pass.`);
+    const message = `Newsletter ${item.date} quality score ${score}/${threshold} does not pass: ${report.status}.`;
+    if (strictPolicy) {
+      fail(message);
+    } else {
+      warn(`${message} ${historicalPolicyWarningReason()}.`);
+    }
   }
   if (!Array.isArray(report.deductions)) {
     fail(`Newsletter ${item.date} quality report must include deductions array.`);
@@ -138,15 +109,24 @@ function validateQualityReport(item, requireReport) {
       staleClaimReport
     });
     if (recomputed.score !== score || recomputed.status !== report.status) {
-      fail(`Newsletter ${item.date} quality report is stale. Expected ${recomputed.score}/${threshold} ${recomputed.status}, found ${score}/${threshold} ${report.status}.`);
+      const message = `Newsletter ${item.date} quality report is stale. Expected ${recomputed.score}/${threshold} ${recomputed.status}, found ${score}/${threshold} ${report.status}.`;
+      if (strictPolicy) {
+        fail(message);
+      } else {
+        warn(`${message} ${historicalPolicyWarningReason()}.`);
+      }
     }
   }
 }
 
-const changedDates = changedNewsletterDates();
-const requireGeneratedReport = fs.existsSync(newsletterDatePath) || process.env.REQUIRE_NEWSLETTER_QUALITY === '1';
+const strictDates = strictTargetDates({ root, newsletterDatePath });
+const requireAllReports = process.env.REQUIRE_NEWSLETTER_QUALITY === '1';
 for (const item of newsletterItems()) {
-  validateQualityReport(item, requireGeneratedReport || changedDates.has(item.date));
+  const strictPolicy = requireAllReports || strictDates.has(item.date);
+  validateQualityReport(item, {
+    requireReport: strictPolicy,
+    strictPolicy
+  });
 }
 
 if (warnings.length > 0) {

@@ -113,7 +113,8 @@ test('final selection prioritizes HAL candidates and treats AI/C++ as optional',
 
   const selected = selectFinalArticles(shortlist);
 
-  assert.ok(selected.length >= 4 && selected.length <= 5);
+  assert.ok(selected.length >= articlePolicy.mainArticleCount.min);
+  assert.ok(selected.length <= articlePolicy.mainArticleCount.max);
   assert.ok(selected.every(item => item.camera_platform_candidate));
   assert.ok(selected.some(item => item.optional_ai_cpp_candidate));
 });
@@ -156,36 +157,46 @@ test('configured minimum composition with required primary and supporting articl
 });
 
 test('configured minimum composition with mixed supporting buckets is publish-ready', () => {
+  const requiredPrimaryCount = articlePolicy.primaryCameraStack.minRequired;
+  const supportingCount = articlePolicy.mainArticleCount.min - requiredPrimaryCount;
+  const primaryCandidates = Array.from({ length: requiredPrimaryCount }, (_, index) => policyPrimaryCandidate(index));
+  const supportingCandidates = Array.from({ length: supportingCount }, (_, index) => {
+    if (index === 0) {
+      return policySupportingCandidate(index, {
+        title: 'Snapdragon ISP policy supporting signal',
+        url: 'https://example.com/policy-supporting-soc',
+        summary: 'Snapdragon SoC ISP thermal and power behavior changes image pipeline performance.',
+        api_or_component: 'Snapdragon ISP',
+        behavior_change: 'Image pipeline thermal behavior changed.',
+        relevance_bucket: 'soc_platform_signal',
+        editorial_priority: 4,
+        soc_platform_relevance: 5,
+        native_tooling_relevance: 0,
+        counts_as_soc_topic: true,
+        counts_as_fallback_topic: false
+      });
+    }
+    return policySupportingCandidate(index);
+  });
   const report = buildShortlistReport('2026-05-03', [
-    policyPrimaryCandidate(0),
-    policySupportingCandidate(0, {
-      title: 'Snapdragon ISP policy supporting signal',
-      url: 'https://example.com/policy-supporting-soc',
-      summary: 'Snapdragon SoC ISP thermal and power behavior changes image pipeline performance.',
-      api_or_component: 'Snapdragon ISP',
-      behavior_change: 'Image pipeline thermal behavior changed.',
-      relevance_bucket: 'soc_platform_signal',
-      editorial_priority: 4,
-      soc_platform_relevance: 5,
-      native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      counts_as_fallback_topic: false
-    }),
-    policySupportingCandidate(1)
+    ...primaryCandidates,
+    ...supportingCandidates
   ]);
 
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.publish_ready, true);
-  assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.primaryCameraStack.minRequired);
-  assert.equal(report.composition_summary.supporting_main_article_count, articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, requiredPrimaryCount);
+  assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
 });
 
 test('below configured minimum remains a hard deterministic selection error', () => {
-  const report = buildShortlistReport('2026-05-03', [
-    policyPrimaryCandidate(0)
-  ]);
+  const belowMinimumCount = Math.max(0, articlePolicy.mainArticleCount.min - 1);
+  const report = buildShortlistReport('2026-05-03',
+    Array.from({ length: belowMinimumCount }, (_, index) => policyPrimaryCandidate(index))
+  );
 
-  assert.equal(report.selected_article_count, 1);
+  assert.ok(report.selected_article_count <= belowMinimumCount);
+  assert.ok(report.selected_article_count < articlePolicy.mainArticleCount.min);
   assert.equal(report.publish_ready, false);
   assert.equal(report.composition_mode, 'NEEDS_FIX');
   assert.ok(report.selection_errors.some(error => error.includes('Newsletter Policy requires')));
@@ -206,9 +217,11 @@ test('supporting-only composition is not publish-ready', () => {
 });
 
 test('forbidden bucket in main candidates is not publish-ready', () => {
+  const requiredPrimaryCount = articlePolicy.primaryCameraStack.minRequired;
+  const supportingCount = Math.max(0, articlePolicy.mainArticleCount.min - requiredPrimaryCount - 1);
   const selected = [
-    policyPrimaryCandidate(0),
-    policySupportingCandidate(0),
+    ...Array.from({ length: requiredPrimaryCount }, (_, index) => policyPrimaryCandidate(index)),
+    ...Array.from({ length: supportingCount }, (_, index) => policySupportingCandidate(index)),
     candidate({
       title: 'Generic technology watchlist item',
       url: 'https://example.com/generic-watchlist-main',
@@ -227,7 +240,7 @@ test('forbidden bucket in main candidates is not publish-ready', () => {
   const summary = compositionSummary(selected);
   const errors = selectionErrors(selected);
 
-  assert.equal(summary.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(summary.selected_article_count, requiredPrimaryCount + supportingCount + 1);
   assert.equal(summary.forbidden_main_article_count, 1);
   assert.equal(publishGatePasses(summary), false);
   assert.ok(errors.some(error => error.includes('forbidden bucket')));
@@ -339,8 +352,8 @@ test('official camera candidates below configured minimum are not publish-ready'
     normalizeCandidate(cameraXItem)
   ]);
 
-  assert.equal(report.selected_article_count, 2);
-  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 2);
+  assert.ok(report.selected_article_count < articlePolicy.mainArticleCount.min);
+  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, report.selected_article_count);
   assert.equal(report.review_gate_passed, false);
   assert.equal(report.publish_gate_passed, false);
   assert.equal(report.publish_ready, false);
@@ -365,52 +378,29 @@ test('month-level dated candidates do not receive exact-day freshness scoring', 
   assert.ok(month.total < exact.total);
 });
 
-test('fallback composition uses SoC and native tooling when direct camera stack topics are scarce', () => {
-  const report = buildShortlistReport('2026-05-03', [
-    candidate({
-      title: 'CameraX release gives one direct Android Camera validation item',
-      url: 'https://example.com/camerax-direct',
-      relevance_bucket: 'direct_aosp_camera',
-      editorial_priority: 1,
-      aosp_camera_directness: 5,
-      driver_stack_relevance: 0,
-      soc_platform_relevance: 0,
-      native_tooling_relevance: 0,
-      counts_as_primary_camera_topic: true
-    }),
-    candidate({
-      title: 'Snapdragon ISP DVFS update affects camera thermal budget',
-      url: 'https://example.com/snapdragon-isp',
-      summary: 'Snapdragon SoC ISP DVFS thermal and power behavior changes performance per watt for image pipelines.',
-      api_or_component: 'Snapdragon ISP DVFS',
-      behavior_change: 'Thermal and power behavior affects image pipeline performance budget.',
-      relevance_bucket: 'soc_platform_signal',
-      editorial_priority: 4,
-      aosp_camera_directness: 0,
-      driver_stack_relevance: 0,
-      soc_platform_relevance: 5,
-      native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      camera_hal_relevance_score: 0
-    }),
-    candidate({
-      title: 'Arm GPU memory bandwidth note for image processing throughput',
-      url: 'https://example.com/arm-gpu-memory',
-      summary: 'Arm GPU memory bandwidth, cache, interconnect, thermal, and power guidance for SoC performance.',
-      api_or_component: 'Arm GPU memory bandwidth',
-      behavior_change: 'Memory bandwidth and cache behavior changes image processing throughput analysis.',
-      relevance_bucket: 'soc_platform_signal',
-      editorial_priority: 4,
-      aosp_camera_directness: 0,
-      driver_stack_relevance: 0,
-      soc_platform_relevance: 4,
-      native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      camera_hal_relevance_score: 0
-    }),
-    candidate({
-      title: 'LLVM sanitizer workflow improves native camera debugging',
-      url: 'https://example.com/llvm-sanitizer',
+test('fallback composition uses supporting buckets when direct camera stack topics are scarce', () => {
+  const supportingCount = articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired;
+  const supportingCandidates = Array.from({ length: supportingCount }, (_, index) => {
+    if (index % 2 === 0) {
+      return candidate({
+        title: `Snapdragon ISP supporting signal ${index}`,
+        url: `https://example.com/snapdragon-isp-${index}`,
+        summary: 'Snapdragon SoC ISP DVFS thermal and power behavior changes performance per watt for image pipelines.',
+        api_or_component: 'Snapdragon ISP DVFS',
+        behavior_change: 'Thermal and power behavior affects image pipeline performance budget.',
+        relevance_bucket: 'soc_platform_signal',
+        editorial_priority: 4,
+        aosp_camera_directness: 0,
+        driver_stack_relevance: 0,
+        soc_platform_relevance: 5,
+        native_tooling_relevance: 0,
+        counts_as_soc_topic: true,
+        camera_hal_relevance_score: 0
+      });
+    }
+    return candidate({
+      title: `LLVM sanitizer workflow improves native camera debugging ${index}`,
+      url: `https://example.com/llvm-sanitizer-${index}`,
       summary: 'LLVM Clang sanitizer native debugging workflow improves C++ build and test productivity.',
       api_or_component: 'LLVM sanitizer',
       behavior_change: 'Sanitizer workflow improves native debugging and test productivity.',
@@ -422,16 +412,19 @@ test('fallback composition uses SoC and native tooling when direct camera stack 
       native_tooling_relevance: 4,
       counts_as_fallback_topic: true,
       camera_hal_relevance_score: 0
-    })
+    });
+  });
+  const report = buildShortlistReport('2026-05-03', [
+    ...Array.from({ length: articlePolicy.primaryCameraStack.minRequired }, (_, index) => policyPrimaryCandidate(index)),
+    ...supportingCandidates
   ]);
 
-  assert.equal(report.selected_article_count, 4);
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
   assert.equal(report.publish_ready, true);
   assert.equal(report.editor_review_required, true);
-  assert.equal(report.composition_summary.direct_aosp_camera_count, 1);
-  assert.equal(report.composition_summary.soc_platform_signal_count, 2);
-  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 1);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.primaryCameraStack.minRequired);
+  assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
 });
 
 test('generic watchlist-only pool remains needs-fix instead of fallback composition', () => {

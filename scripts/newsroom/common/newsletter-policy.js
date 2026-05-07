@@ -124,7 +124,7 @@ function deepFreeze(value) {
   return value;
 }
 
-function normalizePolicy(config) {
+function normalizeNewsletterPolicyConfig(config) {
   const article = config.articlePolicy;
   const quality = config.qualityGatePolicy;
   return deepFreeze({
@@ -149,51 +149,73 @@ function normalizePolicy(config) {
   });
 }
 
-const rawConfig = readPolicyConfig();
-const validation = validateNewsletterPolicyConfig(rawConfig);
-if (!validation.ok) {
-  throw new Error(`Invalid Newsletter Policy config:\n- ${validation.errors.join('\n- ')}`);
+function loadNewsletterPolicy(filePath = policyPath) {
+  const config = readPolicyConfig(filePath);
+  const validation = validateNewsletterPolicyConfig(config);
+  if (!validation.ok) {
+    const displayPath = path.relative(repoRoot, filePath).replace(/\\/g, '/') || filePath;
+    throw new Error(`Invalid Newsletter Policy config at ${displayPath}:\n- ${validation.errors.join('\n- ')}`);
+  }
+  return normalizeNewsletterPolicyConfig(config);
 }
 
-const policy = normalizePolicy(rawConfig);
-const articlePolicy = policy.articlePolicy;
-const qualityGatePolicy = policy.qualityGatePolicy;
+let defaultPolicyCache = null;
+
+function getDefaultNewsletterPolicy() {
+  if (!defaultPolicyCache) {
+    defaultPolicyCache = loadNewsletterPolicy(policyPath);
+  }
+  return defaultPolicyCache;
+}
+
+function getArticlePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.articlePolicy;
+}
+
+function getQualityGatePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.qualityGatePolicy;
+}
 
 function bucketValue(bucket) {
   return String(bucket || '').trim();
 }
 
-function isPrimaryCameraStackBucket(bucket) {
-  return articlePolicy.primaryCameraStack.buckets.includes(bucketValue(bucket));
+function isPrimaryCameraStackBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).primaryCameraStack.buckets.includes(bucketValue(bucket));
 }
 
-function isSupportingMainBucket(bucket) {
-  return articlePolicy.supportingMainBuckets.includes(bucketValue(bucket));
+function isSupportingMainBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).supportingMainBuckets.includes(bucketValue(bucket));
 }
 
-function isForbiddenMainBucket(bucket) {
-  return articlePolicy.forbiddenMainBuckets.includes(bucketValue(bucket));
+function isForbiddenMainBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).forbiddenMainBuckets.includes(bucketValue(bucket));
 }
 
-function isMainArticleAllowedBucket(bucket) {
-  return isPrimaryCameraStackBucket(bucket) || isSupportingMainBucket(bucket);
+function isMainArticleAllowedBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return isPrimaryCameraStackBucket(bucket, policy) || isSupportingMainBucket(bucket, policy);
 }
 
-function articleCountRangeText() {
+function articleCountRangeText(policy = getDefaultNewsletterPolicy()) {
+  const articlePolicy = getArticlePolicy(policy);
   const { min, max } = articlePolicy.mainArticleCount;
   return `${min}-${max}`;
 }
 
-function publishGateCriteriaText() {
+function publishGateCriteriaText(policy = getDefaultNewsletterPolicy()) {
+  const articlePolicy = getArticlePolicy(policy);
+  const qualityGatePolicy = getQualityGatePolicy(policy);
   return [
-    `main articles: ${articleCountRangeText()}`,
+    `main articles: ${articleCountRangeText(policy)}`,
     `required primary camera stack articles: ${articlePolicy.primaryCameraStack.minRequired}`,
     `forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.join(', ') || 'none'}`,
     `quality threshold: ${qualityGatePolicy.threshold}`
   ].join('; ');
 }
 
-function renderNewsletterPolicyBlock() {
+function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
+  const articlePolicy = getArticlePolicy(policy);
+  const qualityGatePolicy = getQualityGatePolicy(policy);
   return [
     POLICY_BLOCK_BEGIN,
     '<!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->',
@@ -213,34 +235,96 @@ function renderNewsletterPolicyBlock() {
   ].join('\n');
 }
 
-function replaceNewsletterPolicyBlock(text) {
-  const block = renderNewsletterPolicyBlock();
-  if (!text.includes(POLICY_BLOCK_BEGIN) || !text.includes(POLICY_BLOCK_END)) {
-    return `${text.replace(/\s*$/, '')}\n\n${block}\n`;
+function markerPositions(text, marker) {
+  const positions = [];
+  let start = 0;
+  while (start < text.length) {
+    const index = text.indexOf(marker, start);
+    if (index === -1) break;
+    positions.push(index);
+    start = index + marker.length;
   }
-  const pattern = new RegExp(`${POLICY_BLOCK_BEGIN}[\\s\\S]*?${POLICY_BLOCK_END}`);
-  return text.replace(pattern, block);
+  return positions;
 }
 
-// Legacy compatibility exports only. New code should prefer articlePolicy and qualityGatePolicy.
-const MIN_MAIN_ARTICLES = articlePolicy.mainArticleCount.min;
-const MAX_MAIN_ARTICLES = articlePolicy.mainArticleCount.max;
-const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
+function analyzeNewsletterPolicyBlock(text, policy = getDefaultNewsletterPolicy()) {
+  const beginPositions = markerPositions(text, POLICY_BLOCK_BEGIN);
+  const endPositions = markerPositions(text, POLICY_BLOCK_END);
+  const errors = [];
+  if (beginPositions.length === 0) errors.push(`missing BEGIN marker ${POLICY_BLOCK_BEGIN}`);
+  if (endPositions.length === 0) errors.push(`missing END marker ${POLICY_BLOCK_END}`);
+  if (beginPositions.length > 1) errors.push(`duplicate BEGIN marker ${POLICY_BLOCK_BEGIN}`);
+  if (endPositions.length > 1) errors.push(`duplicate END marker ${POLICY_BLOCK_END}`);
+  if (beginPositions.length === 1 && endPositions.length === 1 && beginPositions[0] > endPositions[0]) {
+    errors.push('marker order error: BEGIN marker must appear before END marker');
+  }
+
+  const expectedBlock = renderNewsletterPolicyBlock(policy);
+  let actualBlock = '';
+  if (errors.length === 0) {
+    actualBlock = text.slice(beginPositions[0], endPositions[0] + POLICY_BLOCK_END.length);
+    if (actualBlock !== expectedBlock) {
+      errors.push('generated Newsletter Policy block drift');
+    }
+  }
+
+  return {
+    ok: errors.length === 0,
+    errors,
+    expectedBlock,
+    actualBlock,
+    beginCount: beginPositions.length,
+    endCount: endPositions.length
+  };
+}
+
+function replaceNewsletterPolicyBlock(text, { policy = getDefaultNewsletterPolicy() } = {}) {
+  const beginPositions = markerPositions(text, POLICY_BLOCK_BEGIN);
+  const endPositions = markerPositions(text, POLICY_BLOCK_END);
+  const block = renderNewsletterPolicyBlock(policy);
+  if (beginPositions.length === 0 && endPositions.length === 0) {
+    return `${text.replace(/\s*$/, '')}\n\n${block}\n`;
+  }
+
+  const structuralErrors = analyzeNewsletterPolicyBlock(text, policy)
+    .errors
+    .filter(error => error !== 'generated Newsletter Policy block drift');
+  if (structuralErrors.length > 0) {
+    throw new Error(structuralErrors.join('; '));
+  }
+
+  return `${text.slice(0, beginPositions[0])}${block}${text.slice(endPositions[0] + POLICY_BLOCK_END.length)}`;
+}
 
 module.exports = {
   POLICY_BLOCK_BEGIN,
   POLICY_BLOCK_END,
   POLICY_REL_PATH,
-  articlePolicy,
-  qualityGatePolicy,
-  MIN_MAIN_ARTICLES,
-  MAX_MAIN_ARTICLES,
-  QUALITY_THRESHOLD,
+  get articlePolicy() {
+    return getArticlePolicy();
+  },
+  get qualityGatePolicy() {
+    return getQualityGatePolicy();
+  },
+  // Legacy compatibility exports only. New code should prefer articlePolicy and qualityGatePolicy.
+  get MIN_MAIN_ARTICLES() {
+    return getArticlePolicy().mainArticleCount.min;
+  },
+  get MAX_MAIN_ARTICLES() {
+    return getArticlePolicy().mainArticleCount.max;
+  },
+  get QUALITY_THRESHOLD() {
+    return getQualityGatePolicy().threshold;
+  },
+  analyzeNewsletterPolicyBlock,
   articleCountRangeText,
+  getDefaultNewsletterPolicy,
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,
   isPrimaryCameraStackBucket,
   isSupportingMainBucket,
+  loadNewsletterPolicy,
+  normalizeNewsletterPolicyConfig,
   publishGateCriteriaText,
   readPolicyConfig,
   renderNewsletterPolicyBlock,

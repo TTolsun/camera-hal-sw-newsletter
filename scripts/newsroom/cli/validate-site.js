@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
 const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('../render/image-candidates');
 const { repoLocalPath } = require('../render/article-image-resolver');
 const {
@@ -9,13 +8,16 @@ const {
   repoPath
 } = require('../common/common');
 const {
-  changedArtifactDate,
   newsroomDir
 } = require('../common/artifact-paths');
 const {
   articlePolicy,
   articleCountRangeText
 } = require('../common/newsletter-policy');
+const {
+  historicalPolicyWarningReason,
+  strictTargetDates
+} = require('../common/validation-targets');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -53,52 +55,6 @@ function readJsonIfExists(filePath) {
     warn(`Could not parse ${path.relative(root, filePath)} for quality warnings: ${error.message}`);
     return null;
   }
-}
-
-function changedFilesFromGit() {
-  const candidates = [];
-  const eventName = process.env.GITHUB_EVENT_NAME || '';
-  const baseRef = process.env.GITHUB_BASE_REF || '';
-
-  if (eventName === 'pull_request' && baseRef) {
-    candidates.push(`origin/${baseRef}...HEAD`);
-  } else if (eventName === 'push') {
-    candidates.push('HEAD^..HEAD');
-  }
-
-  candidates.push('origin/main...HEAD');
-
-  for (const range of candidates) {
-    try {
-      const output = execFileSync('git', ['diff', '--name-only', range], {
-        cwd: root,
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'ignore']
-      });
-      return output.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
-    } catch (_) {
-      // Try the next range; local validation may not have origin/main or a parent commit.
-    }
-  }
-  return [];
-}
-
-function changedNewsletterDates() {
-  const dates = new Set();
-  for (const file of changedFilesFromGit()) {
-    const date = changedArtifactDate(file);
-    if (date) dates.add(date);
-  }
-  return dates;
-}
-
-function strictValidationDates() {
-  const dates = changedNewsletterDates();
-  if (fs.existsSync(newsletterDatePath)) {
-    const date = read(newsletterDatePath).trim();
-    if (date) dates.add(date);
-  }
-  return dates;
 }
 
 function sectionText(content, heading, nextHeadingPattern = /^## /m) {
@@ -153,16 +109,20 @@ function isNewFormat(md) {
     !legacySectionHeadings.some(heading => md.includes(heading));
 }
 
-function validateArticleQuality(item, md, newFormat) {
+function validateArticleQuality(item, md, newFormat, strictArtifactValidation) {
   const articles = mainArticleBlocks(md);
-  if (articles.length < articlePolicy.mainArticleCount.min) {
-    fail(`Newsletter ${item.date} markdown must satisfy Newsletter Policy main section minimum, found ${articles.length}`);
+  const articleCountOutOfRange = articles.length < articlePolicy.mainArticleCount.min ||
+    articles.length > articlePolicy.mainArticleCount.max;
+  if (articleCountOutOfRange) {
+    const message = `Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${articleCountRangeText()}.`;
+    if (strictArtifactValidation) {
+      fail(message);
+    } else {
+      warn(`${message} ${historicalPolicyWarningReason()}.`);
+    }
   }
 
   if (newFormat) {
-    if (articles.length < articlePolicy.mainArticleCount.min || articles.length > articlePolicy.mainArticleCount.max) {
-      warn(`Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${articleCountRangeText()} for the new format.`);
-    }
     if (!/AI|Gemini|agent|on-device|NPU|LLM|인공지능/i.test(md)) {
       warn(`Newsletter ${item.date} has no AI-related article or AI Corner signal.`);
     }
@@ -341,7 +301,7 @@ if (!Array.isArray(newsletters)) {
 }
 
 const seenDates = new Set();
-const strictDates = strictValidationDates();
+const strictDates = strictTargetDates({ root, newsletterDatePath });
 for (const [index, item] of newsletters.entries()) {
   for (const field of requiredFields) {
     if (!(field in item)) {
@@ -401,8 +361,8 @@ for (const [index, item] of newsletters.entries()) {
         fail(`Newsletter ${item.date} markdown missing References/참고자료 section`);
       }
 
-      validateArticleQuality(item, md, isNewFormat(md));
       const strictArtifactValidation = strictDates.has(item.date);
+      validateArticleQuality(item, md, isNewFormat(md), strictArtifactValidation);
       validateSourceGapArtifact(item.date, strictArtifactValidation);
       validateEditorImageArtifact(item.date, strictArtifactValidation);
     }

@@ -1,6 +1,7 @@
 const path = require('path');
 const {
   POLICY_REL_PATH,
+  normalizeNewsletterPolicyConfig,
   readPolicyConfig,
   validateNewsletterPolicyConfig
 } = require('../common/newsletter-policy');
@@ -23,6 +24,13 @@ if (!result.ok) {
   for (const error of result.errors) {
     console.error(`- ${error}`);
   }
+  process.exit(1);
+}
+
+try {
+  normalizeNewsletterPolicyConfig(config);
+} catch (error) {
+  console.error(`Newsletter Policy validation failed for ${displayPath}: could not normalize config: ${error.message}`);
   process.exit(1);
 }
 

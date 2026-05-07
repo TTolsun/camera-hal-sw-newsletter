@@ -288,8 +288,20 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const manualOverrideStepIndex = workflow.indexOf('- name: Apply manual LLM overrides');
   const doctorStepIndex = workflow.indexOf('- name: Doctor runtime config');
+  const validatePolicyStepIndex = workflow.indexOf('- name: Validate newsletter policy');
+  const checkPolicyDocsStepIndex = workflow.indexOf('- name: Check policy docs');
   const preflightStepIndex = workflow.indexOf('- name: Run unit and regression tests');
   const jitterStepIndex = workflow.indexOf('- name: Jitter scheduled run');
+  const validatePolicyNextStepIndex = workflow.indexOf('\n      - name:', validatePolicyStepIndex + 1);
+  const validatePolicyStep = workflow.slice(
+    validatePolicyStepIndex,
+    validatePolicyNextStepIndex === -1 ? undefined : validatePolicyNextStepIndex
+  );
+  const checkPolicyDocsNextStepIndex = workflow.indexOf('\n      - name:', checkPolicyDocsStepIndex + 1);
+  const checkPolicyDocsStep = workflow.slice(
+    checkPolicyDocsStepIndex,
+    checkPolicyDocsNextStepIndex === -1 ? undefined : checkPolicyDocsNextStepIndex
+  );
   const nextStepIndex = workflow.indexOf('\n      - name:', preflightStepIndex + 1);
   const preflightStep = workflow.slice(
     preflightStepIndex,
@@ -298,10 +310,14 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
 
   assert.notEqual(manualOverrideStepIndex, -1);
   assert.notEqual(doctorStepIndex, -1);
+  assert.notEqual(validatePolicyStepIndex, -1);
+  assert.notEqual(checkPolicyDocsStepIndex, -1);
   assert.notEqual(preflightStepIndex, -1);
   assert.notEqual(jitterStepIndex, -1);
   assert.ok(manualOverrideStepIndex < doctorStepIndex);
-  assert.ok(doctorStepIndex < preflightStepIndex);
+  assert.ok(doctorStepIndex < validatePolicyStepIndex);
+  assert.ok(validatePolicyStepIndex < checkPolicyDocsStepIndex);
+  assert.ok(checkPolicyDocsStepIndex < preflightStepIndex);
   assert.ok(preflightStepIndex < jitterStepIndex);
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /llm_model:/);
@@ -320,6 +336,10 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.doesNotMatch(workflow, /vars\.LLM_FALLBACK_MODELS/);
   assert.doesNotMatch(workflow, /GEMINI_MODEL: \$\{\{ vars\.GEMINI_MODEL/);
   assert.doesNotMatch(workflow, /GEMINI_FALLBACK_MODELS: \$\{\{ vars\.GEMINI_FALLBACK_MODELS/);
+  assert.match(validatePolicyStep, /^\s*run: npm run validate:policy$/m);
+  assert.doesNotMatch(validatePolicyStep, /continue-on-error:\s*true/);
+  assert.match(checkPolicyDocsStep, /^\s*run: npm run check:policy-docs$/m);
+  assert.doesNotMatch(checkPolicyDocsStep, /continue-on-error:\s*true/);
   assert.match(preflightStep, /^\s*run: npm run test$/m);
   assert.doesNotMatch(preflightStep, /continue-on-error:\s*true/);
   assert.match(workflow, /uses: actions\/cache\/restore@v4/);
@@ -340,5 +360,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /compositionMode === 'THIN_WEEK_REVIEW'/);
   assert.match(workflow, /Fail if reviewable newsroom artifacts were not created/);
   assert.doesNotMatch(workflow, /final_publish_ready != 'true'/);
-  assert.doesNotMatch(workflow, /fromJSON\(steps\.generation-status\.outputs\.final_selected_article_count_for_gate\) < 4/);
+  assert.doesNotMatch(
+    workflow,
+    new RegExp(`fromJSON\\(steps\\.generation-status\\.outputs\\.final_selected_article_count_for_gate\\) < ${articlePolicy.mainArticleCount.min}`)
+  );
 });
