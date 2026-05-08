@@ -1,4 +1,4 @@
-## Newsletter publication PR
+## 뉴스레터 발행 PR
 
 ### Public artifact
 

@@ -1,4 +1,4 @@
-## Code / docs / refactor PR
+## 코드 / 문서 / 리팩토링 PR
 
 ### Scope
 
