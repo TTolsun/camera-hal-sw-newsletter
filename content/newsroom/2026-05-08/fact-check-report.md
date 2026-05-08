@@ -1,0 +1,68 @@
+# 사실 검증 보고서 - 2026-05-08
+
+## 상태
+
+NEEDS_FIX
+
+## 반드시 수정할 항목
+
+- 위치: sections[0].why_it_matters
+  - 문제: Exaggerated language: "새로운 버전은 HAL이 지원해야 하는 스트림 조합이나 버퍼 사용 패턴에 변화를 가져올 수 있습니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07
+- 위치: sections[0].camera_hal_perspective
+  - 문제: Exaggerated language: "새로운 CameraX 버전에서 요구하는 스트림 조합이 CDD 및 CTS/VTS/Camera ITS 요구사항을 충족하는지, 그리고 성능 저하 없이 동작하는지 확인해야 합니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07
+- 위치: sections[1].why_it_matters
+  - 문제: Exaggerated language: "SoftISP 및 센서 모드 구성 변경은 HAL 구현에 영향을 줄 수 있으며" is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- 위치: sections[1].why_it_matters
+  - 문제: Exaggerated language: "이러한 드라이버 스택의 변화는 HAL의 버퍼 관리, 포맷 협상, 센서 모드 설정 방식에 영향을 줄 수 있습니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- 위치: sections[1].camera_hal_perspective
+  - 문제: Exaggerated language: "HAL은 libcamera의 SoftISP 개선을 통해 RAW 스트림 처리의 유연성을 확보하거나, 특정 ISP 기능을 소프트웨어적으로 구현하는 방안을 고려할 수 있습니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- 위치: sections[1].camera_hal_perspective
+  - 문제: Exaggerated language: "이미지 파이프라인 처리량 개선은 Preview, Video, Still Capture 등 여러 스트림 조합에서 프레임 드롭 감소 및 지연 시간 단축에 기여할 수 있습니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- 위치: sections[1].camera_hal_perspective
+  - 문제: Exaggerated language: "HAL은 새로운 파이프라인 핸들러 지원이 기존 V4L2 드라이버와의 호환성에 미치는 영향을 평가해야 합니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- 위치: sections[2].why_it_matters
+  - 문제: Exaggerated language: "HAL 코드의 안정성과 성능에 잠재적으로 영향을 미칠 수 있는 C++ 언어 기능의 발전을 이해하는 데 중요합니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://isocpp.org//blog/2026/04/gcc-16.1
+- 위치: sections[2].why_it_matters
+  - 문제: Exaggerated language: "특히 계약 기능은 HAL 코드의 견고성을 높이고 디버깅을 용이하게 할 수 있는 잠재력을 가집니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://isocpp.org//blog/2026/04/gcc-16.1
+- 위치: sections[2].camera_hal_perspective
+  - 문제: Exaggerated language: "C++26의 리플렉션 및 계약과 같은 기능은 HAL 코드의 메타데이터 처리, 디버깅 유용성, 런타임 안정성을 개선할 수 있는 잠재력을 가집니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://isocpp.org//blog/2026/04/gcc-16.1
+- 위치: sections[2].camera_hal_perspective
+  - 문제: Exaggerated language: "HAL 개발팀은 이러한 C++ 표준의 발전을 모니터링하여, 향후 Clang/LLVM에 해당 기능이 도입될 때 HAL 코드에 적용할 수 있는 방안을 미리 검토할 수 있습니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://isocpp.org//blog/2026/04/gcc-16.1
+- 위치: sections[2].camera_hal_perspective
+  - 문제: Exaggerated language: "특히, 계약 기능은 camera3_request 및 camera3_result의 유효성 검사 로직을 더 명확하고 안전하게 작성하는 데 활용될 수 있습니다." is a speculation.
+  - 제안: Rephrase to reflect possibility or remove the speculative part. Focus on what is confirmed by the source.
+  - 출처: https://isocpp.org//blog/2026/04/gcc-16.1
+
+## 권장 수정
+
+- 없음
+
+## 출처 공백
+
+- 없음
+
+## 최종 의견
+
+The draft contains several instances of speculative language, particularly when discussing the potential impact of updates on Camera HAL. These should be rephrased to reflect possibility rather than certainty, or removed if not directly supported by the source. The policy states: "출처가 직접 말하지 않은 HAL 요구사항을 사실처럼 쓰지 않습니다. 필요하면 추정, 가능성, 장기 관찰 항목으로 분리합니다." Please review and correct these sections.
