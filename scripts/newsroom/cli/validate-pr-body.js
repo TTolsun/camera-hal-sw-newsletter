@@ -40,6 +40,41 @@ function extractStatusSection(text) {
   return nextMatch ? rest.slice(0, nextMatch.index) : rest;
 }
 
+function extractSections(text) {
+  const headings = [...String(text || '').matchAll(/^##\s+(.+?)\s*$/gm)];
+  const sections = new Map();
+  for (let index = 0; index < headings.length; index += 1) {
+    const heading = headings[index][1].trim();
+    const bodyStart = headings[index].index + headings[index][0].length;
+    const bodyEnd = headings[index + 1]?.index ?? text.length;
+    sections.set(heading, text.slice(bodyStart, bodyEnd));
+  }
+  return sections;
+}
+
+function sectionByHeading(sections, headings) {
+  for (const heading of headings) {
+    if (sections.has(heading)) return sections.get(heading);
+  }
+  for (const [heading, body] of sections.entries()) {
+    if (headings.some(expected => heading.includes(expected))) return body;
+  }
+  return '';
+}
+
+function escapeRegExp(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function publicArtifactPatterns(date = '') {
+  const datePattern = date ? escapeRegExp(date) : '\\d{4}-\\d{2}-\\d{2}';
+  return {
+    newsletterMd: new RegExp(`^-\\s+newsletters/${datePattern}/newsletter\\.md\\b.*$`, 'm'),
+    newsletterHtml: new RegExp(`^-\\s+newsletters/${datePattern}/index\\.html\\b.*$`, 'm'),
+    dataIndex: /^-\s+data\/newsletters\.json\b.*$/m
+  };
+}
+
 function parseStatusSection(section) {
   return {
     overallStatus: firstMatch(section, /^전체 상태:\s*([A-Z_]+)/m),
@@ -78,8 +113,9 @@ function parseArgs(argv) {
   return { filePath, options };
 }
 
-function validatePrBodyText(text) {
+function validatePrBodyText(text, options = {}) {
   const errors = [];
+  const sections = extractSections(text);
   const generationStatusCount = countMatches(text, /^## 생성 상태$/gm);
   if (generationStatusCount !== 1) {
     errors.push(`PR body must contain exactly one "## 생성 상태" heading, found ${generationStatusCount}.`);
@@ -124,6 +160,35 @@ function validatePrBodyText(text) {
     if (parsed.editorReviewRequired !== true) {
       errors.push(`editorial_reviewable PR body must show editor_review_required=true, got ${parsed.editorReviewRequired}.`);
     }
+    const generatedArtifactsSection = sectionByHeading(sections, ['생성 산출물', '?앹꽦 ?곗텧臾?']);
+    const notGeneratedPublicSection = sectionByHeading(sections, ['생성하지 않은 public 산출물']);
+    const patterns = publicArtifactPatterns(options.date);
+    if (!generatedArtifactsSection) {
+      errors.push('editorial_reviewable PR body must contain generated artifacts section.');
+    } else {
+      for (const pattern of Object.values(patterns)) {
+        if (pattern.test(generatedArtifactsSection)) {
+          errors.push('editorial_reviewable generated artifacts section must not list public artifacts.');
+          break;
+        }
+      }
+    }
+    if (!notGeneratedPublicSection) {
+      errors.push('editorial_reviewable PR body must contain not-generated public artifacts section.');
+    } else {
+      const newsletterMdLine = notGeneratedPublicSection.match(patterns.newsletterMd)?.[0] || '';
+      const newsletterHtmlLine = notGeneratedPublicSection.match(patterns.newsletterHtml)?.[0] || '';
+      const dataIndexLine = notGeneratedPublicSection.match(patterns.dataIndex)?.[0] || '';
+      if (!/not generated/.test(newsletterMdLine)) {
+        errors.push('editorial_reviewable PR body must list newsletter.md as not generated.');
+      }
+      if (!/not generated/.test(newsletterHtmlLine)) {
+        errors.push('editorial_reviewable PR body must list index.html as not generated.');
+      }
+      if (!/not updated/.test(dataIndexLine)) {
+        errors.push('editorial_reviewable PR body must list data/newsletters.json as not updated.');
+      }
+    }
   }
 
   if (parsed.finalPublishReady === true) {
@@ -158,7 +223,7 @@ function validatePrBodyText(text) {
 
 function validatePrBodyFile(filePath, options = {}) {
   const text = fs.readFileSync(filePath, 'utf8');
-  const result = validatePrBodyText(text);
+  const result = validatePrBodyText(text, options);
   const resolved = resolvePublishStatus(options);
   if (resolved.consistencyErrors.length > 0) {
     result.errors.push(`Artifact consistency errors: ${resolved.consistencyErrors.join('; ')}`);
@@ -186,6 +251,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  extractSections,
   extractStatusSection,
   parseStatusSection,
   validatePrBodyFile,

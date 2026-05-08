@@ -1,9 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('../render/image-candidates');
-const { repoLocalPath } = require('../render/article-image-resolver');
 const {
-  htmlAttr,
   readJson,
   repoPath
 } = require('../common/common');
@@ -18,6 +15,9 @@ const {
   historicalPolicyWarningReason,
   strictTargetDates
 } = require('../common/validation-targets');
+const {
+  validateRenderedIssueStructure
+} = require('../validate/rendered-issue-structure');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -165,121 +165,6 @@ function validateSourceGapArtifact(date, strictArtifactValidation) {
   }
 }
 
-function isHttpsUrl(value) {
-  try {
-    return new URL(String(value || '').trim()).protocol === 'https:';
-  } catch {
-    return false;
-  }
-}
-
-function isFallbackImagePath(value) {
-  return /^(?:(?:\.\.\/){1,3})?assets\/images\/fallback\//.test(String(value || '').replace(/\\/g, '/'));
-}
-
-function validateLocalFallbackSelectedImage(date, section, label, selectedImage) {
-  if (!isFallbackImagePath(selectedImage)) {
-    fail(`Newsletter ${date} selectedImage must be an allowed HTTPS article image or repo-local fallback: ${label}`);
-    return;
-  }
-
-  const localPath = repoLocalPath(root, selectedImage);
-  if (!localPath || !fs.existsSync(localPath)) {
-    fail(`Newsletter ${date} selectedImage fallback file is missing: ${label} (${selectedImage})`);
-    return;
-  }
-
-  const resolved = section.resolvedImage || {};
-  const resolvedUrl = resolved.url || resolved.src || '';
-  if (resolved.usedFallback !== true) {
-    fail(`Newsletter ${date} fallback selectedImage missing resolvedImage.usedFallback=true: ${label}`);
-  }
-  if (resolvedUrl !== selectedImage) {
-    fail(`Newsletter ${date} fallback selectedImage does not match resolvedImage.url: ${label}`);
-  }
-}
-
-function validateEditorImageArtifact(date, strictArtifactValidation) {
-  const editor = readJsonIfExists(path.join(newsroomDir(root, date), 'editor-draft.json'));
-  if (!editor || !Array.isArray(editor.sections)) return;
-
-  for (const [index, section] of editor.sections.entries()) {
-    const label = section.category || `section ${index + 1}`;
-    const selectedImage = section.selectedImage || '';
-    if (!selectedImage) continue;
-
-    const resolved = section.resolvedImage || {};
-    if (!isHttpsUrl(selectedImage)) {
-      validateLocalFallbackSelectedImage(date, section, label, selectedImage);
-      continue;
-    }
-
-    if (resolved.usedFallback === true) {
-      const message = `Newsletter ${date} selectedImage still points to an external URL after fallback: ${label}`;
-      if (strictArtifactValidation) {
-        fail(message);
-      } else {
-        warn(`${message}. Not enforcing because this run is not publishing that issue.`);
-      }
-      continue;
-    }
-
-    const imageCandidates = Array.isArray(section.imageCandidates) ? section.imageCandidates : [];
-    if (!imageCandidates.some(image => image && image.url === selectedImage)) {
-      fail(`Newsletter ${date} selectedImage is not in imageCandidates: ${label}`);
-    }
-    if (!isSafeExternalImageUrl(selectedImage) || REJECT_PATH_PATTERN.test(selectedImage)) {
-      fail(`Newsletter ${date} selectedImage is not an allowed HTTPS article image: ${label}`);
-    }
-    for (const field of ['imageSource', 'imageAttribution', 'imageAlt', 'imageUsageDecisionReason']) {
-      if (!String(section[field] || '').trim()) {
-        fail(`Newsletter ${date} selectedImage missing ${field}: ${label}`);
-      }
-    }
-    if (!/^https:\/\//i.test(String(section.imageSource || '').trim())) {
-      fail(`Newsletter ${date} selectedImage imageSource must be an HTTPS URL: ${label}`);
-    }
-    if (!['unknown', 'allowed'].includes(section.imageLicenseStatus || '')) {
-      fail(`Newsletter ${date} selectedImage has invalid imageLicenseStatus: ${label}`);
-    }
-  }
-}
-
-function validateArticleImages(relPath, content) {
-  const imageTags = content.match(/<img\b(?=[^>]*class=["'][^"']*\barticle-image\b)[^>]*>/gi) || [];
-  for (const tag of imageTags) {
-    const src = htmlAttr(tag, 'src');
-    const alt = htmlAttr(tag, 'alt');
-    const loading = htmlAttr(tag, 'loading');
-    if (!src) {
-      fail(`Newsletter article image missing src: ${relPath}`);
-      continue;
-    }
-    if (/^data:/i.test(src) || /^http:/i.test(src)) {
-      fail(`Newsletter article image uses disallowed URL scheme: ${relPath}`);
-    }
-    if (/^https:\/\//i.test(src)) {
-      if (!isSafeExternalImageUrl(src) || REJECT_PATH_PATTERN.test(src)) {
-        fail(`Newsletter article image uses rejected external URL: ${relPath}`);
-      }
-    } else if (!/^(?:\.\.?\/|assets\/|\/?assets\/)/.test(src)) {
-      fail(`Newsletter article image must be HTTPS or repo-local fallback: ${relPath}`);
-    }
-    if (!alt.trim()) {
-      fail(`Newsletter article image missing alt text: ${relPath}`);
-    }
-    if (loading !== 'lazy') {
-      fail(`Newsletter article image missing loading="lazy": ${relPath}`);
-    }
-
-    const start = content.indexOf(tag);
-    const nearby = start >= 0 ? content.slice(start, start + 900) : '';
-    if (!/article-image-caption/.test(nearby) || !/<a\s+[^>]*href=["']https:\/\//i.test(nearby)) {
-      fail(`Newsletter article image missing caption attribution link: ${relPath}`);
-    }
-  }
-}
-
 if (!fs.existsSync(dataPath)) {
   fail('Missing data/newsletters.json');
 }
@@ -362,9 +247,22 @@ for (const [index, item] of newsletters.entries()) {
       }
 
       const strictArtifactValidation = strictDates.has(item.date);
+      const htmlPath = repoPath(root, item.html || '');
+      const html = htmlPath && fs.existsSync(htmlPath) ? read(htmlPath) : '';
+      const editor = readJsonIfExists(path.join(newsroomDir(root, item.date), 'editor-draft.json'));
+      const structural = validateRenderedIssueStructure({
+        date: item.date,
+        editor,
+        markdown: md,
+        html,
+        root,
+        validateDataIndex: index === 0
+      });
+      if (!structural.ok) {
+        errors.push(...structural.errors);
+      }
       validateArticleQuality(item, md, isNewFormat(md), strictArtifactValidation);
       validateSourceGapArtifact(item.date, strictArtifactValidation);
-      validateEditorImageArtifact(item.date, strictArtifactValidation);
     }
   }
 }
@@ -407,7 +305,6 @@ for (const relPath of htmlFiles) {
         fail(`Newsletter HTML source-list has no source links: ${relPath}`);
       }
     }
-    validateArticleImages(relPath, content);
     if (!hasAny(content, ['Archive로 돌아가기', '아카이브로 돌아가기', 'Archive'])) {
       fail(`Newsletter HTML missing archive link text: ${relPath}`);
     }
