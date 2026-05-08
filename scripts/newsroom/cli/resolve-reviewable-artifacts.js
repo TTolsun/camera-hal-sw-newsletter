@@ -143,10 +143,13 @@ function resolveReviewableArtifacts(options = {}) {
     filePath === 'data/newsletters.json'
   );
   const hasReviewableArtifacts = hasRequiredCanonicalArtifacts && statusReviewable && changedArtifacts.length > 0;
-  const hasPublishCandidate =
+  const hasPublicArtifacts =
     hasReviewableArtifacts &&
     publicArtifacts.length > 0 &&
-    changedPublicArtifacts.length > 0 &&
+    changedPublicArtifacts.length > 0;
+  const hasAiPublishReady = status.final_publish_ready === true;
+  const hasPublishCandidate =
+    hasPublicArtifacts &&
     !failedRepairReviewable;
   const reasonParts = [
     `status=${status.status || 'UNKNOWN'}`,
@@ -172,6 +175,8 @@ function resolveReviewableArtifacts(options = {}) {
     changedArtifacts,
     missingRequired,
     hasReviewableArtifacts,
+    hasPublicArtifacts,
+    hasAiPublishReady,
     hasPublishCandidate,
     reviewableArtifactReason: reasonParts.join('; ')
   };
@@ -182,6 +187,8 @@ function buildReviewableArtifactOutputs(resolved) {
     date: resolved.date,
     branch: resolved.branch,
     has_reviewable_artifacts: resolved.hasReviewableArtifacts ? 'true' : 'false',
+    has_public_artifacts: resolved.hasPublicArtifacts ? 'true' : 'false',
+    has_ai_publish_ready: resolved.hasAiPublishReady ? 'true' : 'false',
     has_publish_candidate: resolved.hasPublishCandidate ? 'true' : 'false',
     reviewable_artifact_reason: resolved.reviewableArtifactReason
   };

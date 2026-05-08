@@ -191,7 +191,7 @@ jobs:
 
       - name: Validate generated site
         id: validate
-        if: steps.meta.outputs.has_publish_candidate == 'true'
+        if: steps.meta.outputs.has_public_artifacts == 'true'
         continue-on-error: true
         env:
           REQUIRE_NEWSLETTER_DATE_FILE: "1"
@@ -199,13 +199,13 @@ jobs:
 
       - name: Resolve final publish status
         id: final-publish-status
-        if: steps.meta.outputs.has_publish_candidate == 'true'
+        if: steps.meta.outputs.has_public_artifacts == 'true'
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
         run: node scripts/write-publish-status-output.js >> "$GITHUB_OUTPUT"
 
       - name: Generate source effectiveness report
-        if: always() && steps.meta.outputs.has_publish_candidate == 'true'
+        if: always() && steps.meta.outputs.has_public_artifacts == 'true'
         continue-on-error: true
         run: npm run report:source-effectiveness -- --date "${{ steps.meta.outputs.date }}"
 
@@ -332,9 +332,9 @@ jobs:
             const issue_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
             const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week'];
             const labels = ['newsletter', 'aosp-camera', 'editor-review'];
-            const finalPublishReady = '${{ steps.final-publish-status.outputs.final_publish_ready }}' === 'true';
+            const hasAiPublishReady = '${{ steps.final-publish-status.outputs.has_ai_publish_ready }}' === 'true';
             const compositionMode = '${{ steps.final-publish-status.outputs.composition_mode }}';
-            if (finalPublishReady) {
+            if (hasAiPublishReady) {
               labels.push('publish-ready');
             } else {
               labels.push('needs-fix');

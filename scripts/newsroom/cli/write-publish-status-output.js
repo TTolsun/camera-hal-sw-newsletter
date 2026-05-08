@@ -7,6 +7,7 @@ const {
 
 const OUTPUT_FIELDS = [
   'final_publish_ready',
+  'has_ai_publish_ready',
   'artifact_final_publish_ready',
   'selection_publish_ready',
   'publish_gate_passed',
@@ -38,6 +39,8 @@ function buildPublishStatusOutputs(resolved) {
       outputs[field] = String((status.consistency_errors || []).length);
     } else if (field === 'consistency_errors') {
       outputs[field] = (status.consistency_errors || []).join('\n') || 'none';
+    } else if (field === 'has_ai_publish_ready') {
+      outputs[field] = scalar(status.final_publish_ready === true);
     } else {
       outputs[field] = scalar(status[field], field.endsWith('_count') ? '0' : 'n/a');
     }

@@ -11,6 +11,9 @@
 
 ## PR Review Flow
 
+- `final_publish_ready=false`는 AI 자동 발행 기준 미충족을 뜻합니다. public artifact가 포함된 PR은 편집장 merge로 공개 승인할 수 있습니다.
+- `02-validate-site.yml`은 quality/fact-check 문제를 non-blocking annotation으로 보고하고, structural validation만 blocking으로 처리합니다.
+
 - PR body에서 `final_publish_ready`, article count, labels, selection diagnostics를 먼저 확인합니다.
 - `editor-in-chief-brief.md`로 핵심 메시지와 review order를 확인합니다.
 - `fact-check-report.md`에 unresolved `must_fix`가 있으면 발행 가능한 PR로 보지 않습니다.
@@ -19,10 +22,21 @@
 
 ## Release Flow
 
-- `publish-ready` 상태와 PR body의 `final_publish_ready=true`를 확인합니다.
+- `publish-ready`는 `has_ai_publish_ready=true`인 AI 자동 발행 가능 상태만 뜻합니다.
+- `needs-fix`라도 `has_public_artifacts=true`이면 편집장 main merge를 사이트 공개 승인으로 봅니다.
+
+- 자동 발행 가능 PR은 `publish-ready` 상태와 PR body의 `final_publish_ready=true`를 확인합니다.
+- `needs-fix`와 public artifact가 함께 있는 PR은 quality/fact-check annotation과 review artifact를 검토한 뒤 편집장 merge로 공개 승인합니다.
 - `npm.cmd run test`와 `npm.cmd run validate`가 통과한 PR만 merge합니다.
 - merge 후 GitHub Pages가 `main` 기준 public newsletter를 반영합니다.
 - workflow가 generated issue를 `main`에 직접 push하거나 auto-merge하지 않습니다.
+
+## Publication Quality Annotation
+
+- `node scripts/annotate-publication-quality.js --date YYYY-MM-DD`는 해당 public issue만 검사합니다.
+- changed newsletter date가 public issue와 매칭되면 해당 date만 검사합니다.
+- changed public issue가 없으면 latest public issue 1개만 검사합니다.
+- 전체 과거 issue 검사는 `node scripts/annotate-publication-quality.js --all`에서만 수행합니다.
 
 ## Artifact Review Order
 
