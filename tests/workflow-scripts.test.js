@@ -21,6 +21,7 @@ const {
   resolvePublishStatus
 } = require('../scripts/newsroom/common/publish-status');
 const {
+  extractSections,
   validatePrBodyFile,
   validatePrBodyText
 } = require('../scripts/validate-pr-body');
@@ -454,12 +455,35 @@ test('newsroom PR body marks editorial reviewable handoff as non-publishable', (
   assert.match(body, /final_publish_ready: false/);
   assert.match(body, /validate_ok=false/);
   assert.match(body, /editor_review_required=true/);
+  assert.match(body, new RegExp(`newsletters/${date}/newsletter\\.md - not generated`));
+  assert.match(body, new RegExp(`newsletters/${date}/index\\.html - not generated`));
+  assert.match(body, /data\/newsletters\.json - not updated/);
+  const sections = extractSections(body);
+  const generatedArtifactsSection = [...sections.values()]
+    .find(section => section.includes(`content/collected-news/${date}/candidates.json`)) || '';
+  assert.doesNotMatch(generatedArtifactsSection, new RegExp(`newsletters/${date}/newsletter\\.md`));
+  assert.doesNotMatch(generatedArtifactsSection, new RegExp(`newsletters/${date}/index\\.html`));
+  assert.doesNotMatch(generatedArtifactsSection, /data\/newsletters\.json/);
   assert.equal(validatePrBodyText(body).ok, true);
 
   const missingWarning = body.replace(/^발행 불가 경고:.*\n/m, '');
   const result = validatePrBodyText(missingWarning);
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /non-publish warning/);
+
+  const leakedPublicArtifact = body.replace(
+    `- content/collected-news/${date}/candidates.json`,
+    `- content/collected-news/${date}/candidates.json\n- newsletters/${date}/newsletter.md`
+  );
+  const leakedResult = validatePrBodyText(leakedPublicArtifact, { date });
+  assert.equal(leakedResult.ok, false);
+  assert.match(leakedResult.errors.join('\n'), /must not list public artifacts/);
+
+  const publicArtifactOutsideGeneratedSection = body.replace(
+    '## 생성하지 않은 public 산출물',
+    `## 참고\n\n- newsletters/${date}/newsletter.md - not generated\n\n## 생성하지 않은 public 산출물`
+  );
+  assert.equal(validatePrBodyText(publicArtifactOutsideGeneratedSection, { date }).ok, true);
 });
 
 test('reviewable artifact resolver does not accept tmp status alone', () => {
@@ -1467,6 +1491,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
 test('generation path guards public artifacts for editorial reviewable failures', () => {
   const generatorPath = path.join(__dirname, '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');
+  const renderedMarkdownIndex = generator.indexOf('const newsletterMarkdown = buildMarkdown(editor);');
+  const structuralGuardIndex = generator.indexOf('assertTerminalPublicationContracts({', renderedMarkdownIndex);
   const generationStatusIndex = generator.indexOf("let generationStatus = 'PASS';");
   const factCheckNeedsFixIndex = generator.indexOf("factCheck.status === 'NEEDS_FIX' && mustFixCount > 0", generationStatusIndex);
   const qualityNeedsFixIndex = generator.indexOf("qualityReport.status !== 'PASS'", generationStatusIndex);
@@ -1483,6 +1509,8 @@ test('generation path guards public artifacts for editorial reviewable failures'
   const finalPublishReadyIndex = generator.indexOf('const finalPublishReady =', validateResultIndex);
 
   assert.notEqual(generationStatusIndex, -1);
+  assert.notEqual(renderedMarkdownIndex, -1);
+  assert.notEqual(structuralGuardIndex, -1);
   assert.notEqual(factCheckNeedsFixIndex, -1);
   assert.notEqual(qualityNeedsFixIndex, -1);
   assert.notEqual(editorialReviewableIndex, -1);
@@ -1493,6 +1521,8 @@ test('generation path guards public artifacts for editorial reviewable failures'
   assert.notEqual(dataWriteIndex, -1);
   assert.notEqual(validateResultIndex, -1);
   assert.notEqual(finalPublishReadyIndex, -1);
+  assert.ok(renderedMarkdownIndex < structuralGuardIndex);
+  assert.ok(structuralGuardIndex < generationStatusIndex);
   assert.ok(generationStatusIndex < factCheckNeedsFixIndex);
   assert.ok(factCheckNeedsFixIndex < qualityNeedsFixIndex);
   assert.ok(qualityNeedsFixIndex < editorialReviewableIndex);
@@ -1503,6 +1533,14 @@ test('generation path guards public artifacts for editorial reviewable failures'
   assert.ok(htmlWriteIndex < dataWriteIndex);
   assert.ok(dataWriteIndex < validateResultIndex);
   assert.ok(validateResultIndex < finalPublishReadyIndex);
+});
+
+test('validate-site uses shared rendered issue structural validator', () => {
+  const validateSitePath = path.join(__dirname, '..', 'scripts', 'newsroom', 'cli', 'validate-site.js');
+  const validateSite = fs.readFileSync(validateSitePath, 'utf8');
+
+  assert.match(validateSite, /validateRenderedIssueStructure/);
+  assert.match(validateSite, /rendered-issue-structure/);
 });
 
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {

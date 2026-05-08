@@ -5,7 +5,6 @@ const {
   kstDate,
   readJson,
   readTextIfExists,
-  repoPath,
   writeJson
 } = require('../common/common');
 const {
@@ -24,8 +23,8 @@ const {
   getLlmModelUsage
 } = require('../llm/llm-client');
 const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } = require('../render/newsletter-schema');
-const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('../render/image-candidates');
-const { repoLocalPath, resolveIssueArticleImages } = require('../render/article-image-resolver');
+const { isSafeExternalImageUrl } = require('../render/image-candidates');
+const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
   COMPOSITION_MODES,
   buildShortlistReport,
@@ -80,6 +79,9 @@ const {
   serializeEditorValidationError,
   validateEditorOutputContract
 } = require('../validate/editor-output-contract');
+const {
+  validateRenderedIssueStructure
+} = require('../validate/rendered-issue-structure');
 const {
   buildMarkdown,
   buildHtml,
@@ -1263,10 +1265,6 @@ function containsTodo(files) {
   return files.some(file => fs.existsSync(file) && /\bTODO\b/.test(fs.readFileSync(file, 'utf8')));
 }
 
-function containsTodoText(values) {
-  return ensureArray(values).some(value => /\bTODO\b/.test(String(value || '')));
-}
-
 function updateNewsletterData(date, issue) {
   const entry = {
     date,
@@ -1285,132 +1283,37 @@ function updateNewsletterData(date, issue) {
   writeJson(dataPath, updated);
 }
 
-function assertNewsletterDataReadable() {
-  const newsletters = fs.existsSync(dataPath) ? readJson(dataPath) : [];
-  if (!Array.isArray(newsletters)) {
-    fail('data/newsletters.json must contain an array.');
-  }
-  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-  const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
-  const seenDates = new Set();
-  for (const [index, item] of newsletters.entries()) {
-    if (!item || typeof item !== 'object' || Array.isArray(item)) {
-      fail(`Newsletter entry ${index} must be an object.`);
-    }
-    for (const field of requiredFields) {
-      if (!(field in item)) {
-        fail(`Newsletter entry ${index} is missing "${field}".`);
-      }
-    }
-    if (!datePattern.test(item.date || '')) {
-      fail(`Newsletter entry ${index} has invalid date: ${item.date}`);
-    }
-    if (seenDates.has(item.date)) {
-      fail(`Duplicate newsletter date: ${item.date}`);
-    }
-    seenDates.add(item.date);
-    if (!Array.isArray(item.tags)) {
-      fail(`Newsletter ${item.date} tags must be an array.`);
-    }
-    for (const key of ['html', 'md']) {
-      if (!repoPath(root, item[key] || '')) {
-        fail(`Newsletter ${item.date} ${key} path escapes repository: ${item[key]}`);
-      }
-    }
-  }
-  return newsletters;
-}
-
 function assertJsonArtifactsReadable(filePaths) {
   for (const filePath of filePaths) {
     readJson(filePath);
   }
 }
 
-function assertEditorSourceContract(editor) {
-  const missing = ensureArray(editor.sections)
-    .filter(section => ensureArray(section.sources).filter(source => source && source.url).length === 0)
-    .map(section => section.category || section.headline || 'untitled section');
-  if (missing.length > 0) {
-    fail(`Generated sections without sources: ${missing.join(', ')}`);
-  }
-}
+function assertTerminalPublicationContracts({
+  date,
+  editor,
+  markdown,
+  html,
+  newsroomDir,
+  shortlistReport,
+  qualityReport,
+  factCheck
+}) {
+  const result = validateRenderedIssueStructure({ date, editor, markdown, html, root });
+  if (result.ok) return;
 
-function assertRenderedMarkdownSourceContract(markdown, sectionCount) {
-  const sourceHeadingCount = (String(markdown || '').match(/\*\*(?:Sources|출처)[^\n]*\*\*/g) || []).length;
-  const sourceEntryCount = (String(markdown || '').match(/-\s+(?:\[.+?\]\(https?:\/\/|.+?:\s+https?:\/\/)/g) || []).length;
-  if (sourceHeadingCount < sectionCount) {
-    fail(`Generated newsletter is missing source heading(s): expected at least ${sectionCount}, found ${sourceHeadingCount}.`);
+  if (newsroomDir) {
+    writeRecoveryPrompt(newsroomDir, {
+      date,
+      stage: 'structural validation',
+      reason: `Terminal structural validation failed:\n${result.text}`,
+      shortlistReport,
+      selectedInputs: ensureArray(shortlistReport?.selected_articles),
+      qualityReport,
+      factCheck
+    });
   }
-  if (sourceEntryCount < sectionCount) {
-    fail(`Generated newsletter is missing source URL entries: expected at least ${sectionCount}, found ${sourceEntryCount}.`);
-  }
-}
-
-function assertRenderedHtmlContract(html) {
-  const text = String(html || '');
-  if (!/<!doctype html>/i.test(text) || !/<html\b/i.test(text) || !/<\/html>/i.test(text)) {
-    fail('Generated newsletter HTML is structurally invalid.');
-  }
-}
-
-function assertEditorImageContract(editor) {
-  for (const [index, section] of ensureArray(editor.sections).entries()) {
-    const selectedImage = String(section.selectedImage || '').trim();
-    if (!selectedImage) continue;
-    const label = section.headline || section.category || `section ${index + 1}`;
-    const normalizedImage = selectedImage.replace(/\\/g, '/');
-    if (/^https:\/\//i.test(normalizedImage)) {
-      if (section.resolvedImage?.usedFallback === true) {
-        fail(`Newsletter ${editor.date || 'unknown'} selectedImage still points to an external URL after fallback: ${label}`);
-      }
-      const imageCandidates = ensureArray(section.imageCandidates);
-      if (!imageCandidates.some(image => image && image.url === selectedImage)) {
-        fail(`Newsletter ${editor.date || 'unknown'} selectedImage is not in imageCandidates: ${label}`);
-      }
-      if (!isSafeExternalImageUrl(normalizedImage) || REJECT_PATH_PATTERN.test(normalizedImage)) {
-        fail(`Newsletter ${editor.date || 'unknown'} selectedImage is not an allowed HTTPS article image: ${label}`);
-      }
-      for (const field of ['imageSource', 'imageAttribution', 'imageAlt', 'imageUsageDecisionReason']) {
-        if (!String(section[field] || '').trim()) {
-          fail(`Newsletter ${editor.date || 'unknown'} selectedImage missing ${field}: ${label}`);
-        }
-      }
-      if (!/^https:\/\//i.test(String(section.imageSource || '').trim())) {
-        fail(`Newsletter ${editor.date || 'unknown'} selectedImage imageSource must be an HTTPS URL: ${label}`);
-      }
-      if (!['unknown', 'allowed'].includes(section.imageLicenseStatus || '')) {
-        fail(`Newsletter ${editor.date || 'unknown'} selectedImage has invalid imageLicenseStatus: ${label}`);
-      }
-      continue;
-    }
-    if (!/^(?:(?:\.\.\/){1,3})?assets\/images\/fallback\//.test(normalizedImage)) {
-      fail(`Newsletter ${editor.date || 'unknown'} selectedImage must be HTTPS or repo-local fallback: ${label}`);
-    }
-    const localPath = repoLocalPath(root, selectedImage);
-    if (!localPath || !fs.existsSync(localPath)) {
-      fail(`Newsletter ${editor.date || 'unknown'} selectedImage fallback file is missing: ${label} (${selectedImage})`);
-    }
-    if (section.resolvedImage?.usedFallback !== true) {
-      fail(`Newsletter ${editor.date || 'unknown'} fallback selectedImage missing resolvedImage.usedFallback=true: ${label}`);
-    }
-    const resolvedUrl = section.resolvedImage?.url || section.resolvedImage?.src || '';
-    if (resolvedUrl !== selectedImage) {
-      fail(`Newsletter ${editor.date || 'unknown'} fallback selectedImage does not match resolvedImage.url: ${label}`);
-    }
-  }
-}
-
-function assertTerminalPublicationContracts({ editor, markdown, html }) {
-  const sectionCount = ensureArray(editor.sections).length;
-  assertEditorSourceContract(editor);
-  if (containsTodoText([markdown, html])) {
-    fail('Generated newsletter contains TODO.');
-  }
-  assertRenderedMarkdownSourceContract(markdown, sectionCount);
-  assertRenderedHtmlContract(html);
-  assertEditorImageContract(editor);
-  assertNewsletterDataReadable();
+  fail(`Terminal structural validation failed:\n${result.text}`);
 }
 
 function isEditorialReviewableStatus(status) {
@@ -3102,9 +3005,14 @@ async function main() {
   const newsletterMarkdown = buildMarkdown(editor);
   const newsletterHtmlContent = buildHtml(editor);
   assertTerminalPublicationContracts({
+    date,
     editor,
     markdown: newsletterMarkdown,
-    html: newsletterHtmlContent
+    html: newsletterHtmlContent,
+    newsroomDir,
+    shortlistReport,
+    qualityReport,
+    factCheck
   });
   assertJsonArtifactsReadable([
     path.join(newsroomDir, 'editor-draft.json'),

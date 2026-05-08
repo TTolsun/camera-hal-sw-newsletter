@@ -10,6 +10,7 @@ const markdownRoots = [
   'plan.md',
   'handoff.md',
   path.join('.github', 'pull_request_template.md'),
+  path.join('.github', 'PULL_REQUEST_TEMPLATE'),
   'docs',
   'templates'
 ];

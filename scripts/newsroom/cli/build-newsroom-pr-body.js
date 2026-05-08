@@ -281,8 +281,8 @@ function renderEditorActionGuidance(status, date) {
   return lines.join('\n');
 }
 
-function renderGeneratedArtifacts(date) {
-  return [
+function renderGeneratedArtifacts(date, status = {}) {
+  const lines = [
     '## 생성 산출물',
     '',
     `- content/collected-news/${date}/candidates.json`,
@@ -295,10 +295,26 @@ function renderGeneratedArtifacts(date) {
     `- content/newsroom/${date}/quality-report.md`,
     `- content/newsroom/${date}/retry-history.json`,
     `- content/newsroom/${date}/retry-history.md`,
-    `- content/newsroom/${date}/recovery-prompt.md (only when recovery is needed)`,
-    `- newsletters/${date}/newsletter.md`,
-    `- newsletters/${date}/index.html`,
-    '- data/newsletters.json'
+    `- content/newsroom/${date}/recovery-prompt.md (only when recovery is needed)`
+  ];
+  if (status.failure_kind !== 'editorial_reviewable') {
+    lines.push(
+      `- newsletters/${date}/newsletter.md`,
+      `- newsletters/${date}/index.html`,
+      '- data/newsletters.json'
+    );
+  }
+  return lines.join('\n');
+}
+
+function renderNotGeneratedPublicArtifacts(date, status = {}) {
+  if (status.failure_kind !== 'editorial_reviewable') return '';
+  return [
+    '## 생성하지 않은 public 산출물',
+    '',
+    `- newsletters/${date}/newsletter.md - not generated`,
+    `- newsletters/${date}/index.html - not generated`,
+    '- data/newsletters.json - not updated'
   ].join('\n');
 }
 
@@ -322,7 +338,8 @@ function buildNewsroomPrBody(options = {}) {
     renderCompositionNotes(status),
     renderFinalSelectionStatus(status),
     renderEditorActionGuidance(status, date),
-    renderGeneratedArtifacts(date)
+    renderGeneratedArtifacts(date, status),
+    renderNotGeneratedPublicArtifacts(date, status)
   );
 
   return `${lines.join('\n').replace(/\n{3,}/g, '\n\n').trim()}\n`;

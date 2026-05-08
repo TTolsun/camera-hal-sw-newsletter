@@ -1,38 +1,37 @@
 # Current Plan
 
-## editorial_reviewable Failure Guard
+## editorial_reviewable Structural Validation Hardening
 
-- `NEEDS_FIX` and `QUALITY_NEEDS_FIX` are not terminal failures, but they are reviewable only when canonical review artifacts are complete and `failure_kind="editorial_reviewable"` is recorded.
-- In `editorial_reviewable` mode, do not write public issue files:
-  - `newsletters/<date>/newsletter.md`
-  - `newsletters/<date>/index.html`
-  - `data/newsletters.json`
-- Keep terminal validation failures terminal:
-  - TODO content
-  - missing source heading or source URL
-  - Markdown/HTML structural errors
-  - image contract violations
-  - `data/newsletters.json` JSON/schema errors
-  - artifact file write/read errors
+- Keep `editorial_reviewable` review-only: no public issue files and no `data/newsletters.json` update.
+- Move rendered issue structural checks into a shared validator used by both generator and `validate-site.js`.
+- Treat structural publication failures as terminal before editorial-reviewable handoff.
+- Keep editorial quality/fact-check failures reviewable when structure is valid.
 
 ## Implementation Scope
 
-- `scripts/newsroom/cli/gemini-newsroom-newsletter.js`
-  - Classify fact-check/quality-only failures as `failure_kind="editorial_reviewable"`.
-  - Write canonical review artifacts and status with `final_publish_ready=false`, `validate_ok=false`, and `editor_review_required=true`.
-  - Skip public issue writes and `data/newsletters.json` updates for editorial-reviewable failures.
-- `scripts/newsroom/cli/resolve-reviewable-artifacts.js`
-  - Require valid JSON for `editor-draft.json`, `fact-check-report.json`, `quality-report.json`, and `generation-status.json`.
-  - Reject editorial-reviewable handoff when public newsletter files exist or are changed, `data/newsletters.json` changed, same-date public entry exists, `generation-status.json` is invalid, or `failure_kind` is not `editorial_reviewable`.
-- `scripts/newsroom/cli/build-newsroom-pr-body.js` and `scripts/newsroom/cli/validate-pr-body.js`
-  - Show a non-publish warning for `failure_kind=editorial_reviewable`.
-  - Require `final_publish_ready=false`, `validate_ok=false`, `editor_review_required=true`, and `failure_kind=editorial_reviewable` in reviewable failure PR bodies.
-- Tests
-  - Add resolver regressions for valid and invalid editorial-reviewable handoffs.
-  - Add PR body validation regressions for the non-publish warning and required status fields.
+- Add `scripts/newsroom/validate/rendered-issue-structure.js`.
+  - Export `validateRenderedIssueStructure({ date, editor, markdown, html, root })`.
+  - Return `{ ok, errors, text }`.
+  - Validate only terminal structural contracts: TODO, briefing, references, sources, HTML skeleton, anchors, required issue classes, source-list links, article image HTML, selectedImage contract, and existing `data/newsletters.json` parse/schema/path safety.
+  - Do not fail for quality score, fact-check `must_fix`, `source_gap_count`, weak Camera HAL perspective/actionability, or article count/composition.
+- Update `scripts/newsroom/cli/validate-site.js`.
+  - Reuse the shared validator for newsletter markdown/html/editor structural checks.
+  - Keep site-specific checks such as archive/MD link validation and quality/composition warnings outside the helper.
+- Update `scripts/newsroom/cli/gemini-newsroom-newsletter.js`.
+  - Replace the current partial `assertTerminalPublicationContracts()` checks with the shared validator.
+  - On structural failure, write a recovery prompt and terminal-fail before `editorial_reviewable` return.
+- Update PR body rendering and validation.
+  - For `failure_kind="editorial_reviewable"`, keep public artifacts out of `## 생성 산출물`.
+  - Add `## 생성하지 않은 public 산출물` with `not generated` / `not updated` wording.
+  - Make `validate-pr-body.js` parse PR body sections and enforce the public artifact rule only in the relevant sections.
 
 ## Validation
 
-- Run `npm.cmd run test`.
-- Run `npm.cmd run validate`.
-- Self-review the diff for P1/P2 risks, especially accidental public publication, label drift, weakened validation, and stale artifact acceptance.
+- Run targeted tests:
+  - `node --test tests/workflow-scripts.test.js`
+  - `node --test tests/validator-strictness.test.js`
+  - `node --test tests/rendered-issue-structure.test.js`
+- Run full verification:
+  - `npm.cmd run test`
+  - `npm.cmd run validate`
+- Self-review for P1/P2 risks: accidental public publication, weakened structural gates, PR body drift, and unrelated generated artifact edits.
