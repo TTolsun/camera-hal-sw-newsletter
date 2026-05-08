@@ -194,6 +194,40 @@ test('editor article policy rejects forbidden main buckets', () => {
   );
 });
 
+test('editor article policy uses newsroom URL normalization for reporter metadata matching', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: '',
+        counts_as_primary_camera_topic: false,
+        source_candidate_hash: '',
+        sources: [{
+          title: 'Canonical source',
+          url: 'https://example.com/source-1'
+        }]
+      }),
+      section(2, {
+        relevance_bucket: 'soc_platform_signal',
+        counts_as_primary_camera_topic: false
+      }),
+      section(3, {
+        relevance_bucket: 'cpp_ai_tooling_fallback',
+        counts_as_primary_camera_topic: false
+      })
+    ]
+  });
+  const reporter = {
+    candidates: [{
+      title: 'Reporter CameraX source',
+      url: 'https://example.com/source-1?utm_source=newsletter#section',
+      relevance_bucket: 'direct_aosp_camera',
+      counts_as_primary_camera_topic: true
+    }]
+  };
+
+  assert.equal(validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }), draft);
+});
+
 test('editor title fallback keeps existing Korean title contract', () => {
   const missingTitle = editor({ title: '' });
   const mismatchedTitle = editor({ title: 'Camera HAL SW Newsletter - 2026-05-07' });

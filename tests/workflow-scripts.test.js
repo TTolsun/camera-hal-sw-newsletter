@@ -112,6 +112,63 @@ function writeMinimalPublishArtifacts(root, date, overrides = {}) {
   return { status, quality, factCheck, staleClaim, shortlist };
 }
 
+function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
+  const status = {
+    date,
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    publish_ready: true,
+    selection_publish_ready: true,
+    final_publish_ready: true,
+    publish_gate_passed: true,
+    review_gate_passed: false,
+    quality_status: 'PASS',
+    quality_score: 90,
+    quality_threshold: qualityGatePolicy.threshold,
+    fact_check_status: 'PASS',
+    must_fix_count: 0,
+    source_gap_count: 0,
+    composition_mode: 'NORMAL',
+    ...(overrides.status || {})
+  };
+  const editor = {
+    date,
+    title: `Camera HAL SW Newsletter - ${date}`,
+    summary: 'Fallback draft',
+    briefing: ['one', 'two', 'three'],
+    sections: [],
+    references: [],
+    ...(overrides.editor || {})
+  };
+  const quality = {
+    status: 'PASS',
+    score: 90,
+    threshold: qualityGatePolicy.threshold,
+    deductions: [],
+    ...(overrides.quality || {})
+  };
+  const factCheck = {
+    status: 'PASS',
+    must_fix: [],
+    source_gaps: [],
+    source_gap_count: 0,
+    ...(overrides.factCheck || {})
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  if (overrides.writeEditor !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  }
+  if (overrides.writeQuality !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
+  }
+  if (overrides.writeFactCheck !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  }
+
+  return { status, editor, quality, factCheck };
+}
+
 test('generation status output falls back when status JSON is missing', () => {
   const status = readStatus('__missing__/newsletter-generation-status.json');
   const outputs = buildGenerationStatusOutputs(status);
@@ -225,24 +282,13 @@ test('FAILED_REPAIR_REVIEWABLE status is reviewable but never publish-ready', ()
 });
 
 test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow', () => {
-  const body = buildNewsroomPrBody({
-    date: '2026-05-08',
-    validateOutcome: 'failure',
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date, {
     status: {
-      status: 'FAILED_REPAIR_REVIEWABLE',
-      fact_check_status: 'PASS',
-      must_fix_count: 0,
-      source_gap_count: 0,
       quality_status: 'NEEDS_FIX',
       quality_score: 79,
-      quality_threshold: qualityGatePolicy.threshold,
-      publish_ready: false,
-      selection_publish_ready: false,
       final_publish_ready: false,
-      review_gate_passed: true,
-      publish_gate_passed: false,
-      composition_mode: 'NEEDS_FIX',
-      editor_review_required: true,
       rendered_main_article_count: articlePolicy.mainArticleCount.min,
       selected_article_count: articlePolicy.mainArticleCount.min,
       final_selected_article_count: articlePolicy.mainArticleCount.min,
@@ -251,7 +297,17 @@ test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow'
       forbidden_main_article_count: 0,
       stale_claim_status: 'PASS',
       stale_claim_hard_failure_count: 0
+    },
+    quality: {
+      status: 'NEEDS_FIX',
+      score: 79,
+      threshold: qualityGatePolicy.threshold
     }
+  });
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure'
   });
 
   assert.match(body, /전체 상태: NEEDS_FIX/);
@@ -602,6 +658,60 @@ test('publish status resolver records consistency error when status final flag i
   assert.equal(resolved.status.final_publish_ready, false);
   assert.equal(resolved.status.artifact_final_publish_ready, false);
   assert.match(resolved.status.consistency_errors.join('\n'), /status\.final_publish_ready=true but artifact_final_publish_ready=false/);
+});
+
+test('publish status resolver treats FAILED_REPAIR_REVIEWABLE artifacts as reviewable but not publish-ready', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date);
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+  const outputs = buildPublishStatusOutputs(resolved);
+
+  assert.equal(resolved.status.generation_status, 'FAILED_REPAIR_REVIEWABLE');
+  assert.equal(resolved.status.status, 'NEEDS_FIX');
+  assert.equal(resolved.status.review_gate_passed, true);
+  assert.equal(resolved.status.publish_gate_passed, false);
+  assert.equal(resolved.status.publish_ready, false);
+  assert.equal(resolved.status.selection_publish_ready, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.composition_mode, 'NEEDS_FIX');
+  assert.equal(resolved.status.consistency_errors.length, 0);
+  assert.equal(outputs.final_publish_ready, 'false');
+  assert.equal(outputs.publish_gate_passed, 'false');
+  assert.equal(outputs.review_gate_passed, 'true');
+  assert.equal(outputs.composition_mode, 'NEEDS_FIX');
+});
+
+test('publish status resolver does not promote FAILED_REPAIR_REVIEWABLE without canonical artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date, {
+    writeEditor: false
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.generation_status, 'FAILED_REPAIR_REVIEWABLE');
+  assert.equal(resolved.status.status, 'FAILED');
+  assert.equal(resolved.status.review_gate_passed, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.match(resolved.status.consistency_errors.join('\n'), /Missing reviewable repair artifact: content\/newsroom\/2026-05-08\/editor-draft\.json/);
+});
+
+test('publish status resolver does not promote FAILED_REPAIR_REVIEWABLE with invalid canonical artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date);
+  writeText(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), '{ invalid json');
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.generation_status, 'FAILED_REPAIR_REVIEWABLE');
+  assert.equal(resolved.status.status, 'FAILED');
+  assert.equal(resolved.status.review_gate_passed, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.match(resolved.status.consistency_errors.join('\n'), /Could not read content\/newsroom\/2026-05-08\/editor-draft\.json/);
 });
 
 test('validate-pr-body fails when consistency errors are present', () => {

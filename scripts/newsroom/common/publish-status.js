@@ -5,6 +5,9 @@ const {
   qualityGatePolicy
 } = require('./newsletter-policy');
 
+const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
+const COMPOSITION_MODE_NEEDS_FIX = 'NEEDS_FIX';
+
 const DEFAULT_STATUS = {
   status: 'UNKNOWN',
   fact_check_status: 'UNKNOWN',
@@ -188,8 +191,9 @@ function selectionSummary(status, shortlistReport) {
   };
 }
 
-function displayStatus(status, finalPublishReady, consistencyErrors) {
+function displayStatus(status, finalPublishReady, consistencyErrors, reviewableRepairFailure = false) {
   if (consistencyErrors.length > 0) return 'FAILED';
+  if (reviewableRepairFailure) return COMPOSITION_MODE_NEEDS_FIX;
   if (finalPublishReady) return 'PASS';
   if (status.status === 'FAILED') return 'FAILED';
   if (status.status === 'UNKNOWN') return 'UNKNOWN';
@@ -201,6 +205,7 @@ function readPublishStatusInputs(options = {}) {
   const statusInput = resolveStatusInput(root, options);
   const date = resolveDate(options, statusInput.status, root);
   const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const editor = readJsonIfExists(path.join(newsroomDir, 'editor-draft.json'));
   const quality = readJsonIfExists(path.join(newsroomDir, 'quality-report.json'));
   const factCheck = readJsonIfExists(path.join(newsroomDir, 'fact-check-report.json'));
   const staleClaim = readJsonIfExists(path.join(newsroomDir, 'stale-claim-report.json'));
@@ -211,6 +216,7 @@ function readPublishStatusInputs(options = {}) {
     date,
     newsroomDir,
     statusInput,
+    editor,
     quality,
     factCheck,
     staleClaim,
@@ -228,6 +234,7 @@ function resolvePublishStatus(options = {}) {
     consistencyErrors.push(`Could not read .tmp/newsletter-generation-status.json: ${inputs.statusInput.error.message}`);
   }
   for (const [name, artifact] of Object.entries({
+    'editor-draft.json': inputs.editor,
     'quality-report.json': inputs.quality,
     'fact-check-report.json': inputs.factCheck,
     'stale-claim-report.json': inputs.staleClaim,
@@ -237,6 +244,22 @@ function resolvePublishStatus(options = {}) {
       consistencyErrors.push(`Could not read content/newsroom/${inputs.date}/${name}: ${artifact.error.message}`);
     }
   }
+
+  const failedRepairReviewableStatus = status.status === STATUS_FAILED_REPAIR_REVIEWABLE;
+  const repairReviewArtifacts = {
+    'editor-draft.json': inputs.editor,
+    'quality-report.json': inputs.quality,
+    'fact-check-report.json': inputs.factCheck
+  };
+  if (failedRepairReviewableStatus) {
+    for (const [name, artifact] of Object.entries(repairReviewArtifacts)) {
+      if (!artifact.exists) {
+        consistencyErrors.push(`Missing reviewable repair artifact: content/newsroom/${inputs.date}/${name}`);
+      }
+    }
+  }
+  const reviewableRepairFailure = failedRepairReviewableStatus &&
+    Object.values(repairReviewArtifacts).every(artifact => artifact.exists && !artifact.error);
 
   const factCheck = factCheckSummary(status, inputs.factCheck.value);
   const quality = qualitySummary(status, inputs.quality.value);
@@ -258,13 +281,15 @@ function resolvePublishStatus(options = {}) {
     stale_claim_status_not_needs_fix: staleClaim.status !== 'NEEDS_FIX',
     stale_claim_hard_failure_count_zero: staleClaim.hardFailureCount === 0
   };
-  const artifactFinalPublishReady = Object.values(artifactFinalPublishReadyConditions).every(Boolean);
+  const artifactFinalPublishReady = !failedRepairReviewableStatus &&
+    Object.values(artifactFinalPublishReadyConditions).every(Boolean);
   const validationPassed = validateOutcome === 'success';
   const finalPublishReadyConditions = {
     artifact_final_publish_ready: artifactFinalPublishReady,
     validate_outcome_success: validationPassed
   };
-  const finalPublishReady = Object.values(finalPublishReadyConditions).every(Boolean);
+  const finalPublishReady = !failedRepairReviewableStatus &&
+    Object.values(finalPublishReadyConditions).every(Boolean);
   const statusFinalPublishReady = hasOwn(rawStatus, 'final_publish_ready')
     ? rawStatus.final_publish_ready
     : undefined;
@@ -277,7 +302,8 @@ function resolvePublishStatus(options = {}) {
   if (
     hasOwn(rawStatus, 'final_publish_ready') &&
     statusFinalPublishReady !== artifactFinalPublishReady &&
-    !validationOnlyStatusMismatch
+    !validationOnlyStatusMismatch &&
+    !failedRepairReviewableStatus
   ) {
     consistencyErrors.push(
       `status.final_publish_ready=${String(statusFinalPublishReady)} but artifact_final_publish_ready=${String(artifactFinalPublishReady)}`
@@ -286,7 +312,7 @@ function resolvePublishStatus(options = {}) {
 
   const resolvedStatus = {
     ...status,
-    status: displayStatus(status, finalPublishReady, consistencyErrors),
+    status: displayStatus(status, finalPublishReady, consistencyErrors, reviewableRepairFailure),
     generation_status: status.status || 'UNKNOWN',
     fact_check_status: factCheck.status,
     must_fix_count: factCheck.mustFixCount,
@@ -295,16 +321,16 @@ function resolvePublishStatus(options = {}) {
     quality_score: quality.score,
     quality_threshold: quality.threshold,
     quality_deduction_count: quality.deductionCount,
-    publish_ready: selection.selectionPublishReady,
-    selection_publish_ready: selection.selectionPublishReady,
+    publish_ready: failedRepairReviewableStatus ? false : selection.selectionPublishReady,
+    selection_publish_ready: failedRepairReviewableStatus ? false : selection.selectionPublishReady,
     artifact_final_publish_ready: artifactFinalPublishReady,
     final_publish_ready: finalPublishReady,
     validation_passed: validationPassed,
     status_final_publish_ready: statusFinalPublishReady,
-    review_gate_passed: selection.reviewGatePassed,
-    publish_gate_passed: selection.publishGatePassed,
-    composition_mode: selection.compositionMode,
-    selection_composition_mode: selection.selectionCompositionMode,
+    review_gate_passed: failedRepairReviewableStatus ? reviewableRepairFailure : selection.reviewGatePassed,
+    publish_gate_passed: failedRepairReviewableStatus ? false : selection.publishGatePassed,
+    composition_mode: failedRepairReviewableStatus ? COMPOSITION_MODE_NEEDS_FIX : selection.compositionMode,
+    selection_composition_mode: failedRepairReviewableStatus ? COMPOSITION_MODE_NEEDS_FIX : selection.selectionCompositionMode,
     composition_reason: selection.compositionReason,
     composition_summary: selection.composition,
     selection_warnings: selection.selectionWarnings,
@@ -325,6 +351,7 @@ function resolvePublishStatus(options = {}) {
     newsroomDir: inputs.newsroomDir,
     status: resolvedStatus,
     rawStatus,
+    editor: inputs.editor,
     quality,
     factCheck,
     staleClaim,

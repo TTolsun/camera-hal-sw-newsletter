@@ -1,6 +1,9 @@
 const path = require('path');
 const { writeJson } = require('../common/common');
 const {
+  normalizeUrl
+} = require('../generate/newsroom-selection');
+const {
   articlePolicy,
   articleCountRangeText,
   isForbiddenMainBucket,
@@ -37,20 +40,6 @@ function text(value) {
   return String(value || '').trim();
 }
 
-function normalizeUrlKey(value) {
-  const raw = text(value);
-  if (!raw) return '';
-  try {
-    const parsed = new URL(raw);
-    parsed.protocol = parsed.protocol.toLowerCase();
-    parsed.hostname = parsed.hostname.toLowerCase();
-    const normalized = parsed.toString().replace(/\/$/, '');
-    return normalized.toLowerCase();
-  } catch {
-    return raw.replace(/\/$/, '').toLowerCase();
-  }
-}
-
 function countDetails(value, field, expected = {}) {
   const actualValue = value?.[field];
   const isArray = Array.isArray(actualValue);
@@ -83,7 +72,7 @@ function buildCandidateIndex(reporter = {}) {
     const hash = candidateHash(candidate);
     if (hash && !byHash.has(hash)) byHash.set(hash, candidate);
     for (const url of candidateUrls(candidate)) {
-      const key = normalizeUrlKey(url);
+      const key = normalizeUrl(url);
       if (key && !byUrl.has(key)) byUrl.set(key, candidate);
     }
   }
@@ -94,7 +83,7 @@ function candidateForSection(section = {}, candidateIndex) {
   const hash = text(section.source_candidate_hash || section.url_hash || section.normalized_url_hash);
   if (hash && candidateIndex.byHash.has(hash)) return candidateIndex.byHash.get(hash);
   for (const source of ensureArray(section.sources)) {
-    const key = normalizeUrlKey(source?.url);
+    const key = normalizeUrl(source?.url);
     if (key && candidateIndex.byUrl.has(key)) return candidateIndex.byUrl.get(key);
   }
   return null;

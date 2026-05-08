@@ -335,6 +335,52 @@ test('targeted repair rejects locked section source URL drift', () => {
   );
 });
 
+test('targeted repair preserves locked sections around a middle replacement', () => {
+  const a = policySection('CameraX release', 'https://example.com/a');
+  const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
+  const c = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
+  const repairedB = policySection('Repaired driver pipeline update', 'https://example.com/b-repaired', 'camera_driver_image_pipeline');
+
+  assert.equal(validateTargetedRepairResult({
+    beforeSections: [a, b, c],
+    repairSections: [repairedB],
+    afterSections: [a, repairedB, c],
+    lockedSections: [a, c],
+    mode: 'targeted-repair',
+    allowCountChange: false,
+    date: DATE
+  }), true);
+});
+
+test('targeted repair rejects reordered locked sections around a middle replacement', () => {
+  const a = policySection('CameraX release', 'https://example.com/a');
+  const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
+  const c = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
+  const repairedB = policySection('Repaired driver pipeline update', 'https://example.com/b-repaired', 'camera_driver_image_pipeline');
+
+  for (const afterSections of [
+    [c, repairedB, a],
+    [a, c, repairedB]
+  ]) {
+    assert.throws(
+      () => validateTargetedRepairResult({
+        beforeSections: [a, b, c],
+        repairSections: [repairedB],
+        afterSections,
+        lockedSections: [a, c],
+        mode: 'targeted-repair',
+        allowCountChange: false,
+        date: DATE
+      }),
+      error => {
+        assert.ok(error instanceof EditorSemanticValidationError);
+        assert.equal(error.details.reason, 'locked_section_order_or_source_drift');
+        return true;
+      }
+    );
+  }
+});
+
 test('invalid repair output writes reviewable fallback without replacing last valid editor draft', () => {
   const root = tempRoot();
   const newsroomDir = path.join(root, 'content', 'newsroom', DATE);

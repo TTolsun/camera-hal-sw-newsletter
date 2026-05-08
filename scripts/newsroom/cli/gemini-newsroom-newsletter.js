@@ -721,7 +721,11 @@ function recordLastKnownValidEditor(editor, {
 }
 
 function sourceUrlSignature(section) {
-  return ensureArray(section?.sources).map(source => stringOrEmpty(source?.url));
+  return [...new Set(
+    ensureArray(section?.sources)
+      .map(source => normalizeUrl(source?.url))
+      .filter(Boolean)
+  )].sort();
 }
 
 function sectionRepairSignature(section) {
@@ -731,6 +735,22 @@ function sectionRepairSignature(section) {
     source_candidate_hash: stringOrEmpty(section?.source_candidate_hash),
     source_urls: sourceUrlSignature(section)
   };
+}
+
+function sectionLabelKey(section) {
+  const label = [
+    normalizeTitle(section?.headline),
+    normalizeTitle(section?.category)
+  ].filter(Boolean).join('|');
+  return label ? `label:${label}` : '';
+}
+
+function stableSectionKey(section) {
+  const hash = stringOrEmpty(section?.source_candidate_hash);
+  if (hash) return `hash:${hash}`;
+  const urls = sourceUrlSignature(section);
+  if (urls.length > 0) return `urls:${urls.join('|')}`;
+  return sectionLabelKey(section);
 }
 
 function sameSectionLabel(left, right) {
@@ -765,8 +785,25 @@ function validateTargetedRepairResult({
   const after = ensureArray(afterSections);
   const locked = ensureArray(lockedSections);
 
+  if (mode === 'targeted-repair' && after.length !== before.length) {
+    throw targetedRepairError('Targeted repair changed main article count outside completion/replacement mode.', {
+      reason: 'section_count_drift',
+      mode,
+      expectedCount: before.length,
+      actualCount: after.length,
+      expectedMinCount: articlePolicy.mainArticleCount.min,
+      expectedMaxCount: articlePolicy.mainArticleCount.max,
+      actualType: 'array',
+      sectionCount: after.length
+    });
+  }
+
   for (const generated of repair) {
-    const matchingLocked = locked.find(section => sameSectionLabel(section, generated));
+    const generatedKey = stableSectionKey(generated);
+    const matchingLocked = locked.find(section =>
+      (generatedKey && stableSectionKey(section) === generatedKey) ||
+      sameSectionLabel(section, generated)
+    );
     if (matchingLocked && !signaturesMatch(matchingLocked, generated)) {
       throw targetedRepairError('Targeted repair attempted to mutate a locked section source binding.', {
         reason: 'locked_section_source_drift',
@@ -778,13 +815,43 @@ function validateTargetedRepairResult({
     }
   }
 
-  for (const [index, lockedSection] of locked.entries()) {
-    const actual = after[index];
+  const usedBeforeIndexes = new Set();
+  for (const lockedSection of locked) {
+    const key = stableSectionKey(lockedSection);
+    let originalIndex = before.findIndex((section, index) =>
+      !usedBeforeIndexes.has(index) &&
+      key &&
+      stableSectionKey(section) === key &&
+      signaturesMatch(section, lockedSection)
+    );
+    if (originalIndex < 0) {
+      originalIndex = before.findIndex((section, index) =>
+        !usedBeforeIndexes.has(index) &&
+        key &&
+        stableSectionKey(section) === key
+      );
+    }
+    if (originalIndex < 0) {
+      originalIndex = before.findIndex((section, index) =>
+        !usedBeforeIndexes.has(index) &&
+        sameSectionLabel(section, lockedSection)
+      );
+    }
+    if (originalIndex < 0) {
+      throw targetedRepairError('Targeted repair could not find a locked section in the original draft.', {
+        reason: 'locked_section_missing_from_before',
+        mode,
+        expected: sectionRepairSignature(lockedSection),
+        sectionCount: after.length
+      });
+    }
+    usedBeforeIndexes.add(originalIndex);
+    const actual = after[originalIndex];
     if (!actual || !signaturesMatch(lockedSection, actual)) {
       throw targetedRepairError('Targeted repair changed locked section order or source binding.', {
         reason: 'locked_section_order_or_source_drift',
         mode,
-        index: index + 1,
+        index: originalIndex + 1,
         expected: sectionRepairSignature(lockedSection),
         actual: actual ? sectionRepairSignature(actual) : null,
         sectionCount: after.length
@@ -973,6 +1040,7 @@ function writeReviewableRepairFailureArtifacts({
       }),
       publish_ready: false,
       selection_publish_ready: false,
+      review_gate_passed: true,
       final_publish_ready: false,
       publish_gate_passed: false,
       composition_mode: COMPOSITION_MODES.NEEDS_FIX,
