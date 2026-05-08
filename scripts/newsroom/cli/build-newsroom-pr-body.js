@@ -126,11 +126,16 @@ function recommendedEditorAction(status) {
 
 function renderStatusSection(status) {
   const editorAction = recommendedEditorAction(status);
+  const editorialReviewable = status.failure_kind === 'editorial_reviewable';
   return [
     '## 생성 상태',
     '',
+    editorialReviewable
+      ? '발행 불가 경고: 이 PR은 발행 불가 review PR입니다. public issue 파일과 data/newsletters.json 업데이트를 포함하지 않습니다.'
+      : '',
     `전체 상태: ${valueOrUnknown(status.status)}`,
     `생성 실행 상태: ${valueOrUnknown(status.generation_status)}`,
+    `failure_kind=${valueOrUnknown(status.failure_kind || 'none')}`,
     `팩트체크 상태: ${valueOrUnknown(status.fact_check_status)}`,
     `팩트체크 must_fix_count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
     `팩트체크 source_gap_count: ${valueOrUnknown(status.source_gap_count ?? 0)}`,
@@ -144,18 +149,20 @@ function renderStatusSection(status) {
     `수정된 section 수: ${valueOrUnknown(status.repaired_section_count ?? 0)}`,
     `건너뛴 repair section 수: ${valueOrUnknown(status.skipped_repair_section_count ?? 0)}`,
     `검증 결과: ${valueOrUnknown(status.validate_outcome)}`,
+    `validate_ok=${booleanText(status.validate_ok)}`,
     `selection_publish_ready: ${booleanText(status.selection_publish_ready)}`,
     `최종 발행 가능 여부: ${booleanText(status.final_publish_ready)} (final_publish_ready: ${booleanText(status.final_publish_ready)})`,
     `정책상 발행 조건: ${booleanText(status.publish_gate_passed)} (publish_gate_passed: ${booleanText(status.publish_gate_passed)}; ${publishGateCriteriaText()})`,
     `검토 게이트: ${booleanText(status.review_gate_passed)} (review_gate_passed: ${booleanText(status.review_gate_passed)})`,
     `편집자 검토 필요: ${booleanText(status.editor_review_required)}`,
+    `editor_review_required=${booleanText(status.editor_review_required)}`,
     `부족한 후보 경로: ${booleanText(status.underfilled)}`,
     `Stale claim 상태: ${valueOrUnknown(status.stale_claim_status)}`,
     `Stale claim 요약: removed=${valueOrUnknown(status.stale_claim_removed_count ?? 0)}; hard_failures=${valueOrUnknown(status.stale_claim_hard_failure_count ?? 0)}`,
     `상태 일관성 오류: ${ensureArray(status.consistency_errors).length > 0 ? status.consistency_errors.join('; ') : '없음'} (consistency_errors: ${ensureArray(status.consistency_errors).length > 0 ? status.consistency_errors.join('; ') : 'none'})`,
     `권장 조치: ${editorAction}`,
     ''
-  ].join('\n');
+  ].filter(line => line !== '').join('\n');
 }
 
 function renderEditorApprovedPublicationPolicy() {

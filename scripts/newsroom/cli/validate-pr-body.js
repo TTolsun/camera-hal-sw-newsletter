@@ -43,7 +43,10 @@ function extractStatusSection(text) {
 function parseStatusSection(section) {
   return {
     overallStatus: firstMatch(section, /^전체 상태:\s*([A-Z_]+)/m),
+    failureKind: firstMatch(section, /^failure_kind[=:]\s*([a-z_]+)/m),
     finalPublishReady: boolFromMatch(section.match(/final_publish_ready:\s*(true|false)/)),
+    validateOk: boolFromMatch(section.match(/validate_ok[=:]\s*(true|false)/)),
+    editorReviewRequired: boolFromMatch(section.match(/editor_review_required[=:]\s*(true|false)/)),
     qualityStatus: firstMatch(section, /^품질 상태:\s*([A-Z_]+)/m),
     factCheckStatus: firstMatch(section, /^팩트체크 상태:\s*([A-Z_]+)/m),
     mustFixCount: numberFromMatch(section.match(/must_fix_count[:=]\s*(\d+)/)),
@@ -106,6 +109,21 @@ function validatePrBodyText(text) {
     /\b(?:FAILED|NEEDS_FIX)\b/.test(statusSection)
   ) {
     errors.push('생성 상태 summary mixes PASS with FAILED/NEEDS_FIX.');
+  }
+
+  if (parsed.failureKind === 'editorial_reviewable') {
+    if (!/발행 불가 경고:/.test(statusSection) || !/발행 불가 review PR/.test(statusSection)) {
+      errors.push('editorial_reviewable PR body must contain the non-publish warning.');
+    }
+    if (parsed.finalPublishReady !== false) {
+      errors.push(`editorial_reviewable PR body must show final_publish_ready=false, got ${parsed.finalPublishReady}.`);
+    }
+    if (parsed.validateOk !== false) {
+      errors.push(`editorial_reviewable PR body must show validate_ok=false, got ${parsed.validateOk}.`);
+    }
+    if (parsed.editorReviewRequired !== true) {
+      errors.push(`editorial_reviewable PR body must show editor_review_required=true, got ${parsed.editorReviewRequired}.`);
+    }
   }
 
   if (parsed.finalPublishReady === true) {

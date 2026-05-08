@@ -29,6 +29,7 @@ const {
 } = require('../scripts/write-publish-status-output');
 const {
   buildReviewableArtifactOutputs,
+  REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   resolveReviewableArtifacts
 } = require('../scripts/resolve-reviewable-artifacts');
@@ -145,6 +146,69 @@ function writeNewsletterIndex(root, items) {
     md: `newsletters/${item.date}/newsletter.md`,
     tags: ['Camera HAL']
   })));
+}
+
+function writeEditorialReviewableArtifacts(root, date, overrides = {}) {
+  const status = {
+    date,
+    status: 'NEEDS_FIX',
+    failure_kind: 'editorial_reviewable',
+    final_publish_ready: false,
+    validate_ok: false,
+    editor_review_required: true,
+    fact_check_status: 'NEEDS_FIX',
+    must_fix_count: 1,
+    quality_status: 'NEEDS_FIX',
+    quality_score: 82,
+    quality_threshold: qualityGatePolicy.threshold,
+    publish_gate_passed: false,
+    review_gate_passed: true,
+    ...(overrides.status || {})
+  };
+  const editor = {
+    date,
+    title: `Camera HAL SW Newsletter - ${date}`,
+    summary: 'Review-only draft',
+    briefing: ['one', 'two', 'three'],
+    sections: [],
+    references: [],
+    ...(overrides.editor || {})
+  };
+  const factCheck = {
+    status: 'NEEDS_FIX',
+    must_fix: [{ issue: 'editorial fact-check remains' }],
+    source_gaps: [],
+    source_gap_count: 0,
+    ...(overrides.factCheck || {})
+  };
+  const quality = {
+    status: 'NEEDS_FIX',
+    score: 82,
+    threshold: qualityGatePolicy.threshold,
+    deductions: [{ category: 'source-integrity', points: 15, reason: 'Fact checker returned 1 must_fix item(s).' }],
+    ...(overrides.quality || {})
+  };
+  const generationStatus = {
+    ...status,
+    ...(overrides.generationStatus || {})
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  if (overrides.writeEditor !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  }
+  if (overrides.writeFactCheck !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  }
+  if (overrides.writeQuality !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
+  }
+  if (overrides.writeGenerationStatus !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
+  }
+
+  return { status, editor, factCheck, quality, generationStatus };
 }
 
 function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
@@ -373,6 +437,31 @@ test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow'
   assert.doesNotMatch(body, /최종 발행 조건이 모두 통과했습니다/);
 });
 
+test('newsroom PR body marks editorial reviewable handoff as non-publishable', () => {
+  const root = tempRoot();
+  const date = '2026-05-09';
+  writeEditorialReviewableArtifacts(root, date);
+
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'skipped'
+  });
+
+  assert.match(body, /발행 불가 경고:/);
+  assert.match(body, /발행 불가 review PR/);
+  assert.match(body, /failure_kind=editorial_reviewable/);
+  assert.match(body, /final_publish_ready: false/);
+  assert.match(body, /validate_ok=false/);
+  assert.match(body, /editor_review_required=true/);
+  assert.equal(validatePrBodyText(body).ok, true);
+
+  const missingWarning = body.replace(/^발행 불가 경고:.*\n/m, '');
+  const result = validatePrBodyText(missingWarning);
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /non-publish warning/);
+});
+
 test('reviewable artifact resolver does not accept tmp status alone', () => {
   const root = tempRoot();
   const date = '2026-05-08';
@@ -432,6 +521,87 @@ test('reviewable artifact resolver rejects stale base artifacts without repo-vis
   assert.match(outputs.reviewable_artifact_reason, /missing_required=none/);
 });
 
+test('reviewable artifact resolver accepts editorial reviewable handoff without public artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-09';
+  writeEditorialReviewableArtifacts(root, date);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_public_artifacts, 'false');
+  assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /failure_kind=editorial_reviewable/);
+  assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
+});
+
+test('reviewable artifact resolver rejects editorial reviewable public and data writes', () => {
+  const root = tempRoot();
+  const date = '2026-05-09';
+  writeEditorialReviewableArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${date}/${file}`)
+      .concat([
+        `newsletters/${date}/newsletter.md`,
+        `newsletters/${date}/index.html`,
+        'data/newsletters.json'
+      ])
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.has_public_artifacts, 'false');
+  assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /public_exists=/);
+  assert.match(outputs.reviewable_artifact_reason, /public_changed=/);
+  assert.match(outputs.reviewable_artifact_reason, /data_newsletters_changed=true/);
+  assert.match(outputs.reviewable_artifact_reason, /data_newsletters_has_date=2026-05-09/);
+});
+
+test('reviewable artifact resolver rejects editorial reviewable invalid canonical artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-09';
+  writeEditorialReviewableArtifacts(root, date, {
+    generationStatus: {
+      failure_kind: 'wrong_kind'
+    }
+  });
+
+  let outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /canonical_failure_kind=wrong_kind/);
+
+  writeText(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), '{ invalid json');
+  outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /canonical_generation_status=invalid/);
+  assert.match(outputs.reviewable_artifact_reason, /invalid_editorial_required=/);
+
+  const missingRoot = tempRoot();
+  writeEditorialReviewableArtifacts(missingRoot, date, { writeQuality: false });
+  outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root: missingRoot,
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /missing_editorial_required=quality-report\.json/);
+});
+
 test('reviewable artifact resolver rejects failed repair with repair-failure only', () => {
   const root = tempRoot();
   const date = '2026-05-08';
@@ -483,7 +653,7 @@ test('reviewable artifact resolver accepts complete changed failed repair artifa
   assert.match(outputs.reviewable_artifact_reason, /missing_required=none/);
 });
 
-test('reviewable artifact resolver separates public artifacts from AI publish readiness', () => {
+test('reviewable artifact resolver rejects legacy quality failures without editorial failure kind', () => {
   const root = tempRoot();
   const date = '2026-05-08';
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
@@ -508,10 +678,13 @@ test('reviewable artifact resolver separates public artifacts from AI publish re
     ]
   }));
 
-  assert.equal(outputs.has_reviewable_artifacts, 'true');
-  assert.equal(outputs.has_public_artifacts, 'true');
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.has_public_artifacts, 'false');
   assert.equal(outputs.has_ai_publish_ready, 'false');
-  assert.equal(outputs.has_publish_candidate, 'true');
+  assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /canonical_generation_status=missing/);
+  assert.match(outputs.reviewable_artifact_reason, /public_changed=/);
+  assert.match(outputs.reviewable_artifact_reason, /data_newsletters_changed=true/);
 });
 
 test('reviewable artifact resolver does not treat FAILED status as a publish candidate', () => {
@@ -1291,30 +1464,45 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   );
 });
 
-test('generation path writes public artifacts before AI readiness status checks', () => {
+test('generation path guards public artifacts for editorial reviewable failures', () => {
   const generatorPath = path.join(__dirname, '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');
-  const markdownWriteIndex = generator.indexOf("fs.writeFileSync(newsletterMd, buildMarkdown(editor), 'utf8');");
-  const htmlWriteIndex = generator.indexOf("fs.writeFileSync(newsletterHtml, buildHtml(editor), 'utf8');");
-  const dataWriteIndex = generator.indexOf('updateNewsletterData(date, editor);');
   const generationStatusIndex = generator.indexOf("let generationStatus = 'PASS';");
   const factCheckNeedsFixIndex = generator.indexOf("factCheck.status === 'NEEDS_FIX' && mustFixCount > 0", generationStatusIndex);
   const qualityNeedsFixIndex = generator.indexOf("qualityReport.status !== 'PASS'", generationStatusIndex);
-  const finalPublishReadyIndex = generator.indexOf('const finalPublishReady =', generationStatusIndex);
+  const editorialReviewableIndex = generator.indexOf(
+    'const editorialReviewable = isEditorialReviewableStatus(generationStatus);',
+    qualityNeedsFixIndex
+  );
+  const shouldWriteIndex = generator.indexOf('const shouldWritePublicArtifacts = !editorialReviewable;', editorialReviewableIndex);
+  const writeGuardIndex = generator.indexOf('if (shouldWritePublicArtifacts) {', shouldWriteIndex);
+  const markdownWriteIndex = generator.indexOf("fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');", writeGuardIndex);
+  const htmlWriteIndex = generator.indexOf("fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');", writeGuardIndex);
+  const dataWriteIndex = generator.indexOf('updateNewsletterData(date, editor);', writeGuardIndex);
+  const validateResultIndex = generator.indexOf('const validateResult = editorialReviewable', dataWriteIndex);
+  const finalPublishReadyIndex = generator.indexOf('const finalPublishReady =', validateResultIndex);
 
-  assert.notEqual(markdownWriteIndex, -1);
-  assert.notEqual(htmlWriteIndex, -1);
-  assert.notEqual(dataWriteIndex, -1);
   assert.notEqual(generationStatusIndex, -1);
   assert.notEqual(factCheckNeedsFixIndex, -1);
   assert.notEqual(qualityNeedsFixIndex, -1);
+  assert.notEqual(editorialReviewableIndex, -1);
+  assert.notEqual(shouldWriteIndex, -1);
+  assert.notEqual(writeGuardIndex, -1);
+  assert.notEqual(markdownWriteIndex, -1);
+  assert.notEqual(htmlWriteIndex, -1);
+  assert.notEqual(dataWriteIndex, -1);
+  assert.notEqual(validateResultIndex, -1);
   assert.notEqual(finalPublishReadyIndex, -1);
-  assert.ok(markdownWriteIndex < generationStatusIndex);
-  assert.ok(htmlWriteIndex < generationStatusIndex);
-  assert.ok(dataWriteIndex < generationStatusIndex);
   assert.ok(generationStatusIndex < factCheckNeedsFixIndex);
   assert.ok(factCheckNeedsFixIndex < qualityNeedsFixIndex);
-  assert.ok(qualityNeedsFixIndex < finalPublishReadyIndex);
+  assert.ok(qualityNeedsFixIndex < editorialReviewableIndex);
+  assert.ok(editorialReviewableIndex < shouldWriteIndex);
+  assert.ok(shouldWriteIndex < writeGuardIndex);
+  assert.ok(writeGuardIndex < markdownWriteIndex);
+  assert.ok(markdownWriteIndex < htmlWriteIndex);
+  assert.ok(htmlWriteIndex < dataWriteIndex);
+  assert.ok(dataWriteIndex < validateResultIndex);
+  assert.ok(validateResultIndex < finalPublishReadyIndex);
 });
 
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {

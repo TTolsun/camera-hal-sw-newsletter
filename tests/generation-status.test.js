@@ -45,6 +45,37 @@ test('failure stage is extracted from bracketed Gemini errors', () => {
   );
 });
 
+test('editorial reviewable status records non-publish handoff fields', () => {
+  const status = buildGenerationStatus({
+    date: '2026-05-09',
+    status: 'NEEDS_FIX',
+    retryHistory: [{ attempt: 1 }],
+    qualityReport: {
+      status: 'NEEDS_FIX',
+      score: qualityGatePolicy.threshold - 3,
+      threshold: qualityGatePolicy.threshold,
+      deductions: [{ category: 'source-integrity', points: 15 }]
+    },
+    factCheck: {
+      status: 'NEEDS_FIX',
+      must_fix: [{ issue: 'editorial repair needed' }]
+    },
+    extra: {
+      failure_kind: 'editorial_reviewable',
+      final_publish_ready: false,
+      validate_ok: false,
+      editor_review_required: true
+    }
+  });
+
+  assert.equal(status.status, 'NEEDS_FIX');
+  assert.equal(status.failure_kind, 'editorial_reviewable');
+  assert.equal(status.final_publish_ready, false);
+  assert.equal(status.validate_ok, false);
+  assert.equal(status.editor_review_required, true);
+  assert.equal(status.must_fix_count, 1);
+});
+
 test('completion validation accepts a single missing article section', () => {
   const sections = validateCompletionSections({
     sections: [{

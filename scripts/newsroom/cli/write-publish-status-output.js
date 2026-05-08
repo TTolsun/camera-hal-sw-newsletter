@@ -13,6 +13,8 @@ const OUTPUT_FIELDS = [
   'publish_gate_passed',
   'review_gate_passed',
   'validate_outcome',
+  'validate_ok',
+  'failure_kind',
   'quality_status',
   'fact_check_status',
   'must_fix_count',

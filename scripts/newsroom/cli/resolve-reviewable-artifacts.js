@@ -11,6 +11,7 @@ const {
 } = require('./write-generation-status-output');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
+const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 
 const REVIEWABLE_STATUSES = new Set([
   'PASS',
@@ -41,9 +42,31 @@ const REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS = [
   'generation-status.json'
 ];
 
+const REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS = [
+  'editor-draft.json',
+  'quality-report.json',
+  'fact-check-report.json',
+  'generation-status.json'
+];
+
 function readTextIfExists(filePath) {
   if (!fs.existsSync(filePath)) return '';
   return fs.readFileSync(filePath, 'utf8').trim();
+}
+
+function readJsonIfExists(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return { exists: false, value: null, error: null };
+  }
+  try {
+    return {
+      exists: true,
+      value: JSON.parse(fs.readFileSync(filePath, 'utf8')),
+      error: null
+    };
+  } catch (error) {
+    return { exists: true, value: null, error };
+  }
 }
 
 function toRepoPath(filePath) {
@@ -102,6 +125,48 @@ function existingArtifacts(root, date, relativeFiles) {
   return relativeFiles.filter(relativeFile => fs.existsSync(path.join(root, relativeFile.replaceAll('${date}', date))));
 }
 
+function artifactJsonReadResults(root, date, artifactNames) {
+  return Object.fromEntries(artifactNames.map(name => [
+    name,
+    readJsonIfExists(path.join(root, 'content', 'newsroom', date, name))
+  ]));
+}
+
+function missingArtifacts(results) {
+  return Object.entries(results)
+    .filter(([, result]) => !result.exists)
+    .map(([name]) => name);
+}
+
+function invalidArtifacts(results) {
+  return Object.entries(results)
+    .filter(([, result]) => result.error)
+    .map(([name, result]) => `${name}: ${result.error.message}`);
+}
+
+function newsletterIndexDateStatus(root, date) {
+  const dataPath = path.join(root, 'data', 'newsletters.json');
+  const result = readJsonIfExists(dataPath);
+  if (!result.exists) {
+    return { exists: false, hasDate: false, error: null };
+  }
+  if (result.error) {
+    return { exists: true, hasDate: false, error: result.error };
+  }
+  if (!Array.isArray(result.value)) {
+    return {
+      exists: true,
+      hasDate: false,
+      error: new Error('data/newsletters.json must contain an array')
+    };
+  }
+  return {
+    exists: true,
+    hasDate: result.value.some(item => item?.date === date),
+    error: null
+  };
+}
+
 function relevantChangedArtifacts(changedArtifacts, date) {
   return [...new Set((Array.isArray(changedArtifacts) ? changedArtifacts : [])
     .map(toRepoPath)
@@ -126,23 +191,75 @@ function resolveReviewableArtifacts(options = {}) {
     'newsletters/${date}/newsletter.md',
     'newsletters/${date}/index.html'
   ]);
+  const newsletterIndex = newsletterIndexDateStatus(root, date);
   const changedArtifacts = Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')
     ? relevantChangedArtifacts(options.changedArtifacts, date)
     : relevantChangedArtifacts(getChangedRepoVisibleArtifacts({ root, date }), date);
   const hasCanonicalDiagnostic = canonicalArtifacts.length > 0;
   const statusReviewable = REVIEWABLE_STATUSES.has(status.status);
   const failedRepairReviewable = status.status === STATUS_FAILED_REPAIR_REVIEWABLE;
+  const changedPublicArtifacts = changedArtifacts.filter(filePath =>
+    filePath.startsWith(`newsletters/${date}/`) ||
+    filePath === 'data/newsletters.json'
+  );
+  const dataNewsletterChanged = changedArtifacts.includes('data/newsletters.json');
+  const editorialArtifacts = artifactJsonReadResults(root, date, REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS);
+  const editorialGenerationStatus = editorialArtifacts['generation-status.json'];
+  const statusValues = [status.status, editorialGenerationStatus.value?.status].filter(Boolean);
+  const editorialStatus = statusValues.some(value => value === 'NEEDS_FIX' || value === 'QUALITY_NEEDS_FIX');
+  const editorialReviewableRequested =
+    status.failure_kind === FAILURE_KIND_EDITORIAL_REVIEWABLE ||
+    editorialGenerationStatus.value?.failure_kind === FAILURE_KIND_EDITORIAL_REVIEWABLE ||
+    editorialStatus;
+  const editorialMissingRequired = missingArtifacts(editorialArtifacts);
+  const editorialInvalidArtifacts = invalidArtifacts(editorialArtifacts);
+  const editorialRejectReasons = [];
+  if (editorialReviewableRequested) {
+    if (!editorialStatus) {
+      editorialRejectReasons.push(`status_not_editorial=${statusValues.find(Boolean) || 'UNKNOWN'}`);
+    }
+    if (!editorialGenerationStatus.exists) {
+      editorialRejectReasons.push('canonical_generation_status=missing');
+    } else if (editorialGenerationStatus.error) {
+      editorialRejectReasons.push(`canonical_generation_status=invalid:${editorialGenerationStatus.error.message}`);
+    } else if (editorialGenerationStatus.value?.failure_kind !== FAILURE_KIND_EDITORIAL_REVIEWABLE) {
+      editorialRejectReasons.push(`canonical_failure_kind=${editorialGenerationStatus.value?.failure_kind || 'missing'}`);
+    }
+    if (editorialMissingRequired.length > 0) {
+      editorialRejectReasons.push(`missing_editorial_required=${editorialMissingRequired.join(',')}`);
+    }
+    if (editorialInvalidArtifacts.length > 0) {
+      editorialRejectReasons.push(`invalid_editorial_required=${editorialInvalidArtifacts.join(',')}`);
+    }
+    if (publicArtifacts.length > 0) {
+      editorialRejectReasons.push(`public_exists=${publicArtifacts.join(',')}`);
+    }
+    const changedPublicNewsletterFiles = changedPublicArtifacts.filter(filePath => filePath.startsWith(`newsletters/${date}/`));
+    if (changedPublicNewsletterFiles.length > 0) {
+      editorialRejectReasons.push(`public_changed=${changedPublicNewsletterFiles.join(',')}`);
+    }
+    if (dataNewsletterChanged) {
+      editorialRejectReasons.push('data_newsletters_changed=true');
+    }
+    if (newsletterIndex.error) {
+      editorialRejectReasons.push(`data_newsletters_invalid=${newsletterIndex.error.message}`);
+    } else if (newsletterIndex.hasDate) {
+      editorialRejectReasons.push(`data_newsletters_has_date=${date}`);
+    }
+  }
   const missingRequired = failedRepairReviewable
     ? REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.filter(file => !canonicalArtifacts.includes(file))
     : [];
   const hasRequiredCanonicalArtifacts = failedRepairReviewable
     ? missingRequired.length === 0
-    : hasCanonicalDiagnostic;
-  const changedPublicArtifacts = changedArtifacts.filter(filePath =>
-    filePath.startsWith(`newsletters/${date}/`) ||
-    filePath === 'data/newsletters.json'
-  );
-  const hasReviewableArtifacts = hasRequiredCanonicalArtifacts && statusReviewable && changedArtifacts.length > 0;
+    : editorialReviewableRequested
+      ? editorialRejectReasons.length === 0
+      : hasCanonicalDiagnostic;
+  const hasReviewableArtifacts =
+    hasRequiredCanonicalArtifacts &&
+    statusReviewable &&
+    changedArtifacts.length > 0 &&
+    (!editorialReviewableRequested || editorialRejectReasons.length === 0);
   const hasPublicArtifacts =
     hasReviewableArtifacts &&
     publicArtifacts.length > 0 &&
@@ -150,15 +267,20 @@ function resolveReviewableArtifacts(options = {}) {
   const hasAiPublishReady = status.final_publish_ready === true;
   const hasPublishCandidate =
     hasPublicArtifacts &&
+    !editorialReviewableRequested &&
     !failedRepairReviewable;
   const reasonParts = [
     `status=${status.status || 'UNKNOWN'}`,
+    editorialReviewableRequested ? `failure_kind=${FAILURE_KIND_EDITORIAL_REVIEWABLE}` : '',
     hasCanonicalDiagnostic
       ? `canonical=${canonicalArtifacts.join(',')}`
       : 'canonical=none',
     `changed=${changedArtifacts.length > 0 ? changedArtifacts.join(',') : 'none'}`,
     failedRepairReviewable
       ? `missing_required=${missingRequired.length > 0 ? missingRequired.join(',') : 'none'}`
+      : '',
+    editorialReviewableRequested
+      ? `editorial_reject=${editorialRejectReasons.length > 0 ? editorialRejectReasons.join(';') : 'none'}`
       : '',
     publicArtifacts.length > 0
       ? `public=${publicArtifacts.join(',')}`
@@ -174,6 +296,7 @@ function resolveReviewableArtifacts(options = {}) {
     publicArtifacts,
     changedArtifacts,
     missingRequired,
+    editorialRejectReasons,
     hasReviewableArtifacts,
     hasPublicArtifacts,
     hasAiPublishReady,
@@ -205,6 +328,7 @@ if (require.main === module) {
 
 module.exports = {
   CANONICAL_REVIEW_ARTIFACTS,
+  REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   REVIEWABLE_STATUSES,
   buildReviewableArtifactOutputs,

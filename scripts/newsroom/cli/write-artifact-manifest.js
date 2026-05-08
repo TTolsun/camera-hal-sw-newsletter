@@ -91,6 +91,7 @@ function statusSummary(status) {
     'date',
     'newsletter_date',
     'status',
+    'failure_kind',
     'failure_stage',
     'failure_reason',
     'fact_check_status',
@@ -106,6 +107,7 @@ function statusSummary(status) {
     'selection_composition_mode',
     'editor_review_required',
     'final_publish_ready',
+    'validate_ok',
     'underfilled',
     'publish_ready'
   ];
