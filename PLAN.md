@@ -1,33 +1,29 @@
 # Current Plan
 
-## Newsroom Repair Pipeline follow-up
+## Editor Retry Recovery And Reviewable PR Handoff
 
-- Fix targeted repair validation so a middle replacement does not look like locked section drift.
-- Keep locked section order/source URL/source candidate hash/headline/category stable at the original `beforeSections` index.
-- Treat `FAILED_REPAIR_REVIEWABLE` as successful review artifact creation, but never as publish-ready.
-- Keep Newsletter Policy values sourced from `config/newsletter-policy.json`.
-- Reuse the newsroom selection URL normalization rule for editor output candidate matching.
+- Keep the existing quality and publish gates strict. A 2-section editor retry output remains invalid and must never become publish-ready.
+- When an editor retry violates the output contract and `lastKnownValidEditor` exists, preserve the last valid draft plus canonical diagnostics under `content/newsroom/<date>/` and write `FAILED_REPAIR_REVIEWABLE`.
+- Treat `FAILED_REPAIR_REVIEWABLE` as reviewable but not publishable. It can create a `needs-fix` PR, but site publish validation must not run for it.
+- Do not let `.tmp` files alone make the workflow reviewable. Require at least one same-date canonical diagnostic/review artifact under `content/newsroom/<date>/`.
 
 ## Implementation Scope
 
 - `scripts/newsroom/cli/gemini-newsroom-newsletter.js`
-  - Validate targeted repair section count before locked section checks.
-  - Match locked sections back to their original `beforeSections` index by stable key.
-  - Reject locked source/hash/headline/category drift.
-  - Force fallback status booleans for `FAILED_REPAIR_REVIEWABLE`.
-- `scripts/newsroom/common/publish-status.js`
-  - Read `editor-draft.json` as a publish status input.
-  - Recognize complete `FAILED_REPAIR_REVIEWABLE` artifacts as reviewable but not publishable.
-  - Keep missing or invalid canonical artifacts as diagnostics/failure.
-- `scripts/newsroom/validate/editor-output-contract.js`
-  - Use `normalizeUrl` from `newsroom-selection.js` for reporter candidate URL matching.
+  - Add editor retry contract helpers for `target_section_count`, `locked_section_count`, and `replacement_required_count`.
+  - Prefer `lastKnownValidEditor.sections.length` for the target section count, then current valid draft length, then policy minimum.
+  - Reject locked-only retry output and section-count drift before canonical write.
+  - Route editor semantic failures with `lastKnownValidEditor` through `FAILED_REPAIR_REVIEWABLE` artifact preservation.
+- Workflow handoff
+  - Add a helper that outputs `date`, `branch`, `has_reviewable_artifacts`, `has_publish_candidate`, and `reviewable_artifact_reason`.
+  - Use generation status date before `.tmp/newsletter-date.txt`, explicit `NEWSLETTER_DATE`, then KST today.
+  - Run site validation and publish-status resolution only for publish candidates; still create PRs for reviewable needs-fix artifacts.
 - tests
-  - Add middle replacement, locked reorder, failed repair status, and URL matching regressions.
+  - Cover 2-section retry failure recovery, locked/replacement contract counts, locked-only rejection, `.tmp`-only non-reviewability, and `FAILED_REPAIR_REVIEWABLE` workflow routing.
 
 ## Validation
 
+- `node --test tests/targeted-retry.test.js`
+- `node --test tests/workflow-scripts.test.js`
 - `npm.cmd run test`
-- `npm.cmd run validate:policy`
-- `npm.cmd run check:policy-docs`
 - `npm.cmd run validate`
-- Run `npm.cmd run generate` only if a fixture/dry-run or non-live-API path is available.

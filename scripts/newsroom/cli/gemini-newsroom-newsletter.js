@@ -704,6 +704,87 @@ function validateEditor(value, date, reporter = { candidates: [] }) {
   });
 }
 
+function buildEditorRetryContract({
+  lastKnownValidEditor = null,
+  currentEditor = null,
+  lockedSections = []
+} = {}) {
+  const previousValidSections = ensureArray(lastKnownValidEditor?.sections);
+  const currentSections = ensureArray(currentEditor?.sections);
+  const locked = ensureArray(lockedSections);
+  const targetSectionCount = previousValidSections.length > 0
+    ? previousValidSections.length
+    : currentSections.length > 0
+      ? currentSections.length
+      : articlePolicy.mainArticleCount.min;
+  return {
+    target_section_count: targetSectionCount,
+    locked_section_count: locked.length,
+    replacement_required_count: Math.max(0, targetSectionCount - locked.length),
+    locked_section_signatures: locked.map(sectionRepairSignature),
+    locked_section_summaries: locked.map((section, index) => sectionSummary(section, index))
+  };
+}
+
+function assertEditorRetryOutputContract(editor, contract, reporter = { candidates: [] }) {
+  if (!contract) return true;
+  const sections = ensureArray(editor?.sections);
+  const targetSectionCount = Number(contract.target_section_count);
+  const lockedSectionCount = Number(contract.locked_section_count);
+  const replacementRequiredCount = Number(contract.replacement_required_count);
+  const lockedSignatureStrings = ensureArray(contract.locked_section_signatures)
+    .map(signature => JSON.stringify(signature));
+  const outputSignatureStrings = sections.map(section =>
+    JSON.stringify(sectionRepairSignature(normalizeEditorSection(section, 0, reporter)))
+  );
+  const returnedOnlyLockedSections = sections.length === lockedSectionCount &&
+    replacementRequiredCount > 0 &&
+    lockedSignatureStrings.length === lockedSectionCount &&
+    lockedSignatureStrings.every(signature => outputSignatureStrings.includes(signature));
+  if (returnedOnlyLockedSections) {
+    throw new EditorSemanticValidationError('Editor retry output returned only locked sections instead of the complete target draft.', {
+      field: 'sections',
+      reason: 'locked_only_retry_output',
+      expectedCount: targetSectionCount,
+      actualCount: sections.length,
+      target_section_count: targetSectionCount,
+      locked_section_count: lockedSectionCount,
+      replacement_required_count: replacementRequiredCount,
+      actualType: 'array',
+      sectionCount: sections.length
+    });
+  }
+  if (Number.isFinite(targetSectionCount) && sections.length !== targetSectionCount) {
+    throw new EditorSemanticValidationError(`Editor retry output must contain exactly ${targetSectionCount} sections; got ${sections.length}.`, {
+      field: 'sections',
+      reason: 'editor_retry_section_count_drift',
+      expectedCount: targetSectionCount,
+      actualCount: sections.length,
+      target_section_count: targetSectionCount,
+      locked_section_count: lockedSectionCount,
+      replacement_required_count: replacementRequiredCount,
+      actualType: 'array',
+      sectionCount: sections.length
+    });
+  }
+  for (const expected of ensureArray(contract.locked_section_signatures)) {
+    const found = outputSignatureStrings.includes(JSON.stringify(expected));
+    if (!found) {
+      throw new EditorSemanticValidationError('Editor retry output omitted or changed a locked section.', {
+        field: 'sections',
+        reason: 'locked_section_missing_from_retry_output',
+        expected,
+        target_section_count: targetSectionCount,
+        locked_section_count: lockedSectionCount,
+        replacement_required_count: replacementRequiredCount,
+        actualType: 'array',
+        sectionCount: sections.length
+      });
+    }
+  }
+  return true;
+}
+
 function recordLastKnownValidEditor(editor, {
   date,
   reporter = { candidates: [] },
@@ -884,6 +965,32 @@ function validateTargetedRepairResult({
   return true;
 }
 
+function writeCanonicalReviewArtifacts({
+  date,
+  newsroomDir,
+  reporter = null,
+  editor = null,
+  factCheck = null,
+  qualityReport = null
+}) {
+  fs.mkdirSync(newsroomDir, { recursive: true });
+  if (reporter) {
+    writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
+  }
+  if (editor) {
+    writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
+    fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(editor), 'utf8');
+  }
+  if (factCheck) {
+    writeJson(path.join(newsroomDir, 'fact-check-report.json'), factCheck);
+    fs.writeFileSync(path.join(newsroomDir, 'fact-check-report.md'), buildFactCheckMarkdown(date, factCheck), 'utf8');
+  }
+  if (qualityReport) {
+    writeJson(path.join(newsroomDir, 'quality-report.json'), qualityReport);
+    fs.writeFileSync(path.join(newsroomDir, 'quality-report.md'), buildQualityReportMarkdown(qualityReport), 'utf8');
+  }
+}
+
 function fallbackFactCheckForRepairFailure(error, factCheck = null) {
   if (factCheck) return cloneJson(factCheck);
   return {
@@ -916,10 +1023,13 @@ function writeReviewableRepairFailureArtifacts({
   const fallbackReporter = cloneJson(reporter || generationRunState.lastKnownValidReporter || { candidates: [] });
   const fallbackEditor = validateEditor(cloneJson(generationRunState.lastKnownValidEditor), date, fallbackReporter);
   const fallbackFactCheck = fallbackFactCheckForRepairFailure(error, factCheck || generationRunState.lastKnownValidFactCheck);
-  const fallbackQualityReport = buildNewsletterQualityReport(date, fallbackEditor, fallbackReporter, fallbackFactCheck, {
-    threshold: qualityGatePolicy.threshold,
-    shortlistReport: shortlistReport || generationRunState.shortlistReport
-  });
+  const existingQualityReport = qualityReport || generationRunState.lastKnownValidQualityReport;
+  const fallbackQualityReport = existingQualityReport?.metrics
+    ? cloneJson(existingQualityReport)
+    : buildNewsletterQualityReport(date, fallbackEditor, fallbackReporter, fallbackFactCheck, {
+      threshold: qualityGatePolicy.threshold,
+      shortlistReport: shortlistReport || generationRunState.shortlistReport
+    });
   const serializedError = serializeEditorValidationError(error, {
     stage,
     attempt,
@@ -968,8 +1078,8 @@ function writeReviewableRepairFailureArtifacts({
       rejected_main_ineligible_candidates: [],
       lock_blockers: [],
       rejected_duplicate_headlines: [],
-      source_gap_count: fallbackQualityReport.metrics.source_gap_count,
-      must_fix_count: fallbackQualityReport.metrics.must_fix_count,
+      source_gap_count: fallbackQualityReport.metrics?.source_gap_count ?? fallbackFactCheck.source_gap_count ?? 0,
+      must_fix_count: fallbackQualityReport.metrics?.must_fix_count ?? ensureArray(fallbackFactCheck.must_fix).length,
       repair_failure: serializedError
     }
   ];
@@ -2295,6 +2405,13 @@ async function main() {
     const rejectedReporterDuplicates = removeDisallowedSelections(reporter, lockedSections, excludedSections);
     writeJson(path.join(newsroomDir, `reporter-candidates-attempt-${attempt}.json`), reporter);
 
+    const editorRetryContract = lockedSections.length > 0
+      ? buildEditorRetryContract({
+        lastKnownValidEditor: generationRunState.lastKnownValidEditor,
+        currentEditor: editor,
+        lockedSections
+      })
+      : null;
     const editorDraft = await callLlmJson(
       editorStage,
       [
@@ -2308,7 +2425,10 @@ async function main() {
         `Priority order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
         'SoC/platform articles are lower-priority fallback, but do not exclude public CPU/GPU/NPU/ISP/power/thermal/performance information when it is final-selected and can be explained from Camera framework, HAL, driver, image pipeline, or platform performance perspective.',
         'AI/C++ articles are optional fallback items only when final-selected inputs contain concrete native camera, driver, SoC, build/test, debugging, performance, or workflow value. Do not invent or force a generic AI article.',
-        lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles.' : '',
+        editorRetryContract ? `Editor retry output contract: return the complete editor JSON with exactly ${editorRetryContract.target_section_count} sections.` : '',
+        editorRetryContract ? `The final sections array must include all ${editorRetryContract.locked_section_count} locked section(s) unchanged and ${editorRetryContract.replacement_required_count} replacement/new section(s).` : '',
+        editorRetryContract ? 'Returning only the locked sections is invalid. The sections array must be the full target draft, not a partial handoff.' : '',
+        lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles inside the complete final sections array.' : '',
         lockedSections.length > 0 ? 'Do not duplicate locked article URLs, titles/headlines, source names, or same source + published date + similar title.' : '',
         'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
         'Every article must include evidence_summary, specificity_checks, and source_verification_notes.',
@@ -2332,18 +2452,43 @@ async function main() {
         'Separate facts and interpretation. Preserve source links. Return only JSON matching the schema.',
         'briefing must have exactly 3 items.'
       ].filter(Boolean).join('\n'),
-      `${commonContext}\n\n${lockedContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}`,
+      [
+        commonContext,
+        lockedContext,
+        editorRetryContract ? `Editor retry output contract JSON:\n${JSON.stringify(editorRetryContract, null, 2)}` : '',
+        `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}`
+      ].filter(Boolean).join('\n\n'),
       editorSchema
     );
-    editor = await validateOrRepairEditor(editorDraft, {
-      date,
-      reporter,
-      attempt,
-      editorStage,
-      commonContext,
-      lockedContext,
-      newsroomDir
-    });
+    try {
+      editor = await validateOrRepairEditor(editorDraft, {
+        date,
+        reporter,
+        attempt,
+        editorStage,
+        commonContext,
+        lockedContext,
+        newsroomDir
+      });
+      assertEditorRetryOutputContract(editor, editorRetryContract, reporter);
+    } catch (error) {
+      if (error instanceof EditorSemanticValidationError && generationRunState.lastKnownValidEditor) {
+        writeReviewableRepairFailureArtifacts({
+          date,
+          newsroomDir,
+          error,
+          reporter,
+          factCheck,
+          qualityReport,
+          retryHistory,
+          shortlistReport,
+          attempt,
+          stage: editorStage
+        });
+        return;
+      }
+      throw error;
+    }
     attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
 
     const merged = mergeLockedSections(lockedSections, editor.sections, excludedSections);
@@ -2353,6 +2498,7 @@ async function main() {
     await resolveIssueArticleImages(editor, { root });
     warnResolvedImageFallbacks(editor);
     editor = recordLastKnownValidEditor(editor, { date, reporter, attempt });
+    writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor });
     writeJson(path.join(newsroomDir, `editor-draft-attempt-${attempt}.json`), editor);
     fs.writeFileSync(path.join(newsroomDir, `editor-draft-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
 
@@ -2390,6 +2536,7 @@ async function main() {
     });
     generationRunState.qualityReport = qualityReport;
     editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
+    writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
     writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
     fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
 
@@ -2531,6 +2678,7 @@ async function main() {
         });
         generationRunState.qualityReport = qualityReport;
         editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
+        writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
         writeJson(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.json`), qualityReport);
         fs.writeFileSync(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
         demotedSections = appendUniqueSections(
@@ -2650,6 +2798,7 @@ async function main() {
           });
           generationRunState.qualityReport = qualityReport;
           editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
+          writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
           writeJson(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.json`), qualityReport);
           fs.writeFileSync(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
           repairActions.push(`complete-missing-articles: requested ${missingArticleCount}, added ${Math.max(0, editor.sections.length - (articlePolicy.mainArticleCount.min - missingArticleCount))}`);
@@ -2941,6 +3090,25 @@ async function main() {
 function writeTerminalFailureStatus(error) {
   const date = generationRunState.date || runtimeConfig.newsletterDate || kstDate();
   const newsroomDir = artifactNewsroomDir(root, date);
+  if (error instanceof EditorSemanticValidationError && generationRunState.lastKnownValidEditor) {
+    try {
+      writeReviewableRepairFailureArtifacts({
+        date,
+        newsroomDir,
+        error,
+        reporter: generationRunState.lastKnownValidReporter,
+        factCheck: generationRunState.factCheck || generationRunState.lastKnownValidFactCheck,
+        qualityReport: generationRunState.qualityReport || generationRunState.lastKnownValidQualityReport,
+        retryHistory: generationRunState.retryHistory,
+        shortlistReport: generationRunState.shortlistReport,
+        attempt: generationRunState.currentQualityAttempt || generationRunState.lastKnownValidAttempt,
+        stage: failureStageFromError(error)
+      });
+      return;
+    } catch (fallbackError) {
+      console.error(`Failed to preserve reviewable repair artifacts: ${fallbackError.message}`);
+    }
+  }
   try {
     writeRecoveryPrompt(newsroomDir, {
       date,
@@ -2989,6 +3157,8 @@ if (require.main === module) {
 
 module.exports = {
   STATUS_FAILED_REPAIR_REVIEWABLE,
+  assertEditorRetryOutputContract,
+  buildEditorRetryContract,
   buildGenerationStatus,
   buildSectionRepairPlan,
   editorSemanticStatusExtra,

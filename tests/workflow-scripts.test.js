@@ -27,6 +27,10 @@ const {
 const {
   buildPublishStatusOutputs
 } = require('../scripts/write-publish-status-output');
+const {
+  buildReviewableArtifactOutputs,
+  resolveReviewableArtifacts
+} = require('../scripts/resolve-reviewable-artifacts');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -316,6 +320,82 @@ test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow'
   assert.match(body, /publish_gate_passed: false/);
   assert.match(body, /권장 조치:/);
   assert.doesNotMatch(body, /최종 발행 조건이 모두 통과했습니다/);
+});
+
+test('reviewable artifact resolver does not accept tmp status alone', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    final_publish_ready: false
+  });
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+
+  const resolved = resolveReviewableArtifacts({ root });
+  const outputs = buildReviewableArtifactOutputs(resolved);
+
+  assert.equal(resolved.date, date);
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /canonical=none/);
+});
+
+test('reviewable artifact resolver accepts same-date canonical diagnostics for failed repair', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    publish_ready: false,
+    selection_publish_ready: false,
+    final_publish_ready: false,
+    publish_gate_passed: false
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), {
+    message: 'Editor output must contain 3-5 sections; got 2.'
+  });
+
+  const resolved = resolveReviewableArtifacts({ root });
+  const outputs = buildReviewableArtifactOutputs(resolved);
+
+  assert.equal(outputs.date, date);
+  assert.equal(outputs.branch, `newsletter/${date}`);
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /status=FAILED_REPAIR_REVIEWABLE/);
+  assert.match(outputs.reviewable_artifact_reason, /repair-failure\.json/);
+});
+
+test('reviewable artifact resolver keeps FAILED_REPAIR_REVIEWABLE out of publish candidate path', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date);
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), '# draft\n');
+
+  const resolved = resolveReviewableArtifacts({ root });
+  const outputs = buildReviewableArtifactOutputs(resolved);
+
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_publish_candidate, 'false');
+});
+
+test('reviewable artifact resolver does not treat FAILED status as a publish candidate', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'FAILED'
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), {
+    message: 'terminal failure'
+  });
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), '# stale draft\n');
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({ root }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.has_publish_candidate, 'false');
 });
 
 test('newsroom PR body separates quality score threshold and result in Korean status text', () => {
@@ -819,6 +899,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   const checkPolicyDocsStepIndex = workflow.indexOf('- name: Check policy docs');
   const preflightStepIndex = workflow.indexOf('- name: Run unit and regression tests');
   const jitterStepIndex = workflow.indexOf('- name: Jitter scheduled run');
+  const resolveMetaStepIndex = workflow.indexOf('- name: Resolve newsletter metadata');
+  const validateGeneratedSiteStepIndex = workflow.indexOf('- name: Validate generated site');
   const resolveFinalStatusStepIndex = workflow.indexOf('- name: Resolve final publish status');
   const preparePrBodyStepIndex = workflow.indexOf('- name: Prepare pull request body');
   const createPrStepIndex = workflow.indexOf('- name: Create pull request');
@@ -838,6 +920,16 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
     preflightStepIndex,
     nextStepIndex === -1 ? undefined : nextStepIndex
   );
+  const resolveMetaNextStepIndex = workflow.indexOf('\n      - name:', resolveMetaStepIndex + 1);
+  const resolveMetaStep = workflow.slice(
+    resolveMetaStepIndex,
+    resolveMetaNextStepIndex === -1 ? undefined : resolveMetaNextStepIndex
+  );
+  const validateGeneratedSiteNextStepIndex = workflow.indexOf('\n      - name:', validateGeneratedSiteStepIndex + 1);
+  const validateGeneratedSiteStep = workflow.slice(
+    validateGeneratedSiteStepIndex,
+    validateGeneratedSiteNextStepIndex === -1 ? undefined : validateGeneratedSiteNextStepIndex
+  );
   const resolveFinalStatusNextStepIndex = workflow.indexOf('\n      - name:', resolveFinalStatusStepIndex + 1);
   const resolveFinalStatusStep = workflow.slice(
     resolveFinalStatusStepIndex,
@@ -855,6 +947,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.notEqual(checkPolicyDocsStepIndex, -1);
   assert.notEqual(preflightStepIndex, -1);
   assert.notEqual(jitterStepIndex, -1);
+  assert.notEqual(resolveMetaStepIndex, -1);
+  assert.notEqual(validateGeneratedSiteStepIndex, -1);
   assert.notEqual(resolveFinalStatusStepIndex, -1);
   assert.notEqual(preparePrBodyStepIndex, -1);
   assert.notEqual(createPrStepIndex, -1);
@@ -893,6 +987,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /key: news-summary-\$\{\{ runner\.os \}\}-/);
   assert.match(workflow, /uses: actions\/cache\/save@v4/);
   assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
+  assert.match(resolveMetaStep, /node scripts\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);
+  assert.match(validateGeneratedSiteStep, /if: steps\.meta\.outputs\.has_publish_candidate == 'true'/);
   assert.match(workflow, /newsletter/);
   assert.match(workflow, /aosp-camera/);
   assert.match(workflow, /editor-review/);
@@ -905,7 +1001,9 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /- name: Resolve final publish status/);
   assert.match(workflow, /id: final-publish-status/);
   assert.match(workflow, /node scripts\/write-publish-status-output\.js >> "\$GITHUB_OUTPUT"/);
+  assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.has_publish_candidate == 'true'/);
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
+  assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.has_reviewable_artifacts == 'true'/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
@@ -917,6 +1015,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION'/);
   assert.match(workflow, /compositionMode === 'THIN_WEEK_REVIEW'/);
   assert.match(workflow, /Fail if reviewable newsroom artifacts were not created/);
+  assert.match(workflow, /steps\.meta\.outputs\.has_reviewable_artifacts != 'true'/);
   assert.doesNotMatch(workflow, /final_publish_ready != 'true'/);
   assert.doesNotMatch(
     workflow,

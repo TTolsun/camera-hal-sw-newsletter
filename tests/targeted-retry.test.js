@@ -6,7 +6,9 @@ const test = require('node:test');
 
 const {
   STATUS_FAILED_REPAIR_REVIEWABLE,
+  assertEditorRetryOutputContract,
   availableCompletionCandidates,
+  buildEditorRetryContract,
   buildSectionRepairPlan,
   mergeLockedSections,
   recordLastKnownValidEditor,
@@ -352,6 +354,62 @@ test('targeted repair preserves locked sections around a middle replacement', ()
   }), true);
 });
 
+test('editor retry contract uses previous valid draft as the target section count', () => {
+  const locked = [
+    policySection('CameraX release', 'https://example.com/a'),
+    policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline')
+  ];
+  const previousValidEditor = editorWithSections([
+    ...locked,
+    policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent')
+  ]);
+
+  const contract = buildEditorRetryContract({
+    lastKnownValidEditor: previousValidEditor,
+    currentEditor: editorWithSections(locked),
+    lockedSections: locked
+  });
+
+  assert.equal(contract.target_section_count, 3);
+  assert.equal(contract.locked_section_count, 2);
+  assert.equal(contract.replacement_required_count, 1);
+});
+
+test('editor retry contract rejects locked-only output and section count drift', () => {
+  const locked = [
+    policySection('CameraX release', 'https://example.com/a'),
+    policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline')
+  ];
+  const replacement = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
+  const contract = buildEditorRetryContract({
+    lastKnownValidEditor: editorWithSections([...locked, replacement]),
+    lockedSections: locked
+  });
+
+  assert.throws(
+    () => assertEditorRetryOutputContract(editorWithSections(locked), contract),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.reason, 'locked_only_retry_output');
+      assert.equal(error.details.target_section_count, 3);
+      assert.equal(error.details.locked_section_count, 2);
+      assert.equal(error.details.replacement_required_count, 1);
+      return true;
+    }
+  );
+
+  assert.throws(
+    () => assertEditorRetryOutputContract(editorWithSections([locked[0], replacement]), contract),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.reason, 'editor_retry_section_count_drift');
+      assert.equal(error.details.expectedCount, 3);
+      assert.equal(error.details.actualCount, 2);
+      return true;
+    }
+  );
+});
+
 test('targeted repair rejects reordered locked sections around a middle replacement', () => {
   const a = policySection('CameraX release', 'https://example.com/a');
   const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
@@ -424,9 +482,11 @@ test('invalid repair output writes reviewable fallback without replacing last va
   });
 
   const fallbackEditor = readJson(path.join(newsroomDir, 'editor-draft.json'));
+  const repairFailure = readJson(path.join(newsroomDir, 'repair-failure.json'));
   const status = readJson(path.join(root, '.tmp', 'newsletter-generation-status.json'));
   assert.deepEqual(fallbackEditor.sections.map(item => item.sources[0].url), sections.map(item => item.sources[0].url));
   assert.equal(fallbackEditor.sections.length, 3);
+  assert.equal(repairFailure.details.sectionCount, 2);
   assert.equal(status.status, STATUS_FAILED_REPAIR_REVIEWABLE);
   assert.equal(status.publish_ready, false);
   assert.equal(status.selection_publish_ready, false);

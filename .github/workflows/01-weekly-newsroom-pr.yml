@@ -172,25 +172,7 @@ jobs:
       - name: Resolve newsletter metadata
         id: meta
         if: always()
-        run: |
-          if [ -f .tmp/newsletter-date.txt ]; then
-            DATE=$(cat .tmp/newsletter-date.txt)
-          elif [ -n "${NEWSLETTER_DATE:-}" ]; then
-            DATE="${NEWSLETTER_DATE}"
-          else
-            DATE=$(TZ=Asia/Seoul date +%F)
-          fi
-
-          HAS_REVIEWABLE_ARTIFACTS="false"
-          if [ -f ".tmp/newsletter-date.txt" ] && [ -d "content/newsroom/${DATE}" ]; then
-            if [ -f "content/newsroom/${DATE}/editor-draft.json" ] || [ -f "newsletters/${DATE}/newsletter.md" ]; then
-              HAS_REVIEWABLE_ARTIFACTS="true"
-            fi
-          fi
-
-          echo "date=${DATE}" >> "$GITHUB_OUTPUT"
-          echo "branch=newsletter/${DATE}" >> "$GITHUB_OUTPUT"
-          echo "has_reviewable_artifacts=${HAS_REVIEWABLE_ARTIFACTS}" >> "$GITHUB_OUTPUT"
+        run: node scripts/resolve-reviewable-artifacts.js >> "$GITHUB_OUTPUT"
 
       - name: Resolve generation status
         id: generation-status
@@ -209,7 +191,7 @@ jobs:
 
       - name: Validate generated site
         id: validate
-        if: steps.meta.outputs.has_reviewable_artifacts == 'true'
+        if: steps.meta.outputs.has_publish_candidate == 'true'
         continue-on-error: true
         env:
           REQUIRE_NEWSLETTER_DATE_FILE: "1"
@@ -217,7 +199,7 @@ jobs:
 
       - name: Resolve final publish status
         id: final-publish-status
-        if: steps.meta.outputs.has_reviewable_artifacts == 'true'
+        if: steps.meta.outputs.has_publish_candidate == 'true'
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
         run: node scripts/write-publish-status-output.js >> "$GITHUB_OUTPUT"
@@ -236,14 +218,10 @@ jobs:
           rm -rf "$SNAPSHOT"
           mkdir -p "$SNAPSHOT"
 
+          DATE="${{ steps.meta.outputs.date }}"
           HAS_GENERATED_DATE="0"
-          if [ -f .tmp/newsletter-date.txt ]; then
-            DATE=$(cat .tmp/newsletter-date.txt)
+          if [ -f .tmp/newsletter-generation-status.json ] || [ -f .tmp/newsletter-date.txt ]; then
             HAS_GENERATED_DATE="1"
-          elif [ -n "${NEWSLETTER_DATE:-}" ]; then
-            DATE="${NEWSLETTER_DATE}"
-          else
-            DATE=$(TZ=Asia/Seoul date +%F)
           fi
 
           copy_if_present() {
@@ -277,7 +255,7 @@ jobs:
             copy_if_present "newsletters/${DATE}/index.html"
             copy_if_present "data/newsletters.json"
           else
-            echo "No generated .tmp/newsletter-date.txt found; skipping date-scoped artifact copy to avoid stale base-branch files."
+            echo "No generated status/date marker found; skipping date-scoped artifact copy to avoid stale base-branch files."
           fi
 
           node scripts/write-artifact-manifest.js "$SNAPSHOT" "$DATE"
