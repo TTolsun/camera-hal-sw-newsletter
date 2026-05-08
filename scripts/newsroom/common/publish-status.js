@@ -208,6 +208,8 @@ function readPublishStatusInputs(options = {}) {
   const editor = readJsonIfExists(path.join(newsroomDir, 'editor-draft.json'));
   const quality = readJsonIfExists(path.join(newsroomDir, 'quality-report.json'));
   const factCheck = readJsonIfExists(path.join(newsroomDir, 'fact-check-report.json'));
+  const repairFailure = readJsonIfExists(path.join(newsroomDir, 'repair-failure.json'));
+  const generationStatus = readJsonIfExists(path.join(newsroomDir, 'generation-status.json'));
   const staleClaim = readJsonIfExists(path.join(newsroomDir, 'stale-claim-report.json'));
   const shortlist = readJsonIfExists(path.join(newsroomDir, 'shortlisted-candidates.json'));
 
@@ -219,6 +221,8 @@ function readPublishStatusInputs(options = {}) {
     editor,
     quality,
     factCheck,
+    repairFailure,
+    generationStatus,
     staleClaim,
     shortlist
   };
@@ -237,6 +241,8 @@ function resolvePublishStatus(options = {}) {
     'editor-draft.json': inputs.editor,
     'quality-report.json': inputs.quality,
     'fact-check-report.json': inputs.factCheck,
+    'repair-failure.json': inputs.repairFailure,
+    'generation-status.json': inputs.generationStatus,
     'stale-claim-report.json': inputs.staleClaim,
     'shortlisted-candidates.json': inputs.shortlist
   })) {
@@ -249,7 +255,9 @@ function resolvePublishStatus(options = {}) {
   const repairReviewArtifacts = {
     'editor-draft.json': inputs.editor,
     'quality-report.json': inputs.quality,
-    'fact-check-report.json': inputs.factCheck
+    'fact-check-report.json': inputs.factCheck,
+    'repair-failure.json': inputs.repairFailure,
+    'generation-status.json': inputs.generationStatus
   };
   if (failedRepairReviewableStatus) {
     for (const [name, artifact] of Object.entries(repairReviewArtifacts)) {

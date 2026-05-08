@@ -1,25 +1,26 @@
 # Current Plan
 
-## Editor Retry Recovery And Reviewable PR Handoff
+## Reviewable Handoff Hardening
 
-- Keep the existing quality and publish gates strict. A 2-section editor retry output remains invalid and must never become publish-ready.
-- When an editor retry violates the output contract and `lastKnownValidEditor` exists, preserve the last valid draft plus canonical diagnostics under `content/newsroom/<date>/` and write `FAILED_REPAIR_REVIEWABLE`.
-- Treat `FAILED_REPAIR_REVIEWABLE` as reviewable but not publishable. It can create a `needs-fix` PR, but site publish validation must not run for it.
-- Do not let `.tmp` files alone make the workflow reviewable. Require at least one same-date canonical diagnostic/review artifact under `content/newsroom/<date>/`.
+- Keep quality and publish gates strict. A 2-section editor retry output remains invalid and must never become publish-ready.
+- Do not treat stale base-branch artifacts as current run output. Reviewable PR handoff requires repo-visible changed artifacts.
+- Require a complete `FAILED_REPAIR_REVIEWABLE` canonical artifact set before opening the review PR path.
+- Keep `FAILED_REPAIR_REVIEWABLE` out of the publish/site validation path.
 
 ## Implementation Scope
 
+- `scripts/newsroom/cli/resolve-reviewable-artifacts.js`
+  - Add `git status --porcelain` based changed artifact detection for `content/newsroom/<date>`, `newsletters/<date>`, and `data/newsletters.json`.
+  - Support `options.changedArtifacts` for tests.
+  - Require changed repo-visible artifacts for `has_reviewable_artifacts=true`.
+  - Require `editor-draft.json`, `quality-report.json`, `fact-check-report.json`, `repair-failure.json`, and `generation-status.json` for `FAILED_REPAIR_REVIEWABLE`.
 - `scripts/newsroom/cli/gemini-newsroom-newsletter.js`
-  - Add editor retry contract helpers for `target_section_count`, `locked_section_count`, and `replacement_required_count`.
-  - Prefer `lastKnownValidEditor.sections.length` for the target section count, then current valid draft length, then policy minimum.
-  - Reject locked-only retry output and section-count drift before canonical write.
-  - Route editor semantic failures with `lastKnownValidEditor` through `FAILED_REPAIR_REVIEWABLE` artifact preservation.
-- Workflow handoff
-  - Add a helper that outputs `date`, `branch`, `has_reviewable_artifacts`, `has_publish_candidate`, and `reviewable_artifact_reason`.
-  - Use generation status date before `.tmp/newsletter-date.txt`, explicit `NEWSLETTER_DATE`, then KST today.
-  - Run site validation and publish-status resolution only for publish candidates; still create PRs for reviewable needs-fix artifacts.
-- tests
-  - Cover 2-section retry failure recovery, locked/replacement contract counts, locked-only rejection, `.tmp`-only non-reviewability, and `FAILED_REPAIR_REVIEWABLE` workflow routing.
+  - Write canonical `content/newsroom/<date>/generation-status.json` from the same status object as `.tmp/newsletter-generation-status.json`.
+  - Add `run_context` with GitHub run metadata when available.
+- Workflow and tests
+  - Keep site/final publish status gated by `has_publish_candidate`.
+  - Narrow source effectiveness reporting to publish candidates.
+  - Add stale artifact, missing required artifact, and canonical status consistency regressions.
 
 ## Validation
 

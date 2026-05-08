@@ -29,6 +29,7 @@ const {
 } = require('../scripts/write-publish-status-output');
 const {
   buildReviewableArtifactOutputs,
+  REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   resolveReviewableArtifacts
 } = require('../scripts/resolve-reviewable-artifacts');
 
@@ -157,6 +158,20 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
     source_gap_count: 0,
     ...(overrides.factCheck || {})
   };
+  const repairFailure = {
+    name: 'EditorSemanticValidationError',
+    message: 'Fallback repair failure',
+    ...(overrides.repairFailure || {})
+  };
+  const generationStatus = {
+    ...status,
+    publish_ready: false,
+    selection_publish_ready: false,
+    final_publish_ready: false,
+    publish_gate_passed: false,
+    composition_mode: 'NEEDS_FIX',
+    ...(overrides.generationStatus || {})
+  };
 
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
@@ -169,8 +184,14 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
   if (overrides.writeFactCheck !== false) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
   }
+  if (overrides.writeRepairFailure !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), repairFailure);
+  }
+  if (overrides.writeGenerationStatus !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
+  }
 
-  return { status, editor, quality, factCheck };
+  return { status, editor, quality, factCheck, repairFailure, generationStatus };
 }
 
 test('generation status output falls back when status JSON is missing', () => {
@@ -341,7 +362,47 @@ test('reviewable artifact resolver does not accept tmp status alone', () => {
   assert.match(outputs.reviewable_artifact_reason, /canonical=none/);
 });
 
-test('reviewable artifact resolver accepts same-date canonical diagnostics for failed repair', () => {
+test('reviewable artifact resolver requires changed artifacts even when canonical artifacts exist', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'NEEDS_FIX',
+    final_publish_ready: false
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), {
+    date,
+    sections: []
+  });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: []
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /canonical=editor-draft\.json/);
+  assert.match(outputs.reviewable_artifact_reason, /changed=none/);
+});
+
+test('reviewable artifact resolver rejects stale base artifacts without repo-visible changes', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: []
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /changed=none/);
+  assert.match(outputs.reviewable_artifact_reason, /missing_required=none/);
+});
+
+test('reviewable artifact resolver rejects failed repair with repair-failure only', () => {
   const root = tempRoot();
   const date = '2026-05-08';
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
@@ -356,28 +417,40 @@ test('reviewable artifact resolver accepts same-date canonical diagnostics for f
     message: 'Editor output must contain 3-5 sections; got 2.'
   });
 
-  const resolved = resolveReviewableArtifacts({ root });
+  const resolved = resolveReviewableArtifacts({
+    root,
+    changedArtifacts: [`content/newsroom/${date}/repair-failure.json`]
+  });
   const outputs = buildReviewableArtifactOutputs(resolved);
 
   assert.equal(outputs.date, date);
   assert.equal(outputs.branch, `newsletter/${date}`);
-  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
   assert.equal(outputs.has_publish_candidate, 'false');
   assert.match(outputs.reviewable_artifact_reason, /status=FAILED_REPAIR_REVIEWABLE/);
   assert.match(outputs.reviewable_artifact_reason, /repair-failure\.json/);
+  assert.match(outputs.reviewable_artifact_reason, /missing_required=/);
+  for (const required of REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.filter(file => file !== 'repair-failure.json')) {
+    assert.match(outputs.reviewable_artifact_reason, new RegExp(required.replace('.', '\\.')));
+  }
 });
 
-test('reviewable artifact resolver keeps FAILED_REPAIR_REVIEWABLE out of publish candidate path', () => {
+test('reviewable artifact resolver accepts complete changed failed repair artifact set', () => {
   const root = tempRoot();
   const date = '2026-05-08';
   writeFailedRepairReviewableArtifacts(root, date);
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), '# draft\n');
 
-  const resolved = resolveReviewableArtifacts({ root });
+  const resolved = resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+      .concat(`newsletters/${date}/newsletter.md`)
+  });
   const outputs = buildReviewableArtifactOutputs(resolved);
 
   assert.equal(outputs.has_reviewable_artifacts, 'true');
   assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /missing_required=none/);
 });
 
 test('reviewable artifact resolver does not treat FAILED status as a publish candidate', () => {
@@ -392,7 +465,13 @@ test('reviewable artifact resolver does not treat FAILED status as a publish can
   });
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), '# stale draft\n');
 
-  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({ root }));
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: [
+      `content/newsroom/${date}/repair-failure.json`,
+      `newsletters/${date}/newsletter.md`
+    ]
+  }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
   assert.equal(outputs.has_publish_candidate, 'false');
@@ -902,6 +981,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   const resolveMetaStepIndex = workflow.indexOf('- name: Resolve newsletter metadata');
   const validateGeneratedSiteStepIndex = workflow.indexOf('- name: Validate generated site');
   const resolveFinalStatusStepIndex = workflow.indexOf('- name: Resolve final publish status');
+  const sourceEffectivenessStepIndex = workflow.indexOf('- name: Generate source effectiveness report');
   const preparePrBodyStepIndex = workflow.indexOf('- name: Prepare pull request body');
   const createPrStepIndex = workflow.indexOf('- name: Create pull request');
   const addLabelsStepIndex = workflow.indexOf('- name: Add pull request labels');
@@ -935,6 +1015,11 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
     resolveFinalStatusStepIndex,
     resolveFinalStatusNextStepIndex === -1 ? undefined : resolveFinalStatusNextStepIndex
   );
+  const sourceEffectivenessNextStepIndex = workflow.indexOf('\n      - name:', sourceEffectivenessStepIndex + 1);
+  const sourceEffectivenessStep = workflow.slice(
+    sourceEffectivenessStepIndex,
+    sourceEffectivenessNextStepIndex === -1 ? undefined : sourceEffectivenessNextStepIndex
+  );
   const preparePrBodyNextStepIndex = workflow.indexOf('\n      - name:', preparePrBodyStepIndex + 1);
   const preparePrBodyStep = workflow.slice(
     preparePrBodyStepIndex,
@@ -950,6 +1035,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.notEqual(resolveMetaStepIndex, -1);
   assert.notEqual(validateGeneratedSiteStepIndex, -1);
   assert.notEqual(resolveFinalStatusStepIndex, -1);
+  assert.notEqual(sourceEffectivenessStepIndex, -1);
   assert.notEqual(preparePrBodyStepIndex, -1);
   assert.notEqual(createPrStepIndex, -1);
   assert.notEqual(addLabelsStepIndex, -1);
@@ -1003,6 +1089,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /node scripts\/write-publish-status-output\.js >> "\$GITHUB_OUTPUT"/);
   assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.has_publish_candidate == 'true'/);
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
+  assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.has_publish_candidate == 'true'/);
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.has_reviewable_artifacts == 'true'/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);

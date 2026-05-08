@@ -136,6 +136,14 @@ function writeGenerationStatus(value, rootDir = root) {
   );
 }
 
+function buildRunContext(env = process.env) {
+  return {
+    github_run_id: env.GITHUB_RUN_ID || '',
+    github_sha: env.GITHUB_SHA || '',
+    github_ref: env.GITHUB_REF || ''
+  };
+}
+
 function writeCostReport(date, rootDir = root) {
   const report = buildCostReport({
     date,
@@ -213,6 +221,7 @@ function buildGenerationStatus({
 }) {
   const diagnostics = getLlmDiagnostics();
   const mustFixCount = ensureArray(factCheck?.must_fix).length;
+  const { run_context: extraRunContext, ...restExtra } = extra || {};
   return {
     date,
     status,
@@ -228,7 +237,11 @@ function buildGenerationStatus({
     quota_error_count: diagnostics.quota_error_count,
     invalid_json_count: diagnostics.invalid_json_count,
     model_usage: diagnostics.model_usage,
-    ...extra
+    run_context: {
+      ...buildRunContext(),
+      ...(extraRunContext || {})
+    },
+    ...restExtra
   };
 }
 
@@ -1121,7 +1134,7 @@ function writeReviewableRepairFailureArtifacts({
   generationRunState.qualityReport = fallbackQualityReport;
   generationRunState.retryHistory = fallbackRetryHistory;
 
-  writeGenerationStatus(buildGenerationStatus({
+  const generationStatus = buildGenerationStatus({
     date,
     status: STATUS_FAILED_REPAIR_REVIEWABLE,
     failureStage: stage,
@@ -1156,7 +1169,9 @@ function writeReviewableRepairFailureArtifacts({
       composition_mode: COMPOSITION_MODES.NEEDS_FIX,
       editor_review_required: true
     }
-  }), rootDir);
+  });
+  writeJson(path.join(newsroomDir, 'generation-status.json'), generationStatus);
+  writeGenerationStatus(generationStatus, rootDir);
 
   console.warn(`Repair failed after a valid editor draft was created. Wrote reviewable ${STATUS_FAILED_REPAIR_REVIEWABLE} artifacts for ${date}.`);
   return {

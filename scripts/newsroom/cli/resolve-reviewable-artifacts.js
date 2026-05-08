@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 const {
   kstDate
@@ -23,6 +24,7 @@ const CANONICAL_REVIEW_ARTIFACTS = [
   'editor-draft.json',
   'fact-check-report.json',
   'quality-report.json',
+  'generation-status.json',
   'retry-history.json',
   'repair-failure.json',
   'recovery-prompt.md',
@@ -31,9 +33,60 @@ const CANONICAL_REVIEW_ARTIFACTS = [
   'selection-diagnostics.md'
 ];
 
+const REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS = [
+  'editor-draft.json',
+  'quality-report.json',
+  'fact-check-report.json',
+  'repair-failure.json',
+  'generation-status.json'
+];
+
 function readTextIfExists(filePath) {
   if (!fs.existsSync(filePath)) return '';
   return fs.readFileSync(filePath, 'utf8').trim();
+}
+
+function toRepoPath(filePath) {
+  return String(filePath || '').replace(/\\/g, '/').replace(/^\.\//, '');
+}
+
+function parseGitStatusPorcelain(output) {
+  return String(output || '')
+    .split(/\r?\n/)
+    .map(line => line.trimEnd())
+    .filter(Boolean)
+    .map(line => {
+      const rawPath = line.slice(3).trim();
+      const renameIndex = rawPath.lastIndexOf(' -> ');
+      const currentPath = renameIndex >= 0 ? rawPath.slice(renameIndex + 4) : rawPath;
+      return toRepoPath(currentPath.replace(/^"|"$/g, ''));
+    })
+    .filter(Boolean);
+}
+
+function getChangedRepoVisibleArtifacts({ root = process.cwd(), date } = {}) {
+  if (!date) return [];
+  try {
+    const output = execFileSync(
+      'git',
+      [
+        'status',
+        '--porcelain',
+        '--',
+        `content/newsroom/${date}`,
+        `newsletters/${date}`,
+        'data/newsletters.json'
+      ],
+      {
+        cwd: root,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore']
+      }
+    );
+    return parseGitStatusPorcelain(output);
+  } catch (_) {
+    return [];
+  }
 }
 
 function resolveDate({ root, status, explicitDate } = {}) {
@@ -47,6 +100,16 @@ function resolveDate({ root, status, explicitDate } = {}) {
 
 function existingArtifacts(root, date, relativeFiles) {
   return relativeFiles.filter(relativeFile => fs.existsSync(path.join(root, relativeFile.replaceAll('${date}', date))));
+}
+
+function relevantChangedArtifacts(changedArtifacts, date) {
+  return [...new Set((Array.isArray(changedArtifacts) ? changedArtifacts : [])
+    .map(toRepoPath)
+    .filter(filePath =>
+      filePath.startsWith(`content/newsroom/${date}/`) ||
+      filePath.startsWith(`newsletters/${date}/`) ||
+      filePath === 'data/newsletters.json'
+    ))].sort();
 }
 
 function resolveReviewableArtifacts(options = {}) {
@@ -63,20 +126,41 @@ function resolveReviewableArtifacts(options = {}) {
     'newsletters/${date}/newsletter.md',
     'newsletters/${date}/index.html'
   ]);
+  const changedArtifacts = Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')
+    ? relevantChangedArtifacts(options.changedArtifacts, date)
+    : relevantChangedArtifacts(getChangedRepoVisibleArtifacts({ root, date }), date);
   const hasCanonicalDiagnostic = canonicalArtifacts.length > 0;
   const statusReviewable = REVIEWABLE_STATUSES.has(status.status);
   const failedRepairReviewable = status.status === STATUS_FAILED_REPAIR_REVIEWABLE;
-  const hasReviewableArtifacts = hasCanonicalDiagnostic && statusReviewable;
-  const hasPublishCandidate = hasCanonicalDiagnostic && publicArtifacts.length > 0 && statusReviewable && !failedRepairReviewable;
+  const missingRequired = failedRepairReviewable
+    ? REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.filter(file => !canonicalArtifacts.includes(file))
+    : [];
+  const hasRequiredCanonicalArtifacts = failedRepairReviewable
+    ? missingRequired.length === 0
+    : hasCanonicalDiagnostic;
+  const changedPublicArtifacts = changedArtifacts.filter(filePath =>
+    filePath.startsWith(`newsletters/${date}/`) ||
+    filePath === 'data/newsletters.json'
+  );
+  const hasReviewableArtifacts = hasRequiredCanonicalArtifacts && statusReviewable && changedArtifacts.length > 0;
+  const hasPublishCandidate =
+    hasReviewableArtifacts &&
+    publicArtifacts.length > 0 &&
+    changedPublicArtifacts.length > 0 &&
+    !failedRepairReviewable;
   const reasonParts = [
     `status=${status.status || 'UNKNOWN'}`,
     hasCanonicalDiagnostic
       ? `canonical=${canonicalArtifacts.join(',')}`
       : 'canonical=none',
+    `changed=${changedArtifacts.length > 0 ? changedArtifacts.join(',') : 'none'}`,
+    failedRepairReviewable
+      ? `missing_required=${missingRequired.length > 0 ? missingRequired.join(',') : 'none'}`
+      : '',
     publicArtifacts.length > 0
       ? `public=${publicArtifacts.join(',')}`
       : 'public=none'
-  ];
+  ].filter(Boolean);
 
   return {
     date,
@@ -85,6 +169,8 @@ function resolveReviewableArtifacts(options = {}) {
     newsroomDir,
     canonicalArtifacts,
     publicArtifacts,
+    changedArtifacts,
+    missingRequired,
     hasReviewableArtifacts,
     hasPublishCandidate,
     reviewableArtifactReason: reasonParts.join('; ')
@@ -112,8 +198,11 @@ if (require.main === module) {
 
 module.exports = {
   CANONICAL_REVIEW_ARTIFACTS,
+  REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   REVIEWABLE_STATUSES,
   buildReviewableArtifactOutputs,
+  getChangedRepoVisibleArtifacts,
+  parseGitStatusPorcelain,
   resolveDate,
   resolveReviewableArtifacts
 };

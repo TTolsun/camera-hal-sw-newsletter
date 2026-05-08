@@ -452,6 +452,25 @@ test('invalid repair output writes reviewable fallback without replacing last va
   const factCheck = { status: 'PASS', must_fix: [], recommended_fixes: [], source_gaps: [], source_gap_count: 0 };
   const qualityReport = { status: 'NEEDS_FIX', score: 79, threshold: 85, deductions: [] };
   recordLastKnownValidEditor(validEditor, { date: DATE, reporter, factCheck, qualityReport, attempt: 1 });
+  const invalidTwoSectionEditor = editorWithSections(sections.slice(0, 2));
+  fs.mkdirSync(newsroomDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(newsroomDir, 'editor-invalid-attempt-2.json'),
+    `${JSON.stringify(invalidTwoSectionEditor, null, 2)}\n`,
+    'utf8'
+  );
+  fs.writeFileSync(
+    path.join(newsroomDir, 'editor-validation-error-attempt-2.json'),
+    `${JSON.stringify({
+      name: 'EditorSemanticValidationError',
+      message: 'Editor output must contain 3-5 sections; got 2.',
+      details: {
+        field: 'sections',
+        sectionCount: 2
+      }
+    }, null, 2)}\n`,
+    'utf8'
+  );
 
   writeReviewableRepairFailureArtifacts({
     date: DATE,
@@ -482,12 +501,34 @@ test('invalid repair output writes reviewable fallback without replacing last va
   });
 
   const fallbackEditor = readJson(path.join(newsroomDir, 'editor-draft.json'));
+  const invalidDiagnostic = readJson(path.join(newsroomDir, 'editor-invalid-attempt-2.json'));
   const repairFailure = readJson(path.join(newsroomDir, 'repair-failure.json'));
   const status = readJson(path.join(root, '.tmp', 'newsletter-generation-status.json'));
+  const canonicalStatus = readJson(path.join(newsroomDir, 'generation-status.json'));
+  for (const fileName of [
+    'editor-draft.json',
+    'quality-report.json',
+    'fact-check-report.json',
+    'repair-failure.json',
+    'generation-status.json'
+  ]) {
+    assert.equal(fs.existsSync(path.join(newsroomDir, fileName)), true, `${fileName} should exist`);
+  }
+  assert.equal(invalidDiagnostic.sections.length, 2);
   assert.deepEqual(fallbackEditor.sections.map(item => item.sources[0].url), sections.map(item => item.sources[0].url));
   assert.equal(fallbackEditor.sections.length, 3);
   assert.equal(repairFailure.details.sectionCount, 2);
   assert.equal(status.status, STATUS_FAILED_REPAIR_REVIEWABLE);
+  assert.equal(canonicalStatus.status, status.status);
+  assert.equal(canonicalStatus.publish_ready, status.publish_ready);
+  assert.equal(canonicalStatus.selection_publish_ready, status.selection_publish_ready);
+  assert.equal(canonicalStatus.final_publish_ready, status.final_publish_ready);
+  assert.equal(canonicalStatus.publish_gate_passed, status.publish_gate_passed);
+  assert.equal(canonicalStatus.composition_mode, status.composition_mode);
+  assert.ok(canonicalStatus.run_context);
+  assert.equal(typeof canonicalStatus.run_context.github_run_id, 'string');
+  assert.equal(typeof canonicalStatus.run_context.github_sha, 'string');
+  assert.equal(typeof canonicalStatus.run_context.github_ref, 'string');
   assert.equal(status.publish_ready, false);
   assert.equal(status.selection_publish_ready, false);
   assert.equal(status.final_publish_ready, false);
