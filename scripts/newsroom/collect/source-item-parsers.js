@@ -666,7 +666,7 @@ function parseLibcameraReleaseAnnouncement(html, source) {
     return [];
   }
   const releaseDetails = [];
-  if (/\b(?:SoftISP|software_isp|debayering|Debayer)\b/i.test(evidenceText)) {
+  if (/\b(?:SoftISP|software_isp|de-?bayering|debaying|Debayer)\b/i.test(evidenceText)) {
     releaseDetails.push('SoftISP debayering and image pipeline throughput');
   }
   if (/\b(?:Mali-C55|pipeline handler|camera support)\b/i.test(evidenceText)) {

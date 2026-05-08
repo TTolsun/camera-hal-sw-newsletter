@@ -155,8 +155,16 @@ function resolveTargetItems(root, options = {}) {
     ? options.targetDates
     : strictTargetDates({ root });
 
-  const selected = items.filter(item => targetDates.has(item.date));
-  if (selected.length > 0) return selected;
+  if (targetDates.size > 0) {
+    const selected = items.filter(item => targetDates.has(item.date));
+    const selectedDates = new Set(selected.map(item => item.date));
+    const missingDates = [...targetDates].filter(date => !selectedDates.has(date));
+    if (missingDates.length > 0) {
+      throw new Error(`No data/newsletters.json entry found for detected target date(s): ${missingDates.join(', ')}`);
+    }
+    return selected;
+  }
+
   if (options.latest) return latestPublicIssue(items);
   throw new Error('No target public issue date detected. Pass --date YYYY-MM-DD, --all, or --latest.');
 }

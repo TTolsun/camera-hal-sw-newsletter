@@ -195,6 +195,39 @@ test('libcamera release announcement parser extracts v0.7.1 dated camera pipelin
   assert.match(items[0].behavior_change, /sensor mode configuration/);
 });
 
+test('libcamera release announcement parser accepts debayer spelling variants with normalized output', () => {
+  for (const spelling of ['debaying', 'de-bayering', 'debayering']) {
+    const html = `
+      <html>
+        <head><title>[libcamera-devel] libcamera v0.7.1 released</title></head>
+        <body>
+          <pre>
+Date: Tue Apr 28 20:27:00 CEST 2026
+Subject: [libcamera-devel] libcamera v0.7.1 released
+
+libcamera v0.7.1 has been released.
+This release updates ${spelling} behavior and image pipeline handling.
+The Mali-C55 pipeline handler now has full support for camera support.
+The sensor mode configuration path was updated for camera validation.
+          </pre>
+        </body>
+      </html>
+    `;
+
+    const items = parseSourceSpecificItems(html, source({
+      id: 'libcamera-release-announcements',
+      name: 'libcamera Release Announcements',
+      url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
+      sourceUrl: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html'
+    }));
+
+    assert.equal(items.length, 1, spelling);
+    assertParsedItemContract(items[0]);
+    assert.match(items[0].behavior_change, /SoftISP debayering and image pipeline throughput/, spelling);
+    assert.doesNotMatch(items[0].behavior_change, /debaying|de-bayering/, spelling);
+  }
+});
+
 test('AOSP camera documentation links stay on watchlist fallback path', () => {
   const html = readTextFixture('source-html/aosp-camera-documentation.html');
 

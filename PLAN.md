@@ -1,35 +1,31 @@
 # Current Plan
 
-## PR #37 Publication Stability Follow-up
+## PR #40 Annotation Target Follow-up
 
-- Branch: `followup/pr37-publication-stability`.
-- Commit 1 is the default scope: core #37 follow-up for accuracy, test stability, explicit annotation targeting, and publication policy drift prevention.
-- Commit 2 is allowed only if validation cleanup is proven equivalent or stronger with focused tests. Do not include validation cleanup by default.
+- Work directly on `main`; do not create a new branch.
+- Keep the patch narrow: annotation target resolution, regression tests, and libcamera parser spelling input matching only.
+- Do not change workflow structure, quality thresholds, hard-fail policy, PR body wording, or generated newsletter content.
 
-## Commit 1 Scope
+## Implementation Scope
 
-- Fix `debaying` to `debayering` in public/canonical artifacts and parser/script/test text:
-  - `newsletters/2026-05-08/**`
-  - canonical/review `content/newsroom/2026-05-08/**` artifacts that feed review/public text
-  - `scripts/newsroom/collect/source-item-parsers.js`
-  - related tests
-- Do not mass-edit raw LLM attempt/history files such as `*attempt*.json`, `*completion*.json`, or `*repair*.json`; list remaining matches in PR notes.
-- Update `annotate-publication-quality.js` target precedence:
-  - `--date YYYY-MM-DD` inspects only explicit dates.
-  - `--all` inspects all public issues.
-  - changed public issue dates are selected whenever detected.
-  - `--latest` only permits fallback to latest when no changed public issue date exists.
-  - changed dates win even when `--latest` is present.
-  - no args plus no changed public issue date fails explicitly.
-  - `.github/workflows/02-validate-site.yml` passes `--latest` explicitly.
-- Add `scripts/newsroom/common/editor-publication-policy.js` as the single source for the editor-approved publication policy section.
-- Update `build-newsroom-pr-body.js` and tests to render/verify the helper output.
-- Improve `tests/workflow-scripts.test.js` ordering checks with a shared `assertTextInOrder` helper and workflow step names or semantic markers.
+- Update `scripts/newsroom/cli/annotate-publication-quality.js`.
+  - Preserve `--all` and explicit `--date` behavior.
+  - Treat detected `targetDates` from `strictTargetDates()` or `options.targetDates` as authoritative.
+  - If detected target dates are non-empty, all dates must exist in `data/newsletters.json`.
+  - If any detected date is missing, fail with an error that lists all missing dates.
+  - Do not partially annotate matching dates and do not fallback to latest when any detected date is missing, even with `--latest`.
+  - Use latest fallback only when detected target dates are empty and `--latest` is present.
+- Update `scripts/newsroom/collect/source-item-parsers.js`.
+  - Accept `debaying`, `de-bayering`, and `debayering` as input evidence.
+  - Keep output normalized to `debayering`.
+- Update tests.
+  - Add `resolveTargetItems()` regression coverage for missing detected dates with `--latest`.
+  - Add libcamera parser spelling variant coverage with normalized output.
 
 ## Validation
 
 - Run `node --test tests/workflow-scripts.test.js`.
+- Run `node --test tests/source-item-parsers.test.js`.
 - Run `npm.cmd run test`.
 - Run `npm.cmd run validate`.
-- Run `rg -n "debaying" content/newsroom/2026-05-08 newsletters/2026-05-08 scripts tests`.
-- Self-review for P1/P2 risks: validation weakening, silent latest fallback, changed-date precedence regression, publication policy wording drift, quality threshold drift, and unintended public artifact edits.
+- Self-review for P1/P2 risks: silent latest fallback, partial annotation of detected dates, missing-date diagnostics, workflow or generated-content drift, and quality/hard-fail policy drift.

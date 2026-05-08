@@ -1335,6 +1335,30 @@ test('publication quality annotation changed public issue date wins over latest 
   assert.deepEqual(targets.map(item => item.date), ['2026-05-07']);
 });
 
+test('publication quality annotation rejects missing detected target dates even with latest fallback permission', () => {
+  const root = tempRoot();
+  writeNewsletterIndex(root, [
+    { date: '2026-05-07' },
+    { date: '2026-05-08' }
+  ]);
+
+  assert.throws(
+    () => resolveTargetItems(root, {
+      dates: [],
+      all: false,
+      latest: true,
+      targetDates: new Set(['2026-05-07', '2026-05-09', '2026-05-10'])
+    }),
+    error => {
+      assert.match(error.message, /No data\/newsletters\.json entry found for detected target date\(s\)/);
+      assert.match(error.message, /2026-05-09/);
+      assert.match(error.message, /2026-05-10/);
+      assert.doesNotMatch(error.message, /2026-05-07/);
+      return true;
+    }
+  );
+});
+
 test('publication quality annotation fails without explicit target or changed public issue date', () => {
   const root = tempRoot();
   writeNewsletterIndex(root, [
