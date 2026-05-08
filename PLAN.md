@@ -1,14 +1,32 @@
 # Current Plan
 
-## 2026-05-08 Public Output Repair
+## PR #37 Public Output Repair and Publication Policy Split
 
-- Confirm why PR #36 did not update the site: the merge only added review artifacts under `content/**`; `newsletters/2026-05-08/**` and `data/newsletters.json` were not changed because the run was not publish-ready.
-- Do not force-publish the existing failed draft. Repair only if the 2026-05-08 artifacts can be made to pass the existing fact-check, quality, image, localization, and site validators without weakening thresholds.
-- Keep the repair date-scoped to `2026-05-08`: update `content/newsroom/2026-05-08/editor-draft.*`, regenerated reports, `newsletters/2026-05-08/*`, and `data/newsletters.json` only if validation passes.
-- Preserve candidate/source binding from `shortlisted-candidates.json` and remove or replace any main article that lacks article-level Camera HAL / Android Camera relevance.
+- PR #37 still publishes the repaired `2026-05-08` issue, but this change also adds the general policy for future editor-approved publication.
+- Freeze the repaired `2026-05-08` article content. Do not regenerate or edit `content/newsroom/2026-05-08/**`, `newsletters/2026-05-08/**`, or the `2026-05-08` entry content in `data/newsletters.json`.
+- Keep this implementation limited to workflow, script, test, and docs changes. Add only minimal test fixtures if they are needed.
+- Separate state meanings explicitly:
+  - `has_public_artifacts`: public newsletter files or the public `data/newsletters.json` entry are included.
+  - `has_reviewable_artifacts`: `content/newsroom/YYYY-MM-DD` review artifacts exist.
+  - `has_ai_publish_ready`: `final_publish_ready === true`.
+- Do not expand `has_publish_candidate` with a new meaning. Keep it only as a compatibility output while workflow logic moves to the explicit fields.
+
+## Publication Policy
+
+```text
+AI quality gate PASS = automatic publication eligible
+AI quality gate FAIL = editor-in-chief review required
+editor-in-chief main merge = site publication approval
+```
+
+- `publish-ready` label means only `has_ai_publish_ready=true`.
+- A PR may have `has_public_artifacts=true`, `has_ai_publish_ready=false`, and `needs-fix`. That means the article can be shown if the editor-in-chief merges it, while AI quality gate status remains review-needed.
+- `02-validate-site.yml` reports quality/fact-check problems as non-blocking GitHub Actions annotations.
+- Structural validation remains blocking: site config, `data/newsletters.json` integrity, HTML/Markdown existence, source links, image paths, localization, TODO checks, anchor mismatch, and path escape checks.
 
 ## Validation
 
-- Run focused regeneration/recompute commands using existing `scripts/newsroom` renderer and validator modules.
-- Run `npm.cmd run validate` as the final repository gate.
-- Self-review the diff for publication safety, validator contract drift, unsupported claims, source binding, and unintended generated artifact churn.
+- Run the relevant targeted test after script/workflow updates.
+- Run `npm.cmd run test`.
+- Run `npm.cmd run validate`.
+- Self-review the diff for P1/P2 risks, especially article content freeze violations, state-name drift, `publish-ready` label semantics, and accidental quality gate weakening outside `02-validate-site.yml`.

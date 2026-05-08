@@ -31,6 +31,16 @@ jobs:
       - name: Run unit and regression tests
         run: npm run test
 
-      - name: Validate newsletter site and article images
+      - name: Validate structural publication artifacts
         run: |
-          npm run validate
+          npm run validate:policy
+          npm run check:policy-docs
+          npm run validate:config
+          npm run validate:site
+          npm run validate:images
+          npm run validate:localization
+
+      - name: Annotate publication quality and fact-check status
+        if: always()
+        continue-on-error: true
+        run: node scripts/annotate-publication-quality.js

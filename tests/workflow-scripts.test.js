@@ -32,6 +32,9 @@ const {
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   resolveReviewableArtifacts
 } = require('../scripts/resolve-reviewable-artifacts');
+const {
+  main: annotatePublicationQualityMain
+} = require('../scripts/annotate-publication-quality');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -115,6 +118,21 @@ function writeMinimalPublishArtifacts(root, date, overrides = {}) {
   writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
 
   return { status, quality, factCheck, staleClaim, shortlist };
+}
+
+function writePublicNewsletterArtifacts(root, date, overrides = {}) {
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), overrides.markdown || '# Camera HAL SW Newsletter\n');
+  writeText(path.join(root, 'newsletters', date, 'index.html'), overrides.html || '<!doctype html><html><body>Camera HAL SW Newsletter</body></html>\n');
+  writeJson(path.join(root, 'data', 'newsletters.json'), [
+    {
+      date,
+      title: overrides.title || `Camera HAL SW Newsletter - ${date}`,
+      summary: overrides.summary || 'Public issue summary',
+      html: `newsletters/${date}/index.html`,
+      md: `newsletters/${date}/newsletter.md`,
+      tags: ['Camera HAL']
+    }
+  ]);
 }
 
 function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
@@ -451,6 +469,37 @@ test('reviewable artifact resolver accepts complete changed failed repair artifa
   assert.equal(outputs.has_reviewable_artifacts, 'true');
   assert.equal(outputs.has_publish_candidate, 'false');
   assert.match(outputs.reviewable_artifact_reason, /missing_required=none/);
+});
+
+test('reviewable artifact resolver separates public artifacts from AI publish readiness', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'QUALITY_NEEDS_FIX',
+    final_publish_ready: false
+  });
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), {
+    date,
+    sections: []
+  });
+  writePublicNewsletterArtifacts(root, date);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: [
+      `content/newsroom/${date}/editor-draft.json`,
+      `newsletters/${date}/newsletter.md`,
+      `newsletters/${date}/index.html`,
+      'data/newsletters.json'
+    ]
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_public_artifacts, 'true');
+  assert.equal(outputs.has_ai_publish_ready, 'false');
+  assert.equal(outputs.has_publish_candidate, 'true');
 });
 
 test('reviewable artifact resolver does not treat FAILED status as a publish candidate', () => {
@@ -924,6 +973,7 @@ test('publish status output renders final and artifact readiness fields', () => 
 
   assert.equal(outputs.artifact_final_publish_ready, 'true');
   assert.equal(outputs.final_publish_ready, 'false');
+  assert.equal(outputs.has_ai_publish_ready, 'false');
   assert.equal(outputs.selection_publish_ready, 'true');
   assert.equal(outputs.publish_gate_passed, 'true');
   assert.equal(outputs.review_gate_passed, 'true');
@@ -938,6 +988,68 @@ test('publish status output renders final and artifact readiness fields', () => 
   assert.equal(outputs.consistency_errors, 'none');
   assert.equal(outputs.composition_mode, 'NORMAL');
   assert.equal(outputs.selection_composition_mode, 'NORMAL');
+});
+
+test('publication quality annotation reports quality and fact-check issues without failing', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writePublicNewsletterArtifacts(root, date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+    status: 'NEEDS_FIX',
+    score: qualityGatePolicy.threshold - 5,
+    threshold: qualityGatePolicy.threshold,
+    deductions: [{ reason: 'weak camera relevance' }]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+    status: 'NEEDS_FIX',
+    must_fix: [{ issue: 'unresolved source claim' }],
+    source_gaps: [{ issue: 'missing article-level evidence' }],
+    source_gap_count: 1
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+    final_publish_ready: false,
+    publish_gate_passed: false,
+    stale_claim_status: 'PASS',
+    stale_claim_hard_failure_count: 0
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    publish_gate_passed: false
+  });
+
+  let stdout = '';
+  let stderr = '';
+  const code = annotatePublicationQualityMain(['--date', date], {
+    root,
+    stdout: { write: chunk => { stdout += chunk; } },
+    stderr: { write: chunk => { stderr += chunk; } }
+  });
+
+  assert.equal(code, 0);
+  assert.equal(stderr, '');
+  assert.match(stdout, /::error file=content\/newsroom\/2026-05-08\/quality-report\.json,title=Quality status not PASS::/);
+  assert.match(stdout, /::warning file=content\/newsroom\/2026-05-08\/quality-report\.json,title=Quality score below threshold::/);
+  assert.match(stdout, /::error file=content\/newsroom\/2026-05-08\/fact-check-report\.json,title=Fact-check must_fix items remain::/);
+  assert.match(stdout, /::error file=content\/newsroom\/2026-05-08\/generation-status\.json,title=AI publish readiness is false::/);
+  assert.match(stdout, /Publication quality annotation completed/);
+});
+
+test('publication quality annotation fails only for CLI or system errors', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writePublicNewsletterArtifacts(root, date);
+  writeText(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), '{ invalid json');
+
+  let stdout = '';
+  let stderr = '';
+  const code = annotatePublicationQualityMain(['--date', date], {
+    root,
+    stdout: { write: chunk => { stdout += chunk; } },
+    stderr: { write: chunk => { stderr += chunk; } }
+  });
+
+  assert.equal(code, 1);
+  assert.equal(stdout, '');
+  assert.match(stderr, /Invalid JSON in content\/newsroom\/2026-05-08\/quality-report\.json/);
 });
 
 test('newsroom PR body primary headings are Korean', () => {
@@ -1074,7 +1186,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /uses: actions\/cache\/save@v4/);
   assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
   assert.match(resolveMetaStep, /node scripts\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);
-  assert.match(validateGeneratedSiteStep, /if: steps\.meta\.outputs\.has_publish_candidate == 'true'/);
+  assert.match(validateGeneratedSiteStep, /if: steps\.meta\.outputs\.has_public_artifacts == 'true'/);
   assert.match(workflow, /newsletter/);
   assert.match(workflow, /aosp-camera/);
   assert.match(workflow, /editor-review/);
@@ -1087,16 +1199,17 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /- name: Resolve final publish status/);
   assert.match(workflow, /id: final-publish-status/);
   assert.match(workflow, /node scripts\/write-publish-status-output\.js >> "\$GITHUB_OUTPUT"/);
-  assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.has_publish_candidate == 'true'/);
+  assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.has_public_artifacts == 'true'/);
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
-  assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.has_publish_candidate == 'true'/);
+  assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.has_public_artifacts == 'true'/);
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.has_reviewable_artifacts == 'true'/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);
-  assert.match(workflow, /const finalPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.final_publish_ready \}\}' === 'true';/);
+  assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true';/);
   assert.match(workflow, /const compositionMode = '\$\{\{ steps\.final-publish-status\.outputs\.composition_mode \}\}';/);
+  assert.doesNotMatch(workflow, /steps\.meta\.outputs\.has_publish_candidate/);
   assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /steps\.generation-status\.outputs\.final_publish_ready/);
   assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /validationPassed/);
   assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION'/);
@@ -1108,4 +1221,33 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
     workflow,
     new RegExp(`fromJSON\\(steps\\.generation-status\\.outputs\\.final_selected_article_count_for_gate\\) < ${articlePolicy.mainArticleCount.min}`)
   );
+});
+
+test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {
+  const workflowPath = path.join(__dirname, '..', '.github', 'workflows', '02-validate-site.yml');
+  const workflow = fs.readFileSync(workflowPath, 'utf8');
+  const structuralStepIndex = workflow.indexOf('- name: Validate structural publication artifacts');
+  const annotationStepIndex = workflow.indexOf('- name: Annotate publication quality and fact-check status');
+  const structuralNextStepIndex = workflow.indexOf('\n      - name:', structuralStepIndex + 1);
+  const structuralStep = workflow.slice(
+    structuralStepIndex,
+    structuralNextStepIndex === -1 ? undefined : structuralNextStepIndex
+  );
+  const annotationStep = workflow.slice(annotationStepIndex);
+
+  assert.notEqual(structuralStepIndex, -1);
+  assert.notEqual(annotationStepIndex, -1);
+  assert.ok(structuralStepIndex < annotationStepIndex);
+  assert.match(structuralStep, /npm run validate:policy/);
+  assert.match(structuralStep, /npm run check:policy-docs/);
+  assert.match(structuralStep, /npm run validate:config/);
+  assert.match(structuralStep, /npm run validate:site/);
+  assert.match(structuralStep, /npm run validate:images/);
+  assert.match(structuralStep, /npm run validate:localization/);
+  assert.doesNotMatch(structuralStep, /npm run validate:quality/);
+  assert.doesNotMatch(structuralStep, /^\s*npm run validate$/m);
+  assert.doesNotMatch(structuralStep, /continue-on-error:\s*true/);
+  assert.match(annotationStep, /if: always\(\)/);
+  assert.match(annotationStep, /continue-on-error:\s*true/);
+  assert.match(annotationStep, /run: node scripts\/annotate-publication-quality\.js/);
 });
