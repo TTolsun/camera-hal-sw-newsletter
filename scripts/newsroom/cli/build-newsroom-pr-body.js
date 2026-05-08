@@ -10,6 +10,9 @@ const {
   articleCountRangeText,
   publishGateCriteriaText
 } = require('../common/newsletter-policy');
+const {
+  renderEditorPublicationPolicyMarkdown
+} = require('../common/editor-publication-policy');
 
 const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
   '이번 주 핵심 메시지',
@@ -166,15 +169,7 @@ function renderStatusSection(status) {
 }
 
 function renderEditorApprovedPublicationPolicy() {
-  return [
-    '## Editor-approved Publication Policy',
-    '',
-    '- `final_publish_ready=false` means the AI automatic publication criteria are not met.',
-    '- If public artifacts are included, editor-in-chief merge to `main` is site publication approval.',
-    '- `02-validate-site.yml` reports quality/fact-check issues as non-blocking GitHub Actions annotations.',
-    '- `publish-ready` is reserved for `has_ai_publish_ready=true`; `needs-fix` may still include public artifacts for editor-approved publication.',
-    ''
-  ].join('\n');
+  return renderEditorPublicationPolicyMarkdown();
 }
 
 function renderCompositionSummary(status) {
