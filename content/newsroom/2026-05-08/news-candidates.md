@@ -741,12 +741,12 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Evidence score: 8
 - Version/release: libcamera v0.7.1
 - API/component: libcamera / V4L2 camera pipeline
-- Behavior change: Released libcamera v0.7.1 with SoftISP debaying and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
+- Behavior change: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
 - Cross-check 필요: no
 - Selection exclusion reason: Eligible for main article selection.
 - Verification hint: Can be used directly if the collected item supports the claim.
 - Relevance Score: 93
-- 요약: Released libcamera v0.7.1 with SoftISP debaying and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
+- 요약: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
 - Selection reason: libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)
 
 ### 16. C++26: A User&#45;Friendly assert() macro &#45;&#45; Sandor Dargo

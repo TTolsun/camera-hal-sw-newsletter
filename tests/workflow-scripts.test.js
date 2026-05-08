@@ -38,6 +38,9 @@ const {
   main: annotatePublicationQualityMain,
   resolveTargetItems
 } = require('../scripts/annotate-publication-quality');
+const {
+  renderEditorPublicationPolicyMarkdown
+} = require('../scripts/newsroom/common/editor-publication-policy');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -47,6 +50,32 @@ function writeJson(filePath, value) {
 function writeText(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, value, 'utf8');
+}
+
+function assertTextInOrder(text, labels) {
+  let previous = -1;
+  for (const label of labels) {
+    const current = text.indexOf(label);
+    assert.notEqual(current, -1, `${label} must exist`);
+    assert.ok(current > previous, `${label} must appear after previous marker`);
+    previous = current;
+  }
+}
+
+function workflowStep(text, name) {
+  const marker = `- name: ${name}`;
+  const start = text.indexOf(marker);
+  assert.notEqual(start, -1, `${name} step must exist`);
+  const next = text.indexOf('\n      - name:', start + marker.length);
+  return text.slice(start, next === -1 ? undefined : next);
+}
+
+function extractMarkdownSection(text, heading) {
+  const marker = `## ${heading}`;
+  const start = text.indexOf(marker);
+  assert.notEqual(start, -1, `${heading} section must exist`);
+  const next = text.indexOf('\n## ', start + marker.length);
+  return text.slice(start, next === -1 ? undefined : next);
 }
 
 function tempRoot() {
@@ -1181,11 +1210,10 @@ test('newsroom PR body includes editor-approved publication policy', () => {
   const result = validatePrBodyText(body);
 
   assert.equal(result.ok, true);
-  assert.match(body, /^## Editor-approved Publication Policy$/m);
-  assert.match(body, /`final_publish_ready=false` means the AI automatic publication criteria are not met\./);
-  assert.match(body, /editor-in-chief merge to `main` is site publication approval/);
-  assert.match(body, /`02-validate-site\.yml` reports quality\/fact-check issues as non-blocking GitHub Actions annotations/);
-  assert.match(body, /`publish-ready` is reserved for `has_ai_publish_ready=true`/);
+  assert.equal(
+    extractMarkdownSection(body, 'Editor-approved Publication Policy').trimEnd(),
+    renderEditorPublicationPolicyMarkdown().trimEnd()
+  );
 });
 
 test('publish status output renders final and artifact readiness fields', () => {
@@ -1278,16 +1306,83 @@ test('publication quality annotation fails only for CLI or system errors', () =>
   assert.match(stderr, /Invalid JSON in content\/newsroom\/2026-05-08\/quality-report\.json/);
 });
 
-test('publication quality annotation defaults to the latest public issue only', () => {
+test('publication quality annotation latest mode targets latest only without changed public issue dates', () => {
   const root = tempRoot();
   writeNewsletterIndex(root, [
     { date: '2026-05-07' },
     { date: '2026-05-08' }
   ]);
 
-  const targets = resolveTargetItems(root, { dates: [], all: false });
+  const targets = resolveTargetItems(root, { dates: [], all: false, latest: true, targetDates: new Set() });
 
   assert.deepEqual(targets.map(item => item.date), ['2026-05-08']);
+});
+
+test('publication quality annotation changed public issue date wins over latest fallback permission', () => {
+  const root = tempRoot();
+  writeNewsletterIndex(root, [
+    { date: '2026-05-07' },
+    { date: '2026-05-08' }
+  ]);
+
+  const targets = resolveTargetItems(root, {
+    dates: [],
+    all: false,
+    latest: true,
+    targetDates: new Set(['2026-05-07'])
+  });
+
+  assert.deepEqual(targets.map(item => item.date), ['2026-05-07']);
+});
+
+test('publication quality annotation fails without explicit target or changed public issue date', () => {
+  const root = tempRoot();
+  writeNewsletterIndex(root, [
+    { date: '2026-05-07' },
+    { date: '2026-05-08' }
+  ]);
+
+  assert.throws(
+    () => resolveTargetItems(root, { dates: [], all: false, latest: false, targetDates: new Set() }),
+    /No target public issue date detected/
+  );
+});
+
+test('publication quality annotation CLI fails without target fallback permission', () => {
+  const root = tempRoot();
+  writeNewsletterIndex(root, [
+    { date: '2026-05-07' },
+    { date: '2026-05-08' }
+  ]);
+
+  let stdout = '';
+  let stderr = '';
+  const code = annotatePublicationQualityMain([], {
+    root,
+    stdout: { write: chunk => { stdout += chunk; } },
+    stderr: { write: chunk => { stderr += chunk; } }
+  });
+
+  assert.equal(code, 1);
+  assert.equal(stdout, '');
+  assert.match(stderr, /No target public issue date detected/);
+});
+
+test('publication quality annotation rejects conflicting explicit targets', () => {
+  const root = tempRoot();
+  writeNewsletterIndex(root, [
+    { date: '2026-05-08' }
+  ]);
+
+  let stderr = '';
+  const code = annotatePublicationQualityMain(['--date', '2026-05-08', '--latest'], {
+    root,
+    stdout: { write: () => {} },
+    stderr: { write: chunk => { stderr += chunk; } }
+  });
+
+  assert.equal(code, 1);
+  assert.match(stderr, /--latest cannot be combined with --date/);
 });
 
 test('publication quality annotation all mode includes historical public issues', () => {
@@ -1312,9 +1407,10 @@ test('publication quality annotation help documents target policy', () => {
 
   assert.equal(code, 0);
   assert.match(stdout, /--date YYYY-MM-DD inspects only that public issue/);
-  assert.match(stdout, /Changed newsletter dates inspect only matching public issue dates/);
-  assert.match(stdout, /no changed public issue, the default target is the latest public issue only/);
   assert.match(stdout, /--all inspects every historical public issue/);
+  assert.match(stdout, /Changed public issue dates inspect matching public issue dates, even when --latest is present/);
+  assert.match(stdout, /--latest permits fallback to the latest public issue only when no changed public issue date is detected/);
+  assert.match(stdout, /no explicit target and no changed public issue date, the command fails/);
 });
 
 test('newsroom PR body primary headings are Korean', () => {
@@ -1349,80 +1445,30 @@ test('newsroom PR body primary headings are Korean', () => {
 test('weekly newsroom workflow separates review PR success from publish-ready gate', () => {
   const workflowPath = path.join(__dirname, '..', '.github', 'workflows', '01-weekly-newsroom-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
-  const manualOverrideStepIndex = workflow.indexOf('- name: Apply manual LLM overrides');
-  const doctorStepIndex = workflow.indexOf('- name: Doctor runtime config');
-  const validatePolicyStepIndex = workflow.indexOf('- name: Validate newsletter policy');
-  const checkPolicyDocsStepIndex = workflow.indexOf('- name: Check policy docs');
-  const preflightStepIndex = workflow.indexOf('- name: Run unit and regression tests');
-  const jitterStepIndex = workflow.indexOf('- name: Jitter scheduled run');
-  const resolveMetaStepIndex = workflow.indexOf('- name: Resolve newsletter metadata');
-  const validateGeneratedSiteStepIndex = workflow.indexOf('- name: Validate generated site');
-  const resolveFinalStatusStepIndex = workflow.indexOf('- name: Resolve final publish status');
-  const sourceEffectivenessStepIndex = workflow.indexOf('- name: Generate source effectiveness report');
-  const preparePrBodyStepIndex = workflow.indexOf('- name: Prepare pull request body');
-  const createPrStepIndex = workflow.indexOf('- name: Create pull request');
+  const validatePolicyStep = workflowStep(workflow, 'Validate newsletter policy');
+  const checkPolicyDocsStep = workflowStep(workflow, 'Check policy docs');
+  const preflightStep = workflowStep(workflow, 'Run unit and regression tests');
+  const resolveMetaStep = workflowStep(workflow, 'Resolve newsletter metadata');
+  const validateGeneratedSiteStep = workflowStep(workflow, 'Validate generated site');
+  const resolveFinalStatusStep = workflowStep(workflow, 'Resolve final publish status');
+  const sourceEffectivenessStep = workflowStep(workflow, 'Generate source effectiveness report');
+  const preparePrBodyStep = workflowStep(workflow, 'Prepare pull request body');
   const addLabelsStepIndex = workflow.indexOf('- name: Add pull request labels');
-  const validatePolicyNextStepIndex = workflow.indexOf('\n      - name:', validatePolicyStepIndex + 1);
-  const validatePolicyStep = workflow.slice(
-    validatePolicyStepIndex,
-    validatePolicyNextStepIndex === -1 ? undefined : validatePolicyNextStepIndex
-  );
-  const checkPolicyDocsNextStepIndex = workflow.indexOf('\n      - name:', checkPolicyDocsStepIndex + 1);
-  const checkPolicyDocsStep = workflow.slice(
-    checkPolicyDocsStepIndex,
-    checkPolicyDocsNextStepIndex === -1 ? undefined : checkPolicyDocsNextStepIndex
-  );
-  const nextStepIndex = workflow.indexOf('\n      - name:', preflightStepIndex + 1);
-  const preflightStep = workflow.slice(
-    preflightStepIndex,
-    nextStepIndex === -1 ? undefined : nextStepIndex
-  );
-  const resolveMetaNextStepIndex = workflow.indexOf('\n      - name:', resolveMetaStepIndex + 1);
-  const resolveMetaStep = workflow.slice(
-    resolveMetaStepIndex,
-    resolveMetaNextStepIndex === -1 ? undefined : resolveMetaNextStepIndex
-  );
-  const validateGeneratedSiteNextStepIndex = workflow.indexOf('\n      - name:', validateGeneratedSiteStepIndex + 1);
-  const validateGeneratedSiteStep = workflow.slice(
-    validateGeneratedSiteStepIndex,
-    validateGeneratedSiteNextStepIndex === -1 ? undefined : validateGeneratedSiteNextStepIndex
-  );
-  const resolveFinalStatusNextStepIndex = workflow.indexOf('\n      - name:', resolveFinalStatusStepIndex + 1);
-  const resolveFinalStatusStep = workflow.slice(
-    resolveFinalStatusStepIndex,
-    resolveFinalStatusNextStepIndex === -1 ? undefined : resolveFinalStatusNextStepIndex
-  );
-  const sourceEffectivenessNextStepIndex = workflow.indexOf('\n      - name:', sourceEffectivenessStepIndex + 1);
-  const sourceEffectivenessStep = workflow.slice(
-    sourceEffectivenessStepIndex,
-    sourceEffectivenessNextStepIndex === -1 ? undefined : sourceEffectivenessNextStepIndex
-  );
-  const preparePrBodyNextStepIndex = workflow.indexOf('\n      - name:', preparePrBodyStepIndex + 1);
-  const preparePrBodyStep = workflow.slice(
-    preparePrBodyStepIndex,
-    preparePrBodyNextStepIndex === -1 ? undefined : preparePrBodyNextStepIndex
-  );
 
-  assert.notEqual(manualOverrideStepIndex, -1);
-  assert.notEqual(doctorStepIndex, -1);
-  assert.notEqual(validatePolicyStepIndex, -1);
-  assert.notEqual(checkPolicyDocsStepIndex, -1);
-  assert.notEqual(preflightStepIndex, -1);
-  assert.notEqual(jitterStepIndex, -1);
-  assert.notEqual(resolveMetaStepIndex, -1);
-  assert.notEqual(validateGeneratedSiteStepIndex, -1);
-  assert.notEqual(resolveFinalStatusStepIndex, -1);
-  assert.notEqual(sourceEffectivenessStepIndex, -1);
-  assert.notEqual(preparePrBodyStepIndex, -1);
-  assert.notEqual(createPrStepIndex, -1);
   assert.notEqual(addLabelsStepIndex, -1);
-  assert.ok(manualOverrideStepIndex < doctorStepIndex);
-  assert.ok(doctorStepIndex < validatePolicyStepIndex);
-  assert.ok(validatePolicyStepIndex < checkPolicyDocsStepIndex);
-  assert.ok(checkPolicyDocsStepIndex < preflightStepIndex);
-  assert.ok(preflightStepIndex < jitterStepIndex);
-  assert.ok(resolveFinalStatusStepIndex < preparePrBodyStepIndex);
-  assert.ok(preparePrBodyStepIndex < createPrStepIndex);
+  assertTextInOrder(workflow, [
+    '- name: Apply manual LLM overrides',
+    '- name: Doctor runtime config',
+    '- name: Validate newsletter policy',
+    '- name: Check policy docs',
+    '- name: Run unit and regression tests',
+    '- name: Jitter scheduled run'
+  ]);
+  assertTextInOrder(workflow, [
+    '- name: Resolve final publish status',
+    '- name: Prepare pull request body',
+    '- name: Create pull request'
+  ]);
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /llm_model:/);
   assert.match(workflow, /llm_fallback_models:/);
@@ -1546,18 +1592,13 @@ test('validate-site uses shared rendered issue structural validator', () => {
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {
   const workflowPath = path.join(__dirname, '..', '.github', 'workflows', '02-validate-site.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
-  const structuralStepIndex = workflow.indexOf('- name: Validate structural publication artifacts');
-  const annotationStepIndex = workflow.indexOf('- name: Annotate publication quality and fact-check status');
-  const structuralNextStepIndex = workflow.indexOf('\n      - name:', structuralStepIndex + 1);
-  const structuralStep = workflow.slice(
-    structuralStepIndex,
-    structuralNextStepIndex === -1 ? undefined : structuralNextStepIndex
-  );
-  const annotationStep = workflow.slice(annotationStepIndex);
+  const structuralStep = workflowStep(workflow, 'Validate structural publication artifacts');
+  const annotationStep = workflowStep(workflow, 'Annotate publication quality and fact-check status');
 
-  assert.notEqual(structuralStepIndex, -1);
-  assert.notEqual(annotationStepIndex, -1);
-  assert.ok(structuralStepIndex < annotationStepIndex);
+  assertTextInOrder(workflow, [
+    '- name: Validate structural publication artifacts',
+    '- name: Annotate publication quality and fact-check status'
+  ]);
   assert.match(structuralStep, /npm run validate:policy/);
   assert.match(structuralStep, /npm run check:policy-docs/);
   assert.match(structuralStep, /npm run validate:config/);
@@ -1569,5 +1610,5 @@ test('site validation workflow keeps structural checks blocking and quality anno
   assert.doesNotMatch(structuralStep, /continue-on-error:\s*true/);
   assert.match(annotationStep, /if: always\(\)/);
   assert.match(annotationStep, /continue-on-error:\s*true/);
-  assert.match(annotationStep, /run: node scripts\/annotate-publication-quality\.js/);
+  assert.match(annotationStep, /run: node scripts\/annotate-publication-quality\.js --latest/);
 });

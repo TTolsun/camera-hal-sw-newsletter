@@ -19,16 +19,17 @@ const {
 
 function usage() {
   return [
-    'Usage: node scripts/annotate-publication-quality.js [--date YYYY-MM-DD] [--all]',
+    'Usage: node scripts/annotate-publication-quality.js [--date YYYY-MM-DD] [--all] [--latest]',
     '',
     'Reports publication quality and fact-check issues as GitHub Actions annotations.',
     'Quality issues do not fail the command; invalid CLI/system inputs do.',
     '',
     'Target policy:',
     '- --date YYYY-MM-DD inspects only that public issue.',
-    '- Changed newsletter dates inspect only matching public issue dates.',
-    '- If there is no changed public issue, the default target is the latest public issue only.',
-    '- --all inspects every historical public issue.'
+    '- --all inspects every historical public issue.',
+    '- Changed public issue dates inspect matching public issue dates, even when --latest is present.',
+    '- --latest permits fallback to the latest public issue only when no changed public issue date is detected.',
+    '- With no explicit target and no changed public issue date, the command fails instead of silently falling back.'
   ].join('\n');
 }
 
@@ -50,7 +51,8 @@ function countFromArrayOrValue(arrayValue, countValue) {
 function parseArgs(argv = process.argv.slice(2)) {
   const options = {
     dates: [],
-    all: false
+    all: false,
+    latest: false
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -67,6 +69,8 @@ function parseArgs(argv = process.argv.slice(2)) {
       index += 1;
     } else if (arg === '--all') {
       options.all = true;
+    } else if (arg === '--latest') {
+      options.latest = true;
     } else if (arg === '--help' || arg === '-h') {
       options.help = true;
     } else {
@@ -76,6 +80,12 @@ function parseArgs(argv = process.argv.slice(2)) {
 
   if (options.all && options.dates.length > 0) {
     throw new Error('--all cannot be combined with --date');
+  }
+  if (options.latest && options.dates.length > 0) {
+    throw new Error('--latest cannot be combined with --date');
+  }
+  if (options.latest && options.all) {
+    throw new Error('--latest cannot be combined with --all');
   }
 
   return options;
@@ -141,11 +151,14 @@ function resolveTargetItems(root, options = {}) {
     return selected;
   }
 
-  const targetDates = strictTargetDates({ root });
-  if (targetDates.size === 0) return latestPublicIssue(items);
+  const targetDates = options.targetDates instanceof Set
+    ? options.targetDates
+    : strictTargetDates({ root });
 
   const selected = items.filter(item => targetDates.has(item.date));
-  return selected.length > 0 ? selected : latestPublicIssue(items);
+  if (selected.length > 0) return selected;
+  if (options.latest) return latestPublicIssue(items);
+  throw new Error('No target public issue date detected. Pass --date YYYY-MM-DD, --all, or --latest.');
 }
 
 function addAnnotation(annotations, level, file, title, message) {

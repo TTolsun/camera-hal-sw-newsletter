@@ -4,7 +4,7 @@
   "summary": "이번 호는 2026년 5월 6일 Android Developers CameraX 릴리스 노트와 2026년 4월 28일 libcamera v0.7.1 릴리스 공지를 기준으로 Camera HAL 팀이 확인할 수 있는 항목만 정리합니다. CameraX 항목은 앱 계층 호환성 관찰 대상으로, libcamera 항목은 Linux camera driver / image pipeline 검토 대상으로 분리했습니다.",
   "briefing": [
     "CameraX 1.6.1 항목은 `androidx.camera` Camera Maven Group의 여러 artifact 버전 갱신을 확인하는 공식 release note입니다.",
-    "libcamera v0.7.1은 SoftISP debaying, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates를 포함한 Linux camera stack 릴리스입니다.",
+    "libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates를 포함한 Linux camera stack 릴리스입니다.",
     "GCC 16.1은 Android HAL의 기본 toolchain 변경이 아니라 native C++ 표준/컴파일러 지원 동향을 추적하는 fallback 관찰 항목입니다."
   ],
   "sections": [
@@ -131,12 +131,12 @@
     {
       "category": "Camera Driver / Image Pipeline",
       "headline": "libcamera v0.7.1: SoftISP와 image pipeline 릴리스",
-      "what_changed": "libcamera project의 2026년 4월 28일 release announcement는 libcamera v0.7.1 출시를 알렸습니다. 수집된 후보는 SoftISP debaying, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates를 주요 behavior change로 기록합니다.",
+      "what_changed": "libcamera project의 2026년 4월 28일 release announcement는 libcamera v0.7.1 출시를 알렸습니다. 수집된 후보는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates를 주요 behavior change로 기록합니다.",
       "confirmed_facts": [
         "버전/릴리스: libcamera v0.7.1",
         "게시일: 2026-04-28",
         "API/컴포넌트: libcamera / V4L2 camera pipeline",
-        "수집 evidence에는 SoftISP debaying, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates가 포함됩니다."
+        "수집 evidence에는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates가 포함됩니다."
       ],
       "evidence_summary": "libcamera-devel mailing list의 v0.7.1 release announcement에서 release date와 Linux camera pipeline 관련 변경 evidence를 확인했습니다.",
       "specificity_checks": [

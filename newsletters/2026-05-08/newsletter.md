@@ -4,7 +4,7 @@
 
 ## 1. 이번 주 3줄 브리핑
 - CameraX 1.6.1 항목은 `androidx.camera` Camera Maven Group의 여러 artifact 버전 갱신을 확인하는 공식 release note입니다.
-- libcamera v0.7.1은 SoftISP debaying, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates를 포함한 Linux camera stack 릴리스입니다.
+- libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates를 포함한 Linux camera stack 릴리스입니다.
 - GCC 16.1은 Android HAL의 기본 toolchain 변경이 아니라 native C++ 표준/컴파일러 지원 동향을 추적하는 fallback 관찰 항목입니다.
 
 ## 2. Android Platform Camera Adjacent
@@ -60,7 +60,7 @@ _Image: [libcamera Release Announcements - libcamera v0.7.1](https://lists.libca
 - 버전/릴리스: libcamera v0.7.1
 - 게시일: 2026-04-28
 - API/컴포넌트: libcamera / V4L2 camera pipeline
-- 수집 evidence에는 SoftISP debaying, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates가 포함됩니다.
+- 수집 evidence에는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates가 포함됩니다.
 
 **배경지식**
 
