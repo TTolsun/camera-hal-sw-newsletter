@@ -35,6 +35,8 @@ candidate collection
 
 로컬에서 확인할 때는 아래 명령만 기억하면 됩니다. 변경 범위가 넓거나 확신이 없으면 `ci`를 우선 사용합니다.
 
+`publish-ready`는 AI 자동 발행 가능 상태입니다. `needs-fix`라도 public artifact가 포함되면 편집장 main merge를 사이트 공개 승인으로 해석합니다. `02-validate-site.yml`은 structural validation은 blocking으로, quality/fact-check 문제는 non-blocking annotation으로 보고합니다.
+
 ## Main Commands
 
 Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.

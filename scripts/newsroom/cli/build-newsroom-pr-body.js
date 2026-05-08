@@ -158,6 +158,18 @@ function renderStatusSection(status) {
   ].join('\n');
 }
 
+function renderEditorApprovedPublicationPolicy() {
+  return [
+    '## Editor-approved Publication Policy',
+    '',
+    '- `final_publish_ready=false` means the AI automatic publication criteria are not met.',
+    '- If public artifacts are included, editor-in-chief merge to `main` is site publication approval.',
+    '- `02-validate-site.yml` reports quality/fact-check issues as non-blocking GitHub Actions annotations.',
+    '- `publish-ready` is reserved for `has_ai_publish_ready=true`; `needs-fix` may still include public artifacts for editor-approved publication.',
+    ''
+  ].join('\n');
+}
+
 function renderCompositionSummary(status) {
   return [
     '## 기사 구성 요약',
@@ -298,6 +310,7 @@ function buildNewsroomPrBody(options = {}) {
 
   lines.push(
     renderStatusSection(status),
+    renderEditorApprovedPublicationPolicy(),
     renderCompositionSummary(status),
     renderCompositionNotes(status),
     renderFinalSelectionStatus(status),
@@ -319,5 +332,6 @@ if (require.main === module) {
 module.exports = {
   buildNewsroomPrBody,
   extractEditorBriefSections,
+  renderEditorApprovedPublicationPolicy,
   recommendedEditorAction
 };

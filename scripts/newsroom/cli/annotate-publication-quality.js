@@ -22,7 +22,13 @@ function usage() {
     'Usage: node scripts/annotate-publication-quality.js [--date YYYY-MM-DD] [--all]',
     '',
     'Reports publication quality and fact-check issues as GitHub Actions annotations.',
-    'Quality issues do not fail the command; invalid CLI/system inputs do.'
+    'Quality issues do not fail the command; invalid CLI/system inputs do.',
+    '',
+    'Target policy:',
+    '- --date YYYY-MM-DD inspects only that public issue.',
+    '- Changed newsletter dates inspect only matching public issue dates.',
+    '- If there is no changed public issue, the default target is the latest public issue only.',
+    '- --all inspects every historical public issue.'
   ].join('\n');
 }
 
@@ -113,26 +119,33 @@ function readNewsletterItems(root) {
   return items;
 }
 
+function latestPublicIssue(items) {
+  return [...items]
+    .filter(item => /^\d{4}-\d{2}-\d{2}$/.test(String(item?.date || '')))
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+    .slice(0, 1);
+}
+
 function resolveTargetItems(root, options = {}) {
   const items = readNewsletterItems(root);
   if (options.all) return items;
 
   const explicitDates = new Set(options.dates || []);
-  const targetDates = explicitDates.size > 0
-    ? explicitDates
-    : strictTargetDates({ root });
-
-  if (targetDates.size === 0) return items;
-
-  const selected = items.filter(item => targetDates.has(item.date));
   if (explicitDates.size > 0) {
-    for (const date of targetDates) {
+    const selected = items.filter(item => explicitDates.has(item.date));
+    for (const date of explicitDates) {
       if (!selected.some(item => item.date === date)) {
         throw new Error(`No data/newsletters.json entry found for target date: ${date}`);
       }
     }
+    return selected;
   }
-  return selected;
+
+  const targetDates = strictTargetDates({ root });
+  if (targetDates.size === 0) return latestPublicIssue(items);
+
+  const selected = items.filter(item => targetDates.has(item.date));
+  return selected.length > 0 ? selected : latestPublicIssue(items);
 }
 
 function addAnnotation(annotations, level, file, title, message) {
@@ -472,5 +485,6 @@ module.exports = {
   main,
   parseArgs,
   renderAnnotationCommand,
+  latestPublicIssue,
   resolveTargetItems
 };

@@ -92,6 +92,13 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 - `npm run validate:quality`: deterministic quality report를 재계산하고 configured article count range 위반, Primary Camera Stack 필수 조건 미달, forbidden main bucket 포함, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap mapped candidate, dated evidence 없는 selected candidate를 차단합니다. AI/C++ 기사는 configured supporting main bucket일 때만 보강 기사로 허용됩니다.
 - `npm run validate:localization`: 유지 문서와 표시용 JSON 값이 한국어 규칙을 지키는지 확인합니다.
 
+## Editor-approved Publication Policy
+
+- `publish-ready`는 AI 자동 발행 가능 상태이며 `has_ai_publish_ready=true`일 때만 사용합니다.
+- `needs-fix`는 편집장 검토 또는 수정이 필요한 상태입니다. `has_public_artifacts=true`이면 편집장 main merge를 사이트 공개 승인으로 해석합니다.
+- `final_publish_ready=false`는 자동 발행 기준 미충족을 뜻하지만, public artifact가 포함된 PR의 공개 가능성을 혼자 차단하지 않습니다.
+- `02-validate-site.yml`은 structural validation을 blocking으로 유지하고 quality/fact-check 문제를 non-blocking annotation으로 보고합니다.
+
 ## URL Summary Cache
 
 Reporter summary record는 `cache/news-summary/by-url/{sha256(normalized_url)}.json`과 `cache/news-summary/by-content/{content_hash}.json`에 cache됩니다. cache file은 의도적으로 untracked이며 CI에서는 `actions/cache`로 복원합니다.

@@ -33,7 +33,8 @@ const {
   resolveReviewableArtifacts
 } = require('../scripts/resolve-reviewable-artifacts');
 const {
-  main: annotatePublicationQualityMain
+  main: annotatePublicationQualityMain,
+  resolveTargetItems
 } = require('../scripts/annotate-publication-quality');
 
 function writeJson(filePath, value) {
@@ -133,6 +134,17 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
       tags: ['Camera HAL']
     }
   ]);
+}
+
+function writeNewsletterIndex(root, items) {
+  writeJson(path.join(root, 'data', 'newsletters.json'), items.map(item => ({
+    date: item.date,
+    title: item.title || `Camera HAL SW Newsletter - ${item.date}`,
+    summary: item.summary || 'Public issue summary',
+    html: `newsletters/${item.date}/index.html`,
+    md: `newsletters/${item.date}/newsletter.md`,
+    tags: ['Camera HAL']
+  })));
 }
 
 function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
@@ -962,6 +974,23 @@ test('validate-pr-body allows review PR when final publish is false without cons
   assert.equal(result.ok, true);
 });
 
+test('newsroom PR body includes editor-approved publication policy', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure' });
+  const result = validatePrBodyText(body);
+
+  assert.equal(result.ok, true);
+  assert.match(body, /^## Editor-approved Publication Policy$/m);
+  assert.match(body, /`final_publish_ready=false` means the AI automatic publication criteria are not met\./);
+  assert.match(body, /editor-in-chief merge to `main` is site publication approval/);
+  assert.match(body, /`02-validate-site\.yml` reports quality\/fact-check issues as non-blocking GitHub Actions annotations/);
+  assert.match(body, /`publish-ready` is reserved for `has_ai_publish_ready=true`/);
+});
+
 test('publish status output renders final and artifact readiness fields', () => {
   const root = tempRoot();
   const date = '2026-05-08';
@@ -1050,6 +1079,45 @@ test('publication quality annotation fails only for CLI or system errors', () =>
   assert.equal(code, 1);
   assert.equal(stdout, '');
   assert.match(stderr, /Invalid JSON in content\/newsroom\/2026-05-08\/quality-report\.json/);
+});
+
+test('publication quality annotation defaults to the latest public issue only', () => {
+  const root = tempRoot();
+  writeNewsletterIndex(root, [
+    { date: '2026-05-07' },
+    { date: '2026-05-08' }
+  ]);
+
+  const targets = resolveTargetItems(root, { dates: [], all: false });
+
+  assert.deepEqual(targets.map(item => item.date), ['2026-05-08']);
+});
+
+test('publication quality annotation all mode includes historical public issues', () => {
+  const root = tempRoot();
+  writeNewsletterIndex(root, [
+    { date: '2026-05-07' },
+    { date: '2026-05-08' }
+  ]);
+
+  const targets = resolveTargetItems(root, { dates: [], all: true });
+
+  assert.deepEqual(targets.map(item => item.date), ['2026-05-07', '2026-05-08']);
+});
+
+test('publication quality annotation help documents target policy', () => {
+  let stdout = '';
+  const code = annotatePublicationQualityMain(['--help'], {
+    root: tempRoot(),
+    stdout: { write: chunk => { stdout += chunk; } },
+    stderr: { write: () => {} }
+  });
+
+  assert.equal(code, 0);
+  assert.match(stdout, /--date YYYY-MM-DD inspects only that public issue/);
+  assert.match(stdout, /Changed newsletter dates inspect only matching public issue dates/);
+  assert.match(stdout, /no changed public issue, the default target is the latest public issue only/);
+  assert.match(stdout, /--all inspects every historical public issue/);
 });
 
 test('newsroom PR body primary headings are Korean', () => {
@@ -1221,6 +1289,32 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
     workflow,
     new RegExp(`fromJSON\\(steps\\.generation-status\\.outputs\\.final_selected_article_count_for_gate\\) < ${articlePolicy.mainArticleCount.min}`)
   );
+});
+
+test('generation path writes public artifacts before AI readiness status checks', () => {
+  const generatorPath = path.join(__dirname, '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
+  const generator = fs.readFileSync(generatorPath, 'utf8');
+  const markdownWriteIndex = generator.indexOf("fs.writeFileSync(newsletterMd, buildMarkdown(editor), 'utf8');");
+  const htmlWriteIndex = generator.indexOf("fs.writeFileSync(newsletterHtml, buildHtml(editor), 'utf8');");
+  const dataWriteIndex = generator.indexOf('updateNewsletterData(date, editor);');
+  const generationStatusIndex = generator.indexOf("let generationStatus = 'PASS';");
+  const factCheckNeedsFixIndex = generator.indexOf("factCheck.status === 'NEEDS_FIX' && mustFixCount > 0", generationStatusIndex);
+  const qualityNeedsFixIndex = generator.indexOf("qualityReport.status !== 'PASS'", generationStatusIndex);
+  const finalPublishReadyIndex = generator.indexOf('const finalPublishReady =', generationStatusIndex);
+
+  assert.notEqual(markdownWriteIndex, -1);
+  assert.notEqual(htmlWriteIndex, -1);
+  assert.notEqual(dataWriteIndex, -1);
+  assert.notEqual(generationStatusIndex, -1);
+  assert.notEqual(factCheckNeedsFixIndex, -1);
+  assert.notEqual(qualityNeedsFixIndex, -1);
+  assert.notEqual(finalPublishReadyIndex, -1);
+  assert.ok(markdownWriteIndex < generationStatusIndex);
+  assert.ok(htmlWriteIndex < generationStatusIndex);
+  assert.ok(dataWriteIndex < generationStatusIndex);
+  assert.ok(generationStatusIndex < factCheckNeedsFixIndex);
+  assert.ok(factCheckNeedsFixIndex < qualityNeedsFixIndex);
+  assert.ok(qualityNeedsFixIndex < finalPublishReadyIndex);
 });
 
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {

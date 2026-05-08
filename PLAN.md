@@ -23,6 +23,11 @@ editor-in-chief main merge = site publication approval
 - A PR may have `has_public_artifacts=true`, `has_ai_publish_ready=false`, and `needs-fix`. That means the article can be shown if the editor-in-chief merges it, while AI quality gate status remains review-needed.
 - `02-validate-site.yml` reports quality/fact-check problems as non-blocking GitHub Actions annotations.
 - Structural validation remains blocking: site config, `data/newsletters.json` integrity, HTML/Markdown existence, source links, image paths, localization, TODO checks, anchor mismatch, and path escape checks.
+- `annotate-publication-quality.js` target policy:
+  - `--date YYYY-MM-DD` inspects only that public issue.
+  - Changed newsletter dates inspect only matching public issue dates.
+  - If there is no changed public issue, the default target is the latest public issue only.
+  - `--all` inspects every historical public issue.
 
 ## Validation
 
