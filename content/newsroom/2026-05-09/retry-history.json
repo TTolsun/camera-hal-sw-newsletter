@@ -102,5 +102,46 @@
       "lastKnownValidAttempt": 1,
       "fallbackEditorSectionCount": 3
     }
+  },
+  {
+    "attempt": 2,
+    "model": "deterministic-fallback-public-issue",
+    "score": 99,
+    "threshold": 85,
+    "status": "PUBLIC_ISSUE_CREATED",
+    "rendered_main_article_count": 3,
+    "demoted_article_count": 1,
+    "reserve_candidates_used": [
+      {
+        "headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+        "category": "Tooling Watch / Fallback",
+        "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "fallback": true,
+        "reason": "minimum article count fallback fill"
+      }
+    ],
+    "deductions": [
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera v0.7.1 출시: SoftISP 및 파이프라인 처리량 개선",
+        "blocking": false,
+        "severity": "soft"
+      }
+    ],
+    "selected_article_headlines": [
+      "libcamera v0.7.1 출시: SoftISP 및 파이프라인 처리량 개선",
+      "CameraX 1.4.0-alpha07 출시: viewfinder 및 video 모듈 업데이트",
+      "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more"
+    ],
+    "demoted_sections": [
+      "GCC 16.1 출시: C++26 reflection, contracts, safety hardening 및 C++20 기본 설정"
+    ],
+    "repair_actions": [
+      "fallback-public-issue-builder"
+    ]
   }
 ]

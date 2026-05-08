@@ -1,5 +1,18 @@
 [
   {
+    "date": "2026-05-09",
+    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-09",
+    "summary": "이번 2026-05-09호는 libcamera v0.7.1 출시: SoftISP 및 파이프라인 처리량 개선, CameraX 1.4.0-alpha07 출시: viewfinder 및 video 모듈 업데이트, Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more를 중심으로 구성했습니다. 정상 후보가 부족한 영역은 1개의 Fallback/Watch 기사로 채웠고 HAL 직접 변경으로 표현하지 않았습니다. hard failure article 1개는 main article에서 제거하거나 강등했습니다.",
+    "html": "newsletters/2026-05-09/index.html",
+    "md": "newsletters/2026-05-09/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android",
+      "C++",
+      "AI"
+    ]
+  },
+  {
     "date": "2026-05-08",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-08",
     "summary": "이번 호는 2026년 5월 6일 Android Developers CameraX 릴리스 노트와 2026년 4월 28일 libcamera v0.7.1 릴리스 공지를 기준으로 Camera HAL 팀이 확인할 수 있는 항목만 정리합니다. CameraX 항목은 앱 계층 호환성 관찰 대상으로, libcamera 항목은 Linux camera driver / image pipeline 검토 대상으로 분리했습니다.",

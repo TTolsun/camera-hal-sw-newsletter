@@ -169,6 +169,11 @@ jobs:
         continue-on-error: true
         run: npm run generate
 
+      - name: Ensure public newsletter artifacts
+        id: ensure-public-newsletter
+        if: always()
+        run: node scripts/ensure-public-newsletter-artifacts.js
+
       - name: Resolve newsletter metadata
         id: meta
         if: always()
@@ -191,7 +196,7 @@ jobs:
 
       - name: Validate generated site
         id: validate
-        if: steps.meta.outputs.has_public_artifacts == 'true'
+        if: steps.meta.outputs.public_newsletter_ready == 'true'
         continue-on-error: true
         env:
           REQUIRE_NEWSLETTER_DATE_FILE: "1"
@@ -199,13 +204,13 @@ jobs:
 
       - name: Resolve final publish status
         id: final-publish-status
-        if: steps.meta.outputs.has_public_artifacts == 'true'
+        if: steps.meta.outputs.public_newsletter_ready == 'true'
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
         run: node scripts/write-publish-status-output.js >> "$GITHUB_OUTPUT"
 
       - name: Generate source effectiveness report
-        if: always() && steps.meta.outputs.has_public_artifacts == 'true'
+        if: always() && steps.meta.outputs.public_newsletter_ready == 'true'
         continue-on-error: true
         run: npm run report:source-effectiveness -- --date "${{ steps.meta.outputs.date }}"
 
@@ -269,7 +274,7 @@ jobs:
 
       - name: Prepare pull request body
         id: pr-body
-        if: steps.meta.outputs.has_reviewable_artifacts == 'true'
+        if: steps.meta.outputs.public_newsletter_ready == 'true'
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
         run: |
@@ -283,7 +288,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Ensure labels
-        if: steps.meta.outputs.has_reviewable_artifacts == 'true'
+        if: steps.meta.outputs.public_newsletter_ready == 'true'
         uses: actions/github-script@v7
         continue-on-error: true
         with:
@@ -314,7 +319,7 @@ jobs:
 
       - name: Create pull request
         id: cpr
-        if: steps.meta.outputs.has_reviewable_artifacts == 'true'
+        if: steps.meta.outputs.public_newsletter_ready == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "Generate Camera HAL newsletter ${{ steps.meta.outputs.date }}"
@@ -331,13 +336,13 @@ jobs:
           script: |
             const issue_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
             const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week'];
-            const labels = ['newsletter', 'aosp-camera', 'editor-review'];
+            const labels = ['newsletter', 'aosp-camera'];
             const hasAiPublishReady = '${{ steps.final-publish-status.outputs.has_ai_publish_ready }}' === 'true';
             const compositionMode = '${{ steps.final-publish-status.outputs.composition_mode }}';
             if (hasAiPublishReady) {
               labels.push('publish-ready');
             } else {
-              labels.push('needs-fix');
+              labels.push('needs-fix', 'editor-review');
             }
             if (compositionMode === 'FALLBACK_COMPOSITION') {
               labels.push('fallback-composition');
@@ -374,8 +379,8 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      - name: Fail if reviewable newsroom artifacts were not created
-        if: steps.meta.outputs.has_reviewable_artifacts != 'true'
+      - name: Fail if public newsletter artifacts were not ready
+        if: steps.meta.outputs.public_newsletter_ready != 'true'
         run: |
-          echo "LLM newsroom generation did not produce reviewable artifacts. This is a fatal generation failure."
+          echo "Newsletter public artifacts are not ready: ${{ steps.meta.outputs.public_newsletter_reason }}"
           exit 1

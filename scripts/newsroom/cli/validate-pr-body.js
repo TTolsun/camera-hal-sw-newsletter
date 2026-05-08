@@ -147,48 +147,16 @@ function validatePrBodyText(text, options = {}) {
     errors.push('생성 상태 summary mixes PASS with FAILED/NEEDS_FIX.');
   }
 
-  if (parsed.failureKind === 'editorial_reviewable') {
-    if (!/발행 불가 경고:/.test(statusSection) || !/발행 불가 review PR/.test(statusSection)) {
-      errors.push('editorial_reviewable PR body must contain the non-publish warning.');
-    }
-    if (parsed.finalPublishReady !== false) {
-      errors.push(`editorial_reviewable PR body must show final_publish_ready=false, got ${parsed.finalPublishReady}.`);
-    }
-    if (parsed.validateOk !== false) {
-      errors.push(`editorial_reviewable PR body must show validate_ok=false, got ${parsed.validateOk}.`);
-    }
-    if (parsed.editorReviewRequired !== true) {
-      errors.push(`editorial_reviewable PR body must show editor_review_required=true, got ${parsed.editorReviewRequired}.`);
-    }
-    const generatedArtifactsSection = sectionByHeading(sections, ['생성 산출물', '?앹꽦 ?곗텧臾?']);
-    const notGeneratedPublicSection = sectionByHeading(sections, ['생성하지 않은 public 산출물']);
-    const patterns = publicArtifactPatterns(options.date);
-    if (!generatedArtifactsSection) {
-      errors.push('editorial_reviewable PR body must contain generated artifacts section.');
-    } else {
-      for (const pattern of Object.values(patterns)) {
-        if (pattern.test(generatedArtifactsSection)) {
-          errors.push('editorial_reviewable generated artifacts section must not list public artifacts.');
-          break;
-        }
-      }
-    }
-    if (!notGeneratedPublicSection) {
-      errors.push('editorial_reviewable PR body must contain not-generated public artifacts section.');
-    } else {
-      const newsletterMdLine = notGeneratedPublicSection.match(patterns.newsletterMd)?.[0] || '';
-      const newsletterHtmlLine = notGeneratedPublicSection.match(patterns.newsletterHtml)?.[0] || '';
-      const dataIndexLine = notGeneratedPublicSection.match(patterns.dataIndex)?.[0] || '';
-      if (!/not generated/.test(newsletterMdLine)) {
-        errors.push('editorial_reviewable PR body must list newsletter.md as not generated.');
-      }
-      if (!/not generated/.test(newsletterHtmlLine)) {
-        errors.push('editorial_reviewable PR body must list index.html as not generated.');
-      }
-      if (!/not updated/.test(dataIndexLine)) {
-        errors.push('editorial_reviewable PR body must list data/newsletters.json as not updated.');
-      }
-    }
+  const patterns = publicArtifactPatterns(options.date);
+  const generatedArtifactsSection = sectionByHeading(sections, ['생성 산출물', '?앹꽦 ?곗텧臾?']);
+  if (!generatedArtifactsSection) {
+    errors.push('PR body must contain generated artifacts section.');
+  }
+  if (/생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
+    errors.push('Newsletter PR body must not describe public newsletter files as not generated or not updated.');
+  }
+  if (parsed.finalPublishReady === false && !/public newsletter files는 생성되었습니다/.test(text)) {
+    errors.push('final_publish_ready=false PR body must state that public newsletter files were generated for editor-approved merge.');
   }
 
   if (parsed.finalPublishReady === true) {

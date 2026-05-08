@@ -1,15 +1,15 @@
 {
   "date": "2026-05-09",
-  "status": "FAILED_REPAIR_REVIEWABLE",
+  "status": "NEEDS_FIX",
   "failure_stage": "editor repair attempt 1/2",
   "failure_reason": "Targeted repair changed main article count outside completion/replacement mode.",
   "fact_check_status": "PASS",
   "must_fix_count": 0,
-  "quality_status": "NEEDS_FIX",
+  "quality_status": "PASS",
   "quality_attempt_count": 1,
-  "quality_score": 82,
+  "quality_score": 99,
   "quality_threshold": 85,
-  "quality_deduction_count": 4,
+  "quality_deduction_count": 1,
   "quota_error_count": 0,
   "invalid_json_count": 0,
   "model_usage": {
@@ -55,7 +55,7 @@
     "github_sha": "fc5a6ce90b4604b5e77f5bf65f0dc7b4ffd1a10e",
     "github_ref": "refs/heads/main"
   },
-  "validate_ok": false,
+  "validate_ok": true,
   "todo_found": false,
   "empty_source_sections": [],
   "source_gap_count": 0,
@@ -84,7 +84,7 @@
   "repairSucceeded": false,
   "input_candidate_count": 40,
   "eligible_candidate_count": 6,
-  "selected_article_count": 5,
+  "selected_article_count": 3,
   "deterministic_selected_count": 5,
   "rendered_main_article_count": 3,
   "reserve_candidate_count": 1,
@@ -95,7 +95,7 @@
   "reporter_selected_count": 0,
   "final_input_candidate_count": 40,
   "final_eligible_candidate_count": 6,
-  "final_selected_article_count": 5,
+  "final_selected_article_count": 3,
   "reporter_selected_but_final_excluded_count": 0,
   "ai_selected_article_count": 1,
   "underfilled": false,
@@ -108,7 +108,7 @@
   "max_final_articles": 5,
   "absolute_min_reviewable_articles": 1,
   "min_non_fallback_publish_ready_articles": 1,
-  "composition_mode": "NEEDS_FIX",
+  "composition_mode": "FALLBACK_COMPOSITION",
   "selection_composition_mode": "FALLBACK_COMPOSITION",
   "composition_reason": "Article Composition Policy passed with 4 Primary Camera Stack article(s) and 1 supporting main article(s).",
   "composition_summary": {
@@ -241,5 +241,14 @@
       "count": 4
     }
   ],
-  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "generation_status": "NEEDS_FIX",
+  "fallback_public_issue": true,
+  "fallback_public_issue_status": "CREATED",
+  "fallback_public_issue_demoted_article_count": 1,
+  "fallback_public_issue_added_article_count": 1,
+  "fallback_public_issue_preserve_article_count": 2,
+  "fallback_public_issue_reason": "Public newsletter files generated after quality/repair/final-readiness trigger.",
+  "artifact_final_publish_ready": false,
+  "public_newsletter_ready": true
 }

@@ -18,4 +18,4 @@ PASS
 
 ## 최종 의견
 
-All articles have concrete action items and are well-sourced. The C++ article correctly frames GCC news in the context of Clang/LLVM for Android native development. No factual errors or policy violations were found.
+Fallback public issue builder removed or demoted hard failure articles before writing public files.

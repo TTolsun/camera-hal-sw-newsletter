@@ -13,6 +13,9 @@ const {
 const {
   renderEditorPublicationPolicyMarkdown
 } = require('../common/editor-publication-policy');
+const {
+  getChangedRepoVisibleArtifacts
+} = require('./resolve-reviewable-artifacts');
 
 const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
   '이번 주 핵심 메시지',
@@ -134,7 +137,7 @@ function renderStatusSection(status) {
     '## 생성 상태',
     '',
     editorialReviewable
-      ? '발행 불가 경고: 이 PR은 발행 불가 review PR입니다. public issue 파일과 data/newsletters.json 업데이트를 포함하지 않습니다.'
+      ? '편집장 검토 경고: AI 자동 발행 기준은 통과하지 못했지만 public newsletter files는 생성되었습니다. 편집장이 승인하여 merge하면 Newsletter 사이트에 게시됩니다.'
       : '',
     `전체 상태: ${valueOrUnknown(status.status)}`,
     `생성 실행 상태: ${valueOrUnknown(status.generation_status)}`,
@@ -276,41 +279,66 @@ function renderEditorActionGuidance(status, date) {
   return lines.join('\n');
 }
 
-function renderGeneratedArtifacts(date, status = {}) {
+function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), changedArtifacts = null) {
+  const changed = [...new Set((Array.isArray(changedArtifacts)
+    ? changedArtifacts
+    : getChangedRepoVisibleArtifacts({ root, date }))
+    .filter(filePath =>
+      filePath.startsWith(`content/collected-news/${date}/`) ||
+      filePath.startsWith(`content/newsroom/${date}/`) ||
+      filePath.startsWith(`newsletters/${date}/`) ||
+      filePath === 'data/newsletters.json'
+    ))].sort();
   const lines = [
     '## 생성 산출물',
     '',
-    `- content/collected-news/${date}/candidates.json`,
-    `- content/newsroom/${date}/shortlisted-candidates.json`,
-    `- content/newsroom/${date}/article-capsules.json`,
-    `- content/newsroom/${date}/reporter-candidates.json`,
-    `- content/newsroom/${date}/editor-draft.json`,
-    `- content/newsroom/${date}/fact-check-report.json`,
-    `- content/newsroom/${date}/quality-report.json`,
-    `- content/newsroom/${date}/quality-report.md`,
-    `- content/newsroom/${date}/retry-history.json`,
-    `- content/newsroom/${date}/retry-history.md`,
-    `- content/newsroom/${date}/recovery-prompt.md (only when recovery is needed)`
+    ...(changed.length > 0 ? changed.map(filePath => `- ${filePath}`) : ['- none'])
   ];
-  if (status.failure_kind !== 'editorial_reviewable') {
-    lines.push(
-      `- newsletters/${date}/newsletter.md`,
-      `- newsletters/${date}/index.html`,
-      '- data/newsletters.json'
-    );
-  }
   return lines.join('\n');
 }
 
-function renderNotGeneratedPublicArtifacts(date, status = {}) {
-  if (status.failure_kind !== 'editorial_reviewable') return '';
+function renderPublicNewsletterNotice(status = {}) {
+  if (status.final_publish_ready === true) return '';
   return [
-    '## 생성하지 않은 public 산출물',
+    '## Public Newsletter Notice',
     '',
-    `- newsletters/${date}/newsletter.md - not generated`,
-    `- newsletters/${date}/index.html - not generated`,
-    '- data/newsletters.json - not updated'
+    'AI 자동 발행 기준은 통과하지 못했지만, public newsletter files는 생성되었습니다. 편집장이 이 PR을 승인하여 merge하면 Newsletter 사이트에 게시됩니다.'
   ].join('\n');
+}
+
+function readJsonIfExists(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (_) {
+    return null;
+  }
+}
+
+function renderFallbackPublicIssueNotes(root, date) {
+  const report = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'));
+  if (!report) return '';
+  const demoted = ensureArray(report.demoted_articles);
+  const fallback = ensureArray(report.fallback_articles);
+  if (demoted.length === 0 && fallback.length === 0) return '';
+  const lines = [
+    '## 교체/강등된 기사',
+    ''
+  ];
+  if (demoted.length === 0) {
+    lines.push('- none');
+  } else {
+    for (const item of demoted) {
+      lines.push(`- ${valueOrUnknown(item.headline)}: ${valueOrUnknown(item.reason)}`);
+    }
+  }
+  if (fallback.length > 0) {
+    lines.push('', '## Fallback 기사', '');
+    for (const item of fallback) {
+      lines.push(`- ${valueOrUnknown(item.headline)}: ${valueOrUnknown(item.reason)} (${valueOrUnknown(item.relevance_bucket)})`);
+    }
+  }
+  return lines.join('\n');
 }
 
 function buildNewsroomPrBody(options = {}) {
@@ -331,10 +359,11 @@ function buildNewsroomPrBody(options = {}) {
     renderEditorApprovedPublicationPolicy(),
     renderCompositionSummary(status),
     renderCompositionNotes(status),
+    renderPublicNewsletterNotice(status),
+    renderFallbackPublicIssueNotes(root, date),
     renderFinalSelectionStatus(status),
     renderEditorActionGuidance(status, date),
-    renderGeneratedArtifacts(date, status),
-    renderNotGeneratedPublicArtifacts(date, status)
+    renderGeneratedArtifacts(date, status, root, options.changedArtifacts)
   );
 
   return `${lines.join('\n').replace(/\n{3,}/g, '\n\n').trim()}\n`;
@@ -351,6 +380,7 @@ if (require.main === module) {
 module.exports = {
   buildNewsroomPrBody,
   extractEditorBriefSections,
+  renderGeneratedArtifacts,
   renderEditorApprovedPublicationPolicy,
   recommendedEditorAction
 };

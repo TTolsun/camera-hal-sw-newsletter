@@ -32,8 +32,15 @@ const {
   buildReviewableArtifactOutputs,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
+  requiredPublicFiles,
   resolveReviewableArtifacts
 } = require('../scripts/resolve-reviewable-artifacts');
+const {
+  buildFallbackPublicIssue
+} = require('../scripts/newsroom/generate/fallback-public-issue');
+const {
+  ensurePublicNewsletterArtifacts
+} = require('../scripts/ensure-public-newsletter-artifacts');
 const {
   main: annotatePublicationQualityMain,
   resolveTargetItems
@@ -41,6 +48,10 @@ const {
 const {
   renderEditorPublicationPolicyMarkdown
 } = require('../scripts/newsroom/common/editor-publication-policy');
+const {
+  buildHtml,
+  buildMarkdown
+} = require('../scripts/newsroom/render/newsletter-renderer');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -153,13 +164,57 @@ function writeMinimalPublishArtifacts(root, date, overrides = {}) {
 }
 
 function writePublicNewsletterArtifacts(root, date, overrides = {}) {
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), overrides.markdown || '# Camera HAL SW Newsletter\n');
-  writeText(path.join(root, 'newsletters', date, 'index.html'), overrides.html || '<!doctype html><html><body>Camera HAL SW Newsletter</body></html>\n');
+  const issue = overrides.issue || {
+    date,
+    title: overrides.title || `Camera HAL SW 뉴스레터 - ${date}`,
+    summary: overrides.summary || '공개 뉴스레터 요약입니다.',
+    briefing: ['첫 번째 요약입니다.', '두 번째 요약입니다.', '세 번째 요약입니다.'],
+    sections: [
+      {
+        category: 'Android Camera',
+        headline: 'CameraX release note',
+        what_changed: 'CameraX release note changed a camera component.',
+        evidence_summary: 'Android Developers dated release note is used as source evidence.',
+        background: 'CameraX is part of the Android camera application layer.',
+        camera_hal_perspective: 'Camera HAL team checks stream, buffer, metadata, CTS/VTS, and Camera ITS impact before follow-up work.',
+        team_summary: 'Camera team should review compatibility impact.',
+        confirmed_facts: ['CameraX release note exists.', 'The source link is dated.'],
+        specificity_checks: ['version=1.0.0', 'component=CameraX'],
+        source_verification_notes: ['Source URL is official.'],
+        camera_hal_checks: ['Check stream configuration.', 'Check metadata compatibility.'],
+        action_items: ['Run Camera ITS smoke tests.', 'Check stream/buffer compatibility.'],
+        sources: [
+          {
+            title: 'Android Developers Camera',
+            url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.0.0'
+          }
+        ]
+      }
+    ],
+    action_items: ['Run Camera ITS smoke tests.'],
+    references: [
+      {
+        title: 'Android Developers Camera',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.0.0'
+      }
+    ]
+  };
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), overrides.markdown || buildMarkdown(issue));
+  writeText(path.join(root, 'newsletters', date, 'index.html'), overrides.html || buildHtml(issue));
+  writeText(path.join(root, 'index.html'), overrides.rootIndex || [
+    '<!doctype html><html><body>',
+    '<div id="latest-card"></div>',
+    '<div id="archive-list"></div>',
+    '<script>',
+    "async function loadNewsletters() { await fetch('data/newsletters.json'); const latest = {}; const archive = []; }",
+    'loadNewsletters();',
+    '</script></body></html>'
+  ].join('\n'));
   writeJson(path.join(root, 'data', 'newsletters.json'), [
     {
       date,
-      title: overrides.title || `Camera HAL SW Newsletter - ${date}`,
-      summary: overrides.summary || 'Public issue summary',
+      title: overrides.title || `Camera HAL SW 뉴스레터 - ${date}`,
+      summary: overrides.summary || '공개 뉴스레터 요약입니다.',
       html: `newsletters/${date}/index.html`,
       md: `newsletters/${date}/newsletter.md`,
       tags: ['Camera HAL']
@@ -176,6 +231,175 @@ function writeNewsletterIndex(root, items) {
     md: `newsletters/${item.date}/newsletter.md`,
     tags: ['Camera HAL']
   })));
+}
+
+function writeRootIndexContract(root) {
+  writeText(path.join(root, 'index.html'), [
+    '<!doctype html><html><body>',
+    '<div id="latest-card"></div>',
+    '<div id="archive-list"></div>',
+    '<script>',
+    "async function loadNewsletters() { const latest = {}; const archive = []; await fetch('data/newsletters.json'); }",
+    'loadNewsletters();',
+    '</script></body></html>'
+  ].join('\n'));
+}
+
+function regressionCandidate({ title, url, bucket, fallback = false }) {
+  return {
+    title,
+    url,
+    source: title.includes('libcamera') ? 'libcamera' : title.includes('Glaze') ? 'ISO C++ Blog' : 'Android Developers',
+    published_date: '2026-05-06',
+    version_or_release: title,
+    component: title.includes('libcamera') ? 'SoftISP' : title.includes('Glaze') ? 'C++ reflection serialization' : 'CameraX',
+    summary: `${title} has dated source evidence for camera newsletter review.`,
+    finalSelectionEligibility: fallback ? 'short' : 'main',
+    source_gap_risk: false,
+    main_eligible: true,
+    hasDatedEvidence: true,
+    reference_only: false,
+    briefing_only: false,
+    relevance_bucket: bucket,
+    source_candidate_hash: `${bucket}-${title}`.replace(/[^a-z0-9]+/gi, '-').toLowerCase(),
+    editorial_priority: fallback ? 5 : 2,
+    aosp_camera_directness: bucket === 'android_platform_camera_adjacent' ? 2 : 0,
+    driver_stack_relevance: bucket === 'camera_driver_image_pipeline' ? 3 : 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: fallback ? 3 : 0,
+    counts_as_primary_camera_topic: bucket !== 'cpp_ai_tooling_fallback',
+    counts_as_driver_topic: bucket === 'camera_driver_image_pipeline',
+    counts_as_soc_topic: false,
+    counts_as_fallback_topic: fallback,
+    evidence_origin: 'fixture'
+  };
+}
+
+function regressionSection(item, overrides = {}) {
+  return {
+    category: item.relevance_bucket === 'camera_driver_image_pipeline' ? 'Camera Driver / Image Pipeline' : 'Android Platform / CameraX',
+    headline: item.title,
+    what_changed: item.summary,
+    evidence_summary: `${item.title} uses dated source evidence.`,
+    background: item.summary,
+    camera_hal_perspective: 'Camera HAL team checks stream, buffer, metadata, CTS/VTS, and Camera ITS impact before follow-up work.',
+    team_summary: `${item.title} should be reviewed by camera owners.`,
+    confirmed_facts: [`${item.title} was published on ${item.published_date}.`, `component=${item.component}`],
+    specificity_checks: ['dated evidence present', `bucket=${item.relevance_bucket}`],
+    source_verification_notes: ['Source URL is bound to candidate metadata.'],
+    camera_hal_checks: ['Check stream configuration.', 'Check metadata compatibility.'],
+    action_items: ['Run Camera ITS smoke tests.', 'Check stream/buffer compatibility.'],
+    source_candidate_hash: item.source_candidate_hash,
+    source_candidate_url: item.url,
+    relevance_bucket: item.relevance_bucket,
+    editorial_priority: item.editorial_priority,
+    aosp_camera_directness: item.aosp_camera_directness,
+    driver_stack_relevance: item.driver_stack_relevance,
+    soc_platform_relevance: item.soc_platform_relevance,
+    native_tooling_relevance: item.native_tooling_relevance,
+    counts_as_primary_camera_topic: item.counts_as_primary_camera_topic,
+    counts_as_driver_topic: item.counts_as_driver_topic,
+    counts_as_soc_topic: item.counts_as_soc_topic,
+    counts_as_fallback_topic: item.counts_as_fallback_topic,
+    evidence_origin: item.evidence_origin,
+    sources: [{ title: item.title, url: item.url }],
+    ...overrides
+  };
+}
+
+function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
+  writeRootIndexContract(root);
+  const libcamera = regressionCandidate({
+    title: 'libcamera v0.7.1',
+    url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
+    bucket: 'camera_driver_image_pipeline'
+  });
+  const camerax = regressionCandidate({
+    title: 'CameraX 1.4.0-alpha07',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const gcc = regressionCandidate({
+    title: 'GCC 16.1',
+    url: 'https://isocpp.org/blog/2026/04/gcc-16.1',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const glaze = regressionCandidate({
+    title: 'Glaze 7.2 C++26 Reflection',
+    url: 'https://isocpp.org/blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const editor = {
+    date,
+    title: `Camera HAL SW 뉴스레터 - ${date}`,
+    summary: 'PR #39 regression fixture.',
+    briefing: ['libcamera update.', 'CameraX update.', 'GCC 16.1 tooling item.'],
+    sections: [
+      regressionSection(libcamera),
+      regressionSection(camerax),
+      regressionSection(gcc, {
+        category: 'C++ / Tooling',
+        headline: 'GCC 16.1',
+        camera_hal_perspective: 'GCC 16.1 is presented as a direct HAL toolchain change.'
+      })
+    ],
+    action_items: ['Run libcamera tests.', 'Run CameraX tests.', 'Start GCC 16.1 migration.'],
+    references: []
+  };
+  const quality = {
+    date,
+    score: 82,
+    threshold: qualityGatePolicy.threshold,
+    status: 'NEEDS_FIX',
+    deductions: [
+      { category: 'source-integrity', points: 8, reason: 'Shared watch/release-note URL requires matching evidence.', location: 'GCC 16.1', blocking: true },
+      { category: 'scope-relevance', points: 8, reason: 'Main article lacks article-level Camera HAL relevance.', location: 'GCC 16.1', blocking: true }
+    ],
+    article_results: [
+      { index: 1, headline: libcamera.title, status: 'PASS', repair_action: 'preserve', hard_fail_reasons: [] },
+      { index: 2, headline: camerax.title, status: 'PASS', repair_action: 'preserve', hard_fail_reasons: [] },
+      {
+        index: 3,
+        headline: 'GCC 16.1',
+        status: 'FAIL',
+        repair_action: 'replace-or-demote',
+        hard_fail_reasons: ['source-integrity', 'scope-relevance'],
+        scope_count: { publishable_scope: false }
+      }
+    ]
+  };
+  const factCheck = { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0, final_comment: 'PASS' };
+  const status = {
+    date,
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    failure_reason: 'section_count_drift',
+    final_publish_ready: false,
+    editor_review_required: true,
+    quality_status: 'NEEDS_FIX',
+    quality_score: 82,
+    quality_threshold: qualityGatePolicy.threshold,
+    rendered_main_article_count: 3,
+    min_final_articles: articlePolicy.mainArticleCount.min
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), { message: 'section_count_drift' });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), { date, candidates: [libcamera, camerax, gcc, glaze] });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [libcamera, camerax, gcc],
+    reserve_candidates: [glaze],
+    composition_summary: {}
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), { selected_capsules: [libcamera, camerax, gcc], reserve_capsules: [glaze] });
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), { candidates: [libcamera, camerax, gcc, glaze] });
+  return { date, editor };
 }
 
 function writeEditorialReviewableArtifacts(root, date, overrides = {}) {
@@ -467,52 +691,58 @@ test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow'
   assert.doesNotMatch(body, /최종 발행 조건이 모두 통과했습니다/);
 });
 
-test('newsroom PR body marks editorial reviewable handoff as non-publishable', () => {
+test('newsroom PR body marks editorial reviewable handoff as editor-approved public publication', () => {
   const root = tempRoot();
   const date = '2026-05-09';
   writeEditorialReviewableArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+  const changedArtifacts = [
+    `content/newsroom/${date}/editor-draft.json`,
+    `content/newsroom/${date}/fact-check-report.json`,
+    `content/newsroom/${date}/quality-report.json`,
+    `content/newsroom/${date}/generation-status.json`,
+    `newsletters/${date}/newsletter.md`,
+    `newsletters/${date}/index.html`,
+    'data/newsletters.json'
+  ];
 
   const body = buildNewsroomPrBody({
     root,
     date,
-    validateOutcome: 'skipped'
+    validateOutcome: 'skipped',
+    changedArtifacts
   });
 
-  assert.match(body, /발행 불가 경고:/);
-  assert.match(body, /발행 불가 review PR/);
+  assert.match(body, /편집장 검토 경고:/);
+  assert.match(body, /public newsletter files는 생성되었습니다/);
   assert.match(body, /failure_kind=editorial_reviewable/);
   assert.match(body, /final_publish_ready: false/);
   assert.match(body, /validate_ok=false/);
   assert.match(body, /editor_review_required=true/);
-  assert.match(body, new RegExp(`newsletters/${date}/newsletter\\.md - not generated`));
-  assert.match(body, new RegExp(`newsletters/${date}/index\\.html - not generated`));
-  assert.match(body, /data\/newsletters\.json - not updated/);
+  assert.match(body, new RegExp(`newsletters/${date}/newsletter\\.md`));
+  assert.match(body, new RegExp(`newsletters/${date}/index\\.html`));
+  assert.match(body, /data\/newsletters\.json/);
+  assert.doesNotMatch(body, /not generated|not updated|생성하지 않은 public 산출물/);
   const sections = extractSections(body);
   const generatedArtifactsSection = [...sections.values()]
-    .find(section => section.includes(`content/collected-news/${date}/candidates.json`)) || '';
-  assert.doesNotMatch(generatedArtifactsSection, new RegExp(`newsletters/${date}/newsletter\\.md`));
-  assert.doesNotMatch(generatedArtifactsSection, new RegExp(`newsletters/${date}/index\\.html`));
-  assert.doesNotMatch(generatedArtifactsSection, /data\/newsletters\.json/);
+    .find(section => section.includes(`newsletters/${date}/newsletter.md`)) || '';
+  assert.match(generatedArtifactsSection, new RegExp(`newsletters/${date}/newsletter\\.md`));
+  assert.match(generatedArtifactsSection, new RegExp(`newsletters/${date}/index\\.html`));
+  assert.match(generatedArtifactsSection, /data\/newsletters\.json/);
   assert.equal(validatePrBodyText(body).ok, true);
 
-  const missingWarning = body.replace(/^발행 불가 경고:.*\n/m, '');
-  const result = validatePrBodyText(missingWarning);
+  const missingNotice = body.replace(/^.*public newsletter files는 생성되었습니다.*\n/gm, '');
+  const result = validatePrBodyText(missingNotice);
   assert.equal(result.ok, false);
-  assert.match(result.errors.join('\n'), /non-publish warning/);
+  assert.match(result.errors.join('\n'), /public newsletter files were generated/);
 
-  const leakedPublicArtifact = body.replace(
-    `- content/collected-news/${date}/candidates.json`,
-    `- content/collected-news/${date}/candidates.json\n- newsletters/${date}/newsletter.md`
+  const notGeneratedPublicArtifact = body.replace(
+    `- newsletters/${date}/newsletter.md`,
+    `- newsletters/${date}/newsletter.md - not generated`
   );
-  const leakedResult = validatePrBodyText(leakedPublicArtifact, { date });
-  assert.equal(leakedResult.ok, false);
-  assert.match(leakedResult.errors.join('\n'), /must not list public artifacts/);
-
-  const publicArtifactOutsideGeneratedSection = body.replace(
-    '## 생성하지 않은 public 산출물',
-    `## 참고\n\n- newsletters/${date}/newsletter.md - not generated\n\n## 생성하지 않은 public 산출물`
-  );
-  assert.equal(validatePrBodyText(publicArtifactOutsideGeneratedSection, { date }).ok, true);
+  const notGeneratedResult = validatePrBodyText(notGeneratedPublicArtifact, { date });
+  assert.equal(notGeneratedResult.ok, false);
+  assert.match(notGeneratedResult.errors.join('\n'), /must not describe public newsletter files as not generated/);
 });
 
 test('reviewable artifact resolver does not accept tmp status alone', () => {
@@ -591,7 +821,7 @@ test('reviewable artifact resolver accepts editorial reviewable handoff without 
   assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
 });
 
-test('reviewable artifact resolver rejects editorial reviewable public and data writes', () => {
+test('reviewable artifact resolver accepts editorial reviewable public and data writes when structurally ready', () => {
   const root = tempRoot();
   const date = '2026-05-09';
   writeEditorialReviewableArtifacts(root, date);
@@ -608,13 +838,13 @@ test('reviewable artifact resolver rejects editorial reviewable public and data 
       ])
   }));
 
-  assert.equal(outputs.has_reviewable_artifacts, 'false');
-  assert.equal(outputs.has_public_artifacts, 'false');
-  assert.equal(outputs.has_publish_candidate, 'false');
-  assert.match(outputs.reviewable_artifact_reason, /public_exists=/);
-  assert.match(outputs.reviewable_artifact_reason, /public_changed=/);
-  assert.match(outputs.reviewable_artifact_reason, /data_newsletters_changed=true/);
-  assert.match(outputs.reviewable_artifact_reason, /data_newsletters_has_date=2026-05-09/);
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_public_artifacts, 'true');
+  assert.equal(outputs.has_required_public_newsletter_files, 'true');
+  assert.equal(outputs.public_newsletter_ready, 'true');
+  assert.equal(outputs.has_publish_candidate, 'true');
+  assert.match(outputs.reviewable_artifact_reason, /public_newsletter_ready=true/);
+  assert.doesNotMatch(outputs.public_newsletter_reason, /quality|final_publish_ready|repair|shortage/);
 });
 
 test('reviewable artifact resolver rejects editorial reviewable invalid canonical artifacts', () => {
@@ -706,7 +936,7 @@ test('reviewable artifact resolver accepts complete changed failed repair artifa
   assert.match(outputs.reviewable_artifact_reason, /missing_required=none/);
 });
 
-test('reviewable artifact resolver rejects legacy quality failures without editorial failure kind', () => {
+test('reviewable artifact resolver treats legacy quality failures as public-ready when public files are valid', () => {
   const root = tempRoot();
   const date = '2026-05-08';
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
@@ -731,13 +961,14 @@ test('reviewable artifact resolver rejects legacy quality failures without edito
     ]
   }));
 
-  assert.equal(outputs.has_reviewable_artifacts, 'false');
-  assert.equal(outputs.has_public_artifacts, 'false');
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_public_artifacts, 'true');
+  assert.equal(outputs.has_required_public_newsletter_files, 'true');
+  assert.equal(outputs.public_newsletter_ready, 'true');
   assert.equal(outputs.has_ai_publish_ready, 'false');
-  assert.equal(outputs.has_publish_candidate, 'false');
-  assert.match(outputs.reviewable_artifact_reason, /canonical_generation_status=missing/);
-  assert.match(outputs.reviewable_artifact_reason, /public_changed=/);
-  assert.match(outputs.reviewable_artifact_reason, /data_newsletters_changed=true/);
+  assert.equal(outputs.has_publish_candidate, 'true');
+  assert.match(outputs.reviewable_artifact_reason, /public_newsletter_ready=true/);
+  assert.doesNotMatch(outputs.public_newsletter_reason, /quality|final_publish_ready|repair|shortage/);
 });
 
 test('reviewable artifact resolver does not treat FAILED status as a publish candidate', () => {
@@ -762,6 +993,90 @@ test('reviewable artifact resolver does not treat FAILED status as a publish can
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
   assert.equal(outputs.has_publish_candidate, 'false');
+});
+
+test('fallback builder recovers PR #39 shape with public files and preserve-first articles', () => {
+  const root = tempRoot();
+  const { date, editor } = writePr39LikeRegressionFixture(root);
+  const preserveSnapshots = editor.sections.slice(0, 2).map(section => ({
+    headline: section.headline,
+    category: section.category,
+    confirmed_facts: section.confirmed_facts,
+    camera_hal_perspective: section.camera_hal_perspective,
+    action_items: section.action_items,
+    source_candidate_hash: section.source_candidate_hash,
+    sourceUrl: section.sources[0].url
+  }));
+
+  const result = buildFallbackPublicIssue({ root, date });
+  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
+  const quality = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), 'utf8'));
+  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
+
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
+  assert.equal(finalEditor.sections.length, articlePolicy.mainArticleCount.min);
+  assert.equal(finalEditor.sections.some(section => section.headline === 'GCC 16.1'), false);
+  assert.match(finalEditor.sections[2].category, /Tooling Watch|Fallback/);
+  assert.match(finalEditor.sections[2].camera_hal_perspective, /HAL 직접 변경/);
+  assert.equal(quality.status, 'PASS');
+  assert.equal(fallbackReport.demoted_articles[0].headline, 'GCC 16.1');
+  assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
+
+  for (const snapshot of preserveSnapshots) {
+    const section = finalEditor.sections.find(item => item.source_candidate_hash === snapshot.source_candidate_hash);
+    assert.ok(section, `${snapshot.headline} must be preserved`);
+    assert.deepEqual(section.headline, snapshot.headline);
+    assert.deepEqual(section.category, snapshot.category);
+    assert.deepEqual(section.confirmed_facts, snapshot.confirmed_facts);
+    assert.deepEqual(section.camera_hal_perspective, snapshot.camera_hal_perspective);
+    assert.deepEqual(section.action_items, snapshot.action_items);
+    assert.deepEqual(section.sources[0].url, snapshot.sourceUrl);
+  }
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+  assert.equal(outputs.public_newsletter_ready, 'true');
+  assert.equal(outputs.has_publish_candidate, 'true');
+  assert.equal(outputs.public_newsletter_reason, 'ready');
+});
+
+test('ensure CLI runs fallback builder for quality and repair triggers, then recomputes readiness', () => {
+  const root = tempRoot();
+  const { date } = writePr39LikeRegressionFixture(root);
+
+  const result = ensurePublicNewsletterArtifacts({ root, date });
+
+  assert.equal(result.fallbackExecuted, true);
+  assert.equal(result.outputs.public_newsletter_ready, 'true');
+  assert.equal(result.outputs.fallback_public_issue_executed, 'true');
+  assert.match(result.outputs.fallback_public_issue_trigger_reason, /quality_status=NEEDS_FIX/);
+  assert.match(result.outputs.fallback_public_issue_trigger_reason, /section_count_drift/);
+  assert.doesNotMatch(result.outputs.public_newsletter_reason, /quality|final_publish_ready|repair|shortage|section_count_drift/);
+});
+
+test('public newsletter readiness requires every public file in changed artifacts', () => {
+  const root = tempRoot();
+  const { date } = writePr39LikeRegressionFixture(root);
+  buildFallbackPublicIssue({ root, date });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: [
+      `newsletters/${date}/newsletter.md`,
+      'data/newsletters.json'
+    ]
+  }));
+
+  assert.equal(outputs.has_required_public_newsletter_files, 'true');
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.equal(outputs.has_publish_candidate, 'false');
+  assert.match(outputs.public_newsletter_reason, /required public files not changed/);
 });
 
 test('newsroom PR body separates quality score threshold and result in Korean status text', () => {
@@ -1472,6 +1787,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   const validatePolicyStep = workflowStep(workflow, 'Validate newsletter policy');
   const checkPolicyDocsStep = workflowStep(workflow, 'Check policy docs');
   const preflightStep = workflowStep(workflow, 'Run unit and regression tests');
+  const generateStep = workflowStep(workflow, 'Generate newsletter with LLM newsroom');
+  const ensurePublicStep = workflowStep(workflow, 'Ensure public newsletter artifacts');
   const resolveMetaStep = workflowStep(workflow, 'Resolve newsletter metadata');
   const validateGeneratedSiteStep = workflowStep(workflow, 'Validate generated site');
   const resolveFinalStatusStep = workflowStep(workflow, 'Resolve final publish status');
@@ -1489,6 +1806,9 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
     '- name: Jitter scheduled run'
   ]);
   assertTextInOrder(workflow, [
+    '- name: Generate newsletter with LLM newsroom',
+    '- name: Ensure public newsletter artifacts',
+    '- name: Resolve newsletter metadata',
     '- name: Resolve final publish status',
     '- name: Prepare pull request body',
     '- name: Create pull request'
@@ -1520,8 +1840,10 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /key: news-summary-\$\{\{ runner\.os \}\}-/);
   assert.match(workflow, /uses: actions\/cache\/save@v4/);
   assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
+  assert.match(generateStep, /continue-on-error:\s*true/);
+  assert.match(ensurePublicStep, /node scripts\/ensure-public-newsletter-artifacts\.js/);
   assert.match(resolveMetaStep, /node scripts\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);
-  assert.match(validateGeneratedSiteStep, /if: steps\.meta\.outputs\.has_public_artifacts == 'true'/);
+  assert.match(validateGeneratedSiteStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
   assert.match(workflow, /newsletter/);
   assert.match(workflow, /aosp-camera/);
   assert.match(workflow, /editor-review/);
@@ -1534,10 +1856,10 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /- name: Resolve final publish status/);
   assert.match(workflow, /id: final-publish-status/);
   assert.match(workflow, /node scripts\/write-publish-status-output\.js >> "\$GITHUB_OUTPUT"/);
-  assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.has_public_artifacts == 'true'/);
+  assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
-  assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.has_public_artifacts == 'true'/);
-  assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.has_reviewable_artifacts == 'true'/);
+  assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
+  assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
@@ -1545,12 +1867,13 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true';/);
   assert.match(workflow, /const compositionMode = '\$\{\{ steps\.final-publish-status\.outputs\.composition_mode \}\}';/);
   assert.doesNotMatch(workflow, /steps\.meta\.outputs\.has_publish_candidate/);
+  assert.doesNotMatch(workflow, /if: steps\.meta\.outputs\.has_reviewable_artifacts == 'true'/);
   assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /steps\.generation-status\.outputs\.final_publish_ready/);
   assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /validationPassed/);
   assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION'/);
   assert.match(workflow, /compositionMode === 'THIN_WEEK_REVIEW'/);
-  assert.match(workflow, /Fail if reviewable newsroom artifacts were not created/);
-  assert.match(workflow, /steps\.meta\.outputs\.has_reviewable_artifacts != 'true'/);
+  assert.match(workflow, /Fail if public newsletter artifacts were not ready/);
+  assert.match(workflow, /steps\.meta\.outputs\.public_newsletter_ready != 'true'/);
   assert.doesNotMatch(workflow, /final_publish_ready != 'true'/);
   assert.doesNotMatch(
     workflow,
