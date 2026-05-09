@@ -134,15 +134,16 @@
           throw new Error('newsletters.json must contain an array');
         }
 
-        newsletters.sort((a, b) => b.date.localeCompare(a.date));
+        const sortedNewsletters = [...newsletters].sort((a, b) => b.date.localeCompare(a.date));
 
-        if (newsletters.length === 0) {
+        if (sortedNewsletters.length === 0) {
           latestEl.innerHTML = '<p class="muted">등록된 뉴스레터가 없습니다.</p>';
           archiveEl.innerHTML = '<p class="muted">아카이브가 비어 있습니다.</p>';
           return;
         }
 
-        const latest = newsletters[0];
+        const latest = sortedNewsletters[0];
+        const archiveItems = sortedNewsletters.slice(1);
 
         latestEl.classList.remove('loading-card');
         latestEl.innerHTML = `
@@ -158,7 +159,12 @@
           </div>
         `;
 
-        archiveEl.innerHTML = newsletters.map(item => `
+        if (archiveItems.length === 0) {
+          archiveEl.innerHTML = '<p class="muted">이전 뉴스레터가 없습니다.</p>';
+          return;
+        }
+
+        archiveEl.innerHTML = archiveItems.map(item => `
           <article class="archive-card">
             <div class="card-meta">
               <span class="issue-date">${escapeHtml(item.date)}</span>
