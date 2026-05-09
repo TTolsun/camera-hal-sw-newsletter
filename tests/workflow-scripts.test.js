@@ -22,6 +22,7 @@ const {
 } = require('../scripts/newsroom/common/publish-status');
 const {
   extractSections,
+  extractStatusSection,
   validatePrBodyFile,
   validatePrBodyText
 } = require('../scripts/validate-pr-body');
@@ -79,6 +80,34 @@ function workflowStep(text, name) {
   assert.notEqual(start, -1, `${name} step must exist`);
   const next = text.indexOf('\n      - name:', start + marker.length);
   return text.slice(start, next === -1 ? undefined : next);
+}
+
+function workflowRunCommands(text, scriptName) {
+  const commands = [];
+  const lines = String(text || '').split(/\r?\n/);
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = lines[index].match(/^(\s*)run:\s*(.*)$/);
+    if (!match) continue;
+
+    const indent = match[1].length;
+    const inlineCommand = match[2].trim();
+    if (!/^[|>]/.test(inlineCommand)) {
+      if (inlineCommand.includes(scriptName)) commands.push(inlineCommand);
+      continue;
+    }
+
+    const block = [];
+    for (let lineIndex = index + 1; lineIndex < lines.length; lineIndex += 1) {
+      const line = lines[lineIndex];
+      const nextIndent = line.match(/^(\s*)/)[1].length;
+      if (line.trim() && nextIndent <= indent) break;
+      block.push(line.trim());
+      index = lineIndex;
+    }
+    const command = block.join('\n');
+    if (command.includes(scriptName)) commands.push(command);
+  }
+  return commands;
 }
 
 function extractMarkdownSection(text, heading) {
@@ -745,6 +774,21 @@ test('newsroom PR body marks editorial reviewable handoff as editor-approved pub
   assert.match(notGeneratedResult.errors.join('\n'), /must not describe public newsletter files as not generated/);
 });
 
+test('validate-pr-body handles non-string input without throwing', () => {
+  for (const input of [null, undefined, 42]) {
+    const result = validatePrBodyText(input);
+    assert.equal(result.ok, false, String(input));
+    assert.match(result.errors.join('\n'), /must contain exactly one/);
+    assert.match(result.errors.join('\n'), /missing/);
+  }
+
+  assert.equal(extractSections(null).size, 0);
+  assert.equal(extractSections(undefined).size, 0);
+  assert.equal(extractSections(42).size, 0);
+  assert.equal(extractStatusSection(null), '');
+  assert.equal(extractStatusSection(42), '');
+});
+
 test('reviewable artifact resolver does not accept tmp status alone', () => {
   const root = tempRoot();
   const date = '2026-05-08';
@@ -1077,6 +1121,103 @@ test('public newsletter readiness requires every public file in changed artifact
   assert.equal(outputs.public_newsletter_ready, 'false');
   assert.equal(outputs.has_publish_candidate, 'false');
   assert.match(outputs.public_newsletter_reason, /required public files not changed/);
+});
+
+test('public newsletter readiness requires valid data/newsletters.json entry for public files', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writePublicNewsletterArtifacts(root, date);
+
+  for (const [label, newsletters, expectedReason] of [
+    ['missing date entry', [], /data\/newsletters\.json missing date entry/],
+    ['path mismatch', [{
+      date,
+      title: 'Camera HAL SW Newsletter',
+      summary: 'Path mismatch fixture',
+      html: `newsletters/${date}/wrong-index.html`,
+      md: `newsletters/${date}/wrong-newsletter.md`,
+      tags: ['Camera HAL']
+    }], /data\/newsletters\.json html path mismatch|data\/newsletters\.json md path mismatch/]
+  ]) {
+    writeJson(path.join(root, 'data', 'newsletters.json'), newsletters);
+
+    const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+      root,
+      date,
+      changedArtifacts: requiredPublicFiles(date)
+    }));
+
+    assert.equal(outputs.has_required_public_newsletter_files, 'false', label);
+    assert.equal(outputs.public_newsletter_ready, 'false', label);
+    assert.equal(outputs.has_publish_candidate, 'false', label);
+    assert.match(outputs.public_newsletter_reason, expectedReason, label);
+  }
+});
+
+test('ensure CLI skips fallback when public artifacts are already valid', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true,
+    status: {
+      final_publish_ready: true,
+      validate_ok: true
+    }
+  });
+  writePublicNewsletterArtifacts(root, date);
+
+  const result = ensurePublicNewsletterArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  });
+
+  assert.equal(result.fallbackExecuted, false);
+  assert.equal(result.outputs.public_newsletter_ready, 'true');
+  assert.equal(result.outputs.fallback_public_issue_executed, 'false');
+  assert.equal(result.outputs.fallback_public_issue_trigger_reason, 'none');
+  assert.equal(result.outputs.public_newsletter_reason, 'ready');
+});
+
+test('ensure CLI throws when fallback is required but candidate artifacts are missing', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'QUALITY_NEEDS_FIX',
+    final_publish_ready: false,
+    quality_status: 'NEEDS_FIX'
+  });
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+
+  assert.throws(
+    () => ensurePublicNewsletterArtifacts({ root, date }),
+    /Cannot build fallback public issue for 2026-05-10: no newsroom or collected candidate artifacts are available\./
+  );
+});
+
+test('fallback builder records structural diagnostics when public issue validation fails', () => {
+  const root = tempRoot();
+  const { date } = writePr39LikeRegressionFixture(root);
+  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+  const editor = JSON.parse(fs.readFileSync(editorPath, 'utf8'));
+  editor.sections[0].selectedImage = 'assets/images/fallback/missing.png';
+  editor.sections[0].resolvedImage = {
+    usedFallback: true,
+    url: 'assets/images/fallback/missing.png'
+  };
+  writeJson(editorPath, editor);
+
+  assert.throws(
+    () => buildFallbackPublicIssue({ root, date }),
+    /Fallback public issue structural validation failed/
+  );
+
+  const diagnosticsPath = path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-structural-errors.json');
+  assert.equal(fs.existsSync(diagnosticsPath), true);
+  const diagnostics = JSON.parse(fs.readFileSync(diagnosticsPath, 'utf8'));
+  assert.ok(Array.isArray(diagnostics.errors));
+  assert.match(diagnostics.errors.join('\n'), /selectedImage fallback file is missing|article image fallback file is missing/);
 });
 
 test('newsroom PR body separates quality score threshold and result in Korean status text', () => {
@@ -1745,6 +1886,7 @@ test('publication quality annotation help documents target policy', () => {
   });
 
   assert.equal(code, 0);
+  assert.match(stdout, /Usage: node scripts\/annotate-publication-quality\.js \[--date YYYY-MM-DD\] \[--all\] \[--latest\]/);
   assert.match(stdout, /--date YYYY-MM-DD inspects only that public issue/);
   assert.match(stdout, /--all inspects every historical public issue/);
   assert.match(stdout, /Changed public issue dates inspect matching public issue dates, even when --latest is present/);
@@ -1958,4 +2100,9 @@ test('site validation workflow keeps structural checks blocking and quality anno
   assert.match(annotationStep, /if: always\(\)/);
   assert.match(annotationStep, /continue-on-error:\s*true/);
   assert.match(annotationStep, /run: node scripts\/annotate-publication-quality\.js --latest/);
+  const annotationCommands = workflowRunCommands(workflow, 'scripts/annotate-publication-quality.js');
+  assert.ok(annotationCommands.length > 0, 'annotate-publication-quality.js must be invoked');
+  for (const command of annotationCommands) {
+    assert.match(command, /\bnode\s+scripts\/annotate-publication-quality\.js\b[^\n]*\s--latest\b/);
+  }
 });

@@ -196,7 +196,7 @@ test('libcamera release announcement parser extracts v0.7.1 dated camera pipelin
 });
 
 test('libcamera release announcement parser accepts debayer spelling variants with normalized output', () => {
-  for (const spelling of ['debaying', 'de-bayering', 'debayering']) {
+  for (const spelling of ['debaying', 'de-bayering', 'debayering', 'Debayer', 'SoftISP', 'software_isp']) {
     const html = `
       <html>
         <head><title>[libcamera-devel] libcamera v0.7.1 released</title></head>
@@ -225,6 +225,7 @@ The sensor mode configuration path was updated for camera validation.
     assertParsedItemContract(items[0]);
     assert.match(items[0].behavior_change, /SoftISP debayering and image pipeline throughput/, spelling);
     assert.doesNotMatch(items[0].behavior_change, /debaying|de-bayering/, spelling);
+    assert.doesNotMatch(items[0].behavior_change, /software_isp|Debayer\b/, spelling);
   }
 });
 

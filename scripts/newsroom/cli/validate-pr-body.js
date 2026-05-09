@@ -11,8 +11,12 @@ const FORBIDDEN_ENGLISH_HEADINGS = [
   '## Generated Artifacts'
 ];
 
+function toText(value) {
+  return String(value ?? '');
+}
+
 function countMatches(text, pattern) {
-  return [...text.matchAll(pattern)].length;
+  return [...toText(text).matchAll(pattern)].length;
 }
 
 function boolFromMatch(match) {
@@ -21,7 +25,7 @@ function boolFromMatch(match) {
 }
 
 function firstMatch(text, pattern) {
-  const match = text.match(pattern);
+  const match = toText(text).match(pattern);
   return match ? match[1].trim() : '';
 }
 
@@ -32,6 +36,7 @@ function numberFromMatch(match) {
 }
 
 function extractStatusSection(text) {
+  text = toText(text);
   const startMatch = /^## 생성 상태\s*$/m.exec(text);
   if (!startMatch) return '';
   const bodyStart = startMatch.index + startMatch[0].length;
@@ -41,13 +46,14 @@ function extractStatusSection(text) {
 }
 
 function extractSections(text) {
-  const headings = [...String(text || '').matchAll(/^##\s+(.+?)\s*$/gm)];
+  const source = toText(text);
+  const headings = [...source.matchAll(/^##\s+(.+?)\s*$/gm)];
   const sections = new Map();
   for (let index = 0; index < headings.length; index += 1) {
     const heading = headings[index][1].trim();
     const bodyStart = headings[index].index + headings[index][0].length;
-    const bodyEnd = headings[index + 1]?.index ?? text.length;
-    sections.set(heading, text.slice(bodyStart, bodyEnd));
+    const bodyEnd = headings[index + 1]?.index ?? source.length;
+    sections.set(heading, source.slice(bodyStart, bodyEnd));
   }
   return sections;
 }
@@ -76,6 +82,7 @@ function publicArtifactPatterns(date = '') {
 }
 
 function parseStatusSection(section) {
+  section = toText(section);
   return {
     overallStatus: firstMatch(section, /^전체 상태:\s*([A-Z_]+)/m),
     failureKind: firstMatch(section, /^failure_kind[=:]\s*([a-z_]+)/m),
@@ -114,6 +121,7 @@ function parseArgs(argv) {
 }
 
 function validatePrBodyText(text, options = {}) {
+  text = toText(text);
   const errors = [];
   const sections = extractSections(text);
   const generationStatusCount = countMatches(text, /^## 생성 상태$/gm);
