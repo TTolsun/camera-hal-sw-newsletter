@@ -69,6 +69,29 @@ function hasAny(content, values) {
   return values.some(value => content.includes(value));
 }
 
+function textFromHtml(html) {
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function validateSiteNavLabels(content, relPath) {
+  const siteNavMatch = content.match(/<nav\b[^>]*class=["'][^"']*\bsite-nav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  if (!siteNavMatch) return;
+
+  const labels = [...siteNavMatch[0].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
+    .map(match => textFromHtml(match[1]))
+    .filter(label => label && label !== 'Camera HAL SW Newsletter');
+  const expected = ['Latest', 'Archive', 'Sources', 'GitHub'];
+  const actual = labels.slice(0, expected.length);
+  const matchesExpected = actual.length === expected.length &&
+    expected.every((label, index) => actual[index] === label);
+  if (!matchesExpected) {
+    fail(`Site navigation labels must be Latest / Archive / Sources / GitHub in ${relPath}; found ${actual.join(' / ') || 'none'}`);
+  }
+}
+
 function sourceTail(section) {
   const match = section.match(/\*\*(Sources|출처)[^\n]*\*\*([\s\S]*)/);
   return match ? match[2] : section;
@@ -284,6 +307,7 @@ for (const relPath of htmlFiles) {
   if (/\bTODO\b/.test(content)) {
     fail(`Published HTML contains TODO: ${relPath}`);
   }
+  validateSiteNavLabels(content, relPath);
 
   if (relPath.startsWith('newsletters/')) {
     for (const className of ['issue-briefing', 'issue-section', 'source-list', 'reference-list']) {

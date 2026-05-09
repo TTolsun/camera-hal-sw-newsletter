@@ -1,22 +1,28 @@
 # Current Plan
 
-## Fallback Public Issue Recovery
+## Navigation Label Consistency
 
-- Keep publication gates intact: do not lower `quality_threshold`, minimum main article count, source gap blocking, or `public_newsletter_ready` semantics.
-- Narrowly improve `scripts/newsroom/generate/fallback-public-issue.js` so AndroidX Camera release-note anchor URLs can provide distinct safe candidates while exact-anchor and anchorless page duplicates stay blocked.
-- Split fallback article handling into explicit actions: `preserve`, `rebuild-from-bound-candidate`, `replace-or-demote`, and `demote-to-watch`.
-- Keep `FAILED_REPAIR_REVIEWABLE` review-only and force publish-ready signals false.
-- When fallback cannot fill the minimum safe article count, leave public files unwritten and emit diagnostics with candidate rejection reasons.
+- Treat issue `#61` as a low stability-risk UI consistency task.
+- Standardize only top navigation labels to `Latest / Archive / Sources / GitHub`.
+- Do not change article body language, `Sources` / `출처` section contracts, quality gate scoring, or publish gate rules.
+
+## Implementation Scope
+
+- Update generated newsletter `.site-nav .nav-links` in `scripts/newsroom/render/newsletter-renderer.js`.
+- Update public `newsletters/**/index.html` files only where `.site-nav .nav-links` still uses Korean labels.
+- Add a focused validator assertion that inspects only `.site-nav` navigation labels.
+- Leave legacy `.topbar` links, archive back buttons, source blocks, and article body text unchanged.
 
 ## Validation
 
-- `node --test tests/workflow-scripts.test.js`
+- `node --check scripts\newsroom\render\newsletter-renderer.js`
+- `node --check scripts\newsroom\cli\validate-site.js`
 - `npm.cmd run test`
 - `npm.cmd run validate`
+- `rg` confirmation for `.site-nav` label consistency and retained `출처` source blocks.
 
 ## Self Review Focus
 
-- P1 if a failed repair can become publish-ready without valid public newsletter files.
-- P1 if source gap, source-integrity failure, or `publishable_scope=false` articles remain as main articles.
-- P2 if AndroidX Camera anchor candidates are still blocked by base URL duplication.
-- P2 if fallback failure lacks actionable diagnostics.
+- P1 if quality gate, publish gate, source/evidence validation, or article body behavior changes.
+- P2 if the validator scans article body/source blocks instead of only `.site-nav`.
+- P2 if public generated issue edits go beyond navigation label text.
