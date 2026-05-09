@@ -1758,7 +1758,129 @@ test('publish status resolver blocks final publish when fact-check needs fix', (
 
   assert.equal(resolved.status.quality_status, 'PASS');
   assert.equal(resolved.status.fact_check_status, 'NEEDS_FIX');
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
   assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.fact_check_status_pass, false);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.must_fix_count_zero, false);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+});
+
+test('publish status resolver blocks PUBLISH_READY when quality hard fail remains above threshold', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  const highScore = qualityGatePolicy.threshold + 5;
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: false,
+    status: {
+      quality_status: 'NEEDS_FIX',
+      quality_score: highScore
+    },
+    quality: {
+      status: 'NEEDS_FIX',
+      score: highScore,
+      deductions: [
+        {
+          category: 'source-integrity',
+          points: 8,
+          reason: 'Main article source maps to ineligible reporter/shortlist candidate: source_gap_risk=true.',
+          blocking: true
+        }
+      ]
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.quality_score >= qualityGatePolicy.threshold, true);
+  assert.equal(resolved.status.quality_status, 'NEEDS_FIX');
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.quality_status_pass, false);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.quality_score_meets_threshold, true);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+});
+
+test('publish status resolver blocks PUBLISH_READY when source_gap remains above threshold', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: false,
+    status: {
+      source_gap_count: 1
+    },
+    factCheck: {
+      status: 'PASS',
+      must_fix: [],
+      source_gaps: [{ issue: 'missing article-level source evidence' }],
+      source_gap_count: 1
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.quality_score >= qualityGatePolicy.threshold, true);
+  assert.equal(resolved.status.fact_check_status, 'PASS');
+  assert.equal(resolved.status.source_gap_count, 1);
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.source_gap_count_zero, false);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+});
+
+test('publish status resolver blocks PUBLISH_READY when stale claim hard failure remains above threshold', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: false,
+    status: {
+      stale_claim_status: 'NEEDS_FIX',
+      stale_claim_hard_failure_count: 1
+    },
+    staleClaim: {
+      status: 'NEEDS_FIX',
+      hard_failures: [{ reason: 'removed-section-claim-remains' }]
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.quality_score >= qualityGatePolicy.threshold, true);
+  assert.equal(resolved.status.stale_claim_status, 'NEEDS_FIX');
+  assert.equal(resolved.status.stale_claim_hard_failure_count, 1);
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.stale_claim_status_not_needs_fix, false);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.stale_claim_hard_failure_count_zero, false);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+});
+
+test('publish status resolver blocks PUBLISH_READY when article count policy gate is not publish-ready above threshold', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: false,
+    status: {
+      selection_publish_ready: false,
+      publish_ready: false,
+      publish_gate_passed: false,
+      selected_article_count: articlePolicy.mainArticleCount.min - 1,
+      final_selected_article_count: articlePolicy.mainArticleCount.min - 1
+    },
+    shortlist: {
+      publish_ready: false,
+      publish_gate_passed: false,
+      composition_mode: 'NEEDS_FIX',
+      selected_article_count: articlePolicy.mainArticleCount.min - 1
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.quality_score >= qualityGatePolicy.threshold, true);
+  assert.equal(resolved.status.selection_publish_ready, false);
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.artifact_final_publish_ready_conditions.selection_publish_ready, false);
   assert.deepEqual(resolved.status.consistency_errors, []);
 });
 

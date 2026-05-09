@@ -10,6 +10,9 @@
 ### Code safety
 
 - [ ] quality gate, hard blocker, source binding, image fallback 정책을 약화하지 않았다.
+- [ ] `qualityGatePolicy.threshold` 변경이 있으면 PR 본문에 이유와 검증 결과를 명시했다.
+- [ ] `qualityGatePolicy.hardFailConditions` 변경이 있으면 condition별 regression test와 문서 갱신을 포함했다.
+- [ ] `publish-ready` 판단에 영향을 주는 변경이 있으면 `final_publish_ready` / `artifact_final_publish_ready` 검증을 포함했다.
 - [ ] workflow 동작 변경이 있으면 테스트를 추가했다.
 - [ ] compatibility wrapper/shim을 명시적 이유 없이 제거하지 않았다.
 - [ ] generated artifact path를 바꿨다면 workflow, docs, tests를 함께 갱신했다.

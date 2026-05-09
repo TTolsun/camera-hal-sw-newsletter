@@ -235,6 +235,10 @@ PR에서 다음 항목을 확인합니다.
 
 편집자가 PR을 승인하면 merge합니다. GitHub Pages는 `main` 기준으로 반영됩니다.
 
+## Quality Gate Drift 계약
+
+`qualityGatePolicy.hardFailConditions`는 `config/newsletter-policy.json`에 있는 hard fail inventory의 source of truth입니다. `score`는 숫자 품질 점수일 뿐이며 hard fail blocker를 덮어쓸 수 없습니다. `score >= qualityGatePolicy.threshold`여도 blocking deduction, `source_gap`, fact-check `must_fix`, stale claim hard failure, strict mode의 `quality-report.json` recompute drift가 있으면 해당 이슈는 `publish-ready` / `final_publish_ready`가 아닙니다.
+
 <!-- NEWSLETTER_POLICY:BEGIN -->
 <!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
 

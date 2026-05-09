@@ -22,6 +22,207 @@ const {
   qualityGatePolicy
 } = require('../scripts/lib/newsletter-policy');
 
+const hardFailRegressionCases = new Map([
+  ['source-less main article', {
+    name: 'hardFailCondition: source-less main article remains blocking in the quality gate',
+    buildReport: () => {
+      const sections = [
+        section({ headline: 'Source-less main article', sources: [] }),
+        ...validSections().slice(1)
+      ];
+      return reportFor(sections, reporterCandidatesFor(validSections()).slice(1));
+    },
+    assertReport: report => {
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.article_results.some(item =>
+        item.headline === 'Source-less main article' &&
+        item.status === 'FAIL' &&
+        item.hard_fail_reasons.some(reason => reason.includes('Missing required article list: sources'))
+      ));
+    }
+  }],
+  ['source candidate binding failure', {
+    name: 'hardFailCondition: source candidate binding failure remains blocking in the quality gate',
+    buildReport: () => {
+      const sections = [
+        section({ headline: 'Unbound source candidate article', url: 'https://example.com/unbound-source' }),
+        ...validSections().slice(1)
+      ];
+      return reportFor(sections, reporterCandidatesFor(validSections()).slice(1));
+    },
+    assertReport: report => {
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.article_results.some(item =>
+        item.headline === 'Unbound source candidate article' &&
+        item.status === 'FAIL' &&
+        item.hard_fail_reasons.some(reason => reason.includes('does not bind to reporter/shortlist candidate metadata'))
+      ));
+    }
+  }],
+  ['missing dated evidence', {
+    name: 'hardFailCondition: missing dated evidence blocks publish-quality status above threshold',
+    buildReport: () => {
+      const sections = [
+        section({ headline: 'Missing dated evidence article', url: 'https://example.com/missing-dated-evidence' }),
+        ...validSections().slice(1)
+      ];
+      return reportFor(sections, [
+        scopedCandidate('https://example.com/missing-dated-evidence', 'direct_aosp_camera', { hasDatedEvidence: false }),
+        ...reporterCandidatesFor(validSections()).slice(1)
+      ]);
+    },
+    assertReport: report => {
+      assert.equal(report.score >= qualityGatePolicy.threshold, true);
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.reason.includes('missing dated evidence')
+      ));
+    }
+  }],
+  ['source_gap_risk', {
+    name: 'hardFailCondition: source_gap_risk blocks publish-quality status above threshold',
+    buildReport: () => {
+      const sections = [
+        section({ headline: 'Source gap risk article', url: 'https://example.com/source-gap-risk' }),
+        ...validSections().slice(1)
+      ];
+      return reportFor(sections, [
+        scopedCandidate('https://example.com/source-gap-risk', 'direct_aosp_camera', { source_gap_risk: true }),
+        ...reporterCandidatesFor(validSections()).slice(1)
+      ]);
+    },
+    assertReport: report => {
+      assert.equal(report.score >= qualityGatePolicy.threshold, true);
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.reason.includes('source_gap_risk=true')
+      ));
+    }
+  }],
+  ['fact-check must_fix', {
+    name: 'hardFailCondition: fact-check must_fix blocks publish-quality status above threshold',
+    buildReport: () => buildNewsletterQualityReport(
+      '2026-05-03',
+      {
+        briefing: ['one', 'two', 'three'],
+        sections: validSections()
+      },
+      { candidates: reporterCandidatesFor(validSections()) },
+      {
+        status: 'NEEDS_FIX',
+        must_fix: ['CameraX release A has an unsupported source claim.'],
+        source_gaps: [],
+        source_gap_count: 0
+      }
+    ),
+    assertReport: report => {
+      assert.equal(report.score >= qualityGatePolicy.threshold, true);
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.equal(report.metrics.must_fix_count, 1);
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.reason.includes('Fact checker returned 1 must_fix item')
+      ));
+    }
+  }],
+  ['duplicate source URL', {
+    name: 'hardFailCondition: duplicate source URL blocks publish-quality status above threshold',
+    buildReport: () => {
+      const sharedUrl = 'https://example.com/duplicate-source-url';
+      const sections = [
+        section({ headline: 'Duplicate source article A', url: sharedUrl }),
+        section({ headline: 'Duplicate source article B', url: sharedUrl }),
+        ...validSections().slice(2)
+      ];
+      return reportFor(sections, [
+        scopedCandidate(sharedUrl, 'direct_aosp_camera'),
+        ...reporterCandidatesFor(validSections()).slice(2)
+      ]);
+    },
+    assertReport: report => {
+      assert.equal(report.score >= qualityGatePolicy.threshold, true);
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.reason.includes('Duplicate source URL is used across main sections')
+      ));
+    }
+  }],
+  ['stale claim hard failure', {
+    name: 'hardFailCondition: stale claim hard failure blocks publish-quality status above threshold',
+    buildReport: () => reportFor(validSections(), reporterCandidatesFor(validSections()), {
+      staleClaimReport: {
+        status: 'NEEDS_FIX',
+        stale_claim_items_removed: [],
+        unsupported_release_claims_removed: [],
+        hard_failures: [{ reason: 'removed-section-claim-remains', claims: ['Android 17 Beta 4'] }]
+      }
+    }),
+    assertReport: report => {
+      assert.equal(report.score >= qualityGatePolicy.threshold, true);
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.equal(report.metrics.stale_claim_hard_failure_count, 1);
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.reason.includes('Stale claim report has 1 hard failure')
+      ));
+    }
+  }],
+  ['undated watch/reference page promoted to main article', {
+    name: 'hardFailCondition: undated watch/reference page promoted to main article blocks publish-quality status above threshold',
+    buildReport: () => {
+      const sections = [
+        section({ headline: 'Undated watch page promoted article', url: 'https://example.com/watch-page' }),
+        ...validSections().slice(1)
+      ];
+      return reportFor(sections, [
+        scopedCandidate('https://example.com/watch-page', 'direct_aosp_camera', {
+          finalSelectionEligibility: 'watchlist',
+          isWatchPage: true,
+          hasDatedEvidence: false
+        }),
+        ...reporterCandidatesFor(validSections()).slice(1)
+      ]);
+    },
+    assertReport: report => {
+      assert.equal(report.score >= qualityGatePolicy.threshold, true);
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.reason.includes('watch page lacks dated evidence')
+      ));
+    }
+  }]
+]);
+
+test('qualityGatePolicy.hardFailConditions have config-driven regression test coverage', () => {
+  const configuredConditions = new Set(qualityGatePolicy.hardFailConditions);
+
+  for (const condition of qualityGatePolicy.hardFailConditions) {
+    const regression = hardFailRegressionCases.get(condition);
+    assert.ok(regression, `Missing hard fail regression case for configured condition: ${condition}`);
+    assert.ok(
+      regression.name.includes(condition),
+      `Regression test name must include configured hard fail condition: ${condition}`
+    );
+  }
+
+  for (const condition of hardFailRegressionCases.keys()) {
+    assert.ok(configuredConditions.has(condition), `Regression case is not configured in qualityGatePolicy.hardFailConditions: ${condition}`);
+  }
+});
+
+for (const regression of hardFailRegressionCases.values()) {
+  test(regression.name, () => {
+    const report = regression.buildReport();
+    regression.assertReport(report);
+    assert.ok(report.metrics.blocking_deduction_count > 0);
+    assert.ok(report.metrics.hard_fail_count > 0);
+  });
+}
+
 test('quality threshold follows configured numeric boundary behavior', () => {
   assert.equal(determineQualityStatus(qualityGatePolicy.threshold - 1, qualityGatePolicy.threshold, {
     sourceGapCount: 0,
