@@ -139,6 +139,27 @@ function sourceBaseKey(value) {
   }
 }
 
+function androidCameraReleaseNoteIdentity(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    if (
+      parsed.hostname.toLowerCase() === 'developer.android.com' &&
+      parsed.pathname.includes('/jetpack/androidx/releases/camera') &&
+      parsed.hash
+    ) {
+      parsed.protocol = parsed.protocol.toLowerCase();
+      parsed.hostname = parsed.hostname.toLowerCase();
+      parsed.search = '';
+      return parsed.toString().replace(/\/$/, '');
+    }
+  } catch (_) {
+    return '';
+  }
+  return '';
+}
+
 function sectionBaseUrls(section) {
   return ensureArray(section?.sources).map(source => sourceBaseKey(source?.url)).filter(Boolean);
 }
@@ -286,10 +307,20 @@ function candidatePoolFromArtifacts({ root, date }) {
 function sectionDuplicateReason(candidate, sections) {
   const url = normalizeUrl(candidate.url);
   const baseUrl = sourceBaseKey(candidate.url);
+  const releaseIdentity = androidCameraReleaseNoteIdentity(candidate.url);
   const title = candidate.title;
   for (const section of ensureArray(sections)) {
     if (sectionUrls(section).includes(url)) return 'duplicate_url';
-    if (baseUrl && sectionBaseUrls(section).includes(baseUrl)) return 'duplicate_base_url';
+    if (baseUrl) {
+      for (const source of ensureArray(section?.sources)) {
+        if (sourceBaseKey(source?.url) !== baseUrl) continue;
+        const sectionReleaseIdentity = androidCameraReleaseNoteIdentity(source?.url);
+        if (releaseIdentity && sectionReleaseIdentity && releaseIdentity !== sectionReleaseIdentity) {
+          continue;
+        }
+        return 'duplicate_base_url';
+      }
+    }
     if (normalizedTitle(section.headline) && normalizedTitle(section.headline) === normalizedTitle(title)) {
       return 'duplicate_title';
     }
@@ -313,6 +344,31 @@ function candidateAllowed(candidate, { allowFallback = false } = {}) {
   const bucket = candidate.relevance_bucket;
   if (allowFallback) return FALLBACK_BUCKET_ORDER.includes(bucket);
   return NORMAL_BUCKET_ORDER.includes(bucket);
+}
+
+function candidateBaseEligibilityFailure(candidate) {
+  const reasons = [];
+  if (!['main', 'short'].includes(candidate.finalSelectionEligibility)) {
+    reasons.push(`finalSelectionEligibility=${candidate.finalSelectionEligibility || 'missing'}`);
+  }
+  if (candidate.source_gap_risk === true) reasons.push('source_gap_risk=true');
+  if (candidate.main_eligible !== true) reasons.push(`main_eligible=${String(candidate.main_eligible)}`);
+  if (candidate.hasDatedEvidence !== true) reasons.push(`hasDatedEvidence=${String(candidate.hasDatedEvidence)}`);
+  if (candidate.reference_only === true) reasons.push('reference_only=true');
+  if (candidate.briefing_only === true) reasons.push('briefing_only=true');
+  return reasons.join('; ');
+}
+
+function candidateRejectionReason(candidate, sections, demotedSections, { allowFallback = false } = {}) {
+  const baseEligibilityFailure = candidateBaseEligibilityFailure(candidate);
+  if (baseEligibilityFailure) return baseEligibilityFailure;
+  const order = allowFallback ? FALLBACK_BUCKET_ORDER : NORMAL_BUCKET_ORDER;
+  if (!order.includes(candidate.relevance_bucket)) {
+    return `relevance_bucket=${candidate.relevance_bucket || 'missing'} not allowed`;
+  }
+  const duplicateReason = sectionForCandidateAlreadyExists(candidate, sections, demotedSections);
+  if (duplicateReason) return duplicateReason;
+  return '';
 }
 
 function sortCandidates(candidates, { allowFallback = false } = {}) {
@@ -441,27 +497,8 @@ function buildSectionFromCandidate(candidate, { fallback = false } = {}) {
 function hardFailureArticleIndexes(qualityReport, factCheck) {
   const indexes = new Set();
   for (const result of ensureArray(qualityReport?.article_results)) {
-    const hardReasons = ensureArray(result.hard_fail_reasons).join(' ');
-    const repairAction = String(result.repair_action || '');
-    const status = String(result.status || '');
-    const hasHardCategory = /source-integrity|scope-relevance|source gap|must_fix/i.test(hardReasons);
-    const publishableScope = result.scope_count?.publishable_scope;
-    if (
-      status === 'FAIL' ||
-      repairAction === 'replace-or-demote' ||
-      hasHardCategory ||
-      publishableScope === false
-    ) {
+    if (fallbackArticleAction(result, factCheck) === 'replace-or-demote') {
       indexes.add(Number(result.index) - 1);
-    }
-  }
-  if (Number(factCheck?.source_gap_count || 0) > 0 || ensureArray(factCheck?.must_fix).length > 0) {
-    const labels = [
-      ...ensureArray(factCheck?.source_gaps),
-      ...ensureArray(factCheck?.must_fix)
-    ].map(text).join('\n');
-    for (const [index, result] of ensureArray(qualityReport?.article_results).entries()) {
-      if (labels && labels.includes(result.headline || '')) indexes.add(index);
     }
   }
   return indexes;
@@ -505,14 +542,79 @@ function sectionForCandidateAlreadyExists(candidate, sections, demotedSections) 
   return sectionDuplicateReason(candidate, sections) || sectionDuplicateReason(candidate, demotedSections);
 }
 
-function selectCandidate(candidates, sections, demotedSections, { allowFallback = false } = {}) {
+function sourceGapMentionsResult(result, factCheck) {
+  const labels = ensureArray(factCheck?.source_gaps).map(text).join('\n');
+  if (!labels) return false;
+  const needles = [
+    result?.headline,
+    result?.scope_count?.source_candidate_url,
+    ...ensureArray(result?.sources).flatMap(source => [source?.title, source?.url])
+  ].filter(Boolean);
+  return needles.some(needle => labels.includes(needle) || labels.includes(normalizeUrl(needle)));
+}
+
+function fallbackArticleAction(result = {}, factCheck = {}) {
+  const repairAction = String(result.repair_action || '');
+  const status = String(result.status || '');
+  const hardReasons = ensureArray(result.hard_fail_reasons).join(' ');
+  const scope = result.scope_count || {};
+  const bucket = scope.relevance_bucket || result.relevance_bucket || '';
+  if (status === 'PASS' && repairAction === 'preserve') return 'preserve';
+  if (scope.publishable_scope === false) return 'replace-or-demote';
+  if (repairAction === 'replace-or-demote') return 'replace-or-demote';
+  if (/source-integrity|source gap|scope-relevance|hal-relevance/i.test(hardReasons)) return 'replace-or-demote';
+  if (sourceGapMentionsResult(result, factCheck)) return 'replace-or-demote';
+  if (bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK || scope.counts_as_fallback_topic === true) {
+    return 'demote-to-watch';
+  }
+  if (status === 'FAIL' || repairAction === 'repair-section') return 'rebuild-from-bound-candidate';
+  return 'preserve';
+}
+
+function findCandidateForSection(candidates, section, qualityItem = {}) {
+  const hashes = [
+    section?.source_candidate_hash,
+    qualityItem?.source_candidate_hash,
+    qualityItem?.scope_count?.source_candidate_hash
+  ].filter(Boolean);
+  const urls = [
+    section?.source_candidate_url,
+    qualityItem?.source_candidate_url,
+    qualityItem?.scope_count?.source_candidate_url,
+    ...ensureArray(section?.sources).map(source => source?.url),
+    ...ensureArray(qualityItem?.sources).map(source => source?.url)
+  ].map(normalizeUrl).filter(Boolean);
+
+  return candidates.find(candidate => hashes.includes(candidate.source_candidate_hash)) ||
+    candidates.find(candidate => urls.includes(normalizeUrl(candidate.url)));
+}
+
+function recordRejectedCandidate(target, candidate, reason, allowFallback) {
+  target.push({
+    title: candidate.title,
+    url: candidate.url,
+    source: candidate.source,
+    relevance_bucket: candidate.relevance_bucket,
+    allow_fallback: Boolean(allowFallback),
+    reason
+  });
+}
+
+function selectCandidate(candidates, sections, demotedSections, { allowFallback = false, rejectedCandidates = null } = {}) {
   const sorted = sortCandidates(candidates, { allowFallback });
   for (const candidate of sorted) {
-    if (!candidateAllowed(candidate, { allowFallback })) continue;
-    if (sectionForCandidateAlreadyExists(candidate, sections, demotedSections)) continue;
+    const rejectionReason = candidateRejectionReason(candidate, sections, demotedSections, { allowFallback });
+    if (rejectionReason) {
+      if (rejectedCandidates) recordRejectedCandidate(rejectedCandidates, candidate, rejectionReason, allowFallback);
+      continue;
+    }
     return candidate;
   }
   return null;
+}
+
+function writeFallbackDiagnostics(newsroomDir, payload) {
+  writeJson(path.join(newsroomDir, 'fallback-public-issue-diagnostics.json'), payload);
 }
 
 function updateNewsletterData(root, date, issue) {
@@ -689,7 +791,7 @@ function buildFallbackPublicIssue(options = {}) {
     sections: ensureArray(base.sections).map(cloneJson)
   };
 
-  const hardIndexes = hardFailureArticleIndexes(qualityReport, factCheck);
+  const candidates = candidatePoolFromArtifacts({ root, date });
   const preserveIndexes = preservedArticleIndexes(qualityReport);
   const preserveSnapshots = new Map();
   for (const index of preserveIndexes) {
@@ -699,15 +801,50 @@ function buildFallbackPublicIssue(options = {}) {
   }
   const demotedRecords = [];
   const preservedSections = [];
+  const fallbackRecords = [];
+  const rejectedCandidates = [];
   for (const [index, section] of issue.sections.entries()) {
-    if (hardIndexes.has(index)) {
-      const qualityItem = ensureArray(qualityReport.article_results).find(item => Number(item.index) - 1 === index) || {};
+    const qualityItem = ensureArray(qualityReport.article_results).find(item => Number(item.index) - 1 === index) || {};
+    const action = fallbackArticleAction(qualityItem, factCheck);
+    if (action === 'replace-or-demote') {
       demotedRecords.push({
         headline: section.headline || qualityItem.headline || `article ${index + 1}`,
         category: section.category || qualityItem.category || '',
-        action: 'removed-or-demoted',
+        action,
         reason: ensureArray(qualityItem.hard_fail_reasons).join('; ') || qualityItem.repair_action || 'hard failure article',
         sources: ensureArray(section.sources)
+      });
+      continue;
+    }
+    if (action === 'rebuild-from-bound-candidate' || action === 'demote-to-watch') {
+      const candidate = findCandidateForSection(candidates, section, qualityItem);
+      const fallback = action === 'demote-to-watch' || candidate?.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK;
+      const rejectionReason = candidate
+        ? candidateRejectionReason(candidate, preservedSections, demotedRecords, { allowFallback: fallback })
+        : 'bound_candidate_not_found';
+      if (!candidate || rejectionReason) {
+        demotedRecords.push({
+          headline: section.headline || qualityItem.headline || `article ${index + 1}`,
+          category: section.category || qualityItem.category || '',
+          action: 'replace-or-demote',
+          original_action: action,
+          reason: rejectionReason || 'bound candidate could not be reused safely',
+          sources: ensureArray(section.sources)
+        });
+        if (candidate) recordRejectedCandidate(rejectedCandidates, candidate, rejectionReason, fallback);
+        continue;
+      }
+      const rebuiltSection = buildSectionFromCandidate(candidate, { fallback });
+      preservedSections.push(rebuiltSection);
+      fallbackRecords.push({
+        headline: rebuiltSection.headline,
+        category: rebuiltSection.category,
+        url: candidate.url,
+        source: candidate.source,
+        relevance_bucket: candidate.relevance_bucket,
+        action,
+        fallback,
+        reason: action
       });
       continue;
     }
@@ -717,19 +854,35 @@ function buildFallbackPublicIssue(options = {}) {
     throw new Error('Fallback builder removed a PASS/preserve article.');
   }
 
-  const candidates = candidatePoolFromArtifacts({ root, date });
   const selectedSections = [...preservedSections];
-  const fallbackRecords = [];
-  const rejectedCandidates = [];
   while (selectedSections.length < articlePolicy.mainArticleCount.min) {
-    let candidate = selectCandidate(candidates, selectedSections, demotedRecords, { allowFallback: false });
+    let candidate = selectCandidate(candidates, selectedSections, demotedRecords, {
+      allowFallback: false,
+      rejectedCandidates
+    });
     let fallback = false;
     if (!candidate) {
-      candidate = selectCandidate(candidates, selectedSections, demotedRecords, { allowFallback: true });
+      candidate = selectCandidate(candidates, selectedSections, demotedRecords, {
+        allowFallback: true,
+        rejectedCandidates
+      });
       fallback = true;
     }
     if (!candidate) {
-      throw new Error(`Fallback builder could not fill minimum main article count ${articlePolicy.mainArticleCount.min}; only ${selectedSections.length} article(s) available.`);
+      const message = `Fallback builder could not fill minimum main article count ${articlePolicy.mainArticleCount.min}; only ${selectedSections.length} article(s) available.`;
+      writeFallbackDiagnostics(newsroomDir, {
+        date,
+        generated_at: new Date().toISOString(),
+        status: 'FAILED',
+        failure_reason: message,
+        base_draft_source: baseCandidate?.source || 'default-issue',
+        preserve_article_count: preserveSnapshots.size,
+        final_article_count: selectedSections.length,
+        demoted_articles: demotedRecords,
+        fallback_articles: fallbackRecords,
+        rejected_candidates: rejectedCandidates
+      });
+      throw new Error(message);
     }
     const section = buildSectionFromCandidate(candidate, { fallback });
     selectedSections.push(section);
@@ -739,6 +892,7 @@ function buildFallbackPublicIssue(options = {}) {
       url: candidate.url,
       source: candidate.source,
       relevance_bucket: candidate.relevance_bucket,
+      action: fallback ? 'demote-to-watch' : 'rebuild-from-bound-candidate',
       fallback,
       reason: fallback ? 'minimum article count fallback fill' : 'hard failure replacement'
     });
@@ -916,7 +1070,10 @@ function publicFilePaths(date) {
 module.exports = {
   REQUIRED_PRESERVE_FIELDS,
   buildFallbackPublicIssue,
+  candidateRejectionReason,
   candidatePoolFromArtifacts,
+  fallbackArticleAction,
   hardFailureArticleIndexes,
-  publicFilePaths
+  publicFilePaths,
+  sectionDuplicateReason
 };

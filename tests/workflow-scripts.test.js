@@ -37,7 +37,8 @@ const {
   resolveReviewableArtifacts
 } = require('../scripts/resolve-reviewable-artifacts');
 const {
-  buildFallbackPublicIssue
+  buildFallbackPublicIssue,
+  sectionDuplicateReason
 } = require('../scripts/newsroom/generate/fallback-public-issue');
 const {
   ensurePublicNewsletterArtifacts
@@ -429,6 +430,178 @@ function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
   writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), { selected_capsules: [libcamera, camerax, gcc], reserve_capsules: [glaze] });
   writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), { candidates: [libcamera, camerax, gcc, glaze] });
   return { date, editor };
+}
+
+function scopeCountForCandidate(candidate, overrides = {}) {
+  return {
+    source_candidate_url: candidate.url,
+    source_candidate_hash: candidate.source_candidate_hash,
+    relevance_bucket: candidate.relevance_bucket,
+    binding_status: 'bound',
+    publishable_scope: true,
+    counts_as_primary_camera_topic: candidate.counts_as_primary_camera_topic,
+    counts_as_driver_topic: candidate.counts_as_driver_topic,
+    counts_as_soc_topic: candidate.counts_as_soc_topic,
+    counts_as_fallback_topic: candidate.counts_as_fallback_topic,
+    ...overrides
+  };
+}
+
+function writeRun25590436113LikeFallbackFixture(root, options = {}) {
+  const date = options.date || '2026-05-09';
+  const includeSafeAnchors = options.includeSafeAnchors !== false;
+  writeRootIndexContract(root);
+  const camerax14 = regressionCandidate({
+    title: 'CameraX 1.4.0-alpha07',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const camerax16 = regressionCandidate({
+    title: 'CameraX 1.6.1',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const camerax13 = regressionCandidate({
+    title: 'CameraX 1.3.0-beta02',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const libcamera = regressionCandidate({
+    title: 'libcamera v0.7.1',
+    url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
+    bucket: 'camera_driver_image_pipeline'
+  });
+  const gcc = regressionCandidate({
+    title: 'GCC 16.1',
+    url: 'https://isocpp.org/blog/2026/04/gcc-16.1',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const cameraxAnchorless = regressionCandidate({
+    title: 'CameraX release notes overview',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const safeCandidates = includeSafeAnchors ? [camerax16, camerax13] : [];
+  const candidates = [camerax14, libcamera, gcc, cameraxAnchorless, ...safeCandidates];
+  const editor = {
+    date,
+    title: `Camera HAL SW Newsletter - ${date}`,
+    summary: 'Run 25590436113 fallback regression fixture.',
+    briefing: ['CameraX wording needs repair.', 'libcamera has a source gap.', 'GCC fallback is not publishable.'],
+    sections: [
+      regressionSection(camerax14, {
+        camera_hal_perspective: 'Speculative CameraX HAL wording that must be rebuilt from the bound candidate.'
+      }),
+      regressionSection(libcamera),
+      regressionSection(gcc, {
+        category: 'C++ / Tooling',
+        headline: 'GCC 16.1',
+        camera_hal_perspective: 'GCC 16.1 is presented as a direct HAL toolchain change.'
+      })
+    ],
+    action_items: ['Repair CameraX wording.', 'Investigate libcamera source gap.', 'Start GCC migration.'],
+    references: []
+  };
+  const quality = {
+    date,
+    score: 56,
+    threshold: qualityGatePolicy.threshold,
+    status: 'NEEDS_FIX',
+    deductions: [
+      { category: 'source-integrity', points: 15, reason: 'Fact checker returned 14 must_fix item(s).', blocking: true },
+      { category: 'source-integrity', points: 3, reason: 'Fact checker reported 1 source gap(s).', blocking: true }
+    ],
+    article_results: [
+      {
+        index: 1,
+        headline: camerax14.title,
+        status: 'FAIL',
+        repair_action: 'repair-section',
+        hard_fail_reasons: ['Fact-check must_fix item mentions this section.'],
+        scope_count: scopeCountForCandidate(camerax14)
+      },
+      {
+        index: 2,
+        headline: libcamera.title,
+        status: 'FAIL',
+        repair_action: 'replace-or-demote',
+        hard_fail_reasons: [
+          'Fact-check must_fix item mentions this section.',
+          'Source gap or ineligible source evidence mentions this section.'
+        ],
+        scope_count: scopeCountForCandidate(libcamera)
+      },
+      {
+        index: 3,
+        headline: 'GCC 16.1',
+        status: 'FAIL',
+        repair_action: 'replace-or-demote',
+        hard_fail_reasons: [
+          'Shared watch/release-note URL requires matching version_or_release or published_date evidence.',
+          'Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.'
+        ],
+        scope_count: scopeCountForCandidate(gcc, {
+          publishable_scope: false
+        })
+      }
+    ]
+  };
+  const factCheck = {
+    status: 'NEEDS_FIX',
+    must_fix: [
+      { location: 'sections[0].what_changed', problem: 'CameraX wording is too generic.', source_url: camerax14.url }
+    ],
+    source_gaps: [
+      `Reporter eligibility violation; section="${libcamera.title}"; url=${libcamera.url}; action=replace-or-demote`
+    ],
+    source_gap_count: 1,
+    final_comment: 'Run 25590436113 shape.'
+  };
+  const status = {
+    date,
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    failure_stage: 'editor repair attempt 1/2',
+    failure_reason: 'Targeted repair changed main article count outside completion/replacement mode.',
+    final_publish_ready: false,
+    artifact_final_publish_ready: false,
+    publish_gate_passed: false,
+    review_gate_passed: true,
+    editor_review_required: true,
+    fact_check_status: 'NEEDS_FIX',
+    must_fix_count: 14,
+    source_gap_count: 1,
+    quality_status: 'NEEDS_FIX',
+    quality_score: 56,
+    quality_threshold: qualityGatePolicy.threshold,
+    rendered_main_article_count: 3,
+    selected_article_count: 5,
+    min_final_articles: articlePolicy.mainArticleCount.min
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft-attempt-1.json'), editor);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), {
+    message: 'Targeted repair changed main article count outside completion/replacement mode.',
+    details: { reason: 'section_count_drift' }
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), { date, candidates });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: candidates,
+    reserve_candidates: safeCandidates,
+    composition_summary: {}
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
+    selected_capsules: candidates,
+    reserve_capsules: safeCandidates
+  });
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), { candidates });
+  return { date, camerax14, camerax16, camerax13, libcamera, gcc };
 }
 
 function writeEditorialReviewableArtifacts(root, date, overrides = {}) {
@@ -1087,6 +1260,89 @@ test('fallback builder recovers PR #39 shape with public files and preserve-firs
   assert.equal(outputs.public_newsletter_ready, 'true');
   assert.equal(outputs.has_publish_candidate, 'true');
   assert.equal(outputs.public_newsletter_reason, 'ready');
+});
+
+test('fallback duplicate detection treats AndroidX Camera release anchors as release identity', () => {
+  const camerax14 = regressionCandidate({
+    title: 'CameraX 1.4.0-alpha07',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const camerax16 = regressionCandidate({
+    title: 'CameraX 1.6.1',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const anchorless = regressionCandidate({
+    title: 'CameraX release notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const camerax14Localized = regressionCandidate({
+    title: 'CameraX 1.4.0-alpha07 localized',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera?hl=vi#1.4.0-alpha07',
+    bucket: 'android_platform_camera_adjacent'
+  });
+
+  assert.equal(sectionDuplicateReason(camerax16, [regressionSection(camerax14)]), '');
+  assert.equal(sectionDuplicateReason(camerax14, [regressionSection(camerax14)]), 'duplicate_url');
+  assert.equal(sectionDuplicateReason(camerax14Localized, [regressionSection(camerax14)]), 'duplicate_base_url');
+  assert.equal(sectionDuplicateReason(anchorless, [regressionSection(camerax14)]), 'duplicate_base_url');
+  assert.equal(sectionDuplicateReason(anchorless, [regressionSection(anchorless)]), 'duplicate_url');
+});
+
+test('fallback builder recovers run 25590436113 shape with source-bound anchor candidates', () => {
+  const root = tempRoot();
+  const { date, camerax14, camerax16, camerax13, libcamera, gcc } = writeRun25590436113LikeFallbackFixture(root);
+
+  const result = buildFallbackPublicIssue({ root, date });
+  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
+  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
+  const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
+
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
+  assert.equal(finalEditor.sections.length, articlePolicy.mainArticleCount.min);
+  assert.deepEqual(
+    finalEditor.sections.map(section => section.source_candidate_hash),
+    [camerax14.source_candidate_hash, camerax16.source_candidate_hash, camerax13.source_candidate_hash]
+  );
+  assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === libcamera.source_candidate_hash), false);
+  assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === gcc.source_candidate_hash), false);
+  assert.equal(fallbackReport.fallback_articles[0].action, 'rebuild-from-bound-candidate');
+  assert.equal(fallbackReport.demoted_articles.some(item => item.headline === libcamera.title && item.action === 'replace-or-demote'), true);
+  assert.equal(fallbackReport.demoted_articles.some(item => item.headline === 'GCC 16.1' && item.action === 'replace-or-demote'), true);
+  assert.equal(status.final_publish_ready, false);
+  assert.equal(status.artifact_final_publish_ready, false);
+  assert.equal(status.publish_gate_passed, false);
+  assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+  assert.equal(outputs.public_newsletter_ready, 'true');
+});
+
+test('fallback builder leaves no public files and writes diagnostics when safe article count is below minimum', () => {
+  const root = tempRoot();
+  const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
+
+  assert.throws(
+    () => buildFallbackPublicIssue({ root, date }),
+    /Fallback builder could not fill minimum main article count 3; only 1 article\(s\) available\./
+  );
+
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), false);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), false);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), false);
+  const diagnostics = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json'), 'utf8'));
+  assert.equal(diagnostics.status, 'FAILED');
+  assert.match(diagnostics.failure_reason, /only 1 article\(s\) available/);
+  assert.ok(diagnostics.rejected_candidates.some(item => item.reason === 'duplicate_url'));
+  assert.ok(diagnostics.rejected_candidates.some(item => item.reason === 'duplicate_base_url'));
 });
 
 test('ensure CLI runs fallback builder for quality and repair triggers, then recomputes readiness', () => {
