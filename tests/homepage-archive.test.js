@@ -8,22 +8,23 @@ const root = path.join(__dirname, '..');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-  const match = html.match(/<script>\s*([\s\S]*?)\s*<\/script>/);
-  assert.ok(match, 'index.html should include the homepage inline script');
-  return match[1].replace(/\bloadNewsletters\(\);\s*$/, 'globalThis.__homepageReady = loadNewsletters();');
+  const scripts = [...html.matchAll(/<script\b[^>]*>\s*([\s\S]*?)\s*<\/script>/gi)]
+    .map(match => match[1]);
+  const homepageScript = scripts.find(script =>
+    /\basync function loadNewsletters\b/.test(script) &&
+    /\bloadNewsletters\(\);\s*$/.test(script)
+  );
+  assert.ok(homepageScript, 'index.html should include the homepage newsletter script');
+  return homepageScript.replace(/\bloadNewsletters\(\);\s*$/, 'globalThis.__homepageReady = loadNewsletters();');
 }
 
 function createElement() {
-  const element = {
+  return {
     innerHTML: '',
-    removedClasses: [],
     classList: {
-      remove(...classNames) {
-        element.removedClasses.push(...classNames);
-      }
+      remove() {}
     }
   };
-  return element;
 }
 
 async function renderHomepage(newsletters) {
