@@ -44,6 +44,11 @@ test('code docs PR template keeps code safety checklist guardrails', () => {
   assert.match(text, /^## 코드 \/ 문서 \/ 리팩토링 PR$/m);
   assert.match(text, /generated artifact를 불필요하게 수정하지 않았다/);
   assert.match(text, /quality gate, hard blocker, source binding.+약화하지 않았다/);
+  assert.match(text, /qualityGatePolicy\.threshold/);
+  assert.match(text, /qualityGatePolicy\.hardFailConditions/);
+  assert.match(text, /publish-ready/);
+  assert.match(text, /final_publish_ready/);
+  assert.match(text, /artifact_final_publish_ready/);
   assert.match(text, /`npm run test`/);
   assert.match(text, /`npm run validate`/);
 });
