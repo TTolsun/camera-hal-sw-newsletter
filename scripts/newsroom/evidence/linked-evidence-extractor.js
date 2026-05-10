@@ -22,6 +22,13 @@ const CANDIDATE_TEXT_FIELDS = [
   'releaseNoteHtml'
 ];
 
+const PATCHWORK_MAILING_LIST_HOST_VALUES = [
+  'patchwork.freedesktop.org',
+  'patchwork.kernel.org',
+  'patchwork.libcamera.org'
+];
+const PATCHWORK_MAILING_LIST_HOSTS = new Set(PATCHWORK_MAILING_LIST_HOST_VALUES);
+
 function cleanUrl(value) {
   return String(value || '')
     .replace(/[.,;:!?]+$/g, '')
@@ -111,7 +118,8 @@ function classifyUrl(url) {
     host === 'lists.libcamera.org' ||
     host === 'lore.kernel.org' ||
     host.endsWith('.lore.kernel.org') ||
-    host.includes('patchwork')
+    PATCHWORK_MAILING_LIST_HOSTS.has(host) ||
+    PATCHWORK_MAILING_LIST_HOST_VALUES.some(allowedHost => host.endsWith(`.${allowedHost}`))
   ) {
     return {
       type: LINKED_EVIDENCE_TYPES.MAILING_LIST,
@@ -135,8 +143,8 @@ function addEvidence(results, seen, evidence) {
   results.push(evidence);
 }
 
-function excerptAround(text, match, radius = 160) {
-  const index = Math.max(0, text.indexOf(match));
+function excerptAround(text, match, matchIndex, radius = 160) {
+  const index = Number.isInteger(matchIndex) && matchIndex >= 0 ? matchIndex : 0;
   const start = Math.max(0, index - radius);
   const end = Math.min(text.length, index + match.length + radius);
   return text.slice(start, end);
@@ -149,49 +157,56 @@ function extractLinkedEvidenceFromText(input, options = {}) {
   const seen = new Set();
 
   for (const match of sourceText.matchAll(URL_RE)) {
+    if (results.length >= MAX_LINKED_EVIDENCE_PER_CANDIDATE) break;
     const url = cleanUrl(match[0]);
     if (!url || primaryUrls.has(url)) continue;
     const classified = classifyUrl(url);
     addEvidence(results, seen, makeEvidence({
       ...classified,
       sourceText: url,
-      rawExcerpt: excerptAround(sourceText, match[0])
+      rawExcerpt: excerptAround(sourceText, match[0], match.index)
     }));
   }
 
   for (const match of sourceText.matchAll(CHANGE_ID_RE)) {
+    if (results.length >= MAX_LINKED_EVIDENCE_PER_CANDIDATE) break;
     addEvidence(results, seen, makeEvidence({
       type: LINKED_EVIDENCE_TYPES.ANDROID_GERRIT,
       identifier: match[0],
       sourceText: match[0],
-      rawExcerpt: excerptAround(sourceText, match[0])
+      rawExcerpt: excerptAround(sourceText, match[0], match.index)
     }));
   }
 
   for (const match of sourceText.matchAll(BUG_ID_RE)) {
+    if (results.length >= MAX_LINKED_EVIDENCE_PER_CANDIDATE) break;
     addEvidence(results, seen, makeEvidence({
       type: LINKED_EVIDENCE_TYPES.GOOGLE_ISSUE_TRACKER,
       identifier: match[1],
       sourceText: match[0],
-      rawExcerpt: excerptAround(sourceText, match[0])
+      rawExcerpt: excerptAround(sourceText, match[0], match.index)
     }));
   }
 
   for (const match of sourceText.matchAll(CVE_RE)) {
+    if (results.length >= MAX_LINKED_EVIDENCE_PER_CANDIDATE) break;
     addEvidence(results, seen, makeEvidence({
       type: LINKED_EVIDENCE_TYPES.CVE,
       identifier: match[0].toUpperCase(),
       sourceText: match[0],
-      rawExcerpt: excerptAround(sourceText, match[0])
+      rawExcerpt: excerptAround(sourceText, match[0], match.index)
     }));
   }
 
   for (const match of sourceText.matchAll(ANCHOR_RE)) {
+    if (results.length >= MAX_LINKED_EVIDENCE_PER_CANDIDATE) break;
+    const anchorOffset = match[0].indexOf(match[1]);
+    const anchorIndex = anchorOffset >= 0 ? match.index + anchorOffset : match.index;
     addEvidence(results, seen, makeEvidence({
       type: LINKED_EVIDENCE_TYPES.DOCS_ANCHOR,
       identifier: match[1],
       sourceText: match[1],
-      rawExcerpt: excerptAround(sourceText, match[1])
+      rawExcerpt: excerptAround(sourceText, match[1], anchorIndex)
     }));
   }
 
