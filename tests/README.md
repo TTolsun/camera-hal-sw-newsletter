@@ -71,6 +71,7 @@ Generated output에서 파생한 regression은 필요한 최소 JSON/text input�
 | Helper | Purpose |
 | --- | --- |
 | `fixture-loader.js` | Safe fixture path resolution과 JSON/text fixture loading. |
+| `fs.js` | Temp root, JSON/text write, and JSON read helpers for isolated test fixtures. |
 | `artifact-builders.js` | Minimal artifact manifest entry builder. |
 | `newsroom-builders.js` | Newsroom candidate와 targeted retry builder. |
 | `quality-builders.js` | Quality report section과 reporter candidate builder. |

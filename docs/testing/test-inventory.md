@@ -58,7 +58,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | `tests/newsroom-selection.test.js` | `contract` | Deterministic selection, eligibility, fallback composition, exclusion reason. | `fixture-loader`, `selection` bad/good fixtures, inline builders. | `minimized-regression` | `tests/contract/` | Large file입니다. builder extraction 후 분할합니다. |
 | `tests/policy-docs.test.js` | `hygiene` | Policy docs generated block marker와 drift detection. | Temp root. | `none` | `tests/hygiene/` | Temp helper 공통화 후보입니다. |
 | `tests/pr-template.test.js` | `hygiene` | Split PR template contract와 localization scan coverage. | Direct template read. | `none` | `tests/hygiene/` | Low-risk move 후보입니다. |
-| `tests/rendered-issue-structure.test.js` | `contract` | Rendered Markdown/HTML structural validator와 site validator agreement. | Local temp root/write helper. | `temp-artifact` | `tests/contract/` 또는 `tests/unit/validate/` | Rendered fixture helper 공통화 후보입니다. |
+| `tests/rendered-issue-structure.test.js` | `contract` | Rendered Markdown/HTML structural validator와 site validator agreement. | `tests/helpers/fs.js`, rendered fixture builder. | `temp-artifact` | `tests/contract/` 또는 `tests/unit/validate/` | Local temp/write helper 중복은 Slice 7에서 제거했습니다. |
 | `tests/hygiene/repo-hygiene.test.js` | `hygiene` | Root scratch와 repo hygiene detection. | Inline path sample. | `none` | `tests/hygiene/` | Slice 5에서 이동했습니다. Future structure guard를 이 영역에서 확장할 수 있습니다. |
 | `tests/runtime-config.test.js` | `unit` | Runtime env parsing과 provider policy. | Inline env helper. | `none` | `tests/unit/config/` | Low-risk move 후보입니다. |
 | `tests/selection-report-artifact.test.js` | `workflow` | Deterministic pre-LLM failure artifact와 selection report output. | Temp root, generated status artifact. | `temp-artifact` | `tests/workflow/` | Minimal temp artifact만 사용합니다. |
@@ -69,7 +69,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | `tests/hygiene/text-encoding.test.js` | `hygiene` | Encoding detector, BOM, replacement char, text path allowlist. | Inline buffer. | `none` | `tests/hygiene/` | Slice 5에서 이동했습니다. |
 | `tests/validate-config.test.js` | `unit` | Source registry config validation. | Inline valid registry helper. | `none` | `tests/unit/config/` | Low-risk move 후보입니다. |
 | `tests/validation-targets.test.js` | `unit` | Changed artifact date detection과 strict target-date selection. | Inline path string. | `path-contract` | `tests/unit/validate/` | Path string 자체가 검증 대상입니다. |
-| `tests/validator-strictness.test.js` | `contract` | Historical vs strict `validate-site`와 `validate-quality` behavior. | Temp root와 minimal artifact. | `temp-artifact` | `tests/contract/` | Shared temp/write helper 도입 후 이동합니다. |
+| `tests/validator-strictness.test.js` | `contract` | Historical vs strict `validate-site`와 `validate-quality` behavior. | `tests/helpers/fs.js`, minimal artifact. | `temp-artifact` | `tests/contract/` | Local temp/write helper 중복은 Slice 7에서 제거했습니다. |
 | `tests/workflow-scripts.test.js` | `workflow` | PR body, publish status, fallback builder, reviewable artifacts, workflow wiring, publication annotation. | 많은 local temp/write/build helper. | `temp-artifact` | `tests/workflow/` | 가장 큰 파일입니다. helper extraction과 contract mapping 이후에만 분할합니다. |
 
 ## Script Test Inventory
@@ -101,7 +101,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | Helper file | 현재 consumer | 책임 | Follow-up |
 | --- | --- | --- | --- |
 | `tests/helpers/fixture-loader.js` | Fixture policy, parser, extractor, quality, selection tests. | Safe fixture path resolution과 JSON/text fixture loading. | 유지합니다. 필요하면 ledger helper를 추가합니다. |
-| `tests/helpers/fs.js` | Policy, source effectiveness, selection artifact tests. | Temp root, JSON/text write, JSON read helper. | Shared Test Helpers slice에서 추가했습니다. |
+| `tests/helpers/fs.js` | Policy, source effectiveness, selection artifact, rendered structure, validator strictness tests. | Temp root, JSON/text write, JSON read helper. | Shared Test Helpers slice에서 추가했고 Slice 7에서 명확한 duplicate helper를 추가 치환했습니다. |
 | `tests/helpers/artifact-builders.js` | Artifact manifest tests. | Minimal artifact manifest entry builder. | 유지합니다. Workflow helper naming으로 정리할 수 있습니다. |
 | `tests/helpers/newsroom-builders.js` | Targeted retry tests. | Candidate와 retry section builder. | 더 넓은 newsroom builder로 확장 후보입니다. |
 | `tests/helpers/quality-builders.js` | Newsletter quality tests. | Quality report section과 reporter candidate builder. | Large quality tests의 duplicated fixture logic을 흡수할 수 있습니다. |
@@ -112,8 +112,8 @@ Generated artifact dependency는 아래처럼 분류합니다.
 
 | Pattern | 현재 예시 | Suggested shared helper |
 | --- | --- | --- |
-| `fs.mkdtempSync(path.join(os.tmpdir(), ...))` 기반 temp root 생성 | `editor-output-contract`, `news-summary-cache`, `rendered-issue-structure`, `validator-strictness`, `workflow-scripts` | `tests/helpers/fs.js`를 사용하도록 점진적으로 전환합니다. |
-| `writeJson` / `writeText` helper | `rendered-issue-structure`, `validator-strictness`, `workflow-scripts` | `tests/helpers/fs.js`를 사용하도록 점진적으로 전환합니다. |
+| `fs.mkdtempSync(path.join(os.tmpdir(), ...))` 기반 temp root 생성 | `editor-output-contract`, `news-summary-cache`, `workflow-scripts` | `tests/helpers/fs.js`를 사용하도록 점진적으로 전환합니다. |
+| `writeJson` / `writeText` helper | `workflow-scripts` | `tests/helpers/fs.js`를 사용하도록 점진적으로 전환합니다. |
 | Minimal newsletter/public artifact builder | `rendered-issue-structure`, `validator-strictness`, `workflow-scripts` | `tests/helpers/newsletter-fixtures.js` |
 | Markdown section extraction/order assertion | `workflow-scripts`와 PR body tests | `tests/helpers/markdown-assertions.js` |
 | Candidate/source builder helper | `article-capsules`, `newsroom-selection`, `newsletter-quality`, `targeted-retry` | Domain-specific builder under `tests/helpers/` |
@@ -128,5 +128,5 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | 4. Shared Test Helpers | Complete | `tests/helpers/fs.js`를 추가하고 low-risk temp/write helper 중복을 먼저 치환했습니다. |
 | 5. Test Folder Migration 1 | Complete | Low-risk unit/hygiene test 5개를 nested folder로 이동했습니다. |
 | 6. Generated Artifact Dependency Cleanup | Complete | Generated regression fixture provenance를 ledger-local metadata로 제한하고 generated artifact path embedding을 guard합니다. |
-| 7. Duplicate/Obsolete Test Cleanup | Pending | 이 inventory를 삭제/통합 판단 근거로 사용합니다. |
+| 7. Duplicate/Obsolete Test Cleanup | Complete | 명확한 local temp/write helper 중복을 제거했고 large workflow helper는 후속 후보로 남겼습니다. |
 | 8. Structure Guard + Final Audit | Pending | Guardrail을 추가하고 final inventory를 갱신합니다. |

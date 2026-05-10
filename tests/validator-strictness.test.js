@@ -1,7 +1,5 @@
 const assert = require('node:assert/strict');
 const { spawnSync } = require('node:child_process');
-const fs = require('node:fs');
-const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
@@ -16,19 +14,15 @@ const {
   reporterCandidatesFor,
   validSections
 } = require('./helpers/quality-builders');
+const {
+  tempRoot,
+  writeJson,
+  writeText
+} = require('./helpers/fs');
 
 const repoRoot = path.join(__dirname, '..');
 const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');
 const validateQualityPath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-quality.js');
-
-function tempRoot(prefix) {
-  return fs.mkdtempSync(path.join(os.tmpdir(), prefix));
-}
-
-function writeJson(filePath, value) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
-}
 
 function runScript(scriptPath, root) {
   return spawnSync(process.execPath, [scriptPath], {
@@ -112,10 +106,9 @@ function writeSiteFixture(root, {
     md: `newsletters/${date}/newsletter.md`,
     tags: dataTags
   }]);
-  fs.mkdirSync(path.join(root, 'newsletters', date), { recursive: true });
-  fs.writeFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }), 'utf8');
-  fs.writeFileSync(path.join(root, 'newsletters', date, 'index.html'), newsletterHtml(date, { tags: htmlTags }), 'utf8');
-  fs.writeFileSync(path.join(root, 'index.html'), `<!doctype html><html><body><a href="newsletters/${date}/">Archive</a></body></html>`, 'utf8');
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }));
+  writeText(path.join(root, 'newsletters', date, 'index.html'), newsletterHtml(date, { tags: htmlTags }));
+  writeText(path.join(root, 'index.html'), `<!doctype html><html><body><a href="newsletters/${date}/">Archive</a></body></html>`);
   if (factCheckMustFix || sourceGapCount !== null) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
       status: factCheckMustFix ? 'NEEDS_FIX' : 'PASS',
@@ -167,8 +160,7 @@ function writeSiteFixture(root, {
     });
   }
   if (strict) {
-    fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
-    fs.writeFileSync(path.join(root, '.tmp', 'newsletter-date.txt'), date, 'utf8');
+    writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   }
 }
 
@@ -197,8 +189,7 @@ function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {})
   writeJson(path.join(newsroomDir, 'fact-check-report.json'), factCheck);
   writeJson(path.join(newsroomDir, 'quality-report.json'), staleReport);
   if (strict) {
-    fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
-    fs.writeFileSync(path.join(root, '.tmp', 'newsletter-date.txt'), date, 'utf8');
+    writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   }
 }
 
