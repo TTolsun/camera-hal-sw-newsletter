@@ -3,19 +3,16 @@ const test = require('node:test');
 
 const {
   FETCH_STATUSES,
+  FETCH_STATUS_VALUES,
   LINKED_EVIDENCE_TYPES,
   extractLinkedEvidenceFromCandidate,
   extractLinkedEvidenceFromText
 } = require('../scripts/newsroom/evidence');
 const { readTextFixture } = require('./helpers/fixture-loader');
 
-const RESOLVER_ONLY_STATUSES = new Set([
-  FETCH_STATUSES.RESOLVED,
-  FETCH_STATUSES.BLOCKED,
-  FETCH_STATUSES.FAILED,
-  FETCH_STATUSES.UNSUPPORTED,
-  FETCH_STATUSES.SKIPPED
-]);
+const RESOLVER_ONLY_STATUSES = new Set(
+  FETCH_STATUS_VALUES.filter(status => status !== FETCH_STATUSES.NOT_FETCHED)
+);
 
 function types(items) {
   return new Set(items.map(item => item.type));
@@ -105,4 +102,37 @@ test('extractor detects issue tracker shorthand and docs anchor', () => {
   assertExtractorStatuses(evidence);
   assert.ok(evidence.some(item => item.type === LINKED_EVIDENCE_TYPES.GOOGLE_ISSUE_TRACKER && item.identifier === '123456789'));
   assert.ok(evidence.some(item => item.type === LINKED_EVIDENCE_TYPES.DOCS_ANCHOR && item.identifier === '#camera-video-1.6.1'));
+});
+
+test('extractor excerpts docs anchor from regex match position instead of earlier repeated text', () => {
+  const evidence = extractLinkedEvidenceFromText([
+    'decoy-context prefix#camera-video-1.6.1suffix should not anchor the excerpt.',
+    'x'.repeat(260),
+    'actual-anchor-context href="#camera-video-1.6.1" final marker.'
+  ].join(' '));
+
+  const anchor = evidence.find(item => item.type === LINKED_EVIDENCE_TYPES.DOCS_ANCHOR);
+
+  assert.ok(anchor);
+  assert.equal(anchor.identifier, '#camera-video-1.6.1');
+  assert.equal(anchor.raw_excerpt.includes('actual-anchor-context'), true);
+  assert.equal(anchor.raw_excerpt.includes('decoy-context'), false);
+});
+
+test('extractor only classifies known patchwork hosts as mailing list evidence', () => {
+  const evidence = extractLinkedEvidenceFromText([
+    'Allowed patchwork host https://patchwork.kernel.org/project/linux-media/patch/123/.',
+    'Unrelated host https://notpatchwork.example.com/camera-evidence.'
+  ].join(' '));
+
+  const byUrl = new Map(evidence.map(item => [item.url, item]));
+
+  assert.equal(
+    byUrl.get('https://patchwork.kernel.org/project/linux-media/patch/123/')?.type,
+    LINKED_EVIDENCE_TYPES.MAILING_LIST
+  );
+  assert.equal(
+    byUrl.get('https://notpatchwork.example.com/camera-evidence')?.type,
+    LINKED_EVIDENCE_TYPES.GENERIC_URL
+  );
 });
