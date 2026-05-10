@@ -1,7 +1,8 @@
 {
   "metadata": {
     "generated": true,
-    "source": "content/newsroom/2026-05-05 minimal regression"
+    "source": "minimized-generated-regression",
+    "origin": "2026-05-05 newsroom run, minimized from generated artifact"
   },
   "policyFlags": {
     "source_gap_risk": false,

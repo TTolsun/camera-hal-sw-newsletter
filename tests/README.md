@@ -86,6 +86,11 @@ Fixture loading 또는 common builder를 중복 작성하기보다 기존 helper
 - `tests/fixtures/**/bad` 또는 future `regression/` 영역의 minimized regression fixture.
 - Public artifact 구조를 확인하되 content quality를 golden으로 삼지 않는 smoke check.
 
+Minimized generated regression fixture는 `metadata.source: "minimized-generated-regression"`와
+`fixture-ledger.json`의 `generatedArtifact: true`로만 provenance를 남깁니다. Fixture file 안에
+`content/newsroom/YYYY-MM-DD`, `content/collected-news/YYYY-MM-DD`, `newsletters/YYYY-MM-DD`
+path를 직접 넣지 않습니다.
+
 허용하지 않는 사용:
 
 - Generated newsletter를 PASS quality fixture처럼 사용.

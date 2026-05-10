@@ -6,8 +6,12 @@ const {
   fixturesRoot,
   listFixtureFiles,
   readJsonFixture,
+  readTextFixture,
   resolveFixturePath
 } = require('./helpers/fixture-loader');
+
+const GENERATED_ARTIFACT_PATH_PATTERN = /\b(?:content\/newsroom|content\/collected-news|newsletters)\/\d{4}-\d{2}-\d{2}\b/;
+const MINIMIZED_GENERATED_REGRESSION_SOURCE = 'minimized-generated-regression';
 
 function relativeFixturePath(filePath) {
   return path.relative(fixturesRoot, filePath).replace(/\\/g, '/');
@@ -122,7 +126,11 @@ test('fixture ledger trust metadata matches fixture policy', () => {
 
     if (entry.generatedArtifact) {
       assert.notEqual(entry.allowedUse, 'good', `${entry.path} generated fixture cannot be good`);
-      assert.match(entry.source, /generated-regression/, `${entry.path} generated fixture must be minimized regression evidence`);
+      assert.equal(
+        entry.source,
+        MINIMIZED_GENERATED_REGRESSION_SOURCE,
+        `${entry.path} generated fixture must be minimized regression evidence`
+      );
     }
 
     if (!entry.path.endsWith('.json')) continue;
@@ -130,6 +138,11 @@ test('fixture ledger trust metadata matches fixture policy', () => {
     if (fixture.metadata?.generated === true) {
       assert.equal(entry.generatedArtifact, true, `${entry.path} metadata.generated must match fixture ledger`);
       assert.notEqual(entry.allowedUse, 'good', `${entry.path} generated fixture cannot be a good/golden fixture`);
+      assert.equal(
+        fixture.metadata.source,
+        MINIMIZED_GENERATED_REGRESSION_SOURCE,
+        `${entry.path} generated fixture metadata.source must not point at a generated artifact path`
+      );
     }
     if (fixture.expected?.status) {
       assert.equal(
@@ -138,5 +151,16 @@ test('fixture ledger trust metadata matches fixture policy', () => {
         `${entry.path} expected status must match fixture ledger pass/fail class`
       );
     }
+  }
+});
+
+test('fixture files do not embed generated artifact paths', () => {
+  for (const fixturePath of ledgerFixtureFiles()) {
+    const text = readTextFixture(fixturePath);
+    assert.equal(
+      GENERATED_ARTIFACT_PATH_PATTERN.test(text),
+      false,
+      `${fixturePath} must not embed content/newsroom, content/collected-news, or newsletters generated artifact paths`
+    );
   }
 });

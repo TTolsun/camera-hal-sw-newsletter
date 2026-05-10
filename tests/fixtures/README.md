@@ -47,3 +47,8 @@ Every committed fixture file must have exactly one ledger entry with:
 - `generatedArtifact`: `true` only for minimized generated regression samples outside `good/`.
 
 `good/` fixtures must be curated, non-generated, and PASS-only. `bad/` fixtures must not expect `PASS`.
+
+Generated regression fixtures must keep their fixture-local provenance in
+`fixture-ledger.json` and use `metadata.source: "minimized-generated-regression"`.
+Do not embed `content/newsroom/YYYY-MM-DD`, `content/collected-news/YYYY-MM-DD`, or
+`newsletters/YYYY-MM-DD` paths inside committed fixture files.
