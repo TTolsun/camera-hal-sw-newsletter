@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
 const { execFileSync } = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const ROOT_TEST_ALLOWLIST_RELATIVE_PATH = 'tests/root-test-allowlist.json';
 
 function normalizePath(filePath) {
   return String(filePath || '')
@@ -22,10 +26,10 @@ function trackedFiles(root) {
   return output.toString('utf8').split('\0').filter(Boolean);
 }
 
-function issue(filePath, detail) {
+function issue(filePath, type, detail) {
   return {
     path: normalizePath(filePath),
-    type: 'tracked_agent_scratch',
+    type,
     detail
   };
 }
@@ -34,7 +38,59 @@ function isOfficialDocumentPath(filePath) {
   return filePath === 'README.md' || filePath === 'AGENTS.md' || filePath.startsWith('docs/');
 }
 
-function findRepoHygieneIssues(files) {
+function isRootTestFile(filePath) {
+  return /^tests\/[^/]+\.test\.js$/.test(filePath);
+}
+
+function loadRootTestAllowlist(root) {
+  const allowlistPath = path.join(root, ROOT_TEST_ALLOWLIST_RELATIVE_PATH);
+  if (!fs.existsSync(allowlistPath)) return [];
+  const value = JSON.parse(fs.readFileSync(allowlistPath, 'utf8'));
+  if (!Array.isArray(value)) {
+    throw new Error(`${ROOT_TEST_ALLOWLIST_RELATIVE_PATH} must contain a JSON array`);
+  }
+  return value.map(normalizePath);
+}
+
+function findRootTestStructureIssues(files, allowlist) {
+  const issues = [];
+  const normalizedFiles = (files || []).map(normalizePath).filter(Boolean);
+  const tracked = new Set(normalizedFiles);
+  const allowed = new Set();
+
+  for (const inputPath of allowlist || []) {
+    const filePath = normalizePath(inputPath);
+    if (!isRootTestFile(filePath)) {
+      issues.push(issue(filePath, 'root_test_structure', 'root test allowlist entries must use tests/*.test.js'));
+      continue;
+    }
+    if (allowed.has(filePath)) {
+      issues.push(issue(filePath, 'root_test_structure', 'root test allowlist entry is duplicated'));
+      continue;
+    }
+    allowed.add(filePath);
+  }
+
+  for (const filePath of normalizedFiles) {
+    if (isRootTestFile(filePath) && !allowed.has(filePath)) {
+      issues.push(issue(
+        filePath,
+        'root_test_structure',
+        'new root tests/*.test.js files must move into nested test folders or update the migration allowlist'
+      ));
+    }
+  }
+
+  for (const filePath of allowed) {
+    if (!tracked.has(filePath)) {
+      issues.push(issue(filePath, 'root_test_structure', 'root test allowlist entry is missing from tracked files'));
+    }
+  }
+
+  return issues;
+}
+
+function findRepoHygieneIssues(files, options = {}) {
   const issues = [];
 
   for (const inputPath of files || []) {
@@ -42,18 +98,22 @@ function findRepoHygieneIssues(files) {
     if (!filePath || isOfficialDocumentPath(filePath)) continue;
 
     if (filePath === 'PLAN.md' || filePath === 'PLAN.local.md') {
-      issues.push(issue(filePath, 'root plan files must stay local-only'));
+      issues.push(issue(filePath, 'tracked_agent_scratch', 'root plan files must stay local-only'));
     } else if (filePath.startsWith('.codex/')) {
-      issues.push(issue(filePath, '.codex files must stay local-only'));
+      issues.push(issue(filePath, 'tracked_agent_scratch', '.codex files must stay local-only'));
     } else if (filePath.startsWith('.tmp/codex/')) {
-      issues.push(issue(filePath, '.tmp/codex files must stay local-only'));
+      issues.push(issue(filePath, 'tracked_agent_scratch', '.tmp/codex files must stay local-only'));
     } else if (/^codex-[^/]*\.md$/.test(filePath)) {
-      issues.push(issue(filePath, 'root codex markdown scratch files must stay local-only'));
+      issues.push(issue(filePath, 'tracked_agent_scratch', 'root codex markdown scratch files must stay local-only'));
     } else if (/^[^/]+-codex-plan\.md$/.test(filePath)) {
-      issues.push(issue(filePath, 'root codex plan markdown files must stay local-only'));
+      issues.push(issue(filePath, 'tracked_agent_scratch', 'root codex plan markdown files must stay local-only'));
     } else if (/^[^/]+-scratch\.md$/.test(filePath)) {
-      issues.push(issue(filePath, 'root scratch markdown files must stay local-only'));
+      issues.push(issue(filePath, 'tracked_agent_scratch', 'root scratch markdown files must stay local-only'));
     }
+  }
+
+  if (Array.isArray(options.rootTestAllowlist)) {
+    issues.push(...findRootTestStructureIssues(files, options.rootTestAllowlist));
   }
 
   return issues;
@@ -65,7 +125,9 @@ function formatIssue(item) {
 
 function main() {
   const root = repoRoot();
-  const issues = findRepoHygieneIssues(trackedFiles(root));
+  const issues = findRepoHygieneIssues(trackedFiles(root), {
+    rootTestAllowlist: loadRootTestAllowlist(root)
+  });
 
   if (issues.length > 0) {
     console.error(issues.map(formatIssue).join('\n'));
@@ -80,8 +142,10 @@ if (require.main === module) {
 }
 
 module.exports = {
+  findRootTestStructureIssues,
   findRepoHygieneIssues,
   formatIssue,
+  loadRootTestAllowlist,
   normalizePath,
   repoRoot,
   trackedFiles

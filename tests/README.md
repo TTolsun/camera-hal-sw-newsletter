@@ -18,7 +18,7 @@ node scripts/test-artifact-manifest.js
 node scripts/test-selection-diagnostics.js
 ```
 
-#82 nested-runner slice 이후 `test:unit`은 `tests/**/*.test.js`를 발견합니다. 다만 folder migration slice가 끝나기 전까지 새 test file은 기존처럼 root `tests/*.test.js`에 두고, `tests/unit/`, `tests/contract/`, `tests/workflow/`, `tests/hygiene/` 이동은 별도 migration PR에서 진행합니다.
+#82 nested-runner slice 이후 `test:unit`은 `tests/**/*.test.js`를 발견합니다. Slice 8 이후 root `tests/*.test.js`는 `tests/root-test-allowlist.json`의 migration baseline만 허용하며, 새 test file은 `tests/unit/`, `tests/contract/`, `tests/workflow/`, `tests/hygiene/` 같은 목적별 nested folder에 둡니다.
 
 ## Target Structure
 
@@ -109,6 +109,9 @@ path를 직접 넣지 않습니다.
 6. Generated artifact dependency cleanup: generated output은 smoke/integration check에만 남깁니다.
 7. Duplicate/obsolete test cleanup: replacement contract가 문서화된 경우에만 삭제 또는 통합합니다.
 8. Structure guard and final audit: root test drift와 fixture pollution 재발을 막습니다.
+
+Root `tests/*.test.js` migration baseline은 `tests/root-test-allowlist.json`에 고정되어 있습니다.
+기존 root test를 nested folder로 이동하면 allowlist에서도 제거하고, 새 root test를 추가하지 않습니다.
 
 ## Validation
 
