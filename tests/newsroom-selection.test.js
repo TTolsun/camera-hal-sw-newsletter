@@ -299,7 +299,8 @@ test('linked evidence adjustment does not change threshold eligibility', () => {
   assert.ok(item.deterministic_score >= MAIN_ARTICLE_SCORE_THRESHOLD);
   assert.equal(item.score_breakdown.total, item.deterministic_score);
   assert.equal(item.main_article_score_eligible, false);
-  assert.ok(item.score_filter_reasons.includes(`deterministic_score<${MAIN_ARTICLE_SCORE_THRESHOLD}`));
+  assert.ok(item.score_filter_reasons.includes(`base_total<${MAIN_ARTICLE_SCORE_THRESHOLD}`));
+  assert.equal(item.score_filter_reasons.includes(`deterministic_score<${MAIN_ARTICLE_SCORE_THRESHOLD}`), false);
 });
 
 test('linked evidence bonus does not bypass exclusion contracts', () => {

@@ -482,7 +482,7 @@ function scoreCandidate(candidate, newsletterDate) {
 function scoreFilterReasons(scoreBreakdown) {
   const reasons = [];
   if (number(scoreBreakdown.base_total, scoreBreakdown.total) < MAIN_ARTICLE_SCORE_THRESHOLD) {
-    reasons.push(`deterministic_score<${MAIN_ARTICLE_SCORE_THRESHOLD}`);
+    reasons.push(`base_total<${MAIN_ARTICLE_SCORE_THRESHOLD}`);
   }
   if (scoreBreakdown.scope_relevance < MIN_SCOPE_RELEVANCE) {
     reasons.push(`scope_relevance<${MIN_SCOPE_RELEVANCE}`);
