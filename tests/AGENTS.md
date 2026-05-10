@@ -30,5 +30,5 @@ npm.cmd run validate
 관련 파일이 명확하면 targeted test도 함께 실행합니다.
 
 ```powershell
-node --test tests/*.test.js
+node --test "tests/**/*.test.js"
 ```

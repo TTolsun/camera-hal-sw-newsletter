@@ -9,10 +9,10 @@
 | Command | 현재 동작 | 결과 |
 | --- | --- | --- |
 | `npm.cmd run test` | `npm run test:unit`와 `npm run test:script`를 순서대로 실행합니다. | 통과. `node --test` 기준 368개 test가 pass했고 script test 2개도 통과했습니다. |
-| `npm.cmd run test:unit` | `node --test tests/*.test.js`를 실행합니다. | flat `tests/*.test.js`만 발견합니다. nested test folder는 아직 실행 대상이 아닙니다. |
+| `npm.cmd run test:unit` | `node --test "tests/**/*.test.js"`를 실행합니다. | 현재 flat test 368개를 동일하게 실행하며, 향후 nested test folder도 발견합니다. |
 | `npm.cmd run test:script` | `node scripts/test-artifact-manifest.js && node scripts/test-selection-diagnostics.js`를 실행합니다. | 통과. |
 
-중요 제약: runner migration slice에서 `test:unit`을 nested-aware command로 바꾸고 Windows PowerShell에서 검증하기 전까지 test file을 nested folder로 이동하지 않습니다.
+중요 제약: runner는 nested-aware command로 전환했지만, 이 slice에서는 test file을 이동하지 않습니다. 실제 folder migration은 별도 slice에서 low-risk file부터 진행합니다.
 
 ## 분류 기준
 
@@ -121,12 +121,11 @@ Generated artifact dependency는 아래처럼 분류합니다.
 
 | Slice | Status | Notes |
 | --- | --- | --- |
-| 1. Inventory + Guide | In progress | 이 문서와 `tests/README.md`입니다. |
-| 2. Nested Runner Preparation | Pending | Test file 이동 전에 runner를 변경합니다. |
+| 1. Inventory + Guide | Complete | 이 문서와 `tests/README.md`입니다. |
+| 2. Nested Runner Preparation | Complete | `test:unit`을 nested-aware glob로 변경하고 기존 flat runner와 비교 검증했습니다. |
 | 3. Fixture Ledger + Trust Guard | Pending | 현재 `fixture-policy.test.js`를 확장하거나 `check:fixtures`를 추가합니다. |
 | 4. Shared Test Helpers | Pending | Temp/write helper와 rendered artifact builder부터 시작합니다. |
 | 5. Test Folder Migration 1 | Pending | Nested runner 검증 이후 low-risk file만 이동합니다. |
 | 6. Generated Artifact Dependency Cleanup | Pending | Generated output은 smoke/integration 입력으로만 유지합니다. |
 | 7. Duplicate/Obsolete Test Cleanup | Pending | 이 inventory를 삭제/통합 판단 근거로 사용합니다. |
 | 8. Structure Guard + Final Audit | Pending | Guardrail을 추가하고 final inventory를 갱신합니다. |
-
