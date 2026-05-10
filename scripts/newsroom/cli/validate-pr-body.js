@@ -82,6 +82,101 @@ function publicArtifactPatterns(date = '') {
   };
 }
 
+function datePatternForValidation(date = '') {
+  return date ? escapeRegExp(date) : '\\d{4}-\\d{2}-\\d{2}';
+}
+
+function exactHeadingCount(text, level, heading) {
+  return countMatches(text, new RegExp(`^${'#'.repeat(level)} ${escapeRegExp(heading)}$`, 'gm'));
+}
+
+function extractSubsection(section, heading) {
+  const source = toText(section);
+  const pattern = new RegExp(`^### ${escapeRegExp(heading)}\\s*$`, 'm');
+  const match = pattern.exec(source);
+  if (!match) return '';
+  const bodyStart = match.index + match[0].length;
+  const rest = source.slice(bodyStart);
+  const next = /^###\s+/m.exec(rest);
+  return next ? rest.slice(0, next.index) : rest;
+}
+
+function firstNumberAfterLabel(section, label) {
+  const match = toText(section).match(new RegExp(`${escapeRegExp(label)}:\\s*(\\d+)`));
+  return match ? Number(match[1]) : 0;
+}
+
+function hasCompleteMarkdownLink(value) {
+  const text = toText(value);
+  const angleWrappedLink = /\[[^\]\n]+\]\(<[^>\n]+>\)/;
+  const plainLink = /\[[^\]\n]+\]\([^)>\n]+\)/;
+  return angleWrappedLink.test(text) || plainLink.test(text);
+}
+
+function validateCandidateTraceSection(text, sections, options, errors) {
+  const traceCount = exactHeadingCount(text, 2, '후보 기사 추적');
+  if (traceCount !== 1) {
+    errors.push(`PR body must contain exactly one "## 후보 기사 추적" heading, found ${traceCount}.`);
+    return;
+  }
+
+  const traceSection = sectionByHeading(sections, ['후보 기사 추적']);
+  if (!traceSection) {
+    errors.push('PR body is missing 후보 기사 추적 section.');
+    return;
+  }
+
+  for (const heading of [
+    '한눈에 보는 후보 판단',
+    '최종 선택 기사',
+    'Reserve 후보',
+    '제외/강등/거절된 주요 후보',
+    '품질/팩트체크 연결',
+    '상세 artifact'
+  ]) {
+    if (!new RegExp(`^### ${escapeRegExp(heading)}\\s*$`, 'm').test(traceSection)) {
+      errors.push(`후보 기사 추적 section is missing "### ${heading}" subsection.`);
+    }
+  }
+
+  const datePattern = datePatternForValidation(options.date);
+  for (const requiredPath of [
+    `content/newsroom/${datePattern}/reporter-candidates\\.json`,
+    `content/collected-news/${datePattern}/candidates\\.json`
+  ]) {
+    if (!new RegExp(requiredPath).test(traceSection)) {
+      errors.push(`후보 기사 추적 section must list artifact path matching ${requiredPath}.`);
+    }
+  }
+
+  if (traceSection.includes('후보 기사 artifact를 찾을 수 없어 추적 섹션을 생성하지 못했습니다.')) {
+    if (!/읽기\/형식 요약:\s*\n-\s+/m.test(traceSection)) {
+      errors.push('후보 기사 추적 fallback must include missing/read/shape summary.');
+    }
+  }
+
+  const brokenLinkRows = traceSection
+    .split(/\r?\n/)
+    .filter(line => line.trim().startsWith('|') && line.includes('](') && !hasCompleteMarkdownLink(line));
+  if (brokenLinkRows.length > 0) {
+    errors.push('후보 기사 추적 table contains an incomplete Markdown source link.');
+  }
+
+  const finalSelectedCount = firstNumberAfterLabel(traceSection, '최종 선택 기사');
+  if (finalSelectedCount > 0) {
+    const finalSection = extractSubsection(traceSection, '최종 선택 기사');
+    if (!hasCompleteMarkdownLink(finalSection)) {
+      errors.push('최종 선택 기사 table must include at least one Markdown source link.');
+    }
+    if (!/cand_\d{3}/.test(finalSection)) {
+      errors.push('최종 선택 기사 table must include at least one Candidate ID.');
+    }
+    if (!/\b(?:final_selected|primary_selected)\b/.test(finalSection)) {
+      errors.push('최종 선택 기사 table must include final_selected or primary_selected status.');
+    }
+  }
+}
+
 function parseStatusSection(section) {
   section = toText(section);
   return {
@@ -161,6 +256,7 @@ function validatePrBodyText(text, options = {}) {
   if (!generatedArtifactsSection) {
     errors.push('PR body must contain generated artifacts section.');
   }
+  validateCandidateTraceSection(text, sections, options, errors);
   if (/생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
     errors.push('Newsletter PR body must not describe public newsletter files as not generated or not updated.');
   }
