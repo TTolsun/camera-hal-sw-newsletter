@@ -3,11 +3,11 @@ const test = require('node:test');
 
 const {
   validateNewsSourcesConfigText
-} = require('../scripts/lib/news-sources-config-validator');
+} = require('../../../scripts/lib/news-sources-config-validator');
 const {
   normalizeEnabledSources,
   resolveSection
-} = require('../scripts/lib/news-source-section-resolver');
+} = require('../../../scripts/lib/news-source-section-resolver');
 
 function validSource(overrides = {}) {
   return {

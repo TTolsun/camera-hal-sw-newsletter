@@ -7,7 +7,7 @@ const {
   capsuleInputForCandidates,
   capsuleInputFromReport,
   compactSelectionContext
-} = require('../scripts/newsroom/generate/article-capsules');
+} = require('../../../scripts/newsroom/generate/article-capsules');
 
 function candidate(overrides = {}) {
   return {
