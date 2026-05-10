@@ -101,6 +101,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | Helper file | 현재 consumer | 책임 | Follow-up |
 | --- | --- | --- | --- |
 | `tests/helpers/fixture-loader.js` | Fixture policy, parser, extractor, quality, selection tests. | Safe fixture path resolution과 JSON/text fixture loading. | 유지합니다. 필요하면 ledger helper를 추가합니다. |
+| `tests/helpers/fs.js` | Policy, source effectiveness, selection artifact tests. | Temp root, JSON/text write, JSON read helper. | Shared Test Helpers slice에서 추가했습니다. |
 | `tests/helpers/artifact-builders.js` | Artifact manifest tests. | Minimal artifact manifest entry builder. | 유지합니다. Workflow helper naming으로 정리할 수 있습니다. |
 | `tests/helpers/newsroom-builders.js` | Targeted retry tests. | Candidate와 retry section builder. | 더 넓은 newsroom builder로 확장 후보입니다. |
 | `tests/helpers/quality-builders.js` | Newsletter quality tests. | Quality report section과 reporter candidate builder. | Large quality tests의 duplicated fixture logic을 흡수할 수 있습니다. |
@@ -111,8 +112,8 @@ Generated artifact dependency는 아래처럼 분류합니다.
 
 | Pattern | 현재 예시 | Suggested shared helper |
 | --- | --- | --- |
-| `fs.mkdtempSync(path.join(os.tmpdir(), ...))` 기반 temp root 생성 | `editor-output-contract`, `news-summary-cache`, `policy-docs`, `rendered-issue-structure`, `selection-report-artifact`, `source-effectiveness-report`, `validator-strictness`, `workflow-scripts` | `tests/helpers/fs.js` 또는 `tests/helpers/temp-root.js` |
-| `writeJson` / `writeText` helper | `rendered-issue-structure`, `source-effectiveness-report`, `validator-strictness`, `workflow-scripts` | `tests/helpers/fs.js` |
+| `fs.mkdtempSync(path.join(os.tmpdir(), ...))` 기반 temp root 생성 | `editor-output-contract`, `news-summary-cache`, `rendered-issue-structure`, `validator-strictness`, `workflow-scripts` | `tests/helpers/fs.js`를 사용하도록 점진적으로 전환합니다. |
+| `writeJson` / `writeText` helper | `rendered-issue-structure`, `validator-strictness`, `workflow-scripts` | `tests/helpers/fs.js`를 사용하도록 점진적으로 전환합니다. |
 | Minimal newsletter/public artifact builder | `rendered-issue-structure`, `validator-strictness`, `workflow-scripts` | `tests/helpers/newsletter-fixtures.js` |
 | Markdown section extraction/order assertion | `workflow-scripts`와 PR body tests | `tests/helpers/markdown-assertions.js` |
 | Candidate/source builder helper | `article-capsules`, `newsroom-selection`, `newsletter-quality`, `targeted-retry` | Domain-specific builder under `tests/helpers/` |
@@ -124,7 +125,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | 1. Inventory + Guide | Complete | 이 문서와 `tests/README.md`입니다. |
 | 2. Nested Runner Preparation | Complete | `test:unit`을 nested-aware glob로 변경하고 기존 flat runner와 비교 검증했습니다. |
 | 3. Fixture Ledger + Trust Guard | Complete | `fixture-ledger.json`과 `check:fixtures`로 fixture provenance와 trust guard를 검증합니다. |
-| 4. Shared Test Helpers | Pending | Temp/write helper와 rendered artifact builder부터 시작합니다. |
+| 4. Shared Test Helpers | Complete | `tests/helpers/fs.js`를 추가하고 low-risk temp/write helper 중복을 먼저 치환했습니다. |
 | 5. Test Folder Migration 1 | Pending | Nested runner 검증 이후 low-risk file만 이동합니다. |
 | 6. Generated Artifact Dependency Cleanup | Pending | Generated output은 smoke/integration 입력으로만 유지합니다. |
 | 7. Duplicate/Obsolete Test Cleanup | Pending | 이 inventory를 삭제/통합 판단 근거로 사용합니다. |

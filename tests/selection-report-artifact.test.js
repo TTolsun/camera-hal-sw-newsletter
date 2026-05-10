@@ -1,6 +1,5 @@
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 const test = require('node:test');
 
@@ -12,10 +11,10 @@ const {
   writeSelectionDiagnosticsArtifact
 } = require('../scripts/newsroom/cli/gemini-newsroom-newsletter');
 const { articlePolicy } = require('../scripts/lib/newsletter-policy');
-
-function readJson(filePath) {
-  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-}
+const {
+  readJson,
+  tempRoot
+} = require('./helpers/fs');
 
 function deterministicFailureShortlist(date) {
   const composition = {
@@ -64,11 +63,11 @@ function deterministicFailureShortlist(date) {
 
 test('deterministic pre-LLM failure artifacts include date, status, and selection reports', () => {
   const date = '2026-05-06';
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'selection-report-artifact-'));
-  const newsroomDir = path.join(tempRoot, 'content', 'newsroom', date);
+  const root = tempRoot('selection-report-artifact-');
+  const newsroomDir = path.join(root, 'content', 'newsroom', date);
   const shortlistReport = deterministicFailureShortlist(date);
 
-  writeNewsletterDate(date, tempRoot);
+  writeNewsletterDate(date, root);
   writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
   writeGenerationStatus(buildGenerationStatus({
     date,
@@ -76,10 +75,10 @@ test('deterministic pre-LLM failure artifacts include date, status, and selectio
     failureStage: 'deterministic selection',
     failureReason: shortlistReport.selection_errors.join('; '),
     extra: selectionStatusExtra(shortlistReport)
-  }), tempRoot);
+  }), root);
 
-  assert.equal(fs.readFileSync(path.join(tempRoot, '.tmp', 'newsletter-date.txt'), 'utf8'), date);
-  const status = readJson(path.join(tempRoot, '.tmp', 'newsletter-generation-status.json'));
+  assert.equal(fs.readFileSync(path.join(root, '.tmp', 'newsletter-date.txt'), 'utf8'), date);
+  const status = readJson(path.join(root, '.tmp', 'newsletter-generation-status.json'));
   assert.equal(status.status, 'FAILED');
   assert.equal(status.failure_stage, 'deterministic selection');
   assert.deepEqual(status.selection_errors, shortlistReport.selection_errors);
