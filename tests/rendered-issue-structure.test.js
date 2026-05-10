@@ -1,7 +1,5 @@
 const assert = require('node:assert/strict');
 const { spawnSync } = require('node:child_process');
-const fs = require('node:fs');
-const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
@@ -15,6 +13,11 @@ const {
 const {
   validSections
 } = require('./helpers/quality-builders');
+const {
+  tempRoot,
+  writeJson,
+  writeText
+} = require('./helpers/fs');
 
 const repoRoot = path.join(__dirname, '..');
 const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');
@@ -22,20 +25,6 @@ const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
 
 function escapeRegExp(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function tempRoot() {
-  return fs.mkdtempSync(path.join(os.tmpdir(), 'rendered-issue-structure-'));
-}
-
-function writeJson(filePath, value) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
-}
-
-function writeText(filePath, value) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, value, 'utf8');
 }
 
 function writeNewsletterIndex(root, date = '2026-05-09') {
@@ -69,7 +58,7 @@ function issue(overrides = {}) {
 }
 
 function renderedFixture(overrides = {}) {
-  const root = tempRoot();
+  const root = tempRoot('rendered-issue-structure-');
   const date = writeNewsletterIndex(root, overrides.date);
   const editor = issue({ ...overrides, date });
   const markdown = overrides.markdown || buildMarkdown(editor);
@@ -166,7 +155,7 @@ test('rendered issue structure rejects HTML structural failures', () => {
 });
 
 test('rendered issue structure rejects article image HTML contract failures', () => {
-  const root = tempRoot();
+  const root = tempRoot('rendered-issue-structure-');
   const date = writeNewsletterIndex(root);
   const editor = issue({ date, sections: withImageSection(root) });
   const markdown = buildMarkdown(editor);
@@ -188,12 +177,12 @@ test('rendered issue structure rejects article image HTML contract failures', ()
 
 test('rendered issue structure rejects selectedImage and newsletter index contract failures', () => {
   const missingFallback = validateFixture({
-    sections: withImageSection(tempRoot(), { writeFallback: false })
+    sections: withImageSection(tempRoot('rendered-issue-structure-'), { writeFallback: false })
   }).result;
   assert.equal(missingFallback.ok, false);
   assert.match(missingFallback.text, /selectedImage fallback file is missing|article image fallback file is missing/);
 
-  const root = tempRoot();
+  const root = tempRoot('rendered-issue-structure-');
   const date = writeNewsletterIndex(root);
   writeText(path.join(root, 'data', 'newsletters.json'), '{ invalid json');
   const editor = issue({ date });
