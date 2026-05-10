@@ -12,7 +12,8 @@ const {
 const { editorSchema } = require('../scripts/newsroom/render/newsletter-schema');
 const {
   buildGenerationStatus,
-  editorSemanticStatusExtra
+  editorSemanticStatusExtra,
+  linkedEvidencePromptGuardrails
 } = require('../scripts/gemini-newsroom-newsletter');
 const {
   articlePolicy
@@ -89,6 +90,19 @@ function loadFreshNewsletterCli() {
   delete require.cache[cliPath];
   return require(cliPath);
 }
+
+test('LLM prompt guardrails prohibit linked evidence overclaim without exposing payloads', () => {
+  const guardrails = linkedEvidencePromptGuardrails();
+  assert.match(guardrails, /not included in the prompt payload/);
+  assert.match(guardrails, /blocked, failed, skipped, or unsupported/);
+  assert.match(guardrails, /build_dependency_fix, test_only_change, or documentation_only/);
+  assert.match(guardrails, /stream, buffer, metadata, request, result, ImageCapture, VideoCapture, Surface, or CameraPipe/);
+
+  const cliPath = require.resolve('../scripts/newsroom/cli/gemini-newsroom-newsletter');
+  const source = fs.readFileSync(cliPath, 'utf8');
+  const promptUsageCount = (source.match(/linkedEvidencePromptGuardrails\(\),/g) || []).length;
+  assert.ok(promptUsageCount >= 7);
+});
 
 test('valid editor output with exactly 3 briefing items passes unchanged', () => {
   const draft = editor();

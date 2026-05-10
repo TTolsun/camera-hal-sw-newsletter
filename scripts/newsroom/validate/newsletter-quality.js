@@ -19,6 +19,10 @@ const {
   isSupportingMainBucket,
   publishGateCriteriaText
 } = require('../common/newsletter-policy');
+const {
+  IMPACT_TYPES,
+  RECOMMENDED_ARTICLE_TYPES
+} = require('../evidence/impact-classifier');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
@@ -431,6 +435,151 @@ function boundedDeduct(state, category, points, reason, location = '', options =
     blocking,
     severity: options.severity || (blocking ? 'hard' : 'soft')
   });
+}
+
+const LINKED_EVIDENCE_UNRESOLVED_STATUSES = Object.freeze([
+  'blocked',
+  'failed',
+  'skipped',
+  'unsupported'
+]);
+
+const LINKED_EVIDENCE_RUNTIME_TERMS = /\b(?:stream|buffer|metadata|request|result|ImageCapture|VideoCapture|Surface|CameraPipe)\b/i;
+const LINKED_EVIDENCE_RUNTIME_CLAIM = /\b(?:HAL runtime|runtime behavior|product behavior|implementation change|camera pipeline|stream|buffer|metadata|request|result|ImageCapture|VideoCapture|Surface|CameraPipe)\b[^.\n]{0,90}\b(?:change|changed|fix|fixed|impact|affect|improve|regression|behavior|implementation|runtime)\b|\b(?:change|changed|fix|fixed|impact|affect|improve|regression|behavior|implementation|runtime)\b[^.\n]{0,90}\b(?:HAL runtime|runtime behavior|product behavior|camera pipeline|stream|buffer|metadata|request|result|ImageCapture|VideoCapture|Surface|CameraPipe)\b/i;
+const LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM = /\b(?:Gerrit|IssueTracker|Issue Tracker|GitHub|mailing list|CVE|linked evidence)\b[^.\n]{0,90}\b(?:confirm|confirmed|proves?|verified|resolved|landed|merged|shows?|fix(?:ed|es)?)\b|\b(?:confirm|confirmed|proves?|verified|resolved|landed|merged|shows?|fix(?:ed|es)?)\b[^.\n]{0,90}\b(?:Gerrit|IssueTracker|Issue Tracker|GitHub|mailing list|CVE|linked evidence)\b/i;
+const LINKED_EVIDENCE_HIGH_IMPACT_CLAIM = /\b(?:high|direct|confirmed|runtime|pipeline|HAL)\b[^.\n]{0,80}\b(?:impact|effect|risk|regression|behavior change)\b/i;
+const LINKED_EVIDENCE_LIMITATION_NOTE = /\b(?:unresolved|blocked|failed|skipped|unsupported|not fetched|not_fetched|limited|diagnostic|not confirmed|not resolved)\b/i;
+
+function linkedEvidenceArticleText(section) {
+  return [
+    section?.headline,
+    section?.what_changed,
+    section?.background,
+    section?.why_it_matters,
+    section?.camera_hal_perspective,
+    section?.evidence_summary,
+    section?.confirmed_facts,
+    section?.source_verification_notes,
+    section?.action_items
+  ].map(text).join(' ');
+}
+
+function linkedEvidenceEvidenceText(section) {
+  return [
+    section?.evidence_summary,
+    section?.confirmed_facts,
+    section?.source_verification_notes
+  ].map(text).join(' ');
+}
+
+function linkedEvidenceNotesText(section) {
+  return text(section?.source_verification_notes);
+}
+
+function linkedEvidenceDiagnostics(candidate = {}) {
+  const hasSummary = Object.prototype.hasOwnProperty.call(candidate, 'linked_evidence_summary') ||
+    Object.prototype.hasOwnProperty.call(candidate, 'linkedEvidenceSummary');
+  const hasImpact = Object.prototype.hasOwnProperty.call(candidate, 'impact_classification') ||
+    Object.prototype.hasOwnProperty.call(candidate, 'impactClassification');
+  if (!hasSummary && !hasImpact) {
+    return {
+      present: false,
+      malformed: false,
+      hasLinkedEvidence: false,
+      hasUnresolvedEvidence: false,
+      summary: null,
+      impact: null
+    };
+  }
+
+  const summary = candidate.linked_evidence_summary || candidate.linkedEvidenceSummary;
+  const impact = candidate.impact_classification || candidate.impactClassification;
+  const summaryIsObject = !hasSummary || (summary && typeof summary === 'object' && !Array.isArray(summary));
+  const impactIsObject = !hasImpact || (impact && typeof impact === 'object' && !Array.isArray(impact));
+  let malformed = !summaryIsObject || !impactIsObject;
+  const totalCount = summaryIsObject ? Number(summary?.total_count) : 0;
+  if (hasSummary && !Number.isFinite(totalCount)) malformed = true;
+  if (Number.isFinite(totalCount) && totalCount > 0 && !impactIsObject) malformed = true;
+
+  const byFetchStatus = summaryIsObject && summary?.by_fetch_status && typeof summary.by_fetch_status === 'object'
+    ? summary.by_fetch_status
+    : {};
+  const hasUnresolvedEvidence = summaryIsObject && (
+    summary?.has_unresolved_evidence === true ||
+    LINKED_EVIDENCE_UNRESOLVED_STATUSES.some(status => Number(byFetchStatus[status] || 0) > 0)
+  );
+  return {
+    present: true,
+    malformed,
+    hasLinkedEvidence: Number.isFinite(totalCount) && totalCount > 0,
+    hasUnresolvedEvidence,
+    summary: summaryIsObject ? summary : null,
+    impact: impactIsObject ? impact : null
+  };
+}
+
+function addLinkedEvidenceQualityDeductions(state, section, candidate, location) {
+  const diagnostics = linkedEvidenceDiagnostics(candidate);
+  if (!diagnostics.present) return;
+
+  if (diagnostics.malformed) {
+    boundedDeduct(
+      state,
+      'linked-evidence-malformed',
+      2,
+      'Bound candidate has malformed linked evidence diagnostics; treat linked evidence as diagnostic-only.',
+      location,
+      { blocking: false }
+    );
+  }
+  if (!diagnostics.hasLinkedEvidence || !diagnostics.impact) return;
+
+  const articleText = linkedEvidenceArticleText(section);
+  const evidenceText = linkedEvidenceEvidenceText(section);
+  const notesText = linkedEvidenceNotesText(section);
+  const impactType = text(diagnostics.impact.impact_type);
+  const recommendedArticleType = text(diagnostics.impact.recommended_article_type);
+  const runtimeClaim = LINKED_EVIDENCE_RUNTIME_CLAIM.test(articleText);
+  const explicitRuntimeEvidence = LINKED_EVIDENCE_RUNTIME_TERMS.test(evidenceText);
+  const overclaimReasons = [];
+
+  if (diagnostics.hasUnresolvedEvidence && LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(articleText)) {
+    overclaimReasons.push('Article describes unresolved linked evidence as confirmed detail.');
+  }
+  if (impactType === IMPACT_TYPES.BUILD_DEPENDENCY_FIX && runtimeClaim) {
+    overclaimReasons.push('Article frames build_dependency_fix linked evidence as HAL runtime or camera pipeline behavior change.');
+  }
+  if (impactType === IMPACT_TYPES.TEST_ONLY_CHANGE && runtimeClaim) {
+    overclaimReasons.push('Article frames test_only_change linked evidence as product or runtime behavior change.');
+  }
+  if (impactType === IMPACT_TYPES.DOCUMENTATION_ONLY && runtimeClaim) {
+    overclaimReasons.push('Article frames documentation_only linked evidence as implementation or runtime change.');
+  }
+  if (recommendedArticleType === RECOMMENDED_ARTICLE_TYPES.WATCH && !explicitRuntimeEvidence) {
+    overclaimReasons.push('Article promotes watch-only linked evidence to main framing without explicit runtime or pipeline evidence.');
+  }
+  if (
+    (diagnostics.impact.hal_runtime_impact !== true && diagnostics.impact.camera_pipeline_impact !== true) &&
+    LINKED_EVIDENCE_HIGH_IMPACT_CLAIM.test(articleText) &&
+    !explicitRuntimeEvidence
+  ) {
+    overclaimReasons.push('Article claims high HAL/runtime impact without explicit stream, buffer, metadata, request/result, ImageCapture, VideoCapture, Surface, or CameraPipe evidence.');
+  }
+
+  for (const reason of overclaimReasons) {
+    boundedDeduct(state, 'linked-evidence-overclaim', 8, reason, location);
+  }
+
+  if (diagnostics.hasUnresolvedEvidence && !LINKED_EVIDENCE_LIMITATION_NOTE.test(notesText)) {
+    boundedDeduct(
+      state,
+      'linked-evidence-limitation',
+      2,
+      'Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.',
+      location,
+      { blocking: false }
+    );
+  }
 }
 
 function countSections(sections, pattern) {
@@ -1096,6 +1245,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
           location
         );
       }
+      addLinkedEvidenceQualityDeductions(state, section, binding.candidate, location);
     }
     if (!hasSpecificEvidence(section)) {
       boundedDeduct(state, 'evidence-specificity', 5, 'Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.', location);
