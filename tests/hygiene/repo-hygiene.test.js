@@ -62,7 +62,7 @@ test('findRepoHygieneIssues normalizes Windows path separators', () => {
   assert.equal(normalizePath('docs\\plans\\example.md'), 'docs/plans/example.md');
 });
 
-test('findRepoHygieneIssues reports new root tests outside the migration allowlist', () => {
+test('findRepoHygieneIssues reports root tests even when they are allowlisted', () => {
   const issues = findRepoHygieneIssues([
     'tests/existing.test.js',
     'tests/new-root.test.js',
@@ -71,15 +71,18 @@ test('findRepoHygieneIssues reports new root tests outside the migration allowli
     rootTestAllowlist: ['tests/existing.test.js']
   });
 
-  assert.deepEqual(issues.map(item => item.path), ['tests/new-root.test.js']);
-  assert.equal(issues[0].type, 'root_test_structure');
-  assert.match(formatIssue(issues[0]), /^tests\/new-root\.test\.js: root_test_structure: /);
+  assert.deepEqual(issues.map(item => item.path), [
+    'tests/existing.test.js',
+    'tests/existing.test.js',
+    'tests/new-root.test.js'
+  ]);
+  assert.equal(issues.every(item => item.type === 'root_test_structure'), true);
+  assert.match(issues[0].detail, /allowlist must remain empty/);
+  assert.match(formatIssue(issues[2]), /^tests\/new-root\.test\.js: root_test_structure: /);
 });
 
-test('findRepoHygieneIssues reports invalid and missing root test allowlist entries', () => {
-  const issues = findRepoHygieneIssues([
-    'tests/existing.test.js'
-  ], {
+test('findRepoHygieneIssues reports non-empty root test allowlist entries as migration debt', () => {
+  const issues = findRepoHygieneIssues(['tests/unit/not-root.test.js'], {
     rootTestAllowlist: [
       'tests/existing.test.js',
       'tests/missing.test.js',
@@ -88,8 +91,13 @@ test('findRepoHygieneIssues reports invalid and missing root test allowlist entr
   });
 
   assert.deepEqual(issues.map(item => item.path), [
-    'tests/unit/not-root.test.js',
-    'tests/missing.test.js'
+    'tests/existing.test.js',
+    'tests/missing.test.js',
+    'tests/unit/not-root.test.js'
   ]);
   assert.equal(issues.every(item => item.type === 'root_test_structure'), true);
+  assert.equal(
+    issues.every(item => item.detail === 'root test allowlist must remain empty after root migration'),
+    true
+  );
 });
