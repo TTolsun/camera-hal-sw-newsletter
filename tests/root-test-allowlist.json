@@ -1,13 +1,5 @@
 [
-  "tests/generation-status.test.js",
-  "tests/homepage-archive.test.js",
   "tests/linked-evidence-diagnostics.test.js",
   "tests/linked-evidence-extractor.test.js",
-  "tests/linked-evidence-resolver.test.js",
-  "tests/policy-docs.test.js",
-  "tests/pr-template.test.js",
-  "tests/selection-report-artifact.test.js",
-  "tests/source-effectiveness-report.test.js",
-  "tests/targeted-retry.test.js",
-  "tests/workflow-scripts.test.js"
+  "tests/linked-evidence-resolver.test.js"
 ]
