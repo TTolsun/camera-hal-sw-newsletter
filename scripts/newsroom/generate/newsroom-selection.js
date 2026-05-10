@@ -28,6 +28,8 @@ const MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES = articlePolicy.primaryCameraStack
 const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
 const MIN_CAMERA_HAL_DIRECTNESS = 2;
 const MIN_SCOPE_RELEVANCE = 2;
+const LINKED_EVIDENCE_RUNTIME_BONUS = 2;
+const LINKED_EVIDENCE_WATCH_PENALTY = 8;
 const COMPOSITION_MODES = Object.freeze({
   NORMAL: 'NORMAL',
   FALLBACK_COMPOSITION: 'FALLBACK_COMPOSITION',
@@ -375,6 +377,43 @@ function sourceGapPenalty(candidate) {
   return bool(candidate.source_gap_risk) ? 25 : 0;
 }
 
+function linkedEvidenceCount(candidate) {
+  return Math.max(0, number(candidate?.linked_evidence_summary?.total_count));
+}
+
+function linkedEvidenceAdjustment(candidate) {
+  if (linkedEvidenceCount(candidate) <= 0) {
+    return {
+      linked_evidence_runtime_bonus: 0,
+      linked_evidence_watch_penalty: 0,
+      linked_evidence_adjustment: 0
+    };
+  }
+
+  const impact = candidate?.impact_classification;
+  if (!impact || typeof impact !== 'object') {
+    return {
+      linked_evidence_runtime_bonus: 0,
+      linked_evidence_watch_penalty: 0,
+      linked_evidence_adjustment: 0
+    };
+  }
+
+  const recommendedArticleType = text(impact.recommended_article_type);
+  const runtimeBonus = recommendedArticleType === 'main' &&
+    (impact.hal_runtime_impact === true || impact.camera_pipeline_impact === true)
+    ? LINKED_EVIDENCE_RUNTIME_BONUS
+    : 0;
+  const watchPenalty = recommendedArticleType === 'watch'
+    ? LINKED_EVIDENCE_WATCH_PENALTY
+    : 0;
+  return {
+    linked_evidence_runtime_bonus: runtimeBonus,
+    linked_evidence_watch_penalty: watchPenalty,
+    linked_evidence_adjustment: runtimeBonus - watchPenalty
+  };
+}
+
 function scoreCandidate(candidate, newsletterDate) {
   const scope = candidateScope(candidate);
   const cameraHal = cameraHalDirectnessScore(candidate);
@@ -396,7 +435,7 @@ function scoreCandidate(candidate, newsletterDate) {
     generic_tech_watchlist_penalty: isGenericTechWatchlist(candidate) ? 30 : 0
   };
   const penaltyTotal = Object.values(penalties).reduce((sum, value) => sum + value, 0);
-  const total = rounded(
+  const baseTotal = rounded(
     cameraHal * 9 +
     scopeScore * 8 +
     evidence * 4 +
@@ -406,6 +445,8 @@ function scoreCandidate(candidate, newsletterDate) {
     optionalBonus -
     penaltyTotal
   );
+  const linkedEvidence = linkedEvidenceAdjustment(candidate);
+  const total = rounded(baseTotal + linkedEvidence.linked_evidence_adjustment);
 
   return {
     camera_hal_directness: cameraHal,
@@ -432,13 +473,15 @@ function scoreCandidate(candidate, newsletterDate) {
     ai_required_slot_fit: ai,
     cpp_fallback_value: cppFallback,
     evidence_quality: evidence,
+    base_total: baseTotal,
+    ...linkedEvidence,
     total
   };
 }
 
 function scoreFilterReasons(scoreBreakdown) {
   const reasons = [];
-  if (scoreBreakdown.total < MAIN_ARTICLE_SCORE_THRESHOLD) {
+  if (number(scoreBreakdown.base_total, scoreBreakdown.total) < MAIN_ARTICLE_SCORE_THRESHOLD) {
     reasons.push(`deterministic_score<${MAIN_ARTICLE_SCORE_THRESHOLD}`);
   }
   if (scoreBreakdown.scope_relevance < MIN_SCOPE_RELEVANCE) {
@@ -894,6 +937,19 @@ function omitLinkedEvidencePromptFields(candidate = {}) {
     resolved,
     ...promptCandidate
   } = candidate;
+  if (promptCandidate.score_breakdown && typeof promptCandidate.score_breakdown === 'object') {
+    const {
+      base_total,
+      linked_evidence_runtime_bonus,
+      linked_evidence_watch_penalty,
+      linked_evidence_adjustment,
+      ...scoreBreakdown
+    } = promptCandidate.score_breakdown;
+    return {
+      ...promptCandidate,
+      score_breakdown: scoreBreakdown
+    };
+  }
   return promptCandidate;
 }
 
@@ -920,6 +976,8 @@ module.exports = {
   MIN_FINAL_ARTICLES,
   MAX_FINAL_ARTICLES,
   MAIN_ARTICLE_SCORE_THRESHOLD,
+  LINKED_EVIDENCE_RUNTIME_BONUS,
+  LINKED_EVIDENCE_WATCH_PENALTY,
   MIN_CAMERA_HAL_DIRECTNESS,
   buildShortlistReport,
   candidatesAreDuplicate,

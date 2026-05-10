@@ -29,6 +29,17 @@ function linkedCandidate(overrides = {}) {
   });
 }
 
+function neutralLinkedCandidate(overrides = {}) {
+  return candidate({
+    title: 'Generic linked release note',
+    url: 'https://example.com/generic-linked-release',
+    summary: 'Release note with secondary context: https://example.com/secondary-evidence.',
+    api_or_component: '',
+    behavior_change: '',
+    ...overrides
+  });
+}
+
 test('linked evidence diagnostics produce candidate-safe summary and report-only payload', async () => {
   const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', [linkedCandidate()]);
   const [safeCandidate] = diagnostics.candidates;
@@ -114,10 +125,10 @@ test('linked evidence diagnostics create empty artifacts for zero candidates', a
   assert.match(markdown, /- none/);
 });
 
-test('linked evidence summary does not change deterministic selection scores or order', async () => {
+test('neutral linked evidence summary does not change deterministic selection scores or order', async () => {
   const baseCandidates = [
-    linkedCandidate({ title: 'Camera HAL metadata A', url: 'https://example.com/a' }),
-    linkedCandidate({ title: 'Camera HAL metadata B', url: 'https://example.com/b', camera_hal_relevance_score: 80 })
+    neutralLinkedCandidate({ title: 'Generic linked release A', url: 'https://example.com/a' }),
+    neutralLinkedCandidate({ title: 'Generic linked release B', url: 'https://example.com/b', camera_hal_relevance_score: 80 })
   ];
   const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', baseCandidates);
   const baseReport = buildShortlistReport('2026-05-10', baseCandidates, { minArticles: 1 });
