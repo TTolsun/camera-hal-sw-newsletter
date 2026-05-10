@@ -57,6 +57,94 @@ function readJsonIfExists(filePath) {
   }
 }
 
+function ensureArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function finiteNumber(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function countValue(value) {
+  const parsed = finiteNumber(value);
+  return parsed === null ? 0 : parsed;
+}
+
+function nonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function normalizedCategory(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function normalizedStatus(value) {
+  return String(value || '').trim().toUpperCase();
+}
+
+function factCheckSourceGapCount(factCheck) {
+  if (Number.isFinite(Number(factCheck?.source_gap_count))) return Number(factCheck.source_gap_count);
+  return ensureArray(factCheck?.source_gaps).length;
+}
+
+function blockingDeductionCategories(quality) {
+  const metricsCategories = ensureArray(quality?.metrics?.blocking_deduction_categories)
+    .map(normalizedCategory)
+    .filter(Boolean);
+  if (metricsCategories.length > 0) return [...new Set(metricsCategories)];
+
+  return [...new Set(ensureArray(quality?.deductions)
+    .filter(deduction => deduction?.blocking === true)
+    .map(deduction => normalizedCategory(deduction?.category))
+    .filter(Boolean))];
+}
+
+function hasCompositionOnlyBlocker(quality) {
+  const categories = blockingDeductionCategories(quality);
+  if (categories.length !== 1 || categories[0] !== 'composition') return false;
+
+  const blockingCount = finiteNumber(quality?.metrics?.blocking_deduction_count);
+  if (blockingCount !== null) return blockingCount > 0;
+
+  return ensureArray(quality?.deductions).some(deduction =>
+    deduction?.blocking === true && normalizedCategory(deduction?.category) === 'composition'
+  );
+}
+
+function editorApprovedExceptionFor(date, articleCount) {
+  const dir = newsroomDir(root, date);
+  const status = readJsonIfExists(path.join(dir, 'generation-status.json'));
+  const quality = readJsonIfExists(path.join(dir, 'quality-report.json'));
+  const factCheck = readJsonIfExists(path.join(dir, 'fact-check-report.json'));
+  const staleClaim = readJsonIfExists(path.join(dir, 'stale-claim-report.json'));
+  const reason = status?.editor_approved_exception_reason || quality?.editor_approved_exception_reason;
+  const qualityArticleCount = finiteNumber(quality?.metrics?.article_count);
+  const approved =
+    status?.editor_approved_exception === true &&
+    status?.final_publish_ready === false &&
+    status?.editor_review_required === true &&
+    status?.manual_publication_ready === true &&
+    status?.public_newsletter_ready === true &&
+    nonEmptyString(reason) &&
+    quality?.editor_approved_exception === true &&
+    normalizedStatus(quality?.status) === 'NEEDS_FIX' &&
+    hasCompositionOnlyBlocker(quality) &&
+    (qualityArticleCount === null || qualityArticleCount === articleCount) &&
+    countValue(quality?.metrics?.source_integrity_violation_count) === 0 &&
+    countValue(quality?.metrics?.must_fix_count) === 0 &&
+    countValue(quality?.metrics?.source_gap_count) === 0 &&
+    normalizedStatus(quality?.metrics?.stale_claim_status) !== 'NEEDS_FIX' &&
+    countValue(quality?.metrics?.stale_claim_hard_failure_count) === 0 &&
+    normalizedStatus(factCheck?.status) !== 'NEEDS_FIX' &&
+    ensureArray(factCheck?.must_fix).length === 0 &&
+    factCheckSourceGapCount(factCheck) === 0 &&
+    normalizedStatus(staleClaim?.status) !== 'NEEDS_FIX' &&
+    ensureArray(staleClaim?.hard_failures).length === 0;
+  if (!approved) return null;
+  return reason.trim();
+}
+
 function sectionText(content, heading, nextHeadingPattern = /^## /m) {
   const start = content.indexOf(heading);
   if (start === -1) return '';
@@ -74,6 +162,32 @@ function textFromHtml(html) {
     .replace(/<[^>]*>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+function sameOrderedValues(left, right) {
+  if (left.length !== right.length) return false;
+  return left.every((value, index) => value === right[index]);
+}
+
+function issueTagsFromHtml(html) {
+  const tagRowMatch = html.match(/<div\b[^>]*class=["'][^"']*\bissue-tags\b[^"']*["'][^>]*>([\s\S]*?)<\/div>/i);
+  if (!tagRowMatch) return null;
+  return [...tagRowMatch[1].matchAll(/<span\b[^>]*class=["'][^"']*\btag\b[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi)]
+    .map(match => textFromHtml(match[1]))
+    .filter(Boolean);
+}
+
+function validateNewsletterHtmlTags(item, html, strictArtifactValidation) {
+  const actualTags = issueTagsFromHtml(html);
+  const expectedTags = ensureArray(item.tags).map(tag => String(tag));
+  const message = actualTags === null
+    ? `Newsletter ${item.date} HTML missing issue tag row for data/newsletters.json tags: ${expectedTags.join(', ') || 'none'}.`
+    : `Newsletter ${item.date} HTML issue tags [${actualTags.join(', ') || 'none'}] do not match data/newsletters.json tags [${expectedTags.join(', ') || 'none'}].`;
+
+  if (actualTags !== null && sameOrderedValues(actualTags, expectedTags)) return;
+  if (strictArtifactValidation) {
+    fail(message);
+  }
 }
 
 function validateSiteNavLabels(content, relPath) {
@@ -138,7 +252,12 @@ function validateArticleQuality(item, md, newFormat, strictArtifactValidation) {
     articles.length > articlePolicy.mainArticleCount.max;
   if (articleCountOutOfRange) {
     const message = `Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${articleCountRangeText()}.`;
-    if (strictArtifactValidation) {
+    const exceptionReason = articles.length < articlePolicy.mainArticleCount.min
+      ? editorApprovedExceptionFor(item.date, articles.length)
+      : null;
+    if (strictArtifactValidation && exceptionReason) {
+      warn(`${message} editor-approved exception: ${exceptionReason}.`);
+    } else if (strictArtifactValidation) {
       fail(message);
     } else {
       warn(`${message} ${historicalPolicyWarningReason()}.`);
@@ -170,11 +289,7 @@ function validateArticleQuality(item, md, newFormat, strictArtifactValidation) {
 function validateSourceGapArtifact(date, strictArtifactValidation) {
   const factCheck = readJsonIfExists(path.join(newsroomDir(root, date), 'fact-check-report.json'));
   if (!factCheck) return;
-  const sourceGapCount = Number.isFinite(Number(factCheck.source_gap_count))
-    ? Number(factCheck.source_gap_count)
-    : Array.isArray(factCheck.source_gaps)
-      ? factCheck.source_gaps.length
-      : 0;
+  const sourceGapCount = factCheckSourceGapCount(factCheck);
   if (sourceGapCount >= 3) {
     warn(`Newsletter ${date} fact-check source_gap_count is ${sourceGapCount}.`);
   }
@@ -273,6 +388,7 @@ for (const [index, item] of newsletters.entries()) {
       const htmlPath = repoPath(root, item.html || '');
       const html = htmlPath && fs.existsSync(htmlPath) ? read(htmlPath) : '';
       const editor = readJsonIfExists(path.join(newsroomDir(root, item.date), 'editor-draft.json'));
+      validateNewsletterHtmlTags(item, html, strictArtifactValidation);
       const structural = validateRenderedIssueStructure({
         date: item.date,
         editor,

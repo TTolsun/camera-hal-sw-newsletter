@@ -1,0 +1,168 @@
+{
+  "date": "2026-05-10",
+  "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-10",
+  "summary": "이번 2026-05-10호는 review-only fallback publication입니다. 독립 camera-stack evidence가 있는 main article은 CameraX 관찰 기사와 libcamera v0.7.1 기사 2개뿐이라 정책상 최소 3개 main article을 채우지 못했습니다. 편집장 승인 시 public newsletter로 게시되며, 자동 발행 기준은 통과하지 못했습니다.",
+  "tags": [
+    "Camera HAL",
+    "Android"
+  ],
+  "briefing": [
+    "CameraX 1.6.1 / 1.4.0-alpha07은 동일 AndroidX Camera release page 계열의 호환성 관찰 항목으로 병합했습니다.",
+    "libcamera v0.7.1은 Linux camera driver / image pipeline 관찰 항목으로 유지했습니다.",
+    "이번 호는 article count 부족을 숨기지 않는 review-only fallback publication이며, final_publish_ready=false 상태입니다."
+  ],
+  "sections": [
+    {
+      "category": "Android Platform / CameraX",
+      "headline": "CameraX 1.6.1 / 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+      "confirmed_facts": [
+        "Android Developers Latest Updates의 May 06, 2026 CameraX release table에서 확인한 항목입니다.",
+        "관련 컴포넌트: CameraX / androidx.camera",
+        "1.6.1은 camera-camera2, camera-core, camera-compose, camera-effects, camera-extensions, camera-lifecycle, camera-view, camera-video 등 CameraX artifact의 stable release 행으로 표시됩니다.",
+        "1.4.0-alpha07은 camera-video 계열 pre-release 행으로 함께 표시되어 CameraX video/viewfinder 호환성 관찰 대상으로 묶어 검토합니다."
+      ],
+      "evidence_summary": "동일 AndroidX Camera release page 계열의 anchor를 하나의 CameraX 관찰 기사로 병합했습니다. 독립 main article처럼 분리하지 않고, source page 중복 hard fail을 피하기 위해 동일 release table에서 확인 가능한 version/artifact evidence만 요약합니다.",
+      "specificity_checks": [
+        "source_candidate_url=https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "secondary_anchor=https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+        "published_date=May 06, 2026",
+        "relevance_bucket=android_platform_camera_adjacent",
+        "raw AndroidX table/navigation text removed from public copy"
+      ],
+      "source_verification_notes": [
+        "두 anchor는 같은 AndroidX Camera release page 기반이므로 별도 main article로 계산하지 않습니다.",
+        "이번 호에서는 CameraX API 동작 확정 주장 대신 앱 계층 호환성 및 HAL validation 관찰 항목으로만 다룹니다."
+      ],
+      "what_changed": "AndroidX Camera release table에 CameraX 1.6.1 stable row와 1.4.0-alpha07 pre-release row가 함께 표시되었습니다.",
+      "background": "CameraX는 앱 계층 API이지만 camera-camera2, camera-view, camera-video, extensions 등의 조합은 HAL stream configuration, preview/video/image capture latency, device-specific workaround 검증 항목과 연결됩니다.",
+      "camera_hal_perspective": "Camera HAL 팀은 이번 CameraX 항목을 HAL 직접 변경으로 보지 않고, 앱 API release가 CTS/Camera ITS, stream/buffer/metadata, Preview + VideoCapture + ImageCapture 조합 검증에 영향을 줄 수 있는지 관찰 대상으로 둡니다.",
+      "camera_hal_checks": [
+        "CameraX 1.6.1 기반 reference app에서 Preview, VideoCapture, ImageCapture 동시 사용 시 프레임 드롭과 캡처 지연 시간을 확인합니다.",
+        "camera-viewfinder / camera-video pre-release row는 device-specific issue 또는 stream combination regression이 확인될 때만 후속 작업으로 승격합니다."
+      ],
+      "action_items": [
+        "CameraX 1.6.1을 사용하는 reference app에서 Preview + VideoCapture + ImageCapture 조합의 latency와 frame drop을 측정합니다.",
+        "CameraX 1.4.0-alpha07 관련 video/viewfinder 변경은 HAL `STREAM_CONFIGURATION_MAP`과 실제 지원 해상도/프레임율 범위의 mismatch 여부만 관찰합니다.",
+        "후속 release note에서 Camera2 interop, extensions, device workaround가 명시되면 다음 호에서 별도 기사로 재평가합니다."
+      ],
+      "action_hints": [],
+      "team_summary": "CameraX 1.6.1 / 1.4.0-alpha07은 동일 AndroidX Camera release page의 호환성 관찰 항목으로 묶어 보고, HAL 직접 변경 claim 없이 validation checklist로만 추적합니다.",
+      "why_it_matters": "앱 계층 CameraX release라도 실제 기기에서는 stream 조합, preview/video path, extensions 동작이 HAL validation signal로 이어질 수 있습니다.",
+      "is_ai_related": false,
+      "article_type": "camera-hal",
+      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "editorial_priority": 3,
+      "aosp_camera_directness": 2,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "evidence_origin": "article_text",
+      "source_hint": "",
+      "sources": [
+        {
+          "title": "CameraX 1.6.1 release table row",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        },
+        {
+          "title": "CameraX 1.4.0-alpha07 release table row",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        }
+      ],
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "Editor-approved exception uses local fallback visual; no external image selected."
+    },
+    {
+      "category": "Camera Driver / Image Pipeline",
+      "headline": "libcamera v0.7.1: SoftISP 및 camera pipeline 관찰",
+      "confirmed_facts": [
+        "libcamera Release Announcements의 2026-04-28 항목입니다.",
+        "관련 컴포넌트: libcamera / V4L2 camera pipeline",
+        "v0.7.1 release announcement는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration update를 언급합니다."
+      ],
+      "evidence_summary": "libcamera v0.7.1 release announcement의 version, date, component, behavior evidence를 기준으로 구성했습니다.",
+      "specificity_checks": [
+        "finalSelectionEligibility=main",
+        "relevance_bucket=camera_driver_image_pipeline",
+        "source_gap_risk=false"
+      ],
+      "source_verification_notes": [
+        "Source URL과 published date metadata가 있는 후보만 사용했습니다.",
+        "Main article 후보 조건을 통과했습니다."
+      ],
+      "what_changed": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+      "background": "libcamera는 Android Camera HAL 자체는 아니지만 Linux camera driver, V4L2, sensor mode, image pipeline 관찰 지점과 맞닿아 있습니다.",
+      "camera_hal_perspective": "Camera HAL 팀은 libcamera v0.7.1을 Android HAL 직접 변경으로 해석하지 않고, Linux camera pipeline과 sensor/ISP tuning 관찰 항목으로 둡니다. SoftISP debayering과 throughput 변화는 Android bring-up 환경의 reference comparison에만 활용합니다.",
+      "camera_hal_checks": [
+        "libcamera v0.7.1 release note의 SoftISP / sensor mode 항목을 내부 Linux camera pipeline 관찰 목록에 등록합니다.",
+        "Android HAL 포팅 대상 커널/driver에 동일 change가 들어오는 경우 Preview, RAW, YUV stream 품질과 throughput regression만 별도 측정합니다."
+      ],
+      "action_items": [
+        "libcamera v0.7.1 change list를 내부 Linux camera driver watch 항목으로 등록하고 Android HAL 직접 변경으로 표현하지 않습니다.",
+        "SoftISP debayering 또는 sensor mode update가 포팅 branch에 들어올 때만 RAW/YUV 품질과 throughput 비교를 수행합니다.",
+        "후속 upstream patch가 V4L2 control, sensor configuration, pipeline handler behavior를 바꾸면 다음 호에서 재평가합니다."
+      ],
+      "action_hints": [],
+      "team_summary": "libcamera v0.7.1은 Android HAL 직접 변경이 아니라 Linux camera driver/image pipeline 관찰 항목으로 공유합니다.",
+      "why_it_matters": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+      "is_ai_related": false,
+      "article_type": "camera-hal",
+      "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "evidence_origin": "article_text",
+      "source_hint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
+      "sources": [
+        {
+          "title": "libcamera Release Announcements - libcamera v0.7.1",
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        }
+      ],
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "Fallback builder did not select an external article image; renderer will use local fallback visual."
+    }
+  ],
+  "action_items": [
+    "CameraX 1.6.1 reference app에서 Preview + VideoCapture + ImageCapture stream 조합의 frame drop과 capture latency를 측정합니다. (담당: Camera HAL validation)",
+    "libcamera v0.7.1의 SoftISP / sensor mode 항목이 내부 Linux camera driver branch에 반영되는지 확인합니다. (담당: camera driver)",
+    "독립 dated camera-stack source가 3개 미만인 주간호는 editor-approved exception 여부를 PR에서 명시적으로 판단합니다. (담당: editor-in-chief)"
+  ],
+  "references": [
+    {
+      "title": "CameraX 1.6.1 release table row",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+    },
+    {
+      "title": "CameraX 1.4.0-alpha07 release table row",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+    },
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    }
+  ]
+}
