@@ -6,6 +6,7 @@ const {
   buildHtml,
   buildFactCheckMarkdown,
   buildMarkdown,
+  issueTags,
   ensureArray
 } = require('../render/newsletter-renderer');
 const {
@@ -626,7 +627,7 @@ function updateNewsletterData(root, date, issue) {
     summary: issue.summary,
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
-    tags: ['Camera HAL', 'Android', 'C++', 'AI']
+    tags: issueTags(issue)
   };
   const next = ensureArray(current)
     .filter(item => item?.date !== date)

@@ -88,6 +88,7 @@ const {
   buildFactCheckMarkdown,
   buildEditorChiefBrief,
   buildReleaseQaReport,
+  issueTags,
   ensureArray
 } = require('../render/newsletter-renderer');
 
@@ -1272,7 +1273,7 @@ function updateNewsletterData(date, issue) {
     summary: issue.summary,
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
-    tags: ['Camera HAL', 'Android', 'C++', 'AI']
+    tags: issueTags(issue)
   };
 
   const newsletters = fs.existsSync(dataPath) ? readJson(dataPath) : [];

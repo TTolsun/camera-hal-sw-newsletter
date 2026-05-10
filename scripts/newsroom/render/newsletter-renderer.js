@@ -130,7 +130,7 @@ function articleTeamSummary(section) {
 }
 
 function issueTags(issue) {
-  return ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android', 'C++', 'AI'];
+  return ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
 }
 
 function tagsHtml(tags) {
@@ -425,5 +425,6 @@ module.exports = {
   buildFactCheckMarkdown,
   buildEditorChiefBrief,
   buildReleaseQaReport,
+  issueTags,
   ensureArray
 };
