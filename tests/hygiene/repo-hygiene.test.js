@@ -61,3 +61,35 @@ test('findRepoHygieneIssues normalizes Windows path separators', () => {
   ]);
   assert.equal(normalizePath('docs\\plans\\example.md'), 'docs/plans/example.md');
 });
+
+test('findRepoHygieneIssues reports new root tests outside the migration allowlist', () => {
+  const issues = findRepoHygieneIssues([
+    'tests/existing.test.js',
+    'tests/new-root.test.js',
+    'tests/unit/new-root.test.js'
+  ], {
+    rootTestAllowlist: ['tests/existing.test.js']
+  });
+
+  assert.deepEqual(issues.map(item => item.path), ['tests/new-root.test.js']);
+  assert.equal(issues[0].type, 'root_test_structure');
+  assert.match(formatIssue(issues[0]), /^tests\/new-root\.test\.js: root_test_structure: /);
+});
+
+test('findRepoHygieneIssues reports invalid and missing root test allowlist entries', () => {
+  const issues = findRepoHygieneIssues([
+    'tests/existing.test.js'
+  ], {
+    rootTestAllowlist: [
+      'tests/existing.test.js',
+      'tests/missing.test.js',
+      'tests/unit/not-root.test.js'
+    ]
+  });
+
+  assert.deepEqual(issues.map(item => item.path), [
+    'tests/unit/not-root.test.js',
+    'tests/missing.test.js'
+  ]);
+  assert.equal(issues.every(item => item.type === 'root_test_structure'), true);
+});

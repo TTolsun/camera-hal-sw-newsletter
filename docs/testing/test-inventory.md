@@ -8,11 +8,11 @@
 
 | Command | 현재 동작 | 결과 |
 | --- | --- | --- |
-| `npm.cmd run test` | `npm run test:unit`와 `npm run test:script`를 순서대로 실행합니다. | 통과. `node --test` 기준 368개 test가 pass했고 script test 2개도 통과했습니다. |
-| `npm.cmd run test:unit` | `node --test "tests/**/*.test.js"`를 실행합니다. | 현재 flat test 368개를 동일하게 실행하며, 향후 nested test folder도 발견합니다. |
+| `npm.cmd run test` | `npm run test:unit`와 `npm run test:script`를 순서대로 실행합니다. | 통과. `node --test` 기준 373개 test가 pass했고 script test 2개도 통과했습니다. |
+| `npm.cmd run test:unit` | `node --test "tests/**/*.test.js"`를 실행합니다. | 현재 root와 nested test 373개를 실행하며, 향후 nested test folder도 발견합니다. |
 | `npm.cmd run test:script` | `node scripts/test-artifact-manifest.js && node scripts/test-selection-diagnostics.js`를 실행합니다. | 통과. |
 
-중요 제약: runner는 nested-aware command로 전환했지만, 이 slice에서는 test file을 이동하지 않습니다. 실제 folder migration은 별도 slice에서 low-risk file부터 진행합니다.
+중요 제약: runner는 nested-aware command로 전환했습니다. Slice 8 이후 새 root `tests/*.test.js` 추가는 `tests/root-test-allowlist.json` guard로 제한하고, 새 test는 목적별 nested folder에 둡니다.
 
 ## 분류 기준
 
@@ -59,7 +59,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | `tests/policy-docs.test.js` | `hygiene` | Policy docs generated block marker와 drift detection. | Temp root. | `none` | `tests/hygiene/` | Temp helper 공통화 후보입니다. |
 | `tests/pr-template.test.js` | `hygiene` | Split PR template contract와 localization scan coverage. | Direct template read. | `none` | `tests/hygiene/` | Low-risk move 후보입니다. |
 | `tests/rendered-issue-structure.test.js` | `contract` | Rendered Markdown/HTML structural validator와 site validator agreement. | `tests/helpers/fs.js`, rendered fixture builder. | `temp-artifact` | `tests/contract/` 또는 `tests/unit/validate/` | Local temp/write helper 중복은 Slice 7에서 제거했습니다. |
-| `tests/hygiene/repo-hygiene.test.js` | `hygiene` | Root scratch와 repo hygiene detection. | Inline path sample. | `none` | `tests/hygiene/` | Slice 5에서 이동했습니다. Future structure guard를 이 영역에서 확장할 수 있습니다. |
+| `tests/hygiene/repo-hygiene.test.js` | `hygiene` | Root scratch, repo hygiene, root test allowlist guard. | Inline path sample, `tests/root-test-allowlist.json`. | `none` | `tests/hygiene/` | Slice 8에서 root test drift guard를 추가했습니다. |
 | `tests/runtime-config.test.js` | `unit` | Runtime env parsing과 provider policy. | Inline env helper. | `none` | `tests/unit/config/` | Low-risk move 후보입니다. |
 | `tests/selection-report-artifact.test.js` | `workflow` | Deterministic pre-LLM failure artifact와 selection report output. | Temp root, generated status artifact. | `temp-artifact` | `tests/workflow/` | Minimal temp artifact만 사용합니다. |
 | `tests/source-effectiveness-report.test.js` | `workflow` | Source effectiveness report aggregation과 artifact writing. | `source-effectiveness` fixture, temp root. | `temp-artifact` | `tests/workflow/` | Fixture ledger에서 `workflow-shape`로 표시해야 합니다. |
@@ -129,4 +129,4 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | 5. Test Folder Migration 1 | Complete | Low-risk unit/hygiene test 5개를 nested folder로 이동했습니다. |
 | 6. Generated Artifact Dependency Cleanup | Complete | Generated regression fixture provenance를 ledger-local metadata로 제한하고 generated artifact path embedding을 guard합니다. |
 | 7. Duplicate/Obsolete Test Cleanup | Complete | 명확한 local temp/write helper 중복을 제거했고 large workflow helper는 후속 후보로 남겼습니다. |
-| 8. Structure Guard + Final Audit | Pending | Guardrail을 추가하고 final inventory를 갱신합니다. |
+| 8. Structure Guard + Final Audit | Complete | `tests/root-test-allowlist.json`과 repo hygiene guard로 신규 root test drift를 차단합니다. |
