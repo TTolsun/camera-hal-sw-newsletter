@@ -8,6 +8,9 @@ const {
   hasConcreteApiComponent,
   hasFallbackRelevanceHint,
   hasPlatformSignalTerm,
+  LINKED_EVIDENCE_RUNTIME_BONUS,
+  LINKED_EVIDENCE_WATCH_PENALTY,
+  MAIN_ARTICLE_SCORE_THRESHOLD,
   normalizeUrl,
   publishGatePasses,
   reporterInputFromShortlist,
@@ -66,6 +69,91 @@ function policySupportingCandidate(index = 0, overrides = {}) {
   });
 }
 
+function mainLinkedEvidence() {
+  return {
+    linked_evidence_summary: { total_count: 1 },
+    impact_classification: {
+      impact_type: 'runtime_behavior_change',
+      hal_runtime_impact: true,
+      camera_pipeline_impact: true,
+      recommended_article_type: 'main',
+      confidence: 0.75,
+      reason: 'test fixture',
+      warnings: []
+    }
+  };
+}
+
+function watchLinkedEvidence(impactType = 'build_dependency_fix') {
+  return {
+    linked_evidence_summary: { total_count: 1 },
+    impact_classification: {
+      impact_type: impactType,
+      hal_runtime_impact: false,
+      camera_pipeline_impact: false,
+      recommended_article_type: 'watch',
+      confidence: 0.45,
+      reason: 'test fixture',
+      warnings: []
+    }
+  };
+}
+
+function linkedScoreCandidate(overrides = {}) {
+  return candidate({
+    title: 'Camera HAL stream buffer metadata update',
+    url: 'https://example.com/linked-score',
+    summary: 'Camera HAL stream buffer metadata update.',
+    api_or_component: 'Camera HAL stream',
+    behavior_change: 'Updates stream buffer metadata handling.',
+    published_date: '2026-05-03',
+    hasDatedEvidence: true,
+    finalSelectionEligibility: 'main',
+    reliability: 'official',
+    relevance_bucket: articlePolicy.primaryCameraStack.buckets[0],
+    editorial_priority: 1,
+    aosp_camera_directness: 5,
+    driver_stack_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 0,
+    counts_as_primary_camera_topic: true,
+    ...overrides
+  });
+}
+
+function assertScoreComponentsUnchanged(actual, expected) {
+  for (const key of [
+    'camera_hal_directness',
+    'scope_relevance',
+    'editorial_priority',
+    'relevance_bucket',
+    'aosp_camera_directness',
+    'driver_stack_relevance',
+    'soc_platform_relevance',
+    'native_tooling_relevance',
+    'evidence_specificity',
+    'freshness_score',
+    'practical_actionability',
+    'optional_ai_cpp_bonus',
+    'generic_ai_penalty',
+    'watch_page_penalty',
+    'no_date_penalty',
+    'no_api_component_penalty',
+    'source_gap_penalty',
+    'generic_tech_watchlist_penalty',
+    'penalty_total',
+    'source_reliability',
+    'freshness',
+    'camera_hal_relevance',
+    'android_camera_relevance',
+    'ai_required_slot_fit',
+    'cpp_fallback_value',
+    'evidence_quality'
+  ]) {
+    assert.deepEqual(actual[key], expected[key], key);
+  }
+}
+
 test('prefilter excludes source gaps, undated watch pages, missing evidence, and duplicate URLs', () => {
   const report = buildShortlistReport('2026-05-03', [
     candidate({ title: 'Android Camera HAL release note', url: 'https://example.com/a' }),
@@ -101,6 +189,135 @@ test('deterministic score ordering is stable and shortlist is capped', () => {
   assert.ok(report.reserve_candidates.length <= 7);
   assert.ok(report.reserve_candidates.every(item => item.reserve_candidate === true));
   assert.ok(report.primary_selected_articles.every(item => item.primary_selected === true));
+  assert.ok(report.shortlisted_candidates.every(item => item.score_breakdown.base_total === item.score_breakdown.total));
+  assert.ok(report.shortlisted_candidates.every(item => item.score_breakdown.linked_evidence_adjustment === 0));
+});
+
+test('linked evidence main hint adjusts total only', () => {
+  const baseCandidate = linkedScoreCandidate();
+  const base = scoreCandidate(baseCandidate, '2026-05-03');
+  const linked = scoreCandidate({
+    ...baseCandidate,
+    ...mainLinkedEvidence()
+  }, '2026-05-03');
+
+  assert.equal(base.base_total, base.total);
+  assert.equal(linked.base_total, base.base_total);
+  assert.equal(linked.linked_evidence_runtime_bonus, LINKED_EVIDENCE_RUNTIME_BONUS);
+  assert.equal(linked.linked_evidence_watch_penalty, 0);
+  assert.equal(linked.linked_evidence_adjustment, LINKED_EVIDENCE_RUNTIME_BONUS);
+  assert.equal(linked.total, base.total + LINKED_EVIDENCE_RUNTIME_BONUS);
+  assertScoreComponentsUnchanged(linked, base);
+});
+
+test('linked evidence watch hint adjusts ordering total only without hard exclusion', () => {
+  const baseCandidate = linkedScoreCandidate({
+    title: 'Camera HAL stream buffer metadata watch',
+    url: 'https://example.com/linked-score-watch'
+  });
+  const base = scoreCandidate(baseCandidate, '2026-05-03');
+  const linked = scoreCandidate({
+    ...baseCandidate,
+    ...watchLinkedEvidence()
+  }, '2026-05-03');
+  const report = buildShortlistReport('2026-05-03', [
+    linkedScoreCandidate({ title: 'AOSP Camera provider session configuration', url: 'https://example.com/linked-score-peer' }),
+    { ...baseCandidate, ...watchLinkedEvidence() },
+    linkedScoreCandidate({ title: 'Android Camera API capture request update', url: 'https://example.com/linked-score-c' }),
+    linkedScoreCandidate({ title: 'Camera HAL result metadata validation', url: 'https://example.com/linked-score-d' })
+  ]);
+  const watchCandidate = report.shortlisted_candidates.find(item => item.url === baseCandidate.url);
+  const peerCandidate = report.shortlisted_candidates.find(item => item.url === 'https://example.com/linked-score-peer');
+
+  assert.equal(linked.base_total, base.base_total);
+  assert.equal(linked.linked_evidence_runtime_bonus, 0);
+  assert.equal(linked.linked_evidence_watch_penalty, LINKED_EVIDENCE_WATCH_PENALTY);
+  assert.equal(linked.linked_evidence_adjustment, -LINKED_EVIDENCE_WATCH_PENALTY);
+  assert.equal(linked.total, base.total - LINKED_EVIDENCE_WATCH_PENALTY);
+  assertScoreComponentsUnchanged(linked, base);
+  assert.equal(watchCandidate.main_article_score_eligible, true);
+  assert.deepEqual(watchCandidate.exclusion_reasons, []);
+  assert.equal(watchCandidate.score_filter_reasons.includes('linked_evidence_watch'), false);
+  assert.ok(watchCandidate.deterministic_score < peerCandidate.deterministic_score);
+});
+
+test('linked evidence adjustment requires count and valid impact classification', () => {
+  const baseCandidate = linkedScoreCandidate();
+  const base = scoreCandidate(baseCandidate, '2026-05-03');
+  const zeroCount = scoreCandidate({
+    ...baseCandidate,
+    linked_evidence_summary: { total_count: 0 },
+    impact_classification: mainLinkedEvidence().impact_classification
+  }, '2026-05-03');
+  const missingImpact = scoreCandidate({
+    ...baseCandidate,
+    linked_evidence_summary: { total_count: 1 }
+  }, '2026-05-03');
+  const malformedImpact = scoreCandidate({
+    ...baseCandidate,
+    linked_evidence_summary: { total_count: 1 },
+    impact_classification: 'main'
+  }, '2026-05-03');
+
+  for (const score of [zeroCount, missingImpact, malformedImpact]) {
+    assert.equal(score.base_total, base.base_total);
+    assert.equal(score.linked_evidence_runtime_bonus, 0);
+    assert.equal(score.linked_evidence_watch_penalty, 0);
+    assert.equal(score.linked_evidence_adjustment, 0);
+    assert.equal(score.total, base.total);
+  }
+});
+
+test('linked evidence adjustment does not change threshold eligibility', () => {
+  let thresholdCandidate = null;
+  for (let directness = 2; directness <= 5 && !thresholdCandidate; directness += 0.01) {
+    const item = linkedScoreCandidate({
+      title: `Threshold linked evidence candidate ${directness}`,
+      url: `https://example.com/threshold-${directness.toFixed(2)}`,
+      summary: 'Scoped release note for a workflow.',
+      api_or_component: 'Lens stack',
+      behavior_change: 'Behavior changed.',
+      published_date: '2020-01-01',
+      reliability: 'official',
+      aosp_camera_directness: directness,
+      camera_hal_relevance_score: 0,
+      evidence_score: 0
+    });
+    const score = scoreCandidate({ ...item, ...mainLinkedEvidence() }, '2026-05-03');
+    if (score.base_total < MAIN_ARTICLE_SCORE_THRESHOLD && score.total >= MAIN_ARTICLE_SCORE_THRESHOLD) {
+      thresholdCandidate = item;
+    }
+  }
+  assert.ok(thresholdCandidate, 'expected a synthetic candidate crossing threshold by linked evidence bonus');
+
+  const report = buildShortlistReport('2026-05-03', [
+    { ...thresholdCandidate, ...mainLinkedEvidence() }
+  ], { minArticles: 1 });
+  const [item] = report.shortlisted_candidates;
+
+  assert.ok(item.score_breakdown.base_total < MAIN_ARTICLE_SCORE_THRESHOLD);
+  assert.ok(item.deterministic_score >= MAIN_ARTICLE_SCORE_THRESHOLD);
+  assert.equal(item.score_breakdown.total, item.deterministic_score);
+  assert.equal(item.main_article_score_eligible, false);
+  assert.ok(item.score_filter_reasons.includes(`base_total<${MAIN_ARTICLE_SCORE_THRESHOLD}`));
+  assert.equal(item.score_filter_reasons.includes(`deterministic_score<${MAIN_ARTICLE_SCORE_THRESHOLD}`), false);
+});
+
+test('linked evidence bonus does not bypass exclusion contracts', () => {
+  const items = [
+    linkedScoreCandidate({ title: 'Missing dated linked evidence', url: 'https://example.com/excluded-date', published_date: '', hasDatedEvidence: false }),
+    linkedScoreCandidate({ title: 'Source gap linked evidence', url: 'https://example.com/excluded-gap', source_gap_risk: true }),
+    linkedScoreCandidate({ title: 'Watchlist linked evidence', url: 'https://example.com/excluded-watch', finalSelectionEligibility: 'watchlist' }),
+    linkedScoreCandidate({ title: 'Main ineligible linked evidence', url: 'https://example.com/excluded-main', main_eligible: false })
+  ].map(item => ({ ...item, ...mainLinkedEvidence() }));
+  const report = buildShortlistReport('2026-05-03', items, { minArticles: 1 });
+  const reasonsByUrl = new Map(report.excluded_candidates.map(item => [item.url, item.exclusion_reasons]));
+
+  assert.ok(reasonsByUrl.get('https://example.com/excluded-date').includes('missing dated evidence'));
+  assert.ok(reasonsByUrl.get('https://example.com/excluded-gap').includes('source_gap_risk=true'));
+  assert.ok(reasonsByUrl.get('https://example.com/excluded-watch').includes('finalSelectionEligibility=watchlist'));
+  assert.ok(reasonsByUrl.get('https://example.com/excluded-main').includes('main_eligible=false'));
+  assert.equal(report.shortlisted_candidates.length, 0);
 });
 
 test('reporter input omits linked evidence diagnostics without changing order or selected flags', () => {
@@ -142,6 +359,10 @@ test('reporter input omits linked evidence diagnostics without changing order or
     assert.equal(Object.hasOwn(item, 'linked_evidence'), false);
     assert.equal(Object.hasOwn(item, 'raw_excerpt'), false);
     assert.equal(Object.hasOwn(item, 'resolved'), false);
+    assert.equal(Object.hasOwn(item.score_breakdown, 'base_total'), false);
+    assert.equal(Object.hasOwn(item.score_breakdown, 'linked_evidence_runtime_bonus'), false);
+    assert.equal(Object.hasOwn(item.score_breakdown, 'linked_evidence_watch_penalty'), false);
+    assert.equal(Object.hasOwn(item.score_breakdown, 'linked_evidence_adjustment'), false);
   }
 });
 
