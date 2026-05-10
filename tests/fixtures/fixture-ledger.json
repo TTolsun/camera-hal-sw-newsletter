@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "path": "linked-evidence/camerax-release-row.html",
+      "source": "curated",
+      "allowedUse": "linked-evidence",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "linked evidence extraction from CameraX release rows",
+      "generatedArtifact": false
+    },
+    {
+      "path": "linked-evidence/github-pr-resolved.html",
+      "source": "curated",
+      "allowedUse": "linked-evidence",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "linked evidence resolver structured GitHub payload",
+      "generatedArtifact": false
+    },
+    {
+      "path": "linked-evidence/long-evidence.html",
+      "source": "synthetic",
+      "allowedUse": "linked-evidence",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "linked evidence excerpt truncation",
+      "generatedArtifact": false
+    },
+    {
+      "path": "linked-evidence/mixed-links.txt",
+      "source": "synthetic",
+      "allowedUse": "linked-evidence",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "linked evidence URL extraction",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/bad/freebsd-source-label-regression.json",
+      "source": "minimized-generated-regression",
+      "allowedUse": "bad",
+      "expectedStatus": "DEMOTE",
+      "protectedPolicy": "generic IT item cannot pass as Camera HAL main article",
+      "generatedArtifact": true
+    },
+    {
+      "path": "quality/bad/generic-ai-main-article.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "generic AI item without HAL connection cannot pass main article quality",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/bad/unsupported-release-claim.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "unsupported release claims stay quality blockers",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/good/camerax-curated.json",
+      "source": "curated",
+      "allowedUse": "good",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "curated CameraX quality gate PASS sample",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/bad/source-gap-main-article.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "EXCLUDE",
+      "protectedPolicy": "source gap candidates cannot become final main articles",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/bad/watchlist-reference-main-article.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "EXCLUDE",
+      "protectedPolicy": "watchlist/reference-only candidates cannot become final main articles",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/good/camerax-main-candidate.json",
+      "source": "curated",
+      "allowedUse": "good",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "curated CameraX deterministic selection PASS sample",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-effectiveness/basic-source-effectiveness.json",
+      "source": "synthetic",
+      "allowedUse": "workflow-shape",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "source effectiveness report shape and aggregation",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/android-latest-updates-camera.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Android Latest Updates camera row extraction",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/android-latest-updates-camerax-cards.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Android Latest Updates CameraX card extraction",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/android-latest-updates-camerax-table.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Android Latest Updates CameraX table extraction",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/android-security-bulletin.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Android security release-note child item preservation",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/aosp-camera-documentation.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "AOSP camera documentation remains watch/reference path",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/aosp-site-updates-camera.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "AOSP Site Updates month-level camera child rows",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/aosp-site-updates-paragraph-camera.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "AOSP Site Updates paragraph camera child rows",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/camerax-release-notes.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "CameraX dated release child entry extraction",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/camerax-release-notes-1.6.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "CameraX version heading normalization",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/claude-code-changelog-dated.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Claude Code dated changelog extraction",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/claude-code-changelog-undated.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "undated changelog does not become dated release evidence",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/libcamera-release-v0.7.1.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "libcamera dated release announcement extraction",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/llvm-release-notes.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "toolchain release-note child item preservation",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/samsung-mobile-security.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Samsung Mobile Security monthly SMR extraction",
+      "generatedArtifact": false
+    }
+  ]
+}

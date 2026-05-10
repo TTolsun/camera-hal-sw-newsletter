@@ -33,3 +33,17 @@ JSON fixture는 가능하면 아래 필드를 둡니다.
   }
 }
 ```
+
+## Fixture ledger
+
+`fixture-ledger.json` is the source of truth for committed fixture provenance.
+Every committed fixture file must have exactly one ledger entry with:
+
+- `path`: fixture-relative path using `/` separators.
+- `source`: `curated`, `synthetic`, or `minimized-generated-regression`.
+- `allowedUse`: `good`, `bad`, `linked-evidence`, `parser-source-html`, or `workflow-shape`.
+- `expectedStatus`: expected pass/fail class for JSON gate fixtures, or `n/a` for source text/html fixtures.
+- `protectedPolicy`: the regression contract protected by the fixture.
+- `generatedArtifact`: `true` only for minimized generated regression samples outside `good/`.
+
+`good/` fixtures must be curated, non-generated, and PASS-only. `bad/` fixtures must not expect `PASS`.
