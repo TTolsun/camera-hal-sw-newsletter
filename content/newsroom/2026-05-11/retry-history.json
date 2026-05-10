@@ -1,0 +1,203 @@
+[
+  {
+    "attempt": 1,
+    "model": "repair-fallback",
+    "score": 64,
+    "threshold": 85,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera v0.7.1 출시: SoftISP 및 이미지 파이프라인 개선",
+        "blocking": false,
+        "severity": "soft"
+      },
+      {
+        "category": "source-integrity",
+        "points": 8,
+        "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "location": "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정",
+        "blocking": true,
+        "severity": "hard"
+      },
+      {
+        "category": "scope-relevance",
+        "points": 8,
+        "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+        "location": "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정",
+        "blocking": true,
+        "severity": "hard"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정",
+        "blocking": false,
+        "severity": "soft"
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 24 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard"
+      },
+      {
+        "category": "source-integrity",
+        "points": 3,
+        "reason": "Fact checker reported 1 source gap(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard"
+      }
+    ],
+    "selected_article_headlines": [
+      "libcamera v0.7.1 출시: SoftISP 및 이미지 파이프라인 개선",
+      "CameraX 1.4.0-alpha07 릴리스: 최신 개발 버전 확인",
+      "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [
+      "libcamera v0.7.1 출시: SoftISP 및 이미지 파이프라인 개선"
+    ],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "editor repair attempt 1/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 3,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 1,
+    "must_fix_count": 24,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Targeted repair changed main article count outside completion/replacement mode.",
+      "details": {
+        "field": "sections",
+        "reason": "section_count_drift",
+        "mode": "targeted-repair",
+        "expectedCount": 3,
+        "actualCount": 2,
+        "expectedMinCount": 3,
+        "expectedMaxCount": 5,
+        "actualType": "array",
+        "sectionCount": 2
+      },
+      "field": "sections",
+      "stage": "editor repair attempt 1/2",
+      "attempt": 1,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 3
+    }
+  },
+  {
+    "attempt": 2,
+    "model": "deterministic-fallback-public-issue",
+    "score": 76,
+    "threshold": 85,
+    "status": "PUBLIC_ISSUE_CREATED",
+    "rendered_main_article_count": 3,
+    "demoted_article_count": 2,
+    "reserve_candidates_used": [
+      {
+        "headline": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+        "category": "Android Platform / CameraX",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+        "source": "Android Developers Latest Updates",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "action": "rebuild-from-bound-candidate",
+        "fallback": false,
+        "reason": "rebuild-from-bound-candidate"
+      },
+      {
+        "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+        "category": "Android Platform / CameraX",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "source": "Android Developers Latest Updates",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "action": "rebuild-from-bound-candidate",
+        "fallback": false,
+        "reason": "hard failure replacement"
+      },
+      {
+        "headline": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
+        "category": "Android Platform / CameraX",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+        "source": "Android Developers Latest Updates",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "action": "rebuild-from-bound-candidate",
+        "fallback": false,
+        "reason": "hard failure replacement"
+      }
+    ],
+    "deductions": [
+      {
+        "category": "source-integrity",
+        "points": 8,
+        "reason": "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.6.1.",
+        "location": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+        "blocking": true,
+        "severity": "hard"
+      },
+      {
+        "category": "hal-relevance",
+        "points": 8,
+        "reason": "Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.",
+        "location": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
+        "blocking": true,
+        "severity": "hard"
+      },
+      {
+        "category": "source-integrity",
+        "points": 8,
+        "reason": "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02.",
+        "location": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
+        "blocking": true,
+        "severity": "hard"
+      }
+    ],
+    "selected_article_headlines": [
+      "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+      "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+      "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰"
+    ],
+    "demoted_sections": [
+      "libcamera v0.7.1 출시: SoftISP 및 이미지 파이프라인 개선",
+      "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정"
+    ],
+    "repair_actions": [
+      "fallback-public-issue-builder"
+    ]
+  }
+]
