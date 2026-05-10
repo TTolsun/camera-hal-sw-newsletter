@@ -108,8 +108,9 @@ function firstNumberAfterLabel(section, label) {
 
 function hasCompleteMarkdownLink(value) {
   const text = toText(value);
-  return /\[[^\]\n]+\]\(<[^>\n]+>\)/.test(text) ||
-    /\[[^\]\n]+\]\([^)>\n]+\)/.test(text);
+  const angleWrappedLink = /\[[^\]\n]+\]\(<[^>\n]+>\)/;
+  const plainLink = /\[[^\]\n]+\]\([^)>\n]+\)/;
+  return angleWrappedLink.test(text) || plainLink.test(text);
 }
 
 function validateCandidateTraceSection(text, sections, options, errors) {

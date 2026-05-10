@@ -319,7 +319,12 @@ function sanitizeMarkdownTableCell(value, { fallback = 'unknown', maxLength = 18
 }
 
 function sanitizeMarkdownLinkUrl(value) {
-  return String(value || '').replace(/[\s|<>]+/g, '').trim();
+  return String(value || '')
+    .trim()
+    .replace(/\s+/g, '%20')
+    .replace(/\|/g, '%7C')
+    .replace(/</g, '%3C')
+    .replace(/>/g, '%3E');
 }
 
 function markdownTableCell(value) {
@@ -891,7 +896,7 @@ function renderCandidateTraceability(root, date) {
     '',
     notableCandidates.length > 0
       ? renderMarkdownTable(
-        ['#', 'Candidate ID', '상태', '원문 기사', '출처/날짜', 'Bucket', '점수', '사유 코드', '상세 사유'],
+        ['#', 'Candidate ID', '상태', '원문 기사', '출처/날짜', 'Bucket', '점수', '사유 코드', '설명'],
         renderCandidateRows(notableCandidates, 10, 'code-and-reason')
       )
       : '- none',

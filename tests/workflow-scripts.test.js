@@ -1145,7 +1145,8 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
 test('newsroom PR body candidate traceability applies fallback status overrides safely', () => {
   const root = tempRoot();
   const date = '2026-05-10';
-  const longUrl = 'https://example.com/releases/camera-hal-driver-update-(very-long-segment)-with-query?param=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const longUrl = 'https://example.com/releases/camera-hal-driver-update-(very-long-segment)-with-query?param=alpha|beta gamma<delta>&tail=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const sanitizedLongUrl = 'https://example.com/releases/camera-hal-driver-update-(very-long-segment)-with-query?param=alpha%7Cbeta%20gamma%3Cdelta%3E&tail=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const finalCandidate = traceCandidate({
     title: 'Final camera HAL release',
     url: longUrl,
@@ -1249,12 +1250,12 @@ test('newsroom PR body candidate traceability applies fallback status overrides 
   const reserveSection = body.slice(body.indexOf('### Reserve 후보'), body.indexOf('### 제외/강등/거절된 주요 후보'));
   const notableSection = body.slice(body.indexOf('### 제외/강등/거절된 주요 후보'), body.indexOf('### 품질/팩트체크 연결'));
 
-  assert.ok(body.includes(`[Final camera HAL release](<${longUrl}>)`));
+  assert.ok(body.includes(`[Final camera HAL release](<${sanitizedLongUrl}>)`));
   assert.match(finalSection, /Final camera HAL release/);
   assert.match(finalSection, /final_selected/);
   assert.doesNotMatch(finalSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*rejected\s*\|/);
   assert.doesNotMatch(reserveSection, /Reserve HAL follow-up/);
-  assert.match(notableSection, /\| # \| Candidate ID \| 상태 \| 원문 기사 \| 출처\/날짜 \| Bucket \| 점수 \| 사유 코드 \| 상세 사유 \|/);
+  assert.match(notableSection, /\| # \| Candidate ID \| 상태 \| 원문 기사 \| 출처\/날짜 \| Bucket \| 점수 \| 사유 코드 \| 설명 \|/);
   assert.match(notableSection, /Primary HAL weak evidence/);
   assert.match(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*demoted\s*\|[^\n]*Primary HAL weak evidence/);
   assert.match(notableSection, /fallback demoted after source gap review/);
@@ -1268,6 +1269,9 @@ test('newsroom PR body candidate traceability applies fallback status overrides 
   assert.match(notableSection, /merged_into_selected_article/);
   assert.doesNotMatch(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*quality_fail\s*\|[^\n]*Primary HAL weak evidence/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
+
+  const bodyWithBrokenLinkOutsideTrace = `${body}\n## 추가 메모\n\n| 설명 |\n| --- |\n| [깨진 링크](https://example.com |\n`;
+  assert.equal(validatePrBodyText(bodyWithBrokenLinkOutsideTrace, { date }).ok, true);
 });
 
 test('newsroom PR body candidate traceability tolerates missing and malformed artifacts', () => {
