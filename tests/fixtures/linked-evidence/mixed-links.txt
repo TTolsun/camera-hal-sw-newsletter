@@ -1,0 +1,4 @@
+Android Gerrit change I0123456789abcdef and GitHub pull request https://github.com/androidx/androidx/pull/1234
+GitHub issue https://github.com/androidx/androidx/issues/4321, commit https://github.com/androidx/androidx/commit/abcdef1234567890abcdef1234567890abcdef12, and release https://github.com/androidx/androidx/releases/tag/camera-1.6.1.
+Mailing list discussion https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html and kernel discussion https://lore.kernel.org/linux-media/20260428001@example.com/.
+Security signal CVE-2026-12345 and generic secondary URL https://example.com/camera-background.
