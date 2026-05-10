@@ -1,0 +1,208 @@
+const assert = require('node:assert/strict');
+const test = require('node:test');
+
+const {
+  FETCH_STATUSES,
+  LINKED_EVIDENCE_TYPES,
+  RAW_EXCERPT_MAX_LENGTH,
+  resolveLinkedEvidence
+} = require('../scripts/newsroom/evidence');
+const { readTextFixture } = require('./helpers/fixture-loader');
+
+function fakeFetch(sequence) {
+  const calls = [];
+  const fetchClient = async (url, request = {}) => {
+    calls.push({ url, request });
+    const next = sequence.shift();
+    if (next instanceof Error) throw next;
+    if (next === 'never') return new Promise(() => {});
+    const response = next || {};
+    return {
+      ok: response.ok ?? true,
+      status: response.status || 200,
+      statusText: response.statusText || 'OK',
+      text: async () => {
+        if (typeof response.onText === 'function') response.onText();
+        if (response.textError) throw response.textError;
+        return response.body || '';
+      }
+    };
+  };
+  fetchClient.calls = calls;
+  return fetchClient;
+}
+
+function githubEvidence(overrides = {}) {
+  return {
+    type: LINKED_EVIDENCE_TYPES.GITHUB_PULL_REQUEST,
+    url: 'https://github.com/androidx/androidx/pull/1234',
+    identifier: 'androidx/androidx#1234',
+    fetch_status: FETCH_STATUSES.NOT_FETCHED,
+    ...overrides
+  };
+}
+
+function assertEmptyResolved(resolved) {
+  assert.deepEqual(resolved, {
+    title: '',
+    summary: '',
+    changed_files: [],
+    bug_ids: [],
+    cve_ids: [],
+    test_info: '',
+    labels: [],
+    component: ''
+  });
+}
+
+test('resolver skips fetch by default and does not call injected fetch client', async () => {
+  const fetchClient = fakeFetch([{ body: '<title>Should not fetch</title>' }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], { fetchClient });
+  const [missingClient] = await resolveLinkedEvidence([githubEvidence()], { enableNetwork: true });
+
+  assert.equal(fetchClient.calls.length, 0);
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(resolved.resolver, 'github');
+  assert.ok(resolved.warnings.some(item => item.includes('enableNetwork')));
+  assertEmptyResolved(resolved.resolved);
+  assert.equal(missingClient.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.ok(missingClient.warnings.some(item => item.includes('fetchClient')));
+  assertEmptyResolved(missingClient.resolved);
+});
+
+test('resolver resolves GitHub evidence with structured fields and keeps resolved payload', async () => {
+  const fetchClient = fakeFetch([{ body: readTextFixture('linked-evidence/github-pr-resolved.html') }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(fetchClient.calls[0].url, 'https://github.com/androidx/androidx/pull/1234');
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.RESOLVED);
+  assert.equal(resolved.resolver, 'github');
+  assert.ok(resolved.raw_excerpt.length <= RAW_EXCERPT_MAX_LENGTH);
+  assert.match(resolved.resolved.title, /Fix CameraX video capture metadata/);
+  assert.ok(resolved.resolved.summary.includes('CameraPipe request metadata'));
+  assert.ok(resolved.resolved.changed_files.includes('camera/core/src/main/java/androidx/camera/core/VideoCapture.java'));
+  assert.ok(resolved.resolved.changed_files.includes('camera/camera2/src/test/java/androidx/camera/camera2/CameraPipeTest.kt'));
+  assert.deepEqual(resolved.resolved.labels, ['camera', 'CameraX']);
+  assert.deepEqual(resolved.resolved.bug_ids, ['345678901']);
+  assert.equal(resolved.resolved.test_info, 'CameraPipeTest, VideoCaptureDeviceTest');
+  assert.equal(resolved.resolved.component, 'CameraX VideoCapture');
+});
+
+test('resolver caps raw_excerpt by maxExcerptChars and RAW_EXCERPT_MAX_LENGTH', async () => {
+  const body = readTextFixture('linked-evidence/long-evidence.html');
+  const smallCapFetch = fakeFetch([{ body }]);
+  const rawMaxFetch = fakeFetch([{ body }]);
+
+  const [smallCap] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient: smallCapFetch,
+    maxExcerptChars: 120
+  });
+  const [rawMax] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient: rawMaxFetch,
+    maxExcerptChars: RAW_EXCERPT_MAX_LENGTH + 200
+  });
+
+  assert.equal(smallCap.raw_excerpt.length, 120);
+  assert.equal(rawMax.raw_excerpt.length, RAW_EXCERPT_MAX_LENGTH);
+  assert.ok(smallCap.warnings.includes('excerpt_truncated'));
+  assert.ok(rawMax.warnings.includes('excerpt_truncated'));
+  assert.equal(JSON.stringify(rawMax).includes('LONG_BODY_SENTINEL_END'), false);
+});
+
+test('resolver marks blocked HTTP status without reading or inferring body', async () => {
+  let textCalled = false;
+  const fetchClient = fakeFetch([{
+    ok: false,
+    status: 403,
+    body: '<title>Blocked title must not be parsed</title>',
+    onText: () => {
+      textCalled = true;
+    }
+  }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.BLOCKED);
+  assert.equal(textCalled, false);
+  assertEmptyResolved(resolved.resolved);
+});
+
+test('resolver failures are non-fatal for thrown, timeout, and non-blocked HTTP failures', async () => {
+  const thrownFetch = fakeFetch([new Error('network denied')]);
+  const timeoutFetch = fakeFetch(['never']);
+  const serverFetch = fakeFetch([{ ok: false, status: 500, body: '<title>Not parsed</title>' }]);
+
+  const [thrown] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient: thrownFetch
+  });
+  const [timeout] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient: timeoutFetch,
+    timeoutMs: 5
+  });
+  const [server] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient: serverFetch
+  });
+
+  assert.equal(thrown.fetch_status, FETCH_STATUSES.FAILED);
+  assert.equal(timeout.fetch_status, FETCH_STATUSES.FAILED);
+  assert.equal(server.fetch_status, FETCH_STATUSES.FAILED);
+  assertEmptyResolved(thrown.resolved);
+  assertEmptyResolved(timeout.resolved);
+  assertEmptyResolved(server.resolved);
+});
+
+test('unsupported and malformed inputs do not throw', async () => {
+  assert.deepEqual(await resolveLinkedEvidence(null), []);
+
+  const results = await resolveLinkedEvidence([
+    { type: LINKED_EVIDENCE_TYPES.CVE, identifier: 'CVE-2026-12345', fetch_status: FETCH_STATUSES.NOT_FETCHED },
+    { type: LINKED_EVIDENCE_TYPES.DOCS_ANCHOR, identifier: '#camera', fetch_status: FETCH_STATUSES.NOT_FETCHED },
+    { type: LINKED_EVIDENCE_TYPES.UNKNOWN, fetch_status: FETCH_STATUSES.NOT_FETCHED },
+    { type: LINKED_EVIDENCE_TYPES.ANDROID_GERRIT, identifier: 'I1234567890abcdef', fetch_status: FETCH_STATUSES.NOT_FETCHED },
+    { type: LINKED_EVIDENCE_TYPES.GOOGLE_ISSUE_TRACKER, identifier: '345678901', fetch_status: FETCH_STATUSES.NOT_FETCHED }
+  ]);
+
+  assert.equal(results.length, 5);
+  for (const item of results) {
+    assert.equal(item.fetch_status, FETCH_STATUSES.UNSUPPORTED);
+    assertEmptyResolved(item.resolved);
+  }
+});
+
+test('resolved structured fields are not dropped by PR1 normalizer shape', async () => {
+  const fetchClient = fakeFetch([{ body: readTextFixture('linked-evidence/github-pr-resolved.html') }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.deepEqual(Object.keys(resolved.resolved), [
+    'title',
+    'summary',
+    'changed_files',
+    'bug_ids',
+    'cve_ids',
+    'test_info',
+    'labels',
+    'component'
+  ]);
+  assert.notEqual(resolved.resolved.title, '');
+  assert.notDeepEqual(resolved.resolved.labels, []);
+  assert.notDeepEqual(resolved.resolved.changed_files, []);
+  assert.notEqual(resolved.resolved.test_info, '');
+});

@@ -1,0 +1,446 @@
+const {
+  FETCH_STATUSES,
+  LINKED_EVIDENCE_TYPES,
+  RAW_EXCERPT_MAX_LENGTH
+} = require('./linked-evidence-types');
+const {
+  normalizeLinkedEvidence,
+  truncateRawExcerpt
+} = require('./linked-evidence-schema');
+const androidGerritResolver = require('./resolvers/android-gerrit-resolver');
+const cveResolver = require('./resolvers/cve-resolver');
+const genericUrlResolver = require('./resolvers/generic-url-resolver');
+const githubResolver = require('./resolvers/github-resolver');
+const googleIssueTrackerResolver = require('./resolvers/google-issue-tracker-resolver');
+const mailingListResolver = require('./resolvers/mailing-list-resolver');
+
+const BLOCKED_HTTP_STATUSES = new Set([401, 403, 429, 451]);
+const DEFAULT_TIMEOUT_MS = 3000;
+
+const FETCH_BACKED_RESOLVERS = [
+  androidGerritResolver,
+  googleIssueTrackerResolver,
+  githubResolver,
+  mailingListResolver,
+  cveResolver,
+  genericUrlResolver
+];
+
+function text(value) {
+  if (value === undefined || value === null) return '';
+  return String(value).replace(/\s+/g, ' ').trim();
+}
+
+function uniqueText(values, limit = 20) {
+  const seen = new Set();
+  const result = [];
+  for (const value of Array.isArray(values) ? values : [values]) {
+    const normalized = text(value);
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(normalized);
+    if (result.length >= limit) break;
+  }
+  return result;
+}
+
+function defaultResolved() {
+  return {
+    title: '',
+    summary: '',
+    changed_files: [],
+    bug_ids: [],
+    cve_ids: [],
+    test_info: '',
+    labels: [],
+    component: ''
+  };
+}
+
+function normalizeResolved(payload = {}) {
+  const source = payload && typeof payload === 'object' && !Array.isArray(payload) ? payload : {};
+  return {
+    title: text(source.title).slice(0, 240),
+    summary: text(source.summary).slice(0, 500),
+    changed_files: uniqueText(source.changed_files || source.changedFiles, 50),
+    bug_ids: uniqueText(source.bug_ids || source.bugIds, 50),
+    cve_ids: uniqueText(source.cve_ids || source.cveIds, 50).map(item => item.toUpperCase()),
+    test_info: text(source.test_info || source.testInfo).slice(0, 500),
+    labels: uniqueText(source.labels, 50),
+    component: text(source.component).slice(0, 240)
+  };
+}
+
+function hasStructuredData(resolved) {
+  return Boolean(
+    resolved.title ||
+    resolved.summary ||
+    resolved.test_info ||
+    resolved.component ||
+    resolved.changed_files.length > 0 ||
+    resolved.bug_ids.length > 0 ||
+    resolved.cve_ids.length > 0 ||
+    resolved.labels.length > 0
+  );
+}
+
+function uniqueWarnings(values) {
+  return uniqueText(values, 100);
+}
+
+function effectiveExcerptCap(value) {
+  const parsed = Number(value);
+  const safeValue = Number.isFinite(parsed)
+    ? Math.max(0, Math.floor(parsed))
+    : RAW_EXCERPT_MAX_LENGTH;
+  return Math.min(safeValue, RAW_EXCERPT_MAX_LENGTH);
+}
+
+function buildResult(base, {
+  resolver,
+  fetchStatus,
+  rawExcerpt = base.raw_excerpt,
+  warnings = [],
+  resolved = {},
+  excerptCap = RAW_EXCERPT_MAX_LENGTH
+}) {
+  const resolvedPayload = fetchStatus === FETCH_STATUSES.RESOLVED
+    ? normalizeResolved(resolved)
+    : defaultResolved();
+
+  return {
+    ...base,
+    raw_excerpt: truncateRawExcerpt(rawExcerpt, excerptCap),
+    fetch_status: fetchStatus,
+    warnings: uniqueWarnings([...(base.warnings || []), ...warnings]),
+    resolver,
+    resolved: resolvedPayload
+  };
+}
+
+function decodeHtmlEntities(value) {
+  return String(value || '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>');
+}
+
+function stripHtml(value) {
+  return decodeHtmlEntities(String(value || '')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' '));
+}
+
+function firstMatch(value, patterns) {
+  for (const pattern of patterns) {
+    const match = String(value || '').match(pattern);
+    if (match?.[1]) return text(decodeHtmlEntities(match[1]));
+  }
+  return '';
+}
+
+function collectMatches(value, pattern, index = 1) {
+  const result = [];
+  for (const match of String(value || '').matchAll(pattern)) {
+    if (match[index]) result.push(decodeHtmlEntities(match[index]));
+  }
+  return result;
+}
+
+function extractCommonStructured(body, evidence = {}) {
+  const raw = String(body || '');
+  const plain = stripHtml(raw);
+  const title = firstMatch(raw, [
+    /<title[^>]*>([\s\S]*?)<\/title>/i,
+    /<h1[^>]*>([\s\S]*?)<\/h1>/i
+  ]);
+  const summary = firstMatch(raw, [
+    /<meta[^>]+(?:name|property)=["'](?:description|og:description)["'][^>]+content=["']([^"']+)["'][^>]*>/i,
+    /<meta[^>]+content=["']([^"']+)["'][^>]+(?:name|property)=["'](?:description|og:description)["'][^>]*>/i
+  ]) || text(plain).slice(0, 300);
+  const bugIds = uniqueText([
+    ...collectMatches(raw, /\bb\/(\d{4,})\b/gi),
+    ...collectMatches(raw, /\bBug:\s*(?:b\/)?(\d{4,})\b/gi),
+    ...collectMatches(raw, /\bFixes:\s*(?:b\/)?(\d{4,})\b/gi),
+    evidence.type === LINKED_EVIDENCE_TYPES.GOOGLE_ISSUE_TRACKER ? evidence.identifier : ''
+  ]);
+  const cveIds = uniqueText([
+    ...collectMatches(raw, /\b(CVE-\d{4}-\d{4,})\b/gi),
+    evidence.type === LINKED_EVIDENCE_TYPES.CVE ? evidence.identifier : ''
+  ]).map(item => item.toUpperCase());
+  const testInfo = firstMatch(plain, [
+    /\bTests?:\s*([^.;\n]{1,300})/i,
+    /\bTested:\s*([^.;\n]{1,300})/i
+  ]);
+  const component = firstMatch(plain, [
+    /\bComponent:\s*([^.;\n]{1,160})/i,
+    /\bSubsystem:\s*([^.;\n]{1,160})/i
+  ]);
+
+  return normalizeResolved({
+    title,
+    summary,
+    bug_ids: bugIds,
+    cve_ids: cveIds,
+    test_info: testInfo,
+    component
+  });
+}
+
+function extractChangedFiles(body) {
+  const raw = String(body || '');
+  return uniqueText([
+    ...collectMatches(raw, /\bdata-path=["']([^"']+)["']/gi),
+    ...collectMatches(raw, /\btitle=["']([^"']+\.(?:aidl|bp|cc|cpp|gradle|h|hpp|java|js|kt|mk|md|py|ts|xml))["']/gi),
+    ...collectMatches(raw, /\b(?:[\w.+-]+\/)+[\w.+-]+\.(?:aidl|bp|cc|cpp|gradle|h|hpp|java|js|kt|mk|md|py|ts|xml)\b/gi, 0)
+  ], 50);
+}
+
+function extractLabels(body) {
+  const raw = String(body || '');
+  return uniqueText([
+    ...collectMatches(raw, /\bdata-name=["']([^"']+)["']/gi),
+    ...collectMatches(raw, /\baria-label=["']Label:\s*([^"']+)["']/gi),
+    ...collectMatches(raw, /<span[^>]+class=["'][^"']*(?:Label|label)[^"']*["'][^>]*>([^<]+)<\/span>/gi)
+  ], 50);
+}
+
+function mergeResolved(...payloads) {
+  const merged = defaultResolved();
+  for (const payload of payloads) {
+    const normalized = normalizeResolved(payload);
+    merged.title ||= normalized.title;
+    merged.summary ||= normalized.summary;
+    merged.test_info ||= normalized.test_info;
+    merged.component ||= normalized.component;
+    merged.changed_files = uniqueText([...merged.changed_files, ...normalized.changed_files], 50);
+    merged.bug_ids = uniqueText([...merged.bug_ids, ...normalized.bug_ids], 50);
+    merged.cve_ids = uniqueText([...merged.cve_ids, ...normalized.cve_ids], 50);
+    merged.labels = uniqueText([...merged.labels, ...normalized.labels], 50);
+  }
+  return merged;
+}
+
+async function responseText(response) {
+  if (!response || typeof response.text !== 'function') return '';
+  return await response.text();
+}
+
+async function fetchWithTimeout(url, context) {
+  const timeoutMs = Number.isFinite(Number(context.timeoutMs))
+    ? Math.max(0, Number(context.timeoutMs))
+    : DEFAULT_TIMEOUT_MS;
+  const controller = typeof AbortController === 'function' ? new AbortController() : null;
+  let timeout = null;
+  const request = {
+    method: 'GET',
+    headers: {
+      'user-agent': 'camera-hal-sw-newsletter/1.0',
+      accept: 'text/html,application/json,text/plain,*/*'
+    },
+    signal: controller ? controller.signal : undefined
+  };
+  const fetchPromise = Promise.resolve().then(() => context.fetchClient(url, request));
+
+  if (timeoutMs <= 0) return fetchPromise;
+
+  const timeoutPromise = new Promise((_, reject) => {
+    timeout = setTimeout(() => {
+      if (controller) controller.abort();
+      const error = new Error(`timeout after ${timeoutMs}ms`);
+      error.name = 'AbortError';
+      reject(error);
+    }, timeoutMs);
+  });
+
+  try {
+    return await Promise.race([fetchPromise, timeoutPromise]);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
+}
+
+function responseStatus(response) {
+  const status = Number(response?.status || 0);
+  if (Number.isFinite(status) && status > 0) return status;
+  return response?.ok === false ? 0 : 200;
+}
+
+function responseOk(response) {
+  if (!response) return false;
+  if (response.ok === false) return false;
+  const status = responseStatus(response);
+  return status >= 200 && status < 300;
+}
+
+async function resolveFetchBacked(evidence, options, context) {
+  const resolver = options.resolver || 'unknown';
+  if (!evidence.url) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.UNSUPPORTED,
+      warnings: [`${resolver} resolver requires a URL.`],
+      excerptCap: context.excerptCap
+    });
+  }
+
+  if (context.enableNetwork !== true) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.SKIPPED,
+      warnings: ['Linked evidence network fetch skipped: enableNetwork is false.'],
+      excerptCap: context.excerptCap
+    });
+  }
+
+  if (typeof context.fetchClient !== 'function') {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.SKIPPED,
+      warnings: ['Linked evidence network fetch skipped: fetchClient is not configured.'],
+      excerptCap: context.excerptCap
+    });
+  }
+
+  let response;
+  try {
+    response = await fetchWithTimeout(evidence.url, context);
+  } catch (error) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.FAILED,
+      warnings: [`Linked evidence fetch failed: ${text(error?.message || error?.name || 'unknown error')}`],
+      excerptCap: context.excerptCap
+    });
+  }
+
+  const status = responseStatus(response);
+  if (BLOCKED_HTTP_STATUSES.has(status)) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.BLOCKED,
+      warnings: [`Linked evidence fetch blocked with HTTP ${status}.`],
+      excerptCap: context.excerptCap
+    });
+  }
+
+  if (!responseOk(response)) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.FAILED,
+      warnings: [`Linked evidence fetch failed with HTTP ${status || 'unknown'}.`],
+      excerptCap: context.excerptCap
+    });
+  }
+
+  let body = '';
+  try {
+    body = await responseText(response);
+  } catch (error) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.FAILED,
+      warnings: [`Linked evidence body read failed: ${text(error?.message || 'unknown error')}`],
+      excerptCap: context.excerptCap
+    });
+  }
+
+  const warnings = [];
+  if (text(body).length > context.excerptCap) warnings.push('excerpt_truncated');
+  const structured = mergeResolved(
+    context.extractCommonStructured(body, evidence),
+    typeof options.extractStructured === 'function' ? options.extractStructured(body, evidence, context) : {}
+  );
+  if (!hasStructuredData(structured)) warnings.push('structured_extraction_incomplete');
+
+  return buildResult(evidence, {
+    resolver,
+    fetchStatus: FETCH_STATUSES.RESOLVED,
+    rawExcerpt: body,
+    resolved: structured,
+    warnings,
+    excerptCap: context.excerptCap
+  });
+}
+
+function unsupportedResolver(evidence, resolver, reason, context) {
+  return buildResult(evidence, {
+    resolver,
+    fetchStatus: FETCH_STATUSES.UNSUPPORTED,
+    warnings: [reason || `Unsupported linked evidence type: ${evidence.type || 'unknown'}.`],
+    excerptCap: context.excerptCap
+  });
+}
+
+function resolverFor(type) {
+  return FETCH_BACKED_RESOLVERS.find(resolver => resolver.supports(type)) || null;
+}
+
+function createContext(options) {
+  const excerptCap = effectiveExcerptCap(options.maxExcerptChars);
+  return {
+    enableNetwork: options.enableNetwork,
+    excerptCap,
+    fetchClient: options.fetchClient,
+    timeoutMs: options.timeoutMs,
+    extractChangedFiles,
+    extractCommonStructured,
+    extractLabels,
+    mergeResolved,
+    resolveFetchBacked,
+    unsupportedResolver
+  };
+}
+
+async function resolveOne(item, context) {
+  const base = normalizeLinkedEvidence(item);
+  const resolver = resolverFor(base.type);
+  if (!resolver) {
+    return unsupportedResolver(
+      base,
+      'unsupported',
+      `Unsupported linked evidence type: ${base.type || 'unknown'}.`,
+      context
+    );
+  }
+
+  try {
+    return await resolver.resolve(base, context);
+  } catch (error) {
+    return buildResult(base, {
+      resolver: resolver.name || 'unknown',
+      fetchStatus: FETCH_STATUSES.FAILED,
+      warnings: [`Linked evidence resolver failed: ${text(error?.message || 'unknown error')}`],
+      excerptCap: context.excerptCap
+    });
+  }
+}
+
+async function resolveLinkedEvidence(items, {
+  fetchClient,
+  timeoutMs = DEFAULT_TIMEOUT_MS,
+  maxExcerptChars = RAW_EXCERPT_MAX_LENGTH,
+  enableNetwork = false
+} = {}) {
+  if (!Array.isArray(items)) return [];
+  const context = createContext({
+    enableNetwork,
+    fetchClient,
+    maxExcerptChars,
+    timeoutMs
+  });
+  const results = [];
+  for (const item of items) {
+    results.push(await resolveOne(item, context));
+  }
+  return results;
+}
+
+module.exports = {
+  defaultResolved,
+  resolveLinkedEvidence
+};
