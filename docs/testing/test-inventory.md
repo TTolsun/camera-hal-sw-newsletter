@@ -123,7 +123,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | --- | --- | --- |
 | 1. Inventory + Guide | Complete | 이 문서와 `tests/README.md`입니다. |
 | 2. Nested Runner Preparation | Complete | `test:unit`을 nested-aware glob로 변경하고 기존 flat runner와 비교 검증했습니다. |
-| 3. Fixture Ledger + Trust Guard | Pending | 현재 `fixture-policy.test.js`를 확장하거나 `check:fixtures`를 추가합니다. |
+| 3. Fixture Ledger + Trust Guard | Complete | `fixture-ledger.json`과 `check:fixtures`로 fixture provenance와 trust guard를 검증합니다. |
 | 4. Shared Test Helpers | Pending | Temp/write helper와 rendered artifact builder부터 시작합니다. |
 | 5. Test Folder Migration 1 | Pending | Nested runner 검증 이후 low-risk file만 이동합니다. |
 | 6. Generated Artifact Dependency Cleanup | Pending | Generated output은 smoke/integration 입력으로만 유지합니다. |

@@ -5,7 +5,8 @@ const test = require('node:test');
 const {
   fixturesRoot,
   listFixtureFiles,
-  readJsonFixture
+  readJsonFixture,
+  resolveFixturePath
 } = require('./helpers/fixture-loader');
 
 function relativeFixturePath(filePath) {
@@ -14,6 +15,18 @@ function relativeFixturePath(filePath) {
 
 function isPassStatus(value) {
   return String(value || '').toUpperCase() === 'PASS';
+}
+
+function readFixtureLedger() {
+  return readJsonFixture('fixture-ledger.json');
+}
+
+function ledgerFixtureFiles() {
+  return listFixtureFiles('.', '')
+    .map(relativeFixturePath)
+    .filter(filePath => filePath !== 'README.md')
+    .filter(filePath => filePath !== 'fixture-ledger.json')
+    .filter(filePath => !filePath.endsWith('/.gitkeep'));
 }
 
 function hasPassBlockingPolicyFlag(flags = {}) {
@@ -63,5 +76,67 @@ test('PASS golden fixtures cannot carry source-integrity blocker flags', () => {
       false,
       `${relativeFixturePath(filePath)} cannot be a PASS golden fixture with blocking policy flags`
     );
+  }
+});
+
+test('fixture ledger covers every committed fixture file', () => {
+  const ledger = readFixtureLedger();
+  assert.equal(ledger.schemaVersion, 1);
+  assert.ok(Array.isArray(ledger.entries), 'fixture ledger must have entries');
+
+  const seen = new Set();
+  for (const entry of ledger.entries) {
+    assert.equal(typeof entry.path, 'string', 'ledger entry path must be a string');
+    assert.equal(entry.path.includes('\\'), false, `${entry.path} must use normalized separators`);
+    assert.equal(entry.path.includes('..'), false, `${entry.path} must not escape fixtures root`);
+    assert.equal(path.isAbsolute(entry.path), false, `${entry.path} must be relative`);
+    assert.equal(seen.has(entry.path), false, `${entry.path} is duplicated in fixture ledger`);
+    seen.add(entry.path);
+    assert.doesNotThrow(() => resolveFixturePath(entry.path), `${entry.path} must stay inside tests/fixtures`);
+  }
+
+  assert.deepEqual([...seen].sort(), ledgerFixtureFiles().sort());
+});
+
+test('fixture ledger trust metadata matches fixture policy', () => {
+  const ledger = readFixtureLedger();
+
+  for (const entry of ledger.entries) {
+    assert.ok(entry.source, `${entry.path} must declare source`);
+    assert.ok(entry.allowedUse, `${entry.path} must declare allowedUse`);
+    assert.ok(entry.expectedStatus, `${entry.path} must declare expectedStatus`);
+    assert.ok(entry.protectedPolicy, `${entry.path} must declare protectedPolicy`);
+    assert.equal(typeof entry.generatedArtifact, 'boolean', `${entry.path} must declare generatedArtifact`);
+
+    if (entry.path.includes('/good/')) {
+      assert.equal(entry.allowedUse, 'good', `${entry.path} is under good/ and must declare allowedUse=good`);
+      assert.equal(entry.source, 'curated', `${entry.path} is under good/ and must be curated`);
+      assert.equal(entry.generatedArtifact, false, `${entry.path} is under good/ and cannot be generated`);
+      assert.equal(isPassStatus(entry.expectedStatus), true, `${entry.path} good fixture must expect PASS`);
+    }
+
+    if (entry.path.includes('/bad/')) {
+      assert.equal(entry.allowedUse, 'bad', `${entry.path} is under bad/ and must declare allowedUse=bad`);
+      assert.equal(isPassStatus(entry.expectedStatus), false, `${entry.path} bad fixture must not expect PASS`);
+    }
+
+    if (entry.generatedArtifact) {
+      assert.notEqual(entry.allowedUse, 'good', `${entry.path} generated fixture cannot be good`);
+      assert.match(entry.source, /generated-regression/, `${entry.path} generated fixture must be minimized regression evidence`);
+    }
+
+    if (!entry.path.endsWith('.json')) continue;
+    const fixture = readJsonFixture(entry.path);
+    if (fixture.metadata?.generated === true) {
+      assert.equal(entry.generatedArtifact, true, `${entry.path} metadata.generated must match fixture ledger`);
+      assert.notEqual(entry.allowedUse, 'good', `${entry.path} generated fixture cannot be a good/golden fixture`);
+    }
+    if (fixture.expected?.status) {
+      assert.equal(
+        isPassStatus(fixture.expected.status),
+        isPassStatus(entry.expectedStatus),
+        `${entry.path} expected status must match fixture ledger pass/fail class`
+      );
+    }
   }
 });

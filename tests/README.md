@@ -123,4 +123,5 @@ Fixture policy 변경에는 아래 targeted test를 실행합니다.
 
 ```powershell
 node --test tests\fixture-policy.test.js
+npm.cmd run check:fixtures
 ```
