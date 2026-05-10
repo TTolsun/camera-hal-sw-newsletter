@@ -750,11 +750,12 @@ function dedupe(candidates) {
 }
 
 function mdEscape(value = '') {
-  return String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ');
+  return String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ').trimEnd();
 }
 
-function markdown(date, candidates, failures, lookbackDays) {
+function markdown(date, candidates, failures, lookbackDays, options = {}) {
   const lines = [];
+  const sourceRegistryPath = options.sourcesPath || path.relative(root, activeSourcesPath);
   const articleCandidates = candidates.filter(item => ['main', 'short'].includes(item.finalSelectionEligibility));
   const watchlist = candidates.filter(item => item.finalSelectionEligibility === 'watchlist');
   const excluded = candidates.filter(item => item.finalSelectionEligibility === 'exclude');
@@ -779,7 +780,7 @@ function markdown(date, candidates, failures, lookbackDays) {
   lines.push('');
   lines.push(`- Lookback: ${lookbackDays}일`);
   lines.push(`- 후보 수: ${candidates.length}`);
-  lines.push(`- Source registry: ${path.relative(root, activeSourcesPath)}`);
+  lines.push(`- Source registry: ${sourceRegistryPath}`);
   lines.push('- Candidate-only media/community source는 final article selection 전에 official-source verification이 필요합니다.');
   lines.push('- 날짜가 있는 release/API/behavior evidence가 없는 static HTML page는 main article candidate가 아니라 watchlist/reference material입니다.');
   lines.push('');
@@ -850,7 +851,7 @@ function markdown(date, candidates, failures, lookbackDays) {
     lines.push(`- Selection exclusion reason: ${item.selection_exclusion_reason}`);
     lines.push(`- Verification hint: ${item.verification_hint}`);
     lines.push(`- Relevance Score: ${item.relevanceScore}`);
-    lines.push(`- 요약: ${item.summary || '요약 없음'}`);
+    lines.push(`- 요약: ${mdEscape(item.summary || '요약 없음')}`);
     lines.push(`- Selection reason: ${item.reason}`);
     lines.push('');
   }
@@ -959,5 +960,6 @@ module.exports = {
   fetchUrlForContent,
   newsletterDateWindowEnd,
   normalizeCandidate,
+  renderCandidateMarkdown: markdown,
   withinLookback
 };

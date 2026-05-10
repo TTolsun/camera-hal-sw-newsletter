@@ -11,6 +11,14 @@
 - `selectedImage`는 최종 발행 가능한 이미지 경로로 취급합니다.
 - 과거 생성 산출물인 `content/newsroom/**`, `content/collected-news/**`, 기존 `newsletters/**` 파일은 명시 요청 없이 대량 수정하지 않습니다.
 
+## Encoding / Shell Rules
+
+- Repository text file은 명시 예외가 없는 한 UTF-8 without BOM으로 저장합니다.
+- 한글이나 non-ASCII 문자가 포함될 수 있는 repository text file을 PowerShell `Set-Content`, `Out-File`, `>` redirection으로 rewrite하지 않습니다.
+- Text file 수정은 patch 기반 편집이나 UTF-8 보존이 명확한 Node.js 도구를 사용합니다.
+- Commit 전에는 `npm.cmd run check:encoding` 또는 이를 포함한 `npm.cmd run validate`를 실행합니다.
+- Repository-wide line ending normalization은 별도 작업으로만 다루며, 일반 feature/fix PR에서 `git add --renormalize .`를 실행하지 않습니다.
+
 ## Structure
 
 - `index.html`, `css/`, `assets/`는 정적 사이트 surface입니다.

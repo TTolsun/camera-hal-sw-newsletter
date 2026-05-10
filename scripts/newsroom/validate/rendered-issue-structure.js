@@ -13,13 +13,22 @@ const { ensureArray } = require('../render/newsletter-renderer');
 const REQUIRED_NEWSLETTER_FIELDS = ['date', 'title', 'summary', 'html', 'md', 'tags'];
 const REQUIRED_ISSUE_CLASSES = ['issue-briefing', 'issue-section', 'source-list', 'reference-list'];
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
+const LEGACY_REFERENCES_LABEL = '\uf9e1\uba78\ud02c\u003f\uba2e\uc9ba';
+const LEGACY_REFERENCES_PREFIX = '\uf9e1\uba78\ud02c';
+const LEGACY_ACTION_LABEL = '\u003f\u317d\ubefe';
 
 function hasAny(content, values) {
   return values.some(value => content.includes(value));
 }
 
+function escapeRegExp(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function sourceTail(section) {
-  const match = section.match(/\*\*(Sources|출처|異쒖쿂)[^\n]*\*\*([\s\S]*)/);
+  const sourceLabelPattern = ['Sources', '출처', LEGACY_SOURCE_LABEL].map(escapeRegExp).join('|');
+  const match = section.match(new RegExp(`\\*\\*(${sourceLabelPattern})[^\\n]*\\*\\*([\\s\\S]*)`));
   return match ? match[2] : section;
 }
 
@@ -40,7 +49,8 @@ function briefingSection(markdown) {
 }
 
 function hasReferencesSection(markdown) {
-  return /^##\s+(References|참고자료|李멸퀬\?먮즺)\s*$/m.test(markdown);
+  const referencesLabelPattern = ['References', '참고자료', LEGACY_REFERENCES_LABEL].map(escapeRegExp).join('|');
+  return new RegExp(`^##\\s+(${referencesLabelPattern})\\s*$`, 'm').test(markdown);
 }
 
 function mainArticleBlocks(markdown) {
@@ -50,8 +60,8 @@ function mainArticleBlocks(markdown) {
     const index = Number(matches[i][1]);
     const title = matches[i][2].trim();
     if (index <= 1) continue;
-    if (/Action Items/i.test(title) || title.includes('Action') || title.includes('실행') || title.includes('?ㅽ뻾')) continue;
-    if (/^References$/i.test(title) || title.includes('참고자료') || title.includes('李멸퀬')) continue;
+    if (/Action Items/i.test(title) || title.includes('Action') || title.includes('실행') || title.includes(LEGACY_ACTION_LABEL)) continue;
+    if (/^References$/i.test(title) || title.includes('참고자료') || title.includes(LEGACY_REFERENCES_PREFIX)) continue;
 
     const start = matches[i].index + matches[i][0].length;
     const nextMatch = matches[i + 1];
@@ -137,7 +147,7 @@ function validateMarkdownStructure(date, markdown, errors) {
   }
 
   for (const article of mainArticleBlocks(content)) {
-    if (!hasAny(article.text, ['Sources', '출처', '異쒖쿂'])) {
+    if (!hasAny(article.text, ['Sources', '출처', LEGACY_SOURCE_LABEL])) {
       errors.push(`Newsletter ${date} section missing sources heading: ${article.heading}`);
     }
     if (!hasSourceEntry(article.text)) {
