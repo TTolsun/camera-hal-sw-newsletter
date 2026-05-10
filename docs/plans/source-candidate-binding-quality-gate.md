@@ -16,6 +16,6 @@
 
 ## Validation
 
-- `node --test tests/newsletter-quality.test.js`
+- `node --test tests/contract/newsletter-quality.test.js`
 - `npm.cmd run test`
 - `npm.cmd run validate`

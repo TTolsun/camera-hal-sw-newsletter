@@ -9,10 +9,10 @@
 | Command | 현재 동작 | 결과 |
 | --- | --- | --- |
 | `npm.cmd run test` | `npm run test:unit`와 `npm run test:script`를 순서대로 실행합니다. | 통과. `node --test` 기준 373개 test가 pass했고 script test 2개도 통과했습니다. |
-| `npm.cmd run test:unit` | `node --test "tests/**/*.test.js"`를 실행합니다. | 현재 root와 nested test 373개를 실행하며, 향후 nested test folder도 발견합니다. |
+| `npm.cmd run test:unit` | `node --test "tests/**/*.test.js"`를 실행합니다. | 현재 nested test 373개를 실행하며 root `tests/*.test.js`는 남아 있지 않습니다. |
 | `npm.cmd run test:script` | `node scripts/test-artifact-manifest.js && node scripts/test-selection-diagnostics.js`를 실행합니다. | 통과. |
 
-중요 제약: runner는 nested-aware command로 전환했습니다. Slice 8 이후 새 root `tests/*.test.js` 추가는 `tests/root-test-allowlist.json` guard로 제한하고, 새 test는 목적별 nested folder에 둡니다.
+중요 제약: runner는 nested-aware command로 전환했고 root test migration은 완료되었습니다. 새 root `tests/*.test.js` 추가는 허용하지 않으며, `tests/root-test-allowlist.json`은 빈 migration baseline으로 유지합니다.
 
 ## 분류 기준
 
@@ -48,9 +48,9 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | `tests/workflow/generation-status.test.js` | `workflow` | Generation status parsing과 editorial reviewability field. | Inline sample. | `none` | `tests/workflow/` | PR body/status workflow와 함께 둡니다. |
 | `tests/workflow/homepage-archive.test.js` | `workflow` | Homepage inline script의 latest/archive rendering. | `index.html`에서 script 추출, inline DOM shim. | `path-contract` | `tests/workflow/` | Public data path contract를 검증하며 generated issue quality 기준은 아닙니다. |
 | `tests/unit/evidence/impact-classifier.test.js` | `unit` | Linked evidence impact classifier enum과 conservative recommendation. | Inline evidence helper. | `none` | `tests/unit/evidence/` | Slice 5에서 이동했습니다. |
-| `tests/linked-evidence-diagnostics.test.js` | `workflow` | Linked evidence diagnostics artifact 생성과 후보별 failure isolation. | Temp dir, inline candidate. | `temp-artifact` | `tests/workflow/` | Temp/write helper 공통화 후보입니다. |
-| `tests/linked-evidence-extractor.test.js` | `unit` | Supported evidence type link extraction. | `linked-evidence` text/html fixtures. | `none` | `tests/unit/evidence/` | Low-risk move 후보입니다. |
-| `tests/linked-evidence-resolver.test.js` | `unit` | Resolver fetch behavior, blocked/failed/unsupported status, payload cap. | `fixture-loader`, fake fetch helper. | `none` | `tests/unit/evidence/` | Fake fetch helper 공통화 후보입니다. |
+| `tests/unit/evidence/linked-evidence-diagnostics.test.js` | `unit` | Linked evidence diagnostics artifact 생성과 후보별 failure isolation. | Temp dir, inline candidate. | `temp-artifact` | `tests/unit/evidence/` | Linked evidence unit surface와 함께 둡니다. |
+| `tests/unit/evidence/linked-evidence-extractor.test.js` | `unit` | Supported evidence type link extraction. | `linked-evidence` text/html fixtures. | `none` | `tests/unit/evidence/` | Low-risk move 후보입니다. |
+| `tests/unit/evidence/linked-evidence-resolver.test.js` | `unit` | Resolver fetch behavior, blocked/failed/unsupported status, payload cap. | `fixture-loader`, fake fetch helper. | `none` | `tests/unit/evidence/` | Fake fetch helper 공통화 후보입니다. |
 | `tests/unit/evidence/linked-evidence-schema.test.js` | `unit` | Linked evidence normalization shape와 compatibility. | Inline sample. | `none` | `tests/unit/evidence/` | Slice 5에서 이동했습니다. |
 | `tests/unit/common/llm-client.test.js` | `unit` | Provider-agnostic LLM client와 internal provider behavior. | Inline fake fetch. | `none` | `tests/unit/common/` | Resolver test와 fake fetch helper를 공유할 수 있습니다. |
 | `tests/unit/common/news-summary-cache.test.js` | `unit` | Summary cache key와 diagnostics. | Local `tempDir()`, candidate helper. | `none` | `tests/unit/common/` | Temp helper 공통화 후보입니다. |

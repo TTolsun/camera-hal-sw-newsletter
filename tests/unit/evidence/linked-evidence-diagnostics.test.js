@@ -10,9 +10,9 @@ const {
   RAW_EXCERPT_MAX_LENGTH,
   analyzeLinkedEvidenceForCandidates,
   writeLinkedEvidenceDiagnosticsArtifacts
-} = require('../scripts/newsroom/evidence');
-const { buildShortlistReport } = require('../scripts/lib/newsroom-selection');
-const { candidate } = require('./helpers/newsroom-builders');
+} = require('../../../scripts/newsroom/evidence');
+const { buildShortlistReport } = require('../../../scripts/lib/newsroom-selection');
+const { candidate } = require('../../helpers/newsroom-builders');
 
 function linkedCandidate(overrides = {}) {
   return candidate({
