@@ -841,22 +841,53 @@ test('linked evidence absent or unresolved without inference does not create ove
 });
 
 test('malformed linked evidence diagnostics are soft and non-fatal', () => {
-  const target = section({
-    headline: 'Malformed linked evidence candidate',
-    url: 'https://example.com/malformed-linked'
-  });
-  const report = reportWithTargetSection(
-    target,
-    scopedCandidate('https://example.com/malformed-linked', 'direct_aosp_camera', {
-      linked_evidence_summary: 'malformed',
-      impact_classification: null
-    })
-  );
-  const [deduction] = linkedDeductions(report, 'linked-evidence-malformed');
+  const cases = [
+    {
+      headline: 'Malformed linked evidence candidate',
+      url: 'https://example.com/malformed-linked',
+      candidate: scopedCandidate('https://example.com/malformed-linked', 'direct_aosp_camera', {
+        linked_evidence_summary: 'malformed',
+        impact_classification: null
+      })
+    },
+    {
+      headline: 'Partial linked evidence summary candidate',
+      url: 'https://example.com/summary-only-linked',
+      candidate: scopedCandidate('https://example.com/summary-only-linked', 'direct_aosp_camera', {
+        linked_evidence_summary: linkedEvidenceSummary()
+      })
+    },
+    {
+      headline: 'Partial linked evidence impact candidate',
+      url: 'https://example.com/impact-only-linked',
+      candidate: scopedCandidate('https://example.com/impact-only-linked', 'direct_aosp_camera', {
+        impact_classification: impactClassification()
+      })
+    }
+  ];
 
-  assert.equal(deduction.blocking, false);
-  assert.equal(deduction.severity, 'soft');
-  assert.equal(report.article_results.find(item => item.headline === target.headline).status, 'PASS');
+  for (const item of cases) {
+    const target = section({
+      headline: item.headline,
+      url: item.url
+    });
+    const report = reportWithTargetSection(target, item.candidate);
+    const [deduction] = linkedDeductions(report, 'linked-evidence-malformed');
+
+    assert.equal(deduction.blocking, false);
+    assert.equal(deduction.severity, 'soft');
+    assert.equal(report.article_results.find(result => result.headline === target.headline).status, 'PASS');
+  }
+
+  const absentTarget = section({
+    headline: 'No linked evidence diagnostics candidate',
+    url: 'https://example.com/no-linked-diagnostics'
+  });
+  const absentReport = reportWithTargetSection(
+    absentTarget,
+    scopedCandidate('https://example.com/no-linked-diagnostics', 'direct_aosp_camera')
+  );
+  assert.equal(linkedDeductions(absentReport, 'linked-evidence-malformed').length, 0);
 });
 
 test('weak linked evidence limitation wording is soft and explicit limitation avoids it', () => {

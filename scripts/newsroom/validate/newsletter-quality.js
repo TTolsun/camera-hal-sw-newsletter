@@ -496,7 +496,7 @@ function linkedEvidenceDiagnostics(candidate = {}) {
   const impact = candidate.impact_classification || candidate.impactClassification;
   const summaryIsObject = !hasSummary || (summary && typeof summary === 'object' && !Array.isArray(summary));
   const impactIsObject = !hasImpact || (impact && typeof impact === 'object' && !Array.isArray(impact));
-  let malformed = !summaryIsObject || !impactIsObject;
+  let malformed = hasSummary !== hasImpact || !summaryIsObject || !impactIsObject;
   const totalCount = summaryIsObject ? Number(summary?.total_count) : 0;
   if (hasSummary && !Number.isFinite(totalCount)) malformed = true;
   if (Number.isFinite(totalCount) && totalCount > 0 && !impactIsObject) malformed = true;
