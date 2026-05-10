@@ -94,6 +94,10 @@ function loadFreshNewsletterCli() {
 test('LLM prompt guardrails prohibit linked evidence overclaim without exposing payloads', () => {
   const guardrails = linkedEvidencePromptGuardrails();
   assert.match(guardrails, /not included in the prompt payload/);
+  assert.match(guardrails, /article capsule or source fields/);
+  assert.match(guardrails, /Editor draft text is not linked evidence/);
+  assert.match(guardrails, /claims to verify, not as source-backed facts/);
+  assert.doesNotMatch(guardrails, /editor draft fields/);
   assert.match(guardrails, /blocked, failed, skipped, or unsupported/);
   assert.match(guardrails, /build_dependency_fix, test_only_change, or documentation_only/);
   assert.match(guardrails, /stream, buffer, metadata, request, result, ImageCapture, VideoCapture, Surface, or CameraPipe/);

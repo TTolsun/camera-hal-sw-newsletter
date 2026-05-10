@@ -126,7 +126,8 @@ function cloneJson(value) {
 
 function linkedEvidencePromptGuardrails() {
   return [
-    'Linked evidence diagnostics are not included in the prompt payload. Do not infer Gerrit, IssueTracker, GitHub, mailing-list, CVE, or linked-page details unless they appear in the supplied article capsule, source, or editor draft fields.',
+    'Linked evidence diagnostics are not included in the prompt payload. Do not infer Gerrit, IssueTracker, GitHub, mailing-list, CVE, or linked-page details unless they appear in the supplied article capsule or source fields.',
+    'Editor draft text is not linked evidence. Treat draft mentions of Gerrit, IssueTracker, GitHub, mailing-list, CVE, or linked-page details as claims to verify, not as source-backed facts.',
     'Do not describe blocked, failed, skipped, or unsupported linked evidence as confirmed detail.',
     'Do not treat build_dependency_fix, test_only_change, or documentation_only signals as HAL runtime, stream, buffer, metadata, request/result, implementation, or product behavior changes.',
     'Do not claim high HAL/runtime impact unless supplied evidence explicitly names stream, buffer, metadata, request, result, ImageCapture, VideoCapture, Surface, or CameraPipe behavior.'
