@@ -3,16 +3,16 @@ const test = require('node:test');
 
 const {
   BUCKETS
-} = require('../scripts/lib/aosp-camera-scope');
-const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers');
+} = require('../../../scripts/lib/aosp-camera-scope');
+const { parseSourceSpecificItems } = require('../../../scripts/lib/source-item-parsers');
 const {
   canonicalContentUrl,
   fetchUrlForContent,
   newsletterDateWindowEnd,
   normalizeCandidate,
   withinLookback
-} = require('../scripts/newsroom/cli/collect-news-candidates');
-const { readTextFixture } = require('./helpers/fixture-loader');
+} = require('../../../scripts/newsroom/cli/collect-news-candidates');
+const { readTextFixture } = require('../../helpers/fixture-loader');
 
 function source(overrides = {}) {
   return {

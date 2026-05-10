@@ -12,10 +12,10 @@ const {
   parseIntegerList,
   parseNumber,
   normalizeLlmProvider
-} = require('../scripts/lib/runtime-config');
+} = require('../../../scripts/lib/runtime-config');
 const {
   configuredModels
-} = require('../scripts/newsroom/llm/model-policy');
+} = require('../../../scripts/newsroom/llm/model-policy');
 
 test('defaults match workflow runtime defaults', () => {
   const config = readRuntimeConfig({});

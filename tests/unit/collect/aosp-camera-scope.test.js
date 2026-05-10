@@ -4,7 +4,7 @@ const test = require('node:test');
 const {
   BUCKETS,
   classifyAospCameraStackCandidate
-} = require('../scripts/lib/aosp-camera-scope');
+} = require('../../../scripts/lib/aosp-camera-scope');
 
 test('classifies direct AOSP Camera framework and CameraX evidence', () => {
   const framework = classifyAospCameraStackCandidate({

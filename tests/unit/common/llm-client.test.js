@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
-const clientPath = path.resolve(__dirname, '..', 'scripts', 'newsroom', 'llm', 'llm-client.js');
-const internalProvider = require('../scripts/newsroom/llm/providers/internal-provider');
-const rawDir = path.resolve(__dirname, '..', '.tmp', 'llm-raw');
+const clientPath = path.resolve(__dirname, '..', '..', '..', 'scripts', 'newsroom', 'llm', 'llm-client.js');
+const internalProvider = require('../../../scripts/newsroom/llm/providers/internal-provider');
+const rawDir = path.resolve(__dirname, '..', '..', '..', '.tmp', 'llm-raw');
 
 function clearLlmEnv() {
   for (const key of [

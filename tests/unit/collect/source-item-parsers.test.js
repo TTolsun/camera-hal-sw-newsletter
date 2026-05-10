@@ -1,8 +1,8 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers');
-const { readTextFixture } = require('./helpers/fixture-loader');
+const { parseSourceSpecificItems } = require('../../../scripts/lib/source-item-parsers');
+const { readTextFixture } = require('../../helpers/fixture-loader');
 
 function source(overrides = {}) {
   return {

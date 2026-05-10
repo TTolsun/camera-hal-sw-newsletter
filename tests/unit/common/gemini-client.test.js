@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
-const clientPath = path.resolve(__dirname, '..', 'scripts', 'lib', 'gemini-client.js');
-const rawDir = path.resolve(__dirname, '..', '.tmp', 'gemini-raw');
+const clientPath = path.resolve(__dirname, '..', '..', '..', 'scripts', 'lib', 'gemini-client.js');
+const rawDir = path.resolve(__dirname, '..', '..', '..', '.tmp', 'gemini-raw');
 
 function loadClient(env = {}) {
   delete require.cache[clientPath];
