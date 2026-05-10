@@ -8,7 +8,7 @@ const {
   RECOMMENDED_ARTICLE_TYPES,
   classifyLinkedEvidenceImpact,
   defaultImpactClassification
-} = require('../scripts/newsroom/evidence');
+} = require('../../../scripts/newsroom/evidence');
 
 function evidence(overrides = {}) {
   return {

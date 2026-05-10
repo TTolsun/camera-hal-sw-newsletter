@@ -42,16 +42,16 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | `tests/article-capsules.test.js` | `unit` | Compact article capsule shape와 prompt input trimming. | Inline `candidate()` helper. | `none` | `tests/unit/generate/` | Candidate builder는 후속 helper slice에서 공통화 후보입니다. |
 | `tests/collector-relevance.test.js` | `unit` | Collector relevance와 source classification boundary. | `tests/helpers/fixture-loader`, `source-html` fixtures. | `none` | `tests/unit/collect/` | Parser/relevance fixture는 synthetic 기준을 유지합니다. |
 | `tests/editor-output-contract.test.js` | `contract` | Editor output schema, repair contract, diagnostic artifact. | Local temp/read helper. | `temp-artifact` | `tests/contract/` | Temp/read helper 공통화 후보입니다. |
-| `tests/fact-check-repair.test.js` | `unit` | Fact-check repair filtering. | Inline section helper. | `none` | `tests/unit/generate/` | Runner migration 후 low-risk move 후보입니다. |
+| `tests/unit/generate/fact-check-repair.test.js` | `unit` | Fact-check repair filtering. | Inline section helper. | `none` | `tests/unit/generate/` | Slice 5에서 이동했습니다. |
 | `tests/fixture-policy.test.js` | `fixture-trust` | `good` fixture curated 여부, `bad` fixture PASS 금지, blocker flag PASS golden 금지. | `tests/helpers/fixture-loader`. | `none` | `tests/contract/` 또는 `tests/hygiene/` | Fixture ledger slice에서 유지/확장합니다. |
 | `tests/gemini-client.test.js` | `unit` | Gemini client retry, fallback, cost, usage metadata. | Inline fake Gemini helper. | `none` | `tests/unit/common/` | Provider-specific raw response fixture는 adapter 영역에만 둡니다. |
 | `tests/generation-status.test.js` | `unit` | Generation status parsing과 editorial reviewability field. | Inline sample. | `none` | `tests/unit/common/` | Low-risk move 후보입니다. |
 | `tests/homepage-archive.test.js` | `unit` | Homepage inline script의 latest/archive rendering. | `index.html`에서 script 추출, inline DOM shim. | `path-contract` | `tests/unit/render/` | Public data path contract를 검증하며 generated issue quality 기준은 아닙니다. |
-| `tests/impact-classifier.test.js` | `unit` | Linked evidence impact classifier enum과 conservative recommendation. | Inline evidence helper. | `none` | `tests/unit/evidence/` | Low-risk move 후보입니다. |
+| `tests/unit/evidence/impact-classifier.test.js` | `unit` | Linked evidence impact classifier enum과 conservative recommendation. | Inline evidence helper. | `none` | `tests/unit/evidence/` | Slice 5에서 이동했습니다. |
 | `tests/linked-evidence-diagnostics.test.js` | `workflow` | Linked evidence diagnostics artifact 생성과 후보별 failure isolation. | Temp dir, inline candidate. | `temp-artifact` | `tests/workflow/` | Temp/write helper 공통화 후보입니다. |
 | `tests/linked-evidence-extractor.test.js` | `unit` | Supported evidence type link extraction. | `linked-evidence` text/html fixtures. | `none` | `tests/unit/evidence/` | Low-risk move 후보입니다. |
 | `tests/linked-evidence-resolver.test.js` | `unit` | Resolver fetch behavior, blocked/failed/unsupported status, payload cap. | `fixture-loader`, fake fetch helper. | `none` | `tests/unit/evidence/` | Fake fetch helper 공통화 후보입니다. |
-| `tests/linked-evidence-schema.test.js` | `unit` | Linked evidence normalization shape와 compatibility. | Inline sample. | `none` | `tests/unit/evidence/` | Low-risk move 후보입니다. |
+| `tests/unit/evidence/linked-evidence-schema.test.js` | `unit` | Linked evidence normalization shape와 compatibility. | Inline sample. | `none` | `tests/unit/evidence/` | Slice 5에서 이동했습니다. |
 | `tests/llm-client.test.js` | `unit` | Provider-agnostic LLM client와 internal provider behavior. | Inline fake fetch. | `none` | `tests/unit/common/` | Resolver test와 fake fetch helper를 공유할 수 있습니다. |
 | `tests/news-summary-cache.test.js` | `unit` | Summary cache key와 diagnostics. | Local `tempDir()`, candidate helper. | `none` | `tests/unit/generate/` | Temp helper 공통화 후보입니다. |
 | `tests/newsletter-quality.test.js` | `contract` | Quality gate hard blocker, article composition policy, source binding, linked evidence overclaim check. | `tests/helpers/quality-builders`, `quality` bad/good fixtures. | `minimized-regression` | `tests/contract/` | Large file입니다. helper와 fixture ledger 이후에만 분할합니다. |
@@ -59,14 +59,14 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | `tests/policy-docs.test.js` | `hygiene` | Policy docs generated block marker와 drift detection. | Temp root. | `none` | `tests/hygiene/` | Temp helper 공통화 후보입니다. |
 | `tests/pr-template.test.js` | `hygiene` | Split PR template contract와 localization scan coverage. | Direct template read. | `none` | `tests/hygiene/` | Low-risk move 후보입니다. |
 | `tests/rendered-issue-structure.test.js` | `contract` | Rendered Markdown/HTML structural validator와 site validator agreement. | Local temp root/write helper. | `temp-artifact` | `tests/contract/` 또는 `tests/unit/validate/` | Rendered fixture helper 공통화 후보입니다. |
-| `tests/repo-hygiene.test.js` | `hygiene` | Root scratch와 repo hygiene detection. | Inline path sample. | `none` | `tests/hygiene/` | Future structure guard를 이 영역에서 확장할 수 있습니다. |
+| `tests/hygiene/repo-hygiene.test.js` | `hygiene` | Root scratch와 repo hygiene detection. | Inline path sample. | `none` | `tests/hygiene/` | Slice 5에서 이동했습니다. Future structure guard를 이 영역에서 확장할 수 있습니다. |
 | `tests/runtime-config.test.js` | `unit` | Runtime env parsing과 provider policy. | Inline env helper. | `none` | `tests/unit/config/` | Low-risk move 후보입니다. |
 | `tests/selection-report-artifact.test.js` | `workflow` | Deterministic pre-LLM failure artifact와 selection report output. | Temp root, generated status artifact. | `temp-artifact` | `tests/workflow/` | Minimal temp artifact만 사용합니다. |
 | `tests/source-effectiveness-report.test.js` | `workflow` | Source effectiveness report aggregation과 artifact writing. | `source-effectiveness` fixture, temp root. | `temp-artifact` | `tests/workflow/` | Fixture ledger에서 `workflow-shape`로 표시해야 합니다. |
 | `tests/source-item-parsers.test.js` | `unit` | Source parser row extraction과 dated evidence rule. | `source-html` fixtures. | `none` | `tests/unit/collect/` | Low-risk move 후보입니다. |
 | `tests/stale-claims.test.js` | `unit` | Stale claim scrub와 retention behavior. | Inline source/section. | `none` | `tests/unit/validate/` | Low-risk move 후보입니다. |
 | `tests/targeted-retry.test.js` | `contract` | Targeted retry, repair validation, source lock preservation, failed repair reviewability. | `tests/helpers/newsroom-builders`, inline sample. | `temp-artifact` | `tests/contract/` | `workflow-scripts` helper 검토 후 helper extraction 후보입니다. |
-| `tests/text-encoding.test.js` | `hygiene` | Encoding detector, BOM, replacement char, text path allowlist. | Inline buffer. | `none` | `tests/hygiene/` | Low-risk move 후보입니다. |
+| `tests/hygiene/text-encoding.test.js` | `hygiene` | Encoding detector, BOM, replacement char, text path allowlist. | Inline buffer. | `none` | `tests/hygiene/` | Slice 5에서 이동했습니다. |
 | `tests/validate-config.test.js` | `unit` | Source registry config validation. | Inline valid registry helper. | `none` | `tests/unit/config/` | Low-risk move 후보입니다. |
 | `tests/validation-targets.test.js` | `unit` | Changed artifact date detection과 strict target-date selection. | Inline path string. | `path-contract` | `tests/unit/validate/` | Path string 자체가 검증 대상입니다. |
 | `tests/validator-strictness.test.js` | `contract` | Historical vs strict `validate-site`와 `validate-quality` behavior. | Temp root와 minimal artifact. | `temp-artifact` | `tests/contract/` | Shared temp/write helper 도입 후 이동합니다. |
@@ -126,7 +126,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | 2. Nested Runner Preparation | Complete | `test:unit`을 nested-aware glob로 변경하고 기존 flat runner와 비교 검증했습니다. |
 | 3. Fixture Ledger + Trust Guard | Complete | `fixture-ledger.json`과 `check:fixtures`로 fixture provenance와 trust guard를 검증합니다. |
 | 4. Shared Test Helpers | Complete | `tests/helpers/fs.js`를 추가하고 low-risk temp/write helper 중복을 먼저 치환했습니다. |
-| 5. Test Folder Migration 1 | Pending | Nested runner 검증 이후 low-risk file만 이동합니다. |
+| 5. Test Folder Migration 1 | Complete | Low-risk unit/hygiene test 5개를 nested folder로 이동했습니다. |
 | 6. Generated Artifact Dependency Cleanup | Pending | Generated output은 smoke/integration 입력으로만 유지합니다. |
 | 7. Duplicate/Obsolete Test Cleanup | Pending | 이 inventory를 삭제/통합 판단 근거로 사용합니다. |
 | 8. Structure Guard + Final Audit | Pending | Guardrail을 추가하고 final inventory를 갱신합니다. |
