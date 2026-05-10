@@ -6,11 +6,7 @@ function supports(type) {
 
 async function resolve(evidence, context) {
   return context.resolveFetchBacked(evidence, {
-    resolver: 'generic_url',
-    extractStructured: body => context.mergeResolved({
-      changed_files: context.extractChangedFiles(body),
-      labels: context.extractLabels(body)
-    })
+    resolver: 'generic_url'
   }, context);
 }
 

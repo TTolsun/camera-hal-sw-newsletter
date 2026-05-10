@@ -161,7 +161,7 @@ function extractCommonStructured(body, evidence = {}) {
   const summary = firstMatch(raw, [
     /<meta[^>]+(?:name|property)=["'](?:description|og:description)["'][^>]+content=["']([^"']+)["'][^>]*>/i,
     /<meta[^>]+content=["']([^"']+)["'][^>]+(?:name|property)=["'](?:description|og:description)["'][^>]*>/i
-  ]) || text(plain).slice(0, 300);
+  ]);
   const bugIds = uniqueText([
     ...collectMatches(raw, /\bb\/(\d{4,})\b/gi),
     ...collectMatches(raw, /\bBug:\s*(?:b\/)?(\d{4,})\b/gi),
@@ -226,7 +226,6 @@ function mergeResolved(...payloads) {
 }
 
 async function responseText(response) {
-  if (!response || typeof response.text !== 'function') return '';
   return await response.text();
 }
 
@@ -265,15 +264,14 @@ async function fetchWithTimeout(url, context) {
 }
 
 function responseStatus(response) {
-  const status = Number(response?.status || 0);
+  const status = Number(response?.status);
   if (Number.isFinite(status) && status > 0) return status;
-  return response?.ok === false ? 0 : 200;
+  return null;
 }
 
-function responseOk(response) {
+function responseOk(response, status) {
   if (!response) return false;
   if (response.ok === false) return false;
-  const status = responseStatus(response);
   return status >= 200 && status < 300;
 }
 
@@ -319,6 +317,15 @@ async function resolveFetchBacked(evidence, options, context) {
   }
 
   const status = responseStatus(response);
+  if (status === null) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.FAILED,
+      warnings: ['Linked evidence fetch failed: response status is missing or invalid.'],
+      excerptCap: context.excerptCap
+    });
+  }
+
   if (BLOCKED_HTTP_STATUSES.has(status)) {
     return buildResult(evidence, {
       resolver,
@@ -328,11 +335,20 @@ async function resolveFetchBacked(evidence, options, context) {
     });
   }
 
-  if (!responseOk(response)) {
+  if (!responseOk(response, status)) {
     return buildResult(evidence, {
       resolver,
       fetchStatus: FETCH_STATUSES.FAILED,
       warnings: [`Linked evidence fetch failed with HTTP ${status || 'unknown'}.`],
+      excerptCap: context.excerptCap
+    });
+  }
+
+  if (typeof response.text !== 'function') {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.FAILED,
+      warnings: ['Linked evidence fetch failed: response text() is missing.'],
       excerptCap: context.excerptCap
     });
   }

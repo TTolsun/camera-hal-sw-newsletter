@@ -42,6 +42,16 @@ function githubEvidence(overrides = {}) {
   };
 }
 
+function genericEvidence(overrides = {}) {
+  return {
+    type: LINKED_EVIDENCE_TYPES.GENERIC_URL,
+    url: 'https://example.com/linked-evidence',
+    identifier: 'https://example.com/linked-evidence',
+    fetch_status: FETCH_STATUSES.NOT_FETCHED,
+    ...overrides
+  };
+}
+
 function assertEmptyResolved(resolved) {
   assert.deepEqual(resolved, {
     title: '',
@@ -115,6 +125,84 @@ test('resolver caps raw_excerpt by maxExcerptChars and RAW_EXCERPT_MAX_LENGTH', 
   assert.ok(smallCap.warnings.includes('excerpt_truncated'));
   assert.ok(rawMax.warnings.includes('excerpt_truncated'));
   assert.equal(JSON.stringify(rawMax).includes('LONG_BODY_SENTINEL_END'), false);
+});
+
+test('resolver reports incomplete structured extraction for plain body snippets', async () => {
+  const fetchClient = fakeFetch([{ body: 'Plain body is useful only as raw_excerpt context.' }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.RESOLVED);
+  assert.equal(resolved.resolved.summary, '');
+  assert.ok(resolved.warnings.includes('structured_extraction_incomplete'));
+  assert.ok(resolved.raw_excerpt.includes('Plain body'));
+});
+
+test('resolver fails malformed response-like objects without resolving content', async () => {
+  const missingStatusFetch = async () => ({
+    ok: true,
+    text: async () => '<title>Missing status must not resolve</title>'
+  });
+  const nonNumericStatusFetch = async () => ({
+    ok: true,
+    status: 'OK',
+    text: async () => '<title>Bad status must not resolve</title>'
+  });
+  const missingTextFetch = async () => ({
+    ok: true,
+    status: 200
+  });
+
+  const [missingStatus] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient: missingStatusFetch
+  });
+  const [nonNumericStatus] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient: nonNumericStatusFetch
+  });
+  const [missingText] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient: missingTextFetch
+  });
+
+  assert.equal(missingStatus.fetch_status, FETCH_STATUSES.FAILED);
+  assert.equal(nonNumericStatus.fetch_status, FETCH_STATUSES.FAILED);
+  assert.equal(missingText.fetch_status, FETCH_STATUSES.FAILED);
+  assert.ok(missingStatus.warnings.some(item => item.includes('status')));
+  assert.ok(nonNumericStatus.warnings.some(item => item.includes('status')));
+  assert.ok(missingText.warnings.some(item => item.includes('text()')));
+  assertEmptyResolved(missingStatus.resolved);
+  assertEmptyResolved(nonNumericStatus.resolved);
+  assertEmptyResolved(missingText.resolved);
+});
+
+test('generic URL resolver keeps source-specific changed files and labels empty', async () => {
+  const fetchClient = fakeFetch([{
+    body: [
+      '<title>Generic camera evidence page</title>',
+      '<meta name="description" content="Generic page with camera context.">',
+      '<span data-name="camera"></span>',
+      '<div data-path="camera/core/src/main/java/androidx/camera/core/VideoCapture.java"></div>',
+      '<p>Component: Generic Camera Page</p>'
+    ].join('\n')
+  }]);
+
+  const [resolved] = await resolveLinkedEvidence([genericEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.RESOLVED);
+  assert.equal(resolved.resolver, 'generic_url');
+  assert.equal(resolved.resolved.title, 'Generic camera evidence page');
+  assert.equal(resolved.resolved.summary, 'Generic page with camera context.');
+  assert.equal(resolved.resolved.component, 'Generic Camera Page');
+  assert.deepEqual(resolved.resolved.changed_files, []);
+  assert.deepEqual(resolved.resolved.labels, []);
 });
 
 test('resolver marks blocked HTTP status without reading or inferring body', async () => {
