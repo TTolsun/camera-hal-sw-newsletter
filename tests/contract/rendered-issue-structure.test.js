@@ -5,21 +5,21 @@ const test = require('node:test');
 
 const {
   validateRenderedIssueStructure
-} = require('../scripts/newsroom/validate/rendered-issue-structure');
+} = require('../../scripts/newsroom/validate/rendered-issue-structure');
 const {
   buildMarkdown,
   buildHtml
-} = require('../scripts/newsroom/render/newsletter-renderer');
+} = require('../../scripts/newsroom/render/newsletter-renderer');
 const {
   validSections
-} = require('./helpers/quality-builders');
+} = require('../helpers/quality-builders');
 const {
   tempRoot,
   writeJson,
   writeText
-} = require('./helpers/fs');
+} = require('../helpers/fs');
 
-const repoRoot = path.join(__dirname, '..');
+const repoRoot = path.join(__dirname, '..', '..');
 const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');
 const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
 
