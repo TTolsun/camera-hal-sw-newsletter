@@ -106,6 +106,12 @@ function firstNumberAfterLabel(section, label) {
   return match ? Number(match[1]) : 0;
 }
 
+function hasCompleteMarkdownLink(value) {
+  const text = toText(value);
+  return /\[[^\]\n]+\]\(<[^>\n]+>\)/.test(text) ||
+    /\[[^\]\n]+\]\([^)>\n]+\)/.test(text);
+}
+
 function validateCandidateTraceSection(text, sections, options, errors) {
   const traceCount = exactHeadingCount(text, 2, '후보 기사 추적');
   if (traceCount !== 1) {
@@ -148,10 +154,17 @@ function validateCandidateTraceSection(text, sections, options, errors) {
     }
   }
 
+  const brokenLinkRows = traceSection
+    .split(/\r?\n/)
+    .filter(line => line.trim().startsWith('|') && line.includes('](') && !hasCompleteMarkdownLink(line));
+  if (brokenLinkRows.length > 0) {
+    errors.push('후보 기사 추적 table contains an incomplete Markdown source link.');
+  }
+
   const finalSelectedCount = firstNumberAfterLabel(traceSection, '최종 선택 기사');
   if (finalSelectedCount > 0) {
     const finalSection = extractSubsection(traceSection, '최종 선택 기사');
-    if (!/\[[^\]]+\]\([^)]+\)/.test(finalSection)) {
+    if (!hasCompleteMarkdownLink(finalSection)) {
       errors.push('최종 선택 기사 table must include at least one Markdown source link.');
     }
     if (!/cand_\d{3}/.test(finalSection)) {

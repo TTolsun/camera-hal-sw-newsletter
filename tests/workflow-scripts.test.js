@@ -1142,6 +1142,134 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
+test('newsroom PR body candidate traceability applies fallback status overrides safely', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  const longUrl = 'https://example.com/releases/camera-hal-driver-update-(very-long-segment)-with-query?param=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const finalCandidate = traceCandidate({
+    title: 'Final camera HAL release',
+    url: longUrl,
+    article_url: longUrl,
+    final_selected: true,
+    primary_selected: true,
+    selected_for_editor: true
+  });
+  const primaryDemoted = traceCandidate({
+    title: 'Primary HAL weak evidence',
+    url: 'https://example.com/primary-hal-weak-evidence',
+    article_url: 'https://example.com/primary-hal-weak-evidence',
+    source_name: 'HAL Review',
+    primary_selected: true,
+    selected_for_editor: true,
+    selection_exclusion_reason: 'reporter initially selected this candidate'
+  });
+  const reserveRejected = traceCandidate({
+    title: 'Reserve HAL follow-up',
+    url: 'https://example.com/reserve-hal-follow-up',
+    article_url: 'https://example.com/reserve-hal-follow-up',
+    source_name: 'Reserve Review',
+    reserve_candidate: true,
+    selection_exclusion_reason: 'reserve candidate before fallback review'
+  });
+  const excludedMerged = traceCandidate({
+    title: 'Excluded duplicate CameraX note',
+    url: 'https://example.com/excluded-duplicate-camerax',
+    article_url: 'https://example.com/excluded-duplicate-camerax',
+    source_name: 'CameraX Notes',
+    main_eligible: false,
+    finalSelectionEligibility: 'exclude',
+    final_exclusion_reasons: ['duplicate source before fallback']
+  });
+
+  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), {
+    date,
+    candidates: [finalCandidate, primaryDemoted, reserveRejected, excludedMerged]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [finalCandidate],
+    primary_selected_articles: [primaryDemoted],
+    reserve_candidates: [reserveRejected],
+    excluded_candidates: [excludedMerged]
+  });
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+    candidates: [finalCandidate, primaryDemoted, reserveRejected, excludedMerged]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), {
+    demoted_articles: [
+      {
+        headline: primaryDemoted.title,
+        reason: 'fallback demoted after source gap review',
+        sources: [{ title: primaryDemoted.source_name, url: primaryDemoted.url }]
+      }
+    ],
+    rejected_candidates: [
+      {
+        title: finalCandidate.title,
+        url: finalCandidate.url,
+        source: finalCandidate.source_name,
+        reason: 'fallback attempted final override'
+      },
+      {
+        title: reserveRejected.title,
+        url: reserveRejected.url,
+        source: reserveRejected.source_name,
+        reason: 'fallback rejected duplicate_url after repair'
+      }
+    ],
+    merged_articles: [
+      {
+        headline: excludedMerged.title,
+        source_urls: [excludedMerged.url],
+        reason: 'same source cluster merged into final article'
+      }
+    ]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+    status: 'NEEDS_FIX',
+    deductions: [],
+    article_results: [
+      {
+        index: 1,
+        headline: primaryDemoted.title,
+        status: 'FAIL',
+        sources: [{ url: primaryDemoted.url }],
+        hard_fail_reasons: ['source-integrity']
+      }
+    ]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+    status: 'PASS',
+    must_fix: [],
+    source_gaps: [],
+    source_gap_count: 0
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const finalSection = body.slice(body.indexOf('### 최종 선택 기사'), body.indexOf('### Reserve 후보'));
+  const reserveSection = body.slice(body.indexOf('### Reserve 후보'), body.indexOf('### 제외/강등/거절된 주요 후보'));
+  const notableSection = body.slice(body.indexOf('### 제외/강등/거절된 주요 후보'), body.indexOf('### 품질/팩트체크 연결'));
+
+  assert.ok(body.includes(`[Final camera HAL release](<${longUrl}>)`));
+  assert.match(finalSection, /Final camera HAL release/);
+  assert.match(finalSection, /final_selected/);
+  assert.doesNotMatch(finalSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*rejected\s*\|/);
+  assert.doesNotMatch(reserveSection, /Reserve HAL follow-up/);
+  assert.match(notableSection, /\| # \| Candidate ID \| 상태 \| 원문 기사 \| 출처\/날짜 \| Bucket \| 점수 \| 사유 코드 \| 상세 사유 \|/);
+  assert.match(notableSection, /Primary HAL weak evidence/);
+  assert.match(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*demoted\s*\|[^\n]*Primary HAL weak evidence/);
+  assert.match(notableSection, /fallback demoted after source gap review/);
+  assert.match(notableSection, /source_gap/);
+  assert.match(notableSection, /Reserve HAL follow-up/);
+  assert.match(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*rejected\s*\|[^\n]*Reserve HAL follow-up/);
+  assert.match(notableSection, /fallback rejected duplicate_url after repair/);
+  assert.match(notableSection, /duplicate_source/);
+  assert.match(notableSection, /Excluded duplicate CameraX note/);
+  assert.match(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*merged\s*\|[^\n]*Excluded duplicate CameraX note/);
+  assert.match(notableSection, /merged_into_selected_article/);
+  assert.doesNotMatch(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*quality_fail\s*\|[^\n]*Primary HAL weak evidence/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
 test('newsroom PR body candidate traceability tolerates missing and malformed artifacts', () => {
   const root = tempRoot();
   const date = '2026-05-10';

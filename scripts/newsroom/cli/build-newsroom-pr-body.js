@@ -284,6 +284,9 @@ const TRACE_STATUS_RANK = {
   unknown: 99
 };
 
+const FALLBACK_OVERRIDE_STATUSES = new Set(['demoted', 'rejected', 'merged']);
+const REPORT_ONLY_STATUSES = new Set(['quality_fail', 'factcheck_fail']);
+
 function normalizeMatchText(value) {
   return String(value || '')
     .toLowerCase()
@@ -315,10 +318,25 @@ function sanitizeMarkdownTableCell(value, { fallback = 'unknown', maxLength = 18
   return truncateText(text || fallback, maxLength).replace(/\|/g, '\\|');
 }
 
+function sanitizeMarkdownLinkUrl(value) {
+  return String(value || '').replace(/[\s|<>]+/g, '').trim();
+}
+
+function markdownTableCell(value) {
+  if (value && typeof value === 'object' && value.__markdownTableCell === true) {
+    return String(value.value || '').replace(/[\r\n]+/g, ' ').trim() || 'unknown';
+  }
+  return sanitizeMarkdownTableCell(value);
+}
+
+function trustedMarkdownTableCell(value) {
+  return { __markdownTableCell: true, value };
+}
+
 function renderMarkdownTable(headers, rows) {
   const safeHeaders = headers.map(header => sanitizeMarkdownTableCell(header));
   const separator = headers.map((_, index) => (index === 0 ? '---:' : '---'));
-  const body = rows.map(row => `| ${row.map(cell => sanitizeMarkdownTableCell(cell)).join(' | ')} |`);
+  const body = rows.map(row => `| ${row.map(cell => markdownTableCell(cell)).join(' | ')} |`);
   return [
     `| ${safeHeaders.join(' | ')} |`,
     `| ${separator.join(' | ')} |`,
@@ -469,8 +487,8 @@ function reasonCodeFor(candidate, status, reportStatus = '') {
 
 function formatCandidateLink(candidate) {
   const title = sanitizeMarkdownTableCell(candidate.title || 'unknown title', { maxLength: 120 });
-  const url = String(candidate.url || '').replace(/[\s|]+/g, '').trim();
-  return url ? `[${title}](${url})` : title;
+  const url = sanitizeMarkdownLinkUrl(candidate.url);
+  return url ? trustedMarkdownTableCell(`[${title}](<${url}>)`) : title;
 }
 
 function candidateKeys(candidate) {
@@ -512,7 +530,38 @@ function normalizeTraceCandidate(raw, { statusHint = '', sourceHint = '' } = {})
   };
 }
 
+function hasSourceHint(candidate, hint) {
+  if (!candidate || !candidate.sourceHints) return false;
+  if (candidate.sourceHints instanceof Set) return candidate.sourceHints.has(hint);
+  if (Array.isArray(candidate.sourceHints)) return candidate.sourceHints.includes(hint);
+  return false;
+}
+
+function traceStatusRank(status) {
+  return TRACE_STATUS_RANK[status] || 99;
+}
+
+function shouldReplaceTraceStatus(target, incoming) {
+  const incomingStatus = incoming.status || 'unknown';
+  const targetStatus = target.status || 'unknown';
+  const incomingIsFallback = hasSourceHint(incoming, 'fallback-public-issue');
+
+  if (incomingStatus === 'final_selected') return true;
+  if (targetStatus === 'final_selected') return false;
+
+  if (incomingIsFallback && FALLBACK_OVERRIDE_STATUSES.has(incomingStatus)) {
+    return true;
+  }
+
+  if (REPORT_ONLY_STATUSES.has(incomingStatus) && targetStatus !== 'unknown') {
+    return false;
+  }
+
+  return traceStatusRank(incomingStatus) < traceStatusRank(targetStatus);
+}
+
 function mergeTraceCandidate(target, incoming) {
+  const replaceStatus = shouldReplaceTraceStatus(target, incoming);
   target.urls = [...new Set([...target.urls, ...incoming.urls])];
   if (!target.url && incoming.url) target.url = incoming.url;
   for (const field of ['title', 'source', 'date', 'bucket', 'score']) {
@@ -520,7 +569,7 @@ function mergeTraceCandidate(target, incoming) {
   }
   target.reasons = [...new Set([...target.reasons, ...incoming.reasons])];
   for (const hint of incoming.sourceHints) target.sourceHints.add(hint);
-  if ((TRACE_STATUS_RANK[incoming.status] || 99) < (TRACE_STATUS_RANK[target.status] || 99)) {
+  if (replaceStatus) {
     target.status = incoming.status;
     target.reasonCode = incoming.reasonCode;
   }
@@ -742,6 +791,13 @@ function buildQualityFactcheckLinks(index, qualityReport, factCheckReport) {
   return links;
 }
 
+function candidateReasonCells(candidate, reasonLabel) {
+  const reasons = candidate.reasons.join('; ');
+  if (reasonLabel === 'code-and-reason') return [candidate.reasonCode, reasons];
+  if (reasonLabel === 'code') return [candidate.reasonCode];
+  return [reasons];
+}
+
 function renderCandidateRows(candidates, limit, reasonLabel) {
   const rows = candidates.slice(0, limit).map((candidate, index) => [
     String(index + 1),
@@ -751,9 +807,7 @@ function renderCandidateRows(candidates, limit, reasonLabel) {
     `${candidate.source} / ${candidate.date}`,
     candidate.bucket,
     String(candidate.score),
-    reasonLabel === 'code'
-      ? candidate.reasonCode
-      : candidate.reasons.join('; ')
+    ...candidateReasonCells(candidate, reasonLabel)
   ]);
   return rows;
 }
@@ -837,8 +891,8 @@ function renderCandidateTraceability(root, date) {
     '',
     notableCandidates.length > 0
       ? renderMarkdownTable(
-        ['#', 'Candidate ID', '상태', '원문 기사', '출처/날짜', 'Bucket', '점수', '사유 코드'],
-        renderCandidateRows(notableCandidates, 10, 'code')
+        ['#', 'Candidate ID', '상태', '원문 기사', '출처/날짜', 'Bucket', '점수', '사유 코드', '상세 사유'],
+        renderCandidateRows(notableCandidates, 10, 'code-and-reason')
       )
       : '- none',
     '',
