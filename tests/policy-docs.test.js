@@ -1,6 +1,4 @@
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
@@ -17,6 +15,10 @@ const {
   policyDocPaths,
   syncPolicyDocs
 } = require('../scripts/newsroom/cli/sync-policy-docs');
+const {
+  tempRoot,
+  writeText
+} = require('./helpers/fs');
 
 test('policy docs check reports missing markers', () => {
   const analysis = analyzeNewsletterPolicyBlock('No generated policy block here.');
@@ -90,11 +92,9 @@ test('policy docs sync inserts missing block and rejects malformed markers', () 
 });
 
 test('policy docs check mode fails when representative docs are missing markers', () => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'policy-docs-check-'));
+  const root = tempRoot('policy-docs-check-');
   for (const relPath of policyDocPaths) {
-    const filePath = path.join(root, relPath);
-    fs.mkdirSync(path.dirname(filePath), { recursive: true });
-    fs.writeFileSync(filePath, 'Current operating guidance.', 'utf8');
+    writeText(path.join(root, relPath), 'Current operating guidance.');
   }
 
   const result = syncPolicyDocs({ check: true, root });

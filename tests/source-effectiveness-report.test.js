@@ -1,6 +1,5 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
@@ -9,6 +8,10 @@ const {
   renderSourceEffectivenessMarkdown,
   writeSourceEffectivenessArtifacts
 } = require('../scripts/newsroom/metrics/source-effectiveness-report');
+const {
+  tempRoot,
+  writeJson
+} = require('./helpers/fs');
 
 const fixture = require('./fixtures/source-effectiveness/basic-source-effectiveness.json');
 
@@ -28,11 +31,6 @@ function buildReport(overrides = {}) {
 
 function source(report, id) {
   return report.sources.find(item => item.source_id === id);
-}
-
-function writeJson(filePath, value) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
 test('selected and rendered source gets high score and KEEP recommendation', () => {
@@ -139,14 +137,14 @@ test('fact-check source gap URL is mapped back to the collected source', () => {
 });
 
 test('missing optional artifacts do not crash artifact generation', () => {
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'source-effectiveness-'));
+  const root = tempRoot('source-effectiveness-');
   const date = fixture.date;
 
-  writeJson(path.join(tempRoot, 'data', 'news-sources.json'), fixture.sourceRegistry);
-  writeJson(path.join(tempRoot, 'content', 'collected-news', date, 'candidates.json'), fixture.collectedCandidates);
-  writeJson(path.join(tempRoot, 'content', 'newsroom', date, 'shortlisted-candidates.json'), fixture.shortlistReport);
+  writeJson(path.join(root, 'data', 'news-sources.json'), fixture.sourceRegistry);
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), fixture.collectedCandidates);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), fixture.shortlistReport);
 
-  const result = writeSourceEffectivenessArtifacts({ root: tempRoot, date });
+  const result = writeSourceEffectivenessArtifacts({ root, date });
   assert.equal(fs.existsSync(result.jsonPath), true);
   assert.equal(fs.existsSync(result.markdownPath), true);
   assert.deepEqual(result.report.inputs.optional_artifacts, {
