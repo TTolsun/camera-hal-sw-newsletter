@@ -26,6 +26,10 @@ const {
   BUCKETS,
   classifyAospCameraStackCandidate
 } = require('../common/aosp-camera-scope');
+const {
+  analyzeLinkedEvidenceForCandidates,
+  writeLinkedEvidenceDiagnosticsArtifacts
+} = require('../evidence/linked-evidence-diagnostics');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -918,15 +922,19 @@ async function main() {
   }
   candidates = enrichedCandidates;
 
-  if (candidates.length === 0) {
-    throw new Error('No news candidates collected. Check data/news-sources.json, docs/news-sources.md, or network access.');
-  }
-
   const outDir = collectedNewsDir(root, date);
   const dateNewsroomDir = newsroomDir(root, date);
   fs.mkdirSync(outDir, { recursive: true });
   fs.mkdirSync(dateNewsroomDir, { recursive: true });
   fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
+
+  const linkedEvidenceDiagnostics = await analyzeLinkedEvidenceForCandidates(date, candidates);
+  candidates = linkedEvidenceDiagnostics.candidates;
+  writeLinkedEvidenceDiagnosticsArtifacts(dateNewsroomDir, linkedEvidenceDiagnostics);
+
+  if (candidates.length === 0) {
+    throw new Error('No news candidates collected. Check data/news-sources.json, docs/news-sources.md, or network access.');
+  }
 
   fs.writeFileSync(path.join(outDir, 'candidates.json'), JSON.stringify({
     schema_version: 5,

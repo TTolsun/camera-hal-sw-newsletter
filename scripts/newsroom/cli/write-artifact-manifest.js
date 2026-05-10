@@ -27,6 +27,8 @@ function criticalFiles(date) {
     newsroomRelPath(date, 'selection-diagnostics.md'),
     newsroomRelPath(date, 'selection-report.json'),
     newsroomRelPath(date, 'selection-report.md'),
+    newsroomRelPath(date, 'linked-evidence-report.json'),
+    newsroomRelPath(date, 'linked-evidence-diagnostics.md'),
     newsroomRelPath(date, 'article-capsules.json'),
     newsroomRelPath(date, 'reporter-candidates.json'),
     newsroomRelPath(date, 'quality-report.json'),

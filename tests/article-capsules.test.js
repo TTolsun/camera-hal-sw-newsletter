@@ -117,3 +117,26 @@ test('compact selection context omits full candidate arrays', () => {
   assert.equal(context.shortlisted_candidates, undefined);
   assert.equal(context.excluded_candidates, undefined);
 });
+
+test('article capsule prompt input omits linked evidence diagnostics fields', () => {
+  const report = buildArticleCapsuleReport('2026-05-03', {
+    date: '2026-05-03',
+    shortlisted_candidates: [candidate({
+      linked_evidence_summary: { total_count: 1 },
+      impact_classification: { impact_type: 'runtime_behavior_change' },
+      linked_evidence: [{ raw_excerpt: 'full evidence payload' }],
+      raw_excerpt: 'raw payload',
+      resolved: { title: 'resolved payload' }
+    })],
+    selected_articles: [],
+    reserve_candidates: []
+  });
+  const promptInput = capsuleInputFromReport(report, 'shortlisted');
+  const serialized = JSON.stringify(promptInput);
+
+  assert.equal(serialized.includes('linked_evidence_summary'), false);
+  assert.equal(serialized.includes('impact_classification'), false);
+  assert.equal(serialized.includes('linked_evidence'), false);
+  assert.equal(serialized.includes('raw_excerpt'), false);
+  assert.equal(serialized.includes('resolved'), false);
+});
