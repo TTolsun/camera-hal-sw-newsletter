@@ -77,6 +77,15 @@ function testManifestCreationAndHashes() {
     selection_errors: ['Only 1 eligible candidate remains.']
   });
   writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.md').split('/')), '# Selection Report\n');
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'linked-evidence-report.json').split('/')), {
+    schema_version: 1,
+    date,
+    enable_network: false,
+    candidate_count: 0,
+    totals: {},
+    candidates: []
+  });
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'linked-evidence-diagnostics.md').split('/')), '# Linked Evidence Diagnostics\n');
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'retry-history.json').split('/')), []);
   writeJson(path.join(snapshotDir, '.tmp', 'gemini-raw', 'attempt-1.json'), { text: '{' });
   writeJson(path.join(snapshotDir, 'cache', 'news-summary', 'summary.json'), { title: 'cached' });
@@ -89,6 +98,8 @@ function testManifestCreationAndHashes() {
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'selection-diagnostics.md')));
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'selection-report.json')));
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'selection-report.md')));
+  assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'linked-evidence-report.json')));
+  assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'linked-evidence-diagnostics.md')));
   assert.ok(manifest.files.some(file => file.path === '.tmp/gemini-raw/attempt-1.json'));
   assert.ok(manifest.files.some(file => file.path === 'cache/news-summary/summary.json'));
   assert.ok(manifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
