@@ -12,7 +12,8 @@ const {
 } = require('./linked-evidence-resolver');
 const {
   IMPACT_TYPES,
-  classifyLinkedEvidenceImpact
+  classifyLinkedEvidenceImpact,
+  defaultImpactClassification
 } = require('./impact-classifier');
 
 const SCHEMA_VERSION = 1;
@@ -36,6 +37,10 @@ function countBy(values) {
 
 function bool(value) {
   return value === true;
+}
+
+function uniqueText(values = []) {
+  return [...new Set(ensureArray(values).map(text).filter(Boolean))];
 }
 
 function candidateUrl(candidate = {}) {
@@ -118,6 +123,7 @@ function reportTotals(candidateReports = []) {
   const allTypes = [];
   const allStatuses = [];
   const allImpacts = [];
+  const allIdentifiers = [];
   let warningCount = 0;
   let totalCount = 0;
   let hasResolvedEvidence = false;
@@ -137,6 +143,7 @@ function reportTotals(candidateReports = []) {
     for (const [impact, count] of Object.entries(summary.impact_type_counts || {})) {
       allImpacts.push(...Array.from({ length: count }, () => impact));
     }
+    allIdentifiers.push(...ensureArray(summary.top_identifiers));
   }
 
   return {
@@ -148,7 +155,7 @@ function reportTotals(candidateReports = []) {
     warning_count: warningCount,
     has_resolved_evidence: hasResolvedEvidence,
     has_unresolved_evidence: hasUnresolvedEvidence,
-    top_identifiers: []
+    top_identifiers: uniqueText(allIdentifiers).slice(0, TOP_IDENTIFIER_LIMIT)
   };
 }
 
@@ -159,15 +166,40 @@ function assertRawExcerptCap(evidenceItems = []) {
   }));
 }
 
-async function analyzeLinkedEvidenceForCandidates(date, candidates = []) {
+function diagnosticsFailureWarning(error) {
+  const message = text(error?.message || error || 'unknown diagnostics error').slice(0, 180);
+  return `linked_evidence_diagnostics_failed: ${message}`;
+}
+
+async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options = {}) {
+  const extractCandidateEvidence = options.extractLinkedEvidenceFromCandidate || extractLinkedEvidenceFromCandidate;
+  const resolveEvidence = options.resolveLinkedEvidence || resolveLinkedEvidence;
+  const classifyImpact = options.classifyLinkedEvidenceImpact || classifyLinkedEvidenceImpact;
   const outputCandidates = [];
   const candidateReports = [];
+  const reportWarnings = [];
 
   for (const candidate of ensureArray(candidates)) {
-    const extracted = extractLinkedEvidenceFromCandidate(candidate);
-    const resolved = assertRawExcerptCap(await resolveLinkedEvidence(extracted, { enableNetwork: false }));
-    const impactClassification = classifyLinkedEvidenceImpact(candidate, resolved);
-    const summary = buildLinkedEvidenceSummary(resolved, impactClassification);
+    let resolved = [];
+    let impactClassification;
+    let summary;
+
+    try {
+      const extracted = extractCandidateEvidence(candidate);
+      resolved = assertRawExcerptCap(await resolveEvidence(extracted, { enableNetwork: false }));
+      impactClassification = classifyImpact(candidate, resolved);
+      summary = buildLinkedEvidenceSummary(resolved, impactClassification);
+    } catch (error) {
+      const warning = diagnosticsFailureWarning(error);
+      reportWarnings.push(warning);
+      resolved = [];
+      impactClassification = {
+        ...defaultImpactClassification(),
+        warnings: [warning]
+      };
+      summary = buildLinkedEvidenceSummary([], impactClassification);
+    }
+
     const safeCandidate = {
       ...stripLinkedEvidencePayload(candidate),
       linked_evidence_summary: summary,
@@ -188,6 +220,7 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = []) {
     generated_at: new Date().toISOString(),
     enable_network: false,
     candidate_count: outputCandidates.length,
+    warnings: uniqueText(reportWarnings),
     totals: reportTotals(candidateReports),
     candidates: candidateReports
   };

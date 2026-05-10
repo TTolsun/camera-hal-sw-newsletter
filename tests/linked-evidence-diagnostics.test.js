@@ -36,6 +36,7 @@ test('linked evidence diagnostics produce candidate-safe summary and report-only
 
   assert.equal(diagnostics.report.schema_version, 1);
   assert.equal(diagnostics.report.enable_network, false);
+  assert.deepEqual(diagnostics.report.warnings, []);
   assert.equal(diagnostics.report.candidate_count, 1);
   assert.equal(safeCandidate.linked_evidence_summary.schema_version, 1);
   assert.equal(safeCandidate.impact_classification.impact_type, IMPACT_TYPES.RUNTIME_BEHAVIOR_CHANGE);
@@ -47,6 +48,52 @@ test('linked evidence diagnostics produce candidate-safe summary and report-only
   assert.equal(reportCandidate.linked_evidence[0].fetch_status, FETCH_STATUSES.SKIPPED);
   assert.ok(reportCandidate.linked_evidence[0].raw_excerpt.length <= RAW_EXCERPT_MAX_LENGTH);
   assert.equal(reportCandidate.linked_evidence_summary.by_fetch_status[FETCH_STATUSES.SKIPPED], 1);
+  assert.ok(diagnostics.report.totals.top_identifiers.length > 0);
+});
+
+test('linked evidence diagnostics failures are isolated per candidate', async () => {
+  const cases = [
+    {
+      label: 'extract',
+      options: {
+        extractLinkedEvidenceFromCandidate() {
+          throw new Error('forced extract failure');
+        }
+      }
+    },
+    {
+      label: 'resolve',
+      options: {
+        async resolveLinkedEvidence() {
+          throw new Error('forced resolve failure');
+        }
+      }
+    },
+    {
+      label: 'classify',
+      options: {
+        classifyLinkedEvidenceImpact() {
+          throw new Error('forced classify failure');
+        }
+      }
+    }
+  ];
+
+  for (const { label, options } of cases) {
+    const diagnostics = await analyzeLinkedEvidenceForCandidates(
+      '2026-05-10',
+      [linkedCandidate({ title: `Camera HAL ${label}`, url: `https://example.com/${label}` })],
+      options
+    );
+    const [safeCandidate] = diagnostics.candidates;
+    const [reportCandidate] = diagnostics.report.candidates;
+
+    assert.equal(safeCandidate.linked_evidence_summary.total_count, 0);
+    assert.equal(safeCandidate.impact_classification.impact_type, IMPACT_TYPES.UNKNOWN);
+    assert.match(safeCandidate.impact_classification.warnings[0], /linked_evidence_diagnostics_failed/);
+    assert.deepEqual(reportCandidate.linked_evidence, []);
+    assert.match(diagnostics.report.warnings[0], /linked_evidence_diagnostics_failed/);
+  }
 });
 
 test('linked evidence diagnostics create empty artifacts for zero candidates', async () => {

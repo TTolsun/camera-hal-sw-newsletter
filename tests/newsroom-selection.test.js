@@ -10,6 +10,7 @@ const {
   hasPlatformSignalTerm,
   normalizeUrl,
   publishGatePasses,
+  reporterInputFromShortlist,
   scoreCandidate,
   selectFinalArticles,
   selectionErrors,
@@ -100,6 +101,48 @@ test('deterministic score ordering is stable and shortlist is capped', () => {
   assert.ok(report.reserve_candidates.length <= 7);
   assert.ok(report.reserve_candidates.every(item => item.reserve_candidate === true));
   assert.ok(report.primary_selected_articles.every(item => item.primary_selected === true));
+});
+
+test('reporter input omits linked evidence diagnostics without changing order or selected flags', () => {
+  const rawCandidates = [
+    candidate({
+      title: 'Camera HAL metadata update A',
+      url: 'https://example.com/reporter-a',
+      summary: 'Camera HAL metadata stream buffer update.',
+      linked_evidence_summary: { total_count: 1 },
+      impact_classification: { impact_type: 'runtime_behavior_change' },
+      linked_evidence: [{ raw_excerpt: 'full linked evidence payload' }],
+      raw_excerpt: 'raw linked evidence excerpt',
+      resolved: { title: 'resolved linked evidence payload' }
+    }),
+    candidate({ title: 'AOSP Camera provider stream update B', url: 'https://example.com/reporter-b' }),
+    candidate({ title: 'Android Camera API metadata update C', url: 'https://example.com/reporter-c' }),
+    candidate({ title: 'Camera HAL buffer compatibility update D', url: 'https://example.com/reporter-d' })
+  ];
+  const report = buildShortlistReport('2026-05-03', rawCandidates);
+  const selectedUrls = new Set(report.selected_articles.map(item => item.normalized_url));
+  const input = reporterInputFromShortlist(report);
+
+  assert.deepEqual(
+    input.candidates.map(item => item.url),
+    report.shortlisted_candidates.map(item => item.url)
+  );
+  assert.deepEqual(
+    input.candidates.map(item => item.final_selected),
+    report.shortlisted_candidates.map(item => selectedUrls.has(item.normalized_url))
+  );
+  assert.deepEqual(
+    input.candidates.map(item => item.selected_for_editor),
+    input.candidates.map(item => item.final_selected)
+  );
+
+  for (const item of input.candidates) {
+    assert.equal(Object.hasOwn(item, 'linked_evidence_summary'), false);
+    assert.equal(Object.hasOwn(item, 'impact_classification'), false);
+    assert.equal(Object.hasOwn(item, 'linked_evidence'), false);
+    assert.equal(Object.hasOwn(item, 'raw_excerpt'), false);
+    assert.equal(Object.hasOwn(item, 'resolved'), false);
+  }
 });
 
 test('final selection prioritizes HAL candidates and treats AI/C++ as optional', () => {

@@ -105,39 +105,61 @@ function unresolvedWarnings(evidenceItems = []) {
   return [...statuses].map(status => `linked_evidence_${status}`);
 }
 
-function hasCandidateRuntimeMainEvidence(candidateText) {
-  const explicitCameraRuntime = includesAny(candidateText, [
-    /\bCamera\s*HAL\b/i,
-    /\bcamera\s*provider\b/i,
-    /\bcamera3\b/i,
-    /\bICamera\w*\b/i,
+function hasCandidateRuntimePipelineEvidence(candidateText) {
+  const explicitPipelineComponent = includesAny(candidateText, [
     /\bCameraPipe\b/i,
-    /\bCamera2\b/i,
-    /\bCameraX\b/i,
-    /\bandroidx\.camera\b/i,
-    /\bAOSP Camera\b/i,
-    /\bAndroid Camera\b/i,
     /\bImageCapture\b/i,
     /\bImageAnalysis\b/i,
     /\bVideoCapture\b/i,
     /\bimage pipeline\b/i,
     /\bcamera pipeline\b/i,
+    /\bcamera request\b/i,
+    /\bcamera result\b/i,
+    /\bcapture request\b/i,
+    /\bcapture result\b/i
+  ]);
+  const cameraContext = includesAny(candidateText, [
+    /\bCamera\s*HAL\b/i,
+    /\bcamera\s*provider\b/i,
+    /\bCameraX\b/i,
+    /\bandroidx\.camera\b/i,
+    /\bCamera2\b/i,
+    /\bcamera\b/i,
+    /\bcapture\b/i,
+    /\bpreview\b/i
+  ]);
+  const genericRuntimeTerm = includesAny(candidateText, [
+    /\bcamera metadata\b/i,
+    /\bmetadata (?:handling|behavior|stream|buffer|request|result)\b/i,
+    /\bstream\b/i,
+    /\bbuffer\b/i,
+    /\bSurface\b/i
+  ]);
+  return explicitPipelineComponent || (cameraContext && genericRuntimeTerm);
+}
+
+function hasCandidateRuntimeMainEvidence(candidateText) {
+  const explicitCameraStack = includesAny(candidateText, [
+    /\bCamera\s*HAL\b/i,
+    /\bcamera\s*provider\b/i,
+    /\bcamera3\b/i,
+    /\bICamera\w*\b/i,
+    /\bAOSP Camera\b/i,
+    /\bAndroid Camera\b/i,
     /\blibcamera\b/i,
     /\bV4L2\b/i,
     /\bISP\b/i,
     /\bimage sensor\b/i
   ]);
-  const cameraContext = includesAny(candidateText, [/\bcamera\b/i, /\bcapture\b/i, /\bpreview\b/i]);
-  const runtimeContext = includesAny(candidateText, [
-    /\bcapture request\b/i,
-    /\bcapture result\b/i,
-    /\bmetadata\b/i,
-    /\bstream\b/i,
-    /\bbuffer\b/i,
-    /\bSurface\b/i,
-    /\bpreview\b/i,
-    /\bsession\b/i
+  const cameraContext = includesAny(candidateText, [
+    /\bCameraX\b/i,
+    /\bandroidx\.camera\b/i,
+    /\bCamera2\b/i,
+    /\bcamera\b/i,
+    /\bcapture\b/i,
+    /\bpreview\b/i
   ]);
+  const runtimeContext = hasCandidateRuntimePipelineEvidence(candidateText);
   const changeSignal = includesAny(candidateText, [
     /\badd(?:ed|s)?\b/i,
     /\bchange(?:d|s)?\b/i,
@@ -153,10 +175,10 @@ function hasCandidateRuntimeMainEvidence(candidateText) {
     /\bresult\b/i,
     /\bcapture\b/i
   ]);
-  return (explicitCameraRuntime || (cameraContext && runtimeContext)) && changeSignal;
+  return (explicitCameraStack || (cameraContext && runtimeContext)) && changeSignal;
 }
 
-function classifyImpactType(candidateText, combinedText, hasMainEvidence) {
+function classifyImpactType(candidateText, combinedText, hasMainEvidence, hasRuntimePipelineEvidence) {
   const documentationOnly = includesAny(candidateText, [
     /\bdocumentation(?:_page)?\b/i,
     /\bdocumentation-watch\b/i,
@@ -165,7 +187,7 @@ function classifyImpactType(candidateText, combinedText, hasMainEvidence) {
     /\bguide\b/i,
     /\breference page\b/i
   ]);
-  if (documentationOnly && !hasMainEvidence) return IMPACT_TYPES.DOCUMENTATION_ONLY;
+  if (documentationOnly && !hasRuntimePipelineEvidence) return IMPACT_TYPES.DOCUMENTATION_ONLY;
 
   const buildTooling = includesAny(combinedText, [
     /\bGradle\b/i,
@@ -177,7 +199,7 @@ function classifyImpactType(candidateText, combinedText, hasMainEvidence) {
     /\bAndroid\.bp\b/i,
     /\bbuild\b/i
   ]);
-  if (buildTooling && !hasMainEvidence) return IMPACT_TYPES.BUILD_DEPENDENCY_FIX;
+  if (buildTooling && !hasRuntimePipelineEvidence) return IMPACT_TYPES.BUILD_DEPENDENCY_FIX;
 
   const testOnly = includesAny(combinedText, [
     /\btest(?:s|ing)?\b/i,
@@ -188,7 +210,19 @@ function classifyImpactType(candidateText, combinedText, hasMainEvidence) {
     /\bgtest\b/i,
     /\bunit test\b/i
   ]);
-  if (testOnly && !hasMainEvidence) return IMPACT_TYPES.TEST_ONLY_CHANGE;
+  if (testOnly && !hasRuntimePipelineEvidence) return IMPACT_TYPES.TEST_ONLY_CHANGE;
+
+  const genericTooling = includesAny(combinedText, [
+    /\bC\+\+\b/i,
+    /\bLLVM\b/i,
+    /\bClang\b/i,
+    /\bGCC\b/i,
+    /\bNDK\b/i,
+    /\btoolchain\b/i,
+    /\bdeveloper tooling\b/i,
+    /\bCI\b/i
+  ]);
+  if (genericTooling && !hasRuntimePipelineEvidence) return IMPACT_TYPES.GENERIC_TOOLING_CHANGE;
 
   if (
     includesAny(combinedText, [/\bCVE-\d{4}-\d{4,}\b/i, /\bsecurity\b/i, /\bvulnerabilit/i, /\bbulletin\b/i]) &&
@@ -215,7 +249,7 @@ function classifyImpactType(candidateText, combinedText, hasMainEvidence) {
 
   if (hasMainEvidence) return IMPACT_TYPES.RUNTIME_BEHAVIOR_CHANGE;
 
-  if (includesAny(combinedText, [/\bC\+\+\b/i, /\bLLVM\b/i, /\bClang\b/i, /\bGCC\b/i, /\bNDK\b/i, /\btoolchain\b/i, /\bdeveloper tooling\b/i, /\bCI\b/i])) {
+  if (genericTooling) {
     return IMPACT_TYPES.GENERIC_TOOLING_CHANGE;
   }
 
@@ -239,7 +273,8 @@ function classifyLinkedEvidenceImpact(candidate = {}, evidenceItems = []) {
   const resolvedText = resolvedEvidenceText(evidenceItems);
   const combinedText = `${candidateText} ${resolvedText}`;
   const hasMainEvidence = hasCandidateRuntimeMainEvidence(candidateText);
-  const impactType = classifyImpactType(candidateText, combinedText, hasMainEvidence);
+  const hasRuntimePipelineEvidence = hasCandidateRuntimePipelineEvidence(candidateText);
+  const impactType = classifyImpactType(candidateText, combinedText, hasMainEvidence, hasRuntimePipelineEvidence);
   const warnings = unresolvedWarnings(evidenceItems);
 
   const halRuntimeImpact = hasMainEvidence && ![

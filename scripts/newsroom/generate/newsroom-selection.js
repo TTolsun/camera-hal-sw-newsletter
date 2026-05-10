@@ -879,12 +879,30 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   });
 }
 
+function omitLinkedEvidencePromptFields(candidate = {}) {
+  const {
+    linked_evidence_summary,
+    linkedEvidenceSummary,
+    impact_classification,
+    impactClassification,
+    linked_evidence,
+    linkedEvidence,
+    linkedEvidenceContext,
+    linked_evidence_context,
+    raw_excerpt,
+    rawExcerpt,
+    resolved,
+    ...promptCandidate
+  } = candidate;
+  return promptCandidate;
+}
+
 function reporterInputFromShortlist(shortlistReport) {
   const selectedUrls = new Set(ensureArray(shortlistReport.selected_articles).map(candidate => candidate.normalized_url));
   return {
     date: shortlistReport.date,
     candidates: ensureArray(shortlistReport.shortlisted_candidates).map(candidate => ({
-      ...candidate,
+      ...omitLinkedEvidencePromptFields(candidate),
       selected: false,
       final_selected: selectedUrls.has(candidate.normalized_url),
       selected_for_editor: selectedUrls.has(candidate.normalized_url)

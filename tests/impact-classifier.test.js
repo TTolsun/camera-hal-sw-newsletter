@@ -84,6 +84,43 @@ test('main recommendation requires explicit candidate-level runtime or pipeline 
   assert.equal(watch.hal_runtime_impact, false);
 });
 
+test('CameraX dependency test and docs updates remain watch without runtime pipeline terms', () => {
+  const cases = [
+    [
+      IMPACT_TYPES.BUILD_DEPENDENCY_FIX,
+      { title: 'CameraX ListenableFuture dependency fix', summary: 'Updates Gradle dependency metadata for the release.' }
+    ],
+    [
+      IMPACT_TYPES.TEST_ONLY_CHANGE,
+      { title: 'CameraX test update', summary: 'Updates JUnit and CTS test coverage only.' }
+    ],
+    [
+      IMPACT_TYPES.DOCUMENTATION_ONLY,
+      { title: 'CameraX docs update', summary: 'Documentation guide and reference page update.' }
+    ]
+  ];
+
+  for (const [expectedImpact, candidate] of cases) {
+    const result = classifyLinkedEvidenceImpact(candidate, [evidence()]);
+    assert.equal(result.impact_type, expectedImpact);
+    assert.equal(result.recommended_article_type, RECOMMENDED_ARTICLE_TYPES.WATCH);
+    assert.equal(result.hal_runtime_impact, false);
+    assert.equal(result.camera_pipeline_impact, false);
+  }
+});
+
+test('CameraX explicit runtime pipeline terms can still receive main diagnostic hint', () => {
+  const result = classifyLinkedEvidenceImpact({
+    title: 'CameraX ImageCapture metadata fix',
+    summary: 'Fixes ImageCapture request metadata result handling for camera stream buffers.'
+  }, [evidence()]);
+
+  assert.equal(result.impact_type, IMPACT_TYPES.IMAGE_CAPTURE_FIX);
+  assert.equal(result.recommended_article_type, RECOMMENDED_ARTICLE_TYPES.MAIN);
+  assert.equal(result.hal_runtime_impact, true);
+  assert.equal(result.camera_pipeline_impact, true);
+});
+
 test('blocked failed and unsupported evidence never infer linked page content', () => {
   const result = classifyLinkedEvidenceImpact({
     title: 'Generic issue',
