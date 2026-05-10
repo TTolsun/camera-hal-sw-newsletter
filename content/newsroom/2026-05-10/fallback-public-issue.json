@@ -1,0 +1,71 @@
+{
+  "date": "2026-05-10",
+  "generated_at": "2026-05-10T03:47:03.966Z",
+  "base_draft_source": "editor-draft.json",
+  "preserve_article_count": 0,
+  "final_article_count": 3,
+  "demoted_articles": [
+    {
+      "headline": "GCC 16.1 릴리스: C++26 기능 및 C++20 기본 지원",
+      "category": "C++ / AI Tooling Fallback",
+      "action": "replace-or-demote",
+      "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.; Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.; Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.; Fact-check must_fix item mentions this section.",
+      "sources": [
+        {
+          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+        }
+      ]
+    }
+  ],
+  "fallback_articles": [
+    {
+      "headline": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+      "category": "Android Platform / CameraX",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "action": "rebuild-from-bound-candidate",
+      "fallback": false,
+      "reason": "rebuild-from-bound-candidate"
+    },
+    {
+      "headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "category": "Camera Driver / Image Pipeline",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "action": "rebuild-from-bound-candidate",
+      "fallback": false,
+      "reason": "rebuild-from-bound-candidate"
+    },
+    {
+      "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+      "category": "Android Platform / CameraX",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "action": "rebuild-from-bound-candidate",
+      "fallback": false,
+      "reason": "hard failure replacement"
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "allow_fallback": false,
+      "reason": "duplicate_url"
+    },
+    {
+      "title": "Introduction &mdash; libcamera",
+      "url": "https://libcamera.org/introduction.html",
+      "source": "libcamera Documentation",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true; briefing_only=true"
+    }
+  ]
+}
