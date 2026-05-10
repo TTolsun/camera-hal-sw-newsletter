@@ -10,6 +10,7 @@ const FORBIDDEN_ENGLISH_HEADINGS = [
   '## Editor Action Guidance',
   '## Generated Artifacts'
 ];
+const LEGACY_GENERATED_ARTIFACTS_HEADING = '\u003f\uc579\uaf66\u0020\u003f\uacd7\ud167\u81fe\u003f';
 
 function toText(value) {
   return String(value ?? '');
@@ -156,7 +157,7 @@ function validatePrBodyText(text, options = {}) {
   }
 
   const patterns = publicArtifactPatterns(options.date);
-  const generatedArtifactsSection = sectionByHeading(sections, ['생성 산출물', '?앹꽦 ?곗텧臾?']);
+  const generatedArtifactsSection = sectionByHeading(sections, ['생성 산출물', LEGACY_GENERATED_ARTIFACTS_HEADING]);
   if (!generatedArtifactsSection) {
     errors.push('PR body must contain generated artifacts section.');
   }

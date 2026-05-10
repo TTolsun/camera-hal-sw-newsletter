@@ -1,6 +1,6 @@
 # Candidate Selection Diagnostics - 2026-05-06
 
-## ?꾨낫 ?좏깮 吏꾨떒
+## 후보 선택 진단
 
 - Reporter candidates: unknown
 - Reporter-selected candidates: unknown

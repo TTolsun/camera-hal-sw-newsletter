@@ -18,6 +18,11 @@ const {
 
 const repoRoot = path.join(__dirname, '..');
 const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');
+const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
+
+function escapeRegExp(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'rendered-issue-structure-'));
@@ -117,7 +122,7 @@ test('rendered issue structure rejects markdown structural failures', () => {
     ['missing briefing', base.markdown.replace(/^##\s+1\..+$/m, '## Briefing removed'), /briefing section/],
     ['two briefing bullets', buildMarkdown(issue({ date: base.date, briefing: ['one', 'two'] })), /exactly 3 briefing bullets/],
     ['missing references', base.markdown.replace(/\n## [^\n]+\n\n- \[Reference\]\(https:\/\/example\.com\/reference\)\n?$/m, ''), /References/],
-    ['missing source heading', base.markdown.replace(/\*\*(Sources|출처|異쒖쿂)[^\n]*\*\*/, '**Source heading removed**'), /sources heading/],
+    ['missing source heading', base.markdown.replace(new RegExp(`\\*\\*(Sources|출처|${escapeRegExp(LEGACY_SOURCE_LABEL)})[^\\n]*\\*\\*`), '**Source heading removed**'), /sources heading/],
     ['missing source URL', base.markdown.replace('https://example.com/a', 'ftp://example.com/a'), /no source entries/]
   ];
 

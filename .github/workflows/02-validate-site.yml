@@ -33,6 +33,7 @@ jobs:
 
       - name: Validate structural publication artifacts
         run: |
+          npm run check:encoding
           npm run validate:policy
           npm run check:policy-docs
           npm run validate:config
