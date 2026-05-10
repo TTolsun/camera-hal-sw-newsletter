@@ -13,12 +13,12 @@ npm.cmd run test
 내부적으로는 아래 명령을 실행합니다.
 
 ```powershell
-node --test tests/*.test.js
+node --test "tests/**/*.test.js"
 node scripts/test-artifact-manifest.js
 node scripts/test-selection-diagnostics.js
 ```
 
-#82 nested-runner slice가 반영되기 전까지 CI에서 실행되어야 하는 새 test file은 `tests/*.test.js`에 둡니다. Runner를 변경하고 Windows PowerShell에서 검증하기 전에는 `tests/unit/`, `tests/contract/`, `tests/workflow/`, `tests/hygiene/`로 test file을 이동하지 않습니다.
+#82 nested-runner slice 이후 `test:unit`은 `tests/**/*.test.js`를 발견합니다. 다만 folder migration slice가 끝나기 전까지 새 test file은 기존처럼 root `tests/*.test.js`에 두고, `tests/unit/`, `tests/contract/`, `tests/workflow/`, `tests/hygiene/` 이동은 별도 migration PR에서 진행합니다.
 
 ## Target Structure
 
@@ -124,4 +124,3 @@ Fixture policy 변경에는 아래 targeted test를 실행합니다.
 ```powershell
 node --test tests\fixture-policy.test.js
 ```
-
