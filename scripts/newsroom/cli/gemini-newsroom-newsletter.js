@@ -124,6 +124,16 @@ function cloneJson(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function linkedEvidencePromptGuardrails() {
+  return [
+    'Linked evidence diagnostics are not included in the prompt payload. Do not infer Gerrit, IssueTracker, GitHub, mailing-list, CVE, or linked-page details unless they appear in the supplied article capsule or source fields.',
+    'Editor draft text is not linked evidence. Treat draft mentions of Gerrit, IssueTracker, GitHub, mailing-list, CVE, or linked-page details as claims to verify, not as source-backed facts.',
+    'Do not describe blocked, failed, skipped, or unsupported linked evidence as confirmed detail.',
+    'Do not treat build_dependency_fix, test_only_change, or documentation_only signals as HAL runtime, stream, buffer, metadata, request/result, implementation, or product behavior changes.',
+    'Do not claim high HAL/runtime impact unless supplied evidence explicitly names stream, buffer, metadata, request, result, ImageCapture, VideoCapture, Surface, or CameraPipe behavior.'
+  ].join('\n');
+}
+
 function writeNewsletterDate(date, rootDir = root) {
   const tmpDir = path.join(rootDir, '.tmp');
   fs.mkdirSync(tmpDir, { recursive: true });
@@ -2427,6 +2437,7 @@ async function main() {
         'Preserve primary_selected and reserve_candidate flags exactly. Reserve candidates are replacement pool inputs, not initial main article choices.',
         'Summarize, tag, and refine evidence fields only for the supplied shortlisted article capsules.',
         'Use article capsule fields, risk, score, selection, imageCandidates, and evidence only as context. Do not assume omitted source text exists.',
+        linkedEvidencePromptGuardrails(),
         'For every final_selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
         'Preserve eligibility and risk values from the article capsule. If a required schema field is not present, infer only from the capsule evidence and risk object.',
         'If the source is a rolling page, release-note watch page, documentation watch page, homepage, or other watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides date/version/API/component/behavior evidence.',
@@ -2480,6 +2491,7 @@ async function main() {
         `Create main articles within the Newsletter Policy range (${articleCountRangeText()}) when enough non-duplicate source material exists.`,
         `Final main article count must satisfy ${publishGateCriteriaText()}.`,
         'Use final-selected article capsules as main article inputs. Do not turn final_selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
+        linkedEvidencePromptGuardrails(),
         'Initial editor drafts must use only primary selected article capsules. Reserve candidates are not available until a primary article is demoted/removed during repair or completion.',
         `Priority order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
         'SoC/platform articles are lower-priority fallback, but do not exclude public CPU/GPU/NPU/ISP/power/thermal/performance information when it is final-selected and can be explained from Camera framework, HAL, driver, image pipeline, or platform performance perspective.',
@@ -2566,6 +2578,7 @@ async function main() {
       [
         'You are the AI fact checker for AOSP Camera / Driver / SoC Platform Newsletter.',
         'Check factuality, missing sources, exaggerated language, and missing dates.',
+        linkedEvidencePromptGuardrails(),
         'Treat missing version, release date, API/component name, or behavior change as must_fix when an article presents a rolling page or generic watch item as a concrete update.',
         'Treat any finalSelectionEligibility=watchlist/exclude candidate or watch page without dated evidence used as a main article as must_fix.',
         'Any claim without a source must be classified as must_fix.',
@@ -2658,6 +2671,7 @@ async function main() {
           'For replace-or-demote actions, demote the article to briefing/watchlist or replace it. Never rewrite source gaps into publishable facts.',
           'For reporter_eligibility_violations, replace or demote the section. Do not repair text around an ineligible source.',
           'Replacement main articles must use only primary selected capsules that are not locked/excluded or reserve candidate capsules supplied in this prompt.',
+          linkedEvidencePromptGuardrails(),
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
           'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance.',
@@ -2712,6 +2726,7 @@ async function main() {
           [
           'You are the AI fact checker for the repaired AOSP Camera / Driver / SoC Platform Newsletter draft.',
           'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
+          linkedEvidencePromptGuardrails(),
           'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or expanded editorial-scope relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
           'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
@@ -2794,6 +2809,7 @@ async function main() {
             `Return only ${missingArticleCount} additional main article section(s), never a full newsletter rewrite.`,
             'Preserve existing valid sections by excluding their URLs, titles, source names, and source-date-title combinations.',
             'Use only the eligible reporter candidates supplied in this prompt. Do not use candidates omitted from the eligible list.',
+            linkedEvidencePromptGuardrails(),
             'Do not duplicate locked, duplicate/rejected, source-gap, or ineligible sections from the exclusion context.',
             'Each new section must satisfy the same editorial contract: confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, and sources.',
             'Each new section must name release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance using only supplied candidate metadata/source text.',
@@ -2833,6 +2849,7 @@ async function main() {
             [
             'You are the AI fact checker for the completed AOSP Camera / Driver / SoC Platform Newsletter draft.',
             'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
+            linkedEvidencePromptGuardrails(),
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the Newsletter Policy article composition contract.',
             'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
             'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
@@ -3263,6 +3280,7 @@ module.exports = {
   editorSemanticStatusExtra,
   failureStageFromError,
   hasTooFewMainArticlesDeduction,
+  linkedEvidencePromptGuardrails,
   main,
   recordEditorSemanticStatus,
   availableCompletionCandidates,

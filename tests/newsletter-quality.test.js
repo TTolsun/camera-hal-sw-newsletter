@@ -223,6 +223,62 @@ for (const regression of hardFailRegressionCases.values()) {
   });
 }
 
+function linkedEvidenceSummary(overrides = {}) {
+  return {
+    schema_version: 1,
+    total_count: 1,
+    by_type: { github_pull_request: 1 },
+    by_fetch_status: { resolved: 1 },
+    impact_type_counts: {},
+    warning_count: 0,
+    has_resolved_evidence: true,
+    has_unresolved_evidence: false,
+    top_identifiers: ['PR #123'],
+    ...overrides
+  };
+}
+
+function impactClassification(overrides = {}) {
+  return {
+    impact_type: 'runtime_behavior_change',
+    hal_runtime_impact: true,
+    camera_pipeline_impact: true,
+    recommended_article_type: 'main',
+    confidence: 0.75,
+    reason: 'Synthetic linked evidence impact.',
+    warnings: [],
+    ...overrides
+  };
+}
+
+function linkedEvidenceCandidate(url, bucket = 'direct_aosp_camera', overrides = {}) {
+  return scopedCandidate(url, bucket, {
+    linked_evidence_summary: linkedEvidenceSummary(),
+    impact_classification: impactClassification(),
+    ...overrides
+  });
+}
+
+function reportWithTargetSection(targetSection, targetCandidate, extraCandidates = []) {
+  const sections = [
+    targetSection,
+    section({ headline: 'CameraX release B', url: 'https://example.com/linked-b' }),
+    section({ headline: 'AOSP Camera change C', url: 'https://example.com/linked-c' }),
+    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/linked-d' })
+  ];
+  return reportFor(sections, [
+    targetCandidate,
+    scopedCandidate('https://example.com/linked-b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/linked-c', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/linked-d', 'direct_aosp_camera'),
+    ...extraCandidates
+  ]);
+}
+
+function linkedDeductions(report, category) {
+  return report.deductions.filter(item => item.category === category);
+}
+
 test('quality threshold follows configured numeric boundary behavior', () => {
   assert.equal(determineQualityStatus(qualityGatePolicy.threshold - 1, qualityGatePolicy.threshold, {
     sourceGapCount: 0,
@@ -583,6 +639,302 @@ test('quality gate fails shared release-note URL without matching date or versio
 
   assert.equal(result.status, 'FAIL');
   assert.ok(result.hard_fail_reasons.some(reason => reason.includes('Shared watch/release-note URL requires matching')));
+});
+
+test('linked evidence overclaim detection uses only the bound source candidate', () => {
+  const target = section({
+    headline: 'CameraX runtime overclaim from unrelated diagnostics',
+    url: 'https://example.com/bound-clean',
+    what_changed: 'CameraX request/result metadata behavior changed for HAL runtime validation on 2026-05-01.'
+  });
+  const report = reportWithTargetSection(
+    target,
+    scopedCandidate('https://example.com/bound-clean', 'direct_aosp_camera'),
+    [
+      linkedEvidenceCandidate('https://example.com/unrelated-linked', 'direct_aosp_camera', {
+        linked_evidence_summary: linkedEvidenceSummary({ by_fetch_status: { skipped: 1 }, has_unresolved_evidence: true }),
+        impact_classification: impactClassification({
+          impact_type: 'build_dependency_fix',
+          hal_runtime_impact: false,
+          camera_pipeline_impact: false,
+          recommended_article_type: 'watch'
+        })
+      })
+    ]
+  );
+
+  assert.equal(linkedDeductions(report, 'linked-evidence-overclaim').length, 0);
+  assert.equal(linkedDeductions(report, 'linked-evidence-limitation').length, 0);
+});
+
+test('linked evidence overclaim detection does not infer diagnostics when source binding is missing', () => {
+  const target = section({
+    headline: 'Unbound linked evidence overclaim',
+    url: 'https://example.com/unbound-linked-overclaim',
+    what_changed: 'GitHub linked evidence confirmed the Camera HAL request metadata fix on 2026-05-01.'
+  });
+  const report = reportFor([
+    target,
+    section({ headline: 'CameraX release B', url: 'https://example.com/unbound-b' }),
+    section({ headline: 'AOSP Camera change C', url: 'https://example.com/unbound-c' }),
+    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/unbound-d' })
+  ], [
+    scopedCandidate('https://example.com/unbound-b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/unbound-c', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/unbound-d', 'direct_aosp_camera'),
+    linkedEvidenceCandidate('https://example.com/unrelated-overclaim')
+  ]);
+
+  assert.ok(report.deductions.some(item =>
+    item.category === 'source-integrity' &&
+    item.reason.includes('does not bind')
+  ));
+  assert.equal(linkedDeductions(report, 'linked-evidence-overclaim').length, 0);
+});
+
+test('resolved linked evidence does not bypass source date and source gap contracts', () => {
+  const target = section({
+    headline: 'Linked evidence cannot repair source gap',
+    url: 'https://example.com/linked-source-gap'
+  });
+  const report = reportWithTargetSection(
+    target,
+    linkedEvidenceCandidate('https://example.com/linked-source-gap', 'direct_aosp_camera', {
+      hasDatedEvidence: false,
+      source_gap_risk: true
+    })
+  );
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item => item.reason.includes('missing dated evidence')));
+  assert.ok(report.deductions.some(item => item.reason.includes('source_gap_risk=true')));
+});
+
+test('linked evidence overclaim blocking deductions cover conservative impact classes', () => {
+  const cases = [
+    {
+      title: 'Build dependency framed as runtime',
+      url: 'https://example.com/linked-build',
+      section: {
+        what_changed: 'CameraX dependency update changed request/result metadata behavior in HAL runtime on 2026-05-01.'
+      },
+      impact: {
+        impact_type: 'build_dependency_fix',
+        hal_runtime_impact: false,
+        camera_pipeline_impact: false,
+        recommended_article_type: 'watch'
+      }
+    },
+    {
+      title: 'Test only framed as product runtime',
+      url: 'https://example.com/linked-test',
+      section: {
+        what_changed: 'CameraX test update fixed product runtime behavior for stream buffers on 2026-05-01.'
+      },
+      impact: {
+        impact_type: 'test_only_change',
+        hal_runtime_impact: false,
+        camera_pipeline_impact: false,
+        recommended_article_type: 'watch'
+      }
+    },
+    {
+      title: 'Docs framed as implementation',
+      url: 'https://example.com/linked-docs',
+      section: {
+        what_changed: 'CameraX docs update changed implementation behavior for ImageCapture Surface handling on 2026-05-01.'
+      },
+      impact: {
+        impact_type: 'documentation_only',
+        hal_runtime_impact: false,
+        camera_pipeline_impact: false,
+        recommended_article_type: 'watch'
+      }
+    },
+    {
+      title: 'Watch evidence promoted to main',
+      url: 'https://example.com/linked-watch',
+      section: {
+        what_changed: 'CameraX watch item is presented as a main implementation update for HAL teams on 2026-05-01.',
+        evidence_summary: 'Version: CameraX watch item; release date: 2026-05-01; API/component: CameraX; behavior change: watch signal.'
+      },
+      impact: {
+        impact_type: 'generic_tooling_change',
+        hal_runtime_impact: false,
+        camera_pipeline_impact: false,
+        recommended_article_type: 'watch'
+      }
+    },
+    {
+      title: 'Unresolved evidence described as confirmed',
+      url: 'https://example.com/linked-unresolved',
+      section: {
+        what_changed: 'GitHub linked evidence confirmed the Camera HAL request metadata fix on 2026-05-01.'
+      },
+      summary: {
+        by_fetch_status: { skipped: 1 },
+        has_resolved_evidence: false,
+        has_unresolved_evidence: true
+      },
+      impact: {
+        impact_type: 'runtime_behavior_change',
+        hal_runtime_impact: true,
+        camera_pipeline_impact: true,
+        recommended_article_type: 'main'
+      }
+    }
+  ];
+
+  for (const item of cases) {
+    const target = section({
+      headline: item.title,
+      url: item.url,
+      ...item.section
+    });
+    const report = reportWithTargetSection(
+      target,
+      linkedEvidenceCandidate(item.url, 'direct_aosp_camera', {
+        linked_evidence_summary: linkedEvidenceSummary(item.summary || {}),
+        impact_classification: impactClassification(item.impact)
+      })
+    );
+    assert.ok(linkedDeductions(report, 'linked-evidence-overclaim').some(deduction => deduction.blocking === true), item.title);
+  }
+});
+
+test('linked evidence absent or unresolved without inference does not create overclaim deduction', () => {
+  const absent = reportWithTargetSection(
+    section({ headline: 'No linked evidence candidate', url: 'https://example.com/no-linked' }),
+    scopedCandidate('https://example.com/no-linked', 'direct_aosp_camera')
+  );
+  assert.equal(linkedDeductions(absent, 'linked-evidence-overclaim').length, 0);
+
+  const unresolved = reportWithTargetSection(
+    section({
+      headline: 'Unresolved linked evidence disclosed as limited',
+      url: 'https://example.com/unresolved-limited',
+      what_changed: 'CameraX source note was reviewed on 2026-05-01.',
+      evidence_summary: 'Version: CameraX source note; release date: 2026-05-01; API/component: CameraX; behavior change: not claimed.',
+      background: 'This item is kept as source review context.',
+      why_it_matters: 'Teams can record the item for later source review.',
+      camera_hal_perspective: 'Use this as limited triage context only.',
+      action_items: ['Within 2 weeks, record the source review status.'],
+      team_summary: 'Keep the item as limited source review context.',
+      source_verification_notes: ['Official source checked; linked evidence is unresolved diagnostic context only.']
+    }),
+    linkedEvidenceCandidate('https://example.com/unresolved-limited', 'direct_aosp_camera', {
+      linked_evidence_summary: linkedEvidenceSummary({
+        by_fetch_status: { skipped: 1 },
+        has_resolved_evidence: false,
+        has_unresolved_evidence: true
+      }),
+      impact_classification: impactClassification({
+        impact_type: 'unknown',
+        hal_runtime_impact: false,
+        camera_pipeline_impact: false,
+        recommended_article_type: 'unknown'
+      })
+    })
+  );
+  assert.equal(linkedDeductions(unresolved, 'linked-evidence-overclaim').length, 0);
+  assert.equal(linkedDeductions(unresolved, 'linked-evidence-limitation').length, 0);
+});
+
+test('malformed linked evidence diagnostics are soft and non-fatal', () => {
+  const cases = [
+    {
+      headline: 'Malformed linked evidence candidate',
+      url: 'https://example.com/malformed-linked',
+      candidate: scopedCandidate('https://example.com/malformed-linked', 'direct_aosp_camera', {
+        linked_evidence_summary: 'malformed',
+        impact_classification: null
+      })
+    },
+    {
+      headline: 'Partial linked evidence summary candidate',
+      url: 'https://example.com/summary-only-linked',
+      candidate: scopedCandidate('https://example.com/summary-only-linked', 'direct_aosp_camera', {
+        linked_evidence_summary: linkedEvidenceSummary()
+      })
+    },
+    {
+      headline: 'Partial linked evidence impact candidate',
+      url: 'https://example.com/impact-only-linked',
+      candidate: scopedCandidate('https://example.com/impact-only-linked', 'direct_aosp_camera', {
+        impact_classification: impactClassification()
+      })
+    }
+  ];
+
+  for (const item of cases) {
+    const target = section({
+      headline: item.headline,
+      url: item.url
+    });
+    const report = reportWithTargetSection(target, item.candidate);
+    const [deduction] = linkedDeductions(report, 'linked-evidence-malformed');
+
+    assert.equal(deduction.blocking, false);
+    assert.equal(deduction.severity, 'soft');
+    assert.equal(report.article_results.find(result => result.headline === target.headline).status, 'PASS');
+  }
+
+  const absentTarget = section({
+    headline: 'No linked evidence diagnostics candidate',
+    url: 'https://example.com/no-linked-diagnostics'
+  });
+  const absentReport = reportWithTargetSection(
+    absentTarget,
+    scopedCandidate('https://example.com/no-linked-diagnostics', 'direct_aosp_camera')
+  );
+  assert.equal(linkedDeductions(absentReport, 'linked-evidence-malformed').length, 0);
+});
+
+test('weak linked evidence limitation wording is soft and explicit limitation avoids it', () => {
+  const weak = reportWithTargetSection(
+    section({
+      headline: 'Unresolved linked evidence without limitation note',
+      url: 'https://example.com/weak-linked-note',
+      source_verification_notes: ['Official source checked.']
+    }),
+    linkedEvidenceCandidate('https://example.com/weak-linked-note', 'direct_aosp_camera', {
+      linked_evidence_summary: linkedEvidenceSummary({
+        by_fetch_status: { skipped: 1 },
+        has_resolved_evidence: false,
+        has_unresolved_evidence: true
+      }),
+      impact_classification: impactClassification({
+        impact_type: 'unknown',
+        hal_runtime_impact: false,
+        camera_pipeline_impact: false,
+        recommended_article_type: 'unknown'
+      })
+    })
+  );
+  const [weakDeduction] = linkedDeductions(weak, 'linked-evidence-limitation');
+  assert.equal(weakDeduction.blocking, false);
+
+  const explicit = reportWithTargetSection(
+    section({
+      headline: 'Unresolved linked evidence with limitation note',
+      url: 'https://example.com/explicit-linked-note',
+      source_verification_notes: ['Official source checked; linked evidence is skipped and remains diagnostic only.']
+    }),
+    linkedEvidenceCandidate('https://example.com/explicit-linked-note', 'direct_aosp_camera', {
+      linked_evidence_summary: linkedEvidenceSummary({
+        by_fetch_status: { skipped: 1 },
+        has_resolved_evidence: false,
+        has_unresolved_evidence: true
+      }),
+      impact_classification: impactClassification({
+        impact_type: 'unknown',
+        hal_runtime_impact: false,
+        camera_pipeline_impact: false,
+        recommended_article_type: 'unknown'
+      })
+    })
+  );
+  assert.equal(linkedDeductions(explicit, 'linked-evidence-limitation').length, 0);
 });
 
 test('generic bucket is not promoted by camera wording in generated text', () => {
