@@ -15,6 +15,7 @@
 | [config/action-variables.ko.md](config/action-variables.ko.md) | GitHub Actions Secret과 Variable 설명입니다. |
 | [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약입니다. |
 | [testing/test-baseline.md](testing/test-baseline.md) | 현재 test/validation baseline입니다. |
+| [scripts/README.md](../scripts/README.md) | scripts wrapper와 실제 newsroom 구현 진입점을 설명합니다. |
 
 Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
 
@@ -41,7 +42,7 @@ Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of 
 | --- | --- |
 | `.github/workflows/` | 후보 수집, Gemini 생성, 검증, PR 생성, Pages 검증 workflow입니다. |
 | `data/` | `newsletters.json`과 machine-readable source registry인 `news-sources.json`입니다. |
-| `scripts/newsroom/` | 실제 collector, generator, renderer, validator 구현입니다. |
+| [`scripts/newsroom/`](../scripts/newsroom/README.md) | 실제 collector, generator, renderer, validator 구현입니다. |
 | `tests/` | Node built-in test runner 기반 regression test입니다. |
 | `content/collected-news/` | 날짜별 raw candidate output인 `YYYY-MM-DD/candidates.json`입니다. |
 | `content/newsroom/` | 날짜별 reporter, editor, fact-check, quality, retry, QA artifact입니다. |

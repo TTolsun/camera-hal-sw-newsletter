@@ -6,7 +6,9 @@
 
 - `cli/`: command entrypoint, workflow-facing output, validation command wrapper입니다.
 - `collect/`: source page/RSS parsing과 candidate collection입니다.
-- `generate/`: deterministic selection, article capsule, Gemini client, retry/summary cache logic입니다.
+- `generate/`: deterministic selection, article capsule, generation orchestration, summary cache logic입니다.
+- `llm/`: Gemini/Internal LLM provider client, model policy, retry/cost diagnostics입니다.
+- `metrics/`: source effectiveness와 newsroom 운영 지표 report입니다.
 - `render/`: newsletter schema, Markdown/HTML rendering, image resolution입니다.
 - `validate/`: quality gate와 config validation입니다.
 - `common/`: shared runtime config, artifact paths, scope helpers입니다.
