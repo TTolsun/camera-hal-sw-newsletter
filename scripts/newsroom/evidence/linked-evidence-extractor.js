@@ -207,7 +207,12 @@ function extractLinkedEvidenceFromCandidate(candidate = {}) {
     .join('\n');
 
   return extractLinkedEvidenceFromText(text, {
-    primaryUrl: source.url || source.articleUrl || source.article_url
+    primaryUrls: [
+      source.url,
+      source.articleUrl,
+      source.article_url,
+      source.normalized_url
+    ].filter(Boolean)
   });
 }
 

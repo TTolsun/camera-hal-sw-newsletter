@@ -73,6 +73,20 @@ test('extractor ignores primary candidate url when it is the only URL', () => {
   assert.deepEqual(evidence, []);
 });
 
+test('extractor ignores normalized_url alias while preserving secondary generic URL', () => {
+  const normalizedUrl = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const secondaryUrl = 'https://example.com/camera-evidence';
+  const evidence = extractLinkedEvidenceFromCandidate({
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    normalized_url: normalizedUrl,
+    summary: `Primary normalized row ${normalizedUrl}; extra note ${secondaryUrl}`
+  });
+
+  assertExtractorStatuses(evidence);
+  assert.deepEqual(evidence.map(item => item.url), [secondaryUrl]);
+  assert.equal(evidence[0].type, LINKED_EVIDENCE_TYPES.GENERIC_URL);
+});
+
 test('extractor collapses duplicate linked evidence', () => {
   const text = [
     'See https://github.com/androidx/androidx/pull/1234.',
