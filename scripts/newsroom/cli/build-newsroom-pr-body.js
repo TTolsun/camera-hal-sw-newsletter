@@ -259,6 +259,615 @@ function renderFinalSelectionStatus(status) {
   ].join('\n');
 }
 
+const TRACE_ARTIFACT_DEFS = [
+  { key: 'reporter', path: date => `content/newsroom/${date}/reporter-candidates.json` },
+  { key: 'shortlist', path: date => `content/newsroom/${date}/shortlisted-candidates.json` },
+  { key: 'collected', path: date => `content/collected-news/${date}/candidates.json` },
+  { key: 'quality', path: date => `content/newsroom/${date}/quality-report.json` },
+  { key: 'factCheck', path: date => `content/newsroom/${date}/fact-check-report.json` },
+  { key: 'fallback', path: date => `content/newsroom/${date}/fallback-public-issue.json` }
+];
+
+const TRACE_STATUS_RANK = {
+  final_selected: 1,
+  primary_selected: 2,
+  reserve: 3,
+  merged: 4,
+  demoted: 5,
+  rejected: 6,
+  excluded: 7,
+  not_main_eligible: 8,
+  briefing_only: 9,
+  reference_only: 10,
+  quality_fail: 11,
+  factcheck_fail: 12,
+  unknown: 99
+};
+
+function normalizeMatchText(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function normalizeUrlKey(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  try {
+    const parsed = new URL(text);
+    parsed.hash = parsed.hash || '';
+    parsed.pathname = parsed.pathname.replace(/\/+$/, '') || '/';
+    return parsed.toString().toLowerCase();
+  } catch (_) {
+    return text.replace(/\/+$/, '').toLowerCase();
+  }
+}
+
+function truncateText(value, maxLength = 180) {
+  const text = String(value ?? '').replace(/\s+/g, ' ').trim();
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, Math.max(0, maxLength - 3)).trim()}...`;
+}
+
+function sanitizeMarkdownTableCell(value, { fallback = 'unknown', maxLength = 180 } = {}) {
+  const text = String(value ?? '').replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+  return truncateText(text || fallback, maxLength).replace(/\|/g, '\\|');
+}
+
+function renderMarkdownTable(headers, rows) {
+  const safeHeaders = headers.map(header => sanitizeMarkdownTableCell(header));
+  const separator = headers.map((_, index) => (index === 0 ? '---:' : '---'));
+  const body = rows.map(row => `| ${row.map(cell => sanitizeMarkdownTableCell(cell)).join(' | ')} |`);
+  return [
+    `| ${safeHeaders.join(' | ')} |`,
+    `| ${separator.join(' | ')} |`,
+    ...body
+  ].join('\n');
+}
+
+function firstText(values) {
+  for (const value of values) {
+    if (value === null || value === undefined) continue;
+    const text = String(value).trim();
+    if (text) return text;
+  }
+  return '';
+}
+
+function valuesAsArray(value) {
+  if (Array.isArray(value)) return value;
+  if (value === null || value === undefined || value === '') return [];
+  return [value];
+}
+
+function extractCandidateTitle(candidate) {
+  return firstText([candidate?.title, candidate?.headline, candidate?.article_title, candidate?.name]);
+}
+
+function sourceFromValue(value) {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  return firstText([value.name, value.title, value.source_name, value.source]);
+}
+
+function extractCandidateSource(candidate) {
+  return firstText([
+    candidate?.source_name,
+    sourceFromValue(candidate?.source),
+    candidate?.publisher,
+    candidate?.feed_source,
+    sourceFromValue(ensureArray(candidate?.sources)[0])
+  ]);
+}
+
+function extractCandidateDate(candidate) {
+  return firstText([candidate?.published_date, candidate?.publishedAt, candidate?.date, candidate?.source_date]);
+}
+
+function extractCandidateBucket(candidate) {
+  return firstText([
+    candidate?.relevance_bucket,
+    candidate?.aosp_camera_stack_bucket,
+    candidate?.bucket,
+    candidate?.category
+  ]);
+}
+
+function extractCandidateScore(candidate) {
+  const value = candidate?.deterministic_score ??
+    candidate?.score_breakdown?.total ??
+    candidate?.relevance_score ??
+    candidate?.score;
+  return value === null || value === undefined || value === '' ? 'n/a' : value;
+}
+
+function extractCandidateUrls(candidate) {
+  const urls = [
+    candidate?.article_url,
+    candidate?.articleUrl,
+    candidate?.url,
+    candidate?.source_url,
+    candidate?.sourceUrl,
+    candidate?.link
+  ];
+  for (const source of ensureArray(candidate?.sources)) {
+    urls.push(source?.url, source?.source_url, source?.sourceUrl);
+  }
+  for (const url of valuesAsArray(candidate?.source_urls)) {
+    urls.push(url);
+  }
+  return [...new Set(urls.map(url => String(url || '').trim()).filter(Boolean))];
+}
+
+function extractCandidateUrl(candidate) {
+  return extractCandidateUrls(candidate)[0] || '';
+}
+
+function extractReasonList(candidate) {
+  const reasons = [];
+  const push = value => {
+    for (const item of valuesAsArray(value)) {
+      const text = typeof item === 'string' ? item : (item?.reason || item?.problem || item?.message || JSON.stringify(item));
+      if (text) reasons.push(text);
+    }
+  };
+  push(candidate?.selection_exclusion_reason);
+  push(candidate?.final_exclusion_reasons);
+  push(candidate?.exclusion_reasons);
+  push(candidate?.watchlist_reason);
+  push(candidate?.reason);
+  push(candidate?.collection_reason);
+  if (candidate?.source_gap_risk === true) reasons.push('source_gap_risk=true');
+  push(candidate?.evidence_origin);
+  push(candidate?.finalSelectionEligibility);
+  return reasons.length > 0 ? [...new Set(reasons)] : ['no explicit reason'];
+}
+
+function classifyCandidateStatus(candidate, hint = '') {
+  if (candidate?.final_selected === true || hint === 'final_selected') return 'final_selected';
+  if (candidate?.primary_selected === true || candidate?.selected_for_editor === true || hint === 'primary_selected') {
+    return 'primary_selected';
+  }
+  if (candidate?.reserve_candidate === true || hint === 'reserve') return 'reserve';
+  if (hint === 'merged') return 'merged';
+  if (hint === 'demoted') return 'demoted';
+  if (hint === 'rejected') return 'rejected';
+  if (ensureArray(candidate?.final_exclusion_reasons).length > 0 || ensureArray(candidate?.exclusion_reasons).length > 0 || hint === 'excluded') {
+    return 'excluded';
+  }
+  if (candidate?.main_eligible === false) return 'not_main_eligible';
+  if (candidate?.briefing_only === true) return 'briefing_only';
+  if (candidate?.reference_only === true) return 'reference_only';
+  if (hint === 'quality_fail') return 'quality_fail';
+  if (hint === 'factcheck_fail') return 'factcheck_fail';
+  return 'unknown';
+}
+
+function reasonCodeFor(candidate, status, reportStatus = '') {
+  const haystack = [
+    status,
+    reportStatus,
+    ...extractReasonList(candidate)
+  ].join(' ').toLowerCase();
+  if (status === 'merged' || /merged/.test(haystack)) return 'merged_into_selected_article';
+  if (/fact.?check.*source.?gap|source_gap/.test(haystack) && /fact/.test(reportStatus)) return 'factcheck_source_gap';
+  if (/fact.?check|must_fix/.test(haystack)) return 'factcheck_must_fix';
+  if (/quality|hard_fail/.test(haystack)) return 'quality_hard_fail';
+  if (/source.?gap/.test(haystack)) return 'source_gap';
+  if (/weak.*hal|hal.*weak|scope.?relevance|hal.*connection|camera.*evidence.*weak/.test(haystack)) return 'weak_hal_connection';
+  if (/generic.*ai|generic.*tech|buzzword/.test(haystack)) return 'generic_ai_noise';
+  if (/duplicate.*source|duplicate.*url|duplicate_base_url/.test(haystack)) return 'duplicate_source';
+  if (/same.*source.*cluster|same.*release/.test(haystack)) return 'same_source_cluster';
+  if (/missing.*date|missing.*dated|no date|stale/.test(haystack)) return 'missing_dated_evidence';
+  if (candidate?.main_eligible === false || /main_eligible=false|not_main_eligible/.test(haystack)) return 'not_main_eligible';
+  if (candidate?.briefing_only === true || /briefing_only=true/.test(haystack)) return 'briefing_only';
+  if (candidate?.reference_only === true || /reference_only=true/.test(haystack)) return 'reference_only';
+  if (/fallback/.test(haystack)) return 'fallback_only';
+  return 'unknown_reason';
+}
+
+function formatCandidateLink(candidate) {
+  const title = sanitizeMarkdownTableCell(candidate.title || 'unknown title', { maxLength: 120 });
+  const url = String(candidate.url || '').replace(/[\s|]+/g, '').trim();
+  return url ? `[${title}](${url})` : title;
+}
+
+function candidateKeys(candidate) {
+  const keys = [];
+  for (const url of candidate.urls || []) {
+    const key = normalizeUrlKey(url);
+    if (key) keys.push(`url:${key}`);
+  }
+  if (candidate.title && candidate.source) {
+    keys.push(`title-source:${normalizeMatchText(candidate.title)}|${normalizeMatchText(candidate.source)}`);
+  }
+  if (candidate.title && candidate.date) {
+    keys.push(`title-date:${normalizeMatchText(candidate.title)}|${normalizeMatchText(candidate.date)}`);
+  }
+  return [...new Set(keys)];
+}
+
+function normalizeTraceCandidate(raw, { statusHint = '', sourceHint = '' } = {}) {
+  if (!raw || typeof raw !== 'object') return null;
+  const title = extractCandidateTitle(raw);
+  const urls = extractCandidateUrls(raw);
+  const source = extractCandidateSource(raw);
+  const date = extractCandidateDate(raw);
+  return {
+    raw,
+    id: '',
+    title: title || 'unknown title',
+    url: urls[0] || '',
+    urls,
+    source: source || 'unknown source',
+    date: date || 'unknown date',
+    bucket: extractCandidateBucket(raw) || 'unknown bucket',
+    score: extractCandidateScore(raw),
+    status: classifyCandidateStatus(raw, statusHint),
+    reasons: extractReasonList(raw),
+    reasonCode: reasonCodeFor(raw, classifyCandidateStatus(raw, statusHint)),
+    sourceHints: new Set([sourceHint].filter(Boolean)),
+    reportLinks: []
+  };
+}
+
+function mergeTraceCandidate(target, incoming) {
+  target.urls = [...new Set([...target.urls, ...incoming.urls])];
+  if (!target.url && incoming.url) target.url = incoming.url;
+  for (const field of ['title', 'source', 'date', 'bucket', 'score']) {
+    if (!target[field] || /^unknown|n\/a$/.test(String(target[field]))) target[field] = incoming[field];
+  }
+  target.reasons = [...new Set([...target.reasons, ...incoming.reasons])];
+  for (const hint of incoming.sourceHints) target.sourceHints.add(hint);
+  if ((TRACE_STATUS_RANK[incoming.status] || 99) < (TRACE_STATUS_RANK[target.status] || 99)) {
+    target.status = incoming.status;
+    target.reasonCode = incoming.reasonCode;
+  }
+  return target;
+}
+
+function addTraceCandidate(index, raw, options = {}) {
+  const normalized = normalizeTraceCandidate(raw, options);
+  if (!normalized) return null;
+  const keys = candidateKeys(normalized);
+  const existing = keys.map(key => index.keyToCandidate.get(key)).find(Boolean);
+  const candidate = existing ? mergeTraceCandidate(existing, normalized) : normalized;
+  if (!existing) index.candidates.push(candidate);
+  for (const key of candidateKeys(candidate)) index.keyToCandidate.set(key, candidate);
+  return candidate;
+}
+
+function readTraceJson(root, relPath, issues) {
+  const filePath = path.join(root, ...relPath.split('/'));
+  if (!fs.existsSync(filePath)) {
+    issues.push(`${relPath}: 파일이 없습니다.`);
+    return null;
+  }
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (error) {
+    issues.push(`${relPath}: JSON을 읽을 수 없습니다 (${error.message}).`);
+    return null;
+  }
+}
+
+function loadCandidateTraceArtifacts(root, date) {
+  const issues = [];
+  const artifacts = {};
+  for (const def of TRACE_ARTIFACT_DEFS) {
+    const relPath = def.path(date);
+    artifacts[def.key] = {
+      relPath,
+      value: readTraceJson(root, relPath, issues)
+    };
+  }
+  return { artifacts, issues };
+}
+
+function pushArtifactCandidates(index, value, field, statusHint, sourceHint, issues, relPath) {
+  if (!value || typeof value !== 'object') return;
+  const list = value[field];
+  if (list === undefined) return;
+  if (!Array.isArray(list)) {
+    issues.push(`${relPath}: ${field} 필드가 배열이 아닙니다.`);
+    return;
+  }
+  for (const item of list) addTraceCandidate(index, item, { statusHint, sourceHint });
+}
+
+function buildFallbackCandidate(item) {
+  if (!item || typeof item !== 'object') return null;
+  return {
+    ...item,
+    title: item.title || item.headline,
+    url: item.url || valuesAsArray(item.source_urls)[0] || ensureArray(item.sources)[0]?.url,
+    source_name: item.source_name || item.source || ensureArray(item.sources)[0]?.title,
+    relevance_bucket: item.relevance_bucket || item.category,
+    selection_exclusion_reason: item.reason
+  };
+}
+
+function buildTraceIndex(artifacts, issues) {
+  const index = { candidates: [], keyToCandidate: new Map() };
+  const shortlist = artifacts.shortlist.value;
+  const reporter = artifacts.reporter.value;
+  const collected = artifacts.collected.value;
+  const fallback = artifacts.fallback.value;
+
+  pushArtifactCandidates(index, shortlist, 'primary_selected_articles', 'primary_selected', 'shortlist', issues, artifacts.shortlist.relPath);
+  pushArtifactCandidates(index, shortlist, 'selected_articles', 'final_selected', 'shortlist', issues, artifacts.shortlist.relPath);
+  pushArtifactCandidates(index, shortlist, 'shortlisted_candidates', '', 'shortlist', issues, artifacts.shortlist.relPath);
+  pushArtifactCandidates(index, shortlist, 'reserve_candidates', 'reserve', 'shortlist', issues, artifacts.shortlist.relPath);
+  pushArtifactCandidates(index, shortlist, 'demoted_candidates', 'demoted', 'shortlist', issues, artifacts.shortlist.relPath);
+  pushArtifactCandidates(index, shortlist, 'excluded_candidates', 'excluded', 'shortlist', issues, artifacts.shortlist.relPath);
+  pushArtifactCandidates(index, reporter, 'candidates', '', 'reporter', issues, artifacts.reporter.relPath);
+  pushArtifactCandidates(index, collected, 'candidates', '', 'collected', issues, artifacts.collected.relPath);
+
+  if (fallback && typeof fallback === 'object') {
+    for (const item of ensureArray(fallback.merged_articles)) {
+      addTraceCandidate(index, buildFallbackCandidate(item), { statusHint: 'merged', sourceHint: 'fallback-public-issue' });
+    }
+    for (const item of ensureArray(fallback.demoted_articles)) {
+      addTraceCandidate(index, buildFallbackCandidate(item), { statusHint: 'demoted', sourceHint: 'fallback-public-issue' });
+    }
+    for (const item of ensureArray(fallback.rejected_candidates)) {
+      addTraceCandidate(index, buildFallbackCandidate(item), { statusHint: 'rejected', sourceHint: 'fallback-public-issue' });
+    }
+  }
+
+  for (const artifact of [artifacts.shortlist, artifacts.reporter, artifacts.collected]) {
+    if (!artifact.value) continue;
+    const knownCandidateField = ['primary_selected_articles', 'selected_articles', 'shortlisted_candidates', 'reserve_candidates', 'demoted_candidates', 'excluded_candidates', 'candidates']
+      .some(field => Array.isArray(artifact.value[field]));
+    if (!knownCandidateField) {
+      issues.push(`${artifact.relPath}: 후보 배열 필드를 찾지 못했습니다.`);
+    }
+  }
+
+  return index;
+}
+
+function assignCandidateIds(candidates) {
+  const statusOrder = status => TRACE_STATUS_RANK[status] || 99;
+  candidates.sort((a, b) =>
+    statusOrder(a.status) - statusOrder(b.status) ||
+    normalizeMatchText(a.title).localeCompare(normalizeMatchText(b.title))
+  );
+  candidates.forEach((candidate, index) => {
+    candidate.id = `cand_${String(index + 1).padStart(3, '0')}`;
+  });
+}
+
+function matchCandidateForReport(index, item) {
+  const urls = extractCandidateUrls(item);
+  for (const url of urls) {
+    const candidate = index.keyToCandidate.get(`url:${normalizeUrlKey(url)}`);
+    if (candidate) return candidate;
+  }
+  const title = extractCandidateTitle(item) || item?.location || item?.headline;
+  const source = extractCandidateSource(item);
+  const date = extractCandidateDate(item);
+  if (title && source) {
+    const candidate = index.keyToCandidate.get(`title-source:${normalizeMatchText(title)}|${normalizeMatchText(source)}`);
+    if (candidate) return candidate;
+  }
+  if (title && date) {
+    const candidate = index.keyToCandidate.get(`title-date:${normalizeMatchText(title)}|${normalizeMatchText(date)}`);
+    if (candidate) return candidate;
+  }
+  const normalizedTitle = normalizeMatchText(title);
+  if (normalizedTitle) {
+    return index.candidates.find(candidate => normalizeMatchText(candidate.title) === normalizedTitle) || null;
+  }
+  return null;
+}
+
+function promoteReportOnlyStatus(candidate, statusHint) {
+  if (!candidate || candidate.status !== 'unknown') return;
+  candidate.status = statusHint;
+  candidate.reasonCode = reasonCodeFor(candidate.raw, statusHint, statusHint);
+}
+
+function reportItemTitle(item) {
+  if (typeof item === 'string') {
+    const sectionMatch = item.match(/section="([^"]+)"/);
+    if (sectionMatch) return sectionMatch[1];
+    return item;
+  }
+  return extractCandidateTitle(item) || item?.location || item?.headline || item?.category || 'unknown item';
+}
+
+function reportItemReason(item) {
+  if (typeof item === 'string') return item;
+  return firstText([
+    item?.reason,
+    item?.problem,
+    item?.message,
+    ensureArray(item?.hard_fail_reasons).join('; '),
+    ensureArray(item?.soft_deductions).map(entry => entry.reason || entry.category).join('; ')
+  ]) || 'no explicit reason';
+}
+
+function addReportLink(links, index, item, report, status, label, statusHint) {
+  const candidate = matchCandidateForReport(index, item);
+  if (candidate) {
+    promoteReportOnlyStatus(candidate, statusHint);
+    candidate.reportLinks.push({ report, status, label, reason: reportItemReason(item) });
+  }
+  links.push({
+    candidate,
+    candidateId: candidate ? '' : 'unmatched',
+    title: candidate?.title || reportItemTitle(item),
+    report,
+    status,
+    label,
+    reason: reportItemReason(item)
+  });
+}
+
+function buildQualityFactcheckLinks(index, qualityReport, factCheckReport) {
+  const links = [];
+  for (const result of ensureArray(qualityReport?.article_results)) {
+    const hardReasons = ensureArray(result?.hard_fail_reasons);
+    if (result?.status === 'FAIL' || hardReasons.length > 0) {
+      addReportLink(links, index, result, 'quality-report.json', 'hard_fail', `article_results[${result.index ?? '?'}]`, 'quality_fail');
+    }
+    for (const deduction of ensureArray(result?.soft_deductions)) {
+      addReportLink(links, index, { ...deduction, headline: result?.headline, sources: result?.sources }, 'quality-report.json', 'deduction', `article_results[${result.index ?? '?'}].soft_deductions`, 'quality_fail');
+    }
+  }
+  for (const [indexNumber, deduction] of ensureArray(qualityReport?.deductions).entries()) {
+    addReportLink(links, index, {
+      ...deduction,
+      title: deduction?.location,
+      headline: deduction?.location
+    }, 'quality-report.json', deduction?.blocking === true ? 'hard_fail' : 'deduction', `deductions[${indexNumber}]`, 'quality_fail');
+  }
+  for (const [indexNumber, item] of ensureArray(factCheckReport?.must_fix).entries()) {
+    addReportLink(links, index, {
+      ...item,
+      url: item?.source_url || item?.url,
+      title: item?.location
+    }, 'fact-check-report.json', 'must_fix', `must_fix[${indexNumber}]`, 'factcheck_fail');
+  }
+  for (const [indexNumber, item] of ensureArray(factCheckReport?.source_gaps).entries()) {
+    const urlMatch = typeof item === 'string' ? item.match(/https?:\/\/[^\s;")]+/) : null;
+    addReportLink(links, index, typeof item === 'string' ? {
+      title: reportItemTitle(item),
+      url: urlMatch?.[0] || '',
+      reason: item
+    } : item, 'fact-check-report.json', 'source_gap', `source_gaps[${indexNumber}]`, 'factcheck_fail');
+  }
+  return links;
+}
+
+function renderCandidateRows(candidates, limit, reasonLabel) {
+  const rows = candidates.slice(0, limit).map((candidate, index) => [
+    String(index + 1),
+    `\`${candidate.id}\``,
+    candidate.status,
+    formatCandidateLink(candidate),
+    `${candidate.source} / ${candidate.date}`,
+    candidate.bucket,
+    String(candidate.score),
+    reasonLabel === 'code'
+      ? candidate.reasonCode
+      : candidate.reasons.join('; ')
+  ]);
+  return rows;
+}
+
+function renderCandidateTraceability(root, date) {
+  const { artifacts, issues } = loadCandidateTraceArtifacts(root, date);
+  const traceIndex = buildTraceIndex(artifacts, issues);
+  const links = buildQualityFactcheckLinks(traceIndex, artifacts.quality.value, artifacts.factCheck.value);
+  assignCandidateIds(traceIndex.candidates);
+
+  const finalCandidates = traceIndex.candidates.filter(candidate => ['final_selected', 'primary_selected'].includes(candidate.status));
+  const reserveCandidates = traceIndex.candidates.filter(candidate => candidate.status === 'reserve');
+  const notableCandidates = traceIndex.candidates.filter(candidate =>
+    !['final_selected', 'primary_selected', 'reserve', 'unknown'].includes(candidate.status)
+  );
+  const mergedCount = traceIndex.candidates.filter(candidate => candidate.status === 'merged').length;
+  const demotedCount = traceIndex.candidates.filter(candidate => candidate.status === 'demoted').length;
+  const rejectedCount = traceIndex.candidates.filter(candidate => candidate.status === 'rejected').length;
+  const excludedCount = traceIndex.candidates.filter(candidate =>
+    ['excluded', 'not_main_eligible', 'briefing_only', 'reference_only', 'quality_fail', 'factcheck_fail'].includes(candidate.status)
+  ).length;
+  const unmatchedCount = links.filter(link => !link.candidate).length;
+  const collectedCount = Array.isArray(artifacts.collected.value?.candidates)
+    ? artifacts.collected.value.candidates.length
+    : traceIndex.candidates.length;
+  const reporterCount = Array.isArray(artifacts.reporter.value?.candidates)
+    ? artifacts.reporter.value.candidates.length
+    : 0;
+  const noCandidateArtifacts = traceIndex.candidates.length === 0;
+  const detailPaths = TRACE_ARTIFACT_DEFS.map(def => def.path(date));
+
+  const lines = [
+    '## 후보 기사 추적',
+    '',
+    noCandidateArtifacts
+      ? '후보 기사 artifact를 찾을 수 없어 추적 섹션을 생성하지 못했습니다.'
+      : `총 후보 ${traceIndex.candidates.length}개 중 최종 선택 ${finalCandidates.length}개, reserve ${reserveCandidates.length}개, 제외/강등/거절/병합 주요 후보 ${Math.min(notableCandidates.length, 10)}개를 표시합니다.`,
+    '',
+    '### 한눈에 보는 후보 판단',
+    '',
+    `- 전체 수집 후보: ${collectedCount}`,
+    `- reporter 후보: ${reporterCount}`,
+    `- 최종 선택 기사: ${finalCandidates.length}`,
+    `- reserve 후보: ${reserveCandidates.length}`,
+    `- 제외 후보: ${excludedCount}`,
+    `- 강등 후보: ${demotedCount}`,
+    `- 거절 후보: ${rejectedCount}`,
+    `- 병합 후보: ${mergedCount}`,
+    `- 품질/팩트체크 연결 항목: ${links.length}`,
+    `- unmatched 품질/팩트체크 연결 항목: ${unmatchedCount}`
+  ];
+
+  if (reserveCandidates.length > 5) lines.push(`- 생략된 reserve 후보: ${reserveCandidates.length - 5}`);
+  if (notableCandidates.length > 10) lines.push(`- 생략된 제외/강등/거절 후보: ${notableCandidates.length - 10}`);
+  if (links.length > 10) lines.push(`- 생략된 품질/팩트체크 연결 항목: ${links.length - 10}`);
+
+  lines.push(
+    '',
+    '읽기/형식 요약:',
+    ...(issues.length > 0 ? issues.map(issue => `- ${issue}`) : ['- none']),
+    '',
+    '### 최종 선택 기사',
+    '',
+    finalCandidates.length > 0
+      ? renderMarkdownTable(
+        ['#', 'Candidate ID', '상태', '원문 기사', '출처/날짜', 'Bucket', '점수', '판단 사유'],
+        renderCandidateRows(finalCandidates, finalCandidates.length, 'reason')
+      )
+      : '- none',
+    '',
+    '### Reserve 후보',
+    '',
+    reserveCandidates.length > 0
+      ? renderMarkdownTable(
+        ['#', 'Candidate ID', '상태', '원문 기사', '출처/날짜', 'Bucket', '점수', 'Reserve 사유'],
+        renderCandidateRows(reserveCandidates, 5, 'reason')
+      )
+      : '- none',
+    '',
+    '### 제외/강등/거절된 주요 후보',
+    '',
+    notableCandidates.length > 0
+      ? renderMarkdownTable(
+        ['#', 'Candidate ID', '상태', '원문 기사', '출처/날짜', 'Bucket', '점수', '사유 코드'],
+        renderCandidateRows(notableCandidates, 10, 'code')
+      )
+      : '- none',
+    '',
+    '### 품질/팩트체크 연결',
+    '',
+    links.length > 0
+      ? renderMarkdownTable(
+        ['#', 'Candidate ID', '기사', 'Report', '상태', '연결 항목', '사유'],
+        links.slice(0, 10).map((link, index) => [
+          String(index + 1),
+          link.candidate ? `\`${link.candidate.id}\`` : 'unmatched',
+          link.title,
+          link.report,
+          link.status,
+          link.label,
+          link.reason
+        ])
+      )
+      : '- none',
+    '',
+    '### 상세 artifact',
+    '',
+    ...detailPaths.map(relPath => `- \`${relPath}\``),
+    ''
+  );
+
+  return lines.join('\n');
+}
+
 function renderEditorActionGuidance(status, date) {
   const lines = [
     '## 편집자 조치 가이드',
@@ -362,6 +971,7 @@ function buildNewsroomPrBody(options = {}) {
     renderPublicNewsletterNotice(status),
     renderFallbackPublicIssueNotes(root, date),
     renderFinalSelectionStatus(status),
+    renderCandidateTraceability(root, date),
     renderEditorActionGuidance(status, date),
     renderGeneratedArtifacts(date, status, root, options.changedArtifacts)
   );
@@ -380,6 +990,7 @@ if (require.main === module) {
 module.exports = {
   buildNewsroomPrBody,
   extractEditorBriefSections,
+  renderCandidateTraceability,
   renderGeneratedArtifacts,
   renderEditorApprovedPublicationPolicy,
   recommendedEditorAction

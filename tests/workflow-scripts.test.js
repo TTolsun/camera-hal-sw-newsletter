@@ -962,6 +962,206 @@ test('validate-pr-body handles non-string input without throwing', () => {
   assert.equal(extractStatusSection(42), '');
 });
 
+function traceCandidate(overrides = {}) {
+  return {
+    title: overrides.title || 'libcamera v0.7.1',
+    url: overrides.url || 'https://example.com/libcamera-0.7.1',
+    article_url: overrides.article_url || overrides.url || 'https://example.com/libcamera-0.7.1',
+    source_name: overrides.source_name || 'libcamera',
+    published_date: overrides.published_date || '2026-05-10',
+    relevance_bucket: overrides.relevance_bucket || 'camera_driver_image_pipeline',
+    deterministic_score: overrides.deterministic_score ?? 95,
+    finalSelectionEligibility: overrides.finalSelectionEligibility || 'main',
+    main_eligible: overrides.main_eligible ?? true,
+    hasDatedEvidence: overrides.hasDatedEvidence ?? true,
+    source_gap_risk: overrides.source_gap_risk ?? false,
+    selection_exclusion_reason: overrides.selection_exclusion_reason || '공식 release evidence와 camera pipeline 영향이 확인되었습니다.',
+    ...overrides
+  };
+}
+
+function traceStatus(overrides = {}) {
+  return {
+    status: 'NEEDS_FIX',
+    fact_check_status: 'NEEDS_FIX',
+    must_fix_count: 1,
+    source_gap_count: 1,
+    quality_status: 'NEEDS_FIX',
+    quality_score: 72,
+    quality_threshold: qualityGatePolicy.threshold,
+    selection_publish_ready: false,
+    final_publish_ready: false,
+    publish_gate_passed: false,
+    review_gate_passed: true,
+    stale_claim_status: 'PASS',
+    stale_claim_hard_failure_count: 0,
+    validate_outcome: 'failure',
+    consistency_errors: [],
+    ...overrides
+  };
+}
+
+test('newsroom PR body renders Korean candidate traceability report', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  const finalCandidate = traceCandidate({
+    title: 'libcamera v0.7.1 released',
+    url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/000001.html',
+    final_selected: true,
+    primary_selected: true,
+    selected_for_editor: true
+  });
+  const reserveCandidate = traceCandidate({
+    title: 'Glaze 7.2 C++ reflection',
+    url: 'https://isocpp.org/blog/2026/05/glaze-7.2',
+    source_name: 'ISO C++ Blog',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    deterministic_score: 82,
+    finalSelectionEligibility: 'short',
+    reserve_candidate: true,
+    selection_exclusion_reason: '최종 기사와 source cluster가 겹쳐 reserve로 유지합니다.'
+  });
+  const excludedCandidate = traceCandidate({
+    title: 'Generic Android UI update',
+    url: 'https://example.com/generic-android-ui',
+    source_name: 'Android Developers Blog',
+    relevance_bucket: 'generic_tech_watchlist',
+    deterministic_score: 22,
+    final_selected: false,
+    selected_for_editor: false,
+    main_eligible: false,
+    finalSelectionEligibility: 'watchlist',
+    source_gap_risk: true,
+    final_exclusion_reasons: ['generic_ai_noise', 'main_eligible=false']
+  });
+  const reportOnlyCandidate = traceCandidate({
+    title: 'Report only HAL evidence',
+    url: 'https://example.com/report-only-hal',
+    source_name: 'Example Source',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    deterministic_score: 55
+  });
+
+  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), {
+    date,
+    candidates: [finalCandidate, reserveCandidate, excludedCandidate]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [finalCandidate],
+    reserve_candidates: [reserveCandidate],
+    excluded_candidates: [excludedCandidate]
+  });
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+    candidates: [finalCandidate, reserveCandidate, excludedCandidate, reportOnlyCandidate]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), {
+    demoted_articles: [
+      {
+        headline: 'GCC 16.1',
+        reason: 'HAL 연결 근거가 약해 demote합니다.',
+        sources: [{ title: 'ISO C++ Blog', url: 'https://isocpp.org/blog/2026/05/gcc-16.1' }]
+      }
+    ],
+    rejected_candidates: [
+      {
+        title: 'Generic AI camera post',
+        url: 'https://example.com/generic-ai-camera',
+        source: 'Tech Blog',
+        relevance_bucket: 'generic_tech_watchlist',
+        reason: 'generic AI noise'
+      }
+    ],
+    merged_articles: [
+      {
+        headline: 'CameraX alpha release',
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#alpha'],
+        reason: 'same source cluster'
+      }
+    ]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+    status: 'NEEDS_FIX',
+    deductions: [],
+    article_results: [
+      {
+        index: 1,
+        headline: finalCandidate.title,
+        status: 'FAIL',
+        sources: [{ url: finalCandidate.url }],
+        hard_fail_reasons: ['source-integrity']
+      },
+      {
+        index: 2,
+        headline: reportOnlyCandidate.title,
+        status: 'FAIL',
+        sources: [{ url: reportOnlyCandidate.url }],
+        hard_fail_reasons: ['scope-relevance']
+      }
+    ]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+    status: 'NEEDS_FIX',
+    must_fix: [
+      {
+        location: reserveCandidate.title,
+        problem: 'reserve 후보에도 fact-check 확인이 필요합니다.',
+        source_url: reserveCandidate.url
+      }
+    ],
+    source_gaps: [
+      'section="Unmatched article"; url=https://example.com/unmatched-source-gap; action=replace-or-demote'
+    ],
+    source_gap_count: 1
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const finalSection = body.slice(body.indexOf('### 최종 선택 기사'), body.indexOf('### Reserve 후보'));
+
+  assert.match(body, /^## 후보 기사 추적$/m);
+  assert.match(body, /^### 한눈에 보는 후보 판단$/m);
+  assert.match(body, /\| # \| Candidate ID \| 상태 \| 원문 기사 \| 출처\/날짜 \| Bucket \| 점수 \| 판단 사유 \|/);
+  assert.match(body, /libcamera v0\.7\.1 released/);
+  assert.match(finalSection, /final_selected/);
+  assert.doesNotMatch(finalSection, /quality_fail/);
+  assert.match(body, /Glaze 7\.2 C\+\+ reflection/);
+  assert.match(body, /\| 1 \| `cand_\d{3}` \| reserve \|/);
+  assert.match(body, /GCC 16\.1/);
+  assert.match(body, /demoted/);
+  assert.match(body, /Generic AI camera post/);
+  assert.match(body, /rejected/);
+  assert.match(body, /CameraX alpha release/);
+  assert.match(body, /merged/);
+  assert.match(body, /Report only HAL evidence/);
+  assert.match(body, /quality_fail/);
+  assert.match(body, /quality-report\.json/);
+  assert.match(body, /fact-check-report\.json/);
+  assert.match(body, /hard_fail/);
+  assert.match(body, /must_fix/);
+  assert.match(body, /unmatched 품질\/팩트체크 연결 항목: 1/);
+  assert.match(body, /\| 4 \| unmatched \| Unmatched article \| fact-check-report\.json \| source_gap \|/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('newsroom PR body candidate traceability tolerates missing and malformed artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeText(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), '{ invalid json');
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: { title: 'not an array' },
+    reserve_candidates: 'not an array'
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+
+  assert.match(body, /후보 기사 artifact를 찾을 수 없어 추적 섹션을 생성하지 못했습니다\./);
+  assert.match(body, /읽기\/형식 요약:/);
+  assert.match(body, /reporter-candidates\.json: JSON을 읽을 수 없습니다/);
+  assert.match(body, /shortlisted-candidates\.json: selected_articles 필드가 배열이 아닙니다/);
+  assert.match(body, new RegExp(`content/newsroom/${date}/reporter-candidates\\.json`));
+  assert.match(body, new RegExp(`content/collected-news/${date}/candidates\\.json`));
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
 test('reviewable artifact resolver does not accept tmp status alone', () => {
   const root = tempRoot();
   const date = '2026-05-08';
