@@ -3,6 +3,7 @@ const test = require('node:test');
 
 const {
   CONFIRMED_MOJIBAKE_FRAGMENTS,
+  TEXT_FILE_NAMES,
   containsNulByte,
   detectTextEncodingIssues,
   formatIssue,
@@ -40,9 +41,17 @@ test('detectTextEncodingIssues skips binary buffers with NUL bytes', () => {
   assert.deepEqual(detectTextEncodingIssues(buffer, 'image.bin'), []);
 });
 
-test('isCandidateTextPath is extension allowlist based', () => {
+test('isCandidateTextPath includes extension and filename allowlists', () => {
   assert.equal(isCandidateTextPath('docs/readme.md'), true);
   assert.equal(isCandidateTextPath('scripts/file.js'), true);
+  assert.equal(isCandidateTextPath('.editorconfig'), true);
+  assert.equal(isCandidateTextPath('.gitattributes'), true);
+  assert.equal(isCandidateTextPath('.gitignore'), true);
+  assert.equal(isCandidateTextPath('tests/fixtures/artifacts/.gitkeep'), true);
+  assert.equal(isCandidateTextPath('README'), true);
+  assert.equal(isCandidateTextPath('LICENSE'), true);
   assert.equal(isCandidateTextPath('assets/image.png'), false);
-  assert.equal(isCandidateTextPath('README'), false);
+  assert.equal(isCandidateTextPath('binary-without-extension'), false);
+  assert.equal(TEXT_FILE_NAMES.has('.editorconfig'), true);
+  assert.equal(TEXT_FILE_NAMES.has('.gitattributes'), true);
 });

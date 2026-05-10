@@ -2466,6 +2466,11 @@ test('site validation workflow keeps structural checks blocking and quality anno
     '- name: Validate structural publication artifacts',
     '- name: Annotate publication quality and fact-check status'
   ]);
+  assertTextInOrder(structuralStep, [
+    'npm run check:encoding',
+    'npm run validate:policy'
+  ]);
+  assert.match(structuralStep, /npm run check:encoding/);
   assert.match(structuralStep, /npm run validate:policy/);
   assert.match(structuralStep, /npm run check:policy-docs/);
   assert.match(structuralStep, /npm run validate:config/);

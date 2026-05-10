@@ -15,6 +15,15 @@ const TEXT_FILE_EXTENSIONS = new Set([
   '.yml'
 ]);
 
+const TEXT_FILE_NAMES = new Set([
+  '.editorconfig',
+  '.gitattributes',
+  '.gitignore',
+  '.gitkeep',
+  'LICENSE',
+  'README'
+]);
+
 const CONFIRMED_MOJIBAKE_FRAGMENTS = [
   '\u003f\uc579\uaf66',
   '\u003f\uafa8\ub0ab',
@@ -34,7 +43,10 @@ function normalizePath(filePath) {
 }
 
 function isCandidateTextPath(filePath) {
-  return TEXT_FILE_EXTENSIONS.has(path.extname(filePath).toLowerCase());
+  return (
+    TEXT_FILE_EXTENSIONS.has(path.extname(filePath).toLowerCase()) ||
+    TEXT_FILE_NAMES.has(path.basename(filePath))
+  );
 }
 
 function containsNulByte(buffer) {
@@ -121,6 +133,7 @@ if (require.main === module) {
 module.exports = {
   CONFIRMED_MOJIBAKE_FRAGMENTS,
   TEXT_FILE_EXTENSIONS,
+  TEXT_FILE_NAMES,
   checkTrackedTextFiles,
   containsNulByte,
   detectTextEncodingIssues,
