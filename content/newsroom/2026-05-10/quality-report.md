@@ -29,7 +29,7 @@
 - composition_mode: NORMAL
 - Newsletter Policy gate: main articles: 3-5; required primary camera stack articles: 1; forbidden main buckets: generic_tech_watchlist; quality threshold: 85
 - Relevance bucket counts: {"direct_aosp_camera":0,"camera_driver_image_pipeline":1,"android_platform_camera_adjacent":1,"soc_platform_signal":0,"cpp_ai_tooling_fallback":0,"generic_tech_watchlist":0}
-- AI article count: 1
+- AI article count: 0
 - Article composition failure: 2 main articles were generated; Newsletter Policy range is 3-5.
 
 ## Fact Check And Source Integrity

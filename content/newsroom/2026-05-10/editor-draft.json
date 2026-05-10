@@ -115,7 +115,7 @@
       "action_hints": [],
       "team_summary": "libcamera v0.7.1은 Android HAL 직접 변경이 아니라 Linux camera driver/image pipeline 관찰 항목으로 공유합니다.",
       "why_it_matters": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-      "is_ai_related": true,
+      "is_ai_related": false,
       "article_type": "camera-hal",
       "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
       "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
