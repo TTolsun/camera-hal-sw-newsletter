@@ -55,6 +55,13 @@ npm.cmd run validate
 
 변경 범위가 좁더라도 관련 세부 검증이 있으면 함께 실행합니다. 예를 들어 source registry 변경은 `npm.cmd run validate:config`, 문서/표시값 변경은 `npm.cmd run validate:localization`을 포함합니다.
 
+## Local Agent Scratch
+
+- Repository root `PLAN.md`와 `PLAN.local.md`는 repository artifact가 아니라 local-only scratch로 취급합니다.
+- 작업 계획이 필요하면 `.tmp/codex/<task>.md` 또는 `.codex/PLAN.local.md`처럼 `.gitignore`로 보호되는 local-only 경로를 사용합니다.
+- PR에는 product code, tests, official docs만 포함하고 Codex scratch, worklog, temp plan 문서는 commit하지 않습니다.
+- 승인된 계획 기록이나 완료된 계획 기록은 `docs/plans/**` 같은 공식 문서 경로에만 둡니다.
+
 ## Fixture Trust Policy
 
 - `tests/fixtures/**/good`에는 사람이 검수한 curated fixture만 둡니다.
