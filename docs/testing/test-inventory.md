@@ -127,6 +127,6 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | 3. Fixture Ledger + Trust Guard | Complete | `fixture-ledger.json`과 `check:fixtures`로 fixture provenance와 trust guard를 검증합니다. |
 | 4. Shared Test Helpers | Complete | `tests/helpers/fs.js`를 추가하고 low-risk temp/write helper 중복을 먼저 치환했습니다. |
 | 5. Test Folder Migration 1 | Complete | Low-risk unit/hygiene test 5개를 nested folder로 이동했습니다. |
-| 6. Generated Artifact Dependency Cleanup | Pending | Generated output은 smoke/integration 입력으로만 유지합니다. |
+| 6. Generated Artifact Dependency Cleanup | Complete | Generated regression fixture provenance를 ledger-local metadata로 제한하고 generated artifact path embedding을 guard합니다. |
 | 7. Duplicate/Obsolete Test Cleanup | Pending | 이 inventory를 삭제/통합 판단 근거로 사용합니다. |
 | 8. Structure Guard + Final Audit | Pending | Guardrail을 추가하고 final inventory를 갱신합니다. |
