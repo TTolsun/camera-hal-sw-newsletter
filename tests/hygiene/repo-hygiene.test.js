@@ -5,7 +5,7 @@ const {
   findRepoHygieneIssues,
   formatIssue,
   normalizePath
-} = require('../scripts/check-repo-hygiene');
+} = require('../../scripts/check-repo-hygiene');
 
 test('findRepoHygieneIssues reports tracked root agent scratch files', () => {
   const issues = findRepoHygieneIssues([
