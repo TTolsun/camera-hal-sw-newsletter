@@ -1,16 +1,18 @@
 # Tests Guide
 
-이 folder는 Node built-in test runner로 newsroom automation, quality gate, source selection, rendering, workflow, repository hygiene 계약을 보호합니다.
+이 폴더는 Node built-in test runner로 newsroom automation, quality gate, source selection, rendering, workflow, repository hygiene 계약을 보호합니다. Production validator를 약화하거나 fixture 기대값을 낮춰서 test를 통과시키지 않습니다.
 
-## 현재 Runner 계약
+상세 test inventory와 migration 기록은 `docs/testing/test-inventory.md`를 기준으로 봅니다. 이 파일은 새 test를 어디에 둘지, 어떤 fixture/helper 계약을 지킬지 결정하는 짧은 작업 가이드입니다.
 
-현재 `package.json` 계약은 아직 flat 구조입니다.
+## Runner 계약
+
+기본 검증은 repository root에서 실행합니다.
 
 ```powershell
 npm.cmd run test
 ```
 
-내부적으로는 아래 명령을 실행합니다.
+현재 `npm.cmd run test`는 아래 흐름을 실행합니다.
 
 ```powershell
 node --test "tests/**/*.test.js"
@@ -18,120 +20,85 @@ node scripts/test-artifact-manifest.js
 node scripts/test-selection-diagnostics.js
 ```
 
-#82 nested-runner slice 이후 `test:unit`은 `tests/**/*.test.js`를 발견합니다. Slice 8 이후 root `tests/*.test.js`는 `tests/root-test-allowlist.json`의 migration baseline만 허용하며, 새 test file은 `tests/unit/`, `tests/contract/`, `tests/workflow/`, `tests/hygiene/` 같은 목적별 nested folder에 둡니다.
+Root `tests/*.test.js` migration은 완료되었습니다. `tests/root-test-allowlist.json`은 `[]`인 완료 baseline이며, 새 root test를 허용하는 확장 지점이 아닙니다. 새 test file은 항상 목적별 nested folder에 둡니다.
 
-## Target Structure
+## Folder 선택
 
-Migration slice가 끝난 뒤의 목표 구조는 아래와 같습니다.
+새 test는 보호하려는 동작 기준으로 위치를 정합니다.
 
-```text
-tests/
-  helpers/
-  fixtures/
-  unit/
-    collect/
-    common/
-    config/
-    evidence/
-    generate/
-    render/
-    validate/
-  contract/
-  workflow/
-  hygiene/
-```
+| Folder | Use for |
+| --- | --- |
+| `tests/unit/collect/` | Collector relevance, source parser, source-specific row extraction. |
+| `tests/unit/common/` | Shared client/cache/runtime behavior such as Gemini, LLM, runtime config, summary cache. |
+| `tests/unit/config/` | Source registry/config validation behavior. |
+| `tests/unit/evidence/` | Linked evidence extraction, resolution, diagnostics, schema, impact classifier. |
+| `tests/unit/generate/` | Generation-local helpers such as article capsule or fact-check repair logic. |
+| `tests/contract/` | Quality gate, source binding, rendered issue structure, fixture trust, strict validation targets, validator behavior. |
+| `tests/workflow/` | PR body, generation status, source effectiveness, fallback/public artifact flow, targeted retry, homepage/archive behavior. |
+| `tests/hygiene/` | Repo hygiene, encoding, policy docs, PR template, localization-facing checks. |
+| `tests/helpers/` | Shared fixture loading, temp root, artifact, newsroom, and quality builders. |
+| `tests/fixtures/` | Curated/minimized fixture inputs covered by the fixture trust policy. |
 
-Test를 추가하거나 이동할 때는 아래 기준을 사용합니다.
-
-| Test purpose | Runner migration 전 현재 위치 | Runner migration 후 target location |
-| --- | --- | --- |
-| 단일 parser, classifier, config, cache, small helper 동작 | `tests/<name>.test.js` | `tests/unit/<area>/<name>.test.js` |
-| Quality gate, source binding, publish status, rendered structure, policy contract | `tests/<name>.test.js` | `tests/contract/<name>.test.js` |
-| PR body, artifact writing, fallback builder, generation status, multi-file workflow | `tests/<name>.test.js` | `tests/workflow/<name>.test.js` |
-| Encoding, repo hygiene, docs sync, PR template, localization, fixture policy | `tests/<name>.test.js` | `tests/hygiene/<name>.test.js` 또는 `tests/contract/<name>.test.js` |
+Path를 이동하면 import path뿐 아니라 `package.json`의 direct test path, `docs/testing/test-inventory.md`, 관련 README 문구도 함께 확인합니다.
 
 ## Fixture Trust
 
-Fixture policy는 `tests/fixture-policy.test.js`가 검증하고, 세부 정책은 `tests/fixtures/README.md`에 있습니다.
+Fixture policy는 `tests/contract/fixture-policy.test.js`와 `npm.cmd run check:fixtures`가 검증합니다. 세부 정책과 ledger 규칙은 `tests/fixtures/README.md`를 따릅니다.
 
-규칙:
+핵심 규칙:
 
-- `good/` fixture sample은 curated, non-generated여야 합니다.
-- Generated newsletter artifact는 `good/` 또는 golden fixture로 복사하지 않습니다.
-- `bad/` fixture는 `PASS`를 기대하면 안 됩니다.
+- `good/` fixture sample은 사람이 검수한 curated, non-generated sample이어야 합니다.
+- Generated newsletter artifact 전체를 `good/` 또는 golden fixture로 복사하지 않습니다.
+- `bad/` fixture의 `expected.status`는 `PASS`가 될 수 없습니다.
 - `source_gap_risk=true`, `reference_only=true`, `finalSelectionEligibility=watchlist`, `finalSelectionEligibility=exclude`, `hasDatedEvidence=false`, Camera HAL 연결 없는 generic AI/IT sample은 main article PASS golden이 될 수 없습니다.
-- Generated output은 명시적인 smoke/integration check에만 사용할 수 있고 quality 기준으로 삼지 않습니다.
-
-Generated output에서 파생한 regression은 필요한 최소 JSON/text input으로 축약하고, provenance를 fixture metadata 또는 future fixture ledger에 남깁니다.
+- Generated output에서 회귀 가치가 있으면 전체 artifact가 아니라 최소 JSON/text input만 regression fixture로 축약하고 provenance를 ledger에 남깁니다.
 
 ## Helpers
 
-현재 shared helper는 `tests/helpers/` 아래에 있습니다.
+중복 helper를 test file 안에 새로 만들기 전에 `tests/helpers/`를 먼저 확인합니다.
 
 | Helper | Purpose |
 | --- | --- |
 | `fixture-loader.js` | Safe fixture path resolution과 JSON/text fixture loading. |
-| `fs.js` | Temp root, JSON/text write, and JSON read helpers for isolated test fixtures. |
+| `fs.js` | Temp root, JSON/text write, JSON read helper. |
 | `artifact-builders.js` | Minimal artifact manifest entry builder. |
 | `newsroom-builders.js` | Newsroom candidate와 targeted retry builder. |
 | `quality-builders.js` | Quality report section과 reporter candidate builder. |
 
-Fixture loading 또는 common builder를 중복 작성하기보다 기존 helper를 우선 사용합니다. #82 helper slice에서는 large workflow test를 분할하기 전에 temp-root, JSON/text write, rendered newsletter fixture, Markdown assertion helper를 추가합니다.
+새 helper는 여러 test가 같은 setup/write/assertion을 반복하고, helper name이 보호하는 domain contract를 분명히 설명할 때만 추가합니다.
 
 ## Generated Artifact Boundary
 
-허용되는 generated artifact reference:
+허용되는 사용:
 
-- `newsletters/YYYY-MM-DD/newsletter.md` 같은 path parsing/path contract test.
-- Test 내부에서 생성한 minimal temp-root artifact.
-- `tests/fixtures/**/bad` 또는 future `regression/` 영역의 minimized regression fixture.
-- Public artifact 구조를 확인하되 content quality를 golden으로 삼지 않는 smoke check.
-
-Minimized generated regression fixture는 `metadata.source: "minimized-generated-regression"`와
-`fixture-ledger.json`의 `generatedArtifact: true`로만 provenance를 남깁니다. Fixture file 안에
-`content/newsroom/YYYY-MM-DD`, `content/collected-news/YYYY-MM-DD`, `newsletters/YYYY-MM-DD`
-path를 직접 넣지 않습니다.
+- Path parsing 또는 path contract 검증을 위한 `newsletters/YYYY-MM-DD/newsletter.md` 같은 문자열.
+- Test 내부에서 생성하는 minimal temp-root artifact.
+- `tests/fixtures/**/bad` 또는 regression 목적의 minimized fixture.
+- Public artifact 구조 smoke check. 단, content quality golden으로 삼지 않습니다.
 
 허용하지 않는 사용:
 
 - Generated newsletter를 PASS quality fixture처럼 사용.
-- 약화된 quality gate를 통과시키기 위한 fixture update.
+- Quality gate를 통과시키기 위해 fixture 기대값이나 validator 기준을 완화.
 - Full generated artifact를 `good/`로 복사.
 - 오래된 generated artifact가 malformed라는 이유로 validator를 완화.
 
-## #82 Migration 순서
-
-1. Inventory and guide: `docs/testing/test-inventory.md`와 이 파일.
-2. Nested runner preparation: test file 이동 없이 `test:unit`이 nested test folder를 발견하도록 준비합니다.
-3. Fixture ledger and trust guard: fixture provenance를 추가하고 guard coverage를 확장합니다.
-4. Shared test helpers: temp root, write helper, rendered artifact, Markdown assertion을 공통화합니다.
-5. Test folder migration: low-risk set부터 소량 이동합니다.
-6. Generated artifact dependency cleanup: generated output은 smoke/integration check에만 남깁니다.
-7. Duplicate/obsolete test cleanup: replacement contract가 문서화된 경우에만 삭제 또는 통합합니다.
-8. Structure guard and final audit: root test drift와 fixture pollution 재발을 막습니다.
-
-Root `tests/*.test.js` migration baseline은 `tests/root-test-allowlist.json`에 고정되어 있습니다.
-기존 root test를 nested folder로 이동하면 allowlist에서도 제거하고, 새 root test를 추가하지 않습니다.
-이 allowlist는 임시 migration debt이며 새 root test를 허용하는 확장 지점이 아닙니다.
-
 ## Validation
 
-Test 또는 fixture를 변경한 뒤에는 전체 검증을 실행합니다.
+Test, fixture, helper를 변경한 뒤에는 기본적으로 실행합니다.
 
 ```powershell
 npm.cmd run test
 npm.cmd run validate
 ```
 
-Docs-only 또는 guide 변경에는 아래 명령도 실행합니다.
+변경 범위가 좁으면 targeted test를 먼저 실행하고 전체 검증으로 닫습니다.
 
 ```powershell
-npm.cmd run validate:localization
-```
-
-Fixture policy 변경에는 아래 targeted test를 실행합니다.
-
-```powershell
-node --test tests\fixture-policy.test.js
+node --test tests\contract\fixture-policy.test.js
 npm.cmd run check:fixtures
+npm.cmd run check:repo-hygiene
+npm.cmd run test:source-effectiveness
 ```
+
+Docs-only 변경은 `npm.cmd run validate:localization`도 함께 확인합니다.

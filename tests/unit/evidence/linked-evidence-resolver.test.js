@@ -6,8 +6,8 @@ const {
   LINKED_EVIDENCE_TYPES,
   RAW_EXCERPT_MAX_LENGTH,
   resolveLinkedEvidence
-} = require('../scripts/newsroom/evidence');
-const { readTextFixture } = require('./helpers/fixture-loader');
+} = require('../../../scripts/newsroom/evidence');
+const { readTextFixture } = require('../../helpers/fixture-loader');
 
 function fakeFetch(sequence) {
   const calls = [];

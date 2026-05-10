@@ -55,35 +55,23 @@ function loadRootTestAllowlist(root) {
 function findRootTestStructureIssues(files, allowlist) {
   const issues = [];
   const normalizedFiles = (files || []).map(normalizePath).filter(Boolean);
-  const tracked = new Set(normalizedFiles);
-  const allowed = new Set();
 
   for (const inputPath of allowlist || []) {
     const filePath = normalizePath(inputPath);
-    if (!isRootTestFile(filePath)) {
-      issues.push(issue(filePath, 'root_test_structure', 'root test allowlist entries must use tests/*.test.js'));
-      continue;
-    }
-    if (allowed.has(filePath)) {
-      issues.push(issue(filePath, 'root_test_structure', 'root test allowlist entry is duplicated'));
-      continue;
-    }
-    allowed.add(filePath);
+    issues.push(issue(
+      filePath,
+      'root_test_structure',
+      'root test allowlist must remain empty after root migration'
+    ));
   }
 
   for (const filePath of normalizedFiles) {
-    if (isRootTestFile(filePath) && !allowed.has(filePath)) {
+    if (isRootTestFile(filePath)) {
       issues.push(issue(
         filePath,
         'root_test_structure',
-        'new root tests/*.test.js files must move into nested test folders or update the migration allowlist'
+        'root tests/*.test.js files must move into nested test folders'
       ));
-    }
-  }
-
-  for (const filePath of allowed) {
-    if (!tracked.has(filePath)) {
-      issues.push(issue(filePath, 'root_test_structure', 'root test allowlist entry is missing from tracked files'));
     }
   }
 
