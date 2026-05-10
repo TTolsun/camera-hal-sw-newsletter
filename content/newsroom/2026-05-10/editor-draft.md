@@ -1,127 +1,91 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-10
 
-이번 2026-05-10호는 CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰, libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다. hard failure article 1개는 main article에서 제거하거나 강등했습니다.
+이번 2026-05-10호는 review-only fallback publication입니다. 독립 camera-stack evidence가 있는 main article은 CameraX 관찰 기사와 libcamera v0.7.1 기사 2개뿐이라 정책상 최소 3개 main article을 채우지 못했습니다. 편집장 승인 시 public newsletter로 게시되며, 자동 발행 기준은 통과하지 못했습니다.
 
 ## 1. 이번 주 3줄 브리핑
-- CameraX 1.4.0-alpha07이 릴리스되어 camera-viewfinder 및 camera-video 라이브러리가 업데이트되었습니다. HAL 팀은 관련 스트림 구성 및 성능을 검토해야 합니다.
-- libcamera v0.7.1이 SoftISP 디베이어링, 이미지 파이프라인 처리량 개선, 센서 모드 구성 업데이트와 함께 릴리스되었습니다. Linux 카메라 드라이버 및 V4L2 스택에 직접적인 영향을 미칩니다.
-- 편집장은 source와 article 표현을 최종 확인합니다.
+- CameraX 1.6.1 / 1.4.0-alpha07은 동일 AndroidX Camera release page 계열의 호환성 관찰 항목으로 병합했습니다.
+- libcamera v0.7.1은 Linux camera driver / image pipeline 관찰 항목으로 유지했습니다.
+- 이번 호는 article count 부족을 숨기지 않는 review-only fallback publication이며, final_publish_ready=false 상태입니다.
 
 ## 2. Android Platform / CameraX
 
-### CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰
+### CameraX 1.6.1 / 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰
 
 
 **이번 주 확인한 사실**
 
-- Android Developers Latest Updates의 May 06, 2026 항목입니다.
+- Android Developers Latest Updates의 May 06, 2026 CameraX release table에서 확인한 항목입니다.
 - 관련 컴포넌트: CameraX / androidx.camera
-- > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers
+- 1.6.1은 camera-camera2, camera-core, camera-compose, camera-effects, camera-extensions, camera-lifecycle, camera-view, camera-video 등 CameraX artifact의 stable release 행으로 표시됩니다.
+- 1.4.0-alpha07은 camera-video 계열 pre-release 행으로 함께 표시되어 CameraX video/viewfinder 호환성 관찰 대상으로 묶어 검토합니다.
 
 **배경지식**
 
-> camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers
+CameraX는 앱 계층 API이지만 camera-camera2, camera-view, camera-video, extensions 등의 조합은 HAL stream configuration, preview/video/image capture latency, device-specific workaround 검증 항목과 연결됩니다.
 
 **Camera HAL 관점 해석**
 
-HAL/카메라 스택 영향 가능성을 검토합니다. Camera HAL 팀은 이 항목을 source/API/driver/image pipeline 영향 검토 목록에 올리고 실제 코드 변경이나 CTS/VTS 영향이 확인될 때만 후속 작업으로 승격합니다.
+Camera HAL 팀은 이번 CameraX 항목을 HAL 직접 변경으로 보지 않고, 앱 API release가 CTS/Camera ITS, stream/buffer/metadata, Preview + VideoCapture + ImageCapture 조합 검증에 영향을 줄 수 있는지 관찰 대상으로 둡니다.
 
 **우리 팀이 확인할 Action Item**
 
-- Source URL과 published date를 확인해 내부 추적 항목으로 등록할지 판단합니다.
-- 관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.
-- 후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다.
+- CameraX 1.6.1을 사용하는 reference app에서 Preview + VideoCapture + ImageCapture 조합의 latency와 frame drop을 측정합니다.
+- CameraX 1.4.0-alpha07 관련 video/viewfinder 변경은 HAL `STREAM_CONFIGURATION_MAP`과 실제 지원 해상도/프레임율 범위의 mismatch 여부만 관찰합니다.
+- 후속 release note에서 Camera2 interop, extensions, device workaround가 명시되면 다음 호에서 별도 기사로 재평가합니다.
 
 **팀 공유용 한 줄**
 
-CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰은 Camera HAL / Android Camera / driver-image pipeline 관점에서 확인할 가치가 있는 후보입니다.
+CameraX 1.6.1 / 1.4.0-alpha07은 동일 AndroidX Camera release page의 호환성 관찰 항목으로 묶어 보고, HAL 직접 변경 claim 없이 validation checklist로만 추적합니다.
 
 **출처**
 
-- [1.4.0-alpha07](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
+- [CameraX 1.6.1 release table row](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
+- [CameraX 1.4.0-alpha07 release table row](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
 
 ---
 
 ## 3. Camera Driver / Image Pipeline
 
-### libcamera Release Announcements - libcamera v0.7.1
+### libcamera v0.7.1: SoftISP 및 camera pipeline 관찰
 
 
 **이번 주 확인한 사실**
 
 - libcamera Release Announcements의 2026-04-28 항목입니다.
 - 관련 컴포넌트: libcamera / V4L2 camera pipeline
-- Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
+- v0.7.1 release announcement는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration update를 언급합니다.
 
 **배경지식**
 
-Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
+libcamera는 Android Camera HAL 자체는 아니지만 Linux camera driver, V4L2, sensor mode, image pipeline 관찰 지점과 맞닿아 있습니다.
 
 **Camera HAL 관점 해석**
 
-HAL/카메라 스택 영향 가능성을 검토합니다. Camera HAL 팀은 이 항목을 source/API/driver/image pipeline 영향 검토 목록에 올리고 실제 코드 변경이나 CTS/VTS 영향이 확인될 때만 후속 작업으로 승격합니다.
+Camera HAL 팀은 libcamera v0.7.1을 Android HAL 직접 변경으로 해석하지 않고, Linux camera pipeline과 sensor/ISP tuning 관찰 항목으로 둡니다. SoftISP debayering과 throughput 변화는 Android bring-up 환경의 reference comparison에만 활용합니다.
 
 **우리 팀이 확인할 Action Item**
 
-- Source URL과 published date를 확인해 내부 추적 항목으로 등록할지 판단합니다.
-- 관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.
-- 후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다.
+- libcamera v0.7.1 change list를 내부 Linux camera driver watch 항목으로 등록하고 Android HAL 직접 변경으로 표현하지 않습니다.
+- SoftISP debayering 또는 sensor mode update가 포팅 branch에 들어올 때만 RAW/YUV 품질과 throughput 비교를 수행합니다.
+- 후속 upstream patch가 V4L2 control, sensor configuration, pipeline handler behavior를 바꾸면 다음 호에서 재평가합니다.
 
 **팀 공유용 한 줄**
 
-libcamera Release Announcements - libcamera v0.7.1은 Camera HAL / Android Camera / driver-image pipeline 관점에서 확인할 가치가 있는 후보입니다.
+libcamera v0.7.1은 Android HAL 직접 변경이 아니라 Linux camera driver/image pipeline 관찰 항목으로 공유합니다.
 
 **출처**
 
 - [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
-
----
-
-## 4. Android Platform / CameraX
-
-### CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
-
-
-**이번 주 확인한 사실**
-
-- Android Developers Latest Updates의 May 06, 2026 항목입니다.
-- 관련 컴포넌트: CameraX / androidx.camera
-- camera-camera2 1.6.1 - - 1.7.0-alpha01 camera-core 1.6.1 - - 1.7.0-alpha01 camera-compose 1.6.1 - - 1.7.0-alpha01 camera-effects 1.6.1 - - 1.7.0-alpha01 camera-extensions 1.6.1 - - 1.7.0-alpha01 camera-feature-combination-query - - - 1.5.0-alpha06 camera-feature-combination-query-play-services - - - 1.5.0-alpha06 camera-lifecycle 1.6.1 - - 1.7.0-alpha01 camera-mlkit-vision 1.6.1 - - 1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group versions This table lists all the artifacts in the androidx.wear group.
-
-**배경지식**
-
-camera-camera2 1.6.1 - - 1.7.0-alpha01 camera-core 1.6.1 - - 1.7.0-alpha01 camera-compose 1.6.1 - - 1.7.0-alpha01 camera-effects 1.6.1 - - 1.7.0-alpha01 camera-extensions 1.6.1 - - 1.7.0-alpha01 camera-feature-combination-query - - - 1.5.0-alpha06 camera-feature-combination-query-play-services - - - 1.5.0-alpha06 camera-lifecycle 1.6.1 - - 1.7.0-alpha01 camera-mlkit-vision 1.6.1 - - 1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group versions This table lists all the artifacts in the androidx.wear group.
-
-**Camera HAL 관점 해석**
-
-HAL/카메라 스택 영향 가능성을 검토합니다. Camera HAL 팀은 이 항목을 source/API/driver/image pipeline 영향 검토 목록에 올리고 실제 코드 변경이나 CTS/VTS 영향이 확인될 때만 후속 작업으로 승격합니다.
-
-**우리 팀이 확인할 Action Item**
-
-- Source URL과 published date를 확인해 내부 추적 항목으로 등록할지 판단합니다.
-- 관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.
-- 후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다.
-
-**팀 공유용 한 줄**
-
-CameraX 1.6.1 업데이트: Android Camera 호환성 관찰은 Camera HAL / Android Camera / driver-image pipeline 관점에서 확인할 가치가 있는 후보입니다.
-
-**출처**
-
-- [1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
 
 
 ## 이번 주 실행 항목
 
-- CameraX 1.4.0-alpha07을 사용하는 레퍼런스 앱에서 Preview + VideoCapture + ImageCapture 스트림 조합의 프레임 드롭 및 캡처 지연 시간을 측정합니다. (담당: Camera HAL 성능 팀)
-- libcamera v0.7.1이 적용된 최신 Linux 커널 드라이버를 포팅하고, Preview 및 RAW 스트림을 사용하여 이미지 품질 및 처리량 벤치마크를 수행합니다. (담당: 카메라 드라이버 팀)
-- Clang/LLVM의 C++26 컨트랙트 지원 현황을 조사하고, 해당 기능이 안정화되면 Camera HAL의 핵심 모듈에 컨트랙트를 적용하는 PoC를 수행하여 런타임 안전성 개선 효과를 측정합니다. (담당: 네이티브 HAL 개발 팀)
-- 업데이트된 `camera-viewfinder` 및 `camera-video` 라이브러리가 요구하는 최소/최대 해상도 및 프레임 속도 범위가 HAL의 `STREAM_CONFIGURATION_MAP`과 일치하는지 확인합니다. (담당: Camera HAL 드라이버 팀)
-- SoftISP 디베이어링 개선 사항이 HAL의 `ANDROID_COLOR_CORRECTION_MODE` 및 `ANDROID_TONEMAP_MODE` 설정에 미치는 영향을 분석하고, 필요한 경우 ISP 튜닝 파라미터를 조정합니다. (담당: ISP 튜닝 팀)
+- CameraX 1.6.1 reference app에서 Preview + VideoCapture + ImageCapture stream 조합의 frame drop과 capture latency를 측정합니다. (담당: Camera HAL validation)
+- libcamera v0.7.1의 SoftISP / sensor mode 항목이 내부 Linux camera driver branch에 반영되는지 확인합니다. (담당: camera driver)
+- 독립 dated camera-stack source가 3개 미만인 주간호는 editor-approved exception 여부를 PR에서 명시적으로 판단합니다. (담당: editor-in-chief)
 
 ## 참고자료
 
-- [1.4.0-alpha07](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
+- [CameraX 1.6.1 release table row](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
+- [CameraX 1.4.0-alpha07 release table row](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
 - [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
-- [1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
-- [GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!](https://isocpp.org//blog/2026/04/gcc-16.1)

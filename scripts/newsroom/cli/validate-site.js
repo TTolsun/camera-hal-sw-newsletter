@@ -57,6 +57,23 @@ function readJsonIfExists(filePath) {
   }
 }
 
+function editorApprovedExceptionFor(date) {
+  const dir = newsroomDir(root, date);
+  const status = readJsonIfExists(path.join(dir, 'generation-status.json'));
+  const quality = readJsonIfExists(path.join(dir, 'quality-report.json'));
+  const approved =
+    status?.editor_approved_exception === true &&
+    status?.final_publish_ready === false &&
+    status?.editor_review_required === true &&
+    status?.public_newsletter_ready === true &&
+    quality?.editor_approved_exception === true &&
+    quality?.status === 'NEEDS_FIX';
+  if (!approved) return null;
+  return status.editor_approved_exception_reason ||
+    quality.editor_approved_exception_reason ||
+    'editor-approved exception';
+}
+
 function sectionText(content, heading, nextHeadingPattern = /^## /m) {
   const start = content.indexOf(heading);
   if (start === -1) return '';
@@ -138,7 +155,12 @@ function validateArticleQuality(item, md, newFormat, strictArtifactValidation) {
     articles.length > articlePolicy.mainArticleCount.max;
   if (articleCountOutOfRange) {
     const message = `Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${articleCountRangeText()}.`;
-    if (strictArtifactValidation) {
+    const exceptionReason = articles.length < articlePolicy.mainArticleCount.min
+      ? editorApprovedExceptionFor(item.date)
+      : null;
+    if (strictArtifactValidation && exceptionReason) {
+      warn(`${message} editor-approved exception: ${exceptionReason}.`);
+    } else if (strictArtifactValidation) {
       fail(message);
     } else {
       warn(`${message} ${historicalPolicyWarningReason()}.`);

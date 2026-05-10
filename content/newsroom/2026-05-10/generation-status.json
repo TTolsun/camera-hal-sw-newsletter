@@ -84,9 +84,9 @@
   "repairSucceeded": false,
   "input_candidate_count": 40,
   "eligible_candidate_count": 6,
-  "selected_article_count": 3,
+  "selected_article_count": 2,
   "deterministic_selected_count": 5,
-  "rendered_main_article_count": 3,
+  "rendered_main_article_count": 2,
   "reserve_candidate_count": 1,
   "demoted_article_count": 0,
   "locked_article_count": 0,
@@ -95,10 +95,10 @@
   "reporter_selected_count": 0,
   "final_input_candidate_count": 40,
   "final_eligible_candidate_count": 6,
-  "final_selected_article_count": 3,
+  "final_selected_article_count": 2,
   "reporter_selected_but_final_excluded_count": 0,
   "ai_selected_article_count": 1,
-  "underfilled": false,
+  "underfilled": true,
   "publish_ready": false,
   "selection_publish_ready": false,
   "final_publish_ready": false,
@@ -110,28 +110,28 @@
   "min_non_fallback_publish_ready_articles": 1,
   "composition_mode": "NEEDS_FIX",
   "selection_composition_mode": "NEEDS_FIX",
-  "composition_reason": "Article Composition Policy passed with 4 Primary Camera Stack article(s) and 1 supporting main article(s).",
+  "composition_reason": "Editor-approved exception: only two independent camera-stack articles remain after CameraX duplicate source merge.",
   "composition_summary": {
-    "selected_article_count": 5,
+    "selected_article_count": 2,
     "bucket_counts": {
       "direct_aosp_camera": 0,
       "camera_driver_image_pipeline": 1,
-      "android_platform_camera_adjacent": 3,
+      "android_platform_camera_adjacent": 1,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 1,
+      "cpp_ai_tooling_fallback": 0,
       "generic_tech_watchlist": 0
     },
     "direct_aosp_camera_count": 0,
     "camera_driver_image_pipeline_count": 1,
-    "android_platform_camera_adjacent_count": 3,
+    "android_platform_camera_adjacent_count": 1,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 1,
+    "cpp_ai_tooling_fallback_count": 0,
     "generic_tech_watchlist_count": 0,
-    "primary_camera_stack_topic_count": 4,
-    "supporting_main_article_count": 1,
+    "primary_camera_stack_topic_count": 2,
+    "supporting_main_article_count": 0,
     "forbidden_main_article_count": 0,
-    "non_fallback_reviewable_article_count": 4,
-    "fallback_topic_count": 1
+    "non_fallback_reviewable_article_count": 2,
+    "fallback_topic_count": 0
   },
   "eligible_composition_summary": {
     "selected_article_count": 6,
@@ -250,5 +250,22 @@
   "fallback_public_issue_preserve_article_count": 0,
   "fallback_public_issue_reason": "Public newsletter files generated after quality/repair/final-readiness trigger.",
   "artifact_final_publish_ready": false,
-  "public_newsletter_ready": true
+  "public_newsletter_ready": true,
+  "manual_publication_ready": true,
+  "editor_approved_exception": true,
+  "editor_approved_exception_reason": "Only two independent camera-stack public articles remain after merging duplicate AndroidX Camera release-page anchors; no safe third dated camera-stack source was available.",
+  "automatic_publication_failure_record": {
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "failure_stage": "editor repair attempt 1/2",
+    "failure_reason": "Targeted repair changed main article count outside completion/replacement mode.",
+    "repairAttempted": true,
+    "repairSucceeded": false
+  },
+  "manual_approval_status": {
+    "public_newsletter_ready": true,
+    "editor_review_required": true,
+    "final_publish_ready": false,
+    "editor_approved_exception": true,
+    "reason": "Only two independent camera-stack public articles remain after merging duplicate AndroidX Camera release-page anchors; no safe third dated camera-stack source was available."
+  }
 }

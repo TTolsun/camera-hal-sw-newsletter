@@ -86,7 +86,14 @@ function newsletterHtml(date) {
   ].join('\n');
 }
 
-function writeSiteFixture(root, { date = '2026-04-01', articleCount, todo = false, strict = false, factCheckMustFix = false } = {}) {
+function writeSiteFixture(root, {
+  date = '2026-04-01',
+  articleCount,
+  todo = false,
+  strict = false,
+  factCheckMustFix = false,
+  editorApprovedException = false
+} = {}) {
   const count = articleCount ?? Math.max(0, articlePolicy.mainArticleCount.min - 1);
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
@@ -106,6 +113,20 @@ function writeSiteFixture(root, { date = '2026-04-01', articleCount, todo = fals
       must_fix: ['CameraX release has an unresolved source claim.'],
       source_gaps: [],
       source_gap_count: 0
+    });
+  }
+  if (editorApprovedException) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+      final_publish_ready: false,
+      editor_review_required: true,
+      public_newsletter_ready: true,
+      editor_approved_exception: true,
+      editor_approved_exception_reason: 'Only two independent camera-stack public articles remain.'
+    });
+    writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+      status: 'NEEDS_FIX',
+      editor_approved_exception: true,
+      editor_approved_exception_reason: 'Only two independent camera-stack public articles remain.'
     });
   }
   if (strict) {
@@ -162,6 +183,21 @@ test('strict validate-site article count drift remains hard failure', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /expected Newsletter Policy range/);
+});
+
+test('strict validate-site article count drift allows explicit editor-approved exception', () => {
+  const root = tempRoot('validate-site-editor-exception-');
+  writeSiteFixture(root, {
+    strict: true,
+    editorApprovedException: true
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /editor-approved exception/);
+  assert.match(result.stderr, /expected Newsletter Policy range/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
 });
 
 test('historical validate-site structural errors remain hard failures', () => {
