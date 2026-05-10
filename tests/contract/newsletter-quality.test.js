@@ -6,7 +6,7 @@ const {
   buildQualityReportMarkdown,
   determineQualityStatus,
   sectionPassesArticleGate
-} = require('../scripts/lib/newsletter-quality');
+} = require('../../scripts/lib/newsletter-quality');
 const {
   reporterCandidate,
   reporterCandidatesFor,
@@ -14,13 +14,13 @@ const {
   scopedCandidate,
   section,
   validSections
-} = require('./helpers/quality-builders');
-const { readJsonFixture } = require('./helpers/fixture-loader');
+} = require('../helpers/quality-builders');
+const { readJsonFixture } = require('../helpers/fixture-loader');
 const {
   articlePolicy,
   articleCountRangeText,
   qualityGatePolicy
-} = require('../scripts/lib/newsletter-policy');
+} = require('../../scripts/lib/newsletter-policy');
 
 const hardFailRegressionCases = new Map([
   ['source-less main article', {

@@ -18,14 +18,14 @@ const {
   selectFinalArticles,
   selectionErrors,
   summarizeExclusionReasons
-} = require('../scripts/lib/newsroom-selection');
+} = require('../../scripts/lib/newsroom-selection');
 const {
   articlePolicy
-} = require('../scripts/lib/newsletter-policy');
-const { parseSourceSpecificItems } = require('../scripts/lib/source-item-parsers');
-const { normalizeCandidate } = require('../scripts/newsroom/cli/collect-news-candidates');
-const { candidate } = require('./helpers/newsroom-builders');
-const { readJsonFixture, readTextFixture } = require('./helpers/fixture-loader');
+} = require('../../scripts/lib/newsletter-policy');
+const { parseSourceSpecificItems } = require('../../scripts/lib/source-item-parsers');
+const { normalizeCandidate } = require('../../scripts/newsroom/cli/collect-news-candidates');
+const { candidate } = require('../helpers/newsroom-builders');
+const { readJsonFixture, readTextFixture } = require('../helpers/fixture-loader');
 
 function policyPrimaryCandidate(index = 0, overrides = {}) {
   return candidate({

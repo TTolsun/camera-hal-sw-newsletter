@@ -5,22 +5,22 @@ const test = require('node:test');
 
 const {
   buildNewsletterQualityReport
-} = require('../scripts/lib/newsletter-quality');
+} = require('../../scripts/lib/newsletter-quality');
 const {
   articlePolicy,
   qualityGatePolicy
-} = require('../scripts/lib/newsletter-policy');
+} = require('../../scripts/lib/newsletter-policy');
 const {
   reporterCandidatesFor,
   validSections
-} = require('./helpers/quality-builders');
+} = require('../helpers/quality-builders');
 const {
   tempRoot,
   writeJson,
   writeText
-} = require('./helpers/fs');
+} = require('../helpers/fs');
 
-const repoRoot = path.join(__dirname, '..');
+const repoRoot = path.join(__dirname, '..', '..');
 const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');
 const validateQualityPath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-quality.js');
 

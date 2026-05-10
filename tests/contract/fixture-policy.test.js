@@ -8,7 +8,7 @@ const {
   readJsonFixture,
   readTextFixture,
   resolveFixturePath
-} = require('./helpers/fixture-loader');
+} = require('../helpers/fixture-loader');
 
 const GENERATED_ARTIFACT_PATH_PATTERN = /\b(?:content\/newsroom|content\/collected-news|newsletters)\/\d{4}-\d{2}-\d{2}\b/;
 const MINIMIZED_GENERATED_REGRESSION_SOURCE = 'minimized-generated-regression';

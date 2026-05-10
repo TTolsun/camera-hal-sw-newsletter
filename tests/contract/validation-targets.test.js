@@ -3,10 +3,10 @@ const test = require('node:test');
 
 const {
   changedArtifactDate
-} = require('../scripts/newsroom/common/artifact-paths');
+} = require('../../scripts/newsroom/common/artifact-paths');
 const {
   strictTargetDatesFromInputs
-} = require('../scripts/newsroom/common/validation-targets');
+} = require('../../scripts/newsroom/common/validation-targets');
 
 test('changed artifact date detection covers newsletter and newsroom artifacts', () => {
   assert.equal(changedArtifactDate('newsletters/2026-05-07/newsletter.md'), '2026-05-07');
