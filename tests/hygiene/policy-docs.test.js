@@ -10,15 +10,15 @@ const {
   getDefaultNewsletterPolicy,
   renderNewsletterPolicyBlock,
   replaceNewsletterPolicyBlock
-} = require('../scripts/lib/newsletter-policy');
+} = require('../../scripts/lib/newsletter-policy');
 const {
   policyDocPaths,
   syncPolicyDocs
-} = require('../scripts/newsroom/cli/sync-policy-docs');
+} = require('../../scripts/newsroom/cli/sync-policy-docs');
 const {
   tempRoot,
   writeText
-} = require('./helpers/fs');
+} = require('../helpers/fs');
 
 test('policy docs check reports missing markers', () => {
   const analysis = analyzeNewsletterPolicyBlock('No generated policy block here.');

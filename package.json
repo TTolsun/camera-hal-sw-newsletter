@@ -15,7 +15,7 @@
     "sync:policy-docs": "node scripts/sync-policy-docs.js",
     "test": "npm run test:unit && npm run test:script",
     "test:unit": "node --test \"tests/**/*.test.js\"",
-    "test:source-effectiveness": "node --test tests/source-effectiveness-report.test.js",
+    "test:source-effectiveness": "node --test tests/workflow/source-effectiveness-report.test.js",
     "test:script": "node scripts/test-artifact-manifest.js && node scripts/test-selection-diagnostics.js",
     "test:artifact": "node scripts/test-artifact-manifest.js",
     "test:selection-diagnostics": "node scripts/test-selection-diagnostics.js",

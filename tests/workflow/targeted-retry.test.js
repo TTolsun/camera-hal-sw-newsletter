@@ -16,14 +16,14 @@ const {
   sectionsOutsideRepairPlan,
   validateTargetedRepairResult,
   writeReviewableRepairFailureArtifacts
-} = require('../scripts/gemini-newsroom-newsletter');
+} = require('../../scripts/gemini-newsroom-newsletter');
 const {
   EditorSemanticValidationError
-} = require('../scripts/newsroom/validate/editor-output-contract');
+} = require('../../scripts/newsroom/validate/editor-output-contract');
 const {
   reserveReporterCandidate: reporterCandidate,
   retrySection: section
-} = require('./helpers/newsroom-builders');
+} = require('../helpers/newsroom-builders');
 
 const DATE = '2026-05-08';
 

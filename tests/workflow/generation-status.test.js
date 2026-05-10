@@ -5,8 +5,8 @@ const {
   buildGenerationStatus,
   failureStageFromError,
   validateCompletionSections
-} = require('../scripts/gemini-newsroom-newsletter');
-const { qualityGatePolicy } = require('../scripts/lib/newsletter-policy');
+} = require('../../scripts/gemini-newsroom-newsletter');
+const { qualityGatePolicy } = require('../../scripts/lib/newsletter-policy');
 
 test('failure status includes required Gemini diagnostic fields', () => {
   const status = buildGenerationStatus({

@@ -9,12 +9,12 @@ const {
   writeGenerationStatus,
   writeNewsletterDate,
   writeSelectionDiagnosticsArtifact
-} = require('../scripts/newsroom/cli/gemini-newsroom-newsletter');
-const { articlePolicy } = require('../scripts/lib/newsletter-policy');
+} = require('../../scripts/newsroom/cli/gemini-newsroom-newsletter');
+const { articlePolicy } = require('../../scripts/lib/newsletter-policy');
 const {
   readJson,
   tempRoot
-} = require('./helpers/fs');
+} = require('../helpers/fs');
 
 function deterministicFailureShortlist(date) {
   const composition = {

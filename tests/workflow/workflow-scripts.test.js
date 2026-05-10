@@ -6,54 +6,54 @@ const test = require('node:test');
 
 const {
   buildNewsroomPrBody
-} = require('../scripts/build-newsroom-pr-body');
+} = require('../../scripts/build-newsroom-pr-body');
 const {
   buildGenerationStatusOutputs,
   readStatus,
   renderGithubOutputs
-} = require('../scripts/write-generation-status-output');
+} = require('../../scripts/write-generation-status-output');
 const {
   articlePolicy,
   qualityGatePolicy,
   publishGateCriteriaText
-} = require('../scripts/lib/newsletter-policy');
+} = require('../../scripts/lib/newsletter-policy');
 const {
   resolvePublishStatus
-} = require('../scripts/newsroom/common/publish-status');
+} = require('../../scripts/newsroom/common/publish-status');
 const {
   extractSections,
   extractStatusSection,
   validatePrBodyFile,
   validatePrBodyText
-} = require('../scripts/validate-pr-body');
+} = require('../../scripts/validate-pr-body');
 const {
   buildPublishStatusOutputs
-} = require('../scripts/write-publish-status-output');
+} = require('../../scripts/write-publish-status-output');
 const {
   buildReviewableArtifactOutputs,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   requiredPublicFiles,
   resolveReviewableArtifacts
-} = require('../scripts/resolve-reviewable-artifacts');
+} = require('../../scripts/resolve-reviewable-artifacts');
 const {
   buildFallbackPublicIssue,
   sectionDuplicateReason
-} = require('../scripts/newsroom/generate/fallback-public-issue');
+} = require('../../scripts/newsroom/generate/fallback-public-issue');
 const {
   ensurePublicNewsletterArtifacts
-} = require('../scripts/ensure-public-newsletter-artifacts');
+} = require('../../scripts/ensure-public-newsletter-artifacts');
 const {
   main: annotatePublicationQualityMain,
   resolveTargetItems
-} = require('../scripts/annotate-publication-quality');
+} = require('../../scripts/annotate-publication-quality');
 const {
   renderEditorPublicationPolicyMarkdown
-} = require('../scripts/newsroom/common/editor-publication-policy');
+} = require('../../scripts/newsroom/common/editor-publication-policy');
 const {
   buildHtml,
   buildMarkdown
-} = require('../scripts/newsroom/render/newsletter-renderer');
+} = require('../../scripts/newsroom/render/newsletter-renderer');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -2634,7 +2634,7 @@ test('newsroom PR body primary headings are Korean', () => {
 });
 
 test('weekly newsroom workflow separates review PR success from publish-ready gate', () => {
-  const workflowPath = path.join(__dirname, '..', '.github', 'workflows', '01-weekly-newsroom-pr.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '01-weekly-newsroom-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const validatePolicyStep = workflowStep(workflow, 'Validate newsletter policy');
   const checkPolicyDocsStep = workflowStep(workflow, 'Check policy docs');
@@ -2734,7 +2734,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
 });
 
 test('generation path guards public artifacts for editorial reviewable failures', () => {
-  const generatorPath = path.join(__dirname, '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
+  const generatorPath = path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');
   const renderedMarkdownIndex = generator.indexOf('const newsletterMarkdown = buildMarkdown(editor);');
   const structuralGuardIndex = generator.indexOf('assertTerminalPublicationContracts({', renderedMarkdownIndex);
@@ -2781,7 +2781,7 @@ test('generation path guards public artifacts for editorial reviewable failures'
 });
 
 test('validate-site uses shared rendered issue structural validator', () => {
-  const validateSitePath = path.join(__dirname, '..', 'scripts', 'newsroom', 'cli', 'validate-site.js');
+  const validateSitePath = path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'validate-site.js');
   const validateSite = fs.readFileSync(validateSitePath, 'utf8');
 
   assert.match(validateSite, /validateRenderedIssueStructure/);
@@ -2789,7 +2789,7 @@ test('validate-site uses shared rendered issue structural validator', () => {
 });
 
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {
-  const workflowPath = path.join(__dirname, '..', '.github', 'workflows', '02-validate-site.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '02-validate-site.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const structuralStep = workflowStep(workflow, 'Validate structural publication artifacts');
   const annotationStep = workflowStep(workflow, 'Annotate publication quality and fact-check status');

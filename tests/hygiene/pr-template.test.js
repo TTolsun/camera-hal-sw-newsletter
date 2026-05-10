@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const root = path.join(__dirname, '..');
+const root = path.join(__dirname, '..', '..');
 
 function repoPath(...parts) {
   return path.join(root, ...parts);
