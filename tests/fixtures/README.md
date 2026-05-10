@@ -48,7 +48,15 @@ Every committed fixture file must have exactly one ledger entry with:
 
 `good/` fixtures must be curated, non-generated, and PASS-only. `bad/` fixtures must not expect `PASS`.
 
+When adding, deleting, or moving committed fixture files, update `fixture-ledger.json`
+in the same change and run `npm.cmd run check:fixtures`. The ledger must contain
+exactly one entry for every committed fixture file, excluding `.gitkeep`,
+`README.md`, and `fixture-ledger.json` itself.
+
 Generated regression fixtures must keep their fixture-local provenance in
-`fixture-ledger.json` and use `metadata.source: "minimized-generated-regression"`.
+`fixture-ledger.json`, set `metadata.generated: true`, and use
+`metadata.source: "minimized-generated-regression"`.
 Do not embed `content/newsroom/YYYY-MM-DD`, `content/collected-news/YYYY-MM-DD`, or
 `newsletters/YYYY-MM-DD` paths inside committed fixture files.
+Only `bad/` or dedicated regression-purpose fixtures may set
+`generatedArtifact: true`; `good/` fixtures must stay curated and non-generated.

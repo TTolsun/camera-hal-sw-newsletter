@@ -112,6 +112,7 @@ path를 직접 넣지 않습니다.
 
 Root `tests/*.test.js` migration baseline은 `tests/root-test-allowlist.json`에 고정되어 있습니다.
 기존 root test를 nested folder로 이동하면 allowlist에서도 제거하고, 새 root test를 추가하지 않습니다.
+이 allowlist는 임시 migration debt이며 새 root test를 허용하는 확장 지점이 아닙니다.
 
 ## Validation
 
