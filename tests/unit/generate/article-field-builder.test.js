@@ -113,6 +113,38 @@ test('field hygiene rejects internal classification in confirmed facts', () => {
   assert.ok(issues.some(item => item.type === 'internal_classification_in_confirmed_facts'));
 });
 
+test('field hygiene separates exact duplicate semantic overlap and short overlap warning', () => {
+  const exact = findFieldHygieneIssues({
+    what_changed: 'CameraX changed.',
+    background: 'CameraX changed.'
+  }).find(item => item.type === 'field_overlap');
+  const semantic = findFieldHygieneIssues({
+    what_changed: 'CameraX release updates Android camera compatibility validation behavior today.',
+    background: 'CameraX release updates Android camera compatibility validation behavior now.'
+  }).find(item => item.type === 'field_overlap');
+  const short = findFieldHygieneIssues({
+    what_changed: 'CameraX Android compatibility validation.',
+    background: 'CameraX Android compatibility checks.'
+  }).find(item => item.type === 'field_overlap');
+  const distinct = findFieldHygieneIssues({
+    what_changed: 'CameraX Android compatibility validation.',
+    background: 'libcamera sensor pipeline context.'
+  }).find(item => item.type === 'field_overlap');
+
+  assert.equal(exact.overlap_kind, 'exact_duplicate');
+  assert.equal(exact.severity, 'hard');
+  assert.equal(exact.blocking, true);
+  assert.equal(semantic.overlap_kind, 'semantic_overlap');
+  assert.equal(semantic.severity, 'hard');
+  assert.equal(semantic.blocking, true);
+  assert.equal(semantic.background_token_count >= 6, true);
+  assert.equal(semantic.changed_token_count >= 6, true);
+  assert.equal(short.overlap_kind, 'short_overlap_warning');
+  assert.equal(short.severity, 'warning');
+  assert.equal(short.blocking, false);
+  assert.equal(distinct, undefined);
+});
+
 test('field hygiene detects Korean direct HAL overclaims for non-direct impact levels', () => {
   for (const camera_hal_perspective of [
     '이 항목은 직접 HAL API 변경입니다.',
@@ -167,6 +199,37 @@ test('field hygiene does not treat standalone stream buffer request result or gu
 
   assert.equal(standalone.some(item => item.type === 'overclaim_guardrail'), false);
   assert.equal(guardrail.some(item => item.type === 'overclaim_guardrail'), false);
+});
+
+test('field hygiene keeps not and no from masking positive direct HAL overclaims', () => {
+  for (const camera_hal_perspective of [
+    'No, this is direct HAL API behavior.',
+    'This is not only a CameraX update; it is direct HAL API behavior.'
+  ]) {
+    const issues = findFieldHygieneIssues({
+      what_changed: 'CameraX compatibility behavior changed.',
+      background: 'CameraX is above Camera2.',
+      camera_hal_perspective,
+      impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+    });
+    assert.ok(
+      issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true),
+      `${camera_hal_perspective} should remain blocking`
+    );
+  }
+
+  for (const camera_hal_perspective of [
+    'This is not a direct HAL API change.',
+    'No source evidence supports direct HAL API change.'
+  ]) {
+    const issues = findFieldHygieneIssues({
+      what_changed: 'CameraX compatibility behavior changed.',
+      background: 'CameraX is above Camera2.',
+      camera_hal_perspective,
+      impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+    });
+    assert.equal(issues.some(item => item.type === 'overclaim_guardrail'), false);
+  }
 });
 
 test('overclaim guardrails and field hygiene catch direct HAL overclaim', () => {

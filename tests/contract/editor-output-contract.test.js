@@ -282,7 +282,49 @@ test('editor field hygiene rejects raw table text and background overlap', () =>
     error => {
       assert.ok(error instanceof EditorSemanticValidationError);
       assert.equal(error.details.field, 'sections.field_hygiene');
-      assert.ok(error.details.issues.some(item => item.type === 'field_overlap'));
+      assert.ok(error.details.issues.some(item =>
+        item.type === 'field_overlap' &&
+        item.overlap_kind === 'exact_duplicate' &&
+        item.blocking === true
+      ));
+      return true;
+    }
+  );
+});
+
+test('editor field hygiene passes short overlap warnings and rejects semantic overlap', () => {
+  const shortOverlap = editor({
+    sections: [
+      section(1, {
+        what_changed: 'CameraX Android compatibility validation.',
+        background: 'CameraX Android compatibility checks.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  const semanticOverlap = editor({
+    sections: [
+      section(1, {
+        what_changed: 'CameraX release updates Android camera compatibility validation behavior today.',
+        background: 'CameraX release updates Android camera compatibility validation behavior now.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.equal(validateEditorOutputContract(shortOverlap, DATE, { normalizeSection }), shortOverlap);
+  assert.throws(
+    () => validateEditorOutputContract(semanticOverlap, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item =>
+        item.type === 'field_overlap' &&
+        item.overlap_kind === 'semantic_overlap' &&
+        item.blocking === true
+      ));
       return true;
     }
   );
@@ -310,6 +352,35 @@ test('editor field hygiene rejects direct HAL contract overclaim for adjacent im
       return true;
     }
   );
+});
+
+test('editor field hygiene does not let standalone not or no hide HAL overclaims', () => {
+  for (const camera_hal_perspective of [
+    'No, this is direct HAL API behavior.',
+    'This is not only a CameraX update; it is direct HAL API behavior.'
+  ]) {
+    const draft = editor({
+      sections: [
+        section(1, {
+          relevance_bucket: 'android_platform_camera_adjacent',
+          impact_claim_level: 'android_framework_adjacent',
+          camera_hal_perspective
+        }),
+        section(2),
+        section(3)
+      ]
+    });
+
+    assert.throws(
+      () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+      error => {
+        assert.ok(error instanceof EditorSemanticValidationError);
+        assert.equal(error.details.field, 'sections.field_hygiene');
+        assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
+        return true;
+      }
+    );
+  }
 });
 
 test('editor field hygiene rejects Korean HAL overclaim for non-direct impact level', () => {

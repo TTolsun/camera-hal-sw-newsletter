@@ -295,6 +295,61 @@ function normalizedTokenOverlap(left, right) {
   return intersection / Math.max(leftTokens.size, rightTokens.size);
 }
 
+function backgroundOverlapIssue(background, whatChanged, overlapThreshold) {
+  const backgroundText = text(background);
+  const changedText = text(whatChanged);
+  const normalizedBackground = normalizeForMatch(backgroundText);
+  const normalizedChanged = normalizeForMatch(changedText);
+  const backgroundTokens = normalizedTokens(backgroundText);
+  const changedTokens = normalizedTokens(changedText);
+  const overlap = normalizedTokenOverlap(backgroundText, changedText);
+  const baseIssue = {
+    type: 'field_overlap',
+    field: 'background',
+    overlap,
+    background_token_count: backgroundTokens.length,
+    changed_token_count: changedTokens.length
+  };
+
+  if (normalizedBackground && normalizedBackground === normalizedChanged) {
+    return {
+      ...baseIssue,
+      overlap: 1,
+      overlap_kind: 'exact_duplicate',
+      severity: 'hard',
+      blocking: true,
+      reason: 'background exactly duplicates what_changed.'
+    };
+  }
+  if (
+    backgroundTokens.length >= 6 &&
+    changedTokens.length >= 6 &&
+    overlap >= overlapThreshold
+  ) {
+    return {
+      ...baseIssue,
+      overlap_kind: 'semantic_overlap',
+      severity: 'hard',
+      blocking: true,
+      reason: `background overlaps what_changed too much (${overlap.toFixed(2)} >= ${overlapThreshold}).`
+    };
+  }
+  if (
+    backgroundTokens.length >= 3 &&
+    changedTokens.length >= 3 &&
+    overlap >= overlapThreshold
+  ) {
+    return {
+      ...baseIssue,
+      overlap_kind: 'short_overlap_warning',
+      severity: 'warning',
+      blocking: false,
+      reason: 'background and what_changed overlap, but token count is below hard-fail threshold.'
+    };
+  }
+  return null;
+}
+
 function rawArtifactMatches(value) {
   const raw = text(value);
   if (!raw) return [];
@@ -322,7 +377,7 @@ function sectionSnippets(section = {}) {
 }
 
 function isNegatedOrGuardrailSnippet(value) {
-  return /(?:단정하지|claim하지|표현하지|간주하지|승격하지|보지\s*않|source\s+evidence가\s*없으면|evidence가\s*없으면|\bnot\b|\bno\b|\bwithout\b|\bunless\b|\bavoid\b|\bdo\s+not\b|\bmust\s+not\b|\bshould\s+not\b)/i.test(value);
+  return /(?:단정하지|claim하지|표현하지|간주하지|승격하지|보지\s*않|source\s+evidence가\s*없으면|evidence가\s*없으면|\bwithout\b|\bunless\b|\bavoid\b|\bdo\s+not\b|\bmust\s+not\b|\bshould\s+not\b|\bnot\s+(?:a\s+)?direct\s+HAL\b|\bnot\s+(?:supported|backed)\s+by\s+evidence\b|\bno\s+(?:source\s+)?evidence\b)/i.test(value);
 }
 
 function hasDirectHalChangeClaim(value) {
@@ -387,17 +442,8 @@ function findFieldHygieneIssues(section = {}, options = {}) {
       });
     }
   }
-  const overlap = normalizedTokenOverlap(section.background, section.what_changed);
-  if (overlap >= overlapThreshold) {
-    issues.push({
-      type: 'field_overlap',
-      field: 'background',
-      overlap,
-      severity: 'hard',
-      blocking: true,
-      reason: `background overlaps what_changed too much (${overlap.toFixed(2)} >= ${overlapThreshold}).`
-    });
-  }
+  const overlapIssue = backgroundOverlapIssue(section.background, section.what_changed, overlapThreshold);
+  if (overlapIssue) issues.push(overlapIssue);
   const overclaimSnippet = directHalOverclaim(section);
   if (overclaimSnippet) {
     issues.push({
