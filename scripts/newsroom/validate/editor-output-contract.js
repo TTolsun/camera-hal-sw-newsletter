@@ -9,6 +9,10 @@ const {
   isForbiddenMainBucket,
   isPrimaryCameraStackBucket
 } = require('../common/newsletter-policy');
+const {
+  findFieldHygieneIssues,
+  inferImpactClaimLevel
+} = require('../generate/article-field-builder');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -188,6 +192,34 @@ function validateEditorArticlePolicy(value, reporter = {}) {
   return { primaryCount, forbiddenSections, sectionDetails };
 }
 
+function validateFieldHygiene(value) {
+  const issues = [];
+  ensureArray(value.sections).forEach((section, index) => {
+    const impactClaimLevel = text(section.impact_claim_level || section.impactClaimLevel) ||
+      inferImpactClaimLevel(section);
+    const sectionIssues = findFieldHygieneIssues({
+      ...section,
+      impact_claim_level: impactClaimLevel
+    });
+    for (const issue of sectionIssues.filter(item => item.blocking !== false)) {
+      issues.push({
+        index: index + 1,
+        headline: text(section.headline || section.category || `article ${index + 1}`),
+        impact_claim_level: impactClaimLevel,
+        ...issue
+      });
+    }
+  });
+  if (issues.length > 0) {
+    throw semanticError('Editor output failed article field hygiene validation.', {
+      field: 'sections.field_hygiene',
+      actualCount: issues.length,
+      sectionCount: ensureArray(value.sections).length,
+      issues
+    });
+  }
+}
+
 function validateEditorOutputContract(value, date, options = {}) {
   const reporter = options.reporter || { candidates: [] };
   const normalizeSection = options.normalizeSection || (section => ({
@@ -217,6 +249,7 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateSectionCount(value);
 
   value.sections = value.sections.map((section, index) => normalizeSection(section, index, reporter));
+  validateFieldHygiene(value);
   validateEditorArticlePolicy(value, reporter);
 
   const emptySourceSections = value.sections

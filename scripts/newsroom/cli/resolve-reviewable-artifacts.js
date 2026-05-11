@@ -33,6 +33,7 @@ const CANONICAL_REVIEW_ARTIFACTS = [
   'repair-failure.json',
   'recovery-prompt.md',
   'shortlisted-candidates.json',
+  'background-context.json',
   'selection-report.json',
   'selection-diagnostics.md'
 ];

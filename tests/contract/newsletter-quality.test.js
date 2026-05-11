@@ -510,6 +510,117 @@ test('quality gate reports missing scope scores when no reporter fallback exists
   ));
 });
 
+test('quality gate hard-fails raw background table artifacts', () => {
+  const url = 'https://example.com/raw-camerax-table';
+  const sections = [
+    section({
+      headline: 'CameraX raw table leak',
+      url,
+      background: 'camera-view 1.6.1 - - 1.7.0-alpha01 camera-video 1.6.1 - - 1.7.0-alpha01 View the Camera Library Close Maven Group versions'
+    }),
+    ...validSections().slice(1)
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate(url, 'android_platform_camera_adjacent'),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item => item.category === 'field-hygiene' && item.blocking === true));
+  assert.equal(report.article_results[0].status, 'FAIL');
+});
+
+test('quality gate treats short background overlap as non-blocking field hygiene warning', () => {
+  const url = 'https://example.com/short-overlap';
+  const sections = [
+    section({
+      headline: 'CameraX short overlap',
+      url,
+      what_changed: 'CameraX Android compatibility validation.',
+      background: 'CameraX Android compatibility checks.'
+    }),
+    ...validSections().slice(1)
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate(url, 'android_platform_camera_adjacent'),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+  const diagnostic = report.deductions.find(item =>
+    item.category === 'field-hygiene' &&
+    item.location === 'CameraX short overlap'
+  );
+
+  assert.equal(report.status, 'PASS');
+  assert.ok(diagnostic);
+  assert.equal(diagnostic.blocking, false);
+  assert.equal(diagnostic.severity, 'warning');
+  assert.equal(report.deductions.some(item => item.category === 'field-hygiene' && item.blocking === true), false);
+  assert.notEqual(report.article_results[0].status, 'FAIL');
+});
+
+test('quality gate hard-fails exact duplicate and semantic background overlap', () => {
+  const exactUrl = 'https://example.com/exact-overlap';
+  const semanticUrl = 'https://example.com/semantic-overlap';
+  const exactReport = reportFor([
+    section({
+      headline: 'CameraX exact duplicate',
+      url: exactUrl,
+      what_changed: 'CameraX changed.',
+      background: 'CameraX changed.'
+    }),
+    ...validSections().slice(1)
+  ], [
+    scopedCandidate(exactUrl, 'android_platform_camera_adjacent'),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+  const semanticReport = reportFor([
+    section({
+      headline: 'CameraX semantic overlap',
+      url: semanticUrl,
+      what_changed: 'CameraX release updates Android camera compatibility validation behavior today.',
+      background: 'CameraX release updates Android camera compatibility validation behavior now.'
+    }),
+    ...validSections().slice(1)
+  ], [
+    scopedCandidate(semanticUrl, 'android_platform_camera_adjacent'),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+
+  assert.ok(exactReport.deductions.some(item =>
+    item.category === 'field-hygiene' &&
+    item.blocking === true &&
+    item.reason.includes('exactly duplicates')
+  ));
+  assert.equal(exactReport.article_results[0].status, 'FAIL');
+  assert.ok(semanticReport.deductions.some(item =>
+    item.category === 'field-hygiene' &&
+    item.blocking === true &&
+    item.reason.includes('overlaps what_changed too much')
+  ));
+  assert.equal(semanticReport.article_results[0].status, 'FAIL');
+});
+
+test('quality gate accepts distinct CameraX and libcamera background context', () => {
+  const libcameraUrl = 'https://example.com/libcamera';
+  const sections = [
+    section({
+      headline: 'libcamera pipeline update',
+      url: libcameraUrl,
+      what_changed: 'libcamera 0.5.0 updated image sensor pipeline behavior on 2026-05-01.',
+      background: 'V4L2 and libcamera changes can affect camera driver validation and ISP handoff.',
+      camera_hal_perspective: 'Review this as driver and image pipeline input before deciding whether Android camera integration follow-up is needed.'
+    }),
+    ...validSections().slice(1)
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate(libcameraUrl, 'camera_driver_image_pipeline'),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+
+  assert.equal(report.deductions.some(item => item.category === 'field-hygiene'), false);
+  assert.notEqual(report.article_results[0].status, 'FAIL');
+});
+
 test('quality gate uses shortlist selected candidate before reporter candidate for binding', () => {
   const sameUrl = 'https://example.com/shared-release';
   const sections = [

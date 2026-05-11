@@ -246,6 +246,225 @@ test('editor article policy uses newsroom URL normalization for reporter metadat
   assert.equal(validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }), draft);
 });
 
+test('editor field hygiene rejects raw table text and background overlap', () => {
+  const rawTable = editor({
+    sections: [
+      section(1, {
+        what_changed: 'CameraX 1.6.1 changed Android camera compatibility behavior.',
+        background: 'camera-view 1.6.1 - - 1.7.0-alpha01 camera-video 1.6.1 - - 1.7.0-alpha01 View the Camera Library Close Maven Group versions'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  const overlap = editor({
+    sections: [
+      section(1, {
+        what_changed: 'CameraX 1.6.1 changed Android camera compatibility behavior for validation.',
+        background: 'CameraX 1.6.1 changed Android camera compatibility behavior for validation.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(rawTable, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'raw_artifact'));
+      return true;
+    }
+  );
+  assert.throws(
+    () => validateEditorOutputContract(overlap, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item =>
+        item.type === 'field_overlap' &&
+        item.overlap_kind === 'exact_duplicate' &&
+        item.blocking === true
+      ));
+      return true;
+    }
+  );
+});
+
+test('editor field hygiene passes short overlap warnings and rejects semantic overlap', () => {
+  const shortOverlap = editor({
+    sections: [
+      section(1, {
+        what_changed: 'CameraX Android compatibility validation.',
+        background: 'CameraX Android compatibility checks.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  const semanticOverlap = editor({
+    sections: [
+      section(1, {
+        what_changed: 'CameraX release updates Android camera compatibility validation behavior today.',
+        background: 'CameraX release updates Android camera compatibility validation behavior now.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.equal(validateEditorOutputContract(shortOverlap, DATE, { normalizeSection }), shortOverlap);
+  assert.throws(
+    () => validateEditorOutputContract(semanticOverlap, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item =>
+        item.type === 'field_overlap' &&
+        item.overlap_kind === 'semantic_overlap' &&
+        item.blocking === true
+      ));
+      return true;
+    }
+  );
+});
+
+test('editor field hygiene rejects direct HAL contract overclaim for adjacent impact level', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: 'android_platform_camera_adjacent',
+        impact_claim_level: 'android_framework_adjacent',
+        camera_hal_perspective: 'This is a direct HAL API contract change for stream buffers.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail'));
+      return true;
+    }
+  );
+});
+
+test('editor field hygiene does not let standalone not or no hide HAL overclaims', () => {
+  for (const camera_hal_perspective of [
+    'No, this is direct HAL API behavior.',
+    'This is not only a CameraX update; it is direct HAL API behavior.'
+  ]) {
+    const draft = editor({
+      sections: [
+        section(1, {
+          relevance_bucket: 'android_platform_camera_adjacent',
+          impact_claim_level: 'android_framework_adjacent',
+          camera_hal_perspective
+        }),
+        section(2),
+        section(3)
+      ]
+    });
+
+    assert.throws(
+      () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+      error => {
+        assert.ok(error instanceof EditorSemanticValidationError);
+        assert.equal(error.details.field, 'sections.field_hygiene');
+        assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
+        return true;
+      }
+    );
+  }
+});
+
+test('editor field hygiene rejects Korean HAL overclaim for non-direct impact level', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: 'android_platform_camera_adjacent',
+        impact_claim_level: 'android_framework_adjacent',
+        camera_hal_perspective: '이 항목은 HAL request/result에 직접 영향이 있습니다.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
+      return true;
+    }
+  );
+});
+
+test('editor field hygiene allows direct HAL claims for direct_hal_change and guardrail wording', () => {
+  const directDraft = editor({
+    sections: [
+      section(1, {
+        impact_claim_level: 'direct_hal_change',
+        camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  const guardrailDraft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: 'android_platform_camera_adjacent',
+        impact_claim_level: 'android_framework_adjacent',
+        camera_hal_perspective: '직접 HAL API 변경으로 단정하지 않습니다. source evidence가 없으면 HAL contract impact를 claim하지 않습니다.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.equal(validateEditorOutputContract(directDraft, DATE, { normalizeSection }), directDraft);
+  assert.equal(validateEditorOutputContract(guardrailDraft, DATE, { normalizeSection }), guardrailDraft);
+});
+
+test('editor field hygiene rejects internal classification in confirmed facts', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        confirmed_facts: [
+          'Android Developers가 2026-05-06에 게시 또는 업데이트한 항목입니다.',
+          'Relevance bucket: android_platform_camera_adjacent.',
+          'impact_claim_level=android_framework_adjacent.',
+          'source_gap_risk=false.'
+        ],
+        specificity_checks: [
+          'bucket=android_platform_camera_adjacent',
+          'impact_claim_level=android_framework_adjacent'
+        ]
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'internal_classification_in_confirmed_facts'));
+      return true;
+    }
+  );
+});
+
 test('editor title fallback keeps existing Korean title contract', () => {
   const missingTitle = editor({ title: '' });
   const mismatchedTitle = editor({ title: 'Camera HAL SW Newsletter - 2026-05-07' });

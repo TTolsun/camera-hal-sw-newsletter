@@ -2,11 +2,13 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  backgroundContextStageEnabled,
   buildGenerationStatus,
   failureStageFromError,
   validateCompletionSections
 } = require('../../scripts/gemini-newsroom-newsletter');
 const { qualityGatePolicy } = require('../../scripts/lib/newsletter-policy');
+const { backgroundContextSchema } = require('../../scripts/newsroom/render/newsletter-schema');
 
 test('failure status includes required Gemini diagnostic fields', () => {
   const status = buildGenerationStatus({
@@ -43,6 +45,31 @@ test('failure stage is extracted from bracketed Gemini errors', () => {
     failureStageFromError(new Error('[fact-checker attempt 1/4] Gemini API failed.')),
     'fact-checker attempt 1/4'
   );
+});
+
+test('background context stage defaults to Gemini unless explicitly disabled', () => {
+  assert.equal(backgroundContextStageEnabled({}), true);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: '' }), true);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'gemini' }), true);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'true' }), true);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'static' }), false);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'false' }), false);
+});
+
+test('background context schema requires identity fields for stable matching', () => {
+  const required = new Set(backgroundContextSchema.properties.background_contexts.items.required);
+  for (const field of [
+    'title',
+    'url',
+    'source_candidate_hash',
+    'impact_claim_level',
+    'background_context',
+    'background_basis',
+    'background_confidence',
+    'background_warnings'
+  ]) {
+    assert.equal(required.has(field), true, `${field} should be required`);
+  }
 });
 
 test('editorial reviewable status records non-publish handoff fields', () => {

@@ -26,6 +26,15 @@ const {
   qualityGatePolicy
 } = require('../common/newsletter-policy');
 const {
+  buildConfirmedFacts,
+  buildHalPerspective,
+  buildOverclaimGuardrails,
+  buildStaticBackgroundContext,
+  cleanBehaviorChange,
+  findFieldHygieneIssues,
+  inferImpactClaimLevel
+} = require('./article-field-builder');
+const {
   decodeHtml,
   readJson,
   writeJson
@@ -92,6 +101,41 @@ function normalizedHash(value) {
   return url ? crypto.createHash('sha256').update(url).digest('hex') : '';
 }
 
+function backgroundContextEntries(report = {}) {
+  return [
+    ...ensureArray(report.background_contexts),
+    ...ensureArray(report.articles),
+    ...ensureArray(report.items),
+    ...ensureArray(report.contexts)
+  ].filter(item => item && typeof item === 'object');
+}
+
+function buildBackgroundContextIndex(report = {}) {
+  const byHash = new Map();
+  const byUrl = new Map();
+  for (const entry of backgroundContextEntries(report)) {
+    const hash = firstText(entry.source_candidate_hash, entry.url_hash, entry.normalized_url_hash);
+    if (hash && !byHash.has(hash)) byHash.set(hash, entry);
+    const urls = [
+      entry.url,
+      entry.source_candidate_url,
+      entry.article_url,
+      ...ensureArray(entry.sources).map(source => source?.url)
+    ].map(normalizeUrl).filter(Boolean);
+    for (const url of urls) {
+      if (!byUrl.has(url)) byUrl.set(url, entry);
+    }
+  }
+  return { byHash, byUrl };
+}
+
+function backgroundContextForCandidate(index, candidate = {}) {
+  const hash = firstText(candidate.source_candidate_hash, candidate.url_hash, candidate.normalized_url_hash);
+  if (hash && index.byHash.has(hash)) return index.byHash.get(hash);
+  const url = normalizeUrl(candidate.url || candidate.source_candidate_url || candidate.article_url);
+  return url ? index.byUrl.get(url) || null : null;
+}
+
 function text(value) {
   if (Array.isArray(value)) return value.map(text).filter(Boolean).join(' ');
   if (value && typeof value === 'object') return Object.values(value).map(text).filter(Boolean).join(' ');
@@ -104,6 +148,18 @@ function firstText(...values) {
     if (result) return result;
   }
   return '';
+}
+
+function unique(values) {
+  const seen = new Set();
+  const output = [];
+  for (const value of ensureArray(values).map(text).filter(Boolean)) {
+    const key = value.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    output.push(value);
+  }
+  return output;
 }
 
 function normalizedTitle(value) {
@@ -259,6 +315,7 @@ function normalizeCandidate(candidate, sourceOrder) {
     counts_as_driver_topic: candidate.counts_as_driver_topic ?? classification.counts_as_driver_topic ?? false,
     counts_as_soc_topic: candidate.counts_as_soc_topic ?? classification.counts_as_soc_topic ?? false,
     counts_as_fallback_topic: candidate.counts_as_fallback_topic ?? classification.counts_as_fallback_topic ?? false,
+    impact_claim_level: candidate.impact_claim_level || candidate.impactClaimLevel || '',
     evidence_origin: candidate.evidence_origin || classification.evidence_origin || 'candidate_metadata',
     _source_order: sourceOrder
   };
@@ -420,56 +477,80 @@ function componentText(candidate) {
   return firstText(candidate.component, candidate.api_or_component, candidate.apiOrComponent, candidate.source);
 }
 
-function buildSectionFromCandidate(candidate, { fallback = false } = {}) {
+function buildSectionFromCandidate(candidate, { fallback = false, backgroundContext = null } = {}) {
   const category = categoryForCandidate(candidate, fallback);
   const headline = headlineForCandidate(candidate, fallback);
   const source = {
     title: candidate.title,
     url: candidate.url
   };
-  const behavior = behaviorText(candidate);
-  const component = componentText(candidate);
-  const date = candidate.published_date || 'published date from source metadata';
-  const watchPrefix = fallback || candidate.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK
-    ? 'HAL 직접 변경으로 보지 않고 관찰 항목으로 둡니다.'
-    : 'HAL/카메라 스택 영향 가능성을 검토합니다.';
+  const cleaned = cleanBehaviorChange(candidate);
+  const impactClaimLevel = inferImpactClaimLevel(candidate);
+  const background = firstText(
+    backgroundContext?.background_context,
+    backgroundContext?.background,
+    buildStaticBackgroundContext({ ...candidate, impact_claim_level: impactClaimLevel })
+  );
+  const halPerspective = buildHalPerspective({ ...candidate, impact_claim_level: impactClaimLevel });
+  const guardrails = buildOverclaimGuardrails({ ...candidate, impact_claim_level: impactClaimLevel });
+  const fieldWarnings = unique([
+    ...ensureArray(cleaned.warnings),
+    ...findFieldHygieneIssues({
+      what_changed: cleaned.text,
+      background,
+      camera_hal_perspective: halPerspective,
+      impact_claim_level: impactClaimLevel
+    }).map(item => item.type)
+  ]);
   return {
     category,
     headline,
-    confirmed_facts: [
-      `${candidate.source}의 ${date} 항목입니다.`,
-      component ? `관련 컴포넌트: ${component}` : `관련 주제: ${candidate.relevance_bucket}`,
-      behavior
-    ].filter(Boolean),
-    evidence_summary: `${candidate.source}의 dated evidence와 후보 metadata를 기준으로 deterministic fallback builder가 구성했습니다.`,
+    confirmed_facts: buildConfirmedFacts({ ...candidate, impact_claim_level: impactClaimLevel }),
+    evidence_summary: `${candidate.source} source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.`,
     specificity_checks: [
       `finalSelectionEligibility=${candidate.finalSelectionEligibility}`,
       `relevance_bucket=${candidate.relevance_bucket}`,
+      `impact_claim_level=${impactClaimLevel}`,
       `source_gap_risk=${String(candidate.source_gap_risk)}`
     ],
     source_verification_notes: [
-      'Source URL과 published date metadata가 있는 후보만 사용했습니다.',
-      fallback ? 'Fallback article은 HAL 직접 변경 claim 없이 watch 항목으로 표현했습니다.' : 'Main article 후보 조건을 통과했습니다.'
+      'Confirmed facts에는 source URL, date, component, version, cleaned behavior metadata만 사용했습니다.',
+      fallback ? 'Source evidence가 더 강한 claim을 뒷받침하기 전까지 이 fallback article은 watch/supporting lane에 둡니다.' : 'Fallback reconstruction 전에 main-candidate eligibility check를 통과한 항목입니다.',
+      ...guardrails
     ],
-    what_changed: behavior,
-    background: behavior,
-    camera_hal_perspective: `${watchPrefix} Camera HAL 팀은 이 항목을 source/API/driver/image pipeline 영향 검토 목록에 올리고 실제 코드 변경이나 CTS/VTS 영향이 확인될 때만 후속 작업으로 승격합니다.`,
+    what_changed: cleaned.text,
+    background,
+    camera_hal_perspective: halPerspective,
     camera_hal_checks: [
-      fallback ? 'HAL direct-change claim 없이 watch/reference 성격으로만 검토합니다.' : 'Camera HAL / Android Camera 영향 가능성을 source evidence 기준으로 확인합니다.',
-      'CTS/VTS, Camera ITS, stream/buffer/metadata 영향이 확인될 때만 후속 작업으로 승격합니다.'
+      fallback ? 'Direct camera-stack evidence가 없으면 watch/supporting material로만 표현합니다.' : 'Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.',
+      'Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다.'
     ],
     action_items: [
-      'Source URL과 published date를 확인해 내부 추적 항목으로 등록할지 판단합니다.',
-      fallback ? 'HAL 직접 변경이나 toolchain migration으로 단정하지 말고 관찰 항목으로만 공유합니다.' : '관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.',
-      '후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다.'
+      'Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.',
+      fallback ? 'Direct HAL behavior claim이 아니라 watch/supporting context로 공유합니다.' : '관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.',
+      'Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.'
     ],
     action_hints: [],
     team_summary: fallback
-      ? `${headline}은 HAL 직접 변경이 아니라 인접 관찰 항목입니다. 편집장은 main coverage 부족을 보완하기 위한 fallback 기사로 검토해야 합니다.`
-      : `${headline}은 Camera HAL / Android Camera / driver-image pipeline 관점에서 확인할 가치가 있는 후보입니다.`,
-    why_it_matters: behavior,
-    is_ai_related: /AI|LLM|agent|NPU|on-device/i.test(text(candidate)),
+      ? `${headline}은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다.`
+      : `${headline}은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.`,
+    why_it_matters: halPerspective,
+    is_ai_related: /\b(?:AI|LLM|agent|NPU|on-device|inference|model)\b/i.test([
+      candidate.title,
+      candidate.summary,
+      candidate.behavior_change,
+      candidate.component,
+      candidate.api_or_component,
+      candidate.relevance_reason
+    ].map(text).join(' ')),
     article_type: candidate.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK ? 'tooling-watch' : 'camera-hal',
+    impact_claim_level: impactClaimLevel,
+    overclaim_guardrails: guardrails,
+    field_builder_warnings: fieldWarnings,
+    removed_source_fragments: ensureArray(cleaned.removed_fragments),
+    background_basis: backgroundContext
+      ? firstText(backgroundContext.background_basis, 'background-context.json')
+      : 'article-field-builder deterministic static background',
     source_candidate_url: candidate.source_candidate_url || candidate.url,
     source_candidate_hash: candidate.source_candidate_hash || normalizedHash(candidate.url),
     relevance_bucket: candidate.relevance_bucket,
@@ -494,7 +575,6 @@ function buildSectionFromCandidate(candidate, { fallback = false } = {}) {
     imageUsageDecisionReason: 'Fallback builder did not select an external article image; renderer will use local fallback visual.'
   };
 }
-
 function hardFailureArticleIndexes(qualityReport, factCheck) {
   const indexes = new Set();
   for (const result of ensureArray(qualityReport?.article_results)) {
@@ -779,6 +859,9 @@ function buildFallbackPublicIssue(options = {}) {
   };
   const reporter = readJsonIfExists(path.join(newsroomDir, 'reporter-candidates.json')) || { date, candidates: [] };
   const shortlist = readJsonIfExists(path.join(newsroomDir, 'shortlisted-candidates.json')) || {};
+  const backgroundContextReport = options.backgroundContextReport ||
+    readJsonIfExists(path.join(newsroomDir, 'background-context.json')) || {};
+  const backgroundContextIndex = buildBackgroundContextIndex(backgroundContextReport);
   const generationStatus = readJsonIfExists(path.join(newsroomDir, 'generation-status.json')) ||
     readJsonIfExists(path.join(root, '.tmp', 'newsletter-generation-status.json')) || {};
   const baseCandidate = options.baseDraft
@@ -835,7 +918,10 @@ function buildFallbackPublicIssue(options = {}) {
         if (candidate) recordRejectedCandidate(rejectedCandidates, candidate, rejectionReason, fallback);
         continue;
       }
-      const rebuiltSection = buildSectionFromCandidate(candidate, { fallback });
+      const rebuiltSection = buildSectionFromCandidate(candidate, {
+        fallback,
+        backgroundContext: backgroundContextForCandidate(backgroundContextIndex, candidate)
+      });
       preservedSections.push(rebuiltSection);
       fallbackRecords.push({
         headline: rebuiltSection.headline,
@@ -885,7 +971,10 @@ function buildFallbackPublicIssue(options = {}) {
       });
       throw new Error(message);
     }
-    const section = buildSectionFromCandidate(candidate, { fallback });
+    const section = buildSectionFromCandidate(candidate, {
+      fallback,
+      backgroundContext: backgroundContextForCandidate(backgroundContextIndex, candidate)
+    });
     selectedSections.push(section);
     fallbackRecords.push({
       headline: section.headline,

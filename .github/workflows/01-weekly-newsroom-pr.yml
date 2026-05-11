@@ -77,6 +77,7 @@ jobs:
       NEWSROOM_ALLOW_PRO_ON_SCHEDULE: ${{ vars.NEWSROOM_ALLOW_PRO_ON_SCHEDULE || 'false' }}
       NEWSROOM_ALLOW_PRO_ON_MANUAL: ${{ github.event.inputs.allow_pro || 'false' }}
       NEWSROOM_PRO_ESCALATION: manual
+      NEWSROOM_BACKGROUND_CONTEXT_STAGE: ${{ vars.NEWSROOM_BACKGROUND_CONTEXT_STAGE || 'gemini' }}
 
     steps:
       - name: Checkout repository
