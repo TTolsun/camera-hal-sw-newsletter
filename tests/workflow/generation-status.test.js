@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  backgroundContextStageEnabled,
   buildGenerationStatus,
   failureStageFromError,
   validateCompletionSections
@@ -43,6 +44,15 @@ test('failure stage is extracted from bracketed Gemini errors', () => {
     failureStageFromError(new Error('[fact-checker attempt 1/4] Gemini API failed.')),
     'fact-checker attempt 1/4'
   );
+});
+
+test('background context stage defaults to Gemini unless explicitly disabled', () => {
+  assert.equal(backgroundContextStageEnabled({}), true);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: '' }), true);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'gemini' }), true);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'true' }), true);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'static' }), false);
+  assert.equal(backgroundContextStageEnabled({ NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'false' }), false);
 });
 
 test('editorial reviewable status records non-publish handoff fields', () => {

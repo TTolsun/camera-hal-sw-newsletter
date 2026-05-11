@@ -75,6 +75,7 @@ const reporterCandidate = {
     counts_as_driver_topic: { type: 'BOOLEAN' },
     counts_as_soc_topic: { type: 'BOOLEAN' },
     counts_as_fallback_topic: { type: 'BOOLEAN' },
+    impact_claim_level: string,
     evidence_origin: string,
     source_hint: string,
     camera_hal_relevance_score: { type: 'NUMBER' },
@@ -173,6 +174,7 @@ const section = {
     counts_as_driver_topic: { type: 'BOOLEAN' },
     counts_as_soc_topic: { type: 'BOOLEAN' },
     counts_as_fallback_topic: { type: 'BOOLEAN' },
+    impact_claim_level: string,
     evidence_origin: string,
     source_hint: string,
     imageCandidates: {
@@ -290,9 +292,38 @@ const factCheckSchema = {
   required: ['status', 'must_fix', 'recommended_fixes', 'source_gaps', 'source_gap_count', 'final_comment']
 };
 
+const backgroundContextItem = {
+  type: 'OBJECT',
+  properties: {
+    title: string,
+    url: string,
+    source_candidate_hash: string,
+    relevance_bucket: string,
+    impact_claim_level: string,
+    background_context: string,
+    background_basis: string,
+    background_confidence: string,
+    background_warnings: stringArray
+  },
+  required: ['background_context', 'background_basis', 'background_confidence', 'background_warnings']
+};
+
+const backgroundContextSchema = {
+  type: 'OBJECT',
+  properties: {
+    date: string,
+    background_contexts: {
+      type: 'ARRAY',
+      items: backgroundContextItem
+    }
+  },
+  required: ['date', 'background_contexts']
+};
+
 module.exports = {
   reporterSchema,
   editorSchema,
   editorCompletionSchema,
-  factCheckSchema
+  factCheckSchema,
+  backgroundContextSchema
 };

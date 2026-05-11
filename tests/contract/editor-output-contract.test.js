@@ -246,6 +246,72 @@ test('editor article policy uses newsroom URL normalization for reporter metadat
   assert.equal(validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }), draft);
 });
 
+test('editor field hygiene rejects raw table text and background overlap', () => {
+  const rawTable = editor({
+    sections: [
+      section(1, {
+        what_changed: 'CameraX 1.6.1 changed Android camera compatibility behavior.',
+        background: 'camera-view 1.6.1 - - 1.7.0-alpha01 camera-video 1.6.1 - - 1.7.0-alpha01 View the Camera Library Close Maven Group versions'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  const overlap = editor({
+    sections: [
+      section(1, {
+        what_changed: 'CameraX 1.6.1 changed Android camera compatibility behavior for validation.',
+        background: 'CameraX 1.6.1 changed Android camera compatibility behavior for validation.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(rawTable, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'raw_artifact'));
+      return true;
+    }
+  );
+  assert.throws(
+    () => validateEditorOutputContract(overlap, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'field_overlap'));
+      return true;
+    }
+  );
+});
+
+test('editor field hygiene rejects direct HAL contract overclaim for adjacent impact level', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: 'android_platform_camera_adjacent',
+        impact_claim_level: 'android_framework_adjacent',
+        camera_hal_perspective: 'This is a direct HAL API contract change for stream buffers.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail'));
+      return true;
+    }
+  );
+});
+
 test('editor title fallback keeps existing Korean title contract', () => {
   const missingTitle = editor({ title: '' });
   const mismatchedTitle = editor({ title: 'Camera HAL SW Newsletter - 2026-05-07' });

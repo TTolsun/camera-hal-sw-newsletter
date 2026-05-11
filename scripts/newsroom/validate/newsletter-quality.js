@@ -23,6 +23,10 @@ const {
   IMPACT_TYPES,
   RECOMMENDED_ARTICLE_TYPES
 } = require('../evidence/impact-classifier');
+const {
+  findFieldHygieneIssues,
+  inferImpactClaimLevel
+} = require('../generate/article-field-builder');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
@@ -892,6 +896,7 @@ function scopeFromStructuredFields(value, origin) {
     counts_as_driver_topic: bool(value.counts_as_driver_topic, bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE),
     counts_as_soc_topic: bool(value.counts_as_soc_topic, bucket === BUCKETS.SOC_PLATFORM_SIGNAL),
     counts_as_fallback_topic: bool(value.counts_as_fallback_topic, bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK),
+    impact_claim_level: text(value.impact_claim_level || value.impactClaimLevel) || inferImpactClaimLevel(value),
     evidence_origin: text(value.evidence_origin) || origin,
     missing_score_fields: missingScoreFields,
     metadata_source: origin,
@@ -1027,6 +1032,7 @@ function sectionCountDetail(section, scope, index) {
     counts_as_fallback_topic: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK,
     counts_as_supporting_main_article: countsAsSupportingMain,
     counts_as_forbidden_main_article: countsAsForbiddenMain,
+    impact_claim_level: text(scope?.impact_claim_level) || inferImpactClaimLevel({ ...section, relevance_bucket: bucket }),
     evidence_origin: scope?.evidence_origin || 'unknown',
     metadata_source: scope?.metadata_source || scope?.count_source || 'unknown',
     binding_status: scope?.binding_status || 'unknown',
@@ -1042,6 +1048,7 @@ function sectionCountDetail(section, scope, index) {
 function articleStatusFor(section, hardItems, factCheck) {
   if (sectionHasSourceGap(section, factCheck)) return 'FAIL';
   if (hardItems.some(item => item.category === 'source-integrity')) return 'FAIL';
+  if (hardItems.some(item => item.category === 'field-hygiene')) return 'FAIL';
   if (hardItems.some(item => item.category === 'required-fields' && /sources|source/i.test(item.reason))) return 'FAIL';
   if (hardItems.some(item => item.category === 'evidence-specificity' && /release date|dated|source gap|rolling page|evidence/i.test(item.reason))) return 'FAIL';
   if (hardItems.some(item => item.category === 'hal-relevance' || item.category === 'hal-depth' || item.category === 'scope-relevance')) return 'DEMOTE';
@@ -1078,6 +1085,7 @@ function buildArticleResults(sections, deductions, factCheck, sectionCountDetail
       repair_action: repairActionForArticleStatus(status, hardItems, factCheck, section),
       sources: sectionSourceSummary(section),
       scope_count: sectionCountDetails[index] || null,
+      impact_claim_level: text(section.impact_claim_level) || text(sectionCountDetails[index]?.impact_claim_level),
       hard_fail_reasons: [...new Set(hardReasons)],
       soft_deductions: softItems.map(item => ({
         category: item.category,
@@ -1203,6 +1211,12 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       if (ensureArray(section[field]).length === 0) {
         boundedDeduct(state, 'required-fields', 4, `Missing required article list: ${field}.`, location);
       }
+    }
+    for (const issue of findFieldHygieneIssues({
+      ...section,
+      impact_claim_level: text(section.impact_claim_level) || text(sectionCountDetails[index]?.impact_claim_level)
+    })) {
+      boundedDeduct(state, 'field-hygiene', 8, issue.reason, location);
     }
     for (const source of ensureArray(section.sources)) {
       if (!isValidSourceUrl(source?.url)) {

@@ -2,6 +2,13 @@ const CAPSULE_TOKEN_TARGET = '500-800';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 6;
 const MAX_IMAGE_CANDIDATES = 3;
+const {
+  buildHalPerspective,
+  buildOverclaimGuardrails,
+  buildStaticBackgroundContext,
+  cleanBehaviorChange,
+  inferImpactClaimLevel
+} = require('./article-field-builder');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -81,7 +88,7 @@ function evidenceItems(candidate) {
     ...ensureArray(candidate.evidence_notes).map(item => `evidence_note: ${item}`),
     summaryCacheText(candidate) ? `summary_cache: ${summaryCacheText(candidate)}` : '',
     candidate.summary ? `summary: ${candidate.summary}` : ''
-  ].map(item => compactText(item, 260)).filter(Boolean);
+  ].map(item => compactText(item, 160)).filter(Boolean);
   return [...new Set(items)].slice(0, MAX_EVIDENCE_ITEMS);
 }
 
@@ -155,6 +162,12 @@ function isFinalSelected(candidate) {
 }
 
 function buildArticleCapsule(candidate) {
+  const cleanedBehavior = cleanBehaviorChange(candidate);
+  const impactClaimLevel = inferImpactClaimLevel(candidate);
+  const fieldCandidate = {
+    ...candidate,
+    impact_claim_level: impactClaimLevel
+  };
   const capsule = {
     title: compactText(candidate.title, 180),
     url: candidateUrl(candidate),
@@ -174,13 +187,18 @@ function buildArticleCapsule(candidate) {
       counts_as_fallback_topic: bool(candidate.counts_as_fallback_topic),
       evidence_origin: text(candidate.evidence_origin)
     },
+    impact_claim_level: impactClaimLevel,
     component: compactText(candidate.api_or_component || candidate.version_or_release, 160),
-    what_changed: compactText(candidate.behavior_change || candidate.summary || summaryCacheText(candidate), MAX_TEXT),
+    what_changed: compactText(cleanedBehavior.text || candidate.behavior_change || candidate.summary || summaryCacheText(candidate), MAX_TEXT),
+    background_context_static: compactText(buildStaticBackgroundContext(fieldCandidate), MAX_TEXT),
+    camera_hal_perspective_static: compactText(buildHalPerspective(fieldCandidate), MAX_TEXT),
+    overclaim_guardrails: buildOverclaimGuardrails(fieldCandidate).map(item => compactText(item, 120)),
     why_hal_engineer_cares: compactText(
       candidate.relevance_reason ||
       candidate.collection_reason ||
       candidate.reason ||
       candidate.camera_hal_perspective ||
+      buildHalPerspective(fieldCandidate) ||
       candidate.summary,
       MAX_TEXT
     ),
@@ -201,6 +219,12 @@ function buildArticleCapsule(candidate) {
     url_hash: text(candidate.url_hash),
     imageCandidates: compactImageCandidates(candidate)
   };
+  if (ensureArray(cleanedBehavior.removed_fragments).length > 0 || ensureArray(cleanedBehavior.warnings).length > 0) {
+    capsule.behavior_cleaning = {
+      removed_fragments: ensureArray(cleanedBehavior.removed_fragments).slice(0, 5),
+      warnings: ensureArray(cleanedBehavior.warnings)
+    };
+  }
   return {
     ...capsule,
     estimated_tokens: estimatedTokens(capsule)
@@ -233,7 +257,7 @@ function buildArticleCapsuleReport(date, shortlistReport, reporterInput = null) 
     shortlistedCapsules
   );
   return {
-    schema_version: 2,
+    schema_version: 3,
     date,
     generated_at: new Date().toISOString(),
     capsule_token_target: CAPSULE_TOKEN_TARGET,

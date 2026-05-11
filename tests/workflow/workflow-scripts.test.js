@@ -301,6 +301,11 @@ function regressionCandidate({ title, url, bucket, fallback = false }) {
     counts_as_driver_topic: bucket === 'camera_driver_image_pipeline',
     counts_as_soc_topic: false,
     counts_as_fallback_topic: fallback,
+    impact_claim_level: fallback
+      ? 'tooling_supporting'
+      : bucket === 'camera_driver_image_pipeline'
+        ? 'camera_stack_direct'
+        : 'android_framework_adjacent',
     evidence_origin: 'fixture'
   };
 }
@@ -311,7 +316,9 @@ function regressionSection(item, overrides = {}) {
     headline: item.title,
     what_changed: item.summary,
     evidence_summary: `${item.title} uses dated source evidence.`,
-    background: item.summary,
+    background: item.relevance_bucket === 'camera_driver_image_pipeline'
+      ? 'Driver and image pipeline changes are reviewed as camera-stack integration signals.'
+      : 'CameraX and Android camera framework changes are reviewed as compatibility and validation signals above the HAL boundary.',
     camera_hal_perspective: 'Camera HAL team checks stream, buffer, metadata, CTS/VTS, and Camera ITS impact before follow-up work.',
     team_summary: `${item.title} should be reviewed by camera owners.`,
     confirmed_facts: [`${item.title} was published on ${item.published_date}.`, `component=${item.component}`],
@@ -331,6 +338,7 @@ function regressionSection(item, overrides = {}) {
     counts_as_driver_topic: item.counts_as_driver_topic,
     counts_as_soc_topic: item.counts_as_soc_topic,
     counts_as_fallback_topic: item.counts_as_fallback_topic,
+    impact_claim_level: item.impact_claim_level,
     evidence_origin: item.evidence_origin,
     sources: [{ title: item.title, url: item.url }],
     ...overrides
@@ -1568,7 +1576,9 @@ test('fallback builder recovers PR #39 shape with public files and preserve-firs
   assert.equal(finalEditor.sections.length, articlePolicy.mainArticleCount.min);
   assert.equal(finalEditor.sections.some(section => section.headline === 'GCC 16.1'), false);
   assert.match(finalEditor.sections[2].category, /Tooling Watch|Fallback/);
-  assert.match(finalEditor.sections[2].camera_hal_perspective, /HAL 직접 변경/);
+  assert.match(finalEditor.sections[2].camera_hal_perspective, /build|test|debug|tooling|watch|supporting/i);
+  assert.notEqual(finalEditor.sections[2].background, finalEditor.sections[2].what_changed);
+  assert.doesNotMatch(finalEditor.sections[2].background, /View the .* Close|Maven Group versions|camera-view\s+1\./);
   assert.equal(quality.status, 'PASS');
   assert.equal(fallbackReport.demoted_articles[0].headline, 'GCC 16.1');
   assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
@@ -1626,6 +1636,17 @@ test('fallback duplicate detection treats AndroidX Camera release anchors as rel
 test('fallback builder recovers run 25590436113 shape with source-bound anchor candidates', () => {
   const root = tempRoot();
   const { date, camerax14, camerax16, camerax13, libcamera, gcc } = writeRun25590436113LikeFallbackFixture(root);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'background-context.json'), {
+    schema_version: 1,
+    date,
+    background_contexts: [{
+      source_candidate_hash: camerax13.source_candidate_hash,
+      background_context: 'API supplied context wins over static fallback for CameraX validation background.',
+      background_basis: 'supplied capsule and model knowledge',
+      background_confidence: 'medium',
+      background_warnings: []
+    }]
+  });
 
   const result = buildFallbackPublicIssue({ root, date });
   const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
@@ -1639,6 +1660,14 @@ test('fallback builder recovers run 25590436113 shape with source-bound anchor c
   assert.deepEqual(
     finalEditor.sections.map(section => section.source_candidate_hash),
     [camerax14.source_candidate_hash, camerax16.source_candidate_hash, camerax13.source_candidate_hash]
+  );
+  for (const section of finalEditor.sections) {
+    assert.notEqual(section.background, section.what_changed);
+    assert.equal(section.impact_claim_level, 'android_framework_adjacent');
+  }
+  assert.equal(
+    finalEditor.sections.find(section => section.source_candidate_hash === camerax13.source_candidate_hash).background,
+    'API supplied context wins over static fallback for CameraX validation background.'
   );
   assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === libcamera.source_candidate_hash), false);
   assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === gcc.source_candidate_hash), false);

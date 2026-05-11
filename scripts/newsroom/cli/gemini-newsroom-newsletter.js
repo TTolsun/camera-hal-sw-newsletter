@@ -22,7 +22,13 @@ const {
   getLlmCostCalls,
   getLlmModelUsage
 } = require('../llm/llm-client');
-const { reporterSchema, editorSchema, editorCompletionSchema, factCheckSchema } = require('../render/newsletter-schema');
+const {
+  reporterSchema,
+  editorSchema,
+  editorCompletionSchema,
+  factCheckSchema,
+  backgroundContextSchema
+} = require('../render/newsletter-schema');
 const { isSafeExternalImageUrl } = require('../render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
@@ -39,6 +45,12 @@ const {
   capsuleInputFromReport,
   compactSelectionContext
 } = require('../generate/article-capsules');
+const {
+  buildStaticBackgroundContextReport
+} = require('../generate/background-context');
+const {
+  inferImpactClaimLevel
+} = require('../generate/article-field-builder');
 const {
   annotateCandidatesWithCache,
   buildSummaryCacheReport,
@@ -418,6 +430,70 @@ function collectedCandidateFor(candidate, collectedByUrl) {
     {};
 }
 
+function backgroundContextStageEnabled(env = process.env) {
+  const value = String(env.NEWSROOM_BACKGROUND_CONTEXT_STAGE ?? 'gemini').trim();
+  if (!value) return true;
+  if (/^(0|false|off|static|static-fallback|disabled?)$/i.test(value)) return false;
+  return /^(1|true|on|gemini|enabled?)$/i.test(value);
+}
+
+function normalizeBackgroundContextReport(value, date, fallbackReport) {
+  const fallbackByUrl = new Map(ensureArray(fallbackReport?.background_contexts).map(item => [normalizeUrl(item.url), item]));
+  return {
+    ...fallbackReport,
+    ...value,
+    schema_version: Number(value?.schema_version || fallbackReport?.schema_version || 1),
+    date,
+    generated_at: new Date().toISOString(),
+    stage: value?.stage || 'gemini-background-context',
+    background_contexts: ensureArray(value?.background_contexts).map(item => {
+      const fallback = fallbackByUrl.get(normalizeUrl(item?.url)) || {};
+      return {
+        title: stringOrEmpty(item?.title || fallback.title),
+        url: stringOrEmpty(item?.url || fallback.url),
+        source_candidate_hash: stringOrEmpty(item?.source_candidate_hash || fallback.source_candidate_hash),
+        relevance_bucket: stringOrEmpty(item?.relevance_bucket || fallback.relevance_bucket),
+        impact_claim_level: stringOrEmpty(item?.impact_claim_level || fallback.impact_claim_level),
+        background_context: stringOrEmpty(item?.background_context || fallback.background_context),
+        background_basis: stringOrEmpty(item?.background_basis || 'supplied capsule and model knowledge'),
+        background_confidence: stringOrEmpty(item?.background_confidence || 'medium'),
+        background_warnings: ensureArray(item?.background_warnings).map(stringOrEmpty).filter(Boolean)
+      };
+    }).filter(item => item.background_context)
+  };
+}
+
+async function buildBackgroundContextReport({ date, articleCapsuleReport, commonContext, stage }) {
+  const fallbackReport = buildStaticBackgroundContextReport(date, articleCapsuleReport);
+  if (!backgroundContextStageEnabled()) return fallbackReport;
+  try {
+    const result = await callLlmJson(
+      stage,
+      [
+        'You generate optional background context for AOSP Camera / Driver / SoC Platform Newsletter.',
+        'Return Korean technical background only. Do not browse the web.',
+        'Use only the supplied article capsules plus model knowledge about Android Camera, CameraX, Camera2, Camera HAL, libcamera, V4L2, SoC, native build/test/debug workflows.',
+        'Do not copy raw source table text, UI fragments, release table dumps, or source snippets into background_context.',
+        'background_basis must explain that the context is based on supplied capsule metadata and model knowledge, not external source lookup.',
+        'Do not emit background_sources_used. Use background_basis instead.',
+        'Keep background_context distinct from what_changed and keep claim strength aligned with impact_claim_level.',
+        'Return only JSON matching the schema.'
+      ].join('\n'),
+      `${commonContext}\n\nArticle capsule context JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'selected'), null, 2)}\n\nStatic fallback background context JSON:\n${JSON.stringify(fallbackReport, null, 2)}`,
+      backgroundContextSchema
+    );
+    const normalized = normalizeBackgroundContextReport(result, date, fallbackReport);
+    if (ensureArray(normalized.background_contexts).length > 0) return normalized;
+  } catch (error) {
+    console.warn(`Gemini background-context stage failed; using deterministic static background: ${error.message}`);
+  }
+  return {
+    ...fallbackReport,
+    stage: 'static-fallback-after-background-context-error',
+    background_context_error: 'gemini background-context stage unavailable'
+  };
+}
+
 function reporterCandidateRejectionReason(candidate) {
   const halActionability =
     Number(candidate.camera_hal_relevance_score || 0) +
@@ -525,6 +601,8 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.counts_as_driver_topic = booleanFromCandidate(collected, candidate, 'counts_as_driver_topic');
     candidate.counts_as_soc_topic = booleanFromCandidate(collected, candidate, 'counts_as_soc_topic');
     candidate.counts_as_fallback_topic = booleanFromCandidate(collected, candidate, 'counts_as_fallback_topic');
+    candidate.impact_claim_level = stringOrEmpty(collected.impact_claim_level || candidate.impact_claim_level) ||
+      inferImpactClaimLevel(candidate);
     candidate.evidence_origin = stringOrEmpty(collected.evidence_origin || candidate.evidence_origin || 'unknown');
     candidate.source_hint = stringOrEmpty(collected.source_hint || candidate.source_hint || collected.usageHint || collected.source_usage_hint);
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
@@ -696,6 +774,7 @@ function sourceCandidateMetadataForSection(section, reporter) {
     counts_as_driver_topic: candidate.counts_as_driver_topic === true,
     counts_as_soc_topic: candidate.counts_as_soc_topic === true,
     counts_as_fallback_topic: candidate.counts_as_fallback_topic === true,
+    impact_claim_level: candidate.impact_claim_level || inferImpactClaimLevel(candidate),
     evidence_origin: candidate.evidence_origin || 'candidate_metadata',
     source_hint: candidate.source_hint || ''
   };
@@ -1593,6 +1672,8 @@ function sectionSummary(section, index) {
     index: index + 1,
     headline: section.headline,
     category: section.category,
+    relevance_bucket: section.relevance_bucket || '',
+    impact_claim_level: section.impact_claim_level || '',
     urls: sectionUrls(section),
     source_titles: ensureArray(section.sources).map(source => source.title).filter(Boolean)
   };
@@ -2179,6 +2260,7 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     '',
     `- ${newsroomRelPath(date, 'shortlisted-candidates.json')}`,
     `- ${newsroomRelPath(date, 'article-capsules.json')}`,
+    `- ${newsroomRelPath(date, 'background-context.json')}`,
     `- ${newsroomRelPath(date, 'reporter-candidates.json')}`,
     `- ${newsroomRelPath(date, 'editor-draft.json')}`,
     `- ${newsroomRelPath(date, 'fact-check-report.json')}`,
@@ -2389,6 +2471,8 @@ async function main() {
   writeSummaryCacheReport(date, summaryCacheDiagnostics);
   let articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, reporterInput);
   writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
+  let backgroundContextReport = buildStaticBackgroundContextReport(date, articleCapsuleReport);
+  writeJson(path.join(newsroomDir, 'background-context.json'), backgroundContextReport);
 
   const commonContext = [
     `Newsletter date: ${date}`,
@@ -2446,7 +2530,7 @@ async function main() {
         'cross_check_status must be one of: not-required, official-source, cross-checked, needs-cross-check.',
         'Candidate-only or requiresCrossCheck leads must not be selected unless cross_check_status is official-source or cross-checked.',
         'Fallback SoC/platform, C++, native, toolchain, Linux, and AI items can remain reporter-selected only when they satisfy the reporter-stage evidence and relevance rules.',
-        'Preserve editorial_priority, relevance_bucket, aosp_camera_directness, driver_stack_relevance, soc_platform_relevance, native_tooling_relevance, counts_as_* flags, evidence_origin, and source_hint from the capsule/candidate metadata.',
+        'Preserve editorial_priority, relevance_bucket, impact_claim_level, aosp_camera_directness, driver_stack_relevance, soc_platform_relevance, native_tooling_relevance, counts_as_* flags, evidence_origin, and source_hint from the capsule/candidate metadata.',
         'Preserve imageCandidates exactly from the collected candidate JSON. Do not invent image URLs, rewrite image URLs, or add image candidates.',
         lockedSections.length > 0 ? 'Do not select candidates that duplicate the locked article URLs, titles, sources, or source-date-title combinations listed in the retry context.' : '',
         'For every candidate, provide these numeric scores:',
@@ -2470,6 +2554,13 @@ async function main() {
     writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
     articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates });
     writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
+    backgroundContextReport = await buildBackgroundContextReport({
+      date,
+      articleCapsuleReport,
+      commonContext,
+      stage: `background-context attempt ${attempt}/${totalAttempts}`
+    });
+    writeJson(path.join(newsroomDir, 'background-context.json'), backgroundContextReport);
     for (const candidate of ensureArray(reporter.candidates)) {
       writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getLlmModelUsage(reporterStage) || 'unknown' });
     }
@@ -2503,6 +2594,8 @@ async function main() {
         lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles inside the complete final sections array.' : '',
         lockedSections.length > 0 ? 'Do not duplicate locked article URLs, titles/headlines, source names, or same source + published date + similar title.' : '',
         'Avoid marketing tone. Include confirmed_facts, background, camera_hal_perspective, action_items, team_summary, and sources in every article.',
+        'For background, use background-context.json background_context first when present. If it is missing, use article capsule background_context_static. Never copy raw source UI/table snippets into background.',
+        'Preserve impact_claim_level from candidate or background context. Use it to control claim strength: direct_hal_change, camera_stack_direct, android_framework_adjacent, tooling_supporting, watch_only.',
         'Every article must include evidence_summary, specificity_checks, and source_verification_notes.',
         'Every main article must explicitly name the release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance when those fields exist in the candidate metadata.',
         'specificity_checks must name concrete evidence such as version, release date, API/component, source page, behavior change, or the exact source gap if the source is a rolling/watch page.',
@@ -2528,7 +2621,8 @@ async function main() {
         commonContext,
         lockedContext,
         editorRetryContract ? `Editor retry output contract JSON:\n${JSON.stringify(editorRetryContract, null, 2)}` : '',
-        `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}`
+        `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}`,
+        `Background context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}`
       ].filter(Boolean).join('\n\n'),
       editorSchema
     );
@@ -2593,7 +2687,7 @@ async function main() {
         'Do not rewrite for style. Focus only on factual errors, source problems, and editorial-policy violations.',
         'Return only JSON matching the schema.'
       ].join('\n'),
-      `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+      `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
       factCheckSchema
     ));
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
@@ -2682,7 +2776,7 @@ async function main() {
           'Use the golden example only for article structure and evidence/actionability style. Do not copy facts absent from current reporter candidates.',
           'Return only JSON matching the schema.'
         ].join('\n'),
-        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nReserve candidate capsule pool JSON:\n${JSON.stringify(reporterCandidateCapsules(date, repairCandidatePool, articleCapsuleReport), null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(repairCandidateRejections, null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
+        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nReserve candidate capsule pool JSON:\n${JSON.stringify(reporterCandidateCapsules(date, repairCandidatePool, articleCapsuleReport), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(repairCandidateRejections, null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
           editorCompletionSchema
         ), date, reporter);
         const repairMerged = mergeLockedSections(preservedSections, repairSections, excludedSections.concat(demotedSections));
@@ -2819,7 +2913,7 @@ async function main() {
             'For each article, choose at most one selectedImage from that article imageCandidates; use an empty selectedImage when attribution or relevance is uncertain.',
             'Final newsletter text must be Korean. Return only JSON matching the schema.'
           ].join('\n'),
-          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor section summaries JSON:\n${JSON.stringify(editor.sections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nEligible primary/reserve article capsules for additional articles JSON:\n${JSON.stringify(reporterCandidateCapsules(date, completionCandidates, articleCapsuleReport), null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(completionCandidateRejections, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
+          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor section summaries JSON:\n${JSON.stringify(editor.sections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nEligible primary/reserve article capsules for additional articles JSON:\n${JSON.stringify(reporterCandidateCapsules(date, completionCandidates, articleCapsuleReport), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(completionCandidateRejections, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
             editorCompletionSchema
           ), date, reporter);
           const completionMerged = mergeLockedSections(editor.sections, completionSections, completionExcludedSections);
@@ -2857,7 +2951,7 @@ async function main() {
             'Do not treat resolvedImage.usedFallback=true as must_fix when selectedImage is a repo-local fallback path and originalImage or resolvedImage.originalUrl preserves the external original. Treat it as must_fix only when selectedImage still contains the broken external image URL or the fallback path is missing.',
             'Return only JSON matching the schema.'
           ].join('\n'),
-          `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+          `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
             factCheckSchema
           ));
           eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections, {
@@ -3034,6 +3128,7 @@ async function main() {
   });
   assertJsonArtifactsReadable([
     path.join(newsroomDir, 'editor-draft.json'),
+    path.join(newsroomDir, 'background-context.json'),
     path.join(newsroomDir, 'fact-check-report.json'),
     path.join(newsroomDir, 'quality-report.json')
   ]);
@@ -3042,6 +3137,7 @@ async function main() {
     collectedCandidatesRelPath(date),
     newsroomRelPath(date, 'shortlisted-candidates.json'),
     newsroomRelPath(date, 'article-capsules.json'),
+    newsroomRelPath(date, 'background-context.json'),
     newsroomRelPath(date, 'reporter-candidates.json'),
     newsroomRelPath(date, 'editor-draft.json'),
     newsroomRelPath(date, 'editor-draft.md'),
@@ -3285,6 +3381,7 @@ module.exports = {
   main,
   recordEditorSemanticStatus,
   availableCompletionCandidates,
+  backgroundContextStageEnabled,
   mergeLockedSections,
   recordLastKnownValidEditor,
   sectionsMatchingRepairPlan,
