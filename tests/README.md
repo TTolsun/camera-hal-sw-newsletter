@@ -15,7 +15,7 @@ npm.cmd run test
 현재 `npm.cmd run test`는 아래 흐름을 실행합니다.
 
 ```powershell
-node --test "tests/**/*.test.js"
+node scripts/run-node-tests.js tests
 node scripts/test-artifact-manifest.js
 node scripts/test-selection-diagnostics.js
 ```
