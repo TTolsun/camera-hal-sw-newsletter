@@ -201,7 +201,7 @@ function validateFieldHygiene(value) {
       ...section,
       impact_claim_level: impactClaimLevel
     });
-    for (const issue of sectionIssues) {
+    for (const issue of sectionIssues.filter(item => item.blocking !== false)) {
       issues.push({
         index: index + 1,
         headline: text(section.headline || section.category || `article ${index + 1}`),

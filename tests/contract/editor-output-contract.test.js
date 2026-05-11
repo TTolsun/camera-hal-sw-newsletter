@@ -312,6 +312,57 @@ test('editor field hygiene rejects direct HAL contract overclaim for adjacent im
   );
 });
 
+test('editor field hygiene rejects Korean HAL overclaim for non-direct impact level', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: 'android_platform_camera_adjacent',
+        impact_claim_level: 'android_framework_adjacent',
+        camera_hal_perspective: '이 항목은 HAL request/result에 직접 영향이 있습니다.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
+      return true;
+    }
+  );
+});
+
+test('editor field hygiene allows direct HAL claims for direct_hal_change and guardrail wording', () => {
+  const directDraft = editor({
+    sections: [
+      section(1, {
+        impact_claim_level: 'direct_hal_change',
+        camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  const guardrailDraft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: 'android_platform_camera_adjacent',
+        impact_claim_level: 'android_framework_adjacent',
+        camera_hal_perspective: '직접 HAL API 변경으로 단정하지 않습니다. source evidence가 없으면 HAL contract impact를 claim하지 않습니다.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.equal(validateEditorOutputContract(directDraft, DATE, { normalizeSection }), directDraft);
+  assert.equal(validateEditorOutputContract(guardrailDraft, DATE, { normalizeSection }), guardrailDraft);
+});
+
 test('editor field hygiene rejects internal classification in confirmed facts', () => {
   const draft = editor({
     sections: [

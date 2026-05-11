@@ -113,6 +113,62 @@ test('field hygiene rejects internal classification in confirmed facts', () => {
   assert.ok(issues.some(item => item.type === 'internal_classification_in_confirmed_facts'));
 });
 
+test('field hygiene detects Korean direct HAL overclaims for non-direct impact levels', () => {
+  for (const camera_hal_perspective of [
+    '이 항목은 직접 HAL API 변경입니다.',
+    'HAL 메타데이터 contract 변경입니다.',
+    'HAL stream buffer contract 변경입니다.',
+    'HAL request/result에 직접 영향이 있습니다.'
+  ]) {
+    const issues = findFieldHygieneIssues({
+      what_changed: 'CameraX compatibility behavior changed.',
+      background: 'CameraX is above Camera2.',
+      camera_hal_perspective,
+      impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+    });
+    const overclaim = issues.find(item => item.type === 'overclaim_guardrail');
+    assert.ok(overclaim, `${camera_hal_perspective} should be detected`);
+    assert.equal(overclaim.severity, 'hard');
+    assert.equal(overclaim.blocking, true);
+  }
+});
+
+test('field hygiene allows direct HAL claims only for direct_hal_change impact level', () => {
+  const directIssues = findFieldHygieneIssues({
+    what_changed: 'Camera HAL changed request behavior.',
+    background: 'The source is a direct HAL change.',
+    camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.',
+    impact_claim_level: IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE
+  });
+  const adjacentIssues = findFieldHygieneIssues({
+    what_changed: 'CameraX compatibility behavior changed.',
+    background: 'CameraX is above Camera2.',
+    camera_hal_perspective: 'This is direct HAL API behavior.',
+    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+  });
+
+  assert.equal(directIssues.some(item => item.type === 'overclaim_guardrail'), false);
+  assert.equal(adjacentIssues.some(item => item.type === 'overclaim_guardrail'), true);
+});
+
+test('field hygiene does not treat standalone stream buffer request result or guardrails as overclaim', () => {
+  const standalone = findFieldHygieneIssues({
+    what_changed: 'CameraX compatibility behavior changed.',
+    background: 'CameraX is above Camera2.',
+    camera_hal_perspective: 'stream buffer request/result 관찰 포인트입니다.',
+    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+  });
+  const guardrail = findFieldHygieneIssues({
+    what_changed: 'CameraX compatibility behavior changed.',
+    background: 'CameraX is above Camera2.',
+    camera_hal_perspective: '직접 HAL API 변경으로 단정하지 않습니다. source evidence가 없으면 HAL contract impact를 claim하지 않습니다.',
+    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+  });
+
+  assert.equal(standalone.some(item => item.type === 'overclaim_guardrail'), false);
+  assert.equal(guardrail.some(item => item.type === 'overclaim_guardrail'), false);
+});
+
 test('overclaim guardrails and field hygiene catch direct HAL overclaim', () => {
   const guardrails = buildOverclaimGuardrails(cameraXCandidate());
   const issues = findFieldHygieneIssues({

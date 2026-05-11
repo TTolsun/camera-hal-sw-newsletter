@@ -308,18 +308,47 @@ function rawArtifactMatches(value) {
   return unique(findings);
 }
 
-function directHalOverclaim(section = {}) {
-  const impact = text(section.impact_claim_level || section.impactClaimLevel);
-  if (!impact || impact === IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE) return false;
-  const value = [
+function sectionSnippets(section = {}) {
+  return [
     section.what_changed,
     section.background,
     section.camera_hal_perspective,
     section.why_it_matters,
     section.team_summary
-  ].map(text).join(' ');
-  return /\b(?:direct\s+)?HAL\b[^.\n]{0,80}\b(?:API|contract|interface|metadata contract)\b/i.test(value) ||
-    /\b(?:API|contract|interface|metadata contract)\b[^.\n]{0,80}\b(?:direct\s+)?HAL\b/i.test(value);
+  ]
+    .flatMap(value => text(value).split(/(?:[.!?。！？]+|\r?\n|[;；])\s*/))
+    .map(value => value.trim())
+    .filter(Boolean);
+}
+
+function isNegatedOrGuardrailSnippet(value) {
+  return /(?:단정하지|claim하지|표현하지|간주하지|승격하지|보지\s*않|source\s+evidence가\s*없으면|evidence가\s*없으면|\bnot\b|\bno\b|\bwithout\b|\bunless\b|\bavoid\b|\bdo\s+not\b|\bmust\s+not\b|\bshould\s+not\b)/i.test(value);
+}
+
+function hasDirectHalChangeClaim(value) {
+  const mutation = String.raw`(?:change|changes|changed|changing|impact|impacts|affect|affects|affected|require|requires|required|must|need|needs|alter|alters|modify|modifies|modification|변경|영향|요구|필요|바뀜|수정|조정|강제|해야)`;
+  const halBoundary = String.raw`(?:\bHAL\b|HAL\s*boundary)`;
+  const contractTerm = String.raw`(?:API|contract|interface|metadata\s*(?:contract|계약)|메타데이터\s*(?:contract|계약)|계약|인터페이스)`;
+  const ioTerm = String.raw`(?:stream|buffer|request\s*\/\s*result|request|result)`;
+  const ioClaim = String.raw`(?:contract|계약|API|direct\s+impact|직접\s*영향|change|changes|changed|changing|require|requires|required|변경|요구)`;
+
+  if (/\b직접\s*HAL\s*API\b/i.test(value)) return true;
+  if (/\bdirect\s+HAL\s+API\b/i.test(value)) return true;
+  if (new RegExp(`${halBoundary}[^.\\n]{0,80}${contractTerm}[^.\\n]{0,80}${mutation}`, 'i').test(value)) return true;
+  if (new RegExp(`${contractTerm}[^.\\n]{0,80}${halBoundary}[^.\\n]{0,80}${mutation}`, 'i').test(value)) return true;
+  if (new RegExp(`${halBoundary}[^.\\n]{0,80}${ioTerm}[^.\\n]{0,80}${ioClaim}`, 'i').test(value)) return true;
+  if (new RegExp(`${halBoundary}[^.\\n]{0,80}${ioClaim}[^.\\n]{0,80}${ioTerm}`, 'i').test(value)) return true;
+  return false;
+}
+
+function directHalOverclaim(section = {}) {
+  const impact = text(section.impact_claim_level || section.impactClaimLevel);
+  if (!impact || impact === IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE) return '';
+  for (const snippet of sectionSnippets(section)) {
+    if (isNegatedOrGuardrailSnippet(snippet)) continue;
+    if (hasDirectHalChangeClaim(snippet)) return snippet;
+  }
+  return '';
 }
 
 function confirmedFactClassificationLeaks(section = {}) {
@@ -352,6 +381,8 @@ function findFieldHygieneIssues(section = {}, options = {}) {
         type: 'raw_artifact',
         field,
         artifact,
+        severity: 'hard',
+        blocking: true,
         reason: `${field} contains raw source UI or table artifact: ${artifact}.`
       });
     }
@@ -362,14 +393,20 @@ function findFieldHygieneIssues(section = {}, options = {}) {
       type: 'field_overlap',
       field: 'background',
       overlap,
+      severity: 'hard',
+      blocking: true,
       reason: `background overlaps what_changed too much (${overlap.toFixed(2)} >= ${overlapThreshold}).`
     });
   }
-  if (directHalOverclaim(section)) {
+  const overclaimSnippet = directHalOverclaim(section);
+  if (overclaimSnippet) {
     issues.push({
       type: 'overclaim_guardrail',
       field: 'camera_hal_perspective',
       impact_claim_level: text(section.impact_claim_level || section.impactClaimLevel),
+      snippet: compactText(overclaimSnippet, MAX_FRAGMENT_LENGTH),
+      severity: 'hard',
+      blocking: true,
       reason: 'Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.'
     });
   }
@@ -378,6 +415,8 @@ function findFieldHygieneIssues(section = {}, options = {}) {
       type: 'internal_classification_in_confirmed_facts',
       field: 'confirmed_facts',
       classification,
+      severity: 'hard',
+      blocking: true,
       reason: 'confirmed_facts must contain source-confirmed facts only, not internal editorial classification.'
     });
   }

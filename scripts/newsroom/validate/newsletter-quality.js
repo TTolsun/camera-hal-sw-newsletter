@@ -1216,7 +1216,14 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       ...section,
       impact_claim_level: text(section.impact_claim_level) || text(sectionCountDetails[index]?.impact_claim_level)
     })) {
-      boundedDeduct(state, 'field-hygiene', 8, issue.reason, location);
+      boundedDeduct(
+        state,
+        'field-hygiene',
+        issue.blocking === false ? 2 : 8,
+        issue.reason,
+        location,
+        issue.blocking === false ? { blocking: false, severity: issue.severity || 'soft' } : {}
+      );
     }
     for (const source of ensureArray(section.sources)) {
       if (!isValidSourceUrl(source?.url)) {
