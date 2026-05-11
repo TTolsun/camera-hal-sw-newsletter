@@ -213,6 +213,13 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
         source_verification_notes: ['Source URL is official.'],
         camera_hal_checks: ['Check stream configuration.', 'Check metadata compatibility.'],
         action_items: ['Run Camera ITS smoke tests.', 'Check stream/buffer compatibility.'],
+        article_sections: {
+          verified_facts: ['CameraX release note exists.', 'The source link is dated.'],
+          background_context: 'CameraX is part of the Android camera application layer.',
+          hal_driver_impact: 'Camera HAL team checks stream, buffer, metadata, CTS/VTS, and Camera ITS impact before follow-up work.',
+          action_items: ['Run Camera ITS smoke tests.', 'Check stream/buffer compatibility.'],
+          team_share_points: 'Camera team should review compatibility impact.'
+        },
         sources: [
           {
             title: 'Android Developers Camera',
@@ -311,7 +318,7 @@ function regressionCandidate({ title, url, bucket, fallback = false }) {
 }
 
 function regressionSection(item, overrides = {}) {
-  return {
+  const value = {
     category: item.relevance_bucket === 'camera_driver_image_pipeline' ? 'Camera Driver / Image Pipeline' : 'Android Platform / CameraX',
     headline: item.title,
     what_changed: item.summary,
@@ -343,6 +350,16 @@ function regressionSection(item, overrides = {}) {
     sources: [{ title: item.title, url: item.url }],
     ...overrides
   };
+  if (!Object.prototype.hasOwnProperty.call(overrides, 'article_sections')) {
+    value.article_sections = {
+      verified_facts: value.confirmed_facts,
+      background_context: value.background,
+      hal_driver_impact: value.camera_hal_perspective,
+      action_items: value.action_items,
+      team_share_points: value.team_summary
+    };
+  }
+  return value;
 }
 
 function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
@@ -2409,6 +2426,51 @@ test('newsroom PR body includes editor-approved publication policy', () => {
     extractMarkdownSection(body, 'Editor-approved Publication Policy').trimEnd(),
     renderEditorPublicationPolicyMarkdown().trimEnd()
   );
+});
+
+test('newsroom PR body includes article structure contract summary when editor draft exists', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true,
+    quality: {
+      article_results: [{
+        index: 1,
+        headline: 'CameraX release',
+        section_contract: {
+          complete: true,
+          missing_keys: []
+        }
+      }]
+    }
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), {
+    date,
+    title: `Camera HAL SW Newsletter - ${date}`,
+    summary: 'Summary',
+    briefing: ['one', 'two', 'three'],
+    sections: [{
+      category: 'Android Camera',
+      headline: 'CameraX release',
+      article_sections: {
+        verified_facts: ['CameraX release fact'],
+        background_context: 'CameraX background',
+        hal_driver_impact: 'HAL stream impact',
+        action_items: ['Run Camera ITS'],
+        team_share_points: 'Share in camera triage'
+      },
+      sources: [{ title: 'Source', url: 'https://example.com/source' }]
+    }],
+    action_items: [],
+    references: []
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
+  const section = extractMarkdownSection(body, 'Article Structure Contract');
+
+  assert.match(section, /\| # \| Article \| 5-section \| HAL impact \| Action item \|/);
+  assert.match(section, /CameraX release/);
+  assert.match(section, /pass/);
 });
 
 test('publish status output renders final and artifact readiness fields', () => {

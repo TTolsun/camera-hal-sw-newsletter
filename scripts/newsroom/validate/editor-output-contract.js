@@ -13,6 +13,10 @@ const {
   findFieldHygieneIssues,
   inferImpactClaimLevel
 } = require('../generate/article-field-builder');
+const {
+  ARTICLE_SECTION_KEYS,
+  normalizeArticleSections
+} = require('../common/article-section-contract');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -220,6 +224,67 @@ function validateFieldHygiene(value) {
   }
 }
 
+function strictArticleSections(section) {
+  const normalized = normalizeArticleSections(section);
+  return {
+    verified_facts: normalized.verified_facts,
+    background_context: normalized.background_context,
+    hal_driver_impact: normalized.hal_driver_impact,
+    action_items: normalized.action_items,
+    team_share_points: normalized.team_share_points
+  };
+}
+
+function unexpectedArticleSectionKeys(section) {
+  if (!section.article_sections || typeof section.article_sections !== 'object') return [];
+  const expected = new Set(ARTICLE_SECTION_KEYS);
+  return Object.keys(section.article_sections).filter(key => !expected.has(key));
+}
+
+function validateArticleSectionContract(value) {
+  const issues = [];
+  ensureArray(value.sections).forEach((section, index) => {
+    const normalized = normalizeArticleSections(section);
+    const headline = text(section.headline || section.category || `article ${index + 1}`);
+    if (!normalized.diagnostics.article_sections_present) {
+      issues.push({
+        index: index + 1,
+        headline,
+        type: 'missing_article_sections',
+        keys: ARTICLE_SECTION_KEYS
+      });
+    } else {
+      const unexpectedKeys = unexpectedArticleSectionKeys(section);
+      if (unexpectedKeys.length > 0) {
+        issues.push({
+          index: index + 1,
+          headline,
+          type: 'unexpected_article_section_keys',
+          keys: unexpectedKeys
+        });
+      }
+      if (normalized.diagnostics.missing_keys.length > 0) {
+        issues.push({
+          index: index + 1,
+          headline,
+          type: 'empty_article_sections',
+          keys: normalized.diagnostics.missing_keys
+        });
+      }
+    }
+    section.article_sections = strictArticleSections(section);
+  });
+  if (issues.length > 0) {
+    throw semanticError('Editor output failed article section contract validation.', {
+      field: 'sections.article_sections',
+      expectedKeys: ARTICLE_SECTION_KEYS,
+      actualCount: issues.length,
+      sectionCount: ensureArray(value.sections).length,
+      issues
+    });
+  }
+}
+
 function validateEditorOutputContract(value, date, options = {}) {
   const reporter = options.reporter || { candidates: [] };
   const normalizeSection = options.normalizeSection || (section => ({
@@ -249,6 +314,7 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateSectionCount(value);
 
   value.sections = value.sections.map((section, index) => normalizeSection(section, index, reporter));
+  validateArticleSectionContract(value);
   validateFieldHygiene(value);
   validateEditorArticlePolicy(value, reporter);
 
