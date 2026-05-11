@@ -7,8 +7,8 @@ const ARTICLE_SECTION_KEYS = Object.freeze([
 ]);
 
 const ARTICLE_SECTION_LABELS = Object.freeze({
-  verified_facts: '확인된 사실 / 릴리스 요약',
-  background_context: '배경지식 / 왜 AOSP Camera 관점에서 볼 만한가',
+  verified_facts: '확인한 사실 / 릴리스 요약',
+  background_context: '배경지식 / 왜 AOSP Camera 팀이 볼 만한가',
   hal_driver_impact: 'Camera HAL/Driver 관점 / 적용 가능 지점',
   action_items: '실행 항목 / PoC 제안 및 검증 기준',
   team_share_points: '팀 공유 포인트 / 결론'
@@ -57,8 +57,13 @@ function isEmptyStrictValue(key, value) {
     : !normalizeText(value);
 }
 
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 function normalizeArticleSections(section = {}) {
-  const source = section.article_sections || {};
+  const hasArticleSections = isPlainObject(section.article_sections);
+  const source = hasArticleSections ? section.article_sections : {};
   const normalized = {
     verified_facts: normalizeStringArray(source.verified_facts),
     background_context: normalizeText(source.background_context),
@@ -71,7 +76,7 @@ function normalizeArticleSections(section = {}) {
   return {
     ...normalized,
     diagnostics: {
-      article_sections_present: Boolean(section.article_sections),
+      article_sections_present: hasArticleSections,
       missing_keys: missingKeys,
       complete: missingKeys.length === 0
     }
