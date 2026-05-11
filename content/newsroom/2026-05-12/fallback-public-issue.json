@@ -1,0 +1,66 @@
+{
+  "date": "2026-05-12",
+  "generated_at": "2026-05-11T17:50:37.471Z",
+  "base_draft_source": "default-issue",
+  "preserve_article_count": 0,
+  "final_article_count": 3,
+  "demoted_articles": [],
+  "fallback_articles": [
+    {
+      "headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "category": "Camera Driver / Image Pipeline",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "action": "rebuild-from-bound-candidate",
+      "fallback": false,
+      "reason": "hard failure replacement"
+    },
+    {
+      "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+      "category": "Android Platform / CameraX",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "action": "rebuild-from-bound-candidate",
+      "fallback": false,
+      "reason": "hard failure replacement"
+    },
+    {
+      "headline": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
+      "category": "Android Platform / CameraX",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "action": "rebuild-from-bound-candidate",
+      "fallback": false,
+      "reason": "hard failure replacement"
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "allow_fallback": false,
+      "reason": "duplicate_url"
+    },
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "allow_fallback": false,
+      "reason": "duplicate_url"
+    },
+    {
+      "title": "1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "allow_fallback": false,
+      "reason": "duplicate_url"
+    }
+  ]
+}
