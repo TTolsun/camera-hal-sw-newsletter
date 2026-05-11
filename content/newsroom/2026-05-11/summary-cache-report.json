@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "date": "2026-05-11",
-  "generated_at": "2026-05-10T17:42:53.031Z",
+  "generated_at": "2026-05-11T13:51:24.613Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 6,
     "hit_count": 2,
     "miss_count": 4,
-    "by_url_hit_count": 2,
-    "by_content_hit_count": 0,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 2,
     "legacy_hit_count": 0
   },
   "reasons": [
@@ -17,7 +17,7 @@
       "count": 4
     },
     {
-      "reason": "url-hit",
+      "reason": "content-hash-hit",
       "count": 2
     }
   ],
@@ -34,9 +34,9 @@
         "content_hash": "f2c42a835e4110d9cb7dd585ddea4e610b9971e4d92757c66c480b0699b4af60"
       },
       "hit": true,
-      "reason": "url-hit",
-      "lookup_source": "by-url",
-      "cache_record_path": "cache/news-summary/by-url/7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385.json"
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/f2c42a835e4110d9cb7dd585ddea4e610b9971e4d92757c66c480b0699b4af60.json"
     },
     {
       "title": "1.6.1",
@@ -82,9 +82,9 @@
         "content_hash": "d5ce340def32fd9ea24cf08cf0422740649107c845f1e6041b43d6c22d792e6c"
       },
       "hit": true,
-      "reason": "url-hit",
-      "lookup_source": "by-url",
-      "cache_record_path": "cache/news-summary/by-url/e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9.json"
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/d5ce340def32fd9ea24cf08cf0422740649107c845f1e6041b43d6c22d792e6c.json"
     },
     {
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",

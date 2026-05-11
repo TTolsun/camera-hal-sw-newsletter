@@ -1877,6 +1877,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 ## Collector 실패
 
 - LLVM Project Blog: 404 Not Found
+- 요즘IT: 403 Forbidden
 
 ## 편집장 체크리스트
 

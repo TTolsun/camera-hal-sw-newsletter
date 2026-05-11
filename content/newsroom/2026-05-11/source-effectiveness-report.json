@@ -35,14 +35,10 @@
       },
       {
         "recommendation": "KEEP",
-        "count": 1
+        "count": 2
       },
       {
         "recommendation": "KEEP_AND_FIX_PARSER",
-        "count": 1
-      },
-      {
-        "recommendation": "KEEP_AND_MONITOR",
         "count": 1
       }
     ]
@@ -273,7 +269,7 @@
       "collected_count": 3,
       "eligible_count": 3,
       "selected_count": 3,
-      "rendered_main_count": 3,
+      "rendered_main_count": 2,
       "source_gap_count": 0,
       "reference_only_count": 0,
       "watchlist_count": 0,
@@ -285,10 +281,10 @@
       "generic_noise_count": 0,
       "eligible_rate": 1,
       "selection_rate": 1,
-      "rendered_rate": 1,
+      "rendered_rate": 0.6667,
       "source_gap_rate": 0,
       "noise_rate": 0,
-      "effectiveness_score": 100,
+      "effectiveness_score": 90,
       "recommendation": "KEEP",
       "reasons": [
         "Source contributed at least one rendered main article."
@@ -1398,7 +1394,7 @@
       "collected_count": 1,
       "eligible_count": 1,
       "selected_count": 1,
-      "rendered_main_count": 0,
+      "rendered_main_count": 1,
       "source_gap_count": 0,
       "reference_only_count": 0,
       "watchlist_count": 0,
@@ -1410,12 +1406,14 @@
       "generic_noise_count": 0,
       "eligible_rate": 1,
       "selection_rate": 1,
-      "rendered_rate": 0,
+      "rendered_rate": 1,
       "source_gap_rate": 0,
       "noise_rate": 0,
-      "effectiveness_score": 60,
-      "recommendation": "KEEP_AND_MONITOR",
-      "reasons": [],
+      "effectiveness_score": 100,
+      "recommendation": "KEEP",
+      "reasons": [
+        "Source contributed at least one rendered main article."
+      ],
       "top_exclusion_reasons": [],
       "sample_selected_urls": [
         "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
