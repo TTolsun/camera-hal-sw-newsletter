@@ -86,6 +86,11 @@ function candidateBody(candidate = {}) {
   ].map(text).join(' ');
 }
 
+function hasDirectCameraPipelineEvidence(candidate = {}) {
+  return /\b(?:ISP|image sensor|camera pipeline|MIPI|CSI|V4L2|camera driver|image pipeline|camera)\b/i
+    .test(candidateBody(candidate));
+}
+
 function candidateBucket(candidate = {}) {
   const classified = classifyAospCameraStackCandidate(candidate);
   return firstText(candidate.relevance_bucket, candidate.relevanceBucket, classified.relevance_bucket);
@@ -182,7 +187,11 @@ function inferImpactClaimLevel(candidate = {}) {
   if (bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) return IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT;
   if (bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) return IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT;
   if (bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) return IMPACT_CLAIM_LEVELS.TOOLING_SUPPORTING;
-  if (bucket === BUCKETS.SOC_PLATFORM_SIGNAL) return IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT;
+  if (bucket === BUCKETS.SOC_PLATFORM_SIGNAL) {
+    return hasDirectCameraPipelineEvidence(candidate)
+      ? IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT
+      : IMPACT_CLAIM_LEVELS.WATCH_ONLY;
+  }
   return IMPACT_CLAIM_LEVELS.WATCH_ONLY;
 }
 
@@ -192,15 +201,13 @@ function buildConfirmedFacts(candidate = {}) {
   const date = publishedDate(candidate);
   const version = versionText(candidate);
   const component = componentText(candidate);
-  const bucket = candidateBucket(candidate);
   const cleaned = cleanBehaviorChange(candidate);
 
   if (date) facts.push(`${source}가 ${date}에 게시 또는 업데이트한 항목입니다.`);
   else facts.push(`${source} 항목이며, 추가 날짜 claim은 생성하지 않았습니다.`);
-  if (version) facts.push(`Version or release: ${version}.`);
-  if (component) facts.push(`Component: ${component}.`);
-  if (bucket) facts.push(`Relevance bucket: ${bucket}.`);
-  if (cleaned.text) facts.push(`Observed change: ${cleaned.text}`);
+  if (version) facts.push(`버전/릴리스: ${version}.`);
+  if (component) facts.push(`관련 컴포넌트: ${component}.`);
+  if (cleaned.text) facts.push(`확인된 변경점: ${cleaned.text}`);
   return unique(facts).slice(0, 5);
 }
 
@@ -315,6 +322,16 @@ function directHalOverclaim(section = {}) {
     /\b(?:API|contract|interface|metadata contract)\b[^.\n]{0,80}\b(?:direct\s+)?HAL\b/i.test(value);
 }
 
+function confirmedFactClassificationLeaks(section = {}) {
+  const value = text(section.confirmed_facts);
+  if (!value) return [];
+  return [
+    { id: 'relevance_bucket', pattern: /\b(?:Relevance bucket|relevance_bucket)\b/i },
+    { id: 'impact_claim_level', pattern: /\bimpact_claim_level\b/i },
+    { id: 'source_gap_risk', pattern: /\bsource_gap_risk\b/i }
+  ].filter(entry => entry.pattern.test(value)).map(entry => entry.id);
+}
+
 function findFieldHygieneIssues(section = {}, options = {}) {
   const overlapThreshold = Number.isFinite(Number(options.overlapThreshold))
     ? Number(options.overlapThreshold)
@@ -354,6 +371,14 @@ function findFieldHygieneIssues(section = {}, options = {}) {
       field: 'camera_hal_perspective',
       impact_claim_level: text(section.impact_claim_level || section.impactClaimLevel),
       reason: 'Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.'
+    });
+  }
+  for (const classification of confirmedFactClassificationLeaks(section)) {
+    issues.push({
+      type: 'internal_classification_in_confirmed_facts',
+      field: 'confirmed_facts',
+      classification,
+      reason: 'confirmed_facts must contain source-confirmed facts only, not internal editorial classification.'
     });
   }
   return issues;

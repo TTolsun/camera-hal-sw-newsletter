@@ -438,7 +438,13 @@ function backgroundContextStageEnabled(env = process.env) {
 }
 
 function normalizeBackgroundContextReport(value, date, fallbackReport) {
-  const fallbackByUrl = new Map(ensureArray(fallbackReport?.background_contexts).map(item => [normalizeUrl(item.url), item]));
+  const fallbackItems = ensureArray(fallbackReport?.background_contexts);
+  const fallbackByHash = new Map(fallbackItems
+    .map(item => [stringOrEmpty(item.source_candidate_hash), item])
+    .filter(([key]) => key));
+  const fallbackByUrl = new Map(fallbackItems
+    .map(item => [normalizeUrl(item.url), item])
+    .filter(([key]) => key));
   return {
     ...fallbackReport,
     ...value,
@@ -447,7 +453,10 @@ function normalizeBackgroundContextReport(value, date, fallbackReport) {
     generated_at: new Date().toISOString(),
     stage: value?.stage || 'gemini-background-context',
     background_contexts: ensureArray(value?.background_contexts).map(item => {
-      const fallback = fallbackByUrl.get(normalizeUrl(item?.url)) || {};
+      const fallback =
+        fallbackByHash.get(stringOrEmpty(item?.source_candidate_hash)) ||
+        fallbackByUrl.get(normalizeUrl(item?.url)) ||
+        {};
       return {
         title: stringOrEmpty(item?.title || fallback.title),
         url: stringOrEmpty(item?.url || fallback.url),
@@ -474,6 +483,7 @@ async function buildBackgroundContextReport({ date, articleCapsuleReport, common
         'Return Korean technical background only. Do not browse the web.',
         'Use only the supplied article capsules plus model knowledge about Android Camera, CameraX, Camera2, Camera HAL, libcamera, V4L2, SoC, native build/test/debug workflows.',
         'Do not copy raw source table text, UI fragments, release table dumps, or source snippets into background_context.',
+        'Preserve title, url, source_candidate_hash, and impact_claim_level exactly from the supplied article capsule or static fallback item.',
         'background_basis must explain that the context is based on supplied capsule metadata and model knowledge, not external source lookup.',
         'Do not emit background_sources_used. Use background_basis instead.',
         'Keep background_context distinct from what_changed and keep claim strength aligned with impact_claim_level.',

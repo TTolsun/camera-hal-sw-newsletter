@@ -305,7 +305,16 @@ const backgroundContextItem = {
     background_confidence: string,
     background_warnings: stringArray
   },
-  required: ['background_context', 'background_basis', 'background_confidence', 'background_warnings']
+  required: [
+    'title',
+    'url',
+    'source_candidate_hash',
+    'impact_claim_level',
+    'background_context',
+    'background_basis',
+    'background_confidence',
+    'background_warnings'
+  ]
 };
 
 const backgroundContextSchema = {

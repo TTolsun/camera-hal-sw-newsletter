@@ -3,6 +3,7 @@ const test = require('node:test');
 
 const {
   IMPACT_CLAIM_LEVELS,
+  buildConfirmedFacts,
   buildHalPerspective,
   buildOverclaimGuardrails,
   buildStaticBackgroundContext,
@@ -35,6 +36,20 @@ test('cleanBehaviorChange removes raw CameraX table and UI artifacts', () => {
   assert.ok(result.warnings.includes('behavior_fallback_from_metadata'));
 });
 
+test('confirmed facts use Korean source-fact labels and exclude internal classification', () => {
+  const facts = buildConfirmedFacts(cameraXCandidate({
+    impact_claim_level: 'android_framework_adjacent',
+    source_gap_risk: true
+  }));
+  const joined = facts.join('\n');
+
+  assert.match(joined, /Android Developers가 2026-05-06에 게시 또는 업데이트한 항목입니다\./);
+  assert.match(joined, /버전\/릴리스: 1\.6\.1\./);
+  assert.match(joined, /관련 컴포넌트: androidx\.camera\./);
+  assert.match(joined, /확인된 변경점:/);
+  assert.doesNotMatch(joined, /Relevance bucket|relevance_bucket|impact_claim_level|source_gap_risk/);
+});
+
 test('static background stays separate from cleaned behavior', () => {
   const candidate = cameraXCandidate();
   const cleaned = cleanBehaviorChange(candidate);
@@ -60,6 +75,42 @@ test('impact_claim_level controls HAL perspective strength', () => {
   assert.match(adjacent, /CameraX|Camera2/);
   assert.match(tooling, /build|test|debug|tooling/);
   assert.equal(inferImpactClaimLevel(cameraXCandidate()), IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT);
+});
+
+test('SoC platform signal stays watch-only unless camera pipeline evidence is present', () => {
+  assert.equal(
+    inferImpactClaimLevel({
+      title: 'Tensor G6 improves NPU power management',
+      summary: 'The platform update changes CPU, GPU, NPU, power, and thermal behavior.',
+      relevance_bucket: 'soc_platform_signal'
+    }),
+    IMPACT_CLAIM_LEVELS.WATCH_ONLY
+  );
+  assert.equal(
+    inferImpactClaimLevel({
+      title: 'Tensor ISP update improves image sensor pipeline',
+      summary: 'The platform update names ISP, image sensor, MIPI CSI, and camera pipeline behavior.',
+      relevance_bucket: 'soc_platform_signal'
+    }),
+    IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT
+  );
+});
+
+test('field hygiene rejects internal classification in confirmed facts', () => {
+  const issues = findFieldHygieneIssues({
+    what_changed: 'CameraX 1.6.1 updated app-facing compatibility behavior.',
+    background: 'CameraX is an Android framework layer above Camera2.',
+    camera_hal_perspective: 'Use this as a CameraX compatibility signal.',
+    confirmed_facts: [
+      'Android Developers가 2026-05-06에 게시 또는 업데이트한 항목입니다.',
+      'Relevance bucket: android_platform_camera_adjacent.',
+      'impact_claim_level=android_framework_adjacent.',
+      'source_gap_risk=false.'
+    ],
+    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+  });
+
+  assert.ok(issues.some(item => item.type === 'internal_classification_in_confirmed_facts'));
 });
 
 test('overclaim guardrails and field hygiene catch direct HAL overclaim', () => {

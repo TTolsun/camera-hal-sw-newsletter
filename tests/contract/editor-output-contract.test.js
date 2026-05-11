@@ -312,6 +312,37 @@ test('editor field hygiene rejects direct HAL contract overclaim for adjacent im
   );
 });
 
+test('editor field hygiene rejects internal classification in confirmed facts', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        confirmed_facts: [
+          'Android Developers가 2026-05-06에 게시 또는 업데이트한 항목입니다.',
+          'Relevance bucket: android_platform_camera_adjacent.',
+          'impact_claim_level=android_framework_adjacent.',
+          'source_gap_risk=false.'
+        ],
+        specificity_checks: [
+          'bucket=android_platform_camera_adjacent',
+          'impact_claim_level=android_framework_adjacent'
+        ]
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'internal_classification_in_confirmed_facts'));
+      return true;
+    }
+  );
+});
+
 test('editor title fallback keeps existing Korean title contract', () => {
   const missingTitle = editor({ title: '' });
   const mismatchedTitle = editor({ title: 'Camera HAL SW Newsletter - 2026-05-07' });
