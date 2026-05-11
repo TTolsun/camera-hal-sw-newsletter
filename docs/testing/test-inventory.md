@@ -9,10 +9,10 @@
 | Command | 현재 동작 | 결과 |
 | --- | --- | --- |
 | `npm.cmd run test` | `npm run test:unit`와 `npm run test:script`를 순서대로 실행합니다. | 통과. `node --test` 기준 373개 test가 pass했고 script test 2개도 통과했습니다. |
-| `npm.cmd run test:unit` | `node --test "tests/**/*.test.js"`를 실행합니다. | 현재 nested test 373개를 실행하며 root `tests/*.test.js`는 남아 있지 않습니다. |
+| `npm.cmd run test:unit` | `node scripts/run-node-tests.js tests`를 실행합니다. | 현재 `tests/` 아래 Node test 373개를 발견해 `node --test`로 실행하며 root `tests/*.test.js`는 남아 있지 않습니다. |
 | `npm.cmd run test:script` | `node scripts/test-artifact-manifest.js && node scripts/test-selection-diagnostics.js`를 실행합니다. | 통과. |
 
-중요 제약: runner는 nested-aware command로 전환했고 root test migration은 완료되었습니다. 새 root `tests/*.test.js` 추가는 허용하지 않으며, `tests/root-test-allowlist.json`은 빈 migration baseline으로 유지합니다.
+중요 제약: runner는 directory-based discovery command로 전환했고 root test migration은 완료되었습니다. 새 root `tests/*.test.js` 추가는 허용하지 않으며, `tests/root-test-allowlist.json`은 빈 migration baseline으로 유지합니다.
 
 ## 분류 기준
 
@@ -123,7 +123,7 @@ Generated artifact dependency는 아래처럼 분류합니다.
 | Slice | Status | Notes |
 | --- | --- | --- |
 | 1. Inventory + Guide | Complete | 이 문서와 `tests/README.md`입니다. |
-| 2. Nested Runner Preparation | Complete | `test:unit`을 nested-aware glob로 변경하고 기존 flat runner와 비교 검증했습니다. |
+| 2. Nested Runner Preparation | Complete | `test:unit`을 directory-based discovery command로 변경하고 기존 flat runner와 비교 검증했습니다. |
 | 3. Fixture Ledger + Trust Guard | Complete | `fixture-ledger.json`과 `check:fixtures`로 fixture provenance와 trust guard를 검증합니다. |
 | 4. Shared Test Helpers | Complete | `tests/helpers/fs.js`를 추가하고 low-risk temp/write helper 중복을 먼저 치환했습니다. |
 | 5. Test Folder Migration 1 | Complete | Low-risk unit/hygiene test 5개를 nested folder로 이동했습니다. |
