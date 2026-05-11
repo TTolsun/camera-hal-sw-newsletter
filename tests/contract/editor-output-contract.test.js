@@ -22,7 +22,7 @@ const {
 const DATE = '2026-05-08';
 
 function section(index, overrides = {}) {
-  return {
+  const value = {
     category: `Category ${index}`,
     headline: `Headline ${index}`,
     what_changed: `Change ${index}`,
@@ -53,6 +53,16 @@ function section(index, overrides = {}) {
     source_candidate_hash: `hash-${index}`,
     ...overrides
   };
+  if (!Object.prototype.hasOwnProperty.call(overrides, 'article_sections')) {
+    value.article_sections = {
+      verified_facts: value.confirmed_facts,
+      background_context: value.background,
+      hal_driver_impact: value.camera_hal_perspective,
+      action_items: value.action_items,
+      team_share_points: value.team_summary
+    };
+  }
+  return value;
 }
 
 function editor(overrides = {}) {
@@ -127,6 +137,59 @@ test('valid editor output with exactly 3 briefing items passes unchanged', () =>
       sources: item.sources
     }))),
     sourceSignature
+  );
+});
+
+test('editor output contract requires article_sections on new draft sections', () => {
+  const draft = editor({
+    sections: [
+      section(1, { article_sections: undefined }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.article_sections');
+      assert.ok(error.details.issues.some(issue => issue.type === 'missing_article_sections'));
+      return true;
+    }
+  );
+});
+
+test('editor output contract rejects deterministic article_sections legacy conflicts', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        camera_hal_perspective: 'This is the legacy HAL perspective with stream and metadata validation.',
+        article_sections: {
+          verified_facts: ['Fact 1'],
+          background_context: 'Background 1',
+          hal_driver_impact: 'This conflicting normalized impact claims direct HAL API behavior.',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        }
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.article_sections');
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'article_section_legacy_conflict' &&
+        issue.key === 'hal_driver_impact' &&
+        issue.legacy_field === 'camera_hal_perspective'
+      ));
+      return true;
+    }
   );
 });
 
@@ -758,4 +821,21 @@ test('run-level editor semantic status preserves details and OR accumulates repa
 test('editor schema constrains briefing to exactly 3 numeric items', () => {
   assert.equal(editorSchema.properties.briefing.minItems, 3);
   assert.equal(editorSchema.properties.briefing.maxItems, 3);
+});
+
+test('editor schema keeps article_sections optional with five required normalized keys when present', () => {
+  const articleSections = editorSchema.properties.sections.items.properties.article_sections;
+
+  assert.ok(articleSections);
+  assert.deepEqual(articleSections.required, [
+    'verified_facts',
+    'background_context',
+    'hal_driver_impact',
+    'action_items',
+    'team_share_points'
+  ]);
+  assert.equal(
+    editorSchema.properties.sections.items.required.includes('article_sections'),
+    false
+  );
 });

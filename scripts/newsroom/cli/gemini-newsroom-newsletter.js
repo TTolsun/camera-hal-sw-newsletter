@@ -147,6 +147,18 @@ function linkedEvidencePromptGuardrails() {
   ].join('\n');
 }
 
+function articleSectionContractPrompt() {
+  return [
+    'Article section contract: every main article may include optional article_sections, but when article_sections exists it must include all five keys: verified_facts, background_context, hal_driver_impact, action_items, and team_share_points.',
+    'article_sections.verified_facts must be an array of source-backed facts only. Keep HAL interpretation and recommendations out of verified_facts.',
+    'article_sections.background_context must be a string explaining the context needed by an AOSP Camera / Camera HAL / driver / SoC platform reader.',
+    'article_sections.hal_driver_impact must be a string that interprets practical Camera HAL, driver, stream, buffer, metadata, native tooling, or SoC platform impact without claiming direct runtime/API behavior unless the supplied source explicitly supports it.',
+    'article_sections.action_items must be an array of concrete actions that name a test, log, metric, device class, API/component, stream combination, owner, or PoC handoff.',
+    'article_sections.team_share_points must be a string with the team-review takeaway. Do not simply repeat why_it_matters unless no better team_summary exists.',
+    'Keep legacy fields aligned for backward compatibility, but treat article_sections as the normalized article structure.'
+  ].join('\n');
+}
+
 function writeNewsletterDate(date, rootDir = root) {
   const tmpDir = path.join(rootDir, '.tmp');
   fs.mkdirSync(tmpDir, { recursive: true });
@@ -2594,6 +2606,7 @@ async function main() {
         `Final main article count must satisfy ${publishGateCriteriaText()}.`,
         'Use final-selected article capsules as main article inputs. Do not turn final_selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
         linkedEvidencePromptGuardrails(),
+        articleSectionContractPrompt(),
         'Initial editor drafts must use only primary selected article capsules. Reserve candidates are not available until a primary article is demoted/removed during repair or completion.',
         `Priority order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
         'SoC/platform articles are lower-priority fallback, but do not exclude public CPU/GPU/NPU/ISP/power/thermal/performance information when it is final-selected and can be explained from Camera framework, HAL, driver, image pipeline, or platform performance perspective.',
@@ -2687,6 +2700,7 @@ async function main() {
         'Treat missing version, release date, API/component name, or behavior change as must_fix when an article presents a rolling page or generic watch item as a concrete update.',
         'Treat any finalSelectionEligibility=watchlist/exclude candidate or watch page without dated evidence used as a main article as must_fix.',
         'Any claim without a source must be classified as must_fix.',
+        articleSectionContractPrompt(),
         'Flag general AI/C++/SoC news that lacks AOSP Camera, camera driver, SoC platform, or native development interpretation.',
         'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
         'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
@@ -2777,6 +2791,7 @@ async function main() {
           'For reporter_eligibility_violations, replace or demote the section. Do not repair text around an ineligible source.',
           'Replacement main articles must use only primary selected capsules that are not locked/excluded or reserve candidate capsules supplied in this prompt.',
           linkedEvidencePromptGuardrails(),
+          articleSectionContractPrompt(),
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
           'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance.',
@@ -2832,6 +2847,7 @@ async function main() {
           'You are the AI fact checker for the repaired AOSP Camera / Driver / SoC Platform Newsletter draft.',
           'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
           linkedEvidencePromptGuardrails(),
+          articleSectionContractPrompt(),
           'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or expanded editorial-scope relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
           'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
@@ -2915,6 +2931,7 @@ async function main() {
             'Preserve existing valid sections by excluding their URLs, titles, source names, and source-date-title combinations.',
             'Use only the eligible reporter candidates supplied in this prompt. Do not use candidates omitted from the eligible list.',
             linkedEvidencePromptGuardrails(),
+            articleSectionContractPrompt(),
             'Do not duplicate locked, duplicate/rejected, source-gap, or ineligible sections from the exclusion context.',
             'Each new section must satisfy the same editorial contract: confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, and sources.',
             'Each new section must name release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance using only supplied candidate metadata/source text.',
@@ -2955,6 +2972,7 @@ async function main() {
             'You are the AI fact checker for the completed AOSP Camera / Driver / SoC Platform Newsletter draft.',
             'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
             linkedEvidencePromptGuardrails(),
+            articleSectionContractPrompt(),
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the Newsletter Policy article composition contract.',
             'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
             'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
@@ -3387,6 +3405,7 @@ module.exports = {
   editorSemanticStatusExtra,
   failureStageFromError,
   hasTooFewMainArticlesDeduction,
+  articleSectionContractPrompt,
   linkedEvidencePromptGuardrails,
   main,
   recordEditorSemanticStatus,

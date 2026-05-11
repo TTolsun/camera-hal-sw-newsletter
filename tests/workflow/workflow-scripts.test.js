@@ -2411,6 +2411,54 @@ test('newsroom PR body includes editor-approved publication policy', () => {
   );
 });
 
+test('newsroom PR body includes article structure contract summary when editor draft exists', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true,
+    quality: {
+      article_results: [{
+        index: 1,
+        headline: 'CameraX release',
+        section_contract: {
+          complete: true,
+          missing_keys: [],
+          fallbacks_used: [],
+          warnings: [],
+          conflicts: []
+        }
+      }]
+    }
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), {
+    date,
+    title: `Camera HAL SW Newsletter - ${date}`,
+    summary: 'Summary',
+    briefing: ['one', 'two', 'three'],
+    sections: [{
+      category: 'Android Camera',
+      headline: 'CameraX release',
+      article_sections: {
+        verified_facts: ['CameraX release fact'],
+        background_context: 'CameraX background',
+        hal_driver_impact: 'HAL stream impact',
+        action_items: ['Run Camera ITS'],
+        team_share_points: 'Share in camera triage'
+      },
+      sources: [{ title: 'Source', url: 'https://example.com/source' }]
+    }],
+    action_items: [],
+    references: []
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
+  const section = extractMarkdownSection(body, 'Article Structure Contract');
+
+  assert.match(section, /\| # \| Article \| 5-section \| HAL impact \| Action item \| Overclaim risk \|/);
+  assert.match(section, /CameraX release/);
+  assert.match(section, /pass/);
+});
+
 test('publish status output renders final and artifact readiness fields', () => {
   const root = tempRoot();
   const date = '2026-05-08';

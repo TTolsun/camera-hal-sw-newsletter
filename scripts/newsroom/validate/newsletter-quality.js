@@ -27,6 +27,11 @@ const {
   findFieldHygieneIssues,
   inferImpactClaimLevel
 } = require('../generate/article-field-builder');
+const {
+  ARTICLE_SECTION_KEYS,
+  articleSectionSummary,
+  normalizeArticleSections
+} = require('../common/article-section-contract');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
@@ -43,20 +48,19 @@ function text(value) {
 }
 
 function sectionText(section) {
+  const articleSections = normalizeArticleSections(section);
   return [
     section.category,
     section.headline,
-    section.what_changed,
-    section.background,
-    section.why_it_matters,
-    section.camera_hal_perspective,
+    articleSections.verified_facts,
+    articleSections.background_context,
+    articleSections.hal_driver_impact,
+    articleSections.action_items,
+    articleSections.team_share_points,
     section.evidence_summary,
     section.specificity_checks,
     section.source_verification_notes,
-    section.team_summary,
-    section.confirmed_facts,
     section.camera_hal_checks,
-    section.action_items,
     section.sources
   ].map(text).join(' ');
 }
@@ -699,7 +703,7 @@ function hasHalDepth(section) {
 }
 
 function hasConcreteAction(section) {
-  const actions = ensureArray(section.action_items);
+  const actions = normalizeArticleSections(section).action_items;
   if (actions.length === 0) return false;
   return actions.some(action => /test|log|metric|measure|CTS|VTS|Camera ITS|stream|metadata|latency|frame drop|thermal|device|owner|API|PoC|benchmark|profile|검증|테스트|측정|로그|지표|벤치마크|담당|기기/i.test(text(action)));
 }
@@ -1084,6 +1088,7 @@ function buildArticleResults(sections, deductions, factCheck, sectionCountDetail
       status,
       repair_action: repairActionForArticleStatus(status, hardItems, factCheck, section),
       sources: sectionSourceSummary(section),
+      section_contract: articleSectionSummary(section),
       scope_count: sectionCountDetails[index] || null,
       impact_claim_level: text(section.impact_claim_level) || text(sectionCountDetails[index]?.impact_claim_level),
       hard_fail_reasons: [...new Set(hardReasons)],
@@ -1094,6 +1099,23 @@ function buildArticleResults(sections, deductions, factCheck, sectionCountDetail
       }))
     };
   });
+}
+
+function summarizeArticleSectionContracts(sections) {
+  const summaries = ensureArray(sections).map(articleSectionSummary);
+  const missingKeyCounts = ARTICLE_SECTION_KEYS.reduce((counts, key) => {
+    counts[key] = summaries.filter(summary => ensureArray(summary.missing_keys).includes(key)).length;
+    return counts;
+  }, {});
+  return {
+    complete_count: summaries.filter(summary => summary.complete === true).length,
+    incomplete_count: summaries.filter(summary => summary.complete !== true).length,
+    fallback_count: summaries.reduce((sum, summary) => sum + ensureArray(summary.fallbacks_used).length, 0),
+    warning_count: summaries.reduce((sum, summary) => sum + ensureArray(summary.warnings).length, 0),
+    conflict_count: summaries.reduce((sum, summary) => sum + ensureArray(summary.conflicts).length, 0),
+    missing_key_counts: missingKeyCounts,
+    summaries
+  };
 }
 
 function determineQualityStatus(score, threshold, checks = {}) {
@@ -1133,6 +1155,35 @@ function summarizeCandidateExclusions(reporter) {
   return [...counts.entries()]
     .map(([reason, count]) => ({ reason, count }))
     .sort((a, b) => b.count - a.count || a.reason.localeCompare(b.reason));
+}
+
+function markdownTableCell(value) {
+  return String(value ?? '')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\|/g, '\\|') || 'none';
+}
+
+function articleSectionContractMarkdownRows(report) {
+  return ensureArray(report.article_results).map(item => {
+    const summary = item.section_contract || {};
+    const missing = ensureArray(summary.missing_keys);
+    const fallbacks = ensureArray(summary.fallbacks_used);
+    const warnings = ensureArray(summary.warnings);
+    const conflicts = ensureArray(summary.conflicts);
+    const row = [
+      item.index || '',
+      item.headline || '',
+      summary.complete === true && missing.length === 0 ? 'pass' : `missing ${missing.join(', ') || 'unknown'}`,
+      missing.includes('hal_driver_impact') ? 'missing' : 'present',
+      missing.includes('action_items') ? 'missing' : (fallbacks.some(value => /action_items/.test(value)) ? 'fallback' : 'concrete'),
+      conflicts.length > 0
+        ? `conflict ${conflicts.map(conflict => conflict.key || conflict).join(', ')}`
+        : (warnings.join('; ') || 'low')
+    ];
+    return `| ${row.map(markdownTableCell).join(' | ')} |`;
+  }).join('\n') || '| none | none | none | none | none | none |';
 }
 
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
@@ -1201,19 +1252,56 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     const location = section.headline || section.category || `article ${index + 1}`;
     const binding = sectionBindings[index];
     const scope = sectionScopes[index];
-    const requiredTextFields = ['headline', 'what_changed', 'evidence_summary', 'background', 'camera_hal_perspective', 'team_summary'];
+    const articleSections = normalizeArticleSections(section);
+    const sectionContract = articleSectionSummary(section);
+    const requiredTextFields = ['headline', 'evidence_summary'];
     for (const field of requiredTextFields) {
       if (!text(section[field])) {
         boundedDeduct(state, 'required-fields', 3, `Missing required article field: ${field}.`, location);
       }
     }
-    for (const field of ['confirmed_facts', 'specificity_checks', 'source_verification_notes', 'camera_hal_checks', 'action_items', 'sources']) {
+    for (const field of ['specificity_checks', 'source_verification_notes', 'camera_hal_checks', 'sources']) {
       if (ensureArray(section[field]).length === 0) {
         boundedDeduct(state, 'required-fields', 4, `Missing required article list: ${field}.`, location);
       }
     }
+    for (const missingKey of sectionContract.missing_keys) {
+      boundedDeduct(
+        state,
+        'article-section-contract',
+        missingKey === 'hal_driver_impact' ? 4 : 3,
+        `Missing normalized article section: ${missingKey}.`,
+        location,
+        { blocking: false }
+      );
+    }
+    for (const warning of sectionContract.warnings) {
+      boundedDeduct(
+        state,
+        'article-section-contract',
+        1,
+        warning,
+        location,
+        { blocking: false }
+      );
+    }
+    if (ensureArray(sectionContract.conflicts).length > 0) {
+      boundedDeduct(
+        state,
+        'article-section-contract',
+        2,
+        `article_sections conflicts with legacy fields: ${sectionContract.conflicts.map(item => item.key).join(', ')}.`,
+        location,
+        { blocking: false }
+      );
+    }
     for (const issue of findFieldHygieneIssues({
       ...section,
+      confirmed_facts: articleSections.verified_facts,
+      background: articleSections.background_context,
+      camera_hal_perspective: articleSections.hal_driver_impact,
+      action_items: articleSections.action_items,
+      team_summary: articleSections.team_share_points,
       impact_claim_level: text(section.impact_claim_level) || text(sectionCountDetails[index]?.impact_claim_level)
     })) {
       boundedDeduct(
@@ -1277,18 +1365,41 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     if (!hasHalDepth(section)) {
       boundedDeduct(state, 'hal-depth', 4, 'Article lacks concrete AOSP Camera / driver / SoC / native engineering depth.', location);
     }
-    if (!hasHalDepth({ ...section, headline: '', category: '', what_changed: '', background: '', why_it_matters: '', evidence_summary: '', specificity_checks: [], source_verification_notes: [], team_summary: '', confirmed_facts: [], camera_hal_checks: [], action_items: [], sources: [], camera_hal_perspective: section.camera_hal_perspective })) {
-      boundedDeduct(state, 'hal-depth', 4, 'Article camera_hal_perspective does not include concrete AOSP Camera / driver / SoC / native perspective.', location);
+    if (!hasHalDepth({
+      ...section,
+      headline: '',
+      category: '',
+      what_changed: '',
+      background: '',
+      why_it_matters: '',
+      evidence_summary: '',
+      specificity_checks: [],
+      source_verification_notes: [],
+      team_summary: '',
+      confirmed_facts: [],
+      camera_hal_checks: [],
+      action_items: [],
+      sources: [],
+      article_sections: {
+        verified_facts: [],
+        background_context: '',
+        hal_driver_impact: articleSections.hal_driver_impact,
+        action_items: [],
+        team_share_points: ''
+      },
+      camera_hal_perspective: ''
+    })) {
+      boundedDeduct(state, 'hal-depth', 4, 'Article hal_driver_impact does not include concrete AOSP Camera / driver / SoC / native perspective.', location);
     }
     if (!hasExpandedScope(scope)) {
       boundedDeduct(state, 'scope-relevance', 8, 'Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.', location);
     }
-    if (ensureArray(section.action_items).length < 2) {
+    if (ensureArray(articleSections.action_items).length < 2) {
       boundedDeduct(
         state,
         'actionability',
         4,
-        `Expected at least 2 action_items, found ${ensureArray(section.action_items).length}.`,
+        `Expected at least 2 action_items, found ${ensureArray(articleSections.action_items).length}.`,
         location,
         { blocking: false }
       );
@@ -1381,6 +1492,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const blockers = blockingDeductions(state.deductions);
   const softItems = softDeductions(state.deductions);
   const articleResults = buildArticleResults(sections, state.deductions, factCheck, sectionCountDetails);
+  const articleSectionContract = summarizeArticleSectionContracts(sections);
   const status = determineQualityStatus(score, threshold, {
     sourceGapCount: gaps,
     hasFactCheckMustFix,
@@ -1435,6 +1547,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         counts[item.status] = (counts[item.status] || 0) + 1;
         return counts;
       }, { PASS: 0, DEMOTE: 0, FAIL: 0 }),
+      article_section_contract: articleSectionContract,
       top_deduction_categories: summarizeDeductionCategories(state.deductions).slice(0, 5),
       candidate_exclusion_summary: summarizeCandidateExclusions(reporter).slice(0, 5)
     }
@@ -1477,6 +1590,7 @@ function buildQualityReportMarkdown(report) {
     ` ${ensureArray(item.hard_fail_reasons).join('; ') || 'none'} `,
     ` ${ensureArray(item.soft_deductions).map(deduction => `${deduction.category}: ${deduction.reason}`).join('; ') || 'none'} |`
   ].join('|')).join('\n') || '| none | none | none | none | none | none | none | none | none | none | none | none | none | none | none | none |';
+  const articleStructureRows = articleSectionContractMarkdownRows(report);
   const hardDeductionLines = hardItems.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n') || '- none';
   const softDeductionLines = softItems.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n') || '- none';
 
@@ -1527,6 +1641,18 @@ ${compositionFailure}
 - Blocking deduction categories: ${ensureArray(metrics.blocking_deduction_categories).join(', ') || 'none'}
 - Hard fail count: ${metrics.hard_fail_count || 0}
 - Soft deduction count: ${metrics.soft_deduction_count || 0}
+
+## Article Structure Contract
+
+- Complete article sections: ${metrics.article_section_contract?.complete_count ?? 0}
+- Incomplete article sections: ${metrics.article_section_contract?.incomplete_count ?? 0}
+- Fallbacks used: ${metrics.article_section_contract?.fallback_count ?? 0}
+- Contract warnings: ${metrics.article_section_contract?.warning_count ?? 0}
+- Contract conflicts: ${metrics.article_section_contract?.conflict_count ?? 0}
+
+| # | Article | 5-section | HAL impact | Action item | Overclaim risk |
+| ---: | --- | --- | --- | --- | --- |
+${articleStructureRows}
 
 ## Article Gate Results
 

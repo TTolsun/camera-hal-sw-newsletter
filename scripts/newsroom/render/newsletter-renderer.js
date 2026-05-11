@@ -1,6 +1,11 @@
 const {
   renderCandidateSelectionDiagnostics
 } = require('../generate/selection-diagnostics');
+const {
+  ARTICLE_SECTION_LABELS,
+  articleSectionSummary,
+  normalizeArticleSections
+} = require('../common/article-section-contract');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -37,11 +42,6 @@ function bulletsMarkdown(items) {
 
 function bulletsHtml(items) {
   return ensureArray(items).map(item => `<li>${escapeHtml(item)}</li>`).join('');
-}
-
-function textOrBulletsMarkdown(value) {
-  if (Array.isArray(value)) return bulletsMarkdown(value);
-  return String(value || '').trim();
 }
 
 function paragraphHtml(value) {
@@ -112,23 +112,6 @@ function articleMediaHtml(section) {
           </div>`;
 }
 
-function articleFacts(section) {
-  return ensureArray(section.confirmed_facts).length > 0 ? section.confirmed_facts : section.what_changed;
-}
-
-function articlePerspective(section) {
-  return section.camera_hal_perspective || section.why_it_matters || '';
-}
-
-function articleActions(section) {
-  const actions = ensureArray(section.action_items);
-  return actions.length > 0 ? actions : ensureArray(section.action_hints);
-}
-
-function articleTeamSummary(section) {
-  return section.team_summary || section.why_it_matters || '';
-}
-
 function issueTags(issue) {
   return ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
 }
@@ -161,43 +144,84 @@ function normalizedSections(issue) {
   });
 }
 
+function markdownTableCell(value) {
+  return String(value ?? '')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\|/g, '\\|') || 'none';
+}
+
+function articleSectionContractRows(issue, qualityReport = null) {
+  return ensureArray(issue.sections).map((section, index) => {
+    const summary = qualityReport?.article_results?.[index]?.section_contract ||
+      articleSectionSummary(section);
+    const missing = ensureArray(summary.missing_keys);
+    const fallbacks = ensureArray(summary.fallbacks_used);
+    const warnings = ensureArray(summary.warnings);
+    const conflicts = ensureArray(summary.conflicts);
+    return [
+      index + 1,
+      section.headline || section.category || `article ${index + 1}`,
+      summary.complete === true && missing.length === 0 ? 'pass' : `missing ${missing.join(', ') || 'unknown'}`,
+      missing.includes('hal_driver_impact') ? 'missing' : 'present',
+      missing.includes('action_items') ? 'missing' : (fallbacks.some(item => /action_items/.test(item)) ? 'fallback' : 'concrete'),
+      conflicts.length > 0 ? `conflict ${conflicts.map(item => item.key || item).join(', ')}` : (warnings.join('; ') || 'low')
+    ];
+  });
+}
+
+function articleSectionContractMarkdown(issue, qualityReport = null) {
+  const rows = articleSectionContractRows(issue, qualityReport);
+  if (rows.length === 0) return '- none';
+  return [
+    '| # | Article | 5-section | HAL impact | Action item | Overclaim risk |',
+    '| ---: | --- | --- | --- | --- | --- |',
+    ...rows.map(row => `| ${row.map(markdownTableCell).join(' | ')} |`)
+  ].join('\n');
+}
+
 function buildMarkdown(issue) {
   return `# ${issue.title}
 
 ${issue.summary}
 
 ## 1. 이번 주 3줄 브리핑
+
 ${bulletsMarkdown(issue.briefing)}
 
-${normalizedSections(issue).map(({ heading, section }) => `${heading}
+${normalizedSections(issue).map(({ heading, section }) => {
+    const articleSections = normalizeArticleSections(section);
+    return `${heading}
 
 ### ${section.headline}
 ${articleImageMarkdown(section)}
 
-**이번 주 확인한 사실**
+**${ARTICLE_SECTION_LABELS.verified_facts}**
 
-${textOrBulletsMarkdown(articleFacts(section))}
+${bulletsMarkdown(articleSections.verified_facts)}
 
-**배경지식**
+**${ARTICLE_SECTION_LABELS.background_context}**
 
-${section.background}
+${articleSections.background_context}
 
-**Camera HAL 관점 해석**
+**${ARTICLE_SECTION_LABELS.hal_driver_impact}**
 
-${articlePerspective(section)}
+${articleSections.hal_driver_impact}
 
-**우리 팀이 확인할 Action Item**
+**${ARTICLE_SECTION_LABELS.action_items}**
 
-${bulletsMarkdown(articleActions(section))}
+${bulletsMarkdown(articleSections.action_items)}
 
-**팀 공유용 한 줄**
+**${ARTICLE_SECTION_LABELS.team_share_points}**
 
-${articleTeamSummary(section)}
+${articleSections.team_share_points}
 
 **출처**
 
 ${sourceListMarkdown(section.sources)}
-`).join('\n---\n\n')}
+`;
+  }).join('\n---\n\n')}
 
 ## 이번 주 실행 항목
 
@@ -254,20 +278,23 @@ function buildHtml(issue) {
         </div>
       </section>
 
-${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, section }) => `      <section class="section">
+${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, section }) => {
+    const articleSections = normalizeArticleSections(section);
+    return `      <section class="section">
         <h2>${escapeHtml(htmlHeading)}</h2>
         <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-fallback-image'} ${escapeHtml(className)}">
           ${articleMediaHtml(section)}
           ${articleTagsHtml(section, headingCategory)}
           <h3>${escapeHtml(section.headline)}</h3>
-          <div class="article-block"><strong class="article-block-title">확인한 사실</strong>${Array.isArray(articleFacts(section)) ? `<ul>${bulletsHtml(articleFacts(section))}</ul>` : paragraphHtml(articleFacts(section))}</div>
-          <div class="article-block"><strong class="article-block-title">배경지식</strong>${paragraphHtml(section.background)}</div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL 관점</strong>${paragraphHtml(articlePerspective(section))}</div>
-          <div class="article-block"><strong class="article-block-title">실행 항목</strong><ul>${bulletsHtml(articleActions(section))}</ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트</strong>${paragraphHtml(articleTeamSummary(section))}</div>
+          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.verified_facts)}</strong><ul>${bulletsHtml(articleSections.verified_facts)}</ul></div>
+          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.background_context)}</strong>${paragraphHtml(articleSections.background_context)}</div>
+          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.hal_driver_impact)}</strong>${paragraphHtml(articleSections.hal_driver_impact)}</div>
+          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.action_items)}</strong><ul>${bulletsHtml(articleSections.action_items)}</ul></div>
+          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.team_share_points)}</strong>${paragraphHtml(articleSections.team_share_points)}</div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(section.sources)}</ul></div>
         </div>
-      </section>`).join('\n\n')}
+      </section>`;
+  }).join('\n\n')}
 
       <section class="section">
         <h2>이번 주 실행 항목</h2>
@@ -339,12 +366,18 @@ function staleClaimSummaryMarkdown(staleClaimReport) {
   ].join('\n');
 }
 
+function articleSectionContractSummaryMarkdown(issue, qualityReport = null) {
+  return `## Article Structure Contract
+
+${articleSectionContractMarkdown(issue, qualityReport)}`;
+}
+
 function buildEditorChiefBrief(date, issue, factCheck, qualityReport = null, selectionDiagnostics = null, staleClaimReport = null) {
   const firstSection = ensureArray(issue.sections)[0] || {};
   const decision = factCheck.status === 'PASS' && (!qualityReport || qualityReport.status === 'PASS')
     ? 'APPROVE'
     : 'REQUEST_CHANGES';
-  return `# 편집장 브리프 - ${date}
+  return `# 편집장 브리핑 - ${date}
 
 ## 이번 주 핵심 메시지
 
@@ -365,8 +398,9 @@ ${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
 - 의견: ${factCheck.final_comment}
 
 ## 품질 게이트
-
 ${qualitySummaryMarkdown(qualityReport)}
+
+${articleSectionContractSummaryMarkdown(issue, qualityReport)}
 
 ## Stale Claim Gate
 
@@ -414,12 +448,13 @@ ${emptySourceSections.length === 0 ? '없음' : emptySourceSections.map(section 
 - source gap 개수: ${ensureArray(factCheck.source_gaps).length}
 
 ## 품질 게이트
-
 ${qualitySummaryMarkdown(qualityReport)}
 `;
 }
 
 module.exports = {
+  articleSectionContractMarkdown,
+  articleSectionContractRows,
   buildMarkdown,
   buildHtml,
   buildFactCheckMarkdown,

@@ -27,6 +27,39 @@ function retrySection(headline, url) {
   return {
     category: headline,
     headline,
+    what_changed: `${headline} changed on 2026-05-01.`,
+    confirmed_facts: [`${headline} was published on 2026-05-01.`],
+    evidence_summary: `Version/release: ${headline}; release date: 2026-05-01; API/component: Camera HAL.`,
+    specificity_checks: ['Release date: 2026-05-01', 'API/component: Camera HAL'],
+    source_verification_notes: ['Synthetic official source for targeted retry tests.'],
+    background: `${headline} is relevant to AOSP Camera validation context.`,
+    why_it_matters: `${headline} gives HAL teams a review target.`,
+    camera_hal_perspective: `${headline} should be checked through stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.`,
+    camera_hal_checks: ['Run Camera ITS and inspect stream/metadata logs.'],
+    action_items: [
+      'Assign a HAL owner to inspect Camera ITS logs within 2 weeks.',
+      'Measure preview latency, frame drop, and metadata consistency on a representative device.'
+    ],
+    team_summary: `${headline} should be shared as a HAL validation input.`,
+    article_sections: {
+      verified_facts: [`${headline} was published on 2026-05-01.`],
+      background_context: `${headline} is relevant to AOSP Camera validation context.`,
+      hal_driver_impact: `${headline} should be checked through stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.`,
+      action_items: [
+        'Assign a HAL owner to inspect Camera ITS logs within 2 weeks.',
+        'Measure preview latency, frame drop, and metadata consistency on a representative device.'
+      ],
+      team_share_points: `${headline} should be shared as a HAL validation input.`
+    },
+    is_ai_related: false,
+    article_type: 'camera-hal',
+    imageCandidates: [],
+    selectedImage: '',
+    imageSource: '',
+    imageAttribution: '',
+    imageAlt: '',
+    imageLicenseStatus: 'none',
+    imageUsageDecisionReason: 'No image needed for synthetic retry tests.',
     sources: [{ title: headline, url }]
   };
 }

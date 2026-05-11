@@ -14,6 +14,9 @@ const {
   renderEditorPublicationPolicyMarkdown
 } = require('../common/editor-publication-policy');
 const {
+  articleSectionContractMarkdown
+} = require('../render/newsletter-renderer');
+const {
   getChangedRepoVisibleArtifacts
 } = require('./resolve-reviewable-artifacts');
 
@@ -1009,6 +1012,18 @@ function renderFallbackPublicIssueNotes(root, date) {
   return lines.join('\n');
 }
 
+function renderArticleStructureContract(root, date) {
+  if (!date) return '';
+  const editor = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'));
+  if (!editor || !Array.isArray(editor.sections)) return '';
+  const qualityReport = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'quality-report.json'));
+  return [
+    '## Article Structure Contract',
+    '',
+    articleSectionContractMarkdown(editor, qualityReport)
+  ].join('\n');
+}
+
 function buildNewsroomPrBody(options = {}) {
   const resolved = options.publishStatus || resolvePublishStatus(options);
   const root = resolved.root || options.root || process.cwd();
@@ -1027,6 +1042,7 @@ function buildNewsroomPrBody(options = {}) {
     renderEditorApprovedPublicationPolicy(),
     renderCompositionSummary(status),
     renderCompositionNotes(status),
+    renderArticleStructureContract(root, date),
     renderPublicNewsletterNotice(status),
     renderFallbackPublicIssueNotes(root, date),
     renderFinalSelectionStatus(status),

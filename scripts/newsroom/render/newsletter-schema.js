@@ -40,6 +40,24 @@ const resolvedImage = {
   }
 };
 
+const articleSections = {
+  type: 'OBJECT',
+  properties: {
+    verified_facts: stringArray,
+    background_context: string,
+    hal_driver_impact: string,
+    action_items: stringArray,
+    team_share_points: string
+  },
+  required: [
+    'verified_facts',
+    'background_context',
+    'hal_driver_impact',
+    'action_items',
+    'team_share_points'
+  ]
+};
+
 const reporterCandidate = {
   type: 'OBJECT',
   properties: {
@@ -157,6 +175,7 @@ const section = {
     evidence_summary: string,
     specificity_checks: stringArray,
     source_verification_notes: stringArray,
+    article_sections: articleSections,
     background: string,
     why_it_matters: string,
     camera_hal_perspective: string,
