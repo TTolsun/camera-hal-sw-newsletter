@@ -1,0 +1,1380 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-12",
+  "generated_at": "2026-05-11T17:49:32.761Z",
+  "enable_network": false,
+  "candidate_count": 40,
+  "warnings": [],
+  "totals": {
+    "schema_version": 1,
+    "total_count": 0,
+    "by_type": {},
+    "by_fetch_status": {},
+    "impact_type_counts": {
+      "build_dependency_fix": 7,
+      "camera_api_change": 1,
+      "documentation_only": 2,
+      "generic_tooling_change": 14,
+      "security_component_camera_related": 6,
+      "test_only_change": 2,
+      "unknown": 7,
+      "video_capture_fix": 1
+    },
+    "warning_count": 35,
+    "has_resolved_evidence": false,
+    "has_unresolved_evidence": false,
+    "top_identifiers": []
+  },
+  "candidates": [
+    {
+      "title": "Experimental hybrid inference and new Gemini models for Android",
+      "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Fri, 17 Apr 2026 20:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "camera_api_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "camera_api_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "camera_api_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Get ready for Google I/O: Livestream schedule revealed",
+      "url": "https://android-developers.googleblog.com/2026/04/get-ready-for-google-io-livestream-schedule-revealed.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 14 Apr 2026 12:30:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "unknown": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "unknown",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
+      "source_kind": "release_note_item",
+      "final_selection_eligibility": "main",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "security_component_camera_related": 1
+        },
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "security_component_camera_related",
+        "hal_runtime_impact": true,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "main",
+        "confidence": 0.75,
+        "reason": "security_component_camera_related classified from candidate text.",
+        "warnings": []
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Android CLI and skills: Build Android apps 3x faster using any agent",
+      "url": "https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Thu, 16 Apr 2026 17:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "What's new in the Jetpack Compose April '26 release",
+      "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Wed, 22 Apr 2026 23:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "unknown": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "unknown",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4",
+      "url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 21 Apr 2026 14:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "The Fourth Beta of Android 17",
+      "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Thu, 16 Apr 2026 20:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "test_only_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "test_only_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "test_only_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Test Multi-Device Interactions with the Android Emulator",
+      "url": "https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Mon, 13 Apr 2026 13:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "test_only_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "test_only_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "test_only_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "normalized_url": "",
+      "source": "AOSP Camera Documentation",
+      "published_date": "",
+      "source_kind": "documentation_page",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "documentation_only": 1
+        },
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "documentation_only",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.75,
+        "reason": "documentation_only classified from candidate text.",
+        "warnings": []
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Gratitude saw 25% higher retention for widget users",
+      "url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Fri, 08 May 2026 16:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "unknown": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "unknown",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "A look ahead: Making it easier and faster to publish safer apps",
+      "url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Thu, 07 May 2026 17:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "unknown": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "unknown",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Streamline User Journeys with Verified Email via Credential Manager",
+      "url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Wed, 22 Apr 2026 20:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "unknown": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "unknown",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "1.3.0-beta02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "normalized_url": "",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
+      "source_kind": "release_note_item",
+      "final_selection_eligibility": "short",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "security_component_camera_related": 1
+        },
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "security_component_camera_related",
+        "hal_runtime_impact": true,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "main",
+        "confidence": 0.75,
+        "reason": "security_component_camera_related classified from candidate text.",
+        "warnings": []
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "normalized_url": "",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
+      "source_kind": "release_note_item",
+      "final_selection_eligibility": "short",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "security_component_camera_related": 1
+        },
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "security_component_camera_related",
+        "hal_runtime_impact": true,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "main",
+        "confidence": 0.75,
+        "reason": "security_component_camera_related classified from candidate text.",
+        "warnings": []
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/whatsnew",
+      "normalized_url": "",
+      "source": "AOSP What's New / Release Notes",
+      "published_date": "",
+      "source_kind": "rolling_page",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "unknown": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "unknown",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "normalized_url": "",
+      "source": "Android Compatibility Definition Document",
+      "published_date": "",
+      "source_kind": "documentation_page",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "documentation_only": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "documentation_only",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "documentation_only classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
+      "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Mon, 04 May 2026 17:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "unknown": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "unknown",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Boosting user privacy and business protection with updated Play policies",
+      "url": "https://android-developers.googleblog.com/2026/04/giving-users-clearer-choice-and-everyone-a-safer-more-trusted-app-ecosystem.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Wed, 15 Apr 2026 17:00:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Overview",
+      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "normalized_url": "",
+      "source": "Android Security Bulletin",
+      "published_date": "2026-05-01",
+      "source_kind": "release_note_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "security_component_camera_related": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "security_component_camera_related",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "security_component_camera_related classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "May",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
+      "normalized_url": "",
+      "source": "Android Security Bulletin",
+      "published_date": "2026-05-01",
+      "source_kind": "release_note_item",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "security_component_camera_related": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "security_component_camera_related",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "security_component_camera_related classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "normalized_url": "",
+      "source": "libcamera Release Announcements",
+      "published_date": "2026-04-28",
+      "source_kind": "release_note_item",
+      "final_selection_eligibility": "main",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "video_capture_fix": 1
+        },
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "video_capture_fix",
+        "hal_runtime_impact": true,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "main",
+        "confidence": 0.75,
+        "reason": "video_capture_fix classified from candidate text.",
+        "warnings": []
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 04 May 2026 22:31:55 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "2026 Annual C++ Developer Survey \"Lite\"",
+      "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 22 Apr 2026 00:59:01 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "short",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 23 Apr 2026 21:23:33 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "short",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Results summary: 2026 Annual C++ Developer Survey \"Lite\"",
+      "url": "https://isocpp.org//blog/2026/05/2026-survey-summary",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 04 May 2026 21:04:35 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Devirtualization and Static Polymorphism -- David Álvarez Rosa",
+      "url": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 16 Apr 2026 19:42:23 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "CppCon 2025 Implementing Your Own C++ Atomics -- Ben Saks",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-implementing-your-own-cpp-atomics-ben-saks",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 14 Apr 2026 16:24:09 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "JSON and C++26 compile-time reflection: a talk -- Daniel Lemire",
+      "url": "https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 06 May 2026 22:35:16 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Behold the power of meta::substitute -- Barry Revzin",
+      "url": "https://isocpp.org//blog/2026/04/behold-the-power-of-metasubstitute-barry-revzin",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 22 Apr 2026 19:50:46 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now -- Mike Shah",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-why-every-cpp-game-developer-should-learn-sdl-3-now-mike-shah",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 15 Apr 2026 19:31:45 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Announcement: cppreference.com update",
+      "url": "https://isocpp.org//blog/2026/04/announcement-cppreference.com-update",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 14 Apr 2026 22:36:46 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "CppCon 2025 Back to Basics: Move Semantics -- Ben Saks",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 07 May 2026 21:31:37 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 05 May 2026 21:28:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 27 Apr 2026 21:25:11 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "CppCon 2025 C++: Some Assembly Required -- Matt Godbolt",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 21 Apr 2026 21:13:30 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "CppCon 2025 How C++ Finally Beats Rust at JSON Serialization -- Lemire & Thiesen",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Fri, 17 Apr 2026 19:34:43 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "The ACCU on Sea 2026 Schedule is Now Announced -- ACCU",
+      "url": "https://isocpp.org//blog/2026/05/the-accu-on-sea-2026-schedule-is-now-announced",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 07 May 2026 18:40:56 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    },
+    {
+      "title": "Samsung Mobile Security",
+      "url": "https://security.samsungmobile.com/securityUpdate.smsb",
+      "normalized_url": "",
+      "source": "Samsung Mobile Security Updates",
+      "published_date": "",
+      "source_kind": "rolling_page",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "security_component_camera_related": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "security_component_camera_related",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "security_component_camera_related classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": []
+    }
+  ]
+}
