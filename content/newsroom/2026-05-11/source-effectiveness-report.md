@@ -13,13 +13,14 @@ Date: 2026-05-11
 - Source gap candidates: 34
 - Generic noise candidates: 32
 - Duplicate candidates: 0
-- Recommendations: NO_RECENT_SIGNAL: 38, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 6, KEEP: 1, KEEP_AND_FIX_PARSER: 1, KEEP_AND_MONITOR: 1
+- Recommendations: NO_RECENT_SIGNAL: 38, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 6, KEEP: 2, KEEP_AND_FIX_PARSER: 1
 
 ## Top Effective Sources
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| android-developers-latest-updates | KEEP | 100 | 3 | 3 | 3 | 3 |
+| libcamera-release-announcements | KEEP | 100 | 1 | 1 | 1 | 1 |
+| android-developers-latest-updates | KEEP | 90 | 3 | 3 | 3 | 2 |
 
 ## Sources Needing Parser Repair
 
@@ -85,9 +86,9 @@ _없음_
 | aosp-camera-documentation | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | samsung-mobile-security-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| android-developers-latest-updates | KEEP | 100 | 3 | 1 | 1 | 1 | 0 | 0 | 0 |
+| libcamera-release-announcements | KEEP | 100 | 1 | 1 | 1 | 1 | 0 | 0 | 0 |
+| android-developers-latest-updates | KEEP | 90 | 3 | 1 | 1 | 0.6667 | 0 | 0 | 0 |
 | iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 18 | 0.1111 | 0.5 | 0 | 0.8889 | 0.7778 | 0 |
-| libcamera-release-announcements | KEEP_AND_MONITOR | 60 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |
 
 ## Warnings
 

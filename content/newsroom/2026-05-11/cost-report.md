@@ -10,21 +10,21 @@
 - Pro model configured: no
 - Pro model allowed: no
 - Request count: 4
-- Prompt tokens: 72551
-- Output tokens: 21635
-- Thinking tokens: 510
+- Prompt tokens: 66862
+- Output tokens: 15861
+- Thinking tokens: 495
 - Cached tokens: 0
-- Total tokens: 94696
-- Estimated cost USD: 0.077128
+- Total tokens: 83218
+- Estimated cost USD: 0.060949
 
 ## Calls
 
 | Provider | Stage | Model | Attempt | Prompt | Output | Thinking | Requested Budget | Applied Budget | Cached | Pro | Estimated USD |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
-| gemini | reporter attempt 1/2 | gemini-2.5-flash | 1 | 16092 | 6091 | 0 | 0 | 0 | 0 | no | 0.020055 |
-| gemini | editor attempt 1/2 | gemini-2.5-flash | 1 | 12325 | 6543 | 510 | 512 | 512 | 0 | no | 0.021330 |
-| gemini | fact-checker attempt 1/2 | gemini-2.5-flash | 1 | 20278 | 7273 | 0 | 0 | 0 | 0 | no | 0.024266 |
-| gemini | editor repair attempt 1/2 | gemini-2.5-flash | 1 | 23856 | 1728 | 0 | 0 | 0 | 0 | no | 0.011477 |
+| gemini | reporter attempt 1/2 | gemini-2.5-flash | 2 | 16096 | 7467 | 0 | 0 | 0 | 0 | no | 0.023496 |
+| gemini | editor attempt 1/2 | gemini-2.5-flash | 2 | 12152 | 6354 | 495 | 512 | 512 | 0 | no | 0.020768 |
+| gemini | fact-checker attempt 1/2 | gemini-2.5-flash | 2 | 21023 | 463 | 0 | 0 | 0 | 0 | no | 0.007464 |
+| gemini | editor repair attempt 1/2 | gemini-2.5-flash | 1 | 17591 | 1577 | 0 | 0 | 0 | 0 | no | 0.009220 |
 
 ## Warnings
 

@@ -7,37 +7,37 @@
   "must_fix_count": 0,
   "quality_status": "NEEDS_FIX",
   "quality_attempt_count": 1,
-  "quality_score": 76,
+  "quality_score": 92,
   "quality_threshold": 85,
-  "quality_deduction_count": 3,
+  "quality_deduction_count": 1,
   "quota_error_count": 0,
   "invalid_json_count": 0,
   "model_usage": {
     "reporter attempt 1/2": {
       "gemini-2.5-flash": {
-        "requests": 1,
+        "requests": 2,
         "successes": 1,
         "invalid_json": 0,
         "quota_errors": 0,
-        "api_errors": 0
+        "api_errors": 1
       }
     },
     "editor attempt 1/2": {
       "gemini-2.5-flash": {
-        "requests": 1,
+        "requests": 2,
         "successes": 1,
         "invalid_json": 0,
         "quota_errors": 0,
-        "api_errors": 0
+        "api_errors": 1
       }
     },
     "fact-checker attempt 1/2": {
       "gemini-2.5-flash": {
-        "requests": 1,
+        "requests": 2,
         "successes": 1,
         "invalid_json": 0,
         "quota_errors": 0,
-        "api_errors": 0
+        "api_errors": 1
       }
     },
     "editor repair attempt 1/2": {
@@ -51,8 +51,8 @@
     }
   },
   "run_context": {
-    "github_run_id": "25635398842",
-    "github_sha": "8848cda6b6902e5610116e8dd4fb50ecf4a344b7",
+    "github_run_id": "25674320276",
+    "github_sha": "81c0c4ee4205fce9bd056ba8a44564722ee0f284",
     "github_ref": "refs/heads/main"
   },
   "validate_ok": true,
@@ -91,7 +91,7 @@
   "demoted_article_count": 0,
   "locked_article_count": 0,
   "fallback_topic_count": 1,
-  "reporter_candidate_count": 5,
+  "reporter_candidate_count": 6,
   "reporter_selected_count": 0,
   "final_input_candidate_count": 40,
   "final_eligible_candidate_count": 6,
@@ -245,9 +245,9 @@
   "generation_status": "FAILED_REPAIR_REVIEWABLE",
   "fallback_public_issue": true,
   "fallback_public_issue_status": "CREATED",
-  "fallback_public_issue_demoted_article_count": 2,
-  "fallback_public_issue_added_article_count": 3,
-  "fallback_public_issue_preserve_article_count": 0,
+  "fallback_public_issue_demoted_article_count": 1,
+  "fallback_public_issue_added_article_count": 2,
+  "fallback_public_issue_preserve_article_count": 1,
   "fallback_public_issue_reason": "Public newsletter files generated after quality/repair/final-readiness trigger.",
   "artifact_final_publish_ready": false,
   "public_newsletter_ready": true

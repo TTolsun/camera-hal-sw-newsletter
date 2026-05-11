@@ -9,7 +9,7 @@ newsroom automation이 publication readiness 전에 멈췄습니다. 아래 arti
 
 ## 후보 선택 진단
 
-- Reporter candidates: 5
+- Reporter candidates: 6
 - Reporter-selected candidates: 0
 - Final input candidates: 40
 - Final eligible candidates: 6
@@ -79,7 +79,7 @@ npm.cmd run validate
 {
   "schema_version": 3,
   "date": "2026-05-11",
-  "generated_at": "2026-05-10T17:42:53.020Z",
+  "generated_at": "2026-05-11T13:51:24.602Z",
   "input_candidate_count": 40,
   "eligible_candidate_count": 6,
   "deterministic_selected_count": 5,
@@ -539,7 +539,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -567,23 +567,23 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -611,18 +611,18 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "main-article",
@@ -814,7 +814,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -842,7 +842,7 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -858,7 +858,7 @@ npm.cmd run validate
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -886,7 +886,7 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -1089,7 +1089,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -1117,23 +1117,23 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -1161,18 +1161,18 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "short-news",
@@ -1764,7 +1764,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -1792,23 +1792,23 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -1836,18 +1836,18 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "main-article",
@@ -2039,7 +2039,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -2067,7 +2067,7 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -2083,7 +2083,7 @@ npm.cmd run validate
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -2111,7 +2111,7 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -2314,7 +2314,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -2342,23 +2342,23 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -2386,18 +2386,18 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "short-news",
@@ -3183,7 +3183,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -3211,23 +3211,23 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -3255,18 +3255,18 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "main-article",
@@ -3458,7 +3458,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -3486,7 +3486,7 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -3502,7 +3502,7 @@ npm.cmd run validate
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -3530,7 +3530,7 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -3733,7 +3733,7 @@ npm.cmd run validate
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -3761,23 +3761,23 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -3805,18 +3805,18 @@ npm.cmd run validate
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "short-news",
@@ -7760,7 +7760,7 @@ npm.cmd run validate
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=id",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -7790,7 +7790,7 @@ npm.cmd run validate
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=id",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -8806,7 +8806,7 @@ npm.cmd run validate
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -8836,7 +8836,7 @@ npm.cmd run validate
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -12655,7 +12655,7 @@ npm.cmd run validate
   "final_input_candidate_count": 40,
   "final_eligible_candidate_count": 6,
   "final_selected_article_count": 5,
-  "reporter_candidate_count": 5,
+  "reporter_candidate_count": 6,
   "reporter_selected_count": 0,
   "reporter_selected_but_final_excluded_count": 0,
   "final_exclusion_reason_summary": [
@@ -13011,7 +13011,7 @@ npm.cmd run validate
     "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.",
     "imageCandidates": [
       {
-        "url": "https://developer.android.com/static/images/social/android-developers.png",
+        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
         "sourceKind": "og",
@@ -13039,23 +13039,23 @@ npm.cmd run validate
         "contentLength": 5562
       },
       {
-        "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+        "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
         "sourceKind": "article-img",
         "width": null,
         "height": null,
-        "alt": "YouTube",
-        "contentType": "image/png",
+        "alt": "",
+        "contentType": "image/svg+xml",
         "licenseStatus": "unknown",
         "attribution": "Android Developers Latest Updates",
         "validationStatus": "ok",
-        "contentLength": 2833
+        "contentLength": 1760
       }
     ],
     "image_candidates": [
       {
-        "url": "https://developer.android.com/static/images/social/android-developers.png",
+        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
         "sourceKind": "og",
@@ -13083,18 +13083,18 @@ npm.cmd run validate
         "contentLength": 5562
       },
       {
-        "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+        "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
         "sourceKind": "article-img",
         "width": null,
         "height": null,
-        "alt": "YouTube",
-        "contentType": "image/png",
+        "alt": "",
+        "contentType": "image/svg+xml",
         "licenseStatus": "unknown",
         "attribution": "Android Developers Latest Updates",
         "validationStatus": "ok",
-        "contentLength": 2833
+        "contentLength": 1760
       }
     ],
     "candidateTier": "main-article",
@@ -13286,7 +13286,7 @@ npm.cmd run validate
     "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
     "imageCandidates": [
       {
-        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
         "sourceKind": "og",
@@ -13314,7 +13314,7 @@ npm.cmd run validate
         "contentLength": 5562
       },
       {
-        "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+        "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
         "sourceKind": "article-img",
@@ -13330,7 +13330,7 @@ npm.cmd run validate
     ],
     "image_candidates": [
       {
-        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
         "sourceKind": "og",
@@ -13358,7 +13358,7 @@ npm.cmd run validate
         "contentLength": 5562
       },
       {
-        "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+        "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
         "sourceKind": "article-img",
@@ -13561,7 +13561,7 @@ npm.cmd run validate
     "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
     "imageCandidates": [
       {
-        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+        "url": "https://developer.android.com/static/images/social/android-developers.png",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
         "sourceKind": "og",
@@ -13589,23 +13589,23 @@ npm.cmd run validate
         "contentLength": 5562
       },
       {
-        "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+        "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
         "sourceKind": "article-img",
         "width": null,
         "height": null,
-        "alt": "",
-        "contentType": "image/svg+xml",
+        "alt": "YouTube",
+        "contentType": "image/png",
         "licenseStatus": "unknown",
         "attribution": "Android Developers Latest Updates",
         "validationStatus": "ok",
-        "contentLength": 1760
+        "contentLength": 2833
       }
     ],
     "image_candidates": [
       {
-        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+        "url": "https://developer.android.com/static/images/social/android-developers.png",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
         "sourceKind": "og",
@@ -13633,18 +13633,18 @@ npm.cmd run validate
         "contentLength": 5562
       },
       {
-        "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+        "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
         "sourceUrl": "https://developer.android.com/latest-updates",
         "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
         "sourceKind": "article-img",
         "width": null,
         "height": null,
-        "alt": "",
-        "contentType": "image/svg+xml",
+        "alt": "YouTube",
+        "contentType": "image/png",
         "licenseStatus": "unknown",
         "attribution": "Android Developers Latest Updates",
         "validationStatus": "ok",
-        "contentLength": 1760
+        "contentLength": 2833
       }
     ],
     "candidateTier": "short-news",
@@ -13939,7 +13939,7 @@ npm.cmd run validate
     "category": "image-fallback",
     "points": 1,
     "reason": "Article image uses a local fallback visual.",
-    "location": "libcamera v0.7.1 출시: SoftISP 및 이미지 파이프라인 개선",
+    "location": "libcamera v0.7.1 출시: SoftISP 및 센서 모드 구성 개선",
     "blocking": false,
     "severity": "soft"
   },
@@ -13947,7 +13947,7 @@ npm.cmd run validate
     "category": "source-integrity",
     "points": 8,
     "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
-    "location": "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정",
+    "location": "GCC 16.1 출시: C++26 Reflection, Contracts, Safety Hardening 기능 도입",
     "blocking": true,
     "severity": "hard"
   },
@@ -13955,7 +13955,7 @@ npm.cmd run validate
     "category": "scope-relevance",
     "points": 8,
     "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
-    "location": "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정",
+    "location": "GCC 16.1 출시: C++26 Reflection, Contracts, Safety Hardening 기능 도입",
     "blocking": true,
     "severity": "hard"
   },
@@ -13963,22 +13963,14 @@ npm.cmd run validate
     "category": "image-fallback",
     "points": 1,
     "reason": "Article image uses a local fallback visual.",
-    "location": "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정",
+    "location": "GCC 16.1 출시: C++26 Reflection, Contracts, Safety Hardening 기능 도입",
     "blocking": false,
     "severity": "soft"
   },
   {
     "category": "source-integrity",
-    "points": 15,
-    "reason": "Fact checker returned 24 must_fix item(s).",
-    "location": "",
-    "blocking": true,
-    "severity": "hard"
-  },
-  {
-    "category": "source-integrity",
-    "points": 3,
-    "reason": "Fact checker reported 1 source gap(s).",
+    "points": 10,
+    "reason": "Fact checker returned 2 must_fix item(s).",
     "location": "",
     "blocking": true,
     "severity": "hard"
@@ -13993,156 +13985,22 @@ npm.cmd run validate
   "status": "NEEDS_FIX",
   "must_fix": [
     {
-      "location": "section[0].why_it_matters",
-      "problem": "Exaggerated language: The statement \"이는 Android Camera HAL이 기대하는 성능 및 기능 요구 사항에 부합하는 데 중요합니다.\" (This is important for meeting the performance and functional requirements expected by Android Camera HAL) is an overstatement. While libcamera updates are relevant, directly stating they are 'important for meeting expected HAL requirements' without specific evidence of a HAL requirement change is an exaggeration.",
-      "suggestion": "Rewrite to avoid overstating the direct impact on Android Camera HAL *requirements*. Focus on potential benefits or areas for investigation. For example: \"이는 Android Camera HAL이 이미지 품질 및 프레임 레이트 측면에서 잠재적으로 활용할 수 있는 개선 사항을 제공합니다.\" (This provides improvements that Android Camera HAL can potentially leverage in terms of image quality and frame rate.)",
+      "location": "section 2, article 2 (libcamera v0.7.1 출시: SoftISP 및 센서 모드 구성 개선), selectedImage",
+      "problem": "selectedImage 필드가 비어 있고, resolvedImage.usedFallback이 true로 설정되어 있습니다. 이는 원본 이미지를 찾거나 사용하지 못했음을 의미합니다.",
+      "suggestion": "libcamera v0.7.1 릴리스와 관련된 적절한 이미지를 찾아 selectedImage 필드를 채우거나, 이미지를 사용할 수 없는 경우 resolvedImage.reason에 명확한 설명을 추가해야 합니다.",
       "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
     },
     {
-      "location": "section[0].why_it_matters",
-      "problem": "Exaggerated language: The statement \"특히 SoftISP 디베이어링 및 이미지 파이프라인 처리량 개선은 이미지 품질과 프레임 레이트에 직접적인 영향을 미칠 수 있으며\" (In particular, improvements in SoftISP debayering and image pipeline throughput can directly affect image quality and frame rate) uses 'directly affect' which is too strong without specific evidence of how it directly impacts Android HAL's observed image quality or frame rate.",
-      "suggestion": "Soften the language to reflect potential or indirect impact. For example: \"특히 SoftISP 디베이어링 및 이미지 파이프라인 처리량 개선은 이미지 품질과 프레임 레이트에 긍정적인 영향을 줄 수 있으며\" (In particular, improvements in SoftISP debayering and image pipeline throughput can positively affect image quality and frame rate) or \"...이미지 품질과 프레임 레이트 개선의 기반이 될 수 있으며\" (...can form the basis for improvements in image quality and frame rate).",
-      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
-      "location": "section[0].camera_hal_perspective",
-      "problem": "Exaggerated language: The statement \"HAL 구현자는 libcamera의 SoftISP 개선이 자체 ISP 튜닝 및 이미지 처리 파이프라인에 미치는 영향을 평가해야 합니다.\" (HAL implementers must evaluate the impact of libcamera's SoftISP improvements on their own ISP tuning and image processing pipelines.) uses 'must evaluate' which is too strong. While it's a good idea to evaluate, it's not a strict HAL requirement unless specified by a CDD or CTS/VTS change.",
-      "suggestion": "Soften the language to a recommendation or an area for investigation. For example: \"HAL 구현자는 libcamera의 SoftISP 개선이 자체 ISP 튜닝 및 이미지 처리 파이프라인에 미칠 수 있는 잠재적 영향을 평가하는 것이 좋습니다.\" (HAL implementers are recommended to evaluate the potential impact of libcamera's SoftISP improvements on their own ISP tuning and image processing pipelines.)",
-      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
-      "location": "section[0].camera_hal_perspective",
-      "problem": "Exaggerated language: The statement \"새로운 파이프라인 핸들러 지원은 특정 카메라 하드웨어의 통합 방식을 변경할 수 있으며, 센서 모드 구성 업데이트는 HAL이 지원해야 하는 스트림 구성 및 해상도 옵션에 영향을 줄 수 있습니다.\" (New pipeline handler support may change how specific camera hardware is integrated, and sensor mode configuration updates may affect stream configurations and resolution options that HAL must support.) uses 'must support' which is too strong. HAL 'must support' only what is mandated by CDD/CTS/VTS. Libcamera changes are not direct HAL requirements.",
-      "suggestion": "Soften the language to reflect potential impact rather than a direct mandate. For example: \"새로운 파이프라인 핸들러 지원은 특정 카메라 하드웨어의 통합 방식에 영향을 줄 수 있으며, 센서 모드 구성 업데이트는 HAL이 제공하는 스트림 구성 및 해상도 옵션에 영향을 미칠 수 있습니다.\" (New pipeline handler support may affect how specific camera hardware is integrated, and sensor mode configuration updates may affect the stream configurations and resolution options offered by HAL.)",
-      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
-      "location": "section[0].camera_hal_perspective",
-      "problem": "Exaggerated language: The statement \"특히 YUV/RAW 스트림의 처리량과 지연 시간에 대한 잠재적 개선 또는 회귀를 검토해야 합니다.\" (In particular, potential improvements or regressions in YUV/RAW stream throughput and latency should be reviewed.) uses 'should be reviewed' which is a good recommendation, but the overall tone of 'must evaluate' and 'must support' in the surrounding text makes it sound like a mandatory task rather than a proactive investigation.",
-      "suggestion": "Ensure consistency in tone. If the preceding sentences are softened, this one can remain as a strong recommendation for investigation. If the preceding sentences are softened to 'may affect', then this one could be '검토하는 것이 좋습니다' (it is recommended to review).",
-      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
-      "location": "section[0].action_items[0]",
-      "problem": "The action item \"카메라 드라이버 팀은 libcamera v0.7.1의 변경 로그를 검토하고, 현재 개발 중인 커널 브랜치에 적용 가능한 패치가 있는지 2주 이내에 확인합니다.\" (The camera driver team reviews the change log of libcamera v0.7.1 and checks within 2 weeks if there are applicable patches for the currently developed kernel branch.) is a good action, but it lacks a measurable metric or a specific output beyond 'checking'.",
-      "suggestion": "Add a more concrete output or metric. For example: \"카메라 드라이버 팀은 libcamera v0.7.1의 변경 로그를 검토하고, 현재 개발 중인 커널 브랜치에 적용 가능한 패치 목록과 각 패치의 예상 영향도를 2주 이내에 문서화합니다.\" (The camera driver team reviews the change log of libcamera v0.7.1 and documents a list of applicable patches for the currently developed kernel branch and the estimated impact of each patch within 2 weeks.)",
-      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
-      "location": "section[0].action_items[2]",
-      "problem": "The action item \"이미지 품질 팀은 SoftISP 디베이어링 개선이 특정 센서의 RAW 및 YUV 출력 이미지 품질(노이즈, 색상 정확도)에 미치는 영향을 평가하기 위한 테스트 계획을 2주 이내에 수립합니다.\" (The image quality team establishes a test plan within 2 weeks to evaluate the impact of SoftISP debayering improvements on the RAW and YUV output image quality (noise, color accuracy) of specific sensors.) is good, but '수립합니다' (establishes) is less concrete than '실행합니다' (executes) or '측정합니다' (measures). The policy emphasizes 'confirmable within 2 weeks'.",
-      "suggestion": "Make the action more concrete and measurable within the 2-week timeframe. For example: \"이미지 품질 팀은 SoftISP 디베이어링 개선이 특정 센서의 RAW 및 YUV 출력 이미지 품질(노이즈, 색상 정확도)에 미치는 영향을 평가하기 위한 테스트를 2주 이내에 실행하고 초기 결과를 보고합니다.\" (The image quality team executes tests to evaluate the impact of SoftISP debayering improvements on the RAW and YUV output image quality (noise, color accuracy) of specific sensors and reports initial results within 2 weeks.)",
-      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
-      "location": "section[1].why_it_matters",
-      "problem": "Exaggerated language: The statement \"CameraX의 알파 릴리스는 새로운 기능이나 변경 사항이 HAL에 어떤 영향을 미치는지 미리 파악할 기회를 제공합니다.\" (The alpha release of CameraX provides an opportunity to anticipate how new features or changes will affect HAL.) is an overstatement. Alpha releases are for early testing, not necessarily for 'anticipating' direct HAL impacts that would require immediate changes.",
-      "suggestion": "Soften the language to reflect early investigation rather than direct impact anticipation. For example: \"CameraX의 알파 릴리스는 새로운 기능이나 변경 사항이 HAL에 미칠 수 있는 잠재적 영향을 미리 조사할 기회를 제공합니다.\" (The alpha release of CameraX provides an opportunity to investigate potential impacts of new features or changes on HAL.)",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-    },
-    {
-      "location": "section[1].why_it_matters",
-      "problem": "Exaggerated language: The statement \"특히 CameraX는 다양한 기기에서 일관된 동작을 목표로 하므로, HAL 구현이 CameraX의 최신 요구 사항을 충족하는지 확인하는 것이 중요합니다.\" (In particular, since CameraX aims for consistent behavior across various devices, it is important to ensure that the HAL implementation meets CameraX's latest requirements.) uses 'latest requirements' which is too strong for an alpha release. Alpha releases introduce features, but they don't immediately become 'requirements' for HAL unless explicitly stated in CDD or CTS/VTS for a stable release.",
-      "suggestion": "Soften the language to reflect compatibility or best practices rather than strict requirements. For example: \"특히 CameraX는 다양한 기기에서 일관된 동작을 목표로 하므로, HAL 구현이 CameraX의 최신 동작 방식과 호환되는지 확인하는 것이 중요합니다.\" (In particular, since CameraX aims for consistent behavior across various devices, it is important to ensure that the HAL implementation is compatible with CameraX's latest behavior.)",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-    },
-    {
-      "location": "section[1].camera_hal_perspective",
-      "problem": "Exaggerated language: The statement \"새로운 유스케이스나 파라미터가 도입되면 HAL은 이를 올바르게 해석하고 처리해야 합니다.\" (If new use cases or parameters are introduced, HAL must correctly interpret and process them.) uses 'must correctly interpret and process' which is too strong. HAL 'must' only do what is required by the Camera HAL interface definition and CDD. CameraX alpha changes are not direct HAL mandates.",
-      "suggestion": "Soften the language to reflect potential need for adaptation or investigation. For example: \"새로운 유스케이스나 파라미터가 도입되면 HAL은 이를 올바르게 해석하고 처리할 수 있도록 준비해야 합니다.\" (If new use cases or parameters are introduced, HAL should be prepared to correctly interpret and process them.)",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-    },
-    {
-      "location": "section[1].camera_hal_perspective",
-      "problem": "Exaggerated language: The statement \"CameraX의 내부 동작 변경은 특정 스트림 조합에서 프레임 드롭, 지연 시간 증가 또는 전력 소모 증가로 이어질 수 있으므로, HAL 구현자는 이러한 잠재적 영향을 면밀히 검토해야 합니다.\" (Internal behavior changes in CameraX can lead to frame drops, increased latency, or increased power consumption in specific stream combinations, so HAL implementers must carefully review these potential impacts.) uses 'must carefully review' which is too strong. While review is good, it's not a strict mandate for an alpha release.",
-      "suggestion": "Soften the language to a strong recommendation for investigation. For example: \"CameraX의 내부 동작 변경은 특정 스트림 조합에서 프레임 드롭, 지연 시간 증가 또는 전력 소모 증가로 이어질 수 있으므로, HAL 구현자는 이러한 잠재적 영향을 면밀히 검토하는 것이 좋습니다.\" (Internal behavior changes in CameraX can lead to frame drops, increased latency, or increased power consumption in specific stream combinations, so HAL implementers are recommended to carefully review these potential impacts.)",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-    },
-    {
-      "location": "section[1].camera_hal_perspective",
-      "problem": "Exaggerated language: The statement \"CTS/VTS/Camera ITS 외에 CameraX 호환성 테스트도 중요합니다.\" (In addition to CTS/VTS/Camera ITS, CameraX compatibility testing is also important.) is an overstatement. While CameraX compatibility is important for apps, it's not on the same level of 'importance' as CTS/VTS/Camera ITS for HAL compliance unless a specific CDD clause mandates it.",
-      "suggestion": "Soften the language to reflect its role for app compatibility. For example: \"CTS/VTS/Camera ITS 외에, CameraX 기반 앱의 호환성을 위해 CameraX 호환성 테스트도 고려해야 합니다.\" (In addition to CTS/VTS/Camera ITS, CameraX compatibility testing should also be considered for CameraX-based app compatibility.)",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-    },
-    {
-      "location": "section[1].action_items[1]",
-      "problem": "The action item \"Camera HAL 메타데이터 담당자는 CameraX 1.4.0-alpha07 릴리스 노트를 검토하여 새로운 `CaptureRequest` 또는 `CaptureResult` 키가 도입되었는지 확인하고, 필요한 경우 HAL 구현을 업데이트할 계획을 수립합니다.\" (The Camera HAL metadata owner reviews the CameraX 1.4.0-alpha07 release notes to check if new `CaptureRequest` or `CaptureResult` keys have been introduced, and if necessary, establishes a plan to update the HAL implementation.) uses '수립합니다' (establishes) for the plan, which is less concrete than '실행합니다' (executes) or '측정합니다' (measures) within the 2-week timeframe.",
-      "suggestion": "Make the action more concrete and measurable within the 2-week timeframe. For example: \"Camera HAL 메타데이터 담당자는 CameraX 1.4.0-alpha07 릴리스 노트를 검토하여 새로운 `CaptureRequest` 또는 `CaptureResult` 키가 도입되었는지 확인하고, 해당 키가 HAL에 미치는 영향을 분석한 보고서를 2주 이내에 작성합니다.\" (The Camera HAL metadata owner reviews the CameraX 1.4.0-alpha07 release notes to check if new `CaptureRequest` or `CaptureResult` keys have been introduced, and prepares a report analyzing their impact on HAL within 2 weeks.)",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-    },
-    {
-      "location": "section[1].action_items[2]",
-      "problem": "The action item \"호환성 테스트 팀은 CameraX 1.4.0-alpha07을 대상으로 하는 CameraX 호환성 테스트 스위트(CTS)가 있는지 확인하고, 해당 테스트를 벤더 기기에서 실행하여 통과 여부를 2주 이내에 보고합니다.\" (The compatibility testing team checks if there is a CameraX compatibility test suite (CTS) targeting CameraX 1.4.0-alpha07, and executes those tests on vendor devices to report pass/fail status within 2 weeks.) is problematic because CameraX has its own compatibility tests, but it's not typically referred to as 'CameraX compatibility test suite (CTS)'. CTS is a specific Android platform compliance test. Using 'CTS' here is misleading.",
-      "suggestion": "Clarify the terminology. Refer to CameraX's own compatibility tests or internal test suites, not 'CTS'. For example: \"호환성 테스트 팀은 CameraX 1.4.0-alpha07을 대상으로 하는 CameraX 자체 호환성 테스트 스위트(또는 내부 테스트 스위트)가 있는지 확인하고, 해당 테스트를 벤더 기기에서 실행하여 통과 여부를 2주 이내에 보고합니다.\" (The compatibility testing team checks if there is a CameraX's own compatibility test suite (or internal test suite) targeting CameraX 1.4.0-alpha07, and executes those tests on vendor devices to report pass/fail status within 2 weeks.)",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-    },
-    {
-      "location": "section[2].why_it_matters",
-      "problem": "The statement \"비록 Android는 Clang/LLVM 중심이지만, C++ 표준의 변화는 모든 C++ 컴파일러에 영향을 미치므로, HAL 개발자는 이러한 트렌드를 주시해야 합니다.\" (Although Android is Clang/LLVM-centric, changes in the C++ standard affect all C++ compilers, so HAL developers should keep an eye on these trends.) is a generic statement that lacks specific AOSP Camera, camera driver, SoC platform, or native development interpretation. It's too general for a main article.",
-      "suggestion": "Reframe this sentence to directly connect the C++ standard changes to Android native development, specifically mentioning Clang/LLVM's adoption of these standards and their potential impact on HAL code. For example: \"비록 Android는 Clang/LLVM 중심이지만, C++ 표준의 변화는 Clang/LLVM 컴파일러에도 영향을 미치므로, HAL 개발자는 이러한 트렌드가 Android 네이티브 개발에 어떻게 적용될지 주시해야 합니다.\" (Although Android is Clang/LLVM-centric, changes in the C++ standard also affect the Clang/LLVM compiler, so HAL developers should keep an eye on how these trends apply to Android native development.)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].camera_hal_perspective",
-      "problem": "The statement \"Android HAL은 Clang/LLVM을 주로 사용하지만, C++ 표준의 발전은 HAL 코드의 설계 및 구현에 영향을 미칩니다.\" (Android HAL primarily uses Clang/LLVM, but the evolution of the C++ standard affects the design and implementation of HAL code.) is a generic statement that lacks specific AOSP Camera, camera driver, SoC platform, or native development interpretation. It's too general for a main article.",
-      "suggestion": "Reframe this sentence to directly connect the C++ standard changes to Android native development, specifically mentioning Clang/LLVM's adoption of these standards and their potential impact on HAL code. For example: \"Android HAL은 Clang/LLVM을 주로 사용하지만, C++ 표준의 발전은 Clang/LLVM을 통해 HAL 코드의 설계 및 구현에 영향을 미칩니다.\" (Android HAL primarily uses Clang/LLVM, but the evolution of the C++ standard affects the design and implementation of HAL code through Clang/LLVM.)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].camera_hal_perspective",
-      "problem": "The statement \"C++20이 기본으로 설정됨에 따라, HAL 개발자는 C++20의 기능(예: Concepts, Ranges, Coroutines)을 활용하여 더 효율적이고 안전한 코드를 작성할 수 있는 기회를 모색할 수 있습니다.\" (With C++20 set as default, HAL developers can explore opportunities to write more efficient and safer code using C++20 features (e.g., Concepts, Ranges, Coroutines).) is a generic C++ statement. It needs to be framed within the context of Android native development, specifically Clang/LLVM's support for these features and their relevance to HAL.",
-      "suggestion": "Reframe this to explicitly mention Clang/LLVM and its support for C++20 features in the Android native context. For example: \"Clang/LLVM이 C++20을 지원함에 따라, HAL 개발자는 C++20의 기능(예: Concepts, Ranges, Coroutines)을 활용하여 Android 네이티브 HAL 코드에서 더 효율적이고 안전한 코드를 작성할 기회를 모색할 수 있습니다.\" (As Clang/LLVM supports C++20, HAL developers can explore opportunities to write more efficient and safer code in Android native HAL code using C++20 features (e.g., Concepts, Ranges, Coroutines).)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].camera_hal_perspective",
-      "problem": "The statement \"C++26의 reflection, contracts, safety hardening 기능은 향후 HAL 코드의 정적 분석, 런타임 검증, 보안 강화에 잠재적으로 활용될 수 있습니다.\" (C++26's reflection, contracts, and safety hardening features can potentially be used in the future for static analysis, runtime verification, and security hardening of HAL code.) is a generic C++ statement. It needs to be framed within the context of Android native development, specifically Clang/LLVM's adoption of these standards and their relevance to HAL.",
-      "suggestion": "Reframe this to explicitly mention Clang/LLVM and its potential adoption of C++26 features in the Android native context. For example: \"Clang/LLVM이 C++26의 reflection, contracts, safety hardening 기능을 지원하게 되면, 향후 HAL 코드의 정적 분석, 런타임 검증, 보안 강화에 잠재적으로 활용될 수 있습니다.\" (Once Clang/LLVM supports C++26's reflection, contracts, and safety hardening features, they can potentially be used in the future for static analysis, runtime verification, and security hardening of HAL code.)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].camera_hal_perspective",
-      "problem": "The statement \"이는 특히 카메라 버퍼 처리, 메타데이터 관리, 동시성 제어와 같은 중요한 영역에서 코드 품질을 향상시키는 데 도움이 될 수 있습니다.\" (This can help improve code quality, especially in critical areas such as camera buffer processing, metadata management, and concurrency control.) is a generic C++ statement. It needs to be framed within the context of Android native development, specifically Clang/LLVM's adoption of these standards and their relevance to HAL.",
-      "suggestion": "Reframe this to explicitly mention Clang/LLVM and its potential adoption of C++26 features in the Android native context. For example: \"Clang/LLVM을 통한 이러한 기능의 활용은 특히 카메라 버퍼 처리, 메타데이터 관리, 동시성 제어와 같은 중요한 HAL 영역에서 코드 품질을 향상시키는 데 도움이 될 수 있습니다.\" (The utilization of these features through Clang/LLVM can help improve code quality, especially in critical HAL areas such as camera buffer processing, metadata management, and concurrency control.)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].camera_hal_checks[0]",
-      "problem": "The action item \"현재 HAL 코드베이스에서 C++20 기능을 안전하게 도입할 수 있는 영역을 식별하고, Clang/LLVM 컴파일러가 해당 기능을 지원하는지 확인합니다.\" (Identify areas in the current HAL codebase where C++20 features can be safely introduced, and confirm if the Clang/LLVM compiler supports those features.) is good, but '확인합니다' (confirm) is less concrete than '실행합니다' (executes) or '측정합니다' (measures) within the 2-week timeframe.",
-      "suggestion": "Make the action more concrete and measurable within the 2-week timeframe. For example: \"현재 HAL 코드베이스에서 C++20 기능을 안전하게 도입할 수 있는 영역을 식별하고, Clang/LLVM 컴파일러의 해당 기능 지원 여부를 테스트하여 결과를 2주 이내에 보고합니다.\" (Identify areas in the current HAL codebase where C++20 features can be safely introduced, and test Clang/LLVM compiler support for those features to report results within 2 weeks.)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].camera_hal_checks[1]",
-      "problem": "The action item \"C++26의 contracts 기능이 HAL의 내부 API 계약을 명시하고 런타임 오류를 조기에 감지하는 데 어떻게 활용될 수 있는지 개념 증명(PoC)을 검토합니다.\" (Review a Proof of Concept (PoC) on how C++26's contracts feature can be used to specify HAL's internal API contracts and detect runtime errors early.) uses '검토합니다' (review) which is less concrete than '실행합니다' (executes) or '측정합니다' (measures) within the 2-week timeframe.",
-      "suggestion": "Make the action more concrete and measurable within the 2-week timeframe. For example: \"C++26의 contracts 기능이 HAL의 내부 API 계약을 명시하고 런타임 오류를 조기에 감지하는 데 어떻게 활용될 수 있는지에 대한 소규모 개념 증명(PoC)을 2주 이내에 시작합니다.\" (Initiate a small Proof of Concept (PoC) within 2 weeks on how C++26's contracts feature can be used to specify HAL's internal API contracts and detect runtime errors early.)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].camera_hal_checks[2]",
-      "problem": "The action item \"safety hardening 기능이 카메라 드라이버와 HAL 간의 인터페이스에서 메모리 안전성 문제를 줄이는 데 기여할 수 있는지 평가합니다.\" (Evaluate whether safety hardening features can contribute to reducing memory safety issues in the interface between the camera driver and HAL.) uses '평가합니다' (evaluate) which is less concrete than '실행합니다' (executes) or '측정합니다' (measures) within the 2-week timeframe.",
-      "suggestion": "Make the action more concrete and measurable within the 2-week timeframe. For example: \"safety hardening 기능이 카메라 드라이버와 HAL 간의 인터페이스에서 메모리 안전성 문제를 줄이는 데 기여할 수 있는지에 대한 초기 분석 보고서를 2주 이내에 작성합니다.\" (Prepare an initial analysis report within 2 weeks on whether safety hardening features can contribute to reducing memory safety issues in the interface between the camera driver and HAL.)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].action_items[1]",
-      "problem": "The action item \"빌드 시스템 팀은 Clang/LLVM의 최신 버전이 C++20을 기본으로 지원하는지 확인하고, HAL 빌드에 C++20 표준을 적용할 때의 ABI 호환성 및 성능 영향을 2주 이내에 분석합니다.\" (The build system team confirms if the latest version of Clang/LLVM supports C++20 by default, and analyzes the ABI compatibility and performance impact when applying the C++20 standard to HAL builds within 2 weeks.) uses '확인하고' (confirms) and '분석합니다' (analyzes) which are less concrete than '측정합니다' (measures) or '보고합니다' (reports) for the 2-week timeframe.",
-      "suggestion": "Make the action more concrete and measurable within the 2-week timeframe. For example: \"빌드 시스템 팀은 Clang/LLVM의 최신 버전이 C++20을 기본으로 지원하는지 테스트하고, HAL 빌드에 C++20 표준을 적용할 때의 ABI 호환성 및 성능 영향에 대한 초기 분석 보고서를 2주 이내에 작성합니다.\" (The build system team tests if the latest version of Clang/LLVM supports C++20 by default, and prepares an initial analysis report on the ABI compatibility and performance impact when applying the C++20 standard to HAL builds within 2 weeks.)",
-      "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-    },
-    {
-      "location": "section[2].action_items[2]",
-      "problem": "The action item \"연구 개발 팀은 C++26의 reflection 또는 contracts 기능이 카메라 메타데이터 직렬화 또는 HAL 내부 상태 검증에 어떻게 적용될 수 있는지에 대한 소규모 PoC를 2주 이내에 시작합니다.\" (The R&D team initiates a small PoC within 2 weeks on how C++26's reflection or contracts features can be applied to camera metadata serialization or HAL internal state verification.) is good, but '시작합니다' (initiates) is less concrete than '완료합니다' (completes) or '초기 결과를 보고합니다' (reports initial results) for the 2-week timeframe.",
-      "suggestion": "Make the action more concrete and measurable within the 2-week timeframe. For example: \"연구 개발 팀은 C++26의 reflection 또는 contracts 기능이 카메라 메타데이터 직렬화 또는 HAL 내부 상태 검증에 어떻게 적용될 수 있는지에 대한 소규모 PoC를 2주 이내에 완료하고 초기 결과를 보고합니다.\" (The R&D team completes a small PoC within 2 weeks on how C++26's reflection or contracts features can be applied to camera metadata serialization or HAL internal state verification, and reports initial results.)",
+      "location": "section 2, article 3 (GCC 16.1 출시: C++26 Reflection, Contracts, Safety Hardening 기능 도입), selectedImage",
+      "problem": "selectedImage 필드가 비어 있고, resolvedImage.usedFallback이 true로 설정되어 있습니다. 이는 원본 이미지를 찾거나 사용하지 못했음을 의미합니다.",
+      "suggestion": "GCC 16.1 릴리스와 관련된 적절한 이미지를 찾아 selectedImage 필드를 채우거나, 이미지를 사용할 수 없는 경우 resolvedImage.reason에 명확한 설명을 추가해야 합니다.",
       "source_url": "https://isocpp.org//blog/2026/04/gcc-16.1"
     }
   ],
   "recommended_fixes": [],
-  "source_gaps": [
-    "Reporter eligibility violation; section=\"libcamera v0.7.1 출시: SoftISP 및 이미지 파이프라인 개선\"; source=\"libcamera Release Announcements - libcamera v0.7.1\"; url=https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html; candidate=\"libcamera Release Announcements - libcamera v0.7.1\"; reason=HAL/actionability score 7.65 < 8; action=replace-or-demote"
-  ],
-  "source_gap_count": 1,
-  "final_comment": "The draft is well-structured and follows the template. However, there are several instances of exaggerated language, especially in the 'why_it_matters' and 'camera_hal_perspective' sections, where potential impacts are stated as direct requirements or certainties without explicit evidence from CDD/CTS/VTS. Action items also need to be more concrete and measurable within the 2-week timeframe, moving beyond 'review' or 'plan' to 'test', 'measure', or 'report initial findings'. For C++ tooling, ensure the framing explicitly connects to Clang/LLVM and Android native development, rather than generic C++ trends. Reporter eligibility violations were added as source gaps and require replacement or demotion."
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "final_comment": "전반적으로 기사 내용은 정책을 잘 따르고 있습니다. 모든 주요 기사에 구체적인 Action Item과 Camera HAL 관점 해석이 잘 포함되어 있습니다. 다만, 두 개의 기사에서 이미지가 누락되어 대체 이미지가 사용된 점은 개선이 필요합니다."
 }
 ```
 

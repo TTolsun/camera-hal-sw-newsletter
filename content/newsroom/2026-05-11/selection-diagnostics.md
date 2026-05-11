@@ -2,7 +2,7 @@
 
 ## 후보 선택 진단
 
-- Reporter candidates: 5
+- Reporter candidates: 6
 - Reporter-selected candidates: 0
 - Final input candidates: 40
 - Final eligible candidates: 6
