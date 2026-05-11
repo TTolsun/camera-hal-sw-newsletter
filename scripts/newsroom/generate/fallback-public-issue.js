@@ -502,7 +502,7 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
       impact_claim_level: impactClaimLevel
     }).map(item => item.type)
   ]);
-  return {
+  const section = {
     category,
     headline,
     confirmed_facts: buildConfirmedFacts({ ...candidate, impact_claim_level: impactClaimLevel }),
@@ -574,6 +574,14 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
     imageLicenseStatus: 'none',
     imageUsageDecisionReason: 'Fallback builder did not select an external article image; renderer will use local fallback visual.'
   };
+  section.article_sections = {
+    verified_facts: section.confirmed_facts,
+    background_context: section.background,
+    hal_driver_impact: section.camera_hal_perspective,
+    action_items: section.action_items,
+    team_share_points: section.team_summary
+  };
+  return section;
 }
 function hardFailureArticleIndexes(qualityReport, factCheck) {
   const indexes = new Set();

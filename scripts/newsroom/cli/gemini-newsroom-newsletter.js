@@ -149,13 +149,14 @@ function linkedEvidencePromptGuardrails() {
 
 function articleSectionContractPrompt() {
   return [
-    'Article section contract: every main article may include optional article_sections, but when article_sections exists it must include all five keys: verified_facts, background_context, hal_driver_impact, action_items, and team_share_points.',
+    'Article section contract: for newly generated editor, repair, and completion outputs, every main article must include article_sections.',
+    'article_sections must contain exactly these five keys: verified_facts, background_context, hal_driver_impact, action_items, and team_share_points.',
+    'article_sections remains optional only for legacy artifact compatibility; do not rely on legacy fields to satisfy this contract.',
     'article_sections.verified_facts must be an array of source-backed facts only. Keep HAL interpretation and recommendations out of verified_facts.',
     'article_sections.background_context must be a string explaining the context needed by an AOSP Camera / Camera HAL / driver / SoC platform reader.',
     'article_sections.hal_driver_impact must be a string that interprets practical Camera HAL, driver, stream, buffer, metadata, native tooling, or SoC platform impact without claiming direct runtime/API behavior unless the supplied source explicitly supports it.',
     'article_sections.action_items must be an array of concrete actions that name a test, log, metric, device class, API/component, stream combination, owner, or PoC handoff.',
-    'article_sections.team_share_points must be a string with the team-review takeaway. Do not simply repeat why_it_matters unless no better team_summary exists.',
-    'Keep legacy fields aligned for backward compatibility, but treat article_sections as the normalized article structure.'
+    'article_sections.team_share_points must be a string with the team-review takeaway.'
   ].join('\n');
 }
 

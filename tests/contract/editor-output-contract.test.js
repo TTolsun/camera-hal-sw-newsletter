@@ -160,17 +160,17 @@ test('editor output contract requires article_sections on new draft sections', (
   );
 });
 
-test('editor output contract rejects deterministic article_sections legacy conflicts', () => {
+test('editor output contract rejects article_sections keys outside normalized contract', () => {
   const draft = editor({
     sections: [
       section(1, {
-        camera_hal_perspective: 'This is the legacy HAL perspective with stream and metadata validation.',
         article_sections: {
           verified_facts: ['Fact 1'],
           background_context: 'Background 1',
-          hal_driver_impact: 'This conflicting normalized impact claims direct HAL API behavior.',
+          hal_driver_impact: 'HAL perspective 1',
           action_items: ['Action 1'],
-          team_share_points: 'Summary 1'
+          team_share_points: 'Summary 1',
+          legacy_summary: 'This key is outside the normalized contract.'
         }
       }),
       section(2),
@@ -184,9 +184,8 @@ test('editor output contract rejects deterministic article_sections legacy confl
       assert.ok(error instanceof EditorSemanticValidationError);
       assert.equal(error.details.field, 'sections.article_sections');
       assert.ok(error.details.issues.some(issue =>
-        issue.type === 'article_section_legacy_conflict' &&
-        issue.key === 'hal_driver_impact' &&
-        issue.legacy_field === 'camera_hal_perspective'
+        issue.type === 'unexpected_article_section_keys' &&
+        issue.keys.includes('legacy_summary')
       ));
       return true;
     }

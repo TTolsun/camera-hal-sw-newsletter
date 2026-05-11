@@ -213,6 +213,13 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
         source_verification_notes: ['Source URL is official.'],
         camera_hal_checks: ['Check stream configuration.', 'Check metadata compatibility.'],
         action_items: ['Run Camera ITS smoke tests.', 'Check stream/buffer compatibility.'],
+        article_sections: {
+          verified_facts: ['CameraX release note exists.', 'The source link is dated.'],
+          background_context: 'CameraX is part of the Android camera application layer.',
+          hal_driver_impact: 'Camera HAL team checks stream, buffer, metadata, CTS/VTS, and Camera ITS impact before follow-up work.',
+          action_items: ['Run Camera ITS smoke tests.', 'Check stream/buffer compatibility.'],
+          team_share_points: 'Camera team should review compatibility impact.'
+        },
         sources: [
           {
             title: 'Android Developers Camera',
@@ -311,7 +318,7 @@ function regressionCandidate({ title, url, bucket, fallback = false }) {
 }
 
 function regressionSection(item, overrides = {}) {
-  return {
+  const value = {
     category: item.relevance_bucket === 'camera_driver_image_pipeline' ? 'Camera Driver / Image Pipeline' : 'Android Platform / CameraX',
     headline: item.title,
     what_changed: item.summary,
@@ -343,6 +350,16 @@ function regressionSection(item, overrides = {}) {
     sources: [{ title: item.title, url: item.url }],
     ...overrides
   };
+  if (!Object.prototype.hasOwnProperty.call(overrides, 'article_sections')) {
+    value.article_sections = {
+      verified_facts: value.confirmed_facts,
+      background_context: value.background,
+      hal_driver_impact: value.camera_hal_perspective,
+      action_items: value.action_items,
+      team_share_points: value.team_summary
+    };
+  }
+  return value;
 }
 
 function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
@@ -2422,10 +2439,7 @@ test('newsroom PR body includes article structure contract summary when editor d
         headline: 'CameraX release',
         section_contract: {
           complete: true,
-          missing_keys: [],
-          fallbacks_used: [],
-          warnings: [],
-          conflicts: []
+          missing_keys: []
         }
       }]
     }
@@ -2454,7 +2468,7 @@ test('newsroom PR body includes article structure contract summary when editor d
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
   const section = extractMarkdownSection(body, 'Article Structure Contract');
 
-  assert.match(section, /\| # \| Article \| 5-section \| HAL impact \| Action item \| Overclaim risk \|/);
+  assert.match(section, /\| # \| Article \| 5-section \| HAL impact \| Action item \|/);
   assert.match(section, /CameraX release/);
   assert.match(section, /pass/);
 });

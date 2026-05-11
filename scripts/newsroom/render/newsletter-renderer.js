@@ -157,16 +157,12 @@ function articleSectionContractRows(issue, qualityReport = null) {
     const summary = qualityReport?.article_results?.[index]?.section_contract ||
       articleSectionSummary(section);
     const missing = ensureArray(summary.missing_keys);
-    const fallbacks = ensureArray(summary.fallbacks_used);
-    const warnings = ensureArray(summary.warnings);
-    const conflicts = ensureArray(summary.conflicts);
     return [
       index + 1,
       section.headline || section.category || `article ${index + 1}`,
       summary.complete === true && missing.length === 0 ? 'pass' : `missing ${missing.join(', ') || 'unknown'}`,
       missing.includes('hal_driver_impact') ? 'missing' : 'present',
-      missing.includes('action_items') ? 'missing' : (fallbacks.some(item => /action_items/.test(item)) ? 'fallback' : 'concrete'),
-      conflicts.length > 0 ? `conflict ${conflicts.map(item => item.key || item).join(', ')}` : (warnings.join('; ') || 'low')
+      missing.includes('action_items') ? 'missing' : 'present'
     ];
   });
 }
@@ -175,8 +171,8 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
   const rows = articleSectionContractRows(issue, qualityReport);
   if (rows.length === 0) return '- none';
   return [
-    '| # | Article | 5-section | HAL impact | Action item | Overclaim risk |',
-    '| ---: | --- | --- | --- | --- | --- |',
+    '| # | Article | 5-section | HAL impact | Action item |',
+    '| ---: | --- | --- | --- | --- |',
     ...rows.map(row => `| ${row.map(markdownTableCell).join(' | ')} |`)
   ].join('\n');
 }

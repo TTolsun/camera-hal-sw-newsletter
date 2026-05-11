@@ -1110,9 +1110,6 @@ function summarizeArticleSectionContracts(sections) {
   return {
     complete_count: summaries.filter(summary => summary.complete === true).length,
     incomplete_count: summaries.filter(summary => summary.complete !== true).length,
-    fallback_count: summaries.reduce((sum, summary) => sum + ensureArray(summary.fallbacks_used).length, 0),
-    warning_count: summaries.reduce((sum, summary) => sum + ensureArray(summary.warnings).length, 0),
-    conflict_count: summaries.reduce((sum, summary) => sum + ensureArray(summary.conflicts).length, 0),
     missing_key_counts: missingKeyCounts,
     summaries
   };
@@ -1169,21 +1166,15 @@ function articleSectionContractMarkdownRows(report) {
   return ensureArray(report.article_results).map(item => {
     const summary = item.section_contract || {};
     const missing = ensureArray(summary.missing_keys);
-    const fallbacks = ensureArray(summary.fallbacks_used);
-    const warnings = ensureArray(summary.warnings);
-    const conflicts = ensureArray(summary.conflicts);
     const row = [
       item.index || '',
       item.headline || '',
       summary.complete === true && missing.length === 0 ? 'pass' : `missing ${missing.join(', ') || 'unknown'}`,
       missing.includes('hal_driver_impact') ? 'missing' : 'present',
-      missing.includes('action_items') ? 'missing' : (fallbacks.some(value => /action_items/.test(value)) ? 'fallback' : 'concrete'),
-      conflicts.length > 0
-        ? `conflict ${conflicts.map(conflict => conflict.key || conflict).join(', ')}`
-        : (warnings.join('; ') || 'low')
+      missing.includes('action_items') ? 'missing' : 'present'
     ];
     return `| ${row.map(markdownTableCell).join(' | ')} |`;
-  }).join('\n') || '| none | none | none | none | none | none |';
+  }).join('\n') || '| none | none | none | none | none |';
 }
 
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
@@ -1271,26 +1262,6 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         'article-section-contract',
         missingKey === 'hal_driver_impact' ? 4 : 3,
         `Missing normalized article section: ${missingKey}.`,
-        location,
-        { blocking: false }
-      );
-    }
-    for (const warning of sectionContract.warnings) {
-      boundedDeduct(
-        state,
-        'article-section-contract',
-        1,
-        warning,
-        location,
-        { blocking: false }
-      );
-    }
-    if (ensureArray(sectionContract.conflicts).length > 0) {
-      boundedDeduct(
-        state,
-        'article-section-contract',
-        2,
-        `article_sections conflicts with legacy fields: ${sectionContract.conflicts.map(item => item.key).join(', ')}.`,
         location,
         { blocking: false }
       );
@@ -1646,12 +1617,9 @@ ${compositionFailure}
 
 - Complete article sections: ${metrics.article_section_contract?.complete_count ?? 0}
 - Incomplete article sections: ${metrics.article_section_contract?.incomplete_count ?? 0}
-- Fallbacks used: ${metrics.article_section_contract?.fallback_count ?? 0}
-- Contract warnings: ${metrics.article_section_contract?.warning_count ?? 0}
-- Contract conflicts: ${metrics.article_section_contract?.conflict_count ?? 0}
 
-| # | Article | 5-section | HAL impact | Action item | Overclaim risk |
-| ---: | --- | --- | --- | --- | --- |
+| # | Article | 5-section | HAL impact | Action item |
+| ---: | --- | --- | --- | --- |
 ${articleStructureRows}
 
 ## Article Gate Results

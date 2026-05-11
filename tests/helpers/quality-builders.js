@@ -7,7 +7,7 @@ function source(url, title = 'Source') {
 
 function section(overrides = {}) {
   const title = overrides.headline || 'CameraX 1.5 release gives HAL teams a compatibility target';
-  return {
+  const value = {
     category: 'Android Camera',
     headline: title,
     what_changed: 'CameraX 1.5.0 was released on 2026-05-01 with Android Camera compatibility behavior.',
@@ -29,6 +29,16 @@ function section(overrides = {}) {
     sources: [source(overrides.url || 'https://example.com/camerax')],
     ...overrides
   };
+  if (!Object.prototype.hasOwnProperty.call(overrides, 'article_sections')) {
+    value.article_sections = {
+      verified_facts: value.confirmed_facts,
+      background_context: value.background,
+      hal_driver_impact: value.camera_hal_perspective,
+      action_items: value.action_items,
+      team_share_points: value.team_summary
+    };
+  }
+  return value;
 }
 
 function reporterCandidate(url, overrides = {}) {

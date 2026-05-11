@@ -235,6 +235,12 @@ function strictArticleSections(section) {
   };
 }
 
+function unexpectedArticleSectionKeys(section) {
+  if (!section.article_sections || typeof section.article_sections !== 'object') return [];
+  const expected = new Set(ARTICLE_SECTION_KEYS);
+  return Object.keys(section.article_sections).filter(key => !expected.has(key));
+}
+
 function validateArticleSectionContract(value) {
   const issues = [];
   ensureArray(value.sections).forEach((section, index) => {
@@ -248,12 +254,13 @@ function validateArticleSectionContract(value) {
         keys: ARTICLE_SECTION_KEYS
       });
     } else {
-      if (normalized.diagnostics.missing_article_section_keys.length > 0) {
+      const unexpectedKeys = unexpectedArticleSectionKeys(section);
+      if (unexpectedKeys.length > 0) {
         issues.push({
           index: index + 1,
           headline,
-          type: 'missing_article_section_keys',
-          keys: normalized.diagnostics.missing_article_section_keys
+          type: 'unexpected_article_section_keys',
+          keys: unexpectedKeys
         });
       }
       if (normalized.diagnostics.missing_keys.length > 0) {
@@ -262,15 +269,6 @@ function validateArticleSectionContract(value) {
           headline,
           type: 'empty_article_sections',
           keys: normalized.diagnostics.missing_keys
-        });
-      }
-      for (const conflict of normalized.diagnostics.conflicts) {
-        issues.push({
-          index: index + 1,
-          headline,
-          type: 'article_section_legacy_conflict',
-          key: conflict.key,
-          legacy_field: conflict.legacy_field
         });
       }
     }

@@ -306,7 +306,13 @@ test('quality gate allows non-blocking actionability deductions above threshold'
         ...item,
         action_items: [
           'Within 2 weeks, assign a camera owner to compare Camera ITS logs before and after this change.'
-        ]
+        ],
+        article_sections: {
+          ...item.article_sections,
+          action_items: [
+            'Within 2 weeks, assign a camera owner to compare Camera ITS logs before and after this change.'
+          ]
+        }
       }
     : item);
   const report = reportFor(sections, reporterCandidatesFor(sections));
@@ -1273,24 +1279,34 @@ test('quality report exposes normalized article section contract metrics and art
   assert.deepEqual(report.article_results[0].section_contract.missing_keys, []);
 });
 
-test('quality report records team_share_points why_it_matters fallback as soft diagnostic', () => {
+test('quality report records missing article_sections keys without legacy fallback', () => {
   const sections = [
     section({
-      headline: 'CameraX release with fallback team share point',
-      team_summary: '',
-      why_it_matters: 'Use this CameraX release as the team review takeaway.'
+      headline: 'CameraX release with missing team share point',
+      why_it_matters: 'Legacy why_it_matters must not satisfy team_share_points.',
+      article_sections: {
+        verified_facts: ['CameraX 1.5.0 release date: 2026-05-01.'],
+        background_context: 'CameraX sits above camera2 and can expose compatibility regressions.',
+        hal_driver_impact: 'Validate request/result metadata, stream combinations, Camera ITS scenes, latency, frame drop, thermal, and buffer behavior.',
+        action_items: [
+          'Within 2 weeks, assign a camera owner to compare Camera ITS logs before and after CameraX 1.5.0.',
+          'Measure preview/capture latency and frame drop metrics on at least one legacy and one flagship device.'
+        ]
+      }
     }),
     ...validSections().slice(1)
   ];
   const report = reportFor(sections, reporterCandidatesFor(sections));
 
-  assert.ok(report.metrics.article_section_contract.warning_count >= 1);
+  assert.equal(report.metrics.article_section_contract.incomplete_count, 1);
+  assert.equal(report.metrics.article_section_contract.missing_key_counts.team_share_points, 1);
   assert.ok(report.deductions.some(item =>
     item.category === 'article-section-contract' &&
     item.blocking === false &&
-    item.reason.includes('team_share_points uses legacy why_it_matters fallback')
+    item.reason.includes('team_share_points')
   ));
-  assert.ok(report.article_results[0].section_contract.fallbacks_used.includes('team_share_points_from_why_it_matters'));
+  assert.deepEqual(report.article_results[0].section_contract.missing_keys, ['team_share_points']);
+  assert.equal(report.article_results[0].section_contract.complete, false);
 });
 
 test('quality report marks article PASS DEMOTE FAIL and separates hard and soft causes', () => {

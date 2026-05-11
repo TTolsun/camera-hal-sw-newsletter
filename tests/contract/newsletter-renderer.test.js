@@ -4,7 +4,7 @@ const test = require('node:test');
 const {
   buildHtml,
   buildMarkdown
-} = require('../scripts/newsroom/render/newsletter-renderer');
+} = require('../../scripts/newsroom/render/newsletter-renderer');
 
 function issue() {
   return {
