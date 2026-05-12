@@ -216,12 +216,41 @@ test('derived editorial do_not_claim text does not increase Camera HAL directnes
   const withHints = scoreCandidate({
     ...baseCandidate,
     derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
       hal_boundary: 'framework_adjacent_not_direct_hal_contract',
       do_not_claim: ['Do not claim direct Camera HAL API changes.']
     }
   }, '2026-05-12');
 
   assert.equal(withHints.camera_hal_directness, base.camera_hal_directness);
+  assert.equal(withHints.scope_relevance, base.scope_relevance);
+  assert.equal(withHints.relevance_bucket, base.relevance_bucket);
+});
+
+test('derived editorial relevance bucket hint does not classify a generic candidate', () => {
+  const baseCandidate = candidate({
+    title: 'Generic platform release notes',
+    url: 'https://example.com/platform-release-notes',
+    summary: 'The release updates documentation, dashboards, and sorting behavior.',
+    published_date: '2026-05-06',
+    api_or_component: '',
+    behavior_change: 'Documentation and dashboard sorting were updated.',
+    camera_hal_relevance_score: 0,
+    hasDatedEvidence: true,
+    finalSelectionEligibility: 'main'
+  });
+
+  const base = scoreCandidate(baseCandidate, '2026-05-12');
+  const withHints = scoreCandidate({
+    ...baseCandidate,
+    derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
+      do_not_claim: ['Do not claim direct Camera HAL API changes.']
+    }
+  }, '2026-05-12');
+
+  assert.equal(base.relevance_bucket, 'generic_tech_watchlist');
+  assert.equal(withHints.relevance_bucket, base.relevance_bucket);
   assert.equal(withHints.scope_relevance, base.scope_relevance);
 });
 

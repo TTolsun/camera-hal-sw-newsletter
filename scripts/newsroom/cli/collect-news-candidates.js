@@ -522,8 +522,8 @@ function sourceExtractionBackfill(raw) {
     api_or_component: String(release.component || raw.api_or_component || '').trim(),
     behavior_change: String(bullet || raw.behavior_change || '').trim(),
     summary: String(bullet || raw.summary || '').trim(),
-    relevanceBucketHint: raw.derived_editorial_hints?.relevance_bucket_hint || raw.relevanceBucketHint,
-    relevance_bucket_hint: raw.derived_editorial_hints?.relevance_bucket_hint || raw.relevance_bucket_hint,
+    relevanceBucketHint: raw.relevanceBucketHint,
+    relevance_bucket_hint: raw.relevance_bucket_hint,
     impact_claim_level: raw.impact_claim_level
   };
 }

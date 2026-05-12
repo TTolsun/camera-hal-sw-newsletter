@@ -118,6 +118,33 @@ test('collector keeps generic GPU/NPU/SoC benchmark only coverage out of SoC non
   assert.equal(candidate.finalSelectionEligibility, 'watchlist');
 });
 
+test('collector does not backfill derived editorial relevance bucket hint into classification', () => {
+  const candidate = normalizeCandidate(raw({
+    source: source({
+      id: 'generic-platform-news',
+      name: 'Generic Platform News',
+      category: 'platform',
+      section: 'Platform Watch',
+      keywords: ['platform', 'release'],
+      usageHint: 'Generic platform release notes'
+    }),
+    title: 'Generic platform release notes',
+    url: 'https://example.com/platform-release-notes',
+    summary: 'The release updates documentation, dashboards, and sorting behavior.',
+    behavior_change: 'Documentation and dashboard sorting were updated.',
+    derived_editorial_hints: {
+      relevance_bucket_hint: BUCKETS.DIRECT_AOSP_CAMERA,
+      hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+      do_not_claim: ['Do not claim direct Camera HAL API changes.']
+    }
+  }));
+
+  assert.equal(candidate.derived_editorial_hints.relevance_bucket_hint, BUCKETS.DIRECT_AOSP_CAMERA);
+  assert.equal(candidate.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+  assert.equal(candidate.counts_as_primary_camera_topic, false);
+  assert.equal(candidate.source_gap_risk, true);
+});
+
 test('collector applies exact-day and month-overlap lookback rules', () => {
   const now = newsletterDateWindowEnd('2026-05-06');
 

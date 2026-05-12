@@ -344,9 +344,7 @@ function extract(html = '', source = {}) {
       behavior_change: behavior,
       source_extraction: sourceExtraction,
       derived_editorial_hints: derivedHints,
-      extraction_quality: sourceExtraction.extraction_quality,
-      relevanceBucketHint: derivedHints.relevance_bucket_hint,
-      relevance_bucket_hint: derivedHints.relevance_bucket_hint
+      extraction_quality: sourceExtraction.extraction_quality
     };
   }).filter(item =>
     item.source_extraction.extraction_quality.main_article_allowed &&
