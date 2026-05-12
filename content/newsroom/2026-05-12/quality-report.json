@@ -10,8 +10,8 @@
     {
       "category": "source-integrity",
       "points": 8,
-      "reason": "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02.",
-      "location": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
+      "reason": "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07.",
+      "location": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
       "blocking": true,
       "severity": "hard"
     }
@@ -107,14 +107,14 @@
     },
     {
       "index": 3,
-      "headline": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
+      "headline": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
       "category": "Android Platform / CameraX",
       "status": "FAIL",
       "repair_action": "replace-or-demote",
       "sources": [
         {
-          "title": "1.3.0-beta02",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
+          "title": "1.4.0-alpha07",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
         }
       ],
       "section_contract": {
@@ -123,9 +123,9 @@
       },
       "scope_count": {
         "index": 3,
-        "headline": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
-        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-        "source_candidate_hash": "d116a623b5025f895f131151e5af0dff5221d24c9ef56d17ef871245dce222ca",
+        "headline": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+        "source_candidate_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
         "relevance_bucket": "android_platform_camera_adjacent",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
@@ -147,7 +147,7 @@
       },
       "impact_claim_level": "android_framework_adjacent",
       "hard_fail_reasons": [
-        "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02."
+        "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07."
       ],
       "soft_deductions": []
     }
@@ -221,9 +221,9 @@
       },
       {
         "index": 3,
-        "headline": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
-        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-        "source_candidate_hash": "d116a623b5025f895f131151e5af0dff5221d24c9ef56d17ef871245dce222ca",
+        "headline": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+        "source_candidate_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
         "relevance_bucket": "android_platform_camera_adjacent",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
@@ -305,32 +305,25 @@
     "candidate_exclusion_summary": []
   },
   "fallback_public_issue": true,
-  "demoted_articles": [],
-  "fallback_articles": [
-    {
-      "headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "category": "Camera Driver / Image Pipeline",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "source": "libcamera Release Announcements",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "action": "rebuild-from-bound-candidate",
-      "fallback": false,
-      "reason": "hard failure replacement"
-    },
-    {
-      "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
-      "category": "Android Platform / CameraX",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "source": "Android Developers Latest Updates",
-      "relevance_bucket": "android_platform_camera_adjacent",
-      "action": "rebuild-from-bound-candidate",
-      "fallback": false,
-      "reason": "hard failure replacement"
-    },
+  "demoted_articles": [
     {
       "headline": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
       "category": "Android Platform / CameraX",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "action": "replace-or-demote",
+      "reason": "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02.",
+      "sources": [
+        {
+          "title": "1.3.0-beta02",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
+        }
+      ]
+    }
+  ],
+  "fallback_articles": [
+    {
+      "headline": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+      "category": "Android Platform / CameraX",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "source": "Android Developers Latest Updates",
       "relevance_bucket": "android_platform_camera_adjacent",
       "action": "rebuild-from-bound-candidate",
@@ -338,6 +331,6 @@
       "reason": "hard failure replacement"
     }
   ],
-  "original_quality_status": "UNKNOWN",
-  "original_quality_score": null
+  "original_quality_status": "NEEDS_FIX",
+  "original_quality_score": 92
 }

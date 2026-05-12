@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-12",
-  "generated_at": "2026-05-11T17:50:00.971Z",
+  "generated_at": "2026-05-12T03:40:56.868Z",
   "stage": "gemini-background-context",
   "background_contexts": [
     {
@@ -10,8 +10,8 @@
       "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
       "relevance_bucket": "camera_driver_image_pipeline",
       "impact_claim_level": "camera_stack_direct",
-      "background_context": "드라이버, 센서, ISP, libcamera, V4L2 변경사항은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다.",
-      "background_basis": "제공된 article capsule metadata 및 모델 지식 기반",
+      "background_context": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
+      "background_basis": "supplied article capsule metadata와 모델 지식 기반",
       "background_confidence": "medium",
       "background_warnings": []
     },
@@ -21,8 +21,8 @@
       "source_candidate_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
       "relevance_bucket": "android_platform_camera_adjacent",
       "impact_claim_level": "android_framework_adjacent",
-      "background_context": "CameraX와 Camera2는 HAL 위 계층이므로, 릴리스 노트는 직접적인 HAL 계약 증거가 아니라 호환성, API 사용법, 앱 대면 유효성 검사 신호로 해석하는 것이 적절합니다.",
-      "background_basis": "제공된 article capsule metadata 및 모델 지식 기반",
+      "background_context": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
+      "background_basis": "supplied article capsule metadata와 모델 지식 기반",
       "background_confidence": "medium",
       "background_warnings": []
     },
@@ -32,8 +32,8 @@
       "source_candidate_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "impact_claim_level": "tooling_supporting",
-      "background_context": "네이티브 빌드, 테스트, 새니타이저, 컴파일러, 디버그 워크플로 변경사항은 Camera HAL 및 드라이버 팀을 지원할 수 있지만, 카메라 관련 런타임 증거가 없는 경우 워크플로 신호로만 표현해야 합니다.",
-      "background_basis": "제공된 article capsule metadata 및 모델 지식 기반",
+      "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
+      "background_basis": "supplied article capsule metadata와 모델 지식 기반",
       "background_confidence": "medium",
       "background_warnings": []
     }

@@ -1,6 +1,6 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-12
 
-이번 2026-05-12호는 libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰, CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다.
+이번 2026-05-12호는 libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰, CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다. hard failure article 1개는 main article에서 제거하거나 강등했습니다.
 
 ## 1. 이번 주 3줄 브리핑
 
@@ -82,15 +82,15 @@ CameraX 1.6.1 업데이트: Android Camera 호환성 관찰은 deterministic rec
 
 ## 4. Android Platform / CameraX
 
-### CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰
+### CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰
 
 
 **확인한 사실 / 릴리스 요약**
 
 - Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.
-- 버전/릴리스: 1.3.0-beta02.
+- 버전/릴리스: 1.4.0-alpha07.
 - 관련 컴포넌트: CameraX / androidx.camera.
-- 확인된 변경점: CameraX / androidx.camera 1.3.0-beta02 업데이트입니다. 대상: CameraX / androidx.camera.
+- 확인된 변경점: CameraX / androidx.camera 1.4.0-alpha07 업데이트입니다. 대상: CameraX / androidx.camera.
 
 **배경지식 / 왜 AOSP Camera 팀이 볼 만한가**
 
@@ -108,11 +108,11 @@ CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behav
 
 **팀 공유 포인트 / 결론**
 
-CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.
+CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.
 
 **출처**
 
-- [1.3.0-beta02](https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02)
+- [1.4.0-alpha07](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
 
 
 ## 이번 주 실행 항목
@@ -125,4 +125,5 @@ CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰은 determinis
 
 - [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
 - [1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
+- [1.4.0-alpha07](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
 - [1.3.0-beta02](https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02)
