@@ -2,19 +2,30 @@ const fs = require('fs');
 const path = require('path');
 const {
   FETCH_STATUSES,
+  LINKED_EVIDENCE_TYPES,
   RAW_EXCERPT_MAX_LENGTH
 } = require('./linked-evidence-types');
 const {
+  classifyLinkedEvidenceUrl,
   extractLinkedEvidenceFromCandidate
 } = require('./linked-evidence-extractor');
 const {
+  defaultResolved,
   resolveLinkedEvidence
 } = require('./linked-evidence-resolver');
+const {
+  EVIDENCE_ROLES,
+  classifyOutgoingLinks
+} = require('./linked-evidence-link-classifier');
 const {
   IMPACT_TYPES,
   classifyLinkedEvidenceImpact,
   defaultImpactClassification
 } = require('./impact-classifier');
+const {
+  DEFAULT_RUNTIME_CONFIG,
+  LINKED_EVIDENCE_MODES
+} = require('../common/runtime-config');
 
 const SCHEMA_VERSION = 1;
 const TOP_IDENTIFIER_LIMIT = 8;
@@ -41,6 +52,11 @@ function bool(value) {
 
 function uniqueText(values = []) {
   return [...new Set(ensureArray(values).map(text).filter(Boolean))];
+}
+
+function integerOrDefault(value, fallback, min = 0) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(min, Math.floor(parsed)) : fallback;
 }
 
 function candidateUrl(candidate = {}) {
@@ -104,12 +120,180 @@ function buildLinkedEvidenceSummary(evidenceItems = [], impactClassification = n
   };
 }
 
+function linkedEvidenceRuntimeOptions(options = {}) {
+  const runtimeConfig = options.runtimeConfig || {};
+  const mode = text(options.linkedEvidenceMode || runtimeConfig.linkedEvidenceMode) ||
+    DEFAULT_RUNTIME_CONFIG.linkedEvidenceMode;
+  return {
+    mode,
+    maxLinksPerCandidate: integerOrDefault(
+      options.maxLinksPerCandidate ?? runtimeConfig.linkedEvidenceMaxLinksPerCandidate,
+      DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxLinksPerCandidate,
+      0
+    ),
+    maxLinksPerRun: integerOrDefault(
+      options.maxLinksPerRun ?? runtimeConfig.linkedEvidenceMaxLinksPerRun,
+      DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxLinksPerRun,
+      0
+    ),
+    timeoutMs: integerOrDefault(
+      options.timeoutMs ?? runtimeConfig.linkedEvidenceTimeoutMs,
+      DEFAULT_RUNTIME_CONFIG.linkedEvidenceTimeoutMs,
+      1
+    ),
+    maxBytes: integerOrDefault(
+      options.maxBytes ?? runtimeConfig.linkedEvidenceMaxBytes,
+      DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxBytes,
+      1
+    ),
+    fetchClient: options.fetchClient
+  };
+}
+
+function sourceLinkedEvidencePolicy(candidate = {}) {
+  return candidate.source_linked_evidence_policy ||
+    candidate.linkedEvidencePolicy ||
+    candidate.linked_evidence_policy ||
+    null;
+}
+
+function skippedReasonForRole(link = {}) {
+  if (link.evidence_role === EVIDENCE_ROLES.NOISE) return 'ignored_by_policy';
+  if (link.evidence_role === EVIDENCE_ROLES.UNSUPPORTED) {
+    return link.classification_reason === 'invalid_or_unsupported_url'
+      ? 'invalid_or_unsupported_url'
+      : 'unsupported_domain';
+  }
+  if (link.evidence_role === EVIDENCE_ROLES.BLOCKED_OR_DEFERRED) return 'policy_disabled';
+  if (link.evidence_role === EVIDENCE_ROLES.SECONDARY_CONTEXT) return 'not_primary_evidence';
+  if (link.evidence_role !== EVIDENCE_ROLES.PRIMARY_EVIDENCE) return 'not_primary_evidence';
+  return '';
+}
+
+function urlProtocol(value = '') {
+  try {
+    return new URL(text(value)).protocol;
+  } catch {
+    return '';
+  }
+}
+
+function enrichClassifiedLink(link = {}, mode) {
+  const roleReason = skippedReasonForRole(link);
+  const protocol = urlProtocol(link.url);
+  let skippedReason = roleReason;
+  if (!skippedReason && protocol !== 'https:') skippedReason = protocol ? 'non_https_url' : 'invalid_url';
+  if (!skippedReason && mode === LINKED_EVIDENCE_MODES.EXTRACT_ONLY) skippedReason = 'mode_extract_only';
+  return {
+    ...link,
+    skipped_reason: skippedReason || ''
+  };
+}
+
+function linkedEvidenceFromClassifiedLink(link = {}) {
+  const classified = classifyLinkedEvidenceUrl(link.url);
+  const rawExcerpt = uniqueText([link.text, link.url]).join(' ');
+  return {
+    type: classified.type || LINKED_EVIDENCE_TYPES.GENERIC_URL,
+    url: classified.url || link.url,
+    identifier: classified.identifier || link.url,
+    source_text: text(link.text || link.url),
+    raw_excerpt: rawExcerpt,
+    fetch_status: FETCH_STATUSES.NOT_FETCHED,
+    evidence_role: link.evidence_role,
+    classification_reason: link.classification_reason,
+    skipped_reason: link.skipped_reason
+  };
+}
+
+function skippedSourceAwareEvidence(link = {}, reason = '') {
+  const evidence = linkedEvidenceFromClassifiedLink({
+    ...link,
+    skipped_reason: reason || link.skipped_reason || 'not_resolved'
+  });
+  return {
+    ...evidence,
+    raw_excerpt: text(evidence.raw_excerpt).slice(0, RAW_EXCERPT_MAX_LENGTH),
+    fetch_status: FETCH_STATUSES.SKIPPED,
+    warnings: [`Linked evidence resolve skipped: ${evidence.skipped_reason}.`],
+    resolver: 'source_aware_policy',
+    resolved: defaultResolved()
+  };
+}
+
+function fetchClientForMode(options = {}) {
+  if (typeof options.fetchClient === 'function') return options.fetchClient;
+  if (options.mode === LINKED_EVIDENCE_MODES.RESOLVE_ALLOWED_OFFICIAL_LINKS && typeof fetch === 'function') {
+    return fetch;
+  }
+  return undefined;
+}
+
+async function resolveSourceAwareOutgoingEvidence(candidate = {}, options = {}, runState = { resolvedCount: 0 }) {
+  const classifiedLinks = classifyOutgoingLinks(
+    candidate.outgoing_links || candidate.outgoingLinks,
+    sourceLinkedEvidencePolicy(candidate)
+  ).map(link => enrichClassifiedLink(link, options.mode));
+  const fetchClient = fetchClientForMode(options);
+  const resolvedEvidence = [];
+  let resolvedForCandidate = 0;
+
+  for (const link of classifiedLinks) {
+    if (link.skipped_reason) {
+      resolvedEvidence.push(skippedSourceAwareEvidence(link));
+      continue;
+    }
+
+    if (options.mode === LINKED_EVIDENCE_MODES.OFFLINE_FIXTURE_TEST && typeof fetchClient !== 'function') {
+      resolvedEvidence.push(skippedSourceAwareEvidence(link, 'offline_fixture_fetch_client_missing'));
+      continue;
+    }
+
+    if (options.mode !== LINKED_EVIDENCE_MODES.RESOLVE_ALLOWED_OFFICIAL_LINKS &&
+        options.mode !== LINKED_EVIDENCE_MODES.OFFLINE_FIXTURE_TEST) {
+      resolvedEvidence.push(skippedSourceAwareEvidence(link, 'mode_extract_only'));
+      continue;
+    }
+
+    if (resolvedForCandidate >= options.maxLinksPerCandidate) {
+      resolvedEvidence.push(skippedSourceAwareEvidence(link, 'max_links_per_candidate_exceeded'));
+      continue;
+    }
+
+    if (runState.resolvedCount >= options.maxLinksPerRun) {
+      resolvedEvidence.push(skippedSourceAwareEvidence(link, 'max_links_per_run_exceeded'));
+      continue;
+    }
+
+    const [resolved] = await resolveLinkedEvidence([linkedEvidenceFromClassifiedLink(link)], {
+      enableNetwork: true,
+      fetchClient,
+      timeoutMs: options.timeoutMs,
+      maxBytes: options.maxBytes,
+      maxLinksPerCandidate: 1,
+      httpsOnly: true
+    });
+    resolvedEvidence.push(resolved);
+    resolvedForCandidate += 1;
+    runState.resolvedCount += 1;
+  }
+
+  return {
+    classifiedLinks,
+    linkedEvidence: assertRawExcerptCap(resolvedEvidence),
+    summary: buildLinkedEvidenceSummary(resolvedEvidence, null)
+  };
+}
+
 function stripLinkedEvidencePayload(candidate = {}) {
   const {
     linked_evidence,
     linkedEvidence,
     linkedEvidenceContext,
     linked_evidence_context,
+    source_linked_evidence_policy,
+    linkedEvidencePolicy,
+    linked_evidence_policy,
     raw_excerpt,
     rawExcerpt,
     resolved,
@@ -175,6 +359,8 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options
   const extractCandidateEvidence = options.extractLinkedEvidenceFromCandidate || extractLinkedEvidenceFromCandidate;
   const resolveEvidence = options.resolveLinkedEvidence || resolveLinkedEvidence;
   const classifyImpact = options.classifyLinkedEvidenceImpact || classifyLinkedEvidenceImpact;
+  const runtimeOptions = linkedEvidenceRuntimeOptions(options);
+  const runState = { resolvedCount: 0 };
   const outputCandidates = [];
   const candidateReports = [];
   const reportWarnings = [];
@@ -200,6 +386,22 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options
       summary = buildLinkedEvidenceSummary([], impactClassification);
     }
 
+    let sourceAware;
+    try {
+      sourceAware = await resolveSourceAwareOutgoingEvidence(candidate, runtimeOptions, runState);
+    } catch (error) {
+      const warning = diagnosticsFailureWarning(error);
+      reportWarnings.push(warning);
+      sourceAware = {
+        classifiedLinks: [],
+        linkedEvidence: [],
+        summary: buildLinkedEvidenceSummary([], {
+          ...defaultImpactClassification(),
+          warnings: [warning]
+        })
+      };
+    }
+
     const safeCandidate = {
       ...stripLinkedEvidencePayload(candidate),
       linked_evidence_summary: summary,
@@ -210,7 +412,10 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options
       ...candidateIdentity(candidate),
       linked_evidence_summary: summary,
       impact_classification: impactClassification,
-      linked_evidence: resolved
+      linked_evidence: resolved,
+      classified_outgoing_links: sourceAware.classifiedLinks,
+      source_aware_linked_evidence_summary: sourceAware.summary,
+      source_aware_linked_evidence: sourceAware.linkedEvidence
     });
   }
 
@@ -218,10 +423,22 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options
     schema_version: SCHEMA_VERSION,
     date: text(date),
     generated_at: new Date().toISOString(),
-    enable_network: false,
+    linked_evidence_mode: runtimeOptions.mode,
+    linked_evidence_limits: {
+      max_links_per_candidate: runtimeOptions.maxLinksPerCandidate,
+      max_links_per_run: runtimeOptions.maxLinksPerRun,
+      timeout_ms: runtimeOptions.timeoutMs,
+      max_bytes: runtimeOptions.maxBytes,
+      https_only: true
+    },
+    enable_network: runtimeOptions.mode === LINKED_EVIDENCE_MODES.RESOLVE_ALLOWED_OFFICIAL_LINKS ||
+      (runtimeOptions.mode === LINKED_EVIDENCE_MODES.OFFLINE_FIXTURE_TEST && typeof runtimeOptions.fetchClient === 'function'),
     candidate_count: outputCandidates.length,
     warnings: uniqueText(reportWarnings),
     totals: reportTotals(candidateReports),
+    source_aware_totals: reportTotals(candidateReports.map(candidate => ({
+      linked_evidence_summary: candidate.source_aware_linked_evidence_summary
+    }))),
     candidates: candidateReports
   };
 
@@ -244,9 +461,11 @@ function renderLinkedEvidenceDiagnosticsMarkdown(report = {}) {
     `# Linked Evidence Diagnostics - ${text(report.date) || 'unknown'}`,
     '',
     `- schema_version: ${report.schema_version || SCHEMA_VERSION}`,
+    `- linked_evidence_mode: ${text(report.linked_evidence_mode) || LINKED_EVIDENCE_MODES.EXTRACT_ONLY}`,
     `- enable_network: ${report.enable_network === true ? 'true' : 'false'}`,
     `- candidate_count: ${report.candidate_count || 0}`,
     `- total_linked_evidence: ${totals.total_count || 0}`,
+    `- source_aware_linked_evidence: ${(report.source_aware_totals || emptyLinkedEvidenceSummary()).total_count || 0}`,
     `- warning_count: ${totals.warning_count || 0}`,
     '',
     '## Fetch Status Counts',

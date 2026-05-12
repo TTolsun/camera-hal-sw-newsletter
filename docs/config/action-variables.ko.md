@@ -52,6 +52,11 @@ workflow는 후보 수집과 LLM 생성 전에 `npm run doctor:config`로 runtim
 | `NEWSROOM_ALLOW_PRO_ON_SCHEDULE` | 선택 | `false` | scheduled run(예약 자동 실행)에서 Pro 계열 모델 사용을 허용할지 결정합니다. | 긴급 운영 실험이 필요하고 비용 증가를 명시적으로 감수할 때만 변경합니다. | 기본값을 `true`로 두면 scheduled run 비용이 예기치 않게 커질 수 있습니다. |
 | `NEWSROOM_ALLOW_PRO_ON_MANUAL` | 선택 | `false` | manual `workflow_dispatch` 실행에서 Pro 계열 모델 사용을 허용할지 결정합니다. workflow 입력 `allow_pro=true`가 이 값을 JS runtime 정책 플래그로 전달합니다. | 편집자가 manual high-quality run(수동 고품질 실행)에서 Pro 비용을 명시적으로 승인했을 때만 `true`가 됩니다. | workflow YAML은 fallback model list를 조합하지 않습니다. `workflow_dispatch`, 이 값 `true`, `LLM_PROVIDER=gemini` 조건을 모두 만족할 때만 JS model policy가 Pro fallback을 추가합니다. |
 | `NEWSROOM_PRO_ESCALATION` | 선택 | `manual` | Pro 사용 정책을 cost report와 log에 표시하기 위한 escalation label입니다. | 운영 정책 이름을 문서화해야 할 때 변경합니다. | 정책 표시용 값이며, Pro 허용 여부는 `NEWSROOM_ALLOW_PRO_ON_*` 값과 workflow event로 결정됩니다. |
+| `NEWSROOM_LINKED_EVIDENCE_MODE` | 선택 | `extract_only` | linked evidence resolver mode입니다. `extract_only`, `resolve_allowed_official_links`, `offline_fixture_test`만 허용합니다. | 공식 source link resolve를 제한적으로 실험할 때만 `resolve_allowed_official_links`로 변경합니다. fixture test는 injected fetch client가 있는 테스트에서만 사용합니다. | 기본값은 network-off입니다. 이 값을 바꿔도 Event Bundle, scoring boost, publish gate 우회가 활성화되면 안 됩니다. |
+| `NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE` | 선택 | `8` | candidate 하나에서 network resolve를 시도할 최대 linked evidence 수입니다. | 공식 링크가 많은 source에서 diagnostic 비용과 시간을 제한해야 할 때 조정합니다. | 초과 링크는 실패가 아니라 `skipped` diagnostics로 남습니다. 값을 높이면 workflow 시간이 길어질 수 있습니다. |
+| `NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN` | 선택 | `40` | newsroom run 전체에서 network resolve를 시도할 최대 linked evidence 수입니다. | 한 주차에 candidate가 많아 resolve 시도가 과도할 때 상한을 조정합니다. | 초과 링크는 fetch하지 않습니다. publication score나 HAL impact를 추정하는 근거로 쓰면 안 됩니다. |
+| `NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS` | 선택 | `5000` | linked evidence 한 건의 fetch timeout입니다. | 공식 source가 느리지만 diagnostics 가치가 확인됐을 때만 조정합니다. | timeout은 non-fatal diagnostics입니다. 값을 높이면 CI 대기 시간이 증가합니다. |
+| `NEWSROOM_LINKED_EVIDENCE_MAX_BYTES` | 선택 | `200000` | linked evidence response에서 읽고 분석할 최대 byte 수입니다. | 공식 release/docs page가 구조적으로 크고 capped excerpt만으로 부족할 때 조정합니다. | 초과 response는 resolved content로 사용하지 않고 `skipped` diagnostics로만 남깁니다. raw HTML full body를 artifact로 저장하지 않습니다. |
 
 ## Tradeoff 검토 기준
 

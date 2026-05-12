@@ -88,6 +88,20 @@ test('raw excerpts are whitespace-normalized and length-limited', () => {
   assert.equal(evidence.raw_excerpt.length, RAW_EXCERPT_MAX_LENGTH);
 });
 
+test('normalizer preserves optional role classification diagnostics when present', () => {
+  const evidence = normalizeLinkedEvidence({
+    type: LINKED_EVIDENCE_TYPES.GENERIC_URL,
+    fetch_status: FETCH_STATUSES.SKIPPED,
+    evidence_role: 'noise',
+    classification_reason: 'ignored_utility_link',
+    skipped_reason: 'ignored_by_policy'
+  });
+
+  assert.equal(evidence.evidence_role, 'noise');
+  assert.equal(evidence.classification_reason, 'ignored_utility_link');
+  assert.equal(evidence.skipped_reason, 'ignored_by_policy');
+});
+
 test('linked evidence list normalization caps candidate evidence count', () => {
   const items = Array.from({ length: MAX_LINKED_EVIDENCE_PER_CANDIDATE + 5 }, (_, index) => ({
     type: LINKED_EVIDENCE_TYPES.CVE,

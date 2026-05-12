@@ -6,6 +6,12 @@ const {
 const DEFAULT_LLM_PROVIDER = 'gemini';
 const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
 const DEFAULT_LLM_FALLBACK_MODELS = ['gemini-2.5-flash-lite'];
+const LINKED_EVIDENCE_MODES = Object.freeze({
+  EXTRACT_ONLY: 'extract_only',
+  RESOLVE_ALLOWED_OFFICIAL_LINKS: 'resolve_allowed_official_links',
+  OFFLINE_FIXTURE_TEST: 'offline_fixture_test'
+});
+const LINKED_EVIDENCE_MODE_VALUES = Object.freeze(Object.values(LINKED_EVIDENCE_MODES));
 
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
@@ -32,6 +38,11 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiThinkingBudgetRepair: 0,
   geminiThinkingBudgetFactcheck: 0,
   geminiThinkingBudgetScoring: 0,
+  linkedEvidenceMode: LINKED_EVIDENCE_MODES.EXTRACT_ONLY,
+  linkedEvidenceMaxLinksPerCandidate: 8,
+  linkedEvidenceMaxLinksPerRun: 40,
+  linkedEvidenceTimeoutMs: 5000,
+  linkedEvidenceMaxBytes: 200000,
   githubEventName: ''
 };
 
@@ -222,6 +233,37 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'GEMINI_THINKING_BUDGET_SCORING',
       { min: 0 }
     ),
+    linkedEvidenceMode: String(
+      envValue(env, 'NEWSROOM_LINKED_EVIDENCE_MODE', DEFAULT_RUNTIME_CONFIG.linkedEvidenceMode) || ''
+    ).trim() || DEFAULT_RUNTIME_CONFIG.linkedEvidenceMode,
+    linkedEvidenceMaxLinksPerCandidate: parseInteger(
+      envValue(
+        env,
+        'NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE',
+        DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxLinksPerCandidate
+      ),
+      'NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE',
+      { min: 0 }
+    ),
+    linkedEvidenceMaxLinksPerRun: parseInteger(
+      envValue(
+        env,
+        'NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN',
+        DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxLinksPerRun
+      ),
+      'NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN',
+      { min: 0 }
+    ),
+    linkedEvidenceTimeoutMs: parseInteger(
+      envValue(env, 'NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS', DEFAULT_RUNTIME_CONFIG.linkedEvidenceTimeoutMs),
+      'NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS',
+      { min: 1 }
+    ),
+    linkedEvidenceMaxBytes: parseInteger(
+      envValue(env, 'NEWSROOM_LINKED_EVIDENCE_MAX_BYTES', DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxBytes),
+      'NEWSROOM_LINKED_EVIDENCE_MAX_BYTES',
+      { min: 1 }
+    ),
     githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
     geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim()),
     internalLlmApiKeyConfigured: Boolean(String(env.INTERNAL_LLM_API_KEY || '').trim())
@@ -307,6 +349,36 @@ function validateRuntimeConfig(config, options = {}) {
       errors.push(`${name} must be an integer >= 0.`);
     }
   }
+  const linkedEvidenceMode = String(config.linkedEvidenceMode || DEFAULT_RUNTIME_CONFIG.linkedEvidenceMode).trim();
+  if (!LINKED_EVIDENCE_MODE_VALUES.includes(linkedEvidenceMode)) {
+    errors.push(`NEWSROOM_LINKED_EVIDENCE_MODE must be one of: ${LINKED_EVIDENCE_MODE_VALUES.join(', ')}.`);
+  }
+  for (const [field, name, min] of [
+    [
+      config.linkedEvidenceMaxLinksPerCandidate ?? DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxLinksPerCandidate,
+      'NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE',
+      0
+    ],
+    [
+      config.linkedEvidenceMaxLinksPerRun ?? DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxLinksPerRun,
+      'NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN',
+      0
+    ],
+    [
+      config.linkedEvidenceTimeoutMs ?? DEFAULT_RUNTIME_CONFIG.linkedEvidenceTimeoutMs,
+      'NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS',
+      1
+    ],
+    [
+      config.linkedEvidenceMaxBytes ?? DEFAULT_RUNTIME_CONFIG.linkedEvidenceMaxBytes,
+      'NEWSROOM_LINKED_EVIDENCE_MAX_BYTES',
+      1
+    ]
+  ]) {
+    if (!Number.isInteger(field) || field < min) {
+      errors.push(`${name} must be an integer >= ${min}.`);
+    }
+  }
   const configuredModels = configuredModelList(config);
   const proModels = config.llmProvider === 'gemini' ? configuredModels.filter(isProModel) : [];
   if (proModels.length > 0) {
@@ -363,6 +435,11 @@ function sanitizeRuntimeConfig(config) {
     geminiThinkingBudgetRepair: config.geminiThinkingBudgetRepair,
     geminiThinkingBudgetFactcheck: config.geminiThinkingBudgetFactcheck,
     geminiThinkingBudgetScoring: config.geminiThinkingBudgetScoring,
+    linkedEvidenceMode: config.linkedEvidenceMode,
+    linkedEvidenceMaxLinksPerCandidate: config.linkedEvidenceMaxLinksPerCandidate,
+    linkedEvidenceMaxLinksPerRun: config.linkedEvidenceMaxLinksPerRun,
+    linkedEvidenceTimeoutMs: config.linkedEvidenceTimeoutMs,
+    linkedEvidenceMaxBytes: config.linkedEvidenceMaxBytes,
     internalLlmEndpointConfigured: Boolean(String(config.internalLlmEndpoint || '').trim()),
     internalLlmApiVersion: config.internalLlmApiVersion,
     githubEventName: config.githubEventName,
@@ -378,6 +455,8 @@ function sanitizeRuntimeConfig(config) {
 
 module.exports = {
   DEFAULT_RUNTIME_CONFIG,
+  LINKED_EVIDENCE_MODES,
+  LINKED_EVIDENCE_MODE_VALUES,
   readRuntimeConfig,
   validateRuntimeConfig,
   sanitizeRuntimeConfig,

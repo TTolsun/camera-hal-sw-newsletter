@@ -16,6 +16,7 @@ const mailingListResolver = require('./resolvers/mailing-list-resolver');
 
 const BLOCKED_HTTP_STATUSES = new Set([401, 403, 429, 451]);
 const DEFAULT_TIMEOUT_MS = 3000;
+const DEFAULT_MAX_BYTES = 200000;
 
 const FETCH_BACKED_RESOLVERS = [
   androidGerritResolver,
@@ -96,19 +97,29 @@ function effectiveExcerptCap(value) {
   return Math.min(safeValue, RAW_EXCERPT_MAX_LENGTH);
 }
 
+function effectiveMaxBytes(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(1, Math.floor(parsed)) : DEFAULT_MAX_BYTES;
+}
+
+function effectiveMaxLinks(value, fallback = Number.POSITIVE_INFINITY) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : fallback;
+}
+
 function buildResult(base, {
   resolver,
   fetchStatus,
   rawExcerpt = base.raw_excerpt,
   warnings = [],
   resolved = {},
-  excerptCap = RAW_EXCERPT_MAX_LENGTH
+  excerptCap = RAW_EXCERPT_MAX_LENGTH,
+  skippedReason = base.skipped_reason
 }) {
   const resolvedPayload = fetchStatus === FETCH_STATUSES.RESOLVED
     ? normalizeResolved(resolved)
     : defaultResolved();
-
-  return {
+  const result = {
     ...base,
     raw_excerpt: truncateRawExcerpt(rawExcerpt, excerptCap),
     fetch_status: fetchStatus,
@@ -116,6 +127,9 @@ function buildResult(base, {
     resolver,
     resolved: resolvedPayload
   };
+  const reason = text(skippedReason);
+  if (reason) result.skipped_reason = reason;
+  return result;
 }
 
 function decodeHtmlEntities(value) {
@@ -225,8 +239,46 @@ function mergeResolved(...payloads) {
   return merged;
 }
 
-async function responseText(response) {
-  return await response.text();
+async function responseText(response, maxBytes = DEFAULT_MAX_BYTES) {
+  const byteLimit = effectiveMaxBytes(maxBytes);
+  if (response?.body && typeof response.body.getReader === 'function' && typeof TextDecoder === 'function') {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let body = '';
+    let byteLength = 0;
+    let oversized = false;
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = value instanceof Uint8Array ? value : new Uint8Array(value || []);
+        if (byteLength + chunk.byteLength > byteLimit) {
+          const remaining = Math.max(0, byteLimit - byteLength);
+          if (remaining > 0) body += decoder.decode(chunk.slice(0, remaining), { stream: true });
+          byteLength += chunk.byteLength;
+          oversized = true;
+          if (typeof reader.cancel === 'function') await reader.cancel();
+          break;
+        }
+        body += decoder.decode(chunk, { stream: true });
+        byteLength += chunk.byteLength;
+      }
+      body += decoder.decode();
+    } catch (error) {
+      if (!oversized) throw error;
+    }
+
+    return { body, byteLength, oversized };
+  }
+
+  const body = await response.text();
+  const byteLength = Buffer.byteLength(body, 'utf8');
+  return {
+    body: byteLength > byteLimit ? body.slice(0, byteLimit) : body,
+    byteLength,
+    oversized: byteLength > byteLimit
+  };
 }
 
 async function fetchWithTimeout(url, context) {
@@ -286,12 +338,37 @@ async function resolveFetchBacked(evidence, options, context) {
     });
   }
 
+  if (context.httpsOnly !== false) {
+    let parsed;
+    try {
+      parsed = new URL(evidence.url);
+    } catch {
+      return buildResult(evidence, {
+        resolver,
+        fetchStatus: FETCH_STATUSES.SKIPPED,
+        warnings: ['Linked evidence network fetch skipped: invalid URL.'],
+        excerptCap: context.excerptCap,
+        skippedReason: 'invalid_url'
+      });
+    }
+    if (parsed.protocol !== 'https:') {
+      return buildResult(evidence, {
+        resolver,
+        fetchStatus: FETCH_STATUSES.SKIPPED,
+        warnings: ['Linked evidence network fetch skipped: non-https URL.'],
+        excerptCap: context.excerptCap,
+        skippedReason: 'non_https_url'
+      });
+    }
+  }
+
   if (context.enableNetwork !== true) {
     return buildResult(evidence, {
       resolver,
       fetchStatus: FETCH_STATUSES.SKIPPED,
       warnings: ['Linked evidence network fetch skipped: enableNetwork is false.'],
-      excerptCap: context.excerptCap
+      excerptCap: context.excerptCap,
+      skippedReason: 'network_disabled'
     });
   }
 
@@ -300,7 +377,8 @@ async function resolveFetchBacked(evidence, options, context) {
       resolver,
       fetchStatus: FETCH_STATUSES.SKIPPED,
       warnings: ['Linked evidence network fetch skipped: fetchClient is not configured.'],
-      excerptCap: context.excerptCap
+      excerptCap: context.excerptCap,
+      skippedReason: 'fetch_client_missing'
     });
   }
 
@@ -354,14 +432,30 @@ async function resolveFetchBacked(evidence, options, context) {
   }
 
   let body = '';
+  let bodyBytes = 0;
+  let bodyOversized = false;
   try {
-    body = await responseText(response);
+    const result = await responseText(response, context.maxBytes);
+    body = result.body;
+    bodyBytes = result.byteLength;
+    bodyOversized = result.oversized;
   } catch (error) {
     return buildResult(evidence, {
       resolver,
       fetchStatus: FETCH_STATUSES.FAILED,
       warnings: [`Linked evidence body read failed: ${text(error?.message || 'unknown error')}`],
       excerptCap: context.excerptCap
+    });
+  }
+
+  if (bodyOversized) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.SKIPPED,
+      rawExcerpt: body,
+      warnings: [`Linked evidence response exceeded max bytes: ${bodyBytes}/${context.maxBytes}.`],
+      excerptCap: context.excerptCap,
+      skippedReason: 'response_too_large'
     });
   }
 
@@ -402,6 +496,8 @@ function createContext(options) {
     enableNetwork: options.enableNetwork,
     excerptCap,
     fetchClient: options.fetchClient,
+    httpsOnly: options.httpsOnly,
+    maxBytes: effectiveMaxBytes(options.maxBytes),
     timeoutMs: options.timeoutMs,
     extractChangedFiles,
     extractCommonStructured,
@@ -440,23 +536,45 @@ async function resolveLinkedEvidence(items, {
   fetchClient,
   timeoutMs = DEFAULT_TIMEOUT_MS,
   maxExcerptChars = RAW_EXCERPT_MAX_LENGTH,
+  maxBytes = DEFAULT_MAX_BYTES,
+  maxLinksPerCandidate,
+  maxLinks,
+  httpsOnly = true,
   enableNetwork = false
 } = {}) {
   if (!Array.isArray(items)) return [];
   const context = createContext({
     enableNetwork,
     fetchClient,
+    httpsOnly,
+    maxBytes,
     maxExcerptChars,
     timeoutMs
   });
+  const linkLimit = effectiveMaxLinks(
+    maxLinksPerCandidate === undefined ? maxLinks : maxLinksPerCandidate
+  );
   const results = [];
-  for (const item of items) {
+  for (const [index, item] of items.entries()) {
+    if (index >= linkLimit) {
+      const base = normalizeLinkedEvidence(item);
+      results.push(buildResult(base, {
+        resolver: 'limit',
+        fetchStatus: FETCH_STATUSES.SKIPPED,
+        warnings: ['Linked evidence network fetch skipped: max links per candidate exceeded.'],
+        excerptCap: context.excerptCap,
+        skippedReason: 'max_links_per_candidate_exceeded'
+      }));
+      continue;
+    }
     results.push(await resolveOne(item, context));
   }
   return results;
 }
 
 module.exports = {
+  DEFAULT_MAX_BYTES,
+  DEFAULT_TIMEOUT_MS,
   defaultResolved,
   resolveLinkedEvidence
 };
