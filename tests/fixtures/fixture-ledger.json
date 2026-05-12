@@ -34,6 +34,22 @@
       "generatedArtifact": false
     },
     {
+      "path": "linked-evidence/rss-summary-with-anchor.xml",
+      "source": "synthetic",
+      "allowedUse": "linked-evidence",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "source-aware linked evidence baseline for RSS summary anchor preservation",
+      "generatedArtifact": false
+    },
+    {
+      "path": "linked-evidence/android-blog-article-links.html",
+      "source": "synthetic",
+      "allowedUse": "linked-evidence",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "source-aware linked evidence baseline for article body links before role classification",
+      "generatedArtifact": false
+    },
+    {
       "path": "quality/bad/freebsd-source-label-regression.json",
       "source": "minimized-generated-regression",
       "allowedUse": "bad",

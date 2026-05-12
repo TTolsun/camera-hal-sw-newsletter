@@ -1,0 +1,18 @@
+<rss version="2.0">
+  <channel>
+    <title>Android Developers Blog</title>
+    <item>
+      <title>CameraX release note pointer</title>
+      <link>https://android-developers.googleblog.com/2026/05/camerax-update.html</link>
+      <pubDate>Wed, 13 May 2026 10:00:00 GMT</pubDate>
+      <description><![CDATA[
+        <p>CameraX update summary. See
+          <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">CameraX release notes</a>
+          and
+          <a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/3456789">Gerrit change</a>
+          for source-backed details.
+        </p>
+      ]]></description>
+    </item>
+  </channel>
+</rss>
