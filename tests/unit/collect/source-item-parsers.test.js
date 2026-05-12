@@ -165,13 +165,37 @@ test('CameraX release notes parser normalizes Version headings and CameraX API e
     sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera'
   }));
 
-  assert.equal(items.length, 1);
-  assertParsedItemContract(items[0]);
-  assert.equal(items[0].publishedAt, 'March 25, 2026');
-  assert.equal(items[0].version_or_release, 'CameraX 1.6.0');
-  assert.match(items[0].title, /CameraX Release Notes - CameraX 1\.6\.0/);
-  assert.match(items[0].api_or_component, /CameraX \/ (CameraPipe|SessionConfig|ImageAnalysis|VideoCapture|PreviewView|CameraController|CameraEffect|androidx\.camera)/);
-  assert.match(items[0].behavior_change, /Added CameraPipe SessionConfig support/);
+  assert.equal(items.length, 2);
+  const patch = items.find(item => item.version_or_release === 'CameraX 1.6.1');
+  const minor = items.find(item => item.version_or_release === 'CameraX 1.6.0');
+  assert.ok(patch);
+  assert.ok(minor);
+  assertParsedItemContract(patch);
+  assert.equal(patch.publishedAt, 'May 6, 2026');
+  assert.match(patch.title, /CameraX Release Notes - CameraX 1\.6\.1/);
+  assert.equal(patch.api_or_component, 'CameraX / androidx.camera');
+  assert.match(patch.behavior_change, /Fixed ListenableFuture compile error/);
+  assert.doesNotMatch(patch.behavior_change, /Maven Group|camera-core\s+1\.6\.1/);
+
+  const extraction = patch.source_extraction;
+  assert.equal(extraction.adapter_id, 'android-developers-jetpack-release');
+  assert.equal(extraction.release.version, 'CameraX 1.6.1');
+  assert.equal(extraction.release.component, 'CameraX / androidx.camera');
+  assert.ok(Array.isArray(extraction.release.sections));
+  assert.ok(extraction.release.sections.every(section => Array.isArray(section.items)));
+  assert.ok(extraction.release.sections.some(section =>
+    section.category === 'bug_fixes' &&
+    section.items.some(item => item.text.includes('Fixed ListenableFuture compile error'))
+  ));
+  assert.equal(extraction.minor_line_context.version, 'CameraX 1.6.0');
+  assert.ok(extraction.minor_line_context.sections.some(section =>
+    section.items.some(item => item.text.includes('Added CameraPipe SessionConfig support'))
+  ));
+  assert.equal(Object.prototype.hasOwnProperty.call(extraction, 'hal_boundary'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(extraction, 'validation_targets'), false);
+  assert.equal(patch.derived_editorial_hints.hal_boundary, 'framework_adjacent_not_direct_hal_contract');
+  assert.ok(patch.derived_editorial_hints.validation_targets.some(item => /CameraPipe|SessionConfig|VideoCapture|ImageAnalysis/.test(item)));
+  assert.ok(patch.derived_editorial_hints.do_not_claim.some(item => /direct Camera HAL API/.test(item)));
 });
 
 test('libcamera release announcement parser extracts v0.7.1 dated camera pipeline evidence', () => {

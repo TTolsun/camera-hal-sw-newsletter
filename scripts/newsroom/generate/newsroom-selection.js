@@ -131,6 +131,54 @@ function finalSelectionEligibility(candidate) {
   return text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
 }
 
+function cameraReleasePageKey(candidate) {
+  const raw = candidateUrl(candidate);
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    if (
+      parsed.hostname.toLowerCase() === 'developer.android.com' &&
+      parsed.pathname === '/jetpack/androidx/releases/camera'
+    ) {
+      parsed.hash = '';
+      parsed.search = '';
+      return parsed.toString().replace(/\/$/, '').toLowerCase();
+    }
+  } catch {
+    return '';
+  }
+  return '';
+}
+
+function sourceExtractionItems(candidate) {
+  return [
+    ...(Array.isArray(candidate?.source_extraction?.release?.sections) ? candidate.source_extraction.release.sections : []),
+    ...(Array.isArray(candidate?.source_extraction?.minor_line_context?.sections) ? candidate.source_extraction.minor_line_context.sections : [])
+  ].flatMap(section => ensureArray(section?.items));
+}
+
+function hasSourceExtractionBullet(candidate) {
+  return sourceExtractionItems(candidate).some(item => text(item?.text || item?.source_text));
+}
+
+function hasGenericCameraXFallbackMetadata(candidate) {
+  const value = text(candidate.behavior_change || candidate.behaviorChange || candidate.what_changed || candidate.summary);
+  return /^CameraX(?:\s*\/\s*androidx\.camera)?\s+(?:update|updates|updated|release|released)(?:\.)?$/i.test(value) ||
+    /Maven Group versions?|View the Camera Library|This library was last updated on:/i.test(value);
+}
+
+function cameraReleaseExtractionViolation(candidate) {
+  if (!cameraReleasePageKey(candidate)) return '';
+  const quality = candidate.extraction_quality || candidate.source_extraction?.extraction_quality || {};
+  if (quality.used_fallback === true) return 'source_extraction.used_fallback=true';
+  if (quality.main_article_allowed === false) return 'source_extraction.main_article_allowed=false';
+  if (!hasSourceExtractionBullet(candidate) && hasGenericCameraXFallbackMetadata(candidate)) {
+    return 'CameraX release-note candidate has no concrete source_extraction bullet';
+  }
+  if (candidate.source_extraction && !hasSourceExtractionBullet(candidate)) return 'source_extraction.release.sections has no concrete bullet';
+  return '';
+}
+
 function exclusionReasons(candidate) {
   const reasons = [];
   const eligibility = finalSelectionEligibility(candidate);
@@ -149,6 +197,8 @@ function exclusionReasons(candidate) {
   if (!mainEligible) reasons.push('main_eligible=false');
   if (briefingOnly) reasons.push('briefing_only=true');
   if (referenceOnly) reasons.push('reference_only=true');
+  const extractionViolation = cameraReleaseExtractionViolation(candidate);
+  if (extractionViolation) reasons.push(extractionViolation);
   return [...new Set(reasons)];
 }
 
@@ -187,9 +237,24 @@ function candidateBody(candidate) {
     candidate.version_or_release,
     candidate.api_or_component,
     candidate.behavior_change,
+    candidate.source_extraction,
+    candidate.derived_editorial_hints,
     candidate.reason,
     candidate.collection_reason
   ].map(text).join(' ');
+}
+
+function cameraReleaseVersionRank(candidate) {
+  if (!cameraReleasePageKey(candidate)) return { kind: 99, weight: 0 };
+  const value = text(candidate.version_or_release || candidate.versionOrRelease || candidate.title);
+  const match = value.match(/\b(\d+)\.(\d+)\.(\d+)(?:-([a-z]+)\d*)?/i);
+  if (!match) return { kind: 50, weight: 0 };
+  const suffix = text(match[4]).toLowerCase();
+  const patch = number(match[3]);
+  return {
+    kind: suffix ? 2 : patch > 0 ? 0 : 1,
+    weight: number(match[1]) * 1000000 + number(match[2]) * 10000 + patch * 100
+  };
 }
 
 function candidateScope(candidate) {
@@ -517,6 +582,20 @@ function candidatesAreDuplicate(left, right) {
     titleSimilarity(left.title, right.title) >= 0.68;
 }
 
+function shouldPreferDuplicateCandidate(candidate, existing) {
+  const candidateCameraPage = cameraReleasePageKey(candidate);
+  const existingCameraPage = cameraReleasePageKey(existing);
+  if (candidateCameraPage && existingCameraPage && candidateCameraPage === existingCameraPage) {
+    if (hasSourceExtractionBullet(candidate) && !hasSourceExtractionBullet(existing)) return true;
+    if (!hasSourceExtractionBullet(candidate) && hasSourceExtractionBullet(existing)) return false;
+    const candidateRank = cameraReleaseVersionRank(candidate);
+    const existingRank = cameraReleaseVersionRank(existing);
+    return candidateRank.kind < existingRank.kind ||
+      (candidateRank.kind === existingRank.kind && candidateRank.weight > existingRank.weight);
+  }
+  return false;
+}
+
 function decorateCandidate(candidate, newsletterDate) {
   const scope = candidateScope(candidate);
   const score_breakdown = scoreCandidate(candidate, newsletterDate);
@@ -551,7 +630,16 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
       excluded.push(candidate);
       continue;
     }
-    if (eligible.some(existing => candidatesAreDuplicate(existing, candidate))) {
+    const duplicateIndex = eligible.findIndex(existing => candidatesAreDuplicate(existing, candidate));
+    if (duplicateIndex >= 0) {
+      if (shouldPreferDuplicateCandidate(candidate, eligible[duplicateIndex])) {
+        excluded.push({
+          ...eligible[duplicateIndex],
+          exclusion_reasons: ['duplicate CameraX release-note body candidate supersedes discovery row']
+        });
+        eligible[duplicateIndex] = candidate;
+        continue;
+      }
       excluded.push({
         ...candidate,
         exclusion_reasons: ['duplicate URL or near-duplicate title']
@@ -563,6 +651,8 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
 
   eligible.sort((a, b) =>
     number(a.editorial_priority, 6) - number(b.editorial_priority, 6) ||
+    cameraReleaseVersionRank(a).kind - cameraReleaseVersionRank(b).kind ||
+    cameraReleaseVersionRank(b).weight - cameraReleaseVersionRank(a).weight ||
     b.deterministic_score - a.deterministic_score ||
     b.score_breakdown.camera_hal_directness - a.score_breakdown.camera_hal_directness ||
     b.score_breakdown.scope_relevance - a.score_breakdown.scope_relevance ||
@@ -576,8 +666,14 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
   };
 }
 
+function selectedHasSameCameraReleasePage(selected, candidate) {
+  const key = cameraReleasePageKey(candidate);
+  return Boolean(key) && ensureArray(selected).some(item => cameraReleasePageKey(item) === key);
+}
+
 function pushUnique(selected, candidate, slot) {
   if (!candidate) return false;
+  if (selectedHasSameCameraReleasePage(selected, candidate)) return false;
   if (selected.some(existing => candidatesAreDuplicate(existing, candidate))) return false;
   selected.push({
     ...candidate,

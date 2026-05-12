@@ -194,6 +194,90 @@ const hardFailRegressionCases = new Map([
         item.reason.includes('watch page lacks dated evidence')
       ));
     }
+  }],
+  ['CameraX source extraction failure', {
+    name: 'hardFailCondition: CameraX source extraction failure blocks metadata fallback CameraX main articles',
+    buildReport: () => {
+      const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+      const sections = [
+        section({
+          headline: 'CameraX metadata fallback article',
+          url,
+          what_changed: 'CameraX 1.6.1 was released on 2026-05-06 with Android Camera compatibility behavior.',
+          confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX / androidx.camera; behavior change: compatibility validation target.',
+          specificity_checks: ['Version: CameraX 1.6.1', 'Release date: 2026-05-06'],
+          background: 'CameraX sits above camera2 and should be treated as framework-adjacent, not direct HAL contract evidence.',
+          camera_hal_perspective: 'Use this as a framework-adjacent Android Camera signal, then validate Camera ITS scenes, stream behavior, buffer handling, and request/result metadata on representative devices.',
+          camera_hal_checks: ['Run Camera ITS focused scenes and compare request/result metadata.'],
+          action_items: [
+            'Within 2 weeks, assign a camera owner to run Camera ITS on CameraX-backed preview and capture paths.',
+            'Measure stream latency, frame drops, and metadata consistency before and after CameraX 1.6.1.'
+          ]
+        }),
+        ...validSections().slice(1)
+      ];
+      return reportFor(sections, [
+        scopedCandidate(url, 'android_platform_camera_adjacent', {
+          title: 'CameraX Release Notes - CameraX 1.6.1',
+          published_date: '2026-05-06',
+          version_or_release: 'CameraX 1.6.1',
+          api_or_component: 'CameraX / androidx.camera',
+          behavior_change: 'CameraX / androidx.camera update.',
+          field_builder_warnings: ['behavior_fallback_from_metadata'],
+          source_extraction: {
+            adapter_id: 'android-developers-jetpack-release',
+            source_type: 'release_note',
+            source: {
+              name: 'CameraX Release Notes',
+              url: 'https://developer.android.com/jetpack/androidx/releases/camera'
+            },
+            release: {
+              version: 'CameraX 1.6.1',
+              date: '2026-05-06',
+              component: 'CameraX / androidx.camera',
+              sections: []
+            },
+            minor_line_context: null,
+            extraction_quality: {
+              has_concrete_behavior_change: false,
+              used_fallback: true,
+              raw_table_used_as_body: false,
+              main_article_allowed: false,
+              warnings: ['no_concrete_release_note_bullet']
+            }
+          },
+          extraction_quality: {
+            has_concrete_behavior_change: false,
+            used_fallback: true,
+            raw_table_used_as_body: false,
+            main_article_allowed: false,
+            warnings: ['no_concrete_release_note_bullet']
+          },
+          derived_editorial_hints: {
+            relevance_bucket_hint: 'direct_aosp_camera',
+            impact_claim_level_hint: 'android_framework_adjacent',
+            hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+            validation_targets: ['Camera2 interop regression validation'],
+            device_specific_notes: [],
+            do_not_claim: ['Do not claim direct Camera HAL API changes.'],
+            main_article_allowed_hint: false,
+            warnings: ['no_concrete_release_note_bullet']
+          }
+        }),
+        ...reporterCandidatesFor(validSections()).slice(1)
+      ]);
+    },
+    assertReport: report => {
+      assert.equal(report.score >= qualityGatePolicy.threshold, true);
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.category === 'source-integrity' &&
+        item.reason.includes('CameraX source extraction failure') &&
+        item.reason.includes('source_extraction.used_fallback=true')
+      ));
+    }
   }]
 ]);
 

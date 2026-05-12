@@ -147,6 +147,17 @@ function linkedEvidencePromptGuardrails() {
   ].join('\n');
 }
 
+function sourceExtractionPromptGuardrails() {
+  return [
+    'Source extraction contract: treat source_extraction as source-confirmed structured facts only, and treat derived_editorial_hints as editorial guidance only.',
+    'For CameraX / AndroidX release notes, source_extraction.release.sections[].items[].text is the source-confirmed release-note behavior evidence. Do not replace it with artifact tables, dependency declarations, page navigation, or generic update text.',
+    'Do not copy derived_editorial_hints into article_sections.verified_facts or present HAL boundary, validation_targets, do_not_claim, warnings, or relevance hints as facts from the source.',
+    'Do not analyze the source URL or full source page independently. Use only the supplied article capsule, source_extraction JSON, derived_editorial_hints JSON, and source fields.',
+    'If source_extraction is missing release date, release version, API/component, or a concrete release-note bullet, demote or exclude that item instead of inventing missing release evidence.',
+    'For CameraX main articles, explicitly name the release version, release date, concrete release-note bullet, HAL boundary, and validation checklist when those fields are supplied.'
+  ].join('\n');
+}
+
 function articleSectionContractPrompt() {
   return [
     'Article section contract: for newly generated editor, repair, and completion outputs, every main article must include article_sections.',
@@ -2546,6 +2557,7 @@ async function main() {
         'Summarize, tag, and refine evidence fields only for the supplied shortlisted article capsules.',
         'Use article capsule fields, risk, score, selection, imageCandidates, and evidence only as context. Do not assume omitted source text exists.',
         linkedEvidencePromptGuardrails(),
+        sourceExtractionPromptGuardrails(),
         'For every final_selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
         'Preserve eligibility and risk values from the article capsule. If a required schema field is not present, infer only from the capsule evidence and risk object.',
         'If the source is a rolling page, release-note watch page, documentation watch page, homepage, or other watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides date/version/API/component/behavior evidence.',
@@ -2607,6 +2619,7 @@ async function main() {
         `Final main article count must satisfy ${publishGateCriteriaText()}.`,
         'Use final-selected article capsules as main article inputs. Do not turn final_selected=false, finalSelectionEligibility=watchlist/exclude, isWatchPage=true without hasDatedEvidence, main_eligible=false, source_gap_risk=true, briefing_only, or reference_only candidates into main articles.',
         linkedEvidencePromptGuardrails(),
+        sourceExtractionPromptGuardrails(),
         articleSectionContractPrompt(),
         'Initial editor drafts must use only primary selected article capsules. Reserve candidates are not available until a primary article is demoted/removed during repair or completion.',
         `Priority order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
@@ -2698,6 +2711,7 @@ async function main() {
         'You are the AI fact checker for AOSP Camera / Driver / SoC Platform Newsletter.',
         'Check factuality, missing sources, exaggerated language, and missing dates.',
         linkedEvidencePromptGuardrails(),
+        sourceExtractionPromptGuardrails(),
         'Treat missing version, release date, API/component name, or behavior change as must_fix when an article presents a rolling page or generic watch item as a concrete update.',
         'Treat any finalSelectionEligibility=watchlist/exclude candidate or watch page without dated evidence used as a main article as must_fix.',
         'Any claim without a source must be classified as must_fix.',
@@ -2792,6 +2806,7 @@ async function main() {
           'For reporter_eligibility_violations, replace or demote the section. Do not repair text around an ineligible source.',
           'Replacement main articles must use only primary selected capsules that are not locked/excluded or reserve candidate capsules supplied in this prompt.',
           linkedEvidencePromptGuardrails(),
+          sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
@@ -2848,6 +2863,7 @@ async function main() {
           'You are the AI fact checker for the repaired AOSP Camera / Driver / SoC Platform Newsletter draft.',
           'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
           linkedEvidencePromptGuardrails(),
+          sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
           'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or expanded editorial-scope relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
@@ -2932,6 +2948,7 @@ async function main() {
             'Preserve existing valid sections by excluding their URLs, titles, source names, and source-date-title combinations.',
             'Use only the eligible reporter candidates supplied in this prompt. Do not use candidates omitted from the eligible list.',
             linkedEvidencePromptGuardrails(),
+            sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),
             'Do not duplicate locked, duplicate/rejected, source-gap, or ineligible sections from the exclusion context.',
             'Each new section must satisfy the same editorial contract: confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, and sources.',
@@ -2973,6 +2990,7 @@ async function main() {
             'You are the AI fact checker for the completed AOSP Camera / Driver / SoC Platform Newsletter draft.',
             'Check factuality, missing sources, exaggerated language, missing dates, source gaps, and editorial-policy violations.',
             linkedEvidencePromptGuardrails(),
+            sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the Newsletter Policy article composition contract.',
             'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
@@ -3408,6 +3426,7 @@ module.exports = {
   hasTooFewMainArticlesDeduction,
   articleSectionContractPrompt,
   linkedEvidencePromptGuardrails,
+  sourceExtractionPromptGuardrails,
   main,
   recordEditorSemanticStatus,
   availableCompletionCandidates,

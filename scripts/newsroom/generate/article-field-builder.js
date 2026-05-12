@@ -80,10 +80,29 @@ function candidateBody(candidate = {}) {
     candidate.what_changed,
     candidate.api_or_component,
     candidate.version_or_release,
+    candidate.source_extraction,
+    candidate.derived_editorial_hints,
     candidate.relevance_bucket,
     candidate.relevance_reason,
     candidate.collection_reason
   ].map(text).join(' ');
+}
+
+function extractionSections(candidate = {}) {
+  return [
+    ...(Array.isArray(candidate?.source_extraction?.release?.sections) ? candidate.source_extraction.release.sections : []),
+    ...(Array.isArray(candidate?.source_extraction?.minor_line_context?.sections) ? candidate.source_extraction.minor_line_context.sections : [])
+  ];
+}
+
+function sourceExtractionBullet(candidate = {}) {
+  for (const section of extractionSections(candidate)) {
+    for (const item of ensureArray(section?.items)) {
+      const value = firstText(item?.text, item?.source_text);
+      if (value) return value;
+    }
+  }
+  return '';
 }
 
 function hasDirectCameraPipelineEvidence(candidate = {}) {
@@ -97,15 +116,15 @@ function candidateBucket(candidate = {}) {
 }
 
 function publishedDate(candidate = {}) {
-  return firstText(candidate.published_date, candidate.publishedDate, candidate.published_at, candidate.date, candidate.updated_at);
+  return firstText(candidate.source_extraction?.release?.date, candidate.published_date, candidate.publishedDate, candidate.published_at, candidate.date, candidate.updated_at);
 }
 
 function componentText(candidate = {}) {
-  return firstText(candidate.component, candidate.api_or_component, candidate.apiOrComponent, candidate.source_section, candidate.source);
+  return firstText(candidate.source_extraction?.release?.component, candidate.component, candidate.api_or_component, candidate.apiOrComponent, candidate.source_section, candidate.source);
 }
 
 function versionText(candidate = {}) {
-  const direct = firstText(candidate.version_or_release, candidate.versionOrRelease, candidate.version, candidate.release);
+  const direct = firstText(candidate.source_extraction?.release?.version, candidate.version_or_release, candidate.versionOrRelease, candidate.version, candidate.release);
   if (direct) return direct;
   const title = text(candidate.title);
   const match = title.match(/\b(?:v)?\d+\.\d+(?:\.\d+)?(?:[-.](?:alpha|beta|rc)\d*)?\b/i);
@@ -140,6 +159,7 @@ function cleanBehaviorChange(candidate = {}) {
   const removedFragments = [];
   const warnings = [];
   let value = firstText(
+    sourceExtractionBullet(candidate),
     candidate.what_changed,
     candidate.behavior_change,
     candidate.behaviorChange,

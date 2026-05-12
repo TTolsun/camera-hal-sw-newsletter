@@ -432,6 +432,157 @@ function hasPattern(value, pattern) {
   return pattern.test(text(value));
 }
 
+function sourceExtractionFor(section = {}, candidate = {}) {
+  return section.source_extraction || candidate?.source_extraction || null;
+}
+
+function derivedHintsFor(section = {}, candidate = {}) {
+  return section.derived_editorial_hints || candidate?.derived_editorial_hints || null;
+}
+
+function extractionQualityFor(section = {}, candidate = {}) {
+  return section.extraction_quality ||
+    candidate?.extraction_quality ||
+    section.source_extraction?.extraction_quality ||
+    candidate?.source_extraction?.extraction_quality ||
+    null;
+}
+
+function sourceExtractionItems(value = {}) {
+  return [
+    ...(Array.isArray(value?.release?.sections) ? value.release.sections : []),
+    ...(Array.isArray(value?.minor_line_context?.sections) ? value.minor_line_context.sections : [])
+  ].flatMap(section => ensureArray(section?.items));
+}
+
+function hasSourceExtractionBullet(value = {}) {
+  return sourceExtractionItems(value).some(item => text(item?.text || item?.source_text));
+}
+
+function cameraXReleaseUrl(value = '') {
+  const raw = text(value);
+  if (!raw) return false;
+  try {
+    const parsed = new URL(raw);
+    return parsed.hostname.toLowerCase() === 'developer.android.com' &&
+      parsed.pathname === '/jetpack/androidx/releases/camera';
+  } catch {
+    return /developer\.android\.com\/jetpack\/androidx\/releases\/camera/i.test(raw);
+  }
+}
+
+function isCameraXReleaseArticle(section = {}, candidate = {}) {
+  const extraction = sourceExtractionFor(section, candidate);
+  if (extraction?.adapter_id === 'android-developers-jetpack-release') return true;
+  return [
+    section.source_candidate_url,
+    candidate?.url,
+    candidate?.article_url,
+    candidate?.source_candidate_url,
+    ...ensureArray(section.sources).map(source => source?.url),
+    ...candidateUrls(candidate || {})
+  ].some(cameraXReleaseUrl);
+}
+
+function articleTextWithLegacyFields(section = {}) {
+  const articleSections = normalizeArticleSections(section);
+  return [
+    section.category,
+    section.headline,
+    section.what_changed,
+    section.background,
+    section.why_it_matters,
+    section.camera_hal_perspective,
+    section.confirmed_facts,
+    section.evidence_summary,
+    section.specificity_checks,
+    section.source_verification_notes,
+    section.camera_hal_checks,
+    section.action_items,
+    articleSections.verified_facts,
+    articleSections.background_context,
+    articleSections.hal_driver_impact,
+    articleSections.action_items,
+    articleSections.team_share_points,
+    section.sources
+  ].map(text).join(' ');
+}
+
+function fieldBuilderWarningsFor(section = {}, candidate = {}) {
+  return [
+    ...ensureArray(section.field_builder_warnings),
+    ...ensureArray(candidate?.field_builder_warnings)
+  ].map(text);
+}
+
+function hasRawCameraXTableArtifact(section = {}) {
+  return /Maven Group versions?|View the Camera Library|Close\b|camera-[a-z0-9-]+\s+(?:-|\d+\.\d+\S*)\s+(?:-|\d+\.\d+\S*)/i
+    .test(articleTextWithLegacyFields(section));
+}
+
+function hasGenericCameraXFallbackText(section = {}) {
+  const value = text(section.what_changed || section.evidence_summary || section.headline);
+  return /^CameraX(?:\s*\/\s*androidx\.camera)?\s+(?:update|updates|updated|release|released|업데이트|릴리스)(?:입니다|입니다\.|\.?)?$/i
+    .test(value);
+}
+
+function hasCameraXHalBoundary(section = {}, hints = {}) {
+  if (!text(hints?.hal_boundary)) return false;
+  return /HAL boundary|not direct HAL|framework[-_\s]adjacent|framework adjacent|CameraX sits above camera2|above camera2|direct Camera HAL API.*not|not.*direct Camera HAL/i
+    .test(articleTextWithLegacyFields(section));
+}
+
+function hasCameraXValidationChecklist(section = {}, hints = {}) {
+  const articleText = articleTextWithLegacyFields(section);
+  const articleSections = normalizeArticleSections(section);
+  const actionItems = [
+    ...ensureArray(section.action_items),
+    ...ensureArray(section.camera_hal_checks),
+    ...ensureArray(articleSections.action_items)
+  ];
+  if (actionItems.length === 0) return false;
+  const targets = ensureArray(hints?.validation_targets).map(text).filter(Boolean);
+  if (targets.length === 0) {
+    return /\b(?:Camera ITS|CTS|VTS|stream|buffer|metadata|request\/result|VideoCapture|ImageAnalysis|CameraPipe|validation)\b/i
+      .test(articleText);
+  }
+  return targets.some(target => {
+    const terms = text(target).match(/\b(?:VideoCapture|ImageAnalysis|SessionConfig|CameraPipe|Camera2|stream|buffer|metadata|validation)\b/gi) || [];
+    return terms.some(term => new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(articleText));
+  });
+}
+
+function hasDirectHalOverclaim(section = {}, candidate = {}) {
+  const level = text(section.impact_claim_level || candidate?.impact_claim_level || candidate?.derived_editorial_hints?.impact_claim_level_hint);
+  if (level === 'direct_hal_change') return false;
+  return /\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|vendor\s+HAL|HAL\s+contract|camera\s+provider\s+contract)\b/i
+    .test(articleTextWithLegacyFields(section));
+}
+
+function cameraXSourceExtractionViolations(section = {}, candidate = {}) {
+  if (!isCameraXReleaseArticle(section, candidate)) return [];
+  const extraction = sourceExtractionFor(section, candidate);
+  const quality = extractionQualityFor(section, candidate) || {};
+  const hints = derivedHintsFor(section, candidate) || {};
+  const violations = [];
+  if (quality.used_fallback === true) violations.push('source_extraction.used_fallback=true');
+  if (quality.main_article_allowed === false) violations.push('source_extraction.main_article_allowed=false');
+  if (fieldBuilderWarningsFor(section, candidate).includes('behavior_fallback_from_metadata')) {
+    violations.push('behavior_fallback_from_metadata');
+  }
+  if (hasRawCameraXTableArtifact(section)) violations.push('raw CameraX artifact table remains in article text');
+  if (!extraction || !hasSourceExtractionBullet(extraction)) {
+    violations.push('source_extraction.release.sections has no concrete release-note bullet');
+  }
+  if (hasGenericCameraXFallbackText(section)) violations.push('generic CameraX fallback text used as main article body');
+  if (!hasCameraXHalBoundary(section, hints)) violations.push('CameraX HAL boundary is missing from the article');
+  if (!hasCameraXValidationChecklist(section, hints)) violations.push('CameraX validation checklist is missing from the article');
+  if (hasDirectHalOverclaim(section, candidate)) {
+    violations.push('direct HAL contract/API claim lacks direct_hal_change source evidence');
+  }
+  return [...new Set(violations)];
+}
+
 function boundedDeduct(state, category, points, reason, location = '', options = {}) {
   if (points <= 0) return;
   const blocking = options.blocking !== false;
@@ -1326,6 +1477,20 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         );
       }
       addLinkedEvidenceQualityDeductions(state, section, binding.candidate, location);
+    }
+    const cameraXViolations = cameraXSourceExtractionViolations(
+      section,
+      binding.status === 'bound' ? binding.candidate : null
+    );
+    if (cameraXViolations.length > 0) {
+      sourceIntegrityViolationCount += 1;
+      boundedDeduct(
+        state,
+        'source-integrity',
+        8,
+        `CameraX source extraction failure: ${cameraXViolations.join('; ')}.`,
+        location
+      );
     }
     if (!hasSpecificEvidence(section)) {
       boundedDeduct(state, 'evidence-specificity', 5, 'Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.', location);

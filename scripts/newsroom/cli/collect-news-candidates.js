@@ -494,7 +494,42 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
   };
 }
 
+function sourceExtractionSections(raw) {
+  return [
+    ...(Array.isArray(raw?.source_extraction?.release?.sections) ? raw.source_extraction.release.sections : []),
+    ...(Array.isArray(raw?.source_extraction?.minor_line_context?.sections) ? raw.source_extraction.minor_line_context.sections : [])
+  ];
+}
+
+function sourceExtractionBullet(raw) {
+  for (const section of sourceExtractionSections(raw)) {
+    for (const item of Array.isArray(section?.items) ? section.items : []) {
+      const value = String(item?.text || item?.source_text || '').trim();
+      if (value) return value;
+    }
+  }
+  return '';
+}
+
+function sourceExtractionBackfill(raw) {
+  const extraction = raw?.source_extraction || {};
+  const release = extraction.release || {};
+  const bullet = sourceExtractionBullet(raw);
+  return {
+    ...raw,
+    publishedAt: String(release.date || raw.publishedAt || raw.published_date || '').trim(),
+    version_or_release: String(release.version || raw.version_or_release || '').trim(),
+    api_or_component: String(release.component || raw.api_or_component || '').trim(),
+    behavior_change: String(bullet || raw.behavior_change || '').trim(),
+    summary: String(bullet || raw.summary || '').trim(),
+    relevanceBucketHint: raw.derived_editorial_hints?.relevance_bucket_hint || raw.relevanceBucketHint,
+    relevance_bucket_hint: raw.derived_editorial_hints?.relevance_bucket_hint || raw.relevance_bucket_hint,
+    impact_claim_level: raw.derived_editorial_hints?.impact_claim_level_hint || raw.impact_claim_level
+  };
+}
+
 function normalizeCandidate(raw) {
+  raw = sourceExtractionBackfill(raw);
   const source = raw.source;
   const title = decode(raw.title);
   const summary = decode(raw.summary).slice(0, 500);
@@ -585,6 +620,9 @@ function normalizeCandidate(raw) {
     finalSelectionEligibility: classification.finalSelectionEligibility,
     final_selection_eligibility: classification.finalSelectionEligibility,
     source_kind: metadata.source_kind,
+    source_extraction: raw.source_extraction || null,
+    derived_editorial_hints: raw.derived_editorial_hints || null,
+    extraction_quality: raw.extraction_quality || raw.source_extraction?.extraction_quality || null,
     datePrecision: raw.datePrecision || raw.date_precision || '',
     date_precision: raw.datePrecision || raw.date_precision || '',
     parentUrl: parentUrl || '',

@@ -1,4 +1,5 @@
 const { decodeHtml, htmlAttr } = require('../common/common');
+const { parseSourceWithAdapters } = require('../sources/registry');
 
 const MONTHS = '(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)';
 const ISO_DATE_PATTERN = /\b(20\d{2}-\d{2}-\d{2})\b/;
@@ -459,24 +460,7 @@ function linkedItems(html, source, options = {}) {
 }
 
 function parseCameraXReleaseNotes(html, source) {
-  return releaseItemsFromHeadings(html, source, {
-    component: 'CameraX / androidx.camera',
-    sourceKind: 'release_note_item',
-    limit: 10
-  })
-    .map(item => {
-      const evidenceText = `${item.title} ${item.url} ${item.summary} ${item.version_or_release} ${item.api_or_component} ${item.behavior_change}`;
-      const version = normalizeCameraXVersion(evidenceText, item.version_or_release);
-      return {
-        ...item,
-        title: version ? `${source.name} - ${version}` : item.title,
-        url: canonicalCameraReleaseUrl(item.url, version),
-        version_or_release: version,
-        api_or_component: cameraComponentFromText(evidenceText),
-        relevanceBucketHint: 'direct_aosp_camera'
-      };
-    })
-    .filter(item => hasReleaseItemEvidence(item) && cameraXReleaseEvidence(`${item.title} ${item.summary} ${item.api_or_component} ${item.behavior_change}`));
+  return parseSourceWithAdapters(html, source);
 }
 
 function parseAospWhatsNew(html, source) {

@@ -387,9 +387,53 @@ function sectionDuplicateReason(candidate, sections) {
   return '';
 }
 
+function cameraReleasePageCandidate(candidate = {}) {
+  const raw = text(candidate.url || candidate.source_candidate_url);
+  if (!raw) return false;
+  try {
+    const parsed = new URL(raw);
+    return parsed.hostname.toLowerCase() === 'developer.android.com' &&
+      parsed.pathname === '/jetpack/androidx/releases/camera';
+  } catch {
+    return /developer\.android\.com\/jetpack\/androidx\/releases\/camera/i.test(raw);
+  }
+}
+
+function sourceExtractionItems(candidate = {}) {
+  return [
+    ...(Array.isArray(candidate?.source_extraction?.release?.sections) ? candidate.source_extraction.release.sections : []),
+    ...(Array.isArray(candidate?.source_extraction?.minor_line_context?.sections) ? candidate.source_extraction.minor_line_context.sections : [])
+  ].flatMap(section => ensureArray(section?.items));
+}
+
+function hasSourceExtractionBullet(candidate = {}) {
+  return sourceExtractionItems(candidate).some(item => text(item?.text || item?.source_text));
+}
+
+function hasGenericCameraXFallbackMetadata(candidate = {}) {
+  const value = text(candidate.behavior_change || candidate.behaviorChange || candidate.what_changed || candidate.summary);
+  return /^CameraX(?:\s*\/\s*androidx\.camera)?\s+(?:update|updates|updated|release|released)(?:\.)?$/i.test(value) ||
+    /Maven Group versions?|View the Camera Library|This library was last updated on:/i.test(value);
+}
+
+function cameraReleaseExtractionViolation(candidate = {}) {
+  if (!cameraReleasePageCandidate(candidate)) return '';
+  const quality = candidate.extraction_quality || candidate.source_extraction?.extraction_quality || {};
+  if (quality.used_fallback === true) return 'source_extraction.used_fallback=true';
+  if (quality.main_article_allowed === false) return 'source_extraction.main_article_allowed=false';
+  if (!hasSourceExtractionBullet(candidate) && hasGenericCameraXFallbackMetadata(candidate)) {
+    return 'CameraX release-note candidate has no concrete source_extraction bullet';
+  }
+  if (candidate.source_extraction && !hasSourceExtractionBullet(candidate)) {
+    return 'source_extraction.release.sections has no concrete bullet';
+  }
+  return '';
+}
+
 function candidateMeetsBaseEligibility(candidate) {
   const finalEligibility = candidate.finalSelectionEligibility;
-  return ['main', 'short'].includes(finalEligibility) &&
+  return !cameraReleaseExtractionViolation(candidate) &&
+    ['main', 'short'].includes(finalEligibility) &&
     candidate.source_gap_risk !== true &&
     candidate.main_eligible === true &&
     candidate.hasDatedEvidence === true &&
@@ -414,6 +458,8 @@ function candidateBaseEligibilityFailure(candidate) {
   if (candidate.hasDatedEvidence !== true) reasons.push(`hasDatedEvidence=${String(candidate.hasDatedEvidence)}`);
   if (candidate.reference_only === true) reasons.push('reference_only=true');
   if (candidate.briefing_only === true) reasons.push('briefing_only=true');
+  const extractionViolation = cameraReleaseExtractionViolation(candidate);
+  if (extractionViolation) reasons.push(extractionViolation);
   return reasons.join('; ');
 }
 
@@ -548,6 +594,9 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
     overclaim_guardrails: guardrails,
     field_builder_warnings: fieldWarnings,
     removed_source_fragments: ensureArray(cleaned.removed_fragments),
+    source_extraction: candidate.source_extraction || null,
+    derived_editorial_hints: candidate.derived_editorial_hints || null,
+    extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
     background_basis: backgroundContext
       ? firstText(backgroundContext.background_basis, 'background-context.json')
       : 'article-field-builder deterministic static background',

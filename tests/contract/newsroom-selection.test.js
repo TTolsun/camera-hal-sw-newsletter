@@ -121,6 +121,158 @@ function linkedScoreCandidate(overrides = {}) {
   });
 }
 
+function cameraXSourceExtraction(version, bullet, overrides = {}) {
+  return {
+    adapter_id: 'android-developers-jetpack-release',
+    source_type: 'release_note',
+    source: {
+      name: 'CameraX Release Notes',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera'
+    },
+    release: {
+      version: `CameraX ${version}`,
+      date: '2026-05-06',
+      component: 'CameraX / androidx.camera',
+      sections: [{
+        category: 'bug_fixes',
+        heading: 'Bug Fixes',
+        items: [{
+          text: bullet,
+          source_text: bullet,
+          links: [],
+          issue_ids: [],
+          artifact_names: ['androidx.camera:camera-core']
+        }]
+      }]
+    },
+    minor_line_context: null,
+    extraction_quality: {
+      has_concrete_behavior_change: true,
+      used_fallback: false,
+      raw_table_used_as_body: false,
+      main_article_allowed: true,
+      warnings: [],
+      ...overrides.extraction_quality
+    }
+  };
+}
+
+function cameraXReleaseCandidate(version, overrides = {}) {
+  const bullet = overrides.behavior_change || `Fixed CameraX ${version} compatibility behavior.`;
+  const extraction = overrides.source_extraction || cameraXSourceExtraction(version, bullet);
+  return candidate({
+    title: `CameraX Release Notes - CameraX ${version}`,
+    url: `https://developer.android.com/jetpack/androidx/releases/camera#${version}`,
+    published_date: '2026-05-06',
+    version_or_release: `CameraX ${version}`,
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: bullet,
+    summary: bullet,
+    relevance_bucket: 'android_platform_camera_adjacent',
+    editorial_priority: 3,
+    aosp_camera_directness: 2,
+    driver_stack_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 0,
+    counts_as_primary_camera_topic: true,
+    source_extraction: extraction,
+    extraction_quality: extraction.extraction_quality,
+    derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
+      impact_claim_level_hint: 'android_framework_adjacent',
+      hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+      validation_targets: ['Camera2 interop regression validation'],
+      device_specific_notes: [],
+      do_not_claim: ['Do not claim direct Camera HAL API changes.'],
+      main_article_allowed_hint: true,
+      warnings: []
+    },
+    ...overrides
+  });
+}
+
+test('CameraX release-note body candidate supersedes latest-updates discovery row for same version URL', () => {
+  const versionUrl = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const discoveryRow = candidate({
+    title: 'CameraX 1.6.1 - Camera Maven Group versions',
+    url: versionUrl,
+    source: 'Android Developers Latest Updates',
+    published_date: '2026-05-06',
+    version_or_release: 'CameraX 1.6.1',
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: 'Fixed Camera2 interop behavior for CameraX apps.',
+    summary: 'Fixed Camera2 interop behavior for CameraX apps.',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    editorial_priority: 3,
+    aosp_camera_directness: 2,
+    counts_as_primary_camera_topic: true
+  });
+  const releaseBody = cameraXReleaseCandidate('1.6.1', {
+    title: 'CameraX Release Notes - CameraX 1.6.1',
+    behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.'
+  });
+
+  const report = buildShortlistReport('2026-05-12', [discoveryRow, releaseBody], {
+    minArticles: 1,
+    maxArticles: 1
+  });
+
+  assert.equal(report.selected_articles.length, 1);
+  assert.equal(report.selected_articles[0].title, 'CameraX Release Notes - CameraX 1.6.1');
+  assert.ok(report.excluded_candidates.some(item =>
+    item.title === discoveryRow.title &&
+    item.exclusion_reasons.includes('duplicate CameraX release-note body candidate supersedes discovery row')
+  ));
+});
+
+test('generic CameraX metadata fallback cannot become a main candidate without source_extraction bullet', () => {
+  const generic = candidate({
+    title: 'CameraX 1.6.1 - Camera Maven Group versions',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    source: 'Android Developers Latest Updates',
+    published_date: '2026-05-06',
+    version_or_release: 'CameraX 1.6.1',
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: 'CameraX / androidx.camera update.',
+    summary: 'CameraX / androidx.camera update.',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    editorial_priority: 3,
+    aosp_camera_directness: 2,
+    counts_as_primary_camera_topic: true
+  });
+
+  assert.ok(exclusionReasons(generic).includes('CameraX release-note candidate has no concrete source_extraction bullet'));
+  const report = buildShortlistReport('2026-05-12', [generic], {
+    minArticles: 1,
+    maxArticles: 1
+  });
+  assert.equal(report.selected_articles.length, 0);
+});
+
+test('AndroidX Camera release page keeps one main article and prefers latest stable patch', () => {
+  const patch = cameraXReleaseCandidate('1.6.1', {
+    behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.'
+  });
+  const minor = cameraXReleaseCandidate('1.6.0', {
+    published_date: '2026-03-25',
+    behavior_change: 'Added CameraPipe SessionConfig support for dynamic range handling.'
+  });
+  const beta = cameraXReleaseCandidate('1.7.0-alpha01', {
+    behavior_change: 'Updated CameraX alpha API behavior for testing.'
+  });
+
+  const report = buildShortlistReport('2026-05-12', [minor, beta, patch], {
+    minArticles: 1,
+    maxArticles: 3
+  });
+  const selectedCameraReleases = report.selected_articles.filter(item =>
+    item.url.startsWith('https://developer.android.com/jetpack/androidx/releases/camera')
+  );
+
+  assert.equal(selectedCameraReleases.length, 1);
+  assert.equal(selectedCameraReleases[0].version_or_release, 'CameraX 1.6.1');
+});
+
 function assertScoreComponentsUnchanged(actual, expected) {
   for (const key of [
     'camera_hal_directness',

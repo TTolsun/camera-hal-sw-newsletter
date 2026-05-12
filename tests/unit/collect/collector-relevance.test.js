@@ -236,7 +236,11 @@ test('collector keeps official AOSP and CameraX camera child rows reviewable wit
     })
   ).map(item => normalizeCandidate(item));
 
-  assert.equal(cameraXRows.length, 1);
+  assert.equal(cameraXRows.length, 2);
+  assert.ok(cameraXRows.some(item => item.version_or_release === 'CameraX 1.6.1'));
+  assert.ok(cameraXRows.some(item => item.source_extraction?.release?.sections?.some(section =>
+    section.items.some(releaseItem => /ListenableFuture compile error/.test(releaseItem.text))
+  )));
   assert.ok([
     BUCKETS.DIRECT_AOSP_CAMERA,
     BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
