@@ -90,6 +90,18 @@ function canonicalCameraReleaseUrl(value = '', version = '') {
   }
 }
 
+function targetVersionFromUrl(source = {}) {
+  for (const raw of [source.url, source.sourceUrl]) {
+    try {
+      const token = versionToken(new URL(raw || '').hash);
+      if (token) return token;
+    } catch {
+      continue;
+    }
+  }
+  return '';
+}
+
 function canHandle(url = '', source = {}) {
   const value = `${source.id || ''} ${source.name || ''} ${url || source.url || source.sourceUrl || ''}`;
   return /\bcamerax-release-notes\b/i.test(value) ||
@@ -310,8 +322,12 @@ function firstConcreteBullet(extraction) {
 }
 
 function extract(html = '', source = {}) {
+  const targetVersion = targetVersionFromUrl(source);
   const blocks = headingBlocks(html, source.url || source.sourceUrl || '');
-  return blocks.map(block => {
+  const selectedBlocks = targetVersion
+    ? blocks.filter(block => versionToken(block.version) === targetVersion)
+    : blocks;
+  return selectedBlocks.map(block => {
     const sourceExtraction = buildExtraction(block, blocks, source);
     const behavior = firstConcreteBullet(sourceExtraction);
     const derivedHints = buildDerivedHints(sourceExtraction);
@@ -330,8 +346,7 @@ function extract(html = '', source = {}) {
       derived_editorial_hints: derivedHints,
       extraction_quality: sourceExtraction.extraction_quality,
       relevanceBucketHint: derivedHints.relevance_bucket_hint,
-      relevance_bucket_hint: derivedHints.relevance_bucket_hint,
-      impact_claim_level: derivedHints.impact_claim_level_hint
+      relevance_bucket_hint: derivedHints.relevance_bucket_hint
     };
   }).filter(item =>
     item.source_extraction.extraction_quality.main_article_allowed &&

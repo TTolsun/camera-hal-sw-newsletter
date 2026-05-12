@@ -238,7 +238,6 @@ function candidateBody(candidate) {
     candidate.api_or_component,
     candidate.behavior_change,
     candidate.source_extraction,
-    candidate.derived_editorial_hints,
     candidate.reason,
     candidate.collection_reason
   ].map(text).join(' ');

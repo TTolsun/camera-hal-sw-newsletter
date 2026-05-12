@@ -120,6 +120,21 @@ test('SoC platform signal stays watch-only unless camera pipeline evidence is pr
   );
 });
 
+test('derived editorial hints do not count as source evidence for impact inference', () => {
+  assert.equal(
+    inferImpactClaimLevel({
+      title: 'Tensor G6 improves scheduler behavior',
+      summary: 'The platform update changes CPU, GPU, NPU, power, and thermal behavior.',
+      relevance_bucket: 'soc_platform_signal',
+      derived_editorial_hints: {
+        hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+        do_not_claim: ['Do not claim direct Camera HAL API changes.']
+      }
+    }),
+    IMPACT_CLAIM_LEVELS.WATCH_ONLY
+  );
+});
+
 test('field hygiene rejects internal classification in confirmed facts', () => {
   const issues = findFieldHygieneIssues({
     what_changed: 'CameraX 1.6.1 updated app-facing compatibility behavior.',

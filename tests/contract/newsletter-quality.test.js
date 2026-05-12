@@ -307,6 +307,81 @@ for (const regression of hardFailRegressionCases.values()) {
   });
 }
 
+test('impact_claim_level_hint alone does not permit direct HAL claim', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const cameraXSection = section({
+    headline: 'CameraX direct HAL overclaim',
+    url,
+    what_changed: 'CameraX 1.6.1 was released on 2026-05-06 with a concrete release note.',
+    confirmed_facts: ['CameraX 1.6.1 release note.'],
+    evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX / androidx.camera; behavior change: Fixed ListenableFuture compile error.',
+    specificity_checks: ['Version: CameraX 1.6.1', 'Release date: 2026-05-06'],
+    background: 'CameraX sits above camera2 and is framework-adjacent, not direct HAL contract evidence.',
+    camera_hal_perspective: 'This changes direct Camera HAL API behavior.',
+    camera_hal_checks: ['Run Camera ITS metadata validation.'],
+    action_items: ['Run Camera ITS metadata validation.'],
+    team_summary: 'Watch CameraX compatibility.',
+    article_sections: {
+      verified_facts: ['CameraX 1.6.1 release note.'],
+      background_context: 'CameraX sits above camera2 and is not direct HAL contract evidence.',
+      hal_driver_impact: 'This changes direct Camera HAL API behavior.',
+      action_items: ['Run Camera ITS metadata validation.'],
+      team_share_points: 'Watch CameraX compatibility.'
+    },
+    derived_editorial_hints: {
+      impact_claim_level_hint: 'direct_hal_change',
+      hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+      validation_targets: ['Camera ITS metadata validation']
+    }
+  });
+  const candidate = scopedCandidate(url, 'android_platform_camera_adjacent', {
+    title: 'CameraX Release Notes - CameraX 1.6.1',
+    published_date: '2026-05-06',
+    version_or_release: 'CameraX 1.6.1',
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: 'Fixed ListenableFuture compile error.',
+    derived_editorial_hints: {
+      impact_claim_level_hint: 'direct_hal_change',
+      hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+      validation_targets: ['Camera ITS metadata validation'],
+      do_not_claim: ['Do not claim direct Camera HAL API changes.']
+    },
+    source_extraction: {
+      adapter_id: 'android-developers-jetpack-release',
+      source_type: 'release_note',
+      release: {
+        version: 'CameraX 1.6.1',
+        date: '2026-05-06',
+        component: 'CameraX / androidx.camera',
+        sections: [{
+          category: 'bug_fixes',
+          heading: 'Bug Fixes',
+          items: [{ text: 'Fixed ListenableFuture compile error.' }]
+        }]
+      },
+      extraction_quality: {
+        used_fallback: false,
+        main_article_allowed: true
+      }
+    },
+    extraction_quality: {
+      used_fallback: false,
+      main_article_allowed: true
+    }
+  });
+
+  const report = reportFor(
+    [cameraXSection, ...validSections().slice(1)],
+    [candidate, ...reporterCandidatesFor(validSections()).slice(1)]
+  );
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item =>
+    item.category === 'source-integrity' &&
+    item.reason.includes('direct HAL contract/API claim lacks direct_hal_change source evidence')
+  ));
+});
+
 function linkedEvidenceSummary(overrides = {}) {
   return {
     schema_version: 1,

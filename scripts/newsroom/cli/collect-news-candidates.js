@@ -524,7 +524,7 @@ function sourceExtractionBackfill(raw) {
     summary: String(bullet || raw.summary || '').trim(),
     relevanceBucketHint: raw.derived_editorial_hints?.relevance_bucket_hint || raw.relevanceBucketHint,
     relevance_bucket_hint: raw.derived_editorial_hints?.relevance_bucket_hint || raw.relevance_bucket_hint,
-    impact_claim_level: raw.derived_editorial_hints?.impact_claim_level_hint || raw.impact_claim_level
+    impact_claim_level: raw.impact_claim_level
   };
 }
 

@@ -81,7 +81,6 @@ function candidateBody(candidate = {}) {
     candidate.api_or_component,
     candidate.version_or_release,
     candidate.source_extraction,
-    candidate.derived_editorial_hints,
     candidate.relevance_bucket,
     candidate.relevance_reason,
     candidate.collection_reason

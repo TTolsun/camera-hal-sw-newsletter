@@ -553,7 +553,7 @@ function hasCameraXValidationChecklist(section = {}, hints = {}) {
 }
 
 function hasDirectHalOverclaim(section = {}, candidate = {}) {
-  const level = text(section.impact_claim_level || candidate?.impact_claim_level || candidate?.derived_editorial_hints?.impact_claim_level_hint);
+  const level = text(section.impact_claim_level || candidate?.impact_claim_level);
   if (level === 'direct_hal_change') return false;
   return /\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|vendor\s+HAL|HAL\s+contract|camera\s+provider\s+contract)\b/i
     .test(articleTextWithLegacyFields(section));

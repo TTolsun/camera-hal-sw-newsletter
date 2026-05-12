@@ -191,6 +191,40 @@ function cameraXReleaseCandidate(version, overrides = {}) {
   });
 }
 
+test('derived editorial do_not_claim text does not increase Camera HAL directness score', () => {
+  const baseCandidate = candidate({
+    title: 'CameraX Release Notes - CameraX 1.6.1',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    summary: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.',
+    published_date: '2026-05-06',
+    version_or_release: 'CameraX 1.6.1',
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    editorial_priority: 3,
+    aosp_camera_directness: 2,
+    driver_stack_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 0,
+    camera_hal_relevance_score: 0,
+    counts_as_primary_camera_topic: true,
+    hasDatedEvidence: true,
+    finalSelectionEligibility: 'main'
+  });
+
+  const base = scoreCandidate(baseCandidate, '2026-05-12');
+  const withHints = scoreCandidate({
+    ...baseCandidate,
+    derived_editorial_hints: {
+      hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+      do_not_claim: ['Do not claim direct Camera HAL API changes.']
+    }
+  }, '2026-05-12');
+
+  assert.equal(withHints.camera_hal_directness, base.camera_hal_directness);
+  assert.equal(withHints.scope_relevance, base.scope_relevance);
+});
+
 test('CameraX release-note body candidate supersedes latest-updates discovery row for same version URL', () => {
   const versionUrl = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
   const discoveryRow = candidate({

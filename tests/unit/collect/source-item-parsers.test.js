@@ -198,6 +198,22 @@ test('CameraX release notes parser normalizes Version headings and CameraX API e
   assert.ok(patch.derived_editorial_hints.do_not_claim.some(item => /direct Camera HAL API/.test(item)));
 });
 
+test('CameraX release notes parser respects target version anchor', () => {
+  const html = readTextFixture('source-html/camerax-release-notes-1.6.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'camerax-release-notes',
+    name: 'CameraX Release Notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+  }));
+
+  assert.equal(items.length, 1);
+  assertParsedItemContract(items[0]);
+  assert.equal(items[0].version_or_release, 'CameraX 1.6.1');
+  assert.equal(items[0].url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+});
+
 test('libcamera release announcement parser extracts v0.7.1 dated camera pipeline evidence', () => {
   const html = readTextFixture('source-html/libcamera-release-v0.7.1.html');
 
