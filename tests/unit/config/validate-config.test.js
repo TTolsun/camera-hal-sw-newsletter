@@ -142,6 +142,44 @@ test('invalid collectionModeHint fails when present', () => {
   assert.match(result.errors.join('\n'), /collectionModeHint must be one of/);
 });
 
+test('linkedEvidencePolicy validates optional source-aware link classification policy', () => {
+  const policy = {
+    enabled: true,
+    allowedDomains: ['developer.android.com', 'android-review.googlesource.com'],
+    importantAnchorKeywords: ['release notes', 'gerrit'],
+    ignoreAnchorKeywords: ['privacy', 'rss']
+  };
+  const result = validate(validRegistry({
+    sources: [
+      validSource({
+        linkedEvidencePolicy: policy
+      })
+    ]
+  }));
+  const normalized = normalizeEnabledSources(result.registry);
+
+  assert.equal(result.ok, true);
+  assert.deepEqual(normalized.sources[0].linkedEvidencePolicy, policy);
+});
+
+test('linkedEvidencePolicy rejects enabled policies without allowed domains', () => {
+  const result = validate(validRegistry({
+    sources: [
+      validSource({
+        linkedEvidencePolicy: {
+          enabled: true,
+          allowedDomains: [],
+          importantAnchorKeywords: ['release notes'],
+          ignoreAnchorKeywords: ['privacy']
+        }
+      })
+    ]
+  }));
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /linkedEvidencePolicy\.allowedDomains must be a non-empty array/);
+});
+
 test('section resolver derives source section from category', () => {
   const registry = validRegistry({
     sources: [

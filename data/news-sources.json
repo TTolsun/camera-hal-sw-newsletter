@@ -50,6 +50,42 @@
       "candidateOnly": false,
       "requiresCrossCheck": false,
       "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "changelog",
+          "documentation",
+          "source code",
+          "issue",
+          "bug",
+          "security bulletin",
+          "details",
+          "learn more",
+          "gerrit",
+          "commit",
+          "pull request"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
       "keywords": [
         "Android",
         "Camera",
@@ -71,6 +107,42 @@
       "candidateOnly": false,
       "requiresCrossCheck": false,
       "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "changelog",
+          "documentation",
+          "source code",
+          "issue",
+          "bug",
+          "security bulletin",
+          "details",
+          "learn more",
+          "gerrit",
+          "commit",
+          "pull request"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
       "keywords": [
         "Android",
         "developer",
@@ -95,6 +167,42 @@
       "candidateOnly": false,
       "requiresCrossCheck": false,
       "usageHint": "CameraX, Camera2, Android Camera 중심 Android Developers Blog 공식 글 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "changelog",
+          "documentation",
+          "source code",
+          "issue",
+          "bug",
+          "security bulletin",
+          "details",
+          "learn more",
+          "gerrit",
+          "commit",
+          "pull request"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
       "keywords": [
         "Android",
         "Camera",
@@ -116,6 +224,42 @@
       "candidateOnly": false,
       "requiresCrossCheck": false,
       "usageHint": "CameraX API, compatibility workaround, app-side camera behavior change 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "changelog",
+          "documentation",
+          "source code",
+          "issue",
+          "bug",
+          "security bulletin",
+          "details",
+          "learn more",
+          "gerrit",
+          "commit",
+          "pull request"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
       "keywords": [
         "CameraX",
         "Camera",
@@ -160,6 +304,42 @@
       "candidateOnly": false,
       "requiresCrossCheck": false,
       "usageHint": "Android platform release, CTS/VTS/ITS, Camera ITS, compatibility change 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "source.android.com",
+          "developer.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "changelog",
+          "documentation",
+          "source code",
+          "issue",
+          "bug",
+          "security bulletin",
+          "details",
+          "learn more",
+          "gerrit",
+          "commit",
+          "pull request"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
       "keywords": [
         "Android",
         "AOSP",
@@ -184,6 +364,42 @@
       "candidateOnly": false,
       "requiresCrossCheck": false,
       "usageHint": "Camera ITS, CDD camera, Camera HAL, Android camera 문서 변경을 AOSP What's New site update row 단위로 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "source.android.com",
+          "developer.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "changelog",
+          "documentation",
+          "source code",
+          "issue",
+          "bug",
+          "security bulletin",
+          "details",
+          "learn more",
+          "gerrit",
+          "commit",
+          "pull request"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
       "keywords": [
         "Android",
         "AOSP",
@@ -290,6 +506,40 @@
       "candidateOnly": false,
       "requiresCrossCheck": false,
       "usageHint": "Linux camera stack, complex camera pipeline, Android/ChromeOS camera stack signal 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "libcamera.org",
+          "lists.libcamera.org",
+          "git.libcamera.org",
+          "github.com",
+          "patchwork.kernel.org"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "release announcement",
+          "changelog",
+          "documentation",
+          "source code",
+          "patch",
+          "commit",
+          "pull request",
+          "details",
+          "learn more"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
       "keywords": [
         "libcamera",
         "Linux",
@@ -315,6 +565,40 @@
       "candidateOnly": false,
       "requiresCrossCheck": false,
       "usageHint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "libcamera.org",
+          "lists.libcamera.org",
+          "git.libcamera.org",
+          "github.com",
+          "patchwork.kernel.org"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "release announcement",
+          "changelog",
+          "documentation",
+          "source code",
+          "patch",
+          "commit",
+          "pull request",
+          "details",
+          "learn more"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
       "keywords": [
         "libcamera",
         "V4L2",
