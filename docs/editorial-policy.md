@@ -120,6 +120,6 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 - Supporting main buckets: `soc_platform_signal`, `cpp_ai_tooling_fallback`
 - Forbidden main buckets: `generic_tech_watchlist`
 - Quality threshold: 85
-- Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article
+- Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure
 
 <!-- NEWSLETTER_POLICY:END -->

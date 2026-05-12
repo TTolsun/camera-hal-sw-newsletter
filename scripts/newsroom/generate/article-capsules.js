@@ -81,15 +81,75 @@ function summaryCacheText(candidate) {
 }
 
 function evidenceItems(candidate) {
+  const sourceExtractionBullet = ensureArray(candidate?.source_extraction?.release?.sections)
+    .flatMap(section => ensureArray(section?.items))
+    .map(item => text(item?.text || item?.source_text))
+    .find(Boolean);
   const items = [
     candidate.version_or_release ? `version_or_release: ${candidate.version_or_release}` : '',
     candidate.api_or_component ? `api_or_component: ${candidate.api_or_component}` : '',
     candidate.behavior_change ? `behavior_change: ${candidate.behavior_change}` : '',
+    sourceExtractionBullet ? `source_extraction.release_bullet: ${sourceExtractionBullet}` : '',
     ...ensureArray(candidate.evidence_notes).map(item => `evidence_note: ${item}`),
     summaryCacheText(candidate) ? `summary_cache: ${summaryCacheText(candidate)}` : '',
     candidate.summary ? `summary: ${candidate.summary}` : ''
   ].map(item => compactText(item, 160)).filter(Boolean);
   return [...new Set(items)].slice(0, MAX_EVIDENCE_ITEMS);
+}
+
+function compactExtractionItems(items) {
+  return ensureArray(items).slice(0, 5).map(item => ({
+    text: compactText(item?.text || item?.source_text, 180),
+    source_text: compactText(item?.source_text || item?.text, 180),
+    links: ensureArray(item?.links).slice(0, 3),
+    issue_ids: ensureArray(item?.issue_ids).slice(0, 5),
+    artifact_names: ensureArray(item?.artifact_names).slice(0, 5)
+  }));
+}
+
+function compactExtractionSections(sections) {
+  return ensureArray(sections).slice(0, 5).map(section => ({
+    category: text(section?.category),
+    heading: compactText(section?.heading, 80),
+    items: compactExtractionItems(section?.items)
+  })).filter(section => section.items.length > 0);
+}
+
+function compactSourceExtraction(extraction) {
+  if (!extraction || typeof extraction !== 'object') return null;
+  const minor = extraction.minor_line_context || null;
+  return {
+    adapter_id: text(extraction.adapter_id),
+    source_type: text(extraction.source_type),
+    source: extraction.source || null,
+    release: {
+      version: text(extraction.release?.version),
+      date: text(extraction.release?.date),
+      component: text(extraction.release?.component),
+      sections: compactExtractionSections(extraction.release?.sections)
+    },
+    minor_line_context: minor ? {
+      version: text(minor.version),
+      date: text(minor.date),
+      component: text(minor.component),
+      sections: compactExtractionSections(minor.sections)
+    } : null,
+    extraction_quality: extraction.extraction_quality || null
+  };
+}
+
+function compactDerivedHints(value) {
+  if (!value || typeof value !== 'object') return null;
+  return {
+    relevance_bucket_hint: text(value.relevance_bucket_hint),
+    impact_claim_level_hint: text(value.impact_claim_level_hint),
+    hal_boundary: text(value.hal_boundary),
+    validation_targets: ensureArray(value.validation_targets).slice(0, 6).map(item => compactText(item, 120)),
+    device_specific_notes: ensureArray(value.device_specific_notes).slice(0, 4).map(item => compactText(item, 120)),
+    do_not_claim: ensureArray(value.do_not_claim).slice(0, 4).map(item => compactText(item, 120)),
+    main_article_allowed_hint: value.main_article_allowed_hint === true,
+    warnings: ensureArray(value.warnings).slice(0, 8)
+  };
 }
 
 function score(candidate) {
@@ -203,6 +263,9 @@ function buildArticleCapsule(candidate) {
       MAX_TEXT
     ),
     evidence: evidenceItems(candidate),
+    source_extraction: compactSourceExtraction(candidate.source_extraction),
+    derived_editorial_hints: compactDerivedHints(candidate.derived_editorial_hints),
+    extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
     risk: risk(candidate),
     eligibility: eligibility(candidate),
     score: score(candidate),

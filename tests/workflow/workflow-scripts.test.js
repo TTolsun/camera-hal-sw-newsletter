@@ -282,6 +282,59 @@ function writeRootIndexContract(root) {
   ].join('\n'));
 }
 
+function cameraXRegressionExtraction(title, url) {
+  if (!/developer\.android\.com\/jetpack\/androidx\/releases\/camera/i.test(url)) return {};
+  const bullet = `${title} has a concrete CameraX release-note behavior item for Android camera compatibility validation.`;
+  const sourceExtraction = {
+    adapter_id: 'android-developers-jetpack-release',
+    source_type: 'release_note',
+    source: {
+      name: 'CameraX Release Notes',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera'
+    },
+    release: {
+      version: title,
+      date: '2026-05-06',
+      component: 'CameraX / androidx.camera',
+      sections: [{
+        category: 'bug_fixes',
+        heading: 'Bug Fixes',
+        items: [{
+          text: bullet,
+          source_text: bullet,
+          links: [],
+          issue_ids: [],
+          artifact_names: ['androidx.camera:camera-core']
+        }]
+      }]
+    },
+    minor_line_context: null,
+    extraction_quality: {
+      has_concrete_behavior_change: true,
+      used_fallback: false,
+      raw_table_used_as_body: false,
+      main_article_allowed: true,
+      warnings: []
+    }
+  };
+  return {
+    summary: bullet,
+    behavior_change: bullet,
+    source_extraction: sourceExtraction,
+    extraction_quality: sourceExtraction.extraction_quality,
+    derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
+      impact_claim_level_hint: 'android_framework_adjacent',
+      hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+      validation_targets: ['Camera2 interop regression validation', 'Camera ITS smoke validation'],
+      device_specific_notes: [],
+      do_not_claim: ['Do not claim direct Camera HAL API changes.'],
+      main_article_allowed_hint: true,
+      warnings: []
+    }
+  };
+}
+
 function regressionCandidate({ title, url, bucket, fallback = false }) {
   return {
     title,
@@ -313,7 +366,8 @@ function regressionCandidate({ title, url, bucket, fallback = false }) {
       : bucket === 'camera_driver_image_pipeline'
         ? 'camera_stack_direct'
         : 'android_framework_adjacent',
-    evidence_origin: 'fixture'
+    evidence_origin: 'fixture',
+    ...cameraXRegressionExtraction(title, url)
   };
 }
 
@@ -347,6 +401,9 @@ function regressionSection(item, overrides = {}) {
     counts_as_fallback_topic: item.counts_as_fallback_topic,
     impact_claim_level: item.impact_claim_level,
     evidence_origin: item.evidence_origin,
+    source_extraction: item.source_extraction || null,
+    derived_editorial_hints: item.derived_editorial_hints || null,
+    extraction_quality: item.extraction_quality || item.source_extraction?.extraction_quality || null,
     sources: [{ title: item.title, url: item.url }],
     ...overrides
   };

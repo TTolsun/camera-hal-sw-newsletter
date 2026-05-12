@@ -4,7 +4,8 @@ const path = require('path');
 const test = require('node:test');
 
 const {
-  articleSectionContractPrompt
+  articleSectionContractPrompt,
+  sourceExtractionPromptGuardrails
 } = require('../../scripts/gemini-newsroom-newsletter');
 
 test('article section contract prompt fixes the five normalized keys and guardrails', () => {
@@ -29,6 +30,20 @@ test('article section contract prompt fixes the five normalized keys and guardra
   assert.match(prompt, /concrete actions/);
 });
 
+test('source extraction prompt guardrails keep source facts separate from editorial hints', () => {
+  const prompt = sourceExtractionPromptGuardrails();
+
+  assert.match(prompt, /source_extraction/);
+  assert.match(prompt, /derived_editorial_hints/);
+  assert.match(prompt, /source-confirmed structured facts/);
+  assert.match(prompt, /editorial guidance/);
+  assert.match(prompt, /source_extraction\.release\.sections\[\]\.items\[\]\.text/);
+  assert.match(prompt, /artifact tables/);
+  assert.match(prompt, /Do not analyze the source URL/);
+  assert.match(prompt, /release version/);
+  assert.match(prompt, /validation checklist/);
+});
+
 test('LLM editor, repair, completion, and fact-check prompts include article section contract', () => {
   const source = fs.readFileSync(
     path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
@@ -37,4 +52,14 @@ test('LLM editor, repair, completion, and fact-check prompts include article sec
   const usageCount = (source.match(/articleSectionContractPrompt\(\),/g) || []).length;
 
   assert.ok(usageCount >= 5);
+});
+
+test('LLM reporter, editor, repair, completion, and fact-check prompts include source extraction guardrails', () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
+    'utf8'
+  );
+  const usageCount = (source.match(/sourceExtractionPromptGuardrails\(\),/g) || []).length;
+
+  assert.ok(usageCount >= 7);
 });

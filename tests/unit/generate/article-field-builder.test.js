@@ -36,6 +36,30 @@ test('cleanBehaviorChange removes raw CameraX table and UI artifacts', () => {
   assert.ok(result.warnings.includes('behavior_fallback_from_metadata'));
 });
 
+test('cleanBehaviorChange prefers source_extraction release bullet over metadata fallback', () => {
+  const result = cleanBehaviorChange(cameraXCandidate({
+    source_extraction: {
+      release: {
+        sections: [{
+          category: 'bug_fixes',
+          heading: 'Bug Fixes',
+          items: [{
+            text: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.',
+            source_text: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.',
+            links: [],
+            issue_ids: [],
+            artifact_names: ['androidx.camera:camera-core']
+          }]
+        }]
+      }
+    }
+  }));
+
+  assert.equal(result.text, 'Fixed ListenableFuture compile error in androidx.camera:camera-core.');
+  assert.equal(result.warnings.includes('behavior_fallback_from_metadata'), false);
+  assert.equal(result.warnings.includes('raw_ui_or_table_artifact_removed'), false);
+});
+
 test('confirmed facts use Korean source-fact labels and exclude internal classification', () => {
   const facts = buildConfirmedFacts(cameraXCandidate({
     impact_claim_level: 'android_framework_adjacent',
@@ -93,6 +117,21 @@ test('SoC platform signal stays watch-only unless camera pipeline evidence is pr
       relevance_bucket: 'soc_platform_signal'
     }),
     IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT
+  );
+});
+
+test('derived editorial hints do not count as source evidence for impact inference', () => {
+  assert.equal(
+    inferImpactClaimLevel({
+      title: 'Tensor G6 improves scheduler behavior',
+      summary: 'The platform update changes CPU, GPU, NPU, power, and thermal behavior.',
+      relevance_bucket: 'soc_platform_signal',
+      derived_editorial_hints: {
+        hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+        do_not_claim: ['Do not claim direct Camera HAL API changes.']
+      }
+    }),
+    IMPACT_CLAIM_LEVELS.WATCH_ONLY
   );
 });
 

@@ -15,7 +15,8 @@ const REQUIRED_HARD_FAIL_CONDITIONS = [
   'fact-check must_fix',
   'duplicate source URL',
   'stale claim hard failure',
-  'undated watch/reference page promoted to main article'
+  'undated watch/reference page promoted to main article',
+  'CameraX source extraction failure'
 ];
 const repoRoot = path.resolve(__dirname, '..', '..', '..');
 const policyPath = path.join(repoRoot, POLICY_REL_PATH);

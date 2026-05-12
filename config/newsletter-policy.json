@@ -32,7 +32,8 @@
       "fact-check must_fix",
       "duplicate source URL",
       "stale claim hard failure",
-      "undated watch/reference page promoted to main article"
+      "undated watch/reference page promoted to main article",
+      "CameraX source extraction failure"
     ]
   }
 }
