@@ -288,38 +288,7 @@
   },
   "fallback_public_issue": true,
   "demoted_articles": [],
-  "fallback_articles": [
-    {
-      "headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "category": "Camera Driver / Image Pipeline",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "source": "libcamera Release Announcements",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "action": "rebuild-from-bound-candidate",
-      "fallback": false,
-      "reason": "hard failure replacement"
-    },
-    {
-      "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "category": "Tooling Watch / Fallback",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "source": "ISO C++ Blog",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "action": "demote-to-watch",
-      "fallback": true,
-      "reason": "minimum article count fallback fill"
-    },
-    {
-      "headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "category": "Tooling Watch / Fallback",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "source": "ISO C++ Blog",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "action": "demote-to-watch",
-      "fallback": true,
-      "reason": "minimum article count fallback fill"
-    }
-  ],
-  "original_quality_status": "UNKNOWN",
-  "original_quality_score": null
+  "fallback_articles": [],
+  "original_quality_status": "PASS",
+  "original_quality_score": 100
 }

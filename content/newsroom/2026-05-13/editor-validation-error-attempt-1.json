@@ -12,7 +12,7 @@
         "impact_claim_level": "camera_stack_direct",
         "type": "overclaim_guardrail",
         "field": "camera_hal_perspective",
-        "snippet": "1 릴리스는 Android HAL 계약을 직접적으로 변경하지는 않지만, 하위 레벨 드라이버, 센서, ISP, 이미지 파이프라인, 프레임 타이밍 및 통합 검증을 위한 중요한 카메라 스택 입력으로 검토되어야 합니다",
+        "snippet": "libcamera의 업데이트는 하위 레벨 카메라 드라이버, 센서 모드 구성, 이미지 파이프라인 처리 방식에 직접적인 영향을 미칠 수 있으며, 이는 Android Camera HAL 구현 시 V4L2 인터페이스를 통해 하드웨어와 상호작용하는 방식에 간접적으로 영향을 줄 수 있습니다",
         "severity": "hard",
         "blocking": true,
         "reason": "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level."

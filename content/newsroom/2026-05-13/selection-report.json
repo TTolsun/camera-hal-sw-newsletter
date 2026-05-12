@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-13",
-  "generated_at": "2026-05-12T15:36:50.193Z",
+  "generated_at": "2026-05-12T18:02:22.069Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -106,23 +106,23 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 20
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 20
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 14
+      "count": 6
     },
     {
       "reason": "missing dated evidence",
-      "count": 14
+      "count": 4
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 14
+      "count": 4
     },
     {
       "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
@@ -144,23 +144,23 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 20
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 20
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 14
+      "count": 6
     },
     {
       "reason": "missing dated evidence",
-      "count": 14
+      "count": 4
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 14
+      "count": 4
     },
     {
       "reason": "CameraX release-note candidate has no concrete source_extraction bullet",

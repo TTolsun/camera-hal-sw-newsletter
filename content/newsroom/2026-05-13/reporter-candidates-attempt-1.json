@@ -48,6 +48,204 @@
       "parent_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
       "parentTitle": "libcamera Release Announcements",
       "parent_title": "libcamera Release Announcements",
+      "outgoing_links": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058407.html",
+          "text": "[PATCH v3 0/3] Atomic control lists on Raspberry Pi",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058409.html",
+          "text": "[PATCH v4 0/3] Simple pipeline: proportional AGC, AWB stats fix,",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/date.html#58408",
+          "text": "[ date ]",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/thread.html#58408",
+          "text": "[ thread ]",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/subject.html#58408",
+          "text": "[ subject ]",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/author.html#58408",
+          "text": "[ author ]",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
+          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "laurent.pinchart at ideasonboard.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "barnabas.pocze at ideasonboard.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "kieran.bingham at ideasonboard.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "johannes.goede at oss.qualcomm.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "jacopo.mondi at ideasonboard.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "david.plowman at raspberrypi.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "mzamazal at redhat.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "naush at raspberrypi.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "stefan.klug at ideasonboard.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "dan.scally at ideasonboard.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "gianfranco.mariotti94 at gmail.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "stephan.vanveen at karlstorz.com",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://github.com/pybind/pybind11/pull/5824",
+          "text": "https://github.com/pybind/pybind11/pull/5824",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://github.com/python/cpython/issues/61322",
+          "text": "https://github.com/python/cpython/issues/61322",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/315",
+          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/315",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/313",
+          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/313",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1719",
+          "text": "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1719",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329",
+          "text": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "text": "More information about the libcamera-devel mailing list",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        }
+      ],
       "sourceMonth": "",
       "source_month": "",
       "has_published_date": true,
@@ -76,7 +274,7 @@
       "relevanceScore": 93,
       "relevance_score": 93,
       "cameraHalRelevanceScore": 93,
-      "camera_hal_relevance_score": 4,
+      "camera_hal_relevance_score": 4.65,
       "editorial_priority": 2,
       "relevance_bucket": "camera_driver_image_pipeline",
       "aosp_camera_directness": 0,
@@ -204,19 +402,19 @@
       "evidence_notes": [
         "version_or_release: libcamera v0.7.1",
         "api_or_component: libcamera / V4L2 camera pipeline",
-        "behavior_change: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration up...",
-        "summary_cache: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration upda...",
-        "summary: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
+        "behavior_change: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration upda..."
       ],
       "cross_check_status": "not-required",
-      "android_camera_relevance_score": 4,
+      "android_camera_relevance_score": 0,
       "practical_actionability_score": 3,
       "source_reliability_score": 4,
       "freshness_score": 2,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 0,
       "relevance_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)",
-      "impact_areas": [],
+      "impact_areas": [
+        "camera_driver_image_pipeline"
+      ],
       "impact_claim_level": "camera_stack_direct"
     },
     {
@@ -266,6 +464,127 @@
       "parent_url": "",
       "parentTitle": "",
       "parent_title": "",
+      "outgoing_links": [
+        {
+          "url": "https://gcc.gnu.org/gcc-16/changes.html#cxx",
+          "text": "GCC 16 Release Series: Changes, New Features, and Fixes",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/C_002b_002b-Dialect-Options.html#index-fmodules",
+          "text": "-fmodules",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P2996R13",
+          "text": "P2996R13",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gcc.gnu.org/PR120775",
+          "text": "PR120775",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P3394R4",
+          "text": "P3394R4",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P3293R3",
+          "text": "P3293R3",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P3096R12",
+          "text": "P3096R12",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P3491R3",
+          "text": "P3491R3",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gcc.gnu.org/PR120783",
+          "text": "PR120783",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P3560R2",
+          "text": "P3560R2",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P1306R5",
+          "text": "P1306R5",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gcc.gnu.org/PR120776",
+          "text": "PR120776",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P2900R14",
+          "text": "P2900R14",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gcc.gnu.org/PR119061",
+          "text": "PR119061",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://wg21.link/P2795R5",
+          "text": "P2795R5",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gcc.gnu.org/PR114457",
+          "text": "PR114457",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://gcc.gnu.org/gcc-16/changes.html#libstdcxx",
+          "text": "Runtime Library (libstdc++)",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        }
+      ],
       "sourceMonth": "",
       "source_month": "",
       "has_published_date": true,
@@ -289,8 +608,8 @@
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "publishedAt": "Thu, 30 Apr 2026 22:36:23 +0000",
-      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
-      "summary": "GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From GCC 16.0.1",
+      "published_date": "2026-04-30",
+      "summary": "GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes Fr...",
       "relevanceScore": 57,
       "relevance_score": 57,
       "cameraHalRelevanceScore": 57,
@@ -417,18 +736,19 @@
       "final_exclusion_reasons": [],
       "evidence_notes": [
         "api_or_component: GCC",
-        "behavior_change: GCC 16.1 has been released!",
-        "summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes Fr..."
+        "behavior_change: GCC 16.1 has been released!"
       ],
       "cross_check_status": "not-required",
-      "android_camera_relevance_score": 3,
+      "android_camera_relevance_score": 0,
       "practical_actionability_score": 5,
       "source_reliability_score": 4,
       "freshness_score": 2,
-      "ai_required_slot_fit_score": 3,
+      "ai_required_slot_fit_score": 4,
       "cpp_fallback_value_score": 4,
       "relevance_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
-      "impact_areas": [],
+      "impact_areas": [
+        "cpp_ai_tooling_fallback"
+      ],
       "impact_claim_level": "tooling_supporting"
     },
     {
@@ -478,6 +798,15 @@
       "parent_url": "",
       "parentTitle": "",
       "parent_title": "",
+      "outgoing_links": [
+        {
+          "url": "https://www.reddit.com/r/cpp/comments/1rrq9e6/glaze_72_c26_reflection_yaml_cbor_messagepack/",
+          "text": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        }
+      ],
       "sourceMonth": "",
       "source_month": "",
       "has_published_date": true,
@@ -501,12 +830,12 @@
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "publishedAt": "Tue, 28 Apr 2026 22:25:57 +0000",
-      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
-      "summary": "Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+      "published_date": "2026-04-28",
+      "summary": "Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v...",
       "relevanceScore": 51,
       "relevance_score": 51,
       "cameraHalRelevanceScore": 51,
-      "camera_hal_relevance_score": 2,
+      "camera_hal_relevance_score": 2.55,
       "editorial_priority": 5,
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "aosp_camera_directness": 0,
@@ -630,22 +959,36 @@
       "evidence_notes": [
         "version_or_release: v7.2.0",
         "api_or_component: GCC",
-        "behavior_change: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
-        "summary: Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v..."
+        "behavior_change: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
       ],
       "cross_check_status": "not-required",
-      "android_camera_relevance_score": 2,
+      "android_camera_relevance_score": 0,
       "practical_actionability_score": 5,
       "source_reliability_score": 4,
       "freshness_score": 2,
-      "ai_required_slot_fit_score": 3,
+      "ai_required_slot_fit_score": 4,
       "cpp_fallback_value_score": 4,
       "relevance_reason": "ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
-      "impact_areas": [],
+      "impact_areas": [
+        "cpp_ai_tooling_fallback"
+      ],
       "impact_claim_level": "tooling_supporting"
     }
   ],
-  "rejected_main_ineligible_candidates": [],
+  "rejected_main_ineligible_candidates": [
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "reason": "HAL/actionability score 7.65 < 8"
+    },
+    {
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source": "ISO C++ Blog",
+      "reason": "HAL/actionability score 7.55 < 8"
+    }
+  ],
   "schema_version": 2,
   "selection_stage": "reporter",
   "reporter_candidate_count": 3,

@@ -15,6 +15,13 @@
   "model_usage": {
     "reporter attempt 1/2": {
       "gemini-2.5-flash": {
+        "requests": 3,
+        "successes": 0,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 3
+      },
+      "gemini-2.5-flash-lite": {
         "requests": 1,
         "successes": 1,
         "invalid_json": 0,
@@ -24,11 +31,11 @@
     },
     "background-context attempt 1/2": {
       "gemini-2.5-flash": {
-        "requests": 1,
+        "requests": 2,
         "successes": 1,
         "invalid_json": 0,
         "quota_errors": 0,
-        "api_errors": 0
+        "api_errors": 1
       }
     },
     "editor attempt 1/2": {
@@ -42,8 +49,8 @@
     }
   },
   "run_context": {
-    "github_run_id": "25744892964",
-    "github_sha": "f6551ae7ca8597590d95bdca882cee24f620a55a",
+    "github_run_id": "25752588043",
+    "github_sha": "409e887afb2338b8aa0cf6ce467af17fe63a7fbd",
     "github_ref": "refs/heads/main"
   },
   "editor_semantic_validation": {
@@ -60,7 +67,7 @@
           "impact_claim_level": "camera_stack_direct",
           "type": "overclaim_guardrail",
           "field": "camera_hal_perspective",
-          "snippet": "1 릴리스는 Android HAL 계약을 직접적으로 변경하지는 않지만, 하위 레벨 드라이버, 센서, ISP, 이미지 파이프라인, 프레임 타이밍 및 통합 검증을 위한 중요한 카메라 스택 입력으로 검토되어야 합니다",
+          "snippet": "libcamera의 업데이트는 하위 레벨 카메라 드라이버, 센서 모드 구성, 이미지 파이프라인 처리 방식에 직접적인 영향을 미칠 수 있으며, 이는 Android Camera HAL 구현 시 V4L2 인터페이스를 통해 하드웨어와 상호작용하는 방식에 간접적으로 영향을 줄 수 있습니다",
           "severity": "hard",
           "blocking": true,
           "reason": "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level."
@@ -99,8 +106,8 @@
   "max_final_articles": 5,
   "absolute_min_reviewable_articles": 1,
   "min_non_fallback_publish_ready_articles": 1,
-  "composition_mode": "FALLBACK_COMPOSITION",
-  "selection_composition_mode": "FALLBACK_COMPOSITION",
+  "composition_mode": "NEEDS_FIX",
+  "selection_composition_mode": "NEEDS_FIX",
   "composition_reason": "Article Composition Policy passed with 1 Primary Camera Stack article(s) and 2 supporting main article(s).",
   "composition_summary": {
     "selected_article_count": 3,
@@ -180,23 +187,23 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 20
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 20
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 14
+      "count": 6
     },
     {
       "reason": "missing dated evidence",
-      "count": 14
+      "count": 4
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 14
+      "count": 4
     },
     {
       "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
@@ -218,23 +225,23 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 20
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 20
+      "count": 28
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 14
+      "count": 6
     },
     {
       "reason": "missing dated evidence",
-      "count": 14
+      "count": 4
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 14
+      "count": 4
     },
     {
       "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
@@ -246,8 +253,8 @@
   "fallback_public_issue": true,
   "fallback_public_issue_status": "CREATED",
   "fallback_public_issue_demoted_article_count": 0,
-  "fallback_public_issue_added_article_count": 3,
-  "fallback_public_issue_preserve_article_count": 0,
+  "fallback_public_issue_added_article_count": 0,
+  "fallback_public_issue_preserve_article_count": 3,
   "fallback_public_issue_reason": "Public newsletter files generated after quality/repair/final-readiness trigger.",
   "source_gap_count": 0,
   "artifact_final_publish_ready": false,

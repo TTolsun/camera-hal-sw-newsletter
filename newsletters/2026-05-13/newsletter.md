@@ -1,6 +1,6 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-13
 
-이번 2026-05-13호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more를 중심으로 구성했습니다. 정상 후보가 부족한 영역은 2개의 Fallback/Watch 기사로 채웠고 HAL 직접 변경으로 표현하지 않았습니다.
+이번 2026-05-13호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more를 중심으로 구성했습니다.
 
 ## 1. 이번 주 3줄 브리핑
 
