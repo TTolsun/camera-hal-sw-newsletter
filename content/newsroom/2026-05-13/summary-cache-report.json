@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "date": "2026-05-13",
-  "generated_at": "2026-05-12T15:35:53.548Z",
+  "generated_at": "2026-05-12T18:00:20.918Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 3,
     "hit_count": 1,
     "miss_count": 2,
-    "by_url_hit_count": 0,
-    "by_content_hit_count": 1,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 0,
     "legacy_hit_count": 0
   },
   "reasons": [
@@ -17,7 +17,7 @@
       "count": 2
     },
     {
-      "reason": "content-hash-hit",
+      "reason": "url-hit",
       "count": 1
     }
   ],
@@ -34,9 +34,9 @@
         "content_hash": "f2c42a835e4110d9cb7dd585ddea4e610b9971e4d92757c66c480b0699b4af60"
       },
       "hit": true,
-      "reason": "content-hash-hit",
-      "lookup_source": "by-content",
-      "cache_record_path": "cache/news-summary/by-content/f2c42a835e4110d9cb7dd585ddea4e610b9971e4d92757c66c480b0699b4af60.json"
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385.json"
     },
     {
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",

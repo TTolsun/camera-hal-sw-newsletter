@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "date": "2026-05-13",
-  "generated_at": "2026-05-12T15:36:05.585Z",
+  "generated_at": "2026-05-12T18:01:11.070Z",
   "capsule_token_target": "500-800",
   "shortlisted_capsule_count": 3,
   "selected_capsule_count": 3,
@@ -99,7 +99,7 @@
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "source": "ISO C++ Blog",
-      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "published_date": "2026-04-30",
       "topic_type": "android-camera",
       "editorial_priority": 5,
       "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -132,7 +132,7 @@
         "behavior_change: GCC 16.1 has been released!",
         "evidence_note: api_or_component: GCC",
         "evidence_note: behavior_change: GCC 16.1 has been released!",
-        "evidence_note: summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Feature..."
+        "summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes Fr..."
       ],
       "source_extraction": null,
       "derived_editorial_hints": null,
@@ -181,13 +181,13 @@
       },
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
-      "estimated_tokens": 815
+      "estimated_tokens": 809
     },
     {
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "source": "ISO C++ Blog",
-      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+      "published_date": "2026-04-28",
       "topic_type": "cpp",
       "editorial_priority": 5,
       "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -269,7 +269,7 @@
       },
       "url_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
       "imageCandidates": [],
-      "estimated_tokens": 853
+      "estimated_tokens": 847
     }
   ],
   "selected_capsules": [
@@ -365,7 +365,7 @@
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "source": "ISO C++ Blog",
-      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "published_date": "2026-04-30",
       "topic_type": "android-camera",
       "editorial_priority": 5,
       "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -398,7 +398,7 @@
         "behavior_change: GCC 16.1 has been released!",
         "evidence_note: api_or_component: GCC",
         "evidence_note: behavior_change: GCC 16.1 has been released!",
-        "evidence_note: summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Feature..."
+        "summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes Fr..."
       ],
       "source_extraction": null,
       "derived_editorial_hints": null,
@@ -447,13 +447,13 @@
       },
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
-      "estimated_tokens": 815
+      "estimated_tokens": 809
     },
     {
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "source": "ISO C++ Blog",
-      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+      "published_date": "2026-04-28",
       "topic_type": "cpp",
       "editorial_priority": 5,
       "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -535,7 +535,7 @@
       },
       "url_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
       "imageCandidates": [],
-      "estimated_tokens": 853
+      "estimated_tokens": 847
     }
   ],
   "reserve_capsules": []
