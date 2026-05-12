@@ -636,6 +636,7 @@ function normalizeCandidate(raw) {
     source_reliability: source.reliability,
     usageHint: source.usageHint,
     source_usage_hint: source.usageHint,
+    source_linked_evidence_policy: source.linkedEvidencePolicy || null,
     sourceRole: source.sourceRole || '',
     source_role: metadata.source_role,
     candidateOnly,
@@ -1002,7 +1003,9 @@ async function main() {
   fs.mkdirSync(dateNewsroomDir, { recursive: true });
   fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
 
-  const linkedEvidenceDiagnostics = await analyzeLinkedEvidenceForCandidates(date, candidates);
+  const linkedEvidenceDiagnostics = await analyzeLinkedEvidenceForCandidates(date, candidates, {
+    runtimeConfig
+  });
   candidates = linkedEvidenceDiagnostics.candidates;
   writeLinkedEvidenceDiagnosticsArtifacts(dateNewsroomDir, linkedEvidenceDiagnostics);
 

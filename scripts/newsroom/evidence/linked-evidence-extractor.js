@@ -232,6 +232,7 @@ function extractLinkedEvidenceFromCandidate(candidate = {}) {
 }
 
 module.exports = {
+  classifyLinkedEvidenceUrl: classifyUrl,
   extractLinkedEvidenceFromCandidate,
   extractLinkedEvidenceFromText
 };

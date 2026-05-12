@@ -17,10 +17,21 @@ function fakeFetch(sequence) {
     if (next instanceof Error) throw next;
     if (next === 'never') return new Promise(() => {});
     const response = next || {};
+    const status = response.status || 200;
+    const headers = response.headers || {};
     return {
-      ok: response.ok ?? true,
-      status: response.status || 200,
+      ok: response.ok ?? (status >= 200 && status < 300),
+      status,
       statusText: response.statusText || 'OK',
+      url: response.url || url,
+      headers: {
+        get(name) {
+          const key = String(name || '').toLowerCase();
+          if (key === 'location' && response.location) return response.location;
+          const match = Object.entries(headers).find(([header]) => header.toLowerCase() === key);
+          return match ? match[1] : null;
+        }
+      },
       text: async () => {
         if (typeof response.onText === 'function') response.onText();
         if (response.textError) throw response.textError;
@@ -81,6 +92,159 @@ test('resolver skips fetch by default and does not call injected fetch client', 
   assertEmptyResolved(missingClient.resolved);
 });
 
+test('resolver enforces https-only before network fetch', async () => {
+  const fetchClient = fakeFetch([{ body: '<title>Should not fetch http</title>' }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence({
+    url: 'http://github.com/androidx/androidx/pull/1234'
+  })], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(fetchClient.calls.length, 0);
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(resolved.skipped_reason, 'non_https_url');
+  assert.ok(resolved.warnings.some(item => item.includes('non-https')));
+  assertEmptyResolved(resolved.resolved);
+});
+
+test('resolver rejects non-https redirect targets before reading body', async () => {
+  let textCalled = false;
+  const fetchClient = fakeFetch([{
+    status: 302,
+    location: 'http://github.com/androidx/androidx/pull/1234',
+    body: '<title>Redirect body must not be read</title>',
+    onText: () => {
+      textCalled = true;
+    }
+  }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(fetchClient.calls[0].request.redirect, 'manual');
+  assert.equal(textCalled, false);
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(resolved.skipped_reason, 'redirect_non_https_url');
+  assertEmptyResolved(resolved.resolved);
+});
+
+test('resolver rejects unsafe final response URLs before reading body', async () => {
+  let textCalled = false;
+  const fetchClient = fakeFetch([{
+    url: 'http://github.com/androidx/androidx/pull/1234',
+    body: '<title>Final response body must not be read</title>',
+    onText: () => {
+      textCalled = true;
+    }
+  }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(textCalled, false);
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(resolved.skipped_reason, 'redirect_non_https_url');
+  assertEmptyResolved(resolved.resolved);
+});
+
+test('resolver rejects disallowed redirect final URLs through validator', async () => {
+  const fetchClient = fakeFetch([{
+    status: 302,
+    location: 'https://example.com/not-allowed'
+  }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient,
+    validateFinalUrl(finalUrl) {
+      return new URL(finalUrl).hostname === 'github.com'
+        ? { ok: true }
+        : {
+            ok: false,
+            skippedReason: 'redirect_domain_not_allowed',
+            warning: 'redirect final URL rejected by test policy'
+          };
+    }
+  });
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(resolved.skipped_reason, 'redirect_domain_not_allowed');
+  assert.ok(resolved.warnings.includes('redirect final URL rejected by test policy'));
+  assertEmptyResolved(resolved.resolved);
+});
+
+test('resolver treats missing redirect location as non-fatal skipped diagnostics', async () => {
+  const fetchClient = fakeFetch([{ status: 302 }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(resolved.skipped_reason, 'redirect_invalid_location');
+  assertEmptyResolved(resolved.resolved);
+});
+
+test('resolver follows allowed https redirects and keeps final response safe', async () => {
+  const fetchClient = fakeFetch([
+    {
+      status: 302,
+      location: 'https://github.com/androidx/androidx/pull/1234'
+    },
+    {
+      body: readTextFixture('linked-evidence/github-pr-resolved.html'),
+      url: 'https://github.com/androidx/androidx/pull/1234'
+    }
+  ]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence({
+    url: 'https://github.com/androidx/androidx/pull/redirect'
+  })], {
+    enableNetwork: true,
+    fetchClient,
+    validateFinalUrl(finalUrl) {
+      return new URL(finalUrl).hostname === 'github.com'
+        ? { ok: true }
+        : { ok: false, skippedReason: 'redirect_domain_not_allowed' };
+    }
+  });
+
+  assert.equal(fetchClient.calls.length, 2);
+  assert.equal(fetchClient.calls[0].request.redirect, 'manual');
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.RESOLVED);
+  assert.match(resolved.resolved.title, /Fix CameraX video capture metadata/);
+});
+
+test('resolver stops redirect loops at the fixed redirect limit', async () => {
+  const fetchClient = fakeFetch([
+    { status: 302, location: 'https://github.com/androidx/androidx/pull/loop-1' },
+    { status: 302, location: 'https://github.com/androidx/androidx/pull/loop-2' },
+    { status: 302, location: 'https://github.com/androidx/androidx/pull/loop-3' },
+    { status: 302, location: 'https://github.com/androidx/androidx/pull/loop-4' }
+  ]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient
+  });
+
+  assert.equal(fetchClient.calls.length, 4);
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(resolved.skipped_reason, 'redirect_limit_exceeded');
+  assertEmptyResolved(resolved.resolved);
+});
+
 test('resolver resolves GitHub evidence with structured fields and keeps resolved payload', async () => {
   const fetchClient = fakeFetch([{ body: readTextFixture('linked-evidence/github-pr-resolved.html') }]);
 
@@ -125,6 +289,48 @@ test('resolver caps raw_excerpt by maxExcerptChars and RAW_EXCERPT_MAX_LENGTH', 
   assert.ok(smallCap.warnings.includes('excerpt_truncated'));
   assert.ok(rawMax.warnings.includes('excerpt_truncated'));
   assert.equal(JSON.stringify(rawMax).includes('LONG_BODY_SENTINEL_END'), false);
+});
+
+test('resolver skips oversized responses without structured extraction', async () => {
+  const fetchClient = fakeFetch([{
+    body: `<title>Oversized evidence</title>${'x'.repeat(120)}`
+  }]);
+
+  const [resolved] = await resolveLinkedEvidence([githubEvidence()], {
+    enableNetwork: true,
+    fetchClient,
+    maxBytes: 40
+  });
+
+  assert.equal(resolved.fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(resolved.skipped_reason, 'response_too_large');
+  assert.ok(resolved.raw_excerpt.length <= RAW_EXCERPT_MAX_LENGTH);
+  assert.ok(resolved.warnings.some(item => item.includes('max bytes')));
+  assertEmptyResolved(resolved.resolved);
+});
+
+test('resolver caps max links per candidate with skipped diagnostics', async () => {
+  const fetchClient = fakeFetch([
+    { body: readTextFixture('linked-evidence/github-pr-resolved.html') },
+    { body: '<title>Should not fetch over limit</title>' }
+  ]);
+
+  const results = await resolveLinkedEvidence([
+    githubEvidence({ identifier: 'androidx/androidx#1234' }),
+    githubEvidence({
+      url: 'https://github.com/androidx/androidx/pull/5678',
+      identifier: 'androidx/androidx#5678'
+    })
+  ], {
+    enableNetwork: true,
+    fetchClient,
+    maxLinksPerCandidate: 1
+  });
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(results[0].fetch_status, FETCH_STATUSES.RESOLVED);
+  assert.equal(results[1].fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(results[1].skipped_reason, 'max_links_per_candidate_exceeded');
 });
 
 test('resolver reports incomplete structured extraction for plain body snippets', async () => {

@@ -16,6 +16,8 @@ const mailingListResolver = require('./resolvers/mailing-list-resolver');
 
 const BLOCKED_HTTP_STATUSES = new Set([401, 403, 429, 451]);
 const DEFAULT_TIMEOUT_MS = 3000;
+const DEFAULT_MAX_BYTES = 200000;
+const MAX_REDIRECTS = 3;
 
 const FETCH_BACKED_RESOLVERS = [
   androidGerritResolver,
@@ -96,19 +98,29 @@ function effectiveExcerptCap(value) {
   return Math.min(safeValue, RAW_EXCERPT_MAX_LENGTH);
 }
 
+function effectiveMaxBytes(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(1, Math.floor(parsed)) : DEFAULT_MAX_BYTES;
+}
+
+function effectiveMaxLinks(value, fallback = Number.POSITIVE_INFINITY) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : fallback;
+}
+
 function buildResult(base, {
   resolver,
   fetchStatus,
   rawExcerpt = base.raw_excerpt,
   warnings = [],
   resolved = {},
-  excerptCap = RAW_EXCERPT_MAX_LENGTH
+  excerptCap = RAW_EXCERPT_MAX_LENGTH,
+  skippedReason = base.skipped_reason
 }) {
   const resolvedPayload = fetchStatus === FETCH_STATUSES.RESOLVED
     ? normalizeResolved(resolved)
     : defaultResolved();
-
-  return {
+  const result = {
     ...base,
     raw_excerpt: truncateRawExcerpt(rawExcerpt, excerptCap),
     fetch_status: fetchStatus,
@@ -116,6 +128,9 @@ function buildResult(base, {
     resolver,
     resolved: resolvedPayload
   };
+  const reason = text(skippedReason);
+  if (reason) result.skipped_reason = reason;
+  return result;
 }
 
 function decodeHtmlEntities(value) {
@@ -225,8 +240,46 @@ function mergeResolved(...payloads) {
   return merged;
 }
 
-async function responseText(response) {
-  return await response.text();
+async function responseText(response, maxBytes = DEFAULT_MAX_BYTES) {
+  const byteLimit = effectiveMaxBytes(maxBytes);
+  if (response?.body && typeof response.body.getReader === 'function' && typeof TextDecoder === 'function') {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let body = '';
+    let byteLength = 0;
+    let oversized = false;
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = value instanceof Uint8Array ? value : new Uint8Array(value || []);
+        if (byteLength + chunk.byteLength > byteLimit) {
+          const remaining = Math.max(0, byteLimit - byteLength);
+          if (remaining > 0) body += decoder.decode(chunk.slice(0, remaining), { stream: true });
+          byteLength += chunk.byteLength;
+          oversized = true;
+          if (typeof reader.cancel === 'function') await reader.cancel();
+          break;
+        }
+        body += decoder.decode(chunk, { stream: true });
+        byteLength += chunk.byteLength;
+      }
+      body += decoder.decode();
+    } catch (error) {
+      if (!oversized) throw error;
+    }
+
+    return { body, byteLength, oversized };
+  }
+
+  const body = await response.text();
+  const byteLength = Buffer.byteLength(body, 'utf8');
+  return {
+    body: byteLength > byteLimit ? body.slice(0, byteLimit) : body,
+    byteLength,
+    oversized: byteLength > byteLimit
+  };
 }
 
 async function fetchWithTimeout(url, context) {
@@ -237,6 +290,7 @@ async function fetchWithTimeout(url, context) {
   let timeout = null;
   const request = {
     method: 'GET',
+    redirect: 'manual',
     headers: {
       'user-agent': 'camera-hal-sw-newsletter/1.0',
       accept: 'text/html,application/json,text/plain,*/*'
@@ -275,6 +329,104 @@ function responseOk(response, status) {
   return status >= 200 && status < 300;
 }
 
+function responseHeader(response, name) {
+  const headers = response?.headers;
+  if (!headers) return '';
+  if (typeof headers.get === 'function') return text(headers.get(name));
+  const lowerName = String(name || '').toLowerCase();
+  for (const [key, value] of Object.entries(headers)) {
+    if (String(key).toLowerCase() === lowerName) return text(value);
+  }
+  return '';
+}
+
+function isRedirectStatus(status) {
+  return status >= 300 && status < 400;
+}
+
+function validateUrlForFetch(url, evidence, context, redirectReasonPrefix = '') {
+  let parsed;
+  try {
+    parsed = new URL(text(url));
+  } catch {
+    return {
+      ok: false,
+      skippedReason: redirectReasonPrefix ? 'redirect_invalid_location' : 'invalid_url',
+      warning: 'Linked evidence network fetch skipped: invalid URL.'
+    };
+  }
+
+  if (context.httpsOnly !== false && parsed.protocol !== 'https:') {
+    return {
+      ok: false,
+      skippedReason: redirectReasonPrefix ? 'redirect_non_https_url' : 'non_https_url',
+      warning: 'Linked evidence network fetch skipped: non-https URL.'
+    };
+  }
+
+  if (typeof context.validateFinalUrl === 'function') {
+    const result = context.validateFinalUrl(parsed.toString(), evidence) || {};
+    if (result.ok === false) {
+      return {
+        ok: false,
+        skippedReason: text(result.skippedReason || result.skipped_reason || 'redirect_not_primary_evidence'),
+        warning: text(result.warning || `Linked evidence network fetch skipped: ${result.skippedReason || result.skipped_reason || 'final URL rejected'}.`)
+      };
+    }
+  }
+
+  return {
+    ok: true,
+    url: parsed.toString()
+  };
+}
+
+async function fetchWithRedirects(url, evidence, context) {
+  let currentUrl = url;
+  let redirectCount = 0;
+
+  while (true) {
+    const response = await fetchWithTimeout(currentUrl, context);
+    const status = responseStatus(response);
+    if (!isRedirectStatus(status)) {
+      return { response, finalUrl: text(response?.url) || currentUrl };
+    }
+
+    if (redirectCount >= MAX_REDIRECTS) {
+      return {
+        skippedReason: 'redirect_limit_exceeded',
+        warning: 'Linked evidence network fetch skipped: redirect limit exceeded.'
+      };
+    }
+
+    const location = responseHeader(response, 'location');
+    if (!location) {
+      return {
+        skippedReason: 'redirect_invalid_location',
+        warning: 'Linked evidence network fetch skipped: redirect Location header is missing.'
+      };
+    }
+
+    let nextUrl;
+    try {
+      nextUrl = new URL(location, currentUrl).toString();
+    } catch {
+      return {
+        skippedReason: 'redirect_invalid_location',
+        warning: 'Linked evidence network fetch skipped: redirect Location header is invalid.'
+      };
+    }
+
+    const validation = validateUrlForFetch(nextUrl, evidence, context, 'redirect');
+    if (!validation.ok) {
+      return validation;
+    }
+
+    currentUrl = validation.url;
+    redirectCount += 1;
+  }
+}
+
 async function resolveFetchBacked(evidence, options, context) {
   const resolver = options.resolver || 'unknown';
   if (!evidence.url) {
@@ -286,12 +438,27 @@ async function resolveFetchBacked(evidence, options, context) {
     });
   }
 
+  const initialUrlValidation = validateUrlForFetch(evidence.url, evidence, {
+    ...context,
+    validateFinalUrl: null
+  });
+  if (!initialUrlValidation.ok) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.SKIPPED,
+      warnings: [initialUrlValidation.warning],
+      excerptCap: context.excerptCap,
+      skippedReason: initialUrlValidation.skippedReason
+    });
+  }
+
   if (context.enableNetwork !== true) {
     return buildResult(evidence, {
       resolver,
       fetchStatus: FETCH_STATUSES.SKIPPED,
       warnings: ['Linked evidence network fetch skipped: enableNetwork is false.'],
-      excerptCap: context.excerptCap
+      excerptCap: context.excerptCap,
+      skippedReason: 'network_disabled'
     });
   }
 
@@ -300,13 +467,26 @@ async function resolveFetchBacked(evidence, options, context) {
       resolver,
       fetchStatus: FETCH_STATUSES.SKIPPED,
       warnings: ['Linked evidence network fetch skipped: fetchClient is not configured.'],
-      excerptCap: context.excerptCap
+      excerptCap: context.excerptCap,
+      skippedReason: 'fetch_client_missing'
     });
   }
 
   let response;
+  let finalUrl = evidence.url;
   try {
-    response = await fetchWithTimeout(evidence.url, context);
+    const fetchResult = await fetchWithRedirects(initialUrlValidation.url, evidence, context);
+    if (fetchResult.skippedReason) {
+      return buildResult(evidence, {
+        resolver,
+        fetchStatus: FETCH_STATUSES.SKIPPED,
+        warnings: [fetchResult.warning],
+        excerptCap: context.excerptCap,
+        skippedReason: fetchResult.skippedReason
+      });
+    }
+    response = fetchResult.response;
+    finalUrl = fetchResult.finalUrl;
   } catch (error) {
     return buildResult(evidence, {
       resolver,
@@ -323,6 +503,17 @@ async function resolveFetchBacked(evidence, options, context) {
       fetchStatus: FETCH_STATUSES.FAILED,
       warnings: ['Linked evidence fetch failed: response status is missing or invalid.'],
       excerptCap: context.excerptCap
+    });
+  }
+
+  const finalUrlValidation = validateUrlForFetch(finalUrl, evidence, context, 'redirect');
+  if (!finalUrlValidation.ok) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.SKIPPED,
+      warnings: [finalUrlValidation.warning],
+      excerptCap: context.excerptCap,
+      skippedReason: finalUrlValidation.skippedReason
     });
   }
 
@@ -354,14 +545,30 @@ async function resolveFetchBacked(evidence, options, context) {
   }
 
   let body = '';
+  let bodyBytes = 0;
+  let bodyOversized = false;
   try {
-    body = await responseText(response);
+    const result = await responseText(response, context.maxBytes);
+    body = result.body;
+    bodyBytes = result.byteLength;
+    bodyOversized = result.oversized;
   } catch (error) {
     return buildResult(evidence, {
       resolver,
       fetchStatus: FETCH_STATUSES.FAILED,
       warnings: [`Linked evidence body read failed: ${text(error?.message || 'unknown error')}`],
       excerptCap: context.excerptCap
+    });
+  }
+
+  if (bodyOversized) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.SKIPPED,
+      rawExcerpt: body,
+      warnings: [`Linked evidence response exceeded max bytes: ${bodyBytes}/${context.maxBytes}.`],
+      excerptCap: context.excerptCap,
+      skippedReason: 'response_too_large'
     });
   }
 
@@ -402,7 +609,10 @@ function createContext(options) {
     enableNetwork: options.enableNetwork,
     excerptCap,
     fetchClient: options.fetchClient,
+    httpsOnly: options.httpsOnly,
+    maxBytes: effectiveMaxBytes(options.maxBytes),
     timeoutMs: options.timeoutMs,
+    validateFinalUrl: options.validateFinalUrl,
     extractChangedFiles,
     extractCommonStructured,
     extractLabels,
@@ -440,23 +650,48 @@ async function resolveLinkedEvidence(items, {
   fetchClient,
   timeoutMs = DEFAULT_TIMEOUT_MS,
   maxExcerptChars = RAW_EXCERPT_MAX_LENGTH,
+  maxBytes = DEFAULT_MAX_BYTES,
+  maxLinksPerCandidate,
+  maxLinks,
+  httpsOnly = true,
+  validateFinalUrl,
   enableNetwork = false
 } = {}) {
   if (!Array.isArray(items)) return [];
   const context = createContext({
     enableNetwork,
     fetchClient,
+    httpsOnly,
+    maxBytes,
     maxExcerptChars,
-    timeoutMs
+    timeoutMs,
+    validateFinalUrl
   });
+  const linkLimit = effectiveMaxLinks(
+    maxLinksPerCandidate === undefined ? maxLinks : maxLinksPerCandidate
+  );
   const results = [];
-  for (const item of items) {
+  for (const [index, item] of items.entries()) {
+    if (index >= linkLimit) {
+      const base = normalizeLinkedEvidence(item);
+      results.push(buildResult(base, {
+        resolver: 'limit',
+        fetchStatus: FETCH_STATUSES.SKIPPED,
+        warnings: ['Linked evidence network fetch skipped: max links per candidate exceeded.'],
+        excerptCap: context.excerptCap,
+        skippedReason: 'max_links_per_candidate_exceeded'
+      }));
+      continue;
+    }
     results.push(await resolveOne(item, context));
   }
   return results;
 }
 
 module.exports = {
+  DEFAULT_MAX_BYTES,
+  DEFAULT_TIMEOUT_MS,
+  MAX_REDIRECTS,
   defaultResolved,
   resolveLinkedEvidence
 };

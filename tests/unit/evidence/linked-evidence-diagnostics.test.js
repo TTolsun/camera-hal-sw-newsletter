@@ -13,6 +13,7 @@ const {
 } = require('../../../scripts/newsroom/evidence');
 const { buildShortlistReport } = require('../../../scripts/lib/newsroom-selection');
 const { candidate } = require('../../helpers/newsroom-builders');
+const { readTextFixture } = require('../../helpers/fixture-loader');
 
 function linkedCandidate(overrides = {}) {
   return candidate({
@@ -38,6 +39,63 @@ function neutralLinkedCandidate(overrides = {}) {
     behavior_change: '',
     ...overrides
   });
+}
+
+function sourceAwareCandidate(overrides = {}) {
+  return candidate({
+    title: 'CameraX release source-aware links',
+    url: 'https://android-developers.googleblog.com/2026/05/camerax-update.html',
+    summary: 'CameraX release note row with preserved outgoing anchors.',
+    source_linked_evidence_policy: {
+      enabled: true,
+      allowedDomains: ['developer.android.com', 'github.com'],
+      importantAnchorKeywords: ['release notes', 'pull request'],
+      ignoreAnchorKeywords: ['privacy', 'rss', 'share']
+    },
+    outgoing_links: [
+      {
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+        text: 'CameraX release notes',
+        source_field: 'rss.description',
+        extraction_method: 'html_anchor',
+        evidence_role: 'unclassified'
+      },
+      {
+        url: 'https://developer.android.com/privacy',
+        text: 'Privacy',
+        source_field: 'html.body',
+        extraction_method: 'html_anchor',
+        evidence_role: 'unclassified'
+      }
+    ],
+    ...overrides
+  });
+}
+
+function fakeFetch(sequence) {
+  const calls = [];
+  const fetchClient = async (url, request = {}) => {
+    calls.push({ url, request });
+    const next = sequence.shift() || {};
+    const status = next.status || 200;
+    const headers = next.headers || {};
+    return {
+      ok: next.ok ?? (status >= 200 && status < 300),
+      status,
+      url: next.url || url,
+      headers: {
+        get(name) {
+          const key = String(name || '').toLowerCase();
+          if (key === 'location' && next.location) return next.location;
+          const match = Object.entries(headers).find(([header]) => header.toLowerCase() === key);
+          return match ? match[1] : null;
+        }
+      },
+      text: async () => next.body || ''
+    };
+  };
+  fetchClient.calls = calls;
+  return fetchClient;
 }
 
 test('linked evidence diagnostics produce candidate-safe summary and report-only payload', async () => {
@@ -123,6 +181,157 @@ test('linked evidence diagnostics create empty artifacts for zero candidates', a
   assert.deepEqual(report.candidates, []);
   assert.match(markdown, /- candidate_count: 0/);
   assert.match(markdown, /- none/);
+});
+
+test('source-aware outgoing link diagnostics default to extract_only without fetching', async () => {
+  const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', [sourceAwareCandidate()]);
+  const [safeCandidate] = diagnostics.candidates;
+  const [reportCandidate] = diagnostics.report.candidates;
+
+  assert.equal(diagnostics.report.linked_evidence_mode, 'extract_only');
+  assert.equal(diagnostics.report.enable_network, false);
+  assert.equal(safeCandidate.linked_evidence_summary.total_count, 0);
+  assert.equal(reportCandidate.classified_outgoing_links[0].evidence_role, 'primary_evidence');
+  assert.equal(reportCandidate.classified_outgoing_links[0].skipped_reason, 'mode_extract_only');
+  assert.equal(reportCandidate.classified_outgoing_links[1].evidence_role, 'noise');
+  assert.equal(reportCandidate.classified_outgoing_links[1].skipped_reason, 'ignored_by_policy');
+  assert.equal(reportCandidate.source_aware_linked_evidence_summary.total_count, 2);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].skipped_reason, 'mode_extract_only');
+  assert.equal(diagnostics.report.source_aware_totals.by_fetch_status[FETCH_STATUSES.SKIPPED], 2);
+});
+
+test('source-aware outgoing link diagnostics resolve only allowed official https links in resolve mode', async () => {
+  const fetchClient = fakeFetch([{ body: readTextFixture('linked-evidence/github-pr-resolved.html') }]);
+  const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', [sourceAwareCandidate()], {
+    linkedEvidenceMode: 'resolve_allowed_official_links',
+    fetchClient,
+    maxLinksPerCandidate: 8,
+    maxLinksPerRun: 8,
+    timeoutMs: 5000,
+    maxBytes: 200000
+  });
+  const [reportCandidate] = diagnostics.report.candidates;
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(fetchClient.calls[0].url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+  assert.equal(diagnostics.report.enable_network, true);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].fetch_status, FETCH_STATUSES.RESOLVED);
+  assert.equal(reportCandidate.source_aware_linked_evidence[1].fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(reportCandidate.source_aware_linked_evidence[1].skipped_reason, 'ignored_by_policy');
+  assert.equal(reportCandidate.source_aware_linked_evidence_summary.by_fetch_status[FETCH_STATUSES.RESOLVED], 1);
+  assert.equal(reportCandidate.source_aware_linked_evidence_summary.by_fetch_status[FETCH_STATUSES.SKIPPED], 1);
+});
+
+test('source-aware outgoing link diagnostics reject redirects that are no longer primary evidence', async () => {
+  const fetchClient = fakeFetch([{
+    status: 302,
+    location: 'https://developer.android.com/about'
+  }]);
+  const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', [sourceAwareCandidate()], {
+    linkedEvidenceMode: 'resolve_allowed_official_links',
+    fetchClient,
+    maxLinksPerCandidate: 8,
+    maxLinksPerRun: 8,
+    timeoutMs: 5000,
+    maxBytes: 200000
+  });
+  const [reportCandidate] = diagnostics.report.candidates;
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].skipped_reason, 'redirect_not_primary_evidence');
+  assert.equal(reportCandidate.source_aware_linked_evidence[1].skipped_reason, 'ignored_by_policy');
+});
+
+test('source-aware offline fixture mode requires an injected fetch client', async () => {
+  const skipped = await analyzeLinkedEvidenceForCandidates('2026-05-10', [sourceAwareCandidate()], {
+    linkedEvidenceMode: 'offline_fixture_test'
+  });
+  const [skippedCandidate] = skipped.report.candidates;
+  assert.equal(skipped.report.enable_network, false);
+  assert.equal(
+    skippedCandidate.source_aware_linked_evidence[0].skipped_reason,
+    'offline_fixture_fetch_client_missing'
+  );
+
+  const fetchClient = fakeFetch([{ body: readTextFixture('linked-evidence/github-pr-resolved.html') }]);
+  const resolved = await analyzeLinkedEvidenceForCandidates('2026-05-10', [sourceAwareCandidate()], {
+    linkedEvidenceMode: 'offline_fixture_test',
+    fetchClient
+  });
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(resolved.report.enable_network, true);
+  assert.equal(
+    resolved.report.candidates[0].source_aware_linked_evidence[0].fetch_status,
+    FETCH_STATUSES.RESOLVED
+  );
+});
+
+test('source-aware outgoing link diagnostics never fetch http links', async () => {
+  const fetchClient = fakeFetch([{ body: '<title>Should not fetch http</title>' }]);
+  const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', [sourceAwareCandidate({
+    outgoing_links: [{
+      url: 'http://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      text: 'CameraX release notes',
+      source_field: 'rss.description',
+      extraction_method: 'html_anchor',
+      evidence_role: 'unclassified'
+    }]
+  })], {
+    linkedEvidenceMode: 'resolve_allowed_official_links',
+    fetchClient
+  });
+  const [reportCandidate] = diagnostics.report.candidates;
+
+  assert.equal(fetchClient.calls.length, 0);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].skipped_reason, 'non_https_url');
+});
+
+test('source-aware outgoing link diagnostics enforce max total links per run', async () => {
+  const fetchClient = fakeFetch([
+    { body: readTextFixture('linked-evidence/github-pr-resolved.html') },
+    { body: '<title>Should not fetch over run limit</title>' }
+  ]);
+  const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', [
+    sourceAwareCandidate({
+      title: 'CameraX source-aware first',
+      url: 'https://android-developers.googleblog.com/2026/05/camerax-first.html',
+      outgoing_links: [{
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+        text: 'CameraX release notes',
+        source_field: 'rss.description',
+        extraction_method: 'html_anchor',
+        evidence_role: 'unclassified'
+      }]
+    }),
+    sourceAwareCandidate({
+      title: 'CameraX source-aware second',
+      url: 'https://android-developers.googleblog.com/2026/05/camerax-second.html',
+      outgoing_links: [{
+        url: 'https://github.com/androidx/androidx/pull/1234',
+        text: 'pull request',
+        source_field: 'html.body',
+        extraction_method: 'html_anchor',
+        evidence_role: 'unclassified'
+      }]
+    })
+  ], {
+    linkedEvidenceMode: 'resolve_allowed_official_links',
+    fetchClient,
+    maxLinksPerCandidate: 8,
+    maxLinksPerRun: 1
+  });
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(diagnostics.report.candidates[0].source_aware_linked_evidence[0].fetch_status, FETCH_STATUSES.RESOLVED);
+  assert.equal(diagnostics.report.candidates[1].source_aware_linked_evidence[0].fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(
+    diagnostics.report.candidates[1].source_aware_linked_evidence[0].skipped_reason,
+    'max_links_per_run_exceeded'
+  );
 });
 
 test('neutral linked evidence summary does not change deterministic selection scores or order', async () => {

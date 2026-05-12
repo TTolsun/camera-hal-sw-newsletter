@@ -2821,6 +2821,11 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /LLM_FALLBACK_MODELS=\$\{INPUT_LLM_FALLBACK_MODELS\}/);
   assert.match(workflow, /LLM override inputs must be single-line values\./);
   assert.match(workflow, /NEWSROOM_ALLOW_PRO_ON_MANUAL: \$\{\{ github\.event\.inputs\.allow_pro \|\| 'false' \}\}/);
+  assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MODE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MODE \|\| 'extract_only' \}\}/);
+  assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE \|\| '8' \}\}/);
+  assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN \|\| '40' \}\}/);
+  assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS \|\| '5000' \}\}/);
+  assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_BYTES: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_BYTES \|\| '200000' \}\}/);
   assert.doesNotMatch(workflow, /LLM_FALLBACK_MODELS=gemini-2\.5-flash-lite,gemini-2\.5-pro/);
   assert.doesNotMatch(workflow, /\[ "\$\{INPUT_LLM_PROVIDER\}" = "gemini" \]/);
   assert.match(workflow, /INTERNAL_LLM_API_KEY: \$\{\{ secrets\.INTERNAL_LLM_API_KEY \}\}/);

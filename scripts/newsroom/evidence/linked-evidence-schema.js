@@ -36,7 +36,7 @@ function normalizeLinkedEvidence(item = {}) {
     fetchStatus = FETCH_STATUSES.NOT_FETCHED;
   }
 
-  return {
+  const normalized = {
     type,
     url: text(source.url),
     identifier: text(source.identifier),
@@ -45,6 +45,15 @@ function normalizeLinkedEvidence(item = {}) {
     fetch_status: fetchStatus,
     warnings
   };
+  for (const [outputKey, inputKey] of [
+    ['evidence_role', 'evidenceRole'],
+    ['classification_reason', 'classificationReason'],
+    ['skipped_reason', 'skippedReason']
+  ]) {
+    const normalizedValue = text(source[outputKey] || source[inputKey]);
+    if (normalizedValue) normalized[outputKey] = normalizedValue;
+  }
+  return normalized;
 }
 
 function normalizeLinkedEvidenceList(items = []) {

@@ -43,6 +43,11 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.geminiThinkingBudgetRepair, 0);
   assert.equal(config.geminiThinkingBudgetFactcheck, 0);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
+  assert.equal(config.linkedEvidenceMode, 'extract_only');
+  assert.equal(config.linkedEvidenceMaxLinksPerCandidate, 8);
+  assert.equal(config.linkedEvidenceMaxLinksPerRun, 40);
+  assert.equal(config.linkedEvidenceTimeoutMs, 5000);
+  assert.equal(config.linkedEvidenceMaxBytes, 200000);
   assert.equal(config.geminiApiKeyConfigured, false);
   assert.equal(config.internalLlmApiKeyConfigured, false);
 });
@@ -114,6 +119,11 @@ test('runtime env overrides are parsed into typed config', () => {
     GEMINI_THINKING_BUDGET_REPAIR: '0',
     GEMINI_THINKING_BUDGET_FACTCHECK: '0',
     GEMINI_THINKING_BUDGET_SCORING: '0',
+    NEWSROOM_LINKED_EVIDENCE_MODE: 'resolve_allowed_official_links',
+    NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: '4',
+    NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: '12',
+    NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS: '2500',
+    NEWSROOM_LINKED_EVIDENCE_MAX_BYTES: '4096',
     GITHUB_EVENT_NAME: 'workflow_dispatch'
   }, { requireGeminiApiKey: true });
 
@@ -140,8 +150,63 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.geminiThinkingBudgetRepair, 0);
   assert.equal(config.geminiThinkingBudgetFactcheck, 0);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
+  assert.equal(config.linkedEvidenceMode, 'resolve_allowed_official_links');
+  assert.equal(config.linkedEvidenceMaxLinksPerCandidate, 4);
+  assert.equal(config.linkedEvidenceMaxLinksPerRun, 12);
+  assert.equal(config.linkedEvidenceTimeoutMs, 2500);
+  assert.equal(config.linkedEvidenceMaxBytes, 4096);
   assert.equal(config.githubEventName, 'workflow_dispatch');
   assert.equal(config.geminiApiKeyConfigured, true);
+});
+
+test('linked evidence runtime config rejects invalid mode and unsafe limits', () => {
+  assert.throws(
+    () => readRuntimeConfig({
+      NEWSROOM_LINKED_EVIDENCE_MODE: 'resolve_everything'
+    }),
+    /NEWSROOM_LINKED_EVIDENCE_MODE must be one of/
+  );
+
+  const result = validateRuntimeConfig({
+    newsletterDate: '',
+    lookbackDays: 21,
+    llmProvider: 'gemini',
+    llmModel: 'gemini-2.5-flash',
+    llmFallbackModels: [],
+    geminiModel: 'gemini-2.5-flash',
+    geminiFallbackModels: [],
+    geminiMaxRetries: 2,
+    geminiRetryDelaysMs: [20000],
+    geminiRetryMaxDelayMs: 300000,
+    internalLlmEndpoint: '',
+    internalLlmApiVersion: '',
+    newsroomMaxQualityRetries: 1,
+    newsroomMaxSectionRepairs: 1,
+    newsroomWarnCostUsd: 0.15,
+    newsroomMaxCostUsd: 0.25,
+    newsroomAllowProOnSchedule: false,
+    newsroomAllowProOnManual: false,
+    newsroomProEscalation: 'manual',
+    geminiThinkingBudgetReporter: 0,
+    geminiThinkingBudgetEditor: 512,
+    geminiThinkingBudgetRepair: 0,
+    geminiThinkingBudgetFactcheck: 0,
+    geminiThinkingBudgetScoring: 0,
+    linkedEvidenceMode: 'extract_only',
+    linkedEvidenceMaxLinksPerCandidate: -1,
+    linkedEvidenceMaxLinksPerRun: -1,
+    linkedEvidenceTimeoutMs: 0,
+    linkedEvidenceMaxBytes: 0,
+    githubEventName: '',
+    geminiApiKeyConfigured: false,
+    internalLlmApiKeyConfigured: false
+  });
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE/);
+  assert.match(result.errors.join('\n'), /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN/);
+  assert.match(result.errors.join('\n'), /NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS/);
+  assert.match(result.errors.join('\n'), /NEWSROOM_LINKED_EVIDENCE_MAX_BYTES/);
 });
 
 test('LLM_MODEL and LLM_FALLBACK_MODELS override Gemini compatibility aliases', () => {
@@ -350,6 +415,11 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
   assert.equal(sanitized.newsroomMaxSectionRepairs, 1);
   assert.equal(sanitized.geminiThinkingBudgetEditor, 512);
+  assert.equal(sanitized.linkedEvidenceMode, 'extract_only');
+  assert.equal(sanitized.linkedEvidenceMaxLinksPerCandidate, 8);
+  assert.equal(sanitized.linkedEvidenceMaxLinksPerRun, 40);
+  assert.equal(sanitized.linkedEvidenceTimeoutMs, 5000);
+  assert.equal(sanitized.linkedEvidenceMaxBytes, 200000);
   assert.equal(text.includes('super-secret-api-key'), false);
 });
 

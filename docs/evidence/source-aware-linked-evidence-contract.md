@@ -70,6 +70,10 @@ Network resolve is disabled by default.
 NEWSROOM_LINKED_EVIDENCE_MODE=extract_only
 NEWSROOM_LINKED_EVIDENCE_MODE=resolve_allowed_official_links
 NEWSROOM_LINKED_EVIDENCE_MODE=offline_fixture_test
+NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE=8
+NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN=40
+NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS=5000
+NEWSROOM_LINKED_EVIDENCE_MAX_BYTES=200000
 ```
 
 Required limits before enabling network resolve:
@@ -79,6 +83,11 @@ Required limits before enabling network resolve:
 - Max bytes per response.
 - Max links per article.
 - Max total links per run.
+- `extract_only` preserves and classifies links but never fetches network content.
+- `resolve_allowed_official_links` may fetch only source-policy-allowed `primary_evidence` links.
+- `offline_fixture_test` may resolve only through an injected fixture fetch client.
+- `noise`, `unsupported`, `blocked_or_deferred`, `secondary_context`, `http`, and non-URL links are never fetched.
+- Redirect `Location` and final `response.url` must also satisfy `https` and source-policy-allowed `primary_evidence`.
 - Raw HTML full bodies are never stored as artifacts.
 - Timeout, oversized response, blocked HTTP status, and fetch failure are diagnostics only and non-fatal.
 
