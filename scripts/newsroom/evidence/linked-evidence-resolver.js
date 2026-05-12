@@ -17,6 +17,7 @@ const mailingListResolver = require('./resolvers/mailing-list-resolver');
 const BLOCKED_HTTP_STATUSES = new Set([401, 403, 429, 451]);
 const DEFAULT_TIMEOUT_MS = 3000;
 const DEFAULT_MAX_BYTES = 200000;
+const MAX_REDIRECTS = 3;
 
 const FETCH_BACKED_RESOLVERS = [
   androidGerritResolver,
@@ -289,6 +290,7 @@ async function fetchWithTimeout(url, context) {
   let timeout = null;
   const request = {
     method: 'GET',
+    redirect: 'manual',
     headers: {
       'user-agent': 'camera-hal-sw-newsletter/1.0',
       accept: 'text/html,application/json,text/plain,*/*'
@@ -327,6 +329,104 @@ function responseOk(response, status) {
   return status >= 200 && status < 300;
 }
 
+function responseHeader(response, name) {
+  const headers = response?.headers;
+  if (!headers) return '';
+  if (typeof headers.get === 'function') return text(headers.get(name));
+  const lowerName = String(name || '').toLowerCase();
+  for (const [key, value] of Object.entries(headers)) {
+    if (String(key).toLowerCase() === lowerName) return text(value);
+  }
+  return '';
+}
+
+function isRedirectStatus(status) {
+  return status >= 300 && status < 400;
+}
+
+function validateUrlForFetch(url, evidence, context, redirectReasonPrefix = '') {
+  let parsed;
+  try {
+    parsed = new URL(text(url));
+  } catch {
+    return {
+      ok: false,
+      skippedReason: redirectReasonPrefix ? 'redirect_invalid_location' : 'invalid_url',
+      warning: 'Linked evidence network fetch skipped: invalid URL.'
+    };
+  }
+
+  if (context.httpsOnly !== false && parsed.protocol !== 'https:') {
+    return {
+      ok: false,
+      skippedReason: redirectReasonPrefix ? 'redirect_non_https_url' : 'non_https_url',
+      warning: 'Linked evidence network fetch skipped: non-https URL.'
+    };
+  }
+
+  if (typeof context.validateFinalUrl === 'function') {
+    const result = context.validateFinalUrl(parsed.toString(), evidence) || {};
+    if (result.ok === false) {
+      return {
+        ok: false,
+        skippedReason: text(result.skippedReason || result.skipped_reason || 'redirect_not_primary_evidence'),
+        warning: text(result.warning || `Linked evidence network fetch skipped: ${result.skippedReason || result.skipped_reason || 'final URL rejected'}.`)
+      };
+    }
+  }
+
+  return {
+    ok: true,
+    url: parsed.toString()
+  };
+}
+
+async function fetchWithRedirects(url, evidence, context) {
+  let currentUrl = url;
+  let redirectCount = 0;
+
+  while (true) {
+    const response = await fetchWithTimeout(currentUrl, context);
+    const status = responseStatus(response);
+    if (!isRedirectStatus(status)) {
+      return { response, finalUrl: text(response?.url) || currentUrl };
+    }
+
+    if (redirectCount >= MAX_REDIRECTS) {
+      return {
+        skippedReason: 'redirect_limit_exceeded',
+        warning: 'Linked evidence network fetch skipped: redirect limit exceeded.'
+      };
+    }
+
+    const location = responseHeader(response, 'location');
+    if (!location) {
+      return {
+        skippedReason: 'redirect_invalid_location',
+        warning: 'Linked evidence network fetch skipped: redirect Location header is missing.'
+      };
+    }
+
+    let nextUrl;
+    try {
+      nextUrl = new URL(location, currentUrl).toString();
+    } catch {
+      return {
+        skippedReason: 'redirect_invalid_location',
+        warning: 'Linked evidence network fetch skipped: redirect Location header is invalid.'
+      };
+    }
+
+    const validation = validateUrlForFetch(nextUrl, evidence, context, 'redirect');
+    if (!validation.ok) {
+      return validation;
+    }
+
+    currentUrl = validation.url;
+    redirectCount += 1;
+  }
+}
+
 async function resolveFetchBacked(evidence, options, context) {
   const resolver = options.resolver || 'unknown';
   if (!evidence.url) {
@@ -338,28 +438,18 @@ async function resolveFetchBacked(evidence, options, context) {
     });
   }
 
-  if (context.httpsOnly !== false) {
-    let parsed;
-    try {
-      parsed = new URL(evidence.url);
-    } catch {
-      return buildResult(evidence, {
-        resolver,
-        fetchStatus: FETCH_STATUSES.SKIPPED,
-        warnings: ['Linked evidence network fetch skipped: invalid URL.'],
-        excerptCap: context.excerptCap,
-        skippedReason: 'invalid_url'
-      });
-    }
-    if (parsed.protocol !== 'https:') {
-      return buildResult(evidence, {
-        resolver,
-        fetchStatus: FETCH_STATUSES.SKIPPED,
-        warnings: ['Linked evidence network fetch skipped: non-https URL.'],
-        excerptCap: context.excerptCap,
-        skippedReason: 'non_https_url'
-      });
-    }
+  const initialUrlValidation = validateUrlForFetch(evidence.url, evidence, {
+    ...context,
+    validateFinalUrl: null
+  });
+  if (!initialUrlValidation.ok) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.SKIPPED,
+      warnings: [initialUrlValidation.warning],
+      excerptCap: context.excerptCap,
+      skippedReason: initialUrlValidation.skippedReason
+    });
   }
 
   if (context.enableNetwork !== true) {
@@ -383,8 +473,20 @@ async function resolveFetchBacked(evidence, options, context) {
   }
 
   let response;
+  let finalUrl = evidence.url;
   try {
-    response = await fetchWithTimeout(evidence.url, context);
+    const fetchResult = await fetchWithRedirects(initialUrlValidation.url, evidence, context);
+    if (fetchResult.skippedReason) {
+      return buildResult(evidence, {
+        resolver,
+        fetchStatus: FETCH_STATUSES.SKIPPED,
+        warnings: [fetchResult.warning],
+        excerptCap: context.excerptCap,
+        skippedReason: fetchResult.skippedReason
+      });
+    }
+    response = fetchResult.response;
+    finalUrl = fetchResult.finalUrl;
   } catch (error) {
     return buildResult(evidence, {
       resolver,
@@ -401,6 +503,17 @@ async function resolveFetchBacked(evidence, options, context) {
       fetchStatus: FETCH_STATUSES.FAILED,
       warnings: ['Linked evidence fetch failed: response status is missing or invalid.'],
       excerptCap: context.excerptCap
+    });
+  }
+
+  const finalUrlValidation = validateUrlForFetch(finalUrl, evidence, context, 'redirect');
+  if (!finalUrlValidation.ok) {
+    return buildResult(evidence, {
+      resolver,
+      fetchStatus: FETCH_STATUSES.SKIPPED,
+      warnings: [finalUrlValidation.warning],
+      excerptCap: context.excerptCap,
+      skippedReason: finalUrlValidation.skippedReason
     });
   }
 
@@ -499,6 +612,7 @@ function createContext(options) {
     httpsOnly: options.httpsOnly,
     maxBytes: effectiveMaxBytes(options.maxBytes),
     timeoutMs: options.timeoutMs,
+    validateFinalUrl: options.validateFinalUrl,
     extractChangedFiles,
     extractCommonStructured,
     extractLabels,
@@ -540,6 +654,7 @@ async function resolveLinkedEvidence(items, {
   maxLinksPerCandidate,
   maxLinks,
   httpsOnly = true,
+  validateFinalUrl,
   enableNetwork = false
 } = {}) {
   if (!Array.isArray(items)) return [];
@@ -549,7 +664,8 @@ async function resolveLinkedEvidence(items, {
     httpsOnly,
     maxBytes,
     maxExcerptChars,
-    timeoutMs
+    timeoutMs,
+    validateFinalUrl
   });
   const linkLimit = effectiveMaxLinks(
     maxLinksPerCandidate === undefined ? maxLinks : maxLinksPerCandidate
@@ -575,6 +691,7 @@ async function resolveLinkedEvidence(items, {
 module.exports = {
   DEFAULT_MAX_BYTES,
   DEFAULT_TIMEOUT_MS,
+  MAX_REDIRECTS,
   defaultResolved,
   resolveLinkedEvidence
 };

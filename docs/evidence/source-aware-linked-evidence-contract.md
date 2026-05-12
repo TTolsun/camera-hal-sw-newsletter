@@ -87,6 +87,7 @@ Required limits before enabling network resolve:
 - `resolve_allowed_official_links` may fetch only source-policy-allowed `primary_evidence` links.
 - `offline_fixture_test` may resolve only through an injected fixture fetch client.
 - `noise`, `unsupported`, `blocked_or_deferred`, `secondary_context`, `http`, and non-URL links are never fetched.
+- Redirect `Location` and final `response.url` must also satisfy `https` and source-policy-allowed `primary_evidence`.
 - Raw HTML full bodies are never stored as artifacts.
 - Timeout, oversized response, blocked HTTP status, and fetch failure are diagnostics only and non-fatal.
 

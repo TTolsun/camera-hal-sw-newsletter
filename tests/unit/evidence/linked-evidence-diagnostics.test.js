@@ -77,9 +77,20 @@ function fakeFetch(sequence) {
   const fetchClient = async (url, request = {}) => {
     calls.push({ url, request });
     const next = sequence.shift() || {};
+    const status = next.status || 200;
+    const headers = next.headers || {};
     return {
-      ok: next.ok ?? true,
-      status: next.status || 200,
+      ok: next.ok ?? (status >= 200 && status < 300),
+      status,
+      url: next.url || url,
+      headers: {
+        get(name) {
+          const key = String(name || '').toLowerCase();
+          if (key === 'location' && next.location) return next.location;
+          const match = Object.entries(headers).find(([header]) => header.toLowerCase() === key);
+          return match ? match[1] : null;
+        }
+      },
       text: async () => next.body || ''
     };
   };
@@ -210,6 +221,27 @@ test('source-aware outgoing link diagnostics resolve only allowed official https
   assert.equal(reportCandidate.source_aware_linked_evidence[1].skipped_reason, 'ignored_by_policy');
   assert.equal(reportCandidate.source_aware_linked_evidence_summary.by_fetch_status[FETCH_STATUSES.RESOLVED], 1);
   assert.equal(reportCandidate.source_aware_linked_evidence_summary.by_fetch_status[FETCH_STATUSES.SKIPPED], 1);
+});
+
+test('source-aware outgoing link diagnostics reject redirects that are no longer primary evidence', async () => {
+  const fetchClient = fakeFetch([{
+    status: 302,
+    location: 'https://developer.android.com/about'
+  }]);
+  const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', [sourceAwareCandidate()], {
+    linkedEvidenceMode: 'resolve_allowed_official_links',
+    fetchClient,
+    maxLinksPerCandidate: 8,
+    maxLinksPerRun: 8,
+    timeoutMs: 5000,
+    maxBytes: 200000
+  });
+  const [reportCandidate] = diagnostics.report.candidates;
+
+  assert.equal(fetchClient.calls.length, 1);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].fetch_status, FETCH_STATUSES.SKIPPED);
+  assert.equal(reportCandidate.source_aware_linked_evidence[0].skipped_reason, 'redirect_not_primary_evidence');
+  assert.equal(reportCandidate.source_aware_linked_evidence[1].skipped_reason, 'ignored_by_policy');
 });
 
 test('source-aware offline fixture mode requires an injected fetch client', async () => {

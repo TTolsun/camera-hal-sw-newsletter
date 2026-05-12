@@ -206,6 +206,34 @@ function linkedEvidenceFromClassifiedLink(link = {}) {
   };
 }
 
+function validateFinalUrlForClassifiedLink(link = {}, policy = {}) {
+  return finalUrl => {
+    const protocol = urlProtocol(finalUrl);
+    if (protocol !== 'https:') {
+      return {
+        ok: false,
+        skippedReason: 'redirect_non_https_url',
+        warning: 'Linked evidence network fetch skipped: redirect final URL is not https.'
+      };
+    }
+    const [classified] = classifyOutgoingLinks([{
+      ...link,
+      url: finalUrl
+    }], policy);
+    if (classified.evidence_role === EVIDENCE_ROLES.PRIMARY_EVIDENCE) {
+      return { ok: true };
+    }
+    const skippedReason = classified.classification_reason === 'domain_not_allowed_by_policy'
+      ? 'redirect_domain_not_allowed'
+      : 'redirect_not_primary_evidence';
+    return {
+      ok: false,
+      skippedReason,
+      warning: `Linked evidence network fetch skipped: redirect final URL rejected by source policy (${classified.classification_reason || classified.evidence_role || 'unknown'}).`
+    };
+  };
+}
+
 function skippedSourceAwareEvidence(link = {}, reason = '') {
   const evidence = linkedEvidenceFromClassifiedLink({
     ...link,
@@ -230,9 +258,10 @@ function fetchClientForMode(options = {}) {
 }
 
 async function resolveSourceAwareOutgoingEvidence(candidate = {}, options = {}, runState = { resolvedCount: 0 }) {
+  const policy = sourceLinkedEvidencePolicy(candidate);
   const classifiedLinks = classifyOutgoingLinks(
     candidate.outgoing_links || candidate.outgoingLinks,
-    sourceLinkedEvidencePolicy(candidate)
+    policy
   ).map(link => enrichClassifiedLink(link, options.mode));
   const fetchClient = fetchClientForMode(options);
   const resolvedEvidence = [];
@@ -271,7 +300,8 @@ async function resolveSourceAwareOutgoingEvidence(candidate = {}, options = {}, 
       timeoutMs: options.timeoutMs,
       maxBytes: options.maxBytes,
       maxLinksPerCandidate: 1,
-      httpsOnly: true
+      httpsOnly: true,
+      validateFinalUrl: validateFinalUrlForClassifiedLink(link, policy)
     });
     resolvedEvidence.push(resolved);
     resolvedForCandidate += 1;
