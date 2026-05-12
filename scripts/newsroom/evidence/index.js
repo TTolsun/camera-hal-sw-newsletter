@@ -5,5 +5,6 @@ module.exports = {
   ...require('./linked-evidence-link-classifier'),
   ...require('./linked-evidence-resolver'),
   ...require('./impact-classifier'),
+  ...require('./event-bundle-builder'),
   ...require('./linked-evidence-diagnostics')
 };

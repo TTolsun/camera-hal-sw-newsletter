@@ -93,7 +93,10 @@ Required limits before enabling network resolve:
 
 ## Event Bundle 계약
 
-Event Bundle implementation is explicitly out of scope for PR 1. When implemented, dedupe fallback order is:
+PR 1에서는 Event Bundle을 구현하지 않는다.
+PR 5는 in-memory Event Bundle builder만 추가한다. `event-bundles.json`, PR body trace output,
+selection/scoring integration, HAL runtime/API inference는 PR 6 전까지 범위 밖이다.
+Dedupe fallback order는 다음 순서를 따른다.
 
 ```text
 canonical_release_note_url
@@ -127,6 +130,13 @@ Minimum schema:
   "warnings": []
 }
 ```
+
+Builder 규칙:
+
+- `event_bundles[]` 부재는 fallback article 승격 사유가 될 수 없다.
+- Preservation-only `unclassified`, `noise`, `unsupported`, `blocked_or_deferred`, `secondary_context` link는 Event Bundle evidence URL이 아니다.
+- Failed, blocked, skipped, unsupported resolved evidence는 `evidence_urls`에서 제외한다.
+- Event Bundle key는 deterministic해야 하며, conservative PR 6 integration 전까지 diagnostic-only로 취급한다.
 
 ## Scoring 및 발행 안전성
 
