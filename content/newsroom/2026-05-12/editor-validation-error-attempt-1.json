@@ -3,38 +3,16 @@
   "message": "Editor output failed article field hygiene validation.",
   "details": {
     "field": "sections.field_hygiene",
-    "actualCount": 3,
+    "actualCount": 1,
     "sectionCount": 3,
     "issues": [
       {
         "index": 1,
-        "headline": "libcamera v0.7.1 릴리스: SoftISP 및 이미지 파이프라인 개선",
+        "headline": "libcamera v0.7.1 출시: SoftISP 및 파이프라인 처리량 개선",
         "impact_claim_level": "camera_stack_direct",
         "type": "overclaim_guardrail",
         "field": "camera_hal_perspective",
-        "snippet": "이번 libcamera 업데이트는 Android HAL 계약을 직접적으로 변경하지는 않지만, 하위 레벨 드라이버 및 이미지 파이프라인의 동작에 영향을 미칩니다",
-        "severity": "hard",
-        "blocking": true,
-        "reason": "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level."
-      },
-      {
-        "index": 2,
-        "headline": "CameraX 1.4.0-alpha07 릴리스: camera-viewfinder 업데이트",
-        "impact_claim_level": "android_framework_adjacent",
-        "type": "overclaim_guardrail",
-        "field": "camera_hal_perspective",
-        "snippet": "CameraX 업데이트는 HAL 인터페이스나 메타데이터 계약을 직접적으로 변경하지는 않습니다",
-        "severity": "hard",
-        "blocking": true,
-        "reason": "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level."
-      },
-      {
-        "index": 3,
-        "headline": "GCC 16.1 출시: C++26 기능 및 C++20 기본 설정",
-        "impact_claim_level": "tooling_supporting",
-        "type": "overclaim_guardrail",
-        "field": "camera_hal_perspective",
-        "snippet": "1 릴리스는 Android HAL의 런타임 동작이나 API 계약에 직접적인 영향을 미치지 않습니다",
+        "snippet": "이 libcamera 업데이트는 Android HAL 계약에 직접적인 변경을 의미하지는 않지만, 하위 Linux 카메라 드라이버 스택의 기능과 성능에 영향을 미칠 수 있습니다",
         "severity": "hard",
         "blocking": true,
         "reason": "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level."

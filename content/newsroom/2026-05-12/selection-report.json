@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-12",
-  "generated_at": "2026-05-11T17:50:37.299Z",
+  "generated_at": "2026-05-12T03:41:32.061Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -105,23 +105,23 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 27
+      "count": 20
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 27
+      "count": 20
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 7
+      "count": 14
     },
     {
       "reason": "missing dated evidence",
-      "count": 5
+      "count": 14
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 5
+      "count": 14
     }
   ],
   "final_exclusion_reason_summary": [
@@ -139,23 +139,23 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 27
+      "count": 20
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 27
+      "count": 20
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 7
+      "count": 14
     },
     {
       "reason": "missing dated evidence",
-      "count": 5
+      "count": 14
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 5
+      "count": 14
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."

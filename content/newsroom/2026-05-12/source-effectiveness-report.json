@@ -22,16 +22,16 @@
     "selected_count": 5,
     "rendered_main_count": 3,
     "source_gap_count": 34,
-    "generic_noise_count": 32,
+    "generic_noise_count": 30,
     "duplicate_count": 0,
     "recommendation_counts": [
       {
         "recommendation": "NO_RECENT_SIGNAL",
-        "count": 38
+        "count": 28
       },
       {
         "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
-        "count": 6
+        "count": 16
       },
       {
         "recommendation": "KEEP",
@@ -120,58 +120,19 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
       "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 0,
-      "eligible_rate": 0,
-      "selection_rate": 0,
-      "rendered_rate": 0,
-      "source_gap_rate": 0,
-      "noise_rate": 0,
-      "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
-      "reasons": [
-        "No recent candidates were collected for this source."
-      ],
-      "top_exclusion_reasons": [],
-      "sample_selected_urls": [],
-      "sample_excluded_urls": []
-    },
-    {
-      "source_id": "android-developers-blog",
-      "source_name": "Android Developers Blog",
-      "source_url": "https://android-developers.googleblog.com/",
-      "rss_url": "https://android-developers.googleblog.com/feeds/posts/default?alt=rss",
-      "category": "android",
-      "priority": "high",
-      "reliability": "official",
-      "enabled": true,
-      "candidate_only": false,
-      "collection_mode_hint": "rss-source",
-      "synthetic": false,
-      "collected_count": 12,
-      "eligible_count": 0,
-      "selected_count": 0,
-      "rendered_main_count": 0,
-      "source_gap_count": 12,
-      "reference_only_count": 12,
-      "watchlist_count": 12,
-      "main_eligible_false_count": 12,
-      "briefing_only_count": 12,
-      "duplicate_count": 0,
-      "duplicate_within_source_count": 0,
-      "duplicate_across_sources_count": 0,
-      "generic_noise_count": 12,
+      "generic_noise_count": 1,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -187,32 +148,96 @@
       "top_exclusion_reasons": [
         {
           "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-          "count": 12
+          "count": 1
         },
         {
-          "reason": "briefing_only=true",
-          "count": 12
+          "reason": "finalSelectionEligibility=exclude",
+          "count": 1
         },
         {
-          "reason": "finalSelectionEligibility=watchlist",
-          "count": 12
+          "reason": "hasDatedEvidence=false",
+          "count": 1
         },
         {
           "reason": "main_eligible=false",
-          "count": 12
+          "count": 1
         },
         {
           "reason": "reference_only=true",
-          "count": 12
+          "count": 1
         }
       ],
       "sample_selected_urls": [],
       "sample_excluded_urls": [
-        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
-        "https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html",
+        "https://developer.android.com/newsletter"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "source_name": "Android Developers Blog",
+      "source_url": "https://android-developers.googleblog.com/",
+      "rss_url": "https://android-developers.googleblog.com/feeds/posts/default?alt=rss",
+      "category": "android",
+      "priority": "high",
+      "reliability": "official",
+      "enabled": true,
+      "candidate_only": false,
+      "collection_mode_hint": "rss-source",
+      "synthetic": false,
+      "collected_count": 6,
+      "eligible_count": 0,
+      "selected_count": 0,
+      "rendered_main_count": 0,
+      "source_gap_count": 6,
+      "reference_only_count": 6,
+      "watchlist_count": 6,
+      "main_eligible_false_count": 6,
+      "briefing_only_count": 6,
+      "duplicate_count": 0,
+      "duplicate_within_source_count": 0,
+      "duplicate_across_sources_count": 0,
+      "generic_noise_count": 6,
+      "eligible_rate": 0,
+      "selection_rate": 0,
+      "rendered_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
+      "effectiveness_score": 0,
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
+      "reasons": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
+      ],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 6
+        },
+        {
+          "reason": "briefing_only=true",
+          "count": 6
+        },
+        {
+          "reason": "finalSelectionEligibility=watchlist",
+          "count": 6
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 6
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 6
+        }
+      ],
+      "sample_selected_urls": [],
+      "sample_excluded_urls": [
         "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
-        "https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html",
-        "https://android-developers.googleblog.com/2026/04/get-ready-for-google-io-livestream-schedule-revealed.html"
+        "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+        "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+        "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+        "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html"
       ]
     },
     {
@@ -413,32 +438,57 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
       "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 0,
+      "generic_noise_count": 1,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
-      "noise_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=exclude",
+          "count": 1
+        },
+        {
+          "reason": "hasDatedEvidence=false",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://www.anthropic.com/news"
+      ]
     },
     {
       "source_id": "aosp-camera-documentation",
@@ -658,32 +708,57 @@
       "candidate_only": false,
       "collection_mode_hint": "release-note-watch",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
-      "briefing_only_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
+      "briefing_only_count": 1,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 0,
+      "generic_noise_count": 1,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
-      "noise_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 1
+        },
+        {
+          "reason": "briefing_only=true",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=watchlist",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://code.claude.com/docs/en/changelog"
+      ]
     },
     {
       "source_id": "collabora-blog",
@@ -892,32 +967,57 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
       "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 0,
+      "generic_noise_count": 1,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
-      "noise_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=exclude",
+          "count": 1
+        },
+        {
+          "reason": "hasDatedEvidence=false",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://cloud.google.com/blog/products/ai-machine-learning"
+      ]
     },
     {
       "source_id": "google-deepmind-blog",
@@ -931,32 +1031,57 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
       "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 0,
+      "generic_noise_count": 1,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
-      "noise_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=exclude",
+          "count": 1
+        },
+        {
+          "reason": "hasDatedEvidence=false",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://deepmind.google/blog/"
+      ]
     },
     {
       "source_id": "google-open-source-blog",
@@ -1009,32 +1134,57 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
       "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 0,
+      "generic_noise_count": 1,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
-      "noise_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=exclude",
+          "count": 1
+        },
+        {
+          "reason": "hasDatedEvidence=false",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://research.google/blog/"
+      ]
     },
     {
       "source_id": "hacker-news",
@@ -1204,24 +1354,24 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 18,
+      "collected_count": 14,
       "eligible_count": 2,
       "selected_count": 1,
       "rendered_main_count": 0,
-      "source_gap_count": 16,
-      "reference_only_count": 15,
-      "watchlist_count": 14,
-      "main_eligible_false_count": 16,
-      "briefing_only_count": 14,
+      "source_gap_count": 12,
+      "reference_only_count": 11,
+      "watchlist_count": 10,
+      "main_eligible_false_count": 12,
+      "briefing_only_count": 10,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 14,
-      "eligible_rate": 0.1111,
+      "generic_noise_count": 10,
+      "eligible_rate": 0.1429,
       "selection_rate": 0.5,
       "rendered_rate": 0,
-      "source_gap_rate": 0.8889,
-      "noise_rate": 0.7778,
+      "source_gap_rate": 0.8571,
+      "noise_rate": 0.7143,
       "effectiveness_score": 0,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
@@ -1232,23 +1382,23 @@
       "top_exclusion_reasons": [
         {
           "reason": "main_eligible=false",
-          "count": 16
+          "count": 12
         },
         {
           "reason": "source_gap_risk=true",
-          "count": 16
+          "count": 12
         },
         {
           "reason": "reference_only=true",
-          "count": 15
+          "count": 11
         },
         {
           "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-          "count": 14
+          "count": 10
         },
         {
           "reason": "briefing_only=true",
-          "count": 14
+          "count": 10
         }
       ],
       "sample_selected_urls": [
@@ -1256,10 +1406,10 @@
       ],
       "sample_excluded_urls": [
         "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
-        "https://isocpp.org//blog/2026/04/announcement-cppreference.com-update",
         "https://isocpp.org//blog/2026/04/behold-the-power-of-metasubstitute-barry-revzin",
         "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-        "https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt"
+        "https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt",
+        "https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m"
       ]
     },
     {
@@ -1352,15 +1502,15 @@
       "candidate_only": false,
       "collection_mode_hint": "documentation-watch",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
-      "briefing_only_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
+      "briefing_only_count": 1,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
@@ -1368,16 +1518,40 @@
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
+      "source_gap_rate": 1,
       "noise_rate": 0,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+          "count": 1
+        },
+        {
+          "reason": "briefing_only=true",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=watchlist",
+          "count": 1
+        },
+        {
+          "reason": "hasDatedEvidence=false",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://libcamera.org/introduction.html"
+      ]
     },
     {
       "source_id": "libcamera-release-announcements",
@@ -1471,15 +1645,15 @@
       "candidate_only": false,
       "collection_mode_hint": "release-note-watch",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
-      "briefing_only_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
+      "briefing_only_count": 1,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
@@ -1487,16 +1661,40 @@
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
+      "source_gap_rate": 1,
       "noise_rate": 0,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+          "count": 1
+        },
+        {
+          "reason": "briefing_only=true",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=watchlist",
+          "count": 1
+        },
+        {
+          "reason": "hasDatedEvidence=false",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://releases.llvm.org/"
+      ]
     },
     {
       "source_id": "lwn-camera-media-articles",
@@ -1627,32 +1825,57 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
       "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 0,
+      "generic_noise_count": 1,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
-      "noise_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=exclude",
+          "count": 1
+        },
+        {
+          "reason": "hasDatedEvidence=false",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://openai.com/news/"
+      ]
     },
     {
       "source_id": "phoronix-linux-camera-media",
@@ -1705,32 +1928,57 @@
       "candidate_only": false,
       "collection_mode_hint": "release-note-watch",
       "synthetic": false,
-      "collected_count": 0,
+      "collected_count": 1,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 0,
-      "main_eligible_false_count": 0,
+      "source_gap_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
       "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 0,
+      "generic_noise_count": 1,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0,
-      "noise_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
       "effectiveness_score": 0,
-      "recommendation": "NO_RECENT_SIGNAL",
+      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
       "reasons": [
-        "No recent candidates were collected for this source."
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source produced candidates but none were eligible for main/short selection.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
-      "top_exclusion_reasons": [],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=exclude",
+          "count": 1
+        },
+        {
+          "reason": "hasDatedEvidence=false",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 1
+        }
+      ],
       "sample_selected_urls": [],
-      "sample_excluded_urls": []
+      "sample_excluded_urls": [
+        "https://docs.qualcomm.com/product/publicresources/securitybulletin"
+      ]
     },
     {
       "source_id": "samsung-mobile-security-updates",

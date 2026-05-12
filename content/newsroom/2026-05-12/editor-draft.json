@@ -1,7 +1,7 @@
 {
   "date": "2026-05-12",
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-12",
-  "summary": "이번 2026-05-12호는 libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰, CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다.",
+  "summary": "이번 2026-05-12호는 libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰, CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다. hard failure article 1개는 main article에서 제거하거나 강등했습니다.",
   "briefing": [
     "공식 source 기반 후보를 우선 검토했습니다.",
     "hard failure article은 main article에서 제거하거나 watch 성격으로 강등했습니다.",
@@ -260,12 +260,12 @@
     },
     {
       "category": "Android Platform / CameraX",
-      "headline": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰",
+      "headline": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
       "confirmed_facts": [
         "Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.",
-        "버전/릴리스: 1.3.0-beta02.",
+        "버전/릴리스: 1.4.0-alpha07.",
         "관련 컴포넌트: CameraX / androidx.camera.",
-        "확인된 변경점: CameraX / androidx.camera 1.3.0-beta02 업데이트입니다. 대상: CameraX / androidx.camera."
+        "확인된 변경점: CameraX / androidx.camera 1.4.0-alpha07 업데이트입니다. 대상: CameraX / androidx.camera."
       ],
       "evidence_summary": "Android Developers Latest Updates source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
       "specificity_checks": [
@@ -282,7 +282,7 @@
         "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
         "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
       ],
-      "what_changed": "CameraX / androidx.camera 1.3.0-beta02 업데이트입니다. 대상: CameraX / androidx.camera.",
+      "what_changed": "CameraX / androidx.camera 1.4.0-alpha07 업데이트입니다. 대상: CameraX / androidx.camera.",
       "background": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "camera_hal_checks": [
@@ -295,7 +295,7 @@
         "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
       ],
       "action_hints": [],
-      "team_summary": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
+      "team_summary": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
       "why_it_matters": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "is_ai_related": false,
       "article_type": "camera-hal",
@@ -318,16 +318,16 @@
         },
         {
           "id": "androidx-maven-group-table",
-          "text": "This library was last updated on: May 06, 2026 <h3 class=\"hide-from-toc no-link\" id=\"wear-mave"
+          "text": "This library was last updated on: May 06, 2026 Wear Maven Group vers"
         },
         {
           "id": "module-version-table-dump",
           "text": "camera-viewfinder - - 1.3.0-beta02"
         }
       ],
-      "background_basis": "article-field-builder deterministic static background",
-      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "source_candidate_hash": "d116a623b5025f895f131151e5af0dff5221d24c9ef56d17ef871245dce222ca",
+      "background_basis": "supplied article capsule metadata와 모델 지식 기반",
+      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source_candidate_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
       "relevance_bucket": "android_platform_camera_adjacent",
       "editorial_priority": 3,
       "aosp_camera_directness": 2,
@@ -342,15 +342,15 @@
       "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
       "sources": [
         {
-          "title": "1.3.0-beta02",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
+          "title": "1.4.0-alpha07",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
         }
       ],
       "imageCandidates": [
         {
           "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
           "width": null,
           "height": null,
@@ -364,7 +364,7 @@
         {
           "url": "https://www.gstatic.com/devrel-devsite/prod/v1b953b434e2033f0160fd97c99360ee5d4d0a613449c2a694360a72d378b9d8e/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
@@ -378,7 +378,7 @@
         {
           "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
@@ -399,9 +399,9 @@
       "article_sections": {
         "verified_facts": [
           "Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.",
-          "버전/릴리스: 1.3.0-beta02.",
+          "버전/릴리스: 1.4.0-alpha07.",
           "관련 컴포넌트: CameraX / androidx.camera.",
-          "확인된 변경점: CameraX / androidx.camera 1.3.0-beta02 업데이트입니다. 대상: CameraX / androidx.camera."
+          "확인된 변경점: CameraX / androidx.camera 1.4.0-alpha07 업데이트입니다. 대상: CameraX / androidx.camera."
         ],
         "background_context": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
         "hal_driver_impact": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
@@ -410,7 +410,7 @@
           "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
           "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
         ],
-        "team_share_points": "CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
+        "team_share_points": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
       }
     }
   ],
@@ -427,6 +427,10 @@
     {
       "title": "1.6.1",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+    },
+    {
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
     },
     {
       "title": "1.3.0-beta02",

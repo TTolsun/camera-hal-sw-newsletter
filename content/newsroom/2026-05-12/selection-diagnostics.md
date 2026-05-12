@@ -31,8 +31,8 @@ Source/parser recovery hint:
 - main_eligible=false (34)
 - source_gap_risk=true (34)
 - reference_only=true (32)
-- briefing_only=true (27)
-- finalSelectionEligibility=watchlist (27)
+- briefing_only=true (20)
+- finalSelectionEligibility=watchlist (20)
 
 Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
 

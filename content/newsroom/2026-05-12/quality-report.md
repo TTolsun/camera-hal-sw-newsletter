@@ -55,7 +55,7 @@
 | ---: | --- | --- | --- | --- |
 | 1 | libcamera Release Announcements - libcamera v0.7.1 | pass | present | present |
 | 2 | CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 | pass | present | present |
-| 3 | CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰 | pass | present | present |
+| 3 | CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰 | pass | present | present |
 
 ## Article Gate Results
 
@@ -63,11 +63,11 @@
 | ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | PASS | preserve | libcamera Release Announcements - libcamera v0.7.1 | camera_driver_image_pipeline | 2 | true | true | false | false | true | bound | shortlist_selected | merged | none | camera_driver_image_pipeline counts toward primary_camera_stack_count. | none | none | none |
 | 2 | PASS | preserve | CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | none | none |
-| 3 | FAIL | replace-or-demote | CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰 | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02. | none |
+| 3 | FAIL | replace-or-demote | CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰 | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07. | none |
 
 ## Hard Fails
 
-- 8 pt [source-integrity] CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰: Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02.
+- 8 pt [source-integrity] CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰: Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07.
 
 ## Soft Deductions
 
@@ -83,4 +83,4 @@
 
 ## Deductions
 
-- 8 pt [source-integrity] CameraX 1.3.0-beta02 업데이트: Android Camera 호환성 관찰: Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02.
+- 8 pt [source-integrity] CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰: Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07.
