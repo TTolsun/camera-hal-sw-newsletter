@@ -310,6 +310,23 @@ function normalizeUrlKey(value) {
   }
 }
 
+function normalizeEventBundleTraceUrlKey(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  try {
+    const parsed = new URL(text);
+    const preserveHash = parsed.hostname.toLowerCase() === 'developer.android.com' &&
+      parsed.pathname === '/jetpack/androidx/releases/camera' &&
+      /^#(?:camera-[a-z0-9-]+-)?\d+\.\d+\.\d+(?:[-\w.]*)?$/i.test(parsed.hash);
+    if (!preserveHash) parsed.hash = '';
+    parsed.search = '';
+    parsed.hostname = parsed.hostname.toLowerCase();
+    return parsed.toString().replace(/\/$/, '').toLowerCase();
+  } catch (_) {
+    return text.replace(/[?#].*$/, '').replace(/\/$/, '').toLowerCase();
+  }
+}
+
 function truncateText(value, maxLength = 180) {
   const text = String(value ?? '').replace(/\s+/g, ' ').trim();
   if (text.length <= maxLength) return text;
@@ -820,6 +837,66 @@ function renderCandidateRows(candidates, limit, reasonLabel) {
   return rows;
 }
 
+function eventBundleArtifact(root, date) {
+  return readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'event-bundles.json'));
+}
+
+function eventBundleRowsForFinalCandidates(root, date, finalCandidates = []) {
+  const artifact = eventBundleArtifact(root, date);
+  const bundles = ensureArray(artifact?.event_bundles);
+  if (bundles.length === 0 || finalCandidates.length === 0) return null;
+
+  const candidateByUrl = new Map();
+  for (const candidate of finalCandidates) {
+    const candidateUrls = ensureArray(candidate.urls);
+    for (const url of candidateUrls.length > 0 ? candidateUrls : [candidate.url]) {
+      for (const key of [normalizeUrlKey(url), normalizeEventBundleTraceUrlKey(url)].filter(Boolean)) {
+        candidateByUrl.set(key, candidate);
+      }
+    }
+  }
+
+  const rows = [];
+  for (const bundle of bundles) {
+    const candidate = candidateByUrl.get(normalizeUrlKey(bundle.primary_url)) ||
+      candidateByUrl.get(normalizeEventBundleTraceUrlKey(bundle.primary_url));
+    if (!candidate) continue;
+    const evidenceUrls = ensureArray(bundle.evidence_urls);
+    const evidenceSummary = evidenceUrls.length > 0
+      ? evidenceUrls.slice(0, 3).join('; ')
+      : 'none';
+    const omittedEvidence = evidenceUrls.length > 3 ? `; +${evidenceUrls.length - 3} more` : '';
+    rows.push([
+      String(rows.length + 1),
+      formatCandidateLink(candidate),
+      `${evidenceSummary}${omittedEvidence}`,
+      `${bundle.event_id || 'event_unknown'} / ${bundle.event_type || 'unknown'} / ${bundle.dedupe_reason || 'unknown'} / confidence=${bundle.confidence || 'unknown'}`
+    ]);
+  }
+  return rows;
+}
+
+function renderEventBundleTrace(root, date, finalCandidates = []) {
+  const artifact = eventBundleArtifact(root, date);
+  if (!artifact) return '';
+  const rows = eventBundleRowsForFinalCandidates(root, date, finalCandidates) || [];
+  return [
+    '### Event Bundle 추적',
+    '',
+    rows.length > 0
+      ? renderMarkdownTable(
+        ['#', 'Primary article', 'Followed evidence', 'Event Bundle'],
+        rows
+      )
+      : '- none',
+    '',
+    '상세 artifact:',
+    `- \`content/newsroom/${date}/event-bundles.json\``,
+    `- \`content/newsroom/${date}/event-bundle-diagnostics.md\``,
+    ''
+  ].join('\n');
+}
+
 function renderCandidateTraceability(root, date) {
   const { artifacts, issues } = loadCandidateTraceArtifacts(root, date);
   const traceIndex = buildTraceIndex(artifacts, issues);
@@ -846,6 +923,7 @@ function renderCandidateTraceability(root, date) {
     : 0;
   const noCandidateArtifacts = traceIndex.candidates.length === 0;
   const detailPaths = TRACE_ARTIFACT_DEFS.map(def => def.path(date));
+  const eventBundleTrace = renderEventBundleTrace(root, date, finalCandidates);
 
   const lines = [
     '## 후보 기사 추적',
@@ -921,6 +999,7 @@ function renderCandidateTraceability(root, date) {
       )
       : '- none',
     '',
+    eventBundleTrace,
     '### 상세 artifact',
     '',
     ...detailPaths.map(relPath => `- \`${relPath}\``),

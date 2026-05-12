@@ -118,6 +118,8 @@ test('linked evidence diagnostics produce candidate-safe summary and report-only
   assert.ok(reportCandidate.linked_evidence[0].raw_excerpt.length <= RAW_EXCERPT_MAX_LENGTH);
   assert.equal(reportCandidate.linked_evidence_summary.by_fetch_status[FETCH_STATUSES.SKIPPED], 1);
   assert.ok(diagnostics.report.totals.top_identifiers.length > 0);
+  assert.equal(Array.isArray(diagnostics.eventBundleArtifact.event_bundles), true);
+  assert.equal(safeCandidate.event_bundles, undefined);
 });
 
 test('linked evidence diagnostics failures are isolated per candidate', async () => {
@@ -173,14 +175,46 @@ test('linked evidence diagnostics create empty artifacts for zero candidates', a
 
   const reportPath = path.join(tempDir, 'linked-evidence-report.json');
   const markdownPath = path.join(tempDir, 'linked-evidence-diagnostics.md');
+  const eventBundlesPath = path.join(tempDir, 'event-bundles.json');
+  const eventBundleMarkdownPath = path.join(tempDir, 'event-bundle-diagnostics.md');
   const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
   const markdown = fs.readFileSync(markdownPath, 'utf8');
+  const eventBundleArtifact = JSON.parse(fs.readFileSync(eventBundlesPath, 'utf8'));
+  const eventBundleMarkdown = fs.readFileSync(eventBundleMarkdownPath, 'utf8');
 
   assert.equal(report.candidate_count, 0);
   assert.equal(report.totals.total_count, 0);
   assert.deepEqual(report.candidates, []);
   assert.match(markdown, /- candidate_count: 0/);
   assert.match(markdown, /- none/);
+  assert.deepEqual(eventBundleArtifact.event_bundles, []);
+  assert.match(eventBundleMarkdown, /# Event Bundle Diagnostics/);
+});
+
+test('linked evidence diagnostics creates Event Bundle artifact without changing safe candidates', async () => {
+  const diagnostics = await analyzeLinkedEvidenceForCandidates('2026-05-10', [sourceAwareCandidate({
+    source_id: 'camerax-release-notes',
+    version_or_release: 'CameraX 1.6.1',
+    published_date: '2026-05-06',
+    api_or_component: 'CameraX / androidx.camera',
+    source_extraction: {
+      release: {
+        version: 'CameraX 1.6.1',
+        date: '2026-05-06',
+        component: 'CameraX / androidx.camera'
+      }
+    }
+  })]);
+  const [safeCandidate] = diagnostics.candidates;
+  const [bundle] = diagnostics.eventBundleArtifact.event_bundles;
+
+  assert.equal(safeCandidate.event_bundles, undefined);
+  assert.equal(diagnostics.report.event_bundle_summary.total_count, 1);
+  assert.equal(diagnostics.eventBundleArtifact.summary.total_count, 1);
+  assert.equal(bundle.dedupe_reason, 'source_id + release.version');
+  assert.equal(bundle.release.version, 'CameraX 1.6.1');
+  assert.deepEqual(bundle.evidence_urls, []);
+  assert.match(diagnostics.eventBundleMarkdown, /source_id \+ release\.version/);
 });
 
 test('source-aware outgoing link diagnostics default to extract_only without fetching', async () => {

@@ -86,6 +86,12 @@ function testManifestCreationAndHashes() {
     candidates: []
   });
   writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'linked-evidence-diagnostics.md').split('/')), '# Linked Evidence Diagnostics\n');
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'event-bundles.json').split('/')), {
+    schema_version: 1,
+    date,
+    event_bundles: []
+  });
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'event-bundle-diagnostics.md').split('/')), '# Event Bundle Diagnostics\n');
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'retry-history.json').split('/')), []);
   writeJson(path.join(snapshotDir, '.tmp', 'gemini-raw', 'attempt-1.json'), { text: '{' });
   writeJson(path.join(snapshotDir, 'cache', 'news-summary', 'summary.json'), { title: 'cached' });
@@ -100,6 +106,8 @@ function testManifestCreationAndHashes() {
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'selection-report.md')));
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'linked-evidence-report.json')));
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'linked-evidence-diagnostics.md')));
+  assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'event-bundles.json')));
+  assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'event-bundle-diagnostics.md')));
   assert.ok(manifest.files.some(file => file.path === '.tmp/gemini-raw/attempt-1.json'));
   assert.ok(manifest.files.some(file => file.path === 'cache/news-summary/summary.json'));
   assert.ok(manifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
