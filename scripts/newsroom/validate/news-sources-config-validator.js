@@ -25,6 +25,11 @@ const VALID_COLLECTION_MODE_HINTS = new Set([
   'homepage-watch',
   'media-lead'
 ]);
+const LINKED_EVIDENCE_POLICY_ARRAY_FIELDS = [
+  'allowedDomains',
+  'importantAnchorKeywords',
+  'ignoreAnchorKeywords'
+];
 
 function sourceLabel(source, index) {
   if (source && typeof source === 'object' && typeof source.id === 'string' && source.id.trim()) {
@@ -70,6 +75,36 @@ function validateKeywords(errors, path, value) {
       errors.push(`${path}[${index}] must be a non-empty string.`);
     }
   });
+}
+
+function validateOptionalStringArray(errors, path, value) {
+  if (value === undefined) return;
+  if (!Array.isArray(value)) {
+    errors.push(`${path} must be an array of strings.`);
+    return;
+  }
+  value.forEach((item, index) => {
+    if (typeof item !== 'string' || !item.trim()) {
+      errors.push(`${path}[${index}] must be a non-empty string.`);
+    }
+  });
+}
+
+function validateLinkedEvidencePolicy(errors, path, value) {
+  if (value === undefined) return;
+  if (!isPlainObject(value)) {
+    errors.push(`${path} must be an object.`);
+    return;
+  }
+  if (typeof value.enabled !== 'boolean') {
+    errors.push(`${path}.enabled must be a boolean.`);
+  }
+  for (const field of LINKED_EVIDENCE_POLICY_ARRAY_FIELDS) {
+    validateOptionalStringArray(errors, `${path}.${field}`, value[field]);
+  }
+  if (value.enabled === true && (!Array.isArray(value.allowedDomains) || value.allowedDomains.length === 0)) {
+    errors.push(`${path}.allowedDomains must be a non-empty array when enabled is true.`);
+  }
 }
 
 function validateSource(errors, source, index, sectionMap, seenIds) {
@@ -125,6 +160,7 @@ function validateSource(errors, source, index, sectionMap, seenIds) {
   validateBoolean(errors, `${label}.requiresCrossCheck`, source.requiresCrossCheck);
   validateString(errors, `${label}.usageHint`, source.usageHint);
   validateKeywords(errors, `${label}.keywords`, source.keywords);
+  validateLinkedEvidencePolicy(errors, `${label}.linkedEvidencePolicy`, source.linkedEvidencePolicy);
 
   if (
     Object.prototype.hasOwnProperty.call(source, 'collectionModeHint') &&
@@ -185,5 +221,6 @@ module.exports = {
   REQUIRED_SOURCE_FIELDS,
   VALID_COLLECTION_MODE_HINTS,
   VALID_PRIORITIES,
+  LINKED_EVIDENCE_POLICY_ARRAY_FIELDS,
   validateNewsSourcesConfigText
 };

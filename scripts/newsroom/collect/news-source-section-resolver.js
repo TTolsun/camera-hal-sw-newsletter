@@ -100,6 +100,7 @@ function normalizeSourceEntry(source, sectionMap, options = {}) {
     requiresCrossCheck: source.requiresCrossCheck === true,
     allowFeedHint: options.allowFeedHint === true,
     usageHint: source.usageHint || '',
+    linkedEvidencePolicy: source.linkedEvidencePolicy || null,
     collectionModeHint: normalizeCollectionModeHint(source.collectionModeHint || source.sourceKind || ''),
     sourceRole: source.sourceRole || '',
     sourceKind: source.sourceKind || '',
