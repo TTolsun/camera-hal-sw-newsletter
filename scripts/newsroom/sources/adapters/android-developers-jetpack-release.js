@@ -1,4 +1,5 @@
 const { decodeHtml, htmlAttr } = require('../../common/common');
+const { extractOutgoingLinksFromHtml } = require('../../collect/outgoing-links');
 
 const ADAPTER_ID = 'android-developers-jetpack-release';
 const SOURCE_TYPE = 'release_note';
@@ -344,7 +345,11 @@ function extract(html = '', source = {}) {
       behavior_change: behavior,
       source_extraction: sourceExtraction,
       derived_editorial_hints: derivedHints,
-      extraction_quality: sourceExtraction.extraction_quality
+      extraction_quality: sourceExtraction.extraction_quality,
+      outgoing_links: extractOutgoingLinksFromHtml(block.body, {
+        baseUrl: block.url,
+        sourceField: 'release_note_row'
+      })
     };
   }).filter(item =>
     item.source_extraction.extraction_quality.main_article_allowed &&
