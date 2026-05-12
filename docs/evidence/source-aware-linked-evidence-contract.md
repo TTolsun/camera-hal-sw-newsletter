@@ -94,8 +94,9 @@ Required limits before enabling network resolve:
 ## Event Bundle 계약
 
 PR 1에서는 Event Bundle을 구현하지 않는다.
-PR 5는 in-memory Event Bundle builder만 추가한다. `event-bundles.json`, PR body trace output,
-selection/scoring integration, HAL runtime/API inference는 PR 6 전까지 범위 밖이다.
+PR 5는 in-memory Event Bundle builder만 추가한다.
+PR 6는 `event-bundles.json`, `event-bundle-diagnostics.md`, PR body trace summary를 추가한다.
+Selection/scoring integration과 HAL runtime/API inference는 보수적 후속 integration 전까지 범위 밖이다.
 Dedupe fallback order는 다음 순서를 따른다.
 
 ```text
@@ -137,10 +138,12 @@ Builder 규칙:
 - Preservation-only `unclassified`, `noise`, `unsupported`, `blocked_or_deferred`, `secondary_context` link는 Event Bundle evidence URL이 아니다.
 - Failed, blocked, skipped, unsupported resolved evidence는 `evidence_urls`에서 제외한다.
 - Event Bundle key는 deterministic해야 하며, conservative PR 6 integration 전까지 diagnostic-only로 취급한다.
+- PR body에는 primary article -> followed evidence -> Event Bundle trace summary만 표시한다.
+- Event Bundle trace는 selection/scoring boost를 의미하지 않는다.
 
 ## Scoring 및 발행 안전성
 
 - Failed, blocked, oversized, unsupported, or noise evidence never increases score.
-- Event Bundle evidence may support selection only when it adds source-confirmed release/date/version/API/behavior facts.
+- Event Bundle evidence may support selection only in a future conservative integration and only when it adds source-confirmed release/date/version/API/behavior facts.
 - Evidence must not be used to infer HAL runtime/API/driver behavior that the source does not state.
 - Quality threshold, hard fail conditions, source binding, and article count policy remain unchanged.

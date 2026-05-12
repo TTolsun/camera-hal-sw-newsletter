@@ -23,6 +23,9 @@ const {
   defaultImpactClassification
 } = require('./impact-classifier');
 const {
+  buildEventBundles
+} = require('./event-bundle-builder');
+const {
   DEFAULT_RUNTIME_CONFIG,
   LINKED_EVIDENCE_MODES
 } = require('../common/runtime-config');
@@ -373,6 +376,17 @@ function reportTotals(candidateReports = []) {
   };
 }
 
+function eventBundleTotals(eventBundles = []) {
+  const bundles = ensureArray(eventBundles);
+  return {
+    schema_version: SCHEMA_VERSION,
+    total_count: bundles.length,
+    by_event_type: countBy(bundles.map(bundle => bundle?.event_type)),
+    by_dedupe_reason: countBy(bundles.map(bundle => bundle?.dedupe_reason)),
+    warning_count: bundles.reduce((count, bundle) => count + ensureArray(bundle?.warnings).length, 0)
+  };
+}
+
 function assertRawExcerptCap(evidenceItems = []) {
   return ensureArray(evidenceItems).map(item => ({
     ...item,
@@ -393,6 +407,7 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options
   const runState = { resolvedCount: 0 };
   const outputCandidates = [];
   const candidateReports = [];
+  const eventBundleInputs = [];
   const reportWarnings = [];
 
   for (const candidate of ensureArray(candidates)) {
@@ -438,6 +453,12 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options
       impact_classification: impactClassification
     };
     outputCandidates.push(safeCandidate);
+    eventBundleInputs.push({
+      ...candidate,
+      linked_evidence: resolved,
+      source_aware_linked_evidence: sourceAware.linkedEvidence,
+      impact_classification: impactClassification
+    });
     candidateReports.push({
       ...candidateIdentity(candidate),
       linked_evidence_summary: summary,
@@ -448,6 +469,9 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options
       source_aware_linked_evidence: sourceAware.linkedEvidence
     });
   }
+
+  const eventBundles = buildEventBundles(eventBundleInputs);
+  const eventBundleSummary = eventBundleTotals(eventBundles);
 
   const report = {
     schema_version: SCHEMA_VERSION,
@@ -469,13 +493,24 @@ async function analyzeLinkedEvidenceForCandidates(date, candidates = [], options
     source_aware_totals: reportTotals(candidateReports.map(candidate => ({
       linked_evidence_summary: candidate.source_aware_linked_evidence_summary
     }))),
+    event_bundle_summary: eventBundleSummary,
     candidates: candidateReports
+  };
+
+  const eventBundleArtifact = {
+    schema_version: SCHEMA_VERSION,
+    date: text(date),
+    generated_at: report.generated_at,
+    summary: eventBundleSummary,
+    event_bundles: eventBundles
   };
 
   return {
     candidates: outputCandidates,
     report,
-    markdown: renderLinkedEvidenceDiagnosticsMarkdown(report)
+    markdown: renderLinkedEvidenceDiagnosticsMarkdown(report),
+    eventBundleArtifact,
+    eventBundleMarkdown: renderEventBundleDiagnosticsMarkdown(eventBundleArtifact)
   };
 }
 
@@ -523,6 +558,40 @@ function renderLinkedEvidenceDiagnosticsMarkdown(report = {}) {
   return `${lines.join('\n')}\n`;
 }
 
+function renderEventBundleDiagnosticsMarkdown(artifact = {}) {
+  const summary = artifact.summary || eventBundleTotals(artifact.event_bundles);
+  const bundles = ensureArray(artifact.event_bundles);
+  const lines = [
+    `# Event Bundle Diagnostics - ${text(artifact.date) || 'unknown'}`,
+    '',
+    `- schema_version: ${artifact.schema_version || SCHEMA_VERSION}`,
+    `- event_bundle_count: ${summary.total_count || 0}`,
+    `- warning_count: ${summary.warning_count || 0}`,
+    '',
+    '## Event Type Counts',
+    '',
+    renderCounts(summary.by_event_type),
+    '',
+    '## Dedupe Reason Counts',
+    '',
+    renderCounts(summary.by_dedupe_reason),
+    '',
+    '## Event Bundles',
+    ''
+  ];
+
+  if (bundles.length === 0) {
+    lines.push('- none');
+  } else {
+    for (const bundle of bundles) {
+      lines.push(`- ${bundle.event_id}: ${bundle.event_type}, ${bundle.dedupe_reason}, primary=${bundle.primary_url}, evidence=${ensureArray(bundle.evidence_urls).length}, confidence=${bundle.confidence}`);
+    }
+  }
+
+  lines.push('');
+  return `${lines.join('\n')}`;
+}
+
 function writeLinkedEvidenceDiagnosticsArtifacts(newsroomDir, diagnostics) {
   fs.mkdirSync(newsroomDir, { recursive: true });
   fs.writeFileSync(
@@ -535,12 +604,32 @@ function writeLinkedEvidenceDiagnosticsArtifacts(newsroomDir, diagnostics) {
     diagnostics.markdown,
     'utf8'
   );
+  fs.writeFileSync(
+    path.join(newsroomDir, 'event-bundles.json'),
+    `${JSON.stringify(diagnostics.eventBundleArtifact || {
+      schema_version: SCHEMA_VERSION,
+      date: '',
+      generated_at: '',
+      summary: eventBundleTotals([]),
+      event_bundles: []
+    }, null, 2)}\n`,
+    'utf8'
+  );
+  fs.writeFileSync(
+    path.join(newsroomDir, 'event-bundle-diagnostics.md'),
+    diagnostics.eventBundleMarkdown || renderEventBundleDiagnosticsMarkdown({
+      schema_version: SCHEMA_VERSION,
+      event_bundles: []
+    }),
+    'utf8'
+  );
 }
 
 module.exports = {
   analyzeLinkedEvidenceForCandidates,
   buildLinkedEvidenceSummary,
   emptyLinkedEvidenceSummary,
+  renderEventBundleDiagnosticsMarkdown,
   renderLinkedEvidenceDiagnosticsMarkdown,
   stripLinkedEvidencePayload,
   writeLinkedEvidenceDiagnosticsArtifacts

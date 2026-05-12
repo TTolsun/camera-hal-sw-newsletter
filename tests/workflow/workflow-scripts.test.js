@@ -1195,6 +1195,30 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
     ],
     source_gap_count: 1
   });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'event-bundles.json'), {
+    schema_version: 1,
+    date,
+    summary: {
+      total_count: 1
+    },
+    event_bundles: [{
+      event_id: 'event_abcdef123456',
+      primary_candidate_id: 'candidate_libcamera',
+      event_key: 'source:libcamera-release-announcements:release:libcamera v0.7.1',
+      event_type: 'release_note',
+      primary_url: finalCandidate.url,
+      evidence_urls: ['https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/000002.html'],
+      dedupe_reason: 'source_id + release.version',
+      release: {
+        version: 'libcamera v0.7.1',
+        date: '2026-05-10'
+      },
+      component: 'libcamera / V4L2 camera pipeline',
+      impact_axes: ['runtime_behavior_change'],
+      confidence: 'high',
+      warnings: []
+    }]
+  });
 
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
   const finalSection = body.slice(body.indexOf('### 최종 선택 기사'), body.indexOf('### Reserve 후보'));
@@ -1219,6 +1243,10 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
   assert.match(body, /fact-check-report\.json/);
   assert.match(body, /hard_fail/);
   assert.match(body, /must_fix/);
+  assert.match(body, /^### Event Bundle 추적$/m);
+  assert.match(body, /event_abcdef123456/);
+  assert.match(body, /source_id \+ release\.version/);
+  assert.match(body, /event-bundles\.json/);
   assert.match(body, /unmatched 품질\/팩트체크 연결 항목: 1/);
   assert.match(body, /\| 4 \| unmatched \| Unmatched article \| fact-check-report\.json \| source_gap \|/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
