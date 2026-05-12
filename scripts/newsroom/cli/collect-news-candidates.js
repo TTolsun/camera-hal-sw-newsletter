@@ -23,6 +23,11 @@ const {
   readSourceRegistry
 } = require('../collect/news-source-section-resolver');
 const {
+  extractOutgoingLinksFromHtml,
+  mergeOutgoingLinks,
+  normalizeOutgoingLinks
+} = require('../collect/outgoing-links');
+const {
   BUCKETS,
   classifyAospCameraStackCandidate
 } = require('../common/aosp-camera-scope');
@@ -105,6 +110,13 @@ function decode(value = '') {
 function tag(block, name) {
   const match = block.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)<\\/${name}>`, 'i'));
   return match ? decode(match[1]) : '';
+}
+
+function rawTag(block, name) {
+  const escapedName = String(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = String(block || '').match(new RegExp(`<${escapedName}[^>]*>([\\s\\S]*?)<\\/${escapedName}>`, 'i'));
+  if (!match) return '';
+  return String(match[1] || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1');
 }
 
 function parseStructuredSources() {
@@ -269,7 +281,25 @@ function parseRss(xml, source) {
     const linkTag = block.match(/<link[^>]*href=["']([^"']+)["'][^>]*>/i);
     const link = tag(block, 'link') || (linkTag ? linkTag[1] : source.url);
     const date = tag(block, 'pubDate') || tag(block, 'updated') || tag(block, 'published');
-    const summary = tag(block, 'description') || tag(block, 'summary') || tag(block, 'content');
+    const summary = tag(block, 'description') || tag(block, 'summary') || tag(block, 'content:encoded') || tag(block, 'content');
+    const outgoingLinks = mergeOutgoingLinks(
+      extractOutgoingLinksFromHtml(rawTag(block, 'description'), {
+        baseUrl: link || source.url,
+        sourceField: 'rss.description'
+      }),
+      extractOutgoingLinksFromHtml(rawTag(block, 'summary'), {
+        baseUrl: link || source.url,
+        sourceField: 'rss.summary'
+      }),
+      extractOutgoingLinksFromHtml(rawTag(block, 'content:encoded'), {
+        baseUrl: link || source.url,
+        sourceField: 'rss.content'
+      }),
+      extractOutgoingLinksFromHtml(rawTag(block, 'content'), {
+        baseUrl: link || source.url,
+        sourceField: 'rss.content'
+      })
+    );
     return normalizeCandidate({
       source,
       title,
@@ -278,6 +308,7 @@ function parseRss(xml, source) {
       summary,
       sourceKind: 'rss_item',
       collectionMode: 'rss-item',
+      outgoing_links: outgoingLinks,
       imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
     });
   }).filter(item => item.title && item.url);
@@ -298,6 +329,10 @@ function parseHtmlPage(html, source) {
     summary: description,
     sourceKind: inferFallbackSourceKind(source),
     collectionMode: fallbackCandidateCollectionMode(source),
+    outgoing_links: extractOutgoingLinksFromHtml(html, {
+      baseUrl: source.url,
+      sourceField: 'html.body'
+    }),
     imageCandidates: extractImageCandidatesFromHtml(html, source.url, source)
   })];
 }
@@ -629,6 +664,7 @@ function normalizeCandidate(raw) {
     parent_url: parentUrl || '',
     parentTitle: raw.parentTitle || raw.parent_title || '',
     parent_title: raw.parentTitle || raw.parent_title || '',
+    outgoing_links: normalizeOutgoingLinks(raw.outgoing_links || raw.outgoingLinks),
     sourceMonth: raw.sourceMonth || raw.source_month || '',
     source_month: raw.sourceMonth || raw.source_month || '',
     has_published_date: metadata.has_published_date,
@@ -1006,6 +1042,8 @@ module.exports = {
   fetchUrlForContent,
   newsletterDateWindowEnd,
   normalizeCandidate,
+  parseHtmlPage,
+  parseRss,
   renderCandidateMarkdown: markdown,
   withinLookback
 };

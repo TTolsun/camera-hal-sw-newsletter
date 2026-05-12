@@ -1,4 +1,5 @@
 const { decodeHtml, htmlAttr } = require('../common/common');
+const { extractOutgoingLinksFromHtml } = require('./outgoing-links');
 const { parseSourceWithAdapters } = require('../sources/registry');
 
 const MONTHS = '(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)';
@@ -414,7 +415,11 @@ function releaseItemsFromHeadings(html, source, options = {}) {
         sourceKind: options.sourceKind || 'release_note_item',
         version_or_release: version,
         api_or_component: component,
-        behavior_change: behavior
+        behavior_change: behavior,
+        outgoing_links: extractOutgoingLinksFromHtml(block.body, {
+          baseUrl: block.url,
+          sourceField: 'release_note_block'
+        })
       };
     })
     .filter(item => item.title && item.url)
@@ -447,7 +452,11 @@ function linkedItems(html, source, options = {}) {
       sourceKind: options.sourceKind || 'release_note_item',
       version_or_release: version,
       api_or_component: component,
-      behavior_change: behavior
+      behavior_change: behavior,
+      outgoing_links: extractOutgoingLinksFromHtml(match[0], {
+        baseUrl: source.url,
+        sourceField: 'release_note_row'
+      })
     });
   }
   const seen = new Set();
@@ -576,7 +585,11 @@ function parseAndroidLatestUpdates(html, source) {
       version_or_release: version,
       api_or_component: component,
       behavior_change: behavior,
-      relevanceBucketHint: 'android_platform_camera_adjacent'
+      relevanceBucketHint: 'android_platform_camera_adjacent',
+      outgoing_links: extractOutgoingLinksFromHtml(chunk, {
+        baseUrl: source.url,
+        sourceField: 'release_note_row'
+      })
     };
     if (!hasReleaseItemEvidence(item)) return;
     rowsByKey.set(parserItemKey(item), item);
@@ -677,7 +690,11 @@ function parseLibcameraReleaseAnnouncement(html, source) {
     version_or_release: version,
     api_or_component: 'libcamera / V4L2 camera pipeline',
     behavior_change: behavior,
-    relevanceBucketHint: 'camera_driver_image_pipeline'
+    relevanceBucketHint: 'camera_driver_image_pipeline',
+    outgoing_links: extractOutgoingLinksFromHtml(html, {
+      baseUrl: source.url,
+      sourceField: 'html.body'
+    })
   }];
 }
 
