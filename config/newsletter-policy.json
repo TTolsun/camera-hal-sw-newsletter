@@ -22,6 +22,12 @@
       "generic_tech_watchlist"
     ]
   },
+  "candidatePoolPreflight": {
+    "reserveMin": 2,
+    "publishableCandidateMin": 5,
+    "primaryCameraStackCandidateMin": 1,
+    "cameraStackCandidateMin": 2
+  },
   "qualityGatePolicy": {
     "threshold": 85,
     "hardFailConditions": [

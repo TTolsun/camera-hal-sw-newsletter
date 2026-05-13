@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const { execFileSync } = require('node:child_process');
+const { execFileSync, spawnSync } = require('node:child_process');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -15,8 +15,10 @@ const {
 } = require('../../scripts/write-generation-status-output');
 const {
   articlePolicy,
+  candidatePoolPreflightPolicy,
   qualityGatePolicy,
-  publishGateCriteriaText
+  publishGateCriteriaText,
+  validateNewsletterPolicyConfig
 } = require('../../scripts/lib/newsletter-policy');
 const {
   resolvePublishStatus
@@ -32,6 +34,7 @@ const {
 } = require('../../scripts/write-publish-status-output');
 const {
   buildReviewableArtifactOutputs,
+  REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   requiredPublicFiles,
@@ -828,6 +831,203 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
   return { status, editor, quality, factCheck, repairFailure, generationStatus };
 }
 
+function candidateShortageSummary(overrides = {}) {
+  return {
+    publishable_candidate_count: 3,
+    required_publishable_candidate_count: candidatePoolPreflightPolicy.publishableCandidateMin,
+    reserve_candidate_count: 0,
+    required_reserve_candidate_count: candidatePoolPreflightPolicy.reserveMin,
+    primary_camera_stack_candidate_count: 1,
+    required_primary_camera_stack_candidate_count: candidatePoolPreflightPolicy.primaryCameraStackCandidateMin,
+    camera_stack_candidate_count: 1,
+    required_camera_stack_candidate_count: candidatePoolPreflightPolicy.cameraStackCandidateMin,
+    direct_camera_or_driver_candidate_count: 1,
+    camera_adjacent_candidate_count: 0,
+    supporting_candidate_count: 2,
+    selected_article_count: articlePolicy.mainArticleCount.min,
+    selected_primary_camera_stack_count: 1,
+    ...overrides
+  };
+}
+
+function writeCandidateShortageReviewableArtifacts(root, date, overrides = {}) {
+  const summary = candidateShortageSummary(overrides.summary || {});
+  const shortageReasonCodes = overrides.shortageReasonCodes || [
+    'reserve_candidate_shortage',
+    'camera_stack_candidate_shortage'
+  ];
+  const sourceParserHints = overrides.sourceParserHints || [{
+    code: 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR',
+    source_id: 'android-developers-jetpack-release',
+    reason: 'collected CameraX rows but no eligible source_extraction item'
+  }];
+  const direct = regressionCandidate({
+    title: 'libcamera v0.7.1',
+    url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/000001.html',
+    bucket: 'camera_driver_image_pipeline'
+  });
+  const supportA = regressionCandidate({
+    title: 'GCC 16.1',
+    url: 'https://isocpp.org/blog/2026/05/gcc-16.1',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const supportB = regressionCandidate({
+    title: 'Glaze 7.2 C++ reflection',
+    url: 'https://isocpp.org/blog/2026/05/glaze-7.2',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const selected = [direct, supportA, supportB];
+  const failureReason = shortageReasonCodes.join('; ');
+  const status = {
+    date,
+    status: 'UNDERFILLED_NEEDS_FIX',
+    failure_kind: 'candidate_shortage_reviewable',
+    failure_stage: 'candidate_pool_preflight',
+    failure_reason: failureReason,
+    publish_ready: false,
+    selection_publish_ready: false,
+    final_publish_ready: false,
+    artifact_final_publish_ready: false,
+    publish_gate_passed: false,
+    review_gate_passed: true,
+    editor_review_required: true,
+    quality_status: 'UNKNOWN',
+    quality_score: null,
+    quality_threshold: qualityGatePolicy.threshold,
+    fact_check_status: 'UNKNOWN',
+    must_fix_count: 0,
+    source_gap_count: 0,
+    stale_claim_status: 'UNKNOWN',
+    stale_claim_hard_failure_count: 0,
+    composition_mode: 'NEEDS_FIX',
+    selection_composition_mode: 'NEEDS_FIX',
+    candidate_pool_preflight_passed: false,
+    candidate_shortage_reviewable: true,
+    candidate_shortage_summary: summary,
+    shortage_reason_codes: shortageReasonCodes,
+    source_parser_hints: sourceParserHints,
+    selected_article_count: summary.selected_article_count,
+    reserve_candidate_count: summary.reserve_candidate_count,
+    input_candidate_count: selected.length,
+    eligible_candidate_count: summary.publishable_candidate_count,
+    selection_errors: [],
+    selection_warnings: ['Candidate pool preflight failed before LLM generation.'],
+    selection_shortage_hints: sourceParserHints.map(hint => hint.reason),
+    ...(overrides.status || {})
+  };
+  const shortlist = {
+    date,
+    publish_ready: false,
+    review_gate_passed: true,
+    publish_gate_passed: false,
+    candidate_pool_preflight_passed: false,
+    candidate_shortage_reviewable: true,
+    candidate_shortage_summary: summary,
+    shortage_reason_codes: shortageReasonCodes,
+    source_parser_hints: sourceParserHints,
+    selected_articles: selected,
+    primary_selected_articles: selected,
+    shortlisted_candidates: selected,
+    reserve_candidates: [],
+    excluded_candidates: [],
+    selection_errors: [],
+    selection_warnings: ['Candidate pool preflight failed before LLM generation.'],
+    selection_shortage_hints: sourceParserHints.map(hint => hint.reason),
+    composition_summary: {
+      selected_article_count: summary.selected_article_count,
+      primary_camera_stack_topic_count: summary.primary_camera_stack_candidate_count,
+      supporting_main_article_count: summary.supporting_candidate_count,
+      forbidden_main_article_count: 0
+    }
+  };
+  const selectionReport = {
+    schema_version: 1,
+    date,
+    status: 'UNDERFILLED_NEEDS_FIX',
+    failure_stage: 'candidate_pool_preflight',
+    failure_reason: failureReason,
+    candidate_pool_preflight_passed: false,
+    candidate_shortage_reviewable: true,
+    candidate_shortage_summary: summary,
+    shortage_reason_codes: shortageReasonCodes,
+    source_parser_hints: sourceParserHints,
+    selection_errors: [],
+    selection_warnings: shortlist.selection_warnings,
+    selection_shortage_hints: shortlist.selection_shortage_hints,
+    gate_summary: {
+      review_gate_passed: true,
+      publish_gate_passed: false
+    },
+    counts: {
+      input_candidate_count: selected.length,
+      eligible_candidate_count: summary.publishable_candidate_count,
+      selected_article_count: summary.selected_article_count,
+      reserve_candidate_count: summary.reserve_candidate_count
+    },
+    composition_summary: shortlist.composition_summary
+  };
+  const diagnosticsMd = [
+    '# Selection Diagnostics',
+    '',
+    '## Candidate Pool Preflight',
+    '',
+    '- candidate_shortage: true',
+    `- shortage_reason_codes: ${shortageReasonCodes.join(', ')}`,
+    `- publishable_candidate_count: ${summary.publishable_candidate_count}`,
+    `- reserve_candidate_count: ${summary.reserve_candidate_count}`,
+    `- camera_stack_candidate_count: ${summary.camera_stack_candidate_count}`,
+    '',
+    '## Source Parser Hints',
+    '',
+    ...sourceParserHints.map(hint => `- ${hint.code}: ${hint.source_id} - ${hint.reason}`)
+  ].join('\n');
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  if (overrides.writeGenerationStatus !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
+  }
+  if (overrides.writeShortlist !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
+  }
+  if (overrides.writeSelectionReport !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), selectionReport);
+  }
+  if (overrides.writeSelectionDiagnostics !== false) {
+    writeText(path.join(root, 'content', 'newsroom', date, 'selection-diagnostics.md'), `${diagnosticsMd}\n`);
+  }
+  if (overrides.writeArticleCapsules !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
+      selected_capsules: selected,
+      reserve_capsules: []
+    });
+  }
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+    candidates: [
+      ...selected,
+      {
+        source_id: 'android-developers-jetpack-release',
+        source_name: 'Android Developers Jetpack Release',
+        sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+        title: 'CameraX rolling release page',
+        published_date: '',
+        finalSelectionEligibility: 'watchlist',
+        hasDatedEvidence: false,
+        main_eligible: false,
+        source_gap_risk: true,
+        reference_only: true,
+        briefing_only: true,
+        selection_exclusion_reason: 'Parser did not extract a dated release row from the official source.'
+      }
+    ]
+  });
+
+  return { status, shortlist, selectionReport, summary, sourceParserHints, shortageReasonCodes, selected };
+}
+
 test('generation status output falls back when status JSON is missing', () => {
   const status = readStatus('__missing__/newsletter-generation-status.json');
   const outputs = buildGenerationStatusOutputs(status);
@@ -841,6 +1041,38 @@ test('generation status output falls back when status JSON is missing', () => {
   assert.equal(outputs.final_publish_ready, 'false');
   assert.equal(outputs.review_gate_passed, 'false');
   assert.equal(outputs.publish_gate_passed, 'false');
+});
+
+test('newsletter policy validates candidate pool preflight thresholds', () => {
+  const invalid = {
+    schemaVersion: 1,
+    name: 'Newsletter Policy',
+    articlePolicy: {
+      mainArticleCount: { min: 3, max: 5 },
+      primaryCameraStack: {
+        minRequired: 1,
+        buckets: articlePolicy.primaryCameraStack.buckets
+      },
+      supportingMainBuckets: articlePolicy.supportingMainBuckets,
+      forbiddenMainBuckets: articlePolicy.forbiddenMainBuckets
+    },
+    candidatePoolPreflight: {
+      reserveMin: 2,
+      publishableCandidateMin: 4,
+      primaryCameraStackCandidateMin: 1,
+      cameraStackCandidateMin: 5
+    },
+    qualityGatePolicy: {
+      threshold: qualityGatePolicy.threshold,
+      hardFailConditions: qualityGatePolicy.hardFailConditions
+    }
+  };
+
+  const result = validateNewsletterPolicyConfig(invalid);
+
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.includes('candidatePoolPreflight.publishableCandidateMin must be >= articlePolicy.mainArticleCount.min + candidatePoolPreflight.reserveMin.'));
+  assert.ok(result.errors.includes('candidatePoolPreflight.cameraStackCandidateMin must be <= candidatePoolPreflight.publishableCandidateMin.'));
 });
 
 test('generation status output includes multiline selection diagnostics', () => {
@@ -984,6 +1216,118 @@ test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow'
   assert.match(body, /권장 조치:/);
   assert.doesNotMatch(body, /최종 발행 조건이 모두 통과했습니다/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('newsroom PR body and validator accept candidate shortage review-only handoff without LLM artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-11';
+  writeCandidateShortageReviewableArtifacts(root, date);
+  const changedArtifacts = REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
+    .map(file => `content/newsroom/${date}/${file}`);
+
+  const fallbackBody = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    changedArtifacts
+  });
+
+  assert.match(fallbackBody, /^## Candidate Pool Preflight$/m);
+  assert.match(fallbackBody, /LLM editor generation was skipped because candidate pool was insufficient\./);
+  assert.match(fallbackBody, /candidate_shortage: true/);
+  assert.match(fallbackBody, /candidate_pool_preflight_passed: false/);
+  assert.match(fallbackBody, /preflight_source: selection-report\.json/);
+  assert.match(fallbackBody, /preflight_consistency: ok/);
+  assert.match(fallbackBody, /failure_kind=candidate_shortage_reviewable/);
+  assert.match(fallbackBody, /publishable_candidate_count: 3/);
+  assert.match(fallbackBody, /required_publishable_candidate_count: 5/);
+  assert.match(fallbackBody, /reserve_candidate_count: 0/);
+  assert.match(fallbackBody, /camera_stack_candidate_shortage/);
+  assert.match(fallbackBody, /Source\/parser hints \(preliminary\):/);
+  assert.match(fallbackBody, /OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR \/ android-developers-jetpack-release/);
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json')), false);
+  assert.equal(validatePrBodyText(fallbackBody, { date }).ok, true);
+
+  const mismatchBody = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    changedArtifacts,
+    status: {
+      candidate_pool_preflight_passed: true,
+      failure_kind: 'candidate_shortage_reviewable'
+    }
+  });
+  const bodyPath = path.join(root, '.tmp', 'newsroom-pr-body.md');
+  writeText(bodyPath, mismatchBody);
+  const mismatchCandidatePoolSection = extractMarkdownSection(mismatchBody, 'Candidate Pool Preflight');
+
+  assert.match(mismatchCandidatePoolSection, /candidate_pool_preflight_passed: false/);
+  assert.match(mismatchCandidatePoolSection, /preflight_source: selection-report\.json/);
+  assert.match(mismatchCandidatePoolSection, /preflight_consistency: mismatch/);
+  assert.equal(validatePrBodyFile(bodyPath, { root, date, validateOutcome: 'failure' }).ok, true);
+});
+
+test('candidate shortage generator exits before LLM calls when credentials are empty', () => {
+  const root = tempRoot();
+  const date = '2026-05-11';
+  const rawDir = path.join(root, '.tmp', 'gemini-raw');
+  writeJson(path.join(root, 'data', 'news-sources.json'), {
+    schemaVersion: 2,
+    sources: []
+  });
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+    date,
+    candidates: [
+      regressionCandidate({
+        title: 'libcamera v0.7.1',
+        url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/000001.html',
+        bucket: 'camera_driver_image_pipeline'
+      }),
+      regressionCandidate({
+        title: 'GCC 16.1',
+        url: 'https://isocpp.org/blog/2026/05/gcc-16.1',
+        bucket: 'cpp_ai_tooling_fallback',
+        fallback: true
+      }),
+      regressionCandidate({
+        title: 'Glaze 7.2 C++ reflection',
+        url: 'https://isocpp.org/blog/2026/05/glaze-7.2',
+        bucket: 'cpp_ai_tooling_fallback',
+        fallback: true
+      })
+    ]
+  });
+
+  const result = spawnSync(process.execPath, [
+    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js')
+  ], {
+    cwd: root,
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      NEWSLETTER_DATE: date,
+      GEMINI_API_KEY: '',
+      INTERNAL_LLM_API_KEY: '',
+      INTERNAL_LLM_ENDPOINT: '',
+      LLM_RAW_OUTPUT_DIR: rawDir
+    }
+  });
+  const combinedOutput = `${result.stdout || ''}\n${result.stderr || ''}`;
+  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const generationStatus = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'generation-status.json'), 'utf8'));
+  const rawFiles = fs.existsSync(rawDir) ? fs.readdirSync(rawDir) : [];
+
+  assert.equal(result.status, 0, combinedOutput);
+  assert.doesNotMatch(combinedOutput, /API key|missing credential|LLM provider|provider configuration/i);
+  assert.equal(rawFiles.length, 0);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'editor-draft.json')), false);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'quality-report.json')), false);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'fact-check-report.json')), false);
+  assert.equal(generationStatus.status, 'UNDERFILLED_NEEDS_FIX');
+  assert.equal(generationStatus.failure_kind, 'candidate_shortage_reviewable');
 });
 
 test('newsroom PR body marks editorial reviewable handoff as editor-approved public publication', () => {
@@ -1567,6 +1911,50 @@ test('reviewable artifact resolver rejects editorial reviewable invalid canonica
   assert.equal(outputs.review_pr_ready, 'false');
   assert.equal(outputs.review_only, 'false');
   assert.match(outputs.reviewable_artifact_reason, /missing_editorial_required=quality-report\.json/);
+});
+
+test('reviewable artifact resolver accepts candidate shortage reviewable handoff without LLM artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-11';
+  writeCandidateShortageReviewableArtifacts(root, date);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${date}/${file}`)
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_public_artifacts, 'false');
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.review_only, 'true');
+  assert.equal(outputs.publish_candidate_ready, 'false');
+  assert.equal(outputs.changed_artifact_count, String(REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS.length));
+  assert.match(outputs.reviewable_artifact_reason, /failure_kind=candidate_shortage_reviewable/);
+  assert.match(outputs.reviewable_artifact_reason, /candidate_shortage_reject=none/);
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json')), false);
+});
+
+test('reviewable artifact resolver rejects candidate shortage when deterministic artifact is missing', () => {
+  const root = tempRoot();
+  const date = '2026-05-11';
+  writeCandidateShortageReviewableArtifacts(root, date, { writeArticleCapsules: false });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
+      .filter(file => file !== 'article-capsules.json')
+      .map(file => `content/newsroom/${date}/${file}`)
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.equal(outputs.review_only, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /failure_kind=candidate_shortage_reviewable/);
+  assert.match(outputs.reviewable_artifact_reason, /missing_candidate_shortage_required=article-capsules\.json/);
 });
 
 test('reviewable artifact resolver rejects failed repair with repair-failure only', () => {
@@ -3142,6 +3530,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
+  assert.match(sourceEffectivenessStep, /continue-on-error:\s*true/);
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);

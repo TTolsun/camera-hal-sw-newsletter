@@ -74,6 +74,7 @@ function validateNewsletterPolicyConfig(config) {
   }
   validateInteger(config.schemaVersion, 'schemaVersion', errors, { min: 1 });
   const article = config.articlePolicy || {};
+  const preflight = config.candidatePoolPreflight || {};
   const quality = config.qualityGatePolicy || {};
   const count = article.mainArticleCount || {};
   validateInteger(count.min, 'articlePolicy.mainArticleCount.min', errors, { min: 1 });
@@ -98,6 +99,32 @@ function validateNewsletterPolicyConfig(config) {
   }
   if (Number.isInteger(primary.minRequired) && Number.isInteger(count.max) && primary.minRequired > count.max) {
     errors.push('articlePolicy.primaryCameraStack.minRequired cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+  validateInteger(preflight.reserveMin, 'candidatePoolPreflight.reserveMin', errors, { min: 0 });
+  validateInteger(preflight.publishableCandidateMin, 'candidatePoolPreflight.publishableCandidateMin', errors, { min: 1 });
+  validateInteger(preflight.primaryCameraStackCandidateMin, 'candidatePoolPreflight.primaryCameraStackCandidateMin', errors, { min: 0 });
+  validateInteger(preflight.cameraStackCandidateMin, 'candidatePoolPreflight.cameraStackCandidateMin', errors, { min: 0 });
+  if (
+    Number.isInteger(preflight.publishableCandidateMin) &&
+    Number.isInteger(count.min) &&
+    preflight.publishableCandidateMin < count.min
+  ) {
+    errors.push('candidatePoolPreflight.publishableCandidateMin must be >= articlePolicy.mainArticleCount.min.');
+  }
+  if (
+    Number.isInteger(preflight.publishableCandidateMin) &&
+    Number.isInteger(count.min) &&
+    Number.isInteger(preflight.reserveMin) &&
+    preflight.publishableCandidateMin < count.min + preflight.reserveMin
+  ) {
+    errors.push('candidatePoolPreflight.publishableCandidateMin must be >= articlePolicy.mainArticleCount.min + candidatePoolPreflight.reserveMin.');
+  }
+  if (
+    Number.isInteger(preflight.cameraStackCandidateMin) &&
+    Number.isInteger(preflight.publishableCandidateMin) &&
+    preflight.cameraStackCandidateMin > preflight.publishableCandidateMin
+  ) {
+    errors.push('candidatePoolPreflight.cameraStackCandidateMin must be <= candidatePoolPreflight.publishableCandidateMin.');
   }
   const threshold = quality.threshold;
   if (typeof threshold !== 'number' || !Number.isFinite(threshold) || threshold < 0 || threshold > 100) {
@@ -127,6 +154,7 @@ function deepFreeze(value) {
 
 function normalizeNewsletterPolicyConfig(config) {
   const article = config.articlePolicy;
+  const preflight = config.candidatePoolPreflight;
   const quality = config.qualityGatePolicy;
   return deepFreeze({
     schemaVersion: config.schemaVersion,
@@ -142,6 +170,12 @@ function normalizeNewsletterPolicyConfig(config) {
       },
       supportingMainBuckets: unique(article.supportingMainBuckets),
       forbiddenMainBuckets: unique(article.forbiddenMainBuckets)
+    },
+    candidatePoolPreflight: {
+      reserveMin: preflight.reserveMin,
+      publishableCandidateMin: preflight.publishableCandidateMin,
+      primaryCameraStackCandidateMin: preflight.primaryCameraStackCandidateMin,
+      cameraStackCandidateMin: preflight.cameraStackCandidateMin
     },
     qualityGatePolicy: {
       threshold: quality.threshold,
@@ -175,6 +209,10 @@ function getArticlePolicy(policy = getDefaultNewsletterPolicy()) {
 
 function getQualityGatePolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.qualityGatePolicy;
+}
+
+function getCandidatePoolPreflightPolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.candidatePoolPreflight;
 }
 
 function bucketValue(bucket) {
@@ -229,6 +267,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     `- Primary Camera Stack buckets: ${articlePolicy.primaryCameraStack.buckets.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- Supporting main buckets: ${articlePolicy.supportingMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- Forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
+    `- Candidate pool preflight: publishable candidates at least ${policy.candidatePoolPreflight.publishableCandidateMin}; reserve candidates at least ${policy.candidatePoolPreflight.reserveMin}; camera stack candidates at least ${policy.candidatePoolPreflight.cameraStackCandidateMin}`,
     `- Quality threshold: ${qualityGatePolicy.threshold}`,
     `- Hard fail conditions remain blocking: ${qualityGatePolicy.hardFailConditions.join('; ')}`,
     '',
@@ -307,6 +346,9 @@ module.exports = {
   get qualityGatePolicy() {
     return getQualityGatePolicy();
   },
+  get candidatePoolPreflightPolicy() {
+    return getCandidatePoolPreflightPolicy();
+  },
   // Legacy compatibility exports only. New code should prefer articlePolicy and qualityGatePolicy.
   get MIN_MAIN_ARTICLES() {
     return getArticlePolicy().mainArticleCount.min;
@@ -319,6 +361,7 @@ module.exports = {
   },
   analyzeNewsletterPolicyBlock,
   articleCountRangeText,
+  getCandidatePoolPreflightPolicy,
   getDefaultNewsletterPolicy,
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,

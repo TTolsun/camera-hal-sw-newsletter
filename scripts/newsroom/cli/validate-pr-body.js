@@ -121,6 +121,12 @@ function isReviewOnlyBody(text) {
   ) && /public_newsletter_ready\s*[:=]\s*false\b/i.test(source);
 }
 
+function isCandidateShortageBody(text) {
+  const source = toText(text);
+  return /failure_kind[=:]\s*candidate_shortage_reviewable\b/i.test(source) ||
+    /^## Candidate Pool Preflight\s*$/m.test(source);
+}
+
 function hasReviewOnlyPublicFilesNotReadyText(text) {
   const source = toText(text);
   return /public newsletter files(?:가)?\s*(?:are\s+)?not\s+ready/i.test(source) ||
@@ -205,10 +211,11 @@ function validateCandidateTraceSection(text, sections, options, errors) {
   }
 
   const datePattern = datePatternForValidation(options.date);
-  for (const requiredPath of [
-    `content/newsroom/${datePattern}/reporter-candidates\\.json`,
+  const requiredPaths = [
+    options.allowMissingReporterCandidates ? '' : `content/newsroom/${datePattern}/reporter-candidates\\.json`,
     `content/collected-news/${datePattern}/candidates\\.json`
-  ]) {
+  ].filter(Boolean);
+  for (const requiredPath of requiredPaths) {
     if (!new RegExp(requiredPath).test(traceSection)) {
       errors.push(`후보 기사 추적 section must list artifact path matching ${requiredPath}.`);
     }
@@ -304,8 +311,17 @@ function validatePrBodyText(text, options = {}) {
 
   const parsed = parseStatusSection(statusSection);
   const reviewOnly = isReviewOnlyBody(text);
+  const candidateShortage = isCandidateShortageBody(text);
   if (reviewOnly) {
     validateReviewOnlyContract(text, parsed, errors);
+  }
+  if (candidateShortage) {
+    if (!/^## Candidate Pool Preflight\s*$/m.test(text)) {
+      errors.push('candidate_shortage_reviewable PR body must include Candidate Pool Preflight section.');
+    }
+    if (!/LLM editor generation was skipped because candidate pool was insufficient\./.test(text)) {
+      errors.push('candidate_shortage_reviewable PR body must state that LLM editor generation was skipped.');
+    }
   }
   if (parsed.consistencyErrors !== 'none') {
     errors.push(`PR body has consistency_errors: ${parsed.consistencyErrors || 'missing'}`);
@@ -325,7 +341,10 @@ function validatePrBodyText(text, options = {}) {
   if (!generatedArtifactsSection) {
     errors.push('PR body must contain generated artifacts section.');
   }
-  validateCandidateTraceSection(text, sections, options, errors);
+  validateCandidateTraceSection(text, sections, {
+    ...options,
+    allowMissingReporterCandidates: candidateShortage
+  }, errors);
   if (!reviewOnly && /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
     errors.push('Newsletter PR body must not describe public newsletter files as not generated or not updated.');
   }

@@ -235,12 +235,13 @@ function ensurePublicNewsletterArtifacts(options = {}) {
   }, Object.prototype.hasOwnProperty.call(options, 'changedArtifacts') ? options.changedArtifacts : undefined);
   const initialReasons = fallbackTriggerReasons({ root, date, resolved });
   const fallbackAlreadyCreated = resolved.status?.fallback_public_issue_status === 'CREATED';
+  const candidateShortageReviewable = resolved.status?.failure_kind === 'candidate_shortage_reviewable';
   let fallbackExecuted = false;
   let fallbackError = null;
   let fallbackResult = null;
   let fallbackDiagnosticsRelPath = '';
 
-  if (initialReasons.length > 0 && !fallbackAlreadyCreated && !options.noBuild) {
+  if (initialReasons.length > 0 && !candidateShortageReviewable && !fallbackAlreadyCreated && !options.noBuild) {
     if (!hasArtifactInputs(root, date)) {
       throw new Error(`Cannot build fallback public issue for ${date}: no newsroom or collected candidate artifacts are available.`);
     }

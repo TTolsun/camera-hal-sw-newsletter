@@ -10,6 +10,7 @@ const {
   POLICY_REL_PATH,
   articlePolicy,
   articleCountRangeText,
+  candidatePoolPreflightPolicy,
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,
   isPrimaryCameraStackBucket,
@@ -869,6 +870,77 @@ function compositionSummary(candidates) {
   };
 }
 
+function candidatePoolPreflightSummary(shortlist, selected, reserve, policy = candidatePoolPreflightPolicy) {
+  const eligibleSummary = compositionSummary(shortlist);
+  const selectedSummary = compositionSummary(selected);
+  return {
+    publishable_candidate_count: ensureArray(shortlist).length,
+    required_publishable_candidate_count: policy.publishableCandidateMin,
+    reserve_candidate_count: ensureArray(reserve).length,
+    required_reserve_candidate_count: policy.reserveMin,
+    primary_camera_stack_candidate_count: eligibleSummary.primary_camera_stack_topic_count,
+    required_primary_camera_stack_candidate_count: policy.primaryCameraStackCandidateMin,
+    camera_stack_candidate_count: eligibleSummary.primary_camera_stack_topic_count,
+    required_camera_stack_candidate_count: policy.cameraStackCandidateMin,
+    direct_camera_or_driver_candidate_count:
+      eligibleSummary.direct_aosp_camera_count +
+      eligibleSummary.camera_driver_image_pipeline_count,
+    camera_adjacent_candidate_count: eligibleSummary.android_platform_camera_adjacent_count,
+    supporting_candidate_count:
+      eligibleSummary.soc_platform_signal_count +
+      eligibleSummary.cpp_ai_tooling_fallback_count,
+    selected_article_count: selectedSummary.selected_article_count,
+    selected_primary_camera_stack_count: selectedSummary.primary_camera_stack_topic_count
+  };
+}
+
+function candidatePoolShortageReasonCodes(summary = {}) {
+  const codes = [];
+  if (number(summary.publishable_candidate_count) < number(summary.required_publishable_candidate_count)) {
+    codes.push('publishable_candidate_shortage');
+  }
+  if (number(summary.reserve_candidate_count) < number(summary.required_reserve_candidate_count)) {
+    codes.push('reserve_candidate_shortage');
+  }
+  if (number(summary.primary_camera_stack_candidate_count) < number(summary.required_primary_camera_stack_candidate_count)) {
+    codes.push('primary_camera_stack_candidate_shortage');
+  }
+  if (number(summary.camera_stack_candidate_count) < number(summary.required_camera_stack_candidate_count)) {
+    codes.push('camera_stack_candidate_shortage');
+  }
+  return codes;
+}
+
+function sourceParserHintCode(reason = '') {
+  const textValue = text(reason).toLowerCase();
+  if (/camerax|android developers|androidx\.camera|maven group|parser/.test(textValue)) {
+    return 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR';
+  }
+  if (/v4l2|libcamera|driver|image sensor|isp/.test(textValue)) {
+    return 'CAMERA_DRIVER_SOURCE_SHORTAGE';
+  }
+  if (/soc|gpu|npu|power|thermal/.test(textValue)) {
+    return 'SOC_PLATFORM_SOURCE_SHORTAGE';
+  }
+  return 'CANDIDATE_POOL_SHORTAGE';
+}
+
+function sourceParserHintsFromShortage(summary = {}, selectionHints = []) {
+  return ensureArray(selectionHints).map(reason => ({
+    code: sourceParserHintCode(reason),
+    source_id: 'unknown',
+    reason
+  })).concat(
+    number(summary.reserve_candidate_count) < number(summary.required_reserve_candidate_count)
+      ? [{
+          code: 'RESERVE_POOL_SHORTAGE',
+          source_id: 'selection-preflight',
+          reason: `Only ${summary.reserve_candidate_count} reserve candidate(s) are available; candidatePoolPreflight.reserveMin requires ${summary.required_reserve_candidate_count}.`
+        }]
+      : []
+  );
+}
+
 function selectionShortageHints(summary = {}) {
   const hints = [];
   if (number(summary.direct_aosp_camera_count) === 0) {
@@ -932,6 +1004,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
   const eligibleComposition = compositionSummary(shortlist);
+  const preflightSummary = candidatePoolPreflightSummary(shortlist, selected, reserve);
+  const shortageReasonCodes = candidatePoolShortageReasonCodes(preflightSummary);
   const mode = compositionMode(selected, errors);
   const reviewGatePassed = errors.length === 0;
   const publishGatePassed = reviewGatePassed && publishGatePasses(composition);
@@ -971,7 +1045,12 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     composition_summary: composition,
     eligible_composition_summary: eligibleComposition,
     selection_shortage_hints: selectionShortageHints(eligibleComposition),
-    editor_review_required: mode !== COMPOSITION_MODES.NORMAL,
+    candidate_pool_preflight_passed: shortageReasonCodes.length === 0,
+    candidate_shortage_reviewable: shortageReasonCodes.length > 0,
+    candidate_shortage_summary: preflightSummary,
+    shortage_reason_codes: shortageReasonCodes,
+    source_parser_hints: sourceParserHintsFromShortage(preflightSummary, selectionShortageHints(eligibleComposition)),
+    editor_review_required: mode !== COMPOSITION_MODES.NORMAL || shortageReasonCodes.length > 0,
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
     optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
     relevance_bucket_summary: summarizeBuckets(shortlist),
@@ -987,6 +1066,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     publish_ready: publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX,
     selection_policy: {
       min_final_articles: MIN_FINAL_ARTICLES,
+      candidate_pool_preflight: candidatePoolPreflightPolicy,
       absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
       min_non_fallback_publish_ready_articles: MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
       max_final_articles: MAX_FINAL_ARTICLES,
@@ -1075,6 +1155,8 @@ module.exports = {
   LINKED_EVIDENCE_WATCH_PENALTY,
   MIN_CAMERA_HAL_DIRECTNESS,
   buildShortlistReport,
+  candidatePoolPreflightSummary,
+  candidatePoolShortageReasonCodes,
   candidatesAreDuplicate,
   compositionMode,
   compositionSummary,
