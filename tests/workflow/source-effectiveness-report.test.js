@@ -53,7 +53,34 @@ test('official source with collected candidates but zero eligible needs parser r
 
   assert.equal(official.collected_count, 1);
   assert.equal(official.eligible_count, 0);
+  assert.equal(official.camera_relevant_raw_count, 1);
+  assert.equal(official.parser_repair_reason_count, 1);
   assert.equal(official.recommendation, 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR');
+});
+
+test('official source is not marked parser repair from collected count alone', () => {
+  const report = buildReport({
+    collectedCandidates: {
+      candidates: fixture.collectedCandidates.candidates.map(candidate => {
+        if (candidate.source_name !== 'Official Broken Parser') return candidate;
+        return {
+          ...candidate,
+          title: 'Official camera overview page',
+          summary: 'CameraX overview page without a dated release row in this window.',
+          relevance_bucket: 'android_platform_camera_adjacent',
+          selection_exclusion_reason: 'No camera-relevant release item was found in the collection window.'
+        };
+      })
+    }
+  });
+  const official = source(report, 'official-broken');
+
+  assert.equal(official.collected_count, 1);
+  assert.equal(official.eligible_count, 0);
+  assert.equal(official.camera_relevant_raw_count, 1);
+  assert.equal(official.parser_repair_reason_count, 0);
+  assert.notEqual(official.recommendation, 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR');
+  assert.equal(official.recommendation, 'KEEP_AND_FIX_PARSER');
 });
 
 test('generic source with many collected and zero eligible is downgrade candidate', () => {
@@ -136,13 +163,17 @@ test('fact-check source gap URL is mapped back to the collected source', () => {
   assert.ok(effective.top_exclusion_reasons.some(item => item.reason === 'Rendered article source has a source gap.'));
 });
 
-test('missing optional artifacts do not crash artifact generation', () => {
+test('source effectiveness report builds for candidate shortage review-only without public newsletter files', () => {
   const root = tempRoot('source-effectiveness-');
   const date = fixture.date;
 
   writeJson(path.join(root, 'data', 'news-sources.json'), fixture.sourceRegistry);
   writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), fixture.collectedCandidates);
   writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), fixture.shortlistReport);
+
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), false);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), false);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), false);
 
   const result = writeSourceEffectivenessArtifacts({ root, date });
   assert.equal(fs.existsSync(result.jsonPath), true);

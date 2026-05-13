@@ -50,7 +50,7 @@ node scripts/build-source-effectiveness-report.js --date YYYY-MM-DD
 ## Recommendation
 
 - `NO_RECENT_SIGNAL`: 해당 날짜 artifact에서 수집된 후보가 없습니다.
-- `OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR`: official 또는 high priority source가 수집은 되었지만 eligible 후보가 없는 상태입니다.
+- `OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR`: official 또는 high priority source가 camera-relevant raw signal을 냈고 eligible 후보가 없으며 parser/extraction/source_extraction/date/version/anchor 계열 rejection reason이 있는 상태입니다.
 - `KEEP`: rendered main article 기여가 있는 source입니다.
 - `KEEP_AND_FIX_PARSER`: official 또는 high priority source에서 parser/source evidence 보강이 필요한 상태입니다.
 - `DOWNGRADE_TO_CANDIDATE_ONLY`: generic AI/IT source가 많은 후보를 가져오지만 eligible/rendered 기여가 없는 상태입니다.

@@ -425,14 +425,30 @@ function formatHintRows(hints) {
     });
 }
 
+function sourceEffectivenessHints(root, date) {
+  if (!date) return [];
+  const report = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'source-effectiveness-report.json'));
+  if (!report) return [];
+  return ensureArray(report.sources)
+    .filter(source => ['OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR', 'KEEP_AND_FIX_PARSER', 'REVIEW_SOURCE_OR_PARSER'].includes(source.recommendation))
+    .slice(0, 8)
+    .map(source => ({
+      code: source.recommendation,
+      source_id: source.source_id,
+      reason: ensureArray(source.reasons).join('; ') || `eligible_count=${valueOrUnknown(source.eligible_count)}`
+    }));
+}
+
 function renderCandidatePoolPreflight(root, date, status = {}) {
   if (!candidateShortageStatus(status, root, date)) return '';
   const selectionReport = date
     ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'selection-report.json')) || {}
     : {};
   const summary = selectionReport.candidate_shortage_summary || status.candidate_shortage_summary || {};
+  const richHints = sourceEffectivenessHints(root, date);
   const fallbackHints = selectionReport.source_parser_hints || status.source_parser_hints || status.selection_shortage_hints;
-  const hintRows = formatHintRows(fallbackHints);
+  const hintRows = richHints.length > 0 ? formatHintRows(richHints) : formatHintRows(fallbackHints);
+  const hintHeading = richHints.length > 0 ? 'Source/parser hints:' : 'Source/parser hints (preliminary):';
   const selectionHasPreflight = Object.prototype.hasOwnProperty.call(selectionReport, 'candidate_pool_preflight_passed');
   const statusHasPreflight = Object.prototype.hasOwnProperty.call(status, 'candidate_pool_preflight_passed');
   const preflightPassed = selectionHasPreflight
@@ -461,7 +477,7 @@ function renderCandidatePoolPreflight(root, date, status = {}) {
     `- camera_adjacent_candidate_count: ${valueOrUnknown(summary.camera_adjacent_candidate_count)}`,
     `- supporting_candidate_count: ${valueOrUnknown(summary.supporting_candidate_count)}`,
     '',
-    'Source/parser hints (preliminary):',
+    hintHeading,
     ...(hintRows.length > 0 ? hintRows : ['- none']),
     ''
   ].join('\n');
