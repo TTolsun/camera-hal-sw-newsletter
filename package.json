@@ -12,6 +12,7 @@
     "generate": "node scripts/gemini-newsroom-newsletter.js",
     "ci": "npm run test && npm run validate",
     "report:source-effectiveness": "node scripts/build-source-effectiveness-report.js",
+    "report:evidence-pack": "node scripts/build-evidence-pack-summary.js",
     "sync:policy-docs": "node scripts/sync-policy-docs.js",
     "test": "npm run test:unit && npm run test:script",
     "test:unit": "node scripts/run-node-tests.js tests",
