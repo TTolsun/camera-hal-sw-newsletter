@@ -541,17 +541,40 @@ function normalizeExcludedCandidate(candidate = {}) {
   };
 }
 
+function isFinalSelectedCandidate(candidate = {}) {
+  return candidate.final_selected === true ||
+    candidate.selected_for_editor === true ||
+    candidate.primary_selected === true ||
+    (
+      candidate.selected === true &&
+      candidate.reserve_candidate !== true &&
+      ensureArray(candidate.final_exclusion_reasons).length === 0 &&
+      ensureArray(candidate.exclusion_reasons).length === 0
+    );
+}
+
+function isReserveCandidate(candidate = {}) {
+  return candidate.reserve_candidate === true ||
+    candidate.selection_stage === 'deterministic-reserve';
+}
+
 function selectedCandidates(shortlistReport = {}, articleCapsules = {}) {
   const primary = ensureArray(shortlistReport.primary_selected_articles);
   if (primary.length > 0) return primary;
   const selected = ensureArray(shortlistReport.selected_articles);
   if (selected.length > 0) return selected;
+  const fromShortlisted = ensureArray(shortlistReport.shortlisted_candidates)
+    .filter(isFinalSelectedCandidate);
+  if (fromShortlisted.length > 0) return fromShortlisted;
   return ensureArray(articleCapsules.selected_capsules);
 }
 
 function reserveCandidates(shortlistReport = {}, articleCapsules = {}) {
   const reserve = ensureArray(shortlistReport.reserve_candidates);
   if (reserve.length > 0) return reserve;
+  const fromShortlisted = ensureArray(shortlistReport.shortlisted_candidates)
+    .filter(candidate => isReserveCandidate(candidate) && !isFinalSelectedCandidate(candidate));
+  if (fromShortlisted.length > 0) return fromShortlisted;
   return ensureArray(articleCapsules.reserve_capsules);
 }
 
@@ -561,6 +584,10 @@ function excludedCandidates(shortlistReport = {}, collectedCandidates = {}, sele
     ...ensureArray(shortlistReport.demoted_candidates)
   ];
   if (explicit.length > 0) return explicit;
+
+  const fromShortlisted = ensureArray(shortlistReport.shortlisted_candidates)
+    .filter(candidate => !isFinalSelectedCandidate(candidate) && !isReserveCandidate(candidate));
+  if (fromShortlisted.length > 0) return fromShortlisted;
 
   const selectedUrls = new Set([...selected, ...reserve].map(candidateUrl).filter(Boolean));
   return ensureArray(collectedCandidates.candidates)
@@ -633,6 +660,7 @@ function countFromComposition(composition = {}, key) {
 function selectedCountFallback(shortlistReport = {}, articleCapsules = {}, selected = []) {
   if (Array.isArray(shortlistReport.primary_selected_articles) ||
     Array.isArray(shortlistReport.selected_articles) ||
+    Array.isArray(shortlistReport.shortlisted_candidates) ||
     Array.isArray(articleCapsules.selected_capsules)) {
     return selected.length;
   }
@@ -641,6 +669,7 @@ function selectedCountFallback(shortlistReport = {}, articleCapsules = {}, selec
 
 function reserveCountFallback(shortlistReport = {}, articleCapsules = {}, reserve = []) {
   if (Array.isArray(shortlistReport.reserve_candidates) ||
+    Array.isArray(shortlistReport.shortlisted_candidates) ||
     Array.isArray(articleCapsules.reserve_capsules)) {
     return reserve.length;
   }
@@ -650,6 +679,7 @@ function reserveCountFallback(shortlistReport = {}, articleCapsules = {}, reserv
 function excludedCountFallback(shortlistReport = {}, collectedCandidates = {}, excluded = []) {
   if (Array.isArray(shortlistReport.excluded_candidates) ||
     Array.isArray(shortlistReport.demoted_candidates) ||
+    Array.isArray(shortlistReport.shortlisted_candidates) ||
     Array.isArray(collectedCandidates.candidates)) {
     return excluded.length;
   }
@@ -734,6 +764,7 @@ function selectionSummary({
 function publishStatus({
   generationStatus = {},
   selectionReport = {},
+  shortlistReport = {},
   qualityReport = {},
   factCheckReport = {},
   inputState = {}
@@ -742,7 +773,8 @@ function publishStatus({
     generationStatus.final_publish_ready,
     generationStatus.publish_ready,
     selectionReport.publish_ready,
-    selectionReport.publish_gate_passed
+    selectionReport.publish_gate_passed,
+    shortlistReport.publish_ready
   );
   const publicNewsletterReady = firstBoolean(
     generationStatus.public_newsletter_ready,
@@ -868,11 +900,12 @@ function buildEvidencePackSummary(options = {}) {
   return {
     schema_version: SCHEMA_VERSION,
     date,
-    generated_at: new Date().toISOString(),
+    generated_at: text(options.generatedAt) || new Date().toISOString(),
     inputs: inputState.inputs,
     publish_status: publishStatus({
       generationStatus,
       selectionReport,
+      shortlistReport,
       qualityReport,
       factCheckReport,
       inputState

@@ -18,6 +18,7 @@ const {
 } = require('../helpers/fs');
 
 const DATE = '2026-05-14';
+const GENERATED_AT = '2026-05-14T00:00:00.000Z';
 
 function newsroomPath(root, filename) {
   return path.join(root, 'content', 'newsroom', DATE, filename);
@@ -206,7 +207,7 @@ function writeFullArtifactSet(root) {
 }
 
 test('Evidence Pack schema v1 always exposes required top-level defaults', () => {
-  const report = buildEvidencePackSummary({ date: DATE });
+  const report = buildEvidencePackSummary({ date: DATE, generatedAt: GENERATED_AT });
 
   for (const key of [
     'schema_version',
@@ -226,6 +227,7 @@ test('Evidence Pack schema v1 always exposes required top-level defaults', () =>
 
   assert.equal(report.schema_version, 1);
   assert.equal(report.date, DATE);
+  assert.equal(report.generated_at, GENERATED_AT);
   assert.deepEqual(report.selected_main_articles, []);
   assert.deepEqual(report.reserve_candidates, []);
   assert.deepEqual(report.excluded_candidates_top, []);
@@ -234,6 +236,77 @@ test('Evidence Pack schema v1 always exposes required top-level defaults', () =>
   assert.equal(report.publish_status.final_publish_ready, null);
   assert.equal(report.selection_summary.raw_candidate_count, null);
   assert.equal(report.selection_summary.primary_camera_stack_count, null);
+});
+
+test('supports shortlisted_candidates flag-based selected, reserve, and excluded shape', () => {
+  const selected = selectedCandidate({
+    final_selected: true,
+    selected_for_editor: true,
+    selected: true,
+    reserve_candidate: false,
+    final_exclusion_reasons: []
+  });
+  const reserve = reserveCandidate({
+    final_selected: false,
+    selected_for_editor: false,
+    selected: false,
+    reserve_candidate: true,
+    final_exclusion_reasons: []
+  });
+  const excluded = excludedCandidate(1, {
+    final_selected: false,
+    selected_for_editor: false,
+    selected: false,
+    reserve_candidate: false,
+    final_exclusion_reasons: ['generic topic without HAL impact axis']
+  });
+
+  const report = buildEvidencePackSummary({
+    date: DATE,
+    shortlistReport: {
+      input_candidate_count: 3,
+      eligible_candidate_count: 2,
+      selected_article_count: 1,
+      reserve_candidate_count: 1,
+      shortlisted_candidates: [selected, reserve, excluded]
+    },
+    collectedCandidates: {
+      candidates: [selected, reserve, excluded]
+    }
+  });
+
+  assert.equal(report.selected_main_articles.length, 1);
+  assert.equal(report.reserve_candidates.length, 1);
+  assert.equal(report.excluded_candidates_top.length, 1);
+  assert.equal(report.selected_main_articles[0].candidate_id, 'selected-1');
+  assert.equal(report.reserve_candidates[0].candidate_id, 'reserve-1');
+  assert.equal(report.excluded_candidates_top[0].candidate_id, 'excluded-1');
+  assert.equal(report.selection_summary.selected_main_article_count, 1);
+  assert.equal(report.selection_summary.reserve_candidate_count, 1);
+  assert.equal(report.selection_summary.excluded_candidate_count, 1);
+});
+
+test('writes default summary when no input artifacts exist', () => {
+  const root = tempRoot('evidence-pack-empty-');
+  const { report, jsonPath } = writeEvidencePackSummaryArtifacts({ root, date: DATE });
+
+  assert.equal(fs.existsSync(jsonPath), true);
+  assert.equal(report.publish_status.status, 'unknown');
+  assert.ok(report.warnings.some(warning => warning.includes('No minimum Evidence Pack input artifact')));
+  assert.ok(report.inputs.missing.includes(`content/newsroom/${DATE}/generation-status.json`));
+  assert.ok(report.inputs.missing.includes(`content/newsroom/${DATE}/selection-report.json`));
+  assert.ok(report.inputs.missing.includes(`content/newsroom/${DATE}/shortlisted-candidates.json`));
+  assert.ok(report.inputs.missing.includes(`content/collected-news/${DATE}/candidates.json`));
+});
+
+test('uses shortlist publish_ready as best-effort publish readiness', () => {
+  const report = buildEvidencePackSummary({
+    date: DATE,
+    shortlistReport: { publish_ready: true }
+  });
+
+  assert.equal(report.publish_status.final_publish_ready, true);
+  assert.equal(report.publish_status.status, 'publish-ready');
 });
 
 test('full artifact set creates selected, reserve, excluded, and failure summaries without raw dumps', () => {
