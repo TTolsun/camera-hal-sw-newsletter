@@ -186,6 +186,14 @@
       "generatedArtifact": false
     },
     {
+      "path": "source-html/camerax-release-notes-artifact-table-only.html",
+      "source": "synthetic",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "bad",
+      "protectedPolicy": "CameraX artifact/Maven table-only rows are not main article release items",
+      "generatedArtifact": false
+    },
+    {
       "path": "source-html/claude-code-changelog-dated.html",
       "source": "curated",
       "allowedUse": "parser-source-html",

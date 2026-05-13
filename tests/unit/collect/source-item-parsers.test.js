@@ -214,6 +214,19 @@ test('CameraX release notes parser respects target version anchor', () => {
   assert.equal(items[0].url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
 });
 
+test('CameraX release notes parser does not promote artifact tables without concrete release bullets', () => {
+  const html = readTextFixture('source-html/camerax-release-notes-artifact-table-only.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'camerax-release-notes',
+    name: 'CameraX Release Notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#camera-maven-group-versions',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera#camera-maven-group-versions'
+  }));
+
+  assert.deepEqual(items, []);
+});
+
 test('libcamera release announcement parser extracts v0.7.1 dated camera pipeline evidence', () => {
   const html = readTextFixture('source-html/libcamera-release-v0.7.1.html');
 
