@@ -390,6 +390,14 @@ function resolveReviewableArtifacts(options = {}) {
   if (publicNewsletterReady) {
     hasReviewableArtifacts = true;
   }
+  const changedArtifactCount = changedArtifacts.length;
+  const reviewPrReady = publicNewsletterReady || (
+    hasReviewableArtifacts &&
+    changedArtifactCount > 0 &&
+    statusReviewable
+  );
+  const reviewOnly = reviewPrReady && !publicNewsletterReady;
+  const publishCandidateReady = publicNewsletterReady;
   const hasAiPublishReady = status.final_publish_ready === true;
   const hasPublishCandidate = publicNewsletterReady;
   const reasonParts = [
@@ -411,6 +419,9 @@ function resolveReviewableArtifacts(options = {}) {
     `required_public=${hasRequiredPublicNewsletterFiles ? 'present' : 'missing_or_invalid'}`,
     `changed_public=${changedRequiredPublicArtifacts.length > 0 ? changedRequiredPublicArtifacts.join(',') : 'none'}`,
     `public_newsletter_ready=${publicNewsletterReady ? 'true' : 'false'}`,
+    `review_pr_ready=${reviewPrReady ? 'true' : 'false'}`,
+    `review_only=${reviewOnly ? 'true' : 'false'}`,
+    `changed_artifact_count=${changedArtifactCount}`,
     publicNewsletterReasons.length > 0 ? `public_newsletter_reason=${publicNewsletterReasons.join(';')}` : 'public_newsletter_reason=none'
   ].filter(Boolean);
 
@@ -431,6 +442,10 @@ function resolveReviewableArtifacts(options = {}) {
     hasPublicArtifacts,
     hasRequiredPublicNewsletterFiles,
     publicNewsletterReady,
+    reviewPrReady,
+    reviewOnly,
+    publishCandidateReady,
+    changedArtifactCount,
     publicNewsletterReason: publicNewsletterReasons.length > 0 ? publicNewsletterReasons.join('; ') : 'ready',
     hasAiPublishReady,
     hasPublishCandidate,
@@ -446,6 +461,10 @@ function buildReviewableArtifactOutputs(resolved) {
     has_public_artifacts: resolved.hasPublicArtifacts ? 'true' : 'false',
     has_required_public_newsletter_files: resolved.hasRequiredPublicNewsletterFiles ? 'true' : 'false',
     public_newsletter_ready: resolved.publicNewsletterReady ? 'true' : 'false',
+    review_pr_ready: resolved.reviewPrReady ? 'true' : 'false',
+    review_only: resolved.reviewOnly ? 'true' : 'false',
+    publish_candidate_ready: resolved.publishCandidateReady ? 'true' : 'false',
+    changed_artifact_count: String(resolved.changedArtifactCount ?? 0),
     public_newsletter_reason: resolved.publicNewsletterReason,
     has_ai_publish_ready: resolved.hasAiPublishReady ? 'true' : 'false',
     has_publish_candidate: resolved.hasPublishCandidate ? 'true' : 'false',

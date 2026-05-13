@@ -113,6 +113,71 @@ function hasCompleteMarkdownLink(value) {
   return angleWrappedLink.test(text) || plainLink.test(text);
 }
 
+function isReviewOnlyBody(text) {
+  const source = toText(text);
+  return (
+    /\breview[- ]only\b/i.test(source) ||
+    /검토 전용/.test(source)
+  ) && /public_newsletter_ready\s*[:=]\s*false\b/i.test(source);
+}
+
+function hasReviewOnlyPublicFilesNotReadyText(text) {
+  const source = toText(text);
+  return /public newsletter files(?:가)?\s*(?:are\s+)?not\s+ready/i.test(source) ||
+    /public files\s*(?:are\s*)?not\s+ready/i.test(source) ||
+    /public newsletter files(?:가)?\s*준비되지 않았/.test(source);
+}
+
+function hasReviewOnlyNegativePublishText(text) {
+  const source = toText(text);
+  return /not publish-ready/i.test(source) ||
+    /publish-ready label must not be applied/i.test(source) ||
+    /publish-ready[^.\n]*(?:must not|금지|제거)/i.test(source) ||
+    /발행 가능 상태가 아닙니다/.test(source) ||
+    /발행 가능한 PR이 아닙니다/.test(source);
+}
+
+function reviewOnlyPositivePublishReadyLines(text) {
+  return toText(text)
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean)
+    .filter(line => {
+      if (/this pr is publish-ready/i.test(line)) return true;
+      if (/\bready to publish\b/i.test(line)) return true;
+      if (/final publish ready:\s*true/i.test(line)) return true;
+      if (/final_publish_ready\s*[:=]\s*true\b/i.test(line)) return true;
+      if (/public newsletter generated successfully/i.test(line)) return true;
+      if (!/publish-ready/i.test(line)) return false;
+      return !/\bnot publish-ready\b|must not|label must not be applied|reserved for|has_ai_publish_ready=true|금지|제거|아닙니다/i.test(line);
+    });
+}
+
+function validateReviewOnlyContract(text, parsed, errors) {
+  if (!/\breview[- ]only\b/i.test(text) && !/검토 전용/.test(text)) {
+    errors.push('review-only PR body must include a review-only marker.');
+  }
+  if (!/public_newsletter_ready\s*[:=]\s*false\b/i.test(text)) {
+    errors.push('review-only PR body must include public_newsletter_ready=false.');
+  }
+  if (!/final_publish_ready\s*[:=]\s*false\b/i.test(text)) {
+    errors.push('review-only PR body must include final_publish_ready=false.');
+  }
+  if (!hasReviewOnlyNegativePublishText(text)) {
+    errors.push('review-only PR body must state that it is not publish-ready.');
+  }
+  if (!hasReviewOnlyPublicFilesNotReadyText(text)) {
+    errors.push('review-only PR body must state that public newsletter files are not ready.');
+  }
+  if (parsed.finalPublishReady === true) {
+    errors.push('review-only PR body must not set final_publish_ready=true.');
+  }
+  const positiveLines = reviewOnlyPositivePublishReadyLines(text);
+  if (positiveLines.length > 0) {
+    errors.push(`review-only PR body contains misleading publish-ready wording: ${positiveLines.slice(0, 3).join('; ')}`);
+  }
+}
+
 function validateCandidateTraceSection(text, sections, options, errors) {
   const traceCount = exactHeadingCount(text, 2, '후보 기사 추적');
   if (traceCount !== 1) {
@@ -238,6 +303,10 @@ function validatePrBodyText(text, options = {}) {
   }
 
   const parsed = parseStatusSection(statusSection);
+  const reviewOnly = isReviewOnlyBody(text);
+  if (reviewOnly) {
+    validateReviewOnlyContract(text, parsed, errors);
+  }
   if (parsed.consistencyErrors !== 'none') {
     errors.push(`PR body has consistency_errors: ${parsed.consistencyErrors || 'missing'}`);
   }
@@ -257,10 +326,10 @@ function validatePrBodyText(text, options = {}) {
     errors.push('PR body must contain generated artifacts section.');
   }
   validateCandidateTraceSection(text, sections, options, errors);
-  if (/생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
+  if (!reviewOnly && /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
     errors.push('Newsletter PR body must not describe public newsletter files as not generated or not updated.');
   }
-  if (parsed.finalPublishReady === false && !/public newsletter files는 생성되었습니다/.test(text)) {
+  if (!reviewOnly && parsed.finalPublishReady === false && !/public newsletter files는 생성되었습니다/.test(text)) {
     errors.push('final_publish_ready=false PR body must state that public newsletter files were generated for editor-approved merge.');
   }
 

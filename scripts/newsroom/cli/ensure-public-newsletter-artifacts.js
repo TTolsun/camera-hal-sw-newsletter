@@ -17,6 +17,11 @@ const {
   articlePolicy
 } = require('../common/newsletter-policy');
 
+// Contract:
+// - This command ensures the workflow has either publishable public newsletter artifacts
+//   or reviewable failure artifacts.
+// - It must not mark review-only artifacts as publish-ready.
+// - It may exit successfully with public_newsletter_ready=false when review_pr_ready=true.
 const FALLBACK_TRIGGER_STATUSES = new Set([
   'NEEDS_FIX',
   'QUALITY_NEEDS_FIX',
@@ -143,6 +148,71 @@ function fallbackTriggerReasons({ root, date, resolved }) {
   return [...new Set(reasons)];
 }
 
+function summarizeRejectedReasons(items) {
+  const counts = new Map();
+  for (const item of ensureArray(items)) {
+    const reason = String(item?.reason || item?.selection_exclusion_reason || 'unknown').trim() || 'unknown';
+    counts.set(reason, (counts.get(reason) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+    .slice(0, 5)
+    .map(([reason, count]) => ({ reason, count }));
+}
+
+function readJsonSafely(filePath) {
+  try {
+    return readJsonIfExists(filePath) || {};
+  } catch (_) {
+    return {};
+  }
+}
+
+function writeFallbackFailureDiagnostics({ root, date, error }) {
+  const relPath = `content/newsroom/${date}/fallback-public-issue-diagnostics.json`;
+  const filePath = path.join(root, ...relPath.split('/'));
+  const existing = readJsonSafely(filePath);
+  const rejectedCandidates = ensureArray(existing.rejected_candidates);
+  const payload = {
+    ...existing,
+    date,
+    generated_at: existing.generated_at || new Date().toISOString(),
+    status: 'FAILED',
+    failure_stage: existing.failure_stage || 'fallback_public_issue_builder',
+    failure_reason: existing.failure_reason || String(error?.message || error || 'Unknown fallback public issue failure.'),
+    fallback_public_issue_failed: true,
+    preserve_article_count: existing.preserve_article_count ?? 'unknown',
+    final_article_count: existing.final_article_count ?? 'unknown',
+    minimum_required_count: existing.minimum_required_count ?? articlePolicy.mainArticleCount.min,
+    demoted_articles: ensureArray(existing.demoted_articles),
+    top_rejected_reasons: ensureArray(existing.top_rejected_reasons).length > 0
+      ? existing.top_rejected_reasons
+      : summarizeRejectedReasons(rejectedCandidates),
+    written_by: 'ensure-public-newsletter-artifacts'
+  };
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  return relPath;
+}
+
+function changedArtifactsForRecheck(options, fallbackResult, extraArtifacts = []) {
+  if (Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')) {
+    return [...new Set(ensureArray(options.changedArtifacts).concat(extraArtifacts).filter(Boolean))];
+  }
+  if (fallbackResult?.publicFiles) {
+    return [...new Set(ensureArray(fallbackResult.publicFiles).concat(extraArtifacts).filter(Boolean))];
+  }
+  return undefined;
+}
+
+function resolveReviewableArtifactsForEnsure(baseOptions, changedArtifacts) {
+  const options = { ...baseOptions };
+  if (changedArtifacts !== undefined) {
+    options.changedArtifacts = changedArtifacts;
+  }
+  return resolveReviewableArtifacts(options);
+}
+
 function ensurePublicNewsletterArtifacts(options = {}) {
   const root = options.root || process.cwd();
   const statusPath = path.join(root, '.tmp', 'newsletter-generation-status.json');
@@ -152,37 +222,55 @@ function ensurePublicNewsletterArtifacts(options = {}) {
     throw new Error('Could not resolve newsletter date.');
   }
 
-  let resolved = resolveReviewableArtifacts({
+  let resolved = resolveReviewableArtifactsForEnsure({
     root,
     date,
-    status,
-    changedArtifacts: options.changedArtifacts
-  });
+    status
+  }, Object.prototype.hasOwnProperty.call(options, 'changedArtifacts') ? options.changedArtifacts : undefined);
   const initialReasons = fallbackTriggerReasons({ root, date, resolved });
   const fallbackAlreadyCreated = resolved.status?.fallback_public_issue_status === 'CREATED';
   let fallbackExecuted = false;
   let fallbackError = null;
   let fallbackResult = null;
+  let fallbackDiagnosticsRelPath = '';
 
   if (initialReasons.length > 0 && !fallbackAlreadyCreated && !options.noBuild) {
     if (!hasArtifactInputs(root, date)) {
       throw new Error(`Cannot build fallback public issue for ${date}: no newsroom or collected candidate artifacts are available.`);
     }
+    fallbackExecuted = true;
     try {
       fallbackResult = buildFallbackPublicIssue({ root, date });
-      fallbackExecuted = true;
     } catch (error) {
       fallbackError = error;
+      fallbackDiagnosticsRelPath = writeFallbackFailureDiagnostics({ root, date, error });
     }
-    resolved = resolveReviewableArtifacts({
+    resolved = resolveReviewableArtifactsForEnsure({
       root,
-      date,
-      changedArtifacts: options.changedArtifacts || fallbackResult?.publicFiles
-    });
+      date
+    }, changedArtifactsForRecheck(options, fallbackResult, fallbackDiagnosticsRelPath ? [fallbackDiagnosticsRelPath] : []));
   }
 
   if (!resolved.publicNewsletterReady) {
     const reason = resolved.publicNewsletterReason || 'public newsletter artifacts are not structurally ready';
+    if (resolved.reviewPrReady) {
+      return {
+        date,
+        fallbackExecuted,
+        fallbackAlreadyCreated,
+        fallbackTriggerReasons: initialReasons,
+        resolved,
+        outputs: {
+          ...buildReviewableArtifactOutputs(resolved),
+          fallback_public_issue_executed: fallbackExecuted ? 'true' : 'false',
+          fallback_public_issue_already_created: fallbackAlreadyCreated ? 'true' : 'false',
+          fallback_public_issue_failed: fallbackError ? 'true' : 'false',
+          fallback_public_issue_error: fallbackError ? String(fallbackError.message || fallbackError) : 'none',
+          fallback_public_issue_diagnostics: fallbackDiagnosticsRelPath || 'none',
+          fallback_public_issue_trigger_reason: initialReasons.join('; ') || 'none'
+        }
+      };
+    }
     if (fallbackError) {
       throw new Error(`${reason}\nFallback public issue builder failed: ${fallbackError.message}`);
     }
@@ -199,6 +287,9 @@ function ensurePublicNewsletterArtifacts(options = {}) {
       ...buildReviewableArtifactOutputs(resolved),
       fallback_public_issue_executed: fallbackExecuted ? 'true' : 'false',
       fallback_public_issue_already_created: fallbackAlreadyCreated ? 'true' : 'false',
+      fallback_public_issue_failed: fallbackError ? 'true' : 'false',
+      fallback_public_issue_error: fallbackError ? String(fallbackError.message || fallbackError) : 'none',
+      fallback_public_issue_diagnostics: fallbackDiagnosticsRelPath || 'none',
       fallback_public_issue_trigger_reason: initialReasons.join('; ') || 'none'
     }
   };
@@ -223,5 +314,6 @@ module.exports = {
   fallbackTriggerReasons,
   hardFailureArticleCount,
   ensurePublicNewsletterArtifacts,
+  writeFallbackFailureDiagnostics,
   parseArgs
 };

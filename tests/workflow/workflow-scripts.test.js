@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict');
+const { execFileSync } = require('node:child_process');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -964,15 +965,24 @@ test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow'
   const body = buildNewsroomPrBody({
     root,
     date,
-    validateOutcome: 'failure'
+    validateOutcome: 'failure',
+    changedArtifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${date}/${file}`)
   });
 
+  assert.match(body, /^## Review-only Status$/m);
+  assert.match(body, /review_only: true/);
+  assert.match(body, /public_newsletter_ready: false/);
+  assert.match(body, /This PR is not publish-ready/);
+  assert.match(body, /^## Public Newsletter Readiness$/m);
+  assert.match(body, /^## Failure Diagnostics$/m);
   assert.match(body, /전체 상태: NEEDS_FIX/);
   assert.match(body, /생성 실행 상태: FAILED_REPAIR_REVIEWABLE/);
   assert.match(body, /final_publish_ready: false/);
   assert.match(body, /publish_gate_passed: false/);
   assert.match(body, /권장 조치:/);
   assert.doesNotMatch(body, /최종 발행 조건이 모두 통과했습니다/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
 test('newsroom PR body marks editorial reviewable handoff as editor-approved public publication', () => {
@@ -1476,6 +1486,11 @@ test('reviewable artifact resolver accepts editorial reviewable handoff without 
   assert.equal(outputs.has_reviewable_artifacts, 'true');
   assert.equal(outputs.has_public_artifacts, 'false');
   assert.equal(outputs.has_publish_candidate, 'false');
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.review_only, 'true');
+  assert.equal(outputs.publish_candidate_ready, 'false');
+  assert.equal(outputs.changed_artifact_count, String(REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.length));
   assert.match(outputs.reviewable_artifact_reason, /failure_kind=editorial_reviewable/);
   assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
 });
@@ -1502,6 +1517,9 @@ test('reviewable artifact resolver accepts editorial reviewable public and data 
   assert.equal(outputs.has_required_public_newsletter_files, 'true');
   assert.equal(outputs.public_newsletter_ready, 'true');
   assert.equal(outputs.has_publish_candidate, 'true');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.review_only, 'false');
+  assert.equal(outputs.publish_candidate_ready, 'true');
   assert.match(outputs.reviewable_artifact_reason, /public_newsletter_ready=true/);
   assert.doesNotMatch(outputs.public_newsletter_reason, /quality|final_publish_ready|repair|shortage/);
 });
@@ -1521,6 +1539,8 @@ test('reviewable artifact resolver rejects editorial reviewable invalid canonica
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.equal(outputs.review_only, 'false');
   assert.match(outputs.reviewable_artifact_reason, /canonical_failure_kind=wrong_kind/);
 
   writeText(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), '{ invalid json');
@@ -1530,6 +1550,8 @@ test('reviewable artifact resolver rejects editorial reviewable invalid canonica
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.equal(outputs.review_only, 'false');
   assert.match(outputs.reviewable_artifact_reason, /canonical_generation_status=invalid/);
   assert.match(outputs.reviewable_artifact_reason, /invalid_editorial_required=/);
 
@@ -1541,6 +1563,8 @@ test('reviewable artifact resolver rejects editorial reviewable invalid canonica
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.equal(outputs.review_only, 'false');
   assert.match(outputs.reviewable_artifact_reason, /missing_editorial_required=quality-report\.json/);
 });
 
@@ -1569,12 +1593,31 @@ test('reviewable artifact resolver rejects failed repair with repair-failure onl
   assert.equal(outputs.branch, `newsletter/${date}`);
   assert.equal(outputs.has_reviewable_artifacts, 'false');
   assert.equal(outputs.has_publish_candidate, 'false');
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.equal(outputs.review_only, 'false');
   assert.match(outputs.reviewable_artifact_reason, /status=FAILED_REPAIR_REVIEWABLE/);
   assert.match(outputs.reviewable_artifact_reason, /repair-failure\.json/);
   assert.match(outputs.reviewable_artifact_reason, /missing_required=/);
   for (const required of REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.filter(file => file !== 'repair-failure.json')) {
     assert.match(outputs.reviewable_artifact_reason, new RegExp(required.replace('.', '\\.')));
   }
+});
+
+test('reviewable artifact resolver rejects complete failed repair when only tmp state changed', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: []
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.equal(outputs.review_only, 'false');
+  assert.equal(outputs.changed_artifact_count, '0');
+  assert.match(outputs.reviewable_artifact_reason, /changed=none/);
 });
 
 test('reviewable artifact resolver accepts complete changed failed repair artifact set', () => {
@@ -1592,6 +1635,11 @@ test('reviewable artifact resolver accepts complete changed failed repair artifa
 
   assert.equal(outputs.has_reviewable_artifacts, 'true');
   assert.equal(outputs.has_publish_candidate, 'false');
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.review_only, 'true');
+  assert.equal(outputs.publish_candidate_ready, 'false');
+  assert.equal(outputs.changed_artifact_count, String(REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.length + 1));
   assert.match(outputs.reviewable_artifact_reason, /missing_required=none/);
 });
 
@@ -1626,6 +1674,9 @@ test('reviewable artifact resolver treats legacy quality failures as public-read
   assert.equal(outputs.public_newsletter_ready, 'true');
   assert.equal(outputs.has_ai_publish_ready, 'false');
   assert.equal(outputs.has_publish_candidate, 'true');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.review_only, 'false');
+  assert.equal(outputs.publish_candidate_ready, 'true');
   assert.match(outputs.reviewable_artifact_reason, /public_newsletter_ready=true/);
   assert.doesNotMatch(outputs.public_newsletter_reason, /quality|final_publish_ready|repair|shortage/);
 });
@@ -1652,6 +1703,8 @@ test('reviewable artifact resolver does not treat FAILED status as a publish can
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
   assert.equal(outputs.has_publish_candidate, 'false');
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.equal(outputs.review_only, 'false');
 });
 
 test('fallback builder recovers PR #39 shape with public files and preserve-first articles', () => {
@@ -1808,6 +1861,39 @@ test('fallback builder leaves no public files and writes diagnostics when safe a
   assert.ok(diagnostics.rejected_candidates.some(item => item.reason === 'duplicate_base_url'));
 });
 
+test('ensure CLI preserves fallback failure diagnostics and succeeds only for review-ready handoff', () => {
+  const root = tempRoot();
+  const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
+  const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
+    .map(file => `content/newsroom/${date}/${file}`);
+
+  const result = ensurePublicNewsletterArtifacts({ root, date, changedArtifacts });
+  const diagnosticsPath = path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json');
+  const diagnostics = JSON.parse(fs.readFileSync(diagnosticsPath, 'utf8'));
+  const resolvedOutputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: changedArtifacts.concat(`content/newsroom/${date}/fallback-public-issue-diagnostics.json`)
+  }));
+
+  assert.equal(result.fallbackExecuted, true);
+  assert.equal(result.outputs.fallback_public_issue_executed, 'true');
+  assert.equal(result.outputs.fallback_public_issue_failed, 'true');
+  assert.match(result.outputs.fallback_public_issue_error, /only 1 article\(s\) available/);
+  assert.equal(result.outputs.fallback_public_issue_diagnostics, `content/newsroom/${date}/fallback-public-issue-diagnostics.json`);
+  assert.equal(diagnostics.status, 'FAILED');
+  assert.equal(diagnostics.fallback_public_issue_failed, true);
+  assert.equal(diagnostics.written_by, 'ensure-public-newsletter-artifacts');
+  assert.match(diagnostics.failure_reason, /only 1 article\(s\) available/);
+  assert.equal(result.outputs.public_newsletter_ready, 'false');
+  assert.equal(result.outputs.review_pr_ready, 'true');
+  assert.equal(result.outputs.review_only, 'true');
+  assert.equal(result.outputs.publish_candidate_ready, 'false');
+  assert.equal(result.outputs.review_pr_ready, resolvedOutputs.review_pr_ready);
+  assert.equal(result.outputs.review_only, resolvedOutputs.review_only);
+  assert.equal(result.outputs.public_newsletter_ready, resolvedOutputs.public_newsletter_ready);
+});
+
 test('ensure CLI runs fallback builder for quality and repair triggers, then recomputes readiness', () => {
   const root = tempRoot();
   const { date } = writePr39LikeRegressionFixture(root);
@@ -1896,6 +1982,52 @@ test('ensure CLI skips fallback when public artifacts are already valid', () => 
   assert.equal(result.outputs.fallback_public_issue_executed, 'false');
   assert.equal(result.outputs.fallback_public_issue_trigger_reason, 'none');
   assert.equal(result.outputs.public_newsletter_reason, 'ready');
+});
+
+test('root wrapper CLIs expose review handoff outputs', () => {
+  const repoRoot = path.join(__dirname, '..', '..');
+  const date = '2026-05-10';
+  const resolveRoot = tempRoot();
+  execFileSync('git', ['init'], { cwd: resolveRoot, stdio: 'ignore' });
+  writeFailedRepairReviewableArtifacts(resolveRoot, date);
+
+  const resolveOutput = execFileSync(
+    process.execPath,
+    [path.join(repoRoot, 'scripts', 'resolve-reviewable-artifacts.js')],
+    { cwd: resolveRoot, encoding: 'utf8' }
+  );
+
+  assert.match(resolveOutput, /review_pr_ready=true/);
+  assert.match(resolveOutput, /review_only=true/);
+  assert.match(resolveOutput, /publish_candidate_ready=false/);
+  assert.match(resolveOutput, /changed_artifact_count=\d+/);
+
+  const ensureRoot = tempRoot();
+  execFileSync('git', ['init'], { cwd: ensureRoot, stdio: 'ignore' });
+  writeMinimalPublishArtifacts(ensureRoot, date, {
+    finalPublishReady: true,
+    status: {
+      final_publish_ready: true,
+      validate_ok: true
+    }
+  });
+  writePublicNewsletterArtifacts(ensureRoot, date);
+
+  const ensureOutput = execFileSync(
+    process.execPath,
+    [
+      path.join(repoRoot, 'scripts', 'ensure-public-newsletter-artifacts.js'),
+      '--date',
+      date,
+      '--no-build'
+    ],
+    { cwd: ensureRoot, encoding: 'utf8' }
+  );
+
+  assert.match(ensureOutput, /review_pr_ready=true/);
+  assert.match(ensureOutput, /review_only=false/);
+  assert.match(ensureOutput, /publish_candidate_ready=true/);
+  assert.match(ensureOutput, /changed_artifact_count=\d+/);
 });
 
 test('ensure CLI throws when fallback is required but candidate artifacts are missing', () => {
@@ -2497,6 +2629,78 @@ test('validate-pr-body allows review PR when final publish is false without cons
   assert.equal(result.ok, true);
 });
 
+test('validate-pr-body accepts review-only wording and rejects misleading publish-ready wording', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date, {
+    status: {
+      failure_stage: 'editor repair attempt 1/2',
+      failure_reason: 'section_count_drift',
+      quality_status: 'NEEDS_FIX',
+      quality_score: 79
+    },
+    generationStatus: {
+      failure_stage: 'editor repair attempt 1/2',
+      failure_reason: 'section_count_drift',
+      quality_status: 'NEEDS_FIX',
+      quality_score: 79
+    },
+    repairFailure: {
+      code: 'section_count_drift',
+      message: 'section_count_drift: targeted repair shrank 3 sections to 2.'
+    },
+    quality: {
+      status: 'NEEDS_FIX',
+      score: 79
+    }
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json'), {
+    status: 'FAILED',
+    failure_stage: 'fallback_public_issue_builder',
+    failure_reason: 'Fallback builder could not fill minimum main article count 3; only 1 article(s) available.',
+    fallback_public_issue_failed: true,
+    preserve_article_count: 1,
+    final_article_count: 1,
+    minimum_required_count: 3,
+    demoted_articles: [],
+    top_rejected_reasons: [{ reason: 'duplicate_url', count: 2 }],
+    written_by: 'ensure-public-newsletter-artifacts'
+  });
+  const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
+    .map(file => `content/newsroom/${date}/${file}`)
+    .concat(`content/newsroom/${date}/fallback-public-issue-diagnostics.json`);
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    changedArtifacts
+  });
+
+  assert.match(body, /review_only: true/);
+  assert.match(body, /public_newsletter_ready: false/);
+  assert.match(body, /final_publish_ready: false/);
+  assert.match(body, /section_count_drift/);
+  assert.match(body, /Fallback builder could not fill minimum main article count 3/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+
+  const allowedNegative = body.replace(
+    'This PR is not publish-ready.',
+    'publish-ready label must not be applied.'
+  );
+  assert.equal(validatePrBodyText(allowedNegative, { date }).ok, true);
+
+  for (const misleading of [
+    'This PR is publish-ready.',
+    'Ready to publish.',
+    'Final publish ready: true.',
+    'public newsletter generated successfully.'
+  ]) {
+    const result = validatePrBodyText(body.replace('This PR is not publish-ready.', misleading), { date });
+    assert.equal(result.ok, false, misleading);
+    assert.match(result.errors.join('\n'), /misleading publish-ready wording/);
+  }
+});
+
 test('newsroom PR body includes editor-approved publication policy', () => {
   const root = tempRoot();
   const date = '2026-05-08';
@@ -2822,6 +3026,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   const resolveFinalStatusStep = workflowStep(workflow, 'Resolve final publish status');
   const sourceEffectivenessStep = workflowStep(workflow, 'Generate source effectiveness report');
   const preparePrBodyStep = workflowStep(workflow, 'Prepare pull request body');
+  const ensureLabelsStep = workflowStep(workflow, 'Ensure labels');
+  const createPrStep = workflowStep(workflow, 'Create pull request');
   const addLabelsStepIndex = workflow.indexOf('- name: Add pull request labels');
 
   assert.notEqual(addLabelsStepIndex, -1);
@@ -2884,7 +3090,11 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /fallback-composition/);
   assert.match(workflow, /thin-week/);
   assert.match(workflow, /publish-ready/);
-  assert.match(workflow, /const stateLabels = \['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week'\];/);
+  assert.match(workflow, /review-only/);
+  assert.match(workflow, /failed-repair-reviewable/);
+  assert.match(workflow, /const stateLabels = \[/);
+  assert.match(workflow, /'review-only'/);
+  assert.match(workflow, /'failed-repair-reviewable'/);
   assert.match(workflow, /github\.rest\.issues\.removeLabel/);
   assert.match(workflow, /- name: Resolve final publish status/);
   assert.match(workflow, /id: final-publish-status/);
@@ -2892,12 +3102,15 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
-  assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
+  assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
+  assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
+  assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true';/);
+  assert.match(workflow, /const reviewOnly = '\$\{\{ steps\.meta\.outputs\.review_only \}\}' === 'true';/);
   assert.match(workflow, /const compositionMode = '\$\{\{ steps\.final-publish-status\.outputs\.composition_mode \}\}';/);
   assert.doesNotMatch(workflow, /steps\.meta\.outputs\.has_publish_candidate/);
   assert.doesNotMatch(workflow, /if: steps\.meta\.outputs\.has_reviewable_artifacts == 'true'/);
@@ -2905,8 +3118,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /validationPassed/);
   assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION'/);
   assert.match(workflow, /compositionMode === 'THIN_WEEK_REVIEW'/);
-  assert.match(workflow, /Fail if public newsletter artifacts were not ready/);
-  assert.match(workflow, /steps\.meta\.outputs\.public_newsletter_ready != 'true'/);
+  assert.match(workflow, /Fail if no reviewable PR can be created/);
+  assert.match(workflow, /steps\.meta\.outputs\.review_pr_ready != 'true'/);
   assert.doesNotMatch(workflow, /final_publish_ready != 'true'/);
   assert.doesNotMatch(
     workflow,
