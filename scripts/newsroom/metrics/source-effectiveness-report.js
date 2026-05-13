@@ -486,6 +486,27 @@ function genericSourceLike(source = {}, metrics = {}) {
     /\b(ai|it|tech|software-engineering|ai-trends|ai-engineering|ai-coding)\b/i.test(haystack);
 }
 
+function cameraRelevantRawSignal(candidate = {}) {
+  const haystack = [
+    candidate.title,
+    candidate.summary,
+    candidate.description,
+    candidate.category,
+    candidate.relevance_bucket,
+    candidate.source_name,
+    candidate.api_or_component,
+    candidate.version_or_release,
+    candidate.behavior_change,
+    candidate.source_extraction,
+    candidate.derived_editorial_hints
+  ].map(value => typeof value === 'object' ? JSON.stringify(value) : text(value)).join(' ');
+  return /\b(?:camera|camerax|camera2|androidx\.camera|hal|stream|buffer|metadata|image\s+pipeline|isp|v4l2|libcamera)\b/i.test(haystack);
+}
+
+function parserRepairReason(reason = '') {
+  return /\b(?:parser|parse|extraction|source_extraction|date|dated|version|anchor|source url|missing URL evidence|missing dated evidence|release row|fallback)\b/i.test(text(reason));
+}
+
 function recommendationFor(source, metrics) {
   const reasons = [];
   let recommendation = 'KEEP_AND_MONITOR';
@@ -493,9 +514,14 @@ function recommendationFor(source, metrics) {
   if (metrics.collected_count === 0) {
     recommendation = 'NO_RECENT_SIGNAL';
     reasons.push('No recent candidates were collected for this source.');
-  } else if (officialLike(source) && metrics.eligible_count === 0) {
+  } else if (
+    officialLike(source) &&
+    metrics.eligible_count === 0 &&
+    metrics.camera_relevant_raw_count > 0 &&
+    metrics.parser_repair_reason_count > 0
+  ) {
     recommendation = 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR';
-    reasons.push('Official or high-priority source produced candidates but none were eligible for main/short selection.');
+    reasons.push('Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.');
   } else if (
     metrics.rendered_main_count > 0 &&
     metrics.effectiveness_score >= 60 &&
@@ -561,6 +587,8 @@ function finalizeState(state) {
     selected_count: state.selectedKeys.size,
     rendered_main_count: state.renderedKeys.size,
     source_gap_count: 0,
+    camera_relevant_raw_count: 0,
+    parser_repair_reason_count: 0,
     reference_only_count: 0,
     watchlist_count: 0,
     main_eligible_false_count: 0,
@@ -584,8 +612,10 @@ function finalizeState(state) {
     const mainEligibleFalse = candidates.some(candidate => candidate.main_eligible === false);
     const briefingOnly = candidates.some(candidate => candidate.briefing_only === true);
     const genericNoise = candidates.some(candidate => genericNoiseCandidate(candidate, source));
+    const cameraRelevant = candidates.some(cameraRelevantRawSignal);
 
     if (eligible) metrics.eligible_count += 1;
+    if (cameraRelevant) metrics.camera_relevant_raw_count += 1;
     if (sourceGap) {
       metrics.source_gap_count += 1;
       sourceGapKeys.add(key);
@@ -602,6 +632,7 @@ function finalizeState(state) {
 
     if (!eligible || sourceGap || genericNoise) {
       const reasons = uniqueSorted(candidates.flatMap(candidateExclusionReasons));
+      if (reasons.some(parserRepairReason)) metrics.parser_repair_reason_count += 1;
       for (const reason of reasons) incrementReason(state, reason);
     }
   }

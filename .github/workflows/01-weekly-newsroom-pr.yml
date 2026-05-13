@@ -216,7 +216,7 @@ jobs:
         run: node scripts/write-publish-status-output.js >> "$GITHUB_OUTPUT"
 
       - name: Generate source effectiveness report
-        if: always() && steps.meta.outputs.public_newsletter_ready == 'true'
+        if: always() && steps.meta.outputs.review_pr_ready == 'true'
         continue-on-error: true
         run: npm run report:source-effectiveness -- --date "${{ steps.meta.outputs.date }}"
 

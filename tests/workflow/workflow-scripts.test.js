@@ -1268,6 +1268,27 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
   assert.match(mismatchCandidatePoolSection, /preflight_source: selection-report\.json/);
   assert.match(mismatchCandidatePoolSection, /preflight_consistency: mismatch/);
   assert.equal(validatePrBodyFile(bodyPath, { root, date, validateOutcome: 'failure' }).ok, true);
+
+  writeJson(path.join(root, 'content', 'newsroom', date, 'source-effectiveness-report.json'), {
+    sources: [{
+      source_id: 'android-developers-jetpack-release',
+      recommendation: 'KEEP_AND_FIX_PARSER',
+      reasons: ['rich source effectiveness parser repair recommendation'],
+      eligible_count: 0
+    }]
+  });
+  const richBody = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    changedArtifacts
+  });
+  const richCandidatePoolSection = extractMarkdownSection(richBody, 'Candidate Pool Preflight');
+
+  assert.match(richCandidatePoolSection, /Source\/parser hints:/);
+  assert.doesNotMatch(richCandidatePoolSection, /Source\/parser hints \(preliminary\):/);
+  assert.match(richCandidatePoolSection, /KEEP_AND_FIX_PARSER \/ android-developers-jetpack-release: rich source effectiveness parser repair recommendation/);
+  assert.doesNotMatch(richCandidatePoolSection, /collected CameraX rows but no eligible source_extraction item/);
 });
 
 test('candidate shortage generator exits before LLM calls when credentials are empty', () => {
@@ -3529,7 +3550,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /node scripts\/write-publish-status-output\.js >> "\$GITHUB_OUTPUT"/);
   assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
-  assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
+  assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(sourceEffectivenessStep, /continue-on-error:\s*true/);
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
