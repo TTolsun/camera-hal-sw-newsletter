@@ -17,7 +17,9 @@ const {
   articleSectionContractMarkdown
 } = require('../render/newsletter-renderer');
 const {
-  getChangedRepoVisibleArtifacts
+  getChangedRepoVisibleArtifacts,
+  requiredPublicFiles,
+  resolveReviewableArtifacts
 } = require('./resolve-reviewable-artifacts');
 
 const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
@@ -103,6 +105,22 @@ function mustFixSummaryText(status) {
     `must_fix_count=${valueOrUnknown(status.must_fix_count ?? 0)}`,
     `source_gap_count=${valueOrUnknown(status.source_gap_count ?? 0)}`
   ].join('; ');
+}
+
+function resolveReviewHandoff(options = {}) {
+  if (!options.date) return null;
+  try {
+    const resolverOptions = {
+      root: options.root,
+      date: options.date
+    };
+    if (Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')) {
+      resolverOptions.changedArtifacts = options.changedArtifacts;
+    }
+    return resolveReviewableArtifacts(resolverOptions);
+  } catch (_) {
+    return null;
+  }
 }
 
 function recommendedEditorAction(status) {
@@ -260,6 +278,134 @@ function renderFinalSelectionStatus(status) {
     status.candidate_selection_note || 'Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.',
     ''
   ].join('\n');
+}
+
+function readJsonObjectIfExists(filePath) {
+  const value = readJsonIfExists(filePath);
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
+}
+
+function renderReviewOnlyStatus(status, handoff, root, date) {
+  if (!handoff?.reviewOnly) return '';
+  const generationStatus = date
+    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json')) || {}
+    : {};
+  const failureStage = valueOrUnknown(generationStatus.failure_stage ?? status.failure_stage);
+  const failureReason = valueOrUnknown(generationStatus.failure_reason ?? status.failure_reason);
+  return [
+    '## Review-only Status',
+    '',
+    '이 PR은 review-only입니다. public newsletter files가 준비되지 않았으므로 발행 가능한 PR이 아닙니다. This PR is not publish-ready.',
+    '',
+    `- review_only: ${booleanText(handoff.reviewOnly)}`,
+    `- public_newsletter_ready: ${booleanText(handoff.publicNewsletterReady)}`,
+    '- final_publish_ready: false',
+    '- publish_gate_passed: false (public validation skipped)',
+    `- quality_status: ${valueOrUnknown(status.quality_status ?? generationStatus.quality_status)}`,
+    `- quality_score: ${valueOrUnknown(status.quality_score ?? generationStatus.quality_score)}`,
+    `- quality_threshold: ${valueOrUnknown(status.quality_threshold ?? generationStatus.quality_threshold)}`,
+    `- failure_stage: ${failureStage}`,
+    `- failure_reason: ${failureReason}`,
+    ''
+  ].join('\n');
+}
+
+function renderPublicNewsletterReadiness(root, date, handoff) {
+  if (!handoff || (!handoff.reviewOnly && !handoff.publicNewsletterReady)) return '';
+  const required = date ? requiredPublicFiles(date) : [];
+  return [
+    '## Public Newsletter Readiness',
+    '',
+    `- public_newsletter_ready: ${booleanText(handoff.publicNewsletterReady)}`,
+    `- public_newsletter_reason: ${valueOrUnknown(handoff.publicNewsletterReason)}`,
+    `- review_pr_ready: ${booleanText(handoff.reviewPrReady)}`,
+    `- publish_candidate_ready: ${booleanText(handoff.publishCandidateReady)}`,
+    '- required public files:',
+    ...(required.length > 0 ? required.map(filePath => `  - ${filePath}`) : ['  - unknown']),
+    ''
+  ].join('\n');
+}
+
+function summarizeFallbackReasonRows(items) {
+  return ensureArray(items)
+    .slice(0, 5)
+    .map(item => `${valueOrUnknown(item.reason)} (${valueOrUnknown(item.count ?? 'n/a')})`)
+    .join('; ') || 'none';
+}
+
+function fallbackDiagnosticsFor(root, date) {
+  if (!date) return null;
+  const diagnostics = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json'));
+  if (diagnostics) return { source: 'fallback-public-issue-diagnostics.json', value: diagnostics };
+  const fallback = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'));
+  if (fallback) return { source: 'fallback-public-issue.json', value: fallback };
+  const generationStatus = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json'));
+  if (generationStatus) return { source: 'generation-status.json', value: generationStatus };
+  return null;
+}
+
+function renderFailureDiagnostics(root, date, status, handoff) {
+  if (!handoff?.reviewOnly) return '';
+  const generationStatus = date
+    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json')) || {}
+    : {};
+  const repairFailure = date
+    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'))
+    : null;
+  const fallback = fallbackDiagnosticsFor(root, date);
+  const fallbackValue = fallback?.value || {};
+  const selectionHints = ensureArray(status.selection_shortage_hints);
+  return [
+    '## Failure Diagnostics',
+    '',
+    '### Repair Failure',
+    '',
+    repairFailure
+      ? `- repair_failure: ${valueOrUnknown(repairFailure.message || repairFailure.reason || repairFailure.code || repairFailure.name)}`
+      : '- repair_failure: unavailable',
+    `- failure_stage: ${valueOrUnknown(generationStatus.failure_stage ?? status.failure_stage)}`,
+    `- failure_reason: ${valueOrUnknown(generationStatus.failure_reason ?? status.failure_reason ?? repairFailure?.message ?? repairFailure?.reason)}`,
+    '',
+    '### Fallback Builder Failure',
+    '',
+    fallback
+      ? `- diagnostics_source: ${fallback.source}`
+      : '- fallback diagnostics unavailable',
+    fallback
+      ? `- fallback_public_issue_failed: ${booleanText(fallbackValue.fallback_public_issue_failed === true || fallbackValue.status === 'FAILED')}`
+      : '',
+    fallback
+      ? `- failure_reason: ${valueOrUnknown(fallbackValue.failure_reason || fallbackValue.fallback_public_issue_reason)}`
+      : '',
+    fallback
+      ? `- preserve_article_count: ${valueOrUnknown(fallbackValue.preserve_article_count)}`
+      : '',
+    fallback
+      ? `- final_article_count: ${valueOrUnknown(fallbackValue.final_article_count)}`
+      : '',
+    fallback
+      ? `- minimum_required_count: ${valueOrUnknown(fallbackValue.minimum_required_count ?? articlePolicy.mainArticleCount.min)}`
+      : '',
+    fallback
+      ? `- demoted_articles: ${ensureArray(fallbackValue.demoted_articles).map(item => valueOrUnknown(item.headline || item.title)).join('; ') || 'none'}`
+      : '',
+    fallback
+      ? `- top_rejected_reasons: ${summarizeFallbackReasonRows(fallbackValue.top_rejected_reasons)}`
+      : '',
+    '',
+    '### Candidate Shortage',
+    '',
+    selectionHints.length > 0 ? selectionHints.map(item => `- ${item}`).join('\n') : '- none',
+    '',
+    '### Article Quality Summary',
+    '',
+    `- quality_status: ${valueOrUnknown(status.quality_status)}`,
+    `- quality_score: ${valueOrUnknown(status.quality_score)}`,
+    `- quality_threshold: ${valueOrUnknown(status.quality_threshold)}`,
+    `- must_fix_count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
+    `- source_gap_count: ${valueOrUnknown(status.source_gap_count ?? 0)}`,
+    ''
+  ].filter(line => line !== '').join('\n');
 }
 
 const TRACE_ARTIFACT_DEFS = [
@@ -1047,8 +1193,15 @@ function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), chang
   return lines.join('\n');
 }
 
-function renderPublicNewsletterNotice(status = {}) {
+function renderPublicNewsletterNotice(status = {}, handoff = null) {
   if (status.final_publish_ready === true) return '';
+  if (handoff?.reviewOnly) {
+    return [
+      '## Public Newsletter Notice',
+      '',
+      'AI 자동 발행 기준은 통과하지 못했고 public newsletter files가 준비되지 않았습니다. 이 PR은 review-only이며 merge/publish 대상으로 보면 안 됩니다.'
+    ].join('\n');
+  }
   return [
     '## Public Newsletter Notice',
     '',
@@ -1108,9 +1261,19 @@ function buildNewsroomPrBody(options = {}) {
   const root = resolved.root || options.root || process.cwd();
   const date = resolved.date || options.date || '';
   const status = resolved.status;
+  const handoffOptions = { root, date };
+  if (Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')) {
+    handoffOptions.changedArtifacts = options.changedArtifacts;
+  }
+  const handoff = resolveReviewHandoff(handoffOptions);
   const editorBrief = date ? readTextIfExists(path.join(root, 'content', 'newsroom', date, 'editor-in-chief-brief.md')) : '';
   const editorBriefSections = extractEditorBriefSections(editorBrief);
   const lines = [];
+
+  const reviewOnlyStatus = renderReviewOnlyStatus(status, handoff, root, date);
+  if (reviewOnlyStatus) {
+    lines.push(reviewOnlyStatus, '');
+  }
 
   if (editorBriefSections) {
     lines.push(editorBriefSections, '');
@@ -1122,7 +1285,9 @@ function buildNewsroomPrBody(options = {}) {
     renderCompositionSummary(status),
     renderCompositionNotes(status),
     renderArticleStructureContract(root, date),
-    renderPublicNewsletterNotice(status),
+    renderPublicNewsletterReadiness(root, date, handoff),
+    renderFailureDiagnostics(root, date, status, handoff),
+    renderPublicNewsletterNotice(status, handoff),
     renderFallbackPublicIssueNotes(root, date),
     renderFinalSelectionStatus(status),
     renderCandidateTraceability(root, date),
