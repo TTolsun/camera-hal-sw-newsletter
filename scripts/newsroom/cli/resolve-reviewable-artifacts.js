@@ -15,6 +15,7 @@ const {
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
+const FAILURE_KIND_CANDIDATE_SHORTAGE_REVIEWABLE = 'candidate_shortage_reviewable';
 
 const REVIEWABLE_STATUSES = new Set([
   'PASS',
@@ -33,6 +34,7 @@ const CANONICAL_REVIEW_ARTIFACTS = [
   'repair-failure.json',
   'recovery-prompt.md',
   'shortlisted-candidates.json',
+  'article-capsules.json',
   'background-context.json',
   'selection-report.json',
   'selection-diagnostics.md'
@@ -51,6 +53,14 @@ const REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS = [
   'quality-report.json',
   'fact-check-report.json',
   'generation-status.json'
+];
+
+const REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS = [
+  'generation-status.json',
+  'shortlisted-candidates.json',
+  'selection-report.json',
+  'selection-diagnostics.md',
+  'article-capsules.json'
 ];
 
 const REQUIRED_PUBLIC_NEWSLETTER_FILES = [
@@ -158,6 +168,16 @@ function artifactJsonReadResults(root, date, artifactNames) {
     name,
     readJsonIfExists(path.join(root, 'content', 'newsroom', date, name))
   ]));
+}
+
+function artifactReadResults(root, date, artifactNames) {
+  return Object.fromEntries(artifactNames.map(name => {
+    const filePath = path.join(root, 'content', 'newsroom', date, name);
+    if (name.endsWith('.json')) {
+      return [name, readJsonIfExists(filePath)];
+    }
+    return [name, readTextResult(filePath)];
+  }));
 }
 
 function missingArtifacts(results) {
@@ -327,7 +347,15 @@ function resolveReviewableArtifacts(options = {}) {
   const changedRequiredPublicArtifacts = requiredPublicArtifacts.filter(filePath => changedArtifacts.includes(filePath));
   const editorialArtifacts = artifactJsonReadResults(root, date, REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS);
   const editorialGenerationStatus = editorialArtifacts['generation-status.json'];
+  const candidateShortageArtifacts = artifactReadResults(root, date, REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS);
+  const candidateShortageGenerationStatus = candidateShortageArtifacts['generation-status.json'];
   const statusValues = [status.status, editorialGenerationStatus.value?.status].filter(Boolean);
+  const failureKinds = [
+    status.failure_kind,
+    editorialGenerationStatus.value?.failure_kind,
+    candidateShortageGenerationStatus.value?.failure_kind
+  ].filter(Boolean);
+  const candidateShortageRequested = failureKinds.includes(FAILURE_KIND_CANDIDATE_SHORTAGE_REVIEWABLE);
   const editorialStatus = statusValues.some(value => value === 'NEEDS_FIX' || value === 'QUALITY_NEEDS_FIX');
   const editorialReviewableRequested =
     status.failure_kind === FAILURE_KIND_EDITORIAL_REVIEWABLE ||
@@ -335,6 +363,26 @@ function resolveReviewableArtifacts(options = {}) {
     editorialStatus;
   const editorialMissingRequired = missingArtifacts(editorialArtifacts);
   const editorialInvalidArtifacts = invalidArtifacts(editorialArtifacts);
+  const candidateShortageMissingRequired = missingArtifacts(candidateShortageArtifacts);
+  const candidateShortageInvalidArtifacts = invalidArtifacts(candidateShortageArtifacts);
+  const candidateShortageRejectReasons = [];
+  if (candidateShortageRequested) {
+    if (!candidateShortageGenerationStatus.exists) {
+      candidateShortageRejectReasons.push('candidate_shortage_generation_status=missing');
+    } else if (candidateShortageGenerationStatus.error) {
+      candidateShortageRejectReasons.push(`candidate_shortage_generation_status=invalid:${candidateShortageGenerationStatus.error.message}`);
+    } else if (candidateShortageGenerationStatus.value?.status !== 'UNDERFILLED_NEEDS_FIX') {
+      candidateShortageRejectReasons.push(`candidate_shortage_status=${candidateShortageGenerationStatus.value?.status || 'missing'}`);
+    } else if (candidateShortageGenerationStatus.value?.failure_kind !== FAILURE_KIND_CANDIDATE_SHORTAGE_REVIEWABLE) {
+      candidateShortageRejectReasons.push(`candidate_shortage_failure_kind=${candidateShortageGenerationStatus.value?.failure_kind || 'missing'}`);
+    }
+    if (candidateShortageMissingRequired.length > 0) {
+      candidateShortageRejectReasons.push(`missing_candidate_shortage_required=${candidateShortageMissingRequired.join(',')}`);
+    }
+    if (candidateShortageInvalidArtifacts.length > 0) {
+      candidateShortageRejectReasons.push(`invalid_candidate_shortage_required=${candidateShortageInvalidArtifacts.join(',')}`);
+    }
+  }
   const editorialRejectReasons = [];
   if (editorialReviewableRequested) {
     if (!editorialStatus) {
@@ -362,6 +410,8 @@ function resolveReviewableArtifacts(options = {}) {
     : [];
   const hasRequiredCanonicalArtifacts = failedRepairReviewable
     ? missingRequired.length === 0
+    : candidateShortageRequested
+      ? candidateShortageRejectReasons.length === 0
     : editorialReviewableRequested
       ? editorialRejectReasons.length === 0
       : hasCanonicalDiagnostic;
@@ -369,7 +419,8 @@ function resolveReviewableArtifacts(options = {}) {
     hasRequiredCanonicalArtifacts &&
     statusReviewable &&
     changedArtifacts.length > 0 &&
-    (!editorialReviewableRequested || editorialRejectReasons.length === 0);
+    (!editorialReviewableRequested || editorialRejectReasons.length === 0) &&
+    (!candidateShortageRequested || candidateShortageRejectReasons.length === 0);
   const hasPublicArtifacts = publicArtifacts.length > 0;
   const hasRequiredPublicNewsletterFiles =
     publicStructure.requiredFilesExist &&
@@ -403,6 +454,7 @@ function resolveReviewableArtifacts(options = {}) {
   const reasonParts = [
     `status=${status.status || 'UNKNOWN'}`,
     editorialReviewableRequested ? `failure_kind=${FAILURE_KIND_EDITORIAL_REVIEWABLE}` : '',
+    candidateShortageRequested ? `failure_kind=${FAILURE_KIND_CANDIDATE_SHORTAGE_REVIEWABLE}` : '',
     hasCanonicalDiagnostic
       ? `canonical=${canonicalArtifacts.join(',')}`
       : 'canonical=none',
@@ -412,6 +464,9 @@ function resolveReviewableArtifacts(options = {}) {
       : '',
     editorialReviewableRequested
       ? `editorial_reject=${editorialRejectReasons.length > 0 ? editorialRejectReasons.join(';') : 'none'}`
+      : '',
+    candidateShortageRequested
+      ? `candidate_shortage_reject=${candidateShortageRejectReasons.length > 0 ? candidateShortageRejectReasons.join(';') : 'none'}`
       : '',
     publicArtifacts.length > 0
       ? `public=${publicArtifacts.join(',')}`
@@ -484,6 +539,7 @@ if (require.main === module) {
 module.exports = {
   CANONICAL_REVIEW_ARTIFACTS,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
+  REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   REQUIRED_PUBLIC_NEWSLETTER_FILES,
   REVIEWABLE_STATUSES,

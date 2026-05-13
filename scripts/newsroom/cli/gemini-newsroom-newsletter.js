@@ -402,6 +402,11 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     composition_reason: options.compositionReason || report.composition_reason || diagnostics.composition_reason || '',
     composition_summary: compositionSummary,
     eligible_composition_summary: eligibleCompositionSummary,
+    candidate_pool_preflight_passed: report.candidate_pool_preflight_passed !== false,
+    candidate_shortage_reviewable: report.candidate_shortage_reviewable === true,
+    candidate_shortage_summary: report.candidate_shortage_summary || null,
+    shortage_reason_codes: ensureArray(report.shortage_reason_codes),
+    source_parser_hints: ensureArray(report.source_parser_hints),
     editor_review_required: Boolean(editorReviewRequired),
     non_fallback_reviewable_article_count: compositionSummary.non_fallback_reviewable_article_count ?? null,
     eligible_non_fallback_reviewable_article_count: eligibleCompositionSummary.non_fallback_reviewable_article_count ?? null,
@@ -2313,13 +2318,20 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
   const selectionErrors = ensureArray(report.selection_errors);
   const selectionWarnings = ensureArray(report.selection_warnings);
   const selectionShortageHints = ensureArray(report.selection_shortage_hints);
-  const failureStage = selectionErrors.length > 0 ? 'deterministic selection' : '';
-  const failureReason = selectionErrors.join('; ');
+  const candidateShortage = report.candidate_shortage_reviewable === true;
+  const failureStage = candidateShortage
+    ? 'candidate_pool_preflight'
+    : selectionErrors.length > 0 ? 'deterministic selection' : '';
+  const failureReason = candidateShortage
+    ? ensureArray(report.shortage_reason_codes).join('; ') || 'Not enough publishable candidates before LLM generation.'
+    : selectionErrors.join('; ');
   return {
     schema_version: 1,
     date,
     generated_at: new Date().toISOString(),
-    status: selectionErrors.length > 0
+    status: candidateShortage
+      ? 'UNDERFILLED_NEEDS_FIX'
+      : selectionErrors.length > 0
       ? 'FAILED'
       : selectionWarnings.length > 0 ? 'UNDERFILLED_NEEDS_FIX' : 'OK',
     failure_stage: failureStage,
@@ -2347,6 +2359,11 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
     composition_reason: selectionDiagnostics.composition_reason,
     composition_summary: selectionDiagnostics.composition_summary || {},
     eligible_composition_summary: selectionDiagnostics.eligible_composition_summary || {},
+    candidate_pool_preflight_passed: report.candidate_pool_preflight_passed !== false,
+    candidate_shortage_reviewable: report.candidate_shortage_reviewable === true,
+    candidate_shortage_summary: report.candidate_shortage_summary || {},
+    shortage_reason_codes: ensureArray(report.shortage_reason_codes),
+    source_parser_hints: ensureArray(report.source_parser_hints),
     counts: {
       input_candidate_count: selectionDiagnostics.input_candidate_count,
       eligible_candidate_count: selectionDiagnostics.eligible_candidate_count,
@@ -2418,6 +2435,24 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
         : ['- none']
     ),
     '',
+    '## Candidate Pool Preflight',
+    '',
+    `- candidate_shortage_reviewable: ${selectionReport.candidate_shortage_reviewable}`,
+    `- candidate_pool_preflight_passed: ${selectionReport.candidate_pool_preflight_passed}`,
+    `- shortage_reason_codes: ${selectionReport.shortage_reason_codes.join('; ') || 'none'}`,
+    `- publishable_candidate_count: ${selectionReport.candidate_shortage_summary.publishable_candidate_count ?? 'unknown'}`,
+    `- required_publishable_candidate_count: ${selectionReport.candidate_shortage_summary.required_publishable_candidate_count ?? 'unknown'}`,
+    `- reserve_candidate_count: ${selectionReport.candidate_shortage_summary.reserve_candidate_count ?? 'unknown'}`,
+    `- required_reserve_candidate_count: ${selectionReport.candidate_shortage_summary.required_reserve_candidate_count ?? 'unknown'}`,
+    '',
+    '## Source Parser Hints',
+    '',
+    ...(
+      selectionReport.source_parser_hints.length > 0
+        ? selectionReport.source_parser_hints.map(hint => `- ${hint.code || 'UNKNOWN'}: ${hint.reason || 'unknown'}`)
+        : ['- none']
+    ),
+    '',
     '## Gate Summary',
     '',
     `- non_fallback_reviewable_article_count: ${selectionReport.gate_summary.non_fallback_reviewable_article_count ?? 'unknown'}`,
@@ -2469,6 +2504,36 @@ async function main() {
   generationRunState.selectedInputs = shortlistReport.selected_articles;
   writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
   writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
+  const reporterInput = reporterInputFromShortlist(shortlistReport);
+  reporterInput.candidates = annotateCandidatesWithCache(reporterInput.candidates, cacheDir);
+  const summaryCacheDiagnostics = reporterInput.candidates.cache_diagnostics || [];
+  writeSummaryCacheReport(date, summaryCacheDiagnostics);
+  let articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, reporterInput);
+  writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
+  if (shortlistReport.candidate_shortage_reviewable === true) {
+    const failureReason = ensureArray(shortlistReport.shortage_reason_codes).join('; ') ||
+      ensureArray(shortlistReport.selection_errors).join('; ') ||
+      'Not enough publishable candidates before LLM generation.';
+    writeGenerationStatus(buildGenerationStatus({
+      date,
+      status: 'UNDERFILLED_NEEDS_FIX',
+      extra: {
+        ...selectionStatusExtra(shortlistReport),
+        failure_kind: 'candidate_shortage_reviewable',
+        failure_stage: 'candidate_pool_preflight',
+        failure_reason: failureReason,
+        publish_ready: false,
+        selection_publish_ready: false,
+        final_publish_ready: false,
+        publish_gate_passed: false,
+        review_gate_passed: true,
+        composition_mode: COMPOSITION_MODES.NEEDS_FIX,
+        editor_review_required: true
+      }
+    }));
+    console.warn(`Candidate pool preflight is review-only: ${failureReason}`);
+    return;
+  }
   if (shortlistReport.selection_warnings.length > 0) {
     writeGenerationStatus(buildGenerationStatus({
       date,
@@ -2499,12 +2564,6 @@ async function main() {
     fail(`[deterministic selection] ${shortlistReport.selection_errors.join('; ')}`);
   }
 
-  const reporterInput = reporterInputFromShortlist(shortlistReport);
-  reporterInput.candidates = annotateCandidatesWithCache(reporterInput.candidates, cacheDir);
-  const summaryCacheDiagnostics = reporterInput.candidates.cache_diagnostics || [];
-  writeSummaryCacheReport(date, summaryCacheDiagnostics);
-  let articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, reporterInput);
-  writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
   let backgroundContextReport = buildStaticBackgroundContextReport(date, articleCapsuleReport);
   writeJson(path.join(newsroomDir, 'background-context.json'), backgroundContextReport);
 

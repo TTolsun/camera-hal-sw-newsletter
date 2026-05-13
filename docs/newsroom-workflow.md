@@ -250,6 +250,7 @@ PR에서 다음 항목을 확인합니다.
 - Primary Camera Stack buckets: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
 - Supporting main buckets: `soc_platform_signal`, `cpp_ai_tooling_fallback`
 - Forbidden main buckets: `generic_tech_watchlist`
+- Candidate pool preflight: publishable candidates at least 5; reserve candidates at least 2; camera stack candidates at least 2
 - Quality threshold: 85
 - Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure
 

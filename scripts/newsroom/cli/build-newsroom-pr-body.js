@@ -408,6 +408,65 @@ function renderFailureDiagnostics(root, date, status, handoff) {
   ].filter(line => line !== '').join('\n');
 }
 
+function candidateShortageStatus(status = {}, root, date) {
+  const generationStatus = date
+    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json')) || {}
+    : {};
+  return status.failure_kind === 'candidate_shortage_reviewable' ||
+    generationStatus.failure_kind === 'candidate_shortage_reviewable';
+}
+
+function formatHintRows(hints) {
+  return ensureArray(hints)
+    .slice(0, 8)
+    .map(hint => {
+      if (typeof hint === 'string') return `- ${hint}`;
+      return `- ${valueOrUnknown(hint.code)} / ${valueOrUnknown(hint.source_id)}: ${valueOrUnknown(hint.reason)}`;
+    });
+}
+
+function renderCandidatePoolPreflight(root, date, status = {}) {
+  if (!candidateShortageStatus(status, root, date)) return '';
+  const selectionReport = date
+    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'selection-report.json')) || {}
+    : {};
+  const summary = selectionReport.candidate_shortage_summary || status.candidate_shortage_summary || {};
+  const fallbackHints = selectionReport.source_parser_hints || status.source_parser_hints || status.selection_shortage_hints;
+  const hintRows = formatHintRows(fallbackHints);
+  const selectionHasPreflight = Object.prototype.hasOwnProperty.call(selectionReport, 'candidate_pool_preflight_passed');
+  const statusHasPreflight = Object.prototype.hasOwnProperty.call(status, 'candidate_pool_preflight_passed');
+  const preflightPassed = selectionHasPreflight
+    ? selectionReport.candidate_pool_preflight_passed === true
+    : status.candidate_pool_preflight_passed === true;
+  const preflightSource = selectionHasPreflight ? 'selection-report.json' : statusHasPreflight ? 'generation-status.json' : 'unknown';
+  const preflightMismatch = selectionHasPreflight &&
+    statusHasPreflight &&
+    Boolean(selectionReport.candidate_pool_preflight_passed) !== Boolean(status.candidate_pool_preflight_passed);
+  return [
+    '## Candidate Pool Preflight',
+    '',
+    'LLM editor generation was skipped because candidate pool was insufficient.',
+    '',
+    '- candidate_shortage: true',
+    `- candidate_pool_preflight_passed: ${booleanText(preflightPassed)}`,
+    `- preflight_source: ${preflightSource}`,
+    `- preflight_consistency: ${preflightMismatch ? 'mismatch' : 'ok'}`,
+    `- shortage_reason_codes: ${ensureArray(selectionReport.shortage_reason_codes || status.shortage_reason_codes).join('; ') || 'none'}`,
+    `- publishable_candidate_count: ${valueOrUnknown(summary.publishable_candidate_count)}`,
+    `- required_publishable_candidate_count: ${valueOrUnknown(summary.required_publishable_candidate_count)}`,
+    `- reserve_candidate_count: ${valueOrUnknown(summary.reserve_candidate_count)}`,
+    `- required_reserve_candidate_count: ${valueOrUnknown(summary.required_reserve_candidate_count)}`,
+    `- primary_camera_stack_candidate_count: ${valueOrUnknown(summary.primary_camera_stack_candidate_count)}`,
+    `- direct_camera_or_driver_candidate_count: ${valueOrUnknown(summary.direct_camera_or_driver_candidate_count)}`,
+    `- camera_adjacent_candidate_count: ${valueOrUnknown(summary.camera_adjacent_candidate_count)}`,
+    `- supporting_candidate_count: ${valueOrUnknown(summary.supporting_candidate_count)}`,
+    '',
+    'Source/parser hints (preliminary):',
+    ...(hintRows.length > 0 ? hintRows : ['- none']),
+    ''
+  ].join('\n');
+}
+
 const TRACE_ARTIFACT_DEFS = [
   { key: 'reporter', path: date => `content/newsroom/${date}/reporter-candidates.json` },
   { key: 'shortlist', path: date => `content/newsroom/${date}/shortlisted-candidates.json` },
@@ -1286,6 +1345,7 @@ function buildNewsroomPrBody(options = {}) {
     renderCompositionNotes(status),
     renderArticleStructureContract(root, date),
     renderPublicNewsletterReadiness(root, date, handoff),
+    renderCandidatePoolPreflight(root, date, status),
     renderFailureDiagnostics(root, date, status, handoff),
     renderPublicNewsletterNotice(status, handoff),
     renderFallbackPublicIssueNotes(root, date),
