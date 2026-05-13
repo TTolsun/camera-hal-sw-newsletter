@@ -168,18 +168,24 @@ function readJsonSafely(filePath) {
   }
 }
 
-function writeFallbackFailureDiagnostics({ root, date, error }) {
+function writeFallbackFailureDiagnostics({ root, date, error, status = {} }) {
   const relPath = `content/newsroom/${date}/fallback-public-issue-diagnostics.json`;
   const filePath = path.join(root, ...relPath.split('/'));
   const existing = readJsonSafely(filePath);
   const rejectedCandidates = ensureArray(existing.rejected_candidates);
+  const currentFailureReason = String(error?.message || error || 'Unknown fallback public issue failure.');
+  const previousFailureReason = existing.failure_reason && existing.failure_reason !== currentFailureReason
+    ? existing.failure_reason
+    : undefined;
   const payload = {
     ...existing,
     date,
-    generated_at: existing.generated_at || new Date().toISOString(),
+    generated_at: new Date().toISOString(),
     status: 'FAILED',
-    failure_stage: existing.failure_stage || 'fallback_public_issue_builder',
-    failure_reason: existing.failure_reason || String(error?.message || error || 'Unknown fallback public issue failure.'),
+    source_status: status.generation_status || status.status || 'unknown',
+    failure_stage: 'fallback_public_issue_builder',
+    failure_reason: currentFailureReason,
+    previous_failure_reason: previousFailureReason,
     fallback_public_issue_failed: true,
     preserve_article_count: existing.preserve_article_count ?? 'unknown',
     final_article_count: existing.final_article_count ?? 'unknown',
@@ -243,11 +249,12 @@ function ensurePublicNewsletterArtifacts(options = {}) {
       fallbackResult = buildFallbackPublicIssue({ root, date });
     } catch (error) {
       fallbackError = error;
-      fallbackDiagnosticsRelPath = writeFallbackFailureDiagnostics({ root, date, error });
+      fallbackDiagnosticsRelPath = writeFallbackFailureDiagnostics({ root, date, error, status });
     }
     resolved = resolveReviewableArtifactsForEnsure({
       root,
-      date
+      date,
+      status
     }, changedArtifactsForRecheck(options, fallbackResult, fallbackDiagnosticsRelPath ? [fallbackDiagnosticsRelPath] : []));
   }
 

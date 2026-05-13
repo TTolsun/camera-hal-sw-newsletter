@@ -42,7 +42,8 @@ const {
   sectionDuplicateReason
 } = require('../../scripts/newsroom/generate/fallback-public-issue');
 const {
-  ensurePublicNewsletterArtifacts
+  ensurePublicNewsletterArtifacts,
+  writeFallbackFailureDiagnostics
 } = require('../../scripts/ensure-public-newsletter-artifacts');
 const {
   main: annotatePublicationQualityMain,
@@ -1859,6 +1860,45 @@ test('fallback builder leaves no public files and writes diagnostics when safe a
   assert.match(diagnostics.failure_reason, /only 1 article\(s\) available/);
   assert.ok(diagnostics.rejected_candidates.some(item => item.reason === 'duplicate_url'));
   assert.ok(diagnostics.rejected_candidates.some(item => item.reason === 'duplicate_base_url'));
+});
+
+test('fallback failure diagnostics overwrites stale failure reason on rerun', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  const diagnosticsPath = path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json');
+  const oldGeneratedAt = '2026-05-08T00:00:00.000Z';
+  writeJson(diagnosticsPath, {
+    date,
+    generated_at: oldGeneratedAt,
+    status: 'FAILED',
+    failure_stage: 'stale_stage',
+    failure_reason: 'old failure',
+    fallback_public_issue_failed: true,
+    demoted_articles: [{ headline: 'Old demoted article' }],
+    top_rejected_reasons: [{ reason: 'old_reason', count: 2 }],
+    written_by: 'ensure-public-newsletter-artifacts'
+  });
+
+  const relPath = writeFallbackFailureDiagnostics({
+    root,
+    date,
+    error: new Error('new failure'),
+    status: {
+      generation_status: 'FAILED_REPAIR_REVIEWABLE',
+      status: 'NEEDS_FIX'
+    }
+  });
+  const diagnostics = JSON.parse(fs.readFileSync(diagnosticsPath, 'utf8'));
+
+  assert.equal(relPath, `content/newsroom/${date}/fallback-public-issue-diagnostics.json`);
+  assert.equal(diagnostics.status, 'FAILED');
+  assert.equal(diagnostics.failure_stage, 'fallback_public_issue_builder');
+  assert.equal(diagnostics.failure_reason, 'new failure');
+  assert.equal(diagnostics.previous_failure_reason, 'old failure');
+  assert.notEqual(diagnostics.generated_at, oldGeneratedAt);
+  assert.equal(diagnostics.source_status, 'FAILED_REPAIR_REVIEWABLE');
+  assert.deepEqual(diagnostics.demoted_articles, [{ headline: 'Old demoted article' }]);
+  assert.deepEqual(diagnostics.top_rejected_reasons, [{ reason: 'old_reason', count: 2 }]);
 });
 
 test('ensure CLI preserves fallback failure diagnostics and succeeds only for review-ready handoff', () => {
