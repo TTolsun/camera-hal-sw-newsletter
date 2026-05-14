@@ -447,10 +447,20 @@ function resolveReviewableArtifacts(options = {}) {
     changedArtifactCount > 0 &&
     statusReviewable
   );
-  const reviewOnly = reviewPrReady && !publicNewsletterReady;
+  const diagnosticsOnly = reviewPrReady && !publicNewsletterReady;
+  const reviewOnly = diagnosticsOnly;
   const publishCandidateReady = publicNewsletterReady;
   const hasAiPublishReady = status.final_publish_ready === true;
   const hasPublishCandidate = publicNewsletterReady;
+  const reviewPublicationReady =
+    publicNewsletterReady &&
+    status.final_publish_ready === false &&
+    status.review_gate_passed === true &&
+    status.editor_review_required === true;
+  const homepageVisibleAfterMerge =
+    publicNewsletterReady &&
+    newsletterIndex.hasDate === true &&
+    newsletterIndex.pathsMatch === true;
   const reasonParts = [
     `status=${status.status || 'UNKNOWN'}`,
     editorialReviewableRequested ? `failure_kind=${FAILURE_KIND_EDITORIAL_REVIEWABLE}` : '',
@@ -476,6 +486,9 @@ function resolveReviewableArtifacts(options = {}) {
     `public_newsletter_ready=${publicNewsletterReady ? 'true' : 'false'}`,
     `review_pr_ready=${reviewPrReady ? 'true' : 'false'}`,
     `review_only=${reviewOnly ? 'true' : 'false'}`,
+    `diagnostics_only=${diagnosticsOnly ? 'true' : 'false'}`,
+    `review_publication_ready=${reviewPublicationReady ? 'true' : 'false'}`,
+    `homepage_visible_after_merge=${homepageVisibleAfterMerge ? 'true' : 'false'}`,
     `changed_artifact_count=${changedArtifactCount}`,
     publicNewsletterReasons.length > 0 ? `public_newsletter_reason=${publicNewsletterReasons.join(';')}` : 'public_newsletter_reason=none'
   ].filter(Boolean);
@@ -499,6 +512,9 @@ function resolveReviewableArtifacts(options = {}) {
     publicNewsletterReady,
     reviewPrReady,
     reviewOnly,
+    diagnosticsOnly,
+    reviewPublicationReady,
+    homepageVisibleAfterMerge,
     publishCandidateReady,
     changedArtifactCount,
     publicNewsletterReason: publicNewsletterReasons.length > 0 ? publicNewsletterReasons.join('; ') : 'ready',
@@ -518,6 +534,9 @@ function buildReviewableArtifactOutputs(resolved) {
     public_newsletter_ready: resolved.publicNewsletterReady ? 'true' : 'false',
     review_pr_ready: resolved.reviewPrReady ? 'true' : 'false',
     review_only: resolved.reviewOnly ? 'true' : 'false',
+    diagnostics_only: resolved.diagnosticsOnly ? 'true' : 'false',
+    review_publication_ready: resolved.reviewPublicationReady ? 'true' : 'false',
+    homepage_visible_after_merge: resolved.homepageVisibleAfterMerge ? 'true' : 'false',
     publish_candidate_ready: resolved.publishCandidateReady ? 'true' : 'false',
     changed_artifact_count: String(resolved.changedArtifactCount ?? 0),
     public_newsletter_reason: resolved.publicNewsletterReason,

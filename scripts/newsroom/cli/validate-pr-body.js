@@ -146,12 +146,24 @@ function hasCompleteMarkdownLink(value) {
   return angleWrappedLink.test(text) || plainLink.test(text);
 }
 
-function isReviewOnlyBody(text) {
+function isDiagnosticsOnlyBody(text) {
   const source = toText(text);
-  return (
+  return /(?:^|\n)\s*-?\s*diagnostics_only\s*[:=]\s*true\b/i.test(source) ||
+    /\bdiagnostics[- ]only\b/i.test(source) ||
+    (
     /\breview[- ]only\b/i.test(source) ||
     /검토 전용/.test(source)
-  ) && /public_newsletter_ready\s*[:=]\s*false\b/i.test(source);
+    ) && /public_newsletter_ready\s*[:=]\s*false\b/i.test(source);
+}
+
+function isReviewPublicationBody(text) {
+  const source = toText(text);
+  return /(?:^|\n)\s*-?\s*review_publication_ready\s*[:=]\s*true\b/i.test(source) ||
+    (
+      /public_newsletter_ready\s*[:=]\s*true\b/i.test(source) &&
+      /editor_review_required[=:]\s*true\b/i.test(source) &&
+      /(편집장|편집자|review[- ]only|review publication)/i.test(source)
+    );
 }
 
 function isCandidateShortageBody(text) {
@@ -188,32 +200,83 @@ function reviewOnlyPositivePublishReadyLines(text) {
       if (/final_publish_ready\s*[:=]\s*true\b/i.test(line)) return true;
       if (/public newsletter generated successfully/i.test(line)) return true;
       if (!/publish-ready/i.test(line)) return false;
-      return !/\bnot publish-ready\b|must not|label must not be applied|reserved for|has_ai_publish_ready=true|금지|제거|아닙니다/i.test(line);
+      return !/\bnot publish-ready\b|must not|not applied|label must not be applied|reserved for|has_ai_publish_ready=true|AI 자동 발행 기준 통과|금지|제거|붙이지|미적용|아닙니다/i.test(line);
     });
 }
 
-function validateReviewOnlyContract(text, parsed, errors) {
-  if (!/\breview[- ]only\b/i.test(text) && !/검토 전용/.test(text)) {
-    errors.push('review-only PR body must include a review-only marker.');
+function hasHomepageHiddenText(text) {
+  const source = toText(text);
+  return /merge해도[^.\n]*(?:홈페이지|Newsletter)[^.\n]*(?:표시되지|게시되지)/i.test(source) ||
+    /homepage[^.\n]*(?:not\s+visible|not\s+shown|will\s+not\s+show)/i.test(source) ||
+    /Merge 후 홈페이지 표시 여부\s*\|\s*표시되지 않음/.test(source);
+}
+
+function hasHomepageVisibleText(text) {
+  const source = toText(text);
+  return /Merge 후 홈페이지 표시 여부\s*\|\s*표시됨/.test(source) ||
+    /(?:이 PR|편집장|편집자)[^.\n]*merge하면[^.\n]*(?:Newsletter|홈페이지|사이트)[^.\n]*(?:게시|표시)/i.test(source) ||
+    /homepage\s+(?:is\s+)?(?:visible|shown)/i.test(source) ||
+    /homepage[^.\n]*(?:will\s+show|will\s+be\s+visible)/i.test(source);
+}
+
+function hasPublishReadyLabelBlockedText(text) {
+  const source = toText(text);
+  return /publish-ready label(?:은| must)?[^.\n]*(?:붙이지|금지|must not|not applied|제거)/i.test(source) ||
+    /publish-ready는?[^.\n]*AI 자동 발행 기준 통과/i.test(source);
+}
+
+function validateDiagnosticsOnlyContract(text, parsed, errors) {
+  if (!/(?:^|\n)\s*-?\s*diagnostics_only\s*[:=]\s*true\b/i.test(text) && !/\bdiagnostics[- ]only\b/i.test(text)) {
+    errors.push('diagnostics-only PR body must include diagnostics_only=true or a diagnostics-only marker.');
   }
   if (!/public_newsletter_ready\s*[:=]\s*false\b/i.test(text)) {
-    errors.push('review-only PR body must include public_newsletter_ready=false.');
+    errors.push('diagnostics-only PR body must include public_newsletter_ready=false.');
   }
   if (!/final_publish_ready\s*[:=]\s*false\b/i.test(text)) {
-    errors.push('review-only PR body must include final_publish_ready=false.');
+    errors.push('diagnostics-only PR body must include final_publish_ready=false.');
   }
   if (!hasReviewOnlyNegativePublishText(text)) {
-    errors.push('review-only PR body must state that it is not publish-ready.');
+    errors.push('diagnostics-only PR body must state that it is not publish-ready.');
   }
   if (!hasReviewOnlyPublicFilesNotReadyText(text)) {
-    errors.push('review-only PR body must state that public newsletter files are not ready.');
+    errors.push('diagnostics-only PR body must state that public newsletter files are not ready.');
+  }
+  if (!hasHomepageHiddenText(text)) {
+    errors.push('diagnostics-only PR body must state that merging will not show the newsletter on the homepage.');
+  }
+  if (hasHomepageVisibleText(text)) {
+    errors.push('diagnostics-only PR body must not state that the newsletter will be visible on the homepage.');
   }
   if (parsed.finalPublishReady === true) {
-    errors.push('review-only PR body must not set final_publish_ready=true.');
+    errors.push('diagnostics-only PR body must not set final_publish_ready=true.');
   }
   const positiveLines = reviewOnlyPositivePublishReadyLines(text);
   if (positiveLines.length > 0) {
-    errors.push(`review-only PR body contains misleading publish-ready wording: ${positiveLines.slice(0, 3).join('; ')}`);
+    errors.push(`diagnostics-only PR body contains misleading publish-ready wording: ${positiveLines.slice(0, 3).join('; ')}`);
+  }
+}
+
+function validateReviewPublicationContract(text, parsed, errors) {
+  if (!/(?:^|\n)\s*-?\s*review_publication_ready\s*[:=]\s*true\b/i.test(text)) {
+    errors.push('review publication PR body must include review_publication_ready=true.');
+  }
+  if (!/public_newsletter_ready\s*[:=]\s*true\b/i.test(text)) {
+    errors.push('review publication PR body must include public_newsletter_ready=true.');
+  }
+  if (!/final_publish_ready\s*[:=]\s*false\b/i.test(text)) {
+    errors.push('review publication PR body must include final_publish_ready=false.');
+  }
+  if (!/editor_review_required[=:]\s*true\b/i.test(text)) {
+    errors.push('review publication PR body must include editor_review_required=true.');
+  }
+  if (!hasHomepageVisibleText(text)) {
+    errors.push('review publication PR body must state that editor merge will show the newsletter on the homepage.');
+  }
+  if (!hasPublishReadyLabelBlockedText(text)) {
+    errors.push('review publication PR body must state that the publish-ready label must not be applied.');
+  }
+  if (hasReviewOnlyPublicFilesNotReadyText(text) || /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
+    errors.push('review publication PR body must not describe public newsletter files as not ready, not generated, or not updated.');
   }
 }
 
@@ -398,12 +461,15 @@ function validateEvidencePackSections(text, sections, parsed, errors) {
         errors.push(`Evidence Pack diagnostics is missing "${label}" row.`);
       }
     }
-    const needsFixOrReviewOnly = parsed.overallStatus !== 'PASS' || parsed.finalPublishReady === false || isReviewOnlyBody(text);
+    const needsFixOrReviewable = parsed.overallStatus !== 'PASS' ||
+      parsed.finalPublishReady === false ||
+      isDiagnosticsOnlyBody(text) ||
+      isReviewPublicationBody(text);
     if (
-      needsFixOrReviewOnly &&
+      needsFixOrReviewable &&
       !requiredDiagnosticLabels.some(label => diagnosticLineHasValue(diagnosticsSection, label))
     ) {
-      errors.push('Needs-fix or review-only Evidence Pack diagnostics must include at least one actionable diagnostic.');
+      errors.push('Needs-fix, diagnostics-only, or review publication Evidence Pack diagnostics must include at least one actionable diagnostic.');
     }
   }
 
@@ -473,10 +539,17 @@ function validatePrBodyText(text, options = {}) {
   }
 
   const parsed = parseStatusSection(statusSection);
-  const reviewOnly = isReviewOnlyBody(text);
+  const diagnosticsOnly = isDiagnosticsOnlyBody(text);
+  const reviewPublication = isReviewPublicationBody(text);
   const candidateShortage = isCandidateShortageBody(text);
-  if (reviewOnly) {
-    validateReviewOnlyContract(text, parsed, errors);
+  if (diagnosticsOnly && reviewPublication) {
+    errors.push('PR body must not be both diagnostics_only and review_publication_ready.');
+  }
+  if (diagnosticsOnly) {
+    validateDiagnosticsOnlyContract(text, parsed, errors);
+  }
+  if (reviewPublication) {
+    validateReviewPublicationContract(text, parsed, errors);
   }
   if (candidateShortage) {
     if (!/^## Candidate Pool Preflight\s*$/m.test(text)) {
@@ -509,10 +582,10 @@ function validatePrBodyText(text, options = {}) {
     allowMissingReporterCandidates: candidateShortage
   }, errors);
   validateEvidencePackSections(text, sections, parsed, errors);
-  if (!reviewOnly && /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
+  if (!diagnosticsOnly && /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
     errors.push('Newsletter PR body must not describe public newsletter files as not generated or not updated.');
   }
-  if (!reviewOnly && parsed.finalPublishReady === false && !/public newsletter files는 생성되었습니다/.test(text)) {
+  if (!diagnosticsOnly && parsed.finalPublishReady === false && !/public newsletter files는 생성되었습니다/.test(text)) {
     errors.push('final_publish_ready=false PR body must state that public newsletter files were generated for editor-approved merge.');
   }
 

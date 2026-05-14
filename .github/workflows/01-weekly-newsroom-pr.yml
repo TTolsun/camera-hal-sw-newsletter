@@ -312,6 +312,8 @@ jobs:
               { name: 'fallback-composition', color: '5319e7', description: 'Uses lower-priority SoC/platform/tooling fallback articles' },
               { name: 'thin-week', color: 'c5def5', description: 'Review-only thin-week newsletter candidate' },
               { name: 'review-only', color: 'bfd4f2', description: 'Review handoff only; public newsletter files are not publish-ready' },
+              { name: 'review-only-publication', color: 'bfd4f2', description: 'Public newsletter files exist but editor review is required before merge' },
+              { name: 'diagnostics-only', color: 'cfd3d7', description: 'Review diagnostics only; merge will not publish a newsletter' },
               { name: 'failed-repair-reviewable', color: 'd4c5f9', description: 'Failed repair produced reviewable diagnostics' },
               { name: 'publish-ready', color: '0e8a16', description: 'Final publish gate passed' }
             ];
@@ -348,19 +350,22 @@ jobs:
         with:
           script: |
             const issue_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
-            const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week', 'review-only', 'failed-repair-reviewable'];
+            const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week', 'review-only', 'review-only-publication', 'diagnostics-only', 'failed-repair-reviewable'];
             const labels = ['newsletter', 'aosp-camera'];
             const hasAiPublishReady = '${{ steps.final-publish-status.outputs.has_ai_publish_ready }}' === 'true';
             const compositionMode = '${{ steps.final-publish-status.outputs.composition_mode }}';
-            const reviewOnly = '${{ steps.meta.outputs.review_only }}' === 'true';
+            const diagnosticsOnly = '${{ steps.meta.outputs.diagnostics_only }}' === 'true';
+            const reviewPublicationReady = '${{ steps.meta.outputs.review_publication_ready }}' === 'true';
             const generationStatus = '${{ steps.generation-status.outputs.status }}';
-            if (reviewOnly) {
-              labels.push('needs-fix', 'editor-review', 'review-only');
+            if (hasAiPublishReady) {
+              labels.push('publish-ready');
+            } else if (reviewPublicationReady) {
+              labels.push('needs-fix', 'editor-review', 'review-only-publication');
+            } else if (diagnosticsOnly) {
+              labels.push('needs-fix', 'editor-review', 'diagnostics-only');
               if (generationStatus === 'FAILED_REPAIR_REVIEWABLE') {
                 labels.push('failed-repair-reviewable');
               }
-            } else if (hasAiPublishReady) {
-              labels.push('publish-ready');
             } else {
               labels.push('needs-fix', 'editor-review');
             }

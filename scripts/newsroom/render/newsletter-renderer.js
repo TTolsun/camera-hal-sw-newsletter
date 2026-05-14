@@ -116,6 +116,32 @@ function issueTags(issue) {
   return ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
 }
 
+function publicationNoticeLines(issue) {
+  if (Array.isArray(issue.publication_notice) && issue.publication_notice.length > 0) {
+    return issue.publication_notice.map(String).filter(Boolean);
+  }
+  if (issue.review_publication_ready !== true) return [];
+  return [
+    '편집자 검토 후 발행 가능한 Review-only 발행본입니다.',
+    '이 호는 AI 자동 발행 기준을 통과하지 못했으며, fallback 또는 후보 부족 구성이 포함될 수 있습니다.',
+    '각 기사에서 Camera HAL 직접 변경으로 과장하지 않도록 source와 guardrail을 확인하세요.'
+  ];
+}
+
+function publicationNoticeMarkdown(issue) {
+  const lines = publicationNoticeLines(issue);
+  if (lines.length === 0) return '';
+  return `\n${lines.map(line => `> ${line}`).join('\n')}\n`;
+}
+
+function publicationNoticeHtml(issue) {
+  const lines = publicationNoticeLines(issue);
+  if (lines.length === 0) return '';
+  return `<div class="publication-notice" role="note">
+          ${lines.map(line => `<p>${escapeHtml(line)}</p>`).join('\n          ')}
+        </div>`;
+}
+
 function tagsHtml(tags) {
   return ensureArray(tags).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
 }
@@ -181,6 +207,7 @@ function buildMarkdown(issue) {
   return `# ${issue.title}
 
 ${issue.summary}
+${publicationNoticeMarkdown(issue)}
 
 ## 1. 이번 주 3줄 브리핑
 
@@ -260,6 +287,7 @@ function buildHtml(issue) {
         </div>
         <h1>Camera HAL SW Newsletter</h1>
         <p class="subtitle">${escapeHtml(issue.summary)}</p>
+        ${publicationNoticeHtml(issue)}
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
         <div class="actions newsletter-actions issue-actions">
           <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>

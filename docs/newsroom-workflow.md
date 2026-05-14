@@ -95,8 +95,11 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 ## Editor-approved Publication Policy
 
 - `publish-ready`는 AI 자동 발행 가능 상태이며 `has_ai_publish_ready=true`일 때만 사용합니다.
-- `needs-fix`는 편집장 검토 또는 수정이 필요한 상태입니다. `has_public_artifacts=true`이면 편집장 main merge를 사이트 공개 승인으로 해석합니다.
-- `final_publish_ready=false`는 자동 발행 기준 미충족을 뜻하지만, public artifact가 포함된 PR의 공개 가능성을 혼자 차단하지 않습니다.
+- `review_publication_ready=true`는 `public_newsletter_ready=true`인 검증된 public issue가 있고, `final_publish_ready=false`라서 편집장 검토 후 merge로만 공개할 수 있음을 뜻합니다. 이 값은 raw file existence가 아니라 `resolve-reviewable-artifacts`의 public newsletter readiness 결과에서만 파생합니다.
+- `diagnostics_only=true`는 `review_pr_ready=true && public_newsletter_ready=false`인 진단 전용 PR입니다. merge해도 Newsletter 홈페이지에 표시되지 않으며 public files 누락 이유가 PR body에 남아야 합니다.
+- `homepage_visible_after_merge=true`는 `data/newsletters.json`의 date/html/md entry가 `newsletters/YYYY-MM-DD/index.html` 및 `newsletter.md`와 일치하는 public issue에만 설정합니다.
+- `needs-fix`는 편집장 검토 또는 수정이 필요한 상태입니다. public files가 준비된 review publication PR에는 `review-only-publication`을 함께 붙이고, public files가 없는 진단 PR에는 `diagnostics-only`를 붙입니다. 두 label은 동시에 붙지 않아야 합니다.
+- `final_publish_ready=false`는 자동 발행 기준 미충족을 뜻하지만, `review_publication_ready=true`인 PR의 공개 가능성을 혼자 차단하지 않습니다.
 - `02-validate-site.yml`은 structural validation을 blocking으로 유지하고 quality/fact-check 문제를 non-blocking annotation으로 보고합니다.
 
 ## URL Summary Cache

@@ -11,10 +11,11 @@
 
 ## PR Review Flow
 
-- `final_publish_ready=false`는 AI 자동 발행 기준 미충족을 뜻합니다. public artifact가 포함된 PR은 편집장 merge로 공개 승인할 수 있습니다.
+- `final_publish_ready=false`는 AI 자동 발행 기준 미충족을 뜻합니다. `review_publication_ready=true`이고 `homepage_visible_after_merge=true`인 PR은 편집장 merge로 공개 승인할 수 있습니다.
+- `diagnostics_only=true`인 PR은 public newsletter files가 없으므로 merge해도 홈페이지에 표시되지 않습니다. PR body의 missing public files reason을 먼저 확인합니다.
 - `02-validate-site.yml`은 quality/fact-check 문제를 non-blocking annotation으로 보고하고, structural validation만 blocking으로 처리합니다.
 
-- PR body에서 `final_publish_ready`, article count, labels, selection diagnostics를 먼저 확인합니다.
+- PR body에서 `final_publish_ready`, `review_publication_ready`, `diagnostics_only`, article count, labels, selection diagnostics를 먼저 확인합니다.
 - `editor-in-chief-brief.md`로 핵심 메시지와 review order를 확인합니다.
 - `fact-check-report.md`에 unresolved `must_fix`가 있으면 발행 가능한 PR로 보지 않습니다.
 - `quality-report.md`에서 hard blocker와 soft deduction을 분리해 봅니다.
@@ -23,10 +24,11 @@
 ## Release Flow
 
 - `publish-ready`는 `has_ai_publish_ready=true`인 AI 자동 발행 가능 상태만 뜻합니다.
-- `needs-fix`라도 `has_public_artifacts=true`이면 편집장 main merge를 사이트 공개 승인으로 봅니다.
+- `review-only-publication`은 public files가 있지만 편집장 검토가 필요한 상태입니다.
+- `diagnostics-only`는 public files가 없어 공개 승인 대상이 아닌 상태입니다.
 
 - 자동 발행 가능 PR은 `publish-ready` 상태와 PR body의 `final_publish_ready=true`를 확인합니다.
-- `needs-fix`와 public artifact가 함께 있는 PR은 quality/fact-check annotation과 review artifact를 검토한 뒤 편집장 merge로 공개 승인합니다.
+- `needs-fix`와 `review-only-publication`이 함께 있는 PR은 quality/fact-check annotation과 review artifact를 검토한 뒤 편집장 merge로 공개 승인합니다.
 - `npm.cmd run test`와 `npm.cmd run validate`가 통과한 PR만 merge합니다.
 - merge 후 GitHub Pages가 `main` 기준 public newsletter를 반영합니다.
 - workflow가 generated issue를 `main`에 직접 push하거나 auto-merge하지 않습니다.

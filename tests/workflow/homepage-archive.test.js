@@ -106,3 +106,17 @@ test('homepage excludes the latest issue from archive after sorting a copy', asy
   assert.match(elements['archive-list'].innerHTML, /2026-05-07/);
   assert.deepEqual(items.map(item => item.date), originalOrder);
 });
+
+test('homepage shows review publication issues when data entry paths are present', async () => {
+  const items = [
+    newsletter('2026-05-13', 'Previous issue'),
+    newsletter('2026-05-14', 'Review publication issue')
+  ];
+
+  const elements = await renderHomepage(items);
+
+  assert.match(elements['latest-card'].innerHTML, /2026-05-14/);
+  assert.match(elements['latest-card'].innerHTML, /Review publication issue/);
+  assert.match(elements['latest-card'].innerHTML, /newsletters\/2026-05-14\/index\.html/);
+  assert.match(elements['archive-list'].innerHTML, /2026-05-13/);
+});

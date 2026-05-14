@@ -162,6 +162,31 @@ function unique(values) {
   return output;
 }
 
+function numeric(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function factCheckMustFixCount(factCheck = {}, generationStatus = {}) {
+  const explicit = numeric(factCheck.must_fix_count ?? generationStatus.must_fix_count);
+  if (explicit !== null) return explicit;
+  return ensureArray(factCheck.must_fix).length;
+}
+
+function factCheckSourceGapCount(factCheck = {}, generationStatus = {}) {
+  const explicit = numeric(factCheck.source_gap_count ?? generationStatus.source_gap_count);
+  if (explicit !== null) return explicit;
+  return ensureArray(factCheck.source_gaps).length;
+}
+
+function originalFactCheckDiagnostics(factCheck = {}, generationStatus = {}) {
+  return {
+    original_fact_check_status: factCheck.status || generationStatus.fact_check_status || 'UNKNOWN',
+    original_must_fix_count: factCheckMustFixCount(factCheck, generationStatus),
+    original_source_gap_count: factCheckSourceGapCount(factCheck, generationStatus)
+  };
+}
+
 function normalizedTitle(value) {
   return String(value || '')
     .toLowerCase()
@@ -921,6 +946,7 @@ function buildFallbackPublicIssue(options = {}) {
   const backgroundContextIndex = buildBackgroundContextIndex(backgroundContextReport);
   const generationStatus = readJsonIfExists(path.join(newsroomDir, 'generation-status.json')) ||
     readJsonIfExists(path.join(root, '.tmp', 'newsletter-generation-status.json')) || {};
+  const originalFactCheck = originalFactCheckDiagnostics(factCheck, generationStatus);
   const baseCandidate = options.baseDraft
     ? { source: options.baseDraftSource || 'options.baseDraft', draft: options.baseDraft }
     : baseDraftCandidates(root, date)[0];
@@ -1019,6 +1045,10 @@ function buildFallbackPublicIssue(options = {}) {
         generated_at: new Date().toISOString(),
         status: 'FAILED',
         failure_reason: message,
+        fallback_public_issue_status: 'FAILED',
+        ...originalFactCheck,
+        fallback_public_issue_removed_blockers: demotedRecords.length > 0,
+        fallback_public_issue_removed_article_count: demotedRecords.length,
         base_draft_source: baseCandidate?.source || 'default-issue',
         preserve_article_count: preserveSnapshots.size,
         final_article_count: selectedSections.length,
@@ -1058,6 +1088,12 @@ function buildFallbackPublicIssue(options = {}) {
   }
 
   issue.summary = issueSummary(date, issue.sections, fallbackRecords.filter(item => item.fallback).length, demotedRecords.length);
+  issue.review_publication_ready = true;
+  issue.publication_notice = [
+    '편집자 검토 후 발행 가능한 Review-only 발행본입니다.',
+    '이 호는 AI 자동 발행 기준을 통과하지 못했으며, fallback 또는 후보 부족 구성이 포함될 수 있습니다.',
+    '각 기사에서 Camera HAL 직접 변경으로 과장하지 않도록 source와 guardrail을 확인하세요.'
+  ];
   issue.briefing = ensureThreeBriefingBullets(issue, fallbackRecords.filter(item => item.fallback).length, demotedRecords);
   issue.action_items = fallbackActionItems(issue, fallbackRecords.filter(item => item.fallback).length, demotedRecords);
   issue.references = uniqueReferences(issue.sections, demotedRecords);
@@ -1077,6 +1113,9 @@ function buildFallbackPublicIssue(options = {}) {
   const finalQualityReport = {
     ...fallbackQualityReport,
     fallback_public_issue: true,
+    ...originalFactCheck,
+    fallback_public_issue_removed_blockers: demotedRecords.length > 0,
+    fallback_public_issue_removed_article_count: demotedRecords.length,
     demoted_articles: demotedRecords,
     fallback_articles: fallbackRecords,
     original_quality_status: qualityReport.status || generationStatus.quality_status || 'UNKNOWN',
@@ -1092,6 +1131,10 @@ function buildFallbackPublicIssue(options = {}) {
   writeJson(path.join(newsroomDir, 'fallback-public-issue.json'), {
     date,
     generated_at: new Date().toISOString(),
+    fallback_public_issue_status: 'CREATED',
+    ...originalFactCheck,
+    fallback_public_issue_removed_blockers: demotedRecords.length > 0,
+    fallback_public_issue_removed_article_count: demotedRecords.length,
     base_draft_source: baseCandidate?.source || 'default-issue',
     preserve_article_count: preserveSnapshots.size,
     final_article_count: issue.sections.length,
@@ -1128,6 +1171,8 @@ function buildFallbackPublicIssue(options = {}) {
     fallback_public_issue: true,
     fallback_public_issue_status: 'CREATED',
     fallback_public_issue_demoted_article_count: demotedRecords.length,
+    fallback_public_issue_removed_blockers: demotedRecords.length > 0,
+    fallback_public_issue_removed_article_count: demotedRecords.length,
     fallback_public_issue_added_article_count: fallbackRecords.length,
     fallback_public_issue_preserve_article_count: preserveSnapshots.size,
     fallback_public_issue_reason: 'Public newsletter files generated after quality/repair/final-readiness trigger.',
@@ -1136,6 +1181,7 @@ function buildFallbackPublicIssue(options = {}) {
     quality_threshold: finalQualityReport.threshold,
     quality_deduction_count: ensureArray(finalQualityReport.deductions).length,
     fact_check_status: fallbackFactCheck.status,
+    ...originalFactCheck,
     must_fix_count: 0,
     source_gap_count: 0,
     rendered_main_article_count: issue.sections.length,
@@ -1151,7 +1197,10 @@ function buildFallbackPublicIssue(options = {}) {
     composition_mode: fallbackRecords.some(item => item.fallback) ? 'FALLBACK_COMPOSITION' : 'NEEDS_FIX',
     selection_composition_mode: fallbackRecords.some(item => item.fallback) ? 'FALLBACK_COMPOSITION' : 'NEEDS_FIX',
     validate_ok: true,
-    public_newsletter_ready: true
+    public_newsletter_ready: true,
+    review_publication_ready: true,
+    diagnostics_only: false,
+    homepage_visible_after_merge: true
   };
   writeJson(path.join(newsroomDir, 'generation-status.json'), nextStatus);
   fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
