@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-14",
-  "generated_at": "2026-05-13T16:21:30.160Z",
+  "generated_at": "2026-05-14T01:43:11.108Z",
   "linked_evidence_mode": "extract_only",
   "linked_evidence_limits": {
     "max_links_per_candidate": 8,
@@ -48624,6 +48624,165 @@
       ]
     },
     {
+      "title": "CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 13 May 2026 21:36:47 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://cppcon.org/",
+          "text": "in person in Aurora, CO",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://cppcon.org/registration/",
+          "text": "register today",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=v6OyVjQpjjc",
+          "text": "Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 3,
+        "by_type": {
+          "generic_url": 3
+        },
+        "by_fetch_status": {
+          "skipped": 3
+        },
+        "impact_type_counts": {},
+        "warning_count": 3,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://cppcon.org/",
+          "https://cppcon.org/registration/",
+          "https://www.youtube.com/watch?v=v6OyVjQpjjc"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://cppcon.org/",
+          "identifier": "https://cppcon.org/",
+          "source_text": "in person in Aurora, CO",
+          "raw_excerpt": "in person in Aurora, CO https://cppcon.org/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://cppcon.org/registration/",
+          "identifier": "https://cppcon.org/registration/",
+          "source_text": "register today",
+          "raw_excerpt": "register today https://cppcon.org/registration/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://www.youtube.com/watch?v=v6OyVjQpjjc",
+          "identifier": "https://www.youtube.com/watch?v=v6OyVjQpjjc",
+          "source_text": "Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World",
+          "raw_excerpt": "Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World https://www.youtube.com/watch?v=v6OyVjQpjjc",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
       "title": "Evolving a Translation System with Reflection in C++",
       "url": "https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
       "normalized_url": "",
@@ -49486,165 +49645,6 @@
           "identifier": "https://www.youtube.com/watch?v=zoYT7R94S3c",
           "source_text": "C++: Some Assembly Required",
           "raw_excerpt": "C++: Some Assembly Required https://www.youtube.com/watch?v=zoYT7R94S3c",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        }
-      ]
-    },
-    {
-      "title": "CppCon 2025 How C++ Finally Beats Rust at JSON Serialization -- Lemire & Thiesen",
-      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen",
-      "normalized_url": "",
-      "source": "ISO C++ Blog",
-      "published_date": "Fri, 17 Apr 2026 19:34:43 +0000",
-      "source_kind": "rss_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "generic_tooling_change": 1
-        },
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "generic_tooling_change",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "watch",
-        "confidence": 0.35,
-        "reason": "generic_tooling_change classified from candidate text.",
-        "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [
-        {
-          "url": "https://cppcon.org/",
-          "text": "in person in Aurora, CO",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://cppcon.org/registration/",
-          "text": "register today",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://www.youtube.com/watch?v=Mcgk3CxHYMs",
-          "text": "How C++ Finally Beats Rust at JSON Serialization",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        }
-      ],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 3,
-        "by_type": {
-          "generic_url": 3
-        },
-        "by_fetch_status": {
-          "skipped": 3
-        },
-        "impact_type_counts": {},
-        "warning_count": 3,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "https://cppcon.org/",
-          "https://cppcon.org/registration/",
-          "https://www.youtube.com/watch?v=Mcgk3CxHYMs"
-        ]
-      },
-      "source_aware_linked_evidence": [
-        {
-          "type": "generic_url",
-          "url": "https://cppcon.org/",
-          "identifier": "https://cppcon.org/",
-          "source_text": "in person in Aurora, CO",
-          "raw_excerpt": "in person in Aurora, CO https://cppcon.org/",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://cppcon.org/registration/",
-          "identifier": "https://cppcon.org/registration/",
-          "source_text": "register today",
-          "raw_excerpt": "register today https://cppcon.org/registration/",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://www.youtube.com/watch?v=Mcgk3CxHYMs",
-          "identifier": "https://www.youtube.com/watch?v=Mcgk3CxHYMs",
-          "source_text": "How C++ Finally Beats Rust at JSON Serialization",
-          "raw_excerpt": "How C++ Finally Beats Rust at JSON Serialization https://www.youtube.com/watch?v=Mcgk3CxHYMs",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",

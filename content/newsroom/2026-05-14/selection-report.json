@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-14",
-  "generated_at": "2026-05-13T16:21:30.876Z",
+  "generated_at": "2026-05-14T01:43:11.968Z",
   "status": "UNDERFILLED_NEEDS_FIX",
   "failure_stage": "candidate_pool_preflight",
   "failure_reason": "publishable_candidate_shortage; reserve_candidate_shortage; camera_stack_candidate_shortage",

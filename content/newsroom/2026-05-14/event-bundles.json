@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-14",
-  "generated_at": "2026-05-13T16:21:30.160Z",
+  "generated_at": "2026-05-14T01:43:11.108Z",
   "summary": {
     "schema_version": 1,
     "total_count": 40,
@@ -744,8 +744,30 @@
       "warnings": []
     },
     {
+      "event_id": "event_8f582e1ff61b",
+      "primary_candidate_id": "candidate_8bc33a88d2f4",
+      "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
+      "event_type": "primary_url",
+      "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Wed, 13 May 2026 21:36:47 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "generic_tooling_change",
+        "generic_tech_watchlist",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
       "event_id": "event_511155d5eb95",
-      "primary_candidate_id": "candidate_49dca7e125cd",
+      "primary_candidate_id": "candidate_8cf57c135e2f",
       "event_key": "url:https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
@@ -767,7 +789,7 @@
     },
     {
       "event_id": "event_b82118ee5311",
-      "primary_candidate_id": "candidate_9b9380ce8243",
+      "primary_candidate_id": "candidate_4d359257ea62",
       "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
@@ -789,7 +811,7 @@
     },
     {
       "event_id": "event_63e4833cafb8",
-      "primary_candidate_id": "candidate_a8d3f54275a7",
+      "primary_candidate_id": "candidate_b7e7955e279e",
       "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
@@ -811,7 +833,7 @@
     },
     {
       "event_id": "event_c2b11f90366d",
-      "primary_candidate_id": "candidate_5d5b23bcbcb7",
+      "primary_candidate_id": "candidate_9308afc8222b",
       "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
@@ -833,7 +855,7 @@
     },
     {
       "event_id": "event_0d5b52c7cc62",
-      "primary_candidate_id": "candidate_69a3f845191b",
+      "primary_candidate_id": "candidate_61d90c0e1b8d",
       "event_key": "url:https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m",
@@ -855,7 +877,7 @@
     },
     {
       "event_id": "event_51ae7741652c",
-      "primary_candidate_id": "candidate_aefc28bf17a9",
+      "primary_candidate_id": "candidate_27140e282d70",
       "event_key": "url:https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt",
@@ -864,28 +886,6 @@
       "release": {
         "version": "",
         "date": "Tue, 21 Apr 2026 21:13:30 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_2d03399cdfb2",
-      "primary_candidate_id": "candidate_d87e5e7e8e1d",
-      "event_key": "url:https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Fri, 17 Apr 2026 19:34:43 +0000"
       },
       "component": "",
       "impact_axes": [
