@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "date": "2026-05-14",
-  "generated_at": "2026-05-14T01:43:11.970Z",
+  "generated_at": "2026-05-14T03:46:07.308Z",
   "cache_root": "cache/news-summary",
   "totals": {
-    "candidate_count": 3,
+    "candidate_count": 4,
     "hit_count": 1,
-    "miss_count": 2,
+    "miss_count": 3,
     "by_url_hit_count": 1,
     "by_content_hit_count": 0,
     "legacy_hit_count": 0
@@ -15,6 +15,10 @@
     {
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
       "count": 2
+    },
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 1
     },
     {
       "reason": "url-hit",
@@ -51,6 +55,22 @@
       },
       "hit": false,
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Wed, 13 May 2026 09:45:00 -0400",
+      "cache_key": {
+        "normalized_url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+        "url_hash": "382cfb94f803783b27e1069e68986054a8fa54ebbce8bbc26972716cb799048b",
+        "published_date": "Wed, 13 May 2026 09:45:00 -0400",
+        "content_hash": "bcd8a83b1c4628ae9d84962f06ebcce936514cea82d0a578ca2e4c096c017f1a"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
       "lookup_source": "none",
       "cache_record_path": ""
     },

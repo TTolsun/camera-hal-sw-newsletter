@@ -21,7 +21,7 @@
 - candidate_shortage_reviewable: true
 - candidate_pool_preflight_passed: false
 - shortage_reason_codes: publishable_candidate_shortage; reserve_candidate_shortage; camera_stack_candidate_shortage
-- publishable_candidate_count: 3
+- publishable_candidate_count: 4
 - required_publishable_candidate_count: 5
 - reserve_candidate_count: 0
 - required_reserve_candidate_count: 2
@@ -37,7 +37,7 @@
 
 - non_fallback_reviewable_article_count: 1
 - primary_camera_stack_topic_count: 1
-- supporting_main_article_count: 2
+- supporting_main_article_count: 3
 - forbidden_main_article_count: 0
 - absolute_min_reviewable_articles: 1
 - min_non_fallback_publish_ready_articles: 1
