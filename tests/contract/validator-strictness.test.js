@@ -129,16 +129,16 @@ function writeSiteFixture(root, {
     writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
       final_publish_ready: false,
       editor_review_required: true,
-      manual_publication_ready: true,
       public_newsletter_ready: true,
-      editor_approved_exception: true,
-      editor_approved_exception_reason: 'Only two independent camera-stack public articles remain.',
+      review_publication_ready: true,
+      diagnostics_only: false,
+      homepage_visible_after_merge: true,
+      review_publication_ready_reason: 'Only two independent camera-stack public articles remain.',
       ...statusOverrides
     });
     writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
       status: 'NEEDS_FIX',
-      editor_approved_exception: true,
-      editor_approved_exception_reason: 'Only two independent camera-stack public articles remain.',
+      review_publication_ready_reason: 'Only two independent camera-stack public articles remain.',
       deductions: qualityDeductions || [{
         category: 'composition',
         points: 8,
@@ -213,8 +213,8 @@ test('strict validate-site article count drift remains hard failure', () => {
   assert.match(result.stderr, /expected Newsletter Policy range/);
 });
 
-test('strict validate-site article count drift allows explicit editor-approved exception', () => {
-  const root = tempRoot('validate-site-editor-exception-');
+test('strict validate-site article count drift allows explicit review publication exception', () => {
+  const root = tempRoot('validate-site-review-publication-');
   writeSiteFixture(root, {
     strict: true,
     editorApprovedException: true
@@ -223,7 +223,7 @@ test('strict validate-site article count drift allows explicit editor-approved e
   const result = runScript(validateSitePath, root);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stderr, /editor-approved exception/);
+  assert.match(result.stderr, /review publication exception/);
   assert.match(result.stderr, /expected Newsletter Policy range/);
   assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
 });
@@ -243,7 +243,7 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
   assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match data\/newsletters\.json tags \[Camera HAL, Android\]/);
 });
 
-test('strict editor-approved exception applies only to composition-only blockers', () => {
+test('strict review publication exception applies only to composition-only blockers', () => {
   const cases = [
     {
       name: 'source-integrity',
@@ -302,7 +302,7 @@ test('strict editor-approved exception applies only to composition-only blockers
   ];
 
   for (const testCase of cases) {
-    const root = tempRoot(`validate-site-editor-exception-${testCase.name}-`);
+    const root = tempRoot(`validate-site-review-publication-${testCase.name}-`);
     writeSiteFixture(root, {
       strict: true,
       editorApprovedException: true,
@@ -313,7 +313,7 @@ test('strict editor-approved exception applies only to composition-only blockers
 
     assert.notEqual(result.status, 0, testCase.name);
     assert.match(result.stderr, /expected Newsletter Policy range/, testCase.name);
-    assert.doesNotMatch(result.stderr, /editor-approved exception/, testCase.name);
+    assert.doesNotMatch(result.stderr, /review publication exception/, testCase.name);
   }
 });
 

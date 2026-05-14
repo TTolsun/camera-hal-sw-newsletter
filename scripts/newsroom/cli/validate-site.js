@@ -112,22 +112,27 @@ function hasCompositionOnlyBlocker(quality) {
   );
 }
 
-function editorApprovedExceptionFor(date, articleCount) {
+function reviewPublicationExceptionFor(date, articleCount) {
   const dir = newsroomDir(root, date);
   const status = readJsonIfExists(path.join(dir, 'generation-status.json'));
   const quality = readJsonIfExists(path.join(dir, 'quality-report.json'));
   const factCheck = readJsonIfExists(path.join(dir, 'fact-check-report.json'));
   const staleClaim = readJsonIfExists(path.join(dir, 'stale-claim-report.json'));
-  const reason = status?.editor_approved_exception_reason || quality?.editor_approved_exception_reason;
+  const reason =
+    status?.review_publication_ready_reason ||
+    status?.editor_review_reason ||
+    quality?.review_publication_ready_reason ||
+    quality?.editor_review_reason ||
+    status?.fallback_public_issue_reason ||
+    quality?.fallback_public_issue_reason;
   const qualityArticleCount = finiteNumber(quality?.metrics?.article_count);
   const approved =
-    status?.editor_approved_exception === true &&
+    status?.review_publication_ready === true &&
     status?.final_publish_ready === false &&
     status?.editor_review_required === true &&
-    status?.manual_publication_ready === true &&
     status?.public_newsletter_ready === true &&
+    status?.homepage_visible_after_merge === true &&
     nonEmptyString(reason) &&
-    quality?.editor_approved_exception === true &&
     normalizedStatus(quality?.status) === 'NEEDS_FIX' &&
     hasCompositionOnlyBlocker(quality) &&
     (qualityArticleCount === null || qualityArticleCount === articleCount) &&
@@ -253,10 +258,10 @@ function validateArticleQuality(item, md, newFormat, strictArtifactValidation) {
   if (articleCountOutOfRange) {
     const message = `Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${articleCountRangeText()}.`;
     const exceptionReason = articles.length < articlePolicy.mainArticleCount.min
-      ? editorApprovedExceptionFor(item.date, articles.length)
+      ? reviewPublicationExceptionFor(item.date, articles.length)
       : null;
     if (strictArtifactValidation && exceptionReason) {
-      warn(`${message} editor-approved exception: ${exceptionReason}.`);
+      warn(`${message} review publication exception: ${exceptionReason}.`);
     } else if (strictArtifactValidation) {
       fail(message);
     } else {

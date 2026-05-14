@@ -182,11 +182,17 @@ function writeFallbackFailureDiagnostics({ root, date, error, status = {} }) {
     date,
     generated_at: new Date().toISOString(),
     status: 'FAILED',
+    fallback_public_issue_status: 'FAILED',
     source_status: status.generation_status || status.status || 'unknown',
     failure_stage: 'fallback_public_issue_builder',
     failure_reason: currentFailureReason,
     previous_failure_reason: previousFailureReason,
     fallback_public_issue_failed: true,
+    original_fact_check_status: existing.original_fact_check_status || status.fact_check_status || 'UNKNOWN',
+    original_must_fix_count: existing.original_must_fix_count ?? status.must_fix_count ?? 'unknown',
+    original_source_gap_count: existing.original_source_gap_count ?? status.source_gap_count ?? 'unknown',
+    fallback_public_issue_removed_blockers: existing.fallback_public_issue_removed_blockers ?? false,
+    fallback_public_issue_removed_article_count: existing.fallback_public_issue_removed_article_count ?? ensureArray(existing.demoted_articles).length,
     preserve_article_count: existing.preserve_article_count ?? 'unknown',
     final_article_count: existing.final_article_count ?? 'unknown',
     minimum_required_count: existing.minimum_required_count ?? articlePolicy.mainArticleCount.min,
@@ -235,13 +241,12 @@ function ensurePublicNewsletterArtifacts(options = {}) {
   }, Object.prototype.hasOwnProperty.call(options, 'changedArtifacts') ? options.changedArtifacts : undefined);
   const initialReasons = fallbackTriggerReasons({ root, date, resolved });
   const fallbackAlreadyCreated = resolved.status?.fallback_public_issue_status === 'CREATED';
-  const candidateShortageReviewable = resolved.status?.failure_kind === 'candidate_shortage_reviewable';
   let fallbackExecuted = false;
   let fallbackError = null;
   let fallbackResult = null;
   let fallbackDiagnosticsRelPath = '';
 
-  if (initialReasons.length > 0 && !candidateShortageReviewable && !fallbackAlreadyCreated && !options.noBuild) {
+  if (initialReasons.length > 0 && !fallbackAlreadyCreated && !options.noBuild) {
     if (!hasArtifactInputs(root, date)) {
       throw new Error(`Cannot build fallback public issue for ${date}: no newsroom or collected candidate artifacts are available.`);
     }
@@ -252,10 +257,11 @@ function ensurePublicNewsletterArtifacts(options = {}) {
       fallbackError = error;
       fallbackDiagnosticsRelPath = writeFallbackFailureDiagnostics({ root, date, error, status });
     }
+    const recheckStatus = fallbackResult?.status || status;
     resolved = resolveReviewableArtifactsForEnsure({
       root,
       date,
-      status
+      status: recheckStatus
     }, changedArtifactsForRecheck(options, fallbackResult, fallbackDiagnosticsRelPath ? [fallbackDiagnosticsRelPath] : []));
   }
 

@@ -568,19 +568,20 @@ function renderEvidencePackSummary(root, date) {
 }
 
 function renderReviewOnlyStatus(status, handoff, root, date) {
-  if (!handoff?.reviewOnly) return '';
+  if (!handoff?.diagnosticsOnly) return '';
   const generationStatus = date
     ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json')) || {}
     : {};
   const failureStage = valueOrUnknown(generationStatus.failure_stage ?? status.failure_stage);
   const failureReason = valueOrUnknown(generationStatus.failure_reason ?? status.failure_reason);
   return [
-    '## Review-only Status',
+    '## Diagnostics-only Status',
     '',
-    '이 PR은 review-only입니다. public newsletter files가 준비되지 않았으므로 발행 가능한 PR이 아닙니다. This PR is not publish-ready.',
+    '이 PR은 diagnostics-only입니다. public newsletter files가 준비되지 않았으므로 merge해도 Newsletter 홈페이지에 표시되지 않습니다. This PR is not publish-ready.',
     '',
-    `- review_only: ${booleanText(handoff.reviewOnly)}`,
+    `- diagnostics_only: ${booleanText(handoff.diagnosticsOnly)}`,
     `- public_newsletter_ready: ${booleanText(handoff.publicNewsletterReady)}`,
+    `- homepage_visible_after_merge: ${booleanText(handoff.homepageVisibleAfterMerge)}`,
     '- final_publish_ready: false',
     '- publish_gate_passed: false (public validation skipped)',
     `- quality_status: ${valueOrUnknown(status.quality_status ?? generationStatus.quality_status)}`,
@@ -592,13 +593,41 @@ function renderReviewOnlyStatus(status, handoff, root, date) {
   ].join('\n');
 }
 
+function renderPublicationDecisionSummary(status, handoff) {
+  if (!handoff) return '';
+  const autoPublish = status.final_publish_ready === true ? '통과' : '실패';
+  const reviewPublication = handoff.reviewPublicationReady ? '가능' : '불가능';
+  const publicFiles = handoff.publicNewsletterReady ? '있음' : '없음';
+  const homepage = handoff.homepageVisibleAfterMerge ? '표시됨' : '표시되지 않음';
+  const publishReadyLabel = status.final_publish_ready === true ? '붙임' : '붙이지 않음';
+  return [
+    '## 발행 상태 요약',
+    '',
+    '| 항목 | 판단 |',
+    '| --- | --- |',
+    `| 자동 발행 기준 | ${autoPublish} |`,
+    `| 편집자 승인 발행 가능 여부 | ${reviewPublication} |`,
+    `| Public newsletter files | ${publicFiles} |`,
+    `| Merge 후 홈페이지 표시 여부 | ${homepage} |`,
+    `| publish-ready label | ${publishReadyLabel} |`,
+    '',
+    `- review_publication_ready: ${booleanText(handoff.reviewPublicationReady)}`,
+    `- diagnostics_only: ${booleanText(handoff.diagnosticsOnly)}`,
+    `- homepage_visible_after_merge: ${booleanText(handoff.homepageVisibleAfterMerge)}`,
+    ''
+  ].join('\n');
+}
+
 function renderPublicNewsletterReadiness(root, date, handoff) {
-  if (!handoff || (!handoff.reviewOnly && !handoff.publicNewsletterReady)) return '';
+  if (!handoff || (!handoff.diagnosticsOnly && !handoff.publicNewsletterReady)) return '';
   const required = date ? requiredPublicFiles(date) : [];
   return [
     '## Public Newsletter Readiness',
     '',
     `- public_newsletter_ready: ${booleanText(handoff.publicNewsletterReady)}`,
+    `- review_publication_ready: ${booleanText(handoff.reviewPublicationReady)}`,
+    `- diagnostics_only: ${booleanText(handoff.diagnosticsOnly)}`,
+    `- homepage_visible_after_merge: ${booleanText(handoff.homepageVisibleAfterMerge)}`,
     `- public_newsletter_reason: ${valueOrUnknown(handoff.publicNewsletterReason)}`,
     `- review_pr_ready: ${booleanText(handoff.reviewPrReady)}`,
     `- publish_candidate_ready: ${booleanText(handoff.publishCandidateReady)}`,
@@ -627,7 +656,7 @@ function fallbackDiagnosticsFor(root, date) {
 }
 
 function renderFailureDiagnostics(root, date, status, handoff) {
-  if (!handoff?.reviewOnly) return '';
+  if (!handoff?.diagnosticsOnly) return '';
   const generationStatus = date
     ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json')) || {}
     : {};
@@ -1552,11 +1581,18 @@ function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), chang
 
 function renderPublicNewsletterNotice(status = {}, handoff = null) {
   if (status.final_publish_ready === true) return '';
-  if (handoff?.reviewOnly) {
+  if (handoff?.diagnosticsOnly) {
     return [
       '## Public Newsletter Notice',
       '',
-      'AI 자동 발행 기준은 통과하지 못했고 public newsletter files가 준비되지 않았습니다. 이 PR은 review-only이며 merge/publish 대상으로 보면 안 됩니다.'
+      'AI 자동 발행 기준은 통과하지 못했고 public newsletter files가 준비되지 않았습니다. 이 PR은 diagnostics-only이며 merge해도 Newsletter 홈페이지에 표시되지 않습니다. publish-ready label은 붙이지 않습니다.'
+    ].join('\n');
+  }
+  if (handoff?.reviewPublicationReady) {
+    return [
+      '## Public Newsletter Notice',
+      '',
+      'AI 자동 발행 기준은 통과하지 못했지만, public newsletter files는 생성되었습니다. 편집장이 이 PR을 승인하여 merge하면 Newsletter 사이트에 게시됩니다. publish-ready label은 붙이지 않습니다.'
     ].join('\n');
   }
   return [
@@ -1618,7 +1654,7 @@ function buildNewsroomPrBody(options = {}) {
   const root = resolved.root || options.root || process.cwd();
   const date = resolved.date || options.date || '';
   const status = resolved.status;
-  const handoffOptions = { root, date };
+  const handoffOptions = { root, date, status };
   if (Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')) {
     handoffOptions.changedArtifacts = options.changedArtifacts;
   }
@@ -1638,6 +1674,7 @@ function buildNewsroomPrBody(options = {}) {
 
   lines.push(
     renderStatusSection(status),
+    renderPublicationDecisionSummary(status, handoff),
     renderEditorApprovedPublicationPolicy(),
     renderCompositionSummary(status),
     renderCompositionNotes(status),
