@@ -4070,6 +4070,28 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   );
 });
 
+test('weekly newsroom workflow labels review publication and diagnostics-only mutually exclusively', () => {
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '01-weekly-newsroom-pr.yml');
+  const workflow = fs.readFileSync(workflowPath, 'utf8');
+  const labelStep = workflowStep(workflow, 'Add pull request labels');
+  const reviewPublicationStart = labelStep.indexOf('} else if (reviewPublicationReady) {');
+  const diagnosticsStart = labelStep.indexOf('} else if (diagnosticsOnly) {');
+  const fallbackStart = labelStep.indexOf('} else {', diagnosticsStart);
+
+  assert.notEqual(reviewPublicationStart, -1);
+  assert.notEqual(diagnosticsStart, -1);
+  assert.notEqual(fallbackStart, -1);
+  assert.match(labelStep, /const stateLabels = \[[^\n]*'review-only-publication'[^\n]*'diagnostics-only'[^\n]*\]/);
+
+  const reviewPublicationBranch = labelStep.slice(reviewPublicationStart, diagnosticsStart);
+  const diagnosticsBranch = labelStep.slice(diagnosticsStart, fallbackStart);
+
+  assert.match(reviewPublicationBranch, /labels\.push\('needs-fix', 'editor-review', 'review-only', 'review-only-publication'\)/);
+  assert.doesNotMatch(reviewPublicationBranch, /diagnostics-only/);
+  assert.match(diagnosticsBranch, /labels\.push\('needs-fix', 'editor-review', 'review-only', 'diagnostics-only'\)/);
+  assert.doesNotMatch(diagnosticsBranch, /review-only-publication/);
+});
+
 test('generation path guards public artifacts for editorial reviewable failures', () => {
   const generatorPath = path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');
