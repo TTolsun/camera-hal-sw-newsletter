@@ -8,7 +8,7 @@ const EDITOR_PUBLICATION_POLICY_LINES = Object.freeze([
 
 function renderEditorPublicationPolicyMarkdown() {
   return [
-    '## Editor-approved Publication Policy',
+    '## 편집자 승인 발행 정책',
     '',
     ...EDITOR_PUBLICATION_POLICY_LINES.map(line => `- ${line}`),
     ''

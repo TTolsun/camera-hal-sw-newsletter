@@ -3626,7 +3626,7 @@ test('validate-pr-body ignores policy definitions when detecting concrete public
   assert.equal(diagnosticsValidation.ok, true, diagnosticsValidation.errors.join('\n'));
 });
 
-test('newsroom PR body includes editor-approved publication policy', () => {
+test('newsroom PR body includes editor-approved publication policy in Korean', () => {
   const root = tempRoot();
   const date = '2026-05-08';
   writeMinimalPublishArtifacts(root, date, {
@@ -3637,7 +3637,7 @@ test('newsroom PR body includes editor-approved publication policy', () => {
 
   assert.equal(result.ok, true);
   assert.equal(
-    extractMarkdownSection(body, 'Editor-approved Publication Policy').trimEnd(),
+    extractMarkdownSection(body, '편집자 승인 발행 정책').trimEnd(),
     renderEditorPublicationPolicyMarkdown().trimEnd()
   );
 });

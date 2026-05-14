@@ -17,6 +17,15 @@
 - failed/reviewable run의 artifact upload를 보존합니다.
 - workflow가 사용하는 path를 바꾸면 scripts, docs, tests를 함께 갱신합니다.
 
+## Publication State Labels
+
+- `publish-ready`는 AI 자동 발행 기준을 통과한 PR에만 사용합니다.
+- `review-only`는 AI 자동 발행 기준 미달로 editor review가 필요한 넓은 상태 신호입니다.
+- `review-only-publication`은 public newsletter files가 준비되어 있고 editor merge 시 GitHub Pages에 표시될 수 있는 PR에만 사용합니다.
+- `diagnostics-only`는 public newsletter files가 없어 merge해도 GitHub Pages에 표시되지 않는 PR에만 사용합니다.
+- `review-only-publication`과 `diagnostics-only`는 동시에 붙이면 안 됩니다.
+- GitHub Pages 표시 여부는 PR label이나 `final_publish_ready` 단독 값이 아니라, merge된 `main`의 `newsletters/YYYY-MM-DD/index.html`, `newsletters/YYYY-MM-DD/newsletter.md`, `data/newsletters.json` entry 기준으로 판단합니다.
+
 ## Review Checklist
 
 - `GEMINI_API_KEY` 값이 출력되지 않는지 확인합니다.

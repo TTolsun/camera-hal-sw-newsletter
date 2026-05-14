@@ -92,7 +92,7 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 - `npm run validate:quality`: deterministic quality report를 재계산하고 configured article count range 위반, Primary Camera Stack 필수 조건 미달, forbidden main bucket 포함, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap mapped candidate, dated evidence 없는 selected candidate를 차단합니다. AI/C++ 기사는 configured supporting main bucket일 때만 보강 기사로 허용됩니다.
 - `npm run validate:localization`: 유지 문서와 표시용 JSON 값이 한국어 규칙을 지키는지 확인합니다.
 
-## Editor-approved Publication Policy
+## 편집자 승인 발행 정책
 
 - `publish-ready`는 AI 자동 발행 가능 상태이며 `has_ai_publish_ready=true`일 때만 사용합니다.
 - `review_publication_ready=true`는 `public_newsletter_ready=true`인 검증된 public issue가 있고, `final_publish_ready=false`라서 편집장 검토 후 merge로만 공개할 수 있음을 뜻합니다. 이 값은 raw file existence가 아니라 `resolve-reviewable-artifacts`의 public newsletter readiness 결과에서만 파생합니다.
