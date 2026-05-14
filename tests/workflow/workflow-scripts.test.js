@@ -1507,6 +1507,19 @@ function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
       review_pr_ready: true
     },
     selection_summary: selectionSummary,
+    claim_validation_summary: {
+      status: 'available',
+      bound_claims: 2,
+      total_claims: 2,
+      overclaim_risk: 'low',
+      available_article_count: 1,
+      not_available_article_count: 0
+    },
+    hal_impact_summary: {
+      axes: ['camera_pipeline', 'metadata'],
+      article_count_with_axes: 1,
+      article_count_without_axes: 0
+    },
     selected_main_articles: [{
       candidate_id: 'selected-1',
       title: 'CameraX 1.6.0 alpha release',
@@ -1517,6 +1530,13 @@ function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
       source_url_quality: 'article_url',
       freshness_window: 'current',
       relevance_bucket: 'android_platform_camera_adjacent',
+      hal_impact_axes: ['camera_pipeline', 'metadata'],
+      claim_validation: {
+        status: 'available',
+        bound_claims: 2,
+        total_claims: 2,
+        overclaim_risk: 'low'
+      },
       selection_reason: 'Camera pipeline behavior change with dated release evidence'
     }],
     reserve_candidates: [],
@@ -1568,6 +1588,19 @@ test('newsroom PR body renders Evidence Pack summary sections', () => {
       fallback_window_used: null,
       fallback_bucket_used: true
     },
+    claim_validation_summary: {
+      status: 'partial',
+      bound_claims: 2,
+      total_claims: 3,
+      overclaim_risk: 'medium',
+      available_article_count: 1,
+      not_available_article_count: 1
+    },
+    hal_impact_summary: {
+      axes: ['camera_pipeline', 'metadata'],
+      article_count_with_axes: 1,
+      article_count_without_axes: 0
+    },
     selected_main_articles: [
       {
         candidate_id: 'selected-1',
@@ -1579,6 +1612,13 @@ test('newsroom PR body renders Evidence Pack summary sections', () => {
         source_url_quality: 'article_url',
         freshness_window: 'current',
         relevance_bucket: 'android_platform_camera_adjacent',
+        hal_impact_axes: ['camera_pipeline', 'metadata'],
+        claim_validation: {
+          status: 'available',
+          bound_claims: 2,
+          total_claims: 3,
+          overclaim_risk: 'medium'
+        },
         selection_reason: 'Camera pipeline behavior change with dated release evidence'
       }
     ],
@@ -1610,12 +1650,18 @@ test('newsroom PR body renders Evidence Pack summary sections', () => {
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
 
   assert.match(body, /^## Evidence Pack 요약$/m);
+  assert.match(body, /^## Claim \/ HAL Impact 요약$/m);
   assert.match(body, /^## 선택된 Main Article 근거$/m);
   assert.match(body, /^## 제외 후보 근거$/m);
   assert.match(body, /^## Needs-fix \/ Review-only 진단$/m);
   assert.match(body, /^## 사람 검토 체크리스트$/m);
   assert.match(body, /Raw candidates: 14/);
   assert.match(body, /Fallback bucket used: true/);
+  assert.match(body, /Claim validation status: partial/);
+  assert.match(body, /Claim coverage: bound_claims=2; total_claims=3/);
+  assert.match(body, /Overclaim risk: medium/);
+  assert.match(body, /HAL impact axes: camera_pipeline; metadata/);
+  assert.match(body, /status=available; bound=2; total=3/);
   assert.match(body, /CameraX 1\.6\.0 alpha release/);
   assert.match(body, /official_release_note/);
   assert.match(body, /primary/);
@@ -1658,6 +1704,22 @@ test('validate-pr-body checks Evidence Pack table columns when section is presen
 
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /Evidence Pack selected article table is missing required columns: URL/);
+});
+
+test('validate-pr-body checks Evidence Pack claim and HAL impact summary columns', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const brokenBody = body.replace(
+    '| Article | HAL axes | Claim validation | Overclaim risk |',
+    '| Article | HAL axes | Claim validation |'
+  );
+  const result = validatePrBodyText(brokenBody, { date });
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /Evidence Pack claim\/HAL table is missing required columns: Overclaim risk/);
 });
 
 test('validate-pr-body checks Evidence Pack diagnostics for needs-fix bodies', () => {

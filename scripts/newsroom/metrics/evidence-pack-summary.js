@@ -16,6 +16,7 @@ const SCHEMA_VERSION = 1;
 const MAX_EVIDENCE_PER_ARTICLE = 3;
 const MAX_EVIDENCE_TEXT_LENGTH = 180;
 const MAX_EXCLUDED_CANDIDATES = 10;
+const MAX_HAL_IMPACT_AXES = 12;
 
 const MINIMUM_ARTIFACT_NAMES = [
   'generation_status',
@@ -508,6 +509,56 @@ function normalizeArticle(candidate = {}, capsule = {}, warnings = null) {
   return article;
 }
 
+function claimValidationSummary(articles = []) {
+  const validations = ensureArray(articles).map(article => objectValue(article.claim_validation));
+  const availableCount = validations.filter(validation => {
+    const status = lower(validation.status);
+    return status && status !== 'not_available' && status !== 'unknown';
+  }).length;
+  const notAvailableCount = validations.length - availableCount;
+  const boundClaims = sumNumbersOrNull(...validations.map(validation =>
+    firstNumber(validation.bound_claims, validation.boundClaims)
+  ));
+  const totalClaims = sumNumbersOrNull(...validations.map(validation =>
+    firstNumber(validation.total_claims, validation.totalClaims)
+  ));
+  const riskRank = new Map([
+    ['low', 1],
+    ['medium', 2],
+    ['high', 3]
+  ]);
+  const overclaimRisk = validations
+    .map(validation => lower(validation.overclaim_risk || validation.overclaimRisk))
+    .filter(value => riskRank.has(value))
+    .sort((left, right) => riskRank.get(right) - riskRank.get(left))[0] || 'unknown';
+
+  return {
+    status: validations.length === 0
+      ? 'not_available'
+      : availableCount === 0
+        ? 'not_available'
+        : notAvailableCount > 0
+          ? 'partial'
+          : 'available',
+    bound_claims: boundClaims,
+    total_claims: totalClaims,
+    overclaim_risk: overclaimRisk,
+    available_article_count: availableCount,
+    not_available_article_count: notAvailableCount
+  };
+}
+
+function halImpactSummary(articles = []) {
+  const selected = ensureArray(articles);
+  const axes = unique(selected.flatMap(article => ensureArray(article.hal_impact_axes)))
+    .slice(0, MAX_HAL_IMPACT_AXES);
+  return {
+    axes,
+    article_count_with_axes: selected.filter(article => ensureArray(article.hal_impact_axes).length > 0).length,
+    article_count_without_axes: selected.filter(article => ensureArray(article.hal_impact_axes).length === 0).length
+  };
+}
+
 function exclusionReasons(candidate = {}) {
   return unique([
     ...ensureArray(candidate.final_exclusion_reasons),
@@ -920,6 +971,8 @@ function buildEvidencePackSummary(options = {}) {
       reserve,
       excluded
     }),
+    claim_validation_summary: claimValidationSummary(selectedMainArticles),
+    hal_impact_summary: halImpactSummary(selectedMainArticles),
     selected_main_articles: selectedMainArticles,
     reserve_candidates: reserveArticles,
     excluded_candidates_top: excludedTop,
