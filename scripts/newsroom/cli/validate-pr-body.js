@@ -12,6 +12,7 @@ const FORBIDDEN_ENGLISH_HEADINGS = [
 ];
 const LEGACY_GENERATED_ARTIFACTS_HEADING = '\u003f\uc579\uaf66\u0020\u003f\uacd7\ud167\u81fe\u003f';
 const EVIDENCE_PACK_SUMMARY_HEADING = 'Evidence Pack 요약';
+const EVIDENCE_PACK_CLAIM_HAL_HEADING = 'Claim / HAL Impact 요약';
 const EVIDENCE_PACK_SELECTED_HEADING = '선택된 Main Article 근거';
 const EVIDENCE_PACK_EXCLUDED_HEADING = '제외 후보 근거';
 const EVIDENCE_PACK_DIAGNOSTICS_HEADING = 'Needs-fix / Review-only 진단';
@@ -318,15 +319,47 @@ function validateEvidencePackSections(text, sections, parsed, errors) {
     }
   }
 
+  const claimHalSection = sectionByHeading(sections, [EVIDENCE_PACK_CLAIM_HAL_HEADING]);
   const selectedSection = sectionByHeading(sections, [EVIDENCE_PACK_SELECTED_HEADING]);
   const excludedSection = sectionByHeading(sections, [EVIDENCE_PACK_EXCLUDED_HEADING]);
   const diagnosticsSection = sectionByHeading(sections, [EVIDENCE_PACK_DIAGNOSTICS_HEADING]);
   const checklistSection = sectionByHeading(sections, [EVIDENCE_PACK_CHECKLIST_HEADING]);
 
+  if (!claimHalSection) errors.push(`PR body is missing ${EVIDENCE_PACK_CLAIM_HAL_HEADING} section.`);
   if (!selectedSection) errors.push(`PR body is missing ${EVIDENCE_PACK_SELECTED_HEADING} section.`);
   if (!excludedSection) errors.push(`PR body is missing ${EVIDENCE_PACK_EXCLUDED_HEADING} section.`);
   if (!diagnosticsSection) errors.push(`PR body is missing ${EVIDENCE_PACK_DIAGNOSTICS_HEADING} section.`);
   if (!checklistSection) errors.push(`PR body is missing ${EVIDENCE_PACK_CHECKLIST_HEADING} section.`);
+
+  if (claimHalSection) {
+    for (const label of [
+      'Claim validation status',
+      'Claim coverage',
+      'Claim validation availability',
+      'Overclaim risk',
+      'HAL impact axes',
+      'Articles without HAL impact axes'
+    ]) {
+      if (!new RegExp(`^- ${escapeRegExp(label)}:\\s+`, 'm').test(claimHalSection)) {
+        errors.push(`Evidence Pack claim/HAL summary is missing "${label}" row.`);
+      }
+    }
+    if (!/^- Claim coverage:\s*bound_claims=.+;\s*total_claims=.+$/m.test(claimHalSection)) {
+      errors.push('Evidence Pack claim/HAL summary must include bound_claims and total_claims.');
+    }
+    const selectedCount = firstNumberAfterLabel(summarySection, 'Selected main articles');
+    if (selectedCount > 0 && /^\s*-\s+none\s*$/m.test(claimHalSection)) {
+      errors.push('Evidence Pack selected article count is positive but claim/HAL table is empty.');
+    }
+    if (!/^\s*-\s+none\s*$/m.test(claimHalSection)) {
+      validateMarkdownTableColumns(
+        claimHalSection,
+        'Evidence Pack claim/HAL',
+        ['Article', 'HAL axes', 'Claim validation', 'Overclaim risk'],
+        errors
+      );
+    }
+  }
 
   if (selectedSection) {
     const selectedCount = firstNumberAfterLabel(summarySection, 'Selected main articles');

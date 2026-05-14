@@ -301,6 +301,123 @@ function evidencePackBoolean(value) {
   return 'unknown';
 }
 
+function evidencePackObject(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+}
+
+function evidencePackNumber(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function evidencePackNumberSum(values) {
+  const parsed = ensureArray(values).map(evidencePackNumber).filter(value => value !== null);
+  if (parsed.length === 0) return null;
+  return parsed.reduce((sum, value) => sum + value, 0);
+}
+
+function evidencePackList(values, fallback = 'none') {
+  const out = ensureArray(values)
+    .map(value => evidencePackValue(value))
+    .filter(value => value && value !== 'unknown');
+  return out.length > 0 ? out.join('; ') : fallback;
+}
+
+function evidencePackClaimSummary(report = {}, selected = []) {
+  const summary = evidencePackObject(report.claim_validation_summary);
+  if (Object.keys(summary).length > 0) return summary;
+
+  const validations = ensureArray(selected).map(article => evidencePackObject(article.claim_validation));
+  const availableCount = validations.filter(validation => {
+    const status = String(validation.status || '').trim().toLowerCase();
+    return status && status !== 'not_available' && status !== 'unknown';
+  }).length;
+  const notAvailableCount = validations.length - availableCount;
+  const riskRank = new Map([
+    ['low', 1],
+    ['medium', 2],
+    ['high', 3]
+  ]);
+  const overclaimRisk = validations
+    .map(validation => String(validation.overclaim_risk || validation.overclaimRisk || '').trim().toLowerCase())
+    .filter(value => riskRank.has(value))
+    .sort((left, right) => riskRank.get(right) - riskRank.get(left))[0] || 'unknown';
+
+  return {
+    status: validations.length === 0
+      ? 'not_available'
+      : availableCount === 0
+        ? 'not_available'
+        : notAvailableCount > 0
+          ? 'partial'
+          : 'available',
+    bound_claims: evidencePackNumberSum(validations.map(validation => validation.bound_claims ?? validation.boundClaims)),
+    total_claims: evidencePackNumberSum(validations.map(validation => validation.total_claims ?? validation.totalClaims)),
+    overclaim_risk: overclaimRisk,
+    available_article_count: availableCount,
+    not_available_article_count: notAvailableCount
+  };
+}
+
+function evidencePackHalImpactSummary(report = {}, selected = []) {
+  const summary = evidencePackObject(report.hal_impact_summary);
+  if (Object.keys(summary).length > 0) return summary;
+
+  const articles = ensureArray(selected);
+  const axes = [...new Set(articles.flatMap(article => ensureArray(article.hal_impact_axes))
+    .map(value => evidencePackValue(value))
+    .filter(value => value && value !== 'unknown'))];
+  return {
+    axes,
+    article_count_with_axes: articles.filter(article => ensureArray(article.hal_impact_axes).length > 0).length,
+    article_count_without_axes: articles.filter(article => ensureArray(article.hal_impact_axes).length === 0).length
+  };
+}
+
+function formatEvidencePackClaimValidation(validation = {}) {
+  const value = evidencePackObject(validation);
+  return [
+    `status=${evidencePackValue(value.status, 'not_available')}`,
+    `bound=${evidencePackValue(value.bound_claims ?? value.boundClaims)}`,
+    `total=${evidencePackValue(value.total_claims ?? value.totalClaims)}`
+  ].join('; ');
+}
+
+function renderEvidencePackClaimHalSummary(report = {}, selected = []) {
+  const claimSummary = evidencePackClaimSummary(report, selected);
+  const halSummary = evidencePackHalImpactSummary(report, selected);
+  const articleRows = ensureArray(selected);
+  const articleTable = articleRows.length > 0
+    ? renderMarkdownTable(
+      ['Article', 'HAL axes', 'Claim validation', 'Overclaim risk'],
+      articleRows.map(article => {
+        const validation = evidencePackObject(article.claim_validation);
+        return [
+          formatEvidencePackLink(article),
+          evidencePackList(article.hal_impact_axes),
+          formatEvidencePackClaimValidation(validation),
+          evidencePackValue(validation.overclaim_risk ?? validation.overclaimRisk)
+        ];
+      })
+    )
+    : '- none';
+
+  return [
+    '## Claim / HAL Impact 요약',
+    '',
+    `- Claim validation status: ${evidencePackValue(claimSummary.status, 'not_available')}`,
+    `- Claim coverage: bound_claims=${evidencePackValue(claimSummary.bound_claims)}; total_claims=${evidencePackValue(claimSummary.total_claims)}`,
+    `- Claim validation availability: available_articles=${evidencePackValue(claimSummary.available_article_count)}; not_available_articles=${evidencePackValue(claimSummary.not_available_article_count)}`,
+    `- Overclaim risk: ${evidencePackValue(claimSummary.overclaim_risk)}`,
+    `- HAL impact axes: ${evidencePackList(halSummary.axes)}`,
+    `- Articles without HAL impact axes: ${evidencePackValue(halSummary.article_count_without_axes)}`,
+    '',
+    articleTable,
+    ''
+  ].join('\n');
+}
+
 function evidencePackCandidateTitle(candidate = {}) {
   return firstText([candidate.title, candidate.headline, candidate.article_title, candidate.name]) || 'unknown title';
 }
@@ -417,6 +534,8 @@ function renderEvidencePackSummary(root, date) {
     `- Fallback window used: ${evidencePackValue(selection.fallback_window_used)}`,
     `- Fallback bucket used: ${evidencePackBoolean(selection.fallback_bucket_used)}`,
     `- Artifact: \`${relPath}\``,
+    '',
+    renderEvidencePackClaimHalSummary(report, selected),
     '',
     '## 선택된 Main Article 근거',
     '',

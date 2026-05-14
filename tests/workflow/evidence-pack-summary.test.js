@@ -216,6 +216,8 @@ test('Evidence Pack schema v1 always exposes required top-level defaults', () =>
     'inputs',
     'publish_status',
     'selection_summary',
+    'claim_validation_summary',
+    'hal_impact_summary',
     'selected_main_articles',
     'reserve_candidates',
     'excluded_candidates_top',
@@ -236,6 +238,19 @@ test('Evidence Pack schema v1 always exposes required top-level defaults', () =>
   assert.equal(report.publish_status.final_publish_ready, null);
   assert.equal(report.selection_summary.raw_candidate_count, null);
   assert.equal(report.selection_summary.primary_camera_stack_count, null);
+  assert.deepEqual(report.claim_validation_summary, {
+    status: 'not_available',
+    bound_claims: null,
+    total_claims: null,
+    overclaim_risk: 'unknown',
+    available_article_count: 0,
+    not_available_article_count: 0
+  });
+  assert.deepEqual(report.hal_impact_summary, {
+    axes: [],
+    article_count_with_axes: 0,
+    article_count_without_axes: 0
+  });
 });
 
 test('supports shortlisted_candidates flag-based selected, reserve, and excluded shape', () => {
@@ -284,6 +299,11 @@ test('supports shortlisted_candidates flag-based selected, reserve, and excluded
   assert.equal(report.selection_summary.selected_main_article_count, 1);
   assert.equal(report.selection_summary.reserve_candidate_count, 1);
   assert.equal(report.selection_summary.excluded_candidate_count, 1);
+  assert.equal(report.claim_validation_summary.status, 'available');
+  assert.equal(report.claim_validation_summary.bound_claims, 2);
+  assert.equal(report.claim_validation_summary.total_claims, 2);
+  assert.equal(report.claim_validation_summary.overclaim_risk, 'low');
+  assert.deepEqual(report.hal_impact_summary.axes, ['buffer', 'metadata']);
 });
 
 test('writes default summary when no input artifacts exist', () => {
@@ -329,6 +349,15 @@ test('full artifact set creates selected, reserve, excluded, and failure summari
   assert.equal(report.selection_summary.reserve_candidate_count, 1);
   assert.equal(report.selection_summary.excluded_candidate_count, 12);
   assert.equal(report.selection_summary.primary_camera_stack_count, 1);
+  assert.equal(report.claim_validation_summary.status, 'available');
+  assert.equal(report.claim_validation_summary.bound_claims, 2);
+  assert.equal(report.claim_validation_summary.total_claims, 2);
+  assert.equal(report.claim_validation_summary.overclaim_risk, 'low');
+  assert.equal(report.claim_validation_summary.available_article_count, 1);
+  assert.equal(report.claim_validation_summary.not_available_article_count, 0);
+  assert.deepEqual(report.hal_impact_summary.axes, ['buffer', 'metadata']);
+  assert.equal(report.hal_impact_summary.article_count_with_axes, 1);
+  assert.equal(report.hal_impact_summary.article_count_without_axes, 0);
   assert.equal(report.selected_main_articles.length, 1);
   assert.equal(report.reserve_candidates.length, 1);
   assert.equal(report.excluded_candidates_top.length, MAX_EXCLUDED_CANDIDATES);
@@ -440,6 +469,19 @@ test('selected article compatibility fields fall back to unknown or not_availabl
     bound_claims: null,
     total_claims: null,
     overclaim_risk: 'unknown'
+  });
+  assert.deepEqual(report.claim_validation_summary, {
+    status: 'not_available',
+    bound_claims: null,
+    total_claims: null,
+    overclaim_risk: 'unknown',
+    available_article_count: 0,
+    not_available_article_count: 1
+  });
+  assert.deepEqual(report.hal_impact_summary, {
+    axes: [],
+    article_count_with_axes: 0,
+    article_count_without_axes: 1
   });
   assert.ok(report.warnings.some(warning => warning.includes('source_tier=unknown')));
   assert.ok(report.warnings.some(warning => warning.includes('claim_validation.status=not_available')));
