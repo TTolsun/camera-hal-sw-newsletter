@@ -285,6 +285,169 @@ function readJsonObjectIfExists(filePath) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
 }
 
+function evidencePackValue(value, fallback = 'unknown') {
+  if (value === null || value === undefined || value === '') return fallback;
+  if (Array.isArray(value)) return value.length > 0 ? value.map(item => evidencePackValue(item)).join('; ') : fallback;
+  if (typeof value === 'object') {
+    return firstText([value.message, value.reason, value.problem, value.error, value.code, value.path, value.title, value.name]) ||
+      truncateText(JSON.stringify(value), 180);
+  }
+  return String(value);
+}
+
+function evidencePackBoolean(value) {
+  if (value === true) return 'true';
+  if (value === false) return 'false';
+  return 'unknown';
+}
+
+function evidencePackCandidateTitle(candidate = {}) {
+  return firstText([candidate.title, candidate.headline, candidate.article_title, candidate.name]) || 'unknown title';
+}
+
+function evidencePackCandidateUrl(candidate = {}) {
+  return extractCandidateUrl(candidate);
+}
+
+function evidencePackCandidateSource(candidate = {}) {
+  return extractCandidateSource(candidate) || 'unknown';
+}
+
+function evidencePackCandidateBucket(candidate = {}) {
+  return firstText([candidate.relevance_bucket, candidate.bucket, candidate.category]) || 'unknown';
+}
+
+function evidencePackCandidateReason(candidate = {}) {
+  return firstText([
+    candidate.selection_reason,
+    candidate.exclusion_reason,
+    candidate.reason,
+    ensureArray(candidate.final_exclusion_reasons).join('; '),
+    ensureArray(candidate.exclusion_reasons).join('; ')
+  ]) || 'unknown';
+}
+
+function formatEvidencePackLink(candidate = {}) {
+  return formatCandidateLink({
+    title: evidencePackCandidateTitle(candidate),
+    url: evidencePackCandidateUrl(candidate)
+  });
+}
+
+function formatEvidencePackUrlCell(candidate = {}) {
+  const url = sanitizeMarkdownLinkUrl(evidencePackCandidateUrl(candidate));
+  return url ? trustedMarkdownTableCell(`[source](<${url}>)`) : 'missing';
+}
+
+function renderEvidencePackDiagnosticSummary(label, items, maxItems = 5) {
+  const values = ensureArray(items).map(item => evidencePackValue(item)).filter(Boolean);
+  if (values.length === 0) return `- ${label}: none`;
+  const visible = values.slice(0, maxItems).map(item => truncateText(item, 180));
+  const suffix = values.length > maxItems ? `; ... +${values.length - maxItems} more` : '';
+  return `- ${label}: ${visible.join('; ')}${suffix}`;
+}
+
+function renderEvidencePackSummary(root, date) {
+  if (!date) return '';
+  const relPath = `content/newsroom/${date}/evidence-pack-summary.json`;
+  const report = readJsonObjectIfExists(path.join(root, relPath));
+  if (!report) {
+    return [
+      '## Evidence Pack 요약',
+      '',
+      '- Evidence Pack summary: unavailable',
+      `- Reason: ${relPath} not found`,
+      ''
+    ].join('\n');
+  }
+
+  const selection = report.selection_summary && typeof report.selection_summary === 'object'
+    ? report.selection_summary
+    : {};
+  const selected = ensureArray(report.selected_main_articles);
+  const excluded = ensureArray(report.excluded_candidates_top).slice(0, 10);
+  const diagnostics = report.failure_diagnostics && typeof report.failure_diagnostics === 'object'
+    ? report.failure_diagnostics
+    : {};
+
+  const selectedTable = selected.length > 0
+    ? renderMarkdownTable(
+      ['#', 'Title', 'Source', 'URL', 'Source tier', 'Source role', 'URL quality', 'Bucket', 'Freshness', 'Reason'],
+      selected.map((article, index) => [
+        index + 1,
+        formatEvidencePackLink(article),
+        evidencePackCandidateSource(article),
+        formatEvidencePackUrlCell(article),
+        evidencePackValue(article.source_tier),
+        evidencePackValue(article.source_role),
+        evidencePackValue(article.source_url_quality),
+        evidencePackCandidateBucket(article),
+        evidencePackValue(article.freshness_window),
+        evidencePackCandidateReason(article)
+      ])
+    )
+    : '- none';
+
+  const excludedTable = excluded.length > 0
+    ? renderMarkdownTable(
+      ['Title', 'Source', 'Bucket', 'Reason'],
+      excluded.map(candidate => [
+        formatEvidencePackLink(candidate),
+        evidencePackCandidateSource(candidate),
+        evidencePackCandidateBucket(candidate),
+        evidencePackCandidateReason(candidate)
+      ])
+    )
+    : '- none';
+
+  const excludedTruncationNote = report.excluded_candidates_truncated === true
+    ? `\n\n- More excluded candidates are available in \`${relPath}\`.`
+    : '';
+
+  return [
+    '## Evidence Pack 요약',
+    '',
+    `- Raw candidates: ${evidencePackValue(selection.raw_candidate_count)}`,
+    `- Eligible candidates: ${evidencePackValue(selection.eligible_candidate_count)}`,
+    `- Selected main articles: ${evidencePackValue(selection.selected_main_article_count ?? selected.length)}`,
+    `- Reserve candidates: ${evidencePackValue(selection.reserve_candidate_count)}`,
+    `- Excluded candidates: ${evidencePackValue(selection.excluded_candidate_count)}`,
+    `- Primary camera stack count: ${evidencePackValue(selection.primary_camera_stack_count)}`,
+    `- Supporting bucket count: ${evidencePackValue(selection.supporting_bucket_count)}`,
+    `- Fallback window used: ${evidencePackValue(selection.fallback_window_used)}`,
+    `- Fallback bucket used: ${evidencePackBoolean(selection.fallback_bucket_used)}`,
+    `- Artifact: \`${relPath}\``,
+    '',
+    '## 선택된 Main Article 근거',
+    '',
+    selectedTable,
+    '',
+    '## 제외 후보 근거',
+    '',
+    `${excludedTable}${excludedTruncationNote}`,
+    '',
+    '## Needs-fix / Review-only 진단',
+    '',
+    renderEvidencePackDiagnosticSummary('Quality hard failures', diagnostics.quality_hard_failures),
+    renderEvidencePackDiagnosticSummary('Fact-check must-fix', diagnostics.fact_check_must_fix),
+    renderEvidencePackDiagnosticSummary('Repair failure', diagnostics.repair_failures),
+    renderEvidencePackDiagnosticSummary('Fallback builder failure', diagnostics.fallback_builder_failures),
+    renderEvidencePackDiagnosticSummary('Candidate shortage hints', diagnostics.candidate_shortage_hints),
+    renderEvidencePackDiagnosticSummary('Source gap warnings', diagnostics.source_gap_warnings),
+    renderEvidencePackDiagnosticSummary('Missing artifacts', diagnostics.missing_artifacts),
+    renderEvidencePackDiagnosticSummary('Invalid artifacts', diagnostics.invalid_artifacts),
+    '',
+    '## 사람 검토 체크리스트',
+    '',
+    '- [ ] selected main article에 source URL이 있다.',
+    '- [ ] selected main article에 dated evidence 또는 limitation reason이 있다.',
+    '- [ ] HAL impact가 source보다 과장되지 않았다.',
+    '- [ ] fallback/supporting article이 main을 과하게 채우지 않는다.',
+    '- [ ] source gap risk article이 main으로 승격되지 않았다.',
+    ''
+  ].join('\n');
+}
+
 function renderReviewOnlyStatus(status, handoff, root, date) {
   if (!handoff?.reviewOnly) return '';
   const generationStatus = date
@@ -1366,6 +1529,7 @@ function buildNewsroomPrBody(options = {}) {
     renderPublicNewsletterNotice(status, handoff),
     renderFallbackPublicIssueNotes(root, date),
     renderFinalSelectionStatus(status),
+    renderEvidencePackSummary(root, date),
     renderCandidateTraceability(root, date),
     renderEditorActionGuidance(status, date),
     renderGeneratedArtifacts(date, status, root, options.changedArtifacts)
