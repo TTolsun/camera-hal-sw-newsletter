@@ -311,7 +311,7 @@ jobs:
               { name: 'needs-fix', color: 'd73a4a', description: 'Generated newsletter is not ready to publish' },
               { name: 'fallback-composition', color: '5319e7', description: 'Uses lower-priority SoC/platform/tooling fallback articles' },
               { name: 'thin-week', color: 'c5def5', description: 'Review-only thin-week newsletter candidate' },
-              { name: 'review-only', color: 'bfd4f2', description: 'Review handoff only; public newsletter files are not publish-ready' },
+              { name: 'review-only', color: 'bfd4f2', description: 'AI automatic publish gate did not pass; editor review is required' },
               { name: 'review-only-publication', color: 'bfd4f2', description: 'Public newsletter files exist but editor review is required before merge' },
               { name: 'diagnostics-only', color: 'cfd3d7', description: 'Review diagnostics only; merge will not publish a newsletter' },
               { name: 'failed-repair-reviewable', color: 'd4c5f9', description: 'Failed repair produced reviewable diagnostics' },
@@ -360,9 +360,9 @@ jobs:
             if (hasAiPublishReady) {
               labels.push('publish-ready');
             } else if (reviewPublicationReady) {
-              labels.push('needs-fix', 'editor-review', 'review-only-publication');
+              labels.push('needs-fix', 'editor-review', 'review-only', 'review-only-publication');
             } else if (diagnosticsOnly) {
-              labels.push('needs-fix', 'editor-review', 'diagnostics-only');
+              labels.push('needs-fix', 'editor-review', 'review-only', 'diagnostics-only');
               if (generationStatus === 'FAILED_REPAIR_REVIEWABLE') {
                 labels.push('failed-repair-reviewable');
               }

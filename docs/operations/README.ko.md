@@ -24,6 +24,7 @@
 ## Release Flow
 
 - `publish-ready`는 `has_ai_publish_ready=true`인 AI 자동 발행 가능 상태만 뜻합니다.
+- `review-only`는 AI 자동 발행 기준 미달로 editor review가 필요한 넓은 상태 신호입니다.
 - `review-only-publication`은 public files가 있지만 편집장 검토가 필요한 상태입니다.
 - `diagnostics-only`는 public files가 없어 공개 승인 대상이 아닌 상태입니다.
 

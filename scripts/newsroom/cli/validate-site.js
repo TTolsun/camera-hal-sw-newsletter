@@ -112,7 +112,7 @@ function hasCompositionOnlyBlocker(quality) {
   );
 }
 
-function editorApprovedExceptionFor(date, articleCount) {
+function reviewPublicationExceptionFor(date, articleCount) {
   const dir = newsroomDir(root, date);
   const status = readJsonIfExists(path.join(dir, 'generation-status.json'));
   const quality = readJsonIfExists(path.join(dir, 'quality-report.json'));
@@ -122,7 +122,9 @@ function editorApprovedExceptionFor(date, articleCount) {
     status?.review_publication_ready_reason ||
     status?.editor_review_reason ||
     quality?.review_publication_ready_reason ||
-    quality?.editor_review_reason;
+    quality?.editor_review_reason ||
+    status?.fallback_public_issue_reason ||
+    quality?.fallback_public_issue_reason;
   const qualityArticleCount = finiteNumber(quality?.metrics?.article_count);
   const approved =
     status?.review_publication_ready === true &&
@@ -256,7 +258,7 @@ function validateArticleQuality(item, md, newFormat, strictArtifactValidation) {
   if (articleCountOutOfRange) {
     const message = `Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${articleCountRangeText()}.`;
     const exceptionReason = articles.length < articlePolicy.mainArticleCount.min
-      ? editorApprovedExceptionFor(item.date, articles.length)
+      ? reviewPublicationExceptionFor(item.date, articles.length)
       : null;
     if (strictArtifactValidation && exceptionReason) {
       warn(`${message} review publication exception: ${exceptionReason}.`);

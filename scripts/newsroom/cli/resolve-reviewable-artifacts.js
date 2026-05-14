@@ -104,6 +104,14 @@ function toRepoPath(filePath) {
   return String(filePath || '').replace(/\\/g, '/').replace(/^\.\//, '');
 }
 
+function isTrue(value) {
+  return value === true || value === 'true';
+}
+
+function isFalse(value) {
+  return value === false || value === 'false';
+}
+
 function parseGitStatusPorcelain(output) {
   return String(output || '')
     .split(/\r?\n/)
@@ -450,13 +458,13 @@ function resolveReviewableArtifacts(options = {}) {
   const diagnosticsOnly = reviewPrReady && !publicNewsletterReady;
   const reviewOnly = diagnosticsOnly;
   const publishCandidateReady = publicNewsletterReady;
-  const hasAiPublishReady = status.final_publish_ready === true;
+  const hasAiPublishReady = isTrue(status.final_publish_ready);
   const hasPublishCandidate = publicNewsletterReady;
   const reviewPublicationReady =
     publicNewsletterReady &&
-    status.final_publish_ready === false &&
-    status.review_gate_passed === true &&
-    status.editor_review_required === true;
+    isFalse(status.final_publish_ready) &&
+    isTrue(status.review_gate_passed) &&
+    isTrue(status.editor_review_required);
   const homepageVisibleAfterMerge =
     publicNewsletterReady &&
     newsletterIndex.hasDate === true &&

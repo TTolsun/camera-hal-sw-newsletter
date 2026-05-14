@@ -65,6 +65,17 @@ function extractSections(text) {
   return sections;
 }
 
+function concretePublicationStateText(text) {
+  const sections = extractSections(text);
+  const chunks = [];
+  for (const heading of ['Diagnostics-only Status', '발행 상태 요약', 'Public Newsletter Readiness']) {
+    if (!sections.has(heading)) continue;
+    chunks.push(`## ${heading}`);
+    chunks.push(sections.get(heading));
+  }
+  return chunks.join('\n');
+}
+
 function sectionByHeading(sections, headings) {
   for (const heading of headings) {
     if (sections.has(heading)) return sections.get(heading);
@@ -147,7 +158,7 @@ function hasCompleteMarkdownLink(value) {
 }
 
 function isDiagnosticsOnlyBody(text) {
-  const source = toText(text);
+  const source = concretePublicationStateText(text);
   return /(?:^|\n)\s*-?\s*diagnostics_only\s*[:=]\s*true\b/i.test(source) ||
     /\bdiagnostics[- ]only\b/i.test(source) ||
     (
@@ -157,7 +168,7 @@ function isDiagnosticsOnlyBody(text) {
 }
 
 function isReviewPublicationBody(text) {
-  const source = toText(text);
+  const source = concretePublicationStateText(text);
   return /(?:^|\n)\s*-?\s*review_publication_ready\s*[:=]\s*true\b/i.test(source) ||
     (
       /public_newsletter_ready\s*[:=]\s*true\b/i.test(source) &&
@@ -226,10 +237,11 @@ function hasPublishReadyLabelBlockedText(text) {
 }
 
 function validateDiagnosticsOnlyContract(text, parsed, errors) {
-  if (!/(?:^|\n)\s*-?\s*diagnostics_only\s*[:=]\s*true\b/i.test(text) && !/\bdiagnostics[- ]only\b/i.test(text)) {
+  const concreteState = concretePublicationStateText(text);
+  if (!/(?:^|\n)\s*-?\s*diagnostics_only\s*[:=]\s*true\b/i.test(concreteState) && !/\bdiagnostics[- ]only\b/i.test(concreteState)) {
     errors.push('diagnostics-only PR body must include diagnostics_only=true or a diagnostics-only marker.');
   }
-  if (!/public_newsletter_ready\s*[:=]\s*false\b/i.test(text)) {
+  if (!/public_newsletter_ready\s*[:=]\s*false\b/i.test(concreteState)) {
     errors.push('diagnostics-only PR body must include public_newsletter_ready=false.');
   }
   if (!/final_publish_ready\s*[:=]\s*false\b/i.test(text)) {
@@ -257,10 +269,11 @@ function validateDiagnosticsOnlyContract(text, parsed, errors) {
 }
 
 function validateReviewPublicationContract(text, parsed, errors) {
-  if (!/(?:^|\n)\s*-?\s*review_publication_ready\s*[:=]\s*true\b/i.test(text)) {
+  const concreteState = concretePublicationStateText(text);
+  if (!/(?:^|\n)\s*-?\s*review_publication_ready\s*[:=]\s*true\b/i.test(concreteState)) {
     errors.push('review publication PR body must include review_publication_ready=true.');
   }
-  if (!/public_newsletter_ready\s*[:=]\s*true\b/i.test(text)) {
+  if (!/public_newsletter_ready\s*[:=]\s*true\b/i.test(concreteState)) {
     errors.push('review publication PR body must include public_newsletter_ready=true.');
   }
   if (!/final_publish_ready\s*[:=]\s*false\b/i.test(text)) {
