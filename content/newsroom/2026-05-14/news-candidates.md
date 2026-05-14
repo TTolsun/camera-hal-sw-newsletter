@@ -53,12 +53,12 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | watchlist | generic_tech_watchlist | 6 | 39 | 2 | rss-item | yes | rss_item | ISO C++ Blog | Behold the power of meta::substitute -- Barry Revzin | Wed, 22 Apr 2026 19:50:46 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/behold-the-power-of-metasubstitute-barry-revzin) |
 | watchlist | generic_tech_watchlist | 6 | 39 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now -- Mike Shah | Wed, 15 Apr 2026 19:31:45 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-why-every-cpp-game-developer-should-learn-sdl-3-now-mike-shah) |
 | watchlist | generic_tech_watchlist | 6 | 39 | 2 | rss-item | yes | rss_item | ISO C++ Blog | Announcement: cppreference.com update | Tue, 14 Apr 2026 22:36:46 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/announcement-cppreference.com-update) |
+| watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman | Wed, 13 May 2026 21:36:47 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo) |
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter | Mon, 11 May 2026 21:33:30 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter) |
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Back to Basics: Move Semantics -- Ben Saks | Thu, 07 May 2026 21:31:37 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks) |
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz | Tue, 05 May 2026 21:28:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain) |
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider | Mon, 27 Apr 2026 21:25:11 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m) |
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 C++: Some Assembly Required -- Matt Godbolt | Tue, 21 Apr 2026 21:13:30 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt) |
-| watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 How C++ Finally Beats Rust at JSON Serialization -- Lemire & Thiesen | Fri, 17 Apr 2026 19:34:43 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen) |
 
 ## 제외 또는 낮은 신뢰도 항목
 
@@ -1559,7 +1559,52 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: cppreference.com &nbsp;is the premier public reference site for documenting and tracking the C++ language. It is run by Nate Kohl, with the help of many volunteer wiki editors. I want to thank Nate and all the volunteers for making it such an enduringly valuable resource. Like all software, the site requires maintenance. It has been in read-only mode for some time while Nate has been leading the work to migrate it to MediaWiki. Because the Standard C++ Foundation 's web wizard, James Riordon, re
 - Selection reason: ISO C++ Blog (official-community, high, score 39): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 34. Evolving a Translation System with Reflection in C++
+### 34. CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman
+
+- 출처: ISO C++ Blog
+- 출처 URL: https://isocpp.org/blog
+- 발행일: Wed, 13 May 2026 21:36:47 +0000
+- Link: https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo
+- Section: C++ / Native / Toolchain
+- Source category: cpp
+- Source priority: high
+- Source reliability: official-community
+- Editorial priority: 6
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 2
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
+- Cross-check 필요: no
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 33
+- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World by Daisy Hollman Summa
+- Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 35. Evolving a Translation System with Reflection in C++
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1604,7 +1649,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: A nice example of C++26 reflection moving from theory into something practical. Evolving a Translation System with Reflection in C++ By GitHub user: friedkeenan &nbsp; From the post: Lately, I&rsquo;ve been using C++26 reflection to create some crazy and cursed stuff. But even though I quite enjoy that work, it is as well quite far from the norm of what reflection is going to offer us in our everyday code. Reflection is definitely not just that craziness, and so I want to present reflection in a
 - Selection reason: ISO C++ Blog (official-community, high, score 33): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
 
-### 35. CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter
+### 36. CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1649,7 +1694,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Reflection: C++&rsquo;s Decade-Defining Rocket Engine by Herb Sutter Summary of the talk: In June
 - Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 36. CppCon 2025 Back to Basics: Move Semantics -- Ben Saks
+### 37. CppCon 2025 Back to Basics: Move Semantics -- Ben Saks
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1694,7 +1739,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Back to Basics: Move Semantics by Ben Saks Summary of the talk: While many C++ programmers are fa
 - Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 37. CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz
+### 38. CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1739,7 +1784,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Beyond Sequential Consistency: Unlocking Hidden Performance Gains by Christopher Fretz Summary of
 - Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 38. CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider
+### 39. CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1784,7 +1829,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! The Wonderful World of Designing a USB Stack Using Modern C++ by Madeline Schneider Summary of th
 - Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 39. CppCon 2025 C++: Some Assembly Required -- Matt Godbolt
+### 40. CppCon 2025 C++: Some Assembly Required -- Matt Godbolt
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1829,54 +1874,10 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! C++: Some Assembly Required by Matt Godbolt Summary of the talk: Join Matt in exploring how the C
 - Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 40. CppCon 2025 How C++ Finally Beats Rust at JSON Serialization -- Lemire & Thiesen
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Fri, 17 Apr 2026 19:34:43 +0000
-- Link: https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Editorial priority: 6
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 2
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
-- Cross-check 필요: no
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 33
-- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! How C++ Finally Beats Rust at JSON Serialization by Daniel Lemire & Francisco Geiman Thiesen Summ
-- Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
 ## Collector 실패
 
 - LLVM Project Blog: 404 Not Found
+- 요즘IT: 403 Forbidden
 
 ## 편집장 체크리스트
 

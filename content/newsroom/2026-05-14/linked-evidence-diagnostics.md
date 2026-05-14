@@ -58,10 +58,10 @@
 - Behold the power of meta::substitute -- Barry Revzin: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 Why Every C++ Game Developer Should Learn SDL 3 Now -- Mike Shah: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - Announcement: cppreference.com update: 0 evidence, impact=generic_tooling_change, recommendation=watch
+- CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - Evolving a Translation System with Reflection in C++: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 Back to Basics: Move Semantics -- Ben Saks: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 C++: Some Assembly Required -- Matt Godbolt: 0 evidence, impact=generic_tooling_change, recommendation=watch
-- CppCon 2025 How C++ Finally Beats Rust at JSON Serialization -- Lemire & Thiesen: 0 evidence, impact=generic_tooling_change, recommendation=watch

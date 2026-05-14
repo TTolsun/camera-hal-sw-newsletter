@@ -50,10 +50,10 @@
 - event_fa527ad6a4c4: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/04/behold-the-power-of-metasubstitute-barry-revzin, evidence=0, confidence=low
 - event_d170073f3f7c: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/04/cppcon-2025-why-every-cpp-game-developer-should-learn-sdl-3-now-mike-shah, evidence=0, confidence=low
 - event_06088c36a9f8: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/04/announcement-cppreference.com-update, evidence=0, confidence=low
+- event_8f582e1ff61b: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo, evidence=0, confidence=low
 - event_511155d5eb95: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp, evidence=0, confidence=low
 - event_b82118ee5311: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter, evidence=0, confidence=low
 - event_63e4833cafb8: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks, evidence=0, confidence=low
 - event_c2b11f90366d: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain, evidence=0, confidence=low
 - event_0d5b52c7cc62: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m, evidence=0, confidence=low
 - event_51ae7741652c: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt, evidence=0, confidence=low
-- event_2d03399cdfb2: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen, evidence=0, confidence=low
