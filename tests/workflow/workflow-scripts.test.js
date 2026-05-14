@@ -1459,6 +1459,82 @@ function traceStatus(overrides = {}) {
   };
 }
 
+function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
+  const {
+    selection_summary: selectionSummaryOverrides = {},
+    failure_diagnostics: failureDiagnosticsOverrides = {},
+    ...restOverrides
+  } = overrides;
+  const selectionSummary = {
+    raw_candidate_count: 3,
+    eligible_candidate_count: 2,
+    selected_main_article_count: 1,
+    reserve_candidate_count: 1,
+    excluded_candidate_count: 1,
+    primary_camera_stack_count: 1,
+    supporting_bucket_count: 1,
+    fallback_window_used: null,
+    fallback_bucket_used: false,
+    ...selectionSummaryOverrides
+  };
+  const failureDiagnostics = {
+    quality_hard_failures: ['source-integrity'],
+    fact_check_must_fix: [],
+    repair_failures: [],
+    fallback_builder_failures: [],
+    candidate_shortage_hints: [],
+    source_gap_warnings: [],
+    missing_artifacts: [],
+    invalid_artifacts: [],
+    ...failureDiagnosticsOverrides
+  };
+  writeJson(path.join(root, 'content', 'newsroom', date, 'evidence-pack-summary.json'), {
+    schema_version: 1,
+    date,
+    generated_at: '2026-05-14T00:00:00.000Z',
+    inputs: {
+      required: [],
+      optional: [],
+      missing: [],
+      used: []
+    },
+    publish_status: {
+      status: 'needs-fix',
+      run_mode: 'daily_draft',
+      fact_check_status: 'NEEDS_FIX',
+      final_publish_ready: false,
+      public_newsletter_ready: false,
+      review_pr_ready: true
+    },
+    selection_summary: selectionSummary,
+    selected_main_articles: [{
+      candidate_id: 'selected-1',
+      title: 'CameraX 1.6.0 alpha release',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera#camera-1.6.0-alpha01',
+      source: 'Android Developers',
+      source_tier: 'official_release_note',
+      source_role: 'primary',
+      source_url_quality: 'article_url',
+      freshness_window: 'current',
+      relevance_bucket: 'android_platform_camera_adjacent',
+      selection_reason: 'Camera pipeline behavior change with dated release evidence'
+    }],
+    reserve_candidates: [],
+    excluded_candidates_top: [{
+      candidate_id: 'excluded-1',
+      title: 'Generic AI camera update',
+      url: 'https://example.com/generic-ai-camera',
+      source: 'Example Tech',
+      relevance_bucket: 'generic_tech_watchlist',
+      exclusion_reason: 'generic topic without HAL impact axis'
+    }],
+    excluded_candidates_truncated: false,
+    failure_diagnostics: failureDiagnostics,
+    warnings: [],
+    ...restOverrides
+  });
+}
+
 test('newsroom PR body renders Evidence Pack summary sections', () => {
   const root = tempRoot();
   const date = '2026-05-10';
@@ -1566,6 +1642,60 @@ test('newsroom PR body keeps Evidence Pack fallback when summary artifact is mis
   assert.match(body, /Evidence Pack summary: unavailable/);
   assert.match(body, new RegExp(`content/newsroom/${date}/evidence-pack-summary\\.json not found`));
   assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('validate-pr-body checks Evidence Pack table columns when section is present', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const brokenBody = body.replace(
+    '| # | Title | Source | URL | Source tier | Source role | URL quality | Bucket | Freshness | Reason |',
+    '| # | Title | Source | Source tier | Source role | URL quality | Bucket | Freshness | Reason |'
+  );
+  const result = validatePrBodyText(brokenBody, { date });
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /Evidence Pack selected article table is missing required columns: URL/);
+});
+
+test('validate-pr-body checks Evidence Pack diagnostics for needs-fix bodies', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date, {
+    failure_diagnostics: {
+      quality_hard_failures: ['source-integrity'],
+      fact_check_must_fix: ['needs source binding'],
+      repair_failures: [],
+      fallback_builder_failures: [],
+      candidate_shortage_hints: [],
+      source_gap_warnings: [],
+      missing_artifacts: [],
+      invalid_artifacts: []
+    }
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const brokenBody = body
+    .replace('- Quality hard failures: source-integrity', '- Quality hard failures: none')
+    .replace('- Fact-check must-fix: needs source binding', '- Fact-check must-fix: none');
+  const result = validatePrBodyText(brokenBody, { date });
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /Evidence Pack diagnostics must include at least one actionable diagnostic/);
+});
+
+test('validate-pr-body keeps compatibility when Evidence Pack section is absent', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const legacyBody = body.replace(/^## Evidence Pack 요약[\s\S]*?(?=^## 후보 기사 추적$)/m, '');
+
+  assert.doesNotMatch(legacyBody, /^## Evidence Pack 요약$/m);
+  assert.equal(validatePrBodyText(legacyBody, { date }).ok, true);
 });
 
 test('newsroom PR body renders Korean candidate traceability report', () => {

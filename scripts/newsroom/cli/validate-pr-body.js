@@ -11,6 +11,11 @@ const FORBIDDEN_ENGLISH_HEADINGS = [
   '## Generated Artifacts'
 ];
 const LEGACY_GENERATED_ARTIFACTS_HEADING = '\u003f\uc579\uaf66\u0020\u003f\uacd7\ud167\u81fe\u003f';
+const EVIDENCE_PACK_SUMMARY_HEADING = 'Evidence Pack 요약';
+const EVIDENCE_PACK_SELECTED_HEADING = '선택된 Main Article 근거';
+const EVIDENCE_PACK_EXCLUDED_HEADING = '제외 후보 근거';
+const EVIDENCE_PACK_DIAGNOSTICS_HEADING = 'Needs-fix / Review-only 진단';
+const EVIDENCE_PACK_CHECKLIST_HEADING = '사람 검토 체크리스트';
 
 function toText(value) {
   return String(value ?? '');
@@ -104,6 +109,33 @@ function extractSubsection(section, heading) {
 function firstNumberAfterLabel(section, label) {
   const match = toText(section).match(new RegExp(`${escapeRegExp(label)}:\\s*(\\d+)`));
   return match ? Number(match[1]) : 0;
+}
+
+function markdownHeaderColumns(section) {
+  const lines = toText(section).split(/\r?\n/);
+  const header = lines.find((line, index) =>
+    line.trim().startsWith('|') &&
+    lines[index + 1] &&
+    /^\s*\|\s*:?-{3,}/.test(lines[index + 1])
+  );
+  if (!header) return [];
+  return header
+    .split('|')
+    .map(column => column.trim())
+    .filter(Boolean);
+}
+
+function validateMarkdownTableColumns(section, label, requiredColumns, errors) {
+  const columns = markdownHeaderColumns(section);
+  const missing = requiredColumns.filter(column => !columns.includes(column));
+  if (missing.length > 0) {
+    errors.push(`${label} table is missing required columns: ${missing.join(', ')}.`);
+  }
+}
+
+function diagnosticLineHasValue(section, label) {
+  const match = toText(section).match(new RegExp(`^- ${escapeRegExp(label)}:\\s*(.+)$`, 'm'));
+  return Boolean(match && match[1].trim() && match[1].trim() !== 'none');
 }
 
 function hasCompleteMarkdownLink(value) {
@@ -249,6 +281,104 @@ function validateCandidateTraceSection(text, sections, options, errors) {
   }
 }
 
+function validateEvidencePackSections(text, sections, parsed, errors) {
+  const summaryCount = exactHeadingCount(text, 2, EVIDENCE_PACK_SUMMARY_HEADING);
+  if (summaryCount === 0) return;
+  if (summaryCount !== 1) {
+    errors.push(`PR body must contain at most one "## ${EVIDENCE_PACK_SUMMARY_HEADING}" heading, found ${summaryCount}.`);
+    return;
+  }
+
+  const summarySection = sectionByHeading(sections, [EVIDENCE_PACK_SUMMARY_HEADING]);
+  if (!summarySection) {
+    errors.push(`PR body is missing ${EVIDENCE_PACK_SUMMARY_HEADING} section body.`);
+    return;
+  }
+
+  if (/Evidence Pack summary:\s*unavailable/i.test(summarySection)) {
+    if (!/Reason:\s*content\/newsroom\/\d{4}-\d{2}-\d{2}\/evidence-pack-summary\.json\b/.test(summarySection)) {
+      errors.push('Unavailable Evidence Pack summary must include the expected artifact path reason.');
+    }
+    return;
+  }
+
+  for (const label of [
+    'Raw candidates',
+    'Eligible candidates',
+    'Selected main articles',
+    'Reserve candidates',
+    'Excluded candidates',
+    'Primary camera stack count',
+    'Supporting bucket count',
+    'Fallback window used',
+    'Fallback bucket used'
+  ]) {
+    if (!new RegExp(`^- ${escapeRegExp(label)}:\\s+`, 'm').test(summarySection)) {
+      errors.push(`Evidence Pack summary is missing "${label}" row.`);
+    }
+  }
+
+  const selectedSection = sectionByHeading(sections, [EVIDENCE_PACK_SELECTED_HEADING]);
+  const excludedSection = sectionByHeading(sections, [EVIDENCE_PACK_EXCLUDED_HEADING]);
+  const diagnosticsSection = sectionByHeading(sections, [EVIDENCE_PACK_DIAGNOSTICS_HEADING]);
+  const checklistSection = sectionByHeading(sections, [EVIDENCE_PACK_CHECKLIST_HEADING]);
+
+  if (!selectedSection) errors.push(`PR body is missing ${EVIDENCE_PACK_SELECTED_HEADING} section.`);
+  if (!excludedSection) errors.push(`PR body is missing ${EVIDENCE_PACK_EXCLUDED_HEADING} section.`);
+  if (!diagnosticsSection) errors.push(`PR body is missing ${EVIDENCE_PACK_DIAGNOSTICS_HEADING} section.`);
+  if (!checklistSection) errors.push(`PR body is missing ${EVIDENCE_PACK_CHECKLIST_HEADING} section.`);
+
+  if (selectedSection) {
+    const selectedCount = firstNumberAfterLabel(summarySection, 'Selected main articles');
+    if (selectedCount > 0 && /^\s*-\s+none\s*$/m.test(selectedSection)) {
+      errors.push('Evidence Pack selected article count is positive but selected table is empty.');
+    }
+    if (!/^\s*-\s+none\s*$/m.test(selectedSection)) {
+      validateMarkdownTableColumns(
+        selectedSection,
+        'Evidence Pack selected article',
+        ['#', 'Title', 'Source', 'URL', 'Source tier', 'Source role', 'URL quality', 'Bucket', 'Freshness', 'Reason'],
+        errors
+      );
+    }
+  }
+
+  if (excludedSection && !/^\s*-\s+none\s*$/m.test(excludedSection)) {
+    validateMarkdownTableColumns(
+      excludedSection,
+      'Evidence Pack excluded candidate',
+      ['Title', 'Source', 'Bucket', 'Reason'],
+      errors
+    );
+  }
+
+  if (diagnosticsSection) {
+    const requiredDiagnosticLabels = [
+      'Quality hard failures',
+      'Fact-check must-fix',
+      'Repair failure',
+      'Fallback builder failure',
+      'Candidate shortage hints'
+    ];
+    for (const label of requiredDiagnosticLabels) {
+      if (!new RegExp(`^- ${escapeRegExp(label)}:\\s+`, 'm').test(diagnosticsSection)) {
+        errors.push(`Evidence Pack diagnostics is missing "${label}" row.`);
+      }
+    }
+    const needsFixOrReviewOnly = parsed.overallStatus !== 'PASS' || parsed.finalPublishReady === false || isReviewOnlyBody(text);
+    if (
+      needsFixOrReviewOnly &&
+      !requiredDiagnosticLabels.some(label => diagnosticLineHasValue(diagnosticsSection, label))
+    ) {
+      errors.push('Needs-fix or review-only Evidence Pack diagnostics must include at least one actionable diagnostic.');
+    }
+  }
+
+  if (checklistSection && countMatches(checklistSection, /^- \[ \]\s+/gm) < 5) {
+    errors.push('Evidence Pack human review checklist must include at least five unchecked items.');
+  }
+}
+
 function parseStatusSection(section) {
   section = toText(section);
   return {
@@ -345,6 +475,7 @@ function validatePrBodyText(text, options = {}) {
     ...options,
     allowMissingReporterCandidates: candidateShortage
   }, errors);
+  validateEvidencePackSections(text, sections, parsed, errors);
   if (!reviewOnly && /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
     errors.push('Newsletter PR body must not describe public newsletter files as not generated or not updated.');
   }
