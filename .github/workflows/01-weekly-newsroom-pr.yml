@@ -220,6 +220,11 @@ jobs:
         continue-on-error: true
         run: npm run report:source-effectiveness -- --date "${{ steps.meta.outputs.date }}"
 
+      - name: Generate evidence pack summary
+        if: always() && steps.meta.outputs.date != ''
+        continue-on-error: true
+        run: npm run report:evidence-pack -- --date "${{ steps.meta.outputs.date }}"
+
       - name: Snapshot newsroom debug artifacts
         if: always()
         run: |
