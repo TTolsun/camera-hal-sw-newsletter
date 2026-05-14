@@ -1459,6 +1459,115 @@ function traceStatus(overrides = {}) {
   };
 }
 
+test('newsroom PR body renders Evidence Pack summary sections', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+
+  writeJson(path.join(root, 'content', 'newsroom', date, 'evidence-pack-summary.json'), {
+    schema_version: 1,
+    date,
+    generated_at: '2026-05-14T00:00:00.000Z',
+    inputs: {
+      required: [],
+      optional: [],
+      missing: [],
+      used: []
+    },
+    publish_status: {
+      status: 'needs-fix',
+      run_mode: 'daily_draft',
+      fact_check_status: 'NEEDS_FIX',
+      final_publish_ready: false,
+      public_newsletter_ready: false,
+      review_pr_ready: true
+    },
+    selection_summary: {
+      raw_candidate_count: 14,
+      eligible_candidate_count: 3,
+      selected_main_article_count: 2,
+      reserve_candidate_count: 1,
+      excluded_candidate_count: 11,
+      primary_camera_stack_count: 1,
+      supporting_bucket_count: 1,
+      fallback_window_used: null,
+      fallback_bucket_used: true
+    },
+    selected_main_articles: [
+      {
+        candidate_id: 'selected-1',
+        title: 'CameraX 1.6.0 alpha release',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#camera-1.6.0-alpha01',
+        source: 'Android Developers',
+        source_tier: 'official_release_note',
+        source_role: 'primary',
+        source_url_quality: 'article_url',
+        freshness_window: 'current',
+        relevance_bucket: 'android_platform_camera_adjacent',
+        selection_reason: 'Camera pipeline behavior change with dated release evidence'
+      }
+    ],
+    reserve_candidates: [],
+    excluded_candidates_top: [
+      {
+        candidate_id: 'excluded-1',
+        title: 'Generic AI camera update',
+        url: 'https://example.com/generic-ai-camera',
+        source: 'Example Tech',
+        relevance_bucket: 'generic_tech_watchlist',
+        exclusion_reason: 'generic topic without HAL impact axis'
+      }
+    ],
+    excluded_candidates_truncated: true,
+    failure_diagnostics: {
+      quality_hard_failures: ['source-integrity'],
+      fact_check_must_fix: [{ location: 'CameraX', problem: 'needs source binding' }],
+      repair_failures: ['section_count_drift'],
+      fallback_builder_failures: [],
+      candidate_shortage_hints: ['primary camera stack shortage'],
+      source_gap_warnings: ['source gap on selected-1'],
+      missing_artifacts: ['content/newsroom/2026-05-10/fact-check-report.json'],
+      invalid_artifacts: [{ path: 'content/newsroom/2026-05-10/quality-report.json', error: 'Unexpected token' }]
+    },
+    warnings: []
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+
+  assert.match(body, /^## Evidence Pack 요약$/m);
+  assert.match(body, /^## 선택된 Main Article 근거$/m);
+  assert.match(body, /^## 제외 후보 근거$/m);
+  assert.match(body, /^## Needs-fix \/ Review-only 진단$/m);
+  assert.match(body, /^## 사람 검토 체크리스트$/m);
+  assert.match(body, /Raw candidates: 14/);
+  assert.match(body, /Fallback bucket used: true/);
+  assert.match(body, /CameraX 1\.6\.0 alpha release/);
+  assert.match(body, /official_release_note/);
+  assert.match(body, /primary/);
+  assert.match(body, /article_url/);
+  assert.match(body, /android_platform_camera_adjacent/);
+  assert.match(body, /current/);
+  assert.match(body, /Generic AI camera update/);
+  assert.match(body, /generic topic without HAL impact axis/);
+  assert.match(body, /More excluded candidates are available in `content\/newsroom\/2026-05-10\/evidence-pack-summary\.json`/);
+  assert.match(body, /Quality hard failures: source-integrity/);
+  assert.match(body, /Fact-check must-fix: needs source binding/);
+  assert.match(body, /Invalid artifacts: Unexpected token/);
+  assert.match(body, /^## 후보 기사 추적$/m);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('newsroom PR body keeps Evidence Pack fallback when summary artifact is missing', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+
+  assert.match(body, /^## Evidence Pack 요약$/m);
+  assert.match(body, /Evidence Pack summary: unavailable/);
+  assert.match(body, new RegExp(`content/newsroom/${date}/evidence-pack-summary\\.json not found`));
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
 test('newsroom PR body renders Korean candidate traceability report', () => {
   const root = tempRoot();
   const date = '2026-05-10';
