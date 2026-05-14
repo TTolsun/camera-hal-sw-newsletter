@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-14",
-  "generated_at": "2026-05-14T01:43:12.637Z",
+  "generated_at": "2026-05-14T03:46:08.045Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -51,12 +51,12 @@
   },
   "selection_summary": {
     "raw_candidate_count": 40,
-    "eligible_candidate_count": 3,
-    "selected_main_article_count": 3,
+    "eligible_candidate_count": 4,
+    "selected_main_article_count": 4,
     "reserve_candidate_count": 0,
-    "excluded_candidate_count": 37,
+    "excluded_candidate_count": 36,
     "primary_camera_stack_count": 1,
-    "supporting_bucket_count": 2,
+    "supporting_bucket_count": 3,
     "fallback_window_used": null,
     "fallback_bucket_used": true,
     "candidate_shortage_hints": [
@@ -71,7 +71,7 @@
     "total_claims": null,
     "overclaim_risk": "unknown",
     "available_article_count": 0,
-    "not_available_article_count": 3
+    "not_available_article_count": 4
   },
   "hal_impact_summary": {
     "axes": [
@@ -85,9 +85,10 @@
       "\\bGCC\\b[^.\\n]{0,120}\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b",
       "\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b[^.\\n]{0,120}\\bGCC\\b",
       "\\bGCC\\b",
+      "\\bLLVM\\b",
       "\\bClang\\b"
     ],
-    "article_count_with_axes": 3,
+    "article_count_with_axes": 4,
     "article_count_without_axes": 0
   },
   "selected_main_articles": [
@@ -162,6 +163,41 @@
       }
     },
     {
+      "candidate_id": "382cfb94f803783b27e1069e68986054a8fa54ebbce8bbc26972716cb799048b",
+      "title": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+      "source": "Phoronix Linux Camera / Media",
+      "source_tier": "medium",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "source_reliability": "tech-media",
+      "freshness_window": "unknown",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bLLVM\\b",
+        "\\bClang\\b",
+        "\\bGCC\\b[^.\\n]{0,120}\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b",
+        "\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b[^.\\n]{0,120}\\bGCC\\b",
+        "\\bGCC\\b"
+      ],
+      "key_evidence": [
+        "api_or_component: GCC",
+        "behavior_change: GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection.",
+        "summary: GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection. Early benchmarks showed some nice le..."
+      ],
+      "selection_reason": "Phoronix Linux Camera / Media (tech-media, medium, score 53): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    },
+    {
       "candidate_id": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
@@ -199,28 +235,6 @@
   "reserve_candidates": [],
   "excluded_candidates_top": [
     {
-      "candidate_id": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
-      "title": "Experimental hybrid inference and new Gemini models for Android",
-      "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
-      "source": "Android Developers Blog",
-      "source_role": "unknown",
-      "source_url_quality": "unknown",
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
-      "candidate_id": "9dd8a09088e1f2468ae63d3eb25cb2c6cd68c18b0942541e2c62bd55e6b51cce",
-      "title": "Get ready for Google I/O: Livestream schedule revealed",
-      "url": "https://android-developers.googleblog.com/2026/04/get-ready-for-google-io-livestream-schedule-revealed.html",
-      "source": "Android Developers Blog",
-      "source_role": "unknown",
-      "source_url_quality": "unknown",
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
       "candidate_id": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
       "title": "1.6.1",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
@@ -230,50 +244,6 @@
       "freshness_window": "unknown",
       "relevance_bucket": "android_platform_camera_adjacent",
       "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
-    },
-    {
-      "candidate_id": "d23d468efda95c20d1d671111dd63a41dcc47433749bc8c3f4204df387802312",
-      "title": "Android CLI and skills: Build Android apps 3x faster using any agent",
-      "url": "https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html",
-      "source": "Android Developers Blog",
-      "source_role": "unknown",
-      "source_url_quality": "unknown",
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
-      "candidate_id": "c688fc750ca4fd9a713845d12e6f35968e122931dbe5ec35bb6f61b9ad57a6da",
-      "title": "What's new in the Jetpack Compose April '26 release",
-      "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
-      "source": "Android Developers Blog",
-      "source_role": "unknown",
-      "source_url_quality": "unknown",
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
-      "candidate_id": "a6b14f3ecb17bac32e06437178a801bce8aab4529b0988139c935e5cd518114b",
-      "title": "Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4",
-      "url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
-      "source": "Android Developers Blog",
-      "source_role": "unknown",
-      "source_url_quality": "unknown",
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
-      "candidate_id": "ad09b081a7bc4d2676378136a03ba3852106869ee9ef28ec44b1e36d2525e34c",
-      "title": "The Fourth Beta of Android 17",
-      "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
-      "source": "Android Developers Blog",
-      "source_role": "unknown",
-      "source_url_quality": "unknown",
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
     },
     {
       "candidate_id": "2e09be47b7d035b1b1509fe59f1caf95edd44bab9f4919926cd7de56c0bd6f6a",
@@ -301,6 +271,72 @@
       "candidate_id": "e3e46728deeff066bd16a52c57511f4365cd7c062b859d78156f05a01b842a49",
       "title": "A look ahead: Making it easier and faster to publish safer apps",
       "url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "source": "Android Developers Blog",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "d116a623b5025f895f131151e5af0dff5221d24c9ef56d17ef871245dce222ca",
+      "title": "1.3.0-beta02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "source": "Android Developers Latest Updates",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
+    },
+    {
+      "candidate_id": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
+    },
+    {
+      "candidate_id": "9e95b9aeb56502637e3c44214863e13f906682940bfc35890d2dd5869dc615c9",
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/whatsnew",
+      "source": "AOSP What's New / Release Notes",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "b564c567eef7ae5977d361d9a12b799d681cb5a470b50ac7f67887452ef3478b",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "source": "Android Compatibility Definition Document",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "11b022bd662242659b371f65ded0a365e98b4f3566a6540b2859c16cc672a60b",
+      "title": "Building for the Intelligence System on Android",
+      "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "source": "Android Developers Blog",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "08b720ebcdf09388e6622dcb4cb611d154bd155df1b76ecb0d703b8a2633381a",
+      "title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
+      "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "source": "Android Developers Blog",
       "source_role": "unknown",
       "source_url_quality": "unknown",
@@ -348,6 +384,10 @@
     "Fallback source_url_quality=unknown for selected article: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
     "Fallback freshness_window=unknown for selected article: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
     "Fallback claim_validation.status=not_available for selected article: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+    "Fallback source_role=unknown for selected article: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+    "Fallback source_url_quality=unknown for selected article: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+    "Fallback freshness_window=unknown for selected article: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+    "Fallback claim_validation.status=not_available for selected article: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
     "Fallback source_role=unknown for selected article: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
     "Fallback source_url_quality=unknown for selected article: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
     "Fallback freshness_window=unknown for selected article: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",

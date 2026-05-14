@@ -1,10 +1,10 @@
 {
   "schema_version": 3,
   "date": "2026-05-14",
-  "generated_at": "2026-05-14T01:43:11.980Z",
+  "generated_at": "2026-05-14T03:46:07.320Z",
   "capsule_token_target": "500-800",
-  "shortlisted_capsule_count": 3,
-  "selected_capsule_count": 3,
+  "shortlisted_capsule_count": 4,
+  "selected_capsule_count": 4,
   "reserve_capsule_count": 0,
   "shortlisted_capsules": [
     {
@@ -178,6 +178,116 @@
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
       "estimated_tokens": 782
+    },
+    {
+      "title": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Wed, 13 May 2026 09:45:00 -0400",
+      "topic_type": "cpp",
+      "editorial_priority": 5,
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "scope_relevance": {
+        "aosp_camera_directness": 0,
+        "driver_stack_relevance": 0,
+        "soc_platform_relevance": 0,
+        "native_tooling_relevance": 5,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "evidence_origin": "article_text"
+      },
+      "impact_claim_level": "tooling_supporting",
+      "component": "GCC",
+      "what_changed": "GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection.",
+      "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
+      "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+      "overclaim_guardrails": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impa...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim..."
+      ],
+      "why_hal_engineer_cares": "Phoronix Linux Camera / Media (tech-media, medium, score 53): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "evidence": [
+        "api_or_component: GCC",
+        "behavior_change: GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection.",
+        "summary: GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection. Early benchmarks showed some nice le..."
+      ],
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": true,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "short",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "not-required"
+      },
+      "score": {
+        "total": 112.85,
+        "camera_hal_directness": 2.65,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 0,
+        "optional_ai_cpp_bonus": 4
+      },
+      "selection": {
+        "final_selected": true,
+        "primary_selected": true,
+        "reserve_candidate": false,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "382cfb94f803783b27e1069e68986054a8fa54ebbce8bbc26972716cb799048b",
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1_med",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 1040
     },
     {
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
@@ -438,6 +548,116 @@
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
       "estimated_tokens": 782
+    },
+    {
+      "title": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+      "source": "Phoronix Linux Camera / Media",
+      "published_date": "Wed, 13 May 2026 09:45:00 -0400",
+      "topic_type": "cpp",
+      "editorial_priority": 5,
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "scope_relevance": {
+        "aosp_camera_directness": 0,
+        "driver_stack_relevance": 0,
+        "soc_platform_relevance": 0,
+        "native_tooling_relevance": 5,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "evidence_origin": "article_text"
+      },
+      "impact_claim_level": "tooling_supporting",
+      "component": "GCC",
+      "what_changed": "GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection.",
+      "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
+      "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+      "overclaim_guardrails": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impa...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim..."
+      ],
+      "why_hal_engineer_cares": "Phoronix Linux Camera / Media (tech-media, medium, score 53): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "evidence": [
+        "api_or_component: GCC",
+        "behavior_change: GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection.",
+        "summary: GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection. Early benchmarks showed some nice le..."
+      ],
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "risk": {
+        "source_gap": false,
+        "watch_page": false,
+        "no_dated_evidence": false,
+        "candidate_only": false,
+        "requires_cross_check": true,
+        "final_selection_eligibility": "short"
+      },
+      "eligibility": {
+        "collectionMode": "rss-item",
+        "isArticleCandidate": true,
+        "isWatchPage": false,
+        "hasDatedEvidence": true,
+        "evidenceLevel": "dated-rss-article",
+        "finalSelectionEligibility": "short",
+        "source_kind": "rss_item",
+        "source_gap_risk": false,
+        "main_eligible": true,
+        "briefing_only": false,
+        "reference_only": false,
+        "evidence_score": 6,
+        "cross_check_status": "not-required"
+      },
+      "score": {
+        "total": 112.85,
+        "camera_hal_directness": 2.65,
+        "evidence_specificity": 5,
+        "freshness": 3,
+        "practical_actionability": 5,
+        "source_reliability": 0,
+        "optional_ai_cpp_bonus": 4
+      },
+      "selection": {
+        "final_selected": true,
+        "primary_selected": true,
+        "reserve_candidate": false,
+        "selected_for_editor": true,
+        "selection_slot": "camera-platform-optional-ai-cpp",
+        "main_article_score_eligible": true,
+        "score_filter_reasons": [],
+        "exclusion_reasons": []
+      },
+      "url_hash": "382cfb94f803783b27e1069e68986054a8fa54ebbce8bbc26972716cb799048b",
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1_med",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok"
+        }
+      ],
+      "estimated_tokens": 1040
     },
     {
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",

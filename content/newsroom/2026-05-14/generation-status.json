@@ -14,26 +14,26 @@
   "invalid_json_count": 0,
   "model_usage": {},
   "run_context": {
-    "github_run_id": "25836655973",
-    "github_sha": "6bd2cf94ab1c585d8616828329f3db09a3d01338",
+    "github_run_id": "25840371487",
+    "github_sha": "eedb02bf5e38c405a0f5386b46939e4dbe736bc4",
     "github_ref": "refs/heads/main"
   },
   "input_candidate_count": 40,
-  "eligible_candidate_count": 3,
-  "selected_article_count": 3,
-  "deterministic_selected_count": 3,
+  "eligible_candidate_count": 4,
+  "selected_article_count": 4,
+  "deterministic_selected_count": 4,
   "rendered_main_article_count": null,
   "reserve_candidate_count": 0,
   "demoted_article_count": 0,
   "locked_article_count": null,
-  "fallback_topic_count": 2,
+  "fallback_topic_count": 3,
   "reporter_candidate_count": null,
   "reporter_selected_count": null,
   "final_input_candidate_count": 40,
-  "final_eligible_candidate_count": 3,
-  "final_selected_article_count": 3,
+  "final_eligible_candidate_count": 4,
+  "final_selected_article_count": 4,
   "reporter_selected_but_final_excluded_count": null,
-  "ai_selected_article_count": 2,
+  "ai_selected_article_count": 3,
   "underfilled": false,
   "publish_ready": false,
   "selection_publish_ready": false,
@@ -46,55 +46,55 @@
   "min_non_fallback_publish_ready_articles": 1,
   "composition_mode": "NEEDS_FIX",
   "selection_composition_mode": "FALLBACK_COMPOSITION",
-  "composition_reason": "Article Composition Policy passed with 1 Primary Camera Stack article(s) and 2 supporting main article(s).",
+  "composition_reason": "Article Composition Policy passed with 1 Primary Camera Stack article(s) and 3 supporting main article(s).",
   "composition_summary": {
-    "selected_article_count": 3,
+    "selected_article_count": 4,
     "bucket_counts": {
       "direct_aosp_camera": 0,
       "camera_driver_image_pipeline": 1,
       "android_platform_camera_adjacent": 0,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 2,
+      "cpp_ai_tooling_fallback": 3,
       "generic_tech_watchlist": 0
     },
     "direct_aosp_camera_count": 0,
     "camera_driver_image_pipeline_count": 1,
     "android_platform_camera_adjacent_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 2,
+    "cpp_ai_tooling_fallback_count": 3,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_topic_count": 1,
-    "supporting_main_article_count": 2,
+    "supporting_main_article_count": 3,
     "forbidden_main_article_count": 0,
     "non_fallback_reviewable_article_count": 1,
-    "fallback_topic_count": 2
+    "fallback_topic_count": 3
   },
   "eligible_composition_summary": {
-    "selected_article_count": 3,
+    "selected_article_count": 4,
     "bucket_counts": {
       "direct_aosp_camera": 0,
       "camera_driver_image_pipeline": 1,
       "android_platform_camera_adjacent": 0,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 2,
+      "cpp_ai_tooling_fallback": 3,
       "generic_tech_watchlist": 0
     },
     "direct_aosp_camera_count": 0,
     "camera_driver_image_pipeline_count": 1,
     "android_platform_camera_adjacent_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 2,
+    "cpp_ai_tooling_fallback_count": 3,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_topic_count": 1,
-    "supporting_main_article_count": 2,
+    "supporting_main_article_count": 3,
     "forbidden_main_article_count": 0,
     "non_fallback_reviewable_article_count": 1,
-    "fallback_topic_count": 2
+    "fallback_topic_count": 3
   },
   "candidate_pool_preflight_passed": false,
   "candidate_shortage_reviewable": true,
   "candidate_shortage_summary": {
-    "publishable_candidate_count": 3,
+    "publishable_candidate_count": 4,
     "required_publishable_candidate_count": 5,
     "reserve_candidate_count": 0,
     "required_reserve_candidate_count": 2,
@@ -104,8 +104,8 @@
     "required_camera_stack_candidate_count": 2,
     "direct_camera_or_driver_candidate_count": 1,
     "camera_adjacent_candidate_count": 0,
-    "supporting_candidate_count": 2,
-    "selected_article_count": 3,
+    "supporting_candidate_count": 3,
+    "selected_article_count": 4,
     "selected_primary_camera_stack_count": 1
   },
   "shortage_reason_codes": [
@@ -139,13 +139,13 @@
   "non_fallback_reviewable_article_count": 1,
   "eligible_non_fallback_reviewable_article_count": 1,
   "primary_camera_stack_topic_count": 1,
-  "supporting_main_article_count": 2,
+  "supporting_main_article_count": 3,
   "forbidden_main_article_count": 0,
   "direct_aosp_camera_count": 0,
   "camera_driver_image_pipeline_count": 1,
   "android_platform_camera_adjacent_count": 0,
   "soc_platform_signal_count": 0,
-  "cpp_ai_tooling_fallback_count": 2,
+  "cpp_ai_tooling_fallback_count": 3,
   "generic_tech_watchlist_count": 0,
   "selection_warnings": [],
   "selection_errors": [],
@@ -157,35 +157,35 @@
   "exclusion_reason_summary": [
     {
       "reason": "main_eligible=false",
-      "count": 34
+      "count": 33
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 34
+      "count": 33
     },
     {
       "reason": "reference_only=true",
-      "count": 32
+      "count": 31
     },
     {
       "reason": "briefing_only=true",
-      "count": 27
+      "count": 18
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 27
+      "count": 18
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 7
+      "count": 15
     },
     {
       "reason": "missing dated evidence",
-      "count": 4
+      "count": 14
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 4
+      "count": 14
     },
     {
       "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
@@ -195,35 +195,35 @@
   "final_exclusion_reason_summary": [
     {
       "reason": "main_eligible=false",
-      "count": 34
+      "count": 33
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 34
+      "count": 33
     },
     {
       "reason": "reference_only=true",
-      "count": 32
+      "count": 31
     },
     {
       "reason": "briefing_only=true",
-      "count": 27
+      "count": 18
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 27
+      "count": 18
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 7
+      "count": 15
     },
     {
       "reason": "missing dated evidence",
-      "count": 4
+      "count": 14
     },
     {
       "reason": "watch page without dated evidence",
-      "count": 4
+      "count": 14
     },
     {
       "reason": "CameraX release-note candidate has no concrete source_extraction bullet",

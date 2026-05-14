@@ -5,9 +5,9 @@
 - Reporter candidates: unknown
 - Reporter-selected candidates: unknown
 - Final input candidates: 40
-- Final eligible candidates: 3
-- Final selected articles: 3
-- Deterministic primary articles: 3
+- Final eligible candidates: 4
+- Final selected articles: 4
+- Deterministic primary articles: 4
 - Reserve candidates: 0
 - Demoted candidates: unknown
 - Composition mode: FALLBACK_COMPOSITION
@@ -17,9 +17,9 @@
 - android_platform_camera_adjacent: 0
 - camera_driver_image_pipeline: 1
 - soc_platform_signal: 0
-- cpp_ai_tooling_fallback: 2
+- cpp_ai_tooling_fallback: 3
 - Primary Camera Stack: 1
-- Supporting main articles: 2
+- Supporting main articles: 3
 - Forbidden main articles: 0
 - Non-fallback reviewable: 1
 
@@ -29,11 +29,11 @@ Source/parser recovery hint:
 - Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 주요 final exclusion reason:
-- main_eligible=false (34)
-- source_gap_risk=true (34)
-- reference_only=true (32)
-- briefing_only=true (27)
-- finalSelectionEligibility=watchlist (27)
+- main_eligible=false (33)
+- source_gap_risk=true (33)
+- reference_only=true (31)
+- briefing_only=true (18)
+- finalSelectionEligibility=watchlist (18)
 
 Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
 
