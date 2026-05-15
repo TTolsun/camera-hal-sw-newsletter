@@ -25,6 +25,9 @@
 - `excluded`: 현재 기준으로 본문 승격 대상이 아닙니다.
 - `parser/source 보류`: official/high source지만 parser 또는 source extraction 보완이 먼저 필요합니다.
 - `report-only`: 품질/팩트체크 report 연결용으로만 표시된 항목입니다.
+- `merged`: 같은 source/event cluster로 병합되어 별도 main article로 다루지 않는 후보입니다.
+
+`score`는 편집 판단을 대체하지 않으므로 `편집자 기사 판단 요약` table에는 표시하지 않습니다. 점수와 세부 diagnostics는 기존 `Evidence Pack 요약`, 품질 report, `후보 기사 추적` section에서 확인합니다.
 
 ## 주의할 경고
 

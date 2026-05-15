@@ -1717,6 +1717,144 @@ test('newsroom PR body handles missing evidence pack with shortlist fallback', (
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
+test('newsroom PR body reports editorial summary truncation explicitly', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  const selected = Array.from({ length: 10 }, (_, index) => ({
+    title: `Camera pipeline candidate ${String(index + 1).padStart(2, '0')}`,
+    url: `https://example.com/camera-pipeline-${index + 1}`,
+    source: 'Example Camera Source',
+    source_tier: 'high',
+    relevance_bucket: 'camera_driver_image_pipeline',
+    source_gap_risk: false,
+    has_dated_evidence: true,
+    hal_impact_axes: ['driver', 'image pipeline'],
+    selection_reason: 'camera image pipeline source evidence'
+  }));
+  writeMinimalEvidencePackSummary(root, date, {
+    selected_main_articles: selected,
+    reserve_candidates: [],
+    excluded_candidates_top: []
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const verdict = extractMarkdownSection(body, '편집자 결론');
+
+  assert.match(verdict, /표시된 후보: 8개 \/ 전체 후보: 10개/);
+  assert.match(verdict, /생략된 후보: 2개, 전체 후보는 `후보 기사 추적`과 `Evidence Pack 요약`을 확인하세요\./);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('newsroom PR body loads reporter fallback object array and selected candidate shapes as report-only', () => {
+  const cases = [
+    {
+      name: 'object candidates',
+      value: {
+        candidates: [traceCandidate({
+          title: 'Object root reporter candidate',
+          url: 'https://example.com/reporter-object',
+          relevance_bucket: 'camera_driver_image_pipeline'
+        })]
+      },
+      title: 'Object root reporter candidate'
+    },
+    {
+      name: 'array root',
+      value: [traceCandidate({
+        title: 'Array root reporter candidate',
+        url: 'https://example.com/reporter-array',
+        relevance_bucket: 'camera_driver_image_pipeline'
+      })],
+      title: 'Array root reporter candidate'
+    },
+    {
+      name: 'selected_candidates',
+      value: {
+        selected_candidates: [traceCandidate({
+          title: 'Snake selected reporter candidate',
+          url: 'https://example.com/reporter-selected-snake',
+          relevance_bucket: 'camera_driver_image_pipeline',
+          final_selected: true
+        })]
+      },
+      title: 'Snake selected reporter candidate'
+    },
+    {
+      name: 'selectedCandidates',
+      value: {
+        selectedCandidates: [traceCandidate({
+          title: 'Camel selected reporter candidate',
+          url: 'https://example.com/reporter-selected-camel',
+          relevance_bucket: 'camera_driver_image_pipeline',
+          final_selected: true
+        })]
+      },
+      title: 'Camel selected reporter candidate'
+    }
+  ];
+
+  for (const item of cases) {
+    const root = tempRoot();
+    const date = '2026-05-10';
+    writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), item.value);
+
+    const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+    const summary = extractMarkdownSection(body, '편집자 기사 판단 요약');
+
+    assert.match(summary, new RegExp(item.title), item.name);
+    assert.match(summary, /source: reporter-candidates\.json/, item.name);
+    assert.match(summary, /report-only/, item.name);
+    assert.doesNotMatch(summary, /자동 선택\(final_selected\)/, item.name);
+    assert.equal(validatePrBodyText(body, { date }).ok, true, item.name);
+  }
+});
+
+test('newsroom PR body keeps editorial summary section order by publication state', () => {
+  const reviewRoot = tempRoot();
+  const reviewDate = '2026-05-10';
+  writeMinimalEvidencePackSummary(reviewRoot, reviewDate);
+  const reviewBody = buildNewsroomPrBody({
+    root: reviewRoot,
+    date: reviewDate,
+    validateOutcome: 'failure',
+    status: traceStatus({ review_publication_ready: true, final_publish_ready: false })
+  });
+
+  assertTextInOrder(reviewBody, [
+    '## 발행 상태 요약',
+    '## 편집자 기사 판단 요약',
+    '## 생성 상태'
+  ]);
+
+  const publishRoot = tempRoot();
+  const publishDate = '2026-05-11';
+  writeMinimalEvidencePackSummary(publishRoot, publishDate);
+  const publishBody = buildNewsroomPrBody({
+    root: publishRoot,
+    date: publishDate,
+    validateOutcome: 'success',
+    status: traceStatus({
+      status: 'PASS',
+      fact_check_status: 'PASS',
+      must_fix_count: 0,
+      source_gap_count: 0,
+      quality_status: 'PASS',
+      quality_score: 90,
+      selection_publish_ready: true,
+      final_publish_ready: true,
+      publish_gate_passed: true,
+      review_gate_passed: true,
+      validate_ok: true
+    })
+  });
+
+  assertTextInOrder(publishBody, [
+    '## 편집자 기사 판단 요약',
+    '## 발행 상태 요약',
+    '## 생성 상태'
+  ]);
+});
+
 test('diagnostics-only PR body keeps status first and shows insufficient evidence notice', () => {
   const root = tempRoot();
   const date = '2026-05-08';

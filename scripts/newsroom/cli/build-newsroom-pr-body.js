@@ -1392,8 +1392,11 @@ function loadEditorialDecisionSource(root, date, status = {}) {
     };
   }
 
-  const reporter = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'));
-  const reporterCandidates = candidatesFromArray(reporter?.candidates, 'report_only', 'reporter-candidates');
+  const reporter = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'));
+  const reporterItems = Array.isArray(reporter)
+    ? reporter
+    : reporter?.candidates || reporter?.selected_candidates || reporter?.selectedCandidates;
+  const reporterCandidates = candidatesFromArray(reporterItems, 'report_only', 'reporter-candidates');
   if (reporterCandidates.length > 0) {
     return {
       source: 'reporter-candidates.json',
@@ -1432,7 +1435,7 @@ function loadEditorialDecisionSource(root, date, status = {}) {
     return {
       source: 'content/collected-news candidates.json',
       level: 'collected',
-      candidates: collectedCandidates.slice(0, 8),
+      candidates: collectedCandidates,
       counts: {
         deterministic: status.deterministic_selected_count ?? status.selected_article_count,
         rendered: status.rendered_main_article_count ?? status.final_selected_article_count ?? status.selected_article_count
@@ -1494,6 +1497,9 @@ function renderEditorialDecisionSummary(root, date, status = {}, handoff = null)
   const diagnosticsOnly = handoff?.diagnosticsOnly === true;
   const insufficientEvidence = source.candidates.length === 0 || (diagnosticsOnly && ['status', 'collected'].includes(source.level));
   const rows = insufficientEvidence ? [] : editorialRowsFromCandidates(source.candidates, 8);
+  const displayedCandidateCount = rows.length;
+  const totalCandidateCount = source.candidates.length;
+  const omittedCandidateCount = Math.max(0, totalCandidateCount - displayedCandidateCount);
   const table = renderMarkdownTable(
     EDITORIAL_DECISION_TABLE_COLUMNS,
     rows.map((row, index) => [
@@ -1533,6 +1539,8 @@ function renderEditorialDecisionSummary(root, date, status = {}, handoff = null)
     `- 메인(Main) 판단 기사 수: ${mainRows.length}`,
     `- 보조/짧은 소식 판단 기사 수: ${supportingRows.length}`,
     `- 보류(Hold) 후보 수: ${holdRows.length}`,
+    `- 표시된 후보: ${displayedCandidateCount}개 / 전체 후보: ${totalCandidateCount}개`,
+    `- 생략된 후보: ${omittedCandidateCount > 0 ? `${omittedCandidateCount}개, 전체 후보는 \`후보 기사 추적\`과 \`Evidence Pack 요약\`을 확인하세요.` : '없음'}`,
     `- 핵심 우려: ${concerns.length > 0 ? concerns.join('; ') : 'none'}`,
     '',
     renderEditorialLegend()

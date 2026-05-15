@@ -78,8 +78,12 @@ function joinedEvidenceText(candidate = {}) {
   ].filter(Boolean).join(' ');
 }
 
-function hasSourceUrlOrId(candidate = {}) {
-  return Boolean(candidate.url || candidate.sourceUrl || candidate.sourceId || candidate.candidate_id || candidate.candidateId);
+function hasArticleSourceUrl(candidate = {}) {
+  return Boolean(candidate.url || candidate.sourceUrl);
+}
+
+function hasSourceIdentity(candidate = {}) {
+  return Boolean(candidate.url || candidate.sourceUrl || candidate.sourceId);
 }
 
 function isOfficialOrHighSource(candidate = {}) {
@@ -107,7 +111,7 @@ function hasGenericOrReferenceExclusion(candidate = {}) {
 }
 
 function hasSocCameraPipelineEvidence(candidate = {}) {
-  if (candidate.bucket !== 'soc_platform_signal' || candidate.sourceGapRisk === true || !hasSourceUrlOrId(candidate)) {
+  if (candidate.bucket !== 'soc_platform_signal' || candidate.sourceGapRisk === true || !hasArticleSourceUrl(candidate)) {
     return false;
   }
   const axesText = normalizeText(ensureArray(candidate.halImpactAxes).join(' '));
@@ -125,7 +129,8 @@ function classifyEditorialDecision(candidate = {}) {
   const status = candidate.status || 'unknown';
   const bucket = candidate.bucket || candidate.relevance_bucket || 'unknown';
   const sourceGapRisk = candidate.sourceGapRisk === true || candidate.source_gap_risk === true;
-  const hasSource = hasSourceUrlOrId(candidate);
+  const hasArticleUrl = hasArticleSourceUrl(candidate);
+  const hasSource = hasSourceIdentity(candidate);
   const officialCameraHold =
     isOfficialOrHighSource(candidate) &&
     CAMERA_BUCKETS.has(bucket) &&
@@ -141,7 +146,7 @@ function classifyEditorialDecision(candidate = {}) {
   if (officialCameraHold) {
     return { decision: 'Hold', label: '보류(Hold)', pipelineStatus: 'hold', pipelineLabel: pipelineStatusLabel('hold') };
   }
-  if (!hasSource || hasGenericOrReferenceExclusion({ ...candidate, bucket })) {
+  if (!hasArticleUrl || hasGenericOrReferenceExclusion({ ...candidate, bucket })) {
     return { decision: 'Exclude', label: '제외(Exclude)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) };
   }
   if (['final_selected', 'primary_selected'].includes(status) && CAMERA_BUCKETS.has(bucket)) {
