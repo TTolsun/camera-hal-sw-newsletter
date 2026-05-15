@@ -2,6 +2,12 @@ const fs = require('fs');
 const {
   resolvePublishStatus
 } = require('../common/publish-status');
+const {
+  EDITORIAL_DECISION_HEADINGS,
+  EDITORIAL_DECISION_LABELS,
+  EDITORIAL_DECISION_TABLE_COLUMNS,
+  PIPELINE_STATUS_LABELS
+} = require('../common/editorial-decision-summary');
 
 const FORBIDDEN_ENGLISH_HEADINGS = [
   '## Generation Status',
@@ -131,10 +137,25 @@ function markdownHeaderColumns(section) {
     /^\s*\|\s*:?-{3,}/.test(lines[index + 1])
   );
   if (!header) return [];
-  return header
-    .split('|')
+  return splitMarkdownTableLine(header)
     .map(column => column.trim())
     .filter(Boolean);
+}
+
+function splitMarkdownTableLine(line) {
+  const cells = [];
+  let current = '';
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+    if (char === '|' && line[index - 1] !== '\\') {
+      cells.push(current);
+      current = '';
+      continue;
+    }
+    current += char;
+  }
+  cells.push(current);
+  return cells;
 }
 
 function validateMarkdownTableColumns(section, label, requiredColumns, errors) {
@@ -142,6 +163,65 @@ function validateMarkdownTableColumns(section, label, requiredColumns, errors) {
   const missing = requiredColumns.filter(column => !columns.includes(column));
   if (missing.length > 0) {
     errors.push(`${label} table is missing required columns: ${missing.join(', ')}.`);
+  }
+}
+
+function markdownTableRows(section) {
+  const lines = toText(section).split(/\r?\n/);
+  const headerIndex = lines.findIndex((line, index) =>
+    line.trim().startsWith('|') &&
+    lines[index + 1] &&
+    /^\s*\|\s*:?-{3,}/.test(lines[index + 1])
+  );
+  if (headerIndex === -1) return { columns: [], rows: [] };
+  const columns = splitMarkdownTableLine(lines[headerIndex])
+    .map(column => column.trim())
+    .filter(Boolean);
+  const rows = [];
+  for (const line of lines.slice(headerIndex + 2)) {
+    if (!line.trim().startsWith('|')) break;
+    const cells = splitMarkdownTableLine(line)
+      .map(column => column.trim())
+      .filter((_, index, list) => index > 0 && index < list.length - 1);
+    rows.push(cells);
+  }
+  return { columns, rows };
+}
+
+function validateEditorialDecisionSummarySection(text, sections, errors) {
+  const headings = EDITORIAL_DECISION_HEADINGS;
+  const summaryCount = exactHeadingCount(text, 2, headings.summary);
+  const verdictCount = exactHeadingCount(text, 2, headings.verdict);
+  const legendCount = exactHeadingCount(text, 2, headings.legend);
+  const hasAny = summaryCount > 0 || verdictCount > 0 || legendCount > 0;
+  if (!hasAny) return;
+
+  if (summaryCount !== 1) {
+    errors.push(`PR body must contain exactly one "## ${headings.summary}" heading when editorial decision summary is present, found ${summaryCount}.`);
+  }
+  if (verdictCount !== 1) {
+    errors.push(`PR body must contain exactly one "## ${headings.verdict}" heading when editorial decision summary is present, found ${verdictCount}.`);
+  }
+  if (legendCount !== 1) {
+    errors.push(`PR body must contain exactly one "## ${headings.legend}" heading when editorial decision summary is present, found ${legendCount}.`);
+  }
+  if (summaryCount !== 1) return;
+
+  const summarySection = sectionByHeading(sections, [headings.summary]);
+  validateMarkdownTableColumns(summarySection, 'Editorial decision summary', EDITORIAL_DECISION_TABLE_COLUMNS, errors);
+  const { columns, rows } = markdownTableRows(summarySection);
+  const decisionIndex = columns.indexOf('편집 판단');
+  const pipelineIndex = columns.indexOf('Pipeline 상태');
+  const allowedPipelineLabels = new Set(Object.values(PIPELINE_STATUS_LABELS));
+  for (const row of rows) {
+    const decisionLabel = row[decisionIndex] || '';
+    if (decisionLabel && !EDITORIAL_DECISION_LABELS.has(decisionLabel)) {
+      errors.push(`Editorial decision summary contains unknown decision label: ${decisionLabel}.`);
+    }
+    const pipelineLabel = row[pipelineIndex] || '';
+    if (pipelineLabel && !allowedPipelineLabels.has(pipelineLabel)) {
+      errors.push(`Editorial decision summary contains unknown Pipeline 상태: ${pipelineLabel}.`);
+    }
   }
 }
 
@@ -590,6 +670,7 @@ function validatePrBodyText(text, options = {}) {
   if (!generatedArtifactsSection) {
     errors.push('PR body must contain generated artifacts section.');
   }
+  validateEditorialDecisionSummarySection(text, sections, errors);
   validateCandidateTraceSection(text, sections, {
     ...options,
     allowMissingReporterCandidates: candidateShortage

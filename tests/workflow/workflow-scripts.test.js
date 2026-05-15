@@ -1564,6 +1564,207 @@ function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
   });
 }
 
+test('newsroom PR body renders editor article decision summary with pipeline state', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date, {
+    selection_summary: {
+      selected_main_article_count: 3,
+      supporting_bucket_count: 2
+    },
+    selected_main_articles: [
+      {
+        title: 'libcamera v0.7.1 release',
+        url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/000001.html',
+        source: 'libcamera Release Announcements',
+        source_tier: 'high',
+        source_reliability: 'project-official',
+        relevance_bucket: 'camera_driver_image_pipeline',
+        source_gap_risk: false,
+        has_dated_evidence: true,
+        hal_impact_axes: ['driver', 'image pipeline'],
+        selection_reason: 'libcamera release with V4L2 and image pipeline evidence'
+      },
+      {
+        title: 'GCC 16.1 released',
+        url: 'https://isocpp.org/blog/2026/04/gcc-16.1',
+        source: 'ISO C++ Blog',
+        source_tier: 'high',
+        relevance_bucket: 'cpp_ai_tooling_fallback',
+        source_gap_risk: false,
+        has_dated_evidence: true,
+        selection_reason: 'native C++ toolchain fallback for HAL build workflow'
+      },
+      {
+        title: 'CameraX release row missing extraction',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#camera-1.6.1',
+        source: 'Android Developers Latest Updates',
+        source_tier: 'high',
+        source_role: 'official',
+        relevance_bucket: 'android_platform_camera_adjacent',
+        source_gap_risk: true,
+        has_dated_evidence: true,
+        selection_reason: 'CameraX release-note candidate has no concrete source_extraction bullet'
+      }
+    ],
+    reserve_candidates: [
+      {
+        title: 'Glaze 7.2 C++ reflection',
+        url: 'https://isocpp.org/blog/2026/04/glaze-7.2',
+        source: 'ISO C++ Blog',
+        source_tier: 'high',
+        relevance_bucket: 'cpp_ai_tooling_fallback',
+        source_gap_risk: false,
+        has_dated_evidence: true,
+        selection_reason: 'C++ serialization watch item'
+      }
+    ],
+    excluded_candidates_top: [
+      {
+        title: 'Generic AI camera update',
+        url: 'https://example.com/generic-ai-camera',
+        source: 'Example Tech',
+        relevance_bucket: 'generic_tech_watchlist',
+        exclusion_reason: 'generic AI noise'
+      }
+    ]
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const summary = extractMarkdownSection(body, '편집자 기사 판단 요약');
+  const verdict = extractMarkdownSection(body, '편집자 결론');
+
+  assert.match(body, /^## 편집자 기사 판단 요약$/m);
+  assert.match(body, /^## 편집자 결론$/m);
+  assert.match(body, /^## 판단 라벨 의미$/m);
+  assert.match(summary, /\| 순위 \| 기사 \| 편집 판단 \| Pipeline 상태 \| Bucket \| 왜 중요한가 \| 위험 \/ 과장 방지 \|/);
+  assert.match(summary, /libcamera v0\.7\.1 release/);
+  assert.match(summary, /메인\(Main\)/);
+  assert.match(summary, /GCC 16\.1 released/);
+  assert.match(summary, /보조\(Supporting\)/);
+  assert.match(summary, /Glaze 7\.2 C\+\+ reflection/);
+  assert.match(summary, /짧은 소식\(Short\)/);
+  assert.match(summary, /CameraX release row missing extraction/);
+  assert.match(summary, /보류\(Hold\)/);
+  assert.match(summary, /자동 선택\(final_selected\)/);
+  assert.match(summary, /parser\/source 보류/);
+  assert.doesNotMatch(summary, /점수|score/i);
+  assert.match(verdict, /발행 권고: 자동 발행 금지 \/ Review-only/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('newsroom PR body only promotes soc platform signal with explicit camera pipeline evidence', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date, {
+    selected_main_articles: [
+      {
+        title: 'SoC ISP thermal camera pipeline update',
+        url: 'https://example.com/soc-camera-isp-thermal',
+        source: 'SoC Vendor Notes',
+        source_tier: 'medium',
+        relevance_bucket: 'soc_platform_signal',
+        source_gap_risk: false,
+        has_dated_evidence: true,
+        hal_impact_axes: ['camera', 'image pipeline', 'thermal', 'resource'],
+        selection_reason: 'ISP thermal throttling can affect camera image pipeline performance'
+      },
+      {
+        title: 'Generic SoC performance update',
+        url: 'https://example.com/soc-generic-performance',
+        source: 'SoC Vendor Notes',
+        source_tier: 'medium',
+        relevance_bucket: 'soc_platform_signal',
+        source_gap_risk: false,
+        has_dated_evidence: true,
+        hal_impact_axes: ['resource'],
+        selection_reason: 'General CPU benchmark update'
+      }
+    ],
+    excluded_candidates_top: []
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const summary = extractMarkdownSection(body, '편집자 기사 판단 요약');
+
+  assert.match(summary, /SoC ISP thermal camera pipeline update[\s\S]*메인\(Main\)/);
+  assert.match(summary, /Generic SoC performance update[\s\S]*관찰\(Watch\)|Generic SoC performance update[\s\S]*보조\(Supporting\)/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('newsroom PR body handles missing evidence pack with shortlist fallback', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  const finalCandidate = traceCandidate({
+    title: 'Fallback libcamera release',
+    url: 'https://example.com/fallback-libcamera',
+    relevance_bucket: 'camera_driver_image_pipeline',
+    final_selected: true,
+    primary_selected: true,
+    source_gap_risk: false
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [finalCandidate],
+    reserve_candidates: []
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const summary = extractMarkdownSection(body, '편집자 기사 판단 요약');
+
+  assert.match(summary, /Fallback libcamera release/);
+  assert.match(summary, /메인\(Main\)/);
+  assert.match(summary, /source: shortlisted-candidates\.json/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('diagnostics-only PR body keeps status first and shows insufficient evidence notice', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRepairReviewableArtifacts(root, date);
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    changedArtifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${date}/${file}`)
+  });
+
+  assert.ok(body.indexOf('## Diagnostics-only Status') < body.indexOf('## 편집자 기사 판단 요약'));
+  assert.ok(body.indexOf('## 편집자 기사 판단 요약') < body.indexOf('## 생성 상태'));
+  assert.match(body, /편집자 기사 판단 요약을 생성할 충분한 evidence가 없습니다\./);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('validate-pr-body treats editorial decision summary as optional but complete when present', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const withoutSummary = body.replace(/^## 편집자 기사 판단 요약[\s\S]*?(?=^## 생성 상태$)/m, '');
+  const missingVerdict = body.replace(/^## 편집자 결론[\s\S]*?(?=^## 판단 라벨 의미$)/m, '');
+  const missingLegend = body.replace(/^## 판단 라벨 의미[\s\S]*?(?=^## 생성 상태$)/m, '');
+  const badLabel = body.replace('메인(Main)', '최고기사(Best)');
+  const missingPipelineColumn = body.replace(' | Pipeline 상태 |', ' | ');
+
+  assert.equal(validatePrBodyText(withoutSummary, { date }).ok, true);
+
+  const missingVerdictResult = validatePrBodyText(missingVerdict, { date });
+  assert.equal(missingVerdictResult.ok, false);
+  assert.match(missingVerdictResult.errors.join('\n'), /편집자 결론/);
+
+  const missingLegendResult = validatePrBodyText(missingLegend, { date });
+  assert.equal(missingLegendResult.ok, false);
+  assert.match(missingLegendResult.errors.join('\n'), /판단 라벨 의미/);
+
+  const badLabelResult = validatePrBodyText(badLabel, { date });
+  assert.equal(badLabelResult.ok, false);
+  assert.match(badLabelResult.errors.join('\n'), /unknown decision label/);
+
+  const missingPipelineResult = validatePrBodyText(missingPipelineColumn, { date });
+  assert.equal(missingPipelineResult.ok, false);
+  assert.match(missingPipelineResult.errors.join('\n'), /Pipeline 상태/);
+});
+
 test('newsroom PR body renders Evidence Pack summary sections', () => {
   const root = tempRoot();
   const date = '2026-05-10';
