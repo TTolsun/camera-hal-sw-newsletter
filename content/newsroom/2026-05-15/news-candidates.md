@@ -33,13 +33,13 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 
 | 선택 가능성 | Bucket | Priority | 점수 | 근거 | 수집 mode | 날짜 근거 | 출처 종류 | 출처 | 제목 | 발행일 | 사유 | Link |
 |---|---|---:|---:|---:|---|---|---|---|---|---|---|---|
+| watchlist | generic_tech_watchlist | 6 | 60 | 6 | rss-item | yes | rss_item | Android Developers Blog | Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha | Thu, 14 May 2026 20:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html) |
 | watchlist | generic_tech_watchlist | 6 | 60 | 4 | rss-item | yes | rss_item | Android Developers Blog | Gratitude saw 25% higher retention for widget users | Fri, 08 May 2026 16:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html) |
 | watchlist | generic_tech_watchlist | 6 | 60 | 4 | rss-item | yes | rss_item | Android Developers Blog | A look ahead: Making it easier and faster to publish safer apps | Thu, 07 May 2026 17:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html) |
 | watchlist | generic_tech_watchlist | 6 | 48 | 2 | rss-item | yes | rss_item | Android Developers Blog | Building for the Intelligence System on Android | Tue, 12 May 2026 14:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html) |
 | watchlist | generic_tech_watchlist | 6 | 48 | 2 | rss-item | yes | rss_item | Android Developers Blog | Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks | Mon, 04 May 2026 17:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html) |
 | watchlist | generic_tech_watchlist | 6 | 41 | 8 | release-note-item | yes | release_note_item | Android Security Bulletin | Overview | 2026-05-01 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://source.android.com/docs/security/bulletin/asb-overview) |
 | watchlist | generic_tech_watchlist | 6 | 57 | 4 | rss-item | yes | rss_item | ISO C++ Blog | C++: The Documentary trailer | Thu, 14 May 2026 15:01:46 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer) |
-| watchlist | generic_tech_watchlist | 6 | 57 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal | Thu, 23 Apr 2026 21:23:33 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph) |
 | watchlist | generic_tech_watchlist | 6 | 45 | 2 | rss-item | yes | rss_item | ISO C++ Blog | Results summary: 2026 Annual C++ Developer Survey "Lite" | Mon, 04 May 2026 21:04:35 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/2026-survey-summary) |
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman | Wed, 13 May 2026 21:36:47 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo) |
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter | Mon, 11 May 2026 21:33:30 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter) |
@@ -47,7 +47,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz | Tue, 05 May 2026 21:28:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain) |
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider | Mon, 27 Apr 2026 21:25:11 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m) |
 | watchlist | generic_tech_watchlist | 6 | 27 | 2 | rss-item | yes | rss_item | ISO C++ Blog | The ACCU on Sea 2026 Schedule is Now Announced -- ACCU | Thu, 07 May 2026 18:40:56 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/the-accu-on-sea-2026-schedule-is-now-announced) |
-| watchlist | generic_tech_watchlist | 6 | 62 | 8 | release-note-item | yes | release_note_item | Claude Code Changelog | Claude Code Changelog - 2.1.141 | May 13, 2026 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://code.claude.com/docs/en/changelog) |
+| watchlist | generic_tech_watchlist | 6 | 74 | 8 | release-note-item | yes | release_note_item | Claude Code Changelog | Claude Code Changelog - 2.1.142 | May 14, 2026 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://code.claude.com/docs/en/changelog) |
 | watchlist | camera_driver_image_pipeline | 2 | 53 | 4 | html-watch-page | no | documentation_page | libcamera Documentation | Introduction &mdash; libcamera | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://libcamera.org/introduction.html) |
 | watchlist | cpp_ai_tooling_fallback | 5 | 35 | 4 | release-note-page | no | rolling_page | LLVM Release Notes | Download LLVM releases | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://releases.llvm.org/) |
 | watchlist | generic_tech_watchlist | 6 | 53 | 2 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | Intel Looking To Move Their Low-Power Mode Daemon Into The Linux Kernel Source Tree | Tue, 12 May 2026 06:04:04 -0400 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://www.phoronix.com/news/Intel-LPMD-Kernel-Source-Tree) |
@@ -164,7 +164,52 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP Camera Documentation (official, high, score 65): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 3. Gratitude saw 25% higher retention for widget users
+### 3. Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha
+
+- 출처: Android Developers Blog
+- 출처 URL: https://android-developers.googleblog.com/
+- 발행일: Thu, 14 May 2026 20:00:00 +0000
+- Link: https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html
+- Section: Android / AOSP / Camera
+- Source category: android
+- Source priority: high
+- Source reliability: official
+- Editorial priority: 6
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 6
+- Version/release: 추출 안 됨
+- API/component: API
+- Behavior change: Posted by Nataraj KR, Android Developer Relations Engineer The initial launch of the Jetpack Telecom library introduced CallsManager , replacing the legacy ConnectionService API to simplify VoIP integration.
+- Cross-check 필요: no
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 60
+- 요약: Posted by Nataraj KR, Android Developer Relations Engineer The initial launch of the Jetpack Telecom library introduced CallsManager , replacing the legacy ConnectionService API to simplify VoIP integration. CallsManager streamlines call lifecycle management and audio routing while enabling interactions with remote surfaces like smartwatches, Bluetooth devices, and Android Auto. Additionally, it supports call extensions for richer features—such as participant handling, custom icons, call silenci
+- Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 4. Gratitude saw 25% higher retention for widget users
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -209,7 +254,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Ash Nohe and Amrit Sanjeev, Android Developer Relations Engineers Practicing gratitude may decrease symptoms of depression and anxiety, and improve mental health and life satisfaction 1 . Consistent gratitude practice may lead to sustained improvements that last months 2 . The mindfulness app Gratitude encourages consistency through micro daily journaling, affirmations, and vision boards. The app has over 6 million downloads, 150 thousand 5-star ratings, and 100 million journal entries
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 4. A look ahead: Making it easier and faster to publish safer apps
+### 5. A look ahead: Making it easier and faster to publish safer apps
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -254,7 +299,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by&nbsp; Vijaya Kaza, VP, Product, App & Ecosystem Trust The mobile ecosystem is always evolving, bringing both new opportunities and new threats. Through these changes, Android and Google Play remain committed to ensuring that billions of users can continue to enjoy their apps with confidence and developer innovation can thrive. Earlier this year, we shared how Android and Google Play kept the ecosystem safe in 2025 by deepening our investments in AI and real-time defenses. Today, we’re
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 5. 1.3.0-beta02
+### 6. 1.3.0-beta02
 
 - 출처: Android Developers Latest Updates
 - 출처 URL: https://developer.android.com/latest-updates
@@ -299,7 +344,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: 1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close <h3 class="hide-from-toc no-link" id="wear-mave
 - Selection reason: Android Developers Latest Updates (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.)
 
-### 6. 1.4.0-alpha07
+### 7. 1.4.0-alpha07
 
 - 출처: Android Developers Latest Updates
 - 출처 URL: https://developer.android.com/latest-updates
@@ -344,7 +389,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers
 - Selection reason: Android Developers Latest Updates (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.)
 
-### 7. What&apos;s new &nbsp;|&nbsp; Android Open Source Project
+### 8. What&apos;s new &nbsp;|&nbsp; Android Open Source Project
 
 - 출처: AOSP What's New / Release Notes
 - 출처 URL: https://source.android.com/docs/whatsnew
@@ -389,7 +434,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP What's New / Release Notes (official, high, score 53): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 8. Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project
+### 9. Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project
 
 - 출처: Android Compatibility Definition Document
 - 출처 URL: https://source.android.com/docs/compatibility/cdd
@@ -434,7 +479,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Android Compatibility Definition Document (official, high, score 53): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 9. Building for the Intelligence System on Android
+### 10. Building for the Intelligence System on Android
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -479,7 +524,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Matthew McCullough, VP, Product Management, Android Developer Announced today during The Android Show , Android is transitioning from an operating system to an intelligence system, creating more opportunities for engagement with your apps. Through deep integration between hardware and software, Android devices will be able to handle the heavy lifting of anticipating user needs, so your app can focus on delivering that experience at the right moment. As part of this, we are announcing G
 - Selection reason: Android Developers Blog (official, high, score 48): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 10. Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks
+### 11. Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -524,7 +569,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Thomas Ezan, Sr Developer Relations Engineer and Tracy Agyemang, Product Marketing Manager Karrot is a hyperlocal, community-driven peer-to-peer marketplace app that enables users to buy, sell, and trade items with other verified users. Since launching in South Korea in 2015, the platform has expanded into global markets, amassing over 43 million registered users. After launching in North America, engineers at Karrot observed that 30% of users in the region use a non-English device lan
 - Selection reason: Android Developers Blog (official, high, score 48): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 11. Overview
+### 12. Overview
 
 - 출처: Android Security Bulletin
 - 출처 URL: https://source.android.com/docs/security/bulletin
@@ -569,7 +614,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: ss="devsite-expandable-nav"> Android Security Bulletins Bulletins home Overview 2026 bulletins May April <li class="devsite-nav-
 - Selection reason: Android Security Bulletin (official, high, score 41): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 12. May
+### 13. May
 
 - 출처: Android Security Bulletin
 - 출처 URL: https://source.android.com/docs/security/bulletin
@@ -614,7 +659,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: vsite-nav-title" > Overview 2026 bulletins May April March February January <a class="devsite-nav-toggle" aria-hidden="true"
 - Selection reason: Android Security Bulletin (official, high, score 41): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 13. libcamera Release Announcements - libcamera v0.7.1
+### 14. libcamera Release Announcements - libcamera v0.7.1
 
 - 출처: libcamera Release Announcements
 - 출처 URL: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
@@ -659,7 +704,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
 - Selection reason: libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)
 
-### 14. C++26: A User-Friendly assert() macro -- Sandor Dargo
+### 15. C++26: A User-Friendly assert() macro -- Sandor Dargo
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -704,7 +749,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: C++26 is bringing some long-overdue changes to&nbsp; assert() . But why are those changes needed? And when do we actually use&nbsp; assert , anyway? At its core,&nbsp; assert() &nbsp;exists to validate runtime conditions. If the given expression evaluates to&nbsp; false , the program aborts. I&rsquo;m almost certain you&rsquo;ve used it before &mdash; at work, in personal projects, or at the very least in examples and code snippets. So what&rsquo;s the problem? C++26: A User-Friendly assert() ma
 - Selection reason: ISO C++ Blog (official-community, high, score 69): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
 
-### 15. C++: The Documentary trailer
+### 16. C++: The Documentary trailer
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -749,7 +794,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Sponsored by HRT and produced by CultRepo , we're pleased to share the official trailer for C++: The Documentary . The trailer premieres today at 19:00 UTC. Click Notify me on the YouTube Premiere page to get a reminder when it goes live. The film will have its world premiere on May 28 at a special live event in New York City&rsquo;s Financial District, followed by a panel discussion that will be recorded for later release. C++: The Documentary will be released worldwide on YouTube on June 4, wi
 - Selection reason: ISO C++ Blog (official-community, high, score 57): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 16. GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
+### 17. GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -793,51 +838,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Relevance Score: 57
 - 요약: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R
 - Selection reason: ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)
-
-### 17. CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Thu, 23 Apr 2026 21:23:33 +0000
-- Link: https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Editorial priority: 6
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 4
-- Version/release: 추출 안 됨
-- API/component: GPU
-- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
-- Cross-check 필요: no
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 57
-- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Can Standard C++ Replace CUDA for GPU Acceleration? by Elmar Westphal Summary of the talk: On top
-- Selection reason: ISO C++ Blog (official-community, high, score 57): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
 ### 18. Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
 
@@ -1289,11 +1289,11 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: C++ on Sea and the ACCU Conference combine, this, year for one big festival of C++ by the sea! The 2026 Schedule is Here! by ACCU From the article: Four days, five tracks, and a lineup that spans the full breadth of what ACCU on Sea is about: deep C++ content, broader software craft, and the kind of talks that make you rethink something you thought you understood.
 - Selection reason: ISO C++ Blog (official-community, high, score 27): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 28. Claude Code Changelog - 2.1.141
+### 28. Claude Code Changelog - 2.1.142
 
 - 출처: Claude Code Changelog
 - 출처 URL: https://code.claude.com/docs/en/changelog
-- 발행일: May 13, 2026
+- 발행일: May 14, 2026
 - Link: https://code.claude.com/docs/en/changelog
 - Section: AI / SW Engineering Trends
 - Source category: ai-coding
@@ -1324,15 +1324,15 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Reference only: yes
 - Source gap risk: yes
 - Evidence score: 8
-- Version/release: 2.1.141
+- Version/release: 2.1.142
 - API/component: Claude Code / AI coding agent
-- Behavior change: ​ 2.1.141 May 13, 2026 Added terminalSequence field to hook JSON output so hooks can emit desktop notifications, window titles, and bells without a controlling terminal Added CLAUDE_CODE_PLUGIN_PREFER_HTTPS to clone GitHub plugin sources over HTTPS instead of SSH, for environments without a GitHub SSH key Added ANTHROPIC_WORKSPACE_ID environment variable for workload identity federation — scopes the minted token to a specific workspace when the federation rule covers more than one Added claude agents --cwd <path> to scope the session list to a directory /feedback can now include recent sessions (last 24 hours or 7 days) for issues spanning more than the current session Rewind menu: added “Summarize up to here” to compress earlier context while keeping recent turns intact Auto mode permission dialog now explains when a permissions.ask rule caused the prompt Restore
+- Behavior change: ​ 2.1.142 May 14, 2026 Added new claude agents flags: --add-dir , --settings , --mcp-config , --plugin-dir , --permission-mode , --model , --effort , and --dangerously-skip-permissions to configure dispatched background sessions Fast mode now uses Opus 4.7 by default (previously Opus 4.6).
 - Cross-check 필요: no
 - Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
 - Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 62
-- 요약: ​ 2.1.141 May 13, 2026 Added terminalSequence field to hook JSON output so hooks can emit desktop notifications, window titles, and bells without a controlling terminal Added CLAUDE_CODE_PLUGIN_PREFER_HTTPS to clone GitHub plugin sources over HTTPS instead of SSH, for environments without a GitHub SSH key Added ANTHROPIC_WORKSPACE_ID environment variable for workload identity federation — scopes the minted token to a specific workspace when the federation rule covers more than one Added claude a
-- Selection reason: Claude Code Changelog (official, medium, score 62): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+- Relevance Score: 74
+- 요약: ​ 2.1.142 May 14, 2026 Added new claude agents flags: --add-dir , --settings , --mcp-config , --plugin-dir , --permission-mode , --model , --effort , and --dangerously-skip-permissions to configure dispatched background sessions Fast mode now uses Opus 4.7 by default (previously Opus 4.6).
+- Selection reason: Claude Code Changelog (official, medium, score 74): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
 ### 29. Samsung Mobile Security
 

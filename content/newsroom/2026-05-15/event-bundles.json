@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-15",
-  "generated_at": "2026-05-14T19:21:40.253Z",
+  "generated_at": "2026-05-15T03:55:32.827Z",
   "summary": {
     "schema_version": 1,
     "total_count": 40,
@@ -62,8 +62,30 @@
       "warnings": []
     },
     {
+      "event_id": "event_726a2272b8be",
+      "primary_candidate_id": "candidate_7c86efbb3ac8",
+      "event_key": "source:android-developers-blog:date:Thu, 14 May 2026 20:00:00 +0000:component:api",
+      "event_type": "release_note",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Thu, 14 May 2026 20:00:00 +0000"
+      },
+      "component": "API",
+      "impact_axes": [
+        "camera_api_change",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "medium",
+      "warnings": []
+    },
+    {
       "event_id": "event_e1fc143f0941",
-      "primary_candidate_id": "candidate_d3fc4f4ea5f1",
+      "primary_candidate_id": "candidate_20617414d7bc",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
@@ -85,7 +107,7 @@
     },
     {
       "event_id": "event_5875d0cedfb2",
-      "primary_candidate_id": "candidate_520d854ff29a",
+      "primary_candidate_id": "candidate_584a67807850",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
@@ -107,7 +129,7 @@
     },
     {
       "event_id": "event_d23f95c1aac5",
-      "primary_candidate_id": "candidate_9a8c5914ec61",
+      "primary_candidate_id": "candidate_8f0ac0ab6317",
       "event_key": "source:android-developers-latest-updates:release:1.3.0-beta02",
       "event_type": "release_note",
       "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
@@ -129,7 +151,7 @@
     },
     {
       "event_id": "event_764d2d438c57",
-      "primary_candidate_id": "candidate_a0174a7afbad",
+      "primary_candidate_id": "candidate_344234dc3af1",
       "event_key": "source:android-developers-latest-updates:release:1.4.0-alpha07",
       "event_type": "release_note",
       "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
@@ -151,7 +173,7 @@
     },
     {
       "event_id": "event_aebc033c93c0",
-      "primary_candidate_id": "candidate_40537717a2cf",
+      "primary_candidate_id": "candidate_8702b73e43d8",
       "event_key": "url:https://source.android.com/docs/whatsnew",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/whatsnew",
@@ -173,7 +195,7 @@
     },
     {
       "event_id": "event_22f0b66cf484",
-      "primary_candidate_id": "candidate_8e00b6070ad1",
+      "primary_candidate_id": "candidate_25eacba04a08",
       "event_key": "url:https://source.android.com/docs/compatibility/cdd",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/compatibility/cdd",
@@ -195,7 +217,7 @@
     },
     {
       "event_id": "event_bb92e4ef92b5",
-      "primary_candidate_id": "candidate_8e4bb29d92fa",
+      "primary_candidate_id": "candidate_1ae1c4fc3349",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
@@ -217,7 +239,7 @@
     },
     {
       "event_id": "event_1d54e5f6eb9d",
-      "primary_candidate_id": "candidate_a35fe9488f6d",
+      "primary_candidate_id": "candidate_f0652b19a328",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
@@ -239,7 +261,7 @@
     },
     {
       "event_id": "event_219f8b657452",
-      "primary_candidate_id": "candidate_f374a89dea8d",
+      "primary_candidate_id": "candidate_0a8df30dfc18",
       "event_key": "source:android-security-bulletin:release:android security bulletin",
       "event_type": "release_note",
       "primary_url": "https://source.android.com/docs/security/bulletin/asb-overview",
@@ -261,7 +283,7 @@
     },
     {
       "event_id": "event_825a8b69534e",
-      "primary_candidate_id": "candidate_5538ac732ff4",
+      "primary_candidate_id": "candidate_c82712d5fc46",
       "event_key": "source:android-security-bulletin:release:2026-05-01",
       "event_type": "release_note",
       "primary_url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
@@ -283,7 +305,7 @@
     },
     {
       "event_id": "event_a79daae67d73",
-      "primary_candidate_id": "candidate_7eba98f231d1",
+      "primary_candidate_id": "candidate_de751c754ad4",
       "event_key": "source:libcamera-release-announcements:release:libcamera v0.7.1",
       "event_type": "release_note",
       "primary_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-april/058408.html",
@@ -305,7 +327,7 @@
     },
     {
       "event_id": "event_d4f82e08cbcf",
-      "primary_candidate_id": "candidate_b492fdc8ecee",
+      "primary_candidate_id": "candidate_4b74cb096bd0",
       "event_key": "url:https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
@@ -327,7 +349,7 @@
     },
     {
       "event_id": "event_4f422e47339f",
-      "primary_candidate_id": "candidate_f6ae1fd2aca3",
+      "primary_candidate_id": "candidate_43dc22d18284",
       "event_key": "url:https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
@@ -349,7 +371,7 @@
     },
     {
       "event_id": "event_8f8bc26e2106",
-      "primary_candidate_id": "candidate_4e95f8d6616c",
+      "primary_candidate_id": "candidate_ee3f81ec0488",
       "event_key": "source:iso-cpp-blog:date:Thu, 30 Apr 2026 22:36:23 +0000:component:gcc",
       "event_type": "release_note",
       "primary_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
@@ -363,28 +385,6 @@
       "impact_axes": [
         "build_dependency_fix",
         "cpp_ai_tooling_fallback",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "medium",
-      "warnings": []
-    },
-    {
-      "event_id": "event_0580d2a5e518",
-      "primary_candidate_id": "candidate_348888a2b6e5",
-      "event_key": "source:iso-cpp-blog:date:Thu, 23 Apr 2026 21:23:33 +0000:component:gpu",
-      "event_type": "release_note",
-      "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-      "evidence_urls": [],
-      "dedupe_reason": "source_id + release.date + component",
-      "release": {
-        "version": "",
-        "date": "Thu, 23 Apr 2026 21:23:33 +0000"
-      },
-      "component": "GPU",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
         "C++ / Native / Toolchain",
         "cpp"
       ],
@@ -612,16 +612,16 @@
       "warnings": []
     },
     {
-      "event_id": "event_4205d87922dc",
-      "primary_candidate_id": "candidate_3a78fb8832c9",
-      "event_key": "source:claude-code-changelog:release:2.1.141",
+      "event_id": "event_0233653166f3",
+      "primary_candidate_id": "candidate_59fa7b1f2bfe",
+      "event_key": "source:claude-code-changelog:release:2.1.142",
       "event_type": "release_note",
       "primary_url": "https://code.claude.com/docs/en/changelog",
       "evidence_urls": [],
       "dedupe_reason": "source_id + release.version",
       "release": {
-        "version": "2.1.141",
-        "date": "May 13, 2026"
+        "version": "2.1.142",
+        "date": "May 14, 2026"
       },
       "component": "Claude Code / AI coding agent",
       "impact_axes": [

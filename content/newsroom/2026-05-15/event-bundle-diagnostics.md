@@ -19,6 +19,7 @@
 
 - event_50db0807428f: release_note, source_id + release.version, primary=https://developer.android.com/jetpack/androidx/releases/camera#1.6.1, evidence=0, confidence=high
 - event_d5f3369876b0: primary_url, normalized_primary_url, primary=https://source.android.com/docs/core/camera, evidence=0, confidence=low
+- event_726a2272b8be: release_note, source_id + release.date + component, primary=https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html, evidence=0, confidence=medium
 - event_e1fc143f0941: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html, evidence=0, confidence=low
 - event_5875d0cedfb2: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html, evidence=0, confidence=low
 - event_d23f95c1aac5: release_note, source_id + release.version, primary=https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02, evidence=0, confidence=high
@@ -33,7 +34,6 @@
 - event_d4f82e08cbcf: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo, evidence=0, confidence=low
 - event_4f422e47339f: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer, evidence=0, confidence=low
 - event_8f8bc26e2106: release_note, source_id + release.date + component, primary=https://isocpp.org//blog/2026/04/gcc-16.1, evidence=0, confidence=medium
-- event_0580d2a5e518: release_note, source_id + release.date + component, primary=https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph, evidence=0, confidence=medium
 - event_bc0581ebbaf7: release_note, source_id + release.version, primary=https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more, evidence=0, confidence=high
 - event_bd925ddd03cf: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/2026-survey-summary, evidence=0, confidence=low
 - event_0cfa40b3a793: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire, evidence=0, confidence=low
@@ -44,7 +44,7 @@
 - event_c2b11f90366d: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain, evidence=0, confidence=low
 - event_0d5b52c7cc62: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m, evidence=0, confidence=low
 - event_757b3e43f00c: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/the-accu-on-sea-2026-schedule-is-now-announced, evidence=0, confidence=low
-- event_4205d87922dc: release_note, source_id + release.version, primary=https://code.claude.com/docs/en/changelog, evidence=0, confidence=high
+- event_0233653166f3: release_note, source_id + release.version, primary=https://code.claude.com/docs/en/changelog, evidence=0, confidence=high
 - event_fba67ffe8e52: primary_url, normalized_primary_url, primary=https://security.samsungmobile.com/securityupdate.smsb, evidence=0, confidence=low
 - event_ded239bf8f6b: primary_url, normalized_primary_url, primary=https://docs.qualcomm.com/product/publicresources/securitybulletin, evidence=0, confidence=low
 - event_ef4a135a2ad1: primary_url, normalized_primary_url, primary=https://developer.android.com/newsletter, evidence=0, confidence=low

@@ -1,6 +1,6 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-15
 
-이번 2026-05-15호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22를 중심으로 구성했습니다. 정상 후보가 부족한 영역은 2개의 Fallback/Watch 기사로 채웠고 HAL 직접 변경으로 표현하지 않았습니다.
+이번 2026-05-15호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22를 중심으로 구성했습니다.
 
 > 편집자 검토 후 발행 가능한 Review-only 발행본입니다.
 > 이 호는 AI 자동 발행 기준을 통과하지 못했으며, fallback 또는 후보 부족 구성이 포함될 수 있습니다.
