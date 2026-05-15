@@ -11,6 +11,7 @@
 
 ## PR Review Flow
 
+- PR body의 새 editor-facing 요약은 [Newsroom PR Report 읽는 법](./newsroom-pr-report.ko.md)을 기준으로 확인합니다.
 - `final_publish_ready=false`는 AI 자동 발행 기준 미충족을 뜻합니다. `review_publication_ready=true`이고 `homepage_visible_after_merge=true`인 PR은 편집장 merge로 공개 승인할 수 있습니다.
 - `diagnostics_only=true`인 PR은 public newsletter files가 없으므로 merge해도 홈페이지에 표시되지 않습니다. PR body의 missing public files reason을 먼저 확인합니다.
 - `02-validate-site.yml`은 quality/fact-check 문제를 non-blocking annotation으로 보고하고, structural validation만 blocking으로 처리합니다.
