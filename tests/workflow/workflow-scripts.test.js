@@ -1804,6 +1804,7 @@ test('newsroom PR body loads reporter fallback object array and selected candida
     assert.match(summary, new RegExp(item.title), item.name);
     assert.match(summary, /source: reporter-candidates\.json/, item.name);
     assert.match(summary, /report-only/, item.name);
+    assert.match(summary, new RegExp(`${item.title}[\\s\\S]*관찰\\(Watch\\)`), item.name);
     assert.doesNotMatch(summary, /자동 선택\(final_selected\)/, item.name);
     assert.equal(validatePrBodyText(body, { date }).ok, true, item.name);
   }

@@ -158,6 +158,9 @@ function classifyEditorialDecision(candidate = {}) {
   if (['final_selected', 'primary_selected'].includes(status) && SUPPORTING_BUCKETS.has(bucket)) {
     return { decision: 'Supporting', label: '보조(Supporting)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) };
   }
+  if (status === 'report_only' && hasArticleUrl && CAMERA_BUCKETS.has(bucket)) {
+    return { decision: 'Watch', label: '관찰(Watch)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) };
+  }
   if (status === 'reserve') {
     return SUPPORTING_BUCKETS.has(bucket)
       ? { decision: 'Short', label: '짧은 소식(Short)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) }

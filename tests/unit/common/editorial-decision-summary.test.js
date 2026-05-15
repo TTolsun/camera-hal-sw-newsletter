@@ -127,6 +127,23 @@ test('editorial decision classifier keeps source gaps and generic candidates out
   );
 });
 
+test('editorial decision classifier maps report-only camera candidates with article URLs to Watch', () => {
+  const classification = assertDecision(
+    candidate({
+      status: 'report_only',
+      bucket: 'android_platform_camera_adjacent',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      sourceGapRisk: false
+    }),
+    'Watch',
+    '관찰(Watch)'
+  );
+
+  assert.equal(classification.pipelineLabel, 'report-only');
+  assert.notEqual(classification.decision, 'Main');
+  assert.notEqual(classification.decision, 'Exclude');
+});
+
 test('editorial decision classifier promotes SoC only with explicit camera pipeline evidence', () => {
   assertDecision(
     candidate({
