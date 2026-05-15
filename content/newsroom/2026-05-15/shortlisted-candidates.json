@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "date": "2026-05-15",
-  "generated_at": "2026-05-14T19:21:40.904Z",
+  "generated_at": "2026-05-15T03:55:33.918Z",
   "input_candidate_count": 40,
   "eligible_candidate_count": 4,
   "deterministic_selected_count": 4,
@@ -3986,7 +3986,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=fa",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -4014,7 +4014,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=fa",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -4030,7 +4030,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=fa",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -4058,7 +4058,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=fa",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -9000,6 +9000,13 @@
           "evidence_role": "unclassified"
         },
         {
+          "url": "https://source.android.com/docs/core/tests/development/android-test-station/ats-cloud-orchestration",
+          "text": "Cloud Orchestration in OmniLab ATS",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
           "url": "https://source.android.com/docs/core/tests/development/android-test-station/ats-user-builds",
           "text": "Autoenable USB debugging on user builds",
           "source_field": "html.body",
@@ -10833,6 +10840,291 @@
       "source_name": "Android Developers Blog",
       "sourceUrl": "https://android-developers.googleblog.com/",
       "source_url": "https://android-developers.googleblog.com/",
+      "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "article_url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "source_id": "android-developers-blog",
+      "category": "android",
+      "section": "Android / AOSP / Camera",
+      "source_category": "android",
+      "source_section": "Android / AOSP / Camera",
+      "priority": "high",
+      "reliability": "official",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "sourceRole": "",
+      "source_role": "",
+      "candidateOnly": false,
+      "candidate_only": false,
+      "collectionMode": "rss-item",
+      "collection_mode": "rss-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceLevel": "dated-rss-article",
+      "evidence_level": "dated-rss-article",
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_kind": "rss_item",
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "datePrecision": "",
+      "date_precision": "",
+      "parentUrl": "",
+      "parent_url": "",
+      "parentTitle": "",
+      "parent_title": "",
+      "outgoing_links": [],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": true,
+      "has_behavior_change": true,
+      "source_gap_risk": true,
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "evidence_score": 6,
+      "version_or_release": "",
+      "api_or_component": "API",
+      "source_hint_api_or_component": "android",
+      "behavior_change": "Posted by Nataraj KR, Android Developer Relations Engineer The initial launch of the Jetpack Telecom library introduced CallsManager , replacing the legacy ConnectionService API to simplify VoIP integration.",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+      "url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "publishedAt": "Thu, 14 May 2026 20:00:00 +0000",
+      "published_date": "Thu, 14 May 2026 20:00:00 +0000",
+      "summary": "Posted by Nataraj KR, Android Developer Relations Engineer The initial launch of the Jetpack Telecom library introduced CallsManager , replacing the legacy ConnectionService API to simplify VoIP integration. CallsManager streamlines call lifecycle management and audio routing while enabling interactions with remote surfaces like smartwatches, Bluetooth devices, and Android Auto. Additionally, it supports call extensions for richer features—such as participant handling, custom icons, call silenci",
+      "relevanceScore": 60,
+      "relevance_score": 60,
+      "cameraHalRelevanceScore": 60,
+      "camera_hal_relevance_score": 60,
+      "editorial_priority": 6,
+      "relevance_bucket": "generic_tech_watchlist",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "evidence_origin": "source_hint_only",
+      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "scope_evidence_terms": [],
+      "aospCameraStackBucket": "generic_tech_watchlist",
+      "aosp_camera_stack_bucket": "generic_tech_watchlist",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [],
+      "aosp_camera_evidence_terms": [],
+      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgE-vRiyQ4kvd23LM6SpFv87Dnedt0b429a_dL-l8kxF5I_jOw5bUC5bCtiRppRFyEDK2zzTTs4eZBuL884kSl1XU-I1t-FRAaVPrYcKbxuIn9O9TlUps07MY95iTWRPYKLiBkGP0kbeJZB3T_0gBdYgsCdXhLBuvn07b9WDfdw9aHkGaN0Iamd9xtN38U/s2469/Bring%20Native%20Visibility%20to%20Your%20VoIP%20App%20Experience%20with%20Telecom's%20Latest%20Alpha%20%5BDESIGN%5D%5BABL_66%5D_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 144898
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgE-vRiyQ4kvd23LM6SpFv87Dnedt0b429a_dL-l8kxF5I_jOw5bUC5bCtiRppRFyEDK2zzTTs4eZBuL884kSl1XU-I1t-FRAaVPrYcKbxuIn9O9TlUps07MY95iTWRPYKLiBkGP0kbeJZB3T_0gBdYgsCdXhLBuvn07b9WDfdw9aHkGaN0Iamd9xtN38U/w1200-h630-p-k-no-nu/Bring%20Native%20Visibility%20to%20Your%20VoIP%20App%20Experience%20with%20Telecom's%20Latest%20Alpha%20%5BDESIGN%5D%5BABL_66%5D_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 111925
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgE-vRiyQ4kvd23LM6SpFv87Dnedt0b429a_dL-l8kxF5I_jOw5bUC5bCtiRppRFyEDK2zzTTs4eZBuL884kSl1XU-I1t-FRAaVPrYcKbxuIn9O9TlUps07MY95iTWRPYKLiBkGP0kbeJZB3T_0gBdYgsCdXhLBuvn07b9WDfdw9aHkGaN0Iamd9xtN38U/s2469/Bring%20Native%20Visibility%20to%20Your%20VoIP%20App%20Experience%20with%20Telecom's%20Latest%20Alpha%20%5BDESIGN%5D%5BABL_66%5D_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 144898
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgE-vRiyQ4kvd23LM6SpFv87Dnedt0b429a_dL-l8kxF5I_jOw5bUC5bCtiRppRFyEDK2zzTTs4eZBuL884kSl1XU-I1t-FRAaVPrYcKbxuIn9O9TlUps07MY95iTWRPYKLiBkGP0kbeJZB3T_0gBdYgsCdXhLBuvn07b9WDfdw9aHkGaN0Iamd9xtN38U/w1200-h630-p-k-no-nu/Bring%20Native%20Visibility%20to%20Your%20VoIP%20App%20Experience%20with%20Telecom's%20Latest%20Alpha%20%5BDESIGN%5D%5BABL_66%5D_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 111925
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "candidateTier": "watchlist-reference",
+      "reason": "Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "collection_reason": "Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "camera_api_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "camera_api_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "camera_api_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "selected": false,
+      "selected_for_editor": false,
+      "deterministic_score": 22,
+      "score_breakdown": {
+        "camera_hal_directness": 3,
+        "scope_relevance": 0,
+        "editorial_priority": 6,
+        "relevance_bucket": "generic_tech_watchlist",
+        "aosp_camera_directness": 0,
+        "driver_stack_relevance": 0,
+        "soc_platform_relevance": 0,
+        "native_tooling_relevance": 0,
+        "evidence_specificity": 5,
+        "freshness_score": 3,
+        "practical_actionability": 5,
+        "optional_ai_cpp_bonus": 0,
+        "generic_ai_penalty": 0,
+        "watch_page_penalty": 0,
+        "no_date_penalty": 0,
+        "no_api_component_penalty": 0,
+        "source_gap_penalty": 25,
+        "generic_tech_watchlist_penalty": 30,
+        "penalty_total": 55,
+        "main_article_score_threshold": 42,
+        "minimum_camera_hal_directness": 2,
+        "minimum_scope_relevance": 2,
+        "source_reliability": 5,
+        "freshness": 3,
+        "camera_hal_relevance": 3,
+        "android_camera_relevance": 5,
+        "ai_required_slot_fit": 0,
+        "cpp_fallback_value": 0,
+        "evidence_quality": 5,
+        "base_total": 22,
+        "linked_evidence_runtime_bonus": 0,
+        "linked_evidence_watch_penalty": 0,
+        "linked_evidence_adjustment": 0,
+        "total": 22
+      },
+      "main_article_score_eligible": false,
+      "score_filter_reasons": [
+        "base_total<42",
+        "scope_relevance<2",
+        "relevance_bucket=generic_tech_watchlist",
+        "source_gap_risk=true"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ],
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "url_hash": "aedaad77a2bc7e4d75834d75b2fe82efe8706373c567d1da87231d19ac0d9238",
+      "ai_slot_candidate": false,
+      "camera_platform_candidate": true,
+      "cpp_fallback_candidate": false,
+      "optional_ai_cpp_candidate": false,
+      "final_selected": false,
+      "selection_stage": "deterministic-final",
+      "primary_selected": false,
+      "reserve_candidate": false,
+      "reporter_selected": false,
+      "final_exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "schema_version": 5,
+      "source": "Android Developers Blog",
+      "source_name": "Android Developers Blog",
+      "sourceUrl": "https://android-developers.googleblog.com/",
+      "source_url": "https://android-developers.googleblog.com/",
       "articleUrl": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
       "article_url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
       "source_id": "android-developers-blog",
@@ -11519,7 +11811,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -11547,23 +11839,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -11591,18 +11883,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "short-news",
@@ -11809,7 +12101,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -11837,23 +12129,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -11881,18 +12173,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "short-news",
@@ -15056,20 +15348,6 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=tr",
-          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -15086,20 +15364,6 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=tr",
-          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -15897,20 +16161,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -15927,20 +16177,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -16162,20 +16398,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=he",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -16192,20 +16414,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=he",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -16794,257 +17002,6 @@
       ],
       "normalized_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "url_hash": "5126eff726f215361b39ac351282f81831864d0a8a36117c3a770fa8390bbda0",
-      "ai_slot_candidate": true,
-      "camera_platform_candidate": true,
-      "cpp_fallback_candidate": true,
-      "optional_ai_cpp_candidate": true,
-      "final_selected": false,
-      "selection_stage": "deterministic-final",
-      "primary_selected": false,
-      "reserve_candidate": false,
-      "reporter_selected": false,
-      "final_exclusion_reasons": [
-        "finalSelectionEligibility=watchlist",
-        "source_gap_risk=true",
-        "main_eligible=false",
-        "briefing_only=true",
-        "reference_only=true"
-      ]
-    },
-    {
-      "schema_version": 5,
-      "source": "ISO C++ Blog",
-      "source_name": "ISO C++ Blog",
-      "sourceUrl": "https://isocpp.org/blog",
-      "source_url": "https://isocpp.org/blog",
-      "articleUrl": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-      "article_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-      "source_id": "iso-cpp-blog",
-      "category": "cpp",
-      "section": "C++ / Native / Toolchain",
-      "source_category": "cpp",
-      "source_section": "C++ / Native / Toolchain",
-      "priority": "high",
-      "reliability": "official-community",
-      "source_priority": "high",
-      "source_reliability": "official-community",
-      "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
-      "candidateOnly": false,
-      "candidate_only": false,
-      "collectionMode": "rss-item",
-      "collection_mode": "rss-item",
-      "sourceCollectionMode": "rss-source",
-      "source_collection_mode": "rss-source",
-      "isArticleCandidate": true,
-      "is_article_candidate": true,
-      "isWatchPage": false,
-      "is_watch_page": false,
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "evidenceLevel": "dated-rss-article",
-      "evidence_level": "dated-rss-article",
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_kind": "rss_item",
-      "source_extraction": null,
-      "derived_editorial_hints": null,
-      "extraction_quality": null,
-      "datePrecision": "",
-      "date_precision": "",
-      "parentUrl": "",
-      "parent_url": "",
-      "parentTitle": "",
-      "parent_title": "",
-      "outgoing_links": [
-        {
-          "url": "https://cppcon.org/",
-          "text": "in person in Aurora, CO",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://cppcon.org/registration/",
-          "text": "register today",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://www.youtube.com/watch?v=EOvukoCyW7A",
-          "text": "Can Standard C++ Replace CUDA for GPU Acceleration?",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        }
-      ],
-      "sourceMonth": "",
-      "source_month": "",
-      "has_published_date": true,
-      "has_version_or_release": false,
-      "has_api_or_component": true,
-      "has_behavior_change": false,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "evidence_score": 4,
-      "version_or_release": "",
-      "api_or_component": "GPU",
-      "source_hint_api_or_component": "cpp",
-      "behavior_change": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
-      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-      "publishedAt": "Thu, 23 Apr 2026 21:23:33 +0000",
-      "published_date": "Thu, 23 Apr 2026 21:23:33 +0000",
-      "summary": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Can Standard C++ Replace CUDA for GPU Acceleration? by Elmar Westphal Summary of the talk: On top",
-      "relevanceScore": 57,
-      "relevance_score": 57,
-      "cameraHalRelevanceScore": 57,
-      "camera_hal_relevance_score": 57,
-      "editorial_priority": 6,
-      "relevance_bucket": "generic_tech_watchlist",
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "source_hint_only",
-      "source_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "scope_evidence_terms": [],
-      "aospCameraStackBucket": "generic_tech_watchlist",
-      "aosp_camera_stack_bucket": "generic_tech_watchlist",
-      "aospCameraDirect": false,
-      "aosp_camera_direct": false,
-      "aospCameraEvidenceTerms": [],
-      "aosp_camera_evidence_terms": [],
-      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [
-        {
-          "url": "https://isocpp.org/files/img/cuda-westphal.png",
-          "sourceUrl": "https://isocpp.org/blog",
-          "articleUrl": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "cuda-westphal.png",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "ISO C++ Blog",
-          "validationStatus": "ok",
-          "contentLength": 510075
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://isocpp.org/files/img/cuda-westphal.png",
-          "sourceUrl": "https://isocpp.org/blog",
-          "articleUrl": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "cuda-westphal.png",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "ISO C++ Blog",
-          "validationStatus": "ok",
-          "contentLength": 510075
-        }
-      ],
-      "candidateTier": "watchlist-reference",
-      "reason": "ISO C++ Blog (official-community, high, score 57): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
-      "collection_reason": "ISO C++ Blog (official-community, high, score 57): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "generic_tooling_change": 1
-        },
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "generic_tooling_change",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "watch",
-        "confidence": 0.35,
-        "reason": "generic_tooling_change classified from candidate text.",
-        "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      },
-      "selected": false,
-      "selected_for_editor": false,
-      "deterministic_score": 28,
-      "score_breakdown": {
-        "camera_hal_directness": 5,
-        "scope_relevance": 0,
-        "editorial_priority": 6,
-        "relevance_bucket": "generic_tech_watchlist",
-        "aosp_camera_directness": 0,
-        "driver_stack_relevance": 0,
-        "soc_platform_relevance": 0,
-        "native_tooling_relevance": 0,
-        "evidence_specificity": 5,
-        "freshness_score": 1,
-        "practical_actionability": 3,
-        "optional_ai_cpp_bonus": 3,
-        "generic_ai_penalty": 0,
-        "watch_page_penalty": 0,
-        "no_date_penalty": 0,
-        "no_api_component_penalty": 0,
-        "source_gap_penalty": 25,
-        "generic_tech_watchlist_penalty": 30,
-        "penalty_total": 55,
-        "main_article_score_threshold": 42,
-        "minimum_camera_hal_directness": 2,
-        "minimum_scope_relevance": 2,
-        "source_reliability": 4,
-        "freshness": 1,
-        "camera_hal_relevance": 5,
-        "android_camera_relevance": 5,
-        "ai_required_slot_fit": 3,
-        "cpp_fallback_value": 2,
-        "evidence_quality": 5,
-        "base_total": 28,
-        "linked_evidence_runtime_bonus": 0,
-        "linked_evidence_watch_penalty": 0,
-        "linked_evidence_adjustment": 0,
-        "total": 28
-      },
-      "main_article_score_eligible": false,
-      "score_filter_reasons": [
-        "base_total<42",
-        "scope_relevance<2",
-        "relevance_bucket=generic_tech_watchlist",
-        "source_gap_risk=true"
-      ],
-      "exclusion_reasons": [
-        "finalSelectionEligibility=watchlist",
-        "source_gap_risk=true",
-        "main_eligible=false",
-        "briefing_only=true",
-        "reference_only=true"
-      ],
-      "normalized_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-      "url_hash": "5282bc7766ce3d8fc5c095265dce3e8b06408229a279905bc350b10ff62e5331",
       "ai_slot_candidate": true,
       "camera_platform_candidate": true,
       "cpp_fallback_candidate": true,
@@ -19237,24 +19194,24 @@
       "briefing_only": true,
       "reference_only": true,
       "evidence_score": 8,
-      "version_or_release": "2.1.141",
+      "version_or_release": "2.1.142",
       "api_or_component": "Claude Code / AI coding agent",
       "source_hint_api_or_component": "ai-coding",
-      "behavior_change": "​ 2.1.141 May 13, 2026 Added terminalSequence field to hook JSON output so hooks can emit desktop notifications, window titles, and bells without a controlling terminal Added CLAUDE_CODE_PLUGIN_PREFER_HTTPS to clone GitHub plugin sources over HTTPS instead of SSH, for environments without a GitHub SSH key Added ANTHROPIC_WORKSPACE_ID environment variable for workload identity federation — scopes the minted token to a specific workspace when the federation rule covers more than one Added claude agents --cwd <path> to scope the session list to a directory /feedback can now include recent sessions (last 24 hours or 7 days) for issues spanning more than the current session Rewind menu: added “Summarize up to here” to compress earlier context while keeping recent turns intact Auto mode permission dialog now explains when a permissions.ask rule caused the prompt Restore",
+      "behavior_change": "​ 2.1.142 May 14, 2026 Added new claude agents flags: --add-dir , --settings , --mcp-config , --plugin-dir , --permission-mode , --model , --effort , and --dangerously-skip-permissions to configure dispatched background sessions Fast mode now uses Opus 4.7 by default (previously Opus 4.6).",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "title": "Claude Code Changelog - 2.1.141",
+      "title": "Claude Code Changelog - 2.1.142",
       "url": "https://code.claude.com/docs/en/changelog",
-      "publishedAt": "May 13, 2026",
-      "published_date": "May 13, 2026",
-      "summary": "​ 2.1.141 May 13, 2026 Added terminalSequence field to hook JSON output so hooks can emit desktop notifications, window titles, and bells without a controlling terminal Added CLAUDE_CODE_PLUGIN_PREFER_HTTPS to clone GitHub plugin sources over HTTPS instead of SSH, for environments without a GitHub SSH key Added ANTHROPIC_WORKSPACE_ID environment variable for workload identity federation — scopes the minted token to a specific workspace when the federation rule covers more than one Added claude a",
-      "relevanceScore": 62,
-      "relevance_score": 62,
-      "cameraHalRelevanceScore": 62,
-      "camera_hal_relevance_score": 62,
+      "publishedAt": "May 14, 2026",
+      "published_date": "May 14, 2026",
+      "summary": "​ 2.1.142 May 14, 2026 Added new claude agents flags: --add-dir , --settings , --mcp-config , --plugin-dir , --permission-mode , --model , --effort , and --dangerously-skip-permissions to configure dispatched background sessions Fast mode now uses Opus 4.7 by default (previously Opus 4.6).",
+      "relevanceScore": 74,
+      "relevance_score": 74,
+      "cameraHalRelevanceScore": 74,
+      "camera_hal_relevance_score": 74,
       "editorial_priority": 6,
       "relevance_bucket": "generic_tech_watchlist",
       "aosp_camera_directness": 0,
@@ -19303,7 +19260,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6300
+          "contentLength": 0
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
@@ -19317,7 +19274,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6301
+          "contentLength": 0
         }
       ],
       "image_candidates": [
@@ -19347,7 +19304,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6300
+          "contentLength": 0
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
@@ -19361,12 +19318,12 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6301
+          "contentLength": 0
         }
       ],
       "candidateTier": "watchlist-reference",
-      "reason": "Claude Code Changelog (official, medium, score 62): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
-      "collection_reason": "Claude Code Changelog (official, medium, score 62): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "reason": "Claude Code Changelog (official, medium, score 74): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "collection_reason": "Claude Code Changelog (official, medium, score 74): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -19393,9 +19350,9 @@
       },
       "selected": false,
       "selected_for_editor": false,
-      "deterministic_score": 21.9,
+      "deterministic_score": 27.3,
       "score_breakdown": {
-        "camera_hal_directness": 3.1,
+        "camera_hal_directness": 3.7,
         "scope_relevance": 0,
         "editorial_priority": 6,
         "relevance_bucket": "generic_tech_watchlist",
@@ -19419,16 +19376,16 @@
         "minimum_scope_relevance": 2,
         "source_reliability": 5,
         "freshness": 3,
-        "camera_hal_relevance": 3.1,
+        "camera_hal_relevance": 3.7,
         "android_camera_relevance": 5,
         "ai_required_slot_fit": 3,
         "cpp_fallback_value": 2,
         "evidence_quality": 5,
-        "base_total": 21.9,
+        "base_total": 27.3,
         "linked_evidence_runtime_bonus": 0,
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
-        "total": 21.9
+        "total": 27.3
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -20684,6 +20641,13 @@
         {
           "url": "https://developer.android.com/training/tv",
           "text": "Android TV",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/develop/better-together",
+          "text": "Better Together",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
@@ -22718,6 +22682,13 @@
           "evidence_role": "unclassified"
         },
         {
+          "url": "https://openai.com/index/work-with-codex-from-anywhere/",
+          "text": "Work with Codex from anywhere Product May 14, 2026",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
           "url": "https://openai.com/index/chatgpt-recognize-context-in-sensitive-conversations/",
           "text": "Helping ChatGPT better recognize context in sensitive conversations Safety May 14, 2026",
           "source_field": "html.body",
@@ -22769,13 +22740,6 @@
         {
           "url": "https://openai.com/index/gpt-5-5-with-trusted-access-for-cyber/",
           "text": "Scaling Trusted Access for Cyber with GPT-5.5 and GPT-5.5-Cyber Security May 7, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/advancing-voice-intelligence-with-new-models-in-the-api/",
-          "text": "Advancing voice intelligence with new models in the API Product May 7, 2026",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
@@ -23169,6 +23133,20 @@
           "contentLength": 2900100
         },
         {
+          "url": "https://images.ctfassets.net/kftzwdyauwt9/7qVT9WlLKfgGLPC5W77ei6/a24fd3f13b754378759959aa77cd8f5d/1_1.png?w=3840&q=90&fm=webp",
+          "sourceUrl": "https://openai.com/news/",
+          "articleUrl": "https://openai.com/news/",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "1x1 Art Card",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "OpenAI News",
+          "validationStatus": "ok",
+          "contentLength": 30568
+        },
+        {
           "url": "https://images.ctfassets.net/kftzwdyauwt9/7x4viZ0DsQtxQpAgnYYheQ/8dfe028356aceac9e83da6cb837d6864/Saftey-Art-Card-1080x1080.png?w=3840&q=90&fm=webp",
           "sourceUrl": "https://openai.com/news/",
           "articleUrl": "https://openai.com/news/",
@@ -23181,20 +23159,6 @@
           "attribution": "OpenAI News",
           "validationStatus": "ok",
           "contentLength": 112350
-        },
-        {
-          "url": "https://images.ctfassets.net/kftzwdyauwt9/6ZvTl8ZL23BOhoI6jz0EmR/49d6038b9f92773d4f866f4bfacabdbf/Art_Card__5_.png?w=3840&q=90&fm=webp",
-          "sourceUrl": "https://openai.com/news/",
-          "articleUrl": "https://openai.com/news/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "codex windows > art card",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "OpenAI News",
-          "validationStatus": "ok",
-          "contentLength": 39698
         }
       ],
       "image_candidates": [
@@ -23213,6 +23177,20 @@
           "contentLength": 2900100
         },
         {
+          "url": "https://images.ctfassets.net/kftzwdyauwt9/7qVT9WlLKfgGLPC5W77ei6/a24fd3f13b754378759959aa77cd8f5d/1_1.png?w=3840&q=90&fm=webp",
+          "sourceUrl": "https://openai.com/news/",
+          "articleUrl": "https://openai.com/news/",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "1x1 Art Card",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "OpenAI News",
+          "validationStatus": "ok",
+          "contentLength": 30568
+        },
+        {
           "url": "https://images.ctfassets.net/kftzwdyauwt9/7x4viZ0DsQtxQpAgnYYheQ/8dfe028356aceac9e83da6cb837d6864/Saftey-Art-Card-1080x1080.png?w=3840&q=90&fm=webp",
           "sourceUrl": "https://openai.com/news/",
           "articleUrl": "https://openai.com/news/",
@@ -23225,20 +23203,6 @@
           "attribution": "OpenAI News",
           "validationStatus": "ok",
           "contentLength": 112350
-        },
-        {
-          "url": "https://images.ctfassets.net/kftzwdyauwt9/6ZvTl8ZL23BOhoI6jz0EmR/49d6038b9f92773d4f866f4bfacabdbf/Art_Card__5_.png?w=3840&q=90&fm=webp",
-          "sourceUrl": "https://openai.com/news/",
-          "articleUrl": "https://openai.com/news/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "codex windows > art card",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "OpenAI News",
-          "validationStatus": "ok",
-          "contentLength": 39698
         }
       ],
       "candidateTier": "exclude",
@@ -23701,20 +23665,6 @@
           "evidence_role": "unclassified"
         },
         {
-          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/",
-          "text": "",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/",
-          "text": "Learn more",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
           "url": "https://deepmind.google/blog/ai-pointer/",
           "text": "",
           "source_field": "html.body",
@@ -23821,6 +23771,20 @@
         },
         {
           "url": "https://deepmind.google/blog/gemini-robotics-er-1-6/",
+          "text": "Learn more",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/",
+          "text": "",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/",
           "text": "Learn more",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
@@ -24600,6 +24564,13 @@
           "evidence_role": "unclassified"
         },
         {
+          "url": "https://www.anthropic.com/news/pwc-expanded-partnership",
+          "text": "Announcements PwC is deploying Claude to build technology, execute deals, and reinvent enterprise functions for clients",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
           "url": "https://www.anthropic.com/news/gates-foundation-partnership",
           "text": "May 14, 2026 Announcements Anthropic forms $200 million partnership with the Gates Foundation",
           "source_field": "html.body",
@@ -24658,13 +24629,6 @@
         {
           "url": "https://www.anthropic.com/news/anthropic-nec",
           "text": "Apr 24, 2026 Announcements Anthropic and NEC collaborate to build Japan’s largest AI engineering workforce",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://www.anthropic.com/news/anthropic-amazon-compute",
-          "text": "Apr 20, 2026 Announcements Anthropic and Amazon expand collaboration for up to 5 gigawatts of new compute",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
@@ -25296,18 +25260,18 @@
           "contentLength": 88588
         },
         {
-          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/6905c83d0735e1bc430025fdd1748d1406079036-1000x1000.svg",
+          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/b5c98d26c46edc43193e7f7e28a00633a538bb9c-1000x1000.svg",
           "sourceUrl": "https://www.anthropic.com/news",
           "articleUrl": "https://www.anthropic.com/news",
           "sourceKind": "article-img",
           "width": 1000,
           "height": 1000,
-          "alt": "Anthropic forms $200 million partnership with the Gates Foundation",
+          "alt": "PwC is deploying Claude to build technology, execute deals, and reinvent enterprise functions for clients",
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
           "validationStatus": "ok",
-          "contentLength": 5207
+          "contentLength": 0
         }
       ],
       "image_candidates": [
@@ -25340,18 +25304,18 @@
           "contentLength": 88588
         },
         {
-          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/6905c83d0735e1bc430025fdd1748d1406079036-1000x1000.svg",
+          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/b5c98d26c46edc43193e7f7e28a00633a538bb9c-1000x1000.svg",
           "sourceUrl": "https://www.anthropic.com/news",
           "articleUrl": "https://www.anthropic.com/news",
           "sourceKind": "article-img",
           "width": 1000,
           "height": 1000,
-          "alt": "Anthropic forms $200 million partnership with the Gates Foundation",
+          "alt": "PwC is deploying Claude to build technology, execute deals, and reinvent enterprise functions for clients",
           "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Anthropic News",
           "validationStatus": "ok",
-          "contentLength": 5207
+          "contentLength": 0
         }
       ],
       "candidateTier": "exclude",

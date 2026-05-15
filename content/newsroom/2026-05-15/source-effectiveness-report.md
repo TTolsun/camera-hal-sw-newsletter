@@ -21,17 +21,17 @@ Date: 2026-05-15
 | --- | --- | --- | --- | --- | --- | --- |
 | libcamera-release-announcements | KEEP | 100 | 1 | 1 | 1 | 1 |
 | phoronix-linux-camera-media | REVIEW_SOURCE_OR_PARSER | 60 | 2 | 1 | 1 | 1 |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 20.72 | 14 | 2 | 2 | 1 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 21.92 | 13 | 2 | 2 | 1 |
 
 ## Sources Needing Parser Repair
 
 | Source | Recommendation | Collected | Eligible | Source Gap | Top Reason |
 | --- | --- | --- | --- | --- | --- |
 | libcamera-documentation | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 1 | 0 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 14 | 2 | 12 | main_eligible=false |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 13 | 2 | 11 | main_eligible=false |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | android-developer-newsletter | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 4 | 0 | 4 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 5 | 0 | 5 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 2 | 0 | 2 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | anthropic-news | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
@@ -82,10 +82,10 @@ _없음_
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | libcamera-documentation | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
 | libcamera-release-announcements | KEEP | 100 | 1 | 1 | 1 | 1 | 0 | 0 | 0 |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 20.72 | 14 | 0.1429 | 1 | 0.5 | 0.8571 | 0.6429 | 0 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 21.92 | 13 | 0.1538 | 1 | 0.5 | 0.8462 | 0.6154 | 0 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | android-developer-newsletter | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 0 | 4 | 0 | 0 | 0 | 1 | 1 | 0 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 0 | 5 | 0 | 0 | 0 | 1 | 1 | 0 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 2 | 0 | 0 | 0 | 1 | 1 | 0 |
 | anthropic-news | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |

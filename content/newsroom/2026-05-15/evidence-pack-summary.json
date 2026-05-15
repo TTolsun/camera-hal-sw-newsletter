@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-15",
-  "generated_at": "2026-05-14T19:21:43.940Z",
+  "generated_at": "2026-05-15T03:55:37.049Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -257,6 +257,17 @@
       "exclusion_reason": "missing dated evidence"
     },
     {
+      "candidate_id": "aedaad77a2bc7e4d75834d75b2fe82efe8706373c567d1da87231d19ac0d9238",
+      "title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+      "url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "source": "Android Developers Blog",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
       "candidate_id": "70b911c01b6fce5ec581cedd1c0878c09d5e2a3fb2309ce68c00e2b02545e40c",
       "title": "Gratitude saw 25% higher retention for widget users",
       "url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
@@ -326,17 +337,6 @@
       "candidate_id": "11b022bd662242659b371f65ded0a365e98b4f3566a6540b2859c16cc672a60b",
       "title": "Building for the Intelligence System on Android",
       "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
-      "source": "Android Developers Blog",
-      "source_role": "unknown",
-      "source_url_quality": "unknown",
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
-      "candidate_id": "08b720ebcdf09388e6622dcb4cb611d154bd155df1b76ecb0d703b8a2633381a",
-      "title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
-      "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "source": "Android Developers Blog",
       "source_role": "unknown",
       "source_url_quality": "unknown",

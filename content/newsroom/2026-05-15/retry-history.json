@@ -7,38 +7,7 @@
     "status": "PUBLIC_ISSUE_CREATED",
     "rendered_main_article_count": 3,
     "demoted_article_count": 0,
-    "reserve_candidates_used": [
-      {
-        "headline": "libcamera Release Announcements - libcamera v0.7.1",
-        "category": "Camera Driver / Image Pipeline",
-        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-        "source": "libcamera Release Announcements",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "action": "rebuild-from-bound-candidate",
-        "fallback": false,
-        "reason": "hard failure replacement"
-      },
-      {
-        "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-        "category": "Tooling Watch / Fallback",
-        "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-        "source": "ISO C++ Blog",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "action": "demote-to-watch",
-        "fallback": true,
-        "reason": "minimum article count fallback fill"
-      },
-      {
-        "headline": "Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
-        "category": "Tooling Watch / Fallback",
-        "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
-        "source": "Phoronix Linux Camera / Media",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "action": "demote-to-watch",
-        "fallback": true,
-        "reason": "minimum article count fallback fill"
-      }
-    ],
+    "reserve_candidates_used": [],
     "deductions": [],
     "selected_article_headlines": [
       "libcamera Release Announcements - libcamera v0.7.1",
