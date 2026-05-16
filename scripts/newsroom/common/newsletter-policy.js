@@ -345,9 +345,9 @@ function publishGateCriteriaText(policy = getDefaultNewsletterPolicy()) {
   return [
     `main articles: ${articleCountRangeText(policy)}`,
     `review gate primary camera stack articles: ${articlePolicy.primaryCameraStack.minRequired}`,
-    `AI publish gate primary camera stack articles: ${publishPolicy.primaryCameraStackMinRequired}`,
-    `AI publish gate direct AOSP Camera or driver/image pipeline articles: ${publishPolicy.directAospCameraOrDriverMinRequired}`,
-    `AI publish gate supporting main articles max: ${publishPolicy.supportingMainMaxAllowed}`,
+    `Publish-ready gate primary camera stack articles: ${publishPolicy.primaryCameraStackMinRequired}`,
+    `Publish-ready gate direct AOSP Camera or driver/image pipeline articles: ${publishPolicy.directAospCameraOrDriverMinRequired}`,
+    `Publish-ready gate supporting main articles max: ${publishPolicy.supportingMainMaxAllowed}`,
     `forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.join(', ') || 'none'}`,
     `quality threshold: ${qualityGatePolicy.threshold}`
   ].join('; ');

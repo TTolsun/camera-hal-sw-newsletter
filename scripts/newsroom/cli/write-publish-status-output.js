@@ -12,6 +12,7 @@ const OUTPUT_FIELDS = [
   'selection_publish_ready',
   'publish_gate_passed',
   'publish_gate_reason_codes',
+  'publish_gate_reason_summary',
   'review_gate_passed',
   'validate_outcome',
   'validate_ok',
@@ -34,6 +35,16 @@ function scalar(value, fallback = 'n/a') {
   return String(value);
 }
 
+function ensureArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function reasonSummaryText(items) {
+  return ensureArray(items)
+    .map(item => `${item.code || 'unknown'} actual=${scalar(item.actual, 'n/a')} required=${scalar(item.required, 'n/a')}`)
+    .join('; ') || 'none';
+}
+
 function buildPublishStatusOutputs(resolved) {
   const status = resolved.status || {};
   const outputs = {};
@@ -44,6 +55,10 @@ function buildPublishStatusOutputs(resolved) {
       outputs[field] = (status.consistency_errors || []).join('\n') || 'none';
     } else if (field === 'has_ai_publish_ready') {
       outputs[field] = scalar(status.final_publish_ready === true);
+    } else if (field === 'publish_gate_reason_codes') {
+      outputs[field] = ensureArray(status.publish_gate_reason_codes).join('; ') || 'none';
+    } else if (field === 'publish_gate_reason_summary') {
+      outputs[field] = reasonSummaryText(status.publish_gate_reason_summary);
     } else {
       outputs[field] = scalar(status[field], field.endsWith('_count') ? '0' : 'n/a');
     }

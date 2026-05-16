@@ -4006,6 +4006,114 @@ test('validate-pr-body allows review PR when final publish is false without cons
   assert.equal(result.ok, true);
 });
 
+test('publish status resolver preserves reviewable-but-not-publish-ready reason diagnostics', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  const reasonSummary = [
+    {
+      code: 'publish_ready_primary_camera_stack_shortage',
+      actual: articlePolicy.primaryCameraStack.minRequired,
+      required: publishReadyCompositionPolicy.primaryCameraStackMinRequired
+    }
+  ];
+  writeMinimalPublishArtifacts(root, date, {
+    status: {
+      selection_publish_ready: false,
+      publish_gate_passed: false,
+      publish_gate_reason_codes: reasonSummary.map(item => item.code),
+      publish_gate_reason_summary: reasonSummary,
+      composition_mode: 'FALLBACK_COMPOSITION',
+      selection_composition_mode: 'FALLBACK_COMPOSITION'
+    },
+    shortlist: {
+      publish_ready: false,
+      publish_gate_passed: false,
+      review_gate_passed: true,
+      publish_gate_reason_codes: reasonSummary.map(item => item.code),
+      publish_gate_reason_summary: reasonSummary,
+      composition_mode: 'FALLBACK_COMPOSITION',
+      selection_composition_mode: 'FALLBACK_COMPOSITION'
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+  const outputs = buildPublishStatusOutputs(resolved);
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.selection_publish_ready, false);
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.review_gate_passed, true);
+  assert.equal(resolved.status.publish_gate_passed, false);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+  assert.deepEqual(resolved.status.publish_gate_reason_codes, ['publish_ready_primary_camera_stack_shortage']);
+  assert.deepEqual(resolved.status.publish_gate_reason_summary, reasonSummary);
+  assert.equal(outputs.publish_gate_reason_codes, 'publish_ready_primary_camera_stack_shortage');
+  assert.equal(
+    outputs.publish_gate_reason_summary,
+    `publish_ready_primary_camera_stack_shortage actual=${articlePolicy.primaryCameraStack.minRequired} required=${publishReadyCompositionPolicy.primaryCameraStackMinRequired}`
+  );
+  assert.match(body, /review_gate_passed: true/);
+  assert.match(body, /publish_gate_passed: false/);
+  assert.match(body, /final_publish_ready: false/);
+  assert.match(body, /publish_ready_primary_camera_stack_shortage/);
+  assert.match(body, new RegExp(`actual=${articlePolicy.primaryCameraStack.minRequired} required=${publishReadyCompositionPolicy.primaryCameraStackMinRequired}`));
+});
+
+test('publish status and PR body render direct driver and supporting publish gate reasons', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  const reasonSummary = [
+    {
+      code: 'publish_ready_direct_camera_or_driver_shortage',
+      actual: 0,
+      required: publishReadyCompositionPolicy.directAospCameraOrDriverMinRequired
+    },
+    {
+      code: 'publish_ready_supporting_main_over_limit',
+      actual: publishReadyCompositionPolicy.supportingMainMaxAllowed + 1,
+      required: publishReadyCompositionPolicy.supportingMainMaxAllowed
+    }
+  ];
+  writeMinimalPublishArtifacts(root, date, {
+    status: {
+      selection_publish_ready: false,
+      publish_gate_passed: false,
+      publish_gate_reason_codes: reasonSummary.map(item => item.code),
+      publish_gate_reason_summary: reasonSummary
+    },
+    shortlist: {
+      publish_ready: false,
+      publish_gate_passed: false,
+      review_gate_passed: true,
+      publish_gate_reason_codes: reasonSummary.map(item => item.code),
+      publish_gate_reason_summary: reasonSummary
+    }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+  const outputs = buildPublishStatusOutputs(resolved);
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
+
+  assert.equal(
+    outputs.publish_gate_reason_codes,
+    'publish_ready_direct_camera_or_driver_shortage; publish_ready_supporting_main_over_limit'
+  );
+  assert.match(
+    outputs.publish_gate_reason_summary,
+    new RegExp(`publish_ready_direct_camera_or_driver_shortage actual=0 required=${publishReadyCompositionPolicy.directAospCameraOrDriverMinRequired}`)
+  );
+  assert.match(
+    outputs.publish_gate_reason_summary,
+    new RegExp(`publish_ready_supporting_main_over_limit actual=${publishReadyCompositionPolicy.supportingMainMaxAllowed + 1} required=${publishReadyCompositionPolicy.supportingMainMaxAllowed}`)
+  );
+  assert.match(body, /publish_ready_direct_camera_or_driver_shortage/);
+  assert.match(body, /publish_ready_supporting_main_over_limit/);
+  assert.match(body, /publish_gate_reason_codes: publish_ready_direct_camera_or_driver_shortage; publish_ready_supporting_main_over_limit/);
+  assert.match(body, new RegExp(`publish_ready_direct_camera_or_driver_shortage actual=0 required=${publishReadyCompositionPolicy.directAospCameraOrDriverMinRequired}`));
+  assert.match(body, new RegExp(`publish_ready_supporting_main_over_limit actual=${publishReadyCompositionPolicy.supportingMainMaxAllowed + 1} required=${publishReadyCompositionPolicy.supportingMainMaxAllowed}`));
+});
+
 test('validate-pr-body accepts diagnostics-only wording and rejects misleading publish-ready wording', () => {
   const root = tempRoot();
   const date = '2026-05-08';
