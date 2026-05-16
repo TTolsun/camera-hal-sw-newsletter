@@ -7,6 +7,10 @@ const {
 const {
   calculateSourceQuality
 } = require('../../../scripts/newsroom/collect/score-source-candidates');
+const {
+  sourceDiscoveryCandidateStats,
+  sourceDiscoveryStatsSummary
+} = require('../../../scripts/newsroom/common/candidate-artifacts');
 
 function registry() {
   return {
@@ -110,4 +114,133 @@ test('source gap risk has bucket precedence over high numeric source quality', (
   });
 
   assert.equal(item.source_quality_bucket, 'blocked_candidate');
+});
+
+test('source discovery stats separate Gemini records, unique URLs, and manual duplicates', () => {
+  const stats = sourceDiscoveryCandidateStats({
+    manualCandidates: [
+      { url: 'https://example.com/a' },
+      { url: 'https://example.com/b' }
+    ],
+    geminiCandidates: [
+      {
+        url: 'https://example.com/a',
+        origin: 'gemini_discovery',
+        finalSelectionEligibility: 'watchlist',
+        source_gap_risk: true,
+        main_eligible: false
+      },
+      {
+        url: 'https://example.com/c',
+        origin: 'gemini_discovery',
+        finalSelectionEligibility: 'main',
+        source_gap_risk: false,
+        main_eligible: true
+      },
+      {
+        url: 'https://example.com/c',
+        origin: 'gemini_discovery',
+        final_selection_eligibility: 'short',
+        source_gap_risk: false,
+        main_eligible: true
+      }
+    ],
+    mergedCandidates: [
+      { url: 'https://example.com/a' },
+      { url: 'https://example.com/b' },
+      { url: 'https://example.com/a' },
+      { url: 'https://example.com/c' },
+      { url: 'https://example.com/c' }
+    ]
+  });
+
+  assert.deepEqual(stats, {
+    manual_candidate_count: 2,
+    manual_unique_url_count: 2,
+    gemini_candidate_count: 3,
+    gemini_unique_url_count: 2,
+    gemini_new_unique_url_count: 1,
+    gemini_manual_duplicate_url_count: 1,
+    gemini_duplicate_record_count: 1,
+    merged_candidate_count: 5,
+    merged_unique_url_count: 3,
+    gemini_publishable_candidate_count: 2
+  });
+});
+
+test('source discovery summary reports no new publishable Gemini candidates distinctly from duplicate URLs', () => {
+  const stats = sourceDiscoveryCandidateStats({
+    manualCandidates: [
+      { url: 'https://example.com/a' },
+      { url: 'https://example.com/b' },
+      { url: 'https://example.com/c' },
+      { url: 'https://example.com/d' },
+      { url: 'https://example.com/e' },
+      { url: 'https://example.com/f' }
+    ],
+    geminiCandidates: ['a', 'b', 'c', 'd', 'e', 'f'].map(item => ({
+      url: `https://example.com/${item}`,
+      origin: 'gemini_discovery',
+      finalSelectionEligibility: 'watchlist',
+      source_gap_risk: true,
+      main_eligible: false
+    })),
+    mergedCandidates: []
+  });
+
+  assert.equal(stats.gemini_candidate_count, 6);
+  assert.equal(stats.gemini_unique_url_count, 6);
+  assert.equal(stats.gemini_new_unique_url_count, 0);
+  assert.equal(stats.gemini_manual_duplicate_url_count, 6);
+  assert.equal(stats.gemini_duplicate_record_count, 6);
+  assert.equal(stats.gemini_publishable_candidate_count, 0);
+  assert.equal(
+    sourceDiscoveryStatsSummary(stats, { llmUsed: true }),
+    'Gemini ran, but found no new unique publishable candidates.'
+  );
+});
+
+test('source discovery stats use URL aliases and exclude URL-less Gemini candidates from publishable count', () => {
+  const stats = sourceDiscoveryCandidateStats({
+    manualCandidates: [
+      { source_candidate_url: 'https://example.com/a' }
+    ],
+    geminiCandidates: [
+      {
+        articleUrl: 'https://example.com/a',
+        origin: 'gemini_discovery',
+        finalSelectionEligibility: 'main',
+        source_gap_risk: false,
+        main_eligible: true
+      },
+      {
+        normalized_url: 'https://example.com/b',
+        origin: 'gemini_discovery',
+        final_selection_eligibility: 'short',
+        source_gap_risk: false,
+        main_eligible: true
+      },
+      {
+        origin: 'gemini_discovery',
+        finalSelectionEligibility: 'main',
+        source_gap_risk: false,
+        main_eligible: true
+      }
+    ],
+    mergedCandidates: [
+      { source_candidate_url: 'https://example.com/a' },
+      { normalized_url: 'https://example.com/b' }
+    ]
+  });
+
+  assert.equal(stats.manual_candidate_count, 1);
+  assert.equal(stats.manual_unique_url_count, 1);
+  assert.equal(stats.gemini_candidate_count, 3);
+  assert.equal(stats.gemini_unique_url_count, 2);
+  assert.equal(stats.gemini_new_unique_url_count, 1);
+  assert.equal(stats.gemini_manual_duplicate_url_count, 1);
+  assert.equal(stats.gemini_duplicate_record_count, 1);
+  assert.equal(stats.merged_candidate_count, 2);
+  assert.equal(stats.merged_unique_url_count, 2);
+  assert.equal(stats.gemini_publishable_candidate_count, 2);
 });

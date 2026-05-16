@@ -4738,6 +4738,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
   const stage2PreflightStep = workflowStep(stage2, 'Preflight LLM credentials for enabled source discovery');
   const stage2RunStep = workflowStep(stage2, 'Run disabled pass-through or Gemini source discovery');
+  const stage2PrepareBodyStep = workflowStep(stage2, 'Prepare source discovery pull request body');
   const stage2CreatePrStep = workflowStep(stage2, 'Create source discovery pull request');
   const stage2UploadStep = workflowStep(stage2, 'Upload source discovery debug artifacts');
   const rawPrBodyBuilder = fs.readFileSync(
@@ -4767,8 +4768,19 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.doesNotMatch(stage2, /npm run doctor:config/);
   assert.ok(stage2.indexOf('- name: Preflight LLM credentials for enabled source discovery') <
     stage2.indexOf('- name: Run disabled pass-through or Gemini source discovery'));
+  assert.ok(stage2.indexOf('- name: Run disabled pass-through or Gemini source discovery') <
+    stage2.indexOf('- name: Prepare source discovery pull request body'));
+  assert.ok(stage2.indexOf('- name: Prepare source discovery pull request body') <
+    stage2.indexOf('- name: Upload source discovery debug artifacts'));
+  assert.ok(stage2.indexOf('- name: Upload source discovery debug artifacts') <
+    stage2.indexOf('- name: Create source discovery pull request'));
   assert.doesNotMatch(stage2CreatePrStep, /if:\s*always\(\)/);
+  assert.match(stage2PrepareBodyStep, /gemini-source-discovery-report\.md/);
   assert.match(stage2UploadStep, /if:\s*always\(\)/);
+  assert.match(stage2UploadStep, /uses:\s*actions\/upload-artifact@v4/);
+  assert.match(stage2UploadStep, /if-no-files-found:\s*warn/);
+  assert.match(stage2UploadStep, /merged-candidate-manifest\.json/);
+  assert.match(stage2UploadStep, /gemini-source-discovery-report\.md/);
   assert.match(stage2, /node scripts\/gemini-source-discovery-boundary\.js --date/);
   assert.match(stage2PreflightStep, /--preflight-only/);
   assert.doesNotMatch(stage2RunStep, /--preflight-only/);

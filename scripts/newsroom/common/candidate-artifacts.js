@@ -57,6 +57,113 @@ function candidateItems(payload = {}) {
   return Array.isArray(payload?.candidates) ? payload.candidates : [];
 }
 
+function text(value) {
+  return value === undefined || value === null ? '' : String(value).trim();
+}
+
+function candidateUrl(candidate = {}) {
+  return [
+    candidate.url,
+    candidate.articleUrl,
+    candidate.article_url,
+    candidate.source_candidate_url,
+    candidate.normalized_url
+  ].map(text).find(Boolean) || '';
+}
+
+function normalizedCandidateUrl(candidate = {}) {
+  const raw = candidateUrl(candidate);
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    parsed.protocol = parsed.protocol.toLowerCase();
+    parsed.hostname = parsed.hostname.toLowerCase();
+    return parsed.href;
+  } catch {
+    return raw;
+  }
+}
+
+function normalizedUrlSet(candidates = []) {
+  const urls = new Set();
+  for (const candidate of candidates) {
+    const url = normalizedCandidateUrl(candidate);
+    if (url) urls.add(url);
+  }
+  return urls;
+}
+
+function boolTrue(value) {
+  return value === true || String(value).toLowerCase() === 'true';
+}
+
+function boolFalse(value) {
+  return value === false || String(value).toLowerCase() === 'false';
+}
+
+function finalSelectionEligibility(candidate = {}) {
+  return text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
+}
+
+function isPublishableGeminiCandidate(candidate = {}) {
+  return candidate.origin === 'gemini_discovery' &&
+    Boolean(normalizedCandidateUrl(candidate)) &&
+    !boolTrue(candidate.source_gap_risk) &&
+    !boolFalse(candidate.main_eligible) &&
+    ['main', 'short'].includes(finalSelectionEligibility(candidate));
+}
+
+function sourceDiscoveryCandidateStats({
+  manualCandidates = [],
+  geminiCandidates = [],
+  mergedCandidates = []
+} = {}) {
+  const manualRecords = Array.isArray(manualCandidates) ? manualCandidates : [];
+  const geminiRecords = Array.isArray(geminiCandidates) ? geminiCandidates : [];
+  const mergedRecords = Array.isArray(mergedCandidates) ? mergedCandidates : [];
+  const manualUrls = normalizedUrlSet(manualRecords);
+  const geminiUrls = normalizedUrlSet(geminiRecords);
+  const mergedUrls = normalizedUrlSet(mergedRecords);
+
+  let geminiNewUniqueUrlCount = 0;
+  let geminiManualDuplicateUrlCount = 0;
+  for (const url of geminiUrls) {
+    if (manualUrls.has(url)) {
+      geminiManualDuplicateUrlCount += 1;
+    } else {
+      geminiNewUniqueUrlCount += 1;
+    }
+  }
+
+  return {
+    manual_candidate_count: manualRecords.length,
+    manual_unique_url_count: manualUrls.size,
+    gemini_candidate_count: geminiRecords.length,
+    gemini_unique_url_count: geminiUrls.size,
+    gemini_new_unique_url_count: geminiNewUniqueUrlCount,
+    gemini_manual_duplicate_url_count: geminiManualDuplicateUrlCount,
+    gemini_duplicate_record_count: geminiRecords
+      .filter(candidate => manualUrls.has(normalizedCandidateUrl(candidate)))
+      .length,
+    merged_candidate_count: mergedRecords.length,
+    merged_unique_url_count: mergedUrls.size,
+    gemini_publishable_candidate_count: geminiRecords.filter(isPublishableGeminiCandidate).length
+  };
+}
+
+function sourceDiscoveryStatsSummary(stats = {}, options = {}) {
+  if (options.llmUsed !== true) {
+    return 'Gemini source discovery was disabled; manual candidates were passed through.';
+  }
+  const newUniqueCount = Number(stats.gemini_new_unique_url_count || 0);
+  const publishableCount = Number(stats.gemini_publishable_candidate_count || 0);
+  const duplicateUrlCount = Number(stats.gemini_manual_duplicate_url_count || 0);
+  if (newUniqueCount === 0 && publishableCount === 0) {
+    return 'Gemini ran, but found no new unique publishable candidates.';
+  }
+  return `Gemini added ${newUniqueCount} new unique URL(s), ${publishableCount} publishable candidate(s), and ${duplicateUrlCount} manual-duplicate URL(s).`;
+}
+
 function isObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
@@ -267,6 +374,7 @@ function buildMergedCandidateManifest({
   llmUsed = false,
   status = 'PASS',
   schemaVersion = 1,
+  discoveryStats = null,
   reportRefs = {}
 } = {}) {
   const payload = readJson(candidatePath);
@@ -293,6 +401,9 @@ function buildMergedCandidateManifest({
     github_run_id: process.env.GITHUB_RUN_ID || '',
     github_sha: process.env.GITHUB_SHA || ''
   };
+  if (discoveryStats && typeof discoveryStats === 'object' && !Array.isArray(discoveryStats)) {
+    Object.assign(manifest, discoveryStats);
+  }
   if (schemaVersion >= 2) {
     manifest.usage_report = reportRefs.usage_report || '';
     manifest.proposal_validation_report = reportRefs.proposal_validation_report || '';
@@ -317,6 +428,7 @@ function writeMergedCandidateArtifacts({
   llmUsed = false,
   status = 'PASS',
   manifestSchemaVersion = 1,
+  discoveryStats = null,
   reportRefs = {}
 } = {}) {
   const mergedPath = mergedCandidatesPath(root, date);
@@ -340,6 +452,7 @@ function writeMergedCandidateArtifacts({
     llmUsed,
     status,
     schemaVersion: manifestSchemaVersion,
+    discoveryStats,
     reportRefs
   });
   writeJson(manifestPath, manifest);
@@ -593,6 +706,8 @@ module.exports = {
   buildRawCandidateManifest,
   hashFile,
   resolveCandidateInputArtifact,
+  sourceDiscoveryCandidateStats,
+  sourceDiscoveryStatsSummary,
   validateCandidateArtifact,
   writeManualCandidateArtifacts,
   writeMergedCandidateArtifacts,

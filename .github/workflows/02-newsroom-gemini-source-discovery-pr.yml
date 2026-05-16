@@ -90,6 +90,27 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Upload source discovery debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsroom-source-discovery-debug-${{ github.run_id }}
+          path: |
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/gemini-candidates.json
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidates.json
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidate-manifest.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposals.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposal-validation-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-usage-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/extracted-source-facts.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.md
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-clusters.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/evidence-validation-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-discovery-report.md
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Ensure labels
         uses: actions/github-script@v7
         continue-on-error: true
@@ -125,24 +146,3 @@ jobs:
           title: "[Newsroom Source Discovery] Candidate boundary - ${{ env.NEWSLETTER_DATE }}"
           body: ${{ steps.pr-body.outputs.body }}
           labels: newsletter,aosp-camera,source-discovery
-
-      - name: Upload source discovery debug artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: newsroom-source-discovery-debug-${{ github.run_id }}
-          path: |
-            content/collected-news/${{ env.NEWSLETTER_DATE }}/gemini-candidates.json
-            content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidates.json
-            content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidate-manifest.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposals.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposal-validation-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-usage-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/extracted-source-facts.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.md
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-clusters.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/evidence-validation-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-discovery-report.md
-          if-no-files-found: warn
-          retention-days: 14
