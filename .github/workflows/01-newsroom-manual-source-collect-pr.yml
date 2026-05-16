@@ -1,4 +1,4 @@
-name: Newsroom 01 - Manual Source Collection PR
+name: 01-newsroom-manual-source-collect-pr.yml
 
 on:
   schedule:
