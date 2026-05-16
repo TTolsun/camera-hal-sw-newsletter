@@ -291,6 +291,7 @@ function reviewOnlyPositivePublishReadyLines(text) {
       if (/final_publish_ready\s*[:=]\s*true\b/i.test(line)) return true;
       if (/public newsletter generated successfully/i.test(line)) return true;
       if (!/publish-ready/i.test(line)) return false;
+      if (/publish-ready gate\b/i.test(line)) return false;
       return !/\bnot publish-ready\b|must not|not applied|label must not be applied|reserved for|has_ai_publish_ready=true|AI 자동 발행 기준 통과|금지|제거|붙이지|미적용|아닙니다/i.test(line);
     });
 }

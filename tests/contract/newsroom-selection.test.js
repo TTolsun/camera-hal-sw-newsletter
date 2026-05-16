@@ -15,6 +15,7 @@ const {
   SHORTLIST_CAP,
   normalizeUrl,
   publishGatePasses,
+  publishReadyGateReasonCodes,
   reporterInputFromShortlist,
   scoreCandidate,
   selectFinalArticles,
@@ -22,7 +23,8 @@ const {
   summarizeExclusionReasons
 } = require('../../scripts/lib/newsroom-selection');
 const {
-  articlePolicy
+  articlePolicy,
+  publishReadyCompositionPolicy
 } = require('../../scripts/lib/newsletter-policy');
 const { parseSourceSpecificItems } = require('../../scripts/lib/source-item-parsers');
 const { normalizeCandidate } = require('../../scripts/newsroom/cli/collect-news-candidates');
@@ -621,7 +623,7 @@ test('exclusion reason reports reference-only candidates', () => {
   assert.ok(exclusionReasons(candidate({ reference_only: true })).includes('reference_only=true'));
 });
 
-test('configured minimum composition with required primary and supporting articles is publish-ready', () => {
+test('configured minimum composition with reviewable primary and supporting articles is not publish-ready', () => {
   const supportingCount = articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired;
   const report = buildShortlistReport('2026-05-03', [
     ...Array.from({ length: articlePolicy.primaryCameraStack.minRequired }, (_, index) => policyPrimaryCandidate(index)),
@@ -632,12 +634,17 @@ test('configured minimum composition with required primary and supporting articl
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.primaryCameraStack.minRequired);
   assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
   assert.equal(report.underfilled, false);
-  assert.equal(report.publish_ready, true);
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_primary_camera_stack_shortage'));
+  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_supporting_main_over_limit'));
   assert.deepEqual(report.selection_warnings, []);
   assert.deepEqual(report.selection_errors, []);
 });
 
-test('configured minimum composition with mixed supporting buckets is publish-ready', () => {
+test('configured minimum composition with mixed supporting buckets is reviewable but not publish-ready', () => {
   const requiredPrimaryCount = articlePolicy.primaryCameraStack.minRequired;
   const supportingCount = articlePolicy.mainArticleCount.min - requiredPrimaryCount;
   const primaryCandidates = Array.from({ length: requiredPrimaryCount }, (_, index) => policyPrimaryCandidate(index));
@@ -665,9 +672,118 @@ test('configured minimum composition with mixed supporting buckets is publish-re
   ]);
 
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
-  assert.equal(report.publish_ready, true);
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, requiredPrimaryCount);
   assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
+  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_supporting_main_over_limit'));
+});
+
+test('publish-ready composition passes with two primary topics and at most one supporting article', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(0, {
+      title: 'AOSP Camera direct publish-ready source',
+      url: 'https://example.com/publish-ready-direct',
+      relevance_bucket: 'direct_aosp_camera'
+    }),
+    policyPrimaryCandidate(1, {
+      title: 'CameraX adjacent publish-ready source',
+      url: 'https://example.com/publish-ready-adjacent',
+      relevance_bucket: 'android_platform_camera_adjacent',
+      aosp_camera_directness: 3
+    }),
+    policySupportingCandidate(0, {
+      title: 'Publish-ready SoC supporting source',
+      url: 'https://example.com/publish-ready-supporting',
+      relevance_bucket: 'soc_platform_signal',
+      soc_platform_relevance: 5,
+      native_tooling_relevance: 0,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false
+    })
+  ]);
+
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, publishReadyCompositionPolicy.primaryCameraStackMinRequired);
+  assert.equal(report.composition_summary.direct_aosp_camera_count, 1);
+  assert.equal(report.composition_summary.supporting_main_article_count, publishReadyCompositionPolicy.supportingMainMaxAllowed);
+  assert.deepEqual(report.publish_gate_reason_codes, []);
+});
+
+test('publish-ready composition requires a direct AOSP Camera or driver image pipeline article', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(0, {
+      title: 'Android platform adjacent source A',
+      url: 'https://example.com/publish-ready-adjacent-a',
+      relevance_bucket: 'android_platform_camera_adjacent',
+      aosp_camera_directness: 3
+    }),
+    policyPrimaryCandidate(1, {
+      title: 'Camera2 metadata platform compatibility update',
+      url: 'https://example.com/publish-ready-adjacent-b',
+      relevance_bucket: 'android_platform_camera_adjacent',
+      aosp_camera_directness: 3
+    }),
+    policySupportingCandidate(0, {
+      title: 'Direct shortage supporting source',
+      url: 'https://example.com/publish-ready-direct-shortage-supporting',
+      relevance_bucket: 'soc_platform_signal',
+      soc_platform_relevance: 5,
+      native_tooling_relevance: 0,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false
+    })
+  ]);
+
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, 2);
+  assert.equal(report.composition_summary.direct_aosp_camera_count + report.composition_summary.camera_driver_image_pipeline_count, 0);
+  assert.deepEqual(report.publish_gate_reason_codes, ['publish_ready_direct_camera_or_driver_shortage']);
+});
+
+test('publish-ready supporting max applies across all supporting buckets', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(0, {
+      title: 'AOSP Camera direct with too much support',
+      url: 'https://example.com/supporting-limit-direct',
+      relevance_bucket: 'direct_aosp_camera'
+    }),
+    policyPrimaryCandidate(1, {
+      title: 'Camera driver image pipeline with too much support',
+      url: 'https://example.com/supporting-limit-driver',
+      relevance_bucket: 'camera_driver_image_pipeline',
+      driver_stack_relevance: 5,
+      aosp_camera_directness: 0
+    }),
+    policySupportingCandidate(0, {
+      title: 'Supporting limit SoC source',
+      url: 'https://example.com/supporting-limit-soc',
+      relevance_bucket: 'soc_platform_signal',
+      soc_platform_relevance: 5,
+      native_tooling_relevance: 0,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false
+    }),
+    policySupportingCandidate(1, {
+      title: 'Supporting limit native workflow source',
+      url: 'https://example.com/supporting-limit-native',
+      relevance_bucket: 'cpp_ai_tooling_fallback'
+    })
+  ]);
+
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.equal(report.composition_summary.supporting_main_article_count, 2);
+  assert.deepEqual(report.publish_gate_reason_codes, ['publish_ready_supporting_main_over_limit']);
 });
 
 test('below configured minimum remains a hard deterministic selection error', () => {
@@ -724,6 +840,7 @@ test('forbidden bucket in main candidates is not publish-ready', () => {
   assert.equal(summary.selected_article_count, requiredPrimaryCount + supportingCount + 1);
   assert.equal(summary.forbidden_main_article_count, 1);
   assert.equal(publishGatePasses(summary), false);
+  assert.ok(publishReadyGateReasonCodes(summary).includes('publish_ready_forbidden_main_bucket'));
   assert.ok(errors.some(error => error.includes('forbidden bucket')));
 });
 
@@ -1002,7 +1119,10 @@ test('selection window enforcement promotes fallback only when primary window is
   assert.ok(fallbackSelected.every(item => item.selection_window_stage === 'fallback'));
   assert.equal(report.fallback_candidates_promoted.length, 2);
   assert.deepEqual(report.selection_warnings, []);
-  assert.equal(report.publish_ready, true);
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_primary_camera_stack_shortage'));
 });
 
 test('fallback rescue uses uncapped selection pool when primary fills shortlist cap', () => {
@@ -1327,10 +1447,14 @@ test('fallback composition uses supporting buckets when direct camera stack topi
 
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
-  assert.equal(report.publish_ready, true);
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
   assert.equal(report.editor_review_required, true);
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.primaryCameraStack.minRequired);
   assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
+  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_primary_camera_stack_shortage'));
+  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_supporting_main_over_limit'));
 });
 
 test('generic watchlist-only pool remains needs-fix instead of fallback composition', () => {

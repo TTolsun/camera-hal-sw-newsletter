@@ -14,6 +14,11 @@
         "android_platform_camera_adjacent"
       ]
     },
+    "publishReadyComposition": {
+      "primaryCameraStackMinRequired": 2,
+      "directAospCameraOrDriverMinRequired": 1,
+      "supportingMainMaxAllowed": 1
+    },
     "supportingMainBuckets": [
       "soc_platform_signal",
       "cpp_ai_tooling_fallback"

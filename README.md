@@ -89,13 +89,16 @@ npm.cmd run generate
 
 - Source of truth: `config/newsletter-policy.json`
 - Main article count: 3-5
-- Required Primary Camera Stack articles: at least 1
+- Review gate Primary Camera Stack articles: at least 1
+- Publish-ready Primary Camera Stack articles: at least 2
+- Publish-ready direct AOSP Camera or driver/image pipeline articles: at least 1 across `direct_aosp_camera`, `camera_driver_image_pipeline`
+- Publish-ready supporting main articles: at most 1 total across supporting main buckets
 - Primary Camera Stack buckets: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
 - Supporting main buckets: `soc_platform_signal`, `cpp_ai_tooling_fallback`
 - Forbidden main buckets: `generic_tech_watchlist`
 - Candidate pool preflight: publishable candidates at least 5; reserve candidates at least 2; camera stack candidates at least 2
 - Selection windows: primary 7 days; fallback 21 days; reference 90 days
-- Selection window enforcement: configured for later slices only; this policy block does not mean current candidate filtering or promotion behavior has changed.
+- Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.
 - Quality threshold: 85
 - Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure
 

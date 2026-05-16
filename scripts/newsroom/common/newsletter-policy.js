@@ -18,6 +18,10 @@ const REQUIRED_HARD_FAIL_CONDITIONS = [
   'undated watch/reference page promoted to main article',
   'CameraX source extraction failure'
 ];
+const DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS = Object.freeze([
+  BUCKETS.DIRECT_AOSP_CAMERA,
+  BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE
+]);
 const repoRoot = path.resolve(__dirname, '..', '..', '..');
 const policyPath = path.join(repoRoot, POLICY_REL_PATH);
 
@@ -91,6 +95,54 @@ function validateSelectionWindowPolicy(value, errors) {
   }
 }
 
+function validatePublishReadyCompositionPolicy(value, article, errors) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('articlePolicy.publishReadyComposition must be an object.');
+    return;
+  }
+  validateInteger(
+    value.primaryCameraStackMinRequired,
+    'articlePolicy.publishReadyComposition.primaryCameraStackMinRequired',
+    errors,
+    { min: 0 }
+  );
+  validateInteger(
+    value.directAospCameraOrDriverMinRequired,
+    'articlePolicy.publishReadyComposition.directAospCameraOrDriverMinRequired',
+    errors,
+    { min: 0 }
+  );
+  validateInteger(
+    value.supportingMainMaxAllowed,
+    'articlePolicy.publishReadyComposition.supportingMainMaxAllowed',
+    errors,
+    { min: 0 }
+  );
+
+  const max = article.mainArticleCount || {};
+  if (
+    Number.isInteger(value.primaryCameraStackMinRequired) &&
+    Number.isInteger(max.max) &&
+    value.primaryCameraStackMinRequired > max.max
+  ) {
+    errors.push('articlePolicy.publishReadyComposition.primaryCameraStackMinRequired cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+  if (
+    Number.isInteger(value.directAospCameraOrDriverMinRequired) &&
+    Number.isInteger(value.primaryCameraStackMinRequired) &&
+    value.directAospCameraOrDriverMinRequired > value.primaryCameraStackMinRequired
+  ) {
+    errors.push('articlePolicy.publishReadyComposition.directAospCameraOrDriverMinRequired cannot exceed articlePolicy.publishReadyComposition.primaryCameraStackMinRequired.');
+  }
+  if (
+    Number.isInteger(value.supportingMainMaxAllowed) &&
+    Number.isInteger(max.max) &&
+    value.supportingMainMaxAllowed > max.max
+  ) {
+    errors.push('articlePolicy.publishReadyComposition.supportingMainMaxAllowed cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+}
+
 function validateNewsletterPolicyConfig(config) {
   const errors = [];
   if (!config || typeof config !== 'object') {
@@ -108,6 +160,7 @@ function validateNewsletterPolicyConfig(config) {
   }
   const primary = article.primaryCameraStack || {};
   validateInteger(primary.minRequired, 'articlePolicy.primaryCameraStack.minRequired', errors, { min: 1 });
+  validatePublishReadyCompositionPolicy(article.publishReadyComposition, article, errors);
   const primaryBuckets = validateBucketList(primary.buckets, 'articlePolicy.primaryCameraStack.buckets', errors);
   const supportingBuckets = validateBucketList(article.supportingMainBuckets, 'articlePolicy.supportingMainBuckets', errors);
   const forbiddenBuckets = validateBucketList(article.forbiddenMainBuckets, 'articlePolicy.forbiddenMainBuckets', errors);
@@ -194,6 +247,11 @@ function normalizeNewsletterPolicyConfig(config) {
         minRequired: article.primaryCameraStack.minRequired,
         buckets: unique(article.primaryCameraStack.buckets)
       },
+      publishReadyComposition: {
+        primaryCameraStackMinRequired: article.publishReadyComposition.primaryCameraStackMinRequired,
+        directAospCameraOrDriverMinRequired: article.publishReadyComposition.directAospCameraOrDriverMinRequired,
+        supportingMainMaxAllowed: article.publishReadyComposition.supportingMainMaxAllowed
+      },
       supportingMainBuckets: unique(article.supportingMainBuckets),
       forbiddenMainBuckets: unique(article.forbiddenMainBuckets)
     },
@@ -238,6 +296,10 @@ function getArticlePolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.articlePolicy;
 }
 
+function getPublishReadyCompositionPolicy(policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).publishReadyComposition;
+}
+
 function getQualityGatePolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.qualityGatePolicy;
 }
@@ -278,10 +340,14 @@ function articleCountRangeText(policy = getDefaultNewsletterPolicy()) {
 
 function publishGateCriteriaText(policy = getDefaultNewsletterPolicy()) {
   const articlePolicy = getArticlePolicy(policy);
+  const publishPolicy = getPublishReadyCompositionPolicy(policy);
   const qualityGatePolicy = getQualityGatePolicy(policy);
   return [
     `main articles: ${articleCountRangeText(policy)}`,
-    `required primary camera stack articles: ${articlePolicy.primaryCameraStack.minRequired}`,
+    `review gate primary camera stack articles: ${articlePolicy.primaryCameraStack.minRequired}`,
+    `Publish-ready gate primary camera stack articles: ${publishPolicy.primaryCameraStackMinRequired}`,
+    `Publish-ready gate direct AOSP Camera or driver/image pipeline articles: ${publishPolicy.directAospCameraOrDriverMinRequired}`,
+    `Publish-ready gate supporting main articles max: ${publishPolicy.supportingMainMaxAllowed}`,
     `forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.join(', ') || 'none'}`,
     `quality threshold: ${qualityGatePolicy.threshold}`
   ].join('; ');
@@ -298,6 +364,7 @@ function selectionWindowPolicyText(policy = getDefaultNewsletterPolicy()) {
 
 function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
   const articlePolicy = getArticlePolicy(policy);
+  const publishPolicy = getPublishReadyCompositionPolicy(policy);
   const selectionWindowPolicy = getSelectionWindowPolicy(policy);
   const qualityGatePolicy = getQualityGatePolicy(policy);
   return [
@@ -308,13 +375,16 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     '',
     `- Source of truth: \`${POLICY_REL_PATH.replace(/\\/g, '/')}\``,
     `- Main article count: ${articleCountRangeText(policy)}`,
-    `- Required Primary Camera Stack articles: at least ${articlePolicy.primaryCameraStack.minRequired}`,
+    `- Review gate Primary Camera Stack articles: at least ${articlePolicy.primaryCameraStack.minRequired}`,
+    `- Publish-ready Primary Camera Stack articles: at least ${publishPolicy.primaryCameraStackMinRequired}`,
+    `- Publish-ready direct AOSP Camera or driver/image pipeline articles: at least ${publishPolicy.directAospCameraOrDriverMinRequired} across ${DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS.map(bucket => `\`${bucket}\``).join(', ')}`,
+    `- Publish-ready supporting main articles: at most ${publishPolicy.supportingMainMaxAllowed} total across supporting main buckets`,
     `- Primary Camera Stack buckets: ${articlePolicy.primaryCameraStack.buckets.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- Supporting main buckets: ${articlePolicy.supportingMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- Forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- Candidate pool preflight: publishable candidates at least ${policy.candidatePoolPreflight.publishableCandidateMin}; reserve candidates at least ${policy.candidatePoolPreflight.reserveMin}; camera stack candidates at least ${policy.candidatePoolPreflight.cameraStackCandidateMin}`,
     `- Selection windows: primary ${selectionWindowPolicy.primarySelectionDays} days; fallback ${selectionWindowPolicy.fallbackSelectionDays} days; reference ${selectionWindowPolicy.referenceContextDays} days`,
-    '- Selection window enforcement: configured for later slices only; this policy block does not mean current candidate filtering or promotion behavior has changed.',
+    '- Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.',
     `- Quality threshold: ${qualityGatePolicy.threshold}`,
     `- Hard fail conditions remain blocking: ${qualityGatePolicy.hardFailConditions.join('; ')}`,
     '',
@@ -396,6 +466,9 @@ module.exports = {
   get candidatePoolPreflightPolicy() {
     return getCandidatePoolPreflightPolicy();
   },
+  get publishReadyCompositionPolicy() {
+    return getPublishReadyCompositionPolicy();
+  },
   get selectionWindowPolicy() {
     return getSelectionWindowPolicy();
   },
@@ -413,6 +486,7 @@ module.exports = {
   articleCountRangeText,
   getCandidatePoolPreflightPolicy,
   getDefaultNewsletterPolicy,
+  getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,
