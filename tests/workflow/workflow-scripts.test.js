@@ -17,6 +17,7 @@ const {
   articlePolicy,
   candidatePoolPreflightPolicy,
   qualityGatePolicy,
+  selectionWindowPolicy,
   publishGateCriteriaText,
   validateNewsletterPolicyConfig
 } = require('../../scripts/lib/newsletter-policy');
@@ -1062,6 +1063,7 @@ test('newsletter policy validates candidate pool preflight thresholds', () => {
       primaryCameraStackCandidateMin: 1,
       cameraStackCandidateMin: 5
     },
+    selectionWindowPolicy,
     qualityGatePolicy: {
       threshold: qualityGatePolicy.threshold,
       hardFailConditions: qualityGatePolicy.hardFailConditions
@@ -1073,6 +1075,83 @@ test('newsletter policy validates candidate pool preflight thresholds', () => {
   assert.equal(result.ok, false);
   assert.ok(result.errors.includes('candidatePoolPreflight.publishableCandidateMin must be >= articlePolicy.mainArticleCount.min + candidatePoolPreflight.reserveMin.'));
   assert.ok(result.errors.includes('candidatePoolPreflight.cameraStackCandidateMin must be <= candidatePoolPreflight.publishableCandidateMin.'));
+});
+
+test('newsletter policy validates selection window contract without enforcing selection behavior', () => {
+  const base = {
+    schemaVersion: 1,
+    name: 'Newsletter Policy',
+    articlePolicy: {
+      mainArticleCount: { min: 3, max: 5 },
+      primaryCameraStack: {
+        minRequired: 1,
+        buckets: articlePolicy.primaryCameraStack.buckets
+      },
+      supportingMainBuckets: articlePolicy.supportingMainBuckets,
+      forbiddenMainBuckets: articlePolicy.forbiddenMainBuckets
+    },
+    candidatePoolPreflight: {
+      reserveMin: 2,
+      publishableCandidateMin: 5,
+      primaryCameraStackCandidateMin: 1,
+      cameraStackCandidateMin: 2
+    },
+    selectionWindowPolicy: {
+      primarySelectionDays: 7,
+      fallbackSelectionDays: 21,
+      referenceContextDays: 90
+    },
+    qualityGatePolicy: {
+      threshold: qualityGatePolicy.threshold,
+      hardFailConditions: qualityGatePolicy.hardFailConditions
+    }
+  };
+  const withWindow = selectionWindow => ({
+    ...base,
+    selectionWindowPolicy: selectionWindow
+  });
+
+  assert.equal(validateNewsletterPolicyConfig(base).ok, true);
+  assert.equal(validateNewsletterPolicyConfig(withWindow({
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 7,
+    referenceContextDays: 90
+  })).ok, true);
+  assert.equal(validateNewsletterPolicyConfig(withWindow({
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 21,
+    referenceContextDays: 21
+  })).ok, true);
+  assert.equal(validateNewsletterPolicyConfig(withWindow({
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 7,
+    referenceContextDays: 7
+  })).ok, true);
+
+  const invalid = validateNewsletterPolicyConfig(withWindow({
+    primarySelectionDays: 22,
+    fallbackSelectionDays: 21,
+    referenceContextDays: 90
+  }));
+  const invalidReference = validateNewsletterPolicyConfig(withWindow({
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 91,
+    referenceContextDays: 90
+  }));
+  const invalidValues = validateNewsletterPolicyConfig(withWindow({
+    primarySelectionDays: 0,
+    fallbackSelectionDays: 1.5,
+    referenceContextDays: '90'
+  }));
+
+  assert.equal(invalid.ok, false);
+  assert.ok(invalid.errors.includes('selectionWindowPolicy.fallbackSelectionDays must be >= selectionWindowPolicy.primarySelectionDays.'));
+  assert.equal(invalidReference.ok, false);
+  assert.ok(invalidReference.errors.includes('selectionWindowPolicy.referenceContextDays must be >= selectionWindowPolicy.fallbackSelectionDays.'));
+  assert.equal(invalidValues.ok, false);
+  assert.ok(invalidValues.errors.includes('selectionWindowPolicy.primarySelectionDays must be an integer >= 1.'));
+  assert.ok(invalidValues.errors.includes('selectionWindowPolicy.fallbackSelectionDays must be an integer >= 1.'));
+  assert.ok(invalidValues.errors.includes('selectionWindowPolicy.referenceContextDays must be an integer >= 1.'));
 });
 
 test('generation status output includes multiline selection diagnostics', () => {

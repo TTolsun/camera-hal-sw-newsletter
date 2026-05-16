@@ -42,6 +42,11 @@ test('defaults match workflow runtime defaults', () => {
 
   assert.equal(config.newsletterDate, DEFAULT_RUNTIME_CONFIG.newsletterDate);
   assert.equal(config.lookbackDays, 21);
+  assert.deepEqual(config.selectionWindowPolicy, {
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 21,
+    referenceContextDays: 90
+  });
   assert.equal(config.llmProvider, 'gemini');
   assert.equal(config.llmModel, 'gemini-2.5-flash');
   assert.equal(config.llmModelExplicitlyConfigured, false);
@@ -124,6 +129,9 @@ test('runtime env overrides are parsed into typed config', () => {
   const config = readRuntimeConfig({
     NEWSLETTER_DATE: '2026-05-04',
     LOOKBACK_DAYS: '14',
+    PRIMARY_SELECTION_DAYS: '3',
+    FALLBACK_SELECTION_DAYS: '14',
+    REFERENCE_CONTEXT_DAYS: '60',
     GEMINI_API_KEY: 'secret-test-key',
     GEMINI_MODEL: 'primary-model',
     GEMINI_FALLBACK_MODELS: '',
@@ -155,6 +163,11 @@ test('runtime env overrides are parsed into typed config', () => {
 
   assert.equal(config.newsletterDate, '2026-05-04');
   assert.equal(config.lookbackDays, 14);
+  assert.deepEqual(config.selectionWindowPolicy, {
+    primarySelectionDays: 3,
+    fallbackSelectionDays: 14,
+    referenceContextDays: 60
+  });
   assert.equal(config.llmProvider, 'gemini');
   assert.equal(config.llmModel, 'primary-model');
   assert.equal(config.llmModelExplicitlyConfigured, false);
@@ -186,6 +199,64 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.newsroomEnableGeminiSourceDiscovery, true);
   assert.equal(config.githubEventName, 'workflow_dispatch');
   assert.equal(config.geminiApiKeyConfigured, true);
+});
+
+test('selection window runtime config keeps policy shape and validates ordering', () => {
+  assert.deepEqual(readRuntimeConfig({}).selectionWindowPolicy, {
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 21,
+    referenceContextDays: 90
+  });
+  assert.deepEqual(readRuntimeConfig({
+    PRIMARY_SELECTION_DAYS: '7',
+    FALLBACK_SELECTION_DAYS: '7',
+    REFERENCE_CONTEXT_DAYS: '90'
+  }).selectionWindowPolicy, {
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 7,
+    referenceContextDays: 90
+  });
+  assert.deepEqual(readRuntimeConfig({
+    PRIMARY_SELECTION_DAYS: '7',
+    FALLBACK_SELECTION_DAYS: '21',
+    REFERENCE_CONTEXT_DAYS: '21'
+  }).selectionWindowPolicy, {
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 21,
+    referenceContextDays: 21
+  });
+  assert.deepEqual(readRuntimeConfig({
+    PRIMARY_SELECTION_DAYS: '7',
+    FALLBACK_SELECTION_DAYS: '7',
+    REFERENCE_CONTEXT_DAYS: '7'
+  }).selectionWindowPolicy, {
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 7,
+    referenceContextDays: 7
+  });
+
+  assert.throws(
+    () => readRuntimeConfig({ PRIMARY_SELECTION_DAYS: '0' }),
+    /PRIMARY_SELECTION_DAYS must be >= 1/
+  );
+  assert.throws(
+    () => readRuntimeConfig({ FALLBACK_SELECTION_DAYS: '1.5' }),
+    /FALLBACK_SELECTION_DAYS must be an integer/
+  );
+  assert.throws(
+    () => readRuntimeConfig({
+      PRIMARY_SELECTION_DAYS: '22',
+      FALLBACK_SELECTION_DAYS: '21'
+    }),
+    /FALLBACK_SELECTION_DAYS must be >= PRIMARY_SELECTION_DAYS/
+  );
+  assert.throws(
+    () => readRuntimeConfig({
+      FALLBACK_SELECTION_DAYS: '91',
+      REFERENCE_CONTEXT_DAYS: '90'
+    }),
+    /REFERENCE_CONTEXT_DAYS must be >= FALLBACK_SELECTION_DAYS/
+  );
 });
 
 test('linked evidence runtime config rejects invalid mode and unsafe limits', () => {
@@ -494,6 +565,11 @@ test('sanitized diagnostics never include the raw API key', () => {
 
   assert.equal(sanitized.geminiApiKeyConfigured, true);
   assert.equal(sanitized.llmModelExplicitlyConfigured, false);
+  assert.deepEqual(sanitized.selectionWindowPolicy, {
+    primarySelectionDays: 7,
+    fallbackSelectionDays: 21,
+    referenceContextDays: 90
+  });
   assert.equal(sanitized.internalLlmApiKeyConfigured, false);
   assert.equal(sanitized.internalLlmEndpointConfigured, false);
   assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
