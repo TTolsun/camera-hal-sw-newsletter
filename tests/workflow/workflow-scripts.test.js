@@ -4278,14 +4278,14 @@ test('newsroom PR body primary headings are Korean', () => {
   }
 });
 
-test('weekly newsroom workflow separates review PR success from publish-ready gate', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '01-weekly-newsroom-pr.yml');
+test('final newsroom workflow separates review PR success from publish-ready gate', () => {
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '03-newsroom-final-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const validatePolicyStep = workflowStep(workflow, 'Validate newsletter policy');
   const checkPolicyDocsStep = workflowStep(workflow, 'Check policy docs');
   const doctorStep = workflowStep(workflow, 'Doctor runtime config');
   const preflightStep = workflowStep(workflow, 'Run unit and regression tests');
-  const generateStep = workflowStep(workflow, 'Generate newsletter with LLM newsroom');
+  const generateStep = workflowStep(workflow, 'Generate newsletter with approved candidate artifact');
   const ensurePublicStep = workflowStep(workflow, 'Ensure public newsletter artifacts');
   const resolveMetaStep = workflowStep(workflow, 'Resolve newsletter metadata');
   const validateGeneratedSiteStep = workflowStep(workflow, 'Validate generated site');
@@ -4294,7 +4294,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   const evidencePackStep = workflowStep(workflow, 'Generate evidence pack summary');
   const preparePrBodyStep = workflowStep(workflow, 'Prepare pull request body');
   const ensureLabelsStep = workflowStep(workflow, 'Ensure labels');
-  const createPrStep = workflowStep(workflow, 'Create pull request');
+  const createPrStep = workflowStep(workflow, 'Create final newsletter pull request');
   const addLabelsStepIndex = workflow.indexOf('- name: Add pull request labels');
 
   assert.notEqual(addLabelsStepIndex, -1);
@@ -4303,16 +4303,15 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
     '- name: Doctor runtime config',
     '- name: Validate newsletter policy',
     '- name: Check policy docs',
-    '- name: Run unit and regression tests',
-    '- name: Jitter scheduled run'
+    '- name: Run unit and regression tests'
   ]);
   assertTextInOrder(workflow, [
-    '- name: Generate newsletter with LLM newsroom',
+    '- name: Generate newsletter with approved candidate artifact',
     '- name: Ensure public newsletter artifacts',
     '- name: Resolve newsletter metadata',
     '- name: Resolve final publish status',
     '- name: Prepare pull request body',
-    '- name: Create pull request'
+    '- name: Create final newsletter pull request'
   ]);
   assertTextInOrder(workflow, [
     '- name: Generate source effectiveness report',
@@ -4325,7 +4324,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.match(workflow, /LLM_PROVIDER=\$\{INPUT_LLM_PROVIDER\}/);
   assert.match(workflow, /LLM_MODEL=\$\{INPUT_LLM_MODEL\}/);
   assert.match(workflow, /LLM_FALLBACK_MODELS=\$\{INPUT_LLM_FALLBACK_MODELS\}/);
-  assert.match(workflow, /LLM override inputs must be single-line values\./);
+  assert.match(workflow, /Workflow inputs must be single-line values\./);
   assert.match(workflow, /NEWSROOM_ALLOW_PRO_ON_MANUAL: \$\{\{ github\.event\.inputs\.allow_pro \|\| 'false' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MODE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MODE \|\| 'extract_only' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE \|\| '8' \}\}/);
@@ -4412,8 +4411,8 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   );
 });
 
-test('weekly newsroom workflow labels review publication and diagnostics-only mutually exclusively', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '01-weekly-newsroom-pr.yml');
+test('final newsroom workflow labels review publication and diagnostics-only mutually exclusively', () => {
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '03-newsroom-final-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const labelStep = workflowStep(workflow, 'Add pull request labels');
   const reviewPublicationStart = labelStep.indexOf('} else if (reviewPublicationReady) {');
@@ -4449,7 +4448,8 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage3, /^name: Newsroom 03 - Gemini Final Newsletter PR/m);
 
   assert.match(stage1, /workflow_dispatch:/);
-  assert.doesNotMatch(stage1, /^\s*schedule:/m);
+  assert.match(stage1, /^\s*schedule:/m);
+  assert.match(stage1, /cron: "0 0 \* \* \*"/);
   assert.match(stage1, /run: npm run doctor:config -- --no-llm-credentials/);
   assert.match(stage1, /run: npm run collect/);
   assert.doesNotMatch(stage1, /npm run generate/);
@@ -4480,16 +4480,25 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.doesNotMatch(rawPrBodyBuilder, /source_gap_risk_count/);
 });
 
-test('schedule cutover keeps new RAW workflow manual-only until old schedule is removed', () => {
+test('schedule cutover leaves only the RAW workflow on the daily newsroom schedule', () => {
   const workflowDir = path.join(__dirname, '..', '..', '.github', 'workflows');
-  const weekly = fs.readFileSync(path.join(workflowDir, '01-weekly-newsroom-pr.yml'), 'utf8');
+  const legacyWeeklyFile = ['01', 'weekly', 'newsroom', 'pr.yml'].join('-');
+  const legacyWeeklyPath = path.join(workflowDir, legacyWeeklyFile);
   const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
+  const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsroom-gemini-source-discovery-pr.yml'), 'utf8');
   const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
+  const scheduledWorkflowFiles = fs
+    .readdirSync(workflowDir)
+    .filter((file) => file.endsWith('.yml'))
+    .filter((file) => fs.readFileSync(path.join(workflowDir, file), 'utf8').includes('cron: "0 0 * * *"'));
 
-  assert.match(weekly, /^\s*schedule:/m);
-  assert.match(weekly, /cron: "0 0 \* \* \*"/);
-  assert.doesNotMatch(stage1, /^\s*schedule:/m);
+  assert.equal(fs.existsSync(legacyWeeklyPath), false);
+  assert.deepEqual(scheduledWorkflowFiles, ['01-newsroom-manual-source-collect-pr.yml']);
+  assert.match(stage1, /^\s*schedule:/m);
+  assert.match(stage1, /cron: "0 0 \* \* \*"/);
+  assert.doesNotMatch(stage2, /^\s*schedule:/m);
   assert.doesNotMatch(stage3, /^\s*schedule:/m);
+  assert.doesNotMatch(stage3, /npm run collect/);
 });
 
 test('generation path guards public artifacts for editorial reviewable failures', () => {
@@ -4548,15 +4557,22 @@ test('validate-site uses shared rendered issue structural validator', () => {
 });
 
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '02-validate-site.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '04-validate-site.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const structuralStep = workflowStep(workflow, 'Validate structural publication artifacts');
   const annotationStep = workflowStep(workflow, 'Annotate publication quality and fact-check status');
 
+  assert.match(workflow, /^name: 04 - Validate Site and Images$/m);
+  assert.match(workflow, /^  push:\n    branches: \["main"\]$/m);
+  assert.match(workflow, /^  pull_request:\n    branches: \["main"\]$/m);
+  assert.match(workflow, /^  workflow_dispatch:$/m);
+  assert.match(workflow, /^permissions:\n  contents: read$/m);
   assertTextInOrder(workflow, [
+    '- name: Run unit and regression tests',
     '- name: Validate structural publication artifacts',
     '- name: Annotate publication quality and fact-check status'
   ]);
+  assert.match(workflowStep(workflow, 'Run unit and regression tests'), /^\s*run: npm run test$/m);
   assertTextInOrder(structuralStep, [
     'npm run check:encoding',
     'npm run validate:policy'

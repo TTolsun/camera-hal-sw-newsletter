@@ -4,8 +4,8 @@
 
 ## Manual High-Quality Run
 
-- GitHub Actions에서 `01 - Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 실행합니다.
-- 필요하면 `newsletter_date`, `lookback_days`를 입력합니다.
+- GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR`을 선택하고 `Run workflow`를 실행합니다.
+- `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다.
 - Pro 계열 모델이 꼭 필요하고 비용 증가를 승인한 경우에만 `allow_pro=true`를 선택합니다.
 - 실행 후 `cost-report.md`, `summary-cache-report.md`, `retry-history.md`를 확인해 비용과 retry 범위를 봅니다.
 
@@ -14,7 +14,7 @@
 - PR body의 새 editor-facing 요약은 [Newsroom PR Report 읽는 법](./newsroom-pr-report.ko.md)을 기준으로 확인합니다.
 - `final_publish_ready=false`는 AI 자동 발행 기준 미충족을 뜻합니다. `review_publication_ready=true`이고 `homepage_visible_after_merge=true`인 PR은 편집장 merge로 공개 승인할 수 있습니다.
 - `diagnostics_only=true`인 PR은 public newsletter files가 없으므로 merge해도 홈페이지에 표시되지 않습니다. PR body의 missing public files reason을 먼저 확인합니다.
-- `02-validate-site.yml`은 quality/fact-check 문제를 non-blocking annotation으로 보고하고, structural validation만 blocking으로 처리합니다.
+- `04-validate-site.yml`은 quality/fact-check 문제를 non-blocking annotation으로 보고하고, structural validation만 blocking으로 처리합니다.
 
 - PR body에서 `final_publish_ready`, `review_publication_ready`, `diagnostics_only`, article count, labels, selection diagnostics를 먼저 확인합니다.
 - `editor-in-chief-brief.md`로 핵심 메시지와 review order를 확인합니다.
