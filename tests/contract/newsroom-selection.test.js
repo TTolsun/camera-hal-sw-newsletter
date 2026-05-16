@@ -12,6 +12,7 @@ const {
   LINKED_EVIDENCE_RUNTIME_BONUS,
   LINKED_EVIDENCE_WATCH_PENALTY,
   MAIN_ARTICLE_SCORE_THRESHOLD,
+  SHORTLIST_CAP,
   normalizeUrl,
   publishGatePasses,
   reporterInputFromShortlist,
@@ -949,6 +950,7 @@ test('selection window enforcement keeps fallback out when primary window is suf
   assert.equal(report.selection_policy.selection_window_policy.enforcement, 'main_selection_enforced');
   assert.equal(report.primary_window_selected_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.fallback_window_candidate_count, 1);
+  assert.equal(report.fallback_window_consulted, false);
   assert.equal(report.fallback_window_used, false);
   assert.equal(report.fallback_window_reason, '');
   assert.equal(
@@ -992,6 +994,7 @@ test('selection window enforcement promotes fallback only when primary window is
 
   assert.equal(report.primary_window_selected_count, 1);
   assert.equal(report.fallback_window_candidate_count, 2);
+  assert.equal(report.fallback_window_consulted, true);
   assert.equal(report.fallback_window_used, true);
   assert.match(report.fallback_window_reason, /primary window selected 1 article\(s\), below min 3/);
   assert.equal(fallbackSelected.length, 2);
@@ -1000,6 +1003,141 @@ test('selection window enforcement promotes fallback only when primary window is
   assert.equal(report.fallback_candidates_promoted.length, 2);
   assert.deepEqual(report.selection_warnings, []);
   assert.equal(report.publish_ready, true);
+});
+
+test('fallback rescue uses uncapped selection pool when primary fills shortlist cap', () => {
+  const fillerTitles = [
+    'Primary filler build queue note',
+    'Primary filler lab device note',
+    'Primary filler issue triage note',
+    'Primary filler dashboard status',
+    'Primary filler checklist update',
+    'Primary filler release calendar',
+    'Primary filler owner rotation',
+    'Primary filler sample log',
+    'Primary filler meeting digest',
+    'Primary filler config reminder',
+    'Primary filler dependency memo',
+    'Primary filler tracking bulletin'
+  ];
+  const primaryFillers = Array.from({ length: SHORTLIST_CAP }, (_, index) =>
+    policyPrimaryCandidate(index + 10, {
+      title: fillerTitles[index],
+      url: `https://example.com/window-primary-filler-${index}`,
+      source: `Primary Filler Source ${index}`,
+      summary: 'Low signal camera logistics note without concrete component evidence.',
+      api_or_component: '',
+      behavior_change: '',
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 0,
+      counts_as_primary_camera_topic: false,
+      camera_hal_relevance_score: 0,
+      evidence_score: 0,
+      practical_actionability_score: 0,
+      reliability: '',
+      published_date: '2026-05-09'
+    })
+  );
+  const report = buildShortlistReport('2026-05-10', [
+    policyPrimaryCandidate(0, {
+      title: 'Primary selected source before cap boundary',
+      url: 'https://example.com/window-primary-selected-before-cap',
+      source: 'Primary Selected Source',
+      published_date: '2026-05-09'
+    }),
+    ...primaryFillers,
+    policySupportingCandidate(0, {
+      title: 'Fallback rescue SoC source after cap boundary',
+      url: 'https://example.com/window-fallback-rescue-soc',
+      source: 'Fallback Rescue SoC Source',
+      published_date: '2026-04-26',
+      relevance_bucket: 'soc_platform_signal',
+      soc_platform_relevance: 5,
+      native_tooling_relevance: 0,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false
+    }),
+    policySupportingCandidate(1, {
+      title: 'LLVM debugger workflow candidate beyond shortlist',
+      url: 'https://example.com/window-fallback-rescue-native',
+      source: 'Fallback Rescue Native Source',
+      summary: 'LLDB native debugger workflow improves camera HAL triage and validation.',
+      api_or_component: 'LLDB camera HAL debugger',
+      published_date: '2026-04-26'
+    })
+  ]);
+  const selectedUrls = new Set(report.selected_articles.map(item => item.url));
+  const shortlistedUrls = new Set(report.shortlisted_candidates.map(item => item.url));
+
+  assert.ok(report.primary_window_candidate_count > SHORTLIST_CAP);
+  assert.equal(report.fallback_window_candidate_count, 2);
+  assert.equal(report.fallback_window_consulted, true);
+  assert.equal(report.fallback_window_used, true);
+  assert.equal(report.fallback_candidates_promoted.length, 2);
+  assert.equal(selectedUrls.has('https://example.com/window-fallback-rescue-soc'), true);
+  assert.equal(selectedUrls.has('https://example.com/window-fallback-rescue-native'), true);
+  assert.equal(shortlistedUrls.has('https://example.com/window-fallback-rescue-soc'), true);
+  assert.equal(shortlistedUrls.has('https://example.com/window-fallback-rescue-native'), true);
+});
+
+test('fallback consulted remains distinct from fallback promotion', () => {
+  const report = buildShortlistReport('2026-05-10', [
+    policyPrimaryCandidate(0, {
+      title: 'Primary short source before ineligible fallback',
+      url: 'https://example.com/window-primary-before-ineligible-fallback',
+      source: 'Primary Before Ineligible Fallback Source',
+      published_date: '2026-05-09'
+    }),
+    candidate({
+      title: 'Fallback ineligible generic source A',
+      url: 'https://example.com/window-fallback-ineligible-a',
+      source: 'Fallback Ineligible Source A',
+      summary: 'Generic low signal workflow note.',
+      api_or_component: '',
+      behavior_change: '',
+      relevance_bucket: 'cpp_ai_tooling_fallback',
+      editorial_priority: 6,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 0,
+      counts_as_fallback_topic: false,
+      camera_hal_relevance_score: 0,
+      evidence_score: 0,
+      practical_actionability_score: 0,
+      reliability: '',
+      published_date: '2026-04-26'
+    }),
+    candidate({
+      title: 'Fallback ineligible generic source B',
+      url: 'https://example.com/window-fallback-ineligible-b',
+      source: 'Fallback Ineligible Source B',
+      summary: 'Another generic low signal workflow note.',
+      api_or_component: '',
+      behavior_change: '',
+      relevance_bucket: 'cpp_ai_tooling_fallback',
+      editorial_priority: 6,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 0,
+      counts_as_fallback_topic: false,
+      camera_hal_relevance_score: 0,
+      evidence_score: 0,
+      practical_actionability_score: 0,
+      reliability: '',
+      published_date: '2026-04-26'
+    })
+  ]);
+
+  assert.equal(report.primary_window_selected_count, 1);
+  assert.equal(report.fallback_window_candidate_count, 2);
+  assert.equal(report.fallback_window_consulted, true);
+  assert.equal(report.fallback_window_used, false);
+  assert.deepEqual(report.fallback_candidates_promoted, []);
+  assert.equal(report.selected_articles.some(item => item.freshness_window === 'fallback'), false);
 });
 
 test('selection window enforcement excludes reference stale and unknown candidates without dropping existing reasons', () => {
@@ -1100,6 +1238,7 @@ test('fallback reserve is marked when primary reserve is short', () => {
   const fallbackReserve = report.reserve_candidates.filter(item => item.fallback_window_reserve === true);
 
   assert.equal(report.fallback_window_used, false);
+  assert.equal(report.fallback_window_consulted, false);
   assert.ok(fallbackReserve.length > 0);
   assert.ok(fallbackReserve.every(item => item.selection_window_stage === 'fallback_reserve'));
   assert.ok(fallbackReserve.every(item => item.freshness_window === 'fallback'));
@@ -1139,6 +1278,7 @@ test('custom selection window policy drives fallback classification and promotio
     .map(item => item.url));
 
   assert.equal(report.selection_policy.selection_window_policy.primarySelectionDays, 3);
+  assert.equal(report.fallback_window_consulted, true);
   assert.equal(report.fallback_window_used, true);
   assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-a'), true);
   assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-b'), true);

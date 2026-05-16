@@ -796,6 +796,10 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
 
   return {
     shortlist: mainSelectionCandidates.slice(0, cap),
+    selectionPools: {
+      primary: windows.primary,
+      fallback: windows.fallback
+    },
     excluded: excluded.concat(windows.windowExcluded),
     referenceContextCandidates: windows.reference.slice(0, cap),
     windowCandidateCounts: {
@@ -829,8 +833,8 @@ function pushUnique(selected, candidate, slot) {
 }
 
 function reserveCandidates(shortlist, selected, options = {}) {
-  const minReserve = options.minReserve || RESERVE_MIN_CANDIDATES;
-  const maxReserve = options.maxReserve || RESERVE_MAX_CANDIDATES;
+  const minReserve = options.minReserve ?? RESERVE_MIN_CANDIDATES;
+  const maxReserve = options.maxReserve ?? RESERVE_MAX_CANDIDATES;
   const selectedUrls = new Set(ensureArray(selected).map(candidate => candidate.normalized_url));
   const reserve = [];
   const mainSelectionCandidates = ensureArray(shortlist).filter(isMainSelectionWindow);
@@ -878,8 +882,8 @@ function reserveCandidates(shortlist, selected, options = {}) {
 }
 
 function selectFinalArticlesFromPool(shortlist, options = {}) {
-  const minArticles = options.minArticles || MIN_FINAL_ARTICLES;
-  const maxArticles = options.maxArticles || MAX_FINAL_ARTICLES;
+  const minArticles = options.minArticles ?? MIN_FINAL_ARTICLES;
+  const maxArticles = options.maxArticles ?? MAX_FINAL_ARTICLES;
   const candidates = ensureArray(shortlist).map(candidate =>
     candidate.score_breakdown ? candidate : decorateCandidate(candidate, options.date || '', {
       selectionWindowPolicy: options.selectionWindowPolicy
@@ -915,7 +919,7 @@ function fallbackWindowReason(primarySelectedCount, minArticles) {
 }
 
 function selectFinalArticlesWithDiagnostics(shortlist, options = {}) {
-  const minArticles = options.minArticles || MIN_FINAL_ARTICLES;
+  const minArticles = options.minArticles ?? MIN_FINAL_ARTICLES;
   const rawCandidates = ensureArray(shortlist);
   const enforceSelectionWindow = rawCandidates.some(candidate => text(candidate.freshness_window)) ||
     Boolean(options.date);
@@ -927,6 +931,7 @@ function selectFinalArticlesWithDiagnostics(shortlist, options = {}) {
         primary_window_candidate_count: 0,
         primary_window_selected_count: selected.length,
         fallback_window_candidate_count: 0,
+        fallback_window_consulted: false,
         fallback_window_used: false,
         fallback_window_reason: '',
         fallback_candidates_promoted: []
@@ -951,7 +956,6 @@ function selectFinalArticlesWithDiagnostics(shortlist, options = {}) {
     ? selectFinalArticlesFromPool(selectionPool, options)
     : primarySelected;
   const fallbackCandidatesPromoted = selected.filter(candidate => candidate.fallback_window_promoted === true);
-  const fallbackWindowUsed = fallbackNeeded && fallbackCandidates.length > 0;
 
   return {
     selected,
@@ -959,7 +963,8 @@ function selectFinalArticlesWithDiagnostics(shortlist, options = {}) {
       primary_window_candidate_count: primaryCandidates.length,
       primary_window_selected_count: primarySelected.length,
       fallback_window_candidate_count: fallbackCandidates.length,
-      fallback_window_used: fallbackWindowUsed,
+      fallback_window_consulted: fallbackNeeded && fallbackCandidates.length > 0,
+      fallback_window_used: fallbackCandidatesPromoted.length > 0,
       fallback_window_reason: fallbackNeeded
         ? fallbackWindowReason(primarySelected.length, minArticles)
         : '',
@@ -976,6 +981,50 @@ function selectFinalArticlesWithDiagnostics(shortlist, options = {}) {
 
 function selectFinalArticles(shortlist, options = {}) {
   return selectFinalArticlesFromPool(shortlist, options);
+}
+
+function shortlistCandidateKey(candidate) {
+  return text(candidate?.normalized_url) || normalizeUrl(candidateUrl(candidate)) || candidateUrl(candidate) || text(candidate?.title);
+}
+
+function shortlistWithFinalCandidates(shortlist, selected, reserve, cap = SHORTLIST_CAP) {
+  const requiredCandidates = [...ensureArray(selected), ...ensureArray(reserve)];
+  const requiredByKey = new Map();
+  for (const candidate of requiredCandidates) {
+    const key = shortlistCandidateKey(candidate);
+    if (key && !requiredByKey.has(key)) {
+      requiredByKey.set(key, candidate);
+    }
+  }
+  const requiredKeys = new Set(requiredByKey.keys());
+  const combined = [];
+  const seen = new Set();
+  const addCandidate = (candidate) => {
+    const key = shortlistCandidateKey(candidate);
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    combined.push(requiredByKey.get(key) || candidate);
+  };
+
+  for (const candidate of ensureArray(shortlist)) addCandidate(candidate);
+  for (const candidate of requiredCandidates) addCandidate(candidate);
+
+  const limit = Number.isSafeInteger(cap) && cap > 0 ? cap : SHORTLIST_CAP;
+  if (combined.length <= limit) return combined;
+
+  let optionalDropCount = combined.length - limit;
+  const kept = [];
+  for (let index = combined.length - 1; index >= 0; index -= 1) {
+    const candidate = combined[index];
+    const key = shortlistCandidateKey(candidate);
+    if (optionalDropCount > 0 && !requiredKeys.has(key)) {
+      optionalDropCount -= 1;
+      continue;
+    }
+    kept.push(candidate);
+  }
+
+  return kept.reverse().slice(0, limit);
 }
 
 function selectionWarnings(selected) {
@@ -1217,21 +1266,26 @@ function compositionReason(mode, summary) {
 
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
-  const cap = options.cap || SHORTLIST_CAP;
+  const cap = options.cap ?? SHORTLIST_CAP;
   const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
   const {
     shortlist,
+    selectionPools,
     excluded,
     referenceContextCandidates,
     windowCandidateCounts
   } = buildEligibleShortlist(rawCandidates, date, cap, { selectionWindowPolicy });
-  const selectionResult = selectFinalArticlesWithDiagnostics(shortlist, {
+  const selectionCandidatePool = [
+    ...ensureArray(selectionPools?.primary),
+    ...ensureArray(selectionPools?.fallback)
+  ];
+  const selectionResult = selectFinalArticlesWithDiagnostics(selectionCandidatePool, {
     ...options,
     selectionWindowPolicy
   });
   const selected = selectionResult.selected;
   const windowDiagnostics = selectionResult.diagnostics;
-  const reserve = reserveCandidates(shortlist, selected, options);
+  const reserve = reserveCandidates(selectionCandidatePool, selected, options);
   const warnings = selectionWarnings(selected);
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
@@ -1242,7 +1296,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const reviewGatePassed = errors.length === 0;
   const publishGatePassed = reviewGatePassed && publishGatePasses(composition);
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
-  const markedShortlist = shortlist.map(candidate => {
+  const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, cap);
+  const markedShortlist = reportShortlist.map(candidate => {
     const match = selected.find(item => item.normalized_url === candidate.normalized_url);
     if (match) {
       return {
@@ -1280,6 +1335,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     primary_window_candidate_count: windowDiagnostics.primary_window_candidate_count,
     primary_window_selected_count: windowDiagnostics.primary_window_selected_count,
     fallback_window_candidate_count: windowDiagnostics.fallback_window_candidate_count,
+    fallback_window_consulted: windowDiagnostics.fallback_window_consulted,
     fallback_window_used: windowDiagnostics.fallback_window_used,
     fallback_window_reason: windowDiagnostics.fallback_window_reason,
     fallback_candidates_promoted: windowDiagnostics.fallback_candidates_promoted,
