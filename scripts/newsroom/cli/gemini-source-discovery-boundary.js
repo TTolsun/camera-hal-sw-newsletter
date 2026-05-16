@@ -223,6 +223,38 @@ function candidateKey(candidate = {}) {
   return candidate.id || candidate.source_candidate_id || candidateUrl(candidate) || candidateTitle(candidate);
 }
 
+function candidatePublishedDate(candidate = {}) {
+  return String(candidate.published_date || candidate.publishedAt || candidate.publishedDate || '').trim();
+}
+
+function evidenceReliabilityRank(candidate = {}) {
+  const reliability = String(candidate.reliability || candidate.source_reliability || '').trim().toLowerCase();
+  return ['official', 'upstream', 'project-official'].includes(reliability) ? 0 : 1;
+}
+
+function evidencePriority(candidate = {}, isCanonical = false) {
+  const score = Number(candidate.source_quality_score || 0);
+  return {
+    canonical_rank: isCanonical ? 0 : 1,
+    bucket_rank: candidate.source_quality_bucket === 'strong_candidate' ? 0 : 1,
+    score: Number.isFinite(score) ? score : 0,
+    reliability_rank: evidenceReliabilityRank(candidate),
+    published_date: candidatePublishedDate(candidate),
+    stable_key: String(candidateKey(candidate) || '')
+  };
+}
+
+function compareEvidenceTargets(left, right) {
+  const a = left.priority;
+  const b = right.priority;
+  return a.canonical_rank - b.canonical_rank ||
+    a.bucket_rank - b.bucket_rank ||
+    b.score - a.score ||
+    a.reliability_rank - b.reliability_rank ||
+    b.published_date.localeCompare(a.published_date) ||
+    a.stable_key.localeCompare(b.stable_key);
+}
+
 function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options = {}) {
   const maxTargets = options.maxTargets || 12;
   const canonicalRefs = new Set();
@@ -232,32 +264,44 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
     if (cluster.canonical_title) canonicalRefs.add(`title:${cluster.canonical_title}`);
   }
 
-  const selected = [];
-  const seen = new Set();
-  function add(candidate) {
+  const targetMap = new Map();
+  function isCanonical(candidate) {
+    return canonicalRefs.has(`url:${candidateUrl(candidate)}`) ||
+      canonicalRefs.has(`title:${candidateTitle(candidate)}`);
+  }
+  function add(candidate, canonical = false) {
     const key = candidateKey(candidate);
-    if (!key || seen.has(key) || selected.length >= maxTargets) return;
-    seen.add(key);
-    selected.push(candidate);
+    if (!key) return;
+    const existing = targetMap.get(key);
+    targetMap.set(key, {
+      candidate,
+      isCanonical: canonical || existing?.isCanonical === true
+    });
   }
 
   for (const candidate of candidates) {
     const finalEligible = ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
     const qualityEligible = ['strong_candidate', 'review_candidate'].includes(candidate.source_quality_bucket);
     if (finalEligible && qualityEligible && candidate.duplicate_of_selected_source !== true) {
-      add(candidate);
+      add(candidate, isCanonical(candidate));
     }
   }
 
   for (const candidate of candidates) {
-    const isCanonical = canonicalRefs.has(`url:${candidateUrl(candidate)}`) ||
-      canonicalRefs.has(`title:${candidateTitle(candidate)}`);
-    if (isCanonical && candidate.duplicate_of_selected_source !== true) {
-      add(candidate);
+    const canonical = isCanonical(candidate);
+    if (canonical && candidate.duplicate_of_selected_source !== true) {
+      add(candidate, true);
     }
   }
 
-  return selected;
+  return [...targetMap.values()]
+    .map(item => ({
+      candidate: item.candidate,
+      priority: evidencePriority(item.candidate, item.isCanonical)
+    }))
+    .sort(compareEvidenceTargets)
+    .slice(0, maxTargets)
+    .map(item => item.candidate);
 }
 
 async function runEnabled({

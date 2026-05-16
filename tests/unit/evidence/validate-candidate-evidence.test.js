@@ -54,6 +54,87 @@ test('evidence fetch target selection is capped and skips weak watchlist candida
   assert.equal(skipped.evidence_validation_status, 'not_checked');
 });
 
+test('evidence fetch target selection uses deterministic priority instead of input order', () => {
+  const canonical = candidate('canonical', {
+    id: 'canonical',
+    title: 'Canonical Camera source',
+    url: 'https://example.com/canonical',
+    finalSelectionEligibility: 'watchlist',
+    source_quality_bucket: 'weak_candidate',
+    source_quality_score: 0.1,
+    reliability: 'community',
+    published_date: '2026-05-01'
+  });
+  const shuffled = [
+    candidate('low-first', {
+      id: 'low-first',
+      source_quality_score: 0.05,
+      reliability: 'community',
+      published_date: '2026-05-16'
+    }),
+    candidate('review-high', {
+      id: 'review-high',
+      source_quality_bucket: 'review_candidate',
+      source_quality_score: 0.99,
+      reliability: 'official',
+      published_date: '2026-05-16'
+    }),
+    candidate('strong-community-new', {
+      id: 'strong-community-new',
+      source_quality_score: 0.7,
+      reliability: 'community',
+      published_date: '2026-05-20'
+    }),
+    candidate('strong-official-old', {
+      id: 'strong-official-old',
+      source_quality_score: 0.7,
+      reliability: 'official',
+      published_date: '2026-05-01'
+    }),
+    candidate('strong-official-new', {
+      id: 'strong-official-new',
+      source_quality_score: 0.7,
+      reliability: 'official',
+      published_date: '2026-05-20'
+    }),
+    candidate('strong-high', {
+      id: 'strong-high',
+      source_quality_score: 0.95,
+      reliability: 'community',
+      published_date: '2026-05-10'
+    }),
+    ...Array.from({ length: 14 }, (_, index) => candidate(`filler-${index}`, {
+      id: `filler-${index}`,
+      source_quality_bucket: index % 2 === 0 ? 'review_candidate' : 'strong_candidate',
+      source_quality_score: 0.2,
+      reliability: 'community',
+      published_date: '2026-04-01'
+    })),
+    canonical
+  ];
+
+  const targets = selectEvidenceFetchTargets(shuffled, {
+    clusters: [{
+      duplicate_count: 1,
+      canonical_url: canonical.url,
+      canonical_title: canonical.title
+    }]
+  }, { maxTargets: 12 });
+
+  assert.deepEqual(targets.slice(0, 7).map(item => item.id), [
+    'canonical',
+    'strong-high',
+    'strong-official-new',
+    'strong-official-old',
+    'strong-community-new',
+    'filler-1',
+    'filler-11'
+  ]);
+  assert.equal(targets.length, 12);
+  assert.equal(targets.some(item => item.id === 'low-first'), false);
+  assert.equal(targets.some(item => item.id === 'review-high'), false);
+});
+
 test('duplicate canonical candidate is fetched even when it is outside the strong final-eligible subset', () => {
   const canonical = candidate('canonical', {
     id: 'canonical',
