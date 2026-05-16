@@ -4557,12 +4557,12 @@ test('validate-site uses shared rendered issue structural validator', () => {
 });
 
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '04-validate-site.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', 'validate-site.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const structuralStep = workflowStep(workflow, 'Validate structural publication artifacts');
   const annotationStep = workflowStep(workflow, 'Annotate publication quality and fact-check status');
 
-  assert.match(workflow, /^name: 04 - Validate Site and Images$/m);
+  assert.match(workflow, /^name: Validate Site and Images$/m);
   assert.match(workflow, /^  push:\n    branches: \["main"\]$/m);
   assert.match(workflow, /^  pull_request:\n    branches: \["main"\]$/m);
   assert.match(workflow, /^  workflow_dispatch:$/m);

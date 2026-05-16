@@ -1,4 +1,4 @@
-name: 04 - Validate Site and Images
+name: Validate Site and Images
 
 on:
   push:

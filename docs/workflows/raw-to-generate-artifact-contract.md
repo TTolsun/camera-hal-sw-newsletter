@@ -73,7 +73,7 @@ v1에서는 수동 candidate edit를 허용하지 않습니다. RAW PR은 candid
 
 ## Schedule Cutover
 
-`#154` cutover 이후 `Newsroom 01 - Manual Source Collection PR` workflow가 scheduled RAW collection entrypoint입니다.
+`#154` cutover 이후 `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`) workflow가 scheduled RAW collection entrypoint입니다.
 
 - Stage 1은 daily schedule과 `workflow_dispatch`를 모두 지원합니다.
 - legacy all-in-one weekly workflow는 제거되어야 합니다.
