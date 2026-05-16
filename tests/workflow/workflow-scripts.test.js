@@ -4283,6 +4283,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const validatePolicyStep = workflowStep(workflow, 'Validate newsletter policy');
   const checkPolicyDocsStep = workflowStep(workflow, 'Check policy docs');
+  const doctorStep = workflowStep(workflow, 'Doctor runtime config');
   const preflightStep = workflowStep(workflow, 'Run unit and regression tests');
   const generateStep = workflowStep(workflow, 'Generate newsletter with LLM newsroom');
   const ensurePublicStep = workflowStep(workflow, 'Ensure public newsletter artifacts');
@@ -4335,6 +4336,7 @@ test('weekly newsroom workflow separates review PR success from publish-ready ga
   assert.doesNotMatch(workflow, /\[ "\$\{INPUT_LLM_PROVIDER\}" = "gemini" \]/);
   assert.match(workflow, /INTERNAL_LLM_API_KEY: \$\{\{ secrets\.INTERNAL_LLM_API_KEY \}\}/);
   assert.match(workflow, /INTERNAL_LLM_ENDPOINT: \$\{\{ vars\.INTERNAL_LLM_ENDPOINT \}\}/);
+  assert.doesNotMatch(doctorStep, /--no-llm-credentials/);
   assert.doesNotMatch(workflow, /vars\.LLM_PROVIDER/);
   assert.doesNotMatch(workflow, /vars\.LLM_MODEL/);
   assert.doesNotMatch(workflow, /vars\.LLM_FALLBACK_MODELS/);
@@ -4448,6 +4450,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
 
   assert.match(stage1, /workflow_dispatch:/);
   assert.doesNotMatch(stage1, /^\s*schedule:/m);
+  assert.match(stage1, /run: npm run doctor:config -- --no-llm-credentials/);
   assert.match(stage1, /run: npm run collect/);
   assert.doesNotMatch(stage1, /npm run generate/);
   assert.doesNotMatch(stage1, /GEMINI_API_KEY/);
@@ -4469,6 +4472,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_PATH: \$\{\{ github\.event\.inputs\.candidate_input_path \}\}/);
   assert.match(stage3, /manual-candidates\.json or merged-candidates\.json/);
   assert.match(stage3, /run: npm run generate/);
+  assert.doesNotMatch(stage3, /--no-llm-credentials/);
   assert.doesNotMatch(stage3, /npm run collect/);
   assert.match(stage3, /branch: newsroom-final\/\$\{\{ steps\.meta\.outputs\.date \}\}/);
   assert.match(stage3, /manual-candidates\.json/);
