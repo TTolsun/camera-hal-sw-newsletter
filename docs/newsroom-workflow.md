@@ -177,20 +177,20 @@ manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 �
 
 ## GitHub Actions 운영
 
-### 일일 Draft PR
+### 일일 RAW 후보 PR
 
-`01 - Weekly Gemini Newsroom PR` workflow는 매일 09:00 KST에 실행됩니다.
+`Newsroom 01 - Manual Source Collection PR` workflow는 매일 09:00 KST에 실행됩니다.
 
 ```text
 KST daily 09:00 = UTC daily 00:00
-branch: newsletter/YYYY-MM-DD
+branch: newsroom-raw/YYYY-MM-DD
 ```
 
-workflow는 `main`에 직접 push하지 않고 편집자 검토용 PR을 만듭니다.
+workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만듭니다.
 
 ### 3-stage RAW workflow
 
-`#88` 전환 기간에는 기존 `01 - Weekly Gemini Newsroom PR` schedule을 유지하고, 새 workflow는 수동 실행으로만 smoke 검증합니다.
+`#154` cutover 이후 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
 
 - `Newsroom 01 - Manual Source Collection PR`: `collect`만 실행하고 `manual-candidates.json`, compatibility `candidates.json`, `raw-candidate-manifest.json`을 생성합니다. Gemini/API secret을 사용하지 않습니다.
 - `Newsroom 02 - Gemini Source Discovery PR`: v1에서는 disabled pass-through boundary입니다. `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`는 `#149` engine이 없으므로 `FAILED_GEMINI_SOURCE_DISCOVERY_NOT_IMPLEMENTED`로 실패합니다.
@@ -229,9 +229,9 @@ NEWSROOM_ALLOW_PRO_ON_MANUAL=false
 NEWSROOM_PRO_ESCALATION=manual
 ```
 
-### 수동 실행
+### 수동 Final Generation 실행
 
-GitHub Actions에서 `01 - Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 누릅니다. 필요하면 `newsletter_date`와 `lookback_days`를 입력합니다. 비워 두면 KST 기준 오늘 날짜와 21일 lookback을 사용합니다. Pro 계열 모델을 수동으로 허용해야 하는 경우에만 `allow_pro=true`를 선택합니다.
+GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR`을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. Pro 계열 모델을 수동으로 허용해야 하는 경우에만 `allow_pro=true`를 선택합니다.
 
 ## Editor-in-Chief Review
 

@@ -73,12 +73,12 @@ v1에서는 수동 candidate edit를 허용하지 않습니다. RAW PR은 candid
 
 ## Schedule Cutover
 
-새 `Newsroom 01 / 02 / 03` workflow는 초기에는 `workflow_dispatch` only입니다.
+`#154` cutover 이후 `Newsroom 01 - Manual Source Collection PR` workflow가 scheduled RAW collection entrypoint입니다.
 
-- Stage 1 RAW PR smoke와 Stage 3 Final PR smoke가 통과할 때까지 기존 `01-weekly-newsroom-pr.yml` schedule은 유지합니다.
-- Stage 1/3 smoke가 통과하면 별도 cutover PR에서 기존 all-in-one workflow schedule을 제거합니다.
-- 같은 cutover PR에서 새 Stage 1 RAW workflow schedule을 활성화합니다.
-- 전환 중 기존 all-in-one schedule과 새 Stage 1 schedule은 동시에 활성화하지 않습니다.
+- Stage 1은 daily schedule과 `workflow_dispatch`를 모두 지원합니다.
+- legacy all-in-one weekly workflow는 제거되어야 합니다.
+- Stage 2와 Stage 3은 계속 `workflow_dispatch` only입니다.
+- 전환 이후에도 all-in-one schedule과 Stage 1 schedule을 동시에 활성화하지 않습니다.
 
 PR branch는 date-based naming을 사용해 같은 날짜 PR 중복 생성을 막습니다.
 

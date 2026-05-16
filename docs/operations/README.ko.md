@@ -4,8 +4,8 @@
 
 ## Manual High-Quality Run
 
-- GitHub Actions에서 `01 - Weekly Gemini Newsroom PR`을 선택하고 `Run workflow`를 실행합니다.
-- 필요하면 `newsletter_date`, `lookback_days`를 입력합니다.
+- GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR`을 선택하고 `Run workflow`를 실행합니다.
+- `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다.
 - Pro 계열 모델이 꼭 필요하고 비용 증가를 승인한 경우에만 `allow_pro=true`를 선택합니다.
 - 실행 후 `cost-report.md`, `summary-cache-report.md`, `retry-history.md`를 확인해 비용과 retry 범위를 봅니다.
 
