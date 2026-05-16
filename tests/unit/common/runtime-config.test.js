@@ -48,6 +48,9 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.linkedEvidenceMaxLinksPerRun, 40);
   assert.equal(config.linkedEvidenceTimeoutMs, 5000);
   assert.equal(config.linkedEvidenceMaxBytes, 200000);
+  assert.equal(config.newsroomCandidateInputMode, 'default');
+  assert.equal(config.newsroomCandidateInputPath, '');
+  assert.equal(config.newsroomEnableGeminiSourceDiscovery, false);
   assert.equal(config.geminiApiKeyConfigured, false);
   assert.equal(config.internalLlmApiKeyConfigured, false);
 });
@@ -124,6 +127,9 @@ test('runtime env overrides are parsed into typed config', () => {
     NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: '12',
     NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS: '2500',
     NEWSROOM_LINKED_EVIDENCE_MAX_BYTES: '4096',
+    NEWSROOM_CANDIDATE_INPUT_MODE: 'artifact',
+    NEWSROOM_CANDIDATE_INPUT_PATH: 'content/collected-news/2026-05-04/manual-candidates.json',
+    NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true',
     GITHUB_EVENT_NAME: 'workflow_dispatch'
   }, { requireGeminiApiKey: true });
 
@@ -155,6 +161,9 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.linkedEvidenceMaxLinksPerRun, 12);
   assert.equal(config.linkedEvidenceTimeoutMs, 2500);
   assert.equal(config.linkedEvidenceMaxBytes, 4096);
+  assert.equal(config.newsroomCandidateInputMode, 'artifact');
+  assert.equal(config.newsroomCandidateInputPath, 'content/collected-news/2026-05-04/manual-candidates.json');
+  assert.equal(config.newsroomEnableGeminiSourceDiscovery, true);
   assert.equal(config.githubEventName, 'workflow_dispatch');
   assert.equal(config.geminiApiKeyConfigured, true);
 });
@@ -207,6 +216,22 @@ test('linked evidence runtime config rejects invalid mode and unsafe limits', ()
   assert.match(result.errors.join('\n'), /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN/);
   assert.match(result.errors.join('\n'), /NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS/);
   assert.match(result.errors.join('\n'), /NEWSROOM_LINKED_EVIDENCE_MAX_BYTES/);
+});
+
+test('candidate artifact runtime config rejects invalid mode and multiline path', () => {
+  assert.throws(
+    () => readRuntimeConfig({
+      NEWSROOM_CANDIDATE_INPUT_MODE: 'remote'
+    }),
+    /NEWSROOM_CANDIDATE_INPUT_MODE must be one of/
+  );
+
+  assert.throws(
+    () => readRuntimeConfig({
+      NEWSROOM_CANDIDATE_INPUT_PATH: 'content/collected-news/2026-05-04/manual-candidates.json\nextra'
+    }),
+    /NEWSROOM_CANDIDATE_INPUT_PATH must be a single-line/
+  );
 });
 
 test('LLM_MODEL and LLM_FALLBACK_MODELS override Gemini compatibility aliases', () => {
@@ -420,6 +445,9 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.linkedEvidenceMaxLinksPerRun, 40);
   assert.equal(sanitized.linkedEvidenceTimeoutMs, 5000);
   assert.equal(sanitized.linkedEvidenceMaxBytes, 200000);
+  assert.equal(sanitized.newsroomCandidateInputMode, 'default');
+  assert.equal(sanitized.newsroomCandidateInputPath, '');
+  assert.equal(sanitized.newsroomEnableGeminiSourceDiscovery, false);
   assert.equal(text.includes('super-secret-api-key'), false);
 });
 

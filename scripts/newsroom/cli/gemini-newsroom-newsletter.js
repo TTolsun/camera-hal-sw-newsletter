@@ -8,11 +8,14 @@ const {
   writeJson
 } = require('../common/common');
 const {
-  collectedCandidatesPath,
   collectedCandidatesRelPath,
   newsroomDir: artifactNewsroomDir,
   newsroomRelPath
 } = require('../common/artifact-paths');
+const {
+  CandidateArtifactValidationError,
+  resolveCandidateInputArtifact
+} = require('../common/candidate-artifacts');
 const { readRuntimeConfig } = require('../common/runtime-config');
 const {
   buildCostReport,
@@ -125,7 +128,8 @@ const generationRunState = {
   lastKnownValidAttempt: 0,
   editorSemanticValidation: null,
   repairAttempted: false,
-  repairSucceeded: false
+  repairSucceeded: false,
+  candidateInput: null
 };
 
 function fail(message) {
@@ -291,6 +295,7 @@ function buildGenerationStatus({
     quota_error_count: diagnostics.quota_error_count,
     invalid_json_count: diagnostics.invalid_json_count,
     model_usage: diagnostics.model_usage,
+    candidate_input: restExtra.candidate_input || generationRunState.candidateInput || null,
     run_context: {
       ...buildRunContext(),
       ...(extraRunContext || {})
@@ -2472,9 +2477,16 @@ async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
   generationRunState.date = date;
   writeNewsletterDate(date);
-  writeGenerationStatus({ date, status: 'STARTED', must_fix_count: 0 });
 
-  const candidatePath = collectedCandidatesPath(root, date);
+  const candidateInput = resolveCandidateInputArtifact({
+    root,
+    date,
+    env: process.env
+  });
+  generationRunState.candidateInput = candidateInput.status_extra;
+  writeGenerationStatus(buildGenerationStatus({ date, status: 'STARTED' }));
+
+  const candidatePath = candidateInput.path;
   const sourcesPath = path.join(root, 'docs', 'news-sources.md');
   const editorialPolicyPath = path.join(root, 'docs', 'editorial-policy.md');
   const newsletterTemplatePath = path.join(root, 'docs', 'newsletter-template.md');
@@ -2482,9 +2494,6 @@ async function main() {
   const newsroomDir = artifactNewsroomDir(root, date);
   const newsletterDir = path.join(root, 'newsletters', date);
 
-  if (!fs.existsSync(candidatePath)) {
-    fail(`Missing ${path.relative(root, candidatePath)}. Run scripts/collect-news-candidates.js first.`);
-  }
   if (!fs.existsSync(sourceRegistryPath) && !fs.existsSync(sourcesPath)) {
     fail('Missing data/news-sources.json and docs/news-sources.md.');
   }
@@ -3240,7 +3249,8 @@ async function main() {
   ]);
 
   const baseFiles = [
-    collectedCandidatesRelPath(date),
+    generationRunState.candidateInput?.candidate_artifact || collectedCandidatesRelPath(date),
+    generationRunState.candidateInput?.manifest || '',
     newsroomRelPath(date, 'shortlisted-candidates.json'),
     newsroomRelPath(date, 'article-capsules.json'),
     newsroomRelPath(date, 'background-context.json'),
@@ -3259,7 +3269,7 @@ async function main() {
     newsroomRelPath(date, 'recovery-prompt.md'),
     newsroomRelPath(date, 'editor-in-chief-brief.md'),
     newsroomRelPath(date, 'release-qa-report.md')
-  ];
+  ].filter(Boolean);
 
   fs.writeFileSync(
     path.join(newsroomDir, 'editor-in-chief-brief.md'),
@@ -3409,6 +3419,7 @@ async function main() {
 function writeTerminalFailureStatus(error) {
   const date = generationRunState.date || runtimeConfig.newsletterDate || kstDate();
   const newsroomDir = artifactNewsroomDir(root, date);
+  const failedRawArtifactValidation = error instanceof CandidateArtifactValidationError;
   if (error instanceof EditorSemanticValidationError && generationRunState.lastKnownValidEditor) {
     try {
       writeReviewableRepairFailureArtifacts({
@@ -3444,7 +3455,7 @@ function writeTerminalFailureStatus(error) {
   }
   writeGenerationStatus(buildGenerationStatus({
     date,
-    status: 'FAILED',
+    status: failedRawArtifactValidation ? 'FAILED_RAW_ARTIFACT_VALIDATION' : 'FAILED',
     failureStage: failureStageFromError(error),
     failureReason: String(error?.message || error || 'Unknown generation failure.'),
     retryHistory: generationRunState.retryHistory,
@@ -3455,6 +3466,7 @@ function writeTerminalFailureStatus(error) {
         generationRunState.retryHistory.length,
         generationRunState.currentQualityAttempt
       ),
+      raw_artifact_validation_error: failedRawArtifactValidation ? error.details : null,
       ...editorSemanticStatusExtra(error),
       ...selectionStatusExtra(generationRunState.shortlistReport)
     }

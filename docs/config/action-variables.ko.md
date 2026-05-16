@@ -57,6 +57,9 @@ workflow는 후보 수집과 LLM 생성 전에 `npm run doctor:config`로 runtim
 | `NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN` | 선택 | `40` | newsroom run 전체에서 network resolve를 시도할 최대 linked evidence 수입니다. | 한 주차에 candidate가 많아 resolve 시도가 과도할 때 상한을 조정합니다. | 초과 링크는 fetch하지 않습니다. publication score나 HAL impact를 추정하는 근거로 쓰면 안 됩니다. |
 | `NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS` | 선택 | `5000` | linked evidence 한 건의 fetch timeout입니다. | 공식 source가 느리지만 diagnostics 가치가 확인됐을 때만 조정합니다. | timeout은 non-fatal diagnostics입니다. 값을 높이면 CI 대기 시간이 증가합니다. |
 | `NEWSROOM_LINKED_EVIDENCE_MAX_BYTES` | 선택 | `200000` | linked evidence response에서 읽고 분석할 최대 byte 수입니다. | 공식 release/docs page가 구조적으로 크고 capped excerpt만으로 부족할 때 조정합니다. | 초과 response는 resolved content로 사용하지 않고 `skipped` diagnostics로만 남깁니다. raw HTML full body를 artifact로 저장하지 않습니다. |
+| `NEWSROOM_CANDIDATE_INPUT_MODE` | 선택 | `default` | Final Generation이 candidate를 읽는 mode입니다. 새 Stage 3 workflow에서는 `artifact`로 설정해 approved candidate artifact만 사용합니다. | `Newsroom 03 - Gemini Final Newsletter PR`에서 RAW/merged artifact replay를 실행할 때만 `artifact`를 사용합니다. | `artifact` mode에서는 manifest hash와 `llm_used=false` 계약을 검증합니다. 실패하면 generation을 진행하지 않습니다. |
+| `NEWSROOM_CANDIDATE_INPUT_PATH` | 선택 | empty | Stage 3에서 명시적으로 읽을 repo-relative candidate JSON path입니다. 비워 두면 `merged-candidates.json`, `manual-candidates.json`, legacy `candidates.json` 순서로 선택합니다. | 특정 RAW 또는 merged artifact를 재실행해야 할 때만 지정합니다. | repository 밖 path나 manifest mismatch는 실패합니다. failed Stage 2 report만으로는 generation input이 될 수 없습니다. |
+| `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY` | 선택 | `false` | Stage 2 Optional Gemini Source Discovery boundary를 켤지 결정합니다. `#88`에서는 실제 engine이 없으므로 `true`는 명시 실패합니다. | `#149` 구현 전에는 기본값 `false`를 유지하고 disabled pass-through만 사용합니다. | `true`인데 engine이 없으면 `FAILED_GEMINI_SOURCE_DISCOVERY_NOT_IMPLEMENTED`로 실패하며 normal `merged-candidates.json`을 만들지 않습니다. |
 
 ## Tradeoff 검토 기준
 
