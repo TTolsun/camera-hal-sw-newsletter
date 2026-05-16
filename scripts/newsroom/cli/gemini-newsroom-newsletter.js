@@ -2508,7 +2508,9 @@ async function main() {
   fs.mkdirSync(newsletterDir, { recursive: true });
 
   const cacheDir = path.join(root, 'cache', 'news-summary');
-  let shortlistReport = buildShortlistReport(date, candidates);
+  let shortlistReport = buildShortlistReport(date, candidates, {
+    selectionWindowPolicy: runtimeConfig.selectionWindowPolicy
+  });
   generationRunState.shortlistReport = shortlistReport;
   generationRunState.selectedInputs = shortlistReport.selected_articles;
   writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
