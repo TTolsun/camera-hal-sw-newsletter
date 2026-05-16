@@ -895,6 +895,16 @@ test('freshness window metadata maps candidate age without changing freshness sc
   assert.equal(unknown.freshness_window, 'unknown');
   assert.equal(unknown.days_since_published, null);
 
+  const futureCandidate = candidate({
+    title: 'Camera future dated metadata-only source',
+    url: 'https://example.com/freshness-future',
+    published_date: '2026-05-15'
+  });
+  const future = freshnessWindowMetadata(futureCandidate, '2026-05-10');
+  assert.equal(future.freshness_window, 'primary');
+  assert.equal(future.days_since_published, 0);
+  assert.equal(scoreCandidate(futureCandidate, '2026-05-10').freshness_score, 3);
+
   const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(0, { published_date: '2026-05-07' }),
     policyPrimaryCandidate(1, { published_date: '2026-04-26' }),
@@ -905,6 +915,62 @@ test('freshness window metadata maps candidate age without changing freshness sc
   assert.equal(report.selection_policy.selection_window_policy.primarySelectionDays, 7);
   assert.ok(report.shortlisted_candidates.every(item => item.freshness_window));
   assert.ok(report.selected_articles.every(item => item.days_since_published !== undefined));
+});
+
+test('selection window metadata stays metadata-only and does not reorder selected articles', () => {
+  const candidateBase = {
+    summary: 'Policy source changes validation behavior for device bring-up.',
+    api_or_component: 'Device validation component',
+    behavior_change: 'Release changes validation behavior.',
+    evidence_score: 5,
+    practical_actionability_score: 5,
+    reliability: 'official'
+  };
+  const report = buildShortlistReport('2026-05-10', [
+    policyPrimaryCandidate(0, {
+      ...candidateBase,
+      title: 'Primary low deterministic source',
+      url: 'https://example.com/metadata-primary-low',
+      published_date: '2026-05-09',
+      camera_hal_relevance_score: 40
+    }),
+    policyPrimaryCandidate(1, {
+      ...candidateBase,
+      title: 'Stale high deterministic source',
+      url: 'https://example.com/metadata-stale-high',
+      published_date: '2026-01-10',
+      camera_hal_relevance_score: 100
+    }),
+    policyPrimaryCandidate(2, {
+      ...candidateBase,
+      title: 'Reference medium deterministic source',
+      url: 'https://example.com/metadata-reference-medium',
+      published_date: '2026-03-11',
+      camera_hal_relevance_score: 80
+    }),
+    policyPrimaryCandidate(3, {
+      ...candidateBase,
+      title: 'Fallback medium deterministic source',
+      url: 'https://example.com/metadata-fallback-medium',
+      published_date: '2026-04-26',
+      camera_hal_relevance_score: 60
+    })
+  ], { minArticles: 1 });
+
+  assert.equal(report.selection_policy.selection_window_policy.enforcement, 'metadata_only');
+  assert.deepEqual(
+    report.selected_articles.map(item => item.url),
+    [
+      'https://example.com/metadata-stale-high',
+      'https://example.com/metadata-fallback-medium',
+      'https://example.com/metadata-reference-medium',
+      'https://example.com/metadata-primary-low'
+    ]
+  );
+  assert.deepEqual(
+    report.selected_articles.map(item => item.freshness_window),
+    ['stale', 'fallback', 'reference', 'primary']
+  );
 });
 
 test('fallback composition uses supporting buckets when direct camera stack topics are scarce', () => {
