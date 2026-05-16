@@ -186,6 +186,12 @@ function selectionSummary(status, shortlistReport) {
     selectionErrors: ensureArray(shortlistReport?.selection_errors).length > 0
       ? shortlistReport.selection_errors
       : ensureArray(status.selection_errors),
+    publishGateReasonCodes: ensureArray(shortlistReport?.publish_gate_reason_codes).length > 0
+      ? shortlistReport.publish_gate_reason_codes
+      : ensureArray(status.publish_gate_reason_codes),
+    publishGateReasonSummary: ensureArray(shortlistReport?.publish_gate_reason_summary).length > 0
+      ? shortlistReport.publish_gate_reason_summary
+      : ensureArray(status.publish_gate_reason_summary),
     selectionShortageHints: ensureArray(shortlistReport?.selection_shortage_hints).length > 0
       ? shortlistReport.selection_shortage_hints
       : ensureArray(status.selection_shortage_hints)
@@ -345,6 +351,8 @@ function resolvePublishStatus(options = {}) {
     composition_summary: selection.composition,
     selection_warnings: selection.selectionWarnings,
     selection_errors: selection.selectionErrors,
+    publish_gate_reason_codes: selection.publishGateReasonCodes,
+    publish_gate_reason_summary: selection.publishGateReasonSummary,
     selection_shortage_hints: selection.selectionShortageHints,
     stale_claim_status: staleClaim.status,
     stale_claim_removed_count: staleClaim.removedCount,

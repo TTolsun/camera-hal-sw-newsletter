@@ -62,6 +62,9 @@ test('policy block rendering uses the injected policy article count range', () =
         ...defaultPolicy.articlePolicy.primaryCameraStack,
         buckets: [...defaultPolicy.articlePolicy.primaryCameraStack.buckets]
       },
+      publishReadyComposition: {
+        ...defaultPolicy.articlePolicy.publishReadyComposition
+      },
       supportingMainBuckets: [...defaultPolicy.articlePolicy.supportingMainBuckets],
       forbiddenMainBuckets: [...defaultPolicy.articlePolicy.forbiddenMainBuckets]
     },
@@ -76,8 +79,10 @@ test('policy block rendering uses the injected policy article count range', () =
   const rendered = renderNewsletterPolicyBlock(customPolicy);
 
   assert.match(rendered, /Main article count: 11-13/);
+  assert.match(rendered, /Review gate Primary Camera Stack articles: at least 1/);
+  assert.match(rendered, /Publish-ready Primary Camera Stack articles: at least 2/);
   assert.match(rendered, /Selection windows: primary 7 days; fallback 21 days; reference 90 days/);
-  assert.match(rendered, /configured for later slices only/);
+  assert.match(rendered, /main selection enforced/);
   assert.doesNotMatch(rendered, new RegExp(`Main article count: ${articleCountRangeText(defaultPolicy)}`));
 });
 

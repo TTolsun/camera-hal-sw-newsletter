@@ -187,6 +187,7 @@ function renderStatusSection(status) {
     `selection_publish_ready: ${booleanText(status.selection_publish_ready)}`,
     `최종 발행 가능 여부: ${booleanText(status.final_publish_ready)} (final_publish_ready: ${booleanText(status.final_publish_ready)})`,
     `정책상 발행 조건: ${booleanText(status.publish_gate_passed)} (publish_gate_passed: ${booleanText(status.publish_gate_passed)}; ${publishGateCriteriaText()})`,
+    `publish_gate_reason_codes: ${ensureArray(status.publish_gate_reason_codes).join('; ') || 'none'}`,
     `검토 게이트: ${booleanText(status.review_gate_passed)} (review_gate_passed: ${booleanText(status.review_gate_passed)})`,
     `편집자 검토 필요: ${booleanText(status.editor_review_required)}`,
     `editor_review_required=${booleanText(status.editor_review_required)}`,
@@ -213,6 +214,10 @@ function renderCompositionSummary(status) {
     `- editor_review_required: ${booleanText(status.editor_review_required)}`,
     `- review_gate_passed: ${booleanText(status.review_gate_passed)}`,
     `- publish_gate_passed: ${booleanText(status.publish_gate_passed)} (후보 선택 발행 조건)`,
+    `- publish_gate_reason_codes: ${ensureArray(status.publish_gate_reason_codes).join('; ') || 'none'}`,
+    `- publish_gate_reason_summary: ${ensureArray(status.publish_gate_reason_summary)
+      .map(item => `${item.code || 'unknown'} actual=${valueOrUnknown(item.actual)} required=${valueOrUnknown(item.required)}`)
+      .join('; ') || 'none'}`,
     `- direct_aosp_camera count: ${valueOrUnknown(countFromStatus(status, 'direct_aosp_camera_count'))}`,
     `- camera_driver_image_pipeline count: ${valueOrUnknown(countFromStatus(status, 'camera_driver_image_pipeline_count'))}`,
     `- android_platform_camera_adjacent count: ${valueOrUnknown(countFromStatus(status, 'android_platform_camera_adjacent_count'))}`,

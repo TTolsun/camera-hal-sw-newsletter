@@ -11,6 +11,7 @@ const OUTPUT_FIELDS = [
   'artifact_final_publish_ready',
   'selection_publish_ready',
   'publish_gate_passed',
+  'publish_gate_reason_codes',
   'review_gate_passed',
   'validate_outcome',
   'validate_ok',

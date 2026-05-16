@@ -41,6 +41,7 @@ const OUTPUT_FIELDS = [
   'validate_ok',
   'review_gate_passed',
   'publish_gate_passed',
+  'publish_gate_reason_codes',
   'min_final_articles',
   'absolute_min_reviewable_articles',
   'min_non_fallback_publish_ready_articles',
@@ -157,6 +158,12 @@ function buildGenerationStatusOutputs(status) {
   outputs.stale_claim_hard_failure_count = scalar(status.stale_claim_hard_failure_count, '0');
   outputs.selection_warnings = multilineValue(status.selection_warnings);
   outputs.selection_errors = multilineValue(status.selection_errors);
+  outputs.publish_gate_reason_codes = multilineValue(status.publish_gate_reason_codes);
+  outputs.publish_gate_reason_summary = multilineValue(
+    ensureArray(status.publish_gate_reason_summary).map(item =>
+      `${item.code || 'unknown'} actual=${scalar(item.actual, 'n/a')} required=${scalar(item.required, 'n/a')}`
+    )
+  );
   outputs.selection_shortage_hints = multilineValue(status.selection_shortage_hints);
   outputs.exclusion_reason_summary = formatReasonSummary(status.exclusion_reason_summary);
   outputs.final_exclusion_reason_summary = formatReasonSummary(

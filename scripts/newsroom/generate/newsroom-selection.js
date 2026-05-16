@@ -11,6 +11,7 @@ const {
   articlePolicy,
   articleCountRangeText,
   candidatePoolPreflightPolicy,
+  getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,
@@ -26,7 +27,12 @@ const RESERVE_MAX_CANDIDATES = 7;
 const MIN_FINAL_ARTICLES = articlePolicy.mainArticleCount.min;
 const MAX_FINAL_ARTICLES = articlePolicy.mainArticleCount.max;
 const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = articlePolicy.primaryCameraStack.minRequired;
-const MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES = articlePolicy.primaryCameraStack.minRequired;
+const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();
+const MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES = publishReadyCompositionPolicy.primaryCameraStackMinRequired;
+const DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS = Object.freeze([
+  BUCKETS.DIRECT_AOSP_CAMERA,
+  BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE
+]);
 const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
 const MIN_CAMERA_HAL_DIRECTNESS = 2;
 const MIN_SCOPE_RELEVANCE = 2;
@@ -55,6 +61,16 @@ function bool(value, fallback = false) {
 function number(value, fallback = 0) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function resolvePublishReadyCompositionPolicy(policy = getPublishReadyCompositionPolicy()) {
+  if (policy?.articlePolicy?.publishReadyComposition) {
+    return policy.articlePolicy.publishReadyComposition;
+  }
+  if (policy?.publishReadyComposition) {
+    return policy.publishReadyComposition;
+  }
+  return policy;
 }
 
 function clamp(value, min, max) {
@@ -1054,7 +1070,7 @@ function selectionErrors(selected) {
   return errors;
 }
 
-function publishGatePasses(summary) {
+function reviewCompositionGatePasses(summary) {
   const selectedCount = number(summary.selected_article_count);
   const primaryCount = number(summary.primary_camera_stack_topic_count);
   const supportingCount = number(summary.supporting_main_article_count);
@@ -1064,6 +1080,52 @@ function publishGatePasses(summary) {
     primaryCount >= articlePolicy.primaryCameraStack.minRequired &&
     forbiddenCount === 0 &&
     primaryCount + supportingCount === selectedCount;
+}
+
+function publishReadyGateReasonSummary(summary, policy = getPublishReadyCompositionPolicy()) {
+  const publishPolicy = resolvePublishReadyCompositionPolicy(policy);
+  const selectedCount = number(summary.selected_article_count);
+  const primaryCount = number(summary.primary_camera_stack_topic_count);
+  const directOrDriverCount =
+    number(summary.direct_aosp_camera_count) +
+    number(summary.camera_driver_image_pipeline_count);
+  const supportingCount = number(summary.supporting_main_article_count);
+  const forbiddenCount = number(summary.forbidden_main_article_count);
+  const reasons = [];
+  const addReason = (code, actual, required) => {
+    reasons.push({ code, actual, required });
+  };
+
+  if (selectedCount < articlePolicy.mainArticleCount.min) {
+    addReason('publish_ready_article_count_under_min', selectedCount, articlePolicy.mainArticleCount.min);
+  }
+  if (selectedCount > articlePolicy.mainArticleCount.max) {
+    addReason('publish_ready_article_count_over_max', selectedCount, articlePolicy.mainArticleCount.max);
+  }
+  if (primaryCount < publishPolicy.primaryCameraStackMinRequired) {
+    addReason('publish_ready_primary_camera_stack_shortage', primaryCount, publishPolicy.primaryCameraStackMinRequired);
+  }
+  if (directOrDriverCount < publishPolicy.directAospCameraOrDriverMinRequired) {
+    addReason('publish_ready_direct_camera_or_driver_shortage', directOrDriverCount, publishPolicy.directAospCameraOrDriverMinRequired);
+  }
+  if (supportingCount > publishPolicy.supportingMainMaxAllowed) {
+    addReason('publish_ready_supporting_main_over_limit', supportingCount, publishPolicy.supportingMainMaxAllowed);
+  }
+  if (forbiddenCount > 0) {
+    addReason('publish_ready_forbidden_main_bucket', forbiddenCount, 0);
+  }
+  if (primaryCount + supportingCount !== selectedCount && forbiddenCount === 0) {
+    addReason('publish_ready_forbidden_main_bucket', selectedCount - primaryCount - supportingCount, 0);
+  }
+  return reasons;
+}
+
+function publishReadyGateReasonCodes(summary, policy = getPublishReadyCompositionPolicy()) {
+  return publishReadyGateReasonSummary(summary, policy).map(reason => reason.code);
+}
+
+function publishGatePasses(summary, policy = getPublishReadyCompositionPolicy()) {
+  return publishReadyGateReasonSummary(summary, policy).length === 0;
 }
 
 function summarizeExclusionReasons(excluded) {
@@ -1241,7 +1303,7 @@ function compositionMode(selected, errors = []) {
   const summary = compositionSummary(selected);
   if (
     ensureArray(errors).length > 0 ||
-    !publishGatePasses(summary)
+    !reviewCompositionGatePasses(summary)
   ) {
     return COMPOSITION_MODES.NEEDS_FIX;
   }
@@ -1293,8 +1355,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const preflightSummary = candidatePoolPreflightSummary(shortlist, selected, reserve);
   const shortageReasonCodes = candidatePoolShortageReasonCodes(preflightSummary);
   const mode = compositionMode(selected, errors);
-  const reviewGatePassed = errors.length === 0;
-  const publishGatePassed = reviewGatePassed && publishGatePasses(composition);
+  const reviewGatePassed = errors.length === 0 && reviewCompositionGatePasses(composition);
+  const publishGateReasonSummary = publishReadyGateReasonSummary(composition);
+  const publishGateReasonCodes = publishGateReasonSummary.map(reason => reason.code);
+  const publishGatePassed = reviewGatePassed && publishGateReasonCodes.length === 0;
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, cap);
   const markedShortlist = reportShortlist.map(candidate => {
@@ -1358,6 +1422,14 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     min_final_articles: MIN_FINAL_ARTICLES,
     review_gate_passed: reviewGatePassed,
     publish_gate_passed: publishGatePassed,
+    publish_ready_composition_policy: {
+      primaryCameraStackMinRequired: publishReadyCompositionPolicy.primaryCameraStackMinRequired,
+      directAospCameraOrDriverMinRequired: publishReadyCompositionPolicy.directAospCameraOrDriverMinRequired,
+      supportingMainMaxAllowed: publishReadyCompositionPolicy.supportingMainMaxAllowed,
+      directAospCameraOrDriverBuckets: [...DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS]
+    },
+    publish_gate_reason_codes: publishGateReasonCodes,
+    publish_gate_reason_summary: publishGateReasonSummary,
     underfilled: warnings.length > 0,
     publish_ready: publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX,
     selection_policy: {
@@ -1365,6 +1437,12 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       candidate_pool_preflight: candidatePoolPreflightPolicy,
       absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
       min_non_fallback_publish_ready_articles: MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
+      publish_ready_composition: {
+        primaryCameraStackMinRequired: publishReadyCompositionPolicy.primaryCameraStackMinRequired,
+        directAospCameraOrDriverMinRequired: publishReadyCompositionPolicy.directAospCameraOrDriverMinRequired,
+        supportingMainMaxAllowed: publishReadyCompositionPolicy.supportingMainMaxAllowed,
+        directAospCameraOrDriverBuckets: [...DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS]
+      },
       max_final_articles: MAX_FINAL_ARTICLES,
       policy_config: POLICY_REL_PATH.replace(/\\/g, '/'),
       article_policy: articlePolicy,
@@ -1472,6 +1550,9 @@ module.exports = {
   normalizeUrl,
   normalizedUrlHash,
   publishGatePasses,
+  publishReadyGateReasonCodes,
+  publishReadyGateReasonSummary,
+  reviewCompositionGatePasses,
   reporterInputFromShortlist,
   scoreCandidate,
   selectFinalArticles,
