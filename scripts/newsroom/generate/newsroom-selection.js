@@ -658,11 +658,12 @@ function shouldPreferDuplicateCandidate(candidate, existing) {
   return false;
 }
 
-function decorateCandidate(candidate, newsletterDate) {
+function decorateCandidate(candidate, newsletterDate, options = {}) {
+  const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
   const scope = candidateScope(candidate);
   const score_breakdown = scoreCandidate(candidate, newsletterDate);
   const score_filter_reasons = scoreFilterReasons(score_breakdown);
-  const windowMetadata = freshnessWindowMetadata(candidate, newsletterDate);
+  const windowMetadata = freshnessWindowMetadata(candidate, newsletterDate, selectionWindowPolicy);
   return {
     ...candidate,
     ...scope,
@@ -686,47 +687,123 @@ function decorateCandidate(candidate, newsletterDate) {
   };
 }
 
-function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_CAP) {
-  const excluded = [];
-  const eligible = [];
-  for (const candidate of ensureArray(rawCandidates).map(item => decorateCandidate(item, newsletterDate))) {
-    if (candidate.exclusion_reasons.length > 0) {
-      excluded.push(candidate);
-      continue;
-    }
-    const duplicateIndex = eligible.findIndex(existing => candidatesAreDuplicate(existing, candidate));
-    if (duplicateIndex >= 0) {
-      if (shouldPreferDuplicateCandidate(candidate, eligible[duplicateIndex])) {
-        excluded.push({
-          ...eligible[duplicateIndex],
-          exclusion_reasons: ['duplicate CameraX release-note body candidate supersedes discovery row']
-        });
-        eligible[duplicateIndex] = candidate;
-        continue;
-      }
-      excluded.push({
-        ...candidate,
-        exclusion_reasons: ['duplicate URL or near-duplicate title']
-      });
-      continue;
-    }
-    eligible.push(candidate);
-  }
-
-  eligible.sort((a, b) =>
-    number(a.editorial_priority, 6) - number(b.editorial_priority, 6) ||
+function deterministicCandidateSort(a, b) {
+  return number(a.editorial_priority, 6) - number(b.editorial_priority, 6) ||
     cameraReleaseVersionRank(a).kind - cameraReleaseVersionRank(b).kind ||
     cameraReleaseVersionRank(b).weight - cameraReleaseVersionRank(a).weight ||
     b.deterministic_score - a.deterministic_score ||
     b.score_breakdown.camera_hal_directness - a.score_breakdown.camera_hal_directness ||
     b.score_breakdown.scope_relevance - a.score_breakdown.scope_relevance ||
     b.score_breakdown.evidence_specificity - a.score_breakdown.evidence_specificity ||
-    normalizeTitle(a.title).localeCompare(normalizeTitle(b.title))
-  );
+    normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
+}
+
+function selectionWindowExclusionReason(candidate) {
+  const window = text(candidate.freshness_window);
+  if (window === 'reference') return 'reference_not_main';
+  if (window === 'stale') return 'stale_not_main';
+  if (window === 'unknown') return 'unknown_not_main';
+  return '';
+}
+
+function appendSelectionWindowExclusion(candidate) {
+  const reason = selectionWindowExclusionReason(candidate);
+  if (!reason) return candidate;
+  const marker = `selection_window=${reason}`;
+  return {
+    ...candidate,
+    selection_window_exclusion_reason: reason,
+    exclusion_reasons: [...new Set([...ensureArray(candidate.exclusion_reasons), marker])]
+  };
+}
+
+function isMainSelectionWindow(candidate) {
+  return ['primary', 'fallback'].includes(text(candidate.freshness_window));
+}
+
+function partitionSelectionWindows(candidates) {
+  const primary = [];
+  const fallback = [];
+  const reference = [];
+  const windowExcluded = [];
+
+  for (const candidate of ensureArray(candidates)) {
+    const window = text(candidate.freshness_window);
+    if (window === 'primary') {
+      primary.push(candidate);
+    } else if (window === 'fallback') {
+      fallback.push(candidate);
+    } else {
+      const excluded = appendSelectionWindowExclusion(candidate);
+      windowExcluded.push(excluded);
+      if (window === 'reference') {
+        reference.push(excluded);
+      }
+    }
+  }
 
   return {
-    shortlist: eligible.slice(0, cap),
-    excluded
+    primary,
+    fallback,
+    reference,
+    windowExcluded
+  };
+}
+
+function summarizeSelectionWindowExclusions(excluded) {
+  const counts = new Map();
+  for (const candidate of ensureArray(excluded)) {
+    const reason = text(candidate.selection_window_exclusion_reason);
+    if (!reason) continue;
+    counts.set(reason, (counts.get(reason) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([reason, count]) => ({ reason, count }))
+    .sort((a, b) => b.count - a.count || a.reason.localeCompare(b.reason));
+}
+
+function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_CAP, options = {}) {
+  const excluded = [];
+  const eligible = [];
+  const decorateOptions = { selectionWindowPolicy: options.selectionWindowPolicy };
+  for (const candidate of ensureArray(rawCandidates).map(item => decorateCandidate(item, newsletterDate, decorateOptions))) {
+    if (candidate.exclusion_reasons.length > 0) {
+      excluded.push(appendSelectionWindowExclusion(candidate));
+      continue;
+    }
+    const duplicateIndex = eligible.findIndex(existing => candidatesAreDuplicate(existing, candidate));
+    if (duplicateIndex >= 0) {
+      if (shouldPreferDuplicateCandidate(candidate, eligible[duplicateIndex])) {
+        excluded.push(appendSelectionWindowExclusion({
+          ...eligible[duplicateIndex],
+          exclusion_reasons: ['duplicate CameraX release-note body candidate supersedes discovery row']
+        }));
+        eligible[duplicateIndex] = candidate;
+        continue;
+      }
+      excluded.push(appendSelectionWindowExclusion({
+        ...candidate,
+        exclusion_reasons: ['duplicate URL or near-duplicate title']
+      }));
+      continue;
+    }
+    eligible.push(candidate);
+  }
+
+  eligible.sort(deterministicCandidateSort);
+  const windows = partitionSelectionWindows(eligible);
+  const mainSelectionCandidates = [...windows.primary, ...windows.fallback];
+
+  return {
+    shortlist: mainSelectionCandidates.slice(0, cap),
+    excluded: excluded.concat(windows.windowExcluded),
+    referenceContextCandidates: windows.reference.slice(0, cap),
+    windowCandidateCounts: {
+      primary: windows.primary.length,
+      fallback: windows.fallback.length,
+      reference: windows.reference.length,
+      excluded: windows.windowExcluded.length
+    }
   };
 }
 
@@ -739,10 +816,13 @@ function pushUnique(selected, candidate, slot) {
   if (!candidate) return false;
   if (selectedHasSameCameraReleasePage(selected, candidate)) return false;
   if (selected.some(existing => candidatesAreDuplicate(existing, candidate))) return false;
+  const isFallback = text(candidate.freshness_window) === 'fallback';
   selected.push({
     ...candidate,
     selected: true,
     selected_for_editor: true,
+    fallback_window_promoted: isFallback,
+    selection_window_stage: isFallback ? 'fallback' : 'primary',
     selection_slot: slot
   });
   return true;
@@ -753,7 +833,10 @@ function reserveCandidates(shortlist, selected, options = {}) {
   const maxReserve = options.maxReserve || RESERVE_MAX_CANDIDATES;
   const selectedUrls = new Set(ensureArray(selected).map(candidate => candidate.normalized_url));
   const reserve = [];
-  for (const candidate of ensureArray(shortlist)) {
+  const mainSelectionCandidates = ensureArray(shortlist).filter(isMainSelectionWindow);
+  const primaryReserveCandidates = mainSelectionCandidates.filter(candidate => text(candidate.freshness_window) === 'primary');
+  const fallbackReserveCandidates = mainSelectionCandidates.filter(candidate => text(candidate.freshness_window) === 'fallback');
+  for (const candidate of primaryReserveCandidates) {
     if (reserve.length >= maxReserve) break;
     if (selectedUrls.has(candidate.normalized_url)) continue;
     if (candidate.main_article_score_eligible === false) continue;
@@ -763,13 +846,15 @@ function reserveCandidates(shortlist, selected, options = {}) {
       selected: false,
       selected_for_editor: false,
       final_selected: false,
+      fallback_window_reserve: false,
       reserve_candidate: true,
       selection_stage: 'deterministic-reserve',
+      selection_window_stage: 'primary_reserve',
       selection_slot: 'reserve'
     });
   }
   if (reserve.length < minReserve) {
-    for (const candidate of ensureArray(shortlist)) {
+    for (const candidate of fallbackReserveCandidates) {
       if (reserve.length >= maxReserve) break;
       if (selectedUrls.has(candidate.normalized_url)) continue;
       if (reserve.some(existing => existing.normalized_url === candidate.normalized_url)) continue;
@@ -779,8 +864,10 @@ function reserveCandidates(shortlist, selected, options = {}) {
         selected: false,
         selected_for_editor: false,
         final_selected: false,
+        fallback_window_reserve: true,
         reserve_candidate: true,
         selection_stage: 'deterministic-reserve',
+        selection_window_stage: 'fallback_reserve',
         selection_slot: isForbiddenMainScope(candidate)
           ? 'thin-week-watchlist-reserve'
           : 'reserve'
@@ -790,11 +877,13 @@ function reserveCandidates(shortlist, selected, options = {}) {
   return reserve;
 }
 
-function selectFinalArticles(shortlist, options = {}) {
+function selectFinalArticlesFromPool(shortlist, options = {}) {
   const minArticles = options.minArticles || MIN_FINAL_ARTICLES;
   const maxArticles = options.maxArticles || MAX_FINAL_ARTICLES;
   const candidates = ensureArray(shortlist).map(candidate =>
-    candidate.score_breakdown ? candidate : decorateCandidate(candidate, options.date || '')
+    candidate.score_breakdown ? candidate : decorateCandidate(candidate, options.date || '', {
+      selectionWindowPolicy: options.selectionWindowPolicy
+    })
   );
   const selected = [];
   const mainEligible = candidates.filter(candidate => candidate.main_article_score_eligible !== false);
@@ -819,6 +908,74 @@ function selectFinalArticles(shortlist, options = {}) {
   }
 
   return selected.slice(0, maxArticles);
+}
+
+function fallbackWindowReason(primarySelectedCount, minArticles) {
+  return `primary window selected ${primarySelectedCount} article(s), below min ${minArticles}`;
+}
+
+function selectFinalArticlesWithDiagnostics(shortlist, options = {}) {
+  const minArticles = options.minArticles || MIN_FINAL_ARTICLES;
+  const rawCandidates = ensureArray(shortlist);
+  const enforceSelectionWindow = rawCandidates.some(candidate => text(candidate.freshness_window)) ||
+    Boolean(options.date);
+  if (!enforceSelectionWindow) {
+    const selected = selectFinalArticlesFromPool(rawCandidates, options);
+    return {
+      selected,
+      diagnostics: {
+        primary_window_candidate_count: 0,
+        primary_window_selected_count: selected.length,
+        fallback_window_candidate_count: 0,
+        fallback_window_used: false,
+        fallback_window_reason: '',
+        fallback_candidates_promoted: []
+      }
+    };
+  }
+  const decoratedCandidates = rawCandidates.map(candidate =>
+    candidate.score_breakdown && text(candidate.freshness_window)
+      ? candidate
+      : decorateCandidate(candidate, options.date || '', {
+        selectionWindowPolicy: options.selectionWindowPolicy
+      })
+  );
+  const primaryCandidates = decoratedCandidates.filter(candidate => text(candidate.freshness_window) === 'primary');
+  const fallbackCandidates = decoratedCandidates.filter(candidate => text(candidate.freshness_window) === 'fallback');
+  const primarySelected = selectFinalArticlesFromPool(primaryCandidates, options);
+  const fallbackNeeded = primarySelected.length < minArticles;
+  const selectionPool = fallbackNeeded
+    ? [...primaryCandidates, ...fallbackCandidates]
+    : primaryCandidates;
+  const selected = fallbackNeeded
+    ? selectFinalArticlesFromPool(selectionPool, options)
+    : primarySelected;
+  const fallbackCandidatesPromoted = selected.filter(candidate => candidate.fallback_window_promoted === true);
+  const fallbackWindowUsed = fallbackNeeded && fallbackCandidates.length > 0;
+
+  return {
+    selected,
+    diagnostics: {
+      primary_window_candidate_count: primaryCandidates.length,
+      primary_window_selected_count: primarySelected.length,
+      fallback_window_candidate_count: fallbackCandidates.length,
+      fallback_window_used: fallbackWindowUsed,
+      fallback_window_reason: fallbackNeeded
+        ? fallbackWindowReason(primarySelected.length, minArticles)
+        : '',
+      fallback_candidates_promoted: fallbackCandidatesPromoted.map(candidate => ({
+        title: candidate.title,
+        url: candidate.url,
+        normalized_url: candidate.normalized_url,
+        freshness_window: candidate.freshness_window,
+        days_since_published: candidate.days_since_published
+      }))
+    }
+  };
+}
+
+function selectFinalArticles(shortlist, options = {}) {
+  return selectFinalArticlesFromPool(shortlist, options);
 }
 
 function selectionWarnings(selected) {
@@ -1061,9 +1218,19 @@ function compositionReason(mode, summary) {
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const cap = options.cap || SHORTLIST_CAP;
-  const selectionWindowPolicy = getSelectionWindowPolicy();
-  const { shortlist, excluded } = buildEligibleShortlist(rawCandidates, date, cap);
-  const selected = selectFinalArticles(shortlist, options);
+  const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
+  const {
+    shortlist,
+    excluded,
+    referenceContextCandidates,
+    windowCandidateCounts
+  } = buildEligibleShortlist(rawCandidates, date, cap, { selectionWindowPolicy });
+  const selectionResult = selectFinalArticlesWithDiagnostics(shortlist, {
+    ...options,
+    selectionWindowPolicy
+  });
+  const selected = selectionResult.selected;
+  const windowDiagnostics = selectionResult.diagnostics;
   const reserve = reserveCandidates(shortlist, selected, options);
   const warnings = selectionWarnings(selected);
   const errors = selectionErrors(selected);
@@ -1110,6 +1277,14 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     composition_summary: composition,
     eligible_composition_summary: eligibleComposition,
     selection_shortage_hints: selectionShortageHints(eligibleComposition),
+    primary_window_candidate_count: windowDiagnostics.primary_window_candidate_count,
+    primary_window_selected_count: windowDiagnostics.primary_window_selected_count,
+    fallback_window_candidate_count: windowDiagnostics.fallback_window_candidate_count,
+    fallback_window_used: windowDiagnostics.fallback_window_used,
+    fallback_window_reason: windowDiagnostics.fallback_window_reason,
+    fallback_candidates_promoted: windowDiagnostics.fallback_candidates_promoted,
+    selection_window_candidate_counts: windowCandidateCounts,
+    selection_window_exclusion_summary: summarizeSelectionWindowExclusions(excluded),
     candidate_pool_preflight_passed: shortageReasonCodes.length === 0,
     candidate_shortage_reviewable: shortageReasonCodes.length > 0,
     candidate_shortage_summary: preflightSummary,
@@ -1145,7 +1320,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
         primarySelectionDays: selectionWindowPolicy.primarySelectionDays,
         fallbackSelectionDays: selectionWindowPolicy.fallbackSelectionDays,
         referenceContextDays: selectionWindowPolicy.referenceContextDays,
-        enforcement: 'metadata_only'
+        enforcement: 'main_selection_enforced'
       },
       editorial_scope: 'AOSP Camera + Camera Driver + SoC Platform, with configured supporting main buckets allowed by Newsletter Policy.',
       priority_order: [
@@ -1160,6 +1335,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     shortlisted_candidates: markedShortlist,
     selected_articles: selected,
     reserve_candidates: reserve,
+    reference_context_candidates: referenceContextCandidates,
     demoted_candidates: [],
     excluded_candidates: excluded,
     selection_warnings: warnings,

@@ -4644,6 +4644,23 @@ test('generation path guards public artifacts for editorial reviewable failures'
   assert.ok(validateResultIndex < finalPublishReadyIndex);
 });
 
+test('generation path passes runtime selection window policy into shortlist report', () => {
+  const generatorPath = path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
+  const generator = fs.readFileSync(generatorPath, 'utf8');
+  const runtimeConfigIndex = generator.indexOf('const runtimeConfig = readRuntimeConfig(process.env);');
+  const shortlistIndex = generator.indexOf('let shortlistReport = buildShortlistReport(date, candidates, {');
+  const selectionWindowPolicyIndex = generator.indexOf(
+    'selectionWindowPolicy: runtimeConfig.selectionWindowPolicy',
+    shortlistIndex
+  );
+
+  assert.notEqual(runtimeConfigIndex, -1);
+  assert.notEqual(shortlistIndex, -1);
+  assert.notEqual(selectionWindowPolicyIndex, -1);
+  assert.ok(runtimeConfigIndex < shortlistIndex);
+  assert.ok(shortlistIndex < selectionWindowPolicyIndex);
+});
+
 test('validate-site uses shared rendered issue structural validator', () => {
   const validateSitePath = path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'validate-site.js');
   const validateSite = fs.readFileSync(validateSitePath, 'utf8');

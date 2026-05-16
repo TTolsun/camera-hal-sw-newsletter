@@ -486,18 +486,18 @@ test('linked evidence adjustment requires count and valid impact classification'
 
 test('linked evidence adjustment does not change threshold eligibility', () => {
   let thresholdCandidate = null;
-  for (let directness = 2; directness <= 5 && !thresholdCandidate; directness += 0.01) {
+  for (let directness = 0; directness <= 2 && !thresholdCandidate; directness += 0.01) {
     const item = linkedScoreCandidate({
       title: `Threshold linked evidence candidate ${directness}`,
       url: `https://example.com/threshold-${directness.toFixed(2)}`,
       summary: 'Scoped release note for a workflow.',
       api_or_component: 'Lens stack',
       behavior_change: 'Behavior changed.',
-      published_date: '2020-01-01',
-      reliability: 'official',
+      published_date: '2026-05-01',
+      reliability: '',
       aosp_camera_directness: directness,
       camera_hal_relevance_score: 0,
-      evidence_score: 0
+      evidence_score: 2
     });
     const score = scoreCandidate({ ...item, ...mainLinkedEvidence() }, '2026-05-03');
     if (score.base_total < MAIN_ARTICLE_SCORE_THRESHOLD && score.total >= MAIN_ARTICLE_SCORE_THRESHOLD) {
@@ -783,7 +783,7 @@ test('AOSP site update camera rows can satisfy configured composition', () => {
     keywords: ['AOSP', 'Camera', 'Camera ITS', 'CDD']
   };
   const rows = parseSourceSpecificItems(readTextFixture('source-html/aosp-site-updates-camera.html'), source);
-  const report = buildShortlistReport('2026-05-03', rows.map(item => normalizeCandidate(item)));
+  const report = buildShortlistReport('2026-04-08', rows.map(item => normalizeCandidate(item)));
 
   assert.equal(rows.length, articlePolicy.mainArticleCount.min);
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
@@ -911,13 +911,98 @@ test('freshness window metadata maps candidate age without changing freshness sc
     policyPrimaryCandidate(2, { published_date: '2026-03-11' })
   ], { minArticles: 1 });
 
-  assert.equal(report.selection_policy.selection_window_policy.enforcement, 'metadata_only');
+  assert.equal(report.selection_policy.selection_window_policy.enforcement, 'main_selection_enforced');
   assert.equal(report.selection_policy.selection_window_policy.primarySelectionDays, 7);
   assert.ok(report.shortlisted_candidates.every(item => item.freshness_window));
   assert.ok(report.selected_articles.every(item => item.days_since_published !== undefined));
 });
 
-test('selection window metadata stays metadata-only and does not reorder selected articles', () => {
+test('selection window enforcement keeps fallback out when primary window is sufficient', () => {
+  const primaryTitles = [
+    ['CameraX stream metadata compatibility source', 'CameraX stream metadata'],
+    ['AOSP Camera ITS validation source', 'Camera ITS validation'],
+    ['libcamera image pipeline driver source', 'libcamera image pipeline']
+  ];
+  const primaryCandidates = Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) =>
+    policyPrimaryCandidate(index, {
+      title: primaryTitles[index][0],
+      url: `https://example.com/window-primary-${index}`,
+      source: `Primary Window Source ${index}`,
+      api_or_component: primaryTitles[index][1],
+      published_date: '2026-05-09',
+      camera_hal_relevance_score: 60 - index
+    })
+  );
+  const fallbackCandidate = policyPrimaryCandidate(99, {
+    title: 'Fallback window high score candidate',
+    url: 'https://example.com/window-fallback-high',
+    source: 'Fallback Window Source',
+    published_date: '2026-04-26',
+    camera_hal_relevance_score: 100
+  });
+
+  const report = buildShortlistReport('2026-05-10', [
+    fallbackCandidate,
+    ...primaryCandidates
+  ]);
+
+  assert.equal(report.selection_policy.selection_window_policy.enforcement, 'main_selection_enforced');
+  assert.equal(report.primary_window_selected_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.fallback_window_candidate_count, 1);
+  assert.equal(report.fallback_window_used, false);
+  assert.equal(report.fallback_window_reason, '');
+  assert.equal(
+    report.selected_articles.some(item => item.url === 'https://example.com/window-fallback-high'),
+    false
+  );
+  assert.deepEqual(
+    report.selected_articles.map(item => item.freshness_window),
+    Array(articlePolicy.mainArticleCount.min).fill('primary')
+  );
+});
+
+test('selection window enforcement promotes fallback only when primary window is short', () => {
+  const report = buildShortlistReport('2026-05-10', [
+    policyPrimaryCandidate(0, {
+      title: 'Only primary window camera source',
+      url: 'https://example.com/window-primary-only',
+      source: 'Primary Shortage Source',
+      published_date: '2026-05-09'
+    }),
+    policySupportingCandidate(0, {
+      title: 'Fallback window SoC support source',
+      url: 'https://example.com/window-fallback-soc',
+      source: 'Fallback SoC Source',
+      published_date: '2026-04-26',
+      relevance_bucket: 'soc_platform_signal',
+      soc_platform_relevance: 5,
+      native_tooling_relevance: 0,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false
+    }),
+    policySupportingCandidate(1, {
+      title: 'Fallback window native workflow source',
+      url: 'https://example.com/window-fallback-native',
+      source: 'Fallback Native Source',
+      published_date: '2026-04-26'
+    })
+  ]);
+
+  const fallbackSelected = report.selected_articles.filter(item => item.freshness_window === 'fallback');
+
+  assert.equal(report.primary_window_selected_count, 1);
+  assert.equal(report.fallback_window_candidate_count, 2);
+  assert.equal(report.fallback_window_used, true);
+  assert.match(report.fallback_window_reason, /primary window selected 1 article\(s\), below min 3/);
+  assert.equal(fallbackSelected.length, 2);
+  assert.ok(fallbackSelected.every(item => item.fallback_window_promoted === true));
+  assert.ok(fallbackSelected.every(item => item.selection_window_stage === 'fallback'));
+  assert.equal(report.fallback_candidates_promoted.length, 2);
+  assert.deepEqual(report.selection_warnings, []);
+  assert.equal(report.publish_ready, true);
+});
+
+test('selection window enforcement excludes reference stale and unknown candidates without dropping existing reasons', () => {
   const candidateBase = {
     summary: 'Policy source changes validation behavior for device bring-up.',
     api_or_component: 'Device validation component',
@@ -939,7 +1024,8 @@ test('selection window metadata stays metadata-only and does not reorder selecte
       title: 'Stale high deterministic source',
       url: 'https://example.com/metadata-stale-high',
       published_date: '2026-01-10',
-      camera_hal_relevance_score: 100
+      camera_hal_relevance_score: 100,
+      source_gap_risk: true
     }),
     policyPrimaryCandidate(2, {
       ...candidateBase,
@@ -950,27 +1036,112 @@ test('selection window metadata stays metadata-only and does not reorder selecte
     }),
     policyPrimaryCandidate(3, {
       ...candidateBase,
-      title: 'Fallback medium deterministic source',
-      url: 'https://example.com/metadata-fallback-medium',
-      published_date: '2026-04-26',
-      camera_hal_relevance_score: 60
+      title: 'Unknown date high deterministic source',
+      url: 'https://example.com/metadata-unknown-high',
+      published_date: 'not-a-date',
+      camera_hal_relevance_score: 90
     })
   ], { minArticles: 1 });
+  const selectedUrls = new Set(report.selected_articles.map(item => item.url));
+  const reserveUrls = new Set(report.reserve_candidates.map(item => item.url));
+  const excludedByUrl = new Map(report.excluded_candidates.map(item => [item.url, item]));
 
-  assert.equal(report.selection_policy.selection_window_policy.enforcement, 'metadata_only');
+  assert.equal(selectedUrls.has('https://example.com/metadata-primary-low'), true);
+  assert.equal(selectedUrls.has('https://example.com/metadata-reference-medium'), false);
+  assert.equal(selectedUrls.has('https://example.com/metadata-stale-high'), false);
+  assert.equal(selectedUrls.has('https://example.com/metadata-unknown-high'), false);
+  assert.equal(reserveUrls.has('https://example.com/metadata-reference-medium'), false);
+  assert.equal(reserveUrls.has('https://example.com/metadata-stale-high'), false);
+  assert.equal(reserveUrls.has('https://example.com/metadata-unknown-high'), false);
   assert.deepEqual(
-    report.selected_articles.map(item => item.url),
-    [
-      'https://example.com/metadata-stale-high',
-      'https://example.com/metadata-fallback-medium',
-      'https://example.com/metadata-reference-medium',
-      'https://example.com/metadata-primary-low'
-    ]
+    report.reference_context_candidates.map(item => item.url),
+    ['https://example.com/metadata-reference-medium']
   );
-  assert.deepEqual(
-    report.selected_articles.map(item => item.freshness_window),
-    ['stale', 'fallback', 'reference', 'primary']
-  );
+  assert.ok(excludedByUrl.get('https://example.com/metadata-reference-medium').exclusion_reasons.includes('selection_window=reference_not_main'));
+  assert.ok(excludedByUrl.get('https://example.com/metadata-stale-high').exclusion_reasons.includes('source_gap_risk=true'));
+  assert.ok(excludedByUrl.get('https://example.com/metadata-stale-high').exclusion_reasons.includes('selection_window=stale_not_main'));
+  assert.ok(excludedByUrl.get('https://example.com/metadata-unknown-high').exclusion_reasons.includes('selection_window=unknown_not_main'));
+  assert.deepEqual(report.selection_window_exclusion_summary, [
+    { reason: 'reference_not_main', count: 1 },
+    { reason: 'stale_not_main', count: 1 },
+    { reason: 'unknown_not_main', count: 1 }
+  ]);
+});
+
+test('fallback reserve is marked when primary reserve is short', () => {
+  const report = buildShortlistReport('2026-05-10', [
+    ...Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) =>
+      policyPrimaryCandidate(index, {
+        title: [
+          'Reserve CameraX metadata source',
+          'Reserve AOSP Camera validation source',
+          'Reserve libcamera driver source'
+        ][index],
+        url: `https://example.com/reserve-primary-${index}`,
+        source: `Reserve Primary Source ${index}`,
+        published_date: '2026-05-09'
+      })
+    ),
+    ...Array.from({ length: 4 }, (_, index) =>
+      policySupportingCandidate(index, {
+        title: [
+          'Reserve fallback SoC thermal source',
+          'Reserve fallback native debugger source',
+          'Reserve fallback toolchain sanitizer source',
+          'Reserve fallback build workflow source'
+        ][index],
+        url: `https://example.com/reserve-fallback-${index}`,
+        source: `Reserve Fallback Source ${index}`,
+        published_date: '2026-04-26'
+      })
+    )
+  ], { maxArticles: articlePolicy.mainArticleCount.min });
+
+  const fallbackReserve = report.reserve_candidates.filter(item => item.fallback_window_reserve === true);
+
+  assert.equal(report.fallback_window_used, false);
+  assert.ok(fallbackReserve.length > 0);
+  assert.ok(fallbackReserve.every(item => item.selection_window_stage === 'fallback_reserve'));
+  assert.ok(fallbackReserve.every(item => item.freshness_window === 'fallback'));
+});
+
+test('custom selection window policy drives fallback classification and promotion', () => {
+  const customPolicy = {
+    primarySelectionDays: 3,
+    fallbackSelectionDays: 10,
+    referenceContextDays: 30
+  };
+  const report = buildShortlistReport('2026-05-10', [
+    policyPrimaryCandidate(0, {
+      title: 'Custom policy primary source',
+      url: 'https://example.com/custom-policy-primary',
+      source: 'Custom Primary Source',
+      published_date: '2026-05-09'
+    }),
+    policySupportingCandidate(0, {
+      title: 'Custom policy seven day fallback source A',
+      url: 'https://example.com/custom-policy-fallback-a',
+      source: 'Custom Fallback Source A',
+      published_date: '2026-05-03'
+    }),
+    policySupportingCandidate(1, {
+      title: 'Custom policy native debugger fallback source',
+      url: 'https://example.com/custom-policy-fallback-b',
+      source: 'Custom Fallback Source B',
+      summary: 'Native debugger workflow improves camera HAL validation triage.',
+      api_or_component: 'LLDB camera HAL debugger',
+      published_date: '2026-05-03'
+    })
+  ], { selectionWindowPolicy: customPolicy });
+
+  const fallbackUrls = new Set(report.selected_articles
+    .filter(item => item.freshness_window === 'fallback')
+    .map(item => item.url));
+
+  assert.equal(report.selection_policy.selection_window_policy.primarySelectionDays, 3);
+  assert.equal(report.fallback_window_used, true);
+  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-a'), true);
+  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-b'), true);
 });
 
 test('fallback composition uses supporting buckets when direct camera stack topics are scarce', () => {
