@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-17",
-  "generated_at": "2026-05-16T17:20:32.454Z",
+  "generated_at": "2026-05-16T17:30:01.186Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -22,47 +22,51 @@
       "content/newsroom/2026-05-17/stale-claim-report.json"
     ],
     "missing": [
-      "content/newsroom/2026-05-17/generation-status.json",
-      "content/newsroom/2026-05-17/selection-report.json",
-      "content/newsroom/2026-05-17/shortlisted-candidates.json",
-      "content/newsroom/2026-05-17/article-capsules.json",
       "content/newsroom/2026-05-17/reporter-candidates.json",
-      "content/newsroom/2026-05-17/quality-report.json",
-      "content/newsroom/2026-05-17/fact-check-report.json",
-      "content/newsroom/2026-05-17/source-effectiveness-report.json",
       "content/newsroom/2026-05-17/repair-failure.json",
-      "content/newsroom/2026-05-17/fallback-public-issue.json",
       "content/newsroom/2026-05-17/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-17/stale-claim-report.json"
     ],
     "used": [
-      "content/collected-news/2026-05-17/candidates.json"
+      "content/newsroom/2026-05-17/generation-status.json",
+      "content/newsroom/2026-05-17/selection-report.json",
+      "content/newsroom/2026-05-17/shortlisted-candidates.json",
+      "content/collected-news/2026-05-17/candidates.json",
+      "content/newsroom/2026-05-17/article-capsules.json",
+      "content/newsroom/2026-05-17/quality-report.json",
+      "content/newsroom/2026-05-17/fact-check-report.json",
+      "content/newsroom/2026-05-17/source-effectiveness-report.json",
+      "content/newsroom/2026-05-17/fallback-public-issue.json"
     ]
   },
   "publish_status": {
-    "status": "unknown",
+    "status": "needs-fix",
     "run_mode": "unknown",
-    "quality_score": null,
-    "quality_threshold": null,
-    "fact_check_status": "UNKNOWN",
-    "final_publish_ready": null,
-    "public_newsletter_ready": null,
-    "review_pr_ready": null
+    "quality_score": 100,
+    "quality_threshold": 85,
+    "fact_check_status": "PASS",
+    "final_publish_ready": false,
+    "public_newsletter_ready": true,
+    "review_pr_ready": true
   },
   "selection_summary": {
     "raw_candidate_count": 40,
-    "eligible_candidate_count": null,
-    "selected_main_article_count": null,
-    "reserve_candidate_count": null,
-    "excluded_candidate_count": 40,
-    "primary_camera_stack_count": null,
-    "supporting_bucket_count": null,
-    "fallback_window_used": null,
-    "fallback_window_consulted": null,
-    "fallback_window_reason": "",
-    "fallback_candidates_promoted_count": null,
-    "fallback_bucket_used": null,
-    "candidate_shortage_hints": []
+    "eligible_candidate_count": 3,
+    "selected_main_article_count": 3,
+    "reserve_candidate_count": 0,
+    "excluded_candidate_count": 37,
+    "primary_camera_stack_count": 1,
+    "supporting_bucket_count": 2,
+    "fallback_window_used": true,
+    "fallback_window_consulted": true,
+    "fallback_window_reason": "primary window selected 0 article(s), below min 3",
+    "fallback_candidates_promoted_count": 3,
+    "fallback_bucket_used": true,
+    "candidate_shortage_hints": [
+      "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+      "Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.",
+      "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    ]
   },
   "claim_validation_summary": {
     "status": "not_available",
@@ -70,40 +74,157 @@
     "total_claims": null,
     "overclaim_risk": "unknown",
     "available_article_count": 0,
-    "not_available_article_count": 0
+    "not_available_article_count": 3
   },
   "hal_impact_summary": {
-    "axes": [],
-    "article_count_with_axes": 0,
+    "axes": [
+      "\\bV4L2\\b",
+      "\\blibcamera\\b",
+      "\\bcamera\\b",
+      "\\bimage pipeline\\b",
+      "\\bcamera\\b[^.\\n]{0,120}\\b(?:performance|thermal|latency|power|pipeline|sensor|capture)\\b",
+      "\\b(?:performance|thermal|latency|power|pipeline|sensor|capture)\\b[^.\\n]{0,120}\\bcamera\\b",
+      "\\bC\\+\\+\\b",
+      "\\bGCC\\b[^.\\n]{0,120}\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b",
+      "\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b[^.\\n]{0,120}\\bGCC\\b",
+      "\\bGCC\\b",
+      "\\bClang\\b"
+    ],
+    "article_count_with_axes": 3,
     "article_count_without_axes": 0
   },
-  "selected_main_articles": [],
+  "selected_main_articles": [
+    {
+      "candidate_id": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "source_tier": "high",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "source_reliability": "project-official",
+      "freshness_window": "fallback",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 8,
+      "hal_impact_axes": [
+        "\\bV4L2\\b",
+        "\\blibcamera\\b",
+        "\\bcamera\\b",
+        "\\bimage pipeline\\b",
+        "\\bcamera\\b[^.\\n]{0,120}\\b(?:performance|thermal|latency|power|pipeline|sensor|capture)\\b",
+        "\\b(?:performance|thermal|latency|power|pipeline|sensor|capture)\\b[^.\\n]{0,120}\\bcamera\\b"
+      ],
+      "key_evidence": [
+        "version_or_release: libcamera v0.7.1",
+        "api_or_component: libcamera / V4L2 camera pipeline",
+        "behavior_change: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration up..."
+      ],
+      "selection_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    },
+    {
+      "candidate_id": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "source_tier": "high",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "source_reliability": "official-community",
+      "freshness_window": "fallback",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bC\\+\\+\\b",
+        "\\bGCC\\b[^.\\n]{0,120}\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b",
+        "\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b[^.\\n]{0,120}\\bGCC\\b",
+        "\\bGCC\\b"
+      ],
+      "key_evidence": [
+        "api_or_component: GCC",
+        "behavior_change: GCC 16.1 has been released!",
+        "summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes Fr..."
+      ],
+      "selection_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    },
+    {
+      "candidate_id": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source": "ISO C++ Blog",
+      "source_tier": "high",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "source_reliability": "official-community",
+      "freshness_window": "fallback",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 8,
+      "hal_impact_axes": [
+        "\\bC\\+\\+\\b",
+        "\\bClang\\b",
+        "\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b[^.\\n]{0,120}\\bGCC\\b",
+        "\\bGCC\\b"
+      ],
+      "key_evidence": [
+        "version_or_release: v7.2.0",
+        "api_or_component: GCC",
+        "behavior_change: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
+      ],
+      "selection_reason": "ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    }
+  ],
   "reserve_candidates": [],
   "excluded_candidates_top": [
     {
-      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "candidate_id": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
       "title": "1.6.1",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "source": "Android Developers Latest Updates",
       "source_role": "unknown",
       "source_url_quality": "unknown",
-      "freshness_window": "unknown",
+      "freshness_window": "fallback",
       "relevance_bucket": "android_platform_camera_adjacent",
-      "exclusion_reason": "Eligible for main article selection."
+      "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
     },
     {
-      "candidate_id": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "candidate_id": "931e1972767ee1143736a1c0f348d85ab845308e0f62354994798f2f634a56e8",
       "title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
       "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
       "source": "Android Developers Blog",
       "source_role": "unknown",
       "source_url_quality": "unknown",
-      "freshness_window": "unknown",
+      "freshness_window": "primary",
       "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
     },
     {
-      "candidate_id": "https://source.android.com/docs/core/camera",
+      "candidate_id": "2e09be47b7d035b1b1509fe59f1caf95edd44bab9f4919926cd7de56c0bd6f6a",
       "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/core/camera",
       "source": "AOSP Camera Documentation",
@@ -111,65 +232,65 @@
       "source_url_quality": "unknown",
       "freshness_window": "unknown",
       "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      "exclusion_reason": "missing dated evidence"
     },
     {
-      "candidate_id": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "candidate_id": "aedaad77a2bc7e4d75834d75b2fe82efe8706373c567d1da87231d19ac0d9238",
       "title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
       "url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
       "source": "Android Developers Blog",
       "source_role": "unknown",
       "source_url_quality": "unknown",
-      "freshness_window": "unknown",
+      "freshness_window": "primary",
       "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
     },
     {
-      "candidate_id": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "candidate_id": "70b911c01b6fce5ec581cedd1c0878c09d5e2a3fb2309ce68c00e2b02545e40c",
       "title": "Gratitude saw 25% higher retention for widget users",
       "url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
       "source": "Android Developers Blog",
       "source_role": "unknown",
       "source_url_quality": "unknown",
-      "freshness_window": "unknown",
+      "freshness_window": "fallback",
       "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
     },
     {
-      "candidate_id": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "candidate_id": "e3e46728deeff066bd16a52c57511f4365cd7c062b859d78156f05a01b842a49",
       "title": "A look ahead: Making it easier and faster to publish safer apps",
       "url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
       "source": "Android Developers Blog",
       "source_role": "unknown",
       "source_url_quality": "unknown",
-      "freshness_window": "unknown",
+      "freshness_window": "fallback",
       "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
     },
     {
-      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "candidate_id": "d116a623b5025f895f131151e5af0dff5221d24c9ef56d17ef871245dce222ca",
       "title": "1.3.0-beta02",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
       "source": "Android Developers Latest Updates",
       "source_role": "unknown",
       "source_url_quality": "unknown",
-      "freshness_window": "unknown",
+      "freshness_window": "fallback",
       "relevance_bucket": "android_platform_camera_adjacent",
-      "exclusion_reason": "Eligible for short newsletter use."
+      "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
     },
     {
-      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "candidate_id": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
       "title": "1.4.0-alpha07",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "source": "Android Developers Latest Updates",
       "source_role": "unknown",
       "source_url_quality": "unknown",
-      "freshness_window": "unknown",
+      "freshness_window": "fallback",
       "relevance_bucket": "android_platform_camera_adjacent",
-      "exclusion_reason": "Eligible for short newsletter use."
+      "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
     },
     {
-      "candidate_id": "https://source.android.com/docs/whatsnew",
+      "candidate_id": "9e95b9aeb56502637e3c44214863e13f906682940bfc35890d2dd5869dc615c9",
       "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/whatsnew",
       "source": "AOSP What's New / Release Notes",
@@ -177,10 +298,10 @@
       "source_url_quality": "unknown",
       "freshness_window": "unknown",
       "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      "exclusion_reason": "missing dated evidence"
     },
     {
-      "candidate_id": "https://source.android.com/docs/compatibility/cdd",
+      "candidate_id": "b564c567eef7ae5977d361d9a12b799d681cb5a470b50ac7f67887452ef3478b",
       "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/compatibility/cdd",
       "source": "Android Compatibility Definition Document",
@@ -188,7 +309,7 @@
       "source_url_quality": "unknown",
       "freshness_window": "unknown",
       "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      "exclusion_reason": "missing dated evidence"
     }
   ],
   "excluded_candidates_truncated": true,
@@ -197,36 +318,33 @@
     "fact_check_must_fix": [],
     "repair_failures": [],
     "fallback_builder_failures": [],
-    "candidate_shortage_hints": [],
+    "candidate_shortage_hints": [
+      "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+      "Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.",
+      "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    ],
     "source_gap_warnings": [],
     "missing_artifacts": [
-      "content/newsroom/2026-05-17/generation-status.json",
-      "content/newsroom/2026-05-17/selection-report.json",
-      "content/newsroom/2026-05-17/shortlisted-candidates.json",
-      "content/newsroom/2026-05-17/article-capsules.json",
       "content/newsroom/2026-05-17/reporter-candidates.json",
-      "content/newsroom/2026-05-17/quality-report.json",
-      "content/newsroom/2026-05-17/fact-check-report.json",
-      "content/newsroom/2026-05-17/source-effectiveness-report.json",
       "content/newsroom/2026-05-17/repair-failure.json",
-      "content/newsroom/2026-05-17/fallback-public-issue.json",
       "content/newsroom/2026-05-17/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-17/stale-claim-report.json"
     ],
     "invalid_artifacts": []
   },
   "warnings": [
-    "Missing preferred artifact: content/newsroom/2026-05-17/generation-status.json",
-    "Missing preferred artifact: content/newsroom/2026-05-17/selection-report.json",
-    "Missing preferred artifact: content/newsroom/2026-05-17/shortlisted-candidates.json",
-    "Missing optional artifact: content/newsroom/2026-05-17/article-capsules.json",
     "Missing optional artifact: content/newsroom/2026-05-17/reporter-candidates.json",
-    "Missing optional artifact: content/newsroom/2026-05-17/quality-report.json",
-    "Missing optional artifact: content/newsroom/2026-05-17/fact-check-report.json",
-    "Missing optional artifact: content/newsroom/2026-05-17/source-effectiveness-report.json",
     "Missing optional artifact: content/newsroom/2026-05-17/repair-failure.json",
-    "Missing optional artifact: content/newsroom/2026-05-17/fallback-public-issue.json",
     "Missing optional artifact: content/newsroom/2026-05-17/fallback-public-issue-diagnostics.json",
-    "Missing optional artifact: content/newsroom/2026-05-17/stale-claim-report.json"
+    "Missing optional artifact: content/newsroom/2026-05-17/stale-claim-report.json",
+    "Fallback source_role=unknown for selected article: libcamera Release Announcements - libcamera v0.7.1",
+    "Fallback source_url_quality=unknown for selected article: libcamera Release Announcements - libcamera v0.7.1",
+    "Fallback claim_validation.status=not_available for selected article: libcamera Release Announcements - libcamera v0.7.1",
+    "Fallback source_role=unknown for selected article: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+    "Fallback source_url_quality=unknown for selected article: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+    "Fallback claim_validation.status=not_available for selected article: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+    "Fallback source_role=unknown for selected article: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+    "Fallback source_url_quality=unknown for selected article: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+    "Fallback claim_validation.status=not_available for selected article: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more"
   ]
 }
