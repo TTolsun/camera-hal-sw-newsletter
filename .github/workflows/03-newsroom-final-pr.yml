@@ -1,4 +1,4 @@
-name: 03-newsroom-final-pr.yml
+name: Newsroom 03 - Gemini Final Newsletter PR
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: 02-newsroom-gemini-source-discovery-pr.yml
+name: Newsroom 02 - Gemini Source Discovery PR
 
 on:
   workflow_dispatch:
