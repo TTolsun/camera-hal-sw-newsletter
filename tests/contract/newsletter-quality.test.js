@@ -565,6 +565,42 @@ test('quality gate blocks fallback promotion without explicit allowed reason', (
   assert.ok(report.main_article_signal_checks[1].hard_blocker_reason_codes.includes('fallback_promotion_not_allowed'));
 });
 
+test('quality gate blocks SoC platform signal without explicit camera pipeline link', () => {
+  const sections = [
+    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
+    section({
+      headline: 'SoC thermal platform signal without camera link',
+      url: 'https://example.com/soc-missing-link',
+      category: 'SoC',
+      relevance_bucket: 'soc_platform_signal',
+      soc_signal_source_allowed: true,
+      camera_pipeline_link: '',
+      fallback_promotion_allowed: true,
+      fallback_promotion_reason: 'Thermal/power signal may affect sustained camera usage.',
+      what_changed: 'Mobile SoC thermal behavior changed on 2026-05-01.',
+      evidence_summary: 'Version: platform note 1.0; release date: 2026-05-01; API/component: SoC thermal path; behavior change: sustained performance budget.',
+      background: 'Camera workloads may be affected by platform resources.',
+      camera_hal_perspective: 'Review camera thermal behavior and sustained workload limits.',
+      action_items: ['Assign camera owner to review thermal logs.'],
+      team_summary: 'Potential platform signal.'
+    }),
+    ...validSections().slice(2)
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate('https://example.com/a', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/soc-missing-link', 'soc_platform_signal'),
+    ...reporterCandidatesFor(validSections()).slice(2)
+  ]);
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item =>
+    item.category === 'hal-signal' &&
+    item.reason.includes('explicit camera_pipeline_link')
+  ));
+  assert.ok(report.main_article_signal_checks[1].hard_blockers.includes('soc_platform_missing_camera_pipeline_link'));
+  assert.ok(report.main_article_signal_checks[1].hard_blocker_reason_codes.includes('soc_camera_pipeline_link_missing'));
+});
+
 test('quality gate allows no-AI HAL lineups when other hard gates pass', () => {
   const sections = [
     section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
@@ -597,6 +633,7 @@ test('quality gate counts article buckets from structured candidate metadata', (
       headline: 'Snapdragon NPU thermal update',
       url: 'https://example.com/soc',
       category: 'SoC',
+      camera_pipeline_link: 'Sustained SoC thermal budget maps to camera preview frame latency and buffer queue pressure.',
       what_changed: 'Snapdragon NPU thermal behavior changed on 2026-05-01 for sustained image processing.',
       evidence_summary: 'Version: platform note 1.0; release date: 2026-05-01; API/component: Snapdragon NPU thermal path; behavior change: sustained performance budget.',
       background: 'SoC thermal and power behavior affects camera preview, image processing, and frame latency.',

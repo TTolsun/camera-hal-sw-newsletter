@@ -144,6 +144,21 @@ test('HAL signal quality report records missing optional inputs as input_unavail
   assert.ok(report.warnings.some(warning => warning.includes('Optional input_unavailable')));
 });
 
+test('HAL signal quality report writes INPUT_INCOMPLETE artifacts when required inputs are missing', () => {
+  const root = tempRoot();
+  const date = '2026-05-17';
+
+  const result = writeHalSignalQualityArtifacts({ root, date });
+  const report = JSON.parse(fs.readFileSync(result.jsonPath, 'utf8'));
+  const markdown = fs.readFileSync(result.markdownPath, 'utf8');
+
+  assert.equal(report.status, 'INPUT_INCOMPLETE');
+  assert.equal(report.input_completeness, 'missing_required');
+  assert.equal(report.input_statuses.editor_draft, 'input_unavailable');
+  assert.ok(report.inputs.missing_required.includes('editor_draft'));
+  assert.match(markdown, /INPUT_INCOMPLETE/);
+});
+
 test('HAL signal quality report flags missing capsule as a hard blocker', () => {
   const root = tempRoot();
   const date = '2026-05-17';

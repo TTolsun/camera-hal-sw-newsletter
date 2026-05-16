@@ -498,6 +498,10 @@ function renderHalSignalQualitySummary(root, date, status = {}) {
     ensureArray(item.hard_blocker_reason_codes || item.hard_blockers)
   ))];
   const affectedMainArticles = hardBlockerChecks.map(item => item.title).filter(Boolean);
+  const visibleAffectedMainArticles = affectedMainArticles.slice(0, 5).map(title => truncateText(title, 160));
+  const affectedMainArticleSuffix = affectedMainArticles.length > visibleAffectedMainArticles.length
+    ? `; ... +${affectedMainArticles.length - visibleAffectedMainArticles.length} more`
+    : '';
   const rows = checks.slice(0, 8).map(item => [
     item.index || '',
     item.title || '',
@@ -527,7 +531,7 @@ function renderHalSignalQualitySummary(root, date, status = {}) {
     `- generic_signal_hard_blocker_count: ${valueOrUnknown(summary.generic_signal_hard_blocker_count)}`,
     `- HAL signal hard blocker count: ${valueOrUnknown(summary.hal_signal_hard_blocker_count ?? hardBlockerChecks.length)}`,
     `- HAL signal hard blocker reason codes: ${hardBlockerReasonCodes.join(', ') || 'none'}`,
-    `- Affected main articles: ${affectedMainArticles.join('; ') || 'none'}`,
+    `- Affected main articles: ${visibleAffectedMainArticles.join('; ') || 'none'}${affectedMainArticleSuffix}`,
     `- optional input_unavailable: ${ensureArray(report.inputs?.unavailable_optional).join(', ') || 'none'}`,
     `- Artifact: \`${relPath}\``,
     '',

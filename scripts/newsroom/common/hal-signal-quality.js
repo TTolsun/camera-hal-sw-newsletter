@@ -28,7 +28,8 @@ const SIGNAL_QUALITY_STATUSES = Object.freeze([
   'usable_signal',
   'weak_signal',
   'watchlist_only',
-  'blocked_source_gap'
+  'blocked_source_gap',
+  'unknown'
 ]);
 
 const CAPSULE_REQUIRED_FIELDS = Object.freeze([
@@ -117,7 +118,7 @@ function sourceUrls(value = {}) {
     value.articleUrl,
     value.normalized_url,
     value.source_candidate_url,
-    ...ensureArray(value.sources).flatMap(source => [source?.url, source?.title])
+    ...ensureArray(value.sources).map(source => source?.url)
   ]);
 }
 
@@ -251,15 +252,22 @@ function countConcreteActionSignals(value = {}) {
   return checks.reduce((count, pattern) => count + (pattern.test(haystack) ? 1 : 0), 0);
 }
 
-function countActionabilityUpgradeSignals(value = {}) {
-  const body = articleText(value);
+function actionabilityEvidenceText(value = {}) {
+  const sections = articleSections(value);
   const capsule = objectValue(value.hal_signal_capsule);
-  const haystack = [
-    body,
+  return [
+    sections.action_items,
+    value.action_items,
+    value.camera_hal_checks,
+    value.specificity_checks,
     capsule.check_within_2_weeks,
     capsule.reader_owners,
     value.reader_owners
   ].map(text).join(' ');
+}
+
+function countActionabilityUpgradeSignals(value = {}) {
+  const haystack = actionabilityEvidenceText(value);
   const checks = [
     /\b(?:owner|assignee|camera owner|hal owner|driver owner|team)\b/i,
     /\b(?:test|cts|vts|camera its|its|smoke|regression|validation|poc)\b/i,
@@ -479,9 +487,7 @@ function normalizeHalSignalFields(value = {}) {
     (fallbackPromotionAllowed !== true || !fallbackPromotionReason)) {
     hardBlockers.push('fallback_promotion_missing_reason');
   }
-  if (bucket === 'soc_platform_signal' &&
-    socSignalSourceAllowed !== true &&
-    !cameraPipelineLink) {
+  if (bucket === 'soc_platform_signal' && !cameraPipelineLink) {
     hardBlockers.push('soc_platform_missing_camera_pipeline_link');
   }
 
@@ -701,6 +707,7 @@ module.exports = {
   HAL_IMPACT_AXES,
   HAL_SIGNAL_SCHEMA_VERSION,
   SIGNAL_QUALITY_STATUSES,
+  actionabilityEvidenceText,
   countActionabilityUpgradeSignals,
   buildHalSignalQualitySummary,
   buildMainArticleSignalChecks,

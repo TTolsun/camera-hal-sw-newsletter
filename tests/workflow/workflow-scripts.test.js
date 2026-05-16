@@ -2326,6 +2326,48 @@ test('newsroom PR body renders HAL signal quality summary when report exists', (
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
+test('newsroom PR body truncates long HAL hard blocker affected article lists', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'hal-signal-quality-report.json'), {
+    schema_version: 1,
+    report_type: 'hal_signal_quality',
+    date,
+    status: 'NEEDS_FIX',
+    quality_status: 'NEEDS_FIX',
+    input_completeness: 'complete',
+    inputs: {
+      unavailable_optional: []
+    },
+    hal_signal_quality_summary: {
+      main_article_count: 6,
+      hal_signal_hard_blocker_count: 6
+    },
+    main_article_signal_checks: Array.from({ length: 6 }, (_, index) => ({
+      index: index + 1,
+      title: `Blocked HAL article ${index + 1}`,
+      signal_quality_status: 'weak_signal',
+      actionability_level: 'generic_review',
+      effective_actionability_level: 'generic_review',
+      hal_impact_axes: ['stream_buffer_metadata'],
+      hal_signal_capsule_complete: true,
+      hard_blocker_reason_codes: ['hal_generic_review_actionability']
+    }))
+  });
+
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    status: traceStatus({ final_publish_ready: false })
+  });
+
+  assert.match(body, /Affected main articles: Blocked HAL article 1; Blocked HAL article 2; Blocked HAL article 3; Blocked HAL article 4; Blocked HAL article 5; \.\.\. \+1 more/);
+  assert.doesNotMatch(body, /Affected main articles: .*Blocked HAL article 6/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
 test('newsroom PR body keeps Evidence Pack fallback when summary artifact is missing', () => {
   const root = tempRoot();
   const date = '2026-05-10';

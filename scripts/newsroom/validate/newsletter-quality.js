@@ -1581,7 +1581,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       actionability_none: 'Main article has actionability_level=none and cannot be publish-ready.',
       generic_review_actionability: 'Main article actionability_level=generic_review lacks at least two concrete owner/test/log/metric/API/stream/buffer/metadata signals.',
       fallback_promotion_missing_reason: 'Fallback article lacks fallback_promotion_allowed=true or fallback_promotion_reason before main promotion.',
-      soc_platform_missing_camera_pipeline_link: 'SoC platform signal lacks an allowed source or explicit camera_pipeline_link.'
+      soc_platform_missing_camera_pipeline_link: 'SoC platform signal lacks explicit camera_pipeline_link.'
     };
     for (const blocker of ensureArray(halSignal.hal_signal_hard_blockers)) {
       boundedDeduct(

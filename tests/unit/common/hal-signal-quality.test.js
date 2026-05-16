@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  buildMainArticleSignalChecks,
   buildHalSignalQualitySummary,
   countActionabilityUpgradeSignals,
   countConcreteActionSignals,
@@ -142,6 +143,33 @@ test('explicit generic review does not upgrade from timeframe-only wording', () 
   assert.ok(normalized.hal_signal_hard_blockers.includes('generic_review_actionability'));
 });
 
+test('generic review does not upgrade from keyword soup outside concrete action', () => {
+  const value = article({
+    headline: 'Generic platform note',
+    actionability_level: 'generic_review',
+    article_sections: {
+      verified_facts: ['A platform article mentions camera owner, stream, buffer, and metadata.'],
+      background_context: 'These words appear in background only.',
+      hal_driver_impact: 'Review later.',
+      action_items: ['Review later.'],
+      team_share_points: 'No concrete test, log, metric, or API check is specified.'
+    },
+    hal_signal_capsule: {
+      why_now: 'General platform note.',
+      reader_owners: ['camera_hal_owner'],
+      check_within_2_weeks: 'Review later.',
+      impact_axes: ['stream_buffer_metadata'],
+      do_not_overstate: ['Do not claim direct HAL behavior changes.']
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+
+  assert.equal(countActionabilityUpgradeSignals(value), 0);
+  assert.equal(normalized.actionability_level, 'generic_review');
+  assert.equal(normalized.effective_actionability_level, 'generic_review');
+  assert.ok(normalized.hal_signal_hard_blockers.includes('generic_review_actionability'));
+});
+
 test('fallback promotion requires both allowed flag and promotion reason', () => {
   const normalized = normalizeHalSignalFields(article({
     headline: 'Native tooling fallback with denied promotion',
@@ -158,6 +186,46 @@ test('fallback promotion requires both allowed flag and promotion reason', () =>
   }));
 
   assert.ok(normalized.hal_signal_hard_blockers.includes('fallback_promotion_missing_reason'));
+});
+
+test('SoC platform signal requires explicit camera pipeline link for promotion', () => {
+  const value = article({
+    headline: 'Mobile SoC thermal update',
+    relevance_bucket: 'soc_platform_signal',
+    soc_signal_source_allowed: true,
+    camera_pipeline_link: '',
+    fallback_promotion_allowed: true,
+    fallback_promotion_reason: 'Thermal/power signal may affect sustained camera usage.',
+    article_sections: {
+      verified_facts: ['Mobile SoC update mentions thermal and memory behavior.'],
+      background_context: 'Camera workloads may be affected by platform resources.',
+      hal_driver_impact: 'Review camera thermal behavior.',
+      action_items: ['Assign camera owner to review thermal logs.'],
+      team_share_points: 'Potential platform signal.'
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+  const check = buildMainArticleSignalChecks([value])[0];
+
+  assert.equal(normalized.soc_signal_source_allowed, true);
+  assert.ok(normalized.hal_signal_hard_blockers.includes('soc_platform_missing_camera_pipeline_link'));
+  assert.ok(check.hard_blocker_reason_codes.includes('soc_camera_pipeline_link_missing'));
+});
+
+test('explicit unknown signal quality status is preserved', () => {
+  const normalized = normalizeHalSignalFields(article({
+    signal_quality_status: 'unknown'
+  }));
+
+  assert.equal(normalized.signal_quality_status, 'unknown');
+});
+
+test('source title is not used as a URL fallback', () => {
+  const check = buildMainArticleSignalChecks([article({
+    sources: [{ title: 'Not a URL' }]
+  })])[0];
+
+  assert.equal(check.url, '');
 });
 
 test('summary counts capsule coverage and hard blockers', () => {
