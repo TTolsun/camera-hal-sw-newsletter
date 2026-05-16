@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       enable_gemini_source_discovery:
-        description: "Enable #149 Gemini source discovery engine. In #88 this intentionally fails when true."
+        description: "Enable #149 Gemini source discovery engine."
         required: false
         default: "false"
         type: choice
@@ -56,8 +56,28 @@ jobs:
       - name: Validate newsroom source discovery boundary
         run: npm run validate:config
 
-      - name: Run disabled pass-through or explicit not-implemented failure
+      - name: Preflight LLM credentials for enabled source discovery
+        if: ${{ github.event.inputs.enable_gemini_source_discovery == 'true' }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          INTERNAL_LLM_API_KEY: ${{ secrets.INTERNAL_LLM_API_KEY }}
+          INTERNAL_LLM_ENDPOINT: ${{ vars.INTERNAL_LLM_ENDPOINT || '' }}
+          INTERNAL_LLM_API_VERSION: ${{ vars.INTERNAL_LLM_API_VERSION || '' }}
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'gemini' }}
+          LLM_MODEL: ${{ vars.LLM_MODEL || vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          LLM_FALLBACK_MODELS: ${{ vars.LLM_FALLBACK_MODELS || vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite' }}
+        run: node scripts/gemini-source-discovery-boundary.js --date "${NEWSLETTER_DATE}" --preflight-only
+
+      - name: Run disabled pass-through or Gemini source discovery
         id: source-discovery
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          INTERNAL_LLM_API_KEY: ${{ secrets.INTERNAL_LLM_API_KEY }}
+          INTERNAL_LLM_ENDPOINT: ${{ vars.INTERNAL_LLM_ENDPOINT || '' }}
+          INTERNAL_LLM_API_VERSION: ${{ vars.INTERNAL_LLM_API_VERSION || '' }}
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'gemini' }}
+          LLM_MODEL: ${{ vars.LLM_MODEL || vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          LLM_FALLBACK_MODELS: ${{ vars.LLM_FALLBACK_MODELS || vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite' }}
         run: node scripts/gemini-source-discovery-boundary.js --date "${NEWSLETTER_DATE}"
 
       - name: Prepare source discovery pull request body
@@ -115,6 +135,14 @@ jobs:
             content/collected-news/${{ env.NEWSLETTER_DATE }}/gemini-candidates.json
             content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidates.json
             content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidate-manifest.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposals.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposal-validation-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-usage-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/extracted-source-facts.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.md
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-clusters.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/evidence-validation-report.json
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-discovery-report.md
           if-no-files-found: warn
           retention-days: 14

@@ -7,8 +7,13 @@ const test = require('node:test');
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
+  evidenceValidationReportPath,
+  extractedSourceFactsPath,
   geminiCandidatesPath,
   geminiCandidatesRelPath,
+  geminiSourceProposalValidationReportPath,
+  geminiSourceProposalsPath,
+  geminiUsageReportPath,
   manualCandidatesPath,
   manualCandidatesRelPath,
   mergedCandidateManifestPath,
@@ -27,7 +32,7 @@ const {
   writeMergedCandidateArtifacts
 } = require('../../../scripts/newsroom/common/candidate-artifacts');
 const {
-  FAILED_NOT_IMPLEMENTED,
+  FAILED_LLM_CREDENTIALS,
   run: runSourceDiscoveryBoundary
 } = require('../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
 
@@ -351,14 +356,14 @@ test('Stage 2 disabled pass-through writes merged artifact, manifest, and report
   assert.match(report, /merge_mode=disabled_pass_through/);
 });
 
-test('Stage 2 enabled before #149 engine removes stale normal outputs before failing', () => {
+test('Stage 2 enabled without credentials writes failure report without mutating candidate artifacts', async () => {
   const root = tempRoot();
   const date = '2026-05-16';
   const payload = candidatePayload();
   writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
   writeMergedCandidateArtifacts({ root, date, payload, geminiPayload: [] });
 
-  assert.throws(
+  await assert.rejects(
     () => runSourceDiscoveryBoundary({
       root,
       date,
@@ -367,17 +372,146 @@ test('Stage 2 enabled before #149 engine removes stale normal outputs before fai
         NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true'
       }
     }),
-    error => error.status === FAILED_NOT_IMPLEMENTED
+    error => error.status === FAILED_LLM_CREDENTIALS
   );
 
-  assert.equal(fs.existsSync(mergedCandidatesPath(root, date)), false);
-  assert.equal(fs.existsSync(mergedCandidateManifestPath(root, date)), false);
-  assert.equal(fs.existsSync(geminiCandidatesPath(root, date)), false);
+  assert.equal(fs.existsSync(mergedCandidatesPath(root, date)), true);
+  assert.equal(fs.existsSync(mergedCandidateManifestPath(root, date)), true);
+  assert.equal(fs.existsSync(geminiCandidatesPath(root, date)), true);
   assert.equal(fs.existsSync(manualCandidatesPath(root, date)), true);
   assert.equal(fs.existsSync(collectedCandidatesPath(root, date)), true);
   assert.equal(fs.existsSync(rawCandidateManifestPath(root, date)), true);
   const report = fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'gemini-source-discovery-report.md'), 'utf8');
-  assert.match(report, /Gemini discovery engine is not implemented in #88/);
-  assert.match(report, /Manual candidates were not modified/);
-  assert.match(report, /Stage 3 must use Stage 1 artifact/);
+  assert.match(report, /FAILED_LLM_CREDENTIALS/);
+  assert.match(report, /Candidate artifacts were not modified/);
+});
+
+test('Stage 2 enabled promotes only validated proposal URLs and writes manifest v2 reports', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload();
+  writeJson(path.join(root, 'data', 'news-sources.json'), {
+    schemaVersion: 2,
+    sources: [{
+      id: 'android',
+      name: 'Android Developers',
+      sourceUrl: 'https://developer.android.com/',
+      rssUrl: null,
+      category: 'android',
+      priority: 'high',
+      reliability: 'official',
+      enabled: true,
+      candidateOnly: false,
+      requiresCrossCheck: false,
+      usageHint: 'Android Camera',
+      keywords: ['CameraX'],
+      linkedEvidencePolicy: {
+        enabled: true,
+        allowedDomains: ['developer.android.com']
+      }
+    }]
+  });
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true',
+      GEMINI_API_KEY: 'test-key',
+      GEMINI_RETRY_DELAYS_MS: '0'
+    },
+    callLlmJsonBudgetedImpl: async (_stage, _system, _prompt, _schema, options = {}) => {
+      options.budget.mergeDiagnostics({
+        model_usage: {
+          sourceDiscovery: {
+            fake: {
+              requests: 1,
+              successes: 1
+            }
+          }
+        },
+        cost_report: {
+          calls: [{ stage: 'sourceDiscovery', model: 'fake' }]
+        }
+      });
+      return {
+        schema_version: 1,
+        proposal_type: 'gemini_source_discovery',
+        newsletter_date: date,
+        proposals: [{
+          proposal_id: 'p1',
+          topic_gap: 'CameraX release notes',
+          source_family: 'official_android',
+          allowed_domains: ['example.com'],
+          search_keywords: ['CameraX release notes'],
+          candidate_urls: [
+            'https://developer.android.com/jetpack/androidx/releases/camera',
+            'https://example.com/fake'
+          ],
+          expected_evidence: ['published date'],
+          risk_notes: []
+        }]
+      };
+    },
+    fetchImpl: async (url) => {
+      if (url.includes('developer.android.com')) {
+        return {
+          ok: true,
+          text: async () => '<html><head><title>CameraX release notes</title><meta name="datePublished" content="2026-05-15"></head></html>'
+        };
+      }
+      return { ok: false, status: 404, text: async () => '' };
+    }
+  });
+
+  assert.equal(result.status, 'PASS');
+  assert.equal(readJson(geminiSourceProposalsPath(root, date)).proposals.length, 1);
+  assert.equal(readJson(geminiSourceProposalValidationReportPath(root, date)).validations.length, 2);
+  assert.equal(readJson(geminiCandidatesPath(root, date)).candidates.length, 1);
+  assert.equal(readJson(mergedCandidatesPath(root, date)).candidates.length, 2);
+  assert.equal(fs.existsSync(extractedSourceFactsPath(root, date)), true);
+  assert.equal(fs.existsSync(evidenceValidationReportPath(root, date)), true);
+  assert.equal(fs.existsSync(geminiUsageReportPath(root, date)), true);
+
+  const manifest = readJson(mergedCandidateManifestPath(root, date));
+  assert.equal(manifest.schema_version, 2);
+  assert.equal(manifest.llm_used, true);
+  assert.equal(manifest.usage_report, 'content/newsroom/2026-05-16/gemini-usage-report.json');
+  assert.equal(manifest.proposal_validation_report, 'content/newsroom/2026-05-16/gemini-source-proposal-validation-report.json');
+  const usage = readJson(geminiUsageReportPath(root, date));
+  assert.equal(usage.requested_attempt_count, 1);
+  assert.equal(usage.successful_response_count, 1);
+  assert.equal(usage.stage_counts.sourceDiscovery.requested_attempts, 1);
+
+  const validated = validateCandidateArtifact({
+    root,
+    date,
+    candidatePath: mergedCandidatesPath(root, date),
+    manifestPath: mergedCandidateManifestPath(root, date),
+    requireManifest: true,
+    validationMode: 'strict',
+    expectedManifestType: 'merged_candidate',
+    expectedLlmUsed: 'any'
+  });
+  assert.equal(validated.validation_status, 'validated');
+  const report = fs.readFileSync(result.reportPath, 'utf8');
+  assert.match(report, /domain_not_allowed/);
+  assert.match(report, /proposal_validation_report=content\/newsroom\/2026-05-16\/gemini-source-proposal-validation-report\.json/);
+
+  fs.unlinkSync(geminiSourceProposalValidationReportPath(root, date));
+  assert.throws(
+    () => validateCandidateArtifact({
+      root,
+      date,
+      candidatePath: mergedCandidatesPath(root, date),
+      manifestPath: mergedCandidateManifestPath(root, date),
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'merged_candidate',
+      expectedLlmUsed: 'any'
+    }),
+    /proposal_validation_report target is missing/
+  );
 });

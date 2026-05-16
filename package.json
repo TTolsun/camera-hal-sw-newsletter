@@ -26,7 +26,7 @@
     "validate": "npm run check:encoding && npm run check:repo-hygiene && npm run check:fixtures && npm run validate:policy && npm run check:policy-docs && npm run validate:config && npm run validate:site && npm run validate:images && npm run validate:quality && npm run validate:localization",
     "validate:policy": "node scripts/validate-newsletter-policy.js",
     "check:policy-docs": "node scripts/sync-policy-docs.js --check",
-    "validate:config": "node scripts/validate-config.js",
+    "validate:config": "node scripts/validate-config.js && node scripts/validate-newsroom-budget.js",
     "validate:site": "node scripts/validate-site.js",
     "validate:images": "node scripts/validate-external-images.js",
     "validate:quality": "node scripts/validate-quality.js",

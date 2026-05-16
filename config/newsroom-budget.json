@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "geminiUsageBudget": {
+    "enabled": true,
+    "targetCallsPerRun": 700,
+    "softLimitCallsPerRun": 750,
+    "hardLimitCallsPerRun": 850,
+    "allocation": {
+      "finalGeneration": 200,
+      "sourceDiscovery": 120,
+      "articleExtraction": 140,
+      "sourceScoring": 80,
+      "duplicateAndStaleCheck": 60,
+      "evidenceValidation": 80,
+      "prReportSummary": 20
+    },
+    "stages": {
+      "sourceDiscovery": { "optional": true },
+      "articleExtraction": { "optional": true },
+      "sourceScoring": { "optional": true },
+      "duplicateAndStaleCheck": { "optional": true },
+      "evidenceValidation": { "optional": true },
+      "finalGeneration": { "optional": false },
+      "prReportSummary": { "optional": true }
+    }
+  }
+}

@@ -29,6 +29,7 @@ module.exports = {
   buildCostReport: llmClient.buildCostReport,
   buildCostReportMarkdown: llmClient.buildCostReportMarkdown,
   callGeminiJson: llmClient.callLlmJson,
+  callGeminiJsonBudgeted: llmClient.callLlmJsonBudgeted,
   estimateCallCost: llmClient.estimateCallCost,
   extractJson,
   findPricing: llmClient.findPricing,

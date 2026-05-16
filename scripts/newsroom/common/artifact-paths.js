@@ -44,6 +44,74 @@ function geminiCandidatesRelPath(date) {
   return `${COLLECTED_NEWS_ROOT}/${date}/gemini-candidates.json`;
 }
 
+function newsroomArtifactPath(root, date, filename) {
+  return path.join(newsroomDir(root, date), filename);
+}
+
+function geminiSourceProposalsPath(root, date) {
+  return newsroomArtifactPath(root, date, 'gemini-source-proposals.json');
+}
+
+function geminiSourceProposalsRelPath(date) {
+  return newsroomRelPath(date, 'gemini-source-proposals.json');
+}
+
+function geminiSourceProposalValidationReportPath(root, date) {
+  return newsroomArtifactPath(root, date, 'gemini-source-proposal-validation-report.json');
+}
+
+function geminiSourceProposalValidationReportRelPath(date) {
+  return newsroomRelPath(date, 'gemini-source-proposal-validation-report.json');
+}
+
+function geminiUsageReportPath(root, date) {
+  return newsroomArtifactPath(root, date, 'gemini-usage-report.json');
+}
+
+function geminiUsageReportRelPath(date) {
+  return newsroomRelPath(date, 'gemini-usage-report.json');
+}
+
+function extractedSourceFactsPath(root, date) {
+  return newsroomArtifactPath(root, date, 'extracted-source-facts.json');
+}
+
+function extractedSourceFactsRelPath(date) {
+  return newsroomRelPath(date, 'extracted-source-facts.json');
+}
+
+function sourceQualityReportPath(root, date) {
+  return newsroomArtifactPath(root, date, 'source-quality-report.json');
+}
+
+function sourceQualityReportRelPath(date) {
+  return newsroomRelPath(date, 'source-quality-report.json');
+}
+
+function sourceQualityReportMarkdownPath(root, date) {
+  return newsroomArtifactPath(root, date, 'source-quality-report.md');
+}
+
+function sourceQualityReportMarkdownRelPath(date) {
+  return newsroomRelPath(date, 'source-quality-report.md');
+}
+
+function sourceClustersPath(root, date) {
+  return newsroomArtifactPath(root, date, 'source-clusters.json');
+}
+
+function sourceClustersRelPath(date) {
+  return newsroomRelPath(date, 'source-clusters.json');
+}
+
+function evidenceValidationReportPath(root, date) {
+  return newsroomArtifactPath(root, date, 'evidence-validation-report.json');
+}
+
+function evidenceValidationReportRelPath(date) {
+  return newsroomRelPath(date, 'evidence-validation-report.json');
+}
+
 function rawCandidateManifestPath(root, date) {
   return path.join(collectedNewsDir(root, date), 'raw-candidate-manifest.json');
 }
@@ -82,17 +150,34 @@ module.exports = {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
   collectedNewsDir,
+  evidenceValidationReportPath,
+  evidenceValidationReportRelPath,
+  extractedSourceFactsPath,
+  extractedSourceFactsRelPath,
   geminiCandidatesPath,
   geminiCandidatesRelPath,
+  geminiSourceProposalValidationReportPath,
+  geminiSourceProposalValidationReportRelPath,
+  geminiSourceProposalsPath,
+  geminiSourceProposalsRelPath,
+  geminiUsageReportPath,
+  geminiUsageReportRelPath,
   manualCandidatesPath,
   manualCandidatesRelPath,
   mergedCandidateManifestPath,
   mergedCandidateManifestRelPath,
   mergedCandidatesPath,
   mergedCandidatesRelPath,
+  newsroomArtifactPath,
   newsroomDir,
   newsroomRelPath,
   rawCandidateManifestPath,
   rawCandidateManifestRelPath,
+  sourceClustersPath,
+  sourceClustersRelPath,
+  sourceQualityReportMarkdownPath,
+  sourceQualityReportMarkdownRelPath,
+  sourceQualityReportPath,
+  sourceQualityReportRelPath,
   toPosix
 };
