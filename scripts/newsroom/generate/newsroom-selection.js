@@ -186,6 +186,7 @@ function exclusionReasons(candidate) {
   const isWatchPage = fieldBoolean(candidate, 'isWatchPage', 'is_watch_page');
   const hasDatedEvidence = fieldBoolean(candidate, 'hasDatedEvidence', 'has_dated_evidence');
   const sourceGapRisk = bool(candidate.source_gap_risk);
+  const finalSelectionBlocked = bool(candidate.final_selection_blocked || candidate.finalSelectionBlocked);
   const mainEligible = candidate.main_eligible !== false;
   const briefingOnly = bool(candidate.briefing_only);
   const referenceOnly = bool(candidate.reference_only);
@@ -194,6 +195,7 @@ function exclusionReasons(candidate) {
   if (!publishedDate(candidate) || !hasDatedEvidence) reasons.push('missing dated evidence');
   if (isWatchPage && !hasDatedEvidence) reasons.push('watch page without dated evidence');
   if (!['main', 'short'].includes(eligibility)) reasons.push(`finalSelectionEligibility=${eligibility || 'unknown'}`);
+  if (finalSelectionBlocked) reasons.push('final_selection_blocked=true');
   if (sourceGapRisk) reasons.push('source_gap_risk=true');
   if (!mainEligible) reasons.push('main_eligible=false');
   if (briefingOnly) reasons.push('briefing_only=true');

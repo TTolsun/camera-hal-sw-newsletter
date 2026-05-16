@@ -214,6 +214,20 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
   fail(failureSummary(stage, provider, failures));
 }
 
+async function callLlmJsonBudgeted(stage, systemInstruction, prompt, responseSchema, options = {}) {
+  const budget = options.budget || null;
+  if (budget && typeof budget.assertCanRequest === 'function') {
+    budget.assertCanRequest(stage);
+  }
+  try {
+    return await callLlmJson(stage, systemInstruction, prompt, responseSchema, options);
+  } finally {
+    if (budget && typeof budget.mergeDiagnostics === 'function') {
+      budget.mergeDiagnostics(getLlmDiagnostics());
+    }
+  }
+}
+
 function buildCostReport(options = {}) {
   const provider = resolveProvider(runtimeConfig.llmProvider);
   return buildLlmCostReport({
@@ -244,6 +258,7 @@ module.exports = {
   buildCostReport,
   buildCostReportMarkdown,
   callLlmJson,
+  callLlmJsonBudgeted,
   estimateCallCost: geminiProvider.estimateCallCost,
   extractJson,
   findPricing: geminiProvider.findPricing,

@@ -4460,13 +4460,18 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage1, /raw-candidate-manifest\.json/);
 
   assert.match(stage2, /NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY/);
+  assert.match(stage2, /Preflight LLM credentials for enabled source discovery/);
+  assert.match(stage2, /npm run doctor:config/);
   assert.match(stage2, /node scripts\/gemini-source-discovery-boundary\.js --date/);
   assert.match(stage2, /gemini-source-discovery-report\.md/);
+  assert.match(stage2, /gemini-source-proposals\.json/);
+  assert.match(stage2, /gemini-usage-report\.json/);
+  assert.match(stage2, /source-quality-report\.json/);
+  assert.match(stage2, /source-clusters\.json/);
+  assert.match(stage2, /evidence-validation-report\.json/);
   assert.match(stage2, /gemini-candidates\.json/);
   assert.match(stage2, /merged-candidates\.json/);
   assert.match(stage2, /merged-candidate-manifest\.json/);
-  assert.doesNotMatch(stage2, /GEMINI_API_KEY/);
-  assert.doesNotMatch(stage2, /INTERNAL_LLM_API_KEY/);
 
   assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_MODE: artifact/);
   assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_PATH: \$\{\{ github\.event\.inputs\.candidate_input_path \}\}/);

@@ -65,6 +65,60 @@ function artifactHash(manifest = {}) {
   return String(manifest.artifact_hash || manifest.candidate_artifact_hash || '').trim();
 }
 
+function manifestSchemaVersion(manifest = {}) {
+  const value = manifest.schema_version === undefined ? 1 : Number(manifest.schema_version);
+  return Number.isFinite(value) ? value : NaN;
+}
+
+function validateMergedManifestSchema(root, manifest, manifestRelPath, validationMode) {
+  if (manifest.manifest_type !== 'merged_candidate') return;
+  const version = manifestSchemaVersion(manifest);
+  if (!Number.isInteger(version) || version < 1 || version > 2) {
+    throw new CandidateArtifactValidationError(`Merged candidate manifest schema_version must be 1 or 2: ${manifestRelPath}`, {
+      manifestRelPath,
+      schema_version: manifest.schema_version
+    });
+  }
+
+  if (version < 2) return;
+
+  const reportFields = [
+    'usage_report',
+    'source_quality_report',
+    'source_quality_report_markdown',
+    'source_clusters',
+    'evidence_validation_report'
+  ];
+  const enabledDiscovery = manifest.llm_used === true || manifest.merge_mode === 'gemini_source_discovery';
+  for (const field of reportFields) {
+    const value = String(manifest[field] || '').trim();
+    if (!value) {
+      if (validationMode === 'strict' && enabledDiscovery) {
+        throw new CandidateArtifactValidationError(`Merged candidate manifest ${field} is required for enabled Gemini discovery: ${manifestRelPath}`, {
+          manifestRelPath,
+          field
+        });
+      }
+      continue;
+    }
+    const resolved = repoPath(root, value);
+    if (!resolved) {
+      throw new CandidateArtifactValidationError(`Merged candidate manifest ${field} must stay inside the repository: ${manifestRelPath}`, {
+        manifestRelPath,
+        field,
+        value
+      });
+    }
+    if (validationMode === 'strict' && !fs.existsSync(resolved)) {
+      throw new CandidateArtifactValidationError(`Merged candidate manifest ${field} target is missing: ${value}`, {
+        manifestRelPath,
+        field,
+        value
+      });
+    }
+  }
+}
+
 function readCandidatePayload(root, candidatePath) {
   try {
     return readJson(candidatePath);
@@ -210,11 +264,13 @@ function buildMergedCandidateManifest({
   mergeMode = 'disabled_pass_through',
   geminiCandidateCount = 0,
   llmUsed = false,
-  status = 'PASS'
+  status = 'PASS',
+  schemaVersion = 1,
+  reportRefs = {}
 } = {}) {
   const payload = readJson(candidatePath);
-  return {
-    schema_version: 1,
+  const manifest = {
+    schema_version: schemaVersion,
     manifest_type: 'merged_candidate',
     newsletter_date: date,
     generated_at: generatedAt,
@@ -236,6 +292,14 @@ function buildMergedCandidateManifest({
     github_run_id: process.env.GITHUB_RUN_ID || '',
     github_sha: process.env.GITHUB_SHA || ''
   };
+  if (schemaVersion >= 2) {
+    manifest.usage_report = reportRefs.usage_report || '';
+    manifest.source_quality_report = reportRefs.source_quality_report || '';
+    manifest.source_quality_report_markdown = reportRefs.source_quality_report_markdown || '';
+    manifest.source_clusters = reportRefs.source_clusters || '';
+    manifest.evidence_validation_report = reportRefs.evidence_validation_report || '';
+  }
+  return manifest;
 }
 
 function writeMergedCandidateArtifacts({
@@ -249,7 +313,9 @@ function writeMergedCandidateArtifacts({
   mergeMode = 'disabled_pass_through',
   geminiCandidateCount = 0,
   llmUsed = false,
-  status = 'PASS'
+  status = 'PASS',
+  manifestSchemaVersion = 1,
+  reportRefs = {}
 } = {}) {
   const mergedPath = mergedCandidatesPath(root, date);
   writeJson(mergedPath, payload);
@@ -270,7 +336,9 @@ function writeMergedCandidateArtifacts({
     mergeMode,
     geminiCandidateCount,
     llmUsed,
-    status
+    status,
+    schemaVersion: manifestSchemaVersion,
+    reportRefs
   });
   writeJson(manifestPath, manifest);
 
@@ -334,6 +402,7 @@ function validateCandidateArtifact({
       actualManifestType: manifest.manifest_type
     });
   }
+  validateMergedManifestSchema(root, manifest, result.manifestRelPath, validationMode);
   const expectedHash = artifactHash(manifest);
   if (!expectedHash) {
     throw new CandidateArtifactValidationError(`Candidate manifest is missing artifact_hash: ${result.manifestRelPath}`, result);
@@ -345,7 +414,7 @@ function validateCandidateArtifact({
       actualHash: result.hash
     });
   }
-  if (manifest.llm_used !== expectedLlmUsed) {
+  if (expectedLlmUsed !== 'any' && manifest.llm_used !== expectedLlmUsed) {
     throw new CandidateArtifactValidationError(`Candidate manifest llm_used must be ${String(expectedLlmUsed)}: ${result.manifestRelPath}`, {
       ...result,
       actualLlmUsed: manifest.llm_used
@@ -403,7 +472,8 @@ function resolveExplicitArtifactInput(root, date, inputPath) {
       manifestPath: path.join(path.dirname(resolvedPath), 'merged-candidate-manifest.json'),
       requireManifest: true,
       validationMode: 'strict',
-      expectedManifestType: 'merged_candidate'
+      expectedManifestType: 'merged_candidate',
+      expectedLlmUsed: 'any'
     });
   }
   if (name === 'manual-candidates.json' && inputRelPath === manualCandidatesRelPath(date)) {
@@ -471,7 +541,8 @@ function resolveCandidateInputArtifact({
       manifestPath: mergedCandidateManifestPath(root, date),
       requireManifest: true,
       validationMode: 'strict',
-      expectedManifestType: 'merged_candidate'
+      expectedManifestType: 'merged_candidate',
+      expectedLlmUsed: 'any'
     });
     return {
       ...input,

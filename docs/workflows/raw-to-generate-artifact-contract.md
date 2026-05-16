@@ -41,14 +41,16 @@ Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidate
 
 Disabled pass-through는 `gemini-candidates.json`을 정확히 empty array `[]`로 씁니다. 이 파일은 #88 boundary artifact이며 Stage 3 generation input이 아닙니다.
 
-### Enabled Without #149 Engine
+### Enabled Gemini Source Discovery
 
-`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`인데 `#149` engine이 아직 없으면 `FAILED_GEMINI_SOURCE_DISCOVERY_NOT_IMPLEMENTED`로 실패합니다.
+`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`?? Stage 2? artifact mutation ?? selected LLM provider credential preflight? ?????. Credential? ??? ??? ?? `gemini-source-discovery-report.md`? failure status? ??? candidate artifact? ???? ????.
 
-- 정상 `merged-candidates.json`은 생성하지 않습니다.
-- diagnostics 목적의 `gemini-source-discovery-report.md`는 생성할 수 있습니다.
-- report는 Gemini discovery engine이 `#88`에서 구현되지 않았고, manual candidates가 수정되지 않았고, Stage 3은 failed Stage 2 output 대신 Stage 1 artifact를 사용해야 한다고 명시해야 합니다.
-- manual candidates는 어떤 경우에도 silently drop하지 않습니다.
+- Gemini response? `content/newsroom/<date>/gemini-source-proposals.json` proposal artifact? ?????.
+- proposal? candidate? ???, deterministic fetch/normalize/schema validation? ??? URL? `gemini-candidates.json`? promotion???.
+- `gemini-candidates.json`? promoted candidate? ?????.
+- `merged-candidates.json`? manual candidates? ???? schema-valid Gemini candidates? ?????.
+- v2 `merged-candidate-manifest.json`? usage, quality, cluster, evidence report path? ?????.
+- manual candidates? ?? ???? silently drop?? ????.
 
 ## Stage 3 Final Generation
 
