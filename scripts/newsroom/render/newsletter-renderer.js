@@ -6,6 +6,9 @@ const {
   articleSectionSummary,
   normalizeArticleSections
 } = require('../common/article-section-contract');
+const {
+  normalizeHalSignalCapsule
+} = require('../common/hal-signal-quality');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -42,6 +45,37 @@ function bulletsMarkdown(items) {
 
 function bulletsHtml(items) {
   return ensureArray(items).map(item => `<li>${escapeHtml(item)}</li>`).join('');
+}
+
+function halSignalCapsuleMarkdown(section) {
+  const normalized = normalizeHalSignalCapsule(section);
+  if (!normalized.complete) return '';
+  const capsule = normalized.capsule;
+  return `
+**HAL Signal Capsule**
+
+- why_now: ${capsule.why_now}
+- reader_owners: ${capsule.reader_owners.join(', ')}
+- check_within_2_weeks: ${capsule.check_within_2_weeks}
+- impact_axes: ${capsule.impact_axes.join(', ')}
+- do_not_overstate: ${capsule.do_not_overstate.join('; ')}
+`;
+}
+
+function halSignalCapsuleHtml(section) {
+  const normalized = normalizeHalSignalCapsule(section);
+  if (!normalized.complete) return '';
+  const capsule = normalized.capsule;
+  const rows = [
+    ['why_now', capsule.why_now],
+    ['reader_owners', capsule.reader_owners.join(', ')],
+    ['check_within_2_weeks', capsule.check_within_2_weeks],
+    ['impact_axes', capsule.impact_axes.join(', ')],
+    ['do_not_overstate', capsule.do_not_overstate.join('; ')]
+  ];
+  return `<div class="article-block hal-signal-capsule"><strong class="article-block-title">HAL Signal Capsule</strong><dl>${rows.map(([key, value]) =>
+    `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd>`
+  ).join('')}</dl></div>`;
 }
 
 function paragraphHtml(value) {
@@ -232,6 +266,8 @@ ${articleSections.background_context}
 
 ${articleSections.hal_driver_impact}
 
+${halSignalCapsuleMarkdown(section)}
+
 **${ARTICLE_SECTION_LABELS.action_items}**
 
 ${bulletsMarkdown(articleSections.action_items)}
@@ -313,6 +349,7 @@ ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, sect
           <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.verified_facts)}</strong><ul>${bulletsHtml(articleSections.verified_facts)}</ul></div>
           <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.background_context)}</strong>${paragraphHtml(articleSections.background_context)}</div>
           <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.hal_driver_impact)}</strong>${paragraphHtml(articleSections.hal_driver_impact)}</div>
+          ${halSignalCapsuleHtml(section)}
           <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.action_items)}</strong><ul>${bulletsHtml(articleSections.action_items)}</ul></div>
           <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.team_share_points)}</strong>${paragraphHtml(articleSections.team_share_points)}</div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(section.sources)}</ul></div>

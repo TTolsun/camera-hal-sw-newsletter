@@ -26,6 +26,11 @@ function candidate(overrides = {}) {
 function retrySection(headline, url) {
   return {
     category: headline,
+    fixture_meta: {
+      provenance: 'synthetic',
+      purpose: 'targeted retry contract fixture',
+      must_not_be_used_as_golden_public_artifact: true
+    },
     headline,
     what_changed: `${headline} changed on 2026-05-01.`,
     confirmed_facts: [`${headline} was published on 2026-05-01.`],
@@ -36,6 +41,32 @@ function retrySection(headline, url) {
     why_it_matters: `${headline} gives HAL teams a review target.`,
     camera_hal_perspective: `${headline} should be checked through stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.`,
     camera_hal_checks: ['Run Camera ITS and inspect stream/metadata logs.'],
+    hal_impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
+    reader_owners: ['camera_hal_owner', 'camera_test_owner'],
+    actionability_level: 'owner_metric_log',
+    effective_actionability_level: 'owner_metric_log',
+    actionability_upgrade_reason: '',
+    signal_quality_status: 'strong_signal',
+    do_not_overstate: [
+      'Do not claim device-wide impact without stream, buffer, or metadata evidence.'
+    ],
+    fallback_promotion_allowed: true,
+    fallback_promotion_reason: 'Synthetic retry fixture has direct Camera HAL validation evidence.',
+    fallback_guard_notes: [
+      'Keep fallback promotion tied to explicit Camera HAL validation evidence.'
+    ],
+    soc_signal_type: '',
+    soc_signal_source_allowed: true,
+    camera_pipeline_link: 'Camera HAL stream, buffer, metadata, and Camera ITS validation path.',
+    hal_signal_capsule: {
+      why_now: `${headline} has dated evidence and should be checked in the next validation window.`,
+      reader_owners: ['camera_hal_owner', 'camera_test_owner'],
+      check_within_2_weeks: 'Assign a HAL owner to inspect Camera ITS logs, stream metadata, and latency metrics within 2 weeks.',
+      impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
+      do_not_overstate: [
+        'Do not claim device-wide impact without stream, buffer, or metadata evidence.'
+      ]
+    },
     action_items: [
       'Assign a HAL owner to inspect Camera ITS logs within 2 weeks.',
       'Measure preview latency, frame drop, and metadata consistency on a representative device.'

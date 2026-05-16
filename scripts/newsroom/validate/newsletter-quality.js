@@ -32,6 +32,12 @@ const {
   articleSectionSummary,
   normalizeArticleSections
 } = require('../common/article-section-contract');
+const {
+  buildHalSignalQualitySummary,
+  buildMainArticleSignalChecks,
+  normalizeHalSignalCapsule,
+  normalizeHalSignalFields
+} = require('../common/hal-signal-quality');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
@@ -45,6 +51,10 @@ function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');
   if (value && typeof value === 'object') return Object.values(value).map(text).join(' ');
   return String(value || '').trim();
+}
+
+function objectValue(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
 }
 
 function sectionText(section) {
@@ -63,6 +73,15 @@ function sectionText(section) {
     section.camera_hal_checks,
     section.sources
   ].map(text).join(' ');
+}
+
+function halSignalInput(section = {}, candidate = {}, scope = {}) {
+  return {
+    ...objectValue(candidate),
+    ...section,
+    relevance_bucket: text(section.relevance_bucket) || text(candidate?.relevance_bucket) || text(scope?.relevance_bucket),
+    scope_count: scope
+  };
 }
 
 function normalizeForMatch(value) {
@@ -1205,6 +1224,7 @@ function articleStatusFor(section, hardItems, factCheck) {
   if (hardItems.some(item => item.category === 'source-integrity')) return 'FAIL';
   if (hardItems.some(item => item.category === 'field-hygiene')) return 'FAIL';
   if (hardItems.some(item => item.category === 'required-fields' && /sources|source/i.test(item.reason))) return 'FAIL';
+  if (hardItems.some(item => item.category === 'hal-signal' || item.category === 'hal-signal-capsule')) return 'FAIL';
   if (hardItems.some(item => item.category === 'evidence-specificity' && /release date|dated|source gap|rolling page|evidence/i.test(item.reason))) return 'FAIL';
   if (hardItems.some(item => item.category === 'hal-relevance' || item.category === 'hal-depth' || item.category === 'scope-relevance')) return 'DEMOTE';
   return hardItems.length > 0 || sectionHasFactCheckMustFix(section, factCheck) ? 'FAIL' : 'PASS';
@@ -1550,6 +1570,46 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         { blocking: false }
       );
     }
+    const halSignalInputValue = halSignalInput(
+      section,
+      binding.status === 'bound' ? binding.candidate : {},
+      scope
+    );
+    const halSignal = normalizeHalSignalFields(halSignalInputValue);
+    const halSignalReason = {
+      missing_hal_impact_axis: 'Main article lacks a non-reference HAL impact axis.',
+      actionability_none: 'Main article has actionability_level=none and cannot be publish-ready.',
+      generic_review_actionability: 'Main article actionability_level=generic_review lacks at least two concrete owner/test/log/metric/API/stream/buffer/metadata signals.',
+      fallback_promotion_missing_reason: 'Fallback article lacks fallback_promotion_allowed=true or fallback_promotion_reason before main promotion.',
+      soc_platform_missing_camera_pipeline_link: 'SoC platform signal lacks explicit camera_pipeline_link.'
+    };
+    for (const blocker of ensureArray(halSignal.hal_signal_hard_blockers)) {
+      boundedDeduct(
+        state,
+        'hal-signal',
+        blocker === 'missing_hal_impact_axis' ? 8 : 6,
+        halSignalReason[blocker] || `HAL signal hard blocker: ${blocker}.`,
+        location
+      );
+    }
+    const halSignalCapsule = normalizeHalSignalCapsule(section);
+    if (!halSignalCapsule.present) {
+      boundedDeduct(
+        state,
+        'hal-signal-capsule',
+        8,
+        'Missing HAL Signal Capsule for main article.',
+        location
+      );
+    } else if (!halSignalCapsule.complete) {
+      boundedDeduct(
+        state,
+        'hal-signal-capsule',
+        6,
+        `Incomplete HAL Signal Capsule; missing keys: ${halSignalCapsule.missing_keys.join(', ')}.`,
+        location
+      );
+    }
     if (/C\+\+|LLVM|Clang|GCC|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU|CPU|SoC|thermal|power/i.test(sectionText(section)) && !hasHalDepth(section)) {
       boundedDeduct(state, 'scope-relevance', 4, 'Fallback article does not clearly connect back to AOSP Camera, driver, SoC platform, or native development work.', location);
     }
@@ -1629,6 +1689,13 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const softItems = softDeductions(state.deductions);
   const articleResults = buildArticleResults(sections, state.deductions, factCheck, sectionCountDetails);
   const articleSectionContract = summarizeArticleSectionContracts(sections);
+  const halSignalArticles = sections.map((section, index) => halSignalInput(
+    section,
+    sectionBindings[index]?.status === 'bound' ? sectionBindings[index].candidate : {},
+    sectionScopes[index]
+  ));
+  const halSignalQualitySummary = buildHalSignalQualitySummary(halSignalArticles);
+  const mainArticleSignalChecks = buildMainArticleSignalChecks(halSignalArticles);
   const status = determineQualityStatus(score, threshold, {
     sourceGapCount: gaps,
     hasFactCheckMustFix,
@@ -1646,6 +1713,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       : `Quality score ${score}, threshold ${threshold}, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.`,
     deductions: state.deductions,
     article_results: articleResults,
+    hal_signal_quality_summary: halSignalQualitySummary,
+    main_article_signal_checks: mainArticleSignalChecks,
     metrics: {
       article_count: sections.length,
       briefing_count: ensureArray(editor.briefing).length,
@@ -1684,6 +1753,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         return counts;
       }, { PASS: 0, DEMOTE: 0, FAIL: 0 }),
       article_section_contract: articleSectionContract,
+      hal_signal_quality_summary: halSignalQualitySummary,
+      main_article_signal_checks: mainArticleSignalChecks,
       top_deduction_categories: summarizeDeductionCategories(state.deductions).slice(0, 5),
       candidate_exclusion_summary: summarizeCandidateExclusions(reporter).slice(0, 5)
     }
@@ -1705,6 +1776,21 @@ function buildQualityReportMarkdown(report) {
   const candidateExclusionSummary = ensureArray(metrics.candidate_exclusion_summary)
     .map(item => `- ${item.reason} (${item.count})`)
     .join('\n') || '- none';
+  const halSignalSummary = report.hal_signal_quality_summary || metrics.hal_signal_quality_summary || {};
+  const halSignalRows = ensureArray(report.main_article_signal_checks || metrics.main_article_signal_checks)
+    .map(item => [
+      item.index || '',
+      item.title || '',
+      item.signal_quality_status || 'unknown',
+      item.actionability_level || 'unknown',
+      item.effective_actionability_level || item.actionability_level || 'unknown',
+      ensureArray(item.hal_impact_axes).join(', ') || 'none',
+      item.hal_signal_capsule_complete === true ? 'complete' : `missing ${ensureArray(item.hal_signal_capsule_missing_keys).join(', ') || 'capsule'}`,
+      ensureArray(item.hard_blocker_reason_codes || item.hard_blockers).join(', ') || 'none'
+    ]);
+  const halSignalTable = halSignalRows.length > 0
+    ? halSignalRows.map(row => `| ${row.map(markdownTableCell).join(' | ')} |`).join('\n')
+    : '| none | none | none | none | none | none | none | none |';
   const articleGateRows = ensureArray(report.article_results).map(item => [
     `| ${item.index || ''} `,
     ` ${item.status || 'UNKNOWN'} `,
@@ -1763,6 +1849,26 @@ function buildQualityReportMarkdown(report) {
 - Relevance bucket counts: ${JSON.stringify(metrics.relevance_bucket_counts || {})}
 - AI article count: ${metrics.ai_article_count}
 ${compositionFailure}
+
+## HAL Signal Quality
+
+- strong_signal_count: ${halSignalSummary.strong_signal_count ?? 0}
+- usable_signal_count: ${halSignalSummary.usable_signal_count ?? 0}
+- weak_signal_count: ${halSignalSummary.weak_signal_count ?? 0}
+- watchlist_only_count: ${halSignalSummary.watchlist_only_count ?? 0}
+- blocked_source_gap_count: ${halSignalSummary.blocked_source_gap_count ?? 0}
+- article_count_with_hal_signal_capsule: ${halSignalSummary.article_count_with_hal_signal_capsule ?? 0}
+- article_count_without_hal_signal_capsule: ${halSignalSummary.article_count_without_hal_signal_capsule ?? 0}
+- generic_signal_hard_blocker_count: ${halSignalSummary.generic_signal_hard_blocker_count ?? 0}
+- hal_signal_hard_blocker_count: ${halSignalSummary.hal_signal_hard_blocker_count ?? 0}
+- hard_blocker_reason_code_counts: ${JSON.stringify(halSignalSummary.hard_blocker_reason_code_counts || {})}
+- hal_impact_axis_counts: ${JSON.stringify(halSignalSummary.hal_impact_axis_counts || {})}
+- actionability_level_counts: ${JSON.stringify(halSignalSummary.actionability_level_counts || {})}
+- effective_actionability_level_counts: ${JSON.stringify(halSignalSummary.effective_actionability_level_counts || {})}
+
+| # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | HAL Signal Capsule | hard_blocker_reason_codes |
+| ---: | --- | --- | --- | --- | --- | --- | --- |
+${halSignalTable}
 
 ## Fact Check And Source Integrity
 

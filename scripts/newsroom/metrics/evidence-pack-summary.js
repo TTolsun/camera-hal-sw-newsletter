@@ -11,6 +11,10 @@ const {
   newsroomDir,
   newsroomRelPath
 } = require('../common/artifact-paths');
+const {
+  buildHalSignalQualitySummary,
+  buildMainArticleSignalChecks
+} = require('../common/hal-signal-quality');
 
 const SCHEMA_VERSION = 1;
 const MAX_EVIDENCE_PER_ARTICLE = 3;
@@ -1011,6 +1015,8 @@ function buildEvidencePackSummary(options = {}) {
     }),
     claim_validation_summary: claimValidationSummary(selectedMainArticles),
     hal_impact_summary: halImpactSummary(selectedMainArticles),
+    hal_signal_quality_summary: buildHalSignalQualitySummary(selectedMainArticles),
+    main_article_signal_checks: buildMainArticleSignalChecks(selectedMainArticles),
     selected_main_articles: selectedMainArticles,
     reserve_candidates: reserveArticles,
     excluded_candidates_top: excludedTop,

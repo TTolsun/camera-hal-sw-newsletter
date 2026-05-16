@@ -476,6 +476,75 @@ function renderEvidencePackDiagnosticSummary(label, items, maxItems = 5) {
   return `- ${label}: ${visible.join('; ')}${suffix}`;
 }
 
+function renderHalSignalQualitySummary(root, date, status = {}) {
+  if (!date) return '';
+  const relPath = `content/newsroom/${date}/hal-signal-quality-report.json`;
+  const report = readJsonObjectIfExists(path.join(root, relPath));
+  if (!report) {
+    return [
+      '## HAL Signal Quality Summary',
+      '',
+      '- HAL signal quality report: unavailable',
+      `- Reason: ${relPath} not found`,
+      ''
+    ].join('\n');
+  }
+  const summary = report.hal_signal_quality_summary || {};
+  const checks = ensureArray(report.main_article_signal_checks);
+  const hardBlockerChecks = checks.filter(item =>
+    ensureArray(item.hard_blocker_reason_codes || item.hard_blockers).length > 0
+  );
+  const hardBlockerReasonCodes = [...new Set(hardBlockerChecks.flatMap(item =>
+    ensureArray(item.hard_blocker_reason_codes || item.hard_blockers)
+  ))];
+  const affectedMainArticles = hardBlockerChecks.map(item => item.title).filter(Boolean);
+  const visibleAffectedMainArticles = affectedMainArticles.slice(0, 5).map(title => truncateText(title, 160));
+  const affectedMainArticleSuffix = affectedMainArticles.length > visibleAffectedMainArticles.length
+    ? `; ... +${affectedMainArticles.length - visibleAffectedMainArticles.length} more`
+    : '';
+  const rows = checks.slice(0, 8).map(item => [
+    item.index || '',
+    item.title || '',
+    item.signal_quality_status || 'unknown',
+    item.actionability_level || 'unknown',
+    item.effective_actionability_level || item.actionability_level || 'unknown',
+    ensureArray(item.hal_impact_axes).join(', ') || 'none',
+    item.hal_signal_capsule_complete === true ? 'complete' : `missing ${ensureArray(item.hal_signal_capsule_missing_keys).join(', ') || 'capsule'}`,
+    ensureArray(item.hard_blocker_reason_codes || item.hard_blockers).join(', ') || 'none'
+  ]);
+  return [
+    '## HAL Signal Quality Summary',
+    '',
+    `- status: ${valueOrUnknown(report.status)}`,
+    `- input_completeness: ${valueOrUnknown(report.input_completeness)}`,
+    `- quality_status: ${valueOrUnknown(report.quality_status)}`,
+    `- final_publish_ready: ${valueOrUnknown(status.final_publish_ready)}`,
+    `- publish_gate_reason_codes: ${ensureArray(status.publish_gate_reason_codes).join(', ') || 'none'}`,
+    `- main_article_count: ${valueOrUnknown(summary.main_article_count)}`,
+    `- strong_signal_count: ${valueOrUnknown(summary.strong_signal_count)}`,
+    `- usable_signal_count: ${valueOrUnknown(summary.usable_signal_count)}`,
+    `- weak_signal_count: ${valueOrUnknown(summary.weak_signal_count)}`,
+    `- watchlist_only_count: ${valueOrUnknown(summary.watchlist_only_count)}`,
+    `- blocked_source_gap_count: ${valueOrUnknown(summary.blocked_source_gap_count)}`,
+    `- article_count_with_hal_signal_capsule: ${valueOrUnknown(summary.article_count_with_hal_signal_capsule)}`,
+    `- article_count_without_hal_signal_capsule: ${valueOrUnknown(summary.article_count_without_hal_signal_capsule)}`,
+    `- generic_signal_hard_blocker_count: ${valueOrUnknown(summary.generic_signal_hard_blocker_count)}`,
+    `- HAL signal hard blocker count: ${valueOrUnknown(summary.hal_signal_hard_blocker_count ?? hardBlockerChecks.length)}`,
+    `- HAL signal hard blocker reason codes: ${hardBlockerReasonCodes.join(', ') || 'none'}`,
+    `- Affected main articles: ${visibleAffectedMainArticles.join('; ') || 'none'}${affectedMainArticleSuffix}`,
+    `- optional input_unavailable: ${ensureArray(report.inputs?.unavailable_optional).join(', ') || 'none'}`,
+    `- Artifact: \`${relPath}\``,
+    '',
+    rows.length > 0
+      ? renderMarkdownTable(
+        ['#', 'Article', 'signal_quality_status', 'actionability_level', 'effective_actionability_level', 'hal_impact_axes', 'capsule', 'hard_blocker_reason_codes'],
+        rows
+      )
+      : '- none',
+    ''
+  ].join('\n');
+}
+
 function renderEvidencePackSummary(root, date) {
   if (!date) return '';
   const relPath = `content/newsroom/${date}/evidence-pack-summary.json`;
@@ -2026,6 +2095,7 @@ function buildNewsroomPrBody(options = {}) {
     renderPublicNewsletterNotice(status, handoff),
     renderFallbackPublicIssueNotes(root, date),
     renderFinalSelectionStatus(status),
+    renderHalSignalQualitySummary(root, date, status),
     renderEvidencePackSummary(root, date),
     renderCandidateTraceability(root, date),
     renderEditorActionGuidance(status, date),

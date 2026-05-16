@@ -1,6 +1,6 @@
 const CAPSULE_TOKEN_TARGET = '500-800';
 const MAX_TEXT = 420;
-const MAX_EVIDENCE_ITEMS = 6;
+const MAX_EVIDENCE_ITEMS = 3;
 const MAX_IMAGE_CANDIDATES = 3;
 const {
   buildHalPerspective,
@@ -9,6 +9,9 @@ const {
   cleanBehaviorChange,
   inferImpactClaimLevel
 } = require('./article-field-builder');
+const {
+  normalizeHalSignalFields
+} = require('../common/hal-signal-quality');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -228,6 +231,7 @@ function buildArticleCapsule(candidate) {
     ...candidate,
     impact_claim_level: impactClaimLevel
   };
+  const halSignal = normalizeHalSignalFields(fieldCandidate);
   const capsule = {
     title: compactText(candidate.title, 180),
     url: candidateUrl(candidate),
@@ -248,11 +252,18 @@ function buildArticleCapsule(candidate) {
       evidence_origin: text(candidate.evidence_origin)
     },
     impact_claim_level: impactClaimLevel,
+    hal_impact_axes: halSignal.hal_impact_axes,
+    reader_owners: halSignal.reader_owners,
+    actionability_level: halSignal.actionability_level,
+    effective_actionability_level: halSignal.effective_actionability_level,
+    signal_quality_status: halSignal.signal_quality_status,
+    fallback_promotion_allowed: halSignal.fallback_promotion_allowed,
+    soc_signal_source_allowed: halSignal.soc_signal_source_allowed,
     component: compactText(candidate.api_or_component || candidate.version_or_release, 160),
     what_changed: compactText(cleanedBehavior.text || candidate.behavior_change || candidate.summary || summaryCacheText(candidate), MAX_TEXT),
     background_context_static: compactText(buildStaticBackgroundContext(fieldCandidate), MAX_TEXT),
     camera_hal_perspective_static: compactText(buildHalPerspective(fieldCandidate), MAX_TEXT),
-    overclaim_guardrails: buildOverclaimGuardrails(fieldCandidate).map(item => compactText(item, 120)),
+    overclaim_guardrails: buildOverclaimGuardrails(fieldCandidate).slice(0, 2).map(item => compactText(item, 100)),
     why_hal_engineer_cares: compactText(
       candidate.relevance_reason ||
       candidate.collection_reason ||
@@ -287,6 +298,24 @@ function buildArticleCapsule(candidate) {
       removed_fragments: ensureArray(cleanedBehavior.removed_fragments).slice(0, 5),
       warnings: ensureArray(cleanedBehavior.warnings)
     };
+  }
+  if (ensureArray(halSignal.do_not_overstate).length > 0) {
+    capsule.do_not_overstate = ensureArray(halSignal.do_not_overstate).slice(0, 5);
+  }
+  if (halSignal.fallback_promotion_reason) {
+    capsule.fallback_promotion_reason = compactText(halSignal.fallback_promotion_reason, 180);
+  }
+  if (halSignal.actionability_upgrade_reason) {
+    capsule.actionability_upgrade_reason = compactText(halSignal.actionability_upgrade_reason, 180);
+  }
+  if (ensureArray(halSignal.fallback_guard_notes).length > 0) {
+    capsule.fallback_guard_notes = ensureArray(halSignal.fallback_guard_notes).slice(0, 5);
+  }
+  if (halSignal.soc_signal_type) {
+    capsule.soc_signal_type = halSignal.soc_signal_type;
+  }
+  if (halSignal.camera_pipeline_link) {
+    capsule.camera_pipeline_link = compactText(halSignal.camera_pipeline_link, 180);
   }
   return {
     ...capsule,

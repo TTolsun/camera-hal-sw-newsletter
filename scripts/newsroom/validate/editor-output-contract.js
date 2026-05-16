@@ -17,6 +17,10 @@ const {
   ARTICLE_SECTION_KEYS,
   normalizeArticleSections
 } = require('../common/article-section-contract');
+const {
+  CAPSULE_REQUIRED_FIELDS,
+  normalizeHalSignalCapsule
+} = require('../common/hal-signal-quality');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -285,6 +289,41 @@ function validateArticleSectionContract(value) {
   }
 }
 
+function validateHalSignalCapsules(value) {
+  const issues = [];
+  ensureArray(value.sections).forEach((section, index) => {
+    const headline = text(section.headline || section.category || `article ${index + 1}`);
+    const capsule = normalizeHalSignalCapsule(section);
+    if (!capsule.present) {
+      issues.push({
+        index: index + 1,
+        headline,
+        type: 'missing_hal_signal_capsule',
+        keys: CAPSULE_REQUIRED_FIELDS
+      });
+      return;
+    }
+    if (!capsule.complete) {
+      issues.push({
+        index: index + 1,
+        headline,
+        type: 'incomplete_hal_signal_capsule',
+        keys: capsule.missing_keys
+      });
+    }
+    section.hal_signal_capsule = capsule.capsule;
+  });
+  if (issues.length > 0) {
+    throw semanticError('Editor output failed HAL Signal Capsule validation.', {
+      field: 'sections.hal_signal_capsule',
+      expectedKeys: CAPSULE_REQUIRED_FIELDS,
+      actualCount: issues.length,
+      sectionCount: ensureArray(value.sections).length,
+      issues
+    });
+  }
+}
+
 function validateEditorOutputContract(value, date, options = {}) {
   const reporter = options.reporter || { candidates: [] };
   const normalizeSection = options.normalizeSection || (section => ({
@@ -315,6 +354,7 @@ function validateEditorOutputContract(value, date, options = {}) {
 
   value.sections = value.sections.map((section, index) => normalizeSection(section, index, reporter));
   validateArticleSectionContract(value);
+  validateHalSignalCapsules(value);
   validateFieldHygiene(value);
   validateEditorArticlePolicy(value, reporter);
 

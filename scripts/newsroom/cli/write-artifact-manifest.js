@@ -37,6 +37,8 @@ function criticalFiles(date) {
     newsroomRelPath(date, 'quality-report.json'),
     newsroomRelPath(date, 'quality-report.md'),
     newsroomRelPath(date, 'evidence-pack-summary.json'),
+    newsroomRelPath(date, 'hal-signal-quality-report.json'),
+    newsroomRelPath(date, 'hal-signal-quality-report.md'),
     newsroomRelPath(date, 'retry-history.json'),
     newsroomRelPath(date, 'retry-history.md'),
     `newsletters/${date}/newsletter.md`,
@@ -133,6 +135,22 @@ function qualitySummary(report) {
   };
 }
 
+function halSignalQualitySummary(report) {
+  if (!report) return null;
+  const summary = report.hal_signal_quality_summary || {};
+  return {
+    schema_version: report.schema_version,
+    date: report.date,
+    status: report.status,
+    input_completeness: report.input_completeness,
+    main_article_count: summary.main_article_count,
+    article_count_with_hal_signal_capsule: summary.article_count_with_hal_signal_capsule,
+    article_count_without_hal_signal_capsule: summary.article_count_without_hal_signal_capsule,
+    generic_signal_hard_blocker_count: summary.generic_signal_hard_blocker_count,
+    hal_signal_hard_blocker_count: summary.hal_signal_hard_blocker_count
+  };
+}
+
 function walkFiles(root, dir = root, files = []) {
   if (!fs.existsSync(dir)) return files;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -169,8 +187,10 @@ function buildManifest(snapshotDir, date) {
   const resolvedSnapshotDir = path.resolve(snapshotDir);
   const statusRelPath = '.tmp/newsletter-generation-status.json';
   const qualityRelPath = newsroomRelPath(date, 'quality-report.json');
+  const halSignalRelPath = newsroomRelPath(date, 'hal-signal-quality-report.json');
   const status = readJsonIfPresent(resolvedSnapshotDir, statusRelPath, warnings);
   const quality = readJsonIfPresent(resolvedSnapshotDir, qualityRelPath, warnings);
+  const halSignalQuality = readJsonIfPresent(resolvedSnapshotDir, halSignalRelPath, warnings);
   const dateText = readTextIfPresent(resolvedSnapshotDir, '.tmp/newsletter-date.txt');
 
   if (dateText) {
@@ -233,6 +253,7 @@ function buildManifest(snapshotDir, date) {
     generated_at: new Date().toISOString(),
     status_summary: statusSummary(status),
     quality_summary: qualitySummary(quality),
+    hal_signal_quality_summary: halSignalQualitySummary(halSignalQuality),
     files,
     missing_critical_files: missingCriticalFiles,
     consistency_warnings: warnings

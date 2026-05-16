@@ -9,6 +9,11 @@ function section(overrides = {}) {
   const title = overrides.headline || 'CameraX 1.5 release gives HAL teams a compatibility target';
   const value = {
     category: 'Android Camera',
+    fixture_meta: {
+      provenance: 'synthetic',
+      purpose: 'newsletter quality contract fixture',
+      must_not_be_used_as_golden_public_artifact: true
+    },
     headline: title,
     what_changed: 'CameraX 1.5.0 was released on 2026-05-01 with Android Camera compatibility behavior.',
     confirmed_facts: ['CameraX 1.5.0 release date: 2026-05-01.'],
@@ -26,6 +31,26 @@ function section(overrides = {}) {
     team_summary: 'Use CameraX 1.5.0 as a concrete compatibility validation trigger.',
     is_ai_related: false,
     article_type: 'camera-hal',
+    hal_impact_axes: ['framework_hal_contract', 'stream_buffer_metadata', 'camerax_app_compatibility'],
+    reader_owners: ['camera_hal_owner', 'camera_framework_owner', 'camera_test_owner'],
+    actionability_level: 'owner_metric_log',
+    effective_actionability_level: 'owner_metric_log',
+    actionability_upgrade_reason: '',
+    signal_quality_status: 'strong_signal',
+    do_not_overstate: ['Do not claim a direct Camera HAL API change unless the source says so.'],
+    fallback_promotion_allowed: true,
+    fallback_promotion_reason: 'Primary Camera Stack candidate with dated source evidence.',
+    fallback_guard_notes: ['Keep CameraX claims framework-adjacent unless source evidence says direct HAL.'],
+    soc_signal_type: '',
+    soc_signal_source_allowed: true,
+    camera_pipeline_link: 'CameraX compatibility maps to camera2 stream and metadata validation.',
+    hal_signal_capsule: {
+      why_now: 'CameraX 1.5.0 gives HAL teams a dated compatibility validation trigger.',
+      reader_owners: ['camera_hal_owner', 'camera_framework_owner', 'camera_test_owner'],
+      check_within_2_weeks: 'Assign a camera owner to compare Camera ITS logs, preview latency, and metadata consistency within 2 weeks.',
+      impact_axes: ['framework_hal_contract', 'stream_buffer_metadata', 'camerax_app_compatibility'],
+      do_not_overstate: ['Do not claim a direct Camera HAL API change unless the source says so.']
+    },
     sources: [source(overrides.url || 'https://example.com/camerax')],
     ...overrides
   };

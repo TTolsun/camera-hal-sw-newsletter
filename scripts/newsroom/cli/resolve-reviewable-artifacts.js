@@ -29,6 +29,8 @@ const CANONICAL_REVIEW_ARTIFACTS = [
   'editor-draft.json',
   'fact-check-report.json',
   'quality-report.json',
+  'hal-signal-quality-report.json',
+  'hal-signal-quality-report.md',
   'generation-status.json',
   'retry-history.json',
   'repair-failure.json',
@@ -44,6 +46,8 @@ const REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS = [
   'editor-draft.json',
   'quality-report.json',
   'fact-check-report.json',
+  'hal-signal-quality-report.json',
+  'hal-signal-quality-report.md',
   'repair-failure.json',
   'generation-status.json'
 ];
@@ -52,6 +56,8 @@ const REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS = [
   'editor-draft.json',
   'quality-report.json',
   'fact-check-report.json',
+  'hal-signal-quality-report.json',
+  'hal-signal-quality-report.md',
   'generation-status.json'
 ];
 
@@ -353,7 +359,7 @@ function resolveReviewableArtifacts(options = {}) {
   const statusReviewable = REVIEWABLE_STATUSES.has(status.status);
   const failedRepairReviewable = status.status === STATUS_FAILED_REPAIR_REVIEWABLE;
   const changedRequiredPublicArtifacts = requiredPublicArtifacts.filter(filePath => changedArtifacts.includes(filePath));
-  const editorialArtifacts = artifactJsonReadResults(root, date, REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS);
+  const editorialArtifacts = artifactReadResults(root, date, REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS);
   const editorialGenerationStatus = editorialArtifacts['generation-status.json'];
   const candidateShortageArtifacts = artifactReadResults(root, date, REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS);
   const candidateShortageGenerationStatus = candidateShortageArtifacts['generation-status.json'];
