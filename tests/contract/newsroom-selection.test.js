@@ -5,6 +5,7 @@ const {
   buildShortlistReport,
   compositionSummary,
   exclusionReasons,
+  freshnessWindowMetadata,
   hasConcreteApiComponent,
   hasFallbackRelevanceHint,
   hasPlatformSignalTerm,
@@ -855,6 +856,55 @@ test('month-level dated candidates do not receive exact-day freshness scoring', 
   assert.equal(exact.freshness_score, 3);
   assert.equal(month.freshness_score, 1);
   assert.ok(month.total < exact.total);
+
+  const monthWindow = freshnessWindowMetadata(candidate({
+    title: 'Camera ITS monthly site update',
+    url: 'https://example.com/month-window',
+    published_date: '2026-05-01',
+    datePrecision: 'month'
+  }), '2026-05-03');
+  assert.match(monthWindow.selection_window_reason, /month-level date precision/);
+});
+
+test('freshness window metadata maps candidate age without changing freshness score semantics', () => {
+  const cases = [
+    ['2026-05-07', 'primary', 3],
+    ['2026-05-03', 'primary', 7],
+    ['2026-04-26', 'fallback', 14],
+    ['2026-04-19', 'fallback', 21],
+    ['2026-03-11', 'reference', 60],
+    ['2026-02-09', 'reference', 90],
+    ['2026-01-10', 'stale', 120]
+  ];
+
+  for (const [published_date, expectedWindow, expectedAge] of cases) {
+    const metadata = freshnessWindowMetadata(candidate({
+      title: `Camera freshness ${expectedWindow} ${expectedAge}`,
+      url: `https://example.com/freshness-${expectedAge}`,
+      published_date
+    }), '2026-05-10');
+    assert.equal(metadata.freshness_window, expectedWindow);
+    assert.equal(metadata.days_since_published, expectedAge);
+    assert.match(metadata.selection_window_reason, new RegExp(`${expectedAge} day\\(s\\) since published`));
+  }
+
+  const unknown = freshnessWindowMetadata({
+    title: 'Camera freshness missing date',
+    url: 'https://example.com/freshness-missing'
+  }, '2026-05-10');
+  assert.equal(unknown.freshness_window, 'unknown');
+  assert.equal(unknown.days_since_published, null);
+
+  const report = buildShortlistReport('2026-05-10', [
+    policyPrimaryCandidate(0, { published_date: '2026-05-07' }),
+    policyPrimaryCandidate(1, { published_date: '2026-04-26' }),
+    policyPrimaryCandidate(2, { published_date: '2026-03-11' })
+  ], { minArticles: 1 });
+
+  assert.equal(report.selection_policy.selection_window_policy.enforcement, 'metadata_only');
+  assert.equal(report.selection_policy.selection_window_policy.primarySelectionDays, 7);
+  assert.ok(report.shortlisted_candidates.every(item => item.freshness_window));
+  assert.ok(report.selected_articles.every(item => item.days_since_published !== undefined));
 });
 
 test('fallback composition uses supporting buckets when direct camera stack topics are scarce', () => {
