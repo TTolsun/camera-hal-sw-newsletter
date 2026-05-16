@@ -11,6 +11,7 @@ const {
   articlePolicy,
   articleCountRangeText,
   candidatePoolPreflightPolicy,
+  getSelectionWindowPolicy,
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,
   isPrimaryCameraStackBucket,
@@ -227,6 +228,65 @@ function freshnessScore(candidate, newsletterDate) {
   if (ageDays <= 21) return 2;
   if (ageDays <= 45) return 1;
   return 0;
+}
+
+function utcDayStart(date) {
+  if (!date || Number.isNaN(date.getTime())) return null;
+  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+}
+
+function daysSincePublished(candidate, newsletterDate) {
+  const rawDate = publishedDate(candidate);
+  const published = rawDate ? new Date(rawDate) : null;
+  const base = newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date();
+  const publishedDay = utcDayStart(published);
+  const baseDay = utcDayStart(base);
+  if (publishedDay === null || baseDay === null) return null;
+  return Math.max(0, Math.floor((baseDay - publishedDay) / (24 * 60 * 60 * 1000)));
+}
+
+function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectionWindowPolicy()) {
+  const ageDays = daysSincePublished(candidate, newsletterDate);
+  const precision = datePrecision(candidate);
+  const precisionNote = precision === 'month' ? 'month-level date precision; ' : '';
+
+  if (ageDays === null) {
+    return {
+      freshness_window: 'unknown',
+      days_since_published: null,
+      selection_window_reason: 'missing or invalid published date'
+    };
+  }
+
+  if (ageDays <= policy.primarySelectionDays) {
+    return {
+      freshness_window: 'primary',
+      days_since_published: ageDays,
+      selection_window_reason: `${precisionNote}${ageDays} day(s) since published; within primary ${policy.primarySelectionDays} day window`
+    };
+  }
+
+  if (ageDays <= policy.fallbackSelectionDays) {
+    return {
+      freshness_window: 'fallback',
+      days_since_published: ageDays,
+      selection_window_reason: `${precisionNote}${ageDays} day(s) since published; within fallback ${policy.fallbackSelectionDays} day window`
+    };
+  }
+
+  if (ageDays <= policy.referenceContextDays) {
+    return {
+      freshness_window: 'reference',
+      days_since_published: ageDays,
+      selection_window_reason: `${precisionNote}${ageDays} day(s) since published; within reference ${policy.referenceContextDays} day window`
+    };
+  }
+
+  return {
+    freshness_window: 'stale',
+    days_since_published: ageDays,
+    selection_window_reason: `${precisionNote}${ageDays} day(s) since published; older than reference ${policy.referenceContextDays} day window`
+  };
 }
 
 function candidateBody(candidate) {
@@ -602,9 +662,11 @@ function decorateCandidate(candidate, newsletterDate) {
   const scope = candidateScope(candidate);
   const score_breakdown = scoreCandidate(candidate, newsletterDate);
   const score_filter_reasons = scoreFilterReasons(score_breakdown);
+  const windowMetadata = freshnessWindowMetadata(candidate, newsletterDate);
   return {
     ...candidate,
     ...scope,
+    ...windowMetadata,
     url: candidateUrl(candidate),
     published_date: publishedDate(candidate),
     source: candidateSource(candidate),
@@ -999,6 +1061,7 @@ function compositionReason(mode, summary) {
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const cap = options.cap || SHORTLIST_CAP;
+  const selectionWindowPolicy = getSelectionWindowPolicy();
   const { shortlist, excluded } = buildEligibleShortlist(rawCandidates, date, cap);
   const selected = selectFinalArticles(shortlist, options);
   const reserve = reserveCandidates(shortlist, selected, options);
@@ -1078,6 +1141,12 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       main_article_score_threshold: MAIN_ARTICLE_SCORE_THRESHOLD,
       minimum_camera_hal_directness: MIN_CAMERA_HAL_DIRECTNESS,
       minimum_scope_relevance: MIN_SCOPE_RELEVANCE,
+      selection_window_policy: {
+        primarySelectionDays: selectionWindowPolicy.primarySelectionDays,
+        fallbackSelectionDays: selectionWindowPolicy.fallbackSelectionDays,
+        referenceContextDays: selectionWindowPolicy.referenceContextDays,
+        enforcement: 'metadata_only'
+      },
       editorial_scope: 'AOSP Camera + Camera Driver + SoC Platform, with configured supporting main buckets allowed by Newsletter Policy.',
       priority_order: [
         ...articlePolicy.primaryCameraStack.buckets,
@@ -1166,6 +1235,7 @@ module.exports = {
   hasConcreteApiComponent,
   hasFallbackRelevanceHint,
   hasPlatformSignalTerm,
+  freshnessWindowMetadata,
   normalizeTitle,
   normalizeUrl,
   normalizedUrlHash,

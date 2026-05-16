@@ -487,3 +487,23 @@ test('selected article compatibility fields fall back to unknown or not_availabl
   assert.ok(report.warnings.some(warning => warning.includes('claim_validation.status=not_available')));
   assert.ok(report.warnings.some(warning => warning.includes('hal_impact_axes=[]')));
 });
+
+test('freshness window metadata values are preserved in evidence pack article summaries', () => {
+  const freshnessWindows = ['primary', 'fallback', 'reference', 'stale', 'unknown'];
+  const report = buildEvidencePackSummary({
+    date: DATE,
+    shortlistReport: {
+      selected_articles: freshnessWindows.map((freshness_window, index) => selectedCandidate({
+        candidate_id: `selected-window-${index}`,
+        title: `Camera freshness window ${freshness_window}`,
+        url: `https://example.com/freshness-window-${freshness_window}`,
+        freshness_window
+      }))
+    }
+  });
+
+  assert.deepEqual(
+    report.selected_main_articles.map(article => article.freshness_window),
+    freshnessWindows
+  );
+});
