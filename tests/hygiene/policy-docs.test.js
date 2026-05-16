@@ -65,6 +65,9 @@ test('policy block rendering uses the injected policy article count range', () =
       supportingMainBuckets: [...defaultPolicy.articlePolicy.supportingMainBuckets],
       forbiddenMainBuckets: [...defaultPolicy.articlePolicy.forbiddenMainBuckets]
     },
+    selectionWindowPolicy: {
+      ...defaultPolicy.selectionWindowPolicy
+    },
     qualityGatePolicy: {
       ...defaultPolicy.qualityGatePolicy,
       hardFailConditions: [...defaultPolicy.qualityGatePolicy.hardFailConditions]
@@ -73,6 +76,8 @@ test('policy block rendering uses the injected policy article count range', () =
   const rendered = renderNewsletterPolicyBlock(customPolicy);
 
   assert.match(rendered, /Main article count: 11-13/);
+  assert.match(rendered, /Selection windows: primary 7 days; fallback 21 days; reference 90 days/);
+  assert.match(rendered, /configured for later slices only/);
   assert.doesNotMatch(rendered, new RegExp(`Main article count: ${articleCountRangeText(defaultPolicy)}`));
 });
 

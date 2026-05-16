@@ -2,6 +2,9 @@ const {
   configuredModels: configuredModelList,
   isGeminiProModel
 } = require('../llm/model-policy');
+const {
+  getSelectionWindowPolicy
+} = require('./newsletter-policy');
 
 const DEFAULT_LLM_PROVIDER = 'gemini';
 const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
@@ -13,10 +16,16 @@ const LINKED_EVIDENCE_MODES = Object.freeze({
 });
 const LINKED_EVIDENCE_MODE_VALUES = Object.freeze(Object.values(LINKED_EVIDENCE_MODES));
 const CANDIDATE_INPUT_MODE_VALUES = Object.freeze(['default', 'artifact']);
+const DEFAULT_SELECTION_WINDOW_POLICY = getSelectionWindowPolicy();
 
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
   lookbackDays: 21,
+  selectionWindowPolicy: {
+    primarySelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.primarySelectionDays,
+    fallbackSelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.fallbackSelectionDays,
+    referenceContextDays: DEFAULT_SELECTION_WINDOW_POLICY.referenceContextDays
+  },
   llmProvider: DEFAULT_LLM_PROVIDER,
   llmModel: DEFAULT_LLM_MODEL,
   llmFallbackModels: DEFAULT_LLM_FALLBACK_MODELS,
@@ -145,6 +154,7 @@ function isProModel(value) {
 
 function readRuntimeConfig(env = process.env, options = {}) {
   const newsletterDate = String(envValue(env, 'NEWSLETTER_DATE', DEFAULT_RUNTIME_CONFIG.newsletterDate) || '').trim();
+  const defaultSelectionWindowPolicy = DEFAULT_RUNTIME_CONFIG.selectionWindowPolicy;
   const llmProvider = normalizeLlmProvider(envValue(env, 'LLM_PROVIDER', DEFAULT_RUNTIME_CONFIG.llmProvider));
   const llmModelExplicitlyConfigured = String(env.LLM_MODEL || '').trim().length > 0;
   const llmModel = String(
@@ -163,6 +173,23 @@ function readRuntimeConfig(env = process.env, options = {}) {
   const config = {
     newsletterDate,
     lookbackDays: parseInteger(envValue(env, 'LOOKBACK_DAYS', DEFAULT_RUNTIME_CONFIG.lookbackDays), 'LOOKBACK_DAYS', { min: 1 }),
+    selectionWindowPolicy: {
+      primarySelectionDays: parseInteger(
+        envValue(env, 'PRIMARY_SELECTION_DAYS', defaultSelectionWindowPolicy.primarySelectionDays),
+        'PRIMARY_SELECTION_DAYS',
+        { min: 1 }
+      ),
+      fallbackSelectionDays: parseInteger(
+        envValue(env, 'FALLBACK_SELECTION_DAYS', defaultSelectionWindowPolicy.fallbackSelectionDays),
+        'FALLBACK_SELECTION_DAYS',
+        { min: 1 }
+      ),
+      referenceContextDays: parseInteger(
+        envValue(env, 'REFERENCE_CONTEXT_DAYS', defaultSelectionWindowPolicy.referenceContextDays),
+        'REFERENCE_CONTEXT_DAYS',
+        { min: 1 }
+      )
+    },
     llmProvider,
     llmModel,
     llmModelExplicitlyConfigured,
@@ -311,6 +338,35 @@ function validateRuntimeConfig(config, options = {}) {
   if (!Number.isInteger(config.lookbackDays) || config.lookbackDays < 1) {
     errors.push('LOOKBACK_DAYS must be an integer >= 1.');
   }
+  const selectionWindowPolicy = config.selectionWindowPolicy ?? DEFAULT_RUNTIME_CONFIG.selectionWindowPolicy;
+  if (!selectionWindowPolicy || typeof selectionWindowPolicy !== 'object' || Array.isArray(selectionWindowPolicy)) {
+    errors.push('selectionWindowPolicy must be an object.');
+  } else {
+    const { primarySelectionDays, fallbackSelectionDays, referenceContextDays } = selectionWindowPolicy;
+    if (!Number.isInteger(primarySelectionDays) || primarySelectionDays < 1) {
+      errors.push('PRIMARY_SELECTION_DAYS must be an integer >= 1.');
+    }
+    if (!Number.isInteger(fallbackSelectionDays) || fallbackSelectionDays < 1) {
+      errors.push('FALLBACK_SELECTION_DAYS must be an integer >= 1.');
+    }
+    if (!Number.isInteger(referenceContextDays) || referenceContextDays < 1) {
+      errors.push('REFERENCE_CONTEXT_DAYS must be an integer >= 1.');
+    }
+    if (
+      Number.isInteger(primarySelectionDays) &&
+      Number.isInteger(fallbackSelectionDays) &&
+      fallbackSelectionDays < primarySelectionDays
+    ) {
+      errors.push('FALLBACK_SELECTION_DAYS must be >= PRIMARY_SELECTION_DAYS.');
+    }
+    if (
+      Number.isInteger(fallbackSelectionDays) &&
+      Number.isInteger(referenceContextDays) &&
+      referenceContextDays < fallbackSelectionDays
+    ) {
+      errors.push('REFERENCE_CONTEXT_DAYS must be >= FALLBACK_SELECTION_DAYS.');
+    }
+  }
   if (!['gemini', 'internal'].includes(config.llmProvider)) {
     errors.push('LLM_PROVIDER must be one of: gemini, internal.');
   }
@@ -447,6 +503,9 @@ function sanitizeRuntimeConfig(config) {
   return {
     newsletterDate: config.newsletterDate,
     lookbackDays: config.lookbackDays,
+    selectionWindowPolicy: {
+      ...(config.selectionWindowPolicy ?? DEFAULT_RUNTIME_CONFIG.selectionWindowPolicy)
+    },
     llmProvider: config.llmProvider,
     llmModel: config.llmModel,
     llmModelExplicitlyConfigured: Boolean(config.llmModelExplicitlyConfigured),

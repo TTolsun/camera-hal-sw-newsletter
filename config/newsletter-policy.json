@@ -28,6 +28,11 @@
     "primaryCameraStackCandidateMin": 1,
     "cameraStackCandidateMin": 2
   },
+  "selectionWindowPolicy": {
+    "primarySelectionDays": 7,
+    "fallbackSelectionDays": 21,
+    "referenceContextDays": 90
+  },
   "qualityGatePolicy": {
     "threshold": 85,
     "hardFailConditions": [
