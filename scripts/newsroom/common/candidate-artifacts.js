@@ -84,6 +84,7 @@ function validateMergedManifestSchema(root, manifest, manifestRelPath, validatio
 
   const reportFields = [
     'usage_report',
+    'proposal_validation_report',
     'source_quality_report',
     'source_quality_report_markdown',
     'source_clusters',
@@ -294,6 +295,7 @@ function buildMergedCandidateManifest({
   };
   if (schemaVersion >= 2) {
     manifest.usage_report = reportRefs.usage_report || '';
+    manifest.proposal_validation_report = reportRefs.proposal_validation_report || '';
     manifest.source_quality_report = reportRefs.source_quality_report || '';
     manifest.source_quality_report_markdown = reportRefs.source_quality_report_markdown || '';
     manifest.source_clusters = reportRefs.source_clusters || '';

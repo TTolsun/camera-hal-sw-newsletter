@@ -56,6 +56,14 @@ function geminiSourceProposalsRelPath(date) {
   return newsroomRelPath(date, 'gemini-source-proposals.json');
 }
 
+function geminiSourceProposalValidationReportPath(root, date) {
+  return newsroomArtifactPath(root, date, 'gemini-source-proposal-validation-report.json');
+}
+
+function geminiSourceProposalValidationReportRelPath(date) {
+  return newsroomRelPath(date, 'gemini-source-proposal-validation-report.json');
+}
+
 function geminiUsageReportPath(root, date) {
   return newsroomArtifactPath(root, date, 'gemini-usage-report.json');
 }
@@ -148,6 +156,8 @@ module.exports = {
   extractedSourceFactsRelPath,
   geminiCandidatesPath,
   geminiCandidatesRelPath,
+  geminiSourceProposalValidationReportPath,
+  geminiSourceProposalValidationReportRelPath,
   geminiSourceProposalsPath,
   geminiSourceProposalsRelPath,
   geminiUsageReportPath,

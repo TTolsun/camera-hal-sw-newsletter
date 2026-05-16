@@ -43,14 +43,14 @@ Disabled pass-through는 `gemini-candidates.json`을 정확히 empty array `[]`�
 
 ### Enabled Gemini Source Discovery
 
-`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`?? Stage 2? artifact mutation ?? selected LLM provider credential preflight? ?????. Credential? ??? ??? ?? `gemini-source-discovery-report.md`? failure status? ??? candidate artifact? ???? ????.
+`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`이면 Stage 2는 artifact mutation 전에 selected LLM provider credential preflight를 수행합니다. Credential preflight가 실패하면 가능하면 `gemini-source-discovery-report.md`에 failure status를 남기고 candidate artifact는 수정하지 않습니다.
 
-- Gemini response? `content/newsroom/<date>/gemini-source-proposals.json` proposal artifact? ?????.
-- proposal? candidate? ???, deterministic fetch/normalize/schema validation? ??? URL? `gemini-candidates.json`? promotion???.
-- `gemini-candidates.json`? promoted candidate? ?????.
-- `merged-candidates.json`? manual candidates? ???? schema-valid Gemini candidates? ?????.
-- v2 `merged-candidate-manifest.json`? usage, quality, cluster, evidence report path? ?????.
-- manual candidates? ?? ???? silently drop?? ????.
+- Gemini response는 `content/newsroom/<date>/gemini-source-proposals.json` proposal artifact로 저장합니다.
+- Proposal은 candidate가 아니며, deterministic fetch / normalize / schema validation을 통과한 URL만 `gemini-candidates.json`으로 promotion합니다.
+- `gemini-candidates.json`에는 promoted candidate만 저장합니다.
+- `merged-candidates.json`은 manual candidates를 보존하고 schema-valid Gemini candidates만 추가합니다.
+- v2 `merged-candidate-manifest.json`은 usage, proposal validation, quality, cluster, evidence report path를 포함합니다.
+- manual candidates는 어떤 경우에도 silently drop하지 않습니다.
 
 ## Stage 3 Final Generation
 

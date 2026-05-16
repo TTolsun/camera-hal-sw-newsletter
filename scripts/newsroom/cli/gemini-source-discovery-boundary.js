@@ -14,6 +14,8 @@ const {
   collectedCandidatesRelPath,
   geminiCandidatesPath,
   geminiCandidatesRelPath,
+  geminiSourceProposalValidationReportPath,
+  geminiSourceProposalValidationReportRelPath,
   geminiSourceProposalsPath,
   geminiSourceProposalsRelPath,
   geminiUsageReportPath,
@@ -63,6 +65,10 @@ const {
 const {
   validateCandidateEvidence
 } = require('../evidence/validate-candidate-evidence');
+const {
+  candidateTitle,
+  candidateUrl
+} = require('../collect/source-intelligence-utils');
 
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
 
@@ -104,6 +110,7 @@ function renderReport({
   mergedCandidateRelPath = '',
   manifestRelPath = '',
   proposalRelPath = '',
+  proposalValidationReportRelPath = '',
   usageReportRelPath = '',
   sourceQualityReportRelPath = '',
   sourceClustersRelPath = '',
@@ -131,6 +138,7 @@ function renderReport({
     lines.push(
       `source_candidate_artifact=${sourceCandidateRelPath}`,
       `gemini_source_proposals=${proposalRelPath}`,
+      `proposal_validation_report=${proposalValidationReportRelPath}`,
       `gemini_candidate_artifact=${geminiCandidateRelPath}`,
       `merged_candidate_artifact=${mergedCandidateRelPath}`,
       `merged_candidate_manifest=${manifestRelPath}`,
@@ -171,6 +179,7 @@ function removeStaleNormalOutputs(root, date) {
   removeIfExists(mergedCandidateManifestPath(root, date));
   removeIfExists(geminiCandidatesPath(root, date));
   removeIfExists(geminiSourceProposalsPath(root, date));
+  removeIfExists(geminiSourceProposalValidationReportPath(root, date));
   removeIfExists(geminiUsageReportPath(root, date));
   removeIfExists(extractedSourceFactsPath(root, date));
   removeIfExists(sourceQualityReportPath(root, date));
@@ -208,6 +217,47 @@ function candidatePayload(date, candidates, basePayload = {}) {
     candidates,
     failures: Array.isArray(basePayload.failures) ? basePayload.failures : []
   };
+}
+
+function candidateKey(candidate = {}) {
+  return candidate.id || candidate.source_candidate_id || candidateUrl(candidate) || candidateTitle(candidate);
+}
+
+function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options = {}) {
+  const maxTargets = options.maxTargets || 12;
+  const canonicalRefs = new Set();
+  for (const cluster of clusterReport.clusters || []) {
+    if (Number(cluster.duplicate_count || 0) <= 0) continue;
+    if (cluster.canonical_url) canonicalRefs.add(`url:${cluster.canonical_url}`);
+    if (cluster.canonical_title) canonicalRefs.add(`title:${cluster.canonical_title}`);
+  }
+
+  const selected = [];
+  const seen = new Set();
+  function add(candidate) {
+    const key = candidateKey(candidate);
+    if (!key || seen.has(key) || selected.length >= maxTargets) return;
+    seen.add(key);
+    selected.push(candidate);
+  }
+
+  for (const candidate of candidates) {
+    const finalEligible = ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
+    const qualityEligible = ['strong_candidate', 'review_candidate'].includes(candidate.source_quality_bucket);
+    if (finalEligible && qualityEligible && candidate.duplicate_of_selected_source !== true) {
+      add(candidate);
+    }
+  }
+
+  for (const candidate of candidates) {
+    const isCanonical = canonicalRefs.has(`url:${candidateUrl(candidate)}`) ||
+      canonicalRefs.has(`title:${candidateTitle(candidate)}`);
+    if (isCanonical && candidate.duplicate_of_selected_source !== true) {
+      add(candidate);
+    }
+  }
+
+  return selected;
 }
 
 async function runEnabled({
@@ -250,9 +300,6 @@ async function runEnabled({
   const geminiCandidates = discovery.promotedCandidates;
   const mergedInput = [...manualCandidates, ...geminiCandidates];
 
-  const sourceFacts = await extractSourceFacts(mergedInput, { fetch: false });
-  writeJson(extractedSourceFactsPath(root, date), sourceFacts);
-
   const scored = scoreSourceCandidates(mergedInput, { newsletterDate: date });
   writeJson(sourceQualityReportPath(root, date), scored.report);
   fs.writeFileSync(sourceQualityReportMarkdownPath(root, date), renderSourceQualityMarkdown(scored.report), 'utf8');
@@ -260,10 +307,19 @@ async function runEnabled({
   const clustered = checkSourceDuplicates(scored.annotatedCandidates, { newsletterDate: date });
   writeJson(sourceClustersPath(root, date), clustered.report);
 
+  const evidenceFetchTargets = selectEvidenceFetchTargets(clustered.annotatedCandidates, clustered.report, { maxTargets: 12 });
+  const sourceFacts = await extractSourceFacts(evidenceFetchTargets, {
+    fetch: true,
+    fetchImpl,
+    timeoutMs: 5000,
+    maxBytes: 200000,
+    metadataFallback: false
+  });
+  writeJson(extractedSourceFactsPath(root, date), sourceFacts);
+
   const evidence = validateCandidateEvidence(clustered.annotatedCandidates, sourceFacts, { newsletterDate: date });
   writeJson(evidenceValidationReportPath(root, date), evidence.report);
 
-  budget.mergeDiagnostics(discovery.diagnostics);
   const usageReport = budget.writeReport(geminiUsageReportPath(root, date), {
     date,
     calls: discovery.calls
@@ -289,6 +345,7 @@ async function runEnabled({
     manifestSchemaVersion: 2,
     reportRefs: {
       usage_report: geminiUsageReportRelPath(date),
+      proposal_validation_report: geminiSourceProposalValidationReportRelPath(date),
       source_quality_report: sourceQualityReportRelPath(date),
       source_quality_report_markdown: sourceQualityReportMarkdownRelPath(date),
       source_clusters: sourceClustersRelPath(date),
@@ -304,6 +361,7 @@ async function runEnabled({
     mergeMode: 'gemini_source_discovery',
     sourceCandidateRelPath,
     proposalRelPath: geminiSourceProposalsRelPath(date),
+    proposalValidationReportRelPath: geminiSourceProposalValidationReportRelPath(date),
     geminiCandidateRelPath: geminiCandidatesRelPath(date),
     mergedCandidateRelPath: mergedCandidatesRelPath(date),
     manifestRelPath: mergedCandidateManifestRelPath(date),
@@ -322,6 +380,7 @@ async function runEnabled({
     source_candidate_artifact: sourceCandidateRelPath,
     source_manifest: fs.existsSync(sourceManifestPath) ? rawCandidateManifestRelPath(date) : '',
     gemini_source_proposals: geminiSourceProposalsRelPath(date),
+    proposal_validation_report: geminiSourceProposalValidationReportRelPath(date),
     gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
@@ -429,5 +488,6 @@ module.exports = {
   findManualCandidatePath,
   parseArgs,
   renderReport,
-  run
+  run,
+  selectEvidenceFetchTargets
 };

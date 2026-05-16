@@ -67,12 +67,12 @@ function calculateSourceQuality(candidate = {}, options = {}) {
     0,
     1
   );
-  const bucket = score >= 0.8
-    ? 'strong_candidate'
-    : score >= 0.65
-      ? 'review_candidate'
-      : candidate.source_gap_risk === true
-        ? 'blocked_candidate'
+  const bucket = candidate.source_gap_risk === true
+    ? 'blocked_candidate'
+    : score >= 0.8
+      ? 'strong_candidate'
+      : score >= 0.65
+        ? 'review_candidate'
         : 'weak_candidate';
   return {
     candidate_id: candidate.id || candidate.source_candidate_id || stableId([candidateUrl(candidate), candidateTitle(candidate)]),

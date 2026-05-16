@@ -22,10 +22,17 @@ function validateOne(candidate = {}, facts = {}) {
   const supportedClaims = claims.filter(claim => text(claim.evidence_text));
   const unsupportedClaims = claims.filter(claim => !text(claim.evidence_text));
   const unsupportedCount = unsupportedClaims.length;
-  const hasSupportedCoreClaim = supportedClaims.length > 0 || Boolean(text(candidate.summary || candidate.behavior_change));
+  const sourceFetchUsed = fact.source_fetch_used === true;
+  const sourceFetchStatus = fact.source_fetch_status || 'skipped';
+  const sourceFetchError = fact.source_fetch_error || '';
+  const validationMode = fact.validation_mode || (candidate.source_gap_risk === true ? 'metadata_only' : 'skipped');
+  const fetchFailed = sourceFetchUsed && sourceFetchStatus === 'failed';
+  const metadataCanSupportClaim = validationMode === 'metadata_only';
+  const hasSupportedCoreClaim = supportedClaims.length > 0 ||
+    (metadataCanSupportClaim && Boolean(text(candidate.summary || candidate.behavior_change)));
   let finalSelectionBlocked = false;
   let editorReviewRequired = false;
-  let status = 'pass';
+  let status = validationMode === 'skipped' ? 'not_checked' : 'pass';
   const reasons = [];
 
   if (candidate.source_gap_risk === true) {
@@ -38,7 +45,11 @@ function validateOne(candidate = {}, facts = {}) {
     status = 'blocked';
     reasons.push('stale_claim_risk=high');
   }
-  if (unsupportedCount > 0 && !hasSupportedCoreClaim) {
+  if (fetchFailed && candidate.source_gap_risk !== true) {
+    editorReviewRequired = true;
+    status = status === 'blocked' ? status : 'fetch_failed_review_required';
+    reasons.push('source_fetch_failed');
+  } else if (unsupportedCount > 0 && !hasSupportedCoreClaim) {
     finalSelectionBlocked = true;
     status = 'blocked';
     reasons.push('unsupported_claims_without_supported_core_claim');
@@ -52,7 +63,11 @@ function validateOne(candidate = {}, facts = {}) {
     candidate_id: id,
     url: candidateUrl(candidate),
     title: candidateTitle(candidate),
-    deep_checked: shouldDeepCheck(candidate),
+    deep_checked: sourceFetchUsed && sourceFetchStatus === 'success',
+    source_fetch_used: sourceFetchUsed,
+    source_fetch_status: sourceFetchStatus,
+    source_fetch_error: sourceFetchError,
+    validation_mode: validationMode,
     unsupported_claims: unsupportedCount,
     supported_claims: supportedClaims.length,
     final_selection_blocked: finalSelectionBlocked,
@@ -70,7 +85,6 @@ function validateCandidateEvidence(candidates = [], sourceFacts = {}, options = 
     factMap[id] = fact;
   }
   const checked = candidates
-    .filter(candidate => options.includeAll || shouldDeepCheck(candidate) || candidate.source_gap_risk === true)
     .map(candidate => validateOne(candidate, factMap));
   const byId = new Map(checked.map(item => [item.candidate_id, item]));
   const annotatedCandidates = candidates.map(candidate => {

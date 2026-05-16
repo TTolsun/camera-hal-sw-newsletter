@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 const {
+  geminiSourceProposalValidationReportPath,
+  geminiSourceProposalValidationReportRelPath,
   geminiSourceProposalsPath,
   geminiSourceProposalsRelPath
 } = require('../common/artifact-paths');
@@ -141,21 +143,41 @@ function dateFromHtml(html = '') {
 async function promoteProposalUrls({ proposalPayload, sourceRegistry, fetchImpl, options = {} }) {
   const promoted = [];
   const rejected = [];
+  const validationReport = [];
   const seenUrls = new Set();
+  function recordValidation(proposal, rawUrl, values = {}) {
+    const row = {
+      proposal_id: proposal.proposal_id,
+      candidate_url: rawUrl,
+      normalized_url: values.normalized_url || '',
+      accepted: values.accepted === true,
+      rejected_reason: values.rejected_reason || '',
+      source_policy_match: values.source_policy_match || ''
+    };
+    if (values.message) row.message = values.message;
+    validationReport.push(row);
+    return row;
+  }
+
   for (const proposal of proposalPayload.proposals || []) {
     for (const rawUrl of proposal.candidate_urls || []) {
       const url = normalizeUrl(rawUrl);
       if (!url) {
         rejected.push({ proposal_id: proposal.proposal_id, url: rawUrl, rejected_reason: 'invalid_url' });
+        recordValidation(proposal, rawUrl, { rejected_reason: 'invalid_url' });
         continue;
       }
       if (seenUrls.has(url)) {
         rejected.push({ proposal_id: proposal.proposal_id, url, rejected_reason: 'duplicate_proposal_url' });
+        recordValidation(proposal, rawUrl, { normalized_url: url, rejected_reason: 'duplicate_proposal_url' });
         continue;
       }
       seenUrls.add(url);
+      const source = sourceForUrl(sourceRegistry, url) || {};
+      const sourcePolicyMatch = source.id || source.name || '';
       if (!isUrlAllowed(sourceRegistry, url)) {
         rejected.push({ proposal_id: proposal.proposal_id, url, rejected_reason: 'domain_not_allowed' });
+        recordValidation(proposal, rawUrl, { normalized_url: url, rejected_reason: 'domain_not_allowed' });
         continue;
       }
 
@@ -165,19 +187,30 @@ async function promoteProposalUrls({ proposalPayload, sourceRegistry, fetchImpl,
           html = await fetchTextWithLimit(fetchImpl, url, options);
         } catch (error) {
           rejected.push({ proposal_id: proposal.proposal_id, url, rejected_reason: 'fetch_failed', message: error.message });
+          recordValidation(proposal, rawUrl, {
+            normalized_url: url,
+            rejected_reason: 'fetch_failed',
+            source_policy_match: sourcePolicyMatch,
+            message: error.message
+          });
           continue;
         }
       }
 
-      const source = sourceForUrl(sourceRegistry, url) || {};
       const publishedAt = dateFromHtml(html);
       const title = titleFromHtml(html, proposal.topic_gap || url);
       const hasDatedEvidence = Boolean(publishedAt);
       const sourceGapRisk = !hasDatedEvidence;
+      const candidateId = `gemini-${stableId([url])}`;
+      recordValidation(proposal, rawUrl, {
+        normalized_url: url,
+        accepted: true,
+        source_policy_match: sourcePolicyMatch
+      });
       promoted.push({
         schema_version: 5,
-        id: `gemini-${stableId([url, proposal.proposal_id])}`,
-        source_candidate_id: `gemini-${stableId([url, proposal.proposal_id])}`,
+        id: candidateId,
+        source_candidate_id: candidateId,
         title,
         url,
         articleUrl: url,
@@ -226,12 +259,13 @@ async function promoteProposalUrls({ proposalPayload, sourceRegistry, fetchImpl,
         cameraHalRelevanceScore: hasDatedEvidence ? 70 : 45,
         camera_hal_relevance_score: hasDatedEvidence ? 70 : 45,
         proposal_id: proposal.proposal_id,
+        proposal_trace_id: proposal.proposal_id,
         discovery_topic_gap: proposal.topic_gap,
         discovery_source_family: proposal.source_family
       });
     }
   }
-  return { promoted, rejected };
+  return { promoted, rejected, validationReport };
 }
 
 async function runGeminiSourceDiscovery({
@@ -256,9 +290,23 @@ async function runGeminiSourceDiscovery({
     sourceRegistry,
     fetchImpl: fetch ? fetchImpl : null
   });
+  const proposalValidationReport = {
+    schema_version: 1,
+    report_type: 'gemini_source_proposal_validation',
+    newsletter_date: date,
+    validations: validation.validationReport,
+    counts: validation.validationReport.reduce((counts, item) => {
+      const key = item.accepted ? 'accepted' : item.rejected_reason || 'rejected';
+      counts[key] = (counts[key] || 0) + 1;
+      return counts;
+    }, {})
+  };
+  writeJson(geminiSourceProposalValidationReportPath(root, date), proposalValidationReport);
   return {
     proposals,
     proposalsRelPath: geminiSourceProposalsRelPath(date),
+    proposalValidationReport,
+    proposalValidationReportRelPath: geminiSourceProposalValidationReportRelPath(date),
     promotedCandidates: validation.promoted,
     rejectedProposals: validation.rejected,
     diagnostics: getGeminiDiagnostics(),

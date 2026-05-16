@@ -11,6 +11,7 @@ const {
   extractedSourceFactsPath,
   geminiCandidatesPath,
   geminiCandidatesRelPath,
+  geminiSourceProposalValidationReportPath,
   geminiSourceProposalsPath,
   geminiUsageReportPath,
   manualCandidatesPath,
@@ -421,24 +422,39 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
       GEMINI_API_KEY: 'test-key',
       GEMINI_RETRY_DELAYS_MS: '0'
     },
-    callLlmJsonBudgetedImpl: async () => ({
-      schema_version: 1,
-      proposal_type: 'gemini_source_discovery',
-      newsletter_date: date,
-      proposals: [{
-        proposal_id: 'p1',
-        topic_gap: 'CameraX release notes',
-        source_family: 'official_android',
-        allowed_domains: ['example.com'],
-        search_keywords: ['CameraX release notes'],
-        candidate_urls: [
-          'https://developer.android.com/jetpack/androidx/releases/camera',
-          'https://example.com/fake'
-        ],
-        expected_evidence: ['published date'],
-        risk_notes: []
-      }]
-    }),
+    callLlmJsonBudgetedImpl: async (_stage, _system, _prompt, _schema, options = {}) => {
+      options.budget.mergeDiagnostics({
+        model_usage: {
+          sourceDiscovery: {
+            fake: {
+              requests: 1,
+              successes: 1
+            }
+          }
+        },
+        cost_report: {
+          calls: [{ stage: 'sourceDiscovery', model: 'fake' }]
+        }
+      });
+      return {
+        schema_version: 1,
+        proposal_type: 'gemini_source_discovery',
+        newsletter_date: date,
+        proposals: [{
+          proposal_id: 'p1',
+          topic_gap: 'CameraX release notes',
+          source_family: 'official_android',
+          allowed_domains: ['example.com'],
+          search_keywords: ['CameraX release notes'],
+          candidate_urls: [
+            'https://developer.android.com/jetpack/androidx/releases/camera',
+            'https://example.com/fake'
+          ],
+          expected_evidence: ['published date'],
+          risk_notes: []
+        }]
+      };
+    },
     fetchImpl: async (url) => {
       if (url.includes('developer.android.com')) {
         return {
@@ -452,6 +468,7 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
 
   assert.equal(result.status, 'PASS');
   assert.equal(readJson(geminiSourceProposalsPath(root, date)).proposals.length, 1);
+  assert.equal(readJson(geminiSourceProposalValidationReportPath(root, date)).validations.length, 2);
   assert.equal(readJson(geminiCandidatesPath(root, date)).candidates.length, 1);
   assert.equal(readJson(mergedCandidatesPath(root, date)).candidates.length, 2);
   assert.equal(fs.existsSync(extractedSourceFactsPath(root, date)), true);
@@ -462,6 +479,11 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.equal(manifest.schema_version, 2);
   assert.equal(manifest.llm_used, true);
   assert.equal(manifest.usage_report, 'content/newsroom/2026-05-16/gemini-usage-report.json');
+  assert.equal(manifest.proposal_validation_report, 'content/newsroom/2026-05-16/gemini-source-proposal-validation-report.json');
+  const usage = readJson(geminiUsageReportPath(root, date));
+  assert.equal(usage.requested_attempt_count, 1);
+  assert.equal(usage.successful_response_count, 1);
+  assert.equal(usage.stage_counts.sourceDiscovery.requested_attempts, 1);
 
   const validated = validateCandidateArtifact({
     root,
@@ -476,4 +498,20 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.equal(validated.validation_status, 'validated');
   const report = fs.readFileSync(result.reportPath, 'utf8');
   assert.match(report, /domain_not_allowed/);
+  assert.match(report, /proposal_validation_report=content\/newsroom\/2026-05-16\/gemini-source-proposal-validation-report\.json/);
+
+  fs.unlinkSync(geminiSourceProposalValidationReportPath(root, date));
+  assert.throws(
+    () => validateCandidateArtifact({
+      root,
+      date,
+      candidatePath: mergedCandidatesPath(root, date),
+      manifestPath: mergedCandidateManifestPath(root, date),
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'merged_candidate',
+      expectedLlmUsed: 'any'
+    }),
+    /proposal_validation_report target is missing/
+  );
 });

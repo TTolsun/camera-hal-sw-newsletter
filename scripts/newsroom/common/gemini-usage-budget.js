@@ -185,6 +185,8 @@ function createGeminiUsageBudget({
         target_calls_per_run: budgetConfig.targetCallsPerRun,
         soft_limit_calls_per_run: budgetConfig.softLimitCallsPerRun,
         hard_limit_calls_per_run: budgetConfig.hardLimitCallsPerRun,
+        pre_call_guard_unit: 'logical_llm_call',
+        retry_attempt_guard: false,
         requested_attempt_count: requested,
         successful_response_count: successful,
         failed_attempt_count: failed,
