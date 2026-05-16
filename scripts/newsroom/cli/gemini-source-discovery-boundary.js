@@ -38,6 +38,8 @@ const {
   sourceQualityReportRelPath
 } = require('../common/artifact-paths');
 const {
+  sourceDiscoveryCandidateStats,
+  sourceDiscoveryStatsSummary,
   writeMergedCandidateArtifacts
 } = require('../common/candidate-artifacts');
 const {
@@ -105,6 +107,8 @@ function renderReport({
   llmUsed,
   geminiCandidateCount,
   mergeMode,
+  discoveryStats = null,
+  summary = '',
   sourceCandidateRelPath = '',
   geminiCandidateRelPath = '',
   mergedCandidateRelPath = '',
@@ -117,14 +121,23 @@ function renderReport({
   evidenceValidationReportRelPath = '',
   rejectedProposals = []
 }) {
+  const stats = discoveryStats && typeof discoveryStats === 'object' ? discoveryStats : null;
+  const countLines = stats
+    ? Object.entries(stats).map(([key, value]) => `${key}=${value}`)
+    : [`gemini_candidate_count=${geminiCandidateCount}`];
+  const reportSummary = summary ||
+    (status === FAILED_LLM_CREDENTIALS
+      ? 'Gemini source discovery credential preflight failed.'
+      : sourceDiscoveryStatsSummary(stats || {}, { llmUsed }));
   const lines = [
     `# Gemini Source Discovery Report - ${date}`,
     '',
     `status=${status}`,
     `disabled_pass_through=${disabledPassThrough ? 'true' : 'false'}`,
     `llm_used=${llmUsed ? 'true' : 'false'}`,
-    `gemini_candidate_count=${geminiCandidateCount}`,
     `merge_mode=${mergeMode}`,
+    `summary=${reportSummary}`,
+    ...countLines,
     ''
   ];
 
@@ -369,8 +382,14 @@ async function runEnabled({
     calls: discovery.calls
   });
 
+  const geminiAnnotatedCandidates = evidence.annotatedCandidates.filter(item => item.origin === 'gemini_discovery');
+  const discoveryStats = sourceDiscoveryCandidateStats({
+    manualCandidates,
+    geminiCandidates: geminiAnnotatedCandidates,
+    mergedCandidates: evidence.annotatedCandidates
+  });
   const mergedPayload = candidatePayload(date, evidence.annotatedCandidates, manualPayload);
-  const geminiPayload = candidatePayload(date, evidence.annotatedCandidates.filter(item => item.origin === 'gemini_discovery'), {
+  const geminiPayload = candidatePayload(date, geminiAnnotatedCandidates, {
     failures: discovery.rejectedProposals
   });
   const generatedAt = new Date().toISOString();
@@ -387,6 +406,7 @@ async function runEnabled({
     llmUsed: true,
     status: 'PASS',
     manifestSchemaVersion: 2,
+    discoveryStats,
     reportRefs: {
       usage_report: geminiUsageReportRelPath(date),
       proposal_validation_report: geminiSourceProposalValidationReportRelPath(date),
@@ -403,6 +423,8 @@ async function runEnabled({
     llmUsed: true,
     geminiCandidateCount: geminiPayload.candidates.length,
     mergeMode: 'gemini_source_discovery',
+    discoveryStats,
+    summary: sourceDiscoveryStatsSummary(discoveryStats, { llmUsed: true }),
     sourceCandidateRelPath,
     proposalRelPath: geminiSourceProposalsRelPath(date),
     proposalValidationReportRelPath: geminiSourceProposalValidationReportRelPath(date),
@@ -461,8 +483,14 @@ function run({
 
   const sourceCandidatePath = findManualCandidatePath(root, date);
   const payload = readJson(sourceCandidatePath);
+  const manualCandidates = candidateItems(payload);
   const sourceManifestPath = rawCandidateManifestPath(root, date);
   const generatedAt = new Date().toISOString();
+  const discoveryStats = sourceDiscoveryCandidateStats({
+    manualCandidates,
+    geminiCandidates: [],
+    mergedCandidates: manualCandidates
+  });
   const result = writeMergedCandidateArtifacts({
     root,
     date,
@@ -474,7 +502,8 @@ function run({
     mergeMode: 'disabled_pass_through',
     geminiCandidateCount: 0,
     llmUsed: false,
-    status: 'PASS'
+    status: 'PASS',
+    discoveryStats
   });
   const sourceCandidateRelPath = sourceCandidatePath.endsWith('manual-candidates.json')
     ? manualCandidatesRelPath(date)
@@ -486,6 +515,8 @@ function run({
     llmUsed: false,
     geminiCandidateCount: 0,
     mergeMode: 'disabled_pass_through',
+    discoveryStats,
+    summary: sourceDiscoveryStatsSummary(discoveryStats, { llmUsed: false }),
     sourceCandidateRelPath,
     geminiCandidateRelPath: geminiCandidatesRelPath(date),
     mergedCandidateRelPath: mergedCandidatesRelPath(date),
