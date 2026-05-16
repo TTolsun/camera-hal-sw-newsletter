@@ -26,6 +26,10 @@ const {
   qualityGatePolicy
 } = require('../common/newsletter-policy');
 const {
+  normalizeHalSignalCapsule,
+  normalizeHalSignalFields
+} = require('../common/hal-signal-quality');
+const {
   buildConfirmedFacts,
   buildHalPerspective,
   buildOverclaimGuardrails,
@@ -74,6 +78,63 @@ const FALLBACK_BUCKET_ORDER = [
 
 function cloneJson(value) {
   return JSON.parse(JSON.stringify(value ?? null));
+}
+
+function completeHalSignalSection(section = {}, candidate = {}) {
+  const combined = {
+    ...candidate,
+    ...section,
+    relevance_bucket: section.relevance_bucket || candidate.relevance_bucket
+  };
+  const halSignal = normalizeHalSignalFields(combined);
+  const bucket = text(combined.relevance_bucket);
+  const fallbackBucket = ['cpp_ai_tooling_fallback', 'generic_tech_watchlist', 'soc_platform_signal'].includes(bucket);
+  const fallbackPromotionReason = section.fallback_promotion_reason ||
+    halSignal.fallback_promotion_reason ||
+    (fallbackBucket && halSignal.fallback_promotion_allowed === true
+      ? 'Fallback builder promoted this article only as a supporting main article with explicit Camera HAL validation linkage.'
+      : '');
+  const existingCapsule = normalizeHalSignalCapsule(section);
+  const actionItems = ensureArray(section.article_sections?.action_items).length > 0
+    ? ensureArray(section.article_sections.action_items)
+    : ensureArray(section.action_items);
+  const doNotOverstate = ensureArray(halSignal.do_not_overstate).length > 0
+    ? ensureArray(halSignal.do_not_overstate)
+    : ensureArray(halSignal.fallback_guard_notes).length > 0
+      ? ensureArray(halSignal.fallback_guard_notes)
+      : ['Do not claim direct Camera HAL behavior unless source evidence supports it.'];
+  const fallbackCheck = actionItems.find(item => /test|log|metric|measure|CTS|VTS|Camera ITS|stream|buffer|metadata|owner|API|PoC/i.test(text(item))) ||
+    'Within 2 weeks, assign a camera owner to verify stream, buffer, metadata, and test impact before publication follow-up.';
+  const hal_signal_capsule = existingCapsule.complete
+    ? existingCapsule.capsule
+    : {
+        why_now: `${section.headline || section.category || 'This source'} is included as a dated HAL signal for editor review.`,
+        reader_owners: halSignal.reader_owners,
+        check_within_2_weeks: fallbackCheck,
+        impact_axes: halSignal.hal_impact_axes,
+        do_not_overstate: doNotOverstate
+      };
+  return {
+    ...section,
+    hal_impact_axes: ensureArray(section.hal_impact_axes).length > 0 ? section.hal_impact_axes : halSignal.hal_impact_axes,
+    reader_owners: ensureArray(section.reader_owners).length > 0 ? section.reader_owners : halSignal.reader_owners,
+    actionability_level: section.actionability_level || halSignal.actionability_level,
+    effective_actionability_level: section.effective_actionability_level || halSignal.effective_actionability_level,
+    actionability_upgrade_reason: section.actionability_upgrade_reason || halSignal.actionability_upgrade_reason,
+    signal_quality_status: section.signal_quality_status || halSignal.signal_quality_status,
+    do_not_overstate: ensureArray(section.do_not_overstate).length > 0 ? section.do_not_overstate : halSignal.do_not_overstate,
+    fallback_promotion_allowed: typeof section.fallback_promotion_allowed === 'boolean'
+      ? section.fallback_promotion_allowed
+      : halSignal.fallback_promotion_allowed,
+    fallback_promotion_reason: fallbackPromotionReason,
+    fallback_guard_notes: ensureArray(section.fallback_guard_notes).length > 0 ? section.fallback_guard_notes : halSignal.fallback_guard_notes,
+    soc_signal_type: section.soc_signal_type || halSignal.soc_signal_type,
+    soc_signal_source_allowed: typeof section.soc_signal_source_allowed === 'boolean'
+      ? section.soc_signal_source_allowed
+      : halSignal.soc_signal_source_allowed,
+    camera_pipeline_link: section.camera_pipeline_link || halSignal.camera_pipeline_link,
+    hal_signal_capsule
+  };
 }
 
 function readJsonIfExists(filePath) {
@@ -660,7 +721,7 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
     action_items: section.action_items,
     team_share_points: section.team_summary
   };
-  return section;
+  return completeHalSignalSection(section, candidate);
 }
 function hardFailureArticleIndexes(qualityReport, factCheck) {
   const indexes = new Set();
@@ -1079,7 +1140,12 @@ function buildFallbackPublicIssue(options = {}) {
       reason: fallback ? 'minimum article count fallback fill' : 'hard failure replacement'
     });
   }
-  issue.sections = selectedSections.slice(0, articlePolicy.mainArticleCount.max);
+  issue.sections = selectedSections
+    .slice(0, articlePolicy.mainArticleCount.max)
+    .map(section => completeHalSignalSection(
+      section,
+      findCandidateForSection(candidates, section, {}) || {}
+    ));
 
   for (const [index, snapshot] of preserveSnapshots.entries()) {
     const beforeSection = base.sections[index];

@@ -58,6 +58,24 @@ const articleSections = {
   ]
 };
 
+const halSignalCapsule = {
+  type: 'OBJECT',
+  properties: {
+    why_now: string,
+    reader_owners: stringArray,
+    check_within_2_weeks: string,
+    impact_axes: stringArray,
+    do_not_overstate: stringArray
+  },
+  required: [
+    'why_now',
+    'reader_owners',
+    'check_within_2_weeks',
+    'impact_axes',
+    'do_not_overstate'
+  ]
+};
+
 const reporterCandidate = {
   type: 'OBJECT',
   properties: {
@@ -105,6 +123,19 @@ const reporterCandidate = {
     cpp_fallback_value_score: { type: 'NUMBER' },
     relevance_reason: string,
     impact_areas: stringArray,
+    hal_impact_axes: stringArray,
+    reader_owners: stringArray,
+    actionability_level: string,
+    effective_actionability_level: string,
+    actionability_upgrade_reason: string,
+    signal_quality_status: string,
+    do_not_overstate: stringArray,
+    fallback_promotion_allowed: { type: 'BOOLEAN' },
+    fallback_promotion_reason: string,
+    fallback_guard_notes: stringArray,
+    soc_signal_type: string,
+    soc_signal_source_allowed: { type: 'BOOLEAN' },
+    camera_pipeline_link: string,
     imageCandidates: {
       type: 'ARRAY',
       items: imageCandidate
@@ -176,6 +207,20 @@ const section = {
     specificity_checks: stringArray,
     source_verification_notes: stringArray,
     article_sections: articleSections,
+    hal_signal_capsule: halSignalCapsule,
+    hal_impact_axes: stringArray,
+    reader_owners: stringArray,
+    actionability_level: string,
+    effective_actionability_level: string,
+    actionability_upgrade_reason: string,
+    signal_quality_status: string,
+    do_not_overstate: stringArray,
+    fallback_promotion_allowed: { type: 'BOOLEAN' },
+    fallback_promotion_reason: string,
+    fallback_guard_notes: stringArray,
+    soc_signal_type: string,
+    soc_signal_source_allowed: { type: 'BOOLEAN' },
+    camera_pipeline_link: string,
     background: string,
     why_it_matters: string,
     camera_hal_perspective: string,

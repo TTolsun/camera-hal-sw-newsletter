@@ -486,6 +486,85 @@ test('quality gate allows non-blocking actionability deductions above threshold'
   assert.ok(report.deductions.every(item => item.severity === 'soft'));
 });
 
+test('quality gate treats missing HAL Signal Capsule as a hard blocker', () => {
+  const sections = [
+    section({ headline: 'Missing HAL Signal Capsule', url: 'https://example.com/missing-capsule', hal_signal_capsule: undefined }),
+    ...validSections().slice(1)
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate('https://example.com/missing-capsule', 'direct_aosp_camera'),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item =>
+    item.category === 'hal-signal-capsule' &&
+    item.blocking === true &&
+    item.reason.includes('Missing HAL Signal Capsule')
+  ));
+  assert.equal(report.metrics.hal_signal_quality_summary.article_count_without_hal_signal_capsule, 1);
+  assert.equal(report.article_results[0].status, 'FAIL');
+  assert.ok(report.main_article_signal_checks[0].hard_blocker_reason_codes.includes('hal_signal_capsule_missing'));
+});
+
+test('quality gate maps actionability_level none into publish-blocking HAL signal failure', () => {
+  const sections = [
+    section({
+      headline: 'Actionability none article',
+      url: 'https://example.com/actionability-none',
+      actionability_level: 'none'
+    }),
+    ...validSections().slice(1)
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate('https://example.com/actionability-none', 'direct_aosp_camera'),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item =>
+    item.category === 'hal-signal' &&
+    item.reason.includes('actionability_level=none')
+  ));
+  assert.ok(report.main_article_signal_checks[0].hard_blockers.includes('actionability_none'));
+  assert.ok(report.main_article_signal_checks[0].hard_blocker_reason_codes.includes('hal_actionability_none'));
+});
+
+test('quality gate blocks fallback promotion without explicit allowed reason', () => {
+  const sections = [
+    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
+    section({
+      headline: 'Native tooling fallback without promotion reason',
+      url: 'https://example.com/tooling',
+      category: 'C++ Tooling',
+      relevance_bucket: 'cpp_ai_tooling_fallback',
+      counts_as_primary_camera_topic: false,
+      counts_as_fallback_topic: true,
+      fallback_promotion_allowed: false,
+      fallback_promotion_reason: '',
+      what_changed: 'LLVM sanitizer workflow changed on 2026-05-01.',
+      evidence_summary: 'Version: LLVM 20.1; release date: 2026-05-01; API/component: LLVM sanitizer; behavior change: native debugging.',
+      background: 'Native sanitizer workflows improve Camera HAL and driver debugging productivity.',
+      camera_hal_perspective: 'Apply sanitizer checks to Camera HAL request/result handling and V4L2 buffer ownership tests.',
+      team_summary: 'Use this fallback item for native camera debugging productivity.'
+    }),
+    ...validSections().slice(2)
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate('https://example.com/a', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/tooling', 'cpp_ai_tooling_fallback'),
+    ...reporterCandidatesFor(validSections()).slice(2)
+  ]);
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item =>
+    item.category === 'hal-signal' &&
+    item.reason.includes('Fallback article lacks fallback_promotion_allowed=true')
+  ));
+  assert.ok(report.main_article_signal_checks[1].hard_blockers.includes('fallback_promotion_missing_reason'));
+  assert.ok(report.main_article_signal_checks[1].hard_blocker_reason_codes.includes('fallback_promotion_not_allowed'));
+});
+
 test('quality gate allows no-AI HAL lineups when other hard gates pass', () => {
   const sections = [
     section({ headline: 'CameraX release A', url: 'https://example.com/a' }),

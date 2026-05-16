@@ -171,7 +171,11 @@ function articleSectionContractPrompt() {
     'article_sections.background_context must be a string explaining the context needed by an AOSP Camera / Camera HAL / driver / SoC platform reader.',
     'article_sections.hal_driver_impact must be a string that interprets practical Camera HAL, driver, stream, buffer, metadata, native tooling, or SoC platform impact without claiming direct runtime/API behavior unless the supplied source explicitly supports it.',
     'article_sections.action_items must be an array of concrete actions that name a test, log, metric, device class, API/component, stream combination, owner, or PoC handoff.',
-    'article_sections.team_share_points must be a string with the team-review takeaway.'
+    'article_sections.team_share_points must be a string with the team-review takeaway.',
+    'HAL Signal contract: every main article must include hal_signal_capsule with exactly these keys: why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate.',
+    'hal_signal_capsule.reader_owners and hal_signal_capsule.impact_axes must be arrays. Use only supplied capsule metadata and article evidence; do not invent missing source claims.',
+    'hal_signal_capsule.check_within_2_weeks must name a concrete owner/test/log/metric/API/stream/buffer/metadata follow-up, not a generic review.',
+    'Include additive HAL signal fields when available: hal_impact_axes, reader_owners, actionability_level, effective_actionability_level, actionability_upgrade_reason, signal_quality_status, do_not_overstate, fallback_promotion_allowed, fallback_promotion_reason, fallback_guard_notes, soc_signal_type, soc_signal_source_allowed, and camera_pipeline_link.'
   ].join('\n');
 }
 

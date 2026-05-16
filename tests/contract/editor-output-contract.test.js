@@ -38,6 +38,24 @@ function section(index, overrides = {}) {
     team_summary: `Summary ${index}`,
     is_ai_related: false,
     article_type: 'camera-hal',
+    hal_impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
+    reader_owners: ['camera_hal_owner', 'camera_test_owner'],
+    actionability_level: 'concrete_check',
+    signal_quality_status: 'usable_signal',
+    do_not_overstate: ['Do not overstate direct HAL impact.'],
+    fallback_promotion_allowed: true,
+    fallback_promotion_reason: 'Primary Camera Stack section.',
+    fallback_guard_notes: ['Keep claims tied to source evidence.'],
+    soc_signal_type: '',
+    soc_signal_source_allowed: true,
+    camera_pipeline_link: 'Camera workload validation through stream and metadata checks.',
+    hal_signal_capsule: {
+      why_now: `Headline ${index} gives a dated HAL validation signal.`,
+      reader_owners: ['camera_hal_owner', 'camera_test_owner'],
+      check_within_2_weeks: `Run Camera ITS and stream metadata checks for Headline ${index} within 2 weeks.`,
+      impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
+      do_not_overstate: ['Do not overstate direct HAL impact.']
+    },
     selectedImage: '',
     imageSource: '',
     imageAttribution: '',
@@ -155,6 +173,26 @@ test('editor output contract requires article_sections on new draft sections', (
       assert.ok(error instanceof EditorSemanticValidationError);
       assert.equal(error.details.field, 'sections.article_sections');
       assert.ok(error.details.issues.some(issue => issue.type === 'missing_article_sections'));
+      return true;
+    }
+  );
+});
+
+test('editor output contract requires HAL Signal Capsule on new draft sections', () => {
+  const draft = editor({
+    sections: [
+      section(1, { hal_signal_capsule: undefined }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.hal_signal_capsule');
+      assert.ok(error.details.issues.some(issue => issue.type === 'missing_hal_signal_capsule'));
       return true;
     }
   );
@@ -835,6 +873,23 @@ test('editor schema keeps article_sections optional with five required normalize
   ]);
   assert.equal(
     editorSchema.properties.sections.items.required.includes('article_sections'),
+    false
+  );
+});
+
+test('editor schema keeps hal_signal_capsule optional with required capsule keys when present', () => {
+  const capsule = editorSchema.properties.sections.items.properties.hal_signal_capsule;
+
+  assert.ok(capsule);
+  assert.deepEqual(capsule.required, [
+    'why_now',
+    'reader_owners',
+    'check_within_2_weeks',
+    'impact_axes',
+    'do_not_overstate'
+  ]);
+  assert.equal(
+    editorSchema.properties.sections.items.required.includes('hal_signal_capsule'),
     false
   );
 });

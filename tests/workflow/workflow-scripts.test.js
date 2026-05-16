@@ -72,6 +72,44 @@ function writeText(filePath, value) {
   fs.writeFileSync(filePath, value, 'utf8');
 }
 
+function writeHalSignalQualityReviewArtifacts(root, date, overrides = {}) {
+  const report = {
+    schema_version: 1,
+    report_type: 'hal_signal_quality',
+    date,
+    status: overrides.status || 'NEEDS_FIX',
+    input_completeness: overrides.inputCompleteness || 'complete',
+    input_statuses: {
+      shortlisted_candidates: 'loaded',
+      editor_draft: 'loaded',
+      quality_report: 'loaded',
+      source_effectiveness_report: 'loaded',
+      source_quality_report: 'loaded',
+      evidence_pack_summary: 'loaded',
+      merged_candidate_manifest: 'loaded',
+      ...(overrides.input_statuses || {})
+    },
+    inputs: {
+      missing_required: [],
+      unavailable_optional: [],
+      ...(overrides.inputs || {})
+    },
+    quality_status: overrides.qualityStatus || 'NEEDS_FIX',
+    hal_signal_quality_summary: {
+      main_article_count: 0,
+      article_count_with_hal_signal_capsule: 0,
+      article_count_without_hal_signal_capsule: 0,
+      generic_signal_hard_blocker_count: 0,
+      hal_signal_hard_blocker_count: 0,
+      ...(overrides.hal_signal_quality_summary || {})
+    },
+    main_article_signal_checks: overrides.main_article_signal_checks || []
+  };
+  writeJson(path.join(root, 'content', 'newsroom', date, 'hal-signal-quality-report.json'), report);
+  writeText(path.join(root, 'content', 'newsroom', date, 'hal-signal-quality-report.md'), `# HAL Signal Quality Report - ${date}\n`);
+  return report;
+}
+
 function assertTextInOrder(text, labels) {
   let previous = -1;
   for (const label of labels) {
@@ -508,6 +546,10 @@ function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
   writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
   writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
   writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  writeHalSignalQualityReviewArtifacts(root, date, {
+    qualityStatus: quality.status,
+    status: 'NEEDS_FIX'
+  });
   writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
   writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), { message: 'section_count_drift' });
   writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), { date, candidates: [libcamera, camerax, gcc, glaze] });
@@ -674,6 +716,10 @@ function writeRun25590436113LikeFallbackFixture(root, options = {}) {
   writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft-attempt-1.json'), editor);
   writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
   writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  writeHalSignalQualityReviewArtifacts(root, date, {
+    qualityStatus: quality.status,
+    status: 'NEEDS_FIX'
+  });
   writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
   writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), {
     message: 'Targeted repair changed main article count outside completion/replacement mode.',
@@ -749,6 +795,12 @@ function writeEditorialReviewableArtifacts(root, date, overrides = {}) {
   if (overrides.writeQuality !== false) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
   }
+  if (overrides.writeHalSignalQuality !== false) {
+    writeHalSignalQualityReviewArtifacts(root, date, {
+      qualityStatus: quality.status,
+      status: quality.status === 'PASS' ? 'PASS' : 'NEEDS_FIX'
+    });
+  }
   if (overrides.writeGenerationStatus !== false) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
   }
@@ -822,6 +874,12 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
   }
   if (overrides.writeFactCheck !== false) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  }
+  if (overrides.writeHalSignalQuality !== false) {
+    writeHalSignalQualityReviewArtifacts(root, date, {
+      qualityStatus: quality.status,
+      status: quality.status === 'PASS' ? 'PASS' : 'NEEDS_FIX'
+    });
   }
   if (overrides.writeRepairFailure !== false) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), repairFailure);
@@ -2204,6 +2262,70 @@ test('newsroom PR body renders Evidence Pack fallback diagnostics defaults', () 
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
+test('newsroom PR body renders HAL signal quality summary when report exists', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'hal-signal-quality-report.json'), {
+    schema_version: 1,
+    report_type: 'hal_signal_quality',
+    date,
+    status: 'NEEDS_FIX',
+    quality_status: 'NEEDS_FIX',
+    inputs: {
+      unavailable_optional: ['source_quality_report']
+    },
+    input_completeness: 'partial',
+    hal_signal_quality_summary: {
+      main_article_count: 1,
+      strong_signal_count: 0,
+      usable_signal_count: 1,
+      weak_signal_count: 0,
+      watchlist_only_count: 0,
+      blocked_source_gap_count: 0,
+      article_count_with_hal_signal_capsule: 1,
+      article_count_without_hal_signal_capsule: 0,
+      generic_signal_hard_blocker_count: 1,
+      hal_signal_hard_blocker_count: 1
+    },
+    main_article_signal_checks: [{
+      index: 1,
+      title: 'CameraX release gives HAL teams a validation target',
+      signal_quality_status: 'usable_signal',
+      actionability_level: 'generic_review',
+      effective_actionability_level: 'concrete_check',
+      hal_impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
+      hal_signal_capsule_complete: true,
+      hard_blockers: ['fallback_promotion_missing_reason'],
+      hard_blocker_reason_codes: ['fallback_promotion_not_allowed']
+    }]
+  });
+
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    status: traceStatus({
+      final_publish_ready: false,
+      publish_gate_reason_codes: ['quality_status_needs_fix']
+    })
+  });
+
+  assert.match(body, /^## HAL Signal Quality Summary$/m);
+  assert.match(body, /status: NEEDS_FIX/);
+  assert.match(body, /input_completeness: partial/);
+  assert.match(body, /final_publish_ready: false/);
+  assert.match(body, /publish_gate_reason_codes: quality_status_needs_fix/);
+  assert.match(body, /article_count_with_hal_signal_capsule: 1/);
+  assert.match(body, /HAL signal hard blocker count: 1/);
+  assert.match(body, /fallback_promotion_not_allowed/);
+  assert.match(body, /source_quality_report/);
+  assert.match(body, /CameraX release gives HAL teams a validation target/);
+  assert.match(body, /generic_review/);
+  assert.match(body, /concrete_check/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
 test('newsroom PR body keeps Evidence Pack fallback when summary artifact is missing', () => {
   const root = tempRoot();
   const date = '2026-05-10';
@@ -2702,6 +2824,22 @@ test('reviewable artifact resolver accepts editorial reviewable handoff without 
   assert.equal(outputs.changed_artifact_count, String(REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.length));
   assert.match(outputs.reviewable_artifact_reason, /failure_kind=editorial_reviewable/);
   assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
+});
+
+test('reviewable artifact resolver requires HAL signal report for editorial handoff', () => {
+  const root = tempRoot();
+  const date = '2026-05-09';
+  writeEditorialReviewableArtifacts(root, date, { writeHalSignalQuality: false });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'false');
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /missing_editorial_required=.*hal-signal-quality-report\.json/);
+  assert.match(outputs.reviewable_artifact_reason, /missing_editorial_required=.*hal-signal-quality-report\.md/);
 });
 
 test('reviewable artifact resolver accepts editorial reviewable public and data writes when structurally ready', () => {
@@ -4590,6 +4728,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   const resolveFinalStatusStep = workflowStep(workflow, 'Resolve final publish status');
   const sourceEffectivenessStep = workflowStep(workflow, 'Generate source effectiveness report');
   const evidencePackStep = workflowStep(workflow, 'Generate evidence pack summary');
+  const halSignalQualityStep = workflowStep(workflow, 'Generate HAL signal quality report');
   const preparePrBodyStep = workflowStep(workflow, 'Prepare pull request body');
   const ensureLabelsStep = workflowStep(workflow, 'Ensure labels');
   const createPrStep = workflowStep(workflow, 'Create final newsletter pull request');
@@ -4614,6 +4753,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assertTextInOrder(workflow, [
     '- name: Generate source effectiveness report',
     '- name: Generate evidence pack summary',
+    '- name: Generate HAL signal quality report',
     '- name: Snapshot newsroom debug artifacts'
   ]);
   assert.match(workflow, /llm_provider:/);
@@ -4680,6 +4820,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(evidencePackStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.match(evidencePackStep, /continue-on-error:\s*true/);
   assert.match(evidencePackStep, /npm run report:evidence-pack -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
+  assert.match(halSignalQualityStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
+  assert.match(halSignalQualityStep, /continue-on-error:\s*true/);
+  assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
