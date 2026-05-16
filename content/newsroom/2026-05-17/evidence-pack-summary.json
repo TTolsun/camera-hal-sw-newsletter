@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-17",
+  "generated_at": "2026-05-16T17:20:32.454Z",
+  "inputs": {
+    "required": [],
+    "preferred": [
+      "content/newsroom/2026-05-17/generation-status.json",
+      "content/newsroom/2026-05-17/selection-report.json",
+      "content/newsroom/2026-05-17/shortlisted-candidates.json",
+      "content/collected-news/2026-05-17/candidates.json"
+    ],
+    "optional": [
+      "content/newsroom/2026-05-17/article-capsules.json",
+      "content/newsroom/2026-05-17/reporter-candidates.json",
+      "content/newsroom/2026-05-17/quality-report.json",
+      "content/newsroom/2026-05-17/fact-check-report.json",
+      "content/newsroom/2026-05-17/source-effectiveness-report.json",
+      "content/newsroom/2026-05-17/repair-failure.json",
+      "content/newsroom/2026-05-17/fallback-public-issue.json",
+      "content/newsroom/2026-05-17/fallback-public-issue-diagnostics.json",
+      "content/newsroom/2026-05-17/stale-claim-report.json"
+    ],
+    "missing": [
+      "content/newsroom/2026-05-17/generation-status.json",
+      "content/newsroom/2026-05-17/selection-report.json",
+      "content/newsroom/2026-05-17/shortlisted-candidates.json",
+      "content/newsroom/2026-05-17/article-capsules.json",
+      "content/newsroom/2026-05-17/reporter-candidates.json",
+      "content/newsroom/2026-05-17/quality-report.json",
+      "content/newsroom/2026-05-17/fact-check-report.json",
+      "content/newsroom/2026-05-17/source-effectiveness-report.json",
+      "content/newsroom/2026-05-17/repair-failure.json",
+      "content/newsroom/2026-05-17/fallback-public-issue.json",
+      "content/newsroom/2026-05-17/fallback-public-issue-diagnostics.json",
+      "content/newsroom/2026-05-17/stale-claim-report.json"
+    ],
+    "used": [
+      "content/collected-news/2026-05-17/candidates.json"
+    ]
+  },
+  "publish_status": {
+    "status": "unknown",
+    "run_mode": "unknown",
+    "quality_score": null,
+    "quality_threshold": null,
+    "fact_check_status": "UNKNOWN",
+    "final_publish_ready": null,
+    "public_newsletter_ready": null,
+    "review_pr_ready": null
+  },
+  "selection_summary": {
+    "raw_candidate_count": 40,
+    "eligible_candidate_count": null,
+    "selected_main_article_count": null,
+    "reserve_candidate_count": null,
+    "excluded_candidate_count": 40,
+    "primary_camera_stack_count": null,
+    "supporting_bucket_count": null,
+    "fallback_window_used": null,
+    "fallback_window_consulted": null,
+    "fallback_window_reason": "",
+    "fallback_candidates_promoted_count": null,
+    "fallback_bucket_used": null,
+    "candidate_shortage_hints": []
+  },
+  "claim_validation_summary": {
+    "status": "not_available",
+    "bound_claims": null,
+    "total_claims": null,
+    "overclaim_risk": "unknown",
+    "available_article_count": 0,
+    "not_available_article_count": 0
+  },
+  "hal_impact_summary": {
+    "axes": [],
+    "article_count_with_axes": 0,
+    "article_count_without_axes": 0
+  },
+  "selected_main_articles": [],
+  "reserve_candidates": [],
+  "excluded_candidates_top": [
+    {
+      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "exclusion_reason": "Eligible for main article selection."
+    },
+    {
+      "candidate_id": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+      "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "source": "Android Developers Blog",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://source.android.com/docs/core/camera",
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "source": "AOSP Camera Documentation",
+      "source_role": "reference_index",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+      "url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "source": "Android Developers Blog",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "title": "Gratitude saw 25% higher retention for widget users",
+      "url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "source": "Android Developers Blog",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "title": "A look ahead: Making it easier and faster to publish safer apps",
+      "url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "source": "Android Developers Blog",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "title": "1.3.0-beta02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "source": "Android Developers Latest Updates",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "exclusion_reason": "Eligible for short newsletter use."
+    },
+    {
+      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "exclusion_reason": "Eligible for short newsletter use."
+    },
+    {
+      "candidate_id": "https://source.android.com/docs/whatsnew",
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/whatsnew",
+      "source": "AOSP What's New / Release Notes",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://source.android.com/docs/compatibility/cdd",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "source": "Android Compatibility Definition Document",
+      "source_role": "unknown",
+      "source_url_quality": "unknown",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    }
+  ],
+  "excluded_candidates_truncated": true,
+  "failure_diagnostics": {
+    "quality_hard_failures": [],
+    "fact_check_must_fix": [],
+    "repair_failures": [],
+    "fallback_builder_failures": [],
+    "candidate_shortage_hints": [],
+    "source_gap_warnings": [],
+    "missing_artifacts": [
+      "content/newsroom/2026-05-17/generation-status.json",
+      "content/newsroom/2026-05-17/selection-report.json",
+      "content/newsroom/2026-05-17/shortlisted-candidates.json",
+      "content/newsroom/2026-05-17/article-capsules.json",
+      "content/newsroom/2026-05-17/reporter-candidates.json",
+      "content/newsroom/2026-05-17/quality-report.json",
+      "content/newsroom/2026-05-17/fact-check-report.json",
+      "content/newsroom/2026-05-17/source-effectiveness-report.json",
+      "content/newsroom/2026-05-17/repair-failure.json",
+      "content/newsroom/2026-05-17/fallback-public-issue.json",
+      "content/newsroom/2026-05-17/fallback-public-issue-diagnostics.json",
+      "content/newsroom/2026-05-17/stale-claim-report.json"
+    ],
+    "invalid_artifacts": []
+  },
+  "warnings": [
+    "Missing preferred artifact: content/newsroom/2026-05-17/generation-status.json",
+    "Missing preferred artifact: content/newsroom/2026-05-17/selection-report.json",
+    "Missing preferred artifact: content/newsroom/2026-05-17/shortlisted-candidates.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/article-capsules.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/reporter-candidates.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/quality-report.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/fact-check-report.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/source-effectiveness-report.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/repair-failure.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/fallback-public-issue.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/fallback-public-issue-diagnostics.json",
+    "Missing optional artifact: content/newsroom/2026-05-17/stale-claim-report.json"
+  ]
+}
