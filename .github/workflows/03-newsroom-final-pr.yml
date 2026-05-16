@@ -1,18 +1,16 @@
-name: 01 - Weekly Gemini Newsroom PR
+name: Newsroom 03 - Gemini Final Newsletter PR
 
 on:
-  schedule:
-    - cron: "0 0 * * *" # KST daily 09:00
   workflow_dispatch:
     inputs:
       newsletter_date:
-        description: "Newsletter date in YYYY-MM-DD. Empty means today in KST."
-        required: false
+        description: "Newsletter date in YYYY-MM-DD."
+        required: true
         type: string
-      lookback_days:
-        description: "How many days to look back when collecting news candidates."
+      candidate_input_path:
+        description: "Optional approved artifact path: manual-candidates.json or merged-candidates.json. Empty uses merged, manual, then legacy fallback priority."
         required: false
-        default: "21"
+        default: ""
         type: string
       allow_pro:
         description: "Allow Gemini Pro for this manual run."
@@ -48,16 +46,17 @@ permissions:
   issues: write
 
 concurrency:
-  group: weekly-gemini-newsroom-pr
+  group: newsroom-final-${{ github.event.inputs.newsletter_date || github.run_id }}
   cancel-in-progress: false
 
 jobs:
-  create-newsroom-pr:
+  create-final-newsletter-pr:
     runs-on: ubuntu-latest
 
     env:
       NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
-      LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '21' }}
+      NEWSROOM_CANDIDATE_INPUT_MODE: artifact
+      NEWSROOM_CANDIDATE_INPUT_PATH: ${{ github.event.inputs.candidate_input_path }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       INTERNAL_LLM_API_KEY: ${{ secrets.INTERNAL_LLM_API_KEY }}
       INTERNAL_LLM_ENDPOINT: ${{ vars.INTERNAL_LLM_ENDPOINT }}
@@ -74,7 +73,7 @@ jobs:
       NEWSROOM_MAX_SECTION_REPAIRS: ${{ vars.NEWSROOM_MAX_SECTION_REPAIRS || '1' }}
       NEWSROOM_WARN_COST_USD: ${{ vars.NEWSROOM_WARN_COST_USD || '0.15' }}
       NEWSROOM_MAX_COST_USD: ${{ vars.NEWSROOM_MAX_COST_USD || '0.25' }}
-      NEWSROOM_ALLOW_PRO_ON_SCHEDULE: ${{ vars.NEWSROOM_ALLOW_PRO_ON_SCHEDULE || 'false' }}
+      NEWSROOM_ALLOW_PRO_ON_SCHEDULE: "false"
       NEWSROOM_ALLOW_PRO_ON_MANUAL: ${{ github.event.inputs.allow_pro || 'false' }}
       NEWSROOM_PRO_ESCALATION: manual
       NEWSROOM_BACKGROUND_CONTEXT_STAGE: ${{ vars.NEWSROOM_BACKGROUND_CONTEXT_STAGE || 'gemini' }}
@@ -105,19 +104,17 @@ jobs:
           fi
 
       - name: Apply manual LLM overrides
-        if: github.event_name == 'workflow_dispatch'
         env:
           INPUT_LLM_PROVIDER: ${{ github.event.inputs.llm_provider }}
           INPUT_LLM_MODEL: ${{ github.event.inputs.llm_model }}
           INPUT_LLM_FALLBACK_MODELS: ${{ github.event.inputs.llm_fallback_models }}
-          INPUT_ALLOW_PRO: ${{ github.event.inputs.allow_pro }}
         run: |
           set -euo pipefail
 
-          for value in "${INPUT_LLM_PROVIDER:-}" "${INPUT_LLM_MODEL:-}" "${INPUT_LLM_FALLBACK_MODELS:-}"; do
+          for value in "${INPUT_LLM_PROVIDER:-}" "${INPUT_LLM_MODEL:-}" "${INPUT_LLM_FALLBACK_MODELS:-}" "${NEWSROOM_CANDIDATE_INPUT_PATH:-}"; do
             case "$value" in
               *$'\n'*|*$'\r'*)
-                echo "LLM override inputs must be single-line values."
+                echo "Workflow inputs must be single-line values."
                 exit 1
                 ;;
             esac
@@ -145,23 +142,6 @@ jobs:
       - name: Run unit and regression tests
         run: npm run test
 
-      - name: Clean preflight test scratch artifacts
-        if: always()
-        run: |
-          rm -rf .tmp/gemini-raw
-          rm -rf .tmp/article-image-fallback-*
-          rm -rf .tmp/article-image-missing-fallback-*
-
-      - name: Jitter scheduled run
-        if: github.event_name == 'schedule'
-        run: |
-          DELAY=$(( RANDOM % 300 ))
-          echo "Sleeping ${DELAY}s to avoid fixed-minute API demand spikes."
-          sleep "${DELAY}"
-
-      - name: Collect news candidates
-        run: npm run collect
-
       - name: Restore URL summary cache
         uses: actions/cache/restore@v4
         with:
@@ -170,7 +150,7 @@ jobs:
           restore-keys: |
             news-summary-${{ runner.os }}-
 
-      - name: Generate newsletter with LLM newsroom
+      - name: Generate newsletter with approved candidate artifact
         id: generate
         continue-on-error: true
         run: npm run generate
@@ -235,10 +215,6 @@ jobs:
           mkdir -p "$SNAPSHOT"
 
           DATE="${{ steps.meta.outputs.date }}"
-          HAS_GENERATED_DATE="0"
-          if [ -f .tmp/newsletter-generation-status.json ] || [ -f .tmp/newsletter-date.txt ]; then
-            HAS_GENERATED_DATE="1"
-          fi
 
           copy_if_present() {
             local src="$1"
@@ -264,7 +240,7 @@ jobs:
           copy_if_present ".tmp/summary-cache-report.json"
           copy_tree_if_present ".tmp/gemini-raw"
           copy_tree_if_present "cache/news-summary"
-          if [ "$HAS_GENERATED_DATE" = "1" ]; then
+          if [ -n "$DATE" ]; then
             copy_if_present "content/collected-news/${DATE}/manual-candidates.json"
             copy_if_present "content/collected-news/${DATE}/candidates.json"
             copy_if_present "content/collected-news/${DATE}/raw-candidate-manifest.json"
@@ -275,7 +251,7 @@ jobs:
             copy_if_present "newsletters/${DATE}/index.html"
             copy_if_present "data/newsletters.json"
           else
-            echo "No generated status/date marker found; skipping date-scoped artifact copy to avoid stale base-branch files."
+            echo "No generated date marker found; skipping date-scoped artifact copy."
           fi
 
           node scripts/write-artifact-manifest.js "$SNAPSHOT" "$DATE"
@@ -336,13 +312,13 @@ jobs:
               }
             }
 
-      - name: Create pull request
+      - name: Create final newsletter pull request
         id: cpr
         if: steps.meta.outputs.review_pr_ready == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "Generate Camera HAL newsletter ${{ steps.meta.outputs.date }}"
-          branch: ${{ steps.meta.outputs.branch }}
+          branch: newsroom-final/${{ steps.meta.outputs.date }}
           delete-branch: true
           title: "[Newsletter] Camera HAL SW Newsletter - ${{ steps.meta.outputs.date }}"
           body: ${{ steps.pr-body.outputs.body }}
@@ -402,7 +378,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: newsroom-debug-${{ github.run_id }}
+          name: newsroom-final-debug-${{ github.run_id }}
           path: .tmp/artifact-snapshot
           include-hidden-files: true
           if-no-files-found: warn

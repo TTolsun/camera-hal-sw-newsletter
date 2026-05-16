@@ -1,0 +1,120 @@
+name: Newsroom 02 - Gemini Source Discovery PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      newsletter_date:
+        description: "Newsletter date in YYYY-MM-DD."
+        required: true
+        type: string
+      enable_gemini_source_discovery:
+        description: "Enable #149 Gemini source discovery engine. In #88 this intentionally fails when true."
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: newsroom-source-discovery-${{ github.event.inputs.newsletter_date }}
+  cancel-in-progress: false
+
+jobs:
+  create-source-discovery-pr:
+    runs-on: ubuntu-latest
+
+    env:
+      NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: ${{ github.event.inputs.enable_gemini_source_discovery || 'false' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Validate newsroom source discovery boundary
+        run: npm run validate:config
+
+      - name: Run disabled pass-through or explicit not-implemented failure
+        id: source-discovery
+        run: node scripts/gemini-source-discovery-boundary.js --date "${NEWSLETTER_DATE}"
+
+      - name: Prepare source discovery pull request body
+        id: pr-body
+        run: |
+          REPORT="content/newsroom/${NEWSLETTER_DATE}/gemini-source-discovery-report.md"
+          {
+            echo "body<<EOF"
+            cat "$REPORT"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Ensure labels
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const labels = [
+              { name: 'newsletter', color: '1b58b5', description: 'Camera HAL SW Newsletter' },
+              { name: 'aosp-camera', color: '0e8a16', description: 'AOSP Camera and camera stack scope' },
+              { name: 'source-discovery', color: 'c5def5', description: 'Optional newsroom source discovery boundary' }
+            ];
+            for (const label of labels) {
+              try {
+                await github.rest.issues.getLabel({ owner: context.repo.owner, repo: context.repo.repo, name: label.name });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+              }
+            }
+
+      - name: Create source discovery pull request
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Merge Camera HAL candidate artifacts ${{ env.NEWSLETTER_DATE }}"
+          branch: newsroom-source-discovery/${{ env.NEWSLETTER_DATE }}
+          delete-branch: true
+          title: "[Newsroom Source Discovery] Candidate boundary - ${{ env.NEWSLETTER_DATE }}"
+          body: ${{ steps.pr-body.outputs.body }}
+          labels: newsletter,aosp-camera,source-discovery
+
+      - name: Upload source discovery debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsroom-source-discovery-debug-${{ github.run_id }}
+          path: |
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/gemini-candidates.json
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidates.json
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidate-manifest.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-discovery-report.md
+          if-no-files-found: warn
+          retention-days: 14

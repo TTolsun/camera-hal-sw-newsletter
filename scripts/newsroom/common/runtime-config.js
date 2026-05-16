@@ -12,6 +12,7 @@ const LINKED_EVIDENCE_MODES = Object.freeze({
   OFFLINE_FIXTURE_TEST: 'offline_fixture_test'
 });
 const LINKED_EVIDENCE_MODE_VALUES = Object.freeze(Object.values(LINKED_EVIDENCE_MODES));
+const CANDIDATE_INPUT_MODE_VALUES = Object.freeze(['default', 'artifact']);
 
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
@@ -43,6 +44,9 @@ const DEFAULT_RUNTIME_CONFIG = {
   linkedEvidenceMaxLinksPerRun: 40,
   linkedEvidenceTimeoutMs: 5000,
   linkedEvidenceMaxBytes: 200000,
+  newsroomCandidateInputMode: 'default',
+  newsroomCandidateInputPath: '',
+  newsroomEnableGeminiSourceDiscovery: false,
   githubEventName: ''
 };
 
@@ -264,6 +268,21 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'NEWSROOM_LINKED_EVIDENCE_MAX_BYTES',
       { min: 1 }
     ),
+    newsroomCandidateInputMode: String(
+      envValue(env, 'NEWSROOM_CANDIDATE_INPUT_MODE', DEFAULT_RUNTIME_CONFIG.newsroomCandidateInputMode) || ''
+    ).trim().toLowerCase() || DEFAULT_RUNTIME_CONFIG.newsroomCandidateInputMode,
+    newsroomCandidateInputPath: String(
+      envValue(env, 'NEWSROOM_CANDIDATE_INPUT_PATH', DEFAULT_RUNTIME_CONFIG.newsroomCandidateInputPath) || ''
+    ).trim(),
+    newsroomEnableGeminiSourceDiscovery: parseBoolean(
+      envValue(
+        env,
+        'NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY',
+        DEFAULT_RUNTIME_CONFIG.newsroomEnableGeminiSourceDiscovery
+      ),
+      'NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY',
+      { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomEnableGeminiSourceDiscovery }
+    ),
     githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
     geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim()),
     internalLlmApiKeyConfigured: Boolean(String(env.INTERNAL_LLM_API_KEY || '').trim())
@@ -379,6 +398,20 @@ function validateRuntimeConfig(config, options = {}) {
       errors.push(`${name} must be an integer >= ${min}.`);
     }
   }
+  const candidateInputMode = String(
+    config.newsroomCandidateInputMode || DEFAULT_RUNTIME_CONFIG.newsroomCandidateInputMode
+  ).trim();
+  if (!CANDIDATE_INPUT_MODE_VALUES.includes(candidateInputMode)) {
+    errors.push(`NEWSROOM_CANDIDATE_INPUT_MODE must be one of: ${CANDIDATE_INPUT_MODE_VALUES.join(', ')}.`);
+  }
+  if (/[ \t]*[\r\n]/.test(String(config.newsroomCandidateInputPath || ''))) {
+    errors.push('NEWSROOM_CANDIDATE_INPUT_PATH must be a single-line repository-relative path.');
+  }
+  const enableGeminiSourceDiscovery =
+    config.newsroomEnableGeminiSourceDiscovery ?? DEFAULT_RUNTIME_CONFIG.newsroomEnableGeminiSourceDiscovery;
+  if (typeof enableGeminiSourceDiscovery !== 'boolean') {
+    errors.push('NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY must be true or false.');
+  }
   const configuredModels = configuredModelList(config);
   const proModels = config.llmProvider === 'gemini' ? configuredModels.filter(isProModel) : [];
   if (proModels.length > 0) {
@@ -440,6 +473,10 @@ function sanitizeRuntimeConfig(config) {
     linkedEvidenceMaxLinksPerRun: config.linkedEvidenceMaxLinksPerRun,
     linkedEvidenceTimeoutMs: config.linkedEvidenceTimeoutMs,
     linkedEvidenceMaxBytes: config.linkedEvidenceMaxBytes,
+    newsroomCandidateInputMode: config.newsroomCandidateInputMode ?? DEFAULT_RUNTIME_CONFIG.newsroomCandidateInputMode,
+    newsroomCandidateInputPath: config.newsroomCandidateInputPath ?? DEFAULT_RUNTIME_CONFIG.newsroomCandidateInputPath,
+    newsroomEnableGeminiSourceDiscovery:
+      config.newsroomEnableGeminiSourceDiscovery ?? DEFAULT_RUNTIME_CONFIG.newsroomEnableGeminiSourceDiscovery,
     internalLlmEndpointConfigured: Boolean(String(config.internalLlmEndpoint || '').trim()),
     internalLlmApiVersion: config.internalLlmApiVersion,
     githubEventName: config.githubEventName,
@@ -455,6 +492,7 @@ function sanitizeRuntimeConfig(config) {
 
 module.exports = {
   DEFAULT_RUNTIME_CONFIG,
+  CANDIDATE_INPUT_MODE_VALUES,
   LINKED_EVIDENCE_MODES,
   LINKED_EVIDENCE_MODE_VALUES,
   readRuntimeConfig,

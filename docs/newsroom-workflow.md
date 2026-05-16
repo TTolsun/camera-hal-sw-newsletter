@@ -188,6 +188,16 @@ branch: newsletter/YYYY-MM-DD
 
 workflow는 `main`에 직접 push하지 않고 편집자 검토용 PR을 만듭니다.
 
+### 3-stage RAW workflow
+
+`#88` 전환 기간에는 기존 `01 - Weekly Gemini Newsroom PR` schedule을 유지하고, 새 workflow는 수동 실행으로만 smoke 검증합니다.
+
+- `Newsroom 01 - Manual Source Collection PR`: `collect`만 실행하고 `manual-candidates.json`, compatibility `candidates.json`, `raw-candidate-manifest.json`을 생성합니다. Gemini/API secret을 사용하지 않습니다.
+- `Newsroom 02 - Gemini Source Discovery PR`: v1에서는 disabled pass-through boundary입니다. `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`는 `#149` engine이 없으므로 `FAILED_GEMINI_SOURCE_DISCOVERY_NOT_IMPLEMENTED`로 실패합니다.
+- `Newsroom 03 - Gemini Final Newsletter PR`: `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
+
+Stage 1/3 smoke가 통과하기 전에는 새 Stage 1 schedule을 활성화하지 않습니다. cutover PR에서 기존 all-in-one schedule을 제거한 뒤 새 Stage 1 RAW workflow schedule을 활성화합니다.
+
 ### Secret
 
 Repository Settings > Secrets and variables > Actions:

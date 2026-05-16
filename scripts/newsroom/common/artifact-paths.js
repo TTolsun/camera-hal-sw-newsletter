@@ -20,6 +20,46 @@ function collectedCandidatesRelPath(date) {
   return `${COLLECTED_NEWS_ROOT}/${date}/candidates.json`;
 }
 
+function manualCandidatesPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'manual-candidates.json');
+}
+
+function manualCandidatesRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/manual-candidates.json`;
+}
+
+function mergedCandidatesPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'merged-candidates.json');
+}
+
+function mergedCandidatesRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/merged-candidates.json`;
+}
+
+function geminiCandidatesPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'gemini-candidates.json');
+}
+
+function geminiCandidatesRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/gemini-candidates.json`;
+}
+
+function rawCandidateManifestPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'raw-candidate-manifest.json');
+}
+
+function rawCandidateManifestRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/raw-candidate-manifest.json`;
+}
+
+function mergedCandidateManifestPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'merged-candidate-manifest.json');
+}
+
+function mergedCandidateManifestRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/merged-candidate-manifest.json`;
+}
+
 function newsroomDir(root, date) {
   return path.join(root, CONTENT_ROOT, 'newsroom', date);
 }
@@ -42,7 +82,17 @@ module.exports = {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
   collectedNewsDir,
+  geminiCandidatesPath,
+  geminiCandidatesRelPath,
+  manualCandidatesPath,
+  manualCandidatesRelPath,
+  mergedCandidateManifestPath,
+  mergedCandidateManifestRelPath,
+  mergedCandidatesPath,
+  mergedCandidatesRelPath,
   newsroomDir,
   newsroomRelPath,
+  rawCandidateManifestPath,
+  rawCandidateManifestRelPath,
   toPosix
 };

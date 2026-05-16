@@ -4432,6 +4432,62 @@ test('weekly newsroom workflow labels review publication and diagnostics-only mu
   assert.doesNotMatch(diagnosticsBranch, /review-only-publication/);
 });
 
+test('split newsroom workflows preserve #88 stage boundaries', () => {
+  const workflowDir = path.join(__dirname, '..', '..', '.github', 'workflows');
+  const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
+  const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsroom-gemini-source-discovery-pr.yml'), 'utf8');
+  const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
+  const rawPrBodyBuilder = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'build-raw-candidate-pr-body.js'),
+    'utf8'
+  );
+
+  assert.match(stage1, /^name: Newsroom 01 - Manual Source Collection PR/m);
+  assert.match(stage2, /^name: Newsroom 02 - Gemini Source Discovery PR/m);
+  assert.match(stage3, /^name: Newsroom 03 - Gemini Final Newsletter PR/m);
+
+  assert.match(stage1, /workflow_dispatch:/);
+  assert.doesNotMatch(stage1, /^\s*schedule:/m);
+  assert.match(stage1, /run: npm run collect/);
+  assert.doesNotMatch(stage1, /npm run generate/);
+  assert.doesNotMatch(stage1, /GEMINI_API_KEY/);
+  assert.doesNotMatch(stage1, /INTERNAL_LLM_API_KEY/);
+  assert.match(stage1, /branch=newsroom-raw\/\$\{DATE\}/);
+  assert.match(stage1, /manual-candidates\.json/);
+  assert.match(stage1, /raw-candidate-manifest\.json/);
+
+  assert.match(stage2, /NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY/);
+  assert.match(stage2, /node scripts\/gemini-source-discovery-boundary\.js --date/);
+  assert.match(stage2, /gemini-source-discovery-report\.md/);
+  assert.match(stage2, /gemini-candidates\.json/);
+  assert.match(stage2, /merged-candidates\.json/);
+  assert.match(stage2, /merged-candidate-manifest\.json/);
+  assert.doesNotMatch(stage2, /GEMINI_API_KEY/);
+  assert.doesNotMatch(stage2, /INTERNAL_LLM_API_KEY/);
+
+  assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_MODE: artifact/);
+  assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_PATH: \$\{\{ github\.event\.inputs\.candidate_input_path \}\}/);
+  assert.match(stage3, /manual-candidates\.json or merged-candidates\.json/);
+  assert.match(stage3, /run: npm run generate/);
+  assert.doesNotMatch(stage3, /npm run collect/);
+  assert.match(stage3, /branch: newsroom-final\/\$\{\{ steps\.meta\.outputs\.date \}\}/);
+  assert.match(stage3, /manual-candidates\.json/);
+  assert.match(stage3, /merged-candidates\.json/);
+  assert.doesNotMatch(rawPrBodyBuilder, /source_gap_risk_count/);
+});
+
+test('schedule cutover keeps new RAW workflow manual-only until old schedule is removed', () => {
+  const workflowDir = path.join(__dirname, '..', '..', '.github', 'workflows');
+  const weekly = fs.readFileSync(path.join(workflowDir, '01-weekly-newsroom-pr.yml'), 'utf8');
+  const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
+  const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
+
+  assert.match(weekly, /^\s*schedule:/m);
+  assert.match(weekly, /cron: "0 0 \* \* \*"/);
+  assert.doesNotMatch(stage1, /^\s*schedule:/m);
+  assert.doesNotMatch(stage3, /^\s*schedule:/m);
+});
+
 test('generation path guards public artifacts for editorial reviewable failures', () => {
   const generatorPath = path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');

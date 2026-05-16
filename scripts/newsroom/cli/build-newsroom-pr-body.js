@@ -1951,6 +1951,27 @@ function renderArticleStructureContract(root, date) {
   ].join('\n');
 }
 
+function renderRawInputProvenance(status = {}, date = '') {
+  const input = status.candidate_input;
+  if (!input || typeof input !== 'object') return '';
+
+  return [
+    '## RAW Input Provenance',
+    '',
+    `- input_mode: ${valueOrUnknown(input.mode)}`,
+    `- RAW branch: ${date ? `newsroom-raw/${date}` : 'unknown'}`,
+    `- candidate_artifact: ${valueOrUnknown(input.candidate_artifact)}`,
+    `- candidate_artifact_hash: ${valueOrUnknown(input.candidate_artifact_hash)}`,
+    `- manifest: ${valueOrUnknown(input.manifest)}`,
+    `- manifest_status: ${valueOrUnknown(input.manifest_status)}`,
+    `- manifest_type: ${valueOrUnknown(input.manifest_type)}`,
+    `- llm_used: ${booleanText(input.llm_used)}`,
+    `- merge_mode: ${valueOrUnknown(input.merge_mode || 'none')}`,
+    `- candidate_count: ${valueOrUnknown(input.candidate_count)}`,
+    ''
+  ].join('\n');
+}
+
 function buildNewsroomPrBody(options = {}) {
   const resolved = options.publishStatus || resolvePublishStatus(options);
   const root = resolved.root || options.root || process.cwd();
@@ -1982,6 +2003,7 @@ function buildNewsroomPrBody(options = {}) {
     pushSection(publicationDecisionSummary);
     pushSection(editorialDecisionSummary);
   }
+  pushSection(renderRawInputProvenance(status, date));
   pushSection(renderStatusSection(status));
   pushSection(editorBriefSections);
 
@@ -2018,6 +2040,7 @@ module.exports = {
   extractEditorBriefSections,
   renderCandidateTraceability,
   renderGeneratedArtifacts,
+  renderRawInputProvenance,
   renderEditorApprovedPublicationPolicy,
   recommendedEditorAction
 };

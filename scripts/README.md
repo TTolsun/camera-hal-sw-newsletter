@@ -11,7 +11,9 @@
 | Wrapper | Actual implementation |
 | --- | --- |
 | `scripts/collect-news-candidates.js` | `scripts/newsroom/cli/collect-news-candidates.js` |
+| `scripts/build-raw-candidate-pr-body.js` | `scripts/newsroom/cli/build-raw-candidate-pr-body.js` |
 | `scripts/gemini-newsroom-newsletter.js` | `scripts/newsroom/cli/gemini-newsroom-newsletter.js` |
+| `scripts/gemini-source-discovery-boundary.js` | `scripts/newsroom/cli/gemini-source-discovery-boundary.js` |
 | `scripts/validate-quality.js` | `scripts/newsroom/cli/validate-quality.js` |
 | `scripts/write-artifact-manifest.js` | `scripts/newsroom/cli/write-artifact-manifest.js` |
 

@@ -9,6 +9,9 @@ const {
   collectedNewsDir,
   newsroomDir
 } = require('../common/artifact-paths');
+const {
+  writeManualCandidateArtifacts
+} = require('../common/candidate-artifacts');
 const { readRuntimeConfig } = require('../common/runtime-config');
 const {
   extractImageCandidatesFromHtml,
@@ -569,6 +572,7 @@ function normalizeCandidate(raw) {
   const title = decode(raw.title);
   const summary = decode(raw.summary).slice(0, 500);
   const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
+  const sourceType = raw.sourceType || raw.source_type || rawSourceKind;
   const url = canonicalContentUrl(raw.url);
   const sourceUrl = canonicalContentUrl(source.sourceUrl || source.url);
   const parentUrl = canonicalContentUrl(raw.parentUrl || raw.parent_url || '');
@@ -632,6 +636,13 @@ function normalizeCandidate(raw) {
     source_section: section,
     priority: source.priority,
     reliability: source.reliability,
+    origin: raw.origin || 'source_registry',
+    collectionStage: raw.collectionStage || raw.collection_stage || 'raw_collection',
+    collection_stage: raw.collectionStage || raw.collection_stage || 'raw_collection',
+    manualSeed: Boolean(raw.manualSeed || raw.manual_seed),
+    manual_seed: Boolean(raw.manualSeed || raw.manual_seed),
+    sourceType,
+    source_type: sourceType,
     source_priority: source.priority,
     source_reliability: source.reliability,
     usageHint: source.usageHint,
@@ -868,7 +879,7 @@ function markdown(date, candidates, failures, lookbackDays, options = {}) {
   lines.push('```text');
   lines.push(`뉴스레터 날짜: ${date}`);
   lines.push(`대상 독자: ${AUDIENCE}`);
-  lines.push('Inputs: content/collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/news-sources.md');
+  lines.push('Inputs: content/collected-news/YYYY-MM-DD/manual-candidates.json, content/collected-news/YYYY-MM-DD/candidates.json, data/news-sources.json, docs/news-sources.md');
   lines.push('Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, newsletter.md, index.html, editor-in-chief-brief.md, release-qa-report.md');
   lines.push('```');
   lines.push('');
@@ -1013,18 +1024,27 @@ async function main() {
     throw new Error('No news candidates collected. Check data/news-sources.json, docs/news-sources.md, or network access.');
   }
 
-  fs.writeFileSync(path.join(outDir, 'candidates.json'), JSON.stringify({
+  const generatedAt = new Date().toISOString();
+  const candidatePayload = {
     schema_version: 5,
     date,
     newsletter_date: date,
     audience: AUDIENCE,
     lookback_days: lookbackDays,
-    generated_at: new Date().toISOString(),
+    generated_at: generatedAt,
     sources_path: path.relative(root, activeSourcesPath).replace(/\\/g, '/'),
     section_map: sectionMap,
     candidates,
     failures
-  }, null, 2) + '\n', 'utf8');
+  };
+  writeManualCandidateArtifacts({
+    root,
+    date,
+    payload: candidatePayload,
+    sourceCount: sources.length,
+    generatedAt,
+    workflow: 'manual-source-collection-pr'
+  });
   fs.writeFileSync(path.join(dateNewsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
   fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
 
