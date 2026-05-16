@@ -351,11 +351,12 @@ test('Stage 2 disabled pass-through writes merged artifact, manifest, and report
   assert.match(report, /merge_mode=disabled_pass_through/);
 });
 
-test('Stage 2 enabled before #149 engine fails without normal merged output', () => {
+test('Stage 2 enabled before #149 engine removes stale normal outputs before failing', () => {
   const root = tempRoot();
   const date = '2026-05-16';
   const payload = candidatePayload();
   writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+  writeMergedCandidateArtifacts({ root, date, payload, geminiPayload: [] });
 
   assert.throws(
     () => runSourceDiscoveryBoundary({
@@ -370,7 +371,11 @@ test('Stage 2 enabled before #149 engine fails without normal merged output', ()
   );
 
   assert.equal(fs.existsSync(mergedCandidatesPath(root, date)), false);
+  assert.equal(fs.existsSync(mergedCandidateManifestPath(root, date)), false);
   assert.equal(fs.existsSync(geminiCandidatesPath(root, date)), false);
+  assert.equal(fs.existsSync(manualCandidatesPath(root, date)), true);
+  assert.equal(fs.existsSync(collectedCandidatesPath(root, date)), true);
+  assert.equal(fs.existsSync(rawCandidateManifestPath(root, date)), true);
   const report = fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'gemini-source-discovery-report.md'), 'utf8');
   assert.match(report, /Gemini discovery engine is not implemented in #88/);
   assert.match(report, /Manual candidates were not modified/);

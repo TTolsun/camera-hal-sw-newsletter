@@ -8,10 +8,13 @@ const {
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
+  geminiCandidatesPath,
   geminiCandidatesRelPath,
   manualCandidatesPath,
   manualCandidatesRelPath,
+  mergedCandidateManifestPath,
   mergedCandidateManifestRelPath,
+  mergedCandidatesPath,
   mergedCandidatesRelPath,
   newsroomDir,
   newsroomRelPath,
@@ -102,6 +105,18 @@ function writeReport(root, date, markdown) {
   return reportPath;
 }
 
+function removeIfExists(filePath) {
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
+}
+
+function removeStaleNormalOutputs(root, date) {
+  removeIfExists(mergedCandidatesPath(root, date));
+  removeIfExists(mergedCandidateManifestPath(root, date));
+  removeIfExists(geminiCandidatesPath(root, date));
+}
+
 function run({
   root = process.cwd(),
   env = process.env,
@@ -111,6 +126,7 @@ function run({
   const date = inputDate || runtimeConfig.newsletterDate || kstDate();
 
   if (runtimeConfig.newsroomEnableGeminiSourceDiscovery) {
+    removeStaleNormalOutputs(root, date);
     const report = renderReport({
       date,
       status: FAILED_NOT_IMPLEMENTED,
