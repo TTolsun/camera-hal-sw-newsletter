@@ -329,6 +329,64 @@ test('uses shortlist publish_ready as best-effort publish readiness', () => {
   assert.equal(report.publish_status.status, 'publish-ready');
 });
 
+test('selection summary preserves fallback window diagnostics from promoted array', () => {
+  const reason = 'primary window selected 1 article(s), below min 3';
+  const report = buildEvidencePackSummary({
+    date: DATE,
+    shortlistReport: {
+      fallback_window_consulted: true,
+      fallback_window_used: true,
+      fallback_window_reason: reason,
+      fallback_candidates_promoted: [
+        { title: 'Fallback promoted one' },
+        { title: 'Fallback promoted two' }
+      ]
+    }
+  });
+
+  assert.equal(report.selection_summary.fallback_window_consulted, true);
+  assert.equal(report.selection_summary.fallback_window_used, true);
+  assert.equal(report.selection_summary.fallback_window_reason, reason);
+  assert.equal(report.selection_summary.fallback_candidates_promoted_count, 2);
+});
+
+test('selection summary accepts numeric fallback promoted count', () => {
+  const report = buildEvidencePackSummary({
+    date: DATE,
+    selectionReport: {
+      fallback_candidates_promoted_count: 3
+    }
+  });
+
+  assert.equal(report.selection_summary.fallback_candidates_promoted_count, 3);
+});
+
+test('selection summary preserves false and zero fallback diagnostics by source priority', () => {
+  const report = buildEvidencePackSummary({
+    date: DATE,
+    generationStatus: {
+      fallback_window_consulted: false,
+      fallback_window_used: false,
+      fallback_window_reason: '',
+      fallback_candidates_promoted_count: 0
+    },
+    shortlistReport: {
+      fallback_window_consulted: true,
+      fallback_window_used: true,
+      fallback_window_reason: 'should not override generation status',
+      fallback_candidates_promoted: [
+        { title: 'Fallback promoted one' },
+        { title: 'Fallback promoted two' }
+      ]
+    }
+  });
+
+  assert.equal(report.selection_summary.fallback_window_consulted, false);
+  assert.equal(report.selection_summary.fallback_window_used, false);
+  assert.equal(report.selection_summary.fallback_window_reason, '');
+  assert.equal(report.selection_summary.fallback_candidates_promoted_count, 0);
+});
+
 test('full artifact set creates selected, reserve, excluded, and failure summaries without raw dumps', () => {
   const root = tempRoot('evidence-pack-full-');
   writeFullArtifactSet(root);

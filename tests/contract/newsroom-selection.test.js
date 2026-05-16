@@ -1404,6 +1404,167 @@ test('custom selection window policy drives fallback classification and promotio
   assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-b'), true);
 });
 
+test('#124 acceptance: primary window official Camera candidate outranks fallback candidate', () => {
+  const primaryFixtures = [
+    ['AOSP Camera HAL API contract update', 'Camera HAL API'],
+    ['CameraX stream metadata compatibility update', 'CameraX stream metadata'],
+    ['libcamera image pipeline driver release', 'libcamera image pipeline']
+  ];
+  const primaryCandidates = primaryFixtures.map(([title, component], index) =>
+    policyPrimaryCandidate(index, {
+      title,
+      url: `https://example.com/124-primary-official-${index}`,
+      source: 'Android Camera Official Source',
+      api_or_component: component,
+      behavior_change: `${component} behavior changed.`,
+      reliability: 'official',
+      published_date: '2026-05-09',
+      camera_hal_relevance_score: 50 - index
+    })
+  );
+  const fallbackCandidate = policyPrimaryCandidate(99, {
+    title: 'Older fallback official Camera source with higher score',
+    url: 'https://example.com/124-fallback-high-score',
+    source: 'Android Camera Official Source',
+    reliability: 'official',
+    published_date: '2026-04-26',
+    camera_hal_relevance_score: 100
+  });
+
+  const report = buildShortlistReport('2026-05-10', [
+    fallbackCandidate,
+    ...primaryCandidates
+  ]);
+
+  assert.equal(report.primary_window_selected_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.fallback_window_candidate_count, 1);
+  assert.equal(report.fallback_window_consulted, false);
+  assert.equal(report.fallback_window_used, false);
+  assert.equal(report.selected_articles.some(item => item.url === fallbackCandidate.url), false);
+  assert.deepEqual(
+    report.selected_articles.map(item => item.freshness_window),
+    Array(articlePolicy.mainArticleCount.min).fill('primary')
+  );
+});
+
+test('#124 acceptance: fallback window is promoted only when primary is short', () => {
+  const report = buildShortlistReport('2026-05-10', [
+    policyPrimaryCandidate(0, {
+      title: 'Only current Camera source',
+      url: 'https://example.com/124-current-only',
+      source: 'Primary Camera Source',
+      published_date: '2026-05-09'
+    }),
+    policyPrimaryCandidate(1, {
+      title: 'Older Camera fallback source A',
+      url: 'https://example.com/124-fallback-a',
+      source: 'Fallback Camera Source A',
+      published_date: '2026-04-26'
+    }),
+    policyPrimaryCandidate(2, {
+      title: 'Older Camera fallback source B',
+      url: 'https://example.com/124-fallback-b',
+      source: 'Fallback Camera Source B',
+      published_date: '2026-04-26'
+    })
+  ]);
+
+  assert.equal(report.primary_window_selected_count, 1);
+  assert.equal(report.fallback_window_consulted, true);
+  assert.equal(report.fallback_window_used, true);
+  assert.match(report.fallback_window_reason, /primary window selected 1 article\(s\), below min 3/);
+  assert.equal(report.fallback_candidates_promoted.length, 2);
+  assert.equal(
+    report.selected_articles.filter(item => item.freshness_window === 'fallback').length,
+    2
+  );
+});
+
+test('#124 acceptance: reference window remains context-only', () => {
+  const report = buildShortlistReport('2026-05-10', [
+    policyPrimaryCandidate(0, {
+      title: 'Current Camera main source',
+      url: 'https://example.com/124-reference-primary',
+      published_date: '2026-05-09',
+      camera_hal_relevance_score: 40
+    }),
+    policyPrimaryCandidate(1, {
+      title: 'Reference window high score source',
+      url: 'https://example.com/124-reference-context',
+      published_date: '2026-03-11',
+      camera_hal_relevance_score: 100
+    })
+  ], { minArticles: 1 });
+
+  assert.equal(report.selected_articles.some(item => item.url === 'https://example.com/124-reference-context'), false);
+  assert.equal(report.reserve_candidates.some(item => item.url === 'https://example.com/124-reference-context'), false);
+  assert.deepEqual(
+    report.reference_context_candidates.map(item => item.url),
+    ['https://example.com/124-reference-context']
+  );
+  assert.ok(
+    report.excluded_candidates
+      .find(item => item.url === 'https://example.com/124-reference-context')
+      .exclusion_reasons.includes('selection_window=reference_not_main')
+  );
+});
+
+test('#124 acceptance: publish-ready requires two primary camera stack articles', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(0, {
+      title: 'Single primary camera stack source',
+      url: 'https://example.com/124-single-primary'
+    }),
+    policySupportingCandidate(0),
+    policySupportingCandidate(1)
+  ]);
+
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_primary_camera_stack_shortage'));
+});
+
+test('#124 acceptance: publish-ready rejects more than one supporting main article', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(0, {
+      title: 'AOSP Camera HAL API publish-ready source',
+      url: 'https://example.com/124-direct-primary',
+      api_or_component: 'Camera HAL API',
+      behavior_change: 'Camera HAL API behavior changed.',
+      relevance_bucket: 'direct_aosp_camera'
+    }),
+    policyPrimaryCandidate(1, {
+      title: 'libcamera image pipeline driver publish-ready source',
+      url: 'https://example.com/124-driver-primary',
+      api_or_component: 'libcamera image pipeline',
+      behavior_change: 'Image pipeline driver behavior changed.',
+      relevance_bucket: 'camera_driver_image_pipeline',
+      driver_stack_relevance: 5,
+      aosp_camera_directness: 0
+    }),
+    policySupportingCandidate(0, {
+      title: 'Supporting SoC source',
+      url: 'https://example.com/124-supporting-soc',
+      relevance_bucket: 'soc_platform_signal',
+      soc_platform_relevance: 5,
+      native_tooling_relevance: 0,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false
+    }),
+    policySupportingCandidate(1, {
+      title: 'Supporting native workflow source',
+      url: 'https://example.com/124-supporting-native'
+    })
+  ]);
+
+  assert.equal(report.review_gate_passed, true);
+  assert.equal(report.publish_gate_passed, false);
+  assert.equal(report.publish_ready, false);
+  assert.equal(report.composition_summary.supporting_main_article_count, 2);
+  assert.deepEqual(report.publish_gate_reason_codes, ['publish_ready_supporting_main_over_limit']);
+});
+
 test('fallback composition uses supporting buckets when direct camera stack topics are scarce', () => {
   const supportingCount = articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired;
   const supportingCandidates = Array.from({ length: supportingCount }, (_, index) => {

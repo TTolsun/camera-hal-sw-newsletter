@@ -469,6 +469,9 @@ function validateEvidencePackSections(text, sections, parsed, errors) {
     'Primary camera stack count',
     'Supporting bucket count',
     'Fallback window used',
+    'Fallback window consulted',
+    'Fallback window reason',
+    'Fallback promoted candidates',
     'Fallback bucket used'
   ]) {
     if (!new RegExp(`^- ${escapeRegExp(label)}:\\s+`, 'm').test(summarySection)) {

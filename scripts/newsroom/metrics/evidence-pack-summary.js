@@ -692,6 +692,28 @@ function candidateShortageHints(...sources) {
   return compactDiagnostics(sources.flatMap(source => ensureArray(source?.selection_shortage_hints)));
 }
 
+function firstPresentTextField(field, ...sources) {
+  for (const source of sources) {
+    if (!source || typeof source !== 'object') continue;
+    if (!Object.prototype.hasOwnProperty.call(source, field)) continue;
+    const value = source[field];
+    if (value === null || value === undefined) return '';
+    return text(value);
+  }
+  return '';
+}
+
+function fallbackCandidatesPromotedCount(...sources) {
+  for (const source of sources) {
+    if (!source || typeof source !== 'object') continue;
+    const numeric = numberOrNull(source.fallback_candidates_promoted_count);
+    if (numeric !== null) return numeric;
+    const arrayLength = arrayLengthOrNull(source.fallback_candidates_promoted);
+    if (arrayLength !== null) return arrayLength;
+  }
+  return null;
+}
+
 function factCheckMustFix(factCheckReport = {}, staleClaimReport = {}) {
   return compactDiagnostics([
     ...ensureArray(factCheckReport.must_fix),
@@ -801,6 +823,22 @@ function selectionSummary({
       generationStatus.fallback_window_used,
       shortlistReport.fallback_window_used,
       selectionReport.fallback_window_used
+    ),
+    fallback_window_consulted: firstBoolean(
+      generationStatus.fallback_window_consulted,
+      shortlistReport.fallback_window_consulted,
+      selectionReport.fallback_window_consulted
+    ),
+    fallback_window_reason: firstPresentTextField(
+      'fallback_window_reason',
+      generationStatus,
+      shortlistReport,
+      selectionReport
+    ),
+    fallback_candidates_promoted_count: fallbackCandidatesPromotedCount(
+      generationStatus,
+      shortlistReport,
+      selectionReport
     ),
     fallback_bucket_used: firstBoolean(
       generationStatus.fallback_bucket_used,
