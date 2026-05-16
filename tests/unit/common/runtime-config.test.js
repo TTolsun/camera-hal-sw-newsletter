@@ -1,4 +1,6 @@
 const assert = require('node:assert/strict');
+const { spawnSync } = require('node:child_process');
+const path = require('node:path');
 const test = require('node:test');
 
 const {
@@ -16,6 +18,24 @@ const {
 const {
   configuredModels
 } = require('../../../scripts/newsroom/llm/model-policy');
+
+const doctorConfigScript = path.join(__dirname, '..', '..', '..', 'scripts', 'doctor-config.js');
+
+function doctorConfigEnv(overrides = {}) {
+  return {
+    ...process.env,
+    GEMINI_API_KEY: '',
+    INTERNAL_LLM_API_KEY: '',
+    LLM_PROVIDER: 'gemini',
+    LLM_MODEL: 'gemini-2.5-flash',
+    GEMINI_MODEL: 'gemini-2.5-flash',
+    LLM_FALLBACK_MODELS: 'gemini-2.5-flash-lite',
+    GEMINI_FALLBACK_MODELS: 'gemini-2.5-flash-lite',
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'false',
+    ...overrides
+  };
+}
 
 test('defaults match workflow runtime defaults', () => {
   const config = readRuntimeConfig({});
@@ -232,6 +252,46 @@ test('candidate artifact runtime config rejects invalid mode and multiline path'
     }),
     /NEWSROOM_CANDIDATE_INPUT_PATH must be a single-line/
   );
+});
+
+test('doctor config CLI can validate collect-only runtime without LLM credentials', () => {
+  const result = spawnSync(process.execPath, [
+    doctorConfigScript,
+    '--no-llm-credentials'
+  ], {
+    cwd: path.join(__dirname, '..', '..', '..'),
+    env: doctorConfigEnv(),
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Runtime config validation passed\./);
+  assert.match(result.stdout, /"geminiApiKeyConfigured": false/);
+});
+
+test('doctor config CLI still requires LLM credentials by default', () => {
+  const result = spawnSync(process.execPath, [doctorConfigScript], {
+    cwd: path.join(__dirname, '..', '..', '..'),
+    env: doctorConfigEnv(),
+    encoding: 'utf8'
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /GEMINI_API_KEY must be configured for Gemini newsroom generation\./);
+});
+
+test('doctor config CLI rejects unknown options', () => {
+  const result = spawnSync(process.execPath, [
+    doctorConfigScript,
+    '--no-llm-credential'
+  ], {
+    cwd: path.join(__dirname, '..', '..', '..'),
+    env: doctorConfigEnv({ GEMINI_API_KEY: 'test-key' }),
+    encoding: 'utf8'
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Unknown option\(s\): --no-llm-credential/);
 });
 
 test('LLM_MODEL and LLM_FALLBACK_MODELS override Gemini compatibility aliases', () => {

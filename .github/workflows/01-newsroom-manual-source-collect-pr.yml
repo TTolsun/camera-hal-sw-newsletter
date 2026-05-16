@@ -51,7 +51,7 @@ jobs:
           fi
 
       - name: Doctor runtime config
-        run: npm run doctor:config
+        run: npm run doctor:config -- --no-llm-credentials
 
       - name: Validate newsletter policy
         run: npm run validate:policy
