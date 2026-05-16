@@ -5,6 +5,8 @@ const path = require('path');
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
+  geminiCandidatesPath,
+  geminiCandidatesRelPath,
   manualCandidatesPath,
   manualCandidatesRelPath,
   mergedCandidateManifestPath,
@@ -55,8 +57,83 @@ function candidateItems(payload = {}) {
   return Array.isArray(payload?.candidates) ? payload.candidates : [];
 }
 
+function isObject(value) {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
 function artifactHash(manifest = {}) {
   return String(manifest.artifact_hash || manifest.candidate_artifact_hash || '').trim();
+}
+
+function readCandidatePayload(root, candidatePath) {
+  try {
+    return readJson(candidatePath);
+  } catch (error) {
+    throw new CandidateArtifactValidationError(`Invalid candidate artifact JSON: ${relPath(root, candidatePath)}`, {
+      candidatePath,
+      parse_error: error.message
+    });
+  }
+}
+
+function validateCandidatePayload({
+  root = process.cwd(),
+  date,
+  candidatePath,
+  validationMode = 'compatibility'
+} = {}) {
+  const payload = readCandidatePayload(root, candidatePath);
+  const artifactRelPath = relPath(root, candidatePath);
+
+  if (!isObject(payload)) {
+    throw new CandidateArtifactValidationError(`Candidate artifact must be an object root: ${artifactRelPath}`, {
+      candidatePath,
+      validationMode
+    });
+  }
+  if (!Array.isArray(payload.candidates)) {
+    throw new CandidateArtifactValidationError(`Candidate artifact must include candidates array: ${artifactRelPath}`, {
+      candidatePath,
+      validationMode
+    });
+  }
+
+  payload.candidates.forEach((candidate, index) => {
+    if (!isObject(candidate)) {
+      throw new CandidateArtifactValidationError(`Candidate artifact candidates[${index}] must be an object: ${artifactRelPath}`, {
+        candidatePath,
+        validationMode,
+        candidate_index: index
+      });
+    }
+  });
+
+  if (validationMode === 'strict') {
+    const schemaVersion = Number(payload.schema_version);
+    if (!Number.isFinite(schemaVersion) || schemaVersion < 5) {
+      throw new CandidateArtifactValidationError(`Strict candidate artifact schema_version must be >= 5: ${artifactRelPath}`, {
+        candidatePath,
+        validationMode,
+        schema_version: payload.schema_version
+      });
+    }
+    for (const field of ['date', 'newsletter_date']) {
+      if (date && String(payload[field] || '').trim() !== date) {
+        throw new CandidateArtifactValidationError(`Strict candidate artifact ${field} must match ${date}: ${artifactRelPath}`, {
+          candidatePath,
+          validationMode,
+          field,
+          expected: date,
+          actual: payload[field]
+        });
+      }
+    }
+  }
+
+  return {
+    payload,
+    candidateCount: payload.candidates.length
+  };
 }
 
 function buildRawCandidateManifest({
@@ -128,6 +205,7 @@ function buildMergedCandidateManifest({
   candidatePath = mergedCandidatesPath(root, date),
   sourceCandidatePath = manualCandidatesPath(root, date),
   sourceManifestPath = rawCandidateManifestPath(root, date),
+  geminiCandidatePath = geminiCandidatesPath(root, date),
   generatedAt = new Date().toISOString(),
   mergeMode = 'disabled_pass_through',
   geminiCandidateCount = 0,
@@ -151,6 +229,8 @@ function buildMergedCandidateManifest({
     source_candidate_artifact_hash: hashFileIfExists(sourceCandidatePath),
     source_manifest: fs.existsSync(sourceManifestPath) ? relPath(root, sourceManifestPath) : '',
     source_manifest_hash: hashFileIfExists(sourceManifestPath),
+    gemini_candidate_artifact: fs.existsSync(geminiCandidatePath) ? relPath(root, geminiCandidatePath) : '',
+    gemini_candidate_artifact_hash: hashFileIfExists(geminiCandidatePath),
     gemini_candidate_count: geminiCandidateCount,
     llm_used: llmUsed,
     github_run_id: process.env.GITHUB_RUN_ID || '',
@@ -164,6 +244,7 @@ function writeMergedCandidateArtifacts({
   payload,
   sourceCandidatePath = manualCandidatesPath(root, date),
   sourceManifestPath = rawCandidateManifestPath(root, date),
+  geminiPayload = null,
   generatedAt = new Date().toISOString(),
   mergeMode = 'disabled_pass_through',
   geminiCandidateCount = 0,
@@ -172,6 +253,10 @@ function writeMergedCandidateArtifacts({
 } = {}) {
   const mergedPath = mergedCandidatesPath(root, date);
   writeJson(mergedPath, payload);
+  const geminiPath = geminiCandidatesPath(root, date);
+  if (geminiPayload !== null) {
+    writeJson(geminiPath, geminiPayload);
+  }
 
   const manifestPath = mergedCandidateManifestPath(root, date);
   const manifest = buildMergedCandidateManifest({
@@ -180,6 +265,7 @@ function writeMergedCandidateArtifacts({
     candidatePath: mergedPath,
     sourceCandidatePath,
     sourceManifestPath,
+    geminiCandidatePath: geminiPath,
     generatedAt,
     mergeMode,
     geminiCandidateCount,
@@ -190,6 +276,7 @@ function writeMergedCandidateArtifacts({
 
   return {
     mergedPath,
+    geminiPath: geminiPayload !== null ? geminiPath : '',
     manifestPath,
     manifest
   };
@@ -202,7 +289,9 @@ function validateCandidateArtifact({
   manifestPath = '',
   requireManifest = false,
   expectedLlmUsed = false,
-  allowMissingManifest = false
+  allowMissingManifest = false,
+  validationMode = requireManifest ? 'strict' : 'compatibility',
+  expectedManifestType = ''
 } = {}) {
   if (!candidatePath || !fs.existsSync(candidatePath)) {
     throw new CandidateArtifactValidationError(`Missing candidate artifact: ${relPath(root, candidatePath || '')}`, {
@@ -217,8 +306,16 @@ function validateCandidateArtifact({
     manifestRelPath: manifestPath ? relPath(root, manifestPath) : '',
     manifest: null,
     hash: hashFile(candidatePath),
-    manifestRequired: requireManifest
+    manifestRequired: requireManifest,
+    validation_mode: validationMode
   };
+  const payloadValidation = validateCandidatePayload({
+    root,
+    date,
+    candidatePath,
+    validationMode
+  });
+  result.candidate_count = payloadValidation.candidateCount;
 
   if (!manifestPath || !fs.existsSync(manifestPath)) {
     if (requireManifest && !allowMissingManifest) {
@@ -231,6 +328,12 @@ function validateCandidateArtifact({
   }
 
   const manifest = readJson(manifestPath);
+  if (expectedManifestType && manifest.manifest_type !== expectedManifestType) {
+    throw new CandidateArtifactValidationError(`Candidate manifest manifest_type must be ${expectedManifestType}: ${result.manifestRelPath}`, {
+      ...result,
+      actualManifestType: manifest.manifest_type
+    });
+  }
   const expectedHash = artifactHash(manifest);
   if (!expectedHash) {
     throw new CandidateArtifactValidationError(`Candidate manifest is missing artifact_hash: ${result.manifestRelPath}`, result);
@@ -253,6 +356,13 @@ function validateCandidateArtifact({
       ...result,
       expectedDate: date,
       actualDate: manifest.newsletter_date
+    });
+  }
+  if (Number(manifest.candidate_count) !== payloadValidation.candidateCount) {
+    throw new CandidateArtifactValidationError(`Candidate manifest candidate_count mismatch for ${result.manifestRelPath}`, {
+      ...result,
+      expectedCandidateCount: payloadValidation.candidateCount,
+      actualCandidateCount: manifest.candidate_count
     });
   }
 
@@ -284,30 +394,40 @@ function resolveExplicitArtifactInput(root, date, inputPath) {
   }
 
   const name = path.basename(resolvedPath);
-  if (name === 'merged-candidates.json') {
+  const inputRelPath = relPath(root, resolvedPath);
+  if (name === 'merged-candidates.json' && inputRelPath === mergedCandidatesRelPath(date)) {
     return validateCandidateArtifact({
       root,
       date,
       candidatePath: resolvedPath,
       manifestPath: path.join(path.dirname(resolvedPath), 'merged-candidate-manifest.json'),
-      requireManifest: true
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'merged_candidate'
     });
   }
-  if (name === 'manual-candidates.json') {
+  if (name === 'manual-candidates.json' && inputRelPath === manualCandidatesRelPath(date)) {
     return validateCandidateArtifact({
       root,
       date,
       candidatePath: resolvedPath,
       manifestPath: path.join(path.dirname(resolvedPath), 'raw-candidate-manifest.json'),
-      requireManifest: true
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'raw_candidate'
     });
   }
-  return validateCandidateArtifact({
-    root,
-    date,
-    candidatePath: resolvedPath,
-    allowMissingManifest: true
-  });
+  throw new CandidateArtifactValidationError(
+    `NEWSROOM_CANDIDATE_INPUT_PATH must point to approved candidate artifact for ${date}: ` +
+    `${manualCandidatesRelPath(date)} or ${mergedCandidatesRelPath(date)}. ` +
+    `Legacy ${collectedCandidatesRelPath(date)} is only allowed as automatic transition fallback.`,
+    {
+      inputPath,
+      resolvedPath,
+      allowedPaths: [manualCandidatesRelPath(date), mergedCandidatesRelPath(date)],
+      rejectedPath: inputRelPath
+    }
+  );
 }
 
 function resolveCandidateInputArtifact({
@@ -349,7 +469,9 @@ function resolveCandidateInputArtifact({
       date,
       candidatePath: mergedPath,
       manifestPath: mergedCandidateManifestPath(root, date),
-      requireManifest: true
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'merged_candidate'
     });
     return {
       ...input,
@@ -365,7 +487,9 @@ function resolveCandidateInputArtifact({
       date,
       candidatePath: manualPath,
       manifestPath: rawCandidateManifestPath(root, date),
-      requireManifest: true
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'raw_candidate'
     });
     return {
       ...input,
@@ -379,7 +503,8 @@ function resolveCandidateInputArtifact({
     root,
     date,
     candidatePath: fallbackPath,
-    allowMissingManifest: true
+    allowMissingManifest: true,
+    validationMode: 'compatibility'
   });
   return {
     ...input,
@@ -400,6 +525,7 @@ module.exports = {
   writeMergedCandidateArtifacts,
   collectedCandidatesRelPath,
   manualCandidatesRelPath,
+  geminiCandidatesRelPath,
   mergedCandidateManifestRelPath,
   mergedCandidatesRelPath,
   rawCandidateManifestRelPath

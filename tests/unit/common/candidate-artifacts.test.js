@@ -7,6 +7,8 @@ const test = require('node:test');
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
+  geminiCandidatesPath,
+  geminiCandidatesRelPath,
   manualCandidatesPath,
   manualCandidatesRelPath,
   mergedCandidateManifestPath,
@@ -45,7 +47,7 @@ function writeJson(filePath, value) {
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
-function candidatePayload(title = 'CameraX release') {
+function candidatePayload(title = 'CameraX release', overrides = {}) {
   return {
     schema_version: 5,
     date: '2026-05-16',
@@ -59,7 +61,8 @@ function candidatePayload(title = 'CameraX release') {
         relevance_bucket: 'android_platform_camera_adjacent'
       }
     ],
-    failures: []
+    failures: [],
+    ...overrides
   };
 }
 
@@ -70,10 +73,12 @@ test('candidate artifact paths expose manual, merged, and manifest contracts', (
   assert.equal(manualCandidatesRelPath(date), 'content/collected-news/2026-05-16/manual-candidates.json');
   assert.equal(collectedCandidatesRelPath(date), 'content/collected-news/2026-05-16/candidates.json');
   assert.equal(mergedCandidatesRelPath(date), 'content/collected-news/2026-05-16/merged-candidates.json');
+  assert.equal(geminiCandidatesRelPath(date), 'content/collected-news/2026-05-16/gemini-candidates.json');
   assert.equal(rawCandidateManifestRelPath(date), 'content/collected-news/2026-05-16/raw-candidate-manifest.json');
   assert.equal(mergedCandidateManifestRelPath(date), 'content/collected-news/2026-05-16/merged-candidate-manifest.json');
   assert.equal(path.basename(manualCandidatesPath(root, date)), 'manual-candidates.json');
   assert.equal(path.basename(mergedCandidatesPath(root, date)), 'merged-candidates.json');
+  assert.equal(path.basename(geminiCandidatesPath(root, date)), 'gemini-candidates.json');
 });
 
 test('manual candidate writer creates canonical and compatibility payloads with raw manifest', () => {
@@ -121,6 +126,19 @@ test('candidate artifact validation distinguishes valid, missing, mismatch, and 
     }),
     CandidateArtifactValidationError
   );
+
+  fs.unlinkSync(rawCandidateManifestPath(root, date));
+  assert.throws(
+    () => validateCandidateArtifact({
+      root,
+      date,
+      candidatePath: manualCandidatesPath(root, date),
+      manifestPath: rawCandidateManifestPath(root, date),
+      requireManifest: true
+    }),
+    /Missing candidate manifest/
+  );
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
 
   writeJson(manualCandidatesPath(root, date), candidatePayload('Changed after manifest'));
   assert.throws(
@@ -183,6 +201,126 @@ test('artifact input mode prefers valid merged, then manual, then transition fal
   assert.equal(merged.status_extra.manifest, mergedCandidateManifestRelPath(date));
 });
 
+test('explicit artifact input accepts only approved canonical artifacts with manifests', () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload();
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+  writeMergedCandidateArtifacts({ root, date, payload, geminiPayload: [] });
+  writeJson(path.join(root, 'content', 'collected-news', date, 'other-candidates.json'), payload);
+
+  const manual = resolveCandidateInputArtifact({
+    root,
+    date,
+    env: {
+      NEWSROOM_CANDIDATE_INPUT_MODE: 'artifact',
+      NEWSROOM_CANDIDATE_INPUT_PATH: manualCandidatesRelPath(date)
+    }
+  });
+  assert.equal(manual.relPath, manualCandidatesRelPath(date));
+  assert.equal(manual.status_extra.manifest_status, 'validated');
+
+  const merged = resolveCandidateInputArtifact({
+    root,
+    date,
+    env: {
+      NEWSROOM_CANDIDATE_INPUT_MODE: 'artifact',
+      NEWSROOM_CANDIDATE_INPUT_PATH: mergedCandidatesRelPath(date)
+    }
+  });
+  assert.equal(merged.relPath, mergedCandidatesRelPath(date));
+  assert.equal(merged.status_extra.manifest_status, 'validated');
+
+  for (const rejectedPath of [
+    collectedCandidatesRelPath(date),
+    geminiCandidatesRelPath(date),
+    `content/collected-news/${date}/other-candidates.json`,
+    `content/collected-news/2026-05-15/manual-candidates.json`
+  ]) {
+    assert.throws(
+      () => resolveCandidateInputArtifact({
+        root,
+        date,
+        env: {
+          NEWSROOM_CANDIDATE_INPUT_MODE: 'artifact',
+          NEWSROOM_CANDIDATE_INPUT_PATH: rejectedPath
+        }
+      }),
+      /approved candidate artifact/
+    );
+  }
+});
+
+test('strict candidate artifacts reject schema, manifest type, and count mismatches', () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload();
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  writeJson(manualCandidatesPath(root, date), candidatePayload('old schema', { schema_version: 4 }));
+  assert.throws(
+    () => validateCandidateArtifact({
+      root,
+      date,
+      candidatePath: manualCandidatesPath(root, date),
+      manifestPath: rawCandidateManifestPath(root, date),
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'raw_candidate'
+    }),
+    /schema_version must be >= 5/
+  );
+
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+  writeJson(manualCandidatesPath(root, date), candidatePayload('bad candidate item', { candidates: ['bad'] }));
+  assert.throws(
+    () => validateCandidateArtifact({
+      root,
+      date,
+      candidatePath: manualCandidatesPath(root, date),
+      manifestPath: rawCandidateManifestPath(root, date),
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'raw_candidate'
+    }),
+    /candidates\[0\] must be an object/
+  );
+
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+  const manifest = readJson(rawCandidateManifestPath(root, date));
+  manifest.manifest_type = 'merged_candidate';
+  writeJson(rawCandidateManifestPath(root, date), manifest);
+  assert.throws(
+    () => validateCandidateArtifact({
+      root,
+      date,
+      candidatePath: manualCandidatesPath(root, date),
+      manifestPath: rawCandidateManifestPath(root, date),
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'raw_candidate'
+    }),
+    /manifest_type must be raw_candidate/
+  );
+
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+  const countManifest = readJson(rawCandidateManifestPath(root, date));
+  countManifest.candidate_count = 2;
+  writeJson(rawCandidateManifestPath(root, date), countManifest);
+  assert.throws(
+    () => validateCandidateArtifact({
+      root,
+      date,
+      candidatePath: manualCandidatesPath(root, date),
+      manifestPath: rawCandidateManifestPath(root, date),
+      requireManifest: true,
+      validationMode: 'strict',
+      expectedManifestType: 'raw_candidate'
+    }),
+    /candidate_count mismatch/
+  );
+});
+
 test('Stage 2 disabled pass-through writes merged artifact, manifest, and report', () => {
   const root = tempRoot();
   const date = '2026-05-16';
@@ -200,11 +338,16 @@ test('Stage 2 disabled pass-through writes merged artifact, manifest, and report
 
   assert.equal(result.status, 'PASS');
   assert.deepEqual(readJson(mergedCandidatesPath(root, date)), payload);
-  assert.equal(readJson(mergedCandidateManifestPath(root, date)).merge_mode, 'disabled_pass_through');
+  assert.deepEqual(readJson(geminiCandidatesPath(root, date)), []);
+  const manifest = readJson(mergedCandidateManifestPath(root, date));
+  assert.equal(manifest.merge_mode, 'disabled_pass_through');
+  assert.equal(manifest.gemini_candidate_artifact, geminiCandidatesRelPath(date));
+  assert.equal(manifest.gemini_candidate_count, 0);
   const report = fs.readFileSync(result.reportPath, 'utf8');
   assert.match(report, /disabled_pass_through=true/);
   assert.match(report, /llm_used=false/);
   assert.match(report, /gemini_candidate_count=0/);
+  assert.match(report, /gemini_candidate_artifact=content\/collected-news\/2026-05-16\/gemini-candidates\.json/);
   assert.match(report, /merge_mode=disabled_pass_through/);
 });
 
@@ -227,6 +370,7 @@ test('Stage 2 enabled before #149 engine fails without normal merged output', ()
   );
 
   assert.equal(fs.existsSync(mergedCandidatesPath(root, date)), false);
+  assert.equal(fs.existsSync(geminiCandidatesPath(root, date)), false);
   const report = fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'gemini-source-discovery-report.md'), 'utf8');
   assert.match(report, /Gemini discovery engine is not implemented in #88/);
   assert.match(report, /Manual candidates were not modified/);

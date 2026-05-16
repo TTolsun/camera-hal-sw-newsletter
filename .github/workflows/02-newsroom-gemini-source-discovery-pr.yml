@@ -112,6 +112,7 @@ jobs:
         with:
           name: newsroom-source-discovery-debug-${{ github.run_id }}
           path: |
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/gemini-candidates.json
             content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidates.json
             content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidate-manifest.json
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-discovery-report.md

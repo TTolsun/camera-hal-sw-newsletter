@@ -4437,6 +4437,10 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
   const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsroom-gemini-source-discovery-pr.yml'), 'utf8');
   const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
+  const rawPrBodyBuilder = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'build-raw-candidate-pr-body.js'),
+    'utf8'
+  );
 
   assert.match(stage1, /^name: Newsroom 01 - Manual Source Collection PR/m);
   assert.match(stage2, /^name: Newsroom 02 - Gemini Source Discovery PR/m);
@@ -4455,6 +4459,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage2, /NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY/);
   assert.match(stage2, /node scripts\/gemini-source-discovery-boundary\.js --date/);
   assert.match(stage2, /gemini-source-discovery-report\.md/);
+  assert.match(stage2, /gemini-candidates\.json/);
   assert.match(stage2, /merged-candidates\.json/);
   assert.match(stage2, /merged-candidate-manifest\.json/);
   assert.doesNotMatch(stage2, /GEMINI_API_KEY/);
@@ -4462,11 +4467,13 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
 
   assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_MODE: artifact/);
   assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_PATH: \$\{\{ github\.event\.inputs\.candidate_input_path \}\}/);
+  assert.match(stage3, /manual-candidates\.json or merged-candidates\.json/);
   assert.match(stage3, /run: npm run generate/);
   assert.doesNotMatch(stage3, /npm run collect/);
   assert.match(stage3, /branch: newsroom-final\/\$\{\{ steps\.meta\.outputs\.date \}\}/);
   assert.match(stage3, /manual-candidates\.json/);
   assert.match(stage3, /merged-candidates\.json/);
+  assert.doesNotMatch(rawPrBodyBuilder, /source_gap_risk_count/);
 });
 
 test('schedule cutover keeps new RAW workflow manual-only until old schedule is removed', () => {

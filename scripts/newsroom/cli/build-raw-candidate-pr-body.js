@@ -69,9 +69,6 @@ function summarizeRawCandidates(payload = {}, manifest = null) {
     const bucket = candidateBucket(candidate);
     return bucket === BUCKETS.GENERIC_TECH_WATCHLIST || candidate.finalSelectionEligibility === 'watchlist';
   }).length;
-  const sourceGapRiskCount = candidates.filter(candidate =>
-    candidate.source_gap_risk === true || candidate.sourceGapRisk === true
-  ).length;
   const directCameraBucketCount = candidates.filter(candidate =>
     DIRECT_CAMERA_BUCKETS.has(candidateBucket(candidate))
   ).length;
@@ -87,7 +84,6 @@ function summarizeRawCandidates(payload = {}, manifest = null) {
     officialCount,
     officialRatio,
     genericNoiseCount,
-    sourceGapRiskCount,
     directCameraBucketCount,
     cameraXCount,
     socPlatformCount
@@ -134,7 +130,6 @@ function buildRawCandidatePrBody({
     `- source_count: ${summary.sourceCount ?? 'unknown'}`,
     `- official_ratio: ${percent(summary.officialRatio)} (${summary.officialCount}/${summary.candidateCount})`,
     `- generic_noise_count: ${summary.genericNoiseCount}`,
-    `- source_gap_risk_count: ${summary.sourceGapRiskCount}`,
     `- direct_camera_bucket_count: ${summary.directCameraBucketCount}`,
     `- CameraX_count: ${summary.cameraXCount}`,
     `- SoC_platform_count: ${summary.socPlatformCount}`,

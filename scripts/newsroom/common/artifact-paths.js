@@ -36,6 +36,14 @@ function mergedCandidatesRelPath(date) {
   return `${COLLECTED_NEWS_ROOT}/${date}/merged-candidates.json`;
 }
 
+function geminiCandidatesPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'gemini-candidates.json');
+}
+
+function geminiCandidatesRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/gemini-candidates.json`;
+}
+
 function rawCandidateManifestPath(root, date) {
   return path.join(collectedNewsDir(root, date), 'raw-candidate-manifest.json');
 }
@@ -74,6 +82,8 @@ module.exports = {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
   collectedNewsDir,
+  geminiCandidatesPath,
+  geminiCandidatesRelPath,
   manualCandidatesPath,
   manualCandidatesRelPath,
   mergedCandidateManifestPath,

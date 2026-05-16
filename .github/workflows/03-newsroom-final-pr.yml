@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       candidate_input_path:
-        description: "Optional repo-relative candidate artifact path. Empty uses merged, manual, then legacy fallback priority."
+        description: "Optional approved artifact path: manual-candidates.json or merged-candidates.json. Empty uses merged, manual, then legacy fallback priority."
         required: false
         default: ""
         type: string

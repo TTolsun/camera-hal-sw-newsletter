@@ -8,6 +8,7 @@ const {
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
+  geminiCandidatesRelPath,
   manualCandidatesPath,
   manualCandidatesRelPath,
   mergedCandidateManifestRelPath,
@@ -58,6 +59,7 @@ function renderReport({
   geminiCandidateCount,
   mergeMode,
   sourceCandidateRelPath = '',
+  geminiCandidateRelPath = '',
   mergedCandidateRelPath = '',
   manifestRelPath = ''
 }) {
@@ -82,6 +84,7 @@ function renderReport({
   } else {
     lines.push(
       `source_candidate_artifact=${sourceCandidateRelPath}`,
+      `gemini_candidate_artifact=${geminiCandidateRelPath}`,
       `merged_candidate_artifact=${mergedCandidateRelPath}`,
       `merged_candidate_manifest=${manifestRelPath}`,
       ''
@@ -133,6 +136,7 @@ function run({
     payload,
     sourceCandidatePath,
     sourceManifestPath,
+    geminiPayload: [],
     generatedAt,
     mergeMode: 'disabled_pass_through',
     geminiCandidateCount: 0,
@@ -150,6 +154,7 @@ function run({
     geminiCandidateCount: 0,
     mergeMode: 'disabled_pass_through',
     sourceCandidateRelPath,
+    geminiCandidateRelPath: geminiCandidatesRelPath(date),
     mergedCandidateRelPath: mergedCandidatesRelPath(date),
     manifestRelPath: mergedCandidateManifestRelPath(date)
   });
@@ -161,6 +166,7 @@ function run({
     candidate_count: candidateItems(payload).length,
     source_candidate_artifact: sourceCandidateRelPath,
     source_manifest: fs.existsSync(sourceManifestPath) ? rawCandidateManifestRelPath(date) : '',
+    gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
     report: newsroomRelPath(date, 'gemini-source-discovery-report.md'),

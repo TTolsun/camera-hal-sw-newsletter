@@ -19,6 +19,7 @@
 ## Stage 2 Optional Gemini Source Discovery Boundary
 
 - optional output: `content/collected-news/<date>/merged-candidates.json`
+- Gemini discovery delta artifact: `content/collected-news/<date>/gemini-candidates.json`
 - provenance manifest: `content/collected-news/<date>/merged-candidate-manifest.json`
 - report: `content/newsroom/<date>/gemini-source-discovery-report.md`
 
@@ -35,7 +36,10 @@ Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidate
 - `disabled_pass_through=true`
 - `llm_used=false`
 - `gemini_candidate_count=0`
+- `gemini_candidate_artifact=content/collected-news/<date>/gemini-candidates.json`
 - `merge_mode=disabled_pass_through`
+
+Disabled pass-through는 `gemini-candidates.json`을 정확히 empty array `[]`로 씁니다. 이 파일은 #88 boundary artifact이며 Stage 3 generation input이 아닙니다.
 
 ### Enabled Without #149 Engine
 
@@ -51,7 +55,7 @@ Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidate
 Stage 3은 artifact input mode로 approved candidate artifact만 읽습니다.
 
 - `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`
-- `NEWSROOM_CANDIDATE_INPUT_PATH=<repo-relative-candidate-json>`은 선택 입력입니다.
+- `NEWSROOM_CANDIDATE_INPUT_PATH=<repo-relative-candidate-json>`은 선택 입력입니다. Explicit path는 해당 날짜의 approved `manual-candidates.json` 또는 `merged-candidates.json`만 허용합니다. Legacy `candidates.json`는 explicit path로 지정하지 않고 explicit path가 비어 있을 때 automatic transition fallback으로만 허용합니다.
 
 입력 우선순위는 다음입니다.
 
