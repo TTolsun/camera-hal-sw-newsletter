@@ -1638,6 +1638,9 @@ function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
     primary_camera_stack_count: 1,
     supporting_bucket_count: 1,
     fallback_window_used: null,
+    fallback_window_consulted: null,
+    fallback_window_reason: '',
+    fallback_candidates_promoted_count: null,
     fallback_bucket_used: false,
     ...selectionSummaryOverrides
   };
@@ -2090,6 +2093,9 @@ test('newsroom PR body renders Evidence Pack summary sections', () => {
       primary_camera_stack_count: 1,
       supporting_bucket_count: 1,
       fallback_window_used: null,
+      fallback_window_consulted: true,
+      fallback_window_reason: 'primary window selected 1 article(s), below min 3',
+      fallback_candidates_promoted_count: 2,
       fallback_bucket_used: true
     },
     claim_validation_summary: {
@@ -2160,6 +2166,9 @@ test('newsroom PR body renders Evidence Pack summary sections', () => {
   assert.match(body, /^## Needs-fix \/ Review-only 진단$/m);
   assert.match(body, /^## 사람 검토 체크리스트$/m);
   assert.match(body, /Raw candidates: 14/);
+  assert.match(body, /Fallback window consulted: true/);
+  assert.match(body, /Fallback window reason: primary window selected 1 article\(s\), below min 3/);
+  assert.match(body, /Fallback promoted candidates: 2/);
   assert.match(body, /Fallback bucket used: true/);
   assert.match(body, /Claim validation status: partial/);
   assert.match(body, /Claim coverage: bound_claims=2; total_claims=3/);
@@ -2182,6 +2191,19 @@ test('newsroom PR body renders Evidence Pack summary sections', () => {
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
+test('newsroom PR body renders Evidence Pack fallback diagnostics defaults', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+
+  assert.match(body, /Fallback window consulted: unknown/);
+  assert.match(body, /Fallback window reason: none/);
+  assert.match(body, /Fallback promoted candidates: unknown/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
 test('newsroom PR body keeps Evidence Pack fallback when summary artifact is missing', () => {
   const root = tempRoot();
   const date = '2026-05-10';
@@ -2192,6 +2214,19 @@ test('newsroom PR body keeps Evidence Pack fallback when summary artifact is mis
   assert.match(body, /Evidence Pack summary: unavailable/);
   assert.match(body, new RegExp(`content/newsroom/${date}/evidence-pack-summary\\.json not found`));
   assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('validate-pr-body checks Evidence Pack fallback diagnostic rows', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const brokenBody = body.replace('- Fallback promoted candidates: unknown\n', '');
+  const result = validatePrBodyText(brokenBody, { date });
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /Evidence Pack summary is missing "Fallback promoted candidates" row/);
 });
 
 test('validate-pr-body checks Evidence Pack table columns when section is present', () => {
