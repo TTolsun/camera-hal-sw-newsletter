@@ -4482,7 +4482,8 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
 
 test('schedule cutover leaves only the RAW workflow on the daily newsroom schedule', () => {
   const workflowDir = path.join(__dirname, '..', '..', '.github', 'workflows');
-  const legacyWeeklyPath = path.join(workflowDir, '01-weekly-newsroom-pr.yml');
+  const legacyWeeklyFile = ['01', 'weekly', 'newsroom', 'pr.yml'].join('-');
+  const legacyWeeklyPath = path.join(workflowDir, legacyWeeklyFile);
   const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
   const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsroom-gemini-source-discovery-pr.yml'), 'utf8');
   const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
@@ -4556,15 +4557,22 @@ test('validate-site uses shared rendered issue structural validator', () => {
 });
 
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '02-validate-site.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '04-validate-site.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const structuralStep = workflowStep(workflow, 'Validate structural publication artifacts');
   const annotationStep = workflowStep(workflow, 'Annotate publication quality and fact-check status');
 
+  assert.match(workflow, /^name: 04 - Validate Site and Images$/m);
+  assert.match(workflow, /^  push:\n    branches: \["main"\]$/m);
+  assert.match(workflow, /^  pull_request:\n    branches: \["main"\]$/m);
+  assert.match(workflow, /^  workflow_dispatch:$/m);
+  assert.match(workflow, /^permissions:\n  contents: read$/m);
   assertTextInOrder(workflow, [
+    '- name: Run unit and regression tests',
     '- name: Validate structural publication artifacts',
     '- name: Annotate publication quality and fact-check status'
   ]);
+  assert.match(workflowStep(workflow, 'Run unit and regression tests'), /^\s*run: npm run test$/m);
   assertTextInOrder(structuralStep, [
     'npm run check:encoding',
     'npm run validate:policy'

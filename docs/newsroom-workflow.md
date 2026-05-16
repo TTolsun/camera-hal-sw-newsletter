@@ -100,7 +100,7 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 - `homepage_visible_after_merge=true`는 `data/newsletters.json`의 date/html/md entry가 `newsletters/YYYY-MM-DD/index.html` 및 `newsletter.md`와 일치하는 public issue에만 설정합니다. fallback builder가 성공 status에 이 값을 쓰더라도 workflow output의 최종 판단은 `resolve-reviewable-artifacts`가 public files와 index entry를 다시 검증한 결과입니다.
 - `needs-fix`는 편집장 검토 또는 수정이 필요한 상태입니다. 자동 발행 기준을 통과하지 못한 editor review PR에는 broad signal인 `review-only`를 붙이고, public files가 준비된 review publication PR에는 `review-only-publication`, public files가 없는 진단 PR에는 `diagnostics-only`를 함께 붙입니다. 두 세부 label은 동시에 붙지 않아야 합니다.
 - `final_publish_ready=false`는 자동 발행 기준 미충족을 뜻하지만, `review_publication_ready=true`인 PR의 공개 가능성을 혼자 차단하지 않습니다.
-- `02-validate-site.yml`은 structural validation을 blocking으로 유지하고 quality/fact-check 문제를 non-blocking annotation으로 보고합니다.
+- `04-validate-site.yml`은 structural validation을 blocking으로 유지하고 quality/fact-check 문제를 non-blocking annotation으로 보고합니다.
 
 ## URL Summary Cache
 
