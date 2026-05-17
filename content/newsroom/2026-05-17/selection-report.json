@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-17",
-  "generated_at": "2026-05-17T01:18:54.980Z",
+  "generated_at": "2026-05-17T10:54:52.758Z",
   "status": "UNDERFILLED_NEEDS_FIX",
   "failure_stage": "candidate_pool_preflight",
   "failure_reason": "publishable_candidate_shortage; reserve_candidate_shortage; camera_stack_candidate_shortage",
@@ -154,11 +154,11 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 26
+      "count": 25
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 26
+      "count": 25
     },
     {
       "reason": "missing dated evidence",
@@ -170,7 +170,7 @@
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 14
+      "count": 15
     },
     {
       "reason": "watch page without dated evidence",
@@ -196,11 +196,11 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 26
+      "count": 25
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 26
+      "count": 25
     },
     {
       "reason": "missing dated evidence",
@@ -212,7 +212,7 @@
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 14
+      "count": 15
     },
     {
       "reason": "watch page without dated evidence",

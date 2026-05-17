@@ -1,6 +1,6 @@
 {
   "date": "2026-05-17",
-  "generated_at": "2026-05-17T01:18:55.173Z",
+  "generated_at": "2026-05-17T10:54:52.972Z",
   "status": "FAILED",
   "failure_reason": "Fallback builder could not fill minimum main article count 3; only 1 article(s) available.",
   "fallback_public_issue_status": "FAILED",
@@ -54,7 +54,7 @@
       "source": "libcamera Documentation",
       "relevance_bucket": "camera_driver_image_pipeline",
       "allow_fallback": false,
-      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true; briefing_only=true"
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
     },
     {
       "title": "1.6.1",
@@ -353,8 +353,8 @@
       "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true; briefing_only=true"
     },
     {
-      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
-      "url": "https://www.phoronix.com/review/zimacube-2",
+      "title": "FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software",
+      "url": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
       "source": "Phoronix Linux Camera / Media",
       "relevance_bucket": "generic_tech_watchlist",
       "allow_fallback": false,
@@ -374,7 +374,7 @@
       "source": "libcamera Documentation",
       "relevance_bucket": "camera_driver_image_pipeline",
       "allow_fallback": true,
-      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true; briefing_only=true"
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
     },
     {
       "title": "1.6.1",
@@ -673,8 +673,8 @@
       "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
     },
     {
-      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
-      "url": "https://www.phoronix.com/review/zimacube-2",
+      "title": "FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software",
+      "url": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
       "source": "Phoronix Linux Camera / Media",
       "relevance_bucket": "generic_tech_watchlist",
       "allow_fallback": true,
@@ -692,7 +692,7 @@
     },
     {
       "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true",
-      "count": 20
+      "count": 22
     },
     {
       "reason": "CameraX release-note candidate has no concrete source_extraction bullet",

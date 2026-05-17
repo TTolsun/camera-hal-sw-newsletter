@@ -16,7 +16,7 @@
   "candidate_input": {
     "mode": "artifact",
     "candidate_artifact": "content/collected-news/2026-05-17/merged-candidates.json",
-    "candidate_artifact_hash": "de6fbdae212d835693e1eb6c70c430b33df218db80996ed97610b0b65160263b",
+    "candidate_artifact_hash": "cc315e925b651eb1a773dc0a00ae4850bb39ba52db76cc9411be70c22f2beebe",
     "manifest": "content/collected-news/2026-05-17/merged-candidate-manifest.json",
     "manifest_type": "merged_candidate",
     "manifest_status": "validated",
@@ -25,9 +25,9 @@
     "candidate_count": 46
   },
   "run_context": {
-    "github_run_id": "25977825371",
-    "github_sha": "1ec229e87c114953ad38c526f35b438777a4b277",
-    "github_ref": "refs/heads/main"
+    "github_run_id": "25988870648",
+    "github_sha": "45b80ce1b02c26948fe739803bf58cf06a837e3b",
+    "github_ref": "refs/heads/newsroom-source-discovery/2026-05-17"
   },
   "input_candidate_count": 46,
   "eligible_candidate_count": 3,
@@ -209,11 +209,11 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 26
+      "count": 25
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 26
+      "count": 25
     },
     {
       "reason": "missing dated evidence",
@@ -225,7 +225,7 @@
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 14
+      "count": 15
     },
     {
       "reason": "watch page without dated evidence",
@@ -251,11 +251,11 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 26
+      "count": 25
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 26
+      "count": 25
     },
     {
       "reason": "missing dated evidence",
@@ -267,7 +267,7 @@
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 14
+      "count": 15
     },
     {
       "reason": "watch page without dated evidence",

@@ -1,8 +1,8 @@
 {
   "schema_version": 3,
   "date": "2026-05-17",
-  "generated_at": "2026-05-17T01:18:54.994Z",
-  "capsule_token_target": "500-800",
+  "generated_at": "2026-05-17T10:54:52.774Z",
+  "capsule_token_target": "700-1100",
   "shortlisted_capsule_count": 3,
   "selected_capsule_count": 3,
   "reserve_capsule_count": 0,
@@ -40,6 +40,41 @@
       "signal_quality_status": "weak_signal",
       "fallback_promotion_allowed": true,
       "soc_signal_source_allowed": true,
+      "source_quality": {
+        "source_role": "project_mailing_list_source",
+        "source_url_quality": "project_mailing_list_release",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_project_announcement",
+        "source_quality_notes": []
+      },
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "source_quality_status": "allowed",
+      "main_article_source_allowed": true,
+      "main_article_source_blockers": [],
+      "cross_check_status": "not_required",
+      "requires_cross_check": false,
+      "requires_conditional_evidence": false,
+      "conditional_evidence_type": "",
+      "evidence_granularity": "dated_project_announcement",
+      "source_quality_field_drift": [],
+      "main_article_readiness": {
+        "ready": false,
+        "source_ready": true,
+        "hal_signal_ready": false,
+        "selection_input_ready": true,
+        "selection_ready": true,
+        "blockers": [
+          "hal_signal:actionability_none"
+        ]
+      },
       "component": "libcamera / V4L2 camera pipeline",
       "what_changed": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
       "background_context_static": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
@@ -78,7 +113,7 @@
         "briefing_only": false,
         "reference_only": false,
         "evidence_score": 8,
-        "cross_check_status": "not-required"
+        "cross_check_status": "not_required"
       },
       "score": {
         "total": 105.85,
@@ -103,7 +138,7 @@
       "imageCandidates": [],
       "fallback_promotion_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI C...",
       "soc_signal_type": "isp_image_pipeline",
-      "estimated_tokens": 927
+      "estimated_tokens": 1211
     },
     {
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
@@ -136,6 +171,44 @@
       "signal_quality_status": "weak_signal",
       "fallback_promotion_allowed": false,
       "soc_signal_source_allowed": true,
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "source_role": "engineering_blog_source",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "source_quality_status": "allowed",
+      "main_article_source_allowed": true,
+      "main_article_source_blockers": [],
+      "cross_check_status": "not_required",
+      "requires_cross_check": false,
+      "requires_conditional_evidence": true,
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "source_quality_field_drift": [],
+      "main_article_readiness": {
+        "ready": false,
+        "source_ready": true,
+        "hal_signal_ready": false,
+        "selection_input_ready": true,
+        "selection_ready": true,
+        "blockers": [
+          "hal_signal:actionability_none",
+          "hal_signal:fallback_promotion_missing_reason"
+        ]
+      },
       "component": "GCC",
       "what_changed": "GCC 16.1 has been released!",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
@@ -174,7 +247,7 @@
         "briefing_only": false,
         "reference_only": false,
         "evidence_score": 6,
-        "cross_check_status": "not-required"
+        "cross_check_status": "not_required"
       },
       "score": {
         "total": 115,
@@ -198,7 +271,7 @@
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
       "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI...",
-      "estimated_tokens": 850
+      "estimated_tokens": 1185
     },
     {
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
@@ -231,6 +304,44 @@
       "signal_quality_status": "weak_signal",
       "fallback_promotion_allowed": false,
       "soc_signal_source_allowed": true,
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "source_role": "engineering_blog_source",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "source_quality_status": "allowed",
+      "main_article_source_allowed": true,
+      "main_article_source_blockers": [],
+      "cross_check_status": "not_required",
+      "requires_cross_check": false,
+      "requires_conditional_evidence": true,
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "source_quality_field_drift": [],
+      "main_article_readiness": {
+        "ready": false,
+        "source_ready": true,
+        "hal_signal_ready": false,
+        "selection_input_ready": true,
+        "selection_ready": true,
+        "blockers": [
+          "hal_signal:actionability_none",
+          "hal_signal:fallback_promotion_missing_reason"
+        ]
+      },
       "component": "GCC",
       "what_changed": "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
@@ -269,7 +380,7 @@
         "briefing_only": false,
         "reference_only": false,
         "evidence_score": 8,
-        "cross_check_status": "not-required"
+        "cross_check_status": "not_required"
       },
       "score": {
         "total": 110.95,
@@ -293,7 +404,7 @@
       "url_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
       "imageCandidates": [],
       "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI...",
-      "estimated_tokens": 864
+      "estimated_tokens": 1199
     }
   ],
   "selected_capsules": [
@@ -330,6 +441,41 @@
       "signal_quality_status": "weak_signal",
       "fallback_promotion_allowed": true,
       "soc_signal_source_allowed": true,
+      "source_quality": {
+        "source_role": "project_mailing_list_source",
+        "source_url_quality": "project_mailing_list_release",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_project_announcement",
+        "source_quality_notes": []
+      },
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "source_quality_status": "allowed",
+      "main_article_source_allowed": true,
+      "main_article_source_blockers": [],
+      "cross_check_status": "not_required",
+      "requires_cross_check": false,
+      "requires_conditional_evidence": false,
+      "conditional_evidence_type": "",
+      "evidence_granularity": "dated_project_announcement",
+      "source_quality_field_drift": [],
+      "main_article_readiness": {
+        "ready": false,
+        "source_ready": true,
+        "hal_signal_ready": false,
+        "selection_input_ready": true,
+        "selection_ready": true,
+        "blockers": [
+          "hal_signal:actionability_none"
+        ]
+      },
       "component": "libcamera / V4L2 camera pipeline",
       "what_changed": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
       "background_context_static": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
@@ -368,7 +514,7 @@
         "briefing_only": false,
         "reference_only": false,
         "evidence_score": 8,
-        "cross_check_status": "not-required"
+        "cross_check_status": "not_required"
       },
       "score": {
         "total": 105.85,
@@ -393,7 +539,7 @@
       "imageCandidates": [],
       "fallback_promotion_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI C...",
       "soc_signal_type": "isp_image_pipeline",
-      "estimated_tokens": 927
+      "estimated_tokens": 1211
     },
     {
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
@@ -426,6 +572,44 @@
       "signal_quality_status": "weak_signal",
       "fallback_promotion_allowed": false,
       "soc_signal_source_allowed": true,
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "source_role": "engineering_blog_source",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "source_quality_status": "allowed",
+      "main_article_source_allowed": true,
+      "main_article_source_blockers": [],
+      "cross_check_status": "not_required",
+      "requires_cross_check": false,
+      "requires_conditional_evidence": true,
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "source_quality_field_drift": [],
+      "main_article_readiness": {
+        "ready": false,
+        "source_ready": true,
+        "hal_signal_ready": false,
+        "selection_input_ready": true,
+        "selection_ready": true,
+        "blockers": [
+          "hal_signal:actionability_none",
+          "hal_signal:fallback_promotion_missing_reason"
+        ]
+      },
       "component": "GCC",
       "what_changed": "GCC 16.1 has been released!",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
@@ -464,7 +648,7 @@
         "briefing_only": false,
         "reference_only": false,
         "evidence_score": 6,
-        "cross_check_status": "not-required"
+        "cross_check_status": "not_required"
       },
       "score": {
         "total": 115,
@@ -488,7 +672,7 @@
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
       "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI...",
-      "estimated_tokens": 850
+      "estimated_tokens": 1185
     },
     {
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
@@ -521,6 +705,44 @@
       "signal_quality_status": "weak_signal",
       "fallback_promotion_allowed": false,
       "soc_signal_source_allowed": true,
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "source_role": "engineering_blog_source",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "source_quality_status": "allowed",
+      "main_article_source_allowed": true,
+      "main_article_source_blockers": [],
+      "cross_check_status": "not_required",
+      "requires_cross_check": false,
+      "requires_conditional_evidence": true,
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "source_quality_field_drift": [],
+      "main_article_readiness": {
+        "ready": false,
+        "source_ready": true,
+        "hal_signal_ready": false,
+        "selection_input_ready": true,
+        "selection_ready": true,
+        "blockers": [
+          "hal_signal:actionability_none",
+          "hal_signal:fallback_promotion_missing_reason"
+        ]
+      },
       "component": "GCC",
       "what_changed": "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
@@ -559,7 +781,7 @@
         "briefing_only": false,
         "reference_only": false,
         "evidence_score": 8,
-        "cross_check_status": "not-required"
+        "cross_check_status": "not_required"
       },
       "score": {
         "total": 110.95,
@@ -583,7 +805,7 @@
       "url_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
       "imageCandidates": [],
       "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI...",
-      "estimated_tokens": 864
+      "estimated_tokens": 1199
     }
   ],
   "reserve_capsules": []
