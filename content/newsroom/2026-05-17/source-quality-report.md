@@ -41,10 +41,10 @@
 | blocked_candidate | 0.441 | AI & Machine Learning \| Google Cloud Blog | https://cloud.google.com/blog/products/ai-machine-learning |
 | blocked_candidate | 0.532 | Introduction &mdash; libcamera | https://libcamera.org/introduction.html |
 | blocked_candidate | 0.46 | Download LLVM releases | https://releases.llvm.org/ |
-| blocked_candidate | 0.265 | ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU | https://www.phoronix.com/review/zimacube-2 |
+| blocked_candidate | 0.37 | FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software | https://www.phoronix.com/news/FluidX3D-3.7-Released |
 | blocked_candidate | 0.583 | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 |
-| blocked_candidate | 0.583 | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02 |
-| blocked_candidate | 0.583 | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07 |
+| blocked_candidate | 0.492 | कैमराएक्स &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02 |
+| blocked_candidate | 0.492 | कैमराएक्स &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07 |
 | blocked_candidate | 0.5 | libcamera v0.7.1 | https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html |
 | blocked_candidate | 0.5 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++ | https://isocpp.org//blog/2026/04/gcc-16.1 |
 | blocked_candidate | 0.455 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more : Standard C++ | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
