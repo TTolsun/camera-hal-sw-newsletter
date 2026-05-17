@@ -616,24 +616,6 @@
       }
     },
     {
-      "candidate_id": "0e986b750ab50726",
-      "url": "https://openai.com/news/",
-      "title": "OpenAI News | OpenAI",
-      "source_quality_score": 0.464,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.38,
-        "android_hal_relevance": 0.38,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "debe55bcb645eab2",
       "url": "https://deepmind.google/blog/",
       "title": "News — Google DeepMind",
@@ -724,34 +706,34 @@
       }
     },
     {
-      "candidate_id": "gemini-54d4017dadc0b266",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "title": "CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
-      "source_quality_score": 0.583,
+      "candidate_id": "19216357ed8061ae",
+      "url": "https://www.phoronix.com/review/zimacube-2",
+      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
+      "source_quality_score": 0.265,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
+        "reliability_score": 0.2,
+        "camera_relevance": 0.53,
+        "android_hal_relevance": 0.53,
         "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
+        "marketing_only_penalty": 0.15
       }
     },
     {
-      "candidate_id": "gemini-7ef4ffea5e3a07c4",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "title": "libcamera v0.7.1",
-      "source_quality_score": 0.5,
+      "candidate_id": "gemini-54d4017dadc0b266",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "КамераX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
-        "reliability_score": 0.85,
+        "reliability_score": 1,
         "camera_relevance": 0.45,
         "android_hal_relevance": 0.45,
-        "technical_depth": 0.55,
+        "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -788,6 +770,24 @@
         "camera_relevance": 0.45,
         "android_hal_relevance": 0.45,
         "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-7ef4ffea5e3a07c4",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "title": "libcamera v0.7.1",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,

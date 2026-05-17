@@ -638,25 +638,6 @@
       ]
     },
     {
-      "candidate_id": "0e986b750ab50726",
-      "url": "https://openai.com/news/",
-      "title": "OpenAI News | OpenAI",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
       "candidate_id": "debe55bcb645eab2",
       "url": "https://deepmind.google/blog/",
       "title": "News — Google DeepMind",
@@ -752,16 +733,16 @@
       ]
     },
     {
-      "candidate_id": "gemini-54d4017dadc0b266",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "title": "CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
-      "deep_checked": true,
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
+      "candidate_id": "19216357ed8061ae",
+      "url": "https://www.phoronix.com/review/zimacube-2",
+      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
       "source_fetch_error": "",
-      "validation_mode": "source_fetch",
+      "validation_mode": "metadata_only",
       "unsupported_claims": 0,
-      "supported_claims": 1,
+      "supported_claims": 0,
       "final_selection_blocked": true,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
@@ -771,9 +752,9 @@
       ]
     },
     {
-      "candidate_id": "gemini-7ef4ffea5e3a07c4",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "title": "libcamera v0.7.1",
+      "candidate_id": "gemini-54d4017dadc0b266",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "КамераX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
       "deep_checked": true,
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -819,6 +800,25 @@
       "validation_mode": "metadata_only",
       "unsupported_claims": 0,
       "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
+      "candidate_id": "gemini-7ef4ffea5e3a07c4",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "title": "libcamera v0.7.1",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "unsupported_claims": 0,
+      "supported_claims": 1,
       "final_selection_blocked": true,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
