@@ -112,6 +112,22 @@ function evidenceValidationReportRelPath(date) {
   return newsroomRelPath(date, 'evidence-validation-report.json');
 }
 
+function sourceDiscoveryFeedbackReportPath(root, date) {
+  return newsroomArtifactPath(root, date, 'source-discovery-feedback-report.json');
+}
+
+function sourceDiscoveryFeedbackReportRelPath(date) {
+  return newsroomRelPath(date, 'source-discovery-feedback-report.json');
+}
+
+function sourceDiscoveryFeedbackReportMarkdownPath(root, date) {
+  return newsroomArtifactPath(root, date, 'source-discovery-feedback-report.md');
+}
+
+function sourceDiscoveryFeedbackReportMarkdownRelPath(date) {
+  return newsroomRelPath(date, 'source-discovery-feedback-report.md');
+}
+
 function rawCandidateManifestPath(root, date) {
   return path.join(collectedNewsDir(root, date), 'raw-candidate-manifest.json');
 }
@@ -173,6 +189,10 @@ module.exports = {
   newsroomRelPath,
   rawCandidateManifestPath,
   rawCandidateManifestRelPath,
+  sourceDiscoveryFeedbackReportMarkdownPath,
+  sourceDiscoveryFeedbackReportMarkdownRelPath,
+  sourceDiscoveryFeedbackReportPath,
+  sourceDiscoveryFeedbackReportRelPath,
   sourceClustersPath,
   sourceClustersRelPath,
   sourceQualityReportMarkdownPath,

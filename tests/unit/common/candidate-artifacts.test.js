@@ -21,7 +21,11 @@ const {
   mergedCandidatesPath,
   mergedCandidatesRelPath,
   rawCandidateManifestPath,
-  rawCandidateManifestRelPath
+  rawCandidateManifestRelPath,
+  sourceDiscoveryFeedbackReportMarkdownPath,
+  sourceDiscoveryFeedbackReportMarkdownRelPath,
+  sourceDiscoveryFeedbackReportPath,
+  sourceDiscoveryFeedbackReportRelPath
 } = require('../../../scripts/newsroom/common/artifact-paths');
 const {
   CandidateArtifactValidationError,
@@ -33,6 +37,7 @@ const {
 } = require('../../../scripts/newsroom/common/candidate-artifacts');
 const {
   FAILED_LLM_CREDENTIALS,
+  buildSourceDiscoveryFeedbackReport,
   run: runSourceDiscoveryBoundary
 } = require('../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
 
@@ -63,7 +68,12 @@ function candidatePayload(title = 'CameraX release', overrides = {}) {
         title,
         url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
         reliability: 'official',
-        relevance_bucket: 'android_platform_camera_adjacent'
+        source_id: 'camerax-release-notes',
+        source: 'CameraX Release Notes',
+        relevance_bucket: 'android_platform_camera_adjacent',
+        finalSelectionEligibility: 'short',
+        final_selection_eligibility: 'short',
+        main_eligible: true
       }
     ],
     failures: [],
@@ -81,9 +91,13 @@ test('candidate artifact paths expose manual, merged, and manifest contracts', (
   assert.equal(geminiCandidatesRelPath(date), 'content/collected-news/2026-05-16/gemini-candidates.json');
   assert.equal(rawCandidateManifestRelPath(date), 'content/collected-news/2026-05-16/raw-candidate-manifest.json');
   assert.equal(mergedCandidateManifestRelPath(date), 'content/collected-news/2026-05-16/merged-candidate-manifest.json');
+  assert.equal(sourceDiscoveryFeedbackReportRelPath(date), 'content/newsroom/2026-05-16/source-discovery-feedback-report.json');
+  assert.equal(sourceDiscoveryFeedbackReportMarkdownRelPath(date), 'content/newsroom/2026-05-16/source-discovery-feedback-report.md');
   assert.equal(path.basename(manualCandidatesPath(root, date)), 'manual-candidates.json');
   assert.equal(path.basename(mergedCandidatesPath(root, date)), 'merged-candidates.json');
   assert.equal(path.basename(geminiCandidatesPath(root, date)), 'gemini-candidates.json');
+  assert.equal(path.basename(sourceDiscoveryFeedbackReportPath(root, date)), 'source-discovery-feedback-report.json');
+  assert.equal(path.basename(sourceDiscoveryFeedbackReportMarkdownPath(root, date)), 'source-discovery-feedback-report.md');
 });
 
 test('manual candidate writer creates canonical and compatibility payloads with raw manifest', () => {
@@ -366,6 +380,131 @@ test('Stage 2 disabled pass-through writes merged artifact, manifest, and report
   assert.match(report, /merged_unique_url_count=1/);
   assert.match(report, /gemini_candidate_artifact=content\/collected-news\/2026-05-16\/gemini-candidates\.json/);
   assert.match(report, /merge_mode=disabled_pass_through/);
+  assert.match(report, /## Parser\/source feedback/);
+  assert.match(report, /parser_gap_count=1/);
+  assert.match(report, /duplicate_discovery_gap_count=0/);
+  assert.match(report, /source_discovery_feedback_report_markdown=content\/newsroom\/2026-05-16\/source-discovery-feedback-report\.md/);
+  const feedback = readJson(sourceDiscoveryFeedbackReportPath(root, date));
+  assert.equal(feedback.status, 'WARNING');
+  assert.equal(feedback.parser_gap_count, 1);
+  assert.equal(feedback.duplicate_discovery_gap_count, 0);
+  assert.equal(feedback.items[0].action, 'PARSER_REPAIR_REQUIRED');
+  assert.equal(feedback.items[0].reason, 'missing_source_extraction');
+  assert.equal(feedback.items[0].adapter_hint, 'android-developers-jetpack-release');
+  assert.equal(feedback.items[0].duplicate_discovered_by_gemini, false);
+  assert.equal(feedback.items[0].duplicate_match_type, null);
+  assert.equal(feedback.items[0].source_gap_risk, false);
+  assert.equal(feedback.items[0].evidence_validation_status, null);
+  assert.equal(feedback.items[0].final_selection_eligibility, 'short');
+  assert.equal(feedback.items[0].confidence, 'high');
+  assert.match(fs.readFileSync(sourceDiscoveryFeedbackReportMarkdownPath(root, date), 'utf8'), /PARSER_REPAIR_REQUIRED/);
+});
+
+test('Stage 2 feedback distinguishes normalized exact duplicate URLs from same page family matches', () => {
+  const date = '2026-05-16';
+  const manualCandidate = candidatePayload().candidates[0];
+  const exactReport = buildSourceDiscoveryFeedbackReport({
+    date,
+    manualCandidates: [manualCandidate],
+    mergedCandidates: [manualCandidate],
+    geminiCandidates: [{
+      origin: 'gemini_discovery',
+      title: 'CameraX release notes',
+      url: 'https://WWW.Developer.Android.com/jetpack/androidx/releases/camera/?hl=ko#1.6.1'
+    }]
+  });
+
+  assert.equal(exactReport.duplicate_discovery_gap_count, 1);
+  assert.equal(exactReport.items[0].duplicate_discovered_by_gemini, true);
+  assert.equal(exactReport.items[0].duplicate_match_type, 'exact_normalized_url');
+
+  const familyReport = buildSourceDiscoveryFeedbackReport({
+    date,
+    manualCandidates: [manualCandidate],
+    mergedCandidates: [manualCandidate],
+    geminiCandidates: [{
+      origin: 'gemini_discovery',
+      title: 'CameraX release notes',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07'
+    }]
+  });
+
+  assert.equal(familyReport.duplicate_discovery_gap_count, 1);
+  assert.equal(familyReport.items[0].duplicate_discovered_by_gemini, true);
+  assert.equal(familyReport.items[0].duplicate_match_type, 'same_release_page_family');
+});
+
+test('Stage 2 feedback still surfaces known official parser-backed URLs with source_gap_risk context', () => {
+  const date = '2026-05-16';
+  const candidate = {
+    ...candidatePayload().candidates[0],
+    source_gap_risk: true,
+    evidence_validation_status: 'fail',
+    source_quality_bucket: 'strong_candidate'
+  };
+
+  const report = buildSourceDiscoveryFeedbackReport({
+    date,
+    manualCandidates: [candidate],
+    mergedCandidates: [candidate],
+    geminiCandidates: []
+  });
+
+  assert.equal(report.status, 'WARNING');
+  assert.equal(report.parser_gap_count, 1);
+  assert.equal(report.items[0].source_gap_risk, true);
+  assert.equal(report.items[0].evidence_validation_status, 'fail');
+  assert.equal(report.items[0].source_quality_bucket, 'strong_candidate');
+  assert.equal(report.items[0].confidence, 'medium');
+});
+
+test('Stage 2 feedback does not flag valid concrete source_extraction bullets', () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload('CameraX 1.6.1', {
+    candidates: [{
+      title: 'CameraX 1.6.1',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      reliability: 'official',
+      source_id: 'camerax-release-notes',
+      finalSelectionEligibility: 'short',
+      final_selection_eligibility: 'short',
+      main_eligible: true,
+      source_extraction: {
+        extraction_quality: {
+          main_article_allowed: true,
+          used_fallback: false
+        },
+        release: {
+          version: 'CameraX 1.6.1',
+          sections: [{
+            title: 'Bug Fixes',
+            items: [{
+              text: 'Fixed a compilation error when using CameraX 1.6.0.'
+            }]
+          }]
+        }
+      }
+    }]
+  });
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  const result = runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'false'
+    }
+  });
+
+  const feedback = readJson(sourceDiscoveryFeedbackReportPath(root, date));
+  assert.equal(feedback.status, 'PASS');
+  assert.equal(feedback.parser_gap_count, 0);
+  assert.deepEqual(feedback.items, []);
+  const report = fs.readFileSync(result.reportPath, 'utf8');
+  assert.match(report, /## Parser\/source feedback/);
+  assert.match(report, /parser_gap_count=0/);
 });
 
 test('Stage 2 enabled without credentials writes failure report without mutating candidate artifacts', async () => {
@@ -502,6 +641,8 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.equal(manifest.gemini_publishable_candidate_count, 1);
   assert.equal(manifest.usage_report, 'content/newsroom/2026-05-16/gemini-usage-report.json');
   assert.equal(manifest.proposal_validation_report, 'content/newsroom/2026-05-16/gemini-source-proposal-validation-report.json');
+  assert.equal(manifest.source_discovery_feedback_report, 'content/newsroom/2026-05-16/source-discovery-feedback-report.json');
+  assert.equal(manifest.source_discovery_feedback_report_markdown, 'content/newsroom/2026-05-16/source-discovery-feedback-report.md');
   const usage = readJson(geminiUsageReportPath(root, date));
   assert.equal(usage.requested_attempt_count, 1);
   assert.equal(usage.successful_response_count, 1);
@@ -527,6 +668,16 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.match(report, /gemini_manual_duplicate_url_count=0/);
   assert.match(report, /gemini_publishable_candidate_count=1/);
   assert.match(report, /proposal_validation_report=content\/newsroom\/2026-05-16\/gemini-source-proposal-validation-report\.json/);
+  assert.match(report, /## Parser\/source feedback/);
+  assert.match(report, /parser_gap_count=1/);
+  assert.match(report, /duplicate_discovery_gap_count=1/);
+  const feedback = readJson(sourceDiscoveryFeedbackReportPath(root, date));
+  assert.equal(feedback.status, 'WARNING');
+  assert.equal(feedback.parser_gap_count, 1);
+  assert.equal(feedback.duplicate_discovery_gap_count, 1);
+  assert.equal(feedback.items[0].duplicate_discovered_by_gemini, true);
+  assert.equal(feedback.items[0].duplicate_match_type, 'same_release_page_family');
+  assert.equal(feedback.items[0].selector_exclusion_reason, 'CameraX release-note candidate has no concrete source_extraction bullet');
 
   fs.unlinkSync(geminiSourceProposalValidationReportPath(root, date));
   assert.throws(
