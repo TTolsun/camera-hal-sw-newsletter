@@ -8,7 +8,8 @@ const {
   qualityGatePolicy
 } = require('../common/newsletter-policy');
 const {
-  newsroomRelPath
+  newsroomRelPath,
+  seedEvidencePackRelPath
 } = require('../common/artifact-paths');
 const {
   strictTargetDates
@@ -202,6 +203,7 @@ function maybeAnnotateQuality({
   factCheck,
   shortlist,
   staleClaim,
+  seedEvidencePack,
   strictClaimValidation = false
 }) {
   const relPath = newsroomRelPath(date, 'quality-report.json');
@@ -273,7 +275,8 @@ function maybeAnnotateQuality({
       threshold,
       shortlistReport: shortlist.value || null,
       staleClaimReport: staleClaim.value || null,
-      strictClaimValidation
+      strictClaimValidation,
+      seedEvidencePack: seedEvidencePack?.value || null
     });
     if (recomputed.score !== score || recomputed.status !== report.status) {
       addAnnotation(
@@ -427,6 +430,7 @@ function collectPublicationQualityAnnotations(options = {}) {
     const generationStatus = readJsonOptional(root, `${relBase}/generation-status.json`);
     const shortlist = readJsonOptional(root, `${relBase}/shortlisted-candidates.json`);
     const staleClaim = readJsonOptional(root, `${relBase}/stale-claim-report.json`);
+    const seedEvidencePack = readJsonOptional(root, seedEvidencePackRelPath(date));
 
     maybeAnnotateQuality({
       annotations,
@@ -437,6 +441,7 @@ function collectPublicationQualityAnnotations(options = {}) {
       factCheck,
       shortlist,
       staleClaim,
+      seedEvidencePack,
       strictClaimValidation: strictDates.has(date) || process.env.REQUIRE_NEWSLETTER_QUALITY === '1'
     });
     maybeAnnotateFactCheck({

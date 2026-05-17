@@ -1751,13 +1751,15 @@ function reportItemTitle(item) {
 
 function reportItemReason(item) {
   if (typeof item === 'string') return item;
-  return firstText([
+  const reason = firstText([
     item?.reason,
     item?.problem,
     item?.message,
     ensureArray(item?.hard_fail_reasons).join('; '),
     ensureArray(item?.soft_deductions).map(entry => entry.reason || entry.category).join('; ')
   ]) || 'no explicit reason';
+  const reasonCode = firstText([item?.reason_code, item?.reasonCode]);
+  return reasonCode ? `${reasonCode}: ${reason}` : reason;
 }
 
 function addReportLink(links, index, item, report, status, label, statusHint) {

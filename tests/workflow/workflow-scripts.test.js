@@ -2583,7 +2583,16 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
   });
   writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
     status: 'NEEDS_FIX',
-    deductions: [],
+    deductions: [
+      {
+        category: 'claim-source-binding',
+        points: 8,
+        reason: 'Claim references unresolved evidence_id.',
+        reason_code: 'unknown_evidence_id',
+        location: reportOnlyCandidate.title,
+        blocking: true
+      }
+    ],
     article_results: [
       {
         index: 1,
@@ -2660,6 +2669,7 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
   assert.match(body, /Report only HAL evidence/);
   assert.match(body, /quality_fail/);
   assert.match(body, /quality-report\.json/);
+  assert.match(body, /unknown_evidence_id: Claim references unresolved evidence_id\./);
   assert.match(body, /fact-check-report\.json/);
   assert.match(body, /hard_fail/);
   assert.match(body, /must_fix/);
@@ -2668,7 +2678,7 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
   assert.match(body, /source_id \+ release\.version/);
   assert.match(body, /event-bundles\.json/);
   assert.match(body, /unmatched 품질\/팩트체크 연결 항목: 1/);
-  assert.match(body, /\| 4 \| unmatched \| Unmatched article \| fact-check-report\.json \| source_gap \|/);
+  assert.match(body, /\|\s*\d+\s*\| unmatched \| Unmatched article \| fact-check-report\.json \| source_gap \|/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 

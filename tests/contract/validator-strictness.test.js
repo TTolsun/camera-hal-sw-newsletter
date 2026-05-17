@@ -24,14 +24,15 @@ const repoRoot = path.join(__dirname, '..', '..');
 const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');
 const validateQualityPath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-quality.js');
 
-function runScript(scriptPath, root) {
+function runScript(scriptPath, root, env = {}) {
   return spawnSync(process.execPath, [scriptPath], {
     cwd: root,
     encoding: 'utf8',
     env: {
       ...process.env,
       GITHUB_EVENT_NAME: '',
-      GITHUB_BASE_REF: ''
+      GITHUB_BASE_REF: '',
+      ...env
     }
   });
 }
@@ -191,6 +192,32 @@ function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {})
   if (strict) {
     writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   }
+}
+
+function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictReport = false } = {}) {
+  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+    date,
+    title: 'Camera HAL SW Newsletter',
+    summary: 'Summary',
+    html: `newsletters/${date}/index.html`,
+    md: `newsletters/${date}/newsletter.md`,
+    tags: ['camera-hal']
+  }]);
+  const sections = validSections(articlePolicy.mainArticleCount.min).map(item => {
+    const { claims, ...rest } = item;
+    return rest;
+  });
+  const editor = { briefing: ['one', 'two', 'three'], sections };
+  const reporter = { candidates: reporterCandidatesFor(sections) };
+  const factCheck = { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 };
+  const report = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
+    strictClaimValidation: strictReport
+  });
+  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
+  writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
+  writeJson(path.join(newsroomDir, 'fact-check-report.json'), factCheck);
+  writeJson(path.join(newsroomDir, 'quality-report.json'), report);
 }
 
 test('historical validate-site article count drift is warning-only', () => {
@@ -379,6 +406,30 @@ test('strict validate-quality threshold and recompute drift remain hard failures
   assert.match(result.stderr, /quality report is stale/);
 });
 
+test('historical validate-quality missing claims report is warning-only', () => {
+  const root = tempRoot('validate-quality-historical-missing-claims-');
+  writeMissingClaimsQualityFixture(root, { strictReport: true });
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /quality score \d+\/85 does not pass: NEEDS_FIX/);
+  assert.match(result.stderr, /historical artifact outside current\/changed\/generated validation target, warning only/);
+});
+
+test('newsletter date target makes validate-quality missing claims strict', () => {
+  const root = tempRoot('validate-quality-newsletter-date-missing-claims-');
+  const date = '2026-04-01';
+  writeMissingClaimsQualityFixture(root, { date });
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /quality report is stale/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
+});
+
 test('current generation status date makes validate-quality strict', () => {
   const root = tempRoot('validate-quality-current-generation-');
   const date = '2026-04-01';
@@ -395,6 +446,36 @@ test('current generation status date makes validate-quality strict', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /quality threshold is below current Newsletter Policy threshold/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
+});
+
+test('current canonical generation-status date makes validate-quality strict', () => {
+  const root = tempRoot('validate-quality-current-canonical-generation-');
+  const date = '2026-04-01';
+  writeMissingClaimsQualityFixture(root, { date });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    status: 'STAGE_3_QUALITY',
+    run_context: {
+      github_sha: 'current-sha'
+    }
+  });
+
+  const result = runScript(validateQualityPath, root, { GITHUB_SHA: 'current-sha' });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /quality report is stale/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
+});
+
+test('REQUIRE_NEWSLETTER_QUALITY forces strict missing claims validation', () => {
+  const root = tempRoot('validate-quality-require-quality-missing-claims-');
+  writeMissingClaimsQualityFixture(root);
+
+  const result = runScript(validateQualityPath, root, { REQUIRE_NEWSLETTER_QUALITY: '1' });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /quality report is stale/);
   assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
 });
 

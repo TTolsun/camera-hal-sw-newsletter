@@ -7,7 +7,8 @@ const { qualityGatePolicy } = require('../common/newsletter-policy');
 const { readJson } = require('../common/common');
 const {
   newsroomDir,
-  newsroomRelPath
+  newsroomRelPath,
+  seedEvidencePackPath
 } = require('../common/artifact-paths');
 const {
   historicalPolicyWarningReason,
@@ -41,6 +42,25 @@ function currentGenerationStatusDate(filePath = generationStatusPath) {
   } catch (_) {
     return '';
   }
+}
+
+function currentCanonicalGenerationStatusDates(items = []) {
+  const currentSha = String(process.env.GITHUB_SHA || '').trim();
+  if (!currentSha) return new Set();
+  const dates = new Set();
+  for (const item of items) {
+    const filePath = path.join(newsroomDir(root, item.date), 'generation-status.json');
+    if (!fs.existsSync(filePath)) continue;
+    try {
+      const parsed = readJson(filePath);
+      const statusSha = String(parsed?.run_context?.github_sha || '').trim();
+      const date = String(parsed?.date || item.date || '').trim();
+      if (statusSha === currentSha && /^\d{4}-\d{2}-\d{2}$/.test(date)) dates.add(date);
+    } catch (error) {
+      fail(`Invalid JSON in ${path.relative(root, filePath)}: ${error.message}`);
+    }
+  }
+  return dates;
 }
 
 function readJsonIfExists(filePath) {
@@ -117,12 +137,14 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
   const reporter = readJsonIfExists(path.join(dateNewsroomDir, 'reporter-candidates.json')) || {};
   const shortlistReport = readJsonIfExists(path.join(dateNewsroomDir, 'shortlisted-candidates.json')) || null;
   const staleClaimReport = readJsonIfExists(path.join(dateNewsroomDir, 'stale-claim-report.json')) || null;
+  const seedEvidencePack = readJsonIfExists(seedEvidencePackPath(root, item.date)) || null;
   if (editor && factCheck) {
     const recomputed = buildNewsletterQualityReport(item.date, editor, reporter, factCheck, {
       threshold,
       shortlistReport,
       staleClaimReport,
-      strictClaimValidation: strictPolicy
+      strictClaimValidation: strictPolicy,
+      seedEvidencePack
     });
     if (recomputed.score !== score || recomputed.status !== report.status) {
       const message = `Newsletter ${item.date} quality report is stale. Expected ${recomputed.score}/${threshold} ${recomputed.status}, found ${score}/${threshold} ${report.status}.`;
@@ -138,8 +160,10 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
 const strictDates = strictTargetDates({ root, newsletterDatePath });
 const currentGenerationDate = currentGenerationStatusDate(generationStatusPath);
 if (currentGenerationDate) strictDates.add(currentGenerationDate);
+const items = newsletterItems();
+for (const date of currentCanonicalGenerationStatusDates(items)) strictDates.add(date);
 const requireAllReports = process.env.REQUIRE_NEWSLETTER_QUALITY === '1';
-for (const item of newsletterItems()) {
+for (const item of items) {
   const strictPolicy = requireAllReports || strictDates.has(item.date);
   validateQualityReport(item, {
     requireReport: strictPolicy,

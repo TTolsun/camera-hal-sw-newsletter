@@ -22,6 +22,43 @@ const {
   qualityGatePolicy
 } = require('../../scripts/lib/newsletter-policy');
 
+function seedEvidencePack(packs = []) {
+  return {
+    schema_version: 1,
+    report_type: 'seed_evidence_pack',
+    packs
+  };
+}
+
+function seedPack({
+  packId = 'seed-camerax-pack',
+  seedId = 'seed-camerax',
+  sourceId = '',
+  url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+  evidenceId = 'seed-camerax-primary-01',
+  title = 'CameraX 1.6.1 claim binding',
+  fact = 'CameraX 1.6.1 release date: 2026-05-06.',
+  publishedAt = '2026-05-06'
+} = {}) {
+  return {
+    evidence_pack_id: packId,
+    seed_id: seedId,
+    source_id: sourceId,
+    seed_url: url,
+    final_url: url,
+    title,
+    primary_evidence: [{
+      evidence_id: evidenceId,
+      url,
+      title,
+      published_at: publishedAt,
+      source_backed_items: [fact]
+    }],
+    linked_evidence: [],
+    do_not_claim: []
+  };
+}
+
 const hardFailRegressionCases = new Map([
   ['source-less main article', {
     name: 'hardFailCondition: source-less main article remains blocking in the quality gate',
@@ -548,6 +585,175 @@ test('pack-level evidence fallback is soft and reported as derived mapping', () 
     item.reason_code === 'derived_evidence_mapping' &&
     item.blocking === false
   ));
+});
+
+test('claim results expose stable status and markdown diagnostics', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'CameraX 1.6.1 claim status article',
+    url,
+    confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+    evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-1',
+      text: 'CameraX 1.6.1 release date: 2026-05-06.',
+      claim_type: 'fact',
+      evidence_ids: ['seed-camerax-primary-01'],
+      source_urls: [url],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url]
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+  const claim = report.claim_results.find(item => item.claim_id === 'claim-1');
+  assert.equal(claim.status, 'bound');
+  assert.equal(claim.article_headline, 'CameraX 1.6.1 claim status article');
+  assert.deepEqual(claim.invalid_evidence_ids, []);
+  assert.deepEqual(claim.blocked_evidence_ids, []);
+
+  const markdown = buildQualityReportMarkdown(report);
+  assert.match(markdown, /\| Article \| Claim \| Type \| Status \| Impact \| Risk \| Reason codes \| Evidence \| Source \|/);
+  assert.match(markdown, /CameraX 1\.6\.1 claim status article/);
+  assert.match(markdown, /\| fact \| bound \| app_api_or_framework_adjacent \| low \|/);
+});
+
+test('seed evidence pack unmatched and title fallback diagnostics are soft and explicit', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const unmatchedArticle = section({
+    headline: 'Seed pack unmatched article',
+    url,
+    confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+    evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-unmatched',
+      text: 'CameraX 1.6.1 release date: 2026-05-06.',
+      claim_type: 'fact',
+      evidence_ids: ['seed-camerax-primary-01'],
+      source_urls: [url],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const fallbackCandidateUrl = 'https://example.com/title-fallback-candidate';
+  const fallbackEvidenceUrl = 'https://example.com/title-fallback#1.0';
+  const fallbackArticle = section({
+    headline: 'Title fallback seed article',
+    url: fallbackCandidateUrl,
+    confirmed_facts: ['CameraX fallback release date: 2026-05-06.'],
+    evidence_summary: 'Version: CameraX fallback; release date: 2026-05-06; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-fallback',
+      text: 'CameraX fallback release date: 2026-05-06.',
+      claim_type: 'fact',
+      evidence_ids: ['seed-fallback-primary-01'],
+      source_urls: [fallbackEvidenceUrl],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const report = reportFor(
+    [unmatchedArticle, fallbackArticle, ...validSections().slice(2)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        evidence_pack_ids: ['missing-pack'],
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url]
+        }
+      }),
+      scopedCandidate(fallbackCandidateUrl, 'android_platform_camera_adjacent', {
+        title: 'Title fallback seed article',
+        source_id: 'fallback-source',
+        evidence_pack_ids: [],
+        seed_ids: [],
+        primary_evidence_ids: [],
+        compact_evidence: {
+          evidence_urls: [fallbackCandidateUrl]
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(2)
+    ],
+    {
+      strictClaimValidation: true,
+      seedEvidencePack: seedEvidencePack([
+        seedPack({
+          packId: 'fallback-pack',
+          seedId: 'fallback-seed',
+          sourceId: 'fallback-source',
+          url: fallbackEvidenceUrl,
+          evidenceId: 'seed-fallback-primary-01',
+          title: 'Title fallback seed article',
+          fact: 'CameraX fallback release date: 2026-05-06.'
+        })
+      ])
+    }
+  );
+
+  assert.ok(report.deductions.some(item =>
+    item.reason_code === 'seed_evidence_pack_unmatched' &&
+    item.blocking === false
+  ));
+  assert.ok(report.deductions.some(item =>
+    item.reason_code === 'seed_evidence_pack_title_fallback_rejected' &&
+    item.blocking === false
+  ));
+  const fallbackClaim = report.claim_results.find(item => item.claim_id === 'claim-fallback');
+  assert.equal(fallbackClaim.status, 'needs_fix');
+  assert.ok(fallbackClaim.invalid_evidence_ids.includes('seed-fallback-primary-01'));
+  assert.match(buildQualityReportMarkdown(report), /seed_evidence_pack_title_fallback_rejected/);
+  assert.equal(report.uncovered_facts.every(item => item.article_headline), true);
+});
+
+test('claim results separate source mismatched evidence ids from invalid evidence ids', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'CameraX mismatched source claim',
+    url,
+    confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+    evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-source-mismatch',
+      text: 'CameraX 1.6.1 release date: 2026-05-06.',
+      claim_type: 'fact',
+      evidence_ids: ['seed-camerax-primary-01'],
+      source_urls: ['https://example.com/wrong-source#1.6.1'],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url]
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+
+  const claim = report.claim_results.find(item => item.claim_id === 'claim-source-mismatch');
+  assert.deepEqual(claim.invalid_evidence_ids, []);
+  assert.deepEqual(claim.source_mismatched_evidence_ids, ['seed-camerax-primary-01']);
+  assert.ok(report.deductions.some(item => item.reason_code === 'source_url_fragment_mismatch'));
 });
 
 test('claim-level direct HAL overclaim is reported once by dedupe key', () => {
