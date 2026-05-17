@@ -1,6 +1,27 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const test = require('node:test');
 
+const {
+  collectionIntentPath,
+  geminiCandidatesPath,
+  manualCandidatesPath,
+  mergedCandidateManifestPath,
+  mergedCandidatesPath,
+  seedCandidatesPath,
+  seedEvidencePackPath
+} = require('../../../scripts/newsroom/common/artifact-paths');
+const {
+  writeManualCandidateArtifacts,
+  writeMergedCandidateArtifacts
+} = require('../../../scripts/newsroom/common/candidate-artifacts');
+const {
+  FAILED_LLM_CREDENTIALS,
+  SEED_ONLY_LLM_CREDENTIALS_MISSING,
+  run: runSourceDiscoveryBoundary
+} = require('../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
 const {
   promoteProposalUrls
 } = require('../../../scripts/newsroom/collect/gemini-source-discovery');
@@ -28,6 +49,45 @@ function registry() {
   };
 }
 
+function tempRoot() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'gemini-source-discovery-'));
+  fs.mkdirSync(path.join(root, 'data'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'data', 'news-sources.json'), JSON.stringify({
+    schemaVersion: 2,
+    sources: registry().sources
+  }, null, 2), 'utf8');
+  return root;
+}
+
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+}
+
+function writeJson(filePath, value) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+}
+
+function candidatePayload(date = '2026-05-16') {
+  return {
+    schema_version: 5,
+    date,
+    newsletter_date: date,
+    generated_at: '2026-05-16T00:00:00.000Z',
+    candidates: [{
+      title: 'Manual CameraX release',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera#manual',
+      source_id: 'camerax-release-notes',
+      source: 'CameraX Release Notes',
+      reliability: 'official',
+      finalSelectionEligibility: 'short',
+      final_selection_eligibility: 'short',
+      main_eligible: true
+    }],
+    failures: []
+  };
+}
+
 function proposal(proposalId) {
   return {
     schema_version: 1,
@@ -51,6 +111,88 @@ async function fetchOk() {
     text: async () => '<html><head><title>CameraX release notes</title><meta name="datePublished" content="2026-05-15"></head></html>'
   };
 }
+
+test('enabled boundary writes seed-only artifacts when Gemini credentials are missing after approved seed expansion', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  writeJson(collectionIntentPath(root, date), {
+    schema_version: 1,
+    newsletter_date: date,
+    seed_urls: [{
+      seed_id: 'seed-camerax',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+      expected_topic: 'CameraX release notes'
+    }],
+    keyword_hints: []
+  });
+  writeManualCandidateArtifacts({
+    root,
+    date,
+    payload: candidatePayload(date),
+    sourceCount: 1
+  });
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true'
+    },
+    lookupImpl: async () => [{ address: '93.184.216.34', family: 4 }],
+    fetchImpl: async (url) => ({
+      ok: true,
+      status: 200,
+      url,
+      headers: { get: () => '' },
+      text: async () => '<html><head><title>CameraX 1.6.1 release notes</title><meta name="datePublished" content="2026-05-15"></head><body>2026-05-15 CameraX 1.6.1 fixes Android camera stream validation.</body></html>'
+    })
+  });
+
+  assert.equal(result.status, 'PASS');
+  assert.equal(result.status_detail, SEED_ONLY_LLM_CREDENTIALS_MISSING);
+  assert.equal(fs.existsSync(seedCandidatesPath(root, date)), true);
+  assert.equal(fs.existsSync(seedEvidencePackPath(root, date)), true);
+  assert.equal(fs.existsSync(geminiCandidatesPath(root, date)), true);
+  const manifest = readJson(mergedCandidateManifestPath(root, date));
+  assert.equal(manifest.status, 'PASS');
+  assert.equal(manifest.status_detail, SEED_ONLY_LLM_CREDENTIALS_MISSING);
+  assert.equal(manifest.merge_mode, 'seed_evidence_expansion');
+  assert.equal(manifest.llm_used, false);
+  assert.equal(manifest.seed_used, true);
+  const report = fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'gemini-source-discovery-report.md'), 'utf8');
+  assert.match(report, /status_detail=SEED_ONLY_LLM_CREDENTIALS_MISSING/);
+  assert.match(report, /Gemini discovery was skipped because LLM credentials were missing/);
+});
+
+test('enabled boundary without seed keeps missing credential path strictly no-mutation', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload(date);
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+  writeMergedCandidateArtifacts({ root, date, payload, geminiPayload: [] });
+  const beforeMerged = fs.readFileSync(mergedCandidatesPath(root, date), 'utf8');
+  const beforeManifest = fs.readFileSync(mergedCandidateManifestPath(root, date), 'utf8');
+
+  await assert.rejects(
+    () => runSourceDiscoveryBoundary({
+      root,
+      date,
+      env: {
+        NEWSLETTER_DATE: date,
+        NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true'
+      }
+    }),
+    error => error.status === FAILED_LLM_CREDENTIALS
+  );
+
+  assert.equal(fs.readFileSync(mergedCandidatesPath(root, date), 'utf8'), beforeMerged);
+  assert.equal(fs.readFileSync(mergedCandidateManifestPath(root, date), 'utf8'), beforeManifest);
+  assert.equal(fs.existsSync(seedCandidatesPath(root, date)), false);
+  assert.equal(fs.existsSync(seedEvidencePackPath(root, date)), false);
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'gemini-source-discovery-report.md')), false);
+  assert.equal(fs.existsSync(manualCandidatesPath(root, date)), true);
+});
 
 test('promoted Gemini candidate id is stable for the normalized URL across proposal ids', async () => {
   const first = await promoteProposalUrls({

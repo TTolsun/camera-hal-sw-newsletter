@@ -46,6 +46,24 @@ async function publicLookup() {
   return [{ address: '93.184.216.34', family: 4 }];
 }
 
+function htmlResponse({
+  status = 200,
+  ok = status < 400,
+  url = '',
+  body = '',
+  location = ''
+} = {}) {
+  return {
+    status,
+    ok,
+    url,
+    headers: {
+      get: name => String(name || '').toLowerCase() === 'location' ? location : ''
+    },
+    text: async () => body
+  };
+}
+
 test('seed URL safety rejects non-public URLs and private DNS resolution', async () => {
   await assert.rejects(
     () => assertPublicHttpsUrl('http://developer.android.com/jetpack/androidx/releases/camera', { lookupImpl: null }),
@@ -73,21 +91,137 @@ test('seed URL safety rejects non-public URLs and private DNS resolution', async
     }),
     /dns_resolved_private_address/
   );
+  await assert.rejects(
+    () => assertPublicHttpsUrl('https://example.com/news', {
+      lookupImpl: async () => [{ address: '::ffff:169.254.169.254', family: 6 }]
+    }),
+    /dns_resolved_private_address/
+  );
+  await assert.rejects(
+    () => assertPublicHttpsUrl('https://[::ffff:127.0.0.1]/news', { lookupImpl: null }),
+    /blocked_internal_host/
+  );
+  await assert.rejects(
+    () => assertPublicHttpsUrl('https://[fc00::1]/news', { lookupImpl: null }),
+    /blocked_internal_host/
+  );
+  await assert.rejects(
+    () => assertPublicHttpsUrl('https://[fe80::1]/news', { lookupImpl: null }),
+    /blocked_internal_host/
+  );
+  await assert.rejects(
+    () => assertPublicHttpsUrl('https://[febf::1]/news', { lookupImpl: null }),
+    /blocked_internal_host/
+  );
 });
 
-test('seed fetch validates redirect target as public https', async () => {
+test('seed fetch follows public manual redirects and relative locations', async () => {
+  const calls = [];
+  const body = '<html><head><title>OK</title></head><body>done</body></html>';
+  const result = await fetchPublicText(
+    async (url, options) => {
+      calls.push({ url, redirect: options.redirect });
+      if (calls.length === 1) {
+        return htmlResponse({
+          status: 302,
+          ok: false,
+          url,
+          location: 'https://developer.android.com/jetpack/androidx/releases/camera'
+        });
+      }
+      if (calls.length === 2) {
+        return htmlResponse({
+          status: 302,
+          ok: false,
+          url,
+          location: '/jetpack/androidx/releases/camera#1.6.1'
+        });
+      }
+      return htmlResponse({
+        status: 200,
+        ok: true,
+        url,
+        body
+      });
+    },
+    'https://example.com/news',
+    { lookupImpl: publicLookup }
+  );
+
+  assert.deepEqual(calls.map(call => call.redirect), ['manual', 'manual', 'manual']);
+  assert.equal(result.finalUrl, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+  assert.match(result.body, /done/);
+});
+
+test('seed fetch blocks private redirect before following it', async () => {
+  let callCount = 0;
   await assert.rejects(
     () => fetchPublicText(
-      async () => ({
-        ok: true,
-        url: 'https://192.168.0.10/private',
-        text: async () => 'private target'
-      }),
+      async (url) => {
+        callCount += 1;
+        return htmlResponse({
+          status: 302,
+          ok: false,
+          url,
+          location: 'https://192.168.0.10/private'
+        });
+      },
       'https://example.com/news',
       { lookupImpl: publicLookup }
     ),
     /blocked_internal_host/
   );
+  assert.equal(callCount, 1);
+});
+
+test('seed fetch validates redirect target DNS before following it', async () => {
+  let callCount = 0;
+  await assert.rejects(
+    () => fetchPublicText(
+      async (url) => {
+        callCount += 1;
+        return htmlResponse({
+          status: 302,
+          ok: false,
+          url,
+          location: 'https://redirect.example.com/private'
+        });
+      },
+      'https://example.com/news',
+      {
+        lookupImpl: async (hostname) => hostname === 'redirect.example.com'
+          ? [{ address: '10.0.0.9', family: 4 }]
+          : [{ address: '93.184.216.34', family: 4 }]
+      }
+    ),
+    /dns_resolved_private_address/
+  );
+  assert.equal(callCount, 1);
+});
+
+test('seed fetch rejects malformed redirect responses and redirect loops', async () => {
+  await assert.rejects(
+    () => fetchPublicText(
+      async (url) => htmlResponse({ status: 302, ok: false, url, location: '' }),
+      'https://example.com/news',
+      { lookupImpl: publicLookup }
+    ),
+    /redirect_missing_location/
+  );
+
+  let callCount = 0;
+  await assert.rejects(
+    () => fetchPublicText(
+      async (url) => {
+        callCount += 1;
+        return htmlResponse({ status: 302, ok: false, url, location: '/loop' });
+      },
+      'https://example.com/news',
+      { lookupImpl: publicLookup, maxRedirects: 1 }
+    ),
+    /too_many_redirects/
+  );
+  assert.equal(callCount, 2);
 });
 
 test('seed merge preserves manual editorial fields and records conflicts', () => {
@@ -205,4 +339,96 @@ test('seed expansion writes evidence pack, seed candidates, reports, and compact
   assert.equal(evidencePack.packs.length, 1);
   assert.equal(evidencePack.packs[0].do_not_claim.some(item => item.includes('Keyword hints')), true);
   assert.equal(evidencePack.packs[0].extraction_quality.main_article_allowed, true);
+});
+
+test('seed expansion source_extraction_ref uses actual pack index after blocked first seed', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const html = '<html><head><title>CameraX 1.6.1 release notes</title><meta name="datePublished" content="2026-05-15"></head><body>2026-05-15 CameraX 1.6.1 fixes Android camera stream validation.</body></html>';
+
+  await runSeedEvidenceExpansion({
+    root,
+    date,
+    manualPayload: {
+      schema_version: 5,
+      date,
+      newsletter_date: date,
+      candidates: []
+    },
+    collectionIntent: {
+      payload: {
+        schema_version: 1,
+        newsletter_date: date,
+        seed_urls: [
+          {
+            seed_id: 'seed-blocked',
+            url: 'http://localhost/private',
+            expected_topic: 'Blocked seed'
+          },
+          {
+            seed_id: 'seed-camerax',
+            url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+            expected_topic: 'CameraX release notes'
+          }
+        ],
+        keyword_hints: []
+      }
+    },
+    lookupImpl: publicLookup,
+    fetchImpl: async (url) => htmlResponse({ status: 200, ok: true, url, body: html })
+  });
+
+  const seedPayload = readJson(seedCandidatesPath(root, date));
+  assert.equal(seedPayload.candidates.length, 1);
+  assert.equal(seedPayload.candidates[0].source_extraction_ref, 'seed-evidence-pack.json#/packs/0');
+  const evidencePack = readJson(seedEvidencePackPath(root, date));
+  assert.equal(evidencePack.packs.length, 1);
+  assert.equal(evidencePack.packs[0].seed_id, 'seed-camerax');
+});
+
+test('failed linked evidence is excluded from usable compact evidence fields', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const linkedUrl = 'https://developer.android.com/jetpack/androidx/releases/camera#linked';
+  const html = `<html><head><title>CameraX 1.6.1 release notes</title><meta name="datePublished" content="2026-05-15"></head><body>2026-05-15 CameraX 1.6.1 fixes Android camera stream validation. <a href="${linkedUrl}">Release notes</a></body></html>`;
+
+  await runSeedEvidenceExpansion({
+    root,
+    date,
+    manualPayload: {
+      schema_version: 5,
+      date,
+      newsletter_date: date,
+      candidates: []
+    },
+    collectionIntent: {
+      payload: {
+        schema_version: 1,
+        newsletter_date: date,
+        seed_urls: [{
+          seed_id: 'seed-camerax',
+          url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+          expected_topic: 'CameraX release notes'
+        }],
+        keyword_hints: []
+      }
+    },
+    lookupImpl: publicLookup,
+    fetchImpl: async (url) => {
+      if (url.includes('#linked')) {
+        throw new Error('blocked linked page');
+      }
+      return htmlResponse({ status: 200, ok: true, url, body: html });
+    }
+  });
+
+  const [candidate] = readJson(seedCandidatesPath(root, date)).candidates;
+  assert.deepEqual(candidate.linked_evidence_ids, []);
+  assert.deepEqual(candidate.blocked_linked_evidence_ids, ['seed-camerax-linked-01']);
+  assert.deepEqual(candidate.blocked_linked_evidence_urls, [linkedUrl]);
+  assert.equal(candidate.compact_evidence.linked_context.length, 0);
+  assert.equal(candidate.compact_evidence.evidence_urls.includes(linkedUrl), false);
+
+  const evidencePack = readJson(seedEvidencePackPath(root, date));
+  assert.equal(evidencePack.packs[0].linked_evidence[0].fetch_status, 'failed_or_blocked');
 });

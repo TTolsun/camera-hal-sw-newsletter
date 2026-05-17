@@ -516,6 +516,7 @@ function buildMergedCandidateManifest({
   llmUsed = false,
   seedUsed = false,
   status = 'PASS',
+  statusDetail = '',
   schemaVersion = 1,
   discoveryStats = null,
   reportRefs = {}
@@ -528,6 +529,7 @@ function buildMergedCandidateManifest({
     generated_at: generatedAt,
     workflow: 'gemini-source-discovery-pr',
     status,
+    status_detail: statusDetail,
     merge_mode: mergeMode,
     candidate_artifact: relPath(root, candidatePath),
     candidate_artifact_hash: hashFile(candidatePath),
@@ -586,6 +588,7 @@ function writeMergedCandidateArtifacts({
   llmUsed = false,
   seedUsed = false,
   status = 'PASS',
+  statusDetail = '',
   manifestSchemaVersion = 1,
   discoveryStats = null,
   reportRefs = {}
@@ -617,6 +620,7 @@ function writeMergedCandidateArtifacts({
     llmUsed,
     seedUsed,
     status,
+    statusDetail,
     schemaVersion: manifestSchemaVersion,
     discoveryStats,
     reportRefs

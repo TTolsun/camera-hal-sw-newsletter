@@ -1,5 +1,6 @@
 const dns = require('dns');
 const fs = require('fs');
+const net = require('net');
 const path = require('path');
 
 const {
@@ -46,8 +47,10 @@ const DEFAULT_LIMITS = Object.freeze({
   maxLinksPerSeedUrl: 8,
   maxTotalSeedLinksPerRun: 40,
   fetchTimeoutMs: 5000,
-  maxBytesPerPage: 200000
+  maxBytesPerPage: 200000,
+  maxRedirects: 5
 });
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 class SeedEvidenceError extends Error {
   constructor(message, details = {}) {
@@ -93,13 +96,36 @@ function dateFromHtml(html = '') {
   return plain ? plain[1] : '';
 }
 
+function normalizedHost(hostname = '') {
+  return String(hostname || '').replace(/^\[|\]$/g, '').toLowerCase();
+}
+
+function embeddedMappedIPv4(hostname = '') {
+  const host = normalizedHost(hostname);
+  const dotted = host.match(/^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/);
+  if (dotted) return dotted[1];
+  const hex = host.match(/^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/);
+  if (!hex) return '';
+  const high = Number.parseInt(hex[1], 16);
+  const low = Number.parseInt(hex[2], 16);
+  if (!Number.isInteger(high) || !Number.isInteger(low) || high < 0 || high > 0xffff || low < 0 || low > 0xffff) {
+    return '';
+  }
+  return [
+    (high >> 8) & 0xff,
+    high & 0xff,
+    (low >> 8) & 0xff,
+    low & 0xff
+  ].join('.');
+}
+
 function isIPv4(hostname = '') {
-  return /^\d{1,3}(?:\.\d{1,3}){3}$/.test(hostname);
+  return net.isIP(normalizedHost(hostname)) === 4;
 }
 
 function ipv4Parts(hostname = '') {
   if (!isIPv4(hostname)) return null;
-  const parts = hostname.split('.').map(Number);
+  const parts = normalizedHost(hostname).split('.').map(Number);
   return parts.every(part => Number.isInteger(part) && part >= 0 && part <= 255) ? parts : null;
 }
 
@@ -116,17 +142,21 @@ function isBlockedIPv4(hostname = '') {
 }
 
 function isBlockedIPv6(hostname = '') {
-  const host = hostname.replace(/^\[|\]$/g, '').toLowerCase();
+  const host = normalizedHost(hostname);
+  const mappedIPv4 = embeddedMappedIPv4(host);
+  if (mappedIPv4) return isBlockedIPv4(mappedIPv4);
+  const firstHextet = Number.parseInt(host.split(':')[0] || '', 16);
+  const isLinkLocal = Number.isInteger(firstHextet) && firstHextet >= 0xfe80 && firstHextet <= 0xfebf;
   return host === '::1' ||
     host === '::' ||
     host.startsWith('fc') ||
     host.startsWith('fd') ||
-    host.startsWith('fe80:') ||
+    isLinkLocal ||
     host.startsWith('0:0:0:0:0:0:0:1');
 }
 
 function isBlockedHostname(hostname = '') {
-  const host = String(hostname || '').replace(/^\[|\]$/g, '').toLowerCase();
+  const host = normalizedHost(hostname);
   if (!host) return true;
   if (host === 'localhost' || host.endsWith('.localhost')) return true;
   if (host.endsWith('.local') || host.endsWith('.internal') || host.endsWith('.corp') || host.endsWith('.lan')) return true;
@@ -158,7 +188,7 @@ function parsePublicHttpsUrl(rawUrl = '') {
 async function assertPublicHttpsUrl(rawUrl = '', options = {}) {
   const parsed = parsePublicHttpsUrl(rawUrl);
   const lookupImpl = options.lookupImpl === undefined ? dns.promises.lookup : options.lookupImpl;
-  if (typeof lookupImpl === 'function' && !isIPv4(parsed.hostname) && !parsed.hostname.includes(':')) {
+  if (typeof lookupImpl === 'function' && net.isIP(normalizedHost(parsed.hostname)) === 0) {
     const records = await lookupImpl(parsed.hostname, { all: true });
     for (const record of ensureArray(records)) {
       if (isBlockedIPv4(record.address) || isBlockedIPv6(record.address)) {
@@ -174,27 +204,46 @@ async function assertPublicHttpsUrl(rawUrl = '', options = {}) {
 }
 
 async function fetchPublicText(fetchImpl, url, options = {}) {
-  const safeUrl = await assertPublicHttpsUrl(url, options);
   const timeoutMs = options.timeoutMs || DEFAULT_LIMITS.fetchTimeoutMs;
   const maxBytes = options.maxBytes || DEFAULT_LIMITS.maxBytesPerPage;
-  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-  const timeout = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
-  try {
-    const response = await fetchImpl(safeUrl, controller ? { signal: controller.signal } : {});
-    const finalUrl = response?.url || safeUrl;
-    await assertPublicHttpsUrl(finalUrl, options);
-    if (!response || response.ok === false) {
-      throw new SeedEvidenceError('fetch_failed', { url: safeUrl, status: response?.status || 'unknown' });
+  const maxRedirects = options.maxRedirects ?? DEFAULT_LIMITS.maxRedirects;
+  let currentUrl = await assertPublicHttpsUrl(url, options);
+
+  for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount += 1) {
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timeout = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+    try {
+      const response = await fetchImpl(currentUrl, {
+        redirect: 'manual',
+        ...(controller ? { signal: controller.signal } : {})
+      });
+      if (REDIRECT_STATUSES.has(Number(response?.status))) {
+        const location = response?.headers?.get?.('location') || '';
+        if (!location) {
+          throw new SeedEvidenceError('redirect_missing_location', { url: currentUrl });
+        }
+        const nextUrl = new URL(location, currentUrl).toString();
+        currentUrl = await assertPublicHttpsUrl(nextUrl, options);
+        continue;
+      }
+
+      const finalUrl = response?.url || currentUrl;
+      await assertPublicHttpsUrl(finalUrl, options);
+      if (!response || response.ok === false) {
+        throw new SeedEvidenceError('fetch_failed', { url: currentUrl, status: response?.status || 'unknown' });
+      }
+      const body = await response.text();
+      return {
+        url: currentUrl,
+        finalUrl,
+        body: String(body || '').slice(0, maxBytes)
+      };
+    } finally {
+      if (timeout) clearTimeout(timeout);
     }
-    const body = await response.text();
-    return {
-      url: safeUrl,
-      finalUrl,
-      body: String(body || '').slice(0, maxBytes)
-    };
-  } finally {
-    if (timeout) clearTimeout(timeout);
   }
+
+  throw new SeedEvidenceError('too_many_redirects', { url });
 }
 
 function normalizedUrlKey(value = '') {
@@ -242,6 +291,13 @@ function sourceExtractionItems(candidate = {}) {
 
 function evidenceId(seedId, index, role = 'primary') {
   return `${seedId}-${role}-${String(index + 1).padStart(2, '0')}`;
+}
+
+function isUsableLinkedEvidence(item = {}) {
+  return item &&
+    item.fetch_status !== 'failed_or_blocked' &&
+    Array.isArray(item.source_backed_items) &&
+    item.source_backed_items.length > 0;
 }
 
 function buildPrimaryEvidence(seed, candidate, index, seedUrl) {
@@ -491,7 +547,7 @@ async function runSeedEvidenceExpansion({
   const seedCandidates = [];
   let followedLinkCount = 0;
 
-  for (const [seedIndex, seed] of ensureArray(seedPayload.seed_urls).entries()) {
+  for (const seed of ensureArray(seedPayload.seed_urls)) {
     let fetched;
     try {
       fetched = await fetchPublicText(fetchImpl, seed.url, {
@@ -574,6 +630,7 @@ async function runSeedEvidenceExpansion({
           evidence_granularity: 'page_summary'
         }];
     const concreteFacts = primaryEvidence.flatMap(item => item.source_backed_items || []);
+    const packIndex = packs.length;
     const pack = {
       evidence_pack_id: `${seed.seed_id}-pack`,
       seed_id: seed.seed_id,
@@ -611,6 +668,8 @@ async function runSeedEvidenceExpansion({
       primary_evidence_count: primaryEvidence.length,
       linked_evidence_count: linkedEvidence.length
     });
+    const usableLinkedEvidence = linkedEvidence.filter(isUsableLinkedEvidence);
+    const blockedLinkedEvidence = linkedEvidence.filter(item => item.fetch_status === 'failed_or_blocked');
     primaryEvidence.forEach((evidence, index) => {
       if (!evidence.published_at || ensureArray(evidence.source_backed_items).length === 0) return;
       const sourceCandidate = parsedItems[index] || {
@@ -626,15 +685,17 @@ async function runSeedEvidenceExpansion({
         source: parserSource,
         candidate: sourceCandidate,
         primaryEvidence: evidence,
-        packIndex: seedIndex
+        packIndex
       });
-      candidate.linked_evidence_ids = linkedEvidence.map(item => item.evidence_id);
-      candidate.compact_evidence.linked_context = linkedEvidence
+      candidate.linked_evidence_ids = usableLinkedEvidence.map(item => item.evidence_id);
+      candidate.blocked_linked_evidence_ids = blockedLinkedEvidence.map(item => item.evidence_id);
+      candidate.blocked_linked_evidence_urls = blockedLinkedEvidence.map(item => item.url).filter(Boolean);
+      candidate.compact_evidence.linked_context = usableLinkedEvidence
         .flatMap(item => item.source_backed_items || [])
         .slice(0, 3);
       candidate.compact_evidence.evidence_urls = [
         ...candidate.compact_evidence.evidence_urls,
-        ...linkedEvidence.map(item => item.url)
+        ...usableLinkedEvidence.map(item => item.url)
       ].filter(Boolean);
       seedCandidates.push(candidate);
     });
