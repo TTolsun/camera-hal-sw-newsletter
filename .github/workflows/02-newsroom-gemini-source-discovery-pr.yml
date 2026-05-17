@@ -97,8 +97,15 @@ jobs:
           name: newsroom-source-discovery-debug-${{ github.run_id }}
           path: |
             content/collected-news/${{ env.NEWSLETTER_DATE }}/gemini-candidates.json
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/seed-candidates.json
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/seed-evidence-pack.json
             content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidates.json
             content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidate-manifest.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-fetch-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-fetch-report.md
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-evidence-pack.md
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-merge-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-merge-report.md
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposals.json
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposal-validation-report.json
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-usage-report.json

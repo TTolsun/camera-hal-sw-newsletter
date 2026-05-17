@@ -90,6 +90,33 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.ok(capsule.estimated_tokens <= 1100);
 });
 
+test('article capsule carries compact seed evidence by id instead of full evidence pack', () => {
+  const capsule = buildArticleCapsule(candidate({
+    seed_ids: ['seed-camerax'],
+    evidence_pack_ids: ['seed-camerax-pack'],
+    primary_evidence_ids: ['seed-camerax-primary-01'],
+    linked_evidence_ids: ['seed-camerax-linked-01'],
+    source_extraction_ref: 'seed-evidence-pack.json#/packs/0',
+    compact_evidence: {
+      primary_facts: ['CameraX 1.6.1 fixes a compile error when using CameraX 1.6.0.'],
+      linked_context: ['Linked Android Developers page confirms the same release context.'],
+      do_not_claim: ['Keyword hints are discovery hints only.'],
+      evidence_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']
+    }
+  }));
+
+  assert.deepEqual(capsule.seed_evidence.evidence_pack_ids, ['seed-camerax-pack']);
+  assert.deepEqual(capsule.seed_evidence.primary_evidence_ids, ['seed-camerax-primary-01']);
+  assert.deepEqual(capsule.seed_evidence.linked_evidence_ids, ['seed-camerax-linked-01']);
+  assert.equal(capsule.seed_evidence.source_extraction_ref, 'seed-evidence-pack.json#/packs/0');
+  assert.deepEqual(capsule.seed_evidence.compact_evidence.primary_facts, [
+    'CameraX 1.6.1 fixes a compile error when using CameraX 1.6.0.'
+  ]);
+  assert.equal(capsule.seed_evidence.packs, undefined);
+  assert.equal(capsule.seed_evidence.primary_evidence, undefined);
+  assert.equal(capsule.do_not_claim.includes('Keyword hints are discovery hints only.'), true);
+});
+
 test('article capsule report separates shortlist and selected capsule inputs', () => {
   const selected = candidate({ title: 'Camera HAL selected', url: 'https://example.com/selected' });
   const nonSelected = candidate({

@@ -7,6 +7,7 @@ const test = require('node:test');
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
+  collectionIntentPath,
   evidenceValidationReportPath,
   extractedSourceFactsPath,
   geminiCandidatesPath,
@@ -22,6 +23,10 @@ const {
   mergedCandidatesRelPath,
   rawCandidateManifestPath,
   rawCandidateManifestRelPath,
+  seedCandidatesPath,
+  seedEvidencePackPath,
+  seedFetchReportPath,
+  seedMergeReportPath,
   sourceDiscoveryFeedbackReportMarkdownPath,
   sourceDiscoveryFeedbackReportMarkdownRelPath,
   sourceDiscoveryFeedbackReportPath,
@@ -340,13 +345,13 @@ test('strict candidate artifacts reject schema, manifest type, and count mismatc
   );
 });
 
-test('Stage 2 disabled pass-through writes merged artifact, manifest, and report', () => {
+test('Stage 2 disabled pass-through writes merged artifact, manifest, and report', async () => {
   const root = tempRoot();
   const date = '2026-05-16';
   const payload = candidatePayload();
   writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
 
-  const result = runSourceDiscoveryBoundary({
+  const result = await runSourceDiscoveryBoundary({
     root,
     date,
     env: {
@@ -458,7 +463,7 @@ test('Stage 2 feedback still surfaces known official parser-backed URLs with sou
   assert.equal(report.items[0].confidence, 'medium');
 });
 
-test('Stage 2 feedback does not flag valid concrete source_extraction bullets', () => {
+test('Stage 2 feedback does not flag valid concrete source_extraction bullets', async () => {
   const root = tempRoot();
   const date = '2026-05-16';
   const payload = candidatePayload('CameraX 1.6.1', {
@@ -489,7 +494,7 @@ test('Stage 2 feedback does not flag valid concrete source_extraction bullets', 
   });
   writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
 
-  const result = runSourceDiscoveryBoundary({
+  const result = await runSourceDiscoveryBoundary({
     root,
     date,
     env: {
@@ -505,6 +510,152 @@ test('Stage 2 feedback does not flag valid concrete source_extraction bullets', 
   const report = fs.readFileSync(result.reportPath, 'utf8');
   assert.match(report, /## Parser\/source feedback/);
   assert.match(report, /parser_gap_count=0/);
+});
+
+test('Stage 2 disabled mode expands approved seed evidence without Gemini credentials', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  writeJson(path.join(root, 'data', 'news-sources.json'), {
+    schemaVersion: 2,
+    sources: [{
+      id: 'android',
+      name: 'Android Developers',
+      sourceUrl: 'https://developer.android.com/',
+      category: 'android',
+      reliability: 'official',
+      linkedEvidencePolicy: {
+        enabled: true,
+        allowedDomains: ['developer.android.com']
+      }
+    }]
+  });
+  const payload = candidatePayload('Manual CameraX release', {
+    candidates: [{
+      ...candidatePayload().candidates[0],
+      title: 'Manual CameraX release',
+      editor_note: 'Keep editorial framing',
+      priority: 'urgent',
+      source_id: 'manual-source'
+    }]
+  });
+  const intent = {
+    schema_version: 1,
+    newsletter_date: date,
+    seed_urls: [{
+      seed_id: 'seed-camerax',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      expected_topic: 'CameraX 1.6.1',
+      priority: 'low'
+    }],
+    keyword_hints: ['CameraX release notes']
+  };
+  writeJson(collectionIntentPath(root, date), intent);
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'false'
+    },
+    fetchImpl: async (url) => ({
+      ok: true,
+      url,
+      text: async () => '<html><head><title>CameraX 1.6.1 release notes</title><meta name="datePublished" content="2026-05-15"></head><body>CameraX 1.6.1 fixes camera stream handling for Android camera apps.</body></html>'
+    })
+  });
+
+  assert.equal(result.status, 'PASS');
+  assert.equal(result.manifest.merge_mode, 'seed_evidence_expansion');
+  assert.equal(result.manifest.llm_used, false);
+  assert.equal(result.manifest.seed_used, true);
+  assert.equal(result.manifest.seed_candidate_count, 1);
+  assert.equal(result.manifest.seed_enriched_duplicate_count, 1);
+  assert.equal(result.manifest.seed_new_unique_url_count, 0);
+  assert.equal(fs.existsSync(seedCandidatesPath(root, date)), true);
+  assert.equal(fs.existsSync(seedEvidencePackPath(root, date)), true);
+  assert.equal(fs.existsSync(seedFetchReportPath(root, date)), true);
+  assert.equal(fs.existsSync(seedMergeReportPath(root, date)), true);
+
+  const merged = readJson(mergedCandidatesPath(root, date));
+  assert.equal(merged.candidates.length, 1);
+  assert.equal(merged.candidates[0].title, 'Manual CameraX release');
+  assert.equal(merged.candidates[0].editor_note, 'Keep editorial framing');
+  assert.equal(merged.candidates[0].priority, 'urgent');
+  assert.equal(merged.candidates[0].source_id, 'manual-source');
+  assert.deepEqual(merged.candidates[0].seed_ids, ['seed-camerax']);
+  assert.deepEqual(merged.candidates[0].evidence_pack_ids, ['seed-camerax-pack']);
+  assert.deepEqual(merged.candidates[0].primary_evidence_ids, ['seed-camerax-primary-01']);
+
+  const seedMerge = readJson(seedMergeReportPath(root, date));
+  assert.equal(seedMerge.enriched_duplicate_count, 1);
+  assert.equal(seedMerge.conflicts.some(item => item.field === 'title'), true);
+  assert.equal(seedMerge.conflicts.some(item => item.field === 'priority'), true);
+
+  const report = fs.readFileSync(result.reportPath, 'utf8');
+  assert.match(report, /merge_mode=seed_evidence_expansion/);
+  assert.match(report, /seed_candidate_artifact=content\/collected-news\/2026-05-16\/seed-candidates\.json/);
+  assert.match(report, /seed_evidence_pack=content\/collected-news\/2026-05-16\/seed-evidence-pack\.json/);
+  assert.match(report, /Priority Override \/ Legacy Compatibility/);
+});
+
+test('Stage 2 approved keyword-only intent keeps pass-through without empty seed artifacts', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload();
+  writeJson(collectionIntentPath(root, date), {
+    schema_version: 1,
+    newsletter_date: date,
+    seed_urls: [],
+    keyword_hints: ['CameraX']
+  });
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'false'
+    }
+  });
+
+  assert.equal(result.status, 'PASS');
+  assert.equal(result.manifest.merge_mode, 'disabled_pass_through');
+  assert.equal(result.manifest.seed_used, false);
+  assert.equal(fs.existsSync(seedCandidatesPath(root, date)), false);
+  assert.equal(fs.existsSync(seedEvidencePackPath(root, date)), false);
+});
+
+test('Stage 2 rejects unapproved collection intent in disabled mode', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload();
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+  const manifest = readJson(rawCandidateManifestPath(root, date));
+  manifest.collection_intent = 'content/collected-news/2026-05-16/collection-intent.json';
+  manifest.collection_intent_status = 'approved';
+  manifest.collection_intent_hash = 'sha256-mismatch';
+  writeJson(rawCandidateManifestPath(root, date), manifest);
+  writeJson(collectionIntentPath(root, date), {
+    schema_version: 1,
+    newsletter_date: date,
+    seed_urls: [{ seed_id: 'seed-a', url: 'https://developer.android.com/jetpack/androidx/releases/camera' }],
+    keyword_hints: []
+  });
+
+  await assert.rejects(
+    () => runSourceDiscoveryBoundary({
+      root,
+      date,
+      env: {
+        NEWSLETTER_DATE: date,
+        NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'false'
+      }
+    }),
+    /collection_intent_hash mismatch/
+  );
 });
 
 test('Stage 2 enabled without credentials writes failure report without mutating candidate artifacts', async () => {

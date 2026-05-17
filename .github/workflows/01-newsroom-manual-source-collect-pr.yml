@@ -14,6 +14,11 @@ on:
         required: false
         default: "21"
         type: string
+      collection_intent_path:
+        description: "Optional collection intent artifact path. Empty uses content/collected-news/<date>/collection-intent.json if present."
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write
@@ -31,6 +36,7 @@ jobs:
     env:
       NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
       LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '21' }}
+      NEWSROOM_COLLECTION_INTENT_PATH: ${{ github.event.inputs.collection_intent_path }}
 
     steps:
       - name: Checkout repository
@@ -144,6 +150,7 @@ jobs:
             .tmp/news-candidate-date.txt
             content/collected-news/${{ steps.raw-meta.outputs.date }}/manual-candidates.json
             content/collected-news/${{ steps.raw-meta.outputs.date }}/candidates.json
+            content/collected-news/${{ steps.raw-meta.outputs.date }}/collection-intent.json
             content/collected-news/${{ steps.raw-meta.outputs.date }}/raw-candidate-manifest.json
             content/newsroom/${{ steps.raw-meta.outputs.date }}/news-candidates.md
           if-no-files-found: warn

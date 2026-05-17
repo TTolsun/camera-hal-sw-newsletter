@@ -168,6 +168,54 @@ test('source discovery stats separate Gemini records, unique URLs, and manual du
   });
 });
 
+test('source discovery stats separate seed evidence records from Gemini records', () => {
+  const stats = sourceDiscoveryCandidateStats({
+    manualCandidates: [
+      { url: 'https://example.com/a' }
+    ],
+    seedCandidates: [
+      {
+        url: 'https://example.com/a',
+        origin: 'seed_url_evidence',
+        finalSelectionEligibility: 'short',
+        source_gap_risk: false,
+        main_eligible: true,
+        primary_evidence_ids: ['seed-a-primary-01']
+      },
+      {
+        url: 'https://example.com/b',
+        origin: 'seed_url_evidence',
+        finalSelectionEligibility: 'watchlist',
+        source_gap_risk: true,
+        main_eligible: false
+      }
+    ],
+    geminiCandidates: [
+      {
+        url: 'https://example.com/c',
+        origin: 'gemini_discovery',
+        finalSelectionEligibility: 'short',
+        source_gap_risk: false,
+        main_eligible: true
+      }
+    ],
+    mergedCandidates: [
+      { url: 'https://example.com/a' },
+      { url: 'https://example.com/b' },
+      { url: 'https://example.com/c' }
+    ]
+  });
+
+  assert.equal(stats.seed_candidate_count, 2);
+  assert.equal(stats.seed_unique_url_count, 2);
+  assert.equal(stats.seed_new_unique_url_count, 1);
+  assert.equal(stats.seed_enriched_duplicate_count, 1);
+  assert.equal(stats.seed_publishable_candidate_count, 1);
+  assert.equal(stats.seed_primary_evidence_count, 1);
+  assert.equal(stats.gemini_candidate_count, 1);
+  assert.equal(stats.gemini_new_unique_url_count, 1);
+});
+
 test('source discovery summary reports no new publishable Gemini candidates distinctly from duplicate URLs', () => {
   const stats = sourceDiscoveryCandidateStats({
     manualCandidates: [

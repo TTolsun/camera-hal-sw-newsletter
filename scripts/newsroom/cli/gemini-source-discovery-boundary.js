@@ -30,6 +30,13 @@ const {
   newsroomRelPath,
   rawCandidateManifestPath,
   rawCandidateManifestRelPath,
+  seedCandidatesPath,
+  seedEvidencePackMarkdownPath,
+  seedEvidencePackPath,
+  seedFetchReportMarkdownPath,
+  seedFetchReportPath,
+  seedMergeReportMarkdownPath,
+  seedMergeReportPath,
   sourceClustersPath,
   sourceClustersRelPath,
   sourceDiscoveryFeedbackReportMarkdownPath,
@@ -58,6 +65,12 @@ const {
 const {
   runGeminiSourceDiscovery
 } = require('../collect/gemini-source-discovery');
+const {
+  approvedCollectionIntentFromManifest
+} = require('../collect/collection-intent');
+const {
+  runSeedEvidenceExpansion
+} = require('../collect/seed-evidence');
 const {
   extractSourceFacts
 } = require('../collect/extract-source-facts');
@@ -124,6 +137,7 @@ function renderReport({
   sourceQualityReportRelPath = '',
   sourceClustersRelPath = '',
   evidenceValidationReportRelPath = '',
+  seedEvidenceRefs = {},
   sourceDiscoveryFeedbackReportRelPath = '',
   sourceDiscoveryFeedbackReportMarkdownRelPath = '',
   sourceDiscoveryFeedbackReport = null,
@@ -167,8 +181,40 @@ function renderReport({
       `source_quality_report=${sourceQualityReportRelPath}`,
       `source_clusters=${sourceClustersRelPath}`,
       `evidence_validation_report=${evidenceValidationReportRelPath}`,
+      `seed_candidate_artifact=${seedEvidenceRefs.seed_candidate_artifact || ''}`,
+      `seed_evidence_pack=${seedEvidenceRefs.seed_evidence_pack || ''}`,
+      `seed_evidence_pack_markdown=${seedEvidenceRefs.seed_evidence_pack_markdown || ''}`,
+      `seed_fetch_report=${seedEvidenceRefs.seed_fetch_report || ''}`,
+      `seed_fetch_report_markdown=${seedEvidenceRefs.seed_fetch_report_markdown || ''}`,
+      `seed_merge_report=${seedEvidenceRefs.seed_merge_report || ''}`,
+      `seed_merge_report_markdown=${seedEvidenceRefs.seed_merge_report_markdown || ''}`,
       `source_discovery_feedback_report=${sourceDiscoveryFeedbackReportRelPath}`,
       `source_discovery_feedback_report_markdown=${sourceDiscoveryFeedbackReportMarkdownRelPath}`,
+      ''
+    );
+    lines.push(
+      '## Priority Override / Legacy Compatibility',
+      '',
+      'This PR is part of #185 seed evidence workflow migration.',
+      'The seed evidence workflow is prioritized over legacy-pattern cleanup, but source/evidence/security/publish safety remains non-negotiable.',
+      '',
+      '### Required checks for this PR',
+      '- [ ] Targeted #185 unit tests pass',
+      '- [ ] Targeted workflow tests pass',
+      '- [ ] `npm.cmd run validate` passes',
+      '- [ ] Source/evidence/security gates are not weakened',
+      '',
+      '### Legacy-pattern failures',
+      '| Test | Failure reason | Classification | Follow-up |',
+      '| --- | --- | --- | --- |',
+      '| none | none | none | none |',
+      '',
+      '### Non-negotiable gates',
+      '- [ ] No private/internal URL fetch',
+      '- [ ] No source_gap_risk bypass',
+      '- [ ] No quality threshold lowering',
+      '- [ ] No 03 re-crawl',
+      '- [ ] No Gemini proposal promoted without deterministic validation',
       ''
     );
     if (sourceDiscoveryFeedbackReport) {
@@ -215,6 +261,13 @@ function removeStaleNormalOutputs(root, date) {
   removeIfExists(sourceQualityReportMarkdownPath(root, date));
   removeIfExists(sourceClustersPath(root, date));
   removeIfExists(evidenceValidationReportPath(root, date));
+  removeIfExists(seedCandidatesPath(root, date));
+  removeIfExists(seedEvidencePackPath(root, date));
+  removeIfExists(seedEvidencePackMarkdownPath(root, date));
+  removeIfExists(seedFetchReportPath(root, date));
+  removeIfExists(seedFetchReportMarkdownPath(root, date));
+  removeIfExists(seedMergeReportPath(root, date));
+  removeIfExists(seedMergeReportMarkdownPath(root, date));
   removeIfExists(sourceDiscoveryFeedbackReportPath(root, date));
   removeIfExists(sourceDiscoveryFeedbackReportMarkdownPath(root, date));
 }
@@ -753,9 +806,25 @@ async function runEnabled({
     ? manualCandidatesRelPath(date)
     : collectedCandidatesRelPath(date);
   const sourceManifestPath = rawCandidateManifestPath(root, date);
+  const sourceManifest = fs.existsSync(sourceManifestPath) ? readJson(sourceManifestPath) : {};
   removeStaleNormalOutputs(root, date);
+  const collectionIntent = approvedCollectionIntentFromManifest({
+    root,
+    date,
+    manifest: sourceManifest
+  });
+  const hasSeedUrls = Number(collectionIntent?.seedUrlCount || 0) > 0;
 
   const budget = createGeminiUsageBudget({ root });
+  const seedExpansion = hasSeedUrls
+    ? await runSeedEvidenceExpansion({
+        root,
+        date,
+        manualPayload,
+        collectionIntent,
+        fetchImpl
+      })
+    : null;
   const discovery = await runGeminiSourceDiscovery({
     root,
     date,
@@ -766,8 +835,14 @@ async function runEnabled({
     fetchImpl
   });
   const manualCandidates = candidateItems(manualPayload);
+  const seedCandidates = seedExpansion?.seedCandidates || [];
   const geminiCandidates = discovery.promotedCandidates;
-  const mergedInput = [...manualCandidates, ...geminiCandidates];
+  const mergedInput = [
+    ...(seedExpansion ? seedExpansion.mergedCandidates : manualCandidates),
+    ...geminiCandidates
+  ];
+  const seedUsed = seedExpansion?.stats?.seed_used === true;
+  const mergeMode = seedUsed ? 'seed_evidence_plus_gemini_discovery' : 'gemini_source_discovery';
 
   const scored = scoreSourceCandidates(mergedInput, { newsletterDate: date });
   writeJson(sourceQualityReportPath(root, date), scored.report);
@@ -797,9 +872,13 @@ async function runEnabled({
   const geminiAnnotatedCandidates = evidence.annotatedCandidates.filter(item => item.origin === 'gemini_discovery');
   const discoveryStats = sourceDiscoveryCandidateStats({
     manualCandidates,
+    seedCandidates,
     geminiCandidates: geminiAnnotatedCandidates,
     mergedCandidates: evidence.annotatedCandidates
   });
+  if (seedExpansion?.stats) {
+    Object.assign(discoveryStats, seedExpansion.stats);
+  }
   const feedback = writeSourceDiscoveryFeedbackReport(root, date, buildSourceDiscoveryFeedbackReport({
     date,
     manualCandidates,
@@ -817,11 +896,13 @@ async function runEnabled({
     payload: mergedPayload,
     sourceCandidatePath,
     sourceManifestPath,
+    seedPayload: seedExpansion?.seedPayload || null,
     geminiPayload,
     generatedAt,
-    mergeMode: 'gemini_source_discovery',
+    mergeMode,
     geminiCandidateCount: geminiPayload.candidates.length,
     llmUsed: true,
+    seedUsed,
     status: 'PASS',
     manifestSchemaVersion: 2,
     discoveryStats,
@@ -832,6 +913,7 @@ async function runEnabled({
       source_quality_report_markdown: sourceQualityReportMarkdownRelPath(date),
       source_clusters: sourceClustersRelPath(date),
       evidence_validation_report: evidenceValidationReportRelPath(date),
+      ...(seedExpansion?.reportRefs || {}),
       source_discovery_feedback_report: feedback.jsonRelPath,
       source_discovery_feedback_report_markdown: feedback.markdownRelPath
     }
@@ -842,7 +924,7 @@ async function runEnabled({
     disabledPassThrough: false,
     llmUsed: true,
     geminiCandidateCount: geminiPayload.candidates.length,
-    mergeMode: 'gemini_source_discovery',
+    mergeMode,
     discoveryStats,
     summary: sourceDiscoveryStatsSummary(discoveryStats, { llmUsed: true }),
     sourceCandidateRelPath,
@@ -855,6 +937,7 @@ async function runEnabled({
     sourceQualityReportRelPath: sourceQualityReportRelPath(date),
     sourceClustersRelPath: sourceClustersRelPath(date),
     evidenceValidationReportRelPath: evidenceValidationReportRelPath(date),
+    seedEvidenceRefs: seedExpansion?.reportRefs || {},
     sourceDiscoveryFeedbackReportRelPath: feedback.jsonRelPath,
     sourceDiscoveryFeedbackReportMarkdownRelPath: feedback.markdownRelPath,
     sourceDiscoveryFeedbackReport: feedback.report,
@@ -873,6 +956,8 @@ async function runEnabled({
     gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
+    seed_candidate_artifact: seedExpansion?.reportRefs?.seed_candidate_artifact || '',
+    seed_evidence_pack: seedExpansion?.reportRefs?.seed_evidence_pack || '',
     source_discovery_feedback_report: feedback.jsonRelPath,
     source_discovery_feedback_report_markdown: feedback.markdownRelPath,
     report: newsroomRelPath(date, 'gemini-source-discovery-report.md'),
@@ -882,7 +967,7 @@ async function runEnabled({
   };
 }
 
-function run({
+async function run({
   root = process.cwd(),
   env = process.env,
   date: inputDate = '',
@@ -910,31 +995,60 @@ function run({
   const payload = readJson(sourceCandidatePath);
   const manualCandidates = candidateItems(payload);
   const sourceManifestPath = rawCandidateManifestPath(root, date);
+  const sourceManifest = fs.existsSync(sourceManifestPath) ? readJson(sourceManifestPath) : {};
+  removeStaleNormalOutputs(root, date);
+  const collectionIntent = approvedCollectionIntentFromManifest({
+    root,
+    date,
+    manifest: sourceManifest
+  });
+  const hasSeedUrls = Number(collectionIntent?.seedUrlCount || 0) > 0;
+  const seedExpansion = hasSeedUrls
+    ? await runSeedEvidenceExpansion({
+        root,
+        date,
+        manualPayload: payload,
+        collectionIntent,
+        fetchImpl
+      })
+    : null;
+  const seedUsed = seedExpansion?.stats?.seed_used === true;
+  const mergeMode = seedUsed ? 'seed_evidence_expansion' : 'disabled_pass_through';
+  const mergedCandidates = seedExpansion ? seedExpansion.mergedCandidates : manualCandidates;
+  const mergedPayload = seedUsed ? candidatePayload(date, mergedCandidates, payload) : payload;
   const generatedAt = new Date().toISOString();
   const discoveryStats = sourceDiscoveryCandidateStats({
     manualCandidates,
+    seedCandidates: seedExpansion?.seedCandidates || [],
     geminiCandidates: [],
-    mergedCandidates: manualCandidates
+    mergedCandidates
   });
+  if (seedExpansion?.stats) {
+    Object.assign(discoveryStats, seedExpansion.stats);
+  }
   const result = writeMergedCandidateArtifacts({
     root,
     date,
-    payload,
+    payload: mergedPayload,
     sourceCandidatePath,
     sourceManifestPath,
+    seedPayload: seedExpansion?.seedPayload || null,
     geminiPayload: [],
     generatedAt,
-    mergeMode: 'disabled_pass_through',
+    mergeMode,
     geminiCandidateCount: 0,
     llmUsed: false,
+    seedUsed,
     status: 'PASS',
-    discoveryStats
+    manifestSchemaVersion: seedUsed ? 2 : 1,
+    discoveryStats,
+    reportRefs: seedExpansion?.reportRefs || {}
   });
   const feedback = writeSourceDiscoveryFeedbackReport(root, date, buildSourceDiscoveryFeedbackReport({
     date,
     manualCandidates,
     geminiCandidates: [],
-    mergedCandidates: manualCandidates
+    mergedCandidates
   }));
   const sourceCandidateRelPath = sourceCandidatePath.endsWith('manual-candidates.json')
     ? manualCandidatesRelPath(date)
@@ -942,16 +1056,19 @@ function run({
   const report = renderReport({
     date,
     status: 'PASS',
-    disabledPassThrough: true,
+    disabledPassThrough: !seedUsed,
     llmUsed: false,
     geminiCandidateCount: 0,
-    mergeMode: 'disabled_pass_through',
+    mergeMode,
     discoveryStats,
-    summary: sourceDiscoveryStatsSummary(discoveryStats, { llmUsed: false }),
+    summary: seedUsed
+      ? 'Seed evidence expansion ran without Gemini; manual candidates were merged with approved seed evidence.'
+      : sourceDiscoveryStatsSummary(discoveryStats, { llmUsed: false }),
     sourceCandidateRelPath,
     geminiCandidateRelPath: geminiCandidatesRelPath(date),
     mergedCandidateRelPath: mergedCandidatesRelPath(date),
     manifestRelPath: mergedCandidateManifestRelPath(date),
+    seedEvidenceRefs: seedExpansion?.reportRefs || {},
     sourceDiscoveryFeedbackReportRelPath: feedback.jsonRelPath,
     sourceDiscoveryFeedbackReportMarkdownRelPath: feedback.markdownRelPath,
     sourceDiscoveryFeedbackReport: feedback.report
@@ -967,6 +1084,8 @@ function run({
     gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
+    seed_candidate_artifact: seedExpansion?.reportRefs?.seed_candidate_artifact || '',
+    seed_evidence_pack: seedExpansion?.reportRefs?.seed_evidence_pack || '',
     source_discovery_feedback_report: feedback.jsonRelPath,
     source_discovery_feedback_report_markdown: feedback.markdownRelPath,
     report: newsroomRelPath(date, 'gemini-source-discovery-report.md'),

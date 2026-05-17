@@ -1078,6 +1078,7 @@ async function main() {
     date,
     payload: candidatePayload,
     sourceCount: sources.length,
+    collectionIntentPath: process.env.NEWSROOM_COLLECTION_INTENT_PATH || '',
     generatedAt,
     workflow: 'manual-source-collection-pr'
   });

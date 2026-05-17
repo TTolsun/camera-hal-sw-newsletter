@@ -28,6 +28,14 @@ function manualCandidatesRelPath(date) {
   return `${COLLECTED_NEWS_ROOT}/${date}/manual-candidates.json`;
 }
 
+function collectionIntentPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'collection-intent.json');
+}
+
+function collectionIntentRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/collection-intent.json`;
+}
+
 function mergedCandidatesPath(root, date) {
   return path.join(collectedNewsDir(root, date), 'merged-candidates.json');
 }
@@ -42,6 +50,22 @@ function geminiCandidatesPath(root, date) {
 
 function geminiCandidatesRelPath(date) {
   return `${COLLECTED_NEWS_ROOT}/${date}/gemini-candidates.json`;
+}
+
+function seedCandidatesPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'seed-candidates.json');
+}
+
+function seedCandidatesRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/seed-candidates.json`;
+}
+
+function seedEvidencePackPath(root, date) {
+  return path.join(collectedNewsDir(root, date), 'seed-evidence-pack.json');
+}
+
+function seedEvidencePackRelPath(date) {
+  return `${COLLECTED_NEWS_ROOT}/${date}/seed-evidence-pack.json`;
 }
 
 function newsroomArtifactPath(root, date, filename) {
@@ -128,6 +152,46 @@ function sourceDiscoveryFeedbackReportMarkdownRelPath(date) {
   return newsroomRelPath(date, 'source-discovery-feedback-report.md');
 }
 
+function seedFetchReportPath(root, date) {
+  return newsroomArtifactPath(root, date, 'seed-fetch-report.json');
+}
+
+function seedFetchReportRelPath(date) {
+  return newsroomRelPath(date, 'seed-fetch-report.json');
+}
+
+function seedFetchReportMarkdownPath(root, date) {
+  return newsroomArtifactPath(root, date, 'seed-fetch-report.md');
+}
+
+function seedFetchReportMarkdownRelPath(date) {
+  return newsroomRelPath(date, 'seed-fetch-report.md');
+}
+
+function seedEvidencePackMarkdownPath(root, date) {
+  return newsroomArtifactPath(root, date, 'seed-evidence-pack.md');
+}
+
+function seedEvidencePackMarkdownRelPath(date) {
+  return newsroomRelPath(date, 'seed-evidence-pack.md');
+}
+
+function seedMergeReportPath(root, date) {
+  return newsroomArtifactPath(root, date, 'seed-merge-report.json');
+}
+
+function seedMergeReportRelPath(date) {
+  return newsroomRelPath(date, 'seed-merge-report.json');
+}
+
+function seedMergeReportMarkdownPath(root, date) {
+  return newsroomArtifactPath(root, date, 'seed-merge-report.md');
+}
+
+function seedMergeReportMarkdownRelPath(date) {
+  return newsroomRelPath(date, 'seed-merge-report.md');
+}
+
 function rawCandidateManifestPath(root, date) {
   return path.join(collectedNewsDir(root, date), 'raw-candidate-manifest.json');
 }
@@ -166,6 +230,8 @@ module.exports = {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
   collectedNewsDir,
+  collectionIntentPath,
+  collectionIntentRelPath,
   evidenceValidationReportPath,
   evidenceValidationReportRelPath,
   extractedSourceFactsPath,
@@ -193,6 +259,20 @@ module.exports = {
   sourceDiscoveryFeedbackReportMarkdownRelPath,
   sourceDiscoveryFeedbackReportPath,
   sourceDiscoveryFeedbackReportRelPath,
+  seedCandidatesPath,
+  seedCandidatesRelPath,
+  seedEvidencePackMarkdownPath,
+  seedEvidencePackMarkdownRelPath,
+  seedEvidencePackPath,
+  seedEvidencePackRelPath,
+  seedFetchReportMarkdownPath,
+  seedFetchReportMarkdownRelPath,
+  seedFetchReportPath,
+  seedFetchReportRelPath,
+  seedMergeReportMarkdownPath,
+  seedMergeReportMarkdownRelPath,
+  seedMergeReportPath,
+  seedMergeReportRelPath,
   sourceClustersPath,
   sourceClustersRelPath,
   sourceQualityReportMarkdownPath,

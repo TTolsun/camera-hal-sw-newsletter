@@ -5,6 +5,7 @@ const path = require('path');
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
+  collectionIntentRelPath,
   geminiCandidatesPath,
   geminiCandidatesRelPath,
   manualCandidatesPath,
@@ -13,6 +14,15 @@ const {
   mergedCandidateManifestRelPath,
   mergedCandidatesPath,
   mergedCandidatesRelPath,
+  seedCandidatesPath,
+  seedCandidatesRelPath,
+  seedEvidencePackPath,
+  seedEvidencePackRelPath,
+  seedEvidencePackMarkdownRelPath,
+  seedFetchReportRelPath,
+  seedFetchReportMarkdownRelPath,
+  seedMergeReportRelPath,
+  seedMergeReportMarkdownRelPath,
   rawCandidateManifestPath,
   rawCandidateManifestRelPath,
   toPosix
@@ -22,6 +32,9 @@ const {
   repoPath,
   writeJson
 } = require('./common');
+const {
+  approveCollectionIntent
+} = require('../collect/collection-intent');
 
 const CANDIDATE_INPUT_MODES = Object.freeze({
   DEFAULT: 'default',
@@ -113,15 +126,26 @@ function isPublishableGeminiCandidate(candidate = {}) {
     ['main', 'short'].includes(finalSelectionEligibility(candidate));
 }
 
+function isPublishableSeedCandidate(candidate = {}) {
+  return candidate.origin === 'seed_url_evidence' &&
+    Boolean(normalizedCandidateUrl(candidate)) &&
+    !boolTrue(candidate.source_gap_risk) &&
+    !boolFalse(candidate.main_eligible) &&
+    ['main', 'short'].includes(finalSelectionEligibility(candidate));
+}
+
 function sourceDiscoveryCandidateStats({
   manualCandidates = [],
+  seedCandidates = [],
   geminiCandidates = [],
   mergedCandidates = []
 } = {}) {
   const manualRecords = Array.isArray(manualCandidates) ? manualCandidates : [];
+  const seedRecords = Array.isArray(seedCandidates) ? seedCandidates : [];
   const geminiRecords = Array.isArray(geminiCandidates) ? geminiCandidates : [];
   const mergedRecords = Array.isArray(mergedCandidates) ? mergedCandidates : [];
   const manualUrls = normalizedUrlSet(manualRecords);
+  const seedUrls = normalizedUrlSet(seedRecords);
   const geminiUrls = normalizedUrlSet(geminiRecords);
   const mergedUrls = normalizedUrlSet(mergedRecords);
 
@@ -135,7 +159,7 @@ function sourceDiscoveryCandidateStats({
     }
   }
 
-  return {
+  const stats = {
     manual_candidate_count: manualRecords.length,
     manual_unique_url_count: manualUrls.size,
     gemini_candidate_count: geminiRecords.length,
@@ -149,6 +173,29 @@ function sourceDiscoveryCandidateStats({
     merged_unique_url_count: mergedUrls.size,
     gemini_publishable_candidate_count: geminiRecords.filter(isPublishableGeminiCandidate).length
   };
+  if (seedRecords.length > 0) {
+    let seedNewUniqueUrlCount = 0;
+    let seedEnrichedDuplicateCount = 0;
+    for (const url of seedUrls) {
+      if (manualUrls.has(url)) {
+        seedEnrichedDuplicateCount += 1;
+      } else {
+        seedNewUniqueUrlCount += 1;
+      }
+    }
+    Object.assign(stats, {
+      seed_candidate_count: seedRecords.length,
+      seed_unique_url_count: seedUrls.size,
+      seed_new_unique_url_count: seedNewUniqueUrlCount,
+      seed_enriched_duplicate_count: seedEnrichedDuplicateCount,
+      seed_publishable_candidate_count: seedRecords.filter(isPublishableSeedCandidate).length,
+      seed_blocked_url_count: seedRecords.filter(candidate => boolTrue(candidate.seed_url_blocked)).length,
+      seed_fetch_failed_count: seedRecords.filter(candidate => text(candidate.seed_fetch_status) === 'failed').length,
+      seed_primary_evidence_count: seedRecords.reduce((count, candidate) =>
+        count + (Array.isArray(candidate.primary_evidence_ids) ? candidate.primary_evidence_ids.length : 0), 0)
+    });
+  }
+  return stats;
 }
 
 function sourceDiscoveryStatsSummary(stats = {}, options = {}) {
@@ -199,7 +246,14 @@ function validateMergedManifestSchema(root, manifest, manifestRelPath, validatio
   ];
   const optionalReportFields = [
     'source_discovery_feedback_report',
-    'source_discovery_feedback_report_markdown'
+    'source_discovery_feedback_report_markdown',
+    'seed_candidate_artifact',
+    'seed_evidence_pack',
+    'seed_evidence_pack_markdown',
+    'seed_fetch_report',
+    'seed_fetch_report_markdown',
+    'seed_merge_report',
+    'seed_merge_report_markdown'
   ];
   const enabledDiscovery = manifest.llm_used === true || manifest.merge_mode === 'gemini_source_discovery';
   for (const field of [...reportFields, ...optionalReportFields]) {
@@ -228,6 +282,75 @@ function validateMergedManifestSchema(root, manifest, manifestRelPath, validatio
         value
       });
     }
+    const hashField = {
+      seed_candidate_artifact: 'seed_candidate_artifact_hash',
+      seed_evidence_pack: 'seed_evidence_pack_hash'
+    }[field];
+    if (hashField && validationMode === 'strict') {
+      const expected = String(manifest[hashField] || '').trim();
+      if (!expected) {
+        throw new CandidateArtifactValidationError(`Merged candidate manifest ${hashField} is required when ${field} is present: ${manifestRelPath}`, {
+          manifestRelPath,
+          field,
+          hashField
+        });
+      }
+      const actual = hashFile(resolved);
+      if (actual !== expected) {
+        throw new CandidateArtifactValidationError(`Merged candidate manifest ${hashField} mismatch for ${value}`, {
+          manifestRelPath,
+          field,
+          hashField
+        });
+      }
+    }
+  }
+}
+
+function validateRawManifestSchema(root, manifest, manifestRelPath, validationMode) {
+  if (manifest.manifest_type !== 'raw_candidate') return;
+  const relPath = String(manifest.collection_intent || '').trim();
+  const hash = String(manifest.collection_intent_hash || '').trim();
+  const status = String(manifest.collection_intent_status || '').trim();
+  if (!relPath && !hash && !status) return;
+  if (status !== 'approved') {
+    throw new CandidateArtifactValidationError(`Raw candidate manifest collection_intent_status must be approved: ${manifestRelPath}`, {
+      manifestRelPath,
+      collection_intent_status: status
+    });
+  }
+  if (!relPath || !hash) {
+    throw new CandidateArtifactValidationError(`Raw candidate manifest approved collection intent requires path and hash: ${manifestRelPath}`, {
+      manifestRelPath,
+      collection_intent: relPath,
+      collection_intent_hash: hash
+    });
+  }
+  const expectedRelPath = collectionIntentRelPath(manifest.newsletter_date);
+  if (manifest.newsletter_date && relPath !== expectedRelPath) {
+    throw new CandidateArtifactValidationError(`Raw candidate manifest collection_intent must be ${expectedRelPath}: ${manifestRelPath}`, {
+      manifestRelPath,
+      collection_intent: relPath
+    });
+  }
+  const resolved = repoPath(root, relPath);
+  if (!resolved) {
+    throw new CandidateArtifactValidationError(`Raw candidate manifest collection_intent must stay inside the repository: ${manifestRelPath}`, {
+      manifestRelPath,
+      collection_intent: relPath
+    });
+  }
+  if (validationMode === 'strict' && !fs.existsSync(resolved)) {
+    throw new CandidateArtifactValidationError(`Raw candidate manifest collection_intent target is missing: ${relPath}`, {
+      manifestRelPath,
+      collection_intent: relPath
+    });
+  }
+  if (validationMode === 'strict' && fs.existsSync(resolved) && hashFile(resolved) !== hash) {
+    throw new CandidateArtifactValidationError(`Raw candidate manifest collection_intent_hash mismatch: ${relPath}`, {
+      manifestRelPath,
+      collection_intent: relPath
+    });
   }
 }
 
@@ -308,6 +431,7 @@ function buildRawCandidateManifest({
   candidatePath = manualCandidatesPath(root, date),
   sourceRegistryPath = path.join(root, 'data', 'news-sources.json'),
   sourceCount = null,
+  collectionIntent = null,
   generatedAt = new Date().toISOString(),
   workflow = 'raw-candidate-pr'
 } = {}) {
@@ -326,6 +450,11 @@ function buildRawCandidateManifest({
     source_count: sourceCount ?? 0,
     source_registry_path: fs.existsSync(sourceRegistryPath) ? relPath(root, sourceRegistryPath) : '',
     source_registry_hash: hashFileIfExists(sourceRegistryPath),
+    collection_intent: collectionIntent?.relPath || '',
+    collection_intent_hash: collectionIntent?.hash || '',
+    collection_intent_status: collectionIntent?.status || '',
+    seed_url_count: collectionIntent?.seedUrlCount ?? 0,
+    keyword_hint_count: collectionIntent?.keywordHintCount ?? 0,
     llm_used: false,
     generator: 'collect-news-candidates',
     github_run_id: process.env.GITHUB_RUN_ID || '',
@@ -338,6 +467,7 @@ function writeManualCandidateArtifacts({
   date,
   payload,
   sourceCount = null,
+  collectionIntentPath = '',
   generatedAt = payload?.generated_at || new Date().toISOString(),
   workflow = 'raw-candidate-pr'
 } = {}) {
@@ -345,6 +475,11 @@ function writeManualCandidateArtifacts({
   const legacyPath = collectedCandidatesPath(root, date);
   writeJson(manualPath, payload);
   writeJson(legacyPath, payload);
+  const collectionIntent = approveCollectionIntent({
+    root,
+    date,
+    inputPath: collectionIntentPath
+  });
 
   const manifestPath = rawCandidateManifestPath(root, date);
   const manifest = buildRawCandidateManifest({
@@ -352,6 +487,7 @@ function writeManualCandidateArtifacts({
     date,
     candidatePath: manualPath,
     sourceCount,
+    collectionIntent,
     generatedAt,
     workflow
   });
@@ -371,11 +507,14 @@ function buildMergedCandidateManifest({
   candidatePath = mergedCandidatesPath(root, date),
   sourceCandidatePath = manualCandidatesPath(root, date),
   sourceManifestPath = rawCandidateManifestPath(root, date),
+  seedCandidatePath = seedCandidatesPath(root, date),
+  seedEvidencePackFilePath = seedEvidencePackPath(root, date),
   geminiCandidatePath = geminiCandidatesPath(root, date),
   generatedAt = new Date().toISOString(),
   mergeMode = 'disabled_pass_through',
   geminiCandidateCount = 0,
   llmUsed = false,
+  seedUsed = false,
   status = 'PASS',
   schemaVersion = 1,
   discoveryStats = null,
@@ -402,6 +541,7 @@ function buildMergedCandidateManifest({
     gemini_candidate_artifact_hash: hashFileIfExists(geminiCandidatePath),
     gemini_candidate_count: geminiCandidateCount,
     llm_used: llmUsed,
+    seed_used: seedUsed,
     github_run_id: process.env.GITHUB_RUN_ID || '',
     github_sha: process.env.GITHUB_SHA || ''
   };
@@ -417,6 +557,15 @@ function buildMergedCandidateManifest({
     manifest.evidence_validation_report = reportRefs.evidence_validation_report || '';
     manifest.source_discovery_feedback_report = reportRefs.source_discovery_feedback_report || '';
     manifest.source_discovery_feedback_report_markdown = reportRefs.source_discovery_feedback_report_markdown || '';
+    manifest.seed_candidate_artifact = seedUsed && fs.existsSync(seedCandidatePath) ? relPath(root, seedCandidatePath) : '';
+    manifest.seed_candidate_artifact_hash = seedUsed ? hashFileIfExists(seedCandidatePath) : '';
+    manifest.seed_evidence_pack = seedUsed && fs.existsSync(seedEvidencePackFilePath) ? relPath(root, seedEvidencePackFilePath) : '';
+    manifest.seed_evidence_pack_hash = seedUsed ? hashFileIfExists(seedEvidencePackFilePath) : '';
+    manifest.seed_evidence_pack_markdown = reportRefs.seed_evidence_pack_markdown || '';
+    manifest.seed_fetch_report = reportRefs.seed_fetch_report || '';
+    manifest.seed_fetch_report_markdown = reportRefs.seed_fetch_report_markdown || '';
+    manifest.seed_merge_report = reportRefs.seed_merge_report || '';
+    manifest.seed_merge_report_markdown = reportRefs.seed_merge_report_markdown || '';
   }
   return manifest;
 }
@@ -427,11 +576,15 @@ function writeMergedCandidateArtifacts({
   payload,
   sourceCandidatePath = manualCandidatesPath(root, date),
   sourceManifestPath = rawCandidateManifestPath(root, date),
+  seedCandidatePath = seedCandidatesPath(root, date),
+  seedEvidencePackFilePath = seedEvidencePackPath(root, date),
   geminiPayload = null,
+  seedPayload = null,
   generatedAt = new Date().toISOString(),
   mergeMode = 'disabled_pass_through',
   geminiCandidateCount = 0,
   llmUsed = false,
+  seedUsed = false,
   status = 'PASS',
   manifestSchemaVersion = 1,
   discoveryStats = null,
@@ -443,6 +596,10 @@ function writeMergedCandidateArtifacts({
   if (geminiPayload !== null) {
     writeJson(geminiPath, geminiPayload);
   }
+  const seedPath = seedCandidatePath;
+  if (seedPayload !== null) {
+    writeJson(seedPath, seedPayload);
+  }
 
   const manifestPath = mergedCandidateManifestPath(root, date);
   const manifest = buildMergedCandidateManifest({
@@ -451,11 +608,14 @@ function writeMergedCandidateArtifacts({
     candidatePath: mergedPath,
     sourceCandidatePath,
     sourceManifestPath,
+    seedCandidatePath: seedPath,
+    seedEvidencePackFilePath,
     geminiCandidatePath: geminiPath,
     generatedAt,
     mergeMode,
     geminiCandidateCount,
     llmUsed,
+    seedUsed,
     status,
     schemaVersion: manifestSchemaVersion,
     discoveryStats,
@@ -465,6 +625,7 @@ function writeMergedCandidateArtifacts({
 
   return {
     mergedPath,
+    seedPath: seedPayload !== null ? seedPath : '',
     geminiPath: geminiPayload !== null ? geminiPath : '',
     manifestPath,
     manifest
@@ -523,6 +684,7 @@ function validateCandidateArtifact({
       actualManifestType: manifest.manifest_type
     });
   }
+  validateRawManifestSchema(root, manifest, result.manifestRelPath, validationMode);
   validateMergedManifestSchema(root, manifest, result.manifestRelPath, validationMode);
   const expectedHash = artifactHash(manifest);
   if (!expectedHash) {
@@ -717,10 +879,13 @@ module.exports = {
   validateCandidateArtifact,
   writeManualCandidateArtifacts,
   writeMergedCandidateArtifacts,
+  collectionIntentRelPath,
   collectedCandidatesRelPath,
   manualCandidatesRelPath,
   geminiCandidatesRelPath,
   mergedCandidateManifestRelPath,
   mergedCandidatesRelPath,
-  rawCandidateManifestRelPath
+  rawCandidateManifestRelPath,
+  seedCandidatesRelPath,
+  seedEvidencePackRelPath
 };

@@ -6,6 +6,24 @@
 
 ## Stage 1 RAW Collection
 
+### Collection Intent Approval Boundary
+
+Stage 1은 seed URL과 `keyword_hints`를 직접 workflow input list로 받지 않습니다. `workflow_dispatch` input은 `collection_intent_path`만 허용하고, 승인된 intent는 canonical `content/collected-news/<date>/collection-intent.json`로 normalize됩니다. Seed input이 없으면 empty intent file을 만들지 않습니다.
+
+`raw-candidate-manifest.json`은 승인된 intent가 있을 때만 다음 필드를 기록합니다.
+
+```json
+{
+  "collection_intent": "content/collected-news/YYYY-MM-DD/collection-intent.json",
+  "collection_intent_hash": "...",
+  "collection_intent_status": "approved",
+  "seed_url_count": 2,
+  "keyword_hint_count": 7
+}
+```
+
+Stage 2는 manifest에 기록된 approved path/hash와 실제 `collection-intent.json` hash가 일치할 때만 seed expansion을 수행합니다. Manifest에 없는 canonical intent file이나 hash mismatch는 unapproved input으로 처리하고 seed expansion을 중단합니다. `keyword_hints`는 discovery hint이며 source-backed fact가 될 수 없습니다.
+
 - canonical candidate artifact: `content/collected-news/<date>/manual-candidates.json`
 - transition compatibility artifact: `content/collected-news/<date>/candidates.json`
 - provenance manifest: `content/collected-news/<date>/raw-candidate-manifest.json`
@@ -17,6 +35,52 @@
 `manual-candidates.json`과 `candidates.json`은 v1 transition 동안 같은 payload를 가져야 합니다. 기존 selector/generator 호환성을 위해 `candidates.json`은 남기지만, 새 workflow 계약에서 canonical input은 `manual-candidates.json`입니다.
 
 ## Stage 2 Optional Gemini Source Discovery Boundary
+
+### Seed Evidence Expansion
+
+Approved `collection-intent.json`이 있으면 Stage 2는 Gemini credential 여부와 무관하게 deterministic seed evidence expansion을 먼저 실행합니다. Gemini disabled mode에서도 seed expansion은 `merged-candidates.json`을 생성할 수 있습니다.
+
+Seed evidence artifacts:
+
+- `content/collected-news/<date>/seed-candidates.json`
+- `content/collected-news/<date>/seed-evidence-pack.json`
+- `content/newsroom/<date>/seed-fetch-report.json`
+- `content/newsroom/<date>/seed-fetch-report.md`
+- `content/newsroom/<date>/seed-evidence-pack.md`
+- `content/newsroom/<date>/seed-merge-report.json`
+- `content/newsroom/<date>/seed-merge-report.md`
+
+`merge_mode` 값은 다음 중 하나입니다.
+
+```text
+disabled_pass_through
+seed_evidence_expansion
+gemini_source_discovery
+seed_evidence_plus_gemini_discovery
+```
+
+Stage 2 manifest/report는 seed 사용 시 다음 필드를 기록합니다.
+
+```json
+{
+  "seed_used": true,
+  "seed_candidate_artifact": "content/collected-news/YYYY-MM-DD/seed-candidates.json",
+  "seed_candidate_artifact_hash": "...",
+  "seed_evidence_pack": "content/collected-news/YYYY-MM-DD/seed-evidence-pack.json",
+  "seed_evidence_pack_hash": "...",
+  "seed_candidate_count": 1,
+  "seed_new_unique_url_count": 1,
+  "seed_enriched_duplicate_count": 0,
+  "seed_publishable_candidate_count": 1,
+  "seed_blocked_url_count": 0,
+  "seed_fetch_failed_count": 0,
+  "seed_primary_evidence_count": 1
+}
+```
+
+Seed fetch는 public `https` URL만 허용합니다. `http`, `file`, `ftp`, embedded credentials, localhost, loopback, private IP range, link-local, metadata endpoint, internal host, redirect-to-private target은 fetch하지 않습니다. Redirect 후 final URL도 같은 public `https` validation을 다시 통과해야 합니다.
+
+Duplicate merge precedence는 field-level로 고정합니다. Manual candidate의 `title`, `headline`, `editor_note`, manual `priority`, `source_id`, user tags, intended bucket은 seed/Gemini가 override하지 않습니다. Seed evidence는 `source_extraction`, `evidence_ids`, `seed_evidence_pack_refs`, `extraction_quality`, `linked_evidence_summary`, `do_not_claim`, missing `publishedAt`, missing `version_or_release`만 보강합니다. 충돌은 `content/newsroom/<date>/seed-merge-report.json`과 `.md`에 기록합니다.
 
 - optional output: `content/collected-news/<date>/merged-candidates.json`
 - Gemini discovery delta artifact: `content/collected-news/<date>/gemini-candidates.json`
@@ -53,6 +117,8 @@ Disabled pass-through는 `gemini-candidates.json`을 정확히 empty array `[]`�
 - manual candidates는 어떤 경우에도 silently drop하지 않습니다.
 
 ## Stage 3 Final Generation
+
+Stage 3은 seed URL crawling/fetch를 다시 수행하지 않습니다. Seed-derived claim은 candidate의 `evidence_pack_ids`, `primary_evidence_ids`, `linked_evidence_ids`, `source_extraction_ref`로 Evidence Pack을 추적하고, Gemini prompt에는 full pack이 아니라 candidate별 `compact_evidence` capsule만 전달합니다. Missing evidence id가 있으면 traceability를 invent하지 않고 claim을 demote해야 합니다.
 
 Stage 3은 artifact input mode로 approved candidate artifact만 읽습니다.
 

@@ -98,6 +98,8 @@ function evidenceItems(candidate) {
     candidate.api_or_component ? `api_or_component: ${candidate.api_or_component}` : '',
     candidate.behavior_change ? `behavior_change: ${candidate.behavior_change}` : '',
     sourceExtractionBullet ? `source_extraction.release_bullet: ${sourceExtractionBullet}` : '',
+    ...ensureArray(candidate.compact_evidence?.primary_facts).map(item => `seed_primary_fact: ${item}`),
+    ...ensureArray(candidate.compact_evidence?.linked_context).map(item => `seed_linked_context: ${item}`),
     ...ensureArray(candidate.evidence_notes).map(item => `evidence_note: ${item}`),
     summaryCacheText(candidate) ? `summary_cache: ${summaryCacheText(candidate)}` : '',
     candidate.summary ? `summary: ${candidate.summary}` : ''
@@ -331,6 +333,8 @@ function buildArticleCapsule(candidate) {
   const doNotClaim = [
     ...ensureArray(halSignal.do_not_overstate),
     ...ensureArray(fieldCandidate.derived_editorial_hints?.do_not_claim),
+    ...ensureArray(fieldCandidate.do_not_claim),
+    ...ensureArray(fieldCandidate.compact_evidence?.do_not_claim),
     ...sourceQualityDoNotClaim(sourceQuality),
     ...linkedEvidenceDoNotClaim(fieldCandidate)
   ].map(item => compactText(item, 140));
@@ -380,6 +384,18 @@ function buildArticleCapsule(candidate) {
       MAX_TEXT
     ),
     evidence: evidenceItems(candidate),
+    seed_evidence: candidate.compact_evidence ? {
+      evidence_pack_ids: ensureArray(candidate.evidence_pack_ids).slice(0, 6),
+      primary_evidence_ids: ensureArray(candidate.primary_evidence_ids).slice(0, 8),
+      linked_evidence_ids: ensureArray(candidate.linked_evidence_ids).slice(0, 8),
+      source_extraction_ref: text(candidate.source_extraction_ref),
+      compact_evidence: {
+        primary_facts: ensureArray(candidate.compact_evidence.primary_facts).slice(0, 4).map(item => compactText(item, 180)),
+        linked_context: ensureArray(candidate.compact_evidence.linked_context).slice(0, 3).map(item => compactText(item, 160)),
+        do_not_claim: ensureArray(candidate.compact_evidence.do_not_claim).slice(0, 6).map(item => compactText(item, 140)),
+        evidence_urls: ensureArray(candidate.compact_evidence.evidence_urls).slice(0, 6).map(text)
+      }
+    } : null,
     source_extraction: compactSourceExtraction(candidate.source_extraction),
     derived_editorial_hints: compactDerivedHints(candidate.derived_editorial_hints),
     extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
