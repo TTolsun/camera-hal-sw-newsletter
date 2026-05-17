@@ -270,6 +270,66 @@ test('seed merge preserves manual editorial fields and records conflicts', () =>
   assert.equal(report.conflicts.some(item => item.field === 'priority'), true);
 });
 
+test('seed merge preserves blocked linked evidence diagnostics for duplicate manual candidates', () => {
+  const blockedFact = 'Blocked linked page claimed unsupported implementation details.';
+  const blockedUrl = 'https://developer.android.com/blocked-linked';
+  const manual = [{
+    title: 'Manual title',
+    headline: 'Manual headline',
+    editor_note: 'Manual note',
+    priority: 'urgent',
+    source_id: 'manual-source',
+    tags: ['editor-picked'],
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    linked_evidence_ids: ['manual-usable-linked'],
+    blocked_linked_evidence_ids: ['blocked-overlap'],
+    blocked_linked_evidence_urls: ['https://developer.android.com/manual-blocked'],
+    compact_evidence: {
+      primary_facts: ['Manual source-backed fact.'],
+      linked_context: ['Manual usable linked context.'],
+      evidence_urls: ['https://developer.android.com/manual-usable']
+    }
+  }];
+  const seed = [{
+    title: 'Seed title',
+    headline: 'Seed headline',
+    priority: 'low',
+    source_id: 'seed-source',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera?hl=ko#1.6.1',
+    linked_evidence_ids: ['seed-usable-linked'],
+    blocked_linked_evidence_ids: ['blocked-overlap', 'blocked-new'],
+    blocked_linked_evidence_urls: ['https://developer.android.com/manual-blocked', blockedUrl],
+    compact_evidence: {
+      primary_facts: ['Seed source-backed fact.'],
+      linked_context: ['Seed usable linked context.'],
+      evidence_urls: ['https://developer.android.com/seed-usable']
+    },
+    seed_ids: ['seed-1'],
+    evidence_pack_ids: ['seed-1-pack'],
+    primary_evidence_ids: ['seed-1-primary-01'],
+    source_extraction_ref: 'seed-evidence-pack.json#/packs/0'
+  }];
+
+  const { mergedCandidates, report } = mergeSeedCandidates(manual, seed);
+  const [merged] = mergedCandidates;
+
+  assert.equal(mergedCandidates.length, 1);
+  assert.equal(merged.title, 'Manual title');
+  assert.equal(merged.headline, 'Manual headline');
+  assert.equal(merged.editor_note, 'Manual note');
+  assert.equal(merged.priority, 'urgent');
+  assert.equal(merged.source_id, 'manual-source');
+  assert.deepEqual(merged.tags, ['editor-picked']);
+  assert.deepEqual(merged.blocked_linked_evidence_ids, ['blocked-overlap', 'blocked-new']);
+  assert.deepEqual(merged.blocked_linked_evidence_urls, ['https://developer.android.com/manual-blocked', blockedUrl]);
+  assert.deepEqual(merged.linked_evidence_ids, ['manual-usable-linked', 'seed-usable-linked']);
+  assert.equal(merged.linked_evidence_ids.includes('blocked-overlap'), false);
+  assert.equal(merged.linked_evidence_ids.includes('blocked-new'), false);
+  assert.equal(merged.compact_evidence.linked_context.includes(blockedFact), false);
+  assert.equal(merged.compact_evidence.evidence_urls.includes(blockedUrl), false);
+  assert.deepEqual(report.decisions[0].added_evidence_ids, ['seed-1-primary-01']);
+});
+
 test('seed expansion writes evidence pack, seed candidates, reports, and compact evidence', async () => {
   const root = tempRoot();
   const date = '2026-05-16';

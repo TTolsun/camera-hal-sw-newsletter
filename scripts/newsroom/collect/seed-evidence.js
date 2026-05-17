@@ -413,6 +413,14 @@ function preserveManualEditorialFields(manual, seedCandidate) {
   output.evidence_pack_ids = [...new Set([...ensureArray(output.evidence_pack_ids), ...ensureArray(seedCandidate.evidence_pack_ids)])];
   output.primary_evidence_ids = [...new Set([...ensureArray(output.primary_evidence_ids), ...ensureArray(seedCandidate.primary_evidence_ids)])];
   output.linked_evidence_ids = [...new Set([...ensureArray(output.linked_evidence_ids), ...ensureArray(seedCandidate.linked_evidence_ids)])];
+  output.blocked_linked_evidence_ids = [...new Set([
+    ...ensureArray(output.blocked_linked_evidence_ids),
+    ...ensureArray(seedCandidate.blocked_linked_evidence_ids)
+  ])];
+  output.blocked_linked_evidence_urls = [...new Set([
+    ...ensureArray(output.blocked_linked_evidence_urls),
+    ...ensureArray(seedCandidate.blocked_linked_evidence_urls)
+  ])];
   output.seed_evidence_pack_refs = [...new Set([
     ...ensureArray(output.seed_evidence_pack_refs),
     seedCandidate.source_extraction_ref
