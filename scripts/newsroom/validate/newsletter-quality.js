@@ -43,6 +43,10 @@ const {
   normalizeSourceQuality,
   sourceQualityFieldDrift
 } = require('../collect/source-quality-classifier');
+const {
+  summarizeClaimValidation,
+  validateArticleClaims
+} = require('./claim-source-binding');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
@@ -632,7 +636,9 @@ function boundedDeduct(state, category, points, reason, location = '', options =
     reason,
     location,
     blocking,
-    severity: options.severity || (blocking ? 'hard' : 'soft')
+    severity: options.severity || (blocking ? 'hard' : 'soft'),
+    reason_code: options.reason_code || '',
+    dedupe_key: options.dedupe_key || ''
   });
 }
 
@@ -777,6 +783,49 @@ function addLinkedEvidenceQualityDeductions(state, section, candidate, location)
       'Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.',
       location,
       { blocking: false }
+    );
+  }
+}
+
+function addClaimValidationDeductions(state, validation, location, seenKeys) {
+  const claimIssues = [
+    ...ensureArray(validation.issues).map(item => ({
+      ...item,
+      claim_id: '',
+      category: 'claim-binding'
+    })),
+    ...ensureArray(validation.claim_results).flatMap(claim =>
+      ensureArray(claim.issues).map(item => ({
+        ...item,
+        claim_id: claim.claim_id,
+        category: item.reason_code === 'direct_hal_claim_without_direct_evidence' ||
+          item.reason_code === 'do_not_claim_violation' ||
+          item.reason_code === 'do_not_overstate_violation'
+          ? 'claim-overclaim'
+          : 'claim-binding'
+      }))
+    )
+  ];
+  for (const item of claimIssues) {
+    const dedupeKey = [
+      validation.article_index,
+      item.claim_id || 'article',
+      item.reason_code || item.message
+    ].join(':');
+    if (seenKeys.has(dedupeKey)) continue;
+    seenKeys.add(dedupeKey);
+    boundedDeduct(
+      state,
+      item.category,
+      item.blocking === false ? 1 : 8,
+      item.message || item.reason_code || 'Claim validation issue.',
+      location,
+      {
+        blocking: item.blocking !== false,
+        severity: item.severity || (item.blocking === false ? 'soft' : 'hard'),
+        reason_code: item.reason_code,
+        dedupe_key: dedupeKey
+      }
     );
   }
 }
@@ -1375,6 +1424,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const state = { deductions: [] };
   const bindingIndex = candidateBindingIndex(reporter, options.shortlistReport || null);
   const staleClaimReport = options.staleClaimReport || null;
+  const strictClaimValidation = options.strictClaimValidation === true;
+  const claimValidations = [];
+  const claimDeductionKeys = new Set();
   let sourceIntegrityViolationCount = 0;
   const sourceUrlOwners = new Map();
 
@@ -1519,6 +1571,14 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       }
       addLinkedEvidenceQualityDeductions(state, section, binding.candidate, location);
     }
+    const claimValidation = validateArticleClaims({
+      section,
+      candidate: binding.status === 'bound' ? binding.candidate : {},
+      articleIndex: index,
+      strict: strictClaimValidation
+    });
+    claimValidations.push(claimValidation);
+    addClaimValidationDeductions(state, claimValidation, location, claimDeductionKeys);
     const cameraXViolations = cameraXSourceExtractionViolations(
       section,
       binding.status === 'bound' ? binding.candidate : null
@@ -1710,6 +1770,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const softItems = softDeductions(state.deductions);
   const articleResults = buildArticleResults(sections, state.deductions, factCheck, sectionCountDetails);
   const articleSectionContract = summarizeArticleSectionContracts(sections);
+  const claimValidationSummary = summarizeClaimValidation(claimValidations);
+  const claimResults = claimValidations.flatMap(item => ensureArray(item.claim_results));
+  const uncoveredFacts = claimValidations.flatMap(item => ensureArray(item.uncovered_facts));
   const halSignalArticles = sections.map((section, index) => halSignalInput(
     section,
     sectionBindings[index]?.status === 'bound' ? sectionBindings[index].candidate : {},
@@ -1734,6 +1797,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       : `Quality score ${score}, threshold ${threshold}, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.`,
     deductions: state.deductions,
     article_results: articleResults,
+    claim_validation_summary: claimValidationSummary,
+    claim_results: claimResults,
+    uncovered_facts: uncoveredFacts,
     hal_signal_quality_summary: halSignalQualitySummary,
     main_article_signal_checks: mainArticleSignalChecks,
     metrics: {
@@ -1774,6 +1840,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         return counts;
       }, { PASS: 0, DEMOTE: 0, FAIL: 0 }),
       article_section_contract: articleSectionContract,
+      claim_validation_summary: claimValidationSummary,
+      derived_evidence_mapping_count: claimValidationSummary.derived_evidence_mapping_count || 0,
+      uncovered_fact_count: uncoveredFacts.length,
       hal_signal_quality_summary: halSignalQualitySummary,
       main_article_signal_checks: mainArticleSignalChecks,
       top_deduction_categories: summarizeDeductionCategories(state.deductions).slice(0, 5),
@@ -1798,6 +1867,11 @@ function buildQualityReportMarkdown(report) {
     .map(item => `- ${item.reason} (${item.count})`)
     .join('\n') || '- none';
   const halSignalSummary = report.hal_signal_quality_summary || metrics.hal_signal_quality_summary || {};
+  const claimSummary = report.claim_validation_summary || metrics.claim_validation_summary || {};
+  const uncoveredFactLines = ensureArray(report.uncovered_facts)
+    .slice(0, 12)
+    .map(item => `- article=${item.article_index}; field=${item.field}; reason=${item.reason_code}; text=${markdownTableCell(item.text || '')}`)
+    .join('\n') || '- none';
   const halSignalRows = ensureArray(report.main_article_signal_checks || metrics.main_article_signal_checks)
     .map(item => [
       item.index || '',
@@ -1904,6 +1978,18 @@ ${halSignalTable}
 - Blocking deduction categories: ${ensureArray(metrics.blocking_deduction_categories).join(', ') || 'none'}
 - Hard fail count: ${metrics.hard_fail_count || 0}
 - Soft deduction count: ${metrics.soft_deduction_count || 0}
+
+## Claim Binding
+
+- Claim validation status: ${claimSummary.status || 'not_available'}
+- Claim coverage: bound_claims=${claimSummary.bound_claims ?? 'unknown'}; total_claims=${claimSummary.total_claims ?? 'unknown'}
+- Derived evidence mapping count: ${claimSummary.derived_evidence_mapping_count ?? metrics.derived_evidence_mapping_count ?? 0}
+- Overclaim risk: ${claimSummary.overclaim_risk || 'unknown'}
+- Uncovered fact count: ${metrics.uncovered_fact_count ?? ensureArray(report.uncovered_facts).length}
+
+### Uncovered Facts
+
+${uncoveredFactLines}
 
 ## Article Structure Contract
 

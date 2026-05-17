@@ -201,7 +201,8 @@ function maybeAnnotateQuality({
   reporter,
   factCheck,
   shortlist,
-  staleClaim
+  staleClaim,
+  strictClaimValidation = false
 }) {
   const relPath = newsroomRelPath(date, 'quality-report.json');
   if (!quality.exists) {
@@ -271,7 +272,8 @@ function maybeAnnotateQuality({
     const recomputed = buildNewsletterQualityReport(date, editor.value, reporter.value || {}, factCheck.value, {
       threshold,
       shortlistReport: shortlist.value || null,
-      staleClaimReport: staleClaim.value || null
+      staleClaimReport: staleClaim.value || null,
+      strictClaimValidation
     });
     if (recomputed.score !== score || recomputed.status !== report.status) {
       addAnnotation(
@@ -413,6 +415,7 @@ function collectPublicationQualityAnnotations(options = {}) {
   const parsedOptions = options.parsedOptions || parseArgs(options.argv || []);
   const annotations = [];
   const items = resolveTargetItems(root, parsedOptions);
+  const strictDates = strictTargetDates({ root });
 
   for (const item of items) {
     const date = item.date;
@@ -433,7 +436,8 @@ function collectPublicationQualityAnnotations(options = {}) {
       reporter,
       factCheck,
       shortlist,
-      staleClaim
+      staleClaim,
+      strictClaimValidation: strictDates.has(date) || process.env.REQUIRE_NEWSLETTER_QUALITY === '1'
     });
     maybeAnnotateFactCheck({
       annotations,

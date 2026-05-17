@@ -97,6 +97,30 @@ function editor(overrides = {}) {
   };
 }
 
+function reporterForClaimTests(url = 'https://example.com/source-1') {
+  return {
+    candidates: [{
+      title: 'Source 1',
+      url,
+      source_candidate_hash: 'hash-1',
+      relevance_bucket: 'direct_aosp_camera',
+      aosp_camera_directness: 5,
+      counts_as_primary_camera_topic: true,
+      impact_claim_level: 'camera_stack_direct',
+      primary_evidence_ids: ['evidence-1'],
+      compact_evidence: {
+        primary_facts: ['Fact 1'],
+        evidence_urls: [url],
+        do_not_claim: ['Do not claim direct Camera HAL API changes.']
+      },
+      finalSelectionEligibility: 'main',
+      hasDatedEvidence: true,
+      source_gap_risk: false,
+      main_eligible: true
+    }]
+  };
+}
+
 function normalizeSection(value) {
   return {
     ...value,
@@ -165,6 +189,91 @@ test('valid editor output with exactly 3 briefing items passes unchanged', () =>
       sources: item.sources
     }))),
     sourceSignature
+  );
+});
+
+test('strict editor claim binding requires a fact claim for factual article fields', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim-1',
+          text: 'Fact 1',
+          claim_type: 'recommendation',
+          evidence_ids: ['evidence-1'],
+          source_urls: ['https://example.com/source-1'],
+          impact_level: 'direct_hal_contract',
+          overclaim_risk: 'low'
+        }]
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection,
+      reporter: reporterForClaimTests(),
+      strictClaims: true
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.claims');
+      assert.ok(error.details.issues.some(issue =>
+        issue.issues.some(item => item.reason_code === 'missing_fact_claim')
+      ));
+      return true;
+    }
+  );
+});
+
+test('strict editor claim binding rejects duplicate claim ids and invalid enums', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [
+          {
+            claim_id: 'claim-1',
+            text: 'Fact 1',
+            claim_type: 'fact',
+            evidence_ids: ['evidence-1'],
+            source_urls: ['https://example.com/source-1'],
+            impact_level: 'not_an_impact',
+            overclaim_risk: 'low'
+          },
+          {
+            claim_id: 'claim-1',
+            text: 'Fact 1',
+            claim_type: 'not_a_claim_type',
+            evidence_ids: ['evidence-1'],
+            source_urls: ['https://example.com/source-1'],
+            impact_level: 'direct_hal_contract',
+            overclaim_risk: 'impossible'
+          }
+        ]
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection,
+      reporter: reporterForClaimTests(),
+      strictClaims: true
+    }),
+    error => {
+      const reasonCodes = error.details.issues.flatMap(issue =>
+        issue.issues.map(item => item.reason_code)
+      );
+      assert.ok(reasonCodes.includes('duplicate_claim_id'));
+      assert.ok(reasonCodes.includes('invalid_claim_type'));
+      assert.ok(reasonCodes.includes('invalid_impact_level'));
+      assert.ok(reasonCodes.includes('invalid_overclaim_risk'));
+      return true;
+    }
   );
 });
 

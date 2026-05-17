@@ -76,6 +76,28 @@ const halSignalCapsule = {
   ]
 };
 
+const claimBinding = {
+  type: 'OBJECT',
+  properties: {
+    claim_id: string,
+    text: string,
+    claim_type: string,
+    evidence_ids: stringArray,
+    source_urls: stringArray,
+    impact_level: string,
+    overclaim_risk: string
+  },
+  required: [
+    'claim_id',
+    'text',
+    'claim_type',
+    'evidence_ids',
+    'source_urls',
+    'impact_level',
+    'overclaim_risk'
+  ]
+};
+
 const reporterCandidate = {
   type: 'OBJECT',
   properties: {
@@ -208,6 +230,10 @@ const section = {
     source_verification_notes: stringArray,
     article_sections: articleSections,
     hal_signal_capsule: halSignalCapsule,
+    claims: {
+      type: 'ARRAY',
+      items: claimBinding
+    },
     hal_impact_axes: stringArray,
     reader_owners: stringArray,
     actionability_level: string,

@@ -186,6 +186,18 @@ function articleSectionContractPrompt() {
   ].join('\n');
 }
 
+function articleClaimContractPrompt() {
+  return [
+    'Claim binding contract: every main article must include claims[].',
+    'Each claims[] item must include claim_id, text, claim_type, evidence_ids, source_urls, impact_level, and overclaim_risk.',
+    'claim_type must be one of: fact, inference, recommendation, risk_note, limitation.',
+    'Any source-backed verified_facts[], confirmed_facts[], or concrete evidence_summary text must have at least one matching claim_type=fact claim.',
+    'Fact claims must cite item-level evidence ids from supplied seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, or source_extraction facts. Do not use evidence_pack_ids alone as fact support.',
+    'Preserve release/version/section URL fragments in source_urls when the evidence URL contains a fragment, especially CameraX release-note anchors.',
+    'Do not contradict do_not_claim or do_not_overstate guardrails. Direct HAL/API/runtime wording requires direct source evidence.'
+  ].join('\n');
+}
+
 function writeNewsletterDate(date, rootDir = root) {
   const tmpDir = path.join(rootDir, '.tmp');
   fs.mkdirSync(tmpDir, { recursive: true });
@@ -868,7 +880,8 @@ function normalizeEditorSection(section, index, reporter) {
 function validateEditor(value, date, reporter = { candidates: [] }) {
   return validateEditorOutputContract(value, date, {
     reporter,
-    normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter)
+    normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
+    strictClaims: ensureArray(reporter?.candidates).length > 0
   });
 }
 
@@ -1196,7 +1209,8 @@ function writeReviewableRepairFailureArtifacts({
     ? cloneJson(existingQualityReport)
     : buildNewsletterQualityReport(date, fallbackEditor, fallbackReporter, fallbackFactCheck, {
       threshold: qualityGatePolicy.threshold,
-      shortlistReport: shortlistReport || generationRunState.shortlistReport
+      shortlistReport: shortlistReport || generationRunState.shortlistReport,
+      strictClaimValidation: true
     });
   const serializedError = serializeEditorValidationError(error, {
     stage,
@@ -2642,6 +2656,7 @@ async function main() {
         'Use article capsule fields, risk, score, selection, imageCandidates, and evidence only as context. Do not assume omitted source text exists.',
         linkedEvidencePromptGuardrails(),
         sourceExtractionPromptGuardrails(),
+        'Reporter stage must provide evidence-backed candidate facts and guardrails only. Do not create final article-level claims[]; the editor owns article claims[].',
         'For every final_selected candidate, extract concrete evidence when available: version_or_release, api_or_component, behavior_change, evidence_notes, and cross_check_status.',
         'Preserve eligibility and risk values from the article capsule. If a required schema field is not present, infer only from the capsule evidence and risk object.',
         'If the source is a rolling page, release-note watch page, documentation watch page, homepage, or other watch page, say that explicitly in evidence_notes and do not present it as a dated release unless the candidate provides date/version/API/component/behavior evidence.',
@@ -2705,6 +2720,7 @@ async function main() {
         linkedEvidencePromptGuardrails(),
         sourceExtractionPromptGuardrails(),
         articleSectionContractPrompt(),
+        articleClaimContractPrompt(),
         'Initial editor drafts must use only primary selected article capsules. Reserve candidates are not available until a primary article is demoted/removed during repair or completion.',
         `Priority order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
         'SoC/platform articles are lower-priority fallback, but do not exclude public CPU/GPU/NPU/ISP/power/thermal/performance information when it is final-selected and can be explained from Camera framework, HAL, driver, image pipeline, or platform performance perspective.',
@@ -2800,6 +2816,7 @@ async function main() {
         'Treat any finalSelectionEligibility=watchlist/exclude candidate or watch page without dated evidence used as a main article as must_fix.',
         'Any claim without a source must be classified as must_fix.',
         articleSectionContractPrompt(),
+        articleClaimContractPrompt(),
         'Flag general AI/C++/SoC news that lacks AOSP Camera, camera driver, SoC platform, or native development interpretation.',
         'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
         'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
@@ -2822,7 +2839,8 @@ async function main() {
 
     qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
       threshold: qualityGatePolicy.threshold,
-      shortlistReport
+      shortlistReport,
+      strictClaimValidation: true
     });
     generationRunState.qualityReport = qualityReport;
     editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
@@ -2892,6 +2910,7 @@ async function main() {
           linkedEvidencePromptGuardrails(),
           sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
+          articleClaimContractPrompt(),
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
           'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance.',
@@ -2949,6 +2968,7 @@ async function main() {
           linkedEvidencePromptGuardrails(),
           sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
+          articleClaimContractPrompt(),
           'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or expanded editorial-scope relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
           'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
@@ -2970,7 +2990,8 @@ async function main() {
 
         qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
           threshold: qualityGatePolicy.threshold,
-          shortlistReport
+          shortlistReport,
+          strictClaimValidation: true
         });
         generationRunState.qualityReport = qualityReport;
         editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
@@ -3034,6 +3055,7 @@ async function main() {
             linkedEvidencePromptGuardrails(),
             sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),
+            articleClaimContractPrompt(),
             'Do not duplicate locked, duplicate/rejected, source-gap, or ineligible sections from the exclusion context.',
             'Each new section must satisfy the same editorial contract: confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, and sources.',
             'Each new section must name release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance using only supplied candidate metadata/source text.',
@@ -3076,6 +3098,7 @@ async function main() {
             linkedEvidencePromptGuardrails(),
             sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),
+            articleClaimContractPrompt(),
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the Newsletter Policy article composition contract.',
             'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
             'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
@@ -3096,7 +3119,8 @@ async function main() {
 
           qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
             threshold: qualityGatePolicy.threshold,
-            shortlistReport
+            shortlistReport,
+            strictClaimValidation: true
           });
           generationRunState.qualityReport = qualityReport;
           editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
@@ -3226,7 +3250,8 @@ async function main() {
   qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
     threshold: qualityGatePolicy.threshold,
     shortlistReport,
-    staleClaimReport: staleScrub.report
+    staleClaimReport: staleScrub.report,
+    strictClaimValidation: true
   });
   generationRunState.qualityReport = qualityReport;
 
