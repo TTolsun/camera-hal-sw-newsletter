@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  normalizeSeedPackStatus,
   stableLinkedEvidenceItemId,
   stableSourceExtractionItemId,
   validateArticleClaims
@@ -43,6 +44,42 @@ function candidate(overrides = {}) {
       evidence_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']
     },
     ...overrides
+  };
+}
+
+function seedEvidencePack(packs = []) {
+  return {
+    schema_version: 1,
+    report_type: 'seed_evidence_pack',
+    packs
+  };
+}
+
+function seedPack({
+  packId = 'seed-camerax-pack',
+  seedId = 'seed-camerax',
+  url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+  evidenceId = 'seed-camerax-primary-01',
+  title = 'CameraX 1.6.1 release',
+  fact = 'CameraX 1.6.1 release date: 2026-05-06.',
+  publishedAt = '2026-05-06',
+  doNotClaim = []
+} = {}) {
+  return {
+    evidence_pack_id: packId,
+    seed_id: seedId,
+    seed_url: url,
+    final_url: url,
+    title,
+    primary_evidence: [{
+      evidence_id: evidenceId,
+      url,
+      title,
+      published_at: publishedAt,
+      source_backed_items: [fact]
+    }],
+    linked_evidence: [],
+    do_not_claim: doNotClaim
   };
 }
 
@@ -338,4 +375,175 @@ test('unsafe limitation wording cannot present failed evidence as direct HAL sup
   const issue = result.claim_results[0].issues.find(item => item.reason_code === 'blocked_or_failed_evidence_id');
   assert.ok(issue);
   assert.equal(issue.blocking, true);
+});
+
+test('seed evidence pack primary item supports only the bound candidate evidence index', () => {
+  const result = validateArticleClaims({
+    section: section({
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 release date: 2026-05-06.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }]
+    }),
+    candidate: candidate({
+      primary_evidence_ids: [],
+      linked_evidence_ids: [],
+      compact_evidence: {
+        evidence_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']
+      }
+    }),
+    seedEvidencePack: seedEvidencePack([seedPack()]),
+    strict: true
+  });
+  assert.equal(result.claim_results[0].status, 'bound');
+  assert.deepEqual(result.claim_results[0].invalid_evidence_ids, []);
+});
+
+test('missing seed evidence pack preserves candidate-local validation behavior', () => {
+  const result = validateArticleClaims({
+    section: section({
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 release date: 2026-05-06.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }]
+    }),
+    candidate: candidate(),
+    strict: true
+  });
+  assert.equal(result.claim_results[0].status, 'bound');
+  assert.equal(result.issues.some(item => /^seed_evidence_pack_/.test(item.reason_code)), false);
+});
+
+test('shared release-note URL-only seed pack match is rejected without disambiguating evidence', () => {
+  const sharedUrl = 'https://developer.android.com/jetpack/androidx/releases/camera';
+  const result = validateArticleClaims({
+    section: section({
+      confirmed_facts: ['Release note source evidence exists.'],
+      evidence_summary: 'Official release note source evidence.',
+      article_sections: {
+        verified_facts: ['Release note source evidence exists.'],
+        background_context: 'CameraX sits above camera2.',
+        hal_driver_impact: 'Treat as adjacent source context.',
+        action_items: ['Review source evidence.'],
+        team_share_points: 'Use only matched evidence.'
+      },
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'Release note source evidence exists.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-a-primary-01'],
+        source_urls: [sharedUrl],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }],
+      sources: [{ title: 'CameraX release notes', url: sharedUrl }]
+    }),
+    candidate: candidate({
+      title: 'Release notes',
+      url: sharedUrl,
+      version_or_release: '',
+      published_date: '',
+      publishedAt: '',
+      api_or_component: '',
+      evidence_pack_ids: [],
+      seed_ids: [],
+      primary_evidence_ids: [],
+      linked_evidence_ids: [],
+      compact_evidence: { evidence_urls: [sharedUrl] }
+    }),
+    seedEvidencePack: seedEvidencePack([
+      seedPack({
+        packId: 'seed-a-pack',
+        seedId: 'seed-a',
+        url: sharedUrl,
+        evidenceId: 'seed-a-primary-01',
+        title: 'Release 1.0',
+        fact: 'Release note source evidence exists.'
+      }),
+      seedPack({
+        packId: 'seed-b-pack',
+        seedId: 'seed-b',
+        url: sharedUrl,
+        evidenceId: 'seed-b-primary-01',
+        title: 'Release 2.0',
+        fact: 'Other release evidence exists.'
+      })
+    ]),
+    strict: true
+  });
+  assert.ok(result.issues.some(item => item.reason_code === 'seed_evidence_pack_url_only_shared_page_rejected'));
+  assert.ok(result.claim_results[0].invalid_evidence_ids.includes('seed-a-primary-01'));
+});
+
+test('ambiguous seed pack match does not merge pack evidence', () => {
+  const result = validateArticleClaims({
+    section: section({
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 release date: 2026-05-06.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-a-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }]
+    }),
+    candidate: candidate({
+      seed_ids: ['seed-a', 'seed-b'],
+      evidence_pack_ids: [],
+      primary_evidence_ids: [],
+      linked_evidence_ids: []
+    }),
+    seedEvidencePack: seedEvidencePack([
+      seedPack({ packId: 'seed-a-pack', seedId: 'seed-a', evidenceId: 'seed-a-primary-01' }),
+      seedPack({ packId: 'seed-b-pack', seedId: 'seed-b', evidenceId: 'seed-b-primary-01' })
+    ]),
+    strict: true
+  });
+  assert.ok(result.issues.some(item => item.reason_code === 'seed_evidence_pack_ambiguous'));
+  assert.ok(result.claim_results[0].invalid_evidence_ids.includes('seed-a-primary-01'));
+});
+
+test('seed pack do_not_claim guardrails are additive', () => {
+  const result = validateArticleClaims({
+    section: section({
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 changes direct Camera HAL API behavior.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'direct_hal_contract',
+        overclaim_risk: 'high'
+      }]
+    }),
+    candidate: candidate({
+      do_not_claim: [],
+      compact_evidence: {
+        primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+        evidence_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']
+      }
+    }),
+    seedEvidencePack: seedEvidencePack([
+      seedPack({
+        doNotClaim: ['Do not claim direct Camera HAL API changes.']
+      })
+    ]),
+    strict: true
+  });
+  assert.ok(result.claim_results[0].issues.some(item => item.reason_code === 'do_not_claim_violation'));
+});
+
+test('seed pack status normalization maps failed_or_blocked to blocked', () => {
+  assert.equal(normalizeSeedPackStatus('failed_or_blocked'), 'blocked');
 });

@@ -43,6 +43,9 @@ const {
   readJson,
   writeJson
 } = require('../common/common');
+const {
+  seedEvidencePackPath
+} = require('../common/artifact-paths');
 
 const REQUIRED_PRESERVE_FIELDS = [
   'headline',
@@ -1179,7 +1182,8 @@ function buildFallbackPublicIssue(options = {}) {
   };
   const fallbackQualityReport = buildNewsletterQualityReport(date, issue, reporter, fallbackFactCheck, {
     threshold: qualityReport.threshold || qualityGatePolicy.threshold,
-    shortlistReport: shortlist
+    shortlistReport: shortlist,
+    seedEvidencePack: readJsonIfExists(seedEvidencePackPath(root, date)) || null
   });
   const finalQualityReport = {
     ...fallbackQualityReport,

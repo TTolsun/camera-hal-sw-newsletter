@@ -126,6 +126,90 @@ test('targeted retry demotes or replaces source gaps instead of rewriting them',
   assert.equal(repairPlan[0].allow_rewrite, false);
 });
 
+test('targeted retry demotes or replaces claim evidence integrity failures', () => {
+  const failed = section('Claim evidence integrity article', 'https://example.com/claim-integrity');
+  const editor = { sections: [failed] };
+  const qualityReport = {
+    deductions: [{
+      category: 'claim-evidence',
+      points: 8,
+      reason: 'Fact claim is missing item-level evidence_ids.',
+      reason_code: 'missing_fact_evidence_ids',
+      location: failed.headline
+    }]
+  };
+
+  const repairPlan = buildSectionRepairPlan(editor, qualityReport, {}, []);
+
+  assert.equal(repairPlan.length, 1);
+  assert.equal(repairPlan[0].action, 'replace-or-demote');
+  assert.equal(repairPlan[0].failure_type, 'missing_fact_evidence_ids');
+  assert.equal(repairPlan[0].allow_rewrite, false);
+});
+
+test('targeted retry allows claim wording and impact classification repair only', () => {
+  const cases = [
+    'direct_hal_claim_without_direct_evidence',
+    'do_not_overstate_violation',
+    'invalid_impact_level',
+    'do_not_claim_violation'
+  ];
+
+  for (const reasonCode of cases) {
+    const failed = section(`Claim wording ${reasonCode}`, `https://example.com/${reasonCode}`);
+    const editor = { sections: [failed] };
+    const qualityReport = {
+      deductions: [{
+        category: 'claim-overclaim',
+        points: 8,
+        reason: `Claim issue: ${reasonCode}.`,
+        reason_code: reasonCode,
+        location: failed.headline
+      }]
+    };
+
+    const repairPlan = buildSectionRepairPlan(editor, qualityReport, {}, []);
+
+    assert.equal(repairPlan.length, 1, reasonCode);
+    assert.equal(repairPlan[0].action, 'repair-section', reasonCode);
+    assert.equal(repairPlan[0].failure_type, reasonCode);
+    assert.equal(repairPlan[0].allow_rewrite, true, reasonCode);
+    if (reasonCode === 'do_not_claim_violation') {
+      assert.match(repairPlan[0].policy_reason, /without changing evidence ids or source URLs/);
+    }
+  }
+});
+
+test('targeted retry keeps claim integrity failures ahead of repairable claim wording issues', () => {
+  const failed = section('Mixed claim issue article', 'https://example.com/mixed-claim');
+  const editor = { sections: [failed] };
+  const qualityReport = {
+    deductions: [
+      {
+        category: 'claim-overclaim',
+        points: 8,
+        reason: 'Claim overstates a HAL impact.',
+        reason_code: 'do_not_overstate_violation',
+        location: failed.headline
+      },
+      {
+        category: 'claim-source-binding',
+        points: 8,
+        reason: 'Claim references unresolved evidence_id.',
+        reason_code: 'unknown_evidence_id',
+        location: failed.headline
+      }
+    ]
+  };
+
+  const repairPlan = buildSectionRepairPlan(editor, qualityReport, {}, []);
+
+  assert.equal(repairPlan.length, 1);
+  assert.equal(repairPlan[0].action, 'replace-or-demote');
+  assert.equal(repairPlan[0].failure_type, 'unknown_evidence_id');
+  assert.equal(repairPlan[0].allow_rewrite, false);
+});
+
 test('targeted retry demotes or replaces structured scope failures', () => {
   const failed = section('Generic watchlist article with camera wording', 'https://example.com/generic');
   const editor = { sections: [failed] };

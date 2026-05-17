@@ -208,7 +208,7 @@ const qualityReport = buildNewsletterQualityReport(
     ]
   },
   { status: 'PASS', must_fix: [], source_gaps: [] },
-  { threshold: 0 }
+  { threshold: 0, seedEvidencePack: null }
 );
 const weakFinalDeduction = qualityReport.deductions.filter(deduction =>
   /final-selected candidate\(s\) have weak HAL\/actionability scores/.test(deduction.reason)

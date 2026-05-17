@@ -60,7 +60,6 @@ const LIMITATION_WORDING = /\b(?:not\s+confirmed|not\s+resolved|not\s+fetched|fe
 const POSITIVE_SUPPORT_WORDING = /\b(?:confirms?|confirmed|proves?|verified|shows?|demonstrates?|establishes?|supports?|evidence\s+(?:shows|confirms)|direct\s+HAL\s+impact|direct\s+HAL\s+behavior|runtime\s+behavior\s+(?:changes?|changed)|changes?\s+runtime\s+behavior)\b/i;
 const STREAM_BUFFER_TERMS = Object.freeze(['stream', 'buffer', 'metadata', 'request', 'result']);
 const RUNTIME_TERMS = Object.freeze(['runtime', 'behavior', 'implementation', 'pipeline']);
-
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -210,6 +209,15 @@ function urlKeySet(value, { preserveFragment = false } = {}) {
   return new Set([...keys].filter(Boolean));
 }
 
+function normalizeEvidenceStatus(value, fallback = 'allowed') {
+  const raw = lower(value);
+  if (!raw) return fallback;
+  if (['allowed', 'pass', 'passed', 'resolved', 'success', 'ok'].includes(raw)) return 'allowed';
+  if (raw === 'failed_or_blocked') return 'blocked';
+  if (NON_ALLOWED_EVIDENCE_STATUS_VALUES.has(raw)) return raw;
+  return raw;
+}
+
 function evidenceStatusRank(status) {
   if (NON_ALLOWED_EVIDENCE_STATUS_VALUES.has(status)) return 4;
   if (status === 'provenance') return 2;
@@ -220,10 +228,13 @@ function evidenceStatusRank(status) {
 function addEvidence(index, item = {}) {
   const id = text(item.id || item.evidence_id);
   if (!id) return;
+  const normalizedStatus = normalizeEvidenceStatus(item.status);
   const next = {
     id,
     kind: item.kind || 'evidence',
-    status: item.status || 'allowed',
+    status: normalizedStatus,
+    raw_status: text(item.raw_status || item.rawStatus || item.status || normalizedStatus),
+    normalized_status: normalizedStatus,
     urls: uniqueTexts(item.urls),
     texts: uniqueTexts(item.texts),
     fragment_specific: item.fragment_specific === true,
@@ -236,6 +247,8 @@ function addEvidence(index, item = {}) {
   const current = index.byId.get(id);
   if (evidenceStatusRank(next.status) > evidenceStatusRank(current.status)) {
     current.status = next.status;
+    current.raw_status = next.raw_status;
+    current.normalized_status = next.normalized_status;
     current.kind = next.kind;
   }
   current.urls = item.authoritative_urls === true && next.urls.length > 0
@@ -244,6 +257,8 @@ function addEvidence(index, item = {}) {
   current.texts = uniqueTexts([...current.texts, ...next.texts]);
   current.fragment_specific = current.fragment_specific || next.fragment_specific;
   current.provenance_only = current.provenance_only && next.provenance_only;
+  current.raw_status = current.raw_status || next.raw_status;
+  current.normalized_status = current.normalized_status || current.status;
 }
 
 function linkedEvidenceItems(candidate = {}) {
@@ -256,7 +271,7 @@ function linkedEvidenceItems(candidate = {}) {
     for (const raw of ensureArray(values)) {
       const item = objectValue(raw);
       const fetchStatus = lower(item.fetch_status || item.fetchStatus);
-      const status = fetchStatus === 'resolved' ? 'allowed' : fetchStatus;
+      const status = normalizeEvidenceStatus(fetchStatus, '');
       if (status !== 'allowed' && !NON_ALLOWED_EVIDENCE_STATUS_VALUES.has(status)) continue;
       const itemText = text(item.source_text || item.sourceText || item.raw_excerpt || item.rawExcerpt || item.title || item.identifier);
       const itemUrl = text(item.url || item.source_url || item.sourceUrl);
@@ -264,6 +279,7 @@ function linkedEvidenceItems(candidate = {}) {
         id: text(item.evidence_id || item.evidenceId || item.id) || stableLinkedEvidenceItemId(candidate, item),
         kind: `${field}_item`,
         status,
+        raw_status: fetchStatus || status,
         urls: [itemUrl],
         texts: [itemText, item.classification_reason || item.classificationReason].map(text).filter(Boolean),
         fragment_specific: hasUrlFragment(itemUrl) && hasConcreteFactualText(itemText),
@@ -274,12 +290,310 @@ function linkedEvidenceItems(candidate = {}) {
   return items;
 }
 
-function buildEvidenceIndex(candidate = {}, section = {}) {
+function sourceExtractionRefPackIndex(value = '') {
+  const match = text(value).match(/#\/packs\/(\d+)\b/);
+  return match ? Number(match[1]) : null;
+}
+
+function sourceUrlsFromEvidenceItem(item = {}, pack = {}) {
+  return [
+    item.url,
+    item.source_url,
+    item.sourceUrl,
+    item.final_url,
+    item.finalUrl,
+    pack.final_url,
+    pack.finalUrl,
+    pack.seed_url,
+    pack.seedUrl,
+    pack.url
+  ].map(text).filter(Boolean);
+}
+
+function normalizeSeedPackEvidenceItem(raw = {}, pack = {}, role = 'primary') {
+  const item = objectValue(raw);
+  const rawStatus = text(item.fetch_status || item.fetchStatus || item.status || (role === 'primary' ? 'allowed' : 'allowed'));
+  const normalizedStatus = normalizeEvidenceStatus(rawStatus, role === 'primary' ? 'allowed' : 'allowed');
+  const backedItems = ensureArray(item.source_backed_items || item.sourceBackedItems)
+    .map(text)
+    .filter(Boolean);
+  const evidenceText = [
+    ...backedItems,
+    item.source_text,
+    item.sourceText,
+    item.raw_excerpt,
+    item.rawExcerpt,
+    item.summary,
+    item.title,
+    item.published_at,
+    item.publishedAt
+  ].map(text).filter(Boolean);
+  const urls = sourceUrlsFromEvidenceItem(item, pack);
+  return {
+    id: text(item.evidence_id || item.evidenceId || item.id),
+    kind: role === 'primary' ? 'seed_primary_evidence' : 'seed_linked_evidence',
+    status: normalizedStatus,
+    raw_status: rawStatus || normalizedStatus,
+    urls,
+    texts: evidenceText,
+    fragment_specific: urls.some(hasUrlFragment) && evidenceText.some(hasConcreteFactualText),
+    source_role: text(item.source_role || item.sourceRole),
+    title: text(item.title),
+    published_at: text(item.published_at || item.publishedAt)
+  };
+}
+
+function packUrls(pack = {}) {
+  return uniqueTexts([
+    pack.seed_url,
+    pack.seedUrl,
+    pack.final_url,
+    pack.finalUrl,
+    pack.url,
+    pack.source_url,
+    pack.sourceUrl,
+    ...ensureArray(pack.primary_evidence || pack.primaryEvidence).flatMap(item => sourceUrlsFromEvidenceItem(item, pack)),
+    ...ensureArray(pack.linked_evidence || pack.linkedEvidence).flatMap(item => sourceUrlsFromEvidenceItem(item, pack))
+  ]);
+}
+
+function disambiguationTokens(value) {
+  const raw = text(value);
+  const tokens = new Set(protectedTokens(raw).map(normalizeText).filter(Boolean));
+  for (const match of raw.match(/\b(?:androidx\.camera|CameraX|Camera2|AndroidX|Media3|ImageCapture|VideoCapture|CameraPipe|libcamera|V4L2)\b/gi) || []) {
+    tokens.add(normalizeText(match));
+  }
+  return [...tokens].filter(Boolean);
+}
+
+function normalizeSeedEvidencePack(seedEvidencePack = {}) {
+  const packs = ensureArray(seedEvidencePack?.packs).map((rawPack, index) => {
+    const raw = objectValue(rawPack);
+    const primary = ensureArray(raw.primary_evidence || raw.primaryEvidence)
+      .map(item => normalizeSeedPackEvidenceItem(item, raw, 'primary'))
+      .filter(item => item.id);
+    const linked = ensureArray(raw.linked_evidence || raw.linkedEvidence)
+      .map(item => normalizeSeedPackEvidenceItem(item, raw, 'linked'))
+      .filter(item => item.id);
+    const urls = packUrls(raw);
+    const canonicalUrlKeys = new Set(urls.map(url => canonicalUrlKey(url)).filter(Boolean));
+    const fragmentKeys = new Set(urls.map(url => canonicalUrlKey(url, { preserveFragment: true })).filter(Boolean));
+    const tokenText = [
+      raw.title,
+      raw.seed_id,
+      raw.seedId,
+      raw.expected_topic,
+      raw.expectedTopic,
+      ...primary.flatMap(item => [item.title, item.published_at, ...item.texts]),
+      ...linked.flatMap(item => [item.title, item.published_at, ...item.texts])
+    ].map(text).filter(Boolean).join(' ');
+    return {
+      raw,
+      index,
+      evidence_pack_id: text(raw.evidence_pack_id || raw.evidencePackId),
+      seed_id: text(raw.seed_id || raw.seedId),
+      source_id: text(raw.source_id || raw.sourceId),
+      title: text(raw.title),
+      urls,
+      canonicalUrlKeys,
+      fragmentKeys,
+      disambiguationTokens: new Set(disambiguationTokens(tokenText)),
+      do_not_claim: ensureArray(raw.do_not_claim || raw.doNotClaim).map(text).filter(Boolean),
+      primary_evidence: primary,
+      linked_evidence: linked
+    };
+  });
+  const canonicalUrlCounts = new Map();
+  for (const pack of packs) {
+    for (const key of pack.canonicalUrlKeys) {
+      canonicalUrlCounts.set(key, (canonicalUrlCounts.get(key) || 0) + 1);
+    }
+  }
+  return { packs, canonicalUrlCounts };
+}
+
+function candidateUrls(candidate = {}, section = {}) {
+  const compact = objectValue(candidate.compact_evidence);
+  return uniqueTexts([
+    candidate.url,
+    candidate.article_url,
+    candidate.articleUrl,
+    candidate.normalized_url,
+    candidate.source_candidate_url,
+    ...ensureArray(section.sources).map(source => source?.url),
+    ...ensureArray(compact.evidence_urls)
+  ]);
+}
+
+function candidateDisambiguationTokens(candidate = {}, section = {}) {
+  const articleSections = normalizeArticleSections(section);
+  return new Set(disambiguationTokens([
+    candidate.title,
+    candidate.headline,
+    candidate.version_or_release,
+    candidate.published_date,
+    candidate.publishedAt,
+    candidate.api_or_component,
+    candidate.summary,
+    candidate.behavior_change,
+    section.headline,
+    section.evidence_summary,
+    articleSections.verified_facts
+  ]));
+}
+
+function candidateSeedEvidenceFields(candidate = {}) {
+  return [
+    candidate.source_extraction_ref,
+    ...ensureArray(candidate.evidence_pack_ids),
+    ...ensureArray(candidate.seed_ids)
+  ].map(text).filter(Boolean);
+}
+
+function candidateMatchesPackFragment(candidateUrlValues, pack) {
+  const candidateFragments = new Set(candidateUrlValues
+    .filter(hasUrlFragment)
+    .map(url => canonicalUrlKey(url, { preserveFragment: true }))
+    .filter(Boolean));
+  return [...candidateFragments].some(key => pack.fragmentKeys.has(key));
+}
+
+function hasTokenDisambiguation(candidateTokens, pack) {
+  return [...candidateTokens].some(token => pack.disambiguationTokens.has(token));
+}
+
+function seedPackDiagnostic(reasonCode, message, extra = {}) {
+  return issue(reasonCode, message, {
+    blocking: false,
+    severity: 'soft',
+    ...extra
+  });
+}
+
+function titleMatches(left, right) {
+  const leftTitle = normalizeText(left);
+  const rightTitle = normalizeText(right);
+  if (!leftTitle || !rightTitle) return false;
+  return leftTitle === rightTitle || leftTitle.includes(rightTitle) || rightTitle.includes(leftTitle);
+}
+
+function matchSeedEvidencePack(candidate = {}, section = {}, seedEvidencePack = null) {
+  const normalized = normalizeSeedEvidencePack(seedEvidencePack || {});
+  const packs = normalized.packs;
+  if (packs.length === 0) return { pack: null, diagnostics: [] };
+  const diagnostics = [];
+  const candidatePackIds = new Set(ensureArray(candidate.evidence_pack_ids).map(text).filter(Boolean));
+  const candidateSeedIds = new Set(ensureArray(candidate.seed_ids).map(text).filter(Boolean));
+  const refIndex = sourceExtractionRefPackIndex(candidate.source_extraction_ref);
+  if (Number.isInteger(refIndex) && packs[refIndex]) {
+    return { pack: packs[refIndex], diagnostics };
+  }
+  const byPackId = packs.filter(pack => candidatePackIds.has(pack.evidence_pack_id));
+  if (byPackId.length === 1) return { pack: byPackId[0], diagnostics };
+  if (byPackId.length > 1) {
+    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_ambiguous', 'Multiple seed packs matched candidate evidence_pack_ids.', {
+      evidence_pack_ids: [...candidatePackIds],
+      matched_pack_ids: byPackId.map(pack => pack.evidence_pack_id)
+    }));
+    return { pack: null, diagnostics };
+  }
+  const bySeedId = packs.filter(pack => candidateSeedIds.has(pack.seed_id));
+  if (bySeedId.length === 1) return { pack: bySeedId[0], diagnostics };
+  if (bySeedId.length > 1) {
+    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_ambiguous', 'Multiple seed packs matched candidate seed_ids.', {
+      seed_ids: [...candidateSeedIds],
+      matched_seed_ids: bySeedId.map(pack => pack.seed_id)
+    }));
+    return { pack: null, diagnostics };
+  }
+
+  const candidateUrlValues = candidateUrls(candidate, section);
+  const candidateCanonicalKeys = new Set(candidateUrlValues.map(url => canonicalUrlKey(url)).filter(Boolean));
+  const byUrl = packs.filter(pack => [...pack.canonicalUrlKeys].some(key => candidateCanonicalKeys.has(key)));
+  const sharedUrlCandidate = byUrl.some(pack =>
+    [...pack.canonicalUrlKeys].some(key => candidateCanonicalKeys.has(key) && (normalized.canonicalUrlCounts.get(key) || 0) > 1)
+  );
+  if (byUrl.length > 0) {
+    const candidateTokens = candidateDisambiguationTokens(candidate, section);
+    const disambiguated = byUrl.filter(pack =>
+      candidateMatchesPackFragment(candidateUrlValues, pack) ||
+      hasTokenDisambiguation(candidateTokens, pack)
+    );
+    if (byUrl.length === 1 && !sharedUrlCandidate) return { pack: byUrl[0], diagnostics };
+    if (disambiguated.length === 1) return { pack: disambiguated[0], diagnostics };
+    if (sharedUrlCandidate && disambiguated.length === 0) {
+      diagnostics.push(seedPackDiagnostic(
+        'seed_evidence_pack_url_only_shared_page_rejected',
+        'Seed pack URL-only match was rejected for a shared release-note/watch page without fragment, version, date, or component match.',
+        { matched_pack_ids: byUrl.map(pack => pack.evidence_pack_id || pack.seed_id).filter(Boolean) }
+      ));
+      return { pack: null, diagnostics };
+    }
+    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_ambiguous', 'Multiple seed packs matched candidate URLs.', {
+      matched_pack_ids: byUrl.map(pack => pack.evidence_pack_id || pack.seed_id).filter(Boolean)
+    }));
+    return { pack: null, diagnostics };
+  }
+
+  const candidateSourceId = text(candidate.source_id || candidate.sourceId);
+  const candidateTitle = text(candidate.title || candidate.headline);
+  const titleFallback = packs.filter(pack =>
+    candidateSourceId &&
+    pack.source_id &&
+    candidateSourceId === pack.source_id &&
+    titleMatches(candidateTitle, pack.title)
+  );
+  if (titleFallback.length === 1) {
+    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_title_fallback', 'Seed pack matched by unique source_id and title fallback.', {
+      matched_pack_id: titleFallback[0].evidence_pack_id || titleFallback[0].seed_id
+    }));
+    return { pack: titleFallback[0], diagnostics };
+  }
+  if (titleFallback.length > 1) {
+    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_ambiguous', 'Multiple seed packs matched source_id and title fallback.', {
+      matched_pack_ids: titleFallback.map(pack => pack.evidence_pack_id || pack.seed_id).filter(Boolean)
+    }));
+    return { pack: null, diagnostics };
+  }
+  if (candidateSeedEvidenceFields(candidate).length > 0) {
+    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_unmatched', 'Candidate references seed evidence metadata but no seed pack matched.', {
+      evidence_pack_ids: [...candidatePackIds],
+      seed_ids: [...candidateSeedIds]
+    }));
+  }
+  return { pack: null, diagnostics };
+}
+
+function addSeedPackEvidence(index, candidate = {}, section = {}, seedEvidencePack = null) {
+  const { pack, diagnostics } = matchSeedEvidencePack(candidate, section, seedEvidencePack);
+  index.seedPackDiagnostics.push(...diagnostics);
+  if (!pack) return;
+  index.matchedSeedPack = {
+    evidence_pack_id: pack.evidence_pack_id,
+    seed_id: pack.seed_id,
+    index: pack.index
+  };
+  index.seedPackDoNotClaim.push(...pack.do_not_claim);
+  for (const item of pack.primary_evidence) addEvidence(index, item);
+  for (const item of pack.linked_evidence) addEvidence(index, item);
+  const allowedPrimaryIds = pack.primary_evidence
+    .filter(item => item.status === 'allowed')
+    .map(item => item.id)
+    .filter(Boolean);
+  if (allowedPrimaryIds.length === 1 && pack.evidence_pack_id) {
+    index.packFallback.set(pack.evidence_pack_id, allowedPrimaryIds[0]);
+  }
+}
+
+function buildEvidenceIndex(candidate = {}, section = {}, options = {}) {
   const index = {
     byId: new Map(),
     packFallback: new Map(),
     allowedSourceKeys: new Set(),
-    anchorSpecificSourceKeys: new Set()
+    anchorSpecificSourceKeys: new Set(),
+    seedPackDiagnostics: [],
+    seedPackDoNotClaim: [],
+    matchedSeedPack: null
   };
   const compact = objectValue(candidate.compact_evidence);
   const compactUrls = ensureArray(compact.evidence_urls).map(text).filter(Boolean);
@@ -348,6 +662,7 @@ function buildEvidenceIndex(candidate = {}, section = {}) {
     });
     if (primaryIds.length === 1) index.packFallback.set(text(id), primaryIds[0]);
   }
+  addSeedPackEvidence(index, candidate, section, options.seedEvidencePack || null);
 
   const allowedUrls = [
     candidate.url,
@@ -595,6 +910,9 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
   const issues = [];
   const resolvedEvidenceIds = [];
   const resolvedEvidenceItems = [];
+  const invalidEvidenceIds = [];
+  const blockedEvidenceIds = [];
+  const evidenceStatuses = [];
   let derivedEvidenceMapping = false;
   if (!claim.claim_id) issues.push(issue('missing_claim_id', 'Claim is missing claim_id.'));
   if (!claim.text) issues.push(issue('empty_claim_text', 'Claim text is empty.'));
@@ -633,16 +951,26 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
         : /gemini.*proposal|proposal/i.test(evidenceId)
           ? 'gemini_proposal_is_not_evidence'
           : 'unknown_evidence_id';
+      invalidEvidenceIds.push(evidenceId);
       issues.push(issue(reason, `Claim references unresolved evidence_id: ${evidenceId}.`));
       continue;
     }
     if (item.provenance_only && !evidenceIndex.packFallback.has(evidenceId)) {
+      invalidEvidenceIds.push(evidenceId);
       issues.push(issue('provenance_id_without_item_evidence', `Claim references provenance-only evidence id: ${evidenceId}.`));
       continue;
     }
     resolvedEvidenceIds.push(item.id);
     resolvedEvidenceItems.push(item);
+    evidenceStatuses.push({
+      evidence_id: evidenceId,
+      resolved_evidence_id: item.id,
+      status: item.status,
+      raw_status: item.raw_status || item.status,
+      normalized_status: item.normalized_status || item.status
+    });
     if (!claimSourceMatchesEvidenceItem(claim, item)) {
+      invalidEvidenceIds.push(evidenceId);
       issues.push(issue(
         item.fragment_specific ? 'source_url_fragment_mismatch' : 'evidence_source_url_mismatch',
         item.fragment_specific
@@ -653,6 +981,7 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
     }
     if (item.status !== 'allowed') {
       const options = nonAllowedEvidenceIssueOptions(claim, item);
+      blockedEvidenceIds.push(evidenceId);
       issues.push(issue(
         'blocked_or_failed_evidence_id',
         `Claim references ${item.status} evidence_id: ${evidenceId}.`,
@@ -679,6 +1008,9 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
     issues,
     resolvedEvidenceIds,
     resolvedEvidenceItems,
+    invalidEvidenceIds: uniqueTexts(invalidEvidenceIds),
+    blockedEvidenceIds: uniqueTexts(blockedEvidenceIds),
+    evidenceStatuses,
     derivedEvidenceMapping
   };
 }
@@ -692,24 +1024,46 @@ function overclaimRiskFromResults(claimResults) {
   return 'unknown';
 }
 
+function claimResultStatus(claim, issues, evidence) {
+  if (
+    !claim.text ||
+    !claim.claim_id ||
+    !CLAIM_TYPE_VALUES.has(claim.claim_type) ||
+    (claim.claim_type === 'fact' && (claim.evidence_ids.length === 0 || claim.source_urls.length === 0))
+  ) {
+    return 'not_available';
+  }
+  if (issues.some(item => item.blocking !== false)) return 'needs_fix';
+  if (issues.length > 0) return 'soft_warning';
+  if (claim.claim_type === 'fact' && evidence.resolvedEvidenceIds.length === 0) return 'not_available';
+  return 'bound';
+}
+
 function validateArticleClaims({
   section = {},
   candidate = {},
   articleIndex = 0,
-  strict = false
+  strict = false,
+  seedEvidencePack = null
 } = {}) {
-  const evidenceIndex = buildEvidenceIndex(candidate, section);
+  const evidenceIndex = buildEvidenceIndex(candidate, section, { seedEvidencePack });
+  const headline = text(section.headline || section.category || `article ${articleIndex + 1}`);
   const guardrails = [
     ...ensureArray(candidate.do_not_claim),
     ...ensureArray(objectValue(candidate.compact_evidence).do_not_claim),
     ...ensureArray(objectValue(candidate.derived_editorial_hints).do_not_claim),
     ...ensureArray(section.do_not_overstate),
-    ...ensureArray(objectValue(section.hal_signal_capsule).do_not_overstate)
+    ...ensureArray(objectValue(section.hal_signal_capsule).do_not_overstate),
+    ...evidenceIndex.seedPackDoNotClaim
   ];
   const rawClaims = ensureArray(section.claims);
   const claims = rawClaims.map(normalizeClaim);
   const claimResults = [];
-  const articleIssues = [];
+  const articleIssues = evidenceIndex.seedPackDiagnostics.map(item => ({
+    ...item,
+    article_index: articleIndex + 1,
+    article_headline: headline
+  }));
   const claimIds = new Set();
   const facts = factsToCover(section);
 
@@ -738,13 +1092,18 @@ function validateArticleClaims({
     }
     claimResults.push({
       article_index: articleIndex + 1,
+      article_headline: headline,
       claim_id: claim.internal_id,
       claim_type: claim.claim_type || 'unknown',
+      status: claimResultStatus(claim, issues, evidence),
       impact_level: claim.impact_level || 'unknown',
       overclaim_risk: claim.overclaim_risk || 'unknown',
       text: claim.text,
       evidence_ids: claim.evidence_ids,
       resolved_evidence_ids: [...new Set(evidence.resolvedEvidenceIds)],
+      invalid_evidence_ids: evidence.invalidEvidenceIds,
+      blocked_evidence_ids: evidence.blockedEvidenceIds,
+      evidence_statuses: evidence.evidenceStatuses,
       source_urls: claim.source_urls,
       bound: claim.claim_type === 'fact' &&
         evidence.resolvedEvidenceIds.length > 0 &&
@@ -766,6 +1125,7 @@ function validateArticleClaims({
     if (matches.length === 0) {
       uncoveredFacts.push({
         article_index: articleIndex + 1,
+        article_headline: headline,
         field: fact.field,
         text: fact.text,
         reason_code: 'missing_matching_fact_claim'
@@ -794,9 +1154,10 @@ function validateArticleClaims({
 
   return {
     article_index: articleIndex + 1,
-    headline: text(section.headline || section.category || `article ${articleIndex + 1}`),
+    headline,
     status,
     strict,
+    matched_seed_pack: evidenceIndex.matchedSeedPack,
     bound_claims: boundClaims,
     total_claims: claimResults.length,
     fact_claim_count: factClaims.length,
@@ -841,6 +1202,9 @@ module.exports = {
   CLAIM_TYPES,
   OVERCLAIM_RISKS,
   buildEvidenceIndex,
+  normalizeSeedEvidencePack,
+  normalizeSeedPackEvidenceItem,
+  normalizeSeedPackStatus: normalizeEvidenceStatus,
   stableLinkedEvidenceItemId,
   stableSourceExtractionItemId,
   summarizeClaimValidation,

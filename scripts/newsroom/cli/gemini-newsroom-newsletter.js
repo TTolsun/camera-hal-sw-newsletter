@@ -10,7 +10,8 @@ const {
 const {
   collectedCandidatesRelPath,
   newsroomDir: artifactNewsroomDir,
-  newsroomRelPath
+  newsroomRelPath,
+  seedEvidencePackPath
 } = require('../common/artifact-paths');
 const {
   CandidateArtifactValidationError,
@@ -215,6 +216,11 @@ function writeGenerationStatus(value, rootDir = root) {
       fs.writeFileSync(path.join(targetNewsroomDir, 'generation-status.json'), content, 'utf8');
     }
   }
+}
+
+function readSeedEvidencePackForDate(date, rootDir = root) {
+  const filePath = seedEvidencePackPath(rootDir, date);
+  return fs.existsSync(filePath) ? readJson(filePath) : null;
 }
 
 function buildRunContext(env = process.env) {
@@ -1211,7 +1217,8 @@ function writeReviewableRepairFailureArtifacts({
     : buildNewsletterQualityReport(date, fallbackEditor, fallbackReporter, fallbackFactCheck, {
       threshold: qualityGatePolicy.threshold,
       shortlistReport: shortlistReport || generationRunState.shortlistReport,
-      strictClaimValidation: true
+      strictClaimValidation: true,
+      seedEvidencePack: readSeedEvidencePackForDate(date, rootDir)
     });
   const serializedError = serializeEditorValidationError(error, {
     stage,
@@ -1944,7 +1951,50 @@ function finalArticleSlotDistribution(sections) {
 function deductionRepairPolicy(deduction = {}) {
   const category = stringOrEmpty(deduction.category);
   const reason = stringOrEmpty(deduction.reason);
+  const reasonCode = stringOrEmpty(deduction.reason_code || deduction.reasonCode);
   const haystack = `${category} ${reason}`;
+  const neverRepairableClaimReasons = new Set([
+    'missing_claims',
+    'missing_fact_claim',
+    'missing_fact_evidence_ids',
+    'missing_source_urls',
+    'unknown_evidence_id',
+    'keyword_hint_is_not_evidence',
+    'gemini_proposal_is_not_evidence',
+    'provenance_id_without_item_evidence',
+    'blocked_or_failed_evidence_id',
+    'source_url_mismatch',
+    'evidence_source_url_mismatch',
+    'source_url_fragment_mismatch',
+    'missing_matching_fact_claim',
+    'fact_claim_not_supported_by_evidence_text',
+    'runtime_claim_without_runtime_evidence',
+    'stream_buffer_metadata_without_stream_buffer_metadata_evidence'
+  ]);
+  const repairableClaimReasons = new Set([
+    'direct_hal_claim_without_direct_evidence',
+    'do_not_overstate_violation',
+    'invalid_impact_level',
+    'do_not_claim_violation'
+  ]);
+  if (neverRepairableClaimReasons.has(reasonCode)) {
+    return {
+      failure_type: reasonCode,
+      action: 'replace-or-demote',
+      allow_rewrite: false,
+      reason: 'claim evidence, source binding, or coverage failure must be demoted or replaced'
+    };
+  }
+  if (repairableClaimReasons.has(reasonCode)) {
+    return {
+      failure_type: reasonCode,
+      action: 'repair-section',
+      allow_rewrite: true,
+      reason: reasonCode === 'do_not_claim_violation'
+        ? 'same-source repair may only remove the unsupported assertion or rewrite it as risk_note/limitation without changing evidence ids or source URLs'
+        : 'same-source claim wording or impact classification repair is allowed once'
+    };
+  }
   if (/source gap|source_gap|watchlist|watch page|ineligible|main_eligible=false|missing dated evidence|no dated release/i.test(haystack)) {
     return {
       failure_type: 'source-gap',
@@ -2842,7 +2892,8 @@ async function main() {
     qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
       threshold: qualityGatePolicy.threshold,
       shortlistReport,
-      strictClaimValidation: true
+      strictClaimValidation: true,
+      seedEvidencePack: readSeedEvidencePackForDate(date)
     });
     generationRunState.qualityReport = qualityReport;
     editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
@@ -2913,6 +2964,8 @@ async function main() {
           sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
           articleClaimContractPrompt(),
+          'Claim repair safety: do not invent new fact claims, evidence ids, or source URLs to cover uncovered factual fields. If coverage or source/evidence binding cannot be satisfied from supplied candidate evidence, demote or replace the section.',
+          'For do_not_claim violations, remove the unsupported assertion or rewrite it as risk_note/limitation without changing evidence_ids or source_urls.',
           'Preserve locked/passing sections unchanged and do not duplicate locked or excluded articles.',
           'Locked/passing sections already satisfied the gate; preserve their source URLs, title/headline, and source-date-title combinations exactly unless they are explicitly listed in the repair plan.',
           'For each regenerated section, explicitly provide release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance.',
@@ -2993,7 +3046,8 @@ async function main() {
         qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
           threshold: qualityGatePolicy.threshold,
           shortlistReport,
-          strictClaimValidation: true
+          strictClaimValidation: true,
+          seedEvidencePack: readSeedEvidencePackForDate(date)
         });
         generationRunState.qualityReport = qualityReport;
         editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
@@ -3122,7 +3176,8 @@ async function main() {
           qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
             threshold: qualityGatePolicy.threshold,
             shortlistReport,
-            strictClaimValidation: true
+            strictClaimValidation: true,
+            seedEvidencePack: readSeedEvidencePackForDate(date)
           });
           generationRunState.qualityReport = qualityReport;
           editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
@@ -3253,7 +3308,8 @@ async function main() {
     threshold: qualityGatePolicy.threshold,
     shortlistReport,
     staleClaimReport: staleScrub.report,
-    strictClaimValidation: true
+    strictClaimValidation: true,
+    seedEvidencePack: readSeedEvidencePackForDate(date)
   });
   generationRunState.qualityReport = qualityReport;
 

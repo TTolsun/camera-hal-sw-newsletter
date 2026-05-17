@@ -803,7 +803,11 @@ function claimIssueCategory(reasonCode = '') {
   if ([
     'source_url_mismatch',
     'evidence_source_url_mismatch',
-    'source_url_fragment_mismatch'
+    'source_url_fragment_mismatch',
+    'seed_evidence_pack_unmatched',
+    'seed_evidence_pack_title_fallback',
+    'seed_evidence_pack_ambiguous',
+    'seed_evidence_pack_url_only_shared_page_rejected'
   ].includes(reasonCode)) return 'claim-source-binding';
   if (reasonCode === 'missing_matching_fact_claim') return 'claim-coverage';
   if ([
@@ -1437,6 +1441,11 @@ function markdownTableCell(value) {
     .replace(/\|/g, '\\|') || 'none';
 }
 
+function truncateMarkdownCell(value, limit = 100) {
+  const normalized = markdownTableCell(value);
+  return normalized.length > limit ? `${normalized.slice(0, Math.max(0, limit - 3))}...` : normalized;
+}
+
 function articleSectionContractMarkdownRows(report) {
   return ensureArray(report.article_results).map(item => {
     const summary = item.section_contract || {};
@@ -1459,6 +1468,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const bindingIndex = candidateBindingIndex(reporter, options.shortlistReport || null);
   const staleClaimReport = options.staleClaimReport || null;
   const strictClaimValidation = options.strictClaimValidation === true;
+  const seedEvidencePack = options.seedEvidencePack || null;
   const claimValidations = [];
   const claimDeductionKeys = new Set();
   let sourceIntegrityViolationCount = 0;
@@ -1609,7 +1619,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       section,
       candidate: binding.status === 'bound' ? binding.candidate : {},
       articleIndex: index,
-      strict: strictClaimValidation
+      strict: strictClaimValidation,
+      seedEvidencePack
     });
     claimValidations.push(claimValidation);
     addClaimValidationDeductions(state, claimValidation, location, claimDeductionKeys);
@@ -1902,9 +1913,24 @@ function buildQualityReportMarkdown(report) {
     .join('\n') || '- none';
   const halSignalSummary = report.hal_signal_quality_summary || metrics.hal_signal_quality_summary || {};
   const claimSummary = report.claim_validation_summary || metrics.claim_validation_summary || {};
+  const claimRows = ensureArray(report.claim_results)
+    .slice(0, 40)
+    .map(item => [
+      item.article_headline || `article ${item.article_index || ''}`,
+      `${item.claim_id || 'claim'}: ${truncateMarkdownCell(item.text || '', 100)}`,
+      item.claim_type || 'unknown',
+      item.status || 'not_available',
+      item.impact_level || 'unknown',
+      item.overclaim_risk || 'unknown',
+      ensureArray(item.issues).map(issue => issue.reason_code || issue.message).filter(Boolean).join(', ') || 'none',
+      ensureArray(item.evidence_ids).join(', ') || 'none',
+      ensureArray(item.source_urls).join(', ') || 'none'
+    ])
+    .map(row => `| ${row.map(markdownTableCell).join(' | ')} |`)
+    .join('\n') || '| none | none | none | none | none | none | none | none | none |';
   const uncoveredFactLines = ensureArray(report.uncovered_facts)
     .slice(0, 12)
-    .map(item => `- article=${item.article_index}; field=${item.field}; reason=${item.reason_code}; text=${markdownTableCell(item.text || '')}`)
+    .map(item => `- article=${item.article_index}; headline=${markdownTableCell(item.article_headline || '')}; field=${item.field}; reason=${item.reason_code}; text=${markdownTableCell(item.text || '')}`)
     .join('\n') || '- none';
   const halSignalRows = ensureArray(report.main_article_signal_checks || metrics.main_article_signal_checks)
     .map(item => [
@@ -2020,6 +2046,10 @@ ${halSignalTable}
 - Derived evidence mapping count: ${claimSummary.derived_evidence_mapping_count ?? metrics.derived_evidence_mapping_count ?? 0}
 - Overclaim risk: ${claimSummary.overclaim_risk || 'unknown'}
 - Uncovered fact count: ${metrics.uncovered_fact_count ?? ensureArray(report.uncovered_facts).length}
+
+| Article | Claim | Type | Status | Impact | Risk | Reason codes | Evidence | Source |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+${claimRows}
 
 ### Uncovered Facts
 
