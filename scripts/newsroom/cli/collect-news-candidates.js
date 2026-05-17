@@ -38,6 +38,10 @@ const {
   analyzeLinkedEvidenceForCandidates,
   writeLinkedEvidenceDiagnosticsArtifacts
 } = require('../evidence/linked-evidence-diagnostics');
+const {
+  classifySourceQuality,
+  sourceQualityFlatFields
+} = require('../collect/source-quality-classifier');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -425,7 +429,7 @@ function evidenceLevelFor(classification, metadata) {
 function classifySelection(raw, source, metadata, score, candidateOnly) {
   const sourceMode = sourceCollectionMode(source);
   let collectionMode = candidateCollectionMode(raw, source, metadata.source_kind);
-  if (metadata.source_role === 'reference_index') {
+  if (metadata.source_role === 'reference_index' || metadata.source_role === 'official_documentation_reference') {
     const classification = {
       collectionMode,
       sourceCollectionMode: sourceMode,
@@ -509,7 +513,7 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     sourceKind !== 'release_note_item' &&
     (!hasPublishedDate || !hasApiOrComponent || !hasBehaviorChange);
   const parserItemMissingCoreEvidence = releaseNoteItemMissingEvidence || datedItemMissingEvidence;
-  const referenceIndex = sourceRole === 'reference_index';
+  const referenceIndex = sourceRole === 'reference_index' || sourceRole === 'official_documentation_reference';
   const sourceGapRisk = referenceIndex || fallbackIneligible || parserItemMissingCoreEvidence || evidenceScore < 6;
   const mainEligible = !referenceIndex && !candidateOnly && !sourceGapRisk && evidenceScore >= 6 && score >= 30;
 
@@ -620,6 +624,39 @@ function normalizeCandidate(raw) {
   const mainEligible = ['main', 'short'].includes(classification.finalSelectionEligibility);
   const briefingOnly = classification.finalSelectionEligibility === 'watchlist';
   const referenceOnly = classification.finalSelectionEligibility === 'watchlist' || metadata.reference_only;
+  const sourceQualityCandidate = {
+    ...raw,
+    title,
+    summary,
+    url,
+    article_url: url,
+    sourceUrl,
+    source_url: sourceUrl,
+    source_kind: metadata.source_kind,
+    hasDatedEvidence: classification.hasDatedEvidence,
+    has_dated_evidence: classification.hasDatedEvidence,
+    has_published_date: metadata.has_published_date,
+    api_or_component: metadata.api_or_component,
+    behavior_change: metadata.behavior_change,
+    source_gap_risk: sourceGapRisk,
+    reference_only: referenceOnly,
+    candidateOnly,
+    candidate_only: candidateOnly,
+    requiresCrossCheck: source.requiresCrossCheck,
+    requires_cross_check: source.requiresCrossCheck,
+    ...scopeMetadata
+  };
+  const sourceQuality = classifySourceQuality({
+    candidate: sourceQualityCandidate,
+    source,
+    metadata: {
+      ...metadata,
+      source_gap_risk: sourceGapRisk,
+      reference_only: referenceOnly
+    },
+    scopeMetadata
+  });
+  const sourceQualityFlat = sourceQualityFlatFields(sourceQuality);
 
   return {
     schema_version: 5,
@@ -636,6 +673,7 @@ function normalizeCandidate(raw) {
     source_section: section,
     priority: source.priority,
     reliability: source.reliability,
+    source_quality_required: true,
     origin: raw.origin || 'source_registry',
     collectionStage: raw.collectionStage || raw.collection_stage || 'raw_collection',
     collection_stage: raw.collectionStage || raw.collection_stage || 'raw_collection',
@@ -648,8 +686,8 @@ function normalizeCandidate(raw) {
     usageHint: source.usageHint,
     source_usage_hint: source.usageHint,
     source_linked_evidence_policy: source.linkedEvidencePolicy || null,
-    sourceRole: source.sourceRole || '',
-    source_role: metadata.source_role,
+    source_quality: sourceQuality,
+    ...sourceQualityFlat,
     candidateOnly,
     candidate_only: candidateOnly,
     collectionMode: classification.collectionMode,
@@ -692,8 +730,6 @@ function normalizeCandidate(raw) {
     api_or_component: metadata.api_or_component,
     source_hint_api_or_component: metadata.source_hint_api_or_component,
     behavior_change: metadata.behavior_change,
-    requiresCrossCheck: source.requiresCrossCheck,
-    requires_cross_check: source.requiresCrossCheck,
     selection_exclusion_reason: classification.selectionExclusionReason,
     watchlist_reason: classification.finalSelectionEligibility === 'watchlist'
       ? classification.selectionExclusionReason

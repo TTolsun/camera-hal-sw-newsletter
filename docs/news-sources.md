@@ -30,7 +30,7 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - Android Developers Blog - Camera (`rss-source`): https://android-developers.googleblog.com/search?q=CameraX
 - Android Developers Latest Updates (`release-note-watch`): https://developer.android.com/latest-updates
 - CameraX Release Notes (`release-note-watch`): https://developer.android.com/jetpack/androidx/releases/camera
-- AOSP Camera Documentation (`documentation-watch`, `reference_index`): https://source.android.com/docs/core/camera
+- AOSP Camera Documentation (`documentation-watch`, `official_documentation_reference`): https://source.android.com/docs/core/camera
 - AOSP What's New / Release Notes (`release-note-watch`): https://source.android.com/docs/whatsnew
 - AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
 - Android Compatibility Definition Document (`documentation-watch`): https://source.android.com/docs/compatibility/cdd
@@ -128,3 +128,14 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - 추적 가능한 출처가 없는 항목
 - AOSP Camera / driver / SoC / native engineering check, action item, implementation context로 연결할 수 없는 항목
 - 더 강한 official source와 중복되거나 거의 같은 항목
+
+## Source quality policy contract
+
+`data/news-sources.json` is the executable source registry for source quality policy. The human-facing source list in this document should explain policy, but it must not become a second source of truth.
+
+- Every enabled source defines `sourceRole`, `sourceUrlQualityHint`, `mainArticlePolicy`, `requiresCrossCheckDefault`, `evidenceGranularityHint`, and `sourceQualityNotes`.
+- `main_article_source_allowed` is source/evidence-policy-only. It does not include `finalSelectionEligibility`, score, final selection result, or HAL signal output.
+- Conditional sources can become source-ready only when required confirmation or explicit HAL/native workflow evidence is present.
+- Raw `source_url_quality=unknown` is main-ineligible. The classifier must resolve it before Stage 3 or the new main article fails.
+- `generic_ai_or_it_trend`, `tech_media_lead_requires_cross_check`, and `community_lead_requires_cross_check` are conditional policies, not unconditional approvals.
+- Stage 3 consumes canonical `source_quality` and must not infer, repair, or override `main_article_source_blockers[]`.

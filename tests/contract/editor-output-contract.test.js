@@ -13,7 +13,8 @@ const { editorSchema } = require('../../scripts/newsroom/render/newsletter-schem
 const {
   buildGenerationStatus,
   editorSemanticStatusExtra,
-  linkedEvidencePromptGuardrails
+  linkedEvidencePromptGuardrails,
+  sourceExtractionPromptGuardrails
 } = require('../../scripts/gemini-newsroom-newsletter');
 const {
   articlePolicy
@@ -134,6 +135,15 @@ test('LLM prompt guardrails prohibit linked evidence overclaim without exposing 
   const source = fs.readFileSync(cliPath, 'utf8');
   const promptUsageCount = (source.match(/linkedEvidencePromptGuardrails\(\),/g) || []).length;
   assert.ok(promptUsageCount >= 7);
+});
+
+test('LLM prompt guardrails treat source quality blockers as hard generation inputs', () => {
+  const guardrails = sourceExtractionPromptGuardrails();
+  assert.match(guardrails, /canonical source_quality/);
+  assert.match(guardrails, /main_article_source_allowed=false/);
+  assert.match(guardrails, /hard blocker/);
+  assert.match(guardrails, /main_article_source_blockers/);
+  assert.match(guardrails, /blocked or failed linked evidence/);
 });
 
 test('valid editor output with exactly 3 briefing items passes unchanged', () => {

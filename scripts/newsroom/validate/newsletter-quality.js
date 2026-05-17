@@ -38,6 +38,11 @@ const {
   normalizeHalSignalCapsule,
   normalizeHalSignalFields
 } = require('../common/hal-signal-quality');
+const {
+  SOURCE_QUALITY_FIELD_DRIFT,
+  normalizeSourceQuality,
+  sourceQualityFieldDrift
+} = require('../collect/source-quality-classifier');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
@@ -444,6 +449,22 @@ function candidateSelectionViolation(candidate) {
   if (candidate.main_eligible === false) violations.push('main_eligible=false');
   if (candidate.source_gap_risk === true) violations.push('source_gap_risk=true');
   if (candidate.reference_only === true) violations.push('reference_only=true');
+  const hasCanonicalSourceQuality = Boolean(candidate.source_quality && typeof candidate.source_quality === 'object' && !Array.isArray(candidate.source_quality));
+  if (candidate.source_quality_required === true && !hasCanonicalSourceQuality) {
+    violations.push('missing canonical source_quality');
+  }
+  if (hasCanonicalSourceQuality) {
+    const sourceQuality = normalizeSourceQuality(candidate);
+    const drift = sourceQualityFieldDrift(candidate);
+    if (!candidateCanonicalUrl(candidate)) violations.push('missing_url');
+    if (drift.length > 0) violations.push(SOURCE_QUALITY_FIELD_DRIFT);
+    if (sourceQuality.source_url_quality === 'unknown') violations.push('unresolved source_url_quality=unknown');
+    if (sourceQuality.source_quality_status === 'blocked') violations.push('source_quality_status=blocked');
+    if (sourceQuality.main_article_source_allowed !== true) violations.push('main_article_source_allowed=false');
+    for (const blocker of ensureArray(sourceQuality.main_article_source_blockers)) {
+      violations.push(`source_quality_blocker=${blocker}`);
+    }
+  }
   return violations.join('; ');
 }
 

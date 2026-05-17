@@ -56,3 +56,70 @@ collector는 런타임 normalized source 객체와 `content/collected-news/YYYY-
 6. `priority`, `reliability`, `enabled`, `candidateOnly`, `requiresCrossCheck`는 publication risk 기준으로 보수적으로 정합니다.
 7. `usageHint`와 `keywords`는 AOSP Camera, Camera Driver, SoC Platform, C++, AI/SW engineering 관점의 후보 발굴 의도를 드러내게 작성합니다. 실제 main article 분류는 source keyword만이 아니라 기사 title/summary/API/component/behavior evidence에서 나온 `relevance_bucket`을 우선합니다.
 8. source 추가 후 `npm run collect`, `npm run test`, `npm run validate`를 실행하고, 생성된 candidates에서 watch/reference 후보가 final main article로 올라가지 않는지 확인합니다.
+
+## Source quality contract fields
+
+`data/news-sources.json` is the executable source registry. Source quality docs are review surfaces only; enum values and JSON keys must stay unchanged.
+
+| Field | Meaning | Contract |
+| --- | --- | --- |
+| `sourceRole` | Source role consumed by `source-quality-classifier.js`. | Required for every enabled source. Valid values are defined in `SOURCE_ROLES`. |
+| `sourceUrlQualityHint` | Default URL quality hint for candidates from this source. | Required for every enabled source. `unknown` is main-ineligible unless classifier resolves it before Stage 3. |
+| `mainArticlePolicy` | Default main-article source policy. | Required for every enabled source. Valid values: `allowed`, `conditional`, `watchlist_only`, `reference_only`, `blocked`. |
+| `requiresCrossCheckDefault` | Whether candidates from this source normally need primary confirmation. | Boolean. Conditional cross-check sources must set this or use an explicit evidence-rule URL quality hint. |
+| `evidenceGranularityHint` | Expected evidence granularity. | Human-facing hint; examples: `versioned_release_row`, `article_level_native_hal_workflow_evidence`. |
+| `sourceQualityNotes` | Human review notes for source policy. | Array of strings. Notes do not override enum policy. |
+
+### `mainArticlePolicy` mapping
+
+| `mainArticlePolicy` | Default `source_quality_status` | Default `main_article_source_allowed` |
+| --- | --- | ---: |
+| `allowed` | `allowed` | `true` |
+| `conditional` | `conditional` | `false` |
+| `watchlist_only` | `blocked` | `false` |
+| `reference_only` | `blocked` | `false` |
+| `blocked` | `blocked` | `false` |
+
+`source_quality` is canonical in new artifacts. Flat fields are compatibility mirrors only, and drift is reported as `SOURCE_QUALITY_FIELD_DRIFT`.
+
+
+### Source quality enum values
+
+`validate:config` rejects values outside these lists. Keep this section in sync with code.
+
+#### `sourceRole`
+
+- `official_release_source`
+- `official_documentation_reference`
+- `project_release_source`
+- `project_mailing_list_source`
+- `engineering_blog_source`
+- `tech_media_lead_source`
+- `community_lead_source`
+- `generic_trend_source`
+- `fallback_context_source`
+- `unknown_source`
+
+#### `sourceUrlQualityHint`
+
+- `official_release_note_anchor`
+- `official_dated_release`
+- `official_site_update_row`
+- `official_documentation_reference`
+- `project_release`
+- `project_mailing_list_release`
+- `engineering_blog_with_camera_evidence`
+- `tech_media_lead_requires_cross_check`
+- `community_lead_requires_cross_check`
+- `generic_ai_or_it_trend`
+- `undated_reference_page`
+- `fallback_context`
+- `unknown`
+
+#### `mainArticlePolicy`
+
+- `allowed`
+- `conditional`
+- `watchlist_only`
+- `reference_only`
+- `blocked`

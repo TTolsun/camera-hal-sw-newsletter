@@ -92,6 +92,14 @@
         "CameraX",
         "AOSP",
         "HAL"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -152,6 +160,14 @@
         "androidx.camera",
         "Camera2",
         "Android Camera"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_site_update_row",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -209,6 +225,14 @@
         "CameraX",
         "Camera2",
         "Android Camera"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -265,6 +289,15 @@
         "Camera",
         "AndroidX",
         "compatibility"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_release_note_anchor",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "versioned_release_row",
+      "sourceQualityNotes": [
+        "official source",
+        "preserve version/date fragment anchors"
       ]
     },
     {
@@ -279,7 +312,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "sourceRole": "reference_index",
+      "sourceRole": "official_documentation_reference",
       "usageHint": "Camera HAL, camera framework, provider HAL, stream/request/result 공식 기준 확인",
       "keywords": [
         "Camera",
@@ -289,6 +322,14 @@
         "request",
         "result",
         "metadata"
+      ],
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
       ]
     },
     {
@@ -349,6 +390,14 @@
         "compatibility",
         "Camera HAL",
         "Camera ITS"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_site_update_row",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -407,6 +456,14 @@
         "Camera ITS",
         "CDD",
         "Camera HAL"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_site_update_row",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -429,6 +486,15 @@
         "MUST",
         "SHOULD",
         "Android"
+      ],
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
       ]
     },
     {
@@ -450,6 +516,14 @@
         "framework",
         "vendor",
         "Camera"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -471,6 +545,14 @@
         "SMR",
         "security",
         "Android"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -492,6 +574,14 @@
         "vendor",
         "SoC",
         "Android"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -550,7 +640,13 @@
         "V4L2",
         "media controller",
         "image sensor"
-      ]
+      ],
+      "sourceRole": "project_release_source",
+      "sourceUrlQualityHint": "project_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": []
     },
     {
       "id": "libcamera-release-announcements",
@@ -606,7 +702,13 @@
         "camera",
         "pipeline",
         "image sensor"
-      ]
+      ],
+      "sourceRole": "project_mailing_list_source",
+      "sourceUrlQualityHint": "project_mailing_list_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "dated_project_announcement",
+      "sourceQualityNotes": []
     },
     {
       "id": "libcamera-documentation",
@@ -627,6 +729,15 @@
         "camera",
         "driver",
         "kernel"
+      ],
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
       ]
     },
     {
@@ -647,6 +758,15 @@
         "camera",
         "media",
         "V4L2"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -668,6 +788,15 @@
         "media",
         "driver",
         "camera"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -690,7 +819,13 @@
         "testing",
         "camera",
         "media"
-      ]
+      ],
+      "sourceRole": "engineering_blog_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": []
     },
     {
       "id": "kernelnewbies-linuxchanges",
@@ -712,6 +847,15 @@
         "media",
         "V4L2",
         "camera"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -732,6 +876,14 @@
         "C++29",
         "standard",
         "compiler"
+      ],
+      "sourceRole": "engineering_blog_source",
+      "sourceUrlQualityHint": "engineering_blog_with_camera_evidence",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -752,6 +904,14 @@
         "tooling",
         "architecture",
         "safety"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -772,6 +932,14 @@
         "sanitizer",
         "compiler",
         "static analysis"
+      ],
+      "sourceRole": "project_release_source",
+      "sourceUrlQualityHint": "project_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -793,7 +961,13 @@
         "release",
         "toolchain",
         "compiler"
-      ]
+      ],
+      "sourceRole": "project_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": []
     },
     {
       "id": "microsoft-cpp-team-blog",
@@ -813,6 +987,14 @@
         "tooling",
         "IDE",
         "MSVC"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -832,6 +1014,15 @@
         "weekly",
         "ecosystem",
         "developer"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -851,6 +1042,14 @@
         "developer",
         "newsletter",
         "Google"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
       ]
     },
     {
@@ -870,6 +1069,15 @@
         "programming",
         "software engineering",
         "developer tools"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -889,6 +1097,15 @@
         "AI engineering",
         "platform engineering",
         "software process"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -908,6 +1125,15 @@
         "AI",
         "programming",
         "software engineering"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -928,6 +1154,14 @@
         "Android",
         "AI",
         "software engineering"
+      ],
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -950,6 +1184,15 @@
         "security",
         "developer",
         "enterprise"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -971,6 +1214,15 @@
         "cloud native",
         "platform engineering",
         "software delivery"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -992,6 +1244,14 @@
         "AI",
         "edge",
         "robotics"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -1012,6 +1272,14 @@
         "on-device AI",
         "machine learning",
         "vision"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -1032,6 +1300,15 @@
         "electronics",
         "SoC",
         "firmware"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -1055,6 +1332,15 @@
         "Qualcomm",
         "image sensor",
         "ISP"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -1076,6 +1362,15 @@
         "C++",
         "edge",
         "embedded software"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -1097,6 +1392,14 @@
         "photography",
         "generative AI",
         "machine intelligence"
+      ],
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -1118,6 +1421,14 @@
         "research",
         "safety",
         "model"
+      ],
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -1139,6 +1450,14 @@
         "software engineering",
         "API",
         "model"
+      ],
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -1160,6 +1479,14 @@
         "AI coding",
         "agent",
         "agentic workflow"
+      ],
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -1181,6 +1508,14 @@
         "AI coding",
         "agent",
         "release notes"
+      ],
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -1202,6 +1537,14 @@
         "enterprise AI",
         "DevOps",
         "orchestration"
+      ],
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     },
     {
@@ -1223,6 +1566,15 @@
         "security",
         "agent",
         "startup"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -1243,6 +1595,15 @@
         "infrastructure",
         "architecture",
         "developer tools"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -1265,6 +1626,15 @@
         "개발자",
         "생산성",
         "안드로이드"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -1286,6 +1656,15 @@
         "트렌드",
         "생산성",
         "개발자"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
       ]
     },
     {
@@ -1306,6 +1685,14 @@
         "컨퍼런스",
         "기술 발표",
         "스피커"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
     }
   ]

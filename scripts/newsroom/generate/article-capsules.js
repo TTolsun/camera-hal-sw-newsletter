@@ -1,4 +1,4 @@
-const CAPSULE_TOKEN_TARGET = '500-800';
+const CAPSULE_TOKEN_TARGET = '700-1100';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 3;
 const MAX_IMAGE_CANDIDATES = 3;
@@ -12,6 +12,11 @@ const {
 const {
   normalizeHalSignalFields
 } = require('../common/hal-signal-quality');
+const {
+  normalizeSourceQuality,
+  sourceQualityFieldDrift,
+  sourceQualityFlatFields
+} = require('../collect/source-quality-classifier');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -196,7 +201,91 @@ function eligibility(candidate) {
     briefing_only: bool(candidate.briefing_only),
     reference_only: bool(candidate.reference_only),
     evidence_score: number(candidate.evidence_score),
-    cross_check_status: text(candidate.cross_check_status || 'not-required')
+    cross_check_status: text(candidate.cross_check_status || 'not_required')
+  };
+}
+
+function linkedEvidenceDoNotClaim(candidate) {
+  const messages = [];
+  const byStatus = candidate.linked_evidence_summary?.by_fetch_status ||
+    candidate.source_aware_linked_evidence_summary?.by_fetch_status ||
+    {};
+  if (Number(byStatus.blocked || 0) > 0) {
+    messages.push('Do not use blocked linked evidence as factual support.');
+  }
+  if (Number(byStatus.failed || 0) > 0) {
+    messages.push('Do not use failed linked evidence as factual support.');
+  }
+  return messages;
+}
+
+function sourceQualityDoNotClaim(sourceQuality) {
+  const blockers = ensureArray(sourceQuality.main_article_source_blockers);
+  const messages = [];
+  if (sourceQuality.main_article_source_allowed !== true) {
+    messages.push('Do not promote this candidate to a main article while source quality blockers remain.');
+  }
+  if (blockers.includes('generic_trend_without_hal_workflow_link')) {
+    messages.push('Do not claim direct HAL, Android Camera, driver, SoC, or native workflow impact unless supplied source evidence explicitly connects it.');
+  }
+  if (blockers.includes('cross_check_required_but_missing')) {
+    messages.push('Do not use this source as the main article source until primary confirmation is supplied.');
+  }
+  if (blockers.includes('unknown_source_quality')) {
+    messages.push('Do not infer or repair unknown source quality inside Stage 3 generation.');
+  }
+  return messages;
+}
+
+function readinessBlockers(candidate, sourceQuality, halSignal, drift) {
+  const blockers = [];
+  if (!candidateUrl(candidate)) blockers.push('missing_url');
+  if (sourceQuality.source_url_quality === 'unknown') blockers.push('unknown_source_quality');
+  if (sourceQuality.source_quality_status === 'blocked') blockers.push('source_quality_status_blocked');
+  if (sourceQuality.main_article_source_allowed !== true) blockers.push('main_article_source_allowed_false');
+  for (const blocker of ensureArray(sourceQuality.main_article_source_blockers)) blockers.push(blocker);
+  for (const blocker of ensureArray(halSignal.hal_signal_hard_blockers)) blockers.push(`hal_signal:${blocker}`);
+  if (drift.length > 0) blockers.push('SOURCE_QUALITY_FIELD_DRIFT');
+  if (!['main', 'short'].includes(text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility))) {
+    blockers.push('selection_not_main_or_short');
+  }
+  if (candidate.main_eligible === false) blockers.push('main_eligible_false');
+  if (candidate.source_gap_risk === true) blockers.push('source_gap_risk');
+  if (candidate.reference_only === true) blockers.push('reference_only');
+  return [...new Set(blockers)];
+}
+
+function mainArticleReadiness(candidate, sourceQuality, halSignal, drift) {
+  const sourceReady = sourceQuality.main_article_source_allowed === true &&
+    sourceQuality.source_url_quality !== 'unknown' &&
+    sourceQuality.source_quality_status !== 'blocked' &&
+    drift.length === 0;
+  const halSignalReady = ensureArray(halSignal.hal_signal_hard_blockers).length === 0;
+  const selectionReady = ['main', 'short'].includes(text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility)) &&
+    candidate.main_eligible !== false &&
+    candidate.source_gap_risk !== true &&
+    candidate.reference_only !== true;
+  const blockers = readinessBlockers(candidate, sourceQuality, halSignal, drift);
+  return {
+    ready: sourceReady && halSignalReady && selectionReady && blockers.length === 0,
+    source_ready: sourceReady,
+    hal_signal_ready: halSignalReady,
+    selection_ready: selectionReady,
+    blockers
+  };
+}
+
+function capsuleSourceQualityFlatFields(sourceQuality) {
+  const flat = sourceQualityFlatFields(sourceQuality);
+  return {
+    source_role: flat.source_role,
+    source_url_quality: flat.source_url_quality,
+    source_quality_status: flat.source_quality_status,
+    main_article_source_allowed: flat.main_article_source_allowed,
+    main_article_source_blockers: flat.main_article_source_blockers,
+    cross_check_status: flat.cross_check_status,
+    requires_cross_check: flat.requires_cross_check,
+    evidence_granularity: flat.evidence_granularity
   };
 }
 
@@ -232,6 +321,16 @@ function buildArticleCapsule(candidate) {
     impact_claim_level: impactClaimLevel
   };
   const halSignal = normalizeHalSignalFields(fieldCandidate);
+  const sourceQuality = normalizeSourceQuality(fieldCandidate);
+  const sourceQualityDrift = sourceQualityFieldDrift(fieldCandidate);
+  const sourceQualityFlat = capsuleSourceQualityFlatFields(sourceQuality);
+  const readiness = mainArticleReadiness(fieldCandidate, sourceQuality, halSignal, sourceQualityDrift);
+  const doNotClaim = [
+    ...ensureArray(halSignal.do_not_overstate),
+    ...ensureArray(fieldCandidate.derived_editorial_hints?.do_not_claim),
+    ...sourceQualityDoNotClaim(sourceQuality),
+    ...linkedEvidenceDoNotClaim(fieldCandidate)
+  ].map(item => compactText(item, 140));
   const capsule = {
     title: compactText(candidate.title, 180),
     url: candidateUrl(candidate),
@@ -259,6 +358,10 @@ function buildArticleCapsule(candidate) {
     signal_quality_status: halSignal.signal_quality_status,
     fallback_promotion_allowed: halSignal.fallback_promotion_allowed,
     soc_signal_source_allowed: halSignal.soc_signal_source_allowed,
+    source_quality: sourceQuality,
+    ...sourceQualityFlat,
+    source_quality_field_drift: sourceQualityDrift,
+    main_article_readiness: readiness,
     component: compactText(candidate.api_or_component || candidate.version_or_release, 160),
     what_changed: compactText(cleanedBehavior.text || candidate.behavior_change || candidate.summary || summaryCacheText(candidate), MAX_TEXT),
     background_context_static: compactText(buildStaticBackgroundContext(fieldCandidate), MAX_TEXT),
@@ -301,6 +404,9 @@ function buildArticleCapsule(candidate) {
   }
   if (ensureArray(halSignal.do_not_overstate).length > 0) {
     capsule.do_not_overstate = ensureArray(halSignal.do_not_overstate).slice(0, 5);
+  }
+  if (doNotClaim.length > 0) {
+    capsule.do_not_claim = [...new Set(doNotClaim)].slice(0, 8);
   }
   if (halSignal.fallback_promotion_reason) {
     capsule.fallback_promotion_reason = compactText(halSignal.fallback_promotion_reason, 180);

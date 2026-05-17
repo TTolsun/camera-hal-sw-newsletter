@@ -203,6 +203,8 @@ test('JSON and Markdown report output is deterministic', () => {
   assert.equal(firstMarkdown, secondMarkdown);
   assert.equal(first.summary.unregistered_candidate_count, syntheticCollectedCount);
   assert.equal(first.summary.unregistered_candidate_count, 1);
+  assert.ok(first.summary.source_quality_status_summary.unknown >= 1);
+  assert.ok(first.summary.legacy_source_quality_warning_count >= 1);
   assert.deepEqual(first.inputs.optional_artifacts, {
     reporter_candidates: 'content/newsroom/2026-05-06/reporter-candidates.json',
     editor_draft: 'content/newsroom/2026-05-06/editor-draft.json',
@@ -210,6 +212,8 @@ test('JSON and Markdown report output is deterministic', () => {
     quality_report: 'content/newsroom/2026-05-06/quality-report.json'
   });
   assert.match(firstMarkdown, /- Unregistered candidates: 1/);
+  assert.match(firstMarkdown, /## Source Quality Summary/);
+  assert.match(firstMarkdown, /source_quality_status/);
   assert.ok(firstMarkdown.indexOf('| effective-camera | KEEP |') < firstMarkdown.indexOf('| official-broken | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR |'));
   assert.ok(first.warnings.some(warning => warning.includes('synthetic-unknown-camera-blog')));
 });

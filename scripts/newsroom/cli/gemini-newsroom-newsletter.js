@@ -154,6 +154,10 @@ function linkedEvidencePromptGuardrails() {
 function sourceExtractionPromptGuardrails() {
   return [
     'Source extraction contract: treat source_extraction as source-confirmed structured facts only, and treat derived_editorial_hints as editorial guidance only.',
+    'Source quality contract: consume canonical source_quality as supplied. Do not infer, repair, or override missing source quality fields inside Stage 3 generation.',
+    'Treat main_article_source_allowed=false as a hard blocker for main article generation. Mention blocked candidates only as watchlist/context when selection input explicitly allows it.',
+    'Do not override source_quality.main_article_source_blockers[] or main_article_source_blockers[] from prose reasoning.',
+    'Do not use blocked or failed linked evidence as factual support.',
     'For CameraX / AndroidX release notes, source_extraction.release.sections[].items[].text is the source-confirmed release-note behavior evidence. Do not replace it with artifact tables, dependency declarations, page navigation, or generic update text.',
     'Do not copy derived_editorial_hints into article_sections.verified_facts or present HAL boundary, validation_targets, do_not_claim, warnings, or relevance hints as facts from the source.',
     'Do not analyze the source URL or full source page independently. Use only the supplied article capsule, source_extraction JSON, derived_editorial_hints JSON, and source fields.',

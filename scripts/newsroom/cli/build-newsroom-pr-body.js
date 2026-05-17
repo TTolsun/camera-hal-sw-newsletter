@@ -545,6 +545,44 @@ function renderHalSignalQualitySummary(root, date, status = {}) {
   ].join('\n');
 }
 
+function formatCountSummary(counts) {
+  return Object.entries(counts || {})
+    .sort((a, b) => Number(b[1] || 0) - Number(a[1] || 0) || String(a[0]).localeCompare(String(b[0])))
+    .slice(0, 6)
+    .map(([key, count]) => `${key}: ${count}`)
+    .join(', ') || 'none';
+}
+
+function renderSourceQualityGateSummary(root, date) {
+  if (!date) return '';
+  const relPath = `content/newsroom/${date}/source-effectiveness-report.json`;
+  const report = readJsonObjectIfExists(path.join(root, relPath));
+  if (!report) {
+    return [
+      '## Source Quality Gate Summary',
+      '',
+      '- source quality report: unavailable',
+      `- Reason: ${relPath} not found`,
+      ''
+    ].join('\n');
+  }
+  const summary = report.summary || {};
+  const coverage = summary.selected_main_source_quality_coverage || {};
+  return [
+    '## Source Quality Gate Summary',
+    '',
+    `- selected main source_quality coverage: ${valueOrUnknown(coverage.with_source_quality_count || 0)}/${valueOrUnknown(coverage.selected_main_count || 0)}`,
+    `- unknown_source_quality_count: ${valueOrUnknown(summary.unknown_source_quality_count || 0)}`,
+    `- source_quality_field_drift_count: ${valueOrUnknown(summary.source_quality_field_drift_count || 0)}`,
+    `- legacy_source_quality_warning_count: ${valueOrUnknown(summary.legacy_source_quality_warning_count || 0)}`,
+    `- conditional promoted/blocked: ${valueOrUnknown(summary.conditional_source_promoted_count || 0)}/${valueOrUnknown(summary.conditional_source_blocked_count || 0)}`,
+    `- source_quality_status: ${formatCountSummary(summary.source_quality_status_summary)}`,
+    `- top blockers: ${formatCountSummary(summary.source_quality_blocker_summary)}`,
+    `- Artifact: \`${relPath}\``,
+    ''
+  ].join('\n');
+}
+
 function renderEvidencePackSummary(root, date) {
   if (!date) return '';
   const relPath = `content/newsroom/${date}/evidence-pack-summary.json`;
@@ -2096,6 +2134,7 @@ function buildNewsroomPrBody(options = {}) {
     renderFallbackPublicIssueNotes(root, date),
     renderFinalSelectionStatus(status),
     renderHalSignalQualitySummary(root, date, status),
+    renderSourceQualityGateSummary(root, date),
     renderEvidencePackSummary(root, date),
     renderCandidateTraceability(root, date),
     renderEditorActionGuidance(status, date),
