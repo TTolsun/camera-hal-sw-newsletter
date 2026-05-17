@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-17",
-  "generated_at": "2026-05-17T01:13:53.265Z",
+  "generated_at": "2026-05-17T10:47:39.457Z",
   "summary": {
     "schema_version": 1,
     "total_count": 40,
@@ -876,16 +876,16 @@
       "warnings": []
     },
     {
-      "event_id": "event_732a05cecc3f",
-      "primary_candidate_id": "candidate_7d2da1ec8d2f",
-      "event_key": "source:phoronix-linux-camera-media:date:Fri, 15 May 2026 09:15:36 -0400:component:cpu",
+      "event_id": "event_b12c930f97aa",
+      "primary_candidate_id": "candidate_f58a976c28bf",
+      "event_key": "source:phoronix-linux-camera-media:date:Sun, 17 May 2026 04:09:00 -0400:component:cpu",
       "event_type": "release_note",
-      "primary_url": "https://www.phoronix.com/review/zimacube-2",
+      "primary_url": "https://www.phoronix.com/news/fluidx3d-3.7-released",
       "evidence_urls": [],
       "dedupe_reason": "source_id + release.date + component",
       "release": {
         "version": "",
-        "date": "Fri, 15 May 2026 09:15:36 -0400"
+        "date": "Sun, 17 May 2026 04:09:00 -0400"
       },
       "component": "CPU",
       "impact_axes": [

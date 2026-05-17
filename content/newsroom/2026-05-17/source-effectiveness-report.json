@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "date": "2026-05-17",
   "inputs": {
     "collected_candidates": "content/collected-news/2026-05-17/candidates.json",
@@ -24,14 +24,42 @@
     "source_gap_count": 34,
     "generic_noise_count": 29,
     "duplicate_count": 0,
+    "source_url_quality_distribution": {
+      "undated_reference_page": 3,
+      "official_dated_release": 12,
+      "official_site_update_row": 4,
+      "generic_ai_or_it_trend": 5,
+      "engineering_blog_with_camera_evidence": 14,
+      "project_mailing_list_release": 1,
+      "tech_media_lead_requires_cross_check": 1
+    },
+    "source_quality_status_summary": {
+      "blocked": 34,
+      "allowed": 6
+    },
+    "source_quality_blocker_summary": {
+      "undated_reference_page": 3,
+      "source_gap_risk": 34,
+      "reference_only": 32,
+      "cross_check_required_but_missing": 1
+    },
+    "selected_main_source_quality_coverage": {
+      "selected_main_count": 3,
+      "with_source_quality_count": 3
+    },
+    "main_eligible_source_quality_coverage": {
+      "main_eligible_candidate_count": 2,
+      "with_source_quality_count": 2
+    },
+    "conditional_source_promoted_count": 2,
+    "conditional_source_blocked_count": 18,
+    "unknown_source_quality_count": 0,
+    "source_quality_field_drift_count": 0,
+    "legacy_source_quality_warning_count": 0,
     "recommendation_counts": [
       {
         "recommendation": "NO_RECENT_SIGNAL",
         "count": 28
-      },
-      {
-        "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
-        "count": 1
       },
       {
         "recommendation": "KEEP",
@@ -39,7 +67,7 @@
       },
       {
         "recommendation": "KEEP_AND_FIX_PARSER",
-        "count": 15
+        "count": 16
       },
       {
         "recommendation": "REVIEW_SOURCE_OR_PARSER",
@@ -79,6 +107,30 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "undated_reference_page": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "undated_reference_page": 1,
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -145,6 +197,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "official_dated_release": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -211,6 +286,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 6,
+      "source_url_quality_distribution": {
+        "official_dated_release": 6
+      },
+      "source_quality_status_summary": {
+        "blocked": 6
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 6,
+        "reference_only": 6
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -281,6 +379,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -322,6 +436,26 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {
+        "official_site_update_row": 3
+      },
+      "source_quality_status_summary": {
+        "allowed": 3
+      },
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 1,
+        "with_source_quality_count": 1
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 1,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -361,6 +495,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 2,
+      "source_url_quality_distribution": {
+        "official_dated_release": 2
+      },
+      "source_quality_status_summary": {
+        "blocked": 2
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 2,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -428,6 +585,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -469,6 +642,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "generic_ai_or_it_trend": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 1,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -535,6 +731,30 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "undated_reference_page": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "undated_reference_page": 1,
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -601,6 +821,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -642,6 +878,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "official_site_update_row": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -708,6 +967,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -749,6 +1024,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "generic_ai_or_it_trend": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 1,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -815,6 +1113,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -856,6 +1170,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -897,6 +1227,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -938,6 +1284,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -979,6 +1341,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1020,6 +1398,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "generic_ai_or_it_trend": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 1,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1086,6 +1487,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "generic_ai_or_it_trend": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 1,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1152,6 +1576,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1193,6 +1633,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "generic_ai_or_it_trend": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 1,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1259,6 +1722,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1300,6 +1779,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1341,6 +1836,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1382,6 +1893,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1423,6 +1950,30 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 9,
+      "source_url_quality_distribution": {
+        "engineering_blog_with_camera_evidence": 14
+      },
+      "source_quality_status_summary": {
+        "blocked": 12,
+        "allowed": 2
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 12,
+        "reference_only": 11
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 2,
+        "with_source_quality_count": 2
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 2,
+      "conditional_source_blocked_count": 12,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0.1429,
       "selection_rate": 1,
       "rendered_rate": 1,
@@ -1496,6 +2047,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1537,6 +2104,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1569,37 +2152,57 @@
       "rendered_main_count": 0,
       "source_gap_count": 1,
       "camera_relevant_raw_count": 1,
-      "parser_repair_reason_count": 1,
+      "parser_repair_reason_count": 0,
       "reference_only_count": 1,
       "watchlist_count": 1,
       "main_eligible_false_count": 1,
-      "briefing_only_count": 1,
+      "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {
+        "undated_reference_page": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "undated_reference_page": 1,
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
       "source_gap_rate": 1,
       "noise_rate": 0,
       "effectiveness_score": 0,
-      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
+      "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
-        "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
         "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
       "top_exclusion_reasons": [
         {
-          "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+          "reason": "Reference index source; use only as context/background and exclude from final article inputs.",
           "count": 1
         },
         {
-          "reason": "briefing_only=true",
-          "count": 1
-        },
-        {
-          "reason": "finalSelectionEligibility=watchlist",
+          "reason": "finalSelectionEligibility=exclude",
           "count": 1
         },
         {
@@ -1608,6 +2211,10 @@
         },
         {
           "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
           "count": 1
         }
       ],
@@ -1643,6 +2250,26 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {
+        "project_mailing_list_release": 1
+      },
+      "source_quality_status_summary": {
+        "allowed": 1
+      },
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 1,
+        "with_source_quality_count": 1
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 1,
+        "with_source_quality_count": 1
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 1,
       "selection_rate": 1,
       "rendered_rate": 1,
@@ -1686,6 +2313,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1727,6 +2370,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {
+        "official_dated_release": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1792,6 +2458,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1833,6 +2515,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1874,6 +2572,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1915,6 +2629,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1956,6 +2686,30 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "tech_media_lead_requires_cross_check": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1,
+        "cross_check_required_but_missing": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 1,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -1992,7 +2746,7 @@
       ],
       "sample_selected_urls": [],
       "sample_excluded_urls": [
-        "https://www.phoronix.com/review/zimacube-2"
+        "https://www.phoronix.com/news/FluidX3D-3.7-Released"
       ]
     },
     {
@@ -2022,6 +2776,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "official_dated_release": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -2088,6 +2865,29 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 1,
+      "source_url_quality_distribution": {
+        "official_dated_release": 1
+      },
+      "source_quality_status_summary": {
+        "blocked": 1
+      },
+      "source_quality_blocker_summary": {
+        "source_gap_risk": 1,
+        "reference_only": 1
+      },
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -2154,6 +2954,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -2195,6 +3011,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -2236,6 +3068,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -2277,6 +3125,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -2318,6 +3182,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -2359,6 +3239,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
@@ -2400,6 +3296,22 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
+      "selected_main_source_quality_coverage": {
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
+      },
+      "main_eligible_source_quality_coverage": {
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
+      },
+      "conditional_source_promoted_count": 0,
+      "conditional_source_blocked_count": 0,
+      "unknown_source_quality_count": 0,
+      "source_quality_field_drift_count": 0,
+      "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,

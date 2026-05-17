@@ -56,4 +56,4 @@
 - event_e1a97ab4bcd4: primary_url, normalized_primary_url, primary=https://cloud.google.com/blog/products/ai-machine-learning, evidence=0, confidence=low
 - event_aac1e2118f76: primary_url, normalized_primary_url, primary=https://libcamera.org/introduction.html, evidence=0, confidence=low
 - event_af7168b0fe86: primary_url, normalized_primary_url, primary=https://releases.llvm.org, evidence=0, confidence=low
-- event_732a05cecc3f: release_note, source_id + release.date + component, primary=https://www.phoronix.com/review/zimacube-2, evidence=0, confidence=medium
+- event_b12c930f97aa: release_note, source_id + release.date + component, primary=https://www.phoronix.com/news/fluidx3d-3.7-released, evidence=0, confidence=medium

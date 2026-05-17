@@ -5,7 +5,7 @@
 - enable_network: false
 - candidate_count: 40
 - total_linked_evidence: 0
-- source_aware_linked_evidence: 2032
+- source_aware_linked_evidence: 2031
 - warning_count: 34
 
 ## Fetch Status Counts
@@ -63,4 +63,4 @@
 - AI & Machine Learning | Google Cloud Blog: 0 evidence, impact=unknown, recommendation=unknown
 - Introduction &mdash; libcamera: 0 evidence, impact=documentation_only, recommendation=watch
 - Download LLVM releases: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU: 0 evidence, impact=unknown, recommendation=unknown
+- FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software: 0 evidence, impact=unknown, recommendation=unknown
