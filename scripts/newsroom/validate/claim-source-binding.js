@@ -46,6 +46,20 @@ const OVERCLAIM_RISK_VALUES = new Set(OVERCLAIM_RISKS);
 const DIRECT_HAL_WORDING = /\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|vendor\s+HAL|camera\s+provider\s+contract|HAL\s+runtime|runtime\s+behavior|driver\s+runtime)\b/i;
 const DIRECT_HAL_GUARDRAIL = /\bdo\s+not\s+(?:claim|overstate|present|treat)[^.\n]{0,120}\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|runtime|driver)\b|\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|runtime|driver)\b[^.\n]{0,120}\b(?:do\s+not|not\s+claim|not\s+overstate|without\s+source)\b/i;
 const CONCRETE_FACT_TERMS = /\b(?:version|release\s+date|published|API|component|behavior\s+change|CameraX|Camera2|Camera\s+HAL|AndroidX|libcamera|V4L2|CTS|VTS|Camera\s+ITS|stream|buffer|metadata|request|result)\b|\b20\d{2}-\d{2}-\d{2}\b|\bv?\d+\.\d+(?:\.\d+)?(?:[-\w.]*)?\b/i;
+const NON_ALLOWED_EVIDENCE_STATUSES = Object.freeze(['blocked', 'failed', 'skipped', 'unsupported']);
+const NON_ALLOWED_EVIDENCE_STATUS_VALUES = new Set(NON_ALLOWED_EVIDENCE_STATUSES);
+const LINKED_EVIDENCE_STATUS_FIELDS = Object.freeze([
+  ['blocked_linked_evidence_ids', 'blocked'],
+  ['failed_linked_evidence_ids', 'failed'],
+  ['skipped_linked_evidence_ids', 'skipped'],
+  ['unsupported_linked_evidence_ids', 'unsupported']
+]);
+const POSITIVE_SUPPORT_CLAIM_TYPES = new Set(['fact', 'inference', 'recommendation']);
+const LIMITATION_CLAIM_TYPES = new Set(['risk_note', 'limitation']);
+const LIMITATION_WORDING = /\b(?:not\s+confirmed|not\s+resolved|not\s+fetched|fetch(?:ed)?\s+failed|failed\s+to\s+fetch|blocked|skipped|unsupported|unresolved|diagnostic(?:\s+only)?|limited|cannot\s+confirm|without\s+(?:confirmed|resolved|direct)\s+evidence|no\s+direct\s+HAL\s+impact\s+is\s+confirmed)\b/i;
+const POSITIVE_SUPPORT_WORDING = /\b(?:confirms?|confirmed|proves?|verified|shows?|demonstrates?|establishes?|supports?|evidence\s+(?:shows|confirms)|direct\s+HAL\s+impact|direct\s+HAL\s+behavior|runtime\s+behavior\s+(?:changes?|changed)|changes?\s+runtime\s+behavior)\b/i;
+const STREAM_BUFFER_TERMS = Object.freeze(['stream', 'buffer', 'metadata', 'request', 'result']);
+const RUNTIME_TERMS = Object.freeze(['runtime', 'behavior', 'implementation', 'pipeline']);
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -67,6 +81,10 @@ function lower(value) {
 
 function hashText(value, length = 12) {
   return crypto.createHash('sha256').update(text(value)).digest('hex').slice(0, length);
+}
+
+function uniqueTexts(values = []) {
+  return [...new Set(ensureArray(values).map(text).filter(Boolean))];
 }
 
 function normalizeText(value) {
@@ -108,6 +126,14 @@ function sectionKeyFromSourceExtraction(group, section = {}, extraction = {}) {
 
 function stableSourceExtractionItemId(candidate = {}, sectionKey = 'source-extraction', itemText = '') {
   return `sx:${sourceCandidateHash(candidate)}:${sectionKey}:${hashText(normalizeText(itemText), 16)}`;
+}
+
+function stableLinkedEvidenceItemId(candidate = {}, item = {}) {
+  const status = lower(item.fetch_status || item.fetchStatus || 'unknown') || 'unknown';
+  const urlKey = canonicalUrlKey(item.url || item.source_url || item.sourceUrl) ||
+    normalizeText(item.identifier || item.title || item.source_text || item.sourceText || 'no-url');
+  const textKey = normalizeText(item.title || item.source_text || item.sourceText || item.raw_excerpt || item.rawExcerpt || item.identifier || item.type || status);
+  return `le:${sourceCandidateHash(candidate)}:${status}:${hashText(urlKey, 16)}:${hashText(textKey, 16)}`;
 }
 
 function sourceExtractionItems(candidate = {}) {
@@ -184,20 +210,68 @@ function urlKeySet(value, { preserveFragment = false } = {}) {
   return new Set([...keys].filter(Boolean));
 }
 
+function evidenceStatusRank(status) {
+  if (NON_ALLOWED_EVIDENCE_STATUS_VALUES.has(status)) return 4;
+  if (status === 'provenance') return 2;
+  if (status === 'allowed') return 1;
+  return 0;
+}
+
 function addEvidence(index, item = {}) {
   const id = text(item.id || item.evidence_id);
   if (!id) return;
+  const next = {
+    id,
+    kind: item.kind || 'evidence',
+    status: item.status || 'allowed',
+    urls: uniqueTexts(item.urls),
+    texts: uniqueTexts(item.texts),
+    fragment_specific: item.fragment_specific === true,
+    provenance_only: item.provenance_only === true
+  };
   if (!index.byId.has(id)) {
-    index.byId.set(id, {
-      id,
-      kind: item.kind || 'evidence',
-      status: item.status || 'allowed',
-      urls: ensureArray(item.urls).map(text).filter(Boolean),
-      texts: ensureArray(item.texts).map(text).filter(Boolean),
-      fragment_specific: item.fragment_specific === true,
-      provenance_only: item.provenance_only === true
-    });
+    index.byId.set(id, next);
+    return;
   }
+  const current = index.byId.get(id);
+  if (evidenceStatusRank(next.status) > evidenceStatusRank(current.status)) {
+    current.status = next.status;
+    current.kind = next.kind;
+  }
+  current.urls = item.authoritative_urls === true && next.urls.length > 0
+    ? next.urls
+    : uniqueTexts([...current.urls, ...next.urls]);
+  current.texts = uniqueTexts([...current.texts, ...next.texts]);
+  current.fragment_specific = current.fragment_specific || next.fragment_specific;
+  current.provenance_only = current.provenance_only && next.provenance_only;
+}
+
+function linkedEvidenceItems(candidate = {}) {
+  const entries = [
+    ['linked_evidence', candidate.linked_evidence || candidate.linkedEvidence],
+    ['source_aware_linked_evidence', candidate.source_aware_linked_evidence || candidate.sourceAwareLinkedEvidence]
+  ];
+  const items = [];
+  for (const [field, values] of entries) {
+    for (const raw of ensureArray(values)) {
+      const item = objectValue(raw);
+      const fetchStatus = lower(item.fetch_status || item.fetchStatus);
+      const status = fetchStatus === 'resolved' ? 'allowed' : fetchStatus;
+      if (status !== 'allowed' && !NON_ALLOWED_EVIDENCE_STATUS_VALUES.has(status)) continue;
+      const itemText = text(item.source_text || item.sourceText || item.raw_excerpt || item.rawExcerpt || item.title || item.identifier);
+      const itemUrl = text(item.url || item.source_url || item.sourceUrl);
+      items.push({
+        id: text(item.evidence_id || item.evidenceId || item.id) || stableLinkedEvidenceItemId(candidate, item),
+        kind: `${field}_item`,
+        status,
+        urls: [itemUrl],
+        texts: [itemText, item.classification_reason || item.classificationReason].map(text).filter(Boolean),
+        fragment_specific: hasUrlFragment(itemUrl) && hasConcreteFactualText(itemText),
+        authoritative_urls: Boolean(itemUrl)
+      });
+    }
+  }
+  return items;
 }
 
 function buildEvidenceIndex(candidate = {}, section = {}) {
@@ -249,14 +323,18 @@ function buildEvidenceIndex(candidate = {}, section = {}) {
     });
   }
   for (const item of sourceExtractionItems(candidate)) addEvidence(index, item);
-  for (const id of ensureArray(candidate.blocked_linked_evidence_ids)) {
-    addEvidence(index, {
-      id,
-      kind: 'blocked_linked_evidence',
-      status: 'blocked',
-      urls: ensureArray(candidate.blocked_linked_evidence_urls),
-      texts: []
-    });
+  for (const item of linkedEvidenceItems(candidate)) addEvidence(index, item);
+  for (const [field, status] of LINKED_EVIDENCE_STATUS_FIELDS) {
+    const urlField = field.replace(/_ids$/, '_urls');
+    for (const id of ensureArray(candidate[field])) {
+      addEvidence(index, {
+        id,
+        kind: `${status}_linked_evidence`,
+        status,
+        urls: ensureArray(candidate[urlField]),
+        texts: []
+      });
+    }
   }
   const primaryIds = ensureArray(candidate.primary_evidence_ids).map(text).filter(Boolean);
   for (const id of ensureArray(candidate.evidence_pack_ids)) {
@@ -310,11 +388,13 @@ function normalizeClaim(raw = {}, index) {
 }
 
 function issue(reasonCode, message, options = {}) {
+  const { blocking, severity, ...extra } = options;
   return {
     reason_code: reasonCode,
     message,
-    blocking: options.blocking !== false,
-    severity: options.severity || (options.blocking === false ? 'soft' : 'hard')
+    blocking: blocking !== false,
+    severity: severity || (blocking === false ? 'soft' : 'hard'),
+    ...extra
   };
 }
 
@@ -345,6 +425,63 @@ function evidenceTextForClaim(claim, evidenceIndex) {
       return ensureArray(item?.texts);
     })
     .join(' ');
+}
+
+function evidenceTextForItems(items = []) {
+  return ensureArray(items).flatMap(item => ensureArray(item?.texts)).join(' ');
+}
+
+function missingTermsFromEvidence(terms, claimText, evidenceText) {
+  const claim = normalizeText(claimText);
+  const evidence = normalizeText(evidenceText);
+  return terms.filter(term => {
+    const normalized = normalizeText(term);
+    return claim.includes(normalized) && !evidence.includes(normalized);
+  });
+}
+
+function factSupportIssues(claim, resolvedEvidenceItems = []) {
+  if (claim.claim_type !== 'fact') return [];
+  const allowedItems = ensureArray(resolvedEvidenceItems).filter(item => item?.status === 'allowed');
+  if (allowedItems.length === 0) return [];
+  const supportCheckedEvidenceIds = uniqueTexts(allowedItems.map(item => item.id));
+  const evidenceText = evidenceTextForItems(allowedItems);
+  const issues = [];
+  const protectedMissing = protectedTokens(claim.text)
+    .filter(token => !normalizeText(evidenceText).includes(normalizeText(token)));
+  if (protectedMissing.length > 0) {
+    issues.push(issue(
+      'fact_claim_not_supported_by_evidence_text',
+      'Fact claim contains protected tokens that are missing from resolved evidence text.',
+      {
+        support_checked_evidence_ids: supportCheckedEvidenceIds,
+        support_missing_terms: protectedMissing
+      }
+    ));
+  }
+  const runtimeMissing = missingTermsFromEvidence(RUNTIME_TERMS, claim.text, evidenceText);
+  if (runtimeMissing.length > 0) {
+    issues.push(issue(
+      'runtime_claim_without_runtime_evidence',
+      'Runtime or behavior fact claim lacks matching runtime evidence terms.',
+      {
+        support_checked_evidence_ids: supportCheckedEvidenceIds,
+        support_missing_terms: runtimeMissing
+      }
+    ));
+  }
+  const streamBufferMissing = missingTermsFromEvidence(STREAM_BUFFER_TERMS, claim.text, evidenceText);
+  if (streamBufferMissing.length > 0) {
+    issues.push(issue(
+      'stream_buffer_metadata_without_stream_buffer_metadata_evidence',
+      'Stream/buffer/metadata fact claim lacks matching evidence terms.',
+      {
+        support_checked_evidence_ids: supportCheckedEvidenceIds,
+        support_missing_terms: streamBufferMissing
+      }
+    ));
+  }
+  return issues;
 }
 
 function factCoveredByClaim(factText, claim, evidenceIndex) {
@@ -393,9 +530,21 @@ function factsToCover(section = {}) {
 function claimContradictsGuardrail(claim, guardrails) {
   const claimText = text(claim.text);
   if (!DIRECT_HAL_WORDING.test(claimText)) return null;
+  if (
+    LIMITATION_CLAIM_TYPES.has(claim.claim_type) &&
+    LIMITATION_WORDING.test(claimText) &&
+    !hasPositiveSupportWording(claimText)
+  ) {
+    return null;
+  }
   const guardrail = ensureArray(guardrails).map(text).find(item => DIRECT_HAL_GUARDRAIL.test(item));
   if (!guardrail) return null;
   return guardrail;
+}
+
+function hasPositiveSupportWording(value) {
+  return POSITIVE_SUPPORT_WORDING.test(value) &&
+    !/\b(?:not\s+confirmed|not\s+resolved|cannot\s+confirm|no\s+direct\s+HAL\s+impact\s+is\s+confirmed)\b/i.test(value);
 }
 
 function evidenceHasDirectHalSupport(claim, evidenceIndex, candidate = {}) {
@@ -404,9 +553,48 @@ function evidenceHasDirectHalSupport(claim, evidenceIndex, candidate = {}) {
   return DIRECT_HAL_WORDING.test(evidenceText);
 }
 
+function claimSourceMatchesEvidenceItem(claim, item) {
+  const itemUrls = uniqueTexts(item?.urls);
+  if (itemUrls.length === 0) return true;
+  const itemKeys = new Set();
+  for (const url of itemUrls) {
+    for (const key of urlKeySet(url, { preserveFragment: item.fragment_specific })) itemKeys.add(key);
+  }
+  return claim.source_urls.some(url =>
+    [...urlKeySet(url, { preserveFragment: item.fragment_specific })].some(key => itemKeys.has(key))
+  );
+}
+
+function nonAllowedEvidenceIssueOptions(claim, item) {
+  const checkedIds = [item.id].filter(Boolean);
+  if (claim.claim_type === 'fact') {
+    return {
+      blocking: true,
+      severity: 'hard',
+      support_checked_evidence_ids: checkedIds
+    };
+  }
+  if (POSITIVE_SUPPORT_CLAIM_TYPES.has(claim.claim_type) || LIMITATION_CLAIM_TYPES.has(claim.claim_type)) {
+    const limitation = LIMITATION_WORDING.test(claim.text);
+    const positiveSupport = hasPositiveSupportWording(claim.text);
+    return {
+      blocking: !(limitation && !positiveSupport),
+      severity: limitation && !positiveSupport ? 'soft' : 'hard',
+      support_checked_evidence_ids: checkedIds,
+      non_allowed_evidence_usage: limitation && !positiveSupport ? 'limitation' : 'positive_support'
+    };
+  }
+  return {
+    blocking: true,
+    severity: 'hard',
+    support_checked_evidence_ids: checkedIds
+  };
+}
+
 function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
   const issues = [];
   const resolvedEvidenceIds = [];
+  const resolvedEvidenceItems = [];
   let derivedEvidenceMapping = false;
   if (!claim.claim_id) issues.push(issue('missing_claim_id', 'Claim is missing claim_id.'));
   if (!claim.text) issues.push(issue('empty_claim_text', 'Claim text is empty.'));
@@ -452,32 +640,28 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
       issues.push(issue('provenance_id_without_item_evidence', `Claim references provenance-only evidence id: ${evidenceId}.`));
       continue;
     }
+    resolvedEvidenceIds.push(item.id);
+    resolvedEvidenceItems.push(item);
+    if (!claimSourceMatchesEvidenceItem(claim, item)) {
+      issues.push(issue(
+        item.fragment_specific ? 'source_url_fragment_mismatch' : 'evidence_source_url_mismatch',
+        item.fragment_specific
+          ? 'Claim source_urls do not preserve the release/version/section fragment required by the evidence item.'
+          : `Claim source_urls do not match evidence_id ${evidenceId}.`,
+        { support_checked_evidence_ids: [item.id] }
+      ));
+    }
     if (item.status !== 'allowed') {
-      const hard = ['fact', 'inference', 'recommendation'].includes(claim.claim_type);
+      const options = nonAllowedEvidenceIssueOptions(claim, item);
       issues.push(issue(
         'blocked_or_failed_evidence_id',
         `Claim references ${item.status} evidence_id: ${evidenceId}.`,
-        hard ? {} : { blocking: false, severity: 'soft' }
+        options
       ));
       continue;
     }
-    if (item.fragment_specific) {
-      const itemKeys = new Set();
-      for (const url of item.urls) {
-        for (const key of urlKeySet(url, { preserveFragment: true })) itemKeys.add(key);
-      }
-      const sourceMatchesFragment = claim.source_urls.some(url =>
-        [...urlKeySet(url, { preserveFragment: true })].some(key => itemKeys.has(key))
-      );
-      if (!sourceMatchesFragment) {
-        issues.push(issue(
-          'source_url_fragment_mismatch',
-          'Claim source_urls do not preserve the release/version/section fragment required by the evidence item.'
-        ));
-      }
-    }
-    resolvedEvidenceIds.push(item.id);
   }
+  issues.push(...factSupportIssues(claim, resolvedEvidenceItems));
   if (derivedEvidenceMapping) {
     issues.push(issue(
       'derived_evidence_mapping',
@@ -494,6 +678,7 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
   return {
     issues,
     resolvedEvidenceIds,
+    resolvedEvidenceItems,
     derivedEvidenceMapping
   };
 }
@@ -656,6 +841,7 @@ module.exports = {
   CLAIM_TYPES,
   OVERCLAIM_RISKS,
   buildEvidenceIndex,
+  stableLinkedEvidenceItemId,
   stableSourceExtractionItemId,
   summarizeClaimValidation,
   validateArticleClaims

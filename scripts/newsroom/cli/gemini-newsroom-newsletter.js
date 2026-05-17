@@ -877,11 +877,11 @@ function normalizeEditorSection(section, index, reporter) {
   };
 }
 
-function validateEditor(value, date, reporter = { candidates: [] }) {
+function validateEditor(value, date, reporter = { candidates: [] }, options = {}) {
   return validateEditorOutputContract(value, date, {
     reporter,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
-    strictClaims: ensureArray(reporter?.candidates).length > 0
+    strictClaims: options.strictClaims === true
   });
 }
 
@@ -971,9 +971,10 @@ function recordLastKnownValidEditor(editor, {
   reporter = { candidates: [] },
   factCheck = null,
   qualityReport = null,
-  attempt = 0
+  attempt = 0,
+  strictClaims = true
 } = {}) {
-  const validated = validateEditor(cloneJson(editor), date, reporter);
+  const validated = validateEditor(cloneJson(editor), date, reporter, { strictClaims });
   generationRunState.lastKnownValidEditor = cloneJson(validated);
   generationRunState.lastKnownValidReporter = cloneJson(reporter);
   generationRunState.lastKnownValidFactCheck = cloneJson(factCheck);
@@ -1142,7 +1143,7 @@ function validateTargetedRepairResult({
     sections: after,
     action_items: [],
     references: []
-  }, date, reporter);
+  }, date, reporter, { strictClaims: false });
   return true;
 }
 
@@ -1202,7 +1203,7 @@ function writeReviewableRepairFailureArtifacts({
   }
 
   const fallbackReporter = cloneJson(reporter || generationRunState.lastKnownValidReporter || { candidates: [] });
-  const fallbackEditor = validateEditor(cloneJson(generationRunState.lastKnownValidEditor), date, fallbackReporter);
+  const fallbackEditor = validateEditor(cloneJson(generationRunState.lastKnownValidEditor), date, fallbackReporter, { strictClaims: true });
   const fallbackFactCheck = fallbackFactCheckForRepairFailure(error, factCheck || generationRunState.lastKnownValidFactCheck);
   const existingQualityReport = qualityReport || generationRunState.lastKnownValidQualityReport;
   const fallbackQualityReport = existingQualityReport?.metrics
@@ -1397,6 +1398,7 @@ async function validateOrRepairEditor(value, {
     attempt,
     stage: editorStage,
     newsroomDir,
+    strictClaims: true,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
     repairFn: async ({ invalidEditor, validationError }) => repairEditorBriefingWithLlm({
       date,
@@ -2944,7 +2946,7 @@ async function main() {
         editor = validateEditor({
           ...editor,
           sections: repairMerged.sections
-        }, date, reporter);
+        }, date, reporter, { strictClaims: true });
         attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
         await resolveIssueArticleImages(editor, { root });
         warnResolvedImageFallbacks(editor);
@@ -3083,7 +3085,7 @@ async function main() {
           editor = validateEditor({
             ...editor,
             sections: completionMerged.sections
-          }, date, reporter);
+          }, date, reporter, { strictClaims: true });
           attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
           await resolveIssueArticleImages(editor, { root });
           warnResolvedImageFallbacks(editor);
@@ -3237,7 +3239,7 @@ async function main() {
     removedSections,
     reporter
   });
-  editor = validateEditor(staleScrub.editor, date, reporter);
+  editor = validateEditor(staleScrub.editor, date, reporter, { strictClaims: true });
   factCheck = pruneResolvedStaleFactCheckItems(factCheck, staleScrub.report);
   factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
   generationRunState.factCheck = factCheck;

@@ -508,12 +508,14 @@ async function repairEditorOutputContract({
   stage = 'editor',
   newsroomDir,
   normalizeSection,
+  strictClaims = false,
   repairFn
 }) {
   const invalidEditor = cloneJson(value);
   const validate = candidate => validateEditorOutputContract(candidate, date, {
     reporter,
-    normalizeSection
+    normalizeSection,
+    strictClaims
   });
 
   try {
