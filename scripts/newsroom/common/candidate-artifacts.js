@@ -197,11 +197,15 @@ function validateMergedManifestSchema(root, manifest, manifestRelPath, validatio
     'source_clusters',
     'evidence_validation_report'
   ];
+  const optionalReportFields = [
+    'source_discovery_feedback_report',
+    'source_discovery_feedback_report_markdown'
+  ];
   const enabledDiscovery = manifest.llm_used === true || manifest.merge_mode === 'gemini_source_discovery';
-  for (const field of reportFields) {
+  for (const field of [...reportFields, ...optionalReportFields]) {
     const value = String(manifest[field] || '').trim();
     if (!value) {
-      if (validationMode === 'strict' && enabledDiscovery) {
+      if (reportFields.includes(field) && validationMode === 'strict' && enabledDiscovery) {
         throw new CandidateArtifactValidationError(`Merged candidate manifest ${field} is required for enabled Gemini discovery: ${manifestRelPath}`, {
           manifestRelPath,
           field
@@ -411,6 +415,8 @@ function buildMergedCandidateManifest({
     manifest.source_quality_report_markdown = reportRefs.source_quality_report_markdown || '';
     manifest.source_clusters = reportRefs.source_clusters || '';
     manifest.evidence_validation_report = reportRefs.evidence_validation_report || '';
+    manifest.source_discovery_feedback_report = reportRefs.source_discovery_feedback_report || '';
+    manifest.source_discovery_feedback_report_markdown = reportRefs.source_discovery_feedback_report_markdown || '';
   }
   return manifest;
 }

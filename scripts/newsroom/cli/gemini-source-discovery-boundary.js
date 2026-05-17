@@ -261,11 +261,12 @@ function firstText(...values) {
 function urlParts(value = '') {
   try {
     const parsed = new URL(String(value || '').trim());
+    const hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
     return {
       href: parsed.href,
-      hostname: parsed.hostname.toLowerCase().replace(/^www\./, ''),
+      hostname,
       pathname: parsed.pathname.toLowerCase(),
-      family: `${parsed.protocol.toLowerCase()}//${parsed.hostname.toLowerCase().replace(/^www\./, '')}${parsed.pathname.replace(/\/$/, '').toLowerCase()}`
+      family: `${parsed.protocol.toLowerCase()}//${hostname}${parsed.pathname.replace(/\/$/, '').toLowerCase()}`
     };
   } catch (_error) {
     return {
@@ -274,6 +275,21 @@ function urlParts(value = '') {
       pathname: '',
       family: ''
     };
+  }
+}
+
+function normalizedCandidateUrlForFeedback(candidate = {}) {
+  const raw = candidateUrl(candidate);
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    const protocol = parsed.protocol.toLowerCase();
+    const hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
+    const port = parsed.port ? `:${parsed.port}` : '';
+    const pathname = parsed.pathname.replace(/\/$/, '');
+    return `${protocol}//${hostname}${port}${pathname}${parsed.hash}`;
+  } catch (_error) {
+    return String(raw || '').trim();
   }
 }
 
@@ -333,10 +349,28 @@ function parserGapEligible(candidate = {}) {
     ['strong_candidate', 'review_candidate', 'strong', 'review'].includes(sourceQualityBucket);
 }
 
-function sourceValidationAllowsParserGap(candidate = {}) {
+function officialKnownParserBackedUrl(candidate = {}) {
+  const parts = urlParts(candidateUrl(candidate));
+  if (parts.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parts.pathname)) return true;
+  if (parts.hostname === 'source.android.com' && /\bcamera\b/.test(parts.pathname)) return true;
+  return false;
+}
+
+function sourceValidationStatusAllowsParserGap(candidate = {}) {
   if (!boolTrue(candidate.source_gap_risk)) return true;
   const status = firstText(candidate.evidence_validation_status, candidate.source_validation_status).toLowerCase();
   return ['pass', 'review', 'editor_review_required', 'fetch_failed_review_required'].includes(status);
+}
+
+function sourceValidationAllowsParserGap(candidate = {}) {
+  return sourceValidationStatusAllowsParserGap(candidate) || officialKnownParserBackedUrl(candidate);
+}
+
+function parserGapConfidence(candidate = {}) {
+  if (!sourceValidationStatusAllowsParserGap(candidate) && officialKnownParserBackedUrl(candidate)) {
+    return 'medium';
+  }
+  return 'high';
 }
 
 function sourceExtractionItemText(item = {}) {
@@ -422,24 +456,27 @@ function selectorExclusionReason(candidate = {}) {
     : 'source_extraction.release.sections has no concrete bullet';
 }
 
-function duplicateDiscoveryIndexes(manualCandidates = [], geminiCandidates = []) {
+function duplicateDiscoveryMatches(manualCandidates = [], geminiCandidates = []) {
   const exactUrls = new Set();
   const familyUrls = new Set();
   for (const gemini of geminiCandidates) {
-    const url = candidateUrl(gemini);
+    const url = normalizedCandidateUrlForFeedback(gemini);
     const family = candidateUrlFamily(gemini);
     if (url) exactUrls.add(url);
     if (family) familyUrls.add(family);
   }
-  const duplicateKeys = new Set();
+  const duplicateMatches = new Map();
   for (const manual of manualCandidates) {
-    const url = candidateUrl(manual);
+    const url = normalizedCandidateUrlForFeedback(manual);
     const family = candidateUrlFamily(manual);
-    if ((url && exactUrls.has(url)) || (family && familyUrls.has(family))) {
-      duplicateKeys.add(candidateKey(manual));
+    const key = candidateKey(manual);
+    if (url && exactUrls.has(url)) {
+      duplicateMatches.set(key, 'exact_normalized_url');
+    } else if (family && familyUrls.has(family)) {
+      duplicateMatches.set(key, 'same_release_page_family');
     }
   }
-  return duplicateKeys;
+  return duplicateMatches;
 }
 
 function isGeminiDiscoveryCandidate(candidate = {}) {
@@ -454,7 +491,7 @@ function buildSourceDiscoveryFeedbackReport({
   mergedCandidates = [],
   geminiCandidates = []
 } = {}) {
-  const duplicateKeys = duplicateDiscoveryIndexes(manualCandidates, geminiCandidates);
+  const duplicateMatches = duplicateDiscoveryMatches(manualCandidates, geminiCandidates);
   const candidatesByKey = new Map();
   for (const candidate of mergedCandidates) {
     if (isGeminiDiscoveryCandidate(candidate)) continue;
@@ -477,6 +514,7 @@ function buildSourceDiscoveryFeedbackReport({
     const key = candidateKey(candidate);
     const reason = parserGapReason(candidate);
     const title = firstText(candidate.version_or_release, candidate.versionOrRelease, candidateTitle(candidate), candidate.title);
+    const duplicateMatchType = duplicateMatches.get(key) || null;
     const item = {
       severity: 'warning',
       action: 'PARSER_REPAIR_REQUIRED',
@@ -485,7 +523,13 @@ function buildSourceDiscoveryFeedbackReport({
       url: candidateUrl(candidate),
       source_id: sourceIdentity(candidate),
       adapter_hint: hints.adapter_hint,
-      duplicate_discovered_by_gemini: duplicateKeys.has(key),
+      duplicate_discovered_by_gemini: Boolean(duplicateMatchType),
+      duplicate_match_type: duplicateMatchType,
+      source_gap_risk: boolTrue(candidate.source_gap_risk),
+      evidence_validation_status: firstText(candidate.evidence_validation_status, candidate.source_validation_status) || null,
+      source_quality_bucket: firstText(candidate.source_quality_bucket) || null,
+      final_selection_eligibility: firstText(candidate.final_selection_eligibility, candidate.finalSelectionEligibility) || null,
+      confidence: parserGapConfidence(candidate),
       selector_exclusion_reason: selectorExclusionReason(candidate),
       recommendation: hints.repair_hint ||
         'Repair the source parser so the matching official source block preserves concrete source_extraction bullets.'
@@ -513,8 +557,8 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
     `parser_gap_count=${Number(report.parser_gap_count || 0)}`,
     `duplicate_discovery_gap_count=${Number(report.duplicate_discovery_gap_count || 0)}`,
     '',
-    '| Action | Reason | Candidate | Adapter | Duplicate Discovery | URL |',
-    '|---|---|---|---|---|---|'
+    '| Action | Reason | Candidate | Adapter | Duplicate Discovery | Duplicate Match | Confidence | URL |',
+    '|---|---|---|---|---|---|---|---|'
   ];
   for (const item of report.items || []) {
     lines.push([
@@ -523,11 +567,13 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
       String(item.candidate_title || '').replace(/\|/g, '\\|'),
       item.adapter_hint || '',
       item.duplicate_discovered_by_gemini ? 'true' : 'false',
+      item.duplicate_match_type || '',
+      item.confidence || '',
       item.url || ''
     ].join(' | ').replace(/^/, '| ').replace(/$/, ' |'));
   }
   if (!Array.isArray(report.items) || report.items.length === 0) {
-    lines.push('| none | none | none | none | false |  |');
+    lines.push('| none | none | none | none | false |  |  |  |');
   }
   lines.push('');
 
@@ -538,6 +584,10 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
       `  - adapter_hint: ${item.adapter_hint || ''}`,
       `  - reason: ${item.reason || ''}`,
       `  - duplicate_discovered_by_gemini: ${item.duplicate_discovered_by_gemini ? 'true' : 'false'}`,
+      `  - duplicate_match_type: ${item.duplicate_match_type || ''}`,
+      `  - confidence: ${item.confidence || ''}`,
+      `  - source_gap_risk: ${item.source_gap_risk ? 'true' : 'false'}`,
+      `  - evidence_validation_status: ${item.evidence_validation_status || ''}`,
       `  - recommendation: ${item.recommendation || ''}`,
       ''
     );
@@ -566,8 +616,10 @@ function renderSourceDiscoveryFeedbackSummary(report = {}, markdownRelPath = '')
       `  - url: ${item.url || ''}`,
       `  - adapter_hint: ${item.adapter_hint || ''}`,
       `  - reason: ${item.reason || ''}`,
+      `  - duplicate_match_type: ${item.duplicate_match_type || ''}`,
+      `  - confidence: ${item.confidence || ''}`,
       item.duplicate_discovered_by_gemini
-        ? '  - Gemini rediscovered this URL, but the manual candidate lacks concrete source_extraction bullets.'
+        ? `  - Gemini rediscovered this URL (${item.duplicate_match_type || 'unknown_match'}), but the manual candidate lacks concrete source_extraction bullets.`
         : '  - Manual candidate lacks concrete source_extraction bullets.'
     );
   }
@@ -779,7 +831,9 @@ async function runEnabled({
       source_quality_report: sourceQualityReportRelPath(date),
       source_quality_report_markdown: sourceQualityReportMarkdownRelPath(date),
       source_clusters: sourceClustersRelPath(date),
-      evidence_validation_report: evidenceValidationReportRelPath(date)
+      evidence_validation_report: evidenceValidationReportRelPath(date),
+      source_discovery_feedback_report: feedback.jsonRelPath,
+      source_discovery_feedback_report_markdown: feedback.markdownRelPath
     }
   });
   const report = renderReport({
