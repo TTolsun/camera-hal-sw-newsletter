@@ -706,21 +706,21 @@
       }
     },
     {
-      "candidate_id": "19216357ed8061ae",
-      "url": "https://www.phoronix.com/review/zimacube-2",
-      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
-      "source_quality_score": 0.265,
+      "candidate_id": "c19b9eefd7a4ad2f",
+      "url": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
+      "title": "FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software",
+      "source_quality_score": 0.37,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.2,
         "camera_relevance": 0.53,
         "android_hal_relevance": 0.53,
-        "technical_depth": 0.85,
+        "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0.15
+        "marketing_only_penalty": 0
       }
     },
     {
@@ -734,6 +734,24 @@
         "camera_relevance": 0.45,
         "android_hal_relevance": 0.45,
         "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-7ef4ffea5e3a07c4",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "title": "libcamera v0.7.1",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -770,24 +788,6 @@
         "camera_relevance": 0.45,
         "android_hal_relevance": 0.45,
         "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-7ef4ffea5e3a07c4",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "title": "libcamera v0.7.1",
-      "source_quality_score": 0.5,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,

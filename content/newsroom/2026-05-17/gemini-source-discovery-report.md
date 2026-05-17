@@ -1,6 +1,7 @@
 # Gemini Source Discovery Report - 2026-05-17
 
 status=PASS
+status_detail=
 disabled_pass_through=false
 llm_used=true
 merge_mode=gemini_source_discovery
@@ -26,8 +27,38 @@ gemini_usage_report=content/newsroom/2026-05-17/gemini-usage-report.json
 source_quality_report=content/newsroom/2026-05-17/source-quality-report.json
 source_clusters=content/newsroom/2026-05-17/source-clusters.json
 evidence_validation_report=content/newsroom/2026-05-17/evidence-validation-report.json
+seed_candidate_artifact=
+seed_evidence_pack=
+seed_evidence_pack_markdown=
+seed_fetch_report=
+seed_fetch_report_markdown=
+seed_merge_report=
+seed_merge_report_markdown=
 source_discovery_feedback_report=content/newsroom/2026-05-17/source-discovery-feedback-report.json
 source_discovery_feedback_report_markdown=content/newsroom/2026-05-17/source-discovery-feedback-report.md
+
+## Priority Override / Legacy Compatibility
+
+This PR is part of #185 seed evidence workflow migration.
+The seed evidence workflow is prioritized over legacy-pattern cleanup, but source/evidence/security/publish safety remains non-negotiable.
+
+### Required checks for this PR
+- [ ] Targeted #185 unit tests pass
+- [ ] Targeted workflow tests pass
+- [ ] `npm.cmd run validate` passes
+- [ ] Source/evidence/security gates are not weakened
+
+### Legacy-pattern failures
+| Test | Failure reason | Classification | Follow-up |
+| --- | --- | --- | --- |
+| none | none | none | none |
+
+### Non-negotiable gates
+- [ ] No private/internal URL fetch
+- [ ] No source_gap_risk bypass
+- [ ] No quality threshold lowering
+- [ ] No 03 re-crawl
+- [ ] No Gemini proposal promoted without deterministic validation
 
 ## Parser/source feedback
 

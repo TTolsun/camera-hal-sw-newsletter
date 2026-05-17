@@ -3,7 +3,7 @@
   "schema_version": 5,
   "date": "2026-05-17",
   "newsletter_date": "2026-05-17",
-  "generated_at": "2026-05-17T10:44:36.287Z",
+  "generated_at": "2026-05-17T14:19:21.598Z",
   "candidates": [
     {
       "schema_version": 5,
@@ -38,13 +38,15 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Latest stable CameraX release."
+        "New stable release for CameraX (androidx.camera) 1.6.1."
       ],
       "keywords": [
-        "CameraX 1.6.1 release notes"
+        "CameraX 1.6.1 release notes",
+        "androidx.camera 1.6.1"
       ],
       "evidence": [
-        "Release notes for CameraX 1.6.1"
+        "Release notes for CameraX 1.6.1",
+        "Key features, bug fixes, and API changes"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -64,13 +66,88 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "discovery-2026-05-17-001",
-      "proposal_trace_id": "discovery-2026-05-17-001",
-      "discovery_topic_gap": "Latest stable CameraX release.",
-      "discovery_source_family": "camerax-release-notes",
+      "proposal_id": "camera_androidx_1_6_1_release",
+      "proposal_trace_id": "camera_androidx_1_6_1_release",
+      "discovery_topic_gap": "New stable release for CameraX (androidx.camera) 1.6.1.",
+      "discovery_source_family": "camera-api",
       "source_quality_score": 0.583,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-54d4017dadc0b266",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-7ef4ffea5e3a07c4",
+      "source_candidate_id": "gemini-7ef4ffea5e3a07c4",
+      "title": "libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "articleUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "article_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Blog",
+      "source_name": "libcamera Blog",
+      "sourceName": "libcamera Blog",
+      "sourceUrl": "https://libcamera.org/blog/",
+      "source_url": "https://libcamera.org/blog/",
+      "source_id": "libcamera-blog",
+      "category": "linux-camera",
+      "source_category": "linux-camera",
+      "section": "linux-camera",
+      "source_section": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_reliability": "project-official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "unknown",
+      "source_type": "unknown",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "New release announcement for libcamera v0.7.1."
+      ],
+      "keywords": [
+        "libcamera 0.7.1 release",
+        "libcamera-devel 2026 April"
+      ],
+      "evidence": [
+        "Announcement of libcamera v0.7.1",
+        "Summary of new features, improvements, and bug fixes"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "libcamera_0_7_1_release",
+      "proposal_trace_id": "libcamera_0_7_1_release",
+      "discovery_topic_gap": "New release announcement for libcamera v0.7.1.",
+      "discovery_source_family": "linux-camera",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-7ef4ffea5e3a07c4",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": true,
@@ -111,13 +188,15 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Recent beta CameraX release."
+        "New beta release for CameraX (androidx.camera) 1.3.0-beta02."
       ],
       "keywords": [
-        "CameraX 1.3.0-beta02 release notes"
+        "CameraX 1.3.0-beta02 release notes",
+        "androidx.camera 1.3.0-beta02"
       ],
       "evidence": [
-        "Release notes for CameraX 1.3.0-beta02"
+        "Release notes for CameraX 1.3.0-beta02",
+        "New features, bug fixes, and API changes in beta"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -137,10 +216,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "discovery-2026-05-17-002",
-      "proposal_trace_id": "discovery-2026-05-17-002",
-      "discovery_topic_gap": "Recent beta CameraX release.",
-      "discovery_source_family": "camerax-release-notes",
+      "proposal_id": "camerax_1_3_0_beta02_release",
+      "proposal_trace_id": "camerax_1_3_0_beta02_release",
+      "discovery_topic_gap": "New beta release for CameraX (androidx.camera) 1.3.0-beta02.",
+      "discovery_source_family": "camera-api",
       "source_quality_score": 0.583,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-d116a623b5025f89",
@@ -184,13 +263,15 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Recent alpha CameraX release."
+        "New alpha release for CameraX (androidx.camera) 1.4.0-alpha07."
       ],
       "keywords": [
-        "CameraX 1.4.0-alpha07 release notes"
+        "CameraX 1.4.0-alpha07 release notes",
+        "androidx.camera 1.4.0-alpha07"
       ],
       "evidence": [
-        "Release notes for CameraX 1.4.0-alpha07"
+        "Release notes for CameraX 1.4.0-alpha07",
+        "New features, bug fixes, and API changes in alpha"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -210,87 +291,14 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "discovery-2026-05-17-003",
-      "proposal_trace_id": "discovery-2026-05-17-003",
-      "discovery_topic_gap": "Recent alpha CameraX release.",
-      "discovery_source_family": "camerax-release-notes",
+      "proposal_id": "camerax_1_4_0_alpha07_release",
+      "proposal_trace_id": "camerax_1_4_0_alpha07_release",
+      "discovery_topic_gap": "New alpha release for CameraX (androidx.camera) 1.4.0-alpha07.",
+      "discovery_source_family": "camera-api",
       "source_quality_score": 0.583,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-e39c6ec8c268df92",
       "duplicate_of_selected_source": true,
-      "stale_claim_risk": "",
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-7ef4ffea5e3a07c4",
-      "source_candidate_id": "gemini-7ef4ffea5e3a07c4",
-      "title": "libcamera v0.7.1",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "articleUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "article_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "source": "libcamera Blog",
-      "source_name": "libcamera Blog",
-      "sourceName": "libcamera Blog",
-      "sourceUrl": "https://libcamera.org/blog/",
-      "source_url": "https://libcamera.org/blog/",
-      "source_id": "libcamera-blog",
-      "category": "linux-camera",
-      "source_category": "linux-camera",
-      "section": "linux-camera",
-      "source_section": "linux-camera",
-      "priority": "high",
-      "reliability": "project-official",
-      "source_reliability": "project-official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "unknown",
-      "source_type": "unknown",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "Recent libcamera release."
-      ],
-      "keywords": [
-        "libcamera v0.7.1 release"
-      ],
-      "evidence": [
-        "Announcement of libcamera v0.7.1 release"
-      ],
-      "warnings": [
-        "missing dated evidence from deterministic fetch"
-      ],
-      "publishedAt": "",
-      "published_date": "",
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_gap_risk": true,
-      "source_gap_risk_level": "high",
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "proposal_id": "discovery-2026-05-17-004",
-      "proposal_trace_id": "discovery-2026-05-17-004",
-      "discovery_topic_gap": "Recent libcamera release.",
-      "discovery_source_family": "libcamera-release-announcements",
-      "source_quality_score": 0.5,
-      "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-7ef4ffea5e3a07c4",
-      "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": true,
       "editor_review_required": false,
@@ -330,13 +338,16 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Updates on C++26 reflection and contracts in GCC."
+        "GCC 16.1 release with C++26 reflection, contracts, and safety hardening."
       ],
       "keywords": [
-        "GCC 16.1 C++26 reflection contracts"
+        "GCC 16.1 C++26 reflection",
+        "GCC 16.1 contracts",
+        "C++ safety hardening"
       ],
       "evidence": [
-        "GCC 16.1 release details, specifically mentioning C++26 reflection and contracts"
+        "Details on C++26 features in GCC 16.1",
+        "Impact on C++ development, especially for camera HALs"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -356,10 +367,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "discovery-2026-05-17-005",
-      "proposal_trace_id": "discovery-2026-05-17-005",
-      "discovery_topic_gap": "Updates on C++26 reflection and contracts in GCC.",
-      "discovery_source_family": "iso-cpp-blog",
+      "proposal_id": "gcc_16_1_cpp26_features",
+      "proposal_trace_id": "gcc_16_1_cpp26_features",
+      "discovery_topic_gap": "GCC 16.1 release with C++26 reflection, contracts, and safety hardening.",
+      "discovery_source_family": "cpp",
       "source_quality_score": 0.5,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-8635e5e9a3557c0d",
@@ -403,13 +414,15 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "C++26 reflection library updates."
+        "Glaze 7.2 library update with C++26 Reflection and support for various data formats."
       ],
       "keywords": [
-        "Glaze 7.2 C++26 reflection"
+        "Glaze 7.2 C++26 Reflection",
+        "C++ YAML CBOR MessagePack TOML"
       ],
       "evidence": [
-        "Glaze 7.2 features, particularly C++26 reflection support"
+        "Information on Glaze 7.2 features, especially C++26 Reflection",
+        "Use cases for data serialization/deserialization in embedded or HAL contexts"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -429,10 +442,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "discovery-2026-05-17-006",
-      "proposal_trace_id": "discovery-2026-05-17-006",
-      "discovery_topic_gap": "C++26 reflection library updates.",
-      "discovery_source_family": "iso-cpp-blog",
+      "proposal_id": "glaze_7_2_cpp26_reflection",
+      "proposal_trace_id": "glaze_7_2_cpp26_reflection",
+      "discovery_topic_gap": "Glaze 7.2 library update with C++26 Reflection and support for various data formats.",
+      "discovery_source_family": "cpp",
       "source_quality_score": 0.455,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-a8865e6c6b3d243f",
