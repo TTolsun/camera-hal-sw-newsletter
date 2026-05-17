@@ -126,6 +126,6 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 - Selection windows: primary 7 days; fallback 21 days; reference 90 days
 - Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.
 - Quality threshold: 85
-- Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure
+- Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure; blocked source quality; source quality drift
 
 <!-- NEWSLETTER_POLICY:END -->

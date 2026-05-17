@@ -1,6 +1,11 @@
 const {
   sectionMapValidationErrors
 } = require('../collect/news-source-section-resolver');
+const {
+  MAIN_ARTICLE_POLICIES,
+  SOURCE_ROLES,
+  SOURCE_URL_QUALITIES
+} = require('../collect/source-quality-classifier');
 
 const REQUIRED_SOURCE_FIELDS = [
   'id',
@@ -13,6 +18,12 @@ const REQUIRED_SOURCE_FIELDS = [
   'enabled',
   'candidateOnly',
   'requiresCrossCheck',
+  'sourceRole',
+  'sourceUrlQualityHint',
+  'mainArticlePolicy',
+  'requiresCrossCheckDefault',
+  'evidenceGranularityHint',
+  'sourceQualityNotes',
   'usageHint',
   'keywords'
 ];
@@ -30,6 +41,15 @@ const LINKED_EVIDENCE_POLICY_ARRAY_FIELDS = [
   'importantAnchorKeywords',
   'ignoreAnchorKeywords'
 ];
+const VALID_SOURCE_ROLES = new Set(SOURCE_ROLES);
+const VALID_SOURCE_URL_QUALITY_HINTS = new Set(SOURCE_URL_QUALITIES);
+const VALID_MAIN_ARTICLE_POLICIES = new Set(MAIN_ARTICLE_POLICIES);
+const CONDITIONAL_EVIDENCE_RULE_HINTS = new Set([
+  'generic_ai_or_it_trend',
+  'engineering_blog_with_camera_evidence',
+  'project_release',
+  'project_mailing_list_release'
+]);
 
 function sourceLabel(source, index) {
   if (source && typeof source === 'object' && typeof source.id === 'string' && source.id.trim()) {
@@ -79,6 +99,18 @@ function validateKeywords(errors, path, value) {
 
 function validateOptionalStringArray(errors, path, value) {
   if (value === undefined) return;
+  if (!Array.isArray(value)) {
+    errors.push(`${path} must be an array of strings.`);
+    return;
+  }
+  value.forEach((item, index) => {
+    if (typeof item !== 'string' || !item.trim()) {
+      errors.push(`${path}[${index}] must be a non-empty string.`);
+    }
+  });
+}
+
+function validateStringArray(errors, path, value) {
   if (!Array.isArray(value)) {
     errors.push(`${path} must be an array of strings.`);
     return;
@@ -158,6 +190,28 @@ function validateSource(errors, source, index, sectionMap, seenIds) {
   validateBoolean(errors, `${label}.enabled`, source.enabled);
   validateBoolean(errors, `${label}.candidateOnly`, source.candidateOnly);
   validateBoolean(errors, `${label}.requiresCrossCheck`, source.requiresCrossCheck);
+  validateString(errors, `${label}.sourceRole`, source.sourceRole);
+  if (typeof source.sourceRole === 'string' && !VALID_SOURCE_ROLES.has(source.sourceRole)) {
+    errors.push(`${label}.sourceRole must be one of: ${[...VALID_SOURCE_ROLES].join(', ')}.`);
+  }
+  validateString(errors, `${label}.sourceUrlQualityHint`, source.sourceUrlQualityHint);
+  if (typeof source.sourceUrlQualityHint === 'string' && !VALID_SOURCE_URL_QUALITY_HINTS.has(source.sourceUrlQualityHint)) {
+    errors.push(`${label}.sourceUrlQualityHint must be one of: ${[...VALID_SOURCE_URL_QUALITY_HINTS].join(', ')}.`);
+  }
+  validateString(errors, `${label}.mainArticlePolicy`, source.mainArticlePolicy);
+  if (typeof source.mainArticlePolicy === 'string' && !VALID_MAIN_ARTICLE_POLICIES.has(source.mainArticlePolicy)) {
+    errors.push(`${label}.mainArticlePolicy must be one of: ${[...VALID_MAIN_ARTICLE_POLICIES].join(', ')}.`);
+  }
+  validateBoolean(errors, `${label}.requiresCrossCheckDefault`, source.requiresCrossCheckDefault);
+  validateString(errors, `${label}.evidenceGranularityHint`, source.evidenceGranularityHint);
+  validateStringArray(errors, `${label}.sourceQualityNotes`, source.sourceQualityNotes);
+  if (
+    source.mainArticlePolicy === 'conditional' &&
+    source.requiresCrossCheckDefault !== true &&
+    !CONDITIONAL_EVIDENCE_RULE_HINTS.has(source.sourceUrlQualityHint)
+  ) {
+    errors.push(`${label}.mainArticlePolicy=conditional requires requiresCrossCheckDefault=true or an explicit evidence-rule sourceUrlQualityHint.`);
+  }
   validateString(errors, `${label}.usageHint`, source.usageHint);
   validateKeywords(errors, `${label}.keywords`, source.keywords);
   validateLinkedEvidencePolicy(errors, `${label}.linkedEvidencePolicy`, source.linkedEvidencePolicy);
@@ -219,8 +273,11 @@ function validateNewsSourcesConfigText(text, options = {}) {
 
 module.exports = {
   REQUIRED_SOURCE_FIELDS,
+  VALID_MAIN_ARTICLE_POLICIES,
   VALID_COLLECTION_MODE_HINTS,
   VALID_PRIORITIES,
+  VALID_SOURCE_ROLES,
+  VALID_SOURCE_URL_QUALITY_HINTS,
   LINKED_EVIDENCE_POLICY_ARRAY_FIELDS,
   validateNewsSourcesConfigText
 };

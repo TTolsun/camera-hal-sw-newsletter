@@ -49,7 +49,9 @@
       "duplicate source URL",
       "stale claim hard failure",
       "undated watch/reference page promoted to main article",
-      "CameraX source extraction failure"
+      "CameraX source extraction failure",
+      "blocked source quality",
+      "source quality drift"
     ]
   }
 }

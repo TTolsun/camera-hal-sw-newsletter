@@ -103,6 +103,11 @@ function normalizeSourceEntry(source, sectionMap, options = {}) {
     linkedEvidencePolicy: source.linkedEvidencePolicy || null,
     collectionModeHint: normalizeCollectionModeHint(source.collectionModeHint || source.sourceKind || ''),
     sourceRole: source.sourceRole || '',
+    sourceUrlQualityHint: source.sourceUrlQualityHint || '',
+    mainArticlePolicy: source.mainArticlePolicy || '',
+    requiresCrossCheckDefault: source.requiresCrossCheckDefault === true,
+    evidenceGranularityHint: source.evidenceGranularityHint || '',
+    sourceQualityNotes: Array.isArray(source.sourceQualityNotes) ? source.sourceQualityNotes : [],
     sourceKind: source.sourceKind || '',
     keywords: Array.isArray(source.keywords) ? source.keywords : []
   };

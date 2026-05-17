@@ -15,8 +15,12 @@ const {
 const {
   normalizeUrl
 } = require('../generate/newsroom-selection');
+const {
+  normalizeSourceQuality,
+  sourceQualityFieldDrift
+} = require('../collect/source-quality-classifier');
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 const MAX_SAMPLE_URLS = 5;
 const MAX_REASON_ROWS = 5;
 const RECOMMENDATION_ORDER = [
@@ -226,6 +230,10 @@ function normalizeRegistrySource(source = {}, index = 0) {
     requires_cross_check: source.requiresCrossCheck === true,
     collection_mode_hint: text(source.collectionModeHint),
     source_role: text(source.sourceRole || source.source_role),
+    source_url_quality_hint: text(source.sourceUrlQualityHint || source.source_url_quality_hint),
+    main_article_policy: text(source.mainArticlePolicy || source.main_article_policy),
+    requires_cross_check_default: source.requiresCrossCheckDefault === true,
+    evidence_granularity_hint: text(source.evidenceGranularityHint || source.evidence_granularity_hint),
     synthetic: false,
     registry_index: index
   };
@@ -317,6 +325,10 @@ function syntheticSourceForCandidate(candidate = {}, syntheticSources, warningSe
       requires_cross_check: false,
       collection_mode_hint: text(candidate.sourceCollectionMode || candidate.source_collection_mode),
       source_role: text(candidate.sourceRole || candidate.source_role),
+      source_url_quality_hint: text(candidate.sourceUrlQuality || candidate.source_url_quality),
+      main_article_policy: text(candidate.mainArticlePolicy || candidate.main_article_policy),
+      requires_cross_check_default: false,
+      evidence_granularity_hint: text(candidate.evidenceGranularity || candidate.evidence_granularity),
       synthetic: true,
       registry_index: Number.MAX_SAFE_INTEGER
     };
@@ -344,6 +356,11 @@ function incrementReason(state, reason) {
   const key = text(reason);
   if (!key) return;
   state.reasonCounts.set(key, (state.reasonCounts.get(key) || 0) + 1);
+}
+
+function incrementObjectCount(target, key) {
+  const value = text(key) || 'unknown';
+  target[value] = (target[value] || 0) + 1;
 }
 
 function collectCandidatesFromShortlist(shortlistReport = {}, reporterCandidates = {}) {
@@ -596,7 +613,23 @@ function finalizeState(state) {
     duplicate_count: 0,
     duplicate_within_source_count: 0,
     duplicate_across_sources_count: state.duplicateAcrossKeys.size,
-    generic_noise_count: 0
+    generic_noise_count: 0,
+    source_url_quality_distribution: {},
+    source_quality_status_summary: {},
+    source_quality_blocker_summary: {},
+    selected_main_source_quality_coverage: {
+      selected_main_count: 0,
+      with_source_quality_count: 0
+    },
+    main_eligible_source_quality_coverage: {
+      main_eligible_candidate_count: 0,
+      with_source_quality_count: 0
+    },
+    conditional_source_promoted_count: 0,
+    conditional_source_blocked_count: 0,
+    unknown_source_quality_count: 0,
+    source_quality_field_drift_count: 0,
+    legacy_source_quality_warning_count: 0
   };
   const selectedUrls = new Set(state.selectedUrls);
   const excludedUrls = new Set();
@@ -613,6 +646,47 @@ function finalizeState(state) {
     const briefingOnly = candidates.some(candidate => candidate.briefing_only === true);
     const genericNoise = candidates.some(candidate => genericNoiseCandidate(candidate, source));
     const cameraRelevant = candidates.some(cameraRelevantRawSignal);
+    for (const candidate of candidates) {
+      const sourceQuality = normalizeSourceQuality(candidate);
+      const drift = sourceQualityFieldDrift(candidate);
+      const selectedMain = state.selectedKeys.has(key);
+      const mainEligible = candidate.finalSelectionEligibility === 'main' ||
+        candidate.final_selection_eligibility === 'main';
+      incrementObjectCount(metrics.source_url_quality_distribution, sourceQuality.source_url_quality);
+      incrementObjectCount(metrics.source_quality_status_summary, sourceQuality.source_quality_status);
+      for (const blocker of ensureArray(sourceQuality.main_article_source_blockers)) {
+        incrementObjectCount(metrics.source_quality_blocker_summary, blocker);
+      }
+      if (selectedMain) {
+        metrics.selected_main_source_quality_coverage.selected_main_count += 1;
+        if (candidate.source_quality && typeof candidate.source_quality === 'object') {
+          metrics.selected_main_source_quality_coverage.with_source_quality_count += 1;
+        }
+      }
+      if (mainEligible) {
+        metrics.main_eligible_source_quality_coverage.main_eligible_candidate_count += 1;
+        if (candidate.source_quality && typeof candidate.source_quality === 'object') {
+          metrics.main_eligible_source_quality_coverage.with_source_quality_count += 1;
+        }
+      }
+      if (
+        sourceQuality.requires_conditional_evidence === true &&
+        sourceQuality.source_quality_status === 'allowed' &&
+        sourceQuality.main_article_source_allowed === true
+      ) {
+        metrics.conditional_source_promoted_count += 1;
+      }
+      if (sourceQuality.requires_conditional_evidence === true && sourceQuality.main_article_source_allowed !== true) {
+        metrics.conditional_source_blocked_count += 1;
+      }
+      if (sourceQuality.source_url_quality === 'unknown' || sourceQuality.source_quality_status === 'unknown') {
+        metrics.unknown_source_quality_count += 1;
+      }
+      metrics.source_quality_field_drift_count += drift.length;
+      if (!candidate.source_quality || typeof candidate.source_quality !== 'object') {
+        metrics.legacy_source_quality_warning_count += 1;
+      }
+    }
 
     if (eligible) metrics.eligible_count += 1;
     if (cameraRelevant) metrics.camera_relevant_raw_count += 1;
@@ -797,6 +871,24 @@ function buildSourceEffectivenessReport(options = {}) {
     source_gap_count: sources.reduce((sum, source) => sum + source.source_gap_count, 0),
     generic_noise_count: sources.reduce((sum, source) => sum + source.generic_noise_count, 0),
     duplicate_count: sources.reduce((sum, source) => sum + source.duplicate_count, 0),
+    source_url_quality_distribution: mergeCountObjects(sources, 'source_url_quality_distribution'),
+    source_quality_status_summary: mergeCountObjects(sources, 'source_quality_status_summary'),
+    source_quality_blocker_summary: mergeCountObjects(sources, 'source_quality_blocker_summary'),
+    selected_main_source_quality_coverage: sources.reduce((coverage, source) => {
+      coverage.selected_main_count += Number(source.selected_main_source_quality_coverage?.selected_main_count || 0);
+      coverage.with_source_quality_count += Number(source.selected_main_source_quality_coverage?.with_source_quality_count || 0);
+      return coverage;
+    }, { selected_main_count: 0, with_source_quality_count: 0 }),
+    main_eligible_source_quality_coverage: sources.reduce((coverage, source) => {
+      coverage.main_eligible_candidate_count += Number(source.main_eligible_source_quality_coverage?.main_eligible_candidate_count || 0);
+      coverage.with_source_quality_count += Number(source.main_eligible_source_quality_coverage?.with_source_quality_count || 0);
+      return coverage;
+    }, { main_eligible_candidate_count: 0, with_source_quality_count: 0 }),
+    conditional_source_promoted_count: sources.reduce((sum, source) => sum + source.conditional_source_promoted_count, 0),
+    conditional_source_blocked_count: sources.reduce((sum, source) => sum + source.conditional_source_blocked_count, 0),
+    unknown_source_quality_count: sources.reduce((sum, source) => sum + source.unknown_source_quality_count, 0),
+    source_quality_field_drift_count: sources.reduce((sum, source) => sum + source.source_quality_field_drift_count, 0),
+    legacy_source_quality_warning_count: sources.reduce((sum, source) => sum + source.legacy_source_quality_warning_count, 0),
     recommendation_counts: RECOMMENDATION_ORDER.map(recommendation => ({
       recommendation,
       count: sources.filter(source => source.recommendation === recommendation).length
@@ -834,6 +926,23 @@ function markdownTable(headers, rows) {
   return `${lines.join('\n')}\n`;
 }
 
+function mergeCountObjects(items, field) {
+  const out = {};
+  for (const item of ensureArray(items)) {
+    const counts = item[field] || {};
+    for (const [key, count] of Object.entries(counts)) {
+      out[key] = (out[key] || 0) + Number(count || 0);
+    }
+  }
+  return out;
+}
+
+function countObjectRows(counts) {
+  return Object.entries(counts || {})
+    .map(([key, count]) => ({ key, count }))
+    .sort((a, b) => b.count - a.count || compareText(a.key, b.key));
+}
+
 function recommendationCountText(summary) {
   return ensureArray(summary.recommendation_counts)
     .map(item => `${item.recommendation}: ${item.count}`)
@@ -859,6 +968,23 @@ function renderSourceEffectivenessMarkdown(report) {
     `- Generic noise candidates: ${report.summary.generic_noise_count}`,
     `- Duplicate candidates: ${report.summary.duplicate_count}`,
     `- Recommendations: ${recommendationCountText(report.summary)}`,
+    `- Selected main source quality coverage: ${report.summary.selected_main_source_quality_coverage?.with_source_quality_count || 0}/${report.summary.selected_main_source_quality_coverage?.selected_main_count || 0}`,
+    `- Main-eligible source quality coverage: ${report.summary.main_eligible_source_quality_coverage?.with_source_quality_count || 0}/${report.summary.main_eligible_source_quality_coverage?.main_eligible_candidate_count || 0}`,
+    `- Conditional source promoted/blocked: ${report.summary.conditional_source_promoted_count || 0}/${report.summary.conditional_source_blocked_count || 0}`,
+    `- Unknown source quality: ${report.summary.unknown_source_quality_count || 0}`,
+    `- Source quality field drift: ${report.summary.source_quality_field_drift_count || 0}`,
+    `- Legacy source quality warnings: ${report.summary.legacy_source_quality_warning_count || 0}`,
+    '',
+    '## Source Quality Summary',
+    '',
+    markdownTable(
+      ['Metric', 'Key', 'Count'],
+      [
+        ...countObjectRows(report.summary.source_url_quality_distribution).map(item => ['source_url_quality', item.key, item.count]),
+        ...countObjectRows(report.summary.source_quality_status_summary).map(item => ['source_quality_status', item.key, item.count]),
+        ...countObjectRows(report.summary.source_quality_blocker_summary).map(item => ['blocker', item.key, item.count])
+      ]
+    ),
     '',
     '## Top Effective Sources',
     '',

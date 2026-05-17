@@ -1,7 +1,11 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const test = require('node:test');
 
 const {
+  VALID_MAIN_ARTICLE_POLICIES,
+  VALID_SOURCE_ROLES,
+  VALID_SOURCE_URL_QUALITY_HINTS,
   validateNewsSourcesConfigText
 } = require('../../../scripts/lib/news-sources-config-validator');
 const {
@@ -22,6 +26,12 @@ function validSource(overrides = {}) {
     enabled: true,
     candidateOnly: false,
     requiresCrossCheck: false,
+    sourceRole: 'official_release_source',
+    sourceUrlQualityHint: 'official_dated_release',
+    mainArticlePolicy: 'allowed',
+    requiresCrossCheckDefault: false,
+    evidenceGranularityHint: 'article_level_concrete_source_fact',
+    sourceQualityNotes: ['official source'],
     usageHint: 'Android platform and CameraX official updates',
     keywords: ['Android', 'Camera', 'CameraX'],
     ...overrides
@@ -142,6 +152,48 @@ test('invalid collectionModeHint fails when present', () => {
   assert.match(result.errors.join('\n'), /collectionModeHint must be one of/);
 });
 
+test('source quality registry contract validates required enum fields', () => {
+  const result = validate(validRegistry({
+    sources: [
+      validSource({
+        sourceRole: 'official',
+        sourceUrlQualityHint: 'blog',
+        mainArticlePolicy: 'maybe'
+      })
+    ]
+  }));
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /sourceRole must be one of/);
+  assert.match(result.errors.join('\n'), /sourceUrlQualityHint must be one of/);
+  assert.match(result.errors.join('\n'), /mainArticlePolicy must be one of/);
+});
+
+test('conditional source policy requires cross-check default or explicit evidence rule', () => {
+  const missingRule = validate(validRegistry({
+    sources: [
+      validSource({
+        mainArticlePolicy: 'conditional',
+        sourceUrlQualityHint: 'official_dated_release',
+        requiresCrossCheckDefault: false
+      })
+    ]
+  }));
+  assert.equal(missingRule.ok, false);
+  assert.match(missingRule.errors.join('\n'), /mainArticlePolicy=conditional requires/);
+
+  const explicitRule = validate(validRegistry({
+    sources: [
+      validSource({
+        mainArticlePolicy: 'conditional',
+        sourceUrlQualityHint: 'generic_ai_or_it_trend',
+        requiresCrossCheckDefault: false
+      })
+    ]
+  }));
+  assert.equal(explicitRule.ok, true);
+});
+
 test('linkedEvidencePolicy validates optional source-aware link classification policy', () => {
   const policy = {
     enabled: true,
@@ -193,4 +245,15 @@ test('section resolver derives source section from category', () => {
 
   assert.equal(resolveSection(registry.sectionMap, 'ai', 'sources[0]'), 'AI / SW Engineering Trends');
   assert.equal(normalized.sources[0].section, 'AI / SW Engineering Trends');
+});
+
+test('source quality enum docs stay in sync with config validator', () => {
+  const docs = fs.readFileSync('docs/config/news-sources-fields.ko.md', 'utf8');
+  for (const value of [
+    ...VALID_SOURCE_ROLES,
+    ...VALID_SOURCE_URL_QUALITY_HINTS,
+    ...VALID_MAIN_ARTICLE_POLICIES
+  ]) {
+    assert.ok(docs.includes(`\`${value}\``), `docs/config/news-sources-fields.ko.md must document ${value}`);
+  }
 });

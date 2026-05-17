@@ -101,6 +101,96 @@ const hardFailRegressionCases = new Map([
       ));
     }
   }],
+  ['blocked source quality', {
+    name: 'hardFailCondition: blocked source quality blocks publish-quality status above threshold',
+    buildReport: () => {
+      const sections = [
+        section({ headline: 'Blocked source quality article', url: 'https://example.com/blocked-source-quality' }),
+        ...validSections().slice(1)
+      ];
+      return reportFor(sections, [
+        scopedCandidate('https://example.com/blocked-source-quality', 'direct_aosp_camera', {
+          source_quality_required: true,
+          source_quality: {
+            source_role: 'tech_media_lead_source',
+            source_url_quality: 'tech_media_lead_requires_cross_check',
+            source_quality_status: 'blocked',
+            main_article_source_allowed: false,
+            main_article_source_allowed_reason: 'Source requires primary confirmation before main promotion.',
+            main_article_source_blockers: ['cross_check_required_but_missing'],
+            cross_check_status: 'required_missing',
+            requires_cross_check: true,
+            evidence_granularity: 'article_with_primary_confirmation',
+            source_quality_notes: []
+          },
+          sourceRole: 'tech_media_lead_source',
+          source_role: 'tech_media_lead_source',
+          sourceUrlQuality: 'tech_media_lead_requires_cross_check',
+          source_url_quality: 'tech_media_lead_requires_cross_check',
+          sourceQualityStatus: 'blocked',
+          source_quality_status: 'blocked',
+          mainArticleSourceAllowed: false,
+          main_article_source_allowed: false,
+          mainArticleSourceAllowedReason: 'Source requires primary confirmation before main promotion.',
+          main_article_source_allowed_reason: 'Source requires primary confirmation before main promotion.',
+          mainArticleSourceBlockers: ['cross_check_required_but_missing'],
+          main_article_source_blockers: ['cross_check_required_but_missing'],
+          crossCheckStatus: 'required_missing',
+          cross_check_status: 'required_missing',
+          requiresCrossCheck: true,
+          requires_cross_check: true,
+          evidenceGranularity: 'article_with_primary_confirmation',
+          evidence_granularity: 'article_with_primary_confirmation',
+          sourceQualityNotes: [],
+          source_quality_notes: []
+        }),
+        ...reporterCandidatesFor(validSections()).slice(1)
+      ]);
+    },
+    assertReport: report => {
+      assert.equal(report.score >= qualityGatePolicy.threshold, true);
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.reason.includes('main_article_source_allowed=false')
+      ));
+    }
+  }],
+  ['source quality drift', {
+    name: 'hardFailCondition: source quality drift blocks publish-quality status above threshold',
+    buildReport: () => {
+      const sections = [
+        section({ headline: 'Drift source quality article', url: 'https://example.com/drift-source-quality' }),
+        ...validSections().slice(1)
+      ];
+      return reportFor(sections, [
+        scopedCandidate('https://example.com/drift-source-quality', 'direct_aosp_camera', {
+          source_quality_required: true,
+          source_quality: {
+            source_role: 'official_release_source',
+            source_url_quality: 'official_release_note_anchor',
+            source_quality_status: 'allowed',
+            main_article_source_allowed: true,
+            main_article_source_allowed_reason: 'Source policy allows this candidate with concrete source evidence.',
+            main_article_source_blockers: [],
+            cross_check_status: 'not_required',
+            requires_cross_check: false,
+            evidence_granularity: 'versioned_release_row',
+            source_quality_notes: []
+          },
+          source_url_quality: 'unknown'
+        }),
+        ...reporterCandidatesFor(validSections()).slice(1)
+      ]);
+    },
+    assertReport: report => {
+      assert.equal(report.status, 'NEEDS_FIX');
+      assert.ok(report.deductions.some(item =>
+        item.blocking === true &&
+        item.reason.includes('SOURCE_QUALITY_FIELD_DRIFT')
+      ));
+    }
+  }],
   ['fact-check must_fix', {
     name: 'hardFailCondition: fact-check must_fix blocks publish-quality status above threshold',
     buildReport: () => buildNewsletterQualityReport(

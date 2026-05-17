@@ -315,14 +315,19 @@ test('collector keeps libcamera v0.7.1 release as camera driver image pipeline c
   assert.match(items[0].behavior_change, /sensor mode configuration/);
 });
 
-test('collector forces reference_index source out of final article inputs', () => {
+test('collector forces official documentation reference source out of final article inputs', () => {
   const candidate = normalizeCandidate(raw({
     source: source({
       id: 'aosp-camera-documentation',
       name: 'AOSP Camera Documentation',
       url: 'https://source.android.com/docs/core/camera',
       sourceUrl: 'https://source.android.com/docs/core/camera',
-      sourceRole: 'reference_index',
+      sourceRole: 'official_documentation_reference',
+      sourceUrlQualityHint: 'official_documentation_reference',
+      mainArticlePolicy: 'reference_only',
+      requiresCrossCheckDefault: false,
+      evidenceGranularityHint: 'reference_page',
+      sourceQualityNotes: ['reference/background source only'],
       category: 'camera-hal',
       section: 'Android / AOSP / Camera',
       reliability: 'official',
@@ -339,7 +344,8 @@ test('collector forces reference_index source out of final article inputs', () =
     behavior_change: 'Updated documentation index.'
   }));
 
-  assert.equal(candidate.source_role, 'reference_index');
+  assert.equal(candidate.source_role, 'official_documentation_reference');
+  assert.equal(candidate.source_quality.source_url_quality, 'official_documentation_reference');
   assert.equal(candidate.finalSelectionEligibility, 'exclude');
   assert.equal(candidate.main_eligible, false);
   assert.equal(candidate.reference_only, true);
