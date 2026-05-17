@@ -51,6 +51,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | watchlist | generic_tech_watchlist | 6 | 74 | 8 | release-note-item | yes | release_note_item | Claude Code Changelog | Claude Code Changelog - 2.1.143 | May 15, 2026 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://code.claude.com/docs/en/changelog) |
 | watchlist | camera_driver_image_pipeline | 2 | 53 | 4 | html-watch-page | no | documentation_page | libcamera Documentation | Introduction &mdash; libcamera | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://libcamera.org/introduction.html) |
 | watchlist | cpp_ai_tooling_fallback | 5 | 35 | 4 | release-note-page | no | rolling_page | LLVM Release Notes | Download LLVM releases | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://releases.llvm.org/) |
+| watchlist | generic_tech_watchlist | 6 | 53 | 4 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU | Fri, 15 May 2026 09:15:36 -0400 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://www.phoronix.com/review/zimacube-2) |
 
 ## 제외 또는 낮은 신뢰도 항목
 
@@ -67,7 +68,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | exclude | generic_tech_watchlist | 6 | 44 | 2 | release-note-page | no | rolling_page | Qualcomm Security Bulletins | Qualcomm Documentation | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://docs.qualcomm.com/product/publicresources/securitybulletin) |
 | exclude | generic_tech_watchlist | 6 | 44 | 0 | html-watch-page | no | rolling_page | Android Developer Newsletter | Android Developer Newsletters &nbsp;\|&nbsp; Android Developers | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://developer.android.com/newsletter) |
 | exclude | generic_tech_watchlist | 6 | 38 | 2 | homepage-watch | no | blog_index | Google Research Blog | Latest News from Google Research Blog - Google Research | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://research.google/blog/) |
-| exclude | generic_tech_watchlist | 6 | 38 | 0 | homepage-watch | no | rolling_page | OpenAI News | OpenAI News \| OpenAI | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://openai.com/news/) |
 | exclude | generic_tech_watchlist | 6 | 32 | 2 | homepage-watch | no | blog_index | Google DeepMind Blog | News — Google DeepMind | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://deepmind.google/blog/) |
 | exclude | generic_tech_watchlist | 6 | 32 | 0 | homepage-watch | no | rolling_page | Anthropic News | Newsroom \ Anthropic | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://www.anthropic.com/news) |
 | exclude | generic_tech_watchlist | 6 | 32 | 0 | homepage-watch | no | blog_index | Google Cloud AI & Machine Learning Blog | AI & Machine Learning \| Google Cloud Blog | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://cloud.google.com/blog/products/ai-machine-learning) |
@@ -1604,52 +1604,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Google Research Blog (official, medium, score 38): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 35. OpenAI News | OpenAI
-
-- 출처: OpenAI News
-- 출처 URL: https://openai.com/news/
-- 발행일: 검토 필요
-- Link: https://openai.com/news/
-- Section: AI / SW Engineering Trends
-- Source category: ai
-- Source priority: medium
-- Source reliability: official
-- Editorial priority: 6
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: none
-- Source hint: OpenAI model, Codex, API, enterprise AI, research/product update 확인
-- Candidate only: no
-- Collection mode: homepage-watch
-- Article candidate: no
-- Watch page: yes
-- 날짜 근거 있음: no
-- Evidence level: undated-watch-page
-- Final selection eligibility: exclude
-- Source kind: rolling_page
-- Main eligible: no
-- Briefing only: no
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 0
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: Stay up to speed on the rapid advancement of AI technology and the benefits it offers to humanity.
-- Cross-check 필요: no
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 38
-- 요약: Stay up to speed on the rapid advancement of AI technology and the benefits it offers to humanity.
-- Selection reason: OpenAI News (official, medium, score 38): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 36. News — Google DeepMind
+### 35. News — Google DeepMind
 
 - 출처: Google DeepMind Blog
 - 출처 URL: https://deepmind.google/blog/
@@ -1694,7 +1649,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Google DeepMind Blog (official, medium, score 32): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 37. Newsroom \ Anthropic
+### 36. Newsroom \ Anthropic
 
 - 출처: Anthropic News
 - 출처 URL: https://www.anthropic.com/news
@@ -1739,7 +1694,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems.
 - Selection reason: Anthropic News (official, medium, score 32): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 38. AI & Machine Learning | Google Cloud Blog
+### 37. AI & Machine Learning | Google Cloud Blog
 
 - 출처: Google Cloud AI & Machine Learning Blog
 - 출처 URL: https://cloud.google.com/blog/products/ai-machine-learning
@@ -1784,7 +1739,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Find all the latest news about Google Cloud and Machine Learning & AI with customer stories, product announcements, solutions and more.
 - Selection reason: Google Cloud AI & Machine Learning Blog (official, medium, score 32): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 39. Introduction &mdash; libcamera
+### 38. Introduction &mdash; libcamera
 
 - 출처: libcamera Documentation
 - 출처 URL: https://libcamera.org/introduction.html
@@ -1829,7 +1784,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: libcamera Documentation (project-official, medium, score 53): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)
 
-### 40. Download LLVM releases
+### 39. Download LLVM releases
 
 - 출처: LLVM Release Notes
 - 출처 URL: https://releases.llvm.org/
@@ -1874,9 +1829,56 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: LLVM Release Notes (project-official, medium, score 35): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
 
+### 40. ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU
+
+- 출처: Phoronix Linux Camera / Media
+- 출처 URL: https://www.phoronix.com/
+- 발행일: Fri, 15 May 2026 09:15:36 -0400
+- Link: https://www.phoronix.com/review/zimacube-2
+- Section: Linux Kernel / Platform Watch
+- Source category: linux-kernel
+- Source priority: medium
+- Source reliability: tech-media
+- Editorial priority: 6
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: Linux kernel, V4L2, media subsystem, driver release lead 확인
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: CPU
+- Behavior change: Earlier this year we reviewed the ZimaBoard 2 for building a Linux home storage server.
+- Cross-check 필요: yes
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 53
+- 요약: Earlier this year we reviewed the ZimaBoard 2 for building a Linux home storage server. That was a nifty little device but for those looking for a more polished product than assembling your storage devices in cardboard cut-outs and the like, IceWhale has launched the ZimaCube 2. The ZimaCube 2 is a nice and polished, literal cube, to serve as your personal cloud / network attached storage (NAS) device.
+- Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 53): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
 ## Collector 실패
 
 - LLVM Project Blog: 404 Not Found
+- OpenAI News: 403 Forbidden
+- 요즘IT: 403 Forbidden
 
 ## 편집장 체크리스트
 

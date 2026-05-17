@@ -4,7 +4,7 @@
   "newsletter_date": "2026-05-17",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 21,
-  "generated_at": "2026-05-16T17:20:31.953Z",
+  "generated_at": "2026-05-17T01:13:53.287Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -7945,7 +7945,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -7973,7 +7973,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -7989,7 +7989,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -8017,7 +8017,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -9179,6 +9179,20 @@
           "attribution": "AOSP What's New / Release Notes",
           "validationStatus": "ok",
           "contentLength": 1165
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -9209,6 +9223,20 @@
           "attribution": "AOSP What's New / Release Notes",
           "validationStatus": "ok",
           "contentLength": 1165
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "sourceUrl": "https://source.android.com/docs/whatsnew",
+          "articleUrl": "https://source.android.com/docs/whatsnew",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP What's New / Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -11319,20 +11347,6 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
-          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -11349,20 +11363,6 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
-          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -11964,7 +11964,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=de",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -11994,7 +11994,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=de",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -15221,7 +15221,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6300
+          "contentLength": 0
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
@@ -15235,7 +15235,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6301
+          "contentLength": 0
         }
       ],
       "image_candidates": [
@@ -15265,7 +15265,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6300
+          "contentLength": 0
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
@@ -15279,7 +15279,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 6301
+          "contentLength": 0
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -18114,725 +18114,6 @@
       "candidateTier": "exclude",
       "reason": "Google Research Blog (official, medium, score 38): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Google Research Blog (official, medium, score 38): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "unknown": 1
-        },
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "unknown",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "unknown",
-        "confidence": 0,
-        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
-        "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      }
-    },
-    {
-      "schema_version": 5,
-      "source": "OpenAI News",
-      "source_name": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/",
-      "source_url": "https://openai.com/news/",
-      "articleUrl": "https://openai.com/news/",
-      "article_url": "https://openai.com/news/",
-      "source_id": "openai-news",
-      "category": "ai",
-      "section": "AI / SW Engineering Trends",
-      "source_category": "ai",
-      "source_section": "AI / SW Engineering Trends",
-      "priority": "medium",
-      "reliability": "official",
-      "origin": "source_registry",
-      "collectionStage": "raw_collection",
-      "collection_stage": "raw_collection",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "rolling_page",
-      "source_type": "rolling_page",
-      "source_priority": "medium",
-      "source_reliability": "official",
-      "usageHint": "OpenAI model, Codex, API, enterprise AI, research/product update 확인",
-      "source_usage_hint": "OpenAI model, Codex, API, enterprise AI, research/product update 확인",
-      "sourceRole": "",
-      "source_role": "",
-      "candidateOnly": false,
-      "candidate_only": false,
-      "collectionMode": "homepage-watch",
-      "collection_mode": "homepage-watch",
-      "sourceCollectionMode": "homepage-watch",
-      "source_collection_mode": "homepage-watch",
-      "isArticleCandidate": false,
-      "is_article_candidate": false,
-      "isWatchPage": true,
-      "is_watch_page": true,
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "evidenceLevel": "undated-watch-page",
-      "evidence_level": "undated-watch-page",
-      "finalSelectionEligibility": "exclude",
-      "final_selection_eligibility": "exclude",
-      "source_kind": "rolling_page",
-      "source_extraction": null,
-      "derived_editorial_hints": null,
-      "extraction_quality": null,
-      "datePrecision": "",
-      "date_precision": "",
-      "parentUrl": "",
-      "parent_url": "",
-      "parentTitle": "",
-      "parent_title": "",
-      "outgoing_links": [
-        {
-          "url": "https://openai.com/",
-          "text": "",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/research/index/",
-          "text": "Research",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/business/",
-          "text": "Business",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/api/",
-          "text": "Developers",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/about/",
-          "text": "Company",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openaifoundation.org/",
-          "text": "Foundation (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://chatgpt.com/",
-          "text": "Try ChatGPT (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/company-announcements/",
-          "text": "Company",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/research/",
-          "text": "Research",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/product-releases/",
-          "text": "Product",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/safety-alignment/",
-          "text": "Safety",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/engineering/",
-          "text": "Engineering",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/security/",
-          "text": "Security",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/global-affairs/",
-          "text": "Global Affairs",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/ai-adoption/",
-          "text": "AI Adoption",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/",
-          "text": "All",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/personal-finance-chatgpt/",
-          "text": "A new personal finance experience in ChatGPT Product May 15, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/work-with-codex-from-anywhere/",
-          "text": "Work with Codex from anywhere Product May 14, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/chatgpt-recognize-context-in-sensitive-conversations/",
-          "text": "Helping ChatGPT better recognize context in sensitive conversations Safety May 14, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/building-codex-windows-sandbox/",
-          "text": "Building a safe, effective sandbox to enable Codex on Windows Engineering May 13, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/",
-          "text": "Our response to the TanStack npm supply chain attack Company May 13, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/what-parameter-golf-taught-us/",
-          "text": "What Parameter Golf taught us Research May 12, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/openai-campus-network-student-club-interest-form/",
-          "text": "OpenAI Campus Network: Student club interest form Company May 11, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/openai-launches-the-deployment-company/",
-          "text": "OpenAI launches the OpenAI Deployment Company to help businesses build around intelligence Company May 11, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/running-codex-safely/",
-          "text": "Running Codex safely at OpenAI Security May 8, 2026",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/research/index/",
-          "text": "Research Index",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/research/",
-          "text": "Research Overview",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/residency/",
-          "text": "Research Residency",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/signals/",
-          "text": "Economic Research",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/introducing-gpt-5-5/",
-          "text": "GPT-5.5",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/introducing-gpt-5-4/",
-          "text": "GPT-5.4",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/gpt-5-3-instant/",
-          "text": "GPT-5.3 Instant",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/index/introducing-gpt-5-3-codex/",
-          "text": "GPT-5.3-Codex",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/safety/",
-          "text": "Safety Approach",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/security-and-privacy/",
-          "text": "Security & Privacy",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/trust-and-transparency/",
-          "text": "Trust & Transparency",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://chatgpt.com/overview",
-          "text": "Explore ChatGPT (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://chatgpt.com/business/business-plan",
-          "text": "Business",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://chatgpt.com/business/enterprise",
-          "text": "Enterprise",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://chatgpt.com/business/education",
-          "text": "Education",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://chatgpt.com/pricing",
-          "text": "Pricing (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://chatgpt.com/download",
-          "text": "Download (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/api/",
-          "text": "Platform Overview",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/api/pricing/",
-          "text": "Pricing",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://platform.openai.com/login",
-          "text": "API log in (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developers.openai.com/api/docs",
-          "text": "Documentation (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://community.openai.com/",
-          "text": "Developer Forum (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/business/",
-          "text": "Business Overview",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/solutions/",
-          "text": "Solutions",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/contact-sales/",
-          "text": "Contact Sales",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/about/",
-          "text": "About Us",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/charter/",
-          "text": "Our Charter",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/careers/",
-          "text": "Careers",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/brand/",
-          "text": "Brand",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://help.openai.com/",
-          "text": "Help Center (opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/",
-          "text": "News",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/stories/",
-          "text": "Stories",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/academy/",
-          "text": "Academy",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/live/",
-          "text": "Livestreams",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/podcast/",
-          "text": "Podcast",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/news/rss.xml",
-          "text": "RSS",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/policies/terms-of-use/",
-          "text": "Terms of Use",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/policies/privacy-policy/",
-          "text": "Privacy Policy",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://openai.com/policies/",
-          "text": "Other Policies",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://x.com/OpenAI",
-          "text": "(opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://www.youtube.com/OpenAI",
-          "text": "(opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://www.linkedin.com/company/openai",
-          "text": "(opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://github.com/openai",
-          "text": "(opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://www.instagram.com/openai/",
-          "text": "(opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://www.tiktok.com/@openai",
-          "text": "(opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://discord.gg/openai",
-          "text": "(opens in a new window)",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        }
-      ],
-      "sourceMonth": "",
-      "source_month": "",
-      "has_published_date": false,
-      "has_version_or_release": false,
-      "has_api_or_component": false,
-      "has_behavior_change": false,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": false,
-      "reference_only": true,
-      "evidence_score": 0,
-      "version_or_release": "",
-      "api_or_component": "",
-      "source_hint_api_or_component": "ai",
-      "behavior_change": "Stay up to speed on the rapid advancement of AI technology and the benefits it offers to humanity.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "watchlist_reason": "",
-      "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "title": "OpenAI News | OpenAI",
-      "url": "https://openai.com/news/",
-      "publishedAt": "",
-      "published_date": "",
-      "summary": "Stay up to speed on the rapid advancement of AI technology and the benefits it offers to humanity.",
-      "relevanceScore": 38,
-      "relevance_score": 38,
-      "cameraHalRelevanceScore": 38,
-      "camera_hal_relevance_score": 38,
-      "editorial_priority": 6,
-      "relevance_bucket": "generic_tech_watchlist",
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "none",
-      "source_hint": "OpenAI model, Codex, API, enterprise AI, research/product update 확인",
-      "scope_evidence_terms": [],
-      "aospCameraStackBucket": "generic_tech_watchlist",
-      "aosp_camera_stack_bucket": "generic_tech_watchlist",
-      "aospCameraDirect": false,
-      "aosp_camera_direct": false,
-      "aospCameraEvidenceTerms": [],
-      "aosp_camera_evidence_terms": [],
-      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [
-        {
-          "url": "https://images.ctfassets.net/kftzwdyauwt9/3KGOHkSXu53naMuSFNaiwv/aa2f914943c839ce6b75b8620a46b340/SEO_Banner_2560x1440_02.png?w=1600&h=900&fit=fill",
-          "sourceUrl": "https://openai.com/news/",
-          "articleUrl": "https://openai.com/news/",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "OpenAI News",
-          "validationStatus": "ok",
-          "contentLength": 2900100
-        },
-        {
-          "url": "https://images.ctfassets.net/kftzwdyauwt9/4zSr4YNWXIEYz20piN2bxf/6f9a561be6055802914aee0a3bb671d7/ArtCard-Personal-Finance.png?w=3840&q=90&fm=webp",
-          "sourceUrl": "https://openai.com/news/",
-          "articleUrl": "https://openai.com/news/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Personal finance in ChatGPT > Media > Cover",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "OpenAI News",
-          "validationStatus": "ok",
-          "contentLength": 156028
-        },
-        {
-          "url": "https://images.ctfassets.net/kftzwdyauwt9/7qVT9WlLKfgGLPC5W77ei6/a24fd3f13b754378759959aa77cd8f5d/1_1.png?w=3840&q=90&fm=webp",
-          "sourceUrl": "https://openai.com/news/",
-          "articleUrl": "https://openai.com/news/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "1x1 Art Card",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "OpenAI News",
-          "validationStatus": "ok",
-          "contentLength": 30568
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://images.ctfassets.net/kftzwdyauwt9/3KGOHkSXu53naMuSFNaiwv/aa2f914943c839ce6b75b8620a46b340/SEO_Banner_2560x1440_02.png?w=1600&h=900&fit=fill",
-          "sourceUrl": "https://openai.com/news/",
-          "articleUrl": "https://openai.com/news/",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "OpenAI News",
-          "validationStatus": "ok",
-          "contentLength": 2900100
-        },
-        {
-          "url": "https://images.ctfassets.net/kftzwdyauwt9/4zSr4YNWXIEYz20piN2bxf/6f9a561be6055802914aee0a3bb671d7/ArtCard-Personal-Finance.png?w=3840&q=90&fm=webp",
-          "sourceUrl": "https://openai.com/news/",
-          "articleUrl": "https://openai.com/news/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Personal finance in ChatGPT > Media > Cover",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "OpenAI News",
-          "validationStatus": "ok",
-          "contentLength": 156028
-        },
-        {
-          "url": "https://images.ctfassets.net/kftzwdyauwt9/7qVT9WlLKfgGLPC5W77ei6/a24fd3f13b754378759959aa77cd8f5d/1_1.png?w=3840&q=90&fm=webp",
-          "sourceUrl": "https://openai.com/news/",
-          "articleUrl": "https://openai.com/news/",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "1x1 Art Card",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "OpenAI News",
-          "validationStatus": "ok",
-          "contentLength": 30568
-        }
-      ],
-      "candidateTier": "exclude",
-      "reason": "OpenAI News (official, medium, score 38): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
-      "collection_reason": "OpenAI News (official, medium, score 38): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -22101,12 +21382,241 @@
           "main_hint_requires_candidate_runtime_evidence"
         ]
       }
+    },
+    {
+      "schema_version": 5,
+      "source": "Phoronix Linux Camera / Media",
+      "source_name": "Phoronix Linux Camera / Media",
+      "sourceUrl": "https://www.phoronix.com/",
+      "source_url": "https://www.phoronix.com/",
+      "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+      "article_url": "https://www.phoronix.com/review/zimacube-2",
+      "source_id": "phoronix-linux-camera-media",
+      "category": "linux-kernel",
+      "section": "Linux Kernel / Platform Watch",
+      "source_category": "linux-kernel",
+      "source_section": "Linux Kernel / Platform Watch",
+      "priority": "medium",
+      "reliability": "tech-media",
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "rss_item",
+      "source_type": "rss_item",
+      "source_priority": "medium",
+      "source_reliability": "tech-media",
+      "usageHint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "source_usage_hint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "sourceRole": "",
+      "source_role": "",
+      "candidateOnly": false,
+      "candidate_only": false,
+      "collectionMode": "rss-item",
+      "collection_mode": "rss-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceLevel": "dated-rss-article",
+      "evidence_level": "dated-rss-article",
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_kind": "rss_item",
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "datePrecision": "",
+      "date_precision": "",
+      "parentUrl": "",
+      "parent_url": "",
+      "parentTitle": "",
+      "parent_title": "",
+      "outgoing_links": [],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": true,
+      "has_behavior_change": false,
+      "source_gap_risk": true,
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "evidence_score": 4,
+      "version_or_release": "",
+      "api_or_component": "CPU",
+      "source_hint_api_or_component": "linux-kernel",
+      "behavior_change": "Earlier this year we reviewed the ZimaBoard 2 for building a Linux home storage server.",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
+      "url": "https://www.phoronix.com/review/zimacube-2",
+      "publishedAt": "Fri, 15 May 2026 09:15:36 -0400",
+      "published_date": "Fri, 15 May 2026 09:15:36 -0400",
+      "summary": "Earlier this year we reviewed the ZimaBoard 2 for building a Linux home storage server. That was a nifty little device but for those looking for a more polished product than assembling your storage devices in cardboard cut-outs and the like, IceWhale has launched the ZimaCube 2. The ZimaCube 2 is a nice and polished, literal cube, to serve as your personal cloud / network attached storage (NAS) device.",
+      "relevanceScore": 53,
+      "relevance_score": 53,
+      "cameraHalRelevanceScore": 53,
+      "camera_hal_relevance_score": 53,
+      "editorial_priority": 6,
+      "relevance_bucket": "generic_tech_watchlist",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "evidence_origin": "source_hint_only",
+      "source_hint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
+      "scope_evidence_terms": [],
+      "aospCameraStackBucket": "generic_tech_watchlist",
+      "aosp_camera_stack_bucket": "generic_tech_watchlist",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [],
+      "aosp_camera_evidence_terms": [],
+      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "imageCandidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=zimacube-2&image=zimacube_2_1",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Phoronix",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 3092
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=zimacube-2&image=zimacube_2_1_med",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "ZimaCube 2",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://www.phoronix.net/image.php?id=zimacube-2&image=zimacube_2_1",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        },
+        {
+          "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Phoronix",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 3092
+        },
+        {
+          "url": "https://www.phoronix.net/image.php?id=zimacube-2&image=zimacube_2_1_med",
+          "sourceUrl": "https://www.phoronix.com/",
+          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "ZimaCube 2",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Phoronix Linux Camera / Media",
+          "validationStatus": "ok",
+          "contentLength": 0
+        }
+      ],
+      "candidateTier": "watchlist-reference",
+      "reason": "Phoronix Linux Camera / Media (tech-media, medium, score 53): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "collection_reason": "Phoronix Linux Camera / Media (tech-media, medium, score 53): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "unknown": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "unknown",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      }
     }
   ],
   "failures": [
     {
       "source": "LLVM Project Blog",
       "message": "404 Not Found"
+    },
+    {
+      "source": "OpenAI News",
+      "message": "403 Forbidden"
+    },
+    {
+      "source": "요즘IT",
+      "message": "403 Forbidden"
     }
   ]
 }

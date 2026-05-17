@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
   "date": "2026-05-17",
-  "generated_at": "2026-05-16T17:20:31.928Z",
+  "generated_at": "2026-05-17T01:13:53.265Z",
   "summary": {
     "schema_version": 1,
     "total_count": 40,
     "by_event_type": {
-      "primary_url": 30,
-      "release_note": 10
+      "primary_url": 29,
+      "release_note": 11
     },
     "by_dedupe_reason": {
-      "normalized_primary_url": 30,
-      "source_id + release.date + component": 2,
+      "normalized_primary_url": 29,
+      "source_id + release.date + component": 3,
       "source_id + release.version": 8
     },
     "warning_count": 0
@@ -766,30 +766,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_78d75b9b53db",
-      "primary_candidate_id": "candidate_53ea72711f10",
-      "event_key": "url:https://openai.com/news",
-      "event_type": "primary_url",
-      "primary_url": "https://openai.com/news",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": ""
-      },
-      "component": "",
-      "impact_axes": [
-        "unknown",
-        "generic_tech_watchlist",
-        "AI / SW Engineering Trends",
-        "ai"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
       "event_id": "event_b4489b9b14c2",
-      "primary_candidate_id": "candidate_1d99d94f4647",
+      "primary_candidate_id": "candidate_ba67a0b93726",
       "event_key": "url:https://deepmind.google/blog",
       "event_type": "primary_url",
       "primary_url": "https://deepmind.google/blog",
@@ -811,7 +789,7 @@
     },
     {
       "event_id": "event_d0a8a0530dc1",
-      "primary_candidate_id": "candidate_67d2653f18bb",
+      "primary_candidate_id": "candidate_7de51b8f5c12",
       "event_key": "url:https://www.anthropic.com/news",
       "event_type": "primary_url",
       "primary_url": "https://www.anthropic.com/news",
@@ -833,7 +811,7 @@
     },
     {
       "event_id": "event_e1a97ab4bcd4",
-      "primary_candidate_id": "candidate_a4af45cbbcb4",
+      "primary_candidate_id": "candidate_f5499b3aacb2",
       "event_key": "url:https://cloud.google.com/blog/products/ai-machine-learning",
       "event_type": "primary_url",
       "primary_url": "https://cloud.google.com/blog/products/ai-machine-learning",
@@ -855,7 +833,7 @@
     },
     {
       "event_id": "event_aac1e2118f76",
-      "primary_candidate_id": "candidate_e91ff648d077",
+      "primary_candidate_id": "candidate_d81eeab37088",
       "event_key": "url:https://libcamera.org/introduction.html",
       "event_type": "primary_url",
       "primary_url": "https://libcamera.org/introduction.html",
@@ -877,7 +855,7 @@
     },
     {
       "event_id": "event_af7168b0fe86",
-      "primary_candidate_id": "candidate_1d98de7b9228",
+      "primary_candidate_id": "candidate_3242bb507814",
       "event_key": "url:https://releases.llvm.org",
       "event_type": "primary_url",
       "primary_url": "https://releases.llvm.org",
@@ -895,6 +873,28 @@
         "toolchain"
       ],
       "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_732a05cecc3f",
+      "primary_candidate_id": "candidate_7d2da1ec8d2f",
+      "event_key": "source:phoronix-linux-camera-media:date:Fri, 15 May 2026 09:15:36 -0400:component:cpu",
+      "event_type": "release_note",
+      "primary_url": "https://www.phoronix.com/review/zimacube-2",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Fri, 15 May 2026 09:15:36 -0400"
+      },
+      "component": "CPU",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Linux Kernel / Platform Watch",
+        "linux-kernel"
+      ],
+      "confidence": "medium",
       "warnings": []
     }
   ]
