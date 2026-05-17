@@ -726,14 +726,14 @@
     {
       "candidate_id": "gemini-54d4017dadc0b266",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "title": "КамераX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
-      "source_quality_score": 0.492,
+      "title": "CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.583,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0.45,
         "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
+        "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
