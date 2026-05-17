@@ -691,6 +691,52 @@ function renderEvidencePackSummary(root, date) {
   ].join('\n');
 }
 
+function renderSeedEvidenceUsageSummary(root, date) {
+  if (!date) return '';
+  const seedPackRelPath = `content/collected-news/${date}/seed-evidence-pack.json`;
+  const mergedRelPath = `content/collected-news/${date}/merged-candidates.json`;
+  const seedPack = readJsonObjectIfExists(path.join(root, seedPackRelPath));
+  const merged = readJsonObjectIfExists(path.join(root, mergedRelPath));
+  const candidates = ensureArray(merged?.candidates)
+    .filter(candidate =>
+      ensureArray(candidate.evidence_pack_ids).length > 0 ||
+      ensureArray(candidate.primary_evidence_ids).length > 0 ||
+      candidate.compact_evidence ||
+      candidate.origin === 'seed_url_evidence'
+    )
+    .slice(0, 10);
+  if (!seedPack && candidates.length === 0) return '';
+
+  const rows = candidates.length > 0
+    ? renderMarkdownTable(
+      ['#', 'Candidate', 'Evidence pack IDs', 'Primary evidence IDs', 'Source extraction ref', 'Compact facts'],
+      candidates.map((candidate, index) => [
+        index + 1,
+        formatCandidateLink({
+          title: extractCandidateTitle(candidate) || 'unknown title',
+          url: extractCandidateUrls(candidate)[0] || ''
+        }),
+        ensureArray(candidate.evidence_pack_ids).join(', ') || 'none',
+        ensureArray(candidate.primary_evidence_ids).join(', ') || 'none',
+        candidate.source_extraction_ref || 'none',
+        ensureArray(candidate.compact_evidence?.primary_facts).slice(0, 2).join('; ') || 'none'
+      ])
+    )
+    : '- none';
+
+  return [
+    '## Seed Evidence Usage Summary',
+    '',
+    `- seed-evidence-pack: ${seedPack ? `\`${seedPackRelPath}\`` : 'unavailable'}`,
+    `- pack_count: ${valueOrUnknown(ensureArray(seedPack?.packs).length)}`,
+    `- candidate_count_with_seed_evidence: ${candidates.length}`,
+    '- Stage 3 seed re-crawl: prohibited; final generation uses candidate-level `compact_evidence` only.',
+    '',
+    rows,
+    ''
+  ].join('\n');
+}
+
 function renderReviewOnlyStatus(status, handoff, root, date) {
   if (!handoff?.diagnosticsOnly) return '';
   const generationStatus = date
@@ -2089,6 +2135,34 @@ function renderRawInputProvenance(status = {}, date = '') {
   ].join('\n');
 }
 
+function renderPriorityOverridePolicy() {
+  return [
+    '## Priority Override / Legacy Compatibility',
+    '',
+    'This PR is part of #185 seed evidence workflow migration.',
+    'The seed evidence workflow is prioritized over legacy-pattern cleanup, but source/evidence/security/publish safety remains non-negotiable.',
+    '',
+    '### Required checks for this PR',
+    '- [ ] Targeted #185 unit tests pass',
+    '- [ ] Targeted workflow tests pass',
+    '- [ ] `npm.cmd run validate` passes',
+    '- [ ] Source/evidence/security gates are not weakened',
+    '',
+    '### Legacy-pattern failures',
+    '| Test | Failure reason | Classification | Follow-up |',
+    '| --- | --- | --- | --- |',
+    '| none | none | none | none |',
+    '',
+    '### Non-negotiable gates',
+    '- [ ] No private/internal URL fetch',
+    '- [ ] No source_gap_risk bypass',
+    '- [ ] No quality threshold lowering',
+    '- [ ] No 03 re-crawl',
+    '- [ ] No Gemini proposal promoted without deterministic validation',
+    ''
+  ].join('\n');
+}
+
 function buildNewsroomPrBody(options = {}) {
   const resolved = options.publishStatus || resolvePublishStatus(options);
   const root = resolved.root || options.root || process.cwd();
@@ -2121,6 +2195,7 @@ function buildNewsroomPrBody(options = {}) {
     pushSection(editorialDecisionSummary);
   }
   pushSection(renderRawInputProvenance(status, date));
+  pushSection(renderPriorityOverridePolicy());
   pushSection(renderStatusSection(status));
   pushSection(editorBriefSections);
 
@@ -2137,6 +2212,7 @@ function buildNewsroomPrBody(options = {}) {
     renderFinalSelectionStatus(status),
     renderHalSignalQualitySummary(root, date, status),
     renderSourceQualityGateSummary(root, date),
+    renderSeedEvidenceUsageSummary(root, date),
     renderEvidencePackSummary(root, date),
     renderCandidateTraceability(root, date),
     renderEditorActionGuidance(status, date),

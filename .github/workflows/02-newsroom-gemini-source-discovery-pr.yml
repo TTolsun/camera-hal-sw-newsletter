@@ -56,18 +56,6 @@ jobs:
       - name: Validate newsroom source discovery boundary
         run: npm run validate:config
 
-      - name: Preflight LLM credentials for enabled source discovery
-        if: ${{ github.event.inputs.enable_gemini_source_discovery == 'true' }}
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          INTERNAL_LLM_API_KEY: ${{ secrets.INTERNAL_LLM_API_KEY }}
-          INTERNAL_LLM_ENDPOINT: ${{ vars.INTERNAL_LLM_ENDPOINT || '' }}
-          INTERNAL_LLM_API_VERSION: ${{ vars.INTERNAL_LLM_API_VERSION || '' }}
-          LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'gemini' }}
-          LLM_MODEL: ${{ vars.LLM_MODEL || vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
-          LLM_FALLBACK_MODELS: ${{ vars.LLM_FALLBACK_MODELS || vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite' }}
-        run: node scripts/gemini-source-discovery-boundary.js --date "${NEWSLETTER_DATE}" --preflight-only
-
       - name: Run disabled pass-through or Gemini source discovery
         id: source-discovery
         env:
@@ -97,8 +85,15 @@ jobs:
           name: newsroom-source-discovery-debug-${{ github.run_id }}
           path: |
             content/collected-news/${{ env.NEWSLETTER_DATE }}/gemini-candidates.json
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/seed-candidates.json
+            content/collected-news/${{ env.NEWSLETTER_DATE }}/seed-evidence-pack.json
             content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidates.json
             content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidate-manifest.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-fetch-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-fetch-report.md
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-evidence-pack.md
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-merge-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-merge-report.md
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposals.json
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposal-validation-report.json
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-usage-report.json

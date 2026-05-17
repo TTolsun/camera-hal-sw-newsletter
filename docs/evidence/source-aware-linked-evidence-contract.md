@@ -1,5 +1,18 @@
 # Source-Aware Linked Evidence Contract
 
+## Issue #185 Seed Evidence Extension
+
+Seed evidence expansion reuses this linked-evidence boundary in Stage 2 only. Stage 1 approves `collection-intent.json`, Stage 2 fetches approved seed URLs and allowed linked evidence, and Stage 3 consumes only the approved candidate artifacts plus `compact_evidence`.
+
+Additional seed-specific rules:
+
+- Seed fetch accepts only public `https` URLs and validates redirect targets again.
+- `keyword_hints` are discovery hints only and must never become source-backed facts.
+- Failed, blocked, noise, unsupported, or skipped linked evidence must not be used as article facts.
+- Candidate to Evidence Pack mapping is by `evidence_pack_ids`, `primary_evidence_ids`, `linked_evidence_ids`, and `source_extraction_ref`; URL string matching is not the contract.
+- Stage 3 must not crawl or fetch seed URLs again.
+- Full `seed-evidence-pack.json` is a validation/debug artifact; Gemini prompts receive only candidate-level `compact_evidence`.
+
 이 문서는 issue `#89`의 staged implementation 경계를 고정한다. 목표는 source page, RSS article, release note row 안의 linked evidence를 보존하고 분류하되, 발행 안전성과 기존 article structure 계약을 약화하지 않는 것이다.
 
 ## 책임 경계

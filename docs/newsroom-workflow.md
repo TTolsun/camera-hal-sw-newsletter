@@ -171,6 +171,30 @@ NEWSROOM_PRO_ESCALATION=manual
 
 manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 선택할 수 있습니다. 이때 workflow는 fallback list를 만들지 않고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`만 전달합니다. JS model policy는 provider가 `gemini`인 `workflow_dispatch` 실행에서만 `gemini-2.5-pro` fallback을 추가합니다. scheduled run, internal provider, `allow_pro=false`에서는 Pro fallback을 추가하지 않습니다.
 
+## Issue #185 Seed Evidence Workflow Priority
+
+`#185` workflow migration은 newsroom pipeline 안에서 P0-equivalent 작업으로 취급합니다. 우선순위는 `#185 workflow migration > legacy compatibility cleanup`이지만, `source/evidence/security/publish safety > #185 workflow migration`이 더 높은 절대 기준입니다.
+
+Legacy-pattern test failure는 다음 조건을 모두 만족할 때만 blocker에서 분리할 수 있습니다.
+
+- Targeted `#185` tests와 `npm.cmd run validate`가 통과합니다.
+- 실패가 source integrity, URL safety, quality gate, selector gate, publish gate와 무관합니다.
+- PR body에 affected test, failure reason, classification, follow-up이 기록됩니다.
+
+다음 실패는 legacy 여부와 관계없이 blocker입니다.
+
+- source-less article promotion
+- `source_gap_risk` hard blocker bypass
+- quality threshold, selector gate, publish gate relaxation
+- private/internal URL fetch 또는 redirect-to-private fetch
+- blocked/failed evidence가 article fact로 사용됨
+- Gemini proposal이 deterministic validation 없이 candidate truth가 됨
+- Stage 3 seed crawling/fetch 재수행
+- manual editorial field override
+- broken evidence id mapping
+
+PR마다 failure classification은 `A. New workflow blocker`, `B. Source / evidence / security blocker`, `C. Legacy-pattern compatibility failure`, `D. Snapshot/report formatting drift`, `E. Follow-up cleanup candidate` 중 하나로 기록합니다. `A/B`는 항상 blocker이고, `C/D/E`만 위 조건을 만족할 때 후속 처리로 분리할 수 있습니다.
+
 ## Recovery Artifacts
 
 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, LLM JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.

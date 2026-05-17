@@ -2262,6 +2262,46 @@ test('newsroom PR body renders Evidence Pack fallback diagnostics defaults', () 
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
+test('newsroom PR body renders Seed Evidence usage summary when seed artifacts exist', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+  writeJson(path.join(root, 'content', 'collected-news', date, 'seed-evidence-pack.json'), {
+    schema_version: 1,
+    report_type: 'seed_evidence_pack',
+    newsletter_date: date,
+    packs: [{
+      evidence_pack_id: 'seed-camerax-pack',
+      primary_evidence: [{ evidence_id: 'seed-camerax-primary-01' }]
+    }]
+  });
+  writeJson(path.join(root, 'content', 'collected-news', date, 'merged-candidates.json'), {
+    schema_version: 5,
+    date,
+    newsletter_date: date,
+    candidates: [{
+      title: 'CameraX 1.6.1 seed evidence',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      origin: 'seed_url_evidence',
+      evidence_pack_ids: ['seed-camerax-pack'],
+      primary_evidence_ids: ['seed-camerax-primary-01'],
+      source_extraction_ref: 'seed-evidence-pack.json#/packs/0',
+      compact_evidence: {
+        primary_facts: ['CameraX 1.6.1 fixes a compile error.']
+      }
+    }]
+  });
+
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+
+  assert.match(body, /^## Seed Evidence Usage Summary$/m);
+  assert.match(body, /seed-evidence-pack: `content\/collected-news\/2026-05-10\/seed-evidence-pack\.json`/);
+  assert.match(body, /seed-camerax-pack/);
+  assert.match(body, /seed-camerax-primary-01/);
+  assert.match(body, /Stage 3 seed re-crawl: prohibited/);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
 test('newsroom PR body renders HAL signal quality summary when report exists', () => {
   const root = tempRoot();
   const date = '2026-05-10';
@@ -4921,7 +4961,6 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
   const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsroom-gemini-source-discovery-pr.yml'), 'utf8');
   const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
-  const stage2PreflightStep = workflowStep(stage2, 'Preflight LLM credentials for enabled source discovery');
   const stage2RunStep = workflowStep(stage2, 'Run disabled pass-through or Gemini source discovery');
   const stage2PrepareBodyStep = workflowStep(stage2, 'Prepare source discovery pull request body');
   const stage2CreatePrStep = workflowStep(stage2, 'Create source discovery pull request');
@@ -4936,6 +4975,8 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage3, /^name: Newsroom 03 - Gemini Final Newsletter PR/m);
 
   assert.match(stage1, /workflow_dispatch:/);
+  assert.match(stage1, /collection_intent_path:/);
+  assert.match(stage1, /NEWSROOM_COLLECTION_INTENT_PATH: \$\{\{ github\.event\.inputs\.collection_intent_path \}\}/);
   assert.match(stage1, /^\s*schedule:/m);
   assert.match(stage1, /cron: "0 0 \* \* \*"/);
   assert.match(stage1, /run: npm run doctor:config -- --no-llm-credentials/);
@@ -4945,14 +4986,13 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.doesNotMatch(stage1, /INTERNAL_LLM_API_KEY/);
   assert.match(stage1, /branch=newsroom-raw\/\$\{DATE\}/);
   assert.match(stage1, /manual-candidates\.json/);
+  assert.match(stage1, /collection-intent\.json/);
   assert.match(stage1, /raw-candidate-manifest\.json/);
 
   assert.match(stage2, /NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY/);
-  assert.match(stage2, /Preflight LLM credentials for enabled source discovery/);
-  assert.match(stage2, /node scripts\/gemini-source-discovery-boundary\.js --date "\$\{NEWSLETTER_DATE\}" --preflight-only/);
+  assert.doesNotMatch(stage2, /Preflight LLM credentials for enabled source discovery/);
+  assert.doesNotMatch(stage2, /--preflight-only/);
   assert.doesNotMatch(stage2, /npm run doctor:config/);
-  assert.ok(stage2.indexOf('- name: Preflight LLM credentials for enabled source discovery') <
-    stage2.indexOf('- name: Run disabled pass-through or Gemini source discovery'));
   assert.ok(stage2.indexOf('- name: Run disabled pass-through or Gemini source discovery') <
     stage2.indexOf('- name: Prepare source discovery pull request body'));
   assert.ok(stage2.indexOf('- name: Prepare source discovery pull request body') <
@@ -4966,8 +5006,11 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage2UploadStep, /if-no-files-found:\s*warn/);
   assert.match(stage2UploadStep, /merged-candidate-manifest\.json/);
   assert.match(stage2UploadStep, /gemini-source-discovery-report\.md/);
+  assert.match(stage2UploadStep, /seed-candidates\.json/);
+  assert.match(stage2UploadStep, /seed-evidence-pack\.json/);
+  assert.match(stage2UploadStep, /seed-fetch-report\.json/);
+  assert.match(stage2UploadStep, /seed-merge-report\.md/);
   assert.match(stage2, /node scripts\/gemini-source-discovery-boundary\.js --date/);
-  assert.match(stage2PreflightStep, /--preflight-only/);
   assert.doesNotMatch(stage2RunStep, /--preflight-only/);
   assert.match(stage2, /gemini-source-discovery-report\.md/);
   assert.match(stage2, /gemini-source-proposals\.json/);
@@ -4991,7 +5034,11 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage3, /branch: newsroom-final\/\$\{\{ steps\.meta\.outputs\.date \}\}/);
   assert.match(stage3, /manual-candidates\.json/);
   assert.match(stage3, /merged-candidates\.json/);
+  assert.match(stage3, /collection-intent\.json/);
+  assert.match(stage3, /seed-candidates\.json/);
+  assert.match(stage3, /seed-evidence-pack\.json/);
   assert.doesNotMatch(rawPrBodyBuilder, /source_gap_risk_count/);
+  assert.match(rawPrBodyBuilder, /Priority Override \/ Legacy Compatibility/);
 });
 
 test('schedule cutover leaves only the RAW workflow on the daily newsroom schedule', () => {
