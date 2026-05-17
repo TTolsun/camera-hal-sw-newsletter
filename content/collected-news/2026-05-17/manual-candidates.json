@@ -4,7 +4,7 @@
   "newsletter_date": "2026-05-17",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 21,
-  "generated_at": "2026-05-17T01:13:53.287Z",
+  "generated_at": "2026-05-17T10:47:39.476Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -58,6 +58,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -69,8 +70,50 @@
       "source_reliability": "official",
       "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
       "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_site_update_row",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_site_update_row",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_site_update_row",
+      "source_url_quality": "official_site_update_row",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "dated_site_update_row",
+      "evidence_granularity": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-item",
@@ -156,8 +199,6 @@
       "api_or_component": "CameraX / androidx.camera",
       "source_hint_api_or_component": "android",
       "behavior_change": "camera-camera2 1.6.1 - - 1.7.0-alpha01 camera-core 1.6.1 - - 1.7.0-alpha01 camera-compose 1.6.1 - - 1.7.0-alpha01 camera-effects 1.6.1 - - 1.7.0-alpha01 camera-extensions 1.6.1 - - 1.7.0-alpha01 camera-feature-combination-query - - - 1.5.0-alpha06 camera-feature-combination-query-play-services - - - 1.5.0-alpha06 camera-lifecycle 1.6.1 - - 1.7.0-alpha01 camera-mlkit-vision 1.6.1 - - 1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group versions This table lists all the artifacts in the androidx.wear group.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for main article selection.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -225,7 +266,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -269,7 +310,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -338,6 +379,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -349,8 +391,59 @@
       "source_reliability": "official",
       "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -393,8 +486,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "android",
       "behavior_change": "Posted by Garan Jenkin, Wear OS Developer Relations Engineer FotMob recently experienced its largest single-day increase on Wear OS among its installed audience in 5 years, at 2-3x the daily average.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -559,6 +650,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -570,8 +662,65 @@
       "source_reliability": "official",
       "usageHint": "Camera HAL, camera framework, provider HAL, stream/request/result 공식 기준 확인",
       "source_usage_hint": "Camera HAL, camera framework, provider HAL, stream/request/result 공식 기준 확인",
-      "sourceRole": "reference_index",
-      "source_role": "reference_index",
+      "source_quality": {
+        "source_role": "official_documentation_reference",
+        "source_url_quality": "undated_reference_page",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Reference page does not provide dated article evidence.",
+        "main_article_source_blockers": [
+          "undated_reference_page",
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "reference_page",
+        "source_quality_notes": [
+          "official source",
+          "reference/background source only"
+        ]
+      },
+      "sourceRole": "official_documentation_reference",
+      "source_role": "official_documentation_reference",
+      "sourceUrlQuality": "undated_reference_page",
+      "source_url_quality": "undated_reference_page",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Reference page does not provide dated article evidence.",
+      "main_article_source_allowed_reason": "Reference page does not provide dated article evidence.",
+      "mainArticleSourceBlockers": [
+        "undated_reference_page",
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "undated_reference_page",
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "reference_page",
+      "evidence_granularity": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
+      ],
+      "source_quality_notes": [
+        "official source",
+        "reference/background source only"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "html-watch-page",
@@ -7006,8 +7155,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "camera-hal",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -7043,7 +7190,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
@@ -7087,7 +7234,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
@@ -7170,6 +7317,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -7181,8 +7329,59 @@
       "source_reliability": "official",
       "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -7225,8 +7424,6 @@
       "api_or_component": "API",
       "source_hint_api_or_component": "android",
       "behavior_change": "Posted by Nataraj KR, Android Developer Relations Engineer The initial launch of the Jetpack Telecom library introduced CallsManager , replacing the legacy ConnectionService API to simplify VoIP integration.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -7391,6 +7588,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -7402,8 +7600,59 @@
       "source_reliability": "official",
       "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -7446,8 +7695,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "android",
       "behavior_change": "Posted by Ash Nohe and Amrit Sanjeev, Android Developer Relations Engineers Practicing gratitude may decrease symptoms of depression and anxiety, and improve mental health and life satisfaction 1 .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -7612,6 +7859,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -7623,8 +7871,59 @@
       "source_reliability": "official",
       "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -7667,8 +7966,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "android",
       "behavior_change": "Through these changes, Android and Google Play remain committed to ensuring that billions of users can continue to enjoy their apps with confidence and developer innovation can thrive.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -7833,6 +8130,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -7844,8 +8142,50 @@
       "source_reliability": "official",
       "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
       "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_site_update_row",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_site_update_row",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_site_update_row",
+      "source_url_quality": "official_site_update_row",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "dated_site_update_row",
+      "evidence_granularity": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-item",
@@ -7896,8 +8236,6 @@
       "api_or_component": "CameraX / androidx.camera",
       "source_hint_api_or_component": "android",
       "behavior_change": "1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close <h3 class=\"hide-from-toc no-link\" id=\"wear-mave",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for short newsletter use.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -7945,7 +8283,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -7959,7 +8297,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -7973,23 +8311,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "og",
@@ -8003,7 +8341,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
@@ -8017,18 +8355,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "short-news",
@@ -8072,6 +8410,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -8083,8 +8422,50 @@
       "source_reliability": "official",
       "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
       "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_site_update_row",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_site_update_row",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_site_update_row",
+      "source_url_quality": "official_site_update_row",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "dated_site_update_row",
+      "evidence_granularity": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-item",
@@ -8135,8 +8516,6 @@
       "api_or_component": "CameraX / androidx.camera",
       "source_hint_api_or_component": "android",
       "behavior_change": "> camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for short newsletter use.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -8184,7 +8563,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -8198,7 +8577,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
@@ -8212,23 +8591,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=th",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -8242,7 +8621,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
@@ -8256,18 +8635,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=th",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "short-news",
@@ -8311,6 +8690,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -8322,8 +8702,59 @@
       "source_reliability": "official",
       "usageHint": "Android platform release, CTS/VTS/ITS, Camera ITS, compatibility change 확인",
       "source_usage_hint": "Android platform release, CTS/VTS/ITS, Camera ITS, compatibility change 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_site_update_row",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_site_update_row",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_site_update_row",
+      "source_url_quality": "official_site_update_row",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "dated_site_update_row",
+      "evidence_granularity": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-page",
@@ -9116,8 +9547,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "aosp",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -9153,7 +9582,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -9181,7 +9610,7 @@
           "contentLength": 1165
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -9197,7 +9626,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -9225,7 +9654,7 @@
           "contentLength": 1165
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -9282,6 +9711,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -9293,8 +9723,65 @@
       "source_reliability": "official",
       "usageHint": "Camera capability, device compatibility, MUST/SHOULD requirement 확인",
       "source_usage_hint": "Camera capability, device compatibility, MUST/SHOULD requirement 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_documentation_reference",
+        "source_url_quality": "undated_reference_page",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Reference page does not provide dated article evidence.",
+        "main_article_source_blockers": [
+          "undated_reference_page",
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "reference_page",
+        "source_quality_notes": [
+          "official source",
+          "reference/background source only"
+        ]
+      },
+      "sourceRole": "official_documentation_reference",
+      "source_role": "official_documentation_reference",
+      "sourceUrlQuality": "undated_reference_page",
+      "source_url_quality": "undated_reference_page",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Reference page does not provide dated article evidence.",
+      "main_article_source_allowed_reason": "Reference page does not provide dated article evidence.",
+      "mainArticleSourceBlockers": [
+        "undated_reference_page",
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "undated_reference_page",
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "reference_page",
+      "evidence_granularity": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
+      ],
+      "source_quality_notes": [
+        "official source",
+        "reference/background source only"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "html-watch-page",
@@ -9307,8 +9794,8 @@
       "is_watch_page": true,
       "hasDatedEvidence": false,
       "has_dated_evidence": false,
-      "evidenceLevel": "undated-watch-page",
-      "evidence_level": "undated-watch-page",
+      "evidenceLevel": "reference-index",
+      "evidence_level": "reference-index",
       "finalSelectionEligibility": "exclude",
       "final_selection_eligibility": "exclude",
       "source_kind": "documentation_page",
@@ -11298,8 +11785,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "compatibility",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -11335,7 +11820,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -11351,7 +11836,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -11408,6 +11893,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -11419,8 +11905,59 @@
       "source_reliability": "official",
       "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -11463,8 +12000,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "android",
       "behavior_change": "Posted by Matthew McCullough, VP, Product Management, Android Developer Announced today during The Android Show , Android is transitioning from an operating system to an intelligence system, creating more opportunities for engagement with your apps.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -11629,6 +12164,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -11640,8 +12176,59 @@
       "source_reliability": "official",
       "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -11684,8 +12271,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "android",
       "behavior_change": "Posted by Thomas Ezan, Sr Developer Relations Engineer and Tracy Agyemang, Product Marketing Manager Karrot is a hyperlocal, community-driven peer-to-peer marketplace app that enables users to buy, sell, and trade items with other verified users.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -11850,6 +12435,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -11861,8 +12447,59 @@
       "source_reliability": "official",
       "usageHint": "Android framework/system/vendor security fix와 camera/media/vendor component 관련 security lead 확인",
       "source_usage_hint": "Android framework/system/vendor security fix와 camera/media/vendor component 관련 security lead 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-item",
@@ -11913,8 +12550,6 @@
       "api_or_component": "Android Security Bulletin",
       "source_hint_api_or_component": "security",
       "behavior_change": "ss=\"devsite-expandable-nav\"> Android Security Bulletins Bulletins home Overview 2026 bulletins May April <li class=\"devsite-nav-",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -11950,7 +12585,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -11964,7 +12599,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=de",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -11980,7 +12615,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -11994,7 +12629,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=de",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -12051,6 +12686,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "high",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -12062,8 +12698,56 @@
       "source_reliability": "official",
       "usageHint": "Android framework/system/vendor security fix와 camera/media/vendor component 관련 security lead 확인",
       "source_usage_hint": "Android framework/system/vendor security fix와 camera/media/vendor component 관련 security lead 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-page",
@@ -12114,8 +12798,6 @@
       "api_or_component": "Android Security Bulletin",
       "source_hint_api_or_component": "security",
       "behavior_change": "vsite-nav-title\" > Overview 2026 bulletins May April March February January <a class=\"devsite-nav-toggle\" aria-hidden=\"true\"",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -12151,7 +12833,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -12167,7 +12849,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -12224,6 +12906,7 @@
       "source_section": "Linux Camera / Driver",
       "priority": "high",
       "reliability": "project-official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -12235,8 +12918,44 @@
       "source_reliability": "project-official",
       "usageHint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
       "source_usage_hint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "project_mailing_list_source",
+        "source_url_quality": "project_mailing_list_release",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_project_announcement",
+        "source_quality_notes": []
+      },
+      "sourceRole": "project_mailing_list_source",
+      "source_role": "project_mailing_list_source",
+      "sourceUrlQuality": "project_mailing_list_release",
+      "source_url_quality": "project_mailing_list_release",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "dated_project_announcement",
+      "evidence_granularity": "dated_project_announcement",
+      "sourceQualityNotes": [],
+      "source_quality_notes": [],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-item",
@@ -12476,8 +13195,6 @@
       "api_or_component": "libcamera / V4L2 camera pipeline",
       "source_hint_api_or_component": "linux-camera",
       "behavior_change": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for main article selection.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -12575,6 +13292,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -12586,8 +13304,56 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -12645,8 +13411,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "C++26 is bringing some long-overdue changes to&nbsp; assert() .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
       "watchlist_reason": "",
       "verification_hint": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
@@ -12761,6 +13525,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -12772,8 +13537,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -12845,8 +13661,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "The film will have its world premiere on May 28 at a special live event in New York City&rsquo;s Financial District, followed by a panel discussion that will be recorded for later release.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -12955,6 +13769,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -12966,8 +13781,50 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -13130,8 +13987,6 @@
       "api_or_component": "GCC",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "GCC 16.1 has been released!",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for short newsletter use.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -13225,6 +14080,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -13236,8 +14092,50 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -13288,8 +14186,6 @@
       "api_or_component": "GCC",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Eligible for short newsletter use.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -13383,6 +14279,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -13394,8 +14291,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -13453,8 +14401,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "Thank you to everyone who reponded to&nbsp; our 2026 annual global C++ developer survey .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -13533,6 +14479,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -13544,8 +14491,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -13596,8 +14594,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "The next C++ standard (C++26) is getting exciting new features.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
       "watchlist_reason": "",
       "verification_hint": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
@@ -13682,6 +14678,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -13693,8 +14690,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -13752,8 +14800,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "Even experienced C++ developers sometimes stumble on a deceptively simple question: what actually happens when a destructor throws an exception?",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -13862,6 +14908,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -13873,8 +14920,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -13939,8 +15037,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -14049,6 +15145,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -14060,8 +15157,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -14112,8 +15260,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "A nice example of C++26 reflection moving from theory into something practical.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
       "watchlist_reason": "",
       "verification_hint": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
@@ -14198,6 +15344,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -14209,8 +15356,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -14275,8 +15473,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -14385,6 +15581,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -14396,8 +15593,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -14462,8 +15710,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -14572,6 +15818,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -14583,8 +15830,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -14649,8 +15947,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -14759,6 +16055,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -14770,8 +16067,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -14836,8 +16184,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -14946,6 +16292,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "high",
       "reliability": "official-community",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -14957,8 +16304,59 @@
       "source_reliability": "official-community",
       "usageHint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "source_usage_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "engineering_blog_source",
+        "source_url_quality": "engineering_blog_with_camera_evidence",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "engineering_blog_source",
+      "source_role": "engineering_blog_source",
+      "sourceUrlQuality": "engineering_blog_with_camera_evidence",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -15009,8 +16407,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "cpp",
       "behavior_change": "C++ on Sea and the ACCU Conference combine, this, year for one big festival of C++ by the sea!",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -15089,6 +16485,7 @@
       "source_section": "AI / SW Engineering Trends",
       "priority": "medium",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -15100,8 +16497,59 @@
       "source_reliability": "official",
       "usageHint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
       "source_usage_hint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "generic_trend_source",
+        "source_url_quality": "generic_ai_or_it_trend",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_native_hal_workflow_evidence",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "generic_trend_source",
+      "source_role": "generic_trend_source",
+      "sourceUrlQuality": "generic_ai_or_it_trend",
+      "source_url_quality": "generic_ai_or_it_trend",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_native_hal_workflow_evidence",
+      "evidence_granularity": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-item",
@@ -15159,8 +16607,6 @@
       "api_or_component": "Claude Code / AI coding agent",
       "source_hint_api_or_component": "ai-coding",
       "behavior_change": "​ 2.1.143 May 15, 2026 Added plugin dependency enforcement: claude plugin disable now refuses when another enabled plugin depends on the target (with a copy-pasteable disable-chain hint), and claude plugin enable force-enables transitive dependencies Added projected context cost (per-turn and per-invocation token estimates) to the /plugin marketplace browse pane Added worktree.bgIsolation: \"none\" setting to let background sessions edit the working copy directly without EnterWorktree , for repos where worktrees are impractical PowerShell tool now passes -ExecutionPolicy Bypass .",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -15221,7 +16667,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 0
+          "contentLength": 6300
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
@@ -15235,7 +16681,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 0
+          "contentLength": 6301
         }
       ],
       "image_candidates": [
@@ -15265,7 +16711,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 0
+          "contentLength": 6300
         },
         {
           "url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
@@ -15279,7 +16725,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 0
+          "contentLength": 6301
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -15325,6 +16771,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "medium",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -15336,8 +16783,59 @@
       "source_reliability": "official",
       "usageHint": "Galaxy 단말 security update와 SMR 감시",
       "source_usage_hint": "Galaxy 단말 security update와 SMR 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-page",
@@ -15598,8 +17096,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "security",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -15678,6 +17174,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "medium",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -15689,8 +17186,59 @@
       "source_reliability": "official",
       "usageHint": "Qualcomm SoC/vendor component security issue 감시",
       "source_usage_hint": "Qualcomm SoC/vendor component security issue 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-page",
@@ -15733,8 +17281,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "vendor-security",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -15813,6 +17359,7 @@
       "source_section": "Android / AOSP / Camera",
       "priority": "medium",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -15824,8 +17371,59 @@
       "source_reliability": "official",
       "usageHint": "Google official Android developer newsletter reference 확인",
       "source_usage_hint": "Google official Android developer newsletter reference 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "html-watch-page",
@@ -15876,49 +17474,7 @@
         },
         {
           "url": "https://developer.android.com/get-started/overview",
-          "text": "Hello world",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/courses",
-          "text": "Training courses",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/get-started/codelabs",
-          "text": "Tutorials",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/develop/ui/compose/adopt",
-          "text": "Compose for teams",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/kotlin",
-          "text": "Kotlin for Android",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://play.google.com/console/about/guides/play-commerce/",
-          "text": "Monetization with Play ↗️",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/developer-verification",
-          "text": "Android Developer Verification",
+          "text": "Hello, world!",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
@@ -15931,15 +17487,36 @@
           "evidence_role": "unclassified"
         },
         {
-          "url": "https://developer.android.com/xr",
-          "text": "Android XR",
+          "url": "https://developer.android.com/compose",
+          "text": "Compose for UI",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
         },
         {
-          "url": "https://developer.android.com/wear",
-          "text": "Wear OS",
+          "url": "https://developer.android.com/studio",
+          "text": "AI-powered IDE",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/courses",
+          "text": "Training",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://play.google.com/console/about/guides/play-commerce/",
+          "text": "Monetization with Play ↗️",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/phones-tablets-foldables",
+          "text": "Phones, tablets, foldables",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
@@ -15959,6 +17536,13 @@
           "evidence_role": "unclassified"
         },
         {
+          "url": "https://developer.android.com/xr",
+          "text": "Android XR",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
           "url": "https://developer.android.com/googlebook",
           "text": "Googlebook",
           "source_field": "html.body",
@@ -15968,6 +17552,13 @@
         {
           "url": "https://developer.android.com/chrome-os",
           "text": "ChromeOS",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/wear",
+          "text": "Wear OS",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
@@ -16281,6 +17872,13 @@
           "evidence_role": "unclassified"
         },
         {
+          "url": "https://developer.android.com/multidevice",
+          "text": "Multidevice support",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
           "url": "https://developer.android.com/develop/ui",
           "text": "User interfaces",
           "source_field": "html.body",
@@ -16365,15 +17963,15 @@
           "evidence_role": "unclassified"
         },
         {
-          "url": "https://developer.android.com/guide/topics/large-screens/get-started-with-large-screens",
-          "text": "Adaptive UI",
+          "url": "https://developer.android.com/training/cars",
+          "text": "Android for Cars",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
         },
         {
-          "url": "https://developer.android.com/training/wearables",
-          "text": "Wear OS",
+          "url": "https://developer.android.com/training/tv",
+          "text": "Android TV",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
@@ -16386,22 +17984,15 @@
           "evidence_role": "unclassified"
         },
         {
+          "url": "https://developer.android.com/training/wearables",
+          "text": "Wear OS",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
           "url": "https://developer.android.com/health-and-fitness/guides",
           "text": "Android Health",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/training/cars",
-          "text": "Android for Cars",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/training/tv",
-          "text": "Android TV",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "unclassified"
@@ -17003,8 +18594,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "android",
       "behavior_change": "The latest developer news and tips to help you succeed on Google Play.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -17054,7 +18643,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/newsletter",
           "articleUrl": "https://developer.android.com/newsletter",
           "sourceKind": "article-img",
@@ -17098,7 +18687,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vb114763cc2305a85e6a106d59af57ee9014c30d60a4a13753c950f0c3f9c034b/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/newsletter",
           "articleUrl": "https://developer.android.com/newsletter",
           "sourceKind": "article-img",
@@ -17169,6 +18758,7 @@
       "source_section": "AI / SW Engineering Trends",
       "priority": "medium",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -17180,8 +18770,59 @@
       "source_reliability": "official",
       "usageHint": "Google AI research, computer vision, generative AI, photography research trend 확인",
       "source_usage_hint": "Google AI research, computer vision, generative AI, photography research trend 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "generic_trend_source",
+        "source_url_quality": "generic_ai_or_it_trend",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_native_hal_workflow_evidence",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "generic_trend_source",
+      "source_role": "generic_trend_source",
+      "sourceUrlQuality": "generic_ai_or_it_trend",
+      "source_url_quality": "generic_ai_or_it_trend",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_native_hal_workflow_evidence",
+      "evidence_granularity": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "homepage-watch",
@@ -18044,8 +19685,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "ai-research",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -18154,6 +19793,7 @@
       "source_section": "AI / SW Engineering Trends",
       "priority": "medium",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -18165,8 +19805,59 @@
       "source_reliability": "official",
       "usageHint": "AI breakthrough, model research, agent, safety 공식 업데이트 확인",
       "source_usage_hint": "AI breakthrough, model research, agent, safety 공식 업데이트 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "generic_trend_source",
+        "source_url_quality": "generic_ai_or_it_trend",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_native_hal_workflow_evidence",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "generic_trend_source",
+      "source_role": "generic_trend_source",
+      "sourceUrlQuality": "generic_ai_or_it_trend",
+      "source_url_quality": "generic_ai_or_it_trend",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_native_hal_workflow_evidence",
+      "evidence_granularity": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "homepage-watch",
@@ -19106,8 +20797,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "ai-research",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -19216,6 +20905,7 @@
       "source_section": "AI / SW Engineering Trends",
       "priority": "medium",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -19227,8 +20917,59 @@
       "source_reliability": "official",
       "usageHint": "Claude, Claude Code, AI coding, agentic workflow, safety update 확인",
       "source_usage_hint": "Claude, Claude Code, AI coding, agentic workflow, safety update 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "generic_trend_source",
+        "source_url_quality": "generic_ai_or_it_trend",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_native_hal_workflow_evidence",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "generic_trend_source",
+      "source_role": "generic_trend_source",
+      "sourceUrlQuality": "generic_ai_or_it_trend",
+      "source_url_quality": "generic_ai_or_it_trend",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_native_hal_workflow_evidence",
+      "evidence_granularity": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "homepage-watch",
@@ -19965,8 +21706,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "ai",
       "behavior_change": "Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -20131,6 +21870,7 @@
       "source_section": "AI / SW Engineering Trends",
       "priority": "medium",
       "reliability": "official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -20142,8 +21882,59 @@
       "source_reliability": "official",
       "usageHint": "Enterprise AI, agent platform, Vertex AI, AI DevOps, orchestration 감시",
       "source_usage_hint": "Enterprise AI, agent platform, Vertex AI, AI DevOps, orchestration 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "generic_trend_source",
+        "source_url_quality": "generic_ai_or_it_trend",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "native_hal_workflow",
+        "evidence_granularity": "article_level_native_hal_workflow_evidence",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        ]
+      },
+      "sourceRole": "generic_trend_source",
+      "source_role": "generic_trend_source",
+      "sourceUrlQuality": "generic_ai_or_it_trend",
+      "source_url_quality": "generic_ai_or_it_trend",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "native_hal_workflow",
+      "conditional_evidence_type": "native_hal_workflow",
+      "evidenceGranularity": "article_level_native_hal_workflow_evidence",
+      "evidence_granularity": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "homepage-watch",
@@ -20677,8 +22468,6 @@
       "api_or_component": "",
       "source_hint_api_or_component": "ai-engineering",
       "behavior_change": "Find all the latest news about Google Cloud and Machine Learning & AI with customer stories, product announcements, solutions and more.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -20843,6 +22632,7 @@
       "source_section": "Linux Camera / Driver",
       "priority": "medium",
       "reliability": "project-official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -20854,8 +22644,65 @@
       "source_reliability": "project-official",
       "usageHint": "libcamera architecture와 Linux kernel driver 배경 reference 확인",
       "source_usage_hint": "libcamera architecture와 Linux kernel driver 배경 reference 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "official_documentation_reference",
+        "source_url_quality": "undated_reference_page",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Reference page does not provide dated article evidence.",
+        "main_article_source_blockers": [
+          "undated_reference_page",
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "reference_page",
+        "source_quality_notes": [
+          "official source",
+          "reference/background source only"
+        ]
+      },
+      "sourceRole": "official_documentation_reference",
+      "source_role": "official_documentation_reference",
+      "sourceUrlQuality": "undated_reference_page",
+      "source_url_quality": "undated_reference_page",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Reference page does not provide dated article evidence.",
+      "main_article_source_allowed_reason": "Reference page does not provide dated article evidence.",
+      "mainArticleSourceBlockers": [
+        "undated_reference_page",
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "undated_reference_page",
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "reference_page",
+      "evidence_granularity": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
+      ],
+      "source_quality_notes": [
+        "official source",
+        "reference/background source only"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "html-watch-page",
@@ -20868,10 +22715,10 @@
       "is_watch_page": true,
       "hasDatedEvidence": false,
       "has_dated_evidence": false,
-      "evidenceLevel": "undated-watch-page",
-      "evidence_level": "undated-watch-page",
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
+      "evidenceLevel": "reference-index",
+      "evidence_level": "reference-index",
+      "finalSelectionEligibility": "exclude",
+      "final_selection_eligibility": "exclude",
       "source_kind": "documentation_page",
       "source_extraction": null,
       "derived_editorial_hints": null,
@@ -21088,18 +22935,16 @@
       "has_behavior_change": true,
       "source_gap_risk": true,
       "main_eligible": false,
-      "briefing_only": true,
+      "briefing_only": false,
       "reference_only": true,
       "evidence_score": 4,
       "version_or_release": "",
       "api_or_component": "libcamera",
       "source_hint_api_or_component": "linux-camera",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "selection_exclusion_reason": "Reference index source; use only as context/background and exclude from final article inputs.",
+      "watchlist_reason": "",
+      "verification_hint": "Reference index source; use only as context/background and exclude from final article inputs.",
       "title": "Introduction &mdash; libcamera",
       "url": "https://libcamera.org/introduction.html",
       "publishedAt": "",
@@ -21138,7 +22983,7 @@
       "aosp_camera_relevance_reason": "Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [],
       "image_candidates": [],
-      "candidateTier": "watchlist-reference",
+      "candidateTier": "exclude",
       "reason": "libcamera Documentation (project-official, medium, score 53): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
       "collection_reason": "libcamera Documentation (project-official, medium, score 53): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
       "linked_evidence_summary": {
@@ -21179,6 +23024,7 @@
       "source_section": "C++ / Native / Toolchain",
       "priority": "medium",
       "reliability": "project-official",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -21190,8 +23036,53 @@
       "source_reliability": "project-official",
       "usageHint": "LLVM/Clang release가 native build/toolchain에 미치는 영향 감시",
       "source_usage_hint": "LLVM/Clang release가 native build/toolchain에 미치는 영향 감시",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "project_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": []
+      },
+      "sourceRole": "project_release_source",
+      "source_role": "project_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [],
+      "source_quality_notes": [],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "release-note-page",
@@ -21312,8 +23203,6 @@
       "api_or_component": "LLVM",
       "source_hint_api_or_component": "toolchain",
       "behavior_change": "Use this source page as a change/release-note watch target.",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
       "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
@@ -21389,8 +23278,8 @@
       "source_name": "Phoronix Linux Camera / Media",
       "sourceUrl": "https://www.phoronix.com/",
       "source_url": "https://www.phoronix.com/",
-      "articleUrl": "https://www.phoronix.com/review/zimacube-2",
-      "article_url": "https://www.phoronix.com/review/zimacube-2",
+      "articleUrl": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
+      "article_url": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
       "source_id": "phoronix-linux-camera-media",
       "category": "linux-kernel",
       "section": "Linux Kernel / Platform Watch",
@@ -21398,6 +23287,7 @@
       "source_section": "Linux Kernel / Platform Watch",
       "priority": "medium",
       "reliability": "tech-media",
+      "source_quality_required": true,
       "origin": "source_registry",
       "collectionStage": "raw_collection",
       "collection_stage": "raw_collection",
@@ -21409,8 +23299,65 @@
       "source_reliability": "tech-media",
       "usageHint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
       "source_usage_hint": "Linux kernel, V4L2, media subsystem, driver release lead 확인",
-      "sourceRole": "",
-      "source_role": "",
+      "source_quality": {
+        "source_role": "tech_media_lead_source",
+        "source_url_quality": "tech_media_lead_requires_cross_check",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only",
+          "cross_check_required_but_missing"
+        ],
+        "cross_check_status": "required_missing",
+        "requires_cross_check": true,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "primary_confirmation",
+        "evidence_granularity": "article_with_primary_confirmation",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+          "requires primary-source cross-check before main promotion"
+        ]
+      },
+      "sourceRole": "tech_media_lead_source",
+      "source_role": "tech_media_lead_source",
+      "sourceUrlQuality": "tech_media_lead_requires_cross_check",
+      "source_url_quality": "tech_media_lead_requires_cross_check",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "crossCheckStatus": "required_missing",
+      "cross_check_status": "required_missing",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "primary_confirmation",
+      "conditional_evidence_type": "primary_confirmation",
+      "evidenceGranularity": "article_with_primary_confirmation",
+      "evidence_granularity": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
+      ],
       "candidateOnly": false,
       "candidate_only": false,
       "collectionMode": "rss-item",
@@ -21443,26 +23390,24 @@
       "has_published_date": true,
       "has_version_or_release": false,
       "has_api_or_component": true,
-      "has_behavior_change": false,
+      "has_behavior_change": true,
       "source_gap_risk": true,
       "main_eligible": false,
       "briefing_only": true,
       "reference_only": true,
-      "evidence_score": 4,
+      "evidence_score": 6,
       "version_or_release": "",
       "api_or_component": "CPU",
       "source_hint_api_or_component": "linux-kernel",
-      "behavior_change": "Earlier this year we reviewed the ZimaBoard 2 for building a Linux home storage server.",
-      "requiresCrossCheck": true,
-      "requires_cross_check": true,
+      "behavior_change": "Released this week was FluidX3D 3.7, the latest feature update to this computational fluid dynamics (CFD) software that is CPU/GPU accelerated by way of OpenCL...",
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
-      "url": "https://www.phoronix.com/review/zimacube-2",
-      "publishedAt": "Fri, 15 May 2026 09:15:36 -0400",
-      "published_date": "Fri, 15 May 2026 09:15:36 -0400",
-      "summary": "Earlier this year we reviewed the ZimaBoard 2 for building a Linux home storage server. That was a nifty little device but for those looking for a more polished product than assembling your storage devices in cardboard cut-outs and the like, IceWhale has launched the ZimaCube 2. The ZimaCube 2 is a nice and polished, literal cube, to serve as your personal cloud / network attached storage (NAS) device.",
+      "title": "FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software",
+      "url": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
+      "publishedAt": "Sun, 17 May 2026 04:09:00 -0400",
+      "published_date": "Sun, 17 May 2026 04:09:00 -0400",
+      "summary": "Released this week was FluidX3D 3.7, the latest feature update to this computational fluid dynamics (CFD) software that is CPU/GPU accelerated by way of OpenCL...",
       "relevanceScore": 53,
       "relevance_score": 53,
       "cameraHalRelevanceScore": 53,
@@ -21490,9 +23435,9 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.phoronix.net/image.php?id=zimacube-2&image=zimacube_2_1",
+          "url": "https://www.phoronix.net/image.php?id=2026&image=fluidx3d",
           "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "articleUrl": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
           "sourceKind": "og",
           "width": null,
           "height": null,
@@ -21506,7 +23451,7 @@
         {
           "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
           "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "articleUrl": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
@@ -21516,27 +23461,13 @@
           "attribution": "Phoronix Linux Camera / Media",
           "validationStatus": "ok",
           "contentLength": 3092
-        },
-        {
-          "url": "https://www.phoronix.net/image.php?id=zimacube-2&image=zimacube_2_1_med",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "ZimaCube 2",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "contentLength": 0
         }
       ],
       "image_candidates": [
         {
-          "url": "https://www.phoronix.net/image.php?id=zimacube-2&image=zimacube_2_1",
+          "url": "https://www.phoronix.net/image.php?id=2026&image=fluidx3d",
           "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "articleUrl": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
           "sourceKind": "og",
           "width": null,
           "height": null,
@@ -21550,7 +23481,7 @@
         {
           "url": "https://www.phoronix.com/phxcms7-css/phoronix.png",
           "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
+          "articleUrl": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
@@ -21560,20 +23491,6 @@
           "attribution": "Phoronix Linux Camera / Media",
           "validationStatus": "ok",
           "contentLength": 3092
-        },
-        {
-          "url": "https://www.phoronix.net/image.php?id=zimacube-2&image=zimacube_2_1_med",
-          "sourceUrl": "https://www.phoronix.com/",
-          "articleUrl": "https://www.phoronix.com/review/zimacube-2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "ZimaCube 2",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "Phoronix Linux Camera / Media",
-          "validationStatus": "ok",
-          "contentLength": 0
         }
       ],
       "candidateTier": "watchlist-reference",

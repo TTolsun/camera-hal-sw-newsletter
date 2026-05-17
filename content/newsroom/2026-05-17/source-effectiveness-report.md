@@ -13,7 +13,32 @@ Date: 2026-05-17
 - Source gap candidates: 34
 - Generic noise candidates: 29
 - Duplicate candidates: 0
-- Recommendations: NO_RECENT_SIGNAL: 28, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 1, KEEP: 1, KEEP_AND_FIX_PARSER: 15, REVIEW_SOURCE_OR_PARSER: 1, KEEP_AND_MONITOR: 1
+- Recommendations: NO_RECENT_SIGNAL: 28, KEEP: 1, KEEP_AND_FIX_PARSER: 16, REVIEW_SOURCE_OR_PARSER: 1, KEEP_AND_MONITOR: 1
+- Selected main source quality coverage: 3/3
+- Main-eligible source quality coverage: 2/2
+- Conditional source promoted/blocked: 2/18
+- Unknown source quality: 0
+- Source quality field drift: 0
+- Legacy source quality warnings: 0
+
+## Source Quality Summary
+
+| Metric | Key | Count |
+| --- | --- | --- |
+| source_url_quality | engineering_blog_with_camera_evidence | 14 |
+| source_url_quality | official_dated_release | 12 |
+| source_url_quality | generic_ai_or_it_trend | 5 |
+| source_url_quality | official_site_update_row | 4 |
+| source_url_quality | undated_reference_page | 3 |
+| source_url_quality | project_mailing_list_release | 1 |
+| source_url_quality | tech_media_lead_requires_cross_check | 1 |
+| source_quality_status | blocked | 34 |
+| source_quality_status | allowed | 6 |
+| blocker | source_gap_risk | 34 |
+| blocker | reference_only | 32 |
+| blocker | undated_reference_page | 3 |
+| blocker | cross_check_required_but_missing | 1 |
+
 
 ## Top Effective Sources
 
@@ -26,7 +51,6 @@ Date: 2026-05-17
 
 | Source | Recommendation | Collected | Eligible | Source Gap | Top Reason |
 | --- | --- | --- | --- | --- | --- |
-| libcamera-documentation | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 1 | 0 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
 | iso-cpp-blog | KEEP_AND_FIX_PARSER | 14 | 2 | 12 | main_eligible=false |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | android-developer-newsletter | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
@@ -39,6 +63,7 @@ Date: 2026-05-17
 | google-cloud-ai-ml-blog | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | google-deepmind-blog | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | google-research-blog | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
+| libcamera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Reference index source; use only as context/background and exclude from final article inputs. |
 | llvm-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
 | qualcomm-security-bulletins | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | samsung-mobile-security-updates | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
@@ -79,7 +104,6 @@ _없음_
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| libcamera-documentation | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
 | libcamera-release-announcements | KEEP | 100 | 1 | 1 | 1 | 1 | 0 | 0 | 0 |
 | iso-cpp-blog | KEEP_AND_FIX_PARSER | 35.72 | 14 | 0.1429 | 1 | 1 | 0.8571 | 0.6429 | 0 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
@@ -93,6 +117,7 @@ _없음_
 | google-cloud-ai-ml-blog | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | google-deepmind-blog | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | google-research-blog | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
+| libcamera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
 | llvm-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
 | qualcomm-security-bulletins | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | samsung-mobile-security-updates | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
