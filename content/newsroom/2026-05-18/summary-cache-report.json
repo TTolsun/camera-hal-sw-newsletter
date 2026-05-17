@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-18",
+  "generated_at": "2026-05-17T17:28:00.096Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 3,
+    "hit_count": 1,
+    "miss_count": 2,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 2
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "published_date": "2026-04-28",
+      "cache_key": {
+        "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-april/058408.html",
+        "url_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
+        "published_date": "2026-04-28",
+        "content_hash": "f2c42a835e4110d9cb7dd585ddea4e610b9971e4d92757c66c480b0699b4af60"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385.json"
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
+        "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+        "content_hash": "47e7f31cb529b3dd872a3865e14893c72d4c5778602bd361481a4e7d2d2e260b"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "url_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
+        "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+        "content_hash": "6fc4ca2ad071be2c3bfa9ddd5d2717af82a8dcfef8d1dcabcd6fba350f2c59e3"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
