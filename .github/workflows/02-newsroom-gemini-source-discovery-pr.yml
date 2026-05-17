@@ -107,6 +107,8 @@ jobs:
             content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.md
             content/newsroom/${{ env.NEWSLETTER_DATE }}/source-clusters.json
             content/newsroom/${{ env.NEWSLETTER_DATE }}/evidence-validation-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-discovery-feedback-report.json
+            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-discovery-feedback-report.md
             content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-discovery-report.md
           if-no-files-found: warn
           retention-days: 14

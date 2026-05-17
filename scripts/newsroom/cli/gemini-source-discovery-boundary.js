@@ -32,6 +32,10 @@ const {
   rawCandidateManifestRelPath,
   sourceClustersPath,
   sourceClustersRelPath,
+  sourceDiscoveryFeedbackReportMarkdownPath,
+  sourceDiscoveryFeedbackReportMarkdownRelPath,
+  sourceDiscoveryFeedbackReportPath,
+  sourceDiscoveryFeedbackReportRelPath,
   sourceQualityReportMarkdownPath,
   sourceQualityReportMarkdownRelPath,
   sourceQualityReportPath,
@@ -69,7 +73,8 @@ const {
 } = require('../evidence/validate-candidate-evidence');
 const {
   candidateTitle,
-  candidateUrl
+  candidateUrl,
+  text
 } = require('../collect/source-intelligence-utils');
 
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
@@ -119,6 +124,9 @@ function renderReport({
   sourceQualityReportRelPath = '',
   sourceClustersRelPath = '',
   evidenceValidationReportRelPath = '',
+  sourceDiscoveryFeedbackReportRelPath = '',
+  sourceDiscoveryFeedbackReportMarkdownRelPath = '',
+  sourceDiscoveryFeedbackReport = null,
   rejectedProposals = []
 }) {
   const stats = discoveryStats && typeof discoveryStats === 'object' ? discoveryStats : null;
@@ -159,8 +167,16 @@ function renderReport({
       `source_quality_report=${sourceQualityReportRelPath}`,
       `source_clusters=${sourceClustersRelPath}`,
       `evidence_validation_report=${evidenceValidationReportRelPath}`,
+      `source_discovery_feedback_report=${sourceDiscoveryFeedbackReportRelPath}`,
+      `source_discovery_feedback_report_markdown=${sourceDiscoveryFeedbackReportMarkdownRelPath}`,
       ''
     );
+    if (sourceDiscoveryFeedbackReport) {
+      lines.push(...renderSourceDiscoveryFeedbackSummary(
+        sourceDiscoveryFeedbackReport,
+        sourceDiscoveryFeedbackReportMarkdownRelPath
+      ));
+    }
     if (rejectedProposals.length > 0) {
       lines.push('## Rejected proposals', '');
       for (const item of rejectedProposals) {
@@ -199,6 +215,8 @@ function removeStaleNormalOutputs(root, date) {
   removeIfExists(sourceQualityReportMarkdownPath(root, date));
   removeIfExists(sourceClustersPath(root, date));
   removeIfExists(evidenceValidationReportPath(root, date));
+  removeIfExists(sourceDiscoveryFeedbackReportPath(root, date));
+  removeIfExists(sourceDiscoveryFeedbackReportMarkdownPath(root, date));
 }
 
 function assertEnabledCredentials(root, date, env) {
@@ -229,6 +247,348 @@ function candidatePayload(date, candidates, basePayload = {}) {
     generated_at: new Date().toISOString(),
     candidates,
     failures: Array.isArray(basePayload.failures) ? basePayload.failures : []
+  };
+}
+
+function boolTrue(value) {
+  return value === true || String(value).toLowerCase() === 'true';
+}
+
+function firstText(...values) {
+  return values.map(text).find(Boolean) || '';
+}
+
+function urlParts(value = '') {
+  try {
+    const parsed = new URL(String(value || '').trim());
+    return {
+      href: parsed.href,
+      hostname: parsed.hostname.toLowerCase().replace(/^www\./, ''),
+      pathname: parsed.pathname.toLowerCase(),
+      family: `${parsed.protocol.toLowerCase()}//${parsed.hostname.toLowerCase().replace(/^www\./, '')}${parsed.pathname.replace(/\/$/, '').toLowerCase()}`
+    };
+  } catch (_error) {
+    return {
+      href: '',
+      hostname: '',
+      pathname: '',
+      family: ''
+    };
+  }
+}
+
+function candidateUrlFamily(candidate = {}) {
+  return urlParts(candidateUrl(candidate)).family;
+}
+
+function sourceIdentity(candidate = {}) {
+  return firstText(
+    candidate.source_id,
+    candidate.sourceId,
+    candidate.source_slug,
+    candidate.source,
+    candidate.source_name,
+    candidate.sourceName
+  );
+}
+
+function sourceIdentityHaystack(candidate = {}) {
+  return [
+    candidate.source_id,
+    candidate.sourceId,
+    candidate.source_slug,
+    candidate.source,
+    candidate.source_name,
+    candidate.sourceName,
+    candidate.sourceUrl,
+    candidate.source_url
+  ].map(text).join(' ').toLowerCase();
+}
+
+function sourceIdentitySlug(candidate = {}) {
+  return sourceIdentityHaystack(candidate).replace(/[^a-z0-9]+/g, '-');
+}
+
+function officialCameraSource(candidate = {}) {
+  const parts = urlParts(candidateUrl(candidate));
+  const identity = sourceIdentitySlug(candidate);
+  if (parts.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parts.pathname)) return true;
+  if (parts.hostname === 'source.android.com' && /\bcamera\b/.test(parts.pathname)) return true;
+  return /\b(?:android-developers-latest-updates|camerax-release-notes|aosp-site-updates)\b/.test(identity);
+}
+
+function parserBackedCameraSource(candidate = {}) {
+  const parts = urlParts(candidateUrl(candidate));
+  const identity = sourceIdentitySlug(candidate);
+  if (parts.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parts.pathname)) return true;
+  if (parts.hostname === 'source.android.com' && /\bcamera\b/.test(parts.pathname)) return true;
+  return /\b(?:android-developers-latest-updates|camerax-release-notes|aosp-site-updates)\b/.test(identity);
+}
+
+function parserGapEligible(candidate = {}) {
+  const finalEligibility = firstText(candidate.finalSelectionEligibility, candidate.final_selection_eligibility).toLowerCase();
+  const sourceQualityBucket = firstText(candidate.source_quality_bucket).toLowerCase();
+  return ['main', 'short'].includes(finalEligibility) ||
+    boolTrue(candidate.main_eligible) ||
+    ['strong_candidate', 'review_candidate', 'strong', 'review'].includes(sourceQualityBucket);
+}
+
+function sourceValidationAllowsParserGap(candidate = {}) {
+  if (!boolTrue(candidate.source_gap_risk)) return true;
+  const status = firstText(candidate.evidence_validation_status, candidate.source_validation_status).toLowerCase();
+  return ['pass', 'review', 'editor_review_required', 'fetch_failed_review_required'].includes(status);
+}
+
+function sourceExtractionItemText(item = {}) {
+  if (typeof item === 'string') return text(item);
+  if (!item || typeof item !== 'object') return '';
+  return firstText(item.text, item.body, item.title, item.summary, item.description);
+}
+
+function sourceExtractionSections(candidate = {}) {
+  const extraction = candidate.source_extraction;
+  if (!extraction || typeof extraction !== 'object') return [];
+  return [
+    ...(Array.isArray(extraction?.release?.sections) ? extraction.release.sections : []),
+    ...(Array.isArray(extraction?.minor_line_context?.sections) ? extraction.minor_line_context.sections : [])
+  ];
+}
+
+function hasConcreteSourceExtractionBullet(candidate = {}) {
+  return sourceExtractionSections(candidate)
+    .flatMap(section => Array.isArray(section?.items) ? section.items : [])
+    .some(item => Boolean(sourceExtractionItemText(item)));
+}
+
+function parserGapReason(candidate = {}) {
+  if (!candidate.source_extraction || typeof candidate.source_extraction !== 'object') {
+    return 'missing_source_extraction';
+  }
+  if (!hasConcreteSourceExtractionBullet(candidate)) {
+    return 'empty_source_extraction_release_sections';
+  }
+  return '';
+}
+
+function parserGapCandidate(candidate = {}) {
+  return officialCameraSource(candidate) &&
+    parserBackedCameraSource(candidate) &&
+    parserGapEligible(candidate) &&
+    sourceValidationAllowsParserGap(candidate) &&
+    Boolean(parserGapReason(candidate));
+}
+
+function adapterHint(candidate = {}) {
+  const parts = urlParts(candidateUrl(candidate));
+  const identity = sourceIdentitySlug(candidate);
+  if (parts.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parts.pathname)) {
+    return {
+      adapter_hint: 'android-developers-jetpack-release',
+      repair_hint: 'Check AndroidX Camera release-note block parser and source_extraction.release.sections extraction.'
+    };
+  }
+  if (/\bandroid-developers-latest-updates\b/.test(identity)) {
+    return {
+      adapter_hint: 'android-developers-latest-updates',
+      repair_hint: 'Check latest updates table/card row extraction and Camera Maven Group row handling.'
+    };
+  }
+  if (parts.hostname === 'source.android.com' && /\bcamera\b/.test(parts.pathname)) {
+    return {
+      adapter_hint: firstText(candidate.source_id, candidate.sourceId) || 'aosp-site-updates',
+      repair_hint: 'Check AOSP camera update row extraction.'
+    };
+  }
+  return {
+    adapter_hint: null,
+    repair_hint: ''
+  };
+}
+
+function selectorExclusionReason(candidate = {}) {
+  const haystack = [
+    candidate.title,
+    candidate.version_or_release,
+    candidate.versionOrRelease,
+    candidate.url,
+    candidate.summary,
+    candidate.behavior_change
+  ].map(text).join(' ');
+  if (/camerax|androidx\.camera|\/jetpack\/androidx\/releases\/camera/i.test(haystack)) {
+    return 'CameraX release-note candidate has no concrete source_extraction bullet';
+  }
+  return parserGapReason(candidate) === 'missing_source_extraction'
+    ? 'missing source_extraction for official parser-backed candidate'
+    : 'source_extraction.release.sections has no concrete bullet';
+}
+
+function duplicateDiscoveryIndexes(manualCandidates = [], geminiCandidates = []) {
+  const exactUrls = new Set();
+  const familyUrls = new Set();
+  for (const gemini of geminiCandidates) {
+    const url = candidateUrl(gemini);
+    const family = candidateUrlFamily(gemini);
+    if (url) exactUrls.add(url);
+    if (family) familyUrls.add(family);
+  }
+  const duplicateKeys = new Set();
+  for (const manual of manualCandidates) {
+    const url = candidateUrl(manual);
+    const family = candidateUrlFamily(manual);
+    if ((url && exactUrls.has(url)) || (family && familyUrls.has(family))) {
+      duplicateKeys.add(candidateKey(manual));
+    }
+  }
+  return duplicateKeys;
+}
+
+function isGeminiDiscoveryCandidate(candidate = {}) {
+  return candidate.origin === 'gemini_discovery' ||
+    candidate.collectionStage === 'gemini' ||
+    candidate.collection_stage === 'gemini';
+}
+
+function buildSourceDiscoveryFeedbackReport({
+  date,
+  manualCandidates = [],
+  mergedCandidates = [],
+  geminiCandidates = []
+} = {}) {
+  const duplicateKeys = duplicateDiscoveryIndexes(manualCandidates, geminiCandidates);
+  const candidatesByKey = new Map();
+  for (const candidate of mergedCandidates) {
+    if (isGeminiDiscoveryCandidate(candidate)) continue;
+    const key = candidateKey(candidate);
+    if (key && !candidatesByKey.has(key)) {
+      candidatesByKey.set(key, candidate);
+    }
+  }
+  for (const candidate of manualCandidates) {
+    const key = candidateKey(candidate);
+    if (key && !candidatesByKey.has(key)) {
+      candidatesByKey.set(key, candidate);
+    }
+  }
+
+  const items = [];
+  for (const candidate of candidatesByKey.values()) {
+    if (!parserGapCandidate(candidate)) continue;
+    const hints = adapterHint(candidate);
+    const key = candidateKey(candidate);
+    const reason = parserGapReason(candidate);
+    const title = firstText(candidate.version_or_release, candidate.versionOrRelease, candidateTitle(candidate), candidate.title);
+    const item = {
+      severity: 'warning',
+      action: 'PARSER_REPAIR_REQUIRED',
+      reason,
+      candidate_title: title,
+      url: candidateUrl(candidate),
+      source_id: sourceIdentity(candidate),
+      adapter_hint: hints.adapter_hint,
+      duplicate_discovered_by_gemini: duplicateKeys.has(key),
+      selector_exclusion_reason: selectorExclusionReason(candidate),
+      recommendation: hints.repair_hint ||
+        'Repair the source parser so the matching official source block preserves concrete source_extraction bullets.'
+    };
+    items.push(item);
+  }
+
+  const duplicateDiscoveryGapCount = items.filter(item => item.duplicate_discovered_by_gemini).length;
+  return {
+    schema_version: 1,
+    report_type: 'source_discovery_feedback',
+    date,
+    status: items.length > 0 ? 'WARNING' : 'PASS',
+    parser_gap_count: items.length,
+    duplicate_discovery_gap_count: duplicateDiscoveryGapCount,
+    items
+  };
+}
+
+function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
+  const lines = [
+    `# Source Discovery Feedback Report - ${report.date || 'unknown'}`,
+    '',
+    `status=${report.status || 'PASS'}`,
+    `parser_gap_count=${Number(report.parser_gap_count || 0)}`,
+    `duplicate_discovery_gap_count=${Number(report.duplicate_discovery_gap_count || 0)}`,
+    '',
+    '| Action | Reason | Candidate | Adapter | Duplicate Discovery | URL |',
+    '|---|---|---|---|---|---|'
+  ];
+  for (const item of report.items || []) {
+    lines.push([
+      item.action || '',
+      item.reason || '',
+      String(item.candidate_title || '').replace(/\|/g, '\\|'),
+      item.adapter_hint || '',
+      item.duplicate_discovered_by_gemini ? 'true' : 'false',
+      item.url || ''
+    ].join(' | ').replace(/^/, '| ').replace(/$/, ' |'));
+  }
+  if (!Array.isArray(report.items) || report.items.length === 0) {
+    lines.push('| none | none | none | none | false |  |');
+  }
+  lines.push('');
+
+  for (const item of report.items || []) {
+    lines.push(
+      `- ${item.action}: ${item.candidate_title || 'unknown'}`,
+      `  - url: ${item.url || ''}`,
+      `  - adapter_hint: ${item.adapter_hint || ''}`,
+      `  - reason: ${item.reason || ''}`,
+      `  - duplicate_discovered_by_gemini: ${item.duplicate_discovered_by_gemini ? 'true' : 'false'}`,
+      `  - recommendation: ${item.recommendation || ''}`,
+      ''
+    );
+  }
+  return `${lines.join('\n')}\n`;
+}
+
+function renderSourceDiscoveryFeedbackSummary(report = {}, markdownRelPath = '') {
+  const status = report.status || 'PASS';
+  const parserGapCount = Number(report.parser_gap_count || 0);
+  const duplicateGapCount = Number(report.duplicate_discovery_gap_count || 0);
+  const lines = [
+    '## Parser/source feedback',
+    '',
+    `status=${status}`,
+    `parser_gap_count=${parserGapCount}`,
+    `duplicate_discovery_gap_count=${duplicateGapCount}`
+  ];
+  if (markdownRelPath) {
+    lines.push(`source_discovery_feedback_report_markdown=${markdownRelPath}`);
+  }
+  lines.push('');
+  for (const item of (report.items || []).slice(0, 3)) {
+    lines.push(
+      `- ${item.action}: ${item.candidate_title || 'unknown'}`,
+      `  - url: ${item.url || ''}`,
+      `  - adapter_hint: ${item.adapter_hint || ''}`,
+      `  - reason: ${item.reason || ''}`,
+      item.duplicate_discovered_by_gemini
+        ? '  - Gemini rediscovered this URL, but the manual candidate lacks concrete source_extraction bullets.'
+        : '  - Manual candidate lacks concrete source_extraction bullets.'
+    );
+  }
+  if (parserGapCount > 3) {
+    lines.push(`- ${parserGapCount - 3} more item(s) in ${markdownRelPath}`);
+  }
+  lines.push('');
+  return lines;
+}
+
+function writeSourceDiscoveryFeedbackReport(root, date, report) {
+  const dir = newsroomDir(root, date);
+  fs.mkdirSync(dir, { recursive: true });
+  writeJson(sourceDiscoveryFeedbackReportPath(root, date), report);
+  fs.writeFileSync(sourceDiscoveryFeedbackReportMarkdownPath(root, date), renderSourceDiscoveryFeedbackMarkdown(report), 'utf8');
+  return {
+    report,
+    jsonPath: sourceDiscoveryFeedbackReportPath(root, date),
+    markdownPath: sourceDiscoveryFeedbackReportMarkdownPath(root, date),
+    jsonRelPath: sourceDiscoveryFeedbackReportRelPath(date),
+    markdownRelPath: sourceDiscoveryFeedbackReportMarkdownRelPath(date)
   };
 }
 
@@ -388,6 +748,12 @@ async function runEnabled({
     geminiCandidates: geminiAnnotatedCandidates,
     mergedCandidates: evidence.annotatedCandidates
   });
+  const feedback = writeSourceDiscoveryFeedbackReport(root, date, buildSourceDiscoveryFeedbackReport({
+    date,
+    manualCandidates,
+    geminiCandidates: geminiAnnotatedCandidates,
+    mergedCandidates: evidence.annotatedCandidates
+  }));
   const mergedPayload = candidatePayload(date, evidence.annotatedCandidates, manualPayload);
   const geminiPayload = candidatePayload(date, geminiAnnotatedCandidates, {
     failures: discovery.rejectedProposals
@@ -435,6 +801,9 @@ async function runEnabled({
     sourceQualityReportRelPath: sourceQualityReportRelPath(date),
     sourceClustersRelPath: sourceClustersRelPath(date),
     evidenceValidationReportRelPath: evidenceValidationReportRelPath(date),
+    sourceDiscoveryFeedbackReportRelPath: feedback.jsonRelPath,
+    sourceDiscoveryFeedbackReportMarkdownRelPath: feedback.markdownRelPath,
+    sourceDiscoveryFeedbackReport: feedback.report,
     rejectedProposals: discovery.rejectedProposals
   });
   const reportPath = writeReport(root, date, report);
@@ -450,6 +819,8 @@ async function runEnabled({
     gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
+    source_discovery_feedback_report: feedback.jsonRelPath,
+    source_discovery_feedback_report_markdown: feedback.markdownRelPath,
     report: newsroomRelPath(date, 'gemini-source-discovery-report.md'),
     reportPath,
     usageReport,
@@ -505,6 +876,12 @@ function run({
     status: 'PASS',
     discoveryStats
   });
+  const feedback = writeSourceDiscoveryFeedbackReport(root, date, buildSourceDiscoveryFeedbackReport({
+    date,
+    manualCandidates,
+    geminiCandidates: [],
+    mergedCandidates: manualCandidates
+  }));
   const sourceCandidateRelPath = sourceCandidatePath.endsWith('manual-candidates.json')
     ? manualCandidatesRelPath(date)
     : collectedCandidatesRelPath(date);
@@ -520,7 +897,10 @@ function run({
     sourceCandidateRelPath,
     geminiCandidateRelPath: geminiCandidatesRelPath(date),
     mergedCandidateRelPath: mergedCandidatesRelPath(date),
-    manifestRelPath: mergedCandidateManifestRelPath(date)
+    manifestRelPath: mergedCandidateManifestRelPath(date),
+    sourceDiscoveryFeedbackReportRelPath: feedback.jsonRelPath,
+    sourceDiscoveryFeedbackReportMarkdownRelPath: feedback.markdownRelPath,
+    sourceDiscoveryFeedbackReport: feedback.report
   });
   const reportPath = writeReport(root, date, report);
 
@@ -533,6 +913,8 @@ function run({
     gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
+    source_discovery_feedback_report: feedback.jsonRelPath,
+    source_discovery_feedback_report_markdown: feedback.markdownRelPath,
     report: newsroomRelPath(date, 'gemini-source-discovery-report.md'),
     reportPath,
     manifest: result.manifest
@@ -560,9 +942,11 @@ if (require.main === module) {
 
 module.exports = {
   FAILED_LLM_CREDENTIALS,
+  buildSourceDiscoveryFeedbackReport,
   findManualCandidatePath,
   parseArgs,
   renderReport,
+  renderSourceDiscoveryFeedbackMarkdown,
   run,
   selectEvidenceFetchTargets
 };
