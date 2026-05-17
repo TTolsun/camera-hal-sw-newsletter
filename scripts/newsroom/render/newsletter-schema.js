@@ -47,7 +47,10 @@ const articleSections = {
     background_context: string,
     hal_driver_impact: string,
     action_items: stringArray,
-    team_share_points: string
+    team_share_points: string,
+    known_limitations: stringArray,
+    watch_items: stringArray,
+    do_not_claim: stringArray
   },
   required: [
     'verified_facts',
@@ -55,7 +58,8 @@ const articleSections = {
     'hal_driver_impact',
     'action_items',
     'team_share_points'
-  ]
+  ],
+  additionalProperties: false
 };
 
 const halSignalCapsule = {

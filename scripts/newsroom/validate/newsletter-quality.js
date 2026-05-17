@@ -29,6 +29,7 @@ const {
 } = require('../generate/article-field-builder');
 const {
   ARTICLE_SECTION_KEYS,
+  LIMITATION_VISIBILITY,
   articleSectionSummary,
   normalizeArticleSections
 } = require('../common/article-section-contract');
@@ -1358,6 +1359,7 @@ function buildArticleResults(sections, deductions, factCheck, sectionCountDetail
     const factCheckMustFix = sectionHasFactCheckMustFix(section, factCheck);
     const sourceGap = sectionHasSourceGap(section, factCheck);
     const status = articleStatusFor(section, hardItems, factCheck);
+    const halSignal = normalizeHalSignalCapsule(section);
     const hardReasons = [
       ...hardItems.map(item => item.reason),
       factCheckMustFix ? 'Fact-check must_fix item mentions this section.' : '',
@@ -1373,6 +1375,11 @@ function buildArticleResults(sections, deductions, factCheck, sectionCountDetail
       section_contract: articleSectionSummary(section),
       scope_count: sectionCountDetails[index] || null,
       impact_claim_level: text(section.impact_claim_level) || text(sectionCountDetails[index]?.impact_claim_level),
+      hal_impact_axes: ensureArray(section.hal_impact_axes).length > 0
+        ? ensureArray(section.hal_impact_axes)
+        : ensureArray(halSignal.capsule?.impact_axes),
+      actionability_level: text(section.actionability_level),
+      effective_actionability_level: text(section.effective_actionability_level || section.actionability_level),
       hard_fail_reasons: [...new Set(hardReasons)],
       soft_deductions: softItems.map(item => ({
         category: item.category,
@@ -1389,10 +1396,23 @@ function summarizeArticleSectionContracts(sections) {
     counts[key] = summaries.filter(summary => ensureArray(summary.missing_keys).includes(key)).length;
     return counts;
   }, {});
+  const optionalKeyCounts = summaries.reduce((counts, summary) => {
+    for (const key of ensureArray(summary.present_optional_keys)) {
+      counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, {});
+  const limitationVisibilityCounts = summaries.reduce((counts, summary) => {
+    const key = summary.limitation_visibility || LIMITATION_VISIBILITY.NONE;
+    counts[key] = (counts[key] || 0) + 1;
+    return counts;
+  }, {});
   return {
     complete_count: summaries.filter(summary => summary.complete === true).length,
     incomplete_count: summaries.filter(summary => summary.complete !== true).length,
     missing_key_counts: missingKeyCounts,
+    optional_key_counts: optionalKeyCounts,
+    limitation_visibility_counts: limitationVisibilityCounts,
     summaries
   };
 }
@@ -1455,16 +1475,29 @@ function truncateText(value, limit = 100) {
 function articleSectionContractMarkdownRows(report) {
   return ensureArray(report.article_results).map(item => {
     const summary = item.section_contract || {};
-    const missing = ensureArray(summary.missing_keys);
+    const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
+    const factBoundary = missing.includes('verified_facts')
+      ? 'missing'
+      : summary.has_do_not_claim
+        ? 'source-backed guarded'
+        : 'source-backed';
+    const halImpactAxis = missing.includes('hal_driver_impact')
+      ? 'missing'
+      : ensureArray(item.hal_impact_axes).join(', ') || 'present';
+    const actionability = missing.includes('action_items')
+      ? 'missing'
+      : item.effective_actionability_level || item.actionability_level || 'present';
     const row = [
       item.index || '',
       item.headline || '',
       summary.complete === true && missing.length === 0 ? 'pass' : `missing ${missing.join(', ') || 'unknown'}`,
-      missing.includes('hal_driver_impact') ? 'missing' : 'present',
-      missing.includes('action_items') ? 'missing' : 'present'
+      factBoundary,
+      halImpactAxis,
+      actionability,
+      summary.limitation_visibility || LIMITATION_VISIBILITY.NONE
     ];
     return `| ${row.map(markdownTableCell).join(' | ')} |`;
-  }).join('\n') || '| none | none | none | none | none |';
+  }).join('\n') || '| none | none | none | none | none | none | none |';
 }
 
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
@@ -2070,8 +2103,8 @@ ${uncoveredFactLines}
 - Complete article sections: ${metrics.article_section_contract?.complete_count ?? 0}
 - Incomplete article sections: ${metrics.article_section_contract?.incomplete_count ?? 0}
 
-| # | Article | 5-section | HAL impact | Action item |
-| ---: | --- | --- | --- | --- |
+| # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |
+| ---: | --- | --- | --- | --- | --- | --- |
 ${articleStructureRows}
 
 ## Article Gate Results

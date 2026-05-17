@@ -14,7 +14,9 @@ const {
   inferImpactClaimLevel
 } = require('../generate/article-field-builder');
 const {
+  ARTICLE_SECTION_ALLOWED_KEYS,
   ARTICLE_SECTION_KEYS,
+  ARTICLE_SECTION_OPTIONAL_KEYS,
   normalizeArticleSections
 } = require('../common/article-section-contract');
 const {
@@ -53,6 +55,10 @@ function actualType(value) {
 
 function text(value) {
   return String(value || '').trim();
+}
+
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 function countDetails(value, field, expected = {}) {
@@ -233,18 +239,22 @@ function validateFieldHygiene(value) {
 
 function strictArticleSections(section) {
   const normalized = normalizeArticleSections(section);
-  return {
+  const output = {
     verified_facts: normalized.verified_facts,
     background_context: normalized.background_context,
     hal_driver_impact: normalized.hal_driver_impact,
     action_items: normalized.action_items,
     team_share_points: normalized.team_share_points
   };
+  for (const key of ARTICLE_SECTION_OPTIONAL_KEYS) {
+    if (normalized[key].length > 0) output[key] = normalized[key];
+  }
+  return output;
 }
 
 function unexpectedArticleSectionKeys(section) {
-  if (!section.article_sections || typeof section.article_sections !== 'object') return [];
-  const expected = new Set(ARTICLE_SECTION_KEYS);
+  if (!isPlainObject(section.article_sections)) return [];
+  const expected = new Set(ARTICLE_SECTION_ALLOWED_KEYS);
   return Object.keys(section.article_sections).filter(key => !expected.has(key));
 }
 
@@ -275,7 +285,7 @@ function validateArticleSectionContract(value) {
           index: index + 1,
           headline,
           type: 'empty_article_sections',
-          keys: normalized.diagnostics.missing_keys
+          keys: normalized.diagnostics.missing_required_keys
         });
       }
     }
@@ -285,6 +295,7 @@ function validateArticleSectionContract(value) {
     throw semanticError('Editor output failed article section contract validation.', {
       field: 'sections.article_sections',
       expectedKeys: ARTICLE_SECTION_KEYS,
+      allowedKeys: ARTICLE_SECTION_ALLOWED_KEYS,
       actualCount: issues.length,
       sectionCount: ensureArray(value.sections).length,
       issues

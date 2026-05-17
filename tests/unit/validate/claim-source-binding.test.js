@@ -199,6 +199,100 @@ test('do_not_claim blocks direct HAL fact claims without direct evidence', () =>
   assert.ok(reasons.includes('direct_hal_claim_without_direct_evidence'));
 });
 
+test('article_sections.do_not_claim blocks direct HAL fact claims', () => {
+  const result = validateArticleClaims({
+    section: section({
+      article_sections: {
+        ...section().article_sections,
+        do_not_claim: ['Do not claim direct Camera HAL API changes from this source.']
+      },
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 changes direct Camera HAL API behavior.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'direct_hal_contract',
+        overclaim_risk: 'high'
+      }]
+    }),
+    candidate: candidate({
+      compact_evidence: {
+        primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+        linked_context: ['CameraX remains an app-facing AndroidX library.'],
+        do_not_claim: [],
+        evidence_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']
+      }
+    }),
+    strict: true
+  });
+  const reasons = result.claim_results[0].issues.map(item => item.reason_code);
+  assert.ok(reasons.includes('do_not_claim_violation'));
+});
+
+test('article_sections.known_limitations blocks direct runtime overclaim when limitation says no direct evidence', () => {
+  const result = validateArticleClaims({
+    section: section({
+      article_sections: {
+        ...section().article_sections,
+        known_limitations: ['No direct HAL API evidence is stated by the source.']
+      },
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 changes direct Camera HAL API behavior.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'direct_hal_contract',
+        overclaim_risk: 'high'
+      }]
+    }),
+    candidate: candidate({
+      compact_evidence: {
+        primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+        linked_context: ['CameraX remains an app-facing AndroidX library.'],
+        do_not_claim: [],
+        evidence_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']
+      }
+    }),
+    strict: true
+  });
+  const reasons = result.claim_results[0].issues.map(item => item.reason_code);
+  assert.ok(reasons.includes('do_not_claim_violation'));
+});
+
+test('article_sections.watch_items does not become a do_not_claim guardrail', () => {
+  const result = validateArticleClaims({
+    section: section({
+      article_sections: {
+        ...section().article_sections,
+        watch_items: ['Watch direct HAL API evidence in future releases.']
+      },
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 changes direct Camera HAL API behavior.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'direct_hal_contract',
+        overclaim_risk: 'high'
+      }]
+    }),
+    candidate: candidate({
+      compact_evidence: {
+        primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+        linked_context: ['CameraX remains an app-facing AndroidX library.'],
+        do_not_claim: [],
+        evidence_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']
+      }
+    }),
+    strict: true
+  });
+  const reasons = result.claim_results[0].issues.map(item => item.reason_code);
+  assert.ok(reasons.includes('direct_hal_claim_without_direct_evidence'));
+  assert.equal(reasons.includes('do_not_claim_violation'), false);
+});
+
 test('non-allowed linked evidence status ids fail fact claims', () => {
   for (const [field, evidenceId] of [
     ['failed_linked_evidence_ids', 'linked-failed-1'],

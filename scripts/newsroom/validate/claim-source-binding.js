@@ -44,7 +44,7 @@ const OVERCLAIM_RISKS = Object.freeze([
 const OVERCLAIM_RISK_VALUES = new Set(OVERCLAIM_RISKS);
 
 const DIRECT_HAL_WORDING = /\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|vendor\s+HAL|camera\s+provider\s+contract|HAL\s+runtime|runtime\s+behavior|driver\s+runtime)\b/i;
-const DIRECT_HAL_GUARDRAIL = /\bdo\s+not\s+(?:claim|overstate|present|treat)[^.\n]{0,120}\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|runtime|driver)\b|\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|runtime|driver)\b[^.\n]{0,120}\b(?:do\s+not|not\s+claim|not\s+overstate|without\s+source)\b/i;
+const DIRECT_HAL_GUARDRAIL = /\bdo\s+not\s+(?:claim|overstate|present|treat)[^.\n]{0,120}\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|runtime|driver)\b|\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|runtime|driver)\b[^.\n]{0,120}\b(?:do\s+not|not\s+claim|not\s+overstate|without\s+source|without\s+(?:direct\s+)?evidence|not\s+(?:confirmed|stated|identified))\b|\b(?:no|without|lacks?|missing|not\s+(?:confirmed|stated|identified))\b[^.\n]{0,120}\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|HAL\s+contract|runtime|driver)\b/i;
 const CONCRETE_FACT_TERMS = /\b(?:version|release\s+date|published|API|component|behavior\s+change|CameraX|Camera2|Camera\s+HAL|AndroidX|libcamera|V4L2|CTS|VTS|Camera\s+ITS|stream|buffer|metadata|request|result)\b|\b20\d{2}-\d{2}-\d{2}\b|\bv?\d+\.\d+(?:\.\d+)?(?:[-\w.]*)?\b/i;
 const NON_ALLOWED_EVIDENCE_STATUSES = Object.freeze(['blocked', 'failed', 'skipped', 'unsupported']);
 const NON_ALLOWED_EVIDENCE_STATUS_VALUES = new Set(NON_ALLOWED_EVIDENCE_STATUSES);
@@ -1166,12 +1166,15 @@ function validateArticleClaims({
 } = {}) {
   const evidenceIndex = buildEvidenceIndex(candidate, section, { seedEvidencePack });
   const headline = text(section.headline || section.category || `article ${articleIndex + 1}`);
+  const articleSections = normalizeArticleSections(section);
   const guardrails = [
     ...ensureArray(candidate.do_not_claim),
     ...ensureArray(objectValue(candidate.compact_evidence).do_not_claim),
     ...ensureArray(objectValue(candidate.derived_editorial_hints).do_not_claim),
     ...ensureArray(section.do_not_overstate),
     ...ensureArray(objectValue(section.hal_signal_capsule).do_not_overstate),
+    ...articleSections.do_not_claim,
+    ...articleSections.known_limitations,
     ...evidenceIndex.seedPackDoNotClaim
   ];
   const rawClaims = ensureArray(section.claims);

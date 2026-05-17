@@ -2084,6 +2084,43 @@ test('quality report exposes normalized article section contract metrics and art
   assert.equal(report.metrics.article_section_contract.incomplete_count, 0);
   assert.equal(report.article_results[0].section_contract.complete, true);
   assert.deepEqual(report.article_results[0].section_contract.missing_keys, []);
+  assert.equal(report.article_results[0].section_contract.limitation_visibility, 'none');
+});
+
+test('quality report records article section optional limitation visibility', () => {
+  const sections = [
+    section({
+      headline: 'CameraX release with public limitation',
+      article_sections: {
+        ...section().article_sections,
+        known_limitations: ['No direct HAL contract change is stated.']
+      }
+    }),
+    section({
+      headline: 'CameraX release with guardrail only',
+      url: 'https://example.com/guardrail-only',
+      article_sections: {
+        ...section({ url: 'https://example.com/guardrail-only' }).article_sections,
+        do_not_claim: ['Do not claim direct Camera HAL API changes.']
+      }
+    }),
+    ...validSections().slice(2)
+  ];
+  const report = reportFor(sections, reporterCandidatesFor(sections));
+
+  assert.equal(report.article_results[0].section_contract.limitation_visibility, 'public-limitation');
+  assert.equal(report.article_results[0].section_contract.has_limitations, true);
+  assert.equal(report.article_results[1].section_contract.limitation_visibility, 'guardrail-only');
+  assert.equal(report.article_results[1].section_contract.has_do_not_claim, true);
+  assert.equal(report.metrics.article_section_contract.optional_key_counts.known_limitations, 1);
+  assert.equal(report.metrics.article_section_contract.optional_key_counts.do_not_claim, 1);
+  assert.equal(report.metrics.article_section_contract.limitation_visibility_counts['public-limitation'], 1);
+  assert.equal(report.metrics.article_section_contract.limitation_visibility_counts['guardrail-only'], 1);
+
+  const markdown = buildQualityReportMarkdown(report);
+  assert.match(markdown, /\| # \| Article \| 5-section \| Fact boundary \| HAL impact axis \| Actionability \| Limitations \|/);
+  assert.match(markdown, /public-limitation/);
+  assert.match(markdown, /guardrail-only/);
 });
 
 test('quality report records missing article_sections keys without legacy fallback', () => {
@@ -2282,6 +2319,7 @@ test('quality report markdown separates score threshold max score and result', (
   assert.match(markdown, /Max score: 100/);
   assert.match(markdown, /Result: NEEDS_FIX/);
   assert.match(markdown, /## Article Structure Contract/);
+  assert.match(markdown, /\| # \| Article \| 5-section \| Fact boundary \| HAL impact axis \| Actionability \| Limitations \|/);
   assert.match(markdown, /## Article Gate Results/);
   assert.match(markdown, /Generic AI assistant release/);
   assert.match(markdown, /## Hard Fails/);
