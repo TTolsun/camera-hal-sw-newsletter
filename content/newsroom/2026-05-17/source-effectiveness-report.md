@@ -13,7 +13,7 @@ Date: 2026-05-17
 - Source gap candidates: 34
 - Generic noise candidates: 29
 - Duplicate candidates: 0
-- Recommendations: NO_RECENT_SIGNAL: 28, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 1, KEEP: 1, KEEP_AND_FIX_PARSER: 16, KEEP_AND_MONITOR: 1
+- Recommendations: NO_RECENT_SIGNAL: 28, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 1, KEEP: 1, KEEP_AND_FIX_PARSER: 15, REVIEW_SOURCE_OR_PARSER: 1, KEEP_AND_MONITOR: 1
 
 ## Top Effective Sources
 
@@ -40,7 +40,6 @@ Date: 2026-05-17
 | google-deepmind-blog | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | google-research-blog | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | llvm-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
-| openai-news | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | qualcomm-security-bulletins | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | samsung-mobile-security-updates | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 
@@ -72,7 +71,7 @@ _없음_
 | lwn-camera-media-articles | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | microsoft-cpp-team-blog | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | naver-deview | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| phoronix-linux-camera-media | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| openai-news | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | software-engineering-daily | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | the-new-stack | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | the-register | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -95,9 +94,9 @@ _없음_
 | google-deepmind-blog | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | google-research-blog | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | llvm-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
-| openai-news | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | qualcomm-security-bulletins | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | samsung-mobile-security-updates | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
+| phoronix-linux-camera-media | REVIEW_SOURCE_OR_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | android-developers-latest-updates | KEEP_AND_MONITOR | 35 | 3 | 1 | 0 | 0 | 0 | 0 | 0 |
 
 ## Warnings

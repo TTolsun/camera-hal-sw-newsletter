@@ -5,7 +5,7 @@
 - enable_network: false
 - candidate_count: 40
 - total_linked_evidence: 0
-- source_aware_linked_evidence: 2103
+- source_aware_linked_evidence: 2032
 - warning_count: 34
 
 ## Fetch Status Counts
@@ -58,9 +58,9 @@
 - Qualcomm Documentation: 0 evidence, impact=documentation_only, recommendation=watch
 - Android Developer Newsletters &nbsp;|&nbsp; Android Developers: 0 evidence, impact=unknown, recommendation=unknown
 - Latest News from Google Research Blog - Google Research: 0 evidence, impact=unknown, recommendation=unknown
-- OpenAI News | OpenAI: 0 evidence, impact=unknown, recommendation=unknown
 - News — Google DeepMind: 0 evidence, impact=unknown, recommendation=unknown
 - Newsroom \ Anthropic: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - AI & Machine Learning | Google Cloud Blog: 0 evidence, impact=unknown, recommendation=unknown
 - Introduction &mdash; libcamera: 0 evidence, impact=documentation_only, recommendation=watch
 - Download LLVM releases: 0 evidence, impact=build_dependency_fix, recommendation=watch
+- ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU: 0 evidence, impact=unknown, recommendation=unknown

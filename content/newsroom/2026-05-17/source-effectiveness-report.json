@@ -39,7 +39,11 @@
       },
       {
         "recommendation": "KEEP_AND_FIX_PARSER",
-        "count": 16
+        "count": 15
+      },
+      {
+        "recommendation": "REVIEW_SOURCE_OR_PARSER",
+        "count": 1
       },
       {
         "recommendation": "KEEP_AND_MONITOR",
@@ -1896,72 +1900,6 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 1,
-      "eligible_count": 0,
-      "selected_count": 0,
-      "rendered_main_count": 0,
-      "source_gap_count": 1,
-      "camera_relevant_raw_count": 0,
-      "parser_repair_reason_count": 0,
-      "reference_only_count": 1,
-      "watchlist_count": 1,
-      "main_eligible_false_count": 1,
-      "briefing_only_count": 0,
-      "duplicate_count": 0,
-      "duplicate_within_source_count": 0,
-      "duplicate_across_sources_count": 0,
-      "generic_noise_count": 1,
-      "eligible_rate": 0,
-      "selection_rate": 0,
-      "rendered_rate": 0,
-      "source_gap_rate": 1,
-      "noise_rate": 1,
-      "effectiveness_score": 0,
-      "recommendation": "KEEP_AND_FIX_PARSER",
-      "reasons": [
-        "Generic noise candidates were detected from artifact exclusion metadata.",
-        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
-        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
-      ],
-      "top_exclusion_reasons": [
-        {
-          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-          "count": 1
-        },
-        {
-          "reason": "finalSelectionEligibility=exclude",
-          "count": 1
-        },
-        {
-          "reason": "hasDatedEvidence=false",
-          "count": 1
-        },
-        {
-          "reason": "main_eligible=false",
-          "count": 1
-        },
-        {
-          "reason": "reference_only=true",
-          "count": 1
-        }
-      ],
-      "sample_selected_urls": [],
-      "sample_excluded_urls": [
-        "https://openai.com/news/"
-      ]
-    },
-    {
-      "source_id": "phoronix-linux-camera-media",
-      "source_name": "Phoronix Linux Camera / Media",
-      "source_url": "https://www.phoronix.com/",
-      "rss_url": "https://www.phoronix.com/rss.php",
-      "category": "linux-kernel",
-      "priority": "medium",
-      "reliability": "tech-media",
-      "enabled": true,
-      "candidate_only": false,
-      "collection_mode_hint": "",
-      "synthetic": false,
       "collected_count": 0,
       "eligible_count": 0,
       "selected_count": 0,
@@ -1990,6 +1928,72 @@
       "top_exclusion_reasons": [],
       "sample_selected_urls": [],
       "sample_excluded_urls": []
+    },
+    {
+      "source_id": "phoronix-linux-camera-media",
+      "source_name": "Phoronix Linux Camera / Media",
+      "source_url": "https://www.phoronix.com/",
+      "rss_url": "https://www.phoronix.com/rss.php",
+      "category": "linux-kernel",
+      "priority": "medium",
+      "reliability": "tech-media",
+      "enabled": true,
+      "candidate_only": false,
+      "collection_mode_hint": "",
+      "synthetic": false,
+      "collected_count": 1,
+      "eligible_count": 0,
+      "selected_count": 0,
+      "rendered_main_count": 0,
+      "source_gap_count": 1,
+      "camera_relevant_raw_count": 1,
+      "parser_repair_reason_count": 0,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
+      "briefing_only_count": 1,
+      "duplicate_count": 0,
+      "duplicate_within_source_count": 0,
+      "duplicate_across_sources_count": 0,
+      "generic_noise_count": 1,
+      "eligible_rate": 0,
+      "selection_rate": 0,
+      "rendered_rate": 0,
+      "source_gap_rate": 1,
+      "noise_rate": 1,
+      "effectiveness_score": 0,
+      "recommendation": "REVIEW_SOURCE_OR_PARSER",
+      "reasons": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "Source gap rate is high; inspect source URLs and parser extraction before changing source policy."
+      ],
+      "top_exclusion_reasons": [
+        {
+          "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 1
+        },
+        {
+          "reason": "briefing_only=true",
+          "count": 1
+        },
+        {
+          "reason": "finalSelectionEligibility=watchlist",
+          "count": 1
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 1
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 1
+        }
+      ],
+      "sample_selected_urls": [],
+      "sample_excluded_urls": [
+        "https://www.phoronix.com/review/zimacube-2"
+      ]
     },
     {
       "source_id": "qualcomm-security-bulletins",

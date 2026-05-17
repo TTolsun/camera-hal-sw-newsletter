@@ -6,13 +6,13 @@
 
 ## Event Type Counts
 
-- primary_url: 30
-- release_note: 10
+- primary_url: 29
+- release_note: 11
 
 ## Dedupe Reason Counts
 
-- normalized_primary_url: 30
-- source_id + release.date + component: 2
+- normalized_primary_url: 29
+- source_id + release.date + component: 3
 - source_id + release.version: 8
 
 ## Event Bundles
@@ -51,9 +51,9 @@
 - event_ded239bf8f6b: primary_url, normalized_primary_url, primary=https://docs.qualcomm.com/product/publicresources/securitybulletin, evidence=0, confidence=low
 - event_ef4a135a2ad1: primary_url, normalized_primary_url, primary=https://developer.android.com/newsletter, evidence=0, confidence=low
 - event_c55850090666: primary_url, normalized_primary_url, primary=https://research.google/blog, evidence=0, confidence=low
-- event_78d75b9b53db: primary_url, normalized_primary_url, primary=https://openai.com/news, evidence=0, confidence=low
 - event_b4489b9b14c2: primary_url, normalized_primary_url, primary=https://deepmind.google/blog, evidence=0, confidence=low
 - event_d0a8a0530dc1: primary_url, normalized_primary_url, primary=https://www.anthropic.com/news, evidence=0, confidence=low
 - event_e1a97ab4bcd4: primary_url, normalized_primary_url, primary=https://cloud.google.com/blog/products/ai-machine-learning, evidence=0, confidence=low
 - event_aac1e2118f76: primary_url, normalized_primary_url, primary=https://libcamera.org/introduction.html, evidence=0, confidence=low
 - event_af7168b0fe86: primary_url, normalized_primary_url, primary=https://releases.llvm.org, evidence=0, confidence=low
+- event_732a05cecc3f: release_note, source_id + release.date + component, primary=https://www.phoronix.com/review/zimacube-2, evidence=0, confidence=medium
