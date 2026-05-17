@@ -42,7 +42,7 @@
 | blocked_candidate | 0.532 | Introduction &mdash; libcamera | https://libcamera.org/introduction.html |
 | blocked_candidate | 0.46 | Download LLVM releases | https://releases.llvm.org/ |
 | blocked_candidate | 0.265 | ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU | https://www.phoronix.com/review/zimacube-2 |
-| blocked_candidate | 0.492 | КамераX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 |
+| blocked_candidate | 0.583 | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 |
 | blocked_candidate | 0.583 | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02 |
 | blocked_candidate | 0.583 | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07 |
 | blocked_candidate | 0.5 | libcamera v0.7.1 | https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html |
