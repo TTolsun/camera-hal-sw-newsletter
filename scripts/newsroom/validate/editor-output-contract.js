@@ -21,6 +21,9 @@ const {
   CAPSULE_REQUIRED_FIELDS,
   normalizeHalSignalCapsule
 } = require('../common/hal-signal-quality');
+const {
+  validateArticleClaims
+} = require('./claim-source-binding');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -324,6 +327,43 @@ function validateHalSignalCapsules(value) {
   }
 }
 
+function validateClaimBindingContract(value, reporter = {}, strictClaims = false) {
+  if (strictClaims !== true) return;
+  const candidateIndex = buildCandidateIndex(reporter);
+  const issues = [];
+  ensureArray(value.sections).forEach((section, index) => {
+    const result = validateArticleClaims({
+      section,
+      candidate: candidateForSection(section, candidateIndex) || {},
+      articleIndex: index,
+      strict: true
+    });
+    const blockingIssues = [
+      ...ensureArray(result.issues),
+      ...ensureArray(result.claim_results).flatMap(claim => ensureArray(claim.issues))
+    ].filter(item => item.blocking !== false);
+    if (blockingIssues.length === 0) return;
+    issues.push({
+      index: index + 1,
+      headline: text(section.headline || section.category || `article ${index + 1}`),
+      status: result.status,
+      issues: blockingIssues.map(item => ({
+        reason_code: item.reason_code,
+        message: item.message
+      })),
+      uncovered_facts: result.uncovered_facts
+    });
+  });
+  if (issues.length > 0) {
+    throw semanticError('Editor output failed claim binding validation.', {
+      field: 'sections.claims',
+      actualCount: issues.length,
+      sectionCount: ensureArray(value.sections).length,
+      issues
+    });
+  }
+}
+
 function validateEditorOutputContract(value, date, options = {}) {
   const reporter = options.reporter || { candidates: [] };
   const normalizeSection = options.normalizeSection || (section => ({
@@ -356,6 +396,7 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateArticleSectionContract(value);
   validateHalSignalCapsules(value);
   validateFieldHygiene(value);
+  validateClaimBindingContract(value, reporter, options.strictClaims === true);
   validateEditorArticlePolicy(value, reporter);
 
   const emptySourceSections = value.sections
@@ -467,12 +508,14 @@ async function repairEditorOutputContract({
   stage = 'editor',
   newsroomDir,
   normalizeSection,
+  strictClaims = false,
   repairFn
 }) {
   const invalidEditor = cloneJson(value);
   const validate = candidate => validateEditorOutputContract(candidate, date, {
     reporter,
-    normalizeSection
+    normalizeSection,
+    strictClaims
   });
 
   try {

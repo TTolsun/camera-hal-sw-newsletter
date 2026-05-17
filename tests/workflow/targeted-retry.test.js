@@ -446,9 +446,36 @@ test('invalid repair output writes reviewable fallback without replacing last va
     policySection('CameraX release', 'https://example.com/camerax'),
     policySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline'),
     policySection('Android platform update', 'https://example.com/platform', 'android_platform_camera_adjacent')
-  ];
+  ].map((item, index) => ({
+    ...item,
+    evidence_summary: item.confirmed_facts[0],
+    claims: [{
+      claim_id: `claim-${index + 1}`,
+      text: item.confirmed_facts[0],
+      claim_type: 'fact',
+      evidence_ids: [`primary-${index + 1}`],
+      source_urls: [item.sources[0].url],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  }));
   const validEditor = editorWithSections(sections);
-  const reporter = { candidates: [] };
+  const reporter = {
+    candidates: sections.map((item, index) => reporterCandidate({
+      title: item.headline,
+      url: item.sources[0].url,
+      source_candidate_hash: item.source_candidate_hash,
+      final_selected: true,
+      selected_for_editor: true,
+      reserve_candidate: false,
+      relevance_bucket: item.relevance_bucket,
+      primary_evidence_ids: [`primary-${index + 1}`],
+      compact_evidence: {
+        primary_facts: [item.confirmed_facts[0]],
+        evidence_urls: [item.sources[0].url]
+      }
+    }))
+  };
   const factCheck = { status: 'PASS', must_fix: [], recommended_fixes: [], source_gaps: [], source_gap_count: 0 };
   const qualityReport = { status: 'NEEDS_FIX', score: 79, threshold: 85, deductions: [] };
   recordLastKnownValidEditor(validEditor, { date: DATE, reporter, factCheck, qualityReport, attempt: 1 });

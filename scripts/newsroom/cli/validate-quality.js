@@ -17,6 +17,7 @@ const {
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
+const generationStatusPath = path.join(root, '.tmp', 'newsletter-generation-status.json');
 const errors = [];
 const warnings = [];
 
@@ -26,6 +27,20 @@ function fail(message) {
 
 function warn(message) {
   warnings.push(message);
+}
+
+function currentGenerationStatusDate(filePath = generationStatusPath) {
+  if (!filePath || !fs.existsSync(filePath)) return '';
+  try {
+    const parsed = readJson(filePath);
+    const date = String(parsed?.date || '').trim();
+    const statusSha = String(parsed?.run_context?.github_sha || '').trim();
+    const currentSha = String(process.env.GITHUB_SHA || '').trim();
+    if (statusSha && (!currentSha || statusSha !== currentSha)) return '';
+    return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : '';
+  } catch (_) {
+    return '';
+  }
 }
 
 function readJsonIfExists(filePath) {
@@ -106,7 +121,8 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
     const recomputed = buildNewsletterQualityReport(item.date, editor, reporter, factCheck, {
       threshold,
       shortlistReport,
-      staleClaimReport
+      staleClaimReport,
+      strictClaimValidation: strictPolicy
     });
     if (recomputed.score !== score || recomputed.status !== report.status) {
       const message = `Newsletter ${item.date} quality report is stale. Expected ${recomputed.score}/${threshold} ${recomputed.status}, found ${score}/${threshold} ${report.status}.`;
@@ -120,6 +136,8 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
 }
 
 const strictDates = strictTargetDates({ root, newsletterDatePath });
+const currentGenerationDate = currentGenerationStatusDate(generationStatusPath);
+if (currentGenerationDate) strictDates.add(currentGenerationDate);
 const requireAllReports = process.env.REQUIRE_NEWSLETTER_QUALITY === '1';
 for (const item of newsletterItems()) {
   const strictPolicy = requireAllReports || strictDates.has(item.date);

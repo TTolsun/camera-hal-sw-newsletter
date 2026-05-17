@@ -378,3 +378,40 @@ test('strict validate-quality threshold and recompute drift remain hard failures
   assert.match(result.stderr, /quality threshold is below current Newsletter Policy threshold/);
   assert.match(result.stderr, /quality report is stale/);
 });
+
+test('current generation status date makes validate-quality strict', () => {
+  const root = tempRoot('validate-quality-current-generation-');
+  const date = '2026-04-01';
+  writeQualityFixture(root, { date });
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'STARTED',
+    candidate_input: {
+      mode: 'artifact'
+    }
+  });
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /quality threshold is below current Newsletter Policy threshold/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
+});
+
+test('stale generation status sha does not make validate-quality strict', () => {
+  const root = tempRoot('validate-quality-stale-generation-status-');
+  const date = '2026-04-01';
+  writeQualityFixture(root, { date });
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'NEEDS_FIX',
+    run_context: {
+      github_sha: 'stale-sha'
+    }
+  });
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /historical artifact outside current\/changed\/generated validation target, warning only/);
+});

@@ -306,6 +306,57 @@ test('supports shortlisted_candidates flag-based selected, reserve, and excluded
   assert.deepEqual(report.hal_impact_summary.axes, ['buffer', 'metadata']);
 });
 
+test('quality report claim validation overrides candidate fallback claim summary', () => {
+  const selected = selectedCandidate({
+    final_selected: true,
+    selected_for_editor: true,
+    selected: true,
+    reserve_candidate: false,
+    claim_validation: {
+      status: 'not_available',
+      bound_claims: null,
+      total_claims: null,
+      overclaim_risk: 'unknown'
+    }
+  });
+  const report = buildEvidencePackSummary({
+    date: DATE,
+    shortlistReport: {
+      shortlisted_candidates: [selected],
+      selected_article_count: 1
+    },
+    collectedCandidates: {
+      candidates: [selected]
+    },
+    qualityReport: {
+      claim_validation_summary: {
+        status: 'needs_fix',
+        bound_claims: 1,
+        total_claims: 2,
+        derived_evidence_mapping_count: 1,
+        overclaim_risk: 'high',
+        available_article_count: 1,
+        not_available_article_count: 0
+      },
+      claim_results: [{
+        article_index: 1,
+        claim_id: 'claim-1',
+        bound: true,
+        overclaim_risk: 'high',
+        issues: [],
+        derived_evidence_mapping: true
+      }]
+    }
+  });
+
+  assert.equal(report.claim_validation_summary.status, 'needs_fix');
+  assert.equal(report.claim_validation_summary.bound_claims, 1);
+  assert.equal(report.claim_validation_summary.total_claims, 2);
+  assert.equal(report.claim_validation_summary.derived_evidence_mapping_count, 1);
+  assert.equal(report.selected_main_articles[0].claim_validation.status, 'available');
+  assert.equal(report.selected_main_articles[0].claim_validation.bound_claims, 1);
+});
+
 test('writes default summary when no input artifacts exist', () => {
   const root = tempRoot('evidence-pack-empty-');
   const { report, jsonPath } = writeEvidencePackSummaryArtifacts({ root, date: DATE });

@@ -472,6 +472,242 @@ test('impact_claim_level_hint alone does not permit direct HAL claim', () => {
   ));
 });
 
+test('strict claim validation blocks factual fields without claims', () => {
+  const url = 'https://example.com/claimless';
+  const report = reportFor(
+    [
+      section({
+        headline: 'Claimless factual article',
+        url,
+        confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+        evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX.'
+      }),
+      ...validSections().slice(1)
+    ],
+    [
+      scopedCandidate(url, 'direct_aosp_camera', {
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url]
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item =>
+    item.category === 'claim-contract' &&
+    item.reason_code === 'missing_claims'
+  ));
+  assert.ok(report.uncovered_facts.some(item =>
+    item.field === 'article_sections.verified_facts[0]' ||
+    item.field === 'confirmed_facts[0]'
+  ));
+});
+
+test('pack-level evidence fallback is soft and reported as derived mapping', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'CameraX 1.6.1 claim binding',
+    url,
+    confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+    evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-1',
+      text: 'CameraX 1.6.1 release date: 2026-05-06.',
+      claim_type: 'fact',
+      evidence_ids: ['seed-camerax-pack'],
+      source_urls: [url],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        evidence_pack_ids: ['seed-camerax-pack'],
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url],
+          do_not_claim: ['Do not claim direct Camera HAL API changes.']
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+
+  assert.ok(report.claim_results.some(item => item.derived_evidence_mapping === true));
+  assert.equal(report.metrics.derived_evidence_mapping_count >= 1, true);
+  assert.ok(report.deductions.some(item =>
+    item.reason_code === 'derived_evidence_mapping' &&
+    item.blocking === false
+  ));
+});
+
+test('claim-level direct HAL overclaim is reported once by dedupe key', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'CameraX direct HAL overclaim claim',
+    url,
+    camera_hal_perspective: 'CameraX 1.6.1 changes direct Camera HAL API behavior.',
+    article_sections: {
+      verified_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+      background_context: 'CameraX sits above camera2.',
+      hal_driver_impact: 'CameraX 1.6.1 changes direct Camera HAL API behavior.',
+      action_items: [
+        'Within 2 weeks, assign a camera owner to compare Camera ITS logs.',
+        'Measure preview latency on a representative device.'
+      ],
+      team_share_points: 'Do not overstate direct HAL impact.'
+    },
+    claims: [{
+      claim_id: 'claim-1',
+      text: 'CameraX 1.6.1 changes direct Camera HAL API behavior.',
+      claim_type: 'fact',
+      evidence_ids: ['seed-camerax-primary-01'],
+      source_urls: [url],
+      impact_level: 'direct_hal_contract',
+      overclaim_risk: 'high'
+    }]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url],
+          do_not_claim: ['Do not claim direct Camera HAL API changes.']
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+
+  const overclaimDeductions = report.deductions.filter(item =>
+    item.category === 'claim-overclaim' &&
+    item.dedupe_key === '1:claim-1:direct_hal_claim_without_direct_evidence'
+  );
+  assert.equal(overclaimDeductions.length, 1);
+  assert.equal(report.claim_validation_summary.overclaim_risk, 'high');
+});
+
+test('claim validation allows cautious CameraX risk_note without direct HAL overclaim', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'CameraX cautious indirect HAL risk note',
+    url,
+    what_changed: 'CameraX 1.6.1 was released on 2026-05-06 as an AndroidX camera library update.',
+    background: 'CameraX sits above camera2 and is framework-adjacent evidence.',
+    camera_hal_perspective: 'Treat this as an app-facing CameraX signal and validate stream and buffer behavior through regression checks before claiming HAL runtime impact.',
+    camera_hal_checks: ['Run CameraX preview and capture regression checks for stream and buffer behavior.'],
+    action_items: ['Schedule CameraX regression checks before any HAL runtime claim is made.'],
+    confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+    evidence_summary: 'CameraX 1.6.1 release date: 2026-05-06.',
+    specificity_checks: ['Version: CameraX 1.6.1', 'Release date: 2026-05-06'],
+    source_verification_notes: ['Official AndroidX CameraX release-note evidence.'],
+    claims: [
+      {
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 release date: 2026-05-06.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: [url],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      },
+      {
+        claim_id: 'claim-2',
+        text: 'Linked evidence fetch failed, so HAL stream buffer regression risk is not confirmed; run CameraX regression checks before treating it as HAL runtime impact.',
+        claim_type: 'risk_note',
+        evidence_ids: ['linked-failed-1'],
+        source_urls: [url],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }
+    ]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        title: 'CameraX Release Notes - CameraX 1.6.1',
+        published_date: '2026-05-06',
+        version_or_release: 'CameraX 1.6.1',
+        api_or_component: 'CameraX',
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        failed_linked_evidence_ids: ['linked-failed-1'],
+        failed_linked_evidence_urls: [url],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url],
+          do_not_claim: ['Do not claim direct Camera HAL API changes.']
+        },
+        source_extraction: {
+          adapter_id: 'android-developers-jetpack-release',
+          source_type: 'release_note',
+          source: {
+            name: 'CameraX Release Notes',
+            url: 'https://developer.android.com/jetpack/androidx/releases/camera'
+          },
+          release: {
+            version: '1.6.1',
+            date: '2026-05-06',
+            component: 'CameraX',
+            sections: [{
+              heading: 'CameraX 1.6.1',
+              items: [{
+                text: 'CameraX 1.6.1 release date: 2026-05-06.',
+                url
+              }]
+            }]
+          },
+          extraction_quality: {
+            has_concrete_behavior_change: true,
+            used_fallback: false,
+            raw_table_used_as_body: false,
+            main_article_allowed: true,
+            warnings: []
+          }
+        },
+        extraction_quality: {
+          has_concrete_behavior_change: true,
+          used_fallback: false,
+          raw_table_used_as_body: false,
+          main_article_allowed: true,
+          warnings: []
+        },
+        derived_editorial_hints: {
+          relevance_bucket_hint: 'direct_aosp_camera',
+          impact_claim_level_hint: 'android_framework_adjacent',
+          hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+          validation_targets: ['stream buffer regression validation'],
+          device_specific_notes: [],
+          do_not_claim: ['Do not claim direct Camera HAL API changes.'],
+          main_article_allowed_hint: true,
+          warnings: []
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ]
+  );
+
+  assert.equal(report.status, 'PASS');
+  assert.ok(report.deductions.every(item => item.reason_code !== 'direct_hal_claim_without_direct_evidence'));
+  assert.ok(report.claim_results.some(item =>
+    item.claim_id === 'claim-2' &&
+    item.issues.some(issue => issue.reason_code === 'blocked_or_failed_evidence_id' && issue.blocking === false)
+  ));
+});
+
 function linkedEvidenceSummary(overrides = {}) {
   return {
     schema_version: 1,

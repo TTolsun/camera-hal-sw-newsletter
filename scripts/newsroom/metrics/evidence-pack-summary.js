@@ -464,6 +464,29 @@ function normalizeClaimValidation(candidate = {}, capsule = {}) {
   };
 }
 
+function qualityClaimValidationByArticle(qualityReport = {}) {
+  const byIndex = new Map();
+  for (const item of ensureArray(qualityReport.claim_results)) {
+    const index = Number(item.article_index);
+    if (!Number.isFinite(index) || index <= 0) continue;
+    const current = byIndex.get(index) || {
+      status: 'available',
+      bound_claims: 0,
+      total_claims: 0,
+      overclaim_risk: 'low'
+    };
+    current.total_claims += 1;
+    if (item.bound === true) current.bound_claims += 1;
+    const hasHardIssue = ensureArray(item.issues).some(issue => issue.blocking !== false);
+    if (hasHardIssue) current.status = 'needs_fix';
+    if (['high', 'medium'].includes(firstText(item.overclaim_risk))) {
+      current.overclaim_risk = item.overclaim_risk === 'high' ? 'high' : current.overclaim_risk === 'high' ? 'high' : 'medium';
+    }
+    byIndex.set(index, current);
+  }
+  return byIndex;
+}
+
 function articleByUrl(capsules = []) {
   const byUrl = new Map();
   for (const capsule of ensureArray(capsules)) {
@@ -970,9 +993,14 @@ function buildEvidencePackSummary(options = {}) {
   const reserve = reserveCandidates(shortlistReport, articleCapsules);
   const excluded = excludedCandidates(shortlistReport, collectedCandidates, selected, reserve);
   const capsulesByUrl = articleByUrl(articleCapsules.selected_capsules);
-  const selectedMainArticles = selected.map(candidate => {
+  const qualityClaimsByArticle = qualityClaimValidationByArticle(qualityReport);
+  const selectedMainArticles = selected.map((candidate, index) => {
     const capsule = capsulesByUrl.get(candidateUrl(candidate)) || {};
-    return normalizeArticle(candidate, capsule, warnings);
+    const article = normalizeArticle(candidate, capsule, warnings);
+    if (qualityClaimsByArticle.has(index + 1)) {
+      article.claim_validation = qualityClaimsByArticle.get(index + 1);
+    }
+    return article;
   });
   const reserveArticles = reserve.map(candidate => normalizeArticle(candidate));
   const excludedTop = excluded.slice(0, MAX_EXCLUDED_CANDIDATES).map(normalizeExcludedCandidate);
@@ -1013,7 +1041,9 @@ function buildEvidencePackSummary(options = {}) {
       reserve,
       excluded
     }),
-    claim_validation_summary: claimValidationSummary(selectedMainArticles),
+    claim_validation_summary: objectValue(qualityReport.claim_validation_summary).status
+      ? qualityReport.claim_validation_summary
+      : claimValidationSummary(selectedMainArticles),
     hal_impact_summary: halImpactSummary(selectedMainArticles),
     hal_signal_quality_summary: buildHalSignalQualitySummary(selectedMainArticles),
     main_article_signal_checks: buildMainArticleSignalChecks(selectedMainArticles),
