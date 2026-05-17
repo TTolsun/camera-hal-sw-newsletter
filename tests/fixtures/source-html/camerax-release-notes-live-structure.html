@@ -1,0 +1,52 @@
+<!--
+fixture_meta:
+  id: camerax-live-structure-issue-177
+  type: parser-source-html
+  purpose: Android Developers CameraX live heading structure with family headings, h3 release headings, artifact table, and stale Viewfinder rows
+  provenance: curated-minimal-live-shape
+  expected_result: CameraX 1.6.1 has source_extraction release bullet; Viewfinder rows are not promoted from page-level date
+-->
+<article>
+  <h2 id="camera-maven-group-versions">Camera Maven Group versions</h2>
+  <p>This library was last updated on: May 06, 2026</p>
+  <table>
+    <tr>
+      <th>Artifact</th>
+      <th>Stable Release</th>
+      <th>Beta Release</th>
+      <th>Alpha Release</th>
+    </tr>
+    <tr>
+      <td>camera-core</td>
+      <td><a href="#1.6.1">1.6.1</a></td>
+      <td>-</td>
+      <td><a href="#1.7.0-alpha01">1.7.0-alpha01</a></td>
+    </tr>
+    <tr>
+      <td>camera-viewfinder</td>
+      <td>-</td>
+      <td><a href="#1.3.0-beta02">1.3.0-beta02</a></td>
+      <td><a href="#1.4.0-alpha07">1.4.0-alpha07</a></td>
+    </tr>
+  </table>
+  <h2 id="camera_viewfinder_version_14">Camera Viewfinder Version 1.4</h2>
+  <h3 id="1.4.0-alpha07">Version 1.4.0-alpha07</h3>
+  <p>June 12, 2024</p>
+  <ul>
+    <li>Some Camera Viewfinder-specific change.</li>
+  </ul>
+  <h2 id="camera_version_16">Camera Version 1.6</h2>
+  <h3 id="1.6.1">Version 1.6.1</h3>
+  <p>May 06, 2026</p>
+  <p><code translate="no" dir="ltr">androidx.camera:camera-*:1.6.1</code> is released.</p>
+  <p><strong>Bug Fixes</strong></p>
+  <ul>
+    <li>Fixed a compilation error &quot;Cannot access class <code translate="no" dir="ltr">ListenableFuture</code>&quot; when using CameraX 1.6.0.</li>
+  </ul>
+  <h3 id="1.6.0">Version 1.6.0</h3>
+  <p>March 25, 2026</p>
+  <p><strong>Important changes since 1.5.0</strong></p>
+  <ul>
+    <li>Added CameraPipe SessionConfig support for dynamic range handling.</li>
+  </ul>
+</article>

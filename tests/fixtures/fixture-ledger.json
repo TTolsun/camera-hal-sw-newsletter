@@ -186,6 +186,14 @@
       "generatedArtifact": false
     },
     {
+      "path": "source-html/camerax-release-notes-live-structure.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "CameraX live release heading structure preserves source_extraction without promoting Viewfinder table rows",
+      "generatedArtifact": false
+    },
+    {
       "path": "source-html/camerax-release-notes-artifact-table-only.html",
       "source": "synthetic",
       "allowedUse": "parser-source-html",
