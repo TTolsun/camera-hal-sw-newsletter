@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-05-18",
+  "proposals": [
+    {
+      "proposal_id": "discovery-2026-05-18-001",
+      "topic_gap": "There is a new CameraX release (1.6.1) that should be covered.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.1 release notes",
+        "androidx.camera 1.6.1",
+        "CameraX new features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "expected_evidence": [
+        "Release notes for CameraX 1.6.1",
+        "Key features and bug fixes in CameraX 1.6.1"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "discovery-2026-05-18-002",
+      "topic_gap": "There is a new libcamera release (v0.7.1) that should be covered.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lists.libcamera.org"
+      ],
+      "search_keywords": [
+        "libcamera v0.7.1 release",
+        "libcamera new features",
+        "libcamera-devel 058408"
+      ],
+      "candidate_urls": [
+        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+      ],
+      "expected_evidence": [
+        "Release announcement for libcamera v0.7.1",
+        "New features or improvements in libcamera v0.7.1"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "discovery-2026-05-18-003",
+      "topic_gap": "There is a new CameraX beta release (1.3.0-beta02) that might contain relevant updates.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.3.0-beta02 release notes",
+        "androidx.camera 1.3.0-beta02"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
+      ],
+      "expected_evidence": [
+        "Release notes for CameraX 1.3.0-beta02",
+        "Specific changes or bug fixes in this beta release"
+      ],
+      "risk_notes": [
+        "Beta releases might have less stable or finalized features."
+      ]
+    },
+    {
+      "proposal_id": "discovery-2026-05-18-004",
+      "topic_gap": "There is a new CameraX alpha release (1.4.0-alpha07) that might contain early relevant updates.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.4.0-alpha07 release notes",
+        "androidx.camera 1.4.0-alpha07"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+      ],
+      "expected_evidence": [
+        "Release notes for CameraX 1.4.0-alpha07",
+        "Experimental features or API changes in this alpha release"
+      ],
+      "risk_notes": [
+        "Alpha releases are highly experimental and subject to change."
+      ]
+    },
+    {
+      "proposal_id": "discovery-2026-05-18-005",
+      "topic_gap": "GCC 16.1 has been released with C++26 features like reflection and contracts, which could impact Camera HAL development.",
+      "source_family": "cpp",
+      "allowed_domains": [
+        "isocpp.org"
+      ],
+      "search_keywords": [
+        "GCC 16.1 C++26 reflection",
+        "C++26 contracts Camera HAL",
+        "C++20 by default GCC"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "expected_evidence": [
+        "Details on C++26 reflection and contracts in GCC 16.1",
+        "Impact of new C++26 features on embedded or low-level development"
+      ],
+      "risk_notes": [
+        "The direct impact on Camera HAL might be indirect or long-term."
+      ]
+    },
+    {
+      "proposal_id": "discovery-2026-05-18-006",
+      "topic_gap": "Glaze 7.2, a C++26 Reflection library, has been released, which could be relevant for C++ development in Camera HAL.",
+      "source_family": "cpp",
+      "allowed_domains": [
+        "isocpp.org"
+      ],
+      "search_keywords": [
+        "Glaze 7.2 C++26 Reflection",
+        "C++ reflection library Camera HAL",
+        "YAML CBOR MessagePack C++"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+      ],
+      "expected_evidence": [
+        "Features of Glaze 7.2 and its C++26 reflection capabilities",
+        "Potential applications or benefits of such libraries in Camera HAL or related C++ projects"
+      ],
+      "risk_notes": [
+        "This is a third-party library; its direct relevance to AOSP Camera HAL might be limited."
+      ]
+    }
+  ]
+}
