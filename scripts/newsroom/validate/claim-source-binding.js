@@ -312,8 +312,9 @@ function sourceUrlsFromEvidenceItem(item = {}, pack = {}) {
 
 function normalizeSeedPackEvidenceItem(raw = {}, pack = {}, role = 'primary') {
   const item = objectValue(raw);
-  const rawStatus = text(item.fetch_status || item.fetchStatus || item.status || (role === 'primary' ? 'allowed' : 'allowed'));
-  const normalizedStatus = normalizeEvidenceStatus(rawStatus, role === 'primary' ? 'allowed' : 'allowed');
+  const fallbackStatus = role === 'primary' ? 'allowed' : 'unsupported';
+  const rawStatus = text(item.fetch_status || item.fetchStatus || item.status || fallbackStatus);
+  const normalizedStatus = normalizeEvidenceStatus(rawStatus, fallbackStatus);
   const backedItems = ensureArray(item.source_backed_items || item.sourceBackedItems)
     .map(text)
     .filter(Boolean);
@@ -425,8 +426,8 @@ function candidateUrls(candidate = {}, section = {}) {
   ]);
 }
 
-function candidateDisambiguationTokens(candidate = {}, section = {}) {
-  const articleSections = normalizeArticleSections(section);
+function candidateDisambiguationTokens(candidate = {}) {
+  const compact = objectValue(candidate.compact_evidence);
   return new Set(disambiguationTokens([
     candidate.title,
     candidate.headline,
@@ -436,9 +437,10 @@ function candidateDisambiguationTokens(candidate = {}, section = {}) {
     candidate.api_or_component,
     candidate.summary,
     candidate.behavior_change,
-    section.headline,
-    section.evidence_summary,
-    articleSections.verified_facts
+    compact.primary_facts,
+    compact.linked_context,
+    compact.evidence_urls,
+    ...sourceExtractionItems(candidate).flatMap(item => item.texts)
   ]));
 }
 
@@ -446,20 +448,87 @@ function candidateSeedEvidenceFields(candidate = {}) {
   return [
     candidate.source_extraction_ref,
     ...ensureArray(candidate.evidence_pack_ids),
+    ...ensureArray(candidate.primary_evidence_ids),
+    ...ensureArray(candidate.linked_evidence_ids),
     ...ensureArray(candidate.seed_ids)
   ].map(text).filter(Boolean);
 }
 
-function candidateMatchesPackFragment(candidateUrlValues, pack) {
-  const candidateFragments = new Set(candidateUrlValues
-    .filter(hasUrlFragment)
-    .map(url => canonicalUrlKey(url, { preserveFragment: true }))
-    .filter(Boolean));
-  return [...candidateFragments].some(key => pack.fragmentKeys.has(key));
+function packPrimaryEvidenceIds(pack = {}) {
+  return new Set(ensureArray(pack.primary_evidence).map(item => item.id).filter(Boolean));
 }
 
-function hasTokenDisambiguation(candidateTokens, pack) {
-  return [...candidateTokens].some(token => pack.disambiguationTokens.has(token));
+function packLinkedEvidenceIds(pack = {}) {
+  return new Set(ensureArray(pack.linked_evidence).map(item => item.id).filter(Boolean));
+}
+
+function packEvidenceIds(pack = {}) {
+  return new Set([...packPrimaryEvidenceIds(pack), ...packLinkedEvidenceIds(pack)]);
+}
+
+function intersects(left, right) {
+  return [...left].some(value => right.has(value));
+}
+
+function claimEvidenceIds(section = {}) {
+  return new Set(ensureArray(section.claims)
+    .flatMap(claim => ensureArray(claim?.evidence_ids || claim?.evidenceIds))
+    .map(text)
+    .filter(Boolean));
+}
+
+function sectionReferencesSeedEvidence(section = {}, packs = []) {
+  const ids = claimEvidenceIds(section);
+  if (ids.size === 0) return false;
+  return packs.some(pack =>
+    (pack.evidence_pack_id && ids.has(pack.evidence_pack_id)) ||
+    intersects(ids, packEvidenceIds(pack))
+  );
+}
+
+function uniquePackMatch(packs, predicate, ambiguousMessage, extra = {}) {
+  const matches = packs.filter(predicate);
+  if (matches.length === 1) return { pack: matches[0], diagnostics: [] };
+  if (matches.length > 1) {
+    return {
+      pack: null,
+      diagnostics: [seedPackDiagnostic('seed_evidence_pack_ambiguous', ambiguousMessage, {
+        ...extra,
+        matched_pack_ids: matches.map(pack => pack.evidence_pack_id || pack.seed_id).filter(Boolean)
+      })]
+    };
+  }
+  return { pack: null, diagnostics: [] };
+}
+
+function candidateUrlOverlapsPack(candidateUrlValues, pack) {
+  const candidateCanonicalKeys = new Set(candidateUrlValues.map(url => canonicalUrlKey(url)).filter(Boolean));
+  return [...pack.canonicalUrlKeys].some(key => candidateCanonicalKeys.has(key));
+}
+
+function refMetadataMismatchDiagnostics(candidate = {}, section = {}, pack = {}) {
+  const diagnostics = [];
+  const candidateSourceId = text(candidate.source_id || candidate.sourceId);
+  if (candidateSourceId && pack.source_id && candidateSourceId !== pack.source_id) {
+    diagnostics.push('source_id');
+  }
+  const candidateTitle = text(candidate.title || candidate.headline);
+  if (candidateTitle && pack.title && !titleMatches(candidateTitle, pack.title)) {
+    diagnostics.push('title');
+  }
+  const candidateUrlValues = candidateUrls(candidate, section);
+  if (candidateUrlValues.length > 0 && pack.canonicalUrlKeys.size > 0 && !candidateUrlOverlapsPack(candidateUrlValues, pack)) {
+    diagnostics.push('url');
+  }
+  if (diagnostics.length === 0) return [];
+  return [seedPackDiagnostic(
+    'seed_evidence_pack_ref_metadata_mismatch',
+    `source_extraction_ref matched seed pack but metadata mismatch was detected: ${diagnostics.join(', ')}.`,
+    {
+      mismatch_fields: diagnostics,
+      matched_pack_id: pack.evidence_pack_id || pack.seed_id || ''
+    }
+  )];
 }
 
 function seedPackDiagnostic(reasonCode, message, extra = {}) {
@@ -483,55 +552,102 @@ function matchSeedEvidencePack(candidate = {}, section = {}, seedEvidencePack = 
   if (packs.length === 0) return { pack: null, diagnostics: [] };
   const diagnostics = [];
   const candidatePackIds = new Set(ensureArray(candidate.evidence_pack_ids).map(text).filter(Boolean));
+  const candidatePrimaryEvidenceIds = new Set(ensureArray(candidate.primary_evidence_ids).map(text).filter(Boolean));
+  const candidateLinkedEvidenceIds = new Set(ensureArray(candidate.linked_evidence_ids).map(text).filter(Boolean));
   const candidateSeedIds = new Set(ensureArray(candidate.seed_ids).map(text).filter(Boolean));
   const refIndex = sourceExtractionRefPackIndex(candidate.source_extraction_ref);
-  if (Number.isInteger(refIndex) && packs[refIndex]) {
-    return { pack: packs[refIndex], diagnostics };
+  if (Number.isInteger(refIndex)) {
+    const refPack = packs[refIndex];
+    if (!refPack) {
+      diagnostics.push(seedPackDiagnostic(
+        'seed_evidence_pack_ref_out_of_range',
+        'source_extraction_ref points to a seed pack index outside seed-evidence-pack.json.',
+        { source_extraction_ref: text(candidate.source_extraction_ref), pack_index: refIndex }
+      ));
+      return { pack: null, diagnostics };
+    }
+    if (candidatePackIds.size > 0 && refPack.evidence_pack_id && !candidatePackIds.has(refPack.evidence_pack_id)) {
+      diagnostics.push(seedPackDiagnostic(
+        'seed_evidence_pack_ref_metadata_mismatch',
+        'source_extraction_ref seed pack conflicts with candidate evidence_pack_ids.',
+        {
+          evidence_pack_ids: [...candidatePackIds],
+          matched_pack_id: refPack.evidence_pack_id
+        }
+      ));
+      return { pack: null, diagnostics };
+    }
+    diagnostics.push(...refMetadataMismatchDiagnostics(candidate, section, refPack));
+    return { pack: refPack, diagnostics };
   }
-  const byPackId = packs.filter(pack => candidatePackIds.has(pack.evidence_pack_id));
-  if (byPackId.length === 1) return { pack: byPackId[0], diagnostics };
-  if (byPackId.length > 1) {
-    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_ambiguous', 'Multiple seed packs matched candidate evidence_pack_ids.', {
-      evidence_pack_ids: [...candidatePackIds],
-      matched_pack_ids: byPackId.map(pack => pack.evidence_pack_id)
-    }));
-    return { pack: null, diagnostics };
-  }
-  const bySeedId = packs.filter(pack => candidateSeedIds.has(pack.seed_id));
-  if (bySeedId.length === 1) return { pack: bySeedId[0], diagnostics };
-  if (bySeedId.length > 1) {
-    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_ambiguous', 'Multiple seed packs matched candidate seed_ids.', {
-      seed_ids: [...candidateSeedIds],
-      matched_seed_ids: bySeedId.map(pack => pack.seed_id)
-    }));
-    return { pack: null, diagnostics };
-  }
+  const packIdMatch = uniquePackMatch(
+    packs,
+    pack => pack.evidence_pack_id && candidatePackIds.has(pack.evidence_pack_id),
+    'Multiple seed packs matched candidate evidence_pack_ids.',
+    { evidence_pack_ids: [...candidatePackIds] }
+  );
+  if (packIdMatch.pack || packIdMatch.diagnostics.length > 0) return packIdMatch;
+
+  const primaryEvidenceMatch = uniquePackMatch(
+    packs,
+    pack => intersects(candidatePrimaryEvidenceIds, packPrimaryEvidenceIds(pack)),
+    'Multiple seed packs matched candidate primary_evidence_ids.',
+    { primary_evidence_ids: [...candidatePrimaryEvidenceIds] }
+  );
+  if (primaryEvidenceMatch.pack || primaryEvidenceMatch.diagnostics.length > 0) return primaryEvidenceMatch;
+
+  const linkedEvidenceMatch = uniquePackMatch(
+    packs,
+    pack => intersects(candidateLinkedEvidenceIds, packLinkedEvidenceIds(pack)),
+    'Multiple seed packs matched candidate linked_evidence_ids.',
+    { linked_evidence_ids: [...candidateLinkedEvidenceIds] }
+  );
+  if (linkedEvidenceMatch.pack || linkedEvidenceMatch.diagnostics.length > 0) return linkedEvidenceMatch;
+
+  const seedIdMatch = uniquePackMatch(
+    packs,
+    pack => pack.seed_id && candidateSeedIds.has(pack.seed_id),
+    'Multiple seed packs matched candidate seed_ids.',
+    { seed_ids: [...candidateSeedIds] }
+  );
+  if (seedIdMatch.pack || seedIdMatch.diagnostics.length > 0) return seedIdMatch;
 
   const candidateUrlValues = candidateUrls(candidate, section);
   const candidateCanonicalKeys = new Set(candidateUrlValues.map(url => canonicalUrlKey(url)).filter(Boolean));
   const byUrl = packs.filter(pack => [...pack.canonicalUrlKeys].some(key => candidateCanonicalKeys.has(key)));
+  const shouldEmitFallbackDiagnostic = candidateSeedEvidenceFields(candidate).length > 0 ||
+    sectionReferencesSeedEvidence(section, packs) ||
+    byUrl.length > 0;
   const sharedUrlCandidate = byUrl.some(pack =>
     [...pack.canonicalUrlKeys].some(key => candidateCanonicalKeys.has(key) && (normalized.canonicalUrlCounts.get(key) || 0) > 1)
   );
-  if (byUrl.length > 0) {
-    const candidateTokens = candidateDisambiguationTokens(candidate, section);
-    const disambiguated = byUrl.filter(pack =>
-      candidateMatchesPackFragment(candidateUrlValues, pack) ||
-      hasTokenDisambiguation(candidateTokens, pack)
-    );
-    if (byUrl.length === 1 && !sharedUrlCandidate) return { pack: byUrl[0], diagnostics };
-    if (disambiguated.length === 1) return { pack: disambiguated[0], diagnostics };
-    if (sharedUrlCandidate && disambiguated.length === 0) {
+  if (shouldEmitFallbackDiagnostic && byUrl.length > 0) {
+    const candidateTokens = candidateDisambiguationTokens(candidate);
+    const diagnosticDetails = {
+      matched_pack_ids: byUrl.map(pack => pack.evidence_pack_id || pack.seed_id).filter(Boolean),
+      candidate_disambiguation_tokens: [...candidateTokens]
+    };
+    if (sharedUrlCandidate) {
       diagnostics.push(seedPackDiagnostic(
         'seed_evidence_pack_url_only_shared_page_rejected',
-        'Seed pack URL-only match was rejected for a shared release-note/watch page without fragment, version, date, or component match.',
-        { matched_pack_ids: byUrl.map(pack => pack.evidence_pack_id || pack.seed_id).filter(Boolean) }
+        'Seed pack URL-only match was rejected for a shared release-note/watch page; URL matching is not a merge contract.',
+        diagnosticDetails
       ));
       return { pack: null, diagnostics };
     }
-    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_ambiguous', 'Multiple seed packs matched candidate URLs.', {
-      matched_pack_ids: byUrl.map(pack => pack.evidence_pack_id || pack.seed_id).filter(Boolean)
-    }));
+    if (byUrl.length === 1) {
+      diagnostics.push(seedPackDiagnostic(
+        'seed_evidence_pack_url_fallback_rejected',
+        'Seed pack URL fallback match was rejected because URL string matching is not a merge contract.',
+        diagnosticDetails
+      ));
+      return { pack: null, diagnostics };
+    }
+    diagnostics.push(seedPackDiagnostic(
+      'seed_evidence_pack_ambiguous',
+      'Multiple seed packs matched candidate URLs, but URL string matching is not a merge contract.',
+      diagnosticDetails
+    ));
     return { pack: null, diagnostics };
   }
 
@@ -543,13 +659,13 @@ function matchSeedEvidencePack(candidate = {}, section = {}, seedEvidencePack = 
     candidateSourceId === pack.source_id &&
     titleMatches(candidateTitle, pack.title)
   );
-  if (titleFallback.length === 1) {
-    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_title_fallback', 'Seed pack matched by unique source_id and title fallback.', {
+  if (shouldEmitFallbackDiagnostic && titleFallback.length === 1) {
+    diagnostics.push(seedPackDiagnostic('seed_evidence_pack_title_fallback_rejected', 'Seed pack source_id/title fallback was rejected because title matching is not a merge contract.', {
       matched_pack_id: titleFallback[0].evidence_pack_id || titleFallback[0].seed_id
     }));
-    return { pack: titleFallback[0], diagnostics };
+    return { pack: null, diagnostics };
   }
-  if (titleFallback.length > 1) {
+  if (shouldEmitFallbackDiagnostic && titleFallback.length > 1) {
     diagnostics.push(seedPackDiagnostic('seed_evidence_pack_ambiguous', 'Multiple seed packs matched source_id and title fallback.', {
       matched_pack_ids: titleFallback.map(pack => pack.evidence_pack_id || pack.seed_id).filter(Boolean)
     }));
@@ -912,6 +1028,7 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
   const resolvedEvidenceItems = [];
   const invalidEvidenceIds = [];
   const blockedEvidenceIds = [];
+  const sourceMismatchedEvidenceIds = [];
   const evidenceStatuses = [];
   let derivedEvidenceMapping = false;
   if (!claim.claim_id) issues.push(issue('missing_claim_id', 'Claim is missing claim_id.'));
@@ -970,7 +1087,7 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
       normalized_status: item.normalized_status || item.status
     });
     if (!claimSourceMatchesEvidenceItem(claim, item)) {
-      invalidEvidenceIds.push(evidenceId);
+      sourceMismatchedEvidenceIds.push(evidenceId);
       issues.push(issue(
         item.fragment_specific ? 'source_url_fragment_mismatch' : 'evidence_source_url_mismatch',
         item.fragment_specific
@@ -1010,6 +1127,7 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
     resolvedEvidenceItems,
     invalidEvidenceIds: uniqueTexts(invalidEvidenceIds),
     blockedEvidenceIds: uniqueTexts(blockedEvidenceIds),
+    sourceMismatchedEvidenceIds: uniqueTexts(sourceMismatchedEvidenceIds),
     evidenceStatuses,
     derivedEvidenceMapping
   };
@@ -1103,6 +1221,7 @@ function validateArticleClaims({
       resolved_evidence_ids: [...new Set(evidence.resolvedEvidenceIds)],
       invalid_evidence_ids: evidence.invalidEvidenceIds,
       blocked_evidence_ids: evidence.blockedEvidenceIds,
+      source_mismatched_evidence_ids: evidence.sourceMismatchedEvidenceIds,
       evidence_statuses: evidence.evidenceStatuses,
       source_urls: claim.source_urls,
       bound: claim.claim_type === 'fact' &&

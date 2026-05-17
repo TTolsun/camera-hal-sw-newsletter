@@ -708,11 +708,52 @@ test('seed evidence pack unmatched and title fallback diagnostics are soft and e
     item.blocking === false
   ));
   assert.ok(report.deductions.some(item =>
-    item.reason_code === 'seed_evidence_pack_title_fallback' &&
+    item.reason_code === 'seed_evidence_pack_title_fallback_rejected' &&
     item.blocking === false
   ));
-  assert.equal(report.claim_results.find(item => item.claim_id === 'claim-fallback').status, 'bound');
+  const fallbackClaim = report.claim_results.find(item => item.claim_id === 'claim-fallback');
+  assert.equal(fallbackClaim.status, 'needs_fix');
+  assert.ok(fallbackClaim.invalid_evidence_ids.includes('seed-fallback-primary-01'));
+  assert.match(buildQualityReportMarkdown(report), /seed_evidence_pack_title_fallback_rejected/);
   assert.equal(report.uncovered_facts.every(item => item.article_headline), true);
+});
+
+test('claim results separate source mismatched evidence ids from invalid evidence ids', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'CameraX mismatched source claim',
+    url,
+    confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+    evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-source-mismatch',
+      text: 'CameraX 1.6.1 release date: 2026-05-06.',
+      claim_type: 'fact',
+      evidence_ids: ['seed-camerax-primary-01'],
+      source_urls: ['https://example.com/wrong-source#1.6.1'],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url]
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+
+  const claim = report.claim_results.find(item => item.claim_id === 'claim-source-mismatch');
+  assert.deepEqual(claim.invalid_evidence_ids, []);
+  assert.deepEqual(claim.source_mismatched_evidence_ids, ['seed-camerax-primary-01']);
+  assert.ok(report.deductions.some(item => item.reason_code === 'source_url_fragment_mismatch'));
 });
 
 test('claim-level direct HAL overclaim is reported once by dedupe key', () => {

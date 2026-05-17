@@ -805,9 +805,12 @@ function claimIssueCategory(reasonCode = '') {
     'evidence_source_url_mismatch',
     'source_url_fragment_mismatch',
     'seed_evidence_pack_unmatched',
-    'seed_evidence_pack_title_fallback',
     'seed_evidence_pack_ambiguous',
-    'seed_evidence_pack_url_only_shared_page_rejected'
+    'seed_evidence_pack_url_only_shared_page_rejected',
+    'seed_evidence_pack_url_fallback_rejected',
+    'seed_evidence_pack_title_fallback_rejected',
+    'seed_evidence_pack_ref_out_of_range',
+    'seed_evidence_pack_ref_metadata_mismatch'
   ].includes(reasonCode)) return 'claim-source-binding';
   if (reasonCode === 'missing_matching_fact_claim') return 'claim-coverage';
   if ([
@@ -1441,8 +1444,11 @@ function markdownTableCell(value) {
     .replace(/\|/g, '\\|') || 'none';
 }
 
-function truncateMarkdownCell(value, limit = 100) {
-  const normalized = markdownTableCell(value);
+function truncateText(value, limit = 100) {
+  const normalized = String(value ?? '')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
   return normalized.length > limit ? `${normalized.slice(0, Math.max(0, limit - 3))}...` : normalized;
 }
 
@@ -1917,7 +1923,7 @@ function buildQualityReportMarkdown(report) {
     .slice(0, 40)
     .map(item => [
       item.article_headline || `article ${item.article_index || ''}`,
-      `${item.claim_id || 'claim'}: ${truncateMarkdownCell(item.text || '', 100)}`,
+      `${item.claim_id || 'claim'}: ${truncateText(item.text || '', 100)}`,
       item.claim_type || 'unknown',
       item.status || 'not_available',
       item.impact_level || 'unknown',
@@ -1968,8 +1974,12 @@ function buildQualityReportMarkdown(report) {
     ` ${ensureArray(item.soft_deductions).map(deduction => `${deduction.category}: ${deduction.reason}`).join('; ') || 'none'} |`
   ].join('|')).join('\n') || '| none | none | none | none | none | none | none | none | none | none | none | none | none | none | none | none |';
   const articleStructureRows = articleSectionContractMarkdownRows(report);
-  const hardDeductionLines = hardItems.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n') || '- none';
-  const softDeductionLines = softItems.map(item => `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}`).join('\n') || '- none';
+  const deductionLine = item => {
+    const reasonCode = item.reason_code ? ` (${item.reason_code})` : '';
+    return `- ${item.points} pt [${item.category}] ${item.location ? `${item.location}: ` : ''}${item.reason}${reasonCode}`;
+  };
+  const hardDeductionLines = hardItems.map(deductionLine).join('\n') || '- none';
+  const softDeductionLines = softItems.map(deductionLine).join('\n') || '- none';
 
   return `# 뉴스레터 품질 리포트 - ${report.date}
 
