@@ -214,6 +214,47 @@ test('CameraX release notes parser respects target version anchor', () => {
   assert.equal(items[0].url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
 });
 
+test('CameraX release notes parser handles live h2 family and h3 release structure', () => {
+  const html = readTextFixture('source-html/camerax-release-notes-live-structure.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'camerax-release-notes',
+    name: 'CameraX Release Notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+  }));
+
+  assert.equal(items.length, 1);
+  const patch = items[0];
+  assertParsedItemContract(patch);
+  assert.equal(patch.version_or_release, 'CameraX 1.6.1');
+  assert.equal(patch.url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+  assert.match(patch.publishedAt, /^May 0?6, 2026$/);
+  assert.match(patch.behavior_change, /Cannot access class ListenableFuture/);
+  assert.doesNotMatch(patch.behavior_change, /Maven Group|camera-core\s+1\.6\.1|This library was last updated/);
+  assert.equal(patch.source_extraction.extraction_quality.has_concrete_behavior_change, true);
+  assert.equal(patch.source_extraction.extraction_quality.main_article_allowed, true);
+  assert.equal(patch.source_extraction.extraction_quality.raw_table_used_as_body, false);
+  assert.ok(patch.source_extraction.release.sections.some(section =>
+    section.items.some(item => /Cannot access class ListenableFuture/.test(item.text))
+  ));
+});
+
+test('CameraX release notes parser does not promote stale Viewfinder table rows from live structure', () => {
+  const html = readTextFixture('source-html/camerax-release-notes-live-structure.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'camerax-release-notes',
+    name: 'CameraX Release Notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera'
+  }));
+
+  assert.equal(items.some(item => item.version_or_release === 'CameraX 1.4.0-alpha07'), false);
+  assert.equal(items.some(item => item.publishedAt === 'May 06, 2026' && /Viewfinder/i.test(item.title)), false);
+  assert.ok(items.some(item => item.version_or_release === 'CameraX 1.6.1'));
+});
+
 test('CameraX release notes parser does not promote artifact tables without concrete release bullets', () => {
   const html = readTextFixture('source-html/camerax-release-notes-artifact-table-only.html');
 

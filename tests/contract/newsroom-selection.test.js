@@ -316,6 +316,46 @@ test('generic CameraX metadata fallback cannot become a main candidate without s
   assert.equal(report.selected_articles.length, 0);
 });
 
+test('CameraX source extraction violation depends on concrete release-note bullets', () => {
+  const concrete = cameraXReleaseCandidate('1.6.1', {
+    behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.'
+  });
+  const missingExtraction = cameraXReleaseCandidate('1.6.1', {
+    title: 'CameraX 1.6.1 - Camera Maven Group versions',
+    behavior_change: 'CameraX / androidx.camera update.',
+    summary: 'CameraX / androidx.camera update.',
+    source_extraction: null,
+    extraction_quality: null,
+    derived_editorial_hints: null
+  });
+  const emptyExtraction = cameraXReleaseCandidate('1.6.1', {
+    title: 'CameraX Release Notes - CameraX 1.6.1 empty extraction',
+    behavior_change: 'CameraX / androidx.camera update.',
+    summary: 'CameraX / androidx.camera update.',
+    source_extraction: cameraXSourceExtraction('1.6.1', 'CameraX / androidx.camera update.')
+  });
+  emptyExtraction.source_extraction.release.sections = [];
+  emptyExtraction.source_extraction.extraction_quality.has_concrete_behavior_change = false;
+
+  assert.equal(
+    exclusionReasons(concrete).includes('CameraX release-note candidate has no concrete source_extraction bullet'),
+    false
+  );
+  assert.ok(exclusionReasons(missingExtraction).includes('CameraX release-note candidate has no concrete source_extraction bullet'));
+  assert.ok(exclusionReasons(emptyExtraction).includes('CameraX release-note candidate has no concrete source_extraction bullet'));
+
+  const report = buildShortlistReport('2026-05-12', [missingExtraction, emptyExtraction, concrete], {
+    minArticles: 1,
+    maxArticles: 1
+  });
+  assert.equal(report.selected_articles.length, 1);
+  assert.equal(report.selected_articles[0].title, concrete.title);
+  assert.ok(report.excluded_candidates.some(item =>
+    item.title === missingExtraction.title &&
+    item.exclusion_reasons.includes('CameraX release-note candidate has no concrete source_extraction bullet')
+  ));
+});
+
 test('AndroidX Camera release page keeps one main article and prefers latest stable patch', () => {
   const patch = cameraXReleaseCandidate('1.6.1', {
     behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.'

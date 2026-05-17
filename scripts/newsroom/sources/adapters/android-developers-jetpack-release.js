@@ -109,27 +109,55 @@ function canHandle(url = '', source = {}) {
     /developer\.android(?:\.google\.cn|\.com)\/jetpack\/androidx\/releases\/camera/i.test(value);
 }
 
+function releaseHeadingVersion(title = '') {
+  const value = clean(title);
+  const version = versionToken(value);
+  if (!version) return '';
+  if (new RegExp(`^Version\\s+${version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i').test(value)) {
+    return cameraVersion(version);
+  }
+  if (new RegExp(`^CameraX\\s+${version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:\\b|\\s+-)`, 'i').test(value)) {
+    return cameraVersion(version);
+  }
+  return '';
+}
+
+function excludedFamilyHeading(title = '') {
+  return /\bCamera\s+Viewfinder\b/i.test(title);
+}
+
 function headingBlocks(html = '', baseUrl = '') {
   const value = String(html);
-  const pattern = /<h2\b([^>]*)>([\s\S]*?)<\/h2>/gi;
-  const matches = [...value.matchAll(pattern)];
+  const pattern = /<h([2-4])\b([^>]*)>([\s\S]*?)<\/h\1>/gi;
+  const matches = [...value.matchAll(pattern)].map(match => ({
+    level: Number(match[1]),
+    attrs: match[2] || '',
+    titleHtml: match[3] || '',
+    html: match[0],
+    index: match.index,
+    endIndex: match.index + match[0].length,
+    title: clean(match[3] || '')
+  }));
   const blocks = [];
   for (let index = 0; index < matches.length; index += 1) {
     const current = matches[index];
-    const next = matches[index + 1];
-    const titleHtml = current[2] || '';
-    const attrs = current[1] || '';
-    const id = htmlAttr(attrs, 'id') || htmlAttr(titleHtml, 'id') || versionToken(titleHtml);
-    const start = current.index + current[0].length;
-    const end = next ? next.index : value.length;
-    const title = clean(titleHtml);
-    const version = cameraVersion(`${title} ${id}`);
+    const version = releaseHeadingVersion(current.title);
     if (!version) continue;
+    const family = [...matches.slice(0, index)].reverse().find(item => item.level < current.level);
+    if (family && excludedFamilyHeading(family.title)) continue;
+    const next = matches.slice(index + 1).find(item =>
+      releaseHeadingVersion(item.title) ||
+      item.level <= current.level
+    );
+    const id = htmlAttr(current.attrs, 'id') || htmlAttr(current.titleHtml, 'id') || versionToken(current.titleHtml);
+    const start = current.endIndex;
+    const end = next ? next.index : value.length;
     blocks.push({
-      title,
+      title: current.title,
       version,
       version_token: versionToken(version),
       body: value.slice(start, end),
+      heading_level: current.level,
       url: canonicalCameraReleaseUrl(id ? `${baseUrl.replace(/#.*$/, '')}#${id}` : baseUrl, version)
     });
   }
@@ -156,9 +184,14 @@ function categoryForHeading(heading = '') {
   return 'release_notes';
 }
 
-function subheadingBlocks(html = '') {
+function subheadingBlocks(html = '', releaseHeadingLevel = 2) {
   const value = removeNonReleaseBody(html);
-  const pattern = /<h[3-4]\b[^>]*>([\s\S]*?)<\/h[3-4]>/gi;
+  const minLevel = Math.min(Math.max(Number(releaseHeadingLevel) + 1, 3), 6);
+  const headingRange = minLevel <= 6 ? `[${minLevel}-6]` : '';
+  const markerPattern = headingRange
+    ? `<h${headingRange}\\b[^>]*>([\\s\\S]*?)<\\/h${headingRange}>|<p\\b[^>]*>\\s*<strong\\b[^>]*>([\\s\\S]*?)<\\/strong>\\s*<\\/p>`
+    : `<p\\b[^>]*>\\s*<strong\\b[^>]*>([\\s\\S]*?)<\\/strong>\\s*<\\/p>`;
+  const pattern = new RegExp(markerPattern, 'gi');
   const matches = [...value.matchAll(pattern)];
   if (matches.length === 0) {
     return [{ heading: 'Release Notes', body: value }];
@@ -167,7 +200,7 @@ function subheadingBlocks(html = '') {
     const start = match.index + match[0].length;
     const next = matches[index + 1];
     return {
-      heading: clean(match[1]),
+      heading: clean(match[1] || match[2]),
       body: value.slice(start, next ? next.index : value.length)
     };
   });
@@ -222,7 +255,7 @@ function sectionItems(html = '', baseUrl = '') {
 }
 
 function releaseSections(block) {
-  return subheadingBlocks(block.body)
+  return subheadingBlocks(block.body, block.heading_level)
     .map(section => ({
       category: categoryForHeading(section.heading),
       heading: section.heading,
