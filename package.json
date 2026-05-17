@@ -27,6 +27,7 @@
     "check:repo-hygiene": "node scripts/check-repo-hygiene.js",
     "validate": "npm run check:encoding && npm run check:repo-hygiene && npm run check:fixtures && npm run validate:policy && npm run check:policy-docs && npm run validate:config && npm run validate:site && npm run validate:images && npm run validate:quality && npm run validate:localization",
     "validate:policy": "node scripts/validate-newsletter-policy.js",
+    "validate:source-quality-rollout": "node scripts/newsroom/validate/validate-source-quality-rollout-exit.js",
     "check:policy-docs": "node scripts/sync-policy-docs.js --check",
     "validate:config": "node scripts/validate-config.js && node scripts/validate-newsroom-budget.js",
     "validate:site": "node scripts/validate-site.js",
