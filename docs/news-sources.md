@@ -135,7 +135,8 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 
 - Every enabled source defines `sourceRole`, `sourceUrlQualityHint`, `mainArticlePolicy`, `requiresCrossCheckDefault`, `evidenceGranularityHint`, and `sourceQualityNotes`.
 - `main_article_source_allowed` is source/evidence-policy-only. It does not include `finalSelectionEligibility`, score, final selection result, or HAL signal output.
-- Conditional sources can become source-ready only when required confirmation or explicit HAL/native workflow evidence is present.
+- Conditional sources can become source-ready only from source evidence and required primary confirmation/cross-check state.
+- HAL/native workflow evidence is not evaluated by the source classifier; it is consumed by the HAL signal layer and combined in `main_article_readiness`.
 - Raw `source_url_quality=unknown` is main-ineligible. The classifier must resolve it before Stage 3 or the new main article fails.
 - `generic_ai_or_it_trend`, `tech_media_lead_requires_cross_check`, and `community_lead_requires_cross_check` are conditional policies, not unconditional approvals.
 - Stage 3 consumes canonical `source_quality` and must not infer, repair, or override `main_article_source_blockers[]`.

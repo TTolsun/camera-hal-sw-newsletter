@@ -33,6 +33,24 @@ function source(report, id) {
   return report.sources.find(item => item.source_id === id);
 }
 
+function sourceQuality(overrides = {}) {
+  return {
+    source_role: 'official_release_source',
+    source_url_quality: 'official_dated_release',
+    source_quality_status: 'allowed',
+    main_article_source_allowed: true,
+    main_article_source_allowed_reason: 'Source policy allows this candidate with concrete source evidence.',
+    main_article_source_blockers: [],
+    cross_check_status: 'not_required',
+    requires_cross_check: false,
+    requires_conditional_evidence: false,
+    conditional_evidence_type: '',
+    evidence_granularity: 'article',
+    source_quality_notes: [],
+    ...overrides
+  };
+}
+
 test('selected and rendered source gets high score and KEEP recommendation', () => {
   const report = buildReport();
   const effective = source(report, 'effective-camera');
@@ -161,6 +179,60 @@ test('fact-check source gap URL is mapped back to the collected source', () => {
 
   assert.equal(effective.source_gap_count, 1);
   assert.ok(effective.top_exclusion_reasons.some(item => item.reason === 'Rendered article source has a source gap.'));
+});
+
+test('source quality coverage separates selected main from main-eligible pool', () => {
+  const selected = {
+    source_id: 'effective-camera',
+    source_name: 'Effective Camera Source',
+    sourceUrl: 'https://camera.example.com/',
+    url: 'https://camera.example.com/articles/selected',
+    title: 'Selected Camera HAL release',
+    published_date: '2026-05-05',
+    finalSelectionEligibility: 'main',
+    hasDatedEvidence: true,
+    main_eligible: true,
+    source_gap_risk: false,
+    reference_only: false,
+    briefing_only: false,
+    source_quality: sourceQuality()
+  };
+  const eligibleOnly = {
+    ...selected,
+    url: 'https://camera.example.com/articles/eligible-only',
+    title: 'Eligible-only Camera HAL release',
+    source_quality: sourceQuality()
+  };
+  const report = buildReport({
+    collectedCandidates: {
+      candidates: [selected, eligibleOnly]
+    },
+    shortlistReport: {
+      ...fixture.shortlistReport,
+      primary_selected_articles: [{
+        ...selected,
+        final_selected: true,
+        primary_selected: true,
+        selected_for_editor: true
+      }]
+    },
+    editorDraft: {
+      sections: [{
+        headline: selected.title,
+        source_candidate_url: selected.url,
+        sources: [{ title: selected.title, url: selected.url }]
+      }]
+    }
+  });
+
+  assert.deepEqual(report.summary.selected_main_source_quality_coverage, {
+    selected_main_count: 1,
+    with_source_quality_count: 1
+  });
+  assert.deepEqual(report.summary.main_eligible_source_quality_coverage, {
+    main_eligible_candidate_count: 2,
+    with_source_quality_count: 2
+  });
 });
 
 test('source effectiveness report builds for candidate shortage review-only without public newsletter files', () => {

@@ -82,6 +82,8 @@ collector는 런타임 normalized source 객체와 `content/collected-news/YYYY-
 
 `source_quality` is canonical in new artifacts. Flat fields are compatibility mirrors only, and drift is reported as `SOURCE_QUALITY_FIELD_DRIFT`.
 
+`requires_cross_check` means primary confirmation/cross-check is required. `requires_conditional_evidence` means the source policy is conditional, and `conditional_evidence_type` records why: `primary_confirmation`, `native_hal_workflow`, `project_release_evidence`, or `source_policy_review`. The source quality classifier does not evaluate HAL/native workflow relevance; that is combined later in `main_article_readiness`.
+
 
 ### Source quality enum values
 

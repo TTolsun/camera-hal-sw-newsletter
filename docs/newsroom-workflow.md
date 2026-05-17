@@ -281,9 +281,10 @@ Issue `#46` adds an executable source quality layer between collection and Stage
 - Candidate collection runs `scripts/newsroom/collect/source-quality-classifier.js` before article capsule generation.
 - New candidates carry canonical `source_quality`; flat source quality fields are compatibility mirrors.
 - `article-capsules.json` includes `source_quality`, `main_article_readiness`, and `do_not_claim[]`.
-- `main_article_readiness` combines source readiness, HAL signal readiness, and deterministic selection readiness.
+- `main_article_readiness` combines source readiness, HAL signal readiness, and deterministic `selection_input_ready`; `selection_ready` is a deprecated compatibility alias for `selection_input_ready`.
 - HAL signal quality remains owned by the HAL signal layer; source quality does not recalculate `hal_impact_axes`.
+- HAL/native workflow readiness is decided by the HAL signal layer and the combined readiness object, not by `source-quality-classifier.js`.
 - Prompt guardrails treat `main_article_source_allowed=false` as a hard blocker and forbid overriding `main_article_source_blockers[]` from prose reasoning.
 - New Stage 3 main articles fail on missing URL, missing canonical `source_quality`, unresolved `source_url_quality=unknown`, `source_quality_status=blocked`, `main_article_source_allowed=false`, or `SOURCE_QUALITY_FIELD_DRIFT`.
 - Legacy artifacts without source quality fields warn during rollout.
-- Source effectiveness and PR body summaries expose source URL quality distribution, status summary, blocker summary, selected-main coverage, conditional promoted/blocked counts, unknown count, drift count, and legacy warning count.
+- Source effectiveness and PR body summaries expose source URL quality distribution, status summary, blocker summary, selected-main coverage, main-eligible coverage, conditional promoted/blocked counts, unknown count, drift count, and legacy warning count.

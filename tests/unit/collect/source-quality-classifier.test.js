@@ -5,7 +5,8 @@ const {
   SOURCE_POLICY_MAPPING,
   classifySourceQuality,
   sourceQualityFieldDrift,
-  sourceQualityFlatFields
+  sourceQualityFlatFields,
+  sourceQualitySummaryForCandidates
 } = require('../../../scripts/newsroom/collect/source-quality-classifier');
 
 function candidate(overrides = {}) {
@@ -114,7 +115,7 @@ test('missing URL and unresolved unknown quality are main-ineligible', () => {
   assert.ok(sourceQuality.main_article_source_blockers.includes('unknown_source_quality'));
 });
 
-test('generic AI trend requires native HAL workflow evidence before promotion', () => {
+test('generic AI trend records conditional evidence without judging HAL workflow in source classifier', () => {
   const withoutHal = classifySourceQuality({
     candidate: candidate({
       title: 'Generic AI agent launch',
@@ -133,8 +134,12 @@ test('generic AI trend requires native HAL workflow evidence before promotion', 
       has_behavior_change: true
     })
   });
-  assert.equal(withoutHal.main_article_source_allowed, false);
-  assert.ok(withoutHal.main_article_source_blockers.includes('generic_trend_without_hal_workflow_link'));
+  assert.equal(withoutHal.cross_check_status, 'not_required');
+  assert.equal(withoutHal.requires_cross_check, false);
+  assert.equal(withoutHal.requires_conditional_evidence, true);
+  assert.equal(withoutHal.conditional_evidence_type, 'native_hal_workflow');
+  assert.equal(withoutHal.main_article_source_allowed, true);
+  assert.equal(withoutHal.main_article_source_blockers.includes('generic_trend_without_hal_workflow_link'), false);
 
   const withHal = classifySourceQuality({
     candidate: candidate({
@@ -150,9 +155,34 @@ test('generic AI trend requires native HAL workflow evidence before promotion', 
     metadata: metadata(),
     scopeMetadata: { native_tooling_relevance: 3 }
   });
-  assert.equal(withHal.cross_check_status, 'required_satisfied');
+  assert.equal(withHal.cross_check_status, 'not_required');
   assert.equal(withHal.source_quality_status, 'allowed');
   assert.equal(withHal.main_article_source_allowed, true);
+});
+
+test('HAL axes or native workflow text alone do not satisfy primary cross-check', () => {
+  const sourceQuality = classifySourceQuality({
+    candidate: candidate({
+      title: 'Tech lead reports Camera ITS metadata validation',
+      summary: 'The report mentions Camera HAL validation and native camera stack stream metadata checks.',
+      hal_impact_axes: ['native_tooling_workflow']
+    }),
+    source: {
+      sourceRole: 'tech_media_lead_source',
+      sourceUrlQualityHint: 'tech_media_lead_requires_cross_check',
+      mainArticlePolicy: 'conditional',
+      requiresCrossCheckDefault: true
+    },
+    metadata: metadata(),
+    scopeMetadata: { native_tooling_relevance: 3 }
+  });
+
+  assert.equal(sourceQuality.cross_check_status, 'required_missing');
+  assert.equal(sourceQuality.requires_cross_check, true);
+  assert.equal(sourceQuality.requires_conditional_evidence, true);
+  assert.equal(sourceQuality.conditional_evidence_type, 'primary_confirmation');
+  assert.equal(sourceQuality.main_article_source_allowed, false);
+  assert.ok(sourceQuality.main_article_source_blockers.includes('cross_check_required_but_missing'));
 });
 
 test('tech media lead needs primary confirmation', () => {
@@ -183,7 +213,7 @@ test('tech media lead needs primary confirmation', () => {
   assert.equal(confirmed.main_article_source_allowed, true);
 });
 
-test('explicit evidence-rule conditional source can promote with native HAL workflow evidence', () => {
+test('project release conditional source records project evidence type without cross-check', () => {
   const sourceQuality = classifySourceQuality({
     candidate: candidate({
       title: 'Project release improves native camera stack profiling',
@@ -204,7 +234,10 @@ test('explicit evidence-rule conditional source can promote with native HAL work
     scopeMetadata: { native_tooling_relevance: 3 }
   });
 
-  assert.equal(sourceQuality.cross_check_status, 'required_satisfied');
+  assert.equal(sourceQuality.cross_check_status, 'not_required');
+  assert.equal(sourceQuality.requires_cross_check, false);
+  assert.equal(sourceQuality.requires_conditional_evidence, true);
+  assert.equal(sourceQuality.conditional_evidence_type, 'project_release_evidence');
   assert.equal(sourceQuality.main_article_source_allowed, true);
 });
 
@@ -225,4 +258,49 @@ test('flat source quality mirrors detect drift', () => {
   };
   assert.deepEqual(sourceQualityFieldDrift(mirrored), []);
   assert.equal(sourceQualityFieldDrift({ ...mirrored, source_url_quality: 'unknown' })[0].code, 'SOURCE_QUALITY_FIELD_DRIFT');
+});
+
+test('source quality summary separates selected main from main-eligible candidates', () => {
+  const selectedQuality = classifySourceQuality({
+    candidate: candidate(),
+    source: {
+      sourceRole: 'official_release_source',
+      sourceUrlQualityHint: 'official_dated_release',
+      mainArticlePolicy: 'allowed',
+      requiresCrossCheckDefault: false
+    },
+    metadata: metadata()
+  });
+  const eligibleQuality = classifySourceQuality({
+    candidate: candidate({ url: 'https://example.com/eligible-only' }),
+    source: {
+      sourceRole: 'official_release_source',
+      sourceUrlQualityHint: 'official_dated_release',
+      mainArticlePolicy: 'allowed',
+      requiresCrossCheckDefault: false
+    },
+    metadata: metadata()
+  });
+  const summary = sourceQualitySummaryForCandidates([
+    {
+      final_selected: true,
+      finalSelectionEligibility: 'main',
+      source_quality: selectedQuality,
+      ...sourceQualityFlatFields(selectedQuality)
+    },
+    {
+      finalSelectionEligibility: 'main',
+      source_quality: eligibleQuality,
+      ...sourceQualityFlatFields(eligibleQuality)
+    }
+  ]);
+
+  assert.deepEqual(summary.selected_main_source_quality_coverage, {
+    selected_main_count: 1,
+    with_source_quality_count: 1
+  });
+  assert.deepEqual(summary.main_eligible_source_quality_coverage, {
+    main_eligible_candidate_count: 2,
+    with_source_quality_count: 2
+  });
 });

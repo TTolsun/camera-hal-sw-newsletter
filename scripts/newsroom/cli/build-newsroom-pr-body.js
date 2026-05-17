@@ -568,10 +568,12 @@ function renderSourceQualityGateSummary(root, date) {
   }
   const summary = report.summary || {};
   const coverage = summary.selected_main_source_quality_coverage || {};
+  const mainEligibleCoverage = summary.main_eligible_source_quality_coverage || {};
   return [
     '## Source Quality Gate Summary',
     '',
     `- selected main source_quality coverage: ${valueOrUnknown(coverage.with_source_quality_count || 0)}/${valueOrUnknown(coverage.selected_main_count || 0)}`,
+    `- main-eligible source_quality coverage: ${valueOrUnknown(mainEligibleCoverage.with_source_quality_count || 0)}/${valueOrUnknown(mainEligibleCoverage.main_eligible_candidate_count || 0)}`,
     `- unknown_source_quality_count: ${valueOrUnknown(summary.unknown_source_quality_count || 0)}`,
     `- source_quality_field_drift_count: ${valueOrUnknown(summary.source_quality_field_drift_count || 0)}`,
     `- legacy_source_quality_warning_count: ${valueOrUnknown(summary.legacy_source_quality_warning_count || 0)}`,

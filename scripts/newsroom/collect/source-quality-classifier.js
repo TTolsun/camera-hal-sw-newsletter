@@ -87,12 +87,6 @@ const SOURCE_POLICY_MAPPING = Object.freeze({
   }
 });
 
-const CONDITIONAL_EVIDENCE_RULE_QUALITIES = Object.freeze([
-  'generic_ai_or_it_trend',
-  'engineering_blog_with_camera_evidence',
-  'project_release'
-]);
-
 const FLAT_FIELD_MAP = Object.freeze({
   source_role: ['source_role', 'sourceRole'],
   source_url_quality: ['source_url_quality', 'sourceUrlQuality'],
@@ -102,6 +96,8 @@ const FLAT_FIELD_MAP = Object.freeze({
   main_article_source_blockers: ['main_article_source_blockers', 'mainArticleSourceBlockers'],
   cross_check_status: ['cross_check_status', 'crossCheckStatus'],
   requires_cross_check: ['requires_cross_check', 'requiresCrossCheck'],
+  requires_conditional_evidence: ['requires_conditional_evidence', 'requiresConditionalEvidence'],
+  conditional_evidence_type: ['conditional_evidence_type', 'conditionalEvidenceType'],
   evidence_granularity: ['evidence_granularity', 'evidenceGranularity'],
   source_quality_notes: ['source_quality_notes', 'sourceQualityNotes']
 });
@@ -204,32 +200,6 @@ function linkedEvidenceFailed(candidate = {}) {
     ensureArray(candidate.impact_classification?.warnings).includes('linked_evidence_failed');
 }
 
-function nativeHalWorkflowEvidence(candidate = {}, metadata = {}, scopeMetadata = {}) {
-  const axes = ensureArray(candidate.hal_impact_axes || scopeMetadata.hal_impact_axes);
-  if (axes.includes('native_tooling_workflow')) return true;
-  if (scopeMetadata.counts_as_primary_camera_topic === true ||
-    scopeMetadata.counts_as_driver_topic === true ||
-    scopeMetadata.counts_as_soc_topic === true) {
-    return true;
-  }
-  if (Number(scopeMetadata.native_tooling_relevance || candidate.native_tooling_relevance || 0) >= 2) return true;
-  const haystack = [
-    candidate.title,
-    candidate.summary,
-    candidate.api_or_component,
-    candidate.behavior_change,
-    candidate.camera_pipeline_link,
-    candidate.collection_reason,
-    metadata.api_or_component,
-    metadata.behavior_change,
-    JSON.stringify(candidate.source_extraction || {})
-  ].map(text).join(' ');
-  if (/\b(?:without|lacks?|no)\b.{0,80}\b(?:Camera\s+ITS|CTS|VTS|Android\s+camera\s+pipeline|camera\s+pipeline|metadata|buffer|stream|Camera\s+HAL|HAL\s+validation|native\s+camera\s+stack)\b/i.test(haystack)) {
-    return false;
-  }
-  return /\b(?:Camera\s+ITS|CTS|VTS|Android\s+camera\s+pipeline|camera\s+pipeline|native\s+C\/C\+\+|C\+\+\s+debug|profiling|metadata|buffer|stream|Camera\s+HAL|HAL\s+validation|native\s+camera\s+stack)\b/i.test(haystack);
-}
-
 function normalizeSourceRole(value, source = {}) {
   const raw = lower(value || source.sourceRole || source.source_role);
   if (raw === 'reference_index') return 'official_documentation_reference';
@@ -307,6 +277,17 @@ function normalizeCrossCheckStatus(candidate = {}, source = {}, required = false
   return 'required_missing';
 }
 
+function conditionalEvidenceType(sourceUrlQuality, requiresCrossCheck, mainArticlePolicy) {
+  if (mainArticlePolicy !== 'conditional') return '';
+  if (requiresCrossCheck) return 'primary_confirmation';
+  if (sourceUrlQuality === 'generic_ai_or_it_trend' ||
+    sourceUrlQuality === 'engineering_blog_with_camera_evidence') {
+    return 'native_hal_workflow';
+  }
+  if (sourceUrlQuality === 'project_release') return 'project_release_evidence';
+  return 'source_policy_review';
+}
+
 function reasonFor(blockers, allowed) {
   if (allowed) return 'Source policy allows this candidate with concrete source evidence.';
   const first = blockers[0] || 'unknown_source_quality';
@@ -330,7 +311,6 @@ function classifySourceQuality(input = {}) {
   const candidate = input.candidate || {};
   const source = input.source || {};
   const metadata = input.metadata || {};
-  const scopeMetadata = input.scopeMetadata || {};
   const sourceRole = normalizeSourceRole(
     candidate.source_role || candidate.sourceRole || metadata.source_role || source.sourceRole,
     source
@@ -342,19 +322,12 @@ function classifySourceQuality(input = {}) {
   let sourceUrlQuality = inferSourceUrlQuality(candidate, source, metadata, sourceRole);
   const sourcePolicy = SOURCE_POLICY_MAPPING[mainArticlePolicy] || SOURCE_POLICY_MAPPING.conditional;
   const requiresCrossCheck = bool(source.requiresCrossCheckDefault, bool(source.requiresCrossCheck, bool(candidate.requires_cross_check, bool(candidate.requiresCrossCheck))));
-  let crossCheckStatus = normalizeCrossCheckStatus(candidate, source, requiresCrossCheck || mainArticlePolicy === 'conditional');
+  const requiresConditionalEvidence = mainArticlePolicy === 'conditional';
+  const conditionalType = conditionalEvidenceType(sourceUrlQuality, requiresCrossCheck, mainArticlePolicy);
+  const crossCheckStatus = normalizeCrossCheckStatus(candidate, source, requiresCrossCheck);
   const blockers = [];
   const url = candidateUrl(candidate);
   const concreteDatedEvidence = hasConcreteDatedEvidence(candidate, metadata);
-  if (
-    mainArticlePolicy === 'conditional' &&
-    crossCheckStatus === 'required_missing' &&
-    CONDITIONAL_EVIDENCE_RULE_QUALITIES.includes(sourceUrlQuality) &&
-    nativeHalWorkflowEvidence(candidate, metadata, scopeMetadata) &&
-    concreteDatedEvidence
-  ) {
-    crossCheckStatus = 'required_satisfied';
-  }
 
   if (!url) blockers.push('missing_url');
   if (sourceUrlQuality === 'unknown') blockers.push('unknown_source_quality');
@@ -364,9 +337,6 @@ function classifySourceQuality(input = {}) {
   if (candidate.candidateOnly === true || candidate.candidate_only === true || source.candidateOnly === true) {
     if (crossCheckStatus !== 'required_satisfied') blockers.push('candidate_only_without_primary_confirmation');
   }
-  if (sourceUrlQuality === 'generic_ai_or_it_trend' && !nativeHalWorkflowEvidence(candidate, metadata, scopeMetadata)) {
-    blockers.push('generic_trend_without_hal_workflow_link');
-  }
   if (crossCheckStatus === 'required_missing') blockers.push('cross_check_required_but_missing');
   if (crossCheckStatus === 'required_blocked') blockers.push('candidate_only_without_primary_confirmation');
   if (linkedEvidenceBlocked(candidate)) blockers.push('linked_evidence_blocked');
@@ -374,16 +344,11 @@ function classifySourceQuality(input = {}) {
   if (sourceUrlQuality === 'fallback_context' && !concreteDatedEvidence) blockers.push('fallback_without_concrete_source_fact');
 
   const conditionalSatisfied = mainArticlePolicy === 'conditional' &&
-    crossCheckStatus === 'required_satisfied' &&
+    (!requiresCrossCheck || crossCheckStatus === 'required_satisfied') &&
     concreteDatedEvidence &&
-    !blockers.some(blocker => !['cross_check_required_but_missing'].includes(blocker));
-  if (conditionalSatisfied && sourceUrlQuality === 'unknown') {
-    sourceUrlQuality = 'engineering_blog_with_camera_evidence';
-  }
+    blockers.length === 0;
 
-  const remainingBlockers = unique(blockers.filter(blocker =>
-    !(conditionalSatisfied && blocker === 'cross_check_required_but_missing')
-  ));
+  const remainingBlockers = unique(blockers);
   let status = sourcePolicy.source_quality_status;
   let allowed = sourcePolicy.main_article_source_allowed;
   if (mainArticlePolicy === 'conditional' && conditionalSatisfied) {
@@ -407,7 +372,9 @@ function classifySourceQuality(input = {}) {
     main_article_source_allowed_reason: reasonFor(remainingBlockers, allowed),
     main_article_source_blockers: remainingBlockers,
     cross_check_status: crossCheckStatus,
-    requires_cross_check: requiresCrossCheck || mainArticlePolicy === 'conditional',
+    requires_cross_check: requiresCrossCheck,
+    requires_conditional_evidence: requiresConditionalEvidence,
+    conditional_evidence_type: conditionalType,
     evidence_granularity: firstText(source.evidenceGranularityHint, candidate.evidence_granularity, candidate.evidenceGranularity) || 'candidate_item',
     source_quality_notes: unique([
       ...ensureArray(source.sourceQualityNotes),
@@ -440,6 +407,12 @@ function normalizeSourceQuality(value = {}) {
       : typeof value.requires_cross_check === 'boolean'
         ? value.requires_cross_check
         : value.requiresCrossCheck === true,
+    requires_conditional_evidence: typeof canonical.requires_conditional_evidence === 'boolean'
+      ? canonical.requires_conditional_evidence
+      : typeof value.requires_conditional_evidence === 'boolean'
+        ? value.requires_conditional_evidence
+        : value.requiresConditionalEvidence === true,
+    conditional_evidence_type: firstText(canonical.conditional_evidence_type, value.conditional_evidence_type, value.conditionalEvidenceType),
     evidence_granularity: firstText(canonical.evidence_granularity, value.evidence_granularity, value.evidenceGranularity),
     source_quality_notes: unique([
       ...ensureArray(canonical.source_quality_notes),
@@ -479,6 +452,10 @@ function sourceQualityFlatFields(sourceQuality = {}) {
     cross_check_status: normalized.cross_check_status,
     requiresCrossCheck: normalized.requires_cross_check,
     requires_cross_check: normalized.requires_cross_check,
+    requiresConditionalEvidence: normalized.requires_conditional_evidence,
+    requires_conditional_evidence: normalized.requires_conditional_evidence,
+    conditionalEvidenceType: normalized.conditional_evidence_type,
+    conditional_evidence_type: normalized.conditional_evidence_type,
     evidenceGranularity: normalized.evidence_granularity,
     evidence_granularity: normalized.evidence_granularity,
     sourceQualityNotes: normalized.source_quality_notes,
@@ -530,12 +507,18 @@ function sourceQualitySummaryForCandidates(candidates = []) {
     drift: sourceQualityFieldDrift(candidate),
     hasCanonical: isPlainObject(candidate?.source_quality)
   }));
+  const candidateList = ensureArray(candidates);
   const selectedMain = rows.filter((row, index) => {
-    const candidate = ensureArray(candidates)[index] || {};
+    const candidate = candidateList[index] || {};
     return candidate.final_selected === true ||
       candidate.selected_for_editor === true ||
       candidate.primary_selected === true ||
-      candidate.finalSelectionEligibility === 'main';
+      candidate.selection_slot === 'main';
+  });
+  const mainEligible = rows.filter((row, index) => {
+    const candidate = candidateList[index] || {};
+    return candidate.finalSelectionEligibility === 'main' ||
+      candidate.final_selection_eligibility === 'main';
   });
   return {
     source_url_quality_distribution: countBy(rows, row => row.sourceQuality.source_url_quality),
@@ -548,12 +531,17 @@ function sourceQualitySummaryForCandidates(candidates = []) {
       selected_main_count: selectedMain.length,
       with_source_quality_count: selectedMain.filter(row => row.hasCanonical).length
     },
+    main_eligible_source_quality_coverage: {
+      main_eligible_candidate_count: mainEligible.length,
+      with_source_quality_count: mainEligible.filter(row => row.hasCanonical).length
+    },
     conditional_source_promoted_count: rows.filter(row =>
+      row.sourceQuality.requires_conditional_evidence === true &&
       row.sourceQuality.source_quality_status === 'allowed' &&
-      row.sourceQuality.cross_check_status === 'required_satisfied'
+      row.sourceQuality.main_article_source_allowed === true
     ).length,
     conditional_source_blocked_count: rows.filter(row =>
-      row.sourceQuality.requires_cross_check === true &&
+      row.sourceQuality.requires_conditional_evidence === true &&
       row.sourceQuality.main_article_source_allowed !== true
     ).length,
     unknown_source_quality_count: rows.filter(row =>
@@ -569,7 +557,6 @@ module.exports = {
   CROSS_CHECK_STATUSES,
   FLAT_FIELD_MAP,
   MAIN_ARTICLE_POLICIES,
-  CONDITIONAL_EVIDENCE_RULE_QUALITIES,
   SOURCE_POLICY_MAPPING,
   SOURCE_QUALITY_BLOCKERS,
   SOURCE_QUALITY_FIELD_DRIFT,
@@ -578,7 +565,6 @@ module.exports = {
   SOURCE_URL_QUALITIES,
   classifySourceQuality,
   hasConcreteDatedEvidence,
-  nativeHalWorkflowEvidence,
   normalizeMainArticlePolicy,
   normalizeSourceQuality,
   sourceQualityFieldDrift,

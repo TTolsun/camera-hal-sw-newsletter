@@ -47,6 +47,8 @@ function candidate(overrides = {}) {
       main_article_source_blockers: [],
       cross_check_status: 'not_required',
       requires_cross_check: false,
+      requires_conditional_evidence: false,
+      conditional_evidence_type: '',
       evidence_granularity: 'versioned_release_row',
       source_quality_notes: []
     },
@@ -77,7 +79,12 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.equal(capsule.score.camera_hal_directness, 5);
   assert.equal(capsule.source_quality.source_url_quality, 'official_release_note_anchor');
   assert.equal(capsule.main_article_readiness.source_ready, true);
+  assert.equal(capsule.main_article_readiness.selection_input_ready, true);
+  assert.equal(capsule.main_article_readiness.selection_ready, true);
+  assert.equal(capsule.main_article_readiness.selection_input_ready, capsule.main_article_readiness.selection_ready);
   assert.deepEqual(capsule.source_quality_field_drift, []);
+  assert.equal(capsule.requires_conditional_evidence, false);
+  assert.equal(capsule.conditional_evidence_type, '');
   assert.equal(capsule.selection.final_selected, true);
   assert.ok(capsule.evidence.length > 0);
   assert.ok(capsule.estimated_tokens <= 1100);

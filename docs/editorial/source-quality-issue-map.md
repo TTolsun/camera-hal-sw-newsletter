@@ -9,7 +9,8 @@ Issue `#46` closes the remaining source URL / prompt quality gap by turning sour
 - `source_quality` is canonical for new artifacts.
 - Flat fields such as `source_url_quality` and `main_article_source_allowed` are compatibility mirrors only.
 - `main_article_source_allowed` is source/evidence-policy-only. It must not depend on `finalSelectionEligibility`, score, final selection result, or HAL signal output.
-- `main_article_readiness` combines source readiness, HAL signal readiness, and selection readiness for final main article promotion.
+- `main_article_readiness` combines source readiness, HAL signal readiness, and `selection_input_ready` for final main article promotion.
+- `selection_ready` is kept only as a deprecated compatibility alias for `selection_input_ready`.
 
 ## Policy Fields
 
@@ -27,7 +28,7 @@ Issue `#46` closes the remaining source URL / prompt quality gap by turning sour
 | `mainArticlePolicy` | Default `source_quality_status` | Default `main_article_source_allowed` | Notes |
 | --- | --- | ---: | --- |
 | `allowed` | `allowed` | `true` | URL/evidence validation still required. |
-| `conditional` | `conditional` | `false` | Becomes source-ready only after required evidence/cross-check is satisfied. |
+| `conditional` | `conditional` | `false` | Becomes source-ready only after source evidence and required primary confirmation/cross-check are satisfied. HAL/native workflow readiness is combined separately. |
 | `watchlist_only` | `blocked` | `false` | Watchlist/context only. |
 | `reference_only` | `blocked` | `false` | Background support only, not dated event evidence. |
 | `blocked` | `blocked` | `false` | Never main source. |
@@ -56,4 +57,3 @@ Raw `source_url_quality=unknown` is always main-ineligible. If registry policy a
 - HAL signal quality owns `hal_impact_axes`, `signal_quality_status`, and HAL hard blockers.
 - Capsule build assembles `do_not_claim[]` from source quality blockers, linked evidence blocked/failed status, HAL signal blockers, and fact-check restrictions.
 - Stage 3 generation consumes `source_quality`; it must not infer or repair missing source quality.
-

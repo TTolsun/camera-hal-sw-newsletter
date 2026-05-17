@@ -19,6 +19,7 @@ The source effectiveness report and PR body should expose:
 - `source_quality_status_summary`
 - `source_quality_blocker_summary`
 - `selected_main_source_quality_coverage`
+- `main_eligible_source_quality_coverage`
 - `conditional_source_promoted_count`
 - `conditional_source_blocked_count`
 - `unknown_source_quality_count`
@@ -30,7 +31,8 @@ The source effectiveness report and PR body should expose:
 - Latest 2 generated issues include `source_quality` for all Stage 3 main articles.
 - `legacy_source_quality_warning_count=0` for new artifacts.
 - `source_quality_field_drift_count=0`.
-- After exit, missing `source_quality` in regenerated Stage 3 artifacts becomes a hard fail for all regenerated artifacts.
+- After rollout exit, legacy warning mode applies only to archived artifacts.
+- After exit, any regenerated Stage 3 artifact must include canonical `source_quality`; missing `source_quality` becomes a hard fail for regenerated artifacts.
 
 ## Validation
 
@@ -42,4 +44,3 @@ npm.cmd run validate:config
 npm.cmd run test
 npm.cmd run validate
 ```
-

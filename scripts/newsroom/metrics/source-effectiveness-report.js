@@ -621,6 +621,10 @@ function finalizeState(state) {
       selected_main_count: 0,
       with_source_quality_count: 0
     },
+    main_eligible_source_quality_coverage: {
+      main_eligible_candidate_count: 0,
+      with_source_quality_count: 0
+    },
     conditional_source_promoted_count: 0,
     conditional_source_blocked_count: 0,
     unknown_source_quality_count: 0,
@@ -646,6 +650,8 @@ function finalizeState(state) {
       const sourceQuality = normalizeSourceQuality(candidate);
       const drift = sourceQualityFieldDrift(candidate);
       const selectedMain = state.selectedKeys.has(key);
+      const mainEligible = candidate.finalSelectionEligibility === 'main' ||
+        candidate.final_selection_eligibility === 'main';
       incrementObjectCount(metrics.source_url_quality_distribution, sourceQuality.source_url_quality);
       incrementObjectCount(metrics.source_quality_status_summary, sourceQuality.source_quality_status);
       for (const blocker of ensureArray(sourceQuality.main_article_source_blockers)) {
@@ -657,13 +663,20 @@ function finalizeState(state) {
           metrics.selected_main_source_quality_coverage.with_source_quality_count += 1;
         }
       }
+      if (mainEligible) {
+        metrics.main_eligible_source_quality_coverage.main_eligible_candidate_count += 1;
+        if (candidate.source_quality && typeof candidate.source_quality === 'object') {
+          metrics.main_eligible_source_quality_coverage.with_source_quality_count += 1;
+        }
+      }
       if (
+        sourceQuality.requires_conditional_evidence === true &&
         sourceQuality.source_quality_status === 'allowed' &&
-        sourceQuality.cross_check_status === 'required_satisfied'
+        sourceQuality.main_article_source_allowed === true
       ) {
         metrics.conditional_source_promoted_count += 1;
       }
-      if (sourceQuality.requires_cross_check === true && sourceQuality.main_article_source_allowed !== true) {
+      if (sourceQuality.requires_conditional_evidence === true && sourceQuality.main_article_source_allowed !== true) {
         metrics.conditional_source_blocked_count += 1;
       }
       if (sourceQuality.source_url_quality === 'unknown' || sourceQuality.source_quality_status === 'unknown') {
@@ -866,6 +879,11 @@ function buildSourceEffectivenessReport(options = {}) {
       coverage.with_source_quality_count += Number(source.selected_main_source_quality_coverage?.with_source_quality_count || 0);
       return coverage;
     }, { selected_main_count: 0, with_source_quality_count: 0 }),
+    main_eligible_source_quality_coverage: sources.reduce((coverage, source) => {
+      coverage.main_eligible_candidate_count += Number(source.main_eligible_source_quality_coverage?.main_eligible_candidate_count || 0);
+      coverage.with_source_quality_count += Number(source.main_eligible_source_quality_coverage?.with_source_quality_count || 0);
+      return coverage;
+    }, { main_eligible_candidate_count: 0, with_source_quality_count: 0 }),
     conditional_source_promoted_count: sources.reduce((sum, source) => sum + source.conditional_source_promoted_count, 0),
     conditional_source_blocked_count: sources.reduce((sum, source) => sum + source.conditional_source_blocked_count, 0),
     unknown_source_quality_count: sources.reduce((sum, source) => sum + source.unknown_source_quality_count, 0),
@@ -950,7 +968,8 @@ function renderSourceEffectivenessMarkdown(report) {
     `- Generic noise candidates: ${report.summary.generic_noise_count}`,
     `- Duplicate candidates: ${report.summary.duplicate_count}`,
     `- Recommendations: ${recommendationCountText(report.summary)}`,
-    `- Source quality coverage: ${report.summary.selected_main_source_quality_coverage?.with_source_quality_count || 0}/${report.summary.selected_main_source_quality_coverage?.selected_main_count || 0} selected main candidates`,
+    `- Selected main source quality coverage: ${report.summary.selected_main_source_quality_coverage?.with_source_quality_count || 0}/${report.summary.selected_main_source_quality_coverage?.selected_main_count || 0}`,
+    `- Main-eligible source quality coverage: ${report.summary.main_eligible_source_quality_coverage?.with_source_quality_count || 0}/${report.summary.main_eligible_source_quality_coverage?.main_eligible_candidate_count || 0}`,
     `- Conditional source promoted/blocked: ${report.summary.conditional_source_promoted_count || 0}/${report.summary.conditional_source_blocked_count || 0}`,
     `- Unknown source quality: ${report.summary.unknown_source_quality_count || 0}`,
     `- Source quality field drift: ${report.summary.source_quality_field_drift_count || 0}`,

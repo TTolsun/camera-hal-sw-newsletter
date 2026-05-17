@@ -270,6 +270,7 @@ function mainArticleReadiness(candidate, sourceQuality, halSignal, drift) {
     ready: sourceReady && halSignalReady && selectionReady && blockers.length === 0,
     source_ready: sourceReady,
     hal_signal_ready: halSignalReady,
+    selection_input_ready: selectionReady,
     selection_ready: selectionReady,
     blockers
   };
@@ -285,6 +286,8 @@ function capsuleSourceQualityFlatFields(sourceQuality) {
     main_article_source_blockers: flat.main_article_source_blockers,
     cross_check_status: flat.cross_check_status,
     requires_cross_check: flat.requires_cross_check,
+    requires_conditional_evidence: flat.requires_conditional_evidence,
+    conditional_evidence_type: flat.conditional_evidence_type,
     evidence_granularity: flat.evidence_granularity
   };
 }
