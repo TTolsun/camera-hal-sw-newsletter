@@ -4,7 +4,7 @@
   "newsletter_date": "2026-05-17",
   "validations": [
     {
-      "proposal_id": "camera_androidx_1_6_1_release",
+      "proposal_id": "discovery-2026-05-17-001",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "accepted": true,
@@ -12,15 +12,7 @@
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "libcamera_v0_7_1_release",
-      "candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "libcamera-blog"
-    },
-    {
-      "proposal_id": "camerax_1_3_0_beta02_release",
+      "proposal_id": "discovery-2026-05-17-001",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
       "accepted": true,
@@ -28,7 +20,7 @@
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "camerax_1_4_0_alpha07_release",
+      "proposal_id": "discovery-2026-05-17-001",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "accepted": true,
@@ -36,7 +28,15 @@
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "gcc_16_1_cpp26_features",
+      "proposal_id": "discovery-2026-05-17-002",
+      "candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "libcamera-blog"
+    },
+    {
+      "proposal_id": "discovery-2026-05-17-003",
       "candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "accepted": true,
@@ -44,7 +44,7 @@
       "source_policy_match": "iso-cpp-blog"
     },
     {
-      "proposal_id": "glaze_7_2_cpp26_reflection",
+      "proposal_id": "discovery-2026-05-17-003",
       "candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "normalized_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "accepted": true,

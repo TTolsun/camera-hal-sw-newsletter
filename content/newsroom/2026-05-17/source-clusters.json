@@ -34,7 +34,7 @@
         },
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "title": "CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
+          "title": "КамераX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -604,23 +604,6 @@
       ]
     },
     {
-      "cluster_id": "1b6229ca02e0650d",
-      "cluster_key": "https://openai.com/news",
-      "canonical_url": "https://openai.com/news/",
-      "canonical_title": "OpenAI News | OpenAI",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://openai.com/news/",
-          "title": "OpenAI News | OpenAI",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "d9e1cadbab88d6f3",
       "cluster_key": "https://deepmind.google/blog",
       "canonical_url": "https://deepmind.google/blog/",
@@ -701,6 +684,23 @@
           "title": "Download LLVM releases",
           "canonical": true,
           "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a151f85179dd24ec",
+      "cluster_key": "https://www.phoronix.com/review/zimacube-2",
+      "canonical_url": "https://www.phoronix.com/review/zimacube-2",
+      "canonical_title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.phoronix.com/review/zimacube-2",
+          "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
+          "canonical": true,
+          "reliability": "tech-media",
           "manual_seed": false
         }
       ]
