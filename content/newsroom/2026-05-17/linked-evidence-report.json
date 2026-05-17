@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-17",
-  "generated_at": "2026-05-17T01:13:53.265Z",
+  "generated_at": "2026-05-17T10:43:35.525Z",
   "linked_evidence_mode": "extract_only",
   "linked_evidence_limits": {
     "max_links_per_candidate": 8,
@@ -34,19 +34,19 @@
   },
   "source_aware_totals": {
     "schema_version": 1,
-    "total_count": 2032,
+    "total_count": 2031,
     "by_type": {
-      "generic_url": 2010,
+      "generic_url": 2009,
       "github_issue": 1,
       "github_pull_request": 1,
       "github_release": 1,
       "mailing_list": 19
     },
     "by_fetch_status": {
-      "skipped": 2032
+      "skipped": 2031
     },
     "impact_type_counts": {},
-    "warning_count": 2032,
+    "warning_count": 2031,
     "has_resolved_evidence": false,
     "has_unresolved_evidence": true,
     "top_identifiers": [
@@ -50076,61 +50076,7 @@
         },
         {
           "url": "https://developer.android.com/get-started/overview",
-          "text": "Hello world",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://developer.android.com/courses",
-          "text": "Training courses",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://developer.android.com/get-started/codelabs",
-          "text": "Tutorials",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://developer.android.com/develop/ui/compose/adopt",
-          "text": "Compose for teams",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://developer.android.com/kotlin",
-          "text": "Kotlin for Android",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://play.google.com/console/about/guides/play-commerce/",
-          "text": "Monetization with Play ↗️",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://developer.android.com/developer-verification",
-          "text": "Android Developer Verification",
+          "text": "Hello, world!",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "blocked_or_deferred",
@@ -50147,8 +50093,8 @@
           "skipped_reason": "policy_disabled"
         },
         {
-          "url": "https://developer.android.com/xr",
-          "text": "Android XR",
+          "url": "https://developer.android.com/compose",
+          "text": "Compose for UI",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "blocked_or_deferred",
@@ -50156,8 +50102,35 @@
           "skipped_reason": "policy_disabled"
         },
         {
-          "url": "https://developer.android.com/wear",
-          "text": "Wear OS",
+          "url": "https://developer.android.com/studio",
+          "text": "AI-powered IDE",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://developer.android.com/courses",
+          "text": "Training",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://play.google.com/console/about/guides/play-commerce/",
+          "text": "Monetization with Play ↗️",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://developer.android.com/phones-tablets-foldables",
+          "text": "Phones, tablets, foldables",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "blocked_or_deferred",
@@ -50183,6 +50156,15 @@
           "skipped_reason": "policy_disabled"
         },
         {
+          "url": "https://developer.android.com/xr",
+          "text": "Android XR",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
           "url": "https://developer.android.com/googlebook",
           "text": "Googlebook",
           "source_field": "html.body",
@@ -50194,6 +50176,15 @@
         {
           "url": "https://developer.android.com/chrome-os",
           "text": "ChromeOS",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://developer.android.com/wear",
+          "text": "Wear OS",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "blocked_or_deferred",
@@ -50597,6 +50588,15 @@
           "skipped_reason": "policy_disabled"
         },
         {
+          "url": "https://developer.android.com/multidevice",
+          "text": "Multidevice support",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
           "url": "https://developer.android.com/develop/ui",
           "text": "User interfaces",
           "source_field": "html.body",
@@ -50705,8 +50705,8 @@
           "skipped_reason": "policy_disabled"
         },
         {
-          "url": "https://developer.android.com/guide/topics/large-screens/get-started-with-large-screens",
-          "text": "Adaptive UI",
+          "url": "https://developer.android.com/training/cars",
+          "text": "Android for Cars",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "blocked_or_deferred",
@@ -50714,8 +50714,8 @@
           "skipped_reason": "policy_disabled"
         },
         {
-          "url": "https://developer.android.com/training/wearables",
-          "text": "Wear OS",
+          "url": "https://developer.android.com/training/tv",
+          "text": "Android TV",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "blocked_or_deferred",
@@ -50732,26 +50732,17 @@
           "skipped_reason": "policy_disabled"
         },
         {
+          "url": "https://developer.android.com/training/wearables",
+          "text": "Wear OS",
+          "source_field": "html.body",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
           "url": "https://developer.android.com/health-and-fitness/guides",
           "text": "Android Health",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://developer.android.com/training/cars",
-          "text": "Android for Cars",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://developer.android.com/training/tv",
-          "text": "Android TV",
           "source_field": "html.body",
           "extraction_method": "html_anchor",
           "evidence_role": "blocked_or_deferred",
@@ -51508,15 +51499,15 @@
       ],
       "source_aware_linked_evidence_summary": {
         "schema_version": 1,
-        "total_count": 162,
+        "total_count": 161,
         "by_type": {
-          "generic_url": 162
+          "generic_url": 161
         },
         "by_fetch_status": {
-          "skipped": 162
+          "skipped": 161
         },
         "impact_type_counts": {},
-        "warning_count": 162,
+        "warning_count": 161,
         "has_resolved_evidence": false,
         "has_unresolved_evidence": true,
         "top_identifiers": [
@@ -51524,10 +51515,10 @@
           "https://developer.android.com/get-started",
           "https://developer.android.com/ai",
           "https://developer.android.com/get-started/overview",
-          "https://developer.android.com/courses",
-          "https://developer.android.com/get-started/codelabs",
-          "https://developer.android.com/develop/ui/compose/adopt",
-          "https://developer.android.com/kotlin"
+          "https://developer.android.com/adaptive-apps",
+          "https://developer.android.com/compose",
+          "https://developer.android.com/studio",
+          "https://developer.android.com/courses"
         ]
       },
       "source_aware_linked_evidence": [
@@ -51610,158 +51601,8 @@
           "type": "generic_url",
           "url": "https://developer.android.com/get-started/overview",
           "identifier": "https://developer.android.com/get-started/overview",
-          "source_text": "Hello world",
-          "raw_excerpt": "Hello world https://developer.android.com/get-started/overview",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/courses",
-          "identifier": "https://developer.android.com/courses",
-          "source_text": "Training courses",
-          "raw_excerpt": "Training courses https://developer.android.com/courses",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/get-started/codelabs",
-          "identifier": "https://developer.android.com/get-started/codelabs",
-          "source_text": "Tutorials",
-          "raw_excerpt": "Tutorials https://developer.android.com/get-started/codelabs",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/develop/ui/compose/adopt",
-          "identifier": "https://developer.android.com/develop/ui/compose/adopt",
-          "source_text": "Compose for teams",
-          "raw_excerpt": "Compose for teams https://developer.android.com/develop/ui/compose/adopt",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/kotlin",
-          "identifier": "https://developer.android.com/kotlin",
-          "source_text": "Kotlin for Android",
-          "raw_excerpt": "Kotlin for Android https://developer.android.com/kotlin",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://play.google.com/console/about/guides/play-commerce/",
-          "identifier": "https://play.google.com/console/about/guides/play-commerce/",
-          "source_text": "Monetization with Play ↗️",
-          "raw_excerpt": "Monetization with Play ↗️ https://play.google.com/console/about/guides/play-commerce/",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/developer-verification",
-          "identifier": "https://developer.android.com/developer-verification",
-          "source_text": "Android Developer Verification",
-          "raw_excerpt": "Android Developer Verification https://developer.android.com/developer-verification",
+          "source_text": "Hello, world!",
+          "raw_excerpt": "Hello, world! https://developer.android.com/get-started/overview",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -51808,10 +51649,10 @@
         },
         {
           "type": "generic_url",
-          "url": "https://developer.android.com/xr",
-          "identifier": "https://developer.android.com/xr",
-          "source_text": "Android XR",
-          "raw_excerpt": "Android XR https://developer.android.com/xr",
+          "url": "https://developer.android.com/compose",
+          "identifier": "https://developer.android.com/compose",
+          "source_text": "Compose for UI",
+          "raw_excerpt": "Compose for UI https://developer.android.com/compose",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -51833,10 +51674,85 @@
         },
         {
           "type": "generic_url",
-          "url": "https://developer.android.com/wear",
-          "identifier": "https://developer.android.com/wear",
-          "source_text": "Wear OS",
-          "raw_excerpt": "Wear OS https://developer.android.com/wear",
+          "url": "https://developer.android.com/studio",
+          "identifier": "https://developer.android.com/studio",
+          "source_text": "AI-powered IDE",
+          "raw_excerpt": "AI-powered IDE https://developer.android.com/studio",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://developer.android.com/courses",
+          "identifier": "https://developer.android.com/courses",
+          "source_text": "Training",
+          "raw_excerpt": "Training https://developer.android.com/courses",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://play.google.com/console/about/guides/play-commerce/",
+          "identifier": "https://play.google.com/console/about/guides/play-commerce/",
+          "source_text": "Monetization with Play ↗️",
+          "raw_excerpt": "Monetization with Play ↗️ https://play.google.com/console/about/guides/play-commerce/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://developer.android.com/phones-tablets-foldables",
+          "identifier": "https://developer.android.com/phones-tablets-foldables",
+          "source_text": "Phones, tablets, foldables",
+          "raw_excerpt": "Phones, tablets, foldables https://developer.android.com/phones-tablets-foldables",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -51908,6 +51824,31 @@
         },
         {
           "type": "generic_url",
+          "url": "https://developer.android.com/xr",
+          "identifier": "https://developer.android.com/xr",
+          "source_text": "Android XR",
+          "raw_excerpt": "Android XR https://developer.android.com/xr",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
           "url": "https://developer.android.com/googlebook",
           "identifier": "https://developer.android.com/googlebook",
           "source_text": "Googlebook",
@@ -51937,6 +51878,31 @@
           "identifier": "https://developer.android.com/chrome-os",
           "source_text": "ChromeOS",
           "raw_excerpt": "ChromeOS https://developer.android.com/chrome-os",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://developer.android.com/wear",
+          "identifier": "https://developer.android.com/wear",
+          "source_text": "Wear OS",
+          "raw_excerpt": "Wear OS https://developer.android.com/wear",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -53058,6 +53024,31 @@
         },
         {
           "type": "generic_url",
+          "url": "https://developer.android.com/multidevice",
+          "identifier": "https://developer.android.com/multidevice",
+          "source_text": "Multidevice support",
+          "raw_excerpt": "Multidevice support https://developer.android.com/multidevice",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
           "url": "https://developer.android.com/develop/ui",
           "identifier": "https://developer.android.com/develop/ui",
           "source_text": "User interfaces",
@@ -53358,10 +53349,10 @@
         },
         {
           "type": "generic_url",
-          "url": "https://developer.android.com/guide/topics/large-screens/get-started-with-large-screens",
-          "identifier": "https://developer.android.com/guide/topics/large-screens/get-started-with-large-screens",
-          "source_text": "Adaptive UI",
-          "raw_excerpt": "Adaptive UI https://developer.android.com/guide/topics/large-screens/get-started-with-large-screens",
+          "url": "https://developer.android.com/training/cars",
+          "identifier": "https://developer.android.com/training/cars",
+          "source_text": "Android for Cars",
+          "raw_excerpt": "Android for Cars https://developer.android.com/training/cars",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -53383,10 +53374,10 @@
         },
         {
           "type": "generic_url",
-          "url": "https://developer.android.com/training/wearables",
-          "identifier": "https://developer.android.com/training/wearables",
-          "source_text": "Wear OS",
-          "raw_excerpt": "Wear OS https://developer.android.com/training/wearables",
+          "url": "https://developer.android.com/training/tv",
+          "identifier": "https://developer.android.com/training/tv",
+          "source_text": "Android TV",
+          "raw_excerpt": "Android TV https://developer.android.com/training/tv",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -53433,60 +53424,35 @@
         },
         {
           "type": "generic_url",
+          "url": "https://developer.android.com/training/wearables",
+          "identifier": "https://developer.android.com/training/wearables",
+          "source_text": "Wear OS",
+          "raw_excerpt": "Wear OS https://developer.android.com/training/wearables",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
           "url": "https://developer.android.com/health-and-fitness/guides",
           "identifier": "https://developer.android.com/health-and-fitness/guides",
           "source_text": "Android Health",
           "raw_excerpt": "Android Health https://developer.android.com/health-and-fitness/guides",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/training/cars",
-          "identifier": "https://developer.android.com/training/cars",
-          "source_text": "Android for Cars",
-          "raw_excerpt": "Android for Cars https://developer.android.com/training/cars",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/training/tv",
-          "identifier": "https://developer.android.com/training/tv",
-          "source_text": "Android TV",
-          "raw_excerpt": "Android TV https://developer.android.com/training/tv",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -69914,7 +69880,7 @@
       "source": "libcamera Documentation",
       "published_date": "",
       "source_kind": "documentation_page",
-      "final_selection_eligibility": "watchlist",
+      "final_selection_eligibility": "exclude",
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -71357,11 +71323,11 @@
       ]
     },
     {
-      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
-      "url": "https://www.phoronix.com/review/zimacube-2",
+      "title": "FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software",
+      "url": "https://www.phoronix.com/news/FluidX3D-3.7-Released",
       "normalized_url": "",
       "source": "Phoronix Linux Camera / Media",
-      "published_date": "Fri, 15 May 2026 09:15:36 -0400",
+      "published_date": "Sun, 17 May 2026 04:09:00 -0400",
       "source_kind": "rss_item",
       "final_selection_eligibility": "watchlist",
       "linked_evidence_summary": {

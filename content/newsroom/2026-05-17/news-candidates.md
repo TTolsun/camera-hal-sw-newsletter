@@ -49,9 +49,8 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider | Mon, 27 Apr 2026 21:25:11 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m) |
 | watchlist | generic_tech_watchlist | 6 | 27 | 2 | rss-item | yes | rss_item | ISO C++ Blog | The ACCU on Sea 2026 Schedule is Now Announced -- ACCU | Thu, 07 May 2026 18:40:56 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/the-accu-on-sea-2026-schedule-is-now-announced) |
 | watchlist | generic_tech_watchlist | 6 | 74 | 8 | release-note-item | yes | release_note_item | Claude Code Changelog | Claude Code Changelog - 2.1.143 | May 15, 2026 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://code.claude.com/docs/en/changelog) |
-| watchlist | camera_driver_image_pipeline | 2 | 53 | 4 | html-watch-page | no | documentation_page | libcamera Documentation | Introduction &mdash; libcamera | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://libcamera.org/introduction.html) |
 | watchlist | cpp_ai_tooling_fallback | 5 | 35 | 4 | release-note-page | no | rolling_page | LLVM Release Notes | Download LLVM releases | 검토 필요 | No RSS item, no published date, no concrete release/API/behavior change detected. | [link](https://releases.llvm.org/) |
-| watchlist | generic_tech_watchlist | 6 | 53 | 4 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU | Fri, 15 May 2026 09:15:36 -0400 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://www.phoronix.com/review/zimacube-2) |
+| watchlist | generic_tech_watchlist | 6 | 53 | 6 | rss-item | yes | rss_item | Phoronix Linux Camera / Media | FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software | Sun, 17 May 2026 04:09:00 -0400 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://www.phoronix.com/news/FluidX3D-3.7-Released) |
 
 ## 제외 또는 낮은 신뢰도 항목
 
@@ -71,6 +70,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | exclude | generic_tech_watchlist | 6 | 32 | 2 | homepage-watch | no | blog_index | Google DeepMind Blog | News — Google DeepMind | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://deepmind.google/blog/) |
 | exclude | generic_tech_watchlist | 6 | 32 | 0 | homepage-watch | no | rolling_page | Anthropic News | Newsroom \ Anthropic | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://www.anthropic.com/news) |
 | exclude | generic_tech_watchlist | 6 | 32 | 0 | homepage-watch | no | blog_index | Google Cloud AI & Machine Learning Blog | AI & Machine Learning \| Google Cloud Blog | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://cloud.google.com/blog/products/ai-machine-learning) |
+| exclude | camera_driver_image_pipeline | 2 | 53 | 4 | html-watch-page | no | documentation_page | libcamera Documentation | Introduction &mdash; libcamera | 검토 필요 | Reference index source; use only as context/background and exclude from final article inputs. | [link](https://libcamera.org/introduction.html) |
 
 ## 원본 후보
 
@@ -506,7 +506,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Article candidate: no
 - Watch page: yes
 - 날짜 근거 있음: no
-- Evidence level: undated-watch-page
+- Evidence level: reference-index
 - Final selection eligibility: exclude
 - Source kind: documentation_page
 - Main eligible: no
@@ -1766,11 +1766,11 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Article candidate: no
 - Watch page: yes
 - 날짜 근거 있음: no
-- Evidence level: undated-watch-page
-- Final selection eligibility: watchlist
+- Evidence level: reference-index
+- Final selection eligibility: exclude
 - Source kind: documentation_page
 - Main eligible: no
-- Briefing only: yes
+- Briefing only: no
 - Reference only: yes
 - Source gap risk: yes
 - Evidence score: 4
@@ -1778,8 +1778,8 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - API/component: libcamera
 - Behavior change: Use this source page as a change/release-note watch target.
 - Cross-check 필요: no
-- Selection exclusion reason: No RSS item, no published date, no concrete release/API/behavior change detected.
-- Verification hint: No RSS item, no published date, no concrete release/API/behavior change detected.
+- Selection exclusion reason: Reference index source; use only as context/background and exclude from final article inputs.
+- Verification hint: Reference index source; use only as context/background and exclude from final article inputs.
 - Relevance Score: 53
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: libcamera Documentation (project-official, medium, score 53): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)
@@ -1829,12 +1829,12 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: LLVM Release Notes (project-official, medium, score 35): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
 
-### 40. ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU
+### 40. FluidX3D Lands A Big Speed-Up For This OpenCL CFD Software
 
 - 출처: Phoronix Linux Camera / Media
 - 출처 URL: https://www.phoronix.com/
-- 발행일: Fri, 15 May 2026 09:15:36 -0400
-- Link: https://www.phoronix.com/review/zimacube-2
+- 발행일: Sun, 17 May 2026 04:09:00 -0400
+- Link: https://www.phoronix.com/news/FluidX3D-3.7-Released
 - Section: Linux Kernel / Platform Watch
 - Source category: linux-kernel
 - Source priority: medium
@@ -1863,22 +1863,21 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 4
+- Evidence score: 6
 - Version/release: 추출 안 됨
 - API/component: CPU
-- Behavior change: Earlier this year we reviewed the ZimaBoard 2 for building a Linux home storage server.
+- Behavior change: Released this week was FluidX3D 3.7, the latest feature update to this computational fluid dynamics (CFD) software that is CPU/GPU accelerated by way of OpenCL...
 - Cross-check 필요: yes
 - Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
 - Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
 - Relevance Score: 53
-- 요약: Earlier this year we reviewed the ZimaBoard 2 for building a Linux home storage server. That was a nifty little device but for those looking for a more polished product than assembling your storage devices in cardboard cut-outs and the like, IceWhale has launched the ZimaCube 2. The ZimaCube 2 is a nice and polished, literal cube, to serve as your personal cloud / network attached storage (NAS) device.
+- 요약: Released this week was FluidX3D 3.7, the latest feature update to this computational fluid dynamics (CFD) software that is CPU/GPU accelerated by way of OpenCL...
 - Selection reason: Phoronix Linux Camera / Media (tech-media, medium, score 53): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
 ## Collector 실패
 
 - LLVM Project Blog: 404 Not Found
 - OpenAI News: 403 Forbidden
-- 요즘IT: 403 Forbidden
 
 ## 편집장 체크리스트
 

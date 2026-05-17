@@ -2,17 +2,17 @@
   "schema_version": 1,
   "manifest_type": "raw_candidate",
   "newsletter_date": "2026-05-17",
-  "generated_at": "2026-05-17T01:13:53.287Z",
+  "generated_at": "2026-05-17T10:43:35.542Z",
   "workflow": "manual-source-collection-pr",
   "candidate_artifact": "content/collected-news/2026-05-17/manual-candidates.json",
-  "candidate_artifact_hash": "778a6c8c863ded25c7e5e8e2eb10eb2e95cb31691acbf1de4f35bd033840ddb7",
-  "artifact_hash": "778a6c8c863ded25c7e5e8e2eb10eb2e95cb31691acbf1de4f35bd033840ddb7",
+  "candidate_artifact_hash": "d0e8d1b822fdca5d017141d49e919d2fb62977653d0723cbb5efaebd97517880",
+  "artifact_hash": "d0e8d1b822fdca5d017141d49e919d2fb62977653d0723cbb5efaebd97517880",
   "candidate_count": 40,
   "source_count": 44,
   "source_registry_path": "data/news-sources.json",
-  "source_registry_hash": "14f3d56f8c077076f7970567c3526f97eff2dcc0dd25013376b130afed5d8ad4",
+  "source_registry_hash": "608e16b6d3d915c984e6dfadfc24d286beeb01d28264d56e7fd6ba21a969b192",
   "llm_used": false,
   "generator": "collect-news-candidates",
-  "github_run_id": "25977712140",
-  "github_sha": "1e73070dc2598f6f95b4c8945ce08a37e12c2e98"
+  "github_run_id": "25988615763",
+  "github_sha": "cb1a2c5c53d20ff9303db44650ca547c5abe3600"
 }
