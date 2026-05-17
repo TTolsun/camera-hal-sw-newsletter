@@ -1,0 +1,711 @@
+{
+  "date": "2026-05-17",
+  "generated_at": "2026-05-17T01:18:55.173Z",
+  "status": "FAILED",
+  "failure_reason": "Fallback builder could not fill minimum main article count 3; only 1 article(s) available.",
+  "fallback_public_issue_status": "FAILED",
+  "original_fact_check_status": "PASS",
+  "original_must_fix_count": 0,
+  "original_source_gap_count": 0,
+  "fallback_public_issue_removed_blockers": true,
+  "fallback_public_issue_removed_article_count": 2,
+  "base_draft_source": "editor-draft.json",
+  "preserve_article_count": 1,
+  "final_article_count": 1,
+  "demoted_articles": [
+    {
+      "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "category": "Tooling Watch / Fallback",
+      "action": "replace-or-demote",
+      "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.; Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+      "sources": [
+        {
+          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+        }
+      ]
+    },
+    {
+      "headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "category": "Tooling Watch / Fallback",
+      "action": "replace-or-demote",
+      "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.; Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+      "sources": [
+        {
+          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        }
+      ]
+    }
+  ],
+  "fallback_articles": [],
+  "rejected_candidates": [
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "allow_fallback": false,
+      "reason": "duplicate_url"
+    },
+    {
+      "title": "Introduction &mdash; libcamera",
+      "url": "https://libcamera.org/introduction.html",
+      "source": "libcamera Documentation",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "allow_fallback": false,
+      "reason": "CameraX release-note candidate has no concrete source_extraction bullet"
+    },
+    {
+      "title": "1.3.0-beta02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "allow_fallback": false,
+      "reason": "CameraX release-note candidate has no concrete source_extraction bullet"
+    },
+    {
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "allow_fallback": false,
+      "reason": "CameraX release-note candidate has no concrete source_extraction bullet"
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": false,
+      "reason": "relevance_bucket=cpp_ai_tooling_fallback not allowed"
+    },
+    {
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": false,
+      "reason": "relevance_bucket=cpp_ai_tooling_fallback not allowed"
+    },
+    {
+      "title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+      "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "source": "AOSP Camera Documentation",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+      "url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Gratitude saw 25% higher retention for widget users",
+      "url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "A look ahead: Making it easier and faster to publish safer apps",
+      "url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/whatsnew",
+      "source": "AOSP What's New / Release Notes",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "source": "Android Compatibility Definition Document",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Building for the Intelligence System on Android",
+      "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
+      "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Overview",
+      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "source": "Android Security Bulletin",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "May",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
+      "source": "Android Security Bulletin",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false"
+    },
+    {
+      "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false"
+    },
+    {
+      "title": "C++: The Documentary trailer",
+      "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Results summary: 2026 Annual C++ Developer Survey \"Lite\"",
+      "url": "https://isocpp.org//blog/2026/05/2026-survey-summary",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "JSON and C++26 compile-time reflection: a talk -- Daniel Lemire",
+      "url": "https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; reference_only=true"
+    },
+    {
+      "title": "What Happens When a Destructor Throws -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Evolving a Translation System with Reflection in C++",
+      "url": "https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; reference_only=true"
+    },
+    {
+      "title": "CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 Back to Basics: Move Semantics -- Ben Saks",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "The ACCU on Sea 2026 Schedule is Now Announced -- ACCU",
+      "url": "https://isocpp.org//blog/2026/05/the-accu-on-sea-2026-schedule-is-now-announced",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Claude Code Changelog - 2.1.143",
+      "url": "https://code.claude.com/docs/en/changelog",
+      "source": "Claude Code Changelog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Samsung Mobile Security",
+      "url": "https://security.samsungmobile.com/securityUpdate.smsb",
+      "source": "Samsung Mobile Security Updates",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Qualcomm Documentation",
+      "url": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+      "source": "Qualcomm Security Bulletins",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Android Developer Newsletters &nbsp;|&nbsp; Android Developers",
+      "url": "https://developer.android.com/newsletter",
+      "source": "Android Developer Newsletter",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Latest News from Google Research Blog - Google Research",
+      "url": "https://research.google/blog/",
+      "source": "Google Research Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "News — Google DeepMind",
+      "url": "https://deepmind.google/blog/",
+      "source": "Google DeepMind Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Newsroom \\ Anthropic",
+      "url": "https://www.anthropic.com/news",
+      "source": "Anthropic News",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "AI & Machine Learning | Google Cloud Blog",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning",
+      "source": "Google Cloud AI & Machine Learning Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Download LLVM releases",
+      "url": "https://releases.llvm.org/",
+      "source": "LLVM Release Notes",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
+      "url": "https://www.phoronix.com/review/zimacube-2",
+      "source": "Phoronix Linux Camera / Media",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": false,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "allow_fallback": true,
+      "reason": "duplicate_url"
+    },
+    {
+      "title": "Introduction &mdash; libcamera",
+      "url": "https://libcamera.org/introduction.html",
+      "source": "libcamera Documentation",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "allow_fallback": true,
+      "reason": "CameraX release-note candidate has no concrete source_extraction bullet"
+    },
+    {
+      "title": "1.3.0-beta02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "allow_fallback": true,
+      "reason": "CameraX release-note candidate has no concrete source_extraction bullet"
+    },
+    {
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "allow_fallback": true,
+      "reason": "CameraX release-note candidate has no concrete source_extraction bullet"
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": true,
+      "reason": "duplicate_url"
+    },
+    {
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": true,
+      "reason": "duplicate_url"
+    },
+    {
+      "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false"
+    },
+    {
+      "title": "JSON and C++26 compile-time reflection: a talk -- Daniel Lemire",
+      "url": "https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; reference_only=true"
+    },
+    {
+      "title": "Evolving a Translation System with Reflection in C++",
+      "url": "https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; reference_only=true"
+    },
+    {
+      "title": "Download LLVM releases",
+      "url": "https://releases.llvm.org/",
+      "source": "LLVM Release Notes",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+      "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "source": "AOSP Camera Documentation",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+      "url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Gratitude saw 25% higher retention for widget users",
+      "url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "A look ahead: Making it easier and faster to publish safer apps",
+      "url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/whatsnew",
+      "source": "AOSP What's New / Release Notes",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "source": "Android Compatibility Definition Document",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Building for the Intelligence System on Android",
+      "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
+      "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Overview",
+      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "source": "Android Security Bulletin",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "May",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
+      "source": "Android Security Bulletin",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false"
+    },
+    {
+      "title": "C++: The Documentary trailer",
+      "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Results summary: 2026 Annual C++ Developer Survey \"Lite\"",
+      "url": "https://isocpp.org//blog/2026/05/2026-survey-summary",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "What Happens When a Destructor Throws -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 Back to Basics: Move Semantics -- Ben Saks",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "CppCon 2025 The Wonderful World of Designing a USB Stack Using Modern C++ -- Madeline Schneider",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "The ACCU on Sea 2026 Schedule is Now Announced -- ACCU",
+      "url": "https://isocpp.org//blog/2026/05/the-accu-on-sea-2026-schedule-is-now-announced",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Claude Code Changelog - 2.1.143",
+      "url": "https://code.claude.com/docs/en/changelog",
+      "source": "Claude Code Changelog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    },
+    {
+      "title": "Samsung Mobile Security",
+      "url": "https://security.samsungmobile.com/securityUpdate.smsb",
+      "source": "Samsung Mobile Security Updates",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Qualcomm Documentation",
+      "url": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+      "source": "Qualcomm Security Bulletins",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Android Developer Newsletters &nbsp;|&nbsp; Android Developers",
+      "url": "https://developer.android.com/newsletter",
+      "source": "Android Developer Newsletter",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Latest News from Google Research Blog - Google Research",
+      "url": "https://research.google/blog/",
+      "source": "Google Research Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "News — Google DeepMind",
+      "url": "https://deepmind.google/blog/",
+      "source": "Google DeepMind Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "Newsroom \\ Anthropic",
+      "url": "https://www.anthropic.com/news",
+      "source": "Anthropic News",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "AI & Machine Learning | Google Cloud Blog",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning",
+      "source": "Google Cloud AI & Machine Learning Blog",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true"
+    },
+    {
+      "title": "ZimaCube 2 Makes For A Nice Personal Cloud/NAS With Power Of Linux + Intel CPU",
+      "url": "https://www.phoronix.com/review/zimacube-2",
+      "source": "Phoronix Linux Camera / Media",
+      "relevance_bucket": "generic_tech_watchlist",
+      "allow_fallback": true,
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true"
+    }
+  ],
+  "source_status": "UNDERFILLED_NEEDS_FIX",
+  "failure_stage": "fallback_public_issue_builder",
+  "fallback_public_issue_failed": true,
+  "minimum_required_count": 3,
+  "top_rejected_reasons": [
+    {
+      "reason": "finalSelectionEligibility=watchlist; source_gap_risk=true; main_eligible=false; reference_only=true; briefing_only=true",
+      "count": 36
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; hasDatedEvidence=false; reference_only=true",
+      "count": 20
+    },
+    {
+      "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
+      "count": 6
+    },
+    {
+      "reason": "duplicate_url",
+      "count": 4
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude; source_gap_risk=true; main_eligible=false; reference_only=true",
+      "count": 4
+    }
+  ],
+  "written_by": "ensure-public-newsletter-artifacts"
+}
