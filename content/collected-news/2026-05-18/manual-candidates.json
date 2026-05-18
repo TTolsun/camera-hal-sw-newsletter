@@ -4,7 +4,7 @@
   "newsletter_date": "2026-05-18",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 21,
-  "generated_at": "2026-05-18T01:10:57.891Z",
+  "generated_at": "2026-05-18T02:30:46.722Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -8563,7 +8563,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=de",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -8591,7 +8591,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=de",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
@@ -8607,7 +8607,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=de",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -8635,7 +8635,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=de",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
@@ -11804,20 +11804,6 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=ru",
-          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -11834,20 +11820,6 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=ru",
-          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Compatibility Definition Document",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -12597,6 +12569,20 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -12613,6 +12599,20 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -12819,7 +12819,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=he",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=tr",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -12849,7 +12849,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=he",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=tr",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -22517,20 +22517,6 @@
           "contentLength": 6179
         },
         {
-          "url": "https://www.gstatic.com/cgc/super_cloud_gradient.png",
-          "sourceUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
-          "articleUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Cloud logo",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Google Cloud AI & Machine Learning Blog",
-          "validationStatus": "ok",
-          "contentLength": 9447
-        },
-        {
           "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/0_gemini_enterprise_agent_platform.max-1800x1800.jpg",
           "sourceUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
           "articleUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
@@ -22543,6 +22529,20 @@
           "attribution": "Google Cloud AI & Machine Learning Blog",
           "validationStatus": "ok",
           "contentLength": 46372
+        },
+        {
+          "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/google_ai_this_month.max-900x900.jpg",
+          "sourceUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
+          "articleUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "https://storage.googleapis.com/gweb-cloudblog-publish/images/google_ai_this_month.max-900x900.jpg",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Google Cloud AI & Machine Learning Blog",
+          "validationStatus": "ok",
+          "contentLength": 71967
         }
       ],
       "image_candidates": [
@@ -22561,20 +22561,6 @@
           "contentLength": 6179
         },
         {
-          "url": "https://www.gstatic.com/cgc/super_cloud_gradient.png",
-          "sourceUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
-          "articleUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Cloud logo",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Google Cloud AI & Machine Learning Blog",
-          "validationStatus": "ok",
-          "contentLength": 9447
-        },
-        {
           "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/0_gemini_enterprise_agent_platform.max-1800x1800.jpg",
           "sourceUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
           "articleUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
@@ -22587,6 +22573,20 @@
           "attribution": "Google Cloud AI & Machine Learning Blog",
           "validationStatus": "ok",
           "contentLength": 46372
+        },
+        {
+          "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/google_ai_this_month.max-900x900.jpg",
+          "sourceUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
+          "articleUrl": "https://cloud.google.com/blog/products/ai-machine-learning",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "https://storage.googleapis.com/gweb-cloudblog-publish/images/google_ai_this_month.max-900x900.jpg",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Google Cloud AI & Machine Learning Blog",
+          "validationStatus": "ok",
+          "contentLength": 71967
         }
       ],
       "candidateTier": "exclude",
