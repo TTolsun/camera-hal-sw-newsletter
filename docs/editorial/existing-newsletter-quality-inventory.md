@@ -28,4 +28,4 @@ Issue #108은 이 inventory를 사용해 historical archive cleanup 우선순위
 | 2026-05-08 | public issue | unknown | unknown | unknown | unknown | unknown | unknown | historical_unreviewed | audit_first | pending |
 | 2026-05-07 | public issue | unknown | unknown | unknown | unknown | unknown | unknown | historical_unreviewed | audit_first | pending |
 | 2026-05-05 | public issue | unknown | unknown | unknown | unknown | unknown | unknown | historical_unreviewed | audit_first | pending |
-| 2026-04-30 | public issue | unknown | unknown | weak | weak | unknown | inconsistent | deprecated_archive | delete_only_via_73 | S3 |
+| 2026-04-30 | public issue | unknown | unknown | weak | weak | unknown | inconsistent | removed | delete_completed_via_73 | S3 |

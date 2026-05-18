@@ -127,19 +127,5 @@
       "C++",
       "AI"
     ]
-  },
-  {
-    "date": "2026-04-30",
-    "title": "Camera HAL SW 뉴스레터 - 2026-04-30",
-    "summary": "CameraX 1.6과 Android 17 Beta 4를 중심으로 HAL capability, stream 조합, AI agent workflow, on-device AI, C++ native review 포인트를 정리했습니다.",
-    "html": "newsletters/2026-04-30/index.html",
-    "md": "newsletters/2026-04-30/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android 17",
-      "CameraX",
-      "C++",
-      "AI"
-    ]
   }
 ]
