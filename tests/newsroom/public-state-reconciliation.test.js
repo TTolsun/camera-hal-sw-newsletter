@@ -4,6 +4,10 @@ const path = require('node:path');
 const test = require('node:test');
 
 const {
+  buildHtml,
+  buildMarkdown
+} = require('../../scripts/newsroom/render/newsletter-renderer');
+const {
   PUBLIC_ARTIFACT_POLICIES,
   PUBLIC_STATES,
   RECONCILIATION_ACTIONS,
@@ -18,6 +22,9 @@ const {
   writeJson,
   writeText
 } = require('../helpers/fs');
+const {
+  validSections
+} = require('../helpers/quality-builders');
 
 function writeRootIndex(root) {
   writeText(path.join(root, 'index.html'), [
@@ -32,9 +39,27 @@ function writeRootIndex(root) {
   ].join('\n'));
 }
 
+function publicIssue(date, overrides = {}) {
+  return {
+    date,
+    title: `Camera HAL SW Newsletter - ${date}`,
+    summary: 'Weekly Camera HAL software update.',
+    briefing: [
+      'CameraX release gives HAL teams a validation signal.',
+      'libcamera update keeps image pipeline checks visible.',
+      'Native tooling changes stay review-only unless directly relevant.'
+    ],
+    sections: validSections(3),
+    action_items: ['Check request/result metadata and stream behavior.'],
+    references: [{ title: 'Reference', url: 'https://example.com/reference' }],
+    ...overrides
+  };
+}
+
 function writePublicArtifacts(root, date, overrides = {}) {
-  writeText(path.join(root, 'newsletters', date, 'index.html'), overrides.html || '<!doctype html><html><body>issue</body></html>');
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), overrides.md || '# Issue\n');
+  const issue = publicIssue(date, overrides.issue || {});
+  writeText(path.join(root, 'newsletters', date, 'index.html'), overrides.html || buildHtml(issue));
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), overrides.md || buildMarkdown(issue));
   writeJson(path.join(root, 'data', 'newsletters.json'), overrides.items || [{
     date,
     title: `Issue ${date}`,
@@ -69,6 +94,28 @@ function writeRetention(root, date, overrides = {}) {
 
 function readNewsletters(root) {
   return readJson(path.join(root, 'data', 'newsletters.json'));
+}
+
+function readFile(root, relativePath) {
+  return fs.readFileSync(path.join(root, relativePath), 'utf8');
+}
+
+function statusPaths(date) {
+  return {
+    canonical: `content/newsroom/${date}/generation-status.json`,
+    tmp: '.tmp/newsletter-generation-status.json'
+  };
+}
+
+function diagnosticsStatus(date, overrides = {}) {
+  return {
+    date,
+    status: 'UNDERFILLED_NEEDS_FIX',
+    final_publish_ready: false,
+    public_newsletter_ready: false,
+    review_publication_ready: false,
+    ...overrides
+  };
 }
 
 test('classifyLatestPublicState returns fixed public states', () => {
@@ -248,4 +295,100 @@ test('valid retention with missing file or hash mismatch is not visible', () => 
   retention = validateRetentionMetadata({ root, date });
   assert.equal(retention.valid, false);
   assert.match(retention.error, /hashes mismatch/);
+});
+
+test('reconcilePublicState write=false does not mutate public index or status files', () => {
+  const root = tempRoot('public-state-dry-run-');
+  const date = '2026-05-18';
+  const paths = statusPaths(date);
+  writePublicArtifacts(root, date);
+  const status = diagnosticsStatus(date);
+  writeStatus(root, date, status);
+  const before = {
+    newsletters: readFile(root, 'data/newsletters.json'),
+    canonicalStatus: readFile(root, paths.canonical),
+    tmpStatus: readFile(root, paths.tmp)
+  };
+
+  const result = reconcilePublicState({ root, date, status, write: false });
+
+  assert.equal(result.outputs.effective_homepage_visible, 'false');
+  assert.equal(readFile(root, 'data/newsletters.json'), before.newsletters);
+  assert.equal(readFile(root, paths.canonical), before.canonicalStatus);
+  assert.equal(readFile(root, paths.tmp), before.tmpStatus);
+});
+
+test('reconcilePublicState is idempotent for diagnostics-only index removal', () => {
+  const root = tempRoot('public-state-idempotent-');
+  const date = '2026-05-18';
+  const paths = statusPaths(date);
+  writePublicArtifacts(root, date);
+  const status = diagnosticsStatus(date);
+  writeStatus(root, date, status);
+
+  reconcilePublicState({ root, date, status, write: true });
+  const afterFirst = {
+    newsletters: readFile(root, 'data/newsletters.json'),
+    canonicalStatus: readFile(root, paths.canonical),
+    tmpStatus: readFile(root, paths.tmp)
+  };
+  reconcilePublicState({
+    root,
+    date,
+    status: readJson(path.join(root, paths.canonical)),
+    write: true
+  });
+
+  assert.equal(readFile(root, 'data/newsletters.json'), afterFirst.newsletters);
+  assert.equal(readFile(root, paths.canonical), afterFirst.canonicalStatus);
+  assert.equal(readFile(root, paths.tmp), afterFirst.tmpStatus);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json.tmp')), false);
+});
+
+test('reconciliation overrides stale status visibility fields', () => {
+  const root = tempRoot('public-state-stale-visibility-');
+  const date = '2026-05-18';
+  writePublicArtifacts(root, date);
+  const status = diagnosticsStatus(date, {
+    effective_homepage_visible: true,
+    homepage_visible_after_merge: true
+  });
+  writeStatus(root, date, status);
+
+  const result = reconcilePublicState({ root, date, status, write: true });
+  const canonicalStatus = readJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'));
+
+  assert.equal(result.outputs.effective_homepage_visible, 'false');
+  assert.equal(result.outputs.homepage_visible_after_merge, 'false');
+  assert.equal(canonicalStatus.effective_homepage_visible, false);
+  assert.equal(canonicalStatus.homepage_visible_after_merge, false);
+});
+
+test('reconcilePublicState throws before status write when data index is missing or invalid', () => {
+  const root = tempRoot('public-state-index-failure-');
+  const date = '2026-05-18';
+  const paths = statusPaths(date);
+  writePublicArtifacts(root, date);
+  const status = diagnosticsStatus(date);
+  writeStatus(root, date, status);
+  fs.rmSync(path.join(root, 'data', 'newsletters.json'));
+  const before = {
+    canonicalStatus: readFile(root, paths.canonical),
+    tmpStatus: readFile(root, paths.tmp)
+  };
+
+  assert.throws(
+    () => reconcilePublicState({ root, date, status, write: true }),
+    /Failed to remove 2026-05-18 from data\/newsletters\.json; reconciliation aborted before status write\./
+  );
+  assert.equal(readFile(root, paths.canonical), before.canonicalStatus);
+  assert.equal(readFile(root, paths.tmp), before.tmpStatus);
+
+  writeText(path.join(root, 'data', 'newsletters.json'), '{ invalid json');
+  assert.throws(
+    () => reconcilePublicState({ root, date, status, write: true }),
+    /Failed to remove 2026-05-18 from data\/newsletters\.json; reconciliation aborted before status write\./
+  );
+  assert.equal(readFile(root, paths.canonical), before.canonicalStatus);
+  assert.equal(readFile(root, paths.tmp), before.tmpStatus);
 });

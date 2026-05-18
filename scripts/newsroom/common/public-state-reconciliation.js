@@ -2,6 +2,11 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
+const {
+  publicNewsletterPaths,
+  publicNewsletterStructureStatus
+} = require('./public-structure');
+
 const PUBLIC_STATES = Object.freeze({
   PUBLISH_READY: 'PUBLISH_READY',
   REVIEW_ONLY_PUBLIC_CREATED: 'REVIEW_ONLY_PUBLIC_CREATED',
@@ -62,23 +67,8 @@ function isTrue(value) {
   return value === true || value === 'true';
 }
 
-function isFalse(value) {
-  return value === false || value === 'false';
-}
-
 function scalarBoolean(value) {
   return value === true ? 'true' : 'false';
-}
-
-function statusValue(status, key) {
-  return status?.[key];
-}
-
-function publicNewsletterPaths(date) {
-  return [
-    `newsletters/${date}/index.html`,
-    `newsletters/${date}/newsletter.md`
-  ];
 }
 
 function readTextResult(filePath) {
@@ -107,84 +97,14 @@ function sha256File(filePath) {
   return `sha256:${crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex')}`;
 }
 
-function dataIndexStatus(root, date) {
-  const dataPath = path.join(root, 'data', 'newsletters.json');
-  const result = readJsonResult(dataPath);
-  if (!result.exists) {
-    return { exists: false, validJson: false, items: [], entry: null, hasDate: false, pathsMatch: false, errors: [] };
-  }
-  if (result.error) {
-    return {
-      exists: true,
-      validJson: false,
-      items: [],
-      entry: null,
-      hasDate: false,
-      pathsMatch: false,
-      errors: [`Invalid data/newsletters.json: ${result.error.message}`]
-    };
-  }
-  if (!Array.isArray(result.value)) {
-    return {
-      exists: true,
-      validJson: false,
-      items: [],
-      entry: null,
-      hasDate: false,
-      pathsMatch: false,
-      errors: ['data/newsletters.json must contain an array']
-    };
-  }
-  const entry = result.value.find(item => item?.date === date) || null;
-  const errors = [];
-  if (entry) {
-    if (entry.html !== `newsletters/${date}/index.html`) {
-      errors.push(`data/newsletters.json html path mismatch: ${entry.html || 'missing'}`);
-    }
-    if (entry.md !== `newsletters/${date}/newsletter.md`) {
-      errors.push(`data/newsletters.json md path mismatch: ${entry.md || 'missing'}`);
-    }
-  }
-  return {
-    exists: true,
-    validJson: true,
-    items: result.value,
-    entry,
-    hasDate: Boolean(entry),
-    pathsMatch: Boolean(entry) && errors.length === 0,
-    errors
-  };
-}
-
 function publicStructureStatus(root, date) {
-  const publicFiles = publicNewsletterPaths(date).map(relativePath => {
-    const result = readTextResult(path.join(root, relativePath));
-    return {
-      path: relativePath,
-      exists: result.exists,
-      nonEmpty: result.exists && String(result.text || '').trim().length > 0,
-      error: result.error
-    };
-  });
-  const dataIndex = dataIndexStatus(root, date);
-  const errors = [];
-  for (const file of publicFiles) {
-    if (!file.exists) errors.push(`missing retained public file: ${file.path}`);
-    else if (file.error) errors.push(`unreadable retained public file: ${file.path}: ${file.error.message}`);
-    else if (!file.nonEmpty) errors.push(`empty retained public file: ${file.path}`);
-  }
-  if (!dataIndex.exists) errors.push('missing data/newsletters.json');
-  else if (!dataIndex.validJson) errors.push(...dataIndex.errors);
-  else if (!dataIndex.hasDate) errors.push(`data/newsletters.json missing date entry ${date}`);
-  else if (!dataIndex.pathsMatch) errors.push(...dataIndex.errors);
-
+  // Public files may remain on disk for forensic/debug purposes.
+  // This strict structure status only decides whether they are allowed to be homepage/archive visible.
+  const structure = publicNewsletterStructureStatus(root, date);
+  const publicFiles = structure.statuses.filter(status => status.path.startsWith(`newsletters/${date}/`));
   return {
-    ok: errors.length === 0,
-    errors,
-    dataIndex,
+    ...structure,
     publicFiles,
-    requiredFilesExist: publicFiles.every(file => file.exists),
-    requiredFilesNonEmpty: publicFiles.every(file => file.nonEmpty),
     publicFilesExist: publicFiles.some(file => file.exists)
   };
 }
@@ -283,7 +203,6 @@ function validateRetentionMetadata({ root = process.cwd(), date } = {}) {
 }
 
 function fallbackPublicSourceExists({ root, date, status = {} }) {
-  if (status.fallback_public_issue === true) return true;
   if (status.fallback_public_issue_status === 'CREATED') return true;
   const result = readJsonResult(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'));
   return result.exists && !result.error && result.value?.fallback_public_issue_status === 'CREATED';
@@ -335,9 +254,12 @@ function removeNewsletterIndexEntry(root, date) {
   }
   const next = result.value.filter(item => item?.date !== date);
   if (next.length === result.value.length) return { changed: false, error: '' };
-  fs.mkdirSync(path.dirname(dataPath), { recursive: true });
-  fs.writeFileSync(dataPath, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
-  return { changed: true, error: '' };
+  try {
+    writeJsonAtomic(dataPath, next);
+    return { changed: true, error: '' };
+  } catch (error) {
+    return { changed: false, error: error.message };
+  }
 }
 
 function writeJsonAtomic(filePath, value) {
@@ -445,11 +367,17 @@ function reconcilePublicState(options = {}) {
   });
 
   let dataIndexChanged = false;
-  let dataIndexError = '';
-  if (options.write !== false && !fields.effectiveHomepageVisible) {
+  const shouldRemoveIndexEntry =
+    !fields.effectiveHomepageVisible &&
+    (publicStructure.dataIndex.exists || publicStructure.publicFilesExist);
+  if (options.write !== false && shouldRemoveIndexEntry) {
     const result = removeNewsletterIndexEntry(root, date);
+    if (result.error) {
+      throw new Error(
+        `Failed to remove ${date} from data/newsletters.json; reconciliation aborted before status write. ${result.error}`
+      );
+    }
     dataIndexChanged = result.changed;
-    dataIndexError = result.error;
   }
 
   const runMode = runModeForPublicState(publicState);
@@ -473,9 +401,7 @@ function reconcilePublicState(options = {}) {
     public_artifact_source: fields.publicArtifactSource,
     reconciliation_required: false,
     reconciliation_action: fields.action,
-    reconciliation_reason: dataIndexError
-      ? `${fields.reason}; data index update failed: ${dataIndexError}`
-      : fields.reason
+    reconciliation_reason: fields.reason
   };
 
   const changedArtifacts = uniqueArtifacts(options.changedArtifacts);
