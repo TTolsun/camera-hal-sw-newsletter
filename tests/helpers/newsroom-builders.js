@@ -82,6 +82,20 @@ function retrySection(headline, url) {
       ],
       team_share_points: `${headline} should be shared as a HAL validation input.`
     },
+    public_article: {
+      headline,
+      lead: `${headline} gives Camera HAL teams a source-backed validation signal.`,
+      body_paragraphs: [
+        `${headline} was published with dated source evidence that can be read as a Camera HAL validation input.`,
+        'The reader-facing interpretation stays limited to stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.'
+      ],
+      camera_hal_takeaway: `${headline} should be checked through stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.`,
+      reader_checkpoints: [
+        'Assign a HAL owner to inspect Camera ITS logs within 2 weeks.',
+        'Measure preview latency, frame drop, and metadata consistency on a representative device.'
+      ],
+      source_links: [{ title: headline, url, source_role: 'primary' }]
+    },
     is_ai_related: false,
     article_type: 'camera-hal',
     imageCandidates: [],

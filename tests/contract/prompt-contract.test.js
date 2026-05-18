@@ -5,6 +5,7 @@ const test = require('node:test');
 
 const {
   articleSectionContractPrompt,
+  publicArticleContractPrompt,
   sourceExtractionPromptGuardrails
 } = require('../../scripts/gemini-newsroom-newsletter');
 
@@ -37,6 +38,27 @@ test('article section contract prompt fixes the five normalized keys and guardra
   assert.match(prompt, /Do not render do_not_claim as source-backed fact/);
 });
 
+test('public article contract prompt keeps public output separate from diagnostics', () => {
+  const prompt = publicArticleContractPrompt();
+
+  for (const marker of [
+    'public_article',
+    'article_sections',
+    'hal_signal_capsule',
+    'HAL Signal Capsule',
+    'Fallback',
+    'Review-only',
+    'quality gate',
+    'source_links'
+  ]) {
+    assert.match(prompt, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+  assert.match(prompt, /reader-facing/);
+  assert.match(prompt, /verified_facts checklist/);
+  assert.match(prompt, /즉시 조치할 항목은 없습니다/);
+});
+
+
 test('source extraction prompt guardrails keep source facts separate from editorial hints', () => {
   const prompt = sourceExtractionPromptGuardrails();
 
@@ -59,6 +81,16 @@ test('LLM editor, repair, completion, and fact-check prompts include article sec
   const usageCount = (source.match(/articleSectionContractPrompt\(\),/g) || []).length;
 
   assert.ok(usageCount >= 5);
+});
+
+test('LLM editor, repair, completion, and fact-check prompts include public article contract', () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
+    'utf8'
+  );
+  const usageCount = (source.match(/publicArticleContractPrompt\(\),/g) || []).length;
+
+  assert.ok(usageCount >= 6);
 });
 
 test('LLM reporter, editor, repair, completion, and fact-check prompts include source extraction guardrails', () => {

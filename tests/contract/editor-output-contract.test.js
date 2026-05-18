@@ -57,6 +57,24 @@ function section(index, overrides = {}) {
       impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
       do_not_overstate: ['Do not overstate direct HAL impact.']
     },
+    public_article: {
+      headline: `Headline ${index}`,
+      lead: `Headline ${index} gives Camera HAL readers a source-backed validation signal.`,
+      body_paragraphs: [
+        `Headline ${index} was selected from dated source evidence for Camera HAL readers.`,
+        `The practical interpretation for Headline ${index} stays limited to stream and metadata validation.`
+      ],
+      camera_hal_takeaway: `HAL perspective ${index}`,
+      reader_checkpoints: [
+        `Run Camera ITS and stream metadata checks for Headline ${index}.`,
+        `Compare preview latency and frame-drop metrics for Headline ${index}.`
+      ],
+      source_links: [{
+        title: `Source ${index}`,
+        url: `https://example.com/source-${index}`,
+        source_role: 'primary'
+      }]
+    },
     selectedImage: '',
     imageSource: '',
     imageAttribution: '',
@@ -312,6 +330,56 @@ test('editor output contract requires HAL Signal Capsule on new draft sections',
       assert.ok(error instanceof EditorSemanticValidationError);
       assert.equal(error.details.field, 'sections.hal_signal_capsule');
       assert.ok(error.details.issues.some(issue => issue.type === 'missing_hal_signal_capsule'));
+      return true;
+    }
+  );
+});
+
+test('editor output contract requires public_article on new draft sections', () => {
+  const draft = editor({
+    sections: [
+      section(1, { public_article: undefined }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue => issue.type === 'missing_public_article'));
+      return true;
+    }
+  );
+});
+
+test('editor output contract rejects invalid public_article source_links', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        public_article: {
+          ...section(1).public_article,
+          source_links: [{
+            title: '',
+            url: '.tmp/newsletter.md',
+            source_role: 'editorial'
+          }]
+        }
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      const reasons = error.details.issues.map(issue => issue.reason).filter(Boolean);
+      assert.ok(reasons.includes('missing_title'));
+      assert.ok(reasons.includes('invalid_url'));
+      assert.ok(reasons.includes('unsupported_role'));
       return true;
     }
   );
@@ -1068,6 +1136,25 @@ test('editor schema keeps article_sections optional with five required normalize
   for (const key of ['known_limitations', 'watch_items', 'do_not_claim']) {
     assert.equal(articleSections.properties[key].type, 'ARRAY');
   }
+});
+
+test('editor schema requires public_article with reader-facing fields', () => {
+  const publicArticle = editorSchema.properties.sections.items.properties.public_article;
+
+  assert.ok(publicArticle);
+  assert.deepEqual(publicArticle.required, [
+    'headline',
+    'lead',
+    'body_paragraphs',
+    'camera_hal_takeaway',
+    'reader_checkpoints',
+    'source_links'
+  ]);
+  assert.equal(
+    editorSchema.properties.sections.items.required.includes('public_article'),
+    true
+  );
+  assert.deepEqual(publicArticle.properties.source_links.items.required, ['title', 'url']);
 });
 
 test('editor schema keeps hal_signal_capsule optional with required capsule keys when present', () => {

@@ -190,6 +190,19 @@ function articleSectionContractPrompt() {
   ].join('\n');
 }
 
+function publicArticleContractPrompt() {
+  return [
+    'Public article contract: for newly generated editor, repair, and completion outputs, every main article must include public_article.',
+    'public_article must contain headline, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, and source_links.',
+    'Use article_sections and hal_signal_capsule only for validation/editorial diagnostics. Do not render them as reader-facing article prose.',
+    'Write public_article as a Korean reader-facing technical newsletter article, not a validation report or verified_facts checklist.',
+    'body_paragraphs must contain at least two coherent explanatory paragraphs based on verified facts.',
+    'source_links must contain public http/https URLs with non-empty title values. Do not use local paths, .tmp paths, GitHub Actions artifact URLs, or editorial-only roles.',
+    'Do not expose these internal public-forbidden terms in public_article: Fallback, Review-only, quality gate, candidate, HAL Signal Capsule, why_now, impact_axes, do_not_overstate, guardrail, section repair.',
+    `If there is no concrete reader action, use exactly: "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."`
+  ].join('\n');
+}
+
 function articleClaimContractPrompt() {
   return [
     'Claim binding contract: every main article must include claims[].',
@@ -2775,6 +2788,7 @@ async function main() {
         linkedEvidencePromptGuardrails(),
         sourceExtractionPromptGuardrails(),
         articleSectionContractPrompt(),
+        publicArticleContractPrompt(),
         articleClaimContractPrompt(),
         'Initial editor drafts must use only primary selected article capsules. Reserve candidates are not available until a primary article is demoted/removed during repair or completion.',
         `Priority order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
@@ -2871,6 +2885,7 @@ async function main() {
         'Treat any finalSelectionEligibility=watchlist/exclude candidate or watch page without dated evidence used as a main article as must_fix.',
         'Any claim without a source must be classified as must_fix.',
         articleSectionContractPrompt(),
+        publicArticleContractPrompt(),
         articleClaimContractPrompt(),
         'Flag general AI/C++/SoC news that lacks AOSP Camera, camera driver, SoC platform, or native development interpretation.',
         'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
@@ -2966,6 +2981,7 @@ async function main() {
           linkedEvidencePromptGuardrails(),
           sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
+          publicArticleContractPrompt(),
           articleClaimContractPrompt(),
           'Claim repair safety: do not invent new fact claims, evidence ids, or source URLs to cover uncovered factual fields. If coverage or source/evidence binding cannot be satisfied from supplied candidate evidence, demote or replace the section.',
           'For do_not_claim violations, remove the unsupported assertion or rewrite it as risk_note/limitation without changing evidence_ids or source_urls.',
@@ -3026,6 +3042,7 @@ async function main() {
           linkedEvidencePromptGuardrails(),
           sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
+          publicArticleContractPrompt(),
           articleClaimContractPrompt(),
           'Treat missing release date, version/release, API/component or library/artifact, concrete behavior change, or expanded editorial-scope relevance as must_fix for any main article.',
           'Treat any remaining source gap or watchlist/reference page used as a main article as must_fix.',
@@ -3114,6 +3131,7 @@ async function main() {
             linkedEvidencePromptGuardrails(),
             sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),
+            publicArticleContractPrompt(),
             articleClaimContractPrompt(),
             'Do not duplicate locked, duplicate/rejected, source-gap, or ineligible sections from the exclusion context.',
             'Each new section must satisfy the same editorial contract: confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, and sources.',
@@ -3157,6 +3175,7 @@ async function main() {
             linkedEvidencePromptGuardrails(),
             sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),
+            publicArticleContractPrompt(),
             articleClaimContractPrompt(),
             'Focus on whether the added sections use only eligible reporter candidates and whether the full draft now satisfies the Newsletter Policy article composition contract.',
             'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
@@ -3599,6 +3618,7 @@ module.exports = {
   hasTooFewMainArticlesDeduction,
   articleSectionContractPrompt,
   linkedEvidencePromptGuardrails,
+  publicArticleContractPrompt,
   sourceExtractionPromptGuardrails,
   main,
   recordEditorSemanticStatus,
