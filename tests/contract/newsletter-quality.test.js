@@ -30,6 +30,11 @@ function seedEvidencePack(packs = []) {
   };
 }
 
+function articleStructureSection(markdown) {
+  const match = markdown.match(/## Article Structure Contract[\s\S]*?(?=\n## Article Gate Results|\n## Hard Fails|$)/);
+  return match ? match[0] : '';
+}
+
 function seedPack({
   packId = 'seed-camerax-pack',
   seedId = 'seed-camerax',
@@ -2085,6 +2090,17 @@ test('quality report exposes normalized article section contract metrics and art
   assert.equal(report.article_results[0].section_contract.complete, true);
   assert.deepEqual(report.article_results[0].section_contract.missing_keys, []);
   assert.equal(report.article_results[0].section_contract.limitation_visibility, 'none');
+  assert.deepEqual(Object.keys(report.article_results[0].section_contract).sort(), [
+    'complete',
+    'has_do_not_claim',
+    'has_limitations',
+    'has_watch_items',
+    'limitation_visibility',
+    'missing_keys',
+    'missing_required_keys',
+    'present_optional_keys',
+    'unexpected_keys'
+  ].sort());
 });
 
 test('quality report records article section optional limitation visibility', () => {
@@ -2121,6 +2137,8 @@ test('quality report records article section optional limitation visibility', ()
   assert.match(markdown, /\| # \| Article \| 5-section \| Fact boundary \| HAL impact axis \| Actionability \| Limitations \|/);
   assert.match(markdown, /public-limitation/);
   assert.match(markdown, /guardrail-only/);
+  assert.match(markdown, /present\+guarded/);
+  assert.doesNotMatch(articleStructureSection(markdown), /source-backed/);
 });
 
 test('quality report records missing article_sections keys without legacy fallback', () => {

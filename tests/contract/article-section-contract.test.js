@@ -9,7 +9,8 @@ const {
   ARTICLE_SECTION_REQUIRED_KEYS,
   LIMITATION_VISIBILITY,
   articleSectionSummary,
-  normalizeArticleSections
+  normalizeArticleSections,
+  unexpectedArticleSectionKeys
 } = require('../../scripts/newsroom/common/article-section-contract');
 
 const REQUIRED_KEYS = [
@@ -191,7 +192,7 @@ test('incomplete article_sections reports missing required keys without legacy f
 });
 
 test('unexpected article_sections keys are diagnostic failures separate from completeness', () => {
-  const result = normalizeArticleSections({
+  const section = {
     article_sections: {
       verified_facts: ['CameraX 1.5.0 was released.'],
       background_context: 'CameraX sits above Camera2.',
@@ -200,11 +201,13 @@ test('unexpected article_sections keys are diagnostic failures separate from com
       team_share_points: 'Use this release as a validation trigger.',
       legacy_summary: 'Unexpected field.'
     }
-  });
+  };
+  const result = normalizeArticleSections(section);
 
   assert.equal(result.diagnostics.complete, true);
   assert.deepEqual(result.diagnostics.missing_keys, []);
   assert.deepEqual(result.diagnostics.unexpected_keys, ['legacy_summary']);
+  assert.deepEqual(unexpectedArticleSectionKeys(section), ['legacy_summary']);
 });
 
 test('articleSectionSummary includes optional diagnostics and limitation visibility', () => {

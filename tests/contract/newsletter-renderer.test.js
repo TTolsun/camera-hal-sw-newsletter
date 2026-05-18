@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  articleSectionContractMarkdown,
   buildHtml,
   buildMarkdown
 } = require('../../scripts/newsroom/render/newsletter-renderer');
@@ -86,12 +87,23 @@ test('newsletter renderer uses public_article for public markdown and HTML', () 
     /Internal fallback headline must not render/,
     /Legacy fact must not render/,
     /Normalized source-backed fact must not render/,
+    /Do not claim vendor HAL binary updates/,
     /Top-level internal action must not render/,
     /Publication 전에 source URL/
   ]) {
     assert.doesNotMatch(markdown, leaked);
     assert.doesNotMatch(html, leaked);
   }
+});
+
+test('newsletter renderer article structure table uses shared row semantics', () => {
+  const markdown = articleSectionContractMarkdown(issue());
+
+  assert.match(markdown, /\| # \| Article \| 5-section \| Fact boundary \| HAL impact axis \| Actionability \| Limitations \|/);
+  assert.match(markdown, /\| 1 \| Internal fallback headline must not render \| pass \| present\+guarded \| framework_hal_contract, stream_buffer_metadata \| present \| guardrail-only \|/);
+  assert.doesNotMatch(markdown, /source-backed guarded/);
+  assert.doesNotMatch(markdown, /source-backed/);
+  assert.doesNotMatch(markdown, /Do not claim vendor HAL binary updates/);
 });
 
 test('newsletter renderer sanitizes legacy sections through compatibility projection', () => {

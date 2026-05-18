@@ -43,6 +43,13 @@ Optional public blocks:
 
 `do_not_claim`은 claim validation, quality report, editor brief guardrail로 사용한다. Raw `do_not_claim` text는 public article Markdown/HTML에 직접 렌더링하지 않는다.
 
+### Limitation visibility
+
+- `none`: optional limitation/watch/guardrail signal 없음
+- `present`: `watch_items`만 존재하며 public limitation block은 없음
+- `guardrail-only`: `do_not_claim`이 존재하지만 raw text를 public output에 직접 렌더링하지 않음
+- `public-limitation`: `known_limitations`가 존재하며 public limitation으로 노출 가능
+
 ## Evidence Mapping
 
 #185 `compact_evidence`는 final article structure의 input으로만 사용한다. Stage 3은 seed URL crawling을 다시 수행하지 않는다.

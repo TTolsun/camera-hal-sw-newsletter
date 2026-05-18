@@ -32,6 +32,7 @@ const ARTICLE_SECTION_LABELS = Object.freeze({
 
 const LIMITATION_VISIBILITY = Object.freeze({
   NONE: 'none',
+  // Watch-only public signal: watch_items exists without a public limitation block.
   PRESENT: 'present',
   GUARDRAIL_ONLY: 'guardrail-only',
   PUBLIC_LIMITATION: 'public-limitation'
@@ -87,6 +88,12 @@ function isPlainObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+function unexpectedArticleSectionKeys(section = {}) {
+  if (!isPlainObject(section.article_sections)) return [];
+  const expected = new Set(ARTICLE_SECTION_ALLOWED_KEYS);
+  return Object.keys(section.article_sections).filter(key => !expected.has(key));
+}
+
 function articleSectionLimitationVisibility(section = {}) {
   const normalized = normalizeArticleSections(section);
   if (normalized.known_limitations.length > 0) return LIMITATION_VISIBILITY.PUBLIC_LIMITATION;
@@ -112,9 +119,7 @@ function normalizeArticleSections(section = {}) {
     .filter(key => isEmptyRequiredValue(key, normalized[key]));
   const presentOptionalKeys = ARTICLE_SECTION_OPTIONAL_KEYS
     .filter(key => normalized[key].length > 0);
-  const unexpectedKeys = hasArticleSections
-    ? Object.keys(source).filter(key => !ARTICLE_SECTION_ALLOWED_KEYS.includes(key))
-    : [];
+  const unexpectedKeys = unexpectedArticleSectionKeys(section);
 
   return {
     ...normalized,
@@ -156,5 +161,6 @@ module.exports = {
   articleSectionSummary,
   normalizeArticleSections,
   normalizeStringArray,
-  normalizeText
+  normalizeText,
+  unexpectedArticleSectionKeys
 };

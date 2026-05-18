@@ -2,10 +2,9 @@ const {
   renderCandidateSelectionDiagnostics
 } = require('../generate/selection-diagnostics');
 const {
-  ARTICLE_SECTION_LABELS,
-  LIMITATION_VISIBILITY,
-  articleSectionSummary
-} = require('../common/article-section-contract');
+  articleSectionContractRows: buildArticleSectionContractRows,
+  articleSectionContractRowValues
+} = require('../common/article-structure-summary');
 const {
   publicArticleForSection
 } = require('../common/public-article-contract');
@@ -182,58 +181,9 @@ function markdownTableCell(value) {
     .replace(/\|/g, '\\|') || 'none';
 }
 
-function mergedArticleSectionSummary(section, qualityReport, index) {
-  const localSummary = articleSectionSummary(section);
-  const reportSummary = qualityReport?.article_results?.[index]?.section_contract || {};
-  return {
-    ...localSummary,
-    ...reportSummary,
-    missing_keys: ensureArray(reportSummary.missing_keys || localSummary.missing_keys),
-    missing_required_keys: ensureArray(reportSummary.missing_required_keys || localSummary.missing_required_keys),
-    present_optional_keys: ensureArray(reportSummary.present_optional_keys || localSummary.present_optional_keys),
-    unexpected_keys: ensureArray(reportSummary.unexpected_keys || localSummary.unexpected_keys),
-    has_limitations: reportSummary.has_limitations ?? localSummary.has_limitations,
-    has_watch_items: reportSummary.has_watch_items ?? localSummary.has_watch_items,
-    has_do_not_claim: reportSummary.has_do_not_claim ?? localSummary.has_do_not_claim,
-    limitation_visibility: reportSummary.limitation_visibility || localSummary.limitation_visibility
-  };
-}
-
-function factBoundaryStatus(summary) {
-  const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
-  if (missing.includes('verified_facts')) return 'missing';
-  if (summary.has_do_not_claim) return 'source-backed guarded';
-  return 'source-backed';
-}
-
-function halImpactAxisStatus(section, summary) {
-  const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
-  if (missing.includes('hal_driver_impact')) return 'missing';
-  const axes = ensureArray(section.hal_impact_axes).length > 0
-    ? ensureArray(section.hal_impact_axes)
-    : ensureArray(section.hal_signal_capsule?.impact_axes);
-  return axes.join(', ') || 'present';
-}
-
-function actionabilityStatus(section, summary) {
-  const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
-  if (missing.includes('action_items')) return 'missing';
-  return section.effective_actionability_level || section.actionability_level || 'present';
-}
-
 function articleSectionContractRows(issue, qualityReport = null) {
-  return ensureArray(issue.sections).map((section, index) => {
-    const summary = mergedArticleSectionSummary(section, qualityReport, index);
-    const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
-    return [
-      index + 1,
-      section.headline || section.category || `article ${index + 1}`,
-      summary.complete === true && missing.length === 0 ? 'pass' : `missing ${missing.join(', ') || 'unknown'}`,
-      factBoundaryStatus(summary),
-      halImpactAxisStatus(section, summary),
-      actionabilityStatus(section, summary),
-      summary.limitation_visibility || LIMITATION_VISIBILITY.NONE
-    ];
+  return buildArticleSectionContractRows(ensureArray(issue?.sections), {
+    articleResults: ensureArray(qualityReport?.article_results)
   });
 }
 
@@ -243,7 +193,7 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
   return [
     '| # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |',
     '| ---: | --- | --- | --- | --- | --- | --- |',
-    ...rows.map(row => `| ${row.map(markdownTableCell).join(' | ')} |`)
+    ...rows.map(row => `| ${articleSectionContractRowValues(row).map(markdownTableCell).join(' | ')} |`)
   ].join('\n');
 }
 
