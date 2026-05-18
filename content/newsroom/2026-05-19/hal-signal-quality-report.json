@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "report_type": "hal_signal_quality",
+  "date": "2026-05-19",
+  "generated_at": "2026-05-18T16:59:59.777Z",
+  "status": "NEEDS_FIX",
+  "input_completeness": "complete",
+  "input_statuses": {
+    "shortlisted_candidates": "loaded",
+    "editor_draft": "loaded",
+    "quality_report": "loaded",
+    "source_effectiveness_report": "loaded",
+    "source_quality_report": "loaded",
+    "evidence_pack_summary": "loaded",
+    "merged_candidate_manifest": "loaded"
+  },
+  "inputs": {
+    "required": {
+      "shortlisted_candidates": {
+        "path": "content/newsroom/2026-05-19/shortlisted-candidates.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "editor_draft": {
+        "path": "content/newsroom/2026-05-19/editor-draft.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "quality_report": {
+        "path": "content/newsroom/2026-05-19/quality-report.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "optional": {
+      "source_effectiveness_report": {
+        "path": "content/newsroom/2026-05-19/source-effectiveness-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "source_quality_report": {
+        "path": "content/newsroom/2026-05-19/source-quality-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "evidence_pack_summary": {
+        "path": "content/newsroom/2026-05-19/evidence-pack-summary.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "merged_candidate_manifest": {
+        "path": "content/collected-news/2026-05-19/merged-candidate-manifest.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "missing_required": [],
+    "unavailable_optional": []
+  },
+  "quality_status": "NEEDS_FIX",
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 3,
+    "strong_signal_count": 3,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 3,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 3,
+    "fallback_main_article_count": 2,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 3,
+      "framework_hal_contract": 3,
+      "stream_buffer_metadata": 3,
+      "cts_vts_its_cdd": 3,
+      "performance_latency_frame_drop": 1,
+      "soc_resource_contention": 1,
+      "camerax_app_compatibility": 3,
+      "native_tooling_workflow": 2
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 2
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 2
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 3
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "performance_latency_frame_drop",
+        "soc_resource_contention",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "performance_thermal_owner",
+        "soc_platform_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 6,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다.",
+        "Supplied source evidence가 말하지 않으면 HAL API",
+        "metadata contract",
+        "stream",
+        "buffer"
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "native_tooling_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
+        "Supplied source evidence가 말하지 않으면 HAL API",
+        "metadata contract",
+        "stream",
+        "buffer"
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "native_tooling_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
+        "Supplied source evidence가 말하지 않으면 HAL API",
+        "metadata contract",
+        "stream",
+        "buffer"
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "selection_shortage_hint_details": [
+    {
+      "bucket": "direct_aosp_camera",
+      "severity": "medium",
+      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
+      "affected_sources": [],
+      "recommended_fix": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
+      "affected_sources": [],
+      "recommended_fix": "Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "gate_boundary": {
+    "quality_validation_records_hal_signal_deductions": true,
+    "publish_gate_blocks_hal_signal_hard_blockers": true,
+    "review_artifacts_preserved": true,
+    "optional_input_unavailable_is_not_pass": true
+  },
+  "close_criteria": {
+    "report_generated": true,
+    "main_article_capsule_validation": true,
+    "actionability_hard_blocker_reflected": true,
+    "generic_fallback_soc_overpromotion_tests_required": true,
+    "source_expansion_followups": [
+      "#55",
+      "#57"
+    ],
+    "historical_rewrite_followup": "#108"
+  },
+  "warnings": []
+}
