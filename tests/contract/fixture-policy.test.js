@@ -26,8 +26,16 @@ function isPassStatus(value) {
   return String(value || '').toUpperCase() === 'PASS';
 }
 
+function hasFixtureSegment(entryPath, segment) {
+  return entryPath.split('/').includes(segment);
+}
+
 function isGoodFixturePath(entryPath) {
-  return entryPath.includes('/good/');
+  return hasFixtureSegment(entryPath, 'good');
+}
+
+function isBadFixturePath(entryPath) {
+  return hasFixtureSegment(entryPath, 'bad');
 }
 
 function hasGeneratedProvenance(entry = {}, fixture = {}) {
@@ -81,7 +89,7 @@ test('fixture policy keeps generated samples out of good fixtures', () => {
 
 test('bad fixtures cannot expect PASS', () => {
   const badFixtures = listFixtureFiles('.', '.json')
-    .filter(filePath => relativeFixturePath(filePath).includes('/bad/'));
+    .filter(filePath => isBadFixturePath(relativeFixturePath(filePath)));
 
   assert.ok(badFixtures.length > 0);
   for (const filePath of badFixtures) {
@@ -98,12 +106,23 @@ test('PASS golden fixtures cannot carry source-integrity blocker flags', () => {
   const fixtures = listFixtureFiles('.', '.json');
 
   for (const filePath of fixtures) {
-    const fixture = readJsonFixture(relativeFixturePath(filePath));
-    const isGoldenPass = relativeFixturePath(filePath).includes('/good/') && isPassStatus(fixture.expected?.status);
+    const fixturePath = relativeFixturePath(filePath);
+    const fixture = readJsonFixture(fixturePath);
+    const isGoldenPass = isGoodFixturePath(fixturePath) && isPassStatus(fixture.expected?.status);
     assert.equal(
       isGoldenPass && hasPassBlockingPolicyFlag(fixture.policyFlags),
       false,
-      `${relativeFixturePath(filePath)} cannot be a PASS golden fixture with blocking policy flags`
+      `${fixturePath} cannot be a PASS golden fixture with blocking policy flags`
+    );
+  }
+});
+
+test('fixture layout stays domain-first and avoids root-level good or bad folders', () => {
+  for (const fixturePath of ledgerFixtureFiles()) {
+    assert.equal(
+      fixturePath.startsWith('good/') || fixturePath.startsWith('bad/'),
+      false,
+      `${fixturePath} must use domain-first fixture layout such as quality/good or selection/bad`
     );
   }
 });
@@ -144,7 +163,7 @@ test('fixture ledger trust metadata matches fixture policy', () => {
       assert.equal(isPassStatus(entry.expectedStatus), true, `${entry.path} good fixture must expect PASS`);
     }
 
-    if (entry.path.includes('/bad/')) {
+    if (isBadFixturePath(entry.path)) {
       assert.equal(entry.allowedUse, 'bad', `${entry.path} is under bad/ and must declare allowedUse=bad`);
       assert.equal(isPassStatus(entry.expectedStatus), false, `${entry.path} bad fixture must not expect PASS`);
     }

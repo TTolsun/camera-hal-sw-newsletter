@@ -43,6 +43,7 @@ Allowed classification values:
 | `tests/contract/validation-targets.test.js` | `path_contract_allowed` | closed | Path targets are contract inputs, not article golden content. |
 | `tests/contract/validator-strictness.test.js` | `path_contract_allowed` | closed | Archive and stale-link path strings are validator contract inputs only. |
 | `tests/workflow/homepage-archive.test.js` | `path_contract_allowed` | closed | Archive path behavior is validated without promoting generated article content to a fixture. |
+| `data/newsletters.json` references in tests and scripts | `site_smoke_allowed` | closed | References to the public newsletter index are path/site publication contracts only, not article quality golden content. |
 | `tests/workflow/source-effectiveness-report.test.js` | `workflow_shape_allowed` | closed | Source-effectiveness report artifact paths validate report shape and aggregation. |
 | `tests/workflow/workflow-scripts.test.js` | `workflow_shape_allowed` | closed | Workflow artifact names and wiring are shape contracts only. |
 | `tests/unit/common/runtime-config.test.js` | `path_contract_allowed` | closed | Env path parsing and newline rejection are configuration path contracts only. |
@@ -52,12 +53,19 @@ Allowed classification values:
 | `tests/fixtures/selection/good/**` | `migrate_to_synthetic_fixture` | closed | Good selection fixtures are curated, non-generated, and ledger-backed. |
 | `tests/fixtures/seed-evidence/good/**` | `workflow_shape_allowed` | closed | Seed artifact names may appear only in curated non-generated good fixtures. |
 
+Seed evidence fixtures are consumed at two levels:
+
+- `fixture-policy.test.js` and `fixture-ledger.json` enforce provenance and trust policy.
+- Existing seed artifact tests validate functional artifact shape and naming.
+
+New seed contract test files should be added only if existing seed tests stop covering the required shape.
+
 ## Audit Command
 
 Use this command when updating the inventory:
 
 ```powershell
-rg "newsletters/\d{4}-\d{2}-\d{2}|content/newsroom/\d{4}-\d{2}-\d{2}|content/collected-news/\d{4}-\d{2}-\d{2}" tests scripts
+rg "newsletters/\d{4}-\d{2}-\d{2}|content/newsroom/\d{4}-\d{2}-\d{2}|content/collected-news/\d{4}-\d{2}-\d{2}|data/newsletters\.json" tests scripts
 ```
 
 Any match must be classified above or removed. Matches in generated artifact path-contract tests are allowed only when they do not make generated article content a golden fixture.
@@ -66,6 +74,9 @@ Any match must be classified above or removed. Matches in generated artifact pat
 
 - Quality and selection generated golden fixtures: `0`
 - Generated good fixtures: `0`
+- #185 seed generated good fixtures: `0`
 - Bad fixtures with `PASS` expected status: `0`
 - Rendered committed fixtures added for #62: `0`
+- `data/newsletters.json` references: classified as path/site smoke only
 - Unclassified generated artifact test dependencies: `0`
+- Unclassified seed artifact dependencies: `0`
