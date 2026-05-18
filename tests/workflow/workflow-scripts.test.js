@@ -4550,7 +4550,7 @@ test('newsroom PR body includes article structure contract summary when editor d
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
   const section = extractMarkdownSection(body, 'Article Structure Contract');
 
-  assert.match(section, /\| # \| Article \| 5-section \| HAL impact \| Action item \|/);
+  assert.match(section, /\| # \| Article \| 5-section \| Fact boundary \| HAL impact axis \| Actionability \| Limitations \|/);
   assert.match(section, /CameraX release/);
   assert.match(section, /pass/);
 });

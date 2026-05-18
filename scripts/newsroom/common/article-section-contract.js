@@ -1,4 +1,4 @@
-const ARTICLE_SECTION_KEYS = Object.freeze([
+const ARTICLE_SECTION_REQUIRED_KEYS = Object.freeze([
   'verified_facts',
   'background_context',
   'hal_driver_impact',
@@ -6,12 +6,35 @@ const ARTICLE_SECTION_KEYS = Object.freeze([
   'team_share_points'
 ]);
 
+const ARTICLE_SECTION_OPTIONAL_KEYS = Object.freeze([
+  'known_limitations',
+  'watch_items',
+  'do_not_claim'
+]);
+
+const ARTICLE_SECTION_ALLOWED_KEYS = Object.freeze([
+  ...ARTICLE_SECTION_REQUIRED_KEYS,
+  ...ARTICLE_SECTION_OPTIONAL_KEYS
+]);
+
+// Backward-compatible alias for existing required-key consumers.
+const ARTICLE_SECTION_KEYS = ARTICLE_SECTION_REQUIRED_KEYS;
+
 const ARTICLE_SECTION_LABELS = Object.freeze({
   verified_facts: '확인한 사실 / 릴리스 요약',
   background_context: '배경지식 / 왜 AOSP Camera 팀이 볼 만한가',
   hal_driver_impact: 'Camera HAL/Driver 관점 / 적용 가능 지점',
   action_items: '실행 항목 / PoC 제안 및 검증 기준',
-  team_share_points: '팀 공유 포인트 / 결론'
+  team_share_points: '팀 공유 포인트 / 결론',
+  known_limitations: '제한 / 주의',
+  watch_items: '추적 항목'
+});
+
+const LIMITATION_VISIBILITY = Object.freeze({
+  NONE: 'none',
+  PRESENT: 'present',
+  GUARDRAIL_ONLY: 'guardrail-only',
+  PUBLIC_LIMITATION: 'public-limitation'
 });
 
 const EMPTY_NORMALIZED_ARTICLE_SECTIONS = Object.freeze({
@@ -19,7 +42,10 @@ const EMPTY_NORMALIZED_ARTICLE_SECTIONS = Object.freeze({
   background_context: '',
   hal_driver_impact: '',
   action_items: Object.freeze([]),
-  team_share_points: ''
+  team_share_points: '',
+  known_limitations: Object.freeze([]),
+  watch_items: Object.freeze([]),
+  do_not_claim: Object.freeze([])
 });
 
 function ensureArray(value) {
@@ -51,7 +77,7 @@ function normalizeStringArray(value) {
   return output;
 }
 
-function isEmptyStrictValue(key, value) {
+function isEmptyRequiredValue(key, value) {
   return key === 'verified_facts' || key === 'action_items'
     ? ensureArray(value).length === 0
     : !normalizeText(value);
@@ -59,6 +85,14 @@ function isEmptyStrictValue(key, value) {
 
 function isPlainObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function articleSectionLimitationVisibility(section = {}) {
+  const normalized = normalizeArticleSections(section);
+  if (normalized.known_limitations.length > 0) return LIMITATION_VISIBILITY.PUBLIC_LIMITATION;
+  if (normalized.do_not_claim.length > 0) return LIMITATION_VISIBILITY.GUARDRAIL_ONLY;
+  if (normalized.watch_items.length > 0) return LIMITATION_VISIBILITY.PRESENT;
+  return LIMITATION_VISIBILITY.NONE;
 }
 
 function normalizeArticleSections(section = {}) {
@@ -69,16 +103,28 @@ function normalizeArticleSections(section = {}) {
     background_context: normalizeText(source.background_context),
     hal_driver_impact: normalizeText(source.hal_driver_impact),
     action_items: normalizeStringArray(source.action_items),
-    team_share_points: normalizeText(source.team_share_points)
+    team_share_points: normalizeText(source.team_share_points),
+    known_limitations: normalizeStringArray(source.known_limitations),
+    watch_items: normalizeStringArray(source.watch_items),
+    do_not_claim: normalizeStringArray(source.do_not_claim)
   };
-  const missingKeys = ARTICLE_SECTION_KEYS.filter(key => isEmptyStrictValue(key, normalized[key]));
+  const missingRequiredKeys = ARTICLE_SECTION_REQUIRED_KEYS
+    .filter(key => isEmptyRequiredValue(key, normalized[key]));
+  const presentOptionalKeys = ARTICLE_SECTION_OPTIONAL_KEYS
+    .filter(key => normalized[key].length > 0);
+  const unexpectedKeys = hasArticleSections
+    ? Object.keys(source).filter(key => !ARTICLE_SECTION_ALLOWED_KEYS.includes(key))
+    : [];
 
   return {
     ...normalized,
     diagnostics: {
       article_sections_present: hasArticleSections,
-      missing_keys: missingKeys,
-      complete: missingKeys.length === 0
+      missing_keys: missingRequiredKeys,
+      missing_required_keys: missingRequiredKeys,
+      present_optional_keys: presentOptionalKeys,
+      unexpected_keys: unexpectedKeys,
+      complete: missingRequiredKeys.length === 0
     }
   };
 }
@@ -87,14 +133,26 @@ function articleSectionSummary(section = {}) {
   const normalized = normalizeArticleSections(section);
   return {
     complete: normalized.diagnostics.complete,
-    missing_keys: normalized.diagnostics.missing_keys
+    missing_keys: normalized.diagnostics.missing_keys,
+    missing_required_keys: normalized.diagnostics.missing_required_keys,
+    present_optional_keys: normalized.diagnostics.present_optional_keys,
+    unexpected_keys: normalized.diagnostics.unexpected_keys,
+    has_limitations: normalized.known_limitations.length > 0,
+    has_watch_items: normalized.watch_items.length > 0,
+    has_do_not_claim: normalized.do_not_claim.length > 0,
+    limitation_visibility: articleSectionLimitationVisibility(section)
   };
 }
 
 module.exports = {
+  ARTICLE_SECTION_ALLOWED_KEYS,
   ARTICLE_SECTION_KEYS,
   ARTICLE_SECTION_LABELS,
+  ARTICLE_SECTION_OPTIONAL_KEYS,
+  ARTICLE_SECTION_REQUIRED_KEYS,
   EMPTY_NORMALIZED_ARTICLE_SECTIONS,
+  LIMITATION_VISIBILITY,
+  articleSectionLimitationVisibility,
   articleSectionSummary,
   normalizeArticleSections,
   normalizeStringArray,

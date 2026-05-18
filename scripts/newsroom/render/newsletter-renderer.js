@@ -3,6 +3,7 @@ const {
 } = require('../generate/selection-diagnostics');
 const {
   ARTICLE_SECTION_LABELS,
+  LIMITATION_VISIBILITY,
   articleSectionSummary,
   normalizeArticleSections
 } = require('../common/article-section-contract');
@@ -76,6 +77,28 @@ function halSignalCapsuleHtml(section) {
   return `<div class="article-block hal-signal-capsule"><strong class="article-block-title">HAL Signal Capsule</strong><dl>${rows.map(([key, value]) =>
     `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd>`
   ).join('')}</dl></div>`;
+}
+
+function optionalArticleSectionsMarkdown(articleSections) {
+  const blocks = [];
+  if (ensureArray(articleSections.known_limitations).length > 0) {
+    blocks.push(`**${ARTICLE_SECTION_LABELS.known_limitations}**\n\n${bulletsMarkdown(articleSections.known_limitations)}`);
+  }
+  if (ensureArray(articleSections.watch_items).length > 0) {
+    blocks.push(`**${ARTICLE_SECTION_LABELS.watch_items}**\n\n${bulletsMarkdown(articleSections.watch_items)}`);
+  }
+  return blocks.length > 0 ? `\n${blocks.join('\n\n')}\n` : '';
+}
+
+function optionalArticleSectionsHtml(articleSections) {
+  const blocks = [];
+  if (ensureArray(articleSections.known_limitations).length > 0) {
+    blocks.push(`<div class="article-block article-limitations"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.known_limitations)}</strong><ul>${bulletsHtml(articleSections.known_limitations)}</ul></div>`);
+  }
+  if (ensureArray(articleSections.watch_items).length > 0) {
+    blocks.push(`<div class="article-block article-watch-items"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.watch_items)}</strong><ul>${bulletsHtml(articleSections.watch_items)}</ul></div>`);
+  }
+  return blocks.join('\n          ');
 }
 
 function paragraphHtml(value) {
@@ -212,17 +235,57 @@ function markdownTableCell(value) {
     .replace(/\|/g, '\\|') || 'none';
 }
 
+function mergedArticleSectionSummary(section, qualityReport, index) {
+  const localSummary = articleSectionSummary(section);
+  const reportSummary = qualityReport?.article_results?.[index]?.section_contract || {};
+  return {
+    ...localSummary,
+    ...reportSummary,
+    missing_keys: ensureArray(reportSummary.missing_keys || localSummary.missing_keys),
+    missing_required_keys: ensureArray(reportSummary.missing_required_keys || localSummary.missing_required_keys),
+    present_optional_keys: ensureArray(reportSummary.present_optional_keys || localSummary.present_optional_keys),
+    unexpected_keys: ensureArray(reportSummary.unexpected_keys || localSummary.unexpected_keys),
+    has_limitations: reportSummary.has_limitations ?? localSummary.has_limitations,
+    has_watch_items: reportSummary.has_watch_items ?? localSummary.has_watch_items,
+    has_do_not_claim: reportSummary.has_do_not_claim ?? localSummary.has_do_not_claim,
+    limitation_visibility: reportSummary.limitation_visibility || localSummary.limitation_visibility
+  };
+}
+
+function factBoundaryStatus(summary) {
+  const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
+  if (missing.includes('verified_facts')) return 'missing';
+  if (summary.has_do_not_claim) return 'source-backed guarded';
+  return 'source-backed';
+}
+
+function halImpactAxisStatus(section, summary) {
+  const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
+  if (missing.includes('hal_driver_impact')) return 'missing';
+  const axes = ensureArray(section.hal_impact_axes).length > 0
+    ? ensureArray(section.hal_impact_axes)
+    : ensureArray(section.hal_signal_capsule?.impact_axes);
+  return axes.join(', ') || 'present';
+}
+
+function actionabilityStatus(section, summary) {
+  const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
+  if (missing.includes('action_items')) return 'missing';
+  return section.effective_actionability_level || section.actionability_level || 'present';
+}
+
 function articleSectionContractRows(issue, qualityReport = null) {
   return ensureArray(issue.sections).map((section, index) => {
-    const summary = qualityReport?.article_results?.[index]?.section_contract ||
-      articleSectionSummary(section);
-    const missing = ensureArray(summary.missing_keys);
+    const summary = mergedArticleSectionSummary(section, qualityReport, index);
+    const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
     return [
       index + 1,
       section.headline || section.category || `article ${index + 1}`,
       summary.complete === true && missing.length === 0 ? 'pass' : `missing ${missing.join(', ') || 'unknown'}`,
-      missing.includes('hal_driver_impact') ? 'missing' : 'present',
-      missing.includes('action_items') ? 'missing' : 'present'
+      factBoundaryStatus(summary),
+      halImpactAxisStatus(section, summary),
+      actionabilityStatus(section, summary),
+      summary.limitation_visibility || LIMITATION_VISIBILITY.NONE
     ];
   });
 }
@@ -231,8 +294,8 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
   const rows = articleSectionContractRows(issue, qualityReport);
   if (rows.length === 0) return '- none';
   return [
-    '| # | Article | 5-section | HAL impact | Action item |',
-    '| ---: | --- | --- | --- | --- |',
+    '| # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |',
+    '| ---: | --- | --- | --- | --- | --- | --- |',
     ...rows.map(row => `| ${row.map(markdownTableCell).join(' | ')} |`)
   ].join('\n');
 }
@@ -275,6 +338,7 @@ ${bulletsMarkdown(articleSections.action_items)}
 **${ARTICLE_SECTION_LABELS.team_share_points}**
 
 ${articleSections.team_share_points}
+${optionalArticleSectionsMarkdown(articleSections)}
 
 **출처**
 
@@ -352,6 +416,7 @@ ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, sect
           ${halSignalCapsuleHtml(section)}
           <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.action_items)}</strong><ul>${bulletsHtml(articleSections.action_items)}</ul></div>
           <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.team_share_points)}</strong>${paragraphHtml(articleSections.team_share_points)}</div>
+          ${optionalArticleSectionsHtml(articleSections)}
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(section.sources)}</ul></div>
         </div>
       </section>`;

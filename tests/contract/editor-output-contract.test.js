@@ -349,6 +349,66 @@ test('editor output contract rejects article_sections keys outside normalized co
   );
 });
 
+test('editor output contract allows and preserves optional article_sections keys', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: {
+          verified_facts: ['Fact 1'],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1',
+          known_limitations: ['No direct HAL contract change is stated.'],
+          watch_items: ['Track CameraX SessionConfig regressions.'],
+          do_not_claim: ['Do not claim direct Camera HAL API changes.']
+        }
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  const validated = validateEditorOutputContract(draft, DATE, { normalizeSection });
+
+  assert.deepEqual(validated.sections[0].article_sections.known_limitations, [
+    'No direct HAL contract change is stated.'
+  ]);
+  assert.deepEqual(validated.sections[0].article_sections.watch_items, [
+    'Track CameraX SessionConfig regressions.'
+  ]);
+  assert.deepEqual(validated.sections[0].article_sections.do_not_claim, [
+    'Do not claim direct Camera HAL API changes.'
+  ]);
+});
+
+test('editor output contract drops empty optional article_sections keys after normalization', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: {
+          verified_facts: ['Fact 1'],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1',
+          known_limitations: [],
+          watch_items: '',
+          do_not_claim: []
+        }
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  const validated = validateEditorOutputContract(draft, DATE, { normalizeSection });
+
+  assert.equal(Object.prototype.hasOwnProperty.call(validated.sections[0].article_sections, 'known_limitations'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(validated.sections[0].article_sections, 'watch_items'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(validated.sections[0].article_sections, 'do_not_claim'), false);
+});
+
 test('editor section count follows Newsletter Policy min/max', () => {
   const tooFew = editor({ sections: [section(1), section(2)] });
   const minimum = editor({
@@ -994,6 +1054,20 @@ test('editor schema keeps article_sections optional with five required normalize
     editorSchema.properties.sections.items.required.includes('article_sections'),
     false
   );
+  assert.equal(articleSections.additionalProperties, false);
+  assert.deepEqual(Object.keys(articleSections.properties).sort(), [
+    'action_items',
+    'background_context',
+    'do_not_claim',
+    'hal_driver_impact',
+    'known_limitations',
+    'team_share_points',
+    'verified_facts',
+    'watch_items'
+  ]);
+  for (const key of ['known_limitations', 'watch_items', 'do_not_claim']) {
+    assert.equal(articleSections.properties[key].type, 'ARRAY');
+  }
 });
 
 test('editor schema keeps hal_signal_capsule optional with required capsule keys when present', () => {
