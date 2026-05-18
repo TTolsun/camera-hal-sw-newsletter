@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-18",
-  "generated_at": "2026-05-17T17:29:05.965Z",
+  "generated_at": "2026-05-18T01:16:14.454Z",
   "status": "UNDERFILLED_NEEDS_FIX",
   "failure_stage": "candidate_pool_preflight",
   "failure_reason": "publishable_candidate_shortage; reserve_candidate_shortage; camera_stack_candidate_shortage",
@@ -154,27 +154,27 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 33
+      "count": 25
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 33
-    },
-    {
-      "reason": "selection_window=reference_not_main",
-      "count": 11
+      "count": 25
     },
     {
       "reason": "missing dated evidence",
-      "count": 10
+      "count": 19
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 9
+      "count": 18
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 7
+      "count": 15
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 13
     }
   ],
   "final_exclusion_reason_summary": [
@@ -196,27 +196,27 @@
     },
     {
       "reason": "briefing_only=true",
-      "count": 33
+      "count": 25
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 33
-    },
-    {
-      "reason": "selection_window=reference_not_main",
-      "count": 11
+      "count": 25
     },
     {
       "reason": "missing dated evidence",
-      "count": 10
+      "count": 19
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 9
+      "count": 18
     },
     {
       "reason": "finalSelectionEligibility=exclude",
-      "count": 7
+      "count": 15
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 13
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."

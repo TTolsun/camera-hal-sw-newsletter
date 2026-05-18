@@ -2,7 +2,7 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-05-18",
-  "generated_at": "2026-05-17T17:29:09.235Z",
+  "generated_at": "2026-05-18T01:16:15.566Z",
   "status": "NEEDS_FIX",
   "input_completeness": "complete",
   "input_statuses": {
