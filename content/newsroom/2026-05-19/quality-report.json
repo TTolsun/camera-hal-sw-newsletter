@@ -1,0 +1,1029 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-19",
+  "score": 84,
+  "max_score": 100,
+  "threshold": 85,
+  "status": "NEEDS_FIX",
+  "summary": "Quality score 84, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "deductions": [
+    {
+      "category": "source-integrity",
+      "points": 8,
+      "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+      "location": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "scope-relevance",
+      "points": 8,
+      "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+      "location": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "category": "Camera Driver / Image Pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "libcamera Release Announcements - libcamera v0.7.1",
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "libcamera Release Announcements - libcamera v0.7.1",
+        "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "camera_stack_direct",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "impact_claim_level": "camera_stack_direct",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "performance_latency_frame_drop",
+        "soc_resource_contention",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "hard_fail_reasons": [],
+      "soft_deductions": []
+    },
+    {
+      "index": 2,
+      "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "category": "Tooling Watch / Fallback",
+      "status": "FAIL",
+      "repair_action": "replace-or-demote",
+      "sources": [
+        {
+          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+        "source_candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "source_candidate_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
+        "evidence_origin": "section_text_fallback",
+        "metadata_source": "section_text_fallback",
+        "binding_status": "evidence_mismatch",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "publishable_scope": false,
+        "missing_score_fields": [],
+        "count_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
+        "exclusion_reason_if_not_counted": "Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available."
+      },
+      "impact_claim_level": "tooling_supporting",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "hard_fail_reasons": [
+        "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance."
+      ],
+      "soft_deductions": []
+    },
+    {
+      "index": 3,
+      "headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "category": "Tooling Watch / Fallback",
+      "status": "FAIL",
+      "repair_action": "replace-or-demote",
+      "sources": [
+        {
+          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+        "source_candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "source_candidate_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      "impact_claim_level": "tooling_supporting",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "hard_fail_reasons": [
+        "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance."
+      ],
+      "soft_deductions": []
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "not_available",
+    "bound_claims": null,
+    "total_claims": null,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "unknown",
+    "available_article_count": 0,
+    "not_available_article_count": 3
+  },
+  "claim_results": [],
+  "uncovered_facts": [
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "article_sections.verified_facts[0]",
+      "text": "libcamera Release Announcements가 2026-04-28에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "article_sections.verified_facts[1]",
+      "text": "버전/릴리스: libcamera v0.7.1.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "article_sections.verified_facts[2]",
+      "text": "관련 컴포넌트: libcamera / V4L2 camera pipeline.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "article_sections.verified_facts[3]",
+      "text": "확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "confirmed_facts[0]",
+      "text": "libcamera Release Announcements가 2026-04-28에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "confirmed_facts[1]",
+      "text": "버전/릴리스: libcamera v0.7.1.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "confirmed_facts[2]",
+      "text": "관련 컴포넌트: libcamera / V4L2 camera pipeline.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "confirmed_facts[3]",
+      "text": "확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "field": "evidence_summary",
+      "text": "libcamera Release Announcements source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "article_sections.verified_facts[0]",
+      "text": "ISO C++ Blog가 Thu, 30 Apr 2026 22:36:23 +0000에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "article_sections.verified_facts[1]",
+      "text": "버전/릴리스: 16.1.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "article_sections.verified_facts[2]",
+      "text": "관련 컴포넌트: GCC.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "article_sections.verified_facts[3]",
+      "text": "확인된 변경점: GCC 16.1 has been released!",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "confirmed_facts[0]",
+      "text": "ISO C++ Blog가 Thu, 30 Apr 2026 22:36:23 +0000에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "confirmed_facts[1]",
+      "text": "버전/릴리스: 16.1.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "confirmed_facts[2]",
+      "text": "관련 컴포넌트: GCC.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "confirmed_facts[3]",
+      "text": "확인된 변경점: GCC 16.1 has been released!",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "field": "evidence_summary",
+      "text": "ISO C++ Blog source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "article_sections.verified_facts[0]",
+      "text": "ISO C++ Blog가 Tue, 28 Apr 2026 22:25:57 +0000에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "article_sections.verified_facts[1]",
+      "text": "버전/릴리스: v7.2.0.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "article_sections.verified_facts[2]",
+      "text": "관련 컴포넌트: GCC.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "article_sections.verified_facts[3]",
+      "text": "확인된 변경점: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "confirmed_facts[0]",
+      "text": "ISO C++ Blog가 Tue, 28 Apr 2026 22:25:57 +0000에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "confirmed_facts[1]",
+      "text": "버전/릴리스: v7.2.0.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "confirmed_facts[2]",
+      "text": "관련 컴포넌트: GCC.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "confirmed_facts[3]",
+      "text": "확인된 변경점: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "field": "evidence_summary",
+      "text": "ISO C++ Blog source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
+      "reason_code": "missing_matching_fact_claim"
+    }
+  ],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 3,
+    "strong_signal_count": 3,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 3,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 3,
+    "fallback_main_article_count": 2,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 3,
+      "framework_hal_contract": 3,
+      "stream_buffer_metadata": 3,
+      "cts_vts_its_cdd": 3,
+      "performance_latency_frame_drop": 1,
+      "soc_resource_contention": 1,
+      "camerax_app_compatibility": 3,
+      "native_tooling_workflow": 2
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 2
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 2
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 3
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "performance_latency_frame_drop",
+        "soc_resource_contention",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "performance_thermal_owner",
+        "soc_platform_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 6,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다.",
+        "Supplied source evidence가 말하지 않으면 HAL API",
+        "metadata contract",
+        "stream",
+        "buffer"
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "native_tooling_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
+        "Supplied source evidence가 말하지 않으면 HAL API",
+        "metadata contract",
+        "stream",
+        "buffer"
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "native_tooling_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
+        "Supplied source evidence가 말하지 않으면 HAL API",
+        "metadata contract",
+        "stream",
+        "buffer"
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 3,
+    "briefing_count": 3,
+    "camera_article_count": 1,
+    "legacy_regex_camera_article_count": 3,
+    "expanded_scope_article_count": 2,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 1,
+    "android_platform_camera_adjacent_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 1,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 2,
+    "composition_mode": "FALLBACK_COMPOSITION",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "libcamera Release Announcements - libcamera v0.7.1",
+        "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "camera_stack_direct",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+        "source_candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "source_candidate_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
+        "evidence_origin": "section_text_fallback",
+        "metadata_source": "section_text_fallback",
+        "binding_status": "evidence_mismatch",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "publishable_scope": false,
+        "missing_score_fields": [],
+        "count_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
+        "exclusion_reason_if_not_counted": "Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available."
+      },
+      {
+        "index": 3,
+        "headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+        "source_candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "source_candidate_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 1,
+      "android_platform_camera_adjacent": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "UNKNOWN",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 1,
+    "blocking_deduction_count": 2,
+    "blocking_deduction_categories": [
+      "source-integrity",
+      "scope-relevance"
+    ],
+    "hard_fail_count": 2,
+    "soft_deduction_count": 0,
+    "article_gate_counts": {
+      "PASS": 1,
+      "DEMOTE": 0,
+      "FAIL": 2
+    },
+    "article_section_contract": {
+      "complete_count": 3,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 3
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "not_available",
+      "bound_claims": null,
+      "total_claims": null,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "unknown",
+      "available_article_count": 0,
+      "not_available_article_count": 3
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 27,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 3,
+      "strong_signal_count": 3,
+      "usable_signal_count": 0,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 3,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 3,
+      "fallback_main_article_count": 2,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "driver_image_pipeline": 3,
+        "framework_hal_contract": 3,
+        "stream_buffer_metadata": 3,
+        "cts_vts_its_cdd": 3,
+        "performance_latency_frame_drop": 1,
+        "soc_resource_contention": 1,
+        "camerax_app_compatibility": 3,
+        "native_tooling_workflow": 2
+      },
+      "actionability_level_counts": {
+        "owner_metric_log": 1,
+        "measurable_test": 2
+      },
+      "effective_actionability_level_counts": {
+        "owner_metric_log": 1,
+        "measurable_test": 2
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 3
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "libcamera Release Announcements - libcamera v0.7.1",
+        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "cts_vts_its_cdd",
+          "performance_latency_frame_drop",
+          "soc_resource_contention",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner",
+          "camera_test_owner",
+          "performance_thermal_owner",
+          "soc_platform_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 6,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+          "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+          "libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다.",
+          "Supplied source evidence가 말하지 않으면 HAL API",
+          "metadata contract",
+          "stream",
+          "buffer"
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+        "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow",
+          "framework_hal_contract",
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "cts_vts_its_cdd",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner",
+          "camera_test_owner",
+          "native_tooling_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+          "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+          "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
+          "Supplied source evidence가 말하지 않으면 HAL API",
+          "metadata contract",
+          "stream",
+          "buffer"
+        ],
+        "soc_signal_type": "",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+        "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow",
+          "framework_hal_contract",
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "cts_vts_its_cdd",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner",
+          "camera_test_owner",
+          "native_tooling_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+          "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+          "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
+          "Supplied source evidence가 말하지 않으면 HAL API",
+          "metadata contract",
+          "stream",
+          "buffer"
+        ],
+        "soc_signal_type": "",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "scope-relevance",
+        "count": 1
+      },
+      {
+        "category": "source-integrity",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  },
+  "fallback_public_issue": true,
+  "fallback_public_issue_reason": "Public newsletter files were generated by fallback public issue builder after automatic publish gate failed.",
+  "review_publication_ready_reason": "Public newsletter files were generated by fallback public issue builder after automatic publish gate failed.",
+  "editor_review_reason": "AI automatic publish gate did not pass; editor review is required before merge publication.",
+  "original_fact_check_status": "PASS",
+  "original_must_fix_count": 0,
+  "original_source_gap_count": 0,
+  "fallback_public_issue_removed_blockers": false,
+  "fallback_public_issue_removed_article_count": 0,
+  "demoted_articles": [],
+  "fallback_articles": [
+    {
+      "headline": "libcamera Release Announcements - libcamera v0.7.1",
+      "category": "Camera Driver / Image Pipeline",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "source": "libcamera Release Announcements",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "action": "rebuild-from-bound-candidate",
+      "fallback": false,
+      "reason": "hard failure replacement"
+    },
+    {
+      "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "category": "Tooling Watch / Fallback",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "action": "demote-to-watch",
+      "fallback": true,
+      "reason": "minimum article count fallback fill"
+    },
+    {
+      "headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "category": "Tooling Watch / Fallback",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source": "ISO C++ Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "action": "demote-to-watch",
+      "fallback": true,
+      "reason": "minimum article count fallback fill"
+    }
+  ],
+  "original_quality_status": "UNKNOWN",
+  "original_quality_score": null
+}

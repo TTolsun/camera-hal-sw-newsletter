@@ -1,0 +1,74 @@
+[
+  {
+    "attempt": 1,
+    "model": "deterministic-fallback-public-issue",
+    "score": 84,
+    "threshold": 85,
+    "status": "PUBLIC_ISSUE_CREATED",
+    "rendered_main_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_candidates_used": [
+      {
+        "headline": "libcamera Release Announcements - libcamera v0.7.1",
+        "category": "Camera Driver / Image Pipeline",
+        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+        "source": "libcamera Release Announcements",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "action": "rebuild-from-bound-candidate",
+        "fallback": false,
+        "reason": "hard failure replacement"
+      },
+      {
+        "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+        "category": "Tooling Watch / Fallback",
+        "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "action": "demote-to-watch",
+        "fallback": true,
+        "reason": "minimum article count fallback fill"
+      },
+      {
+        "headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+        "category": "Tooling Watch / Fallback",
+        "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "action": "demote-to-watch",
+        "fallback": true,
+        "reason": "minimum article count fallback fill"
+      }
+    ],
+    "deductions": [
+      {
+        "category": "source-integrity",
+        "points": 8,
+        "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "location": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "scope-relevance",
+        "points": 8,
+        "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+        "location": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "libcamera Release Announcements - libcamera v0.7.1",
+      "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more"
+    ],
+    "demoted_sections": [],
+    "repair_actions": [
+      "fallback-public-issue-builder"
+    ]
+  }
+]
