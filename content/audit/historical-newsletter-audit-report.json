@@ -2,17 +2,18 @@
   "schema_version": 1,
   "report_type": "historical_newsletter_audit",
   "source_of_truth": "content/audit/historical-archive-status.json",
-  "data_newsletter_count": 12,
-  "public_artifact_count": 14,
-  "newsroom_artifact_count": 16,
+  "data_newsletter_count": 11,
+  "public_artifact_count": 13,
+  "newsroom_artifact_count": 15,
   "sidecar_entry_count": 14,
   "archive_status_counts": {
     "historical_unreviewed": 13,
-    "deprecated_archive": 1
+    "removed": 1
   },
   "public_visibility_counts": {
-    "listed": 12,
-    "unlisted": 2
+    "listed": 11,
+    "unlisted": 2,
+    "removed": 1
   },
   "orphan_public_dates": [
     "2026-05-17",
@@ -258,15 +259,16 @@
     {
       "date": "2026-04-30",
       "artifact_scope": "public_archive",
-      "in_data_newsletters": true,
-      "has_public_artifact": true,
-      "has_newsroom_artifact": true,
-      "archive_status": "deprecated_archive",
-      "public_visibility": "listed",
+      "in_data_newsletters": false,
+      "has_public_artifact": false,
+      "has_newsroom_artifact": false,
+      "archive_status": "removed",
+      "public_visibility": "removed",
       "historical_cleanup_reviewed": true,
       "known_limitations": [
         "format_inconsistency",
-        "delete_only_slice_pending",
+        "delete_only_slice",
+        "removed_via_73",
         "excluded_from_rewrite_path"
       ],
       "historical_cleanup_issue": "#73"

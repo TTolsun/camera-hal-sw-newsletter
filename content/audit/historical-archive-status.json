@@ -153,14 +153,15 @@
   },
   {
     "date": "2026-04-30",
-    "archive_status": "deprecated_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
       "format_inconsistency",
-      "delete_only_slice_pending",
+      "delete_only_slice",
+      "removed_via_73",
       "excluded_from_rewrite_path"
     ],
     "historical_cleanup_issue": "#73",
-    "public_visibility": "listed"
+    "public_visibility": "removed"
   }
 ]
