@@ -74,6 +74,31 @@ test('public newsletter validator rejects visible internal terms and raw fact ch
   assert.ok(errors.some(error => /raw verified facts/.test(error)));
 });
 
+test('public newsletter validator rejects editor review and HAL capsule field leftovers', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace('Lead 1.', 'Lead 1. Editor review reader_owners check_within_2_weeks normal publishable coverage.'),
+    html: html('<p>editor review reader_owners check_within_2_weeks</p>')
+  });
+
+  assert.ok(errors.some(error => /editor review/i.test(error)));
+  assert.ok(errors.some(error => /reader_owners/.test(error)));
+  assert.ok(errors.some(error => /check_within_2_weeks/.test(error)));
+  assert.ok(errors.some(error => /normal publishable coverage/.test(error)));
+});
+
+test('public newsletter validator rejects non-public markdown source links', () => {
+  const withNonPublicLinks = markdown()
+    .replace('- [Source 1](https://example.com/source-1)', '- [Internal](content/newsroom/2026-05-18/editor-draft.json)')
+    .replace('- [Reference](https://example.com/reference)', '- [Action](https://github.com/TTolsun/camera-hal-sw-newsletter/actions/runs/123)');
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: withNonPublicLinks,
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /internal_artifact_url/.test(error)));
+  assert.ok(errors.some(error => /github_actions_artifact_url/.test(error)));
+});
+
 test('public newsletter validator rejects generic and repeated checkpoints', () => {
   const repeated = [
     ['Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.'],

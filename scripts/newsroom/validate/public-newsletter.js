@@ -1,7 +1,8 @@
 const fs = require('fs');
 
 const {
-  NO_IMMEDIATE_ACTION_TEXT
+  NO_IMMEDIATE_ACTION_TEXT,
+  publicUrlError
 } = require('../common/public-article-contract');
 
 const PUBLIC_NEWSLETTER_FORBIDDEN_TERMS = Object.freeze([
@@ -12,6 +13,10 @@ const PUBLIC_NEWSLETTER_FORBIDDEN_TERMS = Object.freeze([
   'quality gate',
   'candidate',
   'HAL Signal Capsule',
+  'editor review',
+  'normal publishable coverage',
+  'reader_owners',
+  'check_within_2_weeks',
   'why_now',
   'impact_axes',
   'do_not_overstate',
@@ -75,6 +80,66 @@ function findForbiddenTerms(text, label) {
   return PUBLIC_NEWSLETTER_FORBIDDEN_TERMS
     .filter(term => visible.includes(String(term || '').toLowerCase()))
     .map(term => `${label} contains internal public-forbidden term: ${term}`);
+}
+
+function publicArtifactUrlError(value) {
+  const raw = String(value || '').trim();
+  const normalized = raw.replace(/\\/g, '/').toLowerCase();
+  if (
+    normalized.startsWith('.tmp/') ||
+    normalized.startsWith('/.tmp/') ||
+    normalized.startsWith('content/newsroom/') ||
+    normalized.startsWith('/content/newsroom/') ||
+    normalized.startsWith('content/collected-news/') ||
+    normalized.startsWith('/content/collected-news/') ||
+    normalized.includes('/.tmp/') ||
+    normalized.includes('/content/newsroom/') ||
+    normalized.includes('/content/collected-news/')
+  ) {
+    return 'internal_artifact_url';
+  }
+  return publicUrlError(raw);
+}
+
+function markdownLinks(value) {
+  const links = [];
+  const pattern = /(?<!!)\[[^\]]+\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+  let match;
+  while ((match = pattern.exec(String(value || ''))) !== null) {
+    links.push(match[1]);
+  }
+  return links;
+}
+
+function sourceBlocks(markdown) {
+  const blocks = [];
+  const lines = String(markdown || '').split(/\r?\n/);
+  let current = null;
+  for (const line of lines) {
+    if (/^\*\*Sources\*\*\s*$/i.test(line) || /^##\s+(?:참고자료|References)\s*$/i.test(line)) {
+      if (current !== null) blocks.push(current.join('\n'));
+      current = [];
+      continue;
+    }
+    if (current !== null && (/^---\s*$/.test(line) || /^##\s+/.test(line))) {
+      blocks.push(current.join('\n'));
+      current = null;
+    }
+    if (current !== null) current.push(line);
+  }
+  if (current !== null) blocks.push(current.join('\n'));
+  return blocks;
+}
+
+function validatePublicSourceLinks(markdown, label) {
+  const errors = [];
+  for (const block of sourceBlocks(markdown)) {
+    for (const url of markdownLinks(block)) {
+      const reason = publicArtifactUrlError(url);
+      if (reason) errors.push(`${label} public source link has non-public URL (${reason}): ${url}`);
+    }
+  }
+  return errors;
 }
 
 function mainArticleBlocks(markdown) {
@@ -143,6 +208,7 @@ function validatePublicMarkdown(markdown, label = 'newsletter.md') {
   const errors = [];
   const visible = visibleMarkdownText(markdown);
   errors.push(...findForbiddenTerms(visible, label));
+  errors.push(...validatePublicSourceLinks(markdown, label));
   if (/verified_facts|확인된 변경점:|확인한 사실 \/ 릴리스 요약/i.test(visible)) {
     errors.push(`${label} renders raw verified facts/checklist language.`);
   }
@@ -200,6 +266,7 @@ module.exports = {
   validatePublicMarkdown,
   validatePublicNewsletterArtifacts,
   validatePublicNewsletterFiles,
+  validatePublicSourceLinks,
   visibleHtmlText,
   visibleMarkdownText
 };

@@ -41,10 +41,22 @@ function publicSafeText(value) {
   return compactText(value)
     .replace(/\bTooling Watch \/ Fallback:\s*/gi, '')
     .replace(/\bFallback\b/gi, 'Watch')
-    .replace(/\bReview-only\b/gi, 'Editor review')
+    .replace(/\bReview-only\b/gi, '참고 동향')
     .replace(/\bquality gate\b/gi, 'quality review')
     .replace(/\bcandidate\b/gi, 'source item')
     .trim();
+}
+
+const INTERNAL_PUBLIC_TERM_PATTERN = /Review-only|Fallback|quality gate|candidate|editor review|normal publishable coverage|reader_owners|check_within_2_weeks|HAL Signal Capsule|why_now|impact_axes|do_not_overstate|guardrail|section repair|hard failure|candidate shortage|deterministic reconstruction|source-bound|publish gate/i;
+
+function hasInternalPublicTerm(value) {
+  return INTERNAL_PUBLIC_TERM_PATTERN.test(compactText(value));
+}
+
+function fallbackLeadText(sourceText, headline) {
+  const fallback = `${headline || 'Camera HAL 관련 소식'} is shared as source-backed context for Camera HAL readers.`;
+  if (!sourceText || hasInternalPublicTerm(sourceText)) return fallback;
+  return publicSafeText(sourceText);
 }
 
 function normalizeStringArray(value) {
@@ -170,7 +182,7 @@ function publicArticleForSection(section = {}, { allowLegacyFallback = true } = 
   if (!allowLegacyFallback) return normalized;
 
   if (!normalized.headline) normalized.headline = publicSafeText(section.headline || section.category || 'Camera HAL 관련 소식');
-  if (!normalized.lead) normalized.lead = publicSafeText(section.what_changed || section.summary || section.evidence_summary || normalized.headline);
+  if (!normalized.lead) normalized.lead = fallbackLeadText(section.what_changed || section.summary || section.evidence_summary, normalized.headline);
   if (normalized.body_paragraphs.length < 2) normalized.body_paragraphs = fallbackParagraphs(section);
   if (!normalized.camera_hal_takeaway) {
     normalized.camera_hal_takeaway = publicSafeText(section.camera_hal_perspective || section.why_it_matters || 'Camera HAL / Driver 관점의 직접 영향은 공개 출처가 확인한 범위에서만 해석합니다.');
@@ -214,6 +226,7 @@ function validatePublicArticle(section = {}, index = 0) {
       issues.push({ index: index + 1, headline, ...issue });
     }
   });
+  // Semantic validation also normalizes public_article for downstream render and quality paths.
   section.public_article = normalized;
   return issues;
 }

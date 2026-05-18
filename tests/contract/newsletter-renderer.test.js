@@ -96,7 +96,7 @@ test('newsletter renderer uses public_article for public markdown and HTML', () 
 
 test('newsletter renderer sanitizes legacy sections through compatibility projection', () => {
   const draft = issue();
-  draft.sections[0].what_changed = 'Fallback candidate passed a quality gate for review.';
+  draft.sections[0].what_changed = 'Review-only Fallback candidate passed a quality gate for review.';
   draft.sections[0].sources[0].title = 'Fallback candidate source';
   delete draft.sections[0].public_article;
 
@@ -109,6 +109,12 @@ test('newsletter renderer sanitizes legacy sections through compatibility projec
   assert.match(html, /reader-checkpoints/);
   assert.doesNotMatch(markdown, /HAL Signal Capsule/);
   assert.doesNotMatch(html, /hal-signal-capsule/);
+  assert.doesNotMatch(markdown, /Review-only/);
+  assert.doesNotMatch(markdown, /Editor review/i);
+  assert.doesNotMatch(markdown, /source item passed a quality review/i);
+  assert.doesNotMatch(html, /Review-only/);
+  assert.doesNotMatch(html, /Editor review/i);
+  assert.doesNotMatch(html, /source item passed a quality review/i);
   assert.doesNotMatch(markdown, /Fallback/);
   assert.doesNotMatch(markdown, /quality gate/);
   assert.doesNotMatch(markdown, /candidate/);
