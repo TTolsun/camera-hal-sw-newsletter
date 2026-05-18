@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated regression"
+  },
+  "policyFlags": {
+    "source_gap_risk": true,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": false,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "FAIL"
+  },
+  "section": {
+    "headline": "Source gap camera article",
+    "what_changed": "The article claims a Camera HAL validation impact but lacks source-backed dated evidence.",
+    "camera_hal_perspective": "This cannot become a main article while source_gap_risk=true.",
+    "sources": [
+      {
+        "title": "Unverified source gap item",
+        "url": "https://example.com/source-gap-quality"
+      }
+    ]
+  },
+  "candidate": {
+    "url": "https://example.com/source-gap-quality",
+    "source_gap_risk": true,
+    "hasDatedEvidence": false,
+    "finalSelectionEligibility": "main"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated regression"
+  },
+  "policyFlags": {
+    "source_gap_risk": false,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": true,
+    "generic_ai_without_hal_connection": true
+  },
+  "expected": {
+    "status": "NOT_SELECTED"
+  },
+  "candidate": {
+    "title": "Generic AI assistant update",
+    "url": "https://example.com/generic-ai-selection",
+    "published_date": "2026-05-06",
+    "summary": "A general AI assistant update with no Camera HAL, Android Camera, frame, stream, buffer, metadata, ISP, GPU, or NPU connection.",
+    "api_or_component": "AI assistant",
+    "behavior_change": "Generic assistant workflow changed.",
+    "relevance_bucket": "generic_tech_watchlist",
+    "camera_hal_relevance_score": 0,
+    "android_camera_relevance_score": 0,
+    "practical_actionability_score": 0,
+    "hasDatedEvidence": true,
+    "finalSelectionEligibility": "main"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated regression",
+    "artifact_name": "seed-candidates.json"
+  },
+  "policyFlags": {
+    "source_gap_risk": true,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": false,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "FAIL"
+  },
+  "candidate": {
+    "title": "Blocked seed evidence promoted as source-backed fact",
+    "url": "https://developer.android.com/jetpack/androidx/releases/camera#blocked",
+    "source_extraction_ref": "seed-evidence-pack.json#/packs/9",
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": false,
+    "source_gap_risk": true,
+    "compact_evidence": {
+      "primary_facts": [
+        "Keyword hints were treated as source-backed facts."
+      ],
+      "linked_context": [],
+      "do_not_claim": [
+        "Keyword hints are discovery hints, not source-backed facts."
+      ],
+      "evidence_urls": []
+    }
+  }
+}

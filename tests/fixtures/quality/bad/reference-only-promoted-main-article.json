@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated regression"
+  },
+  "policyFlags": {
+    "source_gap_risk": true,
+    "reference_only": true,
+    "finalSelectionEligibility": "watchlist",
+    "hasDatedEvidence": false,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "FAIL"
+  },
+  "section": {
+    "headline": "Reference-only Camera documentation promoted as news",
+    "what_changed": "An undated Camera documentation page was promoted as if it were a dated main article.",
+    "camera_hal_perspective": "Reference pages can inform review context but cannot stand alone as a source-backed main article.",
+    "sources": [
+      {
+        "title": "Camera reference documentation",
+        "url": "https://source.android.com/docs/core/camera"
+      }
+    ]
+  },
+  "candidate": {
+    "url": "https://source.android.com/docs/core/camera",
+    "reference_only": true,
+    "isWatchPage": true,
+    "hasDatedEvidence": false,
+    "finalSelectionEligibility": "watchlist"
+  }
+}

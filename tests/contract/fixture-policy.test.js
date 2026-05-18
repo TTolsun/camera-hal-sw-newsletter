@@ -12,6 +12,11 @@ const {
 
 const GENERATED_ARTIFACT_PATH_PATTERN = /\b(?:content\/newsroom|content\/collected-news|newsletters)\/\d{4}-\d{2}-\d{2}\b/;
 const MINIMIZED_GENERATED_REGRESSION_SOURCE = 'minimized-generated-regression';
+const GENERATED_SOURCE_VALUES = new Set([
+  'generated_artifact',
+  MINIMIZED_GENERATED_REGRESSION_SOURCE
+]);
+const SEED_ARTIFACT_NAME_PATTERN = /\b(?:collection-intent\.json|seed-evidence-pack\.json|seed-candidates\.json|compact_evidence)\b/;
 
 function relativeFixturePath(filePath) {
   return path.relative(fixturesRoot, filePath).replace(/\\/g, '/');
@@ -19,6 +24,29 @@ function relativeFixturePath(filePath) {
 
 function isPassStatus(value) {
   return String(value || '').toUpperCase() === 'PASS';
+}
+
+function hasFixtureSegment(entryPath, segment) {
+  return entryPath.split('/').includes(segment);
+}
+
+function isGoodFixturePath(entryPath) {
+  return hasFixtureSegment(entryPath, 'good');
+}
+
+function isBadFixturePath(entryPath) {
+  return hasFixtureSegment(entryPath, 'bad');
+}
+
+function hasGeneratedProvenance(entry = {}, fixture = {}) {
+  return entry.generatedArtifact === true ||
+    entry.source === MINIMIZED_GENERATED_REGRESSION_SOURCE ||
+    fixture.metadata?.generated === true ||
+    GENERATED_SOURCE_VALUES.has(fixture.metadata?.source);
+}
+
+function mentionsSeedArtifactName(text) {
+  return SEED_ARTIFACT_NAME_PATTERN.test(text);
 }
 
 function readFixtureLedger() {
@@ -45,18 +73,23 @@ function hasPassBlockingPolicyFlag(flags = {}) {
 
 test('fixture policy keeps generated samples out of good fixtures', () => {
   const goodFixtures = listFixtureFiles('.', '.json')
-    .filter(filePath => relativeFixturePath(filePath).includes('/good/'));
+    .filter(filePath => isGoodFixturePath(relativeFixturePath(filePath)));
 
   assert.ok(goodFixtures.length > 0);
   for (const filePath of goodFixtures) {
-    const fixture = readJsonFixture(relativeFixturePath(filePath));
-    assert.notEqual(fixture.metadata?.generated, true, `${relativeFixturePath(filePath)} must not be generated`);
+    const fixturePath = relativeFixturePath(filePath);
+    const fixture = readJsonFixture(fixturePath);
+    assert.equal(
+      hasGeneratedProvenance({}, fixture),
+      false,
+      `${fixturePath} must not carry generated provenance`
+    );
   }
 });
 
 test('bad fixtures cannot expect PASS', () => {
   const badFixtures = listFixtureFiles('.', '.json')
-    .filter(filePath => relativeFixturePath(filePath).includes('/bad/'));
+    .filter(filePath => isBadFixturePath(relativeFixturePath(filePath)));
 
   assert.ok(badFixtures.length > 0);
   for (const filePath of badFixtures) {
@@ -73,12 +106,23 @@ test('PASS golden fixtures cannot carry source-integrity blocker flags', () => {
   const fixtures = listFixtureFiles('.', '.json');
 
   for (const filePath of fixtures) {
-    const fixture = readJsonFixture(relativeFixturePath(filePath));
-    const isGoldenPass = relativeFixturePath(filePath).includes('/good/') && isPassStatus(fixture.expected?.status);
+    const fixturePath = relativeFixturePath(filePath);
+    const fixture = readJsonFixture(fixturePath);
+    const isGoldenPass = isGoodFixturePath(fixturePath) && isPassStatus(fixture.expected?.status);
     assert.equal(
       isGoldenPass && hasPassBlockingPolicyFlag(fixture.policyFlags),
       false,
-      `${relativeFixturePath(filePath)} cannot be a PASS golden fixture with blocking policy flags`
+      `${fixturePath} cannot be a PASS golden fixture with blocking policy flags`
+    );
+  }
+});
+
+test('fixture layout stays domain-first and avoids root-level good or bad folders', () => {
+  for (const fixturePath of ledgerFixtureFiles()) {
+    assert.equal(
+      fixturePath.startsWith('good/') || fixturePath.startsWith('bad/'),
+      false,
+      `${fixturePath} must use domain-first fixture layout such as quality/good or selection/bad`
     );
   }
 });
@@ -112,20 +156,21 @@ test('fixture ledger trust metadata matches fixture policy', () => {
     assert.ok(entry.protectedPolicy, `${entry.path} must declare protectedPolicy`);
     assert.equal(typeof entry.generatedArtifact, 'boolean', `${entry.path} must declare generatedArtifact`);
 
-    if (entry.path.includes('/good/')) {
+    if (isGoodFixturePath(entry.path)) {
       assert.equal(entry.allowedUse, 'good', `${entry.path} is under good/ and must declare allowedUse=good`);
       assert.equal(entry.source, 'curated', `${entry.path} is under good/ and must be curated`);
       assert.equal(entry.generatedArtifact, false, `${entry.path} is under good/ and cannot be generated`);
       assert.equal(isPassStatus(entry.expectedStatus), true, `${entry.path} good fixture must expect PASS`);
     }
 
-    if (entry.path.includes('/bad/')) {
+    if (isBadFixturePath(entry.path)) {
       assert.equal(entry.allowedUse, 'bad', `${entry.path} is under bad/ and must declare allowedUse=bad`);
       assert.equal(isPassStatus(entry.expectedStatus), false, `${entry.path} bad fixture must not expect PASS`);
     }
 
     if (entry.generatedArtifact) {
       assert.notEqual(entry.allowedUse, 'good', `${entry.path} generated fixture cannot be good`);
+      assert.equal(isGoodFixturePath(entry.path), false, `${entry.path} generated fixture cannot live under good/`);
       assert.equal(
         entry.source,
         MINIMIZED_GENERATED_REGRESSION_SOURCE,
@@ -135,6 +180,11 @@ test('fixture ledger trust metadata matches fixture policy', () => {
 
     if (!entry.path.endsWith('.json')) continue;
     const fixture = readJsonFixture(entry.path);
+    assert.equal(
+      isGoodFixturePath(entry.path) && hasGeneratedProvenance(entry, fixture),
+      false,
+      `${entry.path} good fixture cannot carry generated provenance`
+    );
     if (fixture.metadata?.generated === true) {
       assert.equal(entry.generatedArtifact, true, `${entry.path} metadata.generated must match fixture ledger`);
       assert.notEqual(entry.allowedUse, 'good', `${entry.path} generated fixture cannot be a good/golden fixture`);
@@ -161,6 +211,23 @@ test('fixture files do not embed generated artifact paths', () => {
       GENERATED_ARTIFACT_PATH_PATTERN.test(text),
       false,
       `${fixturePath} must not embed content/newsroom, content/collected-news, or newsletters generated artifact paths`
+    );
+  }
+});
+
+test('seed artifact names are allowed only without generated good-fixture provenance', () => {
+  const ledger = readFixtureLedger();
+  const entriesByPath = new Map(ledger.entries.map(entry => [entry.path, entry]));
+
+  for (const fixturePath of ledgerFixtureFiles()) {
+    const text = readTextFixture(fixturePath);
+    const entry = entriesByPath.get(fixturePath);
+    const fixture = fixturePath.endsWith('.json') ? readJsonFixture(fixturePath) : {};
+
+    assert.equal(
+      isGoodFixturePath(fixturePath) && mentionsSeedArtifactName(text) && hasGeneratedProvenance(entry, fixture),
+      false,
+      `${fixturePath} must not turn generated seed artifacts into a good/golden fixture`
     );
   }
 });
