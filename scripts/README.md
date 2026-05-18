@@ -13,7 +13,9 @@
 | `scripts/collect-news-candidates.js` | `scripts/newsroom/cli/collect-news-candidates.js` |
 | `scripts/build-raw-candidate-pr-body.js` | `scripts/newsroom/cli/build-raw-candidate-pr-body.js` |
 | `scripts/gemini-newsroom-newsletter.js` | `scripts/newsroom/cli/gemini-newsroom-newsletter.js` |
+| `scripts/audit-historical-newsletters.js` | `scripts/newsroom/cli/audit-historical-newsletters.js` |
 | `scripts/gemini-source-discovery-boundary.js` | `scripts/newsroom/cli/gemini-source-discovery-boundary.js` |
+| `scripts/validate-archive.js` | `scripts/newsroom/cli/validate-archive.js` |
 | `scripts/validate-newsroom-budget.js` | `scripts/newsroom/cli/validate-newsroom-budget.js` |
 | `scripts/validate-quality.js` | `scripts/newsroom/cli/validate-quality.js` |
 | `scripts/write-artifact-manifest.js` | `scripts/newsroom/cli/write-artifact-manifest.js` |

@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "report_type": "historical_newsletter_audit",
+  "source_of_truth": "content/audit/historical-archive-status.json",
+  "data_newsletter_count": 12,
+  "public_artifact_count": 14,
+  "newsroom_artifact_count": 16,
+  "sidecar_entry_count": 14,
+  "archive_status_counts": {
+    "historical_unreviewed": 13,
+    "deprecated_archive": 1
+  },
+  "public_visibility_counts": {
+    "listed": 12,
+    "unlisted": 2
+  },
+  "orphan_public_dates": [
+    "2026-05-17",
+    "2026-05-18"
+  ],
+  "newsroom_only_dates": [
+    "2026-05-06",
+    "2026-05-14"
+  ],
+  "validation_error_count": 0,
+  "validation_warning_count": 0,
+  "validation_errors": [],
+  "validation_warnings": [],
+  "entries": [
+    {
+      "date": "2026-05-19",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-18",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": false,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "unlisted",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "not_listed_in_data_newsletters",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-17",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": false,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "unlisted",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "not_listed_in_data_newsletters",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-16",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-15",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-14",
+      "artifact_scope": "non_public_newsroom_artifact",
+      "in_data_newsletters": false,
+      "has_public_artifact": false,
+      "has_newsroom_artifact": true,
+      "archive_status": null,
+      "public_visibility": "not_public",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-13",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-12",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-11",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-10",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-09",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-08",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-07",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-06",
+      "artifact_scope": "non_public_newsroom_artifact",
+      "in_data_newsletters": false,
+      "has_public_artifact": false,
+      "has_newsroom_artifact": true,
+      "archive_status": null,
+      "public_visibility": "not_public",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-05-05",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "historical_unreviewed",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": false,
+      "known_limitations": [
+        "pre_185_generation",
+        "source_provenance_not_backfilled",
+        "historical_cleanup_pending"
+      ],
+      "historical_cleanup_issue": "#108"
+    },
+    {
+      "date": "2026-04-30",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "deprecated_archive",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": true,
+      "known_limitations": [
+        "format_inconsistency",
+        "delete_only_slice_pending",
+        "excluded_from_rewrite_path"
+      ],
+      "historical_cleanup_issue": "#73"
+    }
+  ]
+}

@@ -9,6 +9,9 @@ const {
   readTextFixture,
   resolveFixturePath
 } = require('../helpers/fixture-loader');
+const {
+  FORBIDDEN_GOOD_FIXTURE_PROVENANCE
+} = require('../../scripts/newsroom/validate/historical-archive');
 
 const GENERATED_ARTIFACT_PATH_PATTERN = /\b(?:content\/newsroom|content\/collected-news|newsletters)\/\d{4}-\d{2}-\d{2}\b/;
 const MINIMIZED_GENERATED_REGRESSION_SOURCE = 'minimized-generated-regression';
@@ -43,6 +46,21 @@ function hasGeneratedProvenance(entry = {}, fixture = {}) {
     entry.source === MINIMIZED_GENERATED_REGRESSION_SOURCE ||
     fixture.metadata?.generated === true ||
     GENERATED_SOURCE_VALUES.has(fixture.metadata?.source);
+}
+
+function fixtureProvenanceValues(entry = {}, fixture = {}) {
+  return [
+    entry.source,
+    entry.provenance,
+    fixture.metadata?.source,
+    fixture.metadata?.provenance,
+    fixture.fixture_meta?.provenance
+  ].filter(Boolean);
+}
+
+function hasForbiddenPublicArticleProvenance(entry = {}, fixture = {}) {
+  return fixtureProvenanceValues(entry, fixture)
+    .some(value => FORBIDDEN_GOOD_FIXTURE_PROVENANCE.has(value));
 }
 
 function mentionsSeedArtifactName(text) {
@@ -83,6 +101,25 @@ test('fixture policy keeps generated samples out of good fixtures', () => {
       hasGeneratedProvenance({}, fixture),
       false,
       `${fixturePath} must not carry generated provenance`
+    );
+  }
+});
+
+test('fixture policy keeps historical public article provenance out of good fixtures', () => {
+  const ledger = readFixtureLedger();
+  const entriesByPath = new Map(ledger.entries.map(entry => [entry.path, entry]));
+  const goodFixtures = listFixtureFiles('.', '.json')
+    .filter(filePath => isGoodFixturePath(relativeFixturePath(filePath)));
+
+  assert.ok(goodFixtures.length > 0);
+  for (const filePath of goodFixtures) {
+    const fixturePath = relativeFixturePath(filePath);
+    const fixture = readJsonFixture(fixturePath);
+    const entry = entriesByPath.get(fixturePath) || {};
+    assert.equal(
+      hasForbiddenPublicArticleProvenance(entry, fixture),
+      false,
+      `${fixturePath} must not use historical/generated public articles as good fixture provenance`
     );
   }
 });
