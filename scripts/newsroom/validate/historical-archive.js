@@ -181,10 +181,12 @@ function sidecarEntryByDate(entries) {
   return { map, duplicates };
 }
 
-function entryReferenceExists(state, date) {
-  return state.ledgerText.includes(date) ||
-    state.cleanupReportText.includes(date) ||
-    state.inventoryText.includes(date);
+function ledgerReferenceExists(state, date) {
+  return state.ledgerText.includes(date);
+}
+
+function cleanupReportReferenceExists(state, date) {
+  return state.cleanupReportText.includes(date);
 }
 
 function readPublicArticleText(root, date) {
@@ -287,8 +289,11 @@ function validateSidecarEntry(entry, index, state, errors) {
   if (entry?.public_visibility === 'removed' && entry?.archive_status !== 'removed') {
     errors.push(`${label} public_visibility=removed requires archive_status=removed.`);
   }
-  if (date && !entryReferenceExists(state, date)) {
-    errors.push(`${label} date ${date} must be referenced by the historical ledger, inventory, or cleanup report.`);
+  if (date && !ledgerReferenceExists(state, date)) {
+    errors.push(`${label} date ${date} must be referenced by ${DEFAULT_LEDGER_PATH}.`);
+  }
+  if (date && entry?.archive_status !== 'stable_archive' && !cleanupReportReferenceExists(state, date)) {
+    errors.push(`${label} date ${date} must be summarized by ${DEFAULT_CLEANUP_REPORT_PATH}.`);
   }
 }
 
@@ -381,6 +386,9 @@ function validateHistoricalArchive({ root = process.cwd(), state = null } = {}) 
     if (entry.public_visibility === 'unlisted' && activeDates.has(date)) {
       errors.push(`Sidecar entry ${date} is unlisted but still exposed in data/newsletters.json.`);
     }
+    if (!activeDates.has(date) && !publicDates.has(date) && newsroomDates.has(date) && entry.archive_status !== 'removed') {
+      errors.push(`Sidecar entry ${date} points to a non-public newsroom artifact; newsroom-only artifacts are audit report only.`);
+    }
     if (!activeDates.has(date) && !publicDates.has(date) && !newsroomDates.has(date) && entry.archive_status !== 'removed') {
       errors.push(`Sidecar entry ${date} has no matching public or newsroom artifact.`);
     }
@@ -430,6 +438,7 @@ function buildAuditReport(validation) {
   const publicDates = new Set(state.publicDates);
   const newsroomDates = new Set(state.newsroomDates);
   const sidecarByDate = new Map(state.sidecarEntries.map(entry => [entry.date, entry]));
+  const newsroomOnlyDates = state.newsroomDates.filter(date => !activeDates.has(date) && !publicDates.has(date));
   const allDates = [...new Set([
     ...state.activeDates,
     ...state.publicDates,
@@ -448,23 +457,25 @@ function buildAuditReport(validation) {
     archive_status_counts: countBy(state.sidecarEntries, 'archive_status'),
     public_visibility_counts: countBy(state.sidecarEntries, 'public_visibility'),
     orphan_public_dates: state.publicDates.filter(date => !activeDates.has(date)),
-    newsroom_only_dates: state.newsroomDates.filter(date => !activeDates.has(date) && !publicDates.has(date)),
+    newsroom_only_dates: newsroomOnlyDates,
     validation_error_count: validation.errors.length,
     validation_warning_count: validation.warnings.length,
     validation_errors: validation.errors,
     validation_warnings: validation.warnings,
     entries: allDates.map(date => {
       const entry = sidecarByDate.get(date) || {};
+      const isNewsroomOnly = newsroomOnlyDates.includes(date) && !sidecarByDate.has(date);
       return {
         date,
+        artifact_scope: isNewsroomOnly ? 'non_public_newsroom_artifact' : 'public_archive',
         in_data_newsletters: activeDates.has(date),
         has_public_artifact: publicDates.has(date),
         has_newsroom_artifact: newsroomDates.has(date),
-        archive_status: entry.archive_status || 'unclassified',
-        public_visibility: entry.public_visibility || 'unclassified',
+        archive_status: isNewsroomOnly ? null : entry.archive_status || 'unclassified',
+        public_visibility: isNewsroomOnly ? 'not_public' : entry.public_visibility || 'unclassified',
         historical_cleanup_reviewed: entry.historical_cleanup_reviewed === true,
         known_limitations: Array.isArray(entry.known_limitations) ? entry.known_limitations : [],
-        historical_cleanup_issue: entry.historical_cleanup_issue || ''
+        historical_cleanup_issue: isNewsroomOnly ? '#108' : entry.historical_cleanup_issue || ''
       };
     })
   };
@@ -501,11 +512,12 @@ function buildCleanupReportMarkdown(report) {
     '',
     '## Archive Entries',
     '',
-    '| Date | Archive status | Public visibility | Data index | Public artifact | Known limitations | Issue |',
-    '| --- | --- | --- | --- | --- | --- | --- |',
+    '| Date | Artifact scope | Archive status | Public visibility | Data index | Public artifact | Known limitations | Issue |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- |',
     ...report.entries.map(entry => [
       entry.date,
-      entry.archive_status,
+      entry.artifact_scope || 'public_archive',
+      entry.archive_status || 'none',
       entry.public_visibility,
       entry.in_data_newsletters ? 'yes' : 'no',
       entry.has_public_artifact ? 'yes' : 'no',
@@ -517,7 +529,11 @@ function buildCleanupReportMarkdown(report) {
     '',
     markdownList(report.orphan_public_dates),
     '',
-    '## Newsroom-Only Dates',
+    '## Non-public newsroom artifacts',
+    '',
+    '`not_public` is an audit report classification, not a `content/audit/historical-archive-status.json` sidecar enum value.',
+    '',
+    'These dates have `content/newsroom/YYYY-MM-DD/` artifacts but no public newsletter artifact. They are not public archive entries and are not subject to #108 public archive cleanup.',
     '',
     markdownList(report.newsroom_only_dates),
     ''
@@ -534,9 +550,15 @@ function writeAuditReports({ root = process.cwd(), validation }) {
 
 function auditHistoricalArchive({ root = process.cwd(), writeReports = false } = {}) {
   const validation = validateHistoricalArchive({ root });
-  const report = writeReports
-    ? writeAuditReports({ root, validation })
-    : buildAuditReport(validation);
+  if (writeReports) {
+    writeAuditReports({ root, validation });
+    const refreshedValidation = validateHistoricalArchive({ root });
+    return {
+      ...refreshedValidation,
+      report: writeAuditReports({ root, validation: refreshedValidation })
+    };
+  }
+  const report = buildAuditReport(validation);
   return {
     ...validation,
     report

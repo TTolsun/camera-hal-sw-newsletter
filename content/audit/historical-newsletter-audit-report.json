@@ -29,6 +29,7 @@
   "entries": [
     {
       "date": "2026-05-19",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -42,6 +43,7 @@
     },
     {
       "date": "2026-05-18",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": false,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -56,6 +58,7 @@
     },
     {
       "date": "2026-05-17",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": false,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -70,6 +73,7 @@
     },
     {
       "date": "2026-05-16",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -85,6 +89,7 @@
     },
     {
       "date": "2026-05-15",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -100,17 +105,19 @@
     },
     {
       "date": "2026-05-14",
+      "artifact_scope": "non_public_newsroom_artifact",
       "in_data_newsletters": false,
       "has_public_artifact": false,
       "has_newsroom_artifact": true,
-      "archive_status": "unclassified",
-      "public_visibility": "unclassified",
+      "archive_status": null,
+      "public_visibility": "not_public",
       "historical_cleanup_reviewed": false,
       "known_limitations": [],
-      "historical_cleanup_issue": ""
+      "historical_cleanup_issue": "#108"
     },
     {
       "date": "2026-05-13",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -126,6 +133,7 @@
     },
     {
       "date": "2026-05-12",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -141,6 +149,7 @@
     },
     {
       "date": "2026-05-11",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -156,6 +165,7 @@
     },
     {
       "date": "2026-05-10",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -171,6 +181,7 @@
     },
     {
       "date": "2026-05-09",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -186,6 +197,7 @@
     },
     {
       "date": "2026-05-08",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -201,6 +213,7 @@
     },
     {
       "date": "2026-05-07",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -216,17 +229,19 @@
     },
     {
       "date": "2026-05-06",
+      "artifact_scope": "non_public_newsroom_artifact",
       "in_data_newsletters": false,
       "has_public_artifact": false,
       "has_newsroom_artifact": true,
-      "archive_status": "unclassified",
-      "public_visibility": "unclassified",
+      "archive_status": null,
+      "public_visibility": "not_public",
       "historical_cleanup_reviewed": false,
       "known_limitations": [],
-      "historical_cleanup_issue": ""
+      "historical_cleanup_issue": "#108"
     },
     {
       "date": "2026-05-05",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,
@@ -242,6 +257,7 @@
     },
     {
       "date": "2026-04-30",
+      "artifact_scope": "public_archive",
       "in_data_newsletters": true,
       "has_public_artifact": true,
       "has_newsroom_artifact": true,

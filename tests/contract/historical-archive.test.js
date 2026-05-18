@@ -39,24 +39,39 @@ function writeNewsroom(root, date) {
   });
 }
 
-function writeArchiveDocs(root, dates) {
-  const tableRows = dates.map(date => `| ${date} | historical_unreviewed |`).join('\n');
+function tableRows(dates) {
+  return dates.map(date => `| ${date} | historical_unreviewed |`).join('\n');
+}
+
+function writeArchiveDocs(root, datesOrOptions) {
+  const options = Array.isArray(datesOrOptions)
+    ? {
+        ledgerDates: datesOrOptions,
+        inventoryDates: datesOrOptions,
+        cleanupDates: datesOrOptions
+      }
+    : datesOrOptions;
+  const {
+    ledgerDates = [],
+    inventoryDates = [],
+    cleanupDates = []
+  } = options || {};
   writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
     '# Historical Newsletter Provenance Ledger',
     '',
-    tableRows,
+    tableRows(ledgerDates),
     ''
   ].join('\n'));
   writeText(path.join(root, 'docs', 'editorial', 'existing-newsletter-quality-inventory.md'), [
     '# Existing Newsletter Quality Inventory',
     '',
-    tableRows,
+    tableRows(inventoryDates),
     ''
   ].join('\n'));
   writeText(path.join(root, 'docs', 'editorial', 'existing-newsletter-quality-cleanup-report.md'), [
     '# Existing Newsletter Quality Cleanup Report',
     '',
-    tableRows,
+    tableRows(cleanupDates),
     ''
   ].join('\n'));
 }
@@ -118,6 +133,30 @@ test('historical archive validator accepts listed and unlisted sidecar statuses'
   );
 });
 
+test('historical archive audit classifies newsroom-only artifacts as non-public report entries', () => {
+  const root = tempRoot('historical-archive-newsroom-only-');
+  const date = '2026-05-06';
+  writeNewsletterIndex(root, []);
+  writeNewsroom(root, date);
+  writeArchiveDocs(root, []);
+  writeStatus(root, []);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, true, result.errors.join('\n'));
+
+  const audit = auditHistoricalArchive({ root, writeReports: true });
+  const entry = audit.report.entries.find(item => item.date === date);
+  assert.equal(entry.artifact_scope, 'non_public_newsroom_artifact');
+  assert.equal(entry.archive_status, null);
+  assert.equal(entry.public_visibility, 'not_public');
+  assert.equal(entry.historical_cleanup_issue, '#108');
+  assert.equal(audit.report.validation_warning_count, 0);
+  assert.match(
+    require('node:fs').readFileSync(path.join(root, DEFAULT_CLEANUP_REPORT_PATH), 'utf8'),
+    /Non-public newsroom artifacts/
+  );
+});
+
 test('historical archive validator rejects unclassified public artifacts', () => {
   const root = tempRoot('historical-archive-unclassified-');
   const listedDate = '2026-05-05';
@@ -131,6 +170,44 @@ test('historical archive validator rejects unclassified public artifacts', () =>
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /Public newsletter artifact 2026-05-06 has no content\/audit\/historical-archive-status\.json status entry/);
+});
+
+test('historical archive validator requires sidecar entries to be referenced by the ledger', () => {
+  const root = tempRoot('historical-archive-ledger-reference-');
+  const date = '2026-05-05';
+  writeNewsletterIndex(root, [date]);
+  writePublicIssue(root, date);
+  writeArchiveDocs(root, {
+    ledgerDates: [],
+    inventoryDates: [date],
+    cleanupDates: [date]
+  });
+  writeStatus(root, [statusEntry(date)]);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /historical-newsletter-provenance-ledger\.md/);
+
+  const audit = auditHistoricalArchive({ root, writeReports: false });
+  assert.equal(audit.ok, false);
+  assert.equal(audit.report.validation_error_count > 0, true);
+});
+
+test('historical archive validator requires non-stable sidecar entries in the cleanup report', () => {
+  const root = tempRoot('historical-archive-cleanup-reference-');
+  const date = '2026-05-05';
+  writeNewsletterIndex(root, [date]);
+  writePublicIssue(root, date);
+  writeArchiveDocs(root, {
+    ledgerDates: [date],
+    inventoryDates: [date],
+    cleanupDates: []
+  });
+  writeStatus(root, [statusEntry(date)]);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /existing-newsletter-quality-cleanup-report\.md/);
 });
 
 test('historical archive validator rejects removed archives exposed through public index', () => {

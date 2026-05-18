@@ -14,7 +14,11 @@ function main() {
     console.warn(result.warnings.map(warning => `Warning: ${warning}`).join('\n'));
   }
   if (result.errors.length > 0) {
-    console.warn(result.errors.map(error => `Warning: ${error}`).join('\n'));
+    console.warn(result.errors.map(error => `Validation error: ${error}`).join('\n'));
+    console.warn('Audit completed with validation errors recorded in report.');
+    console.warn('Run npm.cmd run validate:archive for merge-blocking validation.');
+  } else {
+    console.log('Audit completed with no merge-blocking archive validation errors.');
   }
 
   console.log(`Wrote ${DEFAULT_AUDIT_REPORT_PATH}`);
