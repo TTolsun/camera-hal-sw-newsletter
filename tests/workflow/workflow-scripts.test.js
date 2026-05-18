@@ -3527,6 +3527,67 @@ test('ensure CLI preserves fallback failure diagnostics and succeeds only for re
   assert.equal(result.outputs.public_newsletter_ready, resolvedOutputs.public_newsletter_ready);
 });
 
+test('ensure CLI reconciles diagnostics-only state into status files and hides stale public index', () => {
+  const root = tempRoot();
+  const date = '2026-05-18';
+  writeCandidateShortageReviewableArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+
+  const result = ensurePublicNewsletterArtifacts({
+    root,
+    date,
+    noBuild: true,
+    changedArtifacts: REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${date}/${file}`)
+  });
+
+  const newsletters = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters.json'), 'utf8'));
+  const canonicalStatus = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
+  const tmpStatus = JSON.parse(fs.readFileSync(path.join(root, '.tmp', 'newsletter-generation-status.json'), 'utf8'));
+
+  assert.equal(newsletters.some(item => item.date === date), false);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
+  assert.deepEqual(canonicalStatus, tmpStatus);
+  assert.equal(canonicalStatus.effective_homepage_visible, false);
+  assert.equal(canonicalStatus.public_artifact_policy, 'hide_existing_public_artifact_after_latest_diagnostics_only');
+  assert.equal(result.outputs.effective_homepage_visible, 'false');
+  assert.equal(result.outputs.public_artifact_source, 'none');
+  assert.match(result.outputs.reconciled_changed_artifacts, /data\/newsletters\.json/);
+  assert.match(result.outputs.reconciled_changed_artifacts, new RegExp(`content/newsroom/${date}/generation-status\\.json`));
+});
+
+test('ensure CLI records invalid review publication structure as non-visible', () => {
+  const root = tempRoot();
+  const date = '2026-05-18';
+  writeEditorialReviewableArtifacts(root, date, {
+    status: {
+      public_newsletter_ready: true,
+      review_publication_ready: true
+    },
+    generationStatus: {
+      public_newsletter_ready: true,
+      review_publication_ready: true
+    }
+  });
+
+  const result = ensurePublicNewsletterArtifacts({
+    root,
+    date,
+    noBuild: true,
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${date}/${file}`)
+  });
+
+  const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
+  assert.equal(result.outputs.public_newsletter_ready, 'false');
+  assert.equal(result.outputs.effective_homepage_visible, 'false');
+  assert.equal(result.outputs.public_artifact_policy, 'review_publication_invalid_public_structure');
+  assert.equal(status.review_publication_ready, true);
+  assert.equal(status.public_newsletter_ready, false);
+  assert.equal(status.public_artifact_policy, 'review_publication_invalid_public_structure');
+});
+
 test('ensure CLI runs fallback builder for quality and repair triggers, then recomputes readiness', () => {
   const root = tempRoot();
   const { date } = writePr39LikeRegressionFixture(root);

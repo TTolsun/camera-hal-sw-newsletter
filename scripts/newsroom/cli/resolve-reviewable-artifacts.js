@@ -10,8 +10,11 @@ const {
   renderGithubOutputs
 } = require('./write-generation-status-output');
 const {
-  validateRenderedIssueStructure
-} = require('../validate/rendered-issue-structure');
+  REQUIRED_PUBLIC_NEWSLETTER_FILES,
+  newsletterIndexDateStatus,
+  publicNewsletterStructureStatus,
+  requiredPublicFiles
+} = require('../common/public-structure');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
@@ -67,12 +70,6 @@ const REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS = [
   'selection-report.json',
   'selection-diagnostics.md',
   'article-capsules.json'
-];
-
-const REQUIRED_PUBLIC_NEWSLETTER_FILES = [
-  'newsletters/${date}/newsletter.md',
-  'newsletters/${date}/index.html',
-  'data/newsletters.json'
 ];
 
 function readTextIfExists(filePath) {
@@ -173,10 +170,6 @@ function existingArtifacts(root, date, relativeFiles) {
     .filter(relativeFile => fs.existsSync(path.join(root, relativeFile)));
 }
 
-function requiredPublicFiles(date) {
-  return REQUIRED_PUBLIC_NEWSLETTER_FILES.map(file => file.replaceAll('${date}', date));
-}
-
 function artifactJsonReadResults(root, date, artifactNames) {
   return Object.fromEntries(artifactNames.map(name => [
     name,
@@ -204,128 +197,6 @@ function invalidArtifacts(results) {
   return Object.entries(results)
     .filter(([, result]) => result.error)
     .map(([name, result]) => `${name}: ${result.error.message}`);
-}
-
-function newsletterIndexDateStatus(root, date) {
-  const dataPath = path.join(root, 'data', 'newsletters.json');
-  const result = readJsonIfExists(dataPath);
-  if (!result.exists) {
-    return { exists: false, hasDate: false, entry: null, pathsMatch: false, pathErrors: [], error: null };
-  }
-  if (result.error) {
-    return { exists: true, hasDate: false, entry: null, pathsMatch: false, pathErrors: [], error: result.error };
-  }
-  if (!Array.isArray(result.value)) {
-    return {
-      exists: true,
-      hasDate: false,
-      entry: null,
-      pathsMatch: false,
-      pathErrors: [],
-      error: new Error('data/newsletters.json must contain an array')
-    };
-  }
-  const entry = result.value.find(item => item?.date === date) || null;
-  const expectedHtml = `newsletters/${date}/index.html`;
-  const expectedMd = `newsletters/${date}/newsletter.md`;
-  const pathErrors = [];
-  if (!entry) {
-    pathErrors.push(`data/newsletters.json missing date entry ${date}`);
-  } else {
-    if (entry.html !== expectedHtml) pathErrors.push(`data/newsletters.json html path mismatch: ${entry.html || 'missing'}`);
-    if (entry.md !== expectedMd) pathErrors.push(`data/newsletters.json md path mismatch: ${entry.md || 'missing'}`);
-  }
-  return {
-    exists: true,
-    hasDate: Boolean(entry),
-    entry,
-    pathsMatch: pathErrors.length === 0,
-    pathErrors,
-    error: null
-  };
-}
-
-function publicFileStatuses(root, date) {
-  return requiredPublicFiles(date).map(relativePath => {
-    const absolutePath = path.join(root, relativePath);
-    const read = readTextResult(absolutePath);
-    return {
-      path: relativePath,
-      exists: read.exists,
-      nonEmpty: read.exists && String(read.text || '').trim().length > 0,
-      error: read.error,
-      text: read.text
-    };
-  });
-}
-
-function rootIndexContractErrors(root) {
-  const indexPath = path.join(root, 'index.html');
-  const read = readTextResult(indexPath);
-  if (!read.exists) return ['root index.html missing'];
-  if (read.error) return [`root index.html unreadable: ${read.error.message}`];
-  const html = read.text;
-  const checks = [
-    { label: "fetch('data/newsletters.json')", pattern: /fetch\(\s*['"]data\/newsletters\.json['"]/ },
-    { label: 'loadNewsletters', pattern: /\bloadNewsletters\b/ },
-    { label: 'latest-card', pattern: /latest-card/ },
-    { label: 'archive-list', pattern: /archive-list/ }
-  ];
-  return checks
-    .filter(check => !check.pattern.test(html))
-    .map(check => `root index.html missing ${check.label} contract`);
-}
-
-function publicNewsletterStructureStatus(root, date) {
-  const statuses = publicFileStatuses(root, date);
-  const errors = [];
-  for (const status of statuses) {
-    if (!status.exists) errors.push(`missing required public file: ${status.path}`);
-    else if (status.error) errors.push(`unreadable required public file: ${status.path}: ${status.error.message}`);
-    else if (!status.nonEmpty) errors.push(`empty required public file: ${status.path}`);
-  }
-
-  const newsletterMd = statuses.find(item => item.path.endsWith('/newsletter.md'));
-  const newsletterHtml = statuses.find(item => item.path.endsWith('/index.html'));
-  const dataIndex = newsletterIndexDateStatus(root, date);
-  if (!dataIndex.exists) {
-    errors.push('missing data/newsletters.json');
-  } else if (dataIndex.error) {
-    errors.push(`invalid data/newsletters.json: ${dataIndex.error.message}`);
-  } else {
-    errors.push(...dataIndex.pathErrors);
-  }
-
-  if (newsletterHtml?.text && !/<a\s+[^>]*href=["'](?:\.\/)?newsletter\.md["']/i.test(newsletterHtml.text)) {
-    errors.push(`Newsletter HTML missing newsletter.md link: newsletters/${date}/index.html`);
-  }
-
-  errors.push(...rootIndexContractErrors(root));
-
-  if (newsletterMd?.nonEmpty && newsletterHtml?.nonEmpty) {
-    const editorResult = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'));
-    const structural = validateRenderedIssueStructure({
-      date,
-      editor: editorResult.error ? null : editorResult.value,
-      markdown: newsletterMd.text,
-      html: newsletterHtml.text,
-      root
-    });
-    if (!structural.ok) {
-      errors.push(...structural.errors.map(error => `structural: ${error}`));
-    }
-  }
-
-  const requiredFilesExist = statuses.every(status => status.exists);
-  const requiredFilesNonEmpty = statuses.every(status => status.nonEmpty);
-  return {
-    ok: errors.length === 0,
-    errors,
-    dataIndex,
-    requiredFilesExist,
-    requiredFilesNonEmpty,
-    statuses
-  };
 }
 
 function relevantChangedArtifacts(changedArtifacts, date) {
@@ -539,6 +410,7 @@ function resolveReviewableArtifacts(options = {}) {
 }
 
 function buildReviewableArtifactOutputs(resolved) {
+  const status = resolved.status || {};
   return {
     date: resolved.date,
     branch: resolved.branch,
@@ -556,7 +428,30 @@ function buildReviewableArtifactOutputs(resolved) {
     public_newsletter_reason: resolved.publicNewsletterReason,
     has_ai_publish_ready: resolved.hasAiPublishReady ? 'true' : 'false',
     has_publish_candidate: resolved.hasPublishCandidate ? 'true' : 'false',
-    reviewable_artifact_reason: resolved.reviewableArtifactReason
+    reviewable_artifact_reason: resolved.reviewableArtifactReason,
+    public_state: status.public_state || status.run_public_state || 'n/a',
+    run_mode: status.run_mode || 'n/a',
+    effective_homepage_visible: isTrue(status.effective_homepage_visible)
+      ? 'true'
+      : isFalse(status.effective_homepage_visible)
+        ? 'false'
+        : (resolved.homepageVisibleAfterMerge ? 'true' : 'false'),
+    existing_public_artifact_detected: isTrue(status.existing_public_artifact_detected)
+      ? 'true'
+      : isFalse(status.existing_public_artifact_detected)
+        ? 'false'
+        : 'n/a',
+    retention_valid: isTrue(status.retention_valid)
+      ? 'true'
+      : isFalse(status.retention_valid)
+        ? 'false'
+        : 'n/a',
+    retention_error: status.retention_error || 'none',
+    public_artifact_policy: status.public_artifact_policy || 'n/a',
+    public_artifact_source: status.public_artifact_source || 'n/a',
+    reconciliation_required: isTrue(status.reconciliation_required) ? 'true' : 'false',
+    reconciliation_action: status.reconciliation_action || 'n/a',
+    reconciliation_reason: status.reconciliation_reason || 'none'
   };
 }
 
