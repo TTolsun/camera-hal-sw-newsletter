@@ -17,7 +17,8 @@ const {
   ARTICLE_SECTION_ALLOWED_KEYS,
   ARTICLE_SECTION_KEYS,
   ARTICLE_SECTION_OPTIONAL_KEYS,
-  normalizeArticleSections
+  normalizeArticleSections,
+  unexpectedArticleSectionKeys
 } = require('../common/article-section-contract');
 const {
   CAPSULE_REQUIRED_FIELDS,
@@ -59,10 +60,6 @@ function actualType(value) {
 
 function text(value) {
   return String(value || '').trim();
-}
-
-function isPlainObject(value) {
-  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 function countDetails(value, field, expected = {}) {
@@ -254,12 +251,6 @@ function strictArticleSections(section) {
     if (normalized[key].length > 0) output[key] = normalized[key];
   }
   return output;
-}
-
-function unexpectedArticleSectionKeys(section) {
-  if (!isPlainObject(section.article_sections)) return [];
-  const expected = new Set(ARTICLE_SECTION_ALLOWED_KEYS);
-  return Object.keys(section.article_sections).filter(key => !expected.has(key));
 }
 
 function validateArticleSectionContract(value) {

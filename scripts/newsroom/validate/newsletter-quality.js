@@ -34,6 +34,10 @@ const {
   normalizeArticleSections
 } = require('../common/article-section-contract');
 const {
+  articleSectionContractRows,
+  articleSectionContractRowValues
+} = require('../common/article-structure-summary');
+const {
   buildHalSignalQualitySummary,
   buildMainArticleSignalChecks,
   normalizeHalSignalCapsule,
@@ -1473,31 +1477,12 @@ function truncateText(value, limit = 100) {
 }
 
 function articleSectionContractMarkdownRows(report) {
-  return ensureArray(report.article_results).map(item => {
-    const summary = item.section_contract || {};
-    const missing = ensureArray(summary.missing_required_keys || summary.missing_keys);
-    const factBoundary = missing.includes('verified_facts')
-      ? 'missing'
-      : summary.has_do_not_claim
-        ? 'source-backed guarded'
-        : 'source-backed';
-    const halImpactAxis = missing.includes('hal_driver_impact')
-      ? 'missing'
-      : ensureArray(item.hal_impact_axes).join(', ') || 'present';
-    const actionability = missing.includes('action_items')
-      ? 'missing'
-      : item.effective_actionability_level || item.actionability_level || 'present';
-    const row = [
-      item.index || '',
-      item.headline || '',
-      summary.complete === true && missing.length === 0 ? 'pass' : `missing ${missing.join(', ') || 'unknown'}`,
-      factBoundary,
-      halImpactAxis,
-      actionability,
-      summary.limitation_visibility || LIMITATION_VISIBILITY.NONE
-    ];
-    return `| ${row.map(markdownTableCell).join(' | ')} |`;
-  }).join('\n') || '| none | none | none | none | none | none | none |';
+  const rows = articleSectionContractRows(ensureArray(report.sections), {
+    articleResults: ensureArray(report.article_results)
+  });
+  return rows.map(row =>
+    `| ${articleSectionContractRowValues(row).map(markdownTableCell).join(' | ')} |`
+  ).join('\n') || '| none | none | none | none | none | none | none |';
 }
 
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
