@@ -1,47 +1,25 @@
 {
   "schema_version": 1,
   "date": "2026-05-18",
-  "generated_at": "2026-05-17T17:24:44.289Z",
+  "generated_at": "2026-05-18T01:10:57.876Z",
   "summary": {
     "schema_version": 1,
     "total_count": 40,
     "by_event_type": {
-      "primary_url": 27,
-      "release_note": 13
+      "primary_url": 29,
+      "release_note": 11
     },
     "by_dedupe_reason": {
-      "normalized_primary_url": 27,
-      "source_id + release.date + component": 4,
-      "source_id + release.version": 9
+      "normalized_primary_url": 29,
+      "source_id + release.date + component": 3,
+      "source_id + release.version": 8
     },
     "warning_count": 0
   },
   "event_bundles": [
     {
-      "event_id": "event_ef91c1df2f77",
-      "primary_candidate_id": "candidate_c479b5996114",
-      "event_key": "source:android-developers-blog:date:Fri, 17 Apr 2026 20:00:00 +0000:component:api",
-      "event_type": "release_note",
-      "primary_url": "https://android-developers.googleblog.com/2026/04/hybrid-inference-and-new-ai-models-are-coming-to-android.html",
-      "evidence_urls": [],
-      "dedupe_reason": "source_id + release.date + component",
-      "release": {
-        "version": "",
-        "date": "Fri, 17 Apr 2026 20:00:00 +0000"
-      },
-      "component": "API",
-      "impact_axes": [
-        "camera_api_change",
-        "generic_tech_watchlist",
-        "Android / AOSP / Camera",
-        "android"
-      ],
-      "confidence": "medium",
-      "warnings": []
-    },
-    {
       "event_id": "event_50db0807428f",
-      "primary_candidate_id": "candidate_3c793dd56563",
+      "primary_candidate_id": "candidate_e8f535c9b1b6",
       "event_key": "source:android-developers-latest-updates:release:camerax 1.6.1",
       "event_type": "release_note",
       "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
@@ -63,7 +41,7 @@
     },
     {
       "event_id": "event_23223c0084d6",
-      "primary_candidate_id": "candidate_5b9bbd7bc306",
+      "primary_candidate_id": "candidate_34d4dc7987c3",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
@@ -84,74 +62,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_ad50d381280e",
-      "primary_candidate_id": "candidate_e77ee303fe00",
-      "event_key": "source:android-developers-blog:release:2026.04.01",
-      "event_type": "release_note",
-      "primary_url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
-      "evidence_urls": [],
-      "dedupe_reason": "source_id + release.version",
-      "release": {
-        "version": "2026.04.01",
-        "date": "Wed, 22 Apr 2026 23:00:00 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "unknown",
-        "generic_tech_watchlist",
-        "Android / AOSP / Camera",
-        "android"
-      ],
-      "confidence": "high",
-      "warnings": []
-    },
-    {
-      "event_id": "event_1265d472c1af",
-      "primary_candidate_id": "candidate_7bcd18c03e32",
-      "event_key": "url:https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
-      "event_type": "primary_url",
-      "primary_url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Tue, 21 Apr 2026 14:00:00 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "build_dependency_fix",
-        "generic_tech_watchlist",
-        "Android / AOSP / Camera",
-        "android"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_4a2799a29228",
-      "primary_candidate_id": "candidate_190e56a8f0d4",
-      "event_key": "source:android-developers-blog:release:android 17",
-      "event_type": "release_note",
-      "primary_url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
-      "evidence_urls": [],
-      "dedupe_reason": "source_id + release.version",
-      "release": {
-        "version": "Android 17",
-        "date": "Thu, 16 Apr 2026 20:00:00 +0000"
-      },
-      "component": "SDK",
-      "impact_axes": [
-        "test_only_change",
-        "generic_tech_watchlist",
-        "Android / AOSP / Camera",
-        "android"
-      ],
-      "confidence": "high",
-      "warnings": []
-    },
-    {
       "event_id": "event_d5f3369876b0",
-      "primary_candidate_id": "candidate_39cbde7babdf",
+      "primary_candidate_id": "candidate_cee074dcc4c8",
       "event_key": "url:https://source.android.com/docs/core/camera",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/core/camera",
@@ -173,7 +85,7 @@
     },
     {
       "event_id": "event_726a2272b8be",
-      "primary_candidate_id": "candidate_f96704e26189",
+      "primary_candidate_id": "candidate_f6492d367e1b",
       "event_key": "source:android-developers-blog:date:Thu, 14 May 2026 20:00:00 +0000:component:api",
       "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
@@ -195,7 +107,7 @@
     },
     {
       "event_id": "event_e1fc143f0941",
-      "primary_candidate_id": "candidate_eb0d6e513ffc",
+      "primary_candidate_id": "candidate_52a65be51629",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
@@ -217,7 +129,7 @@
     },
     {
       "event_id": "event_5875d0cedfb2",
-      "primary_candidate_id": "candidate_a60bf0652ce1",
+      "primary_candidate_id": "candidate_12c2d8dabb0d",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
@@ -238,30 +150,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_1a0178a66017",
-      "primary_candidate_id": "candidate_8ea6834d8f94",
-      "event_key": "url:https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
-      "event_type": "primary_url",
-      "primary_url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Wed, 22 Apr 2026 20:00:00 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "unknown",
-        "generic_tech_watchlist",
-        "Android / AOSP / Camera",
-        "android"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
       "event_id": "event_d23f95c1aac5",
-      "primary_candidate_id": "candidate_2511883d12ef",
+      "primary_candidate_id": "candidate_6b22962c18e2",
       "event_key": "source:android-developers-latest-updates:release:1.3.0-beta02",
       "event_type": "release_note",
       "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
@@ -283,7 +173,7 @@
     },
     {
       "event_id": "event_764d2d438c57",
-      "primary_candidate_id": "candidate_9a7becb7b7ed",
+      "primary_candidate_id": "candidate_289226ed4fdc",
       "event_key": "source:android-developers-latest-updates:release:1.4.0-alpha07",
       "event_type": "release_note",
       "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
@@ -305,7 +195,7 @@
     },
     {
       "event_id": "event_aebc033c93c0",
-      "primary_candidate_id": "candidate_688bcefea9f8",
+      "primary_candidate_id": "candidate_7d2da9452bbf",
       "event_key": "url:https://source.android.com/docs/whatsnew",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/whatsnew",
@@ -327,7 +217,7 @@
     },
     {
       "event_id": "event_22f0b66cf484",
-      "primary_candidate_id": "candidate_198fcf4147b5",
+      "primary_candidate_id": "candidate_c1512d778b44",
       "event_key": "url:https://source.android.com/docs/compatibility/cdd",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/compatibility/cdd",
@@ -349,7 +239,7 @@
     },
     {
       "event_id": "event_bb92e4ef92b5",
-      "primary_candidate_id": "candidate_cb38e5133b69",
+      "primary_candidate_id": "candidate_fa0546bb2a0f",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
@@ -371,7 +261,7 @@
     },
     {
       "event_id": "event_1d54e5f6eb9d",
-      "primary_candidate_id": "candidate_d24b4a94b215",
+      "primary_candidate_id": "candidate_6b1de9497acd",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
@@ -393,7 +283,7 @@
     },
     {
       "event_id": "event_219f8b657452",
-      "primary_candidate_id": "candidate_1d10b34bd99b",
+      "primary_candidate_id": "candidate_6a28a0a529ad",
       "event_key": "source:android-security-bulletin:release:android security bulletin",
       "event_type": "release_note",
       "primary_url": "https://source.android.com/docs/security/bulletin/asb-overview",
@@ -415,7 +305,7 @@
     },
     {
       "event_id": "event_825a8b69534e",
-      "primary_candidate_id": "candidate_9b5637739c74",
+      "primary_candidate_id": "candidate_240d6484535a",
       "event_key": "source:android-security-bulletin:release:2026-05-01",
       "event_type": "release_note",
       "primary_url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
@@ -437,7 +327,7 @@
     },
     {
       "event_id": "event_a79daae67d73",
-      "primary_candidate_id": "candidate_e1be3368fd0b",
+      "primary_candidate_id": "candidate_86590d1143f1",
       "event_key": "source:libcamera-release-announcements:release:libcamera v0.7.1",
       "event_type": "release_note",
       "primary_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-april/058408.html",
@@ -459,7 +349,7 @@
     },
     {
       "event_id": "event_d4f82e08cbcf",
-      "primary_candidate_id": "candidate_075e73ddf9b8",
+      "primary_candidate_id": "candidate_3c41d3d7ab6e",
       "event_key": "url:https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
@@ -480,30 +370,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_0bb6bd5d2804",
-      "primary_candidate_id": "candidate_58b72db4e716",
-      "event_key": "url:https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Wed, 22 Apr 2026 00:59:01 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
       "event_id": "event_4f422e47339f",
-      "primary_candidate_id": "candidate_4997a2fdff7d",
+      "primary_candidate_id": "candidate_1d4058771133",
       "event_key": "url:https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
@@ -525,7 +393,7 @@
     },
     {
       "event_id": "event_8f8bc26e2106",
-      "primary_candidate_id": "candidate_f65119384531",
+      "primary_candidate_id": "candidate_5cdde0828a02",
       "event_key": "source:iso-cpp-blog:date:Thu, 30 Apr 2026 22:36:23 +0000:component:gcc",
       "event_type": "release_note",
       "primary_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
@@ -546,30 +414,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_0580d2a5e518",
-      "primary_candidate_id": "candidate_e31fca23d5e6",
-      "event_key": "source:iso-cpp-blog:date:Thu, 23 Apr 2026 21:23:33 +0000:component:gpu",
-      "event_type": "release_note",
-      "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
-      "evidence_urls": [],
-      "dedupe_reason": "source_id + release.date + component",
-      "release": {
-        "version": "",
-        "date": "Thu, 23 Apr 2026 21:23:33 +0000"
-      },
-      "component": "GPU",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "medium",
-      "warnings": []
-    },
-    {
       "event_id": "event_bc0581ebbaf7",
-      "primary_candidate_id": "candidate_5f4ca8c58ad5",
+      "primary_candidate_id": "candidate_f2c4be3d75e1",
       "event_key": "source:iso-cpp-blog:release:v7.2.0",
       "event_type": "release_note",
       "primary_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
@@ -591,7 +437,7 @@
     },
     {
       "event_id": "event_bd925ddd03cf",
-      "primary_candidate_id": "candidate_1cd4138cada3",
+      "primary_candidate_id": "candidate_931530209d37",
       "event_key": "url:https://isocpp.org//blog/2026/05/2026-survey-summary",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/2026-survey-summary",
@@ -612,30 +458,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_d98ebd0385a1",
-      "primary_candidate_id": "candidate_4b063420ca3e",
-      "event_key": "url:https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/04/devirtualization-and-static-polymorphism-david-alvarez-rosa",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Thu, 16 Apr 2026 19:42:23 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
       "event_id": "event_0cfa40b3a793",
-      "primary_candidate_id": "candidate_ef67a08a2279",
+      "primary_candidate_id": "candidate_55a8396edeed",
       "event_key": "url:https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
@@ -656,30 +480,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_fa527ad6a4c4",
-      "primary_candidate_id": "candidate_7a10b4025957",
-      "event_key": "url:https://isocpp.org//blog/2026/04/behold-the-power-of-metasubstitute-barry-revzin",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/04/behold-the-power-of-metasubstitute-barry-revzin",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Wed, 22 Apr 2026 19:50:46 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
       "event_id": "event_090e15fe27db",
-      "primary_candidate_id": "candidate_3665782eaed3",
+      "primary_candidate_id": "candidate_67f5eeeb6dad",
       "event_key": "url:https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
@@ -701,7 +503,7 @@
     },
     {
       "event_id": "event_8f582e1ff61b",
-      "primary_candidate_id": "candidate_f2218bf2cb42",
+      "primary_candidate_id": "candidate_059d879f644c",
       "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
@@ -723,7 +525,7 @@
     },
     {
       "event_id": "event_511155d5eb95",
-      "primary_candidate_id": "candidate_fff1f00e83a6",
+      "primary_candidate_id": "candidate_3cbe5b33fc87",
       "event_key": "url:https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
@@ -745,7 +547,7 @@
     },
     {
       "event_id": "event_b82118ee5311",
-      "primary_candidate_id": "candidate_15cca3e4a3c6",
+      "primary_candidate_id": "candidate_170f0ea9e064",
       "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
@@ -767,7 +569,7 @@
     },
     {
       "event_id": "event_63e4833cafb8",
-      "primary_candidate_id": "candidate_1aa439d70263",
+      "primary_candidate_id": "candidate_78be1261e250",
       "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
@@ -789,7 +591,7 @@
     },
     {
       "event_id": "event_c2b11f90366d",
-      "primary_candidate_id": "candidate_a4a290c9aac8",
+      "primary_candidate_id": "candidate_ca03e59e551b",
       "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
@@ -811,7 +613,7 @@
     },
     {
       "event_id": "event_0d5b52c7cc62",
-      "primary_candidate_id": "candidate_c69838653cec",
+      "primary_candidate_id": "candidate_0d874763b70a",
       "event_key": "url:https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-the-wonderful-world-of-designing-a-usb-stack-using-modern-cpp-m",
@@ -832,52 +634,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_51ae7741652c",
-      "primary_candidate_id": "candidate_fc913efe1e45",
-      "event_key": "url:https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-cpp-some-assembly-required-matt-godbolt",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Tue, 21 Apr 2026 21:13:30 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_2d03399cdfb2",
-      "primary_candidate_id": "candidate_3d0d615b1aa8",
-      "event_key": "url:https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-how-cpp-finally-beats-rust-at-json-serialization-lemire-thiesen",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Fri, 17 Apr 2026 19:34:43 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
       "event_id": "event_757b3e43f00c",
-      "primary_candidate_id": "candidate_5e87e8dd052e",
+      "primary_candidate_id": "candidate_875be3a66dfb",
       "event_key": "url:https://isocpp.org//blog/2026/05/the-accu-on-sea-2026-schedule-is-now-announced",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/the-accu-on-sea-2026-schedule-is-now-announced",
@@ -895,6 +653,248 @@
         "cpp"
       ],
       "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_107c6cdcfafc",
+      "primary_candidate_id": "candidate_fb078e28864e",
+      "event_key": "source:claude-code-changelog:release:2.1.143",
+      "event_type": "release_note",
+      "primary_url": "https://code.claude.com/docs/en/changelog",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "2.1.143",
+        "date": "May 15, 2026"
+      },
+      "component": "Claude Code / AI coding agent",
+      "impact_axes": [
+        "build_dependency_fix",
+        "generic_tech_watchlist",
+        "AI / SW Engineering Trends",
+        "ai-coding"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_fba67ffe8e52",
+      "primary_candidate_id": "candidate_7c602efc9469",
+      "event_key": "url:https://security.samsungmobile.com/securityupdate.smsb",
+      "event_type": "primary_url",
+      "primary_url": "https://security.samsungmobile.com/securityupdate.smsb",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "security_component_camera_related",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "security"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_ded239bf8f6b",
+      "primary_candidate_id": "candidate_26f693ae3475",
+      "event_key": "url:https://docs.qualcomm.com/product/publicresources/securitybulletin",
+      "event_type": "primary_url",
+      "primary_url": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "documentation_only",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "vendor-security"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_ef4a135a2ad1",
+      "primary_candidate_id": "candidate_5b561ed3255b",
+      "event_key": "url:https://developer.android.com/newsletter",
+      "event_type": "primary_url",
+      "primary_url": "https://developer.android.com/newsletter",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_c55850090666",
+      "primary_candidate_id": "candidate_b5c05fe849aa",
+      "event_key": "url:https://research.google/blog",
+      "event_type": "primary_url",
+      "primary_url": "https://research.google/blog",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "AI / SW Engineering Trends",
+        "ai-research"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_b4489b9b14c2",
+      "primary_candidate_id": "candidate_ba67a0b93726",
+      "event_key": "url:https://deepmind.google/blog",
+      "event_type": "primary_url",
+      "primary_url": "https://deepmind.google/blog",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "AI / SW Engineering Trends",
+        "ai-research"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_d0a8a0530dc1",
+      "primary_candidate_id": "candidate_7de51b8f5c12",
+      "event_key": "url:https://www.anthropic.com/news",
+      "event_type": "primary_url",
+      "primary_url": "https://www.anthropic.com/news",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "generic_tech_watchlist",
+        "AI / SW Engineering Trends",
+        "ai"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_e1a97ab4bcd4",
+      "primary_candidate_id": "candidate_f5499b3aacb2",
+      "event_key": "url:https://cloud.google.com/blog/products/ai-machine-learning",
+      "event_type": "primary_url",
+      "primary_url": "https://cloud.google.com/blog/products/ai-machine-learning",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "AI / SW Engineering Trends",
+        "ai-engineering"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_aac1e2118f76",
+      "primary_candidate_id": "candidate_d81eeab37088",
+      "event_key": "url:https://libcamera.org/introduction.html",
+      "event_type": "primary_url",
+      "primary_url": "https://libcamera.org/introduction.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "libcamera",
+      "impact_axes": [
+        "documentation_only",
+        "camera_driver_image_pipeline",
+        "Linux Camera / Driver",
+        "linux-camera"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_af7168b0fe86",
+      "primary_candidate_id": "candidate_3242bb507814",
+      "event_key": "url:https://releases.llvm.org",
+      "event_type": "primary_url",
+      "primary_url": "https://releases.llvm.org",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "LLVM",
+      "impact_axes": [
+        "build_dependency_fix",
+        "cpp_ai_tooling_fallback",
+        "C++ / Native / Toolchain",
+        "toolchain"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_b5be02a5079d",
+      "primary_candidate_id": "candidate_14e94710173c",
+      "event_key": "source:phoronix-linux-camera-media:date:Sun, 17 May 2026 12:00:00 -0400:component:cpu",
+      "event_type": "release_note",
+      "primary_url": "https://www.phoronix.com/news/ubuntu-concept-cix-p1-cpu",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Sun, 17 May 2026 12:00:00 -0400"
+      },
+      "component": "CPU",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Linux Kernel / Platform Watch",
+        "linux-kernel"
+      ],
+      "confidence": "medium",
       "warnings": []
     }
   ]
