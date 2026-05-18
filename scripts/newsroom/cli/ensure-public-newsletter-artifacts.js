@@ -16,6 +16,9 @@ const {
 const {
   articlePolicy
 } = require('../common/newsletter-policy');
+const {
+  reconcilePublicState
+} = require('../common/public-state-reconciliation');
 
 // Contract:
 // - This command ensures the workflow has either publishable public newsletter artifacts
@@ -225,6 +228,50 @@ function resolveReviewableArtifactsForEnsure(baseOptions, changedArtifacts) {
   return resolveReviewableArtifacts(options);
 }
 
+function isTrue(value) {
+  return value === true || value === 'true';
+}
+
+function buildEnsureOutputs(resolved, reconciliation, fallbackState) {
+  return {
+    ...buildReviewableArtifactOutputs(resolved),
+    ...reconciliation.outputs,
+    fallback_public_issue_executed: fallbackState.fallbackExecuted ? 'true' : 'false',
+    fallback_public_issue_already_created: fallbackState.fallbackAlreadyCreated ? 'true' : 'false',
+    fallback_public_issue_failed: fallbackState.fallbackError ? 'true' : 'false',
+    fallback_public_issue_error: fallbackState.fallbackError ? String(fallbackState.fallbackError.message || fallbackState.fallbackError) : 'none',
+    fallback_public_issue_diagnostics: fallbackState.fallbackDiagnosticsRelPath || 'none',
+    fallback_public_issue_trigger_reason: fallbackState.initialReasons.join('; ') || 'none'
+  };
+}
+
+function reconcileResolvedArtifacts({ root, date, resolved, fallbackState }) {
+  const reconciliationStatus = {
+    ...(resolved.status || {}),
+    public_newsletter_ready: resolved.publicNewsletterReady === true,
+    review_publication_ready: resolved.reviewPublicationReady === true || isTrue(resolved.status?.review_publication_ready),
+    diagnostics_only: resolved.diagnosticsOnly === true,
+    homepage_visible_after_merge: resolved.homepageVisibleAfterMerge === true
+  };
+  const reconciliation = reconcilePublicState({
+    root,
+    date,
+    status: reconciliationStatus,
+    changedArtifacts: resolved.changedArtifacts,
+    write: true
+  });
+  const reconciledResolved = resolveReviewableArtifactsForEnsure({
+    root,
+    date,
+    status: reconciliation.statusPatch
+  }, reconciliation.changedArtifacts);
+  return {
+    reconciliation,
+    reconciledResolved,
+    outputs: buildEnsureOutputs(reconciledResolved, reconciliation, fallbackState)
+  };
+}
+
 function ensurePublicNewsletterArtifacts(options = {}) {
   const root = options.root || process.cwd();
   const statusPath = path.join(root, '.tmp', 'newsletter-generation-status.json');
@@ -265,24 +312,26 @@ function ensurePublicNewsletterArtifacts(options = {}) {
     }, changedArtifactsForRecheck(options, fallbackResult, fallbackDiagnosticsRelPath ? [fallbackDiagnosticsRelPath] : []));
   }
 
+  const fallbackState = {
+    fallbackExecuted,
+    fallbackAlreadyCreated,
+    fallbackError,
+    fallbackDiagnosticsRelPath,
+    initialReasons
+  };
+
   if (!resolved.publicNewsletterReady) {
     const reason = resolved.publicNewsletterReason || 'public newsletter artifacts are not structurally ready';
     if (resolved.reviewPrReady) {
+      const reconciled = reconcileResolvedArtifacts({ root, date, resolved, fallbackState });
       return {
         date,
         fallbackExecuted,
         fallbackAlreadyCreated,
         fallbackTriggerReasons: initialReasons,
-        resolved,
-        outputs: {
-          ...buildReviewableArtifactOutputs(resolved),
-          fallback_public_issue_executed: fallbackExecuted ? 'true' : 'false',
-          fallback_public_issue_already_created: fallbackAlreadyCreated ? 'true' : 'false',
-          fallback_public_issue_failed: fallbackError ? 'true' : 'false',
-          fallback_public_issue_error: fallbackError ? String(fallbackError.message || fallbackError) : 'none',
-          fallback_public_issue_diagnostics: fallbackDiagnosticsRelPath || 'none',
-          fallback_public_issue_trigger_reason: initialReasons.join('; ') || 'none'
-        }
+        resolved: reconciled.reconciledResolved,
+        reconciliation: reconciled.reconciliation,
+        outputs: reconciled.outputs
       };
     }
     if (fallbackError) {
@@ -291,21 +340,15 @@ function ensurePublicNewsletterArtifacts(options = {}) {
     throw new Error(reason);
   }
 
+  const reconciled = reconcileResolvedArtifacts({ root, date, resolved, fallbackState });
   return {
     date,
     fallbackExecuted,
     fallbackAlreadyCreated,
     fallbackTriggerReasons: initialReasons,
-    resolved,
-    outputs: {
-      ...buildReviewableArtifactOutputs(resolved),
-      fallback_public_issue_executed: fallbackExecuted ? 'true' : 'false',
-      fallback_public_issue_already_created: fallbackAlreadyCreated ? 'true' : 'false',
-      fallback_public_issue_failed: fallbackError ? 'true' : 'false',
-      fallback_public_issue_error: fallbackError ? String(fallbackError.message || fallbackError) : 'none',
-      fallback_public_issue_diagnostics: fallbackDiagnosticsRelPath || 'none',
-      fallback_public_issue_trigger_reason: initialReasons.join('; ') || 'none'
-    }
+    resolved: reconciled.reconciledResolved,
+    reconciliation: reconciled.reconciliation,
+    outputs: reconciled.outputs
   };
 }
 

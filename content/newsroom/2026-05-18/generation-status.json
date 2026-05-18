@@ -275,5 +275,19 @@
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
-  "failure_kind": "candidate_shortage_reviewable"
+  "failure_kind": "candidate_shortage_reviewable",
+  "public_state": "DIAGNOSTICS_ONLY",
+  "run_mode": "diagnostics_only",
+  "public_newsletter_ready": false,
+  "diagnostics_only": true,
+  "effective_homepage_visible": false,
+  "homepage_visible_after_merge": false,
+  "existing_public_artifact_detected": true,
+  "retention_valid": false,
+  "retention_error": "",
+  "public_artifact_policy": "hide_existing_public_artifact_after_latest_diagnostics_only",
+  "public_artifact_source": "none",
+  "reconciliation_required": false,
+  "reconciliation_action": "removed_newsletters_index_entry",
+  "reconciliation_reason": "latest diagnostics-only run is not public-ready and no valid retention metadata exists"
 }

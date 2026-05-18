@@ -83,6 +83,20 @@ function newsletterHtml(date, { tags = ['camera-hal'] } = {}) {
   ].join('\n');
 }
 
+function rootIndexHtml(extra = '') {
+  return [
+    '<!doctype html><html><body>',
+    '<div id="latest-card"></div>',
+    '<div id="archive-list"></div>',
+    extra,
+    '<script>',
+    "async function loadNewsletters() { const latest = {}; const archive = []; await fetch('data/newsletters.json'); }",
+    'loadNewsletters();',
+    '</script>',
+    '</body></html>'
+  ].join('\n');
+}
+
 function writeSiteFixture(root, {
   date = '2026-04-01',
   articleCount,
@@ -109,7 +123,7 @@ function writeSiteFixture(root, {
   }]);
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }));
   writeText(path.join(root, 'newsletters', date, 'index.html'), newsletterHtml(date, { tags: htmlTags }));
-  writeText(path.join(root, 'index.html'), `<!doctype html><html><body><a href="newsletters/${date}/">Archive</a></body></html>`);
+  writeText(path.join(root, 'index.html'), rootIndexHtml());
   if (factCheckMustFix || sourceGapCount !== null) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
       status: factCheckMustFix ? 'NEEDS_FIX' : 'PASS',
@@ -220,6 +234,34 @@ function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictRep
   writeJson(path.join(newsroomDir, 'quality-report.json'), report);
 }
 
+function writeDiagnosticsOnlyStatus(root, date, overrides = {}) {
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    status: 'UNDERFILLED_NEEDS_FIX',
+    public_newsletter_ready: false,
+    final_publish_ready: false,
+    review_publication_ready: false,
+    diagnostics_only: true,
+    ...overrides
+  });
+}
+
+function writePublicRetention(root, date, overrides = {}) {
+  writeJson(path.join(root, 'content', 'newsroom', date, 'public-retention.json'), {
+    retain_existing_public: true,
+    date,
+    scope: 'same_date_diagnostics_only',
+    reason: 'Editor approved retaining this previous public issue after a later diagnostics-only run.',
+    approved_by: 'editor',
+    approved_at: date,
+    retained_public_artifacts: [
+      `newsletters/${date}/index.html`,
+      `newsletters/${date}/newsletter.md`
+    ],
+    ...overrides
+  });
+}
+
 test('historical validate-site article count drift is warning-only', () => {
   const root = tempRoot('validate-site-historical-');
   writeSiteFixture(root);
@@ -268,6 +310,76 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match data\/newsletters\.json tags \[Camera HAL, Android\]/);
+});
+
+test('validate-site fails when diagnostics-only date remains public without retention', () => {
+  const root = tempRoot('validate-site-public-diagnostics-conflict-');
+  const date = '2026-05-18';
+  writeSiteFixture(root, {
+    date,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeDiagnosticsOnlyStatus(root, date);
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /diagnostics-only but data\/newsletters\.json exposes it/);
+  assert.match(result.stderr, /Remove the 2026-05-18 entry from data\/newsletters\.json/);
+});
+
+test('validate-site fails invalid public retention with remediation example', () => {
+  const root = tempRoot('validate-site-invalid-public-retention-');
+  const date = '2026-05-18';
+  writeSiteFixture(root, {
+    date,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeDiagnosticsOnlyStatus(root, date);
+  writePublicRetention(root, date, {
+    approved_at: ''
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Invalid content\/newsroom\/2026-05-18\/public-retention\.json/);
+  assert.match(result.stderr, /approved_at=YYYY-MM-DD/);
+  assert.match(result.stderr, /retained_public_artifacts=\[/);
+});
+
+test('validate-site allows diagnostics-only public index when valid retention exists', () => {
+  const root = tempRoot('validate-site-valid-public-retention-');
+  const date = '2026-05-18';
+  writeSiteFixture(root, {
+    date,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeDiagnosticsOnlyStatus(root, date);
+  writePublicRetention(root, date);
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.doesNotMatch(result.stderr, /diagnostics-only but data\/newsletters\.json exposes it/);
+});
+
+test('validate-site fails root homepage stale hardcoded newsletter exposure', () => {
+  const root = tempRoot('validate-site-root-stale-hardcoded-');
+  const date = '2026-04-01';
+  writeSiteFixture(root, {
+    date,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(
+    path.join(root, 'index.html'),
+    rootIndexHtml('<a href="newsletters/2026-05-18/index.html">stale issue</a>')
+  );
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /root index\.html hardcodes stale newsletter exposure for 2026-05-18/);
 });
 
 test('strict review publication exception applies only to composition-only blockers', () => {

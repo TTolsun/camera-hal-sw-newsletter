@@ -539,6 +539,7 @@ function resolveReviewableArtifacts(options = {}) {
 }
 
 function buildReviewableArtifactOutputs(resolved) {
+  const status = resolved.status || {};
   return {
     date: resolved.date,
     branch: resolved.branch,
@@ -556,7 +557,30 @@ function buildReviewableArtifactOutputs(resolved) {
     public_newsletter_reason: resolved.publicNewsletterReason,
     has_ai_publish_ready: resolved.hasAiPublishReady ? 'true' : 'false',
     has_publish_candidate: resolved.hasPublishCandidate ? 'true' : 'false',
-    reviewable_artifact_reason: resolved.reviewableArtifactReason
+    reviewable_artifact_reason: resolved.reviewableArtifactReason,
+    public_state: status.public_state || status.run_public_state || 'n/a',
+    run_mode: status.run_mode || 'n/a',
+    effective_homepage_visible: isTrue(status.effective_homepage_visible)
+      ? 'true'
+      : isFalse(status.effective_homepage_visible)
+        ? 'false'
+        : (resolved.homepageVisibleAfterMerge ? 'true' : 'false'),
+    existing_public_artifact_detected: isTrue(status.existing_public_artifact_detected)
+      ? 'true'
+      : isFalse(status.existing_public_artifact_detected)
+        ? 'false'
+        : 'n/a',
+    retention_valid: isTrue(status.retention_valid)
+      ? 'true'
+      : isFalse(status.retention_valid)
+        ? 'false'
+        : 'n/a',
+    retention_error: status.retention_error || 'none',
+    public_artifact_policy: status.public_artifact_policy || 'n/a',
+    public_artifact_source: status.public_artifact_source || 'n/a',
+    reconciliation_required: isTrue(status.reconciliation_required) ? 'true' : 'false',
+    reconciliation_action: status.reconciliation_action || 'n/a',
+    reconciliation_reason: status.reconciliation_reason || 'none'
   };
 }
 

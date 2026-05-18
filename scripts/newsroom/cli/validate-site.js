@@ -18,6 +18,11 @@ const {
 const {
   validateRenderedIssueStructure
 } = require('../validate/rendered-issue-structure');
+const {
+  buildRemediationMessage,
+  latestDiagnosticsOnly,
+  validateRetentionMetadata
+} = require('../common/public-state-reconciliation');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -308,6 +313,59 @@ function validateSourceGapArtifact(date, strictArtifactValidation) {
   }
 }
 
+function validateRootHomepageContract(newsletters) {
+  const indexPath = path.join(root, 'index.html');
+  if (!fs.existsSync(indexPath)) return;
+  const html = read(indexPath);
+  if (!/fetch\(\s*['"]data\/newsletters\.json['"]/.test(html)) {
+    fail('root index.html must fetch data/newsletters.json as the homepage/archive source of truth.');
+  }
+  const exposedDates = [...html.matchAll(/newsletters\/(\d{4}-\d{2}-\d{2})\//g)]
+    .map(match => match[1]);
+  const publicDates = new Set(newsletters.map(item => item?.date).filter(Boolean));
+  for (const date of [...new Set(exposedDates)]) {
+    if (!publicDates.has(date)) {
+      fail(`root index.html hardcodes stale newsletter exposure for ${date}. ${buildRemediationMessage(date)}`);
+    }
+  }
+}
+
+function validateRetentionForDate(date) {
+  const retention = validateRetentionMetadata({ root, date });
+  if (retention.exists && !retention.valid) {
+    fail(`Invalid ${retention.path}: ${retention.error}\n${buildRemediationMessage(date)}`);
+  }
+  return retention;
+}
+
+function validateAllRetentionFiles() {
+  const contentDir = path.join(root, 'content', 'newsroom');
+  if (!fs.existsSync(contentDir)) return;
+  for (const entry of fs.readdirSync(contentDir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || !datePattern.test(entry.name)) continue;
+    const retentionPath = path.join(contentDir, entry.name, 'public-retention.json');
+    if (!fs.existsSync(retentionPath)) continue;
+    validateRetentionForDate(entry.name);
+  }
+}
+
+function validateLatestPublicState(item) {
+  const status = readJsonIfExists(path.join(newsroomDir(root, item.date), 'generation-status.json'));
+  if (!status) return;
+  const retention = validateRetentionForDate(item.date);
+  if (latestDiagnosticsOnly(status) && !retention.valid) {
+    fail([
+      `Newsletter ${item.date} is diagnostics-only but data/newsletters.json exposes it.`,
+      `latest status=${status.status || status.generation_status || 'UNKNOWN'}`,
+      `public_newsletter_ready=${String(status.public_newsletter_ready)}`,
+      `final_publish_ready=${String(status.final_publish_ready)}`,
+      `review_publication_ready=${String(status.review_publication_ready)}`,
+      `retention_valid=${String(retention.valid)}`,
+      buildRemediationMessage(item.date)
+    ].join('\n'));
+  }
+}
+
 if (!fs.existsSync(dataPath)) {
   fail('Missing data/newsletters.json');
 }
@@ -330,6 +388,8 @@ if (!Array.isArray(newsletters)) {
 
 const seenDates = new Set();
 const strictDates = strictTargetDates({ root, newsletterDatePath });
+validateRootHomepageContract(newsletters);
+validateAllRetentionFiles();
 for (const [index, item] of newsletters.entries()) {
   for (const field of requiredFields) {
     if (!(field in item)) {
@@ -349,6 +409,8 @@ for (const [index, item] of newsletters.entries()) {
   if (!Array.isArray(item.tags)) {
     fail(`Newsletter ${item.date} tags must be an array`);
   }
+
+  validateLatestPublicState(item);
 
   for (const key of ['html', 'md']) {
     const relPath = item[key];
