@@ -24,6 +24,10 @@ const {
   normalizeHalSignalCapsule
 } = require('../common/hal-signal-quality');
 const {
+  PUBLIC_ARTICLE_REQUIRED_KEYS,
+  validatePublicArticle
+} = require('../common/public-article-contract');
+const {
   validateArticleClaims
 } = require('./claim-source-binding');
 
@@ -303,6 +307,22 @@ function validateArticleSectionContract(value) {
   }
 }
 
+function validatePublicArticleContract(value) {
+  const issues = [];
+  ensureArray(value.sections).forEach((section, index) => {
+    issues.push(...validatePublicArticle(section, index));
+  });
+  if (issues.length > 0) {
+    throw semanticError('Editor output failed public article contract validation.', {
+      field: 'sections.public_article',
+      expectedKeys: PUBLIC_ARTICLE_REQUIRED_KEYS,
+      actualCount: issues.length,
+      sectionCount: ensureArray(value.sections).length,
+      issues
+    });
+  }
+}
+
 function validateHalSignalCapsules(value) {
   const issues = [];
   ensureArray(value.sections).forEach((section, index) => {
@@ -404,6 +424,7 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateSectionCount(value);
 
   value.sections = value.sections.map((section, index) => normalizeSection(section, index, reporter));
+  validatePublicArticleContract(value);
   validateArticleSectionContract(value);
   validateHalSignalCapsules(value);
   validateFieldHygiene(value);
@@ -634,5 +655,6 @@ module.exports = {
   serializeEditorValidationError,
   validateEditorArticlePolicy,
   validateEditorOutputContract,
+  validatePublicArticleContract,
   writeEditorValidationDiagnostics
 };

@@ -4,6 +4,9 @@ const path = require('path');
 const {
   validateRenderedIssueStructure
 } = require('../validate/rendered-issue-structure');
+const {
+  validatePublicNewsletterArtifacts
+} = require('../validate/public-newsletter');
 
 const REQUIRED_PUBLIC_NEWSLETTER_FILES = [
   'newsletters/${date}/newsletter.md',
@@ -156,6 +159,13 @@ function publicNewsletterStructureStatus(root, date) {
     if (!structural.ok) {
       errors.push(...structural.errors.map(error => `structural: ${error}`));
     }
+    const publicErrors = validatePublicNewsletterArtifacts({
+      markdown: newsletterMd.text,
+      html: newsletterHtml.text,
+      markdownLabel: `newsletters/${date}/newsletter.md`,
+      htmlLabel: `newsletters/${date}/index.html`
+    });
+    errors.push(...publicErrors.map(error => `public contract: ${error}`));
   }
 
   const requiredFilesExist = statuses.every(status => status.exists);

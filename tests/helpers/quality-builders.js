@@ -63,6 +63,23 @@ function section(overrides = {}) {
       team_share_points: value.team_summary
     };
   }
+  if (!Object.prototype.hasOwnProperty.call(overrides, 'public_article')) {
+    value.public_article = {
+      headline: value.headline,
+      lead: `${value.headline} gives Camera HAL teams a source-backed validation signal.`,
+      body_paragraphs: [
+        `${value.headline} was selected from dated source evidence for Camera HAL readers.`,
+        'The practical interpretation stays limited to stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.'
+      ],
+      camera_hal_takeaway: value.camera_hal_perspective,
+      reader_checkpoints: value.action_items,
+      source_links: value.sources.map(source => ({
+        title: source.title,
+        url: source.url,
+        source_role: 'primary'
+      }))
+    };
+  }
   return value;
 }
 

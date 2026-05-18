@@ -6,118 +6,119 @@ const {
   buildMarkdown
 } = require('../../scripts/newsroom/render/newsletter-renderer');
 
-function issue() {
+function issue(overrides = {}) {
   return {
     date: '2026-05-03',
     title: 'Camera HAL SW Newsletter - 2026-05-03',
-    summary: 'Weekly summary',
+    summary: 'Weekly summary for Camera HAL readers.',
     briefing: ['Brief one', 'Brief two', 'Brief three'],
     sections: [{
-      category: 'Android Camera',
-      headline: 'CameraX release gives HAL teams a target',
+      category: 'Tooling Watch / Fallback',
+      headline: 'Internal fallback headline must not render',
       confirmed_facts: ['Legacy fact must not render.'],
       background: 'Legacy background must not render.',
       camera_hal_perspective: 'Legacy HAL impact must not render.',
-      action_items: ['Legacy action must not render.'],
+      action_items: ['Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.'],
       team_summary: 'Legacy team share must not render.',
+      public_article: {
+        headline: 'CameraX release gives HAL teams a target',
+        lead: 'CameraX release gives HAL teams a dated compatibility validation signal.',
+        body_paragraphs: [
+          'The release can be read as a framework-adjacent compatibility signal for Camera HAL owners.',
+          'The article does not claim a direct HAL API change without source evidence.'
+        ],
+        camera_hal_takeaway: 'Check stream, buffer, metadata, and Camera ITS compatibility only where source evidence supports it.',
+        reader_checkpoints: [
+          'Run Camera ITS preview latency checks on one representative device.',
+          'Compare stream and metadata behavior for the CameraX-backed capture path.'
+        ],
+        source_links: [{
+          title: 'Source article',
+          url: 'https://example.com/source',
+          source_role: 'primary'
+        }]
+      },
       article_sections: {
-        verified_facts: ['Normalized source-backed fact.'],
-        background_context: 'Normalized context for camera2 and HAL readers.',
-        hal_driver_impact: 'Normalized stream and metadata validation impact.',
+        verified_facts: ['Normalized source-backed fact must not render as a checklist.'],
+        background_context: 'Normalized context must not render directly.',
+        hal_driver_impact: 'Normalized impact must not render directly.',
         action_items: ['Run Camera ITS preview latency checks.'],
-        team_share_points: 'Normalized team review takeaway.'
+        team_share_points: 'Normalized team review takeaway must not render directly.',
+        do_not_claim: ['Do not claim vendor HAL binary updates.']
       },
       hal_signal_capsule: {
-        why_now: 'CameraX release gives a dated compatibility validation trigger.',
+        why_now: 'Internal dated validation trigger.',
         reader_owners: ['camera_hal_owner', 'camera_test_owner'],
         check_within_2_weeks: 'Run Camera ITS preview latency and metadata checks within 2 weeks.',
         impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
         do_not_overstate: ['Do not claim direct HAL API changes.']
       },
       sources: [{
-        title: 'Source article',
-        url: 'https://example.com/source'
+        title: 'Legacy source',
+        url: 'https://example.com/legacy-source'
       }]
     }],
-    action_items: ['Top-level action'],
+    action_items: ['Top-level internal action must not render.'],
     references: [{
       title: 'Reference',
       url: 'https://example.com/reference'
-    }]
+    }],
+    ...overrides
   };
 }
 
-test('newsletter renderer uses normalized article_sections and preserves public hooks', () => {
+test('newsletter renderer uses public_article for public markdown and HTML', () => {
   const markdown = buildMarkdown(issue());
   const html = buildHtml(issue());
 
-  assert.match(markdown, /Normalized source-backed fact/);
-  assert.match(markdown, /Normalized stream and metadata validation impact/);
-  assert.match(markdown, /HAL Signal Capsule/);
-  assert.match(markdown, /check_within_2_weeks/);
-  assert.doesNotMatch(markdown, /Legacy fact must not render/);
-  assert.doesNotMatch(markdown, /Legacy HAL impact must not render/);
+  assert.match(markdown, /CameraX release gives HAL teams a target/);
+  assert.match(markdown, /Camera HAL \/ Driver 관점/);
+  assert.match(markdown, /Run Camera ITS preview latency checks/);
+  assert.match(markdown, /\[Source article\]\(https:\/\/example\.com\/source\)/);
+  assert.match(html, /CameraX release gives HAL teams a target/);
+  assert.match(html, /reader-checkpoints/);
 
-  for (const hook of ['issue-briefing', 'issue-section', 'source-list', 'reference-list']) {
-    assert.match(html, new RegExp(hook));
+  for (const leaked of [
+    /HAL Signal Capsule/,
+    /why_now/,
+    /impact_axes/,
+    /do_not_overstate/,
+    /Internal fallback headline must not render/,
+    /Legacy fact must not render/,
+    /Normalized source-backed fact must not render/,
+    /Top-level internal action must not render/,
+    /Publication 전에 source URL/
+  ]) {
+    assert.doesNotMatch(markdown, leaked);
+    assert.doesNotMatch(html, leaked);
   }
-  assert.match(html, /hal-signal-capsule/);
-  assert.match(html, /camera_hal_owner/);
-  assert.match(html, /Normalized team review takeaway/);
-  assert.doesNotMatch(html, /Legacy team share must not render/);
-  assert.doesNotMatch(markdown, /제한 \/ 주의/);
-  assert.doesNotMatch(markdown, /추적 항목/);
-  assert.doesNotMatch(html, /article-limitations/);
-  assert.doesNotMatch(html, /article-watch-items/);
 });
 
-test('newsletter renderer does not synthesize missing HAL Signal Capsule content', () => {
+test('newsletter renderer sanitizes legacy sections through compatibility projection', () => {
   const draft = issue();
-  delete draft.sections[0].hal_signal_capsule;
+  draft.sections[0].what_changed = 'Review-only Fallback candidate passed a quality gate for review.';
+  draft.sections[0].sources[0].title = 'Fallback candidate source';
+  delete draft.sections[0].public_article;
 
   const markdown = buildMarkdown(draft);
   const html = buildHtml(draft);
 
+  assert.match(markdown, /Internal Watch headline must not render/);
+  assert.match(markdown, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
+  assert.match(markdown, /Camera HAL \/ Driver 관점/);
+  assert.match(markdown, /즉시 조치할 항목은 없습니다|Run Camera ITS preview latency checks/);
+  assert.match(html, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
+  assert.match(html, /reader-checkpoints/);
   assert.doesNotMatch(markdown, /HAL Signal Capsule/);
   assert.doesNotMatch(html, /hal-signal-capsule/);
-});
-
-test('newsletter renderer conditionally renders public limitation and watch blocks', () => {
-  const draft = issue();
-  draft.sections[0].article_sections.known_limitations = ['No direct HAL contract change is stated.'];
-  draft.sections[0].article_sections.watch_items = ['Track CameraX SessionConfig regressions.'];
-  draft.sections[0].article_sections.do_not_claim = ['Do not claim vendor HAL binary updates.'];
-
-  const markdown = buildMarkdown(draft);
-  const html = buildHtml(draft);
-
-  assert.match(markdown, /확인한 사실 \/ 릴리스 요약/);
-  assert.match(markdown, /배경지식 \/ 왜 AOSP Camera 팀이 볼 만한가/);
-  assert.match(markdown, /Camera HAL\/Driver 관점 \/ 적용 가능 지점/);
-  assert.match(markdown, /실행 항목 \/ PoC 제안 및 검증 기준/);
-  assert.match(markdown, /팀 공유 포인트 \/ 결론/);
-  assert.match(markdown, /제한 \/ 주의/);
-  assert.match(markdown, /No direct HAL contract change is stated/);
-  assert.match(markdown, /추적 항목/);
-  assert.match(markdown, /Track CameraX SessionConfig regressions/);
-  assert.doesNotMatch(markdown, /Do not claim vendor HAL binary updates/);
-
-  assert.match(html, /article-limitations/);
-  assert.match(html, /article-watch-items/);
-  assert.match(html, /No direct HAL contract change is stated/);
-  assert.match(html, /Track CameraX SessionConfig regressions/);
-  assert.doesNotMatch(html, /Do not claim vendor HAL binary updates/);
-});
-
-test('newsletter renderer does not render raw do_not_claim when it is the only optional key', () => {
-  const draft = issue();
-  draft.sections[0].article_sections.do_not_claim = ['Do not claim vendor HAL binary updates.'];
-
-  const markdown = buildMarkdown(draft);
-  const html = buildHtml(draft);
-
-  assert.doesNotMatch(markdown, /Do not claim vendor HAL binary updates/);
-  assert.doesNotMatch(html, /Do not claim vendor HAL binary updates/);
-  assert.doesNotMatch(markdown, /제한 \/ 주의/);
-  assert.doesNotMatch(markdown, /추적 항목/);
+  assert.doesNotMatch(markdown, /Review-only/);
+  assert.doesNotMatch(markdown, /Editor review/i);
+  assert.doesNotMatch(markdown, /source item passed a quality review/i);
+  assert.doesNotMatch(html, /Review-only/);
+  assert.doesNotMatch(html, /Editor review/i);
+  assert.doesNotMatch(html, /source item passed a quality review/i);
+  assert.doesNotMatch(markdown, /Fallback/);
+  assert.doesNotMatch(markdown, /quality gate/);
+  assert.doesNotMatch(markdown, /candidate/);
+  assert.doesNotMatch(markdown, /Publication 전에 source URL/);
 });

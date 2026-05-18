@@ -461,6 +461,23 @@ function regressionSection(item, overrides = {}) {
       team_share_points: value.team_summary
     };
   }
+  if (!Object.prototype.hasOwnProperty.call(overrides, 'public_article')) {
+    value.public_article = {
+      headline: value.headline,
+      lead: `${value.headline} gives Camera HAL readers a source-backed validation signal.`,
+      body_paragraphs: [
+        `${value.headline} was selected from dated source evidence for Camera HAL readers.`,
+        'The practical interpretation stays limited to stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.'
+      ],
+      camera_hal_takeaway: value.camera_hal_perspective,
+      reader_checkpoints: value.action_items,
+      source_links: value.sources.map(source => ({
+        title: source.title,
+        url: source.url,
+        source_role: 'primary'
+      }))
+    };
+  }
   return value;
 }
 
@@ -3271,6 +3288,8 @@ test('fallback builder recovers PR #39 shape with public files and preserve-firs
   const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
   const quality = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), 'utf8'));
   const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
+  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
+  const publicHtml = fs.readFileSync(path.join(root, 'newsletters', date, 'index.html'), 'utf8');
 
   assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
   assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
@@ -3281,6 +3300,20 @@ test('fallback builder recovers PR #39 shape with public files and preserve-firs
   assert.match(finalEditor.sections[2].camera_hal_perspective, /build|test|debug|tooling|watch|supporting/i);
   assert.notEqual(finalEditor.sections[2].background, finalEditor.sections[2].what_changed);
   assert.doesNotMatch(finalEditor.sections[2].background, /View the .* Close|Maven Group versions|camera-view\s+1\./);
+  assert.match(finalEditor.sections[2].public_article.headline, /Glaze 7\.2/);
+  assert.match(
+    finalEditor.sections[2].public_article.body_paragraphs.join(' '),
+    /Glaze|C\+\+ serialization|C\+\+26 reflection/
+  );
+  assert.doesNotMatch(
+    finalEditor.sections[2].public_article.body_paragraphs.join(' '),
+    /관련 컴포넌트: GCC/
+  );
+  assert.match(publicMarkdown, /Glaze 7\.2 C\+\+26 Reflection/);
+  assert.doesNotMatch(
+    `${publicMarkdown}\n${publicHtml}`,
+    /HAL Signal Capsule|why_now|impact_axes|do_not_overstate|Review-only|quality gate|deterministic reconstruction|source-bound|Publication 전에|Direct HAL behavior claim/
+  );
   assert.equal(quality.status, 'PASS');
   assert.equal(fallbackReport.demoted_articles[0].headline, 'GCC 16.1');
   assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);

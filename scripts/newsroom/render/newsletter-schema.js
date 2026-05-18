@@ -10,6 +10,41 @@ const source = {
   required: ['title', 'url']
 };
 
+const publicSourceLink = {
+  type: 'OBJECT',
+  properties: {
+    title: string,
+    url: string,
+    publisher: string,
+    source_role: string,
+    checked_at: string
+  },
+  required: ['title', 'url']
+};
+
+const publicArticle = {
+  type: 'OBJECT',
+  properties: {
+    headline: string,
+    lead: string,
+    body_paragraphs: stringArray,
+    camera_hal_takeaway: string,
+    reader_checkpoints: stringArray,
+    source_links: {
+      type: 'ARRAY',
+      items: publicSourceLink
+    }
+  },
+  required: [
+    'headline',
+    'lead',
+    'body_paragraphs',
+    'camera_hal_takeaway',
+    'reader_checkpoints',
+    'source_links'
+  ]
+};
+
 const imageCandidate = {
   type: 'OBJECT',
   properties: {
@@ -232,6 +267,7 @@ const section = {
     evidence_summary: string,
     specificity_checks: stringArray,
     source_verification_notes: stringArray,
+    public_article: publicArticle,
     article_sections: articleSections,
     hal_signal_capsule: halSignalCapsule,
     claims: {
@@ -296,6 +332,7 @@ const section = {
     'evidence_summary',
     'specificity_checks',
     'source_verification_notes',
+    'public_article',
     'background',
     'why_it_matters',
     'camera_hal_perspective',

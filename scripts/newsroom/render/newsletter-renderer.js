@@ -4,12 +4,11 @@ const {
 const {
   ARTICLE_SECTION_LABELS,
   LIMITATION_VISIBILITY,
-  articleSectionSummary,
-  normalizeArticleSections
+  articleSectionSummary
 } = require('../common/article-section-contract');
 const {
-  normalizeHalSignalCapsule
-} = require('../common/hal-signal-quality');
+  publicArticleForSection
+} = require('../common/public-article-contract');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -46,59 +45,6 @@ function bulletsMarkdown(items) {
 
 function bulletsHtml(items) {
   return ensureArray(items).map(item => `<li>${escapeHtml(item)}</li>`).join('');
-}
-
-function halSignalCapsuleMarkdown(section) {
-  const normalized = normalizeHalSignalCapsule(section);
-  if (!normalized.complete) return '';
-  const capsule = normalized.capsule;
-  return `
-**HAL Signal Capsule**
-
-- why_now: ${capsule.why_now}
-- reader_owners: ${capsule.reader_owners.join(', ')}
-- check_within_2_weeks: ${capsule.check_within_2_weeks}
-- impact_axes: ${capsule.impact_axes.join(', ')}
-- do_not_overstate: ${capsule.do_not_overstate.join('; ')}
-`;
-}
-
-function halSignalCapsuleHtml(section) {
-  const normalized = normalizeHalSignalCapsule(section);
-  if (!normalized.complete) return '';
-  const capsule = normalized.capsule;
-  const rows = [
-    ['why_now', capsule.why_now],
-    ['reader_owners', capsule.reader_owners.join(', ')],
-    ['check_within_2_weeks', capsule.check_within_2_weeks],
-    ['impact_axes', capsule.impact_axes.join(', ')],
-    ['do_not_overstate', capsule.do_not_overstate.join('; ')]
-  ];
-  return `<div class="article-block hal-signal-capsule"><strong class="article-block-title">HAL Signal Capsule</strong><dl>${rows.map(([key, value]) =>
-    `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd>`
-  ).join('')}</dl></div>`;
-}
-
-function optionalArticleSectionsMarkdown(articleSections) {
-  const blocks = [];
-  if (ensureArray(articleSections.known_limitations).length > 0) {
-    blocks.push(`**${ARTICLE_SECTION_LABELS.known_limitations}**\n\n${bulletsMarkdown(articleSections.known_limitations)}`);
-  }
-  if (ensureArray(articleSections.watch_items).length > 0) {
-    blocks.push(`**${ARTICLE_SECTION_LABELS.watch_items}**\n\n${bulletsMarkdown(articleSections.watch_items)}`);
-  }
-  return blocks.length > 0 ? `\n${blocks.join('\n\n')}\n` : '';
-}
-
-function optionalArticleSectionsHtml(articleSections) {
-  const blocks = [];
-  if (ensureArray(articleSections.known_limitations).length > 0) {
-    blocks.push(`<div class="article-block article-limitations"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.known_limitations)}</strong><ul>${bulletsHtml(articleSections.known_limitations)}</ul></div>`);
-  }
-  if (ensureArray(articleSections.watch_items).length > 0) {
-    blocks.push(`<div class="article-block article-watch-items"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.watch_items)}</strong><ul>${bulletsHtml(articleSections.watch_items)}</ul></div>`);
-  }
-  return blocks.join('\n          ');
 }
 
 function paragraphHtml(value) {
@@ -142,21 +88,21 @@ function articleImageSource(section) {
   );
 }
 
-function articleImageMarkdown(section) {
+function articleImageMarkdown(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (!image || !image.src) return '';
   const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
   const source = articleImageSource(section);
-  const alt = section.imageAlt || `${section.headline || 'Article'} image`;
+  const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
   return `\n![${alt}](${image.src})\n\n_Image: [${attribution}](${source})_\n`;
 }
 
-function articleMediaHtml(section) {
+function articleMediaHtml(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (image && image.src) {
     const imageSource = articleImageSource(section);
     const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
-    const alt = section.imageAlt || `${section.headline || 'Article'} image`;
+    const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
     return `<figure class="article-media">
             <img class="article-image" src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">
             <figcaption class="article-image-caption">Image: <a href="${escapeHtml(imageSource)}">${escapeHtml(attribution)}</a></figcaption>
@@ -216,7 +162,8 @@ function articleTagsHtml(section, headingCategory) {
 
 function normalizedSections(issue) {
   return ensureArray(issue.sections).map((section, index) => {
-    const category = section.category || `Main Article ${index + 1}`;
+    const publicArticle = publicArticleForSection(section);
+    const category = publicArticle.headline || section.headline || section.category || `Main Article ${index + 1}`;
     return {
       heading: `## ${index + 2}. ${category}`,
       htmlHeading: `${index + 2}. ${category}`,
@@ -300,55 +247,40 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
   ].join('\n');
 }
 
-function buildMarkdown(issue) {
+function publicArticleMarkdown(heading, section) {
+  const publicArticle = publicArticleForSection(section);
+  return `${heading}
+
+${articleImageMarkdown(section, publicArticle)}
+
+${publicArticle.lead}
+
+${publicArticle.body_paragraphs.join('\n\n')}
+
+**Camera HAL / Driver 관점**
+
+${publicArticle.camera_hal_takeaway}
+
+### 확인할 점
+
+${bulletsMarkdown(publicArticle.reader_checkpoints)}
+
+**Sources**
+
+${sourceListMarkdown(publicArticle.source_links)}
+`;
+}
+
+function buildPublicMarkdown(issue) {
   return `# ${issue.title}
 
 ${issue.summary}
-${publicationNoticeMarkdown(issue)}
 
 ## 1. 이번 주 3줄 브리핑
 
 ${bulletsMarkdown(issue.briefing)}
 
-${normalizedSections(issue).map(({ heading, section }) => {
-    const articleSections = normalizeArticleSections(section);
-    return `${heading}
-
-### ${section.headline}
-${articleImageMarkdown(section)}
-
-**${ARTICLE_SECTION_LABELS.verified_facts}**
-
-${bulletsMarkdown(articleSections.verified_facts)}
-
-**${ARTICLE_SECTION_LABELS.background_context}**
-
-${articleSections.background_context}
-
-**${ARTICLE_SECTION_LABELS.hal_driver_impact}**
-
-${articleSections.hal_driver_impact}
-
-${halSignalCapsuleMarkdown(section)}
-
-**${ARTICLE_SECTION_LABELS.action_items}**
-
-${bulletsMarkdown(articleSections.action_items)}
-
-**${ARTICLE_SECTION_LABELS.team_share_points}**
-
-${articleSections.team_share_points}
-${optionalArticleSectionsMarkdown(articleSections)}
-
-**출처**
-
-${sourceListMarkdown(section.sources)}
-`;
-  }).join('\n---\n\n')}
-
-## 이번 주 실행 항목
-
-${bulletsMarkdown(issue.action_items)}
+${normalizedSections(issue).map(({ heading, section }) => publicArticleMarkdown(heading, section)).join('\n---\n\n')}
 
 ## 참고자료
 
@@ -356,7 +288,24 @@ ${sourceListMarkdown(issue.references)}
 `;
 }
 
-function buildHtml(issue) {
+function publicArticleHtml(htmlHeading, headingCategory, className, section) {
+  const publicArticle = publicArticleForSection(section);
+  return `      <section class="section">
+        <h2>${escapeHtml(htmlHeading)}</h2>
+        <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-fallback-image'} ${escapeHtml(className)}">
+          ${articleMediaHtml(section, publicArticle)}
+          ${articleTagsHtml(section, headingCategory)}
+          <h3>${escapeHtml(publicArticle.headline)}</h3>
+          <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
+          ${publicArticle.body_paragraphs.map(paragraphHtml).join('\n          ')}
+          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul>${bulletsHtml(publicArticle.reader_checkpoints)}</ul></div>
+          <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
+        </div>
+      </section>`;
+}
+
+function buildPublicHtml(issue) {
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -387,7 +336,6 @@ function buildHtml(issue) {
         </div>
         <h1>Camera HAL SW Newsletter</h1>
         <p class="subtitle">${escapeHtml(issue.summary)}</p>
-        ${publicationNoticeHtml(issue)}
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
         <div class="actions newsletter-actions issue-actions">
           <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
@@ -402,30 +350,9 @@ function buildHtml(issue) {
         </div>
       </section>
 
-${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, section }) => {
-    const articleSections = normalizeArticleSections(section);
-    return `      <section class="section">
-        <h2>${escapeHtml(htmlHeading)}</h2>
-        <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-fallback-image'} ${escapeHtml(className)}">
-          ${articleMediaHtml(section)}
-          ${articleTagsHtml(section, headingCategory)}
-          <h3>${escapeHtml(section.headline)}</h3>
-          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.verified_facts)}</strong><ul>${bulletsHtml(articleSections.verified_facts)}</ul></div>
-          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.background_context)}</strong>${paragraphHtml(articleSections.background_context)}</div>
-          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.hal_driver_impact)}</strong>${paragraphHtml(articleSections.hal_driver_impact)}</div>
-          ${halSignalCapsuleHtml(section)}
-          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.action_items)}</strong><ul>${bulletsHtml(articleSections.action_items)}</ul></div>
-          <div class="article-block"><strong class="article-block-title">${escapeHtml(ARTICLE_SECTION_LABELS.team_share_points)}</strong>${paragraphHtml(articleSections.team_share_points)}</div>
-          ${optionalArticleSectionsHtml(articleSections)}
-          <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(section.sources)}</ul></div>
-        </div>
-      </section>`;
-  }).join('\n\n')}
-
-      <section class="section">
-        <h2>이번 주 실행 항목</h2>
-        <div class="card action-card"><ul>${bulletsHtml(issue.action_items)}</ul></div>
-      </section>
+${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, section }) =>
+    publicArticleHtml(htmlHeading, headingCategory, className, section)
+  ).join('\n\n')}
 
       <section class="section">
         <h2>참고자료</h2>
@@ -440,6 +367,14 @@ ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, sect
 </body>
 </html>
 `;
+}
+
+function buildMarkdown(issue) {
+  return buildPublicMarkdown(issue);
+}
+
+function buildHtml(issue) {
+  return buildPublicHtml(issue);
 }
 
 function buildFactCheckMarkdown(date, report) {

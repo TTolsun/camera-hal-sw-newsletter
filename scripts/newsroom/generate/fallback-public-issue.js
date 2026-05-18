@@ -30,6 +30,9 @@ const {
   normalizeHalSignalFields
 } = require('../common/hal-signal-quality');
 const {
+  NO_IMMEDIATE_ACTION_TEXT
+} = require('../common/public-article-contract');
+const {
   buildConfirmedFacts,
   buildHalPerspective,
   buildOverclaimGuardrails,
@@ -614,7 +617,94 @@ function behaviorText(candidate) {
 }
 
 function componentText(candidate) {
-  return firstText(candidate.component, candidate.api_or_component, candidate.apiOrComponent, candidate.source);
+  const body = [
+    candidate.title,
+    candidate.summary,
+    candidate.behavior_change,
+    candidate.url
+  ].map(text).join(' ');
+  if (/\bGlaze\b/i.test(body)) return 'Glaze / C++ serialization / C++26 reflection';
+  if (/\bGCC\b/i.test(body)) return 'GCC';
+  return firstText(candidate.source_extraction?.release?.component, candidate.component, candidate.api_or_component, candidate.apiOrComponent, candidate.source);
+}
+
+function publicHeadlineForCandidate(candidate, headline) {
+  const title = text(candidate.title || headline);
+  if (/\bGlaze\b/i.test(title)) return 'Glaze 7.2: C++26 Reflection 기반 직렬화 지원 확대';
+  if (/\bGCC\s+16\.1\b/i.test(title)) return 'GCC 16.1 릴리스: C++20 기본값 전환과 C++26 기능 확장';
+  if (/libcamera/i.test(title)) return 'libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트';
+  return title.replace(/^Tooling Watch \/ Fallback:\s*/i, '').replace(/\bFallback\b/gi, 'Watch').trim();
+}
+
+function publicBodyParagraphs(candidate, section, component) {
+  const title = text(candidate.title || section.headline);
+  const change = text(section.what_changed || candidate.behavior_change || candidate.summary || title);
+  if (/\bGlaze\b/i.test(title)) {
+    return [
+      'Glaze 7.2는 C++26 Reflection 기반 serialization 지원을 병합했고 YAML, CBOR, MessagePack, TOML 같은 format 지원도 함께 확장했습니다.',
+      'Camera HAL runtime과 직접 연결되는 변화는 아닙니다. 다만 camera pipeline 설정, 실험 로그, tuning parameter, test artifact를 JSON/YAML/CBOR 형태로 다루는 내부 도구를 설계할 때 참고할 수 있는 native serialization 동향입니다.'
+    ];
+  }
+  if (/\bGCC\s+16\.1\b/i.test(title)) {
+    return [
+      'GCC 16.1은 C++20 기본 표준 전환과 C++26 reflection/contracts 관련 기능 확장을 포함합니다.',
+      'Camera HAL production build가 Clang 중심이라면 즉시 영향은 제한적입니다. 다만 host tool, 실험용 native utility, static analysis 환경에서 GCC를 병행 사용하는 팀이라면 build option이나 warning profile 변화는 확인할 만합니다.'
+    ];
+  }
+  if (/libcamera/i.test(title)) {
+    return [
+      'libcamera v0.7.1이 공개되었습니다. 이번 릴리스에는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트가 포함되었습니다.',
+      'Android Camera HAL API 변경으로 직접 해석할 근거는 없습니다. 다만 V4L2 기반 camera pipeline, sensor mode 선택, format negotiation, frame timing 검증 관점에서는 참고할 만한 upstream signal입니다.'
+    ];
+  }
+  return [
+    `${component || title} 관련 공개 출처가 ${change}`,
+    '이 항목은 공개 출처가 말한 범위 안에서 Camera HAL / Driver / Native tooling 독자가 참고할 수 있는 실무 맥락으로만 해석합니다.'
+  ];
+}
+
+function publicCheckpointsForCandidate(candidate, section) {
+  const title = text(candidate.title || section.headline);
+  if (/\bGlaze\b/i.test(title)) {
+    return [
+      '현재 Camera HAL 코드나 내부 도구에서 Glaze를 사용하지 않는다면 즉시 조치할 항목은 없습니다.',
+      'JSON/YAML/CBOR 기반 설정 또는 로그 변환 도구를 새로 만들 때 참고합니다.',
+      'C++26 reflection은 production HAL code 적용 대상으로 보지 않습니다.'
+    ];
+  }
+  if (/\bGCC\s+16\.1\b/i.test(title)) {
+    return [
+      'Camera HAL 본체가 아니라 host/native tooling 관점에서만 참고합니다.',
+      'GCC 기반 보조 도구가 있다면 C++20 default 전환 영향을 확인합니다.',
+      'production HAL runtime behavior 변화로 해석하지 않습니다.'
+    ];
+  }
+  if (/libcamera/i.test(title)) {
+    return [
+      'sensor mode selection 관련 내부 이슈와 연결 가능한지 확인합니다.',
+      'frame timing / format negotiation regression test 필요 여부를 검토합니다.',
+      'downstream Android HAL 영향은 별도 evidence가 있을 때만 판단합니다.'
+    ];
+  }
+  return [NO_IMMEDIATE_ACTION_TEXT];
+}
+
+function buildPublicArticle(section, candidate = {}) {
+  const component = componentText(candidate);
+  const headline = publicHeadlineForCandidate(candidate, section.headline);
+  return {
+    headline,
+    lead: text(section.what_changed || candidate.summary || headline),
+    body_paragraphs: publicBodyParagraphs(candidate, section, component),
+    camera_hal_takeaway: text(section.camera_hal_perspective || 'Camera HAL / Driver 관점에서는 공개 출처가 제공한 범위 안에서만 참고합니다.'),
+    reader_checkpoints: publicCheckpointsForCandidate(candidate, section),
+    source_links: ensureArray(section.sources).map(source => ({
+      title: text(source.title || candidate.title || headline),
+      url: text(source.url || candidate.url),
+      publisher: text(candidate.source || candidate.publisher || ''),
+      source_role: 'primary'
+    })).filter(source => source.title && /^https?:\/\//i.test(source.url))
+  };
 }
 
 function buildSectionFromCandidate(candidate, { fallback = false, backgroundContext = null } = {}) {
@@ -724,6 +814,7 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
     action_items: section.action_items,
     team_share_points: section.team_summary
   };
+  section.public_article = buildPublicArticle(section, candidate);
   return completeHalSignalSection(section, candidate);
 }
 function hardFailureArticleIndexes(qualityReport, factCheck) {
@@ -918,6 +1009,26 @@ function issueSummary(date, sections, fallbackCount, demotedCount) {
     ? ` hard failure article ${demotedCount}개는 main article에서 제거하거나 강등했습니다.`
     : '';
   return `이번 ${date}호는 ${topics || '공식 camera source 후보'}를 중심으로 구성했습니다.${fallbackText}${demotedText}`;
+}
+
+function publicIssueSummary(date, sections) {
+  const topics = sections
+    .slice(0, 3)
+    .map(section => section.public_article?.headline || section.headline || section.category)
+    .filter(Boolean)
+    .join(', ');
+  return `이번 ${date}호는 ${topics || '공개 camera source 소식'}를 중심으로 Camera HAL / Driver / Native tooling 독자가 확인할 만한 내용을 정리했습니다.`;
+}
+
+function publicBriefingBullets(sections) {
+  const bullets = sections
+    .slice(0, 3)
+    .map(section => section.public_article?.lead || `${section.public_article?.headline || section.headline || section.category} 관련 소식을 확인했습니다.`)
+    .filter(Boolean);
+  while (bullets.length < 3) {
+    bullets.push('직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.');
+  }
+  return bullets.slice(0, 3);
 }
 
 function ensureThreeBriefingBullets(issue, fallbackCount, demotedRecords) {
@@ -1145,10 +1256,12 @@ function buildFallbackPublicIssue(options = {}) {
   }
   issue.sections = selectedSections
     .slice(0, articlePolicy.mainArticleCount.max)
-    .map(section => completeHalSignalSection(
-      section,
-      findCandidateForSection(candidates, section, {}) || {}
-    ));
+    .map(section => {
+      const candidate = findCandidateForSection(candidates, section, {}) || {};
+      const completed = completeHalSignalSection(section, candidate);
+      completed.public_article = buildPublicArticle(completed, candidate);
+      return completed;
+    });
 
   for (const [index, snapshot] of preserveSnapshots.entries()) {
     const beforeSection = base.sections[index];
@@ -1161,14 +1274,14 @@ function buildFallbackPublicIssue(options = {}) {
     assertPreservedFields(snapshot, afterSection, beforeSection?.headline || `article ${index + 1}`);
   }
 
-  issue.summary = issueSummary(date, issue.sections, fallbackRecords.filter(item => item.fallback).length, demotedRecords.length);
+  issue.summary = publicIssueSummary(date, issue.sections);
   issue.review_publication_ready = true;
   issue.publication_notice = [
     '편집자 검토 후 발행 가능한 Review-only 발행본입니다.',
     '이 호는 AI 자동 발행 기준을 통과하지 못했으며, fallback 또는 후보 부족 구성이 포함될 수 있습니다.',
     '각 기사에서 Camera HAL 직접 변경으로 과장하지 않도록 source와 guardrail을 확인하세요.'
   ];
-  issue.briefing = ensureThreeBriefingBullets(issue, fallbackRecords.filter(item => item.fallback).length, demotedRecords);
+  issue.briefing = publicBriefingBullets(issue.sections);
   issue.action_items = fallbackActionItems(issue, fallbackRecords.filter(item => item.fallback).length, demotedRecords);
   issue.references = uniqueReferences(issue.sections, demotedRecords);
 

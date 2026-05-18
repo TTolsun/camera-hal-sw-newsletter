@@ -40,6 +40,27 @@ function writeRootIndex(root) {
 }
 
 function publicIssue(date, overrides = {}) {
+  const sections = validSections(3).map((section, index) => ({
+    ...section,
+    public_article: {
+      headline: `${section.headline} ${index + 1}`,
+      lead: `${section.headline} gives Camera HAL readers a dated validation signal.`,
+      body_paragraphs: [
+        `${section.headline} is represented here as a reader-facing public article fixture.`,
+        'The operational meaning stays limited to stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.'
+      ],
+      camera_hal_takeaway: section.camera_hal_perspective,
+      reader_checkpoints: [
+        `Assign owner ${index + 1} to review the public source and map it to one Camera HAL validation lane.`,
+        `Record one fixture-specific metric for article ${index + 1} before treating it as implementation guidance.`
+      ],
+      source_links: section.sources.map(source => ({
+        title: source.title || section.headline,
+        url: source.url,
+        source_role: 'primary'
+      }))
+    }
+  }));
   return {
     date,
     title: `Camera HAL SW Newsletter - ${date}`,
@@ -47,9 +68,9 @@ function publicIssue(date, overrides = {}) {
     briefing: [
       'CameraX release gives HAL teams a validation signal.',
       'libcamera update keeps image pipeline checks visible.',
-      'Native tooling changes stay review-only unless directly relevant.'
+      'Native tooling changes stay as context unless directly relevant.'
     ],
-    sections: validSections(3),
+    sections,
     action_items: ['Check request/result metadata and stream behavior.'],
     references: [{ title: 'Reference', url: 'https://example.com/reference' }],
     ...overrides
