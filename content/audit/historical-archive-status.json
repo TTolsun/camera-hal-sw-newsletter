@@ -1,0 +1,166 @@
+[
+  {
+    "date": "2026-05-19",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-18",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "not_listed_in_data_newsletters",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "unlisted"
+  },
+  {
+    "date": "2026-05-17",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "not_listed_in_data_newsletters",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "unlisted"
+  },
+  {
+    "date": "2026-05-16",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-15",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-13",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-12",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-11",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-10",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-09",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-08",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-07",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-05",
+    "archive_status": "historical_unreviewed",
+    "historical_cleanup_reviewed": false,
+    "known_limitations": [
+      "pre_185_generation",
+      "source_provenance_not_backfilled",
+      "historical_cleanup_pending"
+    ],
+    "historical_cleanup_issue": "#108",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-04-30",
+    "archive_status": "deprecated_archive",
+    "historical_cleanup_reviewed": true,
+    "known_limitations": [
+      "format_inconsistency",
+      "delete_only_slice_pending",
+      "excluded_from_rewrite_path"
+    ],
+    "historical_cleanup_issue": "#73",
+    "public_visibility": "listed"
+  }
+]
