@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated regression"
+  },
+  "policyFlags": {
+    "source_gap_risk": true,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": true,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "EXCLUDE"
+  },
+  "candidate": {
+    "title": "Camera candidate without URL",
+    "url": "",
+    "published_date": "2026-05-06",
+    "hasDatedEvidence": true,
+    "finalSelectionEligibility": "main",
+    "source_gap_risk": true,
+    "reference_only": false
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated regression"
+  },
+  "policyFlags": {
+    "source_gap_risk": false,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": false,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "FAIL"
+  },
+  "section": {
+    "headline": "Undated Camera workflow update",
+    "what_changed": "A Camera workflow update is described without dated evidence.",
+    "camera_hal_perspective": "HAL teams need dated source evidence before treating this as a current validation trigger.",
+    "sources": [
+      {
+        "title": "Undated Camera workflow page",
+        "url": "https://example.com/undated-camera-workflow"
+      }
+    ]
+  },
+  "candidate": {
+    "url": "https://example.com/undated-camera-workflow",
+    "hasDatedEvidence": false,
+    "finalSelectionEligibility": "main"
+  }
+}

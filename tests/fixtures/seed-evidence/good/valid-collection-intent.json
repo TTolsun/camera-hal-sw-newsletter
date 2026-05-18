@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated",
+    "artifact_name": "collection-intent.json"
+  },
+  "policyFlags": {
+    "source_gap_risk": false,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": true,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "PASS"
+  },
+  "collection_intent": {
+    "schema_version": 1,
+    "approved": true,
+    "seeds": [
+      {
+        "seed_id": "curated-camerax-release",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "source_id": "android-developers-camera",
+        "reason": "Curated synthetic seed for CameraX release-note evidence."
+      }
+    ]
+  }
+}

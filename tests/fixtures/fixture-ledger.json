@@ -66,6 +66,62 @@
       "generatedArtifact": false
     },
     {
+      "path": "quality/bad/missing-source-url-main-article.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "main article fixtures must retain source URL evidence",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/bad/source-gap-risk-main-article.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "source_gap_risk=true cannot pass main article quality",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/bad/reference-only-promoted-main-article.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "reference-only watch pages cannot be promoted to main article PASS fixtures",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/bad/undated-evidence-main-article.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "main article fixtures must have dated source evidence",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/bad/weak-hal-actionability-main-article.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "DEMOTE",
+      "protectedPolicy": "generic IT item without concrete Camera HAL actionability cannot pass as a main article",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/bad/duplicate-source-url-main-articles.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "duplicate source URLs across main articles remain quality blockers",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/bad/stale-claim-hard-failure.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "unresolved stale claim hard failures block publication quality",
+      "generatedArtifact": false
+    },
+    {
       "path": "quality/bad/unsupported-release-claim.json",
       "source": "synthetic",
       "allowedUse": "bad",
@@ -79,6 +135,70 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated CameraX quality gate PASS sample",
+      "generatedArtifact": false
+    },
+    {
+      "path": "quality/good/libcamera-driver-pipeline-curated.json",
+      "source": "curated",
+      "allowedUse": "good",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "curated libcamera driver pipeline PASS sample with dated source evidence",
+      "generatedArtifact": false
+    },
+    {
+      "path": "seed-evidence/bad/blocked-evidence-used-as-fact.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "blocked seed evidence cannot be promoted to source-backed fact",
+      "generatedArtifact": false
+    },
+    {
+      "path": "seed-evidence/good/valid-collection-intent.json",
+      "source": "curated",
+      "allowedUse": "good",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "curated collection intent seed artifact shape remains non-generated",
+      "generatedArtifact": false
+    },
+    {
+      "path": "seed-evidence/good/valid-seed-candidate-compact-evidence.json",
+      "source": "curated",
+      "allowedUse": "good",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "curated compact_evidence seed candidate remains non-generated",
+      "generatedArtifact": false
+    },
+    {
+      "path": "seed-evidence/good/valid-seed-evidence-pack.json",
+      "source": "curated",
+      "allowedUse": "good",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "curated seed evidence pack remains non-generated and source-backed",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/bad/candidate-only-without-crosscheck.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "EXCLUDE",
+      "protectedPolicy": "candidate-only source requiring cross-check cannot become a final main article",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/bad/duplicate-url-main-candidates.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "EXCLUDE",
+      "protectedPolicy": "duplicate candidate URLs cannot create independent final main articles",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/bad/missing-url-main-candidate.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "EXCLUDE",
+      "protectedPolicy": "main candidate fixtures require source URLs",
       "generatedArtifact": false
     },
     {
@@ -98,11 +218,43 @@
       "generatedArtifact": false
     },
     {
+      "path": "selection/bad/weak-hal-generic-ai-main-candidate.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "NOT_SELECTED",
+      "protectedPolicy": "generic AI candidates without concrete Camera HAL connection cannot become final main articles",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/bad/undated-reference-promotion-candidate.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "EXCLUDE",
+      "protectedPolicy": "undated reference/watch candidates cannot be promoted to final main articles",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/good/dated-aosp-camera-main-candidate.json",
+      "source": "curated",
+      "allowedUse": "good",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "curated dated AOSP Camera candidate can be a final main article input",
+      "generatedArtifact": false
+    },
+    {
       "path": "selection/good/camerax-main-candidate.json",
       "source": "curated",
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated CameraX deterministic selection PASS sample",
+      "generatedArtifact": false
+    },
+    {
+      "path": "selection/good/libcamera-driver-pipeline-main-candidate.json",
+      "source": "curated",
+      "allowedUse": "good",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "curated libcamera driver pipeline candidate can be a final main article input",
       "generatedArtifact": false
     },
     {

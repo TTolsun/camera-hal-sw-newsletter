@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "curated regression"
+  },
+  "policyFlags": {
+    "source_gap_risk": true,
+    "reference_only": true,
+    "finalSelectionEligibility": "watchlist",
+    "hasDatedEvidence": false,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "EXCLUDE"
+  },
+  "candidate": {
+    "title": "Undated AOSP Camera reference page",
+    "url": "https://source.android.com/docs/core/camera",
+    "published_date": "",
+    "isWatchPage": true,
+    "hasDatedEvidence": false,
+    "finalSelectionEligibility": "watchlist",
+    "source_gap_risk": true,
+    "reference_only": true
+  }
+}

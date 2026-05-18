@@ -60,3 +60,46 @@ Do not embed `content/newsroom/YYYY-MM-DD`, `content/collected-news/YYYY-MM-DD`,
 `newsletters/YYYY-MM-DD` paths inside committed fixture files.
 Only `bad/` or dedicated regression-purpose fixtures may set
 `generatedArtifact: true`; `good/` fixtures must stay curated and non-generated.
+
+## Layout
+
+Current fixture layout is the repository contract:
+
+- `quality/good/`
+- `quality/bad/`
+- `selection/good/`
+- `selection/bad/`
+- `seed-evidence/good/`
+- `seed-evidence/bad/`
+
+Do not migrate fixtures to `good/quality/` or `bad/quality/` as part of generated artifact cleanup.
+Fixture layout migration must be handled as a separate scoped change.
+
+## Seed evidence artifact boundary
+
+`collection-intent.json`, `seed-evidence-pack.json`, `seed-candidates.json`, and
+`compact_evidence` names may appear in synthetic or workflow-shape fixtures when
+the test protects the #185 seed evidence contract. These names are not banned
+globally.
+
+They are banned only when a `good/` fixture has generated provenance:
+
+- `metadata.generated=true`
+- `metadata.source=generated_artifact`
+- `metadata.source=minimized-generated-regression`
+- ledger `generatedArtifact=true`
+- ledger `source=minimized-generated-regression`
+
+Generated #185 artifacts may be used only as workflow-shape, smoke, or minimized
+regression evidence. They must not become quality PASS golden, source/evidence
+correctness golden, HAL impact golden, or claim binding golden fixtures.
+
+## Fixture change checklist
+
+- Do not copy a generated newsletter artifact into a `good/` or golden fixture.
+- Keep `good/` fixtures curated and non-generated.
+- Keep `bad/` fixture `expected.status` values away from `PASS`.
+- Do not turn source gap, reference-only, watchlist, exclude, undated evidence,
+  or generic AI/IT samples into PASS golden fixtures.
+- Update `fixture-ledger.json` in the same change.
+- Run `npm.cmd run check:fixtures`.
