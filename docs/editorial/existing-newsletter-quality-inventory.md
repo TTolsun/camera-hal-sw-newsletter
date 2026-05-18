@@ -9,6 +9,7 @@ Issue #108은 이 inventory를 사용해 historical archive cleanup 우선순위
 - Excludes newsroom-only dates `2026-05-06` and `2026-05-14` because they are not public archive entries.
 - Article heading count was recalculated from public `newsletter.md` files during this expansion: 40 article rows plus 1 removed summary row.
 - Article rows include main/brief article title headings only; references, action items, briefing, source list, and editorial/meta headings are excluded.
+- `Article slug` is unique within the same date. Historical rewrite diff paths use `<date>-<article_slug>.md`, so cross-date slug duplication is allowed.
 
 ## Allowed Values
 
@@ -27,6 +28,7 @@ Issue #108은 이 inventory를 사용해 historical archive cleanup 우선순위
 - `source_url_present=yes` means the article section itself, or its immediately adjacent `Sources` / `출처` block, contains a URL.
 - A URL that appears only in the global `참고자료` section does not by itself prove article-level source coverage.
 - `source_backed_fact_present` is separate from `source_url_present`; use `partial` or `unknown` when claim-level source coverage has not been fully verified.
+- `partial` means source links exist or appear related, but claim-level source coverage has not been fully verified. Rows marked `yes` / `partial` are not considered reviewed.
 
 ## Severity
 
