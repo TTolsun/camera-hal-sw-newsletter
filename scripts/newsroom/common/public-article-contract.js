@@ -54,7 +54,7 @@ function hasInternalPublicTerm(value) {
 }
 
 function fallbackLeadText(sourceText, headline) {
-  const fallback = `${headline || 'Camera HAL 관련 소식'} is shared as source-backed context for Camera HAL readers.`;
+  const fallback = `${headline || 'Camera HAL 관련 소식'}은 공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다.`;
   if (!sourceText || hasInternalPublicTerm(sourceText)) return fallback;
   return publicSafeText(sourceText);
 }
