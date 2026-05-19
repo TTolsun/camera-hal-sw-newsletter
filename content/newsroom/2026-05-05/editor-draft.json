@@ -4,13 +4,13 @@
   "summary": "이번 주 뉴스레터에서는 Claude Code 업데이트, Android 보안 게시판, Firebase AI Logic 하이브리드 추론, C++26 assert() 개선을 Camera HAL 팀 관점에서 점검합니다. Firebase 항목은 제품이 camera-frame analysis path를 실제로 통합할 때 확인할 adjacent integration risk로 제한합니다.",
   "briefing": [
     "Android의 하이브리드 AI 추론 소식은 제품이 camera-frame analysis path를 실제로 통합할 때만 camera input 요구와 SoC 리소스 예산을 검토하는 adjacent signal로 다룹니다.",
-    "C++26의 assert() 매크로 개선은 HAL 코드의 디버깅 효율성을 높일 잠재력이 있으며, 기존 assert() 사용 패턴을 점검하고 개선된 기능을 활용할 방안을 모색해야 합니다.",
+    "C++26의 assert() 매크로 개선은 HAL runtime 변화가 아니라, compiler/toolchain support가 확인된 뒤 debug-build 또는 host utility에서 검토할 수 있는 진단 개선 후보입니다.",
     "2026년 5월 Android 보안 게시판이 발행되었으므로, HAL 관련 취약점이 있는지 즉시 확인하고 필요한 보안 패치를 적용해야 합니다."
   ],
   "sections": [
     {
       "category": "AI plus camera input path or HAL workflow",
-      "headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "what_changed": "2026년 5월 4일, Claude Code 2.1.128 버전이 출시되었습니다. 이 업데이트는 새로운 기능 및 개선 사항을 포함하며, 특히 플러그인 아카이브 지원 및 명령어 개선이 이루어졌습니다.",
       "confirmed_facts": [
         "릴리스 날짜: 2026년 5월 4일",
@@ -29,24 +29,24 @@
       "source_verification_notes": [
         "Claude Code Changelog는 제품 업데이트에 대한 공식 정보를 제공하는 신뢰할 수 있는 출처입니다. 2.1.128 버전의 출시 및 변경 사항을 직접 확인했습니다."
       ],
-      "background": "AI 코딩 에이전트는 개발자가 코드 작성, 디버깅, 테스트, 문서화 등 다양한 개발 작업을 자동화하고 효율화하도록 돕는 도구입니다. 이러한 에이전트의 발전은 개발 워크플로우를 혁신하고 생산성을 크게 향상시킬 잠재력을 가지고 있습니다.",
-      "why_it_matters": "Camera HAL 개발은 복잡한 C++ 코드, 하드웨어 인터페이스, Android 프레임워크와의 상호작용을 포함합니다. AI 코딩 에이전트의 발전은 HAL 개발자가 코드 스니펫 생성, 버그 진단, 테스트 케이스 작성, 문서화 지원 등 다양한 측면에서 도움을 받아 개발 생산성을 향상시킬 수 있습니다.",
-      "camera_hal_perspective": "AI 코딩 에이전트는 Camera HAL 개발 워크플로우에 다음과 같은 방식으로 통합될 수 있습니다. 첫째, 특정 카메라 메타데이터 키 또는 스트림 구성에 대한 C++ 코드 스니펫을 생성하여 반복적인 코딩 작업을 줄일 수 있습니다. 둘째, 복잡한 버퍼 수명 주기 관리 또는 동시성 문제에서 잠재적인 버그 패턴을 식별하고 수정 제안을 제공할 수 있습니다. 셋째, CTS/VTS/Camera ITS 실패 로그를 분석하여 HAL의 특정 영역에서 발생한 문제를 진단하는 데 도움을 줄 수 있습니다. 플러그인 아카이브 지원은 HAL 팀이 내부 도구 및 지식을 에이전트에 통합하는 유연성을 제공합니다.",
+      "background": "AI 코딩 에이전트는 개발자가 코드 검토, 리팩토링 후보 탐색, 테스트 로그 정리, 문서화 같은 개발 작업을 보조하도록 돕는 도구입니다. 이 업데이트는 HAL 제품 동작 근거가 아니라 개발 workflow에서 도입 여부를 검토할 신호로 다룹니다.",
+      "why_it_matters": "Camera HAL 개발은 코드 리뷰, 리팩토링 후보 정리, 테스트 로그 해석, 문서화 같은 반복적인 검토 작업을 포함합니다. Claude Code 2.1.128 업데이트는 이런 보조 workflow를 점검할 수 있는 신호이지만, Camera HAL 제품 동작을 설명하는 근거는 아닙니다.",
+      "camera_hal_perspective": "Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지만, Camera HAL 제품 동작을 설명하는 출처는 아닙니다. HAL 팀은 이를 code review 보조, 리팩토링 후보 탐색, 테스트 로그 정리 같은 developer workflow 점검 신호로만 다룹니다. 플러그인 아카이브 지원도 내부 review checklist나 문서 템플릿을 agent workflow에 연결할 수 있는지 검토하는 범위로 제한합니다.",
       "camera_hal_checks": [
-        "AI 코딩 에이전트가 Camera HAL의 C++ 코드 스타일, 명명 규칙, Android 특정 API 사용법을 얼마나 잘 이해하고 코드를 생성하는지 평가합니다.",
-        "HAL의 복잡한 버퍼 관리(예: `GraphicBuffer` 사용) 또는 Binder IPC 관련 코드에서 AI 에이전트가 잠재적인 메모리 안전성 또는 크래시 버그를 식별할 수 있는지 테스트합니다.",
-        "AI 에이전트를 사용하여 특정 스트림 조합(예: Preview + Video + Raw)에 대한 `Camera3Request` 생성 또는 `Camera3Result` 파싱 코드를 자동 생성하는 PoC를 수행합니다."
+        "Claude Code 2.1.128 changelog에서 code review 보조, 리팩토링 후보 탐색, 테스트 로그 요약에 실제로 쓸 수 있는 기능만 확인합니다.",
+        "AI agent가 제안한 변경은 HAL branch에 바로 적용하지 않고, 사람이 검토할 후보로만 기록합니다.",
+        "내부 플러그인 아카이브를 쓴다면 review checklist나 문서 템플릿 연결 가능성만 확인하고, HAL behavior 변경은 별도 product requirement로 분리합니다."
       ],
       "action_hints": [
-        "Claude Code와 같은 AI 코딩 에이전트의 최신 기능을 검토하고, HAL 개발 워크플로우에 통합할 수 있는 잠재적 영역을 식별합니다.",
-        "AI 에이전트가 HAL 코드의 품질 및 디버깅 효율성을 향상시킬 수 있는지 소규모 PoC를 통해 평가합니다."
+        "Claude Code 2.1.128 changelog를 검토해 code review 보조와 리팩토링 후보 탐색에 쓸 수 있는 기능만 목록화합니다.",
+        "AI agent 적용 범위는 사람이 검토할 후보 생성과 문서/로그 정리 보조로 제한합니다."
       ],
       "action_items": [
-        "2주 이내에 Claude Code 2.1.128의 새로운 플러그인 기능을 활용하여 Camera HAL의 특정 코드베이스(예: `camera3_device.cpp` 또는 `vendor_camera_hal.cpp`)에 대한 코드 리뷰 또는 리팩토링 제안을 생성하는 실험을 수행합니다.",
-        "AI 에이전트가 Camera HAL의 `request/result metadata` 키 또는 `stream configuration` 관련 C++ 코드 스니펫을 얼마나 정확하게 생성하는지 평가하고, 생성된 코드의 빌드 성공률 및 런타임 동작을 확인합니다.",
-        "HAL 팀의 개발자 리뷰 시간을 측정하고, AI 에이전트의 도움을 받았을 때 코드 품질 또는 버그 발견율에 유의미한 변화가 있는지 2주 이내의 단기 PoC를 통해 간접적으로 평가합니다."
+        "Claude Code 2.1.128 changelog를 검토해 code review 보조, 리팩토링 후보 탐색, 테스트 로그 요약에 실제로 쓸 수 있는 기능만 목록화합니다.",
+        "AI agent가 제안한 변경은 HAL branch에 바로 적용하지 않고, 사람이 검토할 후보로만 기록합니다.",
+        "내부 플러그인 아카이브를 쓴다면 review checklist나 문서 템플릿 연결 가능성만 확인하고, HAL behavior 변경은 별도 product requirement로 분리합니다."
       ],
-      "team_summary": "Claude Code 2.1.128 업데이트는 Camera HAL 코드 작성, 디버깅, 리팩토링, 테스트 자동화에 쓰는 AI 코딩 에이전트 워크플로우 점검 신호입니다.",
+      "team_summary": "Claude Code 2.1.128 업데이트는 code review와 리팩토링 후보 탐색에 쓸 수 있는 developer workflow 점검 신호입니다.",
       "is_ai_related": true,
       "article_type": "ai-camera-path-hal-workflow",
       "imageCandidates": [
@@ -112,7 +112,7 @@
       "counts_as_soc_topic": false,
       "counts_as_fallback_topic": true,
       "evidence_origin": "candidate_metadata_recovered",
-      "source_hint": "Claude Code release note with AI coding agent workflow relevance for native Camera HAL development.",
+      "source_hint": "Claude Code release note with AI coding agent workflow relevance for code review and refactoring review only.",
       "article_sections": {
         "verified_facts": [
           "릴리스 날짜: 2026년 5월 4일",
@@ -120,32 +120,31 @@
           "API/구성 요소: Claude Code / AI coding agent",
           "동작 변경: 새로운 기능 및 개선 사항이 포함된 Claude Code 2.1.128 버전이 출시되었습니다. 플러그인 아카이브(.zip) 지원 및 명령어 개선이 포함됩니다."
         ],
-        "background_context": "AI 코딩 에이전트는 개발자가 코드 작성, 디버깅, 테스트, 문서화 등 다양한 개발 작업을 자동화하고 효율화하도록 돕는 도구입니다. 이러한 에이전트의 발전은 개발 워크플로우를 혁신하고 생산성을 크게 향상시킬 잠재력을 가지고 있습니다.",
-        "hal_driver_impact": "AI 코딩 에이전트는 Camera HAL 개발 워크플로우에 다음과 같은 방식으로 통합될 수 있습니다. 첫째, 특정 카메라 메타데이터 키 또는 스트림 구성에 대한 C++ 코드 스니펫을 생성하여 반복적인 코딩 작업을 줄일 수 있습니다. 둘째, 복잡한 버퍼 수명 주기 관리 또는 동시성 문제에서 잠재적인 버그 패턴을 식별하고 수정 제안을 제공할 수 있습니다. 셋째, CTS/VTS/Camera ITS 실패 로그를 분석하여 HAL의 특정 영역에서 발생한 문제를 진단하는 데 도움을 줄 수 있습니다. 플러그인 아카이브 지원은 HAL 팀이 내부 도구 및 지식을 에이전트에 통합하는 유연성을 제공합니다.",
+        "background_context": "AI 코딩 에이전트는 개발자가 코드 검토, 리팩토링 후보 탐색, 테스트 로그 정리, 문서화 같은 개발 작업을 보조하도록 돕는 도구입니다. 이 업데이트는 HAL 제품 동작 근거가 아니라 개발 workflow에서 도입 여부를 검토할 신호로 다룹니다.",
+        "hal_driver_impact": "Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지만, Camera HAL 제품 동작을 설명하는 출처는 아닙니다. HAL 팀은 이를 code review 보조, 리팩토링 후보 탐색, 테스트 로그 정리 같은 developer workflow 점검 신호로만 다룹니다. 플러그인 아카이브 지원도 내부 review checklist나 문서 템플릿을 agent workflow에 연결할 수 있는지 검토하는 범위로 제한합니다.",
         "action_items": [
-          "2주 이내에 Claude Code 2.1.128의 새로운 플러그인 기능을 활용하여 Camera HAL의 특정 코드베이스(예: `camera3_device.cpp` 또는 `vendor_camera_hal.cpp`)에 대한 코드 리뷰 또는 리팩토링 제안을 생성하는 실험을 수행합니다.",
-          "AI 에이전트가 Camera HAL의 `request/result metadata` 키 또는 `stream configuration` 관련 C++ 코드 스니펫을 얼마나 정확하게 생성하는지 평가하고, 생성된 코드의 빌드 성공률 및 런타임 동작을 확인합니다.",
-          "HAL 팀의 개발자 리뷰 시간을 측정하고, AI 에이전트의 도움을 받았을 때 코드 품질 또는 버그 발견율에 유의미한 변화가 있는지 2주 이내의 단기 PoC를 통해 간접적으로 평가합니다."
+          "Claude Code 2.1.128 changelog를 검토해 code review 보조, 리팩토링 후보 탐색, 테스트 로그 요약에 실제로 쓸 수 있는 기능만 목록화합니다.",
+          "AI agent가 제안한 변경은 HAL branch에 바로 적용하지 않고, 사람이 검토할 후보로만 기록합니다.",
+          "내부 플러그인 아카이브를 쓴다면 review checklist나 문서 템플릿 연결 가능성만 확인하고, HAL behavior 변경은 별도 product requirement로 분리합니다."
         ],
-        "team_share_points": "Claude Code 2.1.128 업데이트는 Camera HAL 코드 작성, 디버깅, 리팩토링, 테스트 자동화에 쓰는 AI 코딩 에이전트 워크플로우 점검 신호입니다.",
+        "team_share_points": "Claude Code 2.1.128 업데이트는 code review와 리팩토링 후보 탐색에 쓸 수 있는 developer workflow 점검 신호입니다.",
         "do_not_claim": [
-          "Do not convert this historical cleanup metadata into new direct Camera HAL runtime claims without source-backed product requirements."
+          "Do not treat Claude Code release notes as source evidence for Camera HAL product behavior changes."
         ]
       },
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "stream_buffer_metadata"
+        "native_tooling_workflow"
       ],
       "reader_owners": [
         "native_tooling_owner",
         "camera_hal_owner"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "signal_quality_status": "strong_signal",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "signal_quality_status": "usable_signal",
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
-      "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "fallback_promotion_reason": "Native tooling checks apply to code review, refactoring candidate triage, and debug-build validation workflow only.",
+      "camera_pipeline_link": "Workflow review can support Camera HAL code review and test-log triage; it stays tooling-only.",
       "do_not_overstate": [
         "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
       ],
@@ -155,13 +154,12 @@
           "native_tooling_owner",
           "camera_hal_owner"
         ],
-        "check_within_2_weeks": "2주 이내에 Claude Code 2.1.128의 새로운 플러그인 기능을 활용하여 Camera HAL의 특정 코드베이스(예: `camera3_device.cpp` 또는 `vendor_camera_hal.cpp`)에 대한 코드 리뷰 또는 리팩토링 제안을 생성하는 실험을 수행합니다.",
+        "check_within_2_weeks": "Claude Code 2.1.128 changelog를 검토해 code review 보조와 리팩토링 후보 탐색에 쓸 수 있는 기능만 목록화합니다.",
         "impact_axes": [
-          "native_tooling_workflow",
-          "stream_buffer_metadata"
+          "native_tooling_workflow"
         ],
         "do_not_overstate": [
-          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+          "Keep this historical article bounded to developer workflow review; do not assert Camera HAL product behavior changes without source evidence."
         ]
       },
       "claims": [
@@ -634,7 +632,7 @@
     },
     {
       "category": "C++ / Toolchain Fallback",
-      "headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "what_changed": "C++26 표준에 제안된 `assert()` 매크로의 개선 사항은 디버깅 시 더 유용하고 사용자 친화적인 정보를 제공할 것으로 예상됩니다. 이는 `std::string_view`와 같은 타입의 인수를 지원하고, 실패 시 더 많은 컨텍스트 정보를 자동으로 캡처하여 출력할 수 있도록 합니다.",
       "confirmed_facts": [
         "Release/version: C++26 (예정)",
@@ -652,23 +650,23 @@
       "source_verification_notes": [
         "Sandor Dargo의 블로그 게시물은 C++26 표준 제안에 대한 논의를 다루며, `assert()` 매크로의 개선 방향을 구체적으로 설명합니다. 이는 C++ 표준 위원회의 활동과 관련된 신뢰할 수 있는 정보입니다."
       ],
-      "background": "C++의 `assert()` 매크로는 개발 단계에서 프로그램의 가정을 검증하고, 위반 시 즉시 프로그램을 중단시켜 버그를 조기에 발견하는 데 사용됩니다. 기존 `assert()`는 주로 파일명, 라인 번호, 실패한 표현식만을 제공하여 복잡한 버그의 원인을 파악하기 어려울 때가 있었습니다. C++26에서 제안되는 개선 사항은 이러한 한계를 극복하고, 디버깅 경험을 향상시키는 것을 목표로 합니다.",
-      "why_it_matters": "카메라 HAL과 같은 복잡한 시스템에서는 다양한 모듈 간의 인터페이스와 데이터 흐름에 대한 가정이 많습니다. `assert()` 매크로의 개선은 이러한 가정이 깨졌을 때, 어떤 변수의 값이 문제였는지, 어떤 조건이 만족되지 않았는지 등 더 풍부한 디버깅 정보를 제공하여 문제 해결 시간을 단축시킬 수 있습니다. 이는 특히 멀티스레딩 환경이나 복잡한 버퍼 관리 로직에서 유용할 수 있습니다.",
-      "camera_hal_perspective": "Camera HAL은 성능에 민감하고 안정성이 중요한 시스템이므로, 개발 및 테스트 단계에서 `assert()`를 적극적으로 활용하여 예기치 않은 상태를 감지합니다. 개선된 `assert()`는 다음 영역에서 HAL 개발에 긍정적인 영향을 미칠 수 있습니다. 첫째, 스트림 구성, 메타데이터 처리, 버퍼 수명 주기 관리와 같은 복잡한 로직에서 `assert` 실패 시 관련 변수 값을 즉시 확인할 수 있어 디버깅 효율성이 높아집니다. 둘째, `std::string_view` 지원은 HAL 내부에서 사용되는 다양한 문자열 기반 식별자나 디버그 메시지를 `assert`에 직접 전달하여 더 명확한 오류 보고를 가능하게 합니다. 셋째, CTS/VTS 또는 Camera ITS 테스트 실패 시, HAL 내부의 `assert`가 더 상세한 정보를 제공한다면 문제의 근본 원인을 파악하는 데 큰 도움이 될 것입니다.",
+      "background": "C++의 `assert()` 매크로는 개발 단계에서 프로그램의 가정을 검증하고, 위반 시 즉시 프로그램을 중단시켜 버그를 조기에 발견하는 데 사용됩니다. C++26에서 제안되는 개선 사항은 실패 시 더 풍부한 진단 정보를 제공하는 방향의 언어/toolchain 변화입니다.",
+      "why_it_matters": "Camera HAL 팀은 debug-build와 host utility에서 진단 정보를 개선할 수 있는 toolchain 변화를 추적할 필요가 있습니다. 다만 C++26 assert 개선 자체가 Android 실행 환경, CTS/VTS/Camera ITS 결과, HAL 내부 처리 방식이 직접 바뀐다는 뜻은 아닙니다.",
+      "camera_hal_perspective": "C++26 assert 개선은 Camera HAL 제품 동작 변경이 아니라, compiler/toolchain support가 준비된 뒤 debug-build 또는 host utility에서 검토할 수 있는 진단 개선 후보입니다. HAL 팀은 현재 코드의 `assert()` 사용 위치를 inventory로 정리하고, 실패 시 어떤 추가 context가 디버깅에 도움이 될지 검토할 수 있습니다. 다만 출처는 Android 실행 환경, CTS/VTS/Camera ITS 결과, HAL 내부 처리 방식이 직접 바뀐다고 말하지 않으므로 그런 효과는 별도 PoC와 toolchain 확인 전까지 주장하지 않습니다.",
       "camera_hal_checks": [
-        "향후 C++26 표준이 적용될 경우, HAL 코드베이스 내의 `assert()` 사용 패턴을 검토하여 개선된 기능을 활용할 수 있는 부분을 식별합니다.",
-        "특히 스트림 조합 유효성 검사, 메타데이터 키 처리, 버퍼 큐 관리와 같이 복잡하고 오류 발생 가능성이 있는 코드 경로에 대해 개선된 `assert()`를 적용했을 때의 디버깅 효율성 향상 여부를 평가합니다.",
-        "Clang/LLVM 툴체인 업데이트 시 C++26 `assert()` 기능 지원 여부와 빌드 시스템 통합 방안을 확인합니다."
+        "현재 HAL 코드에서 `assert()`가 debug-build 또는 host utility에서 실제로 의미 있는 failure context를 줄 수 있는 위치만 목록화합니다.",
+        "C++26 assert 기능은 compiler/toolchain support가 확인된 뒤, production runtime이 아니라 host utility 또는 debug-build PoC에서만 검토합니다.",
+        "HAL 제품 동작 변경은 별도 source-backed product requirement가 있을 때만 다룹니다."
       ],
       "action_hints": [
-        "HAL 코드베이스에서 현재 `assert()`를 사용하는 부분을 식별하고, C++26의 새로운 기능이 제공하는 추가 컨텍스트 정보를 활용할 수 있는 시나리오를 문서화합니다.",
-        "Clang/LLVM의 C++26 지원 로드맵을 추적하고, 새로운 `assert()` 매크로가 도입될 때 테스트 빌드를 통해 HAL 코드에 미치는 영향을 평가합니다."
+        "현재 HAL 코드에서 `assert()` usage가 debug-build나 host utility diagnostics에 실제 도움이 되는 지점을 추립니다.",
+        "C++26 assert 기능은 compiler/toolchain support가 확인된 뒤 host utility 또는 debug build PoC로만 검토합니다."
       ],
       "action_items": [
-        "2주 내에 HAL 코드베이스에서 `assert()` 사용 현황을 분석하고, 특히 `request/result metadata` 처리, `stream configuration` 유효성 검사, `buffer lifecycle` 관리와 관련된 `assert` 구문에 대한 개선 가능성을 조사합니다.",
-        "C++26 표준 채택 및 Clang/LLVM 툴체인 업데이트 계획을 모니터링하고, 새로운 `assert()` 기능이 안정화되면 `native Android runtime` 환경에서 디버깅 효율성 향상 여부를 측정할 PoC를 계획합니다."
+        "현재 HAL 코드에서 `assert()`가 debug-build 또는 host utility에서 실제로 의미 있는 failure context를 줄 수 있는 위치만 목록화합니다.",
+        "C++26 assert 기능은 compiler/toolchain support가 확인된 뒤, production runtime이 아니라 host utility 또는 debug-build PoC에서만 검토합니다."
       ],
-      "team_summary": "C++26 assert() 개선은 네이티브 Camera HAL 코드의 실패 지점 진단과 상태값 기록 방식을 점검할 수 있는 도구chain 신호입니다.",
+      "team_summary": "C++26 assert() 개선은 Camera HAL runtime 변경이 아니라, debug-build와 host utility diagnostics에서 검토할 수 있는 toolchain adoption 신호입니다.",
       "is_ai_related": false,
       "article_type": "main",
       "imageCandidates": [
@@ -711,7 +709,7 @@
       "counts_as_soc_topic": false,
       "counts_as_fallback_topic": true,
       "evidence_origin": "candidate_metadata_recovered",
-      "source_hint": "C++26 assert improvement is native tooling fallback evidence for Camera HAL debugging and code reliability.",
+      "source_hint": "C++26 assert improvement is native tooling evidence for debug-build and host utility diagnostics review.",
       "article_sections": {
         "verified_facts": [
           "Release/version: C++26 (예정)",
@@ -719,31 +717,30 @@
           "API/component: `assert()` 매크로",
           "Behavior change: `assert()` 매크로가 실패 시 더 많은 컨텍스트 정보(예: 변수 값, 표현식)를 자동으로 캡처하고 출력할 수 있도록 개선됩니다. 또한, `std::string_view`와 같은 타입의 인수를 지원하여 더 유연한 사용이 가능해집니다."
         ],
-        "background_context": "C++의 `assert()` 매크로는 개발 단계에서 프로그램의 가정을 검증하고, 위반 시 즉시 프로그램을 중단시켜 버그를 조기에 발견하는 데 사용됩니다. 기존 `assert()`는 주로 파일명, 라인 번호, 실패한 표현식만을 제공하여 복잡한 버그의 원인을 파악하기 어려울 때가 있었습니다. C++26에서 제안되는 개선 사항은 이러한 한계를 극복하고, 디버깅 경험을 향상시키는 것을 목표로 합니다.",
-        "hal_driver_impact": "Camera HAL은 성능에 민감하고 안정성이 중요한 시스템이므로, 개발 및 테스트 단계에서 `assert()`를 적극적으로 활용하여 예기치 않은 상태를 감지합니다. 개선된 `assert()`는 다음 영역에서 HAL 개발에 긍정적인 영향을 미칠 수 있습니다. 첫째, 스트림 구성, 메타데이터 처리, 버퍼 수명 주기 관리와 같은 복잡한 로직에서 `assert` 실패 시 관련 변수 값을 즉시 확인할 수 있어 디버깅 효율성이 높아집니다. 둘째, `std::string_view` 지원은 HAL 내부에서 사용되는 다양한 문자열 기반 식별자나 디버그 메시지를 `assert`에 직접 전달하여 더 명확한 오류 보고를 가능하게 합니다. 셋째, CTS/VTS 또는 Camera ITS 테스트 실패 시, HAL 내부의 `assert`가 더 상세한 정보를 제공한다면 문제의 근본 원인을 파악하는 데 큰 도움이 될 것입니다.",
+        "background_context": "C++의 `assert()` 매크로는 개발 단계에서 프로그램의 가정을 검증하고, 위반 시 즉시 프로그램을 중단시켜 버그를 조기에 발견하는 데 사용됩니다. C++26에서 제안되는 개선 사항은 실패 시 더 풍부한 진단 정보를 제공하는 방향의 언어/toolchain 변화입니다.",
+        "hal_driver_impact": "C++26 assert 개선은 Camera HAL 제품 동작 변경이 아니라, compiler/toolchain support가 준비된 뒤 debug-build 또는 host utility에서 검토할 수 있는 진단 개선 후보입니다. HAL 팀은 현재 코드의 `assert()` 사용 위치를 inventory로 정리하고, 실패 시 어떤 추가 context가 디버깅에 도움이 될지 검토할 수 있습니다. 다만 출처는 Android 실행 환경, CTS/VTS/Camera ITS 결과, HAL 내부 처리 방식이 직접 바뀐다고 말하지 않으므로 그런 효과는 별도 PoC와 toolchain 확인 전까지 주장하지 않습니다.",
         "action_items": [
-          "2주 내에 HAL 코드베이스에서 `assert()` 사용 현황을 분석하고, 특히 `request/result metadata` 처리, `stream configuration` 유효성 검사, `buffer lifecycle` 관리와 관련된 `assert` 구문에 대한 개선 가능성을 조사합니다.",
-          "C++26 표준 채택 및 Clang/LLVM 툴체인 업데이트 계획을 모니터링하고, 새로운 `assert()` 기능이 안정화되면 `native Android runtime` 환경에서 디버깅 효율성 향상 여부를 측정할 PoC를 계획합니다."
+          "현재 HAL 코드에서 `assert()`가 debug-build 또는 host utility에서 실제로 의미 있는 failure context를 줄 수 있는 위치만 목록화합니다.",
+          "C++26 assert 기능은 compiler/toolchain support가 확인된 뒤, production runtime이 아니라 host utility 또는 debug-build PoC에서만 검토합니다."
         ],
-        "team_share_points": "C++26 assert() 개선은 네이티브 Camera HAL 코드의 실패 지점 진단과 상태값 기록 방식을 점검할 수 있는 도구chain 신호입니다.",
+        "team_share_points": "C++26 assert() 개선은 Camera HAL runtime 변경이 아니라, debug-build와 host utility diagnostics에서 검토할 수 있는 toolchain adoption 신호입니다.",
         "do_not_claim": [
-          "Do not convert this historical cleanup metadata into new direct Camera HAL runtime claims without source-backed product requirements."
+          "Do not treat C++26 assert language/toolchain notes as source evidence for Camera HAL product behavior changes."
         ]
       },
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "stream_buffer_metadata"
+        "native_tooling_workflow"
       ],
       "reader_owners": [
         "native_tooling_owner",
         "camera_hal_owner"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "signal_quality_status": "strong_signal",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "signal_quality_status": "usable_signal",
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
-      "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "fallback_promotion_reason": "Native tooling checks apply to debug-build and host utility diagnostics review only.",
+      "camera_pipeline_link": "Toolchain diagnostics can support Camera HAL debug-build review; it stays tooling-only.",
       "do_not_overstate": [
         "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
       ],
@@ -753,13 +750,12 @@
           "native_tooling_owner",
           "camera_hal_owner"
         ],
-        "check_within_2_weeks": "2주 내에 HAL 코드베이스에서 `assert()` 사용 현황을 분석하고, 특히 `request/result metadata` 처리, `stream configuration` 유효성 검사, `buffer lifecycle` 관리와 관련된 `assert` 구문에 대한 개선 가능성을 조사합니다.",
+        "check_within_2_weeks": "현재 HAL 코드에서 `assert()` usage가 debug-build나 host utility diagnostics에 실제 도움이 되는 지점을 추립니다.",
         "impact_axes": [
-          "native_tooling_workflow",
-          "stream_buffer_metadata"
+          "native_tooling_workflow"
         ],
         "do_not_overstate": [
-          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+          "Keep this historical article bounded to toolchain adoption review; do not assert Camera HAL product behavior changes without source evidence."
         ]
       },
       "claims": [
@@ -833,8 +829,8 @@
   ],
   "action_items": [
     "2026년 5월 Android 보안 게시판이 공개되는 즉시, 카메라 HAL 관련 CVE 항목을 확인하고 해당 취약점이 현재 제품에 영향을 미치는지 분석합니다. (Owner: 보안 담당 엔지니어)",
-    "현재 카메라 HAL 코드베이스에서 사용되는 `assert()` 매크로 호출 지점을 식별하고, 각 지점에서 실패 시 어떤 추가적인 변수 값이나 상태 정보가 디버깅에 유용할지 목록화합니다. (Owner: HAL 개발팀)",
-    "Claude Code 2.1.128의 Changelog를 상세히 검토하여, 카메라 HAL 개발에 직접적으로 적용 가능한 코드 생성, 디버깅, 리팩토링 기능 개선 사항을 2주 이내에 식별하고 팀에 공유합니다. (Owner: HAL 개발팀)",
+    "현재 카메라 HAL 코드베이스에서 사용되는 `assert()` 매크로 호출 지점을 식별하고, debug-build 또는 host utility에서만 검토할 후보를 목록화합니다. (Owner: HAL 개발팀)",
+    "Claude Code 2.1.128의 Changelog를 검토해 code review 보조와 리팩토링 후보 탐색에 쓸 수 있는 기능만 팀에 공유합니다. (Owner: HAL 개발팀)",
     "Firebase AI Logic 기반 camera-frame analysis path가 실제 제품 계획에 있는지 먼저 확인하고, 해당 경로가 없으면 HAL scheduling, metadata contract, pipeline behavior 변경으로 기록하지 않습니다. (Owner: 앱/프레임워크 담당자, HAL 아키텍트)"
   ],
   "references": [

@@ -21,7 +21,7 @@
   "article_results": [
     {
       "index": 1,
-      "headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "category": "AI plus camera input path or HAL workflow",
       "status": "PASS",
       "repair_action": "preserve",
@@ -46,7 +46,7 @@
       },
       "scope_count": {
         "index": 1,
-        "headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+        "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
         "source_candidate_url": "https://code.claude.com/docs/en/changelog",
         "source_candidate_hash": "3d68ad8e1324eb33b763f82183f512fc6276fa6e33aa56b7b51a994d2a3e9fb9",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -70,11 +70,10 @@
       },
       "impact_claim_level": "tooling_supporting",
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "stream_buffer_metadata"
+        "native_tooling_workflow"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
       "hard_fail_reasons": [],
       "soft_deductions": []
     },
@@ -206,7 +205,7 @@
     },
     {
       "index": 4,
-      "headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "category": "C++ / Toolchain Fallback",
       "status": "PASS",
       "repair_action": "preserve",
@@ -231,7 +230,7 @@
       },
       "scope_count": {
         "index": 4,
-        "headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+        "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
         "source_candidate_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
         "source_candidate_hash": "61c963a289f63e09aee4c5730039cd09b8fb3a4a4f30a9e71a54604380462b42",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -255,11 +254,10 @@
       },
       "impact_claim_level": "tooling_supporting",
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "stream_buffer_metadata"
+        "native_tooling_workflow"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
       "hard_fail_reasons": [],
       "soft_deductions": []
     }
@@ -276,7 +274,7 @@
   "claim_results": [
     {
       "article_index": 1,
-      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "article_headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-1",
       "claim_type": "fact",
       "status": "bound",
@@ -310,7 +308,7 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "article_headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-2",
       "claim_type": "fact",
       "status": "bound",
@@ -344,7 +342,7 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "article_headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-3",
       "claim_type": "fact",
       "status": "bound",
@@ -378,7 +376,7 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "article_headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-4",
       "claim_type": "fact",
       "status": "bound",
@@ -412,7 +410,7 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "article_headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-5",
       "claim_type": "fact",
       "status": "bound",
@@ -684,7 +682,7 @@
     },
     {
       "article_index": 4,
-      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "article_headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "claim_id": "c-26-assert-camera-hal-fact-1",
       "claim_type": "fact",
       "status": "bound",
@@ -718,7 +716,7 @@
     },
     {
       "article_index": 4,
-      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "article_headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "claim_id": "c-26-assert-camera-hal-fact-2",
       "claim_type": "fact",
       "status": "bound",
@@ -752,7 +750,7 @@
     },
     {
       "article_index": 4,
-      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "article_headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "claim_id": "c-26-assert-camera-hal-fact-3",
       "claim_type": "fact",
       "status": "bound",
@@ -786,7 +784,7 @@
     },
     {
       "article_index": 4,
-      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "article_headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "claim_id": "c-26-assert-camera-hal-fact-4",
       "claim_type": "fact",
       "status": "bound",
@@ -820,7 +818,7 @@
     },
     {
       "article_index": 4,
-      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "article_headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "claim_id": "c-26-assert-camera-hal-fact-5",
       "claim_type": "fact",
       "status": "bound",
@@ -857,14 +855,14 @@
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 4,
-    "strong_signal_count": 3,
-    "usable_signal_count": 1,
+    "strong_signal_count": 1,
+    "usable_signal_count": 3,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
     "article_count_with_hal_signal_capsule": 4,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 4,
+    "main_articles_with_owner_metric_log": 2,
     "main_articles_with_concrete_action": 4,
     "fallback_main_article_count": 3,
     "soc_platform_signal_count": 1,
@@ -873,52 +871,54 @@
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
       "native_tooling_workflow": 2,
-      "stream_buffer_metadata": 3,
       "security_vendor_component": 1,
       "cts_vts_its_cdd": 1,
       "framework_hal_contract": 1,
       "soc_resource_contention": 1,
-      "camerax_app_compatibility": 1
+      "camerax_app_compatibility": 1,
+      "stream_buffer_metadata": 1
     },
     "actionability_level_counts": {
-      "owner_metric_log": 4
+      "concrete_check": 2,
+      "owner_metric_log": 2
     },
     "effective_actionability_level_counts": {
-      "owner_metric_log": 4
+      "concrete_check": 2,
+      "owner_metric_log": 2
     },
     "signal_quality_status_counts": {
-      "strong_signal": 3,
-      "usable_signal": 1
+      "usable_signal": 3,
+      "strong_signal": 1
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "title": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "url": "https://code.claude.com/docs/en/changelog",
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "stream_buffer_metadata"
+        "native_tooling_workflow"
       ],
       "reader_owners": [
         "native_tooling_owner",
         "camera_hal_owner"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 1,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "fallback_promotion_reason": "Native tooling checks apply to code review, refactoring candidate triage, and debug-build validation workflow only.",
       "fallback_guard_notes": [
         "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
-        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence.",
+        "Keep this historical article bounded to developer workflow review; do not assert Camera HAL product behavior changes without source evidence."
       ],
       "soc_signal_type": "accelerator_camera_workload",
       "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "camera_pipeline_link": "Workflow review can support Camera HAL code review and test-log triage; it stays tooling-only.",
       "has_hal_signal_capsule": true,
       "hal_signal_capsule_complete": true,
       "hal_signal_capsule_missing_keys": [],
@@ -997,31 +997,31 @@
     },
     {
       "index": 4,
-      "title": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "title": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "stream_buffer_metadata"
+        "native_tooling_workflow"
       ],
       "reader_owners": [
         "native_tooling_owner",
         "camera_hal_owner"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "fallback_promotion_reason": "Native tooling checks apply to debug-build and host utility diagnostics review only.",
       "fallback_guard_notes": [
         "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
-        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence.",
+        "Keep this historical article bounded to toolchain adoption review; do not assert Camera HAL product behavior changes without source evidence."
       ],
       "soc_signal_type": "",
       "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "camera_pipeline_link": "Toolchain diagnostics can support Camera HAL debug-build review; it stays tooling-only.",
       "has_hal_signal_capsule": true,
       "hal_signal_capsule_complete": true,
       "hal_signal_capsule_missing_keys": [],
@@ -1050,7 +1050,7 @@
     "section_count_details": [
       {
         "index": 1,
-        "headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+        "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
         "source_candidate_url": "https://code.claude.com/docs/en/changelog",
         "source_candidate_hash": "3d68ad8e1324eb33b763f82183f512fc6276fa6e33aa56b7b51a994d2a3e9fb9",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -1122,7 +1122,7 @@
       },
       {
         "index": 4,
-        "headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+        "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
         "source_candidate_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
         "source_candidate_hash": "61c963a289f63e09aee4c5730039cd09b8fb3a4a4f30a9e71a54604380462b42",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -1255,14 +1255,14 @@
     "hal_signal_quality_summary": {
       "schema_version": 1,
       "main_article_count": 4,
-      "strong_signal_count": 3,
-      "usable_signal_count": 1,
+      "strong_signal_count": 1,
+      "usable_signal_count": 3,
       "weak_signal_count": 0,
       "watchlist_only_count": 0,
       "blocked_source_gap_count": 0,
       "article_count_with_hal_signal_capsule": 4,
       "article_count_without_hal_signal_capsule": 0,
-      "main_articles_with_owner_metric_log": 4,
+      "main_articles_with_owner_metric_log": 2,
       "main_articles_with_concrete_action": 4,
       "fallback_main_article_count": 3,
       "soc_platform_signal_count": 1,
@@ -1271,52 +1271,54 @@
       "hard_blocker_reason_code_counts": {},
       "hal_impact_axis_counts": {
         "native_tooling_workflow": 2,
-        "stream_buffer_metadata": 3,
         "security_vendor_component": 1,
         "cts_vts_its_cdd": 1,
         "framework_hal_contract": 1,
         "soc_resource_contention": 1,
-        "camerax_app_compatibility": 1
+        "camerax_app_compatibility": 1,
+        "stream_buffer_metadata": 1
       },
       "actionability_level_counts": {
-        "owner_metric_log": 4
+        "concrete_check": 2,
+        "owner_metric_log": 2
       },
       "effective_actionability_level_counts": {
-        "owner_metric_log": 4
+        "concrete_check": 2,
+        "owner_metric_log": 2
       },
       "signal_quality_status_counts": {
-        "strong_signal": 3,
-        "usable_signal": 1
+        "usable_signal": 3,
+        "strong_signal": 1
       }
     },
     "main_article_signal_checks": [
       {
         "index": 1,
-        "title": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+        "title": "Claude Code 2.1.128: Camera HAL workflow review 범위",
         "url": "https://code.claude.com/docs/en/changelog",
         "relevance_bucket": "cpp_ai_tooling_fallback",
         "hal_impact_axes": [
-          "native_tooling_workflow",
-          "stream_buffer_metadata"
+          "native_tooling_workflow"
         ],
         "reader_owners": [
           "native_tooling_owner",
           "camera_hal_owner"
         ],
-        "actionability_level": "owner_metric_log",
-        "effective_actionability_level": "owner_metric_log",
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
         "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 3,
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 1,
         "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+        "fallback_promotion_reason": "Native tooling checks apply to code review, refactoring candidate triage, and debug-build validation workflow only.",
         "fallback_guard_notes": [
           "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
-          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence.",
+          "Keep this historical article bounded to developer workflow review; do not assert Camera HAL product behavior changes without source evidence."
         ],
         "soc_signal_type": "accelerator_camera_workload",
         "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+        "camera_pipeline_link": "Workflow review can support Camera HAL code review and test-log triage; it stays tooling-only.",
         "has_hal_signal_capsule": true,
         "hal_signal_capsule_complete": true,
         "hal_signal_capsule_missing_keys": [],
@@ -1395,31 +1397,31 @@
       },
       {
         "index": 4,
-        "title": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+        "title": "C++26 assert(): Camera HAL debug-build 검토 범위",
         "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
         "relevance_bucket": "cpp_ai_tooling_fallback",
         "hal_impact_axes": [
-          "native_tooling_workflow",
-          "stream_buffer_metadata"
+          "native_tooling_workflow"
         ],
         "reader_owners": [
           "native_tooling_owner",
           "camera_hal_owner"
         ],
-        "actionability_level": "owner_metric_log",
-        "effective_actionability_level": "owner_metric_log",
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
         "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 3,
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
         "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+        "fallback_promotion_reason": "Native tooling checks apply to debug-build and host utility diagnostics review only.",
         "fallback_guard_notes": [
           "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
-          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence.",
+          "Keep this historical article bounded to toolchain adoption review; do not assert Camera HAL product behavior changes without source evidence."
         ],
         "soc_signal_type": "",
         "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+        "camera_pipeline_link": "Toolchain diagnostics can support Camera HAL debug-build review; it stays tooling-only.",
         "has_hal_signal_capsule": true,
         "hal_signal_capsule_complete": true,
         "hal_signal_capsule_missing_keys": [],
