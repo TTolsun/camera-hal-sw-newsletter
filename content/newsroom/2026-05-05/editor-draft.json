@@ -238,7 +238,7 @@
         "2026년 5월 Android 보안 게시판이 2026년 5월 1일에 발행되었습니다.",
         "게시판은 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다."
       ],
-      "evidence_summary": "2026? 5? Android ?? ???? 2026? 5? 1?? ?????, ???? Android ???? ?? ??? ? ?? ?? ??? ?????.",
+      "evidence_summary": "2026년 5월 Android 보안 게시판은 2026년 5월 1일에 발행되었으며, Android 시스템의 보안 취약점과 관련 패치 정보를 제공합니다. Camera HAL 영향 여부는 제품 camera path와 연결되는 CVE/패치 매핑이 있을 때만 별도로 판단합니다.",
       "specificity_checks": [
         "release_date: 2026-05-01",
         "api_or_component: Android Security Bulletin",
@@ -350,7 +350,7 @@
         "Do not treat the monthly Android Security Bulletin as evidence of product camera-path impact without a source-backed CVE or product patch mapping."
       ],
       "hal_signal_capsule": {
-        "why_now": "2026? 5? Android ?? ???? 2026? 5? 1?? ?????, ???? Android ???? ?? ??? ? ?? ?? ??? ?????.",
+        "why_now": "2026년 5월 Android 보안 게시판은 2026년 5월 1일에 발행되었으며, 제품 camera path와 연결되는 CVE/패치가 있는지 확인할 security triage 입력입니다.",
         "reader_owners": [
           "security_owner",
           "camera_test_owner",
@@ -394,7 +394,7 @@
         },
         {
           "claim_id": "2026-5-android-security-adjacent-fact-3",
-          "text": "2026? 5? Android ?? ???? 2026? 5? 1?? ?????, ???? Android ???? ?? ??? ? ?? ?? ??? ?????.",
+          "text": "2026년 5월 Android 보안 게시판은 2026년 5월 1일에 발행되었으며, Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "historical-2026-05-05-2026-5-android-hal-primary"
