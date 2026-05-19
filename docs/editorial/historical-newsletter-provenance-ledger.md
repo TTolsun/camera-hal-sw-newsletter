@@ -15,17 +15,17 @@ Issue #108은 과거 public archive provenance를 추적하되 unsupported seed 
 
 | Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Related cleanup issue |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-05-19 | current_generation | unlisted public artifact, GCC tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | unlisted | #108 |
-| 2026-05-18 | current_generation | unlisted public artifact, GCC tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | unlisted | #108 |
-| 2026-05-17 | transition_generation | unlisted public artifact, GCC tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | unlisted | #108 |
-| 2026-05-16 | pre_185 | source provenance not backfilled, GCC tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
+| 2026-05-19 | current_generation | unlisted public artifact, GCC tooling overclaim audit downgraded, Glaze tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | unlisted | #108 |
+| 2026-05-18 | current_generation | unlisted public artifact, GCC tooling overclaim audit downgraded, Glaze tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | unlisted | #108 |
+| 2026-05-17 | transition_generation | unlisted public artifact, GCC tooling overclaim audit downgraded, Glaze tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | unlisted | #108 |
+| 2026-05-16 | pre_185 | source provenance not backfilled, GCC tooling overclaim audit downgraded, Glaze tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
 | 2026-05-15 | pre_185 | source provenance not backfilled, GCC tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
-| 2026-05-13 | pre_185 | source provenance not backfilled, GCC tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
+| 2026-05-13 | pre_185 | source provenance not backfilled, GCC tooling overclaim audit downgraded, Glaze tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
 | 2026-05-12 | pre_185 | source provenance not backfilled, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
 | 2026-05-11 | pre_185 | source provenance not backfilled, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
 | 2026-05-10 | pre_185 | source provenance not backfilled, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
-| 2026-05-09 | pre_185 | source provenance not backfilled, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
+| 2026-05-09 | pre_185 | source provenance not backfilled, Glaze tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
 | 2026-05-08 | pre_185 | source provenance not backfilled, GCC tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
-| 2026-05-07 | pre_185 | source provenance not backfilled, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
+| 2026-05-07 | pre_185 | source provenance not backfilled, bounded Glaze overclaim rewrite, historical cleanup pending | yes_bounded | material_rewrite_glaze | historical_unreviewed | listed | #108 |
 | 2026-05-05 | pre_185 | source provenance not backfilled, bounded Firebase / Claude / C++ overclaim rewrites, historical cleanup pending | yes_bounded | material_rewrite_firebase_claude_cxx | historical_unreviewed | listed | #108 |
 | 2026-04-30 | pre_185 | format inconsistency, delete-only slice completed | no | removed_by_73 | removed | removed | #73 |
