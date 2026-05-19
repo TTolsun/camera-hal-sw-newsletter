@@ -4,7 +4,7 @@
 
 ## 1. 이번 주 3줄 브리핑
 
-- libcamera v0.7.1이 SoftISP debaying 및 이미지 파이프라인 처리량 개선과 함께 출시되어 Linux 카메라 드라이버의 성능 최적화에 영향을 미칩니다.
+- libcamera v0.7.1은 SoftISP debaying 및 이미지 파이프라인 처리량 개선을 포함하지만, Android HAL 영향은 downstream vendor camera stack 통합 여부가 확인될 때만 판단하는 upstream driver/image-pipeline review signal입니다.
 - CameraX 1.4.0-alpha07은 camera-viewfinder 및 camera-video 모듈 업데이트를 포함하지만, HAL 변경 요구가 아니라 CameraX/Camera2 compatibility matrix 확인 입력입니다.
 - Glaze 7.2는 production HAL 변경 요구가 아니라 host-side native tooling 관찰 항목으로만 유지합니다.
 
@@ -20,17 +20,17 @@ _Image: [libcamera Release Announcements - libcamera v0.7.1](https://lists.libca
 
 libcamera는 Linux 기반 시스템에서 카메라 하드웨어와의 상호 작용을 표준화하는 오픈 소스 프레임워크입니다. V4L2(Video for Linux Two) 드라이버 위에 추상화 계층을 제공하여 다양한 카메라 센서와 ISP(Image Signal Processor)에 대한 일관된 API를 제공합니다. Android HAL은 종종 V4L2 및 libcamera 기반의 커널 드라이버와 통신하여 카메라 스트림을 관리하고 이미지 데이터를 처리합니다. SoftISP는 하드웨어 ISP가 없거나 제한적인 경우 소프트웨어적으로 이미지 처리(예: debayering)를 수행하는 구성 요소입니다.
 
-Android Camera HAL 구현은 하위 레벨의 Linux 카메라 드라이버에 크게 의존합니다. libcamera의 이러한 업데이트는 HAL이 V4L2 및 libcamera 기반 드라이버와 상호 작용하는 방식에 영향을 미칠 수 있습니다. 특히, SoftISP 개선은 RAW 스트림 처리 또는 특정 센서 모드에서 HAL의 이미지 처리 부담을 줄이거나 품질을 향상시킬 수 있습니다. HAL은 새로운 파이프라인 핸들러 지원을 통해 더 다양한 카메라 기능을 노출하거나, 센서 모드 구성 업데이트를 활용하여 스트림 조합 및 성능을 최적화할 수 있습니다. HAL은 이러한 하위 계층 변경 사항이 Preview, Still Capture, Video Recording과 같은 주요 스트림 조합의 지연 시간, 프레임 드롭, 전력 소모에 미치는 영향을 검증해야 합니다.
+libcamera v0.7.1의 SoftISP, pipeline handler, sensor mode updates는 upstream Linux camera stack에서 확인할 driver/image-pipeline signal입니다. 이 source만으로 Android product camera stream, metadata, feature exposure, latency, power behavior change가 확인되지는 않습니다. HAL 팀은 vendor kernel/libcamera fork가 해당 release를 실제로 consume하거나 downstream device regression이 보고된 경우에만 RAW/YUV quality, stream combination, sensor mode log를 기존 compatibility evidence와 함께 검토합니다.
 
 **Camera HAL / Driver 관점**
 
-Android Camera HAL 구현은 하위 레벨의 Linux 카메라 드라이버에 크게 의존합니다. libcamera의 이러한 업데이트는 HAL이 V4L2 및 libcamera 기반 드라이버와 상호 작용하는 방식에 영향을 미칠 수 있습니다. 특히, SoftISP 개선은 RAW 스트림 처리 또는 특정 센서 모드에서 HAL의 이미지 처리 부담을 줄이거나 품질을 향상시킬 수 있습니다. HAL은 새로운 파이프라인 핸들러 지원을 통해 더 다양한 카메라 기능을 노출하거나, 센서 모드 구성 업데이트를 활용하여 스트림 조합 및 성능을 최적화할 수 있습니다. HAL은 이러한 하위 계층 변경 사항이 Preview, Still Capture, Video Recording과 같은 주요 스트림 조합의 지연 시간, 프레임 드롭, 전력 소모에 미치는 영향을 검증해야 합니다.
+libcamera v0.7.1의 SoftISP, pipeline handler, sensor mode updates는 upstream Linux camera stack에서 확인할 driver/image-pipeline signal입니다. 이 source만으로 Android product camera stream, metadata, feature exposure, latency, power behavior change가 확인되지는 않습니다. HAL 팀은 vendor kernel/libcamera fork가 해당 release를 실제로 consume하거나 downstream device regression이 보고된 경우에만 RAW/YUV quality, stream combination, sensor mode log를 기존 compatibility evidence와 함께 검토합니다.
 
 ### 확인할 점
 
-- HAL 팀은 libcamera v0.7.1의 변경 사항이 벤더 커널 드라이버에 통합될 경우, Preview + Still Capture + Video Recording 스트림 조합에서 YUV 및 RAW 스트림의 처리량과 지연 시간을 측정하는 테스트를 수행합니다.
-- SoftISP debaying 개선이 저조도 환경에서의 이미지 품질 및 노이즈 감소에 미치는 영향을 평가하기 위해 특정 센서 모드에서 이미지 분석을 수행합니다.
-- 새로운 파이프라인 핸들러 지원이 HAL의 `camera.device` 인터페이스를 통해 노출될 수 있는 새로운 카메라 기능이나 센서 모드에 영향을 주는지 확인하고, 필요한 경우 HAL 기능 선언을 업데이트합니다.
+- vendor kernel/libcamera fork에 v0.7.1 변경이 통합됐다는 evidence가 있을 때만 Preview + Still Capture + Video Recording 조합의 YUV/RAW throughput과 latency를 기존 regression 범위에서 비교합니다.
+- SoftISP debaying 평가는 downstream image-quality regression이나 product requirement가 있을 때만 특정 sensor mode에서 수행합니다.
+- 새 pipeline handler support는 HAL feature declaration update 근거가 아니라, downstream camera stack이 해당 path를 consume하는지 확인하는 driver review item으로 기록합니다.
 
 **Sources**
 

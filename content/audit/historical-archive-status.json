@@ -122,7 +122,8 @@
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
-      "content/audit/historical-rewrite-diff/2026-05-09-camerax-1-4-0-alpha07-viewfinder-video.md"
+      "content/audit/historical-rewrite-diff/2026-05-09-camerax-1-4-0-alpha07-viewfinder-video.md",
+      "content/audit/historical-rewrite-diff/2026-05-09-libcamera-v0-7-1-softisp.md"
     ]
   },
   {
@@ -150,7 +151,10 @@
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
-      "content/audit/historical-rewrite-diff/2026-05-07-glaze-7-2-native-tooling-serialization.md"
+      "content/audit/historical-rewrite-diff/2026-05-07-glaze-7-2-native-tooling-serialization.md",
+      "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-raspberry-pi-atomic-control-lists-simple-pipeline-agc-awb.md",
+      "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md",
+      "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md"
     ]
   },
   {

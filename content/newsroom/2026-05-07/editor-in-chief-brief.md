@@ -9,9 +9,9 @@
 libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선
 
 ## Camera HAL 업무 연결 포인트
-- 카메라 드라이버 팀은 현재 vendor kernel의 V4L2/libcamera 구현에서 Atomic control lists 및 AGC/AWB 통계 처리 로직을 검토하고, libcamera v0.7.1의 관련 패치가 적용되었는지 확인합니다.
-- HAL 팀은 현재 지원하는 모든 `camera3_stream_t` 스트림 조합과 `ANDROID_SENSOR_MODE` 설정에 대해 Camera ITS `test_sensor_mode_selection.py` 및 `test_stream_configurations.py`를 포함한 관련 테스트를 2주 내에 재실행하여 회귀 여부를 확인합니다.
-- RAW 스트림을 지원하는 장치에서 `RAW_SENSOR` + `YUV_420_888` 스트림 조합으로 Camera ITS `test_raw_capture.py`를 실행하고, 디베이어링 품질(색상 정확도, 모아레 패턴)에 대한 측정 지표를 2주 내에 수집하여 SoftISP 개선 전후를 비교합니다.
+- 카메라 드라이버 팀은 현재 vendor kernel/libcamera fork에 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경이 실제로 포함됐는지 확인합니다.
+- vendor stack이 해당 libcamera path를 consume한다는 evidence가 있을 때만 관련 stream combination과 sensor mode regression을 기존 CTS/VTS/Camera ITS 범위에서 확인합니다.
+- vendor stack이 libcamera SoftISP를 실제로 통합한 장치에서만 RAW/YUV image quality smoke test를 기존 regression 범위 안에서 비교합니다.
 - Build/toolchain owner는 Glaze 7.2를 production HAL 변경 요구가 아니라 host-side native tooling watch item으로 기록하고, C++26 Reflection 지원성과 내부 도구 필요성이 확인될 때만 작은 PoC 후보로 재평가합니다.
 
 ## 검증 결과 요약
