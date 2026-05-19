@@ -295,7 +295,27 @@
       "primary_selected": true,
       "reserve_candidate": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-1",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-2",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-3",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-4"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "primary_facts": [
+          "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
+          "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
+          "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다.",
+          "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 AGC/AWB 통계 수정 패치를 포함합니다. 이는 libcamera-devel 메일링 리스트를 통해 확인되었습니다."
+        ],
+        "do_not_claim": [
+          "Do not treat upstream libcamera Raspberry Pi updates as Android vendor HAL runtime behavior without downstream integration evidence."
+        ]
+      }
     },
     {
       "schema_version": 5,
@@ -1388,7 +1408,27 @@
       "selection_stage": "deterministic-primary",
       "final_selected": true,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-1",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-2",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-3",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-4"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "primary_facts": [
+          "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
+          "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
+          "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다.",
+          "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 AGC/AWB 통계 수정 패치를 포함합니다. 이는 libcamera-devel 메일링 리스트를 통해 확인되었습니다."
+        ],
+        "do_not_claim": [
+          "Do not treat upstream libcamera Raspberry Pi updates as Android vendor HAL runtime behavior without downstream integration evidence."
+        ]
+      }
     },
     {
       "schema_version": 5,
@@ -2473,7 +2513,25 @@
       "selection_slot": "reserve",
       "primary_selected": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-07:glaze-7-2-native-tooling:fact-1",
+        "hist:2026-05-07:glaze-7-2-native-tooling:fact-2",
+        "hist:2026-05-07:glaze-7-2-native-tooling:fact-3"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        ],
+        "primary_facts": [
+          "Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.",
+          "Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다.",
+          "ISO C++ Blog의 2026년 4월 28일 Glaze v7.2.0 릴리스 글은 C++26 Reflection 지원과 여러 직렬화 형식 지원을 설명합니다."
+        ],
+        "do_not_claim": [
+          "Do not treat Glaze 7.2 as a Camera HAL API, metadata contract, scheduling, pipeline behavior, or production HAL code change."
+        ]
+      }
     }
   ],
   "selected_articles": [
@@ -2647,7 +2705,27 @@
       "primary_selected": true,
       "reserve_candidate": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-1",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-2",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-3",
+        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-4"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "primary_facts": [
+          "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
+          "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
+          "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다.",
+          "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 AGC/AWB 통계 수정 패치를 포함합니다. 이는 libcamera-devel 메일링 리스트를 통해 확인되었습니다."
+        ],
+        "do_not_claim": [
+          "Do not treat upstream libcamera Raspberry Pi updates as Android vendor HAL runtime behavior without downstream integration evidence."
+        ]
+      }
     },
     {
       "schema_version": 5,
@@ -3734,7 +3812,25 @@
       "selection_slot": "reserve",
       "primary_selected": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-07:glaze-7-2-native-tooling:fact-1",
+        "hist:2026-05-07:glaze-7-2-native-tooling:fact-2",
+        "hist:2026-05-07:glaze-7-2-native-tooling:fact-3"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        ],
+        "primary_facts": [
+          "Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.",
+          "Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다.",
+          "ISO C++ Blog의 2026년 4월 28일 Glaze v7.2.0 릴리스 글은 C++26 Reflection 지원과 여러 직렬화 형식 지원을 설명합니다."
+        ],
+        "do_not_claim": [
+          "Do not treat Glaze 7.2 as a Camera HAL API, metadata contract, scheduling, pipeline behavior, or production HAL code change."
+        ]
+      }
     }
   ],
   "demoted_candidates": [],

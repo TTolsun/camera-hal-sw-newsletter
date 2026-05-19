@@ -1,11 +1,11 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-07
 
-이번 주 뉴스레터는 libcamera v0.7.1 릴리스의 주요 변경 사항에 초점을 맞춥니다. Raspberry Pi의 Atomic control lists 개선, 파이프라인 핸들러 및 센서 구성 업데이트, SoftISP 디베이어링 및 처리량 개선 등 Linux 카메라 드라이버 스택의 핵심 업데이트가 포함되어 있습니다. 또한, Glaze 7.2의 C++26 Reflection 지원은 Android native 개발이 Clang / LLVM / libc++ 중심이라는 전제 아래 Camera HAL 메타데이터 직렬화 PoC 후보로만 검토할 수 있습니다.
+이번 주 뉴스레터는 libcamera v0.7.1 릴리스의 주요 변경 사항에 초점을 맞춥니다. Raspberry Pi의 Atomic control lists 개선, 파이프라인 핸들러 및 센서 구성 업데이트, SoftISP 디베이어링 및 처리량 개선 등 Linux 카메라 드라이버 스택의 핵심 업데이트가 포함되어 있습니다. 또한, Glaze 7.2의 C++26 Reflection 지원은 Android native 개발이 Clang / LLVM / libc++ 중심이라는 전제 아래 Camera HAL production path 변화가 아니라 host-side native tooling serialization 동향으로만 참고합니다.
 
 ## 1. 이번 주 3줄 브리핑
 - libcamera v0.7.1이 2026년 4월 28일 릴리스되어 Raspberry Pi의 Atomic control lists 및 Simple pipeline AGC/AWB 통계가 개선되었습니다.
 - libcamera v0.7.1에는 파이프라인 핸들러 및 센서 구성 동작 업데이트가 포함되어 Android Camera HAL의 드라이버 인터페이스에 영향을 줄 수 있습니다.
-- Glaze 7.2의 C++26 Reflection 지원은 Android HAL에서 즉시 toolchain 전환을 뜻하지 않으며, Clang / LLVM / libc++ 지원 여부를 확인한 뒤 vendor metadata 직렬화 PoC 후보로 검토할 수 있습니다.
+- Glaze 7.2의 C++26 Reflection 지원은 Android HAL에서 즉시 toolchain 전환이나 vendor metadata PoC 요구를 뜻하지 않으며, Clang / LLVM / libc++ 지원성을 확인해야 하는 host-side tooling watch item으로만 둡니다.
 
 ## 2. 카메라 드라이버 및 이미지 파이프라인
 
@@ -35,6 +35,11 @@ HAL은 libcamera의 직접적인 사용자가 아닐 수 있지만, vendor kerne
 - 카메라 드라이버 팀은 현재 vendor kernel의 V4L2/libcamera 구현에서 Atomic control lists 및 AGC/AWB 통계 처리 로직을 검토하고, libcamera v0.7.1의 관련 패치가 적용되었는지 확인합니다.
 - Preview + ImageCapture 스트림 조합을 사용하여 자동 노출 및 자동 화이트 밸런스 모드에서 YUV 및 JPEG 출력의 이미지 품질과 captureResult 메타데이터의 일관성을 측정하는 회귀 테스트를 2주 내에 수행합니다.
 - Raspberry Pi 기반 레퍼런스 장치에서 libcamera v0.7.1 업데이트 후, Preview, ImageCapture, VideoCapture 스트림의 동시 사용 시나리오에서 프레임 드롭, 지연 시간, 열 관리 성능에 변화가 있는지 로그를 통해 확인합니다.
+
+### 확인할 점
+
+- libcamera v0.7.1의 Raspberry Pi Atomic control list 변경이 현재 vendor kernel/libcamera fork에 포함됐는지 확인합니다.
+- Android HAL 동작 변경으로 단정하기 전에 downstream integration evidence와 AE/AWB regression log를 분리해 기록합니다.
 
 **팀 공유용 한 줄**
 
@@ -75,6 +80,11 @@ HAL은 `camera3_device_ops_t`를 통해 드라이버와 상호 작용하며, `co
 - Preview (YUV) + ImageCapture (JPEG) 스트림 조합을 사용하여 30fps 및 60fps 모드에서 `logcat`을 통해 프레임 드롭 및 버퍼 할당/해제 로그를 수집하고, 예상치 못한 패턴 변화가 있는지 분석합니다.
 - 카메라 드라이버 팀은 vendor kernel의 V4L2/libcamera 센서 구성 및 파이프라인 핸들러 관련 패치를 검토하여 libcamera v0.7.1의 변경 사항이 HAL의 스트림 구성 요청과 호환되는지 확인합니다.
 
+### 확인할 점
+
+- pipeline handler와 sensor configuration 변경이 현재 downstream camera stack에 들어왔는지 먼저 확인합니다.
+- HAL stream configuration regression 여부는 CTS/VTS/Camera ITS 결과와 vendor driver log를 분리해 기록합니다.
+
 **팀 공유용 한 줄**
 
 libcamera v0.7.1의 파이프라인 핸들러 및 센서 구성 업데이트는 HAL의 스트림 구성 및 센서 제어에 영향을 미칠 수 있습니다. HAL 팀은 CTS/VTS/ITS 테스트를 재실행하고, 프레임 드롭 및 버퍼 패턴을 모니터링해야 합니다.
@@ -114,6 +124,11 @@ HAL은 `RAW_SENSOR` 스트림을 지원할 때 디베이어링되지 않은 RAW 
 - 4K 30fps `PRIVATE` 스트림을 사용하는 VideoCapture 시나리오에서 `adb shell dumpsys media.camera`를 통해 프레임 드롭률과 엔드투엔드 지연 시간을 측정하고, SoftISP 처리량 개선이 성능에 미치는 영향을 분석합니다.
 - 카메라 드라이버 팀은 vendor ISP 드라이버의 디베이어링 및 이미지 처리 파이프라인이 libcamera SoftISP의 최신 개선 사항을 어떻게 통합하거나 참조하는지 문서화하고, HAL 팀과 공유합니다.
 
+### 확인할 점
+
+- SoftISP 변경이 실제 제품 ISP path에 적용됐는지 확인한 뒤 RAW/YUV 품질 비교를 진행합니다.
+- downstream evidence가 없으면 Android HAL runtime 변화가 아니라 upstream image pipeline signal로 기록합니다.
+
 **팀 공유용 한 줄**
 
 libcamera v0.7.1의 SoftISP 디베이어링 및 처리량 개선은 RAW 이미지 품질과 고성능 스트림에 영향을 줄 수 있습니다. HAL 팀은 RAW 스트림 품질과 고해상도/고프레임 속도 스트림의 성능을 측정해야 합니다.
@@ -126,9 +141,9 @@ libcamera v0.7.1의 SoftISP 디베이어링 및 처리량 개선은 RAW 이미�
 
 ## 5. C++ 및 개발 도구
 
-### Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보
+### Glaze 7.2: native tooling serialization 검토 범위
 
-![Glaze 7.2: Android native HAL 메타데이터 직렬화 PoC 후보 image](../../assets/images/fallback/cpp.svg)
+![Glaze 7.2: native tooling serialization 검토 범위 image](../../assets/images/fallback/cpp.svg)
 
 _Image: [Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원](https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more)_
 
@@ -137,25 +152,29 @@ _Image: [Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML �
 
 - Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.
 - Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다.
-- Android native 개발은 Clang / LLVM / libc++ 중심이므로, 이 기사는 즉시 toolchain 전환이 아니라 HAL 메타데이터 직렬화 PoC 후보로만 다룹니다.
 
 **배경지식**
 
-Glaze는 C++ 직렬화 라이브러리이며 C++26 Reflection을 활용해 타입 매핑과 데이터 직렬화 코드를 줄이는 방향의 기능을 제공합니다. Android Camera HAL은 native C++ 코드와 vendor metadata, 설정 파일, debug dump 경로를 다루지만 Android native 개발은 Clang / LLVM / libc++ 중심입니다. 따라서 Glaze 7.2는 즉시 도입 대상이 아니라, Android toolchain 지원성과 통합 비용을 확인해야 하는 후보입니다.
+Glaze는 C++ 직렬화 라이브러리이며 C++26 Reflection을 활용해 타입 매핑과 데이터 직렬화 코드를 줄이는 방향의 기능을 제공합니다. Android native 개발은 Clang / LLVM / libc++ 중심이므로 Glaze 7.2는 Camera HAL production path 적용 대상이 아니라, host-side 분석 도구나 standalone native utility에서 serialization library 선택지를 검토할 때 참고할 수 있는 tooling signal입니다.
 
 **Camera HAL 관점 해석**
 
-Camera HAL은 `camera3_capture_result_t`에 vendor-specific metadata를 추가하고, 내부 `vendor.camera.hal.stats` 같은 구조를 로그, trace, offline 분석용으로 직렬화할 수 있습니다. Glaze 7.2는 이 중 host-side 분석 도구나 standalone native sandbox에서 CBOR serialization PoC를 해볼 후보입니다. HAL production path 적용 여부는 Clang / LLVM / libc++ 지원, `Android.bp` 통합 가능성, ABI/binary size 영향이 확인된 뒤에만 판단합니다.
+이 source는 Glaze library release note이며, Android camera stack의 product behavior를 직접 설명하지 않습니다. 따라서 Glaze 7.2는 제품 HAL 동작 변경 근거가 아니라, 내부 분석 도구나 debug utility를 새로 설계할 때 Android toolchain 지원성과 통합 비용을 먼저 확인하는 참고 항목으로만 유지합니다.
 
 **우리 팀이 확인할 Action Item**
 
-- HAL native owner는 `camera3_capture_result_t` vendor tag packing/unpacking 경로와 `vendor.camera.hal.stats` debug dump 경로에서 수동 field mapping 또는 validation 코드 2곳을 2주 내에 식별하고, 현재 구현의 boilerplate LOC와 오류 처리 분기 수를 기록합니다.
-- HAL 팀은 host-side 또는 standalone native sandbox에서 `vendor.camera.hal.stats` 샘플 구조체를 CBOR로 직렬화/역직렬화하는 Glaze 7.2 PoC를 만들고, 10,000개 record 기준 CPU time, p95 latency, binary size 증가량을 기존 수동 serialization 경로와 비교합니다.
-- Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 필요한 C++26 Reflection 지원 여부와 `Android.bp` 통합 가능성을 확인하고, 미지원이면 제품 HAL migration 계획이 아니라 watch item으로 남긴다는 결론을 기록합니다.
+- Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 C++26 Reflection 지원 여부와 Glaze 사용 가능성을 changelog와 실험 환경 기준으로 확인합니다.
+- host-side 분석 도구나 standalone native utility에 serialization library 검토 필요가 있을 때만 small PoC 후보로 기록합니다.
+- production HAL code나 camera pipeline 동작 변경으로 승격하려면 별도 product requirement와 source-backed downstream evidence를 요구합니다.
+
+### 확인할 점
+
+- Glaze 7.2는 production HAL code 변경 요구가 아니라 host-side native tooling watch item으로 기록합니다.
+- C++26 Reflection 지원성과 내부 도구 필요성이 확인될 때만 작은 PoC 후보로 재평가합니다.
 
 **팀 공유용 한 줄**
 
-Glaze 7.2는 Android HAL toolchain 전환 근거가 아니라 Clang / LLVM / libc++ 지원 여부를 확인해야 하는 C++ tooling fallback입니다. HAL 팀은 vendor metadata 직렬화 PoC에서 CPU time, p95 latency, binary size, boilerplate LOC를 측정한 뒤 watch 또는 도입 후보 여부를 판단해야 합니다.
+Glaze 7.2는 Android HAL toolchain 전환 근거가 아니라 host-side native tooling 동향입니다. Camera HAL team은 production HAL code 변경이나 vendor metadata PoC 요구로 기록하지 말고, toolchain 지원성과 내부 도구 필요성이 확인될 때만 별도 검토합니다.
 
 **출처**
 
@@ -167,8 +186,7 @@ Glaze 7.2는 Android HAL toolchain 전환 근거가 아니라 Clang / LLVM / lib
 - 카메라 드라이버 팀은 현재 vendor kernel의 V4L2/libcamera 구현에서 Atomic control lists 및 AGC/AWB 통계 처리 로직을 검토하고, libcamera v0.7.1의 관련 패치가 적용되었는지 확인합니다.
 - HAL 팀은 현재 지원하는 모든 `camera3_stream_t` 스트림 조합과 `ANDROID_SENSOR_MODE` 설정에 대해 Camera ITS `test_sensor_mode_selection.py` 및 `test_stream_configurations.py`를 포함한 관련 테스트를 2주 내에 재실행하여 회귀 여부를 확인합니다.
 - RAW 스트림을 지원하는 장치에서 `RAW_SENSOR` + `YUV_420_888` 스트림 조합으로 Camera ITS `test_raw_capture.py`를 실행하고, 디베이어링 품질(색상 정확도, 모아레 패턴)에 대한 측정 지표를 2주 내에 수집하여 SoftISP 개선 전후를 비교합니다.
-- HAL native owner는 `camera3_capture_result_t` vendor tag packing/unpacking 경로와 `vendor.camera.hal.stats` debug dump 경로에서 수동 field mapping 또는 validation 코드 2곳을 2주 내에 식별하고, 현재 구현의 boilerplate LOC와 오류 처리 분기 수를 기록합니다.
-- HAL 팀은 host-side 또는 standalone native sandbox에서 `vendor.camera.hal.stats` 샘플 구조체를 CBOR로 직렬화/역직렬화하는 Glaze 7.2 PoC를 만들고, 10,000개 record 기준 CPU time, p95 latency, binary size 증가량을 기존 수동 serialization 경로와 비교합니다.
+- Build/toolchain owner는 Glaze 7.2를 production HAL 변경 요구가 아니라 host-side native tooling watch item으로 기록하고, C++26 Reflection 지원성과 내부 도구 필요성이 확인될 때만 작은 PoC 후보로 재평가합니다.
 
 ## 참고자료
 

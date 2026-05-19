@@ -138,7 +138,11 @@
       "historical_cleanup_pending"
     ],
     "historical_cleanup_issue": "#108",
-    "public_visibility": "listed"
+    "public_visibility": "listed",
+    "rewrite_status": "material_rewrite",
+    "material_rewrite_diffs": [
+      "content/audit/historical-rewrite-diff/2026-05-07-glaze-7-2-native-tooling-serialization.md"
+    ]
   },
   {
     "date": "2026-05-05",
