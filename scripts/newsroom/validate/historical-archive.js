@@ -297,14 +297,23 @@ function validateSidecarEntry(entry, index, state, errors) {
   }
 }
 
-function validateRewriteDiffPath(root, relPath, sidecarDates, errors) {
+function parseRewriteDiffPath(relPath) {
   const normalized = toPosix(relPath);
   const match = normalized.match(/^content\/audit\/historical-rewrite-diff\/(\d{4}-\d{2}-\d{2})-([a-z0-9][a-z0-9-]*)\.md$/);
   if (!match) {
-    errors.push(`Historical rewrite diff path must use ${REWRITE_DIFF_PREFIX}<date>-<slug>.md: ${relPath}`);
-    return;
+    return null;
   }
   const [, date, slug] = match;
+  return { normalized, date, slug };
+}
+
+function validateRewriteDiffPath(root, relPath, sidecarDates, errors) {
+  const parsed = parseRewriteDiffPath(relPath);
+  if (!parsed) {
+    errors.push(`Historical rewrite diff path must use ${REWRITE_DIFF_PREFIX}<date>-<slug>.md: ${relPath}`);
+    return null;
+  }
+  const { normalized, date, slug } = parsed;
   if (!sidecarDates.has(date)) {
     errors.push(`Historical rewrite diff references unknown archive date ${date}: ${relPath}`);
   } else if (!articleSlugExists(root, date, slug)) {
@@ -313,6 +322,7 @@ function validateRewriteDiffPath(root, relPath, sidecarDates, errors) {
   if (!fs.existsSync(repoPath(root, normalized))) {
     errors.push(`Historical rewrite diff is missing: ${normalized}`);
   }
+  return parsed;
 }
 
 function validateHistoricalArchive({ root = process.cwd(), state = null } = {}) {
@@ -396,7 +406,10 @@ function validateHistoricalArchive({ root = process.cwd(), state = null } = {}) 
       if (!entry.material_rewrite_diff) {
         errors.push(`Material rewrite ${date} must declare material_rewrite_diff.`);
       } else {
-        validateRewriteDiffPath(root, entry.material_rewrite_diff, new Set(archiveState.sidecarDates), errors);
+        const diff = validateRewriteDiffPath(root, entry.material_rewrite_diff, new Set(archiveState.sidecarDates), errors);
+        if (diff && diff.date !== date) {
+          errors.push(`Material rewrite diff date ${diff.date} must match sidecar entry date ${date}.`);
+        }
       }
     }
     if (isPre185Entry(entry) && publicDates.has(date)) {

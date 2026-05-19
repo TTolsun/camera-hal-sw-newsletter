@@ -149,7 +149,9 @@
       "historical_cleanup_pending"
     ],
     "historical_cleanup_issue": "#108",
-    "public_visibility": "listed"
+    "public_visibility": "listed",
+    "rewrite_status": "material_rewrite",
+    "material_rewrite_diff": "content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md"
   },
   {
     "date": "2026-04-30",
