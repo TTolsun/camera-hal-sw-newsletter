@@ -107,7 +107,7 @@ AI 모델의 추론은 온디바이스에서 직접 실행되거나 클라우드
 **우리 팀이 확인할 Action Item**
 
 - 제품이 Firebase AI Logic 기반 AI-analysis path를 사용할 계획이 있는지 앱/프레임워크 담당자와 확인하고, 카메라 프레임 전달 지점과 데이터 경계를 2주 이내에 정리합니다. (Owner: HAL 아키텍트)
-- 해당 경로가 있을 때만 `ImageAnalysis` 등 camera input의 해상도, format, frame rate, buffer usage 요구를 검토하고, HAL 변경 필요 여부는 source-backed product requirement로 별도 판단합니다. (Owner: 성능 엔지니어)
+- 해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 검토하고, HAL 변경 필요 여부는 source-backed product requirement로 별도 판단합니다. (Owner: 성능 엔지니어)
 - AI 결과를 camera metadata로 다시 주입하는 시나리오는 source-backed requirement가 확인되기 전까지 가정하지 않고, 후속 검토 질문으로만 기록합니다. (Owner: HAL 개발팀)
 
 **팀 공유용 한 줄**

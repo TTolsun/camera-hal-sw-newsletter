@@ -287,6 +287,29 @@ test('historical archive validator requires material rewrite diff slug to match 
   assert.match(result.errors.join('\n'), /unknown article slug unrelated-article/);
 });
 
+test('historical archive validator requires material rewrite diff date to match sidecar entry date', () => {
+  const root = tempRoot('historical-archive-material-rewrite-date-');
+  const rewriteDate = '2026-05-05';
+  const wrongEntryDate = '2026-05-19';
+  const diffPath = 'content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
+  writeNewsletterIndex(root, [rewriteDate, wrongEntryDate]);
+  writePublicIssue(root, rewriteDate, '## 2. firebase ai logic camera hal npu gpu\n\nHistorical article body.');
+  writePublicIssue(root, wrongEntryDate);
+  writeArchiveDocs(root, [rewriteDate, wrongEntryDate]);
+  writeText(path.join(root, diffPath), '# Rewrite diff\n');
+  writeStatus(root, [
+    statusEntry(rewriteDate),
+    statusEntry(wrongEntryDate, {
+      rewrite_status: 'material_rewrite',
+      material_rewrite_diff: diffPath
+    })
+  ]);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /Material rewrite diff date 2026-05-05 must match sidecar entry date 2026-05-19/);
+});
+
 test('historical archive validator rejects forbidden public article provenance in good fixtures', () => {
   const root = tempRoot('historical-archive-good-fixture-provenance-');
   const date = '2026-05-05';
