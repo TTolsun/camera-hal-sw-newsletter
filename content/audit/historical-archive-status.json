@@ -4,10 +4,11 @@
     "archive_status": "historical_unreviewed",
     "historical_cleanup_reviewed": false,
     "known_limitations": [
+      "not_listed_in_data_newsletters",
       "historical_cleanup_pending"
     ],
     "historical_cleanup_issue": "#108",
-    "public_visibility": "listed"
+    "public_visibility": "unlisted"
   },
   {
     "date": "2026-05-18",

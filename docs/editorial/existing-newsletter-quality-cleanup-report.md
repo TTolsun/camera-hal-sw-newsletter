@@ -8,7 +8,7 @@ Issue #108은 unsupported seed evidence provenance를 사후 보강하지 않고
 - deprecated archive: 0
 - removed archive: 1
 - known unreviewed archive: 13
-- data/newsletters.json에 없는 public artifact 날짜: 2
+- data/newsletters.json에 없는 public artifact 날짜: 3
 - content/newsroom 전용 날짜: 2
 
 ## Validation Status
@@ -20,7 +20,7 @@ Issue #108은 unsupported seed evidence provenance를 사후 보강하지 않고
 
 | Date | Artifact scope | Archive status | Public visibility | Data index | Public artifact | Known limitations | Issue |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-05-19 | public_archive | historical_unreviewed | listed | yes | yes | historical_cleanup_pending | #108 |
+| 2026-05-19 | public_archive | historical_unreviewed | unlisted | no | yes | not_listed_in_data_newsletters, historical_cleanup_pending | #108 |
 | 2026-05-18 | public_archive | historical_unreviewed | unlisted | no | yes | not_listed_in_data_newsletters, historical_cleanup_pending | #108 |
 | 2026-05-17 | public_archive | historical_unreviewed | unlisted | no | yes | not_listed_in_data_newsletters, historical_cleanup_pending | #108 |
 | 2026-05-16 | public_archive | historical_unreviewed | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled, historical_cleanup_pending | #108 |
@@ -41,6 +41,7 @@ Issue #108은 unsupported seed evidence provenance를 사후 보강하지 않고
 
 - 2026-05-17
 - 2026-05-18
+- 2026-05-19
 
 ## Non-public newsroom artifacts
 
