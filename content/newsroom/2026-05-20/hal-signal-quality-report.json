@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "report_type": "hal_signal_quality",
+  "date": "2026-05-20",
+  "generated_at": "2026-05-19T18:18:07.012Z",
+  "status": "INPUT_INCOMPLETE",
+  "input_completeness": "missing_required",
+  "input_statuses": {
+    "shortlisted_candidates": "loaded",
+    "editor_draft": "input_unavailable",
+    "quality_report": "input_unavailable",
+    "source_effectiveness_report": "loaded",
+    "source_quality_report": "loaded",
+    "evidence_pack_summary": "loaded",
+    "merged_candidate_manifest": "loaded"
+  },
+  "inputs": {
+    "required": {
+      "shortlisted_candidates": {
+        "path": "content/newsroom/2026-05-20/shortlisted-candidates.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "editor_draft": {
+        "path": "content/newsroom/2026-05-20/editor-draft.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "quality_report": {
+        "path": "content/newsroom/2026-05-20/quality-report.json",
+        "status": "input_unavailable",
+        "error": ""
+      }
+    },
+    "optional": {
+      "source_effectiveness_report": {
+        "path": "content/newsroom/2026-05-20/source-effectiveness-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "source_quality_report": {
+        "path": "content/newsroom/2026-05-20/source-quality-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "evidence_pack_summary": {
+        "path": "content/newsroom/2026-05-20/evidence-pack-summary.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "merged_candidate_manifest": {
+        "path": "content/collected-news/2026-05-20/merged-candidate-manifest.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "missing_required": [
+      "editor_draft",
+      "quality_report"
+    ],
+    "unavailable_optional": []
+  },
+  "quality_status": "UNKNOWN",
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 0,
+    "strong_signal_count": 0,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 0,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 0,
+    "fallback_main_article_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {},
+    "actionability_level_counts": {},
+    "effective_actionability_level_counts": {},
+    "signal_quality_status_counts": {}
+  },
+  "main_article_signal_checks": [],
+  "selection_shortage_hint_details": [
+    {
+      "bucket": "direct_aosp_camera",
+      "severity": "medium",
+      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
+      "affected_sources": [],
+      "recommended_fix": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
+      "affected_sources": [],
+      "recommended_fix": "Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    },
+    {
+      "bucket": "direct_aosp_camera",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Collect at least 1 Primary Camera Stack candidate(s): direct_aosp_camera, camera_driver_image_pipeline, android_platform_camera_adjacent."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Collect enough eligible candidates to satisfy the Newsletter Policy article count range (3-5)."
+    }
+  ],
+  "gate_boundary": {
+    "quality_validation_records_hal_signal_deductions": true,
+    "publish_gate_blocks_hal_signal_hard_blockers": true,
+    "review_artifacts_preserved": true,
+    "optional_input_unavailable_is_not_pass": true
+  },
+  "close_criteria": {
+    "report_generated": true,
+    "main_article_capsule_validation": true,
+    "actionability_hard_blocker_reflected": true,
+    "generic_fallback_soc_overpromotion_tests_required": true,
+    "source_expansion_followups": [
+      "#55",
+      "#57"
+    ],
+    "historical_rewrite_followup": "#108"
+  },
+  "warnings": [
+    "Required input unavailable: editor_draft",
+    "Required input unavailable: quality_report"
+  ]
+}
