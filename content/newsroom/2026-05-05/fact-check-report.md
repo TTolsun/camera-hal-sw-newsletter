@@ -18,4 +18,4 @@ PASS
 
 ## 최종 의견
 
-Manual artifact repair resolved headline specificity, concise image usage reasons, and source-backed evidence for the Android hybrid inference article. No unresolved fact-check must_fix items remain.
+Manual archive cleanup keeps Android Security Bulletin wording bounded to product camera-path CVE/patch triage. No unresolved fact-check must_fix items remain.
