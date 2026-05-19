@@ -6,7 +6,7 @@
 
 - Android의 하이브리드 AI 추론 소식은 제품이 camera-frame analysis path를 실제로 통합할 때만 camera input 요구와 SoC 리소스 예산을 검토하는 adjacent signal로 다룹니다.
 - C++26의 assert() 매크로 개선은 HAL runtime 변화가 아니라, compiler/toolchain support가 확인된 뒤 debug-build 또는 host utility에서 검토할 수 있는 진단 개선 후보입니다.
-- 2026년 5월 Android 보안 게시판이 발행되었으므로, HAL 관련 취약점이 있는지 즉시 확인하고 필요한 보안 패치를 적용해야 합니다.
+- 2026년 5월 Android 보안 게시판은 제품 camera path와 연결되는 CVE/패치가 있는지 확인할 security triage 입력입니다.
 
 ## 2. Claude Code 2.1.128: Camera HAL workflow review 범위
 
@@ -34,29 +34,28 @@ Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지�
 
 ---
 
-## 3. 2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수
-
+## 3. 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위
 
 ![Android Security Bulletin 로고](https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png)
 
 _Image: [Android Security Bulletin](https://source.android.com/docs/security/bulletin/asb-overview)_
 
+2026년 5월 Android 보안 게시판이 2026년 5월 1일에 발행되었습니다.
 
-2026년 5월 Android 보안 게시판이 발행되었습니다. 이 게시판은 Android 시스템의 잠재적인 보안 취약점에 대한 세부 정보를 포함하며, Camera HAL과 관련된 취약점 패치 또는 새로운 보안 요구사항이 포함될 수 있습니다.
+게시판은 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다.
 
-Android 보안 게시판은 매월 발행되며, Android 기기의 보안을 강화하기 위한 패치와 권고 사항을 제공합니다. 이는 커널, 프레임워크, 라이브러리, 미디어 구성 요소 등 다양한 시스템 영역의 취약점을 다룹니다. Camera HAL은 Android 시스템의 중요한 구성 요소이므로, 보안 게시판에 언급된 취약점은 HAL 구현에 직접적인 영향을 미칠 수 있습니다.
 
-이번 보안 게시판은 Camera HAL 팀이 HAL 구현의 잠재적 취약점을 검토하고 필요한 보안 패치를 적용해야 함을 의미합니다. 특히, 카메라 드라이버, 이미지 처리 파이프라인, 버퍼 관리, metadata 처리와 관련된 취약점이 있는지 주의 깊게 살펴봐야 합니다. 이러한 취약점은 카메라 앱의 비정상적인 동작, 데이터 유출 또는 서비스 거부 공격으로 이어질 수 있습니다. CTS/VTS 및 Camera ITS 테스트를 통해 패치 적용 후에도 기능적 회귀가 없는지 확인해야 합니다.
+Android 보안 게시판은 매월 발행되며 Android 기기의 보안 취약점과 패치 정보를 제공합니다. 게시판은 커널, 프레임워크, 라이브러리, 미디어 구성 요소 등 여러 시스템 영역을 다루지만, 특정 Camera HAL 구현 영향은 제품 구성 요소와 CVE/패치 매핑을 별도로 확인해야 합니다.
 
 **Camera HAL / Driver 관점**
 
-이번 보안 게시판은 Camera HAL 팀이 HAL 구현의 잠재적 취약점을 검토하고 필요한 보안 패치를 적용해야 함을 의미합니다. 특히, 카메라 드라이버, 이미지 처리 파이프라인, 버퍼 관리, metadata 처리와 관련된 취약점이 있는지 주의 깊게 살펴봐야 합니다. 이러한 취약점은 카메라 앱의 비정상적인 동작, 데이터 유출 또는 서비스 거부 공격으로 이어질 수 있습니다. CTS/VTS 및 Camera ITS 테스트를 통해 패치 적용 후에도 기능적 회귀가 없는지 확인해야 합니다.
+이번 보안 게시판은 제품 camera path 영향이 이미 확인됐다는 증거가 아니라, security triage에서 확인할 platform-adjacent 입력입니다. HAL 팀은 게시판의 kernel, media, framework, vendor component 항목 중 camera path와 실제로 연결되는 CVE나 패치가 있는지 먼저 확인하고, 매핑이 있을 때만 영향을 받는 device branch, vendor component, CTS/VTS/Camera ITS smoke 범위를 정리합니다. 매핑이 확인되지 않은 항목은 camera owner follow-up으로 승격하지 않습니다.
 
 ### 확인할 점
 
-- HAL 보안 담당자는 2026년 5월 Android 보안 게시판의 'Kernel Components', 'Media Framework', 'Camera' 섹션을 우선적으로 검토하여 HAL 관련 CVE를 식별하고, 관련 패치 여부를 2026년 5월 10일까지 보고합니다.
-- 식별된 HAL 관련 CVE에 대해 영향을 받는 기기 모델 및 HAL 버전을 파악하고, 2026년 5월 17일까지 패치 적용 계획을 수립합니다.
-- 패치 적용 후, 해당 CVE와 관련된 보안 테스트 케이스를 CTS/VTS 및 Camera ITS에 추가하거나 기존 테스트를 강화하여 2026년 5월 24일까지 검증을 완료합니다.
+- 게시판의 kernel/media/framework/vendor 항목 중 제품 camera path와 연결되는 CVE가 있는지 확인합니다.
+- CVE/패치 매핑이 없으면 camera owner follow-up이나 제품 영향 항목으로 기록하지 않습니다.
+- 매핑이 확인된 경우에만 패치 적용 범위와 CTS/VTS/Camera ITS smoke 결과를 남깁니다.
 
 **Sources**
 

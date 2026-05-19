@@ -160,7 +160,8 @@
     "material_rewrite_diffs": [
       "content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md",
       "content/audit/historical-rewrite-diff/2026-05-05-claude-code-2-1-128-camera-hal-workflow-review.md",
-      "content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal-debug-build.md"
+      "content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal-debug-build.md",
+      "content/audit/historical-rewrite-diff/2026-05-05-2026-5-android-camera-related-cve.md"
     ]
   },
   {

@@ -27,5 +27,5 @@ Issue #108은 과거 public archive provenance를 추적하되 unsupported seed 
 | 2026-05-09 | pre_185 | source provenance not backfilled, Glaze tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
 | 2026-05-08 | pre_185 | source provenance not backfilled, GCC tooling overclaim audit downgraded, historical cleanup pending | no | none | historical_unreviewed | listed | #108 |
 | 2026-05-07 | pre_185 | source provenance not backfilled, bounded Glaze overclaim rewrite, historical cleanup pending | yes_bounded | material_rewrite_glaze | historical_unreviewed | listed | #108 |
-| 2026-05-05 | pre_185 | source provenance not backfilled, bounded Firebase / Claude / C++ overclaim rewrites, historical cleanup pending | yes_bounded | material_rewrite_firebase_claude_cxx | historical_unreviewed | listed | #108 |
+| 2026-05-05 | pre_185 | source provenance not backfilled, bounded Firebase / Claude / C++ / Android Security overclaim rewrites, historical cleanup pending | yes_bounded | material_rewrite_firebase_claude_cxx_android_security | historical_unreviewed | listed | #108 |
 | 2026-04-30 | pre_185 | format inconsistency, delete-only slice completed | no | removed_by_73 | removed | removed | #73 |
