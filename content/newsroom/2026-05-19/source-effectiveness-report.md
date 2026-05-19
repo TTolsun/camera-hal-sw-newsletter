@@ -8,7 +8,7 @@ Date: 2026-05-19
 - Collected candidates: 40
 - Unregistered candidates: 0
 - Eligible candidates: 5
-- Selected candidates: 3
+- Selected candidates: 2
 - Rendered main articles: 2
 - Source gap candidates: 35
 - Generic noise candidates: 29
@@ -125,4 +125,4 @@ _없음_
 ## Warnings
 
 - Missing optional artifact content/newsroom/2026-05-19/reporter-candidates.json; related metrics remain zero or artifact-limited.
-- Rendered section source URL matched a candidate but not a unique source: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- sections[0] source URL did not match any candidate: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html

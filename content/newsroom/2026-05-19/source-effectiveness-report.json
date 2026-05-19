@@ -19,7 +19,7 @@
     "unregistered_candidate_count": 0,
     "collected_count": 40,
     "eligible_count": 5,
-    "selected_count": 3,
+    "selected_count": 2,
     "rendered_main_count": 2,
     "source_gap_count": 35,
     "generic_noise_count": 29,
@@ -2232,7 +2232,7 @@
       "synthetic": false,
       "collected_count": 0,
       "eligible_count": 0,
-      "selected_count": 1,
+      "selected_count": 0,
       "rendered_main_count": 0,
       "source_gap_count": 0,
       "camera_relevant_raw_count": 0,
@@ -2272,9 +2272,7 @@
         "No recent candidates were collected for this source."
       ],
       "top_exclusion_reasons": [],
-      "sample_selected_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
+      "sample_selected_urls": [],
       "sample_excluded_urls": []
     },
     {
@@ -3321,6 +3319,6 @@
   ],
   "warnings": [
     "Missing optional artifact content/newsroom/2026-05-19/reporter-candidates.json; related metrics remain zero or artifact-limited.",
-    "Rendered section source URL matched a candidate but not a unique source: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+    "sections[0] source URL did not match any candidate: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
   ]
 }

@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "date": "2026-05-19",
-  "generated_at": "2026-05-18T16:59:56.365Z",
+  "generated_at": "2026-05-19T02:41:51.266Z",
   "cache_root": "cache/news-summary",
   "totals": {
-    "candidate_count": 3,
-    "hit_count": 1,
+    "candidate_count": 2,
+    "hit_count": 0,
     "miss_count": 2,
-    "by_url_hit_count": 1,
+    "by_url_hit_count": 0,
     "by_content_hit_count": 0,
     "legacy_hit_count": 0
   },
@@ -15,29 +15,9 @@
     {
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
       "count": 2
-    },
-    {
-      "reason": "url-hit",
-      "count": 1
     }
   ],
   "entries": [
-    {
-      "title": "libcamera Release Announcements - libcamera v0.7.1",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "source": "libcamera Release Announcements",
-      "published_date": "2026-04-28",
-      "cache_key": {
-        "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-april/058408.html",
-        "url_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
-        "published_date": "2026-04-28",
-        "content_hash": "f2c42a835e4110d9cb7dd585ddea4e610b9971e4d92757c66c480b0699b4af60"
-      },
-      "hit": true,
-      "reason": "url-hit",
-      "lookup_source": "by-url",
-      "cache_record_path": "cache/news-summary/by-url/7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385.json"
-    },
     {
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
