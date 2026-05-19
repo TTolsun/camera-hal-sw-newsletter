@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-05-20",
+  "proposals": [
+    {
+      "proposal_id": "discovery-2026-05-20-1",
+      "topic_gap": "There is a gap in coverage for new features or significant updates to CameraX that are not tied to a specific release. The provided candidates focus on general Android development or specific CameraX releases, but not broader CameraX news.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "CameraX new features",
+        "CameraX updates",
+        "Android CameraX development"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [
+        "Blog posts announcing new CameraX features or significant updates outside of a release note context."
+      ],
+      "risk_notes": [
+        "The Android Developers Blog often covers a wide range of topics, so filtering for CameraX-specific news might require careful keyword matching.",
+        "There might not be any such broader CameraX news if all updates are tied to releases."
+      ]
+    },
+    {
+      "proposal_id": "discovery-2026-05-20-2",
+      "topic_gap": "The provided candidates include general Android Security Bulletins, but lack specific details or discussions about Camera-related security vulnerabilities or fixes. There's a need to identify if any recent security bulletins directly impact the Camera HAL or Camera APIs.",
+      "source_family": "security",
+      "allowed_domains": [
+        "source.android.com"
+      ],
+      "search_keywords": [
+        "Android Security Bulletin Camera",
+        "Android Camera HAL security",
+        "Camera API vulnerability"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [
+        "Mentions of 'Camera' or 'HAL' in the context of security vulnerabilities or patches within the Android Security Bulletin.",
+        "Detailed descriptions of camera-related security issues and their resolutions."
+      ],
+      "risk_notes": [
+        "Camera-specific security vulnerabilities might not be explicitly highlighted or might be part of broader framework or vendor issues.",
+        "The Android Security Bulletin can be highly technical, requiring careful analysis to extract relevant information."
+      ]
+    },
+    {
+      "proposal_id": "discovery-2026-05-20-3",
+      "topic_gap": "While there are several C++ related articles, there is no specific coverage on C++ developments that are directly relevant to Android Camera HAL development, such as updates to NDK C++ support, performance optimizations for camera processing in C++, or specific C++ features being adopted in low-level Android camera components.",
+      "source_family": "cpp",
+      "allowed_domains": [
+        "isocpp.org",
+        "blog.llvm.org",
+        "devblogs.microsoft.com"
+      ],
+      "search_keywords": [
+        "C++ Android NDK Camera",
+        "C++ Camera HAL performance",
+        "C++ embedded image processing",
+        "C++26 Android low-level"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [
+        "Articles discussing C++ features or tooling specifically for embedded systems or Android NDK development.",
+        "Performance benchmarks or optimization techniques for C++ in image processing or camera pipelines.",
+        "Discussions on C++ standards (e.g., C++26) and their impact on low-level Android development."
+      ],
+      "risk_notes": [
+        "Many C++ articles are general-purpose and may not have direct relevance to Android Camera HAL.",
+        "Finding specific connections between new C++ features and Camera HAL might require inferential analysis.",
+        "The provided C++ sources are high-level; more specific embedded/Android C++ blogs might be needed."
+      ]
+    }
+  ]
+}
