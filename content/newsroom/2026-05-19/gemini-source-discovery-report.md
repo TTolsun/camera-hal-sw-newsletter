@@ -8,12 +8,12 @@ merge_mode=gemini_source_discovery
 summary=Gemini ran, but found no new unique publishable candidates.
 manual_candidate_count=40
 manual_unique_url_count=40
-gemini_candidate_count=6
-gemini_unique_url_count=6
+gemini_candidate_count=5
+gemini_unique_url_count=5
 gemini_new_unique_url_count=0
-gemini_manual_duplicate_url_count=6
-gemini_duplicate_record_count=6
-merged_candidate_count=46
+gemini_manual_duplicate_url_count=5
+gemini_duplicate_record_count=5
+merged_candidate_count=45
 merged_unique_url_count=40
 gemini_publishable_candidate_count=0
 

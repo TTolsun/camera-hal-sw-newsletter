@@ -4,142 +4,125 @@
   "newsletter_date": "2026-05-19",
   "proposals": [
     {
-      "proposal_id": "DISCOVERY-2026-05-19-001",
-      "topic_gap": "There is a new CameraX 1.6.1 release. We need to understand the key changes and their implications for developers.",
-      "source_family": "camera-api",
+      "proposal_id": "camera-release-1.6.1",
+      "topic_gap": "New stable release for CameraX 1.6.1.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.6.1 release notes",
-        "AndroidX Camera 1.6.1 changes"
+        "AndroidX Camera 1.6.1 features"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
         "Release notes for CameraX 1.6.1",
-        "Key features or bug fixes in 1.6.1",
-        "Migration considerations for developers"
+        "Key features and bug fixes in 1.6.1",
+        "Migration guide or considerations for 1.6.1"
       ],
       "risk_notes": [
-        "The provided URL is a release notes page, which is a primary source. The risk of misinterpretation is low."
+        "Ensure this is a significant stable release, not just a patch or pre-release.",
+        "Verify the content provides enough detail for a newsletter item."
       ]
     },
     {
-      "proposal_id": "DISCOVERY-2026-05-19-002",
-      "topic_gap": "There is a new CameraX 1.3.0-beta02 release. We need to understand the key changes and their implications for developers.",
-      "source_family": "camera-api",
+      "proposal_id": "camerax-prerelease-1.3.0-beta02",
+      "topic_gap": "Updates on CameraX 1.3.0-beta02 pre-release.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.3.0-beta02 release notes",
-        "AndroidX Camera 1.3.0-beta02 changes"
+        "AndroidX Camera 1.3.0-beta02 updates"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
       ],
       "expected_evidence": [
         "Release notes for CameraX 1.3.0-beta02",
-        "Key features or bug fixes in 1.3.0-beta02",
-        "Migration considerations for developers"
+        "New features or API changes in 1.3.0-beta02",
+        "Known issues or improvements in this beta"
       ],
       "risk_notes": [
-        "The provided URL is a release notes page, which is a primary source. The risk of misinterpretation is low."
+        "Pre-release content might change before stable release.",
+        "Focus on significant changes relevant to HAL developers."
       ]
     },
     {
-      "proposal_id": "DISCOVERY-2026-05-19-003",
-      "topic_gap": "There is a new CameraX 1.4.0-alpha07 release. We need to understand the key changes and their implications for developers.",
-      "source_family": "camera-api",
+      "proposal_id": "camerax-prerelease-1.4.0-alpha07",
+      "topic_gap": "Updates on CameraX 1.4.0-alpha07 pre-release.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.4.0-alpha07 release notes",
-        "AndroidX Camera 1.4.0-alpha07 changes"
+        "AndroidX Camera 1.4.0-alpha07 updates"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
       ],
       "expected_evidence": [
         "Release notes for CameraX 1.4.0-alpha07",
-        "Key features or bug fixes in 1.4.0-alpha07",
-        "Migration considerations for developers"
+        "New features or API changes in 1.4.0-alpha07",
+        "Known issues or improvements in this alpha"
       ],
       "risk_notes": [
-        "The provided URL is a release notes page, which is a primary source. The risk of misinterpretation is low."
+        "Alpha releases are highly subject to change.",
+        "Prioritize features that might impact HAL or lower-level camera development."
       ]
     },
     {
-      "proposal_id": "DISCOVERY-2026-05-19-004",
-      "topic_gap": "A new libcamera v0.7.1 release has been announced. We need to understand the key changes and their implications for Linux camera development.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lists.libcamera.org"
-      ],
-      "search_keywords": [
-        "libcamera v0.7.1 release",
-        "libcamera-devel 2026 April"
-      ],
-      "candidate_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "expected_evidence": [
-        "Release announcement details for libcamera v0.7.1",
-        "New features, improvements, or bug fixes",
-        "Impact on camera drivers or applications using libcamera"
-      ],
-      "risk_notes": [
-        "The provided URL is a mailing list announcement, which is a primary source. The risk of misinterpretation is low."
-      ]
-    },
-    {
-      "proposal_id": "DISCOVERY-2026-05-19-005",
-      "topic_gap": "GCC 16.1 has been released with C++26 features. We need to understand the implications for C++ development, especially regarding reflection, contracts, and safety hardening.",
-      "source_family": "cpp",
+      "proposal_id": "cpp-reflection-contracts-gcc-16.1",
+      "topic_gap": "New C++26 features like reflection and contracts in GCC 16.1.",
+      "source_family": "iso-cpp-blog",
       "allowed_domains": [
         "isocpp.org"
       ],
       "search_keywords": [
         "GCC 16.1 C++26 reflection",
-        "GCC 16.1 contracts",
-        "GCC 16.1 safety hardening"
+        "C++26 contracts GCC",
+        "C++20 by default GCC 16.1"
       ],
       "candidate_urls": [
         "https://isocpp.org//blog/2026/04/gcc-16.1"
       ],
       "expected_evidence": [
-        "Details on C++26 reflection features in GCC 16.1",
-        "Information on C++26 contracts and safety hardening",
-        "Impact on C++ development practices and toolchains"
+        "Details on C++26 reflection and contracts implementation in GCC 16.1",
+        "Impact on C++ development and potential use cases",
+        "Performance or safety improvements from these features"
       ],
       "risk_notes": [
-        "The provided URL is from the official ISO C++ Blog, a reliable source. The risk of misinterpretation is low."
+        "Ensure the content is directly relevant to C++26 features, not just general GCC updates.",
+        "Focus on aspects that could be relevant for Camera HAL or embedded C++ development."
       ]
     },
     {
-      "proposal_id": "DISCOVERY-2026-05-19-006",
-      "topic_gap": "Glaze 7.2 has been released with C++26 Reflection support. We need to understand how this impacts serialization/deserialization for various formats.",
-      "source_family": "cpp",
+      "proposal_id": "glaze-7.2-cpp26-reflection",
+      "topic_gap": "Glaze 7.2 library leveraging C++26 reflection for various data formats.",
+      "source_family": "iso-cpp-blog",
       "allowed_domains": [
         "isocpp.org"
       ],
       "search_keywords": [
-        "Glaze 7.2 C++26 Reflection",
-        "C++ serialization YAML CBOR MessagePack TOML"
+        "Glaze 7.2 C++26 reflection",
+        "C++ serialization Glaze",
+        "YAML CBOR MessagePack C++26"
       ],
       "candidate_urls": [
         "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
       ],
       "expected_evidence": [
-        "Details on Glaze 7.2's C++26 Reflection integration",
-        "How it improves YAML, CBOR, MessagePack, TOML support",
-        "Performance or usability benefits for C++ developers"
+        "How Glaze 7.2 uses C++26 reflection for serialization/deserialization",
+        "Supported data formats (YAML, CBOR, MessagePack, TOML) and their relevance",
+        "Benefits of using C++26 reflection for such libraries"
       ],
       "risk_notes": [
-        "The provided URL is from the official ISO C++ Blog, a reliable source. The risk of misinterpretation is low."
+        "Verify the practical implications for C++ developers, especially in embedded contexts.",
+        "Assess if this library has potential for use in Camera HAL related tooling or components."
       ]
     }
   ]

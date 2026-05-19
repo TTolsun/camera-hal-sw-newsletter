@@ -4,7 +4,7 @@
   "newsletter_date": "2026-05-19",
   "validations": [
     {
-      "proposal_id": "DISCOVERY-2026-05-19-001",
+      "proposal_id": "camera-release-1.6.1",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "accepted": true,
@@ -12,7 +12,7 @@
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "DISCOVERY-2026-05-19-002",
+      "proposal_id": "camerax-prerelease-1.3.0-beta02",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
       "accepted": true,
@@ -20,7 +20,7 @@
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "DISCOVERY-2026-05-19-003",
+      "proposal_id": "camerax-prerelease-1.4.0-alpha07",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "accepted": true,
@@ -28,15 +28,7 @@
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "DISCOVERY-2026-05-19-004",
-      "candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "libcamera-blog"
-    },
-    {
-      "proposal_id": "DISCOVERY-2026-05-19-005",
+      "proposal_id": "cpp-reflection-contracts-gcc-16.1",
       "candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "accepted": true,
@@ -44,7 +36,7 @@
       "source_policy_match": "iso-cpp-blog"
     },
     {
-      "proposal_id": "DISCOVERY-2026-05-19-006",
+      "proposal_id": "glaze-7.2-cpp26-reflection",
       "candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "normalized_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "accepted": true,
@@ -53,6 +45,6 @@
     }
   ],
   "counts": {
-    "accepted": 6
+    "accepted": 5
   }
 }
