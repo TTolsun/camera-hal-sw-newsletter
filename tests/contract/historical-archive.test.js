@@ -262,7 +262,7 @@ test('historical archive validator requires diff artifact for material rewrite e
 
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
-  assert.match(result.errors.join('\n'), /Material rewrite 2026-05-05 must declare material_rewrite_diff/);
+  assert.match(result.errors.join('\n'), /Material rewrite 2026-05-05 must declare material_rewrite_diff or material_rewrite_diffs/);
 });
 
 test('historical archive validator requires material rewrite diff slug to match an article heading', () => {
@@ -308,6 +308,73 @@ test('historical archive validator requires material rewrite diff date to match 
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /Material rewrite diff date 2026-05-05 must match sidecar entry date 2026-05-19/);
+});
+
+test('historical archive validator accepts material rewrite diff arrays', () => {
+  const root = tempRoot('historical-archive-material-rewrite-array-');
+  const date = '2026-05-05';
+  const firstDiffPath = 'content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
+  const secondDiffPath = 'content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal.md';
+  writeNewsletterIndex(root, [date]);
+  writePublicIssue(root, date, [
+    '## 2. firebase ai logic camera hal npu gpu',
+    '',
+    'Historical article body.',
+    '',
+    '## 3. c 26 assert camera hal',
+    '',
+    'Historical article body.',
+    ''
+  ].join('\n'));
+  writeArchiveDocs(root, [date]);
+  writeText(path.join(root, firstDiffPath), '# Rewrite diff\n');
+  writeText(path.join(root, secondDiffPath), '# Rewrite diff\n');
+  writeStatus(root, [
+    statusEntry(date, {
+      rewrite_status: 'material_rewrite',
+      material_rewrite_diffs: [
+        firstDiffPath,
+        secondDiffPath
+      ]
+    })
+  ]);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, true, result.errors.join('\n'));
+});
+
+test('historical archive validator requires legacy material rewrite diff to be included in diff arrays', () => {
+  const root = tempRoot('historical-archive-material-rewrite-array-legacy-');
+  const date = '2026-05-05';
+  const legacyDiffPath = 'content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
+  const arrayDiffPath = 'content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal.md';
+  writeNewsletterIndex(root, [date]);
+  writePublicIssue(root, date, [
+    '## 2. firebase ai logic camera hal npu gpu',
+    '',
+    'Historical article body.',
+    '',
+    '## 3. c 26 assert camera hal',
+    '',
+    'Historical article body.',
+    ''
+  ].join('\n'));
+  writeArchiveDocs(root, [date]);
+  writeText(path.join(root, legacyDiffPath), '# Rewrite diff\n');
+  writeText(path.join(root, arrayDiffPath), '# Rewrite diff\n');
+  writeStatus(root, [
+    statusEntry(date, {
+      rewrite_status: 'material_rewrite',
+      material_rewrite_diff: legacyDiffPath,
+      material_rewrite_diffs: [
+        arrayDiffPath
+      ]
+    })
+  ]);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /material_rewrite_diff must be included in material_rewrite_diffs/);
 });
 
 test('historical archive validator rejects forbidden public article provenance in good fixtures', () => {
