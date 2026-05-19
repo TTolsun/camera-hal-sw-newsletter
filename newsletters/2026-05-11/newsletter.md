@@ -118,11 +118,11 @@ CameraX 1.6.1 업데이트는 Android camera app/framework compatibility signal�
 ## 이번 주 실행 항목
 
 - CameraX 1.4.0-alpha07 및 1.7.0-alpha01 reference app smoke run을 기존 compatibility matrix에서만 확인하고, HAL 변경 요구로 등록하지 않습니다. (담당: HAL QA, 기한: 2주)
-- HAL 드라이버 팀은 libcamera v0.7.1의 SoftISP 디베이어링 개선 사항이 vendor kernel 드라이버에 반영되었는지 확인하고, RAW 및 YUV 스트림의 이미지 품질 및 처리 지연 시간을 벤치마킹합니다. (담당: 드라이버 개발, 기한: 2주)
-- 네이티브 HAL 개발팀은 Clang/LLVM 툴체인의 C++26 지원 현황을 조사하고, 특히 Safety Hardening 기능이 HAL 코드의 메모리 안전성 검사에 어떻게 활용될 수 있는지 PoC를 진행합니다. (담당: 네이티브 개발, 기한: 2주)
+- HAL 드라이버 팀은 libcamera v0.7.1의 SoftISP 디베이어링 개선 사항을 downstream vendor fork나 device log에서 확인된 경우에만 이미지 품질/처리 지연 follow-up으로 분리합니다. (담당: 드라이버 개발, 기한: 2주)
+- 네이티브 개발팀은 Clang/LLVM의 C++26 지원 현황을 changelog 수준에서 추적하고, HAL 코드 적용 PoC가 아니라 host-side debug/tooling 후보로만 기록합니다. (담당: 네이티브 개발, 기한: 2주)
 - CameraX 회귀가 보이면 app/framework/HAL log를 분리해 downstream evidence가 있는 경우에만 HAL follow-up으로 승격합니다. (담당: HAL QA, 기한: 2주)
-- HAL 팀은 libcamera v0.7.1의 센서 모드 구성 업데이트에 따라 HAL의 `camera_info` 및 `stream_configuration_map` 선언이 여전히 유효한지 검토하고, 필요한 경우 센서 모드 선택 로직을 조정합니다. (담당: HAL 개발, 기한: 2주)
-- Camera HAL의 핵심 인터페이스에 C++ Contracts 개념을 적용하여, 입력 유효성 검사 및 오류 처리 로직을 개선하는 방안을 검토합니다. (담당: HAL 아키텍트, 기한: 2주)
+- HAL 팀은 libcamera v0.7.1의 센서 모드 구성 업데이트가 downstream vendor integration에 반영된 증거가 있을 때만 기존 camera metadata/stream compatibility checklist에서 확인합니다. (담당: HAL 개발, 기한: 2주)
+- HAL 아키텍트는 C++ Contracts 관련 자료를 production interface 변경 요구가 아니라 장기 tooling watch item으로 유지하고, 실제 적용은 source-backed compiler support와 project requirement가 확인될 때만 별도 검토합니다. (담당: HAL 아키텍트, 기한: 2주)
 
 ## 참고자료
 

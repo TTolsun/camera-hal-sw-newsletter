@@ -1,93 +1,85 @@
 [
   {
     "date": "2026-05-19",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
-      "not_listed_in_data_newsletters",
-      "historical_cleanup_pending"
+      "not_listed_in_data_newsletters"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "unlisted"
   },
   {
     "date": "2026-05-18",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
-      "not_listed_in_data_newsletters",
-      "historical_cleanup_pending"
+      "not_listed_in_data_newsletters"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "unlisted"
   },
   {
     "date": "2026-05-17",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
-      "not_listed_in_data_newsletters",
-      "historical_cleanup_pending"
+      "not_listed_in_data_newsletters"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "unlisted"
   },
   {
     "date": "2026-05-16",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed"
   },
   {
     "date": "2026-05-15",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed"
   },
   {
     "date": "2026-05-13",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed"
   },
   {
     "date": "2026-05-12",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed"
   },
   {
     "date": "2026-05-11",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed",
@@ -99,24 +91,22 @@
   },
   {
     "date": "2026-05-10",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed"
   },
   {
     "date": "2026-05-09",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed",
@@ -128,24 +118,22 @@
   },
   {
     "date": "2026-05-08",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed"
   },
   {
     "date": "2026-05-07",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed",
@@ -159,12 +147,11 @@
   },
   {
     "date": "2026-05-05",
-    "archive_status": "historical_unreviewed",
-    "historical_cleanup_reviewed": false,
+    "archive_status": "reviewed_archive",
+    "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled",
-      "historical_cleanup_pending"
+      "source_provenance_not_backfilled"
     ],
     "historical_cleanup_issue": "#108",
     "public_visibility": "listed",
