@@ -1,23 +1,12 @@
 {
   "schema_version": 1,
   "date": "2026-05-05",
-  "score": 98,
+  "score": 100,
   "max_score": 100,
   "threshold": 85,
   "status": "PASS",
-  "summary": "Quality score 98, threshold 85, max score 100. Editor review is ready.",
-  "deductions": [
-    {
-      "category": "field-hygiene",
-      "points": 2,
-      "reason": "background and what_changed overlap, but token count is below hard-fail threshold.",
-      "location": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
-      "blocking": false,
-      "severity": "warning",
-      "reason_code": "",
-      "dedupe_key": ""
-    }
-  ],
+  "summary": "Quality score 100, threshold 85, max score 100. Editor review is ready.",
+  "deductions": [],
   "article_results": [
     {
       "index": 1,
@@ -79,7 +68,7 @@
     },
     {
       "index": 2,
-      "headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
       "category": "Android Camera / Platform API",
       "status": "PASS",
       "repair_action": "preserve",
@@ -104,7 +93,7 @@
       },
       "scope_count": {
         "index": 2,
-        "headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+        "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
         "source_candidate_url": "https://source.android.com/docs/security/bulletin/asb-overview",
         "source_candidate_hash": "827f3a39ff2811801dcadf811725f8ed7f6f974e696a41e8790d5572f6445bdb",
         "relevance_bucket": "android_platform_camera_adjacent",
@@ -129,19 +118,12 @@
       "impact_claim_level": "android_framework_adjacent",
       "hal_impact_axes": [
         "security_vendor_component",
-        "cts_vts_its_cdd",
-        "framework_hal_contract"
+        "cts_vts_its_cdd"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
       "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "field-hygiene",
-          "points": 2,
-          "reason": "background and what_changed overlap, but token count is below hard-fail threshold."
-        }
-      ]
+      "soft_deductions": []
     },
     {
       "index": 3,
@@ -444,8 +426,8 @@
     },
     {
       "article_index": 2,
-      "article_headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
-      "claim_id": "2026-5-android-hal-fact-1",
+      "article_headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+      "claim_id": "2026-5-android-security-adjacent-fact-1",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "cts_vts_its_cdd",
@@ -478,8 +460,8 @@
     },
     {
       "article_index": 2,
-      "article_headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
-      "claim_id": "2026-5-android-hal-fact-2",
+      "article_headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+      "claim_id": "2026-5-android-security-adjacent-fact-2",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "cts_vts_its_cdd",
@@ -512,13 +494,13 @@
     },
     {
       "article_index": 2,
-      "article_headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
-      "claim_id": "2026-5-android-hal-fact-3",
+      "article_headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+      "claim_id": "2026-5-android-security-adjacent-fact-3",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "cts_vts_its_cdd",
       "overclaim_risk": "low",
-      "text": "2026년 5월 1일자 Android Security Bulletin에 따르면, 2026년 5월 Android 보안 게시판이 발행되었으며, 이는 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다. 구체적인 Camera HAL 관련 취약점은 게시판 내용을 통해 확인해야 합니다.",
+      "text": "2026? 5? Android ?? ???? 2026? 5? 1?? ?????, ???? Android ???? ?? ??? ? ?? ?? ??? ?????.",
       "evidence_ids": [
         "historical-2026-05-05-2026-5-android-hal-primary"
       ],
@@ -862,7 +844,7 @@
     "blocked_source_gap_count": 0,
     "article_count_with_hal_signal_capsule": 4,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 2,
+    "main_articles_with_owner_metric_log": 1,
     "main_articles_with_concrete_action": 4,
     "fallback_main_article_count": 3,
     "soc_platform_signal_count": 1,
@@ -873,18 +855,17 @@
       "native_tooling_workflow": 2,
       "security_vendor_component": 1,
       "cts_vts_its_cdd": 1,
-      "framework_hal_contract": 1,
       "soc_resource_contention": 1,
       "camerax_app_compatibility": 1,
       "stream_buffer_metadata": 1
     },
     "actionability_level_counts": {
-      "concrete_check": 2,
-      "owner_metric_log": 2
+      "concrete_check": 3,
+      "owner_metric_log": 1
     },
     "effective_actionability_level_counts": {
-      "concrete_check": 2,
-      "owner_metric_log": 2
+      "concrete_check": 3,
+      "owner_metric_log": 1
     },
     "signal_quality_status_counts": {
       "usable_signal": 3,
@@ -927,33 +908,32 @@
     },
     {
       "index": 2,
-      "title": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "title": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
       "url": "https://source.android.com/docs/security/bulletin/asb-overview",
       "relevance_bucket": "android_platform_camera_adjacent",
       "hal_impact_axes": [
         "security_vendor_component",
-        "cts_vts_its_cdd",
-        "framework_hal_contract"
+        "cts_vts_its_cdd"
       ],
       "reader_owners": [
         "security_owner",
         "camera_test_owner",
         "camera_hal_owner"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
       "actionability_upgrade_reason": "",
       "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
+      "concrete_action_signal_count": 4,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+      "fallback_promotion_reason": "Android platform security bulletins are adjacent security triage inputs; Camera HAL action requires source-backed CVE or product patch mapping.",
       "fallback_guard_notes": [
         "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
-        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        "Do not treat the monthly Android Security Bulletin as evidence of product camera-path impact without a source-backed CVE or product patch mapping."
       ],
       "soc_signal_type": "platform_signal",
       "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+      "camera_pipeline_link": "Camera HAL review is limited to source-backed CVE or product patch mapping that touches the product camera path.",
       "has_hal_signal_capsule": true,
       "hal_signal_capsule_complete": true,
       "hal_signal_capsule_missing_keys": [],
@@ -1074,7 +1054,7 @@
       },
       {
         "index": 2,
-        "headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+        "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
         "source_candidate_url": "https://source.android.com/docs/security/bulletin/asb-overview",
         "source_candidate_hash": "827f3a39ff2811801dcadf811725f8ed7f6f974e696a41e8790d5572f6445bdb",
         "relevance_bucket": "android_platform_camera_adjacent",
@@ -1164,7 +1144,7 @@
     "blocking_deduction_count": 0,
     "blocking_deduction_categories": [],
     "hard_fail_count": 0,
-    "soft_deduction_count": 1,
+    "soft_deduction_count": 0,
     "article_gate_counts": {
       "PASS": 4,
       "DEMOTE": 0,
@@ -1262,7 +1242,7 @@
       "blocked_source_gap_count": 0,
       "article_count_with_hal_signal_capsule": 4,
       "article_count_without_hal_signal_capsule": 0,
-      "main_articles_with_owner_metric_log": 2,
+      "main_articles_with_owner_metric_log": 1,
       "main_articles_with_concrete_action": 4,
       "fallback_main_article_count": 3,
       "soc_platform_signal_count": 1,
@@ -1273,18 +1253,17 @@
         "native_tooling_workflow": 2,
         "security_vendor_component": 1,
         "cts_vts_its_cdd": 1,
-        "framework_hal_contract": 1,
         "soc_resource_contention": 1,
         "camerax_app_compatibility": 1,
         "stream_buffer_metadata": 1
       },
       "actionability_level_counts": {
-        "concrete_check": 2,
-        "owner_metric_log": 2
+        "concrete_check": 3,
+        "owner_metric_log": 1
       },
       "effective_actionability_level_counts": {
-        "concrete_check": 2,
-        "owner_metric_log": 2
+        "concrete_check": 3,
+        "owner_metric_log": 1
       },
       "signal_quality_status_counts": {
         "usable_signal": 3,
@@ -1327,33 +1306,32 @@
       },
       {
         "index": 2,
-        "title": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+        "title": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
         "url": "https://source.android.com/docs/security/bulletin/asb-overview",
         "relevance_bucket": "android_platform_camera_adjacent",
         "hal_impact_axes": [
           "security_vendor_component",
-          "cts_vts_its_cdd",
-          "framework_hal_contract"
+          "cts_vts_its_cdd"
         ],
         "reader_owners": [
           "security_owner",
           "camera_test_owner",
           "camera_hal_owner"
         ],
-        "actionability_level": "owner_metric_log",
-        "effective_actionability_level": "owner_metric_log",
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
         "actionability_upgrade_reason": "",
         "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 3,
+        "concrete_action_signal_count": 4,
         "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+        "fallback_promotion_reason": "Android platform security bulletins are adjacent security triage inputs; Camera HAL action requires source-backed CVE or product patch mapping.",
         "fallback_guard_notes": [
           "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
-          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+          "Do not treat the monthly Android Security Bulletin as evidence of product camera-path impact without a source-backed CVE or product patch mapping."
         ],
         "soc_signal_type": "platform_signal",
         "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+        "camera_pipeline_link": "Camera HAL review is limited to source-backed CVE or product patch mapping that touches the product camera path.",
         "has_hal_signal_capsule": true,
         "hal_signal_capsule_complete": true,
         "hal_signal_capsule_missing_keys": [],
@@ -1429,12 +1407,7 @@
         "hard_blocker_reason_codes": []
       }
     ],
-    "top_deduction_categories": [
-      {
-        "category": "field-hygiene",
-        "count": 1
-      }
-    ],
+    "top_deduction_categories": [],
     "candidate_exclusion_summary": []
   }
 }
