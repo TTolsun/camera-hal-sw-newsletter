@@ -1,29 +1,6 @@
 {
   "sources": [
     {
-      "id": "5610592f44026508",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "title": "libcamera Release Announcements - libcamera v0.7.1",
-      "published_at": "2026-04-28",
-      "source_type": "release_note_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-          "evidence_text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<HTML>\n <HEAD>\n   <TITLE> libcamera v0.7.1\n   </TITLE>\n   <LINK REL=\"Index\" HREF=\"index.html\" >\n   <LINK REL=\"made\" HREF=\"mailto:libcamera-devel%40lists.libcamera.org?Subject=Re%3A%20libcamera%20v0.7.1&In-Reply-To=%3C177740082063.4079649.17498054540507352911%40ping.linuxembedded.co.uk%3E\">\n   <META NAME=\"robots\" CONTENT=\"index,nofollow\">\n   <style type=\"text/css\">\n       pre {\n           white-space: pre-wrap;       /* css-2.1, cure",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.93,
-      "android_hal_relevance": 0.93,
-      "ai_relevance": 0,
-      "technical_depth": 0.882,
-      "warnings": []
-    },
-    {
       "id": "473c2de5968532c9",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "title": "1.6.1",
@@ -105,7 +82,7 @@
       "claims": [
         {
           "claim": "CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develop",
           "confidence": "medium"
         }
       ],
@@ -113,29 +90,6 @@
       "android_hal_relevance": 0.45,
       "ai_relevance": 0,
       "technical_depth": 0.583,
-      "warnings": []
-    },
-    {
-      "id": "gemini-7ef4ffea5e3a07c4",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "title": "libcamera v0.7.1",
-      "published_at": "",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "libcamera v0.7.1",
-          "evidence_text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<HTML>\n <HEAD>\n   <TITLE> libcamera v0.7.1\n   </TITLE>\n   <LINK REL=\"Index\" HREF=\"index.html\" >\n   <LINK REL=\"made\" HREF=\"mailto:libcamera-devel%40lists.libcamera.org?Subject=Re%3A%20libcamera%20v0.7.1&In-Reply-To=%3C177740082063.4079649.17498054540507352911%40ping.linuxembedded.co.uk%3E\">\n   <META NAME=\"robots\" CONTENT=\"index,nofollow\">\n   <style type=\"text/css\">\n       pre {\n           white-space: pre-wrap;       /* css-2.1, cure",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.5,
       "warnings": []
     },
     {
