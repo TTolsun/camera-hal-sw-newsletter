@@ -6,6 +6,8 @@ const {
   DEFAULT_AUDIT_REPORT_PATH,
   DEFAULT_CLEANUP_REPORT_PATH,
   auditHistoricalArchive,
+  buildInventoryFinalMetrics,
+  parseInventoryTableRows,
   validateHistoricalArchive
 } = require('../../scripts/newsroom/validate/historical-archive');
 const {
@@ -396,4 +398,33 @@ test('historical archive validator rejects forbidden public article provenance i
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /generated_newsletter_public_article/);
+});
+
+test('historical archive final metrics parse escaped pipe inventory rows', () => {
+  const inventoryText = [
+    '# Existing Newsletter Quality Inventory',
+    '',
+    '| Date | Article title | Article slug | Source URL present | Source-backed fact present | HAL relevance | Action item specificity | Overclaim risk | Format consistency | Current quality status | Recommended decision | Severity | Review note |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    '| 2026-05-19 | Glaze 7.2 - C++26 Reflection \\| YAML | glaze-7-2-c-26-reflection | yes | partial | low | generic | medium | weak | reviewed_archive | keep | none | Final-reviewed; accepted historical limitation: partial source-backed coverage, generic actionability, medium overclaim risk, weak historical format. |',
+    '| 2026-04-30 | Removed archive summary | removed-archive-summary | no | no | unknown | none | unknown | inconsistent | removed | delete_completed_via_73 | S3 | Removed. |',
+    ''
+  ].join('\n');
+
+  const rows = parseInventoryTableRows(inventoryText);
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].article_title, 'Glaze 7.2 - C++26 Reflection | YAML');
+
+  const metrics = buildInventoryFinalMetrics(inventoryText);
+  assert.equal(metrics.total_article_rows, 2);
+  assert.equal(metrics.reviewed_article_rows, 1);
+  assert.equal(metrics.removed_article_rows, 1);
+  assert.equal(metrics.accepted_limitation_rows, 1);
+  assert.equal(metrics.remaining_source_gap_count, 0);
+  assert.equal(metrics.remaining_overclaim_risk_count, 0);
+  assert.equal(metrics.remaining_weak_actionability_count, 0);
+  assert.equal(metrics.accepted_limitation_counts.partial_source_backing, 1);
+  assert.equal(metrics.accepted_limitation_counts.generic_actionability, 1);
+  assert.equal(metrics.accepted_limitation_counts.medium_overclaim, 1);
+  assert.equal(metrics.accepted_limitation_counts.weak_format, 1);
 });

@@ -478,6 +478,141 @@ function countBy(items, key) {
   return counts;
 }
 
+function splitMarkdownTableRow(line = '') {
+  const trimmed = String(line).trim();
+  const body = trimmed.replace(/^\|/, '').replace(/\|$/, '');
+  const cells = [];
+  let current = '';
+  let escaped = false;
+  for (const char of body) {
+    if (escaped) {
+      current += char;
+      escaped = false;
+      continue;
+    }
+    if (char === '\\') {
+      escaped = true;
+      continue;
+    }
+    if (char === '|') {
+      cells.push(current.trim());
+      current = '';
+      continue;
+    }
+    current += char;
+  }
+  cells.push(current.trim());
+  return cells;
+}
+
+function parseInventoryTableRows(inventoryText = '') {
+  return String(inventoryText)
+    .split(/\r?\n/)
+    .filter(line => /^\|\s*(?:\d{4}-\d{2}-\d{2}|Date)\s*\|/.test(line))
+    .filter(line => !/^\|\s*Date\s*\|/.test(line))
+    .map(line => splitMarkdownTableRow(line))
+    .filter(cells => cells.length >= 13)
+    .map(cells => ({
+      date: cells[0],
+      article_title: cells[1],
+      article_slug: cells[2],
+      source_url_present: cells[3],
+      source_backed_fact_present: cells[4],
+      hal_relevance: cells[5],
+      action_item_specificity: cells[6],
+      overclaim_risk: cells[7],
+      format_consistency: cells[8],
+      current_quality_status: cells[9],
+      recommended_decision: cells[10],
+      severity: cells[11],
+      review_note: cells[12]
+    }));
+}
+
+function isRemovedInventoryRow(row = {}) {
+  return row.current_quality_status === 'removed' ||
+    row.recommended_decision === 'delete_completed_via_73';
+}
+
+function isFinalReviewedInventoryRow(row = {}) {
+  return row.current_quality_status === 'reviewed_archive' &&
+    row.recommended_decision === 'keep' &&
+    row.severity === 'none';
+}
+
+function hasAcceptedLimitation(row = {}) {
+  return isFinalReviewedInventoryRow(row) && /accepted historical limitation/i.test(row.review_note || '');
+}
+
+function buildInventoryFinalMetrics(inventoryText = '') {
+  const rows = parseInventoryTableRows(inventoryText);
+  const retainedRows = rows.filter(row => !isRemovedInventoryRow(row));
+  const removedRows = rows.filter(isRemovedInventoryRow);
+  const reviewedRows = retainedRows.filter(isFinalReviewedInventoryRow);
+  const acceptedLimitationRows = retainedRows.filter(hasAcceptedLimitation);
+  const remainingRewriteRows = retainedRows.filter(row => [
+    'rewrite_review',
+    'downgrade_review',
+    'archive_note_review'
+  ].includes(row.recommended_decision));
+  const remainingS0S1Rows = retainedRows.filter(row => ['S0', 'S1'].includes(row.severity));
+  const remainingSourceGapRows = retainedRows.filter(row =>
+    row.source_url_present === 'no' || row.source_backed_fact_present === 'no'
+  );
+  const remainingOverclaimRows = retainedRows.filter(row => {
+    if (row.overclaim_risk === 'high') return true;
+    if (row.overclaim_risk === 'medium') return !hasAcceptedLimitation(row);
+    return false;
+  });
+  const remainingWeakActionabilityRows = retainedRows.filter(row => {
+    if (row.action_item_specificity === 'none') return true;
+    if (row.action_item_specificity === 'generic') return !hasAcceptedLimitation(row);
+    return false;
+  });
+  const acceptedLimitationCounts = {
+    partial_source_backing: retainedRows.filter(row =>
+      row.source_backed_fact_present === 'partial' && hasAcceptedLimitation(row)
+    ).length,
+    generic_actionability: retainedRows.filter(row =>
+      row.action_item_specificity === 'generic' && hasAcceptedLimitation(row)
+    ).length,
+    medium_overclaim: retainedRows.filter(row =>
+      row.overclaim_risk === 'medium' && hasAcceptedLimitation(row)
+    ).length,
+    weak_format: retainedRows.filter(row =>
+      row.format_consistency === 'weak' && hasAcceptedLimitation(row)
+    ).length
+  };
+
+  return {
+    total_article_rows: rows.length,
+    retained_article_rows: retainedRows.length,
+    removed_article_rows: removedRows.length,
+    reviewed_article_rows: reviewedRows.length,
+    accepted_limitation_rows: acceptedLimitationRows.length,
+    accepted_limitation_counts: acceptedLimitationCounts,
+    remaining_s0_s1_rows: remainingS0S1Rows.length,
+    remaining_rewrite_downgrade_archive_note_rows: remainingRewriteRows.length,
+    remaining_source_gap_count: remainingSourceGapRows.length,
+    remaining_overclaim_risk_count: remainingOverclaimRows.length,
+    remaining_weak_actionability_count: remainingWeakActionabilityRows.length
+  };
+}
+
+function buildMaterialRewriteTraceability(entries = []) {
+  return entries
+    .filter(entry => entry?.rewrite_status === MATERIAL_REWRITE_STATUS)
+    .map(entry => {
+      const paths = materialRewriteDiffPaths(entry, entry.date, []);
+      return {
+        date: entry.date,
+        rewrite_count: paths.length,
+        diff_artifacts: paths
+      };
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
 function buildAuditReport(validation) {
   const state = validation.state;
   const activeDates = new Set(state.activeDates);
@@ -491,6 +626,20 @@ function buildAuditReport(validation) {
     ...state.newsroomDates,
     ...state.sidecarDates
   ])].filter(date => DATE_PATTERN.test(date)).sort().reverse();
+  const archiveStatusCounts = countBy(state.sidecarEntries, 'archive_status');
+  const publicVisibilityCounts = countBy(state.sidecarEntries, 'public_visibility');
+  const inventoryMetrics = buildInventoryFinalMetrics(state.inventoryText);
+  const finalDecision = {
+    can_close_issue: validation.errors.length === 0 &&
+      (archiveStatusCounts.historical_unreviewed || 0) === 0 &&
+      (inventoryMetrics.remaining_s0_s1_rows || 0) === 0 &&
+      (inventoryMetrics.remaining_rewrite_downgrade_archive_note_rows || 0) === 0 &&
+      (inventoryMetrics.remaining_source_gap_count || 0) === 0 &&
+      (inventoryMetrics.remaining_overclaim_risk_count || 0) === 0 &&
+      (inventoryMetrics.remaining_weak_actionability_count || 0) === 0,
+    issue: '#108',
+    reason: 'No unresolved S0/S1 rows, rewrite/downgrade/archive-note rows, source gaps, overclaim risks, or weak actionability rows remain after accepted historical limitations are recorded.'
+  };
 
   return {
     schema_version: 1,
@@ -500,10 +649,24 @@ function buildAuditReport(validation) {
     public_artifact_count: state.publicDates.length,
     newsroom_artifact_count: state.newsroomDates.length,
     sidecar_entry_count: state.sidecarEntries.length,
-    archive_status_counts: countBy(state.sidecarEntries, 'archive_status'),
-    public_visibility_counts: countBy(state.sidecarEntries, 'public_visibility'),
+    archive_status_counts: archiveStatusCounts,
+    public_visibility_counts: publicVisibilityCounts,
     orphan_public_dates: state.publicDates.filter(date => !activeDates.has(date)),
     newsroom_only_dates: newsroomOnlyDates,
+    unlisted_reviewed_archive_dates: state.sidecarEntries
+      .filter(entry => entry.archive_status === 'reviewed_archive' && entry.public_visibility === 'unlisted')
+      .map(entry => entry.date)
+      .sort(),
+    inventory_metrics: inventoryMetrics,
+    material_rewrite_traceability: buildMaterialRewriteTraceability(state.sidecarEntries),
+    issue_level_normalizations: state.sidecarDates.includes('2026-05-11') ? [
+      {
+        date: '2026-05-11',
+        type: 'global_action_item_normalization',
+        note: '2026-05-11 received issue-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report.'
+      }
+    ] : [],
+    final_decision: finalDecision,
     validation_error_count: validation.errors.length,
     validation_warning_count: validation.warnings.length,
     validation_errors: validation.errors,
@@ -536,25 +699,95 @@ function buildCleanupReportMarkdown(report) {
   const deprecatedCount = report.entries.filter(entry => entry.archive_status === 'deprecated_archive').length;
   const removedCount = report.entries.filter(entry => entry.archive_status === 'removed').length;
   const unreviewedCount = report.entries.filter(entry => entry.archive_status === 'historical_unreviewed').length;
+  const inventory = report.inventory_metrics || {};
+  const accepted = inventory.accepted_limitation_counts || {};
+  const rewriteTraceability = Array.isArray(report.material_rewrite_traceability)
+    ? report.material_rewrite_traceability
+    : [];
+  const normalizations = Array.isArray(report.issue_level_normalizations)
+    ? report.issue_level_normalizations
+    : [];
 
   return [
     '# 기존 뉴스레터 품질 Cleanup Report',
     '',
     'Issue #108은 unsupported seed evidence provenance를 사후 보강하지 않고 historical public archive cleanup 상태만 추적합니다.',
     '',
-    '## Historical Archive Trust Summary',
+    '## Final Archive Trust Summary',
     '',
-    `- reviewed archive: ${reviewedCount}`,
-    `- deprecated archive: ${deprecatedCount}`,
-    `- removed archive: ${removedCount}`,
-    `- known unreviewed archive: ${unreviewedCount}`,
+    '### Date-level status',
+    '',
+    `- reviewed archive dates: ${reviewedCount}`,
+    `- removed archive dates: ${removedCount}`,
+    `- historical unreviewed dates: ${unreviewedCount}`,
+    `- deprecated archive dates: ${deprecatedCount}`,
     `- data/newsletters.json에 없는 public artifact 날짜: ${report.orphan_public_dates.length}`,
     `- content/newsroom 전용 날짜: ${report.newsroom_only_dates.length}`,
+    '',
+    '### Article-level status',
+    '',
+    `- reviewed article rows: ${inventory.reviewed_article_rows || 0}`,
+    `- removed article rows: ${inventory.removed_article_rows || 0}`,
+    `- accepted limitation rows: ${inventory.accepted_limitation_rows || 0}`,
+    `- remaining S0/S1 rows: ${inventory.remaining_s0_s1_rows || 0}`,
+    `- remaining rewrite/downgrade/archive-note rows: ${inventory.remaining_rewrite_downgrade_archive_note_rows || 0}`,
+    `- remaining source gap rows: ${inventory.remaining_source_gap_count || 0}`,
+    `- remaining overclaim risk rows: ${inventory.remaining_overclaim_risk_count || 0}`,
+    `- remaining weak actionability rows: ${inventory.remaining_weak_actionability_count || 0}`,
+    '',
+    '## Final Review Transition Rule',
+    '',
+    '- A retained article row is final-reviewed only when no rewrite/downgrade/archive-note decision remains.',
+    '- `medium` overclaim, `partial` source-backed coverage, `generic` actionability, and weak historical format are allowed only as accepted historical limitations recorded in this report.',
+    '- A retained date becomes `reviewed_archive` only when every retained article row for that date is final-reviewed or explicitly covered by accepted limitations.',
+    '',
+    '## Final Metric Policy',
+    '',
+    '- `remaining_source_gap_count` counts rows with `source_url_present=no` or `source_backed_fact_present=no`.',
+    '- `source_backed_fact_present=partial` is not counted as a remaining source gap when recorded as an accepted historical limitation.',
+    '- `remaining_overclaim_risk_count` counts unresolved `high` or unresolved `medium` overclaim risk.',
+    '- `remaining_weak_actionability_count` counts unresolved `none` or unresolved `generic` actionability.',
+    '',
+    '## Remaining Accepted Limitations',
+    '',
+    '- Pre-#185 generation: source provenance was not backfilled.',
+    `- Partial source-backed coverage rows retained as accepted limitations: ${accepted.partial_source_backing || 0}`,
+    `- Generic actionability rows retained as accepted limitations: ${accepted.generic_actionability || 0}`,
+    `- Medium overclaim rows retained as accepted limitations: ${accepted.medium_overclaim || 0}`,
+    `- Weak historical format rows retained as accepted limitations: ${accepted.weak_format || 0}`,
+    '',
+    '### Unlisted reviewed archives',
+    '',
+    'These remain unlisted because they are absent from `data/newsletters.json`. This final trust report reviews their artifact quality but does not change public index visibility.',
+    '',
+    markdownList(report.unlisted_reviewed_archive_dates || []),
+    '',
+    '## Issue-level Normalizations',
+    '',
+    normalizations.length > 0
+      ? normalizations.map(item => `- ${item.note}`).join('\n')
+      : '- none',
+    '',
+    '## Material Rewrite Traceability',
+    '',
+    '| Date | Rewrite count | Diff artifacts |',
+    '| --- | ---: | --- |',
+    ...rewriteTraceability.map(item => [
+      item.date,
+      item.rewrite_count,
+      item.diff_artifacts.map(diffPath => `\`${diffPath}\``).join('<br>')
+    ].map(value => String(value).replace(/\|/g, '\\|')).join(' | ')).map(row => `| ${row} |`),
     '',
     '## Validation Status',
     '',
     `- validation errors: ${report.validation_error_count}`,
     `- validation warnings: ${report.validation_warning_count}`,
+    '',
+    '## Final Decision',
+    '',
+    report.final_decision?.can_close_issue
+      ? '#108 can be closed because no unresolved S0/S1 rows remain, all material rewrites have diff artifacts, pre-#185 provenance was not backfilled, and final validation passed.'
+      : '#108 must remain open because unresolved archive trust blockers remain.',
     '',
     '## Archive Entries',
     '',
@@ -623,8 +856,10 @@ module.exports = {
   PUBLIC_VISIBILITIES,
   auditHistoricalArchive,
   buildAuditReport,
+  buildInventoryFinalMetrics,
   buildCleanupReportMarkdown,
   collectHistoricalArchiveState,
+  parseInventoryTableRows,
   validateHistoricalArchive,
   writeAuditReports
 };
