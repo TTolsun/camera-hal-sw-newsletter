@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-20",
+  "generated_at": "2026-05-19T18:18:05.917Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 1,
+    "hit_count": 0,
+    "miss_count": 1,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
+        "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+        "content_hash": "47e7f31cb529b3dd872a3865e14893c72d4c5778602bd361481a4e7d2d2e260b"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
