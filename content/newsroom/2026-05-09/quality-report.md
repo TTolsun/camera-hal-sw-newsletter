@@ -13,7 +13,7 @@
 - Main article count: 3
 - Briefing count: 3
 - Structured camera article count: 2
-- Legacy regex camera article count: 3
+- Legacy regex camera article count: 2
 - Expanded-scope article count: 3
 - direct_aosp_camera count: 0
 - camera_driver_image_pipeline count: 1
@@ -45,12 +45,12 @@
 - hal_signal_hard_blocker_count: 0
 - hard_blocker_reason_code_counts: {}
 - hal_impact_axis_counts: {"driver_image_pipeline":1,"stream_buffer_metadata":1,"camerax_app_compatibility":1,"framework_hal_contract":1,"native_tooling_workflow":1}
-- actionability_level_counts: {"measurable_test":1,"owner_metric_log":1,"concrete_check":1}
-- effective_actionability_level_counts: {"measurable_test":1,"owner_metric_log":1,"concrete_check":1}
+- actionability_level_counts: {"owner_metric_log":2,"concrete_check":1}
+- effective_actionability_level_counts: {"owner_metric_log":2,"concrete_check":1}
 
 | # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | HAL Signal Capsule | hard_blocker_reason_codes |
 | ---: | --- | --- | --- | --- | --- | --- | --- |
-| 1 | libcamera v0.7.1 출시: SoftISP 및 파이프라인 처리량 개선 | strong_signal | measurable_test | measurable_test | driver_image_pipeline, stream_buffer_metadata | complete | none |
+| 1 | libcamera v0.7.1 출시: SoftISP 및 파이프라인 처리량 개선 | strong_signal | owner_metric_log | owner_metric_log | driver_image_pipeline, stream_buffer_metadata | complete | none |
 | 2 | CameraX 1.4.0-alpha07 출시: viewfinder 및 video 모듈 업데이트 | strong_signal | owner_metric_log | owner_metric_log | camerax_app_compatibility, framework_hal_contract | complete | none |
 | 3 | Glaze 7.2: native tooling serialization 관찰 | usable_signal | concrete_check | concrete_check | native_tooling_workflow | complete | none |
 
