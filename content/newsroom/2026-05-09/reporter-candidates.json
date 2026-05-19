@@ -192,7 +192,28 @@
         "image sensor",
         "ISP",
         "video capture pipeline"
-      ]
+      ],
+      "evidence_ids": [
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-1",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-2",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-3",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-4",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-5",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-6"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "primary_facts": [
+          "libcamera v0.7.1이 2026년 4월 28일에 출시되었습니다.",
+          "주요 변경 사항은 SoftISP debaying 및 이미지 파이프라인 처리량 개선입니다.",
+          "파이프라인 핸들러 카메라 지원이 추가되었습니다.",
+          "센서 모드 구성이 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -457,7 +478,7 @@
       "freshness_score": 3,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "CameraX 1.6.1 업데이트는 Camera HAL 구현에 대한 앱 호환성 및 요구 사항에 영향을 미칠 수 있습니다. 특히 camera-camera2 모듈의 변경 사항은 HAL 인터페이스 및 메타데이터 처리에 대한 새로운 요구 사항을 도입할 수 있습니다.",
+      "relevance_reason": "CameraX release notes are AndroidX Camera app/framework compatibility signals. Treat them as CameraX/Camera2 compatibility review input unless downstream device evidence shows a HAL impact.",
       "impact_areas": [
         "CameraX compatibility",
         "CTS / VTS / Camera ITS",
@@ -722,7 +743,7 @@
       "freshness_score": 3,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "CameraX 1.3.0-beta02 업데이트는 camera-viewfinder 및 camera-video 모듈에 대한 변경 사항을 포함합니다. 이는 HAL이 뷰파인더 및 비디오 스트림을 처리하는 방식, 특히 성능, 지연 시간 및 버퍼 관리에 영향을 미칠 수 있습니다.",
+      "relevance_reason": "CameraX release notes are AndroidX Camera app/framework compatibility signals. Treat them as CameraX/Camera2 compatibility review input unless downstream device evidence shows a HAL impact.",
       "impact_areas": [
         "CameraX compatibility",
         "stream configuration",
@@ -987,13 +1008,60 @@
       "freshness_score": 3,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "CameraX 1.4.0-alpha07 업데이트는 camera-viewfinder 및 camera-video 모듈에 대한 변경 사항을 포함합니다. 이는 HAL이 뷰파인더 및 비디오 스트림을 처리하는 방식, 특히 성능, 지연 시간 및 버퍼 관리에 영향을 미칠 수 있습니다.",
+      "relevance_reason": "CameraX release notes are AndroidX Camera app/framework compatibility signals. Treat them as CameraX/Camera2 compatibility review input unless downstream device evidence shows a HAL impact.",
       "impact_areas": [
         "CameraX compatibility",
         "stream configuration",
         "buffer lifecycle",
         "latency / frame drop"
-      ]
+      ],
+      "evidence_ids": [
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-1",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-2",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-3",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-4",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        ],
+        "primary_facts": [
+          "CameraX 1.4.0-alpha07이 2026년 5월 6일에 출시되었습니다.",
+          "`camera-viewfinder` 모듈이 1.4.0-alpha07로 업데이트되었습니다.",
+          "`camera-video` 모듈이 1.6.1로 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_extraction": {
+        "adapter_id": "android-developers-jetpack-release",
+        "extraction_quality": {
+          "used_fallback": false,
+          "main_article_allowed": true
+        },
+        "release": {
+          "sections": [
+            {
+              "heading": "CameraX release notes",
+              "items": [
+                {
+                  "text": "CameraX 1.4.0-alpha07 lists camera-viewfinder and camera-video artifact updates dated May 06, 2026.",
+                  "source_text": "CameraX 1.4.0-alpha07 lists camera-viewfinder and camera-video artifact updates dated May 06, 2026."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "derived_editorial_hints": {
+        "hal_boundary": "CameraX sits above Camera2 and is a framework adjacent signal unless downstream device evidence exists.",
+        "validation_targets": [
+          "CameraX/Camera2 compatibility matrix",
+          "Preview",
+          "Video Recording"
+        ]
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,

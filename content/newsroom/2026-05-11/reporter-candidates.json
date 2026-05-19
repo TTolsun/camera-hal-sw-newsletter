@@ -215,7 +215,26 @@
         "Camera Driver",
         "Image Processing",
         "Sensor Control"
-      ]
+      ],
+      "evidence_ids": [
+        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-1",
+        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-2",
+        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-3",
+        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-4",
+        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "primary_facts": [
+          "libcamera Release Announcements의 2026-04-28 항목입니다.",
+          "관련 컴포넌트: libcamera / V4L2 camera pipeline",
+          "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
+        ],
+        "linked_context": []
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -223,8 +242,8 @@
       "source_name": "Android Developers Latest Updates",
       "sourceUrl": "https://developer.android.com/latest-updates",
       "source_url": "https://developer.android.com/latest-updates",
-      "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "articleUrl": "https://developer.android.com/latest-updates",
+      "article_url": "https://developer.android.com/latest-updates",
       "source_id": "android-developers-latest-updates",
       "category": "android",
       "section": "Android / AOSP / Camera",
@@ -281,8 +300,8 @@
       "selection_exclusion_reason": "Eligible for main article selection.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "1.6.1",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "Android Developers Latest Updates",
+      "url": "https://developer.android.com/latest-updates",
       "publishedAt": "May 06, 2026",
       "published_date": "May 06, 2026",
       "summary": "CameraX 1.6.1이 출시되었습니다. camera-camera2, camera-core, camera-compose, camera-effects, camera-extensions, camera-lifecycle, camera-mlkit-vision, camera-view 모듈이 1.6.1 버전으로 업데이트되었으며, 일부 모듈은 1.7.0-alpha01로 업데이트되었습니다.",
@@ -506,13 +525,60 @@
       "freshness_score": 3,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "CameraX는 Android Camera API 위에 구축된 Jetpack 라이브러리입니다. CameraX의 업데이트는 Camera HAL의 기능 노출, 스트림 구성, 메타데이터 처리 방식에 영향을 미칠 수 있습니다. 특히 camera-camera2 모듈의 변경 사항은 HAL과의 직접적인 상호작용에 영향을 줄 수 있습니다.",
+      "relevance_reason": "CameraX release notes are AndroidX Camera app/framework compatibility signals. Treat them as CameraX/Camera2 compatibility review input unless downstream device evidence shows a HAL impact.",
       "impact_areas": [
         "CameraX Compatibility",
-        "Camera HAL Interface",
-        "Stream Configuration",
-        "Metadata Processing"
-      ]
+        "Android Camera Framework",
+        "App/Framework Compatibility"
+      ],
+      "evidence_ids": [
+        "hist:2026-05-11:camerax-1-6-1-android-camera:fact-1",
+        "hist:2026-05-11:camerax-1-6-1-android-camera:fact-2",
+        "hist:2026-05-11:camerax-1-6-1-android-camera:fact-3",
+        "hist:2026-05-11:camerax-1-6-1-android-camera:fact-4",
+        "hist:2026-05-11:camerax-1-6-1-android-camera:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://developer.android.com/latest-updates"
+        ],
+        "primary_facts": [
+          "Android Developers Latest Updates의 May 06, 2026 항목입니다.",
+          "관련 컴포넌트: CameraX / androidx.camera",
+          "CameraX release note는 `camera-camera2`, `camera-core`, `camera-view`, `camera-viewfinder`, `camera-video` 등 AndroidX Camera artifacts의 2026년 5월 6일 기준 버전 업데이트를 나열합니다."
+        ],
+        "linked_context": []
+      },
+      "source_extraction": {
+        "adapter_id": "android-developers-jetpack-release",
+        "extraction_quality": {
+          "used_fallback": false,
+          "main_article_allowed": true
+        },
+        "release": {
+          "sections": [
+            {
+              "heading": "CameraX release notes",
+              "items": [
+                {
+                  "text": "CameraX release notes list AndroidX Camera artifact version updates for May 06, 2026, including camera-camera2, camera-core, camera-view, camera-viewfinder, and camera-video rows.",
+                  "source_text": "CameraX release notes list AndroidX Camera artifact version updates for May 06, 2026, including camera-camera2, camera-core, camera-view, camera-viewfinder, and camera-video rows."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "derived_editorial_hints": {
+        "hal_boundary": "CameraX sits above Camera2 and is a framework adjacent signal unless downstream device evidence exists.",
+        "validation_targets": [
+          "CameraX dependency matrix",
+          "CameraX/Camera2 compatibility matrix",
+          "Preview",
+          "VideoCapture"
+        ]
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -797,12 +863,11 @@
       "freshness_score": 3,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "CameraX의 viewfinder 및 video 모듈 업데이트는 Camera HAL의 스트림 구성, 버퍼 관리, 비디오 녹화 파이프라인에 영향을 줄 수 있습니다. 특히 viewfinder의 변경은 프리뷰 스트림의 성능 및 안정성에 영향을 미칠 수 있습니다.",
+      "relevance_reason": "CameraX release notes are AndroidX Camera app/framework compatibility signals. Treat them as CameraX/Camera2 compatibility review input unless downstream device evidence shows a HAL impact.",
       "impact_areas": [
         "CameraX Compatibility",
-        "Stream Configuration",
-        "Buffer Management",
-        "Video Recording"
+        "Android Camera Framework",
+        "App/Framework Compatibility"
       ]
     },
     {
@@ -1088,13 +1153,59 @@
       "freshness_score": 3,
       "ai_required_slot_fit_score": 0,
       "cpp_fallback_value_score": 0,
-      "relevance_reason": "CameraX의 viewfinder 및 video 모듈 업데이트는 Camera HAL의 스트림 구성, 버퍼 관리, 비디오 녹화 파이프라인에 영향을 줄 수 있습니다. 특히 viewfinder의 변경은 프리뷰 스트림의 성능 및 안정성에 영향을 미칠 수 있습니다.",
+      "relevance_reason": "CameraX release notes are AndroidX Camera app/framework compatibility signals. Treat them as CameraX/Camera2 compatibility review input unless downstream device evidence shows a HAL impact.",
       "impact_areas": [
         "CameraX Compatibility",
-        "Stream Configuration",
-        "Buffer Management",
-        "Video Recording"
-      ]
+        "Android Camera Framework",
+        "App/Framework Compatibility"
+      ],
+      "evidence_ids": [
+        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-1",
+        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-2",
+        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-3",
+        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-4",
+        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        ],
+        "primary_facts": [
+          "2026년 5월 6일, CameraX 라이브러리 1.4.0-alpha07이 릴리스되었습니다.",
+          "viewfinder artifact가 1.4.0-alpha07 line으로 업데이트되었습니다.",
+          "video artifact가 1.7.0-alpha01 line으로 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_extraction": {
+        "adapter_id": "android-developers-jetpack-release",
+        "extraction_quality": {
+          "used_fallback": false,
+          "main_article_allowed": true
+        },
+        "release": {
+          "sections": [
+            {
+              "heading": "CameraX release notes",
+              "items": [
+                {
+                  "text": "CameraX 1.4.0-alpha07 and 1.7.0-alpha01 list camera-viewfinder and camera-video artifact updates dated May 06, 2026.",
+                  "source_text": "CameraX 1.4.0-alpha07 and 1.7.0-alpha01 list camera-viewfinder and camera-video artifact updates dated May 06, 2026."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "derived_editorial_hints": {
+        "hal_boundary": "CameraX sits above Camera2 and is a framework adjacent signal unless downstream device evidence exists.",
+        "validation_targets": [
+          "CameraX/Camera2 compatibility matrix",
+          "VideoCapture",
+          "ImageCapture"
+        ]
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
