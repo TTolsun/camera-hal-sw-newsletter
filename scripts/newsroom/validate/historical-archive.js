@@ -325,6 +325,37 @@ function validateRewriteDiffPath(root, relPath, sidecarDates, errors) {
   return parsed;
 }
 
+function materialRewriteDiffPaths(entry, date, errors) {
+  const paths = [];
+  if (entry.material_rewrite_diff) {
+    if (typeof entry.material_rewrite_diff !== 'string') {
+      errors.push(`Material rewrite ${date} material_rewrite_diff must be a string.`);
+    } else {
+      paths.push(entry.material_rewrite_diff);
+    }
+  }
+  if (entry.material_rewrite_diffs !== undefined) {
+    if (!Array.isArray(entry.material_rewrite_diffs)) {
+      errors.push(`Material rewrite ${date} material_rewrite_diffs must be an array.`);
+    } else {
+      for (const relPath of entry.material_rewrite_diffs) {
+        if (typeof relPath !== 'string' || !relPath.trim()) {
+          errors.push(`Material rewrite ${date} material_rewrite_diffs must contain non-empty string paths.`);
+        } else {
+          paths.push(relPath);
+        }
+      }
+      if (
+        typeof entry.material_rewrite_diff === 'string' &&
+        !entry.material_rewrite_diffs.includes(entry.material_rewrite_diff)
+      ) {
+        errors.push(`Material rewrite ${date} material_rewrite_diff must be included in material_rewrite_diffs.`);
+      }
+    }
+  }
+  return [...new Set(paths)];
+}
+
 function validateHistoricalArchive({ root = process.cwd(), state = null } = {}) {
   const archiveState = state || collectHistoricalArchiveState({ root });
   const errors = [];
@@ -403,10 +434,12 @@ function validateHistoricalArchive({ root = process.cwd(), state = null } = {}) 
       errors.push(`Sidecar entry ${date} has no matching public or newsroom artifact.`);
     }
     if (entry.rewrite_status === MATERIAL_REWRITE_STATUS) {
-      if (!entry.material_rewrite_diff) {
-        errors.push(`Material rewrite ${date} must declare material_rewrite_diff.`);
-      } else {
-        const diff = validateRewriteDiffPath(root, entry.material_rewrite_diff, new Set(archiveState.sidecarDates), errors);
+      const diffPaths = materialRewriteDiffPaths(entry, date, errors);
+      if (diffPaths.length === 0) {
+        errors.push(`Material rewrite ${date} must declare material_rewrite_diff or material_rewrite_diffs.`);
+      }
+      for (const relPath of diffPaths) {
+        const diff = validateRewriteDiffPath(root, relPath, new Set(archiveState.sidecarDates), errors);
         if (diff && diff.date !== date) {
           errors.push(`Material rewrite diff date ${diff.date} must match sidecar entry date ${date}.`);
         }
