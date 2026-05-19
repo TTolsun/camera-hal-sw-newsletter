@@ -2,7 +2,7 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-05-19",
-  "generated_at": "2026-05-18T16:59:59.777Z",
+  "generated_at": "2026-05-19T02:41:52.391Z",
   "status": "NEEDS_FIX",
   "input_completeness": "complete",
   "input_statuses": {
@@ -262,7 +262,28 @@
       "severity": "medium",
       "reason_code": "selection_shortage",
       "affected_sources": [],
+      "recommended_fix": "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
       "recommended_fix": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    },
+    {
+      "bucket": "direct_aosp_camera",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Collect at least 1 Primary Camera Stack candidate(s): direct_aosp_camera, camera_driver_image_pipeline, android_platform_camera_adjacent."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Collect enough eligible candidates to satisfy the Newsletter Policy article count range (3-5)."
     }
   ],
   "gate_boundary": {
