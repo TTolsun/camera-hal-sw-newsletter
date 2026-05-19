@@ -90,7 +90,12 @@
       "historical_cleanup_pending"
     ],
     "historical_cleanup_issue": "#108",
-    "public_visibility": "listed"
+    "public_visibility": "listed",
+    "rewrite_status": "material_rewrite",
+    "material_rewrite_diffs": [
+      "content/audit/historical-rewrite-diff/2026-05-11-camerax-1-4-0-alpha07-1-7-0-alpha01.md",
+      "content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md"
+    ]
   },
   {
     "date": "2026-05-10",
@@ -114,7 +119,11 @@
       "historical_cleanup_pending"
     ],
     "historical_cleanup_issue": "#108",
-    "public_visibility": "listed"
+    "public_visibility": "listed",
+    "rewrite_status": "material_rewrite",
+    "material_rewrite_diffs": [
+      "content/audit/historical-rewrite-diff/2026-05-09-camerax-1-4-0-alpha07-viewfinder-video.md"
+    ]
   },
   {
     "date": "2026-05-08",

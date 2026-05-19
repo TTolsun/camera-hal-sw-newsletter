@@ -319,7 +319,28 @@
       "primary_selected": true,
       "reserve_candidate": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-1",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-2",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-3",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-4",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-5",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-6"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "primary_facts": [
+          "libcamera v0.7.1이 2026년 4월 28일에 출시되었습니다.",
+          "주요 변경 사항은 SoftISP debaying 및 이미지 파이프라인 처리량 개선입니다.",
+          "파이프라인 핸들러 카메라 지원이 추가되었습니다.",
+          "센서 모드 구성이 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -1072,7 +1093,54 @@
       "primary_selected": true,
       "reserve_candidate": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-1",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-2",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-3",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-4",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        ],
+        "primary_facts": [
+          "CameraX 1.4.0-alpha07이 2026년 5월 6일에 출시되었습니다.",
+          "`camera-viewfinder` 모듈이 1.4.0-alpha07로 업데이트되었습니다.",
+          "`camera-video` 모듈이 1.6.1로 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_extraction": {
+        "adapter_id": "android-developers-jetpack-release",
+        "extraction_quality": {
+          "used_fallback": false,
+          "main_article_allowed": true
+        },
+        "release": {
+          "sections": [
+            {
+              "heading": "CameraX release notes",
+              "items": [
+                {
+                  "text": "CameraX 1.4.0-alpha07 lists camera-viewfinder and camera-video artifact updates dated May 06, 2026.",
+                  "source_text": "CameraX 1.4.0-alpha07 lists camera-viewfinder and camera-video artifact updates dated May 06, 2026."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "derived_editorial_hints": {
+        "hal_boundary": "CameraX sits above Camera2 and is a framework adjacent signal unless downstream device evidence exists.",
+        "validation_targets": [
+          "CameraX/Camera2 compatibility matrix",
+          "Preview",
+          "Video Recording"
+        ]
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -1412,7 +1480,28 @@
       "selection_stage": "deterministic-primary",
       "final_selected": true,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-1",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-2",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-3",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-4",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-5",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-6"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "primary_facts": [
+          "libcamera v0.7.1이 2026년 4월 28일에 출시되었습니다.",
+          "주요 변경 사항은 SoftISP debaying 및 이미지 파이프라인 처리량 개선입니다.",
+          "파이프라인 핸들러 카메라 지원이 추가되었습니다.",
+          "센서 모드 구성이 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -2165,7 +2254,54 @@
       "selection_stage": "deterministic-primary",
       "final_selected": true,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-1",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-2",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-3",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-4",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        ],
+        "primary_facts": [
+          "CameraX 1.4.0-alpha07이 2026년 5월 6일에 출시되었습니다.",
+          "`camera-viewfinder` 모듈이 1.4.0-alpha07로 업데이트되었습니다.",
+          "`camera-video` 모듈이 1.6.1로 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_extraction": {
+        "adapter_id": "android-developers-jetpack-release",
+        "extraction_quality": {
+          "used_fallback": false,
+          "main_article_allowed": true
+        },
+        "release": {
+          "sections": [
+            {
+              "heading": "CameraX release notes",
+              "items": [
+                {
+                  "text": "CameraX 1.4.0-alpha07 lists camera-viewfinder and camera-video artifact updates dated May 06, 2026.",
+                  "source_text": "CameraX 1.4.0-alpha07 lists camera-viewfinder and camera-video artifact updates dated May 06, 2026."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "derived_editorial_hints": {
+        "hal_boundary": "CameraX sits above Camera2 and is a framework adjacent signal unless downstream device evidence exists.",
+        "validation_targets": [
+          "CameraX/Camera2 compatibility matrix",
+          "Preview",
+          "Video Recording"
+        ]
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -2497,7 +2633,26 @@
       "selection_slot": "reserve",
       "primary_selected": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-1",
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-2",
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-3",
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-4",
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        ],
+        "primary_facts": [
+          "ISO C++ Blog의 Tue, 28 Apr 2026 22:25:57 +0000 항목입니다.",
+          "관련 컴포넌트: GCC",
+          "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
+        ],
+        "linked_context": []
+      },
+      "source_quality_required": false
     }
   ],
   "selected_articles": [
@@ -2671,7 +2826,28 @@
       "primary_selected": true,
       "reserve_candidate": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-1",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-2",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-3",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-4",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-5",
+        "hist:2026-05-09:libcamera-v0-7-1-softisp:fact-6"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        ],
+        "primary_facts": [
+          "libcamera v0.7.1이 2026년 4월 28일에 출시되었습니다.",
+          "주요 변경 사항은 SoftISP debaying 및 이미지 파이프라인 처리량 개선입니다.",
+          "파이프라인 핸들러 카메라 지원이 추가되었습니다.",
+          "센서 모드 구성이 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -3424,7 +3600,54 @@
       "primary_selected": true,
       "reserve_candidate": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-1",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-2",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-3",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-4",
+        "hist:2026-05-09:camerax-1-4-0-alpha07-viewfinder-video:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        ],
+        "primary_facts": [
+          "CameraX 1.4.0-alpha07이 2026년 5월 6일에 출시되었습니다.",
+          "`camera-viewfinder` 모듈이 1.4.0-alpha07로 업데이트되었습니다.",
+          "`camera-video` 모듈이 1.6.1로 업데이트되었습니다."
+        ],
+        "linked_context": []
+      },
+      "source_extraction": {
+        "adapter_id": "android-developers-jetpack-release",
+        "extraction_quality": {
+          "used_fallback": false,
+          "main_article_allowed": true
+        },
+        "release": {
+          "sections": [
+            {
+              "heading": "CameraX release notes",
+              "items": [
+                {
+                  "text": "CameraX 1.4.0-alpha07 lists camera-viewfinder and camera-video artifact updates dated May 06, 2026.",
+                  "source_text": "CameraX 1.4.0-alpha07 lists camera-viewfinder and camera-video artifact updates dated May 06, 2026."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "derived_editorial_hints": {
+        "hal_boundary": "CameraX sits above Camera2 and is a framework adjacent signal unless downstream device evidence exists.",
+        "validation_targets": [
+          "CameraX/Camera2 compatibility matrix",
+          "Preview",
+          "Video Recording"
+        ]
+      },
+      "source_quality_required": false
     },
     {
       "schema_version": 5,
@@ -3758,7 +3981,26 @@
       "selection_slot": "reserve",
       "primary_selected": false,
       "reporter_selected": false,
-      "final_exclusion_reasons": []
+      "final_exclusion_reasons": [],
+      "evidence_ids": [
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-1",
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-2",
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-3",
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-4",
+        "hist:2026-05-09:glaze-7-2-native-tooling-serialization:fact-5"
+      ],
+      "compact_evidence": {
+        "evidence_urls": [
+          "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        ],
+        "primary_facts": [
+          "ISO C++ Blog의 Tue, 28 Apr 2026 22:25:57 +0000 항목입니다.",
+          "관련 컴포넌트: GCC",
+          "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
+        ],
+        "linked_context": []
+      },
+      "source_quality_required": false
     }
   ],
   "demoted_candidates": [],
