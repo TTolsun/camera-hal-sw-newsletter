@@ -33,6 +33,11 @@ AI 코딩 에이전트는 Camera HAL 개발 워크플로우에 다음과 같은 
 - AI 에이전트가 Camera HAL의 `request/result metadata` 키 또는 `stream configuration` 관련 C++ 코드 스니펫을 얼마나 정확하게 생성하는지 평가하고, 생성된 코드의 빌드 성공률 및 런타임 동작을 확인합니다.
 - HAL 팀의 개발자 리뷰 시간을 측정하고, AI 에이전트의 도움을 받았을 때 코드 품질 또는 버그 발견율에 유의미한 변화가 있는지 2주 이내의 단기 PoC를 통해 간접적으로 평가합니다.
 
+### 확인할 점
+
+- Claude Code가 생성한 camera metadata / stream configuration 코드 제안은 실제 HAL branch에서 build/runtime check를 통과한 뒤에만 적용합니다.
+- AI agent 적용 범위는 code review 보조와 리팩토링 후보 탐색으로 제한하고, HAL behavior 변경은 별도 product requirement로 판단합니다.
+
 **팀 공유용 한 줄**
 
 Claude Code 2.1.128 업데이트는 Camera HAL 코드 작성, 디버깅, 리팩토링, 테스트 자동화에 쓰는 AI 코딩 에이전트 워크플로우 점검 신호입니다.
@@ -70,6 +75,11 @@ Android 보안 게시판은 매월 발행되며, Android 기기의 보안을 강
 - HAL 보안 담당자는 2026년 5월 Android 보안 게시판의 'Kernel Components', 'Media Framework', 'Camera' 섹션을 우선적으로 검토하여 HAL 관련 CVE를 식별하고, 관련 패치 여부를 2026년 5월 10일까지 보고합니다.
 - 식별된 HAL 관련 CVE에 대해 영향을 받는 기기 모델 및 HAL 버전을 파악하고, 2026년 5월 17일까지 패치 적용 계획을 수립합니다.
 - 패치 적용 후, 해당 CVE와 관련된 보안 테스트 케이스를 CTS/VTS 및 Camera ITS에 추가하거나 기존 테스트를 강화하여 2026년 5월 24일까지 검증을 완료합니다.
+
+### 확인할 점
+
+- 2026-05 Android Security Bulletin에서 제품 kernel/media/framework 항목과 camera-related CVE 여부를 확인합니다.
+- 패치 적용 뒤 CTS/VTS/Camera ITS smoke run으로 camera path regression 여부를 기록합니다.
 
 **팀 공유용 한 줄**
 
@@ -110,6 +120,11 @@ AI 모델의 추론은 온디바이스에서 직접 실행되거나 클라우드
 - 해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 검토하고, HAL 변경 필요 여부는 source-backed product requirement로 별도 판단합니다. (Owner: 성능 엔지니어)
 - AI 결과를 camera metadata로 다시 주입하는 시나리오는 source-backed requirement가 확인되기 전까지 가정하지 않고, 후속 검토 질문으로만 기록합니다. (Owner: HAL 개발팀)
 
+### 확인할 점
+
+- 제품 계획에 Firebase AI Logic 기반 camera-frame analysis path가 있는지 앱/프레임워크 담당자와 먼저 확인합니다.
+- 해당 경로가 없으면 HAL scheduling, metadata contract, pipeline behavior 변경으로 기록하지 않습니다.
+
 **팀 공유용 한 줄**
 
 Firebase AI Logic 하이브리드 추론은 Camera HAL 변경 신호가 아니라, 카메라 기능이 AI-analysis path를 통합할 때 input/data-path boundary를 확인할 adjacent product-integration risk입니다.
@@ -120,7 +135,7 @@ Firebase AI Logic 하이브리드 추론은 Camera HAL 변경 신호가 아니�
 
 ---
 
-## 5. C++ / Toolchain Fallback
+## 5. C++ / Toolchain
 
 ### C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호
 
@@ -144,6 +159,11 @@ Camera HAL은 성능에 민감하고 안정성이 중요한 시스템이므로, 
 
 - 2주 내에 HAL 코드베이스에서 `assert()` 사용 현황을 분석하고, 특히 `request/result metadata` 처리, `stream configuration` 유효성 검사, `buffer lifecycle` 관리와 관련된 `assert` 구문에 대한 개선 가능성을 조사합니다.
 - C++26 표준 채택 및 Clang/LLVM 툴체인 업데이트 계획을 모니터링하고, 새로운 `assert()` 기능이 안정화되면 `native Android runtime` 환경에서 디버깅 효율성 향상 여부를 측정할 PoC를 계획합니다.
+
+### 확인할 점
+
+- 현재 HAL 코드에서 `assert()` usage가 metadata / stream / buffer lifecycle debugging에 실제 도움이 되는 지점을 추립니다.
+- C++26 assert 기능은 compiler/toolchain support가 확인된 뒤 host utility 또는 debug build PoC로만 검토합니다.
 
 **팀 공유용 한 줄**
 

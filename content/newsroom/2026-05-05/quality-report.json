@@ -1,12 +1,23 @@
 {
   "schema_version": 1,
   "date": "2026-05-05",
-  "score": 100,
+  "score": 98,
   "max_score": 100,
   "threshold": 85,
   "status": "PASS",
-  "summary": "Quality score 100, threshold 85, max score 100. Editor review is ready.",
-  "deductions": [],
+  "summary": "Quality score 98, threshold 85, max score 100. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "field-hygiene",
+      "points": 2,
+      "reason": "background and what_changed overlap, but token count is below hard-fail threshold.",
+      "location": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "blocking": false,
+      "severity": "warning",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
   "article_results": [
     {
       "index": 1,
@@ -20,6 +31,19 @@
           "url": "https://code.claude.com/docs/en/changelog"
         }
       ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
       "scope_count": {
         "index": 1,
         "headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
@@ -31,6 +55,9 @@
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
         "evidence_origin": "candidate_metadata_recovered",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -38,9 +65,16 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count.",
-        "exclusion_reason_if_not_counted": "Fallback bucket is reviewable support material but not a primary camera stack topic."
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
+      "impact_claim_level": "tooling_supporting",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "hard_fail_reasons": [],
       "soft_deductions": []
     },
@@ -56,6 +90,19 @@
           "url": "https://source.android.com/docs/security/bulletin/asb-overview"
         }
       ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
       "scope_count": {
         "index": 2,
         "headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
@@ -67,6 +114,9 @@
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "android_framework_adjacent",
         "evidence_origin": "candidate_metadata_recovered",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -77,12 +127,26 @@
         "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       },
+      "impact_claim_level": "android_framework_adjacent",
+      "hal_impact_axes": [
+        "security_vendor_component",
+        "cts_vts_its_cdd",
+        "framework_hal_contract"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "hard_fail_reasons": [],
-      "soft_deductions": []
+      "soft_deductions": [
+        {
+          "category": "field-hygiene",
+          "points": 2,
+          "reason": "background and what_changed overlap, but token count is below hard-fail threshold."
+        }
+      ]
     },
     {
       "index": 3,
-      "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향",
+      "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
       "category": "Android Camera / Platform API",
       "status": "PASS",
       "repair_action": "preserve",
@@ -92,9 +156,22 @@
           "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
         }
       ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
       "scope_count": {
         "index": 3,
-        "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향",
+        "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
         "source_candidate_url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
         "source_candidate_hash": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
         "relevance_bucket": "soc_platform_signal",
@@ -103,6 +180,9 @@
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": true,
         "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "app_api_or_framework_adjacent",
         "evidence_origin": "candidate_metadata_recovered",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -110,9 +190,17 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "soc_platform_signal counts toward fallback_relevance_count, not direct camera count.",
-        "exclusion_reason_if_not_counted": "Fallback bucket is reviewable support material but not a primary camera stack topic."
+        "count_reason": "soc_platform_signal counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
+      "impact_claim_level": "app_api_or_framework_adjacent",
+      "hal_impact_axes": [
+        "soc_resource_contention",
+        "camerax_app_compatibility",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "hard_fail_reasons": [],
       "soft_deductions": []
     },
@@ -128,6 +216,19 @@
           "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
         }
       ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
       "scope_count": {
         "index": 4,
         "headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
@@ -139,6 +240,9 @@
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
         "evidence_origin": "candidate_metadata_recovered",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -146,11 +250,783 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count.",
-        "exclusion_reason_if_not_counted": "Fallback bucket is reviewable support material but not a primary camera stack topic."
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
+      "impact_claim_level": "tooling_supporting",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "hard_fail_reasons": [],
       "soft_deductions": []
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 17,
+    "total_claims": 17,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 4,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "릴리스 날짜: 2026년 5월 4일",
+      "evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://code.claude.com/docs/en/changelog"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "버전/릴리스: Claude Code 2.1.128",
+      "evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://code.claude.com/docs/en/changelog"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "API/구성 요소: Claude Code / AI coding agent",
+      "evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://code.claude.com/docs/en/changelog"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "동작 변경: 새로운 기능 및 개선 사항이 포함된 Claude Code 2.1.128 버전이 출시되었습니다. 플러그인 아카이브(.zip) 지원 및 명령어 개선이 포함됩니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://code.claude.com/docs/en/changelog"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-5",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "Claude Code Changelog에서 2026년 5월 4일자 2.1.128 버전 출시 및 주요 개선 사항(플러그인 아카이브 지원 등)을 확인했습니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://code.claude.com/docs/en/changelog"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "claim_id": "2026-5-android-hal-fact-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "cts_vts_its_cdd",
+      "overclaim_risk": "low",
+      "text": "2026년 5월 Android 보안 게시판이 2026년 5월 1일에 발행되었습니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-2026-5-android-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-2026-5-android-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-2026-5-android-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-2026-5-android-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://source.android.com/docs/security/bulletin/asb-overview"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "claim_id": "2026-5-android-hal-fact-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "cts_vts_its_cdd",
+      "overclaim_risk": "low",
+      "text": "게시판은 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-2026-5-android-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-2026-5-android-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-2026-5-android-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-2026-5-android-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://source.android.com/docs/security/bulletin/asb-overview"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "claim_id": "2026-5-android-hal-fact-3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "cts_vts_its_cdd",
+      "overclaim_risk": "low",
+      "text": "2026년 5월 1일자 Android Security Bulletin에 따르면, 2026년 5월 Android 보안 게시판이 발행되었으며, 이는 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다. 구체적인 Camera HAL 관련 취약점은 게시판 내용을 통해 확인해야 합니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-2026-5-android-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-2026-5-android-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-2026-5-android-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-2026-5-android-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://source.android.com/docs/security/bulletin/asb-overview"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+      "claim_id": "firebase-ai-logic-camera-hal-npu-gpu-fact-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "soc_resource_contention",
+      "overclaim_risk": "medium",
+      "text": "published date: 2026-04-17.",
+      "evidence_ids": [
+        "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary",
+          "resolved_evidence_id": "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+      "claim_id": "firebase-ai-logic-camera-hal-npu-gpu-fact-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "soc_resource_contention",
+      "overclaim_risk": "medium",
+      "text": "API/component: Firebase AI Logic API.",
+      "evidence_ids": [
+        "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary",
+          "resolved_evidence_id": "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+      "claim_id": "firebase-ai-logic-camera-hal-npu-gpu-fact-3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "soc_resource_contention",
+      "overclaim_risk": "medium",
+      "text": "behavior change: Android 앱이 온디바이스 추론과 클라우드 추론 경로를 조합하고 새로운 Gemini 모델을 사용할 수 있습니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary",
+          "resolved_evidence_id": "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+      "claim_id": "firebase-ai-logic-camera-hal-npu-gpu-fact-4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "soc_resource_contention",
+      "overclaim_risk": "medium",
+      "text": "공식 Android Developers Blog의 2026-04-17 게시물은 Firebase AI Logic API, 하이브리드 추론, 새로운 Gemini 모델 지원을 명시합니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary",
+          "resolved_evidence_id": "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "claim_id": "c-26-assert-camera-hal-fact-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "Release/version: C++26 (예정)",
+      "evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "claim_id": "c-26-assert-camera-hal-fact-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "Release date: 2026년 5월 (제안 발표)",
+      "evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "claim_id": "c-26-assert-camera-hal-fact-3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "API/component: `assert()` 매크로",
+      "evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "claim_id": "c-26-assert-camera-hal-fact-4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "Behavior change: `assert()` 매크로가 실패 시 더 많은 컨텍스트 정보(예: 변수 값, 표현식)를 자동으로 캡처하고 출력할 수 있도록 개선됩니다. 또한, `std::string_view`와 같은 타입의 인수를 지원하여 더 유연한 사용이 가능해집니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "claim_id": "c-26-assert-camera-hal-fact-5",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "2026년 5월 Sandor Dargo의 블로그 게시물에서 C++26 표준에 제안된 `assert()` 매크로의 개선 사항에 대해 설명하고 있습니다. 이 개선은 `assert()`가 실패 시 더 상세한 진단 정보를 제공하고, 다양한 타입의 인수를 처리할 수 있도록 하는 것을 목표로 합니다.",
+      "evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "resolved_evidence_ids": [
+        "historical-2026-05-05-c-26-assert-camera-hal-primary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "resolved_evidence_id": "historical-2026-05-05-c-26-assert-camera-hal-primary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 4,
+    "strong_signal_count": 3,
+    "usable_signal_count": 1,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 4,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 4,
+    "main_articles_with_concrete_action": 4,
+    "fallback_main_article_count": 3,
+    "soc_platform_signal_count": 1,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "native_tooling_workflow": 2,
+      "stream_buffer_metadata": 3,
+      "security_vendor_component": 1,
+      "cts_vts_its_cdd": 1,
+      "framework_hal_contract": 1,
+      "soc_resource_contention": 1,
+      "camerax_app_compatibility": 1
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 4
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 4
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 3,
+      "usable_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+      "url": "https://code.claude.com/docs/en/changelog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "native_tooling_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "fallback_guard_notes": [
+        "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "hal_impact_axes": [
+        "security_vendor_component",
+        "cts_vts_its_cdd",
+        "framework_hal_contract"
+      ],
+      "reader_owners": [
+        "security_owner",
+        "camera_test_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+      "fallback_guard_notes": [
+        "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+      "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "relevance_bucket": "soc_platform_signal",
+      "hal_impact_axes": [
+        "soc_resource_contention",
+        "camerax_app_compatibility",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "soc_platform_owner",
+        "camera_framework_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Camera frame analysis paths can create adjacent app/framework integration checks for stream, buffer, metadata, and SoC resource review only when product plans use them.",
+      "fallback_guard_notes": [
+        "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "Camera frame analysis paths can create adjacent app/framework integration checks for stream, buffer, metadata, and SoC resource review only when product plans use them.",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+      "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "native_tooling_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "fallback_guard_notes": [
+        "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
     }
   ],
   "metrics": {
@@ -166,6 +1042,8 @@
     "cpp_ai_tooling_fallback_count": 2,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_count": 1,
+    "supporting_main_article_count": 3,
+    "forbidden_main_article_count": 0,
     "fallback_relevance_count": 3,
     "publishable_scope_count": 4,
     "composition_mode": "FALLBACK_COMPOSITION",
@@ -181,6 +1059,9 @@
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
         "evidence_origin": "candidate_metadata_recovered",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -188,8 +1069,8 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count.",
-        "exclusion_reason_if_not_counted": "Fallback bucket is reviewable support material but not a primary camera stack topic."
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
       {
         "index": 2,
@@ -202,6 +1083,9 @@
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "android_framework_adjacent",
         "evidence_origin": "candidate_metadata_recovered",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -214,7 +1098,7 @@
       },
       {
         "index": 3,
-        "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향",
+        "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
         "source_candidate_url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
         "source_candidate_hash": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
         "relevance_bucket": "soc_platform_signal",
@@ -223,6 +1107,9 @@
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": true,
         "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "app_api_or_framework_adjacent",
         "evidence_origin": "candidate_metadata_recovered",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -230,8 +1117,8 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "soc_platform_signal counts toward fallback_relevance_count, not direct camera count.",
-        "exclusion_reason_if_not_counted": "Fallback bucket is reviewable support material but not a primary camera stack topic."
+        "count_reason": "soc_platform_signal counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
       {
         "index": 4,
@@ -244,6 +1131,9 @@
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
         "evidence_origin": "candidate_metadata_recovered",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -251,8 +1141,8 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback counts toward fallback_relevance_count, not direct camera count.",
-        "exclusion_reason_if_not_counted": "Fallback bucket is reviewable support material but not a primary camera stack topic."
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       }
     ],
     "relevance_bucket_counts": {
@@ -274,13 +1164,275 @@
     "blocking_deduction_count": 0,
     "blocking_deduction_categories": [],
     "hard_fail_count": 0,
-    "soft_deduction_count": 0,
+    "soft_deduction_count": 1,
     "article_gate_counts": {
       "PASS": 4,
       "DEMOTE": 0,
       "FAIL": 0
     },
-    "top_deduction_categories": [],
+    "article_section_contract": {
+      "complete_count": 4,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {
+        "do_not_claim": 4
+      },
+      "limitation_visibility_counts": {
+        "guardrail-only": 4
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 17,
+      "total_claims": 17,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 4,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 4,
+      "strong_signal_count": 3,
+      "usable_signal_count": 1,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 4,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 4,
+      "main_articles_with_concrete_action": 4,
+      "fallback_main_article_count": 3,
+      "soc_platform_signal_count": 1,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "native_tooling_workflow": 2,
+        "stream_buffer_metadata": 3,
+        "security_vendor_component": 1,
+        "cts_vts_its_cdd": 1,
+        "framework_hal_contract": 1,
+        "soc_resource_contention": 1,
+        "camerax_app_compatibility": 1
+      },
+      "actionability_level_counts": {
+        "owner_metric_log": 4
+      },
+      "effective_actionability_level_counts": {
+        "owner_metric_log": 4
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 3,
+        "usable_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "Claude Code 2.1.128 출시: agent-assisted Camera HAL 개발 워크플로우 영향",
+        "url": "https://code.claude.com/docs/en/changelog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "native_tooling_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+        "fallback_guard_notes": [
+          "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        ],
+        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "2026년 5월 Android 보안 게시판 발행: HAL 취약점 점검 필수",
+        "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "hal_impact_axes": [
+          "security_vendor_component",
+          "cts_vts_its_cdd",
+          "framework_hal_contract"
+        ],
+        "reader_owners": [
+          "security_owner",
+          "camera_test_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+        "fallback_guard_notes": [
+          "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+        "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+        "relevance_bucket": "soc_platform_signal",
+        "hal_impact_axes": [
+          "soc_resource_contention",
+          "camerax_app_compatibility",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "soc_platform_owner",
+          "camera_framework_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Camera frame analysis paths can create adjacent app/framework integration checks for stream, buffer, metadata, and SoC resource review only when product plans use them.",
+        "fallback_guard_notes": [
+          "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        ],
+        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "Camera frame analysis paths can create adjacent app/framework integration checks for stream, buffer, metadata, and SoC resource review only when product plans use them.",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "C++26 assert() 개선: 네이티브 Camera HAL 코드 안정성 디버깅 신호",
+        "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "native_tooling_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+        "fallback_guard_notes": [
+          "Keep historical cleanup framing bounded to source-backed adjacent Camera HAL relevance.",
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        ],
+        "soc_signal_type": "",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "field-hygiene",
+        "count": 1
+      }
+    ],
     "candidate_exclusion_summary": []
   }
 }

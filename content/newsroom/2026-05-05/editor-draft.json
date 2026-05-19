@@ -1,9 +1,9 @@
 {
   "date": "2026-05-05",
   "title": "Camera HAL SW 뉴스레터 - 2026-05-05",
-  "summary": "이번 주 뉴스레터에서는 Android의 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트 업데이트, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 보안 취약점 관리에 직접적인 점검 항목을 제공합니다.",
+  "summary": "이번 주 뉴스레터에서는 Claude Code 업데이트, Android 보안 게시판, Firebase AI Logic 하이브리드 추론, C++26 assert() 개선을 Camera HAL 팀 관점에서 점검합니다. Firebase 항목은 제품이 camera-frame analysis path를 실제로 통합할 때 확인할 adjacent integration risk로 제한합니다.",
   "briefing": [
-    "Android에서 하이브리드 AI 추론 및 새로운 Gemini 모델 지원이 추가되어, 카메라 HAL은 AI 모델을 위한 효율적인 이미지 데이터 경로 및 NPU/GPU/ISP 활용을 검토해야 합니다.",
+    "Android의 하이브리드 AI 추론 소식은 제품이 camera-frame analysis path를 실제로 통합할 때만 camera input 요구와 SoC 리소스 예산을 검토하는 adjacent signal로 다룹니다.",
     "C++26의 assert() 매크로 개선은 HAL 코드의 디버깅 효율성을 높일 잠재력이 있으며, 기존 assert() 사용 패턴을 점검하고 개선된 기능을 활용할 방안을 모색해야 합니다.",
     "2026년 5월 Android 보안 게시판이 발행되었으므로, HAL 관련 취약점이 있는지 즉시 확인하고 필요한 보안 패치를 적용해야 합니다."
   ],
@@ -112,7 +112,125 @@
       "counts_as_soc_topic": false,
       "counts_as_fallback_topic": true,
       "evidence_origin": "candidate_metadata_recovered",
-      "source_hint": "Claude Code release note with AI coding agent workflow relevance for native Camera HAL development."
+      "source_hint": "Claude Code release note with AI coding agent workflow relevance for native Camera HAL development.",
+      "article_sections": {
+        "verified_facts": [
+          "릴리스 날짜: 2026년 5월 4일",
+          "버전/릴리스: Claude Code 2.1.128",
+          "API/구성 요소: Claude Code / AI coding agent",
+          "동작 변경: 새로운 기능 및 개선 사항이 포함된 Claude Code 2.1.128 버전이 출시되었습니다. 플러그인 아카이브(.zip) 지원 및 명령어 개선이 포함됩니다."
+        ],
+        "background_context": "AI 코딩 에이전트는 개발자가 코드 작성, 디버깅, 테스트, 문서화 등 다양한 개발 작업을 자동화하고 효율화하도록 돕는 도구입니다. 이러한 에이전트의 발전은 개발 워크플로우를 혁신하고 생산성을 크게 향상시킬 잠재력을 가지고 있습니다.",
+        "hal_driver_impact": "AI 코딩 에이전트는 Camera HAL 개발 워크플로우에 다음과 같은 방식으로 통합될 수 있습니다. 첫째, 특정 카메라 메타데이터 키 또는 스트림 구성에 대한 C++ 코드 스니펫을 생성하여 반복적인 코딩 작업을 줄일 수 있습니다. 둘째, 복잡한 버퍼 수명 주기 관리 또는 동시성 문제에서 잠재적인 버그 패턴을 식별하고 수정 제안을 제공할 수 있습니다. 셋째, CTS/VTS/Camera ITS 실패 로그를 분석하여 HAL의 특정 영역에서 발생한 문제를 진단하는 데 도움을 줄 수 있습니다. 플러그인 아카이브 지원은 HAL 팀이 내부 도구 및 지식을 에이전트에 통합하는 유연성을 제공합니다.",
+        "action_items": [
+          "2주 이내에 Claude Code 2.1.128의 새로운 플러그인 기능을 활용하여 Camera HAL의 특정 코드베이스(예: `camera3_device.cpp` 또는 `vendor_camera_hal.cpp`)에 대한 코드 리뷰 또는 리팩토링 제안을 생성하는 실험을 수행합니다.",
+          "AI 에이전트가 Camera HAL의 `request/result metadata` 키 또는 `stream configuration` 관련 C++ 코드 스니펫을 얼마나 정확하게 생성하는지 평가하고, 생성된 코드의 빌드 성공률 및 런타임 동작을 확인합니다.",
+          "HAL 팀의 개발자 리뷰 시간을 측정하고, AI 에이전트의 도움을 받았을 때 코드 품질 또는 버그 발견율에 유의미한 변화가 있는지 2주 이내의 단기 PoC를 통해 간접적으로 평가합니다."
+        ],
+        "team_share_points": "Claude Code 2.1.128 업데이트는 Camera HAL 코드 작성, 디버깅, 리팩토링, 테스트 자동화에 쓰는 AI 코딩 에이전트 워크플로우 점검 신호입니다.",
+        "do_not_claim": [
+          "Do not convert this historical cleanup metadata into new direct Camera HAL runtime claims without source-backed product requirements."
+        ]
+      },
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "native_tooling_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "signal_quality_status": "strong_signal",
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "do_not_overstate": [
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+      ],
+      "hal_signal_capsule": {
+        "why_now": "Claude Code Changelog에서 2026년 5월 4일자 2.1.128 버전 출시 및 주요 개선 사항(플러그인 아카이브 지원 등)을 확인했습니다.",
+        "reader_owners": [
+          "native_tooling_owner",
+          "camera_hal_owner"
+        ],
+        "check_within_2_weeks": "2주 이내에 Claude Code 2.1.128의 새로운 플러그인 기능을 활용하여 Camera HAL의 특정 코드베이스(예: `camera3_device.cpp` 또는 `vendor_camera_hal.cpp`)에 대한 코드 리뷰 또는 리팩토링 제안을 생성하는 실험을 수행합니다.",
+        "impact_axes": [
+          "native_tooling_workflow",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-1",
+          "text": "릴리스 날짜: 2026년 5월 4일",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://code.claude.com/docs/en/changelog"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-2",
+          "text": "버전/릴리스: Claude Code 2.1.128",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://code.claude.com/docs/en/changelog"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-3",
+          "text": "API/구성 요소: Claude Code / AI coding agent",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://code.claude.com/docs/en/changelog"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-4",
+          "text": "동작 변경: 새로운 기능 및 개선 사항이 포함된 Claude Code 2.1.128 버전이 출시되었습니다. 플러그인 아카이브(.zip) 지원 및 명령어 개선이 포함됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://code.claude.com/docs/en/changelog"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claude-code-2-1-128-agent-assisted-camera-hal-fact-5",
+          "text": "Claude Code Changelog에서 2026년 5월 4일자 2.1.128 버전 출시 및 주요 개선 사항(플러그인 아카이브 지원 등)을 확인했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-claude-code-2-1-128-agent-assisted-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://code.claude.com/docs/en/changelog"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        }
+      ]
     },
     {
       "category": "Android Camera / Platform API",
@@ -200,11 +318,105 @@
       "counts_as_soc_topic": false,
       "counts_as_fallback_topic": false,
       "evidence_origin": "candidate_metadata_recovered",
-      "source_hint": "Android Security Bulletin is Android platform-adjacent security evidence requiring HAL impact review."
+      "source_hint": "Android Security Bulletin is Android platform-adjacent security evidence requiring HAL impact review.",
+      "article_sections": {
+        "verified_facts": [
+          "2026년 5월 Android 보안 게시판이 2026년 5월 1일에 발행되었습니다.",
+          "게시판은 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다."
+        ],
+        "background_context": "Android 보안 게시판은 매월 발행되며, Android 기기의 보안을 강화하기 위한 패치와 권고 사항을 제공합니다. 이는 커널, 프레임워크, 라이브러리, 미디어 구성 요소 등 다양한 시스템 영역의 취약점을 다룹니다. Camera HAL은 Android 시스템의 중요한 구성 요소이므로, 보안 게시판에 언급된 취약점은 HAL 구현에 직접적인 영향을 미칠 수 있습니다.",
+        "hal_driver_impact": "이번 보안 게시판은 Camera HAL 팀이 HAL 구현의 잠재적 취약점을 검토하고 필요한 보안 패치를 적용해야 함을 의미합니다. 특히, 카메라 드라이버, 이미지 처리 파이프라인, 버퍼 관리, metadata 처리와 관련된 취약점이 있는지 주의 깊게 살펴봐야 합니다. 이러한 취약점은 카메라 앱의 비정상적인 동작, 데이터 유출 또는 서비스 거부 공격으로 이어질 수 있습니다. CTS/VTS 및 Camera ITS 테스트를 통해 패치 적용 후에도 기능적 회귀가 없는지 확인해야 합니다.",
+        "action_items": [
+          "HAL 보안 담당자는 2026년 5월 Android 보안 게시판의 'Kernel Components', 'Media Framework', 'Camera' 섹션을 우선적으로 검토하여 HAL 관련 CVE를 식별하고, 관련 패치 여부를 2026년 5월 10일까지 보고합니다.",
+          "식별된 HAL 관련 CVE에 대해 영향을 받는 기기 모델 및 HAL 버전을 파악하고, 2026년 5월 17일까지 패치 적용 계획을 수립합니다.",
+          "패치 적용 후, 해당 CVE와 관련된 보안 테스트 케이스를 CTS/VTS 및 Camera ITS에 추가하거나 기존 테스트를 강화하여 2026년 5월 24일까지 검증을 완료합니다."
+        ],
+        "team_share_points": "2026년 5월 Android 보안 게시판이 발행되었습니다. HAL 팀은 게시판을 검토하여 카메라 관련 취약점을 식별하고, 신속하게 패치를 적용하며, 회귀 테스트를 통해 안정성을 확보해야 합니다.",
+        "do_not_claim": [
+          "Do not convert this historical cleanup metadata into new direct Camera HAL runtime claims without source-backed product requirements."
+        ]
+      },
+      "hal_impact_axes": [
+        "security_vendor_component",
+        "cts_vts_its_cdd",
+        "framework_hal_contract"
+      ],
+      "reader_owners": [
+        "security_owner",
+        "camera_test_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "signal_quality_status": "strong_signal",
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+      "camera_pipeline_link": "Android platform security bulletins can affect vendor camera components and require CTS/VTS/Camera ITS smoke validation.",
+      "do_not_overstate": [
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+      ],
+      "hal_signal_capsule": {
+        "why_now": "2026년 5월 1일자 Android Security Bulletin에 따르면, 2026년 5월 Android 보안 게시판이 발행되었으며, 이는 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다. 구체적인 Camera HAL 관련 취약점은 게시판 내용을 통해 확인해야 합니다.",
+        "reader_owners": [
+          "security_owner",
+          "camera_test_owner",
+          "camera_hal_owner"
+        ],
+        "check_within_2_weeks": "HAL 보안 담당자는 2026년 5월 Android 보안 게시판의 'Kernel Components', 'Media Framework', 'Camera' 섹션을 우선적으로 검토하여 HAL 관련 CVE를 식별하고, 관련 패치 여부를 2026년 5월 10일까지 보고합니다.",
+        "impact_axes": [
+          "security_vendor_component",
+          "cts_vts_its_cdd",
+          "framework_hal_contract"
+        ],
+        "do_not_overstate": [
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "2026-5-android-hal-fact-1",
+          "text": "2026년 5월 Android 보안 게시판이 2026년 5월 1일에 발행되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-2026-5-android-hal-primary"
+          ],
+          "source_urls": [
+            "https://source.android.com/docs/security/bulletin/asb-overview"
+          ],
+          "impact_level": "cts_vts_its_cdd",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "2026-5-android-hal-fact-2",
+          "text": "게시판은 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-2026-5-android-hal-primary"
+          ],
+          "source_urls": [
+            "https://source.android.com/docs/security/bulletin/asb-overview"
+          ],
+          "impact_level": "cts_vts_its_cdd",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "2026-5-android-hal-fact-3",
+          "text": "2026년 5월 1일자 Android Security Bulletin에 따르면, 2026년 5월 Android 보안 게시판이 발행되었으며, 이는 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다. 구체적인 Camera HAL 관련 취약점은 게시판 내용을 통해 확인해야 합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-2026-5-android-hal-primary"
+          ],
+          "source_urls": [
+            "https://source.android.com/docs/security/bulletin/asb-overview"
+          ],
+          "impact_level": "cts_vts_its_cdd",
+          "overclaim_risk": "low"
+        }
+      ]
     },
     {
       "category": "Android Camera / Platform API",
-      "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 입력 경로와 NPU/GPU 스케줄링 영향",
+      "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
       "what_changed": "2026-04-17 Android Developers Blog는 Firebase AI Logic API에 하이브리드 추론과 새로운 Gemini 모델 지원을 추가한다고 발표했습니다.",
       "confirmed_facts": [
         "published date: 2026-04-17.",
@@ -224,12 +436,12 @@
         "API/component: Firebase AI Logic API and Gemini models."
       ],
       "background": "AI 모델의 추론은 온디바이스에서 직접 실행되거나 클라우드 서버에서 실행될 수 있습니다. 온디바이스 추론은 낮은 지연 시간과 개인 정보 보호 이점을 제공하지만, 기기의 컴퓨팅 리소스에 제약이 있습니다. 클라우드 추론은 더 강력한 컴퓨팅 성능을 제공하지만, 네트워크 지연과 데이터 전송 비용이 발생합니다. 하이브리드 추론은 이 두 가지 접근 방식의 장점을 결합하여, 작업의 복잡성과 리소스 요구 사항에 따라 최적의 추론 위치를 동적으로 선택하는 방식입니다.",
-      "why_it_matters": "카메라 HAL은 AI 모델을 위한 핵심적인 이미지 데이터를 제공하는 역할을 합니다. 하이브리드 추론 및 새로운 Gemini 모델의 도입은 카메라 프레임 처리 방식, NPU/GPU/ISP 활용 전략, 그리고 전체적인 지연 시간 및 전력 소비에 직접적인 영향을 미칠 수 있습니다. HAL은 AI 워크로드에 최적화된 스트림 구성을 제공하고, 효율적인 버퍼 관리를 통해 AI 추론 파이프라인의 성능을 극대화해야 합니다.",
-      "camera_hal_perspective": "새로운 Firebase AI Logic API와 Gemini 모델은 카메라 HAL에 여러 가지 영향을 미칠 수 있습니다. 첫째, AI 추론을 위한 카메라 스트림(예: `ImageAnalysis` 유스케이스)의 요구 사항이 변경될 수 있습니다. HAL은 AI 모델이 필요로 하는 특정 해상도, 형식, 프레임 속도를 효율적으로 제공해야 합니다. 둘째, 하이브리드 추론 결정에 따라 온디바이스 NPU/GPU/ISP의 부하가 달라질 수 있으며, HAL은 이러한 리소스 경합을 관리하고 최적의 성능을 보장해야 합니다. 셋째, AI 추론 결과가 카메라 메타데이터로 다시 주입되어 후속 프레임 처리나 카메라 동작에 영향을 미칠 가능성도 있습니다. HAL은 AI 워크로드에 대한 지연 시간, 프레임 드롭, 열 관리 지표를 면밀히 모니터링해야 합니다.",
+      "why_it_matters": "Firebase AI Logic source는 Android app AI integration 기능을 설명합니다. Camera HAL 관점에서는 제품이 camera frame을 이 경로에 연결하려는 계획이 있을 때만 앱/프레임워크 통합, 입력 형식, 버퍼 사용, 지연 시간, SoC 리소스 예산을 검토하는 adjacent review input입니다.",
+      "camera_hal_perspective": "Do not treat Firebase AI Logic as a HAL scheduling, metadata contract, stream/buffer, request/result, or camera pipeline behavior change. 제품 계획에 camera frame을 Firebase AI Logic으로 전달하는 경로가 있는지 먼저 확인하고, 해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 검토합니다. Source-backed 제품 요구가 없으면 HAL 변경으로 기록하지 않습니다.",
       "camera_hal_checks": [
-        "새로운 Firebase AI Logic API가 카메라 HAL에 요구하는 스트림 구성(해상도, 형식, 프레임 속도) 및 버퍼 할당 정책을 분석합니다.",
-        "Gemini Nano Banana 모델과 같은 온디바이스 AI 모델이 NPU/GPU/ISP에 미치는 부하를 측정하고, 카메라 스트림과의 리소스 경합 여부를 확인합니다.",
-        "하이브리드 추론 시나리오에서 카메라 프레임의 엔드투엔드 지연 시간(HAL 캡처부터 AI 추론 완료까지)을 측정하고, 프레임 드롭 발생 여부를 모니터링합니다."
+        "제품 계획에 Firebase AI Logic 기반 camera-frame analysis path가 있는지 앱/프레임워크 담당자와 먼저 확인합니다.",
+        "해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 검토합니다.",
+        "Source-backed 제품 요구가 없으면 HAL scheduling, metadata contract, camera pipeline behavior 변경으로 기록하지 않습니다."
       ],
       "action_hints": [
         "Firebase AI Logic API의 문서화를 검토하여 카메라 HAL에 대한 새로운 요구사항을 파악합니다.",
@@ -237,11 +449,11 @@
         "Gemini 모델을 활용하는 앱과의 호환성 및 성능 최적화를 위한 HAL 측면의 개선 방안을 모색합니다."
       ],
       "action_items": [
-        "새로운 Firebase AI Logic API의 문서화를 2주 이내에 검토하여, AI 추론을 위한 카메라 스트림(예: `ImageAnalysis`)의 권장 해상도, 형식, 프레임 속도 및 버퍼 사용 패턴을 파악하고, HAL이 이를 효율적으로 지원할 수 있는지 분석합니다. (Owner: HAL 아키텍트)",
-        "Preview + ImageCapture + VideoCapture + AI-analysis 스트림 조합 시나리오에서 Gemini Nano Banana 모델을 활용하는 앱을 실행하여, NPU/GPU/ISP의 부하, 카메라 프레임 드롭률, 엔드투엔드 지연 시간, 그리고 기기 열 상태를 2주 이내에 측정합니다. (Owner: 성능 엔지니어)",
-        "AI 추론 결과가 카메라 메타데이터로 다시 주입되는 시나리오(예: `ANDROID_CONTROL_SCENE_MODE` 또는 `ANDROID_STATISTICS_FACE_DETECT_MODE`와 유사한 AI 기반 메타데이터)를 가정하여, HAL이 이러한 메타데이터를 처리하고 카메라 동작에 반영할 수 있는 인터페이스 확장 가능성을 검토합니다. (Owner: HAL 개발팀)"
+        "2주 이내에 앱/프레임워크 담당자와 Firebase AI Logic 기반 camera-frame analysis path가 실제 제품 계획에 있는지 확인합니다. (Owner: 앱/프레임워크 담당자, HAL 아키텍트)",
+        "해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 정리하고, HAL 변경 필요 여부는 source-backed 제품 요구로 별도 판단합니다. (Owner: HAL 아키텍트)",
+        "제품 요구가 확인되지 않으면 HAL scheduling, metadata contract, camera pipeline behavior 변경으로 기록하지 않습니다. (Owner: HAL 개발팀)"
       ],
-      "team_summary": "Firebase AI Logic 하이브리드 추론은 Camera HAL 입력 버퍼, AI analysis stream, NPU/GPU/ISP 경합, 지연 시간, 전력 측정을 함께 점검해야 하는 Android AI 경로 변화입니다.",
+      "team_summary": "Firebase AI Logic 하이브리드 추론은 제품이 camera-frame analysis path를 통합할 때 확인할 adjacent integration risk로 다룹니다.",
       "is_ai_related": true,
       "article_type": "Android Camera / Platform API",
       "imageCandidates": [
@@ -309,7 +521,116 @@
       "counts_as_soc_topic": true,
       "counts_as_fallback_topic": false,
       "evidence_origin": "candidate_metadata_recovered",
-      "source_hint": "Android hybrid inference update affects NPU/GPU/ISP scheduling, latency, thermal, and camera input workflows."
+      "source_hint": "Android hybrid inference update affects NPU/GPU/ISP scheduling, latency, thermal, and camera input workflows.",
+      "impact_claim_level": "app_api_or_framework_adjacent",
+      "article_sections": {
+        "verified_facts": [
+          "published date: 2026-04-17.",
+          "API/component: Firebase AI Logic API.",
+          "behavior change: Android 앱이 온디바이스 추론과 클라우드 추론 경로를 조합하고 새로운 Gemini 모델을 사용할 수 있습니다."
+        ],
+        "background_context": "AI 모델의 추론은 온디바이스에서 직접 실행되거나 클라우드 서버에서 실행될 수 있습니다. 온디바이스 추론은 낮은 지연 시간과 개인 정보 보호 이점을 제공하지만, 기기의 컴퓨팅 리소스에 제약이 있습니다. 클라우드 추론은 더 강력한 컴퓨팅 성능을 제공하지만, 네트워크 지연과 데이터 전송 비용이 발생합니다. 하이브리드 추론은 이 두 가지 접근 방식의 장점을 결합하여, 작업의 복잡성과 리소스 요구 사항에 따라 최적의 추론 위치를 동적으로 선택하는 방식입니다.",
+        "hal_driver_impact": "Do not treat Firebase AI Logic as a HAL scheduling, metadata contract, stream/buffer, request/result, or camera pipeline behavior change. 제품 계획에 camera frame을 Firebase AI Logic으로 전달하는 경로가 있는지 먼저 확인하고, 해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 검토합니다. Source-backed 제품 요구가 없으면 HAL 변경으로 기록하지 않습니다.",
+        "action_items": [
+          "2주 이내에 앱/프레임워크 담당자와 Firebase AI Logic 기반 camera-frame analysis path가 실제 제품 계획에 있는지 확인합니다. (Owner: 앱/프레임워크 담당자, HAL 아키텍트)",
+          "해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 정리하고, HAL 변경 필요 여부는 source-backed 제품 요구로 별도 판단합니다. (Owner: HAL 아키텍트)",
+          "제품 요구가 확인되지 않으면 HAL scheduling, metadata contract, camera pipeline behavior 변경으로 기록하지 않습니다. (Owner: HAL 개발팀)"
+        ],
+        "team_share_points": "Firebase AI Logic 하이브리드 추론은 제품이 camera-frame analysis path를 통합할 때 확인할 adjacent integration risk로 다룹니다.",
+        "do_not_claim": [
+          "Do not convert this historical cleanup metadata into new direct Camera HAL runtime claims without source-backed product requirements."
+        ]
+      },
+      "hal_impact_axes": [
+        "soc_resource_contention",
+        "camerax_app_compatibility",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "soc_platform_owner",
+        "camera_framework_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "signal_quality_status": "usable_signal",
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Camera frame analysis paths can create adjacent app/framework integration checks for stream, buffer, metadata, and SoC resource review only when product plans use them.",
+      "camera_pipeline_link": "Camera frame analysis paths can create adjacent app/framework integration checks for stream, buffer, metadata, and SoC resource review only when product plans use them.",
+      "do_not_overstate": [
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+      ],
+      "hal_signal_capsule": {
+        "why_now": "공식 Android Developers Blog의 2026-04-17 게시물은 Firebase AI Logic API, 하이브리드 추론, 새로운 Gemini 모델 지원을 명시합니다.",
+        "reader_owners": [
+          "soc_platform_owner",
+          "camera_framework_owner",
+          "camera_hal_owner"
+        ],
+        "check_within_2_weeks": "2주 이내에 앱/프레임워크 담당자와 Firebase AI Logic 기반 camera-frame analysis path가 실제 제품 계획에 있는지 확인합니다. (Owner: 앱/프레임워크 담당자, HAL 아키텍트)",
+        "impact_axes": [
+          "soc_resource_contention",
+          "camerax_app_compatibility",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "firebase-ai-logic-camera-hal-npu-gpu-fact-1",
+          "text": "published date: 2026-04-17.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+          ],
+          "source_urls": [
+            "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+          ],
+          "impact_level": "soc_resource_contention",
+          "overclaim_risk": "medium"
+        },
+        {
+          "claim_id": "firebase-ai-logic-camera-hal-npu-gpu-fact-2",
+          "text": "API/component: Firebase AI Logic API.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+          ],
+          "source_urls": [
+            "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+          ],
+          "impact_level": "soc_resource_contention",
+          "overclaim_risk": "medium"
+        },
+        {
+          "claim_id": "firebase-ai-logic-camera-hal-npu-gpu-fact-3",
+          "text": "behavior change: Android 앱이 온디바이스 추론과 클라우드 추론 경로를 조합하고 새로운 Gemini 모델을 사용할 수 있습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+          ],
+          "source_urls": [
+            "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+          ],
+          "impact_level": "soc_resource_contention",
+          "overclaim_risk": "medium"
+        },
+        {
+          "claim_id": "firebase-ai-logic-camera-hal-npu-gpu-fact-4",
+          "text": "공식 Android Developers Blog의 2026-04-17 게시물은 Firebase AI Logic API, 하이브리드 추론, 새로운 Gemini 모델 지원을 명시합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-firebase-ai-logic-camera-hal-npu-gpu-primary"
+          ],
+          "source_urls": [
+            "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+          ],
+          "impact_level": "soc_resource_contention",
+          "overclaim_risk": "medium"
+        }
+      ]
     },
     {
       "category": "C++ / Toolchain Fallback",
@@ -390,14 +711,131 @@
       "counts_as_soc_topic": false,
       "counts_as_fallback_topic": true,
       "evidence_origin": "candidate_metadata_recovered",
-      "source_hint": "C++26 assert improvement is native tooling fallback evidence for Camera HAL debugging and code reliability."
+      "source_hint": "C++26 assert improvement is native tooling fallback evidence for Camera HAL debugging and code reliability.",
+      "article_sections": {
+        "verified_facts": [
+          "Release/version: C++26 (예정)",
+          "Release date: 2026년 5월 (제안 발표)",
+          "API/component: `assert()` 매크로",
+          "Behavior change: `assert()` 매크로가 실패 시 더 많은 컨텍스트 정보(예: 변수 값, 표현식)를 자동으로 캡처하고 출력할 수 있도록 개선됩니다. 또한, `std::string_view`와 같은 타입의 인수를 지원하여 더 유연한 사용이 가능해집니다."
+        ],
+        "background_context": "C++의 `assert()` 매크로는 개발 단계에서 프로그램의 가정을 검증하고, 위반 시 즉시 프로그램을 중단시켜 버그를 조기에 발견하는 데 사용됩니다. 기존 `assert()`는 주로 파일명, 라인 번호, 실패한 표현식만을 제공하여 복잡한 버그의 원인을 파악하기 어려울 때가 있었습니다. C++26에서 제안되는 개선 사항은 이러한 한계를 극복하고, 디버깅 경험을 향상시키는 것을 목표로 합니다.",
+        "hal_driver_impact": "Camera HAL은 성능에 민감하고 안정성이 중요한 시스템이므로, 개발 및 테스트 단계에서 `assert()`를 적극적으로 활용하여 예기치 않은 상태를 감지합니다. 개선된 `assert()`는 다음 영역에서 HAL 개발에 긍정적인 영향을 미칠 수 있습니다. 첫째, 스트림 구성, 메타데이터 처리, 버퍼 수명 주기 관리와 같은 복잡한 로직에서 `assert` 실패 시 관련 변수 값을 즉시 확인할 수 있어 디버깅 효율성이 높아집니다. 둘째, `std::string_view` 지원은 HAL 내부에서 사용되는 다양한 문자열 기반 식별자나 디버그 메시지를 `assert`에 직접 전달하여 더 명확한 오류 보고를 가능하게 합니다. 셋째, CTS/VTS 또는 Camera ITS 테스트 실패 시, HAL 내부의 `assert`가 더 상세한 정보를 제공한다면 문제의 근본 원인을 파악하는 데 큰 도움이 될 것입니다.",
+        "action_items": [
+          "2주 내에 HAL 코드베이스에서 `assert()` 사용 현황을 분석하고, 특히 `request/result metadata` 처리, `stream configuration` 유효성 검사, `buffer lifecycle` 관리와 관련된 `assert` 구문에 대한 개선 가능성을 조사합니다.",
+          "C++26 표준 채택 및 Clang/LLVM 툴체인 업데이트 계획을 모니터링하고, 새로운 `assert()` 기능이 안정화되면 `native Android runtime` 환경에서 디버깅 효율성 향상 여부를 측정할 PoC를 계획합니다."
+        ],
+        "team_share_points": "C++26 assert() 개선은 네이티브 Camera HAL 코드의 실패 지점 진단과 상태값 기록 방식을 점검할 수 있는 도구chain 신호입니다.",
+        "do_not_claim": [
+          "Do not convert this historical cleanup metadata into new direct Camera HAL runtime claims without source-backed product requirements."
+        ]
+      },
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "native_tooling_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "signal_quality_status": "strong_signal",
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "camera_pipeline_link": "Native tooling checks apply to Camera HAL code review, stream configuration, metadata, and debug build validation.",
+      "do_not_overstate": [
+        "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+      ],
+      "hal_signal_capsule": {
+        "why_now": "2026년 5월 Sandor Dargo의 블로그 게시물에서 C++26 표준에 제안된 `assert()` 매크로의 개선 사항에 대해 설명하고 있습니다. 이 개선은 `assert()`가 실패 시 더 상세한 진단 정보를 제공하고, 다양한 타입의 인수를 처리할 수 있도록 하는 것을 목표로 합니다.",
+        "reader_owners": [
+          "native_tooling_owner",
+          "camera_hal_owner"
+        ],
+        "check_within_2_weeks": "2주 내에 HAL 코드베이스에서 `assert()` 사용 현황을 분석하고, 특히 `request/result metadata` 처리, `stream configuration` 유효성 검사, `buffer lifecycle` 관리와 관련된 `assert` 구문에 대한 개선 가능성을 조사합니다.",
+        "impact_axes": [
+          "native_tooling_workflow",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "Keep this historical article bounded to source-backed or explicitly adjacent integration risk; do not assert direct HAL runtime behavior without source evidence."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c-26-assert-camera-hal-fact-1",
+          "text": "Release/version: C++26 (예정)",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-c-26-assert-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c-26-assert-camera-hal-fact-2",
+          "text": "Release date: 2026년 5월 (제안 발표)",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-c-26-assert-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c-26-assert-camera-hal-fact-3",
+          "text": "API/component: `assert()` 매크로",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-c-26-assert-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c-26-assert-camera-hal-fact-4",
+          "text": "Behavior change: `assert()` 매크로가 실패 시 더 많은 컨텍스트 정보(예: 변수 값, 표현식)를 자동으로 캡처하고 출력할 수 있도록 개선됩니다. 또한, `std::string_view`와 같은 타입의 인수를 지원하여 더 유연한 사용이 가능해집니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-c-26-assert-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c-26-assert-camera-hal-fact-5",
+          "text": "2026년 5월 Sandor Dargo의 블로그 게시물에서 C++26 표준에 제안된 `assert()` 매크로의 개선 사항에 대해 설명하고 있습니다. 이 개선은 `assert()`가 실패 시 더 상세한 진단 정보를 제공하고, 다양한 타입의 인수를 처리할 수 있도록 하는 것을 목표로 합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "historical-2026-05-05-c-26-assert-camera-hal-primary"
+          ],
+          "source_urls": [
+            "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        }
+      ]
     }
   ],
   "action_items": [
     "2026년 5월 Android 보안 게시판이 공개되는 즉시, 카메라 HAL 관련 CVE 항목을 확인하고 해당 취약점이 현재 제품에 영향을 미치는지 분석합니다. (Owner: 보안 담당 엔지니어)",
     "현재 카메라 HAL 코드베이스에서 사용되는 `assert()` 매크로 호출 지점을 식별하고, 각 지점에서 실패 시 어떤 추가적인 변수 값이나 상태 정보가 디버깅에 유용할지 목록화합니다. (Owner: HAL 개발팀)",
     "Claude Code 2.1.128의 Changelog를 상세히 검토하여, 카메라 HAL 개발에 직접적으로 적용 가능한 코드 생성, 디버깅, 리팩토링 기능 개선 사항을 2주 이내에 식별하고 팀에 공유합니다. (Owner: HAL 개발팀)",
-    "새로운 Firebase AI Logic API의 문서화를 2주 이내에 검토하여, AI 추론을 위한 카메라 스트림(예: `ImageAnalysis`)의 권장 해상도, 형식, 프레임 속도 및 버퍼 사용 패턴을 파악하고, HAL이 이를 효율적으로 지원할 수 있는지 분석합니다. (Owner: HAL 아키텍트)"
+    "Firebase AI Logic 기반 camera-frame analysis path가 실제 제품 계획에 있는지 먼저 확인하고, 해당 경로가 없으면 HAL scheduling, metadata contract, pipeline behavior 변경으로 기록하지 않습니다. (Owner: 앱/프레임워크 담당자, HAL 아키텍트)"
   ],
   "references": [
     {
