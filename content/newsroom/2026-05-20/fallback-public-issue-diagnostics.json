@@ -1,6 +1,6 @@
 {
   "date": "2026-05-20",
-  "generated_at": "2026-05-19T18:18:06.122Z",
+  "generated_at": "2026-05-20T02:12:19.397Z",
   "status": "FAILED",
   "failure_reason": "Fallback builder could not fill minimum main article count 3; only 2 article(s) available.",
   "fallback_public_issue_status": "FAILED",
