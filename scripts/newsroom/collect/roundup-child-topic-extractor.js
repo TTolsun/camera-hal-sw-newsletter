@@ -7,6 +7,8 @@ const STRONG_NON_SCREEN_TOPIC_PATTERN = /\b(?:CameraX|Camera2|VideoCapture|Previ
 const BROAD_TOPIC_PATTERN = /\b(?:media|gallery|video(?:\s+call)?|audio)\b/i;
 const BROAD_CONTEXT_PATTERN = /\b(?:capture|camera\s+output|media\s+framework|video\s+capture|preview|gallery\s+output|HDR|Ultra\s+HDR)\b/i;
 const ROUNDUP_BEHAVIOR_CHANGE_PATTERN = /\b(?:announce(?:d|s)?|introduc(?:e|ed|es|ing)|bring(?:s|ing)?|brought|enable(?:d|s)?|let\s+developers|available|preview|can\s+use|support(?:ed|s)?|improve(?:d|s|ment)?|add(?:ed|s)?|update(?:d|s)?)\b/i;
+const DIRECT_CAMERA_API_PATTERN = /\b(?:CameraX|Camera2|VideoCapture|PreviewView|ImageCapture|ImageAnalysis)\b/i;
+const MULTIMEDIA_CAMERA_OUTPUT_PATTERN = /\b(?:APV|Advanced\s+Professional\s+Video|Ultra\s+HDR|HDR\s+video|camera\s+output|media\s+framework|gallery\s+output|media\s+output|video\s+call|camera\s*\/\s*audio\s+sync|social\s+app\s+camera\s+capture|camera\s+capture\s+result)\b/i;
 
 function decodeContent(value = '') {
   return decodeHtml(String(value || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1'));
@@ -125,9 +127,9 @@ function componentFor(value = '') {
 }
 
 function bucketHintFor(value = '') {
-  return /\b(?:CameraX|Camera2|VideoCapture|PreviewView)\b/i.test(value)
-    ? 'direct_aosp_camera'
-    : 'android_platform_camera_adjacent';
+  if (DIRECT_CAMERA_API_PATTERN.test(value)) return 'direct_aosp_camera';
+  if (MULTIMEDIA_CAMERA_OUTPUT_PATTERN.test(value)) return 'android_multimedia_camera_output';
+  return 'android_platform_camera_adjacent';
 }
 
 function childUrl(parentUrl = '', block = {}) {

@@ -324,6 +324,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- direct_aosp_camera: ${formatCount(diagnostics.direct_aosp_camera_count ?? composition.direct_aosp_camera_count)}`,
     `- android_platform_camera_adjacent: ${formatCount(diagnostics.android_platform_camera_adjacent_count ?? composition.android_platform_camera_adjacent_count)}`,
     `- camera_driver_image_pipeline: ${formatCount(diagnostics.camera_driver_image_pipeline_count ?? composition.camera_driver_image_pipeline_count)}`,
+    `- android_multimedia_camera_output: ${formatCount(diagnostics.android_multimedia_camera_output_count ?? composition.android_multimedia_camera_output_count)}`,
     `- soc_platform_signal: ${formatCount(diagnostics.soc_platform_signal_count ?? composition.soc_platform_signal_count)}`,
     `- cpp_ai_tooling_fallback: ${formatCount(diagnostics.cpp_ai_tooling_fallback_count ?? composition.cpp_ai_tooling_fallback_count)}`,
     `- Primary Camera Stack: ${formatCount(diagnostics.primary_camera_stack_topic_count ?? composition.primary_camera_stack_topic_count)}`,

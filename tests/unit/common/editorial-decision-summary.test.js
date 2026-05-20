@@ -48,6 +48,16 @@ test('editorial decision classifier maps selected direct camera candidates to Ma
 test('editorial decision classifier maps selected and reserve supporting candidates', () => {
   assertDecision(
     candidate({
+      bucket: 'android_multimedia_camera_output',
+      status: 'final_selected',
+      selectionReason: 'camera output / multimedia supporting evidence'
+    }),
+    'Supporting',
+    '보조(Supporting)'
+  );
+
+  assertDecision(
+    candidate({
       bucket: 'cpp_ai_tooling_fallback',
       status: 'final_selected',
       selectionReason: 'native C++ tooling fallback for HAL build workflow'

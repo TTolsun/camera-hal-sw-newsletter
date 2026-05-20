@@ -288,7 +288,7 @@ PR에서 다음 항목을 확인합니다.
 - Publish-ready direct AOSP Camera or driver/image pipeline articles: at least 1 across `direct_aosp_camera`, `camera_driver_image_pipeline`
 - Publish-ready supporting main articles: at most 1 total across supporting main buckets
 - Primary Camera Stack buckets: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
-- Supporting main buckets: `soc_platform_signal`, `cpp_ai_tooling_fallback`
+- Supporting main buckets: `android_multimedia_camera_output`, `soc_platform_signal`, `cpp_ai_tooling_fallback`
 - Forbidden main buckets: `generic_tech_watchlist`
 - Candidate pool preflight: publishable candidates at least 5; reserve candidates at least 2; camera stack candidates at least 2
 - Selection windows: primary 7 days; fallback 21 days; reference 90 days

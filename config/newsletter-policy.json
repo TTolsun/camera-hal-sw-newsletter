@@ -20,6 +20,7 @@
       "supportingMainMaxAllowed": 1
     },
     "supportingMainBuckets": [
+      "android_multimedia_camera_output",
       "soc_platform_signal",
       "cpp_ai_tooling_fallback"
     ],

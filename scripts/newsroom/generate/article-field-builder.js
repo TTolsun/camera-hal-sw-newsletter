@@ -205,6 +205,7 @@ function inferImpactClaimLevel(candidate = {}) {
   }
   if (bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) return IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT;
   if (bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) return IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT;
+  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) return IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT;
   if (bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) return IMPACT_CLAIM_LEVELS.TOOLING_SUPPORTING;
   if (bucket === BUCKETS.SOC_PLATFORM_SIGNAL) {
     return hasDirectCameraPipelineEvidence(candidate)
@@ -283,6 +284,9 @@ function buildOverclaimGuardrails(candidate = {}) {
   }
   if (bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) {
     guardrails.push('libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다.');
+  }
+  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
+    guardrails.push('Camera output / multimedia supporting items must not be described as direct HAL API, vendor HAL implementation, or HAL contract changes.');
   }
   return unique(guardrails);
 }

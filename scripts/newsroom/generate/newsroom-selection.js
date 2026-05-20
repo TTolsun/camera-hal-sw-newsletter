@@ -342,6 +342,7 @@ function candidateScope(candidate) {
       relevance_bucket: text(candidate.relevance_bucket),
       aosp_camera_directness: number(candidate.aosp_camera_directness),
       driver_stack_relevance: number(candidate.driver_stack_relevance),
+      multimedia_camera_output_relevance: number(candidate.multimedia_camera_output_relevance),
       soc_platform_relevance: number(candidate.soc_platform_relevance),
       native_tooling_relevance: number(candidate.native_tooling_relevance),
       counts_as_primary_camera_topic: bool(candidate.counts_as_primary_camera_topic),
@@ -361,6 +362,7 @@ function scopeRelevanceScore(candidate) {
   return Math.max(
     number(scope.aosp_camera_directness),
     number(scope.driver_stack_relevance),
+    number(scope.multimedia_camera_output_relevance),
     number(scope.soc_platform_relevance),
     number(scope.native_tooling_relevance)
   );
@@ -385,6 +387,7 @@ function isNonFallbackReviewableScope(candidate) {
     BUCKETS.DIRECT_AOSP_CAMERA,
     BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
     BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT,
     BUCKETS.SOC_PLATFORM_SIGNAL
   ].includes(bucket);
 }
@@ -433,9 +436,18 @@ function hasGoogleTensorSocComponent(candidate) {
     .test(body);
 }
 
+function hasConcreteMultimediaCameraOutputComponent(candidate) {
+  const body = candidateBody(candidate);
+  return /\b(?:Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video|MediaProvider|media\s+provider|MediaStore|media\s+store|media\s+output|gallery\s+output|video\s+call|social\s+app\s+camera\s+capture|camera\s+capture\s+result|captured\s+image\s*\/\s*video\s+output|captured\s+(?:image|video)\s+output)\b/i.test(body) ||
+    /\bcamera\s*\/\s*audio\s+sync\b/i.test(body) ||
+    /\baudio\s*\/\s*video\s+sync\b[^.\n]{0,120}\b(?:camera|preview|video\s+(?:recording|call)|capture)\b/i.test(body) ||
+    /\b(?:camera|preview|video\s+(?:recording|call)|capture)\b[^.\n]{0,120}\baudio\s*\/\s*video\s+sync\b/i.test(body);
+}
+
 function hasConcreteApiComponent(candidate) {
   if (text(candidate.api_or_component || candidate.apiOrComponent)) return true;
   return hasGoogleTensorSocComponent(candidate) ||
+    hasConcreteMultimediaCameraOutputComponent(candidate) ||
     /Camera HAL|CameraProvider|CameraService|CameraX|Camera2|AOSP Camera|AIDL|HIDL|ICamera|camera3|camera provider|capture request|capture result|stream configuration|camera metadata|ImageReader|AHardwareBuffer|NDK camera|Camera ITS|CTS.{0,80}camera|camera.{0,80}CTS|VTS.{0,80}camera|camera.{0,80}VTS|CDD.{0,80}camera|camera.{0,80}CDD|libcamera|V4L2|media controller|MIPI\s*CSI-?2|CSI-2|DMA-?BUF|image sensor|\bISP\b|\bGPU\b|\bNPU\b|\bDSP\b|Exynos|Snapdragon|\b(?:LLVM|Clang|GCC)\s*\d+(?:\.\d+)*|\b\d+(?:\.\d+)*\s*(?:LLVM|Clang|GCC)\b|AddressSanitizer|ThreadSanitizer|UndefinedBehaviorSanitizer|MemorySanitizer|\b(?:ASan|TSan|UBSan|MSan)\b/i
       .test(candidateBody(candidate));
 }
@@ -598,6 +610,7 @@ function scoreCandidate(candidate, newsletterDate) {
     relevance_bucket: scope.relevance_bucket,
     aosp_camera_directness: scope.aosp_camera_directness,
     driver_stack_relevance: scope.driver_stack_relevance,
+    multimedia_camera_output_relevance: scope.multimedia_camera_output_relevance,
     soc_platform_relevance: scope.soc_platform_relevance,
     native_tooling_relevance: scope.native_tooling_relevance,
     evidence_specificity: evidence,
@@ -1157,6 +1170,7 @@ function bucketCountMap(candidates) {
     [BUCKETS.DIRECT_AOSP_CAMERA]: 0,
     [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 0,
     [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 0,
+    [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 0,
     [BUCKETS.SOC_PLATFORM_SIGNAL]: 0,
     [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 0,
     [BUCKETS.GENERIC_TECH_WATCHLIST]: 0
@@ -1180,6 +1194,7 @@ function compositionSummary(candidates) {
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
   const non_fallback_reviewable_article_count =
     primary_camera_stack_topic_count +
+    bucket_counts[BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT] +
     bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL];
   const fallback_topic_count =
     bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL] +
@@ -1191,6 +1206,7 @@ function compositionSummary(candidates) {
     direct_aosp_camera_count: bucket_counts[BUCKETS.DIRECT_AOSP_CAMERA],
     camera_driver_image_pipeline_count: bucket_counts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE],
     android_platform_camera_adjacent_count: bucket_counts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT],
+    android_multimedia_camera_output_count: bucket_counts[BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT],
     soc_platform_signal_count: bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL],
     cpp_ai_tooling_fallback_count: bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK],
     generic_tech_watchlist_count: bucket_counts[BUCKETS.GENERIC_TECH_WATCHLIST],
@@ -1218,9 +1234,7 @@ function candidatePoolPreflightSummary(shortlist, selected, reserve, policy = ca
       eligibleSummary.direct_aosp_camera_count +
       eligibleSummary.camera_driver_image_pipeline_count,
     camera_adjacent_candidate_count: eligibleSummary.android_platform_camera_adjacent_count,
-    supporting_candidate_count:
-      eligibleSummary.soc_platform_signal_count +
-      eligibleSummary.cpp_ai_tooling_fallback_count,
+    supporting_candidate_count: eligibleSummary.supporting_main_article_count,
     selected_article_count: selectedSummary.selected_article_count,
     selected_primary_camera_stack_count: selectedSummary.primary_camera_stack_topic_count
   };

@@ -48,6 +48,7 @@ const CAMERA_BUCKETS = new Set([
 ]);
 
 const SUPPORTING_BUCKETS = new Set([
+  'android_multimedia_camera_output',
   'soc_platform_signal',
   'cpp_ai_tooling_fallback'
 ]);

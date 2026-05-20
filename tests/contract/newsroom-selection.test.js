@@ -39,9 +39,32 @@ function policyPrimaryCandidate(index = 0, overrides = {}) {
     editorial_priority: 1,
     aosp_camera_directness: 5,
     driver_stack_relevance: 0,
+    multimedia_camera_output_relevance: 0,
     soc_platform_relevance: 0,
     native_tooling_relevance: 0,
     counts_as_primary_camera_topic: true,
+    ...overrides
+  });
+}
+
+function policyDriverCandidate(index = 0, overrides = {}) {
+  return candidate({
+    title: `V4L2 image sensor driver article ${index}`,
+    url: `https://example.com/policy-driver-${index}`,
+    summary: 'V4L2 camera driver update changes image sensor format negotiation and frame routing.',
+    api_or_component: 'V4L2 image sensor driver',
+    behavior_change: 'The camera driver update changes image sensor frame routing.',
+    relevance_bucket: 'camera_driver_image_pipeline',
+    editorial_priority: 2,
+    aosp_camera_directness: 0,
+    driver_stack_relevance: 5,
+    multimedia_camera_output_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 0,
+    counts_as_primary_camera_topic: false,
+    counts_as_driver_topic: true,
+    counts_as_soc_topic: false,
+    counts_as_fallback_topic: false,
     ...overrides
   });
 }
@@ -61,13 +84,60 @@ function policySupportingCandidate(index = 0, overrides = {}) {
     summary: `${topic} improves native C++ build and test productivity for camera workflow debugging.`,
     api_or_component: topic,
     behavior_change: 'Native debugging workflow behavior changed.',
-    relevance_bucket: articlePolicy.supportingMainBuckets[1] || articlePolicy.supportingMainBuckets[0],
-    editorial_priority: 5,
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    editorial_priority: 6,
     aosp_camera_directness: 0,
     driver_stack_relevance: 0,
+    multimedia_camera_output_relevance: 0,
     soc_platform_relevance: 0,
     native_tooling_relevance: 5,
     counts_as_fallback_topic: true,
+    camera_hal_relevance_score: 0,
+    ...overrides
+  });
+}
+
+function policyMultimediaCandidate(index = 0, overrides = {}) {
+  return candidate({
+    title: `Android APV camera output article ${index}`,
+    url: `https://example.com/policy-multimedia-${index}`,
+    summary: 'Android introduces Advanced Professional Video for camera capture output and creator video workflows.',
+    api_or_component: 'Advanced Professional Video / Android media camera output',
+    behavior_change: 'Android introduces APV camera output behavior for professional video capture.',
+    relevance_bucket: 'android_multimedia_camera_output',
+    editorial_priority: 4,
+    aosp_camera_directness: 0,
+    driver_stack_relevance: 0,
+    multimedia_camera_output_relevance: 5,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 0,
+    counts_as_primary_camera_topic: false,
+    counts_as_driver_topic: false,
+    counts_as_soc_topic: false,
+    counts_as_fallback_topic: false,
+    camera_hal_relevance_score: 0,
+    ...overrides
+  });
+}
+
+function policySocCandidate(index = 0, overrides = {}) {
+  return candidate({
+    title: `Snapdragon camera thermal article ${index}`,
+    url: `https://example.com/policy-soc-${index}`,
+    summary: 'Snapdragon platform update changes camera thermal and ISP latency behavior for video capture workloads.',
+    api_or_component: 'Snapdragon ISP camera thermal path',
+    behavior_change: 'The SoC platform update changes camera thermal and ISP latency behavior.',
+    relevance_bucket: 'soc_platform_signal',
+    editorial_priority: 5,
+    aosp_camera_directness: 0,
+    driver_stack_relevance: 0,
+    multimedia_camera_output_relevance: 0,
+    soc_platform_relevance: 5,
+    native_tooling_relevance: 0,
+    counts_as_primary_camera_topic: false,
+    counts_as_driver_topic: false,
+    counts_as_soc_topic: true,
+    counts_as_fallback_topic: false,
     camera_hal_relevance_score: 0,
     ...overrides
   });
@@ -388,6 +458,7 @@ function assertScoreComponentsUnchanged(actual, expected) {
     'relevance_bucket',
     'aosp_camera_directness',
     'driver_stack_relevance',
+    'multimedia_camera_output_relevance',
     'soc_platform_relevance',
     'native_tooling_relevance',
     'evidence_specificity',
@@ -851,6 +922,88 @@ test('supporting-only composition is not publish-ready', () => {
   assert.equal(report.publish_ready, false);
   assert.equal(report.composition_mode, 'NEEDS_FIX');
   assert.ok(report.selection_errors.some(error => error.includes('Primary Camera Stack')));
+});
+
+test('multimedia camera-output candidate is eligible through dedicated scope evidence', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyMultimediaCandidate(0)
+  ], { minArticles: 1, maxArticles: 1 });
+  const [item] = report.shortlisted_candidates;
+
+  assert.equal(item.relevance_bucket, 'android_multimedia_camera_output');
+  assert.equal(item.score_breakdown.multimedia_camera_output_relevance >= 2, true);
+  assert.equal(item.score_breakdown.scope_relevance >= 2, true);
+  assert.equal(item.main_article_score_eligible, true);
+  assert.equal(item.score_filter_reasons.includes('scope_relevance<2'), false);
+  assert.equal(item.score_filter_reasons.includes('missing concrete API/component evidence'), false);
+  assert.equal(item.counts_as_primary_camera_topic, false);
+});
+
+test('multimedia camera-output hard blockers still exclude main selection', () => {
+  const items = [
+    policyMultimediaCandidate(1, { url: 'https://example.com/multimedia-gap', source_gap_risk: true }),
+    policyMultimediaCandidate(2, { url: 'https://example.com/multimedia-date', published_date: '', hasDatedEvidence: false }),
+    policyMultimediaCandidate(3, { url: 'https://example.com/multimedia-watch', finalSelectionEligibility: 'watchlist' })
+  ];
+  const report = buildShortlistReport('2026-05-03', items, { minArticles: 1, maxArticles: 3 });
+  const reasonsByUrl = new Map(report.excluded_candidates.map(item => [item.url, item.exclusion_reasons]));
+
+  assert.equal(report.shortlisted_candidates.length, 0);
+  assert.ok(reasonsByUrl.get('https://example.com/multimedia-gap').includes('source_gap_risk=true'));
+  assert.ok(reasonsByUrl.get('https://example.com/multimedia-date').includes('missing dated evidence'));
+  assert.ok(reasonsByUrl.get('https://example.com/multimedia-watch').includes('finalSelectionEligibility=watchlist'));
+});
+
+test('multimedia supporting bucket counts separately and can pass publish-ready with enough primary coverage', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(1),
+    policyDriverCandidate(2),
+    policyMultimediaCandidate(1)
+  ]);
+
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, 2);
+  assert.equal(report.composition_summary.android_multimedia_camera_output_count, 1);
+  assert.equal(report.composition_summary.supporting_main_article_count, 1);
+  assert.equal(report.composition_summary.non_fallback_reviewable_article_count, 3);
+  assert.equal(report.composition_summary.direct_aosp_camera_count, 1);
+  assert.equal(report.composition_summary.camera_driver_image_pipeline_count, 1);
+  assert.equal(report.publish_ready, true);
+});
+
+test('multimedia plus SoC still fails publish-ready when primary coverage is short and supporting limit is exceeded', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(1),
+    policyMultimediaCandidate(1),
+    policySocCandidate(1)
+  ]);
+
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, 1);
+  assert.equal(report.composition_summary.android_multimedia_camera_output_count, 1);
+  assert.equal(report.composition_summary.soc_platform_signal_count, 1);
+  assert.equal(report.composition_summary.supporting_main_article_count, 2);
+  assert.equal(report.publish_ready, false);
+  assert.ok(publishReadyGateReasonCodes(report.composition_summary).includes('publish_ready_primary_camera_stack_shortage'));
+  assert.ok(publishReadyGateReasonCodes(report.composition_summary).includes('publish_ready_supporting_main_over_limit'));
+});
+
+test('selection order ranks multimedia supporting ahead of SoC and C++ fallback', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(1),
+    policyDriverCandidate(2),
+    policySupportingCandidate(1),
+    policySocCandidate(1),
+    policyMultimediaCandidate(1)
+  ]);
+  const orderedBuckets = report.selected_articles.map(item => item.relevance_bucket);
+
+  assert.ok(
+    orderedBuckets.indexOf('android_multimedia_camera_output') <
+      orderedBuckets.indexOf('soc_platform_signal')
+  );
+  assert.ok(
+    orderedBuckets.indexOf('soc_platform_signal') <
+      orderedBuckets.indexOf('cpp_ai_tooling_fallback')
+  );
 });
 
 test('forbidden bucket in main candidates is not publish-ready', () => {

@@ -905,6 +905,7 @@ function fallbackSectionScope(section) {
       relevance_bucket: BUCKETS.DIRECT_AOSP_CAMERA,
       aosp_camera_directness: 3,
       driver_stack_relevance: 0,
+      multimedia_camera_output_relevance: 0,
       soc_platform_relevance: 0,
       native_tooling_relevance: 0,
       counts_as_primary_camera_topic: true,
@@ -920,6 +921,7 @@ function fallbackSectionScope(section) {
       relevance_bucket: BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
       aosp_camera_directness: 0,
       driver_stack_relevance: 3,
+      multimedia_camera_output_relevance: 0,
       soc_platform_relevance: 0,
       native_tooling_relevance: 0,
       counts_as_primary_camera_topic: false,
@@ -929,12 +931,29 @@ function fallbackSectionScope(section) {
       evidence_origin: 'section_text_fallback'
     };
   }
-  if (/\bSoC\b|\bCPU\b|\bGPU\b|\bNPU\b|\bDSP\b|\bthermal\b|\bpower\b|\bDVFS\b|\bscheduler\b|\bmemory bandwidth\b|Exynos|Snapdragon|Google Tensor/i.test(body)) {
+  if (/\bUltra\s+HDR\b|\bHDR\s+video\b|\bAPV\b|\bAdvanced\s+Professional\s+Video\b|\bMediaProvider\b|\bmedia\s+provider\b|\bMediaStore\b|\bmedia\s+store\b|\bgallery\s+output\b|\bmedia\s+output\b|\bvideo\s+call\b|\bcamera\s*\/\s*audio\s+sync\b|\bsocial\s+app\s+camera\s+capture\b|\bcamera\s+capture\s+result\b|\bcaptured\s+image\s*\/\s*video\s+output\b/i.test(body)) {
     return {
       editorial_priority: 4,
+      relevance_bucket: BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT,
+      aosp_camera_directness: 0,
+      driver_stack_relevance: 0,
+      multimedia_camera_output_relevance: 3,
+      soc_platform_relevance: 0,
+      native_tooling_relevance: 0,
+      counts_as_primary_camera_topic: false,
+      counts_as_driver_topic: false,
+      counts_as_soc_topic: false,
+      counts_as_fallback_topic: false,
+      evidence_origin: 'section_text_fallback'
+    };
+  }
+  if (/\bSoC\b|\bCPU\b|\bGPU\b|\bNPU\b|\bDSP\b|\bthermal\b|\bpower\b|\bDVFS\b|\bscheduler\b|\bmemory bandwidth\b|Exynos|Snapdragon|Google Tensor/i.test(body)) {
+    return {
+      editorial_priority: 5,
       relevance_bucket: BUCKETS.SOC_PLATFORM_SIGNAL,
       aosp_camera_directness: 0,
       driver_stack_relevance: 0,
+      multimedia_camera_output_relevance: 0,
       soc_platform_relevance: 3,
       native_tooling_relevance: 0,
       counts_as_primary_camera_topic: false,
@@ -946,10 +965,11 @@ function fallbackSectionScope(section) {
   }
   if (/C\+\+|LLVM|Clang|GCC|sanitizer|native|toolchain|build|test|AI coding|LLM agent/i.test(body)) {
     return {
-      editorial_priority: 5,
+      editorial_priority: 6,
       relevance_bucket: BUCKETS.CPP_AI_TOOLING_FALLBACK,
       aosp_camera_directness: 0,
       driver_stack_relevance: 0,
+      multimedia_camera_output_relevance: 0,
       soc_platform_relevance: 0,
       native_tooling_relevance: 3,
       counts_as_primary_camera_topic: false,
@@ -1142,6 +1162,7 @@ function sectionSourceSummary(section) {
 const SCOPE_SCORE_FIELDS = Object.freeze([
   'aosp_camera_directness',
   'driver_stack_relevance',
+  'multimedia_camera_output_relevance',
   'soc_platform_relevance',
   'native_tooling_relevance'
 ]);
@@ -1156,6 +1177,7 @@ function scopeScore(scope) {
   return Math.max(
     Number(scope?.aosp_camera_directness || 0),
     Number(scope?.driver_stack_relevance || 0),
+    Number(scope?.multimedia_camera_output_relevance || 0),
     Number(scope?.soc_platform_relevance || 0),
     Number(scope?.native_tooling_relevance || 0)
   );
@@ -1516,6 +1538,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     [BUCKETS.DIRECT_AOSP_CAMERA]: 0,
     [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 0,
     [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 0,
+    [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 0,
     [BUCKETS.SOC_PLATFORM_SIGNAL]: 0,
     [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 0,
     [BUCKETS.GENERIC_TECH_WATCHLIST]: 0
@@ -1523,6 +1546,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const directAospCameraCount = scopeBucketCounts[BUCKETS.DIRECT_AOSP_CAMERA] || 0;
   const cameraDriverImagePipelineCount = scopeBucketCounts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE] || 0;
   const androidPlatformCameraAdjacentCount = scopeBucketCounts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT] || 0;
+  const androidMultimediaCameraOutputCount = scopeBucketCounts[BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT] || 0;
   const socPlatformSignalCount = scopeBucketCounts[BUCKETS.SOC_PLATFORM_SIGNAL] || 0;
   const cppAiToolingFallbackCount = scopeBucketCounts[BUCKETS.CPP_AI_TOOLING_FALLBACK] || 0;
   const genericTechWatchlistCount = scopeBucketCounts[BUCKETS.GENERIC_TECH_WATCHLIST] || 0;
@@ -1880,6 +1904,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       direct_aosp_camera_count: directAospCameraCount,
       camera_driver_image_pipeline_count: cameraDriverImagePipelineCount,
       android_platform_camera_adjacent_count: androidPlatformCameraAdjacentCount,
+      android_multimedia_camera_output_count: androidMultimediaCameraOutputCount,
       soc_platform_signal_count: socPlatformSignalCount,
       cpp_ai_tooling_fallback_count: cppAiToolingFallbackCount,
       generic_tech_watchlist_count: genericTechWatchlistCount,
@@ -2019,6 +2044,7 @@ function buildQualityReportMarkdown(report) {
 - direct_aosp_camera count: ${metrics.direct_aosp_camera_count ?? 0}
 - camera_driver_image_pipeline count: ${metrics.camera_driver_image_pipeline_count ?? 0}
 - android_platform_camera_adjacent count: ${metrics.android_platform_camera_adjacent_count ?? 0}
+- android_multimedia_camera_output count: ${metrics.android_multimedia_camera_output_count ?? 0}
 - soc_platform_signal count: ${metrics.soc_platform_signal_count ?? 0}
 - cpp_ai_tooling_fallback count: ${metrics.cpp_ai_tooling_fallback_count ?? 0}
 - generic_tech_watchlist count: ${metrics.generic_tech_watchlist_count ?? 0}
