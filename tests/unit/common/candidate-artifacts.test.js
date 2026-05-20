@@ -45,6 +45,9 @@ const {
   buildSourceDiscoveryFeedbackReport,
   run: runSourceDiscoveryBoundary
 } = require('../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
+const {
+  readTextFixture
+} = require('../../helpers/fixture-loader');
 
 function tempRoot() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'candidate-artifacts-'));
@@ -463,6 +466,34 @@ test('Stage 2 feedback still surfaces known official parser-backed URLs with sou
   assert.equal(report.items[0].confidence, 'medium');
 });
 
+test('Stage 2 feedback reports Gemini parser extraction failures separately', () => {
+  const report = buildSourceDiscoveryFeedbackReport({
+    date: '2026-05-16',
+    manualCandidates: [],
+    mergedCandidates: [],
+    geminiCandidates: [],
+    proposalValidations: [{
+      proposal_id: 'p1',
+      candidate_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      normalized_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      accepted: false,
+      rejected_reason: 'parser_repair_required',
+      source_policy_match: 'camerax-release-notes',
+      discovery_status: 'discovered',
+      extraction_status: 'parser_repair_required',
+      adapter_hint: 'android-developers-jetpack-release',
+      suggested_fixture_case: 'Add or update a CameraX release-note fixture with version/date/component/behavior evidence.'
+    }]
+  });
+
+  assert.equal(report.status, 'WARNING');
+  assert.equal(report.parser_gap_count, 0);
+  assert.equal(report.gemini_parser_failure_count, 1);
+  assert.equal(report.gemini_parser_failures[0].action, 'GEMINI_PARSER_EXTRACTION_REQUIRED');
+  assert.equal(report.gemini_parser_failures[0].rejected_reason, 'parser_repair_required');
+  assert.equal(report.gemini_parser_failures[0].adapter_hint, 'android-developers-jetpack-release');
+});
+
 test('Stage 2 feedback does not flag valid concrete source_extraction bullets', async () => {
   const root = tempRoot();
   const date = '2026-05-16';
@@ -523,6 +554,23 @@ test('Stage 2 disabled mode expands approved seed evidence without Gemini creden
       sourceUrl: 'https://developer.android.com/',
       category: 'android',
       reliability: 'official',
+      linkedEvidencePolicy: {
+        enabled: true,
+        allowedDomains: ['developer.android.com']
+      }
+    }, {
+      id: 'camerax-release-notes',
+      name: 'CameraX Release Notes',
+      sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera',
+      rssUrl: null,
+      collectionModeHint: 'release-note-watch',
+      evidenceGranularityHint: 'versioned_release_row',
+      category: 'camera-api',
+      priority: 'high',
+      reliability: 'official',
+      enabled: true,
+      candidateOnly: false,
+      requiresCrossCheck: false,
       linkedEvidencePolicy: {
         enabled: true,
         allowedDomains: ['developer.android.com']
@@ -751,7 +799,7 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
           allowed_domains: ['example.com'],
           search_keywords: ['CameraX release notes'],
           candidate_urls: [
-            'https://developer.android.com/jetpack/androidx/releases/camera',
+            'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0',
             'https://example.com/fake'
           ],
           expected_evidence: ['published date'],
@@ -763,7 +811,7 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
       if (url.includes('developer.android.com')) {
         return {
           ok: true,
-          text: async () => '<html><head><title>CameraX release notes</title><meta name="datePublished" content="2026-05-15"></head></html>'
+          text: async () => readTextFixture('source-html/camerax-release-notes-live-structure.html')
         };
       }
       return { ok: false, status: 404, text: async () => '' };
@@ -773,7 +821,15 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.equal(result.status, 'PASS');
   assert.equal(readJson(geminiSourceProposalsPath(root, date)).proposals.length, 1);
   assert.equal(readJson(geminiSourceProposalValidationReportPath(root, date)).validations.length, 2);
-  assert.equal(readJson(geminiCandidatesPath(root, date)).candidates.length, 1);
+  const geminiCandidates = readJson(geminiCandidatesPath(root, date)).candidates;
+  assert.equal(geminiCandidates.length, 1);
+  assert.equal(geminiCandidates[0].source_id, 'camerax-release-notes');
+  assert.equal(geminiCandidates[0].source_extraction.mode, 'versioned_release_row');
+  assert.equal(geminiCandidates[0].source_extraction.extraction_quality.used_versioned_release_row_extractor, true);
+  assert.deepEqual(
+    geminiCandidates[0].source_extraction.bullets,
+    geminiCandidates[0].source_extraction.release.sections.flatMap(section => section.items.map(item => item.text))
+  );
   assert.equal(readJson(mergedCandidatesPath(root, date)).candidates.length, 2);
   assert.equal(fs.existsSync(extractedSourceFactsPath(root, date)), true);
   assert.equal(fs.existsSync(evidenceValidationReportPath(root, date)), true);
@@ -824,10 +880,12 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.match(report, /## Parser\/source feedback/);
   assert.match(report, /parser_gap_count=1/);
   assert.match(report, /duplicate_discovery_gap_count=1/);
+  assert.match(report, /gemini_parser_failure_count=0/);
   const feedback = readJson(sourceDiscoveryFeedbackReportPath(root, date));
   assert.equal(feedback.status, 'WARNING');
   assert.equal(feedback.parser_gap_count, 1);
   assert.equal(feedback.duplicate_discovery_gap_count, 1);
+  assert.equal(feedback.gemini_parser_failure_count, 0);
   assert.equal(feedback.items[0].duplicate_discovered_by_gemini, true);
   assert.equal(feedback.items[0].duplicate_match_type, 'same_release_page_family');
   assert.equal(feedback.items[0].selector_exclusion_reason, 'CameraX release-note candidate has no concrete source_extraction bullet');

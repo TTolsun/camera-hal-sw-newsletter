@@ -562,7 +562,8 @@ function buildSourceDiscoveryFeedbackReport({
   date,
   manualCandidates = [],
   mergedCandidates = [],
-  geminiCandidates = []
+  geminiCandidates = [],
+  proposalValidations = []
 } = {}) {
   const duplicateMatches = duplicateDiscoveryMatches(manualCandidates, geminiCandidates);
   const candidatesByKey = new Map();
@@ -610,14 +611,30 @@ function buildSourceDiscoveryFeedbackReport({
     items.push(item);
   }
 
+  const gemini_parser_failures = (Array.isArray(proposalValidations) ? proposalValidations : [])
+    .filter(item => ['parser_repair_required', 'discovered_not_extractable'].includes(item.rejected_reason))
+    .map(item => ({
+      severity: 'warning',
+      action: 'GEMINI_PARSER_EXTRACTION_REQUIRED',
+      candidate_url: item.normalized_url || item.candidate_url || '',
+      source_policy_match: item.source_policy_match || '',
+      discovery_status: item.discovery_status || 'discovered',
+      extraction_status: item.extraction_status || item.rejected_reason,
+      adapter_hint: item.adapter_hint || null,
+      rejected_reason: item.rejected_reason || '',
+      suggested_fixture_case: item.suggested_fixture_case || '',
+      message: item.message || ''
+    }));
   const duplicateDiscoveryGapCount = items.filter(item => item.duplicate_discovered_by_gemini).length;
   return {
     schema_version: 1,
     report_type: 'source_discovery_feedback',
     date,
-    status: items.length > 0 ? 'WARNING' : 'PASS',
+    status: items.length > 0 || gemini_parser_failures.length > 0 ? 'WARNING' : 'PASS',
     parser_gap_count: items.length,
     duplicate_discovery_gap_count: duplicateDiscoveryGapCount,
+    gemini_parser_failure_count: gemini_parser_failures.length,
+    gemini_parser_failures,
     items
   };
 }
@@ -629,6 +646,7 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
     `status=${report.status || 'PASS'}`,
     `parser_gap_count=${Number(report.parser_gap_count || 0)}`,
     `duplicate_discovery_gap_count=${Number(report.duplicate_discovery_gap_count || 0)}`,
+    `gemini_parser_failure_count=${Number(report.gemini_parser_failure_count || 0)}`,
     '',
     '| Action | Reason | Candidate | Adapter | Duplicate Discovery | Duplicate Match | Confidence | URL |',
     '|---|---|---|---|---|---|---|---|'
@@ -649,6 +667,37 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
     lines.push('| none | none | none | none | false |  |  |  |');
   }
   lines.push('');
+
+  lines.push('## Gemini parser extraction failures', '');
+  lines.push('| Action | Reason | Discovery Status | Extraction Status | Adapter | Source | URL |');
+  lines.push('|---|---|---|---|---|---|---|');
+  for (const item of report.gemini_parser_failures || []) {
+    lines.push([
+      item.action || '',
+      item.rejected_reason || '',
+      item.discovery_status || '',
+      item.extraction_status || '',
+      item.adapter_hint || '',
+      String(item.source_policy_match || '').replace(/\|/g, '\\|'),
+      item.candidate_url || ''
+    ].join(' | ').replace(/^/, '| ').replace(/$/, ' |'));
+  }
+  if (!Array.isArray(report.gemini_parser_failures) || report.gemini_parser_failures.length === 0) {
+    lines.push('| none | none | none | none | none | none |  |');
+  }
+  lines.push('');
+
+  for (const item of report.gemini_parser_failures || []) {
+    lines.push(
+      `- ${item.action}: ${item.candidate_url || 'unknown'}`,
+      `  - rejected_reason: ${item.rejected_reason || ''}`,
+      `  - discovery_status: ${item.discovery_status || ''}`,
+      `  - extraction_status: ${item.extraction_status || ''}`,
+      `  - adapter_hint: ${item.adapter_hint || ''}`,
+      `  - suggested_fixture_case: ${item.suggested_fixture_case || ''}`,
+      ''
+    );
+  }
 
   for (const item of report.items || []) {
     lines.push(
@@ -672,12 +721,14 @@ function renderSourceDiscoveryFeedbackSummary(report = {}, markdownRelPath = '')
   const status = report.status || 'PASS';
   const parserGapCount = Number(report.parser_gap_count || 0);
   const duplicateGapCount = Number(report.duplicate_discovery_gap_count || 0);
+  const geminiParserFailureCount = Number(report.gemini_parser_failure_count || 0);
   const lines = [
     '## Parser/source feedback',
     '',
     `status=${status}`,
     `parser_gap_count=${parserGapCount}`,
-    `duplicate_discovery_gap_count=${duplicateGapCount}`
+    `duplicate_discovery_gap_count=${duplicateGapCount}`,
+    `gemini_parser_failure_count=${geminiParserFailureCount}`
   ];
   if (markdownRelPath) {
     lines.push(`source_discovery_feedback_report_markdown=${markdownRelPath}`);
@@ -698,6 +749,19 @@ function renderSourceDiscoveryFeedbackSummary(report = {}, markdownRelPath = '')
   }
   if (parserGapCount > 3) {
     lines.push(`- ${parserGapCount - 3} more item(s) in ${markdownRelPath}`);
+  }
+  for (const item of (report.gemini_parser_failures || []).slice(0, 3)) {
+    lines.push(
+      `- ${item.action}: ${item.candidate_url || 'unknown'}`,
+      `  - rejected_reason: ${item.rejected_reason || ''}`,
+      `  - discovery_status: ${item.discovery_status || ''}`,
+      `  - extraction_status: ${item.extraction_status || ''}`,
+      `  - adapter_hint: ${item.adapter_hint || ''}`,
+      `  - suggested_fixture_case: ${item.suggested_fixture_case || ''}`
+    );
+  }
+  if (geminiParserFailureCount > 3) {
+    lines.push(`- ${geminiParserFailureCount - 3} more Gemini parser failure item(s) in ${markdownRelPath}`);
   }
   lines.push('');
   return lines;
@@ -1021,7 +1085,8 @@ async function runEnabled({
     date,
     manualCandidates,
     geminiCandidates: geminiAnnotatedCandidates,
-    mergedCandidates: evidence.annotatedCandidates
+    mergedCandidates: evidence.annotatedCandidates,
+    proposalValidations: discovery.proposalValidationReport.validations
   }));
   const mergedPayload = candidatePayload(date, evidence.annotatedCandidates, manualPayload);
   const geminiPayload = candidatePayload(date, geminiAnnotatedCandidates, {

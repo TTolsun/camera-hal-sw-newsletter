@@ -18,7 +18,9 @@ const {
 } = require('../generate/gemini-client');
 const {
   candidateTitle,
+  canonicalContentUrl,
   fetchTextWithLimit,
+  fetchUrlForContent,
   isObject,
   isUrlAllowed,
   normalizeUrl,
@@ -26,6 +28,14 @@ const {
   stableId,
   text
 } = require('./source-intelligence-utils');
+const {
+  fetchTextWithConfiguredLimit,
+  resolveLinkedReleaseNoteEvidenceItems
+} = require('./linked-release-note-evidence');
+const {
+  hasConcreteVersionedReleaseExtraction,
+  parseSourceSpecificItems
+} = require('./source-item-parsers');
 
 const PROPOSAL_TYPE = 'gemini_source_discovery';
 
@@ -140,11 +150,258 @@ function dateFromHtml(html = '') {
   return plainMatch ? plainMatch[1] : '';
 }
 
+function sourceDisplayName(source = {}, proposal = {}) {
+  return source.name || proposal.source_family || 'Gemini discovery';
+}
+
+function parserSource(source = {}, url = '') {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parsed.pathname)) {
+      return {
+        ...source,
+        sourceRegistryUrl: source.sourceUrl || source.url || '',
+        id: 'camerax-release-notes',
+        name: 'CameraX Release Notes',
+        url,
+        sourceUrl: url
+      };
+    }
+    if (parsed.hostname === 'developer.android.com' && parsed.pathname.replace(/\/+$/, '') === '/latest-updates') {
+      return {
+        ...source,
+        sourceRegistryUrl: source.sourceUrl || source.url || '',
+        id: 'android-developers-latest-updates',
+        name: 'Android Developers Latest Updates',
+        url,
+        sourceUrl: url
+      };
+    }
+  } catch {
+    // Use the registry source shape below.
+  }
+  return {
+    ...source,
+    sourceRegistryUrl: source.sourceUrl || source.url || '',
+    url: source.url || source.sourceUrl || url,
+    sourceUrl: source.sourceUrl || source.url || url
+  };
+}
+
+function adapterHintForSource(source = {}, url = '') {
+  const id = text(source.id || source.source_id).toLowerCase();
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parsed.pathname)) {
+      return 'android-developers-jetpack-release';
+    }
+    if (parsed.hostname === 'developer.android.com' && parsed.pathname.replace(/\/+$/, '') === '/latest-updates') {
+      return 'android-developers-latest-updates';
+    }
+  } catch {
+    // Fall back to source identity below.
+  }
+  if (id === 'camerax-release-notes') return 'android-developers-jetpack-release';
+  if (id === 'android-developers-latest-updates') return 'android-developers-latest-updates';
+  return id || null;
+}
+
+function parserBackedReleaseSource(source = {}, url = '') {
+  const id = text(source.id || source.source_id).toLowerCase();
+  const hint = text(source.evidenceGranularityHint || source.evidence_granularity_hint).toLowerCase();
+  const mode = text(source.collectionModeHint || source.collection_mode_hint).toLowerCase();
+  if (['camerax-release-notes', 'android-developers-latest-updates'].includes(id)) return true;
+  if (hint === 'versioned_release_row') return true;
+  if (mode === 'release-note-watch' && /release|latest-updates|androidx\/releases\/camera/i.test(`${source.sourceUrl || ''} ${source.url || ''}`)) {
+    return true;
+  }
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname === 'developer.android.com' &&
+      (/\/jetpack\/androidx\/releases\/camera\b/.test(parsed.pathname) ||
+        parsed.pathname.replace(/\/+$/, '') === '/latest-updates');
+  } catch {
+    return false;
+  }
+}
+
+function suggestedFixtureCase(source = {}, url = '') {
+  const adapter = adapterHintForSource(source, url);
+  if (adapter === 'android-developers-jetpack-release') {
+    return 'Add or update a CameraX release-note fixture with version/date/component/behavior evidence.';
+  }
+  if (adapter === 'android-developers-latest-updates') {
+    return 'Add or update an Android Developers Latest Updates release-row fixture and linked release-note fixture.';
+  }
+  return 'Add a parser regression fixture for the discovered release-note source.';
+}
+
+function sourceExtractionReleaseItems(candidate = {}) {
+  return (Array.isArray(candidate.source_extraction?.release?.sections)
+    ? candidate.source_extraction.release.sections
+    : [])
+    .flatMap(section => Array.isArray(section?.items) ? section.items : []);
+}
+
+function matchesDiscoveredUrl(candidate = {}, url = '') {
+  const target = canonicalContentUrl(url);
+  const candidateUrl = canonicalContentUrl(candidate.url || candidate.articleUrl || candidate.article_url || '');
+  if (!target || !candidateUrl) return false;
+  if (candidateUrl === target) return true;
+  try {
+    const targetParts = new URL(target);
+    if (!targetParts.hash) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+function parserBackedCandidate({ proposal, source, item, fallbackUrl }) {
+  const url = canonicalContentUrl(item.url || item.articleUrl || item.article_url || fallbackUrl);
+  const publishedAt = text(item.publishedAt || item.published_date || item.source_extraction?.release?.date);
+  const hasDatedEvidence = Boolean(publishedAt);
+  const sourceGapRisk = !hasDatedEvidence;
+  const candidateId = `gemini-${stableId([url])}`;
+  const title = text(item.title) || candidateTitle(item) || proposal.topic_gap || url;
+  const summary = text(item.summary || item.behavior_change);
+  return {
+    schema_version: 5,
+    id: candidateId,
+    source_candidate_id: candidateId,
+    title,
+    url,
+    articleUrl: url,
+    article_url: url,
+    source: sourceDisplayName(source, proposal),
+    source_name: sourceDisplayName(source, proposal),
+    sourceName: sourceDisplayName(source, proposal),
+    sourceUrl: source.sourceRegistryUrl || source.sourceUrl || source.url || '',
+    source_url: source.sourceRegistryUrl || source.sourceUrl || source.url || '',
+    source_id: source.id || '',
+    category: source.category || 'unknown',
+    source_category: source.category || 'unknown',
+    section: source.section || source.category || 'unknown',
+    source_section: source.section || source.category || 'unknown',
+    priority: source.priority || 'medium',
+    reliability: source.reliability || 'unknown',
+    source_reliability: source.reliability || 'unknown',
+    origin: 'gemini_discovery',
+    collectionStage: 'gemini',
+    collection_stage: 'gemini',
+    manualSeed: false,
+    manual_seed: false,
+    sourceType: item.sourceKind || item.source_type || 'release_note_item',
+    source_type: item.sourceKind || item.source_type || 'release_note_item',
+    requiresCrossCheck: source.requiresCrossCheck === true,
+    requires_cross_check: source.requiresCrossCheck === true,
+    candidateOnly: source.candidateOnly === true,
+    candidate_only: source.candidateOnly === true,
+    topics: [proposal.topic_gap].filter(Boolean),
+    keywords: proposal.search_keywords || [],
+    evidence: proposal.expected_evidence || [],
+    warnings: [],
+    publishedAt,
+    published_date: publishedAt,
+    datePrecision: item.datePrecision || item.date_precision || '',
+    date_precision: item.datePrecision || item.date_precision || '',
+    hasDatedEvidence,
+    has_dated_evidence: hasDatedEvidence,
+    finalSelectionEligibility: hasDatedEvidence ? 'short' : 'watchlist',
+    final_selection_eligibility: hasDatedEvidence ? 'short' : 'watchlist',
+    source_gap_risk: sourceGapRisk,
+    source_gap_risk_level: sourceGapRisk ? 'high' : 'low',
+    main_eligible: hasDatedEvidence,
+    briefing_only: !hasDatedEvidence,
+    reference_only: !hasDatedEvidence,
+    relevanceScore: hasDatedEvidence ? 70 : 45,
+    relevance_score: hasDatedEvidence ? 70 : 45,
+    cameraHalRelevanceScore: hasDatedEvidence ? 70 : 45,
+    camera_hal_relevance_score: hasDatedEvidence ? 70 : 45,
+    version_or_release: item.version_or_release || item.versionOrRelease || '',
+    api_or_component: item.api_or_component || item.apiOrComponent || '',
+    behavior_change: item.behavior_change || '',
+    summary,
+    source_extraction: item.source_extraction || null,
+    extraction_quality: item.extraction_quality || item.source_extraction?.extraction_quality || null,
+    parentUrl: item.parentUrl || item.parent_url || '',
+    parent_url: item.parentUrl || item.parent_url || '',
+    parentTitle: item.parentTitle || item.parent_title || '',
+    parent_title: item.parentTitle || item.parent_title || '',
+    outgoing_links: item.outgoing_links || item.outgoingLinks || [],
+    proposal_id: proposal.proposal_id,
+    proposal_trace_id: proposal.proposal_id,
+    discovery_topic_gap: proposal.topic_gap,
+    discovery_source_family: proposal.source_family,
+    parser_backed_source_extraction: true
+  };
+}
+
+async function parserBackedPromotions({ proposal, url, source, html, fetchImpl, options }) {
+  const sourceForParsing = parserSource(source, url);
+  const parsedItems = parseSourceSpecificItems(html, sourceForParsing);
+  const fetchTextImpl = fetchImpl ? fetchTextWithConfiguredLimit(fetchImpl, options) : null;
+  const resolvedItems = parsedItems.length > 0
+    ? await resolveLinkedReleaseNoteEvidenceItems(parsedItems, sourceForParsing, {
+        fetchTextImpl: fetchTextImpl || undefined,
+        fetchCache: options.fetchCache
+      })
+    : [];
+  const concreteItems = resolvedItems
+    .filter(item => hasConcreteVersionedReleaseExtraction(item))
+    .filter(item => matchesDiscoveredUrl(item, url));
+  if (concreteItems.length === 0) {
+    const reason = parsedItems.length > 0 ? 'parser_repair_required' : 'discovered_not_extractable';
+    const message = parsedItems.length > 0
+      ? 'Deterministic parser found release-note rows but no concrete source_extraction evidence for this discovered URL.'
+      : 'Deterministic parser did not extract release-note evidence for this discovered URL.';
+    return {
+      candidates: [],
+      rejection: {
+        proposal_id: proposal.proposal_id,
+        url,
+        rejected_reason: reason,
+        message,
+        discovery_status: 'discovered',
+        extraction_status: reason,
+        adapter_hint: adapterHintForSource(sourceForParsing, url),
+        suggested_fixture_case: suggestedFixtureCase(sourceForParsing, url)
+      },
+      validation: {
+        normalized_url: url,
+        rejected_reason: reason,
+        source_policy_match: sourceForParsing.id || sourceForParsing.name || '',
+        message,
+        discovery_status: 'discovered',
+        extraction_status: reason,
+        adapter_hint: adapterHintForSource(sourceForParsing, url),
+        suggested_fixture_case: suggestedFixtureCase(sourceForParsing, url),
+        source_extraction_item_count: 0
+      }
+    };
+  }
+  return {
+    candidates: concreteItems.map(item => parserBackedCandidate({ proposal, source: sourceForParsing, item, fallbackUrl: url })),
+    rejection: null,
+    validation: {
+      normalized_url: url,
+      accepted: true,
+      source_policy_match: sourceForParsing.id || sourceForParsing.name || '',
+      discovery_status: 'discovered',
+      extraction_status: 'parser_extracted',
+      adapter_hint: adapterHintForSource(sourceForParsing, url),
+      source_extraction_item_count: concreteItems
+        .reduce((count, item) => count + sourceExtractionReleaseItems(item).length, 0)
+    }
+  };
+}
+
 async function promoteProposalUrls({ proposalPayload, sourceRegistry, fetchImpl, options = {} }) {
   const promoted = [];
   const rejected = [];
   const validationReport = [];
   const seenUrls = new Set();
+  const seenPromotedUrls = new Set();
   function recordValidation(proposal, rawUrl, values = {}) {
     const row = {
       proposal_id: proposal.proposal_id,
@@ -155,6 +412,13 @@ async function promoteProposalUrls({ proposalPayload, sourceRegistry, fetchImpl,
       source_policy_match: values.source_policy_match || ''
     };
     if (values.message) row.message = values.message;
+    if (values.discovery_status) row.discovery_status = values.discovery_status;
+    if (values.extraction_status) row.extraction_status = values.extraction_status;
+    if (values.adapter_hint) row.adapter_hint = values.adapter_hint;
+    if (values.suggested_fixture_case) row.suggested_fixture_case = values.suggested_fixture_case;
+    if (values.source_extraction_item_count !== undefined) {
+      row.source_extraction_item_count = values.source_extraction_item_count;
+    }
     validationReport.push(row);
     return row;
   }
@@ -184,7 +448,7 @@ async function promoteProposalUrls({ proposalPayload, sourceRegistry, fetchImpl,
       let html = '';
       if (fetchImpl) {
         try {
-          html = await fetchTextWithLimit(fetchImpl, url, options);
+          html = await fetchTextWithLimit(fetchImpl, fetchUrlForContent(url), options);
         } catch (error) {
           rejected.push({ proposal_id: proposal.proposal_id, url, rejected_reason: 'fetch_failed', message: error.message });
           recordValidation(proposal, rawUrl, {
@@ -195,6 +459,29 @@ async function promoteProposalUrls({ proposalPayload, sourceRegistry, fetchImpl,
           });
           continue;
         }
+      }
+
+      if (parserBackedReleaseSource(source, url)) {
+        const parserResult = await parserBackedPromotions({
+          proposal,
+          url,
+          source,
+          html,
+          fetchImpl: fetchImpl || null,
+          options
+        });
+        recordValidation(proposal, rawUrl, parserResult.validation);
+        if (parserResult.rejection) {
+          rejected.push(parserResult.rejection);
+          continue;
+        }
+        for (const candidate of parserResult.candidates) {
+          const candidateKey = canonicalContentUrl(candidate.url);
+          if (seenPromotedUrls.has(candidateKey)) continue;
+          seenPromotedUrls.add(candidateKey);
+          promoted.push(candidate);
+        }
+        continue;
       }
 
       const publishedAt = dateFromHtml(html);
