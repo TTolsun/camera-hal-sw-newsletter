@@ -266,6 +266,14 @@
       "generatedArtifact": false
     },
     {
+      "path": "source-html/android-developers-roundup-rss.xml",
+      "source": "synthetic",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Android Developers roundup RSS child topic extraction remains additive",
+      "generatedArtifact": false
+    },
+    {
       "path": "source-html/android-latest-updates-camera.html",
       "source": "curated",
       "allowedUse": "parser-source-html",
