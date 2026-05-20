@@ -310,14 +310,33 @@ test('collector resolves link-only Latest Updates CameraX rows through determini
   assert.equal(unresolved.length, 1);
   assert.equal(unresolved[0].behavior_change, '');
 
-  const resolved = await resolveLinkedReleaseNoteEvidenceItems(unresolved, latestUpdatesSource, {
+  const fetchUrls = [];
+  const secondUnresolved = {
+    ...unresolved[0],
+    title: 'CameraX 1.6.0',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0',
+    linked_release_note_target_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0',
+    version_or_release: 'CameraX 1.6.0',
+    publishedAt: 'March 25, 2026',
+    source_extraction: {
+      ...unresolved[0].source_extraction,
+      release: {
+        ...unresolved[0].source_extraction.release,
+        version: 'CameraX 1.6.0',
+        date: 'March 25, 2026'
+      }
+    }
+  };
+  const resolved = await resolveLinkedReleaseNoteEvidenceItems([unresolved[0], secondUnresolved], latestUpdatesSource, {
     fetchTextImpl: async (url) => {
-      assert.equal(url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+      fetchUrls.push(url);
       return readTextFixture('source-html/camerax-release-notes-live-structure.html');
     }
   });
   const candidate = normalizeCandidate(resolved[0]);
+  const cachedCandidate = normalizeCandidate(resolved[1]);
 
+  assert.deepEqual(fetchUrls, ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']);
   assert.equal(candidate.article_url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
   assert.equal(candidate.publishedAt, 'May 06, 2026');
   assert.equal(candidate.datePrecision || 'day', 'day');
@@ -337,6 +356,9 @@ test('collector resolves link-only Latest Updates CameraX rows through determini
     candidate.source_extraction.links.some(link => link.role === 'issue_or_bug'),
     false
   );
+  assert.equal(cachedCandidate.article_url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0');
+  assert.equal(cachedCandidate.version_or_release, 'CameraX 1.6.0');
+  assert.match(cachedCandidate.behavior_change, /CameraPipe SessionConfig support/);
 });
 
 test('collector keeps libcamera v0.7.1 release as camera driver image pipeline candidate', () => {

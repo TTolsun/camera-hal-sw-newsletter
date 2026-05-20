@@ -376,8 +376,29 @@ function markUnresolvedLinkedReleaseNote(item = {}, reason = 'missing_concrete_r
   };
 }
 
+function linkedReleaseNoteFetchCacheKey(value) {
+  const canonical = canonicalContentUrl(value);
+  if (!canonical) return '';
+  try {
+    const parsed = new URL(canonical);
+    parsed.hash = '';
+    return parsed.toString();
+  } catch {
+    return canonical.replace(/#.*$/, '');
+  }
+}
+
 async function resolveLinkedReleaseNoteEvidenceItems(items = [], parentSource = {}, options = {}) {
   const fetchTextImpl = options.fetchTextImpl || fetchText;
+  const fetchCache = options.fetchCache || new Map();
+  async function fetchCached(url) {
+    const cacheKey = linkedReleaseNoteFetchCacheKey(url) || url;
+    if (!fetchCache.has(cacheKey)) {
+      fetchCache.set(cacheKey, fetchTextImpl(url));
+    }
+    return fetchCache.get(cacheKey);
+  }
+
   const resolved = [];
   for (const item of items) {
     const targetUrl = String(item.linked_release_note_target_url || '').trim();
@@ -390,7 +411,7 @@ async function resolveLinkedReleaseNoteEvidenceItems(items = [], parentSource = 
       continue;
     }
     try {
-      const html = await fetchTextImpl(targetUrl);
+      const html = await fetchCached(targetUrl);
       const linkedSource = releaseNoteSourceForLinkedTarget(item, parentSource);
       const linkedItems = parseSourceSpecificItems(html, linkedSource);
       const match = linkedItems.find(candidate =>

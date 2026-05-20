@@ -1,7 +1,10 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { parseSourceSpecificItems } = require('../../../scripts/lib/source-item-parsers');
+const {
+  hasConcreteVersionedReleaseExtraction,
+  parseSourceSpecificItems
+} = require('../../../scripts/lib/source-item-parsers');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 
 function source(overrides = {}) {
@@ -141,6 +144,78 @@ test('Android Latest Updates link-only row does not synthesize CameraX behavior'
   assert.equal(item.source_extraction.extraction_quality.main_article_allowed, false);
   assert.equal(item.source_extraction.extraction_quality.used_empty_evidence_fallback, true);
   assert.deepEqual(item.source_extraction.bullets, []);
+});
+
+test('Android Latest Updates parser requires trusted latest-updates identity beyond release-row hints', () => {
+  const html = readTextFixture('source-html/android-latest-updates-camerax-1.6.1.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    id: 'android-developers-camera-release-notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    collectionModeHint: 'release-note-watch',
+    evidenceGranularityHint: 'versioned_release_row'
+  }));
+
+  assert.equal(items.length, 0);
+});
+
+test('versioned release extraction predicate requires allowed canonical release evidence', () => {
+  assert.equal(hasConcreteVersionedReleaseExtraction({
+    source_extraction: {
+      minor_line_context: {
+        sections: [{
+          items: [{ text: 'Fixed CameraX API behavior from a neighboring release line.' }]
+        }]
+      },
+      extraction_quality: {
+        main_article_allowed: true,
+        has_concrete_behavior_change: true
+      }
+    }
+  }), false);
+
+  assert.equal(hasConcreteVersionedReleaseExtraction({
+    source_extraction: {
+      release: {
+        sections: [{
+          items: [{ text: 'Fixed a compile error when using ListenableFuture in CameraX.' }]
+        }]
+      },
+      extraction_quality: {
+        main_article_allowed: false,
+        has_concrete_behavior_change: true
+      }
+    }
+  }), false);
+
+  assert.equal(hasConcreteVersionedReleaseExtraction({
+    source_extraction: {
+      release: {
+        sections: [{
+          items: [{ text: 'Maven Group versions camera-core 1.6.1 camera-camera2 1.6.1' }]
+        }]
+      },
+      extraction_quality: {
+        main_article_allowed: true,
+        has_concrete_behavior_change: true
+      }
+    }
+  }), false);
+
+  assert.equal(hasConcreteVersionedReleaseExtraction({
+    source_extraction: {
+      release: {
+        sections: [{
+          items: [{ text: 'Fixed a compile error when using ListenableFuture in CameraX.' }]
+        }]
+      },
+      extraction_quality: {
+        main_article_allowed: true,
+        has_concrete_behavior_change: true
+      }
+    }
+  }), true);
 });
 
 test('AOSP Site updates parser extracts month-level camera child rows only', () => {

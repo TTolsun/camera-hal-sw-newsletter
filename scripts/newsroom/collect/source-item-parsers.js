@@ -474,10 +474,8 @@ function trustedAndroidLatestUpdatesSource(source = {}) {
   const family = String(source.sourceFamilyId || source.source_family_id || source.sourceFamily || '').toLowerCase();
   if (family === 'android-developers-latest-updates') return true;
   const parsed = sourceUrlParts(source);
-  if (parsed?.hostname === 'developer.android.com' && parsed.pathname === '/latest-updates') return true;
-  const hint = `${source.collectionModeHint || ''} ${source.evidenceGranularityHint || ''}`;
-  return parsed?.hostname === 'developer.android.com' &&
-    /release-note-watch|versioned_release_row/i.test(hint);
+  const path = parsed?.pathname?.replace(/\/+$/, '');
+  return parsed?.hostname === 'developer.android.com' && path === '/latest-updates';
 }
 
 function trustedCameraReleaseNoteUrl(value = '') {
@@ -533,7 +531,13 @@ function sourceExtractionItemTexts(extraction = {}) {
 }
 
 function hasConcreteVersionedReleaseExtraction(item = {}) {
-  return sourceExtractionItemTexts(item.source_extraction).length > 0;
+  const extraction = item.source_extraction || {};
+  const quality = item.extraction_quality || extraction.extraction_quality || {};
+  if (quality.main_article_allowed === false || quality.has_concrete_behavior_change === false) {
+    return false;
+  }
+  return sourceExtractionItemTexts({ release: extraction.release })
+    .some(text => !isArtifactOnlyReleaseEvidence(text));
 }
 
 function versionedReleaseRowExtraction({
