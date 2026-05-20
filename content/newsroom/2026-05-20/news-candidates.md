@@ -2,7 +2,7 @@
 
 이 파일은 구조화된 newsletter source registry에서 생성됩니다. Gemini는 candidate JSON과 source metadata만 입력으로 사용하며 웹을 직접 browse하지 않습니다.
 
-- Lookback: 21일
+- Lookback: 30일
 - 후보 수: 40
 - Source registry: data/news-sources.json
 - Candidate-only media/community source는 final article selection 전에 official-source verification이 필요합니다.
@@ -24,6 +24,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | main | android_platform_camera_adjacent | 3 | 84 | 8 | release-note-item | yes | release_note_item | Android Developers Latest Updates | 1.6.1 | May 06, 2026 | Eligible for main article selection. | [link](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1) |
 | short | android_platform_camera_adjacent | 3 | 60 | 8 | release-note-item | yes | release_note_item | Android Developers Latest Updates | 1.3.0-beta02 | May 06, 2026 | Eligible for short newsletter use. | [link](https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02) |
 | short | android_platform_camera_adjacent | 3 | 60 | 8 | release-note-item | yes | release_note_item | Android Developers Latest Updates | 1.4.0-alpha07 | May 06, 2026 | Eligible for short newsletter use. | [link](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07) |
+| main | camera_driver_image_pipeline | 2 | 93 | 8 | release-note-item | yes | release_note_item | libcamera Release Announcements | libcamera Release Announcements - libcamera v0.7.1 | 2026-04-28 | Eligible for main article selection. | [link](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html) |
 | short | cpp_ai_tooling_fallback | 5 | 57 | 6 | rss-item | yes | rss_item | ISO C++ Blog | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! | Thu, 30 Apr 2026 22:36:23 +0000 | Eligible for short newsletter use. | [link](https://isocpp.org//blog/2026/04/gcc-16.1) |
 | short | cpp_ai_tooling_fallback | 5 | 51 | 8 | rss-item | yes | rss_item | ISO C++ Blog | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more | Tue, 28 Apr 2026 22:25:57 +0000 | Eligible for short newsletter use. | [link](https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more) |
 
@@ -37,6 +38,8 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | watchlist | generic_tech_watchlist | 6 | 72 | 2 | rss-item | yes | rss_item | Android Developers Blog | How FotMob leveraged cross-device discovery to score record Wear OS adoption | Fri, 15 May 2026 16:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html) |
 | watchlist | generic_tech_watchlist | 6 | 66 | 2 | rss-item | yes | rss_item | Android Developers Blog | Increasing app discovery and engagement on Google TV | Tue, 19 May 2026 12:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html) |
 | watchlist | generic_tech_watchlist | 6 | 66 | 2 | rss-item | yes | rss_item | Android Developers Blog | I/O 2026: What's new in Google Play | Tue, 19 May 2026 08:15:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html) |
+| watchlist | generic_tech_watchlist | 6 | 66 | 6 | rss-item | yes | rss_item | Android Developers Blog | What's new in the Jetpack Compose April '26 release | Wed, 22 Apr 2026 23:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html) |
+| watchlist | generic_tech_watchlist | 6 | 66 | 4 | rss-item | yes | rss_item | Android Developers Blog | Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4 | Tue, 21 Apr 2026 14:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html) |
 | watchlist | generic_tech_watchlist | 6 | 60 | 2 | rss-item | yes | rss_item | Android Developers Blog | Build for the future with the Android XR Developer Catalyst Program — Apply now! | Tue, 19 May 2026 11:15:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html) |
 | watchlist | generic_tech_watchlist | 6 | 60 | 6 | rss-item | yes | rss_item | Android Developers Blog | Adaptive development for the expanding Android ecosystem | Tue, 19 May 2026 11:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html) |
 | watchlist | generic_tech_watchlist | 6 | 60 | 6 | rss-item | yes | rss_item | Android Developers Blog | Updates to the Android XR SDK: Introducing Developer Preview 4 | Tue, 19 May 2026 10:45:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html) |
@@ -44,18 +47,17 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | watchlist | generic_tech_watchlist | 6 | 60 | 6 | rss-item | yes | rss_item | Android Developers Blog | Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha | Thu, 14 May 2026 20:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html) |
 | watchlist | generic_tech_watchlist | 6 | 60 | 4 | rss-item | yes | rss_item | Android Developers Blog | Gratitude saw 25% higher retention for widget users | Fri, 08 May 2026 16:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html) |
 | watchlist | generic_tech_watchlist | 6 | 60 | 4 | rss-item | yes | rss_item | Android Developers Blog | A look ahead: Making it easier and faster to publish safer apps | Thu, 07 May 2026 17:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html) |
+| watchlist | generic_tech_watchlist | 6 | 60 | 2 | rss-item | yes | rss_item | Android Developers Blog | Streamline User Journeys with Verified Email via Credential Manager | Wed, 22 Apr 2026 20:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html) |
 | watchlist | generic_tech_watchlist | 6 | 48 | 4 | rss-item | yes | rss_item | Android Developers Blog | Android XR Updates for Unity, Unreal, and Godot | Tue, 19 May 2026 10:30:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html) |
 | watchlist | generic_tech_watchlist | 6 | 48 | 2 | rss-item | yes | rss_item | Android Developers Blog | Building for the Intelligence System on Android | Tue, 12 May 2026 14:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html) |
 | watchlist | generic_tech_watchlist | 6 | 48 | 2 | rss-item | yes | rss_item | Android Developers Blog | Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks | Mon, 04 May 2026 17:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html) |
 | watchlist | generic_tech_watchlist | 6 | 42 | 4 | rss-item | yes | rss_item | Android Developers Blog | What's new in Android for Cars: Unifying platforms and unlocking premium experiences | Tue, 19 May 2026 08:30:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html) |
 | watchlist | generic_tech_watchlist | 6 | 42 | 4 | rss-item | yes | rss_item | Android Developers Blog | What's New in Wear OS 7 | Tue, 19 May 2026 08:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html) |
 | watchlist | generic_tech_watchlist | 6 | 41 | 8 | release-note-item | yes | release_note_item | Android Security Bulletin | Overview | 2026-05-01 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://source.android.com/docs/security/bulletin/asb-overview) |
+| watchlist | generic_tech_watchlist | 6 | 69 | 4 | rss-item | yes | rss_item | ISO C++ Blog | 2026 Annual C++ Developer Survey "Lite" | Wed, 22 Apr 2026 00:59:01 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1) |
 | watchlist | generic_tech_watchlist | 6 | 57 | 4 | rss-item | yes | rss_item | ISO C++ Blog | C++: The Documentary trailer | Thu, 14 May 2026 15:01:46 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer) |
+| watchlist | generic_tech_watchlist | 6 | 57 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal | Thu, 23 Apr 2026 21:23:33 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph) |
 | watchlist | generic_tech_watchlist | 6 | 45 | 2 | rss-item | yes | rss_item | ISO C++ Blog | Results summary: 2026 Annual C++ Developer Survey "Lite" | Mon, 04 May 2026 21:04:35 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/2026-survey-summary) |
-| watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | What Happens When a Destructor Throws -- Sandor Dargo | Fri, 15 May 2026 22:42:26 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo) |
-| watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman | Wed, 13 May 2026 21:36:47 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo) |
-| watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter | Mon, 11 May 2026 21:33:30 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter) |
-| watchlist | generic_tech_watchlist | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Back to Basics: Move Semantics -- Ben Saks | Thu, 07 May 2026 21:31:37 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks) |
 
 ## 제외 또는 낮은 신뢰도 항목
 
@@ -69,8 +71,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | exclude | generic_tech_watchlist | 6 | 41 | 6 | release-note-page | no | release_note_item | Android Security Bulletin | May | 2026-05-01 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://source.android.com/docs/security/bulletin/2026/2026-05-01) |
 | exclude | cpp_ai_tooling_fallback | 5 | 69 | 4 | rss-item | yes | rss_item | ISO C++ Blog | C++26: A User-Friendly assert() macro -- Sandor Dargo | Mon, 04 May 2026 22:31:55 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo) |
 | exclude | cpp_ai_tooling_fallback | 5 | 45 | 2 | rss-item | yes | rss_item | ISO C++ Blog | What reinterpret_cast doesn&apos;t do -- Andreas Fertig | Mon, 18 May 2026 22:46:29 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig) |
-| exclude | cpp_ai_tooling_fallback | 5 | 39 | 2 | rss-item | yes | rss_item | ISO C++ Blog | JSON and C++26 compile-time reflection: a talk -- Daniel Lemire | Wed, 06 May 2026 22:35:16 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire) |
-| exclude | cpp_ai_tooling_fallback | 5 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | Evolving a Translation System with Reflection in C++ | Tue, 12 May 2026 22:40:34 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp) |
 
 ## 원본 후보
 
@@ -479,7 +479,97 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Paul Feng, VP, Google Play Eng, Product, UX At Google Play, we’re passionate about helping people connect with the experiences they’ll love, while empowering developers like you to turn great ideas into lasting business success. At this year’s Google I/O, we talked about our evolving business model that offers more choice and new ways for your apps and content to be discovered on and off the store. We also unveiled advanced tools and insights that will help scale your business with les
 - Selection reason: Android Developers Blog (official, high, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 10. Camera &nbsp;|&nbsp; Android Open Source Project
+### 10. What's new in the Jetpack Compose April '26 release
+
+- 출처: Android Developers Blog
+- 출처 URL: https://android-developers.googleblog.com/
+- 발행일: Wed, 22 Apr 2026 23:00:00 +0000
+- Link: https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html
+- Section: Android / AOSP / Camera
+- Source category: android
+- Source priority: high
+- Source reliability: official
+- Editorial priority: 6
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 6
+- Version/release: 2026.04.01
+- API/component: 추출 안 됨
+- Behavior change: Posted by Meghan Mehta,&nbsp;Android Developer Relations Engineer Today, the Jetpack Compose April ‘26 release is stable.
+- Cross-check 필요: no
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 66
+- 요약: Posted by Meghan Mehta,&nbsp;Android Developer Relations Engineer Today, the Jetpack Compose April ‘26 release is stable. This release contains version 1.11 of core Compose modules (see the full BOM mapping ), shared element debug tools, trackpad events, and more. We also have a few experimental APIs that we’d love you to try out and give us feedback on. To use today’s release, upgrade your Compose BOM version to: implementation(platform("androidx.compose:compose-bom:2026.04.01")) Changes in Com
+- Selection reason: Android Developers Blog (official, high, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 11. Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4
+
+- 출처: Android Developers Blog
+- 출처 URL: https://android-developers.googleblog.com/
+- 발행일: Tue, 21 Apr 2026 14:00:00 +0000
+- Link: https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html
+- Section: Android / AOSP / Camera
+- Source category: android
+- Source priority: high
+- Source reliability: official
+- Editorial priority: 6
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: This release brings Planning Mode, Next Edit Prediction, and more, making it easier than ever to build high-quality Android apps.
+- Cross-check 필요: no
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 66
+- 요약: Posted by Matt Dyor, Senior Product Manager Android Studio Panda 4 is now stable and ready for you to use in production. This release brings Planning Mode, Next Edit Prediction, and more, making it easier than ever to build high-quality Android apps. Here’s a deep dive into what’s new: Planning Mode Before the Agent starts working on complex tasks for you, it would be helpful if it could come up with a detailed plan. Jumping straight into a large coding project without a design often leads to te
+- Selection reason: Android Developers Blog (official, high, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 12. Camera &nbsp;|&nbsp; Android Open Source Project
 
 - 출처: AOSP Camera Documentation
 - 출처 URL: https://source.android.com/docs/core/camera
@@ -524,7 +614,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP Camera Documentation (official, high, score 65): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 11. Build for the future with the Android XR Developer Catalyst Program — Apply now!
+### 13. Build for the future with the Android XR Developer Catalyst Program — Apply now!
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -569,7 +659,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Android XR Team The Android XR ecosystem is expanding, and we’re committed to supporting developers who will build its next great experiences. Today, we’re opening applications for the Android XR Developer Catalyst Program , a dedicated initiative to accelerate the development of Android XR apps ready to launch within the next year. This program is designed to provide the resources, hardware, and grants to help you build and scale innovative experiences across wired XR glasses , like X
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 12. Adaptive development for the expanding Android ecosystem
+### 14. Adaptive development for the expanding Android ecosystem
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -614,7 +704,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted Fahd Imtiaz, Senior Product Manager, Adaptive Apps With the release of Android 17, we are transitioning into an adaptive first development standard. Your users no longer rely on a single form factor; they transition between phones, foldables, tablets, laptops, automotive displays, and immersive XR environments throughout their day. Now, with over 580 million large screen devices in the hands of users, adaptive is no longer just a technical goal. It’s a massive opportunity to reach highly
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 13. Updates to the Android XR SDK: Introducing Developer Preview 4
+### 15. Updates to the Android XR SDK: Introducing Developer Preview 4
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -659,7 +749,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Stevan Silva, Group Product Manager and Amy Zeppenfeld, Developer Relations Engineer Today we're excited to launch Developer Preview 4 of the Android XR SDK, continuing our focus on unifying cross-device development for headsets, wired XR glasses, and intelligent eyewear . To keep our platform intuitive, we are adopting more descriptive naming for our form factors, where AI glasses are now audio glasses and display AI glasses are now display glasses, with these changes appearing in our
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 14. Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android
+### 16. Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -704,7 +794,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: By Simon Cooke, Developer Relations Engineer ( X ) and Mayank Jain, Product Manager ( X ) What is Android Performance Analyzer? Android Performance Analyzer (APA) &nbsp;is Android’s new profiler and performance analysis tool for the Android mobile ecosystem.&nbsp; APA is intended as a profiling tool for any developer building for Android who needs to make their app or game run better and faster. It is helpful for all performance-minded engineers, especially those using Vulkan in their game engin
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 15. Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha
+### 17. Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -749,7 +839,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Nataraj KR, Android Developer Relations Engineer The initial launch of the Jetpack Telecom library introduced CallsManager , replacing the legacy ConnectionService API to simplify VoIP integration. CallsManager streamlines call lifecycle management and audio routing while enabling interactions with remote surfaces like smartwatches, Bluetooth devices, and Android Auto. Additionally, it supports call extensions for richer features—such as participant handling, custom icons, call silenci
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 16. Gratitude saw 25% higher retention for widget users
+### 18. Gratitude saw 25% higher retention for widget users
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -794,7 +884,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Ash Nohe and Amrit Sanjeev, Android Developer Relations Engineers Practicing gratitude may decrease symptoms of depression and anxiety, and improve mental health and life satisfaction 1 . Consistent gratitude practice may lead to sustained improvements that last months 2 . The mindfulness app Gratitude encourages consistency through micro daily journaling, affirmations, and vision boards. The app has over 6 million downloads, 150 thousand 5-star ratings, and 100 million journal entries
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 17. A look ahead: Making it easier and faster to publish safer apps
+### 19. A look ahead: Making it easier and faster to publish safer apps
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -839,7 +929,52 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by&nbsp; Vijaya Kaza, VP, Product, App & Ecosystem Trust The mobile ecosystem is always evolving, bringing both new opportunities and new threats. Through these changes, Android and Google Play remain committed to ensuring that billions of users can continue to enjoy their apps with confidence and developer innovation can thrive. Earlier this year, we shared how Android and Google Play kept the ecosystem safe in 2025 by deepening our investments in AI and real-time defenses. Today, we’re
 - Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 18. 1.3.0-beta02
+### 20. Streamline User Journeys with Verified Email via Credential Manager
+
+- 출처: Android Developers Blog
+- 출처 URL: https://android-developers.googleblog.com/
+- 발행일: Wed, 22 Apr 2026 20:00:00 +0000
+- Link: https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html
+- Section: Android / AOSP / Camera
+- Source category: android
+- Source priority: high
+- Source reliability: official
+- Editorial priority: 6
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 2
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: Posted by Niharika Arora, Senior Developer Relations Engineer and Jean-Pierre Pralle, Product Manager, Credential Manager In the modern digital landscape, the first encounter a user has with an app is often the most critical.
+- Cross-check 필요: no
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 60
+- 요약: Posted by Niharika Arora, Senior Developer Relations Engineer and Jean-Pierre Pralle, Product Manager, Credential Manager In the modern digital landscape, the first encounter a user has with an app is often the most critical. Yet, for decades, this initial interaction has been hindered by the friction of traditional verification methods. Today, we're excited to announce a new verified email credential issued by Google , which developers can now retrieve directly from Android’s Credential Manager
+- Selection reason: Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 21. 1.3.0-beta02
 
 - 출처: Android Developers Latest Updates
 - 출처 URL: https://developer.android.com/latest-updates
@@ -884,7 +1019,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: 1.7.0-alpha01 camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close <h3 class="hide-from-toc no-link" id="wear-mave
 - Selection reason: Android Developers Latest Updates (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.)
 
-### 19. 1.4.0-alpha07
+### 22. 1.4.0-alpha07
 
 - 출처: Android Developers Latest Updates
 - 출처 URL: https://developer.android.com/latest-updates
@@ -929,7 +1064,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: > camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers
 - Selection reason: Android Developers Latest Updates (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.)
 
-### 20. What&apos;s new &nbsp;|&nbsp; Android Open Source Project
+### 23. What&apos;s new &nbsp;|&nbsp; Android Open Source Project
 
 - 출처: AOSP What's New / Release Notes
 - 출처 URL: https://source.android.com/docs/whatsnew
@@ -974,7 +1109,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: AOSP What's New / Release Notes (official, high, score 53): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 21. Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project
+### 24. Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project
 
 - 출처: Android Compatibility Definition Document
 - 출처 URL: https://source.android.com/docs/compatibility/cdd
@@ -1019,7 +1154,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: No RSS feed is configured. Use this source page as a change/release-note watch target.
 - Selection reason: Android Compatibility Definition Document (official, high, score 53): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 22. Android XR Updates for Unity, Unreal, and Godot
+### 25. Android XR Updates for Unity, Unreal, and Godot
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -1064,7 +1199,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Luke Hopkins, Android Developer Relations Engineer for OpenXR & Ryan Bartley, Android XR Product Manager Today, we are excited to announce that official support for Unreal Engine and Godot has arrived for Android XR. Alongside these engine expansions, we are also launching new tools designed to boost your productivity and enable new XR capabilities: the Android XR Engine Hub and&nbsp;the Android XR Interaction Framework . Android XR Engine Hub The Android XR Engine Hub is currently ava
 - Selection reason: Android Developers Blog (official, high, score 48): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 23. Building for the Intelligence System on Android
+### 26. Building for the Intelligence System on Android
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -1109,7 +1244,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Matthew McCullough, VP, Product Management, Android Developer Announced today during The Android Show , Android is transitioning from an operating system to an intelligence system, creating more opportunities for engagement with your apps. Through deep integration between hardware and software, Android devices will be able to handle the heavy lifting of anticipating user needs, so your app can focus on delivering that experience at the right moment. As part of this, we are announcing G
 - Selection reason: Android Developers Blog (official, high, score 48): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 24. Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks
+### 27. Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -1154,7 +1289,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Thomas Ezan, Sr Developer Relations Engineer and Tracy Agyemang, Product Marketing Manager Karrot is a hyperlocal, community-driven peer-to-peer marketplace app that enables users to buy, sell, and trade items with other verified users. Since launching in South Korea in 2015, the platform has expanded into global markets, amassing over 43 million registered users. After launching in North America, engineers at Karrot observed that 30% of users in the region use a non-English device lan
 - Selection reason: Android Developers Blog (official, high, score 48): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 25. What's new in Android for Cars: Unifying platforms and unlocking premium experiences
+### 28. What's new in Android for Cars: Unifying platforms and unlocking premium experiences
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -1199,7 +1334,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by Jan Kleinert, Developer Relations Engineer, Android for Cars, Noam Gefen, Senior Product Manager, and Thomas Weathers, Developer Relations Engineer, Android for Cars We're thrilled to see developers continuing to bring their apps and experiences to Android for Cars! Over the past year, we've continued to see strong growth and momentum in the app ecosystem on Android Auto and cars with Google built-in. This year at Google I/O, we're introducing updates that benefit both drivers and deve
 - Selection reason: Android Developers Blog (official, high, score 42): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 26. What's New in Wear OS 7
+### 29. What's New in Wear OS 7
 
 - 출처: Android Developers Blog
 - 출처 URL: https://android-developers.googleblog.com/
@@ -1244,7 +1379,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by John Zoeller, Developer Relations Engineer Today, we are excited to introduce Wear OS 7, a major update that brings a new era of power efficiency and intelligence to users and developers alike. We recognize that watches are essential, all-day companions to your users. That’s why we're continuing to invest in power optimizations so your users can do more with their favorite apps. For watches upgrading from Wear OS 6 to Wear OS 7, average users can expect up to 10% improvement in battery
 - Selection reason: Android Developers Blog (official, high, score 42): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 27. Overview
+### 30. Overview
 
 - 출처: Android Security Bulletin
 - 출처 URL: https://source.android.com/docs/security/bulletin
@@ -1289,7 +1424,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: ss="devsite-expandable-nav"> Android Security Bulletins Bulletins home Overview 2026 bulletins May April <li class="devsite-nav-
 - Selection reason: Android Security Bulletin (official, high, score 41): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 28. May
+### 31. May
 
 - 출처: Android Security Bulletin
 - 출처 URL: https://source.android.com/docs/security/bulletin
@@ -1334,7 +1469,52 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: vsite-nav-title" > Overview 2026 bulletins May April March February January <a class="devsite-nav-toggle" aria-hidden="true"
 - Selection reason: Android Security Bulletin (official, high, score 41): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 29. C++26: A User-Friendly assert() macro -- Sandor Dargo
+### 32. libcamera Release Announcements - libcamera v0.7.1
+
+- 출처: libcamera Release Announcements
+- 출처 URL: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- 발행일: 2026-04-28
+- Link: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- Section: Linux Camera / Driver
+- Source category: linux-camera
+- Source priority: high
+- Source reliability: project-official
+- Editorial priority: 2
+- Relevance bucket: camera_driver_image_pipeline
+- AOSP camera directness: 0
+- Driver stack relevance: 3
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: yes
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: article_text
+- Source hint: libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인
+- Candidate only: no
+- Collection mode: release-note-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-release-evidence
+- Final selection eligibility: main
+- Source kind: release_note_item
+- Main eligible: yes
+- Briefing only: no
+- Reference only: no
+- Source gap risk: no
+- Evidence score: 8
+- Version/release: libcamera v0.7.1
+- API/component: libcamera / V4L2 camera pipeline
+- Behavior change: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
+- Cross-check 필요: no
+- Selection exclusion reason: Eligible for main article selection.
+- Verification hint: Can be used directly if the collected item supports the claim.
+- Relevance Score: 93
+- 요약: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
+- Selection reason: libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)
+
+### 33. C++26: A User-Friendly assert() macro -- Sandor Dargo
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1379,7 +1559,52 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: C++26 is bringing some long-overdue changes to&nbsp; assert() . But why are those changes needed? And when do we actually use&nbsp; assert , anyway? At its core,&nbsp; assert() &nbsp;exists to validate runtime conditions. If the given expression evaluates to&nbsp; false , the program aborts. I&rsquo;m almost certain you&rsquo;ve used it before &mdash; at work, in personal projects, or at the very least in examples and code snippets. So what&rsquo;s the problem? C++26: A User-Friendly assert() ma
 - Selection reason: ISO C++ Blog (official-community, high, score 69): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
 
-### 30. C++: The Documentary trailer
+### 34. 2026 Annual C++ Developer Survey "Lite"
+
+- 출처: ISO C++ Blog
+- 출처 URL: https://isocpp.org/blog
+- 발행일: Wed, 22 Apr 2026 00:59:01 +0000
+- Link: https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1
+- Section: C++ / Native / Toolchain
+- Source category: cpp
+- Source priority: high
+- Source reliability: official-community
+- Editorial priority: 6
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: This is the biggest opportunity we all have each year to make our voices heard and help improve our industry and community!
+- Cross-check 필요: no
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 69
+- 요약: The annual global C++ developer survey is now open: 2026 Annual C++ Developer Survey "Lite" Please share your feedback in this annual 10-minute survey to help inform C++ standardization and C++ tool vendors. This is the biggest opportunity we all have each year to make our voices heard and help improve our industry and community! A summary of the results, including aggregated highlights of common answers in the write-in responses, will be posted publicly here on isocpp.org and shared with the C+
+- Selection reason: ISO C++ Blog (official-community, high, score 69): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 35. C++: The Documentary trailer
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1424,7 +1649,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Sponsored by HRT and produced by CultRepo , we're pleased to share the official trailer for C++: The Documentary . The trailer premieres today at 19:00 UTC. Click Notify me on the YouTube Premiere page to get a reminder when it goes live. The film will have its world premiere on May 28 at a special live event in New York City&rsquo;s Financial District, followed by a panel discussion that will be recorded for later release. C++: The Documentary will be released worldwide on YouTube on June 4, wi
 - Selection reason: ISO C++ Blog (official-community, high, score 57): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 31. GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
+### 36. GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1469,7 +1694,52 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R
 - Selection reason: ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)
 
-### 32. Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
+### 37. CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal
+
+- 출처: ISO C++ Blog
+- 출처 URL: https://isocpp.org/blog
+- 발행일: Thu, 23 Apr 2026 21:23:33 +0000
+- Link: https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph
+- Section: C++ / Native / Toolchain
+- Source category: cpp
+- Source priority: high
+- Source reliability: official-community
+- Editorial priority: 6
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
+- Candidate only: no
+- Collection mode: rss-item
+- Article candidate: yes
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: GPU
+- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
+- Cross-check 필요: no
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 57
+- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Can Standard C++ Replace CUDA for GPU Acceleration? by Elmar Westphal Summary of the talk: On top
+- Selection reason: ISO C++ Blog (official-community, high, score 57): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 38. Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1514,7 +1784,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more From the article: Glaze now supports C++26 reflection with experimental GCC and Clang compilers. GCC 16 will soon be released with this support. When enabled, Glaze replaces the traditional&nbsp; __PRETTY_FUNCTION__ &nbsp;parsing an
 - Selection reason: ISO C++ Blog (official-community, high, score 51): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)
 
-### 33. What reinterpret_cast doesn&apos;t do -- Andreas Fertig
+### 39. What reinterpret_cast doesn&apos;t do -- Andreas Fertig
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1559,7 +1829,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: In today's post, I will explain one of C++'s biggest pitfalls:&nbsp; reinterpret_cast . Another title for this post could be:&nbsp; This is&nbsp;not&nbsp;the cast you're looking for! What reinterpret_cast doesn't do Andreas Fertig From the article: My motivation for this blog post comes from multiple training classes I thought over the past several months and a couple of talks I gave. Since C++23, you have a new facility in the Standard Library:&nbsp; std::start_lifetime_as . When teaching class
 - Selection reason: ISO C++ Blog (official-community, high, score 45): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
 
-### 34. Results summary: 2026 Annual C++ Developer Survey "Lite"
+### 40. Results summary: 2026 Annual C++ Developer Survey "Lite"
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1603,276 +1873,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Relevance Score: 45
 - 요약: Thank you to everyone who reponded to&nbsp; our 2026 annual global C++ developer survey . As promised, here is a summary of the results, including one-page summaries of your answers to the free-form questions: CppDevSurvey-2026-summary.pdf A 145-page version of this report that also includes all individual write-in responses has now been forwarded to the C++ standards committee and C++ product vendors, to help inform C++ evolution and tooling. Your feedback is valuable, and appreciated.
 - Selection reason: ISO C++ Blog (official-community, high, score 45): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 35. JSON and C++26 compile-time reflection: a talk -- Daniel Lemire
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Wed, 06 May 2026 22:35:16 +0000
-- Link: https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Editorial priority: 5
-- Relevance bucket: cpp_ai_tooling_fallback
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 3
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: yes
-- Evidence origin: article_text
-- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: no
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 2
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: The next C++ standard (C++26) is getting exciting new features.
-- Cross-check 필요: no
-- Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Relevance Score: 39
-- 요약: The next C++ standard (C++26) is getting exciting new features. One of these features is compile-time reflection. It is ideally suited to serialize and deserialize data at high speed. To test it out, we extended our fast JSON library (simdjson) and we gave a talk at CppCon 2025. The video is out on YouTube. JSON and C++26 compile-time reflection: a talk by Daniel Lemire Watch now:
-- Selection reason: ISO C++ Blog (official-community, high, score 39): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
-
-### 36. What Happens When a Destructor Throws -- Sandor Dargo
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Fri, 15 May 2026 22:42:26 +0000
-- Link: https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Editorial priority: 6
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 2
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: Even experienced C++ developers sometimes stumble on a deceptively simple question: what actually happens when a destructor throws an exception?
-- Cross-check 필요: no
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 33
-- 요약: Even experienced C++ developers sometimes stumble on a deceptively simple question: what actually happens when a destructor throws an exception? This post breaks down the mechanics behind stack unwinding, noexcept , and why throwing from destructors is almost always a bad idea What Happens When a Destructor Throws by Sandor Dargo From the article: Recently I wrote about&nbsp; the importance of finding joy in our jobs on The Dev Ladder . Mastery and deep understanding are key elements in finding
-- Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 37. CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Wed, 13 May 2026 21:36:47 +0000
-- Link: https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Editorial priority: 6
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 2
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
-- Cross-check 필요: no
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 33
-- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World by Daisy Hollman Summa
-- Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 38. Evolving a Translation System with Reflection in C++
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Tue, 12 May 2026 22:40:34 +0000
-- Link: https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Editorial priority: 5
-- Relevance bucket: cpp_ai_tooling_fallback
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 3
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: yes
-- Evidence origin: article_text
-- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: no
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 2
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: A nice example of C++26 reflection moving from theory into something practical.
-- Cross-check 필요: no
-- Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Relevance Score: 33
-- 요약: A nice example of C++26 reflection moving from theory into something practical. Evolving a Translation System with Reflection in C++ By GitHub user: friedkeenan &nbsp; From the post: Lately, I&rsquo;ve been using C++26 reflection to create some crazy and cursed stuff. But even though I quite enjoy that work, it is as well quite far from the norm of what reflection is going to offer us in our everyday code. Reflection is definitely not just that craziness, and so I want to present reflection in a
-- Selection reason: ISO C++ Blog (official-community, high, score 33): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
-
-### 39. CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Mon, 11 May 2026 21:33:30 +0000
-- Link: https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Editorial priority: 6
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 2
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
-- Cross-check 필요: no
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 33
-- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Reflection: C++&rsquo;s Decade-Defining Rocket Engine by Herb Sutter Summary of the talk: In June
-- Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 40. CppCon 2025 Back to Basics: Move Semantics -- Ben Saks
-
-- 출처: ISO C++ Blog
-- 출처 URL: https://isocpp.org/blog
-- 발행일: Thu, 07 May 2026 21:31:37 +0000
-- Link: https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks
-- Section: C++ / Native / Toolchain
-- Source category: cpp
-- Source priority: high
-- Source reliability: official-community
-- Editorial priority: 6
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
-- Candidate only: no
-- Collection mode: rss-item
-- Article candidate: yes
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 2
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
-- Cross-check 필요: no
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 33
-- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Back to Basics: Move Semantics by Ben Saks Summary of the talk: While many C++ programmers are fa
-- Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
 ## Collector 실패
 

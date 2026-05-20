@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "date": "2026-05-20",
-  "generated_at": "2026-05-19T18:12:31.199Z",
+  "generated_at": "2026-05-20T02:15:00.696Z",
   "summary": {
     "schema_version": 1,
     "total_count": 40,
     "by_event_type": {
-      "primary_url": 30,
-      "release_note": 10
+      "primary_url": 27,
+      "release_note": 13
     },
     "by_dedupe_reason": {
-      "normalized_primary_url": 30,
-      "source_id + release.date + component": 3,
-      "source_id + release.version": 7
+      "normalized_primary_url": 27,
+      "source_id + release.date + component": 4,
+      "source_id + release.version": 9
     },
     "warning_count": 0
   },
@@ -216,8 +216,52 @@
       "warnings": []
     },
     {
+      "event_id": "event_ad50d381280e",
+      "primary_candidate_id": "candidate_2c890d3e799d",
+      "event_key": "source:android-developers-blog:release:2026.04.01",
+      "event_type": "release_note",
+      "primary_url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "2026.04.01",
+        "date": "Wed, 22 Apr 2026 23:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_1265d472c1af",
+      "primary_candidate_id": "candidate_43b78b01c591",
+      "event_key": "url:https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 21 Apr 2026 14:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
       "event_id": "event_d5f3369876b0",
-      "primary_candidate_id": "candidate_1a63c57dd1f7",
+      "primary_candidate_id": "candidate_f5afec1053af",
       "event_key": "url:https://source.android.com/docs/core/camera",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/core/camera",
@@ -239,7 +283,7 @@
     },
     {
       "event_id": "event_1cfac4647584",
-      "primary_candidate_id": "candidate_424b0e745e26",
+      "primary_candidate_id": "candidate_4d829e67b24a",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
@@ -261,7 +305,7 @@
     },
     {
       "event_id": "event_4a2799a29228",
-      "primary_candidate_id": "candidate_6ae8cba3bf9d",
+      "primary_candidate_id": "candidate_bcc581bfc7c1",
       "event_key": "source:android-developers-blog:release:android 17",
       "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
@@ -283,7 +327,7 @@
     },
     {
       "event_id": "event_bc188080ee39",
-      "primary_candidate_id": "candidate_1892a8464188",
+      "primary_candidate_id": "candidate_3627facd1839",
       "event_key": "source:android-developers-blog:date:Tue, 19 May 2026 10:45:00 +0000:component:sdk",
       "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
@@ -305,7 +349,7 @@
     },
     {
       "event_id": "event_bd521c01202c",
-      "primary_candidate_id": "candidate_1bcf00f2bd41",
+      "primary_candidate_id": "candidate_71a70543a67c",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
@@ -327,7 +371,7 @@
     },
     {
       "event_id": "event_726a2272b8be",
-      "primary_candidate_id": "candidate_f18fc3659d34",
+      "primary_candidate_id": "candidate_957073c0d324",
       "event_key": "source:android-developers-blog:date:Thu, 14 May 2026 20:00:00 +0000:component:api",
       "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
@@ -349,7 +393,7 @@
     },
     {
       "event_id": "event_e1fc143f0941",
-      "primary_candidate_id": "candidate_e1c1041c5f8d",
+      "primary_candidate_id": "candidate_289605111d34",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
@@ -371,7 +415,7 @@
     },
     {
       "event_id": "event_5875d0cedfb2",
-      "primary_candidate_id": "candidate_2cedb8789acc",
+      "primary_candidate_id": "candidate_f9c5cdbe7b4b",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
@@ -392,8 +436,30 @@
       "warnings": []
     },
     {
+      "event_id": "event_1a0178a66017",
+      "primary_candidate_id": "candidate_e77dbcec9ae1",
+      "event_key": "url:https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Wed, 22 Apr 2026 20:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
       "event_id": "event_d23f95c1aac5",
-      "primary_candidate_id": "candidate_0ec45805a430",
+      "primary_candidate_id": "candidate_8d260d678afa",
       "event_key": "source:android-developers-latest-updates:release:1.3.0-beta02",
       "event_type": "release_note",
       "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
@@ -415,7 +481,7 @@
     },
     {
       "event_id": "event_764d2d438c57",
-      "primary_candidate_id": "candidate_233e13a32414",
+      "primary_candidate_id": "candidate_13ef57d7a56d",
       "event_key": "source:android-developers-latest-updates:release:1.4.0-alpha07",
       "event_type": "release_note",
       "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
@@ -437,7 +503,7 @@
     },
     {
       "event_id": "event_aebc033c93c0",
-      "primary_candidate_id": "candidate_751c03a0c027",
+      "primary_candidate_id": "candidate_7e94653fd737",
       "event_key": "url:https://source.android.com/docs/whatsnew",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/whatsnew",
@@ -459,7 +525,7 @@
     },
     {
       "event_id": "event_22f0b66cf484",
-      "primary_candidate_id": "candidate_7a9445072706",
+      "primary_candidate_id": "candidate_43f2b83b58cd",
       "event_key": "url:https://source.android.com/docs/compatibility/cdd",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/compatibility/cdd",
@@ -481,7 +547,7 @@
     },
     {
       "event_id": "event_dc3e74662602",
-      "primary_candidate_id": "candidate_74f42ec1285b",
+      "primary_candidate_id": "candidate_f3db5315c342",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
@@ -503,7 +569,7 @@
     },
     {
       "event_id": "event_bb92e4ef92b5",
-      "primary_candidate_id": "candidate_9c487a77ae94",
+      "primary_candidate_id": "candidate_0958eef5a9ed",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
@@ -525,7 +591,7 @@
     },
     {
       "event_id": "event_1d54e5f6eb9d",
-      "primary_candidate_id": "candidate_0928cc6e1d40",
+      "primary_candidate_id": "candidate_2f278f5ef6fe",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
@@ -547,7 +613,7 @@
     },
     {
       "event_id": "event_b169f55cd9e5",
-      "primary_candidate_id": "candidate_0bbaf5906d7a",
+      "primary_candidate_id": "candidate_5539e787b5d5",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
@@ -569,7 +635,7 @@
     },
     {
       "event_id": "event_3744977cfc68",
-      "primary_candidate_id": "candidate_8e88a2190835",
+      "primary_candidate_id": "candidate_37267d32bbe4",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
@@ -591,7 +657,7 @@
     },
     {
       "event_id": "event_219f8b657452",
-      "primary_candidate_id": "candidate_95e1baec926e",
+      "primary_candidate_id": "candidate_e94ebf141b3d",
       "event_key": "source:android-security-bulletin:release:android security bulletin",
       "event_type": "release_note",
       "primary_url": "https://source.android.com/docs/security/bulletin/asb-overview",
@@ -613,7 +679,7 @@
     },
     {
       "event_id": "event_825a8b69534e",
-      "primary_candidate_id": "candidate_51078433133e",
+      "primary_candidate_id": "candidate_67a366465787",
       "event_key": "source:android-security-bulletin:release:2026-05-01",
       "event_type": "release_note",
       "primary_url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
@@ -634,8 +700,30 @@
       "warnings": []
     },
     {
+      "event_id": "event_a79daae67d73",
+      "primary_candidate_id": "candidate_e6a12e15bd1f",
+      "event_key": "source:libcamera-release-announcements:release:libcamera v0.7.1",
+      "event_type": "release_note",
+      "primary_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-april/058408.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "libcamera v0.7.1",
+        "date": "2026-04-28"
+      },
+      "component": "libcamera / V4L2 camera pipeline",
+      "impact_axes": [
+        "video_capture_fix",
+        "camera_driver_image_pipeline",
+        "Linux Camera / Driver",
+        "linux-camera"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
       "event_id": "event_d4f82e08cbcf",
-      "primary_candidate_id": "candidate_7ab405676896",
+      "primary_candidate_id": "candidate_651b505dbe87",
       "event_key": "url:https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
@@ -656,8 +744,30 @@
       "warnings": []
     },
     {
+      "event_id": "event_0bb6bd5d2804",
+      "primary_candidate_id": "candidate_0126dabaab59",
+      "event_key": "url:https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "event_type": "primary_url",
+      "primary_url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Wed, 22 Apr 2026 00:59:01 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "generic_tooling_change",
+        "generic_tech_watchlist",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
       "event_id": "event_4f422e47339f",
-      "primary_candidate_id": "candidate_dc67305efce5",
+      "primary_candidate_id": "candidate_235cb23404ef",
       "event_key": "url:https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
@@ -679,7 +789,7 @@
     },
     {
       "event_id": "event_8f8bc26e2106",
-      "primary_candidate_id": "candidate_8dcf6becfd06",
+      "primary_candidate_id": "candidate_d12865ede477",
       "event_key": "source:iso-cpp-blog:date:Thu, 30 Apr 2026 22:36:23 +0000:component:gcc",
       "event_type": "release_note",
       "primary_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
@@ -700,8 +810,30 @@
       "warnings": []
     },
     {
+      "event_id": "event_0580d2a5e518",
+      "primary_candidate_id": "candidate_cfb8393df7de",
+      "event_key": "source:iso-cpp-blog:date:Thu, 23 Apr 2026 21:23:33 +0000:component:gpu",
+      "event_type": "release_note",
+      "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Thu, 23 Apr 2026 21:23:33 +0000"
+      },
+      "component": "GPU",
+      "impact_axes": [
+        "generic_tooling_change",
+        "generic_tech_watchlist",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "medium",
+      "warnings": []
+    },
+    {
       "event_id": "event_bc0581ebbaf7",
-      "primary_candidate_id": "candidate_523257982603",
+      "primary_candidate_id": "candidate_466d1960ed2d",
       "event_key": "source:iso-cpp-blog:release:v7.2.0",
       "event_type": "release_note",
       "primary_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
@@ -723,7 +855,7 @@
     },
     {
       "event_id": "event_47efcf32a7f3",
-      "primary_candidate_id": "candidate_9d2dec08bedf",
+      "primary_candidate_id": "candidate_5e43a2357961",
       "event_key": "url:https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
@@ -745,7 +877,7 @@
     },
     {
       "event_id": "event_bd925ddd03cf",
-      "primary_candidate_id": "candidate_2537912955ed",
+      "primary_candidate_id": "candidate_9515d9509a00",
       "event_key": "url:https://isocpp.org//blog/2026/05/2026-survey-summary",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/2026-survey-summary",
@@ -754,138 +886,6 @@
       "release": {
         "version": "",
         "date": "Mon, 04 May 2026 21:04:35 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_0cfa40b3a793",
-      "primary_candidate_id": "candidate_a72d23df711e",
-      "event_key": "url:https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Wed, 06 May 2026 22:35:16 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "build_dependency_fix",
-        "cpp_ai_tooling_fallback",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_090e15fe27db",
-      "primary_candidate_id": "candidate_1508c49119fd",
-      "event_key": "url:https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Fri, 15 May 2026 22:42:26 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_8f582e1ff61b",
-      "primary_candidate_id": "candidate_0c68d06e0aba",
-      "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Wed, 13 May 2026 21:36:47 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_511155d5eb95",
-      "primary_candidate_id": "candidate_ee54ba426601",
-      "event_key": "url:https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Tue, 12 May 2026 22:40:34 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "build_dependency_fix",
-        "cpp_ai_tooling_fallback",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_b82118ee5311",
-      "primary_candidate_id": "candidate_002595b5138e",
-      "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Mon, 11 May 2026 21:33:30 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_63e4833cafb8",
-      "primary_candidate_id": "candidate_c7ece85b7d7d",
-      "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Thu, 07 May 2026 21:31:37 +0000"
       },
       "component": "",
       "impact_axes": [
