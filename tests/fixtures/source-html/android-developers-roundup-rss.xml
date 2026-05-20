@@ -8,7 +8,7 @@
       <pubDate>Wed, 20 May 2026 10:00:00 GMT</pubDate>
       <description><![CDATA[
         <h2>Advanced Professional Video</h2>
-        <p>Android adds APV support for professional video capture and camera output in the media framework.</p>
+        <p>Android introduces a new media framework format for professional capture.</p>
         <h2>Compose updates</h2>
         <p>Compose improves UI developer workflow and design iteration for Android apps.</p>
         <h2>Android audio routing</h2>

@@ -266,10 +266,11 @@ test('RSS roundup child extraction is additive and uses normal evidence derivati
   assert.equal(child.parent_title, '17 Things to know for Android developers at Google I/O');
   assert.equal(child.url, 'https://android-developers.googleblog.com/2026/05/17-things-google-io.html#roundup-child-1-advanced-professional-video');
   assert.equal(child.source_extraction.child_heading, 'Advanced Professional Video');
-  assert.match(child.source_extraction.evidence_blocks[0].text, /APV support for professional video capture/);
-  assert.match(child.summary, /APV support for professional video capture/);
+  assert.match(child.source_extraction.evidence_blocks[0].text, /introduces a new media framework format/);
+  assert.match(child.summary, /introduces a new media framework format/);
   assert.equal(child.api_or_component, 'Android media/camera output');
   assert.equal(rawChildren[0].relevanceBucketHint, 'android_platform_camera_adjacent');
+  assert.equal(child.has_behavior_change, true);
   assert.equal(child.source_gap_risk, false);
   assert.ok(['main', 'short'].includes(child.finalSelectionEligibility));
   assert.ok([
@@ -319,6 +320,43 @@ test('roundup extraction quality alone does not make an underfilled child select
     }
   }));
 
+  assert.equal(candidate.source_gap_risk, true);
+  assert.equal(['main', 'short'].includes(candidate.finalSelectionEligibility), false);
+});
+
+test('roundup behavior wording does not promote generic announcements without camera evidence', () => {
+  const candidate = normalizeCandidate(raw({
+    source: source({
+      id: 'android-developers-blog',
+      name: 'Android Developers Blog',
+      url: 'https://android-developers.googleblog.com/',
+      sourceUrl: 'https://android-developers.googleblog.com/',
+      category: 'android',
+      section: 'Android / AOSP / Camera',
+      priority: 'high',
+      reliability: 'official',
+      keywords: ['Android']
+    }),
+    title: 'Generic developer announcement',
+    url: 'https://android-developers.googleblog.com/2026/05/roundup.html#roundup-child-2-generic',
+    publishedAt: 'Wed, 20 May 2026 10:00:00 GMT',
+    summary: 'Android introduces product updates for developer workflow planning.',
+    sourceKind: 'blog_post_item',
+    collectionMode: 'article-item',
+    version_or_release: '',
+    api_or_component: '',
+    behavior_change: 'Android introduces product updates for developer workflow planning.',
+    source_extraction: {
+      mode: 'roundup_child_topic',
+      extraction_quality: {
+        has_concrete_child_topic_evidence: true,
+        main_article_allowed: true,
+        used_fallback: false
+      }
+    }
+  }));
+
+  assert.equal(candidate.has_behavior_change, true);
   assert.equal(candidate.source_gap_risk, true);
   assert.equal(['main', 'short'].includes(candidate.finalSelectionEligibility), false);
 });

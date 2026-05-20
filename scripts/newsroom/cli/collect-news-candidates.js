@@ -22,7 +22,8 @@ const {
   parseSourceSpecificItems
 } = require('../collect/source-item-parsers');
 const {
-  extractRoundupChildTopics
+  extractRoundupChildTopics,
+  ROUNDUP_BEHAVIOR_CHANGE_PATTERN
 } = require('../collect/roundup-child-topic-extractor');
 const {
   resolveLinkedReleaseNoteEvidenceItems
@@ -360,6 +361,13 @@ function firstBehavior(value) {
   return sentences.find(sentence => BEHAVIOR_CHANGE_PATTERN.test(sentence)) || sentences[0] || '';
 }
 
+function hasBehaviorChangeForRaw(raw, behaviorChange) {
+  if (raw?.source_extraction?.mode === 'roundup_child_topic') {
+    return ROUNDUP_BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
+  }
+  return BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
+}
+
 function componentFromText(value, source) {
   const match = firstMatch(API_OR_COMPONENT_PATTERN, value);
   return match || '';
@@ -498,7 +506,7 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
   const hasPublishedDate = Boolean(String(raw.publishedAt || raw.published_date || '').trim());
   const hasVersionOrRelease = Boolean(versionOrRelease);
   const hasApiOrComponent = Boolean(apiOrComponent);
-  const hasBehaviorChange = Boolean(behaviorChange && BEHAVIOR_CHANGE_PATTERN.test(behaviorChange));
+  const hasBehaviorChange = Boolean(behaviorChange && hasBehaviorChangeForRaw(raw, behaviorChange));
   const evidenceScore =
     (hasPublishedDate ? 2 : 0) +
     (hasVersionOrRelease ? 2 : 0) +

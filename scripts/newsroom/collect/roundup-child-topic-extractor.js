@@ -6,7 +6,7 @@ const STRONG_TOPIC_PATTERN = /\b(?:CameraX|Camera2|Camera\b|VideoCapture|Preview
 const STRONG_NON_SCREEN_TOPIC_PATTERN = /\b(?:CameraX|Camera2|VideoCapture|PreviewView|Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video|image\s+pipeline)\b/i;
 const BROAD_TOPIC_PATTERN = /\b(?:media|gallery|video(?:\s+call)?|audio)\b/i;
 const BROAD_CONTEXT_PATTERN = /\b(?:capture|camera\s+output|media\s+framework|video\s+capture|preview|gallery\s+output|HDR|Ultra\s+HDR)\b/i;
-const BEHAVIOR_PATTERN = /\b(?:announce(?:d|s)?|introduc(?:e|ed|es|ing)|bring(?:s|ing)?|brought|enable(?:d|s)?|let\s+developers|available|preview|can\s+use|support(?:ed|s)?|improve(?:d|s|ment)?|add(?:ed|s)?|update(?:d|s)?)\b/i;
+const ROUNDUP_BEHAVIOR_CHANGE_PATTERN = /\b(?:announce(?:d|s)?|introduc(?:e|ed|es|ing)|bring(?:s|ing)?|brought|enable(?:d|s)?|let\s+developers|available|preview|can\s+use|support(?:ed|s)?|improve(?:d|s|ment)?|add(?:ed|s)?|update(?:d|s)?)\b/i;
 
 function decodeContent(value = '') {
   return decodeHtml(String(value || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1'));
@@ -99,14 +99,18 @@ function hasTopicTrigger(value = '') {
     return false;
   }
   if (STRONG_TOPIC_PATTERN.test(text)) return true;
+  if (hasScreenRecording && hasFrontCamera && /\bAndroid\b/i.test(text)) return true;
   return BROAD_TOPIC_PATTERN.test(text) &&
     /\bAndroid\b/i.test(text) &&
-    (BROAD_CONTEXT_PATTERN.test(text) || (hasScreenRecording && hasFrontCamera));
+    BROAD_CONTEXT_PATTERN.test(text);
 }
 
 function behaviorSentence(heading = '', body = '') {
-  return evidenceSentences(`${heading}. ${body}`)
-    .find(sentence => BEHAVIOR_PATTERN.test(sentence) && hasTopicTrigger(sentence)) || '';
+  return evidenceSentences(body)
+    .find(sentence =>
+      ROUNDUP_BEHAVIOR_CHANGE_PATTERN.test(sentence) &&
+      hasTopicTrigger(`${heading}. ${sentence}`)
+    ) || '';
 }
 
 function componentFor(value = '') {
@@ -220,5 +224,6 @@ function extractRoundupChildTopics({
 }
 
 module.exports = {
-  extractRoundupChildTopics
+  extractRoundupChildTopics,
+  ROUNDUP_BEHAVIOR_CHANGE_PATTERN
 };
