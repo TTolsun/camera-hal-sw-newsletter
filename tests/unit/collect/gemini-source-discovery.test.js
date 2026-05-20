@@ -32,20 +32,42 @@ const {
   sourceDiscoveryCandidateStats,
   sourceDiscoveryStatsSummary
 } = require('../../../scripts/newsroom/common/candidate-artifacts');
+const {
+  readTextFixture
+} = require('../../helpers/fixture-loader');
 
 function registry() {
   return {
-    sources: [{
-      id: 'android',
-      name: 'Android Developers',
-      sourceUrl: 'https://developer.android.com/',
-      category: 'android',
-      reliability: 'official',
-      linkedEvidencePolicy: {
+    sources: [
+      {
+        id: 'android',
+        name: 'Android Developers',
+        sourceUrl: 'https://developer.android.com/',
+        category: 'android',
+        reliability: 'official',
+        linkedEvidencePolicy: {
+          enabled: true,
+          allowedDomains: ['developer.android.com']
+        }
+      },
+      {
+        id: 'camerax-release-notes',
+        name: 'CameraX Release Notes',
+        sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera',
+        category: 'camera-api',
+        priority: 'high',
+        reliability: 'official',
         enabled: true,
-        allowedDomains: ['developer.android.com']
+        candidateOnly: false,
+        requiresCrossCheck: false,
+        collectionModeHint: 'release-note-watch',
+        evidenceGranularityHint: 'versioned_release_row',
+        linkedEvidencePolicy: {
+          enabled: true,
+          allowedDomains: ['developer.android.com']
+        }
       }
-    }]
+    ]
   };
 }
 
@@ -97,7 +119,7 @@ function proposal(proposalId) {
       proposal_id: proposalId,
       topic_gap: 'CameraX release notes',
       source_family: 'official_android',
-      candidate_urls: ['https://developer.android.com/jetpack/androidx/releases/camera'],
+      candidate_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
       search_keywords: ['CameraX'],
       expected_evidence: ['published date'],
       risk_notes: []
@@ -105,7 +127,25 @@ function proposal(proposalId) {
   };
 }
 
+function proposalWithUrls(proposalId, candidateUrls = []) {
+  const payload = proposal(proposalId);
+  return {
+    ...payload,
+    proposals: [{
+      ...payload.proposals[0],
+      candidate_urls: candidateUrls
+    }]
+  };
+}
+
 async function fetchOk() {
+  return {
+    ok: true,
+    text: async () => readTextFixture('source-html/camerax-release-notes-live-structure.html')
+  };
+}
+
+async function fetchWithoutParserEvidence() {
   return {
     ok: true,
     text: async () => '<html><head><title>CameraX release notes</title><meta name="datePublished" content="2026-05-15"></head></html>'
@@ -210,22 +250,66 @@ test('promoted Gemini candidate id is stable for the normalized URL across propo
   assert.equal(second.promoted.length, 1);
   assert.equal(first.promoted[0].id, second.promoted[0].id);
   assert.equal(first.promoted[0].source_candidate_id, second.promoted[0].source_candidate_id);
+  assert.equal(first.promoted[0].source_id, 'camerax-release-notes');
+  assert.equal(first.promoted[0].source_gap_risk, false);
+  assert.equal(first.promoted[0].source_extraction.mode, 'versioned_release_row');
+  assert.equal(first.promoted[0].source_extraction.extraction_quality.used_versioned_release_row_extractor, true);
+  assert.deepEqual(
+    first.promoted[0].source_extraction.bullets,
+    first.promoted[0].source_extraction.release.sections.flatMap(section => section.items.map(item => item.text))
+  );
   assert.equal(first.promoted[0].proposal_id, 'proposal-a');
   assert.equal(second.promoted[0].proposal_trace_id, 'proposal-b');
 });
 
+test('release-note URL matching tolerates trailing slash before fragment', async () => {
+  const result = await promoteProposalUrls({
+    proposalPayload: proposalWithUrls('proposal-trailing-slash', [
+      'https://developer.android.com/jetpack/androidx/releases/camera/#1.6.1'
+    ]),
+    sourceRegistry: registry(),
+    fetchImpl: fetchOk
+  });
+
+  assert.equal(result.promoted.length, 1);
+  assert.equal(result.promoted[0].source_id, 'camerax-release-notes');
+  assert.equal(result.validationReport[0].extraction_status, 'parser_extracted');
+});
+
+test('release-note URL matching strips Android hl query before anchor comparison', async () => {
+  const result = await promoteProposalUrls({
+    proposalPayload: proposalWithUrls('proposal-hl-query', [
+      'https://developer.android.com/jetpack/androidx/releases/camera?hl=ko#1.6.1'
+    ]),
+    sourceRegistry: registry(),
+    fetchImpl: fetchOk
+  });
+
+  assert.equal(result.promoted.length, 1);
+  assert.equal(result.promoted[0].source_id, 'camerax-release-notes');
+  assert.equal(result.validationReport[0].source_policy_match, 'camerax-release-notes');
+});
+
+test('source matching selects CameraX release notes regardless of registry order', async () => {
+  const result = await promoteProposalUrls({
+    proposalPayload: proposal('proposal-order'),
+    sourceRegistry: {
+      sources: [...registry().sources].reverse()
+    },
+    fetchImpl: fetchOk
+  });
+
+  assert.equal(result.promoted.length, 1);
+  assert.equal(result.promoted[0].source_id, 'camerax-release-notes');
+  assert.equal(result.validationReport[0].source_policy_match, 'camerax-release-notes');
+});
+
 test('proposal validation report records accepted and rejected URL decisions', async () => {
   const result = await promoteProposalUrls({
-    proposalPayload: {
-      ...proposal('proposal-a'),
-      proposals: [{
-        ...proposal('proposal-a').proposals[0],
-        candidate_urls: [
-          'https://developer.android.com/jetpack/androidx/releases/camera',
-          'https://example.com/not-allowed'
-        ]
-      }]
-    },
+    proposalPayload: proposalWithUrls('proposal-a', [
+      'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      'https://example.com/not-allowed'
+    ]),
     sourceRegistry: registry(),
     fetchImpl: fetchOk
   });
@@ -234,10 +318,30 @@ test('proposal validation report records accepted and rejected URL decisions', a
   assert.deepEqual(
     result.validationReport.map(item => [item.normalized_url || item.candidate_url, item.accepted, item.rejected_reason]),
     [
-      ['https://developer.android.com/jetpack/androidx/releases/camera', true, ''],
+      ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1', true, ''],
       ['https://example.com/not-allowed', false, 'domain_not_allowed']
     ]
   );
+  assert.equal(result.validationReport[0].extraction_status, 'parser_extracted');
+  assert.equal(result.validationReport[0].adapter_hint, 'android-developers-jetpack-release');
+});
+
+test('release-note source discovery blocks shallow promotion when parser extraction fails', async () => {
+  const result = await promoteProposalUrls({
+    proposalPayload: proposal('proposal-a'),
+    sourceRegistry: registry(),
+    fetchImpl: fetchWithoutParserEvidence
+  });
+
+  assert.equal(result.promoted.length, 0);
+  assert.equal(result.rejected.length, 1);
+  assert.equal(result.rejected[0].rejected_reason, 'discovered_not_extractable');
+  assert.equal(result.rejected[0].discovery_status, 'discovered');
+  assert.equal(result.rejected[0].extraction_status, 'discovered_not_extractable');
+  assert.equal(result.rejected[0].adapter_hint, 'android-developers-jetpack-release');
+  assert.equal(result.validationReport[0].accepted, false);
+  assert.equal(result.validationReport[0].rejected_reason, 'discovered_not_extractable');
+  assert.equal(result.validationReport[0].suggested_fixture_case.includes('CameraX release-note fixture'), true);
 });
 
 test('source gap risk has bucket precedence over high numeric source quality', () => {

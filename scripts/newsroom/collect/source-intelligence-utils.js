@@ -27,6 +27,55 @@ function normalizeUrl(value = '') {
   }
 }
 
+function canonicalContentUrl(value = '') {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    if (parsed.hostname === 'developer.android.google.cn') {
+      parsed.hostname = 'developer.android.com';
+    }
+    if (parsed.hostname === 'source.android.google.cn') {
+      parsed.hostname = 'source.android.com';
+    }
+    if (['developer.android.com', 'source.android.com'].includes(parsed.hostname)) {
+      parsed.searchParams.delete('hl');
+    }
+    return parsed.toString();
+  } catch {
+    return raw;
+  }
+}
+
+function canonicalDocumentUrl(value = '') {
+  const canonical = canonicalContentUrl(value);
+  if (!canonical) return '';
+  try {
+    const parsed = new URL(canonical);
+    parsed.hash = '';
+    if (parsed.pathname !== '/' && parsed.pathname.endsWith('/')) {
+      parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+    }
+    return parsed.toString();
+  } catch {
+    return canonical.replace(/#.*$/, '').replace(/\/+$/, '');
+  }
+}
+
+function fetchUrlForContent(value = '') {
+  const canonical = canonicalContentUrl(value);
+  if (!canonical) return canonical;
+  try {
+    const parsed = new URL(canonical);
+    if (['developer.android.com', 'source.android.com'].includes(parsed.hostname)) {
+      parsed.searchParams.set('hl', 'en');
+    }
+    return parsed.toString();
+  } catch {
+    return canonical;
+  }
+}
+
 function urlHostname(value = '') {
   try {
     return new URL(value).hostname.toLowerCase().replace(/^www\./, '');
@@ -66,14 +115,66 @@ function registryAllowedDomains(sourceRegistry = {}) {
 }
 
 function sourceForUrl(sourceRegistry = {}, url = '') {
-  const host = urlHostname(url);
-  if (!host) return null;
-  for (const source of sourceRegistry.sources || []) {
-    if (sourceAllowedDomains(source).some(domain => domainMatches(host, domain))) {
-      return source;
-    }
+  const targetDocument = canonicalDocumentUrl(url);
+  let target = null;
+  try {
+    target = targetDocument ? new URL(targetDocument) : null;
+  } catch {
+    target = null;
   }
-  return null;
+  const sources = Array.isArray(sourceRegistry.sources) ? sourceRegistry.sources : [];
+  if (!target) return null;
+
+  const sourceMatches = sources
+    .map((source, index) => {
+      const sourceDocument = canonicalDocumentUrl(source.sourceUrl || source.url || '');
+      let sourceUrl = null;
+      try {
+        sourceUrl = sourceDocument ? new URL(sourceDocument) : null;
+      } catch {
+        sourceUrl = null;
+      }
+      const sameHost = Boolean(sourceUrl && sourceUrl.hostname === target.hostname);
+      const sourcePath = sourceUrl?.pathname?.replace(/\/+$/, '') || '';
+      const targetPath = target.pathname.replace(/\/+$/, '');
+      const exact = sameHost && sourceDocument === targetDocument;
+      const prefix = sameHost && sourcePath && (
+        targetPath === sourcePath ||
+        targetPath.startsWith(`${sourcePath}/`)
+      );
+      return {
+        source,
+        index,
+        exact,
+        prefix,
+        pathLength: prefix ? sourcePath.length : 0
+      };
+    })
+    .filter(match => match.exact || match.prefix)
+    .sort((left, right) =>
+      Number(right.exact) - Number(left.exact) ||
+      right.pathLength - left.pathLength ||
+      String(left.source.id || left.source.name || '').localeCompare(String(right.source.id || right.source.name || '')) ||
+      left.index - right.index
+    );
+  if (sourceMatches.length > 0) return sourceMatches[0].source;
+
+  const host = target.hostname.toLowerCase().replace(/^www\./, '');
+  const domainMatchesList = sources
+    .map((source, index) => ({
+      source,
+      index,
+      domainLength: Math.max(0, ...sourceAllowedDomains(source)
+        .filter(domain => domainMatches(host, domain))
+        .map(domain => domain.length))
+    }))
+    .filter(match => match.domainLength > 0)
+    .sort((left, right) =>
+      right.domainLength - left.domainLength ||
+      String(left.source.id || left.source.name || '').localeCompare(String(right.source.id || right.source.name || '')) ||
+      left.index - right.index
+    );
+  return domainMatchesList[0]?.source || null;
 }
 
 function isUrlAllowed(sourceRegistry = {}, url = '') {
@@ -123,11 +224,14 @@ function fetchTextWithLimit(fetchImpl, url, options = {}) {
 }
 
 module.exports = {
+  canonicalContentUrl,
+  canonicalDocumentUrl,
   candidateDate,
   candidateTitle,
   candidateUrl,
   clamp,
   domainMatches,
+  fetchUrlForContent,
   fetchTextWithLimit,
   isObject,
   isUrlAllowed,
