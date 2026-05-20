@@ -7,16 +7,16 @@ Date: 2026-05-20
 - Sources: 47 (registry=47, synthetic=0)
 - Collected candidates: 40
 - Unregistered candidates: 0
-- Eligible candidates: 6
+- Eligible candidates: 4
 - Selected candidates: 1
-- Rendered main articles: 3
-- Source gap candidates: 34
+- Rendered main articles: 1
+- Source gap candidates: 36
 - Generic noise candidates: 30
 - Duplicate candidates: 0
-- Recommendations: NO_RECENT_SIGNAL: 39, KEEP_AND_FIX_PARSER: 6, KEEP_AND_MONITOR: 2
+- Recommendations: NO_RECENT_SIGNAL: 40, KEEP_AND_FIX_PARSER: 6, KEEP_AND_MONITOR: 1
 - Selected main source quality coverage: 1/1
-- Main-eligible source quality coverage: 2/2
-- Conditional source promoted/blocked: 2/6
+- Main-eligible source quality coverage: 1/1
+- Conditional source promoted/blocked: 1/11
 - Unknown source quality: 0
 - Source quality field drift: 0
 - Legacy source quality warnings: 0
@@ -25,15 +25,14 @@ Date: 2026-05-20
 
 | Metric | Key | Count |
 | --- | --- | --- |
-| source_url_quality | official_dated_release | 25 |
-| source_url_quality | engineering_blog_with_camera_evidence | 8 |
+| source_url_quality | official_dated_release | 22 |
+| source_url_quality | engineering_blog_with_camera_evidence | 12 |
 | source_url_quality | official_site_update_row | 4 |
 | source_url_quality | undated_reference_page | 2 |
-| source_url_quality | project_mailing_list_release | 1 |
-| source_quality_status | blocked | 34 |
-| source_quality_status | allowed | 6 |
-| blocker | source_gap_risk | 34 |
-| blocker | reference_only | 32 |
+| source_quality_status | blocked | 36 |
+| source_quality_status | allowed | 4 |
+| blocker | source_gap_risk | 36 |
+| blocker | reference_only | 34 |
 | blocker | undated_reference_page | 2 |
 
 
@@ -41,16 +40,15 @@ Date: 2026-05-20
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 62.5 | 8 | 2 | 1 | 2 |
-| libcamera-release-announcements | KEEP_AND_MONITOR | 45 | 1 | 1 | 0 | 1 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 33.33 | 12 | 1 | 1 | 1 |
 
 ## Sources Needing Parser Repair
 
 | Source | Recommendation | Collected | Eligible | Source Gap | Top Reason |
 | --- | --- | --- | --- | --- | --- |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 8 | 2 | 6 | main_eligible=false |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 12 | 1 | 11 | main_eligible=false |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 23 | 0 | 23 | main_eligible=false |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 20 | 0 | 20 | main_eligible=false |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 2 | 0 | 2 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
@@ -86,6 +84,7 @@ _없음_
 | kernelnewbies-linuxchanges | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | libcamera-blog | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | libcamera-documentation | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| libcamera-release-announcements | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | llvm-project-blog | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | llvm-release-notes | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | lwn-camera-media-articles | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -102,15 +101,16 @@ _없음_
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 62.5 | 8 | 0.25 | 0.5 | 2 | 0.75 | 0.5 | 0 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 33.33 | 12 | 0.0833 | 1 | 1 | 0.9167 | 0.5833 | 0 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 0 | 23 | 0 | 0 | 0 | 1 | 0.913 | 0 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 0 | 20 | 0 | 0 | 0 | 1 | 0.9 | 0 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 2 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| libcamera-release-announcements | KEEP_AND_MONITOR | 45 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | android-developers-latest-updates | KEEP_AND_MONITOR | 35 | 3 | 1 | 0 | 0 | 0 | 0 | 0 |
 
 ## Warnings
 
 - Missing optional artifact content/newsroom/2026-05-20/reporter-candidates.json; related metrics remain zero or artifact-limited.
+- sections[0] source URL did not match any candidate: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
+- sections[2] source URL did not match any candidate: https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more
