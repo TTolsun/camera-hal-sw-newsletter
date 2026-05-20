@@ -166,6 +166,42 @@
       }
     },
     {
+      "candidate_id": "49fb17089c445b01",
+      "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "title": "What's new in the Jetpack Compose April '26 release",
+      "source_quality_score": 0.622,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.66,
+        "android_hal_relevance": 0.66,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c444ca12bfa9e83a",
+      "url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+      "title": "Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4",
+      "source_quality_score": 0.622,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.66,
+        "android_hal_relevance": 0.66,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "2a30fe242da15a49",
       "url": "https://source.android.com/docs/core/camera",
       "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
@@ -302,6 +338,24 @@
         "camera_relevance": 0.6,
         "android_hal_relevance": 0.6,
         "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "775fa008b6c2304c",
+      "url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "title": "Streamline User Journeys with Verified Email via Credential Manager",
+      "source_quality_score": 0.642,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -508,9 +562,45 @@
       }
     },
     {
+      "candidate_id": "5610592f44026508",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "title": "libcamera Release Announcements - libcamera v0.7.1",
+      "source_quality_score": 0.852,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.93,
+        "android_hal_relevance": 0.93,
+        "technical_depth": 0.85,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "c56b2068eed9cd86",
       "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+      "source_quality_score": 0.551,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "0689bdb0d230395b",
+      "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "title": "2026 Annual C++ Developer Survey \"Lite\"",
       "source_quality_score": 0.551,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -556,6 +646,24 @@
         "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "704642d864af9ccd",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
+      "source_quality_score": 0.593,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -616,15 +724,51 @@
       }
     },
     {
-      "candidate_id": "48b07d6d4385f301",
-      "url": "https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
-      "title": "JSON and C++26 compile-time reflection: a talk -- Daniel Lemire",
-      "source_quality_score": 0.431,
+      "candidate_id": "gemini-54d4017dadc0b266",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.583,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-7ef4ffea5e3a07c4",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "title": "libcamera v0.7.1",
+      "source_quality_score": 0.5,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
-        "camera_relevance": 0.39,
-        "android_hal_relevance": 0.39,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-d116a623b5025f89",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "title": "กล้อง X &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
         "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0,
@@ -634,16 +778,16 @@
       }
     },
     {
-      "candidate_id": "727b40d00ef62c1f",
-      "url": "https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
-      "title": "What Happens When a Destructor Throws -- Sandor Dargo",
-      "source_quality_score": 0.407,
+      "candidate_id": "gemini-e39c6ec8c268df92",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "title": "CameraX &nbsp;|&nbsp; Jetpack &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.583,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.33,
-        "android_hal_relevance": 0.33,
-        "technical_depth": 0.25,
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -652,16 +796,16 @@
       }
     },
     {
-      "candidate_id": "996bf578317a0117",
-      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
-      "title": "CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman",
-      "source_quality_score": 0.407,
+      "candidate_id": "gemini-8635e5e9a3557c0d",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
+      "source_quality_score": 0.5,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
-        "camera_relevance": 0.33,
-        "android_hal_relevance": 0.33,
-        "technical_depth": 0.25,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -670,51 +814,15 @@
       }
     },
     {
-      "candidate_id": "56a7229f2f276d3e",
-      "url": "https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
-      "title": "Evolving a Translation System with Reflection in C++",
-      "source_quality_score": 0.407,
+      "candidate_id": "gemini-a8865e6c6b3d243f",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+      "source_quality_score": 0.455,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
-        "camera_relevance": 0.33,
-        "android_hal_relevance": 0.33,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "d4aace8dcaa1a9d1",
-      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
-      "title": "CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter",
-      "source_quality_score": 0.407,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.33,
-        "android_hal_relevance": 0.33,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "24acd6a9101321ae",
-      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
-      "title": "CppCon 2025 Back to Basics: Move Semantics -- Ben Saks",
-      "source_quality_score": 0.407,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.33,
-        "android_hal_relevance": 0.33,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
         "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0,
@@ -725,8 +833,9 @@
     }
   ],
   "counts": {
-    "blocked_candidate": 35,
+    "blocked_candidate": 40,
     "review_candidate": 3,
+    "strong_candidate": 1,
     "weak_candidate": 2
   }
 }
