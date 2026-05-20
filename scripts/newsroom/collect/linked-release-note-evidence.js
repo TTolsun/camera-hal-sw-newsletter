@@ -131,6 +131,16 @@ function linkedReleaseNoteFetchCacheKey(value) {
   }
 }
 
+/**
+ * Resolves parser items that point to trusted linked release-note targets.
+ *
+ * Modes:
+ * - Concrete item pass-through: items with existing concrete versioned release extraction are preserved.
+ * - Linked target resolution: items with linked_release_note_target_url are fetched, parsed, and merged.
+ * - Failure marking: untrusted/fetch/parser failures return unresolved items with main_article_allowed=false.
+ *
+ * Used by raw collection and Gemini source discovery to keep versioned_release_row evidence aligned.
+ */
 async function resolveLinkedReleaseNoteEvidenceItems(items = [], parentSource = {}, options = {}) {
   const fetchTextImpl = options.fetchTextImpl || fetchText;
   const fetchCache = options.fetchCache || new Map();

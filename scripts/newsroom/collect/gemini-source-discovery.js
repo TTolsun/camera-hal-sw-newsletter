@@ -243,18 +243,33 @@ function sourceExtractionReleaseItems(candidate = {}) {
     .flatMap(section => Array.isArray(section?.items) ? section.items : []);
 }
 
-function matchesDiscoveredUrl(candidate = {}, url = '') {
-  const target = canonicalContentUrl(url);
-  const candidateUrl = canonicalContentUrl(candidate.url || candidate.articleUrl || candidate.article_url || '');
-  if (!target || !candidateUrl) return false;
-  if (candidateUrl === target) return true;
+function normalizedReleaseAnchor(value = '') {
+  const canonical = canonicalContentUrl(value);
   try {
-    const targetParts = new URL(target);
-    if (!targetParts.hash) return true;
-    return false;
+    const parsed = new URL(canonical);
+    if (parsed.pathname !== '/' && parsed.pathname.endsWith('/')) {
+      parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+    }
+    return {
+      documentUrl: `${parsed.origin}${parsed.pathname}${parsed.search}`,
+      hash: parsed.hash || ''
+    };
   } catch {
-    return false;
+    const raw = String(value || '').trim();
+    return {
+      documentUrl: raw.replace(/#.*$/, '').replace(/\/+$/, ''),
+      hash: (raw.match(/#.*$/) || [''])[0]
+    };
   }
+}
+
+function matchesDiscoveredUrl(candidate = {}, url = '') {
+  const target = normalizedReleaseAnchor(url);
+  const candidateRef = normalizedReleaseAnchor(candidate.url || candidate.articleUrl || candidate.article_url || '');
+  if (!target.documentUrl || !candidateRef.documentUrl) return false;
+  if (target.documentUrl !== candidateRef.documentUrl) return false;
+  if (target.hash) return target.hash === candidateRef.hash;
+  return true;
 }
 
 function parserBackedCandidate({ proposal, source, item, fallbackUrl }) {
