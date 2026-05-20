@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-20",
-  "generated_at": "2026-05-19T18:18:05.915Z",
+  "generated_at": "2026-05-20T02:19:40.313Z",
   "status": "UNDERFILLED_NEEDS_FIX",
   "failure_stage": "candidate_pool_preflight",
   "failure_reason": "publishable_candidate_shortage; reserve_candidate_shortage; primary_camera_stack_candidate_shortage; camera_stack_candidate_shortage",
@@ -141,7 +141,7 @@
     }
   ],
   "counts": {
-    "input_candidate_count": 40,
+    "input_candidate_count": 46,
     "eligible_candidate_count": 1,
     "selected_article_count": 1,
     "deterministic_selected_count": 1,
@@ -160,85 +160,85 @@
   "exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "main_eligible=false",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 38
     },
     {
       "reason": "briefing_only=true",
-      "count": 25
+      "count": 32
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 25
-    },
-    {
-      "reason": "finalSelectionEligibility=exclude",
-      "count": 10
+      "count": 32
     },
     {
       "reason": "missing dated evidence",
-      "count": 4
+      "count": 10
     },
     {
-      "reason": "watch page without dated evidence",
-      "count": 4
+      "reason": "selection_window=unknown_not_main",
+      "count": 9
     },
     {
-      "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
-      "count": 3
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 8
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 7
     }
   ],
   "final_exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "main_eligible=false",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 38
     },
     {
       "reason": "briefing_only=true",
-      "count": 25
+      "count": 32
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 25
-    },
-    {
-      "reason": "finalSelectionEligibility=exclude",
-      "count": 10
+      "count": 32
     },
     {
       "reason": "missing dated evidence",
-      "count": 4
+      "count": 10
     },
     {
-      "reason": "watch page without dated evidence",
-      "count": 4
+      "reason": "selection_window=unknown_not_main",
+      "count": 9
     },
     {
-      "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
-      "count": 3
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 8
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 7
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-20",
-  "generated_at": "2026-05-20T02:15:01.208Z",
+  "generated_at": "2026-05-20T02:19:43.283Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -23,10 +23,7 @@
     ],
     "missing": [
       "content/newsroom/2026-05-20/reporter-candidates.json",
-      "content/newsroom/2026-05-20/quality-report.json",
-      "content/newsroom/2026-05-20/fact-check-report.json",
       "content/newsroom/2026-05-20/repair-failure.json",
-      "content/newsroom/2026-05-20/fallback-public-issue.json",
       "content/newsroom/2026-05-20/stale-claim-report.json"
     ],
     "used": [
@@ -35,26 +32,29 @@
       "content/newsroom/2026-05-20/shortlisted-candidates.json",
       "content/collected-news/2026-05-20/candidates.json",
       "content/newsroom/2026-05-20/article-capsules.json",
+      "content/newsroom/2026-05-20/quality-report.json",
+      "content/newsroom/2026-05-20/fact-check-report.json",
       "content/newsroom/2026-05-20/source-effectiveness-report.json",
+      "content/newsroom/2026-05-20/fallback-public-issue.json",
       "content/newsroom/2026-05-20/fallback-public-issue-diagnostics.json"
     ]
   },
   "publish_status": {
     "status": "needs-fix",
-    "run_mode": "diagnostics_only",
-    "quality_score": null,
+    "run_mode": "review_only_public",
+    "quality_score": 84,
     "quality_threshold": 85,
-    "fact_check_status": "UNKNOWN",
+    "fact_check_status": "PASS",
     "final_publish_ready": false,
-    "public_newsletter_ready": false,
+    "public_newsletter_ready": true,
     "review_pr_ready": false
   },
   "selection_summary": {
-    "raw_candidate_count": 40,
+    "raw_candidate_count": 46,
     "eligible_candidate_count": 1,
     "selected_main_article_count": 1,
     "reserve_candidate_count": 0,
-    "excluded_candidate_count": 39,
+    "excluded_candidate_count": 45,
     "primary_camera_stack_count": 0,
     "supporting_bucket_count": 1,
     "fallback_window_used": true,
@@ -75,9 +75,10 @@
     "status": "not_available",
     "bound_claims": null,
     "total_claims": null,
+    "derived_evidence_mapping_count": 0,
     "overclaim_risk": "unknown",
     "available_article_count": 0,
-    "not_available_article_count": 1
+    "not_available_article_count": 3
   },
   "hal_impact_summary": {
     "axes": [
@@ -304,20 +305,23 @@
       "exclusion_reason": "finalSelectionEligibility=watchlist"
     },
     {
-      "candidate_id": "2e09be47b7d035b1b1509fe59f1caf95edd44bab9f4919926cd7de56c0bd6f6a",
-      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
-      "url": "https://source.android.com/docs/core/camera",
-      "source": "AOSP Camera Documentation",
-      "source_role": "official_documentation_reference",
-      "source_url_quality": "undated_reference_page",
-      "freshness_window": "unknown",
+      "candidate_id": "c688fc750ca4fd9a713845d12e6f35968e122931dbe5ec35bb6f61b9ad57a6da",
+      "title": "What's new in the Jetpack Compose April '26 release",
+      "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "reference",
       "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "missing dated evidence"
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
     }
   ],
   "excluded_candidates_truncated": true,
   "failure_diagnostics": {
-    "quality_hard_failures": [],
+    "quality_hard_failures": [
+      "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+      "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance."
+    ],
     "fact_check_must_fix": [],
     "repair_failures": [],
     "fallback_builder_failures": [],
@@ -332,20 +336,14 @@
     "source_gap_warnings": [],
     "missing_artifacts": [
       "content/newsroom/2026-05-20/reporter-candidates.json",
-      "content/newsroom/2026-05-20/quality-report.json",
-      "content/newsroom/2026-05-20/fact-check-report.json",
       "content/newsroom/2026-05-20/repair-failure.json",
-      "content/newsroom/2026-05-20/fallback-public-issue.json",
       "content/newsroom/2026-05-20/stale-claim-report.json"
     ],
     "invalid_artifacts": []
   },
   "warnings": [
     "Missing optional artifact: content/newsroom/2026-05-20/reporter-candidates.json",
-    "Missing optional artifact: content/newsroom/2026-05-20/quality-report.json",
-    "Missing optional artifact: content/newsroom/2026-05-20/fact-check-report.json",
     "Missing optional artifact: content/newsroom/2026-05-20/repair-failure.json",
-    "Missing optional artifact: content/newsroom/2026-05-20/fallback-public-issue.json",
     "Missing optional artifact: content/newsroom/2026-05-20/stale-claim-report.json",
     "Fallback claim_validation.status=not_available for selected article: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!"
   ]

@@ -9,7 +9,7 @@ Date: 2026-05-20
 - Unregistered candidates: 0
 - Eligible candidates: 6
 - Selected candidates: 1
-- Rendered main articles: 0
+- Rendered main articles: 3
 - Source gap candidates: 34
 - Generic noise candidates: 30
 - Duplicate candidates: 0
@@ -39,18 +39,21 @@ Date: 2026-05-20
 
 ## Top Effective Sources
 
-_없음_
+| Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
+| --- | --- | --- | --- | --- | --- | --- |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 62.5 | 8 | 2 | 1 | 2 |
+| libcamera-release-announcements | KEEP_AND_MONITOR | 45 | 1 | 1 | 0 | 1 |
 
 ## Sources Needing Parser Repair
 
 | Source | Recommendation | Collected | Eligible | Source Gap | Top Reason |
 | --- | --- | --- | --- | --- | --- |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 8 | 2 | 6 | main_eligible=false |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 23 | 0 | 23 | main_eligible=false |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 2 | 0 | 2 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 8 | 2 | 6 | main_eligible=false |
 
 ## Generic Noise / Downgrade Candidates
 
@@ -99,18 +102,15 @@ _없음_
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 62.5 | 8 | 0.25 | 0.5 | 2 | 0.75 | 0.5 | 0 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 0 | 23 | 0 | 0 | 0 | 1 | 0.913 | 0 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 2 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 8 | 0.25 | 0.5 | 0 | 0.75 | 0.5 | 0 |
+| libcamera-release-announcements | KEEP_AND_MONITOR | 45 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | android-developers-latest-updates | KEEP_AND_MONITOR | 35 | 3 | 1 | 0 | 0 | 0 | 0 | 0 |
-| libcamera-release-announcements | KEEP_AND_MONITOR | 35 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 
 ## Warnings
 
-- Missing optional artifact content/newsroom/2026-05-20/editor-draft.json; related metrics remain zero or artifact-limited.
-- Missing optional artifact content/newsroom/2026-05-20/fact-check-report.json; related metrics remain zero or artifact-limited.
-- Missing optional artifact content/newsroom/2026-05-20/quality-report.json; related metrics remain zero or artifact-limited.
 - Missing optional artifact content/newsroom/2026-05-20/reporter-candidates.json; related metrics remain zero or artifact-limited.

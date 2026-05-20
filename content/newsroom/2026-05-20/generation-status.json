@@ -1,64 +1,62 @@
 {
-  "status": "UNDERFILLED_NEEDS_FIX",
-  "fact_check_status": "UNKNOWN",
-  "must_fix_count": 0,
-  "failure_kind": "candidate_shortage_reviewable",
-  "quality_status": "UNKNOWN",
-  "quality_score": null,
-  "quality_threshold": 85,
-  "publish_ready": false,
-  "selection_publish_ready": false,
-  "final_publish_ready": false,
-  "editor_review_required": true,
   "date": "2026-05-20",
+  "status": "NEEDS_FIX",
   "failure_stage": "candidate_pool_preflight",
   "failure_reason": "publishable_candidate_shortage; reserve_candidate_shortage; primary_camera_stack_candidate_shortage; camera_stack_candidate_shortage",
+  "fact_check_status": "PASS",
+  "must_fix_count": 0,
+  "quality_status": "NEEDS_FIX",
   "quality_attempt_count": 0,
-  "quality_deduction_count": 0,
+  "quality_score": 84,
+  "quality_threshold": 85,
+  "quality_deduction_count": 2,
   "quota_error_count": 0,
   "invalid_json_count": 0,
   "model_usage": {},
   "candidate_input": {
     "mode": "artifact",
     "candidate_artifact": "content/collected-news/2026-05-20/merged-candidates.json",
-    "candidate_artifact_hash": "d11aaa3e022368c5165c898e66209d918789ec416fcae3c95af2c285290096db",
+    "candidate_artifact_hash": "fb51dd9c723fbb1f21de2b1672973c27b599b161c655ee54242bb31094c9ef03",
     "manifest": "content/collected-news/2026-05-20/merged-candidate-manifest.json",
     "manifest_type": "merged_candidate",
     "manifest_status": "validated",
     "llm_used": true,
     "merge_mode": "gemini_source_discovery",
-    "candidate_count": 40
+    "candidate_count": 46
   },
   "run_context": {
-    "github_run_id": "26116498128",
-    "github_sha": "90e6ddcc591d0857ffd70b480af78b8dfd727c64",
+    "github_run_id": "26137247564",
+    "github_sha": "2145cdf8592151e7f7184a218a82251a5405c1b0",
     "github_ref": "refs/heads/main"
   },
-  "input_candidate_count": 40,
+  "input_candidate_count": 46,
   "eligible_candidate_count": 1,
-  "selected_article_count": 1,
+  "selected_article_count": 3,
   "deterministic_selected_count": 1,
-  "rendered_main_article_count": null,
+  "rendered_main_article_count": 3,
   "reserve_candidate_count": 0,
   "demoted_article_count": 0,
   "locked_article_count": null,
   "fallback_topic_count": 1,
   "reporter_candidate_count": null,
   "reporter_selected_count": null,
-  "final_input_candidate_count": 40,
+  "final_input_candidate_count": 46,
   "final_eligible_candidate_count": 1,
-  "final_selected_article_count": 1,
+  "final_selected_article_count": 3,
   "reporter_selected_but_final_excluded_count": null,
   "ai_selected_article_count": 1,
   "underfilled": false,
+  "publish_ready": false,
+  "selection_publish_ready": false,
+  "final_publish_ready": false,
   "review_gate_passed": true,
   "publish_gate_passed": false,
   "min_final_articles": 3,
   "max_final_articles": 5,
   "absolute_min_reviewable_articles": 1,
   "min_non_fallback_publish_ready_articles": 2,
-  "composition_mode": "NEEDS_FIX",
-  "selection_composition_mode": "NEEDS_FIX",
+  "composition_mode": "FALLBACK_COMPOSITION",
+  "selection_composition_mode": "FALLBACK_COMPOSITION",
   "composition_reason": "Deterministic selection is not publish-ready because it does not satisfy Newsletter Policy: main articles: 3-5; review gate primary camera stack articles: 1; Publish-ready gate primary camera stack articles: 2; Publish-ready gate direct AOSP Camera or driver/image pipeline articles: 1; Publish-ready gate supporting main articles max: 1; forbidden main buckets: generic_tech_watchlist; quality threshold: 85.",
   "composition_summary": {
     "selected_article_count": 1,
@@ -195,6 +193,7 @@
       "reason": "Only 0 reserve candidate(s) are available; candidatePoolPreflight.reserveMin requires 2."
     }
   ],
+  "editor_review_required": true,
   "non_fallback_reviewable_article_count": 0,
   "eligible_non_fallback_reviewable_article_count": 0,
   "primary_camera_stack_topic_count": 0,
@@ -222,101 +221,119 @@
   "exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "main_eligible=false",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 38
     },
     {
       "reason": "briefing_only=true",
-      "count": 25
+      "count": 32
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 25
-    },
-    {
-      "reason": "finalSelectionEligibility=exclude",
-      "count": 10
+      "count": 32
     },
     {
       "reason": "missing dated evidence",
-      "count": 4
+      "count": 10
     },
     {
-      "reason": "watch page without dated evidence",
-      "count": 4
+      "reason": "selection_window=unknown_not_main",
+      "count": 9
     },
     {
-      "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
-      "count": 3
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 8
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 7
     }
   ],
   "final_exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "main_eligible=false",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 35
+      "count": 40
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 38
     },
     {
       "reason": "briefing_only=true",
-      "count": 25
+      "count": 32
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 25
-    },
-    {
-      "reason": "finalSelectionEligibility=exclude",
-      "count": 10
+      "count": 32
     },
     {
       "reason": "missing dated evidence",
-      "count": 4
+      "count": 10
     },
     {
-      "reason": "watch page without dated evidence",
-      "count": 4
+      "reason": "selection_window=unknown_not_main",
+      "count": 9
     },
     {
-      "reason": "CameraX release-note candidate has no concrete source_extraction bullet",
-      "count": 3
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 8
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 7
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
-  "public_newsletter_ready": false,
-  "review_publication_ready": false,
-  "diagnostics_only": true,
-  "homepage_visible_after_merge": false,
-  "public_state": "DIAGNOSTICS_ONLY",
-  "run_mode": "diagnostics_only",
-  "effective_homepage_visible": false,
-  "existing_public_artifact_detected": false,
+  "failure_kind": "candidate_shortage_reviewable",
+  "generation_status": "UNDERFILLED_NEEDS_FIX",
+  "fallback_public_issue": true,
+  "fallback_public_issue_status": "CREATED",
+  "fallback_public_issue_demoted_article_count": 0,
+  "fallback_public_issue_removed_blockers": false,
+  "fallback_public_issue_removed_article_count": 0,
+  "fallback_public_issue_added_article_count": 3,
+  "fallback_public_issue_preserve_article_count": 0,
+  "fallback_public_issue_reason": "Public newsletter files were generated by fallback public issue builder after automatic publish gate failed.",
+  "review_publication_ready_reason": "Public newsletter files were generated by fallback public issue builder after automatic publish gate failed.",
+  "editor_review_reason": "AI automatic publish gate did not pass; editor review is required before merge publication.",
+  "original_fact_check_status": "PASS",
+  "original_must_fix_count": 0,
+  "original_source_gap_count": 0,
+  "source_gap_count": 0,
+  "artifact_final_publish_ready": false,
+  "validate_ok": true,
+  "public_newsletter_ready": true,
+  "review_publication_ready": true,
+  "diagnostics_only": false,
+  "homepage_visible_after_merge": true,
+  "public_state": "REVIEW_ONLY_PUBLIC_CREATED",
+  "run_mode": "review_only_public",
+  "effective_homepage_visible": true,
+  "existing_public_artifact_detected": true,
   "retention_valid": false,
   "retention_error": "",
-  "public_artifact_policy": "hide_existing_public_artifact_after_latest_diagnostics_only",
-  "public_artifact_source": "none",
+  "public_artifact_policy": "latest_review_publication_ready",
+  "public_artifact_source": "latest_run",
   "reconciliation_required": false,
-  "reconciliation_action": "removed_newsletters_index_entry",
-  "reconciliation_reason": "latest diagnostics-only run has no effective public artifacts"
+  "reconciliation_action": "upserted_latest_public_entry",
+  "reconciliation_reason": "latest run created a structurally valid review-only public issue"
 }

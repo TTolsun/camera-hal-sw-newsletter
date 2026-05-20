@@ -4,7 +4,7 @@
 
 - Reporter candidates: unknown
 - Reporter-selected candidates: unknown
-- Final input candidates: 40
+- Final input candidates: 46
 - Final eligible candidates: 1
 - Final selected articles: 1
 - Deterministic primary articles: 1
@@ -32,11 +32,11 @@ Source/parser recovery hint:
 - Collect enough eligible candidates to satisfy the Newsletter Policy article count range (3-5).
 
 주요 final exclusion reason:
-- final_selection_blocked=true (35)
-- main_eligible=false (35)
-- source_gap_risk=true (35)
-- reference_only=true (33)
-- briefing_only=true (25)
+- final_selection_blocked=true (40)
+- main_eligible=false (40)
+- source_gap_risk=true (40)
+- reference_only=true (38)
+- briefing_only=true (32)
 
 Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
 

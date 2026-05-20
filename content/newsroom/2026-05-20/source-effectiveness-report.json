@@ -7,9 +7,9 @@
     "source_registry": "data/news-sources.json",
     "optional_artifacts": {
       "reporter_candidates": null,
-      "editor_draft": null,
-      "fact_check_report": null,
-      "quality_report": null
+      "editor_draft": "content/newsroom/2026-05-20/editor-draft.json",
+      "fact_check_report": "content/newsroom/2026-05-20/fact-check-report.json",
+      "quality_report": "content/newsroom/2026-05-20/quality-report.json"
     }
   },
   "summary": {
@@ -20,7 +20,7 @@
     "collected_count": 40,
     "eligible_count": 6,
     "selected_count": 1,
-    "rendered_main_count": 0,
+    "rendered_main_count": 3,
     "source_gap_count": 34,
     "generic_noise_count": 30,
     "duplicate_count": 0,
@@ -1735,7 +1735,7 @@
       "collected_count": 8,
       "eligible_count": 2,
       "selected_count": 1,
-      "rendered_main_count": 0,
+      "rendered_main_count": 2,
       "source_gap_count": 6,
       "camera_relevant_raw_count": 0,
       "parser_repair_reason_count": 0,
@@ -1773,10 +1773,10 @@
       "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0.25,
       "selection_rate": 0.5,
-      "rendered_rate": 0,
+      "rendered_rate": 2,
       "source_gap_rate": 0.75,
       "noise_rate": 0.5,
-      "effectiveness_score": 0,
+      "effectiveness_score": 62.5,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
         "Generic noise candidates were detected from artifact exclusion metadata.",
@@ -2002,7 +2002,7 @@
       "collected_count": 1,
       "eligible_count": 1,
       "selected_count": 0,
-      "rendered_main_count": 0,
+      "rendered_main_count": 1,
       "source_gap_count": 0,
       "camera_relevant_raw_count": 1,
       "parser_repair_reason_count": 0,
@@ -2039,7 +2039,7 @@
       "rendered_rate": 0,
       "source_gap_rate": 0,
       "noise_rate": 0,
-      "effectiveness_score": 35,
+      "effectiveness_score": 45,
       "recommendation": "KEEP_AND_MONITOR",
       "reasons": [],
       "top_exclusion_reasons": [],
@@ -2960,9 +2960,6 @@
     }
   ],
   "warnings": [
-    "Missing optional artifact content/newsroom/2026-05-20/editor-draft.json; related metrics remain zero or artifact-limited.",
-    "Missing optional artifact content/newsroom/2026-05-20/fact-check-report.json; related metrics remain zero or artifact-limited.",
-    "Missing optional artifact content/newsroom/2026-05-20/quality-report.json; related metrics remain zero or artifact-limited.",
     "Missing optional artifact content/newsroom/2026-05-20/reporter-candidates.json; related metrics remain zero or artifact-limited."
   ]
 }
