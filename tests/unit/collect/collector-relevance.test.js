@@ -10,6 +10,7 @@ const {
   fetchUrlForContent,
   newsletterDateWindowEnd,
   normalizeCandidate,
+  resolveLinkedReleaseNoteEvidenceItems,
   withinLookback
 } = require('../../../scripts/newsroom/cli/collect-news-candidates');
 const { readTextFixture } = require('../../helpers/fixture-loader');
@@ -287,6 +288,77 @@ test('collector keeps official AOSP and CameraX camera child rows reviewable wit
 
   assert.equal(nonCameraHal.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
   assert.ok(['watchlist', 'exclude'].includes(nonCameraHal.finalSelectionEligibility));
+});
+
+test('collector resolves link-only Latest Updates CameraX rows through deterministic release-note parse', async () => {
+  const latestUpdatesSource = source({
+    id: 'android-developers-latest-updates',
+    name: 'Android Developers Latest Updates',
+    url: 'https://developer.android.com/latest-updates',
+    sourceUrl: 'https://developer.android.com/latest-updates',
+    category: 'camera-api',
+    section: 'Android / AOSP / Camera',
+    priority: 'high',
+    reliability: 'official',
+    keywords: ['CameraX', 'androidx.camera']
+  });
+  const unresolved = parseSourceSpecificItems(
+    readTextFixture('source-html/android-latest-updates-camerax-link-only.html'),
+    latestUpdatesSource
+  );
+
+  assert.equal(unresolved.length, 1);
+  assert.equal(unresolved[0].behavior_change, '');
+
+  const fetchUrls = [];
+  const secondUnresolved = {
+    ...unresolved[0],
+    title: 'CameraX 1.6.0',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0',
+    linked_release_note_target_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0',
+    version_or_release: 'CameraX 1.6.0',
+    publishedAt: 'March 25, 2026',
+    source_extraction: {
+      ...unresolved[0].source_extraction,
+      release: {
+        ...unresolved[0].source_extraction.release,
+        version: 'CameraX 1.6.0',
+        date: 'March 25, 2026'
+      }
+    }
+  };
+  const resolved = await resolveLinkedReleaseNoteEvidenceItems([unresolved[0], secondUnresolved], latestUpdatesSource, {
+    fetchTextImpl: async (url) => {
+      fetchUrls.push(url);
+      return readTextFixture('source-html/camerax-release-notes-live-structure.html');
+    }
+  });
+  const candidate = normalizeCandidate(resolved[0]);
+  const cachedCandidate = normalizeCandidate(resolved[1]);
+
+  assert.deepEqual(fetchUrls, ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']);
+  assert.equal(candidate.article_url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+  assert.equal(candidate.publishedAt, 'May 06, 2026');
+  assert.equal(candidate.datePrecision || 'day', 'day');
+  assert.equal(candidate.version_or_release, 'CameraX 1.6.1');
+  assert.match(candidate.behavior_change, /Cannot access class ListenableFuture/);
+  assert.equal(candidate.source_gap_risk, false);
+  assert.equal(candidate.main_eligible, true);
+  assert.equal(candidate.source_extraction.extraction_quality.used_versioned_release_row_extractor, true);
+  assert.equal(candidate.source_extraction.extraction_quality.used_fallback, false);
+  assert.deepEqual(
+    candidate.source_extraction.bullets,
+    candidate.source_extraction.release.sections.flatMap(section => section.items.map(item => item.text))
+  );
+  assert.ok(candidate.source_extraction.links.some(link => link.role === 'parent_source'));
+  assert.ok(candidate.source_extraction.links.some(link => link.role === 'release_note_anchor'));
+  assert.equal(
+    candidate.source_extraction.links.some(link => link.role === 'issue_or_bug'),
+    false
+  );
+  assert.equal(cachedCandidate.article_url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0');
+  assert.equal(cachedCandidate.version_or_release, 'CameraX 1.6.0');
+  assert.match(cachedCandidate.behavior_change, /CameraPipe SessionConfig support/);
 });
 
 test('collector keeps libcamera v0.7.1 release as camera driver image pipeline candidate', () => {

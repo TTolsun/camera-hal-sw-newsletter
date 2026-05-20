@@ -290,6 +290,22 @@
       "generatedArtifact": false
     },
     {
+      "path": "source-html/android-latest-updates-camerax-1.6.1.html",
+      "source": "synthetic",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Android Latest Updates CameraX 1.6.1 row preserves concrete versioned release evidence",
+      "generatedArtifact": false
+    },
+    {
+      "path": "source-html/android-latest-updates-camerax-link-only.html",
+      "source": "synthetic",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "bad",
+      "protectedPolicy": "Android Latest Updates link-only row must not synthesize CameraX release-note behavior",
+      "generatedArtifact": false
+    },
+    {
       "path": "source-html/android-security-bulletin.html",
       "source": "curated",
       "allowedUse": "parser-source-html",
