@@ -4,12 +4,16 @@ const test = require('node:test');
 const {
   BUCKETS
 } = require('../../../scripts/lib/aosp-camera-scope');
+const {
+  extractRoundupChildTopics
+} = require('../../../scripts/newsroom/collect/roundup-child-topic-extractor');
 const { parseSourceSpecificItems } = require('../../../scripts/lib/source-item-parsers');
 const {
   canonicalContentUrl,
   fetchUrlForContent,
   newsletterDateWindowEnd,
   normalizeCandidate,
+  parseRss,
   resolveLinkedReleaseNoteEvidenceItems,
   withinLookback
 } = require('../../../scripts/newsroom/cli/collect-news-candidates');
@@ -217,6 +221,106 @@ test('collector canonicalizes Android docs locale URLs and keeps Latest Updates 
   assert.equal(candidate.url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta01');
   assert.equal(candidate.relevance_bucket, BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT);
   assert.ok(['main', 'short'].includes(candidate.finalSelectionEligibility));
+});
+
+test('RSS roundup child extraction is additive and uses normal evidence derivation', () => {
+  const rss = readTextFixture('source-html/android-developers-roundup-rss.xml');
+  const androidSource = source({
+    id: 'android-developers-blog',
+    name: 'Android Developers Blog',
+    url: 'https://android-developers.googleblog.com/',
+    sourceUrl: 'https://android-developers.googleblog.com/',
+    category: 'android',
+    section: 'Android / AOSP / Camera',
+    priority: 'high',
+    reliability: 'official',
+    keywords: ['Android', 'CameraX', 'camera', 'media']
+  });
+  const rawDescription = (rss.match(/<description><!\[CDATA\[([\s\S]*?)\]\]><\/description>/i) || [])[1] || '';
+  const rawChildren = extractRoundupChildTopics({
+    source: androidSource,
+    parentTitle: '17 Things to know for Android developers at Google I/O',
+    parentUrl: 'https://android-developers.googleblog.com/2026/05/17-things-google-io.html',
+    publishedAt: 'Wed, 20 May 2026 10:00:00 GMT',
+    html: rawDescription,
+    rawText: rawDescription
+  });
+  const items = parseRss(rss, androidSource);
+
+  const parent = items.find(item => item.title === '17 Things to know for Android developers at Google I/O');
+  const sibling = items.find(item => item.title === 'Unrelated Android platform article');
+  const child = items.find(item => item.source_extraction?.mode === 'roundup_child_topic');
+
+  assert.equal(rawChildren.length, 1);
+  assert.ok(parent);
+  assert.ok(sibling);
+  assert.ok(child);
+  assert.equal(items.filter(item => item.source_extraction?.mode === 'roundup_child_topic').length, 1);
+  assert.equal(parent.source_kind, 'rss_item');
+  assert.ok(['watchlist', 'exclude'].includes(parent.finalSelectionEligibility));
+  assert.equal(sibling.source_kind, 'rss_item');
+  assert.equal(child.source_kind, 'blog_post_item');
+  assert.equal(child.collectionMode, 'article-item');
+  assert.equal(child.version_or_release, '');
+  assert.equal(child.parent_url, 'https://android-developers.googleblog.com/2026/05/17-things-google-io.html');
+  assert.equal(child.parent_title, '17 Things to know for Android developers at Google I/O');
+  assert.equal(child.url, 'https://android-developers.googleblog.com/2026/05/17-things-google-io.html#roundup-child-1-advanced-professional-video');
+  assert.equal(child.source_extraction.child_heading, 'Advanced Professional Video');
+  assert.match(child.source_extraction.evidence_blocks[0].text, /APV support for professional video capture/);
+  assert.match(child.summary, /APV support for professional video capture/);
+  assert.equal(child.api_or_component, 'Android media/camera output');
+  assert.equal(rawChildren[0].relevanceBucketHint, 'android_platform_camera_adjacent');
+  assert.equal(child.source_gap_risk, false);
+  assert.ok(['main', 'short'].includes(child.finalSelectionEligibility));
+  assert.ok([
+    BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    BUCKETS.DIRECT_AOSP_CAMERA
+  ].includes(child.relevance_bucket));
+  assert.equal(items.some(item => /Compose|audio routing|Screen recording/i.test(item.title) && item.source_extraction?.mode === 'roundup_child_topic'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(rawChildren[0], 'source_gap_risk'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(rawChildren[0], 'finalSelectionEligibility'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(rawChildren[0], 'main_eligible'), false);
+});
+
+test('roundup extraction quality alone does not make an underfilled child selectable', () => {
+  const candidate = normalizeCandidate(raw({
+    source: source({
+      id: 'android-developers-blog',
+      name: 'Android Developers Blog',
+      url: 'https://android-developers.googleblog.com/',
+      sourceUrl: 'https://android-developers.googleblog.com/',
+      category: 'android',
+      section: 'Android / AOSP / Camera',
+      priority: 'high',
+      reliability: 'official',
+      keywords: ['Android', 'camera']
+    }),
+    title: 'Camera output child topic',
+    url: 'https://android-developers.googleblog.com/2026/05/roundup.html#roundup-child-1-camera-output',
+    publishedAt: 'Wed, 20 May 2026 10:00:00 GMT',
+    summary: 'Camera output topic.',
+    sourceKind: 'blog_post_item',
+    collectionMode: 'article-item',
+    version_or_release: '',
+    api_or_component: 'Android media/camera output',
+    behavior_change: '',
+    source_extraction: {
+      mode: 'roundup_child_topic',
+      extraction_quality: {
+        has_concrete_child_topic_evidence: false,
+        main_article_allowed: true,
+        used_fallback: false
+      }
+    },
+    extraction_quality: {
+      has_concrete_child_topic_evidence: false,
+      main_article_allowed: true,
+      used_fallback: false
+    }
+  }));
+
+  assert.equal(candidate.source_gap_risk, true);
+  assert.equal(['main', 'short'].includes(candidate.finalSelectionEligibility), false);
 });
 
 test('collector keeps official AOSP and CameraX camera child rows reviewable without promoting non-camera HAL', () => {

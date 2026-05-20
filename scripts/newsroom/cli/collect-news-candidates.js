@@ -22,6 +22,9 @@ const {
   parseSourceSpecificItems
 } = require('../collect/source-item-parsers');
 const {
+  extractRoundupChildTopics
+} = require('../collect/roundup-child-topic-extractor');
+const {
   resolveLinkedReleaseNoteEvidenceItems
 } = require('../collect/linked-release-note-evidence');
 const {
@@ -256,43 +259,64 @@ async function fetchText(url, timeoutMs = 0) {
   }
 }
 
+function rssParentRawItem(block, source) {
+  const title = tag(block, 'title');
+  const linkTag = block.match(/<link[^>]*href=["']([^"']+)["'][^>]*>/i);
+  const link = tag(block, 'link') || (linkTag ? linkTag[1] : source.url);
+  const date = tag(block, 'pubDate') || tag(block, 'updated') || tag(block, 'published');
+  const summary = tag(block, 'description') || tag(block, 'summary') || tag(block, 'content:encoded') || tag(block, 'content');
+  const outgoingLinks = mergeOutgoingLinks(
+    extractOutgoingLinksFromHtml(rawTag(block, 'description'), {
+      baseUrl: link || source.url,
+      sourceField: 'rss.description'
+    }),
+    extractOutgoingLinksFromHtml(rawTag(block, 'summary'), {
+      baseUrl: link || source.url,
+      sourceField: 'rss.summary'
+    }),
+    extractOutgoingLinksFromHtml(rawTag(block, 'content:encoded'), {
+      baseUrl: link || source.url,
+      sourceField: 'rss.content'
+    }),
+    extractOutgoingLinksFromHtml(rawTag(block, 'content'), {
+      baseUrl: link || source.url,
+      sourceField: 'rss.content'
+    })
+  );
+  return {
+    source,
+    title,
+    url: link,
+    publishedAt: date,
+    summary,
+    sourceKind: 'rss_item',
+    collectionMode: 'rss-item',
+    outgoing_links: outgoingLinks,
+    imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
+  };
+}
+
+function rssItemHtml(block) {
+  return rawTag(block, 'content:encoded') ||
+    rawTag(block, 'description') ||
+    rawTag(block, 'content') ||
+    rawTag(block, 'summary');
+}
+
 function parseRss(xml, source) {
   const blocks = xml.match(/<item[\s\S]*?<\/item>/gi) || xml.match(/<entry[\s\S]*?<\/entry>/gi) || [];
-  return blocks.map(block => {
-    const title = tag(block, 'title');
-    const linkTag = block.match(/<link[^>]*href=["']([^"']+)["'][^>]*>/i);
-    const link = tag(block, 'link') || (linkTag ? linkTag[1] : source.url);
-    const date = tag(block, 'pubDate') || tag(block, 'updated') || tag(block, 'published');
-    const summary = tag(block, 'description') || tag(block, 'summary') || tag(block, 'content:encoded') || tag(block, 'content');
-    const outgoingLinks = mergeOutgoingLinks(
-      extractOutgoingLinksFromHtml(rawTag(block, 'description'), {
-        baseUrl: link || source.url,
-        sourceField: 'rss.description'
-      }),
-      extractOutgoingLinksFromHtml(rawTag(block, 'summary'), {
-        baseUrl: link || source.url,
-        sourceField: 'rss.summary'
-      }),
-      extractOutgoingLinksFromHtml(rawTag(block, 'content:encoded'), {
-        baseUrl: link || source.url,
-        sourceField: 'rss.content'
-      }),
-      extractOutgoingLinksFromHtml(rawTag(block, 'content'), {
-        baseUrl: link || source.url,
-        sourceField: 'rss.content'
-      })
-    );
-    return normalizeCandidate({
+  return blocks.flatMap(block => {
+    const parentRaw = rssParentRawItem(block, source);
+    const parent = normalizeCandidate(parentRaw);
+    const childItems = extractRoundupChildTopics({
       source,
-      title,
-      url: link,
-      publishedAt: date,
-      summary,
-      sourceKind: 'rss_item',
-      collectionMode: 'rss-item',
-      outgoing_links: outgoingLinks,
-      imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
-    });
+      parentTitle: parentRaw.title,
+      parentUrl: parentRaw.url,
+      publishedAt: parentRaw.publishedAt,
+      html: rssItemHtml(block),
+      rawText: parentRaw.summary
+    }).map(item => normalizeCandidate(item));
+    return [parent, ...childItems];
   }).filter(item => item.title && item.url);
 }
 

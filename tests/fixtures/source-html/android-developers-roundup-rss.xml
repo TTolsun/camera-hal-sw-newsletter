@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Android Developers Blog</title>
+    <item>
+      <title>17 Things to know for Android developers at Google I/O</title>
+      <link>https://android-developers.googleblog.com/2026/05/17-things-google-io.html</link>
+      <pubDate>Wed, 20 May 2026 10:00:00 GMT</pubDate>
+      <description><![CDATA[
+        <h2>Advanced Professional Video</h2>
+        <p>Android adds APV support for professional video capture and camera output in the media framework.</p>
+        <h2>Compose updates</h2>
+        <p>Compose improves UI developer workflow and design iteration for Android apps.</p>
+        <h2>Android audio routing</h2>
+        <p>Android improves audio routing controls for communication apps.</p>
+        <h2>Screen recording controls</h2>
+        <p>Android improves screen recording controls for shared devices.</p>
+      ]]></description>
+    </item>
+    <item>
+      <title>Unrelated Android platform article</title>
+      <link>https://android-developers.googleblog.com/2026/05/unrelated-platform.html</link>
+      <pubDate>Wed, 20 May 2026 11:00:00 GMT</pubDate>
+      <description>Regular Android update for platform developers.</description>
+    </item>
+  </channel>
+</rss>
