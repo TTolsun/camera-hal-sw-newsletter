@@ -79,6 +79,70 @@ test('Android Latest Updates parser extracts CameraX card links with nearby date
   assert.equal(items.some(item => /Android Studio/i.test(item.title)), false);
 });
 
+test('Android Latest Updates parser preserves CameraX 1.6.1 versioned row source_extraction', () => {
+  const html = readTextFixture('source-html/android-latest-updates-camerax-1.6.1.html');
+
+  const items = parseSourceSpecificItems(html, source({
+    collectionModeHint: '',
+    evidenceGranularityHint: ''
+  }));
+
+  assert.equal(items.length, 1);
+  const item = items[0];
+  assertParsedItemContract(item);
+  assert.equal(item.url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+  assert.equal(item.publishedAt, 'May 6, 2026');
+  assert.equal(item.datePrecision || 'day', 'day');
+  assert.equal(Object.prototype.hasOwnProperty.call(item, 'published_date'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(item, 'date_precision'), false);
+  assert.equal(item.version_or_release, 'CameraX 1.6.1');
+  assert.equal(item.api_or_component, 'CameraX / androidx.camera:camera-core');
+  assert.match(item.behavior_change, /Fixed ListenableFuture compile error/);
+  assert.doesNotMatch(item.behavior_change, /Maven Group versions/i);
+  assert.doesNotMatch(item.behavior_change, /camera-core\s+1\.6\.1/i);
+  assert.doesNotMatch(item.behavior_change, /This library was last updated/i);
+  assert.doesNotMatch(item.behavior_change, /View the Camera Library/i);
+
+  const extraction = item.source_extraction;
+  assert.equal(extraction.mode, 'versioned_release_row');
+  assert.equal(extraction.evidence_granularity, 'versioned_release_row');
+  assert.equal(extraction.release.version, 'CameraX 1.6.1');
+  assert.equal(extraction.release.date, 'May 6, 2026');
+  assert.equal(extraction.release.component, 'CameraX / androidx.camera:camera-core');
+  const nestedTexts = extraction.release.sections
+    .flatMap(section => section.items)
+    .map(entry => entry.text);
+  assert.deepEqual(extraction.bullets, nestedTexts);
+  assert.ok(nestedTexts.some(text => /ListenableFuture|compile error|Cannot access class/i.test(text)));
+  assert.equal(extraction.extraction_quality.has_concrete_behavior_change, true);
+  assert.equal(extraction.extraction_quality.main_article_allowed, true);
+  assert.equal(extraction.extraction_quality.raw_table_used_as_body, false);
+  assert.equal(extraction.extraction_quality.used_versioned_release_row_extractor, true);
+  assert.equal(extraction.extraction_quality.used_fallback, false);
+  assert.equal(extraction.extraction_quality.used_empty_evidence_fallback, false);
+  assert.ok(extraction.links.some(link => link.role === 'parent_source'));
+  assert.ok(extraction.links.some(link => link.role === 'release_note_anchor'));
+});
+
+test('Android Latest Updates link-only row does not synthesize CameraX behavior', () => {
+  const html = readTextFixture('source-html/android-latest-updates-camerax-link-only.html');
+
+  const items = parseSourceSpecificItems(html, source());
+
+  assert.equal(items.length, 1);
+  const item = items[0];
+  assert.equal(item.url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+  assert.equal(item.publishedAt, 'May 6, 2026');
+  assert.equal(item.version_or_release, 'CameraX 1.6.1');
+  assert.equal(item.behavior_change, '');
+  assert.equal(item.summary, '');
+  assert.equal(item.linked_release_note_target_url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1');
+  assert.equal(item.parser_gap_reason, 'missing_concrete_release_note_bullet');
+  assert.equal(item.source_extraction.extraction_quality.main_article_allowed, false);
+  assert.equal(item.source_extraction.extraction_quality.used_empty_evidence_fallback, true);
+  assert.deepEqual(item.source_extraction.bullets, []);
+});
+
 test('AOSP Site updates parser extracts month-level camera child rows only', () => {
   const html = readTextFixture('source-html/aosp-site-updates-camera.html');
 

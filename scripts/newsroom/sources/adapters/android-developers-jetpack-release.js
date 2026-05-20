@@ -1,5 +1,9 @@
 const { decodeHtml, htmlAttr } = require('../../common/common');
 const { extractOutgoingLinksFromHtml } = require('../../collect/outgoing-links');
+const {
+  firstConcreteBullet: firstVersionedReleaseBullet,
+  normalizeVersionedReleaseExtraction
+} = require('../../collect/versioned-release-row');
 
 const ADAPTER_ID = 'android-developers-jetpack-release';
 const SOURCE_TYPE = 'release_note';
@@ -299,24 +303,33 @@ function buildExtraction(block, blocks, source) {
     used_fallback: items.length === 0,
     raw_table_used_as_body: false,
     main_article_allowed: items.length > 0,
+    used_versioned_release_row_extractor: true,
+    used_empty_evidence_fallback: items.length === 0,
     warnings
   };
-  return {
-    adapter_id: ADAPTER_ID,
-    source_type: SOURCE_TYPE,
+  return normalizeVersionedReleaseExtraction({
+    adapterId: ADAPTER_ID,
+    sourceType: SOURCE_TYPE,
     source: {
+      name: source.name || 'Android Developers',
+      url: block.url || source.sourceUrl || source.url
+    },
+    parentSource: {
       name: source.name || 'Android Developers',
       url: source.sourceUrl || source.url || block.url
     },
+    heading: block.title,
+    releaseNoteUrl: block.url,
     release: {
       version: block.version,
       date: firstDate(`${block.title} ${clean(block.body)}`),
       component: 'CameraX / androidx.camera',
-      sections
     },
-    minor_line_context: minorLineContext(block, blocks),
-    extraction_quality: extractionQuality
-  };
+    sections,
+    links: linksFromHtml(block.body, block.url),
+    minorLineContext: minorLineContext(block, blocks),
+    extractionQuality
+  });
 }
 
 function validationTargetsForExtraction(extraction) {
@@ -352,7 +365,7 @@ function buildDerivedHints(extraction) {
 }
 
 function firstConcreteBullet(extraction) {
-  return concreteItems(extraction.release.sections)[0]?.text || '';
+  return firstVersionedReleaseBullet(extraction) || concreteItems(extraction.release.sections)[0]?.text || '';
 }
 
 function extract(html = '', source = {}) {
@@ -370,6 +383,7 @@ function extract(html = '', source = {}) {
       title: `${source.name || 'CameraX Release Notes'} - ${sourceExtraction.release.version}`,
       url: canonicalCameraReleaseUrl(block.url, sourceExtraction.release.version),
       publishedAt: sourceExtraction.release.date,
+      datePrecision: sourceExtraction.release.date ? 'day' : '',
       summary: behavior,
       sourceKind: 'release_note_item',
       collectionMode: 'release-note-item',
