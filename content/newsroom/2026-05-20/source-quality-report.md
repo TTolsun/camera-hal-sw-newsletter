@@ -11,6 +11,8 @@
 | blocked_candidate | 0.577 | Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html |
 | blocked_candidate | 0.577 | Increasing app discovery and engagement on Google TV | https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html |
 | blocked_candidate | 0.577 | I/O 2026: What's new in Google Play | https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html |
+| blocked_candidate | 0.622 | What's new in the Jetpack Compose April '26 release | https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html |
+| blocked_candidate | 0.622 | Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4 | https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html |
 | blocked_candidate | 0.618 | Camera &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/core/camera |
 | blocked_candidate | 0.402 | Build for the future with the Android XR Developer Catalyst Program — Apply now! | https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html |
 | blocked_candidate | 0.642 | Adaptive development for the expanding Android ecosystem | https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html |
@@ -19,6 +21,7 @@
 | blocked_candidate | 0.492 | Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha | https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html |
 | blocked_candidate | 0.552 | Gratitude saw 25% higher retention for widget users | https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html |
 | blocked_candidate | 0.552 | A look ahead: Making it easier and faster to publish safer apps | https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html |
+| blocked_candidate | 0.642 | Streamline User Journeys with Verified Email via Credential Manager | https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html |
 | review_candidate | 0.688 | 1.3.0-beta02 | https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02 |
 | review_candidate | 0.688 | 1.4.0-alpha07 | https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07 |
 | blocked_candidate | 0.57 | What&apos;s new &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/whatsnew |
@@ -30,16 +33,19 @@
 | blocked_candidate | 0.48 | What's New in Wear OS 7 | https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html |
 | blocked_candidate | 0.531 | Overview | https://source.android.com/docs/security/bulletin/asb-overview |
 | blocked_candidate | 0.531 | May | https://source.android.com/docs/security/bulletin/2026/2026-05-01 |
+| strong_candidate | 0.852 | libcamera Release Announcements - libcamera v0.7.1 | https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html |
 | blocked_candidate | 0.551 | C++26: A User-Friendly assert() macro -- Sandor Dargo | https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo |
+| blocked_candidate | 0.551 | 2026 Annual C++ Developer Survey "Lite" | https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1 |
 | blocked_candidate | 0.398 | C++: The Documentary trailer | https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer |
 | weak_candidate | 0.638 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! | https://isocpp.org//blog/2026/04/gcc-16.1 |
+| blocked_candidate | 0.593 | CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal | https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph |
 | weak_candidate | 0.614 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
 | blocked_candidate | 0.455 | What reinterpret_cast doesn&apos;t do -- Andreas Fertig | https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig |
 | blocked_candidate | 0.455 | Results summary: 2026 Annual C++ Developer Survey "Lite" | https://isocpp.org//blog/2026/05/2026-survey-summary |
-| blocked_candidate | 0.431 | JSON and C++26 compile-time reflection: a talk -- Daniel Lemire | https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire |
-| blocked_candidate | 0.407 | What Happens When a Destructor Throws -- Sandor Dargo | https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo |
-| blocked_candidate | 0.407 | CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman | https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo |
-| blocked_candidate | 0.407 | Evolving a Translation System with Reflection in C++ | https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp |
-| blocked_candidate | 0.407 | CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter | https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter |
-| blocked_candidate | 0.407 | CppCon 2025 Back to Basics: Move Semantics -- Ben Saks | https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks |
+| blocked_candidate | 0.583 | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 |
+| blocked_candidate | 0.5 | libcamera v0.7.1 | https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html |
+| blocked_candidate | 0.492 | กล้อง X &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02 |
+| blocked_candidate | 0.583 | CameraX &nbsp;\|&nbsp; Jetpack &nbsp;\|&nbsp; Android Developers | https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07 |
+| blocked_candidate | 0.5 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++ | https://isocpp.org//blog/2026/04/gcc-16.1 |
+| blocked_candidate | 0.455 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more : Standard C++ | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
 

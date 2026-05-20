@@ -8,12 +8,12 @@ merge_mode=gemini_source_discovery
 summary=Gemini ran, but found no new unique publishable candidates.
 manual_candidate_count=40
 manual_unique_url_count=40
-gemini_candidate_count=0
-gemini_unique_url_count=0
+gemini_candidate_count=6
+gemini_unique_url_count=6
 gemini_new_unique_url_count=0
-gemini_manual_duplicate_url_count=0
-gemini_duplicate_record_count=0
-merged_candidate_count=40
+gemini_manual_duplicate_url_count=6
+gemini_duplicate_record_count=6
+merged_candidate_count=46
 merged_unique_url_count=40
 gemini_publishable_candidate_count=0
 
@@ -64,28 +64,28 @@ The seed evidence workflow is prioritized over legacy-pattern cleanup, but sourc
 
 status=WARNING
 parser_gap_count=3
-duplicate_discovery_gap_count=0
+duplicate_discovery_gap_count=3
 source_discovery_feedback_report_markdown=content/newsroom/2026-05-20/source-discovery-feedback-report.md
 
 - PARSER_REPAIR_REQUIRED: CameraX 1.6.1
   - url: https://developer.android.com/jetpack/androidx/releases/camera#1.6.1
   - adapter_hint: android-developers-jetpack-release
   - reason: missing_source_extraction
-  - duplicate_match_type: 
+  - duplicate_match_type: exact_normalized_url
   - confidence: high
-  - Manual candidate lacks concrete source_extraction bullets.
+  - Gemini rediscovered this URL (exact_normalized_url), but the manual candidate lacks concrete source_extraction bullets.
 - PARSER_REPAIR_REQUIRED: 1.3.0-beta02
   - url: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02
   - adapter_hint: android-developers-jetpack-release
   - reason: missing_source_extraction
-  - duplicate_match_type: 
+  - duplicate_match_type: exact_normalized_url
   - confidence: high
-  - Manual candidate lacks concrete source_extraction bullets.
+  - Gemini rediscovered this URL (exact_normalized_url), but the manual candidate lacks concrete source_extraction bullets.
 - PARSER_REPAIR_REQUIRED: 1.4.0-alpha07
   - url: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07
   - adapter_hint: android-developers-jetpack-release
   - reason: missing_source_extraction
-  - duplicate_match_type: 
+  - duplicate_match_type: exact_normalized_url
   - confidence: high
-  - Manual candidate lacks concrete source_extraction bullets.
+  - Gemini rediscovered this URL (exact_normalized_url), but the manual candidate lacks concrete source_extraction bullets.
 
