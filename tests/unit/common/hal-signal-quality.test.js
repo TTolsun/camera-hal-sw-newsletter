@@ -217,6 +217,7 @@ test('multimedia camera-output bucket gets supporting axis without fallback prom
     headline: 'Android APV camera output update',
     relevance_bucket: 'android_multimedia_camera_output',
     evidence_summary: 'Android introduces Advanced Professional Video for camera capture output.',
+    hal_signal_capsule: undefined,
     article_sections: {
       verified_facts: ['APV was announced for Android camera output.'],
       background_context: 'APV is camera output / multimedia supporting context.',
@@ -227,8 +228,10 @@ test('multimedia camera-output bucket gets supporting axis without fallback prom
   });
   const normalized = normalizeHalSignalFields(value);
   const summary = buildHalSignalQualitySummary([value]);
+  const axes = inferHalImpactAxes(value);
 
-  assert.ok(inferHalImpactAxes(value).includes('stream_buffer_metadata'));
+  assert.ok(axes.includes('stream_buffer_metadata'));
+  assert.equal(axes.includes('framework_hal_contract'), false);
   assert.equal(normalized.hal_signal_hard_blockers.includes('fallback_promotion_missing_reason'), false);
   assert.equal(summary.android_multimedia_camera_output_count, 1);
   assert.equal(summary.fallback_main_article_count, 0);

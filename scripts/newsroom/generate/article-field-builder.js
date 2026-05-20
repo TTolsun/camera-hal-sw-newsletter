@@ -240,6 +240,9 @@ function buildStaticBackgroundContext(candidate = {}) {
   if (impact === IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT || bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) {
     return 'Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.';
   }
+  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
+    return 'Camera output / multimedia supporting items are not direct HAL contract evidence; treat them as capture output, preview/video/gallery/video-call behavior, and downstream validation signals.';
+  }
   if (impact === IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT || bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
     return 'CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.';
   }
@@ -251,11 +254,15 @@ function buildStaticBackgroundContext(candidate = {}) {
 
 function buildHalPerspective(candidate = {}) {
   const impact = inferImpactClaimLevel(candidate);
+  const bucket = candidateBucket(candidate);
   if (impact === IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE) {
     return 'Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.';
   }
   if (impact === IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT) {
     return 'Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.';
+  }
+  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
+    return 'Do not infer a HAL API change; review preview, video, gallery, video-call, and captured image/video output quality or compatibility regressions.';
   }
   if (impact === IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT) {
     return 'CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.';

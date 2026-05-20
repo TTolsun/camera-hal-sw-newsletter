@@ -698,6 +698,11 @@ function renderHalSignalQualityMarkdown(report = {}) {
 - effective_actionability_level_counts: ${JSON.stringify(summary.effective_actionability_level_counts || {})}
 - signal_quality_status_counts: ${JSON.stringify(summary.signal_quality_status_counts || {})}
 
+## Count Semantics
+
+- android_multimedia_camera_output_count: supporting camera output / multimedia lane; not a direct HAL bucket and not a fallback topic count.
+- fallback_main_article_count: fallback/watchlist-oriented signal count for SoC, C++ tooling, and generic watchlist buckets.
+
 ## Main Article Signal Checks
 
 ${rows.length > 0

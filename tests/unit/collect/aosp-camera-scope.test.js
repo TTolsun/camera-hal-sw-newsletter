@@ -113,6 +113,44 @@ test('keeps audio and media playback UI out of multimedia camera-output bucket',
   assert.equal(compose.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
 });
 
+test('requires camera-output context for weak multimedia terms', () => {
+  const mediaStore = classifyAospCameraStackCandidate({
+    title: 'Android MediaStore storage cleanup update',
+    summary: 'The platform update changes MediaStore permission cleanup and storage indexing behavior.'
+  });
+  const mediaProvider = classifyAospCameraStackCandidate({
+    title: 'MediaProvider indexing update for downloads',
+    summary: 'The Android update improves MediaProvider indexing behavior for downloaded files.'
+  });
+  const videoCallUi = classifyAospCameraStackCandidate({
+    title: 'Video call reactions UI update',
+    summary: 'The meeting app update adds video call reaction buttons and UI controls.'
+  });
+  const ultraHdrDisplay = classifyAospCameraStackCandidate({
+    title: 'Ultra HDR display settings update',
+    summary: 'Android updates Ultra HDR display settings for viewing and screen controls.'
+  });
+
+  assert.notEqual(mediaStore.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.notEqual(mediaProvider.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.notEqual(videoCallUi.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.notEqual(ultraHdrDisplay.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+});
+
+test('keeps capture result metadata direct while captured output remains multimedia', () => {
+  const captureResult = classifyAospCameraStackCandidate({
+    title: 'Capture result metadata update',
+    summary: 'Android Camera framework changes capture result metadata handling.'
+  });
+  const capturedOutput = classifyAospCameraStackCandidate({
+    title: 'Captured image output shown in gallery',
+    summary: 'Android changes captured image output behavior for gallery output validation.'
+  });
+
+  assert.equal(captureResult.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
+  assert.equal(capturedOutput.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+});
+
 test('keeps generic SoC, GPU, and NPU benchmark coverage out of non-fallback SoC bucket', () => {
   const soc = classifyAospCameraStackCandidate({
     title: 'SoC benchmark compares GPU and NPU performance',

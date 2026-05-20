@@ -108,27 +108,56 @@ const CAMERA_IMPACT_PATTERNS = [
   /\blatency\b/i
 ];
 
-const MULTIMEDIA_CAMERA_OUTPUT_PATTERNS = [
-  /\bUltra\s+HDR\b/i,
-  /\bHDR\s+video\b/i,
-  /\bAPV\b/i,
-  /\bAdvanced\s+Professional\s+Video\b/i,
-  /\bMediaProvider\b/i,
-  /\bmedia\s+provider\b/i,
-  /\bMediaStore\b/i,
-  /\bmedia\s+store\b/i,
+const MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS = [
+  /\bcamera\s+output\b/i,
   /\bgallery\s+output\b/i,
   /\bmedia\s+output\b/i,
-  /\bvideo\s+call\b/i,
   /\bcamera\s*\/\s*audio\s+sync\b/i,
   /\baudio\s*\/\s*video\s+sync\b[^.\n]{0,120}\b(?:camera|preview|video\s+(?:recording|call)|capture)\b/i,
   /\b(?:camera|preview|video\s+(?:recording|call)|capture)\b[^.\n]{0,120}\baudio\s*\/\s*video\s+sync\b/i,
   /\bsocial\s+app\s+camera\s+capture\b/i,
-  /\bcamera\s+capture\s+result\b/i,
   /\bcaptured\s+image\s*\/\s*video\s+output\b/i,
+  /\bcaptured\s+image\s+and\s+video\s+output\b/i,
   /\bcaptured\s+(?:image|video)\s+output\b/i,
-  /\bAndroid\b[^.\n]{0,120}\b(?:camera\s+output|gallery\s+output|media\s+output|video\s+call|Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video)\b/i,
-  /\b(?:camera\s+output|gallery\s+output|media\s+output|video\s+call|Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video)\b[^.\n]{0,120}\bAndroid\b/i
+  /\bcamera\s+output\s+result\b/i
+];
+
+const MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS = [
+  /\bUltra\s+HDR\b/i,
+  /\bHDR\s+video\b/i,
+  /\bAPV\b/i,
+  /\bAdvanced\s+Professional\s+Video\b/i,
+  /\bvideo\s+call\b/i
+];
+
+const MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS = [
+  /\bMediaProvider\b/i,
+  /\bmedia\s+provider\b/i,
+  /\bMediaStore\b/i,
+  /\bmedia\s+store\b/i
+];
+
+const CAMERA_OUTPUT_CONTEXT_PATTERNS = [
+  /\bcamera\b/i,
+  /\bcaptur(?:e|ed|es|ing)\b/i,
+  /\bpreview\b/i,
+  /\bvideo\s+recording\b/i,
+  /\bgallery\s+output\b/i,
+  /\bmedia\s+output\b/i,
+  /\bcamera\s+output\b/i,
+  /\bsocial\s+app\s+camera\b/i,
+  /\bcaptured\s+image\b/i,
+  /\bcaptured\s+video\b/i
+];
+
+const STORAGE_CAMERA_OUTPUT_CONTEXT_PATTERNS = [
+  /\bcamera\b/i,
+  /\bcaptur(?:e|ed|es|ing)\b/i,
+  /\bgallery\s+output\b/i,
+  /\bmedia\s+output\b/i,
+  /\bcamera\s+output\b/i,
+  /\bcaptured\s+image\b/i,
+  /\bcaptured\s+video\b/i
 ];
 
 const SOC_PATTERNS = [
@@ -251,6 +280,21 @@ function patternHits(patterns, value) {
     .map(pattern => pattern.source);
 }
 
+function multimediaCameraOutputHits(value) {
+  const strongHits = patternHits(MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS, value);
+  const outputContextHits = patternHits(CAMERA_OUTPUT_CONTEXT_PATTERNS, value);
+  const storageContextHits = patternHits(STORAGE_CAMERA_OUTPUT_CONTEXT_PATTERNS, value);
+  return [
+    ...strongHits,
+    ...(outputContextHits.length > 0
+      ? patternHits(MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS, value)
+      : []),
+    ...(storageContextHits.length > 0
+      ? patternHits(MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS, value)
+      : [])
+  ];
+}
+
 function relevanceScoreFromHits(hits, max = 5) {
   return Math.min(max, hits.length === 0 ? 0 : hits.length + 1);
 }
@@ -276,7 +320,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const driverTerms = patternHits(DRIVER_PATTERNS, body);
   const androidAdjacentTerms = patternHits(ANDROID_ADJACENT_PATTERNS, body);
   const cameraImpactTerms = patternHits(CAMERA_IMPACT_PATTERNS, body);
-  const multimediaCameraOutputTerms = patternHits(MULTIMEDIA_CAMERA_OUTPUT_PATTERNS, body);
+  const multimediaCameraOutputTerms = multimediaCameraOutputHits(body);
   const socTerms = patternHits(SOC_PATTERNS, body);
   const strongSocTerms = patternHits(STRONG_SOC_PATTERNS, body);
   const socCameraImpactTerms = patternHits(SOC_CAMERA_IMPACT_PATTERNS, body);
@@ -286,7 +330,9 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ...DIRECT_AOSP_PATTERNS,
     ...DRIVER_PATTERNS,
     ...ANDROID_ADJACENT_PATTERNS,
-    ...MULTIMEDIA_CAMERA_OUTPUT_PATTERNS,
+    ...MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS,
+    ...MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS,
+    ...MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS,
     ...SOC_PATTERNS,
     ...NATIVE_TOOLING_PATTERNS
   ], sourceHint);

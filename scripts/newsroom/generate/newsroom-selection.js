@@ -436,9 +436,24 @@ function hasGoogleTensorSocComponent(candidate) {
     .test(body);
 }
 
+function hasCameraOutputContext(body = '') {
+  return /\b(?:camera|captur(?:e|ed|es|ing)|preview|video\s+recording|gallery\s+output|media\s+output|camera\s+output|social\s+app\s+camera|captured\s+image|captured\s+video)\b/i
+    .test(body);
+}
+
+function hasStorageCameraOutputContext(body = '') {
+  return /\b(?:camera|captur(?:e|ed|es|ing)|gallery\s+output|media\s+output|camera\s+output|captured\s+image|captured\s+video)\b/i
+    .test(body);
+}
+
 function hasConcreteMultimediaCameraOutputComponent(candidate) {
   const body = candidateBody(candidate);
-  return /\b(?:Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video|MediaProvider|media\s+provider|MediaStore|media\s+store|media\s+output|gallery\s+output|video\s+call|social\s+app\s+camera\s+capture|camera\s+capture\s+result|captured\s+image\s*\/\s*video\s+output|captured\s+(?:image|video)\s+output)\b/i.test(body) ||
+  const hasStrongOutput = /\b(?:camera\s+output|media\s+output|gallery\s+output|social\s+app\s+camera\s+capture|captured\s+image\s*\/\s*video\s+output|captured\s+image\s+and\s+video\s+output|captured\s+(?:image|video)\s+output|camera\s+output\s+result)\b/i.test(body);
+  const hasContextRequiredOutput = /\b(?:Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video|video\s+call)\b/i.test(body) &&
+    hasCameraOutputContext(body);
+  const hasStorageOutput = /\b(?:MediaProvider|media\s+provider|MediaStore|media\s+store)\b/i.test(body) &&
+    hasStorageCameraOutputContext(body);
+  return hasStrongOutput || hasContextRequiredOutput || hasStorageOutput ||
     /\bcamera\s*\/\s*audio\s+sync\b/i.test(body) ||
     /\baudio\s*\/\s*video\s+sync\b[^.\n]{0,120}\b(?:camera|preview|video\s+(?:recording|call)|capture)\b/i.test(body) ||
     /\b(?:camera|preview|video\s+(?:recording|call)|capture)\b[^.\n]{0,120}\baudio\s*\/\s*video\s+sync\b/i.test(body);
