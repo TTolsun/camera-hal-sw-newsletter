@@ -137,11 +137,26 @@ test('invalid JSON falls back to the next model after retry budget is exhausted'
   assert.deepEqual(client.getGeminiDiagnostics().model_routing.reporter, {
     stage: 'reporter',
     stage_group: 'reporter',
+    stage_group_known: true,
+    routing_warning: '',
     primary_model: 'primary-model',
     fallback_models: ['fallback-model'],
+    primary_resolved_by: 'GEMINI_MODEL',
     resolved_by: 'GEMINI_MODEL',
     global_override_applied: true
   });
+  const [primaryCall, fallbackCall] = client.getGeminiCostCalls();
+  assert.equal(primaryCall.resolved_by, 'GEMINI_MODEL');
+  assert.equal(primaryCall.primary_resolved_by, 'GEMINI_MODEL');
+  assert.equal(primaryCall.attempt_resolved_by, 'GEMINI_MODEL');
+  assert.equal(primaryCall.fallback_index, null);
+  assert.equal(fallbackCall.model, 'fallback-model');
+  assert.equal(fallbackCall.attempt_model, 'fallback-model');
+  assert.equal(fallbackCall.primary_model, 'primary-model');
+  assert.equal(fallbackCall.resolved_by, 'fallback');
+  assert.equal(fallbackCall.primary_resolved_by, 'GEMINI_MODEL');
+  assert.equal(fallbackCall.attempt_resolved_by, 'fallback');
+  assert.equal(fallbackCall.fallback_index, 0);
 });
 
 test('retry delay parsing handles Gemini human and JSON retry hints', () => {
@@ -199,11 +214,16 @@ test('successful Gemini calls record usage metadata and estimated cost', async (
   const [call] = client.getGeminiCostCalls();
   assert.equal(call.stage, 'cost stage');
   assert.equal(call.stage_group, 'reporter');
+  assert.equal(call.stage_group_known, false);
+  assert.equal(call.routing_warning, 'unknown_stage_defaulted_to_reporter');
   assert.equal(call.model, 'gemini-2.5-flash');
   assert.equal(call.primary_model, 'gemini-2.5-flash');
   assert.equal(call.attempt_model, 'gemini-2.5-flash');
   assert.deepEqual(call.fallback_models, []);
+  assert.equal(call.primary_resolved_by, 'GEMINI_MODEL');
+  assert.equal(call.attempt_resolved_by, 'GEMINI_MODEL');
   assert.equal(call.resolved_by, 'GEMINI_MODEL');
+  assert.equal(call.fallback_index, null);
   assert.equal(call.global_override_applied, true);
   assert.equal(call.attempt, 1);
   assert.equal(call.prompt_tokens, 1000);
@@ -216,6 +236,31 @@ test('successful Gemini calls record usage metadata and estimated cost', async (
   assert.equal(call.billable_input_tokens, 900);
   assert.equal(call.billable_output_tokens, 250);
   assert.equal(call.estimated_cost_usd, 0.000898);
+});
+
+test('unknown stage defaults to reporter and records routing warning', async () => {
+  const client = loadClient({ GEMINI_MODEL: 'gemini-2.5-flash' });
+  const FakeGoogleGenAI = fakeGemini(['{"ok":true}']);
+
+  await client.callGeminiJson('weird-stage', 'system', 'prompt', {}, {
+    GoogleGenAI: FakeGoogleGenAI
+  });
+
+  assert.deepEqual(client.getGeminiDiagnostics().model_routing['weird-stage'], {
+    stage: 'weird-stage',
+    stage_group: 'reporter',
+    stage_group_known: false,
+    routing_warning: 'unknown_stage_defaulted_to_reporter',
+    primary_model: 'gemini-2.5-flash',
+    fallback_models: [],
+    primary_resolved_by: 'GEMINI_MODEL',
+    resolved_by: 'GEMINI_MODEL',
+    global_override_applied: true
+  });
+  const [call] = client.getGeminiCostCalls();
+  assert.equal(call.stage_group, 'reporter');
+  assert.equal(call.stage_group_known, false);
+  assert.equal(call.routing_warning, 'unknown_stage_defaulted_to_reporter');
 });
 
 test('stage-specific thinking budgets are applied to Gemini request config', async () => {
@@ -294,16 +339,22 @@ test('stage-specific model routing selects the configured model for each newsroo
   assert.deepEqual(diagnostics.model_routing['editor attempt 1/1'], {
     stage: 'editor attempt 1/1',
     stage_group: 'editor',
+    stage_group_known: true,
+    routing_warning: '',
     primary_model: 'editor-model',
     fallback_models: ['fallback-model'],
+    primary_resolved_by: 'NEWSROOM_EDITOR_MODEL',
     resolved_by: 'NEWSROOM_EDITOR_MODEL',
     global_override_applied: false
   });
   assert.deepEqual(diagnostics.model_routing['fact-checker repair attempt 1/1'], {
     stage: 'fact-checker repair attempt 1/1',
     stage_group: 'factcheck',
+    stage_group_known: true,
+    routing_warning: '',
     primary_model: 'factcheck-model',
     fallback_models: ['fallback-model'],
+    primary_resolved_by: 'NEWSROOM_FACTCHECK_MODEL',
     resolved_by: 'NEWSROOM_FACTCHECK_MODEL',
     global_override_applied: false
   });
@@ -437,6 +488,7 @@ test('cost report aggregates calls and emits warning-only threshold messages', (
   assert.ok(report.warnings.some(item => item.includes('NEWSROOM_WARN_COST_USD')));
   assert.equal(report.warnings.some(item => item.includes('NEWSROOM_MAX_COST_USD')), false);
   assert.match(client.buildCostReportMarkdown(report), /Estimated cost USD: 0\.001650/);
+  assert.match(client.buildCostReportMarkdown(report), /\| Provider \| Stage \| Group \| Primary \| Attempt Model \| Resolved By \| Fallbacks \|/);
 });
 
 test('manual Pro usage is marked in cost calls and report warnings', async () => {

@@ -131,6 +131,11 @@ function buildCostReportMarkdown(report) {
   const callRows = calls.map(call => [
     `| ${call.provider || 'unknown'} `,
     ` ${call.stage || 'unknown'} `,
+    ` ${call.stage_group || 'unknown'} `,
+    ` ${call.primary_model || call.model || 'unknown'} `,
+    ` ${call.attempt_model || call.model || 'unknown'} `,
+    ` ${call.resolved_by || call.attempt_resolved_by || 'unknown'} `,
+    ` ${ensureArray(call.fallback_models).join(', ') || 'none'} `,
     ` ${call.model || 'unknown'} `,
     ` ${call.attempt || 0} `,
     ` ${call.prompt_tokens || 0} `,
@@ -141,7 +146,7 @@ function buildCostReportMarkdown(report) {
     ` ${call.cached_tokens || 0} `,
     ` ${call.pro_model === true ? 'yes' : 'no'} `,
     ` ${Number.isFinite(Number(call.estimated_cost_usd)) ? Number(call.estimated_cost_usd).toFixed(6) : 'n/a'} |`
-  ].join('|')).join('\n') || '| none | none | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no | 0.000000 |';
+  ].join('|')).join('\n') || '| none | none | none | none | none | none | none | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no | 0.000000 |';
   const warnings = ensureArray(report.warnings).map(item => `- ${item}`).join('\n') || '- none';
   const proPolicy = report.pro_policy || {};
   return `# LLM cost report - ${report.date || 'unknown'}
@@ -165,8 +170,8 @@ function buildCostReportMarkdown(report) {
 
 ## Calls
 
-| Provider | Stage | Model | Attempt | Prompt | Output | Thinking | Requested Budget | Applied Budget | Cached | Pro | Estimated USD |
-| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
+| Provider | Stage | Group | Primary | Attempt Model | Resolved By | Fallbacks | Model | Attempt | Prompt | Output | Thinking | Requested Budget | Applied Budget | Cached | Pro | Estimated USD |
+| --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
 ${callRows}
 
 ## Warnings

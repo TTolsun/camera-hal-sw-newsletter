@@ -101,10 +101,15 @@ test('internal provider uses fake fetch without requiring Gemini API key', async
   const [call] = client.getLlmCostCalls();
   assert.equal(call.provider, 'internal');
   assert.equal(call.stage_group, 'reporter');
+  assert.equal(call.stage_group_known, false);
+  assert.equal(call.routing_warning, 'unknown_stage_defaulted_to_reporter');
   assert.equal(call.primary_model, 'internal-primary');
   assert.equal(call.attempt_model, 'internal-primary');
   assert.deepEqual(call.fallback_models, []);
+  assert.equal(call.primary_resolved_by, 'LLM_MODEL');
+  assert.equal(call.attempt_resolved_by, 'LLM_MODEL');
   assert.equal(call.resolved_by, 'LLM_MODEL');
+  assert.equal(call.fallback_index, null);
   assert.equal(call.global_override_applied, true);
   assert.equal(call.estimated_cost_usd, null);
   assert.match(call.pricing_warning, /No internal LLM pricing table/);
