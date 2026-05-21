@@ -8,12 +8,12 @@ merge_mode=gemini_source_discovery
 summary=Gemini ran, but found no new unique publishable candidates.
 manual_candidate_count=40
 manual_unique_url_count=40
-gemini_candidate_count=23
-gemini_unique_url_count=23
+gemini_candidate_count=26
+gemini_unique_url_count=26
 gemini_new_unique_url_count=0
-gemini_manual_duplicate_url_count=23
-gemini_duplicate_record_count=23
-merged_candidate_count=63
+gemini_manual_duplicate_url_count=26
+gemini_duplicate_record_count=26
+merged_candidate_count=66
 merged_unique_url_count=40
 gemini_publishable_candidate_count=0
 
@@ -65,7 +65,7 @@ The seed evidence workflow is prioritized over legacy-pattern cleanup, but sourc
 status=WARNING
 parser_gap_count=0
 duplicate_discovery_gap_count=0
-gemini_parser_failure_count=3
+gemini_parser_failure_count=1
 source_discovery_feedback_report_markdown=content/newsroom/2026-05-22/source-discovery-feedback-report.md
 
 - GEMINI_PARSER_EXTRACTION_REQUIRED: https://developer.android.com/jetpack/androidx/releases/camera#1.6.1
@@ -74,23 +74,9 @@ source_discovery_feedback_report_markdown=content/newsroom/2026-05-22/source-dis
   - extraction_status: discovered_not_extractable
   - adapter_hint: android-developers-jetpack-release
   - suggested_fixture_case: Add or update a CameraX release-note fixture with version/date/component/behavior evidence.
-- GEMINI_PARSER_EXTRACTION_REQUIRED: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02
-  - rejected_reason: discovered_not_extractable
-  - discovery_status: discovered
-  - extraction_status: discovered_not_extractable
-  - adapter_hint: android-developers-jetpack-release
-  - suggested_fixture_case: Add or update a CameraX release-note fixture with version/date/component/behavior evidence.
-- GEMINI_PARSER_EXTRACTION_REQUIRED: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07
-  - rejected_reason: discovered_not_extractable
-  - discovery_status: discovered
-  - extraction_status: discovered_not_extractable
-  - adapter_hint: android-developers-jetpack-release
-  - suggested_fixture_case: Add or update a CameraX release-note fixture with version/date/component/behavior evidence.
 
 ## Rejected proposals
 
-- domain_not_allowed: https://goo.gle/AdaptiveApps_IO26
 - discovered_not_extractable: https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 (Deterministic parser did not extract release-note evidence for this discovered URL.)
-- discovered_not_extractable: https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02 (Deterministic parser did not extract release-note evidence for this discovered URL.)
-- discovered_not_extractable: https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07 (Deterministic parser did not extract release-note evidence for this discovered URL.)
+- domain_not_allowed: https://goo.gle/AdaptiveApps_IO26
 
