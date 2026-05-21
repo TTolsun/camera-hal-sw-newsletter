@@ -34,6 +34,14 @@ const CLAIM_IMPACT_LEVELS = Object.freeze([
 
 const CLAIM_IMPACT_LEVEL_VALUES = new Set(CLAIM_IMPACT_LEVELS);
 
+const CLAIM_IMPACT_LEVEL_ALIASES = Object.freeze({
+  direct_hal_change: 'direct_hal_contract',
+  camera_stack_direct: 'camera_framework_behavior',
+  android_framework_adjacent: 'app_api_or_framework_adjacent',
+  tooling_supporting: 'native_tooling_workflow',
+  watch_only: 'no_hal_runtime_impact'
+});
+
 const OVERCLAIM_RISKS = Object.freeze([
   'low',
   'medium',
@@ -135,6 +143,10 @@ function stableLinkedEvidenceItemId(candidate = {}, item = {}) {
   return `le:${sourceCandidateHash(candidate)}:${status}:${hashText(urlKey, 16)}:${hashText(textKey, 16)}`;
 }
 
+function stableCandidateSummaryEvidenceId(candidate = {}) {
+  return `candidate:${sourceCandidateHash(candidate)}:source-summary`;
+}
+
 function sourceExtractionItems(candidate = {}) {
   const extraction = objectValue(candidate.source_extraction);
   const groups = [
@@ -142,6 +154,23 @@ function sourceExtractionItems(candidate = {}) {
     ['minor_line_context', objectValue(extraction.minor_line_context)]
   ];
   const items = [];
+  for (const block of ensureArray(extraction.evidence_blocks)) {
+    const itemText = text(block.text || block.source_text || block.summary || block.heading);
+    if (!itemText) continue;
+    const linkedUrls = ensureArray(block.links)
+      .map(link => text(objectValue(link).url || link))
+      .filter(Boolean);
+    items.push({
+      id: text(block.evidence_id || block.source_evidence_id) ||
+        stableSourceExtractionItemId(candidate, 'evidence_blocks', itemText),
+      kind: 'source_extraction_item',
+      status: 'allowed',
+      section_key: 'evidence_blocks',
+      urls: [block.url, candidate.url, candidate.article_url, candidate.articleUrl, ...linkedUrls].map(text).filter(Boolean),
+      texts: [itemText, block.heading].map(text).filter(Boolean),
+      fragment_specific: hasUrlFragment(block.url || candidate.url) && hasConcreteFactualText(itemText)
+    });
+  }
   for (const [group, container] of groups) {
     for (const section of ensureArray(container.sections)) {
       const sectionKey = sectionKeyFromSourceExtraction(group, section, extraction);
@@ -725,6 +754,15 @@ function buildEvidenceIndex(candidate = {}, section = {}, options = {}) {
     candidate.api_or_component
   ].map(text).filter(Boolean);
 
+  if (generalEvidenceTexts.length > 0) {
+    addEvidence(index, {
+      id: stableCandidateSummaryEvidenceId(candidate),
+      kind: 'candidate_source_summary',
+      urls: [candidate.url, candidate.article_url, candidate.articleUrl],
+      texts: generalEvidenceTexts
+    });
+  }
+
   for (const id of ensureArray(candidate.primary_evidence_ids)) {
     addEvidence(index, {
       id,
@@ -804,6 +842,7 @@ function buildEvidenceIndex(candidate = {}, section = {}, options = {}) {
 
 function normalizeClaim(raw = {}, index) {
   const claimId = text(raw.claim_id || raw.claimId);
+  const impactLevel = lower(raw.impact_level || raw.impactLevel);
   return {
     raw,
     index,
@@ -813,7 +852,7 @@ function normalizeClaim(raw = {}, index) {
     claim_type: lower(raw.claim_type || raw.claimType),
     evidence_ids: ensureArray(raw.evidence_ids || raw.evidenceIds).map(text).filter(Boolean),
     source_urls: ensureArray(raw.source_urls || raw.sourceUrls).map(text).filter(Boolean),
-    impact_level: lower(raw.impact_level || raw.impactLevel),
+    impact_level: CLAIM_IMPACT_LEVEL_ALIASES[impactLevel] || impactLevel,
     overclaim_risk: lower(raw.overclaim_risk || raw.overclaimRisk)
   };
 }
@@ -996,6 +1035,17 @@ function claimSourceMatchesEvidenceItem(claim, item) {
   );
 }
 
+function sourceUrlDerivedEvidenceItems(claim, evidenceIndex) {
+  if (claim.source_urls.length === 0) return [];
+  return [...evidenceIndex.byId.values()]
+    .filter(item =>
+      item &&
+      item.status === 'allowed' &&
+      item.provenance_only !== true &&
+      claimSourceMatchesEvidenceItem(claim, item)
+    );
+}
+
 function nonAllowedEvidenceIssueOptions(claim, item) {
   const checkedIds = [item.id].filter(Boolean);
   if (claim.claim_type === 'fact') {
@@ -1031,6 +1081,7 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
   const sourceMismatchedEvidenceIds = [];
   const evidenceStatuses = [];
   let derivedEvidenceMapping = false;
+  let sourceUrlDerivedEvidenceMapping = false;
   if (!claim.claim_id) issues.push(issue('missing_claim_id', 'Claim is missing claim_id.'));
   if (!claim.text) issues.push(issue('empty_claim_text', 'Claim text is empty.'));
   if (!CLAIM_TYPE_VALUES.has(claim.claim_type)) {
@@ -1054,7 +1105,24 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
   }
 
   if (claim.claim_type === 'fact' && claim.evidence_ids.length === 0) {
-    issues.push(issue('missing_fact_evidence_ids', 'Fact claim is missing item-level evidence_ids.'));
+    const derivedItems = sourceUrlDerivedEvidenceItems(claim, evidenceIndex);
+    if (derivedItems.length === 0) {
+      issues.push(issue('missing_fact_evidence_ids', 'Fact claim is missing item-level evidence_ids.'));
+    } else {
+      sourceUrlDerivedEvidenceMapping = true;
+      for (const item of derivedItems) {
+        resolvedEvidenceIds.push(item.id);
+        resolvedEvidenceItems.push(item);
+        evidenceStatuses.push({
+          evidence_id: '',
+          resolved_evidence_id: item.id,
+          status: item.status,
+          raw_status: item.raw_status || item.status,
+          normalized_status: item.normalized_status || item.status,
+          derived_from_source_url: true
+        });
+      }
+    }
   }
   for (const evidenceId of claim.evidence_ids) {
     let item = evidenceIndex.byId.get(evidenceId);
@@ -1115,6 +1183,17 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
       { blocking: false, severity: 'soft' }
     ));
   }
+  if (sourceUrlDerivedEvidenceMapping) {
+    issues.push(issue(
+      'source_url_derived_evidence_mapping',
+      'Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.',
+      {
+        blocking: false,
+        severity: 'soft',
+        support_checked_evidence_ids: uniqueTexts(resolvedEvidenceIds)
+      }
+    ));
+  }
   if (claim.impact_level === 'direct_hal_contract' && !evidenceHasDirectHalSupport(claim, evidenceIndex, candidate)) {
     issues.push(issue(
       'direct_hal_claim_without_direct_evidence',
@@ -1129,7 +1208,7 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
     blockedEvidenceIds: uniqueTexts(blockedEvidenceIds),
     sourceMismatchedEvidenceIds: uniqueTexts(sourceMismatchedEvidenceIds),
     evidenceStatuses,
-    derivedEvidenceMapping
+    derivedEvidenceMapping: derivedEvidenceMapping || sourceUrlDerivedEvidenceMapping
   };
 }
 
@@ -1147,7 +1226,8 @@ function claimResultStatus(claim, issues, evidence) {
     !claim.text ||
     !claim.claim_id ||
     !CLAIM_TYPE_VALUES.has(claim.claim_type) ||
-    (claim.claim_type === 'fact' && (claim.evidence_ids.length === 0 || claim.source_urls.length === 0))
+    (claim.claim_type === 'fact' && claim.source_urls.length === 0) ||
+    (claim.claim_type === 'fact' && claim.evidence_ids.length === 0 && evidence.resolvedEvidenceIds.length === 0)
   ) {
     return 'not_available';
   }

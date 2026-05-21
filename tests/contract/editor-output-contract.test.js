@@ -295,6 +295,49 @@ test('strict editor claim binding rejects duplicate claim ids and invalid enums'
   );
 });
 
+test('strict editor claim binding maps source-level impact aliases and source URL evidence', () => {
+  const url = 'https://example.com/source-1';
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim-1',
+          text: 'Fact 1',
+          claim_type: 'fact',
+          evidence_ids: [],
+          source_urls: [url],
+          impact_level: 'direct_hal_change',
+          overclaim_risk: 'low'
+        }]
+      })
+    ]
+  });
+  const reporter = {
+    candidates: [{
+      title: 'Source 1',
+      url,
+      source_candidate_hash: 'hash-1',
+      source_extraction: {
+        evidence_blocks: [{
+          text: 'Fact 1',
+          links: [{ url }]
+        }]
+      },
+      impact_claim_level: 'direct_hal_change',
+      finalSelectionEligibility: 'main',
+      hasDatedEvidence: true,
+      source_gap_risk: false,
+      main_eligible: true
+    }]
+  };
+
+  assert.doesNotThrow(() => validateEditorOutputContract(draft, DATE, {
+    normalizeSection,
+    reporter,
+    strictClaims: true
+  }));
+});
+
 test('editor output contract requires article_sections on new draft sections', () => {
   const draft = editor({
     sections: [
@@ -383,6 +426,29 @@ test('editor output contract rejects invalid public_article source_links', () =>
       return true;
     }
   );
+});
+
+test('editor output contract maps source-quality roles on public_article source_links', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        public_article: {
+          ...section(1).public_article,
+          source_links: [{
+            title: 'Official release note',
+            url: 'https://example.com/source-1',
+            source_role: 'official_release_source'
+          }]
+        }
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  const result = validateEditorOutputContract(draft, DATE, { normalizeSection });
+
+  assert.equal(result.sections[0].public_article.source_links[0].source_role, 'primary');
 });
 
 test('editor output contract rejects article_sections keys outside normalized contract', () => {
