@@ -9,6 +9,18 @@ const {
 const DEFAULT_LLM_PROVIDER = 'gemini';
 const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
 const DEFAULT_LLM_FALLBACK_MODELS = ['gemini-2.5-flash-lite'];
+const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
+  reporter: 'gemini-2.5-flash',
+  editor: 'gemini-3.5-flash',
+  factcheck: 'gemini-2.5-flash',
+  repair: 'gemini-3.5-flash'
+});
+const LLM_STAGE_MODEL_ENV_KEYS = Object.freeze({
+  reporter: 'NEWSROOM_REPORTER_MODEL',
+  editor: 'NEWSROOM_EDITOR_MODEL',
+  factcheck: 'NEWSROOM_FACTCHECK_MODEL',
+  repair: 'NEWSROOM_REPAIR_MODEL'
+});
 const LINKED_EVIDENCE_MODES = Object.freeze({
   EXTRACT_ONLY: 'extract_only',
   RESOLVE_ALLOWED_OFFICIAL_LINKS: 'resolve_allowed_official_links',
@@ -29,6 +41,13 @@ const DEFAULT_RUNTIME_CONFIG = {
   llmProvider: DEFAULT_LLM_PROVIDER,
   llmModel: DEFAULT_LLM_MODEL,
   llmFallbackModels: DEFAULT_LLM_FALLBACK_MODELS,
+  llmStageModels: { ...DEFAULT_LLM_STAGE_MODELS },
+  llmStageModelSources: {
+    reporter: 'code_default',
+    editor: 'code_default',
+    factcheck: 'code_default',
+    repair: 'code_default'
+  },
   geminiModel: DEFAULT_LLM_MODEL,
   geminiFallbackModels: DEFAULT_LLM_FALLBACK_MODELS,
   geminiMaxRetries: 2,
@@ -142,6 +161,11 @@ function envValue(env, key, defaultValue) {
   return Object.prototype.hasOwnProperty.call(env, key) ? env[key] : defaultValue;
 }
 
+function envText(env, key) {
+  if (!Object.prototype.hasOwnProperty.call(env, key)) return '';
+  return String(env[key] || '').trim();
+}
+
 function normalizeLlmProvider(value, defaultValue = DEFAULT_RUNTIME_CONFIG.llmProvider) {
   const normalized = String(value || '').trim().toLowerCase();
   if (!normalized || normalized === 'default') return defaultValue;
@@ -152,11 +176,37 @@ function isProModel(value) {
   return isGeminiProModel(value);
 }
 
+function globalModelSource(env) {
+  if (envText(env, 'LLM_MODEL')) return 'LLM_MODEL';
+  if (envText(env, 'GEMINI_MODEL')) return 'GEMINI_MODEL';
+  return '';
+}
+
+function resolveStageModels(env, llmModel, llmModelSource) {
+  const models = {};
+  const sources = {};
+  for (const [group, envKey] of Object.entries(LLM_STAGE_MODEL_ENV_KEYS)) {
+    const stageValue = envText(env, envKey);
+    if (llmModelSource) {
+      models[group] = llmModel;
+      sources[group] = llmModelSource;
+    } else if (stageValue) {
+      models[group] = stageValue;
+      sources[group] = envKey;
+    } else {
+      models[group] = DEFAULT_LLM_STAGE_MODELS[group];
+      sources[group] = 'code_default';
+    }
+  }
+  return { models, sources };
+}
+
 function readRuntimeConfig(env = process.env, options = {}) {
   const newsletterDate = String(envValue(env, 'NEWSLETTER_DATE', DEFAULT_RUNTIME_CONFIG.newsletterDate) || '').trim();
   const defaultSelectionWindowPolicy = DEFAULT_RUNTIME_CONFIG.selectionWindowPolicy;
   const llmProvider = normalizeLlmProvider(envValue(env, 'LLM_PROVIDER', DEFAULT_RUNTIME_CONFIG.llmProvider));
   const llmModelExplicitlyConfigured = String(env.LLM_MODEL || '').trim().length > 0;
+  const llmModelSource = globalModelSource(env);
   const llmModel = String(
     envValue(env, 'LLM_MODEL', envValue(env, 'GEMINI_MODEL', DEFAULT_RUNTIME_CONFIG.llmModel)) || ''
   ).trim();
@@ -169,6 +219,7 @@ function readRuntimeConfig(env = process.env, options = {}) {
     llmFallbackDefault
   );
   const llmFallbackModels = parseCsv(llmFallbackValue);
+  const stageModelResolution = resolveStageModels(env, llmModel, llmModelSource);
 
   const config = {
     newsletterDate,
@@ -193,7 +244,11 @@ function readRuntimeConfig(env = process.env, options = {}) {
     llmProvider,
     llmModel,
     llmModelExplicitlyConfigured,
+    llmGlobalModelExplicitlyConfigured: Boolean(llmModelSource),
+    llmModelSource: llmModelSource || 'code_default',
     llmFallbackModels,
+    llmStageModels: stageModelResolution.models,
+    llmStageModelSources: stageModelResolution.sources,
     geminiModel: llmModel,
     geminiFallbackModels: llmFallbackModels,
     geminiMaxRetries: parseInteger(envValue(env, 'GEMINI_MAX_RETRIES', DEFAULT_RUNTIME_CONFIG.geminiMaxRetries), 'GEMINI_MAX_RETRIES', { min: 0 }),
@@ -381,6 +436,16 @@ function validateRuntimeConfig(config, options = {}) {
   } else if (config.llmFallbackModels.some(item => !String(item || '').trim())) {
     errors.push('LLM_FALLBACK_MODELS/GEMINI_FALLBACK_MODELS must not contain empty model names.');
   }
+  const llmStageModels = config.llmStageModels ?? DEFAULT_RUNTIME_CONFIG.llmStageModels;
+  if (!llmStageModels || typeof llmStageModels !== 'object' || Array.isArray(llmStageModels)) {
+    errors.push('llmStageModels must be an object.');
+  } else {
+    for (const group of Object.keys(DEFAULT_LLM_STAGE_MODELS)) {
+      if (!String(llmStageModels[group] || '').trim()) {
+        errors.push(`llmStageModels.${group} must be non-empty.`);
+      }
+    }
+  }
   if (!Number.isInteger(config.geminiMaxRetries) || config.geminiMaxRetries < 0) {
     errors.push('GEMINI_MAX_RETRIES must be an integer >= 0.');
   }
@@ -509,7 +574,15 @@ function sanitizeRuntimeConfig(config) {
     llmProvider: config.llmProvider,
     llmModel: config.llmModel,
     llmModelExplicitlyConfigured: Boolean(config.llmModelExplicitlyConfigured),
+    llmGlobalModelExplicitlyConfigured: Boolean(config.llmGlobalModelExplicitlyConfigured),
+    llmModelSource: config.llmModelSource || 'code_default',
     llmFallbackModels: config.llmFallbackModels,
+    llmStageModels: {
+      ...(config.llmStageModels ?? DEFAULT_RUNTIME_CONFIG.llmStageModels)
+    },
+    llmStageModelSources: {
+      ...(config.llmStageModelSources ?? DEFAULT_RUNTIME_CONFIG.llmStageModelSources)
+    },
     geminiModel: config.geminiModel,
     geminiFallbackModels: config.geminiFallbackModels,
     geminiMaxRetries: config.geminiMaxRetries,
@@ -551,6 +624,8 @@ function sanitizeRuntimeConfig(config) {
 
 module.exports = {
   DEFAULT_RUNTIME_CONFIG,
+  DEFAULT_LLM_STAGE_MODELS,
+  LLM_STAGE_MODEL_ENV_KEYS,
   CANDIDATE_INPUT_MODE_VALUES,
   LINKED_EVIDENCE_MODES,
   LINKED_EVIDENCE_MODE_VALUES,

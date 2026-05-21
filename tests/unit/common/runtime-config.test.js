@@ -5,6 +5,7 @@ const test = require('node:test');
 
 const {
   DEFAULT_RUNTIME_CONFIG,
+  DEFAULT_LLM_STAGE_MODELS,
   readRuntimeConfig,
   validateRuntimeConfig,
   sanitizeRuntimeConfig,
@@ -16,7 +17,10 @@ const {
   normalizeLlmProvider
 } = require('../../../scripts/lib/runtime-config');
 const {
-  configuredModels
+  configuredModels,
+  configuredModelsForStage,
+  modelGroupInfoForStage,
+  modelGroupForStage
 } = require('../../../scripts/newsroom/llm/model-policy');
 
 const doctorConfigScript = path.join(__dirname, '..', '..', '..', 'scripts', 'doctor-config.js');
@@ -50,7 +54,16 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.llmProvider, 'gemini');
   assert.equal(config.llmModel, 'gemini-2.5-flash');
   assert.equal(config.llmModelExplicitlyConfigured, false);
+  assert.equal(config.llmGlobalModelExplicitlyConfigured, false);
+  assert.equal(config.llmModelSource, 'code_default');
   assert.deepEqual(config.llmFallbackModels, ['gemini-2.5-flash-lite']);
+  assert.deepEqual(config.llmStageModels, DEFAULT_LLM_STAGE_MODELS);
+  assert.deepEqual(config.llmStageModelSources, {
+    reporter: 'code_default',
+    editor: 'code_default',
+    factcheck: 'code_default',
+    repair: 'code_default'
+  });
   assert.equal(config.geminiModel, 'gemini-2.5-flash');
   assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
   assert.equal(config.geminiMaxRetries, 2);
@@ -171,7 +184,21 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.llmProvider, 'gemini');
   assert.equal(config.llmModel, 'primary-model');
   assert.equal(config.llmModelExplicitlyConfigured, false);
+  assert.equal(config.llmGlobalModelExplicitlyConfigured, true);
+  assert.equal(config.llmModelSource, 'GEMINI_MODEL');
   assert.deepEqual(config.llmFallbackModels, []);
+  assert.deepEqual(config.llmStageModels, {
+    reporter: 'primary-model',
+    editor: 'primary-model',
+    factcheck: 'primary-model',
+    repair: 'primary-model'
+  });
+  assert.deepEqual(config.llmStageModelSources, {
+    reporter: 'GEMINI_MODEL',
+    editor: 'GEMINI_MODEL',
+    factcheck: 'GEMINI_MODEL',
+    repair: 'GEMINI_MODEL'
+  });
   assert.equal(config.geminiModel, 'primary-model');
   assert.deepEqual(config.geminiFallbackModels, []);
   assert.equal(config.geminiMaxRetries, 0);
@@ -375,9 +402,85 @@ test('LLM_MODEL and LLM_FALLBACK_MODELS override Gemini compatibility aliases', 
 
   assert.equal(config.llmModel, 'llm-primary');
   assert.equal(config.llmModelExplicitlyConfigured, true);
+  assert.equal(config.llmGlobalModelExplicitlyConfigured, true);
+  assert.equal(config.llmModelSource, 'LLM_MODEL');
   assert.deepEqual(config.llmFallbackModels, ['llm-fallback']);
+  assert.deepEqual(config.llmStageModels, {
+    reporter: 'llm-primary',
+    editor: 'llm-primary',
+    factcheck: 'llm-primary',
+    repair: 'llm-primary'
+  });
   assert.equal(config.geminiModel, 'llm-primary');
   assert.deepEqual(config.geminiFallbackModels, ['llm-fallback']);
+});
+
+test('stage model env vars independently override code defaults', () => {
+  const config = readRuntimeConfig({
+    NEWSROOM_REPORTER_MODEL: 'reporter-model',
+    NEWSROOM_EDITOR_MODEL: 'editor-model',
+    NEWSROOM_FACTCHECK_MODEL: 'factcheck-model',
+    NEWSROOM_REPAIR_MODEL: 'repair-model'
+  });
+
+  assert.deepEqual(config.llmStageModels, {
+    reporter: 'reporter-model',
+    editor: 'editor-model',
+    factcheck: 'factcheck-model',
+    repair: 'repair-model'
+  });
+  assert.deepEqual(config.llmStageModelSources, {
+    reporter: 'NEWSROOM_REPORTER_MODEL',
+    editor: 'NEWSROOM_EDITOR_MODEL',
+    factcheck: 'NEWSROOM_FACTCHECK_MODEL',
+    repair: 'NEWSROOM_REPAIR_MODEL'
+  });
+  assert.deepEqual(configuredModelsForStage(config, 'reporter attempt 1/2'), ['reporter-model', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['editor-model', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'fact-checker attempt 1/2'), ['factcheck-model', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor repair attempt 1/2'), ['repair-model', 'gemini-2.5-flash-lite']);
+});
+
+test('global LLM model overrides stage-specific model env vars', () => {
+  const config = readRuntimeConfig({
+    LLM_MODEL: 'global-model',
+    NEWSROOM_EDITOR_MODEL: 'editor-model'
+  });
+
+  assert.deepEqual(config.llmStageModels, {
+    reporter: 'global-model',
+    editor: 'global-model',
+    factcheck: 'global-model',
+    repair: 'global-model'
+  });
+  assert.deepEqual(config.llmStageModelSources, {
+    reporter: 'LLM_MODEL',
+    editor: 'LLM_MODEL',
+    factcheck: 'LLM_MODEL',
+    repair: 'LLM_MODEL'
+  });
+  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['global-model', 'gemini-2.5-flash-lite']);
+});
+
+test('stage model normalizer maps known generation stages', () => {
+  assert.equal(modelGroupForStage('reporter attempt 1/2'), 'reporter');
+  assert.equal(modelGroupForStage('background-context attempt 1/2'), 'reporter');
+  assert.equal(modelGroupForStage('editor attempt 1/2'), 'editor');
+  assert.equal(modelGroupForStage('fact-checker repair attempt 1/2'), 'factcheck');
+  assert.equal(modelGroupForStage('fact-check completion attempt 1/2'), 'factcheck');
+  assert.equal(modelGroupForStage('editor repair attempt 1/2'), 'repair');
+  assert.equal(modelGroupForStage('editor completion attempt 1/2'), 'repair');
+  assert.equal(modelGroupForStage('unknown stage'), 'reporter');
+  assert.deepEqual(modelGroupInfoForStage('unknown stage'), {
+    group: 'reporter',
+    known: false,
+    warning: 'unknown_stage_defaulted_to_reporter'
+  });
+  assert.deepEqual(modelGroupInfoForStage('fact-checker repair attempt 1/2'), {
+    group: 'factcheck',
+    known: true,
+    warning: ''
+  });
 });
 
 test('internal provider credentials do not require a Gemini API key', () => {
@@ -565,6 +668,15 @@ test('sanitized diagnostics never include the raw API key', () => {
 
   assert.equal(sanitized.geminiApiKeyConfigured, true);
   assert.equal(sanitized.llmModelExplicitlyConfigured, false);
+  assert.equal(sanitized.llmGlobalModelExplicitlyConfigured, false);
+  assert.equal(sanitized.llmModelSource, 'code_default');
+  assert.deepEqual(sanitized.llmStageModels, DEFAULT_LLM_STAGE_MODELS);
+  assert.deepEqual(sanitized.llmStageModelSources, {
+    reporter: 'code_default',
+    editor: 'code_default',
+    factcheck: 'code_default',
+    repair: 'code_default'
+  });
   assert.deepEqual(sanitized.selectionWindowPolicy, {
     primarySelectionDays: 7,
     fallbackSelectionDays: 21,
@@ -598,6 +710,27 @@ test('scheduled runs reject configured Pro models by default', () => {
   );
 });
 
+test('stage-specific Pro models require explicit manual escalation', () => {
+  assert.throws(
+    () => readRuntimeConfig({
+      NEWSROOM_EDITOR_MODEL: 'gemini-2.5-pro',
+      GITHUB_EVENT_NAME: 'workflow_dispatch',
+      NEWSROOM_ALLOW_PRO_ON_MANUAL: 'false'
+    }),
+    /Gemini Pro models require explicit manual escalation/
+  );
+
+  const config = readRuntimeConfig({
+    NEWSROOM_EDITOR_MODEL: 'gemini-2.5-pro',
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
+  });
+
+  assert.equal(config.llmStageModels.editor, 'gemini-2.5-pro');
+  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, true);
+  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
+});
+
 test('manual workflow dispatch allows Pro only when explicitly enabled', () => {
   assert.throws(
     () => readRuntimeConfig({
@@ -621,7 +754,7 @@ test('manual workflow dispatch allows Pro only when explicitly enabled', () => {
   assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
 });
 
-test('manual workflow allow_pro equivalent appends Pro to the default Flash-Lite fallback', () => {
+test('manual workflow allow_pro does not append Pro without explicit model selection', () => {
   const config = readRuntimeConfig({
     GEMINI_MODEL: 'gemini-2.5-flash',
     GITHUB_EVENT_NAME: 'workflow_dispatch',
@@ -629,9 +762,10 @@ test('manual workflow allow_pro equivalent appends Pro to the default Flash-Lite
   });
 
   assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro']);
-  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, true);
-  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
+  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, false);
+  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, false);
 });
 
 test('manual Pro model policy dedupes and does not apply to schedule or internal providers', () => {
@@ -647,7 +781,7 @@ test('manual Pro model policy dedupes and does not apply to schedule or internal
     GITHUB_EVENT_NAME: 'schedule',
     NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
   });
-  assert.deepEqual(configuredModels(scheduledGemini), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModels(scheduledGemini), ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-2.5-flash-lite']);
 
   const internal = readRuntimeConfig({
     LLM_PROVIDER: 'internal',
