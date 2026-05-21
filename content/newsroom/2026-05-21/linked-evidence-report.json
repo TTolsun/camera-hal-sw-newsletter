@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-21",
-  "generated_at": "2026-05-21T01:55:28.460Z",
+  "generated_at": "2026-05-21T02:30:20.103Z",
   "linked_evidence_mode": "extract_only",
   "linked_evidence_limits": {
     "max_links_per_candidate": 8,
@@ -15,37 +15,42 @@
   "warnings": [],
   "totals": {
     "schema_version": 1,
-    "total_count": 0,
-    "by_type": {},
-    "by_fetch_status": {},
+    "total_count": 1,
+    "by_type": {
+      "google_issue_tracker": 1
+    },
+    "by_fetch_status": {
+      "unsupported": 1
+    },
     "impact_type_counts": {
-      "build_dependency_fix": 9,
+      "build_dependency_fix": 11,
       "camera_api_change": 2,
       "documentation_only": 2,
-      "generic_tooling_change": 3,
-      "security_component_camera_related": 6,
-      "unknown": 16,
-      "video_capture_fix": 2
+      "generic_tooling_change": 5,
+      "security_component_camera_related": 5,
+      "unknown": 14,
+      "video_capture_fix": 1
     },
-    "warning_count": 33,
+    "warning_count": 37,
     "has_resolved_evidence": false,
-    "has_unresolved_evidence": false,
-    "top_identifiers": []
+    "has_unresolved_evidence": true,
+    "top_identifiers": [
+      "497571473"
+    ]
   },
   "source_aware_totals": {
     "schema_version": 1,
-    "total_count": 1372,
+    "total_count": 1351,
     "by_type": {
-      "generic_url": 1351,
-      "github_issue": 1,
-      "github_pull_request": 1,
-      "mailing_list": 19
+      "android_gerrit": 1,
+      "generic_url": 1349,
+      "google_issue_tracker": 1
     },
     "by_fetch_status": {
-      "skipped": 1372
+      "skipped": 1351
     },
     "impact_type_counts": {},
-    "warning_count": 1372,
+    "warning_count": 1351,
     "has_resolved_evidence": false,
     "has_unresolved_evidence": true,
     "top_identifiers": [
@@ -63,13 +68,13 @@
     "schema_version": 1,
     "total_count": 40,
     "by_event_type": {
-      "primary_url": 25,
-      "release_note": 15
+      "primary_url": 30,
+      "release_note": 10
     },
     "by_dedupe_reason": {
-      "normalized_primary_url": 25,
-      "source_id + release.date + component": 6,
-      "source_id + release.version": 9
+      "normalized_primary_url": 30,
+      "source_id + release.date + component": 5,
+      "source_id + release.version": 5
     },
     "warning_count": 0
   },
@@ -642,6 +647,196 @@
       "source_aware_linked_evidence": []
     },
     {
+      "title": "CameraX Release Notes - CameraX 1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
+      "source_kind": "release_note_item",
+      "final_selection_eligibility": "short",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 1,
+        "by_type": {
+          "google_issue_tracker": 1
+        },
+        "by_fetch_status": {
+          "unsupported": 1
+        },
+        "impact_type_counts": {
+          "security_component_camera_related": 1
+        },
+        "warning_count": 2,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "497571473"
+        ]
+      },
+      "impact_classification": {
+        "impact_type": "security_component_camera_related",
+        "hal_runtime_impact": true,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "main",
+        "confidence": 0.75,
+        "reason": "security_component_camera_related classified from candidate text.",
+        "warnings": [
+          "linked_evidence_unsupported"
+        ]
+      },
+      "linked_evidence": [
+        {
+          "type": "google_issue_tracker",
+          "url": "",
+          "identifier": "497571473",
+          "source_text": "b/497571473",
+          "raw_excerpt": "CameraX Release Notes - CameraX 1.6.1 Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )",
+          "fetch_status": "unsupported",
+          "warnings": [
+            "google_issue_tracker resolver requires a URL."
+          ],
+          "resolver": "google_issue_tracker",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ],
+      "classified_outgoing_links": [
+        {
+          "url": "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
+          "text": "these commits",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unsupported",
+          "classification_reason": "domain_not_allowed_by_policy",
+          "skipped_reason": "unsupported_domain"
+        },
+        {
+          "url": "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
+          "text": "Ic8cba",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "secondary_context",
+          "classification_reason": "allowed_domain_context_link",
+          "skipped_reason": "not_primary_evidence"
+        },
+        {
+          "url": "https://issuetracker.google.com/issues/497571473",
+          "text": "b/497571473",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "primary_evidence",
+          "classification_reason": "allowed_official_evidence_url",
+          "skipped_reason": "mode_extract_only"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 3,
+        "by_type": {
+          "android_gerrit": 1,
+          "generic_url": 1,
+          "google_issue_tracker": 1
+        },
+        "by_fetch_status": {
+          "skipped": 3
+        },
+        "impact_type_counts": {},
+        "warning_count": 3,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
+          "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
+          "497571473"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
+          "identifier": "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
+          "source_text": "these commits",
+          "raw_excerpt": "these commits https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
+          "fetch_status": "skipped",
+          "evidence_role": "unsupported",
+          "classification_reason": "domain_not_allowed_by_policy",
+          "skipped_reason": "unsupported_domain",
+          "warnings": [
+            "Linked evidence resolve skipped: unsupported_domain."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "android_gerrit",
+          "url": "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
+          "identifier": "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
+          "source_text": "Ic8cba",
+          "raw_excerpt": "Ic8cba https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
+          "fetch_status": "skipped",
+          "evidence_role": "secondary_context",
+          "classification_reason": "allowed_domain_context_link",
+          "skipped_reason": "not_primary_evidence",
+          "warnings": [
+            "Linked evidence resolve skipped: not_primary_evidence."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "google_issue_tracker",
+          "url": "https://issuetracker.google.com/issues/497571473",
+          "identifier": "497571473",
+          "source_text": "b/497571473",
+          "raw_excerpt": "b/497571473 https://issuetracker.google.com/issues/497571473",
+          "fetch_status": "skipped",
+          "evidence_role": "primary_evidence",
+          "classification_reason": "allowed_official_evidence_url",
+          "skipped_reason": "mode_extract_only",
+          "warnings": [
+            "Linked evidence resolve skipped: mode_extract_only."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
       "title": "Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "normalized_url": "",
@@ -763,100 +958,6 @@
         "recommended_article_type": "unknown",
         "confidence": 0,
         "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
-        "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {},
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "source_aware_linked_evidence": []
-    },
-    {
-      "title": "What's new in the Jetpack Compose April '26 release",
-      "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
-      "normalized_url": "",
-      "source": "Android Developers Blog",
-      "published_date": "Wed, 22 Apr 2026 23:00:00 +0000",
-      "source_kind": "rss_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "unknown": 1
-        },
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "unknown",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "unknown",
-        "confidence": 0,
-        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
-        "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {},
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "source_aware_linked_evidence": []
-    },
-    {
-      "title": "Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4",
-      "url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
-      "normalized_url": "",
-      "source": "Android Developers Blog",
-      "published_date": "Tue, 21 Apr 2026 14:00:00 +0000",
-      "source_kind": "rss_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "build_dependency_fix": 1
-        },
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "build_dependency_fix",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "watch",
-        "confidence": 0.35,
-        "reason": "build_dependency_fix classified from candidate text.",
         "warnings": [
           "main_hint_requires_candidate_runtime_evidence"
         ]
@@ -32353,360 +32454,6 @@
       "source_aware_linked_evidence": []
     },
     {
-      "title": "Streamline User Journeys with Verified Email via Credential Manager",
-      "url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
-      "normalized_url": "",
-      "source": "Android Developers Blog",
-      "published_date": "Wed, 22 Apr 2026 20:00:00 +0000",
-      "source_kind": "rss_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "unknown": 1
-        },
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "unknown",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "unknown",
-        "confidence": 0,
-        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
-        "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {},
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "source_aware_linked_evidence": []
-    },
-    {
-      "title": "1.6.1",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "normalized_url": "",
-      "source": "Android Developers Latest Updates",
-      "published_date": "May 06, 2026",
-      "source_kind": "release_note_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "security_component_camera_related": 1
-        },
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "security_component_camera_related",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "security_component_camera_related classified from candidate text.",
-        "warnings": []
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "text": "1.6.1",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-          "text": "1.7.0-alpha01",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
-          "text": "1.5.0-alpha06",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "text": "1.3.0-beta02",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "text": "1.4.0-alpha07",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "text": "View the Camera Library",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        }
-      ],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 6,
-        "by_type": {
-          "generic_url": 6
-        },
-        "by_fetch_status": {
-          "skipped": 6
-        },
-        "impact_type_counts": {},
-        "warning_count": 6,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-          "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
-          "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "https://developer.android.com/jetpack/androidx/releases/camera"
-        ]
-      },
-      "source_aware_linked_evidence": [
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "identifier": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "source_text": "1.6.1",
-          "raw_excerpt": "1.6.1 https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-          "identifier": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-          "source_text": "1.7.0-alpha01",
-          "raw_excerpt": "1.7.0-alpha01 https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
-          "identifier": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
-          "source_text": "1.5.0-alpha06",
-          "raw_excerpt": "1.5.0-alpha06 https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "identifier": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "source_text": "1.3.0-beta02",
-          "raw_excerpt": "1.3.0-beta02 https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "identifier": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "source_text": "1.4.0-alpha07",
-          "raw_excerpt": "1.4.0-alpha07 https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "identifier": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "source_text": "View the Camera Library",
-          "raw_excerpt": "View the Camera Library https://developer.android.com/jetpack/androidx/releases/camera",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        }
-      ]
-    },
-    {
-      "title": "1.3.0-beta02",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "normalized_url": "",
-      "source": "Android Developers Latest Updates",
-      "published_date": "May 06, 2026",
-      "source_kind": "release_note_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "security_component_camera_related": 1
-        },
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "security_component_camera_related",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "security_component_camera_related classified from candidate text.",
-        "warnings": []
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {},
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "source_aware_linked_evidence": []
-    },
-    {
       "title": "1.4.0-alpha07",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "normalized_url": "",
@@ -46447,1021 +46194,6 @@
       ]
     },
     {
-      "title": "libcamera Release Announcements - libcamera v0.7.1",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "normalized_url": "",
-      "source": "libcamera Release Announcements",
-      "published_date": "2026-04-28",
-      "source_kind": "release_note_item",
-      "final_selection_eligibility": "main",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "video_capture_fix": 1
-        },
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "video_capture_fix",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "video_capture_fix classified from candidate text.",
-        "warnings": []
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058407.html",
-          "text": "[PATCH v3 0/3] Atomic control lists on Raspberry Pi",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058409.html",
-          "text": "[PATCH v4 0/3] Simple pipeline: proportional AGC, AWB stats fix,",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/date.html#58408",
-          "text": "[ date ]",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/thread.html#58408",
-          "text": "[ thread ]",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/subject.html#58408",
-          "text": "[ subject ]",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/author.html#58408",
-          "text": "[ author ]",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
-          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "laurent.pinchart at ideasonboard.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "barnabas.pocze at ideasonboard.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "kieran.bingham at ideasonboard.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "johannes.goede at oss.qualcomm.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "jacopo.mondi at ideasonboard.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "david.plowman at raspberrypi.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "mzamazal at redhat.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "naush at raspberrypi.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "stefan.klug at ideasonboard.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "dan.scally at ideasonboard.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "gianfranco.mariotti94 at gmail.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "stephan.vanveen at karlstorz.com",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://github.com/pybind/pybind11/pull/5824",
-          "text": "https://github.com/pybind/pybind11/pull/5824",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
-          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain"
-        },
-        {
-          "url": "https://github.com/python/cpython/issues/61322",
-          "text": "https://github.com/python/cpython/issues/61322",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        },
-        {
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/315",
-          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/315",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain"
-        },
-        {
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/313",
-          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/313",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain"
-        },
-        {
-          "url": "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1719",
-          "text": "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1719",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain"
-        },
-        {
-          "url": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329",
-          "text": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain"
-        },
-        {
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-          "text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain"
-        },
-        {
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "text": "More information about the libcamera-devel mailing list",
-          "source_field": "html.body",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        }
-      ],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 28,
-        "by_type": {
-          "generic_url": 7,
-          "github_issue": 1,
-          "github_pull_request": 1,
-          "mailing_list": 19
-        },
-        "by_fetch_status": {
-          "skipped": 28
-        },
-        "impact_type_counts": {},
-        "warning_count": 28,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058407.html",
-          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058409.html",
-          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/date.html#58408",
-          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/thread.html#58408",
-          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/subject.html#58408",
-          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/author.html#58408",
-          "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
-          "https://lists.libcamera.org/listinfo/libcamera-devel"
-        ]
-      },
-      "source_aware_linked_evidence": [
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058407.html",
-          "identifier": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058407.html",
-          "source_text": "[PATCH v3 0/3] Atomic control lists on Raspberry Pi",
-          "raw_excerpt": "[PATCH v3 0/3] Atomic control lists on Raspberry Pi https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058407.html",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058409.html",
-          "identifier": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058409.html",
-          "source_text": "[PATCH v4 0/3] Simple pipeline: proportional AGC, AWB stats fix,",
-          "raw_excerpt": "[PATCH v4 0/3] Simple pipeline: proportional AGC, AWB stats fix, https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058409.html",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/date.html#58408",
-          "identifier": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/date.html#58408",
-          "source_text": "[ date ]",
-          "raw_excerpt": "[ date ] https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/date.html#58408",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/thread.html#58408",
-          "identifier": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/thread.html#58408",
-          "source_text": "[ thread ]",
-          "raw_excerpt": "[ thread ] https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/thread.html#58408",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/subject.html#58408",
-          "identifier": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/subject.html#58408",
-          "source_text": "[ subject ]",
-          "raw_excerpt": "[ subject ] https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/subject.html#58408",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/author.html#58408",
-          "identifier": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/author.html#58408",
-          "source_text": "[ author ]",
-          "raw_excerpt": "[ author ] https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/author.html#58408",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
-          "identifier": "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
-          "source_text": "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
-          "raw_excerpt": "https://gitlab.freedesktop.org/camera/libcamera/-/releases/v0.7.1",
-          "fetch_status": "skipped",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain",
-          "warnings": [
-            "Linked evidence resolve skipped: unsupported_domain."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "laurent.pinchart at ideasonboard.com",
-          "raw_excerpt": "laurent.pinchart at ideasonboard.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "barnabas.pocze at ideasonboard.com",
-          "raw_excerpt": "barnabas.pocze at ideasonboard.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "kieran.bingham at ideasonboard.com",
-          "raw_excerpt": "kieran.bingham at ideasonboard.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "johannes.goede at oss.qualcomm.com",
-          "raw_excerpt": "johannes.goede at oss.qualcomm.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "jacopo.mondi at ideasonboard.com",
-          "raw_excerpt": "jacopo.mondi at ideasonboard.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "david.plowman at raspberrypi.com",
-          "raw_excerpt": "david.plowman at raspberrypi.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "mzamazal at redhat.com",
-          "raw_excerpt": "mzamazal at redhat.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "naush at raspberrypi.com",
-          "raw_excerpt": "naush at raspberrypi.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "stefan.klug at ideasonboard.com",
-          "raw_excerpt": "stefan.klug at ideasonboard.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "dan.scally at ideasonboard.com",
-          "raw_excerpt": "dan.scally at ideasonboard.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "gianfranco.mariotti94 at gmail.com",
-          "raw_excerpt": "gianfranco.mariotti94 at gmail.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "stephan.vanveen at karlstorz.com",
-          "raw_excerpt": "stephan.vanveen at karlstorz.com https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "github_pull_request",
-          "url": "https://github.com/pybind/pybind11/pull/5824",
-          "identifier": "pybind/pybind11#5824",
-          "source_text": "https://github.com/pybind/pybind11/pull/5824",
-          "raw_excerpt": "https://github.com/pybind/pybind11/pull/5824",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
-          "identifier": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
-          "source_text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
-          "raw_excerpt": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
-          "fetch_status": "skipped",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain",
-          "warnings": [
-            "Linked evidence resolve skipped: unsupported_domain."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "github_issue",
-          "url": "https://github.com/python/cpython/issues/61322",
-          "identifier": "python/cpython#61322",
-          "source_text": "https://github.com/python/cpython/issues/61322",
-          "raw_excerpt": "https://github.com/python/cpython/issues/61322",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/315",
-          "identifier": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/315",
-          "source_text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/315",
-          "raw_excerpt": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/315",
-          "fetch_status": "skipped",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain",
-          "warnings": [
-            "Linked evidence resolve skipped: unsupported_domain."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/313",
-          "identifier": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/313",
-          "source_text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/313",
-          "raw_excerpt": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/313",
-          "fetch_status": "skipped",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain",
-          "warnings": [
-            "Linked evidence resolve skipped: unsupported_domain."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1719",
-          "identifier": "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1719",
-          "source_text": "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1719",
-          "raw_excerpt": "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1719",
-          "fetch_status": "skipped",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain",
-          "warnings": [
-            "Linked evidence resolve skipped: unsupported_domain."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329",
-          "identifier": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329",
-          "source_text": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329",
-          "raw_excerpt": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329",
-          "fetch_status": "skipped",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain",
-          "warnings": [
-            "Linked evidence resolve skipped: unsupported_domain."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-          "identifier": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-          "source_text": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-          "raw_excerpt": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-          "fetch_status": "skipped",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain",
-          "warnings": [
-            "Linked evidence resolve skipped: unsupported_domain."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "mailing_list",
-          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "identifier": "https://lists.libcamera.org/listinfo/libcamera-devel",
-          "source_text": "More information about the libcamera-devel mailing list",
-          "raw_excerpt": "More information about the libcamera-devel mailing list https://lists.libcamera.org/listinfo/libcamera-devel",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        }
-      ]
-    },
-    {
       "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
       "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "normalized_url": "",
@@ -47564,95 +46296,6 @@
           "identifier": "https://arne-mertz.de/2019/03/macro-evil/",
           "source_text": "the usual - but valid -&nbsp; &ldquo;macros are evil&rdquo; &nbsp;argument",
           "raw_excerpt": "the usual - but valid -&nbsp; &ldquo;macros are evil&rdquo; &nbsp;argument https://arne-mertz.de/2019/03/macro-evil/",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        }
-      ]
-    },
-    {
-      "title": "2026 Annual C++ Developer Survey \"Lite\"",
-      "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
-      "normalized_url": "",
-      "source": "ISO C++ Blog",
-      "published_date": "Wed, 22 Apr 2026 00:59:01 +0000",
-      "source_kind": "rss_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "generic_tooling_change": 1
-        },
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "generic_tooling_change",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "watch",
-        "confidence": 0.35,
-        "reason": "generic_tooling_change classified from candidate text.",
-        "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [
-        {
-          "url": "https://standardcpp.typeform.com/2026-dev-survey",
-          "text": "2026 Annual C++ Developer Survey \"Lite\"",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        }
-      ],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 1,
-        "by_type": {
-          "generic_url": 1
-        },
-        "by_fetch_status": {
-          "skipped": 1
-        },
-        "impact_type_counts": {},
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "https://standardcpp.typeform.com/2026-dev-survey"
-        ]
-      },
-      "source_aware_linked_evidence": [
-        {
-          "type": "generic_url",
-          "url": "https://standardcpp.typeform.com/2026-dev-survey",
-          "identifier": "https://standardcpp.typeform.com/2026-dev-survey",
-          "source_text": "2026 Annual C++ Developer Survey \"Lite\"",
-          "raw_excerpt": "2026 Annual C++ Developer Survey \"Lite\" https://standardcpp.typeform.com/2026-dev-survey",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -48508,11 +47151,561 @@
       ]
     },
     {
-      "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
-      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "title": "The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo",
+      "url": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
       "normalized_url": "",
       "source": "ISO C++ Blog",
-      "published_date": "Thu, 23 Apr 2026 21:23:33 +0000",
+      "published_date": "Wed, 20 May 2026 22:51:47 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://www.youtube.com/watch?v=hD9JHkt7e2Y",
+          "text": "The road to 'import boost': a library developer's journey into C++20 modules",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 1,
+        "by_type": {
+          "generic_url": 1
+        },
+        "by_fetch_status": {
+          "skipped": 1
+        },
+        "impact_type_counts": {},
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://www.youtube.com/watch?v=hD9JHkt7e2Y"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://www.youtube.com/watch?v=hD9JHkt7e2Y",
+          "identifier": "https://www.youtube.com/watch?v=hD9JHkt7e2Y",
+          "source_text": "The road to 'import boost': a library developer's journey into C++20 modules",
+          "raw_excerpt": "The road to 'import boost': a library developer's journey into C++20 modules https://www.youtube.com/watch?v=hD9JHkt7e2Y",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
+      "title": "What reinterpret_cast doesn&apos;t do -- Andreas Fertig",
+      "url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 18 May 2026 22:46:29 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://andreasfertig.com/blog/2026/04/what-reinterpret_cast-doesnt-do/",
+          "text": "What reinterpret_cast doesn't do",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://andreasfertig.com/blog/2025/04/the-correct-way-to-do-type-punning-in-cpp-the-second-act/",
+          "text": "The correct way to do type punning in C++ - The second act",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 2,
+        "by_type": {
+          "generic_url": 2
+        },
+        "by_fetch_status": {
+          "skipped": 2
+        },
+        "impact_type_counts": {},
+        "warning_count": 2,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://andreasfertig.com/blog/2026/04/what-reinterpret_cast-doesnt-do/",
+          "https://andreasfertig.com/blog/2025/04/the-correct-way-to-do-type-punning-in-cpp-the-second-act/"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://andreasfertig.com/blog/2026/04/what-reinterpret_cast-doesnt-do/",
+          "identifier": "https://andreasfertig.com/blog/2026/04/what-reinterpret_cast-doesnt-do/",
+          "source_text": "What reinterpret_cast doesn't do",
+          "raw_excerpt": "What reinterpret_cast doesn't do https://andreasfertig.com/blog/2026/04/what-reinterpret_cast-doesnt-do/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://andreasfertig.com/blog/2025/04/the-correct-way-to-do-type-punning-in-cpp-the-second-act/",
+          "identifier": "https://andreasfertig.com/blog/2025/04/the-correct-way-to-do-type-punning-in-cpp-the-second-act/",
+          "source_text": "The correct way to do type punning in C++ - The second act",
+          "raw_excerpt": "The correct way to do type punning in C++ - The second act https://andreasfertig.com/blog/2025/04/the-correct-way-to-do-type-punning-in-cpp-the-second-act/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
+      "title": "Results summary: 2026 Annual C++ Developer Survey \"Lite\"",
+      "url": "https://isocpp.org//blog/2026/05/2026-survey-summary",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 04 May 2026 21:04:35 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://isocpp.org/blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+          "text": "our 2026 annual global C++ developer survey",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://isocpp.org/files/papers/CppDevSurvey-2026-summary.pdf",
+          "text": "CppDevSurvey-2026-summary.pdf",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 2,
+        "by_type": {
+          "generic_url": 2
+        },
+        "by_fetch_status": {
+          "skipped": 2
+        },
+        "impact_type_counts": {},
+        "warning_count": 2,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://isocpp.org/blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+          "https://isocpp.org/files/papers/CppDevSurvey-2026-summary.pdf"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://isocpp.org/blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+          "identifier": "https://isocpp.org/blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+          "source_text": "our 2026 annual global C++ developer survey",
+          "raw_excerpt": "our 2026 annual global C++ developer survey https://isocpp.org/blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://isocpp.org/files/papers/CppDevSurvey-2026-summary.pdf",
+          "identifier": "https://isocpp.org/files/papers/CppDevSurvey-2026-summary.pdf",
+          "source_text": "CppDevSurvey-2026-summary.pdf",
+          "raw_excerpt": "CppDevSurvey-2026-summary.pdf https://isocpp.org/files/papers/CppDevSurvey-2026-summary.pdf",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
+      "title": "JSON and C++26 compile-time reflection: a talk -- Daniel Lemire",
+      "url": "https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 06 May 2026 22:35:16 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://lemire.me/blog/2026/03/26/json-and-c26-compile-time-reflection-a-talk/",
+          "text": "JSON and C++26 compile-time reflection: a talk",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 1,
+        "by_type": {
+          "generic_url": 1
+        },
+        "by_fetch_status": {
+          "skipped": 1
+        },
+        "impact_type_counts": {},
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://lemire.me/blog/2026/03/26/json-and-c26-compile-time-reflection-a-talk/"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://lemire.me/blog/2026/03/26/json-and-c26-compile-time-reflection-a-talk/",
+          "identifier": "https://lemire.me/blog/2026/03/26/json-and-c26-compile-time-reflection-a-talk/",
+          "source_text": "JSON and C++26 compile-time reflection: a talk",
+          "raw_excerpt": "JSON and C++26 compile-time reflection: a talk https://lemire.me/blog/2026/03/26/json-and-c26-compile-time-reflection-a-talk/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
+      "title": "What Happens When a Destructor Throws -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Fri, 15 May 2026 22:42:26 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://www.sandordargo.com/blog/2026/04/01/when-a-destructor-throws",
+          "text": "What Happens When a Destructor Throws",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://devladder.substack.com/p/can-we-still-find-joy-in-programming",
+          "text": "the importance of finding joy in our jobs on The Dev Ladder",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 2,
+        "by_type": {
+          "generic_url": 2
+        },
+        "by_fetch_status": {
+          "skipped": 2
+        },
+        "impact_type_counts": {},
+        "warning_count": 2,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://www.sandordargo.com/blog/2026/04/01/when-a-destructor-throws",
+          "https://devladder.substack.com/p/can-we-still-find-joy-in-programming"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://www.sandordargo.com/blog/2026/04/01/when-a-destructor-throws",
+          "identifier": "https://www.sandordargo.com/blog/2026/04/01/when-a-destructor-throws",
+          "source_text": "What Happens When a Destructor Throws",
+          "raw_excerpt": "What Happens When a Destructor Throws https://www.sandordargo.com/blog/2026/04/01/when-a-destructor-throws",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://devladder.substack.com/p/can-we-still-find-joy-in-programming",
+          "identifier": "https://devladder.substack.com/p/can-we-still-find-joy-in-programming",
+          "source_text": "the importance of finding joy in our jobs on The Dev Ladder",
+          "raw_excerpt": "the importance of finding joy in our jobs on The Dev Ladder https://devladder.substack.com/p/can-we-still-find-joy-in-programming",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
+      "title": "CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Wed, 13 May 2026 21:36:47 +0000",
       "source_kind": "rss_item",
       "final_selection_eligibility": "watchlist",
       "linked_evidence_summary": {
@@ -48560,8 +47753,8 @@
           "skipped_reason": "policy_disabled"
         },
         {
-          "url": "https://www.youtube.com/watch?v=EOvukoCyW7A",
-          "text": "Can Standard C++ Replace CUDA for GPU Acceleration?",
+          "url": "https://www.youtube.com/watch?v=v6OyVjQpjjc",
+          "text": "Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World",
           "source_field": "rss.description",
           "extraction_method": "html_anchor",
           "evidence_role": "blocked_or_deferred",
@@ -48585,7 +47778,7 @@
         "top_identifiers": [
           "https://cppcon.org/",
           "https://cppcon.org/registration/",
-          "https://www.youtube.com/watch?v=EOvukoCyW7A"
+          "https://www.youtube.com/watch?v=v6OyVjQpjjc"
         ]
       },
       "source_aware_linked_evidence": [
@@ -48641,10 +47834,10 @@
         },
         {
           "type": "generic_url",
-          "url": "https://www.youtube.com/watch?v=EOvukoCyW7A",
-          "identifier": "https://www.youtube.com/watch?v=EOvukoCyW7A",
-          "source_text": "Can Standard C++ Replace CUDA for GPU Acceleration?",
-          "raw_excerpt": "Can Standard C++ Replace CUDA for GPU Acceleration? https://www.youtube.com/watch?v=EOvukoCyW7A",
+          "url": "https://www.youtube.com/watch?v=v6OyVjQpjjc",
+          "identifier": "https://www.youtube.com/watch?v=v6OyVjQpjjc",
+          "source_text": "Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World",
+          "raw_excerpt": "Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World https://www.youtube.com/watch?v=v6OyVjQpjjc",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
@@ -48667,13 +47860,13 @@
       ]
     },
     {
-      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Evolving a Translation System with Reflection in C++",
+      "url": "https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
       "normalized_url": "",
       "source": "ISO C++ Blog",
-      "published_date": "Tue, 28 Apr 2026 22:25:57 +0000",
+      "published_date": "Tue, 12 May 2026 22:40:34 +0000",
       "source_kind": "rss_item",
-      "final_selection_eligibility": "short",
+      "final_selection_eligibility": "exclude",
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -48701,8 +47894,8 @@
       "linked_evidence": [],
       "classified_outgoing_links": [
         {
-          "url": "https://www.reddit.com/r/cpp/comments/1rrq9e6/glaze_72_c26_reflection_yaml_cbor_messagepack/",
-          "text": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "url": "https://www.reddit.com/r/cpp/comments/1s5rzct/evolving_a_translation_system_with_reflection_in_c/",
+          "text": "Evolving a Translation System with Reflection in C++",
           "source_field": "rss.description",
           "extraction_method": "html_anchor",
           "evidence_role": "noise",
@@ -48724,22 +47917,181 @@
         "has_resolved_evidence": false,
         "has_unresolved_evidence": true,
         "top_identifiers": [
-          "https://www.reddit.com/r/cpp/comments/1rrq9e6/glaze_72_c26_reflection_yaml_cbor_messagepack/"
+          "https://www.reddit.com/r/cpp/comments/1s5rzct/evolving_a_translation_system_with_reflection_in_c/"
         ]
       },
       "source_aware_linked_evidence": [
         {
           "type": "generic_url",
-          "url": "https://www.reddit.com/r/cpp/comments/1rrq9e6/glaze_72_c26_reflection_yaml_cbor_messagepack/",
-          "identifier": "https://www.reddit.com/r/cpp/comments/1rrq9e6/glaze_72_c26_reflection_yaml_cbor_messagepack/",
-          "source_text": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-          "raw_excerpt": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more https://www.reddit.com/r/cpp/comments/1rrq9e6/glaze_72_c26_reflection_yaml_cbor_messagepack/",
+          "url": "https://www.reddit.com/r/cpp/comments/1s5rzct/evolving_a_translation_system_with_reflection_in_c/",
+          "identifier": "https://www.reddit.com/r/cpp/comments/1s5rzct/evolving_a_translation_system_with_reflection_in_c/",
+          "source_text": "Evolving a Translation System with Reflection in C++",
+          "raw_excerpt": "Evolving a Translation System with Reflection in C++ https://www.reddit.com/r/cpp/comments/1s5rzct/evolving_a_translation_system_with_reflection_in_c/",
           "fetch_status": "skipped",
           "evidence_role": "noise",
           "classification_reason": "ignored_utility_link",
           "skipped_reason": "ignored_by_policy",
           "warnings": [
             "Linked evidence resolve skipped: ignored_by_policy."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
+      "title": "CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 11 May 2026 21:33:30 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://cppcon.org/",
+          "text": "in person in Aurora, CO",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://cppcon.org/registration/",
+          "text": "register today",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=7z9NNrRDHQU",
+          "text": "Reflection: C++&rsquo;s Decade-Defining Rocket Engine",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 3,
+        "by_type": {
+          "generic_url": 3
+        },
+        "by_fetch_status": {
+          "skipped": 3
+        },
+        "impact_type_counts": {},
+        "warning_count": 3,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://cppcon.org/",
+          "https://cppcon.org/registration/",
+          "https://www.youtube.com/watch?v=7z9NNrRDHQU"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://cppcon.org/",
+          "identifier": "https://cppcon.org/",
+          "source_text": "in person in Aurora, CO",
+          "raw_excerpt": "in person in Aurora, CO https://cppcon.org/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://cppcon.org/registration/",
+          "identifier": "https://cppcon.org/registration/",
+          "source_text": "register today",
+          "raw_excerpt": "register today https://cppcon.org/registration/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://www.youtube.com/watch?v=7z9NNrRDHQU",
+          "identifier": "https://www.youtube.com/watch?v=7z9NNrRDHQU",
+          "source_text": "Reflection: C++&rsquo;s Decade-Defining Rocket Engine",
+          "raw_excerpt": "Reflection: C++&rsquo;s Decade-Defining Rocket Engine https://www.youtube.com/watch?v=7z9NNrRDHQU",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
           ],
           "resolver": "source_aware_policy",
           "resolved": {

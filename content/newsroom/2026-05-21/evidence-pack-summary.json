@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-21",
-  "generated_at": "2026-05-21T01:55:28.932Z",
+  "generated_at": "2026-05-21T02:30:20.617Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -172,6 +172,17 @@
       "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
     },
     {
+      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "CameraX Release Notes - CameraX 1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_site_update_row",
+      "freshness_window": "unknown",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "exclusion_reason": "Eligible for short newsletter use."
+    },
+    {
       "candidate_id": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "title": "Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
@@ -197,17 +208,6 @@
       "candidate_id": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
       "title": "I/O 2026: What's new in Google Play",
       "url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
-      "source": "Android Developers Blog",
-      "source_role": "official_release_source",
-      "source_url_quality": "official_dated_release",
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
-    },
-    {
-      "candidate_id": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
-      "title": "What's new in the Jetpack Compose April '26 release",
-      "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
       "source": "Android Developers Blog",
       "source_role": "official_release_source",
       "source_url_quality": "official_dated_release",
