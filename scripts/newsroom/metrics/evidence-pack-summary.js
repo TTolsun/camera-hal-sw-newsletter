@@ -841,6 +841,11 @@ function selectionSummary({
         countFromComposition(composition, 'camera_driver_image_pipeline')
       )
     ),
+    android_multimedia_camera_output_count: firstNumber(
+      counts.android_multimedia_camera_output_count,
+      composition.android_multimedia_camera_output_count,
+      countFromComposition(composition, 'android_multimedia_camera_output')
+    ),
     supporting_bucket_count: firstNumber(
       counts.supporting_main_article_count,
       composition.supporting_main_article_count,

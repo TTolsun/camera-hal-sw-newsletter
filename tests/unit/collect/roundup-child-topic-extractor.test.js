@@ -40,7 +40,7 @@ test('roundup extractor accepts heading topic plus body introduce wording', () =
   assert.equal(children.length, 1);
   assert.equal(children[0].source_extraction.child_heading, 'Advanced Professional Video');
   assert.equal(children[0].behavior_change, 'Android introduces a new media framework format for professional capture.');
-  assert.equal(children[0].relevanceBucketHint, 'android_platform_camera_adjacent');
+  assert.equal(children[0].relevanceBucketHint, 'android_multimedia_camera_output');
   assert.equal(Object.prototype.hasOwnProperty.call(children[0], 'source_gap_risk'), false);
 });
 

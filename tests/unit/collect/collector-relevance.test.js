@@ -269,11 +269,12 @@ test('RSS roundup child extraction is additive and uses normal evidence derivati
   assert.match(child.source_extraction.evidence_blocks[0].text, /introduces a new media framework format/);
   assert.match(child.summary, /introduces a new media framework format/);
   assert.equal(child.api_or_component, 'Android media/camera output');
-  assert.equal(rawChildren[0].relevanceBucketHint, 'android_platform_camera_adjacent');
+  assert.equal(rawChildren[0].relevanceBucketHint, 'android_multimedia_camera_output');
   assert.equal(child.has_behavior_change, true);
   assert.equal(child.source_gap_risk, false);
   assert.ok(['main', 'short'].includes(child.finalSelectionEligibility));
   assert.ok([
+    BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT,
     BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
     BUCKETS.DIRECT_AOSP_CAMERA
   ].includes(child.relevance_bucket));

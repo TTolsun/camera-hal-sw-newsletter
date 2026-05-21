@@ -74,6 +74,7 @@ const NORMAL_BUCKET_ORDER = [
   BUCKETS.DIRECT_AOSP_CAMERA,
   BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
   BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+  BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT,
   BUCKETS.SOC_PLATFORM_SIGNAL
 ];
 
@@ -589,6 +590,7 @@ function categoryForCandidate(candidate, fallback = false) {
   if (candidate.relevance_bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) return 'Camera Driver / Image Pipeline';
   if (candidate.relevance_bucket === BUCKETS.DIRECT_AOSP_CAMERA) return 'AOSP Camera / Android Camera';
   if (candidate.relevance_bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) return fallback ? 'Adjacent Watch / Android Camera' : 'Android Platform / CameraX';
+  if (candidate.relevance_bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) return fallback ? 'Adjacent Watch / Camera Output' : 'Camera Output / Multimedia Supporting';
   if (candidate.relevance_bucket === BUCKETS.SOC_PLATFORM_SIGNAL) return 'Adjacent Watch / SoC Platform';
   if (candidate.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) return 'Tooling Watch / Fallback';
   return fallback ? 'Adjacent Watch / Fallback' : 'Camera Platform Watch';

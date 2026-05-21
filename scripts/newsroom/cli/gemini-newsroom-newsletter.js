@@ -469,6 +469,7 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     direct_aosp_camera_count: compositionSummary.direct_aosp_camera_count ?? null,
     camera_driver_image_pipeline_count: compositionSummary.camera_driver_image_pipeline_count ?? null,
     android_platform_camera_adjacent_count: compositionSummary.android_platform_camera_adjacent_count ?? null,
+    android_multimedia_camera_output_count: compositionSummary.android_multimedia_camera_output_count ?? null,
     soc_platform_signal_count: compositionSummary.soc_platform_signal_count ?? ensureArray(report.selected_articles).filter(candidate =>
       candidate.relevance_bucket === 'soc_platform_signal'
     ).length,
@@ -2352,6 +2353,7 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     `- direct_aosp_camera: ${selectionDiagnostics.direct_aosp_camera_count ?? 'unknown'}`,
     `- android_platform_camera_adjacent: ${selectionDiagnostics.android_platform_camera_adjacent_count ?? 'unknown'}`,
     `- camera_driver_image_pipeline: ${selectionDiagnostics.camera_driver_image_pipeline_count ?? 'unknown'}`,
+    `- android_multimedia_camera_output: ${selectionDiagnostics.android_multimedia_camera_output_count ?? 'unknown'}`,
     `- soc_platform_signal: ${selectionDiagnostics.soc_platform_signal_count ?? 'unknown'}`,
     `- cpp_ai_tooling_fallback: ${selectionDiagnostics.cpp_ai_tooling_fallback_count ?? 'unknown'}`,
     `- Non-fallback reviewable: ${selectionDiagnostics.non_fallback_reviewable_article_count ?? 'unknown'}`,
@@ -2474,6 +2476,7 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
       direct_aosp_camera_count: selectionDiagnostics.direct_aosp_camera_count,
       camera_driver_image_pipeline_count: selectionDiagnostics.camera_driver_image_pipeline_count,
       android_platform_camera_adjacent_count: selectionDiagnostics.android_platform_camera_adjacent_count,
+      android_multimedia_camera_output_count: selectionDiagnostics.android_multimedia_camera_output_count,
       soc_platform_signal_count: selectionDiagnostics.soc_platform_signal_count,
       cpp_ai_tooling_fallback_count: selectionDiagnostics.cpp_ai_tooling_fallback_count,
       generic_tech_watchlist_count: selectionDiagnostics.generic_tech_watchlist_count,

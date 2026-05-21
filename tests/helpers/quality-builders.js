@@ -118,24 +118,29 @@ function scopedCandidate(url, bucket, overrides = {}) {
       aosp_camera_directness: 2,
       counts_as_primary_camera_topic: true
     },
-    soc_platform_signal: {
+    android_multimedia_camera_output: {
       editorial_priority: 4,
+      multimedia_camera_output_relevance: 5
+    },
+    soc_platform_signal: {
+      editorial_priority: 5,
       soc_platform_relevance: 5,
       counts_as_soc_topic: true
     },
     cpp_ai_tooling_fallback: {
-      editorial_priority: 5,
+      editorial_priority: 6,
       native_tooling_relevance: 5,
       counts_as_fallback_topic: true
     },
     generic_tech_watchlist: {
-      editorial_priority: 6
+      editorial_priority: 7
     }
   };
   return reporterCandidate(url, {
     relevance_bucket: bucket,
     aosp_camera_directness: 0,
     driver_stack_relevance: 0,
+    multimedia_camera_output_relevance: 0,
     soc_platform_relevance: 0,
     native_tooling_relevance: 0,
     counts_as_primary_camera_topic: false,

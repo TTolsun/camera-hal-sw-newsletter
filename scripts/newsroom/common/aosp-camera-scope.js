@@ -2,6 +2,7 @@ const BUCKETS = Object.freeze({
   DIRECT_AOSP_CAMERA: 'direct_aosp_camera',
   CAMERA_DRIVER_IMAGE_PIPELINE: 'camera_driver_image_pipeline',
   ANDROID_PLATFORM_CAMERA_ADJACENT: 'android_platform_camera_adjacent',
+  ANDROID_MULTIMEDIA_CAMERA_OUTPUT: 'android_multimedia_camera_output',
   SOC_PLATFORM_SIGNAL: 'soc_platform_signal',
   CPP_AI_TOOLING_FALLBACK: 'cpp_ai_tooling_fallback',
   GENERIC_TECH_WATCHLIST: 'generic_tech_watchlist'
@@ -11,15 +12,17 @@ const BUCKET_PRIORITY = Object.freeze({
   [BUCKETS.DIRECT_AOSP_CAMERA]: 1,
   [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 2,
   [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 3,
-  [BUCKETS.SOC_PLATFORM_SIGNAL]: 4,
-  [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 5,
-  [BUCKETS.GENERIC_TECH_WATCHLIST]: 6
+  [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 4,
+  [BUCKETS.SOC_PLATFORM_SIGNAL]: 5,
+  [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 6,
+  [BUCKETS.GENERIC_TECH_WATCHLIST]: 7
 });
 
 const BUCKET_DEFINITIONS = Object.freeze({
   [BUCKETS.DIRECT_AOSP_CAMERA]: 'AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence.',
   [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 'Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence.',
   [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 'Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path.',
+  [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 'Android camera-output or multimedia evidence such as APV, Ultra HDR, HDR video, MediaProvider, MediaStore, gallery output, media output, video call, camera/audio sync, social app camera capture, or captured image/video result behavior.',
   [BUCKETS.SOC_PLATFORM_SIGNAL]: 'Public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact.',
   [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 'C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence.',
   [BUCKETS.GENERIC_TECH_WATCHLIST]: 'General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion.'
@@ -103,6 +106,58 @@ const CAMERA_IMPACT_PATTERNS = [
   /\bISP\b/i,
   /\bthermal\b/i,
   /\blatency\b/i
+];
+
+const MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS = [
+  /\bcamera\s+output\b/i,
+  /\bgallery\s+output\b/i,
+  /\bmedia\s+output\b/i,
+  /\bcamera\s*\/\s*audio\s+sync\b/i,
+  /\baudio\s*\/\s*video\s+sync\b[^.\n]{0,120}\b(?:camera|preview|video\s+(?:recording|call)|capture)\b/i,
+  /\b(?:camera|preview|video\s+(?:recording|call)|capture)\b[^.\n]{0,120}\baudio\s*\/\s*video\s+sync\b/i,
+  /\bsocial\s+app\s+camera\s+capture\b/i,
+  /\bcaptured\s+image\s*\/\s*video\s+output\b/i,
+  /\bcaptured\s+image\s+and\s+video\s+output\b/i,
+  /\bcaptured\s+(?:image|video)\s+output\b/i,
+  /\bcamera\s+output\s+result\b/i
+];
+
+const MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS = [
+  /\bUltra\s+HDR\b/i,
+  /\bHDR\s+video\b/i,
+  /\bAPV\b/i,
+  /\bAdvanced\s+Professional\s+Video\b/i,
+  /\bvideo\s+call\b/i
+];
+
+const MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS = [
+  /\bMediaProvider\b/i,
+  /\bmedia\s+provider\b/i,
+  /\bMediaStore\b/i,
+  /\bmedia\s+store\b/i
+];
+
+const CAMERA_OUTPUT_CONTEXT_PATTERNS = [
+  /\bcamera\b/i,
+  /\bcaptur(?:e|ed|es|ing)\b/i,
+  /\bpreview\b/i,
+  /\bvideo\s+recording\b/i,
+  /\bgallery\s+output\b/i,
+  /\bmedia\s+output\b/i,
+  /\bcamera\s+output\b/i,
+  /\bsocial\s+app\s+camera\b/i,
+  /\bcaptured\s+image\b/i,
+  /\bcaptured\s+video\b/i
+];
+
+const STORAGE_CAMERA_OUTPUT_CONTEXT_PATTERNS = [
+  /\bcamera\b/i,
+  /\bcaptur(?:e|ed|es|ing)\b/i,
+  /\bgallery\s+output\b/i,
+  /\bmedia\s+output\b/i,
+  /\bcamera\s+output\b/i,
+  /\bcaptured\s+image\b/i,
+  /\bcaptured\s+video\b/i
 ];
 
 const SOC_PATTERNS = [
@@ -225,6 +280,21 @@ function patternHits(patterns, value) {
     .map(pattern => pattern.source);
 }
 
+function multimediaCameraOutputHits(value) {
+  const strongHits = patternHits(MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS, value);
+  const outputContextHits = patternHits(CAMERA_OUTPUT_CONTEXT_PATTERNS, value);
+  const storageContextHits = patternHits(STORAGE_CAMERA_OUTPUT_CONTEXT_PATTERNS, value);
+  return [
+    ...strongHits,
+    ...(outputContextHits.length > 0
+      ? patternHits(MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS, value)
+      : []),
+    ...(storageContextHits.length > 0
+      ? patternHits(MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS, value)
+      : [])
+  ];
+}
+
 function relevanceScoreFromHits(hits, max = 5) {
   return Math.min(max, hits.length === 0 ? 0 : hits.length + 1);
 }
@@ -250,6 +320,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const driverTerms = patternHits(DRIVER_PATTERNS, body);
   const androidAdjacentTerms = patternHits(ANDROID_ADJACENT_PATTERNS, body);
   const cameraImpactTerms = patternHits(CAMERA_IMPACT_PATTERNS, body);
+  const multimediaCameraOutputTerms = multimediaCameraOutputHits(body);
   const socTerms = patternHits(SOC_PATTERNS, body);
   const strongSocTerms = patternHits(STRONG_SOC_PATTERNS, body);
   const socCameraImpactTerms = patternHits(SOC_CAMERA_IMPACT_PATTERNS, body);
@@ -259,6 +330,9 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ...DIRECT_AOSP_PATTERNS,
     ...DRIVER_PATTERNS,
     ...ANDROID_ADJACENT_PATTERNS,
+    ...MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS,
+    ...MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS,
+    ...MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS,
     ...SOC_PATTERNS,
     ...NATIVE_TOOLING_PATTERNS
   ], sourceHint);
@@ -269,27 +343,39 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ...directTerms,
     ...driverTerms,
     ...androidAdjacentTerms,
+    ...multimediaCameraOutputTerms,
     ...cameraImpactTerms,
     ...socTerms,
     ...socCameraImpactTerms,
     ...nativeTerms
   ];
-  const canUseBucketHint = bucketHint && articleTerms.length > 0 && (
-    bucketHint !== BUCKETS.SOC_PLATFORM_SIGNAL ||
-    (socTerms.length > 0 && socCameraImpactTerms.length > 0)
-  );
-  if (canUseBucketHint) {
-    bucket = bucketHint;
-    evidenceTerms = articleTerms;
-  } else if (driverTerms.length > 0 && directTerms.length === 0) {
+  const canUseBucketHint = bucketHint && articleTerms.length > 0 &&
+    (
+      bucketHint !== BUCKETS.SOC_PLATFORM_SIGNAL ||
+      (socTerms.length > 0 && socCameraImpactTerms.length > 0)
+    ) &&
+    (
+      bucketHint !== BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT ||
+      multimediaCameraOutputTerms.length > 0
+    );
+  if (driverTerms.length > 0 && directTerms.length === 0) {
     bucket = BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE;
     evidenceTerms = driverTerms;
+  } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
+    bucket = bucketHint;
+    evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms, ...articleTerms];
   } else if (directTerms.length > 0) {
     bucket = BUCKETS.DIRECT_AOSP_CAMERA;
     evidenceTerms = directTerms;
+  } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
+    bucket = bucketHint;
+    evidenceTerms = multimediaCameraOutputTerms;
   } else if (androidAdjacentTerms.length > 0 && cameraImpactTerms.length > 0) {
     bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
     evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms];
+  } else if (multimediaCameraOutputTerms.length > 0) {
+    bucket = BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT;
+    evidenceTerms = multimediaCameraOutputTerms;
   } else if (
     socTerms.length > 0 &&
     socCameraImpactTerms.length > 0 &&
@@ -300,6 +386,9 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   } else if (nativeTerms.length > 0) {
     bucket = BUCKETS.CPP_AI_TOOLING_FALLBACK;
     evidenceTerms = nativeTerms;
+  } else if (canUseBucketHint) {
+    bucket = bucketHint;
+    evidenceTerms = articleTerms;
   }
 
   const evidenceOrigin = evidenceTerms.length > 0
@@ -319,6 +408,9 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const socPlatformRelevance = bucket === BUCKETS.SOC_PLATFORM_SIGNAL
     ? Math.max(3, relevanceScoreFromHits(socTerms))
     : 0;
+  const multimediaCameraOutputRelevance = bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT
+    ? Math.max(3, relevanceScoreFromHits(multimediaCameraOutputTerms))
+    : 0;
   const nativeToolingRelevance = bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK
     ? Math.max(3, relevanceScoreFromHits(nativeTerms))
     : 0;
@@ -328,6 +420,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     relevance_bucket: bucket,
     aosp_camera_directness: aospCameraDirectness,
     driver_stack_relevance: driverStackRelevance,
+    multimedia_camera_output_relevance: multimediaCameraOutputRelevance,
     soc_platform_relevance: socPlatformRelevance,
     native_tooling_relevance: nativeToolingRelevance,
     counts_as_primary_camera_topic: countsAsPrimaryCameraTopic,

@@ -26,6 +26,20 @@ function cameraXCandidate(overrides = {}) {
   };
 }
 
+function multimediaCandidate(overrides = {}) {
+  return {
+    title: 'Android Ultra HDR video output update',
+    source: 'Android Developers',
+    published_date: '2026-05-20',
+    version_or_release: '',
+    api_or_component: 'Ultra HDR video output',
+    relevance_bucket: 'android_multimedia_camera_output',
+    multimedia_camera_output_relevance: 3,
+    behavior_change: 'Android makes Ultra HDR video output available for camera capture and gallery output validation.',
+    ...overrides
+  };
+}
+
 test('cleanBehaviorChange removes raw CameraX table and UI artifacts', () => {
   const result = cleanBehaviorChange(cameraXCandidate());
 
@@ -99,6 +113,20 @@ test('impact_claim_level controls HAL perspective strength', () => {
   assert.match(adjacent, /CameraX|Camera2/);
   assert.match(tooling, /build|test|debug|tooling/);
   assert.equal(inferImpactClaimLevel(cameraXCandidate()), IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT);
+});
+
+test('multimedia camera-output fields avoid CameraX Camera2 and direct HAL wording', () => {
+  const candidate = multimediaCandidate();
+  const background = buildStaticBackgroundContext(candidate);
+  const perspective = buildHalPerspective(candidate);
+  const guardrails = buildOverclaimGuardrails(candidate).join('\n');
+
+  assert.equal(inferImpactClaimLevel(candidate), IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT);
+  assert.match(background, /Camera output|multimedia|preview\/video\/gallery\/video-call/);
+  assert.match(perspective, /preview|video|gallery|video-call|captured image\/video output/);
+  assert.doesNotMatch(`${background}\n${perspective}`, /CameraX|Camera2/);
+  assert.doesNotMatch(`${background}\n${perspective}`, /direct HAL API contract change|HAL contract change/);
+  assert.match(guardrails, /direct HAL API|vendor HAL implementation|HAL contract changes/);
 });
 
 test('SoC platform signal stays watch-only unless camera pipeline evidence is present', () => {

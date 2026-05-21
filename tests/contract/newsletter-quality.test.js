@@ -1206,6 +1206,33 @@ test('quality gate counts article buckets from structured candidate metadata', (
   assert.match(report.article_results[1].scope_count.count_reason, /primary_camera_stack_count/);
 });
 
+test('quality gate counts multimedia camera output as supporting, not primary', () => {
+  const sections = [
+    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
+    section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' }),
+    section({
+      headline: 'Android APV camera output update',
+      url: 'https://example.com/apv',
+      category: 'Camera Output / Multimedia',
+      what_changed: 'Android introduces Advanced Professional Video for camera capture output on 2026-05-01.',
+      evidence_summary: 'Release date: 2026-05-01; API/component: Advanced Professional Video; behavior change: camera output support.',
+      background: 'APV is an Android media output signal for camera capture workflows, not a direct HAL contract change.',
+      camera_hal_perspective: 'Treat this as camera output / multimedia supporting context unless source evidence names HAL API or vendor implementation changes.'
+    })
+  ];
+  const report = reportFor(sections, [
+    scopedCandidate('https://example.com/a', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/apv', 'android_multimedia_camera_output')
+  ]);
+
+  assert.equal(report.metrics.primary_camera_stack_count, 2);
+  assert.equal(report.metrics.android_multimedia_camera_output_count, 1);
+  assert.equal(report.metrics.supporting_main_article_count, 1);
+  assert.equal(report.article_results[2].scope_count.counts_as_primary_camera_topic, false);
+  assert.match(report.article_results[2].scope_count.count_reason, /supporting_main_article_count/);
+});
+
 test('quality gate falls back to reporter scores when section metadata has only a bucket', () => {
   const partial = section({
     headline: 'CameraX release with partial section metadata',

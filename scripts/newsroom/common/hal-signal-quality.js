@@ -184,6 +184,7 @@ function inferHalImpactAxes(value = {}) {
   if (bucket === 'direct_aosp_camera') axes.push('framework_hal_contract');
   if (bucket === 'camera_driver_image_pipeline') axes.push('driver_image_pipeline');
   if (bucket === 'android_platform_camera_adjacent') axes.push('camerax_app_compatibility');
+  if (bucket === 'android_multimedia_camera_output') axes.push('stream_buffer_metadata');
   if (bucket === 'soc_platform_signal') axes.push('soc_resource_contention');
   if (bucket === 'cpp_ai_tooling_fallback') axes.push('native_tooling_workflow');
   if (bucket === 'generic_tech_watchlist') axes.push('reference_only');
@@ -587,6 +588,7 @@ function buildHalSignalQualitySummary(articles = []) {
     fallback_main_article_count: checks.filter(check =>
       ['cpp_ai_tooling_fallback', 'soc_platform_signal', 'generic_tech_watchlist'].includes(normalizeEnum(check.relevance_bucket))
     ).length,
+    android_multimedia_camera_output_count: checks.filter(check => normalizeEnum(check.relevance_bucket) === 'android_multimedia_camera_output').length,
     soc_platform_signal_count: checks.filter(check => normalizeEnum(check.relevance_bucket) === 'soc_platform_signal').length,
     generic_signal_hard_blocker_count: checks.filter(check => check.hard_blockers.length > 0).length,
     hal_signal_hard_blocker_count: checks.filter(check => ensureArray(check.hard_blocker_reason_codes).length > 0).length,
@@ -613,6 +615,7 @@ function normalizeShortageHintDetail(value) {
   let bucket = 'unknown';
   if (lowerRaw.includes('direct_aosp_camera')) bucket = 'direct_aosp_camera';
   else if (lowerRaw.includes('camera_driver_image_pipeline')) bucket = 'camera_driver_image_pipeline';
+  else if (lowerRaw.includes('android_multimedia_camera_output')) bucket = 'android_multimedia_camera_output';
   else if (lowerRaw.includes('soc_platform_signal')) bucket = 'soc_platform_signal';
   else if (lowerRaw.includes('cpp_ai_tooling_fallback')) bucket = 'cpp_ai_tooling_fallback';
   let reasonCode = 'selection_shortage';
@@ -685,6 +688,8 @@ function renderHalSignalQualityMarkdown(report = {}) {
 - blocked_source_gap_count: ${summary.blocked_source_gap_count ?? 0}
 - article_count_with_hal_signal_capsule: ${summary.article_count_with_hal_signal_capsule ?? 0}
 - article_count_without_hal_signal_capsule: ${summary.article_count_without_hal_signal_capsule ?? 0}
+- android_multimedia_camera_output_count: ${summary.android_multimedia_camera_output_count ?? 0}
+- soc_platform_signal_count: ${summary.soc_platform_signal_count ?? 0}
 - generic_signal_hard_blocker_count: ${summary.generic_signal_hard_blocker_count ?? 0}
 - hal_signal_hard_blocker_count: ${summary.hal_signal_hard_blocker_count ?? 0}
 - hard_blocker_reason_code_counts: ${JSON.stringify(summary.hard_blocker_reason_code_counts || {})}
@@ -692,6 +697,11 @@ function renderHalSignalQualityMarkdown(report = {}) {
 - actionability_level_counts: ${JSON.stringify(summary.actionability_level_counts || {})}
 - effective_actionability_level_counts: ${JSON.stringify(summary.effective_actionability_level_counts || {})}
 - signal_quality_status_counts: ${JSON.stringify(summary.signal_quality_status_counts || {})}
+
+## Count Semantics
+
+- android_multimedia_camera_output_count: supporting camera output / multimedia lane; not a direct HAL bucket and not a fallback topic count.
+- fallback_main_article_count: fallback/watchlist-oriented signal count for SoC, C++ tooling, and generic watchlist buckets.
 
 ## Main Article Signal Checks
 

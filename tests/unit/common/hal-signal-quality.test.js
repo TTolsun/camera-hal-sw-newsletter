@@ -212,6 +212,31 @@ test('SoC platform signal requires explicit camera pipeline link for promotion',
   assert.ok(check.hard_blocker_reason_codes.includes('soc_camera_pipeline_link_missing'));
 });
 
+test('multimedia camera-output bucket gets supporting axis without fallback promotion blocker', () => {
+  const value = article({
+    headline: 'Android APV camera output update',
+    relevance_bucket: 'android_multimedia_camera_output',
+    evidence_summary: 'Android introduces Advanced Professional Video for camera capture output.',
+    hal_signal_capsule: undefined,
+    article_sections: {
+      verified_facts: ['APV was announced for Android camera output.'],
+      background_context: 'APV is camera output / multimedia supporting context.',
+      hal_driver_impact: 'Review captured video output assumptions without claiming direct HAL API changes.',
+      action_items: ['Check app-facing video output validation notes.'],
+      team_share_points: 'Supporting camera output signal.'
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+  const summary = buildHalSignalQualitySummary([value]);
+  const axes = inferHalImpactAxes(value);
+
+  assert.ok(axes.includes('stream_buffer_metadata'));
+  assert.equal(axes.includes('framework_hal_contract'), false);
+  assert.equal(normalized.hal_signal_hard_blockers.includes('fallback_promotion_missing_reason'), false);
+  assert.equal(summary.android_multimedia_camera_output_count, 1);
+  assert.equal(summary.fallback_main_article_count, 0);
+});
+
 test('explicit unknown signal quality status is preserved', () => {
   const normalized = normalizeHalSignalFields(article({
     signal_quality_status: 'unknown'
