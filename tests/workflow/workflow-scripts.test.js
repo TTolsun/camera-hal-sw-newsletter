@@ -5802,9 +5802,14 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(imageAuditStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.doesNotMatch(imageAuditStep, /continue-on-error:\s*true/);
+  assert.match(imageAuditStep, /steps\.meta\.outputs\.public_newsletter_ready/);
   assert.match(
     imageAuditStep,
     /npm run newsroom:audit-images -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --fail-on-publish-blocking/
+  );
+  assert.match(
+    imageAuditStep,
+    /npm run newsroom:audit-images -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"\s*$/m
   );
   assert.match(snapshotStep, /copy_tree_if_present "content\/newsroom\/\$\{DATE\}"/);
   assert.match(snapshotStep, /copy_if_present "newsletters\/\$\{DATE\}\/newsletter\.md"/);
