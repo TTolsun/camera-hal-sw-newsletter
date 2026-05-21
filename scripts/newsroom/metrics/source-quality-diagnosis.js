@@ -913,11 +913,28 @@ function resolveCandidateInput(root, date, generationStatus = {}, warnings = [])
   for (const relPath of candidates) {
     const filePath = repoPath(root, relPath);
     if (filePath && fs.existsSync(filePath)) {
-      return {
-        path: filePath,
-        relPath: toRepoRelPath(root, filePath),
-        payload: readJson(filePath)
-      };
+      const repoRelPath = toRepoRelPath(root, filePath);
+      try {
+        return {
+          path: filePath,
+          relPath: repoRelPath,
+          available: true,
+          payload: readJson(filePath)
+        };
+      } catch (error) {
+        warnings.push({
+          type: 'invalid_preferred_artifact',
+          message: `${repoRelPath} is not valid JSON: ${error.message}`,
+          source_artifact: repoRelPath,
+          severity: 'warning'
+        });
+        return {
+          path: filePath,
+          relPath: repoRelPath,
+          available: false,
+          payload: {}
+        };
+      }
     }
   }
   warnings.push({
@@ -929,6 +946,7 @@ function resolveCandidateInput(root, date, generationStatus = {}, warnings = [])
   return {
     path: null,
     relPath: null,
+    available: false,
     payload: {}
   };
 }
@@ -985,7 +1003,7 @@ function loadSourceQualityDiagnosisInputs(root, date) {
       generation_status: generationStatus ? generationRel : null
     },
     inputAvailability: {
-      candidate_input: Boolean(candidateInput.relPath),
+      candidate_input: candidateInput.available !== false && Boolean(candidateInput.relPath),
       shortlisted_candidates: hasShortlistReport,
       generation_status: Boolean(generationStatus)
     }

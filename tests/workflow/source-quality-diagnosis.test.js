@@ -285,6 +285,29 @@ test('source quality diagnosis writer produces partial report when shortlist is 
   assert.match(result.markdown, /알 수 없음/);
 });
 
+test('source quality diagnosis writer produces partial report when candidate input JSON is invalid', () => {
+  const root = tempRoot('source-quality-invalid-candidate-');
+  const candidatePath = path.join(root, 'content', 'collected-news', date, 'merged-candidates.json');
+  fs.mkdirSync(path.dirname(candidatePath), { recursive: true });
+  fs.writeFileSync(candidatePath, '{ invalid json', 'utf8');
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [cameraCandidate()]
+  });
+
+  const result = writeSourceQualityDiagnosisArtifacts({ root, date });
+
+  assert.equal(fs.existsSync(result.jsonPath), true);
+  assert.equal(fs.existsSync(result.markdownPath), true);
+  assert.equal(result.report.input_refs.candidate_input, `content/collected-news/${date}/merged-candidates.json`);
+  assert.equal(result.report.evidence_completeness.candidate_input, false);
+  assert.equal(result.report.raw_candidate_count, null);
+  assert.ok(result.report.warnings.some(warning =>
+    warning.type === 'invalid_preferred_artifact' &&
+    warning.source_artifact === `content/collected-news/${date}/merged-candidates.json`
+  ));
+  assert.ok(result.report.warnings.some(warning => warning.type === 'partial_diagnosis'));
+});
+
 test('newsroom PR body includes source quality diagnosis summary and missing-artifact warning', () => {
   const root = tempRoot('source-quality-pr-body-');
   const report = buildSourceQualityDiagnosisReport(diagnosisInputs());
