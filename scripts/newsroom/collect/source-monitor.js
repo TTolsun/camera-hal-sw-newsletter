@@ -152,8 +152,25 @@ function firstDateMatch(value = '') {
   const raw = text(value);
   const iso = raw.match(/\b(20\d{2}-\d{2}-\d{2})\b/);
   if (iso) return iso[1];
-  const monthDate = raw.match(/\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},\s+20\d{2}\b/i);
-  const parsed = new Date(monthDate ? monthDate[0] : raw);
+  const monthDate = raw.match(/\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2}),\s+(20\d{2})\b/i);
+  if (monthDate) {
+    const month = {
+      jan: '01',
+      feb: '02',
+      mar: '03',
+      apr: '04',
+      may: '05',
+      jun: '06',
+      jul: '07',
+      aug: '08',
+      sep: '09',
+      oct: '10',
+      nov: '11',
+      dec: '12'
+    }[monthDate[1].slice(0, 3).toLowerCase()];
+    return `${monthDate[3]}-${month}-${monthDate[2].padStart(2, '0')}`;
+  }
+  const parsed = new Date(raw);
   return Number.isNaN(parsed.getTime()) ? '' : parsed.toISOString().slice(0, 10);
 }
 
@@ -263,44 +280,49 @@ function extractReleaseRows(html = '', pageUrl = '') {
   return rows.sort((a, b) => a.anchor.localeCompare(b.anchor));
 }
 
-function dateSignalForObservation(observation = {}, releaseRow = null) {
-  if (releaseRow?.date || observation.release_row_date) {
+function hasExtractor(source = {}, name = '') {
+  const extractors = ensureArray(source.date_extractors);
+  return extractors.length === 0 || extractors.includes(name);
+}
+
+function dateSignalForObservation(source = {}, observation = {}, releaseRow = null) {
+  if (hasExtractor(source, 'release_row_date') && (releaseRow?.date || observation.release_row_date)) {
     return {
       effective_date: releaseRow?.date || observation.release_row_date,
       date_source: 'release_row_date'
     };
   }
-  if (observation.visible_date) {
+  if (hasExtractor(source, 'visible_date') && observation.visible_date) {
     return {
       effective_date: observation.visible_date,
       date_source: 'visible_date'
     };
   }
-  if (observation.visible_last_updated) {
+  if (hasExtractor(source, 'visible_last_updated') && observation.visible_last_updated) {
     return {
       effective_date: observation.visible_last_updated,
       date_source: 'visible_last_updated'
     };
   }
-  if (observation.structured_date_published) {
+  if (hasExtractor(source, 'structured_date_published') && observation.structured_date_published) {
     return {
       effective_date: observation.structured_date_published,
       date_source: 'structured_date_published'
     };
   }
-  if (observation.structured_date_modified) {
+  if (hasExtractor(source, 'structured_date_modified') && observation.structured_date_modified) {
     return {
       effective_date: observation.structured_date_modified,
       date_source: 'structured_date_modified'
     };
   }
-  if (observation.sitemap_lastmod) {
+  if (hasExtractor(source, 'sitemap_lastmod') && observation.sitemap_lastmod) {
     return {
       effective_date: observation.sitemap_lastmod,
       date_source: 'sitemap_lastmod'
     };
   }
-  if (observation.http_last_modified) {
+  if (hasExtractor(source, 'http_last_modified') && observation.http_last_modified) {
     return {
       effective_date: observation.http_last_modified,
       date_source: 'http_last_modified'
@@ -431,8 +453,9 @@ async function collectObservationsForSource(source, options = {}) {
   };
 }
 
-function changedDateField(previous = {}, current = {}) {
+function changedDateField(previous = {}, current = {}, source = {}) {
   for (const field of ['release_row_date', 'visible_date', 'visible_last_updated', 'structured_date_published', 'structured_date_modified', 'sitemap_lastmod', 'http_last_modified']) {
+    if (!hasExtractor(source, field)) continue;
     if (text(previous[field]) !== text(current[field]) && text(current[field])) return field;
   }
   return '';
@@ -553,28 +576,28 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
       : `Confirmed removed with HTTP ${current.removed_status}.`;
   } else if (!previous) {
     eventType = 'page_added';
-    const signal = dateSignalForObservation(current);
+    const signal = dateSignalForObservation(source, current);
     effectiveDate = signal.effective_date || detectedAt;
     dateSource = signal.effective_date ? signal.date_source : 'snapshot_page_added';
     reason = 'New page under monitored source.';
   } else {
     const previousAnchors = new Set(ensureArray(previous.anchors));
     const addedAnchors = ensureArray(current.anchors).filter(anchor => !previousAnchors.has(anchor));
-    const dateField = changedDateField(previous, current);
+    const dateField = changedDateField(previous, current, source);
     const normalizedChanged = contentHashEnabled &&
       text(previous.normalized_content_hash) !== text(current.normalized_content_hash);
     const releaseDiff = releaseRowDiff(previous.release_rows, current.release_rows);
     if (releaseDiff.type === 'added') {
       eventType = 'release_row_added';
       releaseRow = releaseDiff.row;
-      const signal = dateSignalForObservation(current, releaseRow);
+      const signal = dateSignalForObservation(source, current, releaseRow);
       effectiveDate = signal.effective_date || detectedAt;
       dateSource = signal.effective_date ? signal.date_source : 'snapshot_detected_at';
       reason = 'Release row/version added.';
     } else if (releaseDiff.type === 'changed') {
       eventType = 'release_row_changed';
       releaseRow = releaseDiff.row;
-      const signal = dateSignalForObservation(current, releaseRow);
+      const signal = dateSignalForObservation(source, current, releaseRow);
       effectiveDate = signal.effective_date || detectedAt;
       dateSource = signal.effective_date ? signal.date_source : 'snapshot_detected_at';
       reason = 'Release row content changed.';
@@ -584,7 +607,7 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
         anchor: addedAnchors.find(anchor => /\d+\.\d+\.\d+(?:[-\w.]*)?/i.test(anchor)),
         version: text(addedAnchors.find(anchor => /\d+\.\d+\.\d+(?:[-\w.]*)?/i.test(anchor))).match(/\d+\.\d+\.\d+(?:[-\w.]*)?/i)?.[0] || ''
       };
-      const signal = dateSignalForObservation(current, releaseRow);
+      const signal = dateSignalForObservation(source, current, releaseRow);
       effectiveDate = signal.effective_date || detectedAt;
       dateSource = signal.effective_date ? signal.date_source : 'snapshot_detected_at';
       reason = 'Release row/version/anchor added.';
@@ -605,8 +628,9 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
       reason = 'Date/metadata changed with normalized content hash unchanged.';
     } else if (addedAnchors.length > 0) {
       eventType = 'anchor_added';
-      effectiveDate = dateSignalForObservation(current).effective_date || detectedAt;
-      dateSource = dateSignalForObservation(current).effective_date ? dateSignalForObservation(current).date_source : 'snapshot_detected_at';
+      const signal = dateSignalForObservation(source, current);
+      effectiveDate = signal.effective_date || detectedAt;
+      dateSource = signal.effective_date ? signal.date_source : 'snapshot_detected_at';
       reason = 'Anchor added without material body change.';
     }
   }
@@ -851,7 +875,9 @@ function markdownReport(report) {
   lines.push(`- main article allowed count: ${report.summary.main_article_allowed_count}`);
   lines.push(`- watchlist only count: ${report.summary.watchlist_only_count}`);
   lines.push(`- duplicate event/evidence count: ${report.summary.duplicate_event_evidence_count}`);
-  lines.push('- `processed_source_event_ids` and `processed_evidence_ids` are bounded snapshot state and are not public newsletter content.');
+  lines.push('- `processed_source_event_ids`: prevents repeated diagnostic/source event reporting for the same change.');
+  lines.push('- `processed_evidence_ids`: prevents repeated article candidate conversion for source event evidence that survived into candidate artifacts.');
+  lines.push('- `page_removed` and `metadata_only_changed` may update `processed_source_event_ids` without adding `processed_evidence_ids`.');
   lines.push('');
   lines.push('## Date Quality');
   lines.push('');
@@ -875,6 +901,8 @@ function markdownReport(report) {
 function buildNextSnapshotWrites(source, snapshot, observations, events, detectedAt) {
   return {
     source,
+    previousSnapshot: snapshot,
+    events,
     snapshot: nextSnapshotForSource(source, snapshot, observations, events, detectedAt)
   };
 }
@@ -883,6 +911,42 @@ function buildSourceEventCandidates(events = [], sourceById = new Map()) {
   return ensureArray(events)
     .map(event => candidateFromEvent(event, sourceById.get(event.source_id)))
     .filter(Boolean);
+}
+
+function normalizeSet(values = []) {
+  if (values instanceof Set) return values;
+  return new Set(ensureArray(values).map(text).filter(Boolean));
+}
+
+function filterSnapshotWritesByIncludedEvidenceIds(snapshotWrites = [], includedEvidenceIds = new Set()) {
+  const included = normalizeSet(includedEvidenceIds);
+  return ensureArray(snapshotWrites).map(item => {
+    const previousSnapshot = item.previousSnapshot || emptySnapshot(item.source?.source_id);
+    const events = ensureArray(item.events);
+    const includedCandidateEvents = events.filter(event =>
+      event.candidate_allowed === true &&
+      included.has(event.evidence_id)
+    );
+    const diagnosticEvents = events.filter(event =>
+      event.event_type !== 'no_meaningful_change' &&
+      event.candidate_allowed !== true
+    );
+    return {
+      ...item,
+      snapshot: {
+        ...item.snapshot,
+        processed_source_event_ids: boundedHistory([
+          ...ensureArray(previousSnapshot.processed_source_event_ids),
+          ...diagnosticEvents.map(event => event.source_event_id),
+          ...includedCandidateEvents.map(event => event.source_event_id)
+        ]),
+        processed_evidence_ids: boundedHistory([
+          ...ensureArray(previousSnapshot.processed_evidence_ids),
+          ...includedCandidateEvents.map(event => event.evidence_id)
+        ])
+      }
+    };
+  });
 }
 
 function commitSourceSnapshotWrites({ root = process.cwd(), snapshotWrites = [], writeOptions = {} } = {}) {
@@ -1005,6 +1069,7 @@ module.exports = {
   collectAndClassifySourceEvents,
   collectObservationsForSource,
   commitSourceSnapshotWrites,
+  filterSnapshotWritesByIncludedEvidenceIds,
   loadRegistry,
   loadSnapshot,
   markdownReport,

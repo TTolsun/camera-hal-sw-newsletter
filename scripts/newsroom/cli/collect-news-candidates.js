@@ -62,6 +62,7 @@ const {
 } = require('../collect/source-intelligence-utils');
 const {
   commitSourceSnapshotWrites,
+  filterSnapshotWritesByIncludedEvidenceIds,
   runSourceMonitor
 } = require('../collect/source-monitor');
 
@@ -955,11 +956,23 @@ function urlDedupeKey(value) {
   }
 }
 
+function isSourceChangeEventCandidate(item = {}) {
+  return item.source_kind === 'source_change_event' ||
+    item.source_type === 'source_change_event' ||
+    item.sourceKind === 'source_change_event' ||
+    item.sourceType === 'source_change_event' ||
+    item.collectionMode === 'source-change-event' ||
+    item.collection_mode === 'source-change-event';
+}
+
 function dedupe(candidates) {
+  const ordered = [...candidates].sort((a, b) =>
+    Number(isSourceChangeEventCandidate(b)) - Number(isSourceChangeEventCandidate(a))
+  );
   const seenUrls = new Set();
   const seenTitles = new Set();
   const result = [];
-  for (const item of candidates) {
+  for (const item of ordered) {
     const urlKey = urlDedupeKey(item.url);
     const normalizedTitle = titleKey(item.title);
     if (seenUrls.has(urlKey)) continue;
@@ -1196,9 +1209,16 @@ async function main() {
   fs.writeFileSync(path.join(dateNewsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
   fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
   if (sourceMonitorResult) {
+    const includedEvidenceIds = new Set(candidates
+      .filter(isSourceChangeEventCandidate)
+      .map(candidate => candidate.evidence_id)
+      .filter(Boolean));
     commitSourceSnapshotWrites({
       root,
-      snapshotWrites: sourceMonitorResult.snapshotWrites
+      snapshotWrites: filterSnapshotWritesByIncludedEvidenceIds(
+        sourceMonitorResult.snapshotWrites,
+        includedEvidenceIds
+      )
     });
   }
 
@@ -1215,8 +1235,10 @@ if (require.main === module) {
 module.exports = {
   canonicalContentUrl,
   componentFromText,
+  dedupe,
   evidenceMetadata,
   fetchUrlForContent,
+  isSourceChangeEventCandidate,
   newsletterDateWindowEnd,
   normalizeCandidate,
   parseHtmlPage,

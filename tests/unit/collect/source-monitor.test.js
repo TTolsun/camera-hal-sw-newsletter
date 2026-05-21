@@ -7,6 +7,7 @@ const test = require('node:test');
 const {
   classifyObservation,
   commitSourceSnapshotWrites,
+  filterSnapshotWritesByIncludedEvidenceIds,
   runSourceMonitor,
   snapshotPath
 } = require('../../../scripts/newsroom/collect/source-monitor');
@@ -64,6 +65,7 @@ function page(overrides = {}) {
     url: 'https://source.android.com/docs/core/camera',
     canonical_url: 'https://source.android.com/docs/core/camera',
     title: 'AOSP Camera docs',
+    visible_date: '',
     visible_last_updated: '2026-05-20',
     structured_date_modified: '',
     sitemap_lastmod: '',
@@ -117,6 +119,46 @@ test('last updated plus material content change creates publishable source event
   assert.equal(event.date_confidence, 85);
   assert.equal(event.candidate_allowed, true);
   assert.equal(event.main_article_allowed, true);
+});
+
+test('date signal respects source date_extractors allowlist', () => {
+  const previous = page();
+  const current = page({
+    visible_date: '2026-05-14',
+    visible_last_updated: '2026-05-22',
+    normalized_content_hash: 'body-2'
+  });
+  const event = classifyObservation({
+    source,
+    previous,
+    current,
+    snapshot: snapshot({ pages: [previous] }),
+    detectedAt: '2026-05-22T00:00:00.000Z'
+  });
+
+  assert.equal(event.event_type, 'last_updated_changed');
+  assert.equal(event.date_source, 'visible_last_updated');
+  assert.equal(event.effective_date, '2026-05-22');
+});
+
+test('date extractor outputs not listed by registry are ignored as source date signal', () => {
+  const previous = page();
+  const current = page({
+    visible_date: '2026-05-14',
+    visible_last_updated: '2026-05-22',
+    normalized_content_hash: 'body-2'
+  });
+  const event = classifyObservation({
+    source: { ...source, date_extractors: ['structured_date_modified'] },
+    previous,
+    current,
+    snapshot: snapshot({ pages: [previous] }),
+    detectedAt: '2026-05-22T00:00:00.000Z'
+  });
+
+  assert.equal(event.event_type, 'content_changed_without_date_change');
+  assert.equal(event.date_source, 'content_hash_changed_without_date');
+  assert.equal(event.main_article_allowed, false);
 });
 
 test('content change without date is weak editor-review source event', () => {
@@ -215,6 +257,45 @@ test('AndroidX Camera release rows use release_row_date and release row evidence
   assert.equal(result.report.events[0].date_confidence, 95);
   assert.equal(result.report.events[0].release_row_version, '1.6.1');
   assert.match(result.report.events[0].release_row_anchor, /#camera-1\.6\.1$/);
+});
+
+test('AndroidX Camera release row extractor matches version heading page shape', async () => {
+  const url = androidxSource.root_url;
+  const canonicalUrl = normalizeSourceUrl(url);
+  const identity = sourceIdentityKey({ sourceId: androidxSource.source_id, url: canonicalUrl });
+  const result = await runSourceMonitor({
+    date: '2026-05-22',
+    registry: { schemaVersion: 1, sources: [androidxSource] },
+    snapshots: {
+      [androidxSource.source_id]: {
+        ...snapshot({ source_id: androidxSource.source_id }),
+        pages: [page({
+          source_identity_key: identity,
+          url,
+          canonical_url: canonicalUrl,
+          title: 'Camera release notes',
+          visible_last_updated: '',
+          normalized_content_hash: 'old-body'
+        })]
+      }
+    },
+    fetchImpl: async () => htmlResponse(`
+      <html>
+        <body>
+          <h3 id="version_170_alpha01">Version 1.7.0-alpha01</h3>
+          <p>March 11, 2026</p>
+          <p><code>androidx.camera:camera-*:1.7.0-alpha01</code> is released.</p>
+        </body>
+      </html>
+    `),
+    writeArtifacts: false
+  });
+
+  const event = result.report.events[0];
+  assert.equal(event.event_type, 'release_row_added');
+  assert.equal(event.release_row_version, '1.7.0-alpha01');
+  assert.equal(event.date_source, 'release_row_date');
+  assert.equal(event.effective_date, '2026-03-11');
 });
 
 test('existing release row body change creates release_row_changed', () => {
@@ -429,6 +510,48 @@ test('source monitor can write reports without committing processed snapshot ids
   const committed = JSON.parse(fs.readFileSync(snapshotPath(root, source.source_id), 'utf8'));
   assert.equal(committed.processed_source_event_ids.length, 1);
   assert.equal(committed.processed_evidence_ids.length, 1);
+});
+
+test('snapshot processed candidate ids are limited to final survivor evidence ids', async () => {
+  const previous = page();
+  const current = page({
+    visible_last_updated: '2026-05-22',
+    normalized_content_hash: 'body-2'
+  });
+  const result = await runSourceMonitor({
+    date: '2026-05-22',
+    registry: { schemaVersion: 1, sources: [source] },
+    snapshots: { [source.source_id]: snapshot({ pages: [previous] }) },
+    observations: { [source.source_id]: [current] },
+    writeArtifacts: false,
+    commitSnapshots: false
+  });
+  const event = result.report.events[0];
+  const dropped = filterSnapshotWritesByIncludedEvidenceIds(result.snapshotWrites, new Set());
+  const included = filterSnapshotWritesByIncludedEvidenceIds(result.snapshotWrites, new Set([event.evidence_id]));
+
+  assert.equal(dropped[0].snapshot.processed_source_event_ids.length, 0);
+  assert.equal(dropped[0].snapshot.processed_evidence_ids.length, 0);
+  assert.deepEqual(included[0].snapshot.processed_source_event_ids, [event.source_event_id]);
+  assert.deepEqual(included[0].snapshot.processed_evidence_ids, [event.evidence_id]);
+});
+
+test('diagnostic source events can be marked processed without evidence ids', async () => {
+  const previous = page();
+  const current = page({ visible_last_updated: '2026-05-22' });
+  const result = await runSourceMonitor({
+    date: '2026-05-22',
+    registry: { schemaVersion: 1, sources: [source] },
+    snapshots: { [source.source_id]: snapshot({ pages: [previous] }) },
+    observations: { [source.source_id]: [current] },
+    writeArtifacts: false,
+    commitSnapshots: false
+  });
+  const filtered = filterSnapshotWritesByIncludedEvidenceIds(result.snapshotWrites, new Set());
+
+  assert.equal(result.report.events[0].event_type, 'metadata_only_changed');
+  assert.deepEqual(filtered[0].snapshot.processed_source_event_ids, [result.report.events[0].source_event_id]);
+  assert.deepEqual(filtered[0].snapshot.processed_evidence_ids, []);
 });
 
 test('atomic snapshot write failure preserves the previous snapshot file', () => {
