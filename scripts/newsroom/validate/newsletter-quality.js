@@ -279,6 +279,10 @@ function dateTokens(value) {
   for (const match of raw.matchAll(monthPattern)) {
     tokens.add(`${match[3]}-${months[match[1].slice(0, 3).toLowerCase()]}-${String(match[2]).padStart(2, '0')}`);
   }
+  const dayMonthPattern = /\b(\d{1,2})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(20\d{2})\b/gi;
+  for (const match of raw.matchAll(dayMonthPattern)) {
+    tokens.add(`${match[3]}-${months[match[2].slice(0, 3).toLowerCase()]}-${String(match[1]).padStart(2, '0')}`);
+  }
   const parsed = raw.length <= 80 && /\b20\d{2}\b/.test(raw) ? Date.parse(raw) : NaN;
   if (Number.isFinite(parsed)) {
     const date = new Date(parsed);

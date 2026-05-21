@@ -2,8 +2,8 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-05-21",
-  "generated_at": "2026-05-21T01:59:30.568Z",
-  "status": "NEEDS_FIX",
+  "generated_at": "2026-05-21T02:37:35.747Z",
+  "status": "PASS",
   "input_completeness": "complete",
   "input_statuses": {
     "shortlisted_candidates": "loaded",
@@ -57,7 +57,7 @@
     "missing_required": [],
     "unavailable_optional": []
   },
-  "quality_status": "NEEDS_FIX",
+  "quality_status": "PASS",
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 3,

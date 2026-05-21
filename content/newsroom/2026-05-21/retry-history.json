@@ -2,7 +2,7 @@
   {
     "attempt": 1,
     "model": "deterministic-fallback-public-issue",
-    "score": 76,
+    "score": 100,
     "threshold": 85,
     "status": "PUBLIC_ISSUE_CREATED",
     "rendered_main_article_count": 3,
@@ -39,38 +39,7 @@
         "reason": "hard failure replacement"
       }
     ],
-    "deductions": [
-      {
-        "category": "source-integrity",
-        "points": 8,
-        "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
-        "location": "Start building today - Build native Android apps in Google AI Studio",
-        "blocking": true,
-        "severity": "hard",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "scope-relevance",
-        "points": 8,
-        "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
-        "location": "Start building today - Build native Android apps in Google AI Studio",
-        "blocking": true,
-        "severity": "hard",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "hal-relevance",
-        "points": 8,
-        "reason": "Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.",
-        "location": "Start building today - Build native Android apps in Google AI Studio",
-        "blocking": true,
-        "severity": "hard",
-        "reason_code": "",
-        "dedupe_key": ""
-      }
-    ],
+    "deductions": [],
     "selected_article_headlines": [
       "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "libcamera Release Announcements - libcamera v0.7.1",

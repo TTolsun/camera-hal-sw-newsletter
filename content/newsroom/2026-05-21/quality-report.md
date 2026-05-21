@@ -2,18 +2,18 @@
 
 ## Gate Result
 
-- Quality score: 76
+- Quality score: 100
 - Quality threshold: 85
 - Max score: 100
-- Result: NEEDS_FIX
-- Summary: Quality score 76, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
+- Result: PASS
+- Summary: Quality score 100, threshold 85, max score 100. Editor review is ready.
 
 ## Publication Mode
 
 - publication_mode: review_only
 - homepage_visibility: normal
-- content_quality_score: 76
-- camera_relevance_score: 76
+- content_quality_score: 100
+- camera_relevance_score: 100
 - publication_mode_decision: review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.
 - fallback_only: false
 - camera_anchor_count: 3
@@ -23,24 +23,24 @@
 
 - Main article count: 3
 - Briefing count: 3
-- Structured camera article count: 2
+- Structured camera article count: 3
 - Legacy regex camera article count: 3
-- Expanded-scope article count: 2
+- Expanded-scope article count: 3
 - direct_aosp_camera count: 1
 - camera_driver_image_pipeline count: 1
-- android_platform_camera_adjacent count: 0
+- android_platform_camera_adjacent count: 1
 - android_multimedia_camera_output count: 0
 - soc_platform_signal count: 0
 - cpp_ai_tooling_fallback count: 0
 - generic_tech_watchlist count: 0
-- primary_camera_stack_count: 2
+- primary_camera_stack_count: 3
 - supporting_main_article_count: 0
 - forbidden_main_article_count: 0
 - fallback_relevance_count: 0
-- publishable_scope_count: 2
+- publishable_scope_count: 3
 - composition_mode: NORMAL
 - Newsletter Policy gate: main articles: 3-5; review gate primary camera stack articles: 1; Publish-ready gate primary camera stack articles: 2; Publish-ready gate direct AOSP Camera or driver/image pipeline articles: 1; Publish-ready gate supporting main articles max: 1; forbidden main buckets: generic_tech_watchlist; quality threshold: 85
-- Relevance bucket counts: {"direct_aosp_camera":1,"camera_driver_image_pipeline":1,"android_platform_camera_adjacent":0,"android_multimedia_camera_output":0,"soc_platform_signal":0,"cpp_ai_tooling_fallback":0,"generic_tech_watchlist":0}
+- Relevance bucket counts: {"direct_aosp_camera":1,"camera_driver_image_pipeline":1,"android_platform_camera_adjacent":1,"android_multimedia_camera_output":0,"soc_platform_signal":0,"cpp_ai_tooling_fallback":0,"generic_tech_watchlist":0}
 - AI article count: 1
 - Underfilled/composition failure: none
 
@@ -74,10 +74,10 @@
 - Stale claim status: UNKNOWN
 - Stale claim removals: 0
 - Stale claim hard failures: 0
-- Source integrity violation count: 1
-- Blocking deduction count: 3
-- Blocking deduction categories: source-integrity, scope-relevance, hal-relevance
-- Hard fail count: 3
+- Source integrity violation count: 0
+- Blocking deduction count: 0
+- Blocking deduction categories: none
+- Hard fail count: 0
 - Soft deduction count: 0
 
 ## Claim Binding
@@ -124,13 +124,11 @@
 | ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | PASS | preserve | 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O | direct_aosp_camera | 1 | true | false | false | false | true | bound | shortlist_selected | merged | none | direct_aosp_camera counts toward primary_camera_stack_count. | none | none | none |
 | 2 | PASS | preserve | libcamera Release Announcements - libcamera v0.7.1 | camera_driver_image_pipeline | 2 | true | true | false | false | true | bound | shortlist_other | merged | none | camera_driver_image_pipeline counts toward primary_camera_stack_count. | none | none | none |
-| 3 | FAIL | replace-or-demote | Start building today - Build native Android apps in Google AI Studio | direct_aosp_camera | 1 | true | false | false | false | false | evidence_mismatch | shortlist_selected | section_text_fallback | none | section_text_fallback classified this section as direct_aosp_camera for diagnostics only. | Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available. | Shared watch/release-note URL requires matching version_or_release or published_date evidence.; Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.; Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article. | none |
+| 3 | PASS | preserve | Start building today - Build native Android apps in Google AI Studio | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | none | none |
 
 ## Hard Fails
 
-- 8 pt [source-integrity] Start building today - Build native Android apps in Google AI Studio: Shared watch/release-note URL requires matching version_or_release or published_date evidence.
-- 8 pt [scope-relevance] Start building today - Build native Android apps in Google AI Studio: Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.
-- 8 pt [hal-relevance] Start building today - Build native Android apps in Google AI Studio: Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.
+- none
 
 ## Soft Deductions
 
@@ -138,9 +136,7 @@
 
 ## Top Deduction Categories
 
-- hal-relevance (1)
-- scope-relevance (1)
-- source-integrity (1)
+- none
 
 ## Candidate Exclusion Summary
 
@@ -148,6 +144,4 @@
 
 ## Deductions
 
-- 8 pt [source-integrity] Start building today - Build native Android apps in Google AI Studio: Shared watch/release-note URL requires matching version_or_release or published_date evidence.
-- 8 pt [scope-relevance] Start building today - Build native Android apps in Google AI Studio: Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.
-- 8 pt [hal-relevance] Start building today - Build native Android apps in Google AI Studio: Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.
+- none

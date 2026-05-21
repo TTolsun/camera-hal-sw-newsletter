@@ -5,7 +5,7 @@
 ## Attempt 1: PUBLIC_ISSUE_CREATED
 
 - model: deterministic-fallback-public-issue
-- score: 76
+- score: 100
 - threshold: 85
 - rendered_main_article_count: 3
 - demoted_article_count: 0

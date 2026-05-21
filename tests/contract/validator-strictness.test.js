@@ -298,6 +298,33 @@ function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictRep
   writeJson(path.join(newsroomDir, 'quality-report.json'), report);
 }
 
+function writeReviewOnlyQualityStatus(root, date, overrides = {}) {
+  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+    date,
+    title: 'Camera HAL SW Newsletter',
+    summary: 'Summary',
+    html: `newsletters/${date}/index.html`,
+    md: `newsletters/${date}/newsletter.md`,
+    tags: ['camera-hal'],
+    publication_mode: 'review_only',
+    homepage_visibility: 'normal',
+    fallback_only: false,
+    camera_anchor_count: articlePolicy.mainArticleCount.min
+  }]);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    publication_mode: 'review_only',
+    final_publish_ready: false,
+    editor_review_required: true,
+    public_newsletter_ready: true,
+    review_publication_ready: true,
+    diagnostics_only: false,
+    homepage_visible_after_merge: true,
+    review_publication_ready_reason: 'Public newsletter files were generated for editor-approved review-only publication.',
+    ...overrides
+  });
+}
+
 function writeDiagnosticsOnlyStatus(root, date, overrides = {}) {
   writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
     date,
@@ -666,6 +693,34 @@ test('newsletter date target makes validate-quality missing claims strict', () =
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /quality report is stale/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
+});
+
+test('review-only publication target does not make claim-contract drift a hard quality failure', () => {
+  const root = tempRoot('validate-quality-review-only-missing-claims-');
+  const date = '2026-04-01';
+  writeMissingClaimsQualityFixture(root, { date });
+  writeReviewOnlyQualityStatus(root, date);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.doesNotMatch(result.stderr, /quality report is stale/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
+});
+
+test('review-only publication target still rejects lowered quality threshold', () => {
+  const root = tempRoot('validate-quality-review-only-low-threshold-');
+  const date = '2026-04-01';
+  writeQualityFixture(root, { date });
+  writeReviewOnlyQualityStatus(root, date);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /quality threshold is below current Newsletter Policy threshold/);
   assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
 });
 

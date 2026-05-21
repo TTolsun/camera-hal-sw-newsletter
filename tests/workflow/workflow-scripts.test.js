@@ -5326,6 +5326,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
+  assert.match(createPrStep, /base: main/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
@@ -5450,6 +5451,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.doesNotMatch(stage3, /--no-llm-credentials/);
   assert.doesNotMatch(stage3, /npm run collect/);
   assert.match(stage3, /branch: newsroom-final\/\$\{\{ steps\.meta\.outputs\.date \}\}/);
+  assert.match(stage3, /base: main/);
   assert.match(stage3, /manual-candidates\.json/);
   assert.match(stage3, /merged-candidates\.json/);
   assert.match(stage3, /collection-intent\.json/);
