@@ -209,6 +209,8 @@ function articleClaimContractPrompt() {
     'Claim binding contract: 모든 main article은 claims[]를 포함해야 합니다.',
     '각 claims[] item은 claim_id, text, claim_type, evidence_ids, source_urls, impact_level, overclaim_risk를 포함해야 합니다.',
     'claim_type은 fact, inference, recommendation, risk_note, limitation 중 하나여야 합니다.',
+    'claim impact_level은 direct_hal_contract, camera_framework_behavior, app_api_or_framework_adjacent, driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd, performance_latency_thermal, soc_resource_contention, native_tooling_workflow, no_hal_runtime_impact, unknown 중 하나여야 합니다.',
+    'candidate impact_claim_level 값인 direct_hal_change, camera_stack_direct, android_framework_adjacent, tooling_supporting, watch_only를 claims[].impact_level에 그대로 복사하지 마세요.',
     'source-backed verified_facts[], confirmed_facts[], 또는 구체적인 evidence_summary text에는 대응되는 claim_type=fact claim이 최소 1개 있어야 합니다.',
     'Fact claims는 제공된 seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, source_extraction facts의 item-level evidence ids를 cite해야 합니다. evidence_pack_ids만으로 fact support를 만들지 마세요.',
     'evidence URL에 fragment가 있으면 source_urls에서 release/version/section URL fragment를 보존하세요. 특히 CameraX release-note anchor를 보존해야 합니다.',
