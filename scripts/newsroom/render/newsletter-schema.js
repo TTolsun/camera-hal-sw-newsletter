@@ -155,6 +155,25 @@ const reporterCandidate = {
     evidenceLevel: string,
     finalSelectionEligibility: string,
     source_kind: string,
+    article_group_key: string,
+    tooling_workflow_type: string,
+    native_workflow_evidence_score: { type: 'NUMBER' },
+    related_context_candidates: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: {
+          title: string,
+          url: string,
+          context_role: string,
+          context_usage_label: string,
+          context_usage_allowed: { type: 'BOOLEAN' },
+          can_create_independent_article: { type: 'BOOLEAN' },
+          blocked_from_independent_main_reason: string,
+          article_group_key: string
+        }
+      }
+    },
     source_gap_risk: { type: 'BOOLEAN' },
     main_eligible: { type: 'BOOLEAN' },
     briefing_only: { type: 'BOOLEAN' },
@@ -298,6 +317,8 @@ const section = {
     article_type: string,
     source_candidate_url: string,
     source_candidate_hash: string,
+    article_group_key: string,
+    tooling_workflow_type: string,
     relevance_bucket: string,
     editorial_priority: { type: 'NUMBER' },
     counts_as_primary_camera_topic: { type: 'BOOLEAN' },
@@ -388,6 +409,17 @@ const editorSchema = {
       items: section
     },
     action_items: stringArray,
+    explicitly_demoted_groups: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: {
+          article_group_key: string,
+          demotion_reason: string
+        },
+        required: ['article_group_key', 'demotion_reason']
+      }
+    },
     references: {
       type: 'ARRAY',
       items: source

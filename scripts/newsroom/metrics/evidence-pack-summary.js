@@ -523,6 +523,11 @@ function normalizeArticle(candidate = {}, capsule = {}, warnings = null) {
     source_reliability: sourceReliability(candidate),
     freshness_window: freshnessWindow(candidate),
     relevance_bucket: firstText(candidate.relevance_bucket, capsule.relevance_bucket) || 'unknown',
+    article_group_key: firstText(candidate.article_group_key, capsule.article_group_key) || 'unknown',
+    tooling_workflow_type: firstText(candidate.tooling_workflow_type, capsule.tooling_workflow_type) || '',
+    related_context_candidates: ensureArray(candidate.related_context_candidates).length > 0
+      ? candidate.related_context_candidates
+      : ensureArray(capsule.related_context_candidates),
     finalSelectionEligibility: finalSelectionEligibility(candidate),
     source_gap_risk: firstBoolean(candidate.source_gap_risk, candidate.sourceGapRisk),
     has_dated_evidence: firstBoolean(candidate.has_dated_evidence, candidate.hasDatedEvidence),

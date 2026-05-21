@@ -86,8 +86,43 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.equal(capsule.requires_conditional_evidence, false);
   assert.equal(capsule.conditional_evidence_type, '');
   assert.equal(capsule.selection.final_selected, true);
+  assert.deepEqual(capsule.related_context_candidates, []);
   assert.ok(capsule.evidence.length > 0);
   assert.ok(capsule.estimated_tokens <= 1100);
+});
+
+test('article capsule carries related context labels without making them facts', () => {
+  const capsule = buildArticleCapsule(candidate({
+    title: 'Android native tooling representative',
+    url: 'https://example.com/android-tooling-main',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    article_group_key: 'android_native_tooling_workflow',
+    tooling_workflow_type: 'native_tooling_workflow',
+    related_context_candidates: [{
+      title: 'Android CLI Now Stable 1.0',
+      url: 'https://example.com/android-cli',
+      relevance_bucket: 'cpp_ai_tooling_fallback',
+      finalSelectionEligibility: 'short',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      source_gap_risk: false,
+      context_usage_allowed: true,
+      article_group_key: 'android_native_tooling_workflow'
+    }, {
+      title: '17 Things parent roundup',
+      url: 'https://example.com/roundup',
+      context_role: 'parent_roundup_context_only',
+      context_usage_allowed: false,
+      article_group_key: 'android_native_tooling_workflow'
+    }]
+  }));
+
+  assert.equal(capsule.article_group_key, 'android_native_tooling_workflow');
+  assert.equal(capsule.tooling_workflow_type, 'native_tooling_workflow');
+  assert.equal(capsule.related_context_candidates.length, 2);
+  assert.equal(capsule.related_context_candidates[0].context_usage_label, 'allowed_supporting_context');
+  assert.equal(capsule.blocked_context_candidates.length, 1);
+  assert.equal(capsule.blocked_context_candidates[0].context_usage_label, 'parent_roundup_context_only');
 });
 
 test('article capsule carries compact seed evidence by id instead of full evidence pack', () => {

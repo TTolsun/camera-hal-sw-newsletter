@@ -41,8 +41,13 @@ const {
 } = require('../collect/outgoing-links');
 const {
   BUCKETS,
-  classifyAospCameraStackCandidate
+  classifyAospCameraStackCandidate,
+  detectNativeAndroidToolingWorkflow
 } = require('../common/aosp-camera-scope');
+const {
+  ANDROID_NATIVE_TOOLING_GROUP_KEY,
+  NATIVE_TOOLING_WORKFLOW_TYPE
+} = require('../common/article-groups');
 const {
   analyzeLinkedEvidenceForCandidates,
   writeLinkedEvidenceDiagnosticsArtifacts
@@ -112,9 +117,9 @@ const WATCH_CANDIDATE_MODES = new Set(['html-watch-page', 'release-note-page', '
 const FINAL_SELECTION_ELIGIBILITIES = new Set(['main', 'short', 'watchlist', 'exclude']);
 const FALLBACK_INELIGIBLE_SOURCE_KINDS = new Set(['documentation_page', 'rolling_page', 'blog_index']);
 const ITEM_LEVEL_SOURCE_KINDS = new Set(['rss_item', 'release_note_item', 'blog_post_item']);
-const VERSION_OR_RELEASE_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|v?\d+\.\d+\.\d+(?:[-\w.]*)?|release notes?|security bulletin)\b/i;
-const API_OR_COMPONENT_PATTERN = /\b(?:CameraX|androidx\.camera|Camera2|Camera HAL|AOSP Camera|CDD|CTS|VTS|Camera ITS|Android framework|Android Security Bulletin|libcamera|V4L2|media controller|image sensor|ISP|MIPI\s*CSI-?2|DMA-?BUF|SoC|CPU|GPU|NPU|DSP|DVFS|EAS|LLVM|Clang|GCC|NDK|SDK|API)\b/i;
-const BEHAVIOR_CHANGE_PATTERN = /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|remove(?:d|s)?|deprecat(?:ed|es)|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?|migrat(?:ed|es|ion)|security|vulnerability|CVE|bulletin|release(?:d|s)?|compatibility|requirement|API|behavior)\b/i;
+const VERSION_OR_RELEASE_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|Android\s+CLI\s+\d+(?:\.\d+){0,2}|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|v?\d+\.\d+\.\d+(?:[-\w.]*)?|release notes?|security bulletin|stable\s+\d+(?:\.\d+)*)\b/i;
+const API_OR_COMPONENT_PATTERN = /\b(?:CameraX|androidx\.camera|Camera2|Camera HAL|AOSP Camera|CDD|CTS|VTS|Camera ITS|Android framework|Android Security Bulletin|Android Studio|Android CLI|Google AI Studio|Gemini in Android Studio|Android Gradle Plugin|AGP|Gradle|libcamera|V4L2|media controller|image sensor|ISP|MIPI\s*CSI-?2|DMA-?BUF|SoC|CPU|GPU|NPU|DSP|DVFS|EAS|LLVM|Clang|GCC|NDK|JNI|SDK|API)\b/i;
+const BEHAVIOR_CHANGE_PATTERN = /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|remove(?:d|s)?|deprecat(?:ed|es)|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?|migrat(?:ed|es|ion)|accelerat(?:e|ed|es|ing)|build(?:s|ing)?|test(?:s|ing)?|debug(?:s|ging)?|profil(?:e|ed|es|ing)|stable|security|vulnerability|CVE|bulletin|release(?:d|s)?|compatibility|requirement|API|behavior)\b/i;
 
 let sectionMap = { ...DEFAULT_SECTION_MAP };
 let activeSourcesPath = legacySourcesPath;
@@ -361,6 +366,46 @@ function firstBehavior(value) {
   return sentences.find(sentence => BEHAVIOR_CHANGE_PATTERN.test(sentence)) || sentences[0] || '';
 }
 
+function isOfficialAndroidDeveloperSource(source = {}, raw = {}) {
+  const sourceIdentity = [
+    source.id,
+    source.name
+  ].map(item => String(item || '')).join(' ');
+  const sourceUrls = [
+    source.id,
+    source.name,
+    source.url,
+    source.sourceUrl,
+    raw.url,
+    raw.sourceUrl,
+    raw.source_url
+  ].map(item => String(item || '')).join(' ');
+  return /\bandroid-developers-blog\b|Android Developers Blog/i.test(sourceIdentity) ||
+    /android-developers\.googleblog\.com/i.test(sourceUrls);
+}
+
+function nativeAndroidToolingEvidence(raw = {}, source = {}, title = '', summary = '') {
+  const candidate = {
+    ...raw,
+    title,
+    summary,
+    source: source.name,
+    source_name: source.name,
+    category: source.category,
+    source_category: source.category,
+    section: source.section,
+    source_section: source.section,
+    usageHint: source.usageHint,
+    source_usage_hint: source.usageHint
+  };
+  const detected = detectNativeAndroidToolingWorkflow(candidate);
+  return {
+    ...detected,
+    official_android_developer_source: isOfficialAndroidDeveloperSource(source, raw),
+    eligible: detected.detected && isOfficialAndroidDeveloperSource(source, raw)
+  };
+}
+
 function hasBehaviorChangeForRaw(raw, behaviorChange) {
   if (raw?.source_extraction?.mode === 'roundup_child_topic') {
     return ROUNDUP_BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
@@ -500,9 +545,18 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
   const sourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
   const sourceRole = String(raw.sourceRole || raw.source_role || source.sourceRole || source.source_role || '').trim();
   const evidenceText = `${title} ${summary} ${raw.version_or_release || ''} ${raw.api_or_component || ''} ${raw.behavior_change || ''}`;
+  const toolingEvidence = nativeAndroidToolingEvidence(raw, source, title, summary);
   const versionOrRelease = String(raw.version_or_release || firstMatch(VERSION_OR_RELEASE_PATTERN, evidenceText)).trim();
-  const apiOrComponent = String(raw.api_or_component || componentFromText(evidenceText, source)).trim();
-  const behaviorChange = String(raw.behavior_change || firstBehavior(summary || title)).trim();
+  const apiOrComponent = String(
+    raw.api_or_component ||
+    componentFromText(evidenceText, source) ||
+    (toolingEvidence.eligible ? 'Android native tooling workflow' : '')
+  ).trim();
+  const behaviorChange = String(
+    raw.behavior_change ||
+    firstBehavior(summary || title) ||
+    (toolingEvidence.eligible ? 'Official Android tooling article describes native Android app workflow behavior.' : '')
+  ).trim();
   const hasPublishedDate = Boolean(String(raw.publishedAt || raw.published_date || '').trim());
   const hasVersionOrRelease = Boolean(versionOrRelease);
   const hasApiOrComponent = Boolean(apiOrComponent);
@@ -519,7 +573,9 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
   const datedItemMissingEvidence = itemLevel &&
     sourceKind !== 'release_note_item' &&
     (!hasPublishedDate || !hasApiOrComponent || !hasBehaviorChange);
-  const parserItemMissingCoreEvidence = releaseNoteItemMissingEvidence || datedItemMissingEvidence;
+  const officialDatedNativeTooling = toolingEvidence.eligible && hasPublishedDate && hasApiOrComponent && hasBehaviorChange;
+  const parserItemMissingCoreEvidence = !officialDatedNativeTooling &&
+    (releaseNoteItemMissingEvidence || datedItemMissingEvidence);
   const referenceIndex = sourceRole === 'reference_index' || sourceRole === 'official_documentation_reference';
   const sourceGapRisk = referenceIndex || fallbackIneligible || parserItemMissingCoreEvidence || evidenceScore < 6;
   const mainEligible = !referenceIndex && !candidateOnly && !sourceGapRisk && evidenceScore >= 6 && score >= 30;
@@ -539,7 +595,8 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     briefing_only: sourceGapRisk && !mainEligible,
     reference_only: referenceIndex || fallbackIneligible || (sourceGapRisk && evidenceScore < 4),
     evidence_score: evidenceScore,
-    source_hint_api_or_component: source.category
+    source_hint_api_or_component: source.category,
+    native_android_tooling: toolingEvidence
   };
 }
 
@@ -618,6 +675,19 @@ function normalizeCandidate(raw) {
     relevance_bucket_hint: raw.relevanceBucketHint || raw.relevance_bucket_hint || ''
   });
   let classification = classifySelection(raw, source, metadata, score, candidateOnly);
+  const nativeTooling = metadata.native_android_tooling || {};
+  if (
+    nativeTooling.eligible === true &&
+    scopeMetadata.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK &&
+    classification.hasDatedEvidence === true &&
+    metadata.source_gap_risk === false
+  ) {
+    classification = {
+      ...classification,
+      finalSelectionEligibility: 'short',
+      selectionExclusionReason: 'Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.'
+    };
+  }
   if (scopeMetadata.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
     classification = {
       ...classification,
@@ -721,6 +791,21 @@ function normalizeCandidate(raw) {
     parent_url: parentUrl || '',
     parentTitle: raw.parentTitle || raw.parent_title || '',
     parent_title: raw.parentTitle || raw.parent_title || '',
+    parentCanonicalUrl: canonicalContentUrl(raw.parentCanonicalUrl || raw.parent_canonical_url || parentUrl || ''),
+    parent_canonical_url: canonicalContentUrl(raw.parentCanonicalUrl || raw.parent_canonical_url || parentUrl || ''),
+    roundupItemIndex: raw.roundupItemIndex ?? raw.roundup_item_index ?? raw.source_extraction?.roundup_item_index ?? null,
+    roundup_item_index: raw.roundupItemIndex ?? raw.roundup_item_index ?? raw.source_extraction?.roundup_item_index ?? null,
+    anchorText: raw.anchorText || raw.anchor_text || raw.source_extraction?.anchor_text || '',
+    anchor_text: raw.anchorText || raw.anchor_text || raw.source_extraction?.anchor_text || '',
+    article_group_key: nativeTooling.eligible === true &&
+      scopeMetadata.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK
+      ? ANDROID_NATIVE_TOOLING_GROUP_KEY
+      : raw.article_group_key || raw.articleGroupKey || '',
+    tooling_workflow_type: nativeTooling.eligible === true &&
+      scopeMetadata.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK
+      ? NATIVE_TOOLING_WORKFLOW_TYPE
+      : raw.tooling_workflow_type || raw.toolingWorkflowType || scopeMetadata.tooling_workflow_type || '',
+    native_workflow_evidence_score: scopeMetadata.native_workflow_evidence_score || nativeTooling.native_workflow_evidence_score || 0,
     outgoing_links: normalizeOutgoingLinks(raw.outgoing_links || raw.outgoingLinks),
     sourceMonth: raw.sourceMonth || raw.source_month || '',
     source_month: raw.sourceMonth || raw.source_month || '',

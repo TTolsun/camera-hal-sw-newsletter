@@ -8,6 +8,14 @@ const {
   normalizeAospCameraScope
 } = require('../common/aosp-camera-scope');
 const {
+  ANDROID_NATIVE_TOOLING_GROUP_KEY,
+  NATIVE_TOOLING_WORKFLOW_TYPE,
+  attachRelatedContextToSelected,
+  candidateGroupKey,
+  groupCoverageSummary,
+  isNativeToolingWorkflow
+} = require('../common/article-groups');
+const {
   POLICY_REL_PATH,
   articlePolicy,
   articleCountRangeText,
@@ -411,13 +419,21 @@ function hasAiValue(candidate) {
 }
 
 function hasCameraPlatformValue(candidate) {
+  const bucket = candidateBucket(candidate);
+  if (bucket === BUCKETS.GENERIC_TECH_WATCHLIST) return false;
+  if (isNativeToolingWorkflow({
+    ...candidate,
+    ...candidateScope(candidate)
+  })) {
+    return false;
+  }
   if (hasSelectableScope(candidate)) return true;
   return /Camera HAL|Android Camera|CameraX|AOSP Camera|Camera2|camera|stream|buffer|metadata|request|result|CTS|VTS|Camera ITS|CDD|libcamera|V4L2/i
     .test(candidateBody(candidate));
 }
 
 function hasCppFallbackValue(candidate) {
-  return /C\+\+|cpp|LLVM|Clang|GCC|NDK|toolchain|sanitizer|AI coding|LLM agent|on-device AI/i.test(candidateBody(candidate));
+  return /C\+\+|cpp|LLVM|Clang|GCC|NDK|toolchain|sanitizer|AI coding|LLM agent|on-device AI|Android Studio|Android CLI|Google AI Studio|Gemini in Android Studio|native Android app/i.test(candidateBody(candidate));
 }
 
 function hasPlatformSignalTerm(candidate) {
@@ -712,6 +728,13 @@ function decorateCandidate(candidate, newsletterDate, options = {}) {
   return {
     ...candidate,
     ...scope,
+    article_group_key: candidate.article_group_key ||
+      (scope.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK &&
+        text(scope.tooling_workflow_type || candidate.tooling_workflow_type) === NATIVE_TOOLING_WORKFLOW_TYPE
+        ? ANDROID_NATIVE_TOOLING_GROUP_KEY
+        : candidateGroupKey({ ...candidate, ...scope })),
+    tooling_workflow_type: text(candidate.tooling_workflow_type || scope.tooling_workflow_type),
+    native_workflow_evidence_score: number(candidate.native_workflow_evidence_score ?? scope.native_workflow_evidence_score),
     ...windowMetadata,
     url: candidateUrl(candidate),
     published_date: publishedDate(candidate),
@@ -733,6 +756,21 @@ function decorateCandidate(candidate, newsletterDate, options = {}) {
 }
 
 function deterministicCandidateSort(a, b) {
+  const nativeGroupDelta = number(b.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY) -
+    number(a.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY);
+  if (nativeGroupDelta === 0 && a.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY && b.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY) {
+    const sourceQualityRank = value => text(value.source_quality_status) === 'allowed' ? 1 : 0;
+    const datedOfficialRank = value => (text(value.reliability) === 'official' && publishedDate(value)) ? 1 : 0;
+    const childRank = value => text(value.sourceType || value.source_type) === 'roundup_child' || text(value.parentUrl || value.parent_url) ? 1 : 0;
+    return sourceQualityRank(b) - sourceQualityRank(a) ||
+      number(b.source_gap_risk === false) - number(a.source_gap_risk === false) ||
+      datedOfficialRank(b) - datedOfficialRank(a) ||
+      number(b.native_workflow_evidence_score) - number(a.native_workflow_evidence_score) ||
+      childRank(b) - childRank(a) ||
+      number(b.context_usage_allowed === true) - number(a.context_usage_allowed === true) ||
+      normalizeUrl(candidateUrl(a)).localeCompare(normalizeUrl(candidateUrl(b))) ||
+      normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
+  }
   return number(a.editorial_priority, 6) - number(b.editorial_priority, 6) ||
     cameraReleaseVersionRank(a).kind - cameraReleaseVersionRank(b).kind ||
     cameraReleaseVersionRank(b).weight - cameraReleaseVersionRank(a).weight ||
@@ -936,16 +974,32 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
   );
   const selected = [];
   const mainEligible = candidates.filter(candidate => candidate.main_article_score_eligible !== false);
+  const nativeToolingPool = mainEligible.filter(candidate =>
+    isNativeToolingWorkflow(candidate) ||
+    candidate.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY ||
+    text(candidate.tooling_workflow_type) === NATIVE_TOOLING_WORKFLOW_TYPE
+  );
+  const nativeToolingUrls = new Set(nativeToolingPool.map(candidate => candidate.normalized_url).filter(Boolean));
   const strongCameraPool = mainEligible.filter(candidate => candidate.camera_platform_candidate);
   const optionalCameraPool = mainEligible.filter(candidate =>
     candidate.optional_ai_cpp_candidate && candidate.camera_platform_candidate
   );
-  const adjacentPool = mainEligible.filter(candidate => !strongCameraPool.includes(candidate));
+  const adjacentPool = mainEligible.filter(candidate =>
+    !strongCameraPool.includes(candidate) &&
+    !nativeToolingUrls.has(candidate.normalized_url)
+  );
 
   for (const candidate of strongCameraPool) {
     if (selected.length >= maxArticles) break;
     const slot = candidate.optional_ai_cpp_candidate ? 'camera-platform-optional-ai-cpp' : 'camera-platform';
     pushUnique(selected, candidate, slot);
+  }
+  if (
+    selected.length < maxArticles &&
+    nativeToolingPool.length > 0 &&
+    compositionSummary(selected).supporting_main_article_count < publishReadyCompositionPolicy.supportingMainMaxAllowed
+  ) {
+    pushUnique(selected, nativeToolingPool[0], 'android-native-tooling-supporting');
   }
   for (const candidate of optionalCameraPool) {
     if (selected.length >= Math.min(maxArticles, minArticles)) break;
@@ -1181,6 +1235,18 @@ function summarizeBuckets(candidates) {
     .sort((a, b) => number(a.bucket === BUCKETS.GENERIC_TECH_WATCHLIST) - number(b.bucket === BUCKETS.GENERIC_TECH_WATCHLIST) || a.bucket.localeCompare(b.bucket));
 }
 
+function groupSummary(candidates) {
+  const counts = new Map();
+  for (const candidate of ensureArray(candidates)) {
+    const key = candidateGroupKey(candidate);
+    if (!key) continue;
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([article_group_key, count]) => ({ article_group_key, count }))
+    .sort((a, b) => a.article_group_key.localeCompare(b.article_group_key));
+}
+
 function bucketCountMap(candidates) {
   const counts = {
     [BUCKETS.DIRECT_AOSP_CAMERA]: 0,
@@ -1375,13 +1441,23 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     ...options,
     selectionWindowPolicy
   });
-  const selected = selectionResult.selected;
+  const selected = attachRelatedContextToSelected(selectionResult.selected, [
+    rawCandidates,
+    shortlist,
+    excluded,
+    referenceContextCandidates
+  ]);
   const windowDiagnostics = selectionResult.diagnostics;
   const reserve = reserveCandidates(selectionCandidatePool, selected, options);
   const warnings = selectionWarnings(selected);
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
   const eligibleComposition = compositionSummary(shortlist);
+  const groupCoverage = groupCoverageSummary({
+    selectedGroupKeys: selected.map(candidateGroupKey),
+    renderedGroupKeys: [],
+    demotedGroups: []
+  });
   const preflightSummary = candidatePoolPreflightSummary(shortlist, selected, reserve);
   const shortageReasonCodes = candidatePoolShortageReasonCodes(preflightSummary);
   const mode = compositionMode(selected, errors);
@@ -1418,6 +1494,13 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     eligible_candidate_count: shortlist.length,
     deterministic_selected_count: selected.length,
     selected_article_count: selected.length,
+    selected_group_count: groupCoverage.selected_group_count,
+    rendered_group_count: null,
+    explicitly_demoted_group_count: 0,
+    selected_representative_group_keys: groupCoverage.selected_representative_group_keys,
+    rendered_group_keys: [],
+    explicitly_demoted_group_keys: [],
+    selected_group_summary: groupSummary(selected),
     primary_selected_article_count: selected.length,
     reserve_candidate_count: reserve.length,
     demoted_candidate_count: 0,
@@ -1446,6 +1529,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
     relevance_bucket_summary: summarizeBuckets(shortlist),
     selected_relevance_bucket_summary: summarizeBuckets(selected),
+    selected_article_group_summary: groupSummary(selected),
     reserve_relevance_bucket_summary: summarizeBuckets(reserve),
     shortlist_cap: cap,
     absolute_min_reviewable_articles: ABSOLUTE_MIN_REVIEWABLE_ARTICLES,

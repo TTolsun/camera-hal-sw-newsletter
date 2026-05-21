@@ -139,6 +139,27 @@ function reporterForClaimTests(url = 'https://example.com/source-1') {
   };
 }
 
+function reporterForGroupTests(overrides = {}) {
+  return {
+    candidates: [{
+      title: 'Selected group source',
+      url: 'https://example.com/source-1',
+      source_candidate_hash: 'hash-1',
+      article_group_key: 'group-a',
+      relevance_bucket: 'cpp_ai_tooling_fallback',
+      final_selected: true,
+      selected_for_editor: true,
+      primary_selected: true,
+      finalSelectionEligibility: 'short',
+      hasDatedEvidence: true,
+      source_gap_risk: false,
+      main_eligible: true,
+      related_context_candidates: [],
+      ...overrides
+    }]
+  };
+}
+
 function normalizeSection(value) {
   return {
     ...value,
@@ -207,6 +228,96 @@ test('valid editor output with exactly 3 briefing items passes unchanged', () =>
       sources: item.sources
     }))),
     sourceSignature
+  );
+});
+
+test('selected representative group must render or be explicitly demoted', () => {
+  const baseSection = section(1);
+  const missingGroup = editor({
+    sections: [section(1, {
+      article_group_key: 'other-group',
+      sources: [{ title: 'Other source', url: 'https://example.com/other' }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [{ title: 'Other source', url: 'https://example.com/other', source_role: 'primary' }]
+      }
+    })]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(missingGroup, DATE, {
+      normalizeSection,
+      reporter: reporterForGroupTests()
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.group_coverage');
+      assert.deepEqual(error.details.missing_group_keys, ['group-a']);
+      return true;
+    }
+  );
+
+  const demoted = editor({
+    sections: [section(1, {
+      source_candidate_hash: '',
+      sources: [{ title: 'Other source', url: 'https://example.com/other' }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [{ title: 'Other source', url: 'https://example.com/other', source_role: 'primary' }]
+      }
+    })],
+    explicitly_demoted_groups: [{
+      article_group_key: 'group-a',
+      demotion_reason: 'Insufficient source binding after editor validation.'
+    }]
+  });
+  const result = validateEditorOutputContract(demoted, DATE, {
+    normalizeSection,
+    reporter: reporterForGroupTests()
+  });
+  assert.equal(result.selected_group_count, 1);
+  assert.equal(result.explicitly_demoted_group_count, 1);
+});
+
+test('blocked related context cannot be used as article source or headline', () => {
+  const blockedUrl = 'https://android-developers.googleblog.com/2026/05/roundup.html';
+  const reporter = reporterForGroupTests({
+    related_context_candidates: [{
+      title: '17 Things to know for Android developers at Google I/O',
+      url: blockedUrl,
+      context_role: 'parent_roundup_context_only',
+      context_usage_allowed: false,
+      can_create_independent_article: false,
+      blocked_from_independent_main_reason: 'parent_roundup_context_only',
+      article_group_key: 'group-a'
+    }]
+  });
+  const baseSection = section(1);
+  const draft = editor({
+    sections: [section(1, {
+      article_group_key: 'group-a',
+      sources: [
+        { title: 'Selected group source', url: 'https://example.com/source-1' },
+        { title: 'Blocked roundup', url: blockedUrl }
+      ],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [
+          { title: 'Selected group source', url: 'https://example.com/source-1', source_role: 'primary' },
+          { title: 'Blocked roundup', url: blockedUrl, source_role: 'context' }
+        ]
+      }
+    })]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.blocked_context');
+      assert.equal(error.details.issues[0].type, 'blocked_context_url_used_as_article_source');
+      return true;
+    }
   );
 });
 

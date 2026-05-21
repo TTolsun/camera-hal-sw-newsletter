@@ -186,6 +186,44 @@ test('classifies C++ AI and tooling as fallback', () => {
   assert.equal(fallback.counts_as_fallback_topic, true);
 });
 
+test('classifies official Android tooling workflow as cpp fallback rather than camera adjacent', () => {
+  const cli = classifyAospCameraStackCandidate({
+    title: 'Android CLI Now Stable 1.0: Accelerate developing for Android using any agent',
+    summary: 'Android CLI 1.0 helps agents build, test, debug, and run native Android apps on devices.',
+    source: 'Android Developers Blog'
+  });
+  const aiStudio = classifyAospCameraStackCandidate({
+    title: 'Start building today - Build native Android apps in Google AI Studio',
+    summary: 'Google AI Studio can generate, modify, and test native Android apps with Gemini assisted workflows.',
+    source: 'Android Developers Blog',
+    relevance_bucket_hint: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+  });
+  const studio = classifyAospCameraStackCandidate({
+    title: 'Android Studio I/O Edition: What’s new in Android Developer tools',
+    summary: 'Android Studio updates device execution, Gradle sync, profiling, and debugging workflow for Android apps.',
+    source: 'Android Developers Blog'
+  });
+
+  for (const item of [cli, aiStudio, studio]) {
+    assert.equal(item.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
+    assert.equal(item.tooling_workflow_type, 'native_tooling_workflow');
+    assert.equal(item.counts_as_primary_camera_topic, false);
+    assert.equal(item.counts_as_fallback_topic, true);
+    assert.ok(item.native_workflow_evidence_score > 0);
+  }
+});
+
+test('keeps Android tooling marketing without concrete workflow behavior on watchlist path', () => {
+  const generic = classifyAospCameraStackCandidate({
+    title: 'Google AI features for Android developers',
+    summary: 'Google announced AI features and developer program updates for Android UI demos.',
+    source: 'Android Developers Blog'
+  });
+
+  assert.equal(generic.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+  assert.equal(generic.tooling_workflow_type || '', '');
+});
+
 test('keeps generic Linux, FreeBSD, and audio-fix items out of camera and driver buckets', () => {
   const generic = classifyAospCameraStackCandidate({
     title: 'Linux 7.1-rc2 fixes Steam Deck audio and FreeBSD 15.1 Beta arrives',
