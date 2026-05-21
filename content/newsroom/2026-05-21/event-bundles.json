@@ -1,0 +1,901 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-21",
+  "generated_at": "2026-05-21T01:55:28.460Z",
+  "summary": {
+    "schema_version": 1,
+    "total_count": 40,
+    "by_event_type": {
+      "primary_url": 25,
+      "release_note": 15
+    },
+    "by_dedupe_reason": {
+      "normalized_primary_url": 25,
+      "source_id + release.date + component": 6,
+      "source_id + release.version": 9
+    },
+    "warning_count": 0
+  },
+  "event_bundles": [
+    {
+      "event_id": "event_f75c69838d3b",
+      "primary_candidate_id": "candidate_2d6a347a6c7a",
+      "event_key": "source:android-developers-blog:date:Tue, 19 May 2026 13:00:00 +0000:component:camerax / android camera apis",
+      "event_type": "release_note",
+      "primary_url": "https://goo.gle/adaptiveapps_io26",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 13:00:00 +0000"
+      },
+      "component": "CameraX / Android camera APIs",
+      "impact_axes": [
+        "camera_api_change",
+        "direct_aosp_camera",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "medium",
+      "warnings": []
+    },
+    {
+      "event_id": "event_4a7fbfd675df",
+      "primary_candidate_id": "candidate_58336c81c1cd",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 13:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_b91a2af1bd7b",
+      "primary_candidate_id": "candidate_eb13abd2fa02",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 09:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_1a9f8e19d5e2",
+      "primary_candidate_id": "candidate_ca0c4751735c",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 11:45:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "cpp_ai_tooling_fallback",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_7935367e175e",
+      "primary_candidate_id": "candidate_13b950ec1796",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 09:30:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_23223c0084d6",
+      "primary_candidate_id": "candidate_3f0daddce537",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Fri, 15 May 2026 16:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "video_capture_fix",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_8944006e8421",
+      "primary_candidate_id": "candidate_9ba3f4327069",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 12:45:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "cpp_ai_tooling_fallback",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_e21cd309a547",
+      "primary_candidate_id": "candidate_913a4af29c8a",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 12:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_6a89c8522a44",
+      "primary_candidate_id": "candidate_87d5e97330a0",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 08:15:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_ad50d381280e",
+      "primary_candidate_id": "candidate_2c890d3e799d",
+      "event_key": "source:android-developers-blog:release:2026.04.01",
+      "event_type": "release_note",
+      "primary_url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "2026.04.01",
+        "date": "Wed, 22 Apr 2026 23:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_1265d472c1af",
+      "primary_candidate_id": "candidate_43b78b01c591",
+      "event_key": "url:https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 21 Apr 2026 14:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_d5f3369876b0",
+      "primary_candidate_id": "candidate_f5afec1053af",
+      "event_key": "url:https://source.android.com/docs/core/camera",
+      "event_type": "primary_url",
+      "primary_url": "https://source.android.com/docs/core/camera",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "documentation_only",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "camera-hal"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_370d0cf4028f",
+      "primary_candidate_id": "candidate_f819e3814d0a",
+      "event_key": "source:android-developers-blog:date:Tue, 19 May 2026 12:45:00 +0000:component:android camera output",
+      "event_type": "release_note",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 12:45:00 +0000"
+      },
+      "component": "Android camera output",
+      "impact_axes": [
+        "security_component_camera_related",
+        "android_platform_camera_adjacent",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "medium",
+      "warnings": []
+    },
+    {
+      "event_id": "event_1cfac4647584",
+      "primary_candidate_id": "candidate_111125fcde54",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 11:15:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_4a2799a29228",
+      "primary_candidate_id": "candidate_1c0623885369",
+      "event_key": "source:android-developers-blog:release:android 17",
+      "event_type": "release_note",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "Android 17",
+        "date": "Tue, 19 May 2026 11:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_bc188080ee39",
+      "primary_candidate_id": "candidate_84af2fc5b336",
+      "event_key": "source:android-developers-blog:date:Tue, 19 May 2026 10:45:00 +0000:component:sdk",
+      "event_type": "release_note",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 10:45:00 +0000"
+      },
+      "component": "SDK",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "medium",
+      "warnings": []
+    },
+    {
+      "event_id": "event_bd521c01202c",
+      "primary_candidate_id": "candidate_587f27eb3124",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 10:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_726a2272b8be",
+      "primary_candidate_id": "candidate_469c575cc35d",
+      "event_key": "source:android-developers-blog:date:Thu, 14 May 2026 20:00:00 +0000:component:api",
+      "event_type": "release_note",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Thu, 14 May 2026 20:00:00 +0000"
+      },
+      "component": "API",
+      "impact_axes": [
+        "camera_api_change",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "medium",
+      "warnings": []
+    },
+    {
+      "event_id": "event_e1fc143f0941",
+      "primary_candidate_id": "candidate_bbba030111e8",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Fri, 08 May 2026 16:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_5875d0cedfb2",
+      "primary_candidate_id": "candidate_a343b9a1f959",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Thu, 07 May 2026 17:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_1a0178a66017",
+      "primary_candidate_id": "candidate_ee7c31211f87",
+      "event_key": "url:https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Wed, 22 Apr 2026 20:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_50db0807428f",
+      "primary_candidate_id": "candidate_16426de40b53",
+      "event_key": "source:android-developers-latest-updates:release:camerax 1.6.1",
+      "event_type": "release_note",
+      "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "CameraX 1.6.1",
+        "date": "May 06, 2026"
+      },
+      "component": "CameraX / androidx.camera",
+      "impact_axes": [
+        "security_component_camera_related",
+        "android_platform_camera_adjacent",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_d23f95c1aac5",
+      "primary_candidate_id": "candidate_71ac253a7e70",
+      "event_key": "source:android-developers-latest-updates:release:1.3.0-beta02",
+      "event_type": "release_note",
+      "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "1.3.0-beta02",
+        "date": "May 06, 2026"
+      },
+      "component": "CameraX / androidx.camera",
+      "impact_axes": [
+        "security_component_camera_related",
+        "android_platform_camera_adjacent",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_764d2d438c57",
+      "primary_candidate_id": "candidate_98b946401757",
+      "event_key": "source:android-developers-latest-updates:release:1.4.0-alpha07",
+      "event_type": "release_note",
+      "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "1.4.0-alpha07",
+        "date": "May 06, 2026"
+      },
+      "component": "CameraX / androidx.camera",
+      "impact_axes": [
+        "security_component_camera_related",
+        "android_platform_camera_adjacent",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_aebc033c93c0",
+      "primary_candidate_id": "candidate_e07f8c724690",
+      "event_key": "url:https://source.android.com/docs/whatsnew",
+      "event_type": "primary_url",
+      "primary_url": "https://source.android.com/docs/whatsnew",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "aosp"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_22f0b66cf484",
+      "primary_candidate_id": "candidate_930de4903536",
+      "event_key": "url:https://source.android.com/docs/compatibility/cdd",
+      "event_type": "primary_url",
+      "primary_url": "https://source.android.com/docs/compatibility/cdd",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": ""
+      },
+      "component": "",
+      "impact_axes": [
+        "documentation_only",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "compatibility"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_dc3e74662602",
+      "primary_candidate_id": "candidate_2846d58c145e",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 10:30:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_bb92e4ef92b5",
+      "primary_candidate_id": "candidate_6cd8f69e0638",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 12 May 2026 14:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_1d54e5f6eb9d",
+      "primary_candidate_id": "candidate_f5f0b5f6b120",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Mon, 04 May 2026 17:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_b169f55cd9e5",
+      "primary_candidate_id": "candidate_0bc0dbe65628",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 08:30:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_3744977cfc68",
+      "primary_candidate_id": "candidate_3265b5bf6e86",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 08:00:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "unknown",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_219f8b657452",
+      "primary_candidate_id": "candidate_6de658860a75",
+      "event_key": "source:android-security-bulletin:release:android security bulletin",
+      "event_type": "release_note",
+      "primary_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "Android Security Bulletin",
+        "date": "2026-05-01"
+      },
+      "component": "Android Security Bulletin",
+      "impact_axes": [
+        "security_component_camera_related",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "security"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_825a8b69534e",
+      "primary_candidate_id": "candidate_a26bc4cb2f4e",
+      "event_key": "source:android-security-bulletin:release:2026-05-01",
+      "event_type": "release_note",
+      "primary_url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "2026-05-01",
+        "date": "2026-05-01"
+      },
+      "component": "Android Security Bulletin",
+      "impact_axes": [
+        "security_component_camera_related",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "security"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_a79daae67d73",
+      "primary_candidate_id": "candidate_d8909844b981",
+      "event_key": "source:libcamera-release-announcements:release:libcamera v0.7.1",
+      "event_type": "release_note",
+      "primary_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-april/058408.html",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "libcamera v0.7.1",
+        "date": "2026-04-28"
+      },
+      "component": "libcamera / V4L2 camera pipeline",
+      "impact_axes": [
+        "video_capture_fix",
+        "camera_driver_image_pipeline",
+        "Linux Camera / Driver",
+        "linux-camera"
+      ],
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "event_id": "event_d4f82e08cbcf",
+      "primary_candidate_id": "candidate_c658f791cde2",
+      "event_key": "url:https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "event_type": "primary_url",
+      "primary_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Mon, 04 May 2026 22:31:55 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "cpp_ai_tooling_fallback",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_0bb6bd5d2804",
+      "primary_candidate_id": "candidate_c4a37471254b",
+      "event_key": "url:https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "event_type": "primary_url",
+      "primary_url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Wed, 22 Apr 2026 00:59:01 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "generic_tooling_change",
+        "generic_tech_watchlist",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_4f422e47339f",
+      "primary_candidate_id": "candidate_25d7d58846a3",
+      "event_key": "url:https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "event_type": "primary_url",
+      "primary_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Thu, 14 May 2026 15:01:46 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "generic_tooling_change",
+        "generic_tech_watchlist",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_8f8bc26e2106",
+      "primary_candidate_id": "candidate_a8cf8f43f83d",
+      "event_key": "source:iso-cpp-blog:date:Thu, 30 Apr 2026 22:36:23 +0000:component:gcc",
+      "event_type": "release_note",
+      "primary_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Thu, 30 Apr 2026 22:36:23 +0000"
+      },
+      "component": "GCC",
+      "impact_axes": [
+        "build_dependency_fix",
+        "cpp_ai_tooling_fallback",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "medium",
+      "warnings": []
+    },
+    {
+      "event_id": "event_0580d2a5e518",
+      "primary_candidate_id": "candidate_14d08d011b07",
+      "event_key": "source:iso-cpp-blog:date:Thu, 23 Apr 2026 21:23:33 +0000:component:gpu",
+      "event_type": "release_note",
+      "primary_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.date + component",
+      "release": {
+        "version": "",
+        "date": "Thu, 23 Apr 2026 21:23:33 +0000"
+      },
+      "component": "GPU",
+      "impact_axes": [
+        "generic_tooling_change",
+        "generic_tech_watchlist",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "medium",
+      "warnings": []
+    },
+    {
+      "event_id": "event_bc0581ebbaf7",
+      "primary_candidate_id": "candidate_f773ce6be050",
+      "event_key": "source:iso-cpp-blog:release:v7.2.0",
+      "event_type": "release_note",
+      "primary_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "evidence_urls": [],
+      "dedupe_reason": "source_id + release.version",
+      "release": {
+        "version": "v7.2.0",
+        "date": "Tue, 28 Apr 2026 22:25:57 +0000"
+      },
+      "component": "GCC",
+      "impact_axes": [
+        "build_dependency_fix",
+        "cpp_ai_tooling_fallback",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "high",
+      "warnings": []
+    }
+  ]
+}
