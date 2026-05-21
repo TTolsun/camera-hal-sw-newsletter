@@ -598,6 +598,9 @@ PR branch: `codex/issue-188-root-docs-guidance`
 | Command | Result |
 | --- | --- |
 | targeted Markdown newline/BOM check | PASS: 대상 Markdown file은 UTF-8 without BOM, LF-only, `CR=0` |
+| GitHub raw semantic newline check | PASS: `raw.githubusercontent.com` 기준 `.github/README.md` 35 lines, `assets/README.md` 26 lines, `docs/glossary.ko.md` 46 lines, `docs/plans/issue-188-root-docs-audit.md` 630 lines |
+| Markdown long-line check | PASS: 대상 Markdown file 중 1000자 초과 line 없음 |
+| bidi Unicode control scan | PASS: Markdown file에서 U+202A..U+202E, U+2066..U+2069 control character 없음 |
 | `git diff --check` | PASS |
 | `npm.cmd run check:encoding` | PASS |
 | `npm.cmd run validate:localization` | PASS |
