@@ -60,6 +60,9 @@ const {
   canonicalContentUrl,
   fetchUrlForContent
 } = require('../collect/source-intelligence-utils');
+const {
+  runSourceMonitor
+} = require('../collect/source-monitor');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -1121,6 +1124,16 @@ async function main() {
     } catch (error) {
       failures.push({ source: source.name, message: error.message });
     }
+  }
+
+  try {
+    const monitorResult = await runSourceMonitor({
+      root,
+      date
+    });
+    candidates.push(...monitorResult.candidates);
+  } catch (error) {
+    failures.push({ source: 'source-monitor', message: error.message });
   }
 
   candidates = dedupe(candidates)

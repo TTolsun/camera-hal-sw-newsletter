@@ -114,7 +114,13 @@ function publicUrlError(value) {
   }
   if (!['http:', 'https:'].includes(parsed.protocol)) return 'non_public_scheme';
   const urlText = raw.toLowerCase();
-  if (urlText.includes('/.tmp/') || urlText.includes('/content/newsroom/') || urlText.includes('/content/collected-news/')) {
+  if (
+    urlText.includes('/.tmp/') ||
+    urlText.includes('/content/newsroom/') ||
+    urlText.includes('/content/collected-news/') ||
+    urlText.includes('/content/source-events/') ||
+    urlText.includes('/data/source-snapshots/')
+  ) {
     return 'internal_artifact_url';
   }
   if (parsed.hostname === 'github.com' && /\/actions\/(?:runs|workflows)\//i.test(parsed.pathname)) {

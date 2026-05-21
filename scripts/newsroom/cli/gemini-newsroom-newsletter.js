@@ -696,6 +696,15 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.version_or_release = stringOrEmpty(candidate.version_or_release || collected.version_or_release);
     candidate.api_or_component = stringOrEmpty(candidate.api_or_component || collected.api_or_component);
     candidate.behavior_change = stringOrEmpty(candidate.behavior_change || collected.behavior_change);
+    candidate.effective_date = stringOrEmpty(collected.effective_date || candidate.effective_date);
+    candidate.date_source = stringOrEmpty(collected.date_source || candidate.date_source);
+    candidate.date_confidence = numberOrDefault(collected.date_confidence ?? candidate.date_confidence);
+    candidate.source_event_id = stringOrEmpty(collected.source_event_id || candidate.source_event_id);
+    candidate.evidence_id = stringOrEmpty(collected.evidence_id || candidate.evidence_id);
+    candidate.event_type = stringOrEmpty(collected.event_type || candidate.event_type);
+    candidate.needs_editor_date_review = typeof collected.needs_editor_date_review === 'boolean'
+      ? collected.needs_editor_date_review
+      : Boolean(candidate.needs_editor_date_review);
     candidate.collectionMode = stringOrEmpty(collected.collectionMode || collected.collection_mode || candidate.collectionMode);
     candidate.isArticleCandidate = booleanFromCandidate(collected, candidate, 'isArticleCandidate',
       Boolean(collected.is_article_candidate));

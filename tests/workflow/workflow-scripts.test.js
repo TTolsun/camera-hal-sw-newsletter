@@ -5817,7 +5817,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
     imageAuditStep,
     /npm run newsroom:audit-images -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"\s*$/m
   );
+  assert.match(snapshotStep, /copy_tree_if_present "content\/source-events\/\$\{DATE\}"/);
   assert.match(snapshotStep, /copy_tree_if_present "content\/newsroom\/\$\{DATE\}"/);
+  assert.match(snapshotStep, /copy_tree_if_present "data\/source-snapshots"/);
   assert.match(snapshotStep, /copy_if_present "newsletters\/\$\{DATE\}\/newsletter\.md"/);
   assert.match(snapshotStep, /copy_if_present "newsletters\/\$\{DATE\}\/index\.html"/);
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
@@ -5905,6 +5907,9 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage1, /manual-candidates\.json/);
   assert.match(stage1, /collection-intent\.json/);
   assert.match(stage1, /raw-candidate-manifest\.json/);
+  assert.match(stage1, /content\/source-events\/\$\{\{ steps\.raw-meta\.outputs\.date \}\}\/source-change-events\.json/);
+  assert.match(stage1, /content\/source-events\/\$\{\{ steps\.raw-meta\.outputs\.date \}\}\/source-change-events\.md/);
+  assert.match(stage1, /data\/source-snapshots\/\*\*/);
 
   assert.match(stage2, /NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY/);
   assert.doesNotMatch(stage2, /Preflight LLM credentials for enabled source discovery/);

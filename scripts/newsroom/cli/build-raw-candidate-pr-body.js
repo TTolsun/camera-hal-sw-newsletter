@@ -111,6 +111,50 @@ function loadRawCandidatePayload(root, date) {
   };
 }
 
+function loadSourceChangeEvents(root, date) {
+  const relPath = `content/source-events/${date}/source-change-events.json`;
+  const filePath = path.join(root, relPath);
+  if (!fs.existsSync(filePath)) return { relPath, report: null };
+  return { relPath, report: readJson(filePath) };
+}
+
+function renderSourceChangeEventSummary(root, date) {
+  const { relPath, report } = loadSourceChangeEvents(root, date);
+  if (!report) {
+    return [
+      '## Source Snapshot Changes',
+      '',
+      '- source change event report: unavailable',
+      `- expected path: ${relPath}`,
+      ''
+    ];
+  }
+  const summary = report.summary || {};
+  return [
+    '## Source Snapshot Changes',
+    '',
+    `- source change event report: ${relPath}`,
+    `- monitored_source_count: ${summary.monitored_source_count ?? 'unknown'}`,
+    `- snapshot_page_count: ${summary.snapshot_page_count ?? 'unknown'}`,
+    `- generated_candidate_count: ${summary.generated_candidate_count ?? 'unknown'}`,
+    `- duplicate_event_evidence_count: ${summary.duplicate_event_evidence_count ?? 'unknown'}`,
+    `- monitor_diagnostic_count: ${summary.monitor_diagnostic_count ?? 'unknown'}`,
+    '',
+    '## Source Change Events',
+    '',
+    `- event_type_counts: ${JSON.stringify(summary.event_type_counts || {})}`,
+    '',
+    '## Evidence Identity / Duplicate Guard',
+    '',
+    '- `processed_source_event_ids` and `processed_evidence_ids` are snapshot state, not public content.',
+    '',
+    '## Date Quality',
+    '',
+    '- Review `date_source`, `date_confidence`, `effective_date`, `needs_editor_date_review`, and `main_article_allowed` in the source event report.',
+    ''
+  ];
+}
+
 function buildRawCandidatePrBody({
   root = process.cwd(),
   date
@@ -145,6 +189,7 @@ function buildRawCandidatePrBody({
     `- collection intent: ${manifest?.collection_intent || 'none'}`,
     `- branch: ${branchName}`,
     '',
+    ...renderSourceChangeEventSummary(root, date),
     '## Priority Override / Legacy Compatibility',
     '',
     'This PR is part of #185 seed evidence workflow migration.',

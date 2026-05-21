@@ -45,6 +45,11 @@ const {
   normalizeHalSignalFields
 } = require('../common/hal-signal-quality');
 const {
+  dateQualityForCandidate,
+  validateDateSource,
+  validateEventType
+} = require('../common/date-signals');
+const {
   SOURCE_QUALITY_FIELD_DRIFT,
   normalizeSourceQuality,
   sourceQualityFieldDrift
@@ -457,6 +462,23 @@ function candidateSelectionViolation(candidate) {
     violations.push(`finalSelectionEligibility=${finalSelectionEligibility || 'unknown'}`);
   }
   if (hasDatedEvidence !== true) violations.push('missing dated evidence');
+  if (text(candidate.event_type)) {
+    const eventTypeError = validateEventType(candidate.event_type);
+    if (eventTypeError) violations.push(`invalid event_type=${text(candidate.event_type)}`);
+  }
+  if (text(candidate.date_source)) {
+    const dateSourceError = validateDateSource(candidate.date_source);
+    if (dateSourceError) violations.push(`invalid date_source=${text(candidate.date_source)}`);
+  }
+  if (text(candidate.effective_date || candidate.effectiveDate)) {
+    const dateQuality = dateQualityForCandidate(candidate);
+    if (dateQuality.main_article_date_eligible !== true) {
+      violations.push(`effective_date not publish-ready: date_source=${dateQuality.date_source}`);
+    }
+    if (['snapshot_detected_at', 'content_hash_changed_without_date', 'missing'].includes(dateQuality.date_source)) {
+      violations.push(`weak source event date_source=${dateQuality.date_source}`);
+    }
+  }
   if (isWatchPage === true && hasDatedEvidence !== true) {
     violations.push('watch page lacks dated evidence');
   }

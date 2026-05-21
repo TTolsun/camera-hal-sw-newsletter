@@ -503,6 +503,34 @@ test('prefilter excludes source gaps, undated watch pages, missing evidence, and
   );
 });
 
+test('effective_date can satisfy selection only with publish-ready date quality', () => {
+  const strongEffectiveDate = policyPrimaryCandidate(0, {
+    title: 'AOSP Camera provider effective date update',
+    url: 'https://example.com/effective-strong',
+    published_date: '',
+    effective_date: '2026-05-02',
+    date_source: 'visible_last_updated',
+    date_confidence: 85,
+    hasDatedEvidence: true
+  });
+  const weakEffectiveDate = policyPrimaryCandidate(1, {
+    title: 'AOSP Camera provider content hash only update',
+    url: 'https://example.com/effective-weak',
+    published_date: '',
+    effective_date: '2026-05-02',
+    date_source: 'content_hash_changed_without_date',
+    date_confidence: 40,
+    hasDatedEvidence: true
+  });
+
+  assert.deepEqual(exclusionReasons(strongEffectiveDate), []);
+  assert.ok(exclusionReasons(weakEffectiveDate).includes('missing dated evidence'));
+
+  const strongWindow = freshnessWindowMetadata(strongEffectiveDate, '2026-05-03');
+  assert.equal(strongWindow.freshness_window, 'primary');
+  assert.match(strongWindow.selection_window_reason, /since effective_date/);
+});
+
 test('deterministic score ordering is stable and shortlist is capped', () => {
   const items = Array.from({ length: 15 }, (_, index) => candidate({
     title: `CameraX release ${index} component ${String.fromCharCode(65 + index)}`,
