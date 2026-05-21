@@ -15,7 +15,7 @@ on:
       allow_pro:
         description: "Allow Gemini Pro for this manual run."
         required: false
-        default: "false"
+        default: "true"
         type: choice
         options:
           - "false"
@@ -32,7 +32,7 @@ on:
       llm_model:
         description: "Optional LLM model override for this manual run."
         required: false
-        default: ""
+        default: "gemini-2.5-pro"
         type: string
       llm_fallback_models:
         description: "Optional comma-separated fallback model override for this manual run."

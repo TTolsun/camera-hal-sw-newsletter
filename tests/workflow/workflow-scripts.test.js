@@ -4163,9 +4163,91 @@ test('fallback failure diagnostics overwrites stale failure reason on rerun', ()
   assert.deepEqual(diagnostics.top_rejected_reasons, [{ reason: 'old_reason', count: 2 }]);
 });
 
-test('ensure CLI treats one safe fallback article as review-publication ready', () => {
+test('ensure CLI preserves failed repair Gemini draft instead of building fallback public issue', () => {
+  const root = tempRoot();
+  const date = '2026-05-21';
+  const draftSection = retrySection(
+    'Jetpack Compose adaptive CameraX preview background',
+    'https://example.com/compose-camerax-preview'
+  );
+  writeFailedRepairReviewableArtifacts(root, date, {
+    status: {
+      final_publish_ready: false,
+      publish_ready: false,
+      publish_gate_passed: false,
+      review_gate_passed: true,
+      failure_reason: 'section_count_drift',
+      repair_failure_kind: 'section_count_drift',
+      quality_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    generationStatus: {
+      final_publish_ready: false,
+      publish_gate_passed: false,
+      review_gate_passed: true,
+      failure_stage: 'editor repair attempt 1/2',
+      failure_reason: 'section_count_drift',
+      repair_failure_kind: 'section_count_drift',
+      quality_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    editor: {
+      summary: 'Preserve this Gemini draft for editor repair.',
+      sections: [draftSection]
+    },
+    quality: {
+      status: 'NEEDS_FIX',
+      score: 82,
+      deductions: [{ category: 'source-integrity', points: 3, reason: 'Repair required.', blocking: false }]
+    },
+    factCheck: {
+      status: 'NEEDS_FIX',
+      must_fix: [{ location: 'sections[0].claims[0].evidence_ids', problem: 'Repair evidence ids.' }],
+      source_gaps: [],
+      source_gap_count: 0
+    },
+    repairFailure: {
+      code: 'section_count_drift',
+      message: 'Repair returned zero sections; preserve last known valid draft.'
+    }
+  });
+  const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
+    .map(file => `content/newsroom/${date}/${file}`);
+  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+  const editorBefore = fs.readFileSync(editorPath, 'utf8');
+
+  const result = ensurePublicNewsletterArtifacts({ root, date, changedArtifacts });
+
+  assert.equal(result.fallbackExecuted, false);
+  assert.equal(result.fallbackSkipped, true);
+  assert.equal(result.outputs.fallback_public_issue_executed, 'false');
+  assert.equal(result.outputs.fallback_public_issue_skipped, 'true');
+  assert.equal(result.outputs.fallback_public_issue_skip_reason, 'preserve_reviewable_gemini_draft_after_failed_repair');
+  assert.equal(result.outputs.public_newsletter_ready, 'false');
+  assert.equal(result.outputs.review_pr_ready, 'true');
+  assert.equal(result.outputs.diagnostics_only, 'true');
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json')), false);
+  assert.equal(fs.readFileSync(editorPath, 'utf8'), editorBefore);
+});
+
+test('ensure CLI treats one safe fallback article as review-publication ready for non-repair quality triggers', () => {
   const root = tempRoot();
   const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
+  const qualityTriggerStatus = {
+    date,
+    status: 'QUALITY_NEEDS_FIX',
+    final_publish_ready: false,
+    publish_gate_passed: false,
+    review_gate_passed: true,
+    editor_review_required: true,
+    quality_status: 'NEEDS_FIX',
+    quality_score: 56,
+    quality_threshold: qualityGatePolicy.threshold,
+    rendered_main_article_count: 3,
+    min_final_articles: articlePolicy.mainArticleCount.min
+  };
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), qualityTriggerStatus);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), qualityTriggerStatus);
   const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
     .map(file => `content/newsroom/${date}/${file}`)
     .concat(requiredPublicFiles(date));
@@ -5589,6 +5671,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /llm_model:/);
   assert.match(workflow, /llm_fallback_models:/);
+  assert.match(workflow, /allow_pro:\s*[\s\S]*?default: "true"/);
+  assert.match(workflow, /llm_model:\s*[\s\S]*?default: "gemini-2\.5-pro"/);
   assert.match(workflow, /LLM_PROVIDER=\$\{INPUT_LLM_PROVIDER\}/);
   assert.match(workflow, /LLM_MODEL=\$\{INPUT_LLM_MODEL\}/);
   assert.match(workflow, /LLM_FALLBACK_MODELS=\$\{INPUT_LLM_FALLBACK_MODELS\}/);

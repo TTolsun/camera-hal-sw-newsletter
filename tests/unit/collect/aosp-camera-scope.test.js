@@ -22,6 +22,20 @@ test('classifies direct AOSP Camera framework and CameraX evidence', () => {
   assert.equal(camerax.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
 });
 
+test('classifies Jetpack Compose adaptive UI with CameraX usage as Android adjacent, not direct camera', () => {
+  const adaptiveUi = classifyAospCameraStackCandidate({
+    title: 'Google I/O highlights Jetpack Compose adaptive Android device experiences',
+    summary: 'Jetpack Compose and Jetpack Navigation 3 help build foldable, tablet, and multi-window Android experiences where CameraX preview screens need layout validation.',
+    api_or_component: 'Jetpack Compose / Jetpack Navigation 3',
+    behavior_change: 'Compose adaptive UI guidance changes how app teams structure camera preview experiences across device classes.'
+  });
+
+  assert.equal(adaptiveUi.relevance_bucket, BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT);
+  assert.equal(adaptiveUi.counts_as_primary_camera_topic, true);
+  assert.equal(adaptiveUi.aosp_camera_directness, 2);
+  assert.notEqual(adaptiveUi.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
+});
+
 test('classifies article-level ICamera, camera3, and camera AIDL aliases as direct camera', () => {
   const aidl = classifyAospCameraStackCandidate({
     title: 'ICameraProvider AIDL update changes camera3 session behavior',

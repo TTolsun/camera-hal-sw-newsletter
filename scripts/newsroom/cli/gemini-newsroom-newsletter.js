@@ -173,6 +173,7 @@ function sourceExtractionPromptGuardrails() {
 
 function articleSectionContractPrompt() {
   return [
+    'Jetpack Compose, Jetpack Navigation 3, adaptive UI, foldables/tablets, multi-window, CameraX 앱 화면 guidance 같은 Android platform-adjacent article은 background_context에서 platform/UI 배경과 camera preview/capture UX 검증 연결점을 설명하세요. source evidence가 없으면 direct HAL/API/runtime change로 쓰지 마세요.',
     'Article section contract: 새로 생성되는 editor, repair, completion output의 모든 main article은 article_sections를 포함해야 합니다.',
     'article_sections는 required keys인 verified_facts, background_context, hal_driver_impact, action_items, team_share_points를 반드시 포함해야 합니다.',
     'article_sections는 optional arrays인 known_limitations, watch_items, do_not_claim을 추가로 포함할 수 있습니다.',
@@ -193,6 +194,7 @@ function articleSectionContractPrompt() {
 
 function publicArticleContractPrompt() {
   return [
+    'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI article은 body_paragraphs에서 camera-facing takeaway 전에 짧은 배경 문단을 먼저 포함하세요.',
     'Public article contract: 새로 생성되는 editor, repair, completion output의 모든 main article은 public_article을 포함해야 합니다.',
     'public_article은 headline, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, source_links를 포함해야 합니다.',
     'article_sections와 hal_signal_capsule은 validation/editorial diagnostics 용도로만 사용하세요. 독자가 보는 article prose로 render하지 마세요.',
@@ -577,6 +579,7 @@ async function buildBackgroundContextReport({ date, articleCapsuleReport, common
         'background_basis는 context가 external source lookup이 아니라 supplied capsule metadata와 model knowledge에 기반했음을 설명해야 합니다.',
         'background_sources_used는 출력하지 마세요. 대신 background_basis를 사용하세요.',
         'background_context는 what_changed와 구분하고 claim strength는 impact_claim_level에 맞추세요.',
+        'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI capsule은 Android UI/platform 개념 배경을 간단히 설명하고 camera preview/capture UX 검증과 연결하세요. direct HAL change로 승격하지 마세요.',
         'schema와 일치하는 JSON만 반환하세요.'
       ].join('\n'),
       `${commonContext}\n\nArticle capsule context JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'selected'), null, 2)}\n\nStatic fallback background context JSON:\n${JSON.stringify(fallbackReport, null, 2)}`,
@@ -2815,6 +2818,7 @@ async function main() {
         lockedSections.length > 0 ? 'locked article URLs, titles/headlines, source names, 또는 같은 source + published date + similar title 조합을 중복하지 마세요.' : '',
         'marketing tone은 피하세요. 모든 article에는 confirmed_facts, background, camera_hal_perspective, action_items, team_summary, sources를 포함하세요.',
         'background는 background-context.json의 background_context를 먼저 사용하세요. 없으면 article capsule의 background_context_static을 사용합니다. raw source UI/table snippet을 background에 복사하지 마세요.',
+        'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI article은 바로 결론으로 가지 말고 Compose/Navigation/adaptive UI가 왜 camera preview/capture UX 검증과 연결되는지 한 문단의 배경설명을 먼저 제공하세요.',
         'candidate 또는 background context의 impact_claim_level을 보존하고 claim strength 제어에 사용하세요: direct_hal_change, camera_stack_direct, android_framework_adjacent, tooling_supporting, watch_only.',
         '모든 article은 evidence_summary, specificity_checks, source_verification_notes를 포함해야 합니다.',
         'candidate metadata에 field가 있으면 모든 main article은 release date, version/release, API/component 또는 library/artifact, concrete behavior change, relevance_bucket, AOSP Camera / driver / SoC / native tooling relevance를 명시해야 합니다.',

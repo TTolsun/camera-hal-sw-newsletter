@@ -108,6 +108,33 @@ const CAMERA_IMPACT_PATTERNS = [
   /\blatency\b/i
 ];
 
+const ANDROID_ADAPTIVE_UI_CONTEXT_PATTERNS = [
+  /\bJetpack\s+Compose\b/i,
+  /\bJetpack\s+Navigation\s*3\b/i,
+  /\bCompose\b[^.\n]{0,120}\b(?:adaptive|Navigation\s*3|foldable|large[-\s]?screen|tablet|multi[-\s]?window|device experience|UI)\b/i,
+  /\b(?:adaptive|large[-\s]?screen|foldable|tablet|multi[-\s]?window|device experience)\b[^.\n]{0,120}\b(?:Compose|Jetpack|Android)\b/i
+];
+
+const DIRECT_CAMERA_RUNTIME_CONTEXT_PATTERNS = [
+  /\bCamera\s*HAL\b/i,
+  /\bcamera3\b/i,
+  /\bICamera(?:Device|DeviceSession|Provider|Service|Session)?\b/i,
+  /\bCamera(?:Provider|Service)\b/i,
+  /\bAndroid Camera Framework\b/i,
+  /\bAOSP Camera\b/i,
+  /\bCamera2\s+interop\b/i,
+  /\bCameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?\b/i,
+  /\bandroidx\.camera\b[^.\n]{0,120}\b(?:release|fix|regression|SessionConfig|ImageAnalysis|VideoCapture|PreviewView|CameraController|CameraEffect|Camera2\s+interop)\b/i,
+  /\b(?:SessionConfig|ImageAnalysis|VideoCapture|PreviewView|CameraController|CameraEffect)\b[^.\n]{0,120}\b(?:release|fix|regression|behavior|API)\b/i,
+  /\bImageReader\b/i,
+  /\bcapture request\b/i,
+  /\bcapture result\b/i,
+  /\bstream configuration\b/i,
+  /\bcamera metadata\b/i,
+  /\b(?:CTS|VTS|CDD|Camera ITS)\b[^.\n]{0,120}\bcamera\b/i,
+  /\bcamera\b[^.\n]{0,120}\b(?:CTS|VTS|CDD|Camera ITS)\b/i
+];
+
 const MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS = [
   /\bcamera\s+output\b/i,
   /\bgallery\s+output\b/i,
@@ -299,6 +326,16 @@ function relevanceScoreFromHits(hits, max = 5) {
   return Math.min(max, hits.length === 0 ? 0 : hits.length + 1);
 }
 
+function androidAdaptiveUiCameraAdjacentTerms(value) {
+  const adaptiveTerms = patternHits(ANDROID_ADAPTIVE_UI_CONTEXT_PATTERNS, value);
+  if (adaptiveTerms.length === 0) return [];
+  const cameraImpactTerms = patternHits(CAMERA_IMPACT_PATTERNS, value);
+  if (cameraImpactTerms.length === 0) return [];
+  const directRuntimeTerms = patternHits(DIRECT_CAMERA_RUNTIME_CONTEXT_PATTERNS, value);
+  if (directRuntimeTerms.length > 0) return [];
+  return [...adaptiveTerms, ...cameraImpactTerms];
+}
+
 function validBucketHint(value) {
   const bucket = text(value);
   return Object.values(BUCKETS).includes(bucket) && bucket !== BUCKETS.GENERIC_TECH_WATCHLIST
@@ -319,6 +356,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const directTerms = patternHits(DIRECT_AOSP_PATTERNS, body);
   const driverTerms = patternHits(DRIVER_PATTERNS, body);
   const androidAdjacentTerms = patternHits(ANDROID_ADJACENT_PATTERNS, body);
+  const adaptiveUiAdjacentTerms = androidAdaptiveUiCameraAdjacentTerms(body);
   const cameraImpactTerms = patternHits(CAMERA_IMPACT_PATTERNS, body);
   const multimediaCameraOutputTerms = multimediaCameraOutputHits(body);
   const socTerms = patternHits(SOC_PATTERNS, body);
@@ -343,6 +381,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ...directTerms,
     ...driverTerms,
     ...androidAdjacentTerms,
+    ...adaptiveUiAdjacentTerms,
     ...multimediaCameraOutputTerms,
     ...cameraImpactTerms,
     ...socTerms,
@@ -361,6 +400,9 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   if (driverTerms.length > 0 && directTerms.length === 0) {
     bucket = BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE;
     evidenceTerms = driverTerms;
+  } else if (adaptiveUiAdjacentTerms.length > 0) {
+    bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
+    evidenceTerms = adaptiveUiAdjacentTerms;
   } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
     bucket = bucketHint;
     evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms, ...articleTerms];
@@ -415,7 +457,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ? Math.max(3, relevanceScoreFromHits(nativeTerms))
     : 0;
 
-  return {
+  return normalizeAospCameraScope(candidate, {
     editorial_priority: BUCKET_PRIORITY[bucket],
     relevance_bucket: bucket,
     aosp_camera_directness: aospCameraDirectness,
@@ -438,6 +480,34 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     aosp_camera_evidence_terms: evidenceTerms.slice(0, 8),
     aospCameraRelevanceReason: bucketReason(bucket, evidenceTerms, evidenceOrigin),
     aosp_camera_relevance_reason: bucketReason(bucket, evidenceTerms, evidenceOrigin)
+  });
+}
+
+function normalizeAospCameraScope(candidate = {}, scope = {}) {
+  const bucket = text(scope.relevance_bucket);
+  if (bucket !== BUCKETS.DIRECT_AOSP_CAMERA) return scope;
+  const evidenceTerms = androidAdaptiveUiCameraAdjacentTerms(candidateArticleText(candidate));
+  if (evidenceTerms.length === 0) return scope;
+  const reason = bucketReason(BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT, evidenceTerms, 'article_text');
+  return {
+    ...scope,
+    editorial_priority: BUCKET_PRIORITY[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT],
+    relevance_bucket: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    aosp_camera_directness: 2,
+    counts_as_primary_camera_topic: true,
+    counts_as_driver_topic: false,
+    counts_as_soc_topic: false,
+    counts_as_fallback_topic: false,
+    evidence_origin: scope.evidence_origin || 'article_text',
+    scope_evidence_terms: evidenceTerms.slice(0, 8),
+    aospCameraStackBucket: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    aosp_camera_stack_bucket: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    aospCameraDirect: true,
+    aosp_camera_direct: true,
+    aospCameraEvidenceTerms: evidenceTerms.slice(0, 8),
+    aosp_camera_evidence_terms: evidenceTerms.slice(0, 8),
+    aospCameraRelevanceReason: reason,
+    aosp_camera_relevance_reason: reason
   };
 }
 
@@ -446,5 +516,6 @@ module.exports = {
   BUCKET_DEFINITIONS,
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate,
+  normalizeAospCameraScope,
   candidateArticleText
 };
