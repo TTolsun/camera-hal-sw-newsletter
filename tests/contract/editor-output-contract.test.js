@@ -295,7 +295,7 @@ test('strict editor claim binding rejects duplicate claim ids and invalid enums'
   );
 });
 
-test('strict editor claim binding maps source-level impact aliases and source URL evidence', () => {
+test('strict editor claim binding maps source and HAL signal impact aliases with source URL evidence', () => {
   const url = 'https://example.com/source-1';
   const draft = editor({
     sections: [
@@ -306,7 +306,7 @@ test('strict editor claim binding maps source-level impact aliases and source UR
           claim_type: 'fact',
           evidence_ids: [],
           source_urls: [url],
-          impact_level: 'direct_hal_change',
+          impact_level: 'camerax_app_compatibility',
           overclaim_risk: 'low'
         }]
       })
@@ -1040,7 +1040,7 @@ test('repair output with invalid briefing writes repair diagnostics', async () =
   assert.equal(errorArtifact.details.actualCount, 2);
 });
 
-test('semantic validation failures outside briefing are not repaired', async () => {
+test('unrepairable section-count semantic failures are not repaired', async () => {
   const newsroomDir = tempNewsroomDir();
   const draft = editor({ sections: [] });
   let repairCalled = false;
@@ -1068,6 +1068,75 @@ test('semantic validation failures outside briefing are not repaired', async () 
 
   assert.equal(repairCalled, false);
   assert.equal(readJson(path.join(newsroomDir, 'editor-validation-error-attempt-5.json')).details.field, 'sections');
+});
+
+test('repairable claim binding failures are repaired without replacing articles', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const url = 'https://example.com/source-1';
+  const draft = editor({
+    sections: [
+      section(1, {
+        evidence_summary: 'Fact 1',
+        article_sections: {
+          verified_facts: ['Fact 1'],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: [{
+          claim_id: 'claim-1',
+          text: 'Fact 1',
+          claim_type: 'recommendation',
+          evidence_ids: [],
+          source_urls: [],
+          impact_level: 'camerax_app_compatibility',
+          overclaim_risk: 'low'
+        }]
+      })
+    ]
+  });
+  let repairCalled = false;
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    reporter: reporterForClaimTests(url),
+    attempt: 6,
+    stage: 'editor attempt 1/1',
+    newsroomDir,
+    normalizeSection,
+    strictClaims: true,
+    repairFn: async ({ invalidEditor, validationError }) => {
+      repairCalled = true;
+      assert.equal(validationError.details.field, 'sections.claims');
+      return {
+        ...invalidEditor,
+        sections: [{
+          ...invalidEditor.sections[0],
+          claims: [{
+            claim_id: 'claim-1',
+            text: 'Fact 1',
+            claim_type: 'fact',
+            evidence_ids: ['evidence-1'],
+            source_urls: [url],
+            impact_level: 'app_api_or_framework_adjacent',
+            overclaim_risk: 'low'
+          }]
+        }]
+      };
+    }
+  });
+
+  assert.equal(repairCalled, true);
+  assert.equal(result.repairAttempted, true);
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.editor.sections.length, 1);
+  assert.equal(result.editor.sections[0].headline, draft.sections[0].headline);
+  assert.deepEqual(result.editor.sections[0].sources, draft.sections[0].sources);
+  assert.equal(result.editor.sections[0].claims[0].claim_type, 'fact');
+  const errorArtifact = readJson(path.join(newsroomDir, 'editor-validation-error-attempt-6.json'));
+  assert.equal(errorArtifact.details.field, 'sections.claims');
 });
 
 test('failure status can include editor semantic validation and repair fields', () => {

@@ -43,6 +43,16 @@ class EditorSemanticValidationError extends Error {
   }
 }
 
+const REPAIRABLE_SEMANTIC_FIELDS = new Set([
+  'briefing',
+  'summary',
+  'sections.article_sections',
+  'sections.public_article',
+  'sections.hal_signal_capsule',
+  'sections.field_hygiene',
+  'sections.claims'
+]);
+
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -523,6 +533,10 @@ function attachSemanticStatus(error, status) {
   return error;
 }
 
+function isRepairableSemanticField(field) {
+  return REPAIRABLE_SEMANTIC_FIELDS.has(text(field));
+}
+
 async function repairEditorOutputContract({
   value,
   date,
@@ -567,7 +581,8 @@ async function repairEditorOutputContract({
       });
     }
 
-    if (error.details?.field !== 'briefing') {
+    const repairField = error.details?.field || error.field || '';
+    if (!isRepairableSemanticField(repairField)) {
       error.stage = stage;
       attachSemanticStatus(error, {
         editor_semantic_validation: initialDetails,
@@ -608,7 +623,7 @@ async function repairEditorOutputContract({
       const semanticRepairError = repairError instanceof EditorSemanticValidationError
         ? repairError
         : semanticError(`Editor semantic repair failed: ${repairError.message}`, {
-          field: 'briefing',
+          field: repairField || 'editor',
           cause: repairError.message,
           sectionCount: Array.isArray(repairedRaw?.sections) ? repairedRaw.sections.length : null
         });

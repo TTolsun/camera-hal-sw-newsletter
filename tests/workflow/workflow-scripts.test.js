@@ -4026,6 +4026,44 @@ test('fallback builder preserves original fact-check blocker diagnostics after r
   }
 });
 
+test('fallback builder keeps editorial reviewable failure kind for unchanged public handoff', () => {
+  const root = tempRoot();
+  const { date } = writePr39LikeRegressionFixture(root);
+  const statusPath = path.join(root, 'content', 'newsroom', date, 'generation-status.json');
+  const tmpStatusPath = path.join(root, '.tmp', 'newsletter-generation-status.json');
+  const status = {
+    ...JSON.parse(fs.readFileSync(statusPath, 'utf8')),
+    status: 'NEEDS_FIX',
+    editor_semantic_validation: {
+      name: 'EditorSemanticValidationError',
+      field: 'sections.claims',
+      message: 'Editor output failed claim binding validation.'
+    }
+  };
+  writeJson(statusPath, status);
+  writeJson(tmpStatusPath, status);
+
+  buildFallbackPublicIssue({ root, date });
+
+  const nextStatus = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
+  assert.equal(nextStatus.failure_kind, 'editorial_reviewable');
+
+  const changedArtifacts = REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
+    .map(file => `content/newsroom/${date}/${file}`)
+    .concat(`content/newsroom/${date}/fallback-public-issue.json`);
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts
+  }));
+
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.diagnostics_only, 'true');
+  assert.match(outputs.reviewable_artifact_reason, /failure_kind=editorial_reviewable/);
+  assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
+});
+
 test('fallback duplicate detection treats AndroidX Camera release anchors as release identity', () => {
   const camerax14 = regressionCandidate({
     title: 'CameraX 1.4.0-alpha07',
@@ -4163,9 +4201,91 @@ test('fallback failure diagnostics overwrites stale failure reason on rerun', ()
   assert.deepEqual(diagnostics.top_rejected_reasons, [{ reason: 'old_reason', count: 2 }]);
 });
 
-test('ensure CLI treats one safe fallback article as review-publication ready', () => {
+test('ensure CLI preserves failed repair Gemini draft instead of building fallback public issue', () => {
+  const root = tempRoot();
+  const date = '2026-05-21';
+  const draftSection = retrySection(
+    'Jetpack Compose adaptive CameraX preview background',
+    'https://example.com/compose-camerax-preview'
+  );
+  writeFailedRepairReviewableArtifacts(root, date, {
+    status: {
+      final_publish_ready: false,
+      publish_ready: false,
+      publish_gate_passed: false,
+      review_gate_passed: true,
+      failure_reason: 'section_count_drift',
+      repair_failure_kind: 'section_count_drift',
+      quality_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    generationStatus: {
+      final_publish_ready: false,
+      publish_gate_passed: false,
+      review_gate_passed: true,
+      failure_stage: 'editor repair attempt 1/2',
+      failure_reason: 'section_count_drift',
+      repair_failure_kind: 'section_count_drift',
+      quality_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    editor: {
+      summary: 'Preserve this Gemini draft for editor repair.',
+      sections: [draftSection]
+    },
+    quality: {
+      status: 'NEEDS_FIX',
+      score: 82,
+      deductions: [{ category: 'source-integrity', points: 3, reason: 'Repair required.', blocking: false }]
+    },
+    factCheck: {
+      status: 'NEEDS_FIX',
+      must_fix: [{ location: 'sections[0].claims[0].evidence_ids', problem: 'Repair evidence ids.' }],
+      source_gaps: [],
+      source_gap_count: 0
+    },
+    repairFailure: {
+      code: 'section_count_drift',
+      message: 'Repair returned zero sections; preserve last known valid draft.'
+    }
+  });
+  const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
+    .map(file => `content/newsroom/${date}/${file}`);
+  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+  const editorBefore = fs.readFileSync(editorPath, 'utf8');
+
+  const result = ensurePublicNewsletterArtifacts({ root, date, changedArtifacts });
+
+  assert.equal(result.fallbackExecuted, false);
+  assert.equal(result.fallbackSkipped, true);
+  assert.equal(result.outputs.fallback_public_issue_executed, 'false');
+  assert.equal(result.outputs.fallback_public_issue_skipped, 'true');
+  assert.equal(result.outputs.fallback_public_issue_skip_reason, 'preserve_reviewable_gemini_draft_after_failed_repair');
+  assert.equal(result.outputs.public_newsletter_ready, 'false');
+  assert.equal(result.outputs.review_pr_ready, 'true');
+  assert.equal(result.outputs.diagnostics_only, 'true');
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json')), false);
+  assert.equal(fs.readFileSync(editorPath, 'utf8'), editorBefore);
+});
+
+test('ensure CLI treats one safe fallback article as review-publication ready for non-repair quality triggers', () => {
   const root = tempRoot();
   const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
+  const qualityTriggerStatus = {
+    date,
+    status: 'QUALITY_NEEDS_FIX',
+    final_publish_ready: false,
+    publish_gate_passed: false,
+    review_gate_passed: true,
+    editor_review_required: true,
+    quality_status: 'NEEDS_FIX',
+    quality_score: 56,
+    quality_threshold: qualityGatePolicy.threshold,
+    rendered_main_article_count: 3,
+    min_final_articles: articlePolicy.mainArticleCount.min
+  };
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), qualityTriggerStatus);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), qualityTriggerStatus);
   const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
     .map(file => `content/newsroom/${date}/${file}`)
     .concat(requiredPublicFiles(date));
@@ -5117,16 +5237,30 @@ test('validate-pr-body accepts diagnostics-only wording and rejects misleading p
   const date = '2026-05-08';
   writeFailedRepairReviewableArtifacts(root, date, {
     status: {
+      status: 'NEEDS_FIX',
+      failure_kind: 'editorial_reviewable',
       failure_stage: 'editor repair attempt 1/2',
       failure_reason: 'section_count_drift',
+      publish_ready: false,
+      selection_publish_ready: false,
+      final_publish_ready: false,
+      publish_gate_passed: false,
       quality_status: 'NEEDS_FIX',
-      quality_score: 79
+      quality_score: 79,
+      public_newsletter_ready: true,
+      review_publication_ready: true,
+      homepage_visible_after_merge: true
     },
     generationStatus: {
+      status: 'NEEDS_FIX',
+      failure_kind: 'editorial_reviewable',
       failure_stage: 'editor repair attempt 1/2',
       failure_reason: 'section_count_drift',
       quality_status: 'NEEDS_FIX',
-      quality_score: 79
+      quality_score: 79,
+      public_newsletter_ready: true,
+      review_publication_ready: true,
+      homepage_visible_after_merge: true
     },
     repairFailure: {
       code: 'section_count_drift',
@@ -5167,6 +5301,14 @@ test('validate-pr-body accepts diagnostics-only wording and rejects misleading p
   assert.match(body, /Fallback builder could not fill minimum main article count 3/);
   const validation = validatePrBodyText(body, { date });
   assert.equal(validation.ok, true, validation.errors.join('\n'));
+
+  const bodyWithNegativeHardFailure = `${body}\n- Quality hard failures: Main article has actionability_level=none and cannot be publish-ready.\n`;
+  const negativeHardFailureValidation = validatePrBodyText(bodyWithNegativeHardFailure, { date });
+  assert.equal(
+    negativeHardFailureValidation.ok,
+    true,
+    negativeHardFailureValidation.errors.join('\n')
+  );
 
   const allowedNegative = body.replace(
     'This PR is not publish-ready.',
@@ -5589,6 +5731,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /llm_model:/);
   assert.match(workflow, /llm_fallback_models:/);
+  assert.match(workflow, /allow_pro:\s*[\s\S]*?default: "true"/);
+  assert.match(workflow, /llm_model:\s*[\s\S]*?default: "gemini-2\.5-pro"/);
   assert.match(workflow, /LLM_PROVIDER=\$\{INPUT_LLM_PROVIDER\}/);
   assert.match(workflow, /LLM_MODEL=\$\{INPUT_LLM_MODEL\}/);
   assert.match(workflow, /LLM_FALLBACK_MODELS=\$\{INPUT_LLM_FALLBACK_MODELS\}/);
@@ -5658,9 +5802,14 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(imageAuditStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.doesNotMatch(imageAuditStep, /continue-on-error:\s*true/);
+  assert.match(imageAuditStep, /steps\.meta\.outputs\.public_newsletter_ready/);
   assert.match(
     imageAuditStep,
     /npm run newsroom:audit-images -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --fail-on-publish-blocking/
+  );
+  assert.match(
+    imageAuditStep,
+    /npm run newsroom:audit-images -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"\s*$/m
   );
   assert.match(snapshotStep, /copy_tree_if_present "content\/newsroom\/\$\{DATE\}"/);
   assert.match(snapshotStep, /copy_if_present "newsletters\/\$\{DATE\}\/newsletter\.md"/);

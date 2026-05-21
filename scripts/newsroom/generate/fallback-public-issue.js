@@ -161,6 +161,20 @@ function readJsonIfExists(filePath) {
   return readJson(filePath);
 }
 
+function reviewableFailureKindForFallbackStatus(status = {}) {
+  if (status.failure_kind) return status.failure_kind;
+  if (
+    status.editor_semantic_validation ||
+    status.fact_check_status === 'NEEDS_FIX' ||
+    status.quality_status === 'NEEDS_FIX' ||
+    status.status === 'NEEDS_FIX' ||
+    status.status === 'QUALITY_NEEDS_FIX'
+  ) {
+    return 'editorial_reviewable';
+  }
+  return undefined;
+}
+
 function writeText(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, value, 'utf8');
@@ -1511,11 +1525,13 @@ function buildFallbackPublicIssue(options = {}) {
     throw new Error(`Fallback public issue structural validation failed:\n${structural.text}`);
   }
 
+  const reviewableFailureKind = reviewableFailureKindForFallbackStatus(generationStatus);
   const nextStatus = {
     ...generationStatus,
     date,
     status: generationStatus.status === 'PASS' ? 'PASS' : 'NEEDS_FIX',
     generation_status: generationStatus.status || generationStatus.generation_status || 'UNKNOWN',
+    ...(reviewableFailureKind ? { failure_kind: reviewableFailureKind } : {}),
     fallback_public_issue: true,
     fallback_public_issue_status: 'CREATED',
     fallback_public_issue_demoted_article_count: demotedRecords.length,

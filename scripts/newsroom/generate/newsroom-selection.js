@@ -4,7 +4,8 @@ const {
 } = require('./selection-diagnostics');
 const {
   BUCKETS,
-  classifyAospCameraStackCandidate
+  classifyAospCameraStackCandidate,
+  normalizeAospCameraScope
 } = require('../common/aosp-camera-scope');
 const {
   POLICY_REL_PATH,
@@ -337,7 +338,7 @@ function cameraReleaseVersionRank(candidate) {
 
 function candidateScope(candidate) {
   if (candidate && candidate.relevance_bucket) {
-    return {
+    return normalizeAospCameraScope(candidate, {
       editorial_priority: number(candidate.editorial_priority, 6),
       relevance_bucket: text(candidate.relevance_bucket),
       aosp_camera_directness: number(candidate.aosp_camera_directness),
@@ -352,7 +353,7 @@ function candidateScope(candidate) {
       evidence_origin: text(candidate.evidence_origin),
       source_hint: text(candidate.source_hint),
       scope_evidence_terms: ensureArray(candidate.scope_evidence_terms)
-    };
+    });
   }
   return classifyAospCameraStackCandidate(candidate);
 }

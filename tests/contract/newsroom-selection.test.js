@@ -862,6 +862,29 @@ test('direct AOSP Camera or driver shortage no longer blocks one-article policy'
   assert.deepEqual(report.publish_gate_reason_codes, []);
 });
 
+test('raw direct bucket is normalized for Jetpack Compose CameraX-adjacent candidates', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    policyPrimaryCandidate(0, {
+      title: 'Google I/O Jetpack Compose adaptive CameraX preview guidance',
+      url: 'https://example.com/compose-camerax-adjacent',
+      summary: 'Google I/O highlighted Jetpack Compose and Jetpack Navigation 3 for adaptive Android device experiences, including app screens where CameraX preview layouts need validation on foldables and tablets.',
+      api_or_component: 'Jetpack Compose / Jetpack Navigation 3',
+      behavior_change: 'Compose adaptive UI guidance changes camera preview screen layout planning across device classes.',
+      relevance_bucket: 'direct_aosp_camera',
+      aosp_camera_directness: 5,
+      counts_as_primary_camera_topic: false
+    })
+  ], { minArticles: 1, maxArticles: 1 });
+  const [item] = report.selected_articles;
+
+  assert.equal(item.relevance_bucket, 'android_platform_camera_adjacent');
+  assert.equal(item.score_breakdown.relevance_bucket, 'android_platform_camera_adjacent');
+  assert.equal(report.composition_summary.direct_aosp_camera_count, 0);
+  assert.equal(report.composition_summary.android_platform_camera_adjacent_count, 1);
+  assert.equal(item.counts_as_primary_camera_topic, true);
+  assert.equal(report.publish_ready, true);
+});
+
 test('publish-ready supporting max applies across all supporting buckets', () => {
   const report = buildShortlistReport('2026-05-03', [
     policyPrimaryCandidate(0, {

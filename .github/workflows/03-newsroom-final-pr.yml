@@ -15,7 +15,7 @@ on:
       allow_pro:
         description: "Allow Gemini Pro for this manual run."
         required: false
-        default: "false"
+        default: "true"
         type: choice
         options:
           - "false"
@@ -32,7 +32,7 @@ on:
       llm_model:
         description: "Optional LLM model override for this manual run."
         required: false
-        default: ""
+        default: "gemini-2.5-pro"
         type: string
       llm_fallback_models:
         description: "Optional comma-separated fallback model override for this manual run."
@@ -217,7 +217,12 @@ jobs:
 
       - name: Audit newsletter image lineage
         if: always() && steps.meta.outputs.date != ''
-        run: npm run newsroom:audit-images -- --date "${{ steps.meta.outputs.date }}" --fail-on-publish-blocking
+        run: |
+          if [ "${{ steps.meta.outputs.public_newsletter_ready }}" = "true" ]; then
+            npm run newsroom:audit-images -- --date "${{ steps.meta.outputs.date }}" --fail-on-publish-blocking
+          else
+            npm run newsroom:audit-images -- --date "${{ steps.meta.outputs.date }}"
+          fi
 
       - name: Snapshot newsroom debug artifacts
         if: always()

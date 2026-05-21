@@ -31,6 +31,9 @@ test('article section contract prompt fixes the five normalized keys and guardra
   assert.match(prompt, /legacy artifact compatibility 때문에만 optional/);
   assert.match(prompt, /legacy fields로 충족했다고 간주하지 마세요/);
   assert.match(prompt, /source-backed facts/);
+  assert.match(prompt, /Jetpack Compose/);
+  assert.match(prompt, /CameraX 앱 화면 guidance/);
+  assert.match(prompt, /direct HAL\/API\/runtime change로 쓰지 마세요/);
   assert.match(prompt, /HAL 해석/);
   assert.match(prompt, /runtime\/API behavior/);
   assert.match(prompt, /구체적 action/);
@@ -55,6 +58,8 @@ test('public article contract prompt keeps public output separate from diagnosti
   }
   assert.match(prompt, /독자-facing/);
   assert.match(prompt, /verified_facts checklist/);
+  assert.match(prompt, /CameraX-adjacent/);
+  assert.match(prompt, /짧은 배경 문단/);
   assert.match(prompt, /즉시 조치할 항목은 없습니다/);
 });
 

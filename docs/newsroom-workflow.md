@@ -120,7 +120,7 @@ Gemini request에는 stage별 thinking budget을 적용합니다. 기본값은 r
 
 `NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 운영 기준으로 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
 
-scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합니다. `gemini-2.5-pro`는 manual `workflow_dispatch`에서 `allow_pro=true`를 명시한 경우에만 사용할 수 있으며, Pro가 실제 호출되면 workflow log와 cost report의 `pro_policy` / `pro_model` 필드에 남습니다. Pro 계열 모델은 thinking disable을 지원하지 않거나 최소 budget 제약이 있을 수 있으므로, requested budget이 `0`인 Pro 호출은 `thinkingConfig`를 생략하고 cost report warning에 남깁니다.
+scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합니다. `gemini-2.5-pro`는 manual `workflow_dispatch`에서만 사용할 수 있으며, `Newsroom 03 - Gemini Final Newsletter PR`의 수동 실행 기본 입력은 `allow_pro=true`, `llm_model=gemini-2.5-pro`입니다. Pro가 실제 호출되면 workflow log와 cost report의 `pro_policy` / `pro_model` 필드에 남습니다. Pro 계열 모델은 thinking disable을 지원하지 않거나 최소 budget 제약이 있을 수 있으므로, requested budget이 `0`인 Pro 호출은 `thinkingConfig`를 생략하고 cost report warning에 남깁니다.
 
 ## Final Cost Reduction Operating Model
 
@@ -129,7 +129,7 @@ scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합�
 - deterministic scoring이 LLM 호출 전에 Camera HAL / Android Camera 후보를 먼저 줄입니다.
 - `article-capsules.json`이 full context 대신 compact capsule만 Gemini에 전달합니다.
 - quality retry는 전체 뉴스레터 재생성이 아니라 실패 section repair 또는 replace로 제한합니다.
-- scheduled run은 Flash/Flash-Lite만 사용하고 Pro는 manual high-quality run에서 명시적으로 허용한 경우에만 사용합니다.
+- scheduled run은 Flash/Flash-Lite만 사용하고 Pro는 manual high-quality run에서만 사용합니다. Stage 3 수동 실행 기본 primary model은 `gemini-2.5-pro`입니다.
 
 운영자가 비용 원인을 확인할 때는 아래 순서로 artifact를 봅니다.
 
@@ -169,7 +169,7 @@ NEWSROOM_ALLOW_PRO_ON_MANUAL=false
 NEWSROOM_PRO_ESCALATION=manual
 ```
 
-manual high-quality run(수동 고품질 실행)에서만 `allow_pro=true`를 선택할 수 있습니다. 이때 workflow는 fallback list를 만들지 않고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`만 전달합니다. JS model policy는 provider가 `gemini`인 `workflow_dispatch` 실행에서만 `gemini-2.5-pro` fallback을 추가합니다. scheduled run, internal provider, `allow_pro=false`에서는 Pro fallback을 추가하지 않습니다.
+manual high-quality run(수동 고품질 실행)의 기본 입력은 `allow_pro=true`, `llm_model=gemini-2.5-pro`입니다. 이때 workflow는 fallback list를 만들지 않고 `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`와 primary `LLM_MODEL=gemini-2.5-pro`를 전달합니다. JS model policy는 provider가 `gemini`인 `workflow_dispatch` 실행에서만 Pro 사용을 허용합니다. scheduled run, internal provider, `allow_pro=false`에서는 Pro fallback을 추가하지 않습니다.
 
 ## Issue #185 Seed Evidence Workflow Priority
 
@@ -255,7 +255,7 @@ NEWSROOM_PRO_ESCALATION=manual
 
 ### 수동 Final Generation 실행
 
-GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. Pro 계열 모델을 수동으로 허용해야 하는 경우에만 `allow_pro=true`를 선택합니다.
+GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. 기본 수동 실행은 `allow_pro=true`, `llm_model=gemini-2.5-pro`로 동작합니다. 비용을 낮춰야 하는 수동 검증에서는 `allow_pro=false`와 Flash 계열 `llm_model`을 명시합니다.
 
 ## Editor-in-Chief Review
 

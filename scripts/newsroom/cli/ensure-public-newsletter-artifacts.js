@@ -76,6 +76,21 @@ function hasArtifactInputs(root, date) {
   ].some(filePath => fs.existsSync(filePath));
 }
 
+function editorDraftSectionCount(root, date) {
+  const editor = readJsonSafely(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'));
+  return ensureArray(editor.sections).length;
+}
+
+function shouldPreserveReviewableDraftWithoutFallback({ root, date, resolved, initialReasons }) {
+  const status = resolved.status || {};
+  const statusValues = new Set([status.status, status.generation_status].filter(Boolean));
+  if (!statusValues.has('FAILED_REPAIR_REVIEWABLE')) return false;
+  if (resolved.reviewPrReady !== true) return false;
+  if (editorDraftSectionCount(root, date) < articlePolicy.mainArticleCount.min) return false;
+  const reasonText = ensureArray(initialReasons).join('\n');
+  return /repair_failure|section_count_drift|quality_status|must_fix_count|source_gap_count/.test(reasonText);
+}
+
 function hardFailureArticleCount(qualityReport = {}) {
   return ensureArray(qualityReport.article_results).filter(result => {
     const hardReasons = ensureArray(result.hard_fail_reasons).join(' ');
@@ -241,6 +256,8 @@ function buildEnsureOutputs(resolved, reconciliation, fallbackState) {
     fallback_public_issue_failed: fallbackState.fallbackError ? 'true' : 'false',
     fallback_public_issue_error: fallbackState.fallbackError ? String(fallbackState.fallbackError.message || fallbackState.fallbackError) : 'none',
     fallback_public_issue_diagnostics: fallbackState.fallbackDiagnosticsRelPath || 'none',
+    fallback_public_issue_skipped: fallbackState.fallbackSkipped ? 'true' : 'false',
+    fallback_public_issue_skip_reason: fallbackState.fallbackSkipReason || 'none',
     fallback_public_issue_trigger_reason: fallbackState.initialReasons.join('; ') || 'none'
   };
 }
@@ -289,32 +306,40 @@ function ensurePublicNewsletterArtifacts(options = {}) {
   const initialReasons = fallbackTriggerReasons({ root, date, resolved });
   const fallbackAlreadyCreated = resolved.status?.fallback_public_issue_status === 'CREATED';
   let fallbackExecuted = false;
+  let fallbackSkipped = false;
+  let fallbackSkipReason = '';
   let fallbackError = null;
   let fallbackResult = null;
   let fallbackDiagnosticsRelPath = '';
 
   if (initialReasons.length > 0 && !fallbackAlreadyCreated && !options.noBuild) {
-    if (!hasArtifactInputs(root, date)) {
+    if (shouldPreserveReviewableDraftWithoutFallback({ root, date, resolved, initialReasons })) {
+      fallbackSkipped = true;
+      fallbackSkipReason = 'preserve_reviewable_gemini_draft_after_failed_repair';
+    } else if (!hasArtifactInputs(root, date)) {
       throw new Error(`Cannot build fallback public issue for ${date}: no newsroom or collected candidate artifacts are available.`);
+    } else {
+      fallbackExecuted = true;
+      try {
+        fallbackResult = buildFallbackPublicIssue({ root, date });
+      } catch (error) {
+        fallbackError = error;
+        fallbackDiagnosticsRelPath = writeFallbackFailureDiagnostics({ root, date, error, status });
+      }
+      const recheckStatus = fallbackResult?.status || status;
+      resolved = resolveReviewableArtifactsForEnsure({
+        root,
+        date,
+        status: recheckStatus
+      }, changedArtifactsForRecheck(options, fallbackResult, fallbackDiagnosticsRelPath ? [fallbackDiagnosticsRelPath] : []));
     }
-    fallbackExecuted = true;
-    try {
-      fallbackResult = buildFallbackPublicIssue({ root, date });
-    } catch (error) {
-      fallbackError = error;
-      fallbackDiagnosticsRelPath = writeFallbackFailureDiagnostics({ root, date, error, status });
-    }
-    const recheckStatus = fallbackResult?.status || status;
-    resolved = resolveReviewableArtifactsForEnsure({
-      root,
-      date,
-      status: recheckStatus
-    }, changedArtifactsForRecheck(options, fallbackResult, fallbackDiagnosticsRelPath ? [fallbackDiagnosticsRelPath] : []));
   }
 
   const fallbackState = {
     fallbackExecuted,
     fallbackAlreadyCreated,
+    fallbackSkipped,
+    fallbackSkipReason,
     fallbackError,
     fallbackDiagnosticsRelPath,
     initialReasons
@@ -328,6 +353,7 @@ function ensurePublicNewsletterArtifacts(options = {}) {
         date,
         fallbackExecuted,
         fallbackAlreadyCreated,
+        fallbackSkipped,
         fallbackTriggerReasons: initialReasons,
         resolved: reconciled.reconciledResolved,
         reconciliation: reconciled.reconciliation,
@@ -345,6 +371,7 @@ function ensurePublicNewsletterArtifacts(options = {}) {
     date,
     fallbackExecuted,
     fallbackAlreadyCreated,
+    fallbackSkipped,
     fallbackTriggerReasons: initialReasons,
     resolved: reconciled.reconciledResolved,
     reconciliation: reconciled.reconciliation,
@@ -370,6 +397,7 @@ if (require.main === module) {
 module.exports = {
   fallbackTriggerReasons,
   hardFailureArticleCount,
+  shouldPreserveReviewableDraftWithoutFallback,
   ensurePublicNewsletterArtifacts,
   writeFallbackFailureDiagnostics,
   parseArgs
