@@ -32,7 +32,7 @@ on:
       llm_model:
         description: "Optional LLM model override for this manual run."
         required: false
-        default: "gemini-2.5-pro"
+        default: ""
         type: string
       llm_fallback_models:
         description: "Optional comma-separated fallback model override for this manual run."
@@ -69,6 +69,10 @@ jobs:
       GEMINI_THINKING_BUDGET_REPAIR: ${{ vars.GEMINI_THINKING_BUDGET_REPAIR || '0' }}
       GEMINI_THINKING_BUDGET_FACTCHECK: ${{ vars.GEMINI_THINKING_BUDGET_FACTCHECK || '0' }}
       GEMINI_THINKING_BUDGET_SCORING: ${{ vars.GEMINI_THINKING_BUDGET_SCORING || '0' }}
+      NEWSROOM_REPORTER_MODEL: ${{ vars.NEWSROOM_REPORTER_MODEL || '' }}
+      NEWSROOM_EDITOR_MODEL: ${{ vars.NEWSROOM_EDITOR_MODEL || '' }}
+      NEWSROOM_FACTCHECK_MODEL: ${{ vars.NEWSROOM_FACTCHECK_MODEL || '' }}
+      NEWSROOM_REPAIR_MODEL: ${{ vars.NEWSROOM_REPAIR_MODEL || '' }}
       NEWSROOM_MAX_QUALITY_RETRIES: ${{ vars.NEWSROOM_MAX_QUALITY_RETRIES || '1' }}
       NEWSROOM_MAX_SECTION_REPAIRS: ${{ vars.NEWSROOM_MAX_SECTION_REPAIRS || '1' }}
       NEWSROOM_WARN_COST_USD: ${{ vars.NEWSROOM_WARN_COST_USD || '0.15' }}

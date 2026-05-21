@@ -9,6 +9,12 @@ const {
 const PRICING_SOURCE_URL = 'https://ai.google.dev/gemini-api/docs/pricing';
 const PRICE_TABLE = [
   {
+    match: /^gemini-3\.5-flash$/i,
+    inputUsdPerMillion: 1.5,
+    outputUsdPerMillion: 9,
+    cachedInputUsdPerMillion: 0.15
+  },
+  {
     match: /^gemini-2\.5-pro\b/i,
     inputUsdPerMillion: 1.25,
     inputUsdPerMillionLargePrompt: 2.5,

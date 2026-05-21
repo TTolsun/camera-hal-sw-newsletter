@@ -6,7 +6,7 @@
 
 - GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 실행합니다.
 - `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다.
-- Stage 3 manual final generation의 기본 입력은 `allow_pro=true`, `llm_model=gemini-2.5-pro`입니다. 비용을 낮춰야 하는 수동 검증에서만 `allow_pro=false`와 Flash 계열 `llm_model`을 명시합니다.
+- Stage 3 manual final generation의 기본 입력은 `allow_pro=true`, `llm_model=""`입니다. 기본 실행은 code default stage model을 primary로 사용하고, 모든 stage primary를 Pro로 승격해야 할 때만 `llm_model=gemini-2.5-pro`를 명시합니다.
 - 실행 후 `cost-report.md`, `summary-cache-report.md`, `retry-history.md`를 확인해 비용과 retry 범위를 봅니다.
 
 ## PR Review Flow
