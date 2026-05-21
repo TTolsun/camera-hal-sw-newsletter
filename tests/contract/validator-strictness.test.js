@@ -65,11 +65,22 @@ function newsletterMarkdown(date, articleCount, { todo = false } = {}) {
   ].join('\n');
 }
 
-function newsletterHtml(date, { tags = ['camera-hal'] } = {}) {
+function newsletterHtml(date, {
+  tags = ['camera-hal'],
+  navLabels = ['Latest', 'Archive', 'Sources', 'GitHub']
+} = {}) {
   const tagHtml = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+  const navHrefs = ['#latest', '#archive', 'docs/news-sources.md', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
+  const navHtml = navLabels
+    .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
+    .join('');
   return [
     '<!doctype html>',
     '<html><body>',
+    '<nav class="site-nav content-wrap" aria-label="Primary navigation">',
+    '<a class="site-brand" href="index.html">Camera HAL SW Newsletter</a>',
+    `<div class="nav-links">${navHtml}</div>`,
+    '</nav>',
     '<main>',
     `<div class="tag-row issue-tags">${tagHtml}</div>`,
     '<section class="issue-briefing"></section>',
@@ -106,6 +117,7 @@ function writeSiteFixture(root, {
   editorApprovedException = false,
   dataTags = ['camera-hal'],
   htmlTags = dataTags,
+  navLabels = ['Latest', 'Archive', 'Sources', 'GitHub'],
   sourceGapCount = null,
   staleClaimHardFailure = false,
   qualityDeductions = null,
@@ -122,7 +134,10 @@ function writeSiteFixture(root, {
     tags: dataTags
   }]);
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }));
-  writeText(path.join(root, 'newsletters', date, 'index.html'), newsletterHtml(date, { tags: htmlTags }));
+  writeText(path.join(root, 'newsletters', date, 'index.html'), newsletterHtml(date, {
+    tags: htmlTags,
+    navLabels
+  }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   if (factCheckMustFix || sourceGapCount !== null) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
@@ -401,6 +416,20 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match data\/newsletters\.json tags \[Camera HAL, Android\]/);
+});
+
+test('strict validate-site rejects localized issue site nav labels', () => {
+  const root = tempRoot('validate-site-nav-labels-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min,
+    navLabels: ['\ucd5c\uc2e0\ud638', '\uc544\uce74\uc774\ube0c', '\ucd9c\ucc98', 'GitHub']
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ Sources \/ GitHub/);
 });
 
 test('validate-site fails fallback_public without badge or publication notice', () => {

@@ -68,6 +68,21 @@ function issue(overrides = {}) {
   };
 }
 
+function textFromHtml(html) {
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function siteNavLabels(html) {
+  const siteNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*\bsite-nav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
+  assert.ok(siteNavMatch, 'generated issue HTML must include .site-nav');
+  return [...siteNavMatch[0].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
+    .map(match => textFromHtml(match[1]))
+    .filter(label => label && label !== 'Camera HAL SW Newsletter');
+}
+
 test('newsletter renderer uses public_article for public markdown and HTML', () => {
   const markdown = buildMarkdown(issue());
   const html = buildHtml(issue());
@@ -94,6 +109,16 @@ test('newsletter renderer uses public_article for public markdown and HTML', () 
     assert.doesNotMatch(markdown, leaked);
     assert.doesNotMatch(html, leaked);
   }
+});
+
+test('newsletter renderer keeps generated issue nav labels in English', () => {
+  const html = buildHtml(issue());
+  const labels = siteNavLabels(html);
+
+  assert.deepEqual(labels.slice(0, 4), ['Latest', 'Archive', 'Sources', 'GitHub']);
+  assert.equal(labels.includes('\ucd5c\uc2e0\ud638'), false);
+  assert.equal(labels.includes('\uc544\uce74\uc774\ube0c'), false);
+  assert.equal(labels.includes('\ucd9c\ucc98'), false);
 });
 
 test('newsletter renderer article structure table uses shared row semantics', () => {

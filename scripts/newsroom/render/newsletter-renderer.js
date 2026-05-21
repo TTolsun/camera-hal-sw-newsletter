@@ -350,9 +350,9 @@ function buildPublicHtml(issue) {
     <nav class="site-nav content-wrap" aria-label="Primary navigation">
       <a class="site-brand" href="../../index.html">Camera HAL SW Newsletter</a>
       <div class="nav-links">
-        <a href="../../index.html#latest">최신호</a>
-        <a href="../../index.html#archive">아카이브</a>
-        <a href="../../docs/news-sources.md">출처</a>
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="../../docs/news-sources.md">Sources</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </nav>

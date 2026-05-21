@@ -269,17 +269,12 @@ function validateSiteNavLabels(content, relPath) {
   const labels = [...siteNavMatch[0].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
     .map(match => textFromHtml(match[1]))
     .filter(label => label && label !== 'Camera HAL SW Newsletter');
-  const expectedSets = [
-    ['Latest', 'Archive', 'Sources', 'GitHub'],
-    ['최신호', '아카이브', '출처', 'GitHub']
-  ];
-  const actual = labels.slice(0, expectedSets[0].length);
-  const matchesExpected = expectedSets.some(expected =>
-    actual.length === expected.length &&
-    expected.every((label, index) => actual[index] === label)
-  );
+  const expected = ['Latest', 'Archive', 'Sources', 'GitHub'];
+  const actual = labels.slice(0, expected.length);
+  const matchesExpected = actual.length === expected.length &&
+    expected.every((label, index) => actual[index] === label);
   if (!matchesExpected) {
-    fail(`Site navigation labels must be Latest / Archive / Sources / GitHub or 최신호 / 아카이브 / 출처 / GitHub in ${relPath}; found ${actual.join(' / ') || 'none'}`);
+    fail(`Site navigation labels must be Latest / Archive / Sources / GitHub in ${relPath}; found ${actual.join(' / ') || 'none'}`);
   }
 }
 
