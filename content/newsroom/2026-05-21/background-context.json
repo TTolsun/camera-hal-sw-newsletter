@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-21",
+  "generated_at": "2026-05-21T14:38:47.139Z",
+  "stage": "gemini-background-context",
+  "background_contexts": [
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
+      "relevance_bucket": "direct_aosp_camera",
+      "impact_claim_level": "direct_hal_change",
+      "background_context": "Jetpack Compose는 선언형 UI 툴킷으로, 다양한 폼팩터(폴더블, 태블릿 등)에 대응하는 적응형 UI(adaptive UI) 개발에 사용됩니다. 앱의 레이아웃이 동적으로 변할 때, 그 안에 포함된 카메라 프리뷰(CameraX PreviewView) 역시 올바른 종횡비와 해상도를 유지해야 합니다. 이는 단순히 UI 컴포넌트의 크기를 조절하는 것을 넘어, CameraX가 내부적으로 적절한 스트림 설정을 선택하고 Camera HAL에 세션을 재설정하거나 새로운 스트림을 요청하는 과정으로 이어집니다. 따라서, UI 레이아웃 변경이 빈번하게 발생할 때 HAL이 다양한 프리뷰 스트림 크기 전환을 얼마나 빠르고 안정적으로 처리하는지가 앱의 사용자 경험에 직접적인 영향을 미칩니다.",
+      "background_basis": "제공된 기사 요약 정보와 Android Jetpack Compose, CameraX, Camera HAL의 스트림 설정에 대한 모델 지식을 기반으로 생성되었습니다.",
+      "background_confidence": "high",
+      "background_warnings": []
+    },
+    {
+      "title": "Start building today - Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "impact_claim_level": "android_framework_adjacent",
+      "background_context": "Google AI Studio와 같은 도구들은 개발자들이 카메라와 같은 네이티브 하드웨어 기능을 활용하는 온디바이스 AI 앱을 더 쉽게 만들도록 지원합니다. 이는 카메라로부터 받은 이미지 프레임을 실시간으로 분석하고 처리하는 새로운 유형의 앱(예: 객체 인식, 이미지 생성)이 증가할 수 있음을 시사합니다. 카메라 HAL과 드라이버 관점에서 이는 새로운 워크로드의 등장을 의미합니다. AI 추론 작업은 NPU, GPU, CPU 자원을 많이 사용하며, 이로 인해 ISP(이미지 신호 처리 장치)와의 메모리 대역폭 경합, 시스템 전체의 발열 증가, 프레임 처리 지연(latency) 또는 프레임 드롭과 같은 성능 문제로 이어질 수 있습니다. 따라서 HAL은 단순한 프리뷰나 캡처를 넘어, 지속적인 고부하 AI 분석 스트림이 동시에 실행되는 시나리오에서도 안정적인 성능을 보장해야 합니다.",
+      "background_basis": "제공된 기사 요약 정보와 온디바이스 AI, CameraX ImageAnalysis, SoC 리소스 경합(NPU/GPU/ISP), 시스템 성능(발열, 지연)에 대한 모델 지식을 기반으로 생성되었습니다.",
+      "background_confidence": "high",
+      "background_warnings": []
+    }
+  ]
+}

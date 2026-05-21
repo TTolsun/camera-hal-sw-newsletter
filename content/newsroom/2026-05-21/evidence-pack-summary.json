@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-21",
-  "generated_at": "2026-05-21T01:59:30.333Z",
+  "generated_at": "2026-05-21T14:46:05.753Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -22,8 +22,6 @@
       "content/newsroom/2026-05-21/stale-claim-report.json"
     ],
     "missing": [
-      "content/newsroom/2026-05-21/reporter-candidates.json",
-      "content/newsroom/2026-05-21/repair-failure.json",
       "content/newsroom/2026-05-21/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-21/stale-claim-report.json"
     ],
@@ -33,49 +31,51 @@
       "content/newsroom/2026-05-21/shortlisted-candidates.json",
       "content/collected-news/2026-05-21/candidates.json",
       "content/newsroom/2026-05-21/article-capsules.json",
+      "content/newsroom/2026-05-21/reporter-candidates.json",
       "content/newsroom/2026-05-21/quality-report.json",
       "content/newsroom/2026-05-21/fact-check-report.json",
       "content/newsroom/2026-05-21/source-effectiveness-report.json",
+      "content/newsroom/2026-05-21/repair-failure.json",
       "content/newsroom/2026-05-21/fallback-public-issue.json"
     ]
   },
   "publish_status": {
     "status": "needs-fix",
-    "run_mode": "review_only_public",
-    "quality_score": 76,
+    "run_mode": "diagnostics_only",
+    "quality_score": 89,
     "quality_threshold": 85,
-    "fact_check_status": "PASS",
+    "fact_check_status": "NEEDS_FIX",
     "final_publish_ready": false,
-    "public_newsletter_ready": true,
+    "public_newsletter_ready": false,
     "review_pr_ready": true
   },
   "selection_summary": {
     "raw_candidate_count": 43,
     "eligible_candidate_count": 3,
-    "selected_main_article_count": 3,
-    "reserve_candidate_count": 0,
+    "selected_main_article_count": 2,
+    "reserve_candidate_count": 1,
     "excluded_candidate_count": 40,
     "primary_camera_stack_count": 2,
     "android_multimedia_camera_output_count": 0,
-    "supporting_bucket_count": 1,
-    "fallback_window_used": true,
-    "fallback_window_consulted": true,
-    "fallback_window_reason": "primary window selected 2 article(s), below min 3",
-    "fallback_candidates_promoted_count": 1,
-    "fallback_bucket_used": true,
+    "supporting_bucket_count": 0,
+    "fallback_window_used": false,
+    "fallback_window_consulted": false,
+    "fallback_window_reason": "",
+    "fallback_candidates_promoted_count": 0,
+    "fallback_bucket_used": null,
     "candidate_shortage_hints": [
       "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
       "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
     ]
   },
   "claim_validation_summary": {
-    "status": "not_available",
-    "bound_claims": null,
-    "total_claims": null,
-    "derived_evidence_mapping_count": 0,
-    "overclaim_risk": "unknown",
-    "available_article_count": 0,
-    "not_available_article_count": 3
+    "status": "available",
+    "bound_claims": 3,
+    "total_claims": 5,
+    "derived_evidence_mapping_count": 3,
+    "overclaim_risk": "low",
+    "available_article_count": 1,
+    "not_available_article_count": 0
   },
   "hal_impact_summary": {
     "axes": [
@@ -84,50 +84,45 @@
       "\\bcamera\\s+output\\b",
       "\\bcamera\\b[^.\\n]{0,120}\\b(?:performance|thermal|latency|power|pipeline|sensor|capture)\\b",
       "\\bnative\\b[^.\\n]{0,120}\\b(?:performance|profiling|debug|build|test|tooling)\\b",
-      "\\b(?:build|test|debug|profiling|tooling)\\b[^.\\n]{0,120}\\bnative\\b",
-      "\\bC\\+\\+\\b",
-      "\\bGCC\\b[^.\\n]{0,120}\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b",
-      "\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b[^.\\n]{0,120}\\bGCC\\b",
-      "\\bGCC\\b"
+      "\\b(?:build|test|debug|profiling|tooling)\\b[^.\\n]{0,120}\\bnative\\b"
     ],
-    "article_count_with_axes": 3,
+    "article_count_with_axes": 2,
     "article_count_without_axes": 0
   },
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 3,
+    "main_article_count": 2,
     "strong_signal_count": 0,
     "usable_signal_count": 0,
-    "weak_signal_count": 3,
+    "weak_signal_count": 2,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
     "article_count_with_hal_signal_capsule": 0,
-    "article_count_without_hal_signal_capsule": 3,
+    "article_count_without_hal_signal_capsule": 2,
     "main_articles_with_owner_metric_log": 0,
     "main_articles_with_concrete_action": 0,
-    "fallback_main_article_count": 1,
+    "fallback_main_article_count": 0,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "generic_signal_hard_blocker_count": 3,
-    "hal_signal_hard_blocker_count": 3,
+    "generic_signal_hard_blocker_count": 2,
+    "hal_signal_hard_blocker_count": 2,
     "hard_blocker_reason_code_counts": {
-      "hal_actionability_none": 3,
-      "hal_signal_capsule_missing": 3,
-      "fallback_promotion_not_allowed": 1
+      "hal_actionability_none": 2,
+      "hal_signal_capsule_missing": 2
     },
     "hal_impact_axis_counts": {
       "framework_hal_contract": 1,
       "camerax_app_compatibility": 1,
-      "native_tooling_workflow": 2
+      "native_tooling_workflow": 1
     },
     "actionability_level_counts": {
-      "none": 3
+      "none": 2
     },
     "effective_actionability_level_counts": {
-      "none": 3
+      "none": 2
     },
     "signal_quality_status_counts": {
-      "weak_signal": 3
+      "weak_signal": 2
     }
   },
   "main_article_signal_checks": [
@@ -211,47 +206,6 @@
         "hal_actionability_none",
         "hal_signal_capsule_missing"
       ]
-    },
-    {
-      "index": 3,
-      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "hal_impact_axes": [
-        "native_tooling_workflow"
-      ],
-      "reader_owners": [
-        "native_tooling_owner"
-      ],
-      "actionability_level": "none",
-      "effective_actionability_level": "none",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "weak_signal",
-      "concrete_action_signal_count": 0,
-      "fallback_promotion_allowed": false,
-      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [],
-      "soc_signal_type": "",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": false,
-      "hal_signal_capsule_complete": false,
-      "hal_signal_capsule_missing_keys": [
-        "why_now",
-        "reader_owners",
-        "check_within_2_weeks",
-        "impact_axes",
-        "do_not_overstate"
-      ],
-      "hard_blockers": [
-        "actionability_none",
-        "fallback_promotion_missing_reason"
-      ],
-      "hard_blocker_reason_codes": [
-        "hal_actionability_none",
-        "fallback_promotion_not_allowed",
-        "hal_signal_capsule_missing"
-      ]
     }
   ],
   "selected_main_articles": [
@@ -274,16 +228,16 @@
         "\\bCameraX\\b"
       ],
       "key_evidence": [
-        "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "summary: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid..."
+        "version_or_release: Not specified",
+        "api_or_component: CameraX",
+        "behavior_change: CameraX is used to provide correct camera previews across various window sizes in adaptive UIs built with Jetpack Compose."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "claim_validation": {
-        "status": "not_available",
-        "bound_claims": null,
-        "total_claims": null,
-        "overclaim_risk": "unknown"
+        "status": "available",
+        "bound_claims": 3,
+        "total_claims": 5,
+        "overclaim_risk": "low"
       }
     },
     {
@@ -309,9 +263,9 @@
         "\\b(?:build|test|debug|profiling|tooling)\\b[^.\\n]{0,120}\\bnative\\b"
       ],
       "key_evidence": [
-        "api_or_component: Android camera output",
-        "behavior_change: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerome...",
-        "summary: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and..."
+        "version_or_release: Not specified",
+        "api_or_component: Camera (Native Android APIs)",
+        "behavior_change: Developers are encouraged to use native device features like the Camera in apps built with Google AI Studio for hardware-level performance."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 6 article-level signal(s) from article_text.)",
       "claim_validation": {
@@ -320,7 +274,9 @@
         "total_claims": null,
         "overclaim_risk": "unknown"
       }
-    },
+    }
+  ],
+  "reserve_candidates": [
     {
       "candidate_id": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
@@ -342,11 +298,7 @@
         "\\b(?:compiler|C\\+\\+|toolchain|performance|sanitizer|native|build|test)\\b[^.\\n]{0,120}\\bGCC\\b",
         "\\bGCC\\b"
       ],
-      "key_evidence": [
-        "api_or_component: GCC",
-        "behavior_change: GCC 16.1 has been released!",
-        "summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes Fr..."
-      ],
+      "key_evidence": [],
       "selection_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "not_available",
@@ -356,7 +308,6 @@
       }
     }
   ],
-  "reserve_candidates": [],
   "excluded_candidates_top": [
     {
       "candidate_id": "ef27814b2c8c86363075af75d0f3b6c0cccbc6a74d8cf31284075b004b924c42",
@@ -472,33 +423,35 @@
   "excluded_candidates_truncated": true,
   "failure_diagnostics": {
     "quality_hard_failures": [
-      "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
-      "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
-      "Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article."
+      "Fact-check must_fix item mentions this section.",
+      "Fact checker returned 1 must_fix item(s).",
+      "Fact checker reported 1 source gap(s)."
     ],
-    "fact_check_must_fix": [],
-    "repair_failures": [],
+    "fact_check_must_fix": [
+      "All claims in the `claims` array have an empty `evidence_ids` field. The editorial policy requires that fact claims must cite specific evidence IDs from the source candidate to..."
+    ],
+    "repair_failures": [
+      "[editor repair attempt 1/2] Gemini API failed with non-retryable error on model gemini-2.5-pro: fetch failed"
+    ],
     "fallback_builder_failures": [],
     "candidate_shortage_hints": [
       "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
       "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
     ],
-    "source_gap_warnings": [],
+    "source_gap_warnings": [
+      "The source article is a high-level blog post from Google I/O. It does not specify the exact CameraX library version, concrete API changes, or direct HAL implementation requireme...",
+      "Unattributed fact-check source gap could not be mapped to a source: The source article is a high-level blog post from Google I/O. It does not specify the exact CameraX library v..."
+    ],
     "missing_artifacts": [
-      "content/newsroom/2026-05-21/reporter-candidates.json",
-      "content/newsroom/2026-05-21/repair-failure.json",
       "content/newsroom/2026-05-21/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-21/stale-claim-report.json"
     ],
     "invalid_artifacts": []
   },
   "warnings": [
-    "Missing optional artifact: content/newsroom/2026-05-21/reporter-candidates.json",
-    "Missing optional artifact: content/newsroom/2026-05-21/repair-failure.json",
     "Missing optional artifact: content/newsroom/2026-05-21/fallback-public-issue-diagnostics.json",
     "Missing optional artifact: content/newsroom/2026-05-21/stale-claim-report.json",
     "Fallback claim_validation.status=not_available for selected article: 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-    "Fallback claim_validation.status=not_available for selected article: Start building today - Build native Android apps in Google AI Studio",
-    "Fallback claim_validation.status=not_available for selected article: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!"
+    "Fallback claim_validation.status=not_available for selected article: Start building today - Build native Android apps in Google AI Studio"
   ]
 }

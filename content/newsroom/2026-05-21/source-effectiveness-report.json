@@ -6,7 +6,7 @@
     "shortlisted_candidates": "content/newsroom/2026-05-21/shortlisted-candidates.json",
     "source_registry": "data/news-sources.json",
     "optional_artifacts": {
-      "reporter_candidates": null,
+      "reporter_candidates": "content/newsroom/2026-05-21/reporter-candidates.json",
       "editor_draft": "content/newsroom/2026-05-21/editor-draft.json",
       "fact_check_report": "content/newsroom/2026-05-21/fact-check-report.json",
       "quality_report": "content/newsroom/2026-05-21/quality-report.json"
@@ -19,8 +19,8 @@
     "unregistered_candidate_count": 0,
     "collected_count": 39,
     "eligible_count": 5,
-    "selected_count": 3,
-    "rendered_main_count": 3,
+    "selected_count": 2,
+    "rendered_main_count": 1,
     "source_gap_count": 35,
     "generic_noise_count": 29,
     "duplicate_count": 1,
@@ -41,8 +41,8 @@
       "reference_only": 33
     },
     "selected_main_source_quality_coverage": {
-      "selected_main_count": 4,
-      "with_source_quality_count": 4
+      "selected_main_count": 3,
+      "with_source_quality_count": 3
     },
     "main_eligible_source_quality_coverage": {
       "main_eligible_candidate_count": 2,
@@ -235,7 +235,7 @@
       "collected_count": 24,
       "eligible_count": 2,
       "selected_count": 2,
-      "rendered_main_count": 2,
+      "rendered_main_count": 1,
       "source_gap_count": 23,
       "camera_relevant_raw_count": 2,
       "parser_repair_reason_count": 0,
@@ -273,10 +273,10 @@
       "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0.0833,
       "selection_rate": 1,
-      "rendered_rate": 1,
+      "rendered_rate": 0.5,
       "source_gap_rate": 0.9583,
       "noise_rate": 0.875,
-      "effectiveness_score": 26.04,
+      "effectiveness_score": 11.04,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
         "Duplicate candidates detected: within_source=1, across_sources=0.",
@@ -1775,7 +1775,7 @@
       "synthetic": false,
       "collected_count": 6,
       "eligible_count": 2,
-      "selected_count": 1,
+      "selected_count": 0,
       "rendered_main_count": 0,
       "source_gap_count": 4,
       "camera_relevant_raw_count": 0,
@@ -1800,8 +1800,8 @@
         "reference_only": 3
       },
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 1,
-        "with_source_quality_count": 1
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
       },
       "main_eligible_source_quality_coverage": {
         "main_eligible_candidate_count": 0,
@@ -1813,7 +1813,7 @@
       "source_quality_field_drift_count": 0,
       "legacy_source_quality_warning_count": 0,
       "eligible_rate": 0.3333,
-      "selection_rate": 0.5,
+      "selection_rate": 0,
       "rendered_rate": 0,
       "source_gap_rate": 0.6667,
       "noise_rate": 0.5,
@@ -1846,9 +1846,7 @@
           "count": 3
         }
       ],
-      "sample_selected_urls": [
-        "https://isocpp.org//blog/2026/04/gcc-16.1"
-      ],
+      "sample_selected_urls": [],
       "sample_excluded_urls": [
         "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
         "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
@@ -2042,7 +2040,7 @@
       "collected_count": 1,
       "eligible_count": 1,
       "selected_count": 0,
-      "rendered_main_count": 1,
+      "rendered_main_count": 0,
       "source_gap_count": 0,
       "camera_relevant_raw_count": 1,
       "parser_repair_reason_count": 0,
@@ -2079,7 +2077,7 @@
       "rendered_rate": 0,
       "source_gap_rate": 0,
       "noise_rate": 0,
-      "effectiveness_score": 45,
+      "effectiveness_score": 35,
       "recommendation": "KEEP_AND_MONITOR",
       "reasons": [],
       "top_exclusion_reasons": [],
@@ -3000,6 +2998,6 @@
     }
   ],
   "warnings": [
-    "Missing optional artifact content/newsroom/2026-05-21/reporter-candidates.json; related metrics remain zero or artifact-limited."
+    "Unattributed fact-check source gap could not be mapped to a source: The source article is a high-level blog post from Google I/O. It does not specify the exact CameraX library version, concrete API changes, or direct HAL implementation requirements related to supporting adaptive UIs. The newsletter article correctly infers the impact, but the source itself lacks technical depth."
   ]
 }

@@ -8,13 +8,13 @@ Date: 2026-05-21
 - Collected candidates: 39
 - Unregistered candidates: 0
 - Eligible candidates: 5
-- Selected candidates: 3
-- Rendered main articles: 3
+- Selected candidates: 2
+- Rendered main articles: 1
 - Source gap candidates: 35
 - Generic noise candidates: 29
 - Duplicate candidates: 1
 - Recommendations: NO_RECENT_SIGNAL: 39, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 1, KEEP_AND_FIX_PARSER: 6, KEEP_AND_MONITOR: 1
-- Selected main source quality coverage: 4/4
+- Selected main source quality coverage: 3/3
 - Main-eligible source quality coverage: 2/2
 - Conditional source promoted/blocked: 2/4
 - Unknown source quality: 0
@@ -41,8 +41,7 @@ Date: 2026-05-21
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| libcamera-release-announcements | KEEP_AND_MONITOR | 45 | 1 | 1 | 0 | 1 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 26.04 | 24 | 2 | 2 | 2 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 11.04 | 24 | 2 | 2 | 1 |
 
 ## Sources Needing Parser Repair
 
@@ -104,14 +103,14 @@ _없음_
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 3 | 0 | 0 | 0 | 1 | 0 | 0 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 26.04 | 24 | 0.0833 | 1 | 1 | 0.9583 | 0.875 | 1 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 11.04 | 24 | 0.0833 | 1 | 0.5 | 0.9583 | 0.875 | 1 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 2 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 6 | 0.3333 | 0.5 | 0 | 0.6667 | 0.5 | 0 |
-| libcamera-release-announcements | KEEP_AND_MONITOR | 45 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 6 | 0.3333 | 0 | 0 | 0.6667 | 0.5 | 0 |
+| libcamera-release-announcements | KEEP_AND_MONITOR | 35 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 
 ## Warnings
 
-- Missing optional artifact content/newsroom/2026-05-21/reporter-candidates.json; related metrics remain zero or artifact-limited.
+- Unattributed fact-check source gap could not be mapped to a source: The source article is a high-level blog post from Google I/O. It does not specify the exact CameraX library version, concrete API changes, or direct HAL implementation requirements related to supporting adaptive UIs. The newsletter article correctly infers the impact, but the source itself lacks technical depth.

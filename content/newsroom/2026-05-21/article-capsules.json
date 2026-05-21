@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "date": "2026-05-21",
-  "generated_at": "2026-05-21T01:59:27.179Z",
+  "generated_at": "2026-05-21T14:38:23.605Z",
   "capsule_token_target": "700-1100",
   "shortlisted_capsule_count": 3,
-  "selected_capsule_count": 3,
-  "reserve_capsule_count": 0,
+  "selected_capsule_count": 2,
+  "reserve_capsule_count": 1,
   "shortlisted_capsules": [
     {
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
@@ -78,19 +78,19 @@
           "hal_signal:actionability_none"
         ]
       },
-      "component": "CameraX / Android camera APIs",
-      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
+      "component": "CameraX",
+      "what_changed": "CameraX is used to provide correct camera previews across various window sizes in adaptive UIs built with Jetpack Compose.",
       "background_context_static": "Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
       "camera_hal_perspective_static": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "The article from the official Android Developers Blog confirms CameraX is a core tool for adaptive UIs, directly impacting HAL and framework validation for varied stream configurations and window sizes.",
       "evidence": [
-        "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "summary: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid..."
+        "version_or_release: Not specified",
+        "api_or_component: CameraX",
+        "behavior_change: CameraX is used to provide correct camera previews across various window sizes in adaptive UIs built with Jetpack Compose."
       ],
       "seed_evidence": null,
       "source_extraction": {
@@ -185,8 +185,9 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface,...",
-      "estimated_tokens": 1697
+      "fallback_promotion_reason": "The article from the official Android Developers Blog confirms CameraX is a core tool for adaptive UIs, directly impacting HAL and framework validation for varied stream configura...",
+      "soc_signal_type": "not_soc_signal_type",
+      "estimated_tokens": 1591
     },
     {
       "title": "Start building today - Build native Android apps in Google AI Studio",
@@ -225,10 +226,13 @@
       "source_quality": {
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release",
-        "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "main_article_source_blockers": [],
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
         "cross_check_status": "not_required",
         "requires_cross_check": false,
         "requires_conditional_evidence": false,
@@ -240,9 +244,12 @@
       },
       "source_role": "official_release_source",
       "source_url_quality": "official_dated_release",
-      "source_quality_status": "allowed",
-      "main_article_source_allowed": true,
-      "main_article_source_blockers": [],
+      "source_quality_status": "blocked",
+      "main_article_source_allowed": false,
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
       "cross_check_status": "not_required",
       "requires_cross_check": false,
       "requires_conditional_evidence": false,
@@ -251,52 +258,36 @@
       "source_quality_field_drift": [],
       "main_article_readiness": {
         "ready": false,
-        "source_ready": true,
+        "source_ready": false,
         "hal_signal_ready": false,
         "selection_input_ready": true,
         "selection_ready": true,
         "blockers": [
+          "source_quality_status_blocked",
+          "main_article_source_allowed_false",
+          "source_gap_risk",
+          "reference_only",
           "hal_signal:actionability_none"
         ]
       },
-      "component": "Android camera output",
-      "what_changed": "Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
+      "component": "Camera (Native Android APIs)",
+      "what_changed": "Developers are encouraged to use native device features like the Camera in apps built with Google AI Studio for hardware-level performance.",
       "background_context_static": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective_static": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android Developers Blog (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 6 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "The article signals a push for more on-device AI applications using native camera APIs, which has indirect but important implications for HAL performance, power, and thermal validation under new workloads.",
       "evidence": [
-        "api_or_component: Android camera output",
-        "behavior_change: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerome...",
-        "summary: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and..."
+        "version_or_release: Not specified",
+        "api_or_component: Camera (Native Android APIs)",
+        "behavior_change: Developers are encouraged to use native device features like the Camera in apps built with Google AI Studio for hardware-level performance."
       ],
       "seed_evidence": null,
-      "source_extraction": {
-        "adapter_id": "",
-        "source_type": "",
-        "source": null,
-        "release": {
-          "version": "",
-          "date": "",
-          "component": "",
-          "sections": []
-        },
-        "minor_line_context": null,
-        "extraction_quality": {
-          "has_concrete_child_topic_evidence": true,
-          "main_article_allowed": true,
-          "used_fallback": false
-        }
-      },
+      "source_extraction": null,
       "derived_editorial_hints": null,
-      "extraction_quality": {
-        "has_concrete_child_topic_evidence": true,
-        "main_article_allowed": true,
-        "used_fallback": false
-      },
+      "extraction_quality": null,
       "risk": {
         "source_gap": false,
         "watch_page": false,
@@ -321,23 +312,32 @@
         "cross_check_status": "not_required"
       },
       "score": {
-        "total": 104,
-        "camera_hal_directness": 4,
-        "evidence_specificity": 5,
+        "total": 60.7,
+        "camera_hal_directness": 3.3,
+        "evidence_specificity": 4,
         "freshness": 3,
-        "practical_actionability": 5,
+        "practical_actionability": 3,
         "source_reliability": 5,
-        "optional_ai_cpp_bonus": 2
+        "optional_ai_cpp_bonus": 4
       },
       "selection": {
         "final_selected": true,
         "primary_selected": true,
         "reserve_candidate": false,
         "selected_for_editor": true,
-        "selection_slot": "camera-platform-optional-ai-cpp",
-        "main_article_score_eligible": true,
-        "score_filter_reasons": [],
-        "exclusion_reasons": []
+        "selection_slot": "",
+        "main_article_score_eligible": false,
+        "score_filter_reasons": [
+          "source_gap_risk=true",
+          "missing concrete API/component evidence"
+        ],
+        "exclusion_reasons": [
+          "finalSelectionEligibility=exclude",
+          "final_selection_blocked=true",
+          "source_gap_risk=true",
+          "main_eligible=false",
+          "reference_only=true"
+        ]
       },
       "url_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
       "imageCandidates": [
@@ -366,9 +366,12 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, s...",
+      "do_not_claim": [
+        "Do not promote this candidate to a main article while source quality blockers remain."
+      ],
+      "fallback_promotion_reason": "The article signals a push for more on-device AI applications using native camera APIs, which has indirect but important implications for HAL performance, power, and thermal valid...",
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 1784
+      "estimated_tokens": 1724
     },
     {
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
@@ -402,56 +405,60 @@
       "fallback_promotion_allowed": false,
       "soc_signal_source_allowed": true,
       "source_quality": {
-        "source_role": "engineering_blog_source",
-        "source_url_quality": "engineering_blog_with_camera_evidence",
-        "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "main_article_source_blockers": [],
+        "source_role": "unknown_source",
+        "source_url_quality": "unknown",
+        "source_quality_status": "unknown",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Source URL quality is unresolved.",
+        "main_article_source_blockers": [
+          "unknown_source_quality"
+        ],
         "cross_check_status": "not_required",
         "requires_cross_check": false,
-        "requires_conditional_evidence": true,
-        "conditional_evidence_type": "native_hal_workflow",
-        "evidence_granularity": "article_level_concrete_source_fact",
-        "source_quality_notes": [
-          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
-        ]
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "",
+        "source_quality_notes": []
       },
-      "source_role": "engineering_blog_source",
-      "source_url_quality": "engineering_blog_with_camera_evidence",
-      "source_quality_status": "allowed",
-      "main_article_source_allowed": true,
-      "main_article_source_blockers": [],
+      "source_role": "unknown_source",
+      "source_url_quality": "unknown",
+      "source_quality_status": "unknown",
+      "main_article_source_allowed": false,
+      "main_article_source_blockers": [
+        "unknown_source_quality"
+      ],
       "cross_check_status": "not_required",
       "requires_cross_check": false,
-      "requires_conditional_evidence": true,
-      "conditional_evidence_type": "native_hal_workflow",
-      "evidence_granularity": "article_level_concrete_source_fact",
+      "requires_conditional_evidence": false,
+      "conditional_evidence_type": "",
+      "evidence_granularity": "",
       "source_quality_field_drift": [],
       "main_article_readiness": {
         "ready": false,
-        "source_ready": true,
+        "source_ready": false,
         "hal_signal_ready": false,
         "selection_input_ready": true,
         "selection_ready": true,
         "blockers": [
+          "unknown_source_quality",
+          "main_article_source_allowed_false",
           "hal_signal:actionability_none",
           "hal_signal:fallback_promotion_missing_reason"
         ]
       },
       "component": "GCC",
-      "what_changed": "GCC 16.1 has been released!",
+      "what_changed": "New release of GCC compiler. C++20 is now the default. Adds experimental support for C++26 features.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "This GCC release is a signal for the broader C++ ecosystem. While not directly applicable to the Android platform's Clang-based toolchain, it is relevant for native developers and any vendor toolchains that may use GCC. It serves as a reserve candidate.",
       "evidence": [
+        "version_or_release: GCC 16.1",
         "api_or_component: GCC",
-        "behavior_change: GCC 16.1 has been released!",
-        "summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes Fr..."
+        "behavior_change: New release of GCC compiler. C++20 is now the default. Adds experimental support for C++26 features."
       ],
       "seed_evidence": null,
       "source_extraction": null,
@@ -481,28 +488,43 @@
         "cross_check_status": "not_required"
       },
       "score": {
-        "total": 115,
+        "total": 30,
         "camera_hal_directness": 3,
-        "evidence_specificity": 5,
-        "freshness": 2,
+        "evidence_specificity": 2,
+        "freshness": 0,
         "practical_actionability": 5,
         "source_reliability": 4,
-        "optional_ai_cpp_bonus": 4
+        "optional_ai_cpp_bonus": 2
       },
       "selection": {
-        "final_selected": true,
-        "primary_selected": true,
-        "reserve_candidate": false,
-        "selected_for_editor": true,
-        "selection_slot": "camera-platform-optional-ai-cpp",
-        "main_article_score_eligible": true,
-        "score_filter_reasons": [],
-        "exclusion_reasons": []
+        "final_selected": false,
+        "primary_selected": false,
+        "reserve_candidate": true,
+        "selected_for_editor": false,
+        "selection_slot": "",
+        "main_article_score_eligible": false,
+        "score_filter_reasons": [
+          "base_total<42",
+          "missing dated evidence",
+          "source_gap_risk=true"
+        ],
+        "exclusion_reasons": [
+          "missing dated evidence",
+          "finalSelectionEligibility=watchlist",
+          "final_selection_blocked=true",
+          "source_gap_risk=true",
+          "main_eligible=false"
+        ]
       },
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
-      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI...",
-      "estimated_tokens": 1190
+      "do_not_claim": [
+        "Do not promote this candidate to a main article while source quality blockers remain.",
+        "Do not infer or repair unknown source quality inside Stage 3 generation."
+      ],
+      "fallback_promotion_reason": "This GCC release is a signal for the broader C++ ecosystem. While not directly applicable to the Android platform's Clang-based toolchain, it is relevant for native developers and...",
+      "soc_signal_type": "not_soc_signal_type",
+      "estimated_tokens": 1239
     }
   ],
   "selected_capsules": [
@@ -577,19 +599,19 @@
           "hal_signal:actionability_none"
         ]
       },
-      "component": "CameraX / Android camera APIs",
-      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
+      "component": "CameraX",
+      "what_changed": "CameraX is used to provide correct camera previews across various window sizes in adaptive UIs built with Jetpack Compose.",
       "background_context_static": "Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
       "camera_hal_perspective_static": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "The article from the official Android Developers Blog confirms CameraX is a core tool for adaptive UIs, directly impacting HAL and framework validation for varied stream configurations and window sizes.",
       "evidence": [
-        "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "summary: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid..."
+        "version_or_release: Not specified",
+        "api_or_component: CameraX",
+        "behavior_change: CameraX is used to provide correct camera previews across various window sizes in adaptive UIs built with Jetpack Compose."
       ],
       "seed_evidence": null,
       "source_extraction": {
@@ -684,8 +706,9 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface,...",
-      "estimated_tokens": 1697
+      "fallback_promotion_reason": "The article from the official Android Developers Blog confirms CameraX is a core tool for adaptive UIs, directly impacting HAL and framework validation for varied stream configura...",
+      "soc_signal_type": "not_soc_signal_type",
+      "estimated_tokens": 1591
     },
     {
       "title": "Start building today - Build native Android apps in Google AI Studio",
@@ -724,10 +747,13 @@
       "source_quality": {
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release",
-        "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "main_article_source_blockers": [],
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
         "cross_check_status": "not_required",
         "requires_cross_check": false,
         "requires_conditional_evidence": false,
@@ -739,9 +765,12 @@
       },
       "source_role": "official_release_source",
       "source_url_quality": "official_dated_release",
-      "source_quality_status": "allowed",
-      "main_article_source_allowed": true,
-      "main_article_source_blockers": [],
+      "source_quality_status": "blocked",
+      "main_article_source_allowed": false,
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
       "cross_check_status": "not_required",
       "requires_cross_check": false,
       "requires_conditional_evidence": false,
@@ -750,52 +779,36 @@
       "source_quality_field_drift": [],
       "main_article_readiness": {
         "ready": false,
-        "source_ready": true,
+        "source_ready": false,
         "hal_signal_ready": false,
         "selection_input_ready": true,
         "selection_ready": true,
         "blockers": [
+          "source_quality_status_blocked",
+          "main_article_source_allowed_false",
+          "source_gap_risk",
+          "reference_only",
           "hal_signal:actionability_none"
         ]
       },
-      "component": "Android camera output",
-      "what_changed": "Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
+      "component": "Camera (Native Android APIs)",
+      "what_changed": "Developers are encouraged to use native device features like the Camera in apps built with Google AI Studio for hardware-level performance.",
       "background_context_static": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective_static": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android Developers Blog (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 6 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "The article signals a push for more on-device AI applications using native camera APIs, which has indirect but important implications for HAL performance, power, and thermal validation under new workloads.",
       "evidence": [
-        "api_or_component: Android camera output",
-        "behavior_change: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerome...",
-        "summary: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and..."
+        "version_or_release: Not specified",
+        "api_or_component: Camera (Native Android APIs)",
+        "behavior_change: Developers are encouraged to use native device features like the Camera in apps built with Google AI Studio for hardware-level performance."
       ],
       "seed_evidence": null,
-      "source_extraction": {
-        "adapter_id": "",
-        "source_type": "",
-        "source": null,
-        "release": {
-          "version": "",
-          "date": "",
-          "component": "",
-          "sections": []
-        },
-        "minor_line_context": null,
-        "extraction_quality": {
-          "has_concrete_child_topic_evidence": true,
-          "main_article_allowed": true,
-          "used_fallback": false
-        }
-      },
+      "source_extraction": null,
       "derived_editorial_hints": null,
-      "extraction_quality": {
-        "has_concrete_child_topic_evidence": true,
-        "main_article_allowed": true,
-        "used_fallback": false
-      },
+      "extraction_quality": null,
       "risk": {
         "source_gap": false,
         "watch_page": false,
@@ -820,23 +833,32 @@
         "cross_check_status": "not_required"
       },
       "score": {
-        "total": 104,
-        "camera_hal_directness": 4,
-        "evidence_specificity": 5,
+        "total": 60.7,
+        "camera_hal_directness": 3.3,
+        "evidence_specificity": 4,
         "freshness": 3,
-        "practical_actionability": 5,
+        "practical_actionability": 3,
         "source_reliability": 5,
-        "optional_ai_cpp_bonus": 2
+        "optional_ai_cpp_bonus": 4
       },
       "selection": {
         "final_selected": true,
         "primary_selected": true,
         "reserve_candidate": false,
         "selected_for_editor": true,
-        "selection_slot": "camera-platform-optional-ai-cpp",
-        "main_article_score_eligible": true,
-        "score_filter_reasons": [],
-        "exclusion_reasons": []
+        "selection_slot": "",
+        "main_article_score_eligible": false,
+        "score_filter_reasons": [
+          "source_gap_risk=true",
+          "missing concrete API/component evidence"
+        ],
+        "exclusion_reasons": [
+          "finalSelectionEligibility=exclude",
+          "final_selection_blocked=true",
+          "source_gap_risk=true",
+          "main_eligible=false",
+          "reference_only=true"
+        ]
       },
       "url_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
       "imageCandidates": [
@@ -865,10 +887,15 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, s...",
+      "do_not_claim": [
+        "Do not promote this candidate to a main article while source quality blockers remain."
+      ],
+      "fallback_promotion_reason": "The article signals a push for more on-device AI applications using native camera APIs, which has indirect but important implications for HAL performance, power, and thermal valid...",
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 1784
-    },
+      "estimated_tokens": 1724
+    }
+  ],
+  "reserve_capsules": [
     {
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
@@ -901,56 +928,60 @@
       "fallback_promotion_allowed": false,
       "soc_signal_source_allowed": true,
       "source_quality": {
-        "source_role": "engineering_blog_source",
-        "source_url_quality": "engineering_blog_with_camera_evidence",
-        "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "main_article_source_blockers": [],
+        "source_role": "unknown_source",
+        "source_url_quality": "unknown",
+        "source_quality_status": "unknown",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Source URL quality is unresolved.",
+        "main_article_source_blockers": [
+          "unknown_source_quality"
+        ],
         "cross_check_status": "not_required",
         "requires_cross_check": false,
-        "requires_conditional_evidence": true,
-        "conditional_evidence_type": "native_hal_workflow",
-        "evidence_granularity": "article_level_concrete_source_fact",
-        "source_quality_notes": [
-          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
-        ]
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "",
+        "source_quality_notes": []
       },
-      "source_role": "engineering_blog_source",
-      "source_url_quality": "engineering_blog_with_camera_evidence",
-      "source_quality_status": "allowed",
-      "main_article_source_allowed": true,
-      "main_article_source_blockers": [],
+      "source_role": "unknown_source",
+      "source_url_quality": "unknown",
+      "source_quality_status": "unknown",
+      "main_article_source_allowed": false,
+      "main_article_source_blockers": [
+        "unknown_source_quality"
+      ],
       "cross_check_status": "not_required",
       "requires_cross_check": false,
-      "requires_conditional_evidence": true,
-      "conditional_evidence_type": "native_hal_workflow",
-      "evidence_granularity": "article_level_concrete_source_fact",
+      "requires_conditional_evidence": false,
+      "conditional_evidence_type": "",
+      "evidence_granularity": "",
       "source_quality_field_drift": [],
       "main_article_readiness": {
         "ready": false,
-        "source_ready": true,
+        "source_ready": false,
         "hal_signal_ready": false,
         "selection_input_ready": true,
         "selection_ready": true,
         "blockers": [
+          "unknown_source_quality",
+          "main_article_source_allowed_false",
           "hal_signal:actionability_none",
           "hal_signal:fallback_promotion_missing_reason"
         ]
       },
       "component": "GCC",
-      "what_changed": "GCC 16.1 has been released!",
+      "what_changed": "New release of GCC compiler. C++20 is now the default. Adds experimental support for C++26 features.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "This GCC release is a signal for the broader C++ ecosystem. While not directly applicable to the Android platform's Clang-based toolchain, it is relevant for native developers and any vendor toolchains that may use GCC. It serves as a reserve candidate.",
       "evidence": [
+        "version_or_release: GCC 16.1",
         "api_or_component: GCC",
-        "behavior_change: GCC 16.1 has been released!",
-        "summary: GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes Fr..."
+        "behavior_change: New release of GCC compiler. C++20 is now the default. Adds experimental support for C++26 features."
       ],
       "seed_evidence": null,
       "source_extraction": null,
@@ -980,29 +1011,43 @@
         "cross_check_status": "not_required"
       },
       "score": {
-        "total": 115,
+        "total": 30,
         "camera_hal_directness": 3,
-        "evidence_specificity": 5,
-        "freshness": 2,
+        "evidence_specificity": 2,
+        "freshness": 0,
         "practical_actionability": 5,
         "source_reliability": 4,
-        "optional_ai_cpp_bonus": 4
+        "optional_ai_cpp_bonus": 2
       },
       "selection": {
-        "final_selected": true,
-        "primary_selected": true,
-        "reserve_candidate": false,
-        "selected_for_editor": true,
-        "selection_slot": "camera-platform-optional-ai-cpp",
-        "main_article_score_eligible": true,
-        "score_filter_reasons": [],
-        "exclusion_reasons": []
+        "final_selected": false,
+        "primary_selected": false,
+        "reserve_candidate": true,
+        "selected_for_editor": false,
+        "selection_slot": "",
+        "main_article_score_eligible": false,
+        "score_filter_reasons": [
+          "base_total<42",
+          "missing dated evidence",
+          "source_gap_risk=true"
+        ],
+        "exclusion_reasons": [
+          "missing dated evidence",
+          "finalSelectionEligibility=watchlist",
+          "final_selection_blocked=true",
+          "source_gap_risk=true",
+          "main_eligible=false"
+        ]
       },
       "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
       "imageCandidates": [],
-      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI...",
-      "estimated_tokens": 1190
+      "do_not_claim": [
+        "Do not promote this candidate to a main article while source quality blockers remain.",
+        "Do not infer or repair unknown source quality inside Stage 3 generation."
+      ],
+      "fallback_promotion_reason": "This GCC release is a signal for the broader C++ ecosystem. While not directly applicable to the Android platform's Clang-based toolchain, it is relevant for native developers and...",
+      "soc_signal_type": "not_soc_signal_type",
+      "estimated_tokens": 1239
     }
-  ],
-  "reserve_capsules": []
+  ]
 }

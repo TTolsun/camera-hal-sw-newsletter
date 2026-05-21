@@ -155,28 +155,6 @@
           ],
           "impact_level": "cts_vts_its_cdd",
           "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "bdcf8a4c-fact-2",
-          "text": "2026년 5월 19일자 Android Developers Blog 게시물은 Google I/O의 주요 내용 중 하나로 Jetpack Compose를 사용한 적응형 UI 구축을 다루었습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [],
-          "source_urls": [
-            "https://goo.gle/AdaptiveApps_IO26"
-          ],
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "bdcf8a4c-fact-3",
-          "text": "이 기사는 2026년 5월 19일자 Android Developers Blog 게시물에 근거합니다. 해당 게시물은 Jetpack Compose를 사용한 적응형 UI(Adaptive UI) 구축을 설명하면서, 다양한 윈도우 크기에서 올바른 카메라 프리뷰를 제공하는 데 CameraX가 사용된다고 명시적으로 언급했습니다. 특정 CameraX 라이브러리 버전이나 API 변경 사항이 명시되지는 않았지만, 공식 블로그에서 CameraX를 적응형 UI의 핵심 구성 요소로 지목했다는 점이 중요합니다. 이는 HAL과 프레임워크가 다양한 스트림 설정 및 재설정 시나리오를 안정적으로 처리해야 한다는 요구사항으로 이어집니다.",
-          "claim_type": "fact",
-          "evidence_ids": [],
-          "source_urls": [
-            "https://goo.gle/AdaptiveApps_IO26"
-          ],
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low"
         }
       ],
       "counts_as_primary_camera_topic": true,
@@ -199,8 +177,7 @@
         ],
         "do_not_overstate": [
           "이 기사는 특정 HAL API 변경이나 새로운 CTS 요구사항을 발표한 것이 아닙니다. CameraX와 적응형 UI의 연관성을 강조하여 기존 HAL의 안정성 검증이 더 중요해졌다는 점에 초점을 맞춰야 합니다.",
-          "소스가 특정 CameraX 라이브러리 버전을 명시하지 않았으므로",
-          "특정 버전에 국한된 변경으로 해석해서는 안 됩니다."
+          "소스가 특정 CameraX 라이브러리 버전을 명시하지 않았으므로, 특정 버전에 국한된 변경으로 해석해서는 안 됩니다."
         ]
       },
       "impact_claim_level": "direct_hal_change",
@@ -209,26 +186,7 @@
         "camera_framework_owner",
         "camerax_app_compat_owner"
       ],
-      "relevance_bucket": "direct_aosp_camera",
-      "source_candidate_url": "https://goo.gle/AdaptiveApps_IO26",
-      "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
-      "editorial_priority": 1,
-      "aosp_camera_directness": 3,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_driver_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "resolvedImage": {
-        "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-        "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
-      }
+      "relevance_bucket": "direct_aosp_camera"
     }
   ],
   "action_items": [

@@ -1,0 +1,11 @@
+{
+  "name": "Error",
+  "message": "[editor repair attempt 1/2] Gemini API failed with non-retryable error on model gemini-2.5-pro: fetch failed",
+  "details": null,
+  "field": null,
+  "stage": "editor repair attempt 1/2",
+  "attempt": 1,
+  "status": "FAILED_REPAIR_REVIEWABLE",
+  "lastKnownValidAttempt": 1,
+  "fallbackEditorSectionCount": 1
+}

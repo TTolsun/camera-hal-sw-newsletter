@@ -1,53 +1,112 @@
 [
   {
     "attempt": 1,
-    "model": "deterministic-fallback-public-issue",
-    "score": 100,
+    "model": "repair-fallback",
+    "score": 89,
     "threshold": 85,
-    "status": "PUBLIC_ISSUE_CREATED",
-    "rendered_main_article_count": 3,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 0,
     "demoted_article_count": 0,
-    "reserve_candidates_used": [
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
       {
-        "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-        "category": "AOSP Camera / Android Camera",
-        "url": "https://goo.gle/AdaptiveApps_IO26",
-        "source": "Android Developers Blog",
-        "relevance_bucket": "direct_aosp_camera",
-        "action": "rebuild-from-bound-candidate",
-        "fallback": false,
-        "reason": "hard failure replacement"
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "Jetpack Compose 적응형 UI의 핵심 요소로 부상한 CameraX, 다양한 화면 크기에서의 스트림 설정 안정성 요구",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:bdcf8a4c-fact-1:source_url_derived_evidence_mapping"
       },
       {
-        "headline": "libcamera Release Announcements - libcamera v0.7.1",
-        "category": "Camera Driver / Image Pipeline",
-        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-        "source": "libcamera Release Announcements",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "action": "rebuild-from-bound-candidate",
-        "fallback": false,
-        "reason": "hard failure replacement"
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "Jetpack Compose 적응형 UI의 핵심 요소로 부상한 CameraX, 다양한 화면 크기에서의 스트림 설정 안정성 요구",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:bdcf8a4c-fact-2:source_url_derived_evidence_mapping"
       },
       {
-        "headline": "Start building today - Build native Android apps in Google AI Studio",
-        "category": "Android Platform / CameraX",
-        "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-        "source": "Android Developers Blog",
-        "relevance_bucket": "android_platform_camera_adjacent",
-        "action": "rebuild-from-bound-candidate",
-        "fallback": false,
-        "reason": "hard failure replacement"
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "Jetpack Compose 적응형 UI의 핵심 요소로 부상한 CameraX, 다양한 화면 크기에서의 스트림 설정 안정성 요구",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:bdcf8a4c-fact-3:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "source-integrity",
+        "points": 5,
+        "reason": "Fact checker returned 1 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 3,
+        "reason": "Fact checker reported 1 source gap(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
       }
     ],
-    "deductions": [],
     "selected_article_headlines": [
-      "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "libcamera Release Announcements - libcamera v0.7.1",
-      "Start building today - Build native Android apps in Google AI Studio"
+      "Jetpack Compose 적응형 UI의 핵심 요소로 부상한 CameraX, 다양한 화면 크기에서의 스트림 설정 안정성 요구"
     ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
     "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
     "repair_actions": [
-      "fallback-public-issue-builder"
-    ]
+      "editor repair attempt 1/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 1,
+    "must_fix_count": 1,
+    "repair_failure": {
+      "name": "Error",
+      "message": "[editor repair attempt 1/2] Gemini API failed with non-retryable error on model gemini-2.5-pro: fetch failed",
+      "details": null,
+      "field": null,
+      "stage": "editor repair attempt 1/2",
+      "attempt": 1,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 1
+    }
   }
 ]

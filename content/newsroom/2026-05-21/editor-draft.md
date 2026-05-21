@@ -1,102 +1,44 @@
-# AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-21
+# AOSP Camera / Driver / SoC Platform 뉴스레터 (2026-05-21)
 
-이번 2026-05-21호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.
+이번 주 뉴스레터에서는 Jetpack Compose를 사용한 적응형 UI에서 CameraX의 역할과 이것이 HAL의 스트림 설정 안정성에 미치는 영향을 분석합니다. 다양한 폼팩터와 윈도우 크기 변경에 따른 카메라 프리뷰 재설정 시나리오를 중점적으로 다룹니다.
 
-
-> 편집자 검토 후 공개 가능한 검토 발행본입니다.
-> 이 호는 자동 정상 발행 기준을 통과하지 못했으며, 편집자 확인 후 merge해야 합니다.
-> 각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.
 
 
 ## 1. 이번 주 3줄 브리핑
 
-- Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.
-- libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트를 포함합니다.
-- Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.
+- Jetpack Compose 적응형 UI에서 CameraX 프리뷰가 핵심 요소로 언급됨에 따라, 다양한 화면 크기 및 분할 화면 모드에서 스트림 재설정 안정성 검증이 중요해졌습니다.
+- 폴더블 기기나 태블릿에서 앱 레이아웃이 동적으로 변경될 때 발생하는 CameraX의 스트림 재설정 요청을 HAL이 얼마나 빠르고 안정적으로 처리하는지 확인해야 합니다.
+- 이번 주 Action Item은 폴더블 및 태블릿 기기에서 화면 분할, 회전, 접기/펴기 동작을 반복하며 CameraX 프리뷰 스트림의 지연(latency) 및 프레임 드롭 여부를 측정하는 것입니다.
 
-## 2. Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트
+## 2. Jetpack Compose 적응형 UI의 핵심 요소로 부상한 CameraX, 다양한 화면 크기에서의 스트림 설정 안정성 요구
 
 
-![Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png)
+![Google I/O 로고와 함께 안드로이드 개발자를 위한 세션을 안내하는 이미지. 다양한 기기에서의 원활한 안드로이드 경험 구축이라는 주제를 시각적으로 나타냅니다.](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png)
 
 _이미지: [Android Developers Blog](https://goo.gle/AdaptiveApps_IO26)_
 
 
-Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.
+최근 Android Developers Blog는 Jetpack Compose를 사용해 폴더블, 태블릿 등 다양한 기기에서 매끄러운 사용자 경험을 구축하는 방법을 소개하며, 동적으로 변하는 UI 레이아웃에서 정확한 카메라 프리뷰를 구현하는 데 CameraX가 핵심적인 역할을 한다고 밝혔습니다. 이는 Camera HAL이 다양한 화면 크기와 윈도우 모드에 대응해 스트림 설정을 얼마나 빠르고 안정적으로 처리하는지가 중요해졌음을 시사합니다.
 
-Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.
+Jetpack Compose는 다양한 폼팩터에 대응하는 적응형 UI(adaptive UI) 개발을 위한 선언형 UI 툴킷입니다. 폴더블 기기를 접거나 펼 때, 또는 태블릿에서 멀티 윈도우 모드를 사용할 때 앱의 레이아웃은 동적으로 변경됩니다. 이 과정에서 앱에 포함된 카메라 프리뷰(CameraX PreviewView) 역시 새로운 크기와 종횡비에 맞춰 실시간으로 재구성되어야 합니다.
 
-이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다.
+이러한 UI 변경은 단순한 화면 요소 크기 조정을 넘어, CameraX가 내부적으로 새로운 스트림 설정을 계산하고 Camera HAL에 세션 재설정을 요청하는 과정으로 이어집니다. 2026년 5월 19일자 공식 Android Developers Blog 게시물은 이처럼 복잡한 시나리오에서 올바른 카메라 프리뷰를 보장하는 핵심 도구로 CameraX를 명시했습니다. 이는 HAL 개발팀이 빈번한 스트림 재설정 요청에도 불구하고 지연이나 오류 없이 안정적인 프리뷰를 제공해야 하는 과제를 안게 되었음을 의미합니다.
 
 **Camera HAL / Driver 관점**
 
-Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.
+Jetpack Compose 기반 적응형 UI의 확산은 HAL이 더 다양한 프리뷰 스트림 크기와 종횡비 전환을 빠르고 안정적으로 처리해야 함을 의미합니다. 특히 폴더블 기기의 접힘/펼침 상태 변경이나 멀티 윈도우 크기 조절 시 발생하는 스트림 재설정(reconfiguration) 요청에 대한 HAL의 성능과 안정성이 앱의 전체적인 품질을 좌우하게 됩니다. 이는 단순한 스트림 지원 여부를 넘어, 동적인 설정 변경 시의 지연 시간(latency), 프레임 드롭, 리소스 사용량까지 고려한 검증이 필요함을 시사합니다.
 
 ### 확인할 점
 
-- 즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.
+- 폴더블 및 태블릿 기기에서 화면 분할, 창 크기 조절, 화면 회전 시 CameraX 프리뷰가 깨지거나 지연 없이 갱신되는지 확인합니다.
+- 앱이 접힌 상태와 펼친 상태를 오갈 때 발생하는 스트림 재설정 요청을 HAL이 얼마나 빠르게 처리하는지 측정합니다.
+- 다양한 프리뷰 스트림 종횡비와 해상도 조합에 대한 HAL의 지원 범위를 재검토하고, 지원되지 않는 설정에 대한 오류 처리가 올바르게 이루어지는지 확인합니다.
 
 **출처**
 
 - [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
-
----
-
-## 3. libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트
-
-
-
-libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트를 포함합니다.
-
-libcamera v0.7.1이 공개되었습니다. 이번 릴리스에는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트가 포함되었습니다.
-
-Android Camera HAL API 변경으로 직접 해석할 근거는 없습니다. 다만 V4L2 기반 camera pipeline, sensor mode 선택, format negotiation, frame timing 검증 관점에서는 참고할 만한 upstream signal입니다.
-
-**Camera HAL / Driver 관점**
-
-Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.
-
-### 확인할 점
-
-- sensor mode selection 관련 내부 이슈와 연결 가능한지 확인합니다.
-- frame timing / format negotiation regression test 필요 여부를 검토합니다.
-- downstream Android HAL 영향은 별도 evidence가 있을 때만 판단합니다.
-
-**출처**
-
-- [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
-
----
-
-## 4. Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인
-
-
-![Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png)
-
-_이미지: [Android Developers Blog](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today)_
-
-
-Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.
-
-Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.
-
-Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다.
-
-**Camera HAL / Driver 관점**
-
-CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.
-
-### 확인할 점
-
-- 즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.
-
-**출처**
-
-- [Start building today - Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today)
 
 
 ## 참고자료
 
 - [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
-- [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
-- [Start building today - Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today)

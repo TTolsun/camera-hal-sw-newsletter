@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-21",
-  "generated_at": "2026-05-21T01:59:27.162Z",
+  "generated_at": "2026-05-21T14:37:20.341Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 3,
@@ -13,12 +13,8 @@
   },
   "reasons": [
     {
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "count": 2
-    },
-    {
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "count": 1
+      "count": 3
     }
   ],
   "entries": [
@@ -34,7 +30,7 @@
         "content_hash": "07001fcff71ad48b61928d083d411a101099d62d0206dd9fd8c8b91c307b80b0"
       },
       "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
       "lookup_source": "none",
       "cache_record_path": ""
     },
@@ -50,7 +46,7 @@
         "content_hash": "5eb4c2b4421343314615b8f7d3b24f2a37bb69f5e941c5ae85481f546f78b46b"
       },
       "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
       "lookup_source": "none",
       "cache_record_path": ""
     },

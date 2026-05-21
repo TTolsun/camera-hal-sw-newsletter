@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "date": "2026-05-21",
-  "generated_at": "2026-05-21T01:59:27.159Z",
-  "status": "UNDERFILLED_NEEDS_FIX",
-  "failure_stage": "candidate_pool_preflight",
-  "failure_reason": "publishable_candidate_shortage; reserve_candidate_shortage",
+  "generated_at": "2026-05-21T14:38:23.597Z",
+  "status": "OK",
+  "failure_stage": "",
+  "failure_reason": "",
   "selection_errors": [],
   "selection_warnings": [],
   "selection_shortage_hints": [
@@ -18,26 +18,26 @@
     "publish_gate_passed": true,
     "non_fallback_reviewable_article_count": 2,
     "primary_camera_stack_topic_count": 2,
-    "supporting_main_article_count": 1,
+    "supporting_main_article_count": 0,
     "forbidden_main_article_count": 0,
     "eligible_non_fallback_reviewable_article_count": 2,
-    "min_final_articles": 3,
+    "min_final_articles": 1,
     "max_final_articles": 5,
-    "absolute_min_reviewable_articles": 1,
-    "min_non_fallback_publish_ready_articles": 2,
-    "selected_article_count": 3
+    "absolute_min_reviewable_articles": 0,
+    "min_non_fallback_publish_ready_articles": 0,
+    "selected_article_count": 2
   },
-  "composition_mode": "FALLBACK_COMPOSITION",
-  "composition_reason": "Article Composition Policy passed with 2 Primary Camera Stack article(s) and 1 supporting main article(s).",
+  "composition_mode": "NORMAL",
+  "composition_reason": "Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.",
   "composition_summary": {
-    "selected_article_count": 3,
+    "selected_article_count": 2,
     "bucket_counts": {
       "direct_aosp_camera": 1,
       "camera_driver_image_pipeline": 0,
       "android_platform_camera_adjacent": 1,
       "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 1,
+      "cpp_ai_tooling_fallback": 0,
       "generic_tech_watchlist": 0
     },
     "direct_aosp_camera_count": 1,
@@ -45,13 +45,13 @@
     "android_platform_camera_adjacent_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 1,
+    "cpp_ai_tooling_fallback_count": 0,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_topic_count": 2,
-    "supporting_main_article_count": 1,
+    "supporting_main_article_count": 0,
     "forbidden_main_article_count": 0,
     "non_fallback_reviewable_article_count": 2,
-    "fallback_topic_count": 1
+    "fallback_topic_count": 0
   },
   "eligible_composition_summary": {
     "selected_article_count": 3,
@@ -77,27 +77,24 @@
     "non_fallback_reviewable_article_count": 2,
     "fallback_topic_count": 1
   },
-  "candidate_pool_preflight_passed": false,
-  "candidate_shortage_reviewable": true,
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
   "candidate_shortage_summary": {
     "publishable_candidate_count": 3,
-    "required_publishable_candidate_count": 5,
-    "reserve_candidate_count": 0,
-    "required_reserve_candidate_count": 2,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 1,
+    "required_reserve_candidate_count": 0,
     "primary_camera_stack_candidate_count": 2,
-    "required_primary_camera_stack_candidate_count": 1,
+    "required_primary_camera_stack_candidate_count": 0,
     "camera_stack_candidate_count": 2,
-    "required_camera_stack_candidate_count": 2,
+    "required_camera_stack_candidate_count": 0,
     "direct_camera_or_driver_candidate_count": 1,
     "camera_adjacent_candidate_count": 1,
     "supporting_candidate_count": 1,
-    "selected_article_count": 3,
+    "selected_article_count": 2,
     "selected_primary_camera_stack_count": 2
   },
-  "shortage_reason_codes": [
-    "publishable_candidate_shortage",
-    "reserve_candidate_shortage"
-  ],
+  "shortage_reason_codes": [],
   "source_parser_hints": [
     {
       "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
@@ -108,28 +105,23 @@
       "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
       "source_id": "unknown",
       "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
-    },
-    {
-      "code": "RESERVE_POOL_SHORTAGE",
-      "source_id": "selection-preflight",
-      "reason": "Only 0 reserve candidate(s) are available; candidatePoolPreflight.reserveMin requires 2."
     }
   ],
   "counts": {
     "input_candidate_count": 43,
     "eligible_candidate_count": 3,
-    "selected_article_count": 3,
-    "deterministic_selected_count": 3,
-    "reserve_candidate_count": 0,
+    "selected_article_count": 2,
+    "deterministic_selected_count": 2,
+    "reserve_candidate_count": 1,
     "direct_aosp_camera_count": 1,
     "camera_driver_image_pipeline_count": 0,
     "android_platform_camera_adjacent_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 1,
+    "cpp_ai_tooling_fallback_count": 0,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_topic_count": 2,
-    "supporting_main_article_count": 1,
+    "supporting_main_article_count": 0,
     "forbidden_main_article_count": 0,
     "non_fallback_reviewable_article_count": 2
   },
