@@ -49,6 +49,12 @@ const {
 const {
   seedEvidencePackPath
 } = require('../common/artifact-paths');
+const {
+  applyPublicationDecision,
+  fallbackEditionNoticeLines,
+  fallbackIssueTags,
+  publicationDecisionForSections
+} = require('../common/publication-mode');
 
 const REQUIRED_PRESERVE_FIELDS = [
   'headline',
@@ -951,7 +957,12 @@ function updateNewsletterData(root, date, issue) {
     summary: issue.summary,
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
-    tags: issueTags(issue)
+    tags: issueTags(issue),
+    publication_mode: issue.publication_mode || 'review_only',
+    homepage_visibility: issue.homepage_visibility || 'normal',
+    fallback_only: issue.fallback_only === true,
+    camera_anchor_count: Number.isFinite(Number(issue.camera_anchor_count)) ? Number(issue.camera_anchor_count) : 0,
+    ...(issue.homepage_badge ? { homepage_badge: issue.homepage_badge } : {})
   };
   const next = ensureArray(current)
     .filter(item => item?.date !== date)
@@ -1276,13 +1287,27 @@ function buildFallbackPublicIssue(options = {}) {
     assertPreservedFields(snapshot, afterSection, beforeSection?.headline || `article ${index + 1}`);
   }
 
-  issue.summary = publicIssueSummary(date, issue.sections);
+  const publicationDecision = publicationDecisionForSections(issue.sections, {
+    publicNewsletterReady: true,
+    finalPublishReady: false,
+    reviewPublicationReady: true
+  });
+  applyPublicationDecision(issue, publicationDecision);
+  const basePublicSummary = publicIssueSummary(date, issue.sections);
+  issue.summary = publicationDecision.fallback_only
+    ? `Fallback Edition: C++ / Tooling Watch - ${basePublicSummary}`
+    : basePublicSummary;
   issue.review_publication_ready = true;
-  issue.publication_notice = [
+  issue.publication_notice = publicationDecision.fallback_only
+    ? fallbackEditionNoticeLines()
+    : [
     '편집자 검토 후 발행 가능한 Review-only 발행본입니다.',
     '이 호는 AI 자동 발행 기준을 통과하지 못했으며, fallback 또는 후보 부족 구성이 포함될 수 있습니다.',
     '각 기사에서 Camera HAL 직접 변경으로 과장하지 않도록 source와 guardrail을 확인하세요.'
-  ];
+      ];
+  if (publicationDecision.fallback_only) {
+    issue.tags = fallbackIssueTags(issue.tags);
+  }
   issue.briefing = publicBriefingBullets(issue.sections);
   issue.action_items = fallbackActionItems(issue, fallbackRecords.filter(item => item.fallback).length, demotedRecords);
   issue.references = uniqueReferences(issue.sections, demotedRecords);
@@ -1306,6 +1331,20 @@ function buildFallbackPublicIssue(options = {}) {
     fallback_public_issue_reason: REVIEW_PUBLICATION_READY_REASON,
     review_publication_ready_reason: REVIEW_PUBLICATION_READY_REASON,
     editor_review_reason: EDITOR_REVIEW_REASON,
+    publication_mode: publicationDecision.publication_mode,
+    homepage_visibility: publicationDecision.homepage_visibility,
+    normal_public_ready: publicationDecision.normal_public_ready,
+    automatic_publish_ready: publicationDecision.automatic_publish_ready,
+    public_artifact_ready: publicationDecision.public_artifact_ready,
+    fallback_public_ready: publicationDecision.fallback_public_ready,
+    fallback_only: publicationDecision.fallback_only,
+    camera_anchor_count: publicationDecision.camera_anchor_count,
+    homepage_badge: publicationDecision.homepage_badge,
+    content_quality_score: fallbackQualityReport.score,
+    camera_relevance_score: publicationDecision.camera_anchor_count > 0 ? fallbackQualityReport.score : 0,
+    publication_mode_decision: publicationDecision.fallback_only
+      ? 'fallback_public: no final public camera anchor remained; publish as clearly labeled Fallback Edition.'
+      : 'review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.',
     ...originalFactCheck,
     fallback_public_issue_removed_blockers: demotedRecords.length > 0,
     fallback_public_issue_removed_article_count: demotedRecords.length,
@@ -1328,6 +1367,15 @@ function buildFallbackPublicIssue(options = {}) {
     fallback_public_issue_reason: REVIEW_PUBLICATION_READY_REASON,
     review_publication_ready_reason: REVIEW_PUBLICATION_READY_REASON,
     editor_review_reason: EDITOR_REVIEW_REASON,
+    publication_mode: publicationDecision.publication_mode,
+    homepage_visibility: publicationDecision.homepage_visibility,
+    normal_public_ready: publicationDecision.normal_public_ready,
+    automatic_publish_ready: publicationDecision.automatic_publish_ready,
+    public_artifact_ready: publicationDecision.public_artifact_ready,
+    fallback_public_ready: publicationDecision.fallback_public_ready,
+    fallback_only: publicationDecision.fallback_only,
+    camera_anchor_count: publicationDecision.camera_anchor_count,
+    homepage_badge: publicationDecision.homepage_badge,
     ...originalFactCheck,
     fallback_public_issue_removed_blockers: demotedRecords.length > 0,
     fallback_public_issue_removed_article_count: demotedRecords.length,
@@ -1374,6 +1422,18 @@ function buildFallbackPublicIssue(options = {}) {
     fallback_public_issue_reason: REVIEW_PUBLICATION_READY_REASON,
     review_publication_ready_reason: REVIEW_PUBLICATION_READY_REASON,
     editor_review_reason: EDITOR_REVIEW_REASON,
+    publication_mode: publicationDecision.publication_mode,
+    homepage_visibility: publicationDecision.homepage_visibility,
+    normal_public_ready: publicationDecision.normal_public_ready,
+    automatic_publish_ready: publicationDecision.automatic_publish_ready,
+    public_artifact_ready: publicationDecision.public_artifact_ready,
+    fallback_public_ready: publicationDecision.fallback_public_ready,
+    fallback_only: publicationDecision.fallback_only,
+    camera_anchor_count: publicationDecision.camera_anchor_count,
+    homepage_badge: publicationDecision.homepage_badge,
+    content_quality_score: finalQualityReport.content_quality_score,
+    camera_relevance_score: finalQualityReport.camera_relevance_score,
+    publication_mode_decision: finalQualityReport.publication_mode_decision,
     quality_status: finalQualityReport.status,
     quality_score: finalQualityReport.score,
     quality_threshold: finalQualityReport.threshold,

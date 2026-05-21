@@ -7,6 +7,15 @@ const {
 
 const OUTPUT_FIELDS = [
   'final_publish_ready',
+  'publication_mode',
+  'homepage_visibility',
+  'normal_public_ready',
+  'automatic_publish_ready',
+  'public_artifact_ready',
+  'fallback_public_ready',
+  'fallback_only',
+  'camera_anchor_count',
+  'homepage_badge',
   'has_ai_publish_ready',
   'artifact_final_publish_ready',
   'selection_publish_ready',

@@ -71,6 +71,10 @@ function finiteNumber(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function isTruthy(value) {
+  return value === true || value === 'true';
+}
+
 function countValue(value) {
   const parsed = finiteNumber(value);
   return parsed === null ? 0 : parsed;
@@ -197,6 +201,64 @@ function validateNewsletterHtmlTags(item, html, strictArtifactValidation) {
   if (actualTags !== null && sameOrderedValues(actualTags, expectedTags)) return;
   if (strictArtifactValidation) {
     fail(message);
+  }
+}
+
+function isFallbackPublicIssue(item, status = {}) {
+  return item?.publication_mode === 'fallback_public' || status?.publication_mode === 'fallback_public';
+}
+
+function validatePublicationModeInvariants(item, status = {}) {
+  const publicationMode = item.publication_mode || status.publication_mode || '';
+  const homepageVisibility = item.homepage_visibility || status.homepage_visibility || 'normal';
+  const cameraAnchorCount = finiteNumber(item.camera_anchor_count ?? status.camera_anchor_count);
+  if (cameraAnchorCount === 0 && homepageVisibility !== 'hidden') {
+    if (publicationMode !== 'fallback_public') {
+      fail(`Newsletter ${item.date} with camera_anchor_count=0 must use publication_mode=fallback_public or be hidden.`);
+    }
+    if (homepageVisibility !== 'visible_with_fallback_badge') {
+      fail(`Newsletter ${item.date} fallback-only public issue must use homepage_visibility=visible_with_fallback_badge.`);
+    }
+  }
+  if (publicationMode !== 'fallback_public') return;
+  if (homepageVisibility !== 'visible_with_fallback_badge') {
+    fail(`Newsletter ${item.date} fallback_public issue must use homepage_visibility=visible_with_fallback_badge.`);
+  }
+  if (!isTruthy(item.fallback_only ?? status.fallback_only)) {
+    fail(`Newsletter ${item.date} fallback_public issue must expose fallback_only=true.`);
+  }
+  if (cameraAnchorCount !== 0) {
+    fail(`Newsletter ${item.date} fallback_public issue must expose camera_anchor_count=0.`);
+  }
+  if (status.publication_mode === 'fallback_public' && !isTruthy(status.fallback_public_ready)) {
+    fail(`Newsletter ${item.date} fallback_public generation status must expose fallback_public_ready=true.`);
+  }
+}
+
+function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
+  if (!isFallbackPublicIssue(item, status)) return;
+  const tags = ensureArray(item.tags).map(String);
+  const cameraAnchorCount = finiteNumber(item.camera_anchor_count ?? status.camera_anchor_count);
+  if (item.homepage_badge !== 'Fallback Edition') {
+    fail(`Newsletter ${item.date} fallback_public entry must expose homepage_badge=Fallback Edition.`);
+  }
+  if (item.homepage_visibility !== 'visible_with_fallback_badge') {
+    fail(`Newsletter ${item.date} fallback_public entry must use homepage_visibility=visible_with_fallback_badge.`);
+  }
+  if (!tags.includes('Fallback Edition')) {
+    fail(`Newsletter ${item.date} fallback_public tags must include Fallback Edition.`);
+  }
+  if (!tags.includes('Tooling Watch')) {
+    fail(`Newsletter ${item.date} fallback_public tags must include Tooling Watch.`);
+  }
+  if (cameraAnchorCount === 0 && tags.includes('Camera HAL')) {
+    fail(`Newsletter ${item.date} fallback-only metadata must not expose Camera HAL as a homepage tag.`);
+  }
+  if (!/class=["'][^"']*\bpublication-notice\b/i.test(html) || !/Fallback Edition: C\+\+ \/ Tooling Watch/.test(textFromHtml(html))) {
+    fail(`Newsletter ${item.date} fallback_public HTML must show a visible Fallback Edition publication notice.`);
+  }
+  if (!/Fallback Edition: C\+\+ \/ Tooling Watch/.test(markdown)) {
+    fail(`Newsletter ${item.date} fallback_public markdown must disclose Fallback Edition status.`);
   }
 }
 
@@ -455,6 +517,9 @@ for (const [index, item] of newsletters.entries()) {
       const htmlPath = repoPath(root, item.html || '');
       const html = htmlPath && fs.existsSync(htmlPath) ? read(htmlPath) : '';
       const editor = readJsonIfExists(path.join(newsroomDir(root, item.date), 'editor-draft.json'));
+      const status = readJsonIfExists(path.join(newsroomDir(root, item.date), 'generation-status.json')) || {};
+      validatePublicationModeInvariants(item, status);
+      validateFallbackPublicPresentation(item, html, md, status);
       validateNewsletterHtmlTags(item, html, strictArtifactValidation);
       const structural = validateRenderedIssueStructure({
         date: item.date,

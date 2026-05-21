@@ -59,8 +59,12 @@ const {
 } = require('../../scripts/newsroom/common/editor-publication-policy');
 const {
   buildHtml,
-  buildMarkdown
+  buildMarkdown,
+  issueTags
 } = require('../../scripts/newsroom/render/newsletter-renderer');
+const {
+  publicationDecisionForSections
+} = require('../../scripts/newsroom/common/publication-mode');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -1107,6 +1111,83 @@ function writeCandidateShortageReviewableArtifacts(root, date, overrides = {}) {
   return { status, shortlist, selectionReport, summary, sourceParserHints, shortageReasonCodes, selected };
 }
 
+function writeFallbackOnlyReviewableArtifacts(root, date) {
+  writeRootIndexContract(root);
+  const fallbackA = regressionCandidate({
+    title: 'GCC 16.1',
+    url: 'https://isocpp.org/blog/2026/05/gcc-16.1',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const fallbackB = regressionCandidate({
+    title: 'Glaze 7.2 C++ reflection',
+    url: 'https://isocpp.org/blog/2026/05/glaze-7.2',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const fallbackC = regressionCandidate({
+    title: 'LLVM native sanitizer workflow',
+    url: 'https://isocpp.org/blog/2026/05/llvm-native-sanitizer-workflow',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const rejectedCamera = {
+    ...regressionCandidate({
+      title: 'CameraX rolling release page',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+      bucket: 'direct_aosp_camera'
+    }),
+    published_date: '',
+    finalSelectionEligibility: 'watchlist',
+    hasDatedEvidence: false,
+    main_eligible: false,
+    source_gap_risk: true,
+    reference_only: true,
+    briefing_only: true,
+    selection_exclusion_reason: 'Parser did not extract a dated release row from the official source.'
+  };
+  const selected = [fallbackA, fallbackB, fallbackC];
+  const summary = candidateShortageSummary({
+    primary_camera_stack_candidate_count: 0,
+    camera_stack_candidate_count: 0,
+    direct_camera_or_driver_candidate_count: 0,
+    supporting_candidate_count: selected.length,
+    selected_primary_camera_stack_count: 0
+  });
+  writeCandidateShortageReviewableArtifacts(root, date, {
+    summary,
+    status: {
+      input_candidate_count: selected.length + 1,
+      selected_article_count: selected.length
+    }
+  });
+  const newsroom = path.join(root, 'content', 'newsroom', date);
+  const collected = path.join(root, 'content', 'collected-news', date);
+  const shortlist = JSON.parse(fs.readFileSync(path.join(newsroom, 'shortlisted-candidates.json'), 'utf8'));
+  shortlist.selected_articles = selected;
+  shortlist.primary_selected_articles = selected;
+  shortlist.shortlisted_candidates = selected;
+  shortlist.composition_summary = {
+    ...shortlist.composition_summary,
+    selected_article_count: selected.length,
+    primary_camera_stack_topic_count: 0,
+    supporting_main_article_count: selected.length
+  };
+  writeJson(path.join(newsroom, 'shortlisted-candidates.json'), shortlist);
+  writeJson(path.join(newsroom, 'article-capsules.json'), {
+    selected_capsules: selected,
+    reserve_capsules: []
+  });
+  writeJson(path.join(newsroom, 'reporter-candidates.json'), {
+    date,
+    candidates: [...selected, rejectedCamera]
+  });
+  writeJson(path.join(collected, 'candidates.json'), {
+    candidates: [...selected, rejectedCamera]
+  });
+  return { selected, rejectedCamera };
+}
+
 test('generation status output falls back when status JSON is missing', () => {
   const status = readStatus('__missing__/newsletter-generation-status.json');
   const outputs = buildGenerationStatusOutputs(status);
@@ -1630,7 +1711,8 @@ test('newsroom PR body marks editorial reviewable handoff as editor-approved pub
   assert.match(generatedArtifactsSection, new RegExp(`newsletters/${date}/newsletter\\.md`));
   assert.match(generatedArtifactsSection, new RegExp(`newsletters/${date}/index\\.html`));
   assert.match(generatedArtifactsSection, /data\/newsletters\.json/);
-  assert.equal(validatePrBodyText(body).ok, true);
+  const bodyValidation = validatePrBodyText(body);
+  assert.equal(bodyValidation.ok, true, JSON.stringify(bodyValidation, null, 2));
 
   const missingNotice = body.replace(/^.*public newsletter files는 생성되었습니다.*\n/gm, '');
   const result = validatePrBodyText(missingNotice);
@@ -3109,6 +3191,227 @@ test('ensure CLI creates review publication from candidate shortage without edit
   assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
 });
 
+test('fallback builder publishes fallback-only issue as disclosed fallback_public edition', () => {
+  const root = tempRoot();
+  const date = '2026-05-12';
+  const { rejectedCamera } = writeFallbackOnlyReviewableArtifacts(root, date);
+
+  const result = buildFallbackPublicIssue({ root, date });
+  const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
+  const quality = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), 'utf8'));
+  const newsletterData = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters.json'), 'utf8'))[0];
+  const markdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
+  const html = fs.readFileSync(path.join(root, 'newsletters', date, 'index.html'), 'utf8');
+  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
+
+  assert.equal(rejectedCamera.relevance_bucket, 'direct_aosp_camera');
+  assert.equal(finalEditor.sections.every(section => section.relevance_bucket === 'cpp_ai_tooling_fallback'), true);
+  assert.equal(status.publication_mode, 'fallback_public');
+  assert.equal(status.homepage_visibility, 'visible_with_fallback_badge');
+  assert.equal(status.normal_public_ready, false);
+  assert.equal(status.automatic_publish_ready, false);
+  assert.equal(status.public_artifact_ready, true);
+  assert.equal(status.fallback_public_ready, true);
+  assert.equal(status.fallback_only, true);
+  assert.equal(status.camera_anchor_count, 0);
+  assert.equal(status.homepage_badge, 'Fallback Edition');
+  assert.equal(status.public_newsletter_ready, true);
+  assert.equal(status.final_publish_ready, false);
+  assert.equal(status.publish_gate_passed, false);
+  assert.equal(status.review_publication_ready, true);
+  assert.equal(status.homepage_visible_after_merge, true);
+  assert.equal(quality.publication_mode, 'fallback_public');
+  assert.equal(quality.content_quality_score, quality.score);
+  assert.equal(quality.camera_relevance_score, 0);
+  assert.match(quality.publication_mode_decision, /fallback_public/);
+  assert.equal(newsletterData.publication_mode, 'fallback_public');
+  assert.equal(newsletterData.homepage_visibility, 'visible_with_fallback_badge');
+  assert.equal(newsletterData.homepage_badge, 'Fallback Edition');
+  assert.equal(newsletterData.camera_anchor_count, 0);
+  assert.deepEqual(newsletterData.tags, ['Fallback Edition', 'Tooling Watch']);
+  assert.match(markdown, /Fallback Edition: C\+\+ \/ Tooling Watch/);
+  assert.match(html, /class="publication-notice"/);
+  assert.match(html, /Fallback Edition: C\+\+ \/ Tooling Watch/);
+  assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+  assert.equal(outputs.publication_mode, 'fallback_public');
+  assert.equal(outputs.homepage_visibility, 'visible_with_fallback_badge');
+  assert.equal(outputs.fallback_only, 'true');
+  assert.equal(outputs.camera_anchor_count, '0');
+  assert.equal(outputs.homepage_badge, 'Fallback Edition');
+
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'skipped',
+    changedArtifacts: requiredPublicFiles(date)
+  });
+  assert.match(body, /publication_mode: fallback_public/);
+  assert.match(body, /homepage_visibility: visible_with_fallback_badge/);
+  assert.match(body, /fallback_only: true/);
+  assert.match(body, /camera_anchor_count: 0/);
+  assert.match(body, /fallback_public_ready: true/);
+  assert.match(body, /homepage_badge: Fallback Edition/);
+  assert.match(body, /hard block policy to a downgrade policy/);
+  const bodyValidation = validatePrBodyText(body);
+  assert.equal(bodyValidation.ok, true, JSON.stringify(bodyValidation, null, 2));
+
+  const hiddenFallbackStatus = body.replace(/fallback_only: true/g, 'fallback_only: false');
+  const validation = validatePrBodyText(hiddenFallbackStatus);
+  assert.equal(validation.ok, false);
+  assert.match(validation.errors.join('\n'), /fallback public PR body must include fallback_only=true/);
+});
+
+test('publication mode uses final bound candidate bucket over stale section bucket', () => {
+  const decision = publicationDecisionForSections([{
+    relevance_bucket: 'android_platform_camera_adjacent',
+    bound_candidate: {
+      relevance_bucket: 'cpp_ai_tooling_fallback'
+    },
+    public_article: {
+      headline: 'C++ tooling fallback'
+    }
+  }], {
+    publicNewsletterReady: true,
+    finalPublishReady: false
+  });
+
+  assert.equal(decision.camera_anchor_count, 0);
+  assert.equal(decision.fallback_only, true);
+  assert.equal(decision.publication_mode, 'fallback_public');
+  assert.equal(decision.homepage_visibility, 'visible_with_fallback_badge');
+});
+
+test('publication mode treats no-anchor public-quality technical sections as fallback_public', () => {
+  const decision = publicationDecisionForSections([{
+    relevance_bucket: 'soc_platform_signal',
+    public_article: {
+      headline: 'Technical platform watch'
+    }
+  }], {
+    publicNewsletterReady: true,
+    finalPublishReady: false
+  });
+
+  assert.equal(decision.camera_anchor_count, 0);
+  assert.equal(decision.fallback_section_count, 0);
+  assert.equal(decision.fallback_only, true);
+  assert.equal(decision.publication_mode, 'fallback_public');
+  assert.equal(decision.homepage_visibility, 'visible_with_fallback_badge');
+});
+
+test('fallback issue tags remove Camera HAL when camera_anchor_count is string zero', () => {
+  assert.deepEqual(
+    issueTags({
+      publication_mode: 'fallback_public',
+      camera_anchor_count: '0',
+      tags: ['Camera HAL', 'Android']
+    }),
+    ['Fallback Edition', 'Tooling Watch', 'Android']
+  );
+});
+
+test('reviewable artifact resolver reports fallback_public contract conflicts', () => {
+  const root = tempRoot();
+  const date = '2026-05-15';
+  writePublicNewsletterArtifacts(root, date);
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'NEEDS_FIX',
+    final_publish_ready: false,
+    review_gate_passed: true,
+    editor_review_required: true,
+    publication_mode: 'fallback_public',
+    homepage_visibility: 'visible_with_fallback_badge',
+    fallback_only: false,
+    camera_anchor_count: 1,
+    fallback_public_ready: true
+  });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+
+  assert.notEqual(outputs.publication_contract_error_count, '0');
+  assert.match(outputs.publication_contract_errors, /fallback_only=true/);
+  assert.match(outputs.publication_contract_errors, /camera_anchor_count=0/);
+  assert.match(outputs.reviewable_artifact_reason, /publication_contract_errors=/);
+});
+
+test('review-only public issue keeps review publication notice', () => {
+  const date = '2026-05-13';
+  const candidate = regressionCandidate({
+    title: 'CameraX validation release',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#review-only',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const issue = {
+    date,
+    title: `Camera HAL SW 뉴스레터 - ${date}`,
+    summary: '편집자 검토 후 공개 가능한 public artifact입니다.',
+    briefing: ['Camera anchor가 남아 있습니다.', '자동 정상 발행은 닫혀 있습니다.', '편집자 확인 후 merge합니다.'],
+    publication_mode: 'review_only',
+    review_publication_ready: true,
+    fallback_only: false,
+    camera_anchor_count: 1,
+    tags: ['Camera HAL', 'Android'],
+    sections: [regressionSection(candidate)],
+    references: [{
+      title: 'Android Developers Camera',
+      url: candidate.url
+    }]
+  };
+
+  const markdown = buildMarkdown(issue);
+  const html = buildHtml(issue);
+
+  assert.match(markdown, /검토 발행본/);
+  assert.match(html, /class="publication-notice"/);
+  assert.match(html, /검토 발행본/);
+  const markdownNotice = markdown.match(/(?:^> .*(?:\n|$))+/m)?.[0] || '';
+  const htmlNotice = html.match(/<div class="publication-notice"[\s\S]*?<\/div>/)?.[0] || '';
+  assert.doesNotMatch(`${markdownNotice}\n${htmlNotice}`, /Review-only|quality gate|guardrail|fallback/);
+});
+
+test('fallback public issue uses tooling perspective label', () => {
+  const date = '2026-05-14';
+  const candidate = regressionCandidate({
+    title: 'LLVM native sanitizer workflow',
+    url: 'https://isocpp.org/blog/2026/05/llvm-native-sanitizer-workflow',
+    bucket: 'cpp_ai_tooling_fallback',
+    fallback: true
+  });
+  const issue = {
+    date,
+    title: `Fallback Edition: C++ / Tooling Watch - ${date}`,
+    summary: 'Fallback Edition issue',
+    briefing: ['Tooling watch item입니다.', 'Camera anchor는 없습니다.', '편집자 검토가 필요합니다.'],
+    publication_mode: 'fallback_public',
+    fallback_only: true,
+    camera_anchor_count: 0,
+    tags: ['Fallback Edition', 'Tooling Watch'],
+    sections: [regressionSection(candidate)],
+    references: [{
+      title: 'ISO C++',
+      url: candidate.url
+    }]
+  };
+
+  const markdown = buildMarkdown(issue);
+  const html = buildHtml(issue);
+
+  assert.match(markdown, /\*\*Android Native \/ Tooling 관점\*\*/);
+  assert.match(html, /Android Native \/ Tooling 관점/);
+  assert.doesNotMatch(markdown, /\*\*Camera HAL \/ Driver 관점\*\*/);
+});
+
 test('reviewable artifact resolver rejects candidate shortage when deterministic artifact is missing', () => {
   const root = tempRoot();
   const date = '2026-05-11';
@@ -3317,6 +3620,10 @@ test('fallback builder recovers PR #39 shape with public files and preserve-firs
     /HAL Signal Capsule|why_now|impact_axes|do_not_overstate|Review-only|quality gate|deterministic reconstruction|source-bound|Publication 전에|Direct HAL behavior claim/
   );
   assert.equal(quality.status, 'PASS');
+  assert.equal(result.status.publication_mode, 'review_only');
+  assert.equal(result.status.fallback_only, false);
+  assert.equal(result.status.camera_anchor_count, 2);
+  assert.equal(result.status.fallback_public_ready, false);
   assert.equal(fallbackReport.demoted_articles[0].headline, 'GCC 16.1');
   assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
 
@@ -3337,6 +3644,9 @@ test('fallback builder recovers PR #39 shape with public files and preserve-firs
     changedArtifacts: requiredPublicFiles(date)
   }));
   assert.equal(outputs.public_newsletter_ready, 'true');
+  assert.equal(outputs.publication_mode, 'review_only');
+  assert.equal(outputs.fallback_only, 'false');
+  assert.equal(outputs.camera_anchor_count, '2');
   assert.equal(outputs.has_publish_candidate, 'true');
   assert.equal(outputs.public_newsletter_reason, 'ready');
 });
@@ -3553,6 +3863,8 @@ test('ensure CLI preserves fallback failure diagnostics and succeeds only for re
   assert.equal(result.outputs.diagnostics_only, 'true');
   assert.equal(result.outputs.review_publication_ready, 'false');
   assert.equal(result.outputs.homepage_visible_after_merge, 'false');
+  assert.equal(result.outputs.publication_mode, 'diagnostics_only');
+  assert.equal(result.outputs.homepage_visibility, 'hidden');
   assert.equal(result.outputs.publish_candidate_ready, 'false');
   assert.equal(result.outputs.review_pr_ready, resolvedOutputs.review_pr_ready);
   assert.equal(result.outputs.review_only, resolvedOutputs.review_only);

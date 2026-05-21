@@ -74,6 +74,28 @@ test('public newsletter validator rejects visible internal terms and raw fact ch
   assert.ok(errors.some(error => /raw verified facts/.test(error)));
 });
 
+test('public newsletter validator allows explicit Fallback Edition disclosure only for fallback_public', () => {
+  const fallbackMarkdown = markdown().replace(
+    'Weekly summary.',
+    'Fallback Edition: C++ / Tooling Watch. This fallback issue is clearly labeled.'
+  );
+  const fallbackHtml = html('<div class="publication-notice"><p>Fallback Edition: C++ / Tooling Watch</p></div>');
+
+  const normalErrors = validatePublicNewsletterArtifacts({
+    markdown: fallbackMarkdown,
+    html: fallbackHtml
+  });
+  const fallbackErrors = validatePublicNewsletterArtifacts({
+    markdown: fallbackMarkdown,
+    html: fallbackHtml,
+    publicationMode: 'fallback_public',
+    fallbackOnly: true
+  });
+
+  assert.ok(normalErrors.some(error => /Fallback/.test(error)));
+  assert.deepEqual(fallbackErrors, []);
+});
+
 test('public newsletter validator rejects editor review and HAL capsule field leftovers', () => {
   const errors = validatePublicNewsletterArtifacts({
     markdown: markdown().replace('Lead 1.', 'Lead 1. Editor review reader_owners check_within_2_weeks normal publishable coverage.'),

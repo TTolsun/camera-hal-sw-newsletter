@@ -2034,6 +2034,17 @@ function buildQualityReportMarkdown(report) {
 - Result: ${report.status}
 - Summary: ${report.summary}
 
+## Publication Mode
+
+- publication_mode: ${report.publication_mode || 'n/a'}
+- homepage_visibility: ${report.homepage_visibility || 'n/a'}
+- content_quality_score: ${report.content_quality_score ?? report.score ?? 'n/a'}
+- camera_relevance_score: ${report.camera_relevance_score ?? 'n/a'}
+- publication_mode_decision: ${report.publication_mode_decision || 'n/a'}
+- fallback_only: ${String(report.fallback_only === true)}
+- camera_anchor_count: ${report.camera_anchor_count ?? 'n/a'}
+- fallback_public_ready: ${String(report.fallback_public_ready === true)}
+
 ## Composition
 
 - Main article count: ${metrics.article_count}

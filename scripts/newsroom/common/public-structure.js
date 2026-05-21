@@ -163,7 +163,9 @@ function publicNewsletterStructureStatus(root, date) {
       markdown: newsletterMd.text,
       html: newsletterHtml.text,
       markdownLabel: `newsletters/${date}/newsletter.md`,
-      htmlLabel: `newsletters/${date}/index.html`
+      htmlLabel: `newsletters/${date}/index.html`,
+      publicationMode: editorResult.error ? '' : editorResult.value?.publication_mode,
+      fallbackOnly: editorResult.error ? false : editorResult.value?.fallback_only === true
     });
     errors.push(...publicErrors.map(error => `public contract: ${error}`));
   }
