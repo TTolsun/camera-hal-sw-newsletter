@@ -5731,13 +5731,17 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /llm_model:/);
   assert.match(workflow, /llm_fallback_models:/);
-  assert.match(workflow, /allow_pro:\s*[\s\S]*?default: "true"/);
-  assert.match(workflow, /llm_model:\s*[\s\S]*?default: "gemini-2\.5-pro"/);
+  assert.match(workflow, /allow_pro:\s*[\s\S]*?default: "false"/);
+  assert.match(workflow, /llm_model:\s*[\s\S]*?default: ""/);
   assert.match(workflow, /LLM_PROVIDER=\$\{INPUT_LLM_PROVIDER\}/);
   assert.match(workflow, /LLM_MODEL=\$\{INPUT_LLM_MODEL\}/);
   assert.match(workflow, /LLM_FALLBACK_MODELS=\$\{INPUT_LLM_FALLBACK_MODELS\}/);
   assert.match(workflow, /Workflow inputs must be single-line values\./);
   assert.match(workflow, /NEWSROOM_ALLOW_PRO_ON_MANUAL: \$\{\{ github\.event\.inputs\.allow_pro \|\| 'false' \}\}/);
+  assert.match(workflow, /NEWSROOM_REPORTER_MODEL: \$\{\{ vars\.NEWSROOM_REPORTER_MODEL \|\| '' \}\}/);
+  assert.match(workflow, /NEWSROOM_EDITOR_MODEL: \$\{\{ vars\.NEWSROOM_EDITOR_MODEL \|\| '' \}\}/);
+  assert.match(workflow, /NEWSROOM_FACTCHECK_MODEL: \$\{\{ vars\.NEWSROOM_FACTCHECK_MODEL \|\| '' \}\}/);
+  assert.match(workflow, /NEWSROOM_REPAIR_MODEL: \$\{\{ vars\.NEWSROOM_REPAIR_MODEL \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MODE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MODE \|\| 'extract_only' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE \|\| '8' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN \|\| '40' \}\}/);
@@ -5763,6 +5767,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /key: news-summary-\$\{\{ runner\.os \}\}-/);
   assert.match(workflow, /uses: actions\/cache\/save@v4/);
   assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
+  const workflowDocs = fs.readFileSync(path.join(__dirname, '..', '..', 'docs', 'newsroom-workflow.md'), 'utf8');
+  assert.doesNotMatch(workflowDocs, /^LLM_MODEL=$/m);
   assert.match(generateStep, /continue-on-error:\s*true/);
   assert.match(ensurePublicStep, /node scripts\/ensure-public-newsletter-artifacts\.js/);
   assert.match(resolveMetaStep, /node scripts\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);

@@ -443,6 +443,28 @@ test('pro pricing switches at the large prompt threshold', () => {
   assert.equal(client.findPricing('gemini-2.5-pro', 200001).output_usd_per_million, 15);
 });
 
+test('Gemini 3.5 Flash pricing uses official standard rates for stable model only', () => {
+  const client = loadClient();
+
+  assert.deepEqual(client.findPricing('gemini-3.5-flash'), {
+    input_usd_per_million: 1.5,
+    output_usd_per_million: 9,
+    cached_input_usd_per_million: 0.15,
+    large_prompt_threshold_tokens: null,
+    large_prompt_applied: false
+  });
+  assert.equal(client.findPricing('gemini-3.5-flash-preview'), null);
+  const cost = client.estimateCallCost('gemini-3.5-flash', {
+    prompt_tokens: 1000,
+    output_tokens: 100,
+    thinking_tokens: 25,
+    cached_tokens: 100,
+    total_tokens: 1125
+  });
+  assert.equal(cost.estimated_cost_usd, 0.00249);
+  assert.equal(cost.pricing_warning, '');
+});
+
 test('cost report aggregates calls and emits warning-only threshold messages', () => {
   const client = loadClient();
   const calls = [
@@ -489,6 +511,81 @@ test('cost report aggregates calls and emits warning-only threshold messages', (
   assert.equal(report.warnings.some(item => item.includes('NEWSROOM_MAX_COST_USD')), false);
   assert.match(client.buildCostReportMarkdown(report), /Estimated cost USD: 0\.001650/);
   assert.match(client.buildCostReportMarkdown(report), /\| Provider \| Stage \| Group \| Primary \| Attempt Model \| Resolved By \| Fallbacks \|/);
+});
+
+test('default stage model synthetic usage keeps cost thresholds warning-only', () => {
+  const client = loadClient();
+  const calls = [
+    {
+      stage: 'reporter attempt 1/1',
+      stage_group: 'reporter',
+      model: 'gemini-2.5-flash',
+      attempt: 1,
+      prompt_tokens: 1000,
+      output_tokens: 100,
+      thinking_tokens: 0,
+      cached_tokens: 0,
+      total_tokens: 1100,
+      billable_input_tokens: 1000,
+      billable_output_tokens: 100,
+      estimated_cost_usd: 0.00055
+    },
+    {
+      stage: 'editor attempt 1/1',
+      stage_group: 'editor',
+      model: 'gemini-3.5-flash',
+      attempt: 1,
+      prompt_tokens: 2000,
+      output_tokens: 200,
+      thinking_tokens: 50,
+      cached_tokens: 0,
+      total_tokens: 2250,
+      billable_input_tokens: 2000,
+      billable_output_tokens: 250,
+      estimated_cost_usd: 0.00525
+    },
+    {
+      stage: 'fact-checker attempt 1/1',
+      stage_group: 'factcheck',
+      model: 'gemini-2.5-flash',
+      attempt: 1,
+      prompt_tokens: 1000,
+      output_tokens: 100,
+      thinking_tokens: 0,
+      cached_tokens: 0,
+      total_tokens: 1100,
+      billable_input_tokens: 1000,
+      billable_output_tokens: 100,
+      estimated_cost_usd: 0.00055
+    },
+    {
+      stage: 'editor repair attempt 1/1',
+      stage_group: 'repair',
+      model: 'gemini-3.5-flash',
+      attempt: 1,
+      prompt_tokens: 2000,
+      output_tokens: 200,
+      thinking_tokens: 50,
+      cached_tokens: 0,
+      total_tokens: 2250,
+      billable_input_tokens: 2000,
+      billable_output_tokens: 250,
+      estimated_cost_usd: 0.00525
+    }
+  ];
+
+  const report = client.buildCostReport({
+    date: '2026-05-04',
+    calls,
+    warnCostUsd: 0.001,
+    maxCostUsd: 0.002
+  });
+
+  assert.equal(report.enforcement, 'warning-only');
+  assert.equal(report.totals.estimated_cost_usd, 0.0116);
+  assert.ok(report.warnings.some(item => item.includes('NEWSROOM_WARN_COST_USD')));
+  assert.ok(report.warnings.some(item => item.includes('NEWSROOM_MAX_COST_USD')));
+  assert.ok(report.warnings.every(item => !item.includes('failed')));
 });
 
 test('manual Pro usage is marked in cost calls and report warnings', async () => {
