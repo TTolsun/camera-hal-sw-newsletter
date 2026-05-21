@@ -9,22 +9,26 @@
 | `cli/` | command entrypoint, workflow-facing output, validation command wrapper입니다. |
 | `collect/` | source page/RSS parsing과 candidate collection입니다. |
 | `common/` | shared runtime config, artifact paths, scope helpers입니다. |
+| `evidence/` | seed evidence, linked evidence, evidence diagnostics 관련 helper입니다. |
 | `generate/` | deterministic selection, article capsule, retry/summary cache logic입니다. |
 | `llm/` | LLM provider dispatch, model policy, retry/cost diagnostics입니다. |
 | `metrics/` | source effectiveness와 newsroom 운영 지표 report입니다. |
 | `render/` | newsletter schema, Markdown/HTML rendering, image resolution입니다. |
+| `sources/` | source registry와 source quality 판단에 가까운 helper입니다. |
 | `validate/` | quality gate, config validation, site/output validation입니다. |
 
 ## Suggested read order
 
 1. `common/`
 2. `collect/`
-3. `generate/`
-4. `llm/`
-5. `render/`
-6. `validate/`
-7. `metrics/`
-8. `cli/`
+3. `evidence/`
+4. `sources/`
+5. `generate/`
+6. `llm/`
+7. `render/`
+8. `validate/`
+9. `metrics/`
+10. `cli/`
 
 ## Do not weaken
 
@@ -34,3 +38,12 @@
 - PR-based publication
 
 Generated artifact path나 public output contract를 바꾸는 작업은 workflow, docs, tests를 함께 갱신해야 합니다.
+
+## Validation
+
+실제 newsroom 구현을 수정한 뒤에는 변경 범위에 맞는 targeted test를 먼저 실행하고 전체 검증으로 닫습니다.
+
+```powershell
+npm.cmd run test
+npm.cmd run validate
+```

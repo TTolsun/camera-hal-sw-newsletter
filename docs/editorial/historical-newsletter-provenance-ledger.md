@@ -15,6 +15,7 @@ Issue #108은 과거 public archive provenance를 추적하되 unsupported seed 
 
 | Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Related cleanup issue |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-05-22 | current_generation | review-only public artifact, editor review required before publish confidence; no historical provenance backfill required | no | none | stable_archive | listed | #274 |
 | 2026-05-21 | current_generation | review-only public artifact, editor review required before publish confidence; no historical provenance backfill required | no | none | stable_archive | listed | #257 |
 | 2026-05-20 | current_generation | post-#185 generated public artifact; no historical provenance backfill required | no | none | stable_archive | listed | #242 |
 | 2026-05-19 | current_generation | unlisted public artifact, GCC tooling overclaim audit downgraded, Glaze tooling overclaim audit downgraded, direct camera claim audit completed, accepted limitations documented | no | none | reviewed_archive | unlisted | #108 |
