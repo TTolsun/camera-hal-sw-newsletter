@@ -3,6 +3,10 @@ const REPORTER_SELECTION_NOTE =
 
 const REPORTER_SELECTED_ALIAS_NOTE =
   'selected is reporter-stage only; use final_selected or shortlisted-candidates.json for final publication selection.';
+const {
+  candidateGroupKey,
+  groupCoverageSummary
+} = require('../common/article-groups');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -125,6 +129,8 @@ function normalizeShortlistCandidate(candidate, reporterSelectedUrls = null) {
       : candidate.selection_stage || 'deterministic-final';
   return {
     ...candidate,
+    article_group_key: candidateGroupKey(candidate),
+    related_context_candidates: ensureArray(candidate.related_context_candidates),
     selection_stage: selectionStage,
     final_selected: finalSelected,
     primary_selected: primarySelected,
@@ -174,6 +180,11 @@ function normalizeShortlistReport(shortlistReport, reporter = null) {
     selectedArticles.length;
   const reserveCandidateCount = shortlistReport?.reserve_candidate_count ?? reserveCandidates.length;
   const demotedCandidateCount = shortlistReport?.demoted_candidate_count ?? demotedCandidates.length;
+  const groupCoverage = groupCoverageSummary({
+    selectedGroupKeys: selectedArticles.map(candidateGroupKey),
+    renderedGroupKeys: ensureArray(shortlistReport?.rendered_group_keys),
+    demotedGroups: ensureArray(shortlistReport?.explicitly_demoted_group_keys).map(key => ({ article_group_key: key, demotion_reason: 'shortlist_report' }))
+  });
 
   return {
     ...shortlistReport,
@@ -183,6 +194,14 @@ function normalizeShortlistReport(shortlistReport, reporter = null) {
     final_eligible_candidate_count: shortlistReport?.eligible_candidate_count ?? null,
     final_selected_article_count: deterministicSelectedCount,
     deterministic_selected_count: deterministicSelectedCount,
+    selected_group_count: shortlistReport?.selected_group_count ?? groupCoverage.selected_group_count,
+    rendered_group_count: shortlistReport?.rendered_group_count ?? null,
+    explicitly_demoted_group_count: shortlistReport?.explicitly_demoted_group_count ?? 0,
+    selected_representative_group_keys: ensureArray(shortlistReport?.selected_representative_group_keys).length > 0
+      ? shortlistReport.selected_representative_group_keys
+      : groupCoverage.selected_representative_group_keys,
+    rendered_group_keys: ensureArray(shortlistReport?.rendered_group_keys),
+    explicitly_demoted_group_keys: ensureArray(shortlistReport?.explicitly_demoted_group_keys),
     primary_selected_article_count: shortlistReport?.primary_selected_article_count ?? selectedArticles.length,
     reserve_candidate_count: reserveCandidateCount,
     demoted_candidate_count: demotedCandidateCount,
@@ -247,6 +266,12 @@ function normalizeReporterReport(reporter, shortlistReport = null) {
     final_eligible_candidate_count: shortlistReport?.final_eligible_candidate_count ?? shortlistReport?.eligible_candidate_count ?? null,
     final_selected_article_count: shortlistReport?.final_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
     deterministic_selected_count: shortlistReport?.deterministic_selected_count ?? shortlistReport?.selected_article_count ?? null,
+    selected_group_count: shortlistReport?.selected_group_count ?? null,
+    rendered_group_count: shortlistReport?.rendered_group_count ?? null,
+    explicitly_demoted_group_count: shortlistReport?.explicitly_demoted_group_count ?? null,
+    selected_representative_group_keys: ensureArray(shortlistReport?.selected_representative_group_keys),
+    rendered_group_keys: ensureArray(shortlistReport?.rendered_group_keys),
+    explicitly_demoted_group_keys: ensureArray(shortlistReport?.explicitly_demoted_group_keys),
     primary_selected_article_count: shortlistReport?.primary_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
     reserve_candidate_count: shortlistReport?.reserve_candidate_count ?? null,
     demoted_candidate_count: shortlistReport?.demoted_candidate_count ?? null,
@@ -271,6 +296,12 @@ function selectionDiagnosticsFromReports(shortlistReport = null, reporterReport 
     final_eligible_candidate_count: shortlistReport?.final_eligible_candidate_count ?? shortlistReport?.eligible_candidate_count ?? null,
     final_selected_article_count: shortlistReport?.final_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
     deterministic_selected_count: shortlistReport?.deterministic_selected_count ?? shortlistReport?.selected_article_count ?? null,
+    selected_group_count: shortlistReport?.selected_group_count ?? reporterReport?.selected_group_count ?? null,
+    rendered_group_count: shortlistReport?.rendered_group_count ?? reporterReport?.rendered_group_count ?? null,
+    explicitly_demoted_group_count: shortlistReport?.explicitly_demoted_group_count ?? reporterReport?.explicitly_demoted_group_count ?? null,
+    selected_representative_group_keys: ensureArray(shortlistReport?.selected_representative_group_keys ?? reporterReport?.selected_representative_group_keys),
+    rendered_group_keys: ensureArray(shortlistReport?.rendered_group_keys ?? reporterReport?.rendered_group_keys),
+    explicitly_demoted_group_keys: ensureArray(shortlistReport?.explicitly_demoted_group_keys ?? reporterReport?.explicitly_demoted_group_keys),
     primary_selected_article_count: shortlistReport?.primary_selected_article_count ?? shortlistReport?.selected_article_count ?? null,
     reserve_candidate_count: shortlistReport?.reserve_candidate_count ?? null,
     demoted_candidate_count: shortlistReport?.demoted_candidate_count ?? null,
@@ -316,6 +347,9 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Final eligible candidates: ${formatCount(diagnostics.final_eligible_candidate_count ?? diagnostics.eligible_candidate_count)}`,
     `- Final selected articles: ${formatCount(diagnostics.final_selected_article_count ?? diagnostics.selected_article_count)}`,
     `- Deterministic primary articles: ${formatCount(diagnostics.primary_selected_article_count ?? diagnostics.deterministic_selected_count)}`,
+    `- Selected representative groups: ${formatCount(diagnostics.selected_group_count)}`,
+    `- Rendered groups: ${formatCount(diagnostics.rendered_group_count)}`,
+    `- Explicitly demoted groups: ${formatCount(diagnostics.explicitly_demoted_group_count)}`,
     `- Reserve candidates: ${formatCount(diagnostics.reserve_candidate_count)}`,
     `- Demoted candidates: ${formatCount(diagnostics.demoted_candidate_count)}`,
     `- Composition mode: ${formatCount(diagnostics.composition_mode)}`,

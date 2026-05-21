@@ -31,6 +31,12 @@ const {
 const {
   validateArticleClaims
 } = require('./claim-source-binding');
+const {
+  candidateGroupKey,
+  explicitDemotedGroups,
+  groupCoverageSummary,
+  normalizeUrl: normalizeGroupUrl
+} = require('../common/article-groups');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -50,6 +56,8 @@ const REPAIRABLE_SEMANTIC_FIELDS = new Set([
   'sections.public_article',
   'sections.hal_signal_capsule',
   'sections.field_hygiene',
+  'sections.group_coverage',
+  'sections.blocked_context',
   'sections.claims'
 ]);
 
@@ -85,10 +93,12 @@ function countDetails(value, field, expected = {}) {
 }
 
 function candidateHash(candidate = {}) {
+  candidate = candidate || {};
   return text(candidate.source_candidate_hash || candidate.url_hash || candidate.normalized_url_hash);
 }
 
 function candidateUrls(candidate = {}) {
+  candidate = candidate || {};
   return [
     candidate.url,
     candidate.article_url,
@@ -396,6 +406,116 @@ function validateClaimBindingContract(value, reporter = {}, strictClaims = false
   }
 }
 
+function selectedReporterCandidates(reporter = {}) {
+  return ensureArray(reporter?.candidates).filter(candidate =>
+    candidate.final_selected === true ||
+    candidate.selected_for_editor === true ||
+    candidate.primary_selected === true
+  );
+}
+
+function sectionGroupKey(section = {}, candidate = null) {
+  return text(section.article_group_key || section.articleGroupKey) ||
+    (candidate ? candidateGroupKey(candidate) : '');
+}
+
+function validateSelectedGroupCoverage(value, reporter = {}) {
+  const selectedGroupKeys = [...new Set(selectedReporterCandidates(reporter).map(candidateGroupKey).filter(Boolean))];
+  if (selectedGroupKeys.length === 0) return null;
+  const candidateIndex = buildCandidateIndex(reporter);
+  const renderedGroupKeys = [...new Set(ensureArray(value.sections)
+    .map(section => sectionGroupKey(section, candidateForSection(section, candidateIndex)))
+    .filter(Boolean))];
+  const demotedGroups = explicitDemotedGroups(value);
+  const coverage = groupCoverageSummary({ selectedGroupKeys, renderedGroupKeys, demotedGroups });
+  value.selected_group_count = coverage.selected_group_count;
+  value.rendered_group_count = coverage.rendered_group_count;
+  value.explicitly_demoted_group_count = coverage.explicitly_demoted_group_count;
+  value.selected_representative_group_keys = coverage.selected_representative_group_keys;
+  value.rendered_group_keys = coverage.rendered_group_keys;
+  value.explicitly_demoted_group_keys = coverage.explicitly_demoted_group_keys;
+  if (coverage.ok) return coverage;
+  throw semanticError('Editor output failed selected group coverage validation.', {
+    field: 'sections.group_coverage',
+    ...coverage,
+    sectionCount: ensureArray(value.sections).length
+  });
+}
+
+function candidateBlockedContexts(candidate = {}) {
+  return [
+    ...ensureArray(candidate.related_context_candidates),
+    ...ensureArray(candidate.blocked_context_candidates)
+  ];
+}
+
+function blockedContextCandidates(reporter = {}) {
+  const seen = new Set();
+  return selectedReporterCandidates(reporter)
+    .flatMap(candidateBlockedContexts)
+    .filter(item => item.context_usage_allowed !== true)
+    .map(item => ({
+      title: text(item.title),
+      url: text(item.url),
+      normalized_url: normalizeGroupUrl(item.url),
+      context_role: text(item.context_role || item.context_usage_label),
+      reason: text(item.blocked_from_independent_main_reason)
+    }))
+    .filter(item => {
+      if (!item.title && !item.url) return false;
+      const key = `${item.normalized_url}|${item.title.toLowerCase()}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+function validateBlockedContextUsage(value, reporter = {}) {
+  const blocked = blockedContextCandidates(reporter);
+  if (blocked.length === 0) return;
+  const issues = [];
+  ensureArray(value.sections).forEach((section, index) => {
+    const sectionSourceUrls = ensureArray(section.sources)
+      .map(source => normalizeGroupUrl(source?.url))
+      .filter(Boolean);
+    const publicSourceUrls = ensureArray(section.public_article?.source_links)
+      .map(source => normalizeGroupUrl(source?.url))
+      .filter(Boolean);
+    const headline = text(section.headline || section.category || `article ${index + 1}`);
+    const normalizedHeadline = headline.toLowerCase();
+    for (const item of blocked) {
+      if (item.normalized_url && (sectionSourceUrls.includes(item.normalized_url) || publicSourceUrls.includes(item.normalized_url))) {
+        issues.push({
+          index: index + 1,
+          headline,
+          type: 'blocked_context_url_used_as_article_source',
+          url: item.url,
+          context_role: item.context_role,
+          reason: item.reason
+        });
+      }
+      if (item.title && normalizedHeadline === item.title.toLowerCase()) {
+        issues.push({
+          index: index + 1,
+          headline,
+          type: 'blocked_context_title_used_as_independent_headline',
+          title: item.title,
+          context_role: item.context_role,
+          reason: item.reason
+        });
+      }
+    }
+  });
+  if (issues.length > 0) {
+    throw semanticError('Editor output used blocked related context as an article source or headline.', {
+      field: 'sections.blocked_context',
+      actualCount: issues.length,
+      sectionCount: ensureArray(value.sections).length,
+      issues
+    });
+  }
+}
+
 function validateEditorOutputContract(value, date, options = {}) {
   const reporter = options.reporter || { candidates: [] };
   const normalizeSection = options.normalizeSection || (section => ({
@@ -431,6 +551,8 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateFieldHygiene(value);
   validateClaimBindingContract(value, reporter, options.strictClaims === true);
   validateEditorArticlePolicy(value, reporter);
+  validateBlockedContextUsage(value, reporter);
+  validateSelectedGroupCoverage(value, reporter);
 
   const emptySourceSections = value.sections
     .filter(section => ensureArray(section.sources).length === 0)
@@ -612,7 +734,9 @@ async function repairEditorOutputContract({
       });
       const repairedForValidation = cloneJson(repairedRaw);
       const repairedEditor = validate(repairedForValidation);
-      assertSectionsAndSourcesPreserved(invalidEditor, repairedRaw);
+      if (!['sections.group_coverage', 'sections.blocked_context'].includes(repairField)) {
+        assertSectionsAndSourcesPreserved(invalidEditor, repairedRaw);
+      }
       return {
         editor: repairedEditor,
         editor_semantic_validation: initialDetails,

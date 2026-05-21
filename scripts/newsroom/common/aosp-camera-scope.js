@@ -266,6 +266,30 @@ const NATIVE_TOOLING_PATTERNS = [
   /\bon-device AI\b/i
 ];
 
+const ANDROID_TOOLING_PRODUCT_PATTERNS = [
+  /\bAndroid\s+Studio\b/i,
+  /\bAndroid\s+CLI\b/i,
+  /\bGoogle\s+AI\s+Studio\b/i,
+  /\bGemini\s+in\s+Android\s+Studio\b/i,
+  /\bAI\s+Studio\b[^.\n]{0,120}\bAndroid\b/i,
+  /\bAndroid\b[^.\n]{0,120}\bAI\s+Studio\b/i
+];
+
+const NATIVE_ANDROID_TOOLING_WORKFLOW_PATTERNS = [
+  /\bnative\s+Android\s+app(?:s)?\b/i,
+  /\bAndroid\b[^.\n]{0,140}\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\b/i,
+  /\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\b[^.\n]{0,140}\bAndroid\b/i,
+  /\b(?:Gradle|AGP|Android Gradle Plugin|NDK|JNI|C\+\+|LLDB|Perfetto)\b[^.\n]{0,140}\b(?:build|test|debug|profil(?:e|ing)|run|device|native|Android)\b/i,
+  /\b(?:build|test|debug|profil(?:e|ing)|run|device|native|Android)\b[^.\n]{0,140}\b(?:Gradle|AGP|Android Gradle Plugin|NDK|JNI|C\+\+|LLDB|Perfetto)\b/i,
+  /\bAndroid\s+CLI\b[^.\n]{0,140}\b(?:agent|build|test|debug|workflow|app)\b/i,
+  /\bGemini\b[^.\n]{0,140}\bAndroid\b[^.\n]{0,140}\b(?:app|build|test|debug|code|coding|agent)\b/i
+];
+
+const CAMERA_BEHAVIOR_CONTEXT_PATTERNS = [
+  /\b(?:API|runtime|workflow|behavior|compatibility|test|testing|validation|debug|profile|profiling|capture|preview|stream|buffer|metadata|request|result|surface)\b/i,
+  /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?|release(?:d|s)?)\b/i
+];
+
 function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');
   if (value && typeof value === 'object') return Object.values(value).map(text).join(' ');
@@ -307,6 +331,24 @@ function patternHits(patterns, value) {
     .map(pattern => pattern.source);
 }
 
+function detectNativeAndroidToolingWorkflow(candidate = {}) {
+  const body = candidateArticleText(candidate);
+  const sourceHint = sourceHintText(candidate);
+  const productTerms = patternHits(ANDROID_TOOLING_PRODUCT_PATTERNS, `${body} ${sourceHint}`);
+  const workflowTerms = patternHits(NATIVE_ANDROID_TOOLING_WORKFLOW_PATTERNS, body);
+  const genericNativeTerms = patternHits(NATIVE_TOOLING_PATTERNS, body);
+  const detected = productTerms.length > 0 && workflowTerms.length > 0;
+  return {
+    detected,
+    tooling_workflow_type: detected ? 'native_tooling_workflow' : '',
+    native_workflow_evidence_score: detected
+      ? Math.min(5, 2 + workflowTerms.length + Math.min(1, genericNativeTerms.length))
+      : 0,
+    tooling_product_terms: productTerms.slice(0, 6),
+    native_workflow_terms: workflowTerms.slice(0, 6)
+  };
+}
+
 function multimediaCameraOutputHits(value) {
   const strongHits = patternHits(MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS, value);
   const outputContextHits = patternHits(CAMERA_OUTPUT_CONTEXT_PATTERNS, value);
@@ -336,6 +378,10 @@ function androidAdaptiveUiCameraAdjacentTerms(value) {
   return [...adaptiveTerms, ...cameraImpactTerms];
 }
 
+function hasCameraBehaviorContext(value) {
+  return patternHits(CAMERA_BEHAVIOR_CONTEXT_PATTERNS, value).length > 0;
+}
+
 function validBucketHint(value) {
   const bucket = text(value);
   return Object.values(BUCKETS).includes(bucket) && bucket !== BUCKETS.GENERIC_TECH_WATCHLIST
@@ -363,6 +409,10 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const strongSocTerms = patternHits(STRONG_SOC_PATTERNS, body);
   const socCameraImpactTerms = patternHits(SOC_CAMERA_IMPACT_PATTERNS, body);
   const nativeTerms = patternHits(NATIVE_TOOLING_PATTERNS, body);
+  const nativeAndroidTooling = detectNativeAndroidToolingWorkflow(candidate);
+  const nativeAndroidToolingTerms = nativeAndroidTooling.detected
+    ? [...nativeAndroidTooling.tooling_product_terms, ...nativeAndroidTooling.native_workflow_terms]
+    : [];
   const bucketHint = validBucketHint(candidate.relevance_bucket_hint || candidate.relevanceBucketHint);
   const sourceHintTerms = patternHits([
     ...DIRECT_AOSP_PATTERNS,
@@ -372,7 +422,9 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ...MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS,
     ...MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS,
     ...SOC_PATTERNS,
-    ...NATIVE_TOOLING_PATTERNS
+    ...NATIVE_TOOLING_PATTERNS,
+    ...ANDROID_TOOLING_PRODUCT_PATTERNS,
+    ...NATIVE_ANDROID_TOOLING_WORKFLOW_PATTERNS
   ], sourceHint);
 
   let bucket = BUCKETS.GENERIC_TECH_WATCHLIST;
@@ -386,9 +438,16 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ...cameraImpactTerms,
     ...socTerms,
     ...socCameraImpactTerms,
-    ...nativeTerms
+    ...nativeTerms,
+    ...nativeAndroidToolingTerms
   ];
+  const hasArticleCameraBehavior = cameraImpactTerms.length > 0 && hasCameraBehaviorContext(body);
   const canUseBucketHint = bucketHint && articleTerms.length > 0 &&
+    (
+      bucketHint !== BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT ||
+      adaptiveUiAdjacentTerms.length > 0 ||
+      (androidAdjacentTerms.length > 0 && hasArticleCameraBehavior)
+    ) &&
     (
       bucketHint !== BUCKETS.SOC_PLATFORM_SIGNAL ||
       (socTerms.length > 0 && socCameraImpactTerms.length > 0)
@@ -412,7 +471,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
     bucket = bucketHint;
     evidenceTerms = multimediaCameraOutputTerms;
-  } else if (androidAdjacentTerms.length > 0 && cameraImpactTerms.length > 0) {
+  } else if (androidAdjacentTerms.length > 0 && hasArticleCameraBehavior) {
     bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
     evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms];
   } else if (multimediaCameraOutputTerms.length > 0) {
@@ -425,6 +484,9 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   ) {
     bucket = BUCKETS.SOC_PLATFORM_SIGNAL;
     evidenceTerms = [...strongSocTerms, ...socCameraImpactTerms];
+  } else if (nativeAndroidTooling.detected) {
+    bucket = BUCKETS.CPP_AI_TOOLING_FALLBACK;
+    evidenceTerms = nativeAndroidToolingTerms;
   } else if (nativeTerms.length > 0) {
     bucket = BUCKETS.CPP_AI_TOOLING_FALLBACK;
     evidenceTerms = nativeTerms;
@@ -469,6 +531,10 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     counts_as_driver_topic: countsAsDriverTopic,
     counts_as_soc_topic: countsAsSocTopic,
     counts_as_fallback_topic: countsAsFallbackTopic,
+    tooling_workflow_type: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK && nativeAndroidTooling.detected
+      ? nativeAndroidTooling.tooling_workflow_type
+      : text(candidate.tooling_workflow_type),
+    native_workflow_evidence_score: nativeAndroidTooling.native_workflow_evidence_score,
     evidence_origin: evidenceOrigin,
     source_hint: text(candidate.usageHint || candidate.source_usage_hint || sourceHint).slice(0, 240),
     scope_evidence_terms: evidenceTerms.slice(0, 8),
@@ -516,6 +582,7 @@ module.exports = {
   BUCKET_DEFINITIONS,
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate,
+  detectNativeAndroidToolingWorkflow,
   normalizeAospCameraScope,
   candidateArticleText
 };

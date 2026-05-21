@@ -69,6 +69,11 @@ const {
   selectionDiagnosticsFromReports
 } = require('../generate/selection-diagnostics');
 const {
+  candidateGroupKey,
+  explicitDemotedGroups,
+  groupCoverageSummary
+} = require('../common/article-groups');
+const {
   buildStaleClaimReportMarkdown,
   pruneResolvedStaleFactCheckItems,
   scrubStaleClaims
@@ -428,12 +433,37 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     Number(primaryCameraStackTopicCount) + Number(supportingMainArticleCount) === Number(selectedArticleCount)
   );
   const publishGatePassed = options.publishGatePassed ?? selectionPublishGatePassed;
+  const selectedGroupKeys = ensureArray(options.selectedGroupKeys).length > 0
+    ? ensureArray(options.selectedGroupKeys)
+    : ensureArray(report.selected_representative_group_keys).length > 0
+      ? ensureArray(report.selected_representative_group_keys)
+      : ensureArray(report.selected_articles).map(candidateGroupKey).filter(Boolean);
+  const renderedGroupKeys = ensureArray(options.renderedGroupKeys).length > 0
+    ? ensureArray(options.renderedGroupKeys)
+    : ensureArray(report.rendered_group_keys);
+  const hasRenderedGroupObservation = options.renderedGroupKeys !== undefined ||
+    ensureArray(report.rendered_group_keys).length > 0;
+  const explicitlyDemotedGroups = ensureArray(options.explicitlyDemotedGroups).length > 0
+    ? ensureArray(options.explicitlyDemotedGroups)
+    : ensureArray(report.explicitly_demoted_group_keys).map(key => ({ article_group_key: key, demotion_reason: 'status' }));
+  const groupCoverage = groupCoverageSummary({
+    selectedGroupKeys,
+    renderedGroupKeys,
+    demotedGroups: explicitlyDemotedGroups
+  });
   return {
     input_candidate_count: report.input_candidate_count ?? null,
     eligible_candidate_count: report.eligible_candidate_count ?? null,
     selected_article_count: selectedArticleCount,
     deterministic_selected_count: diagnostics.deterministic_selected_count ?? report.deterministic_selected_count ?? report.selected_article_count ?? null,
     rendered_main_article_count: renderedMainArticleCount,
+    selected_group_count: groupCoverage.selected_group_count,
+    rendered_group_count: hasRenderedGroupObservation ? groupCoverage.rendered_group_count : report.rendered_group_count ?? null,
+    explicitly_demoted_group_count: groupCoverage.explicitly_demoted_group_count,
+    selected_representative_group_keys: groupCoverage.selected_representative_group_keys,
+    rendered_group_keys: groupCoverage.rendered_group_keys,
+    explicitly_demoted_group_keys: groupCoverage.explicitly_demoted_group_keys,
+    group_coverage_ok: hasRenderedGroupObservation ? groupCoverage.ok : null,
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
     demoted_article_count: options.demotedArticleCount ?? diagnostics.demoted_candidate_count ?? report.demoted_candidate_count ?? null,
     locked_article_count: options.lockedArticleCount ?? null,
@@ -709,6 +739,10 @@ function validateReporter(value, date, collectedCandidates = []) {
       inferImpactClaimLevel(candidate);
     candidate.evidence_origin = stringOrEmpty(collected.evidence_origin || candidate.evidence_origin || 'unknown');
     candidate.source_hint = stringOrEmpty(collected.source_hint || candidate.source_hint || collected.usageHint || collected.source_usage_hint);
+    candidate.article_group_key = stringOrEmpty(collected.article_group_key || candidate.article_group_key || candidateGroupKey(collected));
+    candidate.tooling_workflow_type = stringOrEmpty(collected.tooling_workflow_type || candidate.tooling_workflow_type);
+    candidate.native_workflow_evidence_score = numberOrDefault(collected.native_workflow_evidence_score ?? candidate.native_workflow_evidence_score);
+    candidate.related_context_candidates = ensureArray(collected.related_context_candidates || candidate.related_context_candidates);
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
     if (typeof candidate.selected !== 'boolean') {
       const total =
@@ -868,6 +902,8 @@ function sourceCandidateMetadataForSection(section, reporter) {
   return {
     source_candidate_url: candidateUrl,
     source_candidate_hash: candidate.url_hash || normalizedUrlHash(candidateUrl),
+    article_group_key: candidate.article_group_key || candidateGroupKey(candidate),
+    tooling_workflow_type: candidate.tooling_workflow_type || '',
     relevance_bucket: candidate.relevance_bucket || '',
     editorial_priority: candidate.editorial_priority ?? null,
     aosp_camera_directness: candidate.aosp_camera_directness ?? null,
@@ -909,6 +945,16 @@ function normalizeEditorSection(section, index, reporter) {
     ...sourceCandidateMetadataForSection(normalized, reporter),
     ...normalizeSectionImageFields(normalized, reporter)
   };
+}
+
+function editorRenderedGroupKeys(editor = {}) {
+  return [...new Set(ensureArray(editor.sections)
+    .map(section => stringOrEmpty(section.article_group_key || section.articleGroupKey))
+    .filter(Boolean))];
+}
+
+function editorExplicitlyDemotedGroups(editor = {}) {
+  return explicitDemotedGroups(editor);
 }
 
 function validateEditor(value, date, reporter = { candidates: [] }, options = {}) {
@@ -1317,6 +1363,8 @@ function writeReviewableRepairFailureArtifacts({
     path.join(newsroomDir, 'retry-history.md'),
     buildRetryHistoryMarkdown(date, fallbackRetryHistory, selectionStatusExtra(shortlistReport || generationRunState.shortlistReport, {
       renderedMainArticleCount: ensureArray(fallbackEditor.sections).length,
+      renderedGroupKeys: editorRenderedGroupKeys(fallbackEditor),
+      explicitlyDemotedGroups: editorExplicitlyDemotedGroups(fallbackEditor),
       finalPublishReady: false,
       publishGatePassed: false,
       compositionMode: COMPOSITION_MODES.NEEDS_FIX,
@@ -1359,6 +1407,8 @@ function writeReviewableRepairFailureArtifacts({
       ...editorSemanticStatusExtra(error),
       ...selectionStatusExtra(shortlistReport || generationRunState.shortlistReport, {
         renderedMainArticleCount: ensureArray(fallbackEditor.sections).length,
+        renderedGroupKeys: editorRenderedGroupKeys(fallbackEditor),
+        explicitlyDemotedGroups: editorExplicitlyDemotedGroups(fallbackEditor),
         lockedArticleCount: 0,
         demotedArticleCount: 0,
         finalPublishReady: false,
@@ -1404,6 +1454,8 @@ async function repairEditorSemanticWithLlm({
       'Preserve Korean reader-facing prose unless the validation repair requires a local edit; any newly written reader-facing text must be Korean.',
       'Do not add, remove, reorder, or replace articles.',
       'Do not change article headlines, categories, source URLs, image fields, action_items, or references unless the validation error explicitly targets that field.',
+      'For sections.group_coverage failures, restore the missing selected representative group as an article using only its selected capsule, or add explicitly_demoted_groups[] with article_group_key and demotion_reason when the group cannot be rendered.',
+      'For sections.blocked_context failures, remove blocked context URLs/titles from article sources and headlines; blocked context may remain only as diagnostic context.',
       'For sections.claims failures, add or adjust claims so every source-backed verified_facts[], confirmed_facts[], and concrete evidence_summary field has a matching claim_type=fact claim.',
       'For claim repairs, use only allowed claim_type and impact_level values. Map CameraX/adaptive UI impact to app_api_or_framework_adjacent unless direct HAL contract evidence is present.',
       'For missing source_urls, reuse the section source URL. For fact claims, cite available seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, or source_extraction evidence ids when present; do not invent evidence ids.',
@@ -2807,6 +2859,9 @@ async function main() {
         `중복되지 않는 source material이 충분하면 Newsletter Policy range (${articleCountRangeText()}) 안에서 main articles를 작성하세요.`,
         `Final main article count는 ${publishGateCriteriaText()}를 만족해야 합니다.`,
         'final-selected article capsules를 main article inputs로 사용하세요. final_selected=false, finalSelectionEligibility=watchlist/exclude, hasDatedEvidence 없는 isWatchPage=true, main_eligible=false, source_gap_risk=true, briefing_only, reference_only candidate를 main article로 만들지 마세요.',
+        'Use related_context_candidates only inside the selected representative article. Do not create a separate main article from related_context_candidates.',
+        'Use only related_context_candidates with context_usage_allowed=true as supporting context. Do not cite blocked_context_candidates, blocked_context_reference, parent_roundup_context_only, or dedupe_shadow_context as article sources.',
+        'Preserve article_group_key when it is present. A selected group must either render one article or be explicitly listed in explicitly_demoted_groups with demotion_reason.',
         linkedEvidencePromptGuardrails(),
         sourceExtractionPromptGuardrails(),
         articleSectionContractPrompt(),
@@ -3514,6 +3569,8 @@ async function main() {
       ...editorSemanticStatusExtra(),
       ...selectionStatusExtra(shortlistReport, {
         renderedMainArticleCount: ensureArray(editor.sections).length,
+        renderedGroupKeys: editorRenderedGroupKeys(editor),
+        explicitlyDemotedGroups: editorExplicitlyDemotedGroups(editor),
         lockedArticleCount: retryHistory.at(-1)?.locked_article_headlines.length || 0,
         demotedArticleCount: retryHistory.at(-1)?.demoted_article_count ?? retryHistory.at(-1)?.demoted_sections?.length ?? 0,
         finalPublishReady,

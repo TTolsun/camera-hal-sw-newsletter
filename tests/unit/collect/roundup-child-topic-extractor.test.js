@@ -41,6 +41,14 @@ test('roundup extractor accepts heading topic plus body introduce wording', () =
   assert.equal(children[0].source_extraction.child_heading, 'Advanced Professional Video');
   assert.equal(children[0].behavior_change, 'Android introduces a new media framework format for professional capture.');
   assert.equal(children[0].relevanceBucketHint, 'android_multimedia_camera_output');
+  assert.equal(children[0].sourceType, 'roundup_child');
+  assert.equal(children[0].parentTitle, 'Google I/O recap for Android developers');
+  assert.equal(children[0].parentUrl, 'https://android-developers.googleblog.com/2026/05/io-recap.html');
+  assert.equal(children[0].parentCanonicalUrl, 'https://android-developers.googleblog.com/2026/05/io-recap.html');
+  assert.equal(children[0].roundupItemIndex, 1);
+  assert.equal(children[0].anchorText, 'Advanced Professional Video');
+  assert.ok(children[0].url.includes('#'));
+  assert.notEqual(children[0].url, children[0].parentUrl);
   assert.equal(Object.prototype.hasOwnProperty.call(children[0], 'source_gap_risk'), false);
 });
 

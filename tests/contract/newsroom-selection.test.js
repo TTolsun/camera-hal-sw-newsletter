@@ -1111,6 +1111,121 @@ test('supporting fallback-only candidate can satisfy one-article policy', () => 
   assert.deepEqual(report.selection_errors, []);
 });
 
+test('official Android native tooling is selected as one supporting group with related context', () => {
+  const source = {
+    id: 'android-developers-blog',
+    name: 'Android Developers Blog',
+    url: 'https://android-developers.googleblog.com/',
+    sourceUrl: 'https://android-developers.googleblog.com/',
+    category: 'android',
+    section: 'Android / Developer Tools',
+    priority: 'high',
+    reliability: 'official',
+    candidateOnly: false,
+    requiresCrossCheck: false,
+    usageHint: 'Official Android Developers Blog tooling articles',
+    keywords: ['Android', 'Studio', 'CLI', 'Gemini', 'build', 'test', 'debug']
+  };
+  const rawTooling = [
+    {
+      source,
+      title: 'Start building today - Build native Android apps in Google AI Studio',
+      url: 'https://android-developers.googleblog.com/2026/05/io26.html#roundup-child-3-start-building-today',
+      publishedAt: '2026-05-20',
+      sourceKind: 'blog_post_item',
+      collectionMode: 'article-item',
+      summary: 'Google AI Studio can generate, modify, build, and test native Android apps with Gemini assisted workflows.',
+      relevanceBucketHint: 'android_platform_camera_adjacent'
+    },
+    {
+      source,
+      title: 'Android CLI Now Stable 1.0: Accelerate developing for Android using any agent',
+      url: 'https://android-developers.googleblog.com/2026/05/android-cli-stable.html',
+      publishedAt: '2026-05-20',
+      sourceKind: 'blog_post_item',
+      collectionMode: 'article-item',
+      summary: 'Android CLI 1.0 helps agents build, test, debug, and run native Android apps on devices.'
+    },
+    {
+      source,
+      title: 'Android Studio I/O Edition: What’s new in Android Developer tools',
+      url: 'https://android-developers.googleblog.com/2026/05/android-studio-io-edition.html',
+      publishedAt: '2026-05-20',
+      sourceKind: 'blog_post_item',
+      collectionMode: 'article-item',
+      summary: 'Android Studio updates device execution, Gradle sync, profiling, and debugging workflow for Android apps.'
+    }
+  ].map(item => normalizeCandidate(item));
+  const report = buildShortlistReport('2026-05-22', [
+    policyPrimaryCandidate(1, {
+      title: 'CameraX primary release for grouping regression',
+      url: 'https://example.com/camerax-grouping-primary',
+      published_date: '2026-05-21'
+    }),
+    ...rawTooling
+  ]);
+  const selectedTooling = report.selected_articles.find(item => item.article_group_key === 'android_native_tooling_workflow');
+
+  assert.ok(selectedTooling);
+  assert.equal(selectedTooling.relevance_bucket, 'cpp_ai_tooling_fallback');
+  assert.equal(selectedTooling.finalSelectionEligibility, 'short');
+  assert.equal(selectedTooling.tooling_workflow_type, 'native_tooling_workflow');
+  assert.equal(selectedTooling.counts_as_primary_camera_topic, false);
+  assert.equal(report.composition_summary.supporting_main_article_count, 1);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, 1);
+  assert.equal(report.selected_group_count, report.selected_articles.length);
+  assert.ok(selectedTooling.related_context_candidates.length >= 2);
+  assert.ok(selectedTooling.related_context_candidates.every(item => item.can_create_independent_article === false));
+  assert.equal(rawTooling[0].relevance_bucket, 'cpp_ai_tooling_fallback');
+  assert.equal(rawTooling[0].counts_as_primary_camera_topic, false);
+});
+
+test('native tooling support does not displace a full primary camera selection', () => {
+  const source = {
+    id: 'android-developers-blog',
+    name: 'Android Developers Blog',
+    url: 'https://android-developers.googleblog.com/',
+    sourceUrl: 'https://android-developers.googleblog.com/',
+    category: 'android',
+    section: 'Android / Developer Tools',
+    reliability: 'official',
+    candidateOnly: false,
+    usageHint: 'Official Android Developers Blog tooling articles',
+    keywords: ['Android', 'CLI', 'build', 'test', 'debug']
+  };
+  const tooling = normalizeCandidate({
+    source,
+    title: 'Android CLI Now Stable 1.0: Accelerate developing for Android using any agent',
+    url: 'https://android-developers.googleblog.com/2026/05/android-cli-stable.html',
+    publishedAt: '2026-05-20',
+    sourceKind: 'blog_post_item',
+    collectionMode: 'article-item',
+    summary: 'Android CLI 1.0 helps agents build, test, debug, and run native Android apps on devices.'
+  });
+  const report = buildShortlistReport('2026-05-22', [
+    ...[
+      'CameraX release updates preview stream validation',
+      'AOSP Camera provider changes buffer metadata handling',
+      'Android Camera API fixes capture result behavior',
+      'Camera HAL metadata contract update for CTS checks',
+      'Camera ITS test plan update for preview stability'
+    ].map((title, index) => policyPrimaryCandidate(index, {
+      title,
+      url: `https://example.com/camera-full-slate-${index}`,
+      summary: `${title} changes Camera HAL validation behavior for stream, buffer, and metadata checks.`,
+      api_or_component: 'Camera HAL / CameraX',
+      behavior_change: `${title} changes Camera HAL validation behavior.`,
+      published_date: '2026-05-21'
+    })),
+    tooling
+  ]);
+
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.max);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.mainArticleCount.max);
+  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 0);
+  assert.equal(report.selected_articles.some(item => item.article_group_key === 'android_native_tooling_workflow'), false);
+});
+
 test('AOSP site update camera rows can satisfy configured composition', () => {
   const source = {
     id: 'aosp-site-updates',

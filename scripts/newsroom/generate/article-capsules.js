@@ -17,6 +17,10 @@ const {
   sourceQualityFieldDrift,
   sourceQualityFlatFields
 } = require('../collect/source-quality-classifier');
+const {
+  candidateGroupKey,
+  compactContextCandidate
+} = require('../common/article-groups');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -308,6 +312,15 @@ function compactImageCandidates(candidate) {
     }));
 }
 
+function compactRelatedContextCandidates(candidate) {
+  return ensureArray(candidate.related_context_candidates)
+    .slice(0, 8)
+    .map(item => compactContextCandidate({
+      ...item,
+      article_group_key: item.article_group_key || candidate.article_group_key
+    }));
+}
+
 function estimatedTokens(value) {
   return Math.ceil(JSON.stringify(value).length / 4);
 }
@@ -346,6 +359,19 @@ function buildArticleCapsule(candidate) {
     topic_type: topicType(candidate),
     editorial_priority: number(candidate.editorial_priority, 6),
     relevance_bucket: text(candidate.relevance_bucket),
+    article_group_key: text(candidate.article_group_key || candidate.articleGroupKey),
+    tooling_workflow_type: text(candidate.tooling_workflow_type || candidate.toolingWorkflowType),
+    native_workflow_evidence_score: number(candidate.native_workflow_evidence_score),
+    related_context_candidates: compactRelatedContextCandidates(candidate),
+    blocked_context_candidates: compactRelatedContextCandidates(candidate)
+      .filter(item => item.context_usage_allowed !== true),
+    parent_context: text(candidate.parentUrl || candidate.parent_url) ? {
+      title: compactText(candidate.parentTitle || candidate.parent_title || 'Parent roundup', 120),
+      url: text(candidate.parentUrl || candidate.parent_url),
+      canonical_url: text(candidate.parentCanonicalUrl || candidate.parent_canonical_url || candidate.parentUrl || candidate.parent_url),
+      roundup_item_index: candidate.roundupItemIndex ?? candidate.roundup_item_index ?? null,
+      anchor_text: compactText(candidate.anchorText || candidate.anchor_text, 160)
+    } : null,
     scope_relevance: {
       aosp_camera_directness: number(candidate.aosp_camera_directness),
       driver_stack_relevance: number(candidate.driver_stack_relevance),
@@ -442,6 +468,11 @@ function buildArticleCapsule(candidate) {
   if (halSignal.camera_pipeline_link) {
     capsule.camera_pipeline_link = compactText(halSignal.camera_pipeline_link, 180);
   }
+  if (!capsule.tooling_workflow_type) delete capsule.tooling_workflow_type;
+  if (!capsule.article_group_key) delete capsule.article_group_key;
+  if (!capsule.native_workflow_evidence_score) delete capsule.native_workflow_evidence_score;
+  if (ensureArray(capsule.blocked_context_candidates).length === 0) delete capsule.blocked_context_candidates;
+  if (!capsule.parent_context) delete capsule.parent_context;
   return {
     ...capsule,
     estimated_tokens: estimatedTokens(capsule)
@@ -537,6 +568,7 @@ function compactSelectionContext(shortlistReport) {
     selected_articles: ensureArray(shortlistReport?.selected_articles).map(candidate => ({
       title: compactText(candidate.title, 180),
       url: candidateUrl(candidate),
+      article_group_key: candidateGroupKey(candidate),
       deterministic_score: number(candidate.deterministic_score),
       selection_slot: text(candidate.selection_slot),
       editorial_priority: number(candidate.editorial_priority, 6),
@@ -545,6 +577,7 @@ function compactSelectionContext(shortlistReport) {
     primary_selected_articles: ensureArray(shortlistReport?.primary_selected_articles).map(candidate => ({
       title: compactText(candidate.title, 180),
       url: candidateUrl(candidate),
+      article_group_key: candidateGroupKey(candidate),
       deterministic_score: number(candidate.deterministic_score),
       selection_slot: text(candidate.selection_slot),
       editorial_priority: number(candidate.editorial_priority, 6),
