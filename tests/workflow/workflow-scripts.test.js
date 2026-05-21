@@ -5237,16 +5237,30 @@ test('validate-pr-body accepts diagnostics-only wording and rejects misleading p
   const date = '2026-05-08';
   writeFailedRepairReviewableArtifacts(root, date, {
     status: {
+      status: 'NEEDS_FIX',
+      failure_kind: 'editorial_reviewable',
       failure_stage: 'editor repair attempt 1/2',
       failure_reason: 'section_count_drift',
+      publish_ready: false,
+      selection_publish_ready: false,
+      final_publish_ready: false,
+      publish_gate_passed: false,
       quality_status: 'NEEDS_FIX',
-      quality_score: 79
+      quality_score: 79,
+      public_newsletter_ready: true,
+      review_publication_ready: true,
+      homepage_visible_after_merge: true
     },
     generationStatus: {
+      status: 'NEEDS_FIX',
+      failure_kind: 'editorial_reviewable',
       failure_stage: 'editor repair attempt 1/2',
       failure_reason: 'section_count_drift',
       quality_status: 'NEEDS_FIX',
-      quality_score: 79
+      quality_score: 79,
+      public_newsletter_ready: true,
+      review_publication_ready: true,
+      homepage_visible_after_merge: true
     },
     repairFailure: {
       code: 'section_count_drift',

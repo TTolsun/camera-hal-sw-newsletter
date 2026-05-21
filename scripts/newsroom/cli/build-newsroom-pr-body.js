@@ -170,14 +170,17 @@ function recommendedEditorAction(status) {
   return '생성 산출물, label, validation output을 확인한 뒤 발행 여부를 결정하세요.';
 }
 
-function renderStatusSection(status) {
+function renderStatusSection(status, handoff = null) {
   const editorAction = recommendedEditorAction(status);
   const editorialReviewable = status.failure_kind === 'editorial_reviewable';
+  const diagnosticsOnly = handoff?.diagnosticsOnly === true;
   return [
     '## 생성 상태',
     '',
     editorialReviewable
-      ? '편집장 검토 경고: AI 자동 발행 기준은 통과하지 못했지만 public newsletter files는 생성되었습니다. 편집장이 승인하여 merge하면 Newsletter 사이트에 게시됩니다.'
+      ? diagnosticsOnly
+        ? 'diagnostics-only 경고: public newsletter files가 준비되지 않았으므로 merge해도 Newsletter 홈페이지에 표시되지 않습니다. 이 PR은 publish-ready가 아닙니다.'
+        : '편집장 검토 경고: AI 자동 발행 기준은 통과하지 못했지만 public newsletter files는 생성되었습니다. 편집장이 승인하여 merge하면 Newsletter 사이트에 게시됩니다.'
       : '',
     `전체 상태: ${valueOrUnknown(status.status)}`,
     `생성 실행 상태: ${valueOrUnknown(status.generation_status)}`,
@@ -2342,7 +2345,7 @@ function buildNewsroomPrBody(options = {}) {
   }
   pushSection(renderRawInputProvenance(status, date));
   pushSection(renderPriorityOverridePolicy());
-  pushSection(renderStatusSection(status));
+  pushSection(renderStatusSection(status, handoff));
   pushSection(editorBriefSections);
 
   lines.push(
