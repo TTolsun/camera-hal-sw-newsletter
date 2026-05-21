@@ -8,23 +8,23 @@
     "issues": [
       {
         "index": 1,
-        "headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
+        "headline": "Google I/O 2026: Jetpack Compose 대화면 대응을 위한 CameraX 통합 및 Navigation 3 발표",
         "status": "needs_fix",
         "issues": [
           {
-            "reason_code": "unknown_evidence_id",
-            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
-          },
-          {
-            "reason_code": "unknown_evidence_id",
-            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
-          },
-          {
-            "reason_code": "unknown_evidence_id",
-            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
+            "reason_code": "missing_matching_fact_claim",
+            "message": "Factual field is not covered by a claim_type=fact claim: article_sections.verified_facts[1]."
           }
         ],
-        "uncovered_facts": []
+        "uncovered_facts": [
+          {
+            "article_index": 1,
+            "article_headline": "Google I/O 2026: Jetpack Compose 대화면 대응을 위한 CameraX 통합 및 Navigation 3 발표",
+            "field": "article_sections.verified_facts[1]",
+            "text": "Jetpack Navigation 3 릴리스와 새로운 실험적 Grid 및 FlexBox 레이아웃이 포함되었습니다.",
+            "reason_code": "missing_matching_fact_claim"
+          }
+        ]
       }
     ]
   },

@@ -8,6 +8,9 @@
 - Final eligible candidates: 2
 - Final selected articles: 2
 - Deterministic primary articles: 2
+- Selected representative groups: 2
+- Rendered groups: unknown
+- Explicitly demoted groups: 0
 - Reserve candidates: 0
 - Demoted candidates: unknown
 - Composition mode: NORMAL

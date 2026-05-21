@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T16:27:46.971Z",
+  "generated_at": "2026-05-21T18:25:09.195Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -224,6 +224,27 @@
       "source_reliability": "official",
       "freshness_window": "primary",
       "relevance_bucket": "android_platform_camera_adjacent",
+      "article_group_key": "article:https://goo.gle/adaptiveapps_io26",
+      "tooling_workflow_type": "",
+      "related_context_candidates": [
+        {
+          "title": "17 Things to know for Android developers at Google I/O",
+          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "android_platform_camera_adjacent",
+          "finalSelectionEligibility": "exclude",
+          "context_role": "parent_roundup_context_only",
+          "context_usage_label": "parent_roundup_context_only",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "parent_roundup_context_only",
+          "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
+        }
+      ],
       "finalSelectionEligibility": "main",
       "source_gap_risk": false,
       "has_dated_evidence": true,
@@ -236,9 +257,9 @@
         "\\bCameraX\\b"
       ],
       "key_evidence": [
+        "version_or_release: Jetpack Navigation 3",
         "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "evidence_note: official source"
+        "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment..."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {
@@ -259,6 +280,27 @@
       "source_reliability": "official",
       "freshness_window": "primary",
       "relevance_bucket": "android_platform_camera_adjacent",
+      "article_group_key": "article:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "tooling_workflow_type": "",
+      "related_context_candidates": [
+        {
+          "title": "Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "android_platform_camera_adjacent",
+          "finalSelectionEligibility": "exclude",
+          "context_role": "parent_roundup_context_only",
+          "context_usage_label": "parent_roundup_context_only",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "parent_roundup_context_only",
+          "article_group_key": "article:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+        }
+      ],
       "finalSelectionEligibility": "short",
       "source_gap_risk": false,
       "has_dated_evidence": true,
