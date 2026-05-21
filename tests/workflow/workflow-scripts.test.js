@@ -1,6 +1,7 @@
 const assert = require('node:assert/strict');
-const { execFileSync, spawnSync } = require('node:child_process');
+const { execFileSync, spawn, spawnSync } = require('node:child_process');
 const fs = require('node:fs');
+const http = require('node:http');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
@@ -65,6 +66,10 @@ const {
 const {
   publicationDecisionForSections
 } = require('../../scripts/newsroom/common/publication-mode');
+const {
+  candidate: buildCandidate,
+  retrySection
+} = require('../helpers/newsroom-builders');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -170,6 +175,226 @@ function extractMarkdownSection(text, heading) {
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'newsroom-pr-body-'));
+}
+
+function runNodeAsync(args, options = {}) {
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, args, {
+      encoding: 'utf8',
+      ...options
+    });
+    let stdout = '';
+    let stderr = '';
+    child.stdout?.on('data', chunk => {
+      stdout += chunk.toString();
+    });
+    child.stderr?.on('data', chunk => {
+      stderr += chunk.toString();
+    });
+    child.on('close', status => {
+      resolve({ status, stdout, stderr });
+    });
+  });
+}
+
+function onePublishableSupportingCandidate(date) {
+  const url = 'https://example.com/snapdragon-isp-camera-thermal';
+  const evidenceText = [
+    'Snapdragon ISP camera thermal note 1.0 was published on 2026-05-11.',
+    'The note changes sustained camera preview frame latency behavior for ISP/NPU workloads.',
+    'Camera HAL readers should compare stream buffer metadata, Camera ITS logs, preview latency, and frame-drop metrics.'
+  ].join(' ');
+  return buildCandidate({
+    title: 'Snapdragon ISP camera thermal note',
+    source: 'Example Platform Source',
+    url,
+    published_date: `${date}T00:00:00Z`,
+    summary: 'Snapdragon ISP camera thermal behavior changes sustained preview latency and buffer pressure validation.',
+    collectionMode: 'release_note_item',
+    isArticleCandidate: true,
+    isWatchPage: false,
+    hasDatedEvidence: true,
+    evidenceLevel: 'dated_release',
+    source_kind: 'official_release_note',
+    finalSelectionEligibility: 'main',
+    main_eligible: true,
+    briefing_only: false,
+    reference_only: false,
+    evidence_score: 6,
+    version_or_release: 'Snapdragon ISP camera thermal note 1.0',
+    api_or_component: 'Snapdragon ISP camera thermal path',
+    behavior_change: 'Sustained camera preview frame latency behavior changed for ISP/NPU workloads.',
+    evidence_notes: [evidenceText],
+    cross_check_status: 'official-source',
+    editorial_priority: 5,
+    relevance_bucket: 'soc_platform_signal',
+    aosp_camera_directness: 0,
+    driver_stack_relevance: 0,
+    multimedia_camera_output_relevance: 0,
+    soc_platform_relevance: 5,
+    native_tooling_relevance: 0,
+    counts_as_primary_camera_topic: false,
+    counts_as_driver_topic: false,
+    counts_as_soc_topic: true,
+    counts_as_fallback_topic: false,
+    impact_claim_level: 'soc_resource_contention',
+    evidence_origin: 'source_extraction',
+    source_hint: 'official-source',
+    camera_hal_relevance_score: 2,
+    android_camera_relevance_score: 3,
+    practical_actionability_score: 5,
+    source_reliability_score: 5,
+    freshness_score: 3,
+    ai_required_slot_fit_score: 0,
+    cpp_fallback_value_score: 0,
+    relevance_reason: 'Camera workload thermal behavior affects preview latency, buffer queues, and Camera ITS checks.',
+    impact_areas: ['preview latency', 'buffer pressure', 'Camera ITS validation'],
+    hal_impact_axes: ['performance_latency_thermal', 'stream_buffer_metadata'],
+    reader_owners: ['camera_hal_owner', 'camera_test_owner'],
+    actionability_level: 'owner_metric_log',
+    effective_actionability_level: 'owner_metric_log',
+    actionability_upgrade_reason: '',
+    signal_quality_status: 'strong_signal',
+    do_not_overstate: ['Do not claim source-proven platform API changes from the SoC note alone.'],
+    fallback_promotion_allowed: true,
+    fallback_promotion_reason: 'SoC camera thermal signal includes concrete camera workload validation checks.',
+    fallback_guard_notes: ['Keep interpretation tied to preview latency, stream buffer metadata, and Camera ITS validation.'],
+    soc_signal_type: 'isp_thermal_camera_workload',
+    soc_signal_source_allowed: true,
+    camera_pipeline_link: 'Camera preview frame latency, buffer queue pressure, stream metadata, and Camera ITS validation are affected by sustained ISP/NPU thermal behavior.',
+    source_extraction: {
+      release: {
+        version: 'Snapdragon ISP camera thermal note 1.0',
+        date,
+        component: 'Snapdragon ISP camera thermal path',
+        sections: [{
+          heading: 'Camera workload thermal behavior',
+          items: [{
+            evidence_id: 'evidence-1',
+            text: evidenceText,
+            url
+          }]
+        }]
+      }
+    },
+    compact_evidence: {
+      primary_facts: [evidenceText],
+      evidence_urls: [url],
+      do_not_claim: ['Do not claim source-proven platform API changes from the SoC note alone.']
+    },
+    imageCandidates: []
+  });
+}
+
+function onePublishableSupportingEditorDraft(date, candidate) {
+  const section = retrySection(candidate.title, candidate.url);
+  const evidenceText = candidate.source_extraction.release.sections[0].items[0].text;
+  return {
+    date,
+    title: `Camera HAL SW Newsletter - ${date}`,
+    summary: 'A single source-backed SoC camera workload signal is ready for Camera HAL validation planning.',
+    briefing: [
+      'Snapdragon ISP camera thermal behavior needs preview latency review.',
+      'The selected source has dated evidence and source binding.',
+      'Reserve candidates are not required for this one-article policy path.'
+    ],
+    sections: [{
+      ...section,
+      category: 'SoC Platform Signal',
+      headline: candidate.title,
+      what_changed: 'Snapdragon ISP camera thermal note 1.0 changed sustained camera preview frame latency behavior for ISP/NPU workloads.',
+      confirmed_facts: [
+        'Snapdragon ISP camera thermal note 1.0 was published on 2026-05-11.',
+        'The note changes sustained camera preview frame latency behavior for ISP/NPU workloads.'
+      ],
+      evidence_summary: evidenceText,
+      specificity_checks: [
+        'Release date: 2026-05-11',
+        'API/component: Snapdragon ISP camera thermal path',
+        'Behavior change: sustained camera preview frame latency'
+      ],
+      source_verification_notes: ['Example Platform Source is treated as the official source in this mock workflow test.'],
+      background: 'Sustained ISP/NPU thermal behavior can affect preview latency, frame drops, and buffer queue pressure in camera workloads.',
+      why_it_matters: 'Owners get a measurable follow-up path for stream, buffer, metadata, and Camera ITS validation.',
+      camera_hal_perspective: 'Compare preview latency, stream buffer metadata, Camera ITS logs, and frame-drop metrics on a representative thermal workload.',
+      camera_hal_checks: [
+        'Compare Camera ITS logs before and after the SoC thermal note.',
+        'Measure preview latency, frame drops, and buffer queue pressure on one representative device class.'
+      ],
+      action_items: [
+        'Within 2 weeks, assign a Camera HAL owner to compare Camera ITS logs for the ISP/NPU thermal path.',
+        'Measure preview latency, frame-drop, stream buffer metadata, and buffer queue pressure on a representative device.'
+      ],
+      article_sections: {
+        verified_facts: [
+          'Snapdragon ISP camera thermal note 1.0 was published on 2026-05-11.',
+          'The note changes sustained camera preview frame latency behavior for ISP/NPU workloads.'
+        ],
+        background_context: 'Sustained ISP/NPU thermal behavior can affect preview latency, frame drops, and buffer queue pressure in camera workloads.',
+        hal_driver_impact: 'Compare preview latency, stream buffer metadata, Camera ITS logs, and frame-drop metrics on a representative thermal workload.',
+        action_items: [
+          'Within 2 weeks, assign a Camera HAL owner to compare Camera ITS logs for the ISP/NPU thermal path.',
+          'Measure preview latency, frame-drop, stream buffer metadata, and buffer queue pressure on a representative device.'
+        ],
+        team_share_points: 'Share this as a bounded SoC camera workload signal, not as a source-proven platform API change.',
+        do_not_claim: ['Do not claim source-proven platform API changes from the SoC note alone.']
+      },
+      public_article: {
+        headline: candidate.title,
+        lead: 'Snapdragon ISP thermal behavior gives Camera HAL teams a dated signal for preview latency and buffer-pressure checks.',
+        body_paragraphs: [
+          'Snapdragon ISP camera thermal note 1.0 was published on 2026-05-11 and describes sustained camera preview frame latency behavior for ISP/NPU workloads.',
+          'For Camera HAL readers, the useful follow-up is to compare Camera ITS logs, stream buffer metadata, preview latency, frame drops, and buffer queue pressure on representative devices.'
+        ],
+        camera_hal_takeaway: 'Treat the note as a bounded SoC camera workload validation trigger, not as proof of a source-proven platform API change.',
+        reader_checkpoints: [
+          'Within 2 weeks, assign a Camera HAL owner to compare Camera ITS logs for the ISP/NPU thermal path.',
+          'Measure preview latency, frame-drop, stream buffer metadata, and buffer queue pressure on a representative device.'
+        ],
+        source_links: [{
+          title: candidate.source,
+          url: candidate.url,
+          source_role: 'primary'
+        }]
+      },
+      claims: [{
+        claim_id: 'claim-1',
+        text: `${evidenceText} Snapdragon ISP camera thermal note 1.0 was published on 2026-05-11. The note changes sustained camera preview frame latency behavior for ISP/NPU workloads.`,
+        claim_type: 'fact',
+        evidence_ids: ['evidence-1'],
+        source_urls: [candidate.url],
+        impact_level: 'soc_resource_contention',
+        overclaim_risk: 'low'
+      }],
+      hal_impact_axes: ['performance_latency_thermal', 'stream_buffer_metadata'],
+      reader_owners: ['camera_hal_owner', 'camera_test_owner'],
+      actionability_level: 'owner_metric_log',
+      effective_actionability_level: 'owner_metric_log',
+      actionability_upgrade_reason: '',
+      signal_quality_status: 'strong_signal',
+      do_not_overstate: ['Do not claim source-proven platform API changes from the SoC note alone.'],
+      fallback_promotion_allowed: true,
+      fallback_promotion_reason: 'SoC camera thermal signal includes concrete camera workload validation checks.',
+      fallback_guard_notes: ['Keep interpretation tied to preview latency, stream buffer metadata, and Camera ITS validation.'],
+      soc_signal_type: 'isp_thermal_camera_workload',
+      soc_signal_source_allowed: true,
+      camera_pipeline_link: candidate.camera_pipeline_link,
+      relevance_bucket: 'soc_platform_signal',
+      counts_as_primary_camera_topic: false,
+      counts_as_soc_topic: true,
+      counts_as_fallback_topic: false,
+      impact_claim_level: 'soc_resource_contention',
+      evidence_origin: 'source_extraction',
+      source_hint: 'official-source'
+    }],
+    action_items: [
+      'Assign Camera HAL owner for the ISP/NPU thermal validation follow-up.'
+    ],
+    references: [{
+      title: candidate.source,
+      url: candidate.url
+    }]
+  };
 }
 
 function writeMinimalPublishArtifacts(root, date, overrides = {}) {
@@ -916,19 +1141,19 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
 
 function candidateShortageSummary(overrides = {}) {
   return {
-    publishable_candidate_count: 3,
+    publishable_candidate_count: 0,
     required_publishable_candidate_count: candidatePoolPreflightPolicy.publishableCandidateMin,
     reserve_candidate_count: 0,
     required_reserve_candidate_count: candidatePoolPreflightPolicy.reserveMin,
-    primary_camera_stack_candidate_count: 1,
+    primary_camera_stack_candidate_count: 0,
     required_primary_camera_stack_candidate_count: candidatePoolPreflightPolicy.primaryCameraStackCandidateMin,
-    camera_stack_candidate_count: 1,
+    camera_stack_candidate_count: 0,
     required_camera_stack_candidate_count: candidatePoolPreflightPolicy.cameraStackCandidateMin,
-    direct_camera_or_driver_candidate_count: 1,
+    direct_camera_or_driver_candidate_count: 0,
     camera_adjacent_candidate_count: 0,
-    supporting_candidate_count: 2,
-    selected_article_count: articlePolicy.mainArticleCount.min,
-    selected_primary_camera_stack_count: 1,
+    supporting_candidate_count: 0,
+    selected_article_count: 0,
+    selected_primary_camera_stack_count: 0,
     ...overrides
   };
 }
@@ -936,8 +1161,7 @@ function candidateShortageSummary(overrides = {}) {
 function writeCandidateShortageReviewableArtifacts(root, date, overrides = {}) {
   const summary = candidateShortageSummary(overrides.summary || {});
   const shortageReasonCodes = overrides.shortageReasonCodes || [
-    'reserve_candidate_shortage',
-    'camera_stack_candidate_shortage'
+    'publishable_candidate_shortage'
   ];
   const sourceParserHints = overrides.sourceParserHints || [{
     code: 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR',
@@ -961,7 +1185,7 @@ function writeCandidateShortageReviewableArtifacts(root, date, overrides = {}) {
     bucket: 'cpp_ai_tooling_fallback',
     fallback: true
   });
-  const selected = [direct, supportA, supportB];
+  const selected = overrides.selected || [];
   const failureReason = shortageReasonCodes.join('; ');
   const status = {
     date,
@@ -1554,10 +1778,10 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
   assert.match(fallbackBody, /preflight_source: selection-report\.json/);
   assert.match(fallbackBody, /preflight_consistency: ok/);
   assert.match(fallbackBody, /failure_kind=candidate_shortage_reviewable/);
-  assert.match(fallbackBody, /publishable_candidate_count: 3/);
-  assert.match(fallbackBody, /required_publishable_candidate_count: 5/);
+  assert.match(fallbackBody, /publishable_candidate_count: 0/);
+  assert.match(fallbackBody, /required_publishable_candidate_count: 1/);
   assert.match(fallbackBody, /reserve_candidate_count: 0/);
-  assert.match(fallbackBody, /camera_stack_candidate_shortage/);
+  assert.match(fallbackBody, /publishable_candidate_shortage/);
   assert.match(fallbackBody, /Source\/parser hints \(preliminary\):/);
   assert.match(fallbackBody, /OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR \/ android-developers-jetpack-release/);
   assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
@@ -1617,25 +1841,7 @@ test('candidate shortage generator exits before LLM calls when credentials are e
   });
   writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
     date,
-    candidates: [
-      regressionCandidate({
-        title: 'libcamera v0.7.1',
-        url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/000001.html',
-        bucket: 'camera_driver_image_pipeline'
-      }),
-      regressionCandidate({
-        title: 'GCC 16.1',
-        url: 'https://isocpp.org/blog/2026/05/gcc-16.1',
-        bucket: 'cpp_ai_tooling_fallback',
-        fallback: true
-      }),
-      regressionCandidate({
-        title: 'Glaze 7.2 C++ reflection',
-        url: 'https://isocpp.org/blog/2026/05/glaze-7.2',
-        bucket: 'cpp_ai_tooling_fallback',
-        fallback: true
-      })
-    ]
+    candidates: []
   });
 
   const result = spawnSync(process.execPath, [
@@ -1665,6 +1871,146 @@ test('candidate shortage generator exits before LLM calls when credentials are e
   assert.equal(fs.existsSync(path.join(newsroomDir, 'fact-check-report.json')), false);
   assert.equal(generationStatus.status, 'UNDERFILLED_NEEDS_FIX');
   assert.equal(generationStatus.failure_kind, 'candidate_shortage_reviewable');
+});
+
+test('Workflow 03 enters LLM generation with one publishable candidate and zero reserve candidates', async () => {
+  const root = tempRoot();
+  const date = '2026-05-11';
+  const rawDir = path.join(root, '.tmp', 'gemini-raw');
+  const selectedCandidate = onePublishableSupportingCandidate(date);
+  const editorDraft = onePublishableSupportingEditorDraft(date, selectedCandidate);
+  const factCheck = {
+    status: 'PASS',
+    must_fix: [],
+    recommended_fixes: [],
+    source_gaps: [],
+    source_gap_count: 0,
+    final_comment: 'Mock fact-check passed for one publishable supporting main article.'
+  };
+  const llmRequests = [];
+  const server = http.createServer((request, response) => {
+    let body = '';
+    request.on('data', chunk => {
+      body += chunk.toString();
+    });
+    request.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const required = payload.response_schema?.required || [];
+        llmRequests.push({
+          model: payload.model,
+          required
+        });
+        let json;
+        if (required.includes('candidates')) {
+          json = { date, candidates: [selectedCandidate] };
+        } else if (required.includes('title') && required.includes('sections')) {
+          json = editorDraft;
+        } else if (required.includes('status') && required.includes('must_fix')) {
+          json = factCheck;
+        } else if (required.length === 1 && required[0] === 'sections') {
+          json = { sections: editorDraft.sections };
+        } else {
+          response.writeHead(500, { 'content-type': 'application/json' });
+          response.end(JSON.stringify({ error: `Unexpected schema: ${required.join(',')}` }));
+          return;
+        }
+        response.writeHead(200, { 'content-type': 'application/json' });
+        response.end(JSON.stringify({
+          json,
+          usage: {
+            prompt_tokens: 10,
+            completion_tokens: 10,
+            total_tokens: 20
+          }
+        }));
+      } catch (error) {
+        response.writeHead(500, { 'content-type': 'application/json' });
+        response.end(JSON.stringify({ error: error.message }));
+      }
+    });
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const endpoint = `http://127.0.0.1:${server.address().port}/llm`;
+
+  writeJson(path.join(root, 'package.json'), {
+    private: true,
+    scripts: {
+      'validate:site': 'node -e "process.exit(0)"',
+      'validate:images': 'node -e "process.exit(0)"'
+    }
+  });
+  writeJson(path.join(root, 'data', 'news-sources.json'), {
+    schemaVersion: 2,
+    sources: []
+  });
+  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+    date,
+    title: editorDraft.title,
+    summary: editorDraft.summary,
+    html: `newsletters/${date}/index.html`,
+    md: `newsletters/${date}/newsletter.md`,
+    tags: ['SoC Platform Signal']
+  }]);
+  writeText(path.join(root, 'assets', 'images', 'fallback', 'android.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="#3ddc84"/></svg>\n');
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+    date,
+    candidates: [selectedCandidate]
+  });
+
+  let result;
+  try {
+    result = await runNodeAsync([
+      path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js')
+    ], {
+      cwd: root,
+      env: {
+        ...process.env,
+        NEWSLETTER_DATE: date,
+        LLM_PROVIDER: 'internal',
+        LLM_MODEL: 'mock-internal',
+        LLM_FALLBACK_MODELS: '',
+        INTERNAL_LLM_API_KEY: 'test-key',
+        INTERNAL_LLM_ENDPOINT: endpoint,
+        NEWSROOM_BACKGROUND_CONTEXT_STAGE: 'static',
+        NEWSROOM_MAX_QUALITY_RETRIES: '0',
+        GEMINI_MAX_RETRIES: '0',
+        LLM_RAW_OUTPUT_DIR: rawDir
+      }
+    });
+  } finally {
+    await new Promise(resolve => server.close(resolve));
+  }
+
+  const combinedOutput = `${result.stdout || ''}\n${result.stderr || ''}`;
+  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const generationStatus = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'generation-status.json'), 'utf8'));
+  const qualityReport = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'quality-report.json'), 'utf8'));
+
+  assert.equal(result.status, 0, combinedOutput);
+  assert.equal(llmRequests.some(item => item.required.includes('candidates')), true);
+  assert.equal(llmRequests.some(item => item.required.includes('title') && item.required.includes('sections')), true);
+  assert.equal(llmRequests.some(item => item.required.includes('status') && item.required.includes('must_fix')), true);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'reporter-candidates.json')), true);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'editor-draft.json')), true);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'fact-check-report.json')), true);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'quality-report.json')), true);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
+  assert.equal(generationStatus.status, 'PASS');
+  assert.equal(generationStatus.publish_ready, true);
+  assert.equal(generationStatus.final_publish_ready, true);
+  assert.equal(generationStatus.publish_gate_passed, true);
+  assert.equal(generationStatus.editor_review_required, false);
+  assert.equal(generationStatus.candidate_shortage_reviewable, false);
+  assert.equal(generationStatus.candidate_pool_preflight_passed, true);
+  assert.equal(generationStatus.reserve_candidate_count, 0);
+  assert.equal(generationStatus.candidate_shortage_summary.required_reserve_candidate_count, 0);
+  assert.deepEqual(generationStatus.shortage_reason_codes, []);
+  assert.equal(generationStatus.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(qualityReport.status, 'PASS');
+  assert.equal(qualityReport.metrics.article_count, 1);
 });
 
 test('newsroom PR body marks editorial reviewable handoff as editor-approved public publication', () => {
@@ -3167,7 +3513,7 @@ test('reviewable artifact resolver accepts candidate shortage reviewable handoff
   assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json')), false);
 });
 
-test('ensure CLI creates review publication from candidate shortage without editor draft', () => {
+test('ensure CLI keeps zero-candidate shortage diagnostics-only without editor draft', () => {
   const root = tempRoot();
   const date = '2026-05-11';
   writeRootIndexContract(root);
@@ -3175,20 +3521,20 @@ test('ensure CLI creates review publication from candidate shortage without edit
 
   assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
 
-  const result = ensurePublicNewsletterArtifacts({ root, date });
+  assert.throws(
+    () => ensurePublicNewsletterArtifacts({ root, date }),
+    /Fallback builder could not fill minimum main article count 1; only 0 article\(s\) available\./
+  );
   const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
+  const diagnostics = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json'), 'utf8'));
 
-  assert.equal(result.fallbackExecuted, true);
-  assert.equal(result.outputs.public_newsletter_ready, 'true');
-  assert.equal(result.outputs.review_publication_ready, 'true');
-  assert.equal(result.outputs.diagnostics_only, 'false');
-  assert.equal(result.outputs.homepage_visible_after_merge, 'true');
-  assert.equal(status.review_publication_ready, true);
-  assert.equal(status.diagnostics_only, false);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
+  assert.equal(status.failure_kind, 'candidate_shortage_reviewable');
+  assert.equal(diagnostics.status, 'FAILED');
+  assert.match(diagnostics.failure_reason, /only 0 article\(s\) available/);
+  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), false);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), false);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), false);
 });
 
 test('fallback builder publishes fallback-only issue as disclosed fallback_public edition', () => {
@@ -3599,22 +3945,10 @@ test('fallback builder recovers PR #39 shape with public files and preserve-firs
   assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
   assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
   assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
-  assert.equal(finalEditor.sections.length, articlePolicy.mainArticleCount.min);
+  assert.equal(finalEditor.sections.length, preserveSnapshots.length);
   assert.equal(finalEditor.sections.some(section => section.headline === 'GCC 16.1'), false);
-  assert.match(finalEditor.sections[2].category, /Tooling Watch|Fallback/);
-  assert.match(finalEditor.sections[2].camera_hal_perspective, /build|test|debug|tooling|watch|supporting/i);
-  assert.notEqual(finalEditor.sections[2].background, finalEditor.sections[2].what_changed);
-  assert.doesNotMatch(finalEditor.sections[2].background, /View the .* Close|Maven Group versions|camera-view\s+1\./);
-  assert.match(finalEditor.sections[2].public_article.headline, /Glaze 7\.2/);
-  assert.match(
-    finalEditor.sections[2].public_article.body_paragraphs.join(' '),
-    /Glaze|C\+\+ serialization|C\+\+26 reflection/
-  );
-  assert.doesNotMatch(
-    finalEditor.sections[2].public_article.body_paragraphs.join(' '),
-    /관련 컴포넌트: GCC/
-  );
-  assert.match(publicMarkdown, /Glaze 7\.2 C\+\+26 Reflection/);
+  assert.equal(finalEditor.sections.some(section => /Glaze 7\.2/.test(section.headline)), false);
+  assert.doesNotMatch(publicMarkdown, /Glaze 7\.2 C\+\+26 Reflection/);
   assert.doesNotMatch(
     `${publicMarkdown}\n${publicHtml}`,
     /HAL Signal Capsule|why_now|impact_axes|do_not_overstate|Review-only|quality gate|deterministic reconstruction|source-bound|Publication 전에|Direct HAL behavior claim/
@@ -3747,16 +4081,13 @@ test('fallback builder recovers run 25590436113 shape with source-bound anchor c
   assert.equal(finalEditor.sections.length, articlePolicy.mainArticleCount.min);
   assert.deepEqual(
     finalEditor.sections.map(section => section.source_candidate_hash),
-    [camerax14.source_candidate_hash, camerax16.source_candidate_hash, camerax13.source_candidate_hash]
+    [camerax14.source_candidate_hash]
   );
   for (const section of finalEditor.sections) {
     assert.notEqual(section.background, section.what_changed);
     assert.equal(section.impact_claim_level, 'android_framework_adjacent');
   }
-  assert.equal(
-    finalEditor.sections.find(section => section.source_candidate_hash === camerax13.source_candidate_hash).background,
-    'API supplied context wins over static fallback for CameraX validation background.'
-  );
+  assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === camerax13.source_candidate_hash), false);
   assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === libcamera.source_candidate_hash), false);
   assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === gcc.source_candidate_hash), false);
   assert.equal(fallbackReport.fallback_articles[0].action, 'rebuild-from-bound-candidate');
@@ -3775,23 +4106,22 @@ test('fallback builder recovers run 25590436113 shape with source-bound anchor c
   assert.equal(outputs.public_newsletter_ready, 'true');
 });
 
-test('fallback builder leaves no public files and writes diagnostics when safe article count is below minimum', () => {
+test('fallback builder writes public files when one safe article is available', () => {
   const root = tempRoot();
   const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
 
-  assert.throws(
-    () => buildFallbackPublicIssue({ root, date }),
-    /Fallback builder could not fill minimum main article count 3; only 1 article\(s\) available\./
-  );
+  const result = buildFallbackPublicIssue({ root, date });
+  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
+  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
+  const publicHtml = fs.readFileSync(path.join(root, 'newsletters', date, 'index.html'), 'utf8');
 
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), false);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), false);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), false);
-  const diagnostics = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json'), 'utf8'));
-  assert.equal(diagnostics.status, 'FAILED');
-  assert.match(diagnostics.failure_reason, /only 1 article\(s\) available/);
-  assert.ok(diagnostics.rejected_candidates.some(item => item.reason === 'duplicate_url'));
-  assert.ok(diagnostics.rejected_candidates.some(item => item.reason === 'duplicate_base_url'));
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
+  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
+  assert.equal(finalEditor.sections.length, articlePolicy.mainArticleCount.min);
+  assert.match(publicMarkdown, /CameraX 1\.4\.0-alpha07/);
+  assert.match(publicHtml, /CameraX 1\.4\.0-alpha07/);
+  assert.equal(result.status.public_newsletter_ready, true);
 });
 
 test('fallback failure diagnostics overwrites stale failure reason on rerun', () => {
@@ -3833,39 +4163,33 @@ test('fallback failure diagnostics overwrites stale failure reason on rerun', ()
   assert.deepEqual(diagnostics.top_rejected_reasons, [{ reason: 'old_reason', count: 2 }]);
 });
 
-test('ensure CLI preserves fallback failure diagnostics and succeeds only for review-ready handoff', () => {
+test('ensure CLI treats one safe fallback article as review-publication ready', () => {
   const root = tempRoot();
   const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
   const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-    .map(file => `content/newsroom/${date}/${file}`);
+    .map(file => `content/newsroom/${date}/${file}`)
+    .concat(requiredPublicFiles(date));
 
   const result = ensurePublicNewsletterArtifacts({ root, date, changedArtifacts });
-  const diagnosticsPath = path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json');
-  const diagnostics = JSON.parse(fs.readFileSync(diagnosticsPath, 'utf8'));
   const resolvedOutputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
     date,
-    changedArtifacts: changedArtifacts.concat(`content/newsroom/${date}/fallback-public-issue-diagnostics.json`)
+    changedArtifacts
   }));
 
   assert.equal(result.fallbackExecuted, true);
   assert.equal(result.outputs.fallback_public_issue_executed, 'true');
-  assert.equal(result.outputs.fallback_public_issue_failed, 'true');
-  assert.match(result.outputs.fallback_public_issue_error, /only 1 article\(s\) available/);
-  assert.equal(result.outputs.fallback_public_issue_diagnostics, `content/newsroom/${date}/fallback-public-issue-diagnostics.json`);
-  assert.equal(diagnostics.status, 'FAILED');
-  assert.equal(diagnostics.fallback_public_issue_failed, true);
-  assert.equal(diagnostics.written_by, 'ensure-public-newsletter-artifacts');
-  assert.match(diagnostics.failure_reason, /only 1 article\(s\) available/);
-  assert.equal(result.outputs.public_newsletter_ready, 'false');
+  assert.equal(result.outputs.fallback_public_issue_failed, 'false');
+  assert.equal(result.outputs.fallback_public_issue_error, 'none');
+  assert.equal(result.outputs.public_newsletter_ready, 'true');
   assert.equal(result.outputs.review_pr_ready, 'true');
-  assert.equal(result.outputs.review_only, 'true');
-  assert.equal(result.outputs.diagnostics_only, 'true');
-  assert.equal(result.outputs.review_publication_ready, 'false');
-  assert.equal(result.outputs.homepage_visible_after_merge, 'false');
-  assert.equal(result.outputs.publication_mode, 'diagnostics_only');
-  assert.equal(result.outputs.homepage_visibility, 'hidden');
-  assert.equal(result.outputs.publish_candidate_ready, 'false');
+  assert.equal(result.outputs.review_only, 'false');
+  assert.equal(result.outputs.diagnostics_only, 'false');
+  assert.equal(result.outputs.review_publication_ready, 'true');
+  assert.equal(result.outputs.homepage_visible_after_merge, 'true');
+  assert.equal(result.outputs.publication_mode, 'review_only');
+  assert.equal(result.outputs.homepage_visibility, 'normal');
+  assert.equal(result.outputs.publish_candidate_ready, 'true');
   assert.equal(result.outputs.review_pr_ready, resolvedOutputs.review_pr_ready);
   assert.equal(result.outputs.review_only, resolvedOutputs.review_only);
   assert.equal(result.outputs.diagnostics_only, resolvedOutputs.diagnostics_only);
@@ -4148,7 +4472,7 @@ test('newsroom PR body separates quality score threshold and result in Korean st
       deterministic_selected_count: 5,
       rendered_main_article_count: selectedBelowMinimum,
       reserve_candidate_count: 2,
-      direct_aosp_camera_count: 1,
+      direct_aosp_camera_count: 0,
       camera_driver_image_pipeline_count: 1,
       android_platform_camera_adjacent_count: 0,
       soc_platform_signal_count: 1,
@@ -4195,7 +4519,7 @@ test('newsroom PR body separates quality score threshold and result in Korean st
   assert.match(body, /editor_review_required: true/);
   assert.match(body, /review_gate_passed: true/);
   assert.match(body, /publish_gate_passed: false/);
-  assert.match(body, /direct_aosp_camera count: 1/);
+  assert.match(body, /direct_aosp_camera count: 0/);
   assert.match(body, /deterministic_selected_count: 5/);
   assert.match(body, new RegExp(`rendered_main_article_count: ${selectedBelowMinimum}`));
   assert.match(body, /reserve_candidate_count: 2/);
@@ -4228,11 +4552,11 @@ test('newsroom PR body marks fallback composition explicitly', () => {
       min_final_articles: articlePolicy.mainArticleCount.min,
       absolute_min_reviewable_articles: articlePolicy.primaryCameraStack.minRequired,
       min_non_fallback_publish_ready_articles: articlePolicy.mainArticleCount.min,
-      editor_review_required: true,
+      editor_review_required: false,
       underfilled: false,
       composition_mode: 'FALLBACK_COMPOSITION',
       selection_composition_mode: 'FALLBACK_COMPOSITION',
-      direct_aosp_camera_count: 1,
+      direct_aosp_camera_count: 0,
       camera_driver_image_pipeline_count: 0,
       android_platform_camera_adjacent_count: 0,
       soc_platform_signal_count: configuredSupportingCount,
@@ -4257,7 +4581,8 @@ test('newsroom PR body marks fallback composition explicitly', () => {
   assert.match(body, new RegExp(`soc_platform_signal count: ${configuredSupportingCount}`));
   assert.match(body, /cpp_ai_tooling_fallback count: 0/);
   assert.match(body, /Fallback composition:/);
-  assert.match(body, /인위적인 Camera HAL 표현/);
+  assert.match(body, /정책상 public-ready로 허용됩니다/);
+  assert.match(body, /editor_review_required: false/);
 });
 
 test('newsroom PR body explains review-only fallback when publish gate is blocked', () => {
@@ -5356,7 +5681,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.doesNotMatch(workflow, /if: steps\.meta\.outputs\.has_reviewable_artifacts == 'true'/);
   assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /steps\.generation-status\.outputs\.final_publish_ready/);
   assert.doesNotMatch(workflow.slice(addLabelsStepIndex), /validationPassed/);
-  assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION'/);
+  assert.match(workflow, /compositionMode === 'FALLBACK_COMPOSITION' && !hasAiPublishReady/);
   assert.match(workflow, /compositionMode === 'THIN_WEEK_REVIEW'/);
   assert.match(workflow, /labels\.push\('needs-fix', 'editor-review', 'review-only', 'review-only-publication'\)/);
   assert.match(workflow, /labels\.push\('needs-fix', 'editor-review', 'review-only', 'diagnostics-only'\)/);
@@ -5390,6 +5715,7 @@ test('final newsroom workflow labels review publication and diagnostics-only mut
   assert.doesNotMatch(reviewPublicationBranch, /diagnostics-only/);
   assert.match(diagnosticsBranch, /labels\.push\('needs-fix', 'editor-review', 'review-only', 'diagnostics-only'\)/);
   assert.doesNotMatch(diagnosticsBranch, /review-only-publication/);
+  assert.match(labelStep, /compositionMode === 'FALLBACK_COMPOSITION' && !hasAiPublishReady/);
 });
 
 test('split newsroom workflows preserve #88 stage boundaries', () => {

@@ -3,11 +3,11 @@
   "name": "Newsletter Policy",
   "articlePolicy": {
     "mainArticleCount": {
-      "min": 3,
+      "min": 1,
       "max": 5
     },
     "primaryCameraStack": {
-      "minRequired": 1,
+      "minRequired": 0,
       "buckets": [
         "direct_aosp_camera",
         "camera_driver_image_pipeline",
@@ -15,8 +15,8 @@
       ]
     },
     "publishReadyComposition": {
-      "primaryCameraStackMinRequired": 2,
-      "directAospCameraOrDriverMinRequired": 1,
+      "primaryCameraStackMinRequired": 0,
+      "directAospCameraOrDriverMinRequired": 0,
       "supportingMainMaxAllowed": 1
     },
     "supportingMainBuckets": [
@@ -29,10 +29,10 @@
     ]
   },
   "candidatePoolPreflight": {
-    "reserveMin": 2,
-    "publishableCandidateMin": 5,
-    "primaryCameraStackCandidateMin": 1,
-    "cameraStackCandidateMin": 2
+    "reserveMin": 0,
+    "publishableCandidateMin": 1,
+    "primaryCameraStackCandidateMin": 0,
+    "cameraStackCandidateMin": 0
   },
   "selectionWindowPolicy": {
     "primarySelectionDays": 7,

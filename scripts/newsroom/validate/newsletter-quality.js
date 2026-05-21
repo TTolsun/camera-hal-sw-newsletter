@@ -12,6 +12,7 @@ const {
 } = require('../common/aosp-camera-scope');
 const {
   articlePolicy,
+  publishReadyCompositionPolicy,
   qualityGatePolicy,
   articleCountRangeText,
   isForbiddenMainBucket,
@@ -1569,6 +1570,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       ? 'NEEDS_FIX'
       : primaryCameraStackCount < articlePolicy.primaryCameraStack.minRequired
         ? 'NEEDS_FIX'
+        : supportingMainArticleCount > publishReadyCompositionPolicy.supportingMainMaxAllowed
+          ? 'NEEDS_FIX'
         : supportingMainArticleCount > 0
         ? 'FALLBACK_COMPOSITION'
         : 'NORMAL';
@@ -1577,6 +1580,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   }
   if (forbiddenMainArticleCount > 0) {
     boundedDeduct(state, 'composition', 8, `Forbidden main bucket count ${forbiddenMainArticleCount} violates Newsletter Policy: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`);
+  }
+  if (supportingMainArticleCount > publishReadyCompositionPolicy.supportingMainMaxAllowed) {
+    boundedDeduct(state, 'composition', 8, `Supporting main article count ${supportingMainArticleCount} exceeds publish-ready policy maximum (${publishReadyCompositionPolicy.supportingMainMaxAllowed}).`);
   }
 
   sections.forEach((section, index) => {

@@ -5,6 +5,7 @@ const {
   backgroundContextStageEnabled,
   buildGenerationStatus,
   failureStageFromError,
+  selectionStatusExtra,
   validateCompletionSections
 } = require('../../scripts/gemini-newsroom-newsletter');
 const { qualityGatePolicy } = require('../../scripts/lib/newsletter-policy');
@@ -101,6 +102,33 @@ test('editorial reviewable status records non-publish handoff fields', () => {
   assert.equal(status.validate_ok, false);
   assert.equal(status.editor_review_required, true);
   assert.equal(status.must_fix_count, 1);
+});
+
+test('selection status fallback enforces supporting main publish-ready maximum', () => {
+  const status = selectionStatusExtra({
+    selected_article_count: 2,
+    selected_articles: [
+      { relevance_bucket: 'soc_platform_signal' },
+      { relevance_bucket: 'android_multimedia_camera_output' }
+    ],
+    composition_summary: {
+      primary_camera_stack_topic_count: 0,
+      supporting_main_article_count: 2,
+      forbidden_main_article_count: 0,
+      direct_aosp_camera_count: 0,
+      camera_driver_image_pipeline_count: 0
+    },
+    candidate_pool_preflight_passed: true,
+    candidate_shortage_reviewable: false,
+    candidate_shortage_summary: {
+      publishable_candidate_count: 2,
+      required_publishable_candidate_count: 1,
+      reserve_candidate_count: 0,
+      required_reserve_candidate_count: 0
+    }
+  });
+
+  assert.equal(status.publish_gate_passed, false);
 });
 
 test('completion validation accepts a single missing article section', () => {

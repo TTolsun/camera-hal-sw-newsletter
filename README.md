@@ -88,15 +88,18 @@ npm.cmd run generate
 ### Newsletter Policy
 
 - Source of truth: `config/newsletter-policy.json`
-- Main article count: 3-5
-- Review gate Primary Camera Stack articles: at least 1
-- Publish-ready Primary Camera Stack articles: at least 2
-- Publish-ready direct AOSP Camera or driver/image pipeline articles: at least 1 across `direct_aosp_camera`, `camera_driver_image_pipeline`
+- Main article count: 1-5
+- One-article policy: a public newsletter may contain a single fully publishable main article.
+- Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.
+- Supporting-only policy: a single supporting main bucket article may be public-ready when all hard gates pass.
+- Review gate Primary Camera Stack articles: disabled by one-article policy
+- Publish-ready Primary Camera Stack articles: disabled by one-article policy
+- Publish-ready direct AOSP Camera or driver/image pipeline articles: disabled by one-article policy across `direct_aosp_camera`, `camera_driver_image_pipeline`
 - Publish-ready supporting main articles: at most 1 total across supporting main buckets
 - Primary Camera Stack buckets: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
 - Supporting main buckets: `android_multimedia_camera_output`, `soc_platform_signal`, `cpp_ai_tooling_fallback`
-- Forbidden main buckets: `generic_tech_watchlist`
-- Candidate pool preflight: publishable candidates at least 5; reserve candidates at least 2; camera stack candidates at least 2
+- Forbidden main buckets: `generic_tech_watchlist`; never promote these to main articles by candidate count alone
+- Candidate pool preflight: publishable candidates at least 1; reserve candidates diagnostics only; camera stack candidates at least 0
 - Selection windows: primary 7 days; fallback 21 days; reference 90 days
 - Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.
 - Quality threshold: 85

@@ -306,7 +306,7 @@ jobs:
               { name: 'aosp-camera', color: '0e8a16', description: 'AOSP Camera and camera stack scope' },
               { name: 'editor-review', color: 'fbca04', description: 'Editor-in-chief review required' },
               { name: 'needs-fix', color: 'd73a4a', description: 'Generated newsletter is not ready to publish' },
-              { name: 'fallback-composition', color: '5319e7', description: 'Uses lower-priority SoC/platform/tooling fallback articles' },
+              { name: 'fallback-composition', color: '5319e7', description: 'Non-publish-ready fallback composition diagnostics' },
               { name: 'thin-week', color: 'c5def5', description: 'Review-only thin-week newsletter candidate' },
               { name: 'review-only', color: 'bfd4f2', description: 'AI automatic publish gate did not pass; editor review is required' },
               { name: 'review-only-publication', color: 'bfd4f2', description: 'Public newsletter files exist but editor review is required before merge' },
@@ -367,7 +367,7 @@ jobs:
             } else {
               labels.push('needs-fix', 'editor-review');
             }
-            if (compositionMode === 'FALLBACK_COMPOSITION') {
+            if (compositionMode === 'FALLBACK_COMPOSITION' && !hasAiPublishReady) {
               labels.push('fallback-composition');
             }
             if (compositionMode === 'THIN_WEEK_REVIEW') {

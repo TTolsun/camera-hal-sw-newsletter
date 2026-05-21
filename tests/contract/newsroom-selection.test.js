@@ -31,6 +31,8 @@ const { normalizeCandidate } = require('../../scripts/newsroom/cli/collect-news-
 const { candidate } = require('../helpers/newsroom-builders');
 const { readJsonFixture, readTextFixture } = require('../helpers/fixture-loader');
 
+const FALLBACK_WINDOW_TEST_MIN_ARTICLES = 3;
+
 function policyPrimaryCandidate(index = 0, overrides = {}) {
   return candidate({
     title: `CameraX policy primary release ${index}`,
@@ -734,7 +736,7 @@ test('exclusion reason reports reference-only candidates', () => {
   assert.ok(exclusionReasons(candidate({ reference_only: true })).includes('reference_only=true'));
 });
 
-test('configured minimum composition with reviewable primary and supporting articles is not publish-ready', () => {
+test('one supporting main article can be public-ready without primary coverage', () => {
   const supportingCount = articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired;
   const report = buildShortlistReport('2026-05-03', [
     ...Array.from({ length: articlePolicy.primaryCameraStack.minRequired }, (_, index) => policyPrimaryCandidate(index)),
@@ -747,15 +749,15 @@ test('configured minimum composition with reviewable primary and supporting arti
   assert.equal(report.underfilled, false);
   assert.equal(report.review_gate_passed, true);
   assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
-  assert.equal(report.publish_gate_passed, false);
-  assert.equal(report.publish_ready, false);
-  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_primary_camera_stack_shortage'));
-  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_supporting_main_over_limit'));
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
+  assert.equal(report.editor_review_required, false);
+  assert.deepEqual(report.publish_gate_reason_codes, []);
   assert.deepEqual(report.selection_warnings, []);
   assert.deepEqual(report.selection_errors, []);
 });
 
-test('configured minimum composition with mixed supporting buckets is reviewable but not publish-ready', () => {
+test('one mixed supporting bucket article is public-ready when hard gates pass', () => {
   const requiredPrimaryCount = articlePolicy.primaryCameraStack.minRequired;
   const supportingCount = articlePolicy.mainArticleCount.min - requiredPrimaryCount;
   const primaryCandidates = Array.from({ length: requiredPrimaryCount }, (_, index) => policyPrimaryCandidate(index));
@@ -784,12 +786,13 @@ test('configured minimum composition with mixed supporting buckets is reviewable
 
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.review_gate_passed, true);
-  assert.equal(report.publish_gate_passed, false);
-  assert.equal(report.publish_ready, false);
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
+  assert.equal(report.editor_review_required, false);
   assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, requiredPrimaryCount);
   assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
-  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_supporting_main_over_limit'));
+  assert.deepEqual(report.publish_gate_reason_codes, []);
 });
 
 test('publish-ready composition passes with two primary topics and at most one supporting article', () => {
@@ -816,17 +819,17 @@ test('publish-ready composition passes with two primary topics and at most one s
     })
   ]);
 
-  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
+  assert.ok(report.selected_article_count >= articlePolicy.mainArticleCount.min);
   assert.equal(report.review_gate_passed, true);
   assert.equal(report.publish_gate_passed, true);
   assert.equal(report.publish_ready, true);
-  assert.equal(report.composition_summary.primary_camera_stack_topic_count, publishReadyCompositionPolicy.primaryCameraStackMinRequired);
+  assert.ok(report.composition_summary.primary_camera_stack_topic_count >= publishReadyCompositionPolicy.primaryCameraStackMinRequired);
   assert.equal(report.composition_summary.direct_aosp_camera_count, 1);
   assert.equal(report.composition_summary.supporting_main_article_count, publishReadyCompositionPolicy.supportingMainMaxAllowed);
   assert.deepEqual(report.publish_gate_reason_codes, []);
 });
 
-test('publish-ready composition requires a direct AOSP Camera or driver image pipeline article', () => {
+test('direct AOSP Camera or driver shortage no longer blocks one-article policy', () => {
   const report = buildShortlistReport('2026-05-03', [
     policyPrimaryCandidate(0, {
       title: 'Android platform adjacent source A',
@@ -852,11 +855,11 @@ test('publish-ready composition requires a direct AOSP Camera or driver image pi
   ]);
 
   assert.equal(report.review_gate_passed, true);
-  assert.equal(report.publish_gate_passed, false);
-  assert.equal(report.publish_ready, false);
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, 2);
   assert.equal(report.composition_summary.direct_aosp_camera_count + report.composition_summary.camera_driver_image_pipeline_count, 0);
-  assert.deepEqual(report.publish_gate_reason_codes, ['publish_ready_direct_camera_or_driver_shortage']);
+  assert.deepEqual(report.publish_gate_reason_codes, []);
 });
 
 test('publish-ready supporting max applies across all supporting buckets', () => {
@@ -911,7 +914,7 @@ test('below configured minimum remains a hard deterministic selection error', ()
   assert.equal(report.editor_review_required, true);
 });
 
-test('supporting-only composition is not publish-ready', () => {
+test('supporting-only composition is public-ready with one publishable article', () => {
   const report = buildShortlistReport('2026-05-03', [
     ...Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) => policySupportingCandidate(index))
   ]);
@@ -919,9 +922,16 @@ test('supporting-only composition is not publish-ready', () => {
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, 0);
   assert.equal(report.composition_summary.supporting_main_article_count, articlePolicy.mainArticleCount.min);
-  assert.equal(report.publish_ready, false);
-  assert.equal(report.composition_mode, 'NEEDS_FIX');
-  assert.ok(report.selection_errors.some(error => error.includes('Primary Camera Stack')));
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
+  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.editor_review_required, false);
+  assert.equal(report.candidate_pool_preflight_passed, true);
+  assert.equal(report.candidate_shortage_reviewable, false);
+  assert.equal(report.candidate_shortage_summary.reserve_candidate_count, 0);
+  assert.equal(report.candidate_shortage_summary.required_reserve_candidate_count, 0);
+  assert.equal(report.source_parser_hints.some(hint => hint.code === 'RESERVE_POOL_SHORTAGE'), false);
+  assert.deepEqual(report.selection_errors, []);
 });
 
 test('multimedia camera-output candidate is eligible through dedicated scope evidence', () => {
@@ -970,7 +980,7 @@ test('multimedia supporting bucket counts separately and can pass publish-ready 
   assert.equal(report.publish_ready, true);
 });
 
-test('multimedia plus SoC still fails publish-ready when primary coverage is short and supporting limit is exceeded', () => {
+test('multimedia plus SoC still fails publish-ready when supporting limit is exceeded', () => {
   const report = buildShortlistReport('2026-05-03', [
     policyPrimaryCandidate(1),
     policyMultimediaCandidate(1),
@@ -982,7 +992,6 @@ test('multimedia plus SoC still fails publish-ready when primary coverage is sho
   assert.equal(report.composition_summary.soc_platform_signal_count, 1);
   assert.equal(report.composition_summary.supporting_main_article_count, 2);
   assert.equal(report.publish_ready, false);
-  assert.ok(publishReadyGateReasonCodes(report.composition_summary).includes('publish_ready_primary_camera_stack_shortage'));
   assert.ok(publishReadyGateReasonCodes(report.composition_summary).includes('publish_ready_supporting_main_over_limit'));
 });
 
@@ -1037,7 +1046,7 @@ test('forbidden bucket in main candidates is not publish-ready', () => {
   assert.ok(errors.some(error => error.includes('forbidden bucket')));
 });
 
-test('supporting fallback-only candidates do not satisfy required primary coverage', () => {
+test('supporting fallback-only candidate can satisfy one-article policy', () => {
   const fallbackTopics = [
     'LLVM sanitizer diagnostics',
     'Clang analyzer warning model',
@@ -1072,10 +1081,11 @@ test('supporting fallback-only candidates do not satisfy required primary covera
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, 0);
-  assert.equal(report.publish_ready, false);
-  assert.equal(report.composition_mode, 'NEEDS_FIX');
-  assert.ok(report.selection_errors.some(error => error.includes('Primary Camera Stack')));
-  assert.ok(report.selection_shortage_hints.some(hint => hint.includes('Primary Camera Stack')));
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
+  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.editor_review_required, false);
+  assert.deepEqual(report.selection_errors, []);
 });
 
 test('AOSP site update camera rows can satisfy configured composition', () => {
@@ -1096,58 +1106,26 @@ test('AOSP site update camera rows can satisfy configured composition', () => {
   const rows = parseSourceSpecificItems(readTextFixture('source-html/aosp-site-updates-camera.html'), source);
   const report = buildShortlistReport('2026-04-08', rows.map(item => normalizeCandidate(item)));
 
-  assert.equal(rows.length, articlePolicy.mainArticleCount.min);
-  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
-  assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.mainArticleCount.min);
+  assert.ok(rows.length >= articlePolicy.mainArticleCount.min);
+  assert.equal(report.selected_article_count, rows.length);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, rows.length);
   assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 0);
   assert.deepEqual(report.selection_errors, []);
   assert.equal(report.publish_ready, true);
   assert.equal(report.composition_mode, 'NORMAL');
 });
 
-test('official camera candidates below configured minimum are not publish-ready', () => {
-  const aospSource = {
-    id: 'aosp-site-updates',
-    name: 'AOSP Site Updates',
-    url: 'https://source.android.com/docs/whatsnew/site-updates',
-    sourceUrl: 'https://source.android.com/docs/whatsnew/site-updates',
-    category: 'aosp',
-    section: 'Android / AOSP / Camera',
-    priority: 'high',
-    reliability: 'official',
-    candidateOnly: false,
-    requiresCrossCheck: false,
-    usageHint: 'AOSP Camera site update rows',
-    keywords: ['AOSP', 'Camera', 'Camera ITS', 'CDD']
-  };
-  const cameraXSource = {
-    id: 'camerax-release-notes',
-    name: 'CameraX Release Notes',
-    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
-    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/camera',
-    category: 'camera-api',
-    section: 'Android / AOSP / Camera',
-    priority: 'high',
-    reliability: 'official',
-    candidateOnly: false,
-    requiresCrossCheck: false,
-    usageHint: 'CameraX official release notes',
-    keywords: ['CameraX', 'androidx.camera']
-  };
-  const aospItem = parseSourceSpecificItems(readTextFixture('source-html/aosp-site-updates-paragraph-camera.html'), aospSource)
-    .find(item => item.title === 'Camera ITS');
-  const cameraXItem = parseSourceSpecificItems(readTextFixture('source-html/camerax-release-notes-1.6.html'), cameraXSource)[0];
-
-  const report = buildShortlistReport('2026-05-06', [
-    normalizeCandidate(aospItem),
-    normalizeCandidate(cameraXItem)
-  ]);
+test('zero publishable candidates remain below configured minimum and are not publish-ready', () => {
+  const report = buildShortlistReport('2026-05-06', []);
 
   assert.ok(report.selected_article_count < articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_summary.non_fallback_reviewable_article_count, report.selected_article_count);
   assert.equal(report.review_gate_passed, false);
   assert.equal(report.publish_gate_passed, false);
   assert.equal(report.publish_ready, false);
+  assert.equal(report.candidate_pool_preflight_passed, false);
+  assert.equal(report.candidate_shortage_reviewable, true);
+  assert.ok(report.shortage_reason_codes.includes('publishable_candidate_shortage'));
   assert.ok(report.selection_errors.some(error => error.includes('Newsletter Policy requires')));
 });
 
@@ -1234,7 +1212,7 @@ test('selection window enforcement keeps fallback out when primary window is suf
     ['AOSP Camera ITS validation source', 'Camera ITS validation'],
     ['libcamera image pipeline driver source', 'libcamera image pipeline']
   ];
-  const primaryCandidates = Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) =>
+  const primaryCandidates = Array.from({ length: FALLBACK_WINDOW_TEST_MIN_ARTICLES }, (_, index) =>
     policyPrimaryCandidate(index, {
       title: primaryTitles[index][0],
       url: `https://example.com/window-primary-${index}`,
@@ -1255,10 +1233,10 @@ test('selection window enforcement keeps fallback out when primary window is suf
   const report = buildShortlistReport('2026-05-10', [
     fallbackCandidate,
     ...primaryCandidates
-  ]);
+  ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
   assert.equal(report.selection_policy.selection_window_policy.enforcement, 'main_selection_enforced');
-  assert.equal(report.primary_window_selected_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.primary_window_selected_count, FALLBACK_WINDOW_TEST_MIN_ARTICLES);
   assert.equal(report.fallback_window_candidate_count, 1);
   assert.equal(report.fallback_window_consulted, false);
   assert.equal(report.fallback_window_used, false);
@@ -1269,7 +1247,7 @@ test('selection window enforcement keeps fallback out when primary window is suf
   );
   assert.deepEqual(
     report.selected_articles.map(item => item.freshness_window),
-    Array(articlePolicy.mainArticleCount.min).fill('primary')
+    Array(FALLBACK_WINDOW_TEST_MIN_ARTICLES).fill('primary')
   );
 });
 
@@ -1298,7 +1276,7 @@ test('selection window enforcement promotes fallback only when primary window is
       source: 'Fallback Native Source',
       published_date: '2026-04-26'
     })
-  ]);
+  ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
   const fallbackSelected = report.selected_articles.filter(item => item.freshness_window === 'fallback');
 
@@ -1306,7 +1284,7 @@ test('selection window enforcement promotes fallback only when primary window is
   assert.equal(report.fallback_window_candidate_count, 2);
   assert.equal(report.fallback_window_consulted, true);
   assert.equal(report.fallback_window_used, true);
-  assert.match(report.fallback_window_reason, /primary window selected 1 article\(s\), below min 3/);
+  assert.match(report.fallback_window_reason, new RegExp(`primary window selected 1 article\\(s\\), below min ${FALLBACK_WINDOW_TEST_MIN_ARTICLES}`));
   assert.equal(fallbackSelected.length, 2);
   assert.ok(fallbackSelected.every(item => item.fallback_window_promoted === true));
   assert.ok(fallbackSelected.every(item => item.selection_window_stage === 'fallback'));
@@ -1315,7 +1293,7 @@ test('selection window enforcement promotes fallback only when primary window is
   assert.equal(report.review_gate_passed, true);
   assert.equal(report.publish_gate_passed, false);
   assert.equal(report.publish_ready, false);
-  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_primary_camera_stack_shortage'));
+  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_supporting_main_over_limit'));
 });
 
 test('fallback rescue uses uncapped selection pool when primary fills shortlist cap', () => {
@@ -1380,7 +1358,7 @@ test('fallback rescue uses uncapped selection pool when primary fills shortlist 
       api_or_component: 'LLDB camera HAL debugger',
       published_date: '2026-04-26'
     })
-  ]);
+  ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
   const selectedUrls = new Set(report.selected_articles.map(item => item.url));
   const shortlistedUrls = new Set(report.shortlisted_candidates.map(item => item.url));
 
@@ -1443,7 +1421,7 @@ test('fallback consulted remains distinct from fallback promotion', () => {
       reliability: '',
       published_date: '2026-04-26'
     })
-  ]);
+  ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
   assert.equal(report.primary_window_selected_count, 1);
   assert.equal(report.fallback_window_candidate_count, 2);
@@ -1584,7 +1562,7 @@ test('custom selection window policy drives fallback classification and promotio
       api_or_component: 'LLDB camera HAL debugger',
       published_date: '2026-05-03'
     })
-  ], { selectionWindowPolicy: customPolicy });
+  ], { selectionWindowPolicy: customPolicy, minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
   const fallbackUrls = new Set(report.selected_articles
     .filter(item => item.freshness_window === 'fallback')
@@ -1627,16 +1605,16 @@ test('#124 acceptance: primary window official Camera candidate outranks fallbac
   const report = buildShortlistReport('2026-05-10', [
     fallbackCandidate,
     ...primaryCandidates
-  ]);
+  ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
-  assert.equal(report.primary_window_selected_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.primary_window_selected_count, FALLBACK_WINDOW_TEST_MIN_ARTICLES);
   assert.equal(report.fallback_window_candidate_count, 1);
   assert.equal(report.fallback_window_consulted, false);
   assert.equal(report.fallback_window_used, false);
   assert.equal(report.selected_articles.some(item => item.url === fallbackCandidate.url), false);
   assert.deepEqual(
     report.selected_articles.map(item => item.freshness_window),
-    Array(articlePolicy.mainArticleCount.min).fill('primary')
+    Array(FALLBACK_WINDOW_TEST_MIN_ARTICLES).fill('primary')
   );
 });
 
@@ -1660,12 +1638,12 @@ test('#124 acceptance: fallback window is promoted only when primary is short', 
       source: 'Fallback Camera Source B',
       published_date: '2026-04-26'
     })
-  ]);
+  ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
   assert.equal(report.primary_window_selected_count, 1);
   assert.equal(report.fallback_window_consulted, true);
   assert.equal(report.fallback_window_used, true);
-  assert.match(report.fallback_window_reason, /primary window selected 1 article\(s\), below min 3/);
+  assert.match(report.fallback_window_reason, new RegExp(`primary window selected 1 article\\(s\\), below min ${FALLBACK_WINDOW_TEST_MIN_ARTICLES}`));
   assert.equal(report.fallback_candidates_promoted.length, 2);
   assert.equal(
     report.selected_articles.filter(item => item.freshness_window === 'fallback').length,
@@ -1702,20 +1680,19 @@ test('#124 acceptance: reference window remains context-only', () => {
   );
 });
 
-test('#124 acceptance: publish-ready requires two primary camera stack articles', () => {
+test('#124 acceptance: one primary plus one supporting article is publish-ready', () => {
   const report = buildShortlistReport('2026-05-03', [
     policyPrimaryCandidate(0, {
       title: 'Single primary camera stack source',
       url: 'https://example.com/124-single-primary'
     }),
-    policySupportingCandidate(0),
-    policySupportingCandidate(1)
+    policySupportingCandidate(0)
   ]);
 
   assert.equal(report.review_gate_passed, true);
-  assert.equal(report.publish_gate_passed, false);
-  assert.equal(report.publish_ready, false);
-  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_primary_camera_stack_shortage'));
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
+  assert.deepEqual(report.publish_gate_reason_codes, []);
 });
 
 test('#124 acceptance: publish-ready rejects more than one supporting main article', () => {
@@ -1758,7 +1735,7 @@ test('#124 acceptance: publish-ready rejects more than one supporting main artic
   assert.deepEqual(report.publish_gate_reason_codes, ['publish_ready_supporting_main_over_limit']);
 });
 
-test('fallback composition uses supporting buckets when direct camera stack topics are scarce', () => {
+test('fallback composition with one supporting article is accepted by one-article policy', () => {
   const supportingCount = articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired;
   const supportingCandidates = Array.from({ length: supportingCount }, (_, index) => {
     if (index % 2 === 0) {
@@ -1802,13 +1779,12 @@ test('fallback composition uses supporting buckets when direct camera stack topi
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
   assert.equal(report.review_gate_passed, true);
-  assert.equal(report.publish_gate_passed, false);
-  assert.equal(report.publish_ready, false);
-  assert.equal(report.editor_review_required, true);
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
+  assert.equal(report.editor_review_required, false);
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.primaryCameraStack.minRequired);
   assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
-  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_primary_camera_stack_shortage'));
-  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_supporting_main_over_limit'));
+  assert.deepEqual(report.publish_gate_reason_codes, []);
 });
 
 test('generic watchlist-only pool remains needs-fix instead of fallback composition', () => {

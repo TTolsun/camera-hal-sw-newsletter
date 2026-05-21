@@ -260,7 +260,9 @@ function renderCompositionNotes(status) {
   }
   if (status.composition_mode === 'FALLBACK_COMPOSITION' || status.selection_composition_mode === 'FALLBACK_COMPOSITION') {
     lines.push(
-      'Fallback composition: 설정된 보조 main article로 SoC/platform 또는 C++/AI tooling article이 포함되었습니다. 인위적인 Camera HAL 표현을 추가하지 말고 실제 SoC/platform/native 개발 연결성을 명확히 유지하세요.',
+      status.publish_gate_passed === true
+        ? 'Fallback composition: supporting-main-only 또는 supporting-main-inclusive 구성이며, 모든 hard gate를 통과하면 정책상 public-ready로 허용됩니다.'
+        : 'Fallback composition: supporting main article이 포함되었습니다. 발행 가능 상태로 보려면 실제 SoC/platform/tooling 연결성과 hard gate 통과 여부를 확인하세요.',
       status.publish_gate_passed === false
         ? '검토 게이트는 통과했더라도 후보 선택 발행 조건이 막혀 있으면 최종 발행 가능 상태가 아닙니다.'
         : '',

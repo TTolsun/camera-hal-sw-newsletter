@@ -997,7 +997,7 @@ test('quality threshold does not override hard blockers at high scores', () => {
 });
 
 test('quality gate allows non-blocking actionability deductions above threshold', () => {
-  const sections = validSections().map((item, index) => index < 3
+  const sections = validSections(3).map((item, index) => index < 3
     ? {
         ...item,
         action_items: [
@@ -1195,13 +1195,15 @@ test('quality gate counts article buckets from structured candidate metadata', (
     scopedCandidate('https://example.com/gcc', 'cpp_ai_tooling_fallback')
   ]);
 
-  assert.equal(report.status, 'PASS');
+  assert.equal(report.status, 'NEEDS_FIX');
   assert.equal(report.metrics.direct_aosp_camera_count, 1);
   assert.equal(report.metrics.camera_driver_image_pipeline_count, 1);
   assert.equal(report.metrics.soc_platform_signal_count, 1);
   assert.equal(report.metrics.cpp_ai_tooling_fallback_count, 1);
   assert.equal(report.metrics.primary_camera_stack_count, 2);
   assert.equal(report.metrics.fallback_relevance_count, 2);
+  assert.equal(report.metrics.composition_mode, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item => item.reason.includes('Supporting main article count')));
   assert.equal(report.article_results[1].scope_count.relevance_bucket, 'camera_driver_image_pipeline');
   assert.match(report.article_results[1].scope_count.count_reason, /primary_camera_stack_count/);
 });
@@ -1927,7 +1929,7 @@ test('generic bucket is not promoted by camera wording in generated text', () =>
   assert.equal(sectionPassesArticleGate(generic, report, { status: 'PASS', must_fix: [], source_gaps: [] }), false);
 });
 
-test('quality report supports fallback composition from structured SoC and tooling buckets', () => {
+test('quality gate blocks supporting main articles over publish-ready maximum', () => {
   const sections = [
     section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
     section({
@@ -1968,10 +1970,11 @@ test('quality report supports fallback composition from structured SoC and tooli
     scopedCandidate('https://example.com/d', 'cpp_ai_tooling_fallback')
   ]);
 
-  assert.equal(report.status, 'PASS');
+  assert.equal(report.status, 'NEEDS_FIX');
   assert.equal(report.metrics.primary_camera_stack_count, 1);
   assert.equal(report.metrics.fallback_relevance_count, 3);
-  assert.equal(report.metrics.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.metrics.composition_mode, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item => item.reason.includes('Supporting main article count')));
 });
 
 test('quality gate keeps drafts below configured article minimum in NEEDS_FIX even above threshold', () => {
@@ -1983,7 +1986,7 @@ test('quality gate keeps drafts below configured article minimum in NEEDS_FIX ev
   assert.ok(report.deductions.some(item => item.reason.includes('outside Newsletter Policy range')));
 });
 
-test('quality gate keeps drafts without required primary camera stack in NEEDS_FIX even above threshold', () => {
+test('quality gate allows one supporting-only draft under one-article policy', () => {
   const sections = validSections(articlePolicy.mainArticleCount.min);
   const supportingBuckets = articlePolicy.supportingMainBuckets;
   const report = reportFor(sections, sections.map((item, index) =>
@@ -1991,9 +1994,11 @@ test('quality gate keeps drafts without required primary camera stack in NEEDS_F
   ));
 
   assert.equal(report.score >= qualityGatePolicy.threshold, true);
-  assert.equal(report.status, 'NEEDS_FIX');
+  assert.equal(report.status, 'PASS');
   assert.equal(report.metrics.primary_camera_stack_count, 0);
-  assert.ok(report.deductions.some(item => item.reason.includes('Primary Camera Stack article count')));
+  assert.equal(report.metrics.supporting_main_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.metrics.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.metrics.blocking_deduction_count, 0);
 });
 
 test('quality gate keeps fact-check must_fix in NEEDS_FIX even above threshold', () => {

@@ -77,7 +77,8 @@ const {
   articlePolicy,
   articleCountRangeText,
   qualityGatePolicy,
-  publishGateCriteriaText
+  publishGateCriteriaText,
+  publishReadyCompositionPolicy
 } = require('../common/newsletter-policy');
 const {
   pruneResolvedFallbackImageFactCheckItems
@@ -395,6 +396,8 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   const primaryCameraStackTopicCount = compositionSummary.primary_camera_stack_topic_count ?? null;
   const supportingMainArticleCount = compositionSummary.supporting_main_article_count ?? null;
   const forbiddenMainArticleCount = compositionSummary.forbidden_main_article_count ?? null;
+  const directAospCameraOrDriverCount = Number(compositionSummary.direct_aosp_camera_count ?? 0) +
+    Number(compositionSummary.camera_driver_image_pipeline_count ?? 0);
   const selectionPolicy = report.selection_policy || {};
   const minFinalArticles = report.min_final_articles ?? selectionPolicy.min_final_articles ?? articlePolicy.mainArticleCount.min;
   const maxFinalArticles = selectionPolicy.max_final_articles ?? articlePolicy.mainArticleCount.max;
@@ -413,7 +416,9 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   const selectionPublishGatePassed = report.publish_gate_passed ?? (
     Number(selectedArticleCount) >= minFinalArticles &&
     Number(selectedArticleCount) <= maxFinalArticles &&
-    Number(primaryCameraStackTopicCount) >= articlePolicy.primaryCameraStack.minRequired &&
+    Number(primaryCameraStackTopicCount) >= publishReadyCompositionPolicy.primaryCameraStackMinRequired &&
+    Number(directAospCameraOrDriverCount) >= publishReadyCompositionPolicy.directAospCameraOrDriverMinRequired &&
+    Number(supportingMainArticleCount) <= publishReadyCompositionPolicy.supportingMainMaxAllowed &&
     Number(forbiddenMainArticleCount) === 0 &&
     Number(primaryCameraStackTopicCount) + Number(supportingMainArticleCount) === Number(selectedArticleCount)
   );
@@ -1508,19 +1513,22 @@ function isEditorialReviewableStatus(status) {
   return status === 'NEEDS_FIX' || status === 'QUALITY_NEEDS_FIX';
 }
 
+function runNpmScript(scriptName) {
+  const options = {
+    cwd: root,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe']
+  };
+  if (process.platform === 'win32') {
+    return execFileSync('cmd.exe', ['/d', '/s', '/c', `npm.cmd run ${scriptName}`], options);
+  }
+  return execFileSync('npm', ['run', scriptName], options);
+}
+
 function runValidate() {
-  const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   try {
-    const siteOutput = execFileSync(npmCommand, ['run', 'validate:site'], {
-      cwd: root,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe']
-    });
-    const imageOutput = execFileSync(npmCommand, ['run', 'validate:images'], {
-      cwd: root,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe']
-    });
+    const siteOutput = runNpmScript('validate:site');
+    const imageOutput = runNpmScript('validate:images');
     const output = [siteOutput, imageOutput].join('\n').trim();
     return { ok: true, text: output || 'npm run validate:site and validate:images passed.' };
   } catch (error) {
@@ -2548,6 +2556,7 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
     `- required_publishable_candidate_count: ${selectionReport.candidate_shortage_summary.required_publishable_candidate_count ?? 'unknown'}`,
     `- reserve_candidate_count: ${selectionReport.candidate_shortage_summary.reserve_candidate_count ?? 'unknown'}`,
     `- required_reserve_candidate_count: ${selectionReport.candidate_shortage_summary.required_reserve_candidate_count ?? 'unknown'}`,
+    `- Reserve requirement: ${Number(selectionReport.candidate_shortage_summary.required_reserve_candidate_count) === 0 ? 'diagnostics only' : 'blocking preflight requirement'}`,
     '',
     '## Source Parser Hints',
     '',
@@ -2563,8 +2572,8 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
     `- primary_camera_stack_topic_count: ${selectionReport.gate_summary.primary_camera_stack_topic_count ?? 'unknown'}`,
     `- supporting_main_article_count: ${selectionReport.gate_summary.supporting_main_article_count ?? 'unknown'}`,
     `- forbidden_main_article_count: ${selectionReport.gate_summary.forbidden_main_article_count ?? 'unknown'}`,
-    `- absolute_min_reviewable_articles: ${selectionReport.gate_summary.absolute_min_reviewable_articles ?? 'unknown'}`,
-    `- min_non_fallback_publish_ready_articles: ${selectionReport.gate_summary.min_non_fallback_publish_ready_articles ?? 'unknown'}`,
+    `- Minimum publishable article count: ${selectionReport.gate_summary.min_final_articles ?? 'unknown'}`,
+    `- Primary camera stack requirement: ${Number(selectionReport.gate_summary.absolute_min_reviewable_articles) === 0 ? 'disabled by one-article policy' : selectionReport.gate_summary.absolute_min_reviewable_articles ?? 'unknown'}`,
     `- min_final_articles: ${selectionReport.gate_summary.min_final_articles ?? 'unknown'}`,
     `- max_final_articles: ${selectionReport.gate_summary.max_final_articles ?? 'unknown'}`
   ];
@@ -3445,10 +3454,11 @@ async function main() {
       ? COMPOSITION_MODES.THIN_WEEK_REVIEW
       : COMPOSITION_MODES.NEEDS_FIX;
   const finalEditorReviewRequired =
-    editorialReviewable ||
-    shortlistReport.editor_review_required === true ||
-    finalCompositionMode !== COMPOSITION_MODES.NORMAL ||
-    finalPublishReady !== true;
+    finalPublishReady === true
+      ? false
+      : editorialReviewable ||
+        shortlistReport.editor_review_required === true ||
+        finalCompositionMode !== COMPOSITION_MODES.NORMAL;
   const files = shouldWritePublicArtifacts
     ? baseFiles.concat([
         `newsletters/${date}/newsletter.md`,

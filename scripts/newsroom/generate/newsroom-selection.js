@@ -1388,6 +1388,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const publishGateReasonSummary = publishReadyGateReasonSummary(composition);
   const publishGateReasonCodes = publishGateReasonSummary.map(reason => reason.code);
   const publishGatePassed = reviewGatePassed && publishGateReasonCodes.length === 0;
+  const publishReady = publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX;
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, cap);
   const markedShortlist = reportShortlist.map(candidate => {
@@ -1439,7 +1440,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     candidate_shortage_summary: preflightSummary,
     shortage_reason_codes: shortageReasonCodes,
     source_parser_hints: sourceParserHintsFromShortage(preflightSummary, selectionShortageHints(eligibleComposition)),
-    editor_review_required: mode !== COMPOSITION_MODES.NORMAL || shortageReasonCodes.length > 0,
+    editor_review_required: !publishReady && (mode !== COMPOSITION_MODES.NORMAL || shortageReasonCodes.length > 0),
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
     optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
     relevance_bucket_summary: summarizeBuckets(shortlist),
@@ -1460,7 +1461,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     publish_gate_reason_codes: publishGateReasonCodes,
     publish_gate_reason_summary: publishGateReasonSummary,
     underfilled: warnings.length > 0,
-    publish_ready: publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX,
+    publish_ready: publishReady,
     selection_policy: {
       min_final_articles: MIN_FINAL_ARTICLES,
       candidate_pool_preflight: candidatePoolPreflightPolicy,
