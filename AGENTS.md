@@ -26,12 +26,14 @@
 - `content/collected-news/YYYY-MM-DD/`는 raw candidate output입니다.
 - `content/newsroom/YYYY-MM-DD/`는 reporter, editor, fact-check, quality, retry, QA review artifact입니다.
 - `newsletters/YYYY-MM-DD/`는 public issue output인 `newsletter.md`와 `index.html`입니다.
-- `scripts/` root와 `scripts/lib/`는 compatibility wrapper/shim입니다. 실제 구현은 `scripts/newsroom/{cli,collect,generate,render,validate,common}/`에 둡니다.
+- `scripts/` root와 `scripts/lib/`는 compatibility wrapper/shim입니다. 실제 구현은 `scripts/newsroom/{cli,collect,common,evidence,generate,llm,metrics,render,sources,validate}/`에 둡니다.
 - `.github/workflows/`는 newsroom PR workflow와 validation workflow입니다.
 
 ## Scoped AGENTS Policy
 
 Root `AGENTS.md` applies to the whole repository. Scoped `AGENTS.md` files are added only when a folder has safety-critical rules or contracts that differ from the repository-wide defaults.
+
+Scoped `AGENTS.md` files inherit this root guidance. They add folder-specific constraints and do not replace repository-wide rules. Do not create scoped guidance that conflicts with this root file.
 
 | Path | Why scoped guidance exists |
 | --- | --- |

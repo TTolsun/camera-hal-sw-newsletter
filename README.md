@@ -18,6 +18,7 @@
 | [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약을 설명합니다. |
 | [docs/testing/test-baseline.md](docs/testing/test-baseline.md) | 현재 validation baseline을 기록합니다. |
 | [scripts/README.md](scripts/README.md) | scripts wrapper와 실제 newsroom 구현 진입점을 설명합니다. |
+| [docs/plans/issue-188-root-docs-audit.md](docs/plans/issue-188-root-docs-audit.md) | root folder별 README/AGENTS coverage와 source-of-truth map입니다. |
 
 뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
 
@@ -60,16 +61,17 @@ npm.cmd run generate
 
 | 경로 | 역할 |
 | --- | --- |
-| `.github/workflows/` | newsroom PR workflow와 validation workflow입니다. |
-| `data/` | `newsletters.json`과 machine-readable source registry입니다. |
-| `docs/` | 운영 문서, glossary, source guide, testing 기록입니다. |
+| [`.github/`](.github/README.md) | issue/PR template, newsroom PR workflow, validation workflow입니다. |
+| [`config/`](config/README.md) | newsletter policy와 budget config입니다. |
+| [`data/`](data/README.md) | `newsletters.json`과 machine-readable source registry입니다. |
+| [`docs/`](docs/README.md) | 운영 문서, glossary, source guide, testing 기록입니다. |
 | [`scripts/newsroom/`](scripts/newsroom/README.md) | 실제 collector, generator, renderer, validator 구현입니다. |
-| `tests/` | Node built-in test runner 기반 regression test입니다. |
-| `content/` | 수집 후보와 newsroom review artifact입니다. |
-| `newsletters/` | public newsletter Markdown/HTML output입니다. |
-| `assets/` | site image와 article fallback image입니다. |
-| `css/` | 정적 사이트 스타일입니다. |
-| `templates/` | newsletter Markdown/HTML template입니다. |
+| [`tests/`](tests/README.md) | Node built-in test runner 기반 regression test입니다. |
+| [`content/`](content/README.md) | 수집 후보와 newsroom review artifact입니다. |
+| [`newsletters/`](newsletters/README.md) | public newsletter Markdown/HTML output입니다. |
+| [`assets/`](assets/README.md) | site image와 article fallback image입니다. |
+| [`css/`](css/README.md) | 정적 사이트 스타일입니다. |
+| [`templates/`](templates/README.md) | newsletter Markdown/HTML template입니다. |
 
 마지막으로, 아래 규칙은 문서 정리나 리팩토링 중에도 약화하면 안 됩니다.
 

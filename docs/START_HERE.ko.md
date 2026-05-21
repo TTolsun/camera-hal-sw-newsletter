@@ -16,6 +16,7 @@
 | [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약입니다. |
 | [testing/test-baseline.md](testing/test-baseline.md) | 현재 test/validation baseline입니다. |
 | [scripts/README.md](../scripts/README.md) | scripts wrapper와 실제 newsroom 구현 진입점을 설명합니다. |
+| [plans/issue-188-root-docs-audit.md](plans/issue-188-root-docs-audit.md) | root folder별 README/AGENTS coverage와 source-of-truth map입니다. |
 
 Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
 
@@ -24,6 +25,7 @@ Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of 
 | 경로 | 역할 |
 | --- | --- |
 | `docs/glossary.ko.md` | 코드 식별자와 artifact 이름의 의미를 설명합니다. |
+| `docs/README.md` | docs 하위 폴더와 current/archive guidance를 안내합니다. |
 | `docs/newsroom-workflow.md` | newsroom pipeline, quality gate, artifact, GitHub Actions 운영을 설명합니다. |
 | `docs/editorial-policy.md` | newsletter editorial policy와 scope 판단 기준입니다. |
 | `docs/news-sources.md` | 사람이 검토하는 source editorial view입니다. |
@@ -40,16 +42,16 @@ Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of 
 
 | 경로 | 역할 |
 | --- | --- |
-| `.github/workflows/` | 후보 수집, Gemini 생성, 검증, PR 생성, Pages 검증 workflow입니다. |
-| `data/` | `newsletters.json`과 machine-readable source registry인 `news-sources.json`입니다. |
+| [`.github/`](../.github/README.md) | 후보 수집, Gemini 생성, 검증, PR 생성, Pages 검증 workflow입니다. |
+| [`config/`](../config/README.md) | newsletter policy와 budget config입니다. |
+| [`data/`](../data/README.md) | `newsletters.json`과 machine-readable source registry인 `news-sources.json`입니다. |
 | [`scripts/newsroom/`](../scripts/newsroom/README.md) | 실제 collector, generator, renderer, validator 구현입니다. |
 | `tests/` | Node built-in test runner 기반 regression test입니다. |
-| `content/collected-news/` | 날짜별 raw candidate output인 `YYYY-MM-DD/candidates.json`입니다. |
-| `content/newsroom/` | 날짜별 reporter, editor, fact-check, quality, retry, QA artifact입니다. |
-| `newsletters/` | 발행될 날짜별 `newsletter.md`와 `index.html`입니다. |
-| `templates/` | newsletter Markdown/HTML template입니다. |
-| `assets/` | site image와 article-image fallback asset입니다. |
-| `css/` | 정적 사이트 공통 스타일입니다. |
+| [`content/`](../content/README.md) | 날짜별 raw candidate와 newsroom review artifact입니다. |
+| [`newsletters/`](../newsletters/README.md) | 발행될 날짜별 `newsletter.md`와 `index.html`입니다. |
+| [`templates/`](../templates/README.md) | newsletter Markdown/HTML template입니다. |
+| [`assets/`](../assets/README.md) | site image와 article-image fallback asset입니다. |
+| [`css/`](../css/README.md) | 정적 사이트 공통 스타일입니다. |
 
 ## 안전한 수정 순서
 
