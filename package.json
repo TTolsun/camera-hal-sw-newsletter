@@ -12,6 +12,7 @@
     "generate": "node scripts/gemini-newsroom-newsletter.js",
     "ci": "npm run test && npm run validate",
     "report:source-effectiveness": "node scripts/build-source-effectiveness-report.js",
+    "report:source-quality-diagnosis": "node scripts/build-source-quality-diagnosis.js",
     "report:evidence-pack": "node scripts/build-evidence-pack-summary.js",
     "report:hal-signal-quality": "node scripts/build-hal-signal-quality-report.js",
     "report:hal-signal-scorecard": "node scripts/build-hal-signal-quality-scorecard.js",

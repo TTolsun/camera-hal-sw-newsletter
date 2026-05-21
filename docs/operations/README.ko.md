@@ -53,3 +53,7 @@
 6. `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`
 7. `content/newsroom/YYYY-MM-DD/article-capsules.json`
 8. `newsletters/YYYY-MM-DD/newsletter.md`
+
+## 소스 품질 진단
+
+후보 부족 원인을 source/parser/gate/source discovery 관점으로 볼 때는 [소스 품질 진단 리포트](./source-quality-diagnosis.ko.md)를 확인합니다. 이 리포트는 advisory artifact이며 publish/readiness gate를 바꾸지 않습니다.

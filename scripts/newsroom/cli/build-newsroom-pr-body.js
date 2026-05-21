@@ -24,6 +24,13 @@ const {
   articleSectionContractMarkdown
 } = require('../render/newsletter-renderer');
 const {
+  DIAGNOSIS_KEYS
+} = require('../metrics/source-quality-diagnosis');
+const {
+  DIAGNOSIS_LABELS_KO,
+  RECOMMENDED_ACTION_LABELS_KO
+} = require('../render/source-quality-diagnosis-labels.ko');
+const {
   getChangedRepoVisibleArtifacts,
   requiredPublicFiles,
   resolveReviewableArtifacts
@@ -54,6 +61,11 @@ function readTextIfExists(filePath) {
 
 function valueOrUnknown(value) {
   if (value === null || value === undefined || value === '') return 'unknown';
+  return String(value);
+}
+
+function valueOrUnknownKo(value) {
+  if (value === null || value === undefined || value === '') return '알 수 없음';
   return String(value);
 }
 
@@ -582,6 +594,50 @@ function renderSourceQualityGateSummary(root, date) {
     `- source_quality_status: ${formatCountSummary(summary.source_quality_status_summary)}`,
     `- top blockers: ${formatCountSummary(summary.source_quality_blocker_summary)}`,
     `- Artifact: \`${relPath}\``,
+    ''
+  ].join('\n');
+}
+
+function renderSourceQualityDiagnosisSummary(root, date) {
+  if (!date) return '';
+  const jsonRelPath = `content/newsroom/${date}/source-quality-diagnosis.json`;
+  const markdownRelPath = `content/newsroom/${date}/source-quality-diagnosis.md`;
+  const jsonPath = path.join(root, jsonRelPath);
+  const report = readJsonObjectIfExists(jsonPath);
+  if (!report) {
+    return [
+      '## 소스 품질 진단 / Source Quality Diagnosis',
+      '',
+      '- Status: generation failed or unavailable',
+      `- Reason: ${jsonRelPath} ${fs.existsSync(jsonPath) ? 'is not valid JSON' : 'not found'}`,
+      '- Impact: advisory report only, publish/readiness gates are unaffected.',
+      ''
+    ].join('\n');
+  }
+  const activeLabels = DIAGNOSIS_KEYS
+    .filter(key => report.diagnosis?.[key] === true)
+    .map(key => DIAGNOSIS_LABELS_KO[key] || key);
+  const topIssues = ensureArray(report.recommended_issues).slice(0, 3);
+  const issueLines = topIssues.length > 0
+    ? topIssues.map((issue, index) => {
+      const action = RECOMMENDED_ACTION_LABELS_KO[issue.action] || issue.action || 'unknown';
+      const target = issue.source_name || issue.source_id || '전체';
+      return `  ${index + 1}. ${target}: ${action} - ${valueOrUnknown(issue.reason)}`;
+    })
+    : ['  - 없음'];
+  return [
+    '## 소스 품질 진단 / Source Quality Diagnosis',
+    '',
+    '- Artifact:',
+    `  - \`${jsonRelPath}\``,
+    `  - \`${markdownRelPath}\``,
+    '- 요약:',
+    `  - 원본 후보 수: ${valueOrUnknownKo(report.raw_candidate_count)}`,
+    `  - 최종 사용 가능 후보 수: ${valueOrUnknownKo(report.eligible_candidate_count)}`,
+    `  - 주요 진단: ${activeLabels.join(', ') || '없음'}`,
+    `  - 경고: ${ensureArray(report.warnings).length}`,
+    '- 권장 조치 Top 3:',
+    ...issueLines,
     ''
   ].join('\n');
 }
@@ -2242,6 +2298,7 @@ function buildNewsroomPrBody(options = {}) {
     renderFinalSelectionStatus(status),
     renderHalSignalQualitySummary(root, date, status),
     renderSourceQualityGateSummary(root, date),
+    renderSourceQualityDiagnosisSummary(root, date),
     renderSeedEvidenceUsageSummary(root, date),
     renderEvidencePackSummary(root, date),
     renderCandidateTraceability(root, date),
