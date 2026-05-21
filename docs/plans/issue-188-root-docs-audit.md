@@ -593,15 +593,22 @@ root README의 folder map을 링크 중심으로 보강하고, root AGENTS의 sc
 
 ## Validation record
 
-이 문서를 포함한 #188 구현 후 아래 명령으로 검증합니다.
+PR branch: `codex/issue-188-root-docs-guidance`
 
-```powershell
-npm.cmd run validate:localization
-npm.cmd run check:policy-docs
-npm.cmd run check:repo-hygiene
-npm.cmd run test
-npm.cmd run validate
-```
+| Command | Result |
+| --- | --- |
+| targeted Markdown newline/BOM check | PASS: 대상 Markdown file은 UTF-8 without BOM, LF-only, `CR=0` |
+| `git diff --check` | PASS |
+| `npm.cmd run check:encoding` | PASS |
+| `npm.cmd run validate:localization` | PASS |
+| `npm.cmd run check:policy-docs` | PASS |
+| `npm.cmd run check:repo-hygiene` | PASS |
+| `npm.cmd run validate:archive` | PASS |
+| `npm.cmd run test` | PASS |
+| `npm.cmd run validate` | PASS |
+| policy drift stale value grep | PASS: `quality threshold 90`, `main articles 5-6`, `MIN_FINAL_ARTICLES=4` pattern 없음 |
+
+`npm.cmd run validate`의 historical newsletter artifact warning은 warning-only이며, 이번 PR의 docs guidance 변경 범위 밖이라 수정하지 않았습니다.
 
 Policy drift 점검:
 

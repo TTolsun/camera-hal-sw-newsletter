@@ -33,8 +33,13 @@
 | `seed_url` | 사용자가 대표 근거로 지정한 public `https` URL입니다. Stage 2는 이 URL을 deterministic하게 fetch하고, 허용된 linked evidence만 보강 대상으로 봅니다. |
 | `keyword_hints` | seed 수집과 source discovery를 돕는 검색/분류 hint입니다. 기사 fact나 source evidence가 아니므로 claim 근거로 쓰면 안 됩니다. |
 | `compact_evidence` | Gemini prompt에 전달하기 위해 source-backed fact, linked context, do_not_claim, evidence URL을 압축한 candidate-level evidence capsule입니다. 전체 Evidence Pack을 그대로 넣는 대신 기사 작성에 필요한 최소 근거만 전달합니다. |
+| `seed_evidence_pack` | seed URL에서 가져온 원문, linked evidence, 금지 claim, 근거 URL을 묶은 evidence package입니다. Gemini prompt에는 보통 전체 pack이 아니라 필요한 부분만 `compact_evidence`로 압축해 전달합니다. |
 | `source_gap_risk` | main article로 발행하기에는 dated evidence, source extraction, source binding이 부족하다는 위험 표시입니다. 이 값이 true인 후보는 quality gate나 selector gate를 우회해서 발행하지 않습니다. |
+| `source_url_quality` | source URL이 dated evidence, 공식성, 기사성, 중복 여부, 접근 가능성 측면에서 main article 근거로 적합한지 평가하는 품질 신호입니다. |
+| `main_article_source_allowed` | 해당 후보 또는 source가 main article 근거로 사용 가능한지 나타내는 정책 판단 값입니다. false이면 fallback/context/reference로만 다룹니다. |
+| `candidate_shortage_reviewable` | 후보 수가 부족하지만 원인을 진단하고 사람이 검토할 수 있도록 artifact를 남기는 상태입니다. 자동 publish-ready와는 다릅니다. |
 | `claim.evidence_ids` | article claim이 참조하는 evidence id 목록입니다. #125 이후 fact claim은 source URL과 evidence id를 통해 추적 가능해야 합니다. |
 | `manual-candidates.json` | Stage 1에서 사람이 지정한 seed URL, manual candidate, 기본 수집 후보를 보존하는 후보 artifact입니다. |
 | `merged-candidates.json` | Stage 2에서 manual candidate, seed evidence, Gemini discovery 후보를 병합한 최종 generation input 후보 artifact입니다. |
+| `editor-draft.json` | editor stage가 만든 newsletter draft artifact입니다. public output이 아니라 renderer와 validator가 검토하는 중간 산출물입니다. |
 | `quality-report.json` | quality gate 결과를 담는 machine-readable report입니다. score뿐 아니라 hard blocker, source gap, fact-check must_fix 같은 발행 안전 문제를 함께 확인합니다. |
