@@ -5227,6 +5227,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   const validateGeneratedSiteStep = workflowStep(workflow, 'Validate generated site');
   const resolveFinalStatusStep = workflowStep(workflow, 'Resolve final publish status');
   const sourceEffectivenessStep = workflowStep(workflow, 'Generate source effectiveness report');
+  const sourceQualityDiagnosisStep = workflowStep(workflow, 'Generate source quality diagnosis');
   const evidencePackStep = workflowStep(workflow, 'Generate evidence pack summary');
   const halSignalQualityStep = workflowStep(workflow, 'Generate HAL signal quality report');
   const preparePrBodyStep = workflowStep(workflow, 'Prepare pull request body');
@@ -5252,6 +5253,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   ]);
   assertTextInOrder(workflow, [
     '- name: Generate source effectiveness report',
+    '- name: Generate source quality diagnosis',
     '- name: Generate evidence pack summary',
     '- name: Generate HAL signal quality report',
     '- name: Snapshot newsroom debug artifacts'
@@ -5317,6 +5319,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(sourceEffectivenessStep, /continue-on-error:\s*true/);
+  assert.match(sourceQualityDiagnosisStep, /if: always\(\) && steps\.meta\.outputs\.review_pr_ready == 'true'/);
+  assert.match(sourceQualityDiagnosisStep, /continue-on-error:\s*true/);
+  assert.match(sourceQualityDiagnosisStep, /npm run report:source-quality-diagnosis -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(evidencePackStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.match(evidencePackStep, /continue-on-error:\s*true/);
   assert.match(evidencePackStep, /npm run report:evidence-pack -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
