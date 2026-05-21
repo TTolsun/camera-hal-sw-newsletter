@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "4cd1324b82d886c6",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "title": "Build native Android apps in Google AI Studio",
+      "published_at": "Tue, 19 May 2026 12:45:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt. You don't need to install any software or configure any libraries, which significantly lowers the barrier to development. Whether you’re a seasoned developer looking to prototype at lightning speed or a creator building your first-ever mobile experience, you can now go from a single prompt to a high-quality,",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.66,
+      "android_hal_relevance": 0.66,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.577,
+      "warnings": []
+    },
+    {
+      "id": "473c2de5968532c9",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "1.6.1",
+      "published_at": "May 06, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "1.6.1",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"ja-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.6,
+      "android_hal_relevance": 0.6,
+      "ai_relevance": 0,
+      "technical_depth": 0.552,
+      "warnings": []
+    },
+    {
+      "id": "632c16d8e3837b65",
+      "url": "https://isocpp.org//blog/2026/05/2026-survey-summary",
+      "title": "Results summary: 2026 Annual C++ Developer Survey \"Lite\"",
+      "published_at": "Mon, 04 May 2026 21:04:35 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Thank you to everyone who reponded to&nbsp; our 2026 annual global C++ developer survey . As promised, here is a summary of the results, including one-page summaries of your answers to the free-form questions: CppDevSurvey-2026-summary.pdf A 145-page version of this report that also includes all individual write-in responses has now been forwarded to the C++ standards committee and C++ product vendors, to help inform C++ evolution and tooling. Your feedback is valuable, and appreciated.",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          Results summary: 2026 Annual C++ Developer Survey &quot;Lite&quot; :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link rel=\"apple",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.455,
+      "warnings": []
+    },
+    {
+      "id": "gemini-12e9c4971fdf97b4",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
+      "title": "CppCon 2025 Back to Basics: Move Semantics -- Ben Saks : Standard C++",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CppCon 2025 Back to Basics: Move Semantics -- Ben Saks : Standard C++",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          CppCon 2025 Back to Basics: Move Semantics -- Ben Saks :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link rel=\"apple-touch-icon\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.455,
+      "warnings": []
+    },
+    {
+      "id": "gemini-4ca3718b2211f948",
+      "url": "https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
+      "title": "What Happens When a Destructor Throws -- Sandor Dargo : Standard C++",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "What Happens When a Destructor Throws -- Sandor Dargo : Standard C++",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          What Happens When a Destructor Throws -- Sandor Dargo :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link rel=\"apple-touch-icon\" ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.455,
+      "warnings": []
+    },
+    {
+      "id": "gemini-5126eff726f21536",
+      "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "title": "C++: The Documentary trailer : Standard C++",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "C++: The Documentary trailer : Standard C++",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          C++: The Documentary trailer :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"72x72\" href=\"apple",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.455,
+      "warnings": []
+    },
+    {
+      "id": "gemini-8178cc4e8161a495",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
+      "title": "CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz : Standard C++",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz : Standard C++",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-ic",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.455,
+      "warnings": []
+    },
+    {
+      "id": "gemini-82757cc0578b7c0f",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter",
+      "title": "CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter : Standard C++",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter : Standard C++",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link re",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.455,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b08d4267982f250f",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
+      "title": "CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman : Standard C++",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman : Standard C++",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-ico",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.455,
+      "warnings": []
+    },
+    {
+      "id": "gemini-df85959b259bb019",
+      "url": "https://isocpp.org//blog/2026/05/2026-survey-summary",
+      "title": "Results summary: 2026 Annual C++ Developer Survey &quot;Lite&quot; : Standard C++",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Results summary: 2026 Annual C++ Developer Survey &quot;Lite&quot; : Standard C++",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          Results summary: 2026 Annual C++ Developer Survey &quot;Lite&quot; :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link rel=\"apple",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.455,
+      "warnings": []
+    },
+    {
+      "id": "996bf578317a0117",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
+      "title": "CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman",
+      "published_at": "Wed, 13 May 2026 21:36:47 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Crafting the Code You Don&rsquo;t Write: Sculpting Software in an AI World by Daisy Hollman Summa",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-ico",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.33,
+      "android_hal_relevance": 0.33,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.407,
+      "warnings": []
+    },
+    {
+      "id": "600a14623b83d174",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
+      "title": "CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz",
+      "published_at": "Tue, 05 May 2026 21:28:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Beyond Sequential Consistency: Unlocking Hidden Performance Gains by Christopher Fretz Summary of",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-ic",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.33,
+      "android_hal_relevance": 0.33,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.407,
+      "warnings": []
+    }
+  ]
+}
