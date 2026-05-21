@@ -14,11 +14,11 @@
 
 ## Impact Type Counts
 
-- build_dependency_fix: 10
-- camera_api_change: 1
+- build_dependency_fix: 11
+- camera_api_change: 4
 - documentation_only: 2
 - generic_tooling_change: 7
-- security_component_camera_related: 5
+- security_component_camera_related: 1
 - unknown: 14
 - video_capture_fix: 1
 
@@ -34,7 +34,7 @@
 - Increasing app discovery and engagement on Google TV: 0 evidence, impact=unknown, recommendation=unknown
 - I/O 2026: What's new in Google Play: 0 evidence, impact=unknown, recommendation=unknown
 - Camera &nbsp;|&nbsp; Android Open Source Project: 0 evidence, impact=documentation_only, recommendation=watch
-- Start building today - Build native Android apps in Google AI Studio: 0 evidence, impact=security_component_camera_related, recommendation=main
+- Start building today - Build native Android apps in Google AI Studio: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - Build for the future with the Android XR Developer Catalyst Program — Apply now!: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - Adaptive development for the expanding Android ecosystem: 0 evidence, impact=unknown, recommendation=unknown
 - Updates to the Android XR SDK: Introducing Developer Preview 4: 0 evidence, impact=unknown, recommendation=unknown
@@ -42,9 +42,9 @@
 - Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha: 0 evidence, impact=camera_api_change, recommendation=watch
 - Gratitude saw 25% higher retention for widget users: 0 evidence, impact=unknown, recommendation=unknown
 - A look ahead: Making it easier and faster to publish safer apps: 0 evidence, impact=unknown, recommendation=unknown
-- 1.6.1: 0 evidence, impact=security_component_camera_related, recommendation=main
-- 1.3.0-beta02: 0 evidence, impact=security_component_camera_related, recommendation=main
-- 1.4.0-alpha07: 0 evidence, impact=security_component_camera_related, recommendation=main
+- 1.6.1: 0 evidence, impact=camera_api_change, recommendation=main
+- 1.3.0-beta02: 0 evidence, impact=camera_api_change, recommendation=main
+- 1.4.0-alpha07: 0 evidence, impact=camera_api_change, recommendation=main
 - What&apos;s new &nbsp;|&nbsp; Android Open Source Project: 0 evidence, impact=unknown, recommendation=unknown
 - Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project: 0 evidence, impact=documentation_only, recommendation=watch
 - Android XR Updates for Unity, Unreal, and Godot: 0 evidence, impact=unknown, recommendation=unknown

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T16:27:46.971Z",
+  "generated_at": "2026-05-21T18:33:34.745Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -224,6 +224,9 @@
       "source_reliability": "official",
       "freshness_window": "primary",
       "relevance_bucket": "android_platform_camera_adjacent",
+      "article_group_key": "unknown",
+      "tooling_workflow_type": "",
+      "related_context_candidates": [],
       "finalSelectionEligibility": "main",
       "source_gap_risk": false,
       "has_dated_evidence": true,
@@ -259,6 +262,9 @@
       "source_reliability": "official",
       "freshness_window": "primary",
       "relevance_bucket": "android_platform_camera_adjacent",
+      "article_group_key": "unknown",
+      "tooling_workflow_type": "",
+      "related_context_candidates": [],
       "finalSelectionEligibility": "short",
       "source_gap_risk": false,
       "has_dated_evidence": true,

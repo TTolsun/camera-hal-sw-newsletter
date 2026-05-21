@@ -6,24 +6,24 @@
 
 ## Event Type Counts
 
-- primary_url: 32
-- release_note: 8
+- primary_url: 29
+- release_note: 11
 
 ## Dedupe Reason Counts
 
-- normalized_primary_url: 32
-- source_id + release.date + component: 4
-- source_id + release.version: 4
+- normalized_primary_url: 29
+- source_id + release.date + component: 6
+- source_id + release.version: 5
 
 ## Event Bundles
 
 - event_f75c69838d3b: release_note, source_id + release.date + component, primary=https://goo.gle/adaptiveapps_io26, evidence=0, confidence=medium
 - event_4a7fbfd675df: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html, evidence=0, confidence=low
 - event_b91a2af1bd7b: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html, evidence=0, confidence=low
-- event_1a9f8e19d5e2: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html, evidence=0, confidence=low
-- event_7935367e175e: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html, evidence=0, confidence=low
+- event_43262b041662: release_note, source_id + release.version, primary=https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html, evidence=0, confidence=high
+- event_4fb344106a98: release_note, source_id + release.date + component, primary=https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html, evidence=0, confidence=medium
 - event_23223c0084d6: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html, evidence=0, confidence=low
-- event_8944006e8421: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html, evidence=0, confidence=low
+- event_6e3f383f7a71: release_note, source_id + release.date + component, primary=https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html, evidence=0, confidence=medium
 - event_e21cd309a547: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html, evidence=0, confidence=low
 - event_6a89c8522a44: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html, evidence=0, confidence=low
 - event_d5f3369876b0: primary_url, normalized_primary_url, primary=https://source.android.com/docs/core/camera, evidence=0, confidence=low
