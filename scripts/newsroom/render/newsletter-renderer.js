@@ -23,7 +23,7 @@ function escapeHtml(value) {
 }
 
 function markdownLink(source) {
-  const title = source.title || source.url || 'Source';
+  const title = source.title || source.url || '출처';
   return `- [${title}](${source.url})`;
 }
 
@@ -90,21 +90,21 @@ function articleImageSource(section) {
 function articleImageMarkdown(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (!image || !image.src) return '';
-  const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
+  const attribution = section.imageAttribution || section.sources?.[0]?.title || '출처 기사';
   const source = articleImageSource(section);
   const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
-  return `\n![${alt}](${image.src})\n\n_Image: [${attribution}](${source})_\n`;
+  return `\n![${alt}](${image.src})\n\n_이미지: [${attribution}](${source})_\n`;
 }
 
 function articleMediaHtml(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (image && image.src) {
     const imageSource = articleImageSource(section);
-    const attribution = section.imageAttribution || section.sources?.[0]?.title || 'Source article';
+    const attribution = section.imageAttribution || section.sources?.[0]?.title || '출처 기사';
     const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
     return `<figure class="article-media">
             <img class="article-image" src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">Image: <a href="${escapeHtml(imageSource)}">${escapeHtml(attribution)}</a></figcaption>
+            <figcaption class="article-image-caption">이미지: <a href="${escapeHtml(imageSource)}">${escapeHtml(attribution)}</a></figcaption>
           </figure>`;
   }
 
@@ -265,7 +265,7 @@ ${publicArticle.camera_hal_takeaway}
 
 ${bulletsMarkdown(publicArticle.reader_checkpoints)}
 
-**Sources**
+**출처**
 
 ${sourceListMarkdown(publicArticle.source_links)}
 `;
@@ -322,9 +322,9 @@ function buildPublicHtml(issue) {
     <nav class="site-nav content-wrap" aria-label="Primary navigation">
       <a class="site-brand" href="../../index.html">Camera HAL SW Newsletter</a>
       <div class="nav-links">
-        <a href="../../index.html#latest">Latest</a>
-        <a href="../../index.html#archive">Archive</a>
-        <a href="../../docs/news-sources.md">Sources</a>
+        <a href="../../index.html#latest">최신호</a>
+        <a href="../../index.html#archive">아카이브</a>
+        <a href="../../docs/news-sources.md">출처</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </nav>

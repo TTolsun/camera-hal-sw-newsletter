@@ -1,6 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
+const {
+  rawEnglishProseRuns,
+  visibleHtmlText,
+  visibleMarkdownText
+} = require('../validate/public-newsletter');
+
 const root = process.cwd();
 const errors = [];
 
@@ -13,6 +19,13 @@ const markdownRoots = [
   path.join('.github', 'PULL_REQUEST_TEMPLATE'),
   'docs',
   'templates'
+];
+
+const promptHostFiles = [
+  path.join('scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
+  path.join('scripts', 'newsroom', 'cli', 'build-newsroom-pr-body.js'),
+  path.join('scripts', 'newsroom', 'generate', 'fallback-public-issue.js'),
+  path.join('scripts', 'newsroom', 'render', 'newsletter-renderer.js')
 ];
 
 const generatedPathParts = new Set([
@@ -51,6 +64,12 @@ function relPath(filePath) {
 
 function isGeneratedPath(filePath) {
   return relPath(filePath).split('/').some(part => generatedPathParts.has(part));
+}
+
+function addLongEnglishProseErrors(label, value) {
+  for (const run of rawEnglishProseRuns(value)) {
+    errors.push(`${label}: 긴 영어 prose가 남아 있습니다. 한국어로 요약하세요: ${run.slice(0, 120)}`);
+  }
 }
 
 function collectMarkdown(filePath, out = []) {
@@ -95,6 +114,21 @@ function checkNewsletterData() {
     if (!hangulPattern.test(String(item.summary || ''))) {
       errors.push(`data/newsletters.json: ${item.date} summary에 한국어 표시값이 없습니다.`);
     }
+    addLongEnglishProseErrors(`data/newsletters.json: ${item.date} title`, item.title || '');
+    addLongEnglishProseErrors(`data/newsletters.json: ${item.date} summary`, item.summary || '');
+  }
+}
+
+function checkLatestPublicNewsletterArtifacts() {
+  const items = readJson(path.join('data', 'newsletters.json'));
+  const latest = items[0];
+  if (!latest) return;
+  for (const rel of [latest.md, latest.html].filter(Boolean)) {
+    const filePath = repoPath(rel);
+    if (!fs.existsSync(filePath)) continue;
+    const text = fs.readFileSync(filePath, 'utf8');
+    const visible = rel.endsWith('.html') ? visibleHtmlText(text) : visibleMarkdownText(text);
+    addLongEnglishProseErrors(rel, visible);
   }
 }
 
@@ -107,9 +141,19 @@ function checkSourceRegistry() {
   }
 }
 
+function checkPromptHosts() {
+  for (const rel of promptHostFiles) {
+    const filePath = repoPath(rel);
+    if (!fs.existsSync(filePath)) continue;
+    addLongEnglishProseErrors(rel, fs.readFileSync(filePath, 'utf8'));
+  }
+}
+
 checkMarkdown();
 checkNewsletterData();
+checkLatestPublicNewsletterArtifacts();
 checkSourceRegistry();
+checkPromptHosts();
 
 if (errors.length > 0) {
   console.error(errors.join('\n'));

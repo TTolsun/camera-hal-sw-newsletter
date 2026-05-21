@@ -21,21 +21,21 @@ test('article section contract prompt fixes the five normalized keys and guardra
   ]) {
     assert.match(prompt, new RegExp(key));
   }
-  assert.match(prompt, /must include article_sections/);
-  assert.match(prompt, /five required keys/);
+  assert.match(prompt, /article_sections를 포함해야 합니다/);
+  assert.match(prompt, /required keys/);
   assert.match(prompt, /known_limitations/);
   assert.match(prompt, /watch_items/);
   assert.match(prompt, /do_not_claim/);
   assert.match(prompt, /optional arrays/);
   assert.match(prompt, /guardrail array/);
-  assert.match(prompt, /optional only for legacy artifact compatibility/);
-  assert.match(prompt, /do not rely on legacy fields/);
+  assert.match(prompt, /legacy artifact compatibility 때문에만 optional/);
+  assert.match(prompt, /legacy fields로 충족했다고 간주하지 마세요/);
   assert.match(prompt, /source-backed facts/);
-  assert.match(prompt, /HAL interpretation/);
-  assert.match(prompt, /direct runtime\/API behavior/);
-  assert.match(prompt, /concrete actions/);
-  assert.match(prompt, /must not be copied into verified_facts/);
-  assert.match(prompt, /Do not render do_not_claim as source-backed fact/);
+  assert.match(prompt, /HAL 해석/);
+  assert.match(prompt, /runtime\/API behavior/);
+  assert.match(prompt, /구체적 action/);
+  assert.match(prompt, /verified_facts에 복사하면 안 됩니다/);
+  assert.match(prompt, /do_not_claim은 source-backed fact나 public article content로 render하지 말고/);
 });
 
 test('public article contract prompt keeps public output separate from diagnostics', () => {
@@ -53,7 +53,7 @@ test('public article contract prompt keeps public output separate from diagnosti
   ]) {
     assert.match(prompt, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
-  assert.match(prompt, /reader-facing/);
+  assert.match(prompt, /독자-facing/);
   assert.match(prompt, /verified_facts checklist/);
   assert.match(prompt, /즉시 조치할 항목은 없습니다/);
 });
@@ -64,11 +64,11 @@ test('source extraction prompt guardrails keep source facts separate from editor
 
   assert.match(prompt, /source_extraction/);
   assert.match(prompt, /derived_editorial_hints/);
-  assert.match(prompt, /source-confirmed structured facts/);
+  assert.match(prompt, /source가 확인한 structured fact/);
   assert.match(prompt, /editorial guidance/);
   assert.match(prompt, /source_extraction\.release\.sections\[\]\.items\[\]\.text/);
-  assert.match(prompt, /artifact tables/);
-  assert.match(prompt, /Do not analyze the source URL/);
+  assert.match(prompt, /artifact table/);
+  assert.match(prompt, /source URL 또는 전체 source page를 독립 분석하지 마세요/);
   assert.match(prompt, /release version/);
   assert.match(prompt, /validation checklist/);
 });

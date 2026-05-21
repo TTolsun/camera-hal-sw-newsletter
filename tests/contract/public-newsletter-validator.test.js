@@ -7,13 +7,13 @@ const {
 
 function markdown(overrides = {}) {
   const checkpoints = overrides.checkpoints || [
-    ['Run Camera ITS preview latency checks on one representative device.', 'Compare stream metadata on the CameraX path.'],
-    ['Review sensor mode selection regressions in the libcamera path.', 'Check frame timing and format negotiation tests.'],
+    ['대표 기기 1대에서 Camera ITS preview latency를 확인합니다.', 'CameraX path의 stream metadata 차이를 비교합니다.'],
+    ['libcamera path의 sensor mode selection 회귀 가능성을 확인합니다.', 'frame timing과 format negotiation test 필요 여부를 점검합니다.'],
     ['즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.']
   ];
   return `# Camera HAL SW Newsletter - 2026-05-18
 
-Weekly summary.
+이번 호는 Camera HAL 독자가 확인할 만한 공개 출처 동향을 요약합니다.
 
 ## 1. 이번 주 3줄 브리핑
 
@@ -23,11 +23,11 @@ Weekly summary.
 
 ${[1, 2, 3].map((number, index) => `## ${number + 1}. Article ${number}
 
-Lead ${number}.
+Lead ${number}는 공개 출처 기반 동향을 한국어로 요약합니다.
 
-Body paragraph ${number}A explains the source-backed change.
+본문 ${number}A는 source-backed change를 Camera HAL 독자 관점에서 설명합니다.
 
-Body paragraph ${number}B explains the Camera HAL boundary.
+본문 ${number}B는 직접 HAL 변경으로 과장하지 않아야 하는 boundary를 설명합니다.
 
 **Camera HAL / Driver 관점**
 
@@ -37,7 +37,7 @@ Takeaway ${number}.
 
 ${checkpoints[index].map(item => `- ${item}`).join('\n')}
 
-**Sources**
+**출처**
 
 - [Source ${number}](https://example.com/source-${number})
 `).join('\n---\n\n')}
@@ -63,7 +63,7 @@ test('public newsletter validator accepts reader-facing articles', () => {
 
 test('public newsletter validator rejects visible internal terms and raw fact checklists', () => {
   const errors = validatePublicNewsletterArtifacts({
-    markdown: markdown().replace('Lead 1.', 'Lead 1. HAL Signal Capsule why_now 확인된 변경점: raw fact.'),
+    markdown: markdown().replace('Lead 1는 공개 출처 기반 동향을 한국어로 요약합니다.', 'Lead 1는 HAL Signal Capsule why_now 확인된 변경점: raw fact.'),
     html: html('<p>Review-only quality gate output</p>')
   });
 
@@ -76,7 +76,7 @@ test('public newsletter validator rejects visible internal terms and raw fact ch
 
 test('public newsletter validator allows explicit Fallback Edition disclosure only for fallback_public', () => {
   const fallbackMarkdown = markdown().replace(
-    'Weekly summary.',
+    '이번 호는 Camera HAL 독자가 확인할 만한 공개 출처 동향을 요약합니다.',
     'Fallback Edition: C++ / Tooling Watch. This fallback issue is clearly labeled.'
   );
   const fallbackHtml = html('<div class="publication-notice"><p>Fallback Edition: C++ / Tooling Watch</p></div>');
@@ -98,7 +98,7 @@ test('public newsletter validator allows explicit Fallback Edition disclosure on
 
 test('public newsletter validator rejects editor review and HAL capsule field leftovers', () => {
   const errors = validatePublicNewsletterArtifacts({
-    markdown: markdown().replace('Lead 1.', 'Lead 1. Editor review reader_owners check_within_2_weeks normal publishable coverage.'),
+    markdown: markdown().replace('Lead 1는 공개 출처 기반 동향을 한국어로 요약합니다.', 'Lead 1는 Editor review reader_owners check_within_2_weeks normal publishable coverage.'),
     html: html('<p>editor review reader_owners check_within_2_weeks</p>')
   });
 
@@ -119,6 +119,18 @@ test('public newsletter validator rejects non-public markdown source links', () 
 
   assert.ok(errors.some(error => /internal_artifact_url/.test(error)));
   assert.ok(errors.some(error => /github_actions_artifact_url/.test(error)));
+});
+
+test('public newsletter validator rejects long English prose in article paragraphs', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace(
+      '본문 1A는 source-backed change를 Camera HAL 독자 관점에서 설명합니다.',
+      'Jetpack Compose is the definitive engine for this transition, offering core tools like latest navigation layouts and CameraX preview behavior across any window size.'
+    ),
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /long English prose run/.test(error)));
 });
 
 test('public newsletter validator rejects generic and repeated checkpoints', () => {

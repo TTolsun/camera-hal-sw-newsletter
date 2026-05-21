@@ -2066,7 +2066,7 @@ function renderPublicNewsletterNotice(status = {}, handoff = null) {
   if (status.final_publish_ready === true) return '';
   if (handoff?.diagnosticsOnly) {
     return [
-      '## Public Newsletter Notice',
+      '## Public Newsletter 안내',
       '',
       'AI 자동 발행 기준은 통과하지 못했고 public newsletter files가 준비되지 않았습니다. 이 PR은 diagnostics-only이며 merge해도 Newsletter 홈페이지에 표시되지 않습니다. publish-ready label은 붙이지 않습니다.'
     ].join('\n');
@@ -2074,24 +2074,24 @@ function renderPublicNewsletterNotice(status = {}, handoff = null) {
   if (handoff?.reviewPublicationReady) {
     if (handoff.publicationMode === 'fallback_public') {
       return [
-        '## Public Newsletter Notice',
+        '## Public Newsletter 안내',
         '',
-        'This PR intentionally changes Issue #247 from a hard block policy to a downgrade policy.',
-        'Fallback-only composition may produce a homepage-visible public issue only when it is explicitly marked as Fallback Edition across metadata, PR body, quality report, and public UI.',
+        '이 PR은 Issue #247을 hard block policy에서 downgrade policy로 의도적으로 바꿉니다.',
+        'fallback-only composition은 metadata, PR body, quality report, public UI 전체에서 Fallback Edition으로 명확히 표시된 경우에만 homepage-visible public issue를 만들 수 있습니다.',
         '',
-        'Revised acceptance criteria:',
-        '- C++/tooling fallback alone cannot produce a normal homepage-visible Camera HAL newsletter.',
-        '- Fallback-only composition may produce a homepage-visible Fallback Edition when all fallback disclosure metadata and UI notices are present.'
+        '수정된 acceptance criteria:',
+        '- C++/tooling fallback만으로는 normal homepage-visible Camera HAL newsletter를 만들 수 없습니다.',
+        '- fallback-only composition은 fallback disclosure metadata와 UI notice가 모두 있을 때만 homepage-visible Fallback Edition을 만들 수 있습니다.'
       ].join('\n');
     }
     return [
-      '## Public Newsletter Notice',
+      '## Public Newsletter 안내',
       '',
       'AI 자동 발행 기준은 통과하지 못했지만, public newsletter files는 생성되었습니다. 편집장이 이 PR을 승인하여 merge하면 Newsletter 사이트에 게시됩니다. publish-ready label은 붙이지 않습니다.'
     ].join('\n');
   }
   return [
-    '## Public Newsletter Notice',
+    '## Public Newsletter 안내',
     '',
     'AI 자동 발행 기준은 통과하지 못했지만, public newsletter files는 생성되었습니다. 편집장이 이 PR을 승인하여 merge하면 Newsletter 사이트에 게시됩니다.'
   ].join('\n');

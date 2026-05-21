@@ -1,11 +1,11 @@
 {
   "date": "2026-05-21",
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-21",
-  "summary": "이번 2026-05-21호는 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O, libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트, Start building today - Build native Android apps in Google AI Studio를 중심으로 Camera HAL / Driver / Native tooling 독자가 확인할 만한 내용을 정리했습니다.",
+  "summary": "이번 2026-05-21호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
   "briefing": [
-    "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
-    "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-    "Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance."
+    "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
+    "libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트를 포함합니다.",
+    "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다."
   ],
   "sections": [
     {
@@ -280,11 +280,11 @@
         "team_share_points": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
       },
       "public_article": {
-        "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-        "lead": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
+        "headline": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+        "lead": "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
         "body_paragraphs": [
-          "CameraX / Android camera APIs 관련 공개 출처가 Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
-          "이 항목은 공개 출처가 말한 범위 안에서 Camera HAL / Driver / Native tooling 독자가 참고할 수 있는 실무 맥락으로만 해석합니다."
+          "Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.",
+          "이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다."
         ],
         "camera_hal_takeaway": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
         "reader_checkpoints": [
@@ -459,7 +459,7 @@
       },
       "public_article": {
         "headline": "libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트",
-        "lead": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+        "lead": "libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트를 포함합니다.",
         "body_paragraphs": [
           "libcamera v0.7.1이 공개되었습니다. 이번 릴리스에는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트가 포함되었습니다.",
           "Android Camera HAL API 변경으로 직접 해석할 근거는 없습니다. 다만 V4L2 기반 camera pipeline, sensor mode 선택, format negotiation, frame timing 검증 관점에서는 참고할 만한 upstream signal입니다."
@@ -719,11 +719,11 @@
         "team_share_points": "Start building today - Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
       },
       "public_article": {
-        "headline": "Start building today - Build native Android apps in Google AI Studio",
-        "lead": "Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
+        "headline": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+        "lead": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
         "body_paragraphs": [
-          "Android camera output 관련 공개 출처가 Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
-          "이 항목은 공개 출처가 말한 범위 안에서 Camera HAL / Driver / Native tooling 독자가 참고할 수 있는 실무 맥락으로만 해석합니다."
+          "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.",
+          "Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다."
         ],
         "camera_hal_takeaway": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
         "reader_checkpoints": [

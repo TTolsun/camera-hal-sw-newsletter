@@ -3,6 +3,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
+const { rawEnglishProseRuns } = require('../../scripts/newsroom/validate/public-newsletter');
+
 const root = path.join(__dirname, '..', '..');
 
 function repoPath(...parts) {
@@ -57,4 +59,28 @@ test('localization validator scans split PR template directory', () => {
   const text = readTemplate('scripts', 'newsroom', 'cli', 'validate-localization.js');
 
   assert.match(text, /path\.join\('\.github', 'PULL_REQUEST_TEMPLATE'\)/);
+});
+
+test('localization validator scans prompt and latest public newsletter surfaces', () => {
+  const text = readTemplate('scripts', 'newsroom', 'cli', 'validate-localization.js');
+
+  assert.match(text, /promptHostFiles/);
+  assert.match(text, /checkPromptHosts/);
+  assert.match(text, /checkLatestPublicNewsletterArtifacts/);
+  assert.match(text, /rawEnglishProseRuns/);
+});
+
+test('prompt host files do not keep long English prose instructions', () => {
+  const promptHostFiles = [
+    ['scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'],
+    ['scripts', 'newsroom', 'cli', 'build-newsroom-pr-body.js'],
+    ['scripts', 'newsroom', 'generate', 'fallback-public-issue.js'],
+    ['scripts', 'newsroom', 'render', 'newsletter-renderer.js']
+  ];
+
+  for (const parts of promptHostFiles) {
+    const rel = parts.join('/');
+    const text = readTemplate(...parts);
+    assert.deepEqual(rawEnglishProseRuns(text), [], `${rel} contains long English prose`);
+  }
 });
