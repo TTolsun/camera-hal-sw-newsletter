@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T16:17:45.022Z",
+  "generated_at": "2026-05-21T18:33:34.172Z",
   "summary": {
     "schema_version": 1,
     "total_count": 40,
     "by_event_type": {
-      "primary_url": 32,
-      "release_note": 8
+      "primary_url": 29,
+      "release_note": 11
     },
     "by_dedupe_reason": {
-      "normalized_primary_url": 32,
-      "source_id + release.date + component": 4,
-      "source_id + release.version": 4
+      "normalized_primary_url": 29,
+      "source_id + release.date + component": 6,
+      "source_id + release.version": 5
     },
     "warning_count": 0
   },
@@ -84,47 +84,47 @@
       "warnings": []
     },
     {
-      "event_id": "event_1a9f8e19d5e2",
+      "event_id": "event_43262b041662",
       "primary_candidate_id": "candidate_ca0c4751735c",
-      "event_key": "url:https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
-      "event_type": "primary_url",
+      "event_key": "source:android-developers-blog:release:stable 1.0",
+      "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
       "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
+      "dedupe_reason": "source_id + release.version",
       "release": {
-        "version": "",
+        "version": "Stable 1.0",
         "date": "Tue, 19 May 2026 11:45:00 +0000"
       },
-      "component": "",
+      "component": "Android CLI",
       "impact_axes": [
         "build_dependency_fix",
         "cpp_ai_tooling_fallback",
         "Android / AOSP / Camera",
         "android"
       ],
-      "confidence": "low",
+      "confidence": "high",
       "warnings": []
     },
     {
-      "event_id": "event_7935367e175e",
+      "event_id": "event_4fb344106a98",
       "primary_candidate_id": "candidate_13b950ec1796",
-      "event_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
-      "event_type": "primary_url",
+      "event_key": "source:android-developers-blog:date:Tue, 19 May 2026 09:30:00 +0000:component:android studio",
+      "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
       "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
+      "dedupe_reason": "source_id + release.date + component",
       "release": {
         "version": "",
         "date": "Tue, 19 May 2026 09:30:00 +0000"
       },
-      "component": "",
+      "component": "Android Studio",
       "impact_axes": [
         "unknown",
         "generic_tech_watchlist",
         "Android / AOSP / Camera",
         "android"
       ],
-      "confidence": "low",
+      "confidence": "medium",
       "warnings": []
     },
     {
@@ -150,25 +150,25 @@
       "warnings": []
     },
     {
-      "event_id": "event_8944006e8421",
+      "event_id": "event_6e3f383f7a71",
       "primary_candidate_id": "candidate_9ba3f4327069",
-      "event_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "event_type": "primary_url",
+      "event_key": "source:android-developers-blog:date:Tue, 19 May 2026 12:45:00 +0000:component:google ai studio",
+      "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
+      "dedupe_reason": "source_id + release.date + component",
       "release": {
         "version": "",
         "date": "Tue, 19 May 2026 12:45:00 +0000"
       },
-      "component": "",
+      "component": "Google AI Studio",
       "impact_axes": [
         "build_dependency_fix",
         "cpp_ai_tooling_fallback",
         "Android / AOSP / Camera",
         "android"
       ],
-      "confidence": "low",
+      "confidence": "medium",
       "warnings": []
     },
     {
@@ -251,8 +251,8 @@
       },
       "component": "Android camera output",
       "impact_axes": [
-        "security_component_camera_related",
-        "android_platform_camera_adjacent",
+        "build_dependency_fix",
+        "android_multimedia_camera_output",
         "Android / AOSP / Camera",
         "android"
       ],
@@ -427,8 +427,8 @@
       },
       "component": "CameraX / androidx.camera",
       "impact_axes": [
-        "security_component_camera_related",
-        "android_platform_camera_adjacent",
+        "camera_api_change",
+        "direct_aosp_camera",
         "Android / AOSP / Camera",
         "android"
       ],
@@ -449,8 +449,8 @@
       },
       "component": "CameraX / androidx.camera",
       "impact_axes": [
-        "security_component_camera_related",
-        "android_platform_camera_adjacent",
+        "camera_api_change",
+        "direct_aosp_camera",
         "Android / AOSP / Camera",
         "android"
       ],
@@ -471,8 +471,8 @@
       },
       "component": "CameraX / androidx.camera",
       "impact_axes": [
-        "security_component_camera_related",
-        "android_platform_camera_adjacent",
+        "camera_api_change",
+        "direct_aosp_camera",
         "Android / AOSP / Camera",
         "android"
       ],

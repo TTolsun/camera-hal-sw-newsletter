@@ -21,7 +21,7 @@
     "eligible_count": 2,
     "selected_count": 2,
     "rendered_main_count": 1,
-    "source_gap_count": 38,
+    "source_gap_count": 37,
     "generic_noise_count": 28,
     "duplicate_count": 1,
     "source_url_quality_distribution": {
@@ -31,13 +31,13 @@
       "engineering_blog_with_camera_evidence": 12
     },
     "source_quality_status_summary": {
-      "blocked": 38,
-      "allowed": 2
+      "blocked": 37,
+      "allowed": 3
     },
     "source_quality_blocker_summary": {
       "undated_reference_page": 2,
-      "source_gap_risk": 38,
-      "reference_only": 36
+      "source_gap_risk": 37,
+      "reference_only": 33
     },
     "selected_main_source_quality_coverage": {
       "selected_main_count": 3,
@@ -231,12 +231,12 @@
       "eligible_count": 2,
       "selected_count": 2,
       "rendered_main_count": 1,
-      "source_gap_count": 20,
+      "source_gap_count": 19,
       "camera_relevant_raw_count": 2,
       "parser_repair_reason_count": 0,
-      "reference_only_count": 20,
+      "reference_only_count": 18,
       "watchlist_count": 18,
-      "main_eligible_false_count": 20,
+      "main_eligible_false_count": 19,
       "briefing_only_count": 18,
       "duplicate_count": 1,
       "duplicate_within_source_count": 1,
@@ -246,12 +246,12 @@
         "official_dated_release": 22
       },
       "source_quality_status_summary": {
-        "allowed": 2,
-        "blocked": 20
+        "allowed": 3,
+        "blocked": 19
       },
       "source_quality_blocker_summary": {
-        "source_gap_risk": 20,
-        "reference_only": 20
+        "source_gap_risk": 19,
+        "reference_only": 18
       },
       "selected_main_source_quality_coverage": {
         "selected_main_count": 3,
@@ -269,9 +269,9 @@
       "eligible_rate": 0.0952,
       "selection_rate": 1,
       "rendered_rate": 0.5,
-      "source_gap_rate": 0.9524,
+      "source_gap_rate": 0.9048,
       "noise_rate": 0.8571,
-      "effectiveness_score": 11.9,
+      "effectiveness_score": 13.09,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
         "Duplicate candidates detected: within_source=1, across_sources=0.",
@@ -282,15 +282,11 @@
       "top_exclusion_reasons": [
         {
           "reason": "main_eligible=false",
-          "count": 20
-        },
-        {
-          "reason": "reference_only=true",
-          "count": 20
+          "count": 19
         },
         {
           "reason": "source_gap_risk=true",
-          "count": 20
+          "count": 19
         },
         {
           "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
@@ -298,6 +294,10 @@
         },
         {
           "reason": "briefing_only=true",
+          "count": 18
+        },
+        {
+          "reason": "finalSelectionEligibility=watchlist",
           "count": 18
         }
       ],
@@ -1742,7 +1742,7 @@
       "source_gap_count": 12,
       "camera_relevant_raw_count": 0,
       "parser_repair_reason_count": 0,
-      "reference_only_count": 10,
+      "reference_only_count": 9,
       "watchlist_count": 7,
       "main_eligible_false_count": 12,
       "briefing_only_count": 7,
@@ -1758,7 +1758,7 @@
       },
       "source_quality_blocker_summary": {
         "source_gap_risk": 12,
-        "reference_only": 10
+        "reference_only": 9
       },
       "selected_main_source_quality_coverage": {
         "selected_main_count": 0,
@@ -1796,7 +1796,7 @@
         },
         {
           "reason": "reference_only=true",
-          "count": 10
+          "count": 9
         },
         {
           "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",

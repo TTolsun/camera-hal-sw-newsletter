@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T16:17:45.022Z",
+  "generated_at": "2026-05-21T18:33:34.172Z",
   "linked_evidence_mode": "extract_only",
   "linked_evidence_limits": {
     "max_links_per_candidate": 8,
@@ -19,11 +19,11 @@
     "by_type": {},
     "by_fetch_status": {},
     "impact_type_counts": {
-      "build_dependency_fix": 10,
-      "camera_api_change": 1,
+      "build_dependency_fix": 11,
+      "camera_api_change": 4,
       "documentation_only": 2,
       "generic_tooling_change": 7,
-      "security_component_camera_related": 5,
+      "security_component_camera_related": 1,
       "unknown": 14,
       "video_capture_fix": 1
     },
@@ -60,13 +60,13 @@
     "schema_version": 1,
     "total_count": 40,
     "by_event_type": {
-      "primary_url": 32,
-      "release_note": 8
+      "primary_url": 29,
+      "release_note": 11
     },
     "by_dedupe_reason": {
-      "normalized_primary_url": 32,
-      "source_id + release.date + component": 4,
-      "source_id + release.version": 4
+      "normalized_primary_url": 29,
+      "source_id + release.date + component": 6,
+      "source_id + release.version": 5
     },
     "warning_count": 0
   },
@@ -645,7 +645,7 @@
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
       "source_kind": "rss_item",
-      "final_selection_eligibility": "exclude",
+      "final_selection_eligibility": "short",
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -31895,7 +31895,7 @@
         "by_type": {},
         "by_fetch_status": {},
         "impact_type_counts": {
-          "security_component_camera_related": 1
+          "build_dependency_fix": 1
         },
         "warning_count": 0,
         "has_resolved_evidence": false,
@@ -31903,12 +31903,12 @@
         "top_identifiers": []
       },
       "impact_classification": {
-        "impact_type": "security_component_camera_related",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
         "confidence": 0.75,
-        "reason": "security_component_camera_related classified from candidate text.",
+        "reason": "build_dependency_fix classified from candidate text.",
         "warnings": []
       },
       "linked_evidence": [],
@@ -32269,7 +32269,7 @@
         "by_type": {},
         "by_fetch_status": {},
         "impact_type_counts": {
-          "security_component_camera_related": 1
+          "camera_api_change": 1
         },
         "warning_count": 0,
         "has_resolved_evidence": false,
@@ -32277,12 +32277,12 @@
         "top_identifiers": []
       },
       "impact_classification": {
-        "impact_type": "security_component_camera_related",
+        "impact_type": "camera_api_change",
         "hal_runtime_impact": true,
         "camera_pipeline_impact": true,
         "recommended_article_type": "main",
         "confidence": 0.75,
-        "reason": "security_component_camera_related classified from candidate text.",
+        "reason": "camera_api_change classified from candidate text.",
         "warnings": []
       },
       "linked_evidence": [],
@@ -32531,7 +32531,7 @@
         "by_type": {},
         "by_fetch_status": {},
         "impact_type_counts": {
-          "security_component_camera_related": 1
+          "camera_api_change": 1
         },
         "warning_count": 0,
         "has_resolved_evidence": false,
@@ -32539,12 +32539,12 @@
         "top_identifiers": []
       },
       "impact_classification": {
-        "impact_type": "security_component_camera_related",
+        "impact_type": "camera_api_change",
         "hal_runtime_impact": true,
         "camera_pipeline_impact": true,
         "recommended_article_type": "main",
         "confidence": 0.75,
-        "reason": "security_component_camera_related classified from candidate text.",
+        "reason": "camera_api_change classified from candidate text.",
         "warnings": []
       },
       "linked_evidence": [],
@@ -32576,7 +32576,7 @@
         "by_type": {},
         "by_fetch_status": {},
         "impact_type_counts": {
-          "security_component_camera_related": 1
+          "camera_api_change": 1
         },
         "warning_count": 0,
         "has_resolved_evidence": false,
@@ -32584,12 +32584,12 @@
         "top_identifiers": []
       },
       "impact_classification": {
-        "impact_type": "security_component_camera_related",
+        "impact_type": "camera_api_change",
         "hal_runtime_impact": true,
         "camera_pipeline_impact": true,
         "recommended_article_type": "main",
         "confidence": 0.75,
-        "reason": "security_component_camera_related classified from candidate text.",
+        "reason": "camera_api_change classified from candidate text.",
         "warnings": []
       },
       "linked_evidence": [],
