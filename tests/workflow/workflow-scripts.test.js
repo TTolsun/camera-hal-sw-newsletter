@@ -3257,7 +3257,7 @@ test('fallback builder publishes fallback-only issue as disclosed fallback_publi
   assert.match(body, /camera_anchor_count: 0/);
   assert.match(body, /fallback_public_ready: true/);
   assert.match(body, /homepage_badge: Fallback Edition/);
-  assert.match(body, /hard block policy to a downgrade policy/);
+  assert.match(body, /hard block policy에서 downgrade policy로/);
   const bodyValidation = validatePrBodyText(body);
   assert.equal(bodyValidation.ok, true, JSON.stringify(bodyValidation, null, 2));
 
