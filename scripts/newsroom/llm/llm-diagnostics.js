@@ -3,6 +3,7 @@ function createDiagnosticsState() {
     quota_error_count: 0,
     invalid_json_count: 0,
     model_usage: {},
+    model_routing: {},
     cost_report: {
       calls: []
     }
@@ -44,6 +45,12 @@ function createDiagnosticsState() {
       diagnostics.cost_report.calls.push(call);
     },
 
+    recordModelRouting(stage, routing) {
+      diagnostics.model_routing[stage] = {
+        ...routing
+      };
+    },
+
     recordInvalidJson(stage, modelName) {
       diagnostics.invalid_json_count += 1;
       usageFor(stage, modelName).invalid_json += 1;
@@ -67,6 +74,7 @@ function createDiagnosticsState() {
       diagnostics.quota_error_count = 0;
       diagnostics.invalid_json_count = 0;
       diagnostics.model_usage = {};
+      diagnostics.model_routing = {};
       diagnostics.cost_report = { calls: [] };
       modelUsageByStage.clear();
     }

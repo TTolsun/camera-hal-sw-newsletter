@@ -1,7 +1,7 @@
 const { GoogleGenAI } = require('@google/genai');
 const { TOKENS_PER_MILLION, number, roundUsd } = require('../llm-cost');
 const {
-  configuredModels,
+  configuredModelsForStage,
   geminiProPolicySummary,
   isGeminiProModel
 } = require('../model-policy');
@@ -214,7 +214,8 @@ module.exports = {
     return buildGeminiRequest(args);
   },
 
-  configuredModels,
+  configuredModels: configuredModelsForStage,
+  configuredModelsForStage,
 
   createModelContext,
 

@@ -1,4 +1,4 @@
-const { configuredModels } = require('../model-policy');
+const { configuredModelsForStage } = require('../model-policy');
 const { number } = require('../llm-cost');
 
 function buildInternalHeaders(apiKey, config) {
@@ -155,7 +155,8 @@ module.exports = {
     return buildInternalRequest(args);
   },
 
-  configuredModels,
+  configuredModels: configuredModelsForStage,
+  configuredModelsForStage,
 
   createModelContext,
 
