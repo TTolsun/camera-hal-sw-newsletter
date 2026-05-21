@@ -273,6 +273,7 @@ function hasReviewOnlyPublicFilesNotReadyText(text) {
 function hasReviewOnlyNegativePublishText(text) {
   const source = toText(text);
   return /not publish-ready/i.test(source) ||
+    /cannot be publish-ready/i.test(source) ||
     /publish-ready label must not be applied/i.test(source) ||
     /publish-ready[^.\n]*(?:must not|금지|제거)/i.test(source) ||
     /발행 가능 상태가 아닙니다/.test(source) ||
@@ -292,7 +293,7 @@ function reviewOnlyPositivePublishReadyLines(text) {
       if (/public newsletter generated successfully/i.test(line)) return true;
       if (!/publish-ready/i.test(line)) return false;
       if (/publish-ready gate\b/i.test(line)) return false;
-      return !/\bnot publish-ready\b|must not|not applied|label must not be applied|reserved for|has_ai_publish_ready=true|AI 자동 발행 기준 통과|금지|제거|붙이지|미적용|아닙니다/i.test(line);
+      return !/\bnot publish-ready\b|cannot be publish-ready|must not|not applied|label must not be applied|reserved for|has_ai_publish_ready=true|AI 자동 발행 기준 통과|금지|제거|붙이지|미적용|아닙니다/i.test(line);
     });
 }
 

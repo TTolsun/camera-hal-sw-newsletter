@@ -5302,6 +5302,14 @@ test('validate-pr-body accepts diagnostics-only wording and rejects misleading p
   const validation = validatePrBodyText(body, { date });
   assert.equal(validation.ok, true, validation.errors.join('\n'));
 
+  const bodyWithNegativeHardFailure = `${body}\n- Quality hard failures: Main article has actionability_level=none and cannot be publish-ready.\n`;
+  const negativeHardFailureValidation = validatePrBodyText(bodyWithNegativeHardFailure, { date });
+  assert.equal(
+    negativeHardFailureValidation.ok,
+    true,
+    negativeHardFailureValidation.errors.join('\n')
+  );
+
   const allowedNegative = body.replace(
     'This PR is not publish-ready.',
     'publish-ready label must not be applied.'
