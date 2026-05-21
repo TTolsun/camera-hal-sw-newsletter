@@ -25,13 +25,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_title": "17 Things to know for Android developers at Google I/O",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
           "title": "17 Things to know for Android developers at Google I/O",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "title": "Android Developers Blog: 17 Things to know for Android developers at Google I/O",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -42,13 +49,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
       "canonical_title": "Android UI Development is Compose First",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
           "title": "Android UI Development is Compose First",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+          "title": "Android Developers Blog: Android UI Development is Compose First",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -76,13 +90,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
       "canonical_title": "Android Studio I/O Edition: What’s new in Android Developer tools",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
           "title": "Android Studio I/O Edition: What’s new in Android Developer tools",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+          "title": "Android Developers Blog: Android Studio I/O Edition: What&#8217;s new in Android Developer tools",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -93,13 +114,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
       "canonical_title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
           "title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+          "title": "Android Developers Blog: How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -110,8 +138,8 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_title": "Build native Android apps in Google AI Studio",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 4,
+      "duplicate_count": 3,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
@@ -126,6 +154,20 @@
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
         }
       ]
     },
@@ -134,13 +176,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
       "canonical_title": "Increasing app discovery and engagement on Google TV",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
           "title": "Increasing app discovery and engagement on Google TV",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+          "title": "Android Developers Blog: Increasing app discovery and engagement on Google TV",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -151,13 +200,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
       "canonical_title": "I/O 2026: What's new in Google Play",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
           "title": "I/O 2026: What's new in Google Play",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+          "title": "Android Developers Blog: I/O 2026: What's new in Google Play",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -185,13 +241,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
       "canonical_title": "Build for the future with the Android XR Developer Catalyst Program — Apply now!",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
           "title": "Build for the future with the Android XR Developer Catalyst Program — Apply now!",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+          "title": "Android Developers Blog: Build for the future with the Android XR Developer Catalyst Program &#8212; Apply now!",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -202,13 +265,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
       "canonical_title": "Adaptive development for the expanding Android ecosystem",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
           "title": "Adaptive development for the expanding Android ecosystem",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+          "title": "Android Developers Blog: Adaptive development for the expanding Android ecosystem",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -219,13 +289,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
       "canonical_title": "Updates to the Android XR SDK: Introducing Developer Preview 4",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
           "title": "Updates to the Android XR SDK: Introducing Developer Preview 4",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
+          "title": "Android Developers Blog: Updates to the Android XR SDK: Introducing Developer Preview 4",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -236,13 +313,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
       "canonical_title": "Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
           "title": "Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+          "title": "Android Developers Blog: Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -369,13 +453,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
       "canonical_title": "Android XR Updates for Unity, Unreal, and Godot",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
           "title": "Android XR Updates for Unity, Unreal, and Godot",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+          "title": "Android Developers Blog: Android XR Updates for Unity, Unreal, and Godot",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -386,13 +477,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
       "canonical_title": "Building for the Intelligence System on Android",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
           "title": "Building for the Intelligence System on Android",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+          "title": "Android Developers Blog: Building for the Intelligence System on Android",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -403,13 +501,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "canonical_title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
           "title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+          "title": "Android Developers Blog: Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -420,13 +525,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
       "canonical_title": "What's new in Android for Cars: Unifying platforms and unlocking premium experiences",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
           "title": "What's new in Android for Cars: Unifying platforms and unlocking premium experiences",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+          "title": "Android Developers Blog: What's new in Android for Cars: Unifying platforms and unlocking premium experiences",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -437,13 +549,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
       "canonical_title": "What's New in Wear OS 7",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
           "title": "What's New in Wear OS 7",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+          "title": "Android Developers Blog: What's New in Wear OS 7",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -471,20 +590,13 @@
       "cluster_key": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "canonical_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "canonical_title": "C++: The Documentary trailer",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
           "title": "C++: The Documentary trailer",
           "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        },
-        {
-          "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
-          "title": "C++: The Documentary trailer : Standard C++",
-          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
