@@ -61,6 +61,7 @@ const {
   fetchUrlForContent
 } = require('../collect/source-intelligence-utils');
 const {
+  commitSourceSnapshotWrites,
   runSourceMonitor
 } = require('../collect/source-monitor');
 
@@ -1107,6 +1108,7 @@ async function main() {
   const sources = parseSources();
   const failures = [];
   let candidates = [];
+  let sourceMonitorResult = null;
 
   for (const source of sources) {
     try {
@@ -1127,11 +1129,12 @@ async function main() {
   }
 
   try {
-    const monitorResult = await runSourceMonitor({
+    sourceMonitorResult = await runSourceMonitor({
       root,
-      date
+      date,
+      commitSnapshots: false
     });
-    candidates.push(...monitorResult.candidates);
+    candidates.push(...sourceMonitorResult.candidates);
   } catch (error) {
     failures.push({ source: 'source-monitor', message: error.message });
   }
@@ -1192,6 +1195,12 @@ async function main() {
   });
   fs.writeFileSync(path.join(dateNewsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
   fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
+  if (sourceMonitorResult) {
+    commitSourceSnapshotWrites({
+      root,
+      snapshotWrites: sourceMonitorResult.snapshotWrites
+    });
+  }
 
   console.log(`Collected ${candidates.length} candidates for ${date}`);
 }

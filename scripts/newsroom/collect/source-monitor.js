@@ -10,6 +10,7 @@ const {
 const {
   contentHash,
   evidenceId,
+  hashText,
   normalizeSourceUrl,
   normalizedContentHash,
   sourceEventId,
@@ -49,6 +50,25 @@ function unique(values) {
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+}
+
+function writeJsonAtomic(filePath, value, options = {}) {
+  const writeFileSync = options.writeFileSync || fs.writeFileSync;
+  const renameSync = options.renameSync || fs.renameSync;
+  const unlinkSync = options.unlinkSync || fs.unlinkSync;
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  const tmpPath = `${filePath}.tmp-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  try {
+    writeFileSync(tmpPath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+    renameSync(tmpPath, filePath);
+  } catch (error) {
+    try {
+      if (fs.existsSync(tmpPath)) unlinkSync(tmpPath);
+    } catch {
+      // Preserve the original write/rename failure.
+    }
+    throw error;
+  }
 }
 
 function readJsonIfExists(filePath) {
@@ -132,7 +152,8 @@ function firstDateMatch(value = '') {
   const raw = text(value);
   const iso = raw.match(/\b(20\d{2}-\d{2}-\d{2})\b/);
   if (iso) return iso[1];
-  const parsed = new Date(raw);
+  const monthDate = raw.match(/\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},\s+20\d{2}\b/i);
+  const parsed = new Date(monthDate ? monthDate[0] : raw);
   return Number.isNaN(parsed.getTime()) ? '' : parsed.toISOString().slice(0, 10);
 }
 
@@ -140,6 +161,11 @@ function visibleLastUpdated(html = '') {
   const value = visibleText(html);
   const match = value.match(/\bLast updated\s+([^.\n]+?)(?:\s+UTC)?\.?\b/i);
   return match ? firstDateMatch(match[1]) : '';
+}
+
+function visibleDate(html = '') {
+  const value = visibleText(html).replace(/\bLast updated\s+[^.\n]+/gi, ' ');
+  return firstDateMatch(value);
 }
 
 function structuredDate(html = '', names = []) {
@@ -171,7 +197,85 @@ function releaseEvidenceKey(anchors = []) {
   return release || '';
 }
 
-function dateSignalForObservation(observation = {}) {
+function releaseRowsByKey(rows = []) {
+  const map = new Map();
+  for (const row of ensureArray(rows)) {
+    const key = text(row.anchor || row.version);
+    if (key) map.set(key, row);
+  }
+  return map;
+}
+
+function releaseRowKey(row = {}) {
+  if (!row) return '';
+  return text(row.anchor || row.version);
+}
+
+function releaseRowDiff(previousRows = [], currentRows = []) {
+  const previousByKey = releaseRowsByKey(previousRows);
+  for (const row of ensureArray(currentRows)) {
+    const key = releaseRowKey(row);
+    if (!key) continue;
+    const previous = previousByKey.get(key);
+    if (!previous) {
+      return { type: 'added', row };
+    }
+    if (text(previous.hash) !== text(row.hash)) {
+      return { type: 'changed', row, previous };
+    }
+  }
+  return { type: '', row: null, previous: null };
+}
+
+function extractReleaseRows(html = '', pageUrl = '') {
+  const source = String(html || '');
+  const headings = [...source.matchAll(/<(h[2-4])\b([^>]*)>([\s\S]*?)<\/\1>/gi)].map(match => {
+    const attrs = match[2] || '';
+    const idMatch = attrs.match(/\bid=["']([^"']+)["']/i);
+    return {
+      index: match.index,
+      end: match.index + match[0].length,
+      id: idMatch ? idMatch[1] : '',
+      html: match[0],
+      text: visibleText(match[3])
+    };
+  });
+  const rows = [];
+  for (let index = 0; index < headings.length; index += 1) {
+    const heading = headings[index];
+    const next = headings[index + 1];
+    const sectionHtml = source.slice(heading.index, next ? next.index : source.length);
+    const sectionText = visibleText(sectionHtml);
+    const releaseText = `${heading.id} ${heading.text} ${sectionText}`;
+    const versionMatch = releaseText.match(/\b\d+\.\d+\.\d+(?:[-\w.]*)?\b/i);
+    if (!versionMatch) continue;
+    const version = versionMatch[0];
+    const anchorId = heading.id || version;
+    const anchor = `${normalizeSourceUrl(pageUrl)}#${anchorId.toLowerCase()}`;
+    rows.push({
+      version,
+      anchor,
+      date: firstDateMatch(sectionText),
+      hash: hashText(sectionText, 32),
+      title: heading.text || version
+    });
+  }
+  return rows.sort((a, b) => a.anchor.localeCompare(b.anchor));
+}
+
+function dateSignalForObservation(observation = {}, releaseRow = null) {
+  if (releaseRow?.date || observation.release_row_date) {
+    return {
+      effective_date: releaseRow?.date || observation.release_row_date,
+      date_source: 'release_row_date'
+    };
+  }
+  if (observation.visible_date) {
+    return {
+      effective_date: observation.visible_date,
+      date_source: 'visible_date'
+    };
+  }
   if (observation.visible_last_updated) {
     return {
       effective_date: observation.visible_last_updated,
@@ -190,6 +294,12 @@ function dateSignalForObservation(observation = {}) {
       date_source: 'structured_date_modified'
     };
   }
+  if (observation.sitemap_lastmod) {
+    return {
+      effective_date: observation.sitemap_lastmod,
+      date_source: 'sitemap_lastmod'
+    };
+  }
   if (observation.http_last_modified) {
     return {
       effective_date: observation.http_last_modified,
@@ -205,11 +315,14 @@ function dateSignalForObservation(observation = {}) {
 function observationFromHtml({ source, url, html, status = 200, headers = {} }) {
   const canonicalUrl = normalizeSourceUrl(url);
   const httpLastModified = firstDateMatch(headers['last-modified'] || headers['Last-Modified']);
+  const releaseRows = extractReleaseRows(html, canonicalUrl);
+  const primaryReleaseRow = releaseRows[0] || {};
   return {
     source_identity_key: sourceIdentityKey({ sourceId: source.source_id, url: canonicalUrl }),
     url,
     canonical_url: canonicalUrl,
     title: titleFromHtml(html, source.source_id),
+    visible_date: visibleDate(html),
     visible_last_updated: visibleLastUpdated(html),
     structured_date_published: structuredDate(html, ['datePublished', 'article:published_time']),
     structured_date_modified: structuredDate(html, ['dateModified', 'article:modified_time']),
@@ -218,6 +331,11 @@ function observationFromHtml({ source, url, html, status = 200, headers = {} }) 
     content_hash: contentHash(html),
     normalized_content_hash: normalizedContentHash(html),
     anchors: meaningfulAnchors(html, canonicalUrl),
+    release_row_date: primaryReleaseRow.date || '',
+    release_row_version: primaryReleaseRow.version || '',
+    release_row_anchor: primaryReleaseRow.anchor || '',
+    release_row_hash: primaryReleaseRow.hash || '',
+    release_rows: releaseRows,
     first_seen_at: '',
     last_seen_at: '',
     seen_count: 0,
@@ -230,7 +348,14 @@ async function fetchWithTimeout(url, timeoutMs, fetchImpl = globalThis.fetch) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetchImpl(url, { signal: controller.signal });
+    const response = await fetchImpl(url, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'CameraHALNewsletterBot/1.0 (+https://github.com/TTolsun/camera-hal-sw-newsletter)',
+        Accept: 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-US,en;q=0.9'
+      }
+    });
     const headers = {};
     if (response.headers && typeof response.headers.forEach === 'function') {
       response.headers.forEach((value, key) => {
@@ -307,13 +432,14 @@ async function collectObservationsForSource(source, options = {}) {
 }
 
 function changedDateField(previous = {}, current = {}) {
-  for (const field of ['visible_last_updated', 'structured_date_published', 'structured_date_modified', 'sitemap_lastmod', 'http_last_modified']) {
+  for (const field of ['release_row_date', 'visible_date', 'visible_last_updated', 'structured_date_published', 'structured_date_modified', 'sitemap_lastmod', 'http_last_modified']) {
     if (text(previous[field]) !== text(current[field]) && text(current[field])) return field;
   }
   return '';
 }
 
 function eventTypeForDateField(field) {
+  if (field === 'release_row_date') return 'release_row_changed';
   if (field === 'visible_last_updated') return 'last_updated_changed';
   if (field === 'structured_date_modified') return 'structured_modified_changed';
   if (field === 'sitemap_lastmod') return 'sitemap_lastmod_changed';
@@ -321,6 +447,8 @@ function eventTypeForDateField(field) {
 }
 
 function dateSourceForDateField(field) {
+  if (field === 'release_row_date') return 'release_row_date';
+  if (field === 'visible_date') return 'visible_date';
   if (field === 'visible_last_updated') return 'visible_last_updated';
   if (field === 'structured_date_published') return 'structured_date_published';
   if (field === 'structured_date_modified') return 'structured_date_modified';
@@ -329,21 +457,47 @@ function dateSourceForDateField(field) {
   return 'missing';
 }
 
-function buildEvent({ source, previous, current, eventType, dateSource, effectiveDate, detectedAt, duplicate = false, reason = '' }) {
+function urlMatchesPattern(url, pattern) {
+  const normalizedUrl = normalizeSourceUrl(url);
+  const normalizedPattern = String(pattern || '').trim();
+  if (!normalizedUrl || !normalizedPattern) return false;
+  if (normalizedPattern.endsWith('/**')) {
+    return normalizedUrl.startsWith(normalizedPattern.slice(0, -3));
+  }
+  if (normalizedPattern.endsWith('*')) {
+    return normalizedUrl.startsWith(normalizedPattern.slice(0, -1));
+  }
+  return normalizedUrl === normalizeSourceUrl(normalizedPattern);
+}
+
+function pageInRegistryScope(source = {}, page = {}) {
+  const url = page.canonical_url || page.url || '';
+  const patterns = ensureArray(source.url_patterns);
+  return patterns.length === 0
+    ? normalizeSourceUrl(url).startsWith(normalizeSourceUrl(source.root_url))
+    : patterns.some(pattern => urlMatchesPattern(url, pattern));
+}
+
+function buildEvent({ source, previous, current, eventType, dateSource, effectiveDate, detectedAt, duplicate = false, reason = '', releaseRow = null }) {
   const identityKey = current?.source_identity_key || previous?.source_identity_key || '';
-  const evidenceKey = releaseEvidenceKey(current?.anchors) || current?.normalized_content_hash || current?.canonical_url || identityKey;
+  const normalizedEffectiveDate = normalizeDate(effectiveDate);
+  const evidenceKey = releaseRowKey(releaseRow) ||
+    releaseEvidenceKey(current?.anchors) ||
+    current?.normalized_content_hash ||
+    current?.canonical_url ||
+    identityKey;
   const source_event_id = sourceEventId({
     sourceId: source.source_id,
     eventType,
     sourceIdentityKey: identityKey,
-    effectiveDate,
+    effectiveDate: normalizedEffectiveDate,
     evidenceKey
   });
   const evidence_id = evidenceId({
     sourceId: source.source_id,
     sourceIdentityKey: identityKey,
     eventType,
-    effectiveDate,
+    effectiveDate: normalizedEffectiveDate,
     evidenceKey
   });
   const date_confidence = dateSourceConfidence(dateSource);
@@ -351,6 +505,7 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     !['page_removed', 'metadata_only_changed', 'no_meaningful_change'].includes(eventType);
   const mainArticleAllowed = candidateAllowed &&
     source.main_article_allowed === true &&
+    eventType !== 'page_added' &&
     date_confidence >= 85 &&
     !['content_hash_changed_without_date', 'snapshot_detected_at', 'missing'].includes(dateSource);
   return {
@@ -365,11 +520,15 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     current_values: current || null,
     content_changed: text(previous?.normalized_content_hash) !== text(current?.normalized_content_hash),
     detected_at: detectedAt,
-    effective_date: normalizeDate(effectiveDate),
+    effective_date: normalizedEffectiveDate,
     date_source: dateSource,
     date_confidence,
     candidate_allowed: candidateAllowed,
     main_article_allowed: mainArticleAllowed,
+    release_row_date: releaseRow?.date || current?.release_row_date || '',
+    release_row_version: releaseRow?.version || current?.release_row_version || '',
+    release_row_anchor: releaseRow?.anchor || current?.release_row_anchor || '',
+    release_row_hash: releaseRow?.hash || current?.release_row_hash || '',
     duplicate_processed: duplicate,
     needs_editor_date_review: date_confidence < 85 || dateSource === 'content_hash_changed_without_date',
     reason
@@ -383,11 +542,15 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
   let dateSource = 'missing';
   let effectiveDate = '';
   let reason = 'No meaningful source change.';
+  let releaseRow = null;
+  const contentHashEnabled = source.content_hash_enabled !== false;
 
-  if (current.removed_status === 404 || current.removed_status === 410) {
+  if (current.removed_status === 404 || current.removed_status === 410 || current.removed_status === 'scope_disappearance') {
     eventType = 'page_removed';
     dateSource = 'missing';
-    reason = `Confirmed removed with HTTP ${current.removed_status}.`;
+    reason = current.removed_status === 'scope_disappearance'
+      ? 'Confirmed removed from healthy source observation scope.'
+      : `Confirmed removed with HTTP ${current.removed_status}.`;
   } else if (!previous) {
     eventType = 'page_added';
     const signal = dateSignalForObservation(current);
@@ -398,11 +561,32 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
     const previousAnchors = new Set(ensureArray(previous.anchors));
     const addedAnchors = ensureArray(current.anchors).filter(anchor => !previousAnchors.has(anchor));
     const dateField = changedDateField(previous, current);
-    const normalizedChanged = text(previous.normalized_content_hash) !== text(current.normalized_content_hash);
-    if (addedAnchors.some(anchor => /\d+\.\d+\.\d+(?:[-\w.]*)?/i.test(anchor))) {
+    const normalizedChanged = contentHashEnabled &&
+      text(previous.normalized_content_hash) !== text(current.normalized_content_hash);
+    const releaseDiff = releaseRowDiff(previous.release_rows, current.release_rows);
+    if (releaseDiff.type === 'added') {
       eventType = 'release_row_added';
-      effectiveDate = dateSignalForObservation(current).effective_date || detectedAt;
-      dateSource = dateSignalForObservation(current).effective_date ? dateSignalForObservation(current).date_source : 'snapshot_detected_at';
+      releaseRow = releaseDiff.row;
+      const signal = dateSignalForObservation(current, releaseRow);
+      effectiveDate = signal.effective_date || detectedAt;
+      dateSource = signal.effective_date ? signal.date_source : 'snapshot_detected_at';
+      reason = 'Release row/version added.';
+    } else if (releaseDiff.type === 'changed') {
+      eventType = 'release_row_changed';
+      releaseRow = releaseDiff.row;
+      const signal = dateSignalForObservation(current, releaseRow);
+      effectiveDate = signal.effective_date || detectedAt;
+      dateSource = signal.effective_date ? signal.date_source : 'snapshot_detected_at';
+      reason = 'Release row content changed.';
+    } else if (addedAnchors.some(anchor => /\d+\.\d+\.\d+(?:[-\w.]*)?/i.test(anchor))) {
+      eventType = 'release_row_added';
+      releaseRow = {
+        anchor: addedAnchors.find(anchor => /\d+\.\d+\.\d+(?:[-\w.]*)?/i.test(anchor)),
+        version: text(addedAnchors.find(anchor => /\d+\.\d+\.\d+(?:[-\w.]*)?/i.test(anchor))).match(/\d+\.\d+\.\d+(?:[-\w.]*)?/i)?.[0] || ''
+      };
+      const signal = dateSignalForObservation(current, releaseRow);
+      effectiveDate = signal.effective_date || detectedAt;
+      dateSource = signal.effective_date ? signal.date_source : 'snapshot_detected_at';
       reason = 'Release row/version/anchor added.';
     } else if (dateField && normalizedChanged) {
       eventType = eventTypeForDateField(dateField);
@@ -435,6 +619,7 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
     dateSource,
     effectiveDate,
     detectedAt,
+    releaseRow,
     reason
   });
   if (processedEvents.has(event.source_event_id) || processedEvidence.has(event.evidence_id)) {
@@ -530,10 +715,12 @@ function candidateFromEvent(event, source) {
     source: source.source_id,
     source_name: source.source_id,
     source_id: source.source_id,
+    source_root_url: source.root_url,
     sourceUrl: source.root_url,
     source_url: source.root_url,
     articleUrl: event.url,
     article_url: event.url,
+    evidence_url: event.canonical_url || event.url,
     url: event.url,
     title: event.title,
     summary: `${event.event_type}: ${event.reason}`,
@@ -571,6 +758,10 @@ function candidateFromEvent(event, source) {
     source_identity_key: event.current_values?.source_identity_key || event.previous_values?.source_identity_key || '',
     source_event_id: event.source_event_id,
     evidence_id: event.evidence_id,
+    release_row_date: event.release_row_date,
+    release_row_version: event.release_row_version,
+    release_row_anchor: event.release_row_anchor,
+    release_row_hash: event.release_row_hash,
     primary_evidence_ids: [event.evidence_id],
     evidence_ids: [event.evidence_id],
     publishedAt: '',
@@ -587,7 +778,7 @@ function candidateFromEvent(event, source) {
     source_reliability: 'official',
     source_quality_required: true,
     ...sourceQuality,
-    version_or_release: releaseEvidenceKey(event.current_values?.anchors || []),
+    version_or_release: event.release_row_version || event.release_row_anchor || releaseEvidenceKey(event.current_values?.anchors || []),
     api_or_component: bucket === 'cpp_ai_tooling_fallback' ? 'Android native tooling workflow' : 'Camera source snapshot change',
     behavior_change: event.reason,
     evidence_score: mainDateEligible ? 8 : 4,
@@ -612,10 +803,16 @@ function summarizeEvents(events = [], diagnostics = []) {
     monitored_source_count: unique(events.map(event => event.source_id)).length,
     snapshot_page_count: events.filter(event => event.current_values && !event.current_values.removed_status).length,
     new_page_count: counts.page_added || 0,
-    updated_page_count: ['last_updated_changed', 'structured_modified_changed', 'sitemap_lastmod_changed', 'material_content_changed', 'content_changed_without_date_change'].reduce((sum, key) => sum + (counts[key] || 0), 0),
+    updated_page_count: ['last_updated_changed', 'structured_modified_changed', 'sitemap_lastmod_changed', 'material_content_changed', 'content_changed_without_date_change', 'release_row_added', 'release_row_changed', 'anchor_added'].reduce((sum, key) => sum + (counts[key] || 0), 0),
+    release_row_added_count: counts.release_row_added || 0,
+    release_row_changed_count: counts.release_row_changed || 0,
+    anchor_added_count: counts.anchor_added || 0,
     material_content_change_count: (counts.material_content_changed || 0) + (counts.content_changed_without_date_change || 0),
     no_meaningful_change_count: counts.no_meaningful_change || 0,
     generated_candidate_count: events.filter(event => event.candidate_allowed === true).length,
+    candidate_allowed_count: events.filter(event => event.candidate_allowed === true).length,
+    main_article_allowed_count: events.filter(event => event.main_article_allowed === true).length,
+    watchlist_only_count: events.filter(event => event.candidate_allowed === true && event.main_article_allowed !== true).length,
     duplicate_event_evidence_count: events.filter(event => event.duplicate_processed === true).length,
     monitor_diagnostic_count: diagnostics.length,
     event_type_counts: counts
@@ -632,6 +829,9 @@ function markdownReport(report) {
     `- snapshot page count: ${report.summary.snapshot_page_count}`,
     `- new page count: ${report.summary.new_page_count}`,
     `- updated page count: ${report.summary.updated_page_count}`,
+    `- release row added count: ${report.summary.release_row_added_count}`,
+    `- release row changed count: ${report.summary.release_row_changed_count}`,
+    `- anchor added count: ${report.summary.anchor_added_count}`,
     `- material content change count: ${report.summary.material_content_change_count}`,
     `- no meaningful change count: ${report.summary.no_meaningful_change_count}`,
     '',
@@ -647,6 +847,9 @@ function markdownReport(report) {
   lines.push('## Evidence Identity / Duplicate Guard');
   lines.push('');
   lines.push(`- generated candidate count: ${report.summary.generated_candidate_count}`);
+  lines.push(`- candidate allowed count: ${report.summary.candidate_allowed_count}`);
+  lines.push(`- main article allowed count: ${report.summary.main_article_allowed_count}`);
+  lines.push(`- watchlist only count: ${report.summary.watchlist_only_count}`);
   lines.push(`- duplicate event/evidence count: ${report.summary.duplicate_event_evidence_count}`);
   lines.push('- `processed_source_event_ids` and `processed_evidence_ids` are bounded snapshot state and are not public newsletter content.');
   lines.push('');
@@ -669,17 +872,43 @@ function markdownReport(report) {
   return lines.join('\n');
 }
 
-async function runSourceMonitor(options = {}) {
+function buildNextSnapshotWrites(source, snapshot, observations, events, detectedAt) {
+  return {
+    source,
+    snapshot: nextSnapshotForSource(source, snapshot, observations, events, detectedAt)
+  };
+}
+
+function buildSourceEventCandidates(events = [], sourceById = new Map()) {
+  return ensureArray(events)
+    .map(event => candidateFromEvent(event, sourceById.get(event.source_id)))
+    .filter(Boolean);
+}
+
+function commitSourceSnapshotWrites({ root = process.cwd(), snapshotWrites = [], writeOptions = {} } = {}) {
+  for (const item of ensureArray(snapshotWrites)) {
+    writeJsonAtomic(snapshotPath(root, item.source.source_id), item.snapshot, writeOptions);
+  }
+}
+
+function writeSourceEventArtifacts({ root = process.cwd(), date, report }) {
+  writeJson(sourceEventsJsonPath(root, date), report);
+  fs.mkdirSync(sourceEventsDir(root, date), { recursive: true });
+  fs.writeFileSync(sourceEventsMarkdownPath(root, date), markdownReport(report), 'utf8');
+}
+
+async function collectAndClassifySourceEvents(options = {}) {
   const root = options.root || process.cwd();
   const date = options.date;
   const detectedAt = options.detectedAt || `${date}T00:00:00.000Z`;
   const registry = options.registry || loadRegistry(root);
   const allEvents = [];
   const allDiagnostics = [];
-  const allCandidates = [];
   const snapshotWrites = [];
+  const sourceById = new Map();
 
   for (const source of ensureArray(registry.sources)) {
+    sourceById.set(source.source_id, source);
     const snapshot = options.snapshots?.[source.source_id] || loadSnapshot(root, source.source_id);
     const previousByKey = new Map(snapshot.pages.map(page => [page.source_identity_key, page]));
     const collected = options.observations?.[source.source_id]
@@ -701,36 +930,65 @@ async function runSourceMonitor(options = {}) {
       snapshot,
       detectedAt
     }));
+    const currentKeys = new Set(collected.observations.map(observation => observation.source_identity_key));
+    for (const previous of snapshot.pages) {
+      if (currentKeys.has(previous.source_identity_key)) continue;
+      if (!pageInRegistryScope(source, previous)) continue;
+      events.push(classifyObservation({
+        source,
+        previous,
+        current: {
+          ...previous,
+          removed_status: 'scope_disappearance'
+        },
+        snapshot,
+        detectedAt
+      }));
+    }
     allEvents.push(...events);
-    allCandidates.push(...events.map(event => candidateFromEvent(event, source)).filter(Boolean));
-    snapshotWrites.push({
-      source,
-      snapshot: nextSnapshotForSource(source, snapshot, collected.observations, events, detectedAt)
-    });
+    snapshotWrites.push(buildNextSnapshotWrites(source, snapshot, collected.observations, events, detectedAt));
   }
+
+  return {
+    date,
+    detectedAt,
+    events: allEvents,
+    diagnostics: allDiagnostics,
+    snapshotWrites,
+    sourceById
+  };
+}
+
+async function runSourceMonitor(options = {}) {
+  const root = options.root || process.cwd();
+  const date = options.date;
+  const collected = await collectAndClassifySourceEvents(options);
+  const allCandidates = buildSourceEventCandidates(collected.events, collected.sourceById);
 
   const report = {
     schema_version: 1,
     date,
-    generated_at: detectedAt,
-    summary: summarizeEvents(allEvents, allDiagnostics),
-    events: allEvents,
-    diagnostics: allDiagnostics
+    generated_at: collected.detectedAt,
+    summary: summarizeEvents(collected.events, collected.diagnostics),
+    events: collected.events,
+    diagnostics: collected.diagnostics
   };
 
   if (options.writeArtifacts !== false) {
-    writeJson(sourceEventsJsonPath(root, date), report);
-    fs.mkdirSync(sourceEventsDir(root, date), { recursive: true });
-    fs.writeFileSync(sourceEventsMarkdownPath(root, date), markdownReport(report), 'utf8');
-    for (const item of snapshotWrites) {
-      writeJson(snapshotPath(root, item.source.source_id), item.snapshot);
+    writeSourceEventArtifacts({ root, date, report });
+    if (options.commitSnapshots !== false) {
+      commitSourceSnapshotWrites({
+        root,
+        snapshotWrites: collected.snapshotWrites,
+        writeOptions: options.snapshotWriteOptions || {}
+      });
     }
   }
 
   return {
     report,
     candidates: allCandidates,
-    snapshotWrites
+    snapshotWrites: collected.snapshotWrites
   };
 }
 
@@ -740,9 +998,13 @@ module.exports = {
   SOURCE_EVENTS_ROOT,
   SOURCE_MONITOR_REGISTRY_REL_PATH,
   SOURCE_SNAPSHOT_ROOT,
+  buildNextSnapshotWrites,
+  buildSourceEventCandidates,
   candidateFromEvent,
   classifyObservation,
+  collectAndClassifySourceEvents,
   collectObservationsForSource,
+  commitSourceSnapshotWrites,
   loadRegistry,
   loadSnapshot,
   markdownReport,

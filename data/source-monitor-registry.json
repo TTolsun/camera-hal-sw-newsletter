@@ -19,8 +19,7 @@
       ],
       "date_extractors": [
         "visible_last_updated",
-        "structured_date_modified",
-        "sitemap_lastmod"
+        "structured_date_modified"
       ],
       "content_hash_enabled": true,
       "main_article_allowed": true,

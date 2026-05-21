@@ -44,7 +44,10 @@ function validateIndexedNewsletters() {
     const markdownPath = repoPath(root, item?.md || '');
     const htmlPath = repoPath(root, item?.html || '');
     if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) continue;
-    const result = validatePublicNewsletterFiles(markdownPath, htmlPath);
+    const result = validatePublicNewsletterFiles(markdownPath, htmlPath, {
+      json: item,
+      jsonLabel: `data/newsletters.json:${item.date || item.title || 'entry'}`
+    });
     if (result.length === 0) continue;
     if (requireAll || strictDates.has(item.date)) {
       errors.push(...result);
