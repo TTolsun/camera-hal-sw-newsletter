@@ -125,7 +125,7 @@ function sourceBlocks(markdown) {
   const lines = String(markdown || '').split(/\r?\n/);
   let current = null;
   for (const line of lines) {
-    if (/^\*\*Sources\*\*\s*$/i.test(line) || /^##\s+(?:참고자료|References)\s*$/i.test(line)) {
+    if (/^\*\*(?:Sources|출처)\*\*\s*$/i.test(line) || /^##\s+(?:참고자료|References)\s*$/i.test(line)) {
       if (current !== null) blocks.push(current.join('\n'));
       current = [];
       continue;
@@ -168,7 +168,7 @@ function mainArticleBlocks(markdown) {
 }
 
 function checkpointItems(articleText) {
-  const match = String(articleText || '').match(/###\s+확인할 점\s+([\s\S]*?)(?:\n\*\*Sources\*\*|\n##\s+|$)/);
+  const match = String(articleText || '').match(/###\s+확인할 점\s+([\s\S]*?)(?:\n\*\*(?:Sources|출처)\*\*|\n##\s+|$)/);
   if (!match) return [];
   return match[1]
     .split(/\r?\n/)
@@ -213,6 +213,53 @@ function repeatedCheckpointErrors(articleCheckpoints) {
   return errors;
 }
 
+const ENGLISH_PROSE_STOPWORDS = new Set([
+  'a',
+  'an',
+  'and',
+  'any',
+  'are',
+  'as',
+  'because',
+  'for',
+  'from',
+  'in',
+  'into',
+  'is',
+  'it',
+  'like',
+  'of',
+  'offering',
+  'our',
+  'that',
+  'the',
+  'this',
+  'to',
+  'using',
+  'with',
+  'you',
+  'your'
+]);
+
+function rawEnglishProseRuns(value) {
+  const runs = String(value || '').match(/\b(?:[A-Za-z][A-Za-z0-9+/#.-]*[\s,;:()/-]+){16,}[A-Za-z][A-Za-z0-9+/#.-]*\b/g) || [];
+  return runs.filter(run => {
+    const words = run.toLowerCase().match(/[a-z]+/g) || [];
+    const stopwordCount = words.filter(word => ENGLISH_PROSE_STOPWORDS.has(word)).length;
+    return stopwordCount >= 5;
+  });
+}
+
+function longEnglishParagraphErrors(article, paragraphs, label) {
+  const errors = [];
+  for (const paragraph of paragraphs) {
+    for (const run of rawEnglishProseRuns(paragraph)) {
+      errors.push(`${label} article ${article.number} contains a long English prose run; summarize it in Korean instead: ${run.slice(0, 120)}`);
+    }
+  }
+  return errors;
+}
+
 function validatePublicMarkdown(markdown, label = 'newsletter.md', options = {}) {
   const errors = [];
   const visible = visibleMarkdownText(markdown);
@@ -242,6 +289,7 @@ function validatePublicMarkdown(markdown, label = 'newsletter.md', options = {})
     if (paragraphs.length < 3) {
       errors.push(`${label} article ${article.number} must include lead plus at least 2 body paragraphs.`);
     }
+    errors.push(...longEnglishParagraphErrors(article, paragraphs, label));
   }
   errors.push(...repeatedCheckpointErrors(articleCheckpoints));
   return errors;
@@ -277,6 +325,7 @@ module.exports = {
   validatePublicNewsletterArtifacts,
   validatePublicNewsletterFiles,
   validatePublicSourceLinks,
+  rawEnglishProseRuns,
   visibleHtmlText,
   visibleMarkdownText
 };
