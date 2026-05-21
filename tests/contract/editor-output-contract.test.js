@@ -385,6 +385,29 @@ test('editor output contract rejects invalid public_article source_links', () =>
   );
 });
 
+test('editor output contract maps source-quality roles on public_article source_links', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        public_article: {
+          ...section(1).public_article,
+          source_links: [{
+            title: 'Official release note',
+            url: 'https://example.com/source-1',
+            source_role: 'official_release_source'
+          }]
+        }
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  const result = validateEditorOutputContract(draft, DATE, { normalizeSection });
+
+  assert.equal(result.sections[0].public_article.source_links[0].source_role, 'primary');
+});
+
 test('editor output contract rejects article_sections keys outside normalized contract', () => {
   const draft = editor({
     sections: [

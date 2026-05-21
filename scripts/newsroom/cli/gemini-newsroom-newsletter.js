@@ -198,7 +198,7 @@ function publicArticleContractPrompt() {
     'article_sections와 hal_signal_capsule은 validation/editorial diagnostics 용도로만 사용하세요. 독자가 보는 article prose로 render하지 마세요.',
     'public_article은 validation report나 verified_facts checklist가 아니라 한국어 독자-facing technical newsletter article로 작성하세요.',
     'body_paragraphs는 verified facts를 바탕으로 한 자연스러운 설명 문단을 최소 2개 포함해야 합니다.',
-    'source_links는 non-empty title 값을 가진 public http/https URLs만 포함해야 합니다. local path, .tmp path, GitHub Actions artifact URL, editorial-only role은 사용하지 마세요.',
+    'source_links는 non-empty title 값을 가진 public http/https URLs만 포함해야 합니다. source_role은 primary, supporting, context 중 하나로 쓰세요. local path, .tmp path, GitHub Actions artifact URL, editorial-only role은 사용하지 마세요.',
     'public_article에는 internal public-forbidden terms인 Fallback, Review-only, quality gate, candidate, HAL Signal Capsule, why_now, impact_axes, do_not_overstate, guardrail, section repair를 노출하지 마세요.',
     `구체적인 reader action이 없으면 정확히 다음 문장을 사용하세요: "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."`
   ].join('\n');

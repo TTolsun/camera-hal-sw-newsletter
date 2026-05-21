@@ -21,6 +21,20 @@ const PUBLIC_SOURCE_ROLES = Object.freeze([
   'context'
 ]);
 
+const PUBLIC_SOURCE_ROLE_ALIASES = Object.freeze({
+  official_release_source: 'primary',
+  project_release_source: 'primary',
+  project_mailing_list_source: 'primary',
+  engineering_blog_source: 'primary',
+  linked_primary_evidence: 'primary',
+  seed_page: 'primary',
+  tech_media_lead_source: 'supporting',
+  community_lead_source: 'supporting',
+  official_documentation_reference: 'context',
+  fallback_context_source: 'context',
+  unknown_source: 'context'
+});
+
 const NO_IMMEDIATE_ACTION_TEXT = '즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.';
 
 function ensureArray(value) {
@@ -45,6 +59,13 @@ function publicSafeText(value) {
     .replace(/\bquality gate\b/gi, 'quality review')
     .replace(/\bcandidate\b/gi, 'source item')
     .trim();
+}
+
+function normalizePublicSourceRole(value) {
+  const role = compactText(value);
+  if (!role) return '';
+  if (PUBLIC_SOURCE_ROLES.includes(role)) return role;
+  return PUBLIC_SOURCE_ROLE_ALIASES[role] || role;
 }
 
 const INTERNAL_PUBLIC_TERM_PATTERN = /Review-only|Fallback|quality gate|candidate|editor review|normal publishable coverage|reader_owners|check_within_2_weeks|HAL Signal Capsule|why_now|impact_axes|do_not_overstate|guardrail|section repair|hard failure|candidate shortage|deterministic reconstruction|source-bound|publish gate/i;
@@ -112,6 +133,7 @@ function normalizeSourceLink(source = {}) {
     const value = compactText(source[key]);
     if (value) output[key] = value;
   }
+  if (output.source_role) output.source_role = normalizePublicSourceRole(output.source_role);
   return output;
 }
 
@@ -131,7 +153,7 @@ function sourceLinkIssues(source = {}, index = 0) {
   if (urlError) {
     issues.push({ type: 'invalid_source_link', index, field: 'url', reason: urlError });
   }
-  const role = compactText(source.source_role);
+  const role = normalizePublicSourceRole(source.source_role);
   if (role && !PUBLIC_SOURCE_ROLES.includes(role)) {
     issues.push({ type: 'invalid_source_link', index, field: 'source_role', reason: 'unsupported_role', value: role });
   }
