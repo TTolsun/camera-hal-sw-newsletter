@@ -218,7 +218,7 @@ function newsroomRelPath(date, filename = '') {
 
 function changedArtifactDate(relPath) {
   const normalized = toPosix(relPath);
-  const match = normalized.match(/^(?:newsletters|content\/newsroom|content\/collected-news)\/(\d{4}-\d{2}-\d{2})(?:\/|$)/);
+  const match = normalized.match(/^(?:newsletters|content\/newsroom|content\/collected-news|content\/source-events)\/(\d{4}-\d{2}-\d{2})(?:\/|$)/);
   return match ? match[1] : '';
 }
 

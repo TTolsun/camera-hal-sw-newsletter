@@ -25,3 +25,9 @@ npm.cmd run validate:config
 npm.cmd run test
 npm.cmd run validate
 ```
+
+## Source Monitor Registry
+
+- `data/source-monitor-registry.json`은 source snapshot monitor 계약입니다. `schemaVersion`, `source_id`, `url_patterns`, `date_extractors`, bounded fetch 값, boolean policy flag를 validator와 함께 갱신하세요.
+- `data/source-snapshots/**`는 reviewable generated state이며 public newsletter renderer 입력이 아닙니다.
+- `processed_source_event_ids`, `processed_evidence_ids` 같은 내부 state를 public output에 노출하지 않습니다.

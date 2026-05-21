@@ -15,6 +15,9 @@ const {
   buildHalSignalQualitySummary,
   buildMainArticleSignalChecks
 } = require('../common/hal-signal-quality');
+const {
+  dateQualityForCandidate
+} = require('../common/date-signals');
 
 const SCHEMA_VERSION = 1;
 const MAX_EVIDENCE_PER_ARTICLE = 3;
@@ -35,6 +38,7 @@ const OPTIONAL_ARTIFACT_NAMES = [
   'quality_report',
   'fact_check_report',
   'source_effectiveness_report',
+  'source_change_events',
   'repair_failure',
   'fallback_public_issue',
   'fallback_public_issue_diagnostics',
@@ -87,6 +91,11 @@ function artifactSpecs(date) {
       key: 'sourceEffectivenessReport',
       tier: 'optional',
       relPath: newsroomRelPath(date, 'source-effectiveness-report.json')
+    },
+    source_change_events: {
+      key: 'sourceChangeEvents',
+      tier: 'optional',
+      relPath: `content/source-events/${date}/source-change-events.json`
     },
     repair_failure: {
       key: 'repairFailure',
@@ -525,6 +534,14 @@ function normalizeArticle(candidate = {}, capsule = {}, warnings = null) {
     relevance_bucket: firstText(candidate.relevance_bucket, capsule.relevance_bucket) || 'unknown',
     article_group_key: firstText(candidate.article_group_key, capsule.article_group_key) || 'unknown',
     tooling_workflow_type: firstText(candidate.tooling_workflow_type, capsule.tooling_workflow_type) || '',
+    source_event_id: firstText(candidate.source_event_id, capsule.source_event_id),
+    evidence_id: firstText(candidate.evidence_id, capsule.evidence_id),
+    event_type: firstText(candidate.event_type, capsule.event_type),
+    effective_date: firstText(candidate.effective_date, capsule.effective_date),
+    date_quality: dateQualityForCandidate({
+      ...capsule,
+      ...candidate
+    }),
     related_context_candidates: ensureArray(candidate.related_context_candidates).length > 0
       ? candidate.related_context_candidates
       : ensureArray(capsule.related_context_candidates),

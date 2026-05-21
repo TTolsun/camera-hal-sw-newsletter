@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "source_id": "aosp-camera-docs",
+      "root_url": "https://source.android.com/docs/core/camera",
+      "url_patterns": [
+        "https://source.android.com/docs/core/camera/**"
+      ],
+      "seed_urls": [
+        "https://source.android.com/docs/core/camera"
+      ],
+      "source_priority": "high",
+      "selection_lane": "primary_camera_stack",
+      "expected_categories": [
+        "aosp",
+        "camera-hal",
+        "compatibility"
+      ],
+      "date_extractors": [
+        "visible_last_updated",
+        "structured_date_modified"
+      ],
+      "content_hash_enabled": true,
+      "main_article_allowed": true,
+      "fallback_only": false,
+      "max_pages_per_run": 5,
+      "fetch_timeout_ms": 8000
+    },
+    {
+      "source_id": "androidx-camerax-release-notes",
+      "root_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "url_patterns": [
+        "https://developer.android.com/jetpack/androidx/releases/camera*"
+      ],
+      "seed_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera"
+      ],
+      "source_priority": "high",
+      "selection_lane": "primary_camera_stack",
+      "expected_categories": [
+        "android",
+        "camera-api"
+      ],
+      "date_extractors": [
+        "release_row_date",
+        "visible_date",
+        "structured_date_modified"
+      ],
+      "content_hash_enabled": true,
+      "main_article_allowed": true,
+      "fallback_only": false,
+      "max_pages_per_run": 5,
+      "fetch_timeout_ms": 8000
+    }
+  ]
+}

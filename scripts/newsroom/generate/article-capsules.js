@@ -186,7 +186,7 @@ function risk(candidate) {
   return {
     source_gap: bool(candidate.source_gap_risk),
     watch_page: bool(candidate.isWatchPage, bool(candidate.is_watch_page)),
-    no_dated_evidence: !text(candidate.published_date || candidate.publishedAt || candidate.published_at) || !hasDatedEvidence,
+    no_dated_evidence: !text(candidate.published_date || candidate.publishedAt || candidate.published_at || candidate.effective_date) || !hasDatedEvidence,
     candidate_only: bool(candidate.candidateOnly, bool(candidate.candidate_only)),
     requires_cross_check: bool(candidate.requiresCrossCheck, bool(candidate.requires_cross_check)),
     final_selection_eligibility: text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility)
@@ -356,6 +356,13 @@ function buildArticleCapsule(candidate) {
     url: candidateUrl(candidate),
     source: compactText(candidate.source || candidate.source_name, 120),
     published_date: text(candidate.published_date || candidate.publishedAt || candidate.published_at),
+    effective_date: text(candidate.effective_date || candidate.effectiveDate),
+    date_source: text(candidate.date_source),
+    date_confidence: number(candidate.date_confidence),
+    source_event_id: text(candidate.source_event_id),
+    evidence_id: text(candidate.evidence_id),
+    event_type: text(candidate.event_type),
+    needs_editor_date_review: bool(candidate.needs_editor_date_review),
     topic_type: topicType(candidate),
     editorial_priority: number(candidate.editorial_priority, 6),
     relevance_bucket: text(candidate.relevance_bucket),
@@ -471,6 +478,17 @@ function buildArticleCapsule(candidate) {
   if (!capsule.tooling_workflow_type) delete capsule.tooling_workflow_type;
   if (!capsule.article_group_key) delete capsule.article_group_key;
   if (!capsule.native_workflow_evidence_score) delete capsule.native_workflow_evidence_score;
+  if (!capsule.effective_date) delete capsule.effective_date;
+  if (!capsule.date_source) {
+    delete capsule.date_source;
+    delete capsule.date_confidence;
+  }
+  if (!capsule.source_event_id) delete capsule.source_event_id;
+  if (!capsule.evidence_id) delete capsule.evidence_id;
+  if (!capsule.event_type) delete capsule.event_type;
+  if (!capsule.source_event_id && !capsule.effective_date && !capsule.needs_editor_date_review) {
+    delete capsule.needs_editor_date_review;
+  }
   if (ensureArray(capsule.blocked_context_candidates).length === 0) delete capsule.blocked_context_candidates;
   if (!capsule.parent_context) delete capsule.parent_context;
   return {

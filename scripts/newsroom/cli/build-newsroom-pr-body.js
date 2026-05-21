@@ -816,6 +816,44 @@ function renderEvidencePackSummary(root, date) {
   ].join('\n');
 }
 
+function renderSourceChangeEventsSummary(root, date) {
+  const relPath = `content/source-events/${date}/source-change-events.json`;
+  const report = readJsonObjectIfExists(path.join(root, relPath));
+  if (!report) {
+    return [
+      '## Source Snapshot Changes',
+      '',
+      '- source change event report: unavailable',
+      `- expected path: \`${relPath}\``
+    ].join('\n');
+  }
+  const summary = report.summary || {};
+  return [
+    '## Source Snapshot Changes',
+    '',
+    `- report: \`${relPath}\``,
+    `- monitored_source_count: ${valueOrUnknown(summary.monitored_source_count)}`,
+    `- snapshot_page_count: ${valueOrUnknown(summary.snapshot_page_count)}`,
+    `- new_page_count: ${valueOrUnknown(summary.new_page_count)}`,
+    `- updated_page_count: ${valueOrUnknown(summary.updated_page_count)}`,
+    `- monitor_diagnostic_count: ${valueOrUnknown(summary.monitor_diagnostic_count)}`,
+    '',
+    '## Source Change Events',
+    '',
+    `- event_type_counts: ${JSON.stringify(summary.event_type_counts || {})}`,
+    `- generated_candidate_count: ${valueOrUnknown(summary.generated_candidate_count)}`,
+    '',
+    '## Evidence Identity / Duplicate Guard',
+    '',
+    `- duplicate_event_evidence_count: ${valueOrUnknown(summary.duplicate_event_evidence_count)}`,
+    '- processed source event/evidence history is snapshot state and must not be exposed in public newsletter output.',
+    '',
+    '## Date Quality',
+    '',
+    '- Check `date_source`, `date_confidence`, `effective_date`, `needs_editor_date_review`, and `main_article_allowed` before publication.'
+  ].join('\n');
+}
+
 function renderSeedEvidenceUsageSummary(root, date) {
   if (!date) return '';
   const seedPackRelPath = `content/collected-news/${date}/seed-evidence-pack.json`;
@@ -2368,6 +2406,7 @@ function buildNewsroomPrBody(options = {}) {
     renderSourceQualityDiagnosisSummary(root, date),
     renderNewsletterImageAuditSummary(root, date),
     renderSeedEvidenceUsageSummary(root, date),
+    renderSourceChangeEventsSummary(root, date),
     renderEvidencePackSummary(root, date),
     renderCandidateTraceability(root, date),
     renderEditorActionGuidance(status, date),

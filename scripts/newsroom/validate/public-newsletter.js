@@ -300,20 +300,38 @@ function validatePublicHtml(html, label = 'index.html', options = {}) {
   return findForbiddenTerms(visible, label, options);
 }
 
-function validatePublicNewsletterArtifacts({ markdown = '', html = '', markdownLabel = 'newsletter.md', htmlLabel = 'index.html', publicationMode = '', fallbackOnly = false } = {}) {
+function validatePublicJsonText(json = '', label = 'public.json') {
+  const raw = typeof json === 'string' ? json : JSON.stringify(json || {});
+  const forbidden = [
+    'processed_source_event_ids',
+    'processed_evidence_ids',
+    'previous_values',
+    'current_values',
+    'data/source-snapshots/',
+    'content/source-events/'
+  ];
+  return forbidden
+    .filter(term => String(raw || '').includes(term))
+    .map(term => `${label} contains internal source snapshot state: ${term}`);
+}
+
+function validatePublicNewsletterArtifacts({ markdown = '', html = '', json = '', markdownLabel = 'newsletter.md', htmlLabel = 'index.html', jsonLabel = 'public.json', publicationMode = '', fallbackOnly = false } = {}) {
   const options = { publicationMode, fallbackOnly };
   return [
     ...validatePublicMarkdown(markdown, markdownLabel, options),
-    ...validatePublicHtml(html, htmlLabel, options)
+    ...validatePublicHtml(html, htmlLabel, options),
+    ...validatePublicJsonText(json, jsonLabel)
   ];
 }
 
-function validatePublicNewsletterFiles(markdownPath, htmlPath) {
+function validatePublicNewsletterFiles(markdownPath, htmlPath, options = {}) {
   return validatePublicNewsletterArtifacts({
     markdown: readText(markdownPath),
     html: readText(htmlPath),
     markdownLabel: markdownPath,
-    htmlLabel: htmlPath
+    htmlLabel: htmlPath,
+    json: options.json || '',
+    jsonLabel: options.jsonLabel || 'public.json'
   });
 }
 
@@ -321,6 +339,7 @@ module.exports = {
   GENERIC_CHECKPOINT_PATTERNS,
   PUBLIC_NEWSLETTER_FORBIDDEN_TERMS,
   validatePublicHtml,
+  validatePublicJsonText,
   validatePublicMarkdown,
   validatePublicNewsletterArtifacts,
   validatePublicNewsletterFiles,

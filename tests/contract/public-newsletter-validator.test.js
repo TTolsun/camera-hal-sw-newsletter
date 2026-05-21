@@ -121,6 +121,23 @@ test('public newsletter validator rejects non-public markdown source links', () 
   assert.ok(errors.some(error => /github_actions_artifact_url/.test(error)));
 });
 
+test('public newsletter validator rejects source snapshot state in public JSON', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown(),
+    html: html(),
+    json: JSON.stringify({
+      processed_source_event_ids: ['source-event-1'],
+      previous_values: { normalized_content_hash: 'old' },
+      source: 'data/source-snapshots/aosp-camera-docs.json'
+    }),
+    jsonLabel: 'data/newsletters.json'
+  });
+
+  assert.ok(errors.some(error => /processed_source_event_ids/.test(error)));
+  assert.ok(errors.some(error => /previous_values/.test(error)));
+  assert.ok(errors.some(error => /data\/source-snapshots/.test(error)));
+});
+
 test('public newsletter validator rejects long English prose in article paragraphs', () => {
   const errors = validatePublicNewsletterArtifacts({
     markdown: markdown().replace(

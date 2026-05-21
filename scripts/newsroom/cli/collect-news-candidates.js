@@ -60,6 +60,11 @@ const {
   canonicalContentUrl,
   fetchUrlForContent
 } = require('../collect/source-intelligence-utils');
+const {
+  commitSourceSnapshotWrites,
+  filterSnapshotWritesByIncludedEvidenceIds,
+  runSourceMonitor
+} = require('../collect/source-monitor');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -951,11 +956,23 @@ function urlDedupeKey(value) {
   }
 }
 
+function isSourceChangeEventCandidate(item = {}) {
+  return item.source_kind === 'source_change_event' ||
+    item.source_type === 'source_change_event' ||
+    item.sourceKind === 'source_change_event' ||
+    item.sourceType === 'source_change_event' ||
+    item.collectionMode === 'source-change-event' ||
+    item.collection_mode === 'source-change-event';
+}
+
 function dedupe(candidates) {
+  const ordered = [...candidates].sort((a, b) =>
+    Number(isSourceChangeEventCandidate(b)) - Number(isSourceChangeEventCandidate(a))
+  );
   const seenUrls = new Set();
   const seenTitles = new Set();
   const result = [];
-  for (const item of candidates) {
+  for (const item of ordered) {
     const urlKey = urlDedupeKey(item.url);
     const normalizedTitle = titleKey(item.title);
     if (seenUrls.has(urlKey)) continue;
@@ -1104,6 +1121,7 @@ async function main() {
   const sources = parseSources();
   const failures = [];
   let candidates = [];
+  let sourceMonitorResult = null;
 
   for (const source of sources) {
     try {
@@ -1121,6 +1139,17 @@ async function main() {
     } catch (error) {
       failures.push({ source: source.name, message: error.message });
     }
+  }
+
+  try {
+    sourceMonitorResult = await runSourceMonitor({
+      root,
+      date,
+      commitSnapshots: false
+    });
+    candidates.push(...sourceMonitorResult.candidates);
+  } catch (error) {
+    failures.push({ source: 'source-monitor', message: error.message });
   }
 
   candidates = dedupe(candidates)
@@ -1179,6 +1208,19 @@ async function main() {
   });
   fs.writeFileSync(path.join(dateNewsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
   fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
+  if (sourceMonitorResult) {
+    const includedEvidenceIds = new Set(candidates
+      .filter(isSourceChangeEventCandidate)
+      .map(candidate => candidate.evidence_id)
+      .filter(Boolean));
+    commitSourceSnapshotWrites({
+      root,
+      snapshotWrites: filterSnapshotWritesByIncludedEvidenceIds(
+        sourceMonitorResult.snapshotWrites,
+        includedEvidenceIds
+      )
+    });
+  }
 
   console.log(`Collected ${candidates.length} candidates for ${date}`);
 }
@@ -1193,8 +1235,10 @@ if (require.main === module) {
 module.exports = {
   canonicalContentUrl,
   componentFromText,
+  dedupe,
   evidenceMetadata,
   fetchUrlForContent,
+  isSourceChangeEventCandidate,
   newsletterDateWindowEnd,
   normalizeCandidate,
   parseHtmlPage,

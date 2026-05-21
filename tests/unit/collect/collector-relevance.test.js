@@ -10,6 +10,7 @@ const {
 const { parseSourceSpecificItems } = require('../../../scripts/lib/source-item-parsers');
 const {
   canonicalContentUrl,
+  dedupe,
   fetchUrlForContent,
   newsletterDateWindowEnd,
   normalizeCandidate,
@@ -59,6 +60,28 @@ test('collector does not use source metadata to promote FreeBSD into camera driv
   assert.equal(candidate.has_api_or_component, false);
   assert.ok(candidate.evidence_score < 6);
   assert.notEqual(candidate.finalSelectionEligibility, 'main');
+});
+
+test('collector dedupe prefers source change event candidate for the same URL and title', () => {
+  const generic = {
+    title: 'Camera release notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+    source_kind: 'html_page',
+    source_type: 'html_page'
+  };
+  const sourceEvent = {
+    ...generic,
+    source_kind: 'source_change_event',
+    source_type: 'source_change_event',
+    collectionMode: 'source-change-event',
+    evidence_id: 'evidence-source-event'
+  };
+
+  const result = dedupe([generic, sourceEvent]);
+
+  assert.equal(result.length, 1);
+  assert.equal(result[0].source_kind, 'source_change_event');
+  assert.equal(result[0].evidence_id, 'evidence-source-event');
 });
 
 test('collector keeps Linux audio fixes out of camera driver bucket without article camera evidence', () => {

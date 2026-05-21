@@ -4,6 +4,9 @@ const path = require('path');
 const {
   validateNewsSourcesConfigText
 } = require('../validate/news-sources-config-validator');
+const {
+  validateSourceMonitorRegistryText
+} = require('../validate/source-monitor-registry-validator');
 
 const root = process.cwd();
 const configPath = path.resolve(root, process.argv[2] || path.join('data', 'news-sources.json'));
@@ -28,3 +31,22 @@ if (!result.ok) {
 }
 
 console.log(`Source registry config validation passed for ${displayPath}.`);
+
+if (process.argv[2]) {
+  process.exit(0);
+}
+
+const monitorConfigPath = path.resolve(root, 'data', 'source-monitor-registry.json');
+const monitorDisplayPath = path.relative(root, monitorConfigPath).replace(/\\/g, '/') || monitorConfigPath;
+if (fs.existsSync(monitorConfigPath)) {
+  const monitorText = fs.readFileSync(monitorConfigPath, 'utf8');
+  const monitorResult = validateSourceMonitorRegistryText(monitorText, { filePath: monitorDisplayPath });
+  if (!monitorResult.ok) {
+    console.error(`Source monitor registry config validation failed for ${monitorDisplayPath}:`);
+    for (const error of monitorResult.errors) {
+      console.error(`- ${error}`);
+    }
+    process.exit(1);
+  }
+  console.log(`Source monitor registry config validation passed for ${monitorDisplayPath}.`);
+}

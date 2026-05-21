@@ -43,3 +43,19 @@
 | `merged-candidates.json` | Stage 2에서 manual candidate, seed evidence, Gemini discovery 후보를 병합한 최종 generation input 후보 artifact입니다. |
 | `editor-draft.json` | editor stage가 만든 newsletter draft artifact입니다. public output이 아니라 renderer와 validator가 검토하는 중간 산출물입니다. |
 | `quality-report.json` | quality gate 결과를 담는 machine-readable report입니다. score뿐 아니라 hard blocker, source gap, fact-check must_fix 같은 발행 안전 문제를 함께 확인합니다. |
+## Source snapshot / date quality
+
+| 용어 | 설명 |
+| --- | --- |
+| `published_date` | 원문 source가 명시한 실제 발행일입니다. publish-ready freshness 판단에서 가장 강한 날짜 근거입니다. |
+| `effective_date` | monitored source의 source change event 판단에 쓰는 유효 날짜입니다. `Last updated`, structured modified date, sitemap `lastmod`, release row date 같은 source date signal에서 옵니다. |
+| `detected_at` | pipeline이 source 변화를 관찰한 시각입니다. source의 실제 발행일이나 freshness 근거가 아닙니다. |
+| `first_seen_at` | snapshot identity 기준 최초 발견 시각입니다. 재수집 시 보존되며 freshness/date-source/publish-ready evidence로 쓰지 않습니다. |
+| `last_seen_at` | snapshot identity 기준 마지막 관찰 시각입니다. freshness/date-source/publish-ready evidence로 쓰지 않습니다. |
+| `source_event_id` | source snapshot diff에서 생성된 변경 이벤트 단위 ID입니다. 같은 event 재처리를 막는 duplicate guard에 사용합니다. |
+| `evidence_id` | candidate 전환에 쓰이는 근거 단위 ID입니다. 같은 URL이라도 release row, version, anchor가 다르면 별도 evidence가 될 수 있습니다. |
+| `date_source` | `effective_date` 또는 `published_date`의 출처를 나타내는 enum 값입니다. allowlist는 `scripts/newsroom/common/date-signals.js`와 validator가 공유합니다. |
+| `date_confidence` | `date_source`별 기준 신뢰도 점수입니다. `date_confidence >= 85`만 source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. |
+| `needs_editor_date_review` | 날짜 근거가 약하거나 content hash 기반 변화라 editor 확인이 필요한 상태입니다. 기본적으로 publish-ready date evidence가 아닙니다. |
+
+detected_at, first_seen_at, last_seen_at은 source의 실제 발행일이나 freshness 근거가 아니다.

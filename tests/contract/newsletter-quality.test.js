@@ -996,6 +996,29 @@ test('quality threshold does not override hard blockers at high scores', () => {
   }), 'NEEDS_FIX');
 });
 
+test('quality gate rejects unknown source event and date source enums on selected articles', () => {
+  const targetUrl = 'https://example.com/source-event-enum-drift';
+  const report = reportFor([
+    section({ headline: 'Source event enum drift article', url: targetUrl }),
+    ...validSections().slice(1)
+  ], [
+    scopedCandidate(targetUrl, 'direct_aosp_camera', {
+      effective_date: '2026-05-03',
+      date_source: 'unlisted_date_source',
+      date_confidence: 85,
+      event_type: 'unlisted_event_type'
+    }),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item =>
+    item.blocking === true &&
+    item.reason.includes('invalid event_type=unlisted_event_type') &&
+    item.reason.includes('invalid date_source=unlisted_date_source')
+  ));
+});
+
 test('quality gate allows non-blocking actionability deductions above threshold', () => {
   const sections = validSections(3).map((item, index) => index < 3
     ? {

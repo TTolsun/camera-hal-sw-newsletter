@@ -28,6 +28,10 @@ function collectedPath(root) {
   return path.join(root, 'content', 'collected-news', DATE, 'candidates.json');
 }
 
+function sourceEventsPath(root) {
+  return path.join(root, 'content', 'source-events', DATE, 'source-change-events.json');
+}
+
 function selectedCandidate(overrides = {}) {
   return {
     candidate_id: 'selected-1',
@@ -191,6 +195,23 @@ function writeFullArtifactSet(root) {
     schema_version: 1,
     date: DATE,
     warnings: ['Fact-check source gap URL did not match a collected candidate.']
+  });
+  writeJson(sourceEventsPath(root), {
+    schema_version: 1,
+    date: DATE,
+    events: [{
+      source_event_id: 'source-event-selected-1',
+      evidence_id: 'evidence-selected-1',
+      event_type: 'last_updated_changed',
+      title: selected.title,
+      url: selected.url,
+      effective_date: '2026-05-14',
+      date_source: 'visible_last_updated',
+      date_confidence: 85,
+      candidate_allowed: true,
+      main_article_allowed: true
+    }],
+    diagnostics: []
   });
   writeJson(newsroomPath(root, 'repair-failure.json'), {
     message: 'section_count_drift'
@@ -477,7 +498,7 @@ test('full artifact set creates selected, reserve, excluded, and failure summari
   assert.ok(report.failure_diagnostics.fallback_builder_failures.some(item => item.includes('fallback')));
   assert.ok(report.failure_diagnostics.source_gap_warnings.some(item => item.includes('source gap')));
   assert.equal(report.failure_diagnostics.invalid_artifacts.length, 0);
-  assert.equal(report.inputs.used.length, 13);
+  assert.equal(report.inputs.used.length, 14);
   assert.equal(report.inputs.missing.length, 0);
 
   const article = report.selected_main_articles[0];

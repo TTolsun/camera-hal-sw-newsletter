@@ -272,10 +272,12 @@ jobs:
             copy_if_present "content/collected-news/${DATE}/raw-candidate-manifest.json"
             copy_if_present "content/collected-news/${DATE}/merged-candidates.json"
             copy_if_present "content/collected-news/${DATE}/merged-candidate-manifest.json"
+            copy_tree_if_present "content/source-events/${DATE}"
             copy_tree_if_present "content/newsroom/${DATE}"
             copy_if_present "newsletters/${DATE}/newsletter.md"
             copy_if_present "newsletters/${DATE}/index.html"
             copy_if_present "data/newsletters.json"
+            copy_tree_if_present "data/source-snapshots"
           else
             echo "No generated date marker found; skipping date-scoped artifact copy."
           fi

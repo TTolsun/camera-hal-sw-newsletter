@@ -16,6 +16,10 @@ const {
   isNativeToolingWorkflow
 } = require('../common/article-groups');
 const {
+  dateQualityForCandidate,
+  resolveCandidateDateEvidence
+} = require('../common/date-signals');
+const {
   POLICY_REL_PATH,
   articlePolicy,
   articleCountRangeText,
@@ -136,6 +140,18 @@ function publishedDate(candidate) {
   return text(candidate.published_date || candidate.publishedAt || candidate.published_at);
 }
 
+function selectionDateEvidence(candidate) {
+  return resolveCandidateDateEvidence(candidate);
+}
+
+function selectionDate(candidate) {
+  return selectionDateEvidence(candidate).date;
+}
+
+function hasPublishReadyDateEvidence(candidate) {
+  return selectionDateEvidence(candidate).publish_ready_date_evidence;
+}
+
 function datePrecision(candidate) {
   return text(candidate.datePrecision || candidate.date_precision);
 }
@@ -218,7 +234,7 @@ function exclusionReasons(candidate) {
   const referenceOnly = bool(candidate.reference_only);
 
   if (!candidateUrl(candidate)) reasons.push('missing URL evidence');
-  if (!publishedDate(candidate) || !hasDatedEvidence) reasons.push('missing dated evidence');
+  if (!selectionDate(candidate) || !hasDatedEvidence || !hasPublishReadyDateEvidence(candidate)) reasons.push('missing dated evidence');
   if (isWatchPage && !hasDatedEvidence) reasons.push('watch page without dated evidence');
   if (!['main', 'short'].includes(eligibility)) reasons.push(`finalSelectionEligibility=${eligibility || 'unknown'}`);
   if (finalSelectionBlocked) reasons.push('final_selection_blocked=true');
@@ -241,7 +257,7 @@ function reliabilityScore(candidate) {
 }
 
 function freshnessScore(candidate, newsletterDate) {
-  const rawDate = publishedDate(candidate);
+  const rawDate = selectionDate(candidate);
   const published = rawDate ? new Date(rawDate) : null;
   const base = newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date();
   if (!published || Number.isNaN(published.getTime()) || Number.isNaN(base.getTime())) return 0;
@@ -261,7 +277,7 @@ function utcDayStart(date) {
 }
 
 function daysSincePublished(candidate, newsletterDate) {
-  const rawDate = publishedDate(candidate);
+  const rawDate = selectionDate(candidate);
   const published = rawDate ? new Date(rawDate) : null;
   const base = newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date();
   const publishedDay = utcDayStart(published);
@@ -274,6 +290,8 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
   const ageDays = daysSincePublished(candidate, newsletterDate);
   const precision = datePrecision(candidate);
   const precisionNote = precision === 'month' ? 'month-level date precision; ' : '';
+  const dateEvidence = selectionDateEvidence(candidate);
+  const dateLabel = dateEvidence.date_field === 'effective_date' ? 'effective_date' : 'published';
 
   if (ageDays === null) {
     return {
@@ -287,7 +305,7 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
     return {
       freshness_window: 'primary',
       days_since_published: ageDays,
-      selection_window_reason: `${precisionNote}${ageDays} day(s) since published; within primary ${policy.primarySelectionDays} day window`
+      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; within primary ${policy.primarySelectionDays} day window`
     };
   }
 
@@ -295,7 +313,7 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
     return {
       freshness_window: 'fallback',
       days_since_published: ageDays,
-      selection_window_reason: `${precisionNote}${ageDays} day(s) since published; within fallback ${policy.fallbackSelectionDays} day window`
+      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; within fallback ${policy.fallbackSelectionDays} day window`
     };
   }
 
@@ -303,14 +321,14 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
     return {
       freshness_window: 'reference',
       days_since_published: ageDays,
-      selection_window_reason: `${precisionNote}${ageDays} day(s) since published; within reference ${policy.referenceContextDays} day window`
+      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; within reference ${policy.referenceContextDays} day window`
     };
   }
 
   return {
     freshness_window: 'stale',
     days_since_published: ageDays,
-    selection_window_reason: `${precisionNote}${ageDays} day(s) since published; older than reference ${policy.referenceContextDays} day window`
+    selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; older than reference ${policy.referenceContextDays} day window`
   };
 }
 
@@ -510,7 +528,7 @@ function cameraHalDirectnessScore(candidate) {
 
 function evidenceSpecificityScore(candidate) {
   let score = clamp(number(candidate.evidence_score), 0, 5);
-  if (publishedDate(candidate) && fieldBoolean(candidate, 'hasDatedEvidence', 'has_dated_evidence')) score += 1;
+  if (selectionDate(candidate) && fieldBoolean(candidate, 'hasDatedEvidence', 'has_dated_evidence') && hasPublishReadyDateEvidence(candidate)) score += 1;
   if (hasConcreteApiComponent(candidate)) score += 1;
   if (hasBehaviorEvidence(candidate)) score += 1;
   if (text(candidate.version_or_release || candidate.versionOrRelease)) score += 1;
@@ -553,7 +571,7 @@ function watchPagePenalty(candidate) {
 }
 
 function noDatePenalty(candidate) {
-  return !publishedDate(candidate) || !fieldBoolean(candidate, 'hasDatedEvidence', 'has_dated_evidence') ? 20 : 0;
+  return !selectionDate(candidate) || !fieldBoolean(candidate, 'hasDatedEvidence', 'has_dated_evidence') || !hasPublishReadyDateEvidence(candidate) ? 20 : 0;
 }
 
 function noApiComponentPenalty(candidate) {
@@ -738,6 +756,10 @@ function decorateCandidate(candidate, newsletterDate, options = {}) {
     ...windowMetadata,
     url: candidateUrl(candidate),
     published_date: publishedDate(candidate),
+    effective_date: text(candidate.effective_date || candidate.effectiveDate),
+    date_source: text(candidate.date_source),
+    date_confidence: number(candidate.date_confidence),
+    date_quality: dateQualityForCandidate(candidate),
     source: candidateSource(candidate),
     selected: false,
     selected_for_editor: false,

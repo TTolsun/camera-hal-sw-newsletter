@@ -331,3 +331,14 @@ Issue `#46` adds an executable source quality layer between collection and Stage
 - New Stage 3 main articles fail on missing URL, missing canonical `source_quality`, unresolved `source_url_quality=unknown`, `source_quality_status=blocked`, `main_article_source_allowed=false`, or `SOURCE_QUALITY_FIELD_DRIFT`.
 - Legacy artifacts without source quality fields warn during rollout.
 - Source effectiveness and PR body summaries expose source URL quality distribution, status summary, blocker summary, selected-main coverage, main-eligible coverage, conditional promoted/blocked counts, unknown count, drift count, and legacy warning count.
+## Source snapshot / `effective_date`
+
+`data/source-monitor-registry.json`에 등록된 monitored source는 bounded fetch로 관찰하고, 이전 `data/source-snapshots/<source_id>.json`과 비교해 `content/source-events/YYYY-MM-DD/source-change-events.json` 및 `.md`를 만듭니다. 이 경로는 review artifact이며 public newsletter renderer가 직접 읽는 입력이 아닙니다.
+
+`published_date`는 원문 source가 명시한 실제 발행일입니다. `effective_date`는 `Last updated`, structured modified date, sitemap `lastmod`, release row date, 또는 snapshot diff에서 source change event를 판단할 때 쓰는 유효 날짜입니다. `published_date`가 없는 문서는 날짜 없는 정적 문서 자체로 main article에 승격하지 않고, monitored source에서 생성된 source change event가 source binding과 date quality를 통과할 때만 candidate가 될 수 있습니다.
+
+`detected_at`, `first_seen_at`, `last_seen_at`은 pipeline 관찰 시점 또는 snapshot state입니다. detected_at, first_seen_at, last_seen_at은 source의 실제 발행일이나 freshness 근거가 아니다. 이 값들은 freshness/date-source/publish-ready evidence로 사용하지 않습니다.
+
+`date_source`와 `date_confidence`는 `scripts/newsroom/common/date-signals.js`의 allowlist와 baseline을 따릅니다. `date_confidence >= 85`인 source date signal만 source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. `snapshot_detected_at` 및 `content_hash_changed_without_date`는 editor review 또는 watchlist signal로만 다루며 publish-ready date evidence가 아닙니다.
+
+Source monitor report는 `Source Snapshot Changes`, `Source Change Events`, `Evidence Identity / Duplicate Guard`, `Date Quality` 섹션을 포함합니다. Public newsletter artifact에는 raw snapshot state, previous/current diff payload, `processed_source_event_ids`, `processed_evidence_ids`를 노출하지 않습니다.

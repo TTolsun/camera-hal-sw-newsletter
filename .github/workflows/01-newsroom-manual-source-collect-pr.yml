@@ -152,6 +152,9 @@ jobs:
             content/collected-news/${{ steps.raw-meta.outputs.date }}/candidates.json
             content/collected-news/${{ steps.raw-meta.outputs.date }}/collection-intent.json
             content/collected-news/${{ steps.raw-meta.outputs.date }}/raw-candidate-manifest.json
+            content/source-events/${{ steps.raw-meta.outputs.date }}/source-change-events.json
+            content/source-events/${{ steps.raw-meta.outputs.date }}/source-change-events.md
             content/newsroom/${{ steps.raw-meta.outputs.date }}/news-candidates.md
+            data/source-snapshots/**
           if-no-files-found: warn
           retention-days: 14
