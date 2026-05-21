@@ -1,4 +1,11 @@
 const GEMINI_PRO_FALLBACK_MODEL = 'gemini-2.5-pro';
+const LLM_STAGE_GROUPS = Object.freeze({
+  REPORTER: 'reporter',
+  EDITOR: 'editor',
+  FACTCHECK: 'factcheck',
+  REPAIR: 'repair'
+});
+const LLM_STAGE_GROUP_VALUES = Object.freeze(Object.values(LLM_STAGE_GROUPS));
 
 function normalizeModelName(value) {
   return String(value || '').trim().toLowerCase();
@@ -14,19 +21,58 @@ function shouldAppendGeminiProFallback(config) {
     config?.newsroomAllowProOnManual === true;
 }
 
-function configuredModels(config) {
+function dedupeModels(models) {
+  return models.filter((item, index, items) => item && items.indexOf(item) === index);
+}
+
+function fallbackModels(config) {
+  return Array.isArray(config?.llmFallbackModels)
+    ? config.llmFallbackModels
+    : Array.isArray(config?.geminiFallbackModels)
+      ? config.geminiFallbackModels
+      : [];
+}
+
+function modelGroupForStage(stage) {
+  const normalized = normalizeModelName(stage);
+  if (/background-context|reporter/.test(normalized)) return LLM_STAGE_GROUPS.REPORTER;
+  if (/fact[-\s]?checker|fact[-\s]?check/.test(normalized)) return LLM_STAGE_GROUPS.FACTCHECK;
+  if (/semantic repair|editor repair|completion|repair/.test(normalized)) return LLM_STAGE_GROUPS.REPAIR;
+  if (/editor/.test(normalized)) return LLM_STAGE_GROUPS.EDITOR;
+  return LLM_STAGE_GROUPS.REPORTER;
+}
+
+function primaryModelForStage(config, stage) {
+  const group = modelGroupForStage(stage);
+  const stageModels = config?.llmStageModels && typeof config.llmStageModels === 'object'
+    ? config.llmStageModels
+    : null;
+  return stageModels?.[group] || config?.llmModel || config?.geminiModel;
+}
+
+function configuredModelsForStage(config, stage) {
   const models = [
-    config?.llmModel ?? config?.geminiModel,
-    ...(Array.isArray(config?.llmFallbackModels)
-      ? config.llmFallbackModels
-      : Array.isArray(config?.geminiFallbackModels)
-        ? config.geminiFallbackModels
-        : [])
+    primaryModelForStage(config, stage),
+    ...fallbackModels(config)
   ].filter(Boolean);
   if (shouldAppendGeminiProFallback(config)) {
     models.push(GEMINI_PRO_FALLBACK_MODEL);
   }
-  return models.filter((item, index, items) => items.indexOf(item) === index);
+  return dedupeModels(models);
+}
+
+function configuredModels(config) {
+  if (config?.llmStageModels && typeof config.llmStageModels === 'object') {
+    const models = [
+      ...LLM_STAGE_GROUP_VALUES.map(group => config.llmStageModels[group]),
+      ...fallbackModels(config)
+    ];
+    if (shouldAppendGeminiProFallback(config)) {
+      models.push(GEMINI_PRO_FALLBACK_MODEL);
+    }
+    return dedupeModels(models);
+  }
+  return configuredModelsForStage(config, LLM_STAGE_GROUPS.REPORTER);
 }
 
 function geminiProPolicySummary(config) {
@@ -51,9 +97,13 @@ function geminiProPolicySummary(config) {
 
 module.exports = {
   GEMINI_PRO_FALLBACK_MODEL,
+  LLM_STAGE_GROUPS,
   configuredModels,
+  configuredModelsForStage,
   geminiProPolicySummary,
   isGeminiProModel,
+  modelGroupForStage,
   normalizeModelName,
+  primaryModelForStage,
   shouldAppendGeminiProFallback
 };
