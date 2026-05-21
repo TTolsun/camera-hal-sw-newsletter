@@ -654,7 +654,7 @@ function renderNewsletterImageAuditSummary(root, date) {
       '## 이미지 감사 / Image Audit',
       '',
       '- 상태: 생성 실패 또는 사용 불가',
-      `- 사유: \`${dateJsonRelPath}\` ${fs.existsSync(path.join(root, dateJsonRelPath)) ? 'is not valid JSON' : 'not found'}`,
+      `- 사유: \`${dateJsonRelPath}\` ${fs.existsSync(path.join(root, dateJsonRelPath)) ? 'JSON 형식 오류' : '파일 없음'}`,
       '- 영향: 이미지 감사는 advisory/reporting artifact이며 기존 publish/readiness 판정을 약화하지 않습니다.',
       ''
     ].join('\n');
@@ -662,32 +662,38 @@ function renderNewsletterImageAuditSummary(root, date) {
   const summary = report.summary || {};
   const aggregateSummary = aggregate?.summary || {};
   const repairableDates = ensureArray(aggregate?.repairableDates);
+  const generatedFrom = aggregate ? aggregateRelPath : dateJsonRelPath;
   return [
     '## 이미지 감사 / Image Audit',
     '',
     `- 감사한 issue 수: ${valueOrUnknownKo(aggregateSummary.auditedIssueCount ?? 1)}`,
     `- 감사한 article 수: ${valueOrUnknownKo(aggregateSummary.auditedArticleCount ?? summary.article_count)}`,
     `- 복원 가능 article 수: ${valueOrUnknownKo(aggregateSummary.repairableArticleCount ?? summary.repairable_article_count)}`,
-    `- 복원된 article 수: ${valueOrUnknownKo(aggregateSummary.repairedArticleCount ?? summary.repaired_article_count ?? 0)}`,
+    `- 이번 repair 실행 복원 수: ${valueOrUnknownKo(aggregateSummary.repairedInThisRunCount ?? summary.repaired_in_this_run_count ?? 0)}`,
+    `- imageSelection 선택 상태 수: ${valueOrUnknownKo(aggregateSummary.selectedByImageSelectionCount ?? summary.selected_by_image_selection_count ?? 0)}`,
     `- 후보 없음 article 수: ${valueOrUnknownKo(aggregateSummary.unrepairableNoCandidateCount ?? summary.unrepairable_no_candidate_count)}`,
     `- validator 제외 수: ${valueOrUnknownKo(aggregateSummary.excludedValidatorFailedCount ?? summary.excluded_validator_failed_count)}`,
     `- attribution 부족 제외 수: ${valueOrUnknownKo(aggregateSummary.excludedAttributionMissingCount ?? summary.excluded_attribution_missing_count)}`,
-    `- render mismatch 수: ${valueOrUnknownKo(aggregateSummary.selectedImageRenderMismatchCount ?? summary.selected_image_render_mismatch_count)}`,
-    `- publish blocking issue 수: ${valueOrUnknownKo(aggregateSummary.publishBlockingIssueCount ?? summary.publish_blocking_issue_count)}`,
+    `- 출처 근거 부족 대표 이미지 수: ${valueOrUnknownKo(aggregateSummary.selectedImageWithoutValidCandidateCount ?? summary.selected_image_without_valid_candidate_count ?? 0)}`,
+    `- 후보 목록 불일치 대표 이미지 수: ${valueOrUnknownKo(aggregateSummary.selectedImageNotInCandidatesCount ?? summary.selected_image_not_in_candidates_count ?? 0)}`,
+    `- 렌더 결과 불일치 수: ${valueOrUnknownKo(aggregateSummary.selectedImageRenderMismatchCount ?? summary.selected_image_render_mismatch_count)}`,
+    `- publish 차단 이슈 수: ${valueOrUnknownKo(aggregateSummary.publishBlockingIssueCount ?? summary.publish_blocking_issue_count)}`,
     '',
     '### 복원 가능 날짜',
     '',
-    '- Generated from:',
-    `  - \`${aggregateRelPath}\``,
+    '- 생성 기준:',
+    `  - \`${generatedFrom}\``,
     '',
     '```text',
-    repairableDates.join('\n') || 'none',
+    repairableDates.join('\n') || '없음',
     '```',
     '',
-    '### Artifacts',
+    '### 산출물',
     '',
-    `- \`${aggregateRelPath}\``,
-    '- `content/newsroom/image-audit-aggregate-report.md`',
+    ...(aggregate ? [
+      `- \`${aggregateRelPath}\``,
+      '- `content/newsroom/image-audit-aggregate-report.md`'
+    ] : []),
     `- \`${dateJsonRelPath}\``,
     `- \`${dateMarkdownRelPath}\``,
     ''

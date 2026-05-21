@@ -19,8 +19,20 @@ const IMAGE_REASON_LABELS_KO = {
   html_response: 'HTML 응답',
   svg_rejected: 'SVG 이미지 제외',
   manual_repair_forbidden: '수동 복원 금지',
+  selected_image_without_valid_candidate: '대표 이미지 provenance 부족',
+  selected_image_not_in_candidates: '대표 이미지 후보 목록 불일치',
   schema_mismatch: '이미지 schema 불일치'
 };
+
+function isKnownImageReasonCode(reasonCode) {
+  return Object.prototype.hasOwnProperty.call(IMAGE_REASON_LABELS_KO, reasonCode);
+}
+
+function assertKnownImageReasonCode(reasonCode) {
+  if (!isKnownImageReasonCode(reasonCode)) {
+    throw new Error(`Unknown image audit reasonCode: ${reasonCode}`);
+  }
+}
 
 function imageReasonLabelKo(reasonCode) {
   return IMAGE_REASON_LABELS_KO[reasonCode] || '알 수 없는 사유';
@@ -61,6 +73,10 @@ function imageReasonTextKo(reasonCode) {
       return '후보 이미지의 provenance 또는 validation metadata가 부족합니다.';
     case 'render_mismatch':
       return '선택된 이미지가 Markdown 또는 HTML 산출물에 일관되게 반영되지 않았습니다.';
+    case 'selected_image_without_valid_candidate':
+      return '대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다.';
+    case 'selected_image_not_in_candidates':
+      return '대표 이미지 URL이 기존 imageCandidates 목록에서 확인되지 않습니다.';
     case 'schema_mismatch':
       return '이미지 필드가 기대 schema와 일치하지 않습니다.';
     default:
@@ -70,6 +86,8 @@ function imageReasonTextKo(reasonCode) {
 
 module.exports = {
   IMAGE_REASON_LABELS_KO,
+  assertKnownImageReasonCode,
   imageReasonLabelKo,
-  imageReasonTextKo
+  imageReasonTextKo,
+  isKnownImageReasonCode
 };

@@ -16,8 +16,12 @@
     "valid_image_candidate_count": 2,
     "selected_image_count": 2,
     "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 1,
+    "selected_image_not_in_candidates_count": 0,
     "repairable_article_count": 0,
-    "repaired_article_count": 1,
+    "selected_by_image_selection_count": 1,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
     "unrepairable_no_candidate_count": 1,
     "excluded_validator_failed_count": 0,
     "excluded_attribution_missing_count": 0,
@@ -33,6 +37,20 @@
       "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
       "image_candidate_count": 3,
       "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": true,
+      "selected_image_evidence": {
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다.",
+        "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+        "selectedImageInCandidates": true,
+        "selectedImageHasValidCandidate": false,
+        "selectedImageIsFallback": false
+      },
       "repairable": false,
       "reasonCode": "missing_candidate_metadata",
       "reasonLabel": "후보 이미지 metadata 부족",
@@ -87,6 +105,12 @@
       "selectedImage": "",
       "image_candidate_count": 0,
       "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
       "repairable": false,
       "reasonCode": "no_candidate",
       "reasonLabel": "이미지 후보 없음",
@@ -100,6 +124,12 @@
       "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
       "image_candidate_count": 3,
       "valid_image_candidate_count": 2,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
       "repairable": false,
       "reasonCode": "selected",
       "reasonLabel": "대표 이미지 선택됨",
@@ -144,8 +174,28 @@
     }
   ],
   "consistency": {
-    "selected_image_render_mismatches": []
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
+        "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+      }
+    ]
   },
-  "warnings": [],
+  "warnings": [
+    {
+      "type": "selected_image_without_valid_candidate",
+      "index": 1,
+      "headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+      "reasonCode": "selected_image_without_valid_candidate",
+      "reasonLabel": "대표 이미지 provenance 부족",
+      "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+    }
+  ],
   "errors": []
 }

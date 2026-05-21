@@ -230,6 +230,30 @@ function markdownTableCell(value) {
     .replace(/\|/g, '\\|') || 'none';
 }
 
+function normalizeParagraphForDeduplication(value) {
+  return String(value || '')
+    .replace(/\[[^\]]+\]\([^)]+\)/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+function duplicatesPerspectiveParagraph(paragraph, perspective) {
+  const normalizedParagraph = normalizeParagraphForDeduplication(paragraph);
+  const normalizedPerspective = normalizeParagraphForDeduplication(perspective);
+  if (!normalizedParagraph || !normalizedPerspective) return false;
+  if (normalizedParagraph === normalizedPerspective) return true;
+  if (Math.min(normalizedParagraph.length, normalizedPerspective.length) < 120) return false;
+  return normalizedParagraph.includes(normalizedPerspective) || normalizedPerspective.includes(normalizedParagraph);
+}
+
+function bodyParagraphsForRender(publicArticle) {
+  const perspective = publicArticle?.camera_hal_takeaway || '';
+  return ensureArray(publicArticle?.body_paragraphs)
+    .filter(paragraph => !duplicatesPerspectiveParagraph(paragraph, perspective));
+}
+
 function articleSectionContractRows(issue, qualityReport = null) {
   return buildArticleSectionContractRows(ensureArray(issue?.sections), {
     articleResults: ensureArray(qualityReport?.article_results)
@@ -249,13 +273,14 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
 function publicArticleMarkdown(issue, heading, section) {
   const publicArticle = publicArticleForSection(section);
   const perspectiveLabel = articlePerspectiveLabel(issue, section);
+  const bodyParagraphs = bodyParagraphsForRender(publicArticle);
   return `${heading}
 
 ${articleImageMarkdown(section, publicArticle)}
 
 ${publicArticle.lead}
 
-${publicArticle.body_paragraphs.join('\n\n')}
+${bodyParagraphs.join('\n\n')}
 
 **${perspectiveLabel}**
 
@@ -293,6 +318,7 @@ ${sourceListMarkdown(issue.references)}
 function publicArticleHtml(issue, htmlHeading, headingCategory, className, section) {
   const publicArticle = publicArticleForSection(section);
   const perspectiveLabel = articlePerspectiveLabel(issue, section);
+  const bodyParagraphs = bodyParagraphsForRender(publicArticle);
   return `      <section class="section">
         <h2>${escapeHtml(htmlHeading)}</h2>
         <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-fallback-image'} ${escapeHtml(className)}">
@@ -300,7 +326,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, secti
           ${articleTagsHtml(section, headingCategory)}
           <h3>${escapeHtml(publicArticle.headline)}</h3>
           <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
-          ${publicArticle.body_paragraphs.map(paragraphHtml).join('\n          ')}
+          ${bodyParagraphs.map(paragraphHtml).join('\n          ')}
           <div class="article-block"><strong class="article-block-title">${escapeHtml(perspectiveLabel)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
           <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul>${bulletsHtml(publicArticle.reader_checkpoints)}</ul></div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>

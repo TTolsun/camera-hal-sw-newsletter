@@ -5231,6 +5231,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   const evidencePackStep = workflowStep(workflow, 'Generate evidence pack summary');
   const halSignalQualityStep = workflowStep(workflow, 'Generate HAL signal quality report');
   const imageAuditStep = workflowStep(workflow, 'Audit newsletter image lineage');
+  const snapshotStep = workflowStep(workflow, 'Snapshot newsroom debug artifacts');
   const preparePrBodyStep = workflowStep(workflow, 'Prepare pull request body');
   const ensureLabelsStep = workflowStep(workflow, 'Ensure labels');
   const createPrStep = workflowStep(workflow, 'Create final newsletter pull request');
@@ -5336,6 +5337,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
     imageAuditStep,
     /npm run newsroom:audit-images -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --fail-on-publish-blocking/
   );
+  assert.match(snapshotStep, /copy_tree_if_present "content\/newsroom\/\$\{DATE\}"/);
+  assert.match(snapshotStep, /copy_if_present "newsletters\/\$\{DATE\}\/newsletter\.md"/);
+  assert.match(snapshotStep, /copy_if_present "newsletters\/\$\{DATE\}\/index\.html"/);
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);

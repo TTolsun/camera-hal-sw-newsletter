@@ -6,6 +6,7 @@ const test = require('node:test');
 
 const {
   analyzeSectionImages,
+  buildNewsletterImageAuditReport,
   repairNewsletterImages,
   writeNewsletterImageAuditAggregate
 } = require('../../scripts/newsroom/metrics/newsletter-image-audit');
@@ -13,6 +14,9 @@ const {
   buildHtml,
   buildMarkdown
 } = require('../../scripts/newsroom/render/newsletter-renderer');
+const {
+  assertKnownImageReasonCode
+} = require('../../scripts/newsroom/render/newsletter-image-audit-labels.ko');
 const {
   retrySection
 } = require('../helpers/newsroom-builders');
@@ -130,6 +134,91 @@ test('repair command rewrites editor draft and regenerates public Markdown and H
   }
 });
 
+test('audit flags selectedImage without a valid provenance candidate for publish target', async () => {
+  const root = tempRoot('newsletter-image-selected-provenance-');
+  const date = '2026-05-29';
+  const selectedImage = 'https://cdn.example.com/cards/camera-card.png';
+  const fixture = issue(date, {
+    selectedImage,
+    imageSource: 'https://publisher.example.com/camera-update',
+    imageAttribution: 'Example Publisher',
+    imageAlt: 'Selected image without valid provenance',
+    imageLicenseStatus: 'unknown',
+    imageCandidates: [{
+      ...validImage(selectedImage),
+      sourceUrl: 'https://unrelated.example.com/article',
+      articleUrl: 'https://unrelated.example.com/article',
+      sourceKind: 'release_note_item'
+    }]
+  });
+  fixture.publication_mode = 'public';
+  writeIssue(root, fixture);
+
+  const report = await buildNewsletterImageAuditReport({ root, date });
+
+  assert.equal(report.summary.selected_image_without_valid_candidate_count, 1);
+  assert.equal(report.summary.selected_image_not_in_candidates_count, 0);
+  assert.equal(report.summary.publish_blocking_issue_count, 1);
+  assert.equal(report.errors.some(item => item.reasonCode === 'selected_image_without_valid_candidate'), true);
+});
+
+test('audit flags selectedImage that is not present in imageCandidates', async () => {
+  const root = tempRoot('newsletter-image-selected-missing-candidate-');
+  const date = '2026-05-28';
+  const fixture = issue(date, {
+    selectedImage: 'https://cdn.example.com/cards/not-in-candidates.png',
+    imageSource: 'https://publisher.example.com/camera-update',
+    imageAttribution: 'Example Publisher',
+    imageAlt: 'Selected image not in candidates',
+    imageLicenseStatus: 'unknown',
+    imageCandidates: [validImage()]
+  });
+  fixture.publication_mode = 'public';
+  writeIssue(root, fixture);
+
+  const report = await buildNewsletterImageAuditReport({ root, date });
+
+  assert.equal(report.summary.valid_image_candidate_count, 1);
+  assert.equal(report.summary.selected_image_without_valid_candidate_count, 1);
+  assert.equal(report.summary.selected_image_not_in_candidates_count, 1);
+  assert.equal(report.summary.publish_blocking_issue_count, 1);
+  assert.equal(report.errors.some(item => item.reasonCode === 'selected_image_not_in_candidates'), true);
+});
+
+test('known reason code validation rejects typos before reports can hide them', () => {
+  assert.doesNotThrow(() => assertKnownImageReasonCode('missing_attribution'));
+  assert.throws(
+    () => assertKnownImageReasonCode('missing_attrbution'),
+    /Unknown image audit reasonCode/
+  );
+});
+
+test('renderer suppresses duplicate body paragraph already shown as perspective', () => {
+  const date = '2026-05-27';
+  const duplicate = 'Camera HAL owners should verify stream, buffer, metadata, Camera ITS, latency, and frame-drop behavior before treating this update as a device-wide signal.';
+  const fixture = issue(date, {
+    public_article: {
+      headline: 'Duplicate perspective fixture',
+      lead: 'The lead is distinct.',
+      body_paragraphs: [
+        duplicate,
+        'This separate paragraph should remain in the rendered article body.'
+      ],
+      camera_hal_takeaway: duplicate,
+      reader_checkpoints: ['Check stream and metadata logs.'],
+      source_links: [{ title: 'Fixture', url: 'https://publisher.example.com/camera-update' }]
+    }
+  });
+
+  const markdown = buildMarkdown(fixture);
+  const html = buildHtml(fixture);
+
+  assert.equal(markdown.split(duplicate).length - 1, 1);
+  assert.equal(html.split(duplicate).length - 1, 1);
+  assert.match(markdown, /This separate paragraph should remain/);
+  assert.match(html, /This separate paragraph should remain/);
+});
+
 test('aggregate audit reports repairable dates and Korean Markdown labels', async () => {
   const root = tempRoot('newsletter-image-audit-');
   writeIssue(root, issue('2026-05-31', { imageCandidates: [validImage()] }));
@@ -143,4 +232,5 @@ test('aggregate audit reports repairable dates and Korean Markdown labels', asyn
   const markdown = fs.readFileSync(path.join(root, 'content', 'newsroom', '2026-05-31', 'image-audit-report.md'), 'utf8');
   assert.match(markdown, /대표 이미지 선택됨/);
   assert.match(markdown, /\(`selected`\)|\(selected\)/);
+  assert.doesNotMatch(markdown, /Generated from|Artifacts|valid image candidate|selectedImage 수|publish blocking issue|^none$/m);
 });

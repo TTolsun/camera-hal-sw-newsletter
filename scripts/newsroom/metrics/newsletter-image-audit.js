@@ -11,6 +11,7 @@ const {
   validateImageUrl
 } = require('../render/image-candidates');
 const {
+  assertKnownImageReasonCode,
   imageReasonLabelKo,
   imageReasonTextKo
 } = require('../render/newsletter-image-audit-labels.ko');
@@ -108,6 +109,18 @@ function comparableUrl(value) {
   }
 }
 
+function selectedImageComparable(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  const normalizedUrl = comparableUrl(raw);
+  return normalizedUrl || toPosixPath(raw);
+}
+
+function isRepoLocalFallbackImage(value) {
+  const normalized = toPosixPath(String(value || '').trim());
+  return Boolean(normalized && !/^https?:\/\//i.test(normalized) && normalized.includes('assets/images/fallback/'));
+}
+
 function articleTitle(section = {}, index = 0) {
   return String(
     section.public_article?.headline ||
@@ -191,6 +204,7 @@ function extractionEvidence(candidate = {}, section = {}) {
 }
 
 function exclusion(reasonCode, candidate = {}, details = {}) {
+  assertKnownImageReasonCode(reasonCode);
   return {
     candidate_url: candidate.url || '',
     reasonCode,
@@ -199,6 +213,16 @@ function exclusion(reasonCode, candidate = {}, details = {}) {
     sourceKind: candidate.sourceKind || candidate.source_kind || '',
     contentType: candidateContentType(candidate),
     validationStatus: candidate.validationStatus || candidate.validation_status || '',
+    ...details
+  };
+}
+
+function reasonEvidence(reasonCode, details = {}) {
+  assertKnownImageReasonCode(reasonCode);
+  return {
+    reasonCode,
+    reasonLabel: imageReasonLabelKo(reasonCode),
+    reasonText: imageReasonTextKo(reasonCode),
     ...details
   };
 }
@@ -551,8 +575,39 @@ async function analyzeSectionImages(section = {}, index = 0, options = {}) {
   valid.sort((left, right) => right.score - left.score || String(left.url).localeCompare(String(right.url)));
   const selected = valid[0] || null;
   const selectedImage = String(section.selectedImage || '').trim();
+  const selectedImageKey = selectedImageComparable(selectedImage);
+  const candidateUrlKeys = new Set(candidates
+    .map(candidate => selectedImageComparable(candidate.url))
+    .filter(Boolean));
+  const validCandidateUrlKeys = new Set(valid
+    .map(candidate => selectedImageComparable(candidate.url))
+    .filter(Boolean));
+  const selectedImageIsFallback = isRepoLocalFallbackImage(selectedImage);
+  const selectedImageInCandidates = Boolean(selectedImage && candidateUrlKeys.has(selectedImageKey));
+  const selectedImageHasValidCandidate = Boolean(selectedImage && validCandidateUrlKeys.has(selectedImageKey));
+  const selectedImageNotInCandidates = Boolean(
+    selectedImage &&
+    !selectedImageIsFallback &&
+    !selectedImageInCandidates
+  );
+  const selectedImageWithoutValidCandidate = Boolean(
+    selectedImage &&
+    !selectedImageIsFallback &&
+    !selectedImageHasValidCandidate
+  );
   const repairable = Boolean(!selectedImage && selected);
   const reasonCode = selected ? 'selected' : (candidates.length === 0 ? 'no_candidate' : evidence[0]?.reasonCode || 'missing_candidate_metadata');
+  const selectedImageEvidence = selectedImageWithoutValidCandidate
+    ? reasonEvidence(
+      selectedImageNotInCandidates ? 'selected_image_not_in_candidates' : 'selected_image_without_valid_candidate',
+      {
+        selectedImage,
+        selectedImageInCandidates,
+        selectedImageHasValidCandidate,
+        selectedImageIsFallback
+      }
+    )
+    : null;
 
   return {
     index: index + 1,
@@ -560,6 +615,12 @@ async function analyzeSectionImages(section = {}, index = 0, options = {}) {
     selectedImage,
     image_candidate_count: candidates.length,
     valid_image_candidate_count: valid.length,
+    selected_image_is_fallback: selectedImageIsFallback,
+    selected_image_in_candidates: selectedImageInCandidates,
+    selected_image_has_valid_candidate: selectedImageHasValidCandidate,
+    selected_image_not_in_candidates: selectedImageNotInCandidates,
+    selected_image_without_valid_candidate: selectedImageWithoutValidCandidate,
+    selected_image_evidence: selectedImageEvidence,
     repairable,
     reasonCode,
     reasonLabel: imageReasonLabelKo(reasonCode),
@@ -669,12 +730,6 @@ async function buildNewsletterImageAuditReport(options = {}) {
   }
 
   const selectedImageCount = issue ? selectedImagesFromIssue(issue).length : 0;
-  const repairedArticleCount = issue
-    ? ensureArray(issue.sections).filter(section =>
-      String(section.selectedImage || '').trim() &&
-      section.imageSelection?.reasonCode === 'selected'
-    ).length
-    : 0;
   const repairableArticles = articles.filter(article => article.repairable);
   const articleCount = ensureArray(issue?.sections).length;
   const rawCandidateCount = articles.reduce((sum, article) => sum + article.image_candidate_count, 0);
@@ -689,8 +744,37 @@ async function buildNewsletterImageAuditReport(options = {}) {
   const selectedMissingWithValidCandidates = articles.filter(article =>
     article.valid_image_candidate_count > 0 && !article.selectedImage
   ).length;
+  const selectedImageWithoutValidCandidateArticles = articles.filter(article =>
+    article.selected_image_without_valid_candidate
+  );
+  const selectedImageNotInCandidateArticles = articles.filter(article =>
+    article.selected_image_not_in_candidates
+  );
+  const selectedByImageSelectionCount = issue
+    ? ensureArray(issue.sections).filter(section =>
+      String(section.selectedImage || '').trim() &&
+      section.imageSelection?.reasonCode === 'selected'
+    ).length
+    : 0;
+  for (const article of selectedImageWithoutValidCandidateArticles) {
+    const item = {
+      type: 'selected_image_without_valid_candidate',
+      index: article.index,
+      headline: article.headline,
+      selectedImage: article.selectedImage,
+      reasonCode: article.selected_image_evidence?.reasonCode || 'selected_image_without_valid_candidate',
+      reasonLabel: article.selected_image_evidence?.reasonLabel || imageReasonLabelKo('selected_image_without_valid_candidate'),
+      reasonText: article.selected_image_evidence?.reasonText || imageReasonTextKo('selected_image_without_valid_candidate')
+    };
+    if (isPublishTarget) {
+      errors.push(item);
+    } else {
+      warnings.push(item);
+    }
+  }
   const publishBlockingIssueCount = isPublishTarget
     ? selectedMissingWithValidCandidates + selectedImageRenderMismatchCount
+      + selectedImageWithoutValidCandidateArticles.length
     : selectedImageRenderMismatchCount;
 
   return {
@@ -711,8 +795,12 @@ async function buildNewsletterImageAuditReport(options = {}) {
       valid_image_candidate_count: validCandidateCount,
       selected_image_count: selectedImageCount,
       empty_selected_with_candidates_count: articles.filter(article => !article.selectedImage && article.image_candidate_count > 0).length,
+      selected_image_without_valid_candidate_count: selectedImageWithoutValidCandidateArticles.length,
+      selected_image_not_in_candidates_count: selectedImageNotInCandidateArticles.length,
       repairable_article_count: repairableArticles.length,
-      repaired_article_count: repairedArticleCount,
+      selected_by_image_selection_count: selectedByImageSelectionCount,
+      repaired_in_this_run_count: Number(options.repairedInThisRunCount || 0),
+      repaired_article_count: Number(options.repairedInThisRunCount || 0),
       unrepairable_no_candidate_count: unrepairableNoCandidateCount,
       excluded_validator_failed_count: excludedValidatorFailedCount,
       excluded_attribution_missing_count: excludedAttributionMissingCount,
@@ -734,6 +822,12 @@ async function buildNewsletterImageAuditReport(options = {}) {
       selectedImage: article.selectedImage,
       image_candidate_count: article.image_candidate_count,
       valid_image_candidate_count: article.valid_image_candidate_count,
+      selected_image_is_fallback: article.selected_image_is_fallback,
+      selected_image_in_candidates: article.selected_image_in_candidates,
+      selected_image_has_valid_candidate: article.selected_image_has_valid_candidate,
+      selected_image_not_in_candidates: article.selected_image_not_in_candidates,
+      selected_image_without_valid_candidate: article.selected_image_without_valid_candidate,
+      selected_image_evidence: article.selected_image_evidence,
       repairable: article.repairable,
       reasonCode: article.reasonCode,
       reasonLabel: article.reasonLabel,
@@ -742,7 +836,15 @@ async function buildNewsletterImageAuditReport(options = {}) {
       candidate_evidence: article.candidateEvidence
     })),
     consistency: {
-      selected_image_render_mismatches: mismatches
+      selected_image_render_mismatches: mismatches,
+      selected_image_without_valid_candidate_articles: selectedImageWithoutValidCandidateArticles.map(article => ({
+        index: article.index,
+        headline: article.headline,
+        selectedImage: article.selectedImage,
+        reasonCode: article.selected_image_evidence?.reasonCode || 'selected_image_without_valid_candidate',
+        reasonLabel: article.selected_image_evidence?.reasonLabel || imageReasonLabelKo('selected_image_without_valid_candidate'),
+        reasonText: article.selected_image_evidence?.reasonText || imageReasonTextKo('selected_image_without_valid_candidate')
+      }))
     },
     warnings,
     errors
@@ -752,6 +854,7 @@ async function buildNewsletterImageAuditReport(options = {}) {
 function reportStatusCode(report) {
   if (report.summary.publish_blocking_issue_count > 0) return 'publish_blocking';
   if (report.summary.repairable_article_count > 0) return 'repairable';
+  if (report.summary.selected_image_without_valid_candidate_count > 0) return 'provenance_warning';
   if (report.summary.unrepairable_no_candidate_count === report.summary.article_count) return 'no_candidate';
   return 'ok';
 }
@@ -759,42 +862,59 @@ function reportStatusCode(report) {
 function reportStatusText(report) {
   if (report.summary.publish_blocking_issue_count > 0) return '차단';
   if (report.summary.repairable_article_count > 0) return '복원 가능';
+  if (report.summary.selected_image_without_valid_candidate_count > 0) return '출처 근거 재검토 필요';
   if (report.summary.unrepairable_no_candidate_count === report.summary.article_count) return '후보 없음';
   return '정상 또는 조치 없음';
 }
 
 function renderNewsletterImageAuditMarkdown(report) {
+  const none = '없음';
   const lines = [
     `# 이미지 감사 리포트 - ${report.date}`,
     '',
     '## 요약',
     '',
     `- 상태: ${reportStatusText(report)}`,
-    `- 기사 수: ${report.summary.article_count}`,
-    `- 렌더된 이미지 수: ${report.summary.rendered_image_count}`,
-    `- Markdown 이미지 수: ${report.summary.markdown_image_count}`,
-    `- fallback visual 수: ${report.summary.fallback_visual_count}`,
-    `- 이미지 후보 수: ${report.summary.image_candidates_count}`,
-    `- valid image candidate 수: ${report.summary.valid_image_candidate_count}`,
-    `- selectedImage 수: ${report.summary.selected_image_count}`,
-    `- 복원 가능 기사 수: ${report.summary.repairable_article_count}`,
-    `- publish blocking issue 수: ${report.summary.publish_blocking_issue_count}`,
+    `- 기사 수 (\`article_count\`): ${report.summary.article_count}`,
+    `- 렌더된 이미지 수 (\`rendered_image_count\`): ${report.summary.rendered_image_count}`,
+    `- Markdown 이미지 수 (\`markdown_image_count\`): ${report.summary.markdown_image_count}`,
+    `- 임시 시각 요소 수 (\`fallback_visual_count\`): ${report.summary.fallback_visual_count}`,
+    `- 이미지 후보 수 (\`image_candidates_count\`): ${report.summary.image_candidates_count}`,
+    `- 검증 통과 이미지 후보 수 (\`valid_image_candidate_count\`): ${report.summary.valid_image_candidate_count}`,
+    `- 선택된 대표 이미지 수 (\`selected_image_count\`): ${report.summary.selected_image_count}`,
+    `- 출처 근거 부족 대표 이미지 수 (\`selected_image_without_valid_candidate_count\`): ${report.summary.selected_image_without_valid_candidate_count}`,
+    `- 후보 목록 불일치 대표 이미지 수 (\`selected_image_not_in_candidates_count\`): ${report.summary.selected_image_not_in_candidates_count}`,
+    `- 복원 가능 기사 수 (\`repairable_article_count\`): ${report.summary.repairable_article_count}`,
+    `- 이번 repair 실행 복원 수 (\`repaired_in_this_run_count\`): ${report.summary.repaired_in_this_run_count}`,
+    `- imageSelection 선택 상태 수 (\`selected_by_image_selection_count\`): ${report.summary.selected_by_image_selection_count}`,
+    `- publish 차단 이슈 수 (\`publish_blocking_issue_count\`): ${report.summary.publish_blocking_issue_count}`,
     '',
     '## 기사별 상태',
     '',
-    '| # | 기사 | selectedImage | 후보 | valid 후보 | 상태 |',
+    '| # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |',
     '| ---: | --- | --- | ---: | ---: | --- |'
   ];
   for (const article of report.articles) {
     const status = `${article.reasonLabel} (${article.reasonCode})`;
-    lines.push(`| ${article.index} | ${article.headline.replace(/\|/g, '\\|')} | ${article.selectedImage ? '있음' : '없음'} | ${article.image_candidate_count} | ${article.valid_image_candidate_count} | ${status.replace(/\|/g, '\\|')} |`);
+    const selectedStatus = article.selectedImage
+      ? (article.selected_image_without_valid_candidate ? '있음, 출처 근거 재검토 필요' : '있음')
+      : none;
+    lines.push(`| ${article.index} | ${article.headline.replace(/\|/g, '\\|')} | ${selectedStatus} | ${article.image_candidate_count} | ${article.valid_image_candidate_count} | ${status.replace(/\|/g, '\\|')} |`);
   }
   lines.push('', '## 복원 가능 기사', '');
   if (report.repairable_articles.length === 0) {
-    lines.push('- 없음');
+    lines.push(`- ${none}`);
   } else {
     for (const item of report.repairable_articles) {
       lines.push(`- ${item.index}. ${item.headline}: ${item.reasonLabel} (${item.reasonCode}) - ${item.selected_candidate_url}`);
+    }
+  }
+  lines.push('', '## 대표 이미지 출처 근거 재검토', '');
+  if (report.consistency.selected_image_without_valid_candidate_articles.length === 0) {
+    lines.push(`- ${none}`);
+  } else {
+    for (const item of report.consistency.selected_image_without_valid_candidate_articles) {
+      lines.push(`- ${item.index}. ${item.headline}: ${item.reasonLabel} (${item.reasonCode}) - ${item.selectedImage}`);
     }
   }
   lines.push('', '## 렌더 일관성', '');
@@ -841,10 +961,14 @@ function aggregateReports(root, reports) {
     auditedIssueCount: reports.length,
     auditedArticleCount: reports.reduce((sum, report) => sum + report.summary.article_count, 0),
     repairableArticleCount: reports.reduce((sum, report) => sum + report.summary.repairable_article_count, 0),
-    repairedArticleCount: reports.reduce((sum, report) => sum + (report.summary.repaired_article_count || 0), 0),
+    repairedArticleCount: reports.reduce((sum, report) => sum + (report.summary.repaired_in_this_run_count || 0), 0),
+    repairedInThisRunCount: reports.reduce((sum, report) => sum + (report.summary.repaired_in_this_run_count || 0), 0),
+    selectedByImageSelectionCount: reports.reduce((sum, report) => sum + (report.summary.selected_by_image_selection_count || 0), 0),
     unrepairableNoCandidateCount: reports.reduce((sum, report) => sum + report.summary.unrepairable_no_candidate_count, 0),
     excludedValidatorFailedCount: reports.reduce((sum, report) => sum + report.summary.excluded_validator_failed_count, 0),
     excludedAttributionMissingCount: reports.reduce((sum, report) => sum + report.summary.excluded_attribution_missing_count, 0),
+    selectedImageWithoutValidCandidateCount: reports.reduce((sum, report) => sum + (report.summary.selected_image_without_valid_candidate_count || 0), 0),
+    selectedImageNotInCandidatesCount: reports.reduce((sum, report) => sum + (report.summary.selected_image_not_in_candidates_count || 0), 0),
     selectedImageRenderMismatchCount: reports.reduce((sum, report) => sum + report.summary.selected_image_render_mismatch_count, 0),
     publishBlockingIssueCount: reports.reduce((sum, report) => sum + report.summary.publish_blocking_issue_count, 0)
   };
@@ -864,6 +988,10 @@ function aggregateReports(root, reports) {
       status: reportStatusText(report),
       article_count: report.summary.article_count,
       repairable_article_count: report.summary.repairable_article_count,
+      repaired_in_this_run_count: report.summary.repaired_in_this_run_count,
+      selected_by_image_selection_count: report.summary.selected_by_image_selection_count,
+      selected_image_without_valid_candidate_count: report.summary.selected_image_without_valid_candidate_count,
+      selected_image_not_in_candidates_count: report.summary.selected_image_not_in_candidates_count,
       selected_image_render_mismatch_count: report.summary.selected_image_render_mismatch_count,
       publish_blocking_issue_count: report.summary.publish_blocking_issue_count,
       report: `content/newsroom/${report.date}/image-audit-report.json`
@@ -880,12 +1008,15 @@ function renderAggregateMarkdown(aggregate) {
     `- 감사한 issue 수: ${aggregate.summary.auditedIssueCount}`,
     `- 감사한 article 수: ${aggregate.summary.auditedArticleCount}`,
     `- 복원 가능 article 수: ${aggregate.summary.repairableArticleCount}`,
-    `- 복원된 article 수: ${aggregate.summary.repairedArticleCount}`,
+    `- 이번 repair 실행 복원 수: ${aggregate.summary.repairedInThisRunCount}`,
+    `- imageSelection 선택 상태 수: ${aggregate.summary.selectedByImageSelectionCount}`,
     `- 후보 없음 article 수: ${aggregate.summary.unrepairableNoCandidateCount}`,
     `- validator 제외 수: ${aggregate.summary.excludedValidatorFailedCount}`,
     `- attribution 부족 제외 수: ${aggregate.summary.excludedAttributionMissingCount}`,
-    `- render mismatch 수: ${aggregate.summary.selectedImageRenderMismatchCount}`,
-    `- publish blocking issue 수: ${aggregate.summary.publishBlockingIssueCount}`,
+    `- 출처 근거 부족 대표 이미지 수: ${aggregate.summary.selectedImageWithoutValidCandidateCount}`,
+    `- 후보 목록 불일치 대표 이미지 수: ${aggregate.summary.selectedImageNotInCandidatesCount}`,
+    `- 렌더 결과 불일치 수: ${aggregate.summary.selectedImageRenderMismatchCount}`,
+    `- publish 차단 이슈 수: ${aggregate.summary.publishBlockingIssueCount}`,
     '',
     '## 복원 가능 날짜',
     '',
@@ -893,9 +1024,9 @@ function renderAggregateMarkdown(aggregate) {
     '',
     '## 날짜별 상태',
     '',
-    '| 날짜 | 상태 | 기사 | 복원 가능 | render mismatch | publish blocking |',
-    '| --- | --- | ---: | ---: | ---: | ---: |',
-    ...aggregate.reports.map(report => `| ${report.date} | ${report.status} | ${report.article_count} | ${report.repairable_article_count} | ${report.selected_image_render_mismatch_count} | ${report.publish_blocking_issue_count} |`)
+    '| 날짜 | 상태 | 기사 | 복원 가능 | 출처 근거 부족 | 렌더 불일치 | publish 차단 |',
+    '| --- | --- | ---: | ---: | ---: | ---: | ---: |',
+    ...aggregate.reports.map(report => `| ${report.date} | ${report.status} | ${report.article_count} | ${report.repairable_article_count} | ${report.selected_image_without_valid_candidate_count} | ${report.selected_image_render_mismatch_count} | ${report.publish_blocking_issue_count} |`)
   ];
   return `${lines.join('\n')}\n`;
 }
@@ -910,9 +1041,16 @@ function aggregatePaths(root) {
 async function writeNewsletterImageAuditAggregate(options = {}) {
   const root = options.root || process.cwd();
   const dates = options.dates || listNewsletterDates(root);
+  const repairedInThisRunByDate = options.repairedInThisRunByDate || {};
   const reports = [];
   for (const date of dates) {
-    const result = await writeNewsletterImageAuditArtifacts({ ...options, root, date, failOnPublishBlocking: false });
+    const result = await writeNewsletterImageAuditArtifacts({
+      ...options,
+      root,
+      date,
+      repairedInThisRunCount: Number(repairedInThisRunByDate[date] || 0),
+      failOnPublishBlocking: false
+    });
     reports.push(result.report);
   }
   const aggregate = aggregateReports(root, reports);
@@ -992,10 +1130,13 @@ async function repairNewsletterImagesForDate(options = {}) {
   writeText(paths.newsletterMarkdownPath, markdown);
   writeText(paths.newsletterHtmlPath, html);
 
-  const result = await writeNewsletterImageAuditArtifacts({ ...options, root, date, failOnPublishBlocking: false });
-  result.report.summary.repaired_article_count = repairedArticleCount;
-  writeJson(paths.jsonPath, result.report);
-  writeText(paths.markdownPath, renderNewsletterImageAuditMarkdown(result.report));
+  const result = await writeNewsletterImageAuditArtifacts({
+    ...options,
+    root,
+    date,
+    repairedInThisRunCount: repairedArticleCount,
+    failOnPublishBlocking: false
+  });
   return {
     date,
     repairedArticleCount,
@@ -1014,7 +1155,15 @@ async function repairNewsletterImages(options = {}) {
   for (const date of dates) {
     repairs.push(await repairNewsletterImagesForDate({ ...options, root, date }));
   }
-  await writeNewsletterImageAuditAggregate({ ...options, root, failOnPublishBlocking: false });
+  const repairedInThisRunByDate = Object.fromEntries(
+    repairs.map(item => [item.date, item.repairedArticleCount])
+  );
+  await writeNewsletterImageAuditAggregate({
+    ...options,
+    root,
+    repairedInThisRunByDate,
+    failOnPublishBlocking: false
+  });
   return repairs;
 }
 

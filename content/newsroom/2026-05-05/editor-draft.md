@@ -18,8 +18,6 @@
 
 AI 코딩 에이전트는 개발자가 코드 검토, 리팩토링 후보 탐색, 테스트 로그 정리, 문서화 같은 개발 작업을 보조하도록 돕는 도구입니다. 이 업데이트는 HAL 제품 동작 근거가 아니라 개발 workflow에서 도입 여부를 검토할 신호로 다룹니다.
 
-Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지만, Camera HAL 제품 동작을 설명하는 출처는 아닙니다. HAL 팀은 이를 code review 보조, 리팩토링 후보 탐색, 테스트 로그 정리 같은 developer workflow 점검 신호로만 다룹니다. 플러그인 아카이브 지원도 내부 review checklist나 문서 템플릿을 agent workflow에 연결할 수 있는지 검토하는 범위로 제한합니다.
-
 **Android Native / Tooling 관점**
 
 Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지만, Camera HAL 제품 동작을 설명하는 출처는 아닙니다. HAL 팀은 이를 code review 보조, 리팩토링 후보 탐색, 테스트 로그 정리 같은 developer workflow 점검 신호로만 다룹니다. 플러그인 아카이브 지원도 내부 review checklist나 문서 템플릿을 agent workflow에 연결할 수 있는지 검토하는 범위로 제한합니다.
@@ -47,8 +45,6 @@ _이미지: [Android Security Bulletin](https://source.android.com/docs/security
 2026년 5월 Android 보안 게시판이 발행되었으며, 제품 camera path와 연결되는 CVE/패치가 있는지 확인할 security triage 입력으로 다룹니다.
 
 Android 보안 게시판은 매월 발행되며 Android 기기의 보안 취약점과 패치 정보를 제공합니다. 게시판은 커널, 프레임워크, 라이브러리, 미디어 구성 요소 등 여러 시스템 영역을 다루지만, 특정 Camera HAL 구현 영향은 제품 구성 요소와 CVE/패치 매핑을 별도로 확인해야 합니다.
-
-이번 보안 게시판은 제품 camera path 영향이 이미 확인됐다는 증거가 아니라, security triage에서 확인할 platform-adjacent 입력입니다. HAL 팀은 게시판의 kernel, media, framework, vendor component 항목 중 camera path와 실제로 연결되는 CVE나 패치가 있는지 먼저 확인하고, 매핑이 있을 때만 영향을 받는 device branch, vendor component, CTS/VTS/Camera ITS smoke 범위를 정리합니다. 매핑이 확인되지 않은 항목은 camera owner follow-up으로 승격하지 않습니다.
 
 **Camera HAL / Driver 관점**
 
@@ -78,8 +74,6 @@ _이미지: [Android Developers Blog](https://android-developers.googleblog.com/
 
 AI 모델의 추론은 온디바이스에서 직접 실행되거나 클라우드 서버에서 실행될 수 있습니다. 온디바이스 추론은 낮은 지연 시간과 개인 정보 보호 이점을 제공하지만, 기기의 컴퓨팅 리소스에 제약이 있습니다. 클라우드 추론은 더 강력한 컴퓨팅 성능을 제공하지만, 네트워크 지연과 데이터 전송 비용이 발생합니다. 하이브리드 추론은 이 두 가지 접근 방식의 장점을 결합하여, 작업의 복잡성과 리소스 요구 사항에 따라 최적의 추론 위치를 동적으로 선택하는 방식입니다.
 
-Do not treat Firebase AI Logic as a HAL scheduling, metadata contract, stream/buffer, request/result, or camera pipeline behavior change. 제품 계획에 camera frame을 Firebase AI Logic으로 전달하는 경로가 있는지 먼저 확인하고, 해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 검토합니다. Source-backed 제품 요구가 없으면 HAL 변경으로 기록하지 않습니다.
-
 **Camera HAL / Driver 관점**
 
 Do not treat Firebase AI Logic as a HAL scheduling, metadata contract, stream/buffer, request/result, or camera pipeline behavior change. 제품 계획에 camera frame을 Firebase AI Logic으로 전달하는 경로가 있는지 먼저 확인하고, 해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 검토합니다. Source-backed 제품 요구가 없으면 HAL 변경으로 기록하지 않습니다.
@@ -107,8 +101,6 @@ _이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/05/cpp26-a-user-friendl
 C++26 표준에 제안된 `assert()` 매크로의 개선 사항은 디버깅 시 더 유용하고 사용자 친화적인 정보를 제공할 것으로 예상됩니다. 이는 `std::string_view`와 같은 타입의 인수를 지원하고, 실패 시 더 많은 컨텍스트 정보를 자동으로 캡처하여 출력할 수 있도록 합니다.
 
 C++의 `assert()` 매크로는 개발 단계에서 프로그램의 가정을 검증하고, 위반 시 즉시 프로그램을 중단시켜 버그를 조기에 발견하는 데 사용됩니다. C++26에서 제안되는 개선 사항은 실패 시 더 풍부한 진단 정보를 제공하는 방향의 언어/toolchain 변화입니다.
-
-C++26 assert 개선은 Camera HAL 제품 동작 변경이 아니라, compiler/toolchain support가 준비된 뒤 debug-build 또는 host utility에서 검토할 수 있는 진단 개선 후보입니다. HAL 팀은 현재 코드의 `assert()` 사용 위치를 inventory로 정리하고, 실패 시 어떤 추가 context가 디버깅에 도움이 될지 검토할 수 있습니다. 다만 출처는 Android 실행 환경, CTS/VTS/Camera ITS 결과, HAL 내부 처리 방식이 직접 바뀐다고 말하지 않으므로 그런 효과는 별도 PoC와 toolchain 확인 전까지 주장하지 않습니다.
 
 **Android Native / Tooling 관점**
 

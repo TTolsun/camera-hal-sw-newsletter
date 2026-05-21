@@ -1,6 +1,6 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-15
 
-이번 2026-05-15호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22를 중심으로 구성했습니다.
+이번 2026-05-15호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22를 중심으로 구성했습니다.
 
 
 > 편집자 검토 후 공개 가능한 검토 발행본입니다.
@@ -11,8 +11,8 @@
 ## 1. 이번 주 3줄 브리핑
 
 - 공식 source 기반 후보를 우선 검토했습니다.
-- hard failure article은 main article에서 제거하거나 watch 성격으로 강등했습니다.
-- fallback article은 HAL 직접 변경이 아니라 관찰 항목으로 표시했습니다.
+- 차단 이슈 article은 main article에서 제거하거나 watch 성격으로 강등했습니다.
+- 보조 관찰 article은 HAL 직접 변경이 아니라 관찰 항목으로 표시했습니다.
 
 ## 2. libcamera Release Announcements - libcamera v0.7.1
 
@@ -65,12 +65,12 @@ build, test, debug, native tooling workflow 항목으로 유지합니다. camera
 ## 4. GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
 
 
-![Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22](https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1)
+![Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22](https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1)
 
 _이미지: [Phoronix Linux Camera / Media](https://www.phoronix.com/review/gcc-16-vs-clang-22)_
 
 
-GCC 16.1 released at the end of April as the latest major, annual feature release to the GNU Compiler Collection.
+GCC 16.1은 GNU Compiler Collection의 최신 주요 기능 릴리스로 공개되었고, GCC 15 대비 성능 비교 결과가 함께 소개되었습니다.
 
 Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.
 

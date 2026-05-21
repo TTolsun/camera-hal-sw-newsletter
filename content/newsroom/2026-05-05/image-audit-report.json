@@ -16,8 +16,12 @@
     "valid_image_candidate_count": 1,
     "selected_image_count": 3,
     "empty_selected_with_candidates_count": 1,
+    "selected_image_without_valid_candidate_count": 2,
+    "selected_image_not_in_candidates_count": 0,
     "repairable_article_count": 0,
-    "repaired_article_count": 1,
+    "selected_by_image_selection_count": 1,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
     "unrepairable_no_candidate_count": 0,
     "excluded_validator_failed_count": 0,
     "excluded_attribution_missing_count": 0,
@@ -33,6 +37,12 @@
       "selectedImage": "",
       "image_candidate_count": 3,
       "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
       "repairable": false,
       "reasonCode": "missing_extraction_source",
       "reasonLabel": "추출 출처 정보 부족",
@@ -92,6 +102,20 @@
       "selectedImage": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
       "image_candidate_count": 1,
       "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": true,
+      "selected_image_evidence": {
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다.",
+        "selectedImage": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+        "selectedImageInCandidates": true,
+        "selectedImageHasValidCandidate": false,
+        "selectedImageIsFallback": false
+      },
       "repairable": false,
       "reasonCode": "missing_extraction_source",
       "reasonLabel": "추출 출처 정보 부족",
@@ -121,6 +145,20 @@
       "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
       "image_candidate_count": 3,
       "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": true,
+      "selected_image_evidence": {
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다.",
+        "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+        "selectedImageInCandidates": true,
+        "selectedImageHasValidCandidate": false,
+        "selectedImageIsFallback": false
+      },
       "repairable": false,
       "reasonCode": "missing_extraction_source",
       "reasonLabel": "추출 출처 정보 부족",
@@ -180,6 +218,12 @@
       "selectedImage": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
       "image_candidate_count": 1,
       "valid_image_candidate_count": 1,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
       "repairable": false,
       "reasonCode": "selected",
       "reasonLabel": "대표 이미지 선택됨",
@@ -202,8 +246,45 @@
     }
   ],
   "consistency": {
-    "selected_image_render_mismatches": []
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": [
+      {
+        "index": 2,
+        "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+        "selectedImage": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+      },
+      {
+        "index": 3,
+        "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+        "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+      }
+    ]
   },
-  "warnings": [],
+  "warnings": [
+    {
+      "type": "selected_image_without_valid_candidate",
+      "index": 2,
+      "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+      "selectedImage": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+      "reasonCode": "selected_image_without_valid_candidate",
+      "reasonLabel": "대표 이미지 provenance 부족",
+      "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+    },
+    {
+      "type": "selected_image_without_valid_candidate",
+      "index": 3,
+      "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+      "reasonCode": "selected_image_without_valid_candidate",
+      "reasonLabel": "대표 이미지 provenance 부족",
+      "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+    }
+  ],
   "errors": []
 }

@@ -1,14 +1,14 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-12
 
-이번 2026-05-12호는 libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰, CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다. hard failure article 1개는 main article에서 제거하거나 강등했습니다.
+이번 2026-05-12호는 libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰, CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다. 차단 이슈 article 1개는 main article에서 제거하거나 강등했습니다.
 
 
 
 ## 1. 이번 주 3줄 브리핑
 
 - 공식 source 기반 후보를 우선 검토했습니다.
-- hard failure article은 main article에서 제거하거나 watch 성격으로 강등했습니다.
-- fallback article은 HAL 직접 변경이 아니라 관찰 항목으로 표시했습니다.
+- 차단 이슈 article은 main article에서 제거하거나 watch 성격으로 강등했습니다.
+- 보조 관찰 article은 HAL 직접 변경이 아니라 관찰 항목으로 표시했습니다.
 
 ## 2. libcamera Release Announcements - libcamera v0.7.1
 
@@ -26,7 +26,8 @@ Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image
 
 ### 확인할 점
 
-- 관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.
+- libcamera v0.7.1의 SoftISP, sensor mode, pipeline handler 변경이 downstream camera integration 검증에 영향을 주는지 확인합니다.
+- RAW/YUV throughput, frame timing, format negotiation 관점에서 추가 smoke가 필요한지 검토합니다.
 
 **출처**
 
@@ -54,7 +55,8 @@ CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behav
 
 ### 확인할 점
 
-- 관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.
+- CameraX 1.6.1 reference app에서 Preview, ImageCapture, VideoCapture latency와 frame drop 신호를 확인합니다.
+- Camera2 interop 또는 extensions 관련 변경이 release note 범위 안에서만 해석됐는지 확인합니다.
 
 **출처**
 
@@ -82,7 +84,8 @@ CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behav
 
 ### 확인할 점
 
-- 관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.
+- CameraX 1.4.0-alpha07의 video/viewfinder 변경이 HAL stream configuration 관찰 신호인지 확인합니다.
+- Pre-release 항목이 production HAL 영향으로 과장되지 않았는지 확인합니다.
 
 **출처**
 
