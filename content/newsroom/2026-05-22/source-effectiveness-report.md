@@ -111,4 +111,4 @@ _없음_
 
 ## Warnings
 
-- Missing optional artifact content/newsroom/2026-05-22/reporter-candidates.json; related metrics remain zero or artifact-limited.
+_없음_

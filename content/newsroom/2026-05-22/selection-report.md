@@ -35,9 +35,9 @@
 
 ## Gate Summary
 
-- non_fallback_reviewable_article_count: 2
-- primary_camera_stack_topic_count: 2
-- supporting_main_article_count: 0
+- non_fallback_reviewable_article_count: 1
+- primary_camera_stack_topic_count: 1
+- supporting_main_article_count: 1
 - forbidden_main_article_count: 0
 - Minimum publishable article count: 1
 - Primary camera stack requirement: disabled by one-article policy

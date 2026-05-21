@@ -8,7 +8,7 @@
     "issues": [
       {
         "index": 1,
-        "headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
+        "headline": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
         "status": "needs_fix",
         "issues": [
           {
@@ -28,41 +28,56 @@
             "message": "Factual field is not covered by a claim_type=fact claim: confirmed_facts[1]."
           },
           {
+            "reason_code": "missing_matching_fact_claim",
+            "message": "Factual field is not covered by a claim_type=fact claim: evidence_summary."
+          },
+          {
+            "reason_code": "unknown_evidence_id",
+            "message": "Claim references unresolved evidence_id: version_or_release: Jetpack Navigation 3."
+          },
+          {
             "reason_code": "unknown_evidence_id",
             "message": "Claim references unresolved evidence_id: api_or_component: CameraX / Android camera APIs."
           },
           {
             "reason_code": "unknown_evidence_id",
-            "message": "Claim references unresolved evidence_id: behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...."
+            "message": "Claim references unresolved evidence_id: behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.."
           }
         ],
         "uncovered_facts": [
           {
             "article_index": 1,
-            "article_headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
+            "article_headline": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
             "field": "article_sections.verified_facts[0]",
-            "text": "발표 날짜: 2026년 5월 19일 (Google I/O 2026)",
+            "text": "발표 날짜는 2026년 5월 19일입니다.",
             "reason_code": "missing_matching_fact_claim"
           },
           {
             "article_index": 1,
-            "article_headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
+            "article_headline": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
             "field": "article_sections.verified_facts[1]",
-            "text": "핵심 컴포넌트: Jetpack Compose, Jetpack Navigation 3, CameraX / Android camera APIs",
+            "text": "Jetpack Compose 기반의 멀티 디바이스 화면 전환을 지원하기 위한 핵심 도구로 Jetpack Navigation 3가 릴리스되었습니다.",
             "reason_code": "missing_matching_fact_claim"
           },
           {
             "article_index": 1,
-            "article_headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
+            "article_headline": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
             "field": "confirmed_facts[0]",
-            "text": "발표 날짜: 2026년 5월 19일 (Google I/O 2026)",
+            "text": "발표 날짜는 2026년 5월 19일입니다.",
             "reason_code": "missing_matching_fact_claim"
           },
           {
             "article_index": 1,
-            "article_headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
+            "article_headline": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
             "field": "confirmed_facts[1]",
-            "text": "핵심 컴포넌트: Jetpack Compose, Jetpack Navigation 3, CameraX / Android camera APIs",
+            "text": "Jetpack Compose 기반의 멀티 디바이스 화면 전환을 지원하기 위한 핵심 도구로 Jetpack Navigation 3가 릴리스되었습니다.",
+            "reason_code": "missing_matching_fact_claim"
+          },
+          {
+            "article_index": 1,
+            "article_headline": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
+            "field": "evidence_summary",
+            "text": "Google I/O 2026의 'Building seamless Android experiences across devices with Jetpack Compose' 세션을 통해 Jetpack Navigation 3 및 CameraX를 활용한 멀티 디바이스 카메라 미리보기 구현 및 호환성 강화 방안이 공식 발표되었습니다.",
             "reason_code": "missing_matching_fact_claim"
           }
         ]

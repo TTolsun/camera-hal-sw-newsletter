@@ -1,31 +1,132 @@
 [
   {
     "attempt": 1,
-    "model": "deterministic-fallback-public-issue",
-    "score": 100,
+    "model": "repair-fallback",
+    "score": 80,
     "threshold": 85,
-    "status": "PUBLIC_ISSUE_CREATED",
+    "status": "FAILED_REPAIR_REVIEWABLE",
     "rendered_main_article_count": 1,
+    "locked_article_count": 0,
     "demoted_article_count": 0,
-    "reserve_candidates_used": [
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
       {
-        "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-        "category": "Android Platform / CameraX",
-        "url": "https://goo.gle/AdaptiveApps_IO26",
-        "source": "Android Developers Blog",
-        "relevance_bucket": "android_platform_camera_adjacent",
-        "action": "rebuild-from-bound-candidate",
-        "fallback": false,
-        "reason": "hard failure replacement"
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:compose_io26_camerax_preview:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:compose_io26_release_date:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:compose_io26_navigation_3_release:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:compose_io26_evidence_summary_claim:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "hal-signal",
+        "points": 6,
+        "reason": "Main article has actionability_level=none and cannot be publish-ready.",
+        "location": "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 10,
+        "reason": "Fact checker returned 2 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
       }
     ],
-    "deductions": [],
     "selected_article_headlines": [
-      "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O"
+      "Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증"
     ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
     "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
     "repair_actions": [
-      "fallback-public-issue-builder"
-    ]
+      "editor repair attempt 1/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 2,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Targeted repair changed main article count outside completion/replacement mode.",
+      "details": {
+        "field": "sections",
+        "reason": "section_count_drift",
+        "mode": "targeted-repair",
+        "expectedCount": 1,
+        "actualCount": 0,
+        "expectedMinCount": 1,
+        "expectedMaxCount": 5,
+        "actualType": "array",
+        "sectionCount": 0
+      },
+      "field": "sections",
+      "stage": "editor repair attempt 1/2",
+      "attempt": 1,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 1
+    }
   }
 ]

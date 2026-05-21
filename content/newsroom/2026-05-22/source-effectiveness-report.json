@@ -6,7 +6,7 @@
     "shortlisted_candidates": "content/newsroom/2026-05-22/shortlisted-candidates.json",
     "source_registry": "data/news-sources.json",
     "optional_artifacts": {
-      "reporter_candidates": null,
+      "reporter_candidates": "content/newsroom/2026-05-22/reporter-candidates.json",
       "editor_draft": "content/newsroom/2026-05-22/editor-draft.json",
       "fact_check_report": "content/newsroom/2026-05-22/fact-check-report.json",
       "quality_report": "content/newsroom/2026-05-22/quality-report.json"
@@ -303,7 +303,6 @@
       ],
       "sample_selected_urls": [
         "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
         "https://goo.gle/AdaptiveApps_IO26"
       ],
       "sample_excluded_urls": [
@@ -2957,7 +2956,5 @@
       "sample_excluded_urls": []
     }
   ],
-  "warnings": [
-    "Missing optional artifact content/newsroom/2026-05-22/reporter-candidates.json; related metrics remain zero or artifact-limited."
-  ]
+  "warnings": []
 }

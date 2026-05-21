@@ -2,21 +2,21 @@
 
 ## Gate Result
 
-- Quality score: 100
+- Quality score: 80
 - Quality threshold: 85
 - Max score: 100
-- Result: PASS
-- Summary: Quality score 100, threshold 85, max score 100. Editor review is ready.
+- Result: NEEDS_FIX
+- Summary: Quality score 80, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
 
 ## Publication Mode
 
-- publication_mode: review_only
-- homepage_visibility: normal
-- content_quality_score: 100
-- camera_relevance_score: 100
-- publication_mode_decision: review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.
+- publication_mode: n/a
+- homepage_visibility: n/a
+- content_quality_score: 80
+- camera_relevance_score: n/a
+- publication_mode_decision: n/a
 - fallback_only: false
-- camera_anchor_count: 1
+- camera_anchor_count: n/a
 - fallback_public_ready: false
 
 ## Composition
@@ -46,59 +46,56 @@
 
 ## HAL Signal Quality
 
-- strong_signal_count: 1
+- strong_signal_count: 0
 - usable_signal_count: 0
-- weak_signal_count: 0
+- weak_signal_count: 1
 - watchlist_only_count: 0
 - blocked_source_gap_count: 0
 - article_count_with_hal_signal_capsule: 1
 - article_count_without_hal_signal_capsule: 0
-- generic_signal_hard_blocker_count: 0
-- hal_signal_hard_blocker_count: 0
-- hard_blocker_reason_code_counts: {}
-- hal_impact_axis_counts: {"camerax_app_compatibility":1,"framework_hal_contract":1,"driver_image_pipeline":1,"stream_buffer_metadata":1,"cts_vts_its_cdd":1}
-- actionability_level_counts: {"measurable_test":1}
-- effective_actionability_level_counts: {"measurable_test":1}
+- generic_signal_hard_blocker_count: 1
+- hal_signal_hard_blocker_count: 1
+- hard_blocker_reason_code_counts: {"hal_actionability_none":1}
+- hal_impact_axis_counts: {"camerax_app_compatibility":1}
+- actionability_level_counts: {"none":1}
+- effective_actionability_level_counts: {"none":1}
 
 | # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | HAL Signal Capsule | hard_blocker_reason_codes |
 | ---: | --- | --- | --- | --- | --- | --- | --- |
-| 1 | 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O | strong_signal | measurable_test | measurable_test | camerax_app_compatibility, framework_hal_contract, driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd | complete | none |
+| 1 | Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증 | weak_signal | none | none | camerax_app_compatibility | complete | hal_actionability_none |
 
 ## Fact Check And Source Integrity
 
-- Fact-check status: PASS
-- Must-fix count: 0
+- Fact-check status: NEEDS_FIX
+- Must-fix count: 2
 - Source-gap count: 0
 - Stale claim status: UNKNOWN
 - Stale claim removals: 0
 - Stale claim hard failures: 0
 - Source integrity violation count: 0
-- Blocking deduction count: 0
-- Blocking deduction categories: none
-- Hard fail count: 0
-- Soft deduction count: 0
+- Blocking deduction count: 2
+- Blocking deduction categories: hal-signal, source-integrity
+- Hard fail count: 2
+- Soft deduction count: 4
 
 ## Claim Binding
 
-- Claim validation status: not_available
-- Claim coverage: bound_claims=unknown; total_claims=unknown
-- Derived evidence mapping count: 0
-- Overclaim risk: unknown
-- Uncovered fact count: 7
+- Claim validation status: available
+- Claim coverage: bound_claims=4; total_claims=4
+- Derived evidence mapping count: 4
+- Overclaim risk: low
+- Uncovered fact count: 0
 
 | Article | Claim | Type | Status | Impact | Risk | Reason codes | Evidence | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| none | none | none | none | none | none | none | none | none |
+| Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증 | compose_io26_camerax_preview: Google I/O 2026에서 Jetpack Compose 및 Jetpack Navigation 3와 함께 다양한 창 크기에서 올바른 카메라 미리보기를 제공하기 위해 Cam... | fact | soft_warning | app_api_or_framework_adjacent | low | source_url_derived_evidence_mapping | none | https://goo.gle/AdaptiveApps_IO26 |
+| Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증 | compose_io26_release_date: 발표 날짜는 2026년 5월 19일입니다. | fact | soft_warning | app_api_or_framework_adjacent | low | source_url_derived_evidence_mapping | none | https://goo.gle/AdaptiveApps_IO26 |
+| Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증 | compose_io26_navigation_3_release: Jetpack Compose 기반의 멀티 디바이스 화면 전환을 지원하기 위한 핵심 도구로 Jetpack Navigation 3가 릴리스되었습니다. | fact | soft_warning | app_api_or_framework_adjacent | low | source_url_derived_evidence_mapping | none | https://goo.gle/AdaptiveApps_IO26 |
+| Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증 | compose_io26_evidence_summary_claim: Google I/O 2026의 'Building seamless Android experiences across devices with Jetpack Compose' 세션을 ... | fact | soft_warning | app_api_or_framework_adjacent | low | source_url_derived_evidence_mapping | none | https://goo.gle/AdaptiveApps_IO26 |
 
 ### Uncovered Facts
 
-- article=1; headline=8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O; field=article_sections.verified_facts[0]; reason=missing_matching_fact_claim; text=Android Developers Blog가 Tue, 19 May 2026 13:00:00 +0000에 게시 또는 업데이트한 항목입니다.
-- article=1; headline=8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O; field=article_sections.verified_facts[1]; reason=missing_matching_fact_claim; text=관련 컴포넌트: CameraX / Android camera APIs.
-- article=1; headline=8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O; field=article_sections.verified_facts[2]; reason=missing_matching_fact_claim; text=확인된 변경점: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.
-- article=1; headline=8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O; field=confirmed_facts[0]; reason=missing_matching_fact_claim; text=Android Developers Blog가 Tue, 19 May 2026 13:00:00 +0000에 게시 또는 업데이트한 항목입니다.
-- article=1; headline=8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O; field=confirmed_facts[1]; reason=missing_matching_fact_claim; text=관련 컴포넌트: CameraX / Android camera APIs.
-- article=1; headline=8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O; field=confirmed_facts[2]; reason=missing_matching_fact_claim; text=확인된 변경점: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.
-- article=1; headline=8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O; field=evidence_summary; reason=missing_matching_fact_claim; text=Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.
+- none
 
 ## Article Structure Contract
 
@@ -107,25 +104,31 @@
 
 | # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |
 | ---: | --- | --- | --- | --- | --- | --- |
-| 1 | 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O | pass | present | camerax_app_compatibility, framework_hal_contract, driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd | measurable_test | none |
+| 1 | Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증 | pass | present | camerax_app_compatibility | none | none |
 
 ## Article Gate Results
 
 | # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
 | ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | PASS | preserve | 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | none | none |
+| 1 | FAIL | repair-section | Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증 | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | Main article has actionability_level=none and cannot be publish-ready.; Fact-check must_fix item mentions this section. | claim-binding: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.; claim-binding: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.; claim-binding: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.; claim-binding: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence. |
 
 ## Hard Fails
 
-- none
+- 6 pt [hal-signal] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Main article has actionability_level=none and cannot be publish-ready.
+- 10 pt [source-integrity] Fact checker returned 2 must_fix item(s).
 
 ## Soft Deductions
 
-- none
+- 1 pt [claim-binding] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence. (source_url_derived_evidence_mapping)
+- 1 pt [claim-binding] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence. (source_url_derived_evidence_mapping)
+- 1 pt [claim-binding] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence. (source_url_derived_evidence_mapping)
+- 1 pt [claim-binding] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence. (source_url_derived_evidence_mapping)
 
 ## Top Deduction Categories
 
-- none
+- claim-binding (4)
+- hal-signal (1)
+- source-integrity (1)
 
 ## Candidate Exclusion Summary
 
@@ -133,4 +136,9 @@
 
 ## Deductions
 
-- none
+- 1 pt [claim-binding] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.
+- 1 pt [claim-binding] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.
+- 1 pt [claim-binding] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.
+- 1 pt [claim-binding] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.
+- 6 pt [hal-signal] Google I/O 2026: Jetpack Compose 멀티 디바이스 전환에 따른 CameraX 미리보기 호환성 검증: Main article has actionability_level=none and cannot be publish-ready.
+- 10 pt [source-integrity] Fact checker returned 2 must_fix item(s).

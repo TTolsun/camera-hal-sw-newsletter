@@ -26,14 +26,14 @@
   },
   "raw_candidate_count": 39,
   "eligible_candidate_count": 2,
-  "primary_camera_stack_count": 2,
+  "primary_camera_stack_count": 1,
   "android_multimedia_camera_output_count": 0,
   "diagnosis": {
     "actual_news_shortage": false,
     "parser_extraction_failure": true,
     "source_gap_risk": false,
     "taxonomy_missing": false,
-    "fallback_only_composition": false,
+    "fallback_only_composition": true,
     "duplicate_or_noop_source_discovery": true
   },
   "diagnosis_reasons": {
@@ -77,10 +77,16 @@
     ],
     "source_gap_risk": [],
     "taxonomy_missing": [],
-    "fallback_only_composition": [],
+    "fallback_only_composition": [
+      {
+        "reason": "composition_mode indicates fallback composition: FALLBACK_COMPOSITION.",
+        "source_artifact": "content/newsroom/2026-05-22/generation-status.json",
+        "severity": "medium"
+      }
+    ],
     "duplicate_or_noop_source_discovery": [
       {
-        "reason": "Gemini discovery produced 7 candidate(s) but gemini_new_unique_url_count=0.",
+        "reason": "Gemini discovery produced 23 candidate(s) but gemini_new_unique_url_count=0.",
         "source_artifact": "content/collected-news/2026-05-22/merged-candidate-manifest.json",
         "severity": "medium"
       },
@@ -90,7 +96,7 @@
         "severity": "medium"
       },
       {
-        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=7, duplicate_discovery_gap_count=0.",
+        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=23, duplicate_discovery_gap_count=0.",
         "source_artifact": "content/collected-news/2026-05-22/merged-candidate-manifest.json",
         "severity": "medium"
       }
@@ -155,10 +161,10 @@
       "main_eligible_count": 1,
       "top_blockers": [
         "main_eligible=false",
-        "reference_only=true",
         "source_gap_risk=true",
         "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-        "briefing_only=true"
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist"
       ],
       "parser_failure_signals": [
         "Duplicate candidates detected: within_source=1, across_sources=0.",
@@ -1128,7 +1134,7 @@
       "action_label": "Source discovery 중복 제거/수리",
       "source_id": "",
       "source_name": "",
-      "reason": "Gemini discovery produced 7 candidate(s) but gemini_new_unique_url_count=0.; Gemini discovery produced no new publishable candidates.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=7, duplicate_discovery_gap_count=0.",
+      "reason": "Gemini discovery produced 23 candidate(s) but gemini_new_unique_url_count=0.; Gemini discovery produced no new publishable candidates.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=23, duplicate_discovery_gap_count=0.",
       "severity": "medium",
       "source_artifact": "content/collected-news/2026-05-22/merged-candidate-manifest.json"
     },

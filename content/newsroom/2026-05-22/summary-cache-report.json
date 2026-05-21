@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T16:26:40.472Z",
+  "generated_at": "2026-05-21T18:37:50.501Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 2,
@@ -35,15 +35,15 @@
       "cache_record_path": ""
     },
     {
-      "title": "Start building today - Build native Android apps in Google AI Studio",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "title": "Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
       "cache_key": {
         "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "url_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
         "published_date": "Tue, 19 May 2026 12:45:00 +0000",
-        "content_hash": "5eb4c2b4421343314615b8f7d3b24f2a37bb69f5e941c5ae85481f546f78b46b"
+        "content_hash": "da4ad6a4cf681f0895f77dfefda4bfb4f93ffc3bb3c6dfd4d22eed96b312948f"
       },
       "hit": false,
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
