@@ -786,6 +786,11 @@ function renderPublicationDecisionSummary(status, handoff) {
     `- review_publication_ready: ${booleanText(handoff.reviewPublicationReady)}`,
     `- diagnostics_only: ${booleanText(handoff.diagnosticsOnly)}`,
     `- homepage_visible_after_merge: ${booleanText(handoff.homepageVisibleAfterMerge)}`,
+    `- publication_mode: ${valueOrUnknown(handoff.publicationMode)}`,
+    `- homepage_visibility: ${valueOrUnknown(handoff.homepageVisibility)}`,
+    `- fallback_only: ${booleanText(handoff.fallbackOnly)}`,
+    `- camera_anchor_count: ${valueOrUnknown(handoff.cameraAnchorCount)}`,
+    `- fallback_public_ready: ${booleanText(handoff.fallbackPublicReady)}`,
     ''
   ].join('\n');
 }
@@ -800,6 +805,15 @@ function renderPublicNewsletterReadiness(root, date, handoff) {
     `- review_publication_ready: ${booleanText(handoff.reviewPublicationReady)}`,
     `- diagnostics_only: ${booleanText(handoff.diagnosticsOnly)}`,
     `- homepage_visible_after_merge: ${booleanText(handoff.homepageVisibleAfterMerge)}`,
+    `- publication_mode: ${valueOrUnknown(handoff.publicationMode)}`,
+    `- homepage_visibility: ${valueOrUnknown(handoff.homepageVisibility)}`,
+    `- normal_public_ready: ${booleanText(handoff.normalPublicReady)}`,
+    `- automatic_publish_ready: ${booleanText(handoff.automaticPublishReady)}`,
+    `- public_artifact_ready: ${booleanText(handoff.publicArtifactReady)}`,
+    `- fallback_public_ready: ${booleanText(handoff.fallbackPublicReady)}`,
+    `- fallback_only: ${booleanText(handoff.fallbackOnly)}`,
+    `- camera_anchor_count: ${valueOrUnknown(handoff.cameraAnchorCount)}`,
+    `- homepage_badge: ${valueOrUnknown(handoff.homepageBadge || 'none')}`,
     `- public_newsletter_reason: ${valueOrUnknown(handoff.publicNewsletterReason)}`,
     `- review_pr_ready: ${booleanText(handoff.reviewPrReady)}`,
     `- publish_candidate_ready: ${booleanText(handoff.publishCandidateReady)}`,
@@ -2058,6 +2072,18 @@ function renderPublicNewsletterNotice(status = {}, handoff = null) {
     ].join('\n');
   }
   if (handoff?.reviewPublicationReady) {
+    if (handoff.publicationMode === 'fallback_public') {
+      return [
+        '## Public Newsletter Notice',
+        '',
+        'This PR intentionally changes Issue #247 from a hard block policy to a downgrade policy.',
+        'Fallback-only composition may produce a homepage-visible public issue only when it is explicitly marked as Fallback Edition across metadata, PR body, quality report, and public UI.',
+        '',
+        'Revised acceptance criteria:',
+        '- C++/tooling fallback alone cannot produce a normal homepage-visible Camera HAL newsletter.',
+        '- Fallback-only composition may produce a homepage-visible Fallback Edition when all fallback disclosure metadata and UI notices are present.'
+      ].join('\n');
+    }
     return [
       '## Public Newsletter Notice',
       '',

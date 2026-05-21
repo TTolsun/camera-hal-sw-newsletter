@@ -115,6 +115,11 @@ function isFalse(value) {
   return value === false || value === 'false';
 }
 
+function numberOrNull(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 function parseGitStatusPorcelain(output) {
   return String(output || '')
     .split(/\r?\n/)
@@ -346,6 +351,51 @@ function resolveReviewableArtifacts(options = {}) {
     publicNewsletterReady &&
     newsletterIndex.hasDate === true &&
     newsletterIndex.pathsMatch === true;
+  const fallbackPublicReady = isTrue(status.fallback_public_ready);
+  const fallbackOnly = isTrue(status.fallback_only);
+  const cameraAnchorCount = numberOrNull(status.camera_anchor_count);
+  const publicationMode = status.publication_mode ||
+    (diagnosticsOnly
+      ? 'diagnostics_only'
+      : fallbackPublicReady
+        ? 'fallback_public'
+        : hasAiPublishReady
+          ? 'normal_public'
+          : 'review_only');
+  const homepageVisibility = status.homepage_visibility ||
+    (diagnosticsOnly
+      ? 'hidden'
+      : publicationMode === 'fallback_public'
+        ? 'visible_with_fallback_badge'
+        : homepageVisibleAfterMerge
+          ? 'normal'
+          : 'hidden');
+  const normalPublicReady = isTrue(status.normal_public_ready) || (hasAiPublishReady && publicNewsletterReady);
+  const automaticPublishReady = isTrue(status.automatic_publish_ready) || normalPublicReady;
+  const publicArtifactReady = isTrue(status.public_artifact_ready) || publicNewsletterReady;
+  const homepageBadge = status.homepage_badge || (publicationMode === 'fallback_public' ? 'Fallback Edition' : '');
+  const publicationContractErrors = [];
+  if (publicationMode === 'fallback_public') {
+    if (homepageVisibility !== 'visible_with_fallback_badge') {
+      publicationContractErrors.push('fallback_public requires homepage_visibility=visible_with_fallback_badge');
+    }
+    if (fallbackOnly !== true) {
+      publicationContractErrors.push('fallback_public requires fallback_only=true');
+    }
+    if (cameraAnchorCount !== null && cameraAnchorCount !== 0) {
+      publicationContractErrors.push('fallback_public requires camera_anchor_count=0');
+    }
+    if (fallbackPublicReady !== true) {
+      publicationContractErrors.push('fallback_public requires fallback_public_ready=true');
+    }
+  }
+  if (
+    cameraAnchorCount === 0 &&
+    homepageVisibility !== 'hidden' &&
+    publicationMode !== 'fallback_public'
+  ) {
+    publicationContractErrors.push('homepage-visible camera_anchor_count=0 requires publication_mode=fallback_public');
+  }
   const reasonParts = [
     `status=${status.status || 'UNKNOWN'}`,
     editorialReviewableRequested ? `failure_kind=${FAILURE_KIND_EDITORIAL_REVIEWABLE}` : '',
@@ -374,6 +424,11 @@ function resolveReviewableArtifacts(options = {}) {
     `diagnostics_only=${diagnosticsOnly ? 'true' : 'false'}`,
     `review_publication_ready=${reviewPublicationReady ? 'true' : 'false'}`,
     `homepage_visible_after_merge=${homepageVisibleAfterMerge ? 'true' : 'false'}`,
+    `publication_mode=${publicationMode}`,
+    `homepage_visibility=${homepageVisibility}`,
+    `fallback_only=${fallbackOnly ? 'true' : 'false'}`,
+    `camera_anchor_count=${cameraAnchorCount ?? 'n/a'}`,
+    publicationContractErrors.length > 0 ? `publication_contract_errors=${publicationContractErrors.join('|')}` : '',
     `changed_artifact_count=${changedArtifactCount}`,
     publicNewsletterReasons.length > 0 ? `public_newsletter_reason=${publicNewsletterReasons.join(';')}` : 'public_newsletter_reason=none'
   ].filter(Boolean);
@@ -400,6 +455,16 @@ function resolveReviewableArtifacts(options = {}) {
     diagnosticsOnly,
     reviewPublicationReady,
     homepageVisibleAfterMerge,
+    publicationMode,
+    homepageVisibility,
+    normalPublicReady,
+    automaticPublishReady,
+    publicArtifactReady,
+    fallbackPublicReady,
+    fallbackOnly,
+    cameraAnchorCount,
+    homepageBadge,
+    publicationContractErrors,
     publishCandidateReady,
     changedArtifactCount,
     publicNewsletterReason: publicNewsletterReasons.length > 0 ? publicNewsletterReasons.join('; ') : 'ready',
@@ -423,6 +488,17 @@ function buildReviewableArtifactOutputs(resolved) {
     diagnostics_only: resolved.diagnosticsOnly ? 'true' : 'false',
     review_publication_ready: resolved.reviewPublicationReady ? 'true' : 'false',
     homepage_visible_after_merge: resolved.homepageVisibleAfterMerge ? 'true' : 'false',
+    publication_mode: resolved.publicationMode || 'n/a',
+    homepage_visibility: resolved.homepageVisibility || 'n/a',
+    normal_public_ready: resolved.normalPublicReady ? 'true' : 'false',
+    automatic_publish_ready: resolved.automaticPublishReady ? 'true' : 'false',
+    public_artifact_ready: resolved.publicArtifactReady ? 'true' : 'false',
+    fallback_public_ready: resolved.fallbackPublicReady ? 'true' : 'false',
+    fallback_only: resolved.fallbackOnly ? 'true' : 'false',
+    camera_anchor_count: resolved.cameraAnchorCount === null || resolved.cameraAnchorCount === undefined ? 'n/a' : String(resolved.cameraAnchorCount),
+    homepage_badge: resolved.homepageBadge || 'none',
+    publication_contract_error_count: String(resolved.publicationContractErrors?.length ?? 0),
+    publication_contract_errors: resolved.publicationContractErrors?.join('\n') || 'none',
     publish_candidate_ready: resolved.publishCandidateReady ? 'true' : 'false',
     changed_artifact_count: String(resolved.changedArtifactCount ?? 0),
     public_newsletter_reason: resolved.publicNewsletterReason,

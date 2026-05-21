@@ -114,20 +114,69 @@ function articleMediaHtml(section, publicArticle = null) {
           </div>`;
 }
 
+function issueCameraAnchorCount(issue) {
+  const parsed = Number(issue?.camera_anchor_count);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function sectionRelevanceBucket(section = {}) {
+  return String(
+    section.final_relevance_bucket ||
+    section.bound_candidate?.relevance_bucket ||
+    section.public_article?.bound_candidate?.relevance_bucket ||
+    section.final_candidate?.relevance_bucket ||
+    section.relevance_bucket ||
+    section.aosp_camera_stack_bucket ||
+    section.aospCameraStackBucket ||
+    section.categoryBucket ||
+    section.source_candidate?.relevance_bucket ||
+    ''
+  ).trim();
+}
+
+function articlePerspectiveLabel(issue, section) {
+  const fallbackIssue = issue?.publication_mode === 'fallback_public' || issue?.fallback_only === true;
+  if (fallbackIssue || sectionRelevanceBucket(section) === 'cpp_ai_tooling_fallback') {
+    return 'Android Native / Tooling 관점';
+  }
+  return 'Camera HAL / Driver 관점';
+}
+
 function issueTags(issue) {
-  return ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
+  const tags = ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
+  if (issue?.publication_mode !== 'fallback_public' && issue?.fallback_only !== true) return tags;
+  const cameraAnchorCount = issueCameraAnchorCount(issue);
+  const cleaned = tags
+    .map(String)
+    .filter(Boolean)
+    .filter(tag => !(cameraAnchorCount === 0 && String(tag).trim().toLowerCase() === 'camera hal'));
+  return [...new Set(['Fallback Edition', 'Tooling Watch', ...cleaned])];
+}
+
+function reviewPublicationNoticeLines() {
+  return [
+    '편집자 검토 후 공개 가능한 검토 발행본입니다.',
+    '이 호는 자동 정상 발행 기준을 통과하지 못했으며, 편집자 확인 후 merge해야 합니다.',
+    '각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.'
+  ];
 }
 
 function publicationNoticeLines(issue) {
-  if (Array.isArray(issue.publication_notice) && issue.publication_notice.length > 0) {
-    return issue.publication_notice.map(String).filter(Boolean);
+  const fallbackNotice = issue?.publication_mode === 'fallback_public' || issue?.fallback_only === true;
+  if (fallbackNotice) {
+    if (Array.isArray(issue.publication_notice) && issue.publication_notice.length > 0) {
+      return issue.publication_notice.map(String).filter(Boolean);
+    }
+    return [
+      'Fallback Edition: C++ / Tooling Watch',
+      '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 fallback issue로 발행되었습니다.',
+      'Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.'
+    ];
   }
-  if (issue.review_publication_ready !== true) return [];
-  return [
-    '편집자 검토 후 발행 가능한 Review-only 발행본입니다.',
-    '이 호는 AI 자동 발행 기준을 통과하지 못했으며, fallback 또는 후보 부족 구성이 포함될 수 있습니다.',
-    '각 기사에서 Camera HAL 직접 변경으로 과장하지 않도록 source와 guardrail을 확인하세요.'
-  ];
+  if (issue?.review_publication_ready === true || issue?.publication_mode === 'review_only') {
+    return reviewPublicationNoticeLines();
+  }
+  return [];
 }
 
 function publicationNoticeMarkdown(issue) {
@@ -197,8 +246,9 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
   ].join('\n');
 }
 
-function publicArticleMarkdown(heading, section) {
+function publicArticleMarkdown(issue, heading, section) {
   const publicArticle = publicArticleForSection(section);
+  const perspectiveLabel = articlePerspectiveLabel(issue, section);
   return `${heading}
 
 ${articleImageMarkdown(section, publicArticle)}
@@ -207,7 +257,7 @@ ${publicArticle.lead}
 
 ${publicArticle.body_paragraphs.join('\n\n')}
 
-**Camera HAL / Driver 관점**
+**${perspectiveLabel}**
 
 ${publicArticle.camera_hal_takeaway}
 
@@ -226,11 +276,13 @@ function buildPublicMarkdown(issue) {
 
 ${issue.summary}
 
+${publicationNoticeMarkdown(issue)}
+
 ## 1. 이번 주 3줄 브리핑
 
 ${bulletsMarkdown(issue.briefing)}
 
-${normalizedSections(issue).map(({ heading, section }) => publicArticleMarkdown(heading, section)).join('\n---\n\n')}
+${normalizedSections(issue).map(({ heading, section }) => publicArticleMarkdown(issue, heading, section)).join('\n---\n\n')}
 
 ## 참고자료
 
@@ -238,8 +290,9 @@ ${sourceListMarkdown(issue.references)}
 `;
 }
 
-function publicArticleHtml(htmlHeading, headingCategory, className, section) {
+function publicArticleHtml(issue, htmlHeading, headingCategory, className, section) {
   const publicArticle = publicArticleForSection(section);
+  const perspectiveLabel = articlePerspectiveLabel(issue, section);
   return `      <section class="section">
         <h2>${escapeHtml(htmlHeading)}</h2>
         <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-fallback-image'} ${escapeHtml(className)}">
@@ -248,7 +301,7 @@ function publicArticleHtml(htmlHeading, headingCategory, className, section) {
           <h3>${escapeHtml(publicArticle.headline)}</h3>
           <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
           ${publicArticle.body_paragraphs.map(paragraphHtml).join('\n          ')}
-          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
+          <div class="article-block"><strong class="article-block-title">${escapeHtml(perspectiveLabel)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
           <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul>${bulletsHtml(publicArticle.reader_checkpoints)}</ul></div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
         </div>
@@ -293,6 +346,8 @@ function buildPublicHtml(issue) {
         </div>
       </header>
 
+      ${publicationNoticeHtml(issue)}
+
       <section class="section issue-briefing">
         <h2>1. 이번 주 3줄 브리핑</h2>
         <div class="card">
@@ -301,7 +356,7 @@ function buildPublicHtml(issue) {
       </section>
 
 ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, section }) =>
-    publicArticleHtml(htmlHeading, headingCategory, className, section)
+    publicArticleHtml(issue, htmlHeading, headingCategory, className, section)
   ).join('\n\n')}
 
       <section class="section">

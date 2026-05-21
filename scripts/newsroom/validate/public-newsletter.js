@@ -75,9 +75,18 @@ function visibleHtmlText(value) {
     .trim());
 }
 
-function findForbiddenTerms(text, label) {
+function allowedForbiddenTerms(options = {}) {
+  if (options.publicationMode === 'fallback_public' || options.fallbackOnly === true) {
+    return new Set(['Fallback', 'fallback']);
+  }
+  return new Set();
+}
+
+function findForbiddenTerms(text, label, options = {}) {
   const visible = String(text || '').toLowerCase();
+  const allowed = allowedForbiddenTerms(options);
   return PUBLIC_NEWSLETTER_FORBIDDEN_TERMS
+    .filter(term => !allowed.has(term))
     .filter(term => visible.includes(String(term || '').toLowerCase()))
     .map(term => `${label} contains internal public-forbidden term: ${term}`);
 }
@@ -204,10 +213,10 @@ function repeatedCheckpointErrors(articleCheckpoints) {
   return errors;
 }
 
-function validatePublicMarkdown(markdown, label = 'newsletter.md') {
+function validatePublicMarkdown(markdown, label = 'newsletter.md', options = {}) {
   const errors = [];
   const visible = visibleMarkdownText(markdown);
-  errors.push(...findForbiddenTerms(visible, label));
+  errors.push(...findForbiddenTerms(visible, label, options));
   errors.push(...validatePublicSourceLinks(markdown, label));
   if (/verified_facts|확인된 변경점:|확인한 사실 \/ 릴리스 요약/i.test(visible)) {
     errors.push(`${label} renders raw verified facts/checklist language.`);
@@ -238,15 +247,16 @@ function validatePublicMarkdown(markdown, label = 'newsletter.md') {
   return errors;
 }
 
-function validatePublicHtml(html, label = 'index.html') {
+function validatePublicHtml(html, label = 'index.html', options = {}) {
   const visible = visibleHtmlText(html);
-  return findForbiddenTerms(visible, label);
+  return findForbiddenTerms(visible, label, options);
 }
 
-function validatePublicNewsletterArtifacts({ markdown = '', html = '', markdownLabel = 'newsletter.md', htmlLabel = 'index.html' } = {}) {
+function validatePublicNewsletterArtifacts({ markdown = '', html = '', markdownLabel = 'newsletter.md', htmlLabel = 'index.html', publicationMode = '', fallbackOnly = false } = {}) {
+  const options = { publicationMode, fallbackOnly };
   return [
-    ...validatePublicMarkdown(markdown, markdownLabel),
-    ...validatePublicHtml(html, htmlLabel)
+    ...validatePublicMarkdown(markdown, markdownLabel, options),
+    ...validatePublicHtml(html, htmlLabel, options)
   ];
 }
 

@@ -179,6 +179,70 @@ function writeSiteFixture(root, {
   }
 }
 
+function fallbackNewsletterMarkdown(date, articleCount, { notice = true } = {}) {
+  const markdown = newsletterMarkdown(date, articleCount);
+  if (!notice) return markdown;
+  return markdown.replace(
+    '\n## 1.',
+    '\n> Fallback Edition: C++ / Tooling Watch\n> Direct camera anchor was not available this week.\n\n## 1.'
+  );
+}
+
+function fallbackNewsletterHtml(date, { tags, notice = true } = {}) {
+  const html = newsletterHtml(date, { tags });
+  if (!notice) return html;
+  return html.replace(
+    '<section class="issue-briefing">',
+    '<div class="publication-notice" role="note"><p>Fallback Edition: C++ / Tooling Watch</p><p>Direct camera anchor was not available this week.</p></div>\n<section class="issue-briefing">'
+  );
+}
+
+function writeFallbackPublicSiteFixture(root, {
+  date = '2026-05-20',
+  tags = ['Fallback Edition', 'Tooling Watch'],
+  homepageBadge = 'Fallback Edition',
+  homepageVisibility = 'visible_with_fallback_badge',
+  notice = true,
+  publicationMode = 'fallback_public',
+  fallbackOnly = true,
+  cameraAnchorCount = 0,
+  statusOverrides = {}
+} = {}) {
+  const articleCount = articlePolicy.mainArticleCount.min;
+  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+    date,
+    title: 'Fallback Edition: C++ / Tooling Watch',
+    summary: 'Fallback Edition: C++ / Tooling Watch - Summary',
+    html: `newsletters/${date}/index.html`,
+    md: `newsletters/${date}/newsletter.md`,
+    tags,
+    publication_mode: publicationMode,
+    homepage_visibility: homepageVisibility,
+    fallback_only: fallbackOnly,
+    camera_anchor_count: cameraAnchorCount,
+    ...(homepageBadge ? { homepage_badge: homepageBadge } : {})
+  }]);
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), fallbackNewsletterMarkdown(date, articleCount, { notice }));
+  writeText(path.join(root, 'newsletters', date, 'index.html'), fallbackNewsletterHtml(date, { tags, notice }));
+  writeText(path.join(root, 'index.html'), rootIndexHtml());
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+    publication_mode: publicationMode,
+    homepage_visibility: homepageVisibility,
+    fallback_only: fallbackOnly,
+    camera_anchor_count: cameraAnchorCount,
+    fallback_public_ready: true,
+    homepage_badge: homepageBadge,
+    public_newsletter_ready: true,
+    review_publication_ready: true,
+    diagnostics_only: false,
+    homepage_visible_after_merge: true,
+    final_publish_ready: false,
+    editor_review_required: true,
+    ...statusOverrides
+  });
+}
+
 function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {}) {
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
@@ -310,6 +374,69 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match data\/newsletters\.json tags \[Camera HAL, Android\]/);
+});
+
+test('validate-site fails fallback_public without badge or publication notice', () => {
+  const root = tempRoot('validate-site-fallback-public-missing-disclosure-');
+  writeFallbackPublicSiteFixture(root, {
+    homepageBadge: '',
+    notice: false
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /fallback_public entry must expose homepage_badge=Fallback Edition/);
+  assert.match(result.stderr, /fallback_public HTML must show a visible Fallback Edition publication notice/);
+  assert.match(result.stderr, /fallback_public markdown must disclose Fallback Edition status/);
+});
+
+test('validate-site fails fallback-only homepage metadata that looks like a normal Camera HAL issue', () => {
+  const root = tempRoot('validate-site-fallback-public-camera-tag-');
+  writeFallbackPublicSiteFixture(root, {
+    tags: ['Camera HAL', 'Fallback Edition', 'Tooling Watch']
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /fallback-only metadata must not expose Camera HAL as a homepage tag/);
+});
+
+test('validate-site fails homepage-visible no-anchor issue without fallback_public mode', () => {
+  const root = tempRoot('validate-site-no-anchor-without-fallback-public-');
+  writeFallbackPublicSiteFixture(root, {
+    tags: ['Android', 'C++'],
+    homepageBadge: '',
+    homepageVisibility: 'normal',
+    publicationMode: 'review_only',
+    fallbackOnly: false,
+    cameraAnchorCount: 0
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /camera_anchor_count=0 must use publication_mode=fallback_public or be hidden/);
+  assert.match(result.stderr, /fallback-only public issue must use homepage_visibility=visible_with_fallback_badge/);
+});
+
+test('validate-site fails fallback_public metadata contract conflicts', () => {
+  const root = tempRoot('validate-site-fallback-public-contract-conflict-');
+  writeFallbackPublicSiteFixture(root, {
+    fallbackOnly: false,
+    cameraAnchorCount: 1,
+    statusOverrides: {
+      fallback_public_ready: false
+    }
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /fallback_public issue must expose fallback_only=true/);
+  assert.match(result.stderr, /fallback_public issue must expose camera_anchor_count=0/);
+  assert.match(result.stderr, /fallback_public generation status must expose fallback_public_ready=true/);
 });
 
 test('validate-site fails when diagnostics-only date remains public without retention', () => {

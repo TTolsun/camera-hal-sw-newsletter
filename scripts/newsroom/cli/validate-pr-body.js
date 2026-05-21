@@ -372,6 +372,23 @@ function validateReviewPublicationContract(text, parsed, errors) {
   if (hasReviewOnlyPublicFilesNotReadyText(text) || /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
     errors.push('review publication PR body must not describe public newsletter files as not ready, not generated, or not updated.');
   }
+  if (/(?:^|\n)\s*-?\s*publication_mode\s*[:=]\s*fallback_public\b/i.test(concreteState)) {
+    if (!/(?:^|\n)\s*-?\s*homepage_visibility\s*[:=]\s*visible_with_fallback_badge\b/i.test(concreteState)) {
+      errors.push('fallback public PR body must include homepage_visibility=visible_with_fallback_badge.');
+    }
+    if (!/(?:^|\n)\s*-?\s*fallback_only\s*[:=]\s*true\b/i.test(concreteState)) {
+      errors.push('fallback public PR body must include fallback_only=true.');
+    }
+    if (!/(?:^|\n)\s*-?\s*camera_anchor_count\s*[:=]\s*0\b/i.test(concreteState)) {
+      errors.push('fallback public PR body must include camera_anchor_count=0.');
+    }
+    if (!/(?:^|\n)\s*-?\s*fallback_public_ready\s*[:=]\s*true\b/i.test(concreteState)) {
+      errors.push('fallback public PR body must include fallback_public_ready=true.');
+    }
+    if (!/(?:^|\n)\s*-?\s*homepage_badge\s*[:=]\s*Fallback Edition\b/i.test(concreteState)) {
+      errors.push('fallback public PR body must include homepage_badge=Fallback Edition.');
+    }
+  }
 }
 
 function validateCandidateTraceSection(text, sections, options, errors) {
@@ -639,6 +656,7 @@ function validatePrBodyText(text, options = {}) {
   const diagnosticsOnly = isDiagnosticsOnlyBody(text);
   const reviewPublication = isReviewPublicationBody(text);
   const candidateShortage = isCandidateShortageBody(text);
+  const fallbackPublicPublication = /(?:^|\n)\s*-?\s*publication_mode\s*[:=]\s*fallback_public\b/i.test(concretePublicationStateText(text));
   if (diagnosticsOnly && reviewPublication) {
     errors.push('PR body must not be both diagnostics_only and review_publication_ready.');
   }
@@ -683,7 +701,7 @@ function validatePrBodyText(text, options = {}) {
   if (!diagnosticsOnly && /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
     errors.push('Newsletter PR body must not describe public newsletter files as not generated or not updated.');
   }
-  if (!diagnosticsOnly && parsed.finalPublishReady === false && !/public newsletter files는 생성되었습니다/.test(text)) {
+  if (!diagnosticsOnly && !fallbackPublicPublication && parsed.finalPublishReady === false && !/public newsletter files는 생성되었습니다/.test(text)) {
     errors.push('final_publish_ready=false PR body must state that public newsletter files were generated for editor-approved merge.');
   }
 
