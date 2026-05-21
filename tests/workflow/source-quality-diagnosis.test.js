@@ -169,7 +169,23 @@ test('source quality diagnosis separates parser, taxonomy, fallback, and discove
   assert.ok(report.diagnosis_reasons.parser_extraction_failure.length >= 1);
   assert.equal(report.diagnosis_reasons.parser_extraction_failure[0].source_artifact.includes('source-effectiveness-report.json'), true);
   assert.ok(report.warnings.some(warning => warning.type === 'contract_drift'));
+  assert.ok(report.warnings.some(warning => warning.type === 'unknown_source_quality'));
   assert.equal(report.recommended_issues.some(issue => issue.action === 'NO_ACTION_THIN_WEEK'), false);
+});
+
+test('source quality diagnosis normalizes fallback composition mode values', () => {
+  const report = buildSourceQualityDiagnosisReport(diagnosisInputs({
+    generationStatus: {
+      status: 'UNDERFILLED_NEEDS_FIX',
+      failure_kind: 'candidate_shortage_reviewable',
+      composition_mode: 'fallback-only',
+      input_candidate_count: 46,
+      eligible_candidate_count: 1
+    }
+  }));
+
+  assert.equal(report.diagnosis.fallback_only_composition, true);
+  assert.match(report.diagnosis_reasons.fallback_only_composition[0].reason, /fallback-only/);
 });
 
 test('source quality diagnosis does not infer actual news shortage without source effectiveness evidence', () => {
@@ -225,7 +241,9 @@ test('source quality diagnosis markdown renders Korean labels and recommended ac
 
   assert.match(markdown, /# 소스 품질 진단 리포트/);
   assert.match(markdown, /파서 추출 실패/);
+  assert.match(markdown, /`parser_extraction_failure`/);
   assert.match(markdown, /소스 유지, 파서 수정/);
+  assert.match(markdown, /`KEEP_AND_FIX_PARSER`/);
   assert.match(markdown, /Source discovery 중복 또는 무효/);
 });
 
@@ -246,6 +264,25 @@ test('source quality diagnosis writer produces partial report when optional arti
   assert.equal(fs.existsSync(result.markdownPath), true);
   assert.equal(result.report.input_refs.candidate_input, `content/collected-news/${date}/merged-candidates.json`);
   assert.ok(result.report.warnings.some(warning => warning.type === 'missing_optional_artifact'));
+});
+
+test('source quality diagnosis writer produces partial report when shortlist is missing', () => {
+  const root = tempRoot('source-quality-no-shortlist-');
+  writeJson(path.join(root, 'content', 'collected-news', date, 'merged-candidates.json'), {
+    date,
+    candidates: [cameraCandidate()]
+  });
+
+  const result = writeSourceQualityDiagnosisArtifacts({ root, date });
+
+  assert.equal(fs.existsSync(result.jsonPath), true);
+  assert.equal(fs.existsSync(result.markdownPath), true);
+  assert.equal(result.report.raw_candidate_count, 1);
+  assert.equal(result.report.eligible_candidate_count, null);
+  assert.equal(result.report.evidence_completeness.shortlisted_candidates, false);
+  assert.ok(result.report.warnings.some(warning => warning.type === 'missing_preferred_artifact' && /shortlisted-candidates/.test(warning.source_artifact)));
+  assert.ok(result.report.warnings.some(warning => warning.type === 'partial_diagnosis'));
+  assert.match(result.markdown, /알 수 없음/);
 });
 
 test('newsroom PR body includes source quality diagnosis summary and missing-artifact warning', () => {

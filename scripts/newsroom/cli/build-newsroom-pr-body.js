@@ -24,10 +24,12 @@ const {
   articleSectionContractMarkdown
 } = require('../render/newsletter-renderer');
 const {
-  DIAGNOSIS_KEYS,
+  DIAGNOSIS_KEYS
+} = require('../metrics/source-quality-diagnosis');
+const {
   DIAGNOSIS_LABELS_KO,
   RECOMMENDED_ACTION_LABELS_KO
-} = require('../metrics/source-quality-diagnosis');
+} = require('../render/source-quality-diagnosis-labels.ko');
 const {
   getChangedRepoVisibleArtifacts,
   requiredPublicFiles,
@@ -59,6 +61,11 @@ function readTextIfExists(filePath) {
 
 function valueOrUnknown(value) {
   if (value === null || value === undefined || value === '') return 'unknown';
+  return String(value);
+}
+
+function valueOrUnknownKo(value) {
+  if (value === null || value === undefined || value === '') return '알 수 없음';
   return String(value);
 }
 
@@ -625,8 +632,8 @@ function renderSourceQualityDiagnosisSummary(root, date) {
     `  - \`${jsonRelPath}\``,
     `  - \`${markdownRelPath}\``,
     '- 요약:',
-    `  - 원본 후보 수: ${valueOrUnknown(report.raw_candidate_count)}`,
-    `  - 최종 사용 가능 후보 수: ${valueOrUnknown(report.eligible_candidate_count)}`,
+    `  - 원본 후보 수: ${valueOrUnknownKo(report.raw_candidate_count)}`,
+    `  - 최종 사용 가능 후보 수: ${valueOrUnknownKo(report.eligible_candidate_count)}`,
     `  - 주요 진단: ${activeLabels.join(', ') || '없음'}`,
     `  - 경고: ${ensureArray(report.warnings).length}`,
     '- 권장 조치 Top 3:',

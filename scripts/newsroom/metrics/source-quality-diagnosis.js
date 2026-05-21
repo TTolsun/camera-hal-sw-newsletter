@@ -18,6 +18,10 @@ const {
 const {
   normalizeUrl
 } = require('../generate/newsroom-selection');
+const {
+  DIAGNOSIS_LABELS_KO,
+  RECOMMENDED_ACTION_LABELS_KO
+} = require('../render/source-quality-diagnosis-labels.ko');
 
 const SCHEMA_VERSION = 1;
 const REPORT_TYPE = 'source_quality_diagnosis';
@@ -31,25 +35,6 @@ const DIAGNOSIS_KEYS = [
   'duplicate_or_noop_source_discovery'
 ];
 
-const DIAGNOSIS_LABELS_KO = Object.freeze({
-  actual_news_shortage: '실제 뉴스 부족',
-  parser_extraction_failure: '파서 추출 실패',
-  source_gap_risk: '소스 풀 부족 위험',
-  taxonomy_missing: '분류 체계 누락',
-  fallback_only_composition: 'Fallback 기사만 남음',
-  duplicate_or_noop_source_discovery: 'Source discovery 중복 또는 무효'
-});
-
-const RECOMMENDED_ACTION_LABELS_KO = Object.freeze({
-  KEEP_AND_FIX_PARSER: '소스 유지, 파서 수정',
-  DOWNGRADE_GENERIC_SOURCE: '일반 소스로 강등',
-  ADD_MULTIMEDIA_BUCKET: 'Multimedia bucket 추가',
-  REVIEW_SOURCE_GAP: '소스 풀 보강 검토',
-  REPAIR_SOURCE_DISCOVERY_DUPLICATES: 'Source discovery 중복 제거/수리',
-  NO_ACTION_THIN_WEEK: '기사 부족 주간으로 판단, 조치 없음',
-  KEEP_AND_MONITOR: '유지하고 추적'
-});
-
 const ACTION_PRIORITY = Object.freeze({
   KEEP_AND_FIX_PARSER: 1,
   ADD_MULTIMEDIA_BUCKET: 2,
@@ -58,6 +43,14 @@ const ACTION_PRIORITY = Object.freeze({
   DOWNGRADE_GENERIC_SOURCE: 5,
   NO_ACTION_THIN_WEEK: 6,
   KEEP_AND_MONITOR: 7
+});
+
+const SEVERITY_PRIORITY = Object.freeze({
+  high: 1,
+  medium: 2,
+  warning: 2,
+  low: 3,
+  info: 4
 });
 
 const KNOWN_CAMERA_BUCKETS = new Set([
@@ -81,6 +74,14 @@ function ensureArray(value) {
 
 function objectValue(value) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+}
+
+function hasObjectEvidence(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length > 0;
+}
+
+function availabilityFlag(value, fallback) {
+  return typeof value === 'boolean' ? value : fallback;
 }
 
 function text(value) {
@@ -113,6 +114,10 @@ function firstNumber(...values) {
     if (parsed !== null) return parsed;
   }
   return null;
+}
+
+function countOrNull(items, predicate) {
+  return Array.isArray(items) ? items.filter(predicate).length : null;
 }
 
 function candidateItems(payload) {
@@ -209,6 +214,33 @@ function isEligibleCandidate(candidate = {}) {
     ['main', 'short'].includes(eligibility);
 }
 
+function relevanceBucket(candidate = {}) {
+  return lower(candidate.relevance_bucket || candidate.aospCameraStackBucket || candidate.aosp_camera_stack_bucket);
+}
+
+function isPrimaryCameraStackCandidate(candidate = {}) {
+  return [
+    'direct_aosp_camera',
+    'camera_driver_image_pipeline',
+    'android_platform_camera_adjacent'
+  ].includes(relevanceBucket(candidate));
+}
+
+function normalizeCompositionMode(value) {
+  return text(value)
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .toLowerCase()
+    .replace(/[-\s]+/g, '_');
+}
+
+function isFallbackCompositionMode(value) {
+  return [
+    'fallback',
+    'fallback_only',
+    'fallback_composition'
+  ].includes(normalizeCompositionMode(value));
+}
+
 function cameraRelevantRawSignal(candidate = {}) {
   const haystack = [
     candidate.title,
@@ -293,6 +325,8 @@ function buildSourceBreakdownFromEffectiveness(report = {}) {
     return {
       source_id: text(source.source_id) || 'unknown-source',
       source_name: text(source.source_name) || text(source.source_id) || 'Unknown source',
+      reliability: text(source.reliability),
+      priority: text(source.priority),
       raw_count: Number(source.collected_count || 0),
       eligible_count: Number(source.eligible_count || 0),
       blocked_count: Math.max(0, Number(source.collected_count || 0) - Number(source.eligible_count || 0)),
@@ -316,6 +350,8 @@ function buildSourceBreakdownFromCandidates(candidates = []) {
       states.set(id, {
         source_id: id,
         source_name: sourceNameForCandidate(candidate),
+        reliability: firstText(candidate.reliability, candidate.source_reliability),
+        priority: firstText(candidate.priority, candidate.source_priority),
         raw_count: 0,
         eligible_count: 0,
         blocked_count: 0,
@@ -426,6 +462,24 @@ function compactReasonText(items) {
   return ensureArray(items).map(item => text(item.reason)).filter(Boolean).join('; ');
 }
 
+function severityPriority(value) {
+  return SEVERITY_PRIORITY[lower(value)] || 99;
+}
+
+function sourcePriorityRank(source = {}) {
+  const priority = lower(source.source_priority || source.priority);
+  const reliability = lower(source.source_reliability || source.reliability);
+  if (['official', 'project-official', 'official-community'].includes(reliability) || priority === 'high') return 1;
+  if (['supporting', 'medium'].includes(priority) || reliability === 'media') return 2;
+  if (['generic', 'low'].includes(priority)) return 3;
+  return 4;
+}
+
+function comparableCount(value) {
+  const parsed = numberOrNull(value);
+  return parsed === null ? -1 : parsed;
+}
+
 function buildRecommendedIssues(sourceBreakdown, reasons) {
   const issues = [];
   for (const source of sourceBreakdown) {
@@ -437,7 +491,11 @@ function buildRecommendedIssues(sourceBreakdown, reasons) {
       source_name: source.source_name,
       reason: source.parser_failure_signals[0] || source.top_blockers[0] || source.source_effectiveness_recommendation || source.recommended_action,
       severity: source.recommended_action === 'KEEP_AND_FIX_PARSER' ? 'high' : 'medium',
-      source_artifact: 'source-effectiveness-report.json'
+      source_artifact: 'source-effectiveness-report.json',
+      source_priority: source.priority || '',
+      source_reliability: source.reliability || '',
+      blocked_count: source.blocked_count,
+      raw_count: source.raw_count
     });
   }
   if (boolFromReasons(reasons, 'taxonomy_missing')) {
@@ -484,7 +542,11 @@ function buildRecommendedIssues(sourceBreakdown, reasons) {
       return true;
     })
     .sort((a, b) =>
+      severityPriority(a.severity) - severityPriority(b.severity) ||
       (ACTION_PRIORITY[a.action] || 99) - (ACTION_PRIORITY[b.action] || 99) ||
+      sourcePriorityRank(a) - sourcePriorityRank(b) ||
+      comparableCount(b.blocked_count) - comparableCount(a.blocked_count) ||
+      comparableCount(b.raw_count) - comparableCount(a.raw_count) ||
       String(a.source_id).localeCompare(String(b.source_id)) ||
       String(a.reason).localeCompare(String(b.reason))
     )
@@ -509,9 +571,21 @@ function buildSourceQualityDiagnosisReport(options = {}) {
   const sourceDiscoveryFeedbackReport = objectValue(options.sourceDiscoveryFeedbackReport);
   const mergedCandidateManifest = objectValue(options.mergedCandidateManifest);
   const evidencePackSummary = objectValue(options.evidencePackSummary);
+  const inputAvailability = objectValue(options.inputAvailability);
+  const hasCandidateInput = availabilityFlag(inputAvailability.candidate_input, Boolean(candidateInput.relPath || options.inputRefs?.candidate_input));
+  const hasShortlistReport = availabilityFlag(inputAvailability.shortlisted_candidates, hasObjectEvidence(options.shortlistReport));
+  const hasSelectionReport = availabilityFlag(inputAvailability.selection_report, hasObjectEvidence(options.selectionReport));
+  const hasGenerationStatus = availabilityFlag(inputAvailability.generation_status, hasObjectEvidence(options.generationStatus));
+  const hasSourceEffectivenessReport = availabilityFlag(inputAvailability.source_effectiveness_report, hasObjectEvidence(options.sourceEffectivenessReport));
+  const hasSourceQualityReport = availabilityFlag(inputAvailability.source_quality_report, hasObjectEvidence(options.sourceQualityReport));
+  const hasSourceDiscoveryFeedbackReport = availabilityFlag(inputAvailability.source_discovery_feedback_report, hasObjectEvidence(options.sourceDiscoveryFeedbackReport));
+  const hasMergedCandidateManifest = availabilityFlag(inputAvailability.merged_candidate_manifest, hasObjectEvidence(options.mergedCandidateManifest));
+  const hasEvidencePackSummary = availabilityFlag(inputAvailability.evidence_pack_summary, hasObjectEvidence(options.evidencePackSummary));
   const inputRefs = {
-    candidate_input: candidateInput.relPath || '',
-    shortlisted_candidates: options.inputRefs?.shortlisted_candidates || newsroomRelPath(date, 'shortlisted-candidates.json'),
+    candidate_input: candidateInput.relPath || options.inputRefs?.candidate_input || null,
+    shortlisted_candidates: hasShortlistReport
+      ? options.inputRefs?.shortlisted_candidates || newsroomRelPath(date, 'shortlisted-candidates.json')
+      : options.inputRefs?.shortlisted_candidates || null,
     selection_report: options.inputRefs?.selection_report || null,
     generation_status: options.inputRefs?.generation_status || null,
     source_effectiveness_report: options.inputRefs?.source_effectiveness_report || null,
@@ -528,34 +602,54 @@ function buildSourceQualityDiagnosisReport(options = {}) {
   const sourceEffectivenessSummary = objectValue(sourceEffectivenessReport.summary);
   const gateSummary = objectValue(selectionReport.gate_summary || shortlistReport.gate_summary);
   const statusComposition = generationStatus.composition_summary || {};
+  const hasCandidateEvidence = hasCandidateInput && candidates.length > 0;
+  const evidenceCompleteness = {
+    candidate_input: hasCandidateInput,
+    shortlisted_candidates: hasShortlistReport,
+    selection_report: hasSelectionReport,
+    generation_status: hasGenerationStatus,
+    source_effectiveness_report: hasSourceEffectivenessReport,
+    source_quality_report: hasSourceQualityReport,
+    source_discovery_feedback_report: hasSourceDiscoveryFeedbackReport,
+    merged_candidate_manifest: hasMergedCandidateManifest,
+    evidence_pack_summary: hasEvidencePackSummary
+  };
   const rawCandidateCount = firstNumber(
     sourceEffectivenessSummary.collected_count,
     generationStatus.input_candidate_count,
     shortlistReport.input_candidate_count,
-    candidates.length
-  ) || 0;
+    hasCandidateEvidence ? candidates.length : null
+  );
   const eligibleCandidateCount = firstNumber(
     sourceEffectivenessSummary.eligible_count,
     generationStatus.eligible_candidate_count,
     shortlistReport.final_eligible_candidate_count,
     shortlistReport.eligible_candidate_count,
     candidateShortageSummary.publishable_candidate_count,
-    candidates.filter(isEligibleCandidate).length
-  ) || 0;
+    hasShortlistReport && hasCandidateEvidence ? candidates.filter(isEligibleCandidate).length : null
+  );
   const primaryCameraStackCount = firstNumber(
     candidateShortageSummary.primary_camera_stack_candidate_count,
     gateSummary.primary_camera_stack_topic_count,
     generationStatus.primary_camera_stack_topic_count,
     statusComposition.primary_camera_stack_topic_count,
-    0
-  ) || 0;
+    hasCandidateEvidence ? countOrNull(candidates, isPrimaryCameraStackCandidate) : null
+  );
   const androidMultimediaCameraOutputCount = firstNumber(
     gateSummary.android_multimedia_camera_output_count,
     generationStatus.android_multimedia_camera_output_count,
     statusComposition.android_multimedia_camera_output_count,
-    candidates.filter(candidate => lower(candidate.relevance_bucket) === 'android_multimedia_camera_output').length,
-    0
-  ) || 0;
+    hasCandidateEvidence ? countOrNull(candidates, candidate => relevanceBucket(candidate) === 'android_multimedia_camera_output') : null
+  );
+
+  if (!hasCandidateInput || !hasShortlistReport) {
+    warnings.push({
+      type: 'partial_diagnosis',
+      message: 'Source quality diagnosis was generated with missing preferred input artifacts.',
+      source_artifact: [inputRefs.candidate_input, inputRefs.shortlisted_candidates].filter(Boolean).join(', ') || '',
+      severity: 'warning'
+    });
+  }
 
   if (Number(sourceEffectivenessSummary.source_quality_field_drift_count || 0) > 0) {
     warnings.push({
@@ -605,11 +699,10 @@ function buildSourceQualityDiagnosisReport(options = {}) {
 
   const unknownSourceQualityCount = firstNumber(
     sourceEffectivenessSummary.unknown_source_quality_count,
-    sourceQualityReport.unknown_source_quality_count,
-    0
-  ) || 0;
+    sourceQualityReport.unknown_source_quality_count
+  );
   const unknownBucketCandidates = candidates.filter(candidate => {
-    const bucket = lower(candidate.relevance_bucket || candidate.aospCameraStackBucket || candidate.aosp_camera_stack_bucket);
+    const bucket = relevanceBucket(candidate);
     return cameraRelevantRawSignal(candidate) && (!bucket || !KNOWN_CAMERA_BUCKETS.has(bucket));
   });
   if (unknownBucketCandidates.length > 0) {
@@ -630,14 +723,13 @@ function buildSourceQualityDiagnosisReport(options = {}) {
       'medium'
     );
   }
-  if (unknownSourceQualityCount > 0) {
-    addReason(
-      reasons,
-      'taxonomy_missing',
-      `unknown_source_quality_count=${unknownSourceQualityCount}; source role or source quality could not be interpreted by the classifier.`,
-      sourceEffectivenessRel,
-      'medium'
-    );
+  if (Number(unknownSourceQualityCount || 0) > 0) {
+    warnings.push({
+      type: 'unknown_source_quality',
+      message: `unknown_source_quality_count=${unknownSourceQualityCount}; source quality value could not be interpreted by the classifier.`,
+      source_artifact: sourceEffectivenessRel,
+      severity: 'warning'
+    });
   }
 
   const sourceGapSources = ensureArray(sourceEffectivenessReport.sources)
@@ -687,11 +779,11 @@ function buildSourceQualityDiagnosisReport(options = {}) {
     gateSummary.cpp_ai_tooling_fallback_count,
     0
   ) || 0;
-  if (compositionMode === 'FALLBACK_COMPOSITION') {
+  if (isFallbackCompositionMode(compositionMode)) {
     addReason(
       reasons,
       'fallback_only_composition',
-      'composition_mode is FALLBACK_COMPOSITION.',
+      `composition_mode indicates fallback composition: ${compositionMode}.`,
       generationRel,
       'medium'
     );
@@ -797,6 +889,7 @@ function buildSourceQualityDiagnosisReport(options = {}) {
     report_type: REPORT_TYPE,
     date,
     input_refs: inputRefs,
+    evidence_completeness: evidenceCompleteness,
     raw_candidate_count: rawCandidateCount,
     eligible_candidate_count: eligibleCandidateCount,
     primary_camera_stack_count: primaryCameraStackCount,
@@ -809,7 +902,7 @@ function buildSourceQualityDiagnosisReport(options = {}) {
   };
 }
 
-function resolveCandidateInput(root, date, generationStatus = {}) {
+function resolveCandidateInput(root, date, generationStatus = {}, warnings = []) {
   const configuredRel = text(generationStatus.candidate_input?.candidate_artifact);
   const candidates = [
     configuredRel,
@@ -827,7 +920,17 @@ function resolveCandidateInput(root, date, generationStatus = {}) {
       };
     }
   }
-  throw new Error(`Missing candidate input artifact for ${date}: ${candidates.join(', ')}`);
+  warnings.push({
+    type: 'missing_preferred_artifact',
+    message: `Candidate input artifact not found for ${date}; raw candidate count may be unavailable.`,
+    source_artifact: candidates.join(', '),
+    severity: 'warning'
+  });
+  return {
+    path: null,
+    relPath: null,
+    payload: {}
+  };
 }
 
 function loadSourceQualityDiagnosisInputs(root, date) {
@@ -836,11 +939,30 @@ function loadSourceQualityDiagnosisInputs(root, date) {
   const generationRel = newsroomRelPath(date, 'generation-status.json');
   const generationStatus = readJsonIfExists(resolvedRoot, generationRel, warnings) ||
     readJsonIfExists(resolvedRoot, '.tmp/newsletter-generation-status.json', warnings);
-  const candidateInput = resolveCandidateInput(resolvedRoot, date, generationStatus || {});
+  const candidateInput = resolveCandidateInput(resolvedRoot, date, generationStatus || {}, warnings);
   const shortlistRel = newsroomRelPath(date, 'shortlisted-candidates.json');
   const shortlistPath = path.join(resolvedRoot, ...shortlistRel.split('/'));
+  let shortlistReport = {};
+  let hasShortlistReport = false;
   if (!fs.existsSync(shortlistPath)) {
-    throw new Error(`Missing required input ${shortlistRel}`);
+    warnings.push({
+      type: 'missing_preferred_artifact',
+      message: `${shortlistRel} not found; eligible candidate count may be unavailable.`,
+      source_artifact: shortlistRel,
+      severity: 'warning'
+    });
+  } else {
+    try {
+      shortlistReport = readJson(shortlistPath);
+      hasShortlistReport = true;
+    } catch (error) {
+      warnings.push({
+        type: 'invalid_preferred_artifact',
+        message: `${shortlistRel} is not valid JSON: ${error.message}`,
+        source_artifact: shortlistRel,
+        severity: 'warning'
+      });
+    }
   }
   const optionalSpecs = [
     ['selectionReport', newsroomRelPath(date, 'selection-report.json')],
@@ -855,12 +977,17 @@ function loadSourceQualityDiagnosisInputs(root, date) {
     warnings,
     candidateInput,
     candidatePayload: candidateInput.payload,
-    shortlistReport: readJson(shortlistPath),
+    shortlistReport,
     generationStatus: generationStatus || {},
     inputRefs: {
       candidate_input: candidateInput.relPath,
-      shortlisted_candidates: shortlistRel,
+      shortlisted_candidates: hasShortlistReport ? shortlistRel : null,
       generation_status: generationStatus ? generationRel : null
+    },
+    inputAvailability: {
+      candidate_input: Boolean(candidateInput.relPath),
+      shortlisted_candidates: hasShortlistReport,
+      generation_status: Boolean(generationStatus)
     }
   };
   for (const [key, relPath] of optionalSpecs) {
@@ -873,6 +1000,14 @@ function loadSourceQualityDiagnosisInputs(root, date) {
       mergedCandidateManifest: 'merged_candidate_manifest',
       evidencePackSummary: 'evidence_pack_summary'
     }[key]] = out[key] ? relPath : null;
+    out.inputAvailability[{
+      selectionReport: 'selection_report',
+      sourceEffectivenessReport: 'source_effectiveness_report',
+      sourceQualityReport: 'source_quality_report',
+      sourceDiscoveryFeedbackReport: 'source_discovery_feedback_report',
+      mergedCandidateManifest: 'merged_candidate_manifest',
+      evidencePackSummary: 'evidence_pack_summary'
+    }[key]] = Boolean(out[key]);
   }
   return out;
 }
@@ -895,6 +1030,11 @@ function markdownTable(headers, rows) {
 
 function statusText(value) {
   return value === true ? 'true' : 'false';
+}
+
+function displayValue(value) {
+  if (value === null || value === undefined || value === '') return '알 수 없음';
+  return value;
 }
 
 function firstReasonText(report, key) {
@@ -924,13 +1064,14 @@ function renderSourceQualityDiagnosisMarkdown(report) {
     .slice(0, 20)
     .map(source => [
       source.source_name || source.source_id,
-      source.raw_count,
-      source.eligible_count,
+      displayValue(source.raw_count),
+      displayValue(source.eligible_count),
       ensureArray(source.top_blockers).slice(0, 2).join('; ') || '없음',
       RECOMMENDED_ACTION_LABELS_KO[source.recommended_action] || source.recommended_action || ''
     ]);
   const issueRows = ensureArray(report.recommended_issues).slice(0, 10).map(issue => [
     RECOMMENDED_ACTION_LABELS_KO[issue.action] || issue.action,
+    `\`${issue.action || ''}\``,
     issue.source_name || issue.source_id || '전체',
     issue.reason,
     issue.severity
@@ -949,19 +1090,20 @@ function renderSourceQualityDiagnosisMarkdown(report) {
     '',
     '## 요약',
     '',
-    `- 원본 후보 수: ${report.raw_candidate_count}`,
-    `- 최종 사용 가능 후보 수: ${report.eligible_candidate_count}`,
-    `- Primary Camera Stack 후보 수: ${report.primary_camera_stack_count}`,
-    `- Android multimedia camera output 후보 수: ${report.android_multimedia_camera_output_count}`,
+    `- 원본 후보 수: ${displayValue(report.raw_candidate_count)}`,
+    `- 최종 사용 가능 후보 수: ${displayValue(report.eligible_candidate_count)}`,
+    `- Primary Camera Stack 후보 수: ${displayValue(report.primary_camera_stack_count)}`,
+    `- Android multimedia camera output 후보 수: ${displayValue(report.android_multimedia_camera_output_count)}`,
     `- 주요 진단: ${labels.join(', ') || '없음'}`,
     `- 결론: ${conclusion}`,
     '',
     '## 진단 플래그',
     '',
     markdownTable(
-      ['진단 항목', '상태', '근거'],
+      ['진단 항목', '내부 키', '상태', '근거'],
       DIAGNOSIS_KEYS.map(key => [
         DIAGNOSIS_LABELS_KO[key],
+        `\`${key}\``,
         statusText(report.diagnosis?.[key] === true),
         firstReasonText(report, key)
       ])
@@ -975,7 +1117,7 @@ function renderSourceQualityDiagnosisMarkdown(report) {
     '## 권장 조치',
     '',
     markdownTable(
-      ['권장 조치', '대상', '근거', '심각도'],
+      ['권장 조치', '내부 값', '대상', '근거', '심각도'],
       issueRows
     ),
     '## 경고',

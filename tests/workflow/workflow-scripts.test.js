@@ -5319,7 +5319,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(sourceEffectivenessStep, /continue-on-error:\s*true/);
-  assert.match(sourceQualityDiagnosisStep, /if: always\(\) && steps\.meta\.outputs\.review_pr_ready == 'true'/);
+  assert.match(sourceQualityDiagnosisStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.match(sourceQualityDiagnosisStep, /continue-on-error:\s*true/);
   assert.match(sourceQualityDiagnosisStep, /npm run report:source-quality-diagnosis -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(evidencePackStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
