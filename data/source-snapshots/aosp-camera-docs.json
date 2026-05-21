@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "source_id": "aosp-camera-docs",
+  "updated_at": "2026-05-22T00:00:00.000Z",
+  "pages": [
+    {
+      "source_identity_key": "aosp-camera-docs:2e09be47b7d035b1b1509fe59f1caf95",
+      "url": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "title": "Camera | Android Open Source Project",
+      "visible_date": "",
+      "visible_last_updated": "2026-01-01",
+      "structured_date_published": "",
+      "structured_date_modified": "",
+      "sitemap_lastmod": "",
+      "http_last_modified": "2026-04-10",
+      "content_hash": "d80e2108cf809e679602dbd00d9913c96dde67258d69bfa13099b2183bb634b6",
+      "normalized_content_hash": "0297e7f5dbe13db891647a87e444b6711649ba95ddf7540b0542880c83e205f7",
+      "anchors": [
+        "https://source.android.com/docs/core/camera#legacy-hal"
+      ],
+      "release_row_date": "",
+      "release_row_version": "",
+      "release_row_anchor": "",
+      "release_row_hash": "",
+      "release_rows": [],
+      "first_seen_at": "2026-05-22T00:00:00.000Z",
+      "last_seen_at": "2026-05-22T00:00:00.000Z",
+      "seen_count": 1,
+      "status": 200
+    }
+  ],
+  "processed_source_event_ids": [
+    "source-event-729785aba8003043498e7e1e8a68d275"
+  ],
+  "processed_evidence_ids": [
+    "evidence-788f9d9f210990dc2288a7a4ecab04bd"
+  ]
+}
