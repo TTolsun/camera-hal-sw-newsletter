@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T18:33:34.745Z",
+  "generated_at": "2026-05-21T19:37:24.020Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -16,6 +16,7 @@
       "content/newsroom/2026-05-22/quality-report.json",
       "content/newsroom/2026-05-22/fact-check-report.json",
       "content/newsroom/2026-05-22/source-effectiveness-report.json",
+      "content/source-events/2026-05-22/source-change-events.json",
       "content/newsroom/2026-05-22/repair-failure.json",
       "content/newsroom/2026-05-22/fallback-public-issue.json",
       "content/newsroom/2026-05-22/fallback-public-issue-diagnostics.json",
@@ -36,6 +37,7 @@
       "content/newsroom/2026-05-22/quality-report.json",
       "content/newsroom/2026-05-22/fact-check-report.json",
       "content/newsroom/2026-05-22/source-effectiveness-report.json",
+      "content/source-events/2026-05-22/source-change-events.json",
       "content/newsroom/2026-05-22/fallback-public-issue.json"
     ]
   },
@@ -226,6 +228,19 @@
       "relevance_bucket": "android_platform_camera_adjacent",
       "article_group_key": "unknown",
       "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
       "related_context_candidates": [],
       "finalSelectionEligibility": "main",
       "source_gap_risk": false,
@@ -264,6 +279,19 @@
       "relevance_bucket": "android_platform_camera_adjacent",
       "article_group_key": "unknown",
       "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
       "related_context_candidates": [],
       "finalSelectionEligibility": "short",
       "source_gap_risk": false,
