@@ -21,7 +21,11 @@ function clearLlmEnv() {
     'GEMINI_RETRY_MAX_DELAY_MS',
     'INTERNAL_LLM_API_KEY',
     'INTERNAL_LLM_ENDPOINT',
-    'INTERNAL_LLM_API_VERSION'
+    'INTERNAL_LLM_API_VERSION',
+    'NEWSROOM_REPORTER_MODEL',
+    'NEWSROOM_EDITOR_MODEL',
+    'NEWSROOM_FACTCHECK_MODEL',
+    'NEWSROOM_REPAIR_MODEL'
   ]) {
     delete process.env[key];
   }
@@ -96,6 +100,12 @@ test('internal provider uses fake fetch without requiring Gemini API key', async
   assert.equal(fetchImpl.calls[0].body.system_instruction, 'system');
   const [call] = client.getLlmCostCalls();
   assert.equal(call.provider, 'internal');
+  assert.equal(call.stage_group, 'reporter');
+  assert.equal(call.primary_model, 'internal-primary');
+  assert.equal(call.attempt_model, 'internal-primary');
+  assert.deepEqual(call.fallback_models, []);
+  assert.equal(call.resolved_by, 'LLM_MODEL');
+  assert.equal(call.global_override_applied, true);
   assert.equal(call.estimated_cost_usd, null);
   assert.match(call.pricing_warning, /No internal LLM pricing table/);
 });

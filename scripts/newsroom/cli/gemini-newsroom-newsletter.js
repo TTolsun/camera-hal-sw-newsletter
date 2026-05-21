@@ -345,6 +345,7 @@ function buildGenerationStatus({
     quota_error_count: diagnostics.quota_error_count,
     invalid_json_count: diagnostics.invalid_json_count,
     model_usage: diagnostics.model_usage,
+    model_routing: diagnostics.model_routing || {},
     candidate_input: restExtra.candidate_input || generationRunState.candidateInput || null,
     run_context: {
       ...buildRunContext(),

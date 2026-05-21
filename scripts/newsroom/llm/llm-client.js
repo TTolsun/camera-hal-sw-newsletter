@@ -18,6 +18,7 @@ const {
 } = require('./llm-errors');
 const geminiProvider = require('./providers/gemini-provider');
 const internalProvider = require('./providers/internal-provider');
+const { modelGroupForStage } = require('./model-policy');
 
 const runtimeConfig = readRuntimeConfig(process.env);
 const retryableStatuses = new Set([429, 500, 502, 503, 504]);
@@ -66,14 +67,20 @@ function retryDelay(attempt, error) {
   return effectiveRetryDelaysMs[attempt - 1] ?? effectiveRetryDelaysMs[effectiveRetryDelaysMs.length - 1];
 }
 
-function recordUsageMetadata(stage, provider, modelName, attempt, response, requestState = {}) {
+function recordUsageMetadata(stage, provider, modelName, attempt, response, requestState = {}, routing = {}) {
   const usage = provider.usageMetadataFromResponse(response);
   const cost = provider.estimateCallCost(modelName, usage);
   const thinkingBudget = requestState.thinkingBudget || {};
   diagnostics.recordCostCall({
     provider: provider.id,
     stage,
+    stage_group: routing.stage_group || modelGroupForStage(stage),
     model: modelName,
+    primary_model: routing.primary_model || modelName,
+    attempt_model: modelName,
+    fallback_models: Array.isArray(routing.fallback_models) ? [...routing.fallback_models] : [],
+    resolved_by: routing.resolved_by || 'unknown',
+    global_override_applied: routing.global_override_applied === true,
     attempt,
     pro_model: provider.isProModel(modelName),
     usage_metadata_present: usage.usage_metadata_present,
@@ -94,14 +101,14 @@ function recordUsageMetadata(stage, provider, modelName, attempt, response, requ
   });
 }
 
-async function generateContentJsonWithRetry(stage, provider, context, requestState, modelName) {
+async function generateContentJsonWithRetry(stage, provider, context, requestState, modelName, routing = {}) {
   let lastError;
   for (let attempt = 1; attempt <= maxRetries + 1; attempt += 1) {
     try {
       diagnostics.recordRequest(stage, modelName);
       console.log(`[${stage}] ${provider.displayName} request attempt ${attempt}/${maxRetries + 1} using model ${modelName}.`);
       const response = await provider.execute({ context, request: requestState.request, modelName, stage });
-      recordUsageMetadata(stage, provider, modelName, attempt, response, requestState);
+      recordUsageMetadata(stage, provider, modelName, attempt, response, requestState, routing);
       const text = provider.textFromResponse(response);
       const json = extractJson(text, stage, provider.displayName);
       diagnostics.recordSuccess(stage, modelName);
@@ -167,7 +174,19 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
   }
 
   const failures = [];
-  for (const modelName of provider.configuredModels(runtimeConfig)) {
+  const modelNames = provider.configuredModels(runtimeConfig, stage);
+  const stageGroup = modelGroupForStage(stage);
+  const routing = {
+    stage,
+    stage_group: stageGroup,
+    primary_model: modelNames[0] || '',
+    fallback_models: modelNames.slice(1),
+    resolved_by: runtimeConfig.llmStageModelSources?.[stageGroup] || runtimeConfig.llmModelSource || 'unknown',
+    global_override_applied: runtimeConfig.llmGlobalModelExplicitlyConfigured === true
+  };
+  diagnostics.recordModelRouting(stage, routing);
+
+  for (const modelName of modelNames) {
     let context;
     try {
       context = provider.createModelContext({ modelName, apiKey: key, config: runtimeConfig, options });
@@ -193,7 +212,7 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
         request: builtRequest.request || builtRequest,
         thinkingBudget: builtRequest.thinkingBudget || null
       };
-      const json = await generateContentJsonWithRetry(stage, provider, context, requestState, modelName);
+      const json = await generateContentJsonWithRetry(stage, provider, context, requestState, modelName, routing);
       console.log(`[${stage}] ${provider.displayName} API succeeded with model ${modelName}.`);
       return json;
     } catch (error) {
