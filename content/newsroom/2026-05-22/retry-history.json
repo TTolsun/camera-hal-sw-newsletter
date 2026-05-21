@@ -1,0 +1,31 @@
+[
+  {
+    "attempt": 1,
+    "model": "deterministic-fallback-public-issue",
+    "score": 100,
+    "threshold": 85,
+    "status": "PUBLIC_ISSUE_CREATED",
+    "rendered_main_article_count": 1,
+    "demoted_article_count": 0,
+    "reserve_candidates_used": [
+      {
+        "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+        "category": "Android Platform / CameraX",
+        "url": "https://goo.gle/AdaptiveApps_IO26",
+        "source": "Android Developers Blog",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "action": "rebuild-from-bound-candidate",
+        "fallback": false,
+        "reason": "hard failure replacement"
+      }
+    ],
+    "deductions": [],
+    "selected_article_headlines": [
+      "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O"
+    ],
+    "demoted_sections": [],
+    "repair_actions": [
+      "fallback-public-issue-builder"
+    ]
+  }
+]

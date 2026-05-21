@@ -1,0 +1,36 @@
+{
+  "name": "EditorSemanticValidationError",
+  "message": "Editor output failed claim binding validation.",
+  "details": {
+    "field": "sections.claims",
+    "actualCount": 1,
+    "sectionCount": 1,
+    "issues": [
+      {
+        "index": 1,
+        "headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
+        "status": "needs_fix",
+        "issues": [
+          {
+            "reason_code": "unknown_evidence_id",
+            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
+          },
+          {
+            "reason_code": "unknown_evidence_id",
+            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
+          },
+          {
+            "reason_code": "unknown_evidence_id",
+            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
+          }
+        ],
+        "uncovered_facts": []
+      }
+    ]
+  },
+  "field": "sections.claims",
+  "stage": "editor attempt 1/2",
+  "attempt": 1,
+  "repairAttempted": true,
+  "repairSucceeded": false
+}
