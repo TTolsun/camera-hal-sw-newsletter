@@ -754,7 +754,7 @@ test('manual workflow dispatch allows Pro only when explicitly enabled', () => {
   assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
 });
 
-test('manual workflow allow_pro equivalent appends Pro to the default Flash-Lite fallback', () => {
+test('manual workflow allow_pro does not append Pro without explicit model selection', () => {
   const config = readRuntimeConfig({
     GEMINI_MODEL: 'gemini-2.5-flash',
     GITHUB_EVENT_NAME: 'workflow_dispatch',
@@ -762,10 +762,10 @@ test('manual workflow allow_pro equivalent appends Pro to the default Flash-Lite
   });
 
   assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro']);
-  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro']);
-  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, true);
-  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
+  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, false);
+  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, false);
 });
 
 test('manual Pro model policy dedupes and does not apply to schedule or internal providers', () => {

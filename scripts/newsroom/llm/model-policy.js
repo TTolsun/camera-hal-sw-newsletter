@@ -17,9 +17,8 @@ function isGeminiProModel(value) {
 }
 
 function shouldAppendGeminiProFallback(config) {
-  return config?.llmProvider === 'gemini' &&
-    config?.githubEventName === 'workflow_dispatch' &&
-    config?.newsroomAllowProOnManual === true;
+  void config;
+  return false;
 }
 
 function dedupeModels(models) {
