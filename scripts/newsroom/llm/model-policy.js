@@ -6,6 +6,7 @@ const LLM_STAGE_GROUPS = Object.freeze({
   REPAIR: 'repair'
 });
 const LLM_STAGE_GROUP_VALUES = Object.freeze(Object.values(LLM_STAGE_GROUPS));
+const UNKNOWN_STAGE_ROUTING_WARNING = 'unknown_stage_defaulted_to_reporter';
 
 function normalizeModelName(value) {
   return String(value || '').trim().toLowerCase();
@@ -33,13 +34,29 @@ function fallbackModels(config) {
       : [];
 }
 
-function modelGroupForStage(stage) {
+function modelGroupInfoForStage(stage) {
   const normalized = normalizeModelName(stage);
-  if (/background-context|reporter/.test(normalized)) return LLM_STAGE_GROUPS.REPORTER;
-  if (/fact[-\s]?checker|fact[-\s]?check/.test(normalized)) return LLM_STAGE_GROUPS.FACTCHECK;
-  if (/semantic repair|editor repair|completion|repair/.test(normalized)) return LLM_STAGE_GROUPS.REPAIR;
-  if (/editor/.test(normalized)) return LLM_STAGE_GROUPS.EDITOR;
-  return LLM_STAGE_GROUPS.REPORTER;
+  if (/background-context|reporter/.test(normalized)) {
+    return { group: LLM_STAGE_GROUPS.REPORTER, known: true, warning: '' };
+  }
+  if (/fact[-\s]?checker|fact[-\s]?check/.test(normalized)) {
+    return { group: LLM_STAGE_GROUPS.FACTCHECK, known: true, warning: '' };
+  }
+  if (/semantic repair|editor repair|completion|repair/.test(normalized)) {
+    return { group: LLM_STAGE_GROUPS.REPAIR, known: true, warning: '' };
+  }
+  if (/editor/.test(normalized)) {
+    return { group: LLM_STAGE_GROUPS.EDITOR, known: true, warning: '' };
+  }
+  return {
+    group: LLM_STAGE_GROUPS.REPORTER,
+    known: false,
+    warning: UNKNOWN_STAGE_ROUTING_WARNING
+  };
+}
+
+function modelGroupForStage(stage) {
+  return modelGroupInfoForStage(stage).group;
 }
 
 function primaryModelForStage(config, stage) {
@@ -98,10 +115,12 @@ function geminiProPolicySummary(config) {
 module.exports = {
   GEMINI_PRO_FALLBACK_MODEL,
   LLM_STAGE_GROUPS,
+  UNKNOWN_STAGE_ROUTING_WARNING,
   configuredModels,
   configuredModelsForStage,
   geminiProPolicySummary,
   isGeminiProModel,
+  modelGroupInfoForStage,
   modelGroupForStage,
   normalizeModelName,
   primaryModelForStage,

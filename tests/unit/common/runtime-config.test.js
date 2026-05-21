@@ -19,6 +19,7 @@ const {
 const {
   configuredModels,
   configuredModelsForStage,
+  modelGroupInfoForStage,
   modelGroupForStage
 } = require('../../../scripts/newsroom/llm/model-policy');
 
@@ -470,6 +471,16 @@ test('stage model normalizer maps known generation stages', () => {
   assert.equal(modelGroupForStage('editor repair attempt 1/2'), 'repair');
   assert.equal(modelGroupForStage('editor completion attempt 1/2'), 'repair');
   assert.equal(modelGroupForStage('unknown stage'), 'reporter');
+  assert.deepEqual(modelGroupInfoForStage('unknown stage'), {
+    group: 'reporter',
+    known: false,
+    warning: 'unknown_stage_defaulted_to_reporter'
+  });
+  assert.deepEqual(modelGroupInfoForStage('fact-checker repair attempt 1/2'), {
+    group: 'factcheck',
+    known: true,
+    warning: ''
+  });
 });
 
 test('internal provider credentials do not require a Gemini API key', () => {
