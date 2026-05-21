@@ -39,7 +39,9 @@ const CLAIM_IMPACT_LEVEL_ALIASES = Object.freeze({
   camera_stack_direct: 'camera_framework_behavior',
   android_framework_adjacent: 'app_api_or_framework_adjacent',
   tooling_supporting: 'native_tooling_workflow',
-  watch_only: 'no_hal_runtime_impact'
+  watch_only: 'no_hal_runtime_impact',
+  camerax_app_compatibility: 'app_api_or_framework_adjacent',
+  framework_hal_contract: 'camera_framework_behavior'
 });
 
 const OVERCLAIM_RISKS = Object.freeze([

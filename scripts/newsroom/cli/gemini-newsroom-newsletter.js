@@ -1386,7 +1386,7 @@ function writeReviewableRepairFailureArtifacts({
   };
 }
 
-async function repairEditorBriefingWithLlm({
+async function repairEditorSemanticWithLlm({
   date,
   editorStage,
   commonContext,
@@ -1397,14 +1397,18 @@ async function repairEditorBriefingWithLlm({
   return callLlmJson(
     `${editorStage} semantic repair`,
     [
-      'AOSP Camera / Driver / SoC Platform Newsletter의 유효한 JSON editor draft를 복구합니다.',
-      '같은 schema와 일치하는 complete editor JSON object를 반환하세요.',
-      'briefing field만 수정해서 정확히 3개의 한국어 briefing item을 포함하게 하세요.',
-      'briefing 외의 field는 변경하지 마세요.',
-      'sections, sources, source URLs, factual claims, article order, image fields, action_items, references를 변경하지 마세요.',
-      '새 article을 추가하거나, article을 제거하거나, source fact를 다시 쓰거나, 새 source material을 만들지 마세요.',
-      '가능하면 briefing 외 JSON values는 byte-for-byte로 보존하세요.',
-      'schema와 일치하는 JSON만 반환하세요.'
+      'Repair the AOSP Camera / Driver / SoC Platform Newsletter editor JSON draft.',
+      'Return one complete editor JSON object that matches the same schema.',
+      'Fix only the validation errors shown in Editor semantic validation error JSON.',
+      'Preserve Korean reader-facing prose unless the validation repair requires a local edit; any newly written reader-facing text must be Korean.',
+      'Do not add, remove, reorder, or replace articles.',
+      'Do not change article headlines, categories, source URLs, image fields, action_items, or references unless the validation error explicitly targets that field.',
+      'For sections.claims failures, add or adjust claims so every source-backed verified_facts[], confirmed_facts[], and concrete evidence_summary field has a matching claim_type=fact claim.',
+      'For claim repairs, use only allowed claim_type and impact_level values. Map CameraX/adaptive UI impact to app_api_or_framework_adjacent unless direct HAL contract evidence is present.',
+      'For missing source_urls, reuse the section source URL. For fact claims, cite available seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, or source_extraction evidence ids when present; do not invent evidence ids.',
+      'For briefing failures, fix briefing to exactly 3 items and preserve the rest of the draft.',
+      'Do not invent source facts or source material.',
+      'Return schema-compliant JSON only.'
     ].join('\n'),
     [
       commonContext,
@@ -1434,7 +1438,7 @@ async function validateOrRepairEditor(value, {
     newsroomDir,
     strictClaims: true,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
-    repairFn: async ({ invalidEditor, validationError }) => repairEditorBriefingWithLlm({
+    repairFn: async ({ invalidEditor, validationError }) => repairEditorSemanticWithLlm({
       date,
       editorStage,
       commonContext,

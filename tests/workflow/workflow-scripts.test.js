@@ -4026,6 +4026,44 @@ test('fallback builder preserves original fact-check blocker diagnostics after r
   }
 });
 
+test('fallback builder keeps editorial reviewable failure kind for unchanged public handoff', () => {
+  const root = tempRoot();
+  const { date } = writePr39LikeRegressionFixture(root);
+  const statusPath = path.join(root, 'content', 'newsroom', date, 'generation-status.json');
+  const tmpStatusPath = path.join(root, '.tmp', 'newsletter-generation-status.json');
+  const status = {
+    ...JSON.parse(fs.readFileSync(statusPath, 'utf8')),
+    status: 'NEEDS_FIX',
+    editor_semantic_validation: {
+      name: 'EditorSemanticValidationError',
+      field: 'sections.claims',
+      message: 'Editor output failed claim binding validation.'
+    }
+  };
+  writeJson(statusPath, status);
+  writeJson(tmpStatusPath, status);
+
+  buildFallbackPublicIssue({ root, date });
+
+  const nextStatus = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
+  assert.equal(nextStatus.failure_kind, 'editorial_reviewable');
+
+  const changedArtifacts = REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
+    .map(file => `content/newsroom/${date}/${file}`)
+    .concat(`content/newsroom/${date}/fallback-public-issue.json`);
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts
+  }));
+
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.diagnostics_only, 'true');
+  assert.match(outputs.reviewable_artifact_reason, /failure_kind=editorial_reviewable/);
+  assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
+});
+
 test('fallback duplicate detection treats AndroidX Camera release anchors as release identity', () => {
   const camerax14 = regressionCandidate({
     title: 'CameraX 1.4.0-alpha07',
