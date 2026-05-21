@@ -442,9 +442,17 @@ function validateSelectedGroupCoverage(value, reporter = {}) {
   });
 }
 
+function candidateBlockedContexts(candidate = {}) {
+  return [
+    ...ensureArray(candidate.related_context_candidates),
+    ...ensureArray(candidate.blocked_context_candidates)
+  ];
+}
+
 function blockedContextCandidates(reporter = {}) {
+  const seen = new Set();
   return selectedReporterCandidates(reporter)
-    .flatMap(candidate => ensureArray(candidate.related_context_candidates || candidate.blocked_context_candidates))
+    .flatMap(candidateBlockedContexts)
     .filter(item => item.context_usage_allowed !== true)
     .map(item => ({
       title: text(item.title),
@@ -453,7 +461,13 @@ function blockedContextCandidates(reporter = {}) {
       context_role: text(item.context_role || item.context_usage_label),
       reason: text(item.blocked_from_independent_main_reason)
     }))
-    .filter(item => item.title || item.url);
+    .filter(item => {
+      if (!item.title && !item.url) return false;
+      const key = `${item.normalized_url}|${item.title.toLowerCase()}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
 }
 
 function validateBlockedContextUsage(value, reporter = {}) {

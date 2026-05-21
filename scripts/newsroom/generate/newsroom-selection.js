@@ -756,9 +756,9 @@ function decorateCandidate(candidate, newsletterDate, options = {}) {
 }
 
 function deterministicCandidateSort(a, b) {
-  const nativeGroupDelta = number(b.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY) -
-    number(a.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY);
-  if (nativeGroupDelta === 0 && a.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY && b.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY) {
+  const bothNativeToolingGroup = a.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY &&
+    b.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY;
+  if (bothNativeToolingGroup) {
     const sourceQualityRank = value => text(value.source_quality_status) === 'allowed' ? 1 : 0;
     const datedOfficialRank = value => (text(value.reliability) === 'official' && publishedDate(value)) ? 1 : 0;
     const childRank = value => text(value.sourceType || value.source_type) === 'roundup_child' || text(value.parentUrl || value.parent_url) ? 1 : 0;

@@ -1180,6 +1180,52 @@ test('official Android native tooling is selected as one supporting group with r
   assert.equal(rawTooling[0].counts_as_primary_camera_topic, false);
 });
 
+test('native tooling support does not displace a full primary camera selection', () => {
+  const source = {
+    id: 'android-developers-blog',
+    name: 'Android Developers Blog',
+    url: 'https://android-developers.googleblog.com/',
+    sourceUrl: 'https://android-developers.googleblog.com/',
+    category: 'android',
+    section: 'Android / Developer Tools',
+    reliability: 'official',
+    candidateOnly: false,
+    usageHint: 'Official Android Developers Blog tooling articles',
+    keywords: ['Android', 'CLI', 'build', 'test', 'debug']
+  };
+  const tooling = normalizeCandidate({
+    source,
+    title: 'Android CLI Now Stable 1.0: Accelerate developing for Android using any agent',
+    url: 'https://android-developers.googleblog.com/2026/05/android-cli-stable.html',
+    publishedAt: '2026-05-20',
+    sourceKind: 'blog_post_item',
+    collectionMode: 'article-item',
+    summary: 'Android CLI 1.0 helps agents build, test, debug, and run native Android apps on devices.'
+  });
+  const report = buildShortlistReport('2026-05-22', [
+    ...[
+      'CameraX release updates preview stream validation',
+      'AOSP Camera provider changes buffer metadata handling',
+      'Android Camera API fixes capture result behavior',
+      'Camera HAL metadata contract update for CTS checks',
+      'Camera ITS test plan update for preview stability'
+    ].map((title, index) => policyPrimaryCandidate(index, {
+      title,
+      url: `https://example.com/camera-full-slate-${index}`,
+      summary: `${title} changes Camera HAL validation behavior for stream, buffer, and metadata checks.`,
+      api_or_component: 'Camera HAL / CameraX',
+      behavior_change: `${title} changes Camera HAL validation behavior.`,
+      published_date: '2026-05-21'
+    })),
+    tooling
+  ]);
+
+  assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.max);
+  assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.mainArticleCount.max);
+  assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 0);
+  assert.equal(report.selected_articles.some(item => item.article_group_key === 'android_native_tooling_workflow'), false);
+});
+
 test('AOSP site update camera rows can satisfy configured composition', () => {
   const source = {
     id: 'aosp-site-updates',

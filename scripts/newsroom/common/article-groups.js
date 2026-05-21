@@ -21,18 +21,36 @@ function bool(value, fallback = false) {
   return fallback;
 }
 
-function normalizeUrl(value) {
+function normalizeSourceUrlPreserveAnchor(value) {
   const raw = text(value);
   if (!raw) return '';
   try {
     const parsed = new URL(raw);
     parsed.search = '';
     parsed.hostname = parsed.hostname.toLowerCase();
+    parsed.pathname = parsed.pathname.replace(/\/$/, '') || '/';
     return parsed.toString().replace(/\/$/, '').toLowerCase();
   } catch {
     return raw.replace(/[?].*$/, '').replace(/\/$/, '').toLowerCase();
   }
 }
+
+function normalizeCanonicalUrlStripAnchor(value) {
+  const raw = text(value);
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    parsed.search = '';
+    parsed.hash = '';
+    parsed.hostname = parsed.hostname.toLowerCase();
+    parsed.pathname = parsed.pathname.replace(/\/$/, '') || '/';
+    return parsed.toString().replace(/\/$/, '').toLowerCase();
+  } catch {
+    return raw.replace(/[?#].*$/, '').replace(/\/$/, '').toLowerCase();
+  }
+}
+
+const normalizeUrl = normalizeSourceUrlPreserveAnchor;
 
 function candidateUrl(candidate = {}) {
   return text(candidate.url || candidate.article_url || candidate.articleUrl || candidate.normalized_url);
@@ -70,9 +88,10 @@ function candidateContextLabel(candidate = {}, options = {}) {
     return CONTEXT_LABELS.DEDUPE_SHADOW_CONTEXT;
   }
   const eligibility = text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
-  const sourceQualityStatus = text(candidate.source_quality_status || candidate.sourceQualityStatus);
   const sourceAllowed = candidate.main_article_source_allowed === true || candidate.mainArticleSourceAllowed === true;
   const contextAllowed = candidate.context_usage_allowed === true || candidate.contextUsageAllowed === true;
+  const rawSourceQualityStatus = text(candidate.source_quality_status || candidate.sourceQualityStatus);
+  const sourceQualityStatus = rawSourceQualityStatus || (contextAllowed ? 'allowed' : 'unknown');
   const blocked = bool(candidate.source_gap_risk) ||
     bool(candidate.reference_only) ||
     bool(candidate.briefing_only) ||
@@ -93,7 +112,9 @@ function blockedReason(candidate = {}, label = '') {
   if (bool(candidate.briefing_only)) return 'watchlist_only';
   const eligibility = text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
   if (eligibility && !['main', 'short'].includes(eligibility)) return `${eligibility}_only`;
-  const sourceQualityStatus = text(candidate.source_quality_status || candidate.sourceQualityStatus);
+  const contextAllowed = candidate.context_usage_allowed === true || candidate.contextUsageAllowed === true;
+  const rawSourceQualityStatus = text(candidate.source_quality_status || candidate.sourceQualityStatus);
+  const sourceQualityStatus = rawSourceQualityStatus || (contextAllowed ? 'allowed' : 'unknown');
   if (sourceQualityStatus === 'blocked' || sourceQualityStatus === 'unknown') {
     return `source_quality_${sourceQualityStatus}`;
   }
@@ -107,17 +128,21 @@ function contextUsageAllowed(label) {
 function compactContextCandidate(candidate = {}, options = {}) {
   const label = candidateContextLabel(candidate, options);
   const allowed = contextUsageAllowed(label);
+  const rawSourceQualityStatus = text(candidate.source_quality_status || candidate.sourceQualityStatus);
+  const sourceQualityStatus = rawSourceQualityStatus || (allowed ? 'allowed' : 'unknown');
+  const sourceUrl = candidateUrl(candidate);
   return {
     title: candidateTitle(candidate),
-    url: candidateUrl(candidate),
-    normalized_url: normalizeUrl(candidateUrl(candidate)),
+    url: sourceUrl,
+    normalized_url: normalizeSourceUrlPreserveAnchor(sourceUrl),
+    canonical_url: normalizeCanonicalUrlStripAnchor(sourceUrl),
     source: text(candidate.source || candidate.source_name),
     published_date: text(candidate.published_date || candidate.publishedAt || candidate.published_at),
     relevance_bucket: text(candidate.relevance_bucket),
     finalSelectionEligibility: text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility),
     context_role: label,
     context_usage_label: label,
-    source_quality_status: text(candidate.source_quality_status || candidate.sourceQualityStatus || 'unknown'),
+    source_quality_status: sourceQualityStatus,
     context_usage_allowed: allowed,
     can_create_independent_article: false,
     blocked_from_independent_main_reason: blockedReason(candidate, label),
@@ -143,7 +168,7 @@ function uniqueByUrlAndTitle(items = []) {
   const seen = new Set();
   const output = [];
   for (const item of ensureArray(items)) {
-    const key = `${normalizeUrl(item.url)}|${candidateTitle(item)}`;
+    const key = `${normalizeSourceUrlPreserveAnchor(item.url)}|${candidateTitle(item)}`;
     if (!key.trim() || seen.has(key)) continue;
     seen.add(key);
     output.push(item);
@@ -155,10 +180,10 @@ function attachRelatedContextToSelected(selected = [], pools = []) {
   const allCandidates = ensureArray(pools).flatMap(ensureArray);
   return ensureArray(selected).map(candidate => {
     const groupKey = candidateGroupKey(candidate);
-    const selfUrl = normalizeUrl(candidateUrl(candidate));
+    const selfUrl = normalizeSourceUrlPreserveAnchor(candidateUrl(candidate));
     const related = allCandidates
       .filter(item => candidateGroupKey(item) === groupKey)
-      .filter(item => normalizeUrl(candidateUrl(item)) !== selfUrl || candidateTitle(item) !== candidateTitle(candidate))
+      .filter(item => normalizeSourceUrlPreserveAnchor(candidateUrl(item)) !== selfUrl || candidateTitle(item) !== candidateTitle(candidate))
       .map(item => compactContextCandidate(item));
     const parentContext = parentRoundupContext(candidate);
     const relatedContexts = uniqueByUrlAndTitle(parentContext ? [parentContext, ...related] : related);
@@ -223,6 +248,8 @@ module.exports = {
   explicitDemotedGroups,
   groupCoverageSummary,
   isNativeToolingWorkflow,
+  normalizeCanonicalUrlStripAnchor,
+  normalizeSourceUrlPreserveAnchor,
   normalizeUrl,
   selectedRepresentativeGroupKeys
 };

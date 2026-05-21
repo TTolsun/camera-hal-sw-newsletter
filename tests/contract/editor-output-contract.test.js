@@ -321,6 +321,78 @@ test('blocked related context cannot be used as article source or headline', () 
   );
 });
 
+test('blocked_context_candidates are validated when related context is empty', () => {
+  const blockedUrl = 'https://android-developers.googleblog.com/2026/05/roundup.html';
+  const reporter = reporterForGroupTests({
+    related_context_candidates: [],
+    blocked_context_candidates: [{
+      title: '17 Things to know for Android developers at Google I/O',
+      url: `${blockedUrl}?utm_source=x`,
+      context_role: 'parent_roundup_context_only',
+      context_usage_allowed: false,
+      can_create_independent_article: false,
+      blocked_from_independent_main_reason: 'parent_roundup_context_only',
+      article_group_key: 'group-a'
+    }]
+  });
+  const baseSection = section(1);
+  const draft = editor({
+    sections: [section(1, {
+      article_group_key: 'group-a',
+      sources: [{ title: 'Selected group source', url: 'https://example.com/source-1' }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [
+          { title: 'Selected group source', url: 'https://example.com/source-1', source_role: 'primary' },
+          { title: 'Blocked roundup', url: blockedUrl, source_role: 'context' }
+        ]
+      }
+    })]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.blocked_context');
+      assert.equal(error.details.issues[0].type, 'blocked_context_url_used_as_article_source');
+      return true;
+    }
+  );
+});
+
+test('blocked parent roundup title cannot become an independent headline', () => {
+  const parentTitle = '17 Things to know for Android developers at Google I/O';
+  const reporter = reporterForGroupTests({
+    related_context_candidates: [],
+    blocked_context_candidates: [{
+      title: parentTitle,
+      url: 'https://android-developers.googleblog.com/2026/05/roundup.html',
+      context_role: 'parent_roundup_context_only',
+      context_usage_allowed: false,
+      can_create_independent_article: false,
+      blocked_from_independent_main_reason: 'parent_roundup_context_only',
+      article_group_key: 'group-a'
+    }]
+  });
+  const draft = editor({
+    sections: [section(1, {
+      article_group_key: 'group-a',
+      headline: parentTitle
+    })]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.blocked_context');
+      assert.equal(error.details.issues[0].type, 'blocked_context_title_used_as_independent_headline');
+      return true;
+    }
+  );
+});
+
 test('strict editor claim binding requires a fact claim for factual article fields', () => {
   const draft = editor({
     sections: [
