@@ -18,7 +18,7 @@
 | `retry history` | `retry-history.json`과 `retry-history.md`에 남는 재시도 기록입니다. locked article, failed section, repair/replace 정책을 확인합니다. |
 | `publish-ready` | 발행 가능한 PR 상태를 뜻하는 label 또는 사람이 읽는 상태 표현입니다. PR 생성 성공과 별개로 quality/fact-check/publish gate가 모두 통과해야 합니다. |
 | `needs-fix` | 편집장 수리 또는 검토가 필요한 PR 상태입니다. review artifact는 남기지만 발행 가능한 상태로 보지 않습니다. |
-| `fallback-composition` | direct camera/driver 후보가 부족해 SoC/platform/tooling fallback article로 구성을 보강한 상태입니다. |
+| `fallback-composition` | direct camera/driver 후보가 부족해 SoC/platform/tooling fallback article로 구성을 보강했지만 `publish-ready`는 아닌 diagnostics 상태입니다. |
 | `thin-week` | eligible main article 수가 부족해 자동 발행 대상이 아닌 얇은 주간 review path입니다. |
 | `source candidate binding` | editor section의 source URL과 deterministic shortlist/reporter candidate를 연결해 source integrity를 검증하는 계약입니다. |
 | `watchlist` | 모니터링은 하되 dated evidence나 article candidate 조건이 부족해 main article로 올리지 않는 후보 tier입니다. |

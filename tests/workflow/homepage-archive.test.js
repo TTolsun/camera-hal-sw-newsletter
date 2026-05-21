@@ -69,6 +69,7 @@ function newsletter(date, title = `Issue ${date}`) {
     summary: `Summary ${date}`,
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
+    article_count: 1,
     tags: ['Camera HAL']
   };
 }
@@ -119,4 +120,20 @@ test('homepage shows review publication issues when data entry paths are present
   assert.match(elements['latest-card'].innerHTML, /Review publication issue/);
   assert.match(elements['latest-card'].innerHTML, /newsletters\/2026-05-14\/index\.html/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-13/);
+});
+
+test('homepage and archive accept single-article public issues as normal entries', async () => {
+  const items = [
+    newsletter('2026-05-20', 'Previous one-article issue'),
+    newsletter('2026-05-21', 'Latest one-article issue')
+  ];
+
+  const elements = await renderHomepage(items);
+
+  assert.match(elements['latest-card'].innerHTML, /2026-05-21/);
+  assert.match(elements['latest-card'].innerHTML, /Latest one-article issue/);
+  assert.match(elements['latest-card'].innerHTML, /newsletters\/2026-05-21\/index\.html/);
+  assert.match(elements['archive-list'].innerHTML, /2026-05-20/);
+  assert.match(elements['archive-list'].innerHTML, /Previous one-article issue/);
+  assert.doesNotMatch(elements['latest-card'].innerHTML, /review-only|diagnostics-only|Fallback Edition/i);
 });

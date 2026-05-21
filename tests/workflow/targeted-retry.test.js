@@ -666,28 +666,18 @@ test('3-section final draft with a Primary Camera Stack article passes targeted 
   }), true);
 });
 
-test('3-section final draft with no Primary Camera Stack article fails targeted validation', () => {
+test('supporting-only final draft passes targeted validation under one-article policy', () => {
   const sections = [
-    policySection('SoC thermal update', 'https://example.com/soc-1', 'soc_platform_signal'),
-    policySection('C++ tooling update', 'https://example.com/cpp', 'cpp_ai_tooling_fallback'),
-    policySection('SoC power update', 'https://example.com/soc-2', 'soc_platform_signal')
+    policySection('SoC thermal update', 'https://example.com/soc-1', 'soc_platform_signal')
   ];
 
-  assert.throws(
-    () => validateTargetedRepairResult({
-      beforeSections: sections,
-      repairSections: [],
-      afterSections: sections,
-      lockedSections: sections,
-      mode: 'targeted-repair',
-      allowCountChange: false,
-      date: DATE
-    }),
-    error => {
-      assert.ok(error instanceof EditorSemanticValidationError);
-      assert.equal(error.details.field, 'sections.relevance_bucket');
-      assert.equal(error.details.actualCount, 0);
-      return true;
-    }
-  );
+  assert.equal(validateTargetedRepairResult({
+    beforeSections: sections,
+    repairSections: [],
+    afterSections: sections,
+    lockedSections: sections,
+    mode: 'targeted-repair',
+    allowCountChange: false,
+    date: DATE
+  }), true);
 });

@@ -121,6 +121,18 @@ test('newsletter renderer keeps generated issue nav labels in English', () => {
   assert.equal(labels.includes('\ucd9c\ucc98'), false);
 });
 
+test('newsletter renderer renders a single main article without empty sections', () => {
+  const markdown = buildMarkdown(issue());
+  const html = buildHtml(issue());
+
+  assert.match(markdown, /^## 2\. CameraX release gives HAL teams a target/m);
+  assert.doesNotMatch(markdown, /^## 3\./m);
+  assert.equal((html.match(/\barticle-card\b/g) || []).length, 1);
+  for (const rendered of [markdown, html]) {
+    assert.doesNotMatch(rendered, /\bundefined\b|\bnull\b|\bNaN\b/);
+  }
+});
+
 test('newsletter renderer article structure table uses shared row semantics', () => {
   const markdown = articleSectionContractMarkdown(issue());
 

@@ -159,7 +159,7 @@ function validateNewsletterPolicyConfig(config) {
     errors.push('articlePolicy.mainArticleCount.max must be >= min.');
   }
   const primary = article.primaryCameraStack || {};
-  validateInteger(primary.minRequired, 'articlePolicy.primaryCameraStack.minRequired', errors, { min: 1 });
+  validateInteger(primary.minRequired, 'articlePolicy.primaryCameraStack.minRequired', errors, { min: 0 });
   validatePublishReadyCompositionPolicy(article.publishReadyComposition, article, errors);
   const primaryBuckets = validateBucketList(primary.buckets, 'articlePolicy.primaryCameraStack.buckets', errors);
   const supportingBuckets = validateBucketList(article.supportingMainBuckets, 'articlePolicy.supportingMainBuckets', errors);
@@ -338,15 +338,19 @@ function articleCountRangeText(policy = getDefaultNewsletterPolicy()) {
   return `${min}-${max}`;
 }
 
+function minimumText(value) {
+  return value === 0 ? 'disabled' : String(value);
+}
+
 function publishGateCriteriaText(policy = getDefaultNewsletterPolicy()) {
   const articlePolicy = getArticlePolicy(policy);
   const publishPolicy = getPublishReadyCompositionPolicy(policy);
   const qualityGatePolicy = getQualityGatePolicy(policy);
   return [
     `main articles: ${articleCountRangeText(policy)}`,
-    `review gate primary camera stack articles: ${articlePolicy.primaryCameraStack.minRequired}`,
-    `Publish-ready gate primary camera stack articles: ${publishPolicy.primaryCameraStackMinRequired}`,
-    `Publish-ready gate direct AOSP Camera or driver/image pipeline articles: ${publishPolicy.directAospCameraOrDriverMinRequired}`,
+    `review gate primary camera stack articles: ${minimumText(articlePolicy.primaryCameraStack.minRequired)}`,
+    `Publish-ready gate primary camera stack articles: ${minimumText(publishPolicy.primaryCameraStackMinRequired)}`,
+    `Publish-ready gate direct AOSP Camera or driver/image pipeline articles: ${minimumText(publishPolicy.directAospCameraOrDriverMinRequired)}`,
     `Publish-ready gate supporting main articles max: ${publishPolicy.supportingMainMaxAllowed}`,
     `forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.join(', ') || 'none'}`,
     `quality threshold: ${qualityGatePolicy.threshold}`
@@ -367,6 +371,10 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
   const publishPolicy = getPublishReadyCompositionPolicy(policy);
   const selectionWindowPolicy = getSelectionWindowPolicy(policy);
   const qualityGatePolicy = getQualityGatePolicy(policy);
+  const oneArticlePolicyEnabled = articlePolicy.mainArticleCount.min === 1;
+  const reserveRequirementText = policy.candidatePoolPreflight.reserveMin === 0
+    ? 'reserve candidates diagnostics only'
+    : `reserve candidates at least ${policy.candidatePoolPreflight.reserveMin}`;
   return [
     POLICY_BLOCK_BEGIN,
     '<!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->',
@@ -375,14 +383,21 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     '',
     `- Source of truth: \`${POLICY_REL_PATH.replace(/\\/g, '/')}\``,
     `- Main article count: ${articleCountRangeText(policy)}`,
-    `- Review gate Primary Camera Stack articles: at least ${articlePolicy.primaryCameraStack.minRequired}`,
-    `- Publish-ready Primary Camera Stack articles: at least ${publishPolicy.primaryCameraStackMinRequired}`,
-    `- Publish-ready direct AOSP Camera or driver/image pipeline articles: at least ${publishPolicy.directAospCameraOrDriverMinRequired} across ${DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS.map(bucket => `\`${bucket}\``).join(', ')}`,
+    ...(oneArticlePolicyEnabled
+      ? [
+          '- One-article policy: a public newsletter may contain a single fully publishable main article.',
+          '- Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.',
+          '- Supporting-only policy: a single supporting main bucket article may be public-ready when all hard gates pass.'
+        ]
+      : []),
+    `- Review gate Primary Camera Stack articles: ${articlePolicy.primaryCameraStack.minRequired === 0 ? 'disabled by one-article policy' : `at least ${articlePolicy.primaryCameraStack.minRequired}`}`,
+    `- Publish-ready Primary Camera Stack articles: ${publishPolicy.primaryCameraStackMinRequired === 0 ? 'disabled by one-article policy' : `at least ${publishPolicy.primaryCameraStackMinRequired}`}`,
+    `- Publish-ready direct AOSP Camera or driver/image pipeline articles: ${publishPolicy.directAospCameraOrDriverMinRequired === 0 ? 'disabled by one-article policy' : `at least ${publishPolicy.directAospCameraOrDriverMinRequired}`} across ${DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- Publish-ready supporting main articles: at most ${publishPolicy.supportingMainMaxAllowed} total across supporting main buckets`,
     `- Primary Camera Stack buckets: ${articlePolicy.primaryCameraStack.buckets.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- Supporting main buckets: ${articlePolicy.supportingMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
-    `- Forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
-    `- Candidate pool preflight: publishable candidates at least ${policy.candidatePoolPreflight.publishableCandidateMin}; reserve candidates at least ${policy.candidatePoolPreflight.reserveMin}; camera stack candidates at least ${policy.candidatePoolPreflight.cameraStackCandidateMin}`,
+    `- Forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}; never promote these to main articles by candidate count alone`,
+    `- Candidate pool preflight: publishable candidates at least ${policy.candidatePoolPreflight.publishableCandidateMin}; ${reserveRequirementText}; camera stack candidates at least ${policy.candidatePoolPreflight.cameraStackCandidateMin}`,
     `- Selection windows: primary ${selectionWindowPolicy.primarySelectionDays} days; fallback ${selectionWindowPolicy.fallbackSelectionDays} days; reference ${selectionWindowPolicy.referenceContextDays} days`,
     '- Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.',
     `- Quality threshold: ${qualityGatePolicy.threshold}`,

@@ -12,7 +12,7 @@ quality gate는 AOSP Camera / Camera Driver / SoC Platform relevance, evidence s
 
 workflow의 `create-newsroom-pr` job은 후보 수집, LLM 생성, 검증, review PR 생성을 담당합니다. review 가능한 `content/newsroom/YYYY-MM-DD/` artifact와 PR body가 만들어지면 fact-check 또는 quality가 실패해도 job은 성공할 수 있습니다. 반대로 fatal generation error로 review artifact가 없으면 job은 실패합니다. publish/deploy gate는 `final_publish_ready=true`, fact-check `PASS`, quality `PASS`, policy minimum article count, publish 가능한 `composition_mode`, source integrity, stale claim 없음이 모두 만족될 때만 통과합니다.
 
-PR label은 상태를 분리해서 보여 줍니다. `needs-fix`는 편집장 수리 또는 검토가 필요한 PR, `fallback-composition`은 direct camera/driver 후보가 부족해 SoC/platform/tooling fallback을 사용한 PR, `thin-week`는 자동 발행 대상이 아닌 얇은 주간 review path, `publish-ready`는 최종 발행 gate를 통과한 PR에만 사용합니다. summary cache는 restore와 save를 분리하고 save를 `if: always()`로 실행해 실패 run 이후 retry 비용을 줄입니다.
+PR label은 상태를 분리해서 보여 줍니다. `needs-fix`는 편집장 수리 또는 검토가 필요한 PR, `fallback-composition`은 direct camera/driver 후보가 부족해 SoC/platform/tooling fallback을 사용했지만 `publish-ready`가 아닌 PR에만 붙는 diagnostics label, `thin-week`는 자동 발행 대상이 아닌 얇은 주간 review path, `publish-ready`는 최종 발행 gate를 통과한 PR에만 사용합니다. summary cache는 restore와 save를 분리하고 save를 `if: always()`로 실행해 실패 run 이후 retry 비용을 줄입니다.
 
 ## 목표
 
@@ -282,15 +282,18 @@ PR에서 다음 항목을 확인합니다.
 ### Newsletter Policy
 
 - Source of truth: `config/newsletter-policy.json`
-- Main article count: 3-5
-- Review gate Primary Camera Stack articles: at least 1
-- Publish-ready Primary Camera Stack articles: at least 2
-- Publish-ready direct AOSP Camera or driver/image pipeline articles: at least 1 across `direct_aosp_camera`, `camera_driver_image_pipeline`
+- Main article count: 1-5
+- One-article policy: a public newsletter may contain a single fully publishable main article.
+- Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.
+- Supporting-only policy: a single supporting main bucket article may be public-ready when all hard gates pass.
+- Review gate Primary Camera Stack articles: disabled by one-article policy
+- Publish-ready Primary Camera Stack articles: disabled by one-article policy
+- Publish-ready direct AOSP Camera or driver/image pipeline articles: disabled by one-article policy across `direct_aosp_camera`, `camera_driver_image_pipeline`
 - Publish-ready supporting main articles: at most 1 total across supporting main buckets
 - Primary Camera Stack buckets: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
 - Supporting main buckets: `android_multimedia_camera_output`, `soc_platform_signal`, `cpp_ai_tooling_fallback`
-- Forbidden main buckets: `generic_tech_watchlist`
-- Candidate pool preflight: publishable candidates at least 5; reserve candidates at least 2; camera stack candidates at least 2
+- Forbidden main buckets: `generic_tech_watchlist`; never promote these to main articles by candidate count alone
+- Candidate pool preflight: publishable candidates at least 1; reserve candidates diagnostics only; camera stack candidates at least 0
 - Selection windows: primary 7 days; fallback 21 days; reference 90 days
 - Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.
 - Quality threshold: 85

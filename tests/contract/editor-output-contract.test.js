@@ -478,7 +478,9 @@ test('editor output contract drops empty optional article_sections keys after no
 });
 
 test('editor section count follows Newsletter Policy min/max', () => {
-  const tooFew = editor({ sections: [section(1), section(2)] });
+  const tooFew = editor({
+    sections: Array.from({ length: Math.max(0, articlePolicy.mainArticleCount.min - 1) }, (_, index) => section(index + 1))
+  });
   const minimum = editor({
     sections: Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) => section(index + 1))
   });
@@ -517,25 +519,14 @@ test('editor section count follows Newsletter Policy min/max', () => {
   );
 });
 
-test('editor article policy requires at least one Primary Camera Stack section', () => {
+test('editor article policy allows one supporting main section when primary requirement is disabled', () => {
   const draft = editor({
     sections: [
-      section(1, { relevance_bucket: 'soc_platform_signal', counts_as_primary_camera_topic: false }),
-      section(2, { relevance_bucket: 'cpp_ai_tooling_fallback', counts_as_primary_camera_topic: false }),
-      section(3, { relevance_bucket: 'soc_platform_signal', counts_as_primary_camera_topic: false })
+      section(1, { relevance_bucket: 'soc_platform_signal', counts_as_primary_camera_topic: false })
     ]
   });
 
-  assert.throws(
-    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
-    error => {
-      assert.ok(error instanceof EditorSemanticValidationError);
-      assert.equal(error.details.field, 'sections.relevance_bucket');
-      assert.equal(error.details.expectedMinCount, articlePolicy.primaryCameraStack.minRequired);
-      assert.equal(error.details.actualCount, 0);
-      return true;
-    }
-  );
+  assert.equal(validateEditorOutputContract(draft, DATE, { normalizeSection }), draft);
 });
 
 test('editor article policy rejects forbidden main buckets', () => {
@@ -985,7 +976,7 @@ test('repair output with invalid briefing writes repair diagnostics', async () =
 
 test('semantic validation failures outside briefing are not repaired', async () => {
   const newsroomDir = tempNewsroomDir();
-  const draft = editor({ sections: [section(1), section(2)] });
+  const draft = editor({ sections: [] });
   let repairCalled = false;
 
   await assert.rejects(
