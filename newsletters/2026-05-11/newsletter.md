@@ -2,43 +2,37 @@
 
 이번 2026-05-11호는 CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트, libcamera v0.7.1, CameraX 1.6.1 Android Camera 호환성 관찰을 중심으로 구성했습니다. CameraX 항목은 HAL 변경 근거가 아니라 app/framework 계층 compatibility review input으로 정리했습니다.
 
+
+
 ## 1. 이번 주 3줄 브리핑
+
 - CameraX 1.4.0-alpha07 및 1.7.0-alpha01은 뷰파인더와 비디오 모듈 업데이트이며, HAL 변경 요구가 아니라 compatibility review input입니다.
 - libcamera v0.7.1이 SoftISP 디베이어링 및 센서 모드 구성 개선과 함께 출시되어, Linux 카메라 드라이버 스택의 이미지 처리 및 센서 제어 방식에 변화를 가져옵니다.
-- 편집장은 source와 article 표현을 최종 확인합니다.
+- CameraX 1.6.1은 Android camera app/framework compatibility matrix에서 확인할 adjacent signal입니다.
 
-## 2. android_platform_camera_adjacent
+## 2. CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경
 
-### CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경
 
 ![Android Developers 로고](https://developer.android.com/static/images/social/android-developers.png)
 
-_Image: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)_
+_이미지: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)_
 
 
-**이번 주 확인한 사실**
-
-- 2026년 5월 6일, CameraX 라이브러리 1.4.0-alpha07이 릴리스되었습니다.
-- camera-viewfinder 모듈은 1.3.0-beta02에서 1.4.0-alpha07로 업데이트되었습니다.
-- camera-video 모듈은 1.6.1에서 1.7.0-alpha01로 업데이트되었습니다.
-
-**배경지식**
+2026년 5월 6일 CameraX release note는 viewfinder 및 video artifacts의 version update를 나열했습니다.
 
 CameraX는 Android Jetpack의 일부로, 카메라 앱 개발을 간소화하는 라이브러리입니다. CameraX는 Camera2 API 위에 구축되어 있으며, HAL(Hardware Abstraction Layer)과의 상호작용은 Android Camera Framework를 통해 이루어집니다. 뷰파인더 및 비디오 모듈은 각각 프리뷰 스트림과 비디오 녹화 스트림을 처리하는 핵심 구성 요소입니다.
 
-**Camera HAL 관점 해석**
+이 CameraX release note는 app/framework layer의 viewfinder/video artifact update입니다. HAL 팀은 기존 CameraX/Camera2 compatibility matrix에서 회귀 여부만 확인하고 downstream evidence가 있을 때만 별도 follow-up으로 분리합니다.
+
+**Camera HAL / Driver 관점**
 
 이 CameraX release note는 app/framework layer의 viewfinder/video artifact update입니다. HAL 팀은 기존 CameraX/Camera2 compatibility matrix에서 회귀 여부만 확인하고 downstream evidence가 있을 때만 별도 follow-up으로 분리합니다.
 
 ### 확인할 점
 
 - CameraX 1.4.0-alpha07 및 1.7.0-alpha01을 쓰는 reference app으로 Preview + VideoCapture + ImageCapture smoke run을 실행하고, 실패한 조합만 compatibility matrix에 기록합니다. (Owner: HAL QA)
-- 회귀가 있으면 app logcat, framework camera log, HAL/device log를 분리해 downstream HAL evidence 여부를 확인합니다. (Owner: HAL 검증 팀)
+- 회귀가 보이면 app logcat, framework camera log, HAL/device log를 분리해 원인이 app/library layer인지 downstream HAL issue인지 구분합니다. (Owner: HAL QA)
 - release note만으로 Camera stack 요구사항 변경 요구를 만들지 않습니다. (Owner: HAL 아키텍트)
-
-**팀 공유용 한 줄**
-
-CameraX viewfinder/video 업데이트는 HAL 변경 요구가 아니라 app-facing compatibility signal입니다. HAL 팀은 기존 matrix에서 회귀만 확인하고 downstream evidence가 있을 때만 후속 조치합니다.
 
 **출처**
 
@@ -46,24 +40,19 @@ CameraX viewfinder/video 업데이트는 HAL 변경 요구가 아니라 app-faci
 
 ---
 
-## 3. Camera Driver / Image Pipeline
-
-### libcamera Release Announcements - libcamera v0.7.1
+## 3. libcamera Release Announcements - libcamera v0.7.1
 
 
-**이번 주 확인한 사실**
-
-- libcamera Release Announcements의 2026-04-28 항목입니다.
-- 관련 컴포넌트: libcamera / V4L2 camera pipeline
-- Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
-
-**배경지식**
 
 Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.
 
-**Camera HAL 관점 해석**
+libcamera는 Linux camera stack에서 V4L2 기반 driver/image pipeline 동작을 추적하는 upstream project입니다. 이 항목은 upstream release note를 제품 driver/image-pipeline review input으로 정리합니다.
 
-HAL/카메라 스택 영향 가능성을 검토합니다. Camera HAL 팀은 이 항목을 source/API/driver/image pipeline 영향 검토 목록에 올리고 실제 코드 변경이나 CTS/VTS 영향이 확인될 때만 후속 작업으로 승격합니다.
+HAL 팀은 libcamera release note를 driver/image pipeline review input으로 보고, vendor kernel 또는 product integration evidence가 있을 때만 별도 follow-up으로 승격합니다.
+
+**Camera HAL / Driver 관점**
+
+HAL 팀은 libcamera release note를 driver/image pipeline review input으로 보고, vendor kernel 또는 product integration evidence가 있을 때만 별도 follow-up으로 승격합니다.
 
 ### 확인할 점
 
@@ -71,32 +60,27 @@ HAL/카메라 스택 영향 가능성을 검토합니다. Camera HAL 팀은 이 
 - 관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.
 - 후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다.
 
-**팀 공유용 한 줄**
-
-libcamera Release Announcements - libcamera v0.7.1은 Camera HAL / Android Camera / driver-image pipeline 관점에서 확인할 가치가 있는 후보입니다.
-
 **출처**
 
 - [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
 
 ---
 
-## 4. Android Platform / CameraX
-
-### CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
+## 4. CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
 
-**이번 주 확인한 사실**
+![CameraX 1.6.1 업데이트: Android Camera 호환성 관찰](https://developer.android.com/static/images/social/android-developers.png?hl=es-419)
 
-- Android Developers Latest Updates의 May 06, 2026 항목입니다.
-- 관련 컴포넌트: CameraX / androidx.camera
-- CameraX release note는 `camera-camera2`, `camera-core`, `camera-view`, `camera-viewfinder`, `camera-video` 등 AndroidX Camera artifacts의 2026년 5월 6일 기준 버전 업데이트를 나열합니다.
+_이미지: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)_
 
-**배경지식**
+
+CameraX 1.6.1 / 1.7.0-alpha01 artifact rows were updated in the AndroidX Camera release notes dated May 06, 2026.
 
 CameraX는 Camera2 위에서 앱 개발자가 preview, image capture, video capture 같은 use case를 다루도록 돕는 AndroidX library layer입니다. Artifact version update는 app/framework compatibility matrix 확인 입력이며, 그 자체가 제품 camera path 변경을 의미하지 않습니다.
 
-**Camera HAL 관점 해석**
+이 CameraX release note는 AndroidX Camera artifact version update를 알려주는 app/framework 계층 신호입니다. HAL 팀은 기존 CameraX/Camera2 compatibility matrix에서 회귀 여부만 확인하고 downstream device evidence가 있을 때만 별도 follow-up으로 분리합니다.
+
+**Camera HAL / Driver 관점**
 
 이 CameraX release note는 AndroidX Camera artifact version update를 알려주는 app/framework 계층 신호입니다. HAL 팀은 기존 CameraX/Camera2 compatibility matrix에서 회귀 여부만 확인하고 downstream device evidence가 있을 때만 별도 follow-up으로 분리합니다.
 
@@ -106,27 +90,14 @@ CameraX는 Camera2 위에서 앱 개발자가 preview, image capture, video capt
 - 회귀가 보이면 app logcat, framework camera log, HAL/device log를 분리해 원인이 CameraX/library layer인지 downstream HAL issue인지 구분합니다. (Owner: HAL QA)
 - release note만으로 Camera stack 요구사항이나 metadata 동작 변경 요구를 만들지 않습니다. (Owner: HAL 아키텍트)
 
-**팀 공유용 한 줄**
-
-CameraX 1.6.1 업데이트는 Android camera app/framework compatibility signal입니다. HAL 팀은 기존 matrix에서 회귀만 확인하고 downstream evidence가 있을 때만 후속 조치합니다.
-
 **출처**
 
 - [Android Developers Latest Updates](https://developer.android.com/latest-updates)
 
 
-## 이번 주 실행 항목
-
-- CameraX 1.4.0-alpha07 및 1.7.0-alpha01 reference app smoke run을 기존 compatibility matrix에서만 확인하고, HAL 변경 요구로 등록하지 않습니다. (담당: HAL QA, 기한: 2주)
-- HAL 드라이버 팀은 libcamera v0.7.1의 SoftISP 디베이어링 개선 사항을 downstream vendor fork나 device log에서 확인된 경우에만 이미지 품질/처리 지연 follow-up으로 분리합니다. (담당: 드라이버 개발, 기한: 2주)
-- 네이티브 개발팀은 Clang/LLVM의 C++26 지원 현황을 changelog 수준에서 추적하고, HAL 코드 적용 PoC가 아니라 host-side debug/tooling 후보로만 기록합니다. (담당: 네이티브 개발, 기한: 2주)
-- CameraX 회귀가 보이면 app/framework/HAL log를 분리해 downstream evidence가 있는 경우에만 HAL follow-up으로 승격합니다. (담당: HAL QA, 기한: 2주)
-- HAL 팀은 libcamera v0.7.1의 센서 모드 구성 업데이트가 downstream vendor integration에 반영된 증거가 있을 때만 기존 camera metadata/stream compatibility checklist에서 확인합니다. (담당: HAL 개발, 기한: 2주)
-- HAL 아키텍트는 C++ Contracts 관련 자료를 production interface 변경 요구가 아니라 장기 tooling watch item으로 유지하고, 실제 적용은 source-backed compiler support와 project requirement가 확인될 때만 별도 검토합니다. (담당: HAL 아키텍트, 기한: 2주)
-
 ## 참고자료
 
 - [1.4.0-alpha07](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
 - [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
-- [Android Developers Latest Updates](https://developer.android.com/latest-updates)
+- [1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
 - [GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!](https://isocpp.org//blog/2026/04/gcc-16.1)

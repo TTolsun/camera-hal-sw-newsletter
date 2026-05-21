@@ -10,6 +10,12 @@ const {
   ensureArray
 } = require('../render/newsletter-renderer');
 const {
+  imageReasonTextKo
+} = require('../render/newsletter-image-audit-labels.ko');
+const {
+  selectImageForSectionFromMetadata
+} = require('../metrics/newsletter-image-audit');
+const {
   buildQualityReportMarkdown,
   buildNewsletterQualityReport
 } = require('../validate/newsletter-quality');
@@ -158,6 +164,53 @@ function readJsonIfExists(filePath) {
 function writeText(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, value, 'utf8');
+}
+
+function applyDeterministicImageSelection(section) {
+  const selection = selectImageForSectionFromMetadata(section);
+  const selected = selection.selectedCandidate;
+  if (!selected) {
+    const reasonCode = selection.reasonCode || (ensureArray(section.imageCandidates).length === 0 ? 'no_candidate' : 'missing_candidate_metadata');
+    section.imageSelection = {
+      reasonCode,
+      reasonText: imageReasonTextKo(reasonCode),
+      sourceUrl: '',
+      attribution: '',
+      licenseStatus: '',
+      validationStatus: '',
+      validationSource: 'candidate_metadata',
+      candidateUrl: '',
+      exclusionEvidence: selection.candidateEvidence
+    };
+    section.imageUsageDecisionReason = imageReasonTextKo(reasonCode);
+    return section;
+  }
+  section.selectedImage = selected.url;
+  section.imageSource = selected.sourceUrl;
+  section.imageAttribution = selected.attribution;
+  section.imageAlt = String(selected.alt || section.public_article?.headline || section.headline || 'Article image').trim();
+  section.imageLicenseStatus = selected.licenseStatus;
+  section.imageUsageDecisionReason = imageReasonTextKo('selected');
+  section.imageSelection = {
+    reasonCode: 'selected',
+    reasonText: imageReasonTextKo('selected'),
+    sourceUrl: selected.sourceUrl,
+    attribution: selected.attribution,
+    licenseStatus: selected.licenseStatus,
+    validationStatus: selected.validationStatus,
+    validationSource: selected.validationSource,
+    candidateUrl: selected.url,
+    exclusionEvidence: selection.candidateEvidence.filter(item => item.valid === false)
+  };
+  section.resolvedImage = {
+    url: selected.url,
+    src: selected.url,
+    originalUrl: '',
+    originalSrc: '',
+    usedFallback: false,
+    reason: 'selected image candidate'
+  };
+  return section;
 }
 
 function normalizeUrl(value) {
@@ -870,6 +923,7 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
     team_share_points: section.team_summary
   };
   section.public_article = buildPublicArticle(section, candidate);
+  applyDeterministicImageSelection(section);
   return completeHalSignalSection(section, candidate);
 }
 function hardFailureArticleIndexes(qualityReport, factCheck) {

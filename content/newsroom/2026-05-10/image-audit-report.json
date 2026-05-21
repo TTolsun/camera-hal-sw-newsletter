@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-05-10",
+  "source_of_truth": "content/newsroom/2026-05-10/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-05-10/newsletter.md",
+    "html": "newsletters/2026-05-10/index.html"
+  },
+  "mode": "review-or-draft",
+  "summary": {
+    "article_count": 2,
+    "rendered_image_count": 0,
+    "markdown_image_count": 0,
+    "fallback_visual_count": 2,
+    "image_candidates_count": 0,
+    "valid_image_candidate_count": 0,
+    "selected_image_count": 0,
+    "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 0,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 0,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 2,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.6.1 / 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+      "selectedImage": "",
+      "image_candidate_count": 0,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "no_candidate",
+      "reasonLabel": "이미지 후보 없음",
+      "reasonText": "기존 artifact에 복원 가능한 이미지 후보가 없습니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": []
+    },
+    {
+      "index": 2,
+      "headline": "libcamera v0.7.1: SoftISP 및 camera pipeline 관찰",
+      "selectedImage": "",
+      "image_candidate_count": 0,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "no_candidate",
+      "reasonLabel": "이미지 후보 없음",
+      "reasonText": "기존 artifact에 복원 가능한 이미지 후보가 없습니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": []
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": []
+  },
+  "warnings": [],
+  "errors": []
+}

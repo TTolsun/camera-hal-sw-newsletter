@@ -33,3 +33,19 @@ test('strict target dates combine changed artifacts and generated date file inpu
     '2026-05-10'
   ]);
 });
+
+test('strict target dates ignore advisory image audit reports', () => {
+  const dates = strictTargetDatesFromInputs({
+    changedFiles: [
+      'content/newsroom/2026-05-07/image-audit-report.json',
+      'content/newsroom/2026-05-08/image-audit-report.md',
+      'content/newsroom/2026-05-09/editor-draft.json',
+      'newsletters/2026-05-10/index.html'
+    ]
+  });
+
+  assert.deepEqual([...dates].sort(), [
+    '2026-05-09',
+    '2026-05-10'
+  ]);
+});

@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-05-07",
+  "source_of_truth": "content/newsroom/2026-05-07/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-05-07/newsletter.md",
+    "html": "newsletters/2026-05-07/index.html"
+  },
+  "mode": "review-or-draft",
+  "summary": {
+    "article_count": 4,
+    "rendered_image_count": 4,
+    "markdown_image_count": 4,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 4,
+    "valid_image_candidate_count": 0,
+    "selected_image_count": 2,
+    "empty_selected_with_candidates_count": 2,
+    "selected_image_without_valid_candidate_count": 2,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 0,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+      "selectedImage": "",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "release_note_item",
+          "contentType": "image/jpeg",
+          "validationStatus": "ok",
+          "sourceUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "canonicalSourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+      "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": true,
+      "selected_image_evidence": {
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다.",
+        "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+        "selectedImageInCandidates": true,
+        "selectedImageHasValidCandidate": false,
+        "selectedImageIsFallback": false
+      },
+      "repairable": false,
+      "reasonCode": "missing_candidate_metadata",
+      "reasonLabel": "후보 이미지 metadata 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "reasonCode": "missing_candidate_metadata",
+          "reasonLabel": "후보 이미지 metadata 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "release_note_item",
+          "contentType": "",
+          "validationStatus": "ok",
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+      "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": true,
+      "selected_image_evidence": {
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다.",
+        "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+        "selectedImageInCandidates": true,
+        "selectedImageHasValidCandidate": false,
+        "selectedImageIsFallback": false
+      },
+      "repairable": false,
+      "reasonCode": "missing_candidate_metadata",
+      "reasonLabel": "후보 이미지 metadata 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "reasonCode": "missing_candidate_metadata",
+          "reasonLabel": "후보 이미지 metadata 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "release_note_item",
+          "contentType": "",
+          "validationStatus": "ok",
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "Glaze 7.2: native tooling serialization 검토 범위",
+      "selectedImage": "",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "release_note_item",
+          "contentType": "image/jpeg",
+          "validationStatus": "ok",
+          "sourceUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "canonicalSourceUrl": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": [
+      {
+        "index": 2,
+        "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+        "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+      },
+      {
+        "index": 3,
+        "headline": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+        "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "type": "selected_image_without_valid_candidate",
+      "index": 2,
+      "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+      "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+      "reasonCode": "selected_image_without_valid_candidate",
+      "reasonLabel": "대표 이미지 provenance 부족",
+      "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+    },
+    {
+      "type": "selected_image_without_valid_candidate",
+      "index": 3,
+      "headline": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+      "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
+      "reasonCode": "selected_image_without_valid_candidate",
+      "reasonLabel": "대표 이미지 provenance 부족",
+      "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+    }
+  ],
+  "errors": []
+}

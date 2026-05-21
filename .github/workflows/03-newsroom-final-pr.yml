@@ -215,6 +215,10 @@ jobs:
         continue-on-error: true
         run: npm run report:hal-signal-quality -- --date "${{ steps.meta.outputs.date }}"
 
+      - name: Audit newsletter image lineage
+        if: always() && steps.meta.outputs.date != ''
+        run: npm run newsroom:audit-images -- --date "${{ steps.meta.outputs.date }}" --fail-on-publish-blocking
+
       - name: Snapshot newsroom debug artifacts
         if: always()
         run: |
