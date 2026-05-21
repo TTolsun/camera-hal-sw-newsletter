@@ -642,6 +642,58 @@ function renderSourceQualityDiagnosisSummary(root, date) {
   ].join('\n');
 }
 
+function renderNewsletterImageAuditSummary(root, date) {
+  if (!date) return '';
+  const aggregateRelPath = 'content/newsroom/image-audit-aggregate-report.json';
+  const dateJsonRelPath = `content/newsroom/${date}/image-audit-report.json`;
+  const dateMarkdownRelPath = `content/newsroom/${date}/image-audit-report.md`;
+  const aggregate = readJsonObjectIfExists(path.join(root, aggregateRelPath));
+  const report = readJsonObjectIfExists(path.join(root, dateJsonRelPath));
+  if (!report) {
+    return [
+      '## 이미지 감사 / Image Audit',
+      '',
+      '- 상태: 생성 실패 또는 사용 불가',
+      `- 사유: \`${dateJsonRelPath}\` ${fs.existsSync(path.join(root, dateJsonRelPath)) ? 'is not valid JSON' : 'not found'}`,
+      '- 영향: 이미지 감사는 advisory/reporting artifact이며 기존 publish/readiness 판정을 약화하지 않습니다.',
+      ''
+    ].join('\n');
+  }
+  const summary = report.summary || {};
+  const aggregateSummary = aggregate?.summary || {};
+  const repairableDates = ensureArray(aggregate?.repairableDates);
+  return [
+    '## 이미지 감사 / Image Audit',
+    '',
+    `- 감사한 issue 수: ${valueOrUnknownKo(aggregateSummary.auditedIssueCount ?? 1)}`,
+    `- 감사한 article 수: ${valueOrUnknownKo(aggregateSummary.auditedArticleCount ?? summary.article_count)}`,
+    `- 복원 가능 article 수: ${valueOrUnknownKo(aggregateSummary.repairableArticleCount ?? summary.repairable_article_count)}`,
+    `- 복원된 article 수: ${valueOrUnknownKo(aggregateSummary.repairedArticleCount ?? summary.repaired_article_count ?? 0)}`,
+    `- 후보 없음 article 수: ${valueOrUnknownKo(aggregateSummary.unrepairableNoCandidateCount ?? summary.unrepairable_no_candidate_count)}`,
+    `- validator 제외 수: ${valueOrUnknownKo(aggregateSummary.excludedValidatorFailedCount ?? summary.excluded_validator_failed_count)}`,
+    `- attribution 부족 제외 수: ${valueOrUnknownKo(aggregateSummary.excludedAttributionMissingCount ?? summary.excluded_attribution_missing_count)}`,
+    `- render mismatch 수: ${valueOrUnknownKo(aggregateSummary.selectedImageRenderMismatchCount ?? summary.selected_image_render_mismatch_count)}`,
+    `- publish blocking issue 수: ${valueOrUnknownKo(aggregateSummary.publishBlockingIssueCount ?? summary.publish_blocking_issue_count)}`,
+    '',
+    '### 복원 가능 날짜',
+    '',
+    '- Generated from:',
+    `  - \`${aggregateRelPath}\``,
+    '',
+    '```text',
+    repairableDates.join('\n') || 'none',
+    '```',
+    '',
+    '### Artifacts',
+    '',
+    `- \`${aggregateRelPath}\``,
+    '- `content/newsroom/image-audit-aggregate-report.md`',
+    `- \`${dateJsonRelPath}\``,
+    `- \`${dateMarkdownRelPath}\``,
+    ''
+  ].join('\n');
+}
+
 function renderEvidencePackSummary(root, date) {
   if (!date) return '';
   const relPath = `content/newsroom/${date}/evidence-pack-summary.json`;
@@ -2299,6 +2351,7 @@ function buildNewsroomPrBody(options = {}) {
     renderHalSignalQualitySummary(root, date, status),
     renderSourceQualityGateSummary(root, date),
     renderSourceQualityDiagnosisSummary(root, date),
+    renderNewsletterImageAuditSummary(root, date),
     renderSeedEvidenceUsageSummary(root, date),
     renderEvidencePackSummary(root, date),
     renderCandidateTraceability(root, date),

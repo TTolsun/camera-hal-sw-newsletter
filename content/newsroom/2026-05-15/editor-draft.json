@@ -321,12 +321,12 @@
           "contentLength": 0
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Fallback builder did not select an external article image; renderer will use local fallback visual.",
+      "selectedImage": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+      "imageSource": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+      "imageAttribution": "Phoronix Linux Camera / Media",
+      "imageAlt": "Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "article_sections": {
         "verified_facts": [
           "Phoronix Linux Camera / Media가 Wed, 13 May 2026 09:45:00 -0400에 게시 또는 업데이트한 항목입니다.",
@@ -341,6 +341,25 @@
           "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
         ],
         "team_share_points": "Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다."
+      },
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+        "attribution": "Phoronix Linux Camera / Media",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+        "exclusionEvidence": []
+      },
+      "resolvedImage": {
+        "url": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+        "src": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
       }
     }
   ],

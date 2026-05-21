@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-05-19",
+  "source_of_truth": "content/newsroom/2026-05-19/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-05-19/newsletter.md",
+    "html": "newsletters/2026-05-19/index.html"
+  },
+  "mode": "review-or-draft",
+  "summary": {
+    "article_count": 3,
+    "rendered_image_count": 0,
+    "markdown_image_count": 0,
+    "fallback_visual_count": 3,
+    "image_candidates_count": 0,
+    "valid_image_candidate_count": 0,
+    "selected_image_count": 0,
+    "empty_selected_with_candidates_count": 0,
+    "repairable_article_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 3,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트",
+      "selectedImage": "",
+      "image_candidate_count": 0,
+      "valid_image_candidate_count": 0,
+      "repairable": false,
+      "reasonCode": "no_candidate",
+      "reasonLabel": "이미지 후보 없음",
+      "reasonText": "기존 artifact에 복원 가능한 이미지 후보가 없습니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": []
+    },
+    {
+      "index": 2,
+      "headline": "GCC 16.1 릴리스: C++20 기본값 전환과 C++26 기능 확장",
+      "selectedImage": "",
+      "image_candidate_count": 0,
+      "valid_image_candidate_count": 0,
+      "repairable": false,
+      "reasonCode": "no_candidate",
+      "reasonLabel": "이미지 후보 없음",
+      "reasonText": "기존 artifact에 복원 가능한 이미지 후보가 없습니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": []
+    },
+    {
+      "index": 3,
+      "headline": "Glaze 7.2: C++26 Reflection 기반 직렬화 지원 확대",
+      "selectedImage": "",
+      "image_candidate_count": 0,
+      "valid_image_candidate_count": 0,
+      "repairable": false,
+      "reasonCode": "no_candidate",
+      "reasonLabel": "이미지 후보 없음",
+      "reasonText": "기존 artifact에 복원 가능한 이미지 후보가 없습니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": []
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": []
+  },
+  "warnings": [],
+  "errors": []
+}

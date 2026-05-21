@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-05-21",
+  "source_of_truth": "content/newsroom/2026-05-21/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-05-21/newsletter.md",
+    "html": "newsletters/2026-05-21/index.html"
+  },
+  "mode": "review-or-draft",
+  "summary": {
+    "article_count": 3,
+    "rendered_image_count": 2,
+    "markdown_image_count": 2,
+    "fallback_visual_count": 1,
+    "image_candidates_count": 6,
+    "valid_image_candidate_count": 4,
+    "selected_image_count": 2,
+    "empty_selected_with_candidates_count": 0,
+    "repairable_article_count": 0,
+    "repaired_article_count": 2,
+    "unrepairable_no_candidate_count": 1,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 2,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/w1200-h630-p-k-no-nu/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://developer.android.com/static/images/logos/android.svg",
+          "reasonCode": "svg_rejected",
+          "reasonLabel": "SVG 이미지 제외",
+          "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/svg+xml",
+          "validationStatus": "ok",
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트",
+      "selectedImage": "",
+      "image_candidate_count": 0,
+      "valid_image_candidate_count": 0,
+      "repairable": false,
+      "reasonCode": "no_candidate",
+      "reasonLabel": "이미지 후보 없음",
+      "reasonText": "기존 artifact에 복원 가능한 이미지 후보가 없습니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": []
+    },
+    {
+      "index": 3,
+      "headline": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 2,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/w1200-h630-p-k-no-nu/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://developer.android.com/static/images/logos/android.svg",
+          "reasonCode": "svg_rejected",
+          "reasonLabel": "SVG 이미지 제외",
+          "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/svg+xml",
+          "validationStatus": "ok",
+          "valid": false
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": []
+  },
+  "warnings": [],
+  "errors": []
+}

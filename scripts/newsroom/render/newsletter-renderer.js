@@ -309,6 +309,8 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, secti
 }
 
 function buildPublicHtml(issue) {
+  const publicationNotice = publicationNoticeHtml(issue);
+  const publicationNoticeBlock = publicationNotice ? `      ${publicationNotice}\n\n` : '';
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -346,9 +348,7 @@ function buildPublicHtml(issue) {
         </div>
       </header>
 
-      ${publicationNoticeHtml(issue)}
-
-      <section class="section issue-briefing">
+${publicationNoticeBlock}      <section class="section issue-briefing">
         <h2>1. 이번 주 3줄 브리핑</h2>
         <div class="card">
           <ul>${bulletsHtml(issue.briefing)}</ul>

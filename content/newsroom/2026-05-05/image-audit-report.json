@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-05-05",
+  "source_of_truth": "content/newsroom/2026-05-05/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-05-05/newsletter.md",
+    "html": "newsletters/2026-05-05/index.html"
+  },
+  "mode": "review-or-draft",
+  "summary": {
+    "article_count": 4,
+    "rendered_image_count": 3,
+    "markdown_image_count": 3,
+    "fallback_visual_count": 1,
+    "image_candidates_count": 8,
+    "valid_image_candidate_count": 1,
+    "selected_image_count": 3,
+    "empty_selected_with_candidates_count": 1,
+    "repairable_article_count": 0,
+    "repaired_article_count": 1,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
+      "selectedImage": "",
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 0,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://claude-code.mintlify.app/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DGetting%2Bstarted%26appearance%3Dsystem%26title%3DChangelog%26description%3DRelease%2Bnotes%2Bfor%2BClaude%2BCode%252C%2Bincluding%2Bnew%2Bfeatures%252C%2Bimprovements%252C%2Band%2Bbug%2Bfixes%2Bby%2Bversion.%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Flight.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D78fd01ff4f4340295a4f66e2ea54903c%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Fclaude-code%252Fc5r9_6tjPMzFdDDT%252Flogo%252Fdark.svg%253Ffit%253Dmax%2526auto%253Dformat%2526n%253Dc5r9_6tjPMzFdDDT%2526q%253D85%2526s%253D1298a0c3b3a1da603b190d0de0e31712%26primaryColor%3D%25230E0E0E%26lightColor%3D%2523D4A27F%26darkColor%3D%25230E0E0E%26backgroundLight%3D%2523FDFDF7%26backgroundDark%3D%252309090B&w=1200&q=100",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "release_note_item",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "sourceUrl": "https://code.claude.com/docs/en/changelog",
+          "canonicalSourceUrl": "https://code.claude.com/docs/en/changelog",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/light.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=78fd01ff4f4340295a4f66e2ea54903c",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "release_note_item",
+          "contentType": "image/svg+xml",
+          "validationStatus": "ok",
+          "sourceUrl": "https://code.claude.com/docs/en/changelog",
+          "canonicalSourceUrl": "https://code.claude.com/docs/en/changelog",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "release_note_item",
+          "contentType": "image/svg+xml",
+          "validationStatus": "ok",
+          "sourceUrl": "https://code.claude.com/docs/en/changelog",
+          "canonicalSourceUrl": "https://code.claude.com/docs/en/changelog",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+      "selectedImage": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 0,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "release_note_item",
+          "contentType": "",
+          "validationStatus": "ok",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "canonicalSourceUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 0,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "rss_item",
+          "contentType": "",
+          "validationStatus": "ok",
+          "sourceUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "canonicalSourceUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/w1200-h630-p-k-no-nu/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "rss_item",
+          "contentType": "",
+          "validationStatus": "ok",
+          "sourceUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "canonicalSourceUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://developer.android.com/static/images/logos/android.svg",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "rss_item",
+          "contentType": "",
+          "validationStatus": "ok",
+          "sourceUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "canonicalSourceUrl": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
+      "selectedImage": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 1,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 40.4,
+          "sourceKind": "rss_item",
+          "contentType": "image/jpeg",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": []
+  },
+  "warnings": [],
+  "errors": []
+}

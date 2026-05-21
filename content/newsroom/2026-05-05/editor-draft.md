@@ -2,6 +2,8 @@
 
 이번 주 뉴스레터에서는 Claude Code 업데이트, Android 보안 게시판, Firebase AI Logic 하이브리드 추론, C++26 assert() 개선을 Camera HAL 팀 관점에서 점검합니다. Firebase 항목은 제품이 camera-frame analysis path를 실제로 통합할 때 확인할 adjacent integration risk로 제한합니다.
 
+
+
 ## 1. 이번 주 3줄 브리핑
 
 - Android의 하이브리드 AI 추론 소식은 제품이 camera-frame analysis path를 실제로 통합할 때만 camera input 요구와 SoC 리소스 예산을 검토하는 adjacent signal로 다룹니다.
@@ -18,7 +20,7 @@ AI 코딩 에이전트는 개발자가 코드 검토, 리팩토링 후보 탐색
 
 Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지만, Camera HAL 제품 동작을 설명하는 출처는 아닙니다. HAL 팀은 이를 code review 보조, 리팩토링 후보 탐색, 테스트 로그 정리 같은 developer workflow 점검 신호로만 다룹니다. 플러그인 아카이브 지원도 내부 review checklist나 문서 템플릿을 agent workflow에 연결할 수 있는지 검토하는 범위로 제한합니다.
 
-**Camera HAL / Driver 관점**
+**Android Native / Tooling 관점**
 
 Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지만, Camera HAL 제품 동작을 설명하는 출처는 아닙니다. HAL 팀은 이를 code review 보조, 리팩토링 후보 탐색, 테스트 로그 정리 같은 developer workflow 점검 신호로만 다룹니다. 플러그인 아카이브 지원도 내부 review checklist나 문서 템플릿을 agent workflow에 연결할 수 있는지 검토하는 범위로 제한합니다.
 
@@ -28,7 +30,7 @@ Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지�
 - AI agent가 제안한 변경은 HAL branch에 바로 적용하지 않고, 사람이 검토할 후보로만 기록합니다.
 - 내부 플러그인 아카이브를 쓴다면 review checklist나 문서 템플릿 연결 가능성만 확인하고, HAL behavior 변경은 별도 product requirement로 분리합니다.
 
-**Sources**
+**출처**
 
 - [Claude Code Changelog - 2.1.128](https://code.claude.com/docs/en/changelog)
 
@@ -36,16 +38,17 @@ Claude Code 2.1.128 changelog는 AI coding agent의 기능 개선을 알리지�
 
 ## 3. 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위
 
+
 ![Android Security Bulletin 로고](https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png)
 
-_Image: [Android Security Bulletin](https://source.android.com/docs/security/bulletin/asb-overview)_
+_이미지: [Android Security Bulletin](https://source.android.com/docs/security/bulletin/asb-overview)_
 
-2026년 5월 Android 보안 게시판이 2026년 5월 1일에 발행되었습니다.
 
-게시판은 Android 시스템의 보안 취약점 및 관련 패치 정보를 포함합니다.
-
+2026년 5월 Android 보안 게시판이 발행되었으며, 제품 camera path와 연결되는 CVE/패치가 있는지 확인할 security triage 입력으로 다룹니다.
 
 Android 보안 게시판은 매월 발행되며 Android 기기의 보안 취약점과 패치 정보를 제공합니다. 게시판은 커널, 프레임워크, 라이브러리, 미디어 구성 요소 등 여러 시스템 영역을 다루지만, 특정 Camera HAL 구현 영향은 제품 구성 요소와 CVE/패치 매핑을 별도로 확인해야 합니다.
+
+이번 보안 게시판은 제품 camera path 영향이 이미 확인됐다는 증거가 아니라, security triage에서 확인할 platform-adjacent 입력입니다. HAL 팀은 게시판의 kernel, media, framework, vendor component 항목 중 camera path와 실제로 연결되는 CVE나 패치가 있는지 먼저 확인하고, 매핑이 있을 때만 영향을 받는 device branch, vendor component, CTS/VTS/Camera ITS smoke 범위를 정리합니다. 매핑이 확인되지 않은 항목은 camera owner follow-up으로 승격하지 않습니다.
 
 **Camera HAL / Driver 관점**
 
@@ -53,11 +56,11 @@ Android 보안 게시판은 매월 발행되며 Android 기기의 보안 취약�
 
 ### 확인할 점
 
-- 게시판의 kernel/media/framework/vendor 항목 중 제품 camera path와 연결되는 CVE가 있는지 확인합니다.
-- CVE/패치 매핑이 없으면 camera owner follow-up이나 제품 영향 항목으로 기록하지 않습니다.
-- 매핑이 확인된 경우에만 패치 적용 범위와 CTS/VTS/Camera ITS smoke 결과를 남깁니다.
+- 보안 담당자는 2026년 5월 Android 보안 게시판에서 제품 kernel, media, framework, vendor component 항목과 camera-related CVE 여부를 확인합니다. (Owner: 보안 담당 엔지니어)
+- camera path와 연결되는 CVE/패치가 확인될 때만 영향을 받는 device branch, vendor component, camera stack owner 범위를 기록합니다. (Owner: HAL 보안 담당)
+- 패치가 제품 camera path에 매핑될 경우 CTS/VTS/Camera ITS smoke run으로 회귀 여부를 확인하고, 매핑이 없으면 camera owner follow-up 없음으로 기록합니다. (Owner: HAL 검증 팀)
 
-**Sources**
+**출처**
 
 - [Overview](https://source.android.com/docs/security/bulletin/asb-overview)
 
@@ -68,7 +71,7 @@ Android 보안 게시판은 매월 발행되며 Android 기기의 보안 취약�
 
 ![Android용 하이브리드 추론 솔루션 다이어그램](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png)
 
-_Image: [Android Developers Blog](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
+_이미지: [Android Developers Blog](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
 
 
 2026-04-17 Android Developers Blog는 Firebase AI Logic API에 하이브리드 추론과 새로운 Gemini 모델 지원을 추가한다고 발표했습니다.
@@ -87,7 +90,7 @@ Do not treat Firebase AI Logic as a HAL scheduling, metadata contract, stream/bu
 - 해당 경로가 있을 때만 camera input의 해상도, format, frame rate, buffer usage 요구를 정리하고, HAL 변경 필요 여부는 source-backed 제품 요구로 별도 판단합니다. (Owner: HAL 아키텍트)
 - 제품 요구가 확인되지 않으면 HAL scheduling, metadata contract, camera pipeline behavior 변경으로 기록하지 않습니다. (Owner: HAL 개발팀)
 
-**Sources**
+**출처**
 
 - [Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)
 
@@ -96,6 +99,10 @@ Do not treat Firebase AI Logic as a HAL scheduling, metadata contract, stream/bu
 ## 5. C++26 assert(): Camera HAL debug-build 검토 범위
 
 
+![Sandor Dargo](https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG)
+
+_이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo)_
+
 
 C++26 표준에 제안된 `assert()` 매크로의 개선 사항은 디버깅 시 더 유용하고 사용자 친화적인 정보를 제공할 것으로 예상됩니다. 이는 `std::string_view`와 같은 타입의 인수를 지원하고, 실패 시 더 많은 컨텍스트 정보를 자동으로 캡처하여 출력할 수 있도록 합니다.
 
@@ -103,7 +110,7 @@ C++의 `assert()` 매크로는 개발 단계에서 프로그램의 가정을 검
 
 C++26 assert 개선은 Camera HAL 제품 동작 변경이 아니라, compiler/toolchain support가 준비된 뒤 debug-build 또는 host utility에서 검토할 수 있는 진단 개선 후보입니다. HAL 팀은 현재 코드의 `assert()` 사용 위치를 inventory로 정리하고, 실패 시 어떤 추가 context가 디버깅에 도움이 될지 검토할 수 있습니다. 다만 출처는 Android 실행 환경, CTS/VTS/Camera ITS 결과, HAL 내부 처리 방식이 직접 바뀐다고 말하지 않으므로 그런 효과는 별도 PoC와 toolchain 확인 전까지 주장하지 않습니다.
 
-**Camera HAL / Driver 관점**
+**Android Native / Tooling 관점**
 
 C++26 assert 개선은 Camera HAL 제품 동작 변경이 아니라, compiler/toolchain support가 준비된 뒤 debug-build 또는 host utility에서 검토할 수 있는 진단 개선 후보입니다. HAL 팀은 현재 코드의 `assert()` 사용 위치를 inventory로 정리하고, 실패 시 어떤 추가 context가 디버깅에 도움이 될지 검토할 수 있습니다. 다만 출처는 Android 실행 환경, CTS/VTS/Camera ITS 결과, HAL 내부 처리 방식이 직접 바뀐다고 말하지 않으므로 그런 효과는 별도 PoC와 toolchain 확인 전까지 주장하지 않습니다.
 
@@ -112,7 +119,7 @@ C++26 assert 개선은 Camera HAL 제품 동작 변경이 아니라, compiler/to
 - 현재 HAL 코드에서 `assert()`가 debug-build 또는 host utility에서 실제로 의미 있는 failure context를 줄 수 있는 위치만 목록화합니다.
 - C++26 assert 기능은 compiler/toolchain support가 확인된 뒤, production runtime이 아니라 host utility 또는 debug-build PoC에서만 검토합니다.
 
-**Sources**
+**출처**
 
 - [C++26: A User-Friendly assert() macro -- Sandor Dargo](https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo)
 

@@ -235,12 +235,12 @@
           "contentLength": 2833
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Fallback builder did not select an external article image; renderer will use local fallback visual.",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "imageAttribution": "Android Developers Latest Updates",
+      "imageAlt": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "article_sections": {
         "verified_facts": [
           "Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.",
@@ -256,6 +256,25 @@
           "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
         ],
         "team_share_points": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
+      },
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "attribution": "Android Developers Latest Updates",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://developer.android.com/static/images/social/android-developers.png",
+        "exclusionEvidence": []
+      },
+      "resolvedImage": {
+        "url": "https://developer.android.com/static/images/social/android-developers.png",
+        "src": "https://developer.android.com/static/images/social/android-developers.png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
       }
     },
     {
@@ -390,12 +409,12 @@
           "contentLength": 2833
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Fallback builder did not select an external article image; renderer will use local fallback visual.",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "imageAttribution": "Android Developers Latest Updates",
+      "imageAlt": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "article_sections": {
         "verified_facts": [
           "Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.",
@@ -411,6 +430,25 @@
           "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
         ],
         "team_share_points": "CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
+      },
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+        "attribution": "Android Developers Latest Updates",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://developer.android.com/static/images/social/android-developers.png",
+        "exclusionEvidence": []
+      },
+      "resolvedImage": {
+        "url": "https://developer.android.com/static/images/social/android-developers.png",
+        "src": "https://developer.android.com/static/images/social/android-developers.png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
       }
     }
   ],

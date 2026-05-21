@@ -2,6 +2,8 @@
 
 이번 2026-05-11호는 CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트, libcamera v0.7.1, CameraX 1.6.1 Android Camera 호환성 관찰을 중심으로 구성했습니다. CameraX 항목은 HAL 변경 근거가 아니라 app/framework 계층 compatibility review input으로 정리했습니다.
 
+
+
 ## 1. 이번 주 3줄 브리핑
 
 - CameraX 1.4.0-alpha07 및 1.7.0-alpha01은 뷰파인더와 비디오 모듈 업데이트이며, HAL 변경 요구가 아니라 compatibility review input입니다.
@@ -13,7 +15,7 @@
 
 ![Android Developers 로고](https://developer.android.com/static/images/social/android-developers.png)
 
-_Image: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)_
+_이미지: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)_
 
 
 2026년 5월 6일 CameraX release note는 viewfinder 및 video artifacts의 version update를 나열했습니다.
@@ -32,7 +34,7 @@ CameraX는 Android Jetpack의 일부로, 카메라 앱 개발을 간소화하는
 - 회귀가 보이면 app logcat, framework camera log, HAL/device log를 분리해 원인이 app/library layer인지 downstream HAL issue인지 구분합니다. (Owner: HAL QA)
 - release note만으로 Camera stack 요구사항 변경 요구를 만들지 않습니다. (Owner: HAL 아키텍트)
 
-**Sources**
+**출처**
 
 - [1.4.0-alpha07](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
 
@@ -58,7 +60,7 @@ HAL 팀은 libcamera release note를 driver/image pipeline review input으로 �
 - 관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.
 - 후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다.
 
-**Sources**
+**출처**
 
 - [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
 
@@ -66,6 +68,10 @@ HAL 팀은 libcamera release note를 driver/image pipeline review input으로 �
 
 ## 4. CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
+
+![CameraX 1.6.1 업데이트: Android Camera 호환성 관찰](https://developer.android.com/static/images/social/android-developers.png?hl=es-419)
+
+_이미지: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)_
 
 
 CameraX 1.6.1 / 1.7.0-alpha01 artifact rows were updated in the AndroidX Camera release notes dated May 06, 2026.
@@ -84,7 +90,7 @@ CameraX는 Camera2 위에서 앱 개발자가 preview, image capture, video capt
 - 회귀가 보이면 app logcat, framework camera log, HAL/device log를 분리해 원인이 CameraX/library layer인지 downstream HAL issue인지 구분합니다. (Owner: HAL QA)
 - release note만으로 Camera stack 요구사항이나 metadata 동작 변경 요구를 만들지 않습니다. (Owner: HAL 아키텍트)
 
-**Sources**
+**출처**
 
 - [Android Developers Latest Updates](https://developer.android.com/latest-updates)
 

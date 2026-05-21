@@ -680,12 +680,12 @@
           "width": 200
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Camera HAL 디버깅 맥락에 직접 맞는 출처 이미지가 없어 fallback visual을 사용합니다.",
+      "selectedImage": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+      "imageSource": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "imageAttribution": "ISO C++ Blog",
+      "imageAlt": "Sandor Dargo",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "sources": [
         {
           "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
@@ -820,7 +820,26 @@
           "impact_level": "native_tooling_workflow",
           "overclaim_risk": "low"
         }
-      ]
+      ],
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+        "attribution": "ISO C++ Blog",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+        "exclusionEvidence": []
+      },
+      "resolvedImage": {
+        "url": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+        "src": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
+      }
     }
   ],
   "action_items": [

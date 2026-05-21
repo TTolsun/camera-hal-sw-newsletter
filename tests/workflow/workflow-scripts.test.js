@@ -5230,6 +5230,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   const sourceQualityDiagnosisStep = workflowStep(workflow, 'Generate source quality diagnosis');
   const evidencePackStep = workflowStep(workflow, 'Generate evidence pack summary');
   const halSignalQualityStep = workflowStep(workflow, 'Generate HAL signal quality report');
+  const imageAuditStep = workflowStep(workflow, 'Audit newsletter image lineage');
   const preparePrBodyStep = workflowStep(workflow, 'Prepare pull request body');
   const ensureLabelsStep = workflowStep(workflow, 'Ensure labels');
   const createPrStep = workflowStep(workflow, 'Create final newsletter pull request');
@@ -5256,6 +5257,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
     '- name: Generate source quality diagnosis',
     '- name: Generate evidence pack summary',
     '- name: Generate HAL signal quality report',
+    '- name: Audit newsletter image lineage',
     '- name: Snapshot newsroom debug artifacts'
   ]);
   assert.match(workflow, /llm_provider:/);
@@ -5328,6 +5330,12 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(halSignalQualityStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.match(halSignalQualityStep, /continue-on-error:\s*true/);
   assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
+  assert.match(imageAuditStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
+  assert.doesNotMatch(imageAuditStep, /continue-on-error:\s*true/);
+  assert.match(
+    imageAuditStep,
+    /npm run newsroom:audit-images -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --fail-on-publish-blocking/
+  );
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);

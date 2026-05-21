@@ -11,9 +11,9 @@
     <nav class="site-nav content-wrap" aria-label="Primary navigation">
       <a class="site-brand" href="../../index.html">Camera HAL SW Newsletter</a>
       <div class="nav-links">
-        <a href="../../index.html#latest">Latest</a>
-        <a href="../../index.html#archive">Archive</a>
-        <a href="../../docs/news-sources.md">Sources</a>
+        <a href="../../index.html#latest">최신호</a>
+        <a href="../../index.html#archive">아카이브</a>
+        <a href="../../docs/news-sources.md">출처</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </nav>
@@ -35,6 +35,8 @@
         </div>
       </header>
 
+
+
       <section class="section issue-briefing">
         <h2>1. 이번 주 3줄 브리핑</h2>
         <div class="card">
@@ -43,59 +45,56 @@
       </section>
 
       <section class="section">
-        <h2>2. Camera Driver / Image Pipeline</h2>
+        <h2>2. libcamera Release Announcements - libcamera v0.7.1</h2>
         <div class="card issue-section article-card has-fallback-image camera-hal">
           <div class="article-media article-fallback-visual article-fallback-camera-hal" role="img" aria-label="Camera Driver / Image Pipeline">
             <span></span>
           </div>
-          
+
           <h3>libcamera Release Announcements - libcamera v0.7.1</h3>
-          <div class="article-block"><strong class="article-block-title">확인한 사실 / 릴리스 요약</strong><ul><li>libcamera Release Announcements가 2026-04-28에 게시 또는 업데이트한 항목입니다.</li><li>버전/릴리스: libcamera v0.7.1.</li><li>관련 컴포넌트: libcamera / V4L2 camera pipeline.</li><li>확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">배경지식 / 왜 AOSP Camera 팀이 볼 만한가</strong><p>드라이버, 센서, ISP, libcamera, V4L2 변경사항은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL/Driver 관점 / 적용 가능 지점</strong><p>Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">실행 항목 / PoC 제안 및 검증 기준</strong><ul><li>Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.</li><li>관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.</li><li>Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트 / 결론</strong><p>libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.</p></div>
+          <p class="article-lead">Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.</p>
+          <p>드라이버, 센서, ISP, libcamera, V4L2 변경사항은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다.</p>
+          <p>Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.</p>
+          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.</p></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.</li></ul></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html">libcamera Release Announcements - libcamera v0.7.1</a></li></ul></div>
         </div>
       </section>
 
       <section class="section">
-        <h2>3. Android Platform / CameraX</h2>
-        <div class="card issue-section article-card has-fallback-image camera-hal">
-          <div class="article-media article-fallback-visual article-fallback-camera-hal" role="img" aria-label="Android Platform / CameraX">
-            <span></span>
-          </div>
-          
+        <h2>3. CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</h2>
+        <div class="card issue-section article-card has-image camera-hal">
+          <figure class="article-media">
+            <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.6.1 업데이트: Android Camera 호환성 관찰" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">이미지: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">Android Developers Latest Updates</a></figcaption>
+          </figure>
+
           <h3>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</h3>
-          <div class="article-block"><strong class="article-block-title">확인한 사실 / 릴리스 요약</strong><ul><li>Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.</li><li>버전/릴리스: CameraX 1.6.1.</li><li>관련 컴포넌트: CameraX / androidx.camera.</li><li>확인된 변경점: CameraX / androidx.camera CameraX 1.6.1 업데이트입니다. 대상: CameraX / androidx.camera.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">배경지식 / 왜 AOSP Camera 팀이 볼 만한가</strong><p>CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL/Driver 관점 / 적용 가능 지점</strong><p>CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">실행 항목 / PoC 제안 및 검증 기준</strong><ul><li>Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.</li><li>관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.</li><li>Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트 / 결론</strong><p>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.</p></div>
+          <p class="article-lead">CameraX / androidx.camera CameraX 1.6.1 업데이트입니다. 대상: CameraX / androidx.camera.</p>
+          <p>CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.</p>
+          <p>CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.</p>
+          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.</p></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.</li></ul></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">1.6.1</a></li></ul></div>
         </div>
       </section>
 
       <section class="section">
-        <h2>4. Android Platform / CameraX</h2>
-        <div class="card issue-section article-card has-fallback-image camera-hal">
-          <div class="article-media article-fallback-visual article-fallback-camera-hal" role="img" aria-label="Android Platform / CameraX">
-            <span></span>
-          </div>
-          
+        <h2>4. CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰</h2>
+        <div class="card issue-section article-card has-image camera-hal">
+          <figure class="article-media">
+            <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">이미지: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07">Android Developers Latest Updates</a></figcaption>
+          </figure>
+
           <h3>CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰</h3>
-          <div class="article-block"><strong class="article-block-title">확인한 사실 / 릴리스 요약</strong><ul><li>Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.</li><li>버전/릴리스: 1.4.0-alpha07.</li><li>관련 컴포넌트: CameraX / androidx.camera.</li><li>확인된 변경점: CameraX / androidx.camera 1.4.0-alpha07 업데이트입니다. 대상: CameraX / androidx.camera.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">배경지식 / 왜 AOSP Camera 팀이 볼 만한가</strong><p>CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">Camera HAL/Driver 관점 / 적용 가능 지점</strong><p>CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.</p></div>
-          <div class="article-block"><strong class="article-block-title">실행 항목 / PoC 제안 및 검증 기준</strong><ul><li>Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.</li><li>관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.</li><li>Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.</li></ul></div>
-          <div class="article-block"><strong class="article-block-title">팀 공유 포인트 / 결론</strong><p>CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.</p></div>
+          <p class="article-lead">CameraX / androidx.camera 1.4.0-alpha07 업데이트입니다. 대상: CameraX / androidx.camera.</p>
+          <p>CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.</p>
+          <p>CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.</p>
+          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.</p></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.</li></ul></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07">1.4.0-alpha07</a></li></ul></div>
         </div>
-      </section>
-
-      <section class="section">
-        <h2>이번 주 실행 항목</h2>
-        <div class="card action-card"><ul><li>편집장은 fallback article 표현이 HAL 직접 변경으로 과장되지 않았는지 확인합니다.</li><li>source URL과 published date가 기사 본문과 일치하는지 확인합니다.</li><li>후속 release note가 나오면 다음 호에서 재평가합니다.</li></ul></div>
       </section>
 
       <section class="section">
