@@ -154,14 +154,15 @@ fact-checker는 새 글을 쓰는 stage가 아니라 source gap, unsupported cla
 
 ## Safe Scheduled Defaults
 
-현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, fallback `gemini-2.5-flash-lite`입니다. workflow YAML은 `allow_pro` 값을 fallback list로 조합하지 않고 `NEWSROOM_ALLOW_PRO_ON_MANUAL` 정책 플래그만 JS runtime으로 전달합니다. JS model policy는 `workflow_dispatch`, `NEWSROOM_ALLOW_PRO_ON_MANUAL=true`, `LLM_PROVIDER=gemini` 조건을 모두 만족할 때만 Gemini Pro fallback을 추가합니다.
+현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, fallback `gemini-2.5-flash-lite`입니다. workflow YAML은 `allow_pro` 값을 fallback list로 조합하지 않고 `NEWSROOM_ALLOW_PRO_ON_MANUAL` 정책 플래그만 JS runtime으로 전달합니다. JS model policy는 Pro fallback을 자동으로 추가하지 않습니다. Pro를 쓰려면 `llm_model=gemini-2.5-pro` 같은 explicit model selection과 `allow_pro=true`를 함께 지정해야 합니다.
 
 scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default이고, 나머지는 workflow와 runtime config의 기본값을 사용합니다.
 
 ```text
 LOOKBACK_DAYS=21
 LLM_PROVIDER=gemini
-LLM_MODEL=
+LLM_MODEL unset
+GEMINI_MODEL unset
 NEWSROOM_REPORTER_MODEL=gemini-2.5-flash
 NEWSROOM_EDITOR_MODEL=gemini-3.5-flash
 NEWSROOM_FACTCHECK_MODEL=gemini-2.5-flash
@@ -184,7 +185,7 @@ NEWSROOM_ALLOW_PRO_ON_MANUAL=false
 NEWSROOM_PRO_ESCALATION=manual
 ```
 
-manual high-quality run(수동 고품질 실행)의 기본 입력은 `allow_pro=true`, `llm_model=""`입니다. 이때 workflow는 `LLM_MODEL`을 전달하지 않으므로 code default stage model을 사용합니다. 모든 stage를 Pro로 승격하려면 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`를 유지합니다. JS model policy는 provider가 `gemini`인 `workflow_dispatch` 실행에서만 Pro 사용을 허용합니다. scheduled run, internal provider, `allow_pro=false`에서는 Pro fallback을 추가하지 않습니다.
+manual high-quality run(수동 고품질 실행)의 기본 입력은 `allow_pro=false`, `llm_model=""`입니다. 이때 workflow는 `LLM_MODEL`을 전달하지 않으므로 code default stage model을 사용하고 Pro를 호출하지 않습니다. 모든 stage를 Pro로 승격하려면 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`로 바꿉니다. JS model policy는 Pro fallback을 자동으로 추가하지 않으며, provider가 `gemini`인 `workflow_dispatch` 실행에서 explicit Pro model이 설정되고 `allow_pro=true`일 때만 Pro 사용을 허용합니다.
 
 ## Issue #185 Seed Evidence Workflow Priority
 
@@ -270,7 +271,7 @@ NEWSROOM_PRO_ESCALATION=manual
 
 ### 수동 Final Generation 실행
 
-GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. 기본 수동 실행은 `allow_pro=true`, `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. 모든 stage primary를 Pro로 승격해야 할 때만 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`를 유지합니다.
+GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. 기본 수동 실행은 `allow_pro=false`, `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. 모든 stage primary를 Pro로 승격해야 할 때만 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`로 바꿉니다.
 
 ## Editor-in-Chief Review
 

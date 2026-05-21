@@ -5731,7 +5731,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /llm_model:/);
   assert.match(workflow, /llm_fallback_models:/);
-  assert.match(workflow, /allow_pro:\s*[\s\S]*?default: "true"/);
+  assert.match(workflow, /allow_pro:\s*[\s\S]*?default: "false"/);
   assert.match(workflow, /llm_model:\s*[\s\S]*?default: ""/);
   assert.match(workflow, /LLM_PROVIDER=\$\{INPUT_LLM_PROVIDER\}/);
   assert.match(workflow, /LLM_MODEL=\$\{INPUT_LLM_MODEL\}/);
@@ -5767,6 +5767,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /key: news-summary-\$\{\{ runner\.os \}\}-/);
   assert.match(workflow, /uses: actions\/cache\/save@v4/);
   assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
+  const workflowDocs = fs.readFileSync(path.join(__dirname, '..', '..', 'docs', 'newsroom-workflow.md'), 'utf8');
+  assert.doesNotMatch(workflowDocs, /^LLM_MODEL=$/m);
   assert.match(generateStep, /continue-on-error:\s*true/);
   assert.match(ensurePublicStep, /node scripts\/ensure-public-newsletter-artifacts\.js/);
   assert.match(resolveMetaStep, /node scripts\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);

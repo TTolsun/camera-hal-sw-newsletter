@@ -15,7 +15,7 @@ on:
       allow_pro:
         description: "Allow Gemini Pro for this manual run."
         required: false
-        default: "true"
+        default: "false"
         type: choice
         options:
           - "false"
