@@ -1,0 +1,307 @@
+{
+  "date": "2026-05-21",
+  "status": "NEEDS_FIX",
+  "failure_stage": "candidate_pool_preflight",
+  "failure_reason": "publishable_candidate_shortage; reserve_candidate_shortage",
+  "fact_check_status": "PASS",
+  "must_fix_count": 0,
+  "quality_status": "NEEDS_FIX",
+  "quality_attempt_count": 0,
+  "quality_score": 76,
+  "quality_threshold": 85,
+  "quality_deduction_count": 3,
+  "quota_error_count": 0,
+  "invalid_json_count": 0,
+  "model_usage": {},
+  "candidate_input": {
+    "mode": "artifact",
+    "candidate_artifact": "content/collected-news/2026-05-21/merged-candidates.json",
+    "candidate_artifact_hash": "033e278b42286e709a2f09b367f24d5c3323cdbf90ef53a603915726766c023f",
+    "manifest": "content/collected-news/2026-05-21/merged-candidate-manifest.json",
+    "manifest_type": "merged_candidate",
+    "manifest_status": "validated",
+    "llm_used": true,
+    "merge_mode": "gemini_source_discovery",
+    "candidate_count": 43
+  },
+  "run_context": {
+    "github_run_id": "26200932594",
+    "github_sha": "1cdbda41aad81416971d221bdb8b30b6177d7550",
+    "github_ref": "refs/heads/newsroom-source-discovery/2026-05-21"
+  },
+  "input_candidate_count": 43,
+  "eligible_candidate_count": 3,
+  "selected_article_count": 3,
+  "deterministic_selected_count": 3,
+  "rendered_main_article_count": 3,
+  "reserve_candidate_count": 0,
+  "demoted_article_count": 0,
+  "locked_article_count": null,
+  "fallback_topic_count": 1,
+  "reporter_candidate_count": null,
+  "reporter_selected_count": null,
+  "final_input_candidate_count": 43,
+  "final_eligible_candidate_count": 3,
+  "final_selected_article_count": 3,
+  "reporter_selected_but_final_excluded_count": null,
+  "ai_selected_article_count": 3,
+  "underfilled": false,
+  "publish_ready": false,
+  "selection_publish_ready": false,
+  "final_publish_ready": false,
+  "review_gate_passed": true,
+  "publish_gate_passed": false,
+  "min_final_articles": 3,
+  "max_final_articles": 5,
+  "absolute_min_reviewable_articles": 1,
+  "min_non_fallback_publish_ready_articles": 2,
+  "composition_mode": "NEEDS_FIX",
+  "selection_composition_mode": "NEEDS_FIX",
+  "composition_reason": "Article Composition Policy passed with 2 Primary Camera Stack article(s) and 1 supporting main article(s).",
+  "composition_summary": {
+    "selected_article_count": 3,
+    "bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 2,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 2,
+    "fallback_topic_count": 1
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 3,
+    "bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 2,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 2,
+    "fallback_topic_count": 1
+  },
+  "candidate_pool_preflight_passed": false,
+  "candidate_shortage_reviewable": true,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 3,
+    "required_publishable_candidate_count": 5,
+    "reserve_candidate_count": 0,
+    "required_reserve_candidate_count": 2,
+    "primary_camera_stack_candidate_count": 2,
+    "required_primary_camera_stack_candidate_count": 1,
+    "camera_stack_candidate_count": 2,
+    "required_camera_stack_candidate_count": 2,
+    "direct_camera_or_driver_candidate_count": 1,
+    "camera_adjacent_candidate_count": 1,
+    "supporting_candidate_count": 1,
+    "selected_article_count": 3,
+    "selected_primary_camera_stack_count": 2
+  },
+  "shortage_reason_codes": [
+    "publishable_candidate_shortage",
+    "reserve_candidate_shortage"
+  ],
+  "publish_gate_reason_codes": [],
+  "publish_gate_reason_summary": [],
+  "publish_ready_composition_policy": {
+    "primaryCameraStackMinRequired": 2,
+    "directAospCameraOrDriverMinRequired": 1,
+    "supportingMainMaxAllowed": 1,
+    "directAospCameraOrDriverBuckets": [
+      "direct_aosp_camera",
+      "camera_driver_image_pipeline"
+    ]
+  },
+  "source_parser_hints": [
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    },
+    {
+      "code": "RESERVE_POOL_SHORTAGE",
+      "source_id": "selection-preflight",
+      "reason": "Only 0 reserve candidate(s) are available; candidatePoolPreflight.reserveMin requires 2."
+    }
+  ],
+  "editor_review_required": true,
+  "non_fallback_reviewable_article_count": 2,
+  "eligible_non_fallback_reviewable_article_count": 2,
+  "primary_camera_stack_topic_count": 2,
+  "supporting_main_article_count": 1,
+  "forbidden_main_article_count": 0,
+  "direct_aosp_camera_count": 1,
+  "camera_driver_image_pipeline_count": 0,
+  "android_platform_camera_adjacent_count": 1,
+  "android_multimedia_camera_output_count": 0,
+  "soc_platform_signal_count": 0,
+  "cpp_ai_tooling_fallback_count": 1,
+  "generic_tech_watchlist_count": 0,
+  "selection_warnings": [],
+  "selection_errors": [],
+  "selection_shortage_hints": [
+    "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
+    "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+  ],
+  "exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 38
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 38
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 38
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 36
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 31
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 31
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 10
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 7
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 7
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 7
+    }
+  ],
+  "final_exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 38
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 38
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 38
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 36
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 31
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 31
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 10
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 7
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 7
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 7
+    }
+  ],
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "failure_kind": "candidate_shortage_reviewable",
+  "generation_status": "UNDERFILLED_NEEDS_FIX",
+  "fallback_public_issue": true,
+  "fallback_public_issue_status": "CREATED",
+  "fallback_public_issue_demoted_article_count": 0,
+  "fallback_public_issue_removed_blockers": false,
+  "fallback_public_issue_removed_article_count": 0,
+  "fallback_public_issue_added_article_count": 3,
+  "fallback_public_issue_preserve_article_count": 0,
+  "fallback_public_issue_reason": "Public newsletter files were generated by fallback public issue builder after automatic publish gate failed.",
+  "review_publication_ready_reason": "Public newsletter files were generated by fallback public issue builder after automatic publish gate failed.",
+  "editor_review_reason": "AI automatic publish gate did not pass; editor review is required before merge publication.",
+  "publication_mode": "review_only",
+  "homepage_visibility": "normal",
+  "normal_public_ready": false,
+  "automatic_publish_ready": false,
+  "public_artifact_ready": true,
+  "fallback_public_ready": false,
+  "fallback_only": false,
+  "camera_anchor_count": 3,
+  "homepage_badge": "",
+  "content_quality_score": 76,
+  "camera_relevance_score": 76,
+  "publication_mode_decision": "review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.",
+  "original_fact_check_status": "PASS",
+  "original_must_fix_count": 0,
+  "original_source_gap_count": 0,
+  "source_gap_count": 0,
+  "artifact_final_publish_ready": false,
+  "validate_ok": true,
+  "public_newsletter_ready": true,
+  "review_publication_ready": true,
+  "diagnostics_only": false,
+  "homepage_visible_after_merge": true,
+  "public_state": "REVIEW_ONLY_PUBLIC_CREATED",
+  "run_mode": "review_only_public",
+  "effective_homepage_visible": true,
+  "existing_public_artifact_detected": true,
+  "retention_valid": false,
+  "retention_error": "",
+  "public_artifact_policy": "latest_review_publication_ready",
+  "public_artifact_source": "latest_run",
+  "reconciliation_required": false,
+  "reconciliation_action": "upserted_latest_public_entry",
+  "reconciliation_reason": "latest run created a structurally valid review-only public issue"
+}
