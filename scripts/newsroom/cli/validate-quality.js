@@ -73,6 +73,38 @@ function readJsonIfExists(filePath) {
   }
 }
 
+function isTrue(value) {
+  return value === true || value === 'true';
+}
+
+function isFalse(value) {
+  return value === false || value === 'false';
+}
+
+function reviewPublicationExceptionReason(item = {}, report = {}, status = {}) {
+  const publicationMode = String(
+    item.publication_mode ||
+    report.publication_mode ||
+    status.publication_mode ||
+    ''
+  ).trim();
+  if (publicationMode !== 'review_only') return '';
+  if (!isTrue(status.review_publication_ready)) return '';
+  if (!isTrue(status.public_newsletter_ready)) return '';
+  if (!isTrue(status.homepage_visible_after_merge)) return '';
+  if (!isTrue(status.editor_review_required)) return '';
+  if (!isFalse(status.final_publish_ready)) return '';
+  if (isTrue(status.diagnostics_only)) return '';
+  const reason = String(
+    status.review_publication_ready_reason ||
+    report.review_publication_ready_reason ||
+    status.editor_review_reason ||
+    report.editor_review_reason ||
+    ''
+  ).trim();
+  return reason;
+}
+
 function newsletterItems() {
   if (!fs.existsSync(dataPath)) {
     fail('Missing data/newsletters.json');
@@ -106,6 +138,9 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
 
   const report = readJsonIfExists(reportPath);
   if (!report) return;
+  const status = readJsonIfExists(path.join(dateNewsroomDir, 'generation-status.json')) || {};
+  const reviewPublicationReason = reviewPublicationExceptionReason(item, report, status);
+  const strictClaimValidation = strictPolicy && !reviewPublicationReason;
   const threshold = Number.isFinite(Number(report.threshold)) ? Number(report.threshold) : qualityGatePolicy.threshold;
   const score = Number(report.score);
   if (!Number.isFinite(score)) {
@@ -143,7 +178,7 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
       threshold,
       shortlistReport,
       staleClaimReport,
-      strictClaimValidation: strictPolicy,
+      strictClaimValidation,
       seedEvidencePack
     });
     if (recomputed.score !== score || recomputed.status !== report.status) {

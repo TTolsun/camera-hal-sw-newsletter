@@ -1,5 +1,23 @@
 [
   {
+    "date": "2026-05-21",
+    "archive_status": "stable_archive",
+    "historical_cleanup_reviewed": true,
+    "known_limitations": [
+      "review_only_publication"
+    ],
+    "historical_cleanup_issue": "#257",
+    "public_visibility": "listed"
+  },
+  {
+    "date": "2026-05-20",
+    "archive_status": "stable_archive",
+    "historical_cleanup_reviewed": true,
+    "known_limitations": [],
+    "historical_cleanup_issue": "#242",
+    "public_visibility": "listed"
+  },
+  {
     "date": "2026-05-19",
     "archive_status": "reviewed_archive",
     "historical_cleanup_reviewed": true,

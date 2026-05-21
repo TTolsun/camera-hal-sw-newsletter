@@ -327,6 +327,7 @@ jobs:
         with:
           commit-message: "Generate Camera HAL newsletter ${{ steps.meta.outputs.date }}"
           branch: newsroom-final/${{ steps.meta.outputs.date }}
+          base: main
           delete-branch: true
           title: "[Newsletter] Camera HAL SW Newsletter - ${{ steps.meta.outputs.date }}"
           body: ${{ steps.pr-body.outputs.body }}

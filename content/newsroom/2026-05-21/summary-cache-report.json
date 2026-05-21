@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-21",
+  "generated_at": "2026-05-21T01:59:27.162Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 3,
+    "hit_count": 0,
+    "miss_count": 3,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 2
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://goo.gle/adaptiveapps_io26",
+        "url_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
+        "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+        "content_hash": "07001fcff71ad48b61928d083d411a101099d62d0206dd9fd8c8b91c307b80b0"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Start building today - Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 19 May 2026 12:45:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "url_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+        "published_date": "Tue, 19 May 2026 12:45:00 +0000",
+        "content_hash": "5eb4c2b4421343314615b8f7d3b24f2a37bb69f5e941c5ae85481f546f78b46b"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "url_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
+        "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+        "content_hash": "47e7f31cb529b3dd872a3865e14893c72d4c5778602bd361481a4e7d2d2e260b"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
