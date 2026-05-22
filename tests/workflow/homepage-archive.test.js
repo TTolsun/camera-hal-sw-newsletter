@@ -215,5 +215,6 @@ test('homepage renders valid headline state with newsletter URL priority and esc
   assert.match(elements['headline-card'].innerHTML, /&lt;Camera HAL headline&gt;/);
   assert.match(elements['headline-card'].innerHTML, /Summary &amp; details/);
   assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html"/);
+  assert.match(elements['headline-card'].innerHTML, /뉴스레터에서 보기/);
   assert.doesNotMatch(elements['headline-card'].innerHTML, /rel="noopener"/);
 });

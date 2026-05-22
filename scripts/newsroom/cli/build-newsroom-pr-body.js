@@ -2261,17 +2261,22 @@ function renderHomepageHeadlineDesignReview(status = {}, date = '') {
   const review = status.homepage_headline_design_review && typeof status.homepage_headline_design_review === 'object'
     ? status.homepage_headline_design_review
     : {};
-  const artifactPath = review.artifact_path || review.screenshot_artifact_path || (date
-    ? `content/newsroom/${date}/homepage-headline-design-review.png`
-    : 'content/newsroom/YYYY-MM-DD/homepage-headline-design-review.png');
+  const figmaUrl = review.figma_url || review.url || process.env.HOMEPAGE_HEADLINE_FIGMA_URL;
+  const artifactPath = review.artifact_path || review.screenshot_artifact_path;
+  const desktopCoverage = review.desktop_coverage || process.env.HOMEPAGE_HEADLINE_DESKTOP_COVERAGE;
+  const mobileCoverage = review.mobile_coverage || process.env.HOMEPAGE_HEADLINE_MOBILE_COVERAGE;
+  const implementationDeviation = review.implementation_deviation || process.env.HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION;
+  if (!figmaUrl && !artifactPath && !desktopCoverage && !mobileCoverage && !implementationDeviation) {
+    return '';
+  }
   return [
     '## Homepage Headline Design Review',
     '',
-    `- Figma URL: ${valueOrUnknown(review.figma_url || review.url || process.env.HOMEPAGE_HEADLINE_FIGMA_URL)}`,
-    `- Artifact path: ${artifactPath}`,
-    `- Desktop coverage: ${valueOrUnknown(review.desktop_coverage || 'covered')}`,
-    `- Mobile coverage: ${valueOrUnknown(review.mobile_coverage || 'covered')}`,
-    `- Implementation deviation: ${valueOrUnknown(review.implementation_deviation || 'none')}`,
+    `- Figma URL: ${valueOrUnknown(figmaUrl)}`,
+    `- Artifact path: ${valueOrUnknown(artifactPath)}`,
+    `- Desktop coverage: ${valueOrUnknown(desktopCoverage)}`,
+    `- Mobile coverage: ${valueOrUnknown(mobileCoverage)}`,
+    `- Implementation deviation: ${valueOrUnknown(implementationDeviation)}`,
     ''
   ].join('\n');
 }

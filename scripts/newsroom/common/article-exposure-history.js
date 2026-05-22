@@ -90,7 +90,11 @@ function exposureRecordFromNewsletter(item = {}) {
     newsletter_date: text(item.date),
     newsletter_url: text(item.html),
     exposure_type: 'newsletter_index_seed',
-    exposed_at: text(item.date)
+    exposed_at: text(item.date),
+    first_exposed_at: text(item.date),
+    last_exposed_at: text(item.date),
+    exposure_count: 1,
+    exposure_types: ['newsletter_index_seed']
   };
 }
 
@@ -122,10 +126,27 @@ function recordArticleExposure(history, article = {}, options = {}) {
     reuse_reason: text(options.reuseReason),
     exposed_at: text(options.exposedAt || options.date || article.selected_at || todayDate())
   };
+  record.first_exposed_at = record.exposed_at;
+  record.last_exposed_at = record.exposed_at;
+  record.exposure_count = 1;
+  record.exposure_types = [record.exposure_type].filter(Boolean);
   if (existingIndex >= 0) {
+    const previous = normalized.articles[existingIndex];
+    const previousCount = Number(previous.exposure_count);
+    const exposureTypes = [
+      ...ensureArray(previous.exposure_types),
+      previous.exposure_type,
+      record.exposure_type
+    ].filter(Boolean);
     normalized.articles[existingIndex] = {
-      ...normalized.articles[existingIndex],
-      ...record
+      ...previous,
+      ...record,
+      first_exposed_at: text(previous.first_exposed_at || previous.exposed_at || record.exposed_at),
+      last_exposed_at: record.exposed_at,
+      exposure_count: Number.isFinite(previousCount) && previousCount > 0
+        ? previousCount + 1
+        : 2,
+      exposure_types: [...new Set(exposureTypes)]
     };
   } else {
     normalized.articles.unshift(record);

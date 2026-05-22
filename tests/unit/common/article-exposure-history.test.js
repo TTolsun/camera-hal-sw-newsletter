@@ -41,13 +41,14 @@ test('exposure history lightly seeds from latest newsletters metadata only', () 
   assert.equal(history.articles[0].exposure_type, 'newsletter_index_seed');
 });
 
-test('recording exposure updates existing article identity instead of duplicating', () => {
+test('recording exposure accumulates count and date/type history without duplicating', () => {
   let history = readExposureHistory(tempRoot(), '2026-05-23');
   history = recordArticleExposure(history, {
     title: 'Camera HAL update',
     source_url: 'https://example.com/a'
   }, {
     date: '2026-05-23',
+    type: 'homepage_headline',
     score: 88
   });
   history = recordArticleExposure(history, {
@@ -55,12 +56,17 @@ test('recording exposure updates existing article identity instead of duplicatin
     source_url: 'https://example.com/a?utm_source=x'
   }, {
     date: '2026-05-24',
+    type: 'latest_issue_main',
     score: 84
   });
 
   assert.equal(history.articles.length, 1);
   assert.equal(history.articles[0].newsletter_date, '2026-05-24');
   assert.equal(history.articles[0].headline_score, 84);
+  assert.equal(history.articles[0].first_exposed_at, '2026-05-23');
+  assert.equal(history.articles[0].last_exposed_at, '2026-05-24');
+  assert.equal(history.articles[0].exposure_count, 2);
+  assert.deepEqual(history.articles[0].exposure_types, ['homepage_headline', 'latest_issue_main']);
 });
 
 test('exposure diagnostics annotate and dedupe by article identity', () => {
@@ -89,5 +95,10 @@ test('exposure history writes stable JSON', () => {
   }, { date: '2026-05-23' });
   const filePath = writeExposureHistory(root, history);
 
-  assert.equal(JSON.parse(fs.readFileSync(filePath, 'utf8')).schemaVersion, 1);
+  const written = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  assert.equal(written.schemaVersion, 1);
+  assert.equal(written.articles[0].exposure_count, 1);
+  assert.equal(written.articles[0].first_exposed_at, '2026-05-23');
+  assert.equal(written.articles[0].last_exposed_at, '2026-05-23');
+  assert.deepEqual(written.articles[0].exposure_types, ['homepage_headline']);
 });

@@ -115,6 +115,41 @@ test('null current headline seeds from current issue candidate', () => {
   assert.equal(result.homepage_headline_state.current_headline.title, 'Camera HAL stream metadata update');
 });
 
+test('replacement can use eligible candidate that is not already selected', () => {
+  const current = headlineSnapshotFromCandidate(headlineCandidate({
+    source_url: 'https://source.android.com/docs/camera/current',
+    deterministic_score: 60
+  }), {
+    date: '2026-05-22',
+    policy,
+    scoredAt: '2026-05-22'
+  });
+  const eligibleOnly = headlineCandidate({
+    title: 'Higher priority Camera HAL headline',
+    source_url: 'https://source.android.com/docs/camera/high-priority',
+    deterministic_score: 95
+  });
+  const result = applyHomepageHeadlineSelection({
+    date: '2026-05-23',
+    selectedArticles: [headlineCandidate({
+      title: 'Selected lower score article',
+      source_url: 'https://source.android.com/docs/camera/selected-low',
+      deterministic_score: 62
+    })],
+    eligibleCandidates: [eligibleOnly],
+    currentState: {
+      ...emptyHeadlineState({ date: '2026-05-22', policy }),
+      current_headline: current
+    },
+    policy
+  });
+
+  assert.equal(result.headline_decision.reason, 'replaced_by_new_candidate');
+  assert.equal(result.homepage_headline_state.current_headline.title, 'Higher priority Camera HAL headline');
+  assert.equal(result.headline_latest_inclusion.mode, 'injected_from_headline_snapshot');
+  assert.ok(result.selected_articles.some(article => article.injected_from_headline_snapshot === true));
+});
+
 test('state validator accepts null headline and rejects missing snapshot evidence', () => {
   assert.equal(validateHomepageHeadlineState(emptyHeadlineState({ policy }), { policy }).ok, true);
   const invalid = {

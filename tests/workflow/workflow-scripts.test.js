@@ -1811,7 +1811,12 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
   assert.match(mismatchCandidatePoolSection, /candidate_pool_preflight_passed: false/);
   assert.match(mismatchCandidatePoolSection, /preflight_source: selection-report\.json/);
   assert.match(mismatchCandidatePoolSection, /preflight_consistency: mismatch/);
-  assert.equal(validatePrBodyFile(bodyPath, { root, date, validateOutcome: 'failure' }).ok, true);
+  assert.equal(validatePrBodyFile(bodyPath, {
+    root,
+    date,
+    validateOutcome: 'failure',
+    requireHomepageHeadlineDesignReview: false
+  }).ok, true);
 
   writeJson(path.join(root, 'content', 'newsroom', date, 'source-effectiveness-report.json'), {
     sources: [{
@@ -5243,10 +5248,55 @@ test('validate-pr-body allows review PR when final publish is false without cons
   const result = validatePrBodyFile(filePath, {
     root,
     date,
-    validateOutcome: 'failure'
+    validateOutcome: 'failure',
+    requireHomepageHeadlineDesignReview: false
   });
 
   assert.equal(result.ok, true);
+});
+
+test('validate-pr-body requires actual homepage headline design review evidence for file validation', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+  const originalEnv = {
+    figma: process.env.HOMEPAGE_HEADLINE_FIGMA_URL,
+    desktop: process.env.HOMEPAGE_HEADLINE_DESKTOP_COVERAGE,
+    mobile: process.env.HOMEPAGE_HEADLINE_MOBILE_COVERAGE,
+    deviation: process.env.HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION
+  };
+  delete process.env.HOMEPAGE_HEADLINE_FIGMA_URL;
+  delete process.env.HOMEPAGE_HEADLINE_DESKTOP_COVERAGE;
+  delete process.env.HOMEPAGE_HEADLINE_MOBILE_COVERAGE;
+  delete process.env.HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION;
+  try {
+    const filePath = path.join(root, '.tmp', 'newsroom-pr-body.md');
+    writeText(filePath, buildNewsroomPrBody({ root, date, validateOutcome: 'failure' }));
+    const missing = validatePrBodyFile(filePath, { root, date, validateOutcome: 'failure' });
+
+    assert.equal(missing.ok, false);
+    assert.match(missing.errors.join('\n'), /Homepage Headline Design Review/);
+
+    process.env.HOMEPAGE_HEADLINE_FIGMA_URL = 'https://www.figma.com/design/EWJMa8vjfZLjdn9a7s3Kzs';
+    process.env.HOMEPAGE_HEADLINE_DESKTOP_COVERAGE = 'covered';
+    process.env.HOMEPAGE_HEADLINE_MOBILE_COVERAGE = 'reviewed';
+    process.env.HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION = 'none';
+    writeText(filePath, buildNewsroomPrBody({ root, date, validateOutcome: 'failure' }));
+    const reviewed = validatePrBodyFile(filePath, { root, date, validateOutcome: 'failure' });
+
+    assert.equal(reviewed.ok, true, reviewed.errors.join('\n'));
+  } finally {
+    if (originalEnv.figma === undefined) delete process.env.HOMEPAGE_HEADLINE_FIGMA_URL;
+    else process.env.HOMEPAGE_HEADLINE_FIGMA_URL = originalEnv.figma;
+    if (originalEnv.desktop === undefined) delete process.env.HOMEPAGE_HEADLINE_DESKTOP_COVERAGE;
+    else process.env.HOMEPAGE_HEADLINE_DESKTOP_COVERAGE = originalEnv.desktop;
+    if (originalEnv.mobile === undefined) delete process.env.HOMEPAGE_HEADLINE_MOBILE_COVERAGE;
+    else process.env.HOMEPAGE_HEADLINE_MOBILE_COVERAGE = originalEnv.mobile;
+    if (originalEnv.deviation === undefined) delete process.env.HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION;
+    else process.env.HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION = originalEnv.deviation;
+  }
 });
 
 test('publish status resolver preserves reviewable-but-not-publish-ready reason diagnostics', () => {
@@ -5955,6 +6005,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(createPrStep, /base: main/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_FIGMA_URL: https:\/\/www\.figma\.com\/design\/EWJMa8vjfZLjdn9a7s3Kzs/);
+  assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_DESKTOP_COVERAGE: covered/);
+  assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_MOBILE_COVERAGE: covered/);
+  assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION: none/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);

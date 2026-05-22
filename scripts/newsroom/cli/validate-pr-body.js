@@ -611,16 +611,27 @@ function validateHomepageHeadlineDesignReview(text, sections, errors, options = 
     errors.push('Homepage Headline Design Review section body is missing.');
     return;
   }
-  if (!/(Figma URL|Artifact path):\s*(?:https:\/\/(?:www\.)?figma\.com\/|content\/newsroom\/|docs\/design\/|[^\n]+\.(?:png|jpg|jpeg|webp))/i.test(section)) {
-    errors.push('Homepage Headline Design Review must include a Figma URL or screenshot artifact path string.');
+  const lineValue = label => {
+    const match = section.match(new RegExp(`^- ${label}:\\s*(.+)$`, 'im'));
+    return match ? match[1].trim() : '';
+  };
+  const figmaUrl = lineValue('Figma URL');
+  const artifactPath = lineValue('Artifact path');
+  const hasFigmaUrl = /^https:\/\/(?:www\.)?figma\.com\//i.test(figmaUrl);
+  const hasArtifactPath = /^(?:content\/newsroom\/|docs\/design\/|[^/\s][^\n]*\.(?:png|jpg|jpeg|webp)$)/i.test(artifactPath) &&
+    !/YYYY-MM-DD|unknown|missing/i.test(artifactPath);
+  if (!hasFigmaUrl && !hasArtifactPath) {
+    errors.push('Homepage Headline Design Review must include an actual Figma URL or screenshot artifact path string.');
   }
-  if (!/Desktop coverage:\s*\S+/i.test(section)) {
-    errors.push('Homepage Headline Design Review must include desktop coverage marker.');
+  const coveragePattern = /^(covered|checked|reviewed)(?:\b|:|-)/i;
+  if (!coveragePattern.test(lineValue('Desktop coverage'))) {
+    errors.push('Homepage Headline Design Review must include explicit desktop coverage marker.');
   }
-  if (!/Mobile coverage:\s*\S+/i.test(section)) {
-    errors.push('Homepage Headline Design Review must include mobile coverage marker.');
+  if (!coveragePattern.test(lineValue('Mobile coverage'))) {
+    errors.push('Homepage Headline Design Review must include explicit mobile coverage marker.');
   }
-  if (!/Implementation deviation:\s*\S+/i.test(section)) {
+  const deviation = lineValue('Implementation deviation');
+  if (!deviation || /^(unknown|missing)$/i.test(deviation)) {
     errors.push('Homepage Headline Design Review must include implementation deviation field.');
   }
 }

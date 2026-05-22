@@ -151,7 +151,7 @@
       const href = internalHref || sourceHref;
       if (!href) return '';
       const rel = sourceHref && !internalHref ? ' rel="noopener"' : '';
-      const label = internalHref ? 'Latest issue' : 'Source';
+      const label = internalHref ? '뉴스레터에서 보기' : '원문 보기';
       return `<a class="button button-primary" href="${escapeHtml(href)}"${rel}>${escapeHtml(label)}</a>`;
     }
 

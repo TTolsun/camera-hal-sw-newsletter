@@ -129,7 +129,7 @@ function checkHomepageHeadlineData() {
   for (const field of ['title', 'summary']) {
     const value = String(headline[field] || '');
     if (!hangulPattern.test(value)) {
-      errors.push(`data/homepage-headline.json: current_headline.${field}???쒓뎅???쒖떆媛믪씠 ?놁뒿?덈떎.`);
+      errors.push(`data/homepage-headline.json: current_headline.${field}에 한국어 표시값이 없습니다.`);
     }
     addLongEnglishProseErrors(`data/homepage-headline.json: current_headline.${field}`, value);
   }

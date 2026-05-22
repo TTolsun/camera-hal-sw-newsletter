@@ -242,6 +242,8 @@ function headlineEligibilityRejection(candidate = {}, { policy = getHeadlinePoli
     return 'final_selection_eligibility_not_main';
   }
   if (candidate.main_eligible === false) return 'main_eligible_false';
+  if (candidate.main_article_score_eligible === false) return 'main_article_score_ineligible';
+  if (ensureArray(candidate.score_filter_reasons).length > 0) return 'score_filter_reasons_present';
   const score = runtimeScore === null ? computeHeadlineScore(candidate, policy).headline_score : runtimeScore;
   if (score < policy.minimumHeadlineScore) return 'headline_score_below_minimum';
   return '';
@@ -521,7 +523,7 @@ function applyHomepageHeadlineSelection({
 } = {}) {
   const previousState = currentState || emptyHeadlineState({ date, policy });
   const current = previousState.current_headline || null;
-  const pool = headlineCandidatePool(selectedArticles, []);
+  const pool = headlineCandidatePool(selectedArticles, eligibleCandidates);
   const best = bestHeadlineCandidate(pool, policy);
   const existingValidation = current
     ? validateCurrentHeadline(current, { policy, scoredAt: date })
