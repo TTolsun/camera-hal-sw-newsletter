@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-05-23",
+  "proposals": [
+    {
+      "proposal_id": "discovery-2026-05-23-001",
+      "topic_gap": "What's new in CameraX for Android developers?",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX",
+        "AndroidX Camera",
+        "CameraX release notes",
+        "CameraX 1.6.1"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.1 release notes",
+        "New features in CameraX",
+        "API changes in CameraX"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "discovery-2026-05-23-002",
+      "topic_gap": "What are the key announcements for Android developers from Google I/O 2026, especially regarding adaptive experiences and AI?",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Google I/O 2026 Android",
+        "Android adaptive apps",
+        "Jetpack Compose multi-device",
+        "Android AI Studio"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26",
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+      ],
+      "expected_evidence": [
+        "Google I/O 2026 recap for developers",
+        "Adaptive UI/UX for Android",
+        "Jetpack Compose for multi-device experiences",
+        "Android AI Studio integration"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
