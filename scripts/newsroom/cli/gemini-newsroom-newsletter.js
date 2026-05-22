@@ -207,7 +207,7 @@ function publicArticleContractPrompt() {
     'body_paragraphs는 verified facts를 바탕으로 한 자연스러운 설명 문단을 최소 2개 포함해야 합니다.',
     'source_links는 non-empty title 값을 가진 public http/https URLs만 포함해야 합니다. source_role은 primary, supporting, context 중 하나로 쓰세요. local path, .tmp path, GitHub Actions artifact URL, editorial-only role은 사용하지 마세요.',
     'public_article에는 internal public-forbidden terms인 Fallback, Review-only, quality gate, candidate, HAL Signal Capsule, why_now, impact_axes, do_not_overstate, guardrail, section repair를 노출하지 마세요.',
-    `구체적인 reader action이 없으면 정확히 다음 문장을 사용하세요: "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."`
+    '구체적인 reader action이 없으면 public_article.reader_checkpoints는 독자가 추적할 관찰 포인트 1~2개로 자연스럽게 작성하세요. 내부 triage 문체, 업무 지시 문체, 고정 문구를 사용하지 마세요.'
   ].join('\n');
 }
 
@@ -222,6 +222,23 @@ function articleClaimContractPrompt() {
     'Fact claims는 제공된 seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, source_extraction facts의 item-level evidence ids를 cite해야 합니다. evidence_pack_ids만으로 fact support를 만들지 마세요.',
     'evidence URL에 fragment가 있으면 source_urls에서 release/version/section URL fragment를 보존하세요. 특히 CameraX release-note anchor를 보존해야 합니다.',
     'do_not_claim 또는 do_not_overstate guardrails와 모순되지 않게 쓰세요. Direct HAL/API/runtime 표현은 direct source evidence가 필요합니다.'
+  ].join('\n');
+}
+
+function factCheckSeverityPrompt() {
+  return [
+    'Fact-check 결과 매핑: 발행하면 안 되는 factual/source 오류는 must_fix[]에 넣으세요. 출처 커버리지, 날짜 근거, cross-check가 부족한 항목은 source_gaps[]에도 넣고 source_gap_count는 source_gaps.length와 일치시키세요.',
+    '같은 source 안에서 표현, 구체성, actionability를 보강하면 되는 항목만 recommended_fixes[]에 넣으세요. must_fix[]에는 가능한 한 location, problem, suggestion, source_url을 채우세요.',
+    'source_gaps[]와 recommended_fixes[]에는 headline 또는 source URL을 포함해 repair plan이 해당 section을 찾을 수 있게 하세요.'
+  ].join('\n');
+}
+
+function cameraDeveloperToolingFactCheckPrompt() {
+  return [
+    'C/C++, Android Studio, VS Code, Claude Code, Codex, Roo Code/Rood Code, OpenCode/Open Code 같은 language, IDE, AI Agent, tooling news는 Camera 개발자가 실제로 사용하는 development workflow coverage로 허용될 수 있습니다.',
+    '이런 tooling article을 primary Camera runtime stack article이 아니라는 이유만으로 must_fix[] 또는 source_gaps[]에 넣지 마세요. 다만 허용하려면 source, selected capsule metadata, source_extraction 중 하나가 camera driver, Camera HAL/native code, Android camera app, build/test/debug/performance workflow 연결을 뒷받침해야 합니다. derived editorial hints는 framing 보조로만 사용하고, 단독 publishability 근거로 사용하지 마세요.',
+    '연결이 article text 또는 derived editorial hints에만 있고 source/capsule metadata/source_extraction이 뒷받침하지 않으면 recommended_fixes[]가 아니라 must_fix[] 또는 source_gaps[]로 분류하세요.',
+    '표현 보강만 필요하면 recommended_fixes[]에 넣으세요. Camera 개발자 workflow 연결이 source, selected capsule metadata, source_extraction에 전혀 없거나 Android HAL toolchain migration처럼 source가 뒷받침하지 않는 주장을 하면 must_fix[]에 넣고, supporting source/cross-check 부족이면 source_gaps[]에도 넣으세요.'
   ].join('\n');
 }
 
@@ -1520,20 +1537,20 @@ async function repairEditorSemanticWithLlm({
   return callLlmJson(
     `${editorStage} semantic repair`,
     [
-      'Repair the AOSP Camera / Driver / SoC Platform Newsletter editor JSON draft.',
-      'Return one complete editor JSON object that matches the same schema.',
-      'Fix only the validation errors shown in Editor semantic validation error JSON.',
-      'Preserve Korean reader-facing prose unless the validation repair requires a local edit; any newly written reader-facing text must be Korean.',
-      'Do not add, remove, reorder, or replace articles.',
-      'Do not change article headlines, categories, source URLs, image fields, action_items, or references unless the validation error explicitly targets that field.',
-      'For sections.group_coverage failures, restore the missing selected representative group as an article using only its selected capsule, or add explicitly_demoted_groups[] / hard_blocked_groups[] with article_group_key, reason_code, and reason text when the group cannot be rendered.',
-      'For sections.blocked_context failures, remove blocked context URLs/titles from article sources and headlines; blocked context may remain only as diagnostic context.',
-      'For sections.claims failures, add or adjust claims so every source-backed verified_facts[], confirmed_facts[], and concrete evidence_summary field has a matching claim_type=fact claim.',
-      'For claim repairs, use only allowed claim_type and impact_level values. Map CameraX/adaptive UI impact to app_api_or_framework_adjacent unless direct HAL contract evidence is present.',
-      'For missing source_urls, reuse the section source URL. For fact claims, cite available seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, or source_extraction evidence ids when present; do not invent evidence ids.',
-      'For briefing failures, fix briefing to exactly 3 items and preserve the rest of the draft.',
-      'Do not invent source facts or source material.',
-      'Return schema-compliant JSON only.'
+      'AOSP Camera / Driver / SoC Platform Newsletter editor JSON draft를 repair하세요.',
+      '같은 schema와 일치하는 complete editor JSON object 하나를 반환하세요.',
+      'Editor semantic validation error JSON에 표시된 validation error만 수정하세요.',
+      'Validation repair에 필요한 local edit가 아니면 한국어 reader-facing prose를 보존하세요. 새로 쓰는 reader-facing text는 반드시 한국어여야 합니다.',
+      'Article을 추가, 제거, 재정렬, 교체하지 마세요.',
+      'Validation error가 명시적으로 해당 field를 가리키지 않으면 article headline, category, source URL, image field, action_items, references를 변경하지 마세요.',
+      'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
+      'sections.blocked_context failure는 article sources와 headline에서 blocked context URL/title을 제거하세요. Blocked context는 diagnostic context로만 남길 수 있습니다.',
+      'sections.claims failure는 source-backed verified_facts[], confirmed_facts[], concrete evidence_summary field마다 matching claim_type=fact claim이 있도록 claims를 추가하거나 조정하세요.',
+      'Claim repair에는 허용된 claim_type과 impact_level 값만 사용하세요. 직접 HAL contract를 뒷받침하는 근거가 없으면 CameraX/adaptive UI impact는 app_api_or_framework_adjacent로 매핑하세요.',
+      'source_urls가 누락된 경우 section source URL을 재사용하세요. Fact claim은 존재하는 경우 seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, source_extraction evidence ids를 cite하고, evidence id를 만들지 마세요.',
+      'briefing failure는 briefing을 정확히 3개 item으로 고치고 draft의 나머지는 보존하세요.',
+      'Source fact 또는 source material을 만들지 마세요.',
+      'Schema-compliant JSON만 반환하세요.'
     ].join('\n'),
     [
       commonContext,
@@ -1935,13 +1952,13 @@ function buildLockedArticleContext(lockedSections, excludedSections = []) {
   }));
   const excludedSummary = excludedSections.map((section, index) => sectionSummary(section, index));
   return [
-    lockedSections.length > 0 ? 'Passed articles locked from previous quality attempts:' : '',
+    lockedSections.length > 0 ? 'Previous quality attempt에서 locked된 passed articles:' : '',
     lockedSections.length > 0 ? JSON.stringify(lockedSummary, null, 2) : '',
     lockedSections.length > 0 ? '통과한 article은 그대로 유지하세요. formatting consistency 외에는 다시 쓰지 마세요.' : '',
-    excludedSections.length > 0 ? 'Excluded source-gap/demoted articles from previous attempts:' : '',
+    excludedSections.length > 0 ? 'Previous quality attempt에서 excluded된 source-gap/demoted articles:' : '',
     excludedSections.length > 0 ? JSON.stringify(excludedSummary, null, 2) : '',
     excludedSections.length > 0 ? 'excluded URLs, titles, source names, 또는 same source + published_date + similar title과 중복되는 candidate를 선택하거나 article을 생성하지 마세요.' : '',
-    'Generate only missing replacement articles. Avoid duplicate URLs, duplicate or near-identical headlines, and same source + same published_date + similar title.'
+    'Missing replacement article만 생성하세요. Duplicate URL, duplicate 또는 near-identical headline, same source + same published_date + similar title 조합을 피하세요.'
   ].filter(Boolean).join('\n');
 }
 
@@ -2877,11 +2894,11 @@ async function main() {
         'rolling release-note page는 정확한 date, version/release, API/component, behavior change를 evidence_notes에 명명해야만 선택할 수 있습니다.',
         'cross_check_status는 not-required, official-source, cross-checked, needs-cross-check 중 하나여야 합니다.',
         'Candidate-only 또는 requiresCrossCheck lead는 cross_check_status가 official-source 또는 cross-checked가 아니면 선택하지 마세요.',
-        'Fallback SoC/platform, C++, native, toolchain, Linux, and AI items can remain reporter-selected only when they satisfy the reporter-stage evidence and relevance rules.',
-        'Preserve editorial_priority, relevance_bucket, impact_claim_level, aosp_camera_directness, driver_stack_relevance, soc_platform_relevance, native_tooling_relevance, counts_as_* flags, evidence_origin, and source_hint from the capsule/candidate metadata.',
+        'SoC/platform, C++, native, toolchain, Linux, AI fallback item은 reporter-stage evidence와 relevance rule을 만족할 때만 reporter-selected 상태로 남길 수 있습니다.',
+        'capsule/candidate metadata의 editorial_priority, relevance_bucket, impact_claim_level, aosp_camera_directness, driver_stack_relevance, soc_platform_relevance, native_tooling_relevance, counts_as_* flags, evidence_origin, source_hint를 보존하세요.',
         'collected candidate JSON의 imageCandidates를 정확히 보존하세요. image URL을 만들거나, image URL을 다시 쓰거나, image candidate를 추가하지 마세요.',
         lockedSections.length > 0 ? 'retry context에 있는 locked article URLs, titles, sources, source-date-title 조합과 중복되는 candidate를 선택하지 마세요.' : '',
-        'For every candidate, provide these numeric scores:',
+        '모든 candidate에 대해 다음 numeric score를 제공하세요:',
         '- camera_hal_relevance_score: 0-5',
         '- android_camera_relevance_score: 0-5',
         '- practical_actionability_score: 0-5',
@@ -2931,10 +2948,10 @@ async function main() {
         `중복되지 않는 source material이 충분하면 Newsletter Policy range (${articleCountRangeText()}) 안에서 main articles를 작성하세요.`,
         `Final main article count는 ${publishGateCriteriaText()}를 만족해야 합니다.`,
         'final-selected article capsules를 main article inputs로 사용하세요. final_selected=false, finalSelectionEligibility=watchlist/exclude, hasDatedEvidence 없는 isWatchPage=true, main_eligible=false, source_gap_risk=true, briefing_only, reference_only candidate를 main article로 만들지 마세요.',
-        'Use related_context_candidates only inside the selected representative article. Do not create a separate main article from related_context_candidates.',
-        'Use only related_context_candidates with context_usage_allowed=true as supporting context. Do not cite blocked_context_candidates, blocked_context_reference, parent_roundup_context_only, or dedupe_shadow_context as article sources.',
-        'Preserve article_group_key when it is present. A selected group must render one article, or be listed in explicitly_demoted_groups with reason_code in duplicate_or_near_duplicate|forbidden_bucket|explicit_editor_hold, or be listed in hard_blocked_groups with reason_code in source_gap_risk|missing_dated_evidence|blocked_source_quality|fact_check_must_fix|quality_hard_blocker.',
-        'Do not demote source-ready cpp_ai_tooling_fallback native_tooling_workflow groups solely because they are not primary Camera runtime stack articles.',
+        'related_context_candidates는 selected representative article 안에서만 사용하세요. related_context_candidates로 별도 main article을 만들지 마세요.',
+        'context_usage_allowed=true인 related_context_candidates만 supporting context로 사용하세요. blocked_context_candidates, blocked_context_reference, parent_roundup_context_only, dedupe_shadow_context를 article source로 cite하지 마세요.',
+        'article_group_key가 있으면 보존하세요. Selected group은 article 1개로 render하거나, explicitly_demoted_groups에 reason_code=duplicate_or_near_duplicate|forbidden_bucket|explicit_editor_hold 중 하나로 기록하거나, hard_blocked_groups에 reason_code=source_gap_risk|missing_dated_evidence|blocked_source_quality|fact_check_must_fix|quality_hard_blocker 중 하나로 기록해야 합니다.',
+        'source-ready cpp_ai_tooling_fallback native_tooling_workflow group을 primary Camera runtime stack article이 아니라는 이유만으로 demote하지 마세요.',
         linkedEvidencePromptGuardrails(),
         sourceExtractionPromptGuardrails(),
         articleSectionContractPrompt(),
@@ -2944,10 +2961,10 @@ async function main() {
         `우선순위: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. 금지 bucket은 briefing/watchlist로만 남깁니다: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
         'SoC/platform article은 낮은 우선순위 fallback이지만, final-selected 상태이고 Camera framework, HAL, driver, image pipeline 또는 platform performance 관점에서 설명할 수 있으면 공개 CPU/GPU/NPU/ISP/power/thermal/performance 정보를 제외하지 마세요.',
         'AI/C++ articles는 final-selected inputs가 구체적인 native camera, driver, SoC, build/test, debugging, performance, workflow value를 포함할 때만 optional fallback item입니다. generic AI article을 만들거나 억지로 넣지 마세요.',
-        editorRetryContract ? `Editor retry output contract: return the complete editor JSON with exactly ${editorRetryContract.target_section_count} sections.` : '',
-        editorRetryContract ? `The final sections array must include all ${editorRetryContract.locked_section_count} locked section(s) unchanged and ${editorRetryContract.replacement_required_count} replacement/new section(s).` : '',
+        editorRetryContract ? `Editor retry output contract: sections가 정확히 ${editorRetryContract.target_section_count}개인 complete editor JSON을 반환하세요.` : '',
+        editorRetryContract ? `최종 sections array에는 locked section ${editorRetryContract.locked_section_count}개를 변경 없이 포함하고, replacement/new section ${editorRetryContract.replacement_required_count}개를 포함해야 합니다.` : '',
         editorRetryContract ? 'locked section만 반환하면 invalid입니다. sections array는 partial handoff가 아니라 전체 target draft여야 합니다.' : '',
-        lockedSections.length > 0 ? 'Locked articles from previous attempts are already quality-passing. Keep these passed articles unchanged and generate only missing replacement articles inside the complete final sections array.' : '',
+        lockedSections.length > 0 ? 'Previous attempt에서 quality-passing 상태였던 locked article은 그대로 유지하세요. Complete final sections array 안에는 missing replacement article만 새로 생성하세요.' : '',
         lockedSections.length > 0 ? 'locked article URLs, titles/headlines, source names, 또는 같은 source + published date + similar title 조합을 중복하지 마세요.' : '',
         'marketing tone은 피하세요. 모든 article에는 confirmed_facts, background, camera_hal_perspective, action_items, team_summary, sources를 포함하세요.',
         'background는 background-context.json의 background_context를 먼저 사용하세요. 없으면 article capsule의 background_context_static을 사용합니다. raw source UI/table snippet을 background에 복사하지 마세요.',
@@ -3038,12 +3055,14 @@ async function main() {
         articleSectionContractPrompt(),
         publicArticleContractPrompt(),
         articleClaimContractPrompt(),
-        'Flag general AI/C++/SoC news that lacks AOSP Camera, camera driver, SoC platform, or native development interpretation.',
-        'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
-        'Flag C++ tooling action items that do not name the HAL/native owner, target structure or API, experiment or serialization target, and measurable metrics.',
-        'Flag any main article without concrete Action Item content.',
-        'Flag any main article with weak Camera HAL perspective or missing engineering relevance.',
-        'Flag candidate-only or requiresCrossCheck source usage unless the editor explains official-source or cross-checked verification.',
+        factCheckSeverityPrompt(),
+        cameraDeveloperToolingFactCheckPrompt(),
+        'AOSP Camera, camera driver, SoC platform, native development 또는 Camera developer workflow 해석이 전혀 없는 일반 AI/C++/SoC news는 must_fix[]에 넣으세요.',
+        'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
+        'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
+        '구체적인 Action Item content가 없는 main article은 같은 source 안에서 실행 가능한 action을 만들 수 있으면 recommended_fixes[]에 넣고, source가 실무 action을 뒷받침하지 못하면 must_fix[]에 넣으세요.',
+        'Camera HAL perspective가 약하거나 engineering relevance가 빠진 main article은 source-backed 보강이 가능하면 recommended_fixes[]에 넣고, source가 Camera developer relevance를 뒷받침하지 못하면 must_fix[] 또는 source_gaps[]에 넣으세요.',
+        'Editor가 official-source 또는 cross-checked verification을 설명하지 않는 candidate-only 또는 requiresCrossCheck source 사용은 must_fix[]와 source_gaps[]에 모두 기록하세요.',
         'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
         'style rewrite는 하지 마세요. factual errors, source problems, editorial-policy violations에만 집중하세요.',
         'schema와 일치하는 JSON만 반환하세요.'
@@ -3140,8 +3159,8 @@ async function main() {
           'locked/passing section은 이미 gate를 통과했습니다. repair plan에 명시적으로 포함된 경우가 아니면 source URLs, title/headline, source-date-title 조합을 정확히 보존하세요.',
           '각 regenerated section에는 release date, version/release, API/component 또는 library/artifact, concrete behavior change, relevance_bucket, AOSP Camera / driver / SoC / native tooling relevance를 명시하세요.',
           '그 fact를 제공된 candidate/source data에서 확인할 수 없으면 briefing/watchlist로 demote하거나 exclude하세요. 누락된 release evidence를 만들거나 추론하지 마세요.',
-          `Keep main article count within the Newsletter Policy range (${articleCountRangeText()}).`,
-          `Maintain the Newsletter Policy bucket order: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets stay briefing/watchlist only: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
+          `Main article count는 Newsletter Policy range (${articleCountRangeText()}) 안에서 유지하세요.`,
+          `Newsletter Policy bucket order를 유지하세요: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets는 briefing/watchlist로만 유지하세요: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
           'golden example은 article structure와 evidence/actionability style 참고로만 사용하세요. 현재 reporter candidates에 없는 facts는 복사하지 마세요.',
           'schema와 일치하는 JSON만 반환하세요.'
         ].join('\n'),
@@ -3195,10 +3214,12 @@ async function main() {
           articleSectionContractPrompt(),
           publicArticleContractPrompt(),
           articleClaimContractPrompt(),
+          factCheckSeverityPrompt(),
+          cameraDeveloperToolingFactCheckPrompt(),
           'main article에서 release date, version/release, API/component 또는 library/artifact, concrete behavior change, expanded editorial-scope relevance가 누락되면 must_fix로 다루세요.',
           '남아 있는 source gap 또는 main article로 사용된 watchlist/reference page는 must_fix로 다루세요.',
-          'Flag cpp_ai_tooling_fallback articles that imply Android HAL toolchain migration from GCC, C++ standard, or C++ library news instead of framing Android native development as Clang / LLVM / libc++ centric.',
-          'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics를 명명하지 않는 C++ tooling action items는 flag하세요.',
+          'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
+          'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
           'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
           'schema와 일치하는 JSON만 반환하세요.'
         ].join('\n'),
@@ -3286,8 +3307,8 @@ async function main() {
             articleClaimContractPrompt(),
             'exclusion context에 있는 locked, duplicate/rejected, source-gap, ineligible sections를 중복하지 마세요.',
             '각 새 section은 같은 editorial contract인 confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, sources를 만족해야 합니다.',
-            'Each new section must name release date, version/release, API/component or library/artifact, concrete behavior change, relevance_bucket, and AOSP Camera / driver / SoC / native tooling relevance using only supplied candidate metadata/source text.',
-            'Reject duplicate URLs, duplicate titles, and duplicate source-date-title combinations from the exclusion context.',
+            '각 new section은 제공된 candidate metadata/source text만 사용해 release date, version/release, API/component 또는 library/artifact, concrete behavior change, relevance_bucket, AOSP Camera / driver / SoC / native tooling relevance를 명명해야 합니다.',
+            'Exclusion context에 있는 duplicate URL, duplicate title, duplicate source-date-title combination을 거부하세요.',
             'facts를 검증할 수 없으면 해당 candidate로 main article을 만들지 말고 newsletter를 underfilled 상태로 남겨 editor review에 넘기세요.',
             '각 article은 해당 article imageCandidates에서 selectedImage를 최대 하나만 선택하세요. attribution 또는 relevance가 불확실하면 selectedImage는 empty string을 사용하세요.',
             '최종 newsletter text는 한국어로 작성하세요. schema와 일치하는 JSON만 반환하세요.'
@@ -3328,9 +3349,11 @@ async function main() {
             articleSectionContractPrompt(),
             publicArticleContractPrompt(),
             articleClaimContractPrompt(),
-            'added sections가 eligible reporter candidates만 사용하는지, full draft가 Newsletter Policy article composition contract를 만족하는지에 집중하세요.',
-            'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 flag하세요.',
-            'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics를 명명하지 않는 C++ tooling action items는 flag하세요.',
+            factCheckSeverityPrompt(),
+            cameraDeveloperToolingFactCheckPrompt(),
+            'Added section이 eligible reporter candidates만 사용하는지, full draft가 Newsletter Policy article composition contract를 만족하는지에 집중하세요.',
+            'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
+            'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
             'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
             'schema와 일치하는 JSON만 반환하세요.'
           ].join('\n'),

@@ -2,6 +2,10 @@
 
 이 문서는 반복 운영 흐름만 짧게 정리합니다. 전체 pipeline과 gate 계약은 [newsroom-workflow.md](../newsroom-workflow.md)를 기준으로 확인하세요.
 
+## Prompt Reference
+
+- Gemini/LLM prompt 위치와 stage별 목적은 [Newsroom LLM Prompt Reference](./newsroom-llm-prompts.ko.md)를 확인합니다.
+
 ## Manual High-Quality Run
 
 - GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 실행합니다.

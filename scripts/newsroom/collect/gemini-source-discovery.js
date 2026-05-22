@@ -115,13 +115,13 @@ function buildProposalPrompt({ date, manualCandidates = [], sourceRegistry = {} 
   return [
     `Newsletter date: ${date}`,
     '',
-    'You propose discovery intents only. Do not write newsletter articles.',
-    'Return known source URLs only when they are from the provided registry domains or linked evidence domains.',
+    'Discovery intent만 제안하세요. Newsletter article은 작성하지 마세요.',
+    '제공된 registry domain 또는 linked evidence domain의 known source URL만 반환하세요.',
     '',
-    'Manual candidates:',
+    'Manual candidates 요약:',
     JSON.stringify(candidateSummary, null, 2),
     '',
-    'Source registry:',
+    'Source registry 요약:',
     JSON.stringify(registrySummary, null, 2)
   ].join('\n');
 }
@@ -130,7 +130,7 @@ async function buildProposalPayload({ date, manualCandidates, sourceRegistry, bu
   const callImpl = callLlmJsonBudgetedImpl || callGeminiJsonBudgeted;
   return normalizeProposalPayload(await callImpl(
     'sourceDiscovery',
-    'You are a cautious source discovery planner for a Camera HAL SW newsletter. Return JSON only.',
+    '당신은 Camera HAL SW newsletter를 위한 신중한 source discovery planner입니다. JSON만 반환하세요.',
     buildProposalPrompt({ date, manualCandidates, sourceRegistry }),
     proposalResponseSchema(),
     { budget }
