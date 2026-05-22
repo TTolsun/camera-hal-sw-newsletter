@@ -10,96 +10,8 @@
   "article_results": [
     {
       "index": 1,
-      "headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "category": "Camera Driver / Image Pipeline",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "libcamera Release Announcements - libcamera v0.7.1",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": []
-      },
-      "scope_count": {
-        "index": 1,
-        "headline": "libcamera Release Announcements - libcamera v0.7.1",
-        "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-        "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "camera_stack_direct",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "impact_claim_level": "camera_stack_direct",
-      "hard_fail_reasons": [],
-      "soft_deductions": []
-    },
-    {
-      "index": 2,
-      "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "category": "Tooling Watch / Fallback",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-          "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": []
-      },
-      "scope_count": {
-        "index": 2,
-        "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-        "source_candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-        "source_candidate_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": true,
-        "counts_as_supporting_main_article": true,
-        "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "tooling_supporting",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
-      },
-      "impact_claim_level": "tooling_supporting",
-      "hard_fail_reasons": [],
-      "soft_deductions": []
-    },
-    {
-      "index": 3,
-      "headline": "Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
-      "category": "Tooling Watch / Fallback",
+      "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "category": "Tooling Watch / 보조 관찰",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
@@ -110,11 +22,18 @@
       ],
       "section_contract": {
         "complete": true,
-        "missing_keys": []
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
       },
       "scope_count": {
-        "index": 3,
-        "headline": "Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+        "index": 1,
+        "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
         "source_candidate_url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
         "source_candidate_hash": "382cfb94f803783b27e1069e68986054a8fa54ebbce8bbc26972716cb799048b",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -132,85 +51,192 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
       "impact_claim_level": "tooling_supporting",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
       "hard_fail_reasons": [],
       "soft_deductions": []
     }
   ],
-  "metrics": {
-    "article_count": 3,
-    "briefing_count": 3,
-    "camera_article_count": 1,
-    "legacy_regex_camera_article_count": 3,
-    "expanded_scope_article_count": 3,
-    "direct_aosp_camera_count": 0,
-    "camera_driver_image_pipeline_count": 1,
-    "android_platform_camera_adjacent_count": 0,
+  "claim_validation_summary": {
+    "status": "not_available",
+    "bound_claims": null,
+    "total_claims": null,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "unknown",
+    "available_article_count": 0,
+    "not_available_article_count": 1
+  },
+  "claim_results": [],
+  "uncovered_facts": [
+    {
+      "article_index": 1,
+      "article_headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "field": "article_sections.verified_facts[0]",
+      "text": "Phoronix Linux Camera / Media가 Wed, 13 May 2026 09:45:00 -0400에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "field": "article_sections.verified_facts[1]",
+      "text": "관련 컴포넌트: GCC.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "field": "article_sections.verified_facts[2]",
+      "text": "확인된 변경점: GCC 16.1은 GNU Compiler Collection의 최신 주요 기능 릴리스로 공개되었습니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "field": "confirmed_facts[0]",
+      "text": "Phoronix Linux Camera / Media가 Wed, 13 May 2026 09:45:00 -0400에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "field": "confirmed_facts[1]",
+      "text": "관련 컴포넌트: GCC.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "field": "confirmed_facts[2]",
+      "text": "확인된 변경점: GCC 16.1은 GNU Compiler Collection의 최신 주요 기능 릴리스로 공개되었습니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "field": "evidence_summary",
+      "text": "Phoronix Linux Camera / Media source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
+      "reason_code": "missing_matching_fact_claim"
+    }
+  ],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 1,
+    "strong_signal_count": 1,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 1,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 1,
+    "fallback_main_article_count": 1,
+    "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 2,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "native_tooling_workflow": 1,
+      "framework_hal_contract": 1,
+      "driver_image_pipeline": 1,
+      "stream_buffer_metadata": 1,
+      "cts_vts_its_cdd": 1,
+      "camerax_app_compatibility": 1
+    },
+    "actionability_level_counts": {
+      "measurable_test": 1
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 1
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "native_tooling_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Phoronix Linux Camera / Media (tech-media, medium, score 53): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 1,
+    "briefing_count": 3,
+    "camera_article_count": 0,
+    "legacy_regex_camera_article_count": 1,
+    "expanded_scope_article_count": 1,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
     "generic_tech_watchlist_count": 0,
-    "primary_camera_stack_count": 1,
-    "supporting_main_article_count": 2,
+    "primary_camera_stack_count": 0,
+    "supporting_main_article_count": 1,
     "forbidden_main_article_count": 0,
-    "fallback_relevance_count": 2,
-    "publishable_scope_count": 3,
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 1,
     "composition_mode": "FALLBACK_COMPOSITION",
     "section_count_details": [
       {
         "index": 1,
-        "headline": "libcamera Release Announcements - libcamera v0.7.1",
-        "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-        "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "camera_stack_direct",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      {
-        "index": 2,
-        "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-        "source_candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-        "source_candidate_hash": "8635e5e9a3557c0d7ef221ab1430d7d230d0dcd046ff4a4cc10b619786ea2198",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": true,
-        "counts_as_supporting_main_article": true,
-        "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "tooling_supporting",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
-      },
-      {
-        "index": 3,
-        "headline": "Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+        "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
         "source_candidate_url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
         "source_candidate_hash": "382cfb94f803783b27e1069e68986054a8fa54ebbce8bbc26972716cb799048b",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -228,17 +254,20 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       }
     ],
     "relevance_bucket_counts": {
       "direct_aosp_camera": 0,
-      "camera_driver_image_pipeline": 1,
+      "camera_driver_image_pipeline": 0,
       "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 2,
+      "cpp_ai_tooling_fallback": 1,
       "generic_tech_watchlist": 0
     },
     "ai_article_count": 0,
@@ -254,12 +283,12 @@
     "hard_fail_count": 0,
     "soft_deduction_count": 0,
     "article_gate_counts": {
-      "PASS": 3,
+      "PASS": 1,
       "DEMOTE": 0,
       "FAIL": 0
     },
     "article_section_contract": {
-      "complete_count": 3,
+      "complete_count": 1,
       "incomplete_count": 0,
       "missing_key_counts": {
         "verified_facts": 0,
@@ -268,35 +297,117 @@
         "action_items": 0,
         "team_share_points": 0
       },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 1
+      },
       "summaries": [
         {
           "complete": true,
-          "missing_keys": []
-        },
-        {
-          "complete": true,
-          "missing_keys": []
-        },
-        {
-          "complete": true,
-          "missing_keys": []
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
         }
       ]
     },
+    "claim_validation_summary": {
+      "status": "not_available",
+      "bound_claims": null,
+      "total_claims": null,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "unknown",
+      "available_article_count": 0,
+      "not_available_article_count": 1
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 7,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 1,
+      "strong_signal_count": 1,
+      "usable_signal_count": 0,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 1,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_concrete_action": 1,
+      "fallback_main_article_count": 1,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "native_tooling_workflow": 1,
+        "framework_hal_contract": 1,
+        "driver_image_pipeline": 1,
+        "stream_buffer_metadata": 1,
+        "cts_vts_its_cdd": 1,
+        "camerax_app_compatibility": 1
+      },
+      "actionability_level_counts": {
+        "measurable_test": 1
+      },
+      "effective_actionability_level_counts": {
+        "measurable_test": 1
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+        "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow",
+          "framework_hal_contract",
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "cts_vts_its_cdd",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner",
+          "camera_test_owner",
+          "native_tooling_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Phoronix Linux Camera / Media (tech-media, medium, score 53): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+          "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+          "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
+        ],
+        "soc_signal_type": "",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
     "top_deduction_categories": [],
     "candidate_exclusion_summary": []
-  },
-  "fallback_public_issue": true,
-  "fallback_public_issue_reason": "Public newsletter files were generated by fallback public issue builder after automatic publish gate failed.",
-  "review_publication_ready_reason": "Public newsletter files were generated by fallback public issue builder after automatic publish gate failed.",
-  "editor_review_reason": "AI automatic publish gate did not pass; editor review is required before merge publication.",
-  "original_fact_check_status": "PASS",
-  "original_must_fix_count": 0,
-  "original_source_gap_count": 0,
-  "fallback_public_issue_removed_blockers": false,
-  "fallback_public_issue_removed_article_count": 0,
-  "demoted_articles": [],
-  "fallback_articles": [],
-  "original_quality_status": "PASS",
-  "original_quality_score": 100
+  }
 }

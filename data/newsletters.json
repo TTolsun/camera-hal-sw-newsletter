@@ -2,7 +2,7 @@
   {
     "date": "2026-05-22",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-22",
-    "summary": "이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+    "summary": "이번 2026-05-22호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 2개 기사(8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O, Android Native Tooling: Build native Android apps in Google AI Studio)를 source-backed 내용으로 보강했습니다.",
     "html": "newsletters/2026-05-22/index.html",
     "md": "newsletters/2026-05-22/newsletter.md",
     "tags": [
@@ -17,7 +17,7 @@
   {
     "date": "2026-05-21",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-21",
-    "summary": "이번 2026-05-21호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+    "summary": "이번 2026-05-21호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 1개 기사(libcamera Release Announcements - libcamera v0.7.1)를 source-backed 내용으로 보강했습니다.",
     "html": "newsletters/2026-05-21/index.html",
     "md": "newsletters/2026-05-21/newsletter.md",
     "tags": [
@@ -27,135 +27,100 @@
     "publication_mode": "review_only",
     "homepage_visibility": "normal",
     "fallback_only": false,
-    "camera_anchor_count": 3
+    "camera_anchor_count": 1
   },
   {
     "date": "2026-05-20",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-20",
-    "summary": "이번 2026-05-20호는 libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트, GCC 16.1 릴리스: C++20 기본값 전환과 C++26 기능 확장, Glaze 7.2: C++26 Reflection 기반 직렬화 지원 확대를 중심으로 Camera HAL / Driver / Native tooling 독자가 확인할 만한 내용을 정리했습니다.",
+    "summary": "이번 2026-05-20호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 2개 기사(GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more)를 source-backed 내용으로 보강했습니다.",
     "html": "newsletters/2026-05-20/index.html",
     "md": "newsletters/2026-05-20/newsletter.md",
     "tags": [
-      "Camera HAL",
+      "Fallback Edition",
+      "Tooling Watch",
       "Android"
-    ]
-  },
-  {
-    "date": "2026-05-16",
-    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-16",
-    "summary": "이번 2026-05-16호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more를 중심으로 구성했습니다. 정상 후보가 부족한 영역은 2개의 Fallback/Watch 기사로 채웠고 HAL 직접 변경으로 표현하지 않았습니다.",
-    "html": "newsletters/2026-05-16/index.html",
-    "md": "newsletters/2026-05-16/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android"
-    ]
+    ],
+    "publication_mode": "fallback_public",
+    "homepage_visibility": "visible_with_fallback_badge",
+    "fallback_only": true,
+    "camera_anchor_count": 0,
+    "homepage_badge": "Fallback Edition"
   },
   {
     "date": "2026-05-15",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-15",
-    "summary": "이번 2026-05-15호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch / Fallback: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22를 중심으로 구성했습니다.",
+    "summary": "이번 2026-05-15호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 source-backed 내용으로 보강했습니다.",
     "html": "newsletters/2026-05-15/index.html",
     "md": "newsletters/2026-05-15/newsletter.md",
     "tags": [
-      "Camera HAL",
+      "Fallback Edition",
+      "Tooling Watch",
       "Android"
-    ]
-  },
-  {
-    "date": "2026-05-13",
-    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-13",
-    "summary": "이번 2026-05-13호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more를 중심으로 구성했습니다.",
-    "html": "newsletters/2026-05-13/index.html",
-    "md": "newsletters/2026-05-13/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android"
-    ]
+    ],
+    "publication_mode": "fallback_public",
+    "homepage_visibility": "visible_with_fallback_badge",
+    "fallback_only": true,
+    "camera_anchor_count": 0,
+    "homepage_badge": "Fallback Edition"
   },
   {
     "date": "2026-05-12",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-12",
-    "summary": "이번 2026-05-12호는 libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰, CameraX 1.4.0-alpha07 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다. hard failure article 1개는 main article에서 제거하거나 강등했습니다.",
+    "summary": "이번 2026-05-12호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 source-backed 내용으로 보강했습니다.",
     "html": "newsletters/2026-05-12/index.html",
     "md": "newsletters/2026-05-12/newsletter.md",
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "publication_mode": "review_only",
+    "homepage_visibility": "normal",
+    "fallback_only": false,
+    "camera_anchor_count": 1
   },
   {
     "date": "2026-05-11",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-11",
-    "summary": "이번 2026-05-11호는 CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경, libcamera Release Announcements - libcamera v0.7.1, CameraX 1.6.1 업데이트: Android Camera 호환성 관찰를 중심으로 구성했습니다. hard failure article 1개는 main article에서 제거하거나 강등했습니다.",
+    "summary": "이번 2026-05-11호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 source-backed 내용으로 보강했습니다.",
     "html": "newsletters/2026-05-11/index.html",
     "md": "newsletters/2026-05-11/newsletter.md",
     "tags": [
       "Camera HAL",
       "Android"
-    ]
-  },
-  {
-    "date": "2026-05-10",
-    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-10",
-    "summary": "이번 2026-05-10호는 review-only fallback publication입니다. 독립 camera-stack evidence가 있는 main article은 CameraX 관찰 기사와 libcamera v0.7.1 기사 2개뿐이라 정책상 최소 3개 main article을 채우지 못했습니다. 편집장 승인 시 public newsletter로 게시되며, 자동 발행 기준은 통과하지 못했습니다.",
-    "html": "newsletters/2026-05-10/index.html",
-    "md": "newsletters/2026-05-10/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android"
-    ]
-  },
-  {
-    "date": "2026-05-09",
-    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-09",
-    "summary": "이번 2026-05-09호는 libcamera v0.7.1 출시: SoftISP 및 파이프라인 처리량 개선, CameraX 1.4.0-alpha07 출시: viewfinder 및 video 모듈 업데이트, Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more를 중심으로 구성했습니다. 정상 후보가 부족한 영역은 1개의 Fallback/Watch 기사로 채웠고 HAL 직접 변경으로 표현하지 않았습니다. hard failure article 1개는 main article에서 제거하거나 강등했습니다.",
-    "html": "newsletters/2026-05-09/index.html",
-    "md": "newsletters/2026-05-09/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android",
-      "C++",
-      "AI"
-    ]
-  },
-  {
-    "date": "2026-05-08",
-    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-08",
-    "summary": "이번 호는 2026년 5월 6일 Android Developers CameraX 릴리스 노트와 2026년 4월 28일 libcamera v0.7.1 릴리스 공지를 기준으로 Camera HAL 팀이 확인할 수 있는 항목만 정리합니다. CameraX 항목은 앱 계층 호환성 관찰 대상으로, libcamera 항목은 Linux camera driver / image pipeline 검토 대상으로 분리했습니다.",
-    "html": "newsletters/2026-05-08/index.html",
-    "md": "newsletters/2026-05-08/newsletter.md",
-    "tags": [
-      "Camera HAL",
-      "Android",
-      "C++",
-      "AI"
-    ]
+    ],
+    "publication_mode": "review_only",
+    "homepage_visibility": "normal",
+    "fallback_only": false,
+    "camera_anchor_count": 1
   },
   {
     "date": "2026-05-07",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-07",
-    "summary": "이번 주 뉴스레터는 libcamera v0.7.1 릴리스의 주요 변경 사항에 초점을 맞춥니다. Raspberry Pi의 Atomic control lists 개선, 파이프라인 핸들러 및 센서 구성 업데이트, SoftISP 디베이어링 및 처리량 개선 등 Linux 카메라 드라이버 스택의 핵심 업데이트가 포함되어 있습니다. 또한, Glaze 7.2의 C++26 Reflection 지원은 Android native 개발이 Clang / LLVM / libc++ 중심이라는 전제 아래 Camera HAL 메타데이터 직렬화 PoC 후보로만 검토할 수 있습니다.",
+    "summary": "이번 2026-05-07호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 2개 기사(libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트, libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선)를 source-backed 내용으로 보강했습니다.",
     "html": "newsletters/2026-05-07/index.html",
     "md": "newsletters/2026-05-07/newsletter.md",
     "tags": [
       "Camera HAL",
-      "Android",
-      "C++",
-      "AI"
-    ]
+      "Android"
+    ],
+    "publication_mode": "review_only",
+    "homepage_visibility": "normal",
+    "fallback_only": false,
+    "camera_anchor_count": 2
   },
   {
     "date": "2026-05-05",
     "title": "Camera HAL SW 뉴스레터 - 2026-05-05",
-    "summary": "이번 주 뉴스레터에서는 Android의 하이브리드 AI 추론 및 Gemini 모델 지원, C++26의 assert() 매크로 개선, Claude Code AI 에이전트 업데이트, 그리고 2026년 5월 Android 보안 게시판 발행 소식을 다룹니다. 이 변화들은 Camera HAL의 이미지 데이터 처리, 디버깅 효율성, AI 워크플로우 통합, 보안 취약점 관리에 직접적인 점검 항목을 제공합니다.",
+    "summary": "이번 2026-05-05호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 4개 기사(Claude Code 2.1.128: Camera HAL workflow review 범위, 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위, Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위, C++26 assert(): Camera HAL debug-build 검토 범위)를 source-backed 내용으로 보강했습니다.",
     "html": "newsletters/2026-05-05/index.html",
     "md": "newsletters/2026-05-05/newsletter.md",
     "tags": [
       "Camera HAL",
-      "Android",
-      "C++",
-      "AI"
-    ]
+      "Android"
+    ],
+    "publication_mode": "review_only",
+    "homepage_visibility": "normal",
+    "fallback_only": false,
+    "camera_anchor_count": 2
   }
 ]

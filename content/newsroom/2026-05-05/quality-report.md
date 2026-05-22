@@ -2,11 +2,22 @@
 
 ## Gate Result
 
-- Quality score: 100
+- Quality score: 92
 - Quality threshold: 85
 - Max score: 100
-- Result: PASS
-- Summary: Quality score 100, threshold 85, max score 100. Editor review is ready.
+- Result: NEEDS_FIX
+- Summary: Quality score 92, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
+
+## Publication Mode
+
+- publication_mode: n/a
+- homepage_visibility: n/a
+- content_quality_score: 92
+- camera_relevance_score: n/a
+- publication_mode_decision: n/a
+- fallback_only: false
+- camera_anchor_count: n/a
+- fallback_public_ready: false
 
 ## Composition
 
@@ -18,6 +29,7 @@
 - direct_aosp_camera count: 0
 - camera_driver_image_pipeline count: 0
 - android_platform_camera_adjacent count: 1
+- android_multimedia_camera_output count: 0
 - soc_platform_signal count: 1
 - cpp_ai_tooling_fallback count: 2
 - generic_tech_watchlist count: 0
@@ -26,9 +38,9 @@
 - forbidden_main_article_count: 0
 - fallback_relevance_count: 3
 - publishable_scope_count: 4
-- composition_mode: FALLBACK_COMPOSITION
-- Newsletter Policy gate: main articles: 3-5; review gate primary camera stack articles: 1; Publish-ready gate primary camera stack articles: 2; Publish-ready gate direct AOSP Camera or driver/image pipeline articles: 1; Publish-ready gate supporting main articles max: 1; forbidden main buckets: generic_tech_watchlist; quality threshold: 85
-- Relevance bucket counts: {"direct_aosp_camera":0,"camera_driver_image_pipeline":0,"android_platform_camera_adjacent":1,"soc_platform_signal":1,"cpp_ai_tooling_fallback":2,"generic_tech_watchlist":0}
+- composition_mode: NEEDS_FIX
+- Newsletter Policy gate: main articles: 1-5; review gate primary camera stack articles: disabled; Publish-ready gate primary camera stack articles: disabled; Publish-ready gate direct AOSP Camera or driver/image pipeline articles: disabled; Publish-ready gate supporting main articles max: 1; forbidden main buckets: generic_tech_watchlist; quality threshold: 85
+- Relevance bucket counts: {"direct_aosp_camera":0,"camera_driver_image_pipeline":0,"android_platform_camera_adjacent":1,"android_multimedia_camera_output":0,"soc_platform_signal":1,"cpp_ai_tooling_fallback":2,"generic_tech_watchlist":0}
 - AI article count: 2
 - Underfilled/composition failure: none
 
@@ -64,9 +76,9 @@
 - Stale claim removals: 0
 - Stale claim hard failures: 0
 - Source integrity violation count: 0
-- Blocking deduction count: 0
-- Blocking deduction categories: none
-- Hard fail count: 0
+- Blocking deduction count: 1
+- Blocking deduction categories: composition
+- Hard fail count: 1
 - Soft deduction count: 0
 
 ## Claim Binding
@@ -117,14 +129,14 @@
 
 | # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
 | ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | PASS | preserve | Claude Code 2.1.128: Camera HAL workflow review 범위 | cpp_ai_tooling_fallback | 5 | false | false | false | true | true | bound | shortlist_selected | merged | none | cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count. | Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic. | none | none |
-| 2 | PASS | preserve | 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위 | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | none | none |
-| 3 | PASS | preserve | Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위 | soc_platform_signal | 4 | false | false | true | false | true | bound | shortlist_selected | merged | none | soc_platform_signal counts toward supporting_main_article_count, not primary_camera_stack_count. | Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic. | none | none |
-| 4 | PASS | preserve | C++26 assert(): Camera HAL debug-build 검토 범위 | cpp_ai_tooling_fallback | 5 | false | false | false | true | true | bound | shortlist_selected | merged | none | cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count. | Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic. | none | none |
+| 1 | PASS | preserve | Claude Code 2.1.128: Camera HAL workflow review 범위 | cpp_ai_tooling_fallback | 5 | false | false | false | true | true | bound | shortlist_selected | merged | multimedia_camera_output_relevance | cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count. | Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic. | none | none |
+| 2 | PASS | preserve | 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위 | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | multimedia_camera_output_relevance | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | none | none |
+| 3 | PASS | preserve | Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위 | soc_platform_signal | 4 | false | false | true | false | true | bound | shortlist_selected | merged | multimedia_camera_output_relevance | soc_platform_signal counts toward supporting_main_article_count, not primary_camera_stack_count. | Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic. | none | none |
+| 4 | PASS | preserve | C++26 assert(): Camera HAL debug-build 검토 범위 | cpp_ai_tooling_fallback | 5 | false | false | false | true | true | bound | shortlist_selected | merged | multimedia_camera_output_relevance | cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count. | Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic. | none | none |
 
 ## Hard Fails
 
-- none
+- 8 pt [composition] Supporting main article count 3 exceeds publish-ready policy maximum (1).
 
 ## Soft Deductions
 
@@ -132,7 +144,7 @@
 
 ## Top Deduction Categories
 
-- none
+- composition (1)
 
 ## Candidate Exclusion Summary
 
@@ -140,4 +152,4 @@
 
 ## Deductions
 
-- none
+- 8 pt [composition] Supporting main article count 3 exceeds publish-ready policy maximum (1).

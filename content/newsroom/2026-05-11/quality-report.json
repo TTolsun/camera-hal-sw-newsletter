@@ -10,124 +10,6 @@
   "article_results": [
     {
       "index": 1,
-      "headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-      "category": "android_platform_camera_adjacent",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "1.4.0-alpha07",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [
-          "do_not_claim"
-        ],
-        "unexpected_keys": [],
-        "has_limitations": false,
-        "has_watch_items": false,
-        "has_do_not_claim": true,
-        "limitation_visibility": "guardrail-only"
-      },
-      "scope_count": {
-        "index": 1,
-        "headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-        "source_candidate_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
-        "relevance_bucket": "android_platform_camera_adjacent",
-        "editorial_priority": 3,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "adjacent_signal",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "impact_claim_level": "adjacent_signal",
-      "hal_impact_axes": [
-        "camerax_app_compatibility",
-        "framework_hal_contract"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": []
-    },
-    {
-      "index": 2,
-      "headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "category": "Camera Driver / Image Pipeline",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "libcamera Release Announcements - libcamera v0.7.1",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [
-          "do_not_claim"
-        ],
-        "unexpected_keys": [],
-        "has_limitations": false,
-        "has_watch_items": false,
-        "has_do_not_claim": true,
-        "limitation_visibility": "guardrail-only"
-      },
-      "scope_count": {
-        "index": 2,
-        "headline": "libcamera Release Announcements - libcamera v0.7.1",
-        "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-        "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "adjacent_signal",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "impact_claim_level": "adjacent_signal",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": []
-    },
-    {
-      "index": 3,
       "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "category": "Android Platform / CameraX",
       "status": "PASS",
@@ -152,7 +34,7 @@
         "limitation_visibility": "guardrail-only"
       },
       "scope_count": {
-        "index": 3,
+        "index": 1,
         "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
         "source_candidate_url": "https://developer.android.com/latest-updates",
         "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
@@ -171,7 +53,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       },
@@ -188,356 +72,16 @@
   ],
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 15,
-    "total_claims": 15,
+    "bound_claims": 5,
+    "total_claims": 5,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
-    "available_article_count": 3,
+    "available_article_count": 1,
     "not_available_article_count": 0
   },
   "claim_results": [
     {
       "article_index": 1,
-      "article_headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-      "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-1",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "app_api_or_framework_adjacent",
-      "overclaim_risk": "low",
-      "text": "2026년 5월 6일, CameraX 라이브러리 1.4.0-alpha07이 릴리스되었습니다.",
-      "evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-1"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-1"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-1",
-          "resolved_evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-1",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 1,
-      "article_headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-      "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-2",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "app_api_or_framework_adjacent",
-      "overclaim_risk": "low",
-      "text": "viewfinder artifact가 1.4.0-alpha07 line으로 업데이트되었습니다.",
-      "evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-2"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-2"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-2",
-          "resolved_evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-2",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 1,
-      "article_headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-      "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-3",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "app_api_or_framework_adjacent",
-      "overclaim_risk": "low",
-      "text": "video artifact가 1.7.0-alpha01 line으로 업데이트되었습니다.",
-      "evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-3"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-3"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-3",
-          "resolved_evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-3",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 1,
-      "article_headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-      "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-4",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "app_api_or_framework_adjacent",
-      "overclaim_risk": "low",
-      "text": "Android Developers Latest Updates 페이지에서 2026년 5월 6일자 CameraX release note의 viewfinder/video artifact version update가 확인되었습니다.",
-      "evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-4"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-4"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-4",
-          "resolved_evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-4",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 1,
-      "article_headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-      "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-5",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "app_api_or_framework_adjacent",
-      "overclaim_risk": "low",
-      "text": "2026년 5월 6일 CameraX release note는 viewfinder 및 video artifacts의 version update를 나열했습니다.",
-      "evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-5"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-5"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-5",
-          "resolved_evidence_id": "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-5",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-1",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "libcamera Release Announcements의 2026-04-28 항목입니다.",
-      "evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-1"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-1"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-1",
-          "resolved_evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-1",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-2",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "관련 컴포넌트: libcamera / V4L2 camera pipeline",
-      "evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-2"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-2"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-2",
-          "resolved_evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-2",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-3",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-      "evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-3"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-3"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-3",
-          "resolved_evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-3",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-4",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "libcamera Release Announcements의 dated evidence와 후보 정보를 기준으로 구성했습니다.",
-      "evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-4"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-4"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-4",
-          "resolved_evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-4",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-5",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-      "evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-5"
-      ],
-      "resolved_evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-5"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-5",
-          "resolved_evidence_id": "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-5",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 3,
       "article_headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "claim_id": "camerax-1-6-1-android-camera-fact-1",
       "claim_type": "fact",
@@ -571,7 +115,7 @@
       "issues": []
     },
     {
-      "article_index": 3,
+      "article_index": 1,
       "article_headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "claim_id": "camerax-1-6-1-android-camera-fact-2",
       "claim_type": "fact",
@@ -605,7 +149,7 @@
       "issues": []
     },
     {
-      "article_index": 3,
+      "article_index": 1,
       "article_headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "claim_id": "camerax-1-6-1-android-camera-fact-3",
       "claim_type": "fact",
@@ -639,7 +183,7 @@
       "issues": []
     },
     {
-      "article_index": 3,
+      "article_index": 1,
       "article_headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "claim_id": "camerax-1-6-1-android-camera-fact-4",
       "claim_type": "fact",
@@ -673,7 +217,7 @@
       "issues": []
     },
     {
-      "article_index": 3,
+      "article_index": 1,
       "article_headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "claim_id": "camerax-1-6-1-android-camera-fact-5",
       "claim_type": "fact",
@@ -710,104 +254,39 @@
   "uncovered_facts": [],
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 3,
-    "strong_signal_count": 3,
+    "main_article_count": 1,
+    "strong_signal_count": 1,
     "usable_signal_count": 0,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
-    "article_count_with_hal_signal_capsule": 3,
+    "article_count_with_hal_signal_capsule": 1,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 3,
-    "main_articles_with_concrete_action": 3,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 1,
     "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "generic_signal_hard_blocker_count": 0,
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "camerax_app_compatibility": 2,
-      "framework_hal_contract": 2,
-      "driver_image_pipeline": 1,
-      "stream_buffer_metadata": 1
+      "camerax_app_compatibility": 1,
+      "framework_hal_contract": 1
     },
     "actionability_level_counts": {
-      "owner_metric_log": 3
+      "owner_metric_log": 1
     },
     "effective_actionability_level_counts": {
-      "owner_metric_log": 3
+      "owner_metric_log": 1
     },
     "signal_quality_status_counts": {
-      "strong_signal": 3
+      "strong_signal": 1
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "relevance_bucket": "android_platform_camera_adjacent",
-      "hal_impact_axes": [
-        "camerax_app_compatibility",
-        "framework_hal_contract"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_test_owner"
-      ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 6,
-      "fallback_promotion_allowed": false,
-      "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Keep CameraX viewfinder or video artifact updates as app/framework compatibility signals unless downstream evidence exists."
-      ],
-      "soc_signal_type": "",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 2,
-      "title": "libcamera Release Announcements - libcamera v0.7.1",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_test_owner"
-      ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 6,
-      "fallback_promotion_allowed": false,
-      "fallback_promotion_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Keep upstream libcamera changes within driver/image-pipeline review scope unless downstream integration evidence exists."
-      ],
-      "soc_signal_type": "isp_image_pipeline",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 3,
       "title": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "url": "https://developer.android.com/latest-updates",
       "relevance_bucket": "android_platform_camera_adjacent",
@@ -840,74 +319,27 @@
     }
   ],
   "metrics": {
-    "article_count": 3,
+    "article_count": 1,
     "briefing_count": 3,
-    "camera_article_count": 3,
-    "legacy_regex_camera_article_count": 3,
-    "expanded_scope_article_count": 3,
+    "camera_article_count": 1,
+    "legacy_regex_camera_article_count": 1,
+    "expanded_scope_article_count": 1,
     "direct_aosp_camera_count": 0,
-    "camera_driver_image_pipeline_count": 1,
-    "android_platform_camera_adjacent_count": 2,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "cpp_ai_tooling_fallback_count": 0,
     "generic_tech_watchlist_count": 0,
-    "primary_camera_stack_count": 3,
+    "primary_camera_stack_count": 1,
     "supporting_main_article_count": 0,
     "forbidden_main_article_count": 0,
     "fallback_relevance_count": 0,
-    "publishable_scope_count": 3,
+    "publishable_scope_count": 1,
     "composition_mode": "NORMAL",
     "section_count_details": [
       {
         "index": 1,
-        "headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-        "source_candidate_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
-        "relevance_bucket": "android_platform_camera_adjacent",
-        "editorial_priority": 3,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "adjacent_signal",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      {
-        "index": 2,
-        "headline": "libcamera Release Announcements - libcamera v0.7.1",
-        "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-        "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "adjacent_signal",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      {
-        "index": 3,
         "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
         "source_candidate_url": "https://developer.android.com/latest-updates",
         "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
@@ -926,15 +358,18 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       }
     ],
     "relevance_bucket_counts": {
       "direct_aosp_camera": 0,
-      "camera_driver_image_pipeline": 1,
-      "android_platform_camera_adjacent": 2,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
       "cpp_ai_tooling_fallback": 0,
       "generic_tech_watchlist": 0
@@ -952,12 +387,12 @@
     "hard_fail_count": 0,
     "soft_deduction_count": 0,
     "article_gate_counts": {
-      "PASS": 3,
+      "PASS": 1,
       "DEMOTE": 0,
       "FAIL": 0
     },
     "article_section_contract": {
-      "complete_count": 3,
+      "complete_count": 1,
       "incomplete_count": 0,
       "missing_key_counts": {
         "verified_facts": 0,
@@ -967,38 +402,12 @@
         "team_share_points": 0
       },
       "optional_key_counts": {
-        "do_not_claim": 3
+        "do_not_claim": 1
       },
       "limitation_visibility_counts": {
-        "guardrail-only": 3
+        "guardrail-only": 1
       },
       "summaries": [
-        {
-          "complete": true,
-          "missing_keys": [],
-          "missing_required_keys": [],
-          "present_optional_keys": [
-            "do_not_claim"
-          ],
-          "unexpected_keys": [],
-          "has_limitations": false,
-          "has_watch_items": false,
-          "has_do_not_claim": true,
-          "limitation_visibility": "guardrail-only"
-        },
-        {
-          "complete": true,
-          "missing_keys": [],
-          "missing_required_keys": [],
-          "present_optional_keys": [
-            "do_not_claim"
-          ],
-          "unexpected_keys": [],
-          "has_limitations": false,
-          "has_watch_items": false,
-          "has_do_not_claim": true,
-          "limitation_visibility": "guardrail-only"
-        },
         {
           "complete": true,
           "missing_keys": [],
@@ -1016,115 +425,50 @@
     },
     "claim_validation_summary": {
       "status": "available",
-      "bound_claims": 15,
-      "total_claims": 15,
+      "bound_claims": 5,
+      "total_claims": 5,
       "derived_evidence_mapping_count": 0,
       "overclaim_risk": "low",
-      "available_article_count": 3,
+      "available_article_count": 1,
       "not_available_article_count": 0
     },
     "derived_evidence_mapping_count": 0,
     "uncovered_fact_count": 0,
     "hal_signal_quality_summary": {
       "schema_version": 1,
-      "main_article_count": 3,
-      "strong_signal_count": 3,
+      "main_article_count": 1,
+      "strong_signal_count": 1,
       "usable_signal_count": 0,
       "weak_signal_count": 0,
       "watchlist_only_count": 0,
       "blocked_source_gap_count": 0,
-      "article_count_with_hal_signal_capsule": 3,
+      "article_count_with_hal_signal_capsule": 1,
       "article_count_without_hal_signal_capsule": 0,
-      "main_articles_with_owner_metric_log": 3,
-      "main_articles_with_concrete_action": 3,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 1,
       "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
       "soc_platform_signal_count": 0,
       "generic_signal_hard_blocker_count": 0,
       "hal_signal_hard_blocker_count": 0,
       "hard_blocker_reason_code_counts": {},
       "hal_impact_axis_counts": {
-        "camerax_app_compatibility": 2,
-        "framework_hal_contract": 2,
-        "driver_image_pipeline": 1,
-        "stream_buffer_metadata": 1
+        "camerax_app_compatibility": 1,
+        "framework_hal_contract": 1
       },
       "actionability_level_counts": {
-        "owner_metric_log": 3
+        "owner_metric_log": 1
       },
       "effective_actionability_level_counts": {
-        "owner_metric_log": 3
+        "owner_metric_log": 1
       },
       "signal_quality_status_counts": {
-        "strong_signal": 3
+        "strong_signal": 1
       }
     },
     "main_article_signal_checks": [
       {
         "index": 1,
-        "title": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-        "relevance_bucket": "android_platform_camera_adjacent",
-        "hal_impact_axes": [
-          "camerax_app_compatibility",
-          "framework_hal_contract"
-        ],
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_test_owner"
-        ],
-        "actionability_level": "owner_metric_log",
-        "effective_actionability_level": "owner_metric_log",
-        "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 6,
-        "fallback_promotion_allowed": false,
-        "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 3 article-level signal(s) from article_text.)",
-        "fallback_guard_notes": [
-          "Keep CameraX viewfinder or video artifact updates as app/framework compatibility signals unless downstream evidence exists."
-        ],
-        "soc_signal_type": "",
-        "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "",
-        "has_hal_signal_capsule": true,
-        "hal_signal_capsule_complete": true,
-        "hal_signal_capsule_missing_keys": [],
-        "hard_blockers": [],
-        "hard_blocker_reason_codes": []
-      },
-      {
-        "index": 2,
-        "title": "libcamera Release Announcements - libcamera v0.7.1",
-        "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "hal_impact_axes": [
-          "driver_image_pipeline",
-          "stream_buffer_metadata"
-        ],
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_test_owner"
-        ],
-        "actionability_level": "owner_metric_log",
-        "effective_actionability_level": "owner_metric_log",
-        "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 6,
-        "fallback_promotion_allowed": false,
-        "fallback_promotion_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)",
-        "fallback_guard_notes": [
-          "Keep upstream libcamera changes within driver/image-pipeline review scope unless downstream integration evidence exists."
-        ],
-        "soc_signal_type": "isp_image_pipeline",
-        "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "",
-        "has_hal_signal_capsule": true,
-        "hal_signal_capsule_complete": true,
-        "hal_signal_capsule_missing_keys": [],
-        "hard_blockers": [],
-        "hard_blocker_reason_codes": []
-      },
-      {
-        "index": 3,
         "title": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
         "url": "https://developer.android.com/latest-updates",
         "relevance_bucket": "android_platform_camera_adjacent",

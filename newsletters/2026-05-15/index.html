@@ -27,8 +27,8 @@
           <span class="issue-date">2026-05-15</span>
         </div>
         <h1>Camera HAL SW Newsletter</h1>
-        <p class="subtitle">이번 2026-05-15호는 libcamera Release Announcements - libcamera v0.7.1, Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22를 중심으로 구성했습니다.</p>
-        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+        <p class="subtitle">이번 2026-05-15호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 source-backed 내용으로 보강했습니다.</p>
+        <div class="tag-row issue-tags"><span class="tag">Fallback Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span></div>
         <div class="actions newsletter-actions issue-actions">
           <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
           <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
@@ -36,73 +36,39 @@
       </header>
 
       <div class="publication-notice" role="note">
-          <p>편집자 검토 후 공개 가능한 검토 발행본입니다.</p>
-          <p>이 호는 자동 정상 발행 기준을 통과하지 못했으며, 편집자 확인 후 merge해야 합니다.</p>
-          <p>각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.</p>
+          <p>Fallback Edition: C++ / Tooling Watch</p>
+          <p>이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 fallback issue로 발행되었습니다.</p>
+          <p>Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.</p>
         </div>
 
       <section class="section issue-briefing">
         <h2>1. 이번 주 3줄 브리핑</h2>
         <div class="card">
-          <ul><li>공식 source 기반 후보를 우선 검토했습니다.</li><li>차단 이슈 article은 main article에서 제거하거나 watch 성격으로 강등했습니다.</li><li>보조 관찰 article은 HAL 직접 변경이 아니라 관찰 항목으로 표시했습니다.</li></ul>
+          <ul><li>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 기준으로 중복 issue에 흩어진 내용을 합쳐 Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 항목을 다시 정리했습니다.</li><li>중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다.</li><li>중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다.</li></ul>
         </div>
       </section>
 
       <section class="section">
-        <h2>2. libcamera Release Announcements - libcamera v0.7.1</h2>
-        <div class="card issue-section article-card has-fallback-image camera-hal">
-          <div class="article-media article-fallback-visual article-fallback-camera-hal" role="img" aria-label="Camera Driver / Image Pipeline">
-            <span></span>
-          </div>
-          
-          <h3>libcamera Release Announcements - libcamera v0.7.1</h3>
-          <p class="article-lead">Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.</p>
-          <p>Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.</p>
-          <p>Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.</p>
-          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.</li></ul></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html">libcamera Release Announcements - libcamera v0.7.1</a></li></ul></div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>3. GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</h2>
-        <div class="card issue-section article-card has-fallback-image tooling-watch">
-          <div class="article-media article-fallback-visual article-fallback-tooling-watch" role="img" aria-label="Tooling Watch / 보조 관찰">
-            <span></span>
-          </div>
-          
-          <h3>GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</h3>
-          <p class="article-lead">GCC 16.1 has been released!</p>
-          <p>Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.</p>
-          <p>build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.</p>
-          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.</li></ul></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li></ul></div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>4. GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h2>
+        <h2>2. Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h2>
         <div class="card issue-section article-card has-image tooling-watch">
           <figure class="article-media">
             <img class="article-image" src="https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1" alt="Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22" loading="lazy" decoding="async">
             <figcaption class="article-image-caption">이미지: <a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">Phoronix Linux Camera / Media</a></figcaption>
           </figure>
-          
-          <h3>GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h3>
-          <p class="article-lead">GCC 16.1은 GNU Compiler Collection의 최신 주요 기능 릴리스로 공개되었고, GCC 15 대비 성능 비교 결과가 함께 소개되었습니다.</p>
-          <p>Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.</p>
-          <p>build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.</p>
-          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.</li></ul></div>
+
+          <h3>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h3>
+          <p class="article-lead">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 기준으로 중복 issue에 흩어진 내용을 합쳐 Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 항목을 다시 정리했습니다.</p>
+          <p>이 article은 cpp_ai_tooling_fallback 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.</p>
+          <p>삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다.</p>
+          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>직접 HAL 변경으로 단정하지 않고, native build/test/debug workflow에 줄 수 있는 간접 신호로만 봅니다.</p></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.</li><li>Native tooling owner가 camera validation workflow에 참고할 항목인지 검토합니다.</li></ul></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
         </div>
       </section>
 
       <section class="section">
         <h2>참고자료</h2>
-        <div class="card reference-list"><ul><li><a href="https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html">libcamera Release Announcements - libcamera v0.7.1</a></li><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
+        <div class="card reference-list"><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
       </section>
 
       <nav class="bottom-nav" aria-label="Issue navigation">

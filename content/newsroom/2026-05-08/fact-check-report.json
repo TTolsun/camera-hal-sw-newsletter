@@ -1,8 +1,0 @@
-{
-  "status": "PASS",
-  "must_fix": [],
-  "recommended_fixes": [],
-  "source_gaps": [],
-  "source_gap_count": 0,
-  "final_comment": "Manual repair removed the unsupported GCC main article and rewrote CameraX/libcamera sections to avoid unsupported HAL requirement claims. Source binding is preserved from shortlisted candidates."
-}

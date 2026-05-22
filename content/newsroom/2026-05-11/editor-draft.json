@@ -1,456 +1,13 @@
 {
   "date": "2026-05-11",
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-11",
-  "summary": "이번 2026-05-11호는 CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트, libcamera v0.7.1, CameraX 1.6.1 Android Camera 호환성 관찰을 중심으로 구성했습니다. CameraX 항목은 HAL 변경 근거가 아니라 app/framework 계층 compatibility review input으로 정리했습니다.",
+  "summary": "이번 2026-05-11호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 source-backed 내용으로 보강했습니다.",
   "briefing": [
-    "CameraX 1.4.0-alpha07 및 1.7.0-alpha01은 뷰파인더와 비디오 모듈 업데이트이며, HAL 변경 요구가 아니라 compatibility review input입니다.",
-    "libcamera v0.7.1이 SoftISP 디베이어링 및 센서 모드 구성 개선과 함께 출시되어, Linux 카메라 드라이버 스택의 이미지 처리 및 센서 제어 방식에 변화를 가져옵니다.",
-    "CameraX 1.6.1은 Android camera app/framework compatibility matrix에서 확인할 adjacent signal입니다."
+    "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰: Android Developers Latest Updates 기준으로 중복 issue에 흩어진 내용을 합쳐 CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 항목을 다시 정리했습니다.",
+    "중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다.",
+    "중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다."
   ],
   "sections": [
-    {
-      "category": "android_platform_camera_adjacent",
-      "headline": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 업데이트: 뷰파인더 및 비디오 모듈 변경",
-      "what_changed": "2026년 5월 6일 CameraX release note는 viewfinder 및 video artifacts의 version update를 나열했습니다.",
-      "confirmed_facts": [
-        "2026년 5월 6일, CameraX 라이브러리 1.4.0-alpha07이 릴리스되었습니다.",
-        "viewfinder artifact가 1.4.0-alpha07 line으로 업데이트되었습니다.",
-        "video artifact가 1.7.0-alpha01 line으로 업데이트되었습니다."
-      ],
-      "evidence_summary": "Android Developers Latest Updates 페이지에서 2026년 5월 6일자 CameraX release note의 viewfinder/video artifact version update가 확인되었습니다.",
-      "specificity_checks": [
-        "릴리스 날짜는 2026년 5월 6일로 명시되어 있습니다.",
-        "영향을 받는 컴포넌트는 CameraX viewfinder 및 video artifacts입니다.",
-        "출처는 Android Developers CameraX release notes입니다."
-      ],
-      "source_verification_notes": [
-        "제공된 URL(https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)에서 릴리스 날짜와 버전 정보를 직접 확인할 수 있습니다.",
-        "CameraX sits above Camera2; this is a framework adjacent compatibility signal unless downstream device evidence exists."
-      ],
-      "background": "CameraX는 Android Jetpack의 일부로, 카메라 앱 개발을 간소화하는 라이브러리입니다. CameraX는 Camera2 API 위에 구축되어 있으며, HAL(Hardware Abstraction Layer)과의 상호작용은 Android Camera Framework를 통해 이루어집니다. 뷰파인더 및 비디오 모듈은 각각 프리뷰 스트림과 비디오 녹화 스트림을 처리하는 핵심 구성 요소입니다.",
-      "why_it_matters": "CameraX viewfinder/video module update는 app/framework layer compatibility signal입니다. HAL 팀에는 기존 CameraX/Camera2 compatibility matrix에서 회귀 여부를 확인할 review input으로 다룹니다.",
-      "camera_hal_perspective": "이 CameraX release note는 app/framework layer의 viewfinder/video artifact update입니다. HAL 팀은 기존 CameraX/Camera2 compatibility matrix에서 회귀 여부만 확인하고 downstream evidence가 있을 때만 별도 follow-up으로 분리합니다.",
-      "camera_hal_checks": [
-        "CameraX 1.4.0-alpha07 및 1.7.0-alpha01 reference app으로 Preview + VideoCapture + ImageCapture smoke run을 실행하고, 실패한 조합만 compatibility matrix에 기록합니다.",
-        "회귀가 보이면 app logcat, framework camera log, HAL/device log를 분리해 원인이 app/library layer인지 downstream HAL issue인지 구분합니다.",
-        "release note만으로 Camera stack 요구사항 변경 요구를 만들지 않습니다."
-      ],
-      "action_hints": [
-        "CameraX release note는 app/framework layer artifact update로 분류합니다.",
-        "기존 compatibility matrix에서 smoke run 결과만 기록합니다.",
-        "downstream device evidence가 없으면 HAL follow-up으로 승격하지 않습니다."
-      ],
-      "action_items": [
-        "CameraX 1.4.0-alpha07 및 1.7.0-alpha01을 쓰는 reference app으로 Preview + VideoCapture + ImageCapture smoke run을 실행하고, 실패한 조합만 compatibility matrix에 기록합니다. (Owner: HAL QA)",
-        "회귀가 보이면 app logcat, framework camera log, HAL/device log를 분리해 원인이 app/library layer인지 downstream HAL issue인지 구분합니다. (Owner: HAL QA)",
-        "release note만으로 Camera stack 요구사항 변경 요구를 만들지 않습니다. (Owner: HAL 아키텍트)"
-      ],
-      "team_summary": "CameraX viewfinder/video 업데이트는 app-facing compatibility signal입니다. HAL 팀은 기존 matrix에서 회귀만 확인하고 downstream evidence가 있을 때만 후속 조치합니다.",
-      "is_ai_related": false,
-      "article_type": "main",
-      "imageCandidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "sourceKind": "release_note_item",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v1b953b434e2033f0160fd97c99360ee5d4d0a613449c2a694360a72d378b9d8e/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "sourceKind": "release_note_item",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "sourceKind": "release_note_item",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok"
-        }
-      ],
-      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
-      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "imageAttribution": "Android Developers Latest Updates",
-      "imageAlt": "Android Developers 로고",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "Android Developers 로고는 해당 릴리스 노트의 출처를 명확히 보여주며, 관련성이 높습니다.",
-      "sources": [
-        {
-          "title": "1.4.0-alpha07",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-        }
-      ],
-      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "source_candidate_hash": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
-      "relevance_bucket": "android_platform_camera_adjacent",
-      "editorial_priority": 3,
-      "aosp_camera_directness": 2,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": true,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "resolvedImage": {
-        "url": "https://developer.android.com/static/images/social/android-developers.png",
-        "src": "https://developer.android.com/static/images/social/android-developers.png",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
-      },
-      "source_extraction": {
-        "adapter_id": "android-developers-jetpack-release",
-        "extraction_quality": {
-          "used_fallback": false,
-          "main_article_allowed": true
-        },
-        "release": {
-          "sections": [
-            {
-              "heading": "CameraX release notes",
-              "items": [
-                {
-                  "text": "CameraX 1.4.0-alpha07 and 1.7.0-alpha01 list camera-viewfinder and camera-video artifact updates dated May 06, 2026.",
-                  "source_text": "CameraX 1.4.0-alpha07 and 1.7.0-alpha01 list camera-viewfinder and camera-video artifact updates dated May 06, 2026."
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "derived_editorial_hints": {
-        "hal_boundary": "CameraX sits above Camera2 and is a framework adjacent signal unless downstream device evidence exists.",
-        "validation_targets": [
-          "CameraX/Camera2 compatibility matrix",
-          "VideoCapture",
-          "ImageCapture"
-        ]
-      },
-      "article_sections": {
-        "verified_facts": [
-          "2026년 5월 6일, CameraX 라이브러리 1.4.0-alpha07이 릴리스되었습니다.",
-          "viewfinder artifact가 1.4.0-alpha07 line으로 업데이트되었습니다.",
-          "video artifact가 1.7.0-alpha01 line으로 업데이트되었습니다."
-        ],
-        "background_context": "CameraX는 Android Jetpack의 일부로, 카메라 앱 개발을 간소화하는 라이브러리입니다. CameraX는 Camera2 API 위에 구축되어 있으며, HAL(Hardware Abstraction Layer)과의 상호작용은 Android Camera Framework를 통해 이루어집니다. 뷰파인더 및 비디오 모듈은 각각 프리뷰 스트림과 비디오 녹화 스트림을 처리하는 핵심 구성 요소입니다.",
-        "hal_driver_impact": "이 CameraX release note는 app/framework layer의 viewfinder/video artifact update입니다. HAL 팀은 기존 CameraX/Camera2 compatibility matrix에서 회귀 여부만 확인하고 downstream evidence가 있을 때만 별도 follow-up으로 분리합니다.",
-        "action_items": [
-          "CameraX 1.4.0-alpha07 및 1.7.0-alpha01을 쓰는 reference app으로 Preview + VideoCapture + ImageCapture smoke run을 실행하고, 실패한 조합만 compatibility matrix에 기록합니다. (Owner: HAL QA)",
-          "회귀가 보이면 app logcat, framework camera log, HAL/device log를 분리해 원인이 app/library layer인지 downstream HAL issue인지 구분합니다. (Owner: HAL QA)",
-          "release note만으로 Camera stack 요구사항 변경 요구를 만들지 않습니다. (Owner: HAL 아키텍트)"
-        ],
-        "team_share_points": "CameraX viewfinder/video 업데이트는 app-facing compatibility signal입니다. HAL 팀은 기존 matrix에서 회귀만 확인하고 downstream evidence가 있을 때만 후속 조치합니다.",
-        "do_not_claim": [
-          "Keep CameraX viewfinder or video artifact updates as app/framework compatibility signals unless downstream evidence exists."
-        ]
-      },
-      "claims": [
-        {
-          "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-1",
-          "text": "2026년 5월 6일, CameraX 라이브러리 1.4.0-alpha07이 릴리스되었습니다.",
-          "claim_type": "fact",
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-1"
-          ],
-          "source_urls": [
-            "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-          ]
-        },
-        {
-          "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-2",
-          "text": "viewfinder artifact가 1.4.0-alpha07 line으로 업데이트되었습니다.",
-          "claim_type": "fact",
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-2"
-          ],
-          "source_urls": [
-            "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-          ]
-        },
-        {
-          "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-3",
-          "text": "video artifact가 1.7.0-alpha01 line으로 업데이트되었습니다.",
-          "claim_type": "fact",
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-3"
-          ],
-          "source_urls": [
-            "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-          ]
-        },
-        {
-          "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-4",
-          "text": "Android Developers Latest Updates 페이지에서 2026년 5월 6일자 CameraX release note의 viewfinder/video artifact version update가 확인되었습니다.",
-          "claim_type": "fact",
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-4"
-          ],
-          "source_urls": [
-            "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-          ]
-        },
-        {
-          "claim_id": "camerax-1-4-0-alpha07-1-7-0-alpha01-fact-5",
-          "text": "2026년 5월 6일 CameraX release note는 viewfinder 및 video artifacts의 version update를 나열했습니다.",
-          "claim_type": "fact",
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-5"
-          ],
-          "source_urls": [
-            "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-          ]
-        }
-      ],
-      "hal_signal_capsule": {
-        "why_now": "Android Developers Latest Updates 페이지에서 2026년 5월 6일자 CameraX release note의 viewfinder/video artifact version update가 확인되었습니다.",
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_test_owner"
-        ],
-        "check_within_2_weeks": "CameraX 1.4.0-alpha07 및 1.7.0-alpha01을 쓰는 reference app으로 Preview + VideoCapture + ImageCapture smoke run을 실행하고, 실패한 조합만 compatibility matrix에 기록합니다. (Owner: HAL QA)",
-        "impact_axes": [
-          "camerax_app_compatibility",
-          "framework_hal_contract"
-        ],
-        "do_not_overstate": [
-          "Keep CameraX viewfinder or video artifact updates as app/framework compatibility signals unless downstream evidence exists."
-        ]
-      },
-      "impact_claim_level": "adjacent_signal",
-      "compact_evidence": {
-        "source_urls": [
-          "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-        ],
-        "evidence_ids": [
-          "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-1",
-          "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-2",
-          "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-3",
-          "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-4",
-          "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-5"
-        ]
-      },
-      "evidence_ids": [
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-1",
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-2",
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-3",
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-4",
-        "hist:2026-05-11:camerax-1-4-0-alpha07-1-7-0-alpha01:fact-5"
-      ],
-      "source_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "fallback_promotion_allowed": false
-    },
-    {
-      "category": "Camera Driver / Image Pipeline",
-      "headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "confirmed_facts": [
-        "libcamera Release Announcements의 2026-04-28 항목입니다.",
-        "관련 컴포넌트: libcamera / V4L2 camera pipeline",
-        "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
-      ],
-      "evidence_summary": "libcamera Release Announcements의 dated evidence와 후보 정보를 기준으로 구성했습니다.",
-      "specificity_checks": [
-        "finalSelectionEligibility=main",
-        "relevance_bucket=camera_driver_image_pipeline",
-        "source_gap_risk=false"
-      ],
-      "source_verification_notes": [
-        "Source URL과 published date metadata가 있는 후보만 사용했습니다.",
-        "Main article 후보 조건을 통과했습니다."
-      ],
-      "what_changed": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-      "background": "libcamera는 Linux camera stack에서 V4L2 기반 driver/image pipeline 동작을 추적하는 upstream project입니다. 이 항목은 upstream release note를 제품 driver/image-pipeline review input으로 정리합니다.",
-      "camera_hal_perspective": "HAL 팀은 libcamera release note를 driver/image pipeline review input으로 보고, vendor kernel 또는 product integration evidence가 있을 때만 별도 follow-up으로 승격합니다.",
-      "camera_hal_checks": [
-        "Camera HAL / Android Camera 영향 가능성을 source evidence 기준으로 확인합니다.",
-        "CTS/VTS, Camera ITS, stream/buffer/metadata 영향이 확인될 때만 후속 작업으로 승격합니다."
-      ],
-      "action_items": [
-        "공식 릴리스 날짜와 변경 범위를 확인해 내부 관찰 항목으로 둘지 판단합니다.",
-        "관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.",
-        "후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다."
-      ],
-      "action_hints": [],
-      "team_summary": "libcamera v0.7.1은 driver/image pipeline 관찰 후보입니다. downstream integration evidence가 있을 때만 별도 follow-up으로 승격합니다.",
-      "why_it_matters": "libcamera v0.7.1은 driver/image pipeline 관점의 source signal이며, 제품 영향은 downstream integration evidence가 있을 때만 별도로 판단합니다.",
-      "is_ai_related": false,
-      "article_type": "camera-hal",
-      "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "editorial_priority": 2,
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 3,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": true,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
-      "sources": [
-        {
-          "title": "libcamera Release Announcements - libcamera v0.7.1",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-        }
-      ],
-      "imageCandidates": [],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Fallback builder did not select an external article image; renderer will use local fallback visual.",
-      "article_sections": {
-        "verified_facts": [
-          "libcamera Release Announcements의 2026-04-28 항목입니다.",
-          "관련 컴포넌트: libcamera / V4L2 camera pipeline",
-          "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
-        ],
-        "background_context": "libcamera는 Linux camera stack에서 V4L2 기반 driver/image pipeline 동작을 추적하는 upstream project입니다. 이 항목은 upstream release note를 제품 driver/image-pipeline review input으로 정리합니다.",
-        "hal_driver_impact": "HAL 팀은 libcamera release note를 driver/image pipeline review input으로 보고, vendor kernel 또는 product integration evidence가 있을 때만 별도 follow-up으로 승격합니다.",
-        "action_items": [
-          "공식 릴리스 날짜와 변경 범위를 확인해 내부 관찰 항목으로 둘지 판단합니다.",
-          "관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.",
-          "후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다."
-        ],
-        "team_share_points": "libcamera v0.7.1은 driver/image pipeline 관찰 후보입니다. downstream integration evidence가 있을 때만 별도 follow-up으로 승격합니다.",
-        "do_not_claim": [
-          "Keep upstream libcamera changes within driver/image-pipeline review scope unless downstream integration evidence exists."
-        ]
-      },
-      "claims": [
-        {
-          "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-1",
-          "text": "libcamera Release Announcements의 2026-04-28 항목입니다.",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-1"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        },
-        {
-          "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-2",
-          "text": "관련 컴포넌트: libcamera / V4L2 camera pipeline",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-2"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        },
-        {
-          "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-3",
-          "text": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-3"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        },
-        {
-          "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-4",
-          "text": "libcamera Release Announcements의 dated evidence와 후보 정보를 기준으로 구성했습니다.",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-4"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        },
-        {
-          "claim_id": "libcamera-release-announcements-libcamera-v0-7-1-fact-5",
-          "text": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-5"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        }
-      ],
-      "hal_signal_capsule": {
-        "why_now": "libcamera Release Announcements의 dated evidence와 후보 정보를 기준으로 구성했습니다.",
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_test_owner"
-        ],
-        "check_within_2_weeks": "공식 릴리스 날짜와 변경 범위를 확인해 내부 관찰 항목으로 둘지 판단합니다.",
-        "impact_axes": [
-          "driver_image_pipeline",
-          "stream_buffer_metadata"
-        ],
-        "do_not_overstate": [
-          "Keep upstream libcamera changes within driver/image-pipeline review scope unless downstream integration evidence exists."
-        ]
-      },
-      "impact_claim_level": "adjacent_signal",
-      "compact_evidence": {
-        "source_urls": [
-          "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-        ],
-        "evidence_ids": [
-          "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-1",
-          "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-2",
-          "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-3",
-          "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-4",
-          "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-5"
-        ]
-      },
-      "evidence_ids": [
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-1",
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-2",
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-3",
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-4",
-        "hist:2026-05-11:libcamera-release-announcements-libcamera-v0-7-1:fact-5"
-      ],
-      "source_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "fallback_promotion_allowed": false
-    },
     {
       "category": "Android Platform / CameraX",
       "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
@@ -744,6 +301,26 @@
         "originalSrc": "",
         "usedFallback": false,
         "reason": "selected image candidate"
+      },
+      "public_article": {
+        "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+        "lead": "Android Developers Latest Updates 기준으로 중복 issue에 흩어진 내용을 합쳐 CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 항목을 다시 정리했습니다.",
+        "body_paragraphs": [
+          "이 article은 android_platform_camera_adjacent 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
+        ],
+        "camera_hal_takeaway": "Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.",
+        "reader_checkpoints": [
+          "Android Developers Latest Updates의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Android Developers Latest Updates",
+            "url": "https://developer.android.com/latest-updates",
+            "source_role": "primary"
+          }
+        ]
       }
     }
   ],
@@ -757,20 +334,15 @@
   ],
   "references": [
     {
-      "title": "1.4.0-alpha07",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-    },
-    {
-      "title": "libcamera Release Announcements - libcamera v0.7.1",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
-      "title": "1.6.1",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
-    },
-    {
-      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+      "title": "Android Developers Latest Updates",
+      "url": "https://developer.android.com/latest-updates"
     }
-  ]
+  ],
+  "camera_anchor_count": 1,
+  "fallback_section_count": 0,
+  "fallback_only": false,
+  "homepage_visibility": "normal",
+  "publication_mode": "review_only",
+  "fallback_public_ready": false,
+  "homepage_badge": ""
 }

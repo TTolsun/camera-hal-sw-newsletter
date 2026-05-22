@@ -6,18 +6,18 @@
 
 ### Date-level status
 
-- reviewed archive dates: 16
-- removed archive dates: 1
+- reviewed archive dates: 8
+- removed archive dates: 9
 - historical unreviewed dates: 0
 - deprecated archive dates: 0
-- data/newsletters.json에 없는 public artifact 날짜: 3
-- content/newsroom 전용 날짜: 2
+- data/newsletters.json에 없는 public artifact 날짜: 0
+- content/newsroom 전용 날짜: 0
 
 ### Article-level status
 
-- reviewed article rows: 40
-- removed article rows: 1
-- accepted limitation rows: 40
+- reviewed article rows: 17
+- removed article rows: 9
+- accepted limitation rows: 17
 - remaining S0/S1 rows: 0
 - remaining rewrite/downgrade/archive-note rows: 0
 - remaining source gap rows: 0
@@ -40,18 +40,16 @@
 ## Remaining Accepted Limitations
 
 - Pre-seed-evidence generation: source provenance was not backfilled.
-- Partial source-backed coverage rows retained as accepted limitations: 40
-- Generic actionability rows retained as accepted limitations: 25
+- Partial source-backed coverage rows retained as accepted limitations: 17
+- Generic actionability rows retained as accepted limitations: 10
 - Medium overclaim rows retained as accepted limitations: 3
-- Weak historical format rows retained as accepted limitations: 37
+- Weak historical format rows retained as accepted limitations: 17
 
 ### Unlisted reviewed archives
 
 These remain unlisted because they are absent from `data/newsletters.json`. This final trust report reviews their artifact quality but does not change public index visibility.
 
-- 2026-05-17
-- 2026-05-18
-- 2026-05-19
+- none
 
 ## Historical Content Normalizations
 
@@ -62,9 +60,8 @@ These remain unlisted because they are absent from `data/newsletters.json`. This
 | Date | Rewrite count | Diff artifacts |
 | --- | ---: | --- |
 | 2026-05-05 | 4 | `content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md`<br>`content/audit/historical-rewrite-diff/2026-05-05-claude-code-2-1-128-camera-hal-workflow-review.md`<br>`content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal-debug-build.md`<br>`content/audit/historical-rewrite-diff/2026-05-05-2026-5-android-camera-related-cve.md` |
-| 2026-05-07 | 4 | `content/audit/historical-rewrite-diff/2026-05-07-glaze-7-2-native-tooling-serialization.md`<br>`content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-raspberry-pi-atomic-control-lists-simple-pipeline-agc-awb.md`<br>`content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md`<br>`content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md` |
-| 2026-05-09 | 2 | `content/audit/historical-rewrite-diff/2026-05-09-camerax-1-4-0-alpha07-viewfinder-video.md`<br>`content/audit/historical-rewrite-diff/2026-05-09-libcamera-v0-7-1-softisp.md` |
-| 2026-05-11 | 2 | `content/audit/historical-rewrite-diff/2026-05-11-camerax-1-4-0-alpha07-1-7-0-alpha01.md`<br>`content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md` |
+| 2026-05-07 | 2 | `content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md`<br>`content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md` |
+| 2026-05-11 | 1 | `content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md` |
 
 ## Validation Status
 
@@ -82,28 +79,24 @@ Archive trust cleanup is complete because no unresolved S0/S1 rows remain, all m
 | 2026-05-22 | public_archive | stable_archive | listed | yes | yes | review_only_publication | review_only_publication |
 | 2026-05-21 | public_archive | stable_archive | listed | yes | yes | review_only_publication | review_only_publication |
 | 2026-05-20 | public_archive | stable_archive | listed | yes | yes | none | current_generation_archive_review |
-| 2026-05-19 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | historical_archive_cleanup |
-| 2026-05-18 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | historical_archive_cleanup |
-| 2026-05-17 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | historical_archive_cleanup |
-| 2026-05-16 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-19 | public_archive | removed | removed | no | no | not_listed_in_data_newsletters, duplicate_news_source_cleanup, removed_archive_entry, public_route_intentionally_removed | source_dedup_cleanup |
+| 2026-05-18 | public_archive | removed | removed | no | no | not_listed_in_data_newsletters, duplicate_news_source_cleanup, removed_archive_entry, public_route_intentionally_removed | source_dedup_cleanup |
+| 2026-05-17 | public_archive | removed | removed | no | no | not_listed_in_data_newsletters, duplicate_news_source_cleanup, removed_archive_entry, public_route_intentionally_removed | source_dedup_cleanup |
+| 2026-05-16 | public_archive | removed | removed | no | no | pre_185_generation, source_provenance_not_backfilled, duplicate_news_source_cleanup, removed_archive_entry, public_route_intentionally_removed | source_dedup_cleanup |
 | 2026-05-15 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
-| 2026-05-14 | non_public_newsroom_artifact | none | not_public | no | no | none | non_public_newsroom_artifact |
-| 2026-05-13 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-13 | public_archive | removed | removed | no | no | pre_185_generation, source_provenance_not_backfilled, duplicate_news_source_cleanup, removed_archive_entry, public_route_intentionally_removed | source_dedup_cleanup |
 | 2026-05-12 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
 | 2026-05-11 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
-| 2026-05-10 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
-| 2026-05-09 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
-| 2026-05-08 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-10 | public_archive | removed | removed | no | no | pre_185_generation, source_provenance_not_backfilled, duplicate_news_source_cleanup, removed_archive_entry, public_route_intentionally_removed | source_dedup_cleanup |
+| 2026-05-09 | public_archive | removed | removed | no | no | pre_185_generation, source_provenance_not_backfilled, duplicate_news_source_cleanup, removed_archive_entry, public_route_intentionally_removed | source_dedup_cleanup |
+| 2026-05-08 | public_archive | removed | removed | no | no | pre_185_generation, source_provenance_not_backfilled, duplicate_news_source_cleanup, removed_archive_entry, public_route_intentionally_removed | source_dedup_cleanup |
 | 2026-05-07 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
-| 2026-05-06 | non_public_newsroom_artifact | none | not_public | no | no | none | non_public_newsroom_artifact |
 | 2026-05-05 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
 | 2026-04-30 | public_archive | removed | removed | no | no | format_inconsistency, delete_only_slice, removed_archive_entry, excluded_from_rewrite_path | removed_archive_cleanup |
 
 ## data/newsletters.json에 없는 Public Dates
 
-- 2026-05-17
-- 2026-05-18
-- 2026-05-19
+- none
 
 ## Non-public newsroom artifacts
 
@@ -111,5 +104,4 @@ Archive trust cleanup is complete because no unresolved S0/S1 rows remain, all m
 
 These dates have `content/newsroom/YYYY-MM-DD/` artifacts but no public newsletter artifact. They are not public archive entries and are not subject to public archive cleanup.
 
-- 2026-05-06
-- 2026-05-14
+- none

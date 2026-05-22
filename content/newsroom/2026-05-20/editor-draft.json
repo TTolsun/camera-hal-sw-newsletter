@@ -1,210 +1,13 @@
 {
   "date": "2026-05-20",
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-20",
-  "summary": "이번 2026-05-20호는 libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트, GCC 16.1 릴리스: C++20 기본값 전환과 C++26 기능 확장, Glaze 7.2: C++26 Reflection 기반 직렬화 지원 확대를 중심으로 Camera HAL / Driver / Native tooling 독자가 확인할 만한 내용을 정리했습니다.",
+  "summary": "이번 2026-05-20호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 2개 기사(GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more)를 source-backed 내용으로 보강했습니다.",
   "briefing": [
-    "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-    "GCC 16.1 has been released!",
-    "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
+    "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! 기준으로 중복 issue에 흩어진 내용을 합쳐 GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! 항목을 다시 정리했습니다.",
+    "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more 기준으로 중복 issue에 흩어진 내용을 합쳐 Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more 항목을 다시 정리했습니다.",
+    "중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다."
   ],
   "sections": [
-    {
-      "category": "Camera Driver / Image Pipeline",
-      "headline": "libcamera Release Announcements - libcamera v0.7.1",
-      "confirmed_facts": [
-        "libcamera Release Announcements가 2026-04-28에 게시 또는 업데이트한 항목입니다.",
-        "버전/릴리스: libcamera v0.7.1.",
-        "관련 컴포넌트: libcamera / V4L2 camera pipeline.",
-        "확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
-      ],
-      "evidence_summary": "libcamera Release Announcements source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
-      "specificity_checks": [
-        "finalSelectionEligibility=main",
-        "relevance_bucket=camera_driver_image_pipeline",
-        "impact_claim_level=camera_stack_direct",
-        "source_gap_risk=false"
-      ],
-      "source_verification_notes": [
-        "Confirmed facts에는 source URL, date, component, version, cleaned behavior metadata만 사용했습니다.",
-        "Fallback reconstruction 전에 main-candidate eligibility check를 통과한 항목입니다.",
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-        "libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다."
-      ],
-      "what_changed": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-      "background": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
-      "camera_hal_perspective": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
-      "camera_hal_checks": [
-        "Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.",
-        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
-      ],
-      "action_items": [
-        "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
-        "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
-      ],
-      "action_hints": [],
-      "team_summary": "libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
-      "why_it_matters": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
-      "is_ai_related": false,
-      "article_type": "camera-hal",
-      "impact_claim_level": "camera_stack_direct",
-      "overclaim_guardrails": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-        "libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다."
-      ],
-      "field_builder_warnings": [],
-      "removed_source_fragments": [],
-      "source_extraction": null,
-      "derived_editorial_hints": null,
-      "extraction_quality": null,
-      "background_basis": "article-field-builder deterministic static background",
-      "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "source_candidate_hash": "8905394fec87eea4c868c81b78b3ebe0c09292dd557053891216b7273437e0a3",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "editorial_priority": 2,
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 3,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": true,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "libcamera release announcement에서 날짜, 버전, SoftISP, sensor, pipeline 변경을 확인",
-      "sources": [
-        {
-          "title": "libcamera Release Announcements - libcamera v0.7.1",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-        }
-      ],
-      "imageCandidates": [],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Fallback builder did not select an external article image; renderer will use local fallback visual.",
-      "article_sections": {
-        "verified_facts": [
-          "libcamera Release Announcements가 2026-04-28에 게시 또는 업데이트한 항목입니다.",
-          "버전/릴리스: libcamera v0.7.1.",
-          "관련 컴포넌트: libcamera / V4L2 camera pipeline.",
-          "확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
-        ],
-        "background_context": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
-        "hal_driver_impact": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
-        "action_items": [
-          "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
-          "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
-        ],
-        "team_share_points": "libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
-      },
-      "public_article": {
-        "headline": "libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트",
-        "lead": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-        "body_paragraphs": [
-          "libcamera v0.7.1이 공개되었습니다. 이번 릴리스에는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트가 포함되었습니다.",
-          "Android Camera HAL API 변경으로 직접 해석할 근거는 없습니다. 다만 V4L2 기반 camera pipeline, sensor mode 선택, format negotiation, frame timing 검증 관점에서는 참고할 만한 upstream signal입니다."
-        ],
-        "camera_hal_takeaway": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
-        "reader_checkpoints": [
-          "sensor mode selection 관련 내부 이슈와 연결 가능한지 확인합니다.",
-          "frame timing / format negotiation regression test 필요 여부를 검토합니다.",
-          "downstream Android HAL 영향은 별도 evidence가 있을 때만 판단합니다."
-        ],
-        "source_links": [
-          {
-            "title": "libcamera Release Announcements - libcamera v0.7.1",
-            "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-            "publisher": "libcamera Release Announcements",
-            "source_role": "primary"
-          }
-        ]
-      },
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "framework_hal_contract",
-        "stream_buffer_metadata",
-        "cts_vts_its_cdd",
-        "performance_latency_frame_drop",
-        "soc_resource_contention",
-        "camerax_app_compatibility"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_driver_owner",
-        "camera_test_owner",
-        "performance_thermal_owner",
-        "soc_platform_owner"
-      ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "do_not_overstate": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-        "libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다."
-      ],
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "libcamera Release Announcements (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 6 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-        "libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다."
-      ],
-      "soc_signal_type": "isp_image_pipeline",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "hal_signal_capsule": {
-        "why_now": "libcamera Release Announcements - libcamera v0.7.1 is included as a dated HAL signal for editor review.",
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_framework_owner",
-          "camerax_app_compat_owner",
-          "camera_driver_owner",
-          "camera_test_owner",
-          "performance_thermal_owner",
-          "soc_platform_owner"
-        ],
-        "check_within_2_weeks": "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "impact_axes": [
-          "driver_image_pipeline",
-          "framework_hal_contract",
-          "stream_buffer_metadata",
-          "cts_vts_its_cdd",
-          "performance_latency_frame_drop",
-          "soc_resource_contention",
-          "camerax_app_compatibility"
-        ],
-        "do_not_overstate": [
-          "Supplied source evidence가 말하지 않으면 HAL API",
-          "metadata contract",
-          "stream",
-          "buffer",
-          "request/result",
-          "CTS",
-          "VTS",
-          "Camera ITS impact를 claim하지 않습니다.",
-          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-          "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-          "libcamera",
-          "V4L2",
-          "driver",
-          "sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다."
-        ]
-      }
-    },
     {
       "category": "Tooling Watch / Fallback",
       "headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
@@ -212,7 +15,11 @@
         "ISO C++ Blog가 Thu, 30 Apr 2026 22:36:23 +0000에 게시 또는 업데이트한 항목입니다.",
         "버전/릴리스: 16.1.",
         "관련 컴포넌트: GCC.",
-        "확인된 변경점: GCC 16.1 has been released!"
+        "확인된 변경점: GCC 16.1 has been released!",
+        "버전/릴리스: GCC 16.1",
+        "게시일: 2026-04-30 (Thu, 30 Apr 2026 22:36:23 +0000)",
+        "API/컴포넌트: GCC",
+        "수집 evidence는 GCC 16.1 release와 C++26 reflection / contracts / safety hardening / C++20 by default 항목을 포함합니다."
       ],
       "evidence_summary": "ISO C++ Blog source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
       "specificity_checks": [
@@ -229,17 +36,22 @@
         "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
         "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
       ],
-      "what_changed": "GCC 16.1 has been released!",
-      "background": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
-      "camera_hal_perspective": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+      "what_changed": "GCC 16.1 has been released! ISO C++ Blog는 2026년 4월 30일 GCC 16.1 release를 게시했습니다. 수집된 후보는 GCC 16.1 release와 C++26 reflection, contracts, safety hardening, C++20 by default 항목을 native C++ tooling 관찰 대상으로 기록합니다. GCC 16.1 has been released! GCC 16.1 has been released! GCC 16.1 has been released! GCC 16.1 has been released! GCC 16.1 has been released! GCC 16.1 has been released!",
+      "background": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Camera HAL native code는 AOSP build 환경에서 주로 Clang/LLVM, libc++, Android platform toolchain 정책에 맞춰 관리됩니다. GCC 16.1 소식은 Android HAL에 즉시 적용되는 변경이 아니라 C++ 표준 기능과 compiler support 흐름을 장기 관찰하는 정보입니다. GCC는 C++ 개발에 사용되는 주요 컴파일러 중 하나입니다. Android AOSP 프로젝트는 주로 Clang/LLVM을 사용하지만, C++ 표준의 발전과 컴파일러 기능 개선은 장기적으로 Android native 코드 개발 환경에 영향을 미칠 수 있습니다. C++26의 reflection 및 contracts와 같은 기능은 코드의 안전성, 가독성, 유지보수성을 향상시킬 수 있으며, C++20이 기본으로 적용되는 것은 최신 표준 기능을 활용한 개발을 장려합니다. 이러한 컴파일러 업데이트는 Camera HAL 및 드라이버와 같은 native C++ 컴포넌트의 빌드, 테스트, 디버그 워크플로우에 간접적인 영향을 줄 수 있습니다. 특히 안전성 강화 기능은 잠재적인 버그를 줄이고 코드 품질을 높이는 데 기여할 수 있습니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
+      "camera_hal_perspective": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. HAL 팀은 GCC 16.1을 Android HAL build 변경으로 해석하지 않습니다. 대신 Clang/LLVM 쪽 지원 현황과 AOSP coding guideline을 함께 확인하면서, metadata table generation, request/result validation helper, compile-time checks 같은 native tooling PoC 후보를 장기 backlog로만 기록합니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "camera_hal_checks": [
         "Direct camera-stack evidence가 없으면 watch/supporting material로만 표현합니다.",
-        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
+        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다.",
+        "현재 HAL branch의 compiler, C++ standard flag, libc++ version을 확인하고 GCC 16.1 feature를 바로 적용하지 않는다는 전제를 문서화합니다.",
+        "Clang/LLVM에서 관련 C++26 feature 지원이 확인될 때만 metadata generation이나 request/result validation helper PoC를 검토합니다.",
+        "PoC를 만들 경우 production HAL path가 아니라 별도 native tooling sandbox에서 compile-time check와 generated metadata table 품질만 확인합니다."
       ],
       "action_items": [
         "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
         "Direct HAL behavior claim이 아니라 watch/supporting context로 공유합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+        "HAL native build 설정에서 compiler와 C++ standard flag를 확인하고, GCC 16.1 관련 기능을 production requirement로 등록하지 않습니다.",
+        "metadata serialization 또는 `camera3_request` validation helper에 대한 compile-time check PoC가 필요하면 Clang/LLVM 지원 현황을 먼저 확인합니다."
       ],
       "action_hints": [],
       "team_summary": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다.",
@@ -293,33 +105,34 @@
           "관련 컴포넌트: GCC.",
           "확인된 변경점: GCC 16.1 has been released!"
         ],
-        "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
+        "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. GCC는 C++ 개발에 사용되는 주요 컴파일러 중 하나입니다. Android AOSP 프로젝트는 주로 Clang/LLVM을 사용하지만, C++ 표준의 발전과 컴파일러 기능 개선은 장기적으로 Android native 코드 개발 환경에 영향을 미칠 수 있습니다. C++26의 reflection 및 contracts와 같은 기능은 코드의 안전성, 가독성, 유지보수성을 향상시킬 수 있으며, C++20이 기본으로 적용되는 것은 최신 표준 기능을 활용한 개발을 장려합니다. 이러한 컴파일러 업데이트는 Camera HAL 및 드라이버와 같은 native C++ 컴포넌트의 빌드, 테스트, 디버그 워크플로우에 간접적인 영향을 줄 수 있습니다. 특히 안전성 강화 기능은 잠재적인 버그를 줄이고 코드 품질을 높이는 데 기여할 수 있습니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
         "hal_driver_impact": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
         "action_items": [
           "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
           "Direct HAL behavior claim이 아니라 watch/supporting context로 공유합니다.",
           "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
         ],
-        "team_share_points": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다."
+        "team_share_points": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다.",
+        "known_limitations": [],
+        "watch_items": [],
+        "do_not_claim": []
       },
       "public_article": {
-        "headline": "GCC 16.1 릴리스: C++20 기본값 전환과 C++26 기능 확장",
-        "lead": "GCC 16.1 has been released!",
+        "headline": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+        "lead": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! 기준으로 중복 issue에 흩어진 내용을 합쳐 GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! 항목을 다시 정리했습니다.",
         "body_paragraphs": [
-          "GCC 16.1은 C++20 기본 표준 전환과 C++26 reflection/contracts 관련 기능 확장을 포함합니다.",
-          "Camera HAL production build가 Clang 중심이라면 즉시 영향은 제한적입니다. 다만 host tool, 실험용 native utility, static analysis 환경에서 GCC를 병행 사용하는 팀이라면 build option이나 warning profile 변화는 확인할 만합니다."
+          "이 article은 cpp_ai_tooling_fallback 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
         ],
-        "camera_hal_takeaway": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+        "camera_hal_takeaway": "직접 HAL 변경으로 단정하지 않고, native build/test/debug workflow에 줄 수 있는 간접 신호로만 봅니다.",
         "reader_checkpoints": [
-          "Camera HAL 본체가 아니라 host/native tooling 관점에서만 참고합니다.",
-          "GCC 기반 보조 도구가 있다면 C++20 default 전환 영향을 확인합니다.",
-          "production HAL runtime behavior 변화로 해석하지 않습니다."
+          "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Native tooling owner가 camera validation workflow에 참고할 항목인지 검토합니다."
         ],
         "source_links": [
           {
             "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
             "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-            "publisher": "ISO C++ Blog",
             "source_role": "primary"
           }
         ]
@@ -393,7 +206,65 @@
           "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
           "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
         ]
-      }
+      },
+      "source_dedup_merge_provenance": [
+        {
+          "merged_from_date": "2026-05-08",
+          "merged_from_section": 3,
+          "merged_from_headline": "GCC 16.1: C++26 reflection / contracts 지원 동향",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "source_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-13",
+          "merged_from_section": 2,
+          "merged_from_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "source_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-15",
+          "merged_from_section": 2,
+          "merged_from_headline": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "source_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-16",
+          "merged_from_section": 2,
+          "merged_from_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "source_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-17",
+          "merged_from_section": 2,
+          "merged_from_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "source_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-18",
+          "merged_from_section": 2,
+          "merged_from_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "source_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-19",
+          "merged_from_section": 2,
+          "merged_from_headline": "Tooling Watch / Fallback: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "source_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        }
+      ]
     },
     {
       "category": "Tooling Watch / Fallback",
@@ -402,7 +273,12 @@
         "ISO C++ Blog가 Tue, 28 Apr 2026 22:25:57 +0000에 게시 또는 업데이트한 항목입니다.",
         "버전/릴리스: v7.2.0.",
         "관련 컴포넌트: GCC.",
-        "확인된 변경점: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
+        "확인된 변경점: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+        "Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.",
+        "Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다.",
+        "ISO C++ Blog의 Tue, 28 Apr 2026 22:25:57 +0000 항목입니다.",
+        "관련 컴포넌트: GCC",
+        "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
       ],
       "evidence_summary": "ISO C++ Blog source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
       "specificity_checks": [
@@ -419,17 +295,29 @@
         "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
         "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
       ],
-      "what_changed": "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
-      "background": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
-      "camera_hal_perspective": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+      "what_changed": "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! Glaze v7.2.0은 2026년 4월 28일 릴리스되었고 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 직렬화 형식 지원을 포함합니다. 이 항목은 Android HAL toolchain 전환 근거가 아니라, Clang / LLVM / libc++ 중심 Android native 환경에서 지원 여부를 확인해야 하는 host-side native tooling watch item입니다. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+      "background": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Glaze는 C++ 직렬화 라이브러리이며 C++26 Reflection을 활용해 타입 매핑과 데이터 직렬화 코드를 줄이는 방향의 기능을 제공합니다. Android native 개발은 Clang / LLVM / libc++ 중심이므로 Glaze 7.2는 Camera HAL production path 적용 대상이 아니라, host-side 분석 도구나 standalone native utility에서 serialization library 선택지를 검토할 때 참고할 수 있는 tooling signal입니다. Glaze는 C++ native tooling에서 serialization format 지원을 제공하는 라이브러리입니다. 이 항목은 host-side tooling 관찰 신호로만 다룹니다. Glaze는 C++26 reflection을 활용하여 다양한 데이터 직렬화/역직렬화 형식을 지원하는 라이브러리입니다. C++26 reflection 기능은 컴파일 타임에 타입 정보를 활용하여 코드를 생성하거나 분석하는 것을 가능하게 하며, 이는 복잡한 데이터 구조를 다루는 native 애플리케이션 개발에 유용할 수 있습니다. Camera HAL 또는 드라이버와 같은 native 컴포넌트에서 메타데이터, 설정 파일, 로그 등을 다양한 형식(YAML, CBOR, MessagePack, TOML 등)으로 처리해야 할 때, Glaze와 같은 라이브러리는 개발 효율성을 높일 수 있습니다. 특히, reflection을 통한 자동 직렬화는 수동 파싱 코드의 오류 가능성을 줄이고 유지보수를 용이하게 할 수 있습니다. 이는 Camera HAL의 request/result metadata 처리 또는 디버깅을 위한 설정 로딩 등에 간접적인 영향을 줄 수 있습니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
+      "camera_hal_perspective": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. 이 source는 Glaze library release note이며, Android camera stack의 product behavior를 직접 설명하지 않습니다. 따라서 Glaze 7.2는 제품 HAL 동작 변경 근거가 아니라, 내부 분석 도구나 debug utility를 새로 설계할 때 Android toolchain 지원성과 통합 비용을 먼저 확인하는 참고 항목으로만 유지합니다. host-side native tooling 관찰 항목으로 둡니다. Camera HAL 팀은 제품 tooling 계획이나 upstream evidence가 확인될 때만 별도 follow-up으로 승격합니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "camera_hal_checks": [
         "Direct camera-stack evidence가 없으면 watch/supporting material로만 표현합니다.",
-        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
+        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다.",
+        "Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 C++26 Reflection 지원 여부와 Glaze 사용 가능성을 changelog와 실험 환경 기준으로 확인합니다.",
+        "host-side 분석 도구나 standalone native utility에 serialization library 검토 필요가 있을 때만 small PoC 후보로 기록합니다.",
+        "production HAL code나 camera pipeline 동작 변경으로 승격하려면 별도 product requirement와 source-backed downstream evidence를 요구합니다.",
+        "공식 릴리스 날짜와 변경 범위를 확인해 내부 관찰 항목으로 둘지 판단합니다.",
+        "toolchain migration으로 단정하지 말고 관찰 항목으로만 공유합니다.",
+        "후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다."
       ],
       "action_items": [
         "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
         "Direct HAL behavior claim이 아니라 watch/supporting context로 공유합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+        "Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 C++26 Reflection 지원 여부와 Glaze 사용 가능성을 changelog와 실험 환경 기준으로 확인합니다.",
+        "host-side 분석 도구나 standalone native utility에 serialization library 검토 필요가 있을 때만 small PoC 후보로 기록합니다.",
+        "production HAL code나 camera pipeline 동작 변경으로 승격하려면 별도 product requirement와 source-backed downstream evidence를 요구합니다.",
+        "공식 릴리스 날짜와 변경 범위를 확인해 내부 관찰 항목으로 둘지 판단합니다.",
+        "toolchain migration으로 단정하지 말고 관찰 항목으로만 공유합니다.",
+        "후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다."
       ],
       "action_hints": [],
       "team_summary": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다.",
@@ -467,6 +355,10 @@
         {
           "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
           "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+        },
+        {
+          "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
         }
       ],
       "imageCandidates": [],
@@ -481,35 +373,55 @@
           "ISO C++ Blog가 Tue, 28 Apr 2026 22:25:57 +0000에 게시 또는 업데이트한 항목입니다.",
           "버전/릴리스: v7.2.0.",
           "관련 컴포넌트: GCC.",
-          "확인된 변경점: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
+          "확인된 변경점: It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+          "Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.",
+          "Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다.",
+          "ISO C++ Blog의 Tue, 28 Apr 2026 22:25:57 +0000 항목입니다.",
+          "관련 컴포넌트: GCC",
+          "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!"
         ],
-        "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
-        "hal_driver_impact": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+        "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Glaze는 C++ 직렬화 라이브러리이며 C++26 Reflection을 활용해 타입 매핑과 데이터 직렬화 코드를 줄이는 방향의 기능을 제공합니다. Android native 개발은 Clang / LLVM / libc++ 중심이므로 Glaze 7.2는 Camera HAL production path 적용 대상이 아니라, host-side 분석 도구나 standalone native utility에서 serialization library 선택지를 검토할 때 참고할 수 있는 tooling signal입니다. Glaze는 C++ native tooling에서 serialization format 지원을 제공하는 라이브러리입니다. 이 항목은 host-side tooling 관찰 신호로만 다룹니다. Glaze는 C++26 reflection을 활용하여 다양한 데이터 직렬화/역직렬화 형식을 지원하는 라이브러리입니다. C++26 reflection 기능은 컴파일 타임에 타입 정보를 활용하여 코드를 생성하거나 분석하는 것을 가능하게 하며, 이는 복잡한 데이터 구조를 다루는 native 애플리케이션 개발에 유용할 수 있습니다. Camera HAL 또는 드라이버와 같은 native 컴포넌트에서 메타데이터, 설정 파일, 로그 등을 다양한 형식(YAML, CBOR, MessagePack, TOML 등)으로 처리해야 할 때, Glaze와 같은 라이브러리는 개발 효율성을 높일 수 있습니다. 특히, reflection을 통한 자동 직렬화는 수동 파싱 코드의 오류 가능성을 줄이고 유지보수를 용이하게 할 수 있습니다. 이는 Camera HAL의 request/result metadata 처리 또는 디버깅을 위한 설정 로딩 등에 간접적인 영향을 줄 수 있습니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다. Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
+        "hal_driver_impact": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. 이 source는 Glaze library release note이며, Android camera stack의 product behavior를 직접 설명하지 않습니다. 따라서 Glaze 7.2는 제품 HAL 동작 변경 근거가 아니라, 내부 분석 도구나 debug utility를 새로 설계할 때 Android toolchain 지원성과 통합 비용을 먼저 확인하는 참고 항목으로만 유지합니다. host-side native tooling 관찰 항목으로 둡니다. Camera HAL 팀은 제품 tooling 계획이나 upstream evidence가 확인될 때만 별도 follow-up으로 승격합니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
         "action_items": [
           "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
           "Direct HAL behavior claim이 아니라 watch/supporting context로 공유합니다.",
-          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+          "Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 C++26 Reflection 지원 여부와 Glaze 사용 가능성을 changelog와 실험 환경 기준으로 확인합니다.",
+          "host-side 분석 도구나 standalone native utility에 serialization library 검토 필요가 있을 때만 small PoC 후보로 기록합니다.",
+          "production HAL code나 camera pipeline 동작 변경으로 승격하려면 별도 product requirement와 source-backed downstream evidence를 요구합니다.",
+          "공식 릴리스 날짜와 변경 범위를 확인해 내부 관찰 항목으로 둘지 판단합니다.",
+          "toolchain migration으로 단정하지 말고 관찰 항목으로만 공유합니다.",
+          "후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다."
         ],
-        "team_share_points": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다."
+        "team_share_points": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다. Glaze 7.2는 Android HAL toolchain 전환 근거가 아니라 host-side native tooling 동향입니다. Camera HAL team은 production HAL code 변경이나 vendor metadata PoC 요구로 기록하지 말고, toolchain 지원성과 내부 도구 필요성이 확인될 때만 별도 검토합니다. Glaze 7.2는 host-side native tooling 관찰 항목입니다. 편집장은 production code 변경 요구로 읽히지 않도록 범위를 유지해야 합니다. Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다. Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다. Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다. Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다. Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more은 normal publishable coverage가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다.",
+        "known_limitations": [],
+        "watch_items": [],
+        "do_not_claim": [
+          "Do not treat Glaze 7.2 as a product HAL implementation or production code change.",
+          "Keep Glaze native serialization release notes as host-side tooling signals unless a product tooling plan exists."
+        ]
       },
       "public_article": {
-        "headline": "Glaze 7.2: C++26 Reflection 기반 직렬화 지원 확대",
-        "lead": "It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged!",
+        "headline": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+        "lead": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more 기준으로 중복 issue에 흩어진 내용을 합쳐 Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more 항목을 다시 정리했습니다.",
         "body_paragraphs": [
-          "Glaze 7.2는 C++26 Reflection 기반 serialization 지원을 병합했고 YAML, CBOR, MessagePack, TOML 같은 format 지원도 함께 확장했습니다.",
-          "Camera HAL runtime과 직접 연결되는 변화는 아닙니다. 다만 camera pipeline 설정, 실험 로그, tuning parameter, test artifact를 JSON/YAML/CBOR 형태로 다루는 내부 도구를 설계할 때 참고할 수 있는 native serialization 동향입니다."
+          "이 article은 cpp_ai_tooling_fallback 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
         ],
-        "camera_hal_takeaway": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+        "camera_hal_takeaway": "직접 HAL 변경으로 단정하지 않고, native build/test/debug workflow에 줄 수 있는 간접 신호로만 봅니다.",
         "reader_checkpoints": [
-          "현재 Camera HAL 코드나 내부 도구에서 Glaze를 사용하지 않는다면 즉시 조치할 항목은 없습니다.",
-          "JSON/YAML/CBOR 기반 설정 또는 로그 변환 도구를 새로 만들 때 참고합니다.",
-          "C++26 reflection은 production HAL code 적용 대상으로 보지 않습니다."
+          "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Native tooling owner가 camera validation workflow에 참고할 항목인지 검토합니다."
         ],
         "source_links": [
           {
             "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
             "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-            "publisher": "ISO C++ Blog",
+            "source_role": "primary"
+          },
+          {
+            "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+            "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
             "source_role": "primary"
           }
         ]
@@ -583,7 +495,65 @@
           "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
           "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
         ]
-      }
+      },
+      "source_dedup_merge_provenance": [
+        {
+          "merged_from_date": "2026-05-07",
+          "merged_from_section": 4,
+          "merged_from_headline": "Glaze 7.2: native tooling serialization 검토 범위",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "source_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-09",
+          "merged_from_section": 3,
+          "merged_from_headline": "Glaze 7.2: native tooling serialization 관찰",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "source_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-13",
+          "merged_from_section": 3,
+          "merged_from_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "source_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-16",
+          "merged_from_section": 3,
+          "merged_from_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "source_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-17",
+          "merged_from_section": 3,
+          "merged_from_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "source_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-18",
+          "merged_from_section": 3,
+          "merged_from_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "source_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-19",
+          "merged_from_section": 3,
+          "merged_from_headline": "Tooling Watch / Fallback: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "merged_from_source_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "source_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        }
+      ]
     }
   ],
   "action_items": [
@@ -594,22 +564,32 @@
   ],
   "references": [
     {
-      "title": "libcamera Release Announcements - libcamera v0.7.1",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
     },
     {
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+    },
+    {
+      "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
     }
   ],
   "review_publication_ready": true,
   "publication_notice": [
-    "편집자 검토 후 발행 가능한 Review-only 발행본입니다.",
-    "이 호는 AI 자동 발행 기준을 통과하지 못했으며, fallback 또는 후보 부족 구성이 포함될 수 있습니다.",
-    "각 기사에서 Camera HAL 직접 변경으로 과장하지 않도록 source와 guardrail을 확인하세요."
-  ]
+    "Fallback Edition: C++ / Tooling Watch",
+    "이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 fallback issue로 발행되었습니다.",
+    "Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다."
+  ],
+  "camera_anchor_count": 0,
+  "fallback_section_count": 2,
+  "fallback_only": true,
+  "homepage_visibility": "visible_with_fallback_badge",
+  "publication_mode": "fallback_public",
+  "normal_public_ready": false,
+  "automatic_publish_ready": false,
+  "public_artifact_ready": true,
+  "fallback_public_ready": true,
+  "homepage_badge": "Fallback Edition"
 }

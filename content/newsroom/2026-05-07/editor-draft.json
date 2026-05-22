@@ -1,218 +1,13 @@
 {
   "date": "2026-05-07",
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-07",
-  "summary": "이번 주 뉴스레터는 libcamera v0.7.1 릴리스의 주요 변경 사항에 초점을 맞춥니다. Raspberry Pi의 Atomic control lists 개선, 파이프라인 핸들러 및 센서 구성 업데이트, SoftISP 디베이어링 및 처리량 개선 등 Linux 카메라 드라이버 스택의 핵심 업데이트가 포함되어 있습니다. 또한, Glaze 7.2의 C++26 Reflection 지원은 Android native 개발이 Clang / LLVM / libc++ 중심이라는 전제 아래 Camera HAL production path 변화가 아니라 host-side native tooling serialization 동향으로만 참고합니다.",
+  "summary": "이번 2026-05-07호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 2개 기사(libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트, libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선)를 source-backed 내용으로 보강했습니다.",
   "briefing": [
-    "libcamera v0.7.1이 2026년 4월 28일 릴리스되어 Raspberry Pi의 Atomic control lists 및 Simple pipeline AGC/AWB 통계가 개선되었습니다.",
-    "libcamera v0.7.1에는 파이프라인 핸들러 및 센서 구성 동작 업데이트가 포함되어 있으며, Android HAL 영향은 downstream vendor camera stack 통합 여부가 확인될 때만 별도로 판단합니다.",
-    "Glaze 7.2의 C++26 Reflection 지원은 Android HAL에서 즉시 toolchain 전환이나 vendor metadata PoC 요구를 뜻하지 않으며, Clang / LLVM / libc++ 지원성을 확인해야 하는 host-side tooling watch item으로만 둡니다."
+    "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트: libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트 기준으로 중복 issue에 흩어진 내용을 합쳐 libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트 항목을 다시 정리했습니다.",
+    "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선: libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선 기준으로 중복 issue에 흩어진 내용을 합쳐 libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선 항목을 다시 정리했습니다.",
+    "중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다."
   ],
   "sections": [
-    {
-      "category": "카메라 드라이버 및 이미지 파이프라인",
-      "headline": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
-      "what_changed": "libcamera v0.7.1이 2026년 4월 28일에 릴리스되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC(Auto Gain Control), AWB(Auto White Balance) 통계 수정 등 다양한 패치가 포함되어 있습니다.",
-      "confirmed_facts": [
-        "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
-        "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
-        "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다."
-      ],
-      "evidence_summary": "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 AGC/AWB 통계 수정 패치를 포함합니다. 이는 libcamera-devel 메일링 리스트를 통해 확인되었습니다.",
-      "specificity_checks": [
-        "버전: libcamera v0.7.1",
-        "릴리스 날짜: 2026년 4월 28일",
-        "API/컴포넌트: libcamera / V4L2 camera pipeline, Atomic control lists, Simple pipeline AGC/AWB 통계",
-        "동작 변경: Raspberry Pi의 Atomic control lists 개선, Simple pipeline의 비례 AGC 및 AWB 통계 수정",
-        "출처 페이지: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "source_verification_notes": [
-        "libcamera-devel 메일링 리스트에서 v0.7.1 릴리스 공지를 확인했습니다.",
-        "공지 내용에 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 수정이 명시되어 있습니다."
-      ],
-      "background": "libcamera는 Linux 기반 시스템에서 카메라 하드웨어와 상호 작용하는 표준화된 프레임워크입니다. 제품 camera stack은 구현에 따라 V4L2, vendor driver, 또는 별도 camera stack과 연결될 수 있으므로, upstream libcamera 변경은 downstream 통합 여부를 확인한 뒤에만 제품 영향으로 해석합니다. Atomic control lists는 여러 카메라 컨트롤을 단일 트랜잭션으로 적용하여 일관된 상태를 보장하는 메커니즘이며, AGC/AWB 통계는 이미지 처리 파이프라인에서 노출 및 화이트 밸런스를 조정하는 데 사용됩니다.",
-      "why_it_matters": "libcamera의 이러한 업데이트는 Android Camera HAL 구현 및 최적화에 간접적인 영향을 미칠 수 있습니다. 특히, Raspberry Pi와 같은 임베디드 플랫폼에서 libcamera를 사용하는 경우, 드라이버 수준의 개선 사항이 HAL의 안정성 및 성능에 긍정적인 영향을 줄 수 있습니다. AGC/AWB 통계 개선은 이미지 품질 향상으로 이어질 수 있습니다.",
-      "camera_hal_perspective": "libcamera v0.7.1의 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경은 upstream Linux camera stack의 driver/image-pipeline signal입니다. 제품 camera stack 동작 변화로 보려면 해당 변경이 downstream vendor kernel 또는 libcamera fork에 통합됐다는 증거가 먼저 필요합니다. HAL 팀은 AE/AWB 회귀가 보고된 제품에서만 metadata consistency와 image quality log를 분리해 확인합니다.",
-      "camera_hal_checks": [
-        "현재 개발 중인 vendor kernel 드라이버가 libcamera 또는 유사한 V4L2 기반 Atomic control 메커니즘을 사용하는지 확인하고, 해당 구현이 최신 libcamera 개선 사항을 반영하는지 검토합니다.",
-        "자동 노출(AE) 및 자동 화이트 밸런스(AWB) 모드에서 Preview + ImageCapture 스트림 조합을 사용하여 이미지 품질 및 메타데이터 일관성을 테스트하고, libcamera v0.7.1의 통계 개선이 적용되었을 때의 변화를 관찰합니다.",
-        "Raspberry Pi 기반 개발 보드를 사용하는 경우, libcamera v0.7.1로 업데이트한 후 카메라 동작의 안정성 및 성능 회귀 여부를 확인합니다."
-      ],
-      "action_hints": [
-        "vendor kernel 드라이버의 libcamera/V4L2 구현을 검토하여 Atomic control lists 및 AGC/AWB 통계 관련 패치 적용 여부를 확인합니다.",
-        "AE/AWB 모드에서 이미지 품질 및 메타데이터 일관성 테스트를 수행합니다.",
-        "Raspberry Pi 기반 플랫폼에서 업데이트 후 카메라 동작을 검증합니다."
-      ],
-      "action_items": [
-        "카메라 드라이버 팀은 현재 vendor kernel/libcamera fork에 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경이 실제로 포함됐는지 확인합니다.",
-        "downstream 통합이 확인된 장치에서만 Preview + ImageCapture AE/AWB smoke test와 captureResult metadata consistency를 기존 회귀 범위 안에서 확인합니다.",
-        "Raspberry Pi reference board 결과는 제품 camera stack 변경 근거가 아니라 upstream comparison log로만 분리해 기록합니다."
-      ],
-      "team_summary": "libcamera v0.7.1은 Raspberry Pi Atomic control lists 및 AGC/AWB 통계 개선을 포함합니다. HAL follow-up은 downstream vendor kernel/libcamera 통합과 AE/AWB 회귀 증거가 있을 때만 열고, 그렇지 않으면 upstream driver/image-pipeline review note로 둡니다.",
-      "is_ai_related": false,
-      "article_type": "camera_driver_image_pipeline",
-      "imageCandidates": [
-        {
-          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
-          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-          "sourceKind": "release_note_item",
-          "licenseStatus": "unknown",
-          "attribution": "libcamera Release Announcements",
-          "validationStatus": "ok",
-          "alt": "libcamera logo",
-          "contentType": "image/jpeg",
-          "height": 630,
-          "width": 1200
-        }
-      ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Primary source is a libcamera-devel mailing list archive with no suitable article image. The available GitLab twitter card candidate belongs to a different issue URL, so it was not selected and the repo-local fallback visual is used through resolvedImage.",
-      "sources": [
-        {
-          "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-        }
-      ],
-      "counts_as_driver_topic": true,
-      "counts_as_fallback_topic": false,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_soc_topic": false,
-      "editorial_priority": 2,
-      "evidence_origin": "article_text",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "source_candidate_hash": "7ef4ffea5e3a07c406c00a973bb955bd1e0f5e597b513332d1393d83f4923385",
-      "source_candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-      "source_hint": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 3,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "resolvedImage": {
-        "url": "../../assets/images/fallback/newsletter-default.svg",
-        "src": "../../assets/images/fallback/newsletter-default.svg",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": true,
-        "reason": "no selected image; local fallback visual used"
-      },
-      "impact_claim_level": "driver_image_pipeline",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata"
-      ],
-      "reader_owners": [
-        "camera_driver_owner",
-        "camera_hal_owner",
-        "camera_test_owner"
-      ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "do_not_overstate": [
-        "Do not treat upstream libcamera Raspberry Pi updates as Android vendor HAL runtime behavior without downstream integration evidence."
-      ],
-      "article_sections": {
-        "verified_facts": [
-          "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
-          "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
-          "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다."
-        ],
-        "background_context": "libcamera는 Linux 기반 시스템에서 카메라 하드웨어와 상호 작용하는 표준화된 프레임워크입니다. 제품 camera stack은 구현에 따라 V4L2, vendor driver, 또는 별도 camera stack과 연결될 수 있으므로, upstream libcamera 변경은 downstream 통합 여부를 확인한 뒤에만 제품 영향으로 해석합니다. Atomic control lists는 여러 카메라 컨트롤을 단일 트랜잭션으로 적용하여 일관된 상태를 보장하는 메커니즘이며, AGC/AWB 통계는 이미지 처리 파이프라인에서 노출 및 화이트 밸런스를 조정하는 데 사용됩니다.",
-        "hal_driver_impact": "libcamera v0.7.1의 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경은 upstream Linux camera stack의 driver/image-pipeline signal입니다. 제품 camera stack 동작 변화로 보려면 해당 변경이 downstream vendor kernel 또는 libcamera fork에 통합됐다는 증거가 먼저 필요합니다. HAL 팀은 AE/AWB 회귀가 보고된 제품에서만 metadata consistency와 image quality log를 분리해 확인합니다.",
-        "action_items": [
-          "카메라 드라이버 팀은 현재 vendor kernel/libcamera fork에 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경이 실제로 포함됐는지 확인합니다.",
-          "downstream 통합이 확인된 장치에서만 Preview + ImageCapture AE/AWB smoke test와 captureResult metadata consistency를 기존 회귀 범위 안에서 확인합니다.",
-          "Raspberry Pi reference board 결과는 제품 camera stack 변경 근거가 아니라 upstream comparison log로만 분리해 기록합니다."
-        ],
-        "team_share_points": "libcamera v0.7.1은 Raspberry Pi Atomic control lists 및 AGC/AWB 통계 개선을 포함합니다. HAL follow-up은 downstream vendor kernel/libcamera 통합과 AE/AWB 회귀 증거가 있을 때만 열고, 그렇지 않으면 upstream driver/image-pipeline review note로 둡니다.",
-        "do_not_claim": [
-          "Do not treat upstream libcamera Raspberry Pi updates as Android vendor HAL runtime behavior without downstream integration evidence."
-        ]
-      },
-      "hal_signal_capsule": {
-        "why_now": "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 AGC/AWB 통계 수정 패치를 포함합니다. 이는 libcamera-devel 메일링 리스트를 통해 확인되었습니다.",
-        "reader_owners": [
-          "camera_driver_owner",
-          "camera_hal_owner",
-          "camera_test_owner"
-        ],
-        "check_within_2_weeks": "카메라 드라이버 팀은 현재 vendor kernel/libcamera fork에 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경이 실제로 포함됐는지 확인합니다.",
-        "impact_axes": [
-          "driver_image_pipeline",
-          "stream_buffer_metadata"
-        ],
-        "do_not_overstate": [
-          "Do not treat upstream libcamera Raspberry Pi updates as Android vendor HAL runtime behavior without downstream integration evidence."
-        ]
-      },
-      "claims": [
-        {
-          "claim_id": "libcamera-v0-7-1-rpi-atomic-agc-awb-fact-1",
-          "text": "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-1"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        },
-        {
-          "claim_id": "libcamera-v0-7-1-rpi-atomic-agc-awb-fact-2",
-          "text": "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-2"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        },
-        {
-          "claim_id": "libcamera-v0-7-1-rpi-atomic-agc-awb-fact-3",
-          "text": "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다.",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-3"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        },
-        {
-          "claim_id": "libcamera-v0-7-1-rpi-atomic-agc-awb-fact-4",
-          "text": "libcamera v0.7.1 릴리스는 2026년 4월 28일에 발표되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 AGC/AWB 통계 수정 패치를 포함합니다. 이는 libcamera-devel 메일링 리스트를 통해 확인되었습니다.",
-          "claim_type": "fact",
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-4"
-          ],
-          "source_urls": [
-            "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-          ]
-        }
-      ],
-      "evidence_ids": [
-        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-1",
-        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-2",
-        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-3",
-        "hist:2026-05-07:libcamera-v0-7-1-rpi-atomic-agc-awb:fact-4"
-      ],
-      "source_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-      ],
-      "fallback_promotion_allowed": false
-    },
     {
       "category": "카메라 드라이버 및 이미지 파이프라인",
       "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
@@ -415,7 +210,27 @@
       "source_urls": [
         "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
       ],
-      "fallback_promotion_allowed": false
+      "fallback_promotion_allowed": false,
+      "public_article": {
+        "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+        "lead": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트 기준으로 중복 issue에 흩어진 내용을 합쳐 libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트 항목을 다시 정리했습니다.",
+        "body_paragraphs": [
+          "이 article은 camera_driver_image_pipeline 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
+        ],
+        "camera_hal_takeaway": "Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.",
+        "reader_checkpoints": [
+          "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다."
+        ],
+        "source_links": [
+          {
+            "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+            "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+            "source_role": "primary"
+          }
+        ]
+      }
     },
     {
       "category": "카메라 드라이버 및 이미지 파이프라인",
@@ -617,194 +432,27 @@
       "source_urls": [
         "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
       ],
-      "fallback_promotion_allowed": false
-    },
-    {
-      "category": "C++ 및 개발 도구",
-      "headline": "Glaze 7.2: native tooling serialization 검토 범위",
-      "what_changed": "Glaze v7.2.0은 2026년 4월 28일 릴리스되었고 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 직렬화 형식 지원을 포함합니다. 이 항목은 Android HAL toolchain 전환 근거가 아니라, Clang / LLVM / libc++ 중심 Android native 환경에서 지원 여부를 확인해야 하는 host-side native tooling watch item입니다.",
-      "confirmed_facts": [
-        "Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.",
-        "Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다."
-      ],
-      "evidence_summary": "ISO C++ Blog의 2026년 4월 28일 Glaze v7.2.0 릴리스 글은 C++26 Reflection 지원과 여러 직렬화 형식 지원을 설명합니다.",
-      "specificity_checks": [
-        "버전: Glaze v7.2.0",
-        "릴리스 날짜: 2026년 4월 28일",
-        "API/컴포넌트: Glaze C++ serialization library, C++26 Reflection, YAML, CBOR, MessagePack, TOML",
-        "동작 변경: Reflection 기반 직렬화 지원과 데이터 형식 지원 확대",
-        "Android native 관련성: Clang / LLVM / libc++ 지원 여부 확인이 필요한 host-side native tooling watch item",
-        "출처 페이지: https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-      ],
-      "source_verification_notes": [
-        "ISO C++ Blog 게시물에서 Glaze v7.2.0 릴리스와 C++26 Reflection 지원을 확인했습니다.",
-        "Android HAL에서 바로 toolchain을 전환하거나 vendor metadata PoC를 요구한다는 근거는 없으므로 Clang / LLVM / libc++ 지원 여부를 확인해야 하는 host-side tooling watch item으로 제한했습니다."
-      ],
-      "background": "Glaze는 C++ 직렬화 라이브러리이며 C++26 Reflection을 활용해 타입 매핑과 데이터 직렬화 코드를 줄이는 방향의 기능을 제공합니다. Android native 개발은 Clang / LLVM / libc++ 중심이므로 Glaze 7.2는 Camera HAL production path 적용 대상이 아니라, host-side 분석 도구나 standalone native utility에서 serialization library 선택지를 검토할 때 참고할 수 있는 tooling signal입니다.",
-      "why_it_matters": "HAL 팀이 내부 분석 도구나 debug utility에서 직렬화 라이브러리를 검토해야 할 때 Glaze 7.2는 참고할 수 있습니다. 다만 Android build와 Clang / LLVM / libc++ 지원이 확인되지 않으면 제품 HAL migration 계획으로 올리지 않고 host-side tooling watch item으로만 관리해야 합니다.",
-      "camera_hal_perspective": "이 source는 Glaze library release note이며, Android camera stack의 product behavior를 직접 설명하지 않습니다. 따라서 Glaze 7.2는 제품 HAL 동작 변경 근거가 아니라, 내부 분석 도구나 debug utility를 새로 설계할 때 Android toolchain 지원성과 통합 비용을 먼저 확인하는 참고 항목으로만 유지합니다.",
-      "camera_hal_checks": [
-        "Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 C++26 Reflection 지원 여부와 Glaze 사용 가능성을 changelog와 실험 환경 기준으로 확인합니다.",
-        "host-side 분석 도구나 standalone native utility에 serialization library 검토 필요가 있을 때만 small PoC 후보로 기록합니다.",
-        "production HAL code나 camera pipeline 동작 변경으로 승격하려면 별도 product requirement와 source-backed downstream evidence를 요구합니다."
-      ],
-      "action_hints": [
-        "Build/toolchain owner가 Clang / LLVM / libc++ 지원성과 Glaze 사용 가능성을 확인합니다.",
-        "host-side 분석 도구나 standalone native utility에서 serialization library 검토 필요가 있는지 확인합니다.",
-        "production HAL code 변경은 별도 product requirement와 downstream evidence가 있을 때만 검토합니다."
-      ],
-      "action_items": [
-        "Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 C++26 Reflection 지원 여부와 Glaze 사용 가능성을 changelog와 실험 환경 기준으로 확인합니다.",
-        "host-side 분석 도구나 standalone native utility에 serialization library 검토 필요가 있을 때만 small PoC 후보로 기록합니다.",
-        "production HAL code나 camera pipeline 동작 변경으로 승격하려면 별도 product requirement와 source-backed downstream evidence를 요구합니다."
-      ],
-      "team_summary": "Glaze 7.2는 Android HAL toolchain 전환 근거가 아니라 host-side native tooling 동향입니다. Camera HAL team은 production HAL code 변경이나 vendor metadata PoC 요구로 기록하지 말고, toolchain 지원성과 내부 도구 필요성이 확인될 때만 별도 검토합니다.",
-      "is_ai_related": false,
-      "article_type": "cpp_ai_tooling_fallback",
-      "imageCandidates": [
-        {
-          "url": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
-          "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-          "articleUrl": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
-          "sourceKind": "release_note_item",
-          "licenseStatus": "unknown",
-          "attribution": "libcamera Release Announcements",
-          "validationStatus": "ok",
-          "alt": "libcamera logo",
-          "contentType": "image/jpeg",
-          "height": 630,
-          "width": 1200
-        }
-      ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "The ISO C++ Blog article does not provide a directly relevant inspectable image for this HAL-focused summary, so no external image was selected and the repo-local C++ fallback visual is used through resolvedImage.",
-      "sources": [
-        {
-          "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
-          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-        }
-      ],
-      "counts_as_driver_topic": false,
-      "counts_as_fallback_topic": true,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_soc_topic": false,
-      "editorial_priority": 5,
-      "evidence_origin": "article_text",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "source_candidate_hash": "a8865e6c6b3d243f118e66a60f294112efb9ec157017899bb9cae9f7e2ff5c68",
-      "source_candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "source_hint": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 5,
-      "resolvedImage": {
-        "url": "../../assets/images/fallback/cpp.svg",
-        "src": "../../assets/images/fallback/cpp.svg",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": true,
-        "reason": "no selected image; local fallback visual used"
-      },
-      "impact_claim_level": "native_tooling_workflow",
-      "hal_impact_axes": [
-        "native_tooling_workflow"
-      ],
-      "reader_owners": [
-        "native_tooling_owner",
-        "camera_hal_owner"
-      ],
-      "actionability_level": "concrete_check",
-      "effective_actionability_level": "concrete_check",
-      "do_not_overstate": [
-        "Do not treat Glaze 7.2 as a product HAL implementation or production code change."
-      ],
-      "article_sections": {
-        "verified_facts": [
-          "Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.",
-          "Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다."
+      "fallback_promotion_allowed": false,
+      "public_article": {
+        "headline": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+        "lead": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선 기준으로 중복 issue에 흩어진 내용을 합쳐 libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선 항목을 다시 정리했습니다.",
+        "body_paragraphs": [
+          "이 article은 camera_driver_image_pipeline 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
         ],
-        "background_context": "Glaze는 C++ 직렬화 라이브러리이며 C++26 Reflection을 활용해 타입 매핑과 데이터 직렬화 코드를 줄이는 방향의 기능을 제공합니다. Android native 개발은 Clang / LLVM / libc++ 중심이므로 Glaze 7.2는 Camera HAL production path 적용 대상이 아니라, host-side 분석 도구나 standalone native utility에서 serialization library 선택지를 검토할 때 참고할 수 있는 tooling signal입니다.",
-        "hal_driver_impact": "이 source는 Glaze library release note이며, Android camera stack의 product behavior를 직접 설명하지 않습니다. 따라서 Glaze 7.2는 제품 HAL 동작 변경 근거가 아니라, 내부 분석 도구나 debug utility를 새로 설계할 때 Android toolchain 지원성과 통합 비용을 먼저 확인하는 참고 항목으로만 유지합니다.",
-        "action_items": [
-          "Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 C++26 Reflection 지원 여부와 Glaze 사용 가능성을 changelog와 실험 환경 기준으로 확인합니다.",
-          "host-side 분석 도구나 standalone native utility에 serialization library 검토 필요가 있을 때만 small PoC 후보로 기록합니다.",
-          "production HAL code나 camera pipeline 동작 변경으로 승격하려면 별도 product requirement와 source-backed downstream evidence를 요구합니다."
+        "camera_hal_takeaway": "Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.",
+        "reader_checkpoints": [
+          "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다."
         ],
-        "team_share_points": "Glaze 7.2는 Android HAL toolchain 전환 근거가 아니라 host-side native tooling 동향입니다. Camera HAL team은 production HAL code 변경이나 vendor metadata PoC 요구로 기록하지 말고, toolchain 지원성과 내부 도구 필요성이 확인될 때만 별도 검토합니다.",
-        "do_not_claim": [
-          "Do not treat Glaze 7.2 as a product HAL implementation or production code change."
+        "source_links": [
+          {
+            "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+            "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+            "source_role": "primary"
+          }
         ]
-      },
-      "hal_signal_capsule": {
-        "why_now": "ISO C++ Blog의 2026년 4월 28일 Glaze v7.2.0 릴리스 글은 C++26 Reflection 지원과 여러 직렬화 형식 지원을 설명합니다.",
-        "reader_owners": [
-          "native_tooling_owner",
-          "camera_hal_owner"
-        ],
-        "check_within_2_weeks": "Build/toolchain owner는 현재 Android branch의 Clang / LLVM / libc++에서 C++26 Reflection 지원 여부와 Glaze 사용 가능성을 changelog와 실험 환경 기준으로 확인합니다.",
-        "impact_axes": [
-          "native_tooling_workflow"
-        ],
-        "do_not_overstate": [
-          "Do not treat Glaze 7.2 as a product HAL implementation or production code change."
-        ]
-      },
-      "claims": [
-        {
-          "claim_id": "glaze-7-2-native-tooling-fact-1",
-          "text": "Glaze v7.2.0은 2026년 4월 28일에 릴리스되었습니다.",
-          "claim_type": "fact",
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-07:glaze-7-2-native-tooling:fact-1"
-          ],
-          "source_urls": [
-            "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-          ]
-        },
-        {
-          "claim_id": "glaze-7-2-native-tooling-fact-2",
-          "text": "Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML 형식 지원을 포함합니다.",
-          "claim_type": "fact",
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-07:glaze-7-2-native-tooling:fact-2"
-          ],
-          "source_urls": [
-            "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-          ]
-        },
-        {
-          "claim_id": "glaze-7-2-native-tooling-fact-3",
-          "text": "ISO C++ Blog의 2026년 4월 28일 Glaze v7.2.0 릴리스 글은 C++26 Reflection 지원과 여러 직렬화 형식 지원을 설명합니다.",
-          "claim_type": "fact",
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low",
-          "evidence_ids": [
-            "hist:2026-05-07:glaze-7-2-native-tooling:fact-3"
-          ],
-          "source_urls": [
-            "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-          ]
-        }
-      ],
-      "evidence_ids": [
-        "hist:2026-05-07:glaze-7-2-native-tooling:fact-1",
-        "hist:2026-05-07:glaze-7-2-native-tooling:fact-2",
-        "hist:2026-05-07:glaze-7-2-native-tooling:fact-3"
-      ],
-      "source_urls": [
-        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-      ],
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Glaze is retained only as a host-side native tooling watch item for serialization review."
+      }
     }
   ],
   "action_items": [
@@ -815,20 +463,19 @@
   ],
   "references": [
     {
-      "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
-    },
-    {
       "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
       "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
     },
     {
       "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
       "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
-    },
-    {
-      "title": "Glaze 7.2: C++26 Reflection 지원 및 YAML, CBOR, MessagePack, TOML 형식 지원",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
     }
-  ]
+  ],
+  "camera_anchor_count": 2,
+  "fallback_section_count": 0,
+  "fallback_only": false,
+  "homepage_visibility": "normal",
+  "publication_mode": "review_only",
+  "fallback_public_ready": false,
+  "homepage_badge": ""
 }

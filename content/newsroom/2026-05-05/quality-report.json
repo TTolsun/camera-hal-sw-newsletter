@@ -1,12 +1,23 @@
 {
   "schema_version": 1,
   "date": "2026-05-05",
-  "score": 100,
+  "score": 92,
   "max_score": 100,
   "threshold": 85,
-  "status": "PASS",
-  "summary": "Quality score 100, threshold 85, max score 100. Editor review is ready.",
-  "deductions": [],
+  "status": "NEEDS_FIX",
+  "summary": "Quality score 92, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "deductions": [
+    {
+      "category": "composition",
+      "points": 8,
+      "reason": "Supporting main article count 3 exceeds publish-ready policy maximum (1).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
   "article_results": [
     {
       "index": 1,
@@ -53,7 +64,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
@@ -111,7 +124,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       },
@@ -170,7 +185,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "soc_platform_signal counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
@@ -230,7 +247,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
@@ -847,6 +866,7 @@
     "main_articles_with_owner_metric_log": 1,
     "main_articles_with_concrete_action": 4,
     "fallback_main_article_count": 3,
+    "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 1,
     "generic_signal_hard_blocker_count": 0,
     "hal_signal_hard_blocker_count": 0,
@@ -1018,6 +1038,7 @@
     "direct_aosp_camera_count": 0,
     "camera_driver_image_pipeline_count": 0,
     "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 1,
     "cpp_ai_tooling_fallback_count": 2,
     "generic_tech_watchlist_count": 0,
@@ -1026,7 +1047,7 @@
     "forbidden_main_article_count": 0,
     "fallback_relevance_count": 3,
     "publishable_scope_count": 4,
-    "composition_mode": "FALLBACK_COMPOSITION",
+    "composition_mode": "NEEDS_FIX",
     "section_count_details": [
       {
         "index": 1,
@@ -1048,7 +1069,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
@@ -1072,7 +1095,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       },
@@ -1096,7 +1121,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "soc_platform_signal counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
@@ -1120,7 +1147,9 @@
         "binding_source": "shortlist_selected",
         "binding_reason": "",
         "publishable_scope": true,
-        "missing_score_fields": [],
+        "missing_score_fields": [
+          "multimedia_camera_output_relevance"
+        ],
         "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       }
@@ -1129,6 +1158,7 @@
       "direct_aosp_camera": 0,
       "camera_driver_image_pipeline": 0,
       "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
       "soc_platform_signal": 1,
       "cpp_ai_tooling_fallback": 2,
       "generic_tech_watchlist": 0
@@ -1141,9 +1171,11 @@
     "stale_claim_removed_count": 0,
     "stale_claim_hard_failure_count": 0,
     "source_integrity_violation_count": 0,
-    "blocking_deduction_count": 0,
-    "blocking_deduction_categories": [],
-    "hard_fail_count": 0,
+    "blocking_deduction_count": 1,
+    "blocking_deduction_categories": [
+      "composition"
+    ],
+    "hard_fail_count": 1,
     "soft_deduction_count": 0,
     "article_gate_counts": {
       "PASS": 4,
@@ -1245,6 +1277,7 @@
       "main_articles_with_owner_metric_log": 1,
       "main_articles_with_concrete_action": 4,
       "fallback_main_article_count": 3,
+      "android_multimedia_camera_output_count": 0,
       "soc_platform_signal_count": 1,
       "generic_signal_hard_blocker_count": 0,
       "hal_signal_hard_blocker_count": 0,
@@ -1407,7 +1440,12 @@
         "hard_blocker_reason_codes": []
       }
     ],
-    "top_deduction_categories": [],
+    "top_deduction_categories": [
+      {
+        "category": "composition",
+        "count": 1
+      }
+    ],
     "candidate_exclusion_summary": []
   }
 }

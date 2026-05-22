@@ -1,395 +1,13 @@
 {
   "date": "2026-05-21",
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-21",
-  "summary": "이번 2026-05-21호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+  "summary": "이번 2026-05-21호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 1개 기사(libcamera Release Announcements - libcamera v0.7.1)를 source-backed 내용으로 보강했습니다.",
   "briefing": [
-    "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
-    "libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트를 포함합니다.",
-    "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다."
+    "libcamera Release Announcements - libcamera v0.7.1: libcamera Release Announcements - libcamera v0.7.1 기준으로 중복 issue에 흩어진 내용을 합쳐 libcamera Release Announcements - libcamera v0.7.1 항목을 다시 정리했습니다.",
+    "중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다.",
+    "중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다."
   ],
   "sections": [
-    {
-      "category": "AOSP Camera / Android Camera",
-      "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "confirmed_facts": [
-        "Android Developers Blog가 Tue, 19 May 2026 13:00:00 +0000에 게시 또는 업데이트한 항목입니다.",
-        "관련 컴포넌트: CameraX / Android camera APIs.",
-        "확인된 변경점: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size."
-      ],
-      "evidence_summary": "Android Developers Blog source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
-      "specificity_checks": [
-        "finalSelectionEligibility=main",
-        "relevance_bucket=direct_aosp_camera",
-        "impact_claim_level=direct_hal_change",
-        "source_gap_risk=false"
-      ],
-      "source_verification_notes": [
-        "Confirmed facts에는 source URL, date, component, version, cleaned behavior metadata만 사용했습니다.",
-        "Fallback reconstruction 전에 main-candidate eligibility check를 통과한 항목입니다.",
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
-      "background": "Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
-      "camera_hal_perspective": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
-      "camera_hal_checks": [
-        "Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.",
-        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
-      ],
-      "action_items": [
-        "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
-        "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
-      ],
-      "action_hints": [],
-      "team_summary": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
-      "why_it_matters": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
-      "is_ai_related": false,
-      "article_type": "camera-hal",
-      "impact_claim_level": "direct_hal_change",
-      "overclaim_guardrails": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "field_builder_warnings": [],
-      "removed_source_fragments": [],
-      "source_extraction": {
-        "mode": "roundup_child_topic",
-        "parent_title": "17 Things to know for Android developers at Google I/O",
-        "parent_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-        "child_heading": "8: Building seamless Android experiences across devices with Jetpack Compose",
-        "evidence_blocks": [
-          {
-            "heading": "8: Building seamless Android experiences across devices with Jetpack Compose",
-            "text": "8: Building seamless Android experiences across devices with Jetpack Compose. The Android ecosystem is now Adaptive by Default , moving fluidly across phones, foldables, tablets, cars, XR, and expanding usages with Googlebook and connected displays. With over 580 million large-screen devices, and users on multiple devices spending up to 14x more on apps, the investment in adaptive design presents a massive opportunity. Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size. Furthermore, new skills in Android Studio make updating your existing app to adopt these adaptive patterns easier than ever. Notability’s Android debut sets a new standard for premium productivity apps. Built with Jetpack Compose, Navigation 3, and Kotlin Multiplatform, it delivers an intuitive, adaptive experience across devices.",
-            "source_text": "8: Building seamless Android experiences across devices with Jetpack Compose. The Android ecosystem is now Adaptive by Default , moving fluidly across phones, foldables, tablets, cars, XR, and expanding usages with Googlebook and connected displays. With over 580 million large-screen devices, and users on multiple devices spending up to 14x more on apps, the investment in adaptive design presents a massive opportunity. Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size. Furthermore, new skills in Android Studio make updating your existing app to adopt these adaptive patterns easier than ever. Notability’s Android debut sets a new standard for premium productivity apps. Built with Jetpack Compose, Navigation 3, and Kotlin Multiplatform, it delivers an intuitive, adaptive experience across devices.",
-            "links": [
-              {
-                "url": "https://goo.gle/AdaptiveApps_IO26",
-                "text": "Adaptive by Default",
-                "source_field": "rss.roundup_child",
-                "extraction_method": "html_anchor",
-                "evidence_role": "unclassified"
-              },
-              {
-                "url": "https://developer.android.com/googlebook",
-                "text": "Googlebook",
-                "source_field": "rss.roundup_child",
-                "extraction_method": "html_anchor",
-                "evidence_role": "unclassified"
-              },
-              {
-                "url": "https://developer.android.com/compose",
-                "text": "Jetpack Compose",
-                "source_field": "rss.roundup_child",
-                "extraction_method": "html_anchor",
-                "evidence_role": "unclassified"
-              },
-              {
-                "url": "http://goo.gle/nav3",
-                "text": "Jetpack Navigation 3",
-                "source_field": "rss.roundup_child",
-                "extraction_method": "html_anchor",
-                "evidence_role": "unclassified"
-              },
-              {
-                "url": "https://developer.android.com/develop/ui/compose/layouts/adaptive/grid",
-                "text": "Grid",
-                "source_field": "rss.roundup_child",
-                "extraction_method": "html_anchor",
-                "evidence_role": "unclassified"
-              },
-              {
-                "url": "https://developer.android.com/develop/ui/compose/layouts/adaptive/flexbox",
-                "text": "FlexBox",
-                "source_field": "rss.roundup_child",
-                "extraction_method": "html_anchor",
-                "evidence_role": "unclassified"
-              },
-              {
-                "url": "https://developer.android.com/media/camera/camerax",
-                "text": "CameraX",
-                "source_field": "rss.roundup_child",
-                "extraction_method": "html_anchor",
-                "evidence_role": "unclassified"
-              },
-              {
-                "url": "https://developer.android.com/tools/agents/android-skills",
-                "text": "skills",
-                "source_field": "rss.roundup_child",
-                "extraction_method": "html_anchor",
-                "evidence_role": "unclassified"
-              }
-            ]
-          }
-        ],
-        "links": [
-          {
-            "url": "https://goo.gle/AdaptiveApps_IO26",
-            "text": "Adaptive by Default",
-            "source_field": "rss.roundup_child",
-            "extraction_method": "html_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "https://developer.android.com/googlebook",
-            "text": "Googlebook",
-            "source_field": "rss.roundup_child",
-            "extraction_method": "html_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "https://developer.android.com/compose",
-            "text": "Jetpack Compose",
-            "source_field": "rss.roundup_child",
-            "extraction_method": "html_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "http://goo.gle/nav3",
-            "text": "Jetpack Navigation 3",
-            "source_field": "rss.roundup_child",
-            "extraction_method": "html_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "https://developer.android.com/develop/ui/compose/layouts/adaptive/grid",
-            "text": "Grid",
-            "source_field": "rss.roundup_child",
-            "extraction_method": "html_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "https://developer.android.com/develop/ui/compose/layouts/adaptive/flexbox",
-            "text": "FlexBox",
-            "source_field": "rss.roundup_child",
-            "extraction_method": "html_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "https://developer.android.com/media/camera/camerax",
-            "text": "CameraX",
-            "source_field": "rss.roundup_child",
-            "extraction_method": "html_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "https://developer.android.com/tools/agents/android-skills",
-            "text": "skills",
-            "source_field": "rss.roundup_child",
-            "extraction_method": "html_anchor",
-            "evidence_role": "unclassified"
-          }
-        ],
-        "extraction_quality": {
-          "has_concrete_child_topic_evidence": true,
-          "main_article_allowed": true,
-          "used_fallback": false
-        }
-      },
-      "derived_editorial_hints": null,
-      "extraction_quality": {
-        "has_concrete_child_topic_evidence": true,
-        "main_article_allowed": true,
-        "used_fallback": false
-      },
-      "background_basis": "article-field-builder deterministic static background",
-      "source_candidate_url": "https://goo.gle/AdaptiveApps_IO26",
-      "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
-      "relevance_bucket": "direct_aosp_camera",
-      "editorial_priority": 1,
-      "aosp_camera_directness": 3,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": true,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "sources": [
-        {
-          "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-          "url": "https://goo.gle/AdaptiveApps_IO26"
-        }
-      ],
-      "imageCandidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 185104
-        },
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/w1200-h630-p-k-no-nu/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 111744
-        },
-        {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 12454
-        }
-      ],
-      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-      "imageSource": "https://goo.gle/AdaptiveApps_IO26",
-      "imageAttribution": "Android Developers Blog",
-      "imageAlt": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
-      "article_sections": {
-        "verified_facts": [
-          "Android Developers Blog가 Tue, 19 May 2026 13:00:00 +0000에 게시 또는 업데이트한 항목입니다.",
-          "관련 컴포넌트: CameraX / Android camera APIs.",
-          "확인된 변경점: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size."
-        ],
-        "background_context": "Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
-        "hal_driver_impact": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
-        "action_items": [
-          "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
-          "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
-        ],
-        "team_share_points": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
-      },
-      "public_article": {
-        "headline": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
-        "lead": "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
-        "body_paragraphs": [
-          "Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.",
-          "이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다."
-        ],
-        "camera_hal_takeaway": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
-        "reader_checkpoints": [
-          "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."
-        ],
-        "source_links": [
-          {
-            "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-            "url": "https://goo.gle/AdaptiveApps_IO26",
-            "publisher": "Android Developers Blog",
-            "source_role": "primary"
-          }
-        ]
-      },
-      "hal_impact_axes": [
-        "framework_hal_contract",
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
-        "cts_vts_its_cdd",
-        "camerax_app_compatibility"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_driver_owner",
-        "camera_test_owner"
-      ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "do_not_overstate": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "soc_signal_type": "",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "hal_signal_capsule": {
-        "why_now": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O is included as a dated HAL signal for editor review.",
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_framework_owner",
-          "camerax_app_compat_owner",
-          "camera_driver_owner",
-          "camera_test_owner"
-        ],
-        "check_within_2_weeks": "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "impact_axes": [
-          "framework_hal_contract",
-          "driver_image_pipeline",
-          "stream_buffer_metadata",
-          "cts_vts_its_cdd",
-          "camerax_app_compatibility"
-        ],
-        "do_not_overstate": [
-          "Supplied source evidence가 말하지 않으면 HAL API",
-          "metadata contract",
-          "stream",
-          "buffer",
-          "request/result",
-          "CTS",
-          "VTS",
-          "Camera ITS impact를 claim하지 않습니다.",
-          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-        ]
-      },
-      "imageSelection": {
-        "reasonCode": "selected",
-        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
-        "sourceUrl": "https://goo.gle/AdaptiveApps_IO26",
-        "attribution": "Android Developers Blog",
-        "licenseStatus": "unknown",
-        "validationStatus": "ok",
-        "validationSource": "candidate_metadata",
-        "candidateUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-        "exclusionEvidence": [
-          {
-            "candidate_url": "https://developer.android.com/static/images/logos/android.svg",
-            "reasonCode": "svg_rejected",
-            "reasonLabel": "SVG 이미지 제외",
-            "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
-            "sourceKind": "article-img",
-            "contentType": "image/svg+xml",
-            "validationStatus": "ok",
-            "valid": false
-          }
-        ]
-      },
-      "resolvedImage": {
-        "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-        "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": "selected image candidate"
-      }
-    },
     {
       "category": "Camera Driver / Image Pipeline",
       "headline": "libcamera Release Announcements - libcamera v0.7.1",
@@ -397,7 +15,22 @@
         "libcamera Release Announcements가 2026-04-28에 게시 또는 업데이트한 항목입니다.",
         "버전/릴리스: libcamera v0.7.1.",
         "관련 컴포넌트: libcamera / V4L2 camera pipeline.",
-        "확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
+        "확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+        "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
+        "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
+        "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다.",
+        "버전/릴리스: libcamera v0.7.1",
+        "게시일: 2026-04-28",
+        "API/컴포넌트: libcamera / V4L2 camera pipeline",
+        "수집 evidence에는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates가 포함됩니다.",
+        "libcamera v0.7.1이 2026년 4월 28일에 출시되었습니다.",
+        "주요 변경 사항은 SoftISP debaying 및 이미지 파이프라인 처리량 개선입니다.",
+        "파이프라인 핸들러 카메라 지원이 추가되었습니다.",
+        "센서 모드 구성이 업데이트되었습니다.",
+        "libcamera Release Announcements의 2026-04-28 항목입니다.",
+        "관련 컴포넌트: libcamera / V4L2 camera pipeline",
+        "v0.7.1 release announcement는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration update를 언급합니다.",
+        "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
       ],
       "evidence_summary": "libcamera Release Announcements source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
       "specificity_checks": [
@@ -414,17 +47,46 @@
         "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
         "libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다."
       ],
-      "what_changed": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
-      "background": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
-      "camera_hal_perspective": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
+      "what_changed": "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. libcamera v0.7.1이 2026년 4월 28일에 릴리스되었으며, Raspberry Pi의 Atomic control lists 및 Simple pipeline의 비례 AGC(Auto Gain Control), AWB(Auto White Balance) 통계 수정 등 다양한 패치가 포함되어 있습니다. libcamera project의 2026년 4월 28일 release announcement는 libcamera v0.7.1 출시를 알렸습니다. 수집된 후보는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration updates를 주요 behavior change로 기록합니다. 2026년 4월 28일, libcamera v0.7.1이 출시되었습니다. 이 버전에는 SoftISP debaying 및 이미지 파이프라인 처리량 개선, 새로운 파이프라인 핸들러 카메라 지원, 그리고 센서 모드 구성 업데이트가 포함되어 있습니다. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates. Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+      "background": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. libcamera는 Linux 기반 시스템에서 카메라 하드웨어와 상호 작용하는 표준화된 프레임워크입니다. 제품 camera stack은 구현에 따라 V4L2, vendor driver, 또는 별도 camera stack과 연결될 수 있으므로, upstream libcamera 변경은 downstream 통합 여부를 확인한 뒤에만 제품 영향으로 해석합니다. Atomic control lists는 여러 카메라 컨트롤을 단일 트랜잭션으로 적용하여 일관된 상태를 보장하는 메커니즘이며, AGC/AWB 통계는 이미지 처리 파이프라인에서 노출 및 화이트 밸런스를 조정하는 데 사용됩니다. libcamera는 Linux camera stack에서 V4L2, sensor, pipeline handler, image processing 경로를 추상화하는 project입니다. Android device가 libcamera를 직접 쓰지 않더라도, vendor bring-up이나 Linux-based camera validation 환경에서는 driver pipeline behavior를 비교하는 참고점이 됩니다. libcamera는 Linux 기반 시스템에서 카메라 하드웨어와의 상호 작용을 표준화하는 오픈 소스 프레임워크입니다. V4L2(Video for Linux Two) 드라이버 위에 추상화 계층을 제공하여 다양한 카메라 센서와 ISP(Image Signal Processor)에 대한 일관된 API를 제공합니다. Android HAL은 종종 V4L2 및 libcamera 기반의 커널 드라이버와 통신하여 카메라 스트림을 관리하고 이미지 데이터를 처리합니다. SoftISP는 하드웨어 ISP가 없거나 제한적인 경우 소프트웨어적으로 이미지 처리(예: debayering)를 수행하는 구성 요소입니다. libcamera는 Android Camera HAL 자체는 아니지만 Linux camera driver, V4L2, sensor mode, image pipeline 관찰 지점과 맞닿아 있습니다. libcamera는 Linux camera stack에서 V4L2 기반 driver/image pipeline 동작을 추적하는 upstream project입니다. 이 항목은 upstream release note를 제품 driver/image-pipeline review input으로 정리합니다. 드라이버, 센서, ISP, libcamera, V4L2 변경사항은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다. libcamera는 Linux 카메라 스택의 핵심 구성 요소로, V4L2(Video for Linux Two) 드라이버 위에 추상화 계층을 제공하여 다양한 카메라 하드웨어와 ISP(Image Signal Processor)를 통합합니다. libcamera의 업데이트는 카메라 드라이버, 센서, ISP 간의 상호 작용 방식에 영향을 미치며, 이는 이미지 파이프라인의 성능, 안정성, 기능에 직접적인 영향을 줄 수 있습니다. 특히 SoftISP 디베이어링 및 이미지 파이프라인 처리량 개선은 RAW 이미지 데이터 처리 방식과 최종 이미지 품질에 영향을 줄 수 있으며, 센서 모드 구성 업데이트는 다양한 캡처 시나리오에서의 카메라 동작에 변화를 가져올 수 있습니다. 이러한 변경 사항은 Android Camera HAL 구현 시 하위 레벨 드라이버와의 연동 및 이미지 처리 로직에 대한 검증을 필요로 합니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
+      "camera_hal_perspective": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. libcamera v0.7.1의 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경은 upstream Linux camera stack의 driver/image-pipeline signal입니다. 제품 camera stack 동작 변화로 보려면 해당 변경이 downstream vendor kernel 또는 libcamera fork에 통합됐다는 증거가 먼저 필요합니다. HAL 팀은 AE/AWB 회귀가 보고된 제품에서만 metadata consistency와 image quality log를 분리해 확인합니다. HAL 팀은 libcamera v0.7.1을 Android HAL contract 변경으로 해석하지 않습니다. 다만 vendor kernel, V4L2 bridge, external camera validation stack이 libcamera와 맞닿아 있다면 RAW/YUV path, sensor mode selection, frame timing을 기존 HAL KPI와 같은 방식으로 비교할 수 있습니다. libcamera v0.7.1의 SoftISP, pipeline handler, sensor mode updates는 upstream Linux camera stack에서 확인할 driver/image-pipeline signal입니다. 이 source만으로 Android product camera stream, metadata, feature exposure, latency, power behavior change가 확인되지는 않습니다. HAL 팀은 vendor kernel/libcamera fork가 해당 release를 실제로 consume하거나 downstream device regression이 보고된 경우에만 RAW/YUV quality, stream combination, sensor mode log를 기존 compatibility evidence와 함께 검토합니다. Camera HAL 팀은 libcamera v0.7.1을 Android HAL 직접 변경으로 해석하지 않고, Linux camera pipeline과 sensor/ISP tuning 관찰 항목으로 둡니다. SoftISP debayering과 throughput 변화는 Android bring-up 환경의 reference comparison에만 활용합니다. HAL 팀은 libcamera release note를 driver/image pipeline review input으로 보고, vendor kernel 또는 product integration evidence가 있을 때만 별도 follow-up으로 승격합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
       "camera_hal_checks": [
         "Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.",
-        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
+        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다.",
+        "현재 개발 중인 vendor kernel 드라이버가 libcamera 또는 유사한 V4L2 기반 Atomic control 메커니즘을 사용하는지 확인하고, 해당 구현이 최신 libcamera 개선 사항을 반영하는지 검토합니다.",
+        "자동 노출(AE) 및 자동 화이트 밸런스(AWB) 모드에서 Preview + ImageCapture 스트림 조합을 사용하여 이미지 품질 및 메타데이터 일관성을 테스트하고, libcamera v0.7.1의 통계 개선이 적용되었을 때의 변화를 관찰합니다.",
+        "Raspberry Pi 기반 개발 보드를 사용하는 경우, libcamera v0.7.1로 업데이트한 후 카메라 동작의 안정성 및 성능 회귀 여부를 확인합니다.",
+        "libcamera 기반 validation path가 있는 platform에서 v0.7.1 적용 전후 RAW/YUV capture, preview frame timing, sensor mode selection log를 비교합니다.",
+        "V4L2 control, media graph, sensor mode 설정이 HAL 요청과 어긋나는 사례가 있는지 device log로 확인합니다.",
+        "SoftISP path를 쓰는 경우 CPU load, frame drop, output format 변화를 측정하고 Android HAL issue와 Linux camera stack issue를 분리합니다.",
+        "libcamera v0.7.1의 SoftISP debaying 개선이 HAL의 RAW_OPAQUE 또는 YUV_420_888 스트림 처리 파이프라인에 미치는 영향을 평가합니다.",
+        "새로운 파이프라인 핸들러 지원이 HAL의 `camera.device` 인터페이스를 통해 노출될 수 있는 새로운 기능이나 센서 모드에 영향을 주는지 확인합니다.",
+        "업데이트된 sensor mode 구성은 downstream camera stack 통합 evidence가 있을 때만 stream combination 및 frame-rate compatibility log로 확인합니다.",
+        "libcamera v0.7.1 release note의 SoftISP / sensor mode 항목을 내부 Linux camera pipeline 관찰 목록에 등록합니다.",
+        "Android HAL 포팅 대상 커널/driver에 동일 change가 들어오는 경우 Preview, RAW, YUV stream 품질과 throughput regression만 별도 측정합니다.",
+        "Camera HAL / Android Camera 영향 가능성을 source evidence 기준으로 확인합니다.",
+        "CTS/VTS, Camera ITS, stream/buffer/metadata 영향이 확인될 때만 후속 작업으로 승격합니다."
       ],
       "action_items": [
         "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
         "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+        "카메라 드라이버 팀은 현재 vendor kernel/libcamera fork에 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경이 실제로 포함됐는지 확인합니다.",
+        "downstream 통합이 확인된 장치에서만 Preview + ImageCapture AE/AWB smoke test와 captureResult metadata consistency를 기존 회귀 범위 안에서 확인합니다.",
+        "Raspberry Pi reference board 결과는 제품 camera stack 변경 근거가 아니라 upstream comparison log로만 분리해 기록합니다.",
+        "libcamera v0.7.1 적용 platform이 있는지 vendor kernel / BSP branch 기준으로 확인하고, 해당 platform만 regression 대상에 넣습니다.",
+        "RAW/YUV capture path에서 frame timing, sensor mode, media graph log를 수집해 기존 HAL KPI와 비교합니다.",
+        "vendor kernel/libcamera fork에 v0.7.1 변경이 통합됐다는 evidence가 있을 때만 Preview + Still Capture + Video Recording 조합의 YUV/RAW throughput과 latency를 기존 regression 범위에서 비교합니다.",
+        "SoftISP debaying 평가는 downstream image-quality regression이나 product requirement가 있을 때만 특정 sensor mode에서 수행합니다.",
+        "새 pipeline handler support는 HAL feature declaration update 근거가 아니라, downstream camera stack이 해당 path를 consume하는지 확인하는 driver review item으로 기록합니다.",
+        "libcamera v0.7.1 change list를 내부 Linux camera driver watch 항목으로 등록하고 Android HAL 직접 변경으로 표현하지 않습니다.",
+        "SoftISP debayering 또는 sensor mode update가 포팅 branch에 들어올 때만 RAW/YUV 품질과 throughput 비교를 수행합니다.",
+        "후속 upstream patch가 V4L2 control, sensor configuration, pipeline handler behavior를 바꾸면 다음 호에서 재평가합니다.",
+        "공식 릴리스 날짜와 변경 범위를 확인해 내부 관찰 항목으로 둘지 판단합니다.",
+        "관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.",
+        "후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다.",
+        "libcamera v0.7.1의 SoftISP, sensor mode, pipeline handler 변경이 downstream camera integration 검증에 영향을 주는지 확인합니다.",
+        "RAW/YUV throughput, frame timing, format negotiation 관점에서 추가 smoke가 필요한지 검토합니다."
       ],
       "action_hints": [],
       "team_summary": "libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
@@ -462,6 +124,10 @@
         {
           "title": "libcamera Release Announcements - libcamera v0.7.1",
           "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
+        },
+        {
+          "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
         }
       ],
       "imageCandidates": [],
@@ -476,35 +142,63 @@
           "libcamera Release Announcements가 2026-04-28에 게시 또는 업데이트한 항목입니다.",
           "버전/릴리스: libcamera v0.7.1.",
           "관련 컴포넌트: libcamera / V4L2 camera pipeline.",
-          "확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
+          "확인된 변경점: Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates.",
+          "libcamera v0.7.1은 2026년 4월 28일에 릴리스되었습니다.",
+          "이 릴리스에는 Raspberry Pi의 Atomic control lists에 대한 개선 사항이 포함되어 있습니다.",
+          "Simple pipeline의 비례 AGC 및 AWB 통계가 수정되었습니다.",
+          "libcamera v0.7.1이 2026년 4월 28일에 출시되었습니다.",
+          "주요 변경 사항은 SoftISP debaying 및 이미지 파이프라인 처리량 개선입니다.",
+          "파이프라인 핸들러 카메라 지원이 추가되었습니다.",
+          "센서 모드 구성이 업데이트되었습니다.",
+          "libcamera Release Announcements의 2026-04-28 항목입니다.",
+          "관련 컴포넌트: libcamera / V4L2 camera pipeline",
+          "Released libcamera v0.7.1 with SoftISP debayering and image pipeline throughput, pipeline handler camera support, sensor mode configuration updates."
         ],
-        "background_context": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
-        "hal_driver_impact": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
+        "background_context": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. libcamera는 Linux 기반 시스템에서 카메라 하드웨어와 상호 작용하는 표준화된 프레임워크입니다. 제품 camera stack은 구현에 따라 V4L2, vendor driver, 또는 별도 camera stack과 연결될 수 있으므로, upstream libcamera 변경은 downstream 통합 여부를 확인한 뒤에만 제품 영향으로 해석합니다. Atomic control lists는 여러 카메라 컨트롤을 단일 트랜잭션으로 적용하여 일관된 상태를 보장하는 메커니즘이며, AGC/AWB 통계는 이미지 처리 파이프라인에서 노출 및 화이트 밸런스를 조정하는 데 사용됩니다. libcamera는 Linux 기반 시스템에서 카메라 하드웨어와의 상호 작용을 표준화하는 오픈 소스 프레임워크입니다. V4L2(Video for Linux Two) 드라이버 위에 추상화 계층을 제공하여 다양한 카메라 센서와 ISP(Image Signal Processor)에 대한 일관된 API를 제공합니다. Android HAL은 종종 V4L2 및 libcamera 기반의 커널 드라이버와 통신하여 카메라 스트림을 관리하고 이미지 데이터를 처리합니다. SoftISP는 하드웨어 ISP가 없거나 제한적인 경우 소프트웨어적으로 이미지 처리(예: debayering)를 수행하는 구성 요소입니다. libcamera는 Linux camera stack에서 V4L2 기반 driver/image pipeline 동작을 추적하는 upstream project입니다. 이 항목은 upstream release note를 제품 driver/image-pipeline review input으로 정리합니다. 드라이버, 센서, ISP, libcamera, V4L2 변경사항은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다. libcamera는 Linux 카메라 스택의 핵심 구성 요소로, V4L2(Video for Linux Two) 드라이버 위에 추상화 계층을 제공하여 다양한 카메라 하드웨어와 ISP(Image Signal Processor)를 통합합니다. libcamera의 업데이트는 카메라 드라이버, 센서, ISP 간의 상호 작용 방식에 영향을 미치며, 이는 이미지 파이프라인의 성능, 안정성, 기능에 직접적인 영향을 줄 수 있습니다. 특히 SoftISP 디베이어링 및 이미지 파이프라인 처리량 개선은 RAW 이미지 데이터 처리 방식과 최종 이미지 품질에 영향을 줄 수 있으며, 센서 모드 구성 업데이트는 다양한 캡처 시나리오에서의 카메라 동작에 변화를 가져올 수 있습니다. 이러한 변경 사항은 Android Camera HAL 구현 시 하위 레벨 드라이버와의 연동 및 이미지 처리 로직에 대한 검증을 필요로 합니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다. Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. libcamera v0.7.1의 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경은 upstream Linux camera stack의 driver/image-pipeline signal입니다. 제품 camera stack 동작 변화로 보려면 해당 변경이 downstream vendor kernel 또는 libcamera fork에 통합됐다는 증거가 먼저 필요합니다. HAL 팀은 AE/AWB 회귀가 보고된 제품에서만 metadata consistency와 image quality log를 분리해 확인합니다. libcamera v0.7.1의 SoftISP, pipeline handler, sensor mode updates는 upstream Linux camera stack에서 확인할 driver/image-pipeline signal입니다. 이 source만으로 Android product camera stream, metadata, feature exposure, latency, power behavior change가 확인되지는 않습니다. HAL 팀은 vendor kernel/libcamera fork가 해당 release를 실제로 consume하거나 downstream device regression이 보고된 경우에만 RAW/YUV quality, stream combination, sensor mode log를 기존 compatibility evidence와 함께 검토합니다. HAL 팀은 libcamera release note를 driver/image pipeline review input으로 보고, vendor kernel 또는 product integration evidence가 있을 때만 별도 follow-up으로 승격합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다. Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
         "action_items": [
           "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
           "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+          "카메라 드라이버 팀은 현재 vendor kernel/libcamera fork에 Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 변경이 실제로 포함됐는지 확인합니다.",
+          "downstream 통합이 확인된 장치에서만 Preview + ImageCapture AE/AWB smoke test와 captureResult metadata consistency를 기존 회귀 범위 안에서 확인합니다.",
+          "Raspberry Pi reference board 결과는 제품 camera stack 변경 근거가 아니라 upstream comparison log로만 분리해 기록합니다.",
+          "vendor kernel/libcamera fork에 v0.7.1 변경이 통합됐다는 evidence가 있을 때만 Preview + Still Capture + Video Recording 조합의 YUV/RAW throughput과 latency를 기존 regression 범위에서 비교합니다.",
+          "SoftISP debaying 평가는 downstream image-quality regression이나 product requirement가 있을 때만 특정 sensor mode에서 수행합니다.",
+          "새 pipeline handler support는 HAL feature declaration update 근거가 아니라, downstream camera stack이 해당 path를 consume하는지 확인하는 driver review item으로 기록합니다.",
+          "공식 릴리스 날짜와 변경 범위를 확인해 내부 관찰 항목으로 둘지 판단합니다.",
+          "관련 camera stack owner가 API/driver/image pipeline 영향 여부를 확인합니다.",
+          "후속 릴리스 노트나 upstream 변경이 나오면 다음 뉴스레터에서 재평가합니다."
         ],
-        "team_share_points": "libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
+        "team_share_points": "libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. libcamera v0.7.1은 Raspberry Pi Atomic control lists 및 AGC/AWB 통계 개선을 포함합니다. HAL follow-up은 downstream vendor kernel/libcamera 통합과 AE/AWB 회귀 증거가 있을 때만 열고, 그렇지 않으면 upstream driver/image-pipeline review note로 둡니다. libcamera v0.7.1은 SoftISP debaying 및 이미지 파이프라인 처리량 개선을 포함합니다. camera stack follow-up은 downstream integration evidence와 regression log가 있을 때만 열고, 그렇지 않으면 upstream driver/image-pipeline review note로 유지합니다. libcamera v0.7.1은 driver/image pipeline 관찰 후보입니다. downstream integration evidence가 있을 때만 별도 follow-up으로 승격합니다. libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. libcamera Release Announcements - libcamera v0.7.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
+        "known_limitations": [],
+        "watch_items": [],
+        "do_not_claim": [
+          "Do not treat upstream libcamera Raspberry Pi updates as Android vendor HAL runtime behavior without downstream integration evidence.",
+          "Keep upstream libcamera changes within driver/image-pipeline review scope unless downstream integration evidence exists."
+        ]
       },
       "public_article": {
-        "headline": "libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트",
-        "lead": "libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트를 포함합니다.",
+        "headline": "libcamera Release Announcements - libcamera v0.7.1",
+        "lead": "libcamera Release Announcements - libcamera v0.7.1 기준으로 중복 issue에 흩어진 내용을 합쳐 libcamera Release Announcements - libcamera v0.7.1 항목을 다시 정리했습니다.",
         "body_paragraphs": [
-          "libcamera v0.7.1이 공개되었습니다. 이번 릴리스에는 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트가 포함되었습니다.",
-          "Android Camera HAL API 변경으로 직접 해석할 근거는 없습니다. 다만 V4L2 기반 camera pipeline, sensor mode 선택, format negotiation, frame timing 검증 관점에서는 참고할 만한 upstream signal입니다."
+          "이 article은 camera_driver_image_pipeline 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
         ],
-        "camera_hal_takeaway": "Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.",
+        "camera_hal_takeaway": "Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.",
         "reader_checkpoints": [
-          "sensor mode selection 관련 내부 이슈와 연결 가능한지 확인합니다.",
-          "frame timing / format negotiation regression test 필요 여부를 검토합니다.",
-          "downstream Android HAL 영향은 별도 evidence가 있을 때만 판단합니다."
+          "libcamera Release Announcements - libcamera v0.7.1의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다."
         ],
         "source_links": [
           {
             "title": "libcamera Release Announcements - libcamera v0.7.1",
             "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
-            "publisher": "libcamera Release Announcements",
+            "source_role": "primary"
+          },
+          {
+            "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+            "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
             "source_role": "primary"
           }
         ]
@@ -585,289 +279,113 @@
           "driver",
           "sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다."
         ]
-      }
-    },
-    {
-      "category": "Android Platform / CameraX",
-      "headline": "Start building today - Build native Android apps in Google AI Studio",
-      "confirmed_facts": [
-        "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
-        "관련 컴포넌트: Android camera output.",
-        "확인된 변경점: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance."
-      ],
-      "evidence_summary": "Android Developers Blog source metadata와 dated candidate evidence를 deterministic fallback builder가 사용했습니다.",
-      "specificity_checks": [
-        "finalSelectionEligibility=short",
-        "relevance_bucket=android_platform_camera_adjacent",
-        "impact_claim_level=android_framework_adjacent",
-        "source_gap_risk=false"
-      ],
-      "source_verification_notes": [
-        "Confirmed facts에는 source URL, date, component, version, cleaned behavior metadata만 사용했습니다.",
-        "Fallback reconstruction 전에 main-candidate eligibility check를 통과한 항목입니다.",
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-        "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
-      ],
-      "what_changed": "Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
-      "background": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
-      "camera_hal_perspective": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
-      "camera_hal_checks": [
-        "Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.",
-        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
-      ],
-      "action_items": [
-        "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
-        "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
-      ],
-      "action_hints": [],
-      "team_summary": "Start building today - Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
-      "why_it_matters": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
-      "is_ai_related": true,
-      "article_type": "camera-hal",
-      "impact_claim_level": "android_framework_adjacent",
-      "overclaim_guardrails": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-        "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
-      ],
-      "field_builder_warnings": [],
-      "removed_source_fragments": [],
-      "source_extraction": {
-        "mode": "roundup_child_topic",
-        "parent_title": "Build native Android apps in Google AI Studio",
-        "parent_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-        "child_heading": "Start building today",
-        "evidence_blocks": [
-          {
-            "heading": "Start building today",
-            "text": "Start building today. To ensure a safe, high-quality ecosystem from day one, we have focused our initial release on specific capabilities including: Personal utilities and simple social apps: You can rapidly prototype single or multi-screen apps, such as habit trackers, study quizzes, or event itineraries. Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance. AI-powered experiences: You can create apps that feature Gemini API integrations, seamlessly embedding powerful AI capabilities directly into your mobile experience.",
-            "source_text": "Start building today. To ensure a safe, high-quality ecosystem from day one, we have focused our initial release on specific capabilities including: Personal utilities and simple social apps: You can rapidly prototype single or multi-screen apps, such as habit trackers, study quizzes, or event itineraries. Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance. AI-powered experiences: You can create apps that feature Gemini API integrations, seamlessly embedding powerful AI capabilities directly into your mobile experience.",
-            "links": []
-          }
-        ],
-        "links": [],
-        "extraction_quality": {
-          "has_concrete_child_topic_evidence": true,
-          "main_article_allowed": true,
-          "used_fallback": false
-        }
       },
-      "derived_editorial_hints": null,
-      "extraction_quality": {
-        "has_concrete_child_topic_evidence": true,
-        "main_article_allowed": true,
-        "used_fallback": false
-      },
-      "background_basis": "article-field-builder deterministic static background",
-      "source_candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-      "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
-      "relevance_bucket": "android_platform_camera_adjacent",
-      "editorial_priority": 3,
-      "aosp_camera_directness": 2,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": true,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "sources": [
+      "source_dedup_merge_provenance": [
         {
-          "title": "Start building today - Build native Android apps in Google AI Studio",
-          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
-        }
-      ],
-      "imageCandidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 257155
+          "merged_from_date": "2026-05-07",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
         },
         {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/w1200-h630-p-k-no-nu/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 150149
+          "merged_from_date": "2026-05-08",
+          "merged_from_section": 2,
+          "merged_from_headline": "libcamera v0.7.1: SoftISP와 image pipeline 릴리스",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
         },
         {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 12454
+          "merged_from_date": "2026-05-09",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera v0.7.1 출시: SoftISP 및 파이프라인 처리량 개선",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-10",
+          "merged_from_section": 2,
+          "merged_from_headline": "libcamera v0.7.1: SoftISP 및 camera pipeline 관찰",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-11",
+          "merged_from_section": 2,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-12",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-13",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-15",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-16",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-17",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-18",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-19",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        },
+        {
+          "merged_from_date": "2026-05-20",
+          "merged_from_section": 1,
+          "merged_from_headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "merged_from_source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "source_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
         }
-      ],
-      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-      "imageSource": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-      "imageAttribution": "Android Developers Blog",
-      "imageAlt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
-      "article_sections": {
-        "verified_facts": [
-          "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
-          "관련 컴포넌트: Android camera output.",
-          "확인된 변경점: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance."
-        ],
-        "background_context": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
-        "hal_driver_impact": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
-        "action_items": [
-          "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
-          "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
-        ],
-        "team_share_points": "Start building today - Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
-      },
-      "public_article": {
-        "headline": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
-        "lead": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
-        "body_paragraphs": [
-          "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.",
-          "Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다."
-        ],
-        "camera_hal_takeaway": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
-        "reader_checkpoints": [
-          "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."
-        ],
-        "source_links": [
-          {
-            "title": "Start building today - Build native Android apps in Google AI Studio",
-            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-            "publisher": "Android Developers Blog",
-            "source_role": "primary"
-          }
-        ]
-      },
-      "hal_impact_axes": [
-        "camerax_app_compatibility",
-        "framework_hal_contract",
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
-        "cts_vts_its_cdd",
-        "native_tooling_workflow"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_driver_owner",
-        "camera_test_owner",
-        "native_tooling_owner"
-      ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "do_not_overstate": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-        "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
-      ],
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 60): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 6 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-        "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
-      ],
-      "soc_signal_type": "accelerator_camera_workload",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "hal_signal_capsule": {
-        "why_now": "Start building today - Build native Android apps in Google AI Studio is included as a dated HAL signal for editor review.",
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_framework_owner",
-          "camerax_app_compat_owner",
-          "camera_driver_owner",
-          "camera_test_owner",
-          "native_tooling_owner"
-        ],
-        "check_within_2_weeks": "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "impact_axes": [
-          "camerax_app_compatibility",
-          "framework_hal_contract",
-          "driver_image_pipeline",
-          "stream_buffer_metadata",
-          "cts_vts_its_cdd",
-          "native_tooling_workflow"
-        ],
-        "do_not_overstate": [
-          "Supplied source evidence가 말하지 않으면 HAL API",
-          "metadata contract",
-          "stream",
-          "buffer",
-          "request/result",
-          "CTS",
-          "VTS",
-          "Camera ITS impact를 claim하지 않습니다.",
-          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-          "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
-          "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
-        ]
-      },
-      "imageSelection": {
-        "reasonCode": "selected",
-        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
-        "sourceUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-        "attribution": "Android Developers Blog",
-        "licenseStatus": "unknown",
-        "validationStatus": "ok",
-        "validationSource": "candidate_metadata",
-        "candidateUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-        "exclusionEvidence": [
-          {
-            "candidate_url": "https://developer.android.com/static/images/logos/android.svg",
-            "reasonCode": "svg_rejected",
-            "reasonLabel": "SVG 이미지 제외",
-            "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
-            "sourceKind": "article-img",
-            "contentType": "image/svg+xml",
-            "validationStatus": "ok",
-            "valid": false
-          }
-        ]
-      },
-      "resolvedImage": {
-        "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-        "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": "selected image candidate"
-      }
+      ]
     }
   ],
   "action_items": [
@@ -877,16 +395,12 @@
   ],
   "references": [
     {
-      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "url": "https://goo.gle/AdaptiveApps_IO26"
-    },
-    {
       "title": "libcamera Release Announcements - libcamera v0.7.1",
       "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
     },
     {
-      "title": "Start building today - Build native Android apps in Google AI Studio",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+      "title": "libcamera v0.7.1 릴리스: Raspberry Pi Atomic control lists 및 Simple pipeline AGC/AWB 통계 개선",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html"
     }
   ],
   "publication_mode": "review_only",
@@ -896,7 +410,7 @@
   "public_artifact_ready": true,
   "fallback_public_ready": false,
   "fallback_only": false,
-  "camera_anchor_count": 3,
+  "camera_anchor_count": 1,
   "fallback_section_count": 0,
   "homepage_badge": "",
   "review_publication_ready": true,
