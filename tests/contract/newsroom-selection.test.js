@@ -1190,7 +1190,16 @@ test('official Android native tooling is selected as one supporting group with r
       url: 'https://example.com/camerax-grouping-primary',
       published_date: '2026-05-21'
     }),
-    ...rawTooling
+    ...rawTooling,
+    normalizeCandidate({
+      source,
+      title: 'Android Play growth policy update for developers',
+      url: 'https://android-developers.googleblog.com/2026/05/play-growth-policy.html',
+      publishedAt: '2026-05-20',
+      sourceKind: 'blog_post_item',
+      collectionMode: 'article-item',
+      summary: 'Play Store growth policy guidance for app listings without build, test, debug, or native Android workflow evidence.'
+    })
   ]);
   const selectedTooling = report.selected_articles.find(item => item.article_group_key === 'android_native_tooling_workflow');
 
@@ -1204,6 +1213,10 @@ test('official Android native tooling is selected as one supporting group with r
   assert.equal(report.selected_group_count, report.selected_articles.length);
   assert.ok(selectedTooling.related_context_candidates.length >= 2);
   assert.ok(selectedTooling.related_context_candidates.every(item => item.can_create_independent_article === false));
+  assert.equal(
+    selectedTooling.related_context_candidates.some(item => item.url === 'https://android-developers.googleblog.com/2026/05/play-growth-policy.html'),
+    false
+  );
   assert.equal(rawTooling[0].relevance_bucket, 'cpp_ai_tooling_fallback');
   assert.equal(rawTooling[0].counts_as_primary_camera_topic, false);
 });

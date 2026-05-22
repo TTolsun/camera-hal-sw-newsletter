@@ -125,6 +125,37 @@ test('article capsule carries related context labels without making them facts',
   assert.equal(capsule.blocked_context_candidates[0].context_usage_label, 'parent_roundup_context_only');
 });
 
+test('article capsule preserves camelCase canonical sourceQuality without drifting to unknown', () => {
+  const input = candidate({
+    source_quality: undefined,
+    source_role: undefined,
+    source_url_quality: undefined,
+    source_quality_status: undefined,
+    main_article_source_allowed: undefined,
+    sourceQuality: {
+      source_role: 'official_release_source',
+      source_url_quality: 'official_dated_release',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      main_article_source_allowed_reason: 'Official dated source.',
+      main_article_source_blockers: [],
+      cross_check_status: 'not_required',
+      requires_cross_check: false,
+      requires_conditional_evidence: false,
+      conditional_evidence_type: '',
+      evidence_granularity: 'candidate_item',
+      source_quality_notes: []
+    }
+  });
+  const capsule = buildArticleCapsule(input);
+
+  assert.equal(capsule.source_quality.source_url_quality, 'official_dated_release');
+  assert.equal(capsule.source_url_quality, 'official_dated_release');
+  assert.equal(capsule.source_quality_status, 'allowed');
+  assert.equal(capsule.source_quality_reason, 'Official dated source.');
+  assert.deepEqual(capsule.source_quality_field_drift, []);
+});
+
 test('article capsule carries compact seed evidence by id instead of full evidence pack', () => {
   const capsule = buildArticleCapsule(candidate({
     seed_ids: ['seed-camerax'],

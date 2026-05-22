@@ -8,12 +8,40 @@ const CONTEXT_LABELS = Object.freeze({
   DEDUPE_SHADOW_CONTEXT: 'dedupe_shadow_context'
 });
 
+const EXPLICIT_DEMOTION_REASON_CODES = Object.freeze([
+  'duplicate_or_near_duplicate',
+  'forbidden_bucket',
+  'explicit_editor_hold'
+]);
+
+const HARD_BLOCK_REASON_CODES = Object.freeze([
+  'source_gap_risk',
+  'missing_dated_evidence',
+  'blocked_source_quality',
+  'fact_check_must_fix',
+  'quality_hard_blocker'
+]);
+
+const FORBIDDEN_SOURCE_READY_NATIVE_DEMOTION_REASONS = Object.freeze([
+  'camera_runtime_directness_insufficient',
+  'fallback_bucket',
+  'supporting_only',
+  'not_primary_camera_stack'
+]);
+
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
 
 function text(value) {
   return String(value || '').trim();
+}
+
+function normalizeCode(value) {
+  return text(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
 }
 
 function bool(value, fallback = false) {
@@ -202,51 +230,115 @@ function selectedRepresentativeGroupKeys(candidates = []) {
     .filter(Boolean))];
 }
 
+function inferReasonCode(value = '') {
+  const normalized = normalizeCode(value);
+  if (!normalized) return '';
+  if (EXPLICIT_DEMOTION_REASON_CODES.includes(normalized) || HARD_BLOCK_REASON_CODES.includes(normalized)) {
+    return normalized;
+  }
+  if (FORBIDDEN_SOURCE_READY_NATIVE_DEMOTION_REASONS.includes(normalized)) {
+    return normalized;
+  }
+  if (/duplicate|near_duplicate/.test(normalized)) return 'duplicate_or_near_duplicate';
+  if (/forbidden|bucket/.test(normalized)) return 'forbidden_bucket';
+  if (/hold|editor/.test(normalized)) return 'explicit_editor_hold';
+  if (/source_gap/.test(normalized)) return 'source_gap_risk';
+  if (/dated|date/.test(normalized)) return 'missing_dated_evidence';
+  if (/source_quality|blocked_source|unknown_source/.test(normalized)) return 'blocked_source_quality';
+  if (/fact_check|must_fix/.test(normalized)) return 'fact_check_must_fix';
+  if (/quality|hard_block/.test(normalized)) return 'quality_hard_blocker';
+  if (/directness|runtime/.test(normalized)) return 'camera_runtime_directness_insufficient';
+  if (/supporting/.test(normalized)) return 'supporting_only';
+  if (/primary_camera/.test(normalized)) return 'not_primary_camera_stack';
+  return normalized;
+}
+
 function explicitDemotedGroups(editor = {}) {
   return ensureArray(editor.explicitly_demoted_groups || editor.demoted_groups)
     .map(item => typeof item === 'string'
-      ? { article_group_key: item, demotion_reason: '' }
+      ? { article_group_key: item, demotion_reason: '', reason_code: '' }
       : {
           article_group_key: text(item?.article_group_key || item?.group_key || item?.key),
-          demotion_reason: text(item?.demotion_reason || item?.reason)
+          demotion_reason: text(item?.demotion_reason || item?.reason),
+          reason_code: inferReasonCode(item?.reason_code || item?.demotion_reason_code || item?.demotion_reason || item?.reason)
         })
     .filter(item => item.article_group_key);
 }
 
-function groupCoverageSummary({ selectedGroupKeys = [], renderedGroupKeys = [], demotedGroups = [] } = {}) {
+function explicitHardBlockedGroups(editor = {}) {
+  return ensureArray(editor.hard_blocked_groups)
+    .map(item => typeof item === 'string'
+      ? { article_group_key: item, hard_block_reason: '', reason_code: '' }
+      : {
+          article_group_key: text(item?.article_group_key || item?.group_key || item?.key),
+          hard_block_reason: text(item?.hard_block_reason || item?.reason),
+          reason_code: inferReasonCode(item?.reason_code || item?.hard_block_reason_code || item?.hard_block_reason || item?.reason)
+        })
+    .filter(item => item.article_group_key);
+}
+
+function groupCoverageSummary({ selectedGroupKeys = [], renderedGroupKeys = [], demotedGroups = [], hardBlockedGroups = [] } = {}) {
   const selected = new Set(ensureArray(selectedGroupKeys).filter(Boolean));
-  const rendered = new Set(ensureArray(renderedGroupKeys).filter(Boolean));
+  const renderedList = ensureArray(renderedGroupKeys).filter(Boolean);
+  const rendered = new Set(renderedList);
   const demoted = new Set(ensureArray(demotedGroups).map(item => text(item.article_group_key || item)).filter(Boolean));
-  const missing = [...selected].filter(key => !rendered.has(key) && !demoted.has(key));
+  const hardBlocked = new Set(ensureArray(hardBlockedGroups).map(item => text(item.article_group_key || item)).filter(Boolean));
+  const renderedCounts = renderedList.reduce((counts, key) => counts.set(key, (counts.get(key) || 0) + 1), new Map());
+  const duplicateRendered = [...renderedCounts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([key]) => key);
+  const missing = [...selected].filter(key => !rendered.has(key) && !demoted.has(key) && !hardBlocked.has(key));
   const overlap = [...rendered].filter(key => demoted.has(key));
+  const hardBlockedRenderedOverlap = [...rendered].filter(key => hardBlocked.has(key));
+  const hardBlockedDemotedOverlap = [...demoted].filter(key => hardBlocked.has(key));
   const demotionMissingReason = ensureArray(demotedGroups)
-    .filter(item => selected.has(text(item.article_group_key || item)) && !text(item.demotion_reason))
+    .filter(item => selected.has(text(item.article_group_key || item)) && !text(item.demotion_reason) && !text(item.reason_code))
+    .map(item => text(item.article_group_key || item));
+  const hardBlockedMissingReason = ensureArray(hardBlockedGroups)
+    .filter(item => selected.has(text(item.article_group_key || item)) && !text(item.hard_block_reason) && !text(item.reason_code))
     .map(item => text(item.article_group_key || item));
   return {
     selected_group_count: selected.size,
     rendered_group_count: rendered.size,
     explicitly_demoted_group_count: demoted.size,
+    hard_blocked_group_count: hardBlocked.size,
     selected_representative_group_keys: [...selected],
     rendered_group_keys: [...rendered],
+    duplicate_rendered_group_keys: duplicateRendered,
     explicitly_demoted_group_keys: [...demoted],
+    hard_blocked_group_keys: [...hardBlocked],
     missing_group_keys: missing,
     overlapping_group_keys: overlap,
+    hard_blocked_rendered_overlap_group_keys: hardBlockedRenderedOverlap,
+    hard_blocked_demoted_overlap_group_keys: hardBlockedDemotedOverlap,
     demotion_missing_reason_group_keys: demotionMissingReason,
-    ok: missing.length === 0 && overlap.length === 0 && demotionMissingReason.length === 0 &&
-      selected.size === rendered.size + demoted.size
+    hard_block_missing_reason_group_keys: hardBlockedMissingReason,
+    ok: missing.length === 0 &&
+      overlap.length === 0 &&
+      hardBlockedRenderedOverlap.length === 0 &&
+      hardBlockedDemotedOverlap.length === 0 &&
+      duplicateRendered.length === 0 &&
+      demotionMissingReason.length === 0 &&
+      hardBlockedMissingReason.length === 0 &&
+      selected.size === rendered.size + demoted.size + hardBlocked.size
   };
 }
 
 module.exports = {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   CONTEXT_LABELS,
+  EXPLICIT_DEMOTION_REASON_CODES,
+  FORBIDDEN_SOURCE_READY_NATIVE_DEMOTION_REASONS,
+  HARD_BLOCK_REASON_CODES,
   NATIVE_TOOLING_WORKFLOW_TYPE,
   attachRelatedContextToSelected,
   candidateContextLabel,
   candidateGroupKey,
   compactContextCandidate,
   explicitDemotedGroups,
+  explicitHardBlockedGroups,
   groupCoverageSummary,
+  inferReasonCode,
   isNativeToolingWorkflow,
   normalizeCanonicalUrlStripAnchor,
   normalizeSourceUrlPreserveAnchor,

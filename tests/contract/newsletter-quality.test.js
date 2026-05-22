@@ -1072,7 +1072,17 @@ test('quality gate maps actionability_level none into publish-blocking HAL signa
     section({
       headline: 'Actionability none article',
       url: 'https://example.com/actionability-none',
-      actionability_level: 'none'
+      actionability_level: 'none',
+      action_items: [],
+      camera_hal_checks: ['Review source context with the camera owner.'],
+      specificity_checks: ['Version: synthetic release', 'Release date: 2026-05-01'],
+      hal_signal_capsule: {
+        why_now: 'The source is dated but has no concrete HAL verification path.',
+        reader_owners: ['camera_hal_owner'],
+        check_within_2_weeks: 'Review the dated source with the camera team within 2 weeks.',
+        impact_axes: ['framework_hal_contract'],
+        do_not_overstate: ['Do not claim a concrete HAL validation action without source evidence.']
+      }
     }),
     ...validSections().slice(1)
   ];

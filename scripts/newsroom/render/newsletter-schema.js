@@ -137,6 +137,36 @@ const claimBinding = {
   ]
 };
 
+const actionabilityUpgradeEvidence = {
+  type: 'OBJECT',
+  properties: {
+    source_url: string,
+    evidence_id: string,
+    matched_signal: string,
+    verification_target: string,
+    upgrade_from: string,
+    upgrade_to: string
+  }
+};
+
+const sourceQuality = {
+  type: 'OBJECT',
+  properties: {
+    source_role: string,
+    source_url_quality: string,
+    source_quality_status: string,
+    main_article_source_allowed: { type: 'BOOLEAN' },
+    main_article_source_allowed_reason: string,
+    main_article_source_blockers: stringArray,
+    cross_check_status: string,
+    requires_cross_check: { type: 'BOOLEAN' },
+    requires_conditional_evidence: { type: 'BOOLEAN' },
+    conditional_evidence_type: string,
+    evidence_granularity: string,
+    source_quality_notes: stringArray
+  }
+};
+
 const reporterCandidate = {
   type: 'OBJECT',
   properties: {
@@ -149,6 +179,14 @@ const reporterCandidate = {
     source_event_id: string,
     evidence_id: string,
     event_type: string,
+    source_quality: sourceQuality,
+    source_quality_reason: string,
+    source_role: string,
+    source_url_quality: string,
+    source_quality_status: string,
+    main_article_source_allowed: { type: 'BOOLEAN' },
+    main_article_source_allowed_reason: string,
+    main_article_source_blockers: stringArray,
     needs_editor_date_review: { type: 'BOOLEAN' },
     url: string,
     summary: string,
@@ -215,6 +253,7 @@ const reporterCandidate = {
     actionability_level: string,
     effective_actionability_level: string,
     actionability_upgrade_reason: string,
+    actionability_upgrade_evidence: actionabilityUpgradeEvidence,
     signal_quality_status: string,
     do_not_overstate: stringArray,
     fallback_promotion_allowed: { type: 'BOOLEAN' },
@@ -305,6 +344,7 @@ const section = {
     actionability_level: string,
     effective_actionability_level: string,
     actionability_upgrade_reason: string,
+    actionability_upgrade_evidence: actionabilityUpgradeEvidence,
     signal_quality_status: string,
     do_not_overstate: stringArray,
     fallback_promotion_allowed: { type: 'BOOLEAN' },
@@ -326,6 +366,14 @@ const section = {
     source_candidate_hash: string,
     article_group_key: string,
     tooling_workflow_type: string,
+    source_quality: sourceQuality,
+    source_quality_reason: string,
+    source_role: string,
+    source_url_quality: string,
+    source_quality_status: string,
+    main_article_source_allowed: { type: 'BOOLEAN' },
+    main_article_source_allowed_reason: string,
+    main_article_source_blockers: stringArray,
     relevance_bucket: string,
     editorial_priority: { type: 'NUMBER' },
     counts_as_primary_camera_topic: { type: 'BOOLEAN' },
@@ -422,9 +470,22 @@ const editorSchema = {
         type: 'OBJECT',
         properties: {
           article_group_key: string,
-          demotion_reason: string
+          demotion_reason: string,
+          reason_code: string
         },
         required: ['article_group_key', 'demotion_reason']
+      }
+    },
+    hard_blocked_groups: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: {
+          article_group_key: string,
+          hard_block_reason: string,
+          reason_code: string
+        },
+        required: ['article_group_key', 'hard_block_reason']
       }
     },
     references: {

@@ -446,10 +446,14 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   const explicitlyDemotedGroups = ensureArray(options.explicitlyDemotedGroups).length > 0
     ? ensureArray(options.explicitlyDemotedGroups)
     : ensureArray(report.explicitly_demoted_group_keys).map(key => ({ article_group_key: key, demotion_reason: 'status' }));
+  const hardBlockedGroups = ensureArray(options.hardBlockedGroups).length > 0
+    ? ensureArray(options.hardBlockedGroups)
+    : ensureArray(report.hard_blocked_group_keys).map(key => ({ article_group_key: key, hard_block_reason: 'status' }));
   const groupCoverage = groupCoverageSummary({
     selectedGroupKeys,
     renderedGroupKeys,
-    demotedGroups: explicitlyDemotedGroups
+    demotedGroups: explicitlyDemotedGroups,
+    hardBlockedGroups
   });
   return {
     input_candidate_count: report.input_candidate_count ?? null,
@@ -460,9 +464,11 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     selected_group_count: groupCoverage.selected_group_count,
     rendered_group_count: hasRenderedGroupObservation ? groupCoverage.rendered_group_count : report.rendered_group_count ?? null,
     explicitly_demoted_group_count: groupCoverage.explicitly_demoted_group_count,
+    hard_blocked_group_count: groupCoverage.hard_blocked_group_count,
     selected_representative_group_keys: groupCoverage.selected_representative_group_keys,
     rendered_group_keys: groupCoverage.rendered_group_keys,
     explicitly_demoted_group_keys: groupCoverage.explicitly_demoted_group_keys,
+    hard_blocked_group_keys: groupCoverage.hard_blocked_group_keys,
     group_coverage_ok: hasRenderedGroupObservation ? groupCoverage.ok : null,
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
     demoted_article_count: options.demotedArticleCount ?? diagnostics.demoted_candidate_count ?? report.demoted_candidate_count ?? null,
@@ -1100,9 +1106,38 @@ function sectionLabelKey(section) {
 function stableSectionKey(section) {
   const hash = stringOrEmpty(section?.source_candidate_hash);
   if (hash) return `hash:${hash}`;
+  const groupKey = stringOrEmpty(section?.article_group_key || section?.articleGroupKey);
   const urls = sourceUrlSignature(section);
+  if (groupKey && urls.length > 0) return `group-url:${groupKey}|${urls.join('|')}`;
   if (urls.length > 0) return `urls:${urls.join('|')}`;
   return sectionLabelKey(section);
+}
+
+function stableSectionKeySet(sections = []) {
+  return new Set(ensureArray(sections).map(stableSectionKey).filter(Boolean));
+}
+
+function sameStringSet(left, right) {
+  if (left.size !== right.size) return false;
+  for (const value of left) {
+    if (!right.has(value)) return false;
+  }
+  return true;
+}
+
+function protectedRepairSignature(section = {}) {
+  return {
+    headline: stringOrEmpty(section.headline),
+    category: stringOrEmpty(section.category),
+    relevance_bucket: stringOrEmpty(section.relevance_bucket || section.relevanceBucket),
+    article_group_key: stringOrEmpty(section.article_group_key || section.articleGroupKey),
+    source_candidate_hash: stringOrEmpty(section.source_candidate_hash),
+    source_urls: sourceUrlSignature(section)
+  };
+}
+
+function protectedRepairFieldsMatch(beforeSection = {}, afterSection = {}) {
+  return JSON.stringify(protectedRepairSignature(beforeSection)) === JSON.stringify(protectedRepairSignature(afterSection));
 }
 
 function sameSectionLabel(left, right) {
@@ -1222,6 +1257,34 @@ function validateTargetedRepairResult({
       actualType: 'array',
       sectionCount: after.length
     });
+  }
+
+  if (mode === 'targeted-repair') {
+    const beforeKeys = stableSectionKeySet(before);
+    const afterKeys = stableSectionKeySet(after);
+    if (!sameStringSet(beforeKeys, afterKeys)) {
+      throw targetedRepairError('Targeted repair changed article stable identity set.', {
+        reason: 'section_identity_drift',
+        mode,
+        expected_keys: [...beforeKeys],
+        actual_keys: [...afterKeys],
+        sectionCount: after.length
+      });
+    }
+    for (const beforeSection of before) {
+      const key = stableSectionKey(beforeSection);
+      const afterSection = after.find(section => stableSectionKey(section) === key);
+      if (afterSection && !protectedRepairFieldsMatch(beforeSection, afterSection)) {
+        throw targetedRepairError('Targeted repair changed protected article identity fields.', {
+          reason: 'section_protected_field_drift',
+          mode,
+          key,
+          expected: protectedRepairSignature(beforeSection),
+          actual: protectedRepairSignature(afterSection),
+          sectionCount: after.length
+        });
+      }
+    }
   }
 
   validateEditor({
@@ -1463,7 +1526,7 @@ async function repairEditorSemanticWithLlm({
       'Preserve Korean reader-facing prose unless the validation repair requires a local edit; any newly written reader-facing text must be Korean.',
       'Do not add, remove, reorder, or replace articles.',
       'Do not change article headlines, categories, source URLs, image fields, action_items, or references unless the validation error explicitly targets that field.',
-      'For sections.group_coverage failures, restore the missing selected representative group as an article using only its selected capsule, or add explicitly_demoted_groups[] with article_group_key and demotion_reason when the group cannot be rendered.',
+      'For sections.group_coverage failures, restore the missing selected representative group as an article using only its selected capsule, or add explicitly_demoted_groups[] / hard_blocked_groups[] with article_group_key, reason_code, and reason text when the group cannot be rendered.',
       'For sections.blocked_context failures, remove blocked context URLs/titles from article sources and headlines; blocked context may remain only as diagnostic context.',
       'For sections.claims failures, add or adjust claims so every source-backed verified_facts[], confirmed_facts[], and concrete evidence_summary field has a matching claim_type=fact claim.',
       'For claim repairs, use only allowed claim_type and impact_level values. Map CameraX/adaptive UI impact to app_api_or_framework_adjacent unless direct HAL contract evidence is present.',
@@ -2870,7 +2933,8 @@ async function main() {
         'final-selected article capsules를 main article inputs로 사용하세요. final_selected=false, finalSelectionEligibility=watchlist/exclude, hasDatedEvidence 없는 isWatchPage=true, main_eligible=false, source_gap_risk=true, briefing_only, reference_only candidate를 main article로 만들지 마세요.',
         'Use related_context_candidates only inside the selected representative article. Do not create a separate main article from related_context_candidates.',
         'Use only related_context_candidates with context_usage_allowed=true as supporting context. Do not cite blocked_context_candidates, blocked_context_reference, parent_roundup_context_only, or dedupe_shadow_context as article sources.',
-        'Preserve article_group_key when it is present. A selected group must either render one article or be explicitly listed in explicitly_demoted_groups with demotion_reason.',
+        'Preserve article_group_key when it is present. A selected group must render one article, or be listed in explicitly_demoted_groups with reason_code in duplicate_or_near_duplicate|forbidden_bucket|explicit_editor_hold, or be listed in hard_blocked_groups with reason_code in source_gap_risk|missing_dated_evidence|blocked_source_quality|fact_check_must_fix|quality_hard_blocker.',
+        'Do not demote source-ready cpp_ai_tooling_fallback native_tooling_workflow groups solely because they are not primary Camera runtime stack articles.',
         linkedEvidencePromptGuardrails(),
         sourceExtractionPromptGuardrails(),
         articleSectionContractPrompt(),

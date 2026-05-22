@@ -290,6 +290,7 @@ function renderFinalSelectionStatus(status) {
     `- selected_group_count: ${valueOrUnknown(status.selected_group_count)}`,
     `- rendered_group_count: ${valueOrUnknown(status.rendered_group_count)}`,
     `- explicitly_demoted_group_count: ${valueOrUnknown(status.explicitly_demoted_group_count)}`,
+    `- hard_blocked_group_count: ${valueOrUnknown(status.hard_blocked_group_count)}`,
     `- group_coverage_ok: ${valueOrUnknown(status.group_coverage_ok)}`,
     `- reserve_candidate_count: ${valueOrUnknown(status.reserve_candidate_count)}`,
     `- input_candidate_count: ${valueOrUnknown(status.input_candidate_count)}`,

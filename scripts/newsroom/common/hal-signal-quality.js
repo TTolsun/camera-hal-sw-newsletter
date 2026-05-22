@@ -44,6 +44,9 @@ const REFERENCE_ONLY_AXES = new Set(['reference_only', 'unknown']);
 const VALID_AXES = new Set(HAL_IMPACT_AXES);
 const VALID_ACTIONABILITY = new Set(ACTIONABILITY_LEVELS);
 const VALID_STATUS = new Set(SIGNAL_QUALITY_STATUSES);
+const ACTIONABILITY_RANK = Object.freeze(
+  ACTIONABILITY_LEVELS.reduce((ranks, level, index) => ({ ...ranks, [level]: index }), {})
+);
 const HARD_BLOCKER_REASON_CODE_BY_BLOCKER = Object.freeze({
   missing_hal_impact_axis: 'hal_impact_axis_missing',
   actionability_none: 'hal_actionability_none',
@@ -267,8 +270,95 @@ function actionabilityEvidenceText(value = {}) {
   ].map(text).join(' ');
 }
 
+function actionabilityVerificationText(value = {}) {
+  const sections = articleSections(value);
+  const capsule = objectValue(value.hal_signal_capsule);
+  return [
+    sections.action_items,
+    value.action_items,
+    value.camera_hal_checks,
+    value.specificity_checks,
+    capsule.check_within_2_weeks
+  ].map(text).join(' ');
+}
+
+function hasActionabilitySourceBinding(value = {}) {
+  return sourceUrls(value).length > 0 ||
+    Boolean(firstText(value.evidence_id, value.source_event_id)) ||
+    ensureArray(value.evidence_ids).length > 0 ||
+    ensureArray(value.primary_evidence_ids).length > 0;
+}
+
+function actionabilitySignalMatches(value = {}) {
+  const haystack = actionabilityVerificationText(value);
+  const match = (name, pattern) => pattern.test(haystack) ? name : '';
+  return unique([
+    match('owner', /\b(?:owner|assignee|camera owner|hal owner|driver owner|team)\b/i),
+    match('test', /\b(?:test|cts|vts|camera its|its|smoke|regression|validation|poc|verify|check)\b/i),
+    match('log', /\b(?:log|trace|systrace|perfetto|dumpsys|bugreport)\b/i),
+    match('metric', /\b(?:metric|measure|compare|latency|frame drop|fps|throughput|benchmark|profile|timing)\b/i),
+    match('api', /\b(?:api|camera2|camerax|hal|driver|isp|vendor tag)\b/i),
+    match('stream_buffer_metadata', /\b(?:stream|buffer|metadata|request|result|surface|imagecapture|videocapture|imageanalysis)\b/i),
+    match('follow_up_window', /\b(?:within\s+2\s+weeks?|two\s+weeks?|14\s+days?|2\uc8fc|2 weeks)\b/i)
+  ]).filter(Boolean);
+}
+
+function observableVerificationTarget(value = {}) {
+  const haystack = actionabilityVerificationText(value);
+  if (/\b(?:no|not|without)\b.{0,40}\b(?:cts|vts|test|metric|measure|log|trace|perfetto|required|needed)\b/i.test(haystack) ||
+    /\b(?:cts|vts|test|metric|measure|log|trace|perfetto)\b.{0,40}\b(?:not required|not needed|unnecessary|unneeded)\b/i.test(haystack) ||
+    /(?:테스트|검증|측정).{0,12}(?:불필요|필요\s*없음)/i.test(haystack)) {
+    return '';
+  }
+  const checks = [
+    ['frame timing metric', /\b(?:frame timing|frame drop|fps|latency|metric|measure|compare|benchmark|throughput)\b/i],
+    ['log or trace output', /\b(?:log|trace|systrace|perfetto|dumpsys|bugreport)\b/i],
+    ['camera test result', /\b(?:cts|vts|camera its|its|smoke|regression|validation|test)\b/i],
+    ['API behavior', /\b(?:api|camera2|camerax|imagecapture|videocapture|imageanalysis)\b/i],
+    ['stream/buffer/metadata behavior', /\b(?:stream|buffer|metadata|request|result|surface)\b/i]
+  ];
+  const found = checks.find(([, pattern]) => pattern.test(haystack));
+  return found ? found[0] : '';
+}
+
+function inferActionabilityUpgradeEvidence(value = {}, fromLevel = 'none') {
+  const matchedSignals = actionabilitySignalMatches(value);
+  const verificationTarget = observableVerificationTarget(value);
+  const sourceBound = hasActionabilitySourceBinding(value);
+  const articleSpecific = text(actionabilityVerificationText(value)).length > 0;
+  if (!sourceBound || !articleSpecific || !verificationTarget || matchedSignals.length === 0) {
+    return {
+      upgrade_to: fromLevel,
+      matched_signal: '',
+      verification_target: '',
+      source_bound: sourceBound,
+      article_specific: articleSpecific
+    };
+  }
+
+  const hasOwner = matchedSignals.includes('owner');
+  const hasMetric = matchedSignals.includes('metric');
+  const hasLog = matchedSignals.includes('log');
+  const hasFollowUp = matchedSignals.includes('follow_up_window');
+  const hasMeasurementVerb = /\b(?:measure|compare|profile|benchmark|track)\b/i.test(actionabilityVerificationText(value));
+  let upgradeTo = 'concrete_check';
+  if (hasMetric && hasMeasurementVerb) upgradeTo = 'measurable_test';
+  if (hasOwner && hasFollowUp && (hasMetric || hasLog)) upgradeTo = 'owner_metric_log';
+
+  return {
+    source_url: sourceUrls(value)[0] || '',
+    evidence_id: firstText(value.evidence_id, value.source_event_id, ensureArray(value.evidence_ids)[0], ensureArray(value.primary_evidence_ids)[0]),
+    matched_signal: matchedSignals.join(','),
+    verification_target: verificationTarget,
+    upgrade_from: fromLevel,
+    upgrade_to: upgradeTo,
+    source_bound: true,
+    article_specific: true
+  };
+}
+
 function countActionabilityUpgradeSignals(value = {}) {
-  const haystack = actionabilityEvidenceText(value);
+  const haystack = actionabilityVerificationText(value);
   const checks = [
     /\b(?:owner|assignee|camera owner|hal owner|driver owner|team)\b/i,
     /\b(?:test|cts|vts|camera its|its|smoke|regression|validation|poc)\b/i,
@@ -300,19 +390,27 @@ function resolveActionability(value = {}) {
   const explicit = normalizeEnum(firstText(value.actionability_level, value.actionabilityLevel));
   const signalCount = countConcreteActionSignals(value);
   const upgradeSignalCount = countActionabilityUpgradeSignals(value);
+  const inferredActionability = inferredActionabilityLevel(value, signalCount);
   const actionabilityLevel = explicit && VALID_ACTIONABILITY.has(explicit)
     ? explicit
-    : inferredActionabilityLevel(value, signalCount);
-  const effectiveActionabilityLevel = actionabilityLevel === 'generic_review' && upgradeSignalCount >= 2
-    ? 'concrete_check'
+    : inferredActionability;
+  const upgradeEvidence = inferActionabilityUpgradeEvidence(value, actionabilityLevel);
+  const inferredByAction = upgradeEvidence.upgrade_to || actionabilityLevel;
+  const effectiveActionabilityLevel = ACTIONABILITY_RANK[inferredByAction] > ACTIONABILITY_RANK[actionabilityLevel]
+    ? inferredByAction
     : actionabilityLevel;
   const actionabilityUpgradeReason = actionabilityLevel !== effectiveActionabilityLevel
-    ? `Contains ${upgradeSignalCount} concrete owner/test/log/metric/API/stream/buffer/metadata signal(s).`
+    ? `Contains source-bound ${upgradeEvidence.verification_target || 'verification'} action evidence: ${upgradeEvidence.matched_signal || 'concrete signal'}.`
     : '';
   return {
     actionability_level: actionabilityLevel,
     effective_actionability_level: effectiveActionabilityLevel,
     actionability_upgrade_reason: actionabilityUpgradeReason,
+    actionability_upgrade_evidence: actionabilityLevel !== effectiveActionabilityLevel ? {
+      ...upgradeEvidence,
+      upgrade_from: actionabilityLevel,
+      upgrade_to: effectiveActionabilityLevel
+    } : null,
     concrete_action_signal_count: signalCount,
     actionability_upgrade_signal_count: upgradeSignalCount
   };
@@ -498,6 +596,7 @@ function normalizeHalSignalFields(value = {}) {
     actionability_level: actionabilityLevel,
     effective_actionability_level: effectiveActionabilityLevel,
     actionability_upgrade_reason: actionability.actionability_upgrade_reason,
+    actionability_upgrade_evidence: actionability.actionability_upgrade_evidence,
     signal_quality_status: status,
     signal_quality_notes: unique([
       status === 'watchlist_only' ? 'No non-reference HAL signal axis is present.' : '',

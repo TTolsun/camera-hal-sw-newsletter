@@ -385,7 +385,25 @@ function classifySourceQuality(input = {}) {
 }
 
 function normalizeSourceQuality(value = {}) {
-  const canonical = isPlainObject(value.source_quality) ? value.source_quality : {};
+  const explicitCanonical = isPlainObject(value.source_quality)
+    ? value.source_quality
+    : isPlainObject(value.sourceQuality)
+      ? value.sourceQuality
+      : null;
+  const canonical = explicitCanonical || classifySourceQuality({
+    candidate: value,
+    source: {
+      reliability: firstText(value.source_reliability, value.reliability),
+      sourceRole: firstText(value.source_role, value.sourceRole),
+      sourceUrlQualityHint: firstText(value.source_url_quality, value.sourceUrlQuality),
+      mainArticlePolicy: value.mainArticlePolicy || value.main_article_policy,
+      collectionModeHint: firstText(value.collectionModeHint, value.collection_mode_hint, value.sourceCollectionMode, value.source_collection_mode),
+      requiresCrossCheck: value.requiresCrossCheck,
+      requiresCrossCheckDefault: value.requiresCrossCheckDefault,
+      evidenceGranularityHint: firstText(value.evidenceGranularityHint, value.evidence_granularity)
+    },
+    metadata: value.metadata || {}
+  });
   const sourceQuality = {
     source_role: firstText(canonical.source_role, value.source_role, value.sourceRole) || 'unknown_source',
     source_url_quality: validOr(firstText(canonical.source_url_quality, value.source_url_quality, value.sourceUrlQuality), SOURCE_URL_QUALITIES, 'unknown'),
@@ -471,13 +489,14 @@ function valuesEqual(left, right) {
 }
 
 function sourceQualityFieldDrift(value = {}) {
-  if (!isPlainObject(value.source_quality)) return [];
+  if (!isPlainObject(value.source_quality) && !isPlainObject(value.sourceQuality)) return [];
   const canonical = normalizeSourceQuality(value);
   const flat = sourceQualityFlatFields(canonical);
   const issues = [];
   for (const [field, names] of Object.entries(FLAT_FIELD_MAP)) {
     for (const name of names) {
       if (!Object.prototype.hasOwnProperty.call(value, name)) continue;
+      if (value[name] === undefined) continue;
       if (!valuesEqual(canonical[field], flat[name]) || !valuesEqual(value[name], flat[name])) {
         issues.push({
           code: SOURCE_QUALITY_FIELD_DRIFT,

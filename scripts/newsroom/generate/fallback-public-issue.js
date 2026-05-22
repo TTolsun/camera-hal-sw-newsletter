@@ -99,6 +99,22 @@ function cloneJson(value) {
   return JSON.parse(JSON.stringify(value ?? null));
 }
 
+const ACTIONABILITY_RANK = Object.freeze({
+  none: 0,
+  generic_review: 1,
+  concrete_check: 2,
+  measurable_test: 3,
+  owner_metric_log: 4
+});
+
+function strongerActionability(left, right) {
+  const leftText = text(left);
+  const rightText = text(right);
+  return (ACTIONABILITY_RANK[rightText] ?? -1) > (ACTIONABILITY_RANK[leftText] ?? -1)
+    ? rightText
+    : leftText || rightText;
+}
+
 function completeHalSignalSection(section = {}, candidate = {}) {
   const combined = {
     ...candidate,
@@ -137,9 +153,10 @@ function completeHalSignalSection(section = {}, candidate = {}) {
     ...section,
     hal_impact_axes: ensureArray(section.hal_impact_axes).length > 0 ? section.hal_impact_axes : halSignal.hal_impact_axes,
     reader_owners: ensureArray(section.reader_owners).length > 0 ? section.reader_owners : halSignal.reader_owners,
-    actionability_level: section.actionability_level || halSignal.actionability_level,
-    effective_actionability_level: section.effective_actionability_level || halSignal.effective_actionability_level,
+    actionability_level: strongerActionability(section.actionability_level, halSignal.actionability_level),
+    effective_actionability_level: strongerActionability(section.effective_actionability_level, halSignal.effective_actionability_level),
     actionability_upgrade_reason: section.actionability_upgrade_reason || halSignal.actionability_upgrade_reason,
+    actionability_upgrade_evidence: section.actionability_upgrade_evidence || halSignal.actionability_upgrade_evidence,
     signal_quality_status: section.signal_quality_status || halSignal.signal_quality_status,
     do_not_overstate: ensureArray(section.do_not_overstate).length > 0 ? section.do_not_overstate : halSignal.do_not_overstate,
     fallback_promotion_allowed: typeof section.fallback_promotion_allowed === 'boolean'

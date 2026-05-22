@@ -421,11 +421,18 @@ test('targeted repair rejects locked section source URL drift', () => {
   );
 });
 
-test('targeted repair preserves locked sections around a middle replacement', () => {
+test('targeted repair allows metadata repair when article identity stays fixed', () => {
   const a = policySection('CameraX release', 'https://example.com/a');
   const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
   const c = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
-  const repairedB = policySection('Repaired driver pipeline update', 'https://example.com/b-repaired', 'camera_driver_image_pipeline');
+  const repairedB = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline', {
+    source_candidate_hash: b.source_candidate_hash,
+    effective_actionability_level: 'concrete_check',
+    hal_signal_capsule: {
+      ...b.hal_signal_capsule,
+      do_not_overstate: ['Do not overstate direct HAL behavior.']
+    }
+  });
 
   assert.equal(validateTargetedRepairResult({
     beforeSections: [a, b, c],
@@ -436,6 +443,32 @@ test('targeted repair preserves locked sections around a middle replacement', ()
     allowCountChange: false,
     date: DATE
   }), true);
+});
+
+test('targeted repair rejects same-count article identity drift', () => {
+  const a = policySection('CameraX release', 'https://example.com/a');
+  const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
+  const c = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
+  const driftedB = policySection('Driver pipeline update', 'https://example.com/b-new', 'camera_driver_image_pipeline', {
+    source_candidate_hash: 'new-driver-hash'
+  });
+
+  assert.throws(
+    () => validateTargetedRepairResult({
+      beforeSections: [a, b, c],
+      repairSections: [driftedB],
+      afterSections: [a, driftedB, c],
+      lockedSections: [a, c],
+      mode: 'targeted-repair',
+      allowCountChange: false,
+      date: DATE
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.reason, 'section_identity_drift');
+      return true;
+    }
+  );
 });
 
 test('editor retry contract uses previous valid draft as the target section count', () => {
