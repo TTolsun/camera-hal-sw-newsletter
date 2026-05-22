@@ -235,7 +235,7 @@ function factCheckSeverityPrompt() {
 
 function cameraDeveloperToolingFactCheckPrompt() {
   return [
-    'C/C++, Android Studio, VS Code, Claude Code, Codex, Roo Code/Rood Code, OpenCode/Open Code 같은 language, IDE, AI Agent, tooling news는 Camera 개발자가 실제로 사용하는 development workflow coverage로 허용될 수 있습니다.',
+    'C/C++, Android Studio, VS(Visual Studio) Code, Claude, Codex, Roo Code, OpenCode 같은 language, IDE, AI Agent, tooling news는 Camera 개발자가 실제로 사용하는 development workflow coverage로 허용될 수 있습니다.',
     '이런 tooling article을 primary Camera runtime stack article이 아니라는 이유만으로 must_fix[] 또는 source_gaps[]에 넣지 마세요. 다만 허용하려면 source, selected capsule metadata, source_extraction 중 하나가 camera driver, Camera HAL/native code, Android camera app, build/test/debug/performance workflow 연결을 뒷받침해야 합니다. derived editorial hints는 framing 보조로만 사용하고, 단독 publishability 근거로 사용하지 마세요.',
     '연결이 article text 또는 derived editorial hints에만 있고 source/capsule metadata/source_extraction이 뒷받침하지 않으면 recommended_fixes[]가 아니라 must_fix[] 또는 source_gaps[]로 분류하세요.',
     '표현 보강만 필요하면 recommended_fixes[]에 넣으세요. Camera 개발자 workflow 연결이 source, selected capsule metadata, source_extraction에 전혀 없거나 Android HAL toolchain migration처럼 source가 뒷받침하지 않는 주장을 하면 must_fix[]에 넣고, supporting source/cross-check 부족이면 source_gaps[]에도 넣으세요.'
