@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-05-22T00:00:00.000Z",
+  "updated_at": "2026-05-23T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -1633,15 +1633,17 @@
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-05-22T00:00:00.000Z",
-      "seen_count": 1,
+      "last_seen_at": "2026-05-23T00:00:00.000Z",
+      "seen_count": 2,
       "status": 200
     }
   ],
   "processed_source_event_ids": [
-    "source-event-a593b0187b96e7638fe4af9fb327f9f8"
+    "source-event-a593b0187b96e7638fe4af9fb327f9f8",
+    "source-event-3616a9f0c9e81670bcd09140c52b6f04"
   ],
   "processed_evidence_ids": [
-    "evidence-d134d45807b498f036b07fa3d599ac42"
+    "evidence-d134d45807b498f036b07fa3d599ac42",
+    "evidence-ac4c255a57a844d0e96a9da7336ad513"
   ]
 }
