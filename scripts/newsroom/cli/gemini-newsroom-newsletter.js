@@ -207,7 +207,7 @@ function publicArticleContractPrompt() {
     'body_paragraphs는 verified facts를 바탕으로 한 자연스러운 설명 문단을 최소 2개 포함해야 합니다.',
     'source_links는 non-empty title 값을 가진 public http/https URLs만 포함해야 합니다. source_role은 primary, supporting, context 중 하나로 쓰세요. local path, .tmp path, GitHub Actions artifact URL, editorial-only role은 사용하지 마세요.',
     'public_article에는 internal public-forbidden terms인 Fallback, Review-only, quality gate, candidate, HAL Signal Capsule, why_now, impact_axes, do_not_overstate, guardrail, section repair를 노출하지 마세요.',
-    `구체적인 reader action이 없으면 정확히 다음 문장을 사용하세요: "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."`
+    '구체적인 reader action이 없으면 public_article.reader_checkpoints는 독자가 추적할 관찰 포인트 1~2개로 자연스럽게 작성하세요. 내부 triage 문체, 업무 지시 문체, 고정 문구를 사용하지 마세요.'
   ].join('\n');
 }
 
@@ -227,7 +227,7 @@ function articleClaimContractPrompt() {
 
 function factCheckSeverityPrompt() {
   return [
-    'Fact-check output mapping: 발행하면 안 되는 factual/source 오류는 must_fix[]에 넣으세요. Source coverage, dated evidence, cross-check 부족은 source_gaps[]에도 넣고 source_gap_count는 source_gaps.length와 일치시키세요.',
+    'Fact-check 결과 매핑: 발행하면 안 되는 factual/source 오류는 must_fix[]에 넣으세요. 출처 커버리지, 날짜 근거, cross-check가 부족한 항목은 source_gaps[]에도 넣고 source_gap_count는 source_gaps.length와 일치시키세요.',
     '같은 source 안에서 표현, 구체성, actionability를 보강하면 되는 항목만 recommended_fixes[]에 넣으세요. must_fix[]에는 가능한 한 location, problem, suggestion, source_url을 채우세요.',
     'source_gaps[]와 recommended_fixes[]에는 headline 또는 source URL을 포함해 repair plan이 해당 section을 찾을 수 있게 하세요.'
   ].join('\n');
@@ -236,8 +236,9 @@ function factCheckSeverityPrompt() {
 function cameraDeveloperToolingFactCheckPrompt() {
   return [
     'C/C++, Android Studio, VS Code, Claude Code, Codex, Roo Code/Rood Code, OpenCode/Open Code 같은 language, IDE, AI Agent, tooling news는 Camera 개발자가 실제로 사용하는 development workflow coverage로 허용될 수 있습니다.',
-    '이런 tooling article을 primary Camera runtime stack article이 아니라는 이유만으로 must_fix[] 또는 source_gaps[]에 넣지 마세요. 제공된 source와 article이 camera driver, Camera HAL/native code, Android camera app, build/test/debug/performance workflow에 연결되면 허용하세요.',
-    '표현 보강만 필요하면 recommended_fixes[]에 넣으세요. Camera 개발자 workflow 연결이 source나 article text에 전혀 없거나 Android HAL toolchain migration처럼 source가 뒷받침하지 않는 주장을 하면 must_fix[]에 넣고, supporting source/cross-check 부족이면 source_gaps[]에도 넣으세요.'
+    '이런 tooling article을 primary Camera runtime stack article이 아니라는 이유만으로 must_fix[] 또는 source_gaps[]에 넣지 마세요. 제공된 source, selected capsule metadata, source_extraction, derived editorial hints 중 하나가 camera driver, Camera HAL/native code, Android camera app, build/test/debug/performance workflow 연결을 뒷받침하고 article text가 그 범위 안에서 해석할 때만 허용하세요.',
+    '연결이 article text에만 있고 source/capsule metadata가 뒷받침하지 않으면 recommended_fixes[]가 아니라 must_fix[] 또는 source_gaps[]로 분류하세요.',
+    '표현 보강만 필요하면 recommended_fixes[]에 넣으세요. Camera 개발자 workflow 연결이 source나 capsule metadata에 전혀 없거나 Android HAL toolchain migration처럼 source가 뒷받침하지 않는 주장을 하면 must_fix[]에 넣고, supporting source/cross-check 부족이면 source_gaps[]에도 넣으세요.'
   ].join('\n');
 }
 
@@ -1545,7 +1546,7 @@ async function repairEditorSemanticWithLlm({
       'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
       'sections.blocked_context failure는 article sources와 headline에서 blocked context URL/title을 제거하세요. Blocked context는 diagnostic context로만 남길 수 있습니다.',
       'sections.claims failure는 source-backed verified_facts[], confirmed_facts[], concrete evidence_summary field마다 matching claim_type=fact claim이 있도록 claims를 추가하거나 조정하세요.',
-      'Claim repair에는 허용된 claim_type과 impact_level 값만 사용하세요. Direct HAL contract evidence가 없으면 CameraX/adaptive UI impact는 app_api_or_framework_adjacent로 매핑하세요.',
+      'Claim repair에는 허용된 claim_type과 impact_level 값만 사용하세요. 직접 HAL contract를 뒷받침하는 근거가 없으면 CameraX/adaptive UI impact는 app_api_or_framework_adjacent로 매핑하세요.',
       'source_urls가 누락된 경우 section source URL을 재사용하세요. Fact claim은 존재하는 경우 seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, source_extraction evidence ids를 cite하고, evidence id를 만들지 마세요.',
       'briefing failure는 briefing을 정확히 3개 item으로 고치고 draft의 나머지는 보존하세요.',
       'Source fact 또는 source material을 만들지 마세요.',

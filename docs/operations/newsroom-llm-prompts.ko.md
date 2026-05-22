@@ -1,8 +1,17 @@
-# Newsroom LLM Prompt Reference
+# 뉴스룸 LLM Prompt 운영 Reference
 
 이 문서는 Gemini/LLM prompt 위치를 빠르게 찾기 위한 운영 reference입니다. `source of truth`는 코드이며, 이 문서는 prompt 원문을 복사하지 않고 목적과 입출력 계약만 요약합니다. Line number는 쉽게 drift되므로 파일 경로와 함수명을 기준으로 확인하세요.
 
 API key, runtime secret, 전체 prompt 원문, generated artifact 내용은 이 문서에 포함하지 않습니다. Prompt 변경은 quality threshold, validator 계약, publication gate를 약화하지 않아야 합니다.
+
+## 기준 위치 링크
+
+- [Stage 3 prompt host](../../scripts/newsroom/cli/gemini-newsroom-newsletter.js)
+- [Stage 2 source discovery prompt host](../../scripts/newsroom/collect/gemini-source-discovery.js)
+- [Editorial policy](../editorial-policy.md)
+- [Newsletter template](../newsletter-template.md)
+- [Newsletter policy config](../../config/newsletter-policy.json)
+- [Prompt contract tests](../../tests/contract/prompt-contract.test.js)
 
 ## Workflow 요약
 
@@ -134,7 +143,7 @@ Workflow/Stage: Stage 3 `fact-checker attempt <n>/<total>`
 
 출력/schema: `factCheckSchema`, `content/newsroom/<date>/fact-check-report.json`
 
-주요 guardrail: Style rewrite가 아니라 factual error, source problem, editorial-policy violation에 집중합니다. Source 없는 claim, missing dated evidence, weak Camera HAL perspective, candidate-only 또는 requiresCrossCheck source misuse를 flag합니다.
+주요 guardrail: Style rewrite가 아니라 factual error, source problem, editorial-policy violation에 집중합니다. Source 없는 claim과 발행 차단 오류는 `must_fix[]`, dated evidence 또는 cross-check 부족은 `source_gaps[]`, 같은 source 안에서 보강 가능한 표현/구체성/actionability 문제는 `recommended_fixes[]`로 분류합니다.
 
 ### Targeted repair editor
 
@@ -249,4 +258,3 @@ Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 출력/schema: `editorSchema` 또는 `editorCompletionSchema` 내부 `public_article`
 
 주요 guardrail: `public_article`에는 `headline`, `lead`, `body_paragraphs`, `camera_hal_takeaway`, `reader_checkpoints`, `source_links`를 포함합니다. `article_sections`와 `hal_signal_capsule`은 reader-facing prose로 render하지 않습니다. Local path, `.tmp` path, GitHub Actions artifact URL, editorial-only source role을 public source link로 쓰지 않습니다.
-

@@ -9,6 +9,24 @@ const {
   sourceExtractionPromptGuardrails
 } = require('../../scripts/gemini-newsroom-newsletter');
 
+function promptHostSource() {
+  return fs.readFileSync(
+    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
+    'utf8'
+  );
+}
+
+function assertStagePromptUsesFactCheckHelpers(source, stageAnchor) {
+  const start = source.indexOf(stageAnchor);
+  assert.notEqual(start, -1, `Missing stage anchor: ${stageAnchor}`);
+  const end = source.indexOf('schema와 일치하는 JSON만 반환하세요.', start);
+  assert.notEqual(end, -1, `Missing schema anchor after: ${stageAnchor}`);
+  const stagePrompt = source.slice(start, end);
+
+  assert.match(stagePrompt, /factCheckSeverityPrompt\(\),/);
+  assert.match(stagePrompt, /cameraDeveloperToolingFactCheckPrompt\(\),/);
+}
+
 test('article section contract prompt fixes the five normalized keys and guardrails', () => {
   const prompt = articleSectionContractPrompt();
 
@@ -60,7 +78,9 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /verified_facts checklist/);
   assert.match(prompt, /CameraX-adjacent/);
   assert.match(prompt, /짧은 배경 문단/);
-  assert.match(prompt, /즉시 조치할 항목은 없습니다/);
+  assert.match(prompt, /관찰 포인트 1~2개/);
+  assert.match(prompt, /고정 문구를 사용하지 마세요/);
+  assert.doesNotMatch(prompt, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
 });
 
 
@@ -79,51 +99,52 @@ test('source extraction prompt guardrails keep source facts separate from editor
 });
 
 test('LLM editor, repair, completion, and fact-check prompts include article section contract', () => {
-  const source = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
-    'utf8'
-  );
+  const source = promptHostSource();
   const usageCount = (source.match(/articleSectionContractPrompt\(\),/g) || []).length;
 
   assert.ok(usageCount >= 5);
 });
 
 test('LLM editor, repair, completion, and fact-check prompts include public article contract', () => {
-  const source = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
-    'utf8'
-  );
+  const source = promptHostSource();
   const usageCount = (source.match(/publicArticleContractPrompt\(\),/g) || []).length;
 
   assert.ok(usageCount >= 6);
 });
 
 test('LLM reporter, editor, repair, completion, and fact-check prompts include source extraction guardrails', () => {
-  const source = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
-    'utf8'
-  );
+  const source = promptHostSource();
   const usageCount = (source.match(/sourceExtractionPromptGuardrails\(\),/g) || []).length;
 
   assert.ok(usageCount >= 7);
 });
 
 test('LLM fact-check prompts map findings to schema fields and allow camera developer tooling coverage', () => {
-  const source = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
-    'utf8'
-  );
+  const source = promptHostSource();
 
   assert.doesNotMatch(source, /flag하세요/);
-  assert.ok((source.match(/factCheckSeverityPrompt\(\),/g) || []).length >= 3);
-  assert.ok((source.match(/cameraDeveloperToolingFactCheckPrompt\(\),/g) || []).length >= 3);
+  assertStagePromptUsesFactCheckHelpers(source, '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI fact checker입니다.');
+  assertStagePromptUsesFactCheckHelpers(source, '당신은 repaired AOSP Camera / Driver / SoC Platform Newsletter draft의 AI fact checker입니다.');
+  assertStagePromptUsesFactCheckHelpers(source, '당신은 completed AOSP Camera / Driver / SoC Platform Newsletter draft의 AI fact checker입니다.');
   assert.match(source, /must_fix\[\]/);
   assert.match(source, /source_gaps\[\]/);
   assert.match(source, /recommended_fixes\[\]/);
+  assert.match(source, /selected capsule metadata/);
+  assert.match(source, /source_extraction/);
+  assert.match(source, /derived editorial hints/);
+  assert.match(source, /article text에만 있고 source\/capsule metadata가 뒷받침하지 않으면/);
   assert.match(source, /Android Studio/);
   assert.match(source, /VS Code/);
   assert.match(source, /Claude Code/);
   assert.match(source, /Codex/);
   assert.match(source, /Roo Code/);
   assert.match(source, /OpenCode/);
+});
+
+test('public article prompt does not force internal triage fallback prose', () => {
+  const source = promptHostSource();
+
+  assert.doesNotMatch(source, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
+  assert.match(source, /public_article에는 internal public-forbidden terms/);
+  assert.match(source, /public_article\.reader_checkpoints는 독자가 추적할 관찰 포인트 1~2개/);
 });
