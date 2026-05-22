@@ -4545,6 +4545,7 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
     .find(item => item.article_identity_key === currentHeadline.article_identity_key);
 
   assert.equal(headlineState.current_headline.article_identity_key, currentHeadline.article_identity_key);
+  assert.equal(headlineState.current_headline.newsletter_article_url, `newsletters/${date}/index.html#article-camerax-release-note`);
   assert.ok(headlineExposure);
   assert.equal(headlineExposure.exposure_count, 1);
   assert.deepEqual(headlineExposure.exposure_types, ['homepage_headline']);
@@ -4561,6 +4562,8 @@ test('ensure CLI persists a rendered public article when selected headline is no
   const renderedUrl = 'https://goo.gle/AdaptiveApps_IO26';
   const renderedTitle = 'Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트';
   const renderedSummary = 'Google은 여러 화면 크기와 CameraX preview 대응을 함께 언급했습니다.';
+  const renderedImage = 'https://example.com/android-developers-headline.png';
+  const renderedImageAlt = 'Android Developers headline image';
   writePublicNewsletterArtifacts(root, date, {
     issue: {
       date,
@@ -4571,6 +4574,8 @@ test('ensure CLI persists a rendered public article when selected headline is no
         {
           category: 'Android Camera',
           headline: renderedTitle,
+          selectedImage: renderedImage,
+          imageAlt: renderedImageAlt,
           what_changed: renderedSummary,
           evidence_summary: renderedSummary,
           background: 'CameraX preview 확인 범위를 설명합니다.',
@@ -4715,6 +4720,9 @@ test('ensure CLI persists a rendered public article when selected headline is no
   assert.equal(headlineState.current_headline.title, renderedTitle);
   assert.equal(headlineState.current_headline.summary, renderedSummary);
   assert.equal(headlineState.current_headline.source_url, renderedUrl);
+  assert.equal(headlineState.current_headline.newsletter_article_url, `newsletters/${date}/index.html#article-jetpack-compose-camerax-preview`);
+  assert.equal(headlineState.current_headline.image_url, renderedImage);
+  assert.equal(headlineState.current_headline.image_alt, renderedImageAlt);
   assert.deepEqual(selectionReport.headline_public_render_reconciliation, {
     applied: true,
     previous_headline_key: selectedHeadline.article_identity_key,

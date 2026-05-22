@@ -122,7 +122,7 @@
       return `<span class="status-chip">${escapeHtml(issue.homepage_badge)}</span>`;
     };
 
-    const renderIssueActions = (issue, primaryLabel = 'HTML 이슈 보기', mdLabel = 'Markdown 원문') => {
+    const renderIssueActions = (issue, primaryLabel = '기사 보기', mdLabel = 'Markdown 원문') => {
       const htmlLink = issue.html
         ? `<a class="button button-primary" href="${escapeHtml(issue.html)}">${primaryLabel}</a>`
         : '';
@@ -133,11 +133,17 @@
     };
 
     const isExternalUrl = value => /^https?:\/\//i.test(String(value || ''));
+    const isHttpsUrl = value => /^https:\/\//i.test(String(value || ''));
 
     const safeInternalPath = value => {
       const raw = String(value || '').trim();
       if (!raw || raw.startsWith('/') || raw.includes('..') || /^[a-z][a-z0-9+.-]*:/i.test(raw)) return '';
       return raw;
+    };
+
+    const safeImageSrc = value => {
+      const raw = String(value || '').trim();
+      return isHttpsUrl(raw) ? raw : safeInternalPath(raw);
     };
 
     function hideHomepageHeadline() {
@@ -146,12 +152,12 @@
     }
 
     function renderHeadlineCta(headline) {
-      const internalHref = safeInternalPath(headline.newsletter_url);
+      const internalHref = safeInternalPath(headline.newsletter_article_url) || safeInternalPath(headline.newsletter_url);
       const sourceHref = isExternalUrl(headline.source_url) ? headline.source_url : '';
       const href = internalHref || sourceHref;
       if (!href) return '';
       const rel = sourceHref && !internalHref ? ' rel="noopener"' : '';
-      const label = internalHref ? '뉴스레터에서 보기' : '원문 보기';
+      const label = internalHref ? '기사 보기' : '원문 보기';
       return `<a class="button button-primary" href="${escapeHtml(href)}"${rel}>${escapeHtml(label)}</a>`;
     }
 
@@ -175,16 +181,25 @@
         const badge = headline.newsletter_date
           ? '<span class="status-chip">최신호 포함</span>'
           : '';
+        const imageSrc = safeImageSrc(headline.image_url);
+        const headlineMedia = imageSrc
+          ? `<figure class="headline-media">
+              <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(headline.image_alt || headline.title)}" loading="lazy" decoding="async">
+            </figure>`
+          : '';
         headlineCard.innerHTML = `
-          <div class="card-meta">
-            <span class="issue-date">${escapeHtml(headline.newsletter_date || headline.selected_at || '')}</span>
-            ${badge}
-          </div>
-          <h3>${escapeHtml(headline.title)}</h3>
-          <p>${escapeHtml(headline.summary)}</p>
-          <div class="headline-source">${escapeHtml(sourceName)}</div>
-          <div class="card-actions">
-            ${renderHeadlineCta(headline)}
+          ${headlineMedia}
+          <div class="headline-body">
+            <div class="card-meta">
+              <span class="issue-date">${escapeHtml(headline.newsletter_date || headline.selected_at || '')}</span>
+              ${badge}
+            </div>
+            <h3>${escapeHtml(headline.title)}</h3>
+            <p>${escapeHtml(headline.summary)}</p>
+            <div class="headline-source">${escapeHtml(sourceName)}</div>
+            <div class="card-actions">
+              ${renderHeadlineCta(headline)}
+            </div>
           </div>
         `;
         headlineSection.hidden = false;
@@ -250,7 +265,7 @@
             <p>${escapeHtml(item.summary)}</p>
             <div class="tag-row">${renderTags(item.tags)}</div>
             <div class="card-actions">
-              ${renderIssueActions(item, '이슈 보기', 'Markdown')}
+              ${renderIssueActions(item, '기사 보기', 'Markdown')}
             </div>
           </article>
         `).join('');

@@ -423,6 +423,19 @@ function validateHomepageHeadlineData() {
       fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_url escapes repository.`);
     }
   }
+  if (headline.newsletter_article_url) {
+    const [newsletterArticleRelPath, articleAnchor = ''] = String(headline.newsletter_article_url).split('#');
+    const newsletterArticlePath = repoPath(root, newsletterArticleRelPath);
+    if (!newsletterArticlePath) {
+      fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url escapes repository.`);
+    } else if (articleAnchor) {
+      const html = read(newsletterArticlePath);
+      const escapedAnchor = articleAnchor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      if (!new RegExp(`\\bid=["']${escapedAnchor}["']`).test(html)) {
+        fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url anchor is missing from ${newsletterArticleRelPath}.`);
+      }
+    }
+  }
   if (!/^https?:\/\//i.test(String(headline.source_url || ''))) {
     fail(`${HEADLINE_STATE_REL_PATH}: current_headline.source_url must be an absolute http(s) URL.`);
   }

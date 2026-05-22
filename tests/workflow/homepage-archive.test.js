@@ -133,6 +133,8 @@ test('homepage excludes the latest issue from archive after sorting a copy', asy
   assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-09/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-08/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-07/);
+  assert.match(elements['archive-list'].innerHTML, /기사 보기/);
+  assert.doesNotMatch(elements['archive-list'].innerHTML, /이슈 보기/);
   assert.deepEqual(items.map(item => item.date), originalOrder);
 });
 
@@ -193,7 +195,7 @@ test('homepage malformed headline state is a headline-only fallback', async () =
   assert.equal(errors.length, 1);
 });
 
-test('homepage renders valid headline state with newsletter URL priority and escaped text', async () => {
+test('homepage renders valid headline state with article URL priority, image, and escaped text', async () => {
   const { elements } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], {
     schemaVersion: 1,
     current_headline: {
@@ -203,6 +205,9 @@ test('homepage renders valid headline state with newsletter URL priority and esc
       source_url: 'https://example.com/source',
       newsletter_date: '2026-05-23',
       newsletter_url: 'newsletters/2026-05-23/index.html',
+      newsletter_article_url: 'newsletters/2026-05-23/index.html#article-camerax-preview',
+      image_url: 'https://example.com/headline.png',
+      image_alt: '<Camera preview image>',
       selected_at: '2026-05-23',
       snapshot: {
         source_name: 'Example Source'
@@ -214,8 +219,30 @@ test('homepage renders valid headline state with newsletter URL priority and esc
   assert.equal(elements.headline.hidden, false);
   assert.match(elements['headline-card'].innerHTML, /&lt;Camera HAL headline&gt;/);
   assert.match(elements['headline-card'].innerHTML, /Summary &amp; details/);
-  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html"/);
-  assert.match(elements['headline-card'].innerHTML, /뉴스레터에서 보기/);
+  assert.match(elements['headline-card'].innerHTML, /<img src="https:\/\/example\.com\/headline\.png" alt="&lt;Camera preview image&gt;"/);
+  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html#article-camerax-preview"/);
+  assert.match(elements['headline-card'].innerHTML, /기사 보기/);
   assert.match(elements['headline-card'].innerHTML, /최신호 포함/);
   assert.doesNotMatch(elements['headline-card'].innerHTML, /rel="noopener"/);
+});
+
+test('homepage headline falls back to external source CTA when no newsletter URL is available', async () => {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], {
+    schemaVersion: 1,
+    current_headline: {
+      article_identity_key: 'url:https://example.com/source',
+      title: 'Camera HAL headline',
+      summary: 'Camera HAL summary',
+      source_url: 'https://example.com/source',
+      selected_at: '2026-05-23',
+      snapshot: {
+        source_name: 'Example Source'
+      }
+    },
+    headline_history: []
+  });
+
+  assert.equal(elements.headline.hidden, false);
+  assert.match(elements['headline-card'].innerHTML, /href="https:\/\/example\.com\/source" rel="noopener"/);
+  assert.match(elements['headline-card'].innerHTML, /원문 보기/);
 });
