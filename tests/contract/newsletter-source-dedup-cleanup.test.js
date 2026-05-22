@@ -84,6 +84,27 @@ function writeIndex(root, dates) {
   })));
 }
 
+function assertNoPublicCleanupTerms(value, label) {
+  const forbidden = [
+    /survivor article/i,
+    /\bdonor\b/i,
+    /중복 issue/i,
+    /\bcleanup\b/i,
+    /source-backed/i,
+    /구조화 필드/i,
+    /cpp_ai_tooling_fallback/i,
+    /source_dedup/i,
+    /중복 News Source/i,
+    /중복 source/i,
+    /deterministic reconstruction/i,
+    /normal publishable coverage/i,
+    /section repair/i
+  ];
+  for (const pattern of forbidden) {
+    assert.equal(pattern.test(value), false, `${label} exposes internal cleanup term: ${pattern}`);
+  }
+}
+
 test('normalizeNewsSourceKey applies the cleanup source identity contract', () => {
   assert.equal(
     normalizeNewsSourceKey(' HTTPS://Example.COM:443/CameraX/?utm_source=x&b=2&a=1#section ').key,
@@ -191,7 +212,40 @@ test('apply cleanup removes orphan artifacts and post invariants catch drift', (
   const root = tempRoot('source-dedup-apply-');
   writeIndex(root, ['2026-05-01', '2026-05-02']);
   writeIssue(root, '2026-05-01', [section('Old source', 'https://example.com/a')]);
-  writeIssue(root, '2026-05-02', [section('New source', 'https://example.com/a')]);
+  writeIssue(root, '2026-05-02', [
+    section('New source', 'https://example.com/a', {
+      public_article: {
+        headline: 'New source',
+        lead: 'Curated New source lead for public readers.',
+        body_paragraphs: [
+          'Curated New source paragraph one.',
+          'Curated New source paragraph two.'
+        ],
+        camera_hal_takeaway: 'Curated New source takeaway.',
+        reader_checkpoints: [
+          'Curated New source checkpoint.',
+          'Curated New source second checkpoint.'
+        ],
+        source_links: [source('https://example.com/a')]
+      }
+    }),
+    section('Sidecar source', 'https://example.com/b', {
+      public_article: {
+        headline: 'Sidecar source',
+        lead: 'Curated Sidecar source lead for public readers.',
+        body_paragraphs: [
+          'Curated Sidecar source paragraph one.',
+          'Curated Sidecar source paragraph two.'
+        ],
+        camera_hal_takeaway: 'Curated Sidecar source takeaway.',
+        reader_checkpoints: [
+          'Curated Sidecar source checkpoint.',
+          'Curated Sidecar source second checkpoint.'
+        ],
+        source_links: [source('https://example.com/b')]
+      }
+    })
+  ]);
   writeText(path.join(root, 'content', 'collected-news', '2026-05-01', 'candidates.json'), '[]\n');
   writeText(path.join(root, 'index.html'), '<div id="archive-list"></div>');
 
@@ -204,6 +258,26 @@ test('apply cleanup removes orphan artifacts and post invariants catch drift', (
   assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', '2026-05-01')), false);
   assert.equal(fs.existsSync(path.join(root, 'content', 'collected-news', '2026-05-01')), false);
   assert.equal(result.postRunReport.ok, true, result.postRunReport.errors.join('\n'));
+  const issue = readJson(path.join(root, 'content', 'newsroom', '2026-05-02', 'editor-draft.json'));
+  assert.equal(issue.sections[0].public_article.lead, 'Curated New source lead for public readers.');
+  assert.equal(issue.sections[1].public_article.lead, 'Curated Sidecar source lead for public readers.');
+  assert.equal(issue.briefing[0], 'Curated New source lead for public readers.');
+  assert.equal(issue.briefing[1], 'Curated Sidecar source lead for public readers.');
+  assert.equal(issue.briefing[2].includes('공통 확인'), false);
+  assert.match(issue.briefing[2], /Curated New source checkpoint/);
+  assert.match(issue.briefing[2], /Curated Sidecar source checkpoint/);
+
+  const publicSurfaces = {
+    'data/newsletters.json': JSON.stringify(readJson(path.join(root, 'data', 'newsletters.json'))),
+    'editor-draft.md': fs.readFileSync(path.join(root, 'content', 'newsroom', '2026-05-02', 'editor-draft.md'), 'utf8'),
+    'newsletter.md': fs.readFileSync(path.join(root, 'newsletters', '2026-05-02', 'newsletter.md'), 'utf8'),
+    'index.html': fs.readFileSync(path.join(root, 'newsletters', '2026-05-02', 'index.html'), 'utf8')
+  };
+  for (const [label, value] of Object.entries(publicSurfaces)) {
+    assertNoPublicCleanupTerms(value, label);
+  }
+  const editorJson = JSON.stringify(readJson(path.join(root, 'content', 'newsroom', '2026-05-02', 'editor-draft.json')));
+  assert.match(editorJson, /source_dedup_merge_provenance/);
 
   writeText(path.join(root, 'newsletters', '2026-05-01', 'newsletter.md'), '# drift\n');
   writeText(path.join(root, 'newsletters', '2026-05-01', 'index.html'), '<!doctype html>');
@@ -241,9 +315,9 @@ test('apply cleanup marks fallback-only survivor issues with fallback publicatio
   assert.equal(issue.homepage_visibility, 'visible_with_fallback_badge');
   assert.equal(issue.fallback_only, true);
   assert.equal(issue.fallback_public_ready, true);
-  assert.equal(issue.homepage_badge, 'Fallback Edition');
+  assert.equal(issue.homepage_badge, 'Tooling Watch Edition');
   assert.match(
     fs.readFileSync(path.join(root, 'newsletters', '2026-05-01', 'newsletter.md'), 'utf8'),
-    /Fallback Edition/
+    /Tooling Watch Edition/
   );
 });

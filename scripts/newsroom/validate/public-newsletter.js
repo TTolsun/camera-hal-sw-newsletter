@@ -26,7 +26,15 @@ const PUBLIC_NEWSLETTER_FORBIDDEN_TERMS = Object.freeze([
   'candidate shortage',
   'deterministic reconstruction',
   'source-bound',
-  'publish gate'
+  'publish gate',
+  'review_only',
+  '자동 정상 발행 기준',
+  '자동 발행 기준',
+  '편집자 확인 후 merge',
+  'merge 발행',
+  'Review-only 발행본',
+  '편집자 검토 후 공개 가능한',
+  '편집자 검토 후 발행 가능한'
 ]);
 
 const GENERIC_CHECKPOINT_PATTERNS = Object.freeze([
@@ -76,9 +84,6 @@ function visibleHtmlText(value) {
 }
 
 function allowedForbiddenTerms(options = {}) {
-  if (options.publicationMode === 'fallback_public' || options.fallbackOnly === true) {
-    return new Set(['Fallback', 'fallback']);
-  }
   return new Set();
 }
 

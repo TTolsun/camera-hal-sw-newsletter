@@ -199,7 +199,7 @@ function fallbackNewsletterMarkdown(date, articleCount, { notice = true } = {}) 
   if (!notice) return markdown;
   return markdown.replace(
     '\n## 1.',
-    '\n> Fallback Edition: C++ / Tooling Watch\n> Direct camera anchor was not available this week.\n\n## 1.'
+    '\n> Tooling Watch Edition: C++ / Tooling Watch\n> Direct camera anchor was not available this week.\n\n## 1.'
   );
 }
 
@@ -208,14 +208,14 @@ function fallbackNewsletterHtml(date, { tags, notice = true } = {}) {
   if (!notice) return html;
   return html.replace(
     '<section class="issue-briefing">',
-    '<div class="publication-notice" role="note"><p>Fallback Edition: C++ / Tooling Watch</p><p>Direct camera anchor was not available this week.</p></div>\n<section class="issue-briefing">'
+    '<div class="publication-notice" role="note"><p>Tooling Watch Edition: C++ / Tooling Watch</p><p>Direct camera anchor was not available this week.</p></div>\n<section class="issue-briefing">'
   );
 }
 
 function writeFallbackPublicSiteFixture(root, {
   date = '2026-05-20',
-  tags = ['Fallback Edition', 'Tooling Watch'],
-  homepageBadge = 'Fallback Edition',
+  tags = ['Tooling Watch Edition', 'Tooling Watch'],
+  homepageBadge = 'Tooling Watch Edition',
   homepageVisibility = 'visible_with_fallback_badge',
   notice = true,
   publicationMode = 'fallback_public',
@@ -226,8 +226,8 @@ function writeFallbackPublicSiteFixture(root, {
   const articleCount = articlePolicy.mainArticleCount.min;
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
-    title: 'Fallback Edition: C++ / Tooling Watch',
-    summary: 'Fallback Edition: C++ / Tooling Watch - Summary',
+    title: 'Tooling Watch Edition: C++ / Tooling Watch',
+    summary: 'Tooling Watch Edition: C++ / Tooling Watch - Summary',
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
     tags,
@@ -442,15 +442,15 @@ test('validate-site fails fallback_public without badge or publication notice', 
   const result = runScript(validateSitePath, root);
 
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /fallback_public entry must expose homepage_badge=Fallback Edition/);
-  assert.match(result.stderr, /fallback_public HTML must show a visible Fallback Edition publication notice/);
-  assert.match(result.stderr, /fallback_public markdown must disclose Fallback Edition status/);
+  assert.match(result.stderr, /fallback_public entry must expose homepage_badge=Tooling Watch Edition/);
+  assert.match(result.stderr, /fallback_public HTML must show a visible Tooling Watch Edition publication notice/);
+  assert.match(result.stderr, /fallback_public markdown must disclose Tooling Watch Edition status/);
 });
 
 test('validate-site fails fallback-only homepage metadata that looks like a normal Camera HAL issue', () => {
   const root = tempRoot('validate-site-fallback-public-camera-tag-');
   writeFallbackPublicSiteFixture(root, {
-    tags: ['Camera HAL', 'Fallback Edition', 'Tooling Watch']
+    tags: ['Camera HAL', 'Tooling Watch Edition', 'Tooling Watch']
   });
 
   const result = runScript(validateSitePath, root);

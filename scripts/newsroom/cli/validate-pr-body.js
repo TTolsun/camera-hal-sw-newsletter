@@ -386,8 +386,8 @@ function validateReviewPublicationContract(text, parsed, errors) {
     if (!/(?:^|\n)\s*-?\s*fallback_public_ready\s*[:=]\s*true\b/i.test(concreteState)) {
       errors.push('fallback public PR body must include fallback_public_ready=true.');
     }
-    if (!/(?:^|\n)\s*-?\s*homepage_badge\s*[:=]\s*Fallback Edition\b/i.test(concreteState)) {
-      errors.push('fallback public PR body must include homepage_badge=Fallback Edition.');
+    if (!/(?:^|\n)\s*-?\s*homepage_badge\s*[:=]\s*Tooling Watch Edition\b/i.test(concreteState)) {
+      errors.push('fallback public PR body must include homepage_badge=Tooling Watch Edition.');
     }
   }
 }

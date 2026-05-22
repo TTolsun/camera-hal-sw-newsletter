@@ -135,5 +135,5 @@ test('homepage and archive accept single-article public issues as normal entries
   assert.match(elements['latest-card'].innerHTML, /newsletters\/2026-05-21\/index\.html/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-20/);
   assert.match(elements['archive-list'].innerHTML, /Previous one-article issue/);
-  assert.doesNotMatch(elements['latest-card'].innerHTML, /review-only|diagnostics-only|Fallback Edition/i);
+  assert.doesNotMatch(elements['latest-card'].innerHTML, /review-only|diagnostics-only|Tooling Watch Edition/i);
 });

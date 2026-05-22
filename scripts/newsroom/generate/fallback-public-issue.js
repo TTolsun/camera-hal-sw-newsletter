@@ -1501,15 +1501,14 @@ function buildFallbackPublicIssue(options = {}) {
   applyPublicationDecision(issue, publicationDecision);
   const basePublicSummary = publicIssueSummary(date, issue.sections);
   issue.summary = publicationDecision.fallback_only
-    ? `Fallback Edition: C++ / Tooling Watch - ${basePublicSummary}`
+    ? `Tooling Watch Edition: C++ / Tooling Watch - ${basePublicSummary}`
     : basePublicSummary;
   issue.review_publication_ready = true;
   issue.publication_notice = publicationDecision.fallback_only
     ? fallbackEditionNoticeLines()
     : [
-    '편집자 검토 후 발행 가능한 Review-only 발행본입니다.',
-    '이 호는 AI 자동 발행 기준을 통과하지 못했으며, fallback 또는 후보 부족 구성이 포함될 수 있습니다.',
-    '각 기사에서 Camera HAL 직접 변경으로 과장하지 않도록 source와 guardrail을 확인하세요.'
+    '검토 발행본입니다.',
+    '각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.'
       ];
   if (publicationDecision.fallback_only) {
     issue.tags = fallbackIssueTags(issue.tags);
@@ -1549,7 +1548,7 @@ function buildFallbackPublicIssue(options = {}) {
     content_quality_score: fallbackQualityReport.score,
     camera_relevance_score: publicationDecision.camera_anchor_count > 0 ? fallbackQualityReport.score : 0,
     publication_mode_decision: publicationDecision.fallback_only
-      ? 'fallback_public: no final public camera anchor remained; publish as clearly labeled Fallback Edition.'
+      ? 'fallback_public: no final public camera anchor remained; publish as clearly labeled Tooling Watch Edition.'
       : 'review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.',
     ...originalFactCheck,
     fallback_public_issue_removed_blockers: demotedRecords.length > 0,

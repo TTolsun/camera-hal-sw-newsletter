@@ -57,6 +57,14 @@ function slugClass(value) {
     .replace(/^-+|-+$/g, '') || 'generic';
 }
 
+function publicVisualLabel(value) {
+  return String(value || 'Article visual')
+    .replace(/\bFallback\b/gi, 'Tooling Watch')
+    .replace(/cpp_ai_tooling_fallback/gi, 'Tooling Watch')
+    .replace(/\s*\/\s*Tooling Watch\s*$/i, ' / Tooling Watch')
+    .trim() || 'Article visual';
+}
+
 function httpsUrlOrFallback(value, fallback) {
   return /^https:\/\//i.test(String(value || '').trim()) ? String(value).trim() : fallback;
 }
@@ -108,8 +116,8 @@ function articleMediaHtml(section, publicArticle = null) {
           </figure>`;
   }
 
-  const variant = slugClass(section.article_type || section.category || 'generic');
-  return `<div class="article-media article-fallback-visual article-fallback-${escapeHtml(variant)}" role="img" aria-label="${escapeHtml(section.category || 'Article visual')}">
+  const variant = slugClass(publicVisualLabel(section.article_type || section.category || 'generic'));
+  return `<div class="article-media article-placeholder-visual article-placeholder-${escapeHtml(variant)}" role="img" aria-label="${escapeHtml(publicVisualLabel(section.category))}">
             <span></span>
           </div>`;
 }
@@ -150,13 +158,12 @@ function issueTags(issue) {
     .map(String)
     .filter(Boolean)
     .filter(tag => !(cameraAnchorCount === 0 && String(tag).trim().toLowerCase() === 'camera hal'));
-  return [...new Set(['Fallback Edition', 'Tooling Watch', ...cleaned])];
+  return [...new Set(['Tooling Watch Edition', 'Tooling Watch', ...cleaned])];
 }
 
 function reviewPublicationNoticeLines() {
   return [
-    '편집자 검토 후 공개 가능한 검토 발행본입니다.',
-    '이 호는 자동 정상 발행 기준을 통과하지 못했으며, 편집자 확인 후 merge해야 합니다.',
+    '검토 발행본입니다.',
     '각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.'
   ];
 }
@@ -168,8 +175,8 @@ function publicationNoticeLines(issue) {
       return issue.publication_notice.map(String).filter(Boolean);
     }
     return [
-      'Fallback Edition: C++ / Tooling Watch',
-      '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 fallback issue로 발행되었습니다.',
+      'Tooling Watch Edition: C++ / Tooling Watch',
+      '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 참고 issue로 발행되었습니다.',
       'Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.'
     ];
   }
@@ -321,7 +328,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, secti
   const bodyParagraphs = bodyParagraphsForRender(publicArticle);
   return `      <section class="section">
         <h2>${escapeHtml(htmlHeading)}</h2>
-        <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-fallback-image'} ${escapeHtml(className)}">
+        <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image'} ${escapeHtml(className)}">
           ${articleMediaHtml(section, publicArticle)}
           ${articleTagsHtml(section, headingCategory)}
           <h3>${escapeHtml(publicArticle.headline)}</h3>

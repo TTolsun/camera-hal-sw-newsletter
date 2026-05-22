@@ -239,14 +239,14 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
   if (!isFallbackPublicIssue(item, status)) return;
   const tags = ensureArray(item.tags).map(String);
   const cameraAnchorCount = finiteNumber(item.camera_anchor_count ?? status.camera_anchor_count);
-  if (item.homepage_badge !== 'Fallback Edition') {
-    fail(`Newsletter ${item.date} fallback_public entry must expose homepage_badge=Fallback Edition.`);
+  if (item.homepage_badge !== 'Tooling Watch Edition') {
+    fail(`Newsletter ${item.date} fallback_public entry must expose homepage_badge=Tooling Watch Edition.`);
   }
   if (item.homepage_visibility !== 'visible_with_fallback_badge') {
     fail(`Newsletter ${item.date} fallback_public entry must use homepage_visibility=visible_with_fallback_badge.`);
   }
-  if (!tags.includes('Fallback Edition')) {
-    fail(`Newsletter ${item.date} fallback_public tags must include Fallback Edition.`);
+  if (!tags.includes('Tooling Watch Edition')) {
+    fail(`Newsletter ${item.date} fallback_public tags must include Tooling Watch Edition.`);
   }
   if (!tags.includes('Tooling Watch')) {
     fail(`Newsletter ${item.date} fallback_public tags must include Tooling Watch.`);
@@ -254,11 +254,11 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
   if (cameraAnchorCount === 0 && tags.includes('Camera HAL')) {
     fail(`Newsletter ${item.date} fallback-only metadata must not expose Camera HAL as a homepage tag.`);
   }
-  if (!/class=["'][^"']*\bpublication-notice\b/i.test(html) || !/Fallback Edition: C\+\+ \/ Tooling Watch/.test(textFromHtml(html))) {
-    fail(`Newsletter ${item.date} fallback_public HTML must show a visible Fallback Edition publication notice.`);
+  if (!/class=["'][^"']*\bpublication-notice\b/i.test(html) || !/Tooling Watch Edition: C\+\+ \/ Tooling Watch/.test(textFromHtml(html))) {
+    fail(`Newsletter ${item.date} fallback_public HTML must show a visible Tooling Watch Edition publication notice.`);
   }
-  if (!/Fallback Edition: C\+\+ \/ Tooling Watch/.test(markdown)) {
-    fail(`Newsletter ${item.date} fallback_public markdown must disclose Fallback Edition status.`);
+  if (!/Tooling Watch Edition: C\+\+ \/ Tooling Watch/.test(markdown)) {
+    fail(`Newsletter ${item.date} fallback_public markdown must disclose Tooling Watch Edition status.`);
   }
 }
 
@@ -349,7 +349,7 @@ function validateArticleQuality(item, md, newFormat, strictArtifactValidation) {
     if (!hasSourceEntry(article.text)) {
       fail(`Newsletter ${item.date} article has no source entries: ${article.heading}`);
     }
-    if (newFormat && !hasAny(article.text, ['Action Item', 'Action Items', '확인할 Action Item', '확인해볼 아이템', '실행 항목'])) {
+    if (newFormat && !hasAny(article.text, ['Action Item', 'Action Items', '확인할 Action Item', '확인해볼 아이템', '실행 항목', '확인할 점'])) {
       warn(`Newsletter ${item.date} article may be missing Action Item content: ${article.heading}`);
     }
     if (newFormat && !hasAny(article.text, ['Camera HAL 관점', 'Camera HAL에서']) && !hasEngineeringPerspective(article.text)) {
