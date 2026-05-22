@@ -126,11 +126,25 @@ test('newsletter renderer renders a single main article without empty sections',
   const html = buildHtml(issue());
 
   assert.match(markdown, /^## 2\. CameraX release gives HAL teams a target/m);
+  assert.match(html, /<section class="section" id="article-camerax-release-gives-hal-teams-a-target">/);
   assert.doesNotMatch(markdown, /^## 3\./m);
   assert.equal((html.match(/\barticle-card\b/g) || []).length, 1);
   for (const rendered of [markdown, html]) {
     assert.doesNotMatch(rendered, /\bundefined\b|\bnull\b|\bNaN\b/);
   }
+});
+
+test('newsletter renderer keeps article anchors unique when titles repeat', () => {
+  const duplicateIssue = issue({
+    sections: [
+      issue().sections[0],
+      issue().sections[0]
+    ]
+  });
+  const html = buildHtml(duplicateIssue);
+
+  assert.match(html, /id="article-camerax-release-gives-hal-teams-a-target"/);
+  assert.match(html, /id="article-camerax-release-gives-hal-teams-a-target-2"/);
 });
 
 test('newsletter renderer article structure table uses shared row semantics', () => {

@@ -270,7 +270,10 @@ function headlineSnapshotFromCandidate(candidate = {}, {
 } = {}) {
   const score = computeHeadlineScore(candidate, policy);
   const articleKey = articleIdentityKey(candidate);
-  return {
+  const newsletterArticleUrl = text(candidate.newsletter_article_url || candidate.newsletterArticleUrl);
+  const imageUrl = text(candidate.image_url || candidate.imageUrl || candidate.selectedImage || candidate.selected_image);
+  const imageAlt = text(candidate.image_alt || candidate.imageAlt || candidate.imageAltText);
+  const snapshot = {
     article_identity_key: articleKey,
     title: text(candidate.title),
     summary: text(candidate.summary || candidate.description || candidate.reason),
@@ -289,6 +292,10 @@ function headlineSnapshotFromCandidate(candidate = {}, {
       source_name: text(candidate.source || candidate.source_name || candidate.snapshot?.source_name)
     }
   };
+  if (newsletterArticleUrl) snapshot.newsletter_article_url = newsletterArticleUrl;
+  if (imageUrl) snapshot.image_url = imageUrl;
+  if (imageAlt) snapshot.image_alt = imageAlt;
+  return snapshot;
 }
 
 function validateCurrentHeadline(headline, { policy = getHeadlinePolicy(), scoredAt = todayKstDate() } = {}) {
@@ -414,6 +421,9 @@ function injectedArticleFromHeadline(headline) {
     source: headline.snapshot?.source_name || '',
     newsletter_date: headline.newsletter_date,
     newsletter_url: headline.newsletter_url,
+    newsletter_article_url: headline.newsletter_article_url || '',
+    image_url: headline.image_url || '',
+    image_alt: headline.image_alt || '',
     article_identity_key: headline.article_identity_key,
     relevance_bucket: headline.snapshot?.category || '',
     deterministic_score: headline.current_score,

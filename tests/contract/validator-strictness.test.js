@@ -264,6 +264,49 @@ function writeFallbackPublicSiteFixture(root, {
   });
 }
 
+function homepageHeadlineState({
+  date = '2026-05-23',
+  overrides = {}
+} = {}) {
+  const policy = getHeadlinePolicy();
+  return {
+    schemaVersion: 1,
+    updated_at: `${date}T00:00:00+09:00`,
+    current_headline: {
+      article_identity_key: 'url:https://example.com/source',
+      title: 'Camera HAL headline',
+      summary: 'Camera HAL headline summary.',
+      source_url: 'https://example.com/source',
+      newsletter_date: date,
+      newsletter_url: `newsletters/${date}/index.html`,
+      selected_at: date,
+      base_score: 100,
+      current_score: 100,
+      last_scored_at: date,
+      date_evidence: {
+        date,
+        date_field: 'published_date',
+        evidence_level: 'dated_release',
+        publish_ready_date_evidence: true
+      },
+      quality_flags: {
+        source_gap_risk: false,
+        fact_check_must_fix_unresolved: false,
+        stale_claim_hard_failure: false,
+        blocked_source: false
+      },
+      score_breakdown: {},
+      snapshot: {
+        category: articlePolicy.primaryCameraStack.buckets[0],
+        source_name: 'Example Source'
+      },
+      ...overrides
+    },
+    headline_history: [],
+    policy: policySnapshot(policy)
+  };
+}
+
 function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {}) {
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
@@ -618,6 +661,68 @@ test('validate-site stale homepage headline score failure includes refresh remed
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /current_headline failed validation: headline_score_below_minimum/);
   assert.match(result.stderr, /Run newsletter generation to refresh or clear homepage headline state/);
+});
+
+test('validate-site rejects homepage headline image without alt text', () => {
+  const root = tempRoot('validate-site-headline-image-alt-');
+  const date = '2026-05-23';
+  writeSiteFixture(root, {
+    date,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeJson(path.join(root, 'data', 'homepage-headline.json'), homepageHeadlineState({
+    date,
+    overrides: {
+      image_url: 'https://example.com/headline.png',
+      image_alt: ''
+    }
+  }));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /current_headline\.image_alt is required when image_url is present/);
+});
+
+test('validate-site rejects homepage headline non-https external image URL', () => {
+  const root = tempRoot('validate-site-headline-http-image-');
+  const date = '2026-05-23';
+  writeSiteFixture(root, {
+    date,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeJson(path.join(root, 'data', 'homepage-headline.json'), homepageHeadlineState({
+    date,
+    overrides: {
+      image_url: 'http://example.com/headline.png',
+      image_alt: 'Camera HAL headline image'
+    }
+  }));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /current_headline\.image_url must be https URL or existing repository-relative path/);
+});
+
+test('validate-site rejects homepage headline article URL without repository path', () => {
+  const root = tempRoot('validate-site-headline-anchor-only-');
+  const date = '2026-05-23';
+  writeSiteFixture(root, {
+    date,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeJson(path.join(root, 'data', 'homepage-headline.json'), homepageHeadlineState({
+    date,
+    overrides: {
+      newsletter_article_url: '#article-camerax'
+    }
+  }));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /current_headline\.newsletter_article_url must include a repository-relative HTML path before #anchor/);
 });
 
 test('strict review publication exception applies only to composition-only blockers', () => {

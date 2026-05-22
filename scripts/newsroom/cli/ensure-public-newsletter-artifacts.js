@@ -24,6 +24,9 @@ const {
   normalizeArticleUrl
 } = require('../common/article-identity');
 const {
+  uniqueArticleAnchorId
+} = require('../common/article-anchor');
+const {
   readExposureHistory,
   recordArticleExposure,
   writeExposureHistory
@@ -226,8 +229,14 @@ function readRenderedNewsletterArticles(root, date) {
   const htmlPath = path.join(root, 'newsletters', date, 'index.html');
   if (!fs.existsSync(htmlPath)) return [];
   const html = fs.readFileSync(htmlPath, 'utf8');
-  return [...html.matchAll(/<div class="[^"]*\barticle-card\b[^"]*"[\s\S]*?<\/div>\s*<\/section>/gi)]
+  const usedAnchors = new Set();
+  let articleIndex = 0;
+  return [...html.matchAll(/<section\b([^>]*)>[\s\S]*?<\/section>/gi)]
     .map(match => {
+      if (!/\barticle-card\b/i.test(match[0])) return null;
+      const currentIndex = articleIndex;
+      articleIndex += 1;
+      const attrs = match[1] || '';
       const block = match[0];
       const sourceUrl = decodeHtml(
         matchFirst(block, /<div class="source-list"[\s\S]*?<a[^>]*href="([^"]+)"/i) ||
@@ -242,13 +251,23 @@ function readRenderedNewsletterArticles(root, date) {
         matchFirst(block, /<figcaption[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/i) ||
         matchFirst(block, /<div class="source-list"[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/i)
       );
+      const imageTag = matchFirst(block, /(<img\b(?=[^>]*class="[^"]*\barticle-image\b)[^>]*>)/i);
+      const imageUrl = decodeHtml(matchFirst(imageTag, /\bsrc="([^"]+)"/i));
+      const imageAlt = decodeHtml(matchFirst(imageTag, /\balt="([^"]*)"/i));
       if (!title || !summary || !sourceUrl) return null;
+      const existingAnchor = decodeHtml(matchFirst(attrs, /\bid="([^"]+)"/i));
+      const articleAnchor = existingAnchor || uniqueArticleAnchorId(title, currentIndex, usedAnchors);
+      if (existingAnchor) usedAnchors.add(existingAnchor);
       return {
         article_identity_key: articleIdentityKey({ source_url: sourceUrl }),
         title,
         summary,
         source_url: sourceUrl,
-        source_name: sourceName || '출처'
+        source_name: sourceName || '출처',
+        article_anchor: articleAnchor,
+        newsletter_article_url: `newsletters/${date}/index.html#${articleAnchor}`,
+        image_url: imageUrl,
+        image_alt: imageAlt || title
       };
     })
     .filter(Boolean);
@@ -281,6 +300,9 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
           summary: renderedCurrent.summary,
           source_url: renderedCurrent.source_url,
           newsletter_url: newsletterUrl,
+          newsletter_article_url: renderedCurrent.newsletter_article_url || newsletterUrl,
+          image_url: renderedCurrent.image_url || current.image_url || '',
+          image_alt: renderedCurrent.image_alt || current.image_alt || renderedCurrent.title,
           snapshot: {
             ...(current.snapshot || {}),
             source_name: renderedCurrent.source_name || current.snapshot?.source_name || ''
@@ -306,6 +328,9 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
         summary: article.summary,
         newsletter_date: date,
         newsletter_url: newsletterUrl,
+        newsletter_article_url: article.newsletter_article_url || newsletterUrl,
+        image_url: article.image_url || selected.image_url || selected.selectedImage || '',
+        image_alt: article.image_alt || selected.image_alt || selected.imageAlt || article.title,
         selected_at: date,
         snapshot: {
           ...(selected.snapshot || {}),

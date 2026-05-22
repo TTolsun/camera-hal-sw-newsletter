@@ -8,6 +8,9 @@ const {
 const {
   publicArticleForSection
 } = require('../common/public-article-contract');
+const {
+  uniqueArticleAnchorId
+} = require('../common/article-anchor');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -216,6 +219,7 @@ function articleTagsHtml(section, headingCategory) {
 }
 
 function normalizedSections(issue) {
+  const usedAnchors = new Set();
   return ensureArray(issue.sections).map((section, index) => {
     const publicArticle = publicArticleForSection(section);
     const category = publicArticle.headline || section.headline || section.category || `Main Article ${index + 1}`;
@@ -224,6 +228,7 @@ function normalizedSections(issue) {
       htmlHeading: `${index + 2}. ${category}`,
       headingCategory: category,
       className: section.article_type || (section.is_ai_related ? 'ai' : 'article'),
+      anchorId: uniqueArticleAnchorId(category, index, usedAnchors),
       section
     };
   });
@@ -322,11 +327,11 @@ ${sourceListMarkdown(issue.references)}
 `;
 }
 
-function publicArticleHtml(issue, htmlHeading, headingCategory, className, section) {
+function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, section) {
   const publicArticle = publicArticleForSection(section);
   const perspectiveLabel = articlePerspectiveLabel(issue, section);
   const bodyParagraphs = bodyParagraphsForRender(publicArticle);
-  return `      <section class="section">
+  return `      <section class="section" id="${escapeHtml(anchorId)}">
         <h2>${escapeHtml(htmlHeading)}</h2>
         <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image'} ${escapeHtml(className)}">
           ${articleMediaHtml(section, publicArticle)}
@@ -388,8 +393,8 @@ ${publicationNoticeBlock}      <section class="section issue-briefing">
         </div>
       </section>
 
-${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, section }) =>
-    publicArticleHtml(issue, htmlHeading, headingCategory, className, section)
+${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, anchorId, section }) =>
+    publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, section)
   ).join('\n\n')}
 
       <section class="section">
