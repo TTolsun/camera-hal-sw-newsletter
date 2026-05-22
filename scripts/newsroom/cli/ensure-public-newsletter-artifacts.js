@@ -17,6 +17,24 @@ const {
   articlePolicy
 } = require('../common/newsletter-policy');
 const {
+  decodeHtml
+} = require('../common/common');
+const {
+  articleIdentityKey,
+  normalizeArticleUrl
+} = require('../common/article-identity');
+const {
+  readExposureHistory,
+  recordArticleExposure,
+  writeExposureHistory
+} = require('../common/article-exposure-history');
+const {
+  computeHeadlineScore,
+  headlineSnapshotFromCandidate,
+  isHeadlineEligible,
+  writeHomepageHeadlineState
+} = require('../common/homepage-headline');
+const {
   reconcilePublicState
 } = require('../common/public-state-reconciliation');
 
@@ -186,6 +204,223 @@ function readJsonSafely(filePath) {
   }
 }
 
+function writeJson(filePath, value) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+}
+
+function relativeArtifactPath(root, filePath) {
+  return path.relative(root, filePath).replace(/\\/g, '/');
+}
+
+function stripHtml(value = '') {
+  return decodeHtml(String(value).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' '));
+}
+
+function matchFirst(value, pattern) {
+  const match = String(value || '').match(pattern);
+  return match ? match[1] : '';
+}
+
+function readRenderedNewsletterArticles(root, date) {
+  const htmlPath = path.join(root, 'newsletters', date, 'index.html');
+  if (!fs.existsSync(htmlPath)) return [];
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  return [...html.matchAll(/<div class="[^"]*\barticle-card\b[^"]*"[\s\S]*?<\/div>\s*<\/section>/gi)]
+    .map(match => {
+      const block = match[0];
+      const sourceUrl = decodeHtml(
+        matchFirst(block, /<div class="source-list"[\s\S]*?<a[^>]*href="([^"]+)"/i) ||
+        matchFirst(block, /<figcaption[\s\S]*?<a[^>]*href="([^"]+)"/i)
+      );
+      const title = stripHtml(matchFirst(block, /<h3[^>]*>([\s\S]*?)<\/h3>/i));
+      const summary = stripHtml(
+        matchFirst(block, /<p[^>]*class="[^"]*\barticle-lead\b[^"]*"[^>]*>([\s\S]*?)<\/p>/i) ||
+        matchFirst(block, /<p[^>]*>([\s\S]*?)<\/p>/i)
+      );
+      const sourceName = stripHtml(
+        matchFirst(block, /<figcaption[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/i) ||
+        matchFirst(block, /<div class="source-list"[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/i)
+      );
+      if (!title || !summary || !sourceUrl) return null;
+      return {
+        article_identity_key: articleIdentityKey({ source_url: sourceUrl }),
+        title,
+        summary,
+        source_url: sourceUrl,
+        source_name: sourceName || '출처'
+      };
+    })
+    .filter(Boolean);
+}
+
+function renderedHeadlineState({ root, date, state, shortlist }) {
+  const rendered = readRenderedNewsletterArticles(root, date);
+  if (rendered.length === 0 || !state?.current_headline) {
+    return { state, reconciliation: null };
+  }
+  const newsletterUrl = `newsletters/${date}/index.html`;
+  const selectedByKey = new Map(ensureArray(shortlist.selected_articles).map(candidate => [
+    articleIdentityKey(candidate),
+    candidate
+  ]));
+  const current = state.current_headline;
+  const currentSource = normalizeArticleUrl(current.source_url);
+  const renderedCurrent = rendered.find(article =>
+    article.article_identity_key === current.article_identity_key ||
+    normalizeArticleUrl(article.source_url) === currentSource
+  );
+
+  if (renderedCurrent) {
+    return {
+      state: {
+        ...state,
+        current_headline: {
+          ...current,
+          title: renderedCurrent.title,
+          summary: renderedCurrent.summary,
+          source_url: renderedCurrent.source_url,
+          newsletter_url: newsletterUrl,
+          snapshot: {
+            ...(current.snapshot || {}),
+            source_name: renderedCurrent.source_name || current.snapshot?.source_name || ''
+          }
+        }
+      },
+      reconciliation: null
+    };
+  }
+
+  const fallback = rendered
+    .map(article => {
+      const selected = selectedByKey.get(article.article_identity_key) || {};
+      const candidate = {
+        ...selected,
+        article_identity_key: article.article_identity_key,
+        canonical_url: article.source_url,
+        normalized_url: article.source_url,
+        url: article.source_url,
+        article_url: article.source_url,
+        source_url: article.source_url,
+        title: article.title,
+        summary: article.summary,
+        newsletter_date: date,
+        newsletter_url: newsletterUrl,
+        selected_at: date,
+        snapshot: {
+          ...(selected.snapshot || {}),
+          source_name: article.source_name || selected.source_name || selected.source || ''
+        }
+      };
+      if (!isHeadlineEligible(candidate)) return null;
+      return {
+        candidate,
+        score: computeHeadlineScore(candidate).headline_score
+      };
+    })
+    .filter(Boolean)
+    .sort((left, right) => right.score - left.score || left.candidate.title.localeCompare(right.candidate.title))[0];
+
+  if (!fallback) return { state, reconciliation: null };
+  const fallbackState = {
+    ...state,
+    current_headline: headlineSnapshotFromCandidate(fallback.candidate, {
+      date,
+      newsletterUrl,
+      scoredAt: date
+    })
+  };
+  return {
+    state: fallbackState,
+    reconciliation: {
+      applied: true,
+      previous_headline_key: current.article_identity_key || '',
+      rendered_headline_key: fallbackState.current_headline.article_identity_key,
+      reason: 'selected_headline_not_rendered_in_public_issue'
+    }
+  };
+}
+
+function applyHeadlineRenderReconciliation(report, reconciliation) {
+  if (!report || typeof report !== 'object' || !reconciliation?.applied) return;
+  report.headline_public_render_reconciliation = reconciliation;
+  report.headline_decision = {
+    ...(report.headline_decision || {}),
+    public_rendered_headline_key: reconciliation.rendered_headline_key,
+    public_render_reconciled: true,
+    public_render_reconciliation_reason: reconciliation.reason
+  };
+}
+
+function persistHeadlineDiagnosticsReconciliation({ root, date, reconciliation }) {
+  if (!reconciliation?.applied) return '';
+  const relPath = `content/newsroom/${date}/selection-diagnostics.md`;
+  const filePath = path.join(root, ...relPath.split('/'));
+  if (!fs.existsSync(filePath)) return '';
+  const existing = fs.readFileSync(filePath, 'utf8');
+  const withoutStaleLines = existing.replace(
+    /\n- public_render_reconciled: .*\n- public_rendered_headline_key: .*\n- public_render_reconciliation_reason: .*/g,
+    ''
+  );
+  const updated = withoutStaleLines.replace(
+    /(- replacement_headline_key: [^\n]*\n)/,
+    `$1- public_render_reconciled: true\n` +
+      `- public_rendered_headline_key: ${reconciliation.rendered_headline_key}\n` +
+      `- public_render_reconciliation_reason: ${reconciliation.reason}\n`
+  );
+  if (updated === existing) return '';
+  fs.writeFileSync(filePath, updated, 'utf8');
+  return relPath;
+}
+
+function persistHomepageHeadlineArtifacts({ root, date, resolved }) {
+  if (resolved.publicNewsletterReady !== true) return [];
+  const shortlistPath = path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json');
+  const selectionReportPath = path.join(root, 'content', 'newsroom', date, 'selection-report.json');
+  const shortlist = readJsonSafely(shortlistPath);
+  const rendered = renderedHeadlineState({
+    root,
+    date,
+    state: shortlist.homepage_headline_state,
+    shortlist
+  });
+  const state = rendered.state;
+  const reconciliation = rendered.reconciliation;
+  if (!state || typeof state !== 'object' || !state.current_headline) return [];
+
+  const files = [];
+  const headlinePath = writeHomepageHeadlineState(root, state);
+  files.push(relativeArtifactPath(root, headlinePath));
+
+  let history = readExposureHistory(root, date);
+  history = recordArticleExposure(history, state.current_headline, {
+    date,
+    type: 'homepage_headline',
+    score: state.current_headline.current_score,
+    reuseReason: shortlist.headline_decision?.reason || shortlist.headline_decision?.decision || '',
+    newsletterUrl: state.current_headline.newsletter_url
+  });
+  const historyPath = writeExposureHistory(root, history);
+  files.push(relativeArtifactPath(root, historyPath));
+
+  shortlist.homepage_headline_state = state;
+  shortlist.article_exposure_coverage = history.coverage;
+  applyHeadlineRenderReconciliation(shortlist, reconciliation);
+  writeJson(shortlistPath, shortlist);
+  files.push(relativeArtifactPath(root, shortlistPath));
+
+  const selectionReport = readJsonSafely(selectionReportPath);
+  if (Object.keys(selectionReport).length > 0) {
+    selectionReport.article_exposure_coverage = history.coverage;
+    applyHeadlineRenderReconciliation(selectionReport, reconciliation);
+    writeJson(selectionReportPath, selectionReport);
+    files.push(relativeArtifactPath(root, selectionReportPath));
+  }
+  const diagnosticsPath = persistHeadlineDiagnosticsReconciliation({ root, date, reconciliation });
+  if (diagnosticsPath) files.push(diagnosticsPath);
+  return files;
+}
+
 function writeFallbackFailureDiagnostics({ root, date, error, status = {} }) {
   const relPath = `content/newsroom/${date}/fallback-public-issue-diagnostics.json`;
   const filePath = path.join(root, ...relPath.split('/'));
@@ -263,18 +498,24 @@ function buildEnsureOutputs(resolved, reconciliation, fallbackState) {
 }
 
 function reconcileResolvedArtifacts({ root, date, resolved, fallbackState }) {
+  const headlineArtifacts = persistHomepageHeadlineArtifacts({ root, date, resolved });
+  const resolvedWithHeadlineArtifacts = {
+    ...resolved,
+    changedArtifacts: [...new Set(ensureArray(resolved.changedArtifacts).concat(headlineArtifacts))]
+  };
   const reconciliationStatus = {
-    ...(resolved.status || {}),
-    public_newsletter_ready: resolved.publicNewsletterReady === true,
-    review_publication_ready: resolved.reviewPublicationReady === true || isTrue(resolved.status?.review_publication_ready),
-    diagnostics_only: resolved.diagnosticsOnly === true,
-    homepage_visible_after_merge: resolved.homepageVisibleAfterMerge === true
+    ...(resolvedWithHeadlineArtifacts.status || {}),
+    public_newsletter_ready: resolvedWithHeadlineArtifacts.publicNewsletterReady === true,
+    review_publication_ready: resolvedWithHeadlineArtifacts.reviewPublicationReady === true ||
+      isTrue(resolvedWithHeadlineArtifacts.status?.review_publication_ready),
+    diagnostics_only: resolvedWithHeadlineArtifacts.diagnosticsOnly === true,
+    homepage_visible_after_merge: resolvedWithHeadlineArtifacts.homepageVisibleAfterMerge === true
   };
   const reconciliation = reconcilePublicState({
     root,
     date,
     status: reconciliationStatus,
-    changedArtifacts: resolved.changedArtifacts,
+    changedArtifacts: resolvedWithHeadlineArtifacts.changedArtifacts,
     write: true
   });
   const reconciledResolved = resolveReviewableArtifactsForEnsure({

@@ -4448,6 +4448,291 @@ test('ensure CLI treats one safe fallback article as review-publication ready fo
   assert.equal(result.outputs.public_newsletter_ready, resolvedOutputs.public_newsletter_ready);
 });
 
+test('ensure CLI persists homepage headline artifacts for review-publication public files', () => {
+  const root = tempRoot();
+  const date = '2026-05-23';
+  writePublicNewsletterArtifacts(root, date);
+  const status = {
+    date,
+    status: 'NEEDS_FIX',
+    failure_kind: 'editorial_reviewable',
+    final_publish_ready: false,
+    public_newsletter_ready: true,
+    review_publication_ready: true,
+    diagnostics_only: false,
+    homepage_visible_after_merge: true,
+    publication_mode: 'review_only',
+    homepage_visibility: 'normal',
+    fact_check_status: 'PASS',
+    must_fix_count: 0,
+    source_gap_count: 0,
+    quality_status: 'PASS',
+    quality_score: 100,
+    quality_threshold: qualityGatePolicy.threshold,
+    rendered_main_article_count: 2,
+    selected_article_count: 2,
+    min_final_articles: articlePolicy.mainArticleCount.min
+  };
+  const currentHeadline = {
+    article_identity_key: 'url:https://developer.android.com/jetpack/androidx/releases/camera#1.0.0',
+    title: 'CameraX 1.6.1 업데이트',
+    summary: 'CameraX 1.6.1 release note를 Camera HAL 관점에서 확인합니다.',
+    source_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.0.0',
+    newsletter_date: date,
+    newsletter_url: `newsletters/${date}/index.html`,
+    selected_at: date,
+    base_score: 92,
+    current_score: 92,
+    last_scored_at: date,
+    date_evidence: {
+      date,
+      date_field: 'published_date',
+      evidence_level: 'dated_release',
+      publish_ready_date_evidence: true
+    },
+    quality_flags: {
+      source_gap_risk: false,
+      fact_check_must_fix_unresolved: false,
+      stale_claim_hard_failure: false,
+      blocked_source: false
+    },
+    score_breakdown: {},
+    snapshot: {
+      category: 'direct_aosp_camera',
+      source_name: 'Android Developers'
+    }
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    headline_decision: {
+      reason: 'seeded_from_current_issue'
+    },
+    headline_latest_inclusion: {
+      included: true,
+      mode: 'injected_from_headline_snapshot'
+    },
+    homepage_headline_state: {
+      schemaVersion: 1,
+      updated_at: `${date}T00:00:00+09:00`,
+      current_headline: currentHeadline,
+      headline_history: [],
+      policy: {
+        decay_model: headlinePolicy.decayModel,
+        decay_rate_per_day: headlinePolicy.decayRatePerDay,
+        replacement_margin: headlinePolicy.replacementMargin,
+        minimum_headline_score: headlinePolicy.minimumHeadlineScore
+      }
+    }
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), {
+    headline_decision: {
+      reason: 'seeded_from_current_issue'
+    }
+  });
+
+  const result = ensurePublicNewsletterArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  });
+  const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'data', 'homepage-headline.json'), 'utf8'));
+  const exposureHistory = JSON.parse(fs.readFileSync(path.join(root, 'data', 'article-exposure-history.json'), 'utf8'));
+  const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
+  const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
+  const headlineExposure = exposureHistory.articles
+    .find(item => item.article_identity_key === currentHeadline.article_identity_key);
+
+  assert.equal(headlineState.current_headline.article_identity_key, currentHeadline.article_identity_key);
+  assert.ok(headlineExposure);
+  assert.equal(headlineExposure.exposure_count, 1);
+  assert.deepEqual(headlineExposure.exposure_types, ['homepage_headline']);
+  assert.equal(shortlist.homepage_headline_state.current_headline.article_identity_key, currentHeadline.article_identity_key);
+  assert.equal(selectionReport.headline_public_render_reconciliation, undefined);
+  assert.equal(selectionReport.article_exposure_coverage.mode, 'forward_only');
+  assert.match(result.outputs.reconciled_changed_artifacts, /data\/homepage-headline\.json/);
+  assert.match(result.outputs.reconciled_changed_artifacts, /data\/article-exposure-history\.json/);
+});
+
+test('ensure CLI persists a rendered public article when selected headline is not rendered', () => {
+  const root = tempRoot();
+  const date = '2026-05-23';
+  const renderedUrl = 'https://goo.gle/AdaptiveApps_IO26';
+  const renderedTitle = 'Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트';
+  const renderedSummary = 'Google은 여러 화면 크기와 CameraX preview 대응을 함께 언급했습니다.';
+  writePublicNewsletterArtifacts(root, date, {
+    issue: {
+      date,
+      title: `Camera HAL SW 뉴스레터 - ${date}`,
+      summary: '공개 뉴스레터 요약입니다.',
+      briefing: ['첫 번째 요약입니다.', '두 번째 요약입니다.', '세 번째 요약입니다.'],
+      sections: [
+        {
+          category: 'Android Camera',
+          headline: renderedTitle,
+          what_changed: renderedSummary,
+          evidence_summary: renderedSummary,
+          background: 'CameraX preview 확인 범위를 설명합니다.',
+          camera_hal_perspective: 'Camera HAL 팀은 preview stream, rotation, buffer path를 회귀 확인합니다.',
+          team_summary: 'Camera preview compatibility를 확인합니다.',
+          confirmed_facts: [renderedSummary],
+          specificity_checks: ['component=CameraX'],
+          source_verification_notes: ['Source URL is official.'],
+          camera_hal_checks: ['Check preview stream behavior.'],
+          action_items: ['Check CameraX preview compatibility.'],
+          article_sections: {
+            verified_facts: [renderedSummary],
+            background_context: 'CameraX preview 확인 범위를 설명합니다.',
+            hal_driver_impact: 'Camera HAL 팀은 preview stream, rotation, buffer path를 회귀 확인합니다.',
+            action_items: ['Check CameraX preview compatibility.'],
+            team_share_points: 'Camera preview compatibility를 확인합니다.'
+          },
+          sources: [
+            {
+              title: 'Android Developers Blog',
+              url: renderedUrl
+            }
+          ]
+        }
+      ],
+      action_items: ['Check CameraX preview compatibility.'],
+      references: [
+        {
+          title: 'Android Developers Blog',
+          url: renderedUrl
+        }
+      ]
+    }
+  });
+  const status = {
+    date,
+    status: 'NEEDS_FIX',
+    failure_kind: 'editorial_reviewable',
+    final_publish_ready: false,
+    public_newsletter_ready: true,
+    review_publication_ready: true,
+    diagnostics_only: false,
+    homepage_visible_after_merge: true,
+    publication_mode: 'review_only',
+    homepage_visibility: 'normal',
+    fact_check_status: 'PASS',
+    must_fix_count: 0,
+    source_gap_count: 0,
+    quality_status: 'PASS',
+    quality_score: 100,
+    quality_threshold: qualityGatePolicy.threshold,
+    rendered_main_article_count: 1,
+    selected_article_count: 2,
+    min_final_articles: articlePolicy.mainArticleCount.min
+  };
+  const selectedHeadline = {
+    article_identity_key: 'url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    title: 'CameraX Release Notes - CameraX 1.6.1',
+    summary: 'Fixed a CameraX compilation error.',
+    source_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    newsletter_date: date,
+    newsletter_url: `newsletters/${date}/index.html`,
+    selected_at: date,
+    base_score: 100,
+    current_score: 100,
+    last_scored_at: date,
+    date_evidence: {
+      date,
+      date_field: 'published_date',
+      evidence_level: 'dated_release',
+      publish_ready_date_evidence: true
+    },
+    quality_flags: {
+      source_gap_risk: false,
+      fact_check_must_fix_unresolved: false,
+      stale_claim_hard_failure: false,
+      blocked_source: false
+    },
+    score_breakdown: {},
+    snapshot: {
+      category: 'direct_aosp_camera',
+      source_name: 'Android Developers'
+    }
+  };
+  const renderedCandidate = {
+    article_identity_key: `url:${renderedUrl}`,
+    title: 'Building seamless Android experiences across devices with Jetpack Compose',
+    summary: 'CameraX preview is mentioned for adaptive app validation.',
+    source_url: renderedUrl,
+    published_date: date,
+    hasDatedEvidence: true,
+    finalSelectionEligibility: 'main',
+    main_article_score_eligible: true,
+    score_filter_reasons: [],
+    relevance_bucket: 'android_platform_camera_adjacent',
+    source: 'Android Developers Blog'
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [renderedCandidate],
+    headline_decision: {
+      reason: 'seeded_from_current_issue'
+    },
+    homepage_headline_state: {
+      schemaVersion: 1,
+      updated_at: `${date}T00:00:00+09:00`,
+      current_headline: selectedHeadline,
+      headline_history: [],
+      policy: {
+        decay_model: headlinePolicy.decayModel,
+        decay_rate_per_day: headlinePolicy.decayRatePerDay,
+        replacement_margin: headlinePolicy.replacementMargin,
+        minimum_headline_score: headlinePolicy.minimumHeadlineScore
+      }
+    }
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), {
+    headline_decision: {
+      reason: 'seeded_from_current_issue'
+    }
+  });
+  writeText(path.join(root, 'content', 'newsroom', date, 'selection-diagnostics.md'), [
+    'Homepage Headline:',
+    '- decision: seeded_from_current_issue',
+    `- replacement_headline_key: ${selectedHeadline.article_identity_key}`,
+    '- runtime_decayed_score: 100'
+  ].join('\n'));
+
+  ensurePublicNewsletterArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  });
+  const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'data', 'homepage-headline.json'), 'utf8'));
+  const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
+  const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
+  const diagnosticsMarkdown = fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-diagnostics.md'), 'utf8');
+
+  assert.equal(headlineState.current_headline.article_identity_key, `url:${renderedUrl}`);
+  assert.equal(headlineState.current_headline.title, renderedTitle);
+  assert.equal(headlineState.current_headline.summary, renderedSummary);
+  assert.equal(headlineState.current_headline.source_url, renderedUrl);
+  assert.deepEqual(selectionReport.headline_public_render_reconciliation, {
+    applied: true,
+    previous_headline_key: selectedHeadline.article_identity_key,
+    rendered_headline_key: `url:${renderedUrl}`,
+    reason: 'selected_headline_not_rendered_in_public_issue'
+  });
+  assert.equal(selectionReport.headline_decision.public_render_reconciled, true);
+  assert.equal(selectionReport.headline_decision.public_rendered_headline_key, `url:${renderedUrl}`);
+  assert.equal(shortlist.headline_public_render_reconciliation.rendered_headline_key, `url:${renderedUrl}`);
+  assert.equal(shortlist.homepage_headline_state.current_headline.article_identity_key, `url:${renderedUrl}`);
+  assert.match(diagnosticsMarkdown, /public_render_reconciled: true/);
+  assert.match(diagnosticsMarkdown, /public_rendered_headline_key: url:https:\/\/goo\.gle\/AdaptiveApps_IO26/);
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
+  assert.match(body, /public_render_reconciled: true/);
+  assert.match(body, /public_rendered_headline_key: url:https:\/\/goo\.gle\/AdaptiveApps_IO26/);
+  assert.match(body, /public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue/);
+});
+
 test('ensure CLI reconciles diagnostics-only state into status files and hides stale public index', () => {
   const root = tempRoot();
   const date = '2026-05-18';

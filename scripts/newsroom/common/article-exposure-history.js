@@ -138,14 +138,16 @@ function recordArticleExposure(history, article = {}, options = {}) {
       previous.exposure_type,
       record.exposure_type
     ].filter(Boolean);
+    const sameExposureEvent = text(previous.last_exposed_at || previous.exposed_at) === record.exposed_at &&
+      ensureArray(previous.exposure_types).concat(previous.exposure_type).includes(record.exposure_type);
     normalized.articles[existingIndex] = {
       ...previous,
       ...record,
       first_exposed_at: text(previous.first_exposed_at || previous.exposed_at || record.exposed_at),
       last_exposed_at: record.exposed_at,
-      exposure_count: Number.isFinite(previousCount) && previousCount > 0
-        ? previousCount + 1
-        : 2,
+      exposure_count: sameExposureEvent
+        ? (Number.isFinite(previousCount) && previousCount > 0 ? previousCount : 1)
+        : (Number.isFinite(previousCount) && previousCount > 0 ? previousCount + 1 : 2),
       exposure_types: [...new Set(exposureTypes)]
     };
   } else {

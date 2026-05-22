@@ -2235,6 +2235,9 @@ function renderHomepageHeadlineDecision(root, date, status = {}) {
   const selectionReport = readSelectionReport(root, date) || {};
   const decision = status.headline_decision || selectionReport.headline_decision || {};
   const inclusion = status.headline_latest_inclusion || selectionReport.headline_latest_inclusion || {};
+  const publicRenderReconciliation = status.headline_public_render_reconciliation ||
+    selectionReport.headline_public_render_reconciliation ||
+    {};
   const removedDueToHeadlineInclusion = Array.isArray(status.removed_due_to_headline_inclusion)
     ? status.removed_due_to_headline_inclusion
     : Array.isArray(selectionReport.removed_due_to_headline_inclusion)
@@ -2247,6 +2250,9 @@ function renderHomepageHeadlineDecision(root, date, status = {}) {
     `- decision: ${valueOrUnknown(decision.reason || decision.decision)}`,
     `- current_headline_key: ${valueOrUnknown(decision.current_headline_key)}`,
     `- replacement_headline_key: ${valueOrUnknown(decision.replacement_headline_key)}`,
+    `- public_render_reconciled: ${booleanText(decision.public_render_reconciled === true || publicRenderReconciliation.applied === true)}`,
+    `- public_rendered_headline_key: ${valueOrUnknown(decision.public_rendered_headline_key || publicRenderReconciliation.rendered_headline_key)}`,
+    `- public_render_reconciliation_reason: ${valueOrUnknown(decision.public_render_reconciliation_reason || publicRenderReconciliation.reason)}`,
     `- previous_stored_current_score: ${valueOrUnknown(decision.previous_stored_current_score)}`,
     `- runtime_decayed_score: ${valueOrUnknown(decision.runtime_decayed_score)}`,
     `- last_scored_at: ${valueOrUnknown(decision.last_scored_at)}`,

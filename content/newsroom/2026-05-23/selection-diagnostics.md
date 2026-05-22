@@ -42,6 +42,9 @@ Homepage Headline:
 - decision: seeded_from_current_issue
 - current_headline_key: unknown
 - replacement_headline_key: url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1
+- public_render_reconciled: true
+- public_rendered_headline_key: url:https://goo.gle/AdaptiveApps_IO26
+- public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue
 - runtime_decayed_score: 100
 - previous_stored_current_score: unknown
 - last_scored_at: unknown
@@ -61,4 +64,3 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 - final_publish_ready: null
 - selection_errors: 0
 - selection_shortage_hints: 2
-

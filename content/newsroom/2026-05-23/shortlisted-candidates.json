@@ -28360,7 +28360,10 @@
     "revalidation_failure_reason": "",
     "selected_normally": false,
     "latest_inclusion_required": true,
-    "removed_due_to_headline_inclusion_count": 0
+    "removed_due_to_headline_inclusion_count": 0,
+    "public_rendered_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "public_render_reconciled": true,
+    "public_render_reconciliation_reason": "selected_headline_not_rendered_in_public_issue"
   },
   "headline_latest_inclusion": {
     "included": true,
@@ -28374,10 +28377,10 @@
     "schemaVersion": 1,
     "updated_at": "2026-05-23T00:00:00+09:00",
     "current_headline": {
-      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "summary": "Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
+      "title": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+      "summary": "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26",
       "newsletter_date": "2026-05-23",
       "newsletter_url": "newsletters/2026-05-23/index.html",
       "selected_at": "2026-05-23",
@@ -28385,9 +28388,9 @@
       "current_score": 100,
       "last_scored_at": "2026-05-23",
       "date_evidence": {
-        "date": "May 06, 2026",
+        "date": "Tue, 19 May 2026 13:00:00 +0000",
         "date_field": "published_date",
-        "evidence_level": "dated-release-evidence",
+        "evidence_level": "dated-concrete-evidence",
         "publish_ready_date_evidence": true
       },
       "quality_flags": {
@@ -28409,8 +28412,8 @@
         "total": 100
       },
       "snapshot": {
-        "category": "direct_aosp_camera",
-        "source_name": "Android Developers Latest Updates"
+        "category": "android_platform_camera_adjacent",
+        "source_name": "Android Developers Blog"
       }
     },
     "headline_history": [],
@@ -28487,7 +28490,11 @@
   "final_input_candidate_count": 42,
   "final_eligible_candidate_count": 3,
   "final_selected_article_count": 3,
-  "article_exposure_coverage": null,
+  "article_exposure_coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-05-23",
+    "backfill_included": false
+  },
   "reporter_candidate_count": 3,
   "reporter_selected_count": 0,
   "reporter_selected_but_final_excluded_count": 0,
@@ -28544,5 +28551,11 @@
       "reason": "source_extraction.used_fallback=true",
       "count": 1
     }
-  ]
+  ],
+  "headline_public_render_reconciliation": {
+    "applied": true,
+    "previous_headline_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+    "rendered_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "reason": "selected_headline_not_rendered_in_public_issue"
+  }
 }
