@@ -122,7 +122,7 @@
       return `<span class="status-chip">${escapeHtml(issue.homepage_badge)}</span>`;
     };
 
-    const renderIssueActions = (issue, primaryLabel = '기사 보기', mdLabel = 'Markdown 원문') => {
+    const renderIssueActions = (issue, primaryLabel = '기사 보기', mdLabel = 'Markdown') => {
       const htmlLink = issue.html
         ? `<a class="button button-primary" href="${escapeHtml(issue.html)}">${primaryLabel}</a>`
         : '';
@@ -179,7 +179,7 @@
           ? headline.snapshot.source_name
           : '출처';
         const badge = headline.newsletter_date
-          ? '<span class="status-chip">최신호 포함</span>'
+          ? '<span class="status-chip">Headline</span>'
           : '';
         const imageSrc = safeImageSrc(headline.image_url);
         const headlineMedia = imageSrc

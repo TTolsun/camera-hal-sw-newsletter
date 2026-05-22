@@ -222,7 +222,7 @@ test('homepage renders valid headline state with article URL priority, image, an
   assert.match(elements['headline-card'].innerHTML, /<img src="https:\/\/example\.com\/headline\.png" alt="&lt;Camera preview image&gt;"/);
   assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html#article-camerax-preview"/);
   assert.match(elements['headline-card'].innerHTML, /기사 보기/);
-  assert.match(elements['headline-card'].innerHTML, /최신호 포함/);
+  assert.match(elements['headline-card'].innerHTML, /Headline/);
   assert.doesNotMatch(elements['headline-card'].innerHTML, /rel="noopener"/);
 });
 

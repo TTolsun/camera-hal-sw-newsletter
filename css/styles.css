@@ -350,6 +350,10 @@ pre code {
   display: none;
 }
 
+.headline-section {
+  width: min(calc(var(--content) * 0.75), calc(100% - 40px));
+}
+
 .headline-card {
   display: grid;
   gap: 0;
@@ -381,14 +385,14 @@ pre code {
   display: block;
   width: 100%;
   aspect-ratio: 2.2 / 1;
-  max-height: 380px;
+  max-height: 254px;
   object-fit: cover;
 }
 
 .headline-body {
   display: grid;
   gap: 14px;
-  padding: 30px;
+  padding: 24px;
 }
 
 .headline-card h3 {
