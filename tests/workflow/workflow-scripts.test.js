@@ -4474,10 +4474,10 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
     min_final_articles: articlePolicy.mainArticleCount.min
   };
   const currentHeadline = {
-    article_identity_key: 'url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    article_identity_key: 'url:https://developer.android.com/jetpack/androidx/releases/camera#1.0.0',
     title: 'CameraX 1.6.1 업데이트',
     summary: 'CameraX 1.6.1 release note를 Camera HAL 관점에서 확인합니다.',
-    source_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    source_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.0.0',
     newsletter_date: date,
     newsletter_url: `newsletters/${date}/index.html`,
     selected_at: date,
@@ -4540,6 +4540,7 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
   const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'data', 'homepage-headline.json'), 'utf8'));
   const exposureHistory = JSON.parse(fs.readFileSync(path.join(root, 'data', 'article-exposure-history.json'), 'utf8'));
   const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
+  const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
   const headlineExposure = exposureHistory.articles
     .find(item => item.article_identity_key === currentHeadline.article_identity_key);
 
@@ -4547,6 +4548,8 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
   assert.ok(headlineExposure);
   assert.equal(headlineExposure.exposure_count, 1);
   assert.deepEqual(headlineExposure.exposure_types, ['homepage_headline']);
+  assert.equal(shortlist.homepage_headline_state.current_headline.article_identity_key, currentHeadline.article_identity_key);
+  assert.equal(selectionReport.headline_public_render_reconciliation, undefined);
   assert.equal(selectionReport.article_exposure_coverage.mode, 'forward_only');
   assert.match(result.outputs.reconciled_changed_artifacts, /data\/homepage-headline\.json/);
   assert.match(result.outputs.reconciled_changed_artifacts, /data\/article-exposure-history\.json/);
@@ -4691,6 +4694,12 @@ test('ensure CLI persists a rendered public article when selected headline is no
       reason: 'seeded_from_current_issue'
     }
   });
+  writeText(path.join(root, 'content', 'newsroom', date, 'selection-diagnostics.md'), [
+    'Homepage Headline:',
+    '- decision: seeded_from_current_issue',
+    `- replacement_headline_key: ${selectedHeadline.article_identity_key}`,
+    '- runtime_decayed_score: 100'
+  ].join('\n'));
 
   ensurePublicNewsletterArtifacts({
     root,
@@ -4698,11 +4707,30 @@ test('ensure CLI persists a rendered public article when selected headline is no
     changedArtifacts: requiredPublicFiles(date)
   });
   const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'data', 'homepage-headline.json'), 'utf8'));
+  const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
+  const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
+  const diagnosticsMarkdown = fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-diagnostics.md'), 'utf8');
 
   assert.equal(headlineState.current_headline.article_identity_key, `url:${renderedUrl}`);
   assert.equal(headlineState.current_headline.title, renderedTitle);
   assert.equal(headlineState.current_headline.summary, renderedSummary);
   assert.equal(headlineState.current_headline.source_url, renderedUrl);
+  assert.deepEqual(selectionReport.headline_public_render_reconciliation, {
+    applied: true,
+    previous_headline_key: selectedHeadline.article_identity_key,
+    rendered_headline_key: `url:${renderedUrl}`,
+    reason: 'selected_headline_not_rendered_in_public_issue'
+  });
+  assert.equal(selectionReport.headline_decision.public_render_reconciled, true);
+  assert.equal(selectionReport.headline_decision.public_rendered_headline_key, `url:${renderedUrl}`);
+  assert.equal(shortlist.headline_public_render_reconciliation.rendered_headline_key, `url:${renderedUrl}`);
+  assert.equal(shortlist.homepage_headline_state.current_headline.article_identity_key, `url:${renderedUrl}`);
+  assert.match(diagnosticsMarkdown, /public_render_reconciled: true/);
+  assert.match(diagnosticsMarkdown, /public_rendered_headline_key: url:https:\/\/goo\.gle\/AdaptiveApps_IO26/);
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
+  assert.match(body, /public_render_reconciled: true/);
+  assert.match(body, /public_rendered_headline_key: url:https:\/\/goo\.gle\/AdaptiveApps_IO26/);
+  assert.match(body, /public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue/);
 });
 
 test('ensure CLI reconciles diagnostics-only state into status files and hides stale public index', () => {

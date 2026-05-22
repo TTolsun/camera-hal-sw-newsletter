@@ -69,6 +69,30 @@ test('recording exposure accumulates count and date/type history without duplica
   assert.deepEqual(history.articles[0].exposure_types, ['homepage_headline', 'latest_issue_main']);
 });
 
+test('recording the same exposure event is idempotent', () => {
+  let history = readExposureHistory(tempRoot(), '2026-05-23');
+  const article = {
+    title: 'Camera HAL update',
+    source_url: 'https://example.com/a'
+  };
+  history = recordArticleExposure(history, article, {
+    date: '2026-05-23',
+    type: 'homepage_headline',
+    score: 88
+  });
+  history = recordArticleExposure(history, article, {
+    date: '2026-05-23',
+    type: 'homepage_headline',
+    score: 88
+  });
+
+  assert.equal(history.articles.length, 1);
+  assert.equal(history.articles[0].exposure_count, 1);
+  assert.equal(history.articles[0].first_exposed_at, '2026-05-23');
+  assert.equal(history.articles[0].last_exposed_at, '2026-05-23');
+  assert.deepEqual(history.articles[0].exposure_types, ['homepage_headline']);
+});
+
 test('exposure diagnostics annotate and dedupe by article identity', () => {
   const history = recordArticleExposure(readExposureHistory(tempRoot(), '2026-05-23'), {
     title: 'Camera HAL update',

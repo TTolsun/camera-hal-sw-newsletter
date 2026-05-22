@@ -95,7 +95,10 @@
     "revalidation_failure_reason": "",
     "selected_normally": false,
     "latest_inclusion_required": true,
-    "removed_due_to_headline_inclusion_count": 0
+    "removed_due_to_headline_inclusion_count": 0,
+    "public_rendered_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "public_render_reconciled": true,
+    "public_render_reconciliation_reason": "selected_headline_not_rendered_in_public_issue"
   },
   "headline_latest_inclusion": {
     "included": true,
@@ -242,5 +245,11 @@
       "count": 4
     }
   ],
-  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "headline_public_render_reconciliation": {
+    "applied": true,
+    "previous_headline_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+    "rendered_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "reason": "selected_headline_not_rendered_in_public_issue"
+  }
 }

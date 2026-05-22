@@ -248,7 +248,7 @@ function readRenderedNewsletterArticles(root, date) {
         title,
         summary,
         source_url: sourceUrl,
-        source_name: sourceName || 'source'
+        source_name: sourceName || '출처'
       };
     })
     .filter(Boolean);
@@ -256,7 +256,9 @@ function readRenderedNewsletterArticles(root, date) {
 
 function renderedHeadlineState({ root, date, state, shortlist }) {
   const rendered = readRenderedNewsletterArticles(root, date);
-  if (rendered.length === 0 || !state?.current_headline) return state;
+  if (rendered.length === 0 || !state?.current_headline) {
+    return { state, reconciliation: null };
+  }
   const newsletterUrl = `newsletters/${date}/index.html`;
   const selectedByKey = new Map(ensureArray(shortlist.selected_articles).map(candidate => [
     articleIdentityKey(candidate),
@@ -271,18 +273,21 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
 
   if (renderedCurrent) {
     return {
-      ...state,
-      current_headline: {
-        ...current,
-        title: renderedCurrent.title,
-        summary: renderedCurrent.summary,
-        source_url: renderedCurrent.source_url,
-        newsletter_url: newsletterUrl,
-        snapshot: {
-          ...(current.snapshot || {}),
-          source_name: renderedCurrent.source_name || current.snapshot?.source_name || ''
+      state: {
+        ...state,
+        current_headline: {
+          ...current,
+          title: renderedCurrent.title,
+          summary: renderedCurrent.summary,
+          source_url: renderedCurrent.source_url,
+          newsletter_url: newsletterUrl,
+          snapshot: {
+            ...(current.snapshot || {}),
+            source_name: renderedCurrent.source_name || current.snapshot?.source_name || ''
+          }
         }
-      }
+      },
+      reconciliation: null
     };
   }
 
@@ -316,8 +321,8 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
     .filter(Boolean)
     .sort((left, right) => right.score - left.score || left.candidate.title.localeCompare(right.candidate.title))[0];
 
-  if (!fallback) return state;
-  return {
+  if (!fallback) return { state, reconciliation: null };
+  const fallbackState = {
     ...state,
     current_headline: headlineSnapshotFromCandidate(fallback.candidate, {
       date,
@@ -325,6 +330,47 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
       scoredAt: date
     })
   };
+  return {
+    state: fallbackState,
+    reconciliation: {
+      applied: true,
+      previous_headline_key: current.article_identity_key || '',
+      rendered_headline_key: fallbackState.current_headline.article_identity_key,
+      reason: 'selected_headline_not_rendered_in_public_issue'
+    }
+  };
+}
+
+function applyHeadlineRenderReconciliation(report, reconciliation) {
+  if (!report || typeof report !== 'object' || !reconciliation?.applied) return;
+  report.headline_public_render_reconciliation = reconciliation;
+  report.headline_decision = {
+    ...(report.headline_decision || {}),
+    public_rendered_headline_key: reconciliation.rendered_headline_key,
+    public_render_reconciled: true,
+    public_render_reconciliation_reason: reconciliation.reason
+  };
+}
+
+function persistHeadlineDiagnosticsReconciliation({ root, date, reconciliation }) {
+  if (!reconciliation?.applied) return '';
+  const relPath = `content/newsroom/${date}/selection-diagnostics.md`;
+  const filePath = path.join(root, ...relPath.split('/'));
+  if (!fs.existsSync(filePath)) return '';
+  const existing = fs.readFileSync(filePath, 'utf8');
+  const withoutStaleLines = existing.replace(
+    /\n- public_render_reconciled: .*\n- public_rendered_headline_key: .*\n- public_render_reconciliation_reason: .*/g,
+    ''
+  );
+  const updated = withoutStaleLines.replace(
+    /(- replacement_headline_key: [^\n]*\n)/,
+    `$1- public_render_reconciled: true\n` +
+      `- public_rendered_headline_key: ${reconciliation.rendered_headline_key}\n` +
+      `- public_render_reconciliation_reason: ${reconciliation.reason}\n`
+  );
+  if (updated === existing) return '';
+  fs.writeFileSync(filePath, updated, 'utf8');
+  return relPath;
 }
 
 function persistHomepageHeadlineArtifacts({ root, date, resolved }) {
@@ -332,12 +378,14 @@ function persistHomepageHeadlineArtifacts({ root, date, resolved }) {
   const shortlistPath = path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json');
   const selectionReportPath = path.join(root, 'content', 'newsroom', date, 'selection-report.json');
   const shortlist = readJsonSafely(shortlistPath);
-  const state = renderedHeadlineState({
+  const rendered = renderedHeadlineState({
     root,
     date,
     state: shortlist.homepage_headline_state,
     shortlist
   });
+  const state = rendered.state;
+  const reconciliation = rendered.reconciliation;
   if (!state || typeof state !== 'object' || !state.current_headline) return [];
 
   const files = [];
@@ -355,16 +403,21 @@ function persistHomepageHeadlineArtifacts({ root, date, resolved }) {
   const historyPath = writeExposureHistory(root, history);
   files.push(relativeArtifactPath(root, historyPath));
 
+  shortlist.homepage_headline_state = state;
   shortlist.article_exposure_coverage = history.coverage;
+  applyHeadlineRenderReconciliation(shortlist, reconciliation);
   writeJson(shortlistPath, shortlist);
   files.push(relativeArtifactPath(root, shortlistPath));
 
   const selectionReport = readJsonSafely(selectionReportPath);
   if (Object.keys(selectionReport).length > 0) {
     selectionReport.article_exposure_coverage = history.coverage;
+    applyHeadlineRenderReconciliation(selectionReport, reconciliation);
     writeJson(selectionReportPath, selectionReport);
     files.push(relativeArtifactPath(root, selectionReportPath));
   }
+  const diagnosticsPath = persistHeadlineDiagnosticsReconciliation({ root, date, reconciliation });
+  if (diagnosticsPath) files.push(diagnosticsPath);
   return files;
 }
 

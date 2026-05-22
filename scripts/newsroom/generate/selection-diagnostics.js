@@ -211,6 +211,7 @@ function normalizeShortlistReport(shortlistReport, reporter = null) {
     composition_summary: shortlistReport?.composition_summary || {},
     headline_decision: shortlistReport?.headline_decision || null,
     headline_latest_inclusion: shortlistReport?.headline_latest_inclusion || null,
+    headline_public_render_reconciliation: shortlistReport?.headline_public_render_reconciliation || null,
     removed_due_to_headline_inclusion: ensureArray(shortlistReport?.removed_due_to_headline_inclusion),
     article_exposure_coverage: shortlistReport?.article_exposure_coverage || null,
     editor_review_required: shortlistReport?.editor_review_required === true,
@@ -337,6 +338,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const composition = diagnostics.composition_summary || {};
   const headline = diagnostics.headline_decision || {};
   const headlineInclusion = diagnostics.headline_latest_inclusion || {};
+  const headlinePublicRender = diagnostics.headline_public_render_reconciliation || {};
   const headlineRemoved = ensureArray(diagnostics.removed_due_to_headline_inclusion);
   const hints = ensureArray(diagnostics.selection_shortage_hints)
     .map(item => `- ${item}`)
@@ -383,6 +385,9 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- decision: ${formatCount(headline.reason || headline.decision)}`,
     `- current_headline_key: ${formatCount(headline.current_headline_key)}`,
     `- replacement_headline_key: ${formatCount(headline.replacement_headline_key)}`,
+    `- public_render_reconciled: ${headline.public_render_reconciled === true || headlinePublicRender.applied === true ? 'true' : 'false'}`,
+    `- public_rendered_headline_key: ${formatCount(headline.public_rendered_headline_key || headlinePublicRender.rendered_headline_key)}`,
+    `- public_render_reconciliation_reason: ${formatCount(headline.public_render_reconciliation_reason || headlinePublicRender.reason)}`,
     `- runtime_decayed_score: ${formatCount(headline.runtime_decayed_score)}`,
     `- previous_stored_current_score: ${formatCount(headline.previous_stored_current_score)}`,
     `- last_scored_at: ${formatCount(headline.last_scored_at)}`,
