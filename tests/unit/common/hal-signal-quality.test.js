@@ -16,6 +16,8 @@ const {
 function article(overrides = {}) {
   return {
     headline: 'CameraX release gives HAL teams a validation target',
+    url: 'https://example.com/camerax-release',
+    evidence_id: 'evidence-camerax-release',
     fixture_meta: {
       provenance: 'synthetic',
       purpose: 'HAL signal quality regression fixture',
@@ -55,11 +57,21 @@ test('infers HAL axes and concrete actionability from article-level evidence', (
 test('normalizes capsule completeness without synthesizing missing content', () => {
   const complete = normalizeHalSignalCapsule(article());
   const missing = normalizeHalSignalCapsule(article({ hal_signal_capsule: undefined }));
+  const stringGuardrail = normalizeHalSignalCapsule(article({
+    hal_signal_capsule: {
+      why_now: 'Dated source.',
+      reader_owners: ['camera_hal_owner'],
+      check_within_2_weeks: 'Run Camera ITS.',
+      impact_axes: ['framework_hal_contract'],
+      do_not_overstate: 'Do not claim direct HAL API changes.'
+    }
+  }));
 
   assert.equal(complete.complete, true);
   assert.equal(missing.present, false);
   assert.equal(missing.complete, false);
   assert.ok(missing.missing_keys.includes('why_now'));
+  assert.deepEqual(stringGuardrail.capsule.do_not_overstate, ['Do not claim direct HAL API changes.']);
 });
 
 test('generic review with weak signals is a main article hard blocker', () => {
@@ -106,11 +118,11 @@ test('explicit generic review preserves original actionability and records effec
   const normalized = normalizeHalSignalFields(value);
 
   assert.equal(inferActionabilityLevel(value), 'generic_review');
-  assert.equal(inferEffectiveActionabilityLevel(value), 'concrete_check');
+  assert.equal(inferEffectiveActionabilityLevel(value), 'owner_metric_log');
   assert.ok(countActionabilityUpgradeSignals(value) >= 2);
   assert.equal(normalized.actionability_level, 'generic_review');
-  assert.equal(normalized.effective_actionability_level, 'concrete_check');
-  assert.match(normalized.actionability_upgrade_reason, /concrete/);
+  assert.equal(normalized.effective_actionability_level, 'owner_metric_log');
+  assert.match(normalized.actionability_upgrade_reason, /source-bound/);
   assert.equal(normalized.hal_signal_hard_blockers.includes('generic_review_actionability'), false);
 });
 
@@ -168,6 +180,88 @@ test('generic review does not upgrade from keyword soup outside concrete action'
   assert.equal(normalized.actionability_level, 'generic_review');
   assert.equal(normalized.effective_actionability_level, 'generic_review');
   assert.ok(normalized.hal_signal_hard_blockers.includes('generic_review_actionability'));
+});
+
+test('explicit none does not upgrade from CameraX mention without verification target', () => {
+  const value = article({
+    url: 'https://example.com/camerax-productivity',
+    evidence_id: 'evidence-camerax-productivity',
+    headline: 'CameraX improves developer productivity',
+    actionability_level: 'none',
+    article_sections: {
+      verified_facts: ['The article mentions CameraX developer productivity.'],
+      background_context: 'CameraX improves developer productivity.',
+      hal_driver_impact: 'Review when concrete camera workflow evidence appears.',
+      action_items: [],
+      team_share_points: 'No observable verification target is present.'
+    },
+    hal_signal_capsule: {
+      why_now: 'The source is dated.',
+      reader_owners: ['camera_framework_owner'],
+      check_within_2_weeks: '',
+      impact_axes: ['camerax_app_compatibility'],
+      do_not_overstate: ['Do not claim direct HAL behavior changes.']
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+
+  assert.equal(normalized.effective_actionability_level, 'none');
+  assert.equal(normalized.actionability_upgrade_reason, '');
+});
+
+test('single weak trace keyword is capped below measurable test', () => {
+  const value = article({
+    url: 'https://example.com/perfetto-only',
+    evidence_id: 'evidence-perfetto-only',
+    actionability_level: 'none',
+    article_sections: {
+      verified_facts: ['A dated source mentions a trace workflow.'],
+      background_context: 'Camera teams may review the trace workflow.',
+      hal_driver_impact: 'Check Perfetto trace output for CameraX preview behavior.',
+      action_items: ['Check Perfetto trace output for CameraX preview behavior.'],
+      team_share_points: 'Trace review only.'
+    },
+    hal_signal_capsule: {
+      why_now: 'The source gives a trace review trigger.',
+      reader_owners: ['camera_framework_owner'],
+      check_within_2_weeks: 'Check Perfetto trace output for CameraX preview behavior.',
+      impact_axes: ['camerax_app_compatibility'],
+      do_not_overstate: ['Do not claim direct HAL behavior changes.']
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+
+  assert.equal(normalized.effective_actionability_level, 'concrete_check');
+  assert.notEqual(normalized.effective_actionability_level, 'measurable_test');
+  assert.equal(normalized.actionability_upgrade_evidence.upgrade_to, 'concrete_check');
+});
+
+test('source-bound observable action upgrades explicit none', () => {
+  const value = article({
+    url: 'https://example.com/camerax-frame-metrics',
+    evidence_id: 'evidence-camerax-frame-metrics',
+    actionability_level: 'none',
+    article_sections: {
+      verified_facts: ['A dated source gives a CameraX stream validation trigger.'],
+      background_context: 'CameraX sits above camera2.',
+      hal_driver_impact: 'Check CameraX stream behavior with adb logs and compare frame timing metrics within two weeks.',
+      action_items: ['Check CameraX stream behavior with adb logs and compare frame timing metrics within two weeks.'],
+      team_share_points: 'Use it for app-compat validation.'
+    },
+    hal_signal_capsule: {
+      why_now: 'The source gives a dated validation trigger.',
+      reader_owners: ['camera_framework_owner'],
+      check_within_2_weeks: 'Check CameraX stream behavior with adb logs and compare frame timing metrics within two weeks.',
+      impact_axes: ['camerax_app_compatibility'],
+      do_not_overstate: ['Do not claim direct HAL behavior changes.']
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+
+  assert.equal(normalized.actionability_level, 'none');
+  assert.equal(normalized.effective_actionability_level, 'measurable_test');
+  assert.equal(normalized.actionability_upgrade_evidence.source_url, 'https://example.com/camerax-frame-metrics');
+  assert.equal(normalized.actionability_upgrade_evidence.evidence_id, 'evidence-camerax-frame-metrics');
 });
 
 test('fallback promotion requires both allowed flag and promotion reason', () => {
@@ -247,6 +341,8 @@ test('explicit unknown signal quality status is preserved', () => {
 
 test('source title is not used as a URL fallback', () => {
   const check = buildMainArticleSignalChecks([article({
+    url: '',
+    evidence_id: '',
     sources: [{ title: 'Not a URL' }]
   })])[0];
 

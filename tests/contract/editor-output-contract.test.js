@@ -321,6 +321,141 @@ test('blocked related context cannot be used as article source or headline', () 
   );
 });
 
+test('source-gap selected group is hard blocked even if editor also demotes it', () => {
+  const reporter = reporterForGroupTests({
+    source_gap_risk: true,
+    source_quality: {
+      source_role: 'official_release_source',
+      source_url_quality: 'official_dated_release',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      main_article_source_blockers: [],
+      cross_check_status: 'not_required',
+      requires_cross_check: false,
+      requires_conditional_evidence: false,
+      conditional_evidence_type: '',
+      evidence_granularity: 'candidate_item',
+      source_quality_notes: []
+    }
+  });
+  const baseSection = section(1);
+  const draft = editor({
+    sections: [section(1, {
+      source_candidate_hash: '',
+      sources: [{ title: 'Other source', url: 'https://example.com/other' }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [{ title: 'Other source', url: 'https://example.com/other', source_role: 'primary' }]
+      }
+    })],
+    explicitly_demoted_groups: [{
+      article_group_key: 'group-a',
+      demotion_reason: 'Editor demotion should lose to source gap hard block.',
+      reason_code: 'explicit_editor_hold'
+    }]
+  });
+  const result = validateEditorOutputContract(draft, DATE, { normalizeSection, reporter });
+
+  assert.equal(result.hard_blocked_group_count, 1);
+  assert.equal(result.explicitly_demoted_group_count, 0);
+  assert.deepEqual(result.hard_blocked_group_keys, ['group-a']);
+});
+
+test('source-ready native tooling group cannot be demoted for non-primary camera stack reason', () => {
+  const reporter = reporterForGroupTests({
+    article_group_key: 'android_native_tooling_workflow',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    tooling_workflow_type: 'native_tooling_workflow',
+    source_quality: {
+      source_role: 'official_release_source',
+      source_url_quality: 'official_dated_release',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      main_article_source_blockers: [],
+      cross_check_status: 'not_required',
+      requires_cross_check: false,
+      requires_conditional_evidence: false,
+      conditional_evidence_type: '',
+      evidence_granularity: 'candidate_item',
+      source_quality_notes: []
+    }
+  });
+  const baseSection = section(1);
+  const draft = editor({
+    sections: [section(1, {
+      article_group_key: 'other-group',
+      source_candidate_hash: '',
+      sources: [{ title: 'Other source', url: 'https://example.com/other' }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [{ title: 'Other source', url: 'https://example.com/other', source_role: 'primary' }]
+      }
+    })],
+    explicitly_demoted_groups: [{
+      article_group_key: 'android_native_tooling_workflow',
+      demotion_reason: 'Not a primary camera stack article.',
+      reason_code: 'not_primary_camera_stack'
+    }]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.group_coverage');
+      assert.equal(error.details.invalid_demotions[0].reason_code, 'not_primary_camera_stack');
+      return true;
+    }
+  );
+});
+
+test('source-ready native tooling group cannot normalize fallback_bucket into an allowed demotion', () => {
+  const reporter = reporterForGroupTests({
+    article_group_key: 'android_native_tooling_workflow',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    tooling_workflow_type: 'native_tooling_workflow',
+    source_quality: {
+      source_role: 'official_release_source',
+      source_url_quality: 'official_dated_release',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      main_article_source_blockers: [],
+      cross_check_status: 'not_required',
+      requires_cross_check: false,
+      requires_conditional_evidence: false,
+      conditional_evidence_type: '',
+      evidence_granularity: 'candidate_item',
+      source_quality_notes: []
+    }
+  });
+  const baseSection = section(1);
+  const draft = editor({
+    sections: [section(1, {
+      article_group_key: 'other-group',
+      source_candidate_hash: '',
+      sources: [{ title: 'Other source', url: 'https://example.com/other' }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [{ title: 'Other source', url: 'https://example.com/other', source_role: 'primary' }]
+      }
+    })],
+    explicitly_demoted_groups: [{
+      article_group_key: 'android_native_tooling_workflow',
+      demotion_reason: 'fallback_bucket'
+    }]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.group_coverage');
+      assert.equal(error.details.invalid_demotions[0].reason_code, 'fallback_bucket');
+      return true;
+    }
+  );
+});
+
 test('blocked_context_candidates are validated when related context is empty', () => {
   const blockedUrl = 'https://android-developers.googleblog.com/2026/05/roundup.html';
   const reporter = reporterForGroupTests({

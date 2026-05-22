@@ -298,6 +298,14 @@ function capsuleSourceQualityFlatFields(sourceQuality) {
   };
 }
 
+function compactSourceQuality(sourceQuality = {}) {
+  const normalized = normalizeSourceQuality({ source_quality: sourceQuality });
+  return Object.fromEntries(Object.entries(normalized).filter(([, value]) => {
+    if (Array.isArray(value)) return value.length > 0;
+    return value !== '';
+  }));
+}
+
 function compactImageCandidates(candidate) {
   return ensureArray(candidate.imageCandidates || candidate.image_candidates)
     .filter(image => image && image.url)
@@ -398,7 +406,8 @@ function buildArticleCapsule(candidate) {
     signal_quality_status: halSignal.signal_quality_status,
     fallback_promotion_allowed: halSignal.fallback_promotion_allowed,
     soc_signal_source_allowed: halSignal.soc_signal_source_allowed,
-    source_quality: sourceQuality,
+    source_quality: compactSourceQuality(sourceQuality),
+    source_quality_reason: compactText(sourceQuality.main_article_source_allowed_reason, 180),
     ...sourceQualityFlat,
     source_quality_field_drift: sourceQualityDrift,
     main_article_readiness: readiness,
@@ -465,6 +474,16 @@ function buildArticleCapsule(candidate) {
   }
   if (halSignal.actionability_upgrade_reason) {
     capsule.actionability_upgrade_reason = compactText(halSignal.actionability_upgrade_reason, 180);
+  }
+  if (halSignal.actionability_upgrade_evidence) {
+    capsule.actionability_upgrade_evidence = {
+      source_url: text(halSignal.actionability_upgrade_evidence.source_url),
+      evidence_id: text(halSignal.actionability_upgrade_evidence.evidence_id),
+      matched_signal: text(halSignal.actionability_upgrade_evidence.matched_signal),
+      verification_target: text(halSignal.actionability_upgrade_evidence.verification_target),
+      upgrade_from: text(halSignal.actionability_upgrade_evidence.upgrade_from),
+      upgrade_to: text(halSignal.actionability_upgrade_evidence.upgrade_to)
+    };
   }
   if (ensureArray(halSignal.fallback_guard_notes).length > 0) {
     capsule.fallback_guard_notes = ensureArray(halSignal.fallback_guard_notes).slice(0, 5);

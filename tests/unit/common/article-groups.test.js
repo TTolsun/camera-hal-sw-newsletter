@@ -90,4 +90,21 @@ test('group coverage summary reports missing, overlap, and demotion reason issue
   });
   assert.equal(demotionWithoutReason.ok, false);
   assert.deepEqual(demotionWithoutReason.demotion_missing_reason_group_keys, ['group-a']);
+
+  const hardBlocked = groupCoverageSummary({
+    selectedGroupKeys: ['group-a'],
+    renderedGroupKeys: [],
+    hardBlockedGroups: [{ article_group_key: 'group-a', hard_block_reason: 'source gap', reason_code: 'source_gap_risk' }]
+  });
+  assert.equal(hardBlocked.ok, true);
+  assert.equal(hardBlocked.hard_blocked_group_count, 1);
+
+  const hardBlockedAndDemoted = groupCoverageSummary({
+    selectedGroupKeys: ['group-a'],
+    renderedGroupKeys: [],
+    demotedGroups: [{ article_group_key: 'group-a', demotion_reason: 'editor hold', reason_code: 'explicit_editor_hold' }],
+    hardBlockedGroups: [{ article_group_key: 'group-a', hard_block_reason: 'source gap', reason_code: 'source_gap_risk' }]
+  });
+  assert.equal(hardBlockedAndDemoted.ok, false);
+  assert.deepEqual(hardBlockedAndDemoted.hard_blocked_demoted_overlap_group_keys, ['group-a']);
 });

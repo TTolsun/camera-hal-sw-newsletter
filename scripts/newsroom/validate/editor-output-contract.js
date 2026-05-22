@@ -33,10 +33,17 @@ const {
 } = require('./claim-source-binding');
 const {
   candidateGroupKey,
+  EXPLICIT_DEMOTION_REASON_CODES,
   explicitDemotedGroups,
+  explicitHardBlockedGroups,
+  FORBIDDEN_SOURCE_READY_NATIVE_DEMOTION_REASONS,
   groupCoverageSummary,
+  isNativeToolingWorkflow,
   normalizeUrl: normalizeGroupUrl
 } = require('../common/article-groups');
+const {
+  normalizeSourceQuality
+} = require('../collect/source-quality-classifier');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -414,6 +421,85 @@ function selectedReporterCandidates(reporter = {}) {
   );
 }
 
+function hasDatedEvidence(candidate = {}) {
+  return candidate.hasDatedEvidence === true ||
+    candidate.has_dated_evidence === true ||
+    Boolean(text(candidate.published_date || candidate.publishedAt || candidate.published_at || candidate.effective_date));
+}
+
+function hardBlockReasonForCandidate(candidate = {}) {
+  if (candidate.source_gap_risk === true) return 'source_gap_risk';
+  if (!hasDatedEvidence(candidate)) return 'missing_dated_evidence';
+  const hasSourceQualitySignal = Boolean(candidate.source_quality) ||
+    Boolean(text(candidate.source_quality_status || candidate.sourceQualityStatus || candidate.source_url_quality || candidate.sourceUrlQuality)) ||
+    typeof candidate.main_article_source_allowed === 'boolean' ||
+    typeof candidate.mainArticleSourceAllowed === 'boolean';
+  if (!hasSourceQualitySignal) return '';
+  const sourceQuality = normalizeSourceQuality(candidate);
+  if (sourceQuality.main_article_source_allowed !== true ||
+    sourceQuality.source_quality_status === 'blocked' ||
+    sourceQuality.source_quality_status === 'unknown' ||
+    sourceQuality.source_url_quality === 'unknown') {
+    return 'blocked_source_quality';
+  }
+  const readinessBlockers = [
+    ...ensureArray(candidate.main_article_readiness?.blockers),
+    ...ensureArray(candidate.hal_signal_hard_blockers)
+  ].map(text);
+  if (readinessBlockers.some(item => /source_gap/i.test(item))) return 'source_gap_risk';
+  if (readinessBlockers.some(item => /quality|source/i.test(item))) return 'blocked_source_quality';
+  return '';
+}
+
+function hardBlockedGroupsFromSelected(candidates = []) {
+  const byKey = new Map();
+  for (const candidate of ensureArray(candidates)) {
+    const key = candidateGroupKey(candidate);
+    if (!key || byKey.has(key)) continue;
+    const reason = hardBlockReasonForCandidate(candidate);
+    if (!reason) continue;
+    byKey.set(key, {
+      article_group_key: key,
+      hard_block_reason: reason,
+      reason_code: reason
+    });
+  }
+  return [...byKey.values()];
+}
+
+function finalSelectionEligibility(candidate = {}) {
+  return text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
+}
+
+function isSourceReadyNativeToolingCandidate(candidate = {}) {
+  if (!isNativeToolingWorkflow(candidate)) return false;
+  if (!['main', 'short'].includes(finalSelectionEligibility(candidate))) return false;
+  if (candidate.source_gap_risk === true || candidate.reference_only === true) return false;
+  return hardBlockReasonForCandidate(candidate) === '';
+}
+
+function validateNativeToolingDemotions(selectedCandidates = [], demotedGroups = []) {
+  const selectedNativeGroups = new Set(ensureArray(selectedCandidates)
+    .filter(isSourceReadyNativeToolingCandidate)
+    .map(candidateGroupKey)
+    .filter(Boolean));
+  if (selectedNativeGroups.size === 0) return;
+  const invalid = ensureArray(demotedGroups)
+    .filter(item => selectedNativeGroups.has(text(item.article_group_key)))
+    .filter(item =>
+      FORBIDDEN_SOURCE_READY_NATIVE_DEMOTION_REASONS.includes(text(item.reason_code)) ||
+      !EXPLICIT_DEMOTION_REASON_CODES.includes(text(item.reason_code))
+    );
+  if (invalid.length > 0) {
+    throw semanticError('Editor output demoted a source-ready native tooling group with an invalid reason.', {
+      field: 'sections.group_coverage',
+      invalid_demotions: invalid,
+      allowed_reason_codes: EXPLICIT_DEMOTION_REASON_CODES,
+      forbidden_reason_codes: FORBIDDEN_SOURCE_READY_NATIVE_DEMOTION_REASONS
+    });
+  }
+}
+
 function sectionGroupKey(section = {}, candidate = null) {
   return text(section.article_group_key || section.articleGroupKey) ||
     (candidate ? candidateGroupKey(candidate) : '');
@@ -422,18 +508,33 @@ function sectionGroupKey(section = {}, candidate = null) {
 function validateSelectedGroupCoverage(value, reporter = {}) {
   const selectedGroupKeys = [...new Set(selectedReporterCandidates(reporter).map(candidateGroupKey).filter(Boolean))];
   if (selectedGroupKeys.length === 0) return null;
+  const selectedCandidates = selectedReporterCandidates(reporter);
   const candidateIndex = buildCandidateIndex(reporter);
   const renderedGroupKeys = [...new Set(ensureArray(value.sections)
     .map(section => sectionGroupKey(section, candidateForSection(section, candidateIndex)))
     .filter(Boolean))];
   const demotedGroups = explicitDemotedGroups(value);
-  const coverage = groupCoverageSummary({ selectedGroupKeys, renderedGroupKeys, demotedGroups });
+  const hardBlockedGroups = [
+    ...hardBlockedGroupsFromSelected(selectedCandidates),
+    ...explicitHardBlockedGroups(value)
+  ];
+  const hardBlockedKeys = new Set(hardBlockedGroups.map(item => text(item.article_group_key)).filter(Boolean));
+  const effectiveDemotedGroups = demotedGroups.filter(item => !hardBlockedKeys.has(text(item.article_group_key)));
+  validateNativeToolingDemotions(selectedCandidates, effectiveDemotedGroups);
+  const coverage = groupCoverageSummary({
+    selectedGroupKeys,
+    renderedGroupKeys,
+    demotedGroups: effectiveDemotedGroups,
+    hardBlockedGroups
+  });
   value.selected_group_count = coverage.selected_group_count;
   value.rendered_group_count = coverage.rendered_group_count;
   value.explicitly_demoted_group_count = coverage.explicitly_demoted_group_count;
+  value.hard_blocked_group_count = coverage.hard_blocked_group_count;
   value.selected_representative_group_keys = coverage.selected_representative_group_keys;
   value.rendered_group_keys = coverage.rendered_group_keys;
   value.explicitly_demoted_group_keys = coverage.explicitly_demoted_group_keys;
+  value.hard_blocked_group_keys = coverage.hard_blocked_group_keys;
   if (coverage.ok) return coverage;
   throw semanticError('Editor output failed selected group coverage validation.', {
     field: 'sections.group_coverage',
