@@ -505,13 +505,17 @@ function normalizeCandidate(candidate, sourceOrder) {
     counts_as_fallback_topic: candidate.counts_as_fallback_topic ?? classification.counts_as_fallback_topic ?? false,
     impact_claim_level: candidate.impact_claim_level || candidate.impactClaimLevel || '',
     evidence_origin: candidate.evidence_origin || classification.evidence_origin || 'candidate_metadata',
+    _artifact_role: candidate._artifact_role || '',
     _source_order: sourceOrder
   };
 }
 
-function pushCandidateList(target, value) {
+function pushCandidateList(target, value, artifactRole = '') {
   for (const item of ensureArray(value)) {
-    target.push(item);
+    target.push({
+      ...item,
+      _artifact_role: item?._artifact_role || artifactRole
+    });
   }
 }
 
@@ -521,22 +525,22 @@ function candidatePoolFromArtifacts({ root, date }) {
   const raw = [];
   const shortlist = readJsonIfExists(path.join(newsroomDir, 'shortlisted-candidates.json'));
   if (shortlist) {
-    pushCandidateList(raw, shortlist.selected_articles);
-    pushCandidateList(raw, shortlist.primary_selected_articles);
-    pushCandidateList(raw, shortlist.reserve_candidates);
-    pushCandidateList(raw, shortlist.shortlisted_candidates);
-    pushCandidateList(raw, shortlist.demoted_candidates);
+    pushCandidateList(raw, shortlist.selected_articles, 'selected');
+    pushCandidateList(raw, shortlist.primary_selected_articles, 'selected');
+    pushCandidateList(raw, shortlist.reserve_candidates, 'reserve');
+    pushCandidateList(raw, shortlist.shortlisted_candidates, 'shortlisted');
+    pushCandidateList(raw, shortlist.demoted_candidates, 'demoted');
   }
   const capsules = readJsonIfExists(path.join(newsroomDir, 'article-capsules.json'));
   if (capsules) {
-    pushCandidateList(raw, capsules.selected_capsules);
-    pushCandidateList(raw, capsules.shortlisted_capsules);
-    pushCandidateList(raw, capsules.reserve_capsules);
+    pushCandidateList(raw, capsules.selected_capsules, 'selected');
+    pushCandidateList(raw, capsules.shortlisted_capsules, 'shortlisted');
+    pushCandidateList(raw, capsules.reserve_capsules, 'reserve');
   }
   const reporter = readJsonIfExists(path.join(newsroomDir, 'reporter-candidates.json'));
-  if (reporter) pushCandidateList(raw, reporter.candidates);
+  if (reporter) pushCandidateList(raw, reporter.candidates, 'reporter');
   const collected = readJsonIfExists(path.join(collectedDir, 'candidates.json'));
-  if (collected) pushCandidateList(raw, collected.candidates);
+  if (collected) pushCandidateList(raw, collected.candidates, 'collected');
 
   const seen = new Set();
   return raw
@@ -682,6 +686,12 @@ function categoryForCandidate(candidate, fallback = false) {
   if (candidate.relevance_bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) return fallback ? 'Adjacent Watch / Android Camera' : 'Android Platform / CameraX';
   if (candidate.relevance_bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) return fallback ? 'Adjacent Watch / Camera Output' : 'Camera Output / Multimedia Supporting';
   if (candidate.relevance_bucket === BUCKETS.SOC_PLATFORM_SIGNAL) return 'Adjacent Watch / SoC Platform';
+  if (
+    candidate.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK &&
+    isSelectedNativeToolingCandidate(candidate)
+  ) {
+    return 'Android Native Tooling';
+  }
   if (candidate.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) return 'Tooling Watch / Fallback';
   return fallback ? 'Adjacent Watch / Fallback' : 'Camera Platform Watch';
 }
@@ -1076,6 +1086,59 @@ function selectCandidate(candidates, sections, demotedSections, { allowFallback 
   return null;
 }
 
+function isSelectedNativeToolingCandidate(candidate = {}) {
+  const role = text(candidate._artifact_role);
+  if (role !== 'selected') return false;
+  if (candidate.relevance_bucket !== BUCKETS.CPP_AI_TOOLING_FALLBACK) return false;
+  return text(candidate.tooling_workflow_type) === 'native_tooling_workflow' ||
+    text(candidate.toolingWorkflowType) === 'native_tooling_workflow' ||
+    text(candidate.article_group_key || candidate.articleGroupKey) === 'android_native_tooling_workflow';
+}
+
+function supportingSectionCount(sections = []) {
+  return ensureArray(sections)
+    .filter(section => articlePolicy.supportingMainBuckets.includes(text(section.relevance_bucket)))
+    .length;
+}
+
+function appendSelectedNativeToolingSections({
+  candidates = [],
+  selectedSections = [],
+  demotedRecords = [],
+  fallbackRecords = [],
+  rejectedCandidates = [],
+  backgroundContextIndex = new Map()
+} = {}) {
+  const output = selectedSections;
+  const maxSupporting = Number(articlePolicy.publishReadyComposition?.supportingMainMaxAllowed ?? 0);
+  if (maxSupporting <= 0) return output;
+  for (const candidate of sortCandidates(candidates.filter(isSelectedNativeToolingCandidate), { allowFallback: true })) {
+    if (output.length >= articlePolicy.mainArticleCount.max) break;
+    if (supportingSectionCount(output) >= maxSupporting) break;
+    const rejectionReason = candidateRejectionReason(candidate, output, demotedRecords, { allowFallback: true });
+    if (rejectionReason) {
+      recordRejectedCandidate(rejectedCandidates, candidate, rejectionReason, true);
+      continue;
+    }
+    const section = buildSectionFromCandidate(candidate, {
+      fallback: false,
+      backgroundContext: backgroundContextForCandidate(backgroundContextIndex, candidate)
+    });
+    output.push(section);
+    fallbackRecords.push({
+      headline: section.headline,
+      category: section.category,
+      url: candidate.url,
+      source: candidate.source,
+      relevance_bucket: candidate.relevance_bucket,
+      action: 'selected-native-tooling-supporting',
+      fallback: false,
+      reason: 'selected source-ready native tooling supporting article'
+    });
+  }
+  return output;
+}
+
 function writeFallbackDiagnostics(newsroomDir, payload) {
   writeJson(path.join(newsroomDir, 'fallback-public-issue-diagnostics.json'), payload);
 }
@@ -1402,6 +1465,14 @@ function buildFallbackPublicIssue(options = {}) {
       reason: fallback ? 'minimum article count fallback fill' : 'hard failure replacement'
     });
   }
+  appendSelectedNativeToolingSections({
+    candidates,
+    selectedSections,
+    demotedRecords,
+    fallbackRecords,
+    rejectedCandidates,
+    backgroundContextIndex
+  });
   issue.sections = selectedSections
     .slice(0, articlePolicy.mainArticleCount.max)
     .map(section => {

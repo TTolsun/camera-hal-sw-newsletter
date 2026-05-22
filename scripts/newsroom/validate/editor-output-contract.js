@@ -281,6 +281,54 @@ function strictArticleSections(section) {
   return output;
 }
 
+function buildArticleSectionsFromLegacyFields(section = {}) {
+  const publicArticle = section.public_article || {};
+  const capsule = section.hal_signal_capsule || {};
+  const repaired = {
+    verified_facts: ensureArray(section.confirmed_facts).length > 0
+      ? ensureArray(section.confirmed_facts)
+      : ensureArray(section.specificity_checks).length > 0
+        ? ensureArray(section.specificity_checks)
+        : [section.what_changed, section.evidence_summary].map(text).filter(Boolean),
+    background_context: text(section.background || section.why_it_matters || section.evidence_summary),
+    hal_driver_impact: text(section.camera_hal_perspective || publicArticle.camera_hal_takeaway || section.why_it_matters),
+    action_items: ensureArray(section.action_items).length > 0
+      ? ensureArray(section.action_items)
+      : ensureArray(section.action_hints).length > 0
+        ? ensureArray(section.action_hints)
+        : ensureArray(publicArticle.reader_checkpoints),
+    team_share_points: text(section.team_summary || section.why_it_matters || publicArticle.lead)
+  };
+  const knownLimitations = ensureArray(section.limitations || section.known_limitations);
+  const watchItems = ensureArray(section.watch_items);
+  const doNotClaim = [
+    ...ensureArray(section.do_not_claim),
+    ...ensureArray(section.overclaim_guardrails),
+    ...ensureArray(capsule.do_not_overstate)
+  ];
+  if (knownLimitations.length > 0) repaired.known_limitations = knownLimitations;
+  if (watchItems.length > 0) repaired.watch_items = watchItems;
+  if (doNotClaim.length > 0) repaired.do_not_claim = doNotClaim;
+  return repaired;
+}
+
+function deterministicallyRepairArticleSections(value) {
+  const repaired = cloneJson(value);
+  let changed = false;
+  for (const section of ensureArray(repaired?.sections)) {
+    const normalized = normalizeArticleSections(section);
+    if (normalized.diagnostics.article_sections_present && normalized.diagnostics.complete) continue;
+    const candidate = buildArticleSectionsFromLegacyFields(section);
+    section.article_sections = candidate;
+    const repairedNormalized = normalizeArticleSections(section);
+    if (!repairedNormalized.diagnostics.complete) {
+      return null;
+    }
+    changed = true;
+  }
+  return changed ? repaired : null;
+}
+
 function validateArticleSectionContract(value) {
   const issues = [];
   ensureArray(value.sections).forEach((section, index) => {
@@ -848,6 +896,25 @@ async function repairEditorOutputContract({
         repairSucceeded: false
       });
       throw missingRepairError;
+    }
+
+    if (repairField === 'sections.article_sections') {
+      const deterministicRaw = deterministicallyRepairArticleSections(invalidEditor);
+      if (deterministicRaw) {
+        try {
+          const deterministicEditor = validate(cloneJson(deterministicRaw));
+          assertSectionsAndSourcesPreserved(invalidEditor, deterministicRaw);
+          return {
+            editor: deterministicEditor,
+            editor_semantic_validation: initialDetails,
+            repairAttempted: true,
+            repairSucceeded: true,
+            deterministicRepair: true
+          };
+        } catch (_) {
+          // Fall through to the LLM repair path; the raw validation error stays recorded.
+        }
+      }
     }
 
     let repairedRaw;
