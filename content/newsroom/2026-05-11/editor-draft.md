@@ -1,18 +1,17 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-11
 
-이번 2026-05-11호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 source-backed 내용으로 보강했습니다.
+이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
 
 
-> 편집자 검토 후 공개 가능한 검토 발행본입니다.
-> 이 호는 자동 정상 발행 기준을 통과하지 못했으며, 편집자 확인 후 merge해야 합니다.
+> 검토 발행본입니다.
 > 각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.
 
 
 ## 1. 이번 주 3줄 브리핑
 
-- CameraX 1.6.1 업데이트: Android Camera 호환성 관찰: Android Developers Latest Updates 기준으로 중복 issue에 흩어진 내용을 합쳐 CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 항목을 다시 정리했습니다.
-- 중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다.
-- 중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다.
+- AndroidX Camera release note의 CameraX 1.6.1 / 1.7.0-alpha01 artifact 업데이트는 app/framework camera compatibility 확인 신호입니다. HAL 팀은 이를 새 HAL 요구사항이 아니라 기존 CameraX/Camera2 조합의 회귀 확인 입력으로 다뤄야 합니다.
+- CameraX 업데이트는 app/framework compatibility 신호입니다. HAL 팀은 제품 dependency matrix와 reference app smoke 결과를 확인하고, device log 근거가 있을 때만 HAL follow-up으로 분리해야 합니다.
+- CameraX 1.6.1 / 1.7.0-alpha01 artifact를 현재 product dependency matrix와 비교하는 것부터 보면 기사 내용을 실제 검증 작업으로 옮기기 쉽습니다.
 
 ## 2. CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
@@ -22,20 +21,21 @@
 _이미지: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)_
 
 
-Android Developers Latest Updates 기준으로 중복 issue에 흩어진 내용을 합쳐 CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 항목을 다시 정리했습니다.
+AndroidX Camera release note의 CameraX 1.6.1 / 1.7.0-alpha01 artifact 업데이트는 app/framework camera compatibility 확인 신호입니다. HAL 팀은 이를 새 HAL 요구사항이 아니라 기존 CameraX/Camera2 조합의 회귀 확인 입력으로 다뤄야 합니다.
 
-이 article은 android_platform_camera_adjacent 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.
+CameraX는 Camera2 위에서 Preview, ImageCapture, VideoCapture 같은 use case를 앱 개발자가 다루기 쉽게 만드는 layer입니다. artifact version update는 app dependency matrix와 reference app smoke test가 필요한지 판단하는 자료이지, 그 자체로 device HAL behavior 변경을 의미하지 않습니다.
 
-삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다.
+회귀가 보일 때는 app logcat, framework camera log, HAL/device log를 분리해 원인을 나눠야 합니다. CameraX/library 문제인지 downstream HAL issue인지 구분하지 않으면 HAL owner에게 잘못된 action item이 생깁니다.
 
 **Camera HAL / Driver 관점**
 
-Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.
+CameraX 업데이트는 app/framework compatibility 신호입니다. HAL 팀은 제품 dependency matrix와 reference app smoke 결과를 확인하고, device log 근거가 있을 때만 HAL follow-up으로 분리해야 합니다.
 
 ### 확인할 점
 
-- Android Developers Latest Updates의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.
-- Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다.
+- CameraX 1.6.1 / 1.7.0-alpha01 artifact를 현재 product dependency matrix와 비교합니다.
+- Preview, ImageCapture, VideoCapture smoke run이 필요한 device/API 조합만 표시합니다.
+- 회귀가 있으면 app logcat, framework camera log, HAL/device log를 분리해 원인을 기록합니다.
 
 **출처**
 

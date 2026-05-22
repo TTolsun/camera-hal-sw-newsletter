@@ -3560,7 +3560,7 @@ test('fallback builder publishes fallback-only issue as disclosed fallback_publi
   assert.equal(status.fallback_public_ready, true);
   assert.equal(status.fallback_only, true);
   assert.equal(status.camera_anchor_count, 0);
-  assert.equal(status.homepage_badge, 'Fallback Edition');
+  assert.equal(status.homepage_badge, 'Tooling Watch Edition');
   assert.equal(status.public_newsletter_ready, true);
   assert.equal(status.final_publish_ready, false);
   assert.equal(status.publish_gate_passed, false);
@@ -3572,12 +3572,12 @@ test('fallback builder publishes fallback-only issue as disclosed fallback_publi
   assert.match(quality.publication_mode_decision, /fallback_public/);
   assert.equal(newsletterData.publication_mode, 'fallback_public');
   assert.equal(newsletterData.homepage_visibility, 'visible_with_fallback_badge');
-  assert.equal(newsletterData.homepage_badge, 'Fallback Edition');
+  assert.equal(newsletterData.homepage_badge, 'Tooling Watch Edition');
   assert.equal(newsletterData.camera_anchor_count, 0);
-  assert.deepEqual(newsletterData.tags, ['Fallback Edition', 'Tooling Watch']);
-  assert.match(markdown, /Fallback Edition: C\+\+ \/ Tooling Watch/);
+  assert.deepEqual(newsletterData.tags, ['Tooling Watch Edition', 'Tooling Watch']);
+  assert.match(markdown, /Tooling Watch Edition: C\+\+ \/ Tooling Watch/);
   assert.match(html, /class="publication-notice"/);
-  assert.match(html, /Fallback Edition: C\+\+ \/ Tooling Watch/);
+  assert.match(html, /Tooling Watch Edition: C\+\+ \/ Tooling Watch/);
   assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
 
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
@@ -3589,7 +3589,7 @@ test('fallback builder publishes fallback-only issue as disclosed fallback_publi
   assert.equal(outputs.homepage_visibility, 'visible_with_fallback_badge');
   assert.equal(outputs.fallback_only, 'true');
   assert.equal(outputs.camera_anchor_count, '0');
-  assert.equal(outputs.homepage_badge, 'Fallback Edition');
+  assert.equal(outputs.homepage_badge, 'Tooling Watch Edition');
 
   const body = buildNewsroomPrBody({
     root,
@@ -3602,7 +3602,7 @@ test('fallback builder publishes fallback-only issue as disclosed fallback_publi
   assert.match(body, /fallback_only: true/);
   assert.match(body, /camera_anchor_count: 0/);
   assert.match(body, /fallback_public_ready: true/);
-  assert.match(body, /homepage_badge: Fallback Edition/);
+  assert.match(body, /homepage_badge: Tooling Watch Edition/);
   assert.match(body, /hard block policy에서 downgrade policy로/);
   const bodyValidation = validatePrBodyText(body);
   assert.equal(bodyValidation.ok, true, JSON.stringify(bodyValidation, null, 2));
@@ -3658,7 +3658,7 @@ test('fallback issue tags remove Camera HAL when camera_anchor_count is string z
       camera_anchor_count: '0',
       tags: ['Camera HAL', 'Android']
     }),
-    ['Fallback Edition', 'Tooling Watch', 'Android']
+    ['Tooling Watch Edition', 'Tooling Watch', 'Android']
   );
 });
 
@@ -3701,8 +3701,8 @@ test('review-only public issue keeps review publication notice', () => {
   const issue = {
     date,
     title: `Camera HAL SW 뉴스레터 - ${date}`,
-    summary: '편집자 검토 후 공개 가능한 public artifact입니다.',
-    briefing: ['Camera anchor가 남아 있습니다.', '자동 정상 발행은 닫혀 있습니다.', '편집자 확인 후 merge합니다.'],
+    summary: '검토 발행본입니다.',
+    briefing: ['Camera anchor가 남아 있습니다.', '공개 source 범위 안에서 해석합니다.', 'Camera HAL 직접 변경으로 과장하지 않습니다.'],
     publication_mode: 'review_only',
     review_publication_ready: true,
     fallback_only: false,
@@ -3723,7 +3723,7 @@ test('review-only public issue keeps review publication notice', () => {
   assert.match(html, /검토 발행본/);
   const markdownNotice = markdown.match(/(?:^> .*(?:\n|$))+/m)?.[0] || '';
   const htmlNotice = html.match(/<div class="publication-notice"[\s\S]*?<\/div>/)?.[0] || '';
-  assert.doesNotMatch(`${markdownNotice}\n${htmlNotice}`, /Review-only|quality gate|guardrail|fallback/);
+  assert.doesNotMatch(`${markdownNotice}\n${htmlNotice}`, /Review-only|quality gate|guardrail|fallback|자동 정상 발행|편집자 확인 후 merge|merge해야/);
 });
 
 test('fallback public issue uses tooling perspective label', () => {
@@ -3736,13 +3736,13 @@ test('fallback public issue uses tooling perspective label', () => {
   });
   const issue = {
     date,
-    title: `Fallback Edition: C++ / Tooling Watch - ${date}`,
-    summary: 'Fallback Edition issue',
+    title: `Tooling Watch Edition: C++ / Tooling Watch - ${date}`,
+    summary: 'Tooling Watch Edition issue',
     briefing: ['Tooling watch item입니다.', 'Camera anchor는 없습니다.', '편집자 검토가 필요합니다.'],
     publication_mode: 'fallback_public',
     fallback_only: true,
     camera_anchor_count: 0,
-    tags: ['Fallback Edition', 'Tooling Watch'],
+    tags: ['Tooling Watch Edition', 'Tooling Watch'],
     sections: [regressionSection(candidate)],
     references: [{
       title: 'ISO C++',

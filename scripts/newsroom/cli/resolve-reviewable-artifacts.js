@@ -373,7 +373,7 @@ function resolveReviewableArtifacts(options = {}) {
   const normalPublicReady = isTrue(status.normal_public_ready) || (hasAiPublishReady && publicNewsletterReady);
   const automaticPublishReady = isTrue(status.automatic_publish_ready) || normalPublicReady;
   const publicArtifactReady = isTrue(status.public_artifact_ready) || publicNewsletterReady;
-  const homepageBadge = status.homepage_badge || (publicationMode === 'fallback_public' ? 'Fallback Edition' : '');
+  const homepageBadge = status.homepage_badge || (publicationMode === 'fallback_public' ? 'Tooling Watch Edition' : '');
   const publicationContractErrors = [];
   if (publicationMode === 'fallback_public') {
     if (homepageVisibility !== 'visible_with_fallback_badge') {

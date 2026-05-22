@@ -15,8 +15,8 @@ const HOMEPAGE_VISIBILITY = Object.freeze({
   HIDDEN: 'hidden'
 });
 
-const FALLBACK_HOMEPAGE_BADGE = 'Fallback Edition';
-const FALLBACK_TAGS = ['Fallback Edition', 'Tooling Watch'];
+const FALLBACK_HOMEPAGE_BADGE = 'Tooling Watch Edition';
+const FALLBACK_TAGS = ['Tooling Watch Edition', 'Tooling Watch'];
 
 const CAMERA_ANCHOR_BUCKETS = new Set([
   BUCKETS.DIRECT_AOSP_CAMERA,
@@ -116,8 +116,8 @@ function publicationDecisionForSections(sections, options = {}) {
 
 function fallbackEditionNoticeLines() {
   return [
-    'Fallback Edition: C++ / Tooling Watch',
-    '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 fallback issue로 발행되었습니다.',
+    'Tooling Watch Edition: C++ / Tooling Watch',
+    '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 참고 issue로 발행되었습니다.',
     'Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.'
   ];
 }

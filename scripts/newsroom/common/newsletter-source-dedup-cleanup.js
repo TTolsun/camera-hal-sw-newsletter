@@ -41,9 +41,13 @@ const DEFAULT_EXPECTED_EXPOSED_DATES = Object.freeze([
 const TRACKING_QUERY_PARAMS = new Set(['ref', 'fbclid', 'gclid']);
 const REMOVED_ROUTE_NOTE = 'source_dedup_cleanup_removed_public_route';
 const FALLBACK_PUBLIC_NOTICE = Object.freeze([
-  'Fallback Edition: C++ / Tooling Watch',
-  '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 fallback issue로 발행되었습니다.',
+  'Tooling Watch Edition: C++ / Tooling Watch',
+  '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 참고 issue로 발행되었습니다.',
   'Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.'
+]);
+const REVIEW_PUBLIC_NOTICE = Object.freeze([
+  '검토 발행본입니다.',
+  '각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.'
 ]);
 
 function ensureArray(value) {
@@ -177,13 +181,31 @@ function writeText(filePath, value) {
 }
 
 function sourceUrlsForSection(section = {}) {
-  const sourceUrls = ensureArray(section.sources).map(source => source?.url).filter(Boolean);
+  const sourceUrls = uniqueSourcesByUrl(section.sources).map(source => source?.url).filter(Boolean);
   if (sourceUrls.length > 0) return unique(sourceUrls);
-  return unique(ensureArray(section.public_article?.source_links).map(source => source?.url).filter(Boolean));
+  return uniqueSourcesByUrl(section.public_article?.source_links).map(source => source?.url).filter(Boolean);
+}
+
+function sourceDedupeKey(source = {}) {
+  const normalized = normalizeNewsSourceKey(source?.url || '');
+  return normalized.key || text(source?.url).toLowerCase();
+}
+
+function uniqueSourcesByUrl(sources = []) {
+  const seen = new Set();
+  const output = [];
+  for (const source of ensureArray(sources)) {
+    if (!source?.url) continue;
+    const key = sourceDedupeKey(source);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    output.push(source);
+  }
+  return output;
 }
 
 function sourceLinksForSection(section = {}) {
-  return ensureArray(section.sources)
+  return uniqueSourcesByUrl(section.sources)
     .filter(source => source?.url)
     .map(source => ({
       title: source.title || source.url,
@@ -418,6 +440,107 @@ function mergeTextField(baseValue, donorValue) {
   return merged.join(' ');
 }
 
+function readerSafeText(value) {
+  return normalizeMergeText(value)
+    .replace(/중복\s*News Source/gi, '공개 출처')
+    .replace(/중복\s*source\s*cleanup/gi, '공개 출처 정리')
+    .replace(/중복\s*issue/gi, '이전 발행본')
+    .replace(/survivor article/gi, '기사')
+    .replace(/\bsurvivor\b/gi, '남은 기사')
+    .replace(/\bdonor\b/gi, '이전 기사')
+    .replace(/\bcleanup\b/gi, '정리')
+    .replace(/\bsource-backed\b/gi, '공개 출처가 확인한')
+    .replace(/\bsource-bound\b/gi, '출처 범위 안의')
+    .replace(/\bdeterministic reconstruction\b/gi, '공개 기사 정리')
+    .replace(/\bnormal publishable coverage\b/gi, '직접 발행 범위')
+    .replace(/\bsection repair\b/gi, '기사 보정')
+    .replace(/구조화\s*필드/gi, '기사 자료')
+    .replace(/\bcpp_ai_tooling_fallback\b/gi, 'native tooling 참고 항목')
+    .replace(/\bgeneric_tech_watchlist\b/gi, '기술 참고 항목')
+    .replace(/\bsource_dedup(?:_[a-z0-9_]+)?\b/gi, '출처 정리')
+    .replace(/\bPublication\b/gi, '발행')
+    .replace(/\bDirect HAL behavior claim\b/gi, '직접 HAL 동작 주장')
+    .replace(/\bDirect camera-stack evidence\b/gi, '직접 camera stack 근거')
+    .replace(/\bwatch\/supporting context\b/gi, '참고 맥락')
+    .replace(/\bwatch\/supporting material\b/gi, '참고 자료')
+    .replace(/\bLinked source\b/gi, '연결된 출처')
+    .replace(/\bSource evidence\b/gi, '출처 근거')
+    .replace(/\bsource evidence\b/gi, '출처 근거')
+    .replace(/\bsource URL\b/gi, '출처 URL')
+    .replace(/\bpublished date\b/gi, '게시일')
+    .replace(/\bFallback\b/gi, 'Watch')
+    .replace(/\bReview-only\b/gi, '참고')
+    .replace(/\bcandidate\b/gi, '항목')
+    .trim();
+}
+
+function hasInternalReaderTerm(value) {
+  return /survivor|donor|cleanup|source_dedup|source-backed|deterministic reconstruction|normal publishable coverage|section repair|중복\s*issue|중복\s*source|구조화\s*필드|cpp_ai_tooling_fallback|generic_tech_watchlist/i.test(text(value));
+}
+
+function publicArticleIsUsable(article = {}) {
+  return article && typeof article === 'object' &&
+    readerSafeText(article.headline) &&
+    readerSafeText(article.lead) &&
+    ensureArray(article.body_paragraphs).filter(item => readerSafeText(item)).length >= 2 &&
+    readerSafeText(article.camera_hal_takeaway) &&
+    ensureArray(article.reader_checkpoints).filter(item => readerSafeText(item)).length >= 2 &&
+    !hasInternalReaderTerm(article);
+}
+
+function splitReaderSentences(value) {
+  const normalized = readerSafeText(value);
+  if (!normalized) return [];
+  return normalized
+    .split(/(?<=[!?。])\s+|(?<=다\.)\s+|(?<=요\.)\s+|(?<=습니다\.)\s+|(?<=[A-Za-z)]\.)\s+(?=[A-Z가-힣])/u)
+    .map(item => item.trim())
+    .filter(Boolean);
+}
+
+function readerParagraph(value, { maxChars = 640, maxSentences = 2 } = {}) {
+  const sentences = splitReaderSentences(value);
+  const output = [];
+  const seen = new Set();
+  for (const sentence of sentences.length > 0 ? sentences : [readerSafeText(value)]) {
+    const key = sentence.toLowerCase();
+    if (!sentence || seen.has(key)) continue;
+    seen.add(key);
+    output.push(sentence);
+    if (output.length >= maxSentences) break;
+    if (output.join(' ').length >= maxChars) break;
+  }
+  let paragraph = output.join(' ').trim();
+  if (paragraph.length <= maxChars) return paragraph;
+  paragraph = paragraph.slice(0, maxChars).replace(/\s+\S*$/u, '').trim();
+  return paragraph ? `${paragraph}...` : '';
+}
+
+function readerTextArray(value) {
+  return ensureArray(value)
+    .map(readerSafeText)
+    .filter(Boolean);
+}
+
+function firstReaderText(values = []) {
+  for (const value of values) {
+    const normalized = readerSafeText(value);
+    if (normalized) return normalized;
+  }
+  return '';
+}
+
+function sentenceLead(value, fallback) {
+  const normalized = readerSafeText(value);
+  if (!normalized) return fallback;
+  if (normalized.length <= 280) return normalized;
+  const koreanSentence = normalized.match(/^.{40,280}?(?:다\.|요\.|습니다\.)/u)?.[0];
+  if (koreanSentence) return koreanSentence.trim();
+  const englishSentence = normalized.match(/^.{80,280}?\.(?=\s+[A-Z가-힣]|$)/u)?.[0];
+  if (englishSentence) return englishSentence.trim();
+  const clipped = normalized.slice(0, 280).replace(/\s+\S*$/u, '').trim();
+  return clipped ? `${clipped}...` : normalized;
+}
+
 function donorSourceUrl(donorRecord, sourceKey = '') {
   const matchingSource = sourcesMatchingKey(donorRecord.section.sources, sourceKey)[0];
   return matchingSource?.url || sourceUrlsForSection(donorRecord.section)[0] || '';
@@ -473,10 +596,11 @@ function mergeDonorIntoSection(section, donorRecord, sourceKey) {
     section.action_items = mergeStringArray(section.action_items, donor.action_items);
   }
 
-  section.sources = unique([
+  const mergedSources = unique([
     ...ensureArray(section.sources),
     ...sourcesMatchingKey(donor.sources, sourceKey)
   ].filter(source => source?.url).map(source => JSON.stringify(source))).map(item => JSON.parse(item));
+  section.sources = uniqueSourcesByUrl(mergedSources);
   return section;
 }
 
@@ -498,32 +622,116 @@ function ensureHalSignalCapsule(section) {
   return section;
 }
 
+function publicParagraphsForSection(section, publicHeadline) {
+  const articleSections = section.article_sections || {};
+  const background = readerParagraph(articleSections.background_context) || readerParagraph(section.background);
+  const impact = readerParagraph(articleSections.hal_driver_impact) || readerParagraph(section.camera_hal_perspective);
+  const paragraphs = mergeStringArray([background, impact], [])
+    .filter(item => !/발행 전에|출처 URL|게시일|follow-up validation 필요 여부/i.test(item))
+    .slice(0, 2);
+  while (paragraphs.length < 2) {
+    paragraphs.push(`${publicHeadline}은 공개 출처가 제공한 범위 안에서 Camera HAL / Android camera 독자가 참고할 만한 변경과 점검 포인트로 정리했습니다.`);
+  }
+  return paragraphs.slice(0, 2);
+}
+
+function publicCheckpointsForSection(section) {
+  const articleSections = section.article_sections || {};
+  const actions = mergeStringArray([
+    ...readerTextArray(section.action_items),
+    ...readerTextArray(articleSections.action_items),
+    ...readerTextArray(section.camera_hal_checks)
+  ], [])
+    .filter(item => !/발행 전에|출처 URL|게시일|follow-up validation 필요 여부|직접 HAL 동작 주장|참고 맥락|다음 issue에서 재평가|upstream release note/i.test(item))
+    .slice(0, 4);
+  if (actions.length > 0) return actions;
+  return sectionIsFallback(section)
+    ? ['Native build, test, debug workflow에서 제품 camera path에 실제로 연결되는 항목만 추적합니다.']
+    : ['관련 owner가 기존 compatibility, regression, log 확인 범위 안에서 필요한 점검만 표시합니다.'];
+}
+
+function briefingSnippet(value, maxLength = 160) {
+  const normalized = readerSafeText(value);
+  if (normalized.length <= maxLength) return normalized;
+  const clipped = normalized.slice(0, maxLength).replace(/\s+\S*$/u, '').trim();
+  return clipped ? `${clipped}...` : normalized;
+}
+
+function briefingSentence(value, { maxChars = 260, maxSentences = 2 } = {}) {
+  return readerParagraph(value, { maxChars, maxSentences })
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function checkpointFocus(value) {
+  const normalized = readerSafeText(value)
+    .replace(/[.。]+$/u, '')
+    .trim();
+  return normalized
+    .replace(/등록하지 않습니다$/u, '등록하지 않는 것')
+    .replace(/([A-Za-z가-힣]+)합니다$/u, '$1하는 것')
+    .trim();
+}
+
+function combinedBriefingContext(articles = []) {
+  const checkpoints = articles
+    .map(article => checkpointFocus(ensureArray(article.reader_checkpoints)[0]))
+    .filter(Boolean);
+  if (checkpoints.length >= 2) {
+    return `첫 번째 기사는 ${briefingSnippet(checkpoints[0], 120)}, 두 번째 기사는 ${briefingSnippet(checkpoints[1], 120)}부터 보면 실제 적용 범위를 판단하기 쉽습니다.`;
+  }
+  if (checkpoints.length === 1) {
+    return `${briefingSnippet(checkpoints[0], 180)}부터 보면 기사 내용을 실제 검증 작업으로 옮기기 쉽습니다.`;
+  }
+  const takeaways = articles
+    .map(article => briefingSentence(article.camera_hal_takeaway, { maxChars: 130, maxSentences: 1 }))
+    .filter(Boolean);
+  if (takeaways.length > 0) {
+    return briefingSentence(takeaways.join(' '), { maxChars: 260, maxSentences: 2 });
+  }
+  const backgrounds = articles
+    .flatMap(article => ensureArray(article.body_paragraphs))
+    .map(paragraph => briefingSentence(paragraph, { maxChars: 130, maxSentences: 1 }))
+    .filter(Boolean);
+  return briefingSentence(backgrounds.join(' '), { maxChars: 260, maxSentences: 2 });
+}
+
 function rebuildPublicArticle(section) {
   const headline = text(section.headline || section.category || 'Camera HAL 관련 source');
   const publicHeadline = headline
-    .replace(/\bTooling Watch \/ Fallback:\s*/gi, '')
+    .replace(/\bTooling Watch\s*\/\s*Fallback:?\s*/gi, 'Tooling Watch: ')
+    .replace(/\bTooling Watch\s*\/\s*Watch:?\s*/gi, 'Tooling Watch: ')
     .replace(/\bFallback\b/gi, 'Watch')
     .trim();
   const sourceLinks = sourceLinksForSection(section);
+  if (publicArticleIsUsable(section.public_article)) {
+    section.public_article = {
+      ...section.public_article,
+      headline: publicHeadline,
+      source_links: sourceLinks.length > 0 ? sourceLinks : ensureArray(section.public_article.source_links)
+    };
+    return section;
+  }
   const primarySource = sourceLinks[0]?.title || sourceLinks[0]?.url || '공개 source';
-  const bucket = text(section.relevance_bucket || section.final_relevance_bucket || 'camera_reference');
-  const perspective = sectionIsFallback(section)
+  const leadFallback = `${primarySource}는 ${publicHeadline} 관련 내용을 공개했습니다. Camera HAL / Android camera 독자는 이 내용을 실제 제품 경로와 연결되는지 확인할 참고 신호로 읽어야 합니다.`;
+  const lead = sentenceLead(firstReaderText([
+    section.background,
+    section.article_sections?.background_context,
+    section.what_changed,
+    section.article_sections?.verified_facts
+  ]), leadFallback);
+  const perspective = firstReaderText([
+    section.article_sections?.hal_driver_impact,
+    section.camera_hal_perspective
+  ]) || (sectionIsFallback(section)
     ? '직접 HAL 변경으로 단정하지 않고, native build/test/debug workflow에 줄 수 있는 간접 신호로만 봅니다.'
-    : 'Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.';
+    : 'Camera HAL / Driver owner는 공개 출처가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.');
   section.public_article = {
     headline: publicHeadline,
-    lead: `${primarySource} 기준으로 중복 issue에 흩어진 내용을 합쳐 ${publicHeadline} 항목을 다시 정리했습니다.`,
-    body_paragraphs: [
-      `이 article은 ${bucket} 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.`,
-      `삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다.`
-    ],
-    camera_hal_takeaway: perspective,
-    reader_checkpoints: [
-      `${primarySource}의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.`,
-      sectionIsFallback(section)
-        ? 'Native tooling owner가 camera validation workflow에 참고할 항목인지 검토합니다.'
-        : 'Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다.'
-    ],
+    lead,
+    body_paragraphs: publicParagraphsForSection(section, publicHeadline),
+    camera_hal_takeaway: readerParagraph(perspective, { maxChars: 520, maxSentences: 2 }),
+    reader_checkpoints: publicCheckpointsForSection(section),
     source_links: sourceLinks
   };
   return section;
@@ -549,22 +757,44 @@ function sectionIsCameraAnchor(section = {}) {
 }
 
 function generateBriefing(sections = []) {
-  const bullets = sections.slice(0, 3).map(section => {
-    const article = publicArticleForSection(section);
-    return normalizeMergeText(`${article.headline}: ${article.lead}`);
-  }).filter(Boolean);
-  while (bullets.length < 3) {
-    bullets.push('중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다.');
+  const articles = sections.map(section => publicArticleForSection(section));
+  const leadArticles = articles.length >= 2 ? articles.slice(0, 2) : articles;
+  const primaryBullets = leadArticles
+    .map(article => briefingSentence(article.lead, { maxChars: 260, maxSentences: 2 }))
+    .filter(Boolean);
+  if (articles.length >= 2) {
+    const remainingLeads = articles.slice(2)
+      .map(article => briefingSentence(article.lead, { maxChars: 140, maxSentences: 1 }))
+      .filter(Boolean);
+    if (remainingLeads.length > 0) {
+      primaryBullets.push(briefingSentence(remainingLeads.join(' '), { maxChars: 280, maxSentences: 3 }));
+    }
+    const context = combinedBriefingContext(articles);
+    if (context) primaryBullets.push(context);
+  } else {
+    for (const article of articles) {
+      const takeaway = briefingSentence(article.camera_hal_takeaway, { maxChars: 260, maxSentences: 2 });
+      if (takeaway) primaryBullets.push(takeaway);
+      const context = combinedBriefingContext([article]);
+      if (context) primaryBullets.push(context);
+    }
   }
+  const bullets = [];
+  for (const item of primaryBullets) {
+    if (bullets.some(existing => existing.toLowerCase() === item.toLowerCase())) continue;
+    bullets.push(item);
+    if (bullets.length >= 3) break;
+  }
+  while (bullets.length < 3) bullets.push('Camera HAL / Android camera 독자가 확인할 변경 범위와 확인 포인트를 정리했습니다.');
   return bullets.slice(0, 3);
 }
 
 function generateSummary(date, sections = []) {
   const headlines = sections.map(section => publicArticleForSection(section).headline).filter(Boolean);
   if (headlines.length === 0) {
-    return `이번 ${date}호는 중복 source cleanup 후 공개할 main article이 남지 않아 제거 대상입니다.`;
+    return `이번 ${date}호는 공개할 main article이 없습니다.`;
   }
-  return `이번 ${date}호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 ${headlines.length}개 기사(${headlines.join(', ')})를 source-backed 내용으로 보강했습니다.`;
+  return `이번 ${date}호는 ${headlines.length}개 기사(${headlines.join(', ')})를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.`;
 }
 
 function issueIndexEntry(issue) {
@@ -632,7 +862,7 @@ function updatedIssueForDate(root, date, plan) {
         automatic_publish_ready: false,
         public_artifact_ready: true,
         fallback_public_ready: true,
-        homepage_badge: 'Fallback Edition',
+        homepage_badge: 'Tooling Watch Edition',
         publication_notice: [...FALLBACK_PUBLIC_NOTICE]
       }
     : {
@@ -642,7 +872,8 @@ function updatedIssueForDate(root, date, plan) {
           : (original.homepage_visibility || 'normal'),
         fallback_public_ready: false,
         fallback_only: false,
-        homepage_badge: ''
+        homepage_badge: '',
+        publication_notice: [...REVIEW_PUBLIC_NOTICE]
       };
   return {
     ...original,
@@ -650,12 +881,12 @@ function updatedIssueForDate(root, date, plan) {
     summary: generateSummary(date, sections),
     briefing: generateBriefing(sections),
     sections,
-    references: unique(sections.flatMap(section => ensureArray(section.sources))
+    references: uniqueSourcesByUrl(sections.flatMap(section => ensureArray(section.sources)))
       .filter(source => source?.url)
-      .map(source => JSON.stringify({
+      .map(source => ({
         title: source.title || source.url,
         url: source.url
-      }))).map(item => JSON.parse(item)),
+      })),
     camera_anchor_count: cameraAnchorCount,
     fallback_section_count: fallbackSectionCount,
     fallback_only: fallbackOnly

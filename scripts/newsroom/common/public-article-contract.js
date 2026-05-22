@@ -57,6 +57,10 @@ function publicSafeText(value) {
     .replace(/\bFallback\b/gi, 'Watch')
     .replace(/\bReview-only\b/gi, '참고 동향')
     .replace(/\bquality gate\b/gi, 'quality review')
+    .replace(/자동 정상 발행 기준/g, '검토 기준')
+    .replace(/자동 발행 기준/g, '검토 기준')
+    .replace(/편집자 확인 후 merge/g, '검토')
+    .replace(/merge 발행/g, '발행')
     .replace(/\bcandidate\b/gi, 'source item')
     .trim();
 }
@@ -68,7 +72,7 @@ function normalizePublicSourceRole(value) {
   return PUBLIC_SOURCE_ROLE_ALIASES[role] || role;
 }
 
-const INTERNAL_PUBLIC_TERM_PATTERN = /Review-only|Fallback|quality gate|candidate|editor review|normal publishable coverage|reader_owners|check_within_2_weeks|HAL Signal Capsule|why_now|impact_axes|do_not_overstate|guardrail|section repair|hard failure|candidate shortage|deterministic reconstruction|source-bound|publish gate/i;
+const INTERNAL_PUBLIC_TERM_PATTERN = /Review-only|Fallback|quality gate|candidate|editor review|normal publishable coverage|reader_owners|check_within_2_weeks|HAL Signal Capsule|why_now|impact_axes|do_not_overstate|guardrail|section repair|hard failure|candidate shortage|deterministic reconstruction|source-bound|source-backed|survivor|donor|cleanup|source_dedup|중복 issue|구조화 필드|cpp_ai_tooling_fallback|generic_tech_watchlist|publish gate|review_only|자동 정상 발행 기준|자동 발행 기준|편집자 확인 후 merge|merge 발행|Review-only 발행본|편집자 검토 후 공개 가능한|편집자 검토 후 발행 가능한/i;
 
 function hasInternalPublicTerm(value) {
   return INTERNAL_PUBLIC_TERM_PATTERN.test(compactText(value));

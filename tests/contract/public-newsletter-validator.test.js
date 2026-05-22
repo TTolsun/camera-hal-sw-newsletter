@@ -74,26 +74,57 @@ test('public newsletter validator rejects visible internal terms and raw fact ch
   assert.ok(errors.some(error => /raw verified facts/.test(error)));
 });
 
-test('public newsletter validator allows explicit Fallback Edition disclosure only for fallback_public', () => {
-  const fallbackMarkdown = markdown().replace(
+test('public newsletter validator rejects Korean internal workflow notice terms', () => {
+  const internalNotice = [
+    '> 편집자 검토 후 공개 가능한 검토 발행본입니다.',
+    '> 이 호는 자동 정상 발행 기준을 통과하지 못했으며, 편집자 확인 후 merge해야 합니다.'
+  ].join('\n');
+  const safeNotice = [
+    '> 검토 발행본입니다.',
+    '> 각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.'
+  ].join('\n');
+
+  const internalErrors = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace('## 1. 이번 주 3줄 브리핑', `${internalNotice}\n\n## 1. 이번 주 3줄 브리핑`),
+    html: html('<div class="publication-notice"><p>편집자 검토 후 공개 가능한 검토 발행본입니다.</p><p>이 호는 자동 정상 발행 기준을 통과하지 못했으며, 편집자 확인 후 merge해야 합니다.</p></div>')
+  });
+  const safeErrors = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace('## 1. 이번 주 3줄 브리핑', `${safeNotice}\n\n## 1. 이번 주 3줄 브리핑`),
+    html: html('<div class="publication-notice"><p>검토 발행본입니다.</p><p>각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.</p></div>')
+  });
+
+  assert.ok(internalErrors.some(error => /자동 정상 발행 기준/.test(error)));
+  assert.ok(internalErrors.some(error => /편집자 확인 후 merge/.test(error)));
+  assert.deepEqual(safeErrors, []);
+});
+
+test('public newsletter validator rejects legacy fallback wording and allows Tooling Watch disclosure', () => {
+  const legacyFallbackMarkdown = markdown().replace(
     '이번 호는 Camera HAL 독자가 확인할 만한 공개 출처 동향을 요약합니다.',
     'Fallback Edition: C++ / Tooling Watch. This fallback issue is clearly labeled.'
   );
-  const fallbackHtml = html('<div class="publication-notice"><p>Fallback Edition: C++ / Tooling Watch</p></div>');
+  const legacyFallbackHtml = html('<div class="publication-notice"><p>Fallback Edition: C++ / Tooling Watch</p></div>');
+  const toolingMarkdown = markdown().replace(
+    '이번 호는 Camera HAL 독자가 확인할 만한 공개 출처 동향을 요약합니다.',
+    'Tooling Watch Edition: C++ / Tooling Watch. This tooling-watch issue is clearly labeled.'
+  );
+  const toolingHtml = html('<div class="publication-notice"><p>Tooling Watch Edition: C++ / Tooling Watch</p></div>');
 
-  const normalErrors = validatePublicNewsletterArtifacts({
-    markdown: fallbackMarkdown,
-    html: fallbackHtml
+  const legacyErrors = validatePublicNewsletterArtifacts({
+    markdown: legacyFallbackMarkdown,
+    html: legacyFallbackHtml,
+    publicationMode: 'fallback_public',
+    fallbackOnly: true
   });
-  const fallbackErrors = validatePublicNewsletterArtifacts({
-    markdown: fallbackMarkdown,
-    html: fallbackHtml,
+  const toolingErrors = validatePublicNewsletterArtifacts({
+    markdown: toolingMarkdown,
+    html: toolingHtml,
     publicationMode: 'fallback_public',
     fallbackOnly: true
   });
 
-  assert.ok(normalErrors.some(error => /Fallback/.test(error)));
-  assert.deepEqual(fallbackErrors, []);
+  assert.ok(legacyErrors.some(error => /Fallback/.test(error)));
+  assert.deepEqual(toolingErrors, []);
 });
 
 test('public newsletter validator rejects editor review and HAL capsule field leftovers', () => {

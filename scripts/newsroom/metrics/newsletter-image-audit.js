@@ -641,7 +641,7 @@ function countRenderedImages(html) {
 }
 
 function countFallbackVisuals(html) {
-  return (String(html || '').match(/article-fallback-visual/g) || []).length;
+  return (String(html || '').match(/article-placeholder-visual/g) || []).length;
 }
 
 function countMarkdownImages(markdown) {

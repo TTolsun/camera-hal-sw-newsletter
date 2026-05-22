@@ -701,7 +701,7 @@ pre code {
 }
 
 .article-card.has-image,
-.article-card.has-fallback-image {
+.article-card.has-placeholder-image {
   overflow: hidden;
 }
 
@@ -735,7 +735,7 @@ pre code {
   text-underline-offset: 3px;
 }
 
-.article-fallback-visual {
+.article-placeholder-visual {
   position: relative;
   display: grid;
   min-height: 170px;
@@ -747,15 +747,15 @@ pre code {
     var(--surface-soft);
 }
 
-.article-fallback-visual::before,
-.article-fallback-visual::after,
-.article-fallback-visual span {
+.article-placeholder-visual::before,
+.article-placeholder-visual::after,
+.article-placeholder-visual span {
   content: "";
   display: block;
   border: 2px solid rgba(15, 23, 42, 0.32);
 }
 
-.article-fallback-visual::before {
+.article-placeholder-visual::before {
   width: min(34%, 150px);
   aspect-ratio: 1;
   border-radius: 50%;
@@ -763,14 +763,14 @@ pre code {
   box-shadow: inset 0 0 0 16px rgba(255, 255, 255, 0.28);
 }
 
-.article-fallback-visual::after {
+.article-placeholder-visual::after {
   position: absolute;
   width: min(54%, 240px);
   height: 28%;
   border-radius: 8px;
 }
 
-.article-fallback-visual span {
+.article-placeholder-visual span {
   position: absolute;
   width: min(74%, 320px);
   height: 1px;
@@ -779,16 +779,16 @@ pre code {
   opacity: 0.55;
 }
 
-.article-fallback-ai {
+.article-placeholder-ai {
   background:
     linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(24, 128, 56, 0.12)),
     repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.05) 0 1px, transparent 1px 38px),
     var(--surface-soft);
 }
 
-.article-fallback-camera-hal,
-.article-fallback-android-camera,
-.article-fallback-aosp-camera {
+.article-placeholder-camera-hal,
+.article-placeholder-android-camera,
+.article-placeholder-aosp-camera {
   background:
     linear-gradient(135deg, rgba(24, 128, 56, 0.15), rgba(14, 116, 144, 0.12)),
     repeating-linear-gradient(90deg, rgba(15, 23, 42, 0.05) 0 1px, transparent 1px 42px),
