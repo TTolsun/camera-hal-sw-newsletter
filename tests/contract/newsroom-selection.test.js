@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  buildShortlistReport,
+  buildShortlistReport: buildShortlistReportBase,
   compositionSummary,
   exclusionReasons,
   freshnessWindowMetadata,
@@ -36,6 +36,16 @@ const { candidate } = require('../helpers/newsroom-builders');
 const { readJsonFixture, readTextFixture } = require('../helpers/fixture-loader');
 
 const FALLBACK_WINDOW_TEST_MIN_ARTICLES = 3;
+
+function buildShortlistReport(date, collectedCandidates, options = {}) {
+  const hasHeadlineState = Object.prototype.hasOwnProperty.call(options, 'homepageHeadlineState');
+  return buildShortlistReportBase(date, collectedCandidates, {
+    homepageHeadlineState: hasHeadlineState
+      ? options.homepageHeadlineState
+      : emptyHeadlineState({ date }),
+    ...options
+  });
+}
 
 function policyPrimaryCandidate(index = 0, overrides = {}) {
   return candidate({

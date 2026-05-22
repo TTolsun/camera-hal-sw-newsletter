@@ -105,7 +105,11 @@
     "removed_due_to_headline_inclusion_count": 0
   },
   "removed_due_to_headline_inclusion": [],
-  "article_exposure_coverage": null,
+  "article_exposure_coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-05-23",
+    "backfill_included": false
+  },
   "candidate_pool_preflight_passed": true,
   "candidate_shortage_reviewable": false,
   "candidate_shortage_summary": {

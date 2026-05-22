@@ -28487,7 +28487,11 @@
   "final_input_candidate_count": 42,
   "final_eligible_candidate_count": 3,
   "final_selected_article_count": 3,
-  "article_exposure_coverage": null,
+  "article_exposure_coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-05-23",
+    "backfill_included": false
+  },
   "reporter_candidate_count": 3,
   "reporter_selected_count": 0,
   "reporter_selected_but_final_excluded_count": 0,
