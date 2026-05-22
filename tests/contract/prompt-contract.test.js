@@ -131,8 +131,10 @@ test('LLM fact-check prompts map findings to schema fields and allow camera deve
   assert.match(source, /recommended_fixes\[\]/);
   assert.match(source, /selected capsule metadata/);
   assert.match(source, /source_extraction/);
-  assert.match(source, /derived editorial hints/);
-  assert.match(source, /article text에만 있고 source\/capsule metadata가 뒷받침하지 않으면/);
+  assert.match(source, /derived editorial hints는 framing 보조로만 사용/);
+  assert.match(source, /단독 publishability 근거로 사용하지 마세요/);
+  assert.match(source, /article text 또는 derived editorial hints에만 있고/);
+  assert.match(source, /source\/capsule metadata\/source_extraction이 뒷받침하지 않으면/);
   assert.match(source, /Android Studio/);
   assert.match(source, /VS Code/);
   assert.match(source, /Claude Code/);
