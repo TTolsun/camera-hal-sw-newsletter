@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T16:27:02.865Z",
+  "generated_at": "2026-05-22T04:37:44.234Z",
   "stage": "gemini-background-context",
   "background_contexts": [
     {
@@ -10,19 +10,19 @@
       "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
       "relevance_bucket": "android_platform_camera_adjacent",
       "impact_claim_level": "android_framework_adjacent",
-      "background_context": "Jetpack Compose는 Android UI 개발을 위한 선언형 프레임워크입니다. 이 프레임워크는 다양한 화면 크기와 폼 팩터에 걸쳐 일관된 사용자 경험을 구축하는 데 중점을 둡니다. Jetpack Navigation 3와 같은 도구와 함께 사용되어 앱의 UI 흐름과 구성을 관리합니다. 카메라 앱의 경우, CameraX와 같은 상위 레벨 API를 통해 카메라 미리보기, 캡처 UI를 다양한 기기에서 유연하게 렌더링하고, 폴더블 기기나 태블릿과 같은 적응형 UI 환경에서 카메라 UX의 일관성을 검증하는 데 중요합니다. 이는 직접적인 Camera HAL 변경 사항이 아니라, HAL이 제공하는 카메라 스트림을 앱 계층에서 어떻게 효율적으로 표시하고 상호작용하는지에 대한 플랫폼 및 UI 프레임워크의 발전입니다.",
-      "background_basis": "제공된 article capsule metadata 및 Android Camera, CameraX, Jetpack Compose에 대한 모델 지식",
+      "background_context": "Jetpack Compose는 Android UI 개발을 위한 선언형 프레임워크이며, Jetpack Navigation 3는 앱 내 화면 간 이동을 관리하는 라이브러리입니다. 이들은 주로 애플리케이션 UI 및 사용자 경험(UX) 계층에 영향을 미칩니다. 카메라 앱의 경우, 이러한 UI/내비게이션 업데이트는 카메라 미리보기 화면, 캡처 버튼, 설정 인터페이스 등 사용자에게 보이는 부분의 구현 방식에 변화를 가져올 수 있습니다. HAL(Hardware Abstraction Layer) 관점에서 직접적인 API 변경이나 드라이버 동작 변화를 의미하지는 않지만, CameraX 또는 Camera2를 사용하는 앱이 다양한 화면 크기와 폼 팩터에 걸쳐 일관된 카메라 미리보기 및 캡처 UX를 제공하는지 검증하는 데 중요합니다.",
+      "background_basis": "제공된 article capsule metadata와 Android UI/platform에 대한 모델 지식 기반",
       "background_confidence": "high",
       "background_warnings": []
     },
     {
-      "title": "Start building today - Build native Android apps in Google AI Studio",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "title": "Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
-      "relevance_bucket": "android_platform_camera_adjacent",
-      "impact_claim_level": "android_framework_adjacent",
-      "background_context": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포할 수 있도록 돕는 플랫폼입니다. 이 기사는 Android 네이티브 앱 개발에서 카메라와 같은 기기 기능을 활용하여 AI 기반 경험을 구축하는 것을 강조합니다. Android Camera HAL은 카메라 센서와 ISP를 제어하고, RAW, YUV, JPEG와 같은 이미지 버퍼를 생성하는 하위 레벨 인터페이스를 제공합니다. AI Studio를 통해 개발된 네이티브 앱이 카메라를 활용할 때, CameraX나 Camera2 API를 통해 HAL에서 제공하는 스트림을 받아 AI 모델의 입력으로 사용하게 됩니다. 이는 HAL 자체의 변경보다는, HAL이 제공하는 카메라 데이터가 AI 워크플로우에서 어떻게 활용될 수 있는지에 대한 상위 계층의 개발 도구 및 플랫폼 지원을 의미합니다.",
-      "background_basis": "제공된 article capsule metadata 및 Android Camera, Camera HAL, AI Studio에 대한 모델 지식",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "impact_claim_level": "tooling_supporting",
+      "background_context": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포하는 데 도움을 주는 도구입니다. 이 도구가 네이티브 Android 앱 빌드를 지원한다는 것은, AI 모델을 활용하는 Android 앱 개발 워크플로우를 간소화할 수 있음을 의미합니다. Camera HAL 및 드라이버 팀에게는 직접적인 HAL API 변경보다는, 온디바이스 AI 추론을 위한 네이티브 코드 생성, 빌드, 테스트 및 디버깅 워크플로우에 영향을 줄 수 있습니다. 특히 카메라 프레임 데이터를 입력으로 사용하는 AI 기능(예: 실시간 필터, 객체 인식)을 개발할 때, 이러한 툴링의 개선은 개발 생산성 향상에 기여할 수 있습니다. 그러나 이 변경사항 자체가 카메라 HAL의 런타임 동작이나 성능에 직접적인 영향을 미친다는 증거는 없습니다.",
+      "background_basis": "제공된 article capsule metadata와 Android native build/test/debug workflows 및 AI tooling에 대한 모델 지식 기반",
       "background_confidence": "high",
       "background_warnings": []
     }

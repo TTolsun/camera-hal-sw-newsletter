@@ -1,34 +1,43 @@
 {
   "name": "EditorSemanticValidationError",
-  "message": "Editor output failed claim binding validation.",
+  "message": "Editor output failed article section contract validation.",
   "details": {
-    "field": "sections.claims",
+    "field": "sections.article_sections",
+    "expectedKeys": [
+      "verified_facts",
+      "background_context",
+      "hal_driver_impact",
+      "action_items",
+      "team_share_points"
+    ],
+    "allowedKeys": [
+      "verified_facts",
+      "background_context",
+      "hal_driver_impact",
+      "action_items",
+      "team_share_points",
+      "known_limitations",
+      "watch_items",
+      "do_not_claim"
+    ],
     "actualCount": 1,
     "sectionCount": 1,
     "issues": [
       {
         "index": 1,
-        "headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
-        "status": "needs_fix",
-        "issues": [
-          {
-            "reason_code": "unknown_evidence_id",
-            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
-          },
-          {
-            "reason_code": "unknown_evidence_id",
-            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
-          },
-          {
-            "reason_code": "unknown_evidence_id",
-            "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
-          }
-        ],
-        "uncovered_facts": []
+        "headline": "Jetpack Compose 및 Jetpack Navigation 3 도입에 따른 멀티 디바이스 카메라 UX 검증 요구사항",
+        "type": "missing_article_sections",
+        "keys": [
+          "verified_facts",
+          "background_context",
+          "hal_driver_impact",
+          "action_items",
+          "team_share_points"
+        ]
       }
     ]
   },
-  "field": "sections.claims",
+  "field": "sections.article_sections",
   "stage": "editor attempt 1/2",
   "attempt": 1,
   "repairAttempted": true,

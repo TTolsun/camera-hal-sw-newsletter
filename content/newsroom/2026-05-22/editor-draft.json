@@ -1,10 +1,10 @@
 {
   "date": "2026-05-22",
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-22",
-  "summary": "이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트.",
+  "summary": "이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
   "briefing": [
     "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
-    "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.",
+    "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
     "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다."
   ],
   "sections": [
@@ -398,6 +398,269 @@
           "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
           "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
         ]
+      },
+      "actionability_upgrade_evidence": null
+    },
+    {
+      "category": "Android Native Tooling",
+      "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "confirmed_facts": [
+        "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
+        "관련 컴포넌트: Google AI Studio.",
+        "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt."
+      ],
+      "evidence_summary": "Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.",
+      "specificity_checks": [
+        "finalSelectionEligibility=short",
+        "relevance_bucket=cpp_ai_tooling_fallback",
+        "impact_claim_level=tooling_supporting",
+        "source_gap_risk=false"
+      ],
+      "source_verification_notes": [
+        "확인한 사실에는 source URL, date, component, version, 정제된 behavior metadata만 사용했습니다.",
+        "Fallback reconstruction 전에 main-candidate eligibility check를 통과한 항목입니다.",
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
+      ],
+      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
+      "background": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포하는 데 도움을 주는 도구입니다. 이 도구가 네이티브 Android 앱 빌드를 지원한다는 것은, AI 모델을 활용하는 Android 앱 개발 워크플로우를 간소화할 수 있음을 의미합니다. Camera HAL 및 드라이버 팀에게는 직접적인 HAL API 변경보다는, 온디바이스 AI 추론을 위한 네이티브 코드 생성, 빌드, 테스트 및 디버깅 워크플로우에 영향을 줄 수 있습니다. 특히 카메라 프레임 데이터를 입력으로 사용하는 AI 기능(예: 실시간 필터, 객체 인식)을 개발할 때, 이러한 툴링의 개선은 개발 생산성 향상에 기여할 수 있습니다. 그러나 이 변경사항 자체가 카메라 HAL의 런타임 동작이나 성능에 직접적인 영향을 미친다는 증거는 없습니다.",
+      "camera_hal_perspective": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+      "camera_hal_checks": [
+        "Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.",
+        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
+      ],
+      "action_items": [
+        "발행 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
+        "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
+        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+      ],
+      "action_hints": [],
+      "team_summary": "Android Native Tooling: Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
+      "why_it_matters": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+      "is_ai_related": true,
+      "article_type": "tooling-watch",
+      "impact_claim_level": "tooling_supporting",
+      "overclaim_guardrails": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
+      ],
+      "field_builder_warnings": [
+        "overclaim_guardrail"
+      ],
+      "removed_source_fragments": [],
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "background_basis": "제공된 article capsule metadata와 Android native build/test/debug workflows 및 AI tooling에 대한 모델 지식 기반",
+      "source_candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "editorial_priority": 6,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 3,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": true,
+      "evidence_origin": "article_text",
+      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "sources": [
+        {
+          "title": "Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        }
+      ],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 257155
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/w1200-h630-p-k-no-nu/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150149
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+      "imageSource": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "article_sections": {
+        "verified_facts": [
+          "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
+          "관련 컴포넌트: Google AI Studio.",
+          "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt."
+        ],
+        "background_context": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포하는 데 도움을 주는 도구입니다. 이 도구가 네이티브 Android 앱 빌드를 지원한다는 것은, AI 모델을 활용하는 Android 앱 개발 워크플로우를 간소화할 수 있음을 의미합니다. Camera HAL 및 드라이버 팀에게는 직접적인 HAL API 변경보다는, 온디바이스 AI 추론을 위한 네이티브 코드 생성, 빌드, 테스트 및 디버깅 워크플로우에 영향을 줄 수 있습니다. 특히 카메라 프레임 데이터를 입력으로 사용하는 AI 기능(예: 실시간 필터, 객체 인식)을 개발할 때, 이러한 툴링의 개선은 개발 생산성 향상에 기여할 수 있습니다. 그러나 이 변경사항 자체가 카메라 HAL의 런타임 동작이나 성능에 직접적인 영향을 미친다는 증거는 없습니다.",
+        "hal_driver_impact": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+        "action_items": [
+          "발행 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
+          "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
+          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+        ],
+        "team_share_points": "Android Native Tooling: Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
+      },
+      "public_article": {
+        "headline": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+        "lead": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
+        "body_paragraphs": [
+          "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.",
+          "Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다."
+        ],
+        "camera_hal_takeaway": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+        "reader_checkpoints": [
+          "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Build native Android apps in Google AI Studio",
+            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+            "publisher": "Android Developers Blog",
+            "source_role": "primary"
+          }
+        ]
+      },
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "attribution": "Android Developers Blog",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+        "exclusionEvidence": [
+          {
+            "candidate_url": "https://developer.android.com/static/images/logos/android.svg",
+            "reasonCode": "svg_rejected",
+            "reasonLabel": "SVG 이미지 제외",
+            "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
+            "sourceKind": "article-img",
+            "contentType": "image/svg+xml",
+            "validationStatus": "ok",
+            "valid": false
+          }
+        ]
+      },
+      "resolvedImage": {
+        "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+        "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
+      },
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "native_tooling_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "actionability_upgrade_evidence": null,
+      "signal_quality_status": "strong_signal",
+      "do_not_overstate": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
+      ],
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "hal_signal_capsule": {
+        "why_now": "Android Native Tooling: Build native Android apps in Google AI Studio는 날짜가 확인된 HAL 검토 신호로 포함했습니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner",
+          "camera_test_owner",
+          "native_tooling_owner"
+        ],
+        "check_within_2_weeks": "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
+        "impact_axes": [
+          "native_tooling_workflow",
+          "framework_hal_contract",
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "cts_vts_its_cdd",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "Supplied source evidence가 말하지 않으면 HAL API",
+          "metadata contract",
+          "stream",
+          "buffer",
+          "request/result",
+          "CTS",
+          "VTS",
+          "Camera ITS impact를 claim하지 않습니다.",
+          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+          "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+          "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
+        ]
       }
     }
   ],
@@ -410,6 +673,10 @@
     {
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "title": "Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
     }
   ],
   "publication_mode": "review_only",
@@ -420,7 +687,7 @@
   "fallback_public_ready": false,
   "fallback_only": false,
   "camera_anchor_count": 1,
-  "fallback_section_count": 0,
+  "fallback_section_count": 1,
   "homepage_badge": "",
   "review_publication_ready": true,
   "publication_notice": [
