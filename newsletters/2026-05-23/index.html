@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-23</title>
+  <link rel="stylesheet" href="../../css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav content-wrap" aria-label="Primary navigation">
+      <a class="site-brand" href="../../index.html">Camera HAL SW Newsletter</a>
+      <div class="nav-links">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="../../docs/news-sources.md">Sources</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="article-page">
+    <article class="wrap">
+      <header class="article-header">
+        <div class="article-meta">
+          <span class="issue-kicker">주간 뉴스레터</span>
+          <span class="issue-date">2026-05-23</span>
+        </div>
+        <h1>Camera HAL SW Newsletter</h1>
+        <p class="subtitle">이번 2026-05-23호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+        <div class="actions newsletter-actions issue-actions">
+          <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
+          <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
+        </div>
+      </header>
+
+      <div class="publication-notice" role="note">
+          <p>검토 발행본입니다.</p>
+          <p>각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.</p>
+        </div>
+
+      <section class="section issue-briefing">
+        <h2>1. 이번 주 3줄 브리핑</h2>
+        <div class="card">
+          <ul><li>Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.</li><li>Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.</li><li>직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.</li></ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>2. Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트</h2>
+        <div class="card issue-section article-card has-image camera-hal">
+          <figure class="article-media">
+            <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png" alt="Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">이미지: <a href="https://goo.gle/AdaptiveApps_IO26">Android Developers Blog</a></figcaption>
+          </figure>
+          
+          <h3>Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트</h3>
+          <p class="article-lead">Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.</p>
+          <p>Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.</p>
+          <p>이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다.</p>
+          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.</p></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.</li></ul></div>
+          <div class="source-list"><strong>출처</strong><ul><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a></li></ul></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>3. Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인</h2>
+        <div class="card issue-section article-card has-image tooling-watch">
+          <figure class="article-media">
+            <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png" alt="Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">이미지: <a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Android Developers Blog</a></figcaption>
+          </figure>
+          
+          <h3>Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인</h3>
+          <p class="article-lead">Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.</p>
+          <p>Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.</p>
+          <p>Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다.</p>
+          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.</p></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.</li></ul></div>
+          <div class="source-list"><strong>출처</strong><ul><li><a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Build native Android apps in Google AI Studio</a></li></ul></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>참고자료</h2>
+        <div class="card reference-list"><ul><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a></li><li><a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Build native Android apps in Google AI Studio</a></li></ul></div>
+      </section>
+
+      <nav class="bottom-nav" aria-label="Issue navigation">
+        <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>
