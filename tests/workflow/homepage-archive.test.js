@@ -110,18 +110,20 @@ test('homepage shows empty states when there are no newsletters', async () => {
 });
 
 test('homepage keeps the latest issue visible and shows an archive empty state for one issue', async () => {
-  const items = [newsletter('2026-05-09', 'Latest issue')];
+  const items = [newsletter('2026-05-09', 'Current issue')];
   const { elements } = await renderHomepage(items);
 
   assert.match(elements['latest-card'].innerHTML, /2026-05-09/);
-  assert.match(elements['latest-card'].innerHTML, /Latest issue/);
+  assert.match(elements['latest-card'].innerHTML, /Current issue/);
+  assert.match(elements['latest-card'].innerHTML, /<span class="status-chip">Latest<\/span>/);
+  assert.doesNotMatch(elements['latest-card'].innerHTML, /Latest issue/);
   assert.match(elements['archive-list'].innerHTML, /이전 뉴스레터가 없습니다/);
 });
 
 test('homepage excludes the latest issue from archive after sorting a copy', async () => {
   const items = [
     newsletter('2026-05-07', 'Older issue'),
-    newsletter('2026-05-09', 'Latest issue'),
+    newsletter('2026-05-09', 'Current issue'),
     newsletter('2026-05-08', 'Middle issue')
   ];
   const originalOrder = items.map(item => item.date);
@@ -129,7 +131,8 @@ test('homepage excludes the latest issue from archive after sorting a copy', asy
   const { elements } = await renderHomepage(items);
 
   assert.match(elements['latest-card'].innerHTML, /2026-05-09/);
-  assert.match(elements['latest-card'].innerHTML, /Latest issue/);
+  assert.match(elements['latest-card'].innerHTML, /Current issue/);
+  assert.match(elements['latest-card'].innerHTML, /<span class="status-chip">Latest<\/span>/);
   assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-09/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-08/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-07/);
@@ -169,34 +172,34 @@ test('homepage and archive accept single-article public issues as normal entries
 });
 
 test('homepage headline fetch absence does not block latest/archive rendering', async () => {
-  const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], null);
+  const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], null);
 
   assert.equal(elements.headline.hidden, true);
-  assert.match(elements['latest-card'].innerHTML, /Latest issue/);
+  assert.match(elements['latest-card'].innerHTML, /Current issue/);
   assert.equal(errors.length, 0);
 });
 
 test('homepage hides null headline state', async () => {
-  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
     schemaVersion: 1,
     current_headline: null,
     headline_history: []
   });
 
   assert.equal(elements.headline.hidden, true);
-  assert.match(elements['latest-card'].innerHTML, /Latest issue/);
+  assert.match(elements['latest-card'].innerHTML, /Current issue/);
 });
 
 test('homepage malformed headline state is a headline-only fallback', async () => {
-  const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], 'malformed');
+  const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], 'malformed');
 
   assert.equal(elements.headline.hidden, true);
-  assert.match(elements['latest-card'].innerHTML, /Latest issue/);
+  assert.match(elements['latest-card'].innerHTML, /Current issue/);
   assert.equal(errors.length, 1);
 });
 
 test('homepage renders valid headline state with article URL priority, image, and escaped text', async () => {
-  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
     schemaVersion: 1,
     current_headline: {
       article_identity_key: 'url:https://example.com/source',
@@ -227,7 +230,7 @@ test('homepage renders valid headline state with article URL priority, image, an
 });
 
 test('homepage headline falls back to external source CTA when no newsletter URL is available', async () => {
-  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
     schemaVersion: 1,
     current_headline: {
       article_identity_key: 'url:https://example.com/source',
