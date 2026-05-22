@@ -1,5 +1,7 @@
 const assert = require('node:assert/strict');
+const { spawnSync } = require('node:child_process');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
@@ -13,6 +15,15 @@ function repoPath(...parts) {
 
 function readTemplate(...parts) {
   return fs.readFileSync(repoPath(...parts), 'utf8');
+}
+
+function tempRoot() {
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'localization-validator-'));
+}
+
+function writeJson(filePath, value) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
 test('PR template files exist', () => {
@@ -68,6 +79,38 @@ test('localization validator scans prompt and latest public newsletter surfaces'
   assert.match(text, /checkPromptHosts/);
   assert.match(text, /checkLatestPublicNewsletterArtifacts/);
   assert.match(text, /rawEnglishProseRuns/);
+});
+
+test('localization validator reports homepage headline display errors in readable Korean', () => {
+  const root = tempRoot();
+  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+    date: '2026-05-23',
+    title: '카메라 뉴스레터',
+    summary: '카메라 뉴스 요약',
+    tags: []
+  }]);
+  writeJson(path.join(root, 'data', 'news-sources.json'), {
+    sources: []
+  });
+  writeJson(path.join(root, 'data', 'homepage-headline.json'), {
+    schemaVersion: 1,
+    current_headline: {
+      title: 'Camera headline',
+      summary: 'Camera summary'
+    },
+    headline_history: []
+  });
+
+  const result = spawnSync(process.execPath, [
+    repoPath('scripts', 'newsroom', 'cli', 'validate-localization.js')
+  ], {
+    cwd: root,
+    encoding: 'utf8'
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /current_headline\.title에 한국어 표시값이 없습니다/);
+  assert.doesNotMatch(result.stderr, /\?\?\?쒓뎅|媛믪씠/);
 });
 
 test('prompt host files do not keep long English prose instructions', () => {

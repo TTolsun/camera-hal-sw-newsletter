@@ -119,6 +119,22 @@ function checkNewsletterData() {
   }
 }
 
+function checkHomepageHeadlineData() {
+  const rel = path.join('data', 'homepage-headline.json');
+  const filePath = repoPath(rel);
+  if (!fs.existsSync(filePath)) return;
+  const state = readJson(rel);
+  const headline = state?.current_headline;
+  if (!headline) return;
+  for (const field of ['title', 'summary']) {
+    const value = String(headline[field] || '');
+    if (!hangulPattern.test(value)) {
+      errors.push(`data/homepage-headline.json: current_headline.${field}에 한국어 표시값이 없습니다.`);
+    }
+    addLongEnglishProseErrors(`data/homepage-headline.json: current_headline.${field}`, value);
+  }
+}
+
 function checkLatestPublicNewsletterArtifacts() {
   const items = readJson(path.join('data', 'newsletters.json'));
   const latest = items[0];
@@ -151,6 +167,7 @@ function checkPromptHosts() {
 
 checkMarkdown();
 checkNewsletterData();
+checkHomepageHeadlineData();
 checkLatestPublicNewsletterArtifacts();
 checkSourceRegistry();
 checkPromptHosts();

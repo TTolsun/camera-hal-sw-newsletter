@@ -102,6 +102,7 @@ npm.cmd run generate
 - Candidate pool preflight: publishable candidates at least 1; reserve candidates diagnostics only; camera stack candidates at least 0
 - Selection windows: primary 7 days; fallback 21 days; reference 90 days
 - Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.
+- Homepage headline policy: linear decay; decay 2 point(s)/day; replacement margin 5; minimum headline score 40; latest inclusion required true; history max 50
 - Quality threshold: 85
 - Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure; blocked source quality; source quality drift
 

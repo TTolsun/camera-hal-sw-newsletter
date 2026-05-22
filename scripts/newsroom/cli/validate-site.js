@@ -12,6 +12,10 @@ const {
   articleCountRangeText
 } = require('../common/newsletter-policy');
 const {
+  HEADLINE_STATE_REL_PATH,
+  validateHomepageHeadlineState
+} = require('../common/homepage-headline');
+const {
   historicalPolicyWarningReason,
   strictTargetDates
 } = require('../common/validation-targets');
@@ -382,6 +386,9 @@ function validateRootHomepageContract(newsletters) {
   if (!/fetch\(\s*['"]data\/newsletters\.json['"]/.test(html)) {
     fail('root index.html must fetch data/newsletters.json as the homepage/archive source of truth.');
   }
+  if (!/fetch\(\s*['"]data\/homepage-headline\.json['"]/.test(html)) {
+    fail('root index.html must fetch data/homepage-headline.json through a separate headline loader.');
+  }
   const exposedDates = [...html.matchAll(/newsletters\/(\d{4}-\d{2}-\d{2})\//g)]
     .map(match => match[1]);
   const publicDates = new Set(newsletters.map(item => item?.date).filter(Boolean));
@@ -389,6 +396,35 @@ function validateRootHomepageContract(newsletters) {
     if (!publicDates.has(date)) {
       fail(`root index.html hardcodes stale newsletter exposure for ${date}. ${buildRemediationMessage(date)}`);
     }
+  }
+}
+
+function validateHomepageHeadlineData() {
+  const filePath = path.join(root, HEADLINE_STATE_REL_PATH);
+  if (!fs.existsSync(filePath)) return;
+  let state = null;
+  try {
+    state = readJson(filePath);
+  } catch (error) {
+    fail(`${HEADLINE_STATE_REL_PATH} must be valid JSON: ${error.message}`);
+    return;
+  }
+  const result = validateHomepageHeadlineState(state);
+  if (!result.ok) {
+    for (const error of result.errors) {
+      fail(`${HEADLINE_STATE_REL_PATH}: ${error}`);
+    }
+  }
+  const headline = state.current_headline;
+  if (!headline) return;
+  if (headline.newsletter_url) {
+    const newsletterPath = repoPath(root, headline.newsletter_url);
+    if (!newsletterPath) {
+      fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_url escapes repository.`);
+    }
+  }
+  if (!/^https?:\/\//i.test(String(headline.source_url || ''))) {
+    fail(`${HEADLINE_STATE_REL_PATH}: current_headline.source_url must be an absolute http(s) URL.`);
   }
 }
 
@@ -451,6 +487,7 @@ if (!Array.isArray(newsletters)) {
 const seenDates = new Set();
 const strictDates = strictTargetDates({ root, newsletterDatePath });
 validateRootHomepageContract(newsletters);
+validateHomepageHeadlineData();
 validateAllRetentionFiles();
 for (const [index, item] of newsletters.entries()) {
   for (const field of requiredFields) {

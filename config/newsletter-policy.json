@@ -39,6 +39,14 @@
     "fallbackSelectionDays": 21,
     "referenceContextDays": 90
   },
+  "headlinePolicy": {
+    "decayModel": "linear",
+    "decayRatePerDay": 2,
+    "replacementMargin": 5,
+    "minimumHeadlineScore": 40,
+    "latestInclusionRequired": true,
+    "historyMaxEntries": 50
+  },
   "qualityGatePolicy": {
     "threshold": 85,
     "hardFailConditions": [

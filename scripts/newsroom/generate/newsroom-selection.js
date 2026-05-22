@@ -20,10 +20,21 @@ const {
   resolveCandidateDateEvidence
 } = require('../common/date-signals');
 const {
+  articleIdentityKey
+} = require('../common/article-identity');
+const {
+  applyHomepageHeadlineSelection,
+  candidateDateEvidence,
+  candidateQualityFlags,
+  computeHeadlineScore,
+  readHomepageHeadlineState
+} = require('../common/homepage-headline');
+const {
   POLICY_REL_PATH,
   articlePolicy,
   articleCountRangeText,
   candidatePoolPreflightPolicy,
+  getHeadlinePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
   isForbiddenMainBucket,
@@ -741,6 +752,11 @@ function decorateCandidate(candidate, newsletterDate, options = {}) {
   const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
   const scope = candidateScope(candidate);
   const score_breakdown = scoreCandidate(candidate, newsletterDate);
+  const headline = computeHeadlineScore({
+    ...candidate,
+    ...scope,
+    score_breakdown
+  }, options.headlinePolicy || getHeadlinePolicy());
   const score_filter_reasons = scoreFilterReasons(score_breakdown);
   const windowMetadata = freshnessWindowMetadata(candidate, newsletterDate, selectionWindowPolicy);
   return {
@@ -763,8 +779,13 @@ function decorateCandidate(candidate, newsletterDate, options = {}) {
     source: candidateSource(candidate),
     selected: false,
     selected_for_editor: false,
+    article_identity_key: articleIdentityKey({ ...candidate, ...scope }),
     deterministic_score: score_breakdown.total,
     score_breakdown,
+    headline_score: headline.headline_score,
+    headline_score_breakdown: headline.score_breakdown,
+    date_evidence: candidateDateEvidence(candidate),
+    quality_flags: candidateQualityFlags(candidate),
     main_article_score_eligible: score_filter_reasons.length === 0,
     score_filter_reasons,
     exclusion_reasons: exclusionReasons(candidate),
@@ -1105,7 +1126,7 @@ function selectFinalArticles(shortlist, options = {}) {
 }
 
 function shortlistCandidateKey(candidate) {
-  return text(candidate?.normalized_url) || normalizeUrl(candidateUrl(candidate)) || candidateUrl(candidate) || text(candidate?.title);
+  return text(candidate?.article_identity_key) || text(candidate?.normalized_url) || normalizeUrl(candidateUrl(candidate)) || candidateUrl(candidate) || text(candidate?.title);
 }
 
 function shortlistWithFinalCandidates(shortlist, selected, reserve, cap = SHORTLIST_CAP) {
@@ -1463,12 +1484,24 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     ...options,
     selectionWindowPolicy
   });
-  const selected = attachRelatedContextToSelected(selectionResult.selected, [
+  let selected = attachRelatedContextToSelected(selectionResult.selected, [
     rawCandidates,
     shortlist,
     excluded,
     referenceContextCandidates
   ]);
+  const headlinePolicy = options.headlinePolicy || getHeadlinePolicy();
+  const homepageHeadlineState = options.homepageHeadlineState ||
+    readHomepageHeadlineState(options.root || process.cwd(), { date, policy: headlinePolicy });
+  const headlineSelection = applyHomepageHeadlineSelection({
+    date,
+    selectedArticles: selected,
+    eligibleCandidates: selectionCandidatePool,
+    currentState: homepageHeadlineState,
+    policy: headlinePolicy,
+    newsletterUrl: options.newsletterUrl || `newsletters/${date}/index.html`
+  });
+  selected = headlineSelection.selected_articles;
   const windowDiagnostics = selectionResult.diagnostics;
   const reserve = reserveCandidates(selectionCandidatePool, selected, options);
   const warnings = selectionWarnings(selected);
@@ -1491,7 +1524,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, cap);
   const markedShortlist = reportShortlist.map(candidate => {
-    const match = selected.find(item => item.normalized_url === candidate.normalized_url);
+    const candidateKey = shortlistCandidateKey(candidate);
+    const match = selected.find(item => shortlistCandidateKey(item) === candidateKey);
     if (match) {
       return {
         ...match,
@@ -1583,6 +1617,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       max_final_articles: MAX_FINAL_ARTICLES,
       policy_config: POLICY_REL_PATH.replace(/\\/g, '/'),
       article_policy: articlePolicy,
+      headline_policy: headlinePolicy,
       shortlist_target_range: '8-12 candidates before Gemini reporter/editor prompts.',
       main_article_score_threshold: MAIN_ARTICLE_SCORE_THRESHOLD,
       minimum_camera_hal_directness: MIN_CAMERA_HAL_DIRECTNESS,
@@ -1611,6 +1646,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     excluded_candidates: excluded,
     selection_warnings: warnings,
     selection_errors: errors,
+    headline_decision: headlineSelection.headline_decision,
+    headline_latest_inclusion: headlineSelection.headline_latest_inclusion,
+    removed_due_to_headline_inclusion: headlineSelection.removed_due_to_headline_inclusion || [],
+    homepage_headline_state: headlineSelection.homepage_headline_state,
+    headline_policy: headlinePolicy,
     exclusion_reason_summary: summarizeExclusionReasons(excluded)
   });
 }

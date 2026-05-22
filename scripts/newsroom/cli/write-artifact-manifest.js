@@ -41,6 +41,8 @@ function criticalFiles(date) {
     newsroomRelPath(date, 'hal-signal-quality-report.md'),
     newsroomRelPath(date, 'retry-history.json'),
     newsroomRelPath(date, 'retry-history.md'),
+    'data/homepage-headline.json',
+    'data/article-exposure-history.json',
     `newsletters/${date}/newsletter.md`,
     `newsletters/${date}/index.html`
   ];
@@ -117,7 +119,10 @@ function statusSummary(status) {
     'final_publish_ready',
     'validate_ok',
     'underfilled',
-    'publish_ready'
+    'publish_ready',
+    'headline_decision',
+    'headline_latest_inclusion',
+    'article_exposure_coverage'
   ];
   return Object.fromEntries(fields.filter(field => status[field] !== undefined).map(field => [field, status[field]]));
 }

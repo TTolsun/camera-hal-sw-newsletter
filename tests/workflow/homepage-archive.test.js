@@ -12,24 +12,33 @@ function extractHomepageScript() {
     .map(match => match[1]);
   const homepageScript = scripts.find(script =>
     /\basync function loadNewsletters\b/.test(script) &&
+    /\basync function loadHomepageHeadline\b/.test(script) &&
     /\bloadNewsletters\(\);\s*$/.test(script)
   );
   assert.ok(homepageScript, 'index.html should include the homepage newsletter script');
-  return homepageScript.replace(/\bloadNewsletters\(\);\s*$/, 'globalThis.__homepageReady = loadNewsletters();');
+  return homepageScript.replace(
+    /\bloadHomepageHeadline\(\);\s*\n\s*loadNewsletters\(\);\s*$/,
+    'globalThis.__headlineReady = loadHomepageHeadline();\n    globalThis.__homepageReady = loadNewsletters();'
+  );
 }
 
 function createElement() {
   return {
     innerHTML: '',
+    hidden: false,
     classList: {
+      add() {},
       remove() {}
     }
   };
 }
 
-async function renderHomepage(newsletters) {
+async function renderHomepage(newsletters, headlineState = null) {
   const script = extractHomepageScript();
+  const errors = [];
   const elements = {
+    headline: createElement(),
+    'headline-card': createElement(),
     'latest-card': createElement(),
     'archive-list': createElement()
   };
@@ -41,8 +50,25 @@ async function renderHomepage(newsletters) {
       }
     },
     fetch: async (url, options) => {
-      assert.equal(url, 'data/newsletters.json');
       assert.equal(options.cache, 'no-store');
+      if (url === 'data/homepage-headline.json') {
+        if (headlineState === null) {
+          return { ok: false, status: 404 };
+        }
+        if (headlineState === 'malformed') {
+          return {
+            ok: true,
+            json: async () => {
+              throw new Error('bad headline json');
+            }
+          };
+        }
+        return {
+          ok: true,
+          json: async () => headlineState
+        };
+      }
+      assert.equal(url, 'data/newsletters.json');
       return {
         ok: true,
         json: async () => newsletters
@@ -50,16 +76,18 @@ async function renderHomepage(newsletters) {
     },
     console: {
       error(error) {
-        throw error;
+        errors.push(error);
       }
     }
   };
 
   vm.runInNewContext(script, context, { filename: 'index.html' });
   assert.equal(typeof context.__homepageReady?.then, 'function');
+  assert.equal(typeof context.__headlineReady?.then, 'function');
+  await context.__headlineReady;
   await context.__homepageReady;
 
-  return elements;
+  return { elements, errors };
 }
 
 function newsletter(date, title = `Issue ${date}`) {
@@ -75,7 +103,7 @@ function newsletter(date, title = `Issue ${date}`) {
 }
 
 test('homepage shows empty states when there are no newsletters', async () => {
-  const elements = await renderHomepage([]);
+  const { elements } = await renderHomepage([]);
 
   assert.match(elements['latest-card'].innerHTML, /등록된 뉴스레터가 없습니다/);
   assert.match(elements['archive-list'].innerHTML, /아카이브가 비어 있습니다/);
@@ -83,7 +111,7 @@ test('homepage shows empty states when there are no newsletters', async () => {
 
 test('homepage keeps the latest issue visible and shows an archive empty state for one issue', async () => {
   const items = [newsletter('2026-05-09', 'Latest issue')];
-  const elements = await renderHomepage(items);
+  const { elements } = await renderHomepage(items);
 
   assert.match(elements['latest-card'].innerHTML, /2026-05-09/);
   assert.match(elements['latest-card'].innerHTML, /Latest issue/);
@@ -98,7 +126,7 @@ test('homepage excludes the latest issue from archive after sorting a copy', asy
   ];
   const originalOrder = items.map(item => item.date);
 
-  const elements = await renderHomepage(items);
+  const { elements } = await renderHomepage(items);
 
   assert.match(elements['latest-card'].innerHTML, /2026-05-09/);
   assert.match(elements['latest-card'].innerHTML, /Latest issue/);
@@ -114,7 +142,7 @@ test('homepage shows review publication issues when data entry paths are present
     newsletter('2026-05-14', 'Review publication issue')
   ];
 
-  const elements = await renderHomepage(items);
+  const { elements } = await renderHomepage(items);
 
   assert.match(elements['latest-card'].innerHTML, /2026-05-14/);
   assert.match(elements['latest-card'].innerHTML, /Review publication issue/);
@@ -128,7 +156,7 @@ test('homepage and archive accept single-article public issues as normal entries
     newsletter('2026-05-21', 'Latest one-article issue')
   ];
 
-  const elements = await renderHomepage(items);
+  const { elements } = await renderHomepage(items);
 
   assert.match(elements['latest-card'].innerHTML, /2026-05-21/);
   assert.match(elements['latest-card'].innerHTML, /Latest one-article issue/);
@@ -136,4 +164,58 @@ test('homepage and archive accept single-article public issues as normal entries
   assert.match(elements['archive-list'].innerHTML, /2026-05-20/);
   assert.match(elements['archive-list'].innerHTML, /Previous one-article issue/);
   assert.doesNotMatch(elements['latest-card'].innerHTML, /review-only|diagnostics-only|Tooling Watch Edition/i);
+});
+
+test('homepage headline fetch absence does not block latest/archive rendering', async () => {
+  const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], null);
+
+  assert.equal(elements.headline.hidden, true);
+  assert.match(elements['latest-card'].innerHTML, /Latest issue/);
+  assert.equal(errors.length, 0);
+});
+
+test('homepage hides null headline state', async () => {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], {
+    schemaVersion: 1,
+    current_headline: null,
+    headline_history: []
+  });
+
+  assert.equal(elements.headline.hidden, true);
+  assert.match(elements['latest-card'].innerHTML, /Latest issue/);
+});
+
+test('homepage malformed headline state is a headline-only fallback', async () => {
+  const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], 'malformed');
+
+  assert.equal(elements.headline.hidden, true);
+  assert.match(elements['latest-card'].innerHTML, /Latest issue/);
+  assert.equal(errors.length, 1);
+});
+
+test('homepage renders valid headline state with newsletter URL priority and escaped text', async () => {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Latest issue')], {
+    schemaVersion: 1,
+    current_headline: {
+      article_identity_key: 'url:https://example.com/source',
+      title: '<Camera HAL headline>',
+      summary: 'Summary & details',
+      source_url: 'https://example.com/source',
+      newsletter_date: '2026-05-23',
+      newsletter_url: 'newsletters/2026-05-23/index.html',
+      selected_at: '2026-05-23',
+      snapshot: {
+        source_name: 'Example Source'
+      }
+    },
+    headline_history: []
+  });
+
+  assert.equal(elements.headline.hidden, false);
+  assert.match(elements['headline-card'].innerHTML, /&lt;Camera HAL headline&gt;/);
+  assert.match(elements['headline-card'].innerHTML, /Summary &amp; details/);
+  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html"/);
+  assert.match(elements['headline-card'].innerHTML, /뉴스레터에서 보기/);
+  assert.match(elements['headline-card'].innerHTML, /최신호 포함/);
+  assert.doesNotMatch(elements['headline-card'].innerHTML, /rel="noopener"/);
 });

@@ -86,6 +86,14 @@ const {
   publishReadyCompositionPolicy
 } = require('../common/newsletter-policy');
 const {
+  readExposureHistory,
+  recordArticleExposure,
+  writeExposureHistory
+} = require('../common/article-exposure-history');
+const {
+  writeHomepageHeadlineState
+} = require('../common/homepage-headline');
+const {
   pruneResolvedFallbackImageFactCheckItems
 } = require('../common/fact-check-repair');
 const {
@@ -541,6 +549,10 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     selection_warnings: ensureArray(report.selection_warnings),
     selection_errors: ensureArray(report.selection_errors),
     selection_shortage_hints: ensureArray(report.selection_shortage_hints),
+    headline_decision: report.headline_decision || diagnostics.headline_decision || null,
+    headline_latest_inclusion: report.headline_latest_inclusion || diagnostics.headline_latest_inclusion || null,
+    removed_due_to_headline_inclusion: ensureArray(report.removed_due_to_headline_inclusion || diagnostics.removed_due_to_headline_inclusion),
+    article_exposure_coverage: report.article_exposure_coverage || diagnostics.article_exposure_coverage || null,
     exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
     final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
     candidate_selection_note: diagnostics.note
@@ -1627,6 +1639,31 @@ function updateNewsletterData(date, issue) {
   writeJson(dataPath, updated);
 }
 
+function persistHeadlineStateArtifacts({ date, shortlistReport, shouldWritePublicArtifacts }) {
+  if (!shouldWritePublicArtifacts || !shortlistReport?.homepage_headline_state) {
+    return { files: [], exposureCoverage: shortlistReport?.article_exposure_coverage || null };
+  }
+  const files = [];
+  const state = shortlistReport.homepage_headline_state;
+  const headlinePath = writeHomepageHeadlineState(root, state);
+  files.push(path.relative(root, headlinePath).replace(/\\/g, '/'));
+
+  let history = readExposureHistory(root, date);
+  if (state.current_headline) {
+    history = recordArticleExposure(history, state.current_headline, {
+      date,
+      type: 'homepage_headline',
+      score: state.current_headline.current_score,
+      reuseReason: shortlistReport.headline_decision?.reason || shortlistReport.headline_decision?.decision || '',
+      newsletterUrl: state.current_headline.newsletter_url
+    });
+  }
+  const historyPath = writeExposureHistory(root, history);
+  files.push(path.relative(root, historyPath).replace(/\\/g, '/'));
+  shortlistReport.article_exposure_coverage = history.coverage;
+  return { files, exposureCoverage: history.coverage };
+}
+
 function assertJsonArtifactsReadable(filePaths) {
   for (const filePath of filePaths) {
     readJson(filePath);
@@ -2621,6 +2658,10 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
     composition_reason: selectionDiagnostics.composition_reason,
     composition_summary: selectionDiagnostics.composition_summary || {},
     eligible_composition_summary: selectionDiagnostics.eligible_composition_summary || {},
+    headline_decision: selectionDiagnostics.headline_decision || report.headline_decision || null,
+    headline_latest_inclusion: selectionDiagnostics.headline_latest_inclusion || report.headline_latest_inclusion || null,
+    removed_due_to_headline_inclusion: ensureArray(selectionDiagnostics.removed_due_to_headline_inclusion || report.removed_due_to_headline_inclusion),
+    article_exposure_coverage: selectionDiagnostics.article_exposure_coverage || report.article_exposure_coverage || null,
     candidate_pool_preflight_passed: report.candidate_pool_preflight_passed !== false,
     candidate_shortage_reviewable: report.candidate_shortage_reviewable === true,
     candidate_shortage_summary: report.candidate_shortage_summary || {},
@@ -2708,6 +2749,27 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
     `- reserve_candidate_count: ${selectionReport.candidate_shortage_summary.reserve_candidate_count ?? 'unknown'}`,
     `- required_reserve_candidate_count: ${selectionReport.candidate_shortage_summary.required_reserve_candidate_count ?? 'unknown'}`,
     `- Reserve requirement: ${Number(selectionReport.candidate_shortage_summary.required_reserve_candidate_count) === 0 ? 'diagnostics only' : 'blocking preflight requirement'}`,
+    '',
+    '## Homepage Headline',
+    '',
+    `- decision: ${selectionReport.headline_decision?.reason || selectionReport.headline_decision?.decision || 'unknown'}`,
+    `- current_headline_key: ${selectionReport.headline_decision?.current_headline_key || 'unknown'}`,
+    `- replacement_headline_key: ${selectionReport.headline_decision?.replacement_headline_key || 'unknown'}`,
+    `- previous_stored_current_score: ${selectionReport.headline_decision?.previous_stored_current_score ?? 'unknown'}`,
+    `- runtime_decayed_score: ${selectionReport.headline_decision?.runtime_decayed_score ?? 'unknown'}`,
+    `- last_scored_at: ${selectionReport.headline_decision?.last_scored_at || 'unknown'}`,
+    `- scored_at: ${selectionReport.headline_decision?.scored_at || 'unknown'}`,
+    `- latest_inclusion_mode: ${selectionReport.headline_latest_inclusion?.mode || 'none'}`,
+    `- injected_from_snapshot: ${selectionReport.headline_latest_inclusion?.injected_from_snapshot === true}`,
+    `- removed_due_to_headline_inclusion_count: ${selectionReport.removed_due_to_headline_inclusion.length}`,
+    ...(
+      selectionReport.removed_due_to_headline_inclusion.length > 0
+        ? selectionReport.removed_due_to_headline_inclusion.slice(0, 5).map(item =>
+          `  - ${item.title || 'unknown'} (${item.article_identity_key || 'unknown'}): ${item.reason || 'unknown'}`
+        )
+        : []
+    ),
+    `- exposure_history_coverage: ${selectionReport.article_exposure_coverage?.mode || 'unknown'} since ${selectionReport.article_exposure_coverage?.coverage_starts_at || 'unknown'}`,
     '',
     '## Source Parser Hints',
     '',
@@ -3593,6 +3655,16 @@ async function main() {
     fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
     updateNewsletterData(date, editor);
   }
+  const headlineArtifactResult = persistHeadlineStateArtifacts({
+    date,
+    shortlistReport,
+    shouldWritePublicArtifacts
+  });
+  if (headlineArtifactResult.exposureCoverage) {
+    shortlistReport.article_exposure_coverage = headlineArtifactResult.exposureCoverage;
+    writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
+    writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
+  }
   const validateResult = editorialReviewable
     ? {
         ok: false,
@@ -3625,7 +3697,8 @@ async function main() {
     ? baseFiles.concat([
         `newsletters/${date}/newsletter.md`,
         `newsletters/${date}/index.html`,
-        'data/newsletters.json'
+        'data/newsletters.json',
+        ...headlineArtifactResult.files
       ])
     : baseFiles;
   fs.writeFileSync(

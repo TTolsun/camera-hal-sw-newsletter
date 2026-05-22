@@ -95,6 +95,23 @@ function validateSelectionWindowPolicy(value, errors) {
   }
 }
 
+function validateHeadlinePolicy(value, errors) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('headlinePolicy must be an object.');
+    return;
+  }
+  if (value.decayModel !== 'linear') {
+    errors.push('headlinePolicy.decayModel must be one of: linear.');
+  }
+  validateInteger(value.decayRatePerDay, 'headlinePolicy.decayRatePerDay', errors, { min: 0 });
+  validateInteger(value.replacementMargin, 'headlinePolicy.replacementMargin', errors, { min: 0 });
+  validateInteger(value.minimumHeadlineScore, 'headlinePolicy.minimumHeadlineScore', errors, { min: 0 });
+  validateInteger(value.historyMaxEntries, 'headlinePolicy.historyMaxEntries', errors, { min: 1 });
+  if (typeof value.latestInclusionRequired !== 'boolean') {
+    errors.push('headlinePolicy.latestInclusionRequired must be a boolean.');
+  }
+}
+
 function validatePublishReadyCompositionPolicy(value, article, errors) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     errors.push('articlePolicy.publishReadyComposition must be an object.');
@@ -182,6 +199,7 @@ function validateNewsletterPolicyConfig(config) {
   validateInteger(preflight.primaryCameraStackCandidateMin, 'candidatePoolPreflight.primaryCameraStackCandidateMin', errors, { min: 0 });
   validateInteger(preflight.cameraStackCandidateMin, 'candidatePoolPreflight.cameraStackCandidateMin', errors, { min: 0 });
   validateSelectionWindowPolicy(config.selectionWindowPolicy, errors);
+  validateHeadlinePolicy(config.headlinePolicy, errors);
   if (
     Number.isInteger(preflight.publishableCandidateMin) &&
     Number.isInteger(count.min) &&
@@ -234,6 +252,7 @@ function normalizeNewsletterPolicyConfig(config) {
   const article = config.articlePolicy;
   const preflight = config.candidatePoolPreflight;
   const selectionWindow = config.selectionWindowPolicy;
+  const headline = config.headlinePolicy;
   const quality = config.qualityGatePolicy;
   return deepFreeze({
     schemaVersion: config.schemaVersion,
@@ -265,6 +284,14 @@ function normalizeNewsletterPolicyConfig(config) {
       primarySelectionDays: selectionWindow.primarySelectionDays,
       fallbackSelectionDays: selectionWindow.fallbackSelectionDays,
       referenceContextDays: selectionWindow.referenceContextDays
+    },
+    headlinePolicy: {
+      decayModel: headline.decayModel,
+      decayRatePerDay: headline.decayRatePerDay,
+      replacementMargin: headline.replacementMargin,
+      minimumHeadlineScore: headline.minimumHeadlineScore,
+      latestInclusionRequired: headline.latestInclusionRequired,
+      historyMaxEntries: headline.historyMaxEntries
     },
     qualityGatePolicy: {
       threshold: quality.threshold,
@@ -310,6 +337,10 @@ function getCandidatePoolPreflightPolicy(policy = getDefaultNewsletterPolicy()) 
 
 function getSelectionWindowPolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.selectionWindowPolicy;
+}
+
+function getHeadlinePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.headlinePolicy;
 }
 
 function bucketValue(bucket) {
@@ -370,6 +401,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
   const articlePolicy = getArticlePolicy(policy);
   const publishPolicy = getPublishReadyCompositionPolicy(policy);
   const selectionWindowPolicy = getSelectionWindowPolicy(policy);
+  const headlinePolicy = getHeadlinePolicy(policy);
   const qualityGatePolicy = getQualityGatePolicy(policy);
   const oneArticlePolicyEnabled = articlePolicy.mainArticleCount.min === 1;
   const reserveRequirementText = policy.candidatePoolPreflight.reserveMin === 0
@@ -400,6 +432,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     `- Candidate pool preflight: publishable candidates at least ${policy.candidatePoolPreflight.publishableCandidateMin}; ${reserveRequirementText}; camera stack candidates at least ${policy.candidatePoolPreflight.cameraStackCandidateMin}`,
     `- Selection windows: primary ${selectionWindowPolicy.primarySelectionDays} days; fallback ${selectionWindowPolicy.fallbackSelectionDays} days; reference ${selectionWindowPolicy.referenceContextDays} days`,
     '- Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.',
+    `- Homepage headline policy: ${headlinePolicy.decayModel} decay; decay ${headlinePolicy.decayRatePerDay} point(s)/day; replacement margin ${headlinePolicy.replacementMargin}; minimum headline score ${headlinePolicy.minimumHeadlineScore}; latest inclusion required ${headlinePolicy.latestInclusionRequired}; history max ${headlinePolicy.historyMaxEntries}`,
     `- Quality threshold: ${qualityGatePolicy.threshold}`,
     `- Hard fail conditions remain blocking: ${qualityGatePolicy.hardFailConditions.join('; ')}`,
     '',
@@ -487,6 +520,9 @@ module.exports = {
   get selectionWindowPolicy() {
     return getSelectionWindowPolicy();
   },
+  get headlinePolicy() {
+    return getHeadlinePolicy();
+  },
   // Legacy compatibility exports only. New code should prefer articlePolicy and qualityGatePolicy.
   get MIN_MAIN_ARTICLES() {
     return getArticlePolicy().mainArticleCount.min;
@@ -501,6 +537,7 @@ module.exports = {
   articleCountRangeText,
   getCandidatePoolPreflightPolicy,
   getDefaultNewsletterPolicy,
+  getHeadlinePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
   isForbiddenMainBucket,
@@ -514,5 +551,6 @@ module.exports = {
   renderNewsletterPolicyBlock,
   replaceNewsletterPolicyBlock,
   selectionWindowPolicyText,
+  validateHeadlinePolicy,
   validateNewsletterPolicyConfig
 };
