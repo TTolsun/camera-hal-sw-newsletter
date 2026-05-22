@@ -209,6 +209,84 @@ test('explicit none does not upgrade from CameraX mention without verification t
   assert.equal(normalized.actionability_upgrade_reason, '');
 });
 
+test('source URL with generic action wording does not upgrade actionability', () => {
+  const value = article({
+    url: 'https://example.com/generic-source',
+    evidence_id: '',
+    actionability_level: 'none',
+    article_sections: {
+      verified_facts: ['A dated source exists.'],
+      background_context: 'The source is relevant background context.',
+      hal_driver_impact: 'Review the source when planning future camera work.',
+      action_items: ['Review the source later.'],
+      team_share_points: 'No observable validation target is present.'
+    },
+    hal_signal_capsule: {
+      why_now: 'The source is dated.',
+      reader_owners: ['camera_framework_owner'],
+      check_within_2_weeks: 'Review the source later.',
+      impact_axes: ['camerax_app_compatibility'],
+      do_not_overstate: ['Do not claim direct HAL behavior changes.']
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+
+  assert.equal(normalized.effective_actionability_level, 'none');
+  assert.equal(normalized.actionability_upgrade_reason, '');
+});
+
+test('negated test requirements do not upgrade actionability', () => {
+  const value = article({
+    url: 'https://example.com/no-test-required',
+    evidence_id: 'evidence-no-test-required',
+    actionability_level: 'none',
+    article_sections: {
+      verified_facts: ['A dated source says no CTS/VTS test required for this change.'],
+      background_context: 'CameraX is mentioned as background.',
+      hal_driver_impact: 'No CTS/VTS test required; track only if a later camera-specific note appears.',
+      action_items: ['No CTS/VTS test required for this source.'],
+      team_share_points: 'Do not turn negated testing language into an action item.'
+    },
+    hal_signal_capsule: {
+      why_now: 'The source is dated.',
+      reader_owners: ['camera_framework_owner'],
+      check_within_2_weeks: 'No CTS/VTS test required for this source.',
+      impact_axes: ['camerax_app_compatibility'],
+      do_not_overstate: ['Do not claim direct HAL behavior changes.']
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+
+  assert.equal(normalized.effective_actionability_level, 'none');
+  assert.equal(normalized.actionability_upgrade_reason, '');
+});
+
+test('article-level evidence id without observable action target does not upgrade', () => {
+  const value = article({
+    url: '',
+    evidence_id: 'evidence-background-only',
+    actionability_level: 'none',
+    article_sections: {
+      verified_facts: ['A dated source mentions CameraX.'],
+      background_context: 'CameraX appears in article background only.',
+      hal_driver_impact: 'Review when concrete stream, log, metric, or API evidence appears.',
+      action_items: ['Keep this as background context.'],
+      team_share_points: 'No observable validation target is present.'
+    },
+    hal_signal_capsule: {
+      why_now: 'The source is dated.',
+      reader_owners: ['camera_framework_owner'],
+      check_within_2_weeks: 'Keep this as background context.',
+      impact_axes: ['camerax_app_compatibility'],
+      do_not_overstate: ['Do not claim direct HAL behavior changes.']
+    }
+  });
+  const normalized = normalizeHalSignalFields(value);
+
+  assert.equal(normalized.effective_actionability_level, 'none');
+  assert.equal(normalized.actionability_upgrade_reason, '');
+});
+
 test('single weak trace keyword is capped below measurable test', () => {
   const value = article({
     url: 'https://example.com/perfetto-only',

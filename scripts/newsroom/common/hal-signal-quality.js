@@ -305,6 +305,11 @@ function actionabilitySignalMatches(value = {}) {
 
 function observableVerificationTarget(value = {}) {
   const haystack = actionabilityVerificationText(value);
+  if (/\b(?:no|not|without)\b.{0,40}\b(?:cts|vts|test|metric|measure|log|trace|perfetto|required|needed)\b/i.test(haystack) ||
+    /\b(?:cts|vts|test|metric|measure|log|trace|perfetto)\b.{0,40}\b(?:not required|not needed|unnecessary|unneeded)\b/i.test(haystack) ||
+    /(?:테스트|검증|측정).{0,12}(?:불필요|필요\s*없음)/i.test(haystack)) {
+    return '';
+  }
   const checks = [
     ['frame timing metric', /\b(?:frame timing|frame drop|fps|latency|metric|measure|compare|benchmark|throughput)\b/i],
     ['log or trace output', /\b(?:log|trace|systrace|perfetto|dumpsys|bugreport)\b/i],

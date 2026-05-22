@@ -456,6 +456,96 @@ test('source-ready native tooling group cannot normalize fallback_bucket into an
   );
 });
 
+test('group coverage rejects duplicate rendered cards for one selected group', () => {
+  const reporter = reporterForGroupTests({
+    article_group_key: 'group-a',
+    relevance_bucket: 'direct_aosp_camera'
+  });
+  const draft = editor({
+    sections: [
+      section(1, { article_group_key: 'group-a' }),
+      section(2, { article_group_key: 'group-a' })
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.group_coverage');
+      assert.deepEqual(error.details.duplicate_rendered_group_keys, ['group-a']);
+      return true;
+    }
+  );
+});
+
+test('group state reason codes are validated by state namespace', () => {
+  const reporter = reporterForGroupTests({
+    article_group_key: 'group-a',
+    relevance_bucket: 'direct_aosp_camera'
+  });
+  const baseSection = section(1);
+  const invalidDemotion = editor({
+    sections: [section(1, {
+      article_group_key: 'other-group',
+      source_candidate_hash: '',
+      sources: [{ title: 'Other source', url: 'https://example.com/other' }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [{ title: 'Other source', url: 'https://example.com/other', source_role: 'primary' }]
+      }
+    })],
+    explicitly_demoted_groups: [{
+      article_group_key: 'group-a',
+      demotion_reason: 'Bad demotion reason.',
+      reason_code: 'quality_hard_blocker'
+    }]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(invalidDemotion, DATE, { normalizeSection, reporter }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.group_coverage');
+      assert.deepEqual(error.details.invalid_demotions, [{
+        article_group_key: 'group-a',
+        reason_code: 'quality_hard_blocker'
+      }]);
+      return true;
+    }
+  );
+
+  const invalidHardBlock = editor({
+    sections: [section(1, {
+      article_group_key: 'other-group',
+      source_candidate_hash: '',
+      sources: [{ title: 'Other source', url: 'https://example.com/other' }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [{ title: 'Other source', url: 'https://example.com/other', source_role: 'primary' }]
+      }
+    })],
+    hard_blocked_groups: [{
+      article_group_key: 'group-a',
+      hard_block_reason: 'Bad hard block reason.',
+      reason_code: 'explicit_editor_hold'
+    }]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(invalidHardBlock, DATE, { normalizeSection, reporter }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.group_coverage');
+      assert.deepEqual(error.details.invalid_hard_blocks, [{
+        article_group_key: 'group-a',
+        reason_code: 'explicit_editor_hold'
+      }]);
+      return true;
+    }
+  );
+});
+
 test('blocked_context_candidates are validated when related context is empty', () => {
   const blockedUrl = 'https://android-developers.googleblog.com/2026/05/roundup.html';
   const reporter = reporterForGroupTests({

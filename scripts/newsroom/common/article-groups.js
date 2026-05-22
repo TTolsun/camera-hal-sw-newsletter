@@ -279,9 +279,14 @@ function explicitHardBlockedGroups(editor = {}) {
 
 function groupCoverageSummary({ selectedGroupKeys = [], renderedGroupKeys = [], demotedGroups = [], hardBlockedGroups = [] } = {}) {
   const selected = new Set(ensureArray(selectedGroupKeys).filter(Boolean));
-  const rendered = new Set(ensureArray(renderedGroupKeys).filter(Boolean));
+  const renderedList = ensureArray(renderedGroupKeys).filter(Boolean);
+  const rendered = new Set(renderedList);
   const demoted = new Set(ensureArray(demotedGroups).map(item => text(item.article_group_key || item)).filter(Boolean));
   const hardBlocked = new Set(ensureArray(hardBlockedGroups).map(item => text(item.article_group_key || item)).filter(Boolean));
+  const renderedCounts = renderedList.reduce((counts, key) => counts.set(key, (counts.get(key) || 0) + 1), new Map());
+  const duplicateRendered = [...renderedCounts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([key]) => key);
   const missing = [...selected].filter(key => !rendered.has(key) && !demoted.has(key) && !hardBlocked.has(key));
   const overlap = [...rendered].filter(key => demoted.has(key));
   const hardBlockedRenderedOverlap = [...rendered].filter(key => hardBlocked.has(key));
@@ -299,6 +304,7 @@ function groupCoverageSummary({ selectedGroupKeys = [], renderedGroupKeys = [], 
     hard_blocked_group_count: hardBlocked.size,
     selected_representative_group_keys: [...selected],
     rendered_group_keys: [...rendered],
+    duplicate_rendered_group_keys: duplicateRendered,
     explicitly_demoted_group_keys: [...demoted],
     hard_blocked_group_keys: [...hardBlocked],
     missing_group_keys: missing,
@@ -311,6 +317,7 @@ function groupCoverageSummary({ selectedGroupKeys = [], renderedGroupKeys = [], 
       overlap.length === 0 &&
       hardBlockedRenderedOverlap.length === 0 &&
       hardBlockedDemotedOverlap.length === 0 &&
+      duplicateRendered.length === 0 &&
       demotionMissingReason.length === 0 &&
       hardBlockedMissingReason.length === 0 &&
       selected.size === rendered.size + demoted.size + hardBlocked.size

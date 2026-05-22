@@ -83,6 +83,14 @@ test('group coverage summary reports missing, overlap, and demotion reason issue
   assert.equal(overlap.ok, false);
   assert.deepEqual(overlap.overlapping_group_keys, ['group-a']);
 
+  const duplicateRendered = groupCoverageSummary({
+    selectedGroupKeys: ['group-a'],
+    renderedGroupKeys: ['group-a', 'group-a'],
+    demotedGroups: []
+  });
+  assert.equal(duplicateRendered.ok, false);
+  assert.deepEqual(duplicateRendered.duplicate_rendered_group_keys, ['group-a']);
+
   const demotionWithoutReason = groupCoverageSummary({
     selectedGroupKeys: ['group-a'],
     renderedGroupKeys: [],

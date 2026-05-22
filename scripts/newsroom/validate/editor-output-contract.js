@@ -38,6 +38,7 @@ const {
   explicitHardBlockedGroups,
   FORBIDDEN_SOURCE_READY_NATIVE_DEMOTION_REASONS,
   groupCoverageSummary,
+  HARD_BLOCK_REASON_CODES,
   isNativeToolingWorkflow,
   normalizeUrl: normalizeGroupUrl
 } = require('../common/article-groups');
@@ -500,6 +501,30 @@ function validateNativeToolingDemotions(selectedCandidates = [], demotedGroups =
   }
 }
 
+function validateGroupStateReasonCodes(demotedGroups = [], hardBlockedGroups = []) {
+  const invalidDemotions = ensureArray(demotedGroups)
+    .filter(item => !EXPLICIT_DEMOTION_REASON_CODES.includes(text(item.reason_code)))
+    .map(item => ({
+      article_group_key: text(item.article_group_key),
+      reason_code: text(item.reason_code)
+    }));
+  const invalidHardBlocks = ensureArray(hardBlockedGroups)
+    .filter(item => !HARD_BLOCK_REASON_CODES.includes(text(item.reason_code)))
+    .map(item => ({
+      article_group_key: text(item.article_group_key),
+      reason_code: text(item.reason_code)
+    }));
+  if (invalidDemotions.length > 0 || invalidHardBlocks.length > 0) {
+    throw semanticError('Editor output used an invalid group state reason code.', {
+      field: 'sections.group_coverage',
+      invalid_demotions: invalidDemotions,
+      invalid_hard_blocks: invalidHardBlocks,
+      allowed_demotion_reason_codes: EXPLICIT_DEMOTION_REASON_CODES,
+      allowed_hard_block_reason_codes: HARD_BLOCK_REASON_CODES
+    });
+  }
+}
+
 function sectionGroupKey(section = {}, candidate = null) {
   return text(section.article_group_key || section.articleGroupKey) ||
     (candidate ? candidateGroupKey(candidate) : '');
@@ -510,9 +535,9 @@ function validateSelectedGroupCoverage(value, reporter = {}) {
   if (selectedGroupKeys.length === 0) return null;
   const selectedCandidates = selectedReporterCandidates(reporter);
   const candidateIndex = buildCandidateIndex(reporter);
-  const renderedGroupKeys = [...new Set(ensureArray(value.sections)
+  const renderedGroupKeys = ensureArray(value.sections)
     .map(section => sectionGroupKey(section, candidateForSection(section, candidateIndex)))
-    .filter(Boolean))];
+    .filter(Boolean);
   const demotedGroups = explicitDemotedGroups(value);
   const hardBlockedGroups = [
     ...hardBlockedGroupsFromSelected(selectedCandidates),
@@ -520,6 +545,7 @@ function validateSelectedGroupCoverage(value, reporter = {}) {
   ];
   const hardBlockedKeys = new Set(hardBlockedGroups.map(item => text(item.article_group_key)).filter(Boolean));
   const effectiveDemotedGroups = demotedGroups.filter(item => !hardBlockedKeys.has(text(item.article_group_key)));
+  validateGroupStateReasonCodes(effectiveDemotedGroups, hardBlockedGroups);
   validateNativeToolingDemotions(selectedCandidates, effectiveDemotedGroups);
   const coverage = groupCoverageSummary({
     selectedGroupKeys,
