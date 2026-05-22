@@ -398,7 +398,8 @@
           "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
           "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
         ]
-      }
+      },
+      "actionability_upgrade_evidence": null
     }
   ],
   "action_items": [

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T16:27:47.193Z",
+  "generated_at": "2026-05-22T03:58:54.648Z",
   "status": "PASS",
   "input_completeness": "complete",
   "input_statuses": {
@@ -141,13 +141,6 @@
     }
   ],
   "selection_shortage_hint_details": [
-    {
-      "bucket": "direct_aosp_camera",
-      "severity": "medium",
-      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
-      "affected_sources": [],
-      "recommended_fix": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
-    },
     {
       "bucket": "unknown",
       "severity": "medium",

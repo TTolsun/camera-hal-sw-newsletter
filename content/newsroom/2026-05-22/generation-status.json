@@ -2,7 +2,7 @@
   "date": "2026-05-22",
   "status": "NEEDS_FIX",
   "failure_stage": "editor attempt 1/2",
-  "failure_reason": "Editor output failed claim binding validation.",
+  "failure_reason": "Editor output failed article section contract validation.",
   "fact_check_status": "PASS",
   "must_fix_count": 0,
   "quality_status": "PASS",
@@ -11,13 +11,13 @@
   "quality_threshold": 85,
   "quality_deduction_count": 0,
   "quota_error_count": 0,
-  "invalid_json_count": 0,
+  "invalid_json_count": 1,
   "model_usage": {
     "reporter attempt 1/2": {
       "gemini-2.5-flash": {
-        "requests": 1,
+        "requests": 2,
         "successes": 1,
-        "invalid_json": 0,
+        "invalid_json": 1,
         "quota_errors": 0,
         "api_errors": 0
       }
@@ -107,144 +107,133 @@
   "candidate_input": {
     "mode": "artifact",
     "candidate_artifact": "content/collected-news/2026-05-22/merged-candidates.json",
-    "candidate_artifact_hash": "695438da9ede69f922d8facc2f1cfe1623deaa18e6d77640651029a8820ffb7c",
+    "candidate_artifact_hash": "be7f408f46ad2dd51345ccb0b74d0b5ec4123816d5f8c862a8f90e04e45cee36",
     "manifest": "content/collected-news/2026-05-22/merged-candidate-manifest.json",
     "manifest_type": "merged_candidate",
     "manifest_status": "validated",
     "llm_used": true,
     "merge_mode": "gemini_source_discovery",
-    "candidate_count": 47
+    "candidate_count": 66
   },
   "run_context": {
-    "github_run_id": "26238927955",
-    "github_sha": "2355b37c6e611c4f15cc8b03c7995546487b6985",
+    "github_run_id": "26267448363",
+    "github_sha": "1b5110203b8da3f202e7f477b5662360a26c8dfb",
     "github_ref": "refs/heads/main"
   },
   "raw_artifact_validation_error": null,
   "editor_semantic_validation": {
     "name": "EditorSemanticValidationError",
-    "message": "Editor output failed claim binding validation.",
+    "message": "Editor output failed article section contract validation.",
     "details": {
-      "field": "sections.claims",
+      "field": "sections.article_sections",
+      "expectedKeys": [
+        "verified_facts",
+        "background_context",
+        "hal_driver_impact",
+        "action_items",
+        "team_share_points"
+      ],
+      "allowedKeys": [
+        "verified_facts",
+        "background_context",
+        "hal_driver_impact",
+        "action_items",
+        "team_share_points",
+        "known_limitations",
+        "watch_items",
+        "do_not_claim"
+      ],
       "actualCount": 1,
       "sectionCount": 1,
       "issues": [
         {
           "index": 1,
-          "headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
-          "status": "needs_fix",
-          "issues": [
-            {
-              "reason_code": "unknown_evidence_id",
-              "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
-            },
-            {
-              "reason_code": "unknown_evidence_id",
-              "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
-            },
-            {
-              "reason_code": "unknown_evidence_id",
-              "message": "Claim references unresolved evidence_id: compose_adaptive_ui_io26."
-            }
-          ],
-          "uncovered_facts": []
+          "headline": "Google I/O 2026: Jetpack Compose 기반 멀티 디바이스 카메라 UX 최적화와 프레임워크 영향",
+          "type": "missing_article_sections",
+          "keys": [
+            "verified_facts",
+            "background_context",
+            "hal_driver_impact",
+            "action_items",
+            "team_share_points"
+          ]
         }
       ]
     },
-    "field": "sections.claims",
+    "field": "sections.article_sections",
     "stage": "editor attempt 1/2",
     "attempt": 1,
     "initial": {
       "name": "EditorSemanticValidationError",
-      "message": "Editor output failed claim binding validation.",
+      "message": "Editor output failed article section contract validation.",
       "details": {
-        "field": "sections.claims",
+        "field": "sections.article_sections",
+        "expectedKeys": [
+          "verified_facts",
+          "background_context",
+          "hal_driver_impact",
+          "action_items",
+          "team_share_points"
+        ],
+        "allowedKeys": [
+          "verified_facts",
+          "background_context",
+          "hal_driver_impact",
+          "action_items",
+          "team_share_points",
+          "known_limitations",
+          "watch_items",
+          "do_not_claim"
+        ],
         "actualCount": 1,
         "sectionCount": 1,
         "issues": [
           {
             "index": 1,
-            "headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
-            "status": "needs_fix",
-            "issues": [
-              {
-                "reason_code": "missing_matching_fact_claim",
-                "message": "Factual field is not covered by a claim_type=fact claim: article_sections.verified_facts[0]."
-              },
-              {
-                "reason_code": "missing_matching_fact_claim",
-                "message": "Factual field is not covered by a claim_type=fact claim: article_sections.verified_facts[1]."
-              },
-              {
-                "reason_code": "missing_matching_fact_claim",
-                "message": "Factual field is not covered by a claim_type=fact claim: confirmed_facts[0]."
-              },
-              {
-                "reason_code": "missing_matching_fact_claim",
-                "message": "Factual field is not covered by a claim_type=fact claim: confirmed_facts[1]."
-              },
-              {
-                "reason_code": "unknown_evidence_id",
-                "message": "Claim references unresolved evidence_id: api_or_component: CameraX / Android camera APIs."
-              },
-              {
-                "reason_code": "unknown_evidence_id",
-                "message": "Claim references unresolved evidence_id: behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...."
-              }
-            ],
-            "uncovered_facts": [
-              {
-                "article_index": 1,
-                "article_headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
-                "field": "article_sections.verified_facts[0]",
-                "text": "발표 날짜: 2026년 5월 19일 (Google I/O 2026)",
-                "reason_code": "missing_matching_fact_claim"
-              },
-              {
-                "article_index": 1,
-                "article_headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
-                "field": "article_sections.verified_facts[1]",
-                "text": "핵심 컴포넌트: Jetpack Compose, Jetpack Navigation 3, CameraX / Android camera APIs",
-                "reason_code": "missing_matching_fact_claim"
-              },
-              {
-                "article_index": 1,
-                "article_headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
-                "field": "confirmed_facts[0]",
-                "text": "발표 날짜: 2026년 5월 19일 (Google I/O 2026)",
-                "reason_code": "missing_matching_fact_claim"
-              },
-              {
-                "article_index": 1,
-                "article_headline": "Jetpack Compose 기반 적응형 UI 전환과 Jetpack Navigation 3 릴리스가 카메라 미리보기 UX에 미치는 영향",
-                "field": "confirmed_facts[1]",
-                "text": "핵심 컴포넌트: Jetpack Compose, Jetpack Navigation 3, CameraX / Android camera APIs",
-                "reason_code": "missing_matching_fact_claim"
-              }
+            "headline": "Google I/O 2026: Jetpack Compose 기반 멀티 디바이스 카메라 UX 최적화와 프레임워크 영향",
+            "type": "missing_article_sections",
+            "keys": [
+              "verified_facts",
+              "background_context",
+              "hal_driver_impact",
+              "action_items",
+              "team_share_points"
             ]
           }
         ]
       },
-      "field": "sections.claims",
+      "field": "sections.article_sections",
       "stage": "editor attempt 1/2",
       "attempt": 1
     }
   },
   "repairAttempted": true,
   "repairSucceeded": false,
-  "input_candidate_count": 47,
-  "eligible_candidate_count": 2,
+  "input_candidate_count": 66,
+  "eligible_candidate_count": 3,
   "selected_article_count": 1,
   "deterministic_selected_count": 2,
   "rendered_main_article_count": 1,
-  "reserve_candidate_count": 0,
+  "selected_group_count": 2,
+  "rendered_group_count": null,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://goo.gle/adaptiveapps_io26",
+    "android_native_tooling_workflow"
+  ],
+  "rendered_group_keys": [],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "group_coverage_ok": null,
+  "reserve_candidate_count": 1,
   "demoted_article_count": 0,
   "locked_article_count": null,
-  "fallback_topic_count": 0,
-  "reporter_candidate_count": 2,
+  "fallback_topic_count": 1,
+  "reporter_candidate_count": 3,
   "reporter_selected_count": 0,
-  "final_input_candidate_count": 47,
-  "final_eligible_candidate_count": 2,
+  "final_input_candidate_count": 66,
+  "final_eligible_candidate_count": 3,
   "final_selected_article_count": 1,
   "reporter_selected_but_final_excluded_count": 0,
   "ai_selected_article_count": 2,
@@ -260,71 +249,71 @@
   "min_non_fallback_publish_ready_articles": 0,
   "composition_mode": "NEEDS_FIX",
   "selection_composition_mode": "NEEDS_FIX",
-  "composition_reason": "Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.",
+  "composition_reason": "Article Composition Policy passed with 1 Primary Camera Stack article(s) and 1 supporting main article(s).",
   "composition_summary": {
     "selected_article_count": 2,
     "bucket_counts": {
       "direct_aosp_camera": 0,
       "camera_driver_image_pipeline": 0,
-      "android_platform_camera_adjacent": 2,
+      "android_platform_camera_adjacent": 1,
       "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 0,
+      "cpp_ai_tooling_fallback": 1,
       "generic_tech_watchlist": 0
     },
     "direct_aosp_camera_count": 0,
     "camera_driver_image_pipeline_count": 0,
-    "android_platform_camera_adjacent_count": 2,
+    "android_platform_camera_adjacent_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
     "generic_tech_watchlist_count": 0,
-    "primary_camera_stack_topic_count": 2,
-    "supporting_main_article_count": 0,
+    "primary_camera_stack_topic_count": 1,
+    "supporting_main_article_count": 1,
     "forbidden_main_article_count": 0,
-    "non_fallback_reviewable_article_count": 2,
-    "fallback_topic_count": 0
+    "non_fallback_reviewable_article_count": 1,
+    "fallback_topic_count": 1
   },
   "eligible_composition_summary": {
-    "selected_article_count": 2,
+    "selected_article_count": 3,
     "bucket_counts": {
-      "direct_aosp_camera": 0,
+      "direct_aosp_camera": 1,
       "camera_driver_image_pipeline": 0,
-      "android_platform_camera_adjacent": 2,
+      "android_platform_camera_adjacent": 1,
       "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 0,
+      "cpp_ai_tooling_fallback": 1,
       "generic_tech_watchlist": 0
     },
-    "direct_aosp_camera_count": 0,
+    "direct_aosp_camera_count": 1,
     "camera_driver_image_pipeline_count": 0,
-    "android_platform_camera_adjacent_count": 2,
+    "android_platform_camera_adjacent_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_topic_count": 2,
-    "supporting_main_article_count": 0,
+    "supporting_main_article_count": 1,
     "forbidden_main_article_count": 0,
     "non_fallback_reviewable_article_count": 2,
-    "fallback_topic_count": 0
+    "fallback_topic_count": 1
   },
   "candidate_pool_preflight_passed": true,
   "candidate_shortage_reviewable": false,
   "candidate_shortage_summary": {
-    "publishable_candidate_count": 2,
+    "publishable_candidate_count": 3,
     "required_publishable_candidate_count": 1,
-    "reserve_candidate_count": 0,
+    "reserve_candidate_count": 1,
     "required_reserve_candidate_count": 0,
     "primary_camera_stack_candidate_count": 2,
     "required_primary_camera_stack_candidate_count": 0,
     "camera_stack_candidate_count": 2,
     "required_camera_stack_candidate_count": 0,
-    "direct_camera_or_driver_candidate_count": 0,
-    "camera_adjacent_candidate_count": 2,
-    "supporting_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 1,
+    "camera_adjacent_candidate_count": 1,
+    "supporting_candidate_count": 1,
     "selected_article_count": 2,
-    "selected_primary_camera_stack_count": 2
+    "selected_primary_camera_stack_count": 1
   },
   "shortage_reason_codes": [],
   "publish_gate_reason_codes": [],
@@ -340,11 +329,6 @@
   },
   "source_parser_hints": [
     {
-      "code": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
-      "source_id": "unknown",
-      "reason": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
-    },
-    {
       "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
       "source_id": "unknown",
       "reason": "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence."
@@ -356,61 +340,60 @@
     }
   ],
   "editor_review_required": true,
-  "non_fallback_reviewable_article_count": 2,
+  "non_fallback_reviewable_article_count": 1,
   "eligible_non_fallback_reviewable_article_count": 2,
-  "primary_camera_stack_topic_count": 2,
-  "supporting_main_article_count": 0,
+  "primary_camera_stack_topic_count": 1,
+  "supporting_main_article_count": 1,
   "forbidden_main_article_count": 0,
   "direct_aosp_camera_count": 0,
   "camera_driver_image_pipeline_count": 0,
-  "android_platform_camera_adjacent_count": 2,
+  "android_platform_camera_adjacent_count": 1,
   "android_multimedia_camera_output_count": 0,
   "soc_platform_signal_count": 0,
-  "cpp_ai_tooling_fallback_count": 0,
+  "cpp_ai_tooling_fallback_count": 1,
   "generic_tech_watchlist_count": 0,
   "selection_warnings": [],
   "selection_errors": [],
   "selection_shortage_hints": [
-    "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
     "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
     "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
   ],
   "exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
-      "count": 45
+      "count": 61
     },
     {
       "reason": "main_eligible=false",
-      "count": 45
+      "count": 61
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 45
+      "count": 61
     },
     {
       "reason": "reference_only=true",
-      "count": 43
+      "count": 56
     },
     {
       "reason": "briefing_only=true",
-      "count": 35
+      "count": 52
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 35
+      "count": 52
     },
     {
       "reason": "missing dated evidence",
-      "count": 13
-    },
-    {
-      "reason": "finalSelectionEligibility=exclude",
-      "count": 10
+      "count": 32
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 10
+      "count": 28
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 9
     },
     {
       "reason": "watch page without dated evidence",
@@ -420,39 +403,39 @@
   "final_exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
-      "count": 45
+      "count": 61
     },
     {
       "reason": "main_eligible=false",
-      "count": 45
+      "count": 61
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 45
+      "count": 61
     },
     {
       "reason": "reference_only=true",
-      "count": 43
+      "count": 56
     },
     {
       "reason": "briefing_only=true",
-      "count": 35
+      "count": 52
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 35
+      "count": 52
     },
     {
       "reason": "missing dated evidence",
-      "count": 13
-    },
-    {
-      "reason": "finalSelectionEligibility=exclude",
-      "count": 10
+      "count": 32
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 10
+      "count": 28
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 9
     },
     {
       "reason": "watch page without dated evidence",
@@ -467,8 +450,8 @@
   "fallback_public_issue_demoted_article_count": 0,
   "fallback_public_issue_removed_blockers": false,
   "fallback_public_issue_removed_article_count": 0,
-  "fallback_public_issue_added_article_count": 1,
-  "fallback_public_issue_preserve_article_count": 0,
+  "fallback_public_issue_added_article_count": 0,
+  "fallback_public_issue_preserve_article_count": 1,
   "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
   "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
   "editor_review_reason": "AI 자동 발행 기준을 통과하지 못했으므로 merge 발행 전에 편집자 검토가 필요합니다.",

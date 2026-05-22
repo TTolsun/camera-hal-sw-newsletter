@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-21T16:26:40.472Z",
+  "generated_at": "2026-05-22T03:53:17.497Z",
   "cache_root": "cache/news-summary",
   "totals": {
-    "candidate_count": 2,
+    "candidate_count": 3,
     "hit_count": 0,
-    "miss_count": 2,
+    "miss_count": 3,
     "by_url_hit_count": 0,
     "by_content_hit_count": 0,
     "legacy_hit_count": 0
@@ -14,7 +14,7 @@
   "reasons": [
     {
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "count": 2
+      "count": 3
     }
   ],
   "entries": [
@@ -35,15 +35,31 @@
       "cache_record_path": ""
     },
     {
-      "title": "Start building today - Build native Android apps in Google AI Studio",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "title": "Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
       "cache_key": {
         "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "url_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
         "published_date": "Tue, 19 May 2026 12:45:00 +0000",
-        "content_hash": "5eb4c2b4421343314615b8f7d3b24f2a37bb69f5e941c5ae85481f546f78b46b"
+        "content_hash": "da4ad6a4cf681f0895f77dfefda4bfb4f93ffc3bb3c6dfd4d22eed96b312948f"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "url_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
+        "published_date": "May 06, 2026",
+        "content_hash": "c390be22b0014b248a7f74056e203fe1315966e1bb2051271a493bef61fd6218"
       },
       "hit": false,
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
