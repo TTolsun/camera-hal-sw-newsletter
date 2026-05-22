@@ -26,6 +26,10 @@ const {
   articlePolicy,
   publishReadyCompositionPolicy
 } = require('../../scripts/lib/newsletter-policy');
+const {
+  emptyHeadlineState,
+  headlineSnapshotFromCandidate
+} = require('../../scripts/newsroom/common/homepage-headline');
 const { parseSourceSpecificItems } = require('../../scripts/lib/source-item-parsers');
 const { normalizeCandidate } = require('../../scripts/newsroom/cli/collect-news-candidates');
 const { candidate } = require('../helpers/newsroom-builders');
@@ -362,6 +366,69 @@ test('CameraX release-note body candidate supersedes latest-updates discovery ro
     item.title === discoveryRow.title &&
     item.exclusion_reasons.includes('duplicate CameraX release-note body candidate supersedes discovery row')
   ));
+});
+
+test('retained homepage headline is revalidated before injection into final selection', () => {
+  const retained = headlineSnapshotFromCandidate(policyPrimaryCandidate(90, {
+    title: 'Retained Camera HAL metadata headline',
+    url: 'https://source.android.com/docs/camera/retained-headline',
+    source: 'source.android.com',
+    deterministic_score: 88,
+    published_date: '2026-05-20',
+    hasDatedEvidence: true
+  }), {
+    date: '2026-05-20',
+    scoredAt: '2026-05-20'
+  });
+  const report = buildShortlistReport('2026-05-21', [
+    policyPrimaryCandidate(1, {
+      url: 'https://source.android.com/docs/camera/current-candidate',
+      source: 'source.android.com',
+      deterministic_score: 70
+    })
+  ], {
+    homepageHeadlineState: {
+      ...emptyHeadlineState({ date: '2026-05-20' }),
+      current_headline: retained
+    }
+  });
+
+  assert.equal(report.headline_decision.reason, 'retained_current_above_margin');
+  assert.equal(report.headline_latest_inclusion.injected_from_snapshot, true);
+  assert.ok(report.selected_articles.some(article => article.injected_from_headline_snapshot === true));
+  assert.ok(report.selected_articles.every(article =>
+    !(article.headline_latest_inclusion_mode === 'selected_normally' && article.injected_from_headline_snapshot === true)
+  ));
+});
+
+test('headline injection collapses duplicates by article identity and keeps max article count', () => {
+  const retained = headlineSnapshotFromCandidate(policyPrimaryCandidate(91, {
+    title: 'Retained Camera HAL metadata headline',
+    url: 'https://source.android.com/docs/camera/retained-headline-max',
+    source: 'source.android.com',
+    deterministic_score: 88,
+    published_date: '2026-05-20',
+    hasDatedEvidence: true
+  }), {
+    date: '2026-05-20',
+    scoredAt: '2026-05-20'
+  });
+  const candidates = Array.from({ length: 7 }, (_, index) => policyPrimaryCandidate(index, {
+    url: `https://source.android.com/docs/camera/current-${index}`,
+    source: 'source.android.com',
+    deterministic_score: 65 - index,
+    editorial_priority: index + 1
+  }));
+  const report = buildShortlistReport('2026-05-21', candidates, {
+    homepageHeadlineState: {
+      ...emptyHeadlineState({ date: '2026-05-20' }),
+      current_headline: retained
+    }
+  });
+
+  assert.equal(report.selected_articles.length <= articlePolicy.mainArticleCount.max, true);
+  assert.ok(report.selected_articles.some(article => article.article_identity_key === retained.article_identity_key));
+  assert.equal(new Set(report.selected_articles.map(article => article.article_identity_key)).size, report.selected_articles.length);
 });
 
 test('generic CameraX metadata fallback cannot become a main candidate without source_extraction bullet', () => {

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-05-23",
+    "backfill_included": false
+  },
+  "articles": []
+}

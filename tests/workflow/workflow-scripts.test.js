@@ -17,6 +17,7 @@ const {
 const {
   articlePolicy,
   candidatePoolPreflightPolicy,
+  headlinePolicy,
   publishReadyCompositionPolicy,
   qualityGatePolicy,
   selectionWindowPolicy,
@@ -1448,6 +1449,7 @@ test('newsletter policy validates candidate pool preflight thresholds', () => {
       cameraStackCandidateMin: 5
     },
     selectionWindowPolicy,
+    headlinePolicy,
     qualityGatePolicy: {
       threshold: qualityGatePolicy.threshold,
       hardFailConditions: qualityGatePolicy.hardFailConditions
@@ -1486,6 +1488,7 @@ test('newsletter policy validates selection window contract without enforcing se
       fallbackSelectionDays: 21,
       referenceContextDays: 90
     },
+    headlinePolicy,
     qualityGatePolicy: {
       threshold: qualityGatePolicy.threshold,
       hardFailConditions: qualityGatePolicy.hardFailConditions
@@ -1564,6 +1567,7 @@ test('newsletter policy validates publish-ready composition contract separately 
       cameraStackCandidateMin: 2
     },
     selectionWindowPolicy,
+    headlinePolicy,
     qualityGatePolicy: {
       threshold: qualityGatePolicy.threshold,
       hardFailConditions: qualityGatePolicy.hardFailConditions
@@ -5943,11 +5947,14 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(snapshotStep, /copy_tree_if_present "data\/source-snapshots"/);
   assert.match(snapshotStep, /copy_if_present "newsletters\/\$\{DATE\}\/newsletter\.md"/);
   assert.match(snapshotStep, /copy_if_present "newsletters\/\$\{DATE\}\/index\.html"/);
+  assert.match(snapshotStep, /copy_if_present "data\/homepage-headline\.json"/);
+  assert.match(snapshotStep, /copy_if_present "data\/article-exposure-history\.json"/);
   assert.match(preparePrBodyStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /base: main/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
+  assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_FIGMA_URL: https:\/\/www\.figma\.com\/design\/EWJMa8vjfZLjdn9a7s3Kzs/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);

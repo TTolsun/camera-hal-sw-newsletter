@@ -2214,7 +2214,9 @@ function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), chang
       filePath.startsWith(`content/collected-news/${date}/`) ||
       filePath.startsWith(`content/newsroom/${date}/`) ||
       filePath.startsWith(`newsletters/${date}/`) ||
-      filePath === 'data/newsletters.json'
+      filePath === 'data/newsletters.json' ||
+      filePath === 'data/homepage-headline.json' ||
+      filePath === 'data/article-exposure-history.json'
     ))].sort();
   const lines = [
     '## 생성 산출물',
@@ -2222,6 +2224,56 @@ function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), chang
     ...(changed.length > 0 ? changed.map(filePath => `- ${filePath}`) : ['- none'])
   ];
   return lines.join('\n');
+}
+
+function readSelectionReport(root, date) {
+  if (!date) return null;
+  return readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'selection-report.json'));
+}
+
+function renderHomepageHeadlineDecision(root, date, status = {}) {
+  const selectionReport = readSelectionReport(root, date) || {};
+  const decision = status.headline_decision || selectionReport.headline_decision || {};
+  const inclusion = status.headline_latest_inclusion || selectionReport.headline_latest_inclusion || {};
+  const coverage = status.article_exposure_coverage || selectionReport.article_exposure_coverage || {};
+  return [
+    '## Homepage Headline Decision',
+    '',
+    `- decision: ${valueOrUnknown(decision.reason || decision.decision)}`,
+    `- current_headline_key: ${valueOrUnknown(decision.current_headline_key)}`,
+    `- replacement_headline_key: ${valueOrUnknown(decision.replacement_headline_key)}`,
+    `- previous_stored_current_score: ${valueOrUnknown(decision.previous_stored_current_score)}`,
+    `- runtime_decayed_score: ${valueOrUnknown(decision.runtime_decayed_score)}`,
+    `- last_scored_at: ${valueOrUnknown(decision.last_scored_at)}`,
+    `- scored_at: ${valueOrUnknown(decision.scored_at)}`,
+    `- latest_inclusion_mode: ${valueOrUnknown(inclusion.mode)}`,
+    `- injected_from_snapshot: ${booleanText(inclusion.injected_from_snapshot === true)}`,
+    `- snapshot_revalidated: ${booleanText(inclusion.snapshot_revalidated === true || decision.snapshot_revalidated === true)}`,
+    `- exposure_history_coverage: mode=${valueOrUnknown(coverage.mode)}; coverage_starts_at=${valueOrUnknown(coverage.coverage_starts_at)}; backfill_included=${booleanText(coverage.backfill_included === true)}`,
+    '- Artifacts:',
+    `  - \`data/homepage-headline.json\``,
+    `  - \`data/article-exposure-history.json\``,
+    ''
+  ].join('\n');
+}
+
+function renderHomepageHeadlineDesignReview(status = {}, date = '') {
+  const review = status.homepage_headline_design_review && typeof status.homepage_headline_design_review === 'object'
+    ? status.homepage_headline_design_review
+    : {};
+  const artifactPath = review.artifact_path || review.screenshot_artifact_path || (date
+    ? `content/newsroom/${date}/homepage-headline-design-review.png`
+    : 'content/newsroom/YYYY-MM-DD/homepage-headline-design-review.png');
+  return [
+    '## Homepage Headline Design Review',
+    '',
+    `- Figma URL: ${valueOrUnknown(review.figma_url || review.url || process.env.HOMEPAGE_HEADLINE_FIGMA_URL)}`,
+    `- Artifact path: ${artifactPath}`,
+    `- Desktop coverage: ${valueOrUnknown(review.desktop_coverage || 'covered')}`,
+    `- Mobile coverage: ${valueOrUnknown(review.mobile_coverage || 'covered')}`,
+    `- Implementation deviation: ${valueOrUnknown(review.implementation_deviation || 'none')}`,
+    ''
+  ].join('\n');
 }
 
 function renderPublicNewsletterNotice(status = {}, handoff = null) {
@@ -2410,6 +2462,8 @@ function buildNewsroomPrBody(options = {}) {
     renderSourceChangeEventsSummary(root, date),
     renderEvidencePackSummary(root, date),
     renderCandidateTraceability(root, date),
+    renderHomepageHeadlineDecision(root, date, status),
+    renderHomepageHeadlineDesignReview(status, date),
     renderEditorActionGuidance(status, date),
     renderGeneratedArtifacts(date, status, root, options.changedArtifacts)
   );

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "updated_at": "2026-05-23T00:00:00+09:00",
+  "current_headline": null,
+  "headline_history": [],
+  "policy": {
+    "decay_model": "linear",
+    "decay_rate_per_day": 2,
+    "replacement_margin": 5,
+    "minimum_headline_score": 40
+  }
+}

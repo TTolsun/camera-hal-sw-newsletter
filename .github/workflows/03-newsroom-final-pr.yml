@@ -277,6 +277,8 @@ jobs:
             copy_if_present "newsletters/${DATE}/newsletter.md"
             copy_if_present "newsletters/${DATE}/index.html"
             copy_if_present "data/newsletters.json"
+            copy_if_present "data/homepage-headline.json"
+            copy_if_present "data/article-exposure-history.json"
             copy_tree_if_present "data/source-snapshots"
           else
             echo "No generated date marker found; skipping date-scoped artifact copy."
@@ -296,6 +298,7 @@ jobs:
         if: steps.meta.outputs.review_pr_ready == 'true'
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
+          HOMEPAGE_HEADLINE_FIGMA_URL: https://www.figma.com/design/EWJMa8vjfZLjdn9a7s3Kzs
         run: |
           mkdir -p .tmp
           node scripts/build-newsroom-pr-body.js > .tmp/newsroom-pr-body.md

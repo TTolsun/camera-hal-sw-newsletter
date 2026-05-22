@@ -101,7 +101,9 @@ function rootIndexHtml(extra = '') {
     '<div id="archive-list"></div>',
     extra,
     '<script>',
+    "async function loadHomepageHeadline() { await fetch('data/homepage-headline.json'); }",
     "async function loadNewsletters() { const latest = {}; const archive = []; await fetch('data/newsletters.json'); }",
+    'loadHomepageHeadline();',
     'loadNewsletters();',
     '</script>',
     '</body></html>'

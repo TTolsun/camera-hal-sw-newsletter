@@ -209,6 +209,9 @@ function normalizeShortlistReport(shortlistReport, reporter = null) {
     selection_composition_mode: shortlistReport?.selection_composition_mode || shortlistReport?.composition_mode || null,
     composition_reason: shortlistReport?.composition_reason || '',
     composition_summary: shortlistReport?.composition_summary || {},
+    headline_decision: shortlistReport?.headline_decision || null,
+    headline_latest_inclusion: shortlistReport?.headline_latest_inclusion || null,
+    article_exposure_coverage: shortlistReport?.article_exposure_coverage || null,
     editor_review_required: shortlistReport?.editor_review_required === true,
     reporter_candidate_count: reporterCandidateCount,
     reporter_selected_count: reporterSelectedCount,
@@ -331,6 +334,8 @@ function formatCount(value) {
 
 function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const composition = diagnostics.composition_summary || {};
+  const headline = diagnostics.headline_decision || {};
+  const headlineInclusion = diagnostics.headline_latest_inclusion || {};
   const hints = ensureArray(diagnostics.selection_shortage_hints)
     .map(item => `- ${item}`)
     .join('\n') || '- none';
@@ -371,6 +376,18 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     '',
     '주요 final exclusion reason:',
     reasons,
+    '',
+    'Homepage Headline:',
+    `- decision: ${formatCount(headline.reason || headline.decision)}`,
+    `- current_headline_key: ${formatCount(headline.current_headline_key)}`,
+    `- replacement_headline_key: ${formatCount(headline.replacement_headline_key)}`,
+    `- runtime_decayed_score: ${formatCount(headline.runtime_decayed_score)}`,
+    `- previous_stored_current_score: ${formatCount(headline.previous_stored_current_score)}`,
+    `- last_scored_at: ${formatCount(headline.last_scored_at)}`,
+    `- scored_at: ${formatCount(headline.scored_at)}`,
+    `- included_as_latest: ${headlineInclusion.included === true ? 'true' : 'false'}`,
+    `- latest_inclusion_mode: ${formatCount(headlineInclusion.mode)}`,
+    `- injected_from_snapshot: ${headlineInclusion.injected_from_snapshot === true ? 'true' : 'false'}`,
     '',
     diagnostics.note || REPORTER_SELECTION_NOTE
   ].join('\n');

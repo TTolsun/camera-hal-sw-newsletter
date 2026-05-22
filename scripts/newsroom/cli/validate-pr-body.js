@@ -593,6 +593,38 @@ function validateEvidencePackSections(text, sections, parsed, errors) {
   }
 }
 
+function validateHomepageHeadlineDesignReview(text, sections, errors, options = {}) {
+  const heading = 'Homepage Headline Design Review';
+  const count = exactHeadingCount(text, 2, heading);
+  if (count === 0) {
+    if (options.required === true) {
+      errors.push(`PR body must contain "## ${heading}".`);
+    }
+    return;
+  }
+  if (count !== 1) {
+    errors.push(`PR body must contain at most one "## ${heading}" heading, found ${count}.`);
+    return;
+  }
+  const section = sectionByHeading(sections, [heading]);
+  if (!section) {
+    errors.push('Homepage Headline Design Review section body is missing.');
+    return;
+  }
+  if (!/(Figma URL|Artifact path):\s*(?:https:\/\/(?:www\.)?figma\.com\/|content\/newsroom\/|docs\/design\/|[^\n]+\.(?:png|jpg|jpeg|webp))/i.test(section)) {
+    errors.push('Homepage Headline Design Review must include a Figma URL or screenshot artifact path string.');
+  }
+  if (!/Desktop coverage:\s*\S+/i.test(section)) {
+    errors.push('Homepage Headline Design Review must include desktop coverage marker.');
+  }
+  if (!/Mobile coverage:\s*\S+/i.test(section)) {
+    errors.push('Homepage Headline Design Review must include mobile coverage marker.');
+  }
+  if (!/Implementation deviation:\s*\S+/i.test(section)) {
+    errors.push('Homepage Headline Design Review must include implementation deviation field.');
+  }
+}
+
 function parseStatusSection(section) {
   section = toText(section);
   return {
@@ -698,6 +730,9 @@ function validatePrBodyText(text, options = {}) {
     ...options,
     allowMissingReporterCandidates: candidateShortage
   }, errors);
+  validateHomepageHeadlineDesignReview(text, sections, errors, {
+    required: options.requireHomepageHeadlineDesignReview === true
+  });
   validateEvidencePackSections(text, sections, parsed, errors);
   if (!diagnosticsOnly && /생성하지 않은 public 산출물|not generated|not updated/.test(text)) {
     errors.push('Newsletter PR body must not describe public newsletter files as not generated or not updated.');
@@ -738,7 +773,10 @@ function validatePrBodyText(text, options = {}) {
 
 function validatePrBodyFile(filePath, options = {}) {
   const text = fs.readFileSync(filePath, 'utf8');
-  const result = validatePrBodyText(text, options);
+  const result = validatePrBodyText(text, {
+    requireHomepageHeadlineDesignReview: true,
+    ...options
+  });
   const resolved = resolvePublishStatus(options);
   if (resolved.consistencyErrors.length > 0) {
     result.errors.push(`Artifact consistency errors: ${resolved.consistencyErrors.join('; ')}`);
