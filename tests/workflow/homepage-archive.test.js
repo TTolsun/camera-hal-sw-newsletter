@@ -235,14 +235,13 @@ test('homepage headline falls back to external source CTA when no newsletter URL
       summary: 'Camera HAL summary',
       source_url: 'https://example.com/source',
       selected_at: '2026-05-23',
-      snapshot: {
-        source_name: 'Example Source'
-      }
+      snapshot: {}
     },
     headline_history: []
   });
 
   assert.equal(elements.headline.hidden, false);
+  assert.match(elements['headline-card'].innerHTML, /출처/);
   assert.match(elements['headline-card'].innerHTML, /href="https:\/\/example\.com\/source" rel="noopener"/);
   assert.match(elements['headline-card'].innerHTML, /원문 보기/);
 });

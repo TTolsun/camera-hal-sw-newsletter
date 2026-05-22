@@ -425,15 +425,30 @@ function validateHomepageHeadlineData() {
   }
   if (headline.newsletter_article_url) {
     const [newsletterArticleRelPath, articleAnchor = ''] = String(headline.newsletter_article_url).split('#');
-    const newsletterArticlePath = repoPath(root, newsletterArticleRelPath);
-    if (!newsletterArticlePath) {
-      fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url escapes repository.`);
-    } else if (articleAnchor) {
-      const html = read(newsletterArticlePath);
-      const escapedAnchor = articleAnchor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      if (!new RegExp(`\\bid=["']${escapedAnchor}["']`).test(html)) {
-        fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url anchor is missing from ${newsletterArticleRelPath}.`);
+    if (!newsletterArticleRelPath) {
+      fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url must include a repository-relative HTML path before #anchor.`);
+    } else {
+      const newsletterArticlePath = repoPath(root, newsletterArticleRelPath);
+      if (!newsletterArticlePath) {
+        fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url escapes repository.`);
+      } else if (articleAnchor) {
+        const html = read(newsletterArticlePath);
+        const escapedAnchor = articleAnchor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        if (!new RegExp(`\\bid=["']${escapedAnchor}["']`).test(html)) {
+          fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url anchor is missing from ${newsletterArticleRelPath}.`);
+        }
       }
+    }
+  }
+  if (headline.image_url) {
+    const imageUrl = String(headline.image_url || '').trim();
+    const isHttps = /^https:\/\//i.test(imageUrl);
+    const imagePath = isHttps ? '' : repoPath(root, imageUrl);
+    if (!isHttps && (!imagePath || !fs.existsSync(imagePath))) {
+      fail(`${HEADLINE_STATE_REL_PATH}: current_headline.image_url must be https URL or existing repository-relative path.`);
+    }
+    if (!String(headline.image_alt || '').trim()) {
+      fail(`${HEADLINE_STATE_REL_PATH}: current_headline.image_alt is required when image_url is present.`);
     }
   }
   if (!/^https?:\/\//i.test(String(headline.source_url || ''))) {
