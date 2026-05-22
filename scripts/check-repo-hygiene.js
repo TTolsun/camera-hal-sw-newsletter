@@ -44,7 +44,9 @@ function isOfficialDocumentPath(filePath) {
 function isTrackedWorklogDocumentPath(filePath) {
   return filePath.startsWith('docs/plans/') ||
     filePath.startsWith('docs/debug/') ||
-    filePath.startsWith('docs/refactoring/');
+    filePath.startsWith('docs/refactoring/') ||
+    filePath.startsWith('docs/archive/') ||
+    filePath.startsWith('docs/testing/');
 }
 
 function isRootTestFile(filePath) {
@@ -98,7 +100,7 @@ function findRepoHygieneIssues(files, options = {}) {
       issues.push(issue(
         filePath,
         'tracked_worklog_document',
-        'plans, debug baselines, and refactoring worklogs must stay local-only or be integrated into canonical docs'
+        'plans, debug baselines, refactoring worklogs, archive notes, and dated testing inventories must stay local-only or be integrated into current canonical docs'
       ));
     } else if (isOfficialDocumentPath(filePath)) {
       continue;

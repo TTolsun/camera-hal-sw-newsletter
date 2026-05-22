@@ -49,13 +49,16 @@ test('findRepoHygieneIssues reports tracked worklog document folders', () => {
     'docs/plans/root-docs-audit.md',
     'docs/debug/source-url-prompt-quality-rollout.md',
     'docs/refactoring/pr-body-publish-gate-consistency-plan.md',
+    'docs/archive/handoff-2026-05-05.md',
     'docs/testing/test-baseline.md'
   ]);
 
   assert.deepEqual(issues.map(item => item.path), [
     'docs/plans/root-docs-audit.md',
     'docs/debug/source-url-prompt-quality-rollout.md',
-    'docs/refactoring/pr-body-publish-gate-consistency-plan.md'
+    'docs/refactoring/pr-body-publish-gate-consistency-plan.md',
+    'docs/archive/handoff-2026-05-05.md',
+    'docs/testing/test-baseline.md'
   ]);
   assert.equal(issues.every(item => item.type === 'tracked_worklog_document'), true);
 });

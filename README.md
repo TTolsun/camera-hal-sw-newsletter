@@ -16,7 +16,6 @@
 | [docs/operations/README.ko.md](docs/operations/README.ko.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
 | [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
 | [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약을 설명합니다. |
-| [docs/testing/test-baseline.md](docs/testing/test-baseline.md) | 현재 validation baseline을 기록합니다. |
 | [scripts/README.md](scripts/README.md) | scripts wrapper와 실제 newsroom 구현 진입점을 설명합니다. |
 
 뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
@@ -63,7 +62,7 @@ npm.cmd run generate
 | [`.github/`](.github/README.md) | issue/PR template, newsroom PR workflow, validation workflow입니다. |
 | [`config/`](config/README.md) | newsletter policy와 budget config입니다. |
 | [`data/`](data/README.md) | `newsletters.json`과 machine-readable source registry입니다. |
-| [`docs/`](docs/README.md) | 운영 문서, glossary, source guide, testing 기록입니다. |
+| [`docs/`](docs/README.md) | 운영 문서, glossary, source guide입니다. |
 | [`scripts/newsroom/`](scripts/newsroom/README.md) | 실제 collector, generator, renderer, validator 구현입니다. |
 | [`tests/`](tests/README.md) | Node built-in test runner 기반 regression test입니다. |
 | [`content/`](content/README.md) | 수집 후보와 newsroom review artifact입니다. |
