@@ -225,6 +225,22 @@ function articleClaimContractPrompt() {
   ].join('\n');
 }
 
+function factCheckSeverityPrompt() {
+  return [
+    'Fact-check output mapping: 발행하면 안 되는 factual/source 오류는 must_fix[]에 넣으세요. Source coverage, dated evidence, cross-check 부족은 source_gaps[]에도 넣고 source_gap_count는 source_gaps.length와 일치시키세요.',
+    '같은 source 안에서 표현, 구체성, actionability를 보강하면 되는 항목만 recommended_fixes[]에 넣으세요. must_fix[]에는 가능한 한 location, problem, suggestion, source_url을 채우세요.',
+    'source_gaps[]와 recommended_fixes[]에는 headline 또는 source URL을 포함해 repair plan이 해당 section을 찾을 수 있게 하세요.'
+  ].join('\n');
+}
+
+function cameraDeveloperToolingFactCheckPrompt() {
+  return [
+    'C/C++, Android Studio, VS Code, Claude Code, Codex, Roo Code/Rood Code, OpenCode/Open Code 같은 language, IDE, AI Agent, tooling news는 Camera 개발자가 실제로 사용하는 development workflow coverage로 허용될 수 있습니다.',
+    '이런 tooling article을 primary Camera runtime stack article이 아니라는 이유만으로 must_fix[] 또는 source_gaps[]에 넣지 마세요. 제공된 source와 article이 camera driver, Camera HAL/native code, Android camera app, build/test/debug/performance workflow에 연결되면 허용하세요.',
+    '표현 보강만 필요하면 recommended_fixes[]에 넣으세요. Camera 개발자 workflow 연결이 source나 article text에 전혀 없거나 Android HAL toolchain migration처럼 source가 뒷받침하지 않는 주장을 하면 must_fix[]에 넣고, supporting source/cross-check 부족이면 source_gaps[]에도 넣으세요.'
+  ].join('\n');
+}
+
 function writeNewsletterDate(date, rootDir = root) {
   const tmpDir = path.join(rootDir, '.tmp');
   fs.mkdirSync(tmpDir, { recursive: true });
@@ -3038,12 +3054,14 @@ async function main() {
         articleSectionContractPrompt(),
         publicArticleContractPrompt(),
         articleClaimContractPrompt(),
-        'AOSP Camera, camera driver, SoC platform, native development 해석이 부족한 일반 AI/C++/SoC news는 flag하세요.',
-        'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 flag하세요.',
-        'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics를 명명하지 않는 C++ tooling action item은 flag하세요.',
-        '구체적인 Action Item content가 없는 main article은 flag하세요.',
-        'Camera HAL perspective가 약하거나 engineering relevance가 빠진 main article은 flag하세요.',
-        'Editor가 official-source 또는 cross-checked verification을 설명하지 않는 candidate-only 또는 requiresCrossCheck source 사용은 flag하세요.',
+        factCheckSeverityPrompt(),
+        cameraDeveloperToolingFactCheckPrompt(),
+        'AOSP Camera, camera driver, SoC platform, native development 또는 Camera developer workflow 해석이 전혀 없는 일반 AI/C++/SoC news는 must_fix[]에 넣으세요.',
+        'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
+        'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
+        '구체적인 Action Item content가 없는 main article은 같은 source 안에서 실행 가능한 action을 만들 수 있으면 recommended_fixes[]에 넣고, source가 실무 action을 뒷받침하지 못하면 must_fix[]에 넣으세요.',
+        'Camera HAL perspective가 약하거나 engineering relevance가 빠진 main article은 source-backed 보강이 가능하면 recommended_fixes[]에 넣고, source가 Camera developer relevance를 뒷받침하지 못하면 must_fix[] 또는 source_gaps[]에 넣으세요.',
+        'Editor가 official-source 또는 cross-checked verification을 설명하지 않는 candidate-only 또는 requiresCrossCheck source 사용은 must_fix[]와 source_gaps[]에 모두 기록하세요.',
         'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
         'style rewrite는 하지 마세요. factual errors, source problems, editorial-policy violations에만 집중하세요.',
         'schema와 일치하는 JSON만 반환하세요.'
@@ -3195,10 +3213,12 @@ async function main() {
           articleSectionContractPrompt(),
           publicArticleContractPrompt(),
           articleClaimContractPrompt(),
+          factCheckSeverityPrompt(),
+          cameraDeveloperToolingFactCheckPrompt(),
           'main article에서 release date, version/release, API/component 또는 library/artifact, concrete behavior change, expanded editorial-scope relevance가 누락되면 must_fix로 다루세요.',
           '남아 있는 source gap 또는 main article로 사용된 watchlist/reference page는 must_fix로 다루세요.',
-          'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 flag하세요.',
-          'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics를 명명하지 않는 C++ tooling action items는 flag하세요.',
+          'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
+          'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
           'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
           'schema와 일치하는 JSON만 반환하세요.'
         ].join('\n'),
@@ -3328,9 +3348,11 @@ async function main() {
             articleSectionContractPrompt(),
             publicArticleContractPrompt(),
             articleClaimContractPrompt(),
+            factCheckSeverityPrompt(),
+            cameraDeveloperToolingFactCheckPrompt(),
             'Added section이 eligible reporter candidates만 사용하는지, full draft가 Newsletter Policy article composition contract를 만족하는지에 집중하세요.',
-            'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 flag하세요.',
-            'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics를 명명하지 않는 C++ tooling action items는 flag하세요.',
+            'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
+            'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
             'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
             'schema와 일치하는 JSON만 반환하세요.'
           ].join('\n'),

@@ -107,3 +107,23 @@ test('LLM reporter, editor, repair, completion, and fact-check prompts include s
 
   assert.ok(usageCount >= 7);
 });
+
+test('LLM fact-check prompts map findings to schema fields and allow camera developer tooling coverage', () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
+    'utf8'
+  );
+
+  assert.doesNotMatch(source, /flag하세요/);
+  assert.ok((source.match(/factCheckSeverityPrompt\(\),/g) || []).length >= 3);
+  assert.ok((source.match(/cameraDeveloperToolingFactCheckPrompt\(\),/g) || []).length >= 3);
+  assert.match(source, /must_fix\[\]/);
+  assert.match(source, /source_gaps\[\]/);
+  assert.match(source, /recommended_fixes\[\]/);
+  assert.match(source, /Android Studio/);
+  assert.match(source, /VS Code/);
+  assert.match(source, /Claude Code/);
+  assert.match(source, /Codex/);
+  assert.match(source, /Roo Code/);
+  assert.match(source, /OpenCode/);
+});
