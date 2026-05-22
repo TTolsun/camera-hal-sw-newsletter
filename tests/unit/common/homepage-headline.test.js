@@ -6,8 +6,10 @@ const {
   computeHeadlineScore,
   computeKstAgeDays,
   emptyHeadlineState,
+  HEADLINE_STATE_REMEDIATION,
   headlineSnapshotFromCandidate,
   isHeadlineEligible,
+  REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON,
   validateHomepageHeadlineState
 } = require('../../../scripts/newsroom/common/homepage-headline');
 
@@ -150,6 +152,37 @@ test('replacement can use eligible candidate that is not already selected', () =
   assert.ok(result.selected_articles.some(article => article.injected_from_headline_snapshot === true));
 });
 
+test('headline injection records candidate removed by max article count', () => {
+  const selectedArticles = Array.from({ length: 5 }, (_, index) => headlineCandidate({
+    title: `Selected Camera HAL article ${index}`,
+    source_url: `https://source.android.com/docs/camera/selected-${index}`,
+    deterministic_score: 62 - index,
+    editorial_priority: index === 4 ? 99 : index + 1
+  }));
+  const headlineOnly = headlineCandidate({
+    title: 'Highest eligible homepage headline',
+    source_url: 'https://source.android.com/docs/camera/highest-headline-only',
+    deterministic_score: 98,
+    editorial_priority: 1
+  });
+
+  const result = applyHomepageHeadlineSelection({
+    date: '2026-05-23',
+    selectedArticles,
+    eligibleCandidates: [headlineOnly],
+    currentState: emptyHeadlineState({ date: '2026-05-23', policy }),
+    policy
+  });
+
+  assert.equal(result.selected_articles.length, 5);
+  assert.equal(result.headline_decision.reason, 'seeded_from_current_issue');
+  assert.equal(result.headline_latest_inclusion.mode, 'injected_from_headline_snapshot');
+  assert.equal(result.headline_latest_inclusion.removed_due_to_headline_inclusion_count, 1);
+  assert.equal(result.removed_due_to_headline_inclusion.length, 1);
+  assert.equal(result.removed_due_to_headline_inclusion[0].title, 'Selected Camera HAL article 4');
+  assert.equal(result.removed_due_to_headline_inclusion[0].reason, REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON);
+});
+
 test('state validator accepts null headline and rejects missing snapshot evidence', () => {
   assert.equal(validateHomepageHeadlineState(emptyHeadlineState({ policy }), { policy }).ok, true);
   const invalid = {
@@ -160,4 +193,45 @@ test('state validator accepts null headline and rejects missing snapshot evidenc
   };
 
   assert.equal(validateHomepageHeadlineState(invalid, { policy }).ok, false);
+});
+
+test('state validator explains how to refresh stale decayed headline state', () => {
+  const state = {
+    ...emptyHeadlineState({ date: '2026-05-01', policy }),
+    current_headline: {
+      article_identity_key: 'url:https://source.android.com/docs/camera/stale-headline',
+      title: 'Stale Camera HAL headline',
+      summary: 'Stale Camera HAL headline summary.',
+      source_url: 'https://source.android.com/docs/camera/stale-headline',
+      newsletter_date: '2026-05-01',
+      newsletter_url: 'newsletters/2026-05-01/index.html',
+      selected_at: '2026-05-01',
+      base_score: 41,
+      current_score: 41,
+      last_scored_at: '2026-05-01',
+      date_evidence: {
+        date: '2026-05-01',
+        date_field: 'published_date',
+        evidence_level: 'dated_release',
+        publish_ready_date_evidence: true
+      },
+      quality_flags: {
+        source_gap_risk: false,
+        fact_check_must_fix_unresolved: false,
+        stale_claim_hard_failure: false,
+        blocked_source: false
+      },
+      score_breakdown: {},
+      snapshot: {
+        category: 'direct_aosp_camera',
+        source_name: 'source.android.com'
+      }
+    }
+  };
+
+  const result = validateHomepageHeadlineState(state, { policy, scoredAt: '2026-05-23' });
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /headline_score_below_minimum/);
+  assert.match(result.errors.join('\n'), new RegExp(HEADLINE_STATE_REMEDIATION.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 });

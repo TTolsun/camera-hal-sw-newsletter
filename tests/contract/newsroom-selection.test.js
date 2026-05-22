@@ -429,6 +429,11 @@ test('headline injection collapses duplicates by article identity and keeps max 
   assert.equal(report.selected_articles.length <= articlePolicy.mainArticleCount.max, true);
   assert.ok(report.selected_articles.some(article => article.article_identity_key === retained.article_identity_key));
   assert.equal(new Set(report.selected_articles.map(article => article.article_identity_key)).size, report.selected_articles.length);
+  assert.equal(Array.isArray(report.removed_due_to_headline_inclusion), true);
+  assert.equal(
+    report.headline_decision.removed_due_to_headline_inclusion_count,
+    report.removed_due_to_headline_inclusion.length
+  );
 });
 
 test('generic CameraX metadata fallback cannot become a main candidate without source_extraction bullet', () => {

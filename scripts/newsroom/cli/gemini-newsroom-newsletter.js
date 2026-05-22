@@ -551,6 +551,7 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     selection_shortage_hints: ensureArray(report.selection_shortage_hints),
     headline_decision: report.headline_decision || diagnostics.headline_decision || null,
     headline_latest_inclusion: report.headline_latest_inclusion || diagnostics.headline_latest_inclusion || null,
+    removed_due_to_headline_inclusion: ensureArray(report.removed_due_to_headline_inclusion || diagnostics.removed_due_to_headline_inclusion),
     article_exposure_coverage: report.article_exposure_coverage || diagnostics.article_exposure_coverage || null,
     exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
     final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
@@ -2659,6 +2660,7 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
     eligible_composition_summary: selectionDiagnostics.eligible_composition_summary || {},
     headline_decision: selectionDiagnostics.headline_decision || report.headline_decision || null,
     headline_latest_inclusion: selectionDiagnostics.headline_latest_inclusion || report.headline_latest_inclusion || null,
+    removed_due_to_headline_inclusion: ensureArray(selectionDiagnostics.removed_due_to_headline_inclusion || report.removed_due_to_headline_inclusion),
     article_exposure_coverage: selectionDiagnostics.article_exposure_coverage || report.article_exposure_coverage || null,
     candidate_pool_preflight_passed: report.candidate_pool_preflight_passed !== false,
     candidate_shortage_reviewable: report.candidate_shortage_reviewable === true,
@@ -2759,6 +2761,14 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
     `- scored_at: ${selectionReport.headline_decision?.scored_at || 'unknown'}`,
     `- latest_inclusion_mode: ${selectionReport.headline_latest_inclusion?.mode || 'none'}`,
     `- injected_from_snapshot: ${selectionReport.headline_latest_inclusion?.injected_from_snapshot === true}`,
+    `- removed_due_to_headline_inclusion_count: ${selectionReport.removed_due_to_headline_inclusion.length}`,
+    ...(
+      selectionReport.removed_due_to_headline_inclusion.length > 0
+        ? selectionReport.removed_due_to_headline_inclusion.slice(0, 5).map(item =>
+          `  - ${item.title || 'unknown'} (${item.article_identity_key || 'unknown'}): ${item.reason || 'unknown'}`
+        )
+        : []
+    ),
     `- exposure_history_coverage: ${selectionReport.article_exposure_coverage?.mode || 'unknown'} since ${selectionReport.article_exposure_coverage?.coverage_starts_at || 'unknown'}`,
     '',
     '## Source Parser Hints',

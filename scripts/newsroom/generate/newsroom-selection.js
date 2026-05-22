@@ -1648,6 +1648,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     selection_errors: errors,
     headline_decision: headlineSelection.headline_decision,
     headline_latest_inclusion: headlineSelection.headline_latest_inclusion,
+    removed_due_to_headline_inclusion: headlineSelection.removed_due_to_headline_inclusion || [],
     homepage_headline_state: headlineSelection.homepage_headline_state,
     headline_policy: headlinePolicy,
     exclusion_reason_summary: summarizeExclusionReasons(excluded)

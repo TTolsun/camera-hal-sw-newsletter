@@ -22,6 +22,9 @@ const DECISION_REASONS = Object.freeze({
   SEEDED_FROM_CURRENT_ISSUE: 'seeded_from_current_issue',
   NO_ELIGIBLE_CANDIDATE: 'no_eligible_candidate'
 });
+const HEADLINE_STATE_REMEDIATION = 'Run newsletter generation to refresh or clear homepage headline state.';
+const HEADLINE_POLICY_SNAPSHOT_REMEDIATION = 'Re-run generation or update data/homepage-headline.json policy snapshot.';
+const REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON = 'max_article_count_after_headline_injection';
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -305,7 +308,7 @@ function validateCurrentHeadline(headline, { policy = getHeadlinePolicy(), score
   };
 }
 
-function validateHomepageHeadlineState(state, { policy = getHeadlinePolicy(), strict = true } = {}) {
+function validateHomepageHeadlineState(state, { policy = getHeadlinePolicy(), strict = true, scoredAt = todayKstDate() } = {}) {
   const errors = [];
   if (!state || typeof state !== 'object' || Array.isArray(state)) {
     return { ok: false, errors: ['homepage headline state must be an object'] };
@@ -316,8 +319,10 @@ function validateHomepageHeadlineState(state, { policy = getHeadlinePolicy(), st
   if (!text(state.updated_at)) errors.push('updated_at is required');
   if (!Array.isArray(state.headline_history)) errors.push('headline_history must be an array');
   if (state.current_headline !== null) {
-    const validation = validateCurrentHeadline(state.current_headline, { policy });
-    if (!validation.ok) errors.push(`current_headline failed validation: ${validation.reason}`);
+    const validation = validateCurrentHeadline(state.current_headline, { policy, scoredAt });
+    if (!validation.ok) {
+      errors.push(`current_headline failed validation: ${validation.reason}. ${HEADLINE_STATE_REMEDIATION}`);
+    }
     for (const field of ['article_identity_key', 'title', 'summary', 'source_url', 'newsletter_date', 'newsletter_url', 'selected_at', 'base_score', 'current_score', 'last_scored_at']) {
       if (state.current_headline[field] === undefined || state.current_headline[field] === null || state.current_headline[field] === '') {
         errors.push(`current_headline.${field} is required`);
@@ -340,7 +345,7 @@ function validateHomepageHeadlineState(state, { policy = getHeadlinePolicy(), st
     const snapshot = policySnapshot(policy);
     for (const [key, value] of Object.entries(snapshot)) {
       if (state.policy[key] !== value) {
-        errors.push(`policy.${key} must match newsletter policy (${value})`);
+        errors.push(`policy.${key} must match newsletter policy (${value}). ${HEADLINE_POLICY_SNAPSHOT_REMEDIATION}`);
       }
     }
   }
@@ -440,6 +445,17 @@ function applyHeadlineInclusion(selected, headline, policy) {
   return { selected: marked, selectedNormally, injected };
 }
 
+function removedDueToHeadlineInclusionRecord(article) {
+  return {
+    article_identity_key: articleIdentityKey(article),
+    title: text(article.title),
+    source_url: text(sourceUrl(article) || article.source_url || article.url),
+    deterministic_score: number(article.deterministic_score ?? article.headline_score, null),
+    editorial_priority: number(article.editorial_priority, null),
+    reason: REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON
+  };
+}
+
 function collapseAndLimitSelected(articles, maxArticles = articlePolicy.mainArticleCount.max) {
   const byKey = new Map();
   for (const article of ensureArray(articles)) {
@@ -458,19 +474,27 @@ function collapseAndLimitSelected(articles, maxArticles = articlePolicy.mainArti
     });
   }
   const out = [...byKey.values()];
-  if (out.length <= maxArticles) return out;
+  if (out.length <= maxArticles) {
+    return {
+      selected: out,
+      removed_due_to_headline_inclusion: []
+    };
+  }
   const overflow = out.length - maxArticles;
-  const dropKeys = out
+  const dropCandidates = out
     .filter(item => item.injected_from_headline_snapshot !== true)
     .sort((a, b) =>
       number(b.editorial_priority, 99) - number(a.editorial_priority, 99) ||
       number(a.deterministic_score ?? a.headline_score) - number(b.deterministic_score ?? b.headline_score) ||
       text(b.title).localeCompare(text(a.title))
     )
-    .slice(0, overflow)
-    .map(articleIdentityKey);
+    .slice(0, overflow);
+  const dropKeys = dropCandidates.map(articleIdentityKey);
   const dropSet = new Set(dropKeys);
-  return out.filter(item => !dropSet.has(articleIdentityKey(item))).slice(0, maxArticles);
+  return {
+    selected: out.filter(item => !dropSet.has(articleIdentityKey(item))).slice(0, maxArticles),
+    removed_due_to_headline_inclusion: dropCandidates.map(removedDueToHeadlineInclusionRecord)
+  };
 }
 
 function updatedState({ date, currentHeadline, previousHeadline, decision, policy }) {
@@ -509,7 +533,8 @@ function buildDecision(base) {
     snapshot_revalidated: Boolean(base.snapshot_revalidated),
     revalidation_failure_reason: base.revalidation_failure_reason || '',
     selected_normally: Boolean(base.selected_normally),
-    latest_inclusion_required: Boolean(base.latest_inclusion_required)
+    latest_inclusion_required: Boolean(base.latest_inclusion_required),
+    removed_due_to_headline_inclusion_count: Number(base.removed_due_to_headline_inclusion_count || 0)
   };
 }
 
@@ -671,7 +696,10 @@ function applyHomepageHeadlineSelection({
     }
   }
 
-  selected = collapseAndLimitSelected(selected, articlePolicy.mainArticleCount.max);
+  const collapseResult = collapseAndLimitSelected(selected, articlePolicy.mainArticleCount.max);
+  selected = collapseResult.selected;
+  const removedDueToHeadlineInclusion = collapseResult.removed_due_to_headline_inclusion;
+  decision.removed_due_to_headline_inclusion_count = removedDueToHeadlineInclusion.length;
   decision.previous_state = previousState;
   const nextState = updatedState({
     date,
@@ -690,14 +718,19 @@ function applyHomepageHeadlineSelection({
       included: selected.some(article => article.included_as_headline_latest === true),
       mode: selected.find(article => article.included_as_headline_latest === true)?.headline_latest_inclusion_mode || 'none',
       injected_from_snapshot: selected.some(article => article.injected_from_headline_snapshot === true),
-      snapshot_revalidated: selected.some(article => article.snapshot_revalidated === true)
-    }
+      snapshot_revalidated: selected.some(article => article.snapshot_revalidated === true),
+      removed_due_to_headline_inclusion_count: removedDueToHeadlineInclusion.length
+    },
+    removed_due_to_headline_inclusion: removedDueToHeadlineInclusion
   };
 }
 
 module.exports = {
   DECISION_REASONS,
+  HEADLINE_POLICY_SNAPSHOT_REMEDIATION,
   HEADLINE_STATE_REL_PATH,
+  HEADLINE_STATE_REMEDIATION,
+  REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON,
   applyHomepageHeadlineSelection,
   candidateDateEvidence,
   candidateQualityFlags,

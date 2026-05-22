@@ -2235,6 +2235,11 @@ function renderHomepageHeadlineDecision(root, date, status = {}) {
   const selectionReport = readSelectionReport(root, date) || {};
   const decision = status.headline_decision || selectionReport.headline_decision || {};
   const inclusion = status.headline_latest_inclusion || selectionReport.headline_latest_inclusion || {};
+  const removedDueToHeadlineInclusion = Array.isArray(status.removed_due_to_headline_inclusion)
+    ? status.removed_due_to_headline_inclusion
+    : Array.isArray(selectionReport.removed_due_to_headline_inclusion)
+      ? selectionReport.removed_due_to_headline_inclusion
+      : [];
   const coverage = status.article_exposure_coverage || selectionReport.article_exposure_coverage || {};
   return [
     '## Homepage Headline Decision',
@@ -2249,6 +2254,7 @@ function renderHomepageHeadlineDecision(root, date, status = {}) {
     `- latest_inclusion_mode: ${valueOrUnknown(inclusion.mode)}`,
     `- injected_from_snapshot: ${booleanText(inclusion.injected_from_snapshot === true)}`,
     `- snapshot_revalidated: ${booleanText(inclusion.snapshot_revalidated === true || decision.snapshot_revalidated === true)}`,
+    `- removed_due_to_headline_inclusion_count: ${removedDueToHeadlineInclusion.length}`,
     `- exposure_history_coverage: mode=${valueOrUnknown(coverage.mode)}; coverage_starts_at=${valueOrUnknown(coverage.coverage_starts_at)}; backfill_included=${booleanText(coverage.backfill_included === true)}`,
     '- Artifacts:',
     `  - \`data/homepage-headline.json\``,

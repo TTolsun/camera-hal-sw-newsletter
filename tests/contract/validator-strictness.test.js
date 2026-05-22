@@ -8,8 +8,12 @@ const {
 } = require('../../scripts/lib/newsletter-quality');
 const {
   articlePolicy,
+  getHeadlinePolicy,
   qualityGatePolicy
 } = require('../../scripts/lib/newsletter-policy');
+const {
+  policySnapshot
+} = require('../../scripts/newsroom/common/homepage-headline');
 const {
   reporterCandidatesFor,
   validSections
@@ -565,6 +569,55 @@ test('validate-site fails root homepage stale hardcoded newsletter exposure', ()
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /root index\.html hardcodes stale newsletter exposure for 2026-05-18/);
+});
+
+test('validate-site stale homepage headline score failure includes refresh remediation', () => {
+  const root = tempRoot('validate-site-stale-homepage-headline-');
+  const policy = getHeadlinePolicy();
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeJson(path.join(root, 'data', 'homepage-headline.json'), {
+    schemaVersion: 1,
+    updated_at: '2020-01-01T00:00:00+09:00',
+    current_headline: {
+      article_identity_key: 'url:https://source.android.com/docs/camera/stale-headline',
+      title: 'Stale Camera HAL headline',
+      summary: 'Stale Camera HAL headline summary.',
+      source_url: 'https://source.android.com/docs/camera/stale-headline',
+      newsletter_date: '2020-01-01',
+      newsletter_url: 'newsletters/2020-01-01/index.html',
+      selected_at: '2020-01-01',
+      base_score: policy.minimumHeadlineScore,
+      current_score: policy.minimumHeadlineScore,
+      last_scored_at: '2020-01-01',
+      date_evidence: {
+        date: '2020-01-01',
+        date_field: 'published_date',
+        evidence_level: 'dated_release',
+        publish_ready_date_evidence: true
+      },
+      quality_flags: {
+        source_gap_risk: false,
+        fact_check_must_fix_unresolved: false,
+        stale_claim_hard_failure: false,
+        blocked_source: false
+      },
+      score_breakdown: {},
+      snapshot: {
+        category: articlePolicy.primaryCameraStack.buckets[0],
+        source_name: 'source.android.com'
+      }
+    },
+    headline_history: [],
+    policy: policySnapshot(policy)
+  });
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /current_headline failed validation: headline_score_below_minimum/);
+  assert.match(result.stderr, /Run newsletter generation to refresh or clear homepage headline state/);
 });
 
 test('strict review publication exception applies only to composition-only blockers', () => {
