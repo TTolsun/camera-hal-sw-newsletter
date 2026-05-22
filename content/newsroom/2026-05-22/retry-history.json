@@ -2,26 +2,38 @@
   {
     "attempt": 1,
     "model": "deterministic-fallback-public-issue",
-    "score": 100,
+    "score": 92,
     "threshold": 85,
     "status": "PUBLIC_ISSUE_CREATED",
-    "rendered_main_article_count": 1,
+    "rendered_main_article_count": 2,
     "demoted_article_count": 0,
     "reserve_candidates_used": [
       {
-        "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-        "category": "Android Platform / CameraX",
-        "url": "https://goo.gle/AdaptiveApps_IO26",
+        "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+        "category": "Android Native Tooling",
+        "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "source": "Android Developers Blog",
-        "relevance_bucket": "android_platform_camera_adjacent",
-        "action": "rebuild-from-bound-candidate",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "action": "selected-native-tooling-supporting",
         "fallback": false,
-        "reason": "hard failure replacement"
+        "reason": "selected source-ready native tooling supporting article"
       }
     ],
-    "deductions": [],
+    "deductions": [
+      {
+        "category": "field-hygiene",
+        "points": 8,
+        "reason": "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.",
+        "location": "Android Native Tooling: Build native Android apps in Google AI Studio",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
     "selected_article_headlines": [
-      "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O"
+      "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "Android Native Tooling: Build native Android apps in Google AI Studio"
     ],
     "demoted_sections": [],
     "repair_actions": [

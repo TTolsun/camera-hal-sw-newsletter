@@ -25,14 +25,14 @@
     "evidence_pack_summary": true
   },
   "raw_candidate_count": 39,
-  "eligible_candidate_count": 2,
+  "eligible_candidate_count": 4,
   "primary_camera_stack_count": 2,
   "android_multimedia_camera_output_count": 0,
   "diagnosis": {
     "actual_news_shortage": false,
     "parser_extraction_failure": true,
     "source_gap_risk": false,
-    "taxonomy_missing": false,
+    "taxonomy_missing": true,
     "fallback_only_composition": false,
     "duplicate_or_noop_source_discovery": true
   },
@@ -52,35 +52,41 @@
         "source_id": "android-developers-blog"
       },
       {
-        "reason": "android-developers-latest-updates has OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR recommendation.",
+        "reason": "android-developers-latest-updates has KEEP_AND_FIX_PARSER recommendation.",
         "source_artifact": "content/newsroom/2026-05-22/source-effectiveness-report.json",
         "severity": "high",
         "source_id": "android-developers-latest-updates"
       },
       {
-        "reason": "aosp-camera-documentation has KEEP_AND_FIX_PARSER recommendation.",
+        "reason": "android-security-bulletin has KEEP_AND_FIX_PARSER recommendation.",
+        "source_artifact": "content/newsroom/2026-05-22/source-effectiveness-report.json",
+        "severity": "high",
+        "source_id": "android-security-bulletin"
+      },
+      {
+        "reason": "aosp-camera-documentation has OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR recommendation.",
         "source_artifact": "content/newsroom/2026-05-22/source-effectiveness-report.json",
         "severity": "high",
         "source_id": "aosp-camera-documentation"
       },
       {
-        "reason": "aosp-whats-new-release-notes has KEEP_AND_FIX_PARSER recommendation.",
-        "source_artifact": "content/newsroom/2026-05-22/source-effectiveness-report.json",
-        "severity": "high",
-        "source_id": "aosp-whats-new-release-notes"
-      },
-      {
-        "reason": "Gemini discovery parser extraction failures=3.",
+        "reason": "Gemini discovery parser extraction failures=1.",
         "source_artifact": "content/newsroom/2026-05-22/source-discovery-feedback-report.json",
         "severity": "high"
       }
     ],
     "source_gap_risk": [],
-    "taxonomy_missing": [],
+    "taxonomy_missing": [
+      {
+        "reason": "1 camera-relevant candidate(s) were not mapped to a known camera bucket.",
+        "source_artifact": "content/collected-news/2026-05-22/merged-candidates.json",
+        "severity": "medium"
+      }
+    ],
     "fallback_only_composition": [],
     "duplicate_or_noop_source_discovery": [
       {
-        "reason": "Gemini discovery produced 7 candidate(s) but gemini_new_unique_url_count=0.",
+        "reason": "Gemini discovery produced 26 candidate(s) but gemini_new_unique_url_count=0.",
         "source_artifact": "content/collected-news/2026-05-22/merged-candidate-manifest.json",
         "severity": "medium"
       },
@@ -90,7 +96,7 @@
         "severity": "medium"
       },
       {
-        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=7, duplicate_discovery_gap_count=0.",
+        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=26, duplicate_discovery_gap_count=0.",
         "source_artifact": "content/collected-news/2026-05-22/merged-candidate-manifest.json",
         "severity": "medium"
       }
@@ -155,10 +161,10 @@
       "main_eligible_count": 1,
       "top_blockers": [
         "main_eligible=false",
-        "reference_only=true",
         "source_gap_risk=true",
         "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-        "briefing_only=true"
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist"
       ],
       "parser_failure_signals": [
         "Duplicate candidates detected: within_source=1, across_sources=0.",
@@ -196,9 +202,9 @@
       "source_name": "Android Developers Latest Updates",
       "reliability": "official",
       "priority": "high",
-      "raw_count": 3,
-      "eligible_count": 0,
-      "blocked_count": 3,
+      "raw_count": 2,
+      "eligible_count": 1,
+      "blocked_count": 1,
       "main_eligible_count": 0,
       "top_blockers": [
         "No RSS item, no published date, no concrete release/API/behavior change detected.",
@@ -208,7 +214,7 @@
         "main_eligible=false"
       ],
       "parser_failure_signals": [
-        "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
         "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
         "No RSS item, no published date, no concrete release/API/behavior change detected.",
         "hasDatedEvidence=false"
@@ -217,26 +223,34 @@
       "source_discovery_new_publishable_count": null,
       "recommended_action": "KEEP_AND_FIX_PARSER",
       "recommended_action_label": "소스 유지, 파서 수정",
-      "source_effectiveness_recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR"
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
     },
     {
       "source_id": "android-security-bulletin",
       "source_name": "Android Security Bulletin",
       "reliability": "official",
       "priority": "high",
-      "raw_count": 0,
+      "raw_count": 2,
       "eligible_count": 0,
-      "blocked_count": 0,
+      "blocked_count": 2,
       "main_eligible_count": 0,
-      "top_blockers": [],
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "main_eligible=false",
+        "source_gap_risk=true",
+        "briefing_only=true",
+        "finalSelectionEligibility=exclude"
+      ],
       "parser_failure_signals": [
-        "No recent candidates were collected for this source."
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
-      "recommended_action": "NO_ACTION_THIN_WEEK",
-      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
-      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
     },
     {
       "source_id": "android-weekly",
@@ -286,23 +300,24 @@
       "blocked_count": 1,
       "main_eligible_count": 0,
       "top_blockers": [
-        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-        "finalSelectionEligibility=exclude",
-        "hasDatedEvidence=false",
-        "main_eligible=false",
-        "reference_only=true"
+        "Review source-change-events artifacts before using this candidate.",
+        "Source snapshot event is review/watchlist only because date evidence is weak or diagnostic.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "hasDatedEvidence=false"
       ],
       "parser_failure_signals": [
-        "Generic noise candidates were detected from artifact exclusion metadata.",
-        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
         "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "Review source-change-events artifacts before using this candidate.",
+        "Source snapshot event is review/watchlist only because date evidence is weak or diagnostic.",
         "hasDatedEvidence=false"
       ],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
       "recommended_action": "KEEP_AND_FIX_PARSER",
       "recommended_action_label": "소스 유지, 파서 수정",
-      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+      "source_effectiveness_recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR"
     },
     {
       "source_id": "aosp-site-updates",
@@ -356,19 +371,29 @@
       "source_name": "CameraX Release Notes",
       "reliability": "official",
       "priority": "high",
-      "raw_count": 0,
+      "raw_count": 1,
       "eligible_count": 0,
-      "blocked_count": 0,
+      "blocked_count": 1,
       "main_eligible_count": 0,
-      "top_blockers": [],
+      "top_blockers": [
+        "Review source-change-events artifacts before using this candidate.",
+        "Source snapshot event is review/watchlist only because date evidence is weak or diagnostic.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "hasDatedEvidence=false"
+      ],
       "parser_failure_signals": [
-        "No recent candidates were collected for this source."
+        "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "Review source-change-events artifacts before using this candidate.",
+        "Source snapshot event is review/watchlist only because date evidence is weak or diagnostic.",
+        "hasDatedEvidence=false"
       ],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
-      "recommended_action": "NO_ACTION_THIN_WEEK",
-      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
-      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR"
     },
     {
       "source_id": "claude-code-changelog",
@@ -641,16 +666,16 @@
       "source_name": "ISO C++ Blog",
       "reliability": "official-community",
       "priority": "high",
-      "raw_count": 12,
-      "eligible_count": 0,
-      "blocked_count": 12,
+      "raw_count": 10,
+      "eligible_count": 1,
+      "blocked_count": 9,
       "main_eligible_count": 0,
       "top_blockers": [
         "main_eligible=false",
         "source_gap_risk=true",
         "reference_only=true",
-        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-        "briefing_only=true"
+        "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
+        "finalSelectionEligibility=exclude"
       ],
       "parser_failure_signals": [
         "Generic noise candidates were detected from artifact exclusion metadata.",
@@ -1068,21 +1093,34 @@
       "source_artifact": "source-effectiveness-report.json",
       "source_priority": "high",
       "source_reliability": "official-community",
-      "blocked_count": 12,
-      "raw_count": 12
+      "blocked_count": 9,
+      "raw_count": 10
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "android-security-bulletin",
+      "source_name": "Android Security Bulletin",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 2,
+      "raw_count": 2
     },
     {
       "action": "KEEP_AND_FIX_PARSER",
       "action_label": "소스 유지, 파서 수정",
       "source_id": "android-developers-latest-updates",
       "source_name": "Android Developers Latest Updates",
-      "reason": "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
+      "reason": "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
       "severity": "high",
       "source_artifact": "source-effectiveness-report.json",
       "source_priority": "high",
       "source_reliability": "official",
-      "blocked_count": 3,
-      "raw_count": 3
+      "blocked_count": 1,
+      "raw_count": 2
     },
     {
       "action": "KEEP_AND_FIX_PARSER",
@@ -1102,7 +1140,7 @@
       "action_label": "소스 유지, 파서 수정",
       "source_id": "aosp-camera-documentation",
       "source_name": "AOSP Camera Documentation",
-      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "reason": "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
       "severity": "high",
       "source_artifact": "source-effectiveness-report.json",
       "source_priority": "high",
@@ -1124,52 +1162,35 @@
       "raw_count": 1
     },
     {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "camerax-release-notes",
+      "source_name": "CameraX Release Notes",
+      "reason": "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 1
+    },
+    {
+      "action": "ADD_MULTIMEDIA_BUCKET",
+      "action_label": "Multimedia bucket 추가",
+      "source_id": "",
+      "source_name": "",
+      "reason": "1 camera-relevant candidate(s) were not mapped to a known camera bucket.",
+      "severity": "medium",
+      "source_artifact": "content/collected-news/2026-05-22/merged-candidates.json"
+    },
+    {
       "action": "REPAIR_SOURCE_DISCOVERY_DUPLICATES",
       "action_label": "Source discovery 중복 제거/수리",
       "source_id": "",
       "source_name": "",
-      "reason": "Gemini discovery produced 7 candidate(s) but gemini_new_unique_url_count=0.; Gemini discovery produced no new publishable candidates.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=7, duplicate_discovery_gap_count=0.",
+      "reason": "Gemini discovery produced 26 candidate(s) but gemini_new_unique_url_count=0.; Gemini discovery produced no new publishable candidates.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=26, duplicate_discovery_gap_count=0.",
       "severity": "medium",
       "source_artifact": "content/collected-news/2026-05-22/merged-candidate-manifest.json"
-    },
-    {
-      "action": "NO_ACTION_THIN_WEEK",
-      "action_label": "기사 부족 주간으로 판단, 조치 없음",
-      "source_id": "android-developer-newsletter",
-      "source_name": "Android Developer Newsletter",
-      "reason": "No recent candidates were collected for this source.",
-      "severity": "medium",
-      "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "medium",
-      "source_reliability": "official",
-      "blocked_count": 0,
-      "raw_count": 0
-    },
-    {
-      "action": "NO_ACTION_THIN_WEEK",
-      "action_label": "기사 부족 주간으로 판단, 조치 없음",
-      "source_id": "android-developers-blog-camera",
-      "source_name": "Android Developers Blog - Camera",
-      "reason": "No recent candidates were collected for this source.",
-      "severity": "medium",
-      "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "high",
-      "source_reliability": "official",
-      "blocked_count": 0,
-      "raw_count": 0
-    },
-    {
-      "action": "NO_ACTION_THIN_WEEK",
-      "action_label": "기사 부족 주간으로 판단, 조치 없음",
-      "source_id": "android-security-bulletin",
-      "source_name": "Android Security Bulletin",
-      "reason": "No recent candidates were collected for this source.",
-      "severity": "medium",
-      "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "high",
-      "source_reliability": "official",
-      "blocked_count": 0,
-      "raw_count": 0
     }
   ],
   "warnings": []

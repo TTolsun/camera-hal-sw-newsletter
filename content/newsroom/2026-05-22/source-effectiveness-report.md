@@ -9,7 +9,7 @@ Date: 2026-05-22
 - Unregistered candidates: 0
 - Eligible candidates: 4
 - Selected candidates: 2
-- Rendered main articles: 1
+- Rendered main articles: 2
 - Source gap candidates: 35
 - Generic noise candidates: 26
 - Duplicate candidates: 1
@@ -42,7 +42,7 @@ Date: 2026-05-22
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 13.09 | 21 | 2 | 2 | 1 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 28.09 | 21 | 2 | 2 | 2 |
 
 ## Sources Needing Parser Repair
 
@@ -106,7 +106,7 @@ _없음_
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | aosp-camera-documentation | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
 | camerax-release-notes | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 13.09 | 21 | 0.0952 | 1 | 0.5 | 0.9048 | 0.8571 | 1 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 28.09 | 21 | 0.0952 | 1 | 1 | 0.9048 | 0.8571 | 1 |
 | android-developers-latest-updates | KEEP_AND_FIX_PARSER | 5 | 2 | 0.5 | 0 | 0 | 0.5 | 0 | 0 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 2 | 0 | 0 | 0 | 1 | 1 | 0 |

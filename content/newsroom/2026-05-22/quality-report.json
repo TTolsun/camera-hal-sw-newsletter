@@ -1,12 +1,23 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "score": 100,
+  "score": 92,
   "max_score": 100,
   "threshold": 85,
-  "status": "PASS",
-  "summary": "Quality score 100, threshold 85, max score 100. Editor review is ready.",
-  "deductions": [],
+  "status": "NEEDS_FIX",
+  "summary": "Quality score 92, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "deductions": [
+    {
+      "category": "field-hygiene",
+      "points": 8,
+      "reason": "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.",
+      "location": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
   "article_results": [
     {
       "index": 1,
@@ -67,6 +78,69 @@
       "effective_actionability_level": "measurable_test",
       "hard_fail_reasons": [],
       "soft_deductions": []
+    },
+    {
+      "index": 2,
+      "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "category": "Android Native Tooling",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+        "source_candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      "impact_claim_level": "tooling_supporting",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "hard_fail_reasons": [
+        "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level."
+      ],
+      "soft_deductions": []
     }
   ],
   "claim_validation_summary": {
@@ -76,7 +150,7 @@
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "unknown",
     "available_article_count": 0,
-    "not_available_article_count": 1
+    "not_available_article_count": 2
   },
   "claim_results": [],
   "uncovered_facts": [
@@ -128,41 +202,91 @@
       "field": "evidence_summary",
       "text": "Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.",
       "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "article_sections.verified_facts[0]",
+      "text": "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "article_sections.verified_facts[1]",
+      "text": "관련 컴포넌트: Google AI Studio.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "article_sections.verified_facts[2]",
+      "text": "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "confirmed_facts[0]",
+      "text": "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "confirmed_facts[1]",
+      "text": "관련 컴포넌트: Google AI Studio.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "confirmed_facts[2]",
+      "text": "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "evidence_summary",
+      "text": "Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.",
+      "reason_code": "missing_matching_fact_claim"
     }
   ],
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 1,
-    "strong_signal_count": 1,
+    "main_article_count": 2,
+    "strong_signal_count": 2,
     "usable_signal_count": 0,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
-    "article_count_with_hal_signal_capsule": 1,
+    "article_count_with_hal_signal_capsule": 2,
     "article_count_without_hal_signal_capsule": 0,
     "main_articles_with_owner_metric_log": 0,
-    "main_articles_with_concrete_action": 1,
-    "fallback_main_article_count": 0,
+    "main_articles_with_concrete_action": 2,
+    "fallback_main_article_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "generic_signal_hard_blocker_count": 0,
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "camerax_app_compatibility": 1,
-      "framework_hal_contract": 1,
-      "driver_image_pipeline": 1,
-      "stream_buffer_metadata": 1,
-      "cts_vts_its_cdd": 1
+      "camerax_app_compatibility": 2,
+      "framework_hal_contract": 2,
+      "driver_image_pipeline": 2,
+      "stream_buffer_metadata": 2,
+      "cts_vts_its_cdd": 2,
+      "native_tooling_workflow": 1
     },
     "actionability_level_counts": {
-      "measurable_test": 1
+      "measurable_test": 2
     },
     "effective_actionability_level_counts": {
-      "measurable_test": 1
+      "measurable_test": 2
     },
     "signal_quality_status_counts": {
-      "strong_signal": 1
+      "strong_signal": 2
     }
   },
   "main_article_signal_checks": [
@@ -210,27 +334,74 @@
       "hal_signal_capsule_missing_keys": [],
       "hard_blockers": [],
       "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "cts_vts_its_cdd",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner",
+        "camera_test_owner",
+        "native_tooling_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+        "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+        "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
+        "Supplied source evidence가 말하지 않으면 HAL API",
+        "metadata contract",
+        "stream",
+        "buffer"
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
     }
   ],
   "metrics": {
-    "article_count": 1,
+    "article_count": 2,
     "briefing_count": 3,
     "camera_article_count": 1,
-    "legacy_regex_camera_article_count": 1,
-    "expanded_scope_article_count": 1,
+    "legacy_regex_camera_article_count": 2,
+    "expanded_scope_article_count": 2,
     "direct_aosp_camera_count": 0,
     "camera_driver_image_pipeline_count": 0,
     "android_platform_camera_adjacent_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_count": 1,
-    "supporting_main_article_count": 0,
+    "supporting_main_article_count": 1,
     "forbidden_main_article_count": 0,
-    "fallback_relevance_count": 0,
-    "publishable_scope_count": 1,
-    "composition_mode": "NORMAL",
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 2,
+    "composition_mode": "FALLBACK_COMPOSITION",
     "section_count_details": [
       {
         "index": 1,
@@ -255,6 +426,30 @@
         "missing_score_fields": [],
         "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+        "source_candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "impact_claim_level": "tooling_supporting",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       }
     ],
     "relevance_bucket_counts": {
@@ -263,10 +458,10 @@
       "android_platform_camera_adjacent": 1,
       "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 0,
+      "cpp_ai_tooling_fallback": 1,
       "generic_tech_watchlist": 0
     },
-    "ai_article_count": 0,
+    "ai_article_count": 1,
     "fact_check_status": "PASS",
     "must_fix_count": 0,
     "source_gap_count": 0,
@@ -274,17 +469,19 @@
     "stale_claim_removed_count": 0,
     "stale_claim_hard_failure_count": 0,
     "source_integrity_violation_count": 0,
-    "blocking_deduction_count": 0,
-    "blocking_deduction_categories": [],
-    "hard_fail_count": 0,
+    "blocking_deduction_count": 1,
+    "blocking_deduction_categories": [
+      "field-hygiene"
+    ],
+    "hard_fail_count": 1,
     "soft_deduction_count": 0,
     "article_gate_counts": {
       "PASS": 1,
       "DEMOTE": 0,
-      "FAIL": 0
+      "FAIL": 1
     },
     "article_section_contract": {
-      "complete_count": 1,
+      "complete_count": 2,
       "incomplete_count": 0,
       "missing_key_counts": {
         "verified_facts": 0,
@@ -295,9 +492,20 @@
       },
       "optional_key_counts": {},
       "limitation_visibility_counts": {
-        "none": 1
+        "none": 2
       },
       "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
         {
           "complete": true,
           "missing_keys": [],
@@ -318,43 +526,44 @@
       "derived_evidence_mapping_count": 0,
       "overclaim_risk": "unknown",
       "available_article_count": 0,
-      "not_available_article_count": 1
+      "not_available_article_count": 2
     },
     "derived_evidence_mapping_count": 0,
-    "uncovered_fact_count": 7,
+    "uncovered_fact_count": 14,
     "hal_signal_quality_summary": {
       "schema_version": 1,
-      "main_article_count": 1,
-      "strong_signal_count": 1,
+      "main_article_count": 2,
+      "strong_signal_count": 2,
       "usable_signal_count": 0,
       "weak_signal_count": 0,
       "watchlist_only_count": 0,
       "blocked_source_gap_count": 0,
-      "article_count_with_hal_signal_capsule": 1,
+      "article_count_with_hal_signal_capsule": 2,
       "article_count_without_hal_signal_capsule": 0,
       "main_articles_with_owner_metric_log": 0,
-      "main_articles_with_concrete_action": 1,
-      "fallback_main_article_count": 0,
+      "main_articles_with_concrete_action": 2,
+      "fallback_main_article_count": 1,
       "android_multimedia_camera_output_count": 0,
       "soc_platform_signal_count": 0,
       "generic_signal_hard_blocker_count": 0,
       "hal_signal_hard_blocker_count": 0,
       "hard_blocker_reason_code_counts": {},
       "hal_impact_axis_counts": {
-        "camerax_app_compatibility": 1,
-        "framework_hal_contract": 1,
-        "driver_image_pipeline": 1,
-        "stream_buffer_metadata": 1,
-        "cts_vts_its_cdd": 1
+        "camerax_app_compatibility": 2,
+        "framework_hal_contract": 2,
+        "driver_image_pipeline": 2,
+        "stream_buffer_metadata": 2,
+        "cts_vts_its_cdd": 2,
+        "native_tooling_workflow": 1
       },
       "actionability_level_counts": {
-        "measurable_test": 1
+        "measurable_test": 2
       },
       "effective_actionability_level_counts": {
-        "measurable_test": 1
+        "measurable_test": 2
       },
       "signal_quality_status_counts": {
-        "strong_signal": 1
+        "strong_signal": 2
       }
     },
     "main_article_signal_checks": [
@@ -402,9 +611,61 @@
         "hal_signal_capsule_missing_keys": [],
         "hard_blockers": [],
         "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Android Native Tooling: Build native Android apps in Google AI Studio",
+        "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow",
+          "framework_hal_contract",
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "cts_vts_its_cdd",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner",
+          "camera_test_owner",
+          "native_tooling_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
+          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
+          "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
+          "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
+          "Supplied source evidence가 말하지 않으면 HAL API",
+          "metadata contract",
+          "stream",
+          "buffer"
+        ],
+        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
       }
     ],
-    "top_deduction_categories": [],
+    "top_deduction_categories": [
+      {
+        "category": "field-hygiene",
+        "count": 1
+      }
+    ],
     "candidate_exclusion_summary": []
   },
   "fallback_public_issue": true,
@@ -420,8 +681,8 @@
   "fallback_only": false,
   "camera_anchor_count": 1,
   "homepage_badge": "",
-  "content_quality_score": 100,
-  "camera_relevance_score": 100,
+  "content_quality_score": 92,
+  "camera_relevance_score": 92,
   "publication_mode_decision": "review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.",
   "original_fact_check_status": "PASS",
   "original_must_fix_count": 0,
@@ -431,16 +692,16 @@
   "demoted_articles": [],
   "fallback_articles": [
     {
-      "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "category": "Android Platform / CameraX",
-      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "category": "Android Native Tooling",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
-      "relevance_bucket": "android_platform_camera_adjacent",
-      "action": "rebuild-from-bound-candidate",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "action": "selected-native-tooling-supporting",
       "fallback": false,
-      "reason": "hard failure replacement"
+      "reason": "selected source-ready native tooling supporting article"
     }
   ],
-  "original_quality_status": "UNKNOWN",
-  "original_quality_score": null
+  "original_quality_status": "PASS",
+  "original_quality_score": 100
 }
