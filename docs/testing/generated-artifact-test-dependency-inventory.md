@@ -1,6 +1,6 @@
 # Generated Artifact Test Dependency Inventory
 
-Issue #62 is not a rebuild of fixture governance. It closes the remaining risk that generated newsletter artifacts can become trusted golden fixtures.
+This document is not a rebuild of fixture governance. It closes the remaining risk that generated newsletter artifacts can become trusted golden fixtures.
 
 ## Already Done in main
 
@@ -39,7 +39,7 @@ Allowed classification values:
 | `tests/helpers/artifact-builders.js` | `workflow_shape_allowed` | closed | Helper defaults use date-scoped artifact paths to build workflow-shape inputs only. |
 | `tests/contract/fixture-policy.test.js` | `minimized_regression_allowed` | closed | Generated provenance is forbidden for `good/`; minimized generated regressions are allowed only as non-PASS bad fixtures. |
 | `tests/contract/public-newsletter-validator.test.js` | `path_contract_allowed` | closed | Internal artifact path strings are negative validator inputs, not trusted content fixtures. |
-| `tests/contract/rendered-issue-structure.test.js` | `temp_artifact_allowed` | closed | The rendered output contract uses temp-root artifacts and does not add committed rendered fixtures for #62. |
+| `tests/contract/rendered-issue-structure.test.js` | `temp_artifact_allowed` | closed | The rendered output contract uses temp-root artifacts and does not add committed rendered fixtures. |
 | `tests/contract/validation-targets.test.js` | `path_contract_allowed` | closed | Path targets are contract inputs, not article golden content. |
 | `tests/contract/validator-strictness.test.js` | `path_contract_allowed` | closed | Archive and stale-link path strings are validator contract inputs only. |
 | `tests/workflow/homepage-archive.test.js` | `path_contract_allowed` | closed | Archive path behavior is validated without promoting generated article content to a fixture. |
@@ -70,13 +70,13 @@ rg "newsletters/\d{4}-\d{2}-\d{2}|content/newsroom/\d{4}-\d{2}-\d{2}|content/col
 
 Any match must be classified above or removed. Matches in generated artifact path-contract tests are allowed only when they do not make generated article content a golden fixture.
 
-## Final #62 Status
+## Final Status
 
 - Quality and selection generated golden fixtures: `0`
 - Generated good fixtures: `0`
-- #185 seed generated good fixtures: `0`
+- Seed generated good fixtures: `0`
 - Bad fixtures with `PASS` expected status: `0`
-- Rendered committed fixtures added for #62: `0`
+- Rendered committed fixtures added: `0`
 - `data/newsletters.json` references: classified as path/site smoke only
 - Unclassified generated artifact test dependencies: `0`
 - Unclassified seed artifact dependencies: `0`

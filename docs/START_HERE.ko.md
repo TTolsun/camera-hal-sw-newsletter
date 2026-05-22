@@ -16,7 +16,6 @@
 | [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약입니다. |
 | [testing/test-baseline.md](testing/test-baseline.md) | 현재 test/validation baseline입니다. |
 | [scripts/README.md](../scripts/README.md) | scripts wrapper와 실제 newsroom 구현 진입점을 설명합니다. |
-| [plans/issue-188-root-docs-audit.md](plans/issue-188-root-docs-audit.md) | root folder별 README/AGENTS coverage와 source-of-truth map입니다. |
 
 Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
 
@@ -33,7 +32,6 @@ Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of 
 | `docs/newsletter-template.md` | newsletter 구조와 template 계약입니다. |
 | `docs/config/` | runtime config와 source registry field 설명입니다. |
 | `docs/testing/` | validation baseline과 generated artifact audit 기록입니다. |
-| `docs/plans/` | 승인된 계획 또는 완료된 계획 기록입니다. |
 | `docs/operations/` | 반복 운영 절차의 짧은 안내입니다. |
 | `docs/archive/` | 현재 guidance로 쓰지 않는 과거 note입니다. |
 | `docs/AGENTS.md` | docs 폴더의 current/archive guidance 구분과 링크 유지 규칙입니다. |

@@ -18,7 +18,6 @@
 | [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약을 설명합니다. |
 | [docs/testing/test-baseline.md](docs/testing/test-baseline.md) | 현재 validation baseline을 기록합니다. |
 | [scripts/README.md](scripts/README.md) | scripts wrapper와 실제 newsroom 구현 진입점을 설명합니다. |
-| [docs/plans/issue-188-root-docs-audit.md](docs/plans/issue-188-root-docs-audit.md) | root folder별 README/AGENTS coverage와 source-of-truth map입니다. |
 
 뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
 

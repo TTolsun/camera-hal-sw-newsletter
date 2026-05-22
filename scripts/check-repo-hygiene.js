@@ -23,7 +23,10 @@ function trackedFiles(root) {
   const output = execFileSync('git', ['-C', root, 'ls-files', '-z'], {
     encoding: 'buffer'
   });
-  return output.toString('utf8').split('\0').filter(Boolean);
+  return output.toString('utf8')
+    .split('\0')
+    .filter(Boolean)
+    .filter(filePath => fs.existsSync(path.join(root, filePath)));
 }
 
 function issue(filePath, type, detail) {
@@ -36,6 +39,12 @@ function issue(filePath, type, detail) {
 
 function isOfficialDocumentPath(filePath) {
   return filePath === 'README.md' || filePath === 'AGENTS.md' || filePath.startsWith('docs/');
+}
+
+function isTrackedWorklogDocumentPath(filePath) {
+  return filePath.startsWith('docs/plans/') ||
+    filePath.startsWith('docs/debug/') ||
+    filePath.startsWith('docs/refactoring/');
 }
 
 function isRootTestFile(filePath) {
@@ -83,9 +92,17 @@ function findRepoHygieneIssues(files, options = {}) {
 
   for (const inputPath of files || []) {
     const filePath = normalizePath(inputPath);
-    if (!filePath || isOfficialDocumentPath(filePath)) continue;
+    if (!filePath) continue;
 
-    if (filePath === 'PLAN.md' || filePath === 'PLAN.local.md') {
+    if (isTrackedWorklogDocumentPath(filePath)) {
+      issues.push(issue(
+        filePath,
+        'tracked_worklog_document',
+        'plans, debug baselines, and refactoring worklogs must stay local-only or be integrated into canonical docs'
+      ));
+    } else if (isOfficialDocumentPath(filePath)) {
+      continue;
+    } else if (filePath === 'PLAN.md' || filePath === 'PLAN.local.md') {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root plan files must stay local-only'));
     } else if (filePath.startsWith('.codex/')) {
       issues.push(issue(filePath, 'tracked_agent_scratch', '.codex files must stay local-only'));
@@ -133,6 +150,7 @@ module.exports = {
   findRootTestStructureIssues,
   findRepoHygieneIssues,
   formatIssue,
+  isTrackedWorklogDocumentPath,
   loadRootTestAllowlist,
   normalizePath,
   repoRoot,

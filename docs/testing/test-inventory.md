@@ -1,6 +1,6 @@
 # Test Inventory
 
-이 문서는 issue #82의 `tests/` 구조화 작업을 위한 현재 상태 inventory입니다. 목적은 test folder migration 전에 test, fixture, helper의 책임과 이동 후보를 고정하는 것입니다. 이 문서는 runtime behavior, quality gate, source selection, publish gate 정책을 변경하지 않습니다.
+이 문서는 `tests/` 구조화 이후의 현재 상태 inventory입니다. 목적은 test, fixture, helper의 책임과 이동 후보를 고정하는 것입니다. 이 문서는 runtime behavior, quality gate, source selection, publish gate 정책을 변경하지 않습니다.
 
 ## 현재 Runner 계약
 
@@ -76,9 +76,9 @@ Generated artifact dependency는 아래처럼 분류합니다.
 
 | Script | Current runner | Role | Migration note |
 | --- | --- | --- | --- |
-| `scripts/test-artifact-manifest.js` | `npm.cmd run test:script` | `scripts/newsroom/cli/test-artifact-manifest.js` compatibility wrapper. | #85에서 script wrapper compatibility를 다루기 전까지 유지합니다. |
-| `scripts/test-selection-diagnostics.js` | `npm.cmd run test:script` | `scripts/newsroom/cli/test-selection-diagnostics.js` compatibility wrapper. | #85에서 script wrapper compatibility를 다루기 전까지 유지합니다. |
-| `scripts/test-article-image-fallback-contract.js` | 현재 `test:script`에 포함되지 않음. | Image fallback contract test compatibility wrapper. | Inventory만 남깁니다. #82 Slice 1에서 wire/delete하지 않습니다. |
+| `scripts/test-artifact-manifest.js` | `npm.cmd run test:script` | `scripts/newsroom/cli/test-artifact-manifest.js` compatibility wrapper. | Compatibility wrapper로 유지합니다. |
+| `scripts/test-selection-diagnostics.js` | `npm.cmd run test:script` | `scripts/newsroom/cli/test-selection-diagnostics.js` compatibility wrapper. | Compatibility wrapper로 유지합니다. |
+| `scripts/test-article-image-fallback-contract.js` | 현재 `test:script`에 포함되지 않음. | Image fallback contract test compatibility wrapper. | Inventory만 남깁니다. |
 
 ## Fixture Inventory
 

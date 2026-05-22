@@ -1,6 +1,6 @@
 # Source Quality Issue Map
 
-Issue `#46` closes the remaining source URL / prompt quality gap by turning source policy into executable pipeline contracts. It does not reimplement source-specific parsers, linked evidence extraction, final article selection, or HAL signal classification.
+Source quality closes the remaining source URL / prompt quality gap by turning source policy into executable pipeline contracts. It does not reimplement source-specific parsers, linked evidence extraction, final article selection, or HAL signal classification.
 
 ## Scope
 

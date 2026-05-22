@@ -277,8 +277,11 @@ function validateSidecarEntry(entry, index, state, errors) {
   if (!Array.isArray(entry?.known_limitations)) {
     errors.push(`${label} must declare known_limitations as an array.`);
   }
-  if (typeof entry?.historical_cleanup_issue !== 'string' || !entry.historical_cleanup_issue.trim()) {
-    errors.push(`${label} must declare historical_cleanup_issue.`);
+  if (typeof entry?.historical_cleanup_context !== 'string' || !entry.historical_cleanup_context.trim()) {
+    errors.push(`${label} must declare historical_cleanup_context.`);
+  }
+  if (entry?.historical_cleanup_issue !== undefined) {
+    errors.push(`${label} must not use historical_cleanup_issue; use historical_cleanup_context.`);
   }
   if (entry?.archive_status === 'deprecated_archive' && (!Array.isArray(entry.known_limitations) || entry.known_limitations.length === 0)) {
     errors.push(`${label} deprecated_archive entries must include at least one known_limitations item.`);
@@ -448,7 +451,7 @@ function validateHistoricalArchive({ root = process.cwd(), state = null } = {}) 
     if (isPre185Entry(entry) && publicDates.has(date)) {
       const publicText = readPublicArticleText(root, date);
       if (FAKE_SEED_PROVENANCE_PATTERN.test(publicText)) {
-        errors.push(`Pre-#185 public article ${date} contains seed evidence workflow provenance wording.`);
+        errors.push(`Pre-seed-evidence public article ${date} contains seed evidence workflow provenance wording.`);
       }
     }
   }
@@ -531,7 +534,7 @@ function parseInventoryTableRows(inventoryText = '') {
 
 function isRemovedInventoryRow(row = {}) {
   return row.current_quality_status === 'removed' ||
-    row.recommended_decision === 'delete_completed_via_73';
+    row.recommended_decision === 'delete_completed';
 }
 
 function isFinalReviewedInventoryRow(row = {}) {
@@ -630,14 +633,13 @@ function buildAuditReport(validation) {
   const publicVisibilityCounts = countBy(state.sidecarEntries, 'public_visibility');
   const inventoryMetrics = buildInventoryFinalMetrics(state.inventoryText);
   const finalDecision = {
-    can_close_issue: validation.errors.length === 0 &&
+    archive_trust_complete: validation.errors.length === 0 &&
       (archiveStatusCounts.historical_unreviewed || 0) === 0 &&
       (inventoryMetrics.remaining_s0_s1_rows || 0) === 0 &&
       (inventoryMetrics.remaining_rewrite_downgrade_archive_note_rows || 0) === 0 &&
       (inventoryMetrics.remaining_source_gap_count || 0) === 0 &&
       (inventoryMetrics.remaining_overclaim_risk_count || 0) === 0 &&
       (inventoryMetrics.remaining_weak_actionability_count || 0) === 0,
-    issue: '#108',
     reason: 'No unresolved S0/S1 rows, rewrite/downgrade/archive-note rows, source gaps, overclaim risks, or weak actionability rows remain after accepted historical limitations are recorded.'
   };
 
@@ -659,11 +661,11 @@ function buildAuditReport(validation) {
       .sort(),
     inventory_metrics: inventoryMetrics,
     material_rewrite_traceability: buildMaterialRewriteTraceability(state.sidecarEntries),
-    issue_level_normalizations: state.sidecarDates.includes('2026-05-11') ? [
+    historical_content_normalizations: state.sidecarDates.includes('2026-05-11') ? [
       {
         date: '2026-05-11',
         type: 'global_action_item_normalization',
-        note: '2026-05-11 received issue-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report.'
+        note: '2026-05-11 received date-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report.'
       }
     ] : [],
     final_decision: finalDecision,
@@ -684,7 +686,7 @@ function buildAuditReport(validation) {
         public_visibility: isNewsroomOnly ? 'not_public' : entry.public_visibility || 'unclassified',
         historical_cleanup_reviewed: entry.historical_cleanup_reviewed === true,
         known_limitations: Array.isArray(entry.known_limitations) ? entry.known_limitations : [],
-        historical_cleanup_issue: isNewsroomOnly ? '#108' : entry.historical_cleanup_issue || ''
+        historical_cleanup_context: isNewsroomOnly ? 'non_public_newsroom_artifact' : entry.historical_cleanup_context || ''
       };
     })
   };
@@ -704,14 +706,14 @@ function buildCleanupReportMarkdown(report) {
   const rewriteTraceability = Array.isArray(report.material_rewrite_traceability)
     ? report.material_rewrite_traceability
     : [];
-  const normalizations = Array.isArray(report.issue_level_normalizations)
-    ? report.issue_level_normalizations
+  const normalizations = Array.isArray(report.historical_content_normalizations)
+    ? report.historical_content_normalizations
     : [];
 
   return [
     '# 기존 뉴스레터 품질 Cleanup Report',
     '',
-    'Issue #108은 unsupported seed evidence provenance를 사후 보강하지 않고 historical public archive cleanup 상태만 추적합니다.',
+    '이 문서는 unsupported seed evidence provenance를 사후 보강하지 않고 historical public archive cleanup 상태만 추적합니다.',
     '',
     '## Final Archive Trust Summary',
     '',
@@ -750,7 +752,7 @@ function buildCleanupReportMarkdown(report) {
     '',
     '## Remaining Accepted Limitations',
     '',
-    '- Pre-#185 generation: source provenance was not backfilled.',
+    '- Pre-seed-evidence generation: source provenance was not backfilled.',
     `- Partial source-backed coverage rows retained as accepted limitations: ${accepted.partial_source_backing || 0}`,
     `- Generic actionability rows retained as accepted limitations: ${accepted.generic_actionability || 0}`,
     `- Medium overclaim rows retained as accepted limitations: ${accepted.medium_overclaim || 0}`,
@@ -762,7 +764,7 @@ function buildCleanupReportMarkdown(report) {
     '',
     markdownList(report.unlisted_reviewed_archive_dates || []),
     '',
-    '## Issue-level Normalizations',
+    '## Historical Content Normalizations',
     '',
     normalizations.length > 0
       ? normalizations.map(item => `- ${item.note}`).join('\n')
@@ -785,13 +787,13 @@ function buildCleanupReportMarkdown(report) {
     '',
     '## Final Decision',
     '',
-    report.final_decision?.can_close_issue
-      ? '#108 can be closed because no unresolved S0/S1 rows remain, all material rewrites have diff artifacts, pre-#185 provenance was not backfilled, and final validation passed.'
-      : '#108 must remain open because unresolved archive trust blockers remain.',
+    report.final_decision?.archive_trust_complete
+      ? 'Archive trust cleanup is complete because no unresolved S0/S1 rows remain, all material rewrites have diff artifacts, pre-seed-evidence provenance was not backfilled, and final validation passed.'
+      : 'Archive trust cleanup is not complete because unresolved archive trust blockers remain.',
     '',
     '## Archive Entries',
     '',
-    '| Date | Artifact scope | Archive status | Public visibility | Data index | Public artifact | Known limitations | Issue |',
+    '| Date | Artifact scope | Archive status | Public visibility | Data index | Public artifact | Known limitations | Cleanup context |',
     '| --- | --- | --- | --- | --- | --- | --- | --- |',
     ...report.entries.map(entry => [
       entry.date,
@@ -801,7 +803,7 @@ function buildCleanupReportMarkdown(report) {
       entry.in_data_newsletters ? 'yes' : 'no',
       entry.has_public_artifact ? 'yes' : 'no',
       entry.known_limitations.join(', ') || 'none',
-      entry.historical_cleanup_issue || 'none'
+      entry.historical_cleanup_context || 'none'
     ].map(value => String(value).replace(/\|/g, '\\|')).join(' | ')).map(row => `| ${row} |`),
     '',
     '## data/newsletters.json에 없는 Public Dates',
@@ -812,7 +814,7 @@ function buildCleanupReportMarkdown(report) {
     '',
     '`not_public` is an audit report classification, not a `content/audit/historical-archive-status.json` sidecar enum value.',
     '',
-    'These dates have `content/newsroom/YYYY-MM-DD/` artifacts but no public newsletter artifact. They are not public archive entries and are not subject to #108 public archive cleanup.',
+    'These dates have `content/newsroom/YYYY-MM-DD/` artifacts but no public newsletter artifact. They are not public archive entries and are not subject to public archive cleanup.',
     '',
     markdownList(report.newsroom_only_dates),
     ''

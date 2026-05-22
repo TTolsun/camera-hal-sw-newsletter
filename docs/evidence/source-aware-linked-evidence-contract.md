@@ -1,6 +1,6 @@
 # Source-Aware Linked Evidence Contract
 
-## Issue #185 Seed Evidence Extension
+## Seed Evidence Extension
 
 Seed evidence expansion reuses this linked-evidence boundary in Stage 2 only. Stage 1 approves `collection-intent.json`, Stage 2 fetches approved seed URLs and allowed linked evidence, and Stage 3 consumes only the approved candidate artifacts plus `compact_evidence`.
 
@@ -13,16 +13,16 @@ Additional seed-specific rules:
 - Stage 3 must not crawl or fetch seed URLs again.
 - Full `seed-evidence-pack.json` is a validation/debug artifact; Gemini prompts receive only candidate-level `compact_evidence`.
 
-이 문서는 issue `#89`의 staged implementation 경계를 고정한다. 목표는 source page, RSS article, release note row 안의 linked evidence를 보존하고 분류하되, 발행 안전성과 기존 article structure 계약을 약화하지 않는 것이다.
+이 문서는 source page, RSS article, release note row 안의 linked evidence를 보존하고 분류하는 현재 계약을 설명합니다. 목표는 evidence traceability를 높이되, 발행 안전성과 기존 article structure 계약을 약화하지 않는 것입니다.
 
 ## 책임 경계
 
-| Area | Owner | Contract |
+| Area | Implementation source | Contract |
 | --- | --- | --- |
-| Source extraction | `#111` Source Adapter Pipeline | Source page에서 release/version/date/component/source facts를 추출한다. Public article section을 직접 만들지 않는다. |
-| Linked evidence | `#89` Source-Aware Linked Evidence | `outgoing_links[]`를 보존하고 source-aware policy로 role을 분류한다. 필요한 경우 linked evidence를 resolve하고 Event Bundle로 묶는다. |
-| Public article structure | `#56` HAL executable article structure | 최종 newsletter article section order와 renderer-visible shape의 source of truth다. `#89`는 새 public article structure를 정의하지 않는다. |
-| Source and signal quality | `#46`, `#65` | Source quality, prompt quality, HAL-facing signal metric을 정의한다. `#89`는 이 metric에 traceable evidence를 제공한다. |
+| Source extraction | `scripts/newsroom/sources/adapters/**`, `scripts/newsroom/cli/collect-news-candidates.js` | Source page에서 release/version/date/component/source facts를 추출한다. Public article section을 직접 만들지 않는다. |
+| Linked evidence | `scripts/newsroom/evidence/**` | `outgoing_links[]`를 보존하고 source-aware policy로 role을 분류한다. 필요한 경우 linked evidence를 resolve하고 Event Bundle로 묶는다. |
+| Public article structure | `docs/newsletter-template.md`, `scripts/newsroom/render/**` | 최종 newsletter article section order와 renderer-visible shape의 source of truth다. Linked evidence는 새 public article structure를 정의하지 않는다. |
+| Source and signal quality | `scripts/newsroom/collect/**`, `scripts/newsroom/metrics/**`, `scripts/newsroom/validate/**` | Source quality, prompt quality, HAL-facing signal metric을 정의한다. Linked evidence는 이 metric에 traceable evidence를 제공한다. |
 
 ## Data 책임
 
@@ -31,7 +31,7 @@ Additional seed-specific rules:
 | `source_extraction` | Source adapter | Candidate normalization, prompt/report diagnostics | Source-confirmed facts만 담는다. Editorial hints는 별도 field에 둔다. |
 | `outgoing_links[]` | Collector/parser preservation slice | Role classifier | Optional이다. Link 누락이 collection failure가 되면 안 된다. |
 | `linked_evidence[]` | Existing extractor/resolver | Diagnostics, impact classifier | 명시적으로 요약되지 않은 resolved evidence는 report-only로 유지한다. |
-| `event_bundles[]` | Event Bundle builder slice | Diagnostics, conservative selection/report integration | PR 1에서는 구현하지 않는다. Bundle 부재가 fallback article 승격 이유가 되면 안 된다. |
+| `event_bundles[]` | Event Bundle builder | Diagnostics, conservative selection/report integration | Optional이다. Bundle 부재가 fallback article 승격 이유가 되면 안 된다. |
 
 ## `outgoing_links[]` Contract
 
@@ -56,7 +56,7 @@ Rules:
 
 ## Evidence Role Classification 경계
 
-Classification은 다음 slice에서 구현한다. Classifier는 preserved links를 입력으로 소비하되 preservation semantics를 바꾸지 않는다.
+Classifier는 preserved links를 입력으로 소비하되 preservation semantics를 바꾸지 않는다.
 
 Allowed roles:
 
@@ -106,10 +106,7 @@ Required limits before enabling network resolve:
 
 ## Event Bundle 계약
 
-PR 1에서는 Event Bundle을 구현하지 않는다.
-PR 5는 in-memory Event Bundle builder만 추가한다.
-PR 6는 `event-bundles.json`, `event-bundle-diagnostics.md`, PR body trace summary를 추가한다.
-Selection/scoring integration과 HAL runtime/API inference는 보수적 후속 integration 전까지 범위 밖이다.
+Event Bundle은 linked evidence를 diagnostics와 trace summary로 묶는 optional artifact입니다. Selection/scoring integration과 HAL runtime/API inference는 별도 보수적 integration이 명시되기 전까지 범위 밖입니다.
 Dedupe fallback order는 다음 순서를 따른다.
 
 ```text
@@ -150,7 +147,7 @@ Builder 규칙:
 - `event_bundles[]` 부재는 fallback article 승격 사유가 될 수 없다.
 - Preservation-only `unclassified`, `noise`, `unsupported`, `blocked_or_deferred`, `secondary_context` link는 Event Bundle evidence URL이 아니다.
 - Failed, blocked, skipped, unsupported resolved evidence는 `evidence_urls`에서 제외한다.
-- Event Bundle key는 deterministic해야 하며, conservative PR 6 integration 전까지 diagnostic-only로 취급한다.
+- Event Bundle key는 deterministic해야 하며, explicit scoring integration 전까지 diagnostic-only로 취급한다.
 - PR body에는 primary article -> followed evidence -> Event Bundle trace summary만 표시한다.
 - Event Bundle trace는 selection/scoring boost를 의미하지 않는다.
 

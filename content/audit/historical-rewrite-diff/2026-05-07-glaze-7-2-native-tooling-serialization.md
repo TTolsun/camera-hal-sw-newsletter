@@ -5,7 +5,7 @@
 - Date: 2026-05-07
 - Article slug: `glaze-7-2-native-tooling-serialization`
 - Source: ISO C++ Blog Glaze 7.2 release note
-- Issue: #108
+- Cleanup context: historical_archive_cleanup
 
 ## Original Summary
 

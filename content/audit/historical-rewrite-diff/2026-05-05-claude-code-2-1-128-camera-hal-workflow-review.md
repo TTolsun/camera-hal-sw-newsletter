@@ -5,7 +5,7 @@
 - Date: `2026-05-05`
 - Article slug: `claude-code-2-1-128-camera-hal-workflow-review`
 - Source URL: `https://code.claude.com/docs/en/changelog`
-- Cleanup issue: `#108`
+- Cleanup context: `historical_archive_cleanup`
 
 ## Original Summary
 

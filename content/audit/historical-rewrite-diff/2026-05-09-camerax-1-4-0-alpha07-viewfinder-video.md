@@ -20,4 +20,4 @@ The source supports CameraX artifact version changes. It does not establish a Ca
 
 ## Validation intent
 
-This rewrite keeps the historical source visible while lowering the article to an Android camera adjacent compatibility review input for #108 cleanup.
+This rewrite keeps the historical source visible while lowering the article to an Android camera adjacent compatibility review input for historical archive cleanup.

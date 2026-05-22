@@ -2,7 +2,7 @@
 
 ## 목적
 
-`#88`의 범위는 newsroom workflow를 RAW 수집, Optional Gemini Source Discovery boundary, Final Gemini Generation으로 분리하고 artifact replay boundary를 고정하는 것입니다. 실제 Gemini source intelligence는 `#149`에서 구현합니다.
+이 문서는 newsroom workflow를 RAW 수집, Optional Gemini Source Discovery boundary, Final Gemini Generation으로 분리하고 artifact replay boundary를 고정하는 현재 계약입니다. Gemini source intelligence는 Stage 2 boundary 안에서만 동작합니다.
 
 ## Stage 1 RAW Collection
 
@@ -103,7 +103,7 @@ Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidate
 - `gemini_candidate_artifact=content/collected-news/<date>/gemini-candidates.json`
 - `merge_mode=disabled_pass_through`
 
-Disabled pass-through는 `gemini-candidates.json`을 정확히 empty array `[]`로 씁니다. 이 파일은 #88 boundary artifact이며 Stage 3 generation input이 아닙니다.
+Disabled pass-through는 `gemini-candidates.json`을 정확히 empty array `[]`로 씁니다. 이 파일은 Stage 2 boundary artifact이며 Stage 3 generation input이 아닙니다.
 
 ### Enabled Gemini Source Discovery
 
@@ -137,18 +137,18 @@ Stage 3은 RAW artifact를 수정하지 않고 `collect`를 재실행하지 않�
 
 ## Manual Candidate Edit Policy
 
-v1에서는 수동 candidate edit를 허용하지 않습니다. RAW PR은 candidate review와 provenance 확인을 위한 PR이며, candidate payload를 사람이 수정해 Final Generation input으로 쓰는 절차는 별도 이슈에서 schema, review, approval 계약을 먼저 정의한 뒤 도입합니다.
+v1에서는 수동 candidate edit를 허용하지 않습니다. RAW PR은 candidate review와 provenance 확인을 위한 PR이며, candidate payload를 사람이 수정해 Final Generation input으로 쓰는 절차는 별도 schema, review, approval 계약을 먼저 정의한 뒤 도입합니다.
 
 ## Schedule Cutover
 
-`#154` cutover 이후 `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`) workflow가 scheduled RAW collection entrypoint입니다.
+현재 `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`) workflow가 scheduled RAW collection entrypoint입니다.
 
 - Stage 1은 daily schedule과 `workflow_dispatch`를 모두 지원합니다.
 - legacy all-in-one weekly workflow는 제거되어야 합니다.
 - Stage 2와 Stage 3은 계속 `workflow_dispatch` only입니다.
 - 전환 이후에도 all-in-one schedule과 Stage 1 schedule을 동시에 활성화하지 않습니다.
 
-PR branch는 date-based naming을 사용해 같은 날짜 PR 중복 생성을 막습니다.
+Workflow branch는 date-based naming을 사용해 같은 날짜 PR 중복 생성을 막습니다.
 
 - Stage 1: `newsroom-raw/<YYYY-MM-DD>`
 - Stage 3: `newsroom-final/<YYYY-MM-DD>`

@@ -20,4 +20,4 @@ The source supports CameraX artifact version facts and release timing. It does n
 
 ## Validation intent
 
-This rewrite keeps the historical CameraX source visible while reducing the article to an adjacent compatibility audit signal for #108 cleanup.
+This rewrite keeps the historical CameraX source visible while reducing the article to an adjacent compatibility audit signal for historical archive cleanup.

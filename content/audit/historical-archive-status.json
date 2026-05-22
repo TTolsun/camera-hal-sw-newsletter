@@ -6,7 +6,7 @@
     "known_limitations": [
       "review_only_publication"
     ],
-    "historical_cleanup_issue": "#274",
+    "historical_cleanup_context": "review_only_publication",
     "public_visibility": "listed"
   },
   {
@@ -16,7 +16,7 @@
     "known_limitations": [
       "review_only_publication"
     ],
-    "historical_cleanup_issue": "#257",
+    "historical_cleanup_context": "review_only_publication",
     "public_visibility": "listed"
   },
   {
@@ -24,7 +24,7 @@
     "archive_status": "stable_archive",
     "historical_cleanup_reviewed": true,
     "known_limitations": [],
-    "historical_cleanup_issue": "#242",
+    "historical_cleanup_context": "current_generation_archive_review",
     "public_visibility": "listed"
   },
   {
@@ -34,7 +34,7 @@
     "known_limitations": [
       "not_listed_in_data_newsletters"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "unlisted"
   },
   {
@@ -44,7 +44,7 @@
     "known_limitations": [
       "not_listed_in_data_newsletters"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "unlisted"
   },
   {
@@ -54,7 +54,7 @@
     "known_limitations": [
       "not_listed_in_data_newsletters"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "unlisted"
   },
   {
@@ -65,7 +65,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed"
   },
   {
@@ -76,7 +76,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed"
   },
   {
@@ -87,7 +87,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed"
   },
   {
@@ -98,7 +98,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed"
   },
   {
@@ -109,7 +109,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
@@ -125,7 +125,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed"
   },
   {
@@ -136,7 +136,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
@@ -152,7 +152,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed"
   },
   {
@@ -163,7 +163,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
@@ -181,7 +181,7 @@
       "pre_185_generation",
       "source_provenance_not_backfilled"
     ],
-    "historical_cleanup_issue": "#108",
+    "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diff": "content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md",
@@ -199,10 +199,10 @@
     "known_limitations": [
       "format_inconsistency",
       "delete_only_slice",
-      "removed_via_73",
+      "removed_archive_entry",
       "excluded_from_rewrite_path"
     ],
-    "historical_cleanup_issue": "#73",
+    "historical_cleanup_context": "removed_archive_cleanup",
     "public_visibility": "removed"
   }
 ]
