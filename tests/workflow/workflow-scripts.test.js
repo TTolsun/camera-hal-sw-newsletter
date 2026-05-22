@@ -4162,6 +4162,127 @@ test('fallback builder writes public files when one safe article is available', 
   assert.equal(result.status.public_newsletter_ready, true);
 });
 
+test('fallback builder includes selected native tooling supporting article after one safe main article', () => {
+  const root = tempRoot();
+  const date = '2026-05-22';
+  writeRootIndexContract(root);
+  const compose = regressionCandidate({
+    title: 'Building seamless Android experiences across devices with Jetpack Compose',
+    url: 'https://goo.gle/AdaptiveApps_IO26',
+    bucket: 'android_platform_camera_adjacent'
+  });
+  const aiStudio = {
+    ...regressionCandidate({
+      title: 'Build native Android apps in Google AI Studio',
+      url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html',
+      bucket: 'cpp_ai_tooling_fallback',
+      fallback: true
+    }),
+    source: 'Android Developers Blog',
+    component: 'Google AI Studio',
+    tooling_workflow_type: 'native_tooling_workflow',
+    article_group_key: 'android_native_tooling_workflow',
+    native_tooling_relevance: 4,
+    impact_claim_level: 'tooling_supporting',
+    summary: 'Google AI Studio added native Android app generation workflow support for Android developers.'
+  };
+  const editor = {
+    date,
+    title: `Camera HAL SW Newsletter - ${date}`,
+    summary: 'Workflow 3 fallback should keep source-ready supporting tooling.',
+    briefing: ['Compose CameraX item.', 'AI Studio tooling item.', 'Review-only public issue.'],
+    sections: [regressionSection(compose)],
+    action_items: ['Review Compose CameraX behavior.'],
+    references: []
+  };
+  const status = {
+    date,
+    status: 'NEEDS_FIX',
+    generation_status: 'FAILED',
+    failure_stage: 'editor attempt 1/2',
+    failure_reason: 'Editor output failed article section contract validation.',
+    final_publish_ready: false,
+    artifact_final_publish_ready: false,
+    publish_gate_passed: false,
+    review_gate_passed: true,
+    editor_review_required: true,
+    fact_check_status: 'PASS',
+    must_fix_count: 0,
+    source_gap_count: 0,
+    quality_status: 'PASS',
+    quality_score: 100,
+    quality_threshold: qualityGatePolicy.threshold,
+    rendered_main_article_count: 1,
+    selected_article_count: 2,
+    min_final_articles: articlePolicy.mainArticleCount.min
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+    date,
+    score: 100,
+    threshold: qualityGatePolicy.threshold,
+    status: 'PASS',
+    deductions: [],
+    article_results: [{
+      index: 1,
+      headline: compose.title,
+      status: 'PASS',
+      repair_action: 'preserve',
+      hard_fail_reasons: [],
+      scope_count: scopeCountForCandidate(compose)
+    }]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+    status: 'PASS',
+    must_fix: [],
+    source_gaps: [],
+    source_gap_count: 0,
+    final_comment: 'PASS'
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), {
+    date,
+    candidates: [compose, aiStudio]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [compose, aiStudio],
+    reserve_candidates: [],
+    composition_summary: {
+      supporting_main_article_count: 1
+    }
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
+    selected_capsules: [compose, aiStudio],
+    reserve_capsules: []
+  });
+
+  const result = buildFallbackPublicIssue({ root, date });
+  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
+  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
+  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
+
+  assert.equal(finalEditor.sections.length, 2);
+  assert.equal(
+    finalEditor.sections.some(section => section.headline.includes(aiStudio.title)),
+    true,
+    finalEditor.sections.map(section => section.headline).join(' | ')
+  );
+  assert.match(publicMarkdown, /Build native Android apps in Google AI Studio/);
+  assert.equal(fallbackReport.fallback_articles.some(item => item.action === 'selected-native-tooling-supporting'), true);
+  assert.equal(result.status.public_newsletter_ready, true);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+  assert.equal(outputs.public_newsletter_ready, 'true');
+  assert.equal(outputs.diagnostics_only, 'false');
+});
+
 test('fallback failure diagnostics overwrites stale failure reason on rerun', () => {
   const root = tempRoot();
   const date = '2026-05-08';

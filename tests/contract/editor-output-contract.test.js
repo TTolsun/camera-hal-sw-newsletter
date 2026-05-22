@@ -766,6 +766,44 @@ test('editor output contract requires article_sections on new draft sections', (
   );
 });
 
+test('semantic repair deterministically restores missing article_sections from section fields', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const draft = editor({
+    sections: [
+      section(1, { article_sections: undefined }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    newsroomDir,
+    normalizeSection,
+    repairFn: async () => {
+      throw new Error('LLM repair should not be needed for deterministic article_sections repair.');
+    }
+  });
+
+  assert.equal(result.repairAttempted, true);
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.deterministicRepair, true);
+  assert.deepEqual(result.editor.sections[0].article_sections, {
+    verified_facts: ['Fact 1'],
+    background_context: 'Background 1',
+    hal_driver_impact: 'HAL perspective 1',
+    action_items: ['Action 1'],
+    team_share_points: 'Summary 1',
+    do_not_claim: ['Do not overstate direct HAL impact.']
+  });
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'editor-invalid-attempt-1.json')), true);
+  const errorArtifact = readJson(path.join(newsroomDir, 'editor-validation-error-attempt-1.json'));
+  assert.equal(errorArtifact.field, 'sections.article_sections');
+});
+
 test('editor output contract requires HAL Signal Capsule on new draft sections', () => {
   const draft = editor({
     sections: [
