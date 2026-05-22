@@ -99,7 +99,7 @@ function statusEntry(date, overrides = {}) {
     archive_status: 'historical_unreviewed',
     historical_cleanup_reviewed: false,
     known_limitations: ['historical_cleanup_pending'],
-    historical_cleanup_issue: '#108',
+    historical_cleanup_context: 'historical_archive_cleanup',
     public_visibility: 'listed',
     ...overrides
   };
@@ -151,7 +151,7 @@ test('historical archive audit classifies newsroom-only artifacts as non-public 
   assert.equal(entry.artifact_scope, 'non_public_newsroom_artifact');
   assert.equal(entry.archive_status, null);
   assert.equal(entry.public_visibility, 'not_public');
-  assert.equal(entry.historical_cleanup_issue, '#108');
+  assert.equal(entry.historical_cleanup_context, 'non_public_newsroom_artifact');
   assert.equal(audit.report.validation_warning_count, 0);
   assert.match(
     require('node:fs').readFileSync(path.join(root, DEFAULT_CLEANUP_REPORT_PATH), 'utf8'),
@@ -247,7 +247,7 @@ test('historical archive validator rejects fake seed evidence provenance in pre-
 
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
-  assert.match(result.errors.join('\n'), /Pre-#185 public article 2026-05-05 contains seed evidence workflow provenance wording/);
+  assert.match(result.errors.join('\n'), /Pre-seed-evidence public article 2026-05-05 contains seed evidence workflow provenance wording/);
 });
 
 test('historical archive validator requires diff artifact for material rewrite entries', () => {
@@ -407,7 +407,7 @@ test('historical archive final metrics parse escaped pipe inventory rows', () =>
     '| Date | Article title | Article slug | Source URL present | Source-backed fact present | HAL relevance | Action item specificity | Overclaim risk | Format consistency | Current quality status | Recommended decision | Severity | Review note |',
     '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
     '| 2026-05-19 | Glaze 7.2 - C++26 Reflection \\| YAML | glaze-7-2-c-26-reflection | yes | partial | low | generic | medium | weak | reviewed_archive | keep | none | Final-reviewed; accepted historical limitation: partial source-backed coverage, generic actionability, medium overclaim risk, weak historical format. |',
-    '| 2026-04-30 | Removed archive summary | removed-archive-summary | no | no | unknown | none | unknown | inconsistent | removed | delete_completed_via_73 | S3 | Removed. |',
+    '| 2026-04-30 | Removed archive summary | removed-archive-summary | no | no | unknown | none | unknown | inconsistent | removed | delete_completed | S3 | Removed. |',
     ''
   ].join('\n');
 

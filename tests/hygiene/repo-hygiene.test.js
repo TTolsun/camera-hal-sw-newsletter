@@ -12,10 +12,10 @@ test('findRepoHygieneIssues reports tracked root agent scratch files', () => {
     'PLAN.md',
     'PLAN.local.md',
     '.codex/PLAN.local.md',
-    '.tmp/codex/issue-68.md',
+    '.tmp/codex/local-plan.md',
     'codex-notes.md',
-    'issue-68-codex-plan.md',
-    'issue-68-scratch.md',
+    'feature-codex-plan.md',
+    'feature-scratch.md',
     '.tmp/newsletter-date.txt'
   ]);
 
@@ -23,10 +23,10 @@ test('findRepoHygieneIssues reports tracked root agent scratch files', () => {
     'PLAN.md',
     'PLAN.local.md',
     '.codex/PLAN.local.md',
-    '.tmp/codex/issue-68.md',
+    '.tmp/codex/local-plan.md',
     'codex-notes.md',
-    'issue-68-codex-plan.md',
-    'issue-68-scratch.md'
+    'feature-codex-plan.md',
+    'feature-scratch.md'
   ]);
   assert.equal(issues.every(item => item.type === 'tracked_agent_scratch'), true);
   assert.match(formatIssue(issues[0]), /^PLAN\.md: tracked_agent_scratch: /);
@@ -36,30 +36,47 @@ test('findRepoHygieneIssues allows official docs and nested markdown names', () 
   const issues = findRepoHygieneIssues([
     'README.md',
     'AGENTS.md',
-    'docs/plans/PLAN.md',
-    'docs/plans/codex-notes.md',
-    'docs/plans/issue-68-codex-plan.md',
-    'docs/plans/issue-68-scratch.md',
+    'docs/operations/manual-run.ko.md',
+    'docs/evidence/source-aware-linked-evidence-contract.md',
     'notes/codex-notes.md'
   ]);
 
   assert.deepEqual(issues, []);
 });
 
+test('findRepoHygieneIssues reports tracked worklog document folders', () => {
+  const issues = findRepoHygieneIssues([
+    'docs/plans/root-docs-audit.md',
+    'docs/debug/source-url-prompt-quality-rollout.md',
+    'docs/refactoring/pr-body-publish-gate-consistency-plan.md',
+    'docs/archive/handoff-2026-05-05.md',
+    'docs/testing/test-baseline.md'
+  ]);
+
+  assert.deepEqual(issues.map(item => item.path), [
+    'docs/plans/root-docs-audit.md',
+    'docs/debug/source-url-prompt-quality-rollout.md',
+    'docs/refactoring/pr-body-publish-gate-consistency-plan.md',
+    'docs/archive/handoff-2026-05-05.md',
+    'docs/testing/test-baseline.md'
+  ]);
+  assert.equal(issues.every(item => item.type === 'tracked_worklog_document'), true);
+});
+
 test('findRepoHygieneIssues normalizes Windows path separators', () => {
   const issues = findRepoHygieneIssues([
     '.codex\\PLAN.local.md',
-    '.tmp\\codex\\issue-68.md',
+    '.tmp\\codex\\local-plan.md',
     'codex-notes.md',
     'nested\\codex-notes.md'
   ]);
 
   assert.deepEqual(issues.map(item => item.path), [
     '.codex/PLAN.local.md',
-    '.tmp/codex/issue-68.md',
+    '.tmp/codex/local-plan.md',
     'codex-notes.md'
   ]);
-  assert.equal(normalizePath('docs\\plans\\example.md'), 'docs/plans/example.md');
+  assert.equal(normalizePath('docs\\operations\\example.md'), 'docs/operations/example.md');
 });
 
 test('findRepoHygieneIssues reports root tests even when they are allowlisted', () => {

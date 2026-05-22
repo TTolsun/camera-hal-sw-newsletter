@@ -1,6 +1,6 @@
 # Article Structure Contract
 
-이 문서는 issue `#56`의 final public article structure source of truth다. Source crawling, linked evidence resolving, Event Bundle construction은 소유하지 않고, 최종 article section 구조와 renderer-visible output만 정의한다.
+이 문서는 final public article structure의 source of truth다. Source crawling, linked evidence resolving, Event Bundle construction은 소유하지 않고, 최종 article section 구조와 renderer-visible output만 정의한다.
 
 ## New Generation Contract
 
@@ -52,7 +52,7 @@ Optional public blocks:
 
 ## Evidence Mapping
 
-#185 `compact_evidence`는 final article structure의 input으로만 사용한다. Stage 3은 seed URL crawling을 다시 수행하지 않는다.
+`compact_evidence`는 final article structure의 input으로만 사용한다. Stage 3은 seed URL crawling을 다시 수행하지 않는다.
 
 ```text
 compact_evidence.primary_facts -> article_sections.verified_facts
@@ -68,25 +68,25 @@ compact_evidence.do_not_claim -> article_sections.do_not_claim or known_limitati
 
 ## Claim Binding Compatibility
 
-#125 claim binding은 `article_sections.verified_facts`를 fact coverage 대상으로 본다. New main article의 fact claim은 item-level evidence id와 source URL을 가져야 한다. `evidence_pack_ids` 단독 support는 신규 생성물의 fact claim support로 충분하지 않다.
+Claim binding은 `article_sections.verified_facts`를 fact coverage 대상으로 본다. New main article의 fact claim은 item-level evidence id와 source URL을 가져야 한다. `evidence_pack_ids` 단독 support는 신규 생성물의 fact claim support로 충분하지 않다.
 
 `article_sections.do_not_claim`은 strong guardrail이다. `article_sections.known_limitations`는 direct HAL/API/runtime/driver limitation wording이 있을 때 overclaim guardrail로 사용한다. `watch_items`는 guardrail이 아니라 report/rendering 중심의 follow-up signal이다.
 
-## Cross-Issue Boundary
+## Responsibility Boundary
 
-- `#185`: seed URL fetch, linked evidence expansion, Evidence Pack, `compact_evidence` 생성 소유.
-- `#111`: source-specific extraction schema 소유. Source adapter는 public article heading을 직접 생성하지 않는다.
-- `#89`: Event Bundle evidence enrichment 소유. Event Bundle은 article structure를 정의하지 않는다.
-- `#125`: `claims[]`, claim -> evidence id/source URL binding, HAL overclaim validation 소유.
-- `#56`: normalized article section keys, public section order, renderer-visible structure, section completeness report shape 소유.
+- Seed evidence: seed URL fetch, linked evidence expansion, Evidence Pack, `compact_evidence` 생성을 소유한다.
+- Source adapters: source-specific extraction schema를 소유한다. Source adapter는 public article heading을 직접 생성하지 않는다.
+- Event Bundle: evidence enrichment를 소유한다. Event Bundle은 article structure를 정의하지 않는다.
+- Claim binding: `claims[]`, claim -> evidence id/source URL binding, HAL overclaim validation을 소유한다.
+- Article structure: normalized article section keys, public section order, renderer-visible structure, section completeness report shape를 소유한다.
 
 ## Historical Compatibility
 
-#108 historical rewrite는 별도 이슈에서 처리한다. #56 contract 구현은 기존 `content/newsroom/**`, `content/collected-news/**`, `newsletters/**` artifact를 재생성하지 않는다.
+Historical rewrite는 archive cleanup contract에서 처리한다. Article structure contract 구현은 기존 `content/newsroom/**`, `content/collected-news/**`, `newsletters/**` artifact를 재생성하지 않는다.
 
 Historical cleanup rule:
 
-- pre-#185 article에 fake seed evidence provenance를 추가하지 않는다.
+- seed evidence workflow 이전 article에 fake seed evidence provenance를 추가하지 않는다.
 - source에 없는 technical claim을 추가하지 않는다.
 - structure normalization은 source support가 있을 때만 한다.
-- optional provenance/rewrite fields는 #108에서 정의하고 처리한다.
+- optional provenance/rewrite fields는 historical archive cleanup contract에서 정의하고 처리한다.

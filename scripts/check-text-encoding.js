@@ -97,7 +97,10 @@ function trackedFiles(root = process.cwd()) {
     cwd: root,
     encoding: 'buffer'
   });
-  return output.toString('utf8').split('\0').filter(Boolean);
+  return output.toString('utf8')
+    .split('\0')
+    .filter(Boolean)
+    .filter(filePath => fs.existsSync(path.join(root, filePath)));
 }
 
 function checkTrackedTextFiles(root = process.cwd()) {

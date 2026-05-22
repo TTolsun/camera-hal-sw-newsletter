@@ -5,7 +5,7 @@
 - Date: `2026-05-05`
 - Article slug: `c-26-assert-camera-hal-debug-build`
 - Source URL: `https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo`
-- Cleanup issue: `#108`
+- Cleanup context: `historical_archive_cleanup`
 
 ## Original Summary
 

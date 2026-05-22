@@ -8,7 +8,7 @@
 
 ## npm run validate 실행 결과
 
-Not rerun during artifact edit; see docs/testing/test-baseline.md and final validation.
+Not rerun during artifact edit; final validation was recorded with the release change.
 
 ## 잔여 TODO 여부
 

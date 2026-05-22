@@ -1,11 +1,11 @@
 # HAL Signal Quality Scorecard
 
-이 문서는 #65의 HAL engineer signal quality 기준을 고정합니다. 목표는 새 source/parser를 늘리는 것이 아니라, 이미 생성된 Stage 3 artifact에서 main article이 HAL 독자에게 실제로 검토 가치가 있는지 측정하고 publish gate에 반영하는 것입니다.
+이 문서는 HAL engineer signal quality 기준을 고정합니다. 목표는 새 source/parser를 늘리는 것이 아니라, 이미 생성된 Stage 3 artifact에서 main article이 HAL 독자에게 실제로 검토 가치가 있는지 측정하고 publish gate에 반영하는 것입니다.
 
 ## Scope
 
-- 적용 대상: #65 merge 이후 생성되는 신규 Stage 3 `editor-draft.json`, `quality-report.json`, `hal-signal-quality-report.json/md`.
-- 비대상: 기존 public archive rewrite, 과거 generated artifact golden fixture, #55/#57 source expansion, #108 historical cleanup.
+- 적용 대상: 신규 Stage 3 `editor-draft.json`, `quality-report.json`, `hal-signal-quality-report.json/md`.
+- 비대상: 기존 public archive rewrite, 과거 generated artifact golden fixture, source expansion, historical cleanup.
 - 기존 field shape는 유지합니다. `selection_shortage_hints[]`와 `hal_impact_summary.axes`는 기존 소비자를 위해 제거하거나 구조 변경하지 않습니다.
 
 ## Required Article Fields
@@ -70,7 +70,7 @@ node scripts/newsroom/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-
 Write a local/debug baseline explicitly:
 
 ```powershell
-node scripts/newsroom/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-15,2026-05-16,2026-05-17 --output docs/debug/2026-05-17-hal-signal-quality-baseline.md
+node scripts/newsroom/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-15,2026-05-16,2026-05-17 --output .tmp/hal-signal-quality-baseline.md
 ```
 
-`--output`이 없으면 파일을 쓰지 않습니다. PR 1 baseline 값은 one-time snapshot이며 validation source of truth가 아닙니다. 자동 산출 source of truth는 Stage 3의 `hal-signal-quality-report.json/md`입니다.
+`--output`이 없으면 파일을 쓰지 않습니다. 수동 baseline은 local debug 자료이며 validation source of truth가 아닙니다. 자동 산출 source of truth는 Stage 3의 `hal-signal-quality-report.json/md`입니다.

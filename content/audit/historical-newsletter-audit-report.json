@@ -2,17 +2,18 @@
   "schema_version": 1,
   "report_type": "historical_newsletter_audit",
   "source_of_truth": "content/audit/historical-archive-status.json",
-  "data_newsletter_count": 10,
-  "public_artifact_count": 13,
-  "newsroom_artifact_count": 15,
-  "sidecar_entry_count": 14,
+  "data_newsletter_count": 13,
+  "public_artifact_count": 16,
+  "newsroom_artifact_count": 18,
+  "sidecar_entry_count": 17,
   "archive_status_counts": {
+    "stable_archive": 3,
     "reviewed_archive": 13,
     "removed": 1
   },
   "public_visibility_counts": {
+    "listed": 13,
     "unlisted": 3,
-    "listed": 10,
     "removed": 1
   },
   "orphan_public_dates": [
@@ -85,16 +86,15 @@
       ]
     }
   ],
-  "issue_level_normalizations": [
+  "historical_content_normalizations": [
     {
       "date": "2026-05-11",
       "type": "global_action_item_normalization",
-      "note": "2026-05-11 received issue-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report."
+      "note": "2026-05-11 received date-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report."
     }
   ],
   "final_decision": {
-    "can_close_issue": true,
-    "issue": "#108",
+    "archive_trust_complete": true,
     "reason": "No unresolved S0/S1 rows, rewrite/downgrade/archive-note rows, source gaps, overclaim risks, or weak actionability rows remain after accepted historical limitations are recorded."
   },
   "validation_error_count": 0,
@@ -102,6 +102,46 @@
   "validation_errors": [],
   "validation_warnings": [],
   "entries": [
+    {
+      "date": "2026-05-22",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "stable_archive",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": true,
+      "known_limitations": [
+        "review_only_publication"
+      ],
+      "historical_cleanup_context": "review_only_publication"
+    },
+    {
+      "date": "2026-05-21",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "stable_archive",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": true,
+      "known_limitations": [
+        "review_only_publication"
+      ],
+      "historical_cleanup_context": "review_only_publication"
+    },
+    {
+      "date": "2026-05-20",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "stable_archive",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": true,
+      "known_limitations": [],
+      "historical_cleanup_context": "current_generation_archive_review"
+    },
     {
       "date": "2026-05-19",
       "artifact_scope": "public_archive",
@@ -114,7 +154,7 @@
       "known_limitations": [
         "not_listed_in_data_newsletters"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-18",
@@ -128,7 +168,7 @@
       "known_limitations": [
         "not_listed_in_data_newsletters"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-17",
@@ -142,7 +182,7 @@
       "known_limitations": [
         "not_listed_in_data_newsletters"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-16",
@@ -157,7 +197,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-15",
@@ -172,7 +212,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-14",
@@ -184,7 +224,7 @@
       "public_visibility": "not_public",
       "historical_cleanup_reviewed": false,
       "known_limitations": [],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "non_public_newsroom_artifact"
     },
     {
       "date": "2026-05-13",
@@ -199,7 +239,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-12",
@@ -214,7 +254,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-11",
@@ -229,7 +269,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-10",
@@ -244,7 +284,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-09",
@@ -259,7 +299,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-08",
@@ -274,7 +314,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-07",
@@ -289,7 +329,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-05-06",
@@ -301,7 +341,7 @@
       "public_visibility": "not_public",
       "historical_cleanup_reviewed": false,
       "known_limitations": [],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "non_public_newsroom_artifact"
     },
     {
       "date": "2026-05-05",
@@ -316,7 +356,7 @@
         "pre_185_generation",
         "source_provenance_not_backfilled"
       ],
-      "historical_cleanup_issue": "#108"
+      "historical_cleanup_context": "historical_archive_cleanup"
     },
     {
       "date": "2026-04-30",
@@ -330,10 +370,10 @@
       "known_limitations": [
         "format_inconsistency",
         "delete_only_slice",
-        "removed_via_73",
+        "removed_archive_entry",
         "excluded_from_rewrite_path"
       ],
-      "historical_cleanup_issue": "#73"
+      "historical_cleanup_context": "removed_archive_cleanup"
     }
   ]
 }

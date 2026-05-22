@@ -26,4 +26,4 @@ The source supports that an Android Security Bulletin exists and covers Android 
 
 ## Validation Intent
 
-This is a material rewrite for #108 because the public article meaning changed from direct HAL vulnerability framing to bounded adjacent security triage.
+This is a material rewrite because the public article meaning changed from direct HAL vulnerability framing to bounded adjacent security triage.

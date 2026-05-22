@@ -1,12 +1,12 @@
 # 기존 뉴스레터 품질 Cleanup Report
 
-Issue #108은 unsupported seed evidence provenance를 사후 보강하지 않고 historical public archive cleanup 상태만 추적합니다.
+이 문서는 unsupported seed evidence provenance를 사후 보강하지 않고 historical public archive cleanup 상태만 추적합니다.
 
 ## Final Archive Trust Summary
 
 ### Date-level status
 
-- reviewed archive dates: 13
+- reviewed archive dates: 16
 - removed archive dates: 1
 - historical unreviewed dates: 0
 - deprecated archive dates: 0
@@ -39,7 +39,7 @@ Issue #108은 unsupported seed evidence provenance를 사후 보강하지 않고
 
 ## Remaining Accepted Limitations
 
-- Pre-#185 generation: source provenance was not backfilled.
+- Pre-seed-evidence generation: source provenance was not backfilled.
 - Partial source-backed coverage rows retained as accepted limitations: 40
 - Generic actionability rows retained as accepted limitations: 25
 - Medium overclaim rows retained as accepted limitations: 3
@@ -53,9 +53,9 @@ These remain unlisted because they are absent from `data/newsletters.json`. This
 - 2026-05-18
 - 2026-05-19
 
-## Issue-level Normalizations
+## Historical Content Normalizations
 
-- 2026-05-11 received issue-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report.
+- 2026-05-11 received date-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report.
 
 ## Material Rewrite Traceability
 
@@ -73,28 +73,31 @@ These remain unlisted because they are absent from `data/newsletters.json`. This
 
 ## Final Decision
 
-#108 can be closed because no unresolved S0/S1 rows remain, all material rewrites have diff artifacts, pre-#185 provenance was not backfilled, and final validation passed.
+Archive trust cleanup is complete because no unresolved S0/S1 rows remain, all material rewrites have diff artifacts, pre-seed-evidence provenance was not backfilled, and final validation passed.
 
 ## Archive Entries
 
-| Date | Artifact scope | Archive status | Public visibility | Data index | Public artifact | Known limitations | Issue |
+| Date | Artifact scope | Archive status | Public visibility | Data index | Public artifact | Known limitations | Cleanup context |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-05-19 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | #108 |
-| 2026-05-18 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | #108 |
-| 2026-05-17 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | #108 |
-| 2026-05-16 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-15 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-14 | non_public_newsroom_artifact | none | not_public | no | no | none | #108 |
-| 2026-05-13 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-12 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-11 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-10 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-09 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-08 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-07 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-05-06 | non_public_newsroom_artifact | none | not_public | no | no | none | #108 |
-| 2026-05-05 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | #108 |
-| 2026-04-30 | public_archive | removed | removed | no | no | format_inconsistency, delete_only_slice, removed_via_73, excluded_from_rewrite_path | #73 |
+| 2026-05-22 | public_archive | stable_archive | listed | yes | yes | review_only_publication | review_only_publication |
+| 2026-05-21 | public_archive | stable_archive | listed | yes | yes | review_only_publication | review_only_publication |
+| 2026-05-20 | public_archive | stable_archive | listed | yes | yes | none | current_generation_archive_review |
+| 2026-05-19 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | historical_archive_cleanup |
+| 2026-05-18 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | historical_archive_cleanup |
+| 2026-05-17 | public_archive | reviewed_archive | unlisted | no | yes | not_listed_in_data_newsletters | historical_archive_cleanup |
+| 2026-05-16 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-15 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-14 | non_public_newsroom_artifact | none | not_public | no | no | none | non_public_newsroom_artifact |
+| 2026-05-13 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-12 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-11 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-10 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-09 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-08 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-07 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-05-06 | non_public_newsroom_artifact | none | not_public | no | no | none | non_public_newsroom_artifact |
+| 2026-05-05 | public_archive | reviewed_archive | listed | yes | yes | pre_185_generation, source_provenance_not_backfilled | historical_archive_cleanup |
+| 2026-04-30 | public_archive | removed | removed | no | no | format_inconsistency, delete_only_slice, removed_archive_entry, excluded_from_rewrite_path | removed_archive_cleanup |
 
 ## data/newsletters.json에 없는 Public Dates
 
@@ -106,7 +109,7 @@ These remain unlisted because they are absent from `data/newsletters.json`. This
 
 `not_public` is an audit report classification, not a `content/audit/historical-archive-status.json` sidecar enum value.
 
-These dates have `content/newsroom/YYYY-MM-DD/` artifacts but no public newsletter artifact. They are not public archive entries and are not subject to #108 public archive cleanup.
+These dates have `content/newsroom/YYYY-MM-DD/` artifacts but no public newsletter artifact. They are not public archive entries and are not subject to public archive cleanup.
 
 - 2026-05-06
 - 2026-05-14

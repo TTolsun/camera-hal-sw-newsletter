@@ -79,7 +79,7 @@ Fixture layout migration must be handled as a separate scoped change.
 
 `collection-intent.json`, `seed-evidence-pack.json`, `seed-candidates.json`, and
 `compact_evidence` names may appear in synthetic or workflow-shape fixtures when
-the test protects the #185 seed evidence contract. These names are not banned
+the test protects the seed evidence contract. These names are not banned
 globally.
 
 They are banned only when a `good/` fixture has generated provenance:
@@ -90,7 +90,7 @@ They are banned only when a `good/` fixture has generated provenance:
 - ledger `generatedArtifact=true`
 - ledger `source=minimized-generated-regression`
 
-Generated #185 artifacts may be used only as workflow-shape, smoke, or minimized
+Generated seed artifacts may be used only as workflow-shape, smoke, or minimized
 regression evidence. They must not become quality PASS golden, source/evidence
 correctness golden, HAL impact golden, or claim binding golden fixtures.
 

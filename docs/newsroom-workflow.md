@@ -187,13 +187,13 @@ NEWSROOM_PRO_ESCALATION=manual
 
 manual high-quality run(수동 고품질 실행)의 기본 입력은 `allow_pro=false`, `llm_model=""`입니다. 이때 workflow는 `LLM_MODEL`을 전달하지 않으므로 code default stage model을 사용하고 Pro를 호출하지 않습니다. 모든 stage를 Pro로 승격하려면 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`로 바꿉니다. JS model policy는 Pro fallback을 자동으로 추가하지 않으며, provider가 `gemini`인 `workflow_dispatch` 실행에서 explicit Pro model이 설정되고 `allow_pro=true`일 때만 Pro 사용을 허용합니다.
 
-## Issue #185 Seed Evidence Workflow Priority
+## Seed Evidence Workflow Priority
 
-`#185` workflow migration은 newsroom pipeline 안에서 P0-equivalent 작업으로 취급합니다. 우선순위는 `#185 workflow migration > legacy compatibility cleanup`이지만, `source/evidence/security/publish safety > #185 workflow migration`이 더 높은 절대 기준입니다.
+Seed evidence workflow migration은 newsroom pipeline 안에서 P0-equivalent 작업으로 취급합니다. 우선순위는 `seed evidence workflow migration > legacy compatibility cleanup`이지만, `source/evidence/security/publish safety > seed evidence workflow migration`이 더 높은 절대 기준입니다.
 
 Legacy-pattern test failure는 다음 조건을 모두 만족할 때만 blocker에서 분리할 수 있습니다.
 
-- Targeted `#185` tests와 `npm.cmd run validate`가 통과합니다.
+- Targeted seed evidence tests와 `npm.cmd run validate`가 통과합니다.
 - 실패가 source integrity, URL safety, quality gate, selector gate, publish gate와 무관합니다.
 - PR body에 affected test, failure reason, classification, follow-up이 기록됩니다.
 
@@ -230,7 +230,7 @@ workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만
 
 ### 3-stage RAW workflow
 
-`#154` cutover 이후 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
+현재 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
 
 - `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`): `collect`만 실행하고 `manual-candidates.json`, compatibility `candidates.json`, `raw-candidate-manifest.json`을 생성합니다. Gemini/API secret을 사용하지 않습니다.
 - `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`): `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`에서는 credential-free disabled pass-through로 `merged-candidates.json`을 만듭니다. `true`에서는 LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다.
@@ -319,7 +319,7 @@ PR에서 다음 항목을 확인합니다.
 
 ## Source quality and prompt contract
 
-Issue `#46` adds an executable source quality layer between collection and Stage 3 generation.
+Source quality adds an executable policy layer between collection and Stage 3 generation.
 
 - Candidate collection runs `scripts/newsroom/collect/source-quality-classifier.js` before article capsule generation.
 - New candidates carry canonical `source_quality`; flat source quality fields are compatibility mirrors.

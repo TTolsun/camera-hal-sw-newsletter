@@ -1,11 +1,11 @@
 # Existing Newsletter Quality Inventory
 
-Issue #108은 이 inventory를 사용해 historical archive cleanup 우선순위를 정합니다. 이 문서는 historical article을 source-backed article로 바꾸지 않으며, 현재 review 상태와 권장 cleanup 방향만 기록합니다.
+이 inventory는 historical archive cleanup 우선순위를 정합니다. 이 문서는 historical article을 source-backed article로 바꾸지 않으며, 현재 review 상태와 권장 cleanup 방향만 기록합니다.
 
 ## Inventory Scope
 
 - Includes article-level rows for the 13 current public artifact dates in `newsletters/YYYY-MM-DD/newsletter.md`.
-- Includes one removed archive summary row for `2026-04-30` because #73 completed the delete-only slice.
+- Includes one removed archive summary row for `2026-04-30` because delete-only cleanup is complete.
 - Excludes newsroom-only dates `2026-05-06` and `2026-05-14` because they are not public archive entries.
 - Article heading count was recalculated from public `newsletter.md` files during this expansion: 40 article rows plus 1 removed summary row.
 - Article rows include main/brief article title headings only; references, action items, briefing, source list, and editorial/meta headings are excluded.
@@ -20,7 +20,7 @@ Issue #108은 이 inventory를 사용해 historical archive cleanup 우선순위
 - `Overclaim risk`: `high` / `medium` / `low` / `unknown`
 - `Format consistency`: `good` / `weak` / `inconsistent` / `unknown`
 - `Current quality status`: `historical_unreviewed` / `reviewed_archive` / `removed`
-- `Recommended decision`: `keep_candidate` / `audit_first` / `keep` / `downgrade_review` / `rewrite_review` / `archive_note_review` / `delete_completed_via_73`
+- `Recommended decision`: `keep_candidate` / `audit_first` / `keep` / `downgrade_review` / `rewrite_review` / `archive_note_review` / `delete_completed`
 - `Severity`: `S0` / `S1` / `S2` / `S3` / `pending` / `none`
 
 ## Source Review Rules
@@ -97,4 +97,4 @@ Issue #108은 이 inventory를 사용해 historical archive cleanup 우선순위
 | 2026-05-05 | 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위 | 2026-5-android-camera-related-cve | yes | partial | medium | specific | low | weak | reviewed_archive | keep | none | Final-reviewed; accepted historical limitation: partial source-backed coverage, weak historical format retained without further rewrite. |
 | 2026-05-05 | Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위 | firebase-ai-logic-camera-hal-npu-gpu | yes | partial | low | generic | medium | weak | reviewed_archive | keep | none | Final-reviewed; accepted historical limitation: partial source-backed coverage, generic historical actionability, medium overclaim risk already bounded by prior cleanup, weak historical format retained without further rewrite. |
 | 2026-05-05 | C++26 assert(): Camera HAL debug-build 검토 범위 | c-26-assert-camera-hal-debug-build | yes | partial | low | generic | medium | weak | reviewed_archive | keep | none | Final-reviewed; accepted historical limitation: partial source-backed coverage, generic historical actionability, medium overclaim risk already bounded by prior cleanup, weak historical format retained without further rewrite. |
-| 2026-04-30 | Removed archive summary | removed-archive-summary | no | no | unknown | none | unknown | inconsistent | removed | delete_completed_via_73 | S3 | #73 delete-only slice completed; no public/newsroom artifact remains |
+| 2026-04-30 | Removed archive summary | removed-archive-summary | no | no | unknown | none | unknown | inconsistent | removed | delete_completed | S3 | Delete-only cleanup completed; no public/newsroom artifact remains |

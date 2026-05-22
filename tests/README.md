@@ -2,7 +2,7 @@
 
 이 폴더는 Node built-in test runner로 newsroom automation, quality gate, source selection, rendering, workflow, repository hygiene 계약을 보호합니다. Production validator를 약화하거나 fixture 기대값을 낮춰서 test를 통과시키지 않습니다.
 
-상세 test inventory와 migration 기록은 `docs/testing/test-inventory.md`를 기준으로 봅니다. 이 파일은 새 test를 어디에 둘지, 어떤 fixture/helper 계약을 지킬지 결정하는 짧은 작업 가이드입니다.
+새 test를 어디에 둘지, 어떤 fixture/helper 계약을 지킬지는 이 파일과 `tests/AGENTS.md`, `tests/fixtures/README.md`를 기준으로 봅니다. Dated migration inventory나 과거 baseline 문서는 유지하지 않습니다.
 
 ## Runner 계약
 
@@ -39,7 +39,7 @@ Root `tests/*.test.js` migration은 완료되었습니다. `tests/root-test-allo
 | `tests/helpers/` | Shared fixture loading, temp root, artifact, newsroom, and quality builders. |
 | `tests/fixtures/` | Curated/minimized fixture inputs covered by the fixture trust policy. |
 
-Path를 이동하면 import path뿐 아니라 `package.json`의 direct test path, `docs/testing/test-inventory.md`, 관련 README 문구도 함께 확인합니다.
+Path를 이동하면 import path뿐 아니라 `package.json`의 direct test path와 관련 README 문구도 함께 확인합니다.
 
 ## Fixture Trust
 

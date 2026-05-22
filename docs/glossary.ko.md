@@ -38,7 +38,7 @@
 | `source_url_quality` | source URL이 dated evidence, 공식성, 기사성, 중복 여부, 접근 가능성 측면에서 main article 근거로 적합한지 평가하는 품질 신호입니다. |
 | `main_article_source_allowed` | 해당 후보 또는 source가 main article 근거로 사용 가능한지 나타내는 정책 판단 값입니다. false이면 fallback/context/reference로만 다룹니다. |
 | `candidate_shortage_reviewable` | 후보 수가 부족하지만 원인을 진단하고 사람이 검토할 수 있도록 artifact를 남기는 상태입니다. 자동 publish-ready와는 다릅니다. |
-| `claim.evidence_ids` | article claim이 참조하는 evidence id 목록입니다. #125 이후 fact claim은 source URL과 evidence id를 통해 추적 가능해야 합니다. |
+| `claim.evidence_ids` | article claim이 참조하는 evidence id 목록입니다. fact claim은 source URL과 evidence id를 통해 추적 가능해야 합니다. |
 | `manual-candidates.json` | Stage 1에서 사람이 지정한 seed URL, manual candidate, 기본 수집 후보를 보존하는 후보 artifact입니다. |
 | `merged-candidates.json` | Stage 2에서 manual candidate, seed evidence, Gemini discovery 후보를 병합한 최종 generation input 후보 artifact입니다. |
 | `editor-draft.json` | editor stage가 만든 newsletter draft artifact입니다. public output이 아니라 renderer와 validator가 검토하는 중간 산출물입니다. |

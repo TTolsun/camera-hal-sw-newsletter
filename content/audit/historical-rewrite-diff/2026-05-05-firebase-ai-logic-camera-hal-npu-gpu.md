@@ -4,7 +4,7 @@
 
 - Date: 2026-05-05
 - Article slug: `firebase-ai-logic-camera-hal-npu-gpu`
-- Cleanup issue: #108
+- Cleanup context: historical_archive_cleanup
 - Rewrite status: `material_rewrite`
 
 ## Original Summary

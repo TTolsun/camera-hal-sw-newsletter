@@ -14,9 +14,7 @@
 | [operations/README.ko.md](operations/README.ko.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
 | [config/action-variables.ko.md](config/action-variables.ko.md) | GitHub Actions Secret과 Variable 설명입니다. |
 | [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약입니다. |
-| [testing/test-baseline.md](testing/test-baseline.md) | 현재 test/validation baseline입니다. |
 | [scripts/README.md](../scripts/README.md) | scripts wrapper와 실제 newsroom 구현 진입점을 설명합니다. |
-| [plans/issue-188-root-docs-audit.md](plans/issue-188-root-docs-audit.md) | root folder별 README/AGENTS coverage와 source-of-truth map입니다. |
 
 Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
 
@@ -25,18 +23,15 @@ Newsletter Policy의 현재 값은 `config/newsletter-policy.json`이 source of 
 | 경로 | 역할 |
 | --- | --- |
 | `docs/glossary.ko.md` | 코드 식별자와 artifact 이름의 의미를 설명합니다. |
-| `docs/README.md` | docs 하위 폴더와 current/archive guidance를 안내합니다. |
+| `docs/README.md` | docs 하위 폴더와 현재 운영 문서 기준을 안내합니다. |
 | `docs/newsroom-workflow.md` | newsroom pipeline, quality gate, artifact, GitHub Actions 운영을 설명합니다. |
 | `docs/editorial-policy.md` | newsletter editorial policy와 scope 판단 기준입니다. |
 | `docs/news-sources.md` | 사람이 검토하는 source editorial view입니다. |
 | `docs/news-sources-guide.md` | source registry 수정 절차입니다. |
 | `docs/newsletter-template.md` | newsletter 구조와 template 계약입니다. |
 | `docs/config/` | runtime config와 source registry field 설명입니다. |
-| `docs/testing/` | validation baseline과 generated artifact audit 기록입니다. |
-| `docs/plans/` | 승인된 계획 또는 완료된 계획 기록입니다. |
 | `docs/operations/` | 반복 운영 절차의 짧은 안내입니다. |
-| `docs/archive/` | 현재 guidance로 쓰지 않는 과거 note입니다. |
-| `docs/AGENTS.md` | docs 폴더의 current/archive guidance 구분과 링크 유지 규칙입니다. |
+| `docs/AGENTS.md` | docs 폴더의 현재 운영 문서 기준과 링크 유지 규칙입니다. |
 
 ## 주요 폴더
 
