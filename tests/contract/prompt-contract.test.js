@@ -136,11 +136,12 @@ test('LLM fact-check prompts map findings to schema fields and allow camera deve
   assert.match(source, /article text 또는 derived editorial hints에만 있고/);
   assert.match(source, /source\/capsule metadata\/source_extraction이 뒷받침하지 않으면/);
   assert.match(source, /Android Studio/);
-  assert.match(source, /VS Code/);
-  assert.match(source, /Claude Code/);
+  assert.match(source, /VS\(Visual Studio\) Code/);
+  assert.match(source, /Claude/);
   assert.match(source, /Codex/);
   assert.match(source, /Roo Code/);
   assert.match(source, /OpenCode/);
+  assert.doesNotMatch(source, /Rood Code/);
 });
 
 test('public article prompt does not force internal triage fallback prose', () => {
