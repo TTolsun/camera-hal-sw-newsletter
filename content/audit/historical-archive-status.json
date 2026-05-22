@@ -29,44 +29,60 @@
   },
   {
     "date": "2026-05-19",
-    "archive_status": "reviewed_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
-      "not_listed_in_data_newsletters"
+      "not_listed_in_data_newsletters",
+      "duplicate_news_source_cleanup",
+      "removed_archive_entry",
+      "public_route_intentionally_removed"
     ],
-    "historical_cleanup_context": "historical_archive_cleanup",
-    "public_visibility": "unlisted"
+    "historical_cleanup_context": "source_dedup_cleanup",
+    "public_visibility": "removed",
+    "removal_reason": "source_dedup_cleanup_removed_public_route"
   },
   {
     "date": "2026-05-18",
-    "archive_status": "reviewed_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
-      "not_listed_in_data_newsletters"
+      "not_listed_in_data_newsletters",
+      "duplicate_news_source_cleanup",
+      "removed_archive_entry",
+      "public_route_intentionally_removed"
     ],
-    "historical_cleanup_context": "historical_archive_cleanup",
-    "public_visibility": "unlisted"
+    "historical_cleanup_context": "source_dedup_cleanup",
+    "public_visibility": "removed",
+    "removal_reason": "source_dedup_cleanup_removed_public_route"
   },
   {
     "date": "2026-05-17",
-    "archive_status": "reviewed_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
-      "not_listed_in_data_newsletters"
+      "not_listed_in_data_newsletters",
+      "duplicate_news_source_cleanup",
+      "removed_archive_entry",
+      "public_route_intentionally_removed"
     ],
-    "historical_cleanup_context": "historical_archive_cleanup",
-    "public_visibility": "unlisted"
+    "historical_cleanup_context": "source_dedup_cleanup",
+    "public_visibility": "removed",
+    "removal_reason": "source_dedup_cleanup_removed_public_route"
   },
   {
     "date": "2026-05-16",
-    "archive_status": "reviewed_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled"
+      "source_provenance_not_backfilled",
+      "duplicate_news_source_cleanup",
+      "removed_archive_entry",
+      "public_route_intentionally_removed"
     ],
-    "historical_cleanup_context": "historical_archive_cleanup",
-    "public_visibility": "listed"
+    "historical_cleanup_context": "source_dedup_cleanup",
+    "public_visibility": "removed",
+    "removal_reason": "source_dedup_cleanup_removed_public_route"
   },
   {
     "date": "2026-05-15",
@@ -81,14 +97,18 @@
   },
   {
     "date": "2026-05-13",
-    "archive_status": "reviewed_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled"
+      "source_provenance_not_backfilled",
+      "duplicate_news_source_cleanup",
+      "removed_archive_entry",
+      "public_route_intentionally_removed"
     ],
-    "historical_cleanup_context": "historical_archive_cleanup",
-    "public_visibility": "listed"
+    "historical_cleanup_context": "source_dedup_cleanup",
+    "public_visibility": "removed",
+    "removal_reason": "source_dedup_cleanup_removed_public_route"
   },
   {
     "date": "2026-05-12",
@@ -113,47 +133,54 @@
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
-      "content/audit/historical-rewrite-diff/2026-05-11-camerax-1-4-0-alpha07-1-7-0-alpha01.md",
       "content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md"
-    ]
+    ],
+    "material_rewrite_diff": "content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md"
   },
   {
     "date": "2026-05-10",
-    "archive_status": "reviewed_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled"
+      "source_provenance_not_backfilled",
+      "duplicate_news_source_cleanup",
+      "removed_archive_entry",
+      "public_route_intentionally_removed"
     ],
-    "historical_cleanup_context": "historical_archive_cleanup",
-    "public_visibility": "listed"
+    "historical_cleanup_context": "source_dedup_cleanup",
+    "public_visibility": "removed",
+    "removal_reason": "source_dedup_cleanup_removed_public_route"
   },
   {
     "date": "2026-05-09",
-    "archive_status": "reviewed_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled"
+      "source_provenance_not_backfilled",
+      "duplicate_news_source_cleanup",
+      "removed_archive_entry",
+      "public_route_intentionally_removed"
     ],
-    "historical_cleanup_context": "historical_archive_cleanup",
-    "public_visibility": "listed",
-    "rewrite_status": "material_rewrite",
-    "material_rewrite_diffs": [
-      "content/audit/historical-rewrite-diff/2026-05-09-camerax-1-4-0-alpha07-viewfinder-video.md",
-      "content/audit/historical-rewrite-diff/2026-05-09-libcamera-v0-7-1-softisp.md"
-    ]
+    "historical_cleanup_context": "source_dedup_cleanup",
+    "public_visibility": "removed",
+    "removal_reason": "source_dedup_cleanup_removed_public_route"
   },
   {
     "date": "2026-05-08",
-    "archive_status": "reviewed_archive",
+    "archive_status": "removed",
     "historical_cleanup_reviewed": true,
     "known_limitations": [
       "pre_185_generation",
-      "source_provenance_not_backfilled"
+      "source_provenance_not_backfilled",
+      "duplicate_news_source_cleanup",
+      "removed_archive_entry",
+      "public_route_intentionally_removed"
     ],
-    "historical_cleanup_context": "historical_archive_cleanup",
-    "public_visibility": "listed"
+    "historical_cleanup_context": "source_dedup_cleanup",
+    "public_visibility": "removed",
+    "removal_reason": "source_dedup_cleanup_removed_public_route"
   },
   {
     "date": "2026-05-07",
@@ -167,11 +194,10 @@
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
-      "content/audit/historical-rewrite-diff/2026-05-07-glaze-7-2-native-tooling-serialization.md",
-      "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-raspberry-pi-atomic-control-lists-simple-pipeline-agc-awb.md",
       "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md",
       "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md"
-    ]
+    ],
+    "material_rewrite_diff": "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md"
   },
   {
     "date": "2026-05-05",

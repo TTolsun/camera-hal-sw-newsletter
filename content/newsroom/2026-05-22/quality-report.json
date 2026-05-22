@@ -1,12 +1,22 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "score": 92,
+  "score": 84,
   "max_score": 100,
   "threshold": 85,
   "status": "NEEDS_FIX",
-  "summary": "Quality score 92, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "summary": "Quality score 84, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
   "deductions": [
+    {
+      "category": "field-hygiene",
+      "points": 8,
+      "reason": "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.",
+      "location": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
     {
       "category": "field-hygiene",
       "points": 8,
@@ -23,8 +33,8 @@
       "index": 1,
       "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "category": "Android Platform / CameraX",
-      "status": "PASS",
-      "repair_action": "preserve",
+      "status": "FAIL",
+      "repair_action": "repair-section",
       "sources": [
         {
           "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
@@ -76,7 +86,9 @@
       ],
       "actionability_level": "measurable_test",
       "effective_actionability_level": "measurable_test",
-      "hard_fail_reasons": [],
+      "hard_fail_reasons": [
+        "Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level."
+      ],
       "soft_deductions": []
     },
     {
@@ -89,6 +101,10 @@
         {
           "title": "Build native Android apps in Google AI Studio",
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        },
+        {
+          "title": "Start building today - Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
         }
       ],
       "section_contract": {
@@ -227,6 +243,20 @@
     {
       "article_index": 2,
       "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "article_sections.verified_facts[3]",
+      "text": "관련 컴포넌트: Android camera output.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "article_sections.verified_facts[4]",
+      "text": "확인된 변경점: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
       "field": "confirmed_facts[0]",
       "text": "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
       "reason_code": "missing_matching_fact_claim"
@@ -243,6 +273,20 @@
       "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
       "field": "confirmed_facts[2]",
       "text": "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "confirmed_facts[3]",
+      "text": "관련 컴포넌트: Android camera output.",
+      "reason_code": "missing_matching_fact_claim"
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "field": "confirmed_facts[4]",
+      "text": "확인된 변경점: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
       "reason_code": "missing_matching_fact_claim"
     },
     {
@@ -360,7 +404,7 @@
       "effective_actionability_level": "measurable_test",
       "actionability_upgrade_reason": "",
       "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 4,
+      "concrete_action_signal_count": 5,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
@@ -469,16 +513,16 @@
     "stale_claim_removed_count": 0,
     "stale_claim_hard_failure_count": 0,
     "source_integrity_violation_count": 0,
-    "blocking_deduction_count": 1,
+    "blocking_deduction_count": 2,
     "blocking_deduction_categories": [
       "field-hygiene"
     ],
-    "hard_fail_count": 1,
+    "hard_fail_count": 2,
     "soft_deduction_count": 0,
     "article_gate_counts": {
-      "PASS": 1,
+      "PASS": 0,
       "DEMOTE": 0,
-      "FAIL": 1
+      "FAIL": 2
     },
     "article_section_contract": {
       "complete_count": 2,
@@ -529,7 +573,7 @@
       "not_available_article_count": 2
     },
     "derived_evidence_mapping_count": 0,
-    "uncovered_fact_count": 14,
+    "uncovered_fact_count": 18,
     "hal_signal_quality_summary": {
       "schema_version": 1,
       "main_article_count": 2,
@@ -637,7 +681,7 @@
         "effective_actionability_level": "measurable_test",
         "actionability_upgrade_reason": "",
         "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 4,
+        "concrete_action_signal_count": 5,
         "fallback_promotion_allowed": true,
         "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
@@ -663,45 +707,9 @@
     "top_deduction_categories": [
       {
         "category": "field-hygiene",
-        "count": 1
+        "count": 2
       }
     ],
     "candidate_exclusion_summary": []
-  },
-  "fallback_public_issue": true,
-  "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
-  "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
-  "editor_review_reason": "AI 자동 발행 기준을 통과하지 못했으므로 merge 발행 전에 편집자 검토가 필요합니다.",
-  "publication_mode": "review_only",
-  "homepage_visibility": "normal",
-  "normal_public_ready": false,
-  "automatic_publish_ready": false,
-  "public_artifact_ready": true,
-  "fallback_public_ready": false,
-  "fallback_only": false,
-  "camera_anchor_count": 1,
-  "homepage_badge": "",
-  "content_quality_score": 92,
-  "camera_relevance_score": 92,
-  "publication_mode_decision": "review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.",
-  "original_fact_check_status": "PASS",
-  "original_must_fix_count": 0,
-  "original_source_gap_count": 0,
-  "fallback_public_issue_removed_blockers": false,
-  "fallback_public_issue_removed_article_count": 0,
-  "demoted_articles": [],
-  "fallback_articles": [
-    {
-      "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
-      "category": "Android Native Tooling",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "source": "Android Developers Blog",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "action": "selected-native-tooling-supporting",
-      "fallback": false,
-      "reason": "selected source-ready native tooling supporting article"
-    }
-  ],
-  "original_quality_status": "PASS",
-  "original_quality_score": 100
+  }
 }

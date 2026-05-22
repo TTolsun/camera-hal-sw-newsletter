@@ -1,11 +1,11 @@
 {
   "date": "2026-05-05",
   "title": "Camera HAL SW 뉴스레터 - 2026-05-05",
-  "summary": "이번 주 뉴스레터에서는 Claude Code 업데이트, Android 보안 게시판, Firebase AI Logic 하이브리드 추론, C++26 assert() 개선을 Camera HAL 팀 관점에서 점검합니다. Firebase 항목은 제품이 camera-frame analysis path를 실제로 통합할 때 확인할 adjacent integration risk로 제한합니다.",
+  "summary": "이번 2026-05-05호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 4개 기사(Claude Code 2.1.128: Camera HAL workflow review 범위, 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위, Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위, C++26 assert(): Camera HAL debug-build 검토 범위)를 source-backed 내용으로 보강했습니다.",
   "briefing": [
-    "Android의 하이브리드 AI 추론 소식은 제품이 camera-frame analysis path를 실제로 통합할 때만 camera input 요구와 SoC 리소스 예산을 검토하는 adjacent signal로 다룹니다.",
-    "C++26의 assert() 매크로 개선은 HAL runtime 변화가 아니라, compiler/toolchain support가 확인된 뒤 debug-build 또는 host utility에서 검토할 수 있는 진단 개선 후보입니다.",
-    "2026년 5월 Android 보안 게시판은 제품 camera path와 연결되는 CVE/패치가 있는지 확인할 security triage 입력입니다."
+    "Claude Code 2.1.128: Camera HAL workflow review 범위: Claude Code Changelog - 2.1.128 기준으로 중복 issue에 흩어진 내용을 합쳐 Claude Code 2.1.128: Camera HAL workflow review 범위 항목을 다시 정리했습니다.",
+    "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위: Overview 기준으로 중복 issue에 흩어진 내용을 합쳐 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위 항목을 다시 정리했습니다.",
+    "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위: Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 기준으로 중복 issue에 흩어진 내용을 합쳐 Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위 항목을 다시 정리했습니다."
   ],
   "sections": [
     {
@@ -228,7 +228,27 @@
           "impact_level": "native_tooling_workflow",
           "overclaim_risk": "low"
         }
-      ]
+      ],
+      "public_article": {
+        "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
+        "lead": "Claude Code Changelog - 2.1.128 기준으로 중복 issue에 흩어진 내용을 합쳐 Claude Code 2.1.128: Camera HAL workflow review 범위 항목을 다시 정리했습니다.",
+        "body_paragraphs": [
+          "이 article은 cpp_ai_tooling_fallback 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
+        ],
+        "camera_hal_takeaway": "직접 HAL 변경으로 단정하지 않고, native build/test/debug workflow에 줄 수 있는 간접 신호로만 봅니다.",
+        "reader_checkpoints": [
+          "Claude Code Changelog - 2.1.128의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Native tooling owner가 camera validation workflow에 참고할 항목인지 검토합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Claude Code Changelog - 2.1.128",
+            "url": "https://code.claude.com/docs/en/changelog",
+            "source_role": "primary"
+          }
+        ]
+      }
     },
     {
       "category": "Android Camera / Platform API",
@@ -406,7 +426,27 @@
           "overclaim_risk": "low"
         }
       ],
-      "impact_claim_level": "android_framework_adjacent"
+      "impact_claim_level": "android_framework_adjacent",
+      "public_article": {
+        "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+        "lead": "Overview 기준으로 중복 issue에 흩어진 내용을 합쳐 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위 항목을 다시 정리했습니다.",
+        "body_paragraphs": [
+          "이 article은 android_platform_camera_adjacent 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
+        ],
+        "camera_hal_takeaway": "Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.",
+        "reader_checkpoints": [
+          "Overview의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Overview",
+            "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+            "source_role": "primary"
+          }
+        ]
+      }
     },
     {
       "category": "Android Camera / Platform API",
@@ -624,7 +664,27 @@
           "impact_level": "soc_resource_contention",
           "overclaim_risk": "medium"
         }
-      ]
+      ],
+      "public_article": {
+        "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+        "lead": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델 기준으로 중복 issue에 흩어진 내용을 합쳐 Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위 항목을 다시 정리했습니다.",
+        "body_paragraphs": [
+          "이 article은 soc_platform_signal 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
+        ],
+        "camera_hal_takeaway": "Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.",
+        "reader_checkpoints": [
+          "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Android용 실험적 하이브리드 추론 및 새로운 Gemini 모델",
+            "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+            "source_role": "primary"
+          }
+        ]
+      }
     },
     {
       "category": "C++ / Toolchain Fallback",
@@ -839,6 +899,26 @@
         "originalSrc": "",
         "usedFallback": false,
         "reason": "selected image candidate"
+      },
+      "public_article": {
+        "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
+        "lead": "C++26: A User-Friendly assert() macro -- Sandor Dargo 기준으로 중복 issue에 흩어진 내용을 합쳐 C++26 assert(): Camera HAL debug-build 검토 범위 항목을 다시 정리했습니다.",
+        "body_paragraphs": [
+          "이 article은 cpp_ai_tooling_fallback 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
+        ],
+        "camera_hal_takeaway": "직접 HAL 변경으로 단정하지 않고, native build/test/debug workflow에 줄 수 있는 간접 신호로만 봅니다.",
+        "reader_checkpoints": [
+          "C++26: A User-Friendly assert() macro -- Sandor Dargo의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Native tooling owner가 camera validation workflow에 참고할 항목인지 검토합니다."
+        ],
+        "source_links": [
+          {
+            "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+            "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+            "source_role": "primary"
+          }
+        ]
       }
     }
   ],
@@ -865,5 +945,12 @@
       "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
       "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
     }
-  ]
+  ],
+  "camera_anchor_count": 2,
+  "fallback_section_count": 2,
+  "fallback_only": false,
+  "homepage_visibility": "normal",
+  "publication_mode": "review_only",
+  "fallback_public_ready": false,
+  "homepage_badge": ""
 }

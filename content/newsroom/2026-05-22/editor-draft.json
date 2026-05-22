@@ -1,11 +1,11 @@
 {
   "date": "2026-05-22",
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-22",
-  "summary": "이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+  "summary": "이번 2026-05-22호는 중복 News Source를 최신 indexed issue 기준으로 정리하고, 남은 2개 기사(8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O, Android Native Tooling: Build native Android apps in Google AI Studio)를 source-backed 내용으로 보강했습니다.",
   "briefing": [
-    "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
-    "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
-    "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다."
+    "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O: 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O 기준으로 중복 issue에 흩어진 내용을 합쳐 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O 항목을 다시 정리했습니다.",
+    "Android Native Tooling: Build native Android apps in Google AI Studio: Build native Android apps in Google AI Studio 기준으로 중복 issue에 흩어진 내용을 합쳐 Android Native Tooling: Build native Android apps in Google AI Studio 항목을 다시 정리했습니다.",
+    "중복 source cleanup 후 남은 공개 source 기준으로 읽을 만한 개발자 관점만 유지했습니다."
   ],
   "sections": [
     {
@@ -32,8 +32,8 @@
         "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
       ],
       "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
-      "background": "Jetpack Compose는 Android UI 개발을 위한 선언형 프레임워크입니다. 이 프레임워크는 다양한 화면 크기와 폼 팩터에 걸쳐 일관된 사용자 경험을 구축하는 데 중점을 둡니다. Jetpack Navigation 3와 같은 도구와 함께 사용되어 앱의 UI 흐름과 구성을 관리합니다. 카메라 앱의 경우, CameraX와 같은 상위 레벨 API를 통해 카메라 미리보기, 캡처 UI를 다양한 기기에서 유연하게 렌더링하고, 폴더블 기기나 태블릿과 같은 적응형 UI 환경에서 카메라 UX의 일관성을 검증하는 데 중요합니다. 이는 직접적인 Camera HAL 변경 사항이 아니라, HAL이 제공하는 카메라 스트림을 앱 계층에서 어떻게 효율적으로 표시하고 상호작용하는지에 대한 플랫폼 및 UI 프레임워크의 발전입니다.",
-      "camera_hal_perspective": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
+      "background": "Jetpack Compose는 Android UI 개발을 위한 선언형 프레임워크입니다. 이 프레임워크는 다양한 화면 크기와 폼 팩터에 걸쳐 일관된 사용자 경험을 구축하는 데 중점을 둡니다. Jetpack Navigation 3와 같은 도구와 함께 사용되어 앱의 UI 흐름과 구성을 관리합니다. 카메라 앱의 경우, CameraX와 같은 상위 레벨 API를 통해 카메라 미리보기, 캡처 UI를 다양한 기기에서 유연하게 렌더링하고, 폴더블 기기나 태블릿과 같은 적응형 UI 환경에서 카메라 UX의 일관성을 검증하는 데 중요합니다. 이는 직접적인 Camera HAL 변경 사항이 아니라, HAL이 제공하는 카메라 스트림을 앱 계층에서 어떻게 효율적으로 표시하고 상호작용하는지에 대한 플랫폼 및 UI 프레임워크의 발전입니다. Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
+      "camera_hal_perspective": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다. Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
       "camera_hal_checks": [
         "Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.",
         "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
@@ -41,7 +41,8 @@
       "action_items": [
         "발행 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
         "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+        "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다."
       ],
       "action_hints": [],
       "team_summary": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
@@ -274,31 +275,35 @@
           "관련 컴포넌트: CameraX / Android camera APIs.",
           "확인된 변경점: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size."
         ],
-        "background_context": "Jetpack Compose는 Android UI 개발을 위한 선언형 프레임워크입니다. 이 프레임워크는 다양한 화면 크기와 폼 팩터에 걸쳐 일관된 사용자 경험을 구축하는 데 중점을 둡니다. Jetpack Navigation 3와 같은 도구와 함께 사용되어 앱의 UI 흐름과 구성을 관리합니다. 카메라 앱의 경우, CameraX와 같은 상위 레벨 API를 통해 카메라 미리보기, 캡처 UI를 다양한 기기에서 유연하게 렌더링하고, 폴더블 기기나 태블릿과 같은 적응형 UI 환경에서 카메라 UX의 일관성을 검증하는 데 중요합니다. 이는 직접적인 Camera HAL 변경 사항이 아니라, HAL이 제공하는 카메라 스트림을 앱 계층에서 어떻게 효율적으로 표시하고 상호작용하는지에 대한 플랫폼 및 UI 프레임워크의 발전입니다.",
-        "hal_driver_impact": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
+        "background_context": "Jetpack Compose는 Android UI 개발을 위한 선언형 프레임워크입니다. 이 프레임워크는 다양한 화면 크기와 폼 팩터에 걸쳐 일관된 사용자 경험을 구축하는 데 중점을 둡니다. Jetpack Navigation 3와 같은 도구와 함께 사용되어 앱의 UI 흐름과 구성을 관리합니다. 카메라 앱의 경우, CameraX와 같은 상위 레벨 API를 통해 카메라 미리보기, 캡처 UI를 다양한 기기에서 유연하게 렌더링하고, 폴더블 기기나 태블릿과 같은 적응형 UI 환경에서 카메라 UX의 일관성을 검증하는 데 중요합니다. 이는 직접적인 Camera HAL 변경 사항이 아니라, HAL이 제공하는 카메라 스트림을 앱 계층에서 어떻게 효율적으로 표시하고 상호작용하는지에 대한 플랫폼 및 UI 프레임워크의 발전입니다. Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
+        "hal_driver_impact": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다. Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
         "action_items": [
           "발행 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
           "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+          "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다."
         ],
-        "team_share_points": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
+        "team_share_points": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
+        "known_limitations": [],
+        "watch_items": [],
+        "do_not_claim": []
       },
       "public_article": {
-        "headline": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
-        "lead": "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
+        "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+        "lead": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O 기준으로 중복 issue에 흩어진 내용을 합쳐 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O 항목을 다시 정리했습니다.",
         "body_paragraphs": [
-          "Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.",
-          "이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다."
+          "이 article은 android_platform_camera_adjacent 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
         ],
-        "camera_hal_takeaway": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
+        "camera_hal_takeaway": "Camera HAL / Driver owner는 source가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.",
         "reader_checkpoints": [
-          "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."
+          "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Camera HAL / Driver owner가 downstream test나 log 확인이 필요한지 판단합니다."
         ],
         "source_links": [
           {
             "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
             "url": "https://goo.gle/AdaptiveApps_IO26",
-            "publisher": "Android Developers Blog",
             "source_role": "primary"
           }
         ]
@@ -399,7 +404,17 @@
           "CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다."
         ]
       },
-      "actionability_upgrade_evidence": null
+      "actionability_upgrade_evidence": null,
+      "source_dedup_merge_provenance": [
+        {
+          "merged_from_date": "2026-05-21",
+          "merged_from_section": 1,
+          "merged_from_headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+          "merged_from_source_url": "https://goo.gle/AdaptiveApps_IO26",
+          "source_key": "https://goo.gle/AdaptiveApps_IO26",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        }
+      ]
     },
     {
       "category": "Android Native Tooling",
@@ -407,7 +422,9 @@
       "confirmed_facts": [
         "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
         "관련 컴포넌트: Google AI Studio.",
-        "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt."
+        "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
+        "관련 컴포넌트: Android camera output.",
+        "확인된 변경점: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance."
       ],
       "evidence_summary": "Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.",
       "specificity_checks": [
@@ -424,9 +441,9 @@
         "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
         "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
       ],
-      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
-      "background": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포하는 데 도움을 주는 도구입니다. 이 도구가 네이티브 Android 앱 빌드를 지원한다는 것은, AI 모델을 활용하는 Android 앱 개발 워크플로우를 간소화할 수 있음을 의미합니다. Camera HAL 및 드라이버 팀에게는 직접적인 HAL API 변경보다는, 온디바이스 AI 추론을 위한 네이티브 코드 생성, 빌드, 테스트 및 디버깅 워크플로우에 영향을 줄 수 있습니다. 특히 카메라 프레임 데이터를 입력으로 사용하는 AI 기능(예: 실시간 필터, 객체 인식)을 개발할 때, 이러한 툴링의 개선은 개발 생산성 향상에 기여할 수 있습니다. 그러나 이 변경사항 자체가 카메라 HAL의 런타임 동작이나 성능에 직접적인 영향을 미친다는 증거는 없습니다.",
-      "camera_hal_perspective": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt. Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
+      "background": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포하는 데 도움을 주는 도구입니다. 이 도구가 네이티브 Android 앱 빌드를 지원한다는 것은, AI 모델을 활용하는 Android 앱 개발 워크플로우를 간소화할 수 있음을 의미합니다. Camera HAL 및 드라이버 팀에게는 직접적인 HAL API 변경보다는, 온디바이스 AI 추론을 위한 네이티브 코드 생성, 빌드, 테스트 및 디버깅 워크플로우에 영향을 줄 수 있습니다. 특히 카메라 프레임 데이터를 입력으로 사용하는 AI 기능(예: 실시간 필터, 객체 인식)을 개발할 때, 이러한 툴링의 개선은 개발 생산성 향상에 기여할 수 있습니다. 그러나 이 변경사항 자체가 카메라 HAL의 런타임 동작이나 성능에 직접적인 영향을 미친다는 증거는 없습니다. CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
+      "camera_hal_perspective": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "camera_hal_checks": [
         "Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.",
         "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
@@ -434,7 +451,8 @@
       "action_items": [
         "발행 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
         "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+        "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다."
       ],
       "action_hints": [],
       "team_summary": "Android Native Tooling: Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
@@ -474,6 +492,10 @@
         {
           "title": "Build native Android apps in Google AI Studio",
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        },
+        {
+          "title": "Start building today - Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
         }
       ],
       "imageCandidates": [
@@ -530,33 +552,44 @@
         "verified_facts": [
           "Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.",
           "관련 컴포넌트: Google AI Studio.",
-          "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt."
+          "확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
+          "관련 컴포넌트: Android camera output.",
+          "확인된 변경점: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance."
         ],
-        "background_context": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포하는 데 도움을 주는 도구입니다. 이 도구가 네이티브 Android 앱 빌드를 지원한다는 것은, AI 모델을 활용하는 Android 앱 개발 워크플로우를 간소화할 수 있음을 의미합니다. Camera HAL 및 드라이버 팀에게는 직접적인 HAL API 변경보다는, 온디바이스 AI 추론을 위한 네이티브 코드 생성, 빌드, 테스트 및 디버깅 워크플로우에 영향을 줄 수 있습니다. 특히 카메라 프레임 데이터를 입력으로 사용하는 AI 기능(예: 실시간 필터, 객체 인식)을 개발할 때, 이러한 툴링의 개선은 개발 생산성 향상에 기여할 수 있습니다. 그러나 이 변경사항 자체가 카메라 HAL의 런타임 동작이나 성능에 직접적인 영향을 미친다는 증거는 없습니다.",
-        "hal_driver_impact": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+        "background_context": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포하는 데 도움을 주는 도구입니다. 이 도구가 네이티브 Android 앱 빌드를 지원한다는 것은, AI 모델을 활용하는 Android 앱 개발 워크플로우를 간소화할 수 있음을 의미합니다. Camera HAL 및 드라이버 팀에게는 직접적인 HAL API 변경보다는, 온디바이스 AI 추론을 위한 네이티브 코드 생성, 빌드, 테스트 및 디버깅 워크플로우에 영향을 줄 수 있습니다. 특히 카메라 프레임 데이터를 입력으로 사용하는 AI 기능(예: 실시간 필터, 객체 인식)을 개발할 때, 이러한 툴링의 개선은 개발 생산성 향상에 기여할 수 있습니다. 그러나 이 변경사항 자체가 카메라 HAL의 런타임 동작이나 성능에 직접적인 영향을 미친다는 증거는 없습니다. CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
+        "hal_driver_impact": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다. CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
         "action_items": [
           "발행 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
           "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
+          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다.",
+          "Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다."
         ],
-        "team_share_points": "Android Native Tooling: Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
+        "team_share_points": "Android Native Tooling: Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다. Start building today - Build native Android apps in Google AI Studio은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
+        "known_limitations": [],
+        "watch_items": [],
+        "do_not_claim": []
       },
       "public_article": {
-        "headline": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
-        "lead": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
+        "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+        "lead": "Build native Android apps in Google AI Studio 기준으로 중복 issue에 흩어진 내용을 합쳐 Android Native Tooling: Build native Android apps in Google AI Studio 항목을 다시 정리했습니다.",
         "body_paragraphs": [
-          "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.",
-          "Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다."
+          "이 article은 cpp_ai_tooling_fallback 범위에서 공개 source가 확인한 사실과 이전 issue의 중복 설명을 합친 survivor article입니다.",
+          "삭제된 중복 issue의 donor 내용은 구조화 필드로만 반영했고, source가 말하지 않은 HAL 영향은 새로 만들지 않았습니다."
         ],
-        "camera_hal_takeaway": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+        "camera_hal_takeaway": "직접 HAL 변경으로 단정하지 않고, native build/test/debug workflow에 줄 수 있는 간접 신호로만 봅니다.",
         "reader_checkpoints": [
-          "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."
+          "Build native Android apps in Google AI Studio의 release/version 범위를 기준으로 downstream camera stack 검토 범위를 정리합니다.",
+          "Native tooling owner가 camera validation workflow에 참고할 항목인지 검토합니다."
         ],
         "source_links": [
           {
             "title": "Build native Android apps in Google AI Studio",
             "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-            "publisher": "Android Developers Blog",
+            "source_role": "primary"
+          },
+          {
+            "title": "Start building today - Build native Android apps in Google AI Studio",
+            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
             "source_role": "primary"
           }
         ]
@@ -661,7 +694,17 @@
           "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
           "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
         ]
-      }
+      },
+      "source_dedup_merge_provenance": [
+        {
+          "merged_from_date": "2026-05-21",
+          "merged_from_section": 3,
+          "merged_from_headline": "Start building today - Build native Android apps in Google AI Studio",
+          "merged_from_source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "source_key": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "merge_reason": "duplicate_news_source_structured_merge"
+        }
+      ]
     }
   ],
   "action_items": [
@@ -677,6 +720,10 @@
     {
       "title": "Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "title": "Start building today - Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
     }
   ],
   "publication_mode": "review_only",
