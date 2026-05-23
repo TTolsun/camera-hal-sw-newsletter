@@ -5,6 +5,7 @@ const path = require('path');
 const { buildManifest } = require('./write-artifact-manifest');
 const {
   buildReviewArtifactInventory,
+  renderReviewGuideMarkdown,
   REVIEW_ARTIFACT_SCHEMA_VERSION
 } = require('../common/review-artifact-inventory');
 const {
@@ -174,6 +175,10 @@ function testReviewInventoryRequiredStateAndFallbacks() {
   const unknownPath = newsroomRelPath(date, 'experimental-selection-report.json');
   writeText(path.join(snapshotDir, ...seedEvidencePackMarkdownRelPath(date).split('/')), '# Seed Evidence\n');
   writeJson(path.join(snapshotDir, ...unknownPath.split('/')), { experimental: true });
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, '.DS_Store').split('/')), 'ignored\n');
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'Thumbs.db').split('/')), 'ignored\n');
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'debug.tmp').split('/')), 'ignored\n');
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'old.bak').split('/')), 'ignored\n');
 
   const inventory = buildReviewArtifactInventory({
     root: snapshotDir,
@@ -218,6 +223,10 @@ function testReviewInventoryRequiredStateAndFallbacks() {
   assert.equal(unknown.review_order, 95);
   assert.equal(unknown.review_attention_required, true);
   assert.equal(unknown.changed, true);
+  assert.equal(inventory.review_artifacts.some(artifact => artifact.path.endsWith('.DS_Store')), false);
+  assert.equal(inventory.review_artifacts.some(artifact => artifact.path.endsWith('Thumbs.db')), false);
+  assert.equal(inventory.review_artifacts.some(artifact => artifact.path.endsWith('.tmp')), false);
+  assert.equal(inventory.review_artifacts.some(artifact => artifact.path.endsWith('.bak')), false);
 }
 
 function testDerivedArtifactsDoNotCreateMissingRequired() {
@@ -260,10 +269,89 @@ function testDerivedArtifactsDoNotCreateMissingRequired() {
   assert.equal(inventory.missingRequired.some(artifact => artifact.derived), false);
 }
 
+function testRecoveryPromptAttentionPolicy() {
+  const passSnapshot = makeSnapshot();
+  const passInventory = buildReviewArtifactInventory({
+    root: passSnapshot,
+    date,
+    runContext: {
+      seedUsed: false,
+      publicOutputExpected: true,
+      status: 'PASS'
+    }
+  });
+  const passRecovery = passInventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'recovery-prompt.md')
+  );
+  assert.equal(passRecovery.present, false);
+  assert.equal(passRecovery.requiredActive, false);
+  assert.equal(passRecovery.review_attention_required, false);
+  assert.equal(passRecovery.warning, undefined);
+  assert.equal(renderReviewGuideMarkdown(passInventory).includes(newsroomRelPath(date, 'recovery-prompt.md')), false);
+
+  const failureSnapshot = makeSnapshot();
+  const failureInventory = buildReviewArtifactInventory({
+    root: failureSnapshot,
+    date,
+    runContext: {
+      seedUsed: false,
+      publicOutputExpected: false,
+      status: 'FAILED_REPAIR_REVIEWABLE'
+    }
+  });
+  const failureRecovery = failureInventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'recovery-prompt.md')
+  );
+  assert.equal(failureRecovery.present, false);
+  assert.equal(failureRecovery.requiredActive, false);
+  assert.equal(failureRecovery.review_attention_required, true);
+  assert.equal(failureRecovery.warning.code, 'recovery_prompt_missing_for_reviewable_failure');
+}
+
+function testDerivedMissingWarningsAndOptionalGateBlocking() {
+  const snapshotDir = makeSnapshot();
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'stale-claim-report.md').split('/')), '# Stale Claims\n');
+
+  const inventory = buildReviewArtifactInventory({
+    root: snapshotDir,
+    date,
+    runContext: {
+      seedUsed: false,
+      publicOutputExpected: false,
+      status: 'PASS'
+    }
+  });
+  const guide = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, '00-review-guide.md')
+  );
+  const releaseQa = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'release-qa-report.md')
+  );
+  const staleClaim = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'stale-claim-report.md')
+  );
+
+  assert.equal(guide.derived, true);
+  assert.equal(guide.requiredActive, false);
+  assert.equal(guide.review_attention_required, true);
+  assert.equal(guide.warning.code, 'derived_artifact_missing');
+  assert.equal(releaseQa.derived, true);
+  assert.equal(releaseQa.requiredActive, false);
+  assert.equal(releaseQa.review_attention_required, true);
+  assert.equal(releaseQa.warning.code, 'derived_artifact_missing');
+  assert.equal(inventory.missingRequired.some(artifact => artifact.path === guide.path), false);
+  assert.equal(inventory.missingRequired.some(artifact => artifact.path === releaseQa.path), false);
+  assert.equal(staleClaim.present, true);
+  assert.equal(staleClaim.requiredActive, false);
+  assert.equal(staleClaim.review_blocking, true);
+}
+
 testManifestCreationAndHashes();
 testWarningsWhenReportsDisagree();
 testNoWarningsWhenReportsAgree();
 testReviewInventoryRequiredStateAndFallbacks();
 testDerivedArtifactsDoNotCreateMissingRequired();
+testRecoveryPromptAttentionPolicy();
+testDerivedMissingWarningsAndOptionalGateBlocking();
 
 console.log('Artifact manifest tests passed.');

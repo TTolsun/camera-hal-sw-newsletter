@@ -156,6 +156,7 @@ function entry({
   reviewOrder,
   humanReadable = null,
   reviewBlocking = false,
+  reviewBlockingWhenPresent = false,
   reviewAttentionRequired = false,
   derived = false
 }) {
@@ -168,6 +169,7 @@ function entry({
     review_order: reviewOrder,
     human_readable: humanReadable === null ? isMarkdownLike(relPath) : Boolean(humanReadable),
     review_blocking: Boolean(reviewBlocking),
+    review_blocking_when_present: Boolean(reviewBlockingWhenPresent),
     review_attention_required: Boolean(reviewAttentionRequired),
     derived: Boolean(derived)
   };
@@ -285,21 +287,26 @@ function exactCatalog(date) {
       role: 'stale_claim_gate',
       reviewOrder: 43,
       humanReadable: true,
-      reviewBlocking: true
+      reviewBlocking: true,
+      reviewBlockingWhenPresent: true
     }),
     entry({
       relPath: newsroomRelPath(date, 'image-audit-report.md'),
       group: 'gate_reports',
       role: 'image_audit',
       reviewOrder: 44,
-      humanReadable: true
+      humanReadable: true,
+      reviewBlocking: true,
+      reviewBlockingWhenPresent: true
     }),
     entry({
       relPath: newsroomRelPath(date, 'source-quality-report.md'),
       group: 'gate_reports',
       role: 'source_quality',
       reviewOrder: 45,
-      humanReadable: true
+      humanReadable: true,
+      reviewBlocking: true,
+      reviewBlockingWhenPresent: true
     }),
     entry({
       relPath: newsroomRelPath(date, 'selection-diagnostics.md'),
@@ -339,8 +346,7 @@ function exactCatalog(date) {
       group: 'check_when_needed',
       role: 'recovery_prompt',
       reviewOrder: 61,
-      humanReadable: true,
-      reviewAttentionRequired: true
+      humanReadable: true
     }),
     entry({
       relPath: newsroomRelPath(date, 'release-qa-report.md'),
@@ -509,7 +515,19 @@ function scannedReviewPaths(root, date) {
   for (const relPath of ['data/newsletters.json', 'data/homepage-headline.json', 'data/article-exposure-history.json']) {
     if (fileExists(root, relPath)) paths.push(relPath);
   }
-  return [...new Set(paths.map(toPosix))].sort();
+  return [...new Set(paths.map(toPosix))]
+    .filter(relPath => !shouldIgnoreScannedArtifact(relPath))
+    .sort();
+}
+
+function shouldIgnoreScannedArtifact(relPath) {
+  const normalized = toPosix(relPath);
+  const name = normalized.split('/').pop();
+  return name === '.DS_Store' ||
+    name === 'Thumbs.db' ||
+    name === 'artifact-manifest.json' ||
+    name.endsWith('.tmp') ||
+    name.endsWith('.bak');
 }
 
 function classifyUnknown(relPath) {
@@ -528,21 +546,21 @@ function materializeEntry(root, date, catalogEntry, context, changedSet) {
   const active = requiredActive(catalogEntry.required, context, catalogEntry.derived);
   const staleSeedArtifact = !context.seedUsed && present && isSeedArtifact(catalogEntry.path, date);
   const missingRequired = active && !present;
+  const derivedMissing = catalogEntry.derived && !present;
+  const recoveryPromptAttention = shouldRequireRecoveryPromptAttention({ catalogEntry, context, present });
+  const recoveryPromptMissing = recoveryPromptAttention && !present;
   const stat = statArtifact(root, catalogEntry.path);
   const reviewBlocking = catalogEntry.derived
     ? present && catalogEntry.review_blocking
-    : active && catalogEntry.review_blocking && !staleSeedArtifact;
-  const warning = staleSeedArtifact
-    ? {
-        code: 'seed_artifact_present_without_seed',
-        message: 'Seed artifact exists even though runContext.seedUsed=false.'
-      }
-    : missingRequired
-      ? {
-          code: 'required_artifact_missing',
-          message: 'Required review artifact is missing for this run context.'
-        }
-      : undefined;
+    : catalogEntry.review_blocking &&
+      !staleSeedArtifact &&
+      (active || (present && catalogEntry.review_blocking_when_present));
+  const warning = artifactWarning({
+    staleSeedArtifact,
+    derivedMissing,
+    recoveryPromptMissing,
+    missingRequired
+  });
 
   return {
     path: catalogEntry.path,
@@ -554,7 +572,13 @@ function materializeEntry(root, date, catalogEntry, context, changedSet) {
     present,
     human_readable: catalogEntry.human_readable,
     review_blocking: Boolean(reviewBlocking),
-    review_attention_required: Boolean(catalogEntry.review_attention_required || missingRequired || staleSeedArtifact),
+    review_attention_required: Boolean(
+      catalogEntry.review_attention_required ||
+      missingRequired ||
+      staleSeedArtifact ||
+      derivedMissing ||
+      recoveryPromptAttention
+    ),
     review_order: catalogEntry.review_order,
     changed: changedSet.has(catalogEntry.path),
     derived: catalogEntry.derived,
@@ -562,6 +586,53 @@ function materializeEntry(root, date, catalogEntry, context, changedSet) {
     sha256: present ? stat.sha256 : null,
     ...(warning ? { warning } : {})
   };
+}
+
+function artifactWarning({
+  staleSeedArtifact,
+  derivedMissing,
+  recoveryPromptMissing,
+  missingRequired
+}) {
+  if (staleSeedArtifact) {
+    return {
+      code: 'seed_artifact_present_without_seed',
+      message: 'Seed artifact exists even though runContext.seedUsed=false.'
+    };
+  }
+  if (derivedMissing) {
+    return {
+      code: 'derived_artifact_missing',
+      message: 'Derived review artifact is missing.'
+    };
+  }
+  if (recoveryPromptMissing) {
+    return {
+      code: 'recovery_prompt_missing_for_reviewable_failure',
+      message: 'Recovery prompt is missing for a failure or reviewable run.'
+    };
+  }
+  if (missingRequired) {
+    return {
+      code: 'required_artifact_missing',
+      message: 'Required review artifact is missing for this run context.'
+    };
+  }
+  return undefined;
+}
+
+function shouldRequireRecoveryPromptAttention({ catalogEntry, context, present }) {
+  if (catalogEntry.role !== 'recovery_prompt') return false;
+  if (present) return true;
+  if (context.recoveryPromptExpected === true) return true;
+  return isFailureOrReviewableStatus(context.status);
+}
+
+function isFailureOrReviewableStatus(status) {
+  const normalized = String(status || '').toUpperCase();
+  return normalized.includes('FAILED') ||
+    normalized.includes('NEEDS_FIX') ||
+    normalized.includes('REVIEWABLE');
 }
 
 function sortArtifacts(artifacts) {
@@ -595,7 +666,8 @@ function buildReviewArtifactInventory({
   const context = {
     seedUsed: deriveSeedUsed(root, date, runContext),
     publicOutputExpected: derivePublicOutputExpected(runContext),
-    status: deriveStatusLabel(root, date, runContext)
+    status: deriveStatusLabel(root, date, runContext),
+    recoveryPromptExpected: booleanFrom(runContext.recoveryPromptExpected) === true
   };
   const changedSet = normalizeChangedArtifacts(changedArtifacts);
   const exactEntries = exactCatalog(date);

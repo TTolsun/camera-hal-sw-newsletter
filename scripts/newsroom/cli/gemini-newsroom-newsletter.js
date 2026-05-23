@@ -337,8 +337,13 @@ function writeDateReviewPackage({
   writeReviewGuide(inventory);
   inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
   writeReleaseQa(inventory);
-  const manifest = buildDateReviewManifest({ root: rootDir, date, changedArtifacts, runContext });
-  writeJson(path.join(newsroomDir, 'artifact-manifest.json'), manifest);
+  const manifestPath = path.join(newsroomDir, 'artifact-manifest.json');
+  writeJson(manifestPath, buildDateReviewManifest({ root: rootDir, date, changedArtifacts, runContext }));
+  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
+  writeReviewGuide(inventory);
+  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
+  writeReleaseQa(inventory);
+  writeJson(manifestPath, buildDateReviewManifest({ root: rootDir, date, changedArtifacts, runContext }));
 }
 
 function readSeedEvidencePackForDate(date, rootDir = root) {
