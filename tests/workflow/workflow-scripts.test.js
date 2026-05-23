@@ -4673,6 +4673,50 @@ test('fallback title helper asks LLM for source-bound headlines using article co
   assert.match(calls[0].systemInstruction, /Do not copy the source title verbatim/);
   assert.match(calls[0].prompt, /Cannot access class ListenableFuture/);
   assert.match(calls[0].prompt, /AOSP Camera HAL/);
+  assert.match(calls[0].prompt, /Items without a stable key are ignored/);
+});
+
+test('fallback title helper ignores LLM headlines without stable source keys', async () => {
+  const issue = {
+    sections: [{
+      source_candidate_hash: 'camerax-161',
+      source_candidate_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      headline: 'CameraX Release Notes - CameraX 1.6.1',
+      sources: [{
+        title: 'CameraX Release Notes - CameraX 1.6.1',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+      }],
+      public_article: {
+        headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정',
+        body_paragraphs: ['CameraX 1.6.1은 ListenableFuture 컴파일 오류를 수정한 패치입니다.']
+      }
+    }, {
+      source_candidate_hash: 'libcamera-071',
+      source_candidate_url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
+      headline: 'libcamera v0.7.1',
+      sources: [{
+        title: 'libcamera v0.7.1',
+        url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html'
+      }],
+      public_article: {
+        headline: 'libcamera v0.7.1 릴리스',
+        body_paragraphs: ['libcamera v0.7.1 release note입니다.']
+      }
+    }]
+  };
+  const result = await generateFallbackPublicHeadlineOverrides({
+    issue,
+    force: true,
+    llmCall: async () => ({
+      headlines: [{
+        headline: '엉뚱하게 첫 번째 기사에 들어가면 안 되는 제목'
+      }]
+    })
+  });
+
+  assert.equal(result.used, false);
+  assert.equal(result.reason, 'no_valid_llm_headlines');
+  assert.deepEqual(result.overrides, {});
 });
 
 test('fallback builder recovers run 25590436113 shape with source-bound anchor candidates', () => {

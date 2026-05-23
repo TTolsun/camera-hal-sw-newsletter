@@ -70,6 +70,8 @@ const fallbackPublicTitleSchema = {
         type: 'OBJECT',
         properties: {
           source_candidate_hash: { type: 'STRING' },
+          source_hash: { type: 'STRING' },
+          source_candidate_url: { type: 'STRING' },
           source_url: { type: 'STRING' },
           headline: { type: 'STRING' },
           rationale: { type: 'STRING' }
@@ -180,7 +182,7 @@ function fallbackTitlePrompt(issue = {}) {
   return JSON.stringify({
     task: 'Generate source-bound Korean headlines for these fallback public newsletter articles.',
     output_contract: {
-      headlines: 'One item per input article. Include source_candidate_hash or source_url when available.',
+      headlines: 'One item per input article. Include source_candidate_hash or source_url from the matching input article. Items without a stable key are ignored.',
       headline: 'Concise Korean headline, usually 18-60 chars. Must not be the original source title copied verbatim.'
     },
     articles
@@ -201,16 +203,27 @@ function sanitizeGeneratedHeadline(section = {}, headline = '') {
 function normalizeLlmHeadlineOverrides(issue = {}, response = {}) {
   const sections = ensureArray(issue.sections);
   const byHash = new Map(sections.map(section => [text(section.source_candidate_hash), section]).filter(([key]) => key));
-  const byUrl = new Map(sections.flatMap(section => [
-    [text(section.source_candidate_url), section],
-    [text(ensureArray(section.sources)[0]?.url), section],
-    [text(section.public_article?.source_links?.[0]?.url), section]
-  ]).filter(([key]) => key));
+  const urlEntries = sections.flatMap(section => [
+    text(section.source_candidate_url),
+    text(ensureArray(section.sources)[0]?.url),
+    text(section.public_article?.source_links?.[0]?.url)
+  ]
+    .flatMap(url => [url, normalizeArticleUrl(url)])
+    .filter(Boolean)
+    .map(url => [url, section]));
+  const urlSections = new Map();
+  for (const [url, section] of urlEntries) {
+    if (!urlSections.has(url)) urlSections.set(url, new Set());
+    urlSections.get(url).add(section);
+  }
+  const byUrl = new Map(urlEntries.filter(([url]) => urlSections.get(url)?.size === 1));
   const overrides = {};
   for (const item of ensureArray(response.headlines)) {
-    const section = byHash.get(text(item.source_candidate_hash)) ||
-      byUrl.get(text(item.source_url)) ||
-      sections[ensureArray(response.headlines).indexOf(item)];
+    const sourceHash = text(item.source_candidate_hash || item.source_hash || item.hash);
+    const sourceUrl = text(item.source_url || item.source_candidate_url || item.url);
+    const section = byHash.get(sourceHash) ||
+      byUrl.get(sourceUrl) ||
+      byUrl.get(normalizeArticleUrl(sourceUrl));
     if (!section) continue;
     const headline = sanitizeGeneratedHeadline(section, item.headline);
     if (!headline) continue;
