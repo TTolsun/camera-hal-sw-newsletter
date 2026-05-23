@@ -62,21 +62,31 @@ function publicArticlePathLabel(keyPath = []) {
   return keyPath.map(item => /^\d+$/.test(item) ? '[]' : item).join('.');
 }
 
-function collectPublicArticleSections(value, keyPath = [], parent = null, root = value) {
+function looksLikeNewsletterIssue(value) {
+  return isPlainObject(value) && (
+    Object.prototype.hasOwnProperty.call(value, 'public_contract_version') ||
+    Object.prototype.hasOwnProperty.call(value, 'generation_contract_version') ||
+    Array.isArray(value.sections) ||
+    Array.isArray(value.articles)
+  );
+}
+
+function collectPublicArticleSections(value, keyPath = [], contextIssue = null) {
   const sections = [];
   if (Array.isArray(value)) {
     value.forEach((item, index) => {
-      sections.push(...collectPublicArticleSections(item, keyPath.concat(String(index)), parent, root));
+      sections.push(...collectPublicArticleSections(item, keyPath.concat(String(index)), contextIssue));
     });
     return sections;
   }
   if (!isPlainObject(value)) return sections;
+  const nextIssue = looksLikeNewsletterIssue(value) ? value : contextIssue;
   for (const [key, item] of Object.entries(value)) {
     const itemPath = keyPath.concat(key);
     if (key === 'public_article' && isPlainObject(item)) {
       sections.push({
         keyPath: itemPath,
-        issue: root,
+        issue: nextIssue || {},
         section: {
           ...value,
           public_article: item
@@ -84,7 +94,7 @@ function collectPublicArticleSections(value, keyPath = [], parent = null, root =
       });
       continue;
     }
-    sections.push(...collectPublicArticleSections(item, itemPath, value, root));
+    sections.push(...collectPublicArticleSections(item, itemPath, nextIssue));
   }
   return sections;
 }
@@ -199,6 +209,8 @@ if (require.main === module) {
 }
 
 module.exports = {
+  collectPublicArticleSections,
   main,
+  publicArticlePathIssues,
   validateIndexedNewsletters
 };

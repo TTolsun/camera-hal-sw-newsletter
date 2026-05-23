@@ -239,3 +239,17 @@ test('newsletter renderer renders story v1 labels without raw story keys', () =>
     assert.doesNotMatch(html, leaked);
   }
 });
+
+test('newsletter renderer does not treat unsupported future story versions as story v1', () => {
+  const futureIssue = storyIssue();
+  futureIssue.public_contract_version = 'story-v2';
+  futureIssue.sections[0].public_article.story_contract_version = 2;
+
+  const markdown = buildMarkdown(futureIssue);
+  const html = buildHtml(futureIssue);
+
+  assert.doesNotMatch(markdown, /Android Developers/);
+  assert.doesNotMatch(markdown, /story_contract_version/);
+  assert.doesNotMatch(html, /story-article/);
+  assert.doesNotMatch(html, /article-decision-metadata/);
+});

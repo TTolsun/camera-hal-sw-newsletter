@@ -58,6 +58,10 @@ const {
   summarizeClaimValidation,
   validateArticleClaims
 } = require('./claim-source-binding');
+const {
+  STORY_CONTRACT_VERSION,
+  STORY_PUBLIC_CONTRACT_VERSION
+} = require('../common/public-article-contract');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
@@ -1630,6 +1634,32 @@ function briefingRawCopyFindings(briefing = [], reporter = {}) {
   return findings;
 }
 
+const BRIEFING_WHAT_PATTERN = /\b(?:source|change|changed|update|updated|release|released|note|published|announced|android|aosp|camerax|camera2|libcamera|ndk|gcc|clang|llvm|driver|sensor|isp|soc|api)\b|릴리스|업데이트|변경|공개|출처/i;
+const BRIEFING_READER_PATTERN = /\b(?:hal|driver|sensor|camera|camerax|camera2|preview|capture|stream|buffer|metadata|ci|review|test|debug|latency|frame|regression|pipeline|native|tooling)\b|카메라|검증|디버깅|리뷰/i;
+const BRIEFING_ACTION_PATTERN = /\b(?:check|watch|test|review|compare|measure|track|triage|validate|verify|confirm|run|inspect|adopt)\b|확인|검증|테스트|비교|주시|점검|측정|추적|리뷰|도입/i;
+
+function briefingStoryStructureFindings(briefing = [], editor = {}) {
+  if (editor.public_contract_version !== STORY_PUBLIC_CONTRACT_VERSION) return [];
+  const findings = [];
+  ensureArray(briefing).forEach((item, index) => {
+    const bullet = text(item);
+    if (!bullet) return;
+    const missing = [];
+    if (!BRIEFING_WHAT_PATTERN.test(bullet)) missing.push('what_happened');
+    if (!BRIEFING_READER_PATTERN.test(bullet)) missing.push('reader_perspective');
+    if (!BRIEFING_ACTION_PATTERN.test(bullet)) missing.push('action_hint');
+    if (missing.length > 0) {
+      findings.push({
+        index: index + 1,
+        missing,
+        severity: 'warning',
+        reason: `Briefing bullet misses story structure elements: ${missing.join(', ')}.`
+      });
+    }
+  });
+  return findings;
+}
+
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : qualityGatePolicy.threshold;
   const sections = ensureArray(editor.sections);
@@ -1657,6 +1687,16 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       finding.reason,
       `briefing ${finding.index}`,
       finding.severity === 'fail' ? {} : { blocking: false, severity: 'soft' }
+    );
+  }
+  for (const finding of briefingStoryStructureFindings(editor.briefing, editor)) {
+    boundedDeduct(
+      state,
+      'editorial-story',
+      1,
+      finding.reason,
+      `briefing ${finding.index}`,
+      { blocking: false, severity: 'soft' }
     );
   }
   const sectionBindings = sections.map(section => bindCandidateForSection(section, bindingIndex));
@@ -1800,8 +1840,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         );
       }
       addLinkedEvidenceQualityDeductions(state, section, binding.candidate, location);
-      const storyTitleGate = editor.public_contract_version === 'story-v1' ||
-        Number(section.public_article?.story_contract_version) >= 1;
+      const storyTitleGate = editor.public_contract_version === STORY_PUBLIC_CONTRACT_VERSION ||
+        Number(section.public_article?.story_contract_version) === STORY_CONTRACT_VERSION;
       const titleFinding = storyTitleGate ? titleCopyFinding(section, binding.candidate) : null;
       if (titleFinding) {
         boundedDeduct(

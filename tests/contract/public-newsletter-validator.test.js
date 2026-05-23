@@ -4,6 +4,9 @@ const test = require('node:test');
 const {
   validatePublicNewsletterArtifacts
 } = require('../../scripts/newsroom/validate/public-newsletter');
+const {
+  publicArticlePathIssues
+} = require('../../scripts/newsroom/cli/validate-public-newsletter');
 
 function markdown(overrides = {}) {
   const checkpoints = overrides.checkpoints || [
@@ -50,6 +53,108 @@ ${checkpoints[index].map(item => `- ${item}`).join('\n')}
 
 function html(body = '<p>Public reader-facing article.</p>') {
   return `<!doctype html><html><body><main>${body}</main></body></html>`;
+}
+
+function storyPublicArticle(headline = 'CameraX preview 호환성 확인') {
+  return {
+    story_contract_version: 1,
+    headline,
+    source_subtitle: 'Android Developers · CameraX',
+    lead: 'CameraX preview 변경은 app/framework 계층의 호환성 검증 신호로 다룹니다.',
+    body_paragraphs: [
+      'Android Developers가 CameraX preview 동작과 관련된 변경점을 공개했습니다.',
+      'Camera HAL 독자는 HAL 직접 변경이 아니라 preview/capture regression 범위 지정에 참고합니다.'
+    ],
+    camera_hal_takeaway: '검증 범위는 app/framework 관찰 항목으로 제한합니다.',
+    reader_checkpoints: [
+      'CameraX preview path에서 Camera ITS smoke test를 실행합니다.',
+      'preview latency와 stream metadata 차이를 비교합니다.'
+    ],
+    editorial_story: {
+      reader_scenario: '앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage하는 상황을 가정합니다.',
+      what_happened: 'Android Developers가 CameraX 변경점을 공개했습니다.',
+      why_it_matters: 'Camera HAL 독자는 preview/capture regression 범위 지정에 참고할 수 있습니다.',
+      field_scenario: 'Camera ITS와 preview latency log를 비교합니다.',
+      not_to_overclaim: 'HAL runtime 변경으로 확대하지 않습니다.',
+      editor_take: 'source 범위 안에서만 실무 확인 항목으로 다룹니다.'
+    },
+    decision_metadata: {
+      impact: 'Medium',
+      scope: ['Framework'],
+      action: ['Watch', 'Test'],
+      overclaim_risk: 'Medium'
+    },
+    source_links: [{
+      title: 'CameraX Release Notes',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+      source_role: 'primary'
+    }]
+  };
+}
+
+function storyIssue(overrides = {}) {
+  const headline = overrides.headline || 'CameraX preview 호환성 확인';
+  return {
+    date: '2026-05-18',
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1,
+    sections: [{
+      category: 'Android Platform / CameraX',
+      headline,
+      what_changed: 'CameraX preview behavior changed in a dated release note.',
+      camera_hal_perspective: 'CameraX preview path를 Camera ITS와 stream metadata로 확인합니다.',
+      action_items: [
+        'Camera ITS smoke test를 실행합니다.',
+        'preview latency와 stream metadata 차이를 비교합니다.'
+      ],
+      hal_impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
+      actionability_level: 'measurable_test',
+      sources: [{
+        title: 'CameraX Release Notes',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera'
+      }],
+      public_article: storyPublicArticle(headline)
+    }],
+    ...overrides
+  };
+}
+
+function legacyIssue() {
+  return {
+    date: '2026-05-17',
+    sections: [{
+      category: 'Legacy',
+      headline: 'Legacy Camera article',
+      what_changed: 'Legacy article stays on the old public article contract.',
+      camera_hal_perspective: 'Camera HAL readers keep the legacy rendering path.',
+      action_items: [
+        'Run Camera ITS smoke test for Legacy Source preview stream metadata.',
+        'Compare Legacy Source preview latency and frame-drop logs.'
+      ],
+      sources: [{
+        title: 'Legacy Source',
+        url: 'https://example.com/legacy-source'
+      }],
+      public_article: {
+        headline: 'Legacy Camera article',
+        lead: 'Legacy article stays on the old public article contract.',
+        body_paragraphs: [
+          'Legacy body paragraph one explains source-backed context.',
+          'Legacy body paragraph two keeps the HAL interpretation bounded.'
+        ],
+        camera_hal_takeaway: 'Legacy rendering remains compatible.',
+        reader_checkpoints: [
+          'Run Camera ITS smoke test for Legacy Source preview stream metadata.',
+          'Compare Legacy Source preview latency and frame-drop logs.'
+        ],
+        source_links: [{
+          title: 'Legacy Source',
+          url: 'https://example.com/legacy-source',
+          source_role: 'primary'
+        }]
+      }
+    }]
+  };
 }
 
 test('public newsletter validator accepts reader-facing articles', () => {
@@ -189,6 +294,38 @@ test('public newsletter validator accepts story v1 Korean rendered labels', () =
   });
 
   assert.deepEqual(errors, []);
+});
+
+test('public article path validation uses nearest issue context for array and wrapper artifacts', () => {
+  assert.deepEqual(publicArticlePathIssues(storyIssue(), 'single-story-issue'), []);
+  assert.deepEqual(publicArticlePathIssues([legacyIssue(), storyIssue()], 'issue-array'), []);
+  assert.deepEqual(publicArticlePathIssues({ newsletters: [legacyIssue(), storyIssue()] }, 'issue-wrapper'), []);
+});
+
+test('public article path validation rejects unsupported future story contract versions in wrappers', () => {
+  const issue = storyIssue({
+    public_contract_version: 'story-v2'
+  });
+  const errors = publicArticlePathIssues({ newsletters: [issue] }, 'issue-wrapper');
+
+  assert.ok(errors.some(error => /unsupported_public_contract_version/.test(error)));
+});
+
+test('public article path validation rejects unsupported future section story versions in wrappers', () => {
+  const issue = storyIssue();
+  issue.sections[0].public_article.story_contract_version = 2;
+  const errors = publicArticlePathIssues({ newsletters: [issue] }, 'issue-wrapper');
+
+  assert.ok(errors.some(error => /unsupported_story_contract_version/.test(error)));
+});
+
+test('public article path validation rejects story fields without story markers', () => {
+  const issue = legacyIssue();
+  issue.sections[0].public_article = storyPublicArticle('Story fields without markers');
+  delete issue.sections[0].public_article.story_contract_version;
+  const errors = publicArticlePathIssues({ newsletters: [issue] }, 'issue-wrapper');
+
+  assert.ok(errors.some(error => /story_contract_version_mismatch/.test(error)));
 });
 
 test('public newsletter validator rejects non-public markdown source links', () => {

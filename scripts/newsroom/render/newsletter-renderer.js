@@ -6,6 +6,7 @@ const {
   articleSectionContractRowValues
 } = require('../common/article-structure-summary');
 const {
+  STORY_CONTRACT_VERSION,
   publicArticleForSection
 } = require('../common/public-article-contract');
 const {
@@ -270,7 +271,7 @@ function bodyParagraphsForRender(publicArticle) {
 }
 
 function isStoryArticle(publicArticle = {}) {
-  return Number(publicArticle.story_contract_version) >= 1 &&
+  return Number(publicArticle.story_contract_version) === STORY_CONTRACT_VERSION &&
     publicArticle.editorial_story &&
     typeof publicArticle.editorial_story === 'object';
 }

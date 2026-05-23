@@ -1155,6 +1155,82 @@ test('story v1 contract rejects mixed marker artifacts instead of falling back t
   );
 });
 
+test('story contract rejects story fields without contract markers instead of treating them as legacy', () => {
+  const draft = editor({
+    sections: [
+      {
+        ...section(1),
+        public_article: storyPublicArticle(section(1), {
+          story_contract_version: undefined
+        })
+      },
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue => issue.type === 'story_contract_version_mismatch'));
+      return true;
+    }
+  );
+});
+
+test('story contract rejects unsupported future story versions instead of treating them as v1', () => {
+  const draft = storyEditor({
+    sections: [
+      {
+        ...section(1),
+        public_article: storyPublicArticle(section(1), {
+          story_contract_version: 2
+        })
+      },
+      { ...section(2), public_article: storyPublicArticle(section(2)) },
+      { ...section(3), public_article: storyPublicArticle(section(3)) }
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_story_contract_version' &&
+        issue.value === 2
+      ));
+      return true;
+    }
+  );
+});
+
+test('story contract rejects unsupported future public contract versions', () => {
+  const draft = storyEditor({
+    public_contract_version: 'story-v2'
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_public_contract_version' &&
+        issue.value === 'story-v2'
+      ));
+      return true;
+    }
+  );
+});
+
 test('story v1 repair fills legacy public article markers and story fields deterministically', async () => {
   const draft = editor();
 
@@ -1213,6 +1289,51 @@ test('story v1 deterministic metadata overrides aggressive LLM metadata', () => 
   assert.equal(metadata.overclaim_risk, 'High');
   assert.equal(metadata.action.includes('Adopt'), false);
   assert.deepEqual(metadata, deriveDecisionMetadata(result.sections[0], result));
+});
+
+test('story v1 deterministic metadata separates tooling scope from fallback-only policy', () => {
+  const tooling = section(1, {
+    category: 'Android Native Tooling',
+    headline: 'NDK camera test utility update',
+    relevance_bucket: 'android_native_tooling_workflow',
+    impact_claim_level: 'tooling_supporting',
+    actionability_level: 'measurable_test',
+    effective_actionability_level: 'measurable_test',
+    source_gap_risk: false,
+    do_not_overstate: [],
+    hal_signal_capsule: {
+      ...section(1).hal_signal_capsule,
+      do_not_overstate: []
+    }
+  });
+  const fallback = section(2, {
+    category: 'Tooling Watch / Fallback',
+    headline: 'AI tooling fallback note',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    impact_claim_level: 'tooling_supporting',
+    actionability_level: 'measurable_test',
+    effective_actionability_level: 'measurable_test',
+    source_gap_risk: false,
+    do_not_overstate: [],
+    hal_signal_capsule: {
+      ...section(2).hal_signal_capsule,
+      do_not_overstate: []
+    }
+  });
+
+  const toolingMetadata = deriveDecisionMetadata(tooling, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+  const fallbackMetadata = deriveDecisionMetadata(fallback, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(toolingMetadata.scope.includes('Tooling'), true);
+  assert.equal(toolingMetadata.action.includes('Adopt'), true);
+  assert.equal(fallbackMetadata.scope.includes('Tooling'), true);
+  assert.equal(fallbackMetadata.action.includes('Adopt'), false);
 });
 
 test('story v1 deterministic metadata scope ignores generic story prose boilerplate', () => {

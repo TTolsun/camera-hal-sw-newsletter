@@ -10,6 +10,9 @@ const PUBLIC_ARTICLE_BASE_REQUIRED_KEYS = Object.freeze([
 const STORY_CONTRACT_VERSION = 1;
 const STORY_PUBLIC_CONTRACT_VERSION = 'story-v1';
 const GENERATION_CONTRACT_VERSION = 1;
+const SUPPORTED_STORY_CONTRACT_VERSIONS = new Set([STORY_CONTRACT_VERSION]);
+const SUPPORTED_PUBLIC_CONTRACT_VERSIONS = new Set([STORY_PUBLIC_CONTRACT_VERSION]);
+const SUPPORTED_GENERATION_CONTRACT_VERSIONS = new Set([GENERATION_CONTRACT_VERSION]);
 
 const PUBLIC_ARTICLE_STORY_KEYS = Object.freeze([
   'story_contract_version',
@@ -396,34 +399,84 @@ function contractVersion(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function isSupportedStoryVersion(value) {
+  return SUPPORTED_STORY_CONTRACT_VERSIONS.has(contractVersion(value));
+}
+
+function isSupportedGenerationVersion(value) {
+  return SUPPORTED_GENERATION_CONTRACT_VERSIONS.has(contractVersion(value));
+}
+
+function isSupportedPublicContractVersion(value) {
+  return SUPPORTED_PUBLIC_CONTRACT_VERSIONS.has(compactText(value));
+}
+
 function hasOwn(value, key) {
   return Object.prototype.hasOwnProperty.call(value || {}, key);
 }
 
 function storyContractMarkers(issue = {}, section = {}, options = {}) {
   const article = isPlainObject(section.public_article) ? section.public_article : {};
-  const hasIssueStoryMarker = issue.public_contract_version === STORY_PUBLIC_CONTRACT_VERSION;
-  const hasGenerationMarker = contractVersion(issue.generation_contract_version) >= GENERATION_CONTRACT_VERSION;
-  const hasSectionStoryMarker = contractVersion(article.story_contract_version) >= STORY_CONTRACT_VERSION;
+  const hasIssueContractValue = compactText(issue.public_contract_version) !== '';
+  const hasGenerationContractValue = hasOwn(issue, 'generation_contract_version') &&
+    compactText(issue.generation_contract_version) !== '';
+  const hasSectionStoryContractValue = hasOwn(article, 'story_contract_version') &&
+    compactText(article.story_contract_version) !== '';
+  const hasIssueStoryMarker = isSupportedPublicContractVersion(issue.public_contract_version);
+  const hasGenerationMarker = isSupportedGenerationVersion(issue.generation_contract_version);
+  const hasSectionStoryMarker = isSupportedStoryVersion(article.story_contract_version);
+  const unsupported = [];
+  if (hasIssueContractValue && !hasIssueStoryMarker) {
+    unsupported.push({
+      type: 'unsupported_public_contract_version',
+      key: 'public_contract_version',
+      value: compactText(issue.public_contract_version),
+      supported: [...SUPPORTED_PUBLIC_CONTRACT_VERSIONS]
+    });
+  }
+  if (hasGenerationContractValue && !hasGenerationMarker) {
+    unsupported.push({
+      type: 'unsupported_generation_contract_version',
+      key: 'generation_contract_version',
+      value: issue.generation_contract_version,
+      supported: [...SUPPORTED_GENERATION_CONTRACT_VERSIONS]
+    });
+  }
+  if (hasSectionStoryContractValue && !hasSectionStoryMarker) {
+    unsupported.push({
+      type: 'unsupported_story_contract_version',
+      key: 'story_contract_version',
+      value: article.story_contract_version,
+      supported: [...SUPPORTED_STORY_CONTRACT_VERSIONS]
+    });
+  }
   const hasStoryField = PUBLIC_ARTICLE_STORY_KEYS.some(key => hasOwn(article, key));
   const markerCount = [
     hasIssueStoryMarker,
     hasGenerationMarker,
     hasSectionStoryMarker
   ].filter(Boolean).length;
-  const complete = markerCount === 3;
+  const rawMarkerCount = [
+    hasIssueContractValue,
+    hasGenerationContractValue,
+    hasSectionStoryContractValue
+  ].filter(Boolean).length;
+  const complete = markerCount === 3 && unsupported.length === 0;
   const requiredByCaller = options.requireStoryContract === true;
   return {
     hasIssueStoryMarker,
     hasGenerationMarker,
     hasSectionStoryMarker,
     hasStoryField,
+    hasUnsupportedMarker: unsupported.length > 0,
+    unsupported,
+    rawMarkerCount,
     markerCount,
     complete,
     required: complete || requiredByCaller,
-    mismatch: (markerCount > 0 && markerCount < 3) ||
+    mismatch: unsupported.length === 0 && ((markerCount > 0 && markerCount < 3) ||
       (markerCount === 0 && hasStoryField) ||
-      (requiredByCaller && !complete)
+      (requiredByCaller && !complete))
   };
 }
 
@@ -663,10 +716,12 @@ function hasDoNotOverstateBoundary(section = {}) {
 }
 
 function isFallbackOnly(section = {}, issue = {}) {
+  const bucket = compactText(section.relevance_bucket || section.bucket);
   return issue.fallback_only === true ||
     section.fallback_only === true ||
     issue.publication_mode === 'fallback_public' ||
-    /cpp_ai_tooling_fallback|fallback|tooling/i.test(sectionBucket(section));
+    section.publication_mode === 'fallback_public' ||
+    bucket === 'cpp_ai_tooling_fallback';
 }
 
 function isDirectHalSourceConfirmed(section = {}) {
@@ -923,7 +978,7 @@ function publicArticleForSection(section = {}, { allowLegacyFallback = true, iss
     reader_checkpoints: normalizeStringArray(raw.reader_checkpoints),
     source_links: sourceLinks
   };
-  const storyEnabled = storyState.required || storyState.hasStoryField;
+  const storyEnabled = (storyState.required || storyState.hasStoryField) && !storyState.hasUnsupportedMarker;
   if (storyEnabled) {
     normalized.story_contract_version = STORY_CONTRACT_VERSION;
     normalized.source_subtitle = compactText(raw.source_subtitle);
@@ -1261,7 +1316,10 @@ function publicSourceLinkMergeIssues(section = {}) {
 }
 
 function publicArticleAllowedKeysFor(storyState) {
-  return storyState.required || storyState.hasStoryField || storyState.markerCount > 0
+  return storyState.required ||
+    storyState.hasStoryField ||
+    storyState.markerCount > 0 ||
+    storyState.rawMarkerCount > 0
     ? PUBLIC_ARTICLE_ALLOWED_KEYS
     : PUBLIC_ARTICLE_BASE_REQUIRED_KEYS;
 }
@@ -1320,6 +1378,13 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
   const storyState = storyContractMarkers(issue, section, {
     requireStoryContract: options.requireStoryContract === true
   });
+  for (const unsupported of storyState.unsupported) {
+    issues.push({
+      index: index + 1,
+      headline,
+      ...unsupported
+    });
+  }
   if (storyState.mismatch) {
     issues.push({
       index: index + 1,
@@ -1381,7 +1446,7 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
         });
       }
     }
-    issues.push(...validateDecisionMetadataShape(normalized.decision_metadata, index, headline));
+    issues.push(...validateDecisionMetadataShape(normalized.decision_metadata || raw.decision_metadata, index, headline));
   }
   for (const [field, value] of Object.entries({
     headline: normalized.headline,
