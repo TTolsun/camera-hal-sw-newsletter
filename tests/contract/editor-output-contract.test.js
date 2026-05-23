@@ -21,6 +21,7 @@ const {
 } = require('../../scripts/newsroom/common/newsletter-policy');
 const {
   isConcreteCheckpoint,
+  deriveDecisionMetadata,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
   publicArticleForSection,
@@ -120,6 +121,43 @@ function editor(overrides = {}) {
     references: [],
     ...overrides
   };
+}
+
+function storyPublicArticle(baseSection = section(1), overrides = {}) {
+  const publicArticle = {
+    ...baseSection.public_article,
+    story_contract_version: 1,
+    source_subtitle: `${baseSection.sources[0].title} · 2026-05-08`,
+    editorial_story: {
+      reader_scenario: 'HAL 리뷰 중 이 변경이 stream metadata 검증 범위에 들어가는지 확인해야 하는 상황을 가정합니다.',
+      what_happened: `${baseSection.headline} source가 확인한 변경점을 공개했습니다.`,
+      why_it_matters: 'Camera HAL 독자는 이 항목을 source 범위 안에서 regression 검증 후보로 볼 수 있습니다.',
+      field_scenario: 'Camera ITS와 preview latency log를 비교하는 리뷰 흐름에 연결합니다.',
+      not_to_overclaim: 'source가 직접 말하지 않는 HAL runtime 변경으로 확대하지 않습니다.',
+      editor_take: '검증 대상은 source가 확인한 범위 안에서만 잡습니다.'
+    },
+    decision_metadata: {
+      impact: 'High',
+      scope: ['HAL'],
+      action: ['Test', 'Adopt'],
+      overclaim_risk: 'Low'
+    },
+    ...overrides
+  };
+  return publicArticle;
+}
+
+function storyEditor(overrides = {}) {
+  const sections = [section(1), section(2), section(3)].map(item => ({
+    ...item,
+    public_article: storyPublicArticle(item)
+  }));
+  return editor({
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1,
+    sections,
+    ...overrides
+  });
 }
 
 function reporterForClaimTests(url = 'https://example.com/source-1') {
@@ -1082,6 +1120,367 @@ test('editor output contract maps source-quality roles on public_article source_
   const result = validateEditorOutputContract(draft, DATE, { normalizeSection });
 
   assert.equal(result.sections[0].public_article.source_links[0].source_role, 'primary');
+});
+
+test('story v1 editor output requires complete contract markers and story fields', () => {
+  const draft = storyEditor();
+
+  const result = validateEditorOutputContract(draft, DATE, {
+    normalizeSection,
+    requireStoryContract: true
+  });
+
+  assert.equal(result.public_contract_version, 'story-v1');
+  assert.equal(result.generation_contract_version, 1);
+  assert.equal(result.sections[0].public_article.story_contract_version, 1);
+  assert.deepEqual(
+    result.sections[0].public_article.decision_metadata,
+    deriveDecisionMetadata(result.sections[0], result)
+  );
+});
+
+test('story v1 contract rejects mixed marker artifacts instead of falling back to legacy', () => {
+  const draft = storyEditor({ generation_contract_version: undefined });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue => issue.type === 'story_contract_version_mismatch'));
+      return true;
+    }
+  );
+});
+
+test('story contract rejects story fields without contract markers instead of treating them as legacy', () => {
+  const draft = editor({
+    sections: [
+      {
+        ...section(1),
+        public_article: storyPublicArticle(section(1), {
+          story_contract_version: undefined
+        })
+      },
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue => issue.type === 'story_contract_version_mismatch'));
+      return true;
+    }
+  );
+});
+
+test('story contract rejects unsupported future story versions instead of treating them as v1', () => {
+  const draft = storyEditor({
+    sections: [
+      {
+        ...section(1),
+        public_article: storyPublicArticle(section(1), {
+          story_contract_version: 2
+        })
+      },
+      { ...section(2), public_article: storyPublicArticle(section(2)) },
+      { ...section(3), public_article: storyPublicArticle(section(3)) }
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_story_contract_version' &&
+        issue.value === 2
+      ));
+      return true;
+    }
+  );
+});
+
+test('story contract rejects unsupported future public contract versions', () => {
+  const draft = storyEditor({
+    public_contract_version: 'story-v2'
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_public_contract_version' &&
+        issue.value === 'story-v2'
+      ));
+      return true;
+    }
+  );
+});
+
+test('story repair does not downgrade unsupported future public contract versions', async () => {
+  const draft = storyEditor({
+    public_contract_version: 'story-v2'
+  });
+
+  await assert.rejects(
+    () => repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: { candidates: [] },
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.equal(error.repairAttempted, false);
+      assert.equal(error.repairSucceeded, false);
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_public_contract_version' &&
+        issue.value === 'story-v2'
+      ));
+      assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_public_contract_version'));
+      return true;
+    }
+  );
+});
+
+test('story repair does not downgrade unsupported future section story versions', async () => {
+  const draft = storyEditor({
+    sections: [
+      {
+        ...section(1),
+        public_article: storyPublicArticle(section(1), {
+          story_contract_version: 2
+        })
+      },
+      { ...section(2), public_article: storyPublicArticle(section(2)) },
+      { ...section(3), public_article: storyPublicArticle(section(3)) }
+    ]
+  });
+
+  await assert.rejects(
+    () => repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: { candidates: [] },
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.equal(error.repairAttempted, false);
+      assert.equal(error.repairSucceeded, false);
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_story_contract_version' &&
+        issue.value === 2
+      ));
+      assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_story_contract_version'));
+      return true;
+    }
+  );
+});
+
+test('story repair does not downgrade unsupported future generation contract versions', async () => {
+  const draft = storyEditor({
+    generation_contract_version: 2
+  });
+
+  await assert.rejects(
+    () => repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: { candidates: [] },
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.equal(error.repairAttempted, false);
+      assert.equal(error.repairSucceeded, false);
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_generation_contract_version' &&
+        issue.value === 2
+      ));
+      assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_generation_contract_version'));
+      return true;
+    }
+  );
+});
+
+test('story v1 repair fills legacy public article markers and story fields deterministically', async () => {
+  const draft = editor();
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    reporter: { candidates: [] },
+    normalizeSection,
+    requireStoryContract: true
+  });
+
+  assert.equal(result.repairAttempted, true);
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.deterministicRepair, true);
+  assert.equal(result.editor.public_contract_version, 'story-v1');
+  assert.equal(result.editor.generation_contract_version, 1);
+  for (const repairedSection of result.editor.sections) {
+    assert.equal(repairedSection.public_article.story_contract_version, 1);
+    assert.ok(repairedSection.public_article.source_subtitle);
+    assert.ok(repairedSection.public_article.editorial_story.reader_scenario);
+    assert.deepEqual(
+      repairedSection.public_article.decision_metadata,
+      deriveDecisionMetadata(repairedSection, result.editor)
+    );
+  }
+});
+
+test('story v1 deterministic metadata overrides aggressive LLM metadata', () => {
+  const base = section(1, {
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    impact_claim_level: 'tooling_supporting',
+    source_gap_risk: true,
+    public_article: storyPublicArticle(section(1), {
+      decision_metadata: {
+        impact: 'High',
+        scope: ['HAL'],
+        action: ['Adopt'],
+        overclaim_risk: 'Low'
+      }
+    })
+  });
+  const draft = storyEditor({
+    sections: [
+      base,
+      { ...section(2), public_article: storyPublicArticle(section(2)) },
+      { ...section(3), public_article: storyPublicArticle(section(3)) }
+    ]
+  });
+
+  const result = validateEditorOutputContract(draft, DATE, {
+    normalizeSection,
+    requireStoryContract: true
+  });
+  const metadata = result.sections[0].public_article.decision_metadata;
+
+  assert.equal(metadata.overclaim_risk, 'High');
+  assert.equal(metadata.action.includes('Adopt'), false);
+  assert.deepEqual(metadata, deriveDecisionMetadata(result.sections[0], result));
+});
+
+test('story v1 deterministic metadata separates tooling scope from fallback-only policy', () => {
+  const tooling = section(1, {
+    category: 'Android Native Tooling',
+    headline: 'NDK camera test utility update',
+    relevance_bucket: 'android_native_tooling_workflow',
+    impact_claim_level: 'tooling_supporting',
+    actionability_level: 'measurable_test',
+    effective_actionability_level: 'measurable_test',
+    source_gap_risk: false,
+    do_not_overstate: [],
+    hal_signal_capsule: {
+      ...section(1).hal_signal_capsule,
+      do_not_overstate: []
+    }
+  });
+  const fallback = section(2, {
+    category: 'Tooling Watch / Fallback',
+    headline: 'AI tooling fallback note',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    impact_claim_level: 'tooling_supporting',
+    actionability_level: 'measurable_test',
+    effective_actionability_level: 'measurable_test',
+    source_gap_risk: false,
+    do_not_overstate: [],
+    hal_signal_capsule: {
+      ...section(2).hal_signal_capsule,
+      do_not_overstate: []
+    }
+  });
+
+  const toolingMetadata = deriveDecisionMetadata(tooling, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+  const fallbackMetadata = deriveDecisionMetadata(fallback, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(toolingMetadata.scope.includes('Tooling'), true);
+  assert.equal(toolingMetadata.action.includes('Adopt'), true);
+  assert.equal(fallbackMetadata.scope.includes('Tooling'), true);
+  assert.equal(fallbackMetadata.action.includes('Adopt'), false);
+});
+
+test('story v1 deterministic metadata scope ignores generic story prose boilerplate', () => {
+  const base = section(1, {
+    category: 'SoC Platform Signal',
+    headline: 'Snapdragon ISP camera thermal note',
+    relevance_bucket: 'soc_platform_signal',
+    impact_claim_level: 'soc_resource_contention',
+    hal_impact_axes: ['performance_latency_thermal', 'stream_buffer_metadata'],
+    soc_signal_type: 'isp_thermal_camera_workload'
+  });
+  base.public_article = storyPublicArticle(base, {
+    editorial_story: {
+      ...storyPublicArticle(base).editorial_story,
+      reader_scenario: '이 항목을 Camera HAL / Driver / Native tooling 리뷰 범위에 넣을지 판단하는 상황을 가정합니다.'
+    }
+  });
+
+  const metadata = deriveDecisionMetadata(base, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(metadata.scope.includes('SoC'), true);
+  assert.equal(metadata.scope.includes('Driver'), false);
+  assert.equal(metadata.scope.includes('Tooling'), false);
+  assert.equal(metadata.scope.includes('AI'), false);
+});
+
+test('story v1 reader_scenario must stay hypothetical', () => {
+  const draft = storyEditor({
+    sections: [
+      {
+        ...section(1),
+        public_article: storyPublicArticle(section(1), {
+          editorial_story: {
+            ...storyPublicArticle(section(1)).editorial_story,
+            reader_scenario: '이번 CameraX 업데이트로 HAL 버퍼 누수가 발생했다.'
+          }
+        })
+      },
+      { ...section(2), public_article: storyPublicArticle(section(2)) },
+      { ...section(3), public_article: storyPublicArticle(section(3)) }
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue => issue.type === 'reader_scenario_factual_boundary'));
+      return true;
+    }
+  );
 });
 
 test('LLM public_article merge preserves deterministic article fields', () => {
@@ -2302,11 +2701,28 @@ test('editor schema requires public_article with reader-facing fields', () => {
   assert.ok(publicArticle);
   assert.deepEqual(publicArticle.required, [
     'headline',
+    'source_subtitle',
     'lead',
     'body_paragraphs',
     'camera_hal_takeaway',
     'reader_checkpoints',
+    'story_contract_version',
+    'editorial_story',
     'source_links'
+  ]);
+  assert.ok(publicArticle.properties.editorial_story);
+  assert.deepEqual(publicArticle.properties.editorial_story.required, [
+    'reader_scenario',
+    'what_happened',
+    'why_it_matters',
+    'field_scenario',
+    'not_to_overclaim',
+    'editor_take'
+  ]);
+  assert.deepEqual(editorSchema.required.slice(0, 3), [
+    'date',
+    'public_contract_version',
+    'generation_contract_version'
   ]);
   assert.equal(
     editorSchema.properties.sections.items.required.includes('public_article'),

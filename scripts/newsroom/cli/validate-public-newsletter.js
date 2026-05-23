@@ -62,20 +62,31 @@ function publicArticlePathLabel(keyPath = []) {
   return keyPath.map(item => /^\d+$/.test(item) ? '[]' : item).join('.');
 }
 
-function collectPublicArticleSections(value, keyPath = [], parent = null) {
+function looksLikeNewsletterIssue(value) {
+  return isPlainObject(value) && (
+    Object.prototype.hasOwnProperty.call(value, 'public_contract_version') ||
+    Object.prototype.hasOwnProperty.call(value, 'generation_contract_version') ||
+    Array.isArray(value.sections) ||
+    Array.isArray(value.articles)
+  );
+}
+
+function collectPublicArticleSections(value, keyPath = [], contextIssue = null) {
   const sections = [];
   if (Array.isArray(value)) {
     value.forEach((item, index) => {
-      sections.push(...collectPublicArticleSections(item, keyPath.concat(String(index)), parent));
+      sections.push(...collectPublicArticleSections(item, keyPath.concat(String(index)), contextIssue));
     });
     return sections;
   }
   if (!isPlainObject(value)) return sections;
+  const nextIssue = looksLikeNewsletterIssue(value) ? value : contextIssue;
   for (const [key, item] of Object.entries(value)) {
     const itemPath = keyPath.concat(key);
     if (key === 'public_article' && isPlainObject(item)) {
       sections.push({
         keyPath: itemPath,
+        issue: nextIssue || {},
         section: {
           ...value,
           public_article: item
@@ -83,15 +94,15 @@ function collectPublicArticleSections(value, keyPath = [], parent = null) {
       });
       continue;
     }
-    sections.push(...collectPublicArticleSections(item, itemPath, value));
+    sections.push(...collectPublicArticleSections(item, itemPath, nextIssue));
   }
   return sections;
 }
 
 function publicArticlePathIssues(value, label) {
   const issues = [];
-  for (const [index, { keyPath, section }] of collectPublicArticleSections(value).entries()) {
-    for (const issue of validatePublicArticle(section, index)) {
+  for (const [index, { keyPath, section, issue: rootIssue }] of collectPublicArticleSections(value).entries()) {
+    for (const issue of validatePublicArticle(section, index, { issue: rootIssue })) {
       issues.push(`${label}:${publicArticlePathLabel(keyPath)} failed: ${issue.type}${issue.key ? ` ${issue.key}` : ''}${issue.reason ? ` ${issue.reason}` : ''}${issue.message ? ` ${issue.message}` : ''}`);
     }
   }
@@ -198,6 +209,8 @@ if (require.main === module) {
 }
 
 module.exports = {
+  collectPublicArticleSections,
   main,
+  publicArticlePathIssues,
   validateIndexedNewsletters
 };

@@ -58,6 +58,9 @@ const {
   fallbackIssueTags,
   publicationDecisionForSections
 } = require('../common/publication-mode');
+const {
+  deriveDecisionMetadata
+} = require('../common/public-article-contract');
 
 const REQUIRED_PRESERVE_FIELDS = [
   'headline',
@@ -734,6 +737,10 @@ function publicHeadlineForCandidate(candidate, headline) {
   if (/\bGlaze\b/i.test(title)) return 'Glaze 7.2: C++26 Reflection 기반 직렬화 지원 확대';
   if (/\bGCC\s+16\.1\b/i.test(title)) return 'GCC 16.1 릴리스: C++20 기본값 전환과 C++26 기능 확장';
   if (/libcamera/i.test(title)) return 'libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트';
+  const cameraXVersion = title.match(/\bCameraX\s+([0-9][A-Za-z0-9.-]*)\b/i);
+  if (cameraXVersion) {
+    return `CameraX ${cameraXVersion[1]} 업데이트: preview/capture 호환성 확인`;
+  }
   return title.replace(/^Tooling Watch \/ Fallback:\s*/i, '').replace(/\bFallback\b/gi, 'Watch').trim();
 }
 
@@ -752,6 +759,9 @@ function publicChangeSummary(candidate, section, component) {
   }
   if (/libcamera/i.test(title)) {
     return 'libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트를 포함합니다.';
+  }
+  if (/CameraX|androidx\.camera/i.test(title) || /CameraX|androidx\.camera/i.test(component)) {
+    return 'CameraX release note는 app/framework 계층의 preview/capture 호환성 검증 신호로 다룹니다.';
   }
   if (longEnglishSourceText(change)) {
     return `${component || title} 관련 공개 출처가 공식 업데이트를 공지했습니다. 원문 세부 문장은 출처 링크에서 확인하고, 여기서는 Camera HAL / Driver / Native tooling 관점의 확인 범위만 요약합니다.`;
@@ -891,15 +901,57 @@ function publicTakeawayForCandidate(candidate, section, component) {
   return `${title}은 공개 출처 범위 안의 watch signal입니다. HAL/driver 변경으로 확대 해석하지 않고 release note와 compatibility 확인 범위로 제한합니다.`;
 }
 
+function sourceSubtitleForCandidate(candidate, section) {
+  return [
+    firstText(candidate.source, candidate.publisher, ensureArray(section.sources)[0]?.title),
+    firstText(candidate.version_or_release, candidate.versionOrRelease, candidate.published_date)
+  ].filter(Boolean).join(' · ') || firstText(ensureArray(section.sources)[0]?.title, candidate.title, section.category);
+}
+
+function readerScenarioForCandidate(candidate, section, headline) {
+  const title = text(candidate.title || headline);
+  if (/libcamera/i.test(title)) {
+    return 'sensor mode 선택이나 frame timing 회귀를 조사하는 리뷰 상황에서 upstream libcamera 변경점을 함께 확인해야 하는 장면을 가정합니다.';
+  }
+  if (/GCC|Glaze|AI Studio/i.test(title)) {
+    return 'Camera HAL 본체가 아니라 host/native tooling이나 prototype 코드 검토 중 build, logging, Camera API 사용 범위를 확인해야 하는 장면을 가정합니다.';
+  }
+  if (/Compose|CameraX|Android/i.test(title)) {
+    return '앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage하는 상황을 가정합니다.';
+  }
+  return `${headline}을 Camera HAL / Driver / Native tooling 리뷰 범위에 넣을지 판단하는 현업 장면을 가정합니다.`;
+}
+
+function editorialStoryForCandidate(candidate, section, headline, component) {
+  const change = publicChangeSummary(candidate, section, component);
+  return {
+    reader_scenario: readerScenarioForCandidate(candidate, section, headline),
+    what_happened: change,
+    why_it_matters: publicTakeawayForCandidate(candidate, section, component),
+    field_scenario: publicCheckpointsForCandidate(candidate, section).join(' '),
+    not_to_overclaim: ensureArray(section.do_not_overstate || section.hal_signal_capsule?.do_not_overstate).join(' ') ||
+      'source가 직접 말하지 않는 HAL runtime, driver branch, vendor tag, pipeline 영향으로 확대하지 않습니다.',
+    editor_take: `${headline}은 source 범위 안에서만 실무 확인 항목으로 다루는 것이 안전합니다.`
+  };
+}
+
 function buildPublicArticle(section, candidate = {}) {
   const component = componentText(candidate);
   const headline = publicHeadlineForCandidate(candidate, section.headline);
   return {
+    story_contract_version: 1,
     headline,
+    source_subtitle: sourceSubtitleForCandidate(candidate, section),
     lead: publicLeadText(candidate, section, headline),
     body_paragraphs: publicBodyParagraphs(candidate, section, component),
     camera_hal_takeaway: publicTakeawayForCandidate(candidate, section, component),
     reader_checkpoints: publicCheckpointsForCandidate(candidate, section),
+    editorial_story: editorialStoryForCandidate(candidate, section, headline, component),
+    decision_metadata: deriveDecisionMetadata(section, {
+      public_contract_version: 'story-v1',
+      generation_contract_version: 1,
+      publication_mode: 'fallback_public'
+    }),
     source_links: ensureArray(section.sources).map(source => ({
       title: text(source.title || candidate.title || headline),
       url: text(source.url || candidate.url),
@@ -1244,6 +1296,8 @@ function baseDraftCandidates(root, date) {
 function defaultIssue(date) {
   return {
     date,
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1,
     title: `AOSP Camera / Driver / SoC Platform 뉴스레터 - ${date}`,
     summary: '이번 호는 deterministic fallback public issue builder가 공식 source 기반 후보만 사용해 구성했습니다.',
     briefing: [
@@ -1401,6 +1455,8 @@ function buildFallbackPublicIssue(options = {}) {
     date,
     sections: ensureArray(base.sections).map(cloneJson)
   };
+  issue.public_contract_version = 'story-v1';
+  issue.generation_contract_version = 1;
 
   const candidates = candidatePoolFromArtifacts({ root, date });
   const preserveIndexes = preservedArticleIndexes(qualityReport);

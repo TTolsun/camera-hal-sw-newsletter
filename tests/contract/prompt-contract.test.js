@@ -75,11 +75,22 @@ test('public article contract prompt keeps public output separate from diagnosti
 
   for (const marker of [
     'public_article',
+    'public_contract_version="story-v1"',
+    'generation_contract_version=1',
+    'story_contract_version=1',
     'headline',
+    'source_subtitle',
     'lead',
     'body_paragraphs',
     'camera_hal_takeaway',
     'reader_checkpoints',
+    'editorial_story',
+    'reader_scenario',
+    'what_happened',
+    'field_scenario',
+    'not_to_overclaim',
+    'editor_take',
+    'decision_metadata',
     'source_links',
     'source-bound engineering inference',
     'selected article capsule',
@@ -95,6 +106,9 @@ test('public article contract prompt keeps public output separate from diagnosti
     assert.match(prompt, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   assert.match(prompt, /독자-facing/);
+  assert.match(prompt, /가정형 현업 장면/);
+  assert.match(prompt, /source-confirmed fact/);
+  assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);
   assert.match(prompt, /validation report, checklist, enum, schema\/debug field name/);
   assert.match(prompt, /claim\/schema contract와 public prose contract를 섞지 마세요/);
   assert.match(prompt, /primary 또는 seed evidence URL/);

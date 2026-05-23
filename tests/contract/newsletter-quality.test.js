@@ -975,6 +975,42 @@ function linkedDeductions(report, category) {
   return report.deductions.filter(item => item.category === category);
 }
 
+function storyQualityReport({
+  headline = 'CameraX 1.5.0 gives HAL teams a preview regression target',
+  sourceTitle = 'CameraX 1.5.0 release notes',
+  briefing = [
+    'CameraX update gives Camera HAL teams a preview regression check target.',
+    'The source change affects HAL-facing stream metadata review scope, so compare logs.',
+    'Keep the action to Watch and Test because the source does not prove HAL runtime changes.'
+  ]
+} = {}) {
+  const slug = headline.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'default';
+  const url = `https://example.com/story-source-${slug}`;
+  const target = section({ headline, url });
+  target.public_article = {
+    ...target.public_article,
+    story_contract_version: 1,
+    headline
+  };
+  const rest = validSections().slice(1);
+  return buildNewsletterQualityReport(
+    '2026-05-03',
+    {
+      public_contract_version: 'story-v1',
+      generation_contract_version: 1,
+      briefing,
+      sections: [target, ...rest]
+    },
+    {
+      candidates: [
+        scopedCandidate(url, 'android_platform_camera_adjacent', { title: sourceTitle }),
+        ...reporterCandidatesFor(rest)
+      ]
+    },
+    { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 }
+  );
+}
+
 test('quality threshold follows configured numeric boundary behavior', () => {
   assert.equal(determineQualityStatus(qualityGatePolicy.threshold - 1, qualityGatePolicy.threshold, {
     sourceGapCount: 0,
@@ -994,6 +1030,172 @@ test('quality threshold does not override hard blockers at high scores', () => {
     hasFactCheckMustFix: false,
     blockingDeductions: [{ category: 'composition', points: 4 }]
   }), 'NEEDS_FIX');
+});
+
+test('quality gate allows product/version-only source title mentions in story briefing', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07';
+  const storySection = section({
+    headline: 'CameraX 1.4.0-alpha07 업데이트: preview/capture 호환성 확인',
+    url
+  });
+  storySection.public_article = {
+    ...storySection.public_article,
+    story_contract_version: 1,
+    headline: storySection.headline,
+    source_subtitle: 'Android Developers · CameraX',
+    editorial_story: {
+      reader_scenario: '앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage하는 상황을 가정합니다.',
+      what_happened: 'CameraX release note는 app/framework 계층의 preview/capture 호환성 검증 신호로 다룹니다.',
+      why_it_matters: 'HAL 직접 변경이 아니라 app/framework 호환성 확인 범위로 제한합니다.',
+      field_scenario: 'CameraX preview와 capture path를 regression check 후보로 확인합니다.',
+      not_to_overclaim: 'HAL runtime 변경으로 확대하지 않습니다.',
+      editor_take: 'source 범위 안에서만 실무 확인 항목으로 다룹니다.'
+    },
+    decision_metadata: {
+      impact: 'Medium',
+      scope: ['Framework'],
+      action: ['Watch', 'Test'],
+      overclaim_risk: 'Medium'
+    }
+  };
+  const rest = validSections().slice(1);
+  const report = buildNewsletterQualityReport(
+    '2026-05-03',
+    {
+      public_contract_version: 'story-v1',
+      generation_contract_version: 1,
+      briefing: [
+        'CameraX 1.4.0-alpha07은 preview/capture 호환성 검증 범위만 확인합니다.',
+        '직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.',
+        '편집자는 source와 article 표현을 최종 확인합니다.'
+      ],
+      sections: [storySection, ...rest]
+    },
+    {
+      candidates: [
+        scopedCandidate(url, 'android_platform_camera_adjacent', {
+          title: 'CameraX 1.4.0-alpha07'
+        }),
+        ...reporterCandidatesFor(rest)
+      ]
+    },
+    { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 }
+  );
+
+  assert.equal(report.deductions.some(item => item.reason === 'Briefing bullet includes a raw source title phrase.'), false);
+  assert.equal(report.deductions.some(item => item.reason === 'Public headline exactly copies the source title.'), false);
+});
+
+test('quality gate rejects exact and punctuation-only story headline source title copies', () => {
+  const exact = storyQualityReport({
+    headline: 'CameraX 1.5.0 released for Android camera',
+    sourceTitle: 'CameraX 1.5.0 released for Android camera'
+  });
+  const punctuationOnly = storyQualityReport({
+    headline: 'CameraX 1.5.0 released for Android camera!',
+    sourceTitle: 'CameraX 1.5.0 released for Android camera'
+  });
+
+  for (const report of [exact, punctuationOnly]) {
+    assert.equal(report.status, 'NEEDS_FIX');
+    assert.ok(report.deductions.some(item =>
+      item.category === 'editorial-story' &&
+      item.blocking === true &&
+      item.reason === 'Public headline exactly copies the source title.'
+    ));
+  }
+});
+
+test('quality gate distinguishes product/version title overlap from source title copy', () => {
+  const productOnly = storyQualityReport({
+    headline: 'CameraX 1.5.0 preview regression check',
+    sourceTitle: 'CameraX 1.5.0 released'
+  });
+  const shortNearCopy = storyQualityReport({
+    headline: 'Driver sensor pipeline update',
+    sourceTitle: 'Driver sensor pipeline'
+  });
+
+  assert.equal(productOnly.deductions.some(item =>
+    /Public headline/.test(item.reason)
+  ), false);
+  assert.ok(shortNearCopy.deductions.some(item =>
+    item.category === 'editorial-story' &&
+    item.blocking === false &&
+    item.reason === 'Short public headline is very close to the source title.'
+  ));
+  assert.equal(shortNearCopy.deductions.some(item =>
+    item.blocking === true &&
+    /Public headline/.test(item.reason)
+  ), false);
+});
+
+test('quality gate fails high source-title token overlap and warns on moderate overlap', () => {
+  const highOverlap = storyQualityReport({
+    headline: 'HAL stream buffer metadata latency regression checklist review',
+    sourceTitle: 'HAL stream buffer metadata latency regression checklist release'
+  });
+  const moderateOverlap = storyQualityReport({
+    headline: 'HAL stream buffer metadata latency review note',
+    sourceTitle: 'HAL stream buffer metadata latency regression checklist'
+  });
+
+  assert.ok(highOverlap.deductions.some(item =>
+    item.category === 'editorial-story' &&
+    item.blocking === true &&
+    item.reason === 'Public headline is too similar to the source title after product/version discounting.'
+  ));
+  assert.ok(moderateOverlap.deductions.some(item =>
+    item.category === 'editorial-story' &&
+    item.blocking === false &&
+    item.reason === 'Public headline is close to the source title and should be rewritten with reader-facing framing.'
+  ));
+});
+
+test('quality gate flags briefing source copy and raw English release prose', () => {
+  const rawSourceTitle = storyQualityReport({
+    sourceTitle: 'Android CameraX stream buffer regression checklist',
+    briefing: [
+      'Android CameraX stream buffer regression checklist',
+      'The source change affects HAL-facing stream metadata review scope, so compare logs.',
+      'Keep the action to Watch and Test because the source does not prove HAL runtime changes.'
+    ]
+  });
+  const englishReleaseProse = storyQualityReport({
+    sourceTitle: 'CameraX 1.5.0',
+    briefing: [
+      'CameraX 1.5.0 has been released with support for preview checks.',
+      'The source change affects HAL-facing stream metadata review scope, so compare logs.',
+      'Keep the action to Watch and Test because the source does not prove HAL runtime changes.'
+    ]
+  });
+
+  assert.ok(rawSourceTitle.deductions.some(item =>
+    item.category === 'editorial-story' &&
+    item.blocking === true &&
+    item.reason === 'Briefing bullet includes a raw source title phrase.'
+  ));
+  assert.ok(englishReleaseProse.deductions.some(item =>
+    item.category === 'editorial-story' &&
+    item.blocking === false &&
+    item.reason === 'Briefing bullet uses raw English release prose instead of Korean editorial framing.'
+  ));
+});
+
+test('quality gate reports missing story briefing structure elements for story v1', () => {
+  const report = storyQualityReport({
+    briefing: [
+      'CameraX 1.5.0 update.',
+      'HAL teams should review stream metadata logs.',
+      'Check the source.'
+    ]
+  });
+
+  assert.ok(report.deductions.some(item =>
+    item.category === 'editorial-story' &&
+    item.blocking === false &&
+    /Briefing bullet misses story structure elements/.test(item.reason)
+  ));
 });
 
 test('quality gate rejects unknown source event and date source enums on selected articles', () => {

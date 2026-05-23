@@ -58,6 +58,10 @@ const {
   summarizeClaimValidation,
   validateArticleClaims
 } = require('./claim-source-binding');
+const {
+  STORY_CONTRACT_VERSION,
+  STORY_PUBLIC_CONTRACT_VERSION
+} = require('../common/public-article-contract');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
@@ -248,6 +252,72 @@ function tokenSimilarity(left, right) {
     if (rightTokens.has(token)) intersection += 1;
   }
   return intersection / Math.max(leftTokens.size, rightTokens.size);
+}
+
+const PRODUCT_VERSION_TOKEN_PATTERN = /^(?:android|aosp|camera|camerax|camera2|libcamera|gemini|ndk|sdk|gcc|clang|llvm|v?\d+(?:\.\d+){1,4}.*|c\+\+\d{2})$/i;
+const RELEASE_BOILERPLATE_TOKEN_PATTERN = /^(?:released|release|announced|adds?|support|update|updates?|version|new)$/i;
+
+function weightedTitleTokens(value) {
+  return normalizedTokens(value)
+    .map(token => ({
+      token,
+      weight: PRODUCT_VERSION_TOKEN_PATTERN.test(token)
+        ? 0.2
+        : RELEASE_BOILERPLATE_TOKEN_PATTERN.test(token)
+          ? 0
+          : 1
+    }))
+    .filter(item => item.weight > 0);
+}
+
+function sourceTitleHasRawCopySignal(value) {
+  return weightedTitleTokens(value).filter(item => item.weight >= 1).length >= 3;
+}
+
+function weightedTitleSimilarity(left, right) {
+  const leftTokens = weightedTitleTokens(left);
+  const rightTokens = weightedTitleTokens(right);
+  const leftCore = leftTokens.filter(item => item.weight >= 1);
+  const rightCore = rightTokens.filter(item => item.weight >= 1);
+  if (leftCore.length < 3 || rightCore.length < 3) return 0;
+  const rightWeights = new Map(rightTokens.map(item => [item.token, item.weight]));
+  let intersection = 0;
+  for (const item of leftTokens) {
+    intersection += rightWeights.has(item.token) ? Math.min(item.weight, rightWeights.get(item.token)) : 0;
+  }
+  const denominator = Math.max(
+    leftTokens.reduce((sum, item) => sum + item.weight, 0),
+    rightTokens.reduce((sum, item) => sum + item.weight, 0)
+  );
+  return denominator > 0 ? intersection / denominator : 0;
+}
+
+function titleCopyFinding(section = {}, candidate = {}) {
+  const headline = text(section.public_article?.headline || section.headline);
+  const sourceTitle = text(candidate?.title || ensureArray(section.sources)[0]?.title);
+  if (!headline || !sourceTitle) return null;
+  const normalizedHeadline = normalizeForMatch(headline);
+  const normalizedSource = normalizeForMatch(sourceTitle);
+  if (normalizedHeadline && normalizedHeadline === normalizedSource) {
+    return {
+      severity: 'fail',
+      reason: 'Public headline exactly copies the source title.'
+    };
+  }
+  const headlineTokenCount = normalizedTokens(headline).length;
+  const similarity = weightedTitleSimilarity(headline, sourceTitle);
+  if (headlineTokenCount < 5) {
+    return similarity >= 0.85
+      ? { severity: 'warning', reason: 'Short public headline is very close to the source title.', similarity }
+      : null;
+  }
+  if (similarity >= 0.85) {
+    return { severity: 'fail', reason: 'Public headline is too similar to the source title after product/version discounting.', similarity };
+  }
+  if (similarity >= 0.7) {
+    return { severity: 'warning', reason: 'Public headline is close to the source title and should be rewritten with reader-facing framing.', similarity };
+  }
+  return null;
 }
 
 function candidateTitleSimilarity(section, candidate) {
@@ -1534,6 +1604,62 @@ function articleSectionContractMarkdownRows(report) {
   ).join('\n') || '| none | none | none | none | none | none | none |';
 }
 
+function briefingRawCopyFindings(briefing = [], reporter = {}) {
+  const findings = [];
+  const candidateTitles = ensureArray(reporter.candidates)
+    .map(candidate => text(candidate.title))
+    .filter(title => title.length >= 12 && sourceTitleHasRawCopySignal(title));
+  ensureArray(briefing).forEach((item, index) => {
+    const bullet = text(item);
+    const normalizedBullet = normalizeForMatch(bullet);
+    for (const title of candidateTitles) {
+      const normalizedTitleValue = normalizeForMatch(title);
+      if (normalizedTitleValue && normalizedBullet.includes(normalizedTitleValue)) {
+        findings.push({
+          index: index + 1,
+          severity: 'fail',
+          reason: 'Briefing bullet includes a raw source title phrase.',
+          title
+        });
+      }
+    }
+    if (/\b(?:has been released|announced|released|adds support|is now available)\b/i.test(bullet) && /[A-Za-z]{4,}\s+[A-Za-z]{4,}/.test(bullet)) {
+      findings.push({
+        index: index + 1,
+        severity: 'warning',
+        reason: 'Briefing bullet uses raw English release prose instead of Korean editorial framing.'
+      });
+    }
+  });
+  return findings;
+}
+
+const BRIEFING_WHAT_PATTERN = /\b(?:source|change|changed|update|updated|release|released|note|published|announced|android|aosp|camerax|camera2|libcamera|ndk|gcc|clang|llvm|driver|sensor|isp|soc|api)\b|릴리스|업데이트|변경|공개|출처/i;
+const BRIEFING_READER_PATTERN = /\b(?:hal|driver|sensor|camera|camerax|camera2|preview|capture|stream|buffer|metadata|ci|review|test|debug|latency|frame|regression|pipeline|native|tooling)\b|카메라|검증|디버깅|리뷰/i;
+const BRIEFING_ACTION_PATTERN = /\b(?:check|watch|test|review|compare|measure|track|triage|validate|verify|confirm|run|inspect|adopt)\b|확인|검증|테스트|비교|주시|점검|측정|추적|리뷰|도입/i;
+
+function briefingStoryStructureFindings(briefing = [], editor = {}) {
+  if (editor.public_contract_version !== STORY_PUBLIC_CONTRACT_VERSION) return [];
+  const findings = [];
+  ensureArray(briefing).forEach((item, index) => {
+    const bullet = text(item);
+    if (!bullet) return;
+    const missing = [];
+    if (!BRIEFING_WHAT_PATTERN.test(bullet)) missing.push('what_happened');
+    if (!BRIEFING_READER_PATTERN.test(bullet)) missing.push('reader_perspective');
+    if (!BRIEFING_ACTION_PATTERN.test(bullet)) missing.push('action_hint');
+    if (missing.length > 0) {
+      findings.push({
+        index: index + 1,
+        missing,
+        severity: 'warning',
+        reason: `Briefing bullet misses story structure elements: ${missing.join(', ')}.`
+      });
+    }
+  });
+  return findings;
+}
+
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : qualityGatePolicy.threshold;
   const sections = ensureArray(editor.sections);
@@ -1552,6 +1678,26 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   }
   if (ensureArray(editor.briefing).length !== 3) {
     boundedDeduct(state, 'composition', 3, `Expected exactly 3 briefing bullets, found ${ensureArray(editor.briefing).length}.`);
+  }
+  for (const finding of briefingRawCopyFindings(editor.briefing, reporter)) {
+    boundedDeduct(
+      state,
+      'editorial-story',
+      finding.severity === 'fail' ? 6 : 2,
+      finding.reason,
+      `briefing ${finding.index}`,
+      finding.severity === 'fail' ? {} : { blocking: false, severity: 'soft' }
+    );
+  }
+  for (const finding of briefingStoryStructureFindings(editor.briefing, editor)) {
+    boundedDeduct(
+      state,
+      'editorial-story',
+      1,
+      finding.reason,
+      `briefing ${finding.index}`,
+      { blocking: false, severity: 'soft' }
+    );
   }
   const sectionBindings = sections.map(section => bindCandidateForSection(section, bindingIndex));
   const sectionScopes = sections.map((section, index) => sectionScope(section, sectionBindings[index]));
@@ -1694,6 +1840,19 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
         );
       }
       addLinkedEvidenceQualityDeductions(state, section, binding.candidate, location);
+      const storyTitleGate = editor.public_contract_version === STORY_PUBLIC_CONTRACT_VERSION ||
+        Number(section.public_article?.story_contract_version) === STORY_CONTRACT_VERSION;
+      const titleFinding = storyTitleGate ? titleCopyFinding(section, binding.candidate) : null;
+      if (titleFinding) {
+        boundedDeduct(
+          state,
+          'editorial-story',
+          titleFinding.severity === 'fail' ? 6 : 2,
+          titleFinding.reason,
+          location,
+          titleFinding.severity === 'fail' ? {} : { blocking: false, severity: 'soft' }
+        );
+      }
     }
     const claimValidation = validateArticleClaims({
       section,
