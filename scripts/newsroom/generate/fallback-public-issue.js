@@ -744,19 +744,56 @@ function componentText(candidate) {
   return firstText(candidate.source_extraction?.release?.component, candidate.component, candidate.api_or_component, candidate.apiOrComponent, candidate.source);
 }
 
+function sourceBehaviorSpecificityScore(value) {
+  const body = text(value);
+  if (!body) return Number.NEGATIVE_INFINITY;
+  let score = 0;
+  if (/ListenableFuture|Cannot access class/i.test(body)) score += 30;
+  if (/\b(?:fix(?:ed|es)?|bug|error|compil(?:e|ation|er)?|crash|regression|support(?:ed)?|deprecat(?:e|ed|ion)|remove(?:d)?|add(?:ed)?|change(?:d)?|improv(?:e|ed)|vulnerability|CVE)\b|오류|컴파일|빌드|수정|개선/i.test(body)) {
+    score += 8;
+  }
+  if (/"[^"]{4,}"|'[^']{4,}'|`[^`]{4,}`|androidx\.camera:[\w.-]+|[A-Z][A-Za-z0-9_]*(?:Future|Capture|Preview|Request|Result|Exception|Error)\b/.test(body)) {
+    score += 6;
+  }
+  if (/\b(?:[A-Z][A-Za-z0-9_]*\.){1,}[A-Z][A-Za-z0-9_]*\b|\bI[0-9a-f]{6,}\b|#[0-9]{3,}|\b[0-9]+(?:\.[0-9]+){1,}\b/i.test(body)) {
+    score += 2;
+  }
+  if (body.length >= 50) score += 2;
+  if (body.length >= 120) score += 1;
+  if (/^\s*(?:CameraX|androidx\.camera|Android|libcamera|GCC|Glaze)(?:\s*\/\s*[\w. -]+)?\s+(?:update|updates?|release notes?|release-note changes?|변경점|업데이트)\.?\s*$/i.test(body)) {
+    score -= 20;
+  } else if (/\b(?:update|updates?|release notes?|release-note changes?)\b|변경점|업데이트/i.test(body)) {
+    score -= 3;
+  }
+  return score;
+}
+
 function sourceBehaviorText(candidate, section = {}) {
   const releaseItems = ensureArray(candidate?.source_extraction?.release?.sections)
     .flatMap(section => ensureArray(section?.items))
     .map(item => item?.source_text || item?.text)
     .filter(Boolean);
-  return firstText(
+  const candidates = [
     section.what_changed,
     candidate.behavior_change,
     candidate.behaviorChange,
     candidate.summary,
     ...releaseItems,
     candidate.title
-  );
+  ]
+    .map((value, index) => ({
+      value: text(value),
+      index,
+      score: sourceBehaviorSpecificityScore(value)
+    }))
+    .filter(item => item.value);
+  if (candidates.length === 0) return '';
+  const best = [...candidates].sort((left, right) =>
+    right.score - left.score || left.index - right.index
+  )[0];
+  const first = candidates[0];
+  if (first.index < best.index && first.score >= best.score - 2) return first.value;
+  return best.value;
 }
 
 function releaseVersionText(candidate, fallback = '') {

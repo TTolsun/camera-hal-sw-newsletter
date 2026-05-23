@@ -4557,6 +4557,7 @@ test('fallback builder keeps CameraX source behavior in public article instead o
   const root = tempRoot();
   const { date, camerax14 } = writeRun25590436113LikeFallbackFixture(root, { date: '2026-05-24' });
   const behavior = 'Fixed a compilation error "Cannot access class ListenableFuture" when using CameraX 1.6.0.';
+  const genericBehavior = 'CameraX / androidx.camera update.';
   const candidate = {
     ...camerax14,
     title: 'CameraX Release Notes - CameraX 1.6.1',
@@ -4564,8 +4565,8 @@ test('fallback builder keeps CameraX source behavior in public article instead o
     version_or_release: 'CameraX 1.6.1',
     component: 'CameraX / androidx.camera',
     api_or_component: 'CameraX / androidx.camera',
-    summary: behavior,
-    behavior_change: behavior,
+    summary: genericBehavior,
+    behavior_change: genericBehavior,
     source_extraction: {
       ...camerax14.source_extraction,
       release: {
@@ -4610,7 +4611,7 @@ test('fallback builder keeps CameraX source behavior in public article instead o
   const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
   const editor = JSON.parse(fs.readFileSync(editorPath, 'utf8'));
   editor.sections[0].headline = candidate.title;
-  editor.sections[0].what_changed = behavior;
+  editor.sections[0].what_changed = genericBehavior;
   editor.sections[0].sources = [{ title: candidate.title, url: candidate.url }];
   writeJson(editorPath, editor);
 
