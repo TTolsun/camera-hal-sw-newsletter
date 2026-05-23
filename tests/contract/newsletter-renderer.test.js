@@ -169,7 +169,7 @@ test('newsletter renderer sanitizes legacy sections through compatibility projec
   assert.match(markdown, /Internal Watch headline must not render/);
   assert.match(markdown, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
   assert.match(markdown, /Camera HAL \/ Driver 관점/);
-  assert.match(markdown, /즉시 조치할 항목은 없습니다|Run Camera ITS preview latency checks/);
+  assert.match(markdown, /Camera API를 호출한다면, Camera 권한과 preview\/capture 호출 흐름만 확인합니다/);
   assert.match(html, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
   assert.match(html, /reader-checkpoints/);
   assert.doesNotMatch(markdown, /HAL Signal Capsule/);

@@ -29,11 +29,12 @@ Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack C
 
 **Camera HAL / Driver 관점**
 
-CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.
+이 소식은 HAL API 변경이 아니라, 다양한 화면 크기에서 CameraX preview가 어떻게 보이는지 확인하라는 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 preview aspect ratio, rotation, crop 동작의 앱 호환성만 확인하면 됩니다.
 
 ### 확인할 점
 
-- 즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.
+- CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.
+- 이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.
 
 **출처**
 
@@ -57,11 +58,12 @@ Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이�
 
 **Android Native / Tooling 관점**
 
-build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.
+이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.
 
 ### 확인할 점
 
-- 즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.
+- AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.
+- 이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.
 
 **출처**
 

@@ -11,6 +11,9 @@ const {
   normalizeNewsSourceKey
 } = require('../../scripts/newsroom/common/newsletter-source-dedup-cleanup');
 const {
+  normalizeNewsSourceKey: normalizePureNewsSourceKey
+} = require('../../scripts/newsroom/common/source-url-key');
+const {
   readJson,
   tempRoot,
   writeJson,
@@ -119,12 +122,40 @@ test('normalizeNewsSourceKey applies the cleanup source identity contract', () =
     'https://example.com/releases#1.4.0-alpha07'
   );
   assert.equal(
+    normalizeNewsSourceKey('https://developer.android.com/jetpack/androidx/releases/camera#1.6.1').key,
+    'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+  );
+  assert.equal(
+    normalizeNewsSourceKey('https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07').key,
+    'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07'
+  );
+  assert.equal(
+    normalizeNewsSourceKey('https://example.com/blog#overview').key,
+    'https://example.com/blog'
+  );
+  assert.equal(
     normalizeNewsSourceKey('https://example.com/CameraX').key === normalizeNewsSourceKey('https://example.com/camerax').key,
     false
   );
   const duplicateQuery = normalizeNewsSourceKey('https://example.com/a?id=2&id=1&utm_campaign=x');
   assert.equal(duplicateQuery.key, 'https://example.com/a?id=2&id=1');
   assert.equal(duplicateQuery.warnings.some(item => item.type === 'duplicate_query_key'), true);
+  assert.equal(
+    normalizePureNewsSourceKey('https://example.com/a?a=1&b=2&a=3&c=4&utm_source=x').key,
+    'https://example.com/a?a=1&a=3&b=2&c=4'
+  );
+  assert.equal(
+    normalizePureNewsSourceKey(normalizePureNewsSourceKey('https://example.com/a?b=2&a=1').key).key,
+    'https://example.com/a?a=1&b=2'
+  );
+  assert.equal(
+    normalizePureNewsSourceKey('https://example.com/a?A=1&a=2').key,
+    'https://example.com/a?A=1&a=2'
+  );
+  assert.equal(
+    normalizePureNewsSourceKey('https://example.com/a?a=2&A=1').key,
+    'https://example.com/a?A=1&a=2'
+  );
 });
 
 test('cleanup plan blocks duplicate groups with parse-failed URLs', () => {

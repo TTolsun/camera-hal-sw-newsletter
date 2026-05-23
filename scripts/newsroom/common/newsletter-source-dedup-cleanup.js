@@ -24,6 +24,10 @@ const {
 const {
   auditHistoricalArchive
 } = require('../validate/historical-archive');
+const {
+  isReleaseVersionAnchor,
+  normalizeNewsSourceKey
+} = require('./source-url-key');
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const DEFAULT_DRY_RUN_REPORT = '.tmp/codex/source-dedup-cleanup-plan.json';
@@ -38,7 +42,6 @@ const DEFAULT_EXPECTED_EXPOSED_DATES = Object.freeze([
   '2026-05-21',
   '2026-05-22'
 ]);
-const TRACKING_QUERY_PARAMS = new Set(['ref', 'fbclid', 'gclid']);
 const REMOVED_ROUTE_NOTE = 'source_dedup_cleanup_removed_public_route';
 const FALLBACK_PUBLIC_NOTICE = Object.freeze([
   'Tooling Watch Edition: C++ / Tooling Watch',
@@ -79,86 +82,6 @@ function unique(values = []) {
     output.push(parsed);
   }
   return output;
-}
-
-function isTrackingQueryParam(name = '') {
-  const lower = String(name || '').toLowerCase();
-  return lower.startsWith('utm_') || TRACKING_QUERY_PARAMS.has(lower);
-}
-
-function isReleaseVersionAnchor(value = '') {
-  const fragment = String(value || '').trim().replace(/^#/, '');
-  return /^(?:v|version[_-]?)?\d+(?:[._]\d+){1,3}(?:[-._]?(?:alpha|beta|rc|preview|stable)\d*)?$/i.test(fragment);
-}
-
-function normalizeSearchParams(parsed, warnings) {
-  const kept = [];
-  const counts = new Map();
-  for (const [name, value] of parsed.searchParams.entries()) {
-    if (isTrackingQueryParam(name)) continue;
-    kept.push([name, value]);
-    counts.set(name, (counts.get(name) || 0) + 1);
-  }
-
-  const hasDuplicateKey = [...counts.values()].some(count => count > 1);
-  if (hasDuplicateKey) {
-    warnings.push({
-      type: 'duplicate_query_key',
-      url: parsed.toString(),
-      message: 'Duplicate query key preserved in original order.'
-    });
-  } else {
-    kept.sort((left, right) => {
-      const byName = left[0].localeCompare(right[0]);
-      return byName || left[1].localeCompare(right[1]);
-    });
-  }
-
-  parsed.search = '';
-  for (const [name, value] of kept) parsed.searchParams.append(name, value);
-}
-
-function normalizeNewsSourceKey(value = '') {
-  const raw = String(value || '').trim();
-  const warnings = [];
-  if (!raw) {
-    return { key: '', raw, parse_failed: false, warnings };
-  }
-
-  try {
-    const parsed = new URL(raw);
-    parsed.protocol = parsed.protocol.toLowerCase();
-    parsed.hostname = parsed.hostname.toLowerCase();
-    if (
-      (parsed.protocol === 'http:' && parsed.port === '80') ||
-      (parsed.protocol === 'https:' && parsed.port === '443')
-    ) {
-      parsed.port = '';
-    }
-    if (parsed.pathname.length > 1 && parsed.pathname.endsWith('/')) {
-      parsed.pathname = parsed.pathname.replace(/\/+$/, '');
-    }
-    normalizeSearchParams(parsed, warnings);
-    const fragment = parsed.hash ? parsed.hash.slice(1) : '';
-    if (!isReleaseVersionAnchor(fragment)) parsed.hash = '';
-    return {
-      key: parsed.toString(),
-      raw,
-      parse_failed: false,
-      warnings
-    };
-  } catch (error) {
-    return {
-      key: raw,
-      raw,
-      parse_failed: true,
-      warnings: [{
-        type: 'url_parse_failed',
-        url: raw,
-        message: error.message
-      }]
-    };
-  }
 }
 
 function listDateDirs(root, relDir) {

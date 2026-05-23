@@ -19,6 +19,13 @@ const {
 const {
   articlePolicy
 } = require('../../scripts/newsroom/common/newsletter-policy');
+const {
+  isConcreteCheckpoint,
+  mergePublicArticleFromLlm,
+  mergePublicArticlesFromLlmSections,
+  publicArticleForSection,
+  validatePublicArticle
+} = require('../../scripts/newsroom/common/public-article-contract');
 
 const DATE = '2026-05-08';
 
@@ -304,7 +311,7 @@ test('blocked related context cannot be used as article source or headline', () 
         ...baseSection.public_article,
         source_links: [
           { title: 'Selected group source', url: 'https://example.com/source-1', source_role: 'primary' },
-          { title: 'Blocked roundup', url: blockedUrl, source_role: 'context' }
+          { title: 'Blocked roundup', url: blockedUrl, source_role: 'primary' }
         ]
       }
     })]
@@ -564,12 +571,15 @@ test('blocked_context_candidates are validated when related context is empty', (
   const draft = editor({
     sections: [section(1, {
       article_group_key: 'group-a',
-      sources: [{ title: 'Selected group source', url: 'https://example.com/source-1' }],
+      sources: [
+        { title: 'Selected group source', url: 'https://example.com/source-1' },
+        { title: 'Blocked roundup', url: blockedUrl }
+      ],
       public_article: {
         ...baseSection.public_article,
         source_links: [
           { title: 'Selected group source', url: 'https://example.com/source-1', source_role: 'primary' },
-          { title: 'Blocked roundup', url: blockedUrl, source_role: 'context' }
+          { title: 'Blocked roundup', url: blockedUrl, source_role: 'primary' }
         ]
       }
     })]
@@ -1072,6 +1082,401 @@ test('editor output contract maps source-quality roles on public_article source_
   const result = validateEditorOutputContract(draft, DATE, { normalizeSection });
 
   assert.equal(result.sections[0].public_article.source_links[0].source_role, 'primary');
+});
+
+test('LLM public_article merge preserves deterministic article fields', () => {
+  const base = section(1, {
+    impact_claim_level: 'android_framework_adjacent',
+    finalSelectionEligibility: 'main',
+    source_gap_risk: true,
+    main_article_readiness: { status: 'blocked' },
+    do_not_claim: ['Do not claim HAL driver changes.']
+  });
+  const llm = {
+    ...base,
+    impact_claim_level: 'direct_hal_change',
+    finalSelectionEligibility: 'main',
+    source_gap_risk: false,
+    main_article_readiness: { status: 'ready' },
+    do_not_claim: [],
+    public_article: {
+      ...base.public_article,
+      headline: 'Rewritten public headline'
+    }
+  };
+
+  const merged = mergePublicArticleFromLlm(base, llm, {
+    impact_claim_level: base.impact_claim_level,
+    finalSelectionEligibility: base.finalSelectionEligibility,
+    source_gap_risk: base.source_gap_risk,
+    main_article_readiness: base.main_article_readiness,
+    do_not_claim: base.do_not_claim
+  });
+
+  assert.equal(merged.public_article.headline, 'Rewritten public headline');
+  assert.equal(merged.impact_claim_level, 'android_framework_adjacent');
+  assert.equal(merged.source_gap_risk, true);
+  assert.deepEqual(merged.main_article_readiness, { status: 'blocked' });
+  assert.deepEqual(merged.do_not_claim, ['Do not claim HAL driver changes.']);
+});
+
+test('LLM public_article merge fails closed on invalid source link provenance', () => {
+  const base = section(1, {
+    related_context_sources: [{
+      title: 'Context-only reference',
+      url: 'https://example.com/context-doc',
+      source_role: 'related_context'
+    }]
+  });
+  const llm = {
+    ...base,
+    public_article: {
+      ...base.public_article,
+      source_links: [{
+        title: 'Context-only reference',
+        url: 'https://example.com/context-doc',
+        source_role: 'primary'
+      }]
+    }
+  };
+
+  assert.throws(
+    () => mergePublicArticleFromLlm(base, llm),
+    error => {
+      assert.equal(error.code, 'invalid_public_source_links');
+      assert.ok(error.details.issues.some(issue => issue.reason === 'source_role_not_allowed_for_url'));
+      return true;
+    }
+  );
+});
+
+test('public_article fallback body paragraphs stay bucket aware', () => {
+  const tooling = publicArticleForSection(section(1, {
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    background: '',
+    camera_hal_perspective: '',
+    why_it_matters: '',
+    public_article: {
+      ...section(1).public_article,
+      body_paragraphs: []
+    }
+  }));
+  const adjacent = publicArticleForSection(section(2, {
+    relevance_bucket: 'android_platform_camera_adjacent',
+    background: '',
+    camera_hal_perspective: '',
+    why_it_matters: '',
+    public_article: {
+      ...section(2).public_article,
+      body_paragraphs: []
+    }
+  }));
+
+  assert.ok(tooling.body_paragraphs.some(paragraph => /prototype\/tooling/.test(paragraph)));
+  assert.ok(adjacent.body_paragraphs.some(paragraph => /app\/framework 계층/.test(paragraph)));
+  assert.equal(
+    [...tooling.body_paragraphs, ...adjacent.body_paragraphs]
+      .some(paragraph => paragraph.includes('공개 출처가 제공한 범위 안에서만 참고 동향')),
+    false
+  );
+});
+
+test('LLM section merge uses source_candidate_hash before title or URL', () => {
+  const baseSections = [section(1), section(2)];
+  const llmSections = [{
+    ...section(2, { headline: 'LLM changed title' }),
+    source_candidate_hash: 'hash-2',
+    sources: [{ title: 'Unexpected URL', url: 'https://example.com/unmatched' }],
+    public_article: {
+      ...section(2).public_article,
+      headline: 'Hash matched public headline'
+    }
+  }];
+
+  const merged = mergePublicArticlesFromLlmSections(baseSections, llmSections);
+
+  assert.equal(merged[0].public_article.headline, 'Headline 1');
+  assert.equal(merged[1].public_article.headline, 'Hash matched public headline');
+  assert.equal(merged[1].source_candidate_hash, 'hash-2');
+  assert.deepEqual(merged[1].sources, section(2).sources);
+});
+
+test('LLM section merge falls back to normalized source URL when hash is absent', () => {
+  const baseSections = [
+    section(1, {
+      source_candidate_hash: '',
+      sources: [{ title: 'Source 1', url: 'https://example.com/source-1?a=1&b=2' }]
+    }),
+    section(2)
+  ];
+  const llmSections = [{
+    headline: 'Different LLM title',
+    sources: [{ title: 'Source 1', url: 'https://example.com/source-1?utm_source=ai&b=2&a=1' }],
+    public_article: {
+      ...section(1).public_article,
+      headline: 'URL matched public headline',
+      source_links: [{
+        title: 'Source 1',
+        url: 'https://example.com/source-1?a=1&b=2',
+        source_role: 'primary'
+      }]
+    }
+  }];
+
+  const merged = mergePublicArticlesFromLlmSections(baseSections, llmSections);
+
+  assert.equal(merged[0].public_article.headline, 'URL matched public headline');
+  assert.equal(merged[1].public_article.headline, 'Headline 2');
+});
+
+test('LLM section merge uses unique section title when hash and URL are absent', () => {
+  const baseSections = [
+    section(1, {
+      source_candidate_hash: '',
+      sources: [],
+      public_article: { ...section(1).public_article, source_links: [] }
+    }),
+    section(2)
+  ];
+  const llmSections = [{
+    headline: 'Headline 1',
+    public_article: {
+      ...section(1).public_article,
+      headline: 'Rewritten public title',
+      source_links: []
+    }
+  }];
+
+  const merged = mergePublicArticlesFromLlmSections(baseSections, llmSections);
+
+  assert.equal(merged[0].public_article.headline, 'Rewritten public title');
+  assert.equal(merged[1].public_article.headline, 'Headline 2');
+});
+
+test('LLM section merge fails closed when title fallback is ambiguous', () => {
+  const baseSections = [
+    section(1, {
+      source_candidate_hash: '',
+      headline: 'Same title',
+      public_article: { ...section(1).public_article, headline: 'Same title', source_links: [] },
+      sources: []
+    }),
+    section(2, {
+      source_candidate_hash: '',
+      headline: 'Same title',
+      public_article: { ...section(2).public_article, headline: 'Same title', source_links: [] },
+      sources: []
+    })
+  ];
+  const llmSections = [{
+    headline: 'Same title',
+    public_article: {
+      ...section(1).public_article,
+      headline: 'Same title',
+      source_links: []
+    }
+  }];
+
+  assert.throws(
+    () => mergePublicArticlesFromLlmSections(baseSections, llmSections),
+    error => {
+      assert.equal(error.code, 'ambiguous_section_match');
+      assert.equal(error.details.strategy, 'unique_title');
+      assert.equal(error.details.match_count, 2);
+      return true;
+    }
+  );
+});
+
+test('LLM section merge rejects an unmatched LLM section', () => {
+  const llmSections = [{
+    source_candidate_hash: 'unknown-hash',
+    headline: 'Unknown source section',
+    sources: [{ title: 'Unknown', url: 'https://example.com/unknown' }],
+    public_article: {
+      ...section(1).public_article,
+      headline: 'Unknown source section',
+      source_links: []
+    }
+  }];
+
+  assert.throws(
+    () => mergePublicArticlesFromLlmSections([section(1), section(2)], llmSections),
+    error => {
+      assert.equal(error.code, 'ambiguous_section_match');
+      assert.equal(error.details.strategy, 'unique_title');
+      assert.equal(error.details.match_count, 0);
+      return true;
+    }
+  );
+});
+
+test('LLM section merge preserves or repairs base public_article when LLM omits a section', () => {
+  const missingPublicArticle = section(2, {
+    public_article: {
+      headline: '',
+      lead: '',
+      body_paragraphs: [],
+      camera_hal_takeaway: '',
+      reader_checkpoints: [],
+      source_links: []
+    }
+  });
+  const llmSections = [{
+    ...section(1),
+    public_article: {
+      ...section(1).public_article,
+      headline: 'Merged first article'
+    }
+  }];
+
+  const merged = mergePublicArticlesFromLlmSections([section(1), missingPublicArticle], llmSections);
+
+  assert.equal(merged[0].public_article.headline, 'Merged first article');
+  assert.equal(merged[1].public_article.headline, 'Headline 2');
+  assert.ok(merged[1].public_article.reader_checkpoints.length >= 2);
+  assert.ok(merged[1].public_article.source_links.length >= 1);
+});
+
+test('editor output contract rejects source link label leakage and related context role', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        public_article: {
+          ...section(1).public_article,
+          source_links: [{
+            title: 'source_gap_risk evidence',
+            url: 'https://example.com/source-1',
+            source_role: 'related_context'
+          }]
+        }
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue => issue.type === 'public_article_leakage'));
+      assert.ok(error.details.issues.some(issue => issue.reason === 'related_context_not_allowed'));
+      return true;
+    }
+  );
+});
+
+test('public_article source_links cannot promote related context URL provenance to primary', () => {
+  const contextOnly = section(1, {
+    sources: [],
+    allowed_public_source_links: [{
+      title: 'Context only reference',
+      url: 'https://example.com/context-doc',
+      source_role: 'related_context'
+    }],
+    public_article: {
+      ...section(1).public_article,
+      source_links: [{
+        title: 'Context only reference',
+        url: 'https://example.com/context-doc',
+        source_role: 'primary'
+      }]
+    }
+  });
+  const seedAndContext = section(1, {
+    sources: [],
+    seed_evidence_urls: ['https://example.com/context-doc'],
+    allowed_public_source_links: [{
+      title: 'Context only reference',
+      url: 'https://example.com/context-doc',
+      source_role: 'related_context'
+    }],
+    public_article: {
+      ...section(1).public_article,
+      source_links: [{
+        title: 'Seed evidence reference',
+        url: 'https://example.com/context-doc',
+        source_role: 'seed_evidence'
+      }]
+    }
+  });
+
+  const contextOnlyIssues = validatePublicArticle(contextOnly, 0);
+  const seedAndContextIssues = validatePublicArticle(seedAndContext, 0);
+
+  assert.ok(contextOnlyIssues.some(issue => issue.reason === 'source_role_not_allowed_for_url'));
+  assert.equal(seedAndContextIssues.some(issue => issue.reason === 'source_role_not_allowed_for_url'), false);
+});
+
+test('editor output contract rejects hallucinated public source links', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        public_article: {
+          ...section(1).public_article,
+          source_links: [{
+            title: 'Different source',
+            url: 'https://example.com/not-in-section',
+            source_role: 'primary'
+          }]
+        }
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.ok(error.details.issues.some(issue => issue.reason === 'url_not_in_allowed_source_set'));
+      return true;
+    }
+  );
+});
+
+test('reader checkpoint concrete contract requires actionable source or validation target combinations', () => {
+  assert.equal(isConcreteCheckpoint('CameraX 관련 내용을 확인합니다.', section(1)), false);
+  assert.equal(isConcreteCheckpoint('CameraX preview의 aspect ratio와 rotation 동작이 기존 앱과 달라지지 않는지 확인합니다.', section(1)), true);
+  assert.equal(isConcreteCheckpoint('CameraX / Android camera APIs 관련 API/component/date를 확인합니다.', section(1)), false);
+  assert.equal(
+    isConcreteCheckpoint('HAL/driver 변경 근거는 없음으로 제한하고 Camera2 compatibility 범위만 확인합니다.', section(1)),
+    true
+  );
+});
+
+test('public_article prose quality rejects validator-token checkpoint placeholders', () => {
+  const draftSection = section(1, {
+    public_article: {
+      ...section(1).public_article,
+      camera_hal_takeaway: 'CameraX preview의 앱 호환성만 확인하고 HAL/driver 변경으로 해석하지 않습니다.',
+      reader_checkpoints: [
+        'Google AI Studio 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.',
+        'Google AI Studio compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다.'
+      ]
+    }
+  });
+
+  const issues = validatePublicArticle(draftSection, 0);
+
+  assert.ok(issues.some(issue => /validator-token prose/.test(issue.message || '')));
+});
+
+test('public_article prose quality accepts reader-facing camera checkpoints', () => {
+  const draftSection = section(1, {
+    public_article: {
+      ...section(1).public_article,
+      camera_hal_takeaway: '이 소식은 HAL API 변경이 아니라 app/framework 계층의 참고 신호입니다.',
+      reader_checkpoints: [
+        'AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.',
+        '이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
+      ]
+    }
+  });
+
+  assert.deepEqual(validatePublicArticle(draftSection, 0), []);
 });
 
 test('editor output contract rejects article_sections keys outside normalized contract', () => {
@@ -1610,7 +2015,11 @@ test('repair that changes sections or sources fatally fails and writes repair di
         sections: [
           {
             ...invalidEditor.sections[0],
-            sources: [{ title: 'Changed source', url: 'https://example.com/changed' }]
+            sources: [{ title: 'Changed source', url: 'https://example.com/changed' }],
+            public_article: {
+              ...invalidEditor.sections[0].public_article,
+              source_links: [{ title: 'Changed source', url: 'https://example.com/changed', source_role: 'primary' }]
+            }
           },
           ...invalidEditor.sections.slice(1)
         ]
