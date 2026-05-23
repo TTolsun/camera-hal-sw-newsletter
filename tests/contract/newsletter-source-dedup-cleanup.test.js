@@ -136,6 +136,14 @@ test('normalizeNewsSourceKey applies the cleanup source identity contract', () =
     normalizePureNewsSourceKey(normalizePureNewsSourceKey('https://example.com/a?b=2&a=1').key).key,
     'https://example.com/a?a=1&b=2'
   );
+  assert.equal(
+    normalizePureNewsSourceKey('https://example.com/a?A=1&a=2').key,
+    'https://example.com/a?A=1&a=2'
+  );
+  assert.equal(
+    normalizePureNewsSourceKey('https://example.com/a?a=2&A=1').key,
+    'https://example.com/a?A=1&a=2'
+  );
 });
 
 test('cleanup plan blocks duplicate groups with parse-failed URLs', () => {

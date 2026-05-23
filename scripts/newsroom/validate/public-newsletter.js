@@ -6,38 +6,6 @@ const {
   publicUrlError
 } = require('../common/public-article-contract');
 
-const PUBLIC_NEWSLETTER_FORBIDDEN_TERMS = Object.freeze([
-  'Review-only',
-  'review-only',
-  'Fallback',
-  'fallback',
-  'quality gate',
-  'candidate',
-  'HAL Signal Capsule',
-  'editor review',
-  'normal publishable coverage',
-  'reader_owners',
-  'check_within_2_weeks',
-  'why_now',
-  'impact_axes',
-  'do_not_overstate',
-  'guardrail',
-  'section repair',
-  'hard failure',
-  'candidate shortage',
-  'deterministic reconstruction',
-  'source-bound',
-  'publish gate',
-  'review_only',
-  '자동 정상 발행 기준',
-  '자동 발행 기준',
-  '편집자 확인 후 merge',
-  'merge 발행',
-  'Review-only 발행본',
-  '편집자 검토 후 공개 가능한',
-  '편집자 검토 후 발행 가능한'
-]);
-
 const GENERIC_CHECKPOINT_PATTERNS = Object.freeze([
   /source URL/i,
   /published date/i,
@@ -175,12 +143,13 @@ function mainArticleBlocks(markdown) {
   for (let index = 0; index < matches.length; index += 1) {
     const number = Number(matches[index][1]);
     const title = matches[index][2].trim();
-    if (number <= 1) continue;
     if (/^(?:참고자료|References)$/i.test(title)) continue;
     if (/Action|실행/.test(title)) continue;
     const start = matches[index].index + matches[index][0].length;
     const end = matches[index + 1] ? matches[index + 1].index : markdown.length;
-    blocks.push({ number, title, text: markdown.slice(start, end) });
+    const text = markdown.slice(start, end);
+    if (!/###\s+확인할 점/.test(text)) continue;
+    blocks.push({ number, title, text });
   }
   return blocks;
 }
@@ -416,7 +385,6 @@ function validatePublicNewsletterFiles(markdownPath, htmlPath, options = {}) {
 
 module.exports = {
   GENERIC_CHECKPOINT_PATTERNS,
-  PUBLIC_NEWSLETTER_FORBIDDEN_TERMS,
   validatePublicHtml,
   validatePublicJsonText,
   validatePublicMarkdown,

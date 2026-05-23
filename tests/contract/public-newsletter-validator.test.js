@@ -169,6 +169,26 @@ test('public newsletter validator rejects source snapshot state in public JSON',
   assert.ok(errors.some(error => /data\/source-snapshots/.test(error)));
 });
 
+test('public newsletter validator checks rendered markdown article 1', () => {
+  const articleOneMarkdown = markdown({
+    checkpoints: [
+      ['즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.', 'CameraX preview latency를 대표 기기에서 확인합니다.'],
+      ['libcamera path의 sensor mode selection 회귀 가능성을 확인합니다.', 'frame timing과 format negotiation test 필요 여부를 점검합니다.'],
+      ['Android native owner가 Clang build log와 camera module 경고를 확인합니다.', 'HAL/driver 변경 근거는 없음으로 제한해 release note 범위만 추적합니다.']
+    ]
+  })
+    .replace('## 1. 이번 주 3줄 브리핑', '## 이번 주 3줄 브리핑')
+    .replace('## 2. Article 1', '## 1. Article 1')
+    .replace('## 3. Article 2', '## 2. Article 2')
+    .replace('## 4. Article 3', '## 3. Article 3');
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: articleOneMarkdown,
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /article 1 has generic fallback checkpoint/.test(error)));
+});
+
 test('public newsletter validator separates contextual validator wording from internal reports', () => {
   const allowed = validatePublicNewsletterArtifacts({
     markdown: markdown().replace(
@@ -188,6 +208,18 @@ test('public newsletter validator separates contextual validator wording from in
   assert.deepEqual(allowed, []);
   assert.ok(blocked.some(error => /internal validator report|validator\+internal_marker/.test(error)));
   assert.ok(blocked.some(error => /source_gap_risk/.test(error)));
+});
+
+test('public newsletter validator scopes contextual allow phrases per sentence or window', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace(
+      '본문 1A는 source-backed change를 Camera HAL 독자 관점에서 설명합니다.',
+      '본문 1A는 API validator가 입력 포맷을 검사하는 개발 도구 문맥을 설명합니다. 다음 문장은 internal validator report output을 노출합니다.'
+    ),
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /internal validator report|validator\+internal_marker/.test(error)));
 });
 
 test('public newsletter validator rejects generic fallback checkpoint even when not repeated', () => {

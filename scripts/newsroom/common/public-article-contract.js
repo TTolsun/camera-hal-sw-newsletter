@@ -210,10 +210,17 @@ function includesPhrase(textValue, phrase) {
   return textValue.includes(String(phrase || '').toLowerCase());
 }
 
-function hasAllowPhraseAroundTerm(textValue, term) {
+function sentenceAtIndex(value, index) {
+  const normalized = normalizedLeakText(value);
+  const matches = [...normalized.matchAll(/[^.!?。！？\r\n]+(?:[.!?。！？]+|$)/gu)];
+  const match = matches.find(item => index >= item.index && index < item.index + item[0].length);
+  return match ? match[0].trim() : '';
+}
+
+function hasAllowPhraseInContext(textValue, term) {
   return CONTEXTUAL_ALLOW_PHRASES
     .map(phrase => phrase.toLowerCase())
-    .some(phrase => phrase.includes(term) && textValue.includes(phrase));
+    .some(phrase => phrase.includes(term) && String(textValue || '').includes(phrase));
 }
 
 function contextualLeakReasons(value) {
@@ -227,7 +234,7 @@ function contextualLeakReasons(value) {
 
   for (const term of CONTEXTUAL_PUBLIC_TERMS) {
     const lowerTerm = term.toLowerCase();
-    if (!lower.includes(lowerTerm) || hasAllowPhraseAroundTerm(lower, lowerTerm)) continue;
+    if (!lower.includes(lowerTerm)) continue;
     const termIndexes = [];
     let fromIndex = 0;
     while (fromIndex < lower.length) {
@@ -238,15 +245,19 @@ function contextualLeakReasons(value) {
     }
     for (const index of termIndexes) {
       const windowText = lower.slice(Math.max(0, index - 40), index + lowerTerm.length + 40);
+      const sameSentence = sentenceAtIndex(normalized, index).toLowerCase();
+      if (
+        hasAllowPhraseInContext(windowText, lowerTerm) ||
+        hasAllowPhraseInContext(sameSentence, lowerTerm)
+      ) {
+        continue;
+      }
       if (CONTEXTUAL_INTERNAL_MARKERS.some(marker => windowText.includes(marker))) {
         reasons.push(`${term}+internal_marker`);
         continue;
       }
-      const sameSentence = sentenceFragments(normalized)
-        .find(sentence => sentence.toLowerCase().includes(lowerTerm));
       if (sameSentence) {
-        const sameLower = sameSentence.toLowerCase();
-        if (CONTEXTUAL_INTERNAL_MARKERS.some(marker => sameLower.includes(marker))) {
+        if (CONTEXTUAL_INTERNAL_MARKERS.some(marker => sameSentence.includes(marker))) {
           reasons.push(`${term}+same_sentence_marker`);
         }
       }
@@ -352,17 +363,32 @@ function normalizedSourceUrlKey(value = '') {
   return normalized.key || compactText(value).toLowerCase();
 }
 
+function sourceEntryRole(source, fallbackRole = 'primary') {
+  if (!isPlainObject(source)) return normalizePublicSourceRole(fallbackRole);
+  return normalizePublicSourceRole(source.source_role || source.role || source.context_role || fallbackRole);
+}
+
+function addSourceRole(roleMap, source, fallbackRole = 'primary') {
+  const key = normalizedSourceUrlKey(source?.url || source);
+  if (!key) return;
+  const role = sourceEntryRole(source, fallbackRole);
+  if (!roleMap.has(key)) roleMap.set(key, new Set());
+  if (role) roleMap.get(key).add(role);
+}
+
+function allowedPublicSourceUrlRoleMap(section = {}) {
+  const roleMap = new Map();
+  ensureArray(section.sources).forEach(source => addSourceRole(roleMap, source, 'primary'));
+  ensureArray(section.allowed_public_source_links).forEach(source => addSourceRole(roleMap, source, 'primary'));
+  ensureArray(section.seed_evidence_urls).forEach(url => addSourceRole(roleMap, { url, source_role: 'seed_evidence' }, 'seed_evidence'));
+  ensureArray(section.seedEvidenceUrls).forEach(url => addSourceRole(roleMap, { url, source_role: 'seed_evidence' }, 'seed_evidence'));
+  ensureArray(section.related_context_sources).forEach(source => addSourceRole(roleMap, source, 'related_context'));
+  ensureArray(section.related_context_candidates).forEach(source => addSourceRole(roleMap, source, 'related_context'));
+  return roleMap;
+}
+
 function allowedPublicSourceUrlKeys(section = {}) {
-  const entries = [
-    ...ensureArray(section.sources),
-    ...ensureArray(section.allowed_public_source_links),
-    ...ensureArray(section.seed_evidence_urls).map(url => ({ url })),
-    ...ensureArray(section.seedEvidenceUrls).map(url => ({ url }))
-  ];
-  const keys = entries
-    .map(source => normalizedSourceUrlKey(source?.url || source))
-    .filter(Boolean);
-  return new Set(keys);
+  return new Set(allowedPublicSourceUrlRoleMap(section).keys());
 }
 
 function publicSourceLinkRoleIssue(role, { allowRelatedContext = false } = {}) {
@@ -396,8 +422,24 @@ function sourceLinkIssues(source = {}, index = 0, options = {}) {
     issues.push({ type: 'invalid_source_link', index, field: 'url', reason: urlError });
   }
   const allowedKeys = options.allowedSourceUrlKeys;
-  if (!urlError && allowedKeys instanceof Set && allowedKeys.size > 0) {
-    const key = normalizedSourceUrlKey(source.url);
+  const allowedRoles = options.allowedSourceUrlRoles;
+  const key = urlError ? '' : normalizedSourceUrlKey(source.url);
+  if (!urlError && allowedRoles instanceof Map && allowedRoles.size > 0) {
+    const roles = allowedRoles.get(key);
+    const requestedRole = normalizePublicSourceRole(source.source_role) || 'primary';
+    if (!roles) {
+      issues.push({ type: 'invalid_source_link', index, field: 'url', reason: 'url_not_in_allowed_source_set', value: source.url });
+    } else if (!roles.has(requestedRole)) {
+      issues.push({
+        type: 'invalid_source_link',
+        index,
+        field: 'source_role',
+        reason: 'source_role_not_allowed_for_url',
+        value: requestedRole,
+        allowedRoles: [...roles]
+      });
+    }
+  } else if (!urlError && allowedKeys instanceof Set && allowedKeys.size > 0) {
     if (!allowedKeys.has(key)) {
       issues.push({ type: 'invalid_source_link', index, field: 'url', reason: 'url_not_in_allowed_source_set', value: source.url });
     }
@@ -495,8 +537,9 @@ const CHECKPOINT_GENERIC_TOKENS = new Set([
 
 const HAL_VALIDATION_TARGET_PATTERN = /request\/result|request|result|metadata|stream configuration|stream|buffer lifecycle|buffer|vendor tag|capture session|CameraX interop|Camera2 compatibility|CameraX|Camera2|CTS|VTS|device matrix|app compatibility|dependency version|release note|branch|owner|test scenario|log|metric|preview latency|frame|format negotiation|HAL\/driver|driver|vendor|pipeline|codec|ISP|SoC/i;
 const SOURCE_BOUND_LIMITATION_PATTERN = /HAL\/driver 변경 근거는 없음|앱\/API 영향 범위로 제한|release note 범위 내 확인|직접 HAL|확대 해석하지|과장하지|source 범위|공개 출처|근거는 없음|범위로 제한/i;
-const ACTION_VERB_PATTERN = /확인|비교|점검|추적|분리|테스트|추가|검증|review|compare|check|track|test|measure|profile/i;
+const ACTION_VERB_PATTERN = /확인|비교|점검|추적|분리|테스트|추가|검증|review|compare|check|track|test|measure|profile|inspect|assign/i;
 const ACTION_TARGET_PATTERN = /log|CTS|VTS|device matrix|compatibility|release note|branch|owner|test scenario|metric|latency|frame|stream|buffer|metadata|vendor tag|capture session|CameraX|Camera2|HAL|driver|API|build flag|dependency|performance|preview|format|pipeline/i;
+const NON_GENERIC_ACTION_TARGET_PATTERN = /log|CTS|VTS|device matrix|compatibility test|test scenario|metric|latency|frame|stream|buffer|metadata|vendor tag|capture session|preview regression|preview latency|release note|branch|owner|dependency version|build flag|performance|format negotiation|pipeline|codec|ISP|SoC/i;
 
 function wordTokens(value) {
   return String(value || '')
@@ -506,7 +549,6 @@ function wordTokens(value) {
 
 function sourceSpecificTokens(section = {}) {
   const values = [
-    section.public_article?.headline,
     section.headline,
     section.category,
     ...ensureArray(section.sources).flatMap(source => [source?.title, source?.publisher, source?.url]),
@@ -535,10 +577,16 @@ function isConcreteCheckpoint(value, section = {}) {
   const tokens = wordTokens(value);
   const specific = sourceSpecificTokens(section);
   const sourceTokenCount = tokens.filter(token => specific.has(token)).length;
-  if (sourceTokenCount >= 2) return true;
-  if (HAL_VALIDATION_TARGET_PATTERN.test(normalized)) return true;
-  if (SOURCE_BOUND_LIMITATION_PATTERN.test(normalized)) return true;
-  return ACTION_VERB_PATTERN.test(normalized) && ACTION_TARGET_PATTERN.test(normalized);
+  const hasAction = ACTION_VERB_PATTERN.test(normalized);
+  const hasTarget = ACTION_TARGET_PATTERN.test(normalized);
+  const hasValidationTarget = HAL_VALIDATION_TARGET_PATTERN.test(normalized);
+  const hasNonGenericTarget = NON_GENERIC_ACTION_TARGET_PATTERN.test(normalized);
+  const hasSourceBoundLimitation = SOURCE_BOUND_LIMITATION_PATTERN.test(normalized);
+  return (
+    (sourceTokenCount >= 2 && hasAction && hasNonGenericTarget) ||
+    (hasSourceBoundLimitation && hasValidationTarget) ||
+    (hasValidationTarget && hasAction && hasTarget && hasNonGenericTarget)
+  );
 }
 
 function checkpointConcreteIssues(section = {}, checkpoints = [], index = 0, headline = '') {
@@ -784,10 +832,10 @@ function validatePublicArticle(section = {}, index = 0) {
       issues.push({ index: index + 1, headline, type: 'public_article_leakage', key: field, message });
     }
   }
-  const allowedSourceUrlKeys = allowedPublicSourceUrlKeys(section);
+  const allowedSourceUrlRoles = allowedPublicSourceUrlRoleMap(section);
   ensureArray(raw.source_links).forEach((source, sourceIndex) => {
     for (const issue of sourceLinkIssues(source, sourceIndex, {
-      allowedSourceUrlKeys,
+      allowedSourceUrlRoles,
       allowRelatedContext: section.allow_related_context_source_links === true
     })) {
       issues.push({ index: index + 1, headline, ...issue });
@@ -804,6 +852,7 @@ module.exports = {
   PUBLIC_SOURCE_LINK_ALLOWED_KEYS,
   PUBLIC_SOURCE_ROLES,
   allowedPublicSourceUrlKeys,
+  allowedPublicSourceUrlRoleMap,
   isConcreteCheckpoint,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,

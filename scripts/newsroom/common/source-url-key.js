@@ -27,7 +27,7 @@ function normalizeSearchParams(parsed, warnings) {
   }
 
   parsed.search = '';
-  for (const key of [...groups.keys()].sort((left, right) => left.localeCompare(right))) {
+  for (const key of [...groups.keys()].sort()) {
     for (const value of groups.get(key)) {
       parsed.searchParams.append(key, value);
     }

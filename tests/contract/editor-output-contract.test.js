@@ -20,8 +20,10 @@ const {
   articlePolicy
 } = require('../../scripts/newsroom/common/newsletter-policy');
 const {
+  isConcreteCheckpoint,
   mergePublicArticleFromLlm,
-  mergePublicArticlesFromLlmSections
+  mergePublicArticlesFromLlmSections,
+  validatePublicArticle
 } = require('../../scripts/newsroom/common/public-article-contract');
 
 const DATE = '2026-05-08';
@@ -1303,6 +1305,48 @@ test('editor output contract rejects source link label leakage and related conte
   );
 });
 
+test('public_article source_links cannot promote related context URL provenance to primary', () => {
+  const contextOnly = section(1, {
+    sources: [],
+    allowed_public_source_links: [{
+      title: 'Context only reference',
+      url: 'https://example.com/context-doc',
+      source_role: 'related_context'
+    }],
+    public_article: {
+      ...section(1).public_article,
+      source_links: [{
+        title: 'Context only reference',
+        url: 'https://example.com/context-doc',
+        source_role: 'primary'
+      }]
+    }
+  });
+  const seedAndContext = section(1, {
+    sources: [],
+    seed_evidence_urls: ['https://example.com/context-doc'],
+    allowed_public_source_links: [{
+      title: 'Context only reference',
+      url: 'https://example.com/context-doc',
+      source_role: 'related_context'
+    }],
+    public_article: {
+      ...section(1).public_article,
+      source_links: [{
+        title: 'Seed evidence reference',
+        url: 'https://example.com/context-doc',
+        source_role: 'seed_evidence'
+      }]
+    }
+  });
+
+  const contextOnlyIssues = validatePublicArticle(contextOnly, 0);
+  const seedAndContextIssues = validatePublicArticle(seedAndContext, 0);
+
+  assert.ok(contextOnlyIssues.some(issue => issue.reason === 'source_role_not_allowed_for_url'));
+  assert.equal(seedAndContextIssues.some(issue => issue.reason === 'source_role_not_allowed_for_url'), false);
+});
+
 test('editor output contract rejects hallucinated public source links', () => {
   const draft = editor({
     sections: [
@@ -1328,6 +1372,15 @@ test('editor output contract rejects hallucinated public source links', () => {
       assert.ok(error.details.issues.some(issue => issue.reason === 'url_not_in_allowed_source_set'));
       return true;
     }
+  );
+});
+
+test('reader checkpoint concrete contract requires actionable source or validation target combinations', () => {
+  assert.equal(isConcreteCheckpoint('CameraX 관련 내용을 확인합니다.', section(1)), false);
+  assert.equal(isConcreteCheckpoint('CameraX preview regression을 device matrix에서 비교합니다.', section(1)), true);
+  assert.equal(
+    isConcreteCheckpoint('HAL/driver 변경 근거는 없음으로 제한하고 Camera2 compatibility 범위만 확인합니다.', section(1)),
+    true
   );
 });
 
