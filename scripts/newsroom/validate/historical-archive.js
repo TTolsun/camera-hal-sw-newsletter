@@ -286,6 +286,17 @@ function validateSidecarEntry(entry, index, state, errors) {
   if (entry?.archive_status === 'deprecated_archive' && (!Array.isArray(entry.known_limitations) || entry.known_limitations.length === 0)) {
     errors.push(`${label} deprecated_archive entries must include at least one known_limitations item.`);
   }
+  if (entry?.historical_cleanup_context === 'review_only_publication' && !hasKnownLimitation(entry, 'review_only_publication')) {
+    errors.push(`${label} review_only_publication entries must include known_limitations=review_only_publication.`);
+  }
+  if (hasKnownLimitation(entry, 'review_only_publication') && entry?.historical_cleanup_context !== 'review_only_publication') {
+    errors.push(`${label} known_limitations=review_only_publication requires historical_cleanup_context=review_only_publication.`);
+  }
+  if (entry?.historical_cleanup_context === 'current_generation_archive_review' &&
+    Array.isArray(entry.known_limitations) &&
+    entry.known_limitations.length > 0) {
+    errors.push(`${label} current_generation_archive_review entries must not declare known_limitations.`);
+  }
   if (entry?.archive_status === 'removed' && entry?.public_visibility !== 'removed') {
     errors.push(`${label} removed archives must use public_visibility=removed.`);
   }

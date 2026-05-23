@@ -2,17 +2,17 @@
   "schema_version": 1,
   "report_type": "historical_newsletter_audit",
   "source_of_truth": "content/audit/historical-archive-status.json",
-  "data_newsletter_count": 8,
-  "public_artifact_count": 8,
-  "newsroom_artifact_count": 8,
-  "sidecar_entry_count": 17,
+  "data_newsletter_count": 9,
+  "public_artifact_count": 9,
+  "newsroom_artifact_count": 9,
+  "sidecar_entry_count": 18,
   "archive_status_counts": {
-    "stable_archive": 3,
+    "stable_archive": 4,
     "removed": 9,
     "reviewed_archive": 5
   },
   "public_visibility_counts": {
-    "listed": 8,
+    "listed": 9,
     "removed": 9
   },
   "orphan_public_dates": [],
@@ -79,6 +79,20 @@
   "validation_errors": [],
   "validation_warnings": [],
   "entries": [
+    {
+      "date": "2026-05-23",
+      "artifact_scope": "public_archive",
+      "in_data_newsletters": true,
+      "has_public_artifact": true,
+      "has_newsroom_artifact": true,
+      "archive_status": "stable_archive",
+      "public_visibility": "listed",
+      "historical_cleanup_reviewed": true,
+      "known_limitations": [
+        "review_only_publication"
+      ],
+      "historical_cleanup_context": "review_only_publication"
+    },
     {
       "date": "2026-05-22",
       "artifact_scope": "public_archive",

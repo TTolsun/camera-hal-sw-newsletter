@@ -55,6 +55,33 @@ const HARD_BLOCKER_REASON_CODE_BY_BLOCKER = Object.freeze({
   soc_platform_missing_camera_pipeline_link: 'soc_camera_pipeline_link_missing'
 });
 
+const CONSERVATIVE_DO_NOT_OVERSTATE =
+  '출처 근거를 넘어 기기 적용, HAL API 변경, 양산 영향으로 확대 해석하지 않는다.';
+const FALLBACK_DO_NOT_OVERSTATE =
+  'source evidence가 뒷받침하지 않으면 Camera HAL 직접 동작 변경으로 표현하지 않습니다.';
+
+const BUCKET_IMPACT_AXES = Object.freeze({
+  direct_aosp_camera: ['framework_hal_contract'],
+  camera_driver_image_pipeline: ['driver_image_pipeline'],
+  android_platform_camera_adjacent: ['camerax_app_compatibility'],
+  android_multimedia_camera_output: ['stream_buffer_metadata'],
+  soc_platform_signal: ['soc_resource_contention'],
+  cpp_ai_tooling_fallback: ['native_tooling_workflow'],
+  generic_tech_watchlist: ['reference_only']
+});
+
+const AXIS_READER_OWNER_MAP = Object.freeze({
+  framework_hal_contract: ['camera_hal_owner'],
+  stream_buffer_metadata: ['camera_hal_owner'],
+  driver_image_pipeline: ['camera_driver_owner'],
+  cts_vts_its_cdd: ['camera_test_owner'],
+  camerax_app_compatibility: ['camerax_app_compat_owner'],
+  native_tooling_workflow: ['native_tooling_owner'],
+  thermal_power_memory_pressure: ['soc_platform_owner'],
+  soc_resource_contention: ['soc_platform_owner'],
+  security_vendor_component: ['security_owner']
+});
+
 function ensureArray(value) {
   if (Array.isArray(value)) return value;
   if (value === null || value === undefined || value === '') return [];
@@ -158,6 +185,12 @@ function normalizeAxes(values) {
   return unique(ensureArray(values).flatMap(value => arrayFromCommaText(value)))
     .map(normalizeEnum)
     .filter(value => VALID_AXES.has(value));
+}
+
+function rawAxisValues(values) {
+  return unique(ensureArray(values).flatMap(value => arrayFromCommaText(value)))
+    .map(normalizeEnum)
+    .filter(Boolean);
 }
 
 function explicitAxes(value = {}) {
@@ -539,7 +572,7 @@ function normalizeHalSignalCapsule(section = {}) {
   const raw = objectValue(section.hal_signal_capsule || section.halSignalCapsule);
   const readerOwners = unique(ensureArray(raw.reader_owners).flatMap(arrayFromCommaText)).map(normalizeEnum);
   const impactAxes = normalizeAxes(raw.impact_axes);
-  const doNotOverstate = unique(ensureArray(raw.do_not_overstate).flatMap(arrayFromCommaText));
+  const doNotOverstate = unique(ensureArray(raw.do_not_overstate));
   const normalized = {
     why_now: text(raw.why_now),
     reader_owners: readerOwners,
@@ -556,6 +589,181 @@ function normalizeHalSignalCapsule(section = {}) {
     complete: Object.keys(raw).length > 0 && missing.length === 0,
     missing_keys: missing,
     capsule: normalized
+  };
+}
+
+function isCompleteHalSignalCapsule(section = {}) {
+  return normalizeHalSignalCapsule(section).complete === true;
+}
+
+function canonicalizeHalSignalCapsule(capsule = {}) {
+  const normalized = normalizeHalSignalCapsule({ hal_signal_capsule: capsule }).capsule;
+  return {
+    why_now: normalized.why_now,
+    reader_owners: [...normalized.reader_owners].sort(),
+    check_within_2_weeks: normalized.check_within_2_weeks,
+    impact_axes: [...normalized.impact_axes].sort(),
+    do_not_overstate: [...normalized.do_not_overstate].sort()
+  };
+}
+
+function sourceDateValues(value = {}) {
+  const fields = [
+    value.evidence_date,
+    value.source_date,
+    value.published_at,
+    value.publishedAt,
+    value.published_date,
+    value.effective_date,
+    value.evidence_summary,
+    value.source_verification_notes,
+    objectValue(value.source_extraction).date,
+    objectValue(value.source_extraction).published_at,
+    objectValue(value.source_extraction).publishedAt,
+    objectValue(value.source_extraction).published_date,
+    objectValue(value.source_extraction).effective_date,
+    ...ensureArray(value.sources).flatMap(source => [
+      source?.published_at,
+      source?.publishedAt,
+      source?.published_date,
+      source?.date,
+      source?.effective_date
+    ])
+  ];
+  return unique(fields
+    .map(item => {
+      const match = text(item).match(/\b\d{4}-\d{2}-\d{2}\b/);
+      return match ? match[0] : '';
+    })
+    .filter(Boolean))
+    .sort()
+    .reverse();
+}
+
+function explicitImpactAxisResult(value = {}) {
+  const rawValues = rawAxisValues([
+    ...ensureArray(value.hal_impact_axes),
+    ...ensureArray(value.halImpactAxes),
+    ...ensureArray(objectValue(value.impact_classification).hal_impact_axes),
+    ...ensureArray(objectValue(value.impact_classification).axes),
+    ...ensureArray(objectValue(value.hal_signal_capsule).impact_axes)
+  ]);
+  const invalid = rawValues.filter(axis => !VALID_AXES.has(axis));
+  return {
+    rawValues,
+    invalid,
+    axes: rawValues.filter(axis => VALID_AXES.has(axis))
+  };
+}
+
+function bucketImpactAxes(value = {}) {
+  const bucket = normalizeEnum(firstText(
+    value.relevance_bucket,
+    value.relevanceBucket,
+    objectValue(value.scope_count).relevance_bucket,
+    objectValue(value.scope_relevance).relevance_bucket
+  ));
+  return BUCKET_IMPACT_AXES[bucket] || [];
+}
+
+function explicitReaderOwners(value = {}) {
+  return unique([
+    ...ensureArray(objectValue(value.hal_signal_capsule).reader_owners),
+    ...ensureArray(value.reader_owners),
+    ...ensureArray(value.readerOwners)
+  ].flatMap(arrayFromCommaText)).map(normalizeEnum).filter(Boolean);
+}
+
+function readerOwnersForAxes(impactAxes = []) {
+  return unique(ensureArray(impactAxes)
+    .map(normalizeEnum)
+    .flatMap(axis => AXIS_READER_OWNER_MAP[axis] || []));
+}
+
+function completeHalSignalCapsuleFromExistingFields(value = {}, options = {}) {
+  const mode = options.mode || 'fallback_completion';
+  const strictEditorRepair = mode === 'editor_deterministic_repair';
+  const existing = normalizeHalSignalCapsule(value);
+  if (existing.complete) {
+    return {
+      capsule: existing.capsule,
+      complete: true,
+      changed: false,
+      reason_codes: []
+    };
+  }
+
+  const reasonCodes = [];
+  const raw = objectValue(value.hal_signal_capsule || value.halSignalCapsule);
+  const normalized = strictEditorRepair ? null : normalizeHalSignalFields(value);
+  const axisResult = strictEditorRepair ? explicitImpactAxisResult(value) : { invalid: [], axes: normalized.hal_impact_axes };
+  if (axisResult.invalid.length > 0) reasonCodes.push('unknown_impact_axis');
+  const impactAxes = axisResult.axes.length > 0
+    ? axisResult.axes
+    : strictEditorRepair
+      ? bucketImpactAxes(value)
+      : normalized.hal_impact_axes;
+  if (impactAxes.length === 0) reasonCodes.push('unknown_impact_axis');
+
+  const readerOwners = strictEditorRepair
+    ? unique([
+      ...explicitReaderOwners(value),
+      ...readerOwnersForAxes(impactAxes)
+    ])
+    : unique([
+      ...ensureArray(raw.reader_owners),
+      ...ensureArray(value.reader_owners),
+      ...normalized.reader_owners
+    ].flatMap(arrayFromCommaText)).map(normalizeEnum).filter(Boolean);
+  if (readerOwners.length === 0) reasonCodes.push('missing_reader_owner_mapping');
+
+  const actionItems = ensureArray(articleSections(value).action_items).length > 0
+    ? ensureArray(articleSections(value).action_items)
+    : ensureArray(value.action_items);
+  const fallbackAction = actionItems.find(item => /test|log|metric|measure|CTS|VTS|Camera ITS|stream|buffer|metadata|owner|API|PoC/i.test(text(item))) ||
+    actionItems[0];
+  const checkWithinTwoWeeks = text(raw.check_within_2_weeks) ||
+    text(fallbackAction) ||
+    (strictEditorRepair ? '' : '2주 안에 camera owner를 지정해 stream, buffer, metadata, test 영향 여부를 확인합니다.');
+  if (!checkWithinTwoWeeks) reasonCodes.push('missing_action_items');
+
+  const datedSources = sourceDateValues(value);
+  const whyNow = text(raw.why_now) || (datedSources.length > 0
+    ? `Source date ${datedSources[0]} provides the dated context for this HAL validation signal.`
+    : strictEditorRepair
+      ? ''
+      : `${value.headline || value.category || '이 출처'}는 날짜가 확인된 HAL 검토 신호로 포함했습니다.`);
+  if (!whyNow) reasonCodes.push('missing_why_now_context');
+
+  const doNotOverstate = strictEditorRepair
+    ? unique([
+      ...ensureArray(raw.do_not_overstate),
+      ...ensureArray(value.do_not_overstate)
+    ])
+    : unique([
+      ...ensureArray(raw.do_not_overstate),
+      ...ensureArray(value.do_not_overstate),
+      ...ensureArray(value.overclaim_guardrails),
+      ...ensureArray(value.fallback_guard_notes)
+    ]);
+
+  const capsule = {
+    why_now: whyNow,
+    reader_owners: readerOwners,
+    check_within_2_weeks: checkWithinTwoWeeks,
+    impact_axes: impactAxes,
+    do_not_overstate: doNotOverstate.length > 0
+      ? doNotOverstate
+      : [strictEditorRepair ? CONSERVATIVE_DO_NOT_OVERSTATE : FALLBACK_DO_NOT_OVERSTATE]
+  };
+  const completed = normalizeHalSignalCapsule({ hal_signal_capsule: capsule });
+  if (!completed.complete) reasonCodes.push(...completed.missing_keys.map(key => `missing_${key}`));
+
+  return {
+    capsule: completed.capsule,
+    complete: completed.complete && reasonCodes.length === 0,
+    changed: true,
+    reason_codes: unique(reasonCodes)
   };
 }
 
@@ -827,7 +1035,10 @@ module.exports = {
   inferEffectiveActionabilityLevel,
   inferHalImpactAxes,
   hardBlockerReasonCodes,
+  canonicalizeHalSignalCapsule,
+  completeHalSignalCapsuleFromExistingFields,
   normalizeHalSignalCapsule,
   normalizeHalSignalFields,
+  isCompleteHalSignalCapsule,
   renderHalSignalQualityMarkdown
 };

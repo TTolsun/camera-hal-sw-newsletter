@@ -32,7 +32,7 @@ const {
   qualityGatePolicy
 } = require('../common/newsletter-policy');
 const {
-  normalizeHalSignalCapsule,
+  completeHalSignalCapsuleFromExistingFields,
   normalizeHalSignalFields
 } = require('../common/hal-signal-quality');
 const {
@@ -129,26 +129,18 @@ function completeHalSignalSection(section = {}, candidate = {}) {
     (fallbackBucket && halSignal.fallback_promotion_allowed === true
       ? 'Fallback builder는 이 항목을 Camera HAL 검증 연결이 명시된 보조 main article로만 승격했습니다.'
       : '');
-  const existingCapsule = normalizeHalSignalCapsule(section);
   const actionItems = ensureArray(section.article_sections?.action_items).length > 0
     ? ensureArray(section.article_sections.action_items)
     : ensureArray(section.action_items);
-  const doNotOverstate = ensureArray(halSignal.do_not_overstate).length > 0
-    ? ensureArray(halSignal.do_not_overstate)
-    : ensureArray(halSignal.fallback_guard_notes).length > 0
-      ? ensureArray(halSignal.fallback_guard_notes)
-      : ['source evidence가 뒷받침하지 않으면 Camera HAL 직접 동작 변경으로 표현하지 않습니다.'];
-  const fallbackCheck = actionItems.find(item => /test|log|metric|measure|CTS|VTS|Camera ITS|stream|buffer|metadata|owner|API|PoC/i.test(text(item))) ||
-    '2주 안에 camera owner를 지정해 stream, buffer, metadata, test 영향 여부를 확인합니다.';
-  const hal_signal_capsule = existingCapsule.complete
-    ? existingCapsule.capsule
-    : {
-        why_now: `${section.headline || section.category || '이 출처'}는 날짜가 확인된 HAL 검토 신호로 포함했습니다.`,
-        reader_owners: halSignal.reader_owners,
-        check_within_2_weeks: fallbackCheck,
-        impact_axes: halSignal.hal_impact_axes,
-        do_not_overstate: doNotOverstate
-      };
+  const hal_signal_capsule = completeHalSignalCapsuleFromExistingFields({
+    ...combined,
+    article_sections: {
+      ...(combined.article_sections || {}),
+      action_items: actionItems
+    }
+  }, {
+    mode: 'fallback_public_issue'
+  }).capsule;
   return {
     ...section,
     hal_impact_axes: ensureArray(section.hal_impact_axes).length > 0 ? section.hal_impact_axes : halSignal.hal_impact_axes,
