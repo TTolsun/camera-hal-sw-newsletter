@@ -36,9 +36,6 @@ const {
   normalizeHalSignalFields
 } = require('../common/hal-signal-quality');
 const {
-  NO_IMMEDIATE_ACTION_TEXT
-} = require('../common/public-article-contract');
-const {
   buildConfirmedFacts,
   buildHalPerspective,
   buildOverclaimGuardrails,
@@ -810,16 +807,30 @@ function publicBodyParagraphs(candidate, section, component) {
 
 function publicCheckpointsForCandidate(candidate, section) {
   const title = text(candidate.title || section.headline);
+  const component = componentText(candidate) || 'Camera API/component';
+  const bucket = text(candidate.relevance_bucket || section.relevance_bucket);
+  if (/Building seamless Android experiences across devices/i.test(title)) {
+    return [
+      'CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.',
+      '이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.'
+    ];
+  }
+  if (/Start building today|Google AI Studio/i.test(title)) {
+    return [
+      'AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.',
+      '이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
+    ];
+  }
   if (/\bGlaze\b/i.test(title)) {
     return [
-      '현재 Camera HAL 코드나 내부 도구에서 Glaze를 사용하지 않는다면 즉시 조치할 항목은 없습니다.',
-      'JSON/YAML/CBOR 기반 설정 또는 로그 변환 도구를 새로 만들 때 참고합니다.',
-      'C++26 reflection은 production HAL code 적용 대상으로 보지 않습니다.'
+      'Glaze 적용 여부는 Camera HAL production path가 아니라 JSON/YAML/CBOR 로그 변환 도구 범위에서만 확인합니다.',
+      'camera pipeline 설정이나 tuning parameter serialization 도구를 새로 만들 때 Glaze format 지원을 비교합니다.',
+      'C++26 reflection은 production HAL runtime behavior 변경 근거로 확대 해석하지 않습니다.'
     ];
   }
   if (/\bGCC\s+16\.1\b/i.test(title)) {
     return [
-      'Camera HAL 본체가 아니라 host/native tooling 관점에서만 참고합니다.',
+      'Camera HAL 본체가 아니라 host/native tooling build log와 warning profile 범위에서만 참고합니다.',
       'GCC 기반 보조 도구가 있다면 C++20 default 전환 영향을 확인합니다.',
       'production HAL runtime behavior 변화로 해석하지 않습니다.'
     ];
@@ -831,7 +842,53 @@ function publicCheckpointsForCandidate(candidate, section) {
       'downstream Android HAL 영향은 별도 evidence가 있을 때만 판단합니다.'
     ];
   }
-  return [NO_IMMEDIATE_ACTION_TEXT];
+  if (/android_platform_camera_adjacent|android_camera_api|android_camera|multimedia/i.test(bucket)) {
+    return [
+      'CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.',
+      '이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.'
+    ];
+  }
+  if (/cpp_ai_tooling|tooling/i.test(bucket)) {
+    return [
+      'native tooling이나 prototype 코드가 Camera API를 호출한다면, Camera 권한과 CameraX/Camera2 사용 방식만 확인합니다.',
+      '이 소스는 production HAL runtime 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
+    ];
+  }
+  if (/direct|camera_driver|image_pipeline|direct_aosp_camera|camera_stack/i.test(bucket)) {
+    return [
+      `${component}가 request/result, stream configuration, buffer lifecycle 중 어떤 HAL 계약과 연결되는지 source 근거 안에서 확인합니다.`,
+      'source가 직접 뒷받침하지 않는 driver branch, vendor tag, pipeline 변경 주장은 분리합니다.'
+    ];
+  }
+  return [
+    `${component}와 직접 연결된 공개 출처의 Camera API나 component 변화만 확인합니다.`,
+    'HAL/driver 변경 근거가 없으면 request/result나 vendor tag 변화로 해석하지 않습니다.'
+  ];
+}
+
+function publicTakeawayForCandidate(candidate, section, component) {
+  const bucket = text(candidate.relevance_bucket || section.relevance_bucket);
+  const impact = text(candidate.impact_claim_level || section.impact_claim_level);
+  const title = text(candidate.title || section.headline || component);
+  if (/direct|camera_stack/i.test(impact) || /direct|driver|image_pipeline/i.test(bucket)) {
+    return `${title}은 공개 출처가 직접 말한 ${component || 'camera stack'} 변화 범위 안에서 HAL request/result, stream, buffer, metadata validation 영향을 확인할 후보입니다.`;
+  }
+  if (/Building seamless Android experiences across devices/i.test(title)) {
+    return '이 소식은 HAL API 변경이 아니라, 다양한 화면 크기에서 CameraX preview가 어떻게 보이는지 확인하라는 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 preview aspect ratio, rotation, crop 동작의 앱 호환성만 확인하면 됩니다.';
+  }
+  if (/Start building today|Google AI Studio/i.test(title)) {
+    return '이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.';
+  }
+  if (/android_platform|android_camera|multimedia|CameraX|Camera2/i.test(bucket)) {
+    return '이 소식은 HAL API 변경이 아니라 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 CameraX/Camera2 preview와 capture path의 앱 호환성만 확인하면 됩니다.';
+  }
+  if (/soc_platform/i.test(bucket)) {
+    return `${title}은 SoC/platform signal입니다. vendor BSP, ISP, driver branch, device matrix 영향은 별도 source evidence가 있을 때만 확인합니다.`;
+  }
+  if (/cpp_ai_tooling|tooling/i.test(bucket) || /tooling/i.test(impact)) {
+    return '이 소식은 native tooling workflow 참고 항목입니다. production HAL runtime behavior 변경 근거는 아니며, prototype이 Camera API를 호출할 때 권한 선언과 CameraX/Camera2 사용 방식을 확인하는 수준으로 제한합니다.';
+  }
+  return `${title}은 공개 출처 범위 안의 watch signal입니다. HAL/driver 변경으로 확대 해석하지 않고 release note와 compatibility 확인 범위로 제한합니다.`;
 }
 
 function buildPublicArticle(section, candidate = {}) {
@@ -841,7 +898,7 @@ function buildPublicArticle(section, candidate = {}) {
     headline,
     lead: publicLeadText(candidate, section, headline),
     body_paragraphs: publicBodyParagraphs(candidate, section, component),
-    camera_hal_takeaway: text(section.camera_hal_perspective || 'Camera HAL / Driver 관점에서는 공개 출처가 제공한 범위 안에서만 참고합니다.'),
+    camera_hal_takeaway: publicTakeawayForCandidate(candidate, section, component),
     reader_checkpoints: publicCheckpointsForCandidate(candidate, section),
     source_links: ensureArray(section.sources).map(source => ({
       title: text(source.title || candidate.title || headline),

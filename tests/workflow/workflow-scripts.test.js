@@ -4293,6 +4293,8 @@ test('fallback builder includes selected native tooling supporting article after
     finalEditor.sections.map(section => section.headline).join(' | ')
   );
   assert.match(publicMarkdown, /Build native Android apps in Google AI Studio/);
+  assert.match(publicMarkdown, /AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX\/Camera2 사용 방식을 확인합니다\./);
+  assert.doesNotMatch(publicMarkdown, /API\/component\/date|stream\/metadata|compatibility test scenario|현재\s+device matrix와\s+맞는지/);
   assert.equal(fallbackReport.fallback_articles.some(item => item.action === 'selected-native-tooling-supporting'), true);
   assert.equal(result.status.public_newsletter_ready, true);
 

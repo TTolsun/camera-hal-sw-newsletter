@@ -10,11 +10,20 @@ const {
   strictTargetDates
 } = require('../common/validation-targets');
 const {
+  validatePublicNewsletterArtifacts,
   validatePublicNewsletterFiles
 } = require('../validate/public-newsletter');
+const {
+  validatePublicArticle
+} = require('../common/public-article-contract');
 
 const root = process.cwd();
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
 
 function readNewsletterItems() {
   const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -26,13 +35,112 @@ function readNewsletterItems() {
 
 function validateExplicitFiles(args) {
   if (args.length === 0) return null;
+  if (args[0] === '--date') {
+    const date = args[1];
+    if (!DATE_PATTERN.test(String(date || ''))) {
+      throw new Error('Usage: node scripts/validate-public-newsletter.js --date YYYY-MM-DD');
+    }
+    if (args.length !== 2) {
+      throw new Error('Usage: node scripts/validate-public-newsletter.js --date YYYY-MM-DD');
+    }
+    return validateDateArtifacts(date);
+  }
   if (args.length !== 2) {
-    throw new Error('Usage: node scripts/validate-public-newsletter.js <newsletter.md> <index.html>');
+    throw new Error('Usage: node scripts/validate-public-newsletter.js <newsletter.md> <index.html> OR --date YYYY-MM-DD');
   }
   const markdownPath = repoPath(root, args[0]);
   const htmlPath = repoPath(root, args[1]);
   if (!markdownPath || !htmlPath) throw new Error('Public newsletter paths must stay inside the repository.');
   return validatePublicNewsletterFiles(markdownPath, htmlPath);
+}
+
+function newsletterItemForDate(date) {
+  return readNewsletterItems().find(item => item?.date === date) || null;
+}
+
+function publicArticlePathLabel(keyPath = []) {
+  return keyPath.map(item => /^\d+$/.test(item) ? '[]' : item).join('.');
+}
+
+function collectPublicArticleSections(value, keyPath = [], parent = null) {
+  const sections = [];
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => {
+      sections.push(...collectPublicArticleSections(item, keyPath.concat(String(index)), parent));
+    });
+    return sections;
+  }
+  if (!isPlainObject(value)) return sections;
+  for (const [key, item] of Object.entries(value)) {
+    const itemPath = keyPath.concat(key);
+    if (key === 'public_article' && isPlainObject(item)) {
+      sections.push({
+        keyPath: itemPath,
+        section: {
+          ...value,
+          public_article: item
+        }
+      });
+      continue;
+    }
+    sections.push(...collectPublicArticleSections(item, itemPath, value));
+  }
+  return sections;
+}
+
+function publicArticlePathIssues(value, label) {
+  const issues = [];
+  for (const [index, { keyPath, section }] of collectPublicArticleSections(value).entries()) {
+    for (const issue of validatePublicArticle(section, index)) {
+      issues.push(`${label}:${publicArticlePathLabel(keyPath)} failed: ${issue.type}${issue.key ? ` ${issue.key}` : ''}${issue.reason ? ` ${issue.reason}` : ''}${issue.message ? ` ${issue.message}` : ''}`);
+    }
+  }
+  return issues;
+}
+
+function readJsonFilesInDir(dirPath) {
+  if (!fs.existsSync(dirPath)) return [];
+  return fs.readdirSync(dirPath)
+    .filter(name => name.endsWith('.json'))
+    .map(name => path.join(dirPath, name));
+}
+
+function isDiagnosticsOnlyNewsroomJson(filePath) {
+  return /(?:invalid|validation-error|attempt|retry-history|repair-failure)/i.test(path.basename(filePath));
+}
+
+function validatePublicJsonFilesForDate(date) {
+  const errors = [];
+  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  for (const filePath of readJsonFilesInDir(newsroomDir).filter(filePath => !isDiagnosticsOnlyNewsroomJson(filePath))) {
+    const rel = path.relative(root, filePath).replace(/\\/g, '/');
+    errors.push(...publicArticlePathIssues(readJson(filePath), rel));
+  }
+  const newsletterDir = path.join(root, 'newsletters', date);
+  for (const filePath of readJsonFilesInDir(newsletterDir)) {
+    const rel = path.relative(root, filePath).replace(/\\/g, '/');
+    errors.push(...validatePublicNewsletterArtifacts({
+      json: readJson(filePath),
+      jsonLabel: rel
+    }));
+  }
+  return errors;
+}
+
+function validateDateArtifacts(date) {
+  const item = newsletterItemForDate(date);
+  if (!item) return [`data/newsletters.json is missing date entry: ${date}`];
+  const markdownPath = repoPath(root, item.md || `newsletters/${date}/newsletter.md`);
+  const htmlPath = repoPath(root, item.html || `newsletters/${date}/index.html`);
+  if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) {
+    return [`Public newsletter files are missing for ${date}.`];
+  }
+  const errors = validatePublicNewsletterFiles(markdownPath, htmlPath, {
+    json: item,
+    jsonLabel: `data/newsletters.json:${date}`
+  });
+  errors.push(...validatePublicJsonFilesForDate(date));
+  return errors;
 }
 
 function validateIndexedNewsletters() {

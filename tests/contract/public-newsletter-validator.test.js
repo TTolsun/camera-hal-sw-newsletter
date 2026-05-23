@@ -9,7 +9,7 @@ function markdown(overrides = {}) {
   const checkpoints = overrides.checkpoints || [
     ['대표 기기 1대에서 Camera ITS preview latency를 확인합니다.', 'CameraX path의 stream metadata 차이를 비교합니다.'],
     ['libcamera path의 sensor mode selection 회귀 가능성을 확인합니다.', 'frame timing과 format negotiation test 필요 여부를 점검합니다.'],
-    ['즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.']
+    ['Android native owner가 Clang build log와 camera module 경고를 확인합니다.', 'HAL/driver 변경 근거는 없음으로 제한해 release note 범위만 추적합니다.']
   ];
   return `# Camera HAL SW Newsletter - 2026-05-18
 
@@ -167,6 +167,130 @@ test('public newsletter validator rejects source snapshot state in public JSON',
   assert.ok(errors.some(error => /processed_source_event_ids/.test(error)));
   assert.ok(errors.some(error => /previous_values/.test(error)));
   assert.ok(errors.some(error => /data\/source-snapshots/.test(error)));
+});
+
+test('public newsletter validator checks rendered markdown article 1', () => {
+  const articleOneMarkdown = markdown({
+    checkpoints: [
+      ['즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.', 'CameraX preview latency를 대표 기기에서 확인합니다.'],
+      ['libcamera path의 sensor mode selection 회귀 가능성을 확인합니다.', 'frame timing과 format negotiation test 필요 여부를 점검합니다.'],
+      ['Android native owner가 Clang build log와 camera module 경고를 확인합니다.', 'HAL/driver 변경 근거는 없음으로 제한해 release note 범위만 추적합니다.']
+    ]
+  })
+    .replace('## 1. 이번 주 3줄 브리핑', '## 이번 주 3줄 브리핑')
+    .replace('## 2. Article 1', '## 1. Article 1')
+    .replace('## 3. Article 2', '## 2. Article 2')
+    .replace('## 4. Article 3', '## 3. Article 3');
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: articleOneMarkdown,
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /article 1 has generic fallback checkpoint/.test(error)));
+});
+
+test('public newsletter validator separates contextual validator wording from internal reports', () => {
+  const allowed = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace(
+      '본문 1A는 source-backed change를 Camera HAL 독자 관점에서 설명합니다.',
+      '본문 1A는 API validator가 입력 포맷을 검사하는 개발 도구 문맥을 설명합니다.'
+    ),
+    html: html('<p>API validator가 입력 포맷을 검사합니다.</p>')
+  });
+  const blocked = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace(
+      '본문 1A는 source-backed change를 Camera HAL 독자 관점에서 설명합니다.',
+      '본문 1A는 internal validator report output을 public 기사에 노출합니다.'
+    ),
+    html: html('<script type="application/json">{"note":"source_gap_risk"}</script>')
+  });
+
+  assert.deepEqual(allowed, []);
+  assert.ok(blocked.some(error => /internal validator report|validator\+internal_marker/.test(error)));
+  assert.ok(blocked.some(error => /source_gap_risk/.test(error)));
+});
+
+test('public newsletter validator scopes contextual allow phrases per sentence or window', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace(
+      '본문 1A는 source-backed change를 Camera HAL 독자 관점에서 설명합니다.',
+      '본문 1A는 API validator가 입력 포맷을 검사하는 개발 도구 문맥을 설명합니다. 다음 문장은 internal validator report output을 노출합니다.'
+    ),
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /internal validator report|validator\+internal_marker/.test(error)));
+});
+
+test('public newsletter validator rejects generic fallback checkpoint even when not repeated', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown({
+      checkpoints: [
+        ['대표 기기 1대에서 Camera ITS preview latency를 확인합니다.', 'CameraX path의 stream metadata 차이를 비교합니다.'],
+        ['즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.', 'Camera2 compatibility test scenario를 확인합니다.'],
+        ['Android native owner가 Clang build log와 camera module 경고를 확인합니다.', 'HAL/driver 변경 근거는 없음으로 제한해 release note 범위만 추적합니다.']
+      ]
+    }),
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /generic fallback checkpoint/.test(error)));
+});
+
+test('public newsletter validator rejects validator-token placeholder prose', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown({
+      checkpoints: [
+        [
+          'Google AI Studio 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.',
+          'Google AI Studio compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다.'
+        ],
+        ['다양한 화면 크기에서 CameraX preview의 aspect ratio와 rotation 동작을 확인합니다.', 'HAL API 변경 소식은 아니므로 request/result나 vendor tag 변경으로 해석하지 않습니다.'],
+        ['AI Studio prototype의 Camera API 권한 선언을 확인합니다.', '이 소스만으로 HAL/driver 변경이나 vendor camera pipeline 영향을 주장하지 않습니다.']
+      ]
+    }),
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /validator-token prose|API\/component\/date|stream\/metadata/.test(error)));
+});
+
+test('public newsletter validator allows natural technical prose with concrete targets', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown({
+      checkpoints: [
+        [
+          'CameraX version과 published date가 release note에 명시되어 있는지 확인합니다.',
+          'test log와 latency metric을 비교해 preview regression 여부를 확인합니다.'
+        ],
+        ['CameraX preview가 회전 후 aspect ratio를 유지하는지 확인합니다.', 'HAL API 변경 소식은 아니므로 request/result나 vendor tag 변경으로 해석하지 않습니다.'],
+        ['AI Studio prototype의 Camera API 권한 선언을 확인합니다.', '이 소스만으로 HAL/driver 변경이나 vendor camera pipeline 영향을 주장하지 않습니다.']
+      ]
+    }),
+    html: html()
+  });
+
+  assert.deepEqual(errors, []);
+});
+
+test('public newsletter validator fails numbered article without reader checkpoints', () => {
+  const broken = markdown().replace(
+    [
+      '### 확인할 점',
+      '',
+      '- 대표 기기 1대에서 Camera ITS preview latency를 확인합니다.',
+      '- CameraX path의 stream metadata 차이를 비교합니다.',
+      ''
+    ].join('\n'),
+    ''
+  );
+
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: broken,
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /missing reader checkpoints/.test(error)));
 });
 
 test('public newsletter validator rejects long English prose in article paragraphs', () => {

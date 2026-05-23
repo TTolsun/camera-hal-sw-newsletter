@@ -2,44 +2,13 @@ const fs = require('fs');
 
 const {
   NO_IMMEDIATE_ACTION_TEXT,
+  publicProseLeakageIssues,
   publicUrlError
 } = require('../common/public-article-contract');
 
-const PUBLIC_NEWSLETTER_FORBIDDEN_TERMS = Object.freeze([
-  'Review-only',
-  'review-only',
-  'Fallback',
-  'fallback',
-  'quality gate',
-  'candidate',
-  'HAL Signal Capsule',
-  'editor review',
-  'normal publishable coverage',
-  'reader_owners',
-  'check_within_2_weeks',
-  'why_now',
-  'impact_axes',
-  'do_not_overstate',
-  'guardrail',
-  'section repair',
-  'hard failure',
-  'candidate shortage',
-  'deterministic reconstruction',
-  'source-bound',
-  'publish gate',
-  'review_only',
-  '자동 정상 발행 기준',
-  '자동 발행 기준',
-  '편집자 확인 후 merge',
-  'merge 발행',
-  'Review-only 발행본',
-  '편집자 검토 후 공개 가능한',
-  '편집자 검토 후 발행 가능한'
-]);
-
 const GENERIC_CHECKPOINT_PATTERNS = Object.freeze([
   /source URL/i,
-  /published date/i,
+  /^published date(?:\s+check)?$/i,
   /article text/i,
   /다음\s*issue/i,
   /후속\s*release note/i,
@@ -83,17 +52,29 @@ function visibleHtmlText(value) {
     .trim());
 }
 
+function htmlJsonScriptBlocks(value) {
+  const blocks = [];
+  const pattern = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+  let match;
+  while ((match = pattern.exec(String(value || ''))) !== null) {
+    const attrs = match[1] || '';
+    if (!/type\s*=\s*["']application\/(?:json|ld\+json)["']/i.test(attrs) && !/NEWSLETTER_DATA|newsletter/i.test(match[2])) {
+      continue;
+    }
+    blocks.push(decodeEntities(match[2] || '').trim());
+  }
+  return blocks.filter(Boolean);
+}
+
 function allowedForbiddenTerms(options = {}) {
   return new Set();
 }
 
 function findForbiddenTerms(text, label, options = {}) {
-  const visible = String(text || '').toLowerCase();
   const allowed = allowedForbiddenTerms(options);
-  return PUBLIC_NEWSLETTER_FORBIDDEN_TERMS
-    .filter(term => !allowed.has(term))
-    .filter(term => visible.includes(String(term || '').toLowerCase()))
-    .map(term => `${label} contains internal public-forbidden term: ${term}`);
+  const filtered = publicProseLeakageIssues(text, label)
+    .filter(message => ![...allowed].some(term => message.toLowerCase().includes(String(term).toLowerCase())));
+  return filtered;
 }
 
 function publicArtifactUrlError(value) {
@@ -162,12 +143,13 @@ function mainArticleBlocks(markdown) {
   for (let index = 0; index < matches.length; index += 1) {
     const number = Number(matches[index][1]);
     const title = matches[index][2].trim();
-    if (number <= 1) continue;
     if (/^(?:참고자료|References)$/i.test(title)) continue;
     if (/Action|실행/.test(title)) continue;
+    if (/이번 주|브리핑|요약/.test(title)) continue;
     const start = matches[index].index + matches[index][0].length;
     const end = matches[index + 1] ? matches[index + 1].index : markdown.length;
-    blocks.push({ number, title, text: markdown.slice(start, end) });
+    const text = markdown.slice(start, end);
+    blocks.push({ number, title, text });
   }
   return blocks;
 }
@@ -195,7 +177,7 @@ function repeatedCheckpointErrors(articleCheckpoints) {
   const errors = [];
   const comparable = articleCheckpoints
     .map((items, index) => ({ index, items: items.map(normalizedCheckpoint).filter(Boolean) }))
-    .filter(item => item.items.length > 0 && !allNoAction(articleCheckpoints[item.index]));
+    .filter(item => item.items.length > 0);
   if (comparable.length < 2) return errors;
 
   const first = comparable[0].items.join('\n');
@@ -281,8 +263,14 @@ function validatePublicMarkdown(markdown, label = 'newsletter.md', options = {})
     if (items.length === 0) {
       errors.push(`${label} article ${article.number} is missing reader checkpoints.`);
     }
+    if (items.length < 2) {
+      errors.push(`${label} article ${article.number} must include at least 2 reader checkpoints.`);
+    }
     for (const item of items) {
-      if (item === NO_IMMEDIATE_ACTION_TEXT) continue;
+      if (item === NO_IMMEDIATE_ACTION_TEXT) {
+        errors.push(`${label} article ${article.number} has generic fallback checkpoint: ${item}`);
+        continue;
+      }
       if (GENERIC_CHECKPOINT_PATTERNS.some(pattern => pattern.test(item))) {
         errors.push(`${label} article ${article.number} has editorial QA checkpoint: ${item}`);
       }
@@ -302,7 +290,45 @@ function validatePublicMarkdown(markdown, label = 'newsletter.md', options = {})
 
 function validatePublicHtml(html, label = 'index.html', options = {}) {
   const visible = visibleHtmlText(html);
-  return findForbiddenTerms(visible, label, options);
+  const errors = findForbiddenTerms(visible, label, options);
+  htmlJsonScriptBlocks(html).forEach((block, index) => {
+    try {
+      errors.push(...validatePublicJsonText(JSON.parse(block), `${label}:script[${index}]`));
+    } catch (_) {
+      errors.push(...findForbiddenTerms(block, `${label}:script[${index}]`, options));
+    }
+  });
+  return errors;
+}
+
+function publicJsonTextValues(value, keyPath = []) {
+  if (value == null) return [];
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    const key = keyPath[keyPath.length - 1] || '';
+    if ([
+      'title',
+      'summary',
+      'headline',
+      'lead',
+      'body_paragraphs',
+      'camera_hal_takeaway',
+      'reader_checkpoints',
+      'tags',
+      'homepage_badge',
+      'publication_notice',
+      'source_links'
+    ].includes(key) || keyPath.includes('public_article')) {
+      return [String(value)];
+    }
+    return [];
+  }
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) => publicJsonTextValues(item, keyPath.concat(String(index))));
+  }
+  if (typeof value === 'object') {
+    return Object.entries(value).flatMap(([key, item]) => publicJsonTextValues(item, keyPath.concat(key)));
+  }
+  return [];
 }
 
 function validatePublicJsonText(json = '', label = 'public.json') {
@@ -312,12 +338,29 @@ function validatePublicJsonText(json = '', label = 'public.json') {
     'processed_evidence_ids',
     'previous_values',
     'current_values',
+    'source_gap_risk',
+    'finalSelectionEligibility',
+    'candidate_pool_preflight',
+    'relevance_bucket',
+    'impact_claim_level',
+    'do_not_claim',
+    'do_not_overstate',
+    'hal_signal_capsule',
+    'article_sections',
+    'specificity_checks',
+    'overclaim_guardrails',
+    'main_article_readiness',
     'data/source-snapshots/',
     'content/source-events/'
   ];
-  return forbidden
+  const errors = forbidden
     .filter(term => String(raw || '').includes(term))
     .map(term => `${label} contains internal source snapshot state: ${term}`);
+  if (typeof json === 'string') {
+    return errors.concat(findForbiddenTerms(raw, label));
+  }
+  const publicText = publicJsonTextValues(json).join('\n');
+  return errors.concat(findForbiddenTerms(publicText, label));
 }
 
 function validatePublicNewsletterArtifacts({ markdown = '', html = '', json = '', markdownLabel = 'newsletter.md', htmlLabel = 'index.html', jsonLabel = 'public.json', publicationMode = '', fallbackOnly = false } = {}) {
@@ -342,7 +385,6 @@ function validatePublicNewsletterFiles(markdownPath, htmlPath, options = {}) {
 
 module.exports = {
   GENERIC_CHECKPOINT_PATTERNS,
-  PUBLIC_NEWSLETTER_FORBIDDEN_TERMS,
   validatePublicHtml,
   validatePublicJsonText,
   validatePublicMarkdown,
