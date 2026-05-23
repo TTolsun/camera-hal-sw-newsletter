@@ -145,10 +145,10 @@ function mainArticleBlocks(markdown) {
     const title = matches[index][2].trim();
     if (/^(?:참고자료|References)$/i.test(title)) continue;
     if (/Action|실행/.test(title)) continue;
+    if (/이번 주|브리핑|요약/.test(title)) continue;
     const start = matches[index].index + matches[index][0].length;
     const end = matches[index + 1] ? matches[index + 1].index : markdown.length;
     const text = markdown.slice(start, end);
-    if (!/###\s+확인할 점/.test(text)) continue;
     blocks.push({ number, title, text });
   }
   return blocks;

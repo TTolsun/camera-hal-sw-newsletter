@@ -237,6 +237,44 @@ test('public newsletter validator rejects generic fallback checkpoint even when 
   assert.ok(errors.some(error => /generic fallback checkpoint/.test(error)));
 });
 
+test('public newsletter validator rejects validator-token placeholder prose', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown({
+      checkpoints: [
+        [
+          'Google AI Studio 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.',
+          'Google AI Studio compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다.'
+        ],
+        ['다양한 화면 크기에서 CameraX preview의 aspect ratio와 rotation 동작을 확인합니다.', 'HAL API 변경 소식은 아니므로 request/result나 vendor tag 변경으로 해석하지 않습니다.'],
+        ['AI Studio prototype의 Camera API 권한 선언을 확인합니다.', '이 소스만으로 HAL/driver 변경이나 vendor camera pipeline 영향을 주장하지 않습니다.']
+      ]
+    }),
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /validator-token prose|API\/component\/date|stream\/metadata/.test(error)));
+});
+
+test('public newsletter validator fails numbered article without reader checkpoints', () => {
+  const broken = markdown().replace(
+    [
+      '### 확인할 점',
+      '',
+      '- 대표 기기 1대에서 Camera ITS preview latency를 확인합니다.',
+      '- CameraX path의 stream metadata 차이를 비교합니다.',
+      ''
+    ].join('\n'),
+    ''
+  );
+
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: broken,
+    html: html()
+  });
+
+  assert.ok(errors.some(error => /missing reader checkpoints/.test(error)));
+});
+
 test('public newsletter validator rejects long English prose in article paragraphs', () => {
   const errors = validatePublicNewsletterArtifacts({
     markdown: markdown().replace(

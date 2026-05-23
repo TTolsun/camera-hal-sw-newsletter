@@ -185,6 +185,23 @@ const CONTEXTUAL_FAIL_PHRASES = Object.freeze([
   'internal guardrail output'
 ]);
 
+const PUBLIC_PROSE_PLACEHOLDER_PATTERNS = Object.freeze([
+  { pattern: /\bAPI\/component\/date\b/i, reason: 'api_component_date_placeholder' },
+  { pattern: /\bsource title\/domain\/version\/date\b/i, reason: 'source_identity_placeholder' },
+  { pattern: /\btest\/log\/metric\/API\b/i, reason: 'test_log_metric_api_placeholder' },
+  { pattern: /\bbuild\/test\/debug metric\b/i, reason: 'build_test_debug_metric_placeholder' },
+  { pattern: /\bstream\/metadata\b/i, reason: 'stream_metadata_placeholder' },
+  { pattern: /\bcompatibility test scenario\b/i, reason: 'compatibility_test_scenario_placeholder' },
+  { pattern: /관련\s+API\/component/i, reason: 'related_api_component_placeholder' },
+  { pattern: /관련\s+API\/component\/date/i, reason: 'related_api_component_date_placeholder' },
+  { pattern: /현재\s+device matrix와\s+맞는지/i, reason: 'device_matrix_fit_placeholder' },
+  { pattern: /compatibility test scenario\s+또는\s+stream\/metadata/i, reason: 'test_scenario_stream_metadata_placeholder' },
+  { pattern: /stream\/metadata\s+확인\s+항목/i, reason: 'stream_metadata_check_item_placeholder' },
+  { pattern: /확인\s+항목만\s+추적합니다/i, reason: 'check_item_tracking_placeholder' },
+  { pattern: /source\s+범위에서[^.!?。！？\r\n]*확인\s+항목을\s+점검합니다/i, reason: 'source_scope_check_item_placeholder' },
+  { pattern: /release note 범위에서[^.!?。！？\r\n]*API\/component\/date/i, reason: 'release_note_placeholder_template' }
+]);
+
 function normalizedLeakText(value) {
   return compactText(value)
     .replace(/&amp;/g, '&')
@@ -268,6 +285,7 @@ function contextualLeakReasons(value) {
 
 function publicProseLeakageIssues(value, label = 'public text') {
   const lower = lowerLeakText(value);
+  const normalized = normalizedLeakText(value);
   const issues = [];
   for (const term of HARD_PUBLIC_IDENTIFIERS) {
     if (lower.includes(String(term).toLowerCase())) {
@@ -281,6 +299,11 @@ function publicProseLeakageIssues(value, label = 'public text') {
   }
   for (const reason of contextualLeakReasons(value)) {
     issues.push(`${label} contains contextual internal term: ${reason}`);
+  }
+  for (const { pattern, reason } of PUBLIC_PROSE_PLACEHOLDER_PATTERNS) {
+    if (pattern.test(normalized)) {
+      issues.push(`${label} contains validator-token prose instead of reader-facing prose: ${reason}`);
+    }
   }
   return issues;
 }
@@ -473,15 +496,76 @@ function fallbackParagraphs(section = {}) {
   return paragraphs.slice(0, 4);
 }
 
+function sectionBucket(section = {}) {
+  return compactText(section.relevance_bucket || section.bucket || section.impact_claim_level || section.category);
+}
+
+function publicComponentText(section = {}) {
+  return publicSafeText(
+    section.api_or_component ||
+    section.apiOrComponent ||
+    section.component ||
+    section.category ||
+    section.headline ||
+    'Camera 관련 항목'
+  );
+}
+
+function buildToolingFallbackCheckpoints(section = {}) {
+  const headline = `${section.headline || section.category || ''}`;
+  if (/AI Studio/i.test(headline)) {
+    return [
+      'AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.',
+      '이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
+    ];
+  }
+  return [
+    'native tooling이나 prototype 코드가 Camera API를 호출한다면, Camera 권한과 preview/capture 호출 흐름만 확인합니다.',
+    '이 소스는 production HAL runtime 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
+  ];
+}
+
+function buildCameraApiFallbackCheckpoints() {
+  return [
+    'CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.',
+    '이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.'
+  ];
+}
+
+function buildDirectHalFallbackCheckpoints(section = {}) {
+  const component = publicComponentText(section);
+  return [
+    `${component}가 request/result, stream configuration, buffer lifecycle 중 어떤 HAL 계약과 연결되는지 source 근거 안에서 확인합니다.`,
+    'source가 직접 뒷받침하지 않는 driver branch, vendor tag, pipeline 변경 주장은 분리합니다.'
+  ];
+}
+
+function buildLowImpactFallbackCheckpoints(section = {}) {
+  const component = publicComponentText(section);
+  return [
+    `${component}와 직접 연결된 공개 출처의 Camera API나 component 변화만 확인합니다.`,
+    'HAL/driver 변경 근거가 없으면 request/result나 vendor tag 변화로 해석하지 않습니다.'
+  ];
+}
+
 function fallbackCheckpoints(section = {}) {
   const actions = normalizePublicSafeStringArray(section.action_items)
     .filter(item => !/source URL|published date|Publication|Direct HAL behavior claim|watch\/supporting context|다음 issue|후속 release note/i.test(item));
   if (actions.length >= 2) return actions;
-  const headline = publicSafeText(section.headline || section.category || 'Camera HAL 관련 항목');
+  const bucket = sectionBucket(section);
+  let generated;
+  if (/cpp_ai_tooling|tooling|native/i.test(bucket)) {
+    generated = buildToolingFallbackCheckpoints(section);
+  } else if (/android_platform_camera_adjacent|android_camera_api|android_camera|multimedia|CameraX|Camera2/i.test(bucket)) {
+    generated = buildCameraApiFallbackCheckpoints(section);
+  } else if (/direct|camera_driver|image_pipeline|direct_aosp_camera|camera_stack/i.test(bucket)) {
+    generated = buildDirectHalFallbackCheckpoints(section);
+  } else {
+    generated = buildLowImpactFallbackCheckpoints(section);
+  }
   return [
     ...actions,
-    `${headline}의 source 범위에서 CameraX/Camera2 compatibility 또는 stream metadata 확인 항목을 점검합니다.`,
-    `${headline}을 직접 HAL/driver 변경으로 확대 해석하지 않고 공개 출처의 release note 범위로 제한합니다.`
+    ...generated
   ].slice(0, 3);
 }
 
@@ -535,11 +619,11 @@ const CHECKPOINT_GENERIC_TOKENS = new Set([
   '공유'
 ]);
 
-const HAL_VALIDATION_TARGET_PATTERN = /request\/result|request|result|metadata|stream configuration|stream|buffer lifecycle|buffer|vendor tag|capture session|CameraX interop|Camera2 compatibility|CameraX|Camera2|CTS|VTS|device matrix|app compatibility|dependency version|release note|branch|owner|test scenario|log|metric|preview latency|frame|format negotiation|HAL\/driver|driver|vendor|pipeline|codec|ISP|SoC/i;
-const SOURCE_BOUND_LIMITATION_PATTERN = /HAL\/driver 변경 근거는 없음|앱\/API 영향 범위로 제한|release note 범위 내 확인|직접 HAL|확대 해석하지|과장하지|source 범위|공개 출처|근거는 없음|범위로 제한/i;
+const HAL_VALIDATION_TARGET_PATTERN = /request\/result|request|result|metadata|stream configuration|stream metadata checks|stream|buffer lifecycle|buffer|vendor tag|capture session|Camera ITS|CameraX interop|Camera2 compatibility|CameraX|Camera2|Camera API|camera permission|권한 선언|preview\/capture|aspect ratio|rotation|crop|CTS|VTS|device matrix|app compatibility|dependency version|release note|branch|owner|test scenario|log|metric|preview latency|frame|format negotiation|HAL\/driver|driver|vendor|pipeline|codec|ISP|SoC/i;
+const SOURCE_BOUND_LIMITATION_PATTERN = /HAL\/driver 변경 근거는 없음|HAL API 변경 소식은 아니므로|직접 언급하지 않으므로|변경 신호가 아니라|앱\/API 영향 범위로 제한|release note 범위 내 확인|직접 HAL|확대 해석하지|해석하지|주장하지|과장하지|source 범위|공개 출처|근거는 없음|범위로 제한/i;
 const ACTION_VERB_PATTERN = /확인|비교|점검|추적|분리|테스트|추가|검증|review|compare|check|track|test|measure|profile|inspect|assign/i;
-const ACTION_TARGET_PATTERN = /log|CTS|VTS|device matrix|compatibility|release note|branch|owner|test scenario|metric|latency|frame|stream|buffer|metadata|vendor tag|capture session|CameraX|Camera2|HAL|driver|API|build flag|dependency|performance|preview|format|pipeline/i;
-const NON_GENERIC_ACTION_TARGET_PATTERN = /log|CTS|VTS|device matrix|compatibility test|test scenario|metric|latency|frame|stream|buffer|metadata|vendor tag|capture session|preview regression|preview latency|release note|branch|owner|dependency version|build flag|performance|format negotiation|pipeline|codec|ISP|SoC/i;
+const ACTION_TARGET_PATTERN = /log|CTS|VTS|Camera ITS|device matrix|compatibility|release note|branch|owner|test scenario|metric|latency|frame|stream|buffer|metadata|vendor tag|capture session|CameraX|Camera2|Camera API|권한|사용 방식|preview\/capture|aspect ratio|rotation|crop|HAL|driver|API|build flag|dependency|performance|preview|format|pipeline/i;
+const NON_GENERIC_ACTION_TARGET_PATTERN = /Camera ITS|Camera API|권한 선언|사용 방식|preview\/capture|aspect ratio|rotation|crop|request\/result|stream metadata checks|stream configuration|buffer lifecycle|vendor tag|capture session|preview regression|preview latency|format negotiation|dependency version|build flag|performance|pipeline|codec|ISP|SoC|log|metric|latency|frame/i;
 
 function wordTokens(value) {
   return String(value || '')
@@ -573,6 +657,7 @@ function isGenericCheckpoint(value) {
 
 function isConcreteCheckpoint(value, section = {}) {
   if (isGenericCheckpoint(value)) return false;
+  if (publicProseLeakageIssues(value).length > 0) return false;
   const normalized = compactText(value);
   const tokens = wordTokens(value);
   const specific = sourceSpecificTokens(section);

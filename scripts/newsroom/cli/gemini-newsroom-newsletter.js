@@ -199,6 +199,12 @@ function articleSectionContractPrompt() {
     'article_sections.background_context는 AOSP Camera / Camera HAL / driver / SoC platform reader에게 필요한 맥락을 설명하는 string이어야 합니다.',
     'article_sections.hal_driver_impact는 제공된 source가 직접 뒷받침하지 않는 runtime/API behavior를 주장하지 않으면서 Camera HAL, driver, stream, buffer, metadata, native tooling, SoC platform 관점의 실무 영향을 해석하는 string이어야 합니다.',
     'article_sections.action_items는 test, log, metric, device class, API/component, stream combination, owner, PoC handoff 중 하나 이상을 명명하는 구체적 action 배열이어야 합니다.',
+    'Action target scope:',
+    '- direct_camera_hal: request/result, metadata, stream, buffer, vendor tag, HAL contract를 사용할 수 있습니다.',
+    '- android_camera_api: CameraX/Camera2, preview/capture, permission, app compatibility, Surface 연결 수준으로 제한하세요.',
+    '- android_multimedia_camera_output: media output path, codec, capture/export, app-visible behavior 수준으로 제한하세요.',
+    '- cpp_ai_tooling_fallback: build/test/debug workflow, sample/prototype app, Camera API usage 수준으로 제한하세요. HAL runtime, stream, buffer, metadata 변경을 기본 action target으로 만들지 마세요.',
+    '- reference_only/watchlist: 직접 조치 문장이 아니라 관찰/제한 문장으로만 작성하세요.',
     'article_sections.team_share_points는 팀 리뷰 때 공유할 핵심 takeaway string이어야 합니다.',
     'do_not_claim은 source-backed fact나 public article content로 render하지 말고 claim guardrail로만 사용하세요.',
     'HAL Signal contract: 모든 main article은 why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate key만 가진 hal_signal_capsule을 포함해야 합니다.',
@@ -210,19 +216,15 @@ function articleSectionContractPrompt() {
 
 function publicArticleContractPrompt() {
   return [
-    'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI article은 body_paragraphs에서 camera-facing takeaway 전에 짧은 배경 문단을 먼저 포함하세요.',
-    'Public article contract: 새로 생성되는 editor, repair, completion output의 모든 main article은 public_article을 포함해야 합니다.',
-    'public_article은 headline, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, source_links를 포함해야 합니다.',
-    'Gemini output은 public_article 작성 후보로만 사용됩니다. relevance_bucket, impact_claim_level, finalSelectionEligibility, source_gap_risk, main_article_readiness, do_not_claim 같은 deterministic judgment fields는 selected article capsule과 deterministic selection state에서만 가져옵니다.',
-    'public writer의 source of truth는 selected article capsule입니다. raw source를 재판정하거나 HAL impact / source eligibility / publishability 판단을 다시 쓰지 마세요.',
-    'article_sections와 hal_signal_capsule은 validation/editorial diagnostics 용도로만 사용하세요. 독자가 보는 article prose로 render하지 마세요.',
-    'public_article은 validation report나 verified_facts checklist가 아니라 한국어 독자-facing technical newsletter article로 작성하세요.',
-    'body_paragraphs는 verified facts를 바탕으로 한 자연스러운 설명 문단을 최소 2개 포함해야 합니다.',
-    'source_links는 non-empty title 값을 가진 public http/https URLs만 포함해야 합니다. source_role은 primary 또는 seed_evidence만 쓰세요. local path, .tmp path, GitHub Actions artifact URL, editorial-only role, related_context URL은 사용하지 마세요.',
-    'source_links URL은 selected capsule의 primary 또는 seed evidence URL만 사용하세요. source_links를 새로 만들지 마세요.',
-    'public_article에는 internal public-forbidden terms인 source_gap_risk, finalSelectionEligibility, relevance_bucket, impact_claim_level, do_not_claim, article_sections, hal_signal_capsule, Fallback, Review-only, quality gate, HAL Signal Capsule, why_now, impact_axes, do_not_overstate, guardrail, section repair를 노출하지 마세요.',
-    'do_not_claim에 있는 claim은 우회 표현으로도 쓰지 마세요.',
-    'public_article.reader_checkpoints는 최소 2개 concrete 항목이어야 합니다. source title/domain/version/date에서 온 구체 token, Camera HAL validation target, source-bound limitation, action verb + target 중 하나를 포함해야 하며 고정 generic 문구를 반복하지 마세요.'
+    'Public article contract: 모든 main article은 public_article을 포함해야 합니다.',
+    'public_article fields: headline, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, source_links.',
+    'Gemini는 public prose writer입니다. selected article capsule과 deterministic metadata 안에서 독자 관점, 문장 구성, checkpoint 후보, source-bound 해석 문장을 작성할 수 있습니다.',
+    'Gemini는 deterministic judgment를 바꿀 수 없습니다: HAL impact level, source eligibility, source_gap_risk, main/supporting 승격, source link, do_not_claim.',
+    'public_article은 한국어 독자-facing technical newsletter prose로 작성하세요. validation report, checklist, schema/debug field name을 노출하지 마세요.',
+    'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
+    'reader_checkpoints는 최소 2개이며, 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하세요.',
+    'API/component/date, stream/metadata, compatibility test scenario처럼 validator token을 조합한 문장을 쓰지 마세요.',
+    'source가 HAL/driver 변경을 직접 말하지 않으면 vendor pipeline, stream, metadata, buffer 변경으로 확대하지 마세요.'
   ].join('\n');
 }
 

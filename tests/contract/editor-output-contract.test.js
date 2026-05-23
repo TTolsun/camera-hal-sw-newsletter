@@ -1377,11 +1377,44 @@ test('editor output contract rejects hallucinated public source links', () => {
 
 test('reader checkpoint concrete contract requires actionable source or validation target combinations', () => {
   assert.equal(isConcreteCheckpoint('CameraX 관련 내용을 확인합니다.', section(1)), false);
-  assert.equal(isConcreteCheckpoint('CameraX preview regression을 device matrix에서 비교합니다.', section(1)), true);
+  assert.equal(isConcreteCheckpoint('CameraX preview의 aspect ratio와 rotation 동작이 기존 앱과 달라지지 않는지 확인합니다.', section(1)), true);
+  assert.equal(isConcreteCheckpoint('CameraX / Android camera APIs 관련 API/component/date를 확인합니다.', section(1)), false);
   assert.equal(
     isConcreteCheckpoint('HAL/driver 변경 근거는 없음으로 제한하고 Camera2 compatibility 범위만 확인합니다.', section(1)),
     true
   );
+});
+
+test('public_article prose quality rejects validator-token checkpoint placeholders', () => {
+  const draftSection = section(1, {
+    public_article: {
+      ...section(1).public_article,
+      camera_hal_takeaway: 'CameraX preview의 앱 호환성만 확인하고 HAL/driver 변경으로 해석하지 않습니다.',
+      reader_checkpoints: [
+        'Google AI Studio 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.',
+        'Google AI Studio compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다.'
+      ]
+    }
+  });
+
+  const issues = validatePublicArticle(draftSection, 0);
+
+  assert.ok(issues.some(issue => /validator-token prose/.test(issue.message || '')));
+});
+
+test('public_article prose quality accepts reader-facing camera checkpoints', () => {
+  const draftSection = section(1, {
+    public_article: {
+      ...section(1).public_article,
+      camera_hal_takeaway: '이 소식은 HAL API 변경이 아니라 app/framework 계층의 참고 신호입니다.',
+      reader_checkpoints: [
+        'AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.',
+        '이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
+      ]
+    }
+  });
+
+  assert.deepEqual(validatePublicArticle(draftSection, 0), []);
 });
 
 test('editor output contract rejects article_sections keys outside normalized contract', () => {

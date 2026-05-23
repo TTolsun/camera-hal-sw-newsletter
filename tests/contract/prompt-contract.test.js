@@ -55,6 +55,13 @@ test('article section contract prompt fixes the five normalized keys and guardra
   assert.match(prompt, /HAL 해석/);
   assert.match(prompt, /runtime\/API behavior/);
   assert.match(prompt, /구체적 action/);
+  assert.match(prompt, /Action target scope:/);
+  assert.match(prompt, /direct_camera_hal: request\/result, metadata, stream, buffer, vendor tag, HAL contract/);
+  assert.match(prompt, /android_camera_api: CameraX\/Camera2, preview\/capture, permission, app compatibility, Surface 연결/);
+  assert.match(prompt, /android_multimedia_camera_output: media output path, codec, capture\/export, app-visible behavior/);
+  assert.match(prompt, /cpp_ai_tooling_fallback: build\/test\/debug workflow, sample\/prototype app, Camera API usage/);
+  assert.match(prompt, /HAL runtime, stream, buffer, metadata 변경을 기본 action target으로 만들지 마세요/);
+  assert.match(prompt, /reference_only\/watchlist: 직접 조치 문장이 아니라 관찰\/제한 문장/);
   assert.match(prompt, /verified_facts에 복사하면 안 됩니다/);
   assert.match(prompt, /do_not_claim은 source-backed fact나 public article content로 render하지 말고/);
 });
@@ -64,24 +71,34 @@ test('public article contract prompt keeps public output separate from diagnosti
 
   for (const marker of [
     'public_article',
-    'article_sections',
-    'hal_signal_capsule',
-    'HAL Signal Capsule',
-    'Fallback',
-    'Review-only',
-    'quality gate',
-    'source_links'
+    'headline',
+    'lead',
+    'body_paragraphs',
+    'camera_hal_takeaway',
+    'reader_checkpoints',
+    'source_links',
+    'selected article capsule',
+    'deterministic metadata',
+    'deterministic judgment',
+    'HAL impact level',
+    'source eligibility',
+    'source_gap_risk',
+    'main/supporting 승격',
+    'source link',
+    'do_not_claim'
   ]) {
     assert.match(prompt, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   assert.match(prompt, /독자-facing/);
-  assert.match(prompt, /verified_facts checklist/);
-  assert.match(prompt, /CameraX-adjacent/);
-  assert.match(prompt, /짧은 배경 문단/);
-  assert.match(prompt, /최소 2개 concrete/);
-  assert.match(prompt, /selected article capsule/);
-  assert.match(prompt, /deterministic judgment fields/);
-  assert.match(prompt, /고정 generic 문구를 반복하지 마세요/);
+  assert.match(prompt, /validation report, checklist, schema\/debug field name/);
+  assert.match(prompt, /primary 또는 seed evidence URL/);
+  assert.match(prompt, /최소 2개/);
+  assert.match(prompt, /독자가 실제로 확인할 행동/);
+  assert.match(prompt, /source 범위 제한/);
+  assert.match(prompt, /API\/component\/date/);
+  assert.match(prompt, /stream\/metadata/);
+  assert.match(prompt, /compatibility test scenario/);
+  assert.match(prompt, /vendor pipeline, stream, metadata, buffer/);
   assert.doesNotMatch(prompt, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
 });
 
@@ -150,6 +167,7 @@ test('public article prompt does not force internal triage fallback prose', () =
   const source = promptHostSource();
 
   assert.doesNotMatch(source, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
-  assert.match(source, /public_article에는 internal public-forbidden terms/);
-  assert.match(source, /public_article\.reader_checkpoints는 최소 2개 concrete/);
+  assert.match(source, /validation report, checklist, schema\/debug field name을 노출하지 마세요/);
+  assert.match(source, /reader_checkpoints는 최소 2개/);
+  assert.match(source, /validator token을 조합한 문장을 쓰지 마세요/);
 });
