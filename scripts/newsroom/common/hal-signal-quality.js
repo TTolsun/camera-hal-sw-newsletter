@@ -54,6 +54,8 @@ const HARD_BLOCKER_REASON_CODE_BY_BLOCKER = Object.freeze({
   fallback_promotion_missing_reason: 'fallback_promotion_not_allowed',
   soc_platform_missing_camera_pipeline_link: 'soc_camera_pipeline_link_missing'
 });
+const CONCRETE_TWO_WEEK_ACTION_PATTERN =
+  /test|log|metric|measure|CTS|VTS|Camera ITS|stream|buffer|metadata|owner|API|PoC/i;
 
 const CONSERVATIVE_DO_NOT_OVERSTATE =
   '출처 근거를 넘어 기기 적용, HAL API 변경, 양산 영향으로 확대 해석하지 않는다.';
@@ -607,29 +609,7 @@ function canonicalizeHalSignalCapsule(capsule = {}) {
   };
 }
 
-function sourceDateValues(value = {}) {
-  const fields = [
-    value.evidence_date,
-    value.source_date,
-    value.published_at,
-    value.publishedAt,
-    value.published_date,
-    value.effective_date,
-    value.evidence_summary,
-    value.source_verification_notes,
-    objectValue(value.source_extraction).date,
-    objectValue(value.source_extraction).published_at,
-    objectValue(value.source_extraction).publishedAt,
-    objectValue(value.source_extraction).published_date,
-    objectValue(value.source_extraction).effective_date,
-    ...ensureArray(value.sources).flatMap(source => [
-      source?.published_at,
-      source?.publishedAt,
-      source?.published_date,
-      source?.date,
-      source?.effective_date
-    ])
-  ];
+function dateValuesFromFields(fields = []) {
   return unique(fields
     .map(item => {
       const match = text(item).match(/\b\d{4}-\d{2}-\d{2}\b/);
@@ -638,6 +618,36 @@ function sourceDateValues(value = {}) {
     .filter(Boolean))
     .sort()
     .reverse();
+}
+
+function sourceDateValues(value = {}) {
+  const sourceExtraction = objectValue(value.source_extraction);
+  const structuredFields = [
+    value.evidence_date,
+    value.source_date,
+    value.published_at,
+    value.publishedAt,
+    value.published_date,
+    value.effective_date,
+    sourceExtraction.date,
+    sourceExtraction.published_at,
+    sourceExtraction.publishedAt,
+    sourceExtraction.published_date,
+    sourceExtraction.effective_date,
+    ...ensureArray(value.sources).flatMap(source => [
+      source?.published_at,
+      source?.publishedAt,
+      source?.published_date,
+      source?.date,
+      source?.effective_date
+    ])
+  ];
+  const structuredDates = dateValuesFromFields(structuredFields);
+  if (structuredDates.length > 0) return structuredDates;
+  return dateValuesFromFields([
+    value.source_verification_notes,
+    sourceExtraction.source_verification_notes
+  ]);
 }
 
 function explicitImpactAxisResult(value = {}) {
@@ -720,12 +730,16 @@ function completeHalSignalCapsuleFromExistingFields(value = {}, options = {}) {
   const actionItems = ensureArray(articleSections(value).action_items).length > 0
     ? ensureArray(articleSections(value).action_items)
     : ensureArray(value.action_items);
-  const fallbackAction = actionItems.find(item => /test|log|metric|measure|CTS|VTS|Camera ITS|stream|buffer|metadata|owner|API|PoC/i.test(text(item))) ||
-    actionItems[0];
+  const concreteAction = actionItems.find(item => CONCRETE_TWO_WEEK_ACTION_PATTERN.test(text(item)));
+  const fallbackAction = concreteAction || (strictEditorRepair ? '' : actionItems[0]);
   const checkWithinTwoWeeks = text(raw.check_within_2_weeks) ||
     text(fallbackAction) ||
     (strictEditorRepair ? '' : '2주 안에 camera owner를 지정해 stream, buffer, metadata, test 영향 여부를 확인합니다.');
-  if (!checkWithinTwoWeeks) reasonCodes.push('missing_action_items');
+  if (!checkWithinTwoWeeks) {
+    reasonCodes.push(strictEditorRepair && actionItems.length > 0
+      ? 'missing_concrete_two_week_check'
+      : 'missing_action_items');
+  }
 
   const datedSources = sourceDateValues(value);
   const whyNow = text(raw.why_now) || (datedSources.length > 0

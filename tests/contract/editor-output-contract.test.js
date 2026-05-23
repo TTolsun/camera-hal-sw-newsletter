@@ -809,6 +809,7 @@ test('semantic repair deterministically restores legacy sections and HAL Signal 
   const firstSection = section(1, {
     article_sections: undefined,
     hal_signal_capsule: undefined,
+    action_items: ['Run Camera ITS and stream metadata checks for Headline 1 within 2 weeks.'],
     sources: [{
       title: 'Source 1',
       url: 'https://example.com/source-1',
@@ -843,7 +844,7 @@ test('semantic repair deterministically restores legacy sections and HAL Signal 
   assert.deepEqual(result.editor.sections[0].hal_signal_capsule, {
     why_now: 'Source date 2026-05-07 provides the dated context for this HAL validation signal.',
     reader_owners: ['camera_hal_owner', 'camera_test_owner'],
-    check_within_2_weeks: 'Action 1',
+    check_within_2_weeks: 'Run Camera ITS and stream metadata checks for Headline 1 within 2 weeks.',
     impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
     do_not_overstate: ['Do not overstate direct HAL impact.']
   });

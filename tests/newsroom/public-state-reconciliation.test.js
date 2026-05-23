@@ -456,6 +456,44 @@ test('archive reconciliation rejects duplicate ledger rows and missing table mar
   }
 });
 
+test('archive reconciliation anchors ledger parsing after the Ledger heading', () => {
+  const root = tempRoot('public-state-ledger-anchor-');
+  const date = '2026-05-23';
+  writePublicArtifacts(root, date);
+  writeFallbackPublicIssue(root, date);
+  writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
+  writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
+    '# Historical Newsletter Provenance Ledger',
+    '',
+    '## Summary',
+    '',
+    '| Date | Note |',
+    '| --- | --- |',
+    '| 2026-01-01 | This is not the provenance ledger table. |',
+    '',
+    '## Ledger',
+    '',
+    '| Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Cleanup context |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- |',
+    ''
+  ].join('\n'));
+
+  const result = reconcilePublicState({
+    root,
+    date,
+    status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+    write: true
+  });
+  const ledger = fs.readFileSync(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), 'utf8');
+  const summaryTableIndex = ledger.indexOf('| 2026-01-01 | This is not the provenance ledger table. |');
+  const ledgerHeadingIndex = ledger.indexOf('## Ledger');
+  const insertedRowIndex = ledger.indexOf(archiveLedgerRow(date));
+
+  assert.ok(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'));
+  assert.ok(summaryTableIndex > 0);
+  assert.ok(insertedRowIndex > ledgerHeadingIndex);
+});
+
 test('archive reconciliation rejects removed, unlisted, and non-current sidecar conflicts', () => {
   const date = '2026-05-23';
   const cases = [

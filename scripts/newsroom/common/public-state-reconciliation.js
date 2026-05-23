@@ -451,8 +451,11 @@ function canonicalLedgerRow(row = {}) {
 
 function parseLedgerTable(text, dateForError) {
   const lines = String(text || '').split(/\r?\n/);
-  const headerIndex = lines.findIndex(line => /^\|\s*Date\s*\|/.test(line));
-  if (headerIndex < 0 || !/^## Ledger\b/m.test(text)) {
+  const ledgerHeadingIndex = lines.findIndex(line => /^## Ledger\b/.test(line));
+  const headerIndex = ledgerHeadingIndex < 0
+    ? -1
+    : lines.findIndex((line, index) => index > ledgerHeadingIndex && /^\|\s*Date\s*\|/.test(line));
+  if (ledgerHeadingIndex < 0 || headerIndex < 0) {
     throw archiveConflictError({
       date: dateForError,
       file: ARCHIVE_LEDGER_PATH,

@@ -110,10 +110,51 @@ test('strict editor HAL Signal Capsule repair uses only dated source context and
   ]);
 });
 
+test('strict editor HAL Signal Capsule repair rejects generic action item fallback', () => {
+  const result = completeHalSignalCapsuleFromExistingFields(article({
+    hal_signal_capsule: undefined,
+    article_sections: {
+      verified_facts: ['CameraX 1.5.0 release date: 2026-05-01.'],
+      background_context: 'CameraX sits above camera2.',
+      hal_driver_impact: 'Review the source only when concrete HAL evidence appears.',
+      action_items: ['Review this topic.'],
+      team_share_points: 'No concrete two-week verification target is present.'
+    },
+    sources: [{
+      title: 'Source',
+      url: 'https://example.com/source',
+      date: '2026-05-02'
+    }]
+  }), {
+    mode: 'editor_deterministic_repair'
+  });
+
+  assert.equal(result.complete, false);
+  assert.ok(result.reason_codes.includes('missing_concrete_two_week_check'));
+});
+
+test('strict editor HAL Signal Capsule repair prefers structured source dates over prose dates', () => {
+  const result = completeHalSignalCapsuleFromExistingFields(article({
+    hal_signal_capsule: undefined,
+    evidence_summary: 'Team should review follow-up work by 2026-05-30.',
+    source_verification_notes: 'Source note mentions a later review date of 2026-05-31.',
+    sources: [{
+      title: 'Source',
+      url: 'https://example.com/source',
+      published_date: '2026-05-02'
+    }]
+  }), {
+    mode: 'editor_deterministic_repair'
+  });
+
+  assert.equal(result.complete, true);
+  assert.equal(result.capsule.why_now, 'Source date 2026-05-02 provides the dated context for this HAL validation signal.');
+});
+
 test('strict editor HAL Signal Capsule repair does not use generation date as why_now', () => {
   const result = completeHalSignalCapsuleFromExistingFields(article({
     hal_signal_capsule: undefined,
-    evidence_summary: 'No source date here.',
+    evidence_summary: 'Review follow-up by 2026-05-30, but this is not source publication context.',
     date: '2026-05-08',
     sources: [{
       title: 'Source',

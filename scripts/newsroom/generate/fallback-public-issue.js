@@ -132,7 +132,7 @@ function completeHalSignalSection(section = {}, candidate = {}) {
   const actionItems = ensureArray(section.article_sections?.action_items).length > 0
     ? ensureArray(section.article_sections.action_items)
     : ensureArray(section.action_items);
-  const hal_signal_capsule = completeHalSignalCapsuleFromExistingFields({
+  const capsuleCompletion = completeHalSignalCapsuleFromExistingFields({
     ...combined,
     article_sections: {
       ...(combined.article_sections || {}),
@@ -140,7 +140,11 @@ function completeHalSignalSection(section = {}, candidate = {}) {
     }
   }, {
     mode: 'fallback_public_issue'
-  }).capsule;
+  });
+  if (!capsuleCompletion.complete) {
+    throw new Error(`Fallback public issue produced incomplete hal_signal_capsule: ${capsuleCompletion.reason_codes.join(', ') || 'unknown'}`);
+  }
+  const hal_signal_capsule = capsuleCompletion.capsule;
   return {
     ...section,
     hal_impact_axes: ensureArray(section.hal_impact_axes).length > 0 ? section.hal_impact_axes : halSignal.hal_impact_axes,
