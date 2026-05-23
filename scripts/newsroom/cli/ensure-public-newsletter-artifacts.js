@@ -5,6 +5,12 @@ const {
   buildFallbackPublicIssue
 } = require('../generate/fallback-public-issue');
 const {
+  callLlmJson
+} = require('../llm/llm-client');
+const {
+  readRuntimeConfig
+} = require('../common/runtime-config');
+const {
   buildReviewableArtifactOutputs,
   resolveDate,
   resolveReviewableArtifacts
@@ -53,6 +59,30 @@ const FALLBACK_TRIGGER_STATUSES = new Set([
   'FAILED_REPAIR_REVIEWABLE'
 ]);
 
+const FALLBACK_PUBLIC_TITLE_STAGE = 'fallback-public-title-editor';
+
+const fallbackPublicTitleSchema = {
+  type: 'OBJECT',
+  properties: {
+    headlines: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: {
+          source_candidate_hash: { type: 'STRING' },
+          source_hash: { type: 'STRING' },
+          source_candidate_url: { type: 'STRING' },
+          source_url: { type: 'STRING' },
+          headline: { type: 'STRING' },
+          rationale: { type: 'STRING' }
+        },
+        required: ['headline']
+      }
+    }
+  },
+  required: ['headlines']
+};
+
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -67,6 +97,18 @@ function numeric(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function text(value) {
+  return String(value ?? '').trim();
+}
+
+function normalizedTitle(value) {
+  return text(value)
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function parseArgs(argv) {
   const options = {};
   for (let index = 0; index < argv.length; index += 1) {
@@ -79,11 +121,147 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === '--no-build') {
       options.noBuild = true;
+    } else if (arg === '--no-llm-fallback-titles') {
+      options.noLlmFallbackTitles = true;
     } else if (arg) {
       throw new Error(`Unknown argument: ${arg}`);
     }
   }
   return options;
+}
+
+function llmTitleCredentialConfigured(env = process.env) {
+  const config = readRuntimeConfig(env);
+  if (config.llmProvider === 'internal') return Boolean(text(env.INTERNAL_LLM_API_KEY));
+  return Boolean(text(env.GEMINI_API_KEY));
+}
+
+function fallbackHeadlineKey(section = {}) {
+  return text(section.source_candidate_hash) ||
+    text(section.source_candidate_url) ||
+    text(ensureArray(section.sources)[0]?.url) ||
+    text(section.public_article?.source_links?.[0]?.url) ||
+    text(section.headline);
+}
+
+function fallbackHeadlineArticlePayload(section = {}, index = 0) {
+  const publicArticle = section.public_article || {};
+  return {
+    index: index + 1,
+    source_candidate_hash: text(section.source_candidate_hash),
+    source_url: text(section.source_candidate_url || ensureArray(section.sources)[0]?.url || ensureArray(publicArticle.source_links)[0]?.url),
+    source_title: text(ensureArray(section.sources)[0]?.title || section.headline),
+    current_public_headline: text(publicArticle.headline || section.headline),
+    source_subtitle: text(publicArticle.source_subtitle),
+    what_changed: text(section.what_changed),
+    confirmed_facts: ensureArray(section.confirmed_facts).map(text).filter(Boolean),
+    evidence_summary: text(section.evidence_summary),
+    public_lead: text(publicArticle.lead),
+    public_body_paragraphs: ensureArray(publicArticle.body_paragraphs).map(text).filter(Boolean),
+    camera_hal_takeaway: text(publicArticle.camera_hal_takeaway),
+    reader_checkpoints: ensureArray(publicArticle.reader_checkpoints).map(text).filter(Boolean),
+    source_extraction: section.source_extraction || null,
+    derived_editorial_hints: section.derived_editorial_hints || null,
+    do_not_overstate: ensureArray(section.do_not_overstate || section.hal_signal_capsule?.do_not_overstate).map(text).filter(Boolean)
+  };
+}
+
+function fallbackTitleSystemInstruction() {
+  return [
+    'You write concise Korean public article headlines for Camera HAL SW Newsletter review-only fallback artifacts.',
+    'Return JSON only. Do not copy the source title verbatim.',
+    'Use the supplied source title, what_changed, confirmed facts, public article draft, and source_extraction.',
+    'The headline must reflect the concrete source-confirmed article content, not a generic CameraX or Android template.',
+    'You may make source-bound engineering inferences from the supplied article facts, but do not invent direct Camera HAL, driver, vendor, CTS/VTS/ITS, stream, buffer, metadata, or preview/capture impact unless the supplied facts support that framing.',
+    'Preserve important technical tokens such as CameraX, ListenableFuture, ImageCapture, VideoCapture, Camera2, API names, versions, and error strings when they are central to the article.'
+  ].join('\n');
+}
+
+function fallbackTitlePrompt(issue = {}) {
+  const articles = ensureArray(issue.sections).map(fallbackHeadlineArticlePayload);
+  return JSON.stringify({
+    task: 'Generate source-bound Korean headlines for these fallback public newsletter articles.',
+    output_contract: {
+      headlines: 'One item per input article. Include source_candidate_hash or source_url from the matching input article. Items without a stable key are ignored.',
+      headline: 'Concise Korean headline, usually 18-60 chars. Must not be the original source title copied verbatim.'
+    },
+    articles
+  }, null, 2);
+}
+
+function sanitizeGeneratedHeadline(section = {}, headline = '') {
+  const value = text(headline)
+    .replace(/^[`"'“”‘’]+|[`"'“”‘’]+$/g, '')
+    .replace(/\s+/g, ' ');
+  if (!value) return '';
+  const sourceTitle = text(ensureArray(section.sources)[0]?.title || section.headline);
+  if (normalizedTitle(value) && normalizedTitle(value) === normalizedTitle(sourceTitle)) return '';
+  if (/direct\s+(?:Camera\s+)?HAL|vendor\s+HAL|HAL\s+API/i.test(value)) return '';
+  return value.length > 90 ? `${value.slice(0, 90).trim()}...` : value;
+}
+
+function normalizeLlmHeadlineOverrides(issue = {}, response = {}) {
+  const sections = ensureArray(issue.sections);
+  const byHash = new Map(sections.map(section => [text(section.source_candidate_hash), section]).filter(([key]) => key));
+  const urlEntries = sections.flatMap(section => [
+    text(section.source_candidate_url),
+    text(ensureArray(section.sources)[0]?.url),
+    text(section.public_article?.source_links?.[0]?.url)
+  ]
+    .flatMap(url => [url, normalizeArticleUrl(url)])
+    .filter(Boolean)
+    .map(url => [url, section]));
+  const urlSections = new Map();
+  for (const [url, section] of urlEntries) {
+    if (!urlSections.has(url)) urlSections.set(url, new Set());
+    urlSections.get(url).add(section);
+  }
+  const byUrl = new Map(urlEntries.filter(([url]) => urlSections.get(url)?.size === 1));
+  const overrides = {};
+  for (const item of ensureArray(response.headlines)) {
+    const sourceHash = text(item.source_candidate_hash || item.source_hash || item.hash);
+    const sourceUrl = text(item.source_url || item.source_candidate_url || item.url);
+    const section = byHash.get(sourceHash) ||
+      byUrl.get(sourceUrl) ||
+      byUrl.get(normalizeArticleUrl(sourceUrl));
+    if (!section) continue;
+    const headline = sanitizeGeneratedHeadline(section, item.headline);
+    if (!headline) continue;
+    overrides[fallbackHeadlineKey(section)] = headline;
+    if (section.source_candidate_hash) overrides[section.source_candidate_hash] = headline;
+    if (section.source_candidate_url) overrides[section.source_candidate_url] = headline;
+    for (const source of ensureArray(section.sources)) {
+      if (source?.url) overrides[source.url] = headline;
+    }
+  }
+  return overrides;
+}
+
+async function generateFallbackPublicHeadlineOverrides(options = {}) {
+  const issue = options.issue || {};
+  if (ensureArray(issue.sections).length === 0) {
+    return { used: false, skipped: true, reason: 'no_sections', overrides: {} };
+  }
+  if (options.force !== true && !llmTitleCredentialConfigured(options.env || process.env)) {
+    return { used: false, skipped: true, reason: 'missing_llm_credentials', overrides: {} };
+  }
+  const llmCall = options.llmCall || callLlmJson;
+  const response = await llmCall(
+    FALLBACK_PUBLIC_TITLE_STAGE,
+    fallbackTitleSystemInstruction(),
+    fallbackTitlePrompt(issue),
+    fallbackPublicTitleSchema,
+    options.llmOptions || {}
+  );
+  const overrides = normalizeLlmHeadlineOverrides(issue, response);
+  return {
+    used: Object.keys(overrides).length > 0,
+    skipped: false,
+    reason: Object.keys(overrides).length > 0 ? 'llm_headlines_generated' : 'no_valid_llm_headlines',
+    stage: FALLBACK_PUBLIC_TITLE_STAGE,
+    override_count: Object.keys(overrides).length,
+    overrides
+  };
 }
 
 function hasArtifactInputs(root, date) {
@@ -621,6 +799,7 @@ function ensurePublicNewsletterArtifacts(options = {}) {
         fallbackAlreadyCreated,
         fallbackSkipped,
         fallbackTriggerReasons: initialReasons,
+        fallbackResult,
         resolved: reconciled.reconciledResolved,
         reconciliation: reconciled.reconciliation,
         outputs: reconciled.outputs
@@ -639,16 +818,93 @@ function ensurePublicNewsletterArtifacts(options = {}) {
     fallbackAlreadyCreated,
     fallbackSkipped,
     fallbackTriggerReasons: initialReasons,
+    fallbackResult,
     resolved: reconciled.reconciledResolved,
     reconciliation: reconciled.reconciliation,
     outputs: reconciled.outputs
   };
 }
 
-function main() {
+async function ensurePublicNewsletterArtifactsWithLlmTitles(options = {}) {
+  const result = ensurePublicNewsletterArtifacts(options);
+  if (
+    options.noBuild === true ||
+    options.noLlmFallbackTitles === true ||
+    result.fallbackExecuted !== true ||
+    !result.fallbackResult?.issue
+  ) {
+    return result;
+  }
+
+  let titleResult;
+  try {
+    titleResult = await generateFallbackPublicHeadlineOverrides({
+      issue: result.fallbackResult.issue,
+      env: options.env || process.env,
+      llmCall: options.llmCall,
+      llmOptions: options.llmOptions,
+      force: options.forceLlmFallbackTitles === true
+    });
+  } catch (error) {
+    return {
+      ...result,
+      fallbackHeadlineGeneration: {
+        used: false,
+        skipped: true,
+        reason: 'llm_headline_generation_failed',
+        error: error.message
+      }
+    };
+  }
+  if (!titleResult.used) {
+    return {
+      ...result,
+      fallbackHeadlineGeneration: titleResult
+    };
+  }
+
+  const root = options.root || process.cwd();
+  const date = result.date;
+  const rebuilt = buildFallbackPublicIssue({
+    root,
+    date,
+    publicArticleHeadlineOverrides: titleResult.overrides,
+    publicArticleHeadlineGeneration: {
+      source: 'llm',
+      stage: titleResult.stage,
+      override_count: titleResult.override_count,
+      reason: titleResult.reason
+    }
+  });
+  const resolved = resolveReviewableArtifactsForEnsure({
+    root,
+    date,
+    status: rebuilt.status
+  }, changedArtifactsForRecheck(options, rebuilt, []));
+  const fallbackState = {
+    fallbackExecuted: true,
+    fallbackAlreadyCreated: result.fallbackAlreadyCreated,
+    fallbackSkipped: result.fallbackSkipped,
+    fallbackSkipReason: '',
+    fallbackError: null,
+    fallbackDiagnosticsRelPath: '',
+    initialReasons: result.fallbackTriggerReasons || []
+  };
+  const reconciled = reconcileResolvedArtifacts({ root, date, resolved, fallbackState });
+  return {
+    ...result,
+    fallbackResult: rebuilt,
+    fallbackHeadlineGeneration: titleResult,
+    resolved: reconciled.reconciledResolved,
+    reconciliation: reconciled.reconciliation,
+    outputs: reconciled.outputs
+  };
+}
+
+async function main() {
   const options = parseArgs(process.argv.slice(2));
   try {
-    const result = ensurePublicNewsletterArtifacts(options);
+    const result = await ensurePublicNewsletterArtifactsWithLlmTitles(options);
     process.stdout.write(`${renderGithubOutputs(result.outputs)}\n`);
   } catch (error) {
     console.error(error.message);
@@ -662,9 +918,11 @@ if (require.main === module) {
 
 module.exports = {
   fallbackTriggerReasons,
+  generateFallbackPublicHeadlineOverrides,
   hardFailureArticleCount,
   shouldPreserveReviewableDraftWithoutFallback,
   ensurePublicNewsletterArtifacts,
+  ensurePublicNewsletterArtifactsWithLlmTitles,
   writeFallbackFailureDiagnostics,
   parseArgs
 };

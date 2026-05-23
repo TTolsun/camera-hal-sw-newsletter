@@ -259,38 +259,27 @@ test('public newsletter validator rejects story v1 raw key leakage', () => {
   assert.ok(errors.some(error => /not_to_overclaim/.test(error)));
 });
 
-test('public newsletter validator accepts story v1 Korean rendered labels', () => {
+test('public newsletter validator accepts compact story v1 public prose section', () => {
   const storyMarkdown = markdown().replace(
     'Lead 1는 공개 출처 기반 동향을 한국어로 요약합니다.',
     [
       'Lead 1는 공개 출처 기반 동향을 한국어로 요약합니다.',
       '',
-      '> 영향도: 보통 · 범위: Framework · 권장 행동: 주시 / 테스트 · 과장 위험: 보통',
+      'Android Developers가 CameraX 변경점을 공개했고, Camera HAL 독자는 이를 preview/capture regression 범위 지정에 참고할 수 있습니다.',
       '',
-      '### 현업 장면',
+      'CameraX preview 회귀를 triage할 때 Camera ITS와 preview latency log를 비교합니다.',
       '',
-      'CameraX preview 회귀를 triage하는 상황을 가정합니다.',
+      '### Camera HAL / Driver 관점에서 확인할 점',
       '',
-      '### 확인된 변화',
+      '검증 범위는 app/framework 관찰 항목으로 제한합니다.',
       '',
-      'Android Developers가 CameraX 변경점을 공개했습니다.',
-      '',
-      '### 왜 봐야 하나',
-      '',
-      'Camera HAL 독자는 preview/capture regression 범위 지정에 참고할 수 있습니다.',
-      '',
-      '### 디버깅/리뷰 시나리오',
-      '',
-      'Camera ITS와 preview latency log를 비교합니다.',
-      '',
-      '### 편집자 판단',
-      '',
-      '검증 범위는 app/framework 관찰 항목으로 제한합니다.'
+      '- CameraX preview path에서 Camera ITS smoke test를 실행합니다.',
+      '- preview latency와 stream metadata 차이를 비교합니다.'
     ].join('\n')
   );
   const errors = validatePublicNewsletterArtifacts({
     markdown: storyMarkdown,
-    html: html('<p>현업 장면 확인된 변화 왜 봐야 하나 디버깅/리뷰 시나리오 편집자 판단 영향도 범위 권장 행동 과장 위험</p>')
+    html: html('<p>Android Developers가 CameraX 변경점을 공개했습니다.</p><h3>Camera HAL / Driver 관점에서 확인할 점</h3>')
   });
 
   assert.deepEqual(errors, []);

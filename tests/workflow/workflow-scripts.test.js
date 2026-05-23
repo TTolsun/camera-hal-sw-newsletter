@@ -60,6 +60,7 @@ const {
 } = require('../../scripts/newsroom/generate/fallback-public-issue');
 const {
   ensurePublicNewsletterArtifacts,
+  generateFallbackPublicHeadlineOverrides,
   writeFallbackFailureDiagnostics
 } = require('../../scripts/ensure-public-newsletter-artifacts');
 const {
@@ -4202,9 +4203,9 @@ test('fallback public issue uses tooling perspective label', () => {
   const markdown = buildMarkdown(issue);
   const html = buildHtml(issue);
 
-  assert.match(markdown, /\*\*Android Native \/ Tooling 관점\*\*/);
-  assert.match(html, /Android Native \/ Tooling 관점/);
-  assert.doesNotMatch(markdown, /\*\*Camera HAL \/ Driver 관점\*\*/);
+  assert.match(markdown, /### Android Native \/ Tooling 관점에서 확인할 점/);
+  assert.match(html, /Android Native \/ Tooling 관점에서 확인할 점/);
+  assert.doesNotMatch(markdown, /### Camera HAL \/ Driver 관점에서 확인할 점/);
 });
 
 test('reviewable artifact resolver rejects candidate shortage when deterministic artifact is missing', () => {
@@ -4451,6 +4452,16 @@ test('fallback builder preserves original fact-check blocker diagnostics after r
   });
 
   buildFallbackPublicIssue({ root, date });
+  buildFallbackPublicIssue({
+    root,
+    date,
+    publicArticleHeadlineGeneration: {
+      source: 'llm',
+      stage: 'fallback-public-title-editor',
+      override_count: 0,
+      reason: 'diagnostic-preservation-regression'
+    }
+  });
 
   const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
   const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
@@ -4540,6 +4551,172 @@ test('fallback duplicate detection treats AndroidX Camera release anchors as rel
   assert.equal(sectionDuplicateReason(camerax14Localized, [regressionSection(camerax14)]), 'duplicate_base_url');
   assert.equal(sectionDuplicateReason(anchorless, [regressionSection(camerax14)]), 'duplicate_base_url');
   assert.equal(sectionDuplicateReason(anchorless, [regressionSection(anchorless)]), 'duplicate_url');
+});
+
+test('fallback builder keeps CameraX source behavior in public article instead of generic preview framing', () => {
+  const root = tempRoot();
+  const { date, camerax14 } = writeRun25590436113LikeFallbackFixture(root, { date: '2026-05-24' });
+  const behavior = 'Fixed a compilation error "Cannot access class ListenableFuture" when using CameraX 1.6.0.';
+  const genericBehavior = 'CameraX / androidx.camera update.';
+  const candidate = {
+    ...camerax14,
+    title: 'CameraX Release Notes - CameraX 1.6.1',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    version_or_release: 'CameraX 1.6.1',
+    component: 'CameraX / androidx.camera',
+    api_or_component: 'CameraX / androidx.camera',
+    summary: genericBehavior,
+    behavior_change: genericBehavior,
+    source_extraction: {
+      ...camerax14.source_extraction,
+      release: {
+        ...camerax14.source_extraction.release,
+        version: 'CameraX 1.6.1',
+        date: '2026-05-06',
+        component: 'CameraX / androidx.camera',
+        sections: [{
+          category: 'bug_fixes',
+          heading: 'Bug Fixes',
+          items: [{
+            text: behavior,
+            source_text: behavior,
+            links: [],
+            issue_ids: ['497571473'],
+            artifact_names: ['androidx.camera:camera-core']
+          }]
+        }]
+      }
+    }
+  };
+
+  for (const relPath of [
+    ['content', 'newsroom', date, 'reporter-candidates.json'],
+    ['content', 'newsroom', date, 'article-capsules.json'],
+    ['content', 'newsroom', date, 'shortlisted-candidates.json'],
+    ['content', 'collected-news', date, 'candidates.json']
+  ]) {
+    const filePath = path.join(root, ...relPath);
+    const payload = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const replace = value => Array.isArray(value)
+      ? value.map(item => item.source_candidate_hash === camerax14.source_candidate_hash ? candidate : item)
+      : value;
+    payload.candidates = replace(payload.candidates);
+    payload.selected_articles = replace(payload.selected_articles);
+    payload.reserve_candidates = replace(payload.reserve_candidates);
+    payload.selected_capsules = replace(payload.selected_capsules);
+    payload.reserve_capsules = replace(payload.reserve_capsules);
+    writeJson(filePath, payload);
+  }
+
+  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+  const editor = JSON.parse(fs.readFileSync(editorPath, 'utf8'));
+  editor.sections[0].headline = candidate.title;
+  editor.sections[0].what_changed = genericBehavior;
+  editor.sections[0].sources = [{ title: candidate.title, url: candidate.url }];
+  writeJson(editorPath, editor);
+
+  buildFallbackPublicIssue({ root, date });
+
+  const markdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
+  assert.match(markdown, /CameraX 1\.6\.1: ListenableFuture 컴파일 오류 수정/);
+  assert.match(markdown, /Cannot access class ListenableFuture/);
+  assert.match(markdown, /CameraX 1\.6\.0 사용 시 발생/);
+  assert.match(markdown, /AOSP Camera HAL에는 직접 영향이 확인되지 않았습니다/);
+  assert.doesNotMatch(markdown, /CameraX 1\.6\.1 업데이트: preview\/capture 호환성 확인/);
+  assert.doesNotMatch(markdown, /CameraX release note는 app\/framework 계층의 preview\/capture 호환성 검증 신호/);
+});
+
+test('fallback title helper asks LLM for source-bound headlines using article content', async () => {
+  const issue = {
+    sections: [{
+      source_candidate_hash: 'camerax-161',
+      source_candidate_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      headline: 'CameraX Release Notes - CameraX 1.6.1',
+      what_changed: 'Fixed a compilation error "Cannot access class ListenableFuture" when using CameraX 1.6.0.',
+      confirmed_facts: ['버전/릴리스: CameraX 1.6.1.', '관련 컴포넌트: CameraX / androidx.camera.'],
+      sources: [{
+        title: 'CameraX Release Notes - CameraX 1.6.1',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+      }],
+      public_article: {
+        headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정',
+        source_subtitle: 'Android Developers Latest Updates · CameraX 1.6.1',
+        lead: 'CameraX 1.6.1은 ListenableFuture 컴파일 오류를 수정한 패치입니다.',
+        body_paragraphs: ['AOSP Camera HAL에는 직접 영향이 확인되지 않았습니다.'],
+        camera_hal_takeaway: '빌드 안정성 패치로 확인합니다.',
+        reader_checkpoints: ['Gradle compile smoke test를 확인합니다.'],
+        source_links: [{
+          title: 'CameraX Release Notes - CameraX 1.6.1',
+          url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+        }]
+      }
+    }]
+  };
+  const calls = [];
+  const result = await generateFallbackPublicHeadlineOverrides({
+    issue,
+    force: true,
+    llmCall: async (stage, systemInstruction, prompt, schema) => {
+      calls.push({ stage, systemInstruction, prompt, schema });
+      return {
+        headlines: [{
+          source_candidate_hash: 'camerax-161',
+          headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정'
+        }]
+      };
+    }
+  });
+
+  assert.equal(result.used, true);
+  assert.equal(result.overrides['camerax-161'], 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정');
+  assert.equal(calls[0].stage, 'fallback-public-title-editor');
+  assert.match(calls[0].systemInstruction, /Do not copy the source title verbatim/);
+  assert.match(calls[0].prompt, /Cannot access class ListenableFuture/);
+  assert.match(calls[0].prompt, /AOSP Camera HAL/);
+  assert.match(calls[0].prompt, /Items without a stable key are ignored/);
+});
+
+test('fallback title helper ignores LLM headlines without stable source keys', async () => {
+  const issue = {
+    sections: [{
+      source_candidate_hash: 'camerax-161',
+      source_candidate_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      headline: 'CameraX Release Notes - CameraX 1.6.1',
+      sources: [{
+        title: 'CameraX Release Notes - CameraX 1.6.1',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+      }],
+      public_article: {
+        headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정',
+        body_paragraphs: ['CameraX 1.6.1은 ListenableFuture 컴파일 오류를 수정한 패치입니다.']
+      }
+    }, {
+      source_candidate_hash: 'libcamera-071',
+      source_candidate_url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
+      headline: 'libcamera v0.7.1',
+      sources: [{
+        title: 'libcamera v0.7.1',
+        url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html'
+      }],
+      public_article: {
+        headline: 'libcamera v0.7.1 릴리스',
+        body_paragraphs: ['libcamera v0.7.1 release note입니다.']
+      }
+    }]
+  };
+  const result = await generateFallbackPublicHeadlineOverrides({
+    issue,
+    force: true,
+    llmCall: async () => ({
+      headlines: [{
+        headline: '엉뚱하게 첫 번째 기사에 들어가면 안 되는 제목'
+      }]
+    })
+  });
+
+  assert.equal(result.used, false);
+  assert.equal(result.reason, 'no_valid_llm_headlines');
+  assert.deepEqual(result.overrides, {});
 });
 
 test('fallback builder recovers run 25590436113 shape with source-bound anchor candidates', () => {
