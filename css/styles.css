@@ -8,12 +8,39 @@
   --primary: #188038;
   --primary-hover: #12642c;
   --chip: #eaf4ee;
-  --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  --focus-ring: rgba(24, 128, 56, 0.35);
+  --primary-border: rgba(24, 128, 56, 0.22);
+  --shadow-sm: 0 8px 18px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 12px 32px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 44px rgba(15, 23, 42, 0.12);
+  --shadow: var(--shadow-md);
   --radius-lg: 24px;
   --radius-md: 18px;
   --radius-sm: 12px;
+  --radius-xs: 8px;
+  --radius-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 10px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 18px;
+  --space-7: 20px;
+  --space-8: 22px;
+  --space-9: 24px;
+  --space-10: 28px;
+  --space-11: 34px;
+  --space-12: 56px;
   --content: 1120px;
   --reading: 900px;
+  --content-gutter: 40px;
+  --content-gutter-mobile: 28px;
+  --control-height: 44px;
+  --control-padding-x: 18px;
+  --card-padding-lg: 34px;
+  --card-padding-md: 24px;
+  --card-padding-sm: 20px;
+  --section-gap: 56px;
 }
 
 * {
@@ -39,7 +66,7 @@ a {
 
 a:focus-visible,
 button:focus-visible {
-  outline: 3px solid rgba(24, 128, 56, 0.35);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -81,7 +108,7 @@ pre {
 
 code {
   padding: 0.12rem 0.32rem;
-  border-radius: 6px;
+  border-radius: var(--radius-xs);
   background: var(--surface-soft);
   color: var(--text);
 }
@@ -105,7 +132,7 @@ pre code {
 
 .content-wrap,
 .wrap {
-  width: min(var(--content), calc(100% - 40px));
+  width: min(var(--content), calc(100% - var(--content-gutter)));
   margin: 0 auto;
 }
 
@@ -249,7 +276,7 @@ pre code {
   padding: 18px 20px;
   border: 1px solid rgba(24, 128, 56, 0.24);
   border-left: 4px solid var(--primary);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   background: var(--chip);
   color: var(--text);
 }
@@ -268,17 +295,17 @@ pre code {
 .newsletter-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: var(--space-3);
 }
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0 18px;
+  min-height: var(--control-height);
+  padding: 0 var(--control-padding-x);
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--surface);
   color: var(--text);
   font-weight: 750;
@@ -288,7 +315,7 @@ pre code {
 
 .button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .button-primary,
@@ -319,15 +346,15 @@ pre code {
 }
 
 .section {
-  margin-top: 56px;
+  margin-top: var(--section-gap);
 }
 
 .section-heading {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-7);
 }
 
 .section-heading .eyebrow {
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
 }
 
 .newsletter-card,
@@ -343,7 +370,7 @@ pre code {
 }
 
 .newsletter-card {
-  padding: 34px;
+  padding: var(--card-padding-lg);
 }
 
 .headline-section[hidden] {
@@ -351,7 +378,7 @@ pre code {
 }
 
 .headline-section {
-  width: min(calc(var(--content) * 0.75), calc(100% - 40px));
+  width: min(calc(var(--content) * 0.75), calc(100% - var(--content-gutter)));
 }
 
 .headline-card {
@@ -362,7 +389,7 @@ pre code {
   border: 1px solid rgba(24, 128, 56, 0.28);
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(234, 244, 238, 0.74));
-  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.12);
+  box-shadow: var(--shadow-lg);
 }
 
 .headline-media {
@@ -392,7 +419,7 @@ pre code {
 .headline-body {
   display: grid;
   gap: 14px;
-  padding: 24px;
+  padding: var(--card-padding-md);
 }
 
 .headline-card h3 {
@@ -434,8 +461,8 @@ pre code {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
 }
 
 .issue-date,
@@ -447,7 +474,7 @@ pre code {
   align-items: center;
   min-height: 28px;
   padding: 0 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 0.78rem;
   font-weight: 800;
 }
@@ -469,18 +496,18 @@ pre code {
 .hero-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
 }
 
 .issue-tags {
-  gap: 8px;
-  margin-top: 18px;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
 }
 
 .issue-actions {
   gap: 14px;
-  margin-top: 20px;
+  margin-top: var(--space-7);
 }
 
 .section > h2 {
@@ -490,7 +517,7 @@ pre code {
 .article-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .tag,
@@ -500,7 +527,7 @@ pre code {
   min-height: 30px;
   padding: 0 10px;
   border: 1px solid rgba(24, 128, 56, 0.16);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--chip);
   color: #245f36;
   font-size: 0.85rem;
@@ -508,19 +535,19 @@ pre code {
 }
 
 .card-actions {
-  margin-top: 24px;
+  margin-top: var(--space-9);
 }
 
 .focus-brief {
-  margin-top: 10px;
+  margin-top: var(--space-3);
 }
 
 .focus-band {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   align-items: center;
-  gap: 22px;
-  padding: 18px 22px;
+  gap: var(--space-8);
+  padding: var(--space-6) var(--space-8);
   border: 1px solid rgba(24, 128, 56, 0.14);
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(234, 244, 238, 0.74));
@@ -534,7 +561,7 @@ pre code {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 8px 9px;
+  gap: var(--space-2) 9px;
 }
 
 .keyword {
@@ -542,8 +569,8 @@ pre code {
   align-items: center;
   min-height: 32px;
   padding: 0 12px;
-  border: 1px solid rgba(24, 128, 56, 0.22);
-  border-radius: 999px;
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-pill);
   background: var(--chip);
   color: #245f36;
   font-size: 0.88rem;
@@ -560,20 +587,20 @@ pre code {
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: var(--space-5);
 }
 
 .archive-card {
   display: flex;
   min-height: 100%;
   flex-direction: column;
-  padding: 24px 24px 22px;
+  padding: var(--card-padding-md) var(--card-padding-md) var(--space-8);
   transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
 
 .archive-card:hover {
   border-color: rgba(24, 128, 56, 0.35);
-  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.09);
+  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 
@@ -595,7 +622,7 @@ pre code {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
+  gap: var(--space-6);
   min-height: 74px;
 }
 
@@ -608,7 +635,7 @@ pre code {
 .footer-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--space-5);
 }
 
 .footer-links a {
@@ -1060,7 +1087,7 @@ pre code {
 @media (max-width: 640px) {
   .content-wrap,
   .wrap {
-    width: min(100% - 28px, var(--content));
+    width: min(100% - var(--content-gutter-mobile), var(--content));
   }
 
   h1 {
@@ -1076,11 +1103,11 @@ pre code {
   .reference-list,
   .action-card {
     border-radius: var(--radius-md);
-    padding: 20px;
+    padding: var(--card-padding-sm);
   }
 
   .focus-band {
-    padding: 20px;
+    padding: var(--card-padding-sm);
   }
 
   .button {
