@@ -6,8 +6,12 @@ const {
   collectedCandidatesRelPath,
   newsroomRelPath
 } = require('../common/artifact-paths');
+const {
+  REVIEW_ARTIFACT_SCHEMA_VERSION,
+  buildReviewArtifactInventory
+} = require('../common/review-artifact-inventory');
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = REVIEW_ARTIFACT_SCHEMA_VERSION;
 
 function usage() {
   console.error('Usage: node scripts/write-artifact-manifest.js <snapshot_dir> <date>');
@@ -164,7 +168,7 @@ function walkFiles(root, dir = root, files = []) {
       walkFiles(root, filePath, files);
     } else if (entry.isFile()) {
       const relPath = toPosix(path.relative(root, filePath));
-      if (relPath !== 'artifact-manifest.json') files.push(relPath);
+      if (path.basename(relPath) !== 'artifact-manifest.json') files.push(relPath);
     }
   }
   return files;
@@ -185,6 +189,21 @@ function gitSha() {
   } catch (_) {
     return '';
   }
+}
+
+function runContextFromStatus(status) {
+  const explicitPublicOutputExpected = status?.public_output_expected ?? status?.publicOutputExpected;
+  return {
+    status: status?.status || 'unknown',
+    seedUsed: status?.seed_used ?? status?.candidate_input?.seed_used,
+    publicOutputExpected: explicitPublicOutputExpected === true ||
+      explicitPublicOutputExpected === 'true' ||
+      (explicitPublicOutputExpected === undefined &&
+        (status?.public_artifact_ready === true ||
+          status?.public_newsletter_ready === true ||
+          status?.review_publication_ready === true ||
+          status?.final_publish_ready === true))
+  };
 }
 
 function buildManifest(snapshotDir, date) {
@@ -251,6 +270,11 @@ function buildManifest(snapshotDir, date) {
         sha256: hashFile(filePath)
       };
     });
+  const reviewInventory = buildReviewArtifactInventory({
+    root: resolvedSnapshotDir,
+    date,
+    runContext: runContextFromStatus(status)
+  });
 
   const manifest = {
     schema_version: SCHEMA_VERSION,
@@ -260,6 +284,9 @@ function buildManifest(snapshotDir, date) {
     quality_summary: qualitySummary(quality),
     hal_signal_quality_summary: halSignalQualitySummary(halSignalQuality),
     files,
+    review_summary: reviewInventory.summary,
+    review_artifacts: reviewInventory.review_artifacts,
+    missing_required_review_artifacts: reviewInventory.missingRequired.map(artifact => artifact.path),
     missing_critical_files: missingCriticalFiles,
     consistency_warnings: warnings
   };
