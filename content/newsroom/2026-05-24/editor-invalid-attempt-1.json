@@ -1,0 +1,192 @@
+{
+  "date": "2026-05-24",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "AOSP Camera / Driver / SoC Platform 뉴스레터",
+  "summary": "이번 주 뉴스레터에서는 Google I/O 2026에서 발표된 Jetpack Compose 및 CameraX의 적응형 레이아웃 지원 소식을 다룹니다. 다양한 화면 크기에서 올바른 카메라 미리보기를 보장하기 위한 프레임워크 계층의 변화와 이에 대응하는 Camera HAL 검증 포인트를 분석합니다.",
+  "briefing": [
+    "Google I/O 2026에서 Jetpack Compose와 CameraX를 결합하여 다양한 창 크기에서 올바른 카메라 미리보기를 보장하는 적응형 UI 지원이 강조되었습니다.",
+    "CameraX의 레이아웃 적응형 미리보기 기능은 HAL 계층에서 전달되는 스트림과 버퍼가 UI 계층에서 왜곡 없이 렌더링되도록 보장하는 검증이 필요합니다.",
+    "개발자들은 폴더블 및 멀티 윈도우 환경을 모방하여 다양한 화면 비율과 해상도 조합에서 미리보기 스트림의 왜곡 여부를 테스트해야 합니다."
+  ],
+  "sections": [
+    {
+      "category": "android_platform_camera_adjacent",
+      "headline": "Google I/O 2026: Jetpack Compose와 CameraX를 통한 기기 간 적응형 카메라 미리보기 구현",
+      "what_changed": "Google I/O 2026에서 Jetpack Compose와 CameraX의 통합이 강조되었습니다. Jetpack Compose는 Jetpack Navigation 3, 새로운 실험적 Grid 및 FlexBox 레이아웃과 함께, 모든 창 크기에서 올바른 카메라 미리보기를 제공하는 CameraX를 통해 폴더블 및 다양한 화면 크기의 기기에서 일관된 카메라 경험을 제공합니다.",
+      "confirmed_facts": [
+        "발표 날짜는 2026년 5월 19일이며, Google I/O 2026 행사에서 공개되었습니다.",
+        "Jetpack Compose는 Jetpack Navigation 3 릴리스, 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력을 지원합니다.",
+        "CameraX는 다양한 창 크기와 화면 비율에서 올바른 카메라 미리보기를 제공하도록 적응형 레이아웃 엔진과 연동됩니다."
+      ],
+      "evidence_summary": "Google I/O 2026 발표를 통해 Jetpack Compose와 CameraX가 결합되어 폴더블 및 멀티 윈도우 환경에서 카메라 미리보기의 레이아웃 적응성을 향상시켰음이 확인되었습니다.",
+      "specificity_checks": [
+        "Release Date: 2026-05-19",
+        "Event: Google I/O 2026",
+        "Component: Jetpack Compose / CameraX",
+        "Key Feature: CameraX adaptive preview across window sizes"
+      ],
+      "source_verification_notes": [
+        "공식 Android Developers Blog 포스트를 통해 확인된 사실입니다."
+      ],
+      "public_article": {
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX를 통한 기기 간 적응형 카메라 미리보기 구현",
+        "source_subtitle": "Android Developers Blog (2026-05-19)",
+        "lead": "Google I/O 2026에서 Jetpack Compose와 CameraX의 긴밀한 통합을 통해 폴더블폰, 태블릿 등 다양한 폼팩터에서 왜곡 없는 카메라 미리보기를 구현하는 기술이 소개되었습니다.",
+        "body_paragraphs": [
+          "최근 모바일 생태계는 폴더블 기기와 멀티 윈도우 모드의 대중화로 인해 다양한 화면 비율과 해상도에 유연하게 대응하는 UI 엔진을 요구하고 있습니다. Google은 이번 I/O 2026에서 Jetpack Compose와 CameraX를 결합하여 개발자가 복잡한 레이아웃 계산 없이도 모든 창 크기에서 올바른 카메라 미리보기를 제공할 수 있도록 지원한다고 밝혔습니다.",
+          "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스와 새로운 실험적 Grid 및 FlexBox 레이아웃을 도입하여 적응형 UI 전환을 가속화합니다. 여기에 CameraX의 미리보기 최적화 기능이 더해져, 앱이 분할 화면이나 완전히 펼쳐진 대화면 상태로 전환될 때도 카메라 스트림이 찌그러지거나 잘리는 현상을 방지합니다.",
+          "이러한 상위 프레임워크의 변화는 Camera HAL 계층에서 생성되는 YUV/PRIVATE 스트림 버퍼가 다양한 디스플레이 종횡비에 맞춰 올바르게 크기 조정(Scaling) 및 크롭(Cropping)되어야 함을 의미합니다. 따라서 하드웨어 및 드라이버 엔지니어는 프레임워크의 동적 스트림 재구성 요청에 대응하여 HAL의 안정성을 검증해야 합니다."
+        ],
+        "camera_hal_takeaway": "CameraX의 적응형 미리보기는 HAL 위 계층의 동작이지만, 동적 화면 전환 시 스트림 구성(Stream Configuration)의 안정성과 버퍼 라이프사이클이 정상적으로 유지되는지 검증하는 신호로 활용해야 합니다.",
+        "reader_checkpoints": [
+          "폴더블 기기 및 멀티 윈도우 환경 모방 테스트를 통해 화면 크기 전환 시 미리보기 스트림의 YUV frame drop 여부를 확인하세요.",
+          "다양한 디스플레이 종횡비에서 CameraX 미리보기 버퍼의 크롭 및 스케일링 동작이 HAL의 아웃풋 사양과 일치하는지 검증하세요."
+        ],
+        "story_contract_version": 1,
+        "editorial_story": {
+          "reader_scenario": "폴더블 기기에서 카메라 앱을 실행한 채 화면을 접거나 펼칠 때, 혹은 멀티 윈도우 분할 비율을 조정할 때 카메라 미리보기가 순간적으로 깨지거나 멈추는 현상을 디버깅하는 상황입니다.",
+          "what_happened": "Google I/O 2026에서 Jetpack Compose와 CameraX의 통합을 통해 다양한 화면 크기와 창 비율에서도 왜곡 없는 카메라 미리보기를 자동으로 맞추는 적응형 레이아웃 기능이 발표되었습니다.",
+          "why_it_matters": "상위 UI 프레임워크가 화면 크기 변경에 따라 동적으로 카메라 미리보기 크기를 조정할 때, HAL 계층에서 버퍼 공급이 지연되거나 스트림 재설정 오류가 발생하면 앱 크래시나 프레임 드롭으로 이어질 수 있습니다.",
+          "field_scenario": "개발자는 Jetpack Compose의 새로운 Grid/FlexBox 레이아웃과 CameraX 미리보기를 연동하여, 화면 전환 시 발생할 수 있는 스트림 버퍼 할당 지연 시간(Latency)을 측정해야 합니다.",
+          "not_to_overclaim": "이 발표가 Camera HAL3 API 자체의 직접적인 스펙 변경을 의미하는 것은 아니며, CameraX와 Compose 레이아웃 엔진 간의 상위 호환성 개선 사항입니다.",
+          "editor_take": "상위 레이아웃의 유연성이 극대화됨에 따라 하부 HAL 및 드라이버 계층은 다양한 해상도 출력 요청에 대해 더욱 견고하고 빠른 버퍼 응답성을 유지해야 합니다."
+        },
+        "source_links": [
+          {
+            "title": "8: Building seamless Android experiences across devices with Jetpack Compose",
+            "url": "https://goo.gle/AdaptiveApps_IO26"
+          }
+        ]
+      },
+      "background": "Jetpack Compose는 Android UI 개발을 위한 선언형 프레임워크이며, Jetpack Navigation 3와 함께 다양한 화면 크기에 걸쳐 적응형 UI를 구축하는 데 사용됩니다. CameraX는 Camera2 API의 복잡성을 추상화하여 미리보기, 사진 캡처 등의 구현을 돕는 Jetpack 라이브러리입니다. 본 기사에서 언급된 '모든 창 크기에서 올바른 카메라 미리보기를 제공하는 CameraX'는 다양한 화면 비율과 해상도를 가진 기기에서 카메라 미리보기가 올바르게 표시되도록 지원하는 기능을 강조합니다.",
+      "why_it_matters": "폴더블 기기 및 멀티 윈도우 환경에서 카메라 앱의 화면 크기가 동적으로 변할 때, 미리보기 스트림의 왜곡이나 프레임 드롭 없이 부드럽게 전환되도록 보장하는 것은 사용자 경험에 매우 중요합니다.",
+      "camera_hal_perspective": "CameraX의 적응형 미리보기 기능은 HAL 계층에서 제공하는 스트림과 버퍼가 UI 계층에서 정확하게 처리되고 렌더링되도록 돕습니다. HAL 엔지니어는 동적 레이아웃 변경 시 발생할 수 있는 스트림 재구성(Stream Reconfiguration) 요청과 버퍼 라이프사이클(Buffer Lifecycle)의 안정성을 검증해야 합니다.",
+      "camera_hal_checks": [
+        "동적 화면 크기 변경 시 Preview 스트림의 버퍼 소유권 전환이 지연 없이 이루어지는지 확인합니다.",
+        "다양한 디스플레이 종횡비에 따른 YUV/PRIVATE 스트림의 크롭(Crop) 및 스케일링(Scaling) 동작을 검증합니다."
+      ],
+      "action_hints": [
+        "Jetpack Compose 적응형 레이아웃 환경에서 CameraX 미리보기를 실행하고 화면 크기 전환 시 프레임 드롭을 측정하십시오."
+      ],
+      "action_items": [
+        "폴더블 레퍼런스 기기에서 화면 접힘/펼침 상태 전환 시 CameraX 미리보기 스트림의 재구성 시간(Reconfiguration Latency)을 측정하고 기록한다.",
+        "다양한 멀티 윈도우 분할 비율에서 YUV 미리보기 스트림의 왜곡(Distortion) 및 프레임 드롭 발생 여부를 CTS/VTS 테스트 시나리오와 연계하여 검증한다."
+      ],
+      "team_summary": "Google I/O 2026에서 발표된 Jetpack Compose 및 CameraX의 적응형 미리보기 지원에 대응하여, 화면 동적 전환 시의 스트림 안정성과 버퍼 응답성을 검증해야 합니다.",
+      "is_ai_related": false,
+      "article_type": "android_platform_camera_adjacent",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
+          "sourceKind": "blog_post_item",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok"
+        }
+      ],
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "imageSource": "https://android-developers.googleblog.com/",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Google I/O 2026 Jetpack Compose and CameraX Adaptive Apps",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "The image is directly related to the Google I/O 2026 adaptive apps announcement and is from an official source.",
+      "sources": [
+        {
+          "title": "8: Building seamless Android experiences across devices with Jetpack Compose",
+          "url": "https://goo.gle/AdaptiveApps_IO26"
+        }
+      ],
+      "article_group_key": "article:https://goo.gle/adaptiveapps_io26",
+      "article_sections": {
+        "verified_facts": [
+          "발표 날짜는 2026년 5월 19일이며, Google I/O 2026 행사에서 공개되었습니다.",
+          "Jetpack Compose는 Jetpack Navigation 3 릴리스, 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력을 지원합니다.",
+          "CameraX는 다양한 창 크기와 화면 비율에서 올바른 카메라 미리보기를 제공하도록 적응형 레이아웃 엔진과 연동됩니다."
+        ],
+        "background_context": "Jetpack Compose는 Android UI 개발을 위한 선언형 프레임워크이며, Jetpack Navigation 3와 함께 다양한 화면 크기에 걸쳐 적응형 UI를 구축하는 데 사용됩니다. CameraX는 Camera2 API의 복잡성을 추상화하여 미리보기, 사진 캡처 등의 구현을 돕는 Jetpack 라이브러리입니다. 본 기사에서 언급된 '모든 창 크기에서 올바른 카메라 미리보기를 제공하는 CameraX'는 다양한 화면 비율과 해상도를 가진 기기에서 카메라 미리보기가 올바르게 표시되도록 지원하는 기능을 강조합니다.",
+        "hal_driver_impact": "CameraX의 적응형 미리보기 기능은 HAL 계층에서 제공하는 스트림과 버퍼가 UI 계층에서 정확하게 처리되고 렌더링되도록 돕습니다. HAL 엔지니어는 동적 레이아웃 변경 시 발생할 수 있는 스트림 재구성(Stream Reconfiguration) 요청과 버퍼 라이프사이클(Buffer Lifecycle)의 안정성을 검증해야 합니다.",
+        "action_items": [
+          "폴더블 레퍼런스 기기에서 화면 접힘/펼침 상태 전환 시 CameraX 미리보기 스트림의 재구성 시간(Reconfiguration Latency)을 측정하고 기록한다.",
+          "다양한 멀티 윈도우 분할 비율에서 YUV 미리보기 스트림의 왜곡(Distortion) 및 프레임 드롭 발생 여부를 CTS/VTS 테스트 시나리오와 연계하여 검증한다."
+        ],
+        "team_share_points": "Google I/O 2026에서 발표된 Jetpack Compose 및 CameraX의 적응형 미리보기 지원에 대응하여, 화면 동적 전환 시의 스트림 안정성과 버퍼 응답성을 검증해야 합니다."
+      },
+      "claims": [
+        {
+          "claim_id": "claim_io26_compose_camerax_date",
+          "text": "Google I/O 2026에서 Jetpack Compose와 CameraX의 적응형 레이아웃 통합이 2026년 5월 19일에 발표되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "version_or_release: Google I/O 2026"
+          ],
+          "source_urls": [
+            "https://goo.gle/AdaptiveApps_IO26"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_io26_camerax_preview_behavior",
+          "text": "CameraX는 모든 창 크기에서 올바른 카메라 미리보기를 제공하도록 적응형 레이아웃 엔진과 연동됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "api_or_component: Jetpack Compose / CameraX"
+          ],
+          "source_urls": [
+            "https://goo.gle/AdaptiveApps_IO26"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_hal_stream_reconfig_impact",
+          "text": "동적 화면 크기 변경 시 CameraX 미리보기의 안정성을 보장하기 위해 HAL 계층의 스트림 재구성 지연 시간과 버퍼 라이프사이클을 검증해야 합니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 모든 창 크기에서 올바른 카메라 미리보기를 제공하는 CameraX와 같은 핵심 도구를 제공하여..."
+          ],
+          "source_urls": [
+            "https://goo.gle/AdaptiveApps_IO26"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "Google I/O 2026에서 적응형 레이아웃과 CameraX 미리보기 최적화가 공식 발표되어, 폴더블 및 멀티 윈도우 기기에서의 카메라 스트림 안정성 검증이 시급해졌습니다.",
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "폴더블 기기 화면 전환 시 CameraX 미리보기 스트림의 재구성 지연 시간을 측정하십시오.",
+        "impact_axes": [
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "이 발표는 Camera HAL3 API 자체의 직접적인 변경을 의미하지 않으며, 상위 프레임워크 수준의 레이아웃 최적화입니다."
+        ]
+      }
+    }
+  ],
+  "action_items": [
+    "폴더블 레퍼런스 기기에서 화면 접힘/펼침 상태 전환 시 CameraX 미리보기 스트림의 재구성 시간(Reconfiguration Latency)을 측정하고 기록한다.",
+    "다양한 멀티 윈도우 분할 비율에서 YUV 미리보기 스트림의 왜곡(Distortion) 및 프레임 드롭 발생 여부를 CTS/VTS 테스트 시나리오와 연계하여 검증한다."
+  ],
+  "references": [
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose",
+      "url": "https://goo.gle/AdaptiveApps_IO26"
+    }
+  ],
+  "explicitly_demoted_groups": [
+    {
+      "article_group_key": "android_native_tooling_workflow",
+      "demotion_reason": "Google AI Studio native Android app building announcement lacks direct camera HAL, driver, or image pipeline runtime evidence and is demoted to prevent overclaiming.",
+      "reason_code": "forbidden_bucket"
+    }
+  ],
+  "hard_blocked_groups": []
+}

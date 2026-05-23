@@ -7,6 +7,23 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "title": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "newsletter_date": "2026-05-24",
+      "newsletter_url": "newsletters/2026-05-24/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 98,
+      "reuse_reason": "retained_current_above_margin",
+      "exposed_at": "2026-05-24",
+      "first_exposed_at": "2026-05-24",
+      "last_exposed_at": "2026-05-24",
+      "exposure_count": 1,
+      "exposure_types": [
+        "homepage_headline"
+      ]
+    },
+    {
       "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
       "title": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
       "source_url": "https://goo.gle/AdaptiveApps_IO26",
