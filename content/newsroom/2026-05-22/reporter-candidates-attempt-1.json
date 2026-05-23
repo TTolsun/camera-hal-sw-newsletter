@@ -29,18 +29,6 @@
       "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "source_quality": {
-        "conditional_evidence_type": "",
-        "cross_check_status": "not_required",
-        "evidence_granularity": "article_level_concrete_source_fact",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "main_article_source_blockers": [],
-        "requires_conditional_evidence": false,
-        "requires_cross_check": false,
-        "source_quality_notes": [
-          "official source"
-        ],
-        "source_quality_status": "allowed",
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release"
       },
@@ -316,7 +304,7 @@
       "briefing_only": false,
       "reference_only": false,
       "evidence_score": 6,
-      "version_or_release": "",
+      "version_or_release": "Jetpack Compose, Jetpack Navigation 3",
       "api_or_component": "CameraX / Android camera APIs",
       "source_hint_api_or_component": "android",
       "behavior_change": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하며, 이 전환을 위한 결정적인 엔진입니다.",
@@ -374,22 +362,30 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPYUL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
           "sourceKind": "unknown",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "alt": "GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323 (1).png",
+          "contentType": "image/png",
+          "height": 1323,
+          "width": 2048
         },
         {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPYUL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/w1200-h630-p-k-no-nu/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/w1200-h630-p-k-no-nu/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
           "sourceKind": "unknown",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "alt": "GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323 (1).png",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -398,7 +394,11 @@
           "sourceKind": "unknown",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "alt": "Android logo",
+          "contentType": "image/svg+xml",
+          "height": 24,
+          "width": 24
         }
       ],
       "image_candidates": [
@@ -591,10 +591,6 @@
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
-      "included_as_headline_latest": true,
-      "headline_latest_inclusion_mode": "selected_normally",
-      "injected_from_headline_snapshot": false,
-      "snapshot_revalidated": true,
       "primary_selected": true,
       "reserve_candidate": false,
       "selection_stage": "reporter",
@@ -614,22 +610,13 @@
       ],
       "actionability_level": "none",
       "effective_actionability_level": "none",
-      "fallback_promotion_allowed": true,
-      "hal_impact_axes": [
-        "camerax_app_compatibility"
-      ],
-      "impact_claim_level": "android_framework_adjacent",
-      "reader_owners": [
-        "camera_framework_owner",
-        "camerax_app_compat_owner"
-      ],
       "signal_quality_status": "weak_signal",
       "soc_signal_source_allowed": true,
-      "source_quality_reason": "Source policy allows this candidate with concrete source evidence.",
       "source_event_id": "",
       "evidence_id": "",
       "event_type": "",
-      "needs_editor_date_review": false
+      "needs_editor_date_review": false,
+      "impact_claim_level": "android_framework_adjacent"
     },
     {
       "schema_version": 5,
@@ -902,10 +889,10 @@
       "reserve_candidate": false,
       "reporter_selected": false,
       "final_exclusion_reasons": [],
-      "summary": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다.",
-      "version_or_release": "",
+      "summary": "오늘부터 Google AI Studio는 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다.",
+      "version_or_release": "N/A",
       "api_or_component": "Google AI Studio",
-      "behavior_change": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다.",
+      "behavior_change": "Google AI Studio가 프롬프트만으로 Android 앱을 빌드할 수 있게 됨.",
       "collectionMode": "rss-item",
       "isArticleCandidate": true,
       "isWatchPage": false,
@@ -932,7 +919,11 @@
           "sourceKind": "unknown",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "alt": "GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+          "contentType": "image/png",
+          "height": 1323,
+          "width": 2048
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/w1200-h630-p-k-no-nu/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
@@ -941,7 +932,11 @@
           "sourceKind": "unknown",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "alt": "GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+          "contentType": "image/png",
+          "height": 630,
+          "width": 1200
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -950,50 +945,30 @@
           "sourceKind": "unknown",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "alt": "Android logo",
+          "contentType": "image/svg+xml",
+          "height": 24,
+          "width": 24
         }
       ],
       "actionability_level": "none",
       "effective_actionability_level": "none",
-      "fallback_promotion_allowed": false,
-      "hal_impact_axes": [
-        "native_tooling_workflow"
-      ],
-      "impact_claim_level": "tooling_supporting",
-      "main_article_source_allowed": true,
-      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-      "main_article_source_blockers": [],
-      "reader_owners": [
-        "native_tooling_owner"
-      ],
-      "selection_slot": "",
       "signal_quality_status": "weak_signal",
       "soc_signal_source_allowed": true,
-      "soc_signal_type": "accelerator_camera_workload",
       "source_quality": {
-        "conditional_evidence_type": "",
-        "cross_check_status": "not_required",
-        "evidence_granularity": "article_level_concrete_source_fact",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "main_article_source_blockers": [],
-        "requires_conditional_evidence": false,
-        "requires_cross_check": false,
-        "source_quality_notes": [
-          "official source"
-        ],
-        "source_quality_status": "allowed",
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release"
       },
-      "source_quality_reason": "Source policy allows this candidate with concrete source evidence.",
       "source_quality_status": "allowed",
       "source_role": "official_release_source",
       "source_url_quality": "official_dated_release",
       "source_event_id": "",
       "evidence_id": "",
       "event_type": "",
-      "needs_editor_date_review": false
+      "needs_editor_date_review": false,
+      "impact_claim_level": "tooling_supporting",
+      "selection_slot": ""
     }
   ],
   "rejected_main_ineligible_candidates": [],

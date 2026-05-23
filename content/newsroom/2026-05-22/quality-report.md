@@ -2,18 +2,18 @@
 
 ## Gate Result
 
-- Quality score: 92
+- Quality score: 89
 - Quality threshold: 85
 - Max score: 100
 - Result: NEEDS_FIX
-- Summary: Quality score 92, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
+- Summary: Quality score 89, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
 
 ## Publication Mode
 
 - publication_mode: review_only
 - homepage_visibility: normal
-- content_quality_score: 92
-- camera_relevance_score: 92
+- content_quality_score: 89
+- camera_relevance_score: 89
 - publication_mode_decision: review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.
 - fallback_only: false
 - camera_anchor_count: 1
@@ -77,7 +77,7 @@
 - Blocking deduction count: 1
 - Blocking deduction categories: field-hygiene
 - Hard fail count: 1
-- Soft deduction count: 0
+- Soft deduction count: 3
 
 ## Claim Binding
 
@@ -129,10 +129,13 @@
 
 ## Soft Deductions
 
-- none
+- 1 pt [editorial-story] briefing 1: Briefing bullet misses story structure elements: action_hint.
+- 1 pt [editorial-story] briefing 2: Briefing bullet misses story structure elements: action_hint.
+- 1 pt [editorial-story] briefing 3: Briefing bullet misses story structure elements: action_hint.
 
 ## Top Deduction Categories
 
+- editorial-story (3)
 - field-hygiene (1)
 
 ## Candidate Exclusion Summary
@@ -141,4 +144,7 @@
 
 ## Deductions
 
+- 1 pt [editorial-story] briefing 1: Briefing bullet misses story structure elements: action_hint.
+- 1 pt [editorial-story] briefing 2: Briefing bullet misses story structure elements: action_hint.
+- 1 pt [editorial-story] briefing 3: Briefing bullet misses story structure elements: action_hint.
 - 8 pt [field-hygiene] 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O: Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.

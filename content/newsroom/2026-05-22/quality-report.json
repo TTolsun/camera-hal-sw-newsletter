@@ -1,12 +1,42 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "score": 92,
+  "score": 89,
   "max_score": 100,
   "threshold": 85,
   "status": "NEEDS_FIX",
-  "summary": "Quality score 92, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "summary": "Quality score 89, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
   "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
     {
       "category": "field-hygiene",
       "points": 8,
@@ -463,7 +493,7 @@
       "field-hygiene"
     ],
     "hard_fail_count": 1,
-    "soft_deduction_count": 0,
+    "soft_deduction_count": 3,
     "article_gate_counts": {
       "PASS": 1,
       "DEMOTE": 0,
@@ -641,6 +671,10 @@
     ],
     "top_deduction_categories": [
       {
+        "category": "editorial-story",
+        "count": 3
+      },
+      {
         "category": "field-hygiene",
         "count": 1
       }
@@ -660,8 +694,8 @@
   "fallback_only": false,
   "camera_anchor_count": 1,
   "homepage_badge": "",
-  "content_quality_score": 92,
-  "camera_relevance_score": 92,
+  "content_quality_score": 89,
+  "camera_relevance_score": 89,
   "publication_mode_decision": "review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.",
   "original_fact_check_status": "PASS",
   "original_must_fix_count": 0,
@@ -679,18 +713,14 @@
       "action": "rebuild-from-bound-candidate",
       "fallback": false,
       "reason": "rebuild-from-bound-candidate"
-    },
-    {
-      "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
-      "category": "Android Native Tooling",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "source": "Android Developers Blog",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "action": "demote-to-watch",
-      "fallback": true,
-      "reason": "demote-to-watch"
     }
   ],
   "original_quality_status": "NEEDS_FIX",
-  "original_quality_score": 84
+  "original_quality_score": 89,
+  "fallback_public_headline_generation": {
+    "source": "llm",
+    "stage": "fallback-public-title-editor",
+    "override_count": 4,
+    "reason": "llm_headlines_generated"
+  }
 }
