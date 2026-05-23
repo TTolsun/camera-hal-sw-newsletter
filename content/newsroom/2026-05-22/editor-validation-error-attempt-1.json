@@ -1,43 +1,36 @@
 {
   "name": "EditorSemanticValidationError",
-  "message": "Editor output failed article section contract validation.",
+  "message": "Editor output failed public article contract validation.",
   "details": {
-    "field": "sections.article_sections",
+    "field": "sections.public_article",
     "expectedKeys": [
-      "verified_facts",
-      "background_context",
-      "hal_driver_impact",
-      "action_items",
-      "team_share_points"
+      "headline",
+      "lead",
+      "body_paragraphs",
+      "camera_hal_takeaway",
+      "reader_checkpoints",
+      "source_links"
     ],
-    "allowedKeys": [
-      "verified_facts",
-      "background_context",
-      "hal_driver_impact",
-      "action_items",
-      "team_share_points",
-      "known_limitations",
-      "watch_items",
-      "do_not_claim"
-    ],
-    "actualCount": 1,
-    "sectionCount": 1,
+    "actualCount": 2,
+    "sectionCount": 2,
     "issues": [
       {
         "index": 1,
-        "headline": "Jetpack Compose 및 Jetpack Navigation 3 도입에 따른 멀티 디바이스 카메라 UX 검증 요구사항",
-        "type": "missing_article_sections",
-        "keys": [
-          "verified_facts",
-          "background_context",
-          "hal_driver_impact",
-          "action_items",
-          "team_share_points"
-        ]
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX를 통한 적응형 카메라 미리보기 구현",
+        "type": "insufficient_concrete_public_checkpoints",
+        "actualCount": 0,
+        "expectedMinCount": 2
+      },
+      {
+        "index": 2,
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원",
+        "type": "insufficient_concrete_public_checkpoints",
+        "actualCount": 0,
+        "expectedMinCount": 2
       }
     ]
   },
-  "field": "sections.article_sections",
+  "field": "sections.public_article",
   "stage": "editor attempt 1/2",
   "attempt": 1,
   "repairAttempted": false,

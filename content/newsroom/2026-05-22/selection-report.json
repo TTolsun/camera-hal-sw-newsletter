@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-22",
-  "generated_at": "2026-05-22T04:38:10.866Z",
+  "generated_at": "2026-05-23T11:12:33.286Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -76,6 +76,39 @@
     "forbidden_main_article_count": 0,
     "non_fallback_reviewable_article_count": 2,
     "fallback_topic_count": 1
+  },
+  "headline_decision": {
+    "decision": "retained_current_above_margin",
+    "reason": "retained_current_above_margin",
+    "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "replacement_headline_key": null,
+    "previous_stored_current_score": 100,
+    "runtime_decayed_score": 100,
+    "last_scored_at": "2026-05-23",
+    "scored_at": "2026-05-22",
+    "retained": true,
+    "replaced": false,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": true,
+    "mode": "selected_normally",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-05-23",
+    "backfill_included": false
   },
   "candidate_pool_preflight_passed": true,
   "candidate_shortage_reviewable": false,

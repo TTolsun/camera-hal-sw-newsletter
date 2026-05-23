@@ -5,11 +5,11 @@ newsroom automation이 publication readiness 전에 멈췄습니다. 아래 arti
 ## 실패
 
 - 단계: editor attempt 1/2
-- 사유: Editor output failed article section contract validation.
+- 사유: Editor output failed public article contract validation.
 
 ## 후보 선택 진단
 
-- Reporter candidates: 1
+- Reporter candidates: 2
 - Reporter-selected candidates: 0
 - Final input candidates: 66
 - Final eligible candidates: 3
@@ -44,6 +44,22 @@ Source/parser recovery hint:
 - source_gap_risk=true (61)
 - reference_only=true (56)
 - briefing_only=true (52)
+
+Homepage Headline:
+- decision: retained_current_above_margin
+- current_headline_key: url:https://goo.gle/AdaptiveApps_IO26
+- replacement_headline_key: unknown
+- public_render_reconciled: false
+- public_rendered_headline_key: unknown
+- public_render_reconciliation_reason: unknown
+- runtime_decayed_score: 100
+- previous_stored_current_score: 100
+- last_scored_at: 2026-05-23
+- scored_at: 2026-05-22
+- included_as_latest: true
+- latest_inclusion_mode: selected_normally
+- injected_from_snapshot: false
+- removed_due_to_headline_inclusion_count: 0
 
 Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
 
@@ -84,7 +100,7 @@ npm.cmd run validate
 {
   "schema_version": 3,
   "date": "2026-05-22",
-  "generated_at": "2026-05-22T04:33:02.269Z",
+  "generated_at": "2026-05-23T11:02:47.235Z",
   "input_candidate_count": 66,
   "eligible_candidate_count": 3,
   "deterministic_selected_count": 2,
@@ -332,6 +348,14 @@ npm.cmd run validate
       "forbiddenMainBuckets": [
         "generic_tech_watchlist"
       ]
+    },
+    "headline_policy": {
+      "decayModel": "linear",
+      "decayRatePerDay": 2,
+      "replacementMargin": 5,
+      "minimumHeadlineScore": 40,
+      "latestInclusionRequired": true,
+      "historyMaxEntries": 50
     },
     "shortlist_target_range": "8-12 candidates before Gemini reporter/editor prompts.",
     "main_article_score_threshold": 42,
@@ -867,6 +891,7 @@ npm.cmd run validate
       },
       "selected": true,
       "selected_for_editor": true,
+      "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
       "deterministic_score": 113,
       "score_breakdown": {
         "camera_hal_directness": 5,
@@ -905,6 +930,31 @@ npm.cmd run validate
         "linked_evidence_adjustment": 0,
         "total": 113
       },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 113,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 13:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-concrete-evidence",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
       "exclusion_reasons": [],
@@ -936,6 +986,10 @@ npm.cmd run validate
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -1258,6 +1312,7 @@ npm.cmd run validate
       },
       "selected": true,
       "selected_for_editor": true,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "deterministic_score": 107.7,
       "score_breakdown": {
         "camera_hal_directness": 3.3,
@@ -1295,6 +1350,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 107.7
+      },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 107.7,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 12:45:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
@@ -1863,6 +1943,7 @@ npm.cmd run validate
       },
       "selected": true,
       "selected_for_editor": true,
+      "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
       "deterministic_score": 113,
       "score_breakdown": {
         "camera_hal_directness": 5,
@@ -1901,6 +1982,31 @@ npm.cmd run validate
         "linked_evidence_adjustment": 0,
         "total": 113
       },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 113,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 13:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-concrete-evidence",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
       "exclusion_reasons": [],
@@ -1932,6 +2038,10 @@ npm.cmd run validate
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "primary_selected": true,
       "reserve_candidate": false,
       "selection_stage": "deterministic-primary",
@@ -2254,6 +2364,7 @@ npm.cmd run validate
       },
       "selected": true,
       "selected_for_editor": true,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "deterministic_score": 107.7,
       "score_breakdown": {
         "camera_hal_directness": 3.3,
@@ -2291,6 +2402,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 107.7
+      },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 107.7,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 12:45:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
@@ -2968,6 +3104,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "deterministic_score": 116,
       "score_breakdown": {
         "camera_hal_directness": 5,
@@ -3005,6 +3142,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 2,
         "total": 116
+      },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 116,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "May 06, 2026",
+        "date_field": "published_date",
+        "evidence_level": "dated-release-evidence",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
@@ -3538,6 +3700,7 @@ npm.cmd run validate
       },
       "selected": true,
       "selected_for_editor": true,
+      "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
       "deterministic_score": 113,
       "score_breakdown": {
         "camera_hal_directness": 5,
@@ -3576,6 +3739,31 @@ npm.cmd run validate
         "linked_evidence_adjustment": 0,
         "total": 113
       },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 113,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 13:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-concrete-evidence",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
       "exclusion_reasons": [],
@@ -3607,6 +3795,10 @@ npm.cmd run validate
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -3929,6 +4121,7 @@ npm.cmd run validate
       },
       "selected": true,
       "selected_for_editor": true,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "deterministic_score": 107.7,
       "score_breakdown": {
         "camera_hal_directness": 3.3,
@@ -3966,6 +4159,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 107.7
+      },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 107.7,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 12:45:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
@@ -4645,6 +4863,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "deterministic_score": 116,
       "score_breakdown": {
         "camera_hal_directness": 5,
@@ -4682,6 +4901,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 2,
         "total": 116
+      },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 116,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "May 06, 2026",
+        "date_field": "published_date",
+        "evidence_level": "dated-release-evidence",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
@@ -5051,6 +5295,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/04/gcc-16.1",
       "deterministic_score": 110,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -5088,6 +5333,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 110
+      },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 110,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Thu, 30 Apr 2026 22:36:23 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
@@ -5411,6 +5681,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "deterministic_score": 12.8,
       "score_breakdown": {
         "camera_hal_directness": 4.2,
@@ -5448,6 +5719,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 12.8
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 12.8,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 13:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -5792,6 +6088,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
       "deterministic_score": 14.1,
       "score_breakdown": {
         "camera_hal_directness": 3.9,
@@ -5829,6 +6126,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 14.1
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 14.1,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 09:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -6176,6 +6498,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
       "deterministic_score": 85.4,
       "score_breakdown": {
         "camera_hal_directness": 3.6,
@@ -6213,6 +6536,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 85.4
+      },
+      "headline_score": 43,
+      "headline_score_breakdown": {
+        "base_score": 85.4,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 43
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 11:45:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -6549,6 +6897,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
       "deterministic_score": 26.4,
       "score_breakdown": {
         "camera_hal_directness": 3.6,
@@ -6586,6 +6935,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 26.4
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 26.4,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 09:30:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -6929,6 +7303,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
       "deterministic_score": 3.4,
       "score_breakdown": {
         "camera_hal_directness": 3.6,
@@ -6966,6 +7341,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 3.4
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 3.4,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Fri, 15 May 2026 16:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -7310,6 +7710,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
       "deterministic_score": 4.7,
       "score_breakdown": {
         "camera_hal_directness": 3.3,
@@ -7347,6 +7748,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 4.7
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 4.7,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 12:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -7691,6 +8117,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
       "deterministic_score": 0.7,
       "score_breakdown": {
         "camera_hal_directness": 3.3,
@@ -7728,6 +8155,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 0.7
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 0.7,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 08:15:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -8093,6 +8545,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "deterministic_score": 113,
       "score_breakdown": {
         "camera_hal_directness": 4,
@@ -8130,6 +8583,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 113
+      },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 113,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 3,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 12:45:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-concrete-evidence",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
@@ -8458,6 +8936,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
       "deterministic_score": 0,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -8495,6 +8974,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 0
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 0,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 11:15:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -8839,6 +9343,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
       "deterministic_score": 0,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -8876,6 +9381,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 0
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 0,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 11:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -9220,6 +9750,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
       "deterministic_score": 20,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -9257,6 +9788,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 20
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 20,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 10:45:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -9600,6 +10156,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
       "deterministic_score": 6,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -9637,6 +10194,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 6
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 6,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 10:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -9981,6 +10563,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
       "deterministic_score": 17,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -10018,6 +10601,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 17
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 17,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Thu, 14 May 2026 20:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -10361,6 +10969,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
       "deterministic_score": -3,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -10398,6 +11007,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -3
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -3,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Fri, 08 May 2026 16:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -10742,6 +11376,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
       "deterministic_score": -3,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -10779,6 +11414,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -3
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -3,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Thu, 07 May 2026 17:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -11177,6 +11837,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "deterministic_score": 59,
       "score_breakdown": {
         "camera_hal_directness": 5,
@@ -11214,6 +11875,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 59
+      },
+      "headline_score": 25,
+      "headline_score_breakdown": {
+        "base_score": 59,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 8,
+        "minimum_headline_score": 40,
+        "total": 25
+      },
+      "date_evidence": {
+        "date": "May 06, 2026",
+        "date_field": "published_date",
+        "evidence_level": "undated-watch-page",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -12283,6 +12969,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://source.android.com/docs/whatsnew",
       "deterministic_score": -56.15,
       "score_breakdown": {
         "camera_hal_directness": 2.65,
@@ -12320,6 +13007,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -56.15
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -56.15,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 8,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "undated-watch-page",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -14609,6 +15321,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://source.android.com/docs/compatibility/cdd",
       "deterministic_score": -52.15,
       "score_breakdown": {
         "camera_hal_directness": 2.65,
@@ -14646,6 +15359,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -52.15
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -52.15,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 8,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "reference-index",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -14996,6 +15734,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
       "deterministic_score": -1.4,
       "score_breakdown": {
         "camera_hal_directness": 2.4,
@@ -15033,6 +15772,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -1.4
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -1.4,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 10:30:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -15377,6 +16141,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
       "deterministic_score": -14.4,
       "score_breakdown": {
         "camera_hal_directness": 2.4,
@@ -15414,6 +16179,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -14.4
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -14.4,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 12 May 2026 14:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -15758,6 +16548,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "deterministic_score": -12.4,
       "score_breakdown": {
         "camera_hal_directness": 2.4,
@@ -15795,6 +16586,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -12.4
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -12.4,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Mon, 04 May 2026 17:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -16115,6 +16931,7 @@ npm.cmd run validate
       "selection_window_reason": "141 day(s) since effective_date; older than reference 90 day window",
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://source.android.com/docs/core/camera",
       "deterministic_score": 14.25,
       "score_breakdown": {
         "camera_hal_directness": 4.25,
@@ -16152,6 +16969,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 14.25
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 14.25,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 8,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "2026-01-01",
+        "date_field": "effective_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -16478,6 +17320,7 @@ npm.cmd run validate
       "selection_window_reason": "1843 day(s) since effective_date; older than reference 90 day window",
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera",
       "deterministic_score": 12,
       "score_breakdown": {
         "camera_hal_directness": 4,
@@ -16515,6 +17358,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 12
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 12,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 8,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "2021-05-05",
+        "date_field": "effective_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -16865,6 +17733,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
       "deterministic_score": -8.1,
       "score_breakdown": {
         "camera_hal_directness": 2.1,
@@ -16902,6 +17771,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -8.1
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -8.1,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 08:30:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -17218,6 +18112,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
       "deterministic_score": -8.1,
       "score_breakdown": {
         "camera_hal_directness": 2.1,
@@ -17255,6 +18150,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -8.1
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -8.1,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 08:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -17551,6 +18471,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://source.android.com/docs/security/bulletin/asb-overview",
       "deterministic_score": 4.45,
       "score_breakdown": {
         "camera_hal_directness": 2.05,
@@ -17588,6 +18509,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 4.45
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 4.45,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "2026-05-01",
+        "date_field": "published_date",
+        "evidence_level": "dated-release-evidence",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -17908,6 +18854,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://source.android.com/docs/security/bulletin/2026/2026-05-01",
       "deterministic_score": -25.55,
       "score_breakdown": {
         "camera_hal_directness": 2.05,
@@ -17945,6 +18892,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -25.55
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -25.55,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 8,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "2026-05-01",
+        "date_field": "published_date",
+        "evidence_level": "undated-watch-page",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -18251,6 +19223,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "deterministic_score": 60.05,
       "score_breakdown": {
         "camera_hal_directness": 3.45,
@@ -18288,6 +19261,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 60.05
+      },
+      "headline_score": 10,
+      "headline_score_breakdown": {
+        "base_score": 60.05,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 10
+      },
+      "date_evidence": {
+        "date": "Mon, 04 May 2026 22:31:55 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -18598,6 +19596,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "deterministic_score": -4.35,
       "score_breakdown": {
         "camera_hal_directness": 2.85,
@@ -18635,6 +19634,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -4.35
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -4.35,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Thu, 14 May 2026 15:01:46 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -18904,6 +19928,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
       "deterministic_score": 61,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -18941,6 +19966,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 61
+      },
+      "headline_score": 11,
+      "headline_score_breakdown": {
+        "base_score": 61,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 11
+      },
+      "date_evidence": {
+        "date": "Wed, 20 May 2026 22:51:47 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -19243,6 +20293,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
       "deterministic_score": 50.25,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -19280,6 +20331,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 50.25
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 50.25,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Mon, 18 May 2026 22:46:29 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -19548,6 +20624,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/2026-survey-summary",
       "deterministic_score": -13.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -19585,6 +20662,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -13.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -13.75,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Mon, 04 May 2026 21:04:35 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -19854,6 +20956,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire",
       "deterministic_score": 46.55,
       "score_breakdown": {
         "camera_hal_directness": 1.95,
@@ -19891,6 +20994,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 46.55
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 46.55,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Wed, 06 May 2026 22:35:16 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -20187,6 +21315,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
       "deterministic_score": -29.15,
       "score_breakdown": {
         "camera_hal_directness": 1.65,
@@ -20224,6 +21353,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -29.15
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -29.15,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Fri, 15 May 2026 22:42:26 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -20534,6 +21688,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
       "deterministic_score": -34.15,
       "score_breakdown": {
         "camera_hal_directness": 1.65,
@@ -20571,6 +21726,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -34.15
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -34.15,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Wed, 13 May 2026 21:36:47 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -20843,6 +22023,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp",
       "deterministic_score": 39.85,
       "score_breakdown": {
         "camera_hal_directness": 1.65,
@@ -20880,6 +22061,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 39.85
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 39.85,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "Tue, 12 May 2026 22:40:34 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": true
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -21034,6 +22240,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -21071,6 +22278,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -21235,6 +22467,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -21272,6 +22505,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -21436,6 +22694,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
       "deterministic_score": -62.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -21473,6 +22732,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -62.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -62.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -21637,6 +22921,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -21674,6 +22959,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -21859,6 +23169,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "deterministic_score": -5.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -21896,6 +23207,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -5.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -5.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -22058,6 +23394,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -22095,6 +23432,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -22259,6 +23621,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -22296,6 +23659,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -22481,6 +23869,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "deterministic_score": -5.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -22518,6 +23907,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -5.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -5.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -22680,6 +24094,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -22717,6 +24132,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -22881,6 +24321,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -22918,6 +24359,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -23082,6 +24548,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -23119,6 +24586,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -23283,6 +24775,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
       "deterministic_score": -59.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -23320,6 +24813,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -59.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -59.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -23484,6 +25002,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
       "deterministic_score": -53.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -23521,6 +25040,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -53.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -53.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -23685,6 +25229,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -23722,6 +25267,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -23886,6 +25456,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -23923,6 +25494,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -24087,6 +25683,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -24124,6 +25721,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -24288,6 +25910,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -24325,6 +25948,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -24489,6 +26137,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
       "deterministic_score": -61.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -24526,6 +26175,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -61.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -61.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -24690,6 +26364,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -24727,6 +26402,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -24891,6 +26591,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -24928,6 +26629,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -25100,6 +26826,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/04/gcc-16.1",
       "deterministic_score": 30,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -25137,6 +26864,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": 30
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": 30,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -25297,6 +27049,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "deterministic_score": -61.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -25334,6 +27087,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -61.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -61.75,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -25497,6 +27275,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/2026-survey-summary",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -25534,6 +27313,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -25697,6 +27501,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo",
       "deterministic_score": -63.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -25734,6 +27539,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -63.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -63.75,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -25897,6 +27727,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo",
       "deterministic_score": -61.75,
       "score_breakdown": {
         "camera_hal_directness": 2.25,
@@ -25934,6 +27765,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -61.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -61.75,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -26096,6 +27952,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://source.android.com/docs/core/camera",
       "deterministic_score": -39,
       "score_breakdown": {
         "camera_hal_directness": 5,
@@ -26133,6 +27990,31 @@ npm.cmd run validate
         "linked_evidence_watch_penalty": 0,
         "linked_evidence_adjustment": 0,
         "total": -39
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -39,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 30,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
       },
       "main_article_score_eligible": false,
       "score_filter_reasons": [
@@ -26523,6 +28405,7 @@ npm.cmd run validate
       },
       "selected": false,
       "selected_for_editor": false,
+      "article_identity_key": "url:https://isocpp.org//blog/2026/04/gcc-16.1",
       "deterministic_score": 110,
       "score_breakdown": {
         "camera_hal_directness": 3,
@@ -26561,6 +28444,31 @@ npm.cmd run validate
         "linked_evidence_adjustment": 0,
         "total": 110
       },
+      "headline_score": 100,
+      "headline_score_breakdown": {
+        "base_score": 110,
+        "official_source_bonus": 0,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "date_evidence": {
+        "date": "Thu, 30 Apr 2026 22:36:23 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
       "main_article_score_eligible": true,
       "score_filter_reasons": [],
       "exclusion_reasons": [
@@ -26586,6 +28494,96 @@ npm.cmd run validate
   ],
   "selection_warnings": [],
   "selection_errors": [],
+  "headline_decision": {
+    "decision": "retained_current_above_margin",
+    "reason": "retained_current_above_margin",
+    "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "replacement_headline_key": null,
+    "previous_stored_current_score": 100,
+    "runtime_decayed_score": 100,
+    "last_scored_at": "2026-05-23",
+    "scored_at": "2026-05-22",
+    "retained": true,
+    "replaced": false,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": true,
+    "mode": "selected_normally",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "homepage_headline_state": {
+    "schemaVersion": 1,
+    "updated_at": "2026-05-22T00:00:00+09:00",
+    "current_headline": {
+      "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
+      "title": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+      "summary": "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26",
+      "newsletter_date": "2026-05-23",
+      "newsletter_url": "newsletters/2026-05-23/index.html",
+      "newsletter_article_url": "newsletters/2026-05-23/index.html#article-jetpack-compose-camerax-preview",
+      "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "image_alt": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+      "selected_at": "2026-05-23",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-05-22",
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 13:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-concrete-evidence",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "android_platform_camera_adjacent",
+        "source_name": "Android Developers Blog"
+      }
+    },
+    "headline_history": [],
+    "policy": {
+      "decay_model": "linear",
+      "decay_rate_per_day": 2,
+      "replacement_margin": 5,
+      "minimum_headline_score": 40
+    }
+  },
+  "headline_policy": {
+    "decayModel": "linear",
+    "decayRatePerDay": 2,
+    "replacementMargin": 5,
+    "minimumHeadlineScore": 40,
+    "latestInclusionRequired": true,
+    "historyMaxEntries": 50
+  },
   "exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
@@ -26648,7 +28646,9 @@ npm.cmd run validate
   "final_input_candidate_count": 66,
   "final_eligible_candidate_count": 3,
   "final_selected_article_count": 2,
-  "reporter_candidate_count": 1,
+  "headline_public_render_reconciliation": null,
+  "article_exposure_coverage": null,
+  "reporter_candidate_count": 2,
   "reporter_selected_count": 0,
   "reporter_selected_but_final_excluded_count": 0,
   "final_exclusion_reason_summary": [
@@ -27226,6 +29226,7 @@ npm.cmd run validate
     },
     "selected": true,
     "selected_for_editor": true,
+    "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
     "deterministic_score": 113,
     "score_breakdown": {
       "camera_hal_directness": 5,
@@ -27264,6 +29265,31 @@ npm.cmd run validate
       "linked_evidence_adjustment": 0,
       "total": 113
     },
+    "headline_score": 100,
+    "headline_score_breakdown": {
+      "base_score": 113,
+      "official_source_bonus": 8,
+      "camera_bucket_bonus": 6,
+      "driver_or_soc_bonus": 0,
+      "fallback_penalty": 0,
+      "generic_topic_penalty": 0,
+      "source_gap_penalty": 0,
+      "watch_page_penalty": 0,
+      "minimum_headline_score": 40,
+      "total": 100
+    },
+    "date_evidence": {
+      "date": "Tue, 19 May 2026 13:00:00 +0000",
+      "date_field": "published_date",
+      "evidence_level": "dated-concrete-evidence",
+      "publish_ready_date_evidence": true
+    },
+    "quality_flags": {
+      "source_gap_risk": false,
+      "fact_check_must_fix_unresolved": false,
+      "stale_claim_hard_failure": false,
+      "blocked_source": false
+    },
     "main_article_score_eligible": true,
     "score_filter_reasons": [],
     "exclusion_reasons": [],
@@ -27295,6 +29321,10 @@ npm.cmd run validate
         "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
       }
     ],
+    "included_as_headline_latest": true,
+    "headline_latest_inclusion_mode": "selected_normally",
+    "injected_from_headline_snapshot": false,
+    "snapshot_revalidated": true,
     "final_selected": true,
     "selection_stage": "deterministic-primary",
     "primary_selected": true,
@@ -27617,6 +29647,7 @@ npm.cmd run validate
     },
     "selected": true,
     "selected_for_editor": true,
+    "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
     "deterministic_score": 107.7,
     "score_breakdown": {
       "camera_hal_directness": 3.3,
@@ -27654,6 +29685,31 @@ npm.cmd run validate
       "linked_evidence_watch_penalty": 0,
       "linked_evidence_adjustment": 0,
       "total": 107.7
+    },
+    "headline_score": 100,
+    "headline_score_breakdown": {
+      "base_score": 107.7,
+      "official_source_bonus": 8,
+      "camera_bucket_bonus": 0,
+      "driver_or_soc_bonus": 0,
+      "fallback_penalty": 10,
+      "generic_topic_penalty": 0,
+      "source_gap_penalty": 0,
+      "watch_page_penalty": 0,
+      "minimum_headline_score": 40,
+      "total": 100
+    },
+    "date_evidence": {
+      "date": "Tue, 19 May 2026 12:45:00 +0000",
+      "date_field": "published_date",
+      "evidence_level": "dated-rss-article",
+      "publish_ready_date_evidence": true
+    },
+    "quality_flags": {
+      "source_gap_risk": false,
+      "fact_check_must_fix_unresolved": false,
+      "stale_claim_hard_failure": false,
+      "blocked_source": false
     },
     "main_article_score_eligible": true,
     "score_filter_reasons": [],
