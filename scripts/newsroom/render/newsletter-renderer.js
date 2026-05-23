@@ -11,6 +11,9 @@ const {
 const {
   uniqueArticleAnchorId
 } = require('../common/article-anchor');
+const {
+  renderReleaseQaInventorySection
+} = require('../common/review-artifact-inventory');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -526,12 +529,15 @@ ${decision}
 `;
 }
 
-function buildReleaseQaReport(date, files, validateResult, factCheck, todoFound, emptySourceSections, qualityReport = null) {
+function buildReleaseQaReport(date, files, validateResult, factCheck, todoFound, emptySourceSections, qualityReport = null, reviewInventory = null) {
   return `# 릴리스 QA 보고서 - ${date}
 
 ## 생성 파일 목록
 
 ${files.map(file => `- ${file}`).join('\n')}
+
+${reviewInventory ? `${renderReleaseQaInventorySection(reviewInventory)}
+` : ''}
 
 ## npm run validate 실행 결과
 

@@ -4,8 +4,15 @@ const os = require('os');
 const path = require('path');
 const { buildManifest } = require('./write-artifact-manifest');
 const {
+  buildReviewArtifactInventory,
+  renderReviewGuideMarkdown,
+  REVIEW_ARTIFACT_SCHEMA_VERSION
+} = require('../common/review-artifact-inventory');
+const {
   collectedCandidatesRelPath,
-  newsroomRelPath
+  newsroomRelPath,
+  seedEvidencePackMarkdownRelPath,
+  seedMergeReportMarkdownRelPath
 } = require('../common/artifact-paths');
 const {
   articlePolicy,
@@ -97,13 +104,25 @@ function testManifestCreationAndHashes() {
     date,
     selected_main_articles: []
   });
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'artifact-manifest.json').split('/')), {
+    schema_version: 1,
+    date,
+    files: []
+  });
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'retry-history.json').split('/')), []);
   writeJson(path.join(snapshotDir, '.tmp', 'gemini-raw', 'attempt-1.json'), { text: '{' });
   writeJson(path.join(snapshotDir, 'cache', 'news-summary', 'summary.json'), { title: 'cached' });
 
   const manifest = runWriter(snapshotDir);
+  assert.strictEqual(manifest.schema_version, REVIEW_ARTIFACT_SCHEMA_VERSION);
   assert.strictEqual(manifest.date, date);
   assert.ok(fs.existsSync(path.join(snapshotDir, 'artifact-manifest.json')));
+  assert.ok(Array.isArray(manifest.review_artifacts));
+  assert.ok(manifest.review_artifacts.some(artifact =>
+    artifact.path === newsroomRelPath(date, 'artifact-manifest.json') &&
+    artifact.present === true &&
+    artifact.derived === true
+  ));
   assert.ok(manifest.files.some(file => file.path === '.tmp/newsletter-generation-status.json'));
   assert.ok(manifest.files.some(file => file.path === collectedCandidatesRelPath(date)));
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'selection-diagnostics.md')));
@@ -117,6 +136,13 @@ function testManifestCreationAndHashes() {
   assert.ok(manifest.files.some(file => file.path === '.tmp/gemini-raw/attempt-1.json'));
   assert.ok(manifest.files.some(file => file.path === 'cache/news-summary/summary.json'));
   assert.ok(manifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
+  assert.ok(manifest.files.every(file =>
+    Object.keys(file).sort().join(',') === 'path,sha256,size' &&
+    typeof file.path === 'string' &&
+    typeof file.size === 'number' &&
+    typeof file.sha256 === 'string'
+  ));
+  assert.ok(manifest.files.every(file => !file.path.endsWith('artifact-manifest.json')));
   assert.ok(manifest.missing_critical_files.includes(`newsletters/${date}/newsletter.md`));
 }
 
@@ -144,8 +170,188 @@ function testNoWarningsWhenReportsAgree() {
   assert.deepStrictEqual(manifest.consistency_warnings, []);
 }
 
+function testReviewInventoryRequiredStateAndFallbacks() {
+  const snapshotDir = makeSnapshot();
+  const unknownPath = newsroomRelPath(date, 'experimental-selection-report.json');
+  writeText(path.join(snapshotDir, ...seedEvidencePackMarkdownRelPath(date).split('/')), '# Seed Evidence\n');
+  writeJson(path.join(snapshotDir, ...unknownPath.split('/')), { experimental: true });
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, '.DS_Store').split('/')), 'ignored\n');
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'Thumbs.db').split('/')), 'ignored\n');
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'debug.tmp').split('/')), 'ignored\n');
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'old.bak').split('/')), 'ignored\n');
+
+  const inventory = buildReviewArtifactInventory({
+    root: snapshotDir,
+    date,
+    changedArtifacts: [unknownPath.replace(/\//g, '\\')],
+    runContext: {
+      seedUsed: false,
+      publicOutputExpected: true,
+      status: 'weird_new_status'
+    }
+  });
+
+  const seedEvidence = inventory.review_artifacts.find(artifact =>
+    artifact.path === seedEvidencePackMarkdownRelPath(date)
+  );
+  const seedMerge = inventory.review_artifacts.find(artifact =>
+    artifact.path === seedMergeReportMarkdownRelPath(date)
+  );
+  const newsletterMd = inventory.review_artifacts.find(artifact =>
+    artifact.path === `newsletters/${date}/newsletter.md`
+  );
+  const newsletterHtml = inventory.review_artifacts.find(artifact =>
+    artifact.path === `newsletters/${date}/index.html`
+  );
+  const unknown = inventory.review_artifacts.find(artifact => artifact.path === unknownPath);
+
+  assert.equal(inventory.status, 'weird_new_status');
+  assert.equal(seedEvidence.present, true);
+  assert.equal(seedEvidence.requiredActive, false);
+  assert.equal(seedEvidence.review_blocking, false);
+  assert.equal(seedEvidence.review_attention_required, true);
+  assert.equal(seedEvidence.warning.code, 'seed_artifact_present_without_seed');
+  assert.equal(seedMerge.requiredActive, false);
+  assert.equal(newsletterMd.requiredActive, true);
+  assert.equal(newsletterHtml.requiredActive, true);
+  assert.ok(inventory.missingRequired.some(artifact => artifact.path === `newsletters/${date}/newsletter.md`));
+  assert.ok(inventory.missingRequired.some(artifact => artifact.path === `newsletters/${date}/index.html`));
+  assert.equal(unknown.group, 'unknown_artifacts');
+  assert.equal(unknown.role, 'unclassified');
+  assert.equal(unknown.required, 'optional');
+  assert.equal(unknown.requiredActive, false);
+  assert.equal(unknown.review_order, 95);
+  assert.equal(unknown.review_attention_required, true);
+  assert.equal(unknown.changed, true);
+  assert.equal(inventory.review_artifacts.some(artifact => artifact.path.endsWith('.DS_Store')), false);
+  assert.equal(inventory.review_artifacts.some(artifact => artifact.path.endsWith('Thumbs.db')), false);
+  assert.equal(inventory.review_artifacts.some(artifact => artifact.path.endsWith('.tmp')), false);
+  assert.equal(inventory.review_artifacts.some(artifact => artifact.path.endsWith('.bak')), false);
+}
+
+function testDerivedArtifactsDoNotCreateMissingRequired() {
+  const snapshotDir = makeSnapshot();
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, '00-review-guide.md').split('/')), '# Guide\n');
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'release-qa-report.md').split('/')), '# Release QA\n');
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'artifact-manifest.json').split('/')), {
+    schema_version: REVIEW_ARTIFACT_SCHEMA_VERSION,
+    files: []
+  });
+
+  const inventory = buildReviewArtifactInventory({
+    root: snapshotDir,
+    date,
+    runContext: {
+      seedUsed: false,
+      publicOutputExpected: false,
+      status: 'FAILED_REPAIR_REVIEWABLE'
+    }
+  });
+  const guide = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, '00-review-guide.md')
+  );
+  const releaseQa = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'release-qa-report.md')
+  );
+  const manifest = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'artifact-manifest.json')
+  );
+
+  assert.equal(guide.present, true);
+  assert.equal(guide.derived, true);
+  assert.equal(guide.requiredActive, false);
+  assert.equal(releaseQa.present, true);
+  assert.equal(releaseQa.derived, true);
+  assert.equal(releaseQa.requiredActive, false);
+  assert.equal(manifest.present, true);
+  assert.equal(manifest.derived, true);
+  assert.equal(manifest.requiredActive, false);
+  assert.equal(inventory.missingRequired.some(artifact => artifact.derived), false);
+}
+
+function testRecoveryPromptAttentionPolicy() {
+  const passSnapshot = makeSnapshot();
+  const passInventory = buildReviewArtifactInventory({
+    root: passSnapshot,
+    date,
+    runContext: {
+      seedUsed: false,
+      publicOutputExpected: true,
+      status: 'PASS'
+    }
+  });
+  const passRecovery = passInventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'recovery-prompt.md')
+  );
+  assert.equal(passRecovery.present, false);
+  assert.equal(passRecovery.requiredActive, false);
+  assert.equal(passRecovery.review_attention_required, false);
+  assert.equal(passRecovery.warning, undefined);
+  assert.equal(renderReviewGuideMarkdown(passInventory).includes(newsroomRelPath(date, 'recovery-prompt.md')), false);
+
+  const failureSnapshot = makeSnapshot();
+  const failureInventory = buildReviewArtifactInventory({
+    root: failureSnapshot,
+    date,
+    runContext: {
+      seedUsed: false,
+      publicOutputExpected: false,
+      status: 'FAILED_REPAIR_REVIEWABLE'
+    }
+  });
+  const failureRecovery = failureInventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'recovery-prompt.md')
+  );
+  assert.equal(failureRecovery.present, false);
+  assert.equal(failureRecovery.requiredActive, false);
+  assert.equal(failureRecovery.review_attention_required, true);
+  assert.equal(failureRecovery.warning.code, 'recovery_prompt_missing_for_reviewable_failure');
+}
+
+function testDerivedMissingWarningsAndOptionalGateBlocking() {
+  const snapshotDir = makeSnapshot();
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'stale-claim-report.md').split('/')), '# Stale Claims\n');
+
+  const inventory = buildReviewArtifactInventory({
+    root: snapshotDir,
+    date,
+    runContext: {
+      seedUsed: false,
+      publicOutputExpected: false,
+      status: 'PASS'
+    }
+  });
+  const guide = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, '00-review-guide.md')
+  );
+  const releaseQa = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'release-qa-report.md')
+  );
+  const staleClaim = inventory.review_artifacts.find(artifact =>
+    artifact.path === newsroomRelPath(date, 'stale-claim-report.md')
+  );
+
+  assert.equal(guide.derived, true);
+  assert.equal(guide.requiredActive, false);
+  assert.equal(guide.review_attention_required, true);
+  assert.equal(guide.warning.code, 'derived_artifact_missing');
+  assert.equal(releaseQa.derived, true);
+  assert.equal(releaseQa.requiredActive, false);
+  assert.equal(releaseQa.review_attention_required, true);
+  assert.equal(releaseQa.warning.code, 'derived_artifact_missing');
+  assert.equal(inventory.missingRequired.some(artifact => artifact.path === guide.path), false);
+  assert.equal(inventory.missingRequired.some(artifact => artifact.path === releaseQa.path), false);
+  assert.equal(staleClaim.present, true);
+  assert.equal(staleClaim.requiredActive, false);
+  assert.equal(staleClaim.review_blocking, true);
+}
+
 testManifestCreationAndHashes();
 testWarningsWhenReportsDisagree();
 testNoWarningsWhenReportsAgree();
+testReviewInventoryRequiredStateAndFallbacks();
+testDerivedArtifactsDoNotCreateMissingRequired();
+testRecoveryPromptAttentionPolicy();
+testDerivedMissingWarningsAndOptionalGateBlocking();
 
 console.log('Artifact manifest tests passed.');

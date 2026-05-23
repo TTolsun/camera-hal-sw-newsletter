@@ -1853,6 +1853,75 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
   assert.doesNotMatch(richCandidatePoolSection, /collected CameraX rows but no eligible source_extraction item/);
 });
 
+test('newsroom PR body renders generated artifacts in review inventory order', () => {
+  const root = tempRoot();
+  const date = '2026-05-12';
+  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const status = traceStatus({
+    status: 'PASS',
+    seed_used: true,
+    public_artifact_ready: true,
+    public_newsletter_ready: true,
+    review_publication_ready: true,
+    final_publish_ready: false,
+    artifact_final_publish_ready: false,
+    publish_gate_passed: false,
+    fact_check_status: 'PASS',
+    quality_status: 'PASS',
+    quality_score: 91,
+    must_fix_count: 0,
+    source_gap_count: 0
+  });
+  const files = [
+    ['00-review-guide.md', '# Review Guide\n'],
+    ['editor-in-chief-brief.md', '# Editor Brief\n'],
+    ['seed-evidence-pack.md', '# Seed Evidence\n'],
+    ['seed-merge-report.md', '# Seed Merge\n'],
+    ['fact-check-report.md', '# Fact Check\n'],
+    ['quality-report.md', '# Quality\n'],
+    ['hal-signal-quality-report.md', '# HAL\n']
+  ];
+  for (const [filename, content] of files) {
+    writeText(path.join(newsroomDir, filename), content);
+  }
+  writeJson(path.join(newsroomDir, 'seed-evidence-pack.json'), { schema_version: 1 });
+  writePublicNewsletterArtifacts(root, date);
+
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'success',
+    status,
+    changedArtifacts: [
+      ...files.map(([filename]) => `content/newsroom/${date}/${filename}`),
+      `content/newsroom/${date}/seed-evidence-pack.json`,
+      `newsletters/${date}/newsletter.md`,
+      `newsletters/${date}/index.html`,
+      'data/newsletters.json'
+    ]
+  });
+  const generated = extractMarkdownSection(body, '생성 산출물');
+
+  assertTextInOrder(generated, [
+    '### 필수 확인',
+    `content/newsroom/${date}/00-review-guide.md`,
+    `content/newsroom/${date}/editor-in-chief-brief.md`,
+    `content/newsroom/${date}/seed-evidence-pack.md`,
+    `content/newsroom/${date}/seed-merge-report.md`,
+    '### 최종 기사 / 공개 출력',
+    `newsletters/${date}/newsletter.md`,
+    `newsletters/${date}/index.html`,
+    '### 사실성 / 품질 / HAL 게이트',
+    `content/newsroom/${date}/fact-check-report.md`,
+    `content/newsroom/${date}/quality-report.md`,
+    `content/newsroom/${date}/hal-signal-quality-report.md`,
+    '### 디버그 근거',
+    `See \`content/newsroom/${date}/artifact-manifest.json\`.`
+  ]);
+  const validation = validatePrBodyText(body, { date });
+  assert.equal(validation.ok, true, validation.errors.join('\n'));
+});
+
 test('candidate shortage generator exits before LLM calls when credentials are empty', () => {
   const root = tempRoot();
   const date = '2026-05-11';
@@ -3433,6 +3502,50 @@ test('reviewable artifact resolver accepts editorial reviewable public and data 
   assert.equal(outputs.publish_candidate_ready, 'true');
   assert.match(outputs.reviewable_artifact_reason, /public_newsletter_ready=true/);
   assert.doesNotMatch(outputs.public_newsletter_reason, /quality|final_publish_ready|repair|shortage/);
+});
+
+test('review artifact advisory metadata does not change publish readiness resolver output', () => {
+  const root = tempRoot();
+  const date = '2026-05-09';
+  writeEditorialReviewableArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'artifact-manifest.json'), {
+    schema_version: 2,
+    date,
+    files: [],
+    review_artifacts: [{
+      path: `newsletters/${date}/newsletter.md`,
+      present: false,
+      group: 'public_output',
+      role: 'public_markdown',
+      required: 'when_public_output',
+      requiredActive: true,
+      review_blocking: true,
+      review_attention_required: true,
+      review_order: 30
+    }],
+    missing_required_review_artifacts: [`newsletters/${date}/newsletter.md`]
+  });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${date}/${file}`)
+      .concat([
+        `content/newsroom/${date}/artifact-manifest.json`,
+        `newsletters/${date}/newsletter.md`,
+        `newsletters/${date}/index.html`,
+        'data/newsletters.json'
+      ])
+  }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.has_public_artifacts, 'true');
+  assert.equal(outputs.public_newsletter_ready, 'true');
+  assert.equal(outputs.publish_candidate_ready, 'true');
+  assert.equal(outputs.review_publication_ready, 'true');
+  assert.equal(outputs.homepage_visible_after_merge, 'true');
+  assert.doesNotMatch(outputs.public_newsletter_reason, /review_blocking|review_attention|required_review/);
 });
 
 test('reviewable artifact resolver accepts string booleans for review publication readiness', () => {

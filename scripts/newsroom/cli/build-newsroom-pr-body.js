@@ -35,6 +35,10 @@ const {
   requiredPublicFiles,
   resolveReviewableArtifacts
 } = require('./resolve-reviewable-artifacts');
+const {
+  buildReviewArtifactInventory,
+  renderGeneratedArtifactsSummary
+} = require('../common/review-artifact-inventory');
 
 const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
   '이번 주 핵심 메시지',
@@ -2206,24 +2210,34 @@ function renderEditorActionGuidance(status, date) {
   return lines.join('\n');
 }
 
+function publicOutputExpectedFromStatus(status = {}) {
+  if (status.public_output_expected === true || status.public_output_expected === 'true') return true;
+  if (status.public_output_expected === false || status.public_output_expected === 'false') return false;
+  return status.public_artifact_ready === true ||
+    status.public_newsletter_ready === true ||
+    status.review_publication_ready === true ||
+    status.final_publish_ready === true ||
+    status.automatic_publish_ready === true ||
+    status.normal_public_ready === true ||
+    status.public_state === 'REVIEW_ONLY_PUBLIC_CREATED' ||
+    status.public_state === 'PUBLIC_READY';
+}
+
 function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), changedArtifacts = null) {
-  const changed = [...new Set((Array.isArray(changedArtifacts)
+  const changed = Array.isArray(changedArtifacts)
     ? changedArtifacts
-    : getChangedRepoVisibleArtifacts({ root, date }))
-    .filter(filePath =>
-      filePath.startsWith(`content/collected-news/${date}/`) ||
-      filePath.startsWith(`content/newsroom/${date}/`) ||
-      filePath.startsWith(`newsletters/${date}/`) ||
-      filePath === 'data/newsletters.json' ||
-      filePath === 'data/homepage-headline.json' ||
-      filePath === 'data/article-exposure-history.json'
-    ))].sort();
-  const lines = [
-    '## 생성 산출물',
-    '',
-    ...(changed.length > 0 ? changed.map(filePath => `- ${filePath}`) : ['- none'])
-  ];
-  return lines.join('\n');
+    : getChangedRepoVisibleArtifacts({ root, date });
+  const inventory = buildReviewArtifactInventory({
+    root,
+    date,
+    changedArtifacts: changed,
+    runContext: {
+      status: status.status || 'unknown',
+      seedUsed: status.seed_used ?? status.candidate_input?.seed_used,
+      publicOutputExpected: publicOutputExpectedFromStatus(status)
+    }
+  });
+  return renderGeneratedArtifactsSummary(inventory);
 }
 
 function readSelectionReport(root, date) {

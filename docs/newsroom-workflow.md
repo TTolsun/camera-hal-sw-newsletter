@@ -78,7 +78,22 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 - `newsletters/YYYY-MM-DD/newsletter.md`를 생성합니다.
 - `newsletters/YYYY-MM-DD/index.html`을 생성합니다.
 - `data/newsletters.json`을 갱신합니다.
-- `content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`와 `release-qa-report.md`를 생성합니다.
+- `content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`, `00-review-guide.md`, `release-qa-report.md`, `artifact-manifest.json`을 생성합니다.
+- `00-review-guide.md`는 아래 순서로 review artifact를 묶습니다.
+  1. 편집장 브리프
+  2. Seed 근거 요약
+  3. 최종 기사 / 공개 출력
+  4. 사실성 / 품질 / HAL 게이트
+  5. 후보 선정 진단
+  6. 필요 시 확인
+  7. 디버그 근거
+  8. 미분류 산출물
+- `artifact-manifest.json`은 `schema_version=2`이며 legacy consumer 호환을 위해 `files[].path`, `files[].size`, `files[].sha256`에는 실제 존재하는 파일만 둡니다. review 순서, missing expected artifact, `review_blocking`, `review_attention_required` 같은 advisory metadata는 `review_artifacts[]`에 둡니다.
+- `review_blocking`과 `review_attention_required`는 리뷰어 안내용 metadata입니다. 이 값은 deterministic publish gate, quality gate, source gate, public artifact readiness 판단을 변경하지 않습니다.
+- `artifact-manifest.json` 파일은 hash churn 방지를 위해 manifest `files[]` hashing 대상에서 제외합니다. `00-review-guide.md`와 `release-qa-report.md`는 존재하면 `files[]`에 포함될 수 있지만 derived artifact라서 `missingRequired` 판단에는 사용하지 않습니다.
+- Manifest surface는 두 가지입니다.
+  - `content/newsroom/YYYY-MM-DD/artifact-manifest.json`: date-scoped review package manifest입니다. `files[]`와 `review_artifacts[]`는 review inventory 기준으로 생성합니다.
+  - snapshot root `artifact-manifest.json`: workflow snapshot manifest입니다. `.tmp/**`, cache, debug file 같은 snapshot file을 추가로 포함할 수 있으며 같은 `schema_version=2`와 review metadata field를 사용합니다.
 
 ## Role 6. Validator
 

@@ -91,6 +91,11 @@ const {
   writeExposureHistory
 } = require('../common/article-exposure-history');
 const {
+  buildDateReviewManifest,
+  buildReviewArtifactInventory,
+  renderReviewGuideMarkdown
+} = require('../common/review-artifact-inventory');
+const {
   writeHomepageHeadlineState
 } = require('../common/homepage-headline');
 const {
@@ -277,6 +282,68 @@ function writeGenerationStatus(value, rootDir = root) {
       fs.writeFileSync(path.join(targetNewsroomDir, 'generation-status.json'), content, 'utf8');
     }
   }
+}
+
+function reviewPackageFactCheck(factCheck) {
+  return factCheck || {
+    status: 'UNKNOWN',
+    must_fix: [],
+    source_gaps: []
+  };
+}
+
+function writeDateReviewPackage({
+  rootDir = root,
+  date,
+  files = [],
+  validateText = '',
+  factCheck = null,
+  todoFound = false,
+  emptySourceSections = [],
+  qualityReport = null,
+  runContext = {}
+}) {
+  const newsroomDir = artifactNewsroomDir(rootDir, date);
+  fs.mkdirSync(newsroomDir, { recursive: true });
+  const changedArtifacts = [...new Set([
+    ...files.filter(Boolean),
+    newsroomRelPath(date, '00-review-guide.md'),
+    newsroomRelPath(date, 'release-qa-report.md'),
+    newsroomRelPath(date, 'artifact-manifest.json')
+  ])];
+  const reviewGuidePath = path.join(newsroomDir, '00-review-guide.md');
+  const releaseQaPath = path.join(newsroomDir, 'release-qa-report.md');
+  const writeReviewGuide = inventory => {
+    fs.writeFileSync(reviewGuidePath, renderReviewGuideMarkdown(inventory), 'utf8');
+  };
+  const writeReleaseQa = inventory => {
+    fs.writeFileSync(releaseQaPath, buildReleaseQaReport(
+      date,
+      files,
+      validateText,
+      reviewPackageFactCheck(factCheck),
+      todoFound,
+      emptySourceSections,
+      qualityReport,
+      inventory
+    ), 'utf8');
+  };
+
+  let inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
+  writeReviewGuide(inventory);
+  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
+  writeReleaseQa(inventory);
+  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
+  writeReviewGuide(inventory);
+  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
+  writeReleaseQa(inventory);
+  const manifestPath = path.join(newsroomDir, 'artifact-manifest.json');
+  writeJson(manifestPath, buildDateReviewManifest({ root: rootDir, date, changedArtifacts, runContext }));
+  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
+  writeReviewGuide(inventory);
+  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
+  writeReleaseQa(inventory);
+  writeJson(manifestPath, buildDateReviewManifest({ root: rootDir, date, changedArtifacts, runContext }));
 }
 
 function readSeedEvidencePackForDate(date, rootDir = root) {
@@ -1517,6 +1584,7 @@ function writeReviewableRepairFailureArtifacts({
       quality_threshold: fallbackQualityReport.threshold,
       quality_deduction_count: ensureArray(fallbackQualityReport.deductions).length,
       validate_ok: false,
+      public_output_expected: false,
       todo_found: false,
       empty_source_sections: [],
       source_gap_count: fallbackFactCheck.source_gap_count ?? fallbackQualityReport.metrics.source_gap_count,
@@ -1543,6 +1611,35 @@ function writeReviewableRepairFailureArtifacts({
   });
   writeJson(path.join(newsroomDir, 'generation-status.json'), generationStatus);
   writeGenerationStatus(generationStatus, rootDir);
+  writeDateReviewPackage({
+    rootDir,
+    date,
+    files: [
+      newsroomRelPath(date, 'repair-failure.json'),
+      newsroomRelPath(date, 'reporter-candidates.json'),
+      newsroomRelPath(date, 'editor-draft.json'),
+      newsroomRelPath(date, 'editor-draft.md'),
+      newsroomRelPath(date, 'fact-check-report.json'),
+      newsroomRelPath(date, 'fact-check-report.md'),
+      newsroomRelPath(date, 'quality-report.json'),
+      newsroomRelPath(date, 'quality-report.md'),
+      newsroomRelPath(date, 'retry-history.json'),
+      newsroomRelPath(date, 'retry-history.md'),
+      newsroomRelPath(date, 'recovery-prompt.md'),
+      newsroomRelPath(date, 'generation-status.json'),
+      newsroomRelPath(date, '00-review-guide.md'),
+      newsroomRelPath(date, 'release-qa-report.md'),
+      newsroomRelPath(date, 'artifact-manifest.json')
+    ],
+    validateText: `${STATUS_FAILED_REPAIR_REVIEWABLE}: skipped public validation because repair failed after a valid editor draft.`,
+    factCheck: fallbackFactCheck,
+    qualityReport: fallbackQualityReport,
+    runContext: {
+      status: generationStatus.status,
+      seedUsed: generationStatus.seed_used ?? generationStatus.candidate_input?.seed_used,
+      publicOutputExpected: false
+    }
+  });
 
   console.warn(`Repair failed after a valid editor draft was created. Wrote reviewable ${STATUS_FAILED_REPAIR_REVIEWABLE} artifacts for ${date}.`);
   return {
@@ -2864,7 +2961,7 @@ async function main() {
     const failureReason = ensureArray(shortlistReport.shortage_reason_codes).join('; ') ||
       ensureArray(shortlistReport.selection_errors).join('; ') ||
       'Not enough publishable candidates before LLM generation.';
-    writeGenerationStatus(buildGenerationStatus({
+    const generationStatus = buildGenerationStatus({
       date,
       status: 'UNDERFILLED_NEEDS_FIX',
       extra: {
@@ -2872,6 +2969,7 @@ async function main() {
         failure_kind: 'candidate_shortage_reviewable',
         failure_stage: 'candidate_pool_preflight',
         failure_reason: failureReason,
+        public_output_expected: false,
         publish_ready: false,
         selection_publish_ready: false,
         final_publish_ready: false,
@@ -2880,7 +2978,25 @@ async function main() {
         composition_mode: COMPOSITION_MODES.NEEDS_FIX,
         editor_review_required: true
       }
-    }));
+    });
+    writeGenerationStatus(generationStatus);
+    writeDateReviewPackage({
+      date,
+      files: [
+        newsroomRelPath(date, 'shortlisted-candidates.json'),
+        newsroomRelPath(date, 'selection-diagnostics.md'),
+        newsroomRelPath(date, 'selection-report.json'),
+        newsroomRelPath(date, 'selection-report.md'),
+        newsroomRelPath(date, 'article-capsules.json'),
+        newsroomRelPath(date, 'generation-status.json')
+      ],
+      validateText: 'candidate_shortage_reviewable: LLM editor generation was skipped because candidate pool preflight is review-only.',
+      runContext: {
+        status: generationStatus.status,
+        seedUsed: generationStatus.seed_used ?? generationStatus.candidate_input?.seed_used,
+        publicOutputExpected: false
+      }
+    });
     console.warn(`Candidate pool preflight is review-only: ${failureReason}`);
     return;
   }
@@ -2904,14 +3020,56 @@ async function main() {
     console.warn(`Deterministic selection is underfilled: ${shortlistReport.selection_warnings.join('; ')}`);
   }
   if (shortlistReport.selection_errors.length > 0) {
+    const failureReason = shortlistReport.selection_errors.join('; ');
+    const generationStatus = buildGenerationStatus({
+      date,
+      status: 'FAILED',
+      failureStage: 'deterministic selection',
+      failureReason,
+      extra: {
+        failure_stage: 'deterministic selection',
+        failure_reason: failureReason,
+        public_output_expected: false,
+        publish_ready: false,
+        selection_publish_ready: false,
+        final_publish_ready: false,
+        publish_gate_passed: false,
+        review_gate_passed: false,
+        composition_mode: COMPOSITION_MODES.NEEDS_FIX,
+        editor_review_required: true,
+        ...selectionStatusExtra(shortlistReport)
+      }
+    });
     writeRecoveryPrompt(newsroomDir, {
       date,
       stage: 'deterministic selection',
-      reason: shortlistReport.selection_errors.join('; '),
+      reason: failureReason,
       shortlistReport,
       selectedInputs: shortlistReport.selected_articles
     });
-    fail(`[deterministic selection] ${shortlistReport.selection_errors.join('; ')}`);
+    writeGenerationStatus(generationStatus);
+    writeDateReviewPackage({
+      date,
+      files: [
+        newsroomRelPath(date, 'shortlisted-candidates.json'),
+        newsroomRelPath(date, 'selection-diagnostics.md'),
+        newsroomRelPath(date, 'selection-report.json'),
+        newsroomRelPath(date, 'selection-report.md'),
+        newsroomRelPath(date, 'article-capsules.json'),
+        newsroomRelPath(date, 'recovery-prompt.md'),
+        newsroomRelPath(date, 'generation-status.json'),
+        newsroomRelPath(date, '00-review-guide.md'),
+        newsroomRelPath(date, 'release-qa-report.md'),
+        newsroomRelPath(date, 'artifact-manifest.json')
+      ],
+      validateText: `deterministic selection failed: ${failureReason}`,
+      runContext: {
+        status: generationStatus.status,
+        seedUsed: generationStatus.seed_used ?? generationStatus.candidate_input?.seed_used,
+        publicOutputExpected: false
+      }
+    });
+    fail(`[deterministic selection] ${failureReason}`);
   }
 
   let backgroundContextReport = buildStaticBackgroundContextReport(date, articleCapsuleReport);
@@ -3642,8 +3800,10 @@ async function main() {
     newsroomRelPath(date, 'retry-history.md'),
     newsroomRelPath(date, 'cost-report.md'),
     newsroomRelPath(date, 'recovery-prompt.md'),
+    newsroomRelPath(date, '00-review-guide.md'),
     newsroomRelPath(date, 'editor-in-chief-brief.md'),
-    newsroomRelPath(date, 'release-qa-report.md')
+    newsroomRelPath(date, 'release-qa-report.md'),
+    newsroomRelPath(date, 'artifact-manifest.json')
   ].filter(Boolean);
 
   fs.writeFileSync(
@@ -3719,13 +3879,7 @@ async function main() {
         ...headlineArtifactResult.files
       ])
     : baseFiles;
-  fs.writeFileSync(
-    path.join(newsroomDir, 'release-qa-report.md'),
-    buildReleaseQaReport(date, files, validateResult.text, factCheck, todoFound, emptySourceSections, qualityReport),
-    'utf8'
-  );
-
-  writeGenerationStatus(buildGenerationStatus({
+  const generationStatusArtifact = buildGenerationStatus({
     date,
     status: generationStatus,
     retryHistory,
@@ -3745,6 +3899,7 @@ async function main() {
       rejected_duplicate_article_count: retryHistory.reduce((sum, item) => sum + item.rejected_duplicate_headlines.length, 0),
       validate_ok: validateResult.ok,
       failure_kind: failureKind,
+      public_output_expected: shouldWritePublicArtifacts,
       todo_found: todoFound,
       empty_source_sections: emptySourceSections,
       source_gap_count: factCheck.source_gap_count,
@@ -3766,26 +3921,72 @@ async function main() {
         editorReviewRequired: finalEditorReviewRequired
       })
     }
-  }));
+  });
+  writeGenerationStatus(generationStatusArtifact);
+  const reviewRunContext = {
+    status: generationStatusArtifact.status,
+    seedUsed: generationStatusArtifact.seed_used ?? generationStatusArtifact.candidate_input?.seed_used,
+    publicOutputExpected: shouldWritePublicArtifacts
+  };
   assertJsonArtifactsReadable([
     path.join(newsroomDir, 'generation-status.json')
   ]);
 
   if (todoFound) {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'validation', reason: 'Generated newsletter contains TODO.', shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
+    writeDateReviewPackage({
+      date,
+      files,
+      validateText: validateResult.text,
+      factCheck,
+      todoFound,
+      emptySourceSections,
+      qualityReport,
+      runContext: reviewRunContext
+    });
     fail('Generated newsletter contains TODO.');
   }
   if (emptySourceSections.length > 0) {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'validation', reason: `Generated sections without sources: ${emptySourceSections.join(', ')}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
+    writeDateReviewPackage({
+      date,
+      files,
+      validateText: validateResult.text,
+      factCheck,
+      todoFound,
+      emptySourceSections,
+      qualityReport,
+      runContext: reviewRunContext
+    });
     fail(`Generated sections without sources: ${emptySourceSections.join(', ')}`);
   }
   if (!validateResult.ok && !shortlistReport.underfilled) {
     if (editorialReviewable) {
       writeRecoveryPrompt(newsroomDir, { date, stage: failureKind, reason: 'Editorial reviewable failure is not publishable.', shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
+      writeDateReviewPackage({
+        date,
+        files,
+        validateText: validateResult.text,
+        factCheck,
+        todoFound,
+        emptySourceSections,
+        qualityReport,
+        runContext: reviewRunContext
+      });
       console.warn(`${failureKind}: review artifacts were written without public newsletter files or data/newsletters.json updates.`);
       return;
     }
     writeRecoveryPrompt(newsroomDir, { date, stage: 'validation', reason: `npm run validate failed:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
+    writeDateReviewPackage({
+      date,
+      files,
+      validateText: validateResult.text,
+      factCheck,
+      todoFound,
+      emptySourceSections,
+      qualityReport,
+      runContext: reviewRunContext
+    });
     fail(`npm run validate failed:\n${validateResult.text}`);
   }
   if (!validateResult.ok && shortlistReport.underfilled) {
@@ -3801,6 +4002,16 @@ async function main() {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'thin-week selection', reason: shortlistReport.selection_warnings.join('; '), shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     console.warn('Underfilled thin-week draft is review-only. Artifacts were written for editor review.');
   }
+  writeDateReviewPackage({
+    date,
+    files,
+    validateText: validateResult.text,
+    factCheck,
+    todoFound,
+    emptySourceSections,
+    qualityReport,
+    runContext: reviewRunContext
+  });
 
   console.log(`LLM newsroom newsletter generated for ${date}`);
 }
