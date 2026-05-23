@@ -2,7 +2,7 @@
 
 ## 후보 선택 진단
 
-- Reporter candidates: 1
+- Reporter candidates: 2
 - Reporter-selected candidates: 0
 - Final input candidates: 66
 - Final eligible candidates: 3
@@ -37,6 +37,22 @@ Source/parser recovery hint:
 - source_gap_risk=true (61)
 - reference_only=true (56)
 - briefing_only=true (52)
+
+Homepage Headline:
+- decision: retained_current_above_margin
+- current_headline_key: url:https://goo.gle/AdaptiveApps_IO26
+- replacement_headline_key: unknown
+- public_render_reconciled: false
+- public_rendered_headline_key: unknown
+- public_render_reconciliation_reason: unknown
+- runtime_decayed_score: 100
+- previous_stored_current_score: 100
+- last_scored_at: 2026-05-23
+- scored_at: 2026-05-22
+- included_as_latest: true
+- latest_inclusion_mode: selected_normally
+- injected_from_snapshot: false
+- removed_due_to_headline_inclusion_count: 0
 
 Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
 

@@ -2,7 +2,7 @@
   "date": "2026-05-22",
   "status": "NEEDS_FIX",
   "failure_stage": "editor attempt 1/2",
-  "failure_reason": "Editor output failed article section contract validation.",
+  "failure_reason": "Editor output failed public article contract validation.",
   "fact_check_status": "PASS",
   "must_fix_count": 0,
   "quality_status": "NEEDS_FIX",
@@ -11,13 +11,13 @@
   "quality_threshold": 85,
   "quality_deduction_count": 1,
   "quota_error_count": 0,
-  "invalid_json_count": 1,
+  "invalid_json_count": 2,
   "model_usage": {
     "reporter attempt 1/2": {
       "gemini-2.5-flash": {
-        "requests": 2,
+        "requests": 3,
         "successes": 1,
-        "invalid_json": 1,
+        "invalid_json": 2,
         "quota_errors": 0,
         "api_errors": 0
       }
@@ -116,93 +116,79 @@
     "candidate_count": 66
   },
   "run_context": {
-    "github_run_id": "26268549121",
-    "github_sha": "46ea3e5ccd55d3a2c6b37ba1af0d5bf195bedf5a",
+    "github_run_id": "26330988677",
+    "github_sha": "a930e05a45c28e9750bd290e4769f3b2e3ec4dc5",
     "github_ref": "refs/heads/main"
   },
   "raw_artifact_validation_error": null,
   "editor_semantic_validation": {
     "name": "EditorSemanticValidationError",
-    "message": "Editor output failed article section contract validation.",
+    "message": "Editor output failed public article contract validation.",
     "details": {
-      "field": "sections.article_sections",
+      "field": "sections.public_article",
       "expectedKeys": [
-        "verified_facts",
-        "background_context",
-        "hal_driver_impact",
-        "action_items",
-        "team_share_points"
+        "headline",
+        "lead",
+        "body_paragraphs",
+        "camera_hal_takeaway",
+        "reader_checkpoints",
+        "source_links"
       ],
-      "allowedKeys": [
-        "verified_facts",
-        "background_context",
-        "hal_driver_impact",
-        "action_items",
-        "team_share_points",
-        "known_limitations",
-        "watch_items",
-        "do_not_claim"
-      ],
-      "actualCount": 1,
-      "sectionCount": 1,
+      "actualCount": 2,
+      "sectionCount": 2,
       "issues": [
         {
           "index": 1,
-          "headline": "Jetpack Compose 및 Jetpack Navigation 3 도입에 따른 멀티 디바이스 카메라 UX 검증 요구사항",
-          "type": "missing_article_sections",
-          "keys": [
-            "verified_facts",
-            "background_context",
-            "hal_driver_impact",
-            "action_items",
-            "team_share_points"
-          ]
+          "headline": "Google I/O 2026: Jetpack Compose와 CameraX를 통한 적응형 카메라 미리보기 구현",
+          "type": "insufficient_concrete_public_checkpoints",
+          "actualCount": 0,
+          "expectedMinCount": 2
+        },
+        {
+          "index": 2,
+          "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원",
+          "type": "insufficient_concrete_public_checkpoints",
+          "actualCount": 0,
+          "expectedMinCount": 2
         }
       ]
     },
-    "field": "sections.article_sections",
+    "field": "sections.public_article",
     "stage": "editor attempt 1/2",
     "attempt": 1,
     "initial": {
       "name": "EditorSemanticValidationError",
-      "message": "Editor output failed article section contract validation.",
+      "message": "Editor output failed public article contract validation.",
       "details": {
-        "field": "sections.article_sections",
+        "field": "sections.public_article",
         "expectedKeys": [
-          "verified_facts",
-          "background_context",
-          "hal_driver_impact",
-          "action_items",
-          "team_share_points"
+          "headline",
+          "lead",
+          "body_paragraphs",
+          "camera_hal_takeaway",
+          "reader_checkpoints",
+          "source_links"
         ],
-        "allowedKeys": [
-          "verified_facts",
-          "background_context",
-          "hal_driver_impact",
-          "action_items",
-          "team_share_points",
-          "known_limitations",
-          "watch_items",
-          "do_not_claim"
-        ],
-        "actualCount": 1,
-        "sectionCount": 1,
+        "actualCount": 2,
+        "sectionCount": 2,
         "issues": [
           {
             "index": 1,
-            "headline": "Jetpack Compose 및 Jetpack Navigation 3 도입에 따른 멀티 디바이스 카메라 UX 검증 요구사항",
-            "type": "missing_article_sections",
-            "keys": [
-              "verified_facts",
-              "background_context",
-              "hal_driver_impact",
-              "action_items",
-              "team_share_points"
-            ]
+            "headline": "Google I/O 2026: Jetpack Compose와 CameraX를 통한 적응형 카메라 미리보기 구현",
+            "type": "insufficient_concrete_public_checkpoints",
+            "actualCount": 0,
+            "expectedMinCount": 2
+          },
+          {
+            "index": 2,
+            "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원",
+            "type": "insufficient_concrete_public_checkpoints",
+            "actualCount": 0,
+            "expectedMinCount": 2
           }
         ]
       },
-      "field": "sections.article_sections",
+      "field": "sections.public_article",
       "stage": "editor attempt 1/2",
       "attempt": 1
     }
@@ -230,7 +216,7 @@
   "demoted_article_count": 0,
   "locked_article_count": null,
   "fallback_topic_count": 1,
-  "reporter_candidate_count": 1,
+  "reporter_candidate_count": 2,
   "reporter_selected_count": 0,
   "final_input_candidate_count": 66,
   "final_eligible_candidate_count": 3,
@@ -247,8 +233,8 @@
   "max_final_articles": 5,
   "absolute_min_reviewable_articles": 0,
   "min_non_fallback_publish_ready_articles": 0,
-  "composition_mode": "NEEDS_FIX",
-  "selection_composition_mode": "NEEDS_FIX",
+  "composition_mode": "FALLBACK_COMPOSITION",
+  "selection_composition_mode": "FALLBACK_COMPOSITION",
   "composition_reason": "Article Composition Policy passed with 1 Primary Camera Stack article(s) and 1 supporting main article(s).",
   "composition_summary": {
     "selected_article_count": 2,
@@ -358,6 +344,35 @@
     "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
     "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
   ],
+  "headline_decision": {
+    "decision": "retained_current_above_margin",
+    "reason": "retained_current_above_margin",
+    "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "replacement_headline_key": null,
+    "previous_stored_current_score": 100,
+    "runtime_decayed_score": 100,
+    "last_scored_at": "2026-05-23",
+    "scored_at": "2026-05-22",
+    "retained": true,
+    "replaced": false,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": true,
+    "mode": "selected_normally",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": null,
   "exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
@@ -450,8 +465,8 @@
   "fallback_public_issue_demoted_article_count": 0,
   "fallback_public_issue_removed_blockers": false,
   "fallback_public_issue_removed_article_count": 0,
-  "fallback_public_issue_added_article_count": 1,
-  "fallback_public_issue_preserve_article_count": 1,
+  "fallback_public_issue_added_article_count": 2,
+  "fallback_public_issue_preserve_article_count": 0,
   "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
   "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
   "editor_review_reason": "AI 자동 발행 기준을 통과하지 못했으므로 merge 발행 전에 편집자 검토가 필요합니다.",

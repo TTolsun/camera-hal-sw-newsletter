@@ -2,21 +2,21 @@
 
 ## Gate Result
 
-- Quality score: 84
+- Quality score: 92
 - Quality threshold: 85
 - Max score: 100
 - Result: NEEDS_FIX
-- Summary: Quality score 84, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
+- Summary: Quality score 92, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.
 
 ## Publication Mode
 
-- publication_mode: n/a
-- homepage_visibility: n/a
-- content_quality_score: 84
-- camera_relevance_score: n/a
-- publication_mode_decision: n/a
+- publication_mode: review_only
+- homepage_visibility: normal
+- content_quality_score: 92
+- camera_relevance_score: 92
+- publication_mode_decision: review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.
 - fallback_only: false
-- camera_anchor_count: n/a
+- camera_anchor_count: 1
 - fallback_public_ready: false
 
 ## Composition
@@ -56,14 +56,14 @@
 - generic_signal_hard_blocker_count: 0
 - hal_signal_hard_blocker_count: 0
 - hard_blocker_reason_code_counts: {}
-- hal_impact_axis_counts: {"camerax_app_compatibility":2,"framework_hal_contract":2,"driver_image_pipeline":2,"stream_buffer_metadata":2,"cts_vts_its_cdd":2,"native_tooling_workflow":1}
+- hal_impact_axis_counts: {"camerax_app_compatibility":2,"framework_hal_contract":2,"driver_image_pipeline":1,"stream_buffer_metadata":2,"cts_vts_its_cdd":2,"native_tooling_workflow":1}
 - actionability_level_counts: {"measurable_test":2}
 - effective_actionability_level_counts: {"measurable_test":2}
 
 | # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | HAL Signal Capsule | hard_blocker_reason_codes |
 | ---: | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O | strong_signal | measurable_test | measurable_test | camerax_app_compatibility, framework_hal_contract, driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd | complete | none |
-| 2 | Android Native Tooling: Build native Android apps in Google AI Studio | strong_signal | measurable_test | measurable_test | native_tooling_workflow, framework_hal_contract, driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd, camerax_app_compatibility | complete | none |
+| 2 | Android Native Tooling: Build native Android apps in Google AI Studio | strong_signal | measurable_test | measurable_test | native_tooling_workflow, framework_hal_contract, stream_buffer_metadata, cts_vts_its_cdd, camerax_app_compatibility | complete | none |
 
 ## Fact Check And Source Integrity
 
@@ -74,9 +74,9 @@
 - Stale claim removals: 0
 - Stale claim hard failures: 0
 - Source integrity violation count: 0
-- Blocking deduction count: 2
+- Blocking deduction count: 1
 - Blocking deduction categories: field-hygiene
-- Hard fail count: 2
+- Hard fail count: 1
 - Soft deduction count: 0
 
 ## Claim Binding
@@ -85,7 +85,7 @@
 - Claim coverage: bound_claims=unknown; total_claims=unknown
 - Derived evidence mapping count: 0
 - Overclaim risk: unknown
-- Uncovered fact count: 18
+- Uncovered fact count: 14
 
 | Article | Claim | Type | Status | Impact | Risk | Reason codes | Evidence | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -103,8 +103,8 @@
 - article=2; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=article_sections.verified_facts[0]; reason=missing_matching_fact_claim; text=Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.
 - article=2; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=article_sections.verified_facts[1]; reason=missing_matching_fact_claim; text=관련 컴포넌트: Google AI Studio.
 - article=2; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=article_sections.verified_facts[2]; reason=missing_matching_fact_claim; text=확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.
-- article=2; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=article_sections.verified_facts[3]; reason=missing_matching_fact_claim; text=관련 컴포넌트: Android camera output.
-- article=2; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=article_sections.verified_facts[4]; reason=missing_matching_fact_claim; text=확인된 변경점: Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.
+- article=2; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=confirmed_facts[0]; reason=missing_matching_fact_claim; text=Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.
+- article=2; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=confirmed_facts[1]; reason=missing_matching_fact_claim; text=관련 컴포넌트: Google AI Studio.
 
 ## Article Structure Contract
 
@@ -114,19 +114,18 @@
 | # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |
 | ---: | --- | --- | --- | --- | --- | --- |
 | 1 | 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O | pass | present | camerax_app_compatibility, framework_hal_contract, driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd | measurable_test | none |
-| 2 | Android Native Tooling: Build native Android apps in Google AI Studio | pass | present | native_tooling_workflow, framework_hal_contract, driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd, camerax_app_compatibility | measurable_test | none |
+| 2 | Android Native Tooling: Build native Android apps in Google AI Studio | pass | present | native_tooling_workflow, framework_hal_contract, stream_buffer_metadata, cts_vts_its_cdd, camerax_app_compatibility | measurable_test | none |
 
 ## Article Gate Results
 
 | # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
 | ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | FAIL | repair-section | 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O | android_platform_camera_adjacent | 3 | true | false | false | false | true | bound | shortlist_selected | merged | none | android_platform_camera_adjacent counts toward primary_camera_stack_count. | none | Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level. | none |
-| 2 | FAIL | repair-section | Android Native Tooling: Build native Android apps in Google AI Studio | cpp_ai_tooling_fallback | 6 | false | false | false | true | true | bound | shortlist_selected | merged | none | cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count. | Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic. | Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level. | none |
+| 2 | PASS | preserve | Android Native Tooling: Build native Android apps in Google AI Studio | cpp_ai_tooling_fallback | 6 | false | false | false | true | true | bound | shortlist_selected | merged | none | cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count. | Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic. | none | none |
 
 ## Hard Fails
 
 - 8 pt [field-hygiene] 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O: Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.
-- 8 pt [field-hygiene] Android Native Tooling: Build native Android apps in Google AI Studio: Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.
 
 ## Soft Deductions
 
@@ -134,7 +133,7 @@
 
 ## Top Deduction Categories
 
-- field-hygiene (2)
+- field-hygiene (1)
 
 ## Candidate Exclusion Summary
 
@@ -143,4 +142,3 @@
 ## Deductions
 
 - 8 pt [field-hygiene] 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O: Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.
-- 8 pt [field-hygiene] Android Native Tooling: Build native Android apps in Google AI Studio: Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.
