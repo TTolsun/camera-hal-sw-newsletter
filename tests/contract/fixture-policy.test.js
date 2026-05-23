@@ -121,8 +121,9 @@ function hasPassBlockingPolicyFlag(flags = {}) {
 }
 
 function expectedRelatedRules(entryPath) {
-  const match = RELATED_RULE_EXPECTATIONS.find(([prefix]) => entryPath.startsWith(prefix));
-  return match ? match[1] : [];
+  return [...new Set(RELATED_RULE_EXPECTATIONS
+    .filter(([prefix]) => entryPath.startsWith(prefix))
+    .flatMap(([, rules]) => rules))];
 }
 
 test('fixture policy keeps generated samples out of good fixtures', () => {

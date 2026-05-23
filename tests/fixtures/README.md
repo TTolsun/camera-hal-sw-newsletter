@@ -49,6 +49,12 @@ Every committed fixture file must have exactly one ledger entry with:
   `seed_evidence`, `linked_evidence`, `parser_contract`, `workflow_shape`, or
   `artifact_provenance`.
 
+Ledger v2 keeps provenance compact:
+
+- `curated` maps to curated/reference fixtures.
+- `synthetic` maps to hand-authored reduced examples.
+- `minimized-generated-regression` is allowed only when reduced from generated output and must stay non-public, minimized, and regression-scoped.
+
 `good/` fixtures must be curated, non-generated, and PASS-only. `bad/` fixtures must not expect `PASS`.
 
 When adding, deleting, or moving committed fixture files, update `fixture-ledger.json`
