@@ -293,9 +293,10 @@
           "Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.",
           "이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다."
         ],
-        "camera_hal_takeaway": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
+        "camera_hal_takeaway": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 앱/API 또는 media output path 관점의 신호입니다. HAL/driver 변경 근거는 없음으로 제한하고 CameraX/Camera2 compatibility와 stream configuration 회귀만 확인합니다.",
         "reader_checkpoints": [
-          "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."
+          "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O의 release note 범위에서 CameraX / Android camera APIs 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.",
+          "HAL/driver 변경 근거는 없음으로 제한하고 CameraX / Android camera APIs compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다."
         ],
         "source_links": [
           {
@@ -549,9 +550,10 @@
           "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.",
           "Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다."
         ],
-        "camera_hal_takeaway": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
+        "camera_hal_takeaway": "Build native Android apps in Google AI Studio은 native tooling workflow 참고 항목입니다. production HAL runtime behavior 변경이 아니라 build/test/debug metric 확인 범위로 제한합니다.",
         "reader_checkpoints": [
-          "즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다."
+          "Build native Android apps in Google AI Studio의 release note 범위에서 Google AI Studio 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.",
+          "HAL/driver 변경 근거는 없음으로 제한하고 Google AI Studio compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다."
         ],
         "source_links": [
           {

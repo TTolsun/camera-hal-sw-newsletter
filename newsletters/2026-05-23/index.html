@@ -59,8 +59,8 @@
           <p class="article-lead">Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.</p>
           <p>Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.</p>
           <p>이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다.</p>
-          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 앱/API 또는 media output path 관점의 신호입니다. HAL/driver 변경 근거는 없음으로 제한하고 CameraX/Camera2 compatibility와 stream configuration 회귀만 확인합니다.</p></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O의 release note 범위에서 CameraX / Android camera APIs 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.</li><li>HAL/driver 변경 근거는 없음으로 제한하고 CameraX / Android camera APIs compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다.</li></ul></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a></li></ul></div>
         </div>
       </section>
@@ -77,8 +77,8 @@
           <p class="article-lead">Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.</p>
           <p>Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.</p>
           <p>Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다.</p>
-          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.</li></ul></div>
+          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>Build native Android apps in Google AI Studio은 native tooling workflow 참고 항목입니다. production HAL runtime behavior 변경이 아니라 build/test/debug metric 확인 범위로 제한합니다.</p></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>Build native Android apps in Google AI Studio의 release note 범위에서 Google AI Studio 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.</li><li>HAL/driver 변경 근거는 없음으로 제한하고 Google AI Studio compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다.</li></ul></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Build native Android apps in Google AI Studio</a></li></ul></div>
         </div>
       </section>

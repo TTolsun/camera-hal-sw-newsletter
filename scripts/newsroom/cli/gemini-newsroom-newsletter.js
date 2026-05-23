@@ -97,6 +97,9 @@ const {
   pruneResolvedFallbackImageFactCheckItems
 } = require('../common/fact-check-repair');
 const {
+  mergePublicArticleFromLlm
+} = require('../common/public-article-contract');
+const {
   buildNewsletterQualityReport,
   buildQualityReportMarkdown,
   deductionMatchesSection,
@@ -210,12 +213,16 @@ function publicArticleContractPrompt() {
     'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI article은 body_paragraphs에서 camera-facing takeaway 전에 짧은 배경 문단을 먼저 포함하세요.',
     'Public article contract: 새로 생성되는 editor, repair, completion output의 모든 main article은 public_article을 포함해야 합니다.',
     'public_article은 headline, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, source_links를 포함해야 합니다.',
+    'Gemini output은 public_article 작성 후보로만 사용됩니다. relevance_bucket, impact_claim_level, finalSelectionEligibility, source_gap_risk, main_article_readiness, do_not_claim 같은 deterministic judgment fields는 selected article capsule과 deterministic selection state에서만 가져옵니다.',
+    'public writer의 source of truth는 selected article capsule입니다. raw source를 재판정하거나 HAL impact / source eligibility / publishability 판단을 다시 쓰지 마세요.',
     'article_sections와 hal_signal_capsule은 validation/editorial diagnostics 용도로만 사용하세요. 독자가 보는 article prose로 render하지 마세요.',
     'public_article은 validation report나 verified_facts checklist가 아니라 한국어 독자-facing technical newsletter article로 작성하세요.',
     'body_paragraphs는 verified facts를 바탕으로 한 자연스러운 설명 문단을 최소 2개 포함해야 합니다.',
-    'source_links는 non-empty title 값을 가진 public http/https URLs만 포함해야 합니다. source_role은 primary, supporting, context 중 하나로 쓰세요. local path, .tmp path, GitHub Actions artifact URL, editorial-only role은 사용하지 마세요.',
-    'public_article에는 internal public-forbidden terms인 Fallback, Review-only, quality gate, candidate, HAL Signal Capsule, why_now, impact_axes, do_not_overstate, guardrail, section repair를 노출하지 마세요.',
-    '구체적인 reader action이 없으면 public_article.reader_checkpoints는 독자가 추적할 관찰 포인트 1~2개로 자연스럽게 작성하세요. 내부 triage 문체, 업무 지시 문체, 고정 문구를 사용하지 마세요.'
+    'source_links는 non-empty title 값을 가진 public http/https URLs만 포함해야 합니다. source_role은 primary 또는 seed_evidence만 쓰세요. local path, .tmp path, GitHub Actions artifact URL, editorial-only role, related_context URL은 사용하지 마세요.',
+    'source_links URL은 selected capsule의 primary 또는 seed evidence URL만 사용하세요. source_links를 새로 만들지 마세요.',
+    'public_article에는 internal public-forbidden terms인 source_gap_risk, finalSelectionEligibility, relevance_bucket, impact_claim_level, do_not_claim, article_sections, hal_signal_capsule, Fallback, Review-only, quality gate, HAL Signal Capsule, why_now, impact_axes, do_not_overstate, guardrail, section repair를 노출하지 마세요.',
+    'do_not_claim에 있는 claim은 우회 표현으로도 쓰지 마세요.',
+    'public_article.reader_checkpoints는 최소 2개 concrete 항목이어야 합니다. source title/domain/version/date에서 온 구체 token, Camera HAL validation target, source-bound limitation, action verb + target 중 하나를 포함해야 하며 고정 generic 문구를 반복하지 마세요.'
   ].join('\n');
 }
 
@@ -959,6 +966,10 @@ function sourceCandidateMetadataForSection(section, reporter) {
     counts_as_soc_topic: candidate.counts_as_soc_topic === true,
     counts_as_fallback_topic: candidate.counts_as_fallback_topic === true,
     impact_claim_level: candidate.impact_claim_level || inferImpactClaimLevel(candidate),
+    finalSelectionEligibility: candidate.finalSelectionEligibility || candidate.final_selection_eligibility || '',
+    source_gap_risk: candidate.source_gap_risk === true,
+    main_article_readiness: candidate.main_article_readiness || null,
+    do_not_claim: ensureArray(candidate.do_not_claim || candidate.compact_evidence?.do_not_claim),
     evidence_origin: candidate.evidence_origin || 'candidate_metadata',
     source_hint: candidate.source_hint || ''
   };
@@ -984,11 +995,12 @@ function normalizeEditorSection(section, index, reporter) {
     article_type: section.article_type || (section.is_ai_related ? 'ai' : 'camera-hal'),
     sources: ensureArray(section.sources).filter(source => source && source.url)
   };
-  return {
+  const deterministicMetadata = sourceCandidateMetadataForSection(normalized, reporter);
+  return mergePublicArticleFromLlm({
     ...normalized,
-    ...sourceCandidateMetadataForSection(normalized, reporter),
+    ...deterministicMetadata,
     ...normalizeSectionImageFields(normalized, reporter)
-  };
+  }, normalized, deterministicMetadata);
 }
 
 function editorRenderedGroupKeys(editor = {}) {

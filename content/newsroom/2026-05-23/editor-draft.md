@@ -29,11 +29,12 @@ Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack C
 
 **Camera HAL / Driver 관점**
 
-CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.
+8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O은 앱/API 또는 media output path 관점의 신호입니다. HAL/driver 변경 근거는 없음으로 제한하고 CameraX/Camera2 compatibility와 stream configuration 회귀만 확인합니다.
 
 ### 확인할 점
 
-- 즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.
+- 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O의 release note 범위에서 CameraX / Android camera APIs 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.
+- HAL/driver 변경 근거는 없음으로 제한하고 CameraX / Android camera APIs compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다.
 
 **출처**
 
@@ -57,11 +58,12 @@ Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이�
 
 **Android Native / Tooling 관점**
 
-build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.
+Build native Android apps in Google AI Studio은 native tooling workflow 참고 항목입니다. production HAL runtime behavior 변경이 아니라 build/test/debug metric 확인 범위로 제한합니다.
 
 ### 확인할 점
 
-- 즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.
+- Build native Android apps in Google AI Studio의 release note 범위에서 Google AI Studio 관련 API/component/date가 현재 device matrix와 맞는지 확인합니다.
+- HAL/driver 변경 근거는 없음으로 제한하고 Google AI Studio compatibility test scenario 또는 stream/metadata 확인 항목만 추적합니다.
 
 **출처**
 

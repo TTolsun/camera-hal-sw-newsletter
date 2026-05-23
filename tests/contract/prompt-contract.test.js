@@ -78,8 +78,10 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /verified_facts checklist/);
   assert.match(prompt, /CameraX-adjacent/);
   assert.match(prompt, /짧은 배경 문단/);
-  assert.match(prompt, /관찰 포인트 1~2개/);
-  assert.match(prompt, /고정 문구를 사용하지 마세요/);
+  assert.match(prompt, /최소 2개 concrete/);
+  assert.match(prompt, /selected article capsule/);
+  assert.match(prompt, /deterministic judgment fields/);
+  assert.match(prompt, /고정 generic 문구를 반복하지 마세요/);
   assert.doesNotMatch(prompt, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
 });
 
@@ -149,5 +151,5 @@ test('public article prompt does not force internal triage fallback prose', () =
 
   assert.doesNotMatch(source, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
   assert.match(source, /public_article에는 internal public-forbidden terms/);
-  assert.match(source, /public_article\.reader_checkpoints는 독자가 추적할 관찰 포인트 1~2개/);
+  assert.match(source, /public_article\.reader_checkpoints는 최소 2개 concrete/);
 });
