@@ -6,7 +6,7 @@
 
 ### Date-level status
 
-- reviewed archive dates: 8
+- reviewed archive dates: 9
 - removed archive dates: 9
 - historical unreviewed dates: 0
 - deprecated archive dates: 0
@@ -76,6 +76,7 @@ Archive trust cleanup is complete because no unresolved S0/S1 rows remain, all m
 
 | Date | Artifact scope | Archive status | Public visibility | Data index | Public artifact | Known limitations | Cleanup context |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-05-23 | public_archive | stable_archive | listed | yes | yes | review_only_publication | review_only_publication |
 | 2026-05-22 | public_archive | stable_archive | listed | yes | yes | review_only_publication | review_only_publication |
 | 2026-05-21 | public_archive | stable_archive | listed | yes | yes | review_only_publication | review_only_publication |
 | 2026-05-20 | public_archive | stable_archive | listed | yes | yes | none | current_generation_archive_review |

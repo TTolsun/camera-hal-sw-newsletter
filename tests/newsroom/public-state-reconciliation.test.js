@@ -23,6 +23,9 @@ const {
   writeText
 } = require('../helpers/fs');
 const {
+  validateHistoricalArchive
+} = require('../../scripts/newsroom/validate/historical-archive');
+const {
   validSections
 } = require('../helpers/quality-builders');
 
@@ -126,6 +129,69 @@ function statusPaths(date) {
     canonical: `content/newsroom/${date}/generation-status.json`,
     tmp: '.tmp/newsletter-generation-status.json'
   };
+}
+
+function writeFallbackPublicIssue(root, date) {
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), {
+    fallback_public_issue_status: 'CREATED'
+  });
+}
+
+function archiveSidecarEntry(date, context = 'review_only_publication', overrides = {}) {
+  const reviewOnly = context === 'review_only_publication';
+  return {
+    date,
+    archive_status: 'stable_archive',
+    historical_cleanup_reviewed: true,
+    known_limitations: reviewOnly ? ['review_only_publication'] : [],
+    historical_cleanup_context: context,
+    public_visibility: 'listed',
+    ...overrides
+  };
+}
+
+function writeArchiveSidecar(root, entries = []) {
+  writeJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'), entries);
+}
+
+function archiveLedgerRow(date, context = 'review_only_publication', overrides = {}) {
+  const reviewOnly = context === 'review_only_publication';
+  const row = {
+    date,
+    original_generation_mode: 'current_generation',
+    known_quality_issues: reviewOnly
+      ? 'review-only public artifact, editor review required before publish confidence; no historical provenance backfill required'
+      : 'current generated public artifact; no historical provenance backfill required',
+    rewrite_allowed: 'no',
+    rewrite_status: 'none',
+    archive_status: 'stable_archive',
+    public_visibility: 'listed',
+    cleanup_context: context,
+    ...overrides
+  };
+  return `| ${[
+    row.date,
+    row.original_generation_mode,
+    row.known_quality_issues,
+    row.rewrite_allowed,
+    row.rewrite_status,
+    row.archive_status,
+    row.public_visibility,
+    row.cleanup_context
+  ].join(' | ')} |`;
+}
+
+function writeArchiveLedger(root, rows = []) {
+  writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
+    '# Historical Newsletter Provenance Ledger',
+    '',
+    '## Ledger',
+    '',
+    '| Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Cleanup context |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- |',
+    ...rows,
+    ''
+  ].join('\n'));
 }
 
 function diagnosticsStatus(date, overrides = {}) {
@@ -237,6 +303,248 @@ test('reconcilePublicState emits only fixed policy, action, and run_mode values'
     assert.equal(allowedActions.has(result.outputs.reconciliation_action), true);
     assert.equal(allowedRunModes.has(result.outputs.run_mode), true);
   }
+});
+
+test('review-only public reconciliation syncs archive sidecar and provenance ledger', () => {
+  const root = tempRoot('public-state-review-archive-sync-');
+  const date = '2026-05-23';
+  writePublicArtifacts(root, date);
+  writeFallbackPublicIssue(root, date);
+  writeArchiveSidecar(root, []);
+  writeArchiveLedger(root);
+  const status = {
+    date,
+    final_publish_ready: false,
+    public_newsletter_ready: true,
+    review_publication_ready: true
+  };
+
+  const result = reconcilePublicState({ root, date, status, write: true });
+
+  const sidecar = readJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'));
+  assert.deepEqual(sidecar, [archiveSidecarEntry(date)]);
+  assert.match(readFile(root, 'docs/editorial/historical-newsletter-provenance-ledger.md'), /review_only_publication/);
+  assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
+  assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), true);
+});
+
+test('publish-ready public reconciliation syncs current-generation archive state', () => {
+  const root = tempRoot('public-state-publish-archive-sync-');
+  const date = '2026-05-24';
+  writePublicArtifacts(root, date);
+  writeArchiveSidecar(root, []);
+  writeArchiveLedger(root);
+  const status = {
+    date,
+    final_publish_ready: true,
+    public_newsletter_ready: true,
+    review_publication_ready: false
+  };
+
+  const result = reconcilePublicState({ root, date, status, write: true });
+
+  const sidecar = readJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'));
+  assert.deepEqual(sidecar, [archiveSidecarEntry(date, 'current_generation_archive_review')]);
+  assert.match(
+    readFile(root, 'docs/editorial/historical-newsletter-provenance-ledger.md'),
+    /current generated public artifact; no historical provenance backfill required/
+  );
+  assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
+  assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), true);
+});
+
+test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and no-op states', () => {
+  const date = '2026-05-23';
+  {
+    const root = tempRoot('public-state-sidecar-only-');
+    writePublicArtifacts(root, date);
+    writeFallbackPublicIssue(root, date);
+    writeArchiveSidecar(root, []);
+    writeArchiveLedger(root, [archiveLedgerRow(date)]);
+    const result = reconcilePublicState({
+      root,
+      date,
+      status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+      write: true
+    });
+    assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
+    assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), false);
+  }
+
+  {
+    const root = tempRoot('public-state-ledger-only-');
+    writePublicArtifacts(root, date);
+    writeFallbackPublicIssue(root, date);
+    writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
+    writeArchiveLedger(root);
+    const result = reconcilePublicState({
+      root,
+      date,
+      status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+      write: true
+    });
+    assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), false);
+    assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), true);
+  }
+
+  {
+    const root = tempRoot('public-state-archive-noop-');
+    writePublicArtifacts(root, date);
+    writeFallbackPublicIssue(root, date);
+    writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
+    writeArchiveLedger(root, [archiveLedgerRow(date)]);
+    const result = reconcilePublicState({
+      root,
+      date,
+      status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+      write: true
+    });
+    assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), false);
+    assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), false);
+  }
+});
+
+test('diagnostics-only reconciliation does not create listed archive sidecar', () => {
+  const root = tempRoot('public-state-diagnostics-no-archive-');
+  const date = '2026-05-18';
+  writePublicArtifacts(root, date);
+  writeArchiveLedger(root);
+  const status = diagnosticsStatus(date);
+
+  const result = reconcilePublicState({ root, date, status, write: true });
+
+  assert.equal(fs.existsSync(path.join(root, 'content', 'audit', 'historical-archive-status.json')), false);
+  assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), false);
+});
+
+test('archive reconciliation rejects duplicate ledger rows and missing table marker', () => {
+  const date = '2026-05-23';
+  {
+    const root = tempRoot('public-state-duplicate-ledger-');
+    writePublicArtifacts(root, date);
+    writeFallbackPublicIssue(root, date);
+    writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
+    writeArchiveLedger(root, [archiveLedgerRow(date), archiveLedgerRow(date)]);
+
+    assert.throws(
+      () => reconcilePublicState({
+        root,
+        date,
+        status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+        write: true
+      }),
+      /duplicate ledger date row/
+    );
+  }
+
+  {
+    const root = tempRoot('public-state-missing-ledger-table-');
+    writePublicArtifacts(root, date);
+    writeFallbackPublicIssue(root, date);
+    writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
+    writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), '# Ledger missing table\n');
+
+    assert.throws(
+      () => reconcilePublicState({
+        root,
+        date,
+        status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+        write: true
+      }),
+      /ledger table marker\/header is missing/
+    );
+  }
+});
+
+test('archive reconciliation anchors ledger parsing after the Ledger heading', () => {
+  const root = tempRoot('public-state-ledger-anchor-');
+  const date = '2026-05-23';
+  writePublicArtifacts(root, date);
+  writeFallbackPublicIssue(root, date);
+  writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
+  writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
+    '# Historical Newsletter Provenance Ledger',
+    '',
+    '## Summary',
+    '',
+    '| Date | Note |',
+    '| --- | --- |',
+    '| 2026-01-01 | This is not the provenance ledger table. |',
+    '',
+    '## Ledger',
+    '',
+    '| Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Cleanup context |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- |',
+    ''
+  ].join('\n'));
+
+  const result = reconcilePublicState({
+    root,
+    date,
+    status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+    write: true
+  });
+  const ledger = fs.readFileSync(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), 'utf8');
+  const summaryTableIndex = ledger.indexOf('| 2026-01-01 | This is not the provenance ledger table. |');
+  const ledgerHeadingIndex = ledger.indexOf('## Ledger');
+  const insertedRowIndex = ledger.indexOf(archiveLedgerRow(date));
+
+  assert.ok(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'));
+  assert.ok(summaryTableIndex > 0);
+  assert.ok(insertedRowIndex > ledgerHeadingIndex);
+});
+
+test('archive reconciliation rejects removed, unlisted, and non-current sidecar conflicts', () => {
+  const date = '2026-05-23';
+  const cases = [
+    archiveSidecarEntry(date, 'review_only_publication', {
+      archive_status: 'removed',
+      public_visibility: 'removed'
+    }),
+    archiveSidecarEntry(date, 'review_only_publication', {
+      public_visibility: 'unlisted'
+    }),
+    archiveSidecarEntry(date, 'historical_archive_cleanup', {
+      known_limitations: ['accepted_historical_limitation']
+    })
+  ];
+
+  for (const entry of cases) {
+    const root = tempRoot('public-state-sidecar-conflict-');
+    writePublicArtifacts(root, date);
+    writeFallbackPublicIssue(root, date);
+    writeArchiveSidecar(root, [entry]);
+    writeArchiveLedger(root, [archiveLedgerRow(date)]);
+
+    assert.throws(
+      () => reconcilePublicState({
+        root,
+        date,
+        status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+        write: true
+      }),
+      /Archive reconciliation conflict/
+    );
+  }
+});
+
+test('2026-05-23 review-only public state backfills archive status through reconciliation and validates', () => {
+  const root = tempRoot('public-state-2026-05-23-backfill-');
+  const date = '2026-05-23';
+  writePublicArtifacts(root, date);
+  writeFallbackPublicIssue(root, date);
+  writeArchiveSidecar(root, []);
+  writeArchiveLedger(root);
+
+  reconcilePublicState({
+    root,
+    date,
+    status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
+    write: true
+  });
+
+  const validation = validateHistoricalArchive({ root });
+  assert.equal(validation.ok, true, validation.errors.join('\n'));
 });
 
 test('diagnostics-only reconciliation removes only data index entry by default', () => {

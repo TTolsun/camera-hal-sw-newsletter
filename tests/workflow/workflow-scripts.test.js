@@ -82,6 +82,19 @@ function writeText(filePath, value) {
   fs.writeFileSync(filePath, value, 'utf8');
 }
 
+function writeArchiveSyncSurface(root) {
+  writeJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'), []);
+  writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
+    '# Historical Newsletter Provenance Ledger',
+    '',
+    '## Ledger',
+    '',
+    '| Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Cleanup context |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- |',
+    ''
+  ].join('\n'));
+}
+
 function writeHalSignalQualityReviewArtifacts(root, date, overrides = {}) {
   const report = {
     schema_version: 1,
@@ -4401,6 +4414,7 @@ test('ensure CLI preserves failed repair Gemini draft instead of building fallba
 test('ensure CLI treats one safe fallback article as review-publication ready for non-repair quality triggers', () => {
   const root = tempRoot();
   const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
+  writeArchiveSyncSurface(root);
   const qualityTriggerStatus = {
     date,
     status: 'QUALITY_NEEDS_FIX',
@@ -4805,6 +4819,7 @@ test('ensure CLI records invalid review publication structure as non-visible', (
 test('ensure CLI runs fallback builder for quality and repair triggers, then recomputes readiness', () => {
   const root = tempRoot();
   const { date } = writePr39LikeRegressionFixture(root);
+  writeArchiveSyncSurface(root);
 
   const result = ensurePublicNewsletterArtifacts({ root, date });
 
@@ -4881,6 +4896,7 @@ test('ensure CLI skips fallback when public artifacts are already valid', () => 
     }
   });
   writePublicNewsletterArtifacts(root, date);
+  writeArchiveSyncSurface(root);
 
   const result = ensurePublicNewsletterArtifacts({
     root,
@@ -4926,6 +4942,7 @@ test('root wrapper CLIs expose review handoff outputs', () => {
     }
   });
   writePublicNewsletterArtifacts(ensureRoot, date);
+  writeArchiveSyncSurface(ensureRoot);
 
   const ensureOutput = execFileSync(
     process.execPath,

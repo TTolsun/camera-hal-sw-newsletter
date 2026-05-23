@@ -195,6 +195,68 @@ test('historical archive validator requires sidecar entries to be referenced by 
   assert.equal(audit.report.validation_error_count > 0, true);
 });
 
+test('historical archive validator accepts review-only public stable archive entries', () => {
+  const root = tempRoot('historical-archive-review-only-current-');
+  const date = '2026-05-23';
+  writeNewsletterIndex(root, [date]);
+  writePublicIssue(root, date);
+  writeArchiveDocs(root, [date]);
+  writeStatus(root, [
+    statusEntry(date, {
+      archive_status: 'stable_archive',
+      historical_cleanup_reviewed: true,
+      known_limitations: ['review_only_publication'],
+      historical_cleanup_context: 'review_only_publication',
+      public_visibility: 'listed'
+    })
+  ]);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, true, result.errors.join('\n'));
+});
+
+test('historical archive validator rejects current-generation archive entries with limitations', () => {
+  const root = tempRoot('historical-archive-current-generation-limitations-');
+  const date = '2026-05-24';
+  writeNewsletterIndex(root, [date]);
+  writePublicIssue(root, date);
+  writeArchiveDocs(root, [date]);
+  writeStatus(root, [
+    statusEntry(date, {
+      archive_status: 'stable_archive',
+      historical_cleanup_reviewed: true,
+      known_limitations: ['review_only_publication'],
+      historical_cleanup_context: 'current_generation_archive_review',
+      public_visibility: 'listed'
+    })
+  ]);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /current_generation_archive_review entries must not declare known_limitations/);
+});
+
+test('historical archive validator rejects review-only context without review-only limitation', () => {
+  const root = tempRoot('historical-archive-review-only-missing-limitation-');
+  const date = '2026-05-23';
+  writeNewsletterIndex(root, [date]);
+  writePublicIssue(root, date);
+  writeArchiveDocs(root, [date]);
+  writeStatus(root, [
+    statusEntry(date, {
+      archive_status: 'stable_archive',
+      historical_cleanup_reviewed: true,
+      known_limitations: [],
+      historical_cleanup_context: 'review_only_publication',
+      public_visibility: 'listed'
+    })
+  ]);
+
+  const result = validateHistoricalArchive({ root });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /review_only_publication entries must include known_limitations=review_only_publication/);
+});
+
 test('historical archive validator requires non-stable sidecar entries in the cleanup report', () => {
   const root = tempRoot('historical-archive-cleanup-reference-');
   const date = '2026-05-05';

@@ -22,6 +22,7 @@ const {
 } = require('../common/article-section-contract');
 const {
   CAPSULE_REQUIRED_FIELDS,
+  completeHalSignalCapsuleFromExistingFields,
   normalizeHalSignalCapsule
 } = require('../common/hal-signal-quality');
 const {
@@ -281,52 +282,105 @@ function strictArticleSections(section) {
   return output;
 }
 
+function uniqueText(values) {
+  const output = [];
+  const seen = new Set();
+  const items = Array.isArray(values) ? values.flat() : [values];
+  for (const value of items) {
+    const parsed = text(value);
+    if (!parsed) continue;
+    const key = parsed.replace(/\s+/g, ' ').trim().toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    output.push(parsed);
+  }
+  return output;
+}
+
+function mergeBackgroundContext(section = {}) {
+  return uniqueText([
+    section.background,
+    section.why_it_matters,
+    section.evidence_summary
+  ]).join('\n\n');
+}
+
 function buildArticleSectionsFromLegacyFields(section = {}) {
-  const publicArticle = section.public_article || {};
-  const capsule = section.hal_signal_capsule || {};
+  const reasonCodes = [];
+  const verifiedFacts = uniqueText(section.confirmed_facts);
+  const backgroundContext = mergeBackgroundContext(section);
+  const halDriverImpact = text(section.camera_hal_perspective);
+  const actionItems = uniqueText(section.action_items);
+  const teamSharePoints = text(section.team_summary);
+  if (!backgroundContext) reasonCodes.push('missing_background_context');
+  if (!halDriverImpact) reasonCodes.push('missing_hal_driver_impact');
+  if (actionItems.length === 0) reasonCodes.push('missing_action_items');
+  if (!teamSharePoints) reasonCodes.push('missing_team_share_points');
+
   const repaired = {
-    verified_facts: ensureArray(section.confirmed_facts).length > 0
-      ? ensureArray(section.confirmed_facts)
-      : ensureArray(section.specificity_checks).length > 0
-        ? ensureArray(section.specificity_checks)
-        : [section.what_changed, section.evidence_summary].map(text).filter(Boolean),
-    background_context: text(section.background || section.why_it_matters || section.evidence_summary),
-    hal_driver_impact: text(section.camera_hal_perspective || publicArticle.camera_hal_takeaway || section.why_it_matters),
-    action_items: ensureArray(section.action_items).length > 0
-      ? ensureArray(section.action_items)
-      : ensureArray(section.action_hints).length > 0
-        ? ensureArray(section.action_hints)
-        : ensureArray(publicArticle.reader_checkpoints),
-    team_share_points: text(section.team_summary || section.why_it_matters || publicArticle.lead)
+    verified_facts: verifiedFacts,
+    background_context: backgroundContext,
+    hal_driver_impact: halDriverImpact,
+    action_items: actionItems,
+    team_share_points: teamSharePoints
   };
-  const knownLimitations = ensureArray(section.limitations || section.known_limitations);
-  const watchItems = ensureArray(section.watch_items);
-  const doNotClaim = [
+  const knownLimitations = uniqueText([section.limitations, section.known_limitations]);
+  const watchItems = uniqueText(section.watch_items);
+  const doNotClaim = uniqueText([
     ...ensureArray(section.do_not_claim),
     ...ensureArray(section.overclaim_guardrails),
-    ...ensureArray(capsule.do_not_overstate)
-  ];
+    ...ensureArray(section.do_not_overstate)
+  ]);
   if (knownLimitations.length > 0) repaired.known_limitations = knownLimitations;
   if (watchItems.length > 0) repaired.watch_items = watchItems;
   if (doNotClaim.length > 0) repaired.do_not_claim = doNotClaim;
-  return repaired;
+  return {
+    article_sections: repaired,
+    reason_codes: uniqueText(reasonCodes)
+  };
 }
 
-function deterministicallyRepairArticleSections(value) {
+function deterministicallyRepairEditorSchema(value) {
   const repaired = cloneJson(value);
   let changed = false;
+  const reasonCodes = [];
   for (const section of ensureArray(repaired?.sections)) {
     const normalized = normalizeArticleSections(section);
-    if (normalized.diagnostics.article_sections_present && normalized.diagnostics.complete) continue;
-    const candidate = buildArticleSectionsFromLegacyFields(section);
-    section.article_sections = candidate;
-    const repairedNormalized = normalizeArticleSections(section);
-    if (!repairedNormalized.diagnostics.complete) {
-      return null;
+    if (!(normalized.diagnostics.article_sections_present && normalized.diagnostics.complete)) {
+      const candidate = buildArticleSectionsFromLegacyFields(section);
+      reasonCodes.push(...candidate.reason_codes);
+      section.article_sections = candidate.article_sections;
+      const repairedNormalized = normalizeArticleSections(section);
+      if (!repairedNormalized.diagnostics.complete) {
+        reasonCodes.push(...repairedNormalized.diagnostics.missing_required_keys.map(key => `missing_${key}`));
+      } else {
+        changed = true;
+      }
     }
-    changed = true;
+
+    const capsule = normalizeHalSignalCapsule(section);
+    if (!capsule.complete) {
+      const candidate = completeHalSignalCapsuleFromExistingFields(section, {
+        mode: 'editor_deterministic_repair'
+      });
+      reasonCodes.push(...candidate.reason_codes);
+      if (candidate.complete) {
+        section.hal_signal_capsule = candidate.capsule;
+        changed = true;
+      }
+    }
   }
-  return changed ? repaired : null;
+  const uniqueReasonCodes = uniqueText(reasonCodes);
+  if (uniqueReasonCodes.length > 0) {
+    return {
+      editor: null,
+      reason_codes: uniqueReasonCodes
+    };
+  }
+  return {
+    editor: changed ? repaired : null,
+    reason_codes: []
+  };
 }
 
 function validateArticleSectionContract(value) {
@@ -862,8 +916,20 @@ async function repairEditorOutputContract({
     };
   } catch (error) {
     if (!(error instanceof EditorSemanticValidationError)) throw error;
+    const repairField = error.details?.field || error.field || '';
+    let deterministicRepair = null;
+    let deterministicRepairFailureReasonCodes = [];
+    if (repairField === 'sections.article_sections' || repairField === 'sections.hal_signal_capsule') {
+      deterministicRepair = deterministicallyRepairEditorSchema(invalidEditor);
+      deterministicRepairFailureReasonCodes = ensureArray(deterministicRepair?.reason_codes);
+      if (deterministicRepairFailureReasonCodes.length > 0) {
+        error.deterministic_repair_failure_reason_codes = deterministicRepairFailureReasonCodes;
+      }
+    }
     const initialDetails = {
-      ...serializeEditorValidationError(error),
+      ...serializeEditorValidationError(error, deterministicRepairFailureReasonCodes.length > 0
+        ? { deterministic_repair_failure_reason_codes: deterministicRepairFailureReasonCodes }
+        : {}),
       stage,
       attempt
     };
@@ -874,11 +940,18 @@ async function repairEditorOutputContract({
         phase: 'attempt',
         output: invalidEditor,
         error,
-        extra: { stage, attempt, repairAttempted: false, repairSucceeded: false }
+        extra: {
+          stage,
+          attempt,
+          repairAttempted: false,
+          repairSucceeded: false,
+          ...(deterministicRepairFailureReasonCodes.length > 0
+            ? { deterministic_repair_failure_reason_codes: deterministicRepairFailureReasonCodes }
+            : {})
+        }
       });
     }
 
-    const repairField = error.details?.field || error.field || '';
     if (!isRepairableSemanticField(repairField)) {
       error.stage = stage;
       attachSemanticStatus(error, {
@@ -888,6 +961,23 @@ async function repairEditorOutputContract({
       });
       throw error;
     }
+
+    if (deterministicRepair?.editor) {
+      try {
+        const deterministicEditor = validate(cloneJson(deterministicRepair.editor));
+        assertSectionsAndSourcesPreserved(invalidEditor, deterministicRepair.editor);
+        return {
+          editor: deterministicEditor,
+          editor_semantic_validation: initialDetails,
+          repairAttempted: true,
+          repairSucceeded: true,
+          deterministicRepair: true
+        };
+      } catch (_) {
+        // Fall through to the LLM repair path; the raw validation error stays recorded.
+      }
+    }
+
     if (typeof repairFn !== 'function') {
       error.stage = stage;
       const missingRepairError = attachSemanticStatus(error, {
@@ -898,30 +988,13 @@ async function repairEditorOutputContract({
       throw missingRepairError;
     }
 
-    if (repairField === 'sections.article_sections') {
-      const deterministicRaw = deterministicallyRepairArticleSections(invalidEditor);
-      if (deterministicRaw) {
-        try {
-          const deterministicEditor = validate(cloneJson(deterministicRaw));
-          assertSectionsAndSourcesPreserved(invalidEditor, deterministicRaw);
-          return {
-            editor: deterministicEditor,
-            editor_semantic_validation: initialDetails,
-            repairAttempted: true,
-            repairSucceeded: true,
-            deterministicRepair: true
-          };
-        } catch (_) {
-          // Fall through to the LLM repair path; the raw validation error stays recorded.
-        }
-      }
-    }
-
     let repairedRaw;
     try {
       repairedRaw = await repairFn({
         invalidEditor: cloneJson(invalidEditor),
-        validationError: serializeEditorValidationError(error),
+        validationError: serializeEditorValidationError(error, deterministicRepairFailureReasonCodes.length > 0
+          ? { deterministic_repair_failure_reason_codes: deterministicRepairFailureReasonCodes }
+          : {}),
         details: error.details,
         stage,
         attempt

@@ -4,6 +4,7 @@ const test = require('node:test');
 const {
   buildMainArticleSignalChecks,
   buildHalSignalQualitySummary,
+  completeHalSignalCapsuleFromExistingFields,
   countActionabilityUpgradeSignals,
   countConcreteActionSignals,
   inferActionabilityLevel,
@@ -72,6 +73,99 @@ test('normalizes capsule completeness without synthesizing missing content', () 
   assert.equal(missing.complete, false);
   assert.ok(missing.missing_keys.includes('why_now'));
   assert.deepEqual(stringGuardrail.capsule.do_not_overstate, ['Do not claim direct HAL API changes.']);
+});
+
+test('completes HAL Signal Capsule from existing fields in fallback mode', () => {
+  const result = completeHalSignalCapsuleFromExistingFields(article({
+    hal_signal_capsule: undefined
+  }), {
+    mode: 'fallback_public_issue'
+  });
+
+  assert.equal(result.complete, true);
+  assert.equal(result.capsule.check_within_2_weeks, 'Within 2 weeks, assign a camera owner to run Camera ITS.');
+  assert.ok(result.capsule.impact_axes.includes('camerax_app_compatibility'));
+  assert.deepEqual(result.reason_codes, []);
+});
+
+test('strict editor HAL Signal Capsule repair uses only dated source context and existing action items', () => {
+  const result = completeHalSignalCapsuleFromExistingFields(article({
+    hal_signal_capsule: undefined,
+    evidence_summary: 'No date in the evidence text.',
+    fallback_guard_notes: ['Do not copy fallback guard notes into strict repair.'],
+    sources: [{
+      title: 'Source',
+      url: 'https://example.com/source',
+      date: '2026-05-02'
+    }]
+  }), {
+    mode: 'editor_deterministic_repair'
+  });
+
+  assert.equal(result.complete, true);
+  assert.equal(result.capsule.why_now, 'Source date 2026-05-02 provides the dated context for this HAL validation signal.');
+  assert.equal(result.capsule.check_within_2_weeks, 'Within 2 weeks, assign a camera owner to run Camera ITS.');
+  assert.deepEqual(result.capsule.do_not_overstate, [
+    '출처 근거를 넘어 기기 적용, HAL API 변경, 양산 영향으로 확대 해석하지 않는다.'
+  ]);
+});
+
+test('strict editor HAL Signal Capsule repair rejects generic action item fallback', () => {
+  const result = completeHalSignalCapsuleFromExistingFields(article({
+    hal_signal_capsule: undefined,
+    article_sections: {
+      verified_facts: ['CameraX 1.5.0 release date: 2026-05-01.'],
+      background_context: 'CameraX sits above camera2.',
+      hal_driver_impact: 'Review the source only when concrete HAL evidence appears.',
+      action_items: ['Review this topic.'],
+      team_share_points: 'No concrete two-week verification target is present.'
+    },
+    sources: [{
+      title: 'Source',
+      url: 'https://example.com/source',
+      date: '2026-05-02'
+    }]
+  }), {
+    mode: 'editor_deterministic_repair'
+  });
+
+  assert.equal(result.complete, false);
+  assert.ok(result.reason_codes.includes('missing_concrete_two_week_check'));
+});
+
+test('strict editor HAL Signal Capsule repair prefers structured source dates over prose dates', () => {
+  const result = completeHalSignalCapsuleFromExistingFields(article({
+    hal_signal_capsule: undefined,
+    evidence_summary: 'Team should review follow-up work by 2026-05-30.',
+    source_verification_notes: 'Source note mentions a later review date of 2026-05-31.',
+    sources: [{
+      title: 'Source',
+      url: 'https://example.com/source',
+      published_date: '2026-05-02'
+    }]
+  }), {
+    mode: 'editor_deterministic_repair'
+  });
+
+  assert.equal(result.complete, true);
+  assert.equal(result.capsule.why_now, 'Source date 2026-05-02 provides the dated context for this HAL validation signal.');
+});
+
+test('strict editor HAL Signal Capsule repair does not use generation date as why_now', () => {
+  const result = completeHalSignalCapsuleFromExistingFields(article({
+    hal_signal_capsule: undefined,
+    evidence_summary: 'Review follow-up by 2026-05-30, but this is not source publication context.',
+    date: '2026-05-08',
+    sources: [{
+      title: 'Source',
+      url: 'https://example.com/source'
+    }]
+  }), {
+    mode: 'editor_deterministic_repair'
+  });
+
+  assert.equal(result.complete, false);
+  assert.ok(result.reason_codes.includes('missing_why_now_context'));
 });
 
 test('generic review with weak signals is a main article hard blocker', () => {

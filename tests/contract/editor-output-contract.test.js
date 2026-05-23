@@ -793,7 +793,7 @@ test('semantic repair deterministically restores missing article_sections from s
   assert.equal(result.deterministicRepair, true);
   assert.deepEqual(result.editor.sections[0].article_sections, {
     verified_facts: ['Fact 1'],
-    background_context: 'Background 1',
+    background_context: 'Background 1 Why 1 Evidence 1',
     hal_driver_impact: 'HAL perspective 1',
     action_items: ['Action 1'],
     team_share_points: 'Summary 1',
@@ -802,6 +802,183 @@ test('semantic repair deterministically restores missing article_sections from s
   assert.equal(fs.existsSync(path.join(newsroomDir, 'editor-invalid-attempt-1.json')), true);
   const errorArtifact = readJson(path.join(newsroomDir, 'editor-validation-error-attempt-1.json'));
   assert.equal(errorArtifact.field, 'sections.article_sections');
+});
+
+test('semantic repair deterministically restores legacy sections and HAL Signal Capsule without LLM repair', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const firstSection = section(1, {
+    article_sections: undefined,
+    hal_signal_capsule: undefined,
+    action_items: ['Run Camera ITS and stream metadata checks for Headline 1 within 2 weeks.'],
+    sources: [{
+      title: 'Source 1',
+      url: 'https://example.com/source-1',
+      date: '2026-05-07'
+    }]
+  });
+  const publicArticle = JSON.parse(JSON.stringify(firstSection.public_article));
+  const sources = JSON.parse(JSON.stringify(firstSection.sources));
+  const draft = editor({
+    sections: [
+      firstSection,
+      section(2),
+      section(3)
+    ]
+  });
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    newsroomDir,
+    normalizeSection,
+    repairFn: async () => {
+      throw new Error('LLM repair should not be needed for deterministic schema repair.');
+    }
+  });
+
+  assert.equal(result.deterministicRepair, true);
+  assert.deepEqual(result.editor.sections[0].public_article, publicArticle);
+  assert.deepEqual(result.editor.sections[0].sources, sources);
+  assert.deepEqual(result.editor.sections[0].hal_signal_capsule, {
+    why_now: 'Source date 2026-05-07 provides the dated context for this HAL validation signal.',
+    reader_owners: ['camera_hal_owner', 'camera_test_owner'],
+    check_within_2_weeks: 'Run Camera ITS and stream metadata checks for Headline 1 within 2 weeks.',
+    impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
+    do_not_overstate: ['Do not overstate direct HAL impact.']
+  });
+});
+
+test('semantic repair preserves complete HAL Signal Capsule during deterministic article section repair', async () => {
+  const capsule = {
+    why_now: 'Custom dated HAL signal is already present.',
+    reader_owners: ['camera_driver_owner'],
+    check_within_2_weeks: 'Keep the existing driver validation task.',
+    impact_axes: ['driver_image_pipeline'],
+    do_not_overstate: ['Preserve this existing caution.']
+  };
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: undefined,
+        hal_signal_capsule: capsule
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    normalizeSection,
+    repairFn: async () => {
+      throw new Error('LLM repair should not be needed when complete capsule exists.');
+    }
+  });
+
+  assert.equal(result.deterministicRepair, true);
+  assert.deepEqual(result.editor.sections[0].hal_signal_capsule, capsule);
+});
+
+test('semantic repair falls back to LLM repair with deterministic reason code for missing semantic fields', async () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: undefined,
+        camera_hal_perspective: ''
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  let validationError;
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    normalizeSection,
+    repairFn: async payload => {
+      validationError = payload.validationError;
+      return editor();
+    }
+  });
+
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.deterministicRepair, undefined);
+  assert.deepEqual(validationError.deterministic_repair_failure_reason_codes, ['missing_hal_driver_impact']);
+});
+
+test('semantic repair does not create why_now from generation date alone', async () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        hal_signal_capsule: undefined,
+        sources: [{
+          title: 'Source 1',
+          url: 'https://example.com/source-1'
+        }]
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  let validationError;
+
+  await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    normalizeSection,
+    repairFn: async payload => {
+      validationError = payload.validationError;
+      return editor();
+    }
+  });
+
+  assert.ok(validationError.deterministic_repair_failure_reason_codes.includes('missing_why_now_context'));
+});
+
+test('semantic repair records unknown axis and owner mapping failures before LLM fallback', async () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        hal_signal_capsule: undefined,
+        hal_impact_axes: ['future_camera_lane'],
+        reader_owners: [],
+        relevance_bucket: '',
+        sources: [{
+          title: 'Source 1',
+          url: 'https://example.com/source-1',
+          date: '2026-05-07'
+        }]
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+  let validationError;
+
+  await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    normalizeSection,
+    repairFn: async payload => {
+      validationError = payload.validationError;
+      return editor();
+    }
+  });
+
+  assert.ok(validationError.deterministic_repair_failure_reason_codes.includes('unknown_impact_axis'));
+  assert.ok(validationError.deterministic_repair_failure_reason_codes.includes('missing_reader_owner_mapping'));
 });
 
 test('editor output contract requires HAL Signal Capsule on new draft sections', () => {

@@ -54,6 +54,16 @@ const DIAGNOSTICS_STATUSES = new Set([
 ]);
 
 const RETENTION_SCOPE = 'same_date_diagnostics_only';
+const ARCHIVE_SIDECAR_PATH = 'content/audit/historical-archive-status.json';
+const ARCHIVE_LEDGER_PATH = 'docs/editorial/historical-newsletter-provenance-ledger.md';
+const ARCHIVE_CURRENT_CONTEXTS = new Set([
+  'current_generation_archive_review',
+  'review_only_publication'
+]);
+const REVIEW_ONLY_LEDGER_ISSUE =
+  'review-only public artifact, editor review required before publish confidence; no historical provenance backfill required';
+const PUBLISH_READY_LEDGER_ISSUE =
+  'current generated public artifact; no historical provenance backfill required';
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -273,6 +283,298 @@ function uniqueArtifacts(values) {
   return [...new Set(ensureArray(values).map(toRepoPath).filter(Boolean))].sort();
 }
 
+function normalizeStringArray(value) {
+  return ensureArray(value).map(item => String(item || '').trim()).filter(Boolean);
+}
+
+function expectedArchiveEntry(date, publicState) {
+  const reviewOnly = publicState === PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED;
+  return {
+    date,
+    archive_status: 'stable_archive',
+    historical_cleanup_reviewed: true,
+    known_limitations: reviewOnly ? ['review_only_publication'] : [],
+    historical_cleanup_context: reviewOnly
+      ? 'review_only_publication'
+      : 'current_generation_archive_review',
+    public_visibility: 'listed'
+  };
+}
+
+function canonicalArchiveEntry(entry = {}) {
+  return {
+    date: String(entry.date || ''),
+    archive_status: String(entry.archive_status || ''),
+    historical_cleanup_reviewed: entry.historical_cleanup_reviewed === true,
+    known_limitations: normalizeStringArray(entry.known_limitations).sort(),
+    historical_cleanup_context: String(entry.historical_cleanup_context || ''),
+    public_visibility: String(entry.public_visibility || '')
+  };
+}
+
+function sameJson(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function archiveConflictError({ date, file, reason, existing, expected }) {
+  return new Error([
+    `Archive reconciliation conflict for ${date} in ${file}: ${reason}.`,
+    `existing=${JSON.stringify(existing)}`,
+    `expected=${JSON.stringify(expected)}`
+  ].join(' '));
+}
+
+function readArchiveSidecar(root) {
+  const relPath = ARCHIVE_SIDECAR_PATH;
+  const filePath = path.join(root, relPath);
+  const result = readJsonResult(filePath);
+  if (!result.exists) return [];
+  if (result.error || !Array.isArray(result.value)) {
+    throw archiveConflictError({
+      date: 'unknown',
+      file: relPath,
+      reason: result.error ? `invalid JSON: ${result.error.message}` : 'sidecar must be a JSON array',
+      existing: result.value,
+      expected: []
+    });
+  }
+  return result.value;
+}
+
+function duplicateDates(entries) {
+  const seen = new Set();
+  const duplicates = new Set();
+  for (const entry of ensureArray(entries)) {
+    const date = String(entry?.date || '');
+    if (!date) continue;
+    if (seen.has(date)) duplicates.add(date);
+    seen.add(date);
+  }
+  return [...duplicates].sort();
+}
+
+function upsertArchiveSidecar({ root, date, publicState, write = true }) {
+  const entries = readArchiveSidecar(root);
+  const duplicates = duplicateDates(entries);
+  if (duplicates.length > 0) {
+    throw archiveConflictError({
+      date,
+      file: ARCHIVE_SIDECAR_PATH,
+      reason: `duplicate sidecar date row(s): ${duplicates.join(', ')}`,
+      existing: duplicates,
+      expected: canonicalArchiveEntry(expectedArchiveEntry(date, publicState))
+    });
+  }
+
+  const expected = expectedArchiveEntry(date, publicState);
+  const expectedCanonical = canonicalArchiveEntry(expected);
+  const existingIndex = entries.findIndex(entry => String(entry?.date || '') === date);
+  if (existingIndex >= 0) {
+    const existing = entries[existingIndex];
+    const existingCanonical = canonicalArchiveEntry(existing);
+    if (sameJson(existingCanonical, expectedCanonical)) {
+      return { changed: false };
+    }
+    const historicalContext = String(existing.historical_cleanup_context || '');
+    const unsafeReason = existing.archive_status === 'removed'
+      ? 'existing entry is removed'
+      : existing.public_visibility === 'unlisted' || existing.public_visibility === 'removed'
+        ? `existing public_visibility is ${existing.public_visibility}`
+        : !ARCHIVE_CURRENT_CONTEXTS.has(historicalContext)
+          ? `existing cleanup context is ${historicalContext || 'missing'}`
+          : 'existing canonical archive state differs from expected state';
+    throw archiveConflictError({
+      date,
+      file: ARCHIVE_SIDECAR_PATH,
+      reason: unsafeReason,
+      existing: existingCanonical,
+      expected: expectedCanonical
+    });
+  }
+
+  const nextEntries = [...entries, expected]
+    .sort((left, right) => String(right?.date || '').localeCompare(String(left?.date || '')));
+  if (write) writeJsonAtomic(path.join(root, ARCHIVE_SIDECAR_PATH), nextEntries);
+  return { changed: true };
+}
+
+function parseLedgerCells(line) {
+  return String(line || '')
+    .trim()
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split('|')
+    .map(cell => cell.trim());
+}
+
+function expectedLedgerRow(date, publicState) {
+  const expected = expectedArchiveEntry(date, publicState);
+  return {
+    date,
+    original_generation_mode: 'current_generation',
+    known_quality_issues: publicState === PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED
+      ? REVIEW_ONLY_LEDGER_ISSUE
+      : PUBLISH_READY_LEDGER_ISSUE,
+    rewrite_allowed: 'no',
+    rewrite_status: 'none',
+    archive_status: expected.archive_status,
+    public_visibility: expected.public_visibility,
+    cleanup_context: expected.historical_cleanup_context
+  };
+}
+
+function ledgerRowToLine(row) {
+  return [
+    row.date,
+    row.original_generation_mode,
+    row.known_quality_issues,
+    row.rewrite_allowed,
+    row.rewrite_status,
+    row.archive_status,
+    row.public_visibility,
+    row.cleanup_context
+  ].join(' | ').replace(/^/, '| ').replace(/$/, ' |');
+}
+
+function canonicalLedgerRow(row = {}) {
+  return {
+    date: String(row.date || ''),
+    original_generation_mode: String(row.original_generation_mode || ''),
+    known_quality_issues: String(row.known_quality_issues || ''),
+    rewrite_allowed: String(row.rewrite_allowed || ''),
+    rewrite_status: String(row.rewrite_status || ''),
+    archive_status: String(row.archive_status || ''),
+    public_visibility: String(row.public_visibility || ''),
+    cleanup_context: String(row.cleanup_context || '')
+  };
+}
+
+function parseLedgerTable(text, dateForError) {
+  const lines = String(text || '').split(/\r?\n/);
+  const ledgerHeadingIndex = lines.findIndex(line => /^## Ledger\b/.test(line));
+  const headerIndex = ledgerHeadingIndex < 0
+    ? -1
+    : lines.findIndex((line, index) => index > ledgerHeadingIndex && /^\|\s*Date\s*\|/.test(line));
+  if (ledgerHeadingIndex < 0 || headerIndex < 0) {
+    throw archiveConflictError({
+      date: dateForError,
+      file: ARCHIVE_LEDGER_PATH,
+      reason: 'ledger table marker/header is missing',
+      existing: 'missing',
+      expected: '## Ledger table with Date header'
+    });
+  }
+  const separatorIndex = headerIndex + 1;
+  if (!/^\|\s*-+/.test(lines[separatorIndex] || '')) {
+    throw archiveConflictError({
+      date: dateForError,
+      file: ARCHIVE_LEDGER_PATH,
+      reason: 'ledger table separator is missing',
+      existing: lines[separatorIndex] || '',
+      expected: '| --- |'
+    });
+  }
+
+  const rows = [];
+  let rowEndIndex = separatorIndex + 1;
+  for (; rowEndIndex < lines.length; rowEndIndex += 1) {
+    const line = lines[rowEndIndex];
+    if (!line.startsWith('|')) break;
+    const cells = parseLedgerCells(line);
+    rows.push({
+      line,
+      date: cells[0] || '',
+      original_generation_mode: cells[1] || '',
+      known_quality_issues: cells[2] || '',
+      rewrite_allowed: cells[3] || '',
+      rewrite_status: cells[4] || '',
+      archive_status: cells[5] || '',
+      public_visibility: cells[6] || '',
+      cleanup_context: cells[7] || ''
+    });
+  }
+  return { lines, headerIndex, separatorIndex, rowEndIndex, rows };
+}
+
+function assertNoDuplicateLedgerRows(rows, dateForError) {
+  const counts = new Map();
+  for (const row of rows) {
+    if (!row.date) continue;
+    counts.set(row.date, (counts.get(row.date) || 0) + 1);
+  }
+  const duplicates = [...counts.entries()].filter(([, count]) => count > 1).map(([date]) => date);
+  if (duplicates.length > 0) {
+    throw archiveConflictError({
+      date: dateForError,
+      file: ARCHIVE_LEDGER_PATH,
+      reason: `duplicate ledger date row(s): ${duplicates.join(', ')}`,
+      existing: duplicates,
+      expected: canonicalLedgerRow(expectedLedgerRow(dateForError, PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED))
+    });
+  }
+}
+
+function upsertArchiveLedger({ root, date, publicState, write = true }) {
+  const filePath = path.join(root, ARCHIVE_LEDGER_PATH);
+  if (!fs.existsSync(filePath)) {
+    throw archiveConflictError({
+      date,
+      file: ARCHIVE_LEDGER_PATH,
+      reason: 'ledger file is missing',
+      existing: 'missing',
+      expected: ARCHIVE_LEDGER_PATH
+    });
+  }
+  const originalText = fs.readFileSync(filePath, 'utf8');
+  const table = parseLedgerTable(originalText, date);
+  assertNoDuplicateLedgerRows(table.rows, date);
+  const expected = expectedLedgerRow(date, publicState);
+  const expectedCanonical = canonicalLedgerRow(expected);
+  const existing = table.rows.find(row => row.date === date);
+  if (existing) {
+    const existingCanonical = canonicalLedgerRow(existing);
+    if (sameJson(existingCanonical, expectedCanonical)) {
+      return { changed: false };
+    }
+    throw archiveConflictError({
+      date,
+      file: ARCHIVE_LEDGER_PATH,
+      reason: 'existing ledger row differs from expected archive state',
+      existing: existingCanonical,
+      expected: expectedCanonical
+    });
+  }
+
+  const nextRows = [...table.rows, expected]
+    .sort((left, right) => String(right.date || '').localeCompare(String(left.date || '')))
+    .map(ledgerRowToLine);
+  const nextLines = [
+    ...table.lines.slice(0, table.separatorIndex + 1),
+    ...nextRows,
+    ...table.lines.slice(table.rowEndIndex)
+  ];
+  const nextText = nextLines.join('\n');
+  if (nextText === originalText) return { changed: false };
+  if (write) fs.writeFileSync(filePath, nextText, 'utf8');
+  return { changed: true };
+}
+
+function syncArchivePublicationState({ root, date, publicState }) {
+  if (![PUBLIC_STATES.PUBLISH_READY, PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED].includes(publicState)) {
+    return { changedArtifacts: [] };
+  }
+  const sidecar = upsertArchiveSidecar({ root, date, publicState, write: false });
+  const ledger = upsertArchiveLedger({ root, date, publicState, write: false });
+  if (sidecar.changed) upsertArchiveSidecar({ root, date, publicState, write: true });
+  if (ledger.changed) upsertArchiveLedger({ root, date, publicState, write: true });
+  return {
+    changedArtifacts: uniqueArtifacts([
+      sidecar.changed ? ARCHIVE_SIDECAR_PATH : '',
+      ledger.changed ? ARCHIVE_LEDGER_PATH : ''
+    ])
+  };
+}
+
 function buildRemediationMessage(date) {
   return [
     `Remediation for ${date}:`,
@@ -406,7 +708,14 @@ function reconcilePublicState(options = {}) {
 
   const changedArtifacts = uniqueArtifacts(options.changedArtifacts);
   const repoVisibleStatusPath = `content/newsroom/${date}/generation-status.json`;
-  const repoVisibleChangedArtifacts = uniqueArtifacts(changedArtifacts.concat(repoVisibleStatusPath, dataIndexChanged ? 'data/newsletters.json' : []));
+  const archiveSync = options.write !== false
+    ? syncArchivePublicationState({ root, date, publicState })
+    : { changedArtifacts: [] };
+  const repoVisibleChangedArtifacts = uniqueArtifacts(changedArtifacts.concat(
+    repoVisibleStatusPath,
+    dataIndexChanged ? 'data/newsletters.json' : [],
+    archiveSync.changedArtifacts
+  ));
 
   if (options.write !== false) {
     writeJsonAtomic(path.join(root, repoVisibleStatusPath), statusPatch);
@@ -459,6 +768,7 @@ module.exports = {
   reconcilePublicState,
   retentionMetadataPath,
   runModeForPublicState,
+  syncArchivePublicationState,
   validateRetentionMetadata,
   writeJsonAtomic
 };
