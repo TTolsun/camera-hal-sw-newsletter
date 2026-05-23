@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-05-24",
+  "validations": [
+    {
+      "proposal_id": "P1",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "P2",
+      "candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "P2",
+      "candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "P3",
+      "candidate_url": "https://goo.gle/AdaptiveApps_IO26",
+      "normalized_url": "https://goo.gle/AdaptiveApps_IO26",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    }
+  ],
+  "counts": {
+    "discovered_not_extractable": 1,
+    "accepted": 2,
+    "domain_not_allowed": 1
+  }
+}

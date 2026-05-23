@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "report_type": "source_discovery_feedback",
+  "date": "2026-05-24",
+  "status": "WARNING",
+  "parser_gap_count": 0,
+  "duplicate_discovery_gap_count": 0,
+  "gemini_parser_failure_count": 1,
+  "gemini_parser_failures": [
+    {
+      "severity": "warning",
+      "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source_policy_match": "camerax-release-notes",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "rejected_reason": "discovered_not_extractable",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
+    }
+  ],
+  "items": []
+}
