@@ -338,11 +338,29 @@ function factCheckSourceGapCount(factCheck = {}, generationStatus = {}) {
   return ensureArray(factCheck.source_gaps).length;
 }
 
-function originalFactCheckDiagnostics(factCheck = {}, generationStatus = {}) {
+function originalFactCheckDiagnostics(factCheck = {}, generationStatus = {}, qualityReport = {}) {
+  const originalStatus = firstText(
+    factCheck.original_fact_check_status,
+    generationStatus.original_fact_check_status,
+    qualityReport.original_fact_check_status,
+    factCheck.status,
+    generationStatus.fact_check_status,
+    'UNKNOWN'
+  );
+  const originalMustFixCount = numeric(
+    factCheck.original_must_fix_count ??
+    generationStatus.original_must_fix_count ??
+    qualityReport.original_must_fix_count
+  );
+  const originalSourceGapCount = numeric(
+    factCheck.original_source_gap_count ??
+    generationStatus.original_source_gap_count ??
+    qualityReport.original_source_gap_count
+  );
   return {
-    original_fact_check_status: factCheck.status || generationStatus.fact_check_status || 'UNKNOWN',
-    original_must_fix_count: factCheckMustFixCount(factCheck, generationStatus),
-    original_source_gap_count: factCheckSourceGapCount(factCheck, generationStatus)
+    original_fact_check_status: originalStatus,
+    original_must_fix_count: originalMustFixCount ?? factCheckMustFixCount(factCheck, generationStatus),
+    original_source_gap_count: originalSourceGapCount ?? factCheckSourceGapCount(factCheck, generationStatus)
   };
 }
 
@@ -726,7 +744,103 @@ function componentText(candidate) {
   return firstText(candidate.source_extraction?.release?.component, candidate.component, candidate.api_or_component, candidate.apiOrComponent, candidate.source);
 }
 
-function publicHeadlineForCandidate(candidate, headline) {
+function sourceBehaviorText(candidate, section = {}) {
+  const releaseItems = ensureArray(candidate?.source_extraction?.release?.sections)
+    .flatMap(section => ensureArray(section?.items))
+    .map(item => item?.source_text || item?.text)
+    .filter(Boolean);
+  return firstText(
+    section.what_changed,
+    candidate.behavior_change,
+    candidate.behaviorChange,
+    candidate.summary,
+    ...releaseItems,
+    candidate.title
+  );
+}
+
+function releaseVersionText(candidate, fallback = '') {
+  return firstText(
+    candidate?.source_extraction?.release?.version,
+    candidate.version_or_release,
+    candidate.versionOrRelease,
+    fallback
+  );
+}
+
+function cameraXCandidateText(candidate, section = {}) {
+  return [
+    candidate.title,
+    section.headline,
+    candidate.url,
+    candidate.summary,
+    candidate.behavior_change,
+    candidate.api_or_component,
+    candidate.component,
+    candidate?.source_extraction?.release?.component
+  ].map(text).join(' ');
+}
+
+function isCameraXCandidate(candidate, section = {}) {
+  return /CameraX|androidx\.camera/i.test(cameraXCandidateText(candidate, section));
+}
+
+function isListenableFutureCompileFix(value) {
+  const body = text(value);
+  return /ListenableFuture/i.test(body) && /compil|Cannot access class|빌드|컴파일/i.test(body);
+}
+
+function compactCameraXHeadline(candidate, section = {}) {
+  if (!isCameraXCandidate(candidate, section)) return '';
+  const version = releaseVersionText(candidate, text(candidate.title || section.headline)).replace(/^CameraX\s+/i, '');
+  const behavior = sourceBehaviorText(candidate, section);
+  const prefix = version ? `CameraX ${version}` : 'CameraX release note';
+  if (isListenableFutureCompileFix(behavior)) {
+    return `${prefix}: ListenableFuture 컴파일 오류 수정`;
+  }
+  if (/compil|빌드|compile|dependency|Gradle/i.test(behavior)) {
+    return `${prefix}: 앱 빌드/의존성 수정 확인`;
+  }
+  if (/preview|capture|ImageCapture|VideoCapture|Preview/i.test(behavior)) {
+    return `${prefix}: preview/capture 동작 변경 확인`;
+  }
+  return `${prefix}: release-note 변경점 확인`;
+}
+
+function normalizeHeadlineOverrides(overrides = {}) {
+  if (!overrides || typeof overrides !== 'object') return {};
+  if (Array.isArray(overrides)) {
+    return Object.fromEntries(overrides
+      .map(item => [text(item.key || item.source_candidate_hash || item.source_url || item.url), text(item.headline)])
+      .filter(([key, value]) => key && value));
+  }
+  return Object.fromEntries(Object.entries(overrides)
+    .map(([key, value]) => [text(key), text(value?.headline || value)])
+    .filter(([key, value]) => key && value));
+}
+
+function headlineOverrideForSection(section = {}, candidate = {}, overrides = {}) {
+  const sources = ensureArray(section.sources);
+  const keys = [
+    section.source_candidate_hash,
+    candidate.source_candidate_hash,
+    section.source_candidate_url,
+    candidate.url,
+    candidate.source_url,
+    sources[0]?.url,
+    normalizeUrl(section.source_candidate_url),
+    normalizeUrl(candidate.url),
+    normalizeUrl(sources[0]?.url)
+  ].map(text).filter(Boolean);
+  for (const key of keys) {
+    if (overrides[key]) return overrides[key];
+  }
+  return '';
+}
+
+function publicHeadlineForCandidate(candidate, headline, options = {}) {
+  const override = text(options.headlineOverride);
+  if (override) return override;
   const title = text(candidate.title || headline);
   if (/Building seamless Android experiences across devices/i.test(title)) {
     return 'Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트';
@@ -737,10 +851,8 @@ function publicHeadlineForCandidate(candidate, headline) {
   if (/\bGlaze\b/i.test(title)) return 'Glaze 7.2: C++26 Reflection 기반 직렬화 지원 확대';
   if (/\bGCC\s+16\.1\b/i.test(title)) return 'GCC 16.1 릴리스: C++20 기본값 전환과 C++26 기능 확장';
   if (/libcamera/i.test(title)) return 'libcamera v0.7.1 릴리스: SoftISP와 센서 모드 설정 업데이트';
-  const cameraXVersion = title.match(/\bCameraX\s+([0-9][A-Za-z0-9.-]*)\b/i);
-  if (cameraXVersion) {
-    return `CameraX ${cameraXVersion[1]} 업데이트: preview/capture 호환성 확인`;
-  }
+  const cameraXHeadline = compactCameraXHeadline(candidate, { headline });
+  if (cameraXHeadline) return cameraXHeadline;
   return title.replace(/^Tooling Watch \/ Fallback:\s*/i, '').replace(/\bFallback\b/gi, 'Watch').trim();
 }
 
@@ -750,7 +862,7 @@ function longEnglishSourceText(value) {
 
 function publicChangeSummary(candidate, section, component) {
   const title = text(candidate.title || section.headline);
-  const change = text(section.what_changed || candidate.behavior_change || candidate.summary || title);
+  const change = text(sourceBehaviorText(candidate, section));
   if (/Building seamless Android experiences across devices/i.test(title) || /Jetpack Compose is the definitive engine/i.test(change)) {
     return 'Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.';
   }
@@ -760,8 +872,12 @@ function publicChangeSummary(candidate, section, component) {
   if (/libcamera/i.test(title)) {
     return 'libcamera v0.7.1은 SoftISP debayering, image pipeline throughput, pipeline handler camera support, sensor mode configuration 관련 업데이트를 포함합니다.';
   }
-  if (/CameraX|androidx\.camera/i.test(title) || /CameraX|androidx\.camera/i.test(component)) {
-    return 'CameraX release note는 app/framework 계층의 preview/capture 호환성 검증 신호로 다룹니다.';
+  if (isCameraXCandidate(candidate, section)) {
+    const version = releaseVersionText(candidate, title);
+    if (isListenableFutureCompileFix(change)) {
+      return `${version}은 CameraX 1.6.0 사용 시 발생하던 "Cannot access class ListenableFuture" 컴파일 오류를 수정한 패치입니다.`;
+    }
+    return change;
   }
   if (longEnglishSourceText(change)) {
     return `${component || title} 관련 공개 출처가 공식 업데이트를 공지했습니다. 원문 세부 문장은 출처 링크에서 확인하고, 여기서는 Camera HAL / Driver / Native tooling 관점의 확인 범위만 요약합니다.`;
@@ -809,6 +925,19 @@ function publicBodyParagraphs(candidate, section, component) {
       'Android Camera HAL API 변경으로 직접 해석할 근거는 없습니다. 다만 V4L2 기반 camera pipeline, sensor mode 선택, format negotiation, frame timing 검증 관점에서는 참고할 만한 upstream signal입니다.'
     ];
   }
+  if (isCameraXCandidate(candidate, section)) {
+    const behavior = sourceBehaviorText(candidate, section);
+    if (isListenableFutureCompileFix(behavior)) {
+      return [
+        `${releaseVersionText(candidate, title)}은 CameraX 1.6.0 사용 시 발생하던 "Cannot access class ListenableFuture" 컴파일 오류를 수정한 release note입니다. ListenableFuture는 CameraX와 Android app/API 코드에서 비동기 작업 결과를 전달할 때 쓰이는 future 타입이므로, 이번 항목은 preview/capture 동작 변경보다 앱 빌드와 의존성 접근 문제에 가깝습니다.`,
+        'AOSP Camera HAL에는 직접 영향이 확인되지 않았습니다. CameraX 1.6.0을 쓰는 앱, sample, validation tool이 있다면 CameraX 1.6.1을 빌드 안정성 패치로 보고 Gradle dependency와 compile smoke test를 확인하는 것이 적절합니다.'
+      ];
+    }
+    return [
+      change,
+      '이 CameraX release note는 app/framework 계층의 변경점으로 먼저 해석합니다. AOSP Camera HAL, vendor driver, metadata contract, stream/buffer runtime 영향은 source가 직접 말한 범위나 별도 검증 결과가 있을 때만 후속 항목으로 분리합니다.'
+    ];
+  }
   return [
     change,
     '이 항목은 공개 출처가 말한 범위 안에서 Camera HAL / Driver / Native tooling 독자가 참고할 수 있는 실무 맥락으로만 해석합니다.'
@@ -817,6 +946,7 @@ function publicBodyParagraphs(candidate, section, component) {
 
 function publicCheckpointsForCandidate(candidate, section) {
   const title = text(candidate.title || section.headline);
+  const behavior = sourceBehaviorText(candidate, section);
   const component = componentText(candidate) || 'Camera API/component';
   const bucket = text(candidate.relevance_bucket || section.relevance_bucket);
   if (/Building seamless Android experiences across devices/i.test(title)) {
@@ -852,6 +982,12 @@ function publicCheckpointsForCandidate(candidate, section) {
       'downstream Android HAL 영향은 별도 evidence가 있을 때만 판단합니다.'
     ];
   }
+  if (isCameraXCandidate(candidate, section) && isListenableFutureCompileFix(behavior)) {
+    return [
+      'CameraX 1.6.0을 쓰는 앱, sample, validation tool이 있다면 1.6.1 적용 후 Gradle compile smoke test를 확인합니다.',
+      '이 release note는 AOSP Camera HAL/runtime 변경을 직접 말하지 않으므로 preview/capture 동작 회귀나 vendor pipeline 영향과 분리해서 다룹니다.'
+    ];
+  }
   if (/android_platform_camera_adjacent|android_camera_api|android_camera|multimedia/i.test(bucket)) {
     return [
       'CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.',
@@ -880,7 +1016,14 @@ function publicTakeawayForCandidate(candidate, section, component) {
   const bucket = text(candidate.relevance_bucket || section.relevance_bucket);
   const impact = text(candidate.impact_claim_level || section.impact_claim_level);
   const title = text(candidate.title || section.headline || component);
+  const behavior = sourceBehaviorText(candidate, section);
   if (/direct|camera_stack/i.test(impact) || /direct|driver|image_pipeline/i.test(bucket)) {
+    if (isCameraXCandidate(candidate, section) && isListenableFutureCompileFix(behavior)) {
+      return '이 항목은 AOSP Camera HAL 변경이 아니라 CameraX 1.6.0 채택 앱이나 샘플, 검증 도구의 빌드 안정성 패치로 보는 것이 안전합니다. HAL/driver 영향은 별도 source evidence가 있을 때만 판단합니다.';
+    }
+    if (isCameraXCandidate(candidate, section)) {
+      return '이 항목은 CameraX release note의 source-confirmed 변경점을 app/framework 계층에서 먼저 확인하는 항목입니다. HAL/driver 영향은 release note나 별도 검증이 직접 뒷받침할 때만 확장합니다.';
+    }
     return `${title}은 공개 출처가 직접 말한 ${component || 'camera stack'} 변화 범위 안에서 HAL request/result, stream, buffer, metadata validation 영향을 확인할 후보입니다.`;
   }
   if (/Building seamless Android experiences across devices/i.test(title)) {
@@ -888,6 +1031,12 @@ function publicTakeawayForCandidate(candidate, section, component) {
   }
   if (/Start building today|Google AI Studio/i.test(title)) {
     return '이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.';
+  }
+  if (isCameraXCandidate(candidate, section) && isListenableFutureCompileFix(behavior)) {
+    return '이 항목은 AOSP Camera HAL 변경이 아니라 CameraX 1.6.0 채택 앱이나 샘플, 검증 도구의 빌드 안정성 패치로 보는 것이 안전합니다. HAL/driver 영향은 별도 source evidence가 있을 때만 판단합니다.';
+  }
+  if (isCameraXCandidate(candidate, section)) {
+    return '이 항목은 CameraX release note의 source-confirmed 변경점을 app/framework 계층에서 먼저 확인하는 항목입니다. HAL/driver 영향은 release note나 별도 검증이 직접 뒷받침할 때만 확장합니다.';
   }
   if (/android_platform|android_camera|multimedia|CameraX|Camera2/i.test(bucket)) {
     return '이 소식은 HAL API 변경이 아니라 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 CameraX/Camera2 preview와 capture path의 앱 호환성만 확인하면 됩니다.';
@@ -910,16 +1059,20 @@ function sourceSubtitleForCandidate(candidate, section) {
 
 function readerScenarioForCandidate(candidate, section, headline) {
   const title = text(candidate.title || headline);
+  const behavior = sourceBehaviorText(candidate, section);
   if (/libcamera/i.test(title)) {
-    return 'sensor mode 선택이나 frame timing 회귀를 조사하는 리뷰 상황에서 upstream libcamera 변경점을 함께 확인해야 하는 장면을 가정합니다.';
+    return 'sensor mode 선택이나 frame timing 회귀를 조사할 때 upstream libcamera 변경점을 함께 확인합니다.';
   }
   if (/GCC|Glaze|AI Studio/i.test(title)) {
-    return 'Camera HAL 본체가 아니라 host/native tooling이나 prototype 코드 검토 중 build, logging, Camera API 사용 범위를 확인해야 하는 장면을 가정합니다.';
+    return 'Camera HAL 본체가 아니라 host/native tooling이나 prototype 코드 검토 과정에서 build, logging, Camera API 사용 범위를 확인합니다.';
+  }
+  if (isCameraXCandidate(candidate, section) && isListenableFutureCompileFix(behavior)) {
+    return 'CameraX 1.6.0을 채택한 앱, sample, validation tool에서 컴파일 오류가 재현되는지 triage할 때 확인합니다.';
   }
   if (/Compose|CameraX|Android/i.test(title)) {
-    return '앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage하는 상황을 가정합니다.';
+    return '앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage할 때 확인합니다.';
   }
-  return `${headline}을 Camera HAL / Driver / Native tooling 리뷰 범위에 넣을지 판단하는 현업 장면을 가정합니다.`;
+  return `${headline}을 Camera HAL / Driver / Native tooling 리뷰 범위에 넣을지 판단할 때 확인합니다.`;
 }
 
 function editorialStoryForCandidate(candidate, section, headline, component) {
@@ -935,9 +1088,11 @@ function editorialStoryForCandidate(candidate, section, headline, component) {
   };
 }
 
-function buildPublicArticle(section, candidate = {}) {
+function buildPublicArticle(section, candidate = {}, options = {}) {
   const component = componentText(candidate);
-  const headline = publicHeadlineForCandidate(candidate, section.headline);
+  const headline = publicHeadlineForCandidate(candidate, section.headline, {
+    headlineOverride: options.headlineOverride
+  });
   return {
     story_contract_version: 1,
     headline,
@@ -1442,9 +1597,13 @@ function buildFallbackPublicIssue(options = {}) {
   const backgroundContextReport = options.backgroundContextReport ||
     readJsonIfExists(path.join(newsroomDir, 'background-context.json')) || {};
   const backgroundContextIndex = buildBackgroundContextIndex(backgroundContextReport);
+  const publicArticleHeadlineOverrides = normalizeHeadlineOverrides(
+    options.publicArticleHeadlineOverrides || options.headlineOverrides
+  );
+  const headlineGeneration = options.publicArticleHeadlineGeneration || null;
   const generationStatus = readJsonIfExists(path.join(newsroomDir, 'generation-status.json')) ||
     readJsonIfExists(path.join(root, '.tmp', 'newsletter-generation-status.json')) || {};
-  const originalFactCheck = originalFactCheckDiagnostics(factCheck, generationStatus);
+  const originalFactCheck = originalFactCheckDiagnostics(factCheck, generationStatus, qualityReport);
   const baseCandidate = options.baseDraft
     ? { source: options.baseDraftSource || 'options.baseDraft', draft: options.baseDraft }
     : baseDraftCandidates(root, date)[0];
@@ -1470,6 +1629,8 @@ function buildFallbackPublicIssue(options = {}) {
   const preservedSections = [];
   const fallbackRecords = [];
   const rejectedCandidates = [];
+  const priorDemotedRecords = ensureArray(qualityReport.demoted_articles);
+  const priorFallbackRecords = ensureArray(qualityReport.fallback_articles);
   for (const [index, section] of issue.sections.entries()) {
     const qualityItem = ensureArray(qualityReport.article_results).find(item => Number(item.index) - 1 === index) || {};
     const action = fallbackArticleAction(qualityItem, factCheck);
@@ -1587,9 +1748,28 @@ function buildFallbackPublicIssue(options = {}) {
     .map(section => {
       const candidate = findCandidateForSection(candidates, section, {}) || {};
       const completed = completeHalSignalSection(section, candidate);
-      completed.public_article = buildPublicArticle(completed, candidate);
+      completed.public_article = buildPublicArticle(completed, candidate, {
+        headlineOverride: headlineOverrideForSection(completed, candidate, publicArticleHeadlineOverrides)
+      });
       return completed;
     });
+  const reportedDemotedRecords = demotedRecords.length > 0 ? demotedRecords : priorDemotedRecords;
+  const reportedFallbackRecords = fallbackRecords.length > 0 ? fallbackRecords : priorFallbackRecords;
+  const reportedRemovedArticleCount = demotedRecords.length > 0
+    ? demotedRecords.length
+    : numeric(
+      qualityReport.fallback_public_issue_removed_article_count ??
+      generationStatus.fallback_public_issue_removed_article_count
+    ) ?? reportedDemotedRecords.length;
+  const reportedRemovedBlockers = demotedRecords.length > 0 ||
+    qualityReport.fallback_public_issue_removed_blockers === true ||
+    qualityReport.fallback_public_issue_removed_blockers === 'true' ||
+    generationStatus.fallback_public_issue_removed_blockers === true ||
+    generationStatus.fallback_public_issue_removed_blockers === 'true' ||
+    reportedRemovedArticleCount > 0;
+  const reportedFallbackCount = fallbackRecords.length > 0
+    ? fallbackRecords.filter(item => item.fallback).length
+    : reportedFallbackRecords.filter(item => item.fallback).length;
 
   for (const [index, snapshot] of preserveSnapshots.entries()) {
     const beforeSection = base.sections[index];
@@ -1623,8 +1803,8 @@ function buildFallbackPublicIssue(options = {}) {
     issue.tags = fallbackIssueTags(issue.tags);
   }
   issue.briefing = publicBriefingBullets(issue.sections);
-  issue.action_items = fallbackActionItems(issue, fallbackRecords.filter(item => item.fallback).length, demotedRecords);
-  issue.references = uniqueReferences(issue.sections, demotedRecords);
+  issue.action_items = fallbackActionItems(issue, reportedFallbackCount, reportedDemotedRecords);
+  issue.references = uniqueReferences(issue.sections, reportedDemotedRecords);
 
   const fallbackFactCheck = {
     ...factCheck,
@@ -1660,12 +1840,16 @@ function buildFallbackPublicIssue(options = {}) {
       ? 'fallback_public: no final public camera anchor remained; publish as clearly labeled Tooling Watch Edition.'
       : 'review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.',
     ...originalFactCheck,
-    fallback_public_issue_removed_blockers: demotedRecords.length > 0,
-    fallback_public_issue_removed_article_count: demotedRecords.length,
-    demoted_articles: demotedRecords,
-    fallback_articles: fallbackRecords,
+    fallback_public_issue_removed_blockers: reportedRemovedBlockers,
+    fallback_public_issue_removed_article_count: reportedRemovedArticleCount,
+    demoted_articles: reportedDemotedRecords,
+    fallback_articles: reportedFallbackRecords,
     original_quality_status: qualityReport.status || generationStatus.quality_status || 'UNKNOWN',
-    original_quality_score: qualityReport.score ?? generationStatus.quality_score ?? null
+    original_quality_score: qualityReport.score ?? generationStatus.quality_score ?? null,
+    fallback_public_headline_generation: headlineGeneration || {
+      source: Object.keys(publicArticleHeadlineOverrides).length > 0 ? 'provided_override' : 'deterministic',
+      override_count: Object.keys(publicArticleHeadlineOverrides).length
+    }
   };
 
   writeJson(path.join(newsroomDir, 'editor-draft.json'), issue);
@@ -1691,13 +1875,17 @@ function buildFallbackPublicIssue(options = {}) {
     camera_anchor_count: publicationDecision.camera_anchor_count,
     homepage_badge: publicationDecision.homepage_badge,
     ...originalFactCheck,
-    fallback_public_issue_removed_blockers: demotedRecords.length > 0,
-    fallback_public_issue_removed_article_count: demotedRecords.length,
+    fallback_public_issue_removed_blockers: reportedRemovedBlockers,
+    fallback_public_issue_removed_article_count: reportedRemovedArticleCount,
     base_draft_source: baseCandidate?.source || 'default-issue',
     preserve_article_count: preserveSnapshots.size,
     final_article_count: issue.sections.length,
-    demoted_articles: demotedRecords,
-    fallback_articles: fallbackRecords,
+    headline_generation: headlineGeneration || {
+      source: Object.keys(publicArticleHeadlineOverrides).length > 0 ? 'provided_override' : 'deterministic',
+      override_count: Object.keys(publicArticleHeadlineOverrides).length
+    },
+    demoted_articles: reportedDemotedRecords,
+    fallback_articles: reportedFallbackRecords,
     rejected_candidates: rejectedCandidates
   });
 
@@ -1730,10 +1918,10 @@ function buildFallbackPublicIssue(options = {}) {
     ...(reviewableFailureKind ? { failure_kind: reviewableFailureKind } : {}),
     fallback_public_issue: true,
     fallback_public_issue_status: 'CREATED',
-    fallback_public_issue_demoted_article_count: demotedRecords.length,
-    fallback_public_issue_removed_blockers: demotedRecords.length > 0,
-    fallback_public_issue_removed_article_count: demotedRecords.length,
-    fallback_public_issue_added_article_count: fallbackRecords.length,
+    fallback_public_issue_demoted_article_count: reportedRemovedArticleCount,
+    fallback_public_issue_removed_blockers: reportedRemovedBlockers,
+    fallback_public_issue_removed_article_count: reportedRemovedArticleCount,
+    fallback_public_issue_added_article_count: reportedFallbackRecords.length,
     fallback_public_issue_preserve_article_count: preserveSnapshots.size,
     fallback_public_issue_reason: REVIEW_PUBLICATION_READY_REASON,
     review_publication_ready_reason: REVIEW_PUBLICATION_READY_REASON,
@@ -1768,8 +1956,8 @@ function buildFallbackPublicIssue(options = {}) {
     review_gate_passed: true,
     publish_gate_passed: false,
     editor_review_required: true,
-    composition_mode: fallbackRecords.some(item => item.fallback) ? 'FALLBACK_COMPOSITION' : 'NEEDS_FIX',
-    selection_composition_mode: fallbackRecords.some(item => item.fallback) ? 'FALLBACK_COMPOSITION' : 'NEEDS_FIX',
+    composition_mode: reportedFallbackRecords.some(item => item.fallback) ? 'FALLBACK_COMPOSITION' : 'NEEDS_FIX',
+    selection_composition_mode: reportedFallbackRecords.some(item => item.fallback) ? 'FALLBACK_COMPOSITION' : 'NEEDS_FIX',
     validate_ok: true,
     public_newsletter_ready: true,
     review_publication_ready: true,
@@ -1791,11 +1979,11 @@ function buildFallbackPublicIssue(options = {}) {
     threshold: finalQualityReport.threshold,
     status: 'PUBLIC_ISSUE_CREATED',
     rendered_main_article_count: issue.sections.length,
-    demoted_article_count: demotedRecords.length,
-    reserve_candidates_used: fallbackRecords,
+    demoted_article_count: reportedRemovedArticleCount,
+    reserve_candidates_used: reportedFallbackRecords,
     deductions: ensureArray(finalQualityReport.deductions),
     selected_article_headlines: issue.sections.map(section => section.headline),
-    demoted_sections: demotedRecords.map(record => record.headline),
+    demoted_sections: reportedDemotedRecords.map(record => record.headline),
     repair_actions: ['fallback-public-issue-builder']
   });
   writeJson(retryHistoryPath, retryHistory);
@@ -1825,8 +2013,8 @@ function buildFallbackPublicIssue(options = {}) {
     markdown,
     html,
     publicFiles: PUBLIC_FILES.map(file => file.replaceAll('${date}', date)),
-    demotedArticles: demotedRecords,
-    fallbackArticles: fallbackRecords,
+    demotedArticles: reportedDemotedRecords,
+    fallbackArticles: reportedFallbackRecords,
     qualityReport: finalQualityReport,
     factCheck: fallbackFactCheck,
     status: nextStatus

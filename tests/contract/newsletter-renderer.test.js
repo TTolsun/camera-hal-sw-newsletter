@@ -217,13 +217,31 @@ test('newsletter renderer sanitizes legacy sections through compatibility projec
   assert.doesNotMatch(markdown, /Publication 전에 source URL/);
 });
 
-test('newsletter renderer renders story v1 labels without raw story keys', () => {
+test('newsletter renderer renders story v1 as natural prose without public story labels', () => {
   const markdown = buildMarkdown(storyIssue());
   const html = buildHtml(storyIssue());
 
-  for (const label of ['현업 장면', '확인된 변화', '왜 봐야 하나', '디버깅/리뷰 시나리오', '편집자 판단', '영향도', '범위', '권장 행동', '과장 위험']) {
-    assert.match(markdown, new RegExp(label));
-    assert.match(html, new RegExp(label));
+  assert.match(markdown, /Android Developers가 CameraX 변경점을 공개했습니다/);
+  assert.match(markdown, /Camera ITS와 preview latency log를 비교하는 리뷰 흐름/);
+  assert.match(markdown, /### Camera HAL \/ Driver 관점에서 확인할 점/);
+  assert.match(html, /Android Developers가 CameraX 변경점을 공개했습니다/);
+  assert.match(html, /Camera HAL \/ Driver 관점에서 확인할 점/);
+  assert.doesNotMatch(html, /article-decision-metadata/);
+  for (const label of [
+    /^### 현업 장면/m,
+    /^### 확인된 변화/m,
+    /^### 왜 봐야 하나/m,
+    /^### 디버깅\/리뷰 시나리오/m,
+    /^### 편집자 판단/m,
+    /^### 과장 금지/m,
+    /영향도:/,
+    /권장 행동/,
+    /과장 위험/,
+    /편집자 판단/,
+    /과장 금지/
+  ]) {
+    assert.doesNotMatch(markdown, label);
+    assert.doesNotMatch(html, label);
   }
   for (const leaked of [
     /story_contract_version/,
