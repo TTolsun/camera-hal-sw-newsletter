@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "synthetic",
+    "artifact_name": "collection-intent.json"
+  },
+  "policyFlags": {
+    "source_gap_risk": true,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": false,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "FAIL",
+    "reason": "blocked_internal_host"
+  },
+  "collection_intent": {
+    "schema_version": 1,
+    "newsletter_date": "2026-05-16",
+    "seed_urls": [
+      {
+        "seed_id": "seed-private-url",
+        "url": "https://localhost/private-camera-debug",
+        "expected_topic": "Private Camera debug endpoint"
+      }
+    ],
+    "keyword_hints": [
+      "CameraX 1.6.1"
+    ]
+  }
+}

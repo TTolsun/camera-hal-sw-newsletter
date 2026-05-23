@@ -20,6 +20,37 @@ const GENERATED_SOURCE_VALUES = new Set([
   MINIMIZED_GENERATED_REGRESSION_SOURCE
 ]);
 const SEED_ARTIFACT_NAME_PATTERN = /\b(?:collection-intent\.json|seed-evidence-pack\.json|seed-candidates\.json|compact_evidence)\b/;
+const LEDGER_SOURCES = new Set([
+  'curated',
+  'synthetic',
+  MINIMIZED_GENERATED_REGRESSION_SOURCE
+]);
+const ALLOWED_USES = new Set([
+  'good',
+  'bad',
+  'linked-evidence',
+  'parser-source-html',
+  'workflow-shape'
+]);
+const RELATED_RULES = new Set([
+  'quality_gate',
+  'selection',
+  'source_binding',
+  'seed_evidence',
+  'linked_evidence',
+  'parser_contract',
+  'workflow_shape',
+  'artifact_provenance'
+]);
+const RELATED_RULE_EXPECTATIONS = [
+  ['seed-evidence/workflow-shapes/', ['seed_evidence', 'workflow_shape']],
+  ['quality/', ['quality_gate']],
+  ['selection/', ['selection']],
+  ['seed-evidence/', ['seed_evidence']],
+  ['linked-evidence/', ['linked_evidence']],
+  ['source-html/', ['parser_contract']],
+  ['source-effectiveness/', ['workflow_shape']]
+];
 
 function relativeFixturePath(filePath) {
   return path.relative(fixturesRoot, filePath).replace(/\\/g, '/');
@@ -87,6 +118,11 @@ function hasPassBlockingPolicyFlag(flags = {}) {
     flags.hasDatedEvidence === false ||
     flags.generic_ai_without_hal_connection === true ||
     flags.generic_it_without_hal_connection === true;
+}
+
+function expectedRelatedRules(entryPath) {
+  const match = RELATED_RULE_EXPECTATIONS.find(([prefix]) => entryPath.startsWith(prefix));
+  return match ? match[1] : [];
 }
 
 test('fixture policy keeps generated samples out of good fixtures', () => {
@@ -166,7 +202,7 @@ test('fixture layout stays domain-first and avoids root-level good or bad folder
 
 test('fixture ledger covers every committed fixture file', () => {
   const ledger = readFixtureLedger();
-  assert.equal(ledger.schemaVersion, 1);
+  assert.equal(ledger.schemaVersion, 2);
   assert.ok(Array.isArray(ledger.entries), 'fixture ledger must have entries');
 
   const seen = new Set();
@@ -192,6 +228,16 @@ test('fixture ledger trust metadata matches fixture policy', () => {
     assert.ok(entry.expectedStatus, `${entry.path} must declare expectedStatus`);
     assert.ok(entry.protectedPolicy, `${entry.path} must declare protectedPolicy`);
     assert.equal(typeof entry.generatedArtifact, 'boolean', `${entry.path} must declare generatedArtifact`);
+    assert.equal(LEDGER_SOURCES.has(entry.source), true, `${entry.path} must use a known source`);
+    assert.equal(ALLOWED_USES.has(entry.allowedUse), true, `${entry.path} must use a known allowedUse`);
+    assert.equal(Array.isArray(entry.relatedRules), true, `${entry.path} must declare relatedRules`);
+    assert.ok(entry.relatedRules.length > 0, `${entry.path} relatedRules must not be empty`);
+    for (const rule of entry.relatedRules) {
+      assert.equal(RELATED_RULES.has(rule), true, `${entry.path} has unknown relatedRules value: ${rule}`);
+    }
+    for (const rule of expectedRelatedRules(entry.path)) {
+      assert.equal(entry.relatedRules.includes(rule), true, `${entry.path} relatedRules must include ${rule}`);
+    }
 
     if (isGoodFixturePath(entry.path)) {
       assert.equal(entry.allowedUse, 'good', `${entry.path} is under good/ and must declare allowedUse=good`);
@@ -212,6 +258,11 @@ test('fixture ledger trust metadata matches fixture policy', () => {
         entry.source,
         MINIMIZED_GENERATED_REGRESSION_SOURCE,
         `${entry.path} generated fixture must be minimized regression evidence`
+      );
+      assert.equal(
+        entry.relatedRules.includes('artifact_provenance'),
+        true,
+        `${entry.path} generated fixture must declare artifact_provenance`
       );
     }
 

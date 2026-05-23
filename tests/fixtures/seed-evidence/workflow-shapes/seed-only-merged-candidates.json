@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "synthetic",
+    "artifact_name": "merged-candidates.json"
+  },
+  "expected": {
+    "status": "PASS",
+    "mergedCount": 1,
+    "newSeedCandidateCount": 1,
+    "enrichedDuplicateCount": 0
+  },
+  "manual_candidates": [],
+  "seed_candidates": [
+    {
+      "title": "CameraX 1.6.1 release notes",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "origin": "seed_url_evidence",
+      "seed_ids": [
+        "seed-camerax"
+      ],
+      "evidence_pack_ids": [
+        "seed-camerax-pack"
+      ],
+      "primary_evidence_ids": [
+        "seed-camerax-primary-01"
+      ],
+      "linked_evidence_ids": [],
+      "source_extraction_ref": "seed-evidence-pack.json#/packs/0",
+      "compact_evidence": {
+        "primary_facts": [
+          "CameraX 1.6.1 release date: 2026-05-06."
+        ],
+        "linked_context": [],
+        "do_not_claim": [
+          "Do not claim direct Camera HAL API changes."
+        ],
+        "evidence_urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        ]
+      }
+    }
+  ]
+}
