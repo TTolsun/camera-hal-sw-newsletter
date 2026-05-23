@@ -380,18 +380,15 @@ test('Stage 2 disabled pass-through writes merged artifact, manifest, and report
   assert.equal(manifest.merged_unique_url_count, 1);
   assert.equal(manifest.gemini_publishable_candidate_count, 0);
   const report = fs.readFileSync(result.reportPath, 'utf8');
-  assert.match(report, /disabled_pass_through=true/);
-  assert.match(report, /llm_used=false/);
-  assert.match(report, /summary=Gemini source discovery was disabled; manual candidates were passed through\./);
-  assert.match(report, /gemini_candidate_count=0/);
-  assert.match(report, /gemini_new_unique_url_count=0/);
-  assert.match(report, /merged_unique_url_count=1/);
-  assert.match(report, /gemini_candidate_artifact=content\/collected-news\/2026-05-16\/gemini-candidates\.json/);
-  assert.match(report, /merge_mode=disabled_pass_through/);
-  assert.match(report, /## Parser\/source feedback/);
-  assert.match(report, /parser_gap_count=1/);
-  assert.match(report, /duplicate_discovery_gap_count=0/);
-  assert.match(report, /source_discovery_feedback_report_markdown=content\/newsroom\/2026-05-16\/source-discovery-feedback-report\.md/);
+  assert.match(report, /next_step: strengthen_candidates/);
+  assert.match(report, /03 진행 가능하나 후보 보강 권장/);
+  assert.match(report, /\| merge_mode \| disabled_pass_through \|/);
+  assert.match(report, /\| Gemini 후보 \| 0 \| 비활성\/pass-through \|/);
+  assert.match(report, /\| Gemini 신규 unique 후보 \| 0 \| 없음 \|/);
+  assert.match(report, /\| parser gap \| 1 \| 보강 필요 \|/);
+  assert.match(report, /gemini_candidate_artifact: content\/collected-news\/2026-05-16\/gemini-candidates\.json/);
+  assert.match(report, /source_discovery_feedback_report: content\/newsroom\/2026-05-16\/source-discovery-feedback-report\.md/);
+  assert.doesNotMatch(report, /## Parser\/source feedback/);
   const feedback = readJson(sourceDiscoveryFeedbackReportPath(root, date));
   assert.equal(feedback.status, 'WARNING');
   assert.equal(feedback.parser_gap_count, 1);
@@ -539,8 +536,8 @@ test('Stage 2 feedback does not flag valid concrete source_extraction bullets', 
   assert.equal(feedback.parser_gap_count, 0);
   assert.deepEqual(feedback.items, []);
   const report = fs.readFileSync(result.reportPath, 'utf8');
-  assert.match(report, /## Parser\/source feedback/);
-  assert.match(report, /parser_gap_count=0/);
+  assert.doesNotMatch(report, /## Parser\/source feedback/);
+  assert.match(report, /\| parser gap \| 0 \| 없음 \|/);
 });
 
 test('Stage 2 disabled mode expands approved seed evidence without Gemini credentials', async () => {
@@ -642,10 +639,10 @@ test('Stage 2 disabled mode expands approved seed evidence without Gemini creden
   assert.equal(seedMerge.conflicts.some(item => item.field === 'priority'), true);
 
   const report = fs.readFileSync(result.reportPath, 'utf8');
-  assert.match(report, /merge_mode=seed_evidence_expansion/);
-  assert.match(report, /seed_candidate_artifact=content\/collected-news\/2026-05-16\/seed-candidates\.json/);
-  assert.match(report, /seed_evidence_pack=content\/collected-news\/2026-05-16\/seed-evidence-pack\.json/);
-  assert.match(report, /Priority Override \/ Legacy Compatibility/);
+  assert.match(report, /\| merge_mode \| seed_evidence_expansion \|/);
+  assert.match(report, /seed_candidate_artifact: content\/collected-news\/2026-05-16\/seed-candidates\.json/);
+  assert.match(report, /seed_evidence_pack: content\/collected-news\/2026-05-16\/seed-evidence-pack\.json/);
+  assert.doesNotMatch(report, /Priority Override \/ Legacy Compatibility/);
 });
 
 test('Stage 2 approved keyword-only intent keeps pass-through without empty seed artifacts', async () => {
@@ -869,18 +866,16 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   });
   assert.equal(validated.validation_status, 'validated');
   const report = fs.readFileSync(result.reportPath, 'utf8');
-  assert.match(report, /domain_not_allowed/);
-  assert.match(report, /summary=Gemini added 1 new unique URL\(s\), 1 publishable candidate\(s\), and 0 manual-duplicate URL\(s\)\./);
-  assert.match(report, /manual_candidate_count=1/);
-  assert.match(report, /gemini_candidate_count=1/);
-  assert.match(report, /gemini_new_unique_url_count=1/);
-  assert.match(report, /gemini_manual_duplicate_url_count=0/);
-  assert.match(report, /gemini_publishable_candidate_count=1/);
-  assert.match(report, /proposal_validation_report=content\/newsroom\/2026-05-16\/gemini-source-proposal-validation-report\.json/);
-  assert.match(report, /## Parser\/source feedback/);
-  assert.match(report, /parser_gap_count=1/);
-  assert.match(report, /duplicate_discovery_gap_count=1/);
-  assert.match(report, /gemini_parser_failure_count=0/);
+  assert.doesNotMatch(report, /domain_not_allowed/);
+  assert.match(report, /next_step: run_03/);
+  assert.match(report, /\| manual 후보 \| 1 \| 입력 \|/);
+  assert.match(report, /\| Gemini 후보 \| 1 \| 실행됨 \|/);
+  assert.match(report, /\| Gemini 신규 unique 후보 \| 1 \| 있음 \|/);
+  assert.match(report, /\| Gemini publishable 후보 \| 1 \| 있음 \|/);
+  assert.match(report, /\| 중복 후보 \| 0 \| 낮음 \|/);
+  assert.match(report, /\| parser gap \| 1 \| 보강 필요 \|/);
+  assert.match(report, /proposal_validation_report: content\/newsroom\/2026-05-16\/gemini-source-proposal-validation-report\.json/);
+  assert.doesNotMatch(report, /## Parser\/source feedback/);
   const feedback = readJson(sourceDiscoveryFeedbackReportPath(root, date));
   assert.equal(feedback.status, 'WARNING');
   assert.equal(feedback.parser_gap_count, 1);

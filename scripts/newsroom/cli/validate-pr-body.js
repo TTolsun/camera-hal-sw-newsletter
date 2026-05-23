@@ -58,6 +58,15 @@ function extractStatusSection(text) {
   return nextMatch ? rest.slice(0, nextMatch.index) : rest;
 }
 
+function extractEditorPrSummaryText(text) {
+  const source = toText(text);
+  const startMatch = /^## 최종 판단\s*$/m.exec(source);
+  if (!startMatch) return '';
+  const rest = source.slice(startMatch.index);
+  const endMatch = /^## 상세 report\s*$/m.exec(rest);
+  return endMatch ? rest.slice(0, endMatch.index) : rest;
+}
+
 function extractSections(text) {
   const source = toText(text);
   const headings = [...source.matchAll(/^##\s+(.+?)\s*$/gm)];
@@ -316,6 +325,90 @@ function hasPublishReadyLabelBlockedText(text) {
   const source = toText(text);
   return /publish-ready label(?:은| must)?[^.\n]*(?:붙이지|금지|must not|not applied|제거)/i.test(source) ||
     /publish-ready는?[^.\n]*AI 자동 발행 기준 통과/i.test(source);
+}
+
+function topSummaryHasBool(summary, key, expected) {
+  return new RegExp(`${escapeRegExp(key)}[^\\n]*(?:[:=]|\\|)[^\\n]*${expected}\\b`, 'i').test(toText(summary));
+}
+
+function hasTopHomepageVisibleText(summary) {
+  const source = toText(summary);
+  return topSummaryHasBool(source, 'homepage_visible_after_merge', 'true') ||
+    /merge 시 홈페이지 표시 가능/.test(source) ||
+    /홈페이지 표시 가능/.test(source);
+}
+
+function hasTopHomepageHiddenText(summary) {
+  const source = toText(summary);
+  return topSummaryHasBool(source, 'homepage_visible_after_merge', 'false') ||
+    /merge해도[^.\n]*(?:홈페이지|Newsletter)[^.\n]*(?:표시되지|게시되지)/i.test(source);
+}
+
+function validateEditorPrSummaryContract(text, parsed, errors) {
+  const finalJudgmentCount = exactHeadingCount(text, 2, '최종 판단');
+  if (finalJudgmentCount !== 1) {
+    errors.push(`PR body must contain exactly one "## 최종 판단" heading, found ${finalJudgmentCount}.`);
+    return;
+  }
+  const finalJudgmentIndex = toText(text).indexOf('## 최종 판단');
+  const generationStatusIndex = toText(text).indexOf('## 생성 상태');
+  if (generationStatusIndex !== -1 && finalJudgmentIndex > generationStatusIndex) {
+    errors.push('PR body must place "## 최종 판단" before "## 생성 상태".');
+  }
+
+  const summary = extractEditorPrSummaryText(text);
+  if (!summary) {
+    errors.push('PR body is missing editor-facing top summary content.');
+    return;
+  }
+
+  if (parsed.finalPublishReady === true) {
+    if (!topSummaryHasBool(summary, 'final_publish_ready', 'true') && !/AI 자동 발행 가능/.test(summary)) {
+      errors.push('publish-ready top summary must include final_publish_ready=true or AI automatic publish-ready wording.');
+    }
+    if (
+      topSummaryHasBool(summary, 'diagnostics_only', 'true') ||
+      /진단 전용/.test(summary) ||
+      /편집장 승인 시 공개 가능|publish-ready 아님|publish-ready label 금지/.test(summary)
+    ) {
+      errors.push('publish-ready top summary must not include diagnostics-only or review-publication negative wording.');
+    }
+  }
+
+  const reviewPublication = isReviewPublicationBody(text);
+  if (reviewPublication) {
+    if (!topSummaryHasBool(summary, 'final_publish_ready', 'false')) {
+      errors.push('review-publication top summary must include final_publish_ready=false.');
+    }
+    if (!topSummaryHasBool(summary, 'review_publication_ready', 'true')) {
+      errors.push('review-publication top summary must include review_publication_ready=true.');
+    }
+    if (!hasPublishReadyLabelBlockedText(summary)) {
+      errors.push('review-publication top summary must state that the publish-ready label is blocked.');
+    }
+    if (!hasTopHomepageVisibleText(summary)) {
+      errors.push('review-publication top summary must state that merge can show the newsletter on the homepage.');
+    }
+    if (/AI 자동 발행 가능/.test(summary)) {
+      errors.push('review-publication top summary must not describe the PR as AI automatic publish-ready.');
+    }
+  }
+
+  const diagnosticsOnly = isDiagnosticsOnlyBody(text);
+  if (diagnosticsOnly) {
+    if (!topSummaryHasBool(summary, 'diagnostics_only', 'true')) {
+      errors.push('diagnostics-only top summary must include diagnostics_only=true.');
+    }
+    if (!topSummaryHasBool(summary, 'public_newsletter_ready', 'false')) {
+      errors.push('diagnostics-only top summary must include public_newsletter_ready=false.');
+    }
+    if (!hasTopHomepageHiddenText(summary)) {
+      errors.push('diagnostics-only top summary must state that merging will not show the newsletter on the homepage.');
+    }
+    if (topSummaryHasBool(summary, 'public_newsletter_ready', 'true') || /public newsletter files는 생성되었습니다/.test(summary)) {
+      errors.push('diagnostics-only top summary must not state that public newsletter files are ready.');
+    }
+  }
 }
 
 function validateDiagnosticsOnlyContract(text, parsed, errors) {
@@ -697,6 +790,7 @@ function validatePrBodyText(text, options = {}) {
   }
 
   const parsed = parseStatusSection(statusSection);
+  validateEditorPrSummaryContract(text, parsed, errors);
   const diagnosticsOnly = isDiagnosticsOnlyBody(text);
   const reviewPublication = isReviewPublicationBody(text);
   const candidateShortage = isCandidateShortageBody(text);

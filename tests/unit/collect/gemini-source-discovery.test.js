@@ -201,8 +201,8 @@ test('enabled boundary writes seed-only artifacts when Gemini credentials are mi
   assert.equal(manifest.llm_used, false);
   assert.equal(manifest.seed_used, true);
   const report = fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'gemini-source-discovery-report.md'), 'utf8');
-  assert.match(report, /status_detail=SEED_ONLY_LLM_CREDENTIALS_MISSING/);
-  assert.match(report, /Gemini discovery was skipped because LLM credentials were missing/);
+  assert.match(report, /\| status_detail \| SEED_ONLY_LLM_CREDENTIALS_MISSING \|/);
+  assert.match(report, /Gemini credentials가 없어 Gemini discovery는 건너뛰었습니다/);
 });
 
 test('enabled boundary without seed keeps missing credential path strictly no-mutation', async () => {

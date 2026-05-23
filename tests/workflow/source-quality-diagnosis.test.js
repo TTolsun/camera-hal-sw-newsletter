@@ -308,7 +308,7 @@ test('source quality diagnosis writer produces partial report when candidate inp
   assert.ok(result.report.warnings.some(warning => warning.type === 'partial_diagnosis'));
 });
 
-test('newsroom PR body includes source quality diagnosis summary and missing-artifact warning', () => {
+test('newsroom PR body omits source quality diagnosis detail and keeps artifact-only review path', () => {
   const root = tempRoot('source-quality-pr-body-');
   const report = buildSourceQualityDiagnosisReport(diagnosisInputs());
   writeJson(path.join(root, 'content', 'newsroom', date, 'source-quality-diagnosis.json'), report);
@@ -329,9 +329,9 @@ test('newsroom PR body includes source quality diagnosis summary and missing-art
     }
   });
 
-  assert.match(body, /## 소스 품질 진단 \/ Source Quality Diagnosis/);
-  assert.match(body, /파서 추출 실패/);
-  assert.match(body, /소스 유지, 파서 수정/);
+  assert.doesNotMatch(body, /## 소스 품질 진단 \/ Source Quality Diagnosis/);
+  assert.doesNotMatch(body, /파서 추출 실패/);
+  assert.doesNotMatch(body, /소스 유지, 파서 수정/);
 
   const missingBody = buildNewsroomPrBody({
     publishStatus: {
@@ -346,6 +346,7 @@ test('newsroom PR body includes source quality diagnosis summary and missing-art
     }
   });
 
-  assert.match(missingBody, /Status: generation failed or unavailable/);
-  assert.match(missingBody, /publish\/readiness gates are unaffected/);
+  assert.doesNotMatch(missingBody, /## 소스 품질 진단 \/ Source Quality Diagnosis/);
+  assert.doesNotMatch(missingBody, /Status: generation failed or unavailable/);
+  assert.doesNotMatch(missingBody, /publish\/readiness gates are unaffected/);
 });

@@ -10,6 +10,16 @@ const {
   buildNewsroomPrBody
 } = require('../../scripts/build-newsroom-pr-body');
 const {
+  buildRawCandidatePrBody
+} = require('../../scripts/build-raw-candidate-pr-body');
+const {
+  FAILED_LLM_CREDENTIALS,
+  renderReport: renderSourceDiscoveryReport
+} = require('../../scripts/newsroom/cli/gemini-source-discovery-boundary');
+const {
+  renderEditorPrSummary
+} = require('../../scripts/newsroom/common/editor-pr-summary');
+const {
   buildGenerationStatusOutputs,
   readStatus,
   renderGithubOutputs
@@ -56,9 +66,6 @@ const {
   main: annotatePublicationQualityMain,
   resolveTargetItems
 } = require('../../scripts/annotate-publication-quality');
-const {
-  renderEditorPublicationPolicyMarkdown
-} = require('../../scripts/newsroom/common/editor-publication-policy');
 const {
   buildHtml,
   buildMarkdown,
@@ -1426,6 +1433,158 @@ function writeFallbackOnlyReviewableArtifacts(root, date) {
   return { selected, rejectedCamera };
 }
 
+test('editor PR summary renderer keeps stable top-level sections and escapes table cells', () => {
+  const body = renderEditorPrSummary({
+    stage: 'manual_source_collect',
+    verdict: {
+      label: '검토 | 필요',
+      action: '',
+      firstLook: '후보 table을 먼저 확인하세요.'
+    },
+    handoff: {
+      nextStep: 'run_02',
+      label: '02 진행 가능',
+      reason: 'RAW artifact가 있습니다.'
+    },
+    summaryRows: [
+      ['생성 단계', 'RAW 후보 수집'],
+      ['pipe', 'Camera|HAL'],
+      ['empty', '']
+    ],
+    checklistItems: ['source gap 여부'],
+    resultRows: [
+      ['후보 수', 2, '충분']
+    ]
+  });
+
+  assertTextInOrder(body, [
+    '## 최종 판단',
+    '## 이번 PR 요약',
+    '## 반드시 확인할 항목',
+    '## 주요 결과',
+    '## 상세 report'
+  ]);
+  assert.match(body, /검토 \\| 필요/);
+  assert.match(body, /Camera\\\|HAL/);
+  assert.match(body, /\| empty \| 알 수 없음 \|/);
+  assert.match(body, /편집장 액션: 산출물과 검증 결과를 확인하세요\./);
+  assert.doesNotMatch(body, /<details>/);
+});
+
+test('RAW candidate PR body puts editor-facing summary before detailed compatibility report', () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const dir = path.join(root, 'content', 'collected-news', date);
+  fs.mkdirSync(dir, { recursive: true });
+  writeJson(path.join(dir, 'manual-candidates.json'), {
+    candidates: [
+      {
+        title: 'CameraX release',
+        reliability: 'official',
+        relevance_bucket: 'direct_aosp_camera',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera'
+      },
+      {
+        title: 'Generic AI tooling',
+        reliability: 'official',
+        relevance_bucket: 'generic_tech_watchlist',
+        finalSelectionEligibility: 'watchlist',
+        url: 'https://example.com/ai'
+      }
+    ]
+  });
+  writeJson(path.join(dir, 'raw-candidate-manifest.json'), {
+    source_count: 2,
+    collection_intent_status: '',
+    seed_url_count: 0,
+    keyword_hint_count: 0
+  });
+
+  const body = buildRawCandidatePrBody({ root, date });
+
+  assertTextInOrder(body, [
+    '## 최종 판단',
+    '## 이번 PR 요약',
+    '## 반드시 확인할 항목',
+    '## 주요 결과',
+    '## 상세 report',
+    'source change event report'
+  ]);
+  assert.match(body, /next_step: run_02/);
+  assert.match(body, /direct Camera\/HAL 후보 \| 1 \| 있음/);
+  assert.match(body, /private\/internal URL fetch 없음/);
+  assert.ok(body.indexOf('private/internal URL fetch 없음') < body.indexOf('## 상세 report'));
+  assert.doesNotMatch(body, /<details>/);
+  assert.doesNotMatch(body, /Priority Override \/ Legacy Compatibility/);
+});
+
+test('source discovery PR report normalizes top rejected reasons and handoff states', () => {
+  const date = '2026-05-16';
+  const passThrough = renderSourceDiscoveryReport({
+    date,
+    status: 'PASS',
+    disabledPassThrough: true,
+    llmUsed: false,
+    geminiCandidateCount: 0,
+    mergeMode: 'disabled_pass_through',
+    discoveryStats: {
+      manual_candidate_count: 1,
+      gemini_candidate_count: 0,
+      gemini_new_unique_url_count: 0,
+      gemini_publishable_candidate_count: 0,
+      gemini_manual_duplicate_url_count: 0,
+      merged_candidate_count: 1
+    },
+    mergedCandidateRelPath: `content/collected-news/${date}/merged-candidates.json`
+  });
+  assert.match(passThrough, /next_step: strengthen_candidates/);
+  assert.match(passThrough, /03 진행 가능하나 후보 보강 권장/);
+
+  const parserWarning = renderSourceDiscoveryReport({
+    date,
+    status: 'PASS',
+    disabledPassThrough: false,
+    llmUsed: true,
+    geminiCandidateCount: 2,
+    mergeMode: 'gemini_source_discovery',
+    discoveryStats: {
+      manual_candidate_count: 40,
+      gemini_candidate_count: 2,
+      gemini_new_unique_url_count: 0,
+      gemini_publishable_candidate_count: 0,
+      gemini_manual_duplicate_url_count: 2,
+      merged_candidate_count: 42
+    },
+    mergedCandidateRelPath: `content/collected-news/${date}/merged-candidates.json`,
+    sourceDiscoveryFeedbackReport: {
+      status: 'WARNING',
+      parser_gap_count: 1,
+      gemini_parser_failure_count: 2
+    },
+    rejectedProposals: [
+      { rejected_reason: 'discovered_not_extractable', url: 'https://example.com/a' },
+      { rejected_reason: 'domain_not_allowed', url: 'https://example.com/b' }
+    ]
+  });
+  const parserWarningTop = parserWarning.slice(0, parserWarning.indexOf('## 상세 report'));
+  assert.match(parserWarningTop, /rejected: parser_gap/);
+  assert.match(parserWarningTop, /rejected: taxonomy_gap/);
+  assert.doesNotMatch(parserWarningTop, /discovered_not_extractable/);
+  assert.doesNotMatch(parserWarning, /discovered_not_extractable/);
+
+  const credentialFailure = renderSourceDiscoveryReport({
+    date,
+    status: FAILED_LLM_CREDENTIALS,
+    disabledPassThrough: false,
+    llmUsed: false,
+    geminiCandidateCount: 0,
+    mergeMode: 'gemini_source_discovery',
+    discoveryStats: null
+  });
+  assert.match(credentialFailure, /next_step: blocked/);
+  assert.match(credentialFailure, /rejected: credential_failure/);
+});
+
 test('generation status output falls back when status JSON is missing', () => {
   const status = readStatus('__missing__/newsletter-generation-status.json');
   const outputs = buildGenerationStatusOutputs(status);
@@ -2318,6 +2477,68 @@ function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
   });
 }
 
+function withMinimalEvidencePackSections(body) {
+  const sections = [
+    '## Evidence Pack 요약',
+    '',
+    '- Raw candidates: 1',
+    '- Eligible candidates: 1',
+    '- Selected main articles: 1',
+    '- Reserve candidates: 0',
+    '- Excluded candidates: 0',
+    '- Primary camera stack count: 1',
+    '- Supporting bucket count: 0',
+    '- Fallback window used: false',
+    '- Fallback window consulted: false',
+    '- Fallback window reason: none',
+    '- Fallback promoted candidates: 0',
+    '- Fallback bucket used: false',
+    '',
+    '## Claim / HAL Impact 요약',
+    '',
+    '- Claim validation status: pass',
+    '- Claim coverage: bound_claims=1; total_claims=1',
+    '- Claim validation availability: available=1; unavailable=0',
+    '- Overclaim risk: low',
+    '- HAL impact axes: camera_pipeline',
+    '- Articles with HAL impact axes: 1',
+    '- Articles without HAL impact axes: 0',
+    '',
+    '| Article | HAL axes | Claim validation | Overclaim risk |',
+    '| --- | --- | --- | --- |',
+    '| CameraX release | camera_pipeline | status=available; bound=1; total=1 | low |',
+    '',
+    '## 선택된 Main Article 근거',
+    '',
+    '| # | Title | Source | URL | Source tier | Source role | URL quality | Bucket | Freshness | Reason |',
+    '| ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    '| 1 | CameraX release | Android Developers | https://example.com/source | official | primary | article_url | android_platform_camera_adjacent | current | Camera source evidence |',
+    '',
+    '## 제외 후보 근거',
+    '',
+    '- none',
+    '',
+    '## Needs-fix / Review-only 진단',
+    '',
+    '- Quality hard failures: source-integrity',
+    '- Fact-check must-fix: needs source binding',
+    '- Repair failures: none',
+    '- Fallback builder failures: none',
+    '- Candidate shortage hints: none',
+    '- Source gap warnings: none',
+    '- Missing artifacts: none',
+    '- Invalid artifacts: none',
+    '',
+    '## 사람 검토 체크리스트',
+    '',
+    '- [ ] Selected main article source URL opens and matches the dated evidence.',
+    '- [ ] HAL impact axes are concrete and not generic AI-only.',
+    '- [ ] Fact-check must-fix items are resolved before publish-ready labeling.',
+    ''
+  ].join('\n');
+  return body.replace('\n## 후보 기사 추적', `\n${sections}\n## 후보 기사 추적`);
+}
+
 test('newsroom PR body renders editor article decision summary with pipeline state', () => {
   const root = tempRoot();
   const date = '2026-05-10';
@@ -2495,7 +2716,7 @@ test('newsroom PR body reports editorial summary truncation explicitly', () => {
   const verdict = extractMarkdownSection(body, '편집자 결론');
 
   assert.match(verdict, /표시된 후보: 8개 \/ 전체 후보: 10개/);
-  assert.match(verdict, /생략된 후보: 2개, 전체 후보는 `후보 기사 추적`과 `Evidence Pack 요약`을 확인하세요\./);
+  assert.match(verdict, /생략된 후보: 2개, 전체 후보는 `후보 기사 추적` 또는 관련 JSON artifact에서 확인하세요\./);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
@@ -2568,18 +2789,36 @@ test('newsroom PR body keeps editorial summary section order by publication stat
   const reviewRoot = tempRoot();
   const reviewDate = '2026-05-10';
   writeMinimalEvidencePackSummary(reviewRoot, reviewDate);
+  writeEditorialReviewableArtifacts(reviewRoot, reviewDate);
+  writePublicNewsletterArtifacts(reviewRoot, reviewDate);
   const reviewBody = buildNewsroomPrBody({
     root: reviewRoot,
     date: reviewDate,
     validateOutcome: 'failure',
-    status: traceStatus({ review_publication_ready: true, final_publish_ready: false })
+    status: traceStatus({ review_publication_ready: true, final_publish_ready: false }),
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${reviewDate}/${file}`)
+      .concat([
+        `newsletters/${reviewDate}/newsletter.md`,
+        `newsletters/${reviewDate}/index.html`,
+        'data/newsletters.json'
+      ])
   });
 
   assertTextInOrder(reviewBody, [
+    '## 최종 판단',
+    '## 상세 report',
     '## 발행 상태 요약',
     '## 편집자 기사 판단 요약',
     '## 생성 상태'
   ]);
+  const reviewTop = reviewBody.slice(0, reviewBody.indexOf('## 상세 report'));
+  assert.match(reviewTop, /편집장 승인 시 공개 가능\(단, publish-ready 아님\)/);
+  assert.match(reviewTop, /final_publish_ready \| false/);
+  assert.match(reviewTop, /review_publication_ready \| true/);
+  assert.match(reviewTop, /publish-ready label 금지/);
+  assert.match(reviewTop, /merge 시 홈페이지 표시 가능/);
+  assert.doesNotMatch(reviewTop, /AI 자동 발행 가능/);
 
   const publishRoot = tempRoot();
   const publishDate = '2026-05-11';
@@ -2604,10 +2843,16 @@ test('newsroom PR body keeps editorial summary section order by publication stat
   });
 
   assertTextInOrder(publishBody, [
+    '## 최종 판단',
+    '## 상세 report',
     '## 편집자 기사 판단 요약',
     '## 발행 상태 요약',
     '## 생성 상태'
   ]);
+  const publishTop = publishBody.slice(0, publishBody.indexOf('## 상세 report'));
+  assert.match(publishTop, /AI 자동 발행 가능/);
+  assert.match(publishTop, /final_publish_ready \| true/);
+  assert.doesNotMatch(publishTop, /publish-ready label 금지/);
 });
 
 test('diagnostics-only PR body keeps status first and shows insufficient evidence notice', () => {
@@ -2622,8 +2867,15 @@ test('diagnostics-only PR body keeps status first and shows insufficient evidenc
       .map(file => `content/newsroom/${date}/${file}`)
   });
 
+  assert.ok(body.indexOf('## 최종 판단') < body.indexOf('## Diagnostics-only Status'));
   assert.ok(body.indexOf('## Diagnostics-only Status') < body.indexOf('## 편집자 기사 판단 요약'));
   assert.ok(body.indexOf('## 편집자 기사 판단 요약') < body.indexOf('## 생성 상태'));
+  const top = body.slice(0, body.indexOf('## 상세 report'));
+  assert.match(top, /진단 전용/);
+  assert.match(top, /diagnostics_only \| true/);
+  assert.match(top, /public_newsletter_ready \| false/);
+  assert.match(top, /merge해도 홈페이지에 표시되지 않습니다/);
+  assert.doesNotMatch(top, /public newsletter files는 생성되었습니다/);
   assert.match(body, /편집자 기사 판단 요약을 생성할 충분한 evidence가 없습니다\./);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
@@ -2658,7 +2910,7 @@ test('validate-pr-body treats editorial decision summary as optional but complet
   assert.match(missingPipelineResult.errors.join('\n'), /Pipeline 상태/);
 });
 
-test('newsroom PR body renders Evidence Pack summary sections', () => {
+test('newsroom PR body omits detailed Evidence Pack summary sections', () => {
   const root = tempRoot();
   const date = '2026-05-10';
 
@@ -2755,52 +3007,31 @@ test('newsroom PR body renders Evidence Pack summary sections', () => {
 
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
 
-  assert.match(body, /^## Evidence Pack 요약$/m);
-  assert.match(body, /^## Claim \/ HAL Impact 요약$/m);
-  assert.match(body, /^## 선택된 Main Article 근거$/m);
-  assert.match(body, /^## 제외 후보 근거$/m);
-  assert.match(body, /^## Needs-fix \/ Review-only 진단$/m);
-  assert.match(body, /^## 사람 검토 체크리스트$/m);
-  assert.match(body, /Raw candidates: 14/);
-  assert.match(body, /Fallback window consulted: true/);
-  assert.match(body, /Fallback window reason: primary window selected 1 article\(s\), below min 3/);
-  assert.match(body, /Fallback promoted candidates: 2/);
-  assert.match(body, /Fallback bucket used: true/);
-  assert.match(body, /Claim validation status: partial/);
-  assert.match(body, /Claim coverage: bound_claims=2; total_claims=3/);
-  assert.match(body, /Overclaim risk: medium/);
-  assert.match(body, /HAL impact axes: camera_pipeline; metadata/);
-  assert.match(body, /status=available; bound=2; total=3/);
-  assert.match(body, /CameraX 1\.6\.0 alpha release/);
-  assert.match(body, /official_release_note/);
-  assert.match(body, /primary/);
-  assert.match(body, /article_url/);
-  assert.match(body, /android_platform_camera_adjacent/);
-  assert.match(body, /current/);
-  assert.match(body, /Generic AI camera update/);
-  assert.match(body, /generic topic without HAL impact axis/);
-  assert.match(body, /More excluded candidates are available in `content\/newsroom\/2026-05-10\/evidence-pack-summary\.json`/);
-  assert.match(body, /Quality hard failures: source-integrity/);
-  assert.match(body, /Fact-check must-fix: needs source binding/);
-  assert.match(body, /Invalid artifacts: Unexpected token/);
+  assert.doesNotMatch(body, /^## Evidence Pack 요약$/m);
+  assert.doesNotMatch(body, /^## Claim \/ HAL Impact 요약$/m);
+  assert.doesNotMatch(body, /^## 선택된 Main Article 근거$/m);
+  assert.doesNotMatch(body, /^## 제외 후보 근거$/m);
+  assert.doesNotMatch(body, /^## Needs-fix \/ Review-only 진단$/m);
+  assert.doesNotMatch(body, /^## 사람 검토 체크리스트$/m);
   assert.match(body, /^## 후보 기사 추적$/m);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
-test('newsroom PR body renders Evidence Pack fallback diagnostics defaults', () => {
+test('newsroom PR body omits Evidence Pack fallback diagnostics defaults', () => {
   const root = tempRoot();
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
 
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
 
-  assert.match(body, /Fallback window consulted: unknown/);
-  assert.match(body, /Fallback window reason: none/);
-  assert.match(body, /Fallback promoted candidates: unknown/);
+  assert.doesNotMatch(body, /^## Evidence Pack 요약$/m);
+  assert.doesNotMatch(body, /Fallback window consulted: unknown/);
+  assert.doesNotMatch(body, /Fallback window reason: none/);
+  assert.doesNotMatch(body, /Fallback promoted candidates: unknown/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
-test('newsroom PR body renders Seed Evidence usage summary when seed artifacts exist', () => {
+test('newsroom PR body omits Seed Evidence usage detail when seed artifacts exist', () => {
   const root = tempRoot();
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
@@ -2832,15 +3063,14 @@ test('newsroom PR body renders Seed Evidence usage summary when seed artifacts e
 
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
 
-  assert.match(body, /^## Seed Evidence Usage Summary$/m);
-  assert.match(body, /seed-evidence-pack: `content\/collected-news\/2026-05-10\/seed-evidence-pack\.json`/);
-  assert.match(body, /seed-camerax-pack/);
-  assert.match(body, /seed-camerax-primary-01/);
-  assert.match(body, /Stage 3 seed re-crawl: prohibited/);
+  assert.doesNotMatch(body, /^## Seed Evidence Usage Summary$/m);
+  assert.doesNotMatch(body, /seed-camerax-pack/);
+  assert.doesNotMatch(body, /seed-camerax-primary-01/);
+  assert.doesNotMatch(body, /Stage 3 seed re-crawl: prohibited/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
-test('newsroom PR body renders HAL signal quality summary when report exists', () => {
+test('newsroom PR body omits HAL signal quality detail when report exists', () => {
   const root = tempRoot();
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
@@ -2889,18 +3119,10 @@ test('newsroom PR body renders HAL signal quality summary when report exists', (
     })
   });
 
-  assert.match(body, /^## HAL Signal Quality Summary$/m);
-  assert.match(body, /status: NEEDS_FIX/);
-  assert.match(body, /input_completeness: partial/);
-  assert.match(body, /final_publish_ready: false/);
-  assert.match(body, /publish_gate_reason_codes: quality_status_needs_fix/);
-  assert.match(body, /article_count_with_hal_signal_capsule: 1/);
-  assert.match(body, /HAL signal hard blocker count: 1/);
-  assert.match(body, /fallback_promotion_not_allowed/);
-  assert.match(body, /source_quality_report/);
-  assert.match(body, /CameraX release gives HAL teams a validation target/);
-  assert.match(body, /generic_review/);
-  assert.match(body, /concrete_check/);
+  assert.doesNotMatch(body, /^## HAL Signal Quality Summary$/m);
+  assert.doesNotMatch(body, /input_completeness: partial/);
+  assert.doesNotMatch(body, /HAL signal hard blocker count: 1/);
+  assert.doesNotMatch(body, /fallback_promotion_not_allowed/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
@@ -2941,7 +3163,7 @@ test('newsroom PR body truncates long HAL hard blocker affected article lists', 
     status: traceStatus({ final_publish_ready: false })
   });
 
-  assert.match(body, /Affected main articles: Blocked HAL article 1; Blocked HAL article 2; Blocked HAL article 3; Blocked HAL article 4; Blocked HAL article 5; \.\.\. \+1 more/);
+  assert.doesNotMatch(body, /Affected main articles:/);
   assert.doesNotMatch(body, /Affected main articles: .*Blocked HAL article 6/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
@@ -2952,9 +3174,9 @@ test('newsroom PR body keeps Evidence Pack fallback when summary artifact is mis
 
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
 
-  assert.match(body, /^## Evidence Pack 요약$/m);
-  assert.match(body, /Evidence Pack summary: unavailable/);
-  assert.match(body, new RegExp(`content/newsroom/${date}/evidence-pack-summary\\.json not found`));
+  assert.doesNotMatch(body, /^## Evidence Pack 요약$/m);
+  assert.doesNotMatch(body, /Evidence Pack summary: unavailable/);
+  assert.doesNotMatch(body, new RegExp(`content/newsroom/${date}/evidence-pack-summary\\.json not found`));
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
@@ -2963,8 +3185,10 @@ test('validate-pr-body checks Evidence Pack fallback diagnostic rows', () => {
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
 
-  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
-  const brokenBody = body.replace('- Fallback promoted candidates: unknown\n', '');
+  const body = withMinimalEvidencePackSections(
+    buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() })
+  );
+  const brokenBody = body.replace('- Fallback promoted candidates: 0\n', '');
   const result = validatePrBodyText(brokenBody, { date });
 
   assert.equal(result.ok, false);
@@ -2976,7 +3200,9 @@ test('validate-pr-body checks Evidence Pack table columns when section is presen
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
 
-  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const body = withMinimalEvidencePackSections(
+    buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() })
+  );
   const brokenBody = body.replace(
     '| # | Title | Source | URL | Source tier | Source role | URL quality | Bucket | Freshness | Reason |',
     '| # | Title | Source | Source tier | Source role | URL quality | Bucket | Freshness | Reason |'
@@ -2992,7 +3218,9 @@ test('validate-pr-body checks Evidence Pack claim and HAL impact summary columns
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
 
-  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const body = withMinimalEvidencePackSections(
+    buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() })
+  );
   const brokenBody = body.replace(
     '| Article | HAL axes | Claim validation | Overclaim risk |',
     '| Article | HAL axes | Claim validation |'
@@ -3019,7 +3247,9 @@ test('validate-pr-body checks Evidence Pack diagnostics for needs-fix bodies', (
     }
   });
 
-  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
+  const body = withMinimalEvidencePackSections(
+    buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() })
+  );
   const brokenBody = body
     .replace('- Quality hard failures: source-integrity', '- Quality hard failures: none')
     .replace('- Fact-check must-fix: needs source binding', '- Fact-check must-fix: none');
@@ -3035,10 +3265,9 @@ test('validate-pr-body keeps compatibility when Evidence Pack section is absent'
   writeMinimalEvidencePackSummary(root, date);
 
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
-  const legacyBody = body.replace(/^## Evidence Pack 요약[\s\S]*?(?=^## 후보 기사 추적$)/m, '');
 
-  assert.doesNotMatch(legacyBody, /^## Evidence Pack 요약$/m);
-  assert.equal(validatePrBodyText(legacyBody, { date }).ok, true);
+  assert.doesNotMatch(body, /^## Evidence Pack 요약$/m);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
 test('newsroom PR body renders Korean candidate traceability report', () => {
@@ -4865,9 +5094,9 @@ test('ensure CLI persists a rendered public article when selected headline is no
   assert.match(diagnosticsMarkdown, /public_render_reconciled: true/);
   assert.match(diagnosticsMarkdown, /public_rendered_headline_key: url:https:\/\/goo\.gle\/AdaptiveApps_IO26/);
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
-  assert.match(body, /public_render_reconciled: true/);
-  assert.match(body, /public_rendered_headline_key: url:https:\/\/goo\.gle\/AdaptiveApps_IO26/);
-  assert.match(body, /public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue/);
+  assert.doesNotMatch(body, /public_render_reconciled: true/);
+  assert.doesNotMatch(body, /public_rendered_headline_key: url:https:\/\/goo\.gle\/AdaptiveApps_IO26/);
+  assert.doesNotMatch(body, /public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue/);
 });
 
 test('ensure CLI reconciles diagnostics-only state into status files and hides stale public index', () => {
@@ -5182,7 +5411,7 @@ test('newsroom PR body separates quality score threshold and result in Korean st
   assert.match(body, /Stale claim 상태: PASS/);
   assert.match(body, /Stale claim 요약: removed=1; hard_failures=0/);
   assert.match(body, /권장 조치:/);
-  assert.match(body, /## 기사 구성 요약/);
+  assert.doesNotMatch(body, /## 기사 구성 요약/);
   assert.doesNotMatch(body, /## Composition Summary/);
   assert.match(body, /composition_mode: NEEDS_FIX/);
   assert.match(body, /final_publish_ready: false/);
@@ -5376,9 +5605,9 @@ test('newsroom PR body strips stale editor brief gate sections', () => {
     }
   });
 
-  assert.match(body, /^## 이번 주 핵심 메시지$/m);
-  assert.match(body, /핵심 메시지입니다/);
-  assert.match(body, /^## 권장 판단$/m);
+  assert.doesNotMatch(body, /^## 이번 주 핵심 메시지$/m);
+  assert.doesNotMatch(body, /핵심 메시지입니다/);
+  assert.doesNotMatch(body, /^## 권장 판단$/m);
   assert.doesNotMatch(body, /^## 품질 게이트$/m);
   assert.doesNotMatch(body, /^## Stale Claim Gate$/m);
   assert.doesNotMatch(body, /오래된 PASS 문구/);
@@ -5947,7 +6176,7 @@ test('validate-pr-body ignores policy definitions when detecting concrete public
       ])
   });
 
-  assert.match(reviewBody, /`diagnostics_only=true`/);
+  assert.match(reviewBody, /diagnostics_only: false/);
   assert.match(reviewBody, /review_publication_ready: true/);
   const reviewValidation = validatePrBodyText(reviewBody, { date: reviewDate });
   assert.equal(reviewValidation.ok, true, reviewValidation.errors.join('\n'));
@@ -5963,13 +6192,13 @@ test('validate-pr-body ignores policy definitions when detecting concrete public
       .map(file => `content/newsroom/${diagnosticsDate}/${file}`)
   });
 
-  assert.match(diagnosticsBody, /`review_publication_ready=true`/);
+  assert.match(diagnosticsBody, /review_publication_ready: false/);
   assert.match(diagnosticsBody, /diagnostics_only: true/);
   const diagnosticsValidation = validatePrBodyText(diagnosticsBody, { date: diagnosticsDate });
   assert.equal(diagnosticsValidation.ok, true, diagnosticsValidation.errors.join('\n'));
 });
 
-test('newsroom PR body includes editor-approved publication policy in Korean', () => {
+test('newsroom PR body omits editor-approved publication policy detail section', () => {
   const root = tempRoot();
   const date = '2026-05-08';
   writeMinimalPublishArtifacts(root, date, {
@@ -5979,13 +6208,10 @@ test('newsroom PR body includes editor-approved publication policy in Korean', (
   const result = validatePrBodyText(body);
 
   assert.equal(result.ok, true);
-  assert.equal(
-    extractMarkdownSection(body, '편집자 승인 발행 정책').trimEnd(),
-    renderEditorPublicationPolicyMarkdown().trimEnd()
-  );
+  assert.doesNotMatch(body, /^## 편집자 승인 발행 정책$/m);
 });
 
-test('newsroom PR body includes article structure contract summary when editor draft exists', () => {
+test('newsroom PR body omits article structure contract detail when editor draft exists', () => {
   const root = tempRoot();
   const date = '2026-05-08';
   writeMinimalPublishArtifacts(root, date, {
@@ -6023,11 +6249,9 @@ test('newsroom PR body includes article structure contract summary when editor d
   });
 
   const body = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
-  const section = extractMarkdownSection(body, 'Article Structure Contract');
 
-  assert.match(section, /\| # \| Article \| 5-section \| Fact boundary \| HAL impact axis \| Actionability \| Limitations \|/);
-  assert.match(section, /CameraX release/);
-  assert.match(section, /pass/);
+  assert.doesNotMatch(body, /^## Article Structure Contract$/m);
+  assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
 test('publish status output renders final and artifact readiness fields', () => {
@@ -6273,10 +6497,10 @@ test('newsroom PR body primary headings are Korean', () => {
     }
   });
 
-  for (const heading of ['생성 상태', '기사 구성 요약', '최종 후보 선택 상태', '편집자 조치 가이드', '생성 산출물']) {
+  for (const heading of ['최종 판단', '이번 PR 요약', '반드시 확인할 항목', '주요 결과', '상세 report', '생성 상태', '후보 기사 추적', '생성 산출물']) {
     assert.match(body, new RegExp(`^## ${heading}$`, 'm'));
   }
-  for (const heading of ['Generation Status', 'Composition Summary', 'Editor Action Guidance', 'Generated Artifacts']) {
+  for (const heading of ['Generation Status', 'Composition Summary', 'Editor Action Guidance', 'Generated Artifacts', '기사 구성 요약', '최종 후보 선택 상태', '편집자 조치 가이드']) {
     assert.doesNotMatch(body, new RegExp(`^## ${heading}$`, 'm'));
   }
 });
@@ -6567,7 +6791,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage3, /seed-candidates\.json/);
   assert.match(stage3, /seed-evidence-pack\.json/);
   assert.doesNotMatch(rawPrBodyBuilder, /source_gap_risk_count/);
-  assert.match(rawPrBodyBuilder, /Priority Override \/ Legacy Compatibility/);
+  assert.doesNotMatch(rawPrBodyBuilder, /Priority Override \/ Legacy Compatibility/);
 });
 
 test('schedule cutover leaves only the RAW workflow on the daily newsroom schedule', () => {
