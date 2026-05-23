@@ -1321,6 +1321,46 @@ test('story repair does not downgrade unsupported future generation contract ver
   );
 });
 
+test('story repair fails closed on unsupported markers before repairing earlier briefing errors', async () => {
+  const draft = storyEditor({
+    public_contract_version: 'story-v2',
+    generation_contract_version: 2,
+    briefing: ['only one']
+  });
+  let repairCalled = false;
+
+  await assert.rejects(
+    () => repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: { candidates: [] },
+      normalizeSection,
+      requireStoryContract: true,
+      repairFn: async () => {
+        repairCalled = true;
+        throw new Error('LLM repair must not run for unsupported story markers.');
+      }
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.equal(error.repairAttempted, false);
+      assert.equal(error.repairSucceeded, false);
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_public_contract_version' &&
+        issue.value === 'story-v2'
+      ));
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_generation_contract_version' &&
+        issue.value === 2
+      ));
+      assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_public_contract_version'));
+      assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_generation_contract_version'));
+      return true;
+    }
+  );
+  assert.equal(repairCalled, false);
+});
+
 test('story v1 repair fills legacy public article markers and story fields deterministically', async () => {
   const draft = editor();
 
