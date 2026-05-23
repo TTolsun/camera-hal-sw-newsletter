@@ -23,6 +23,7 @@ const {
   isConcreteCheckpoint,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
+  publicArticleForSection,
   validatePublicArticle
 } = require('../../scripts/newsroom/common/public-article-contract');
 
@@ -1117,6 +1118,67 @@ test('LLM public_article merge preserves deterministic article fields', () => {
   assert.equal(merged.source_gap_risk, true);
   assert.deepEqual(merged.main_article_readiness, { status: 'blocked' });
   assert.deepEqual(merged.do_not_claim, ['Do not claim HAL driver changes.']);
+});
+
+test('LLM public_article merge fails closed on invalid source link provenance', () => {
+  const base = section(1, {
+    related_context_sources: [{
+      title: 'Context-only reference',
+      url: 'https://example.com/context-doc',
+      source_role: 'related_context'
+    }]
+  });
+  const llm = {
+    ...base,
+    public_article: {
+      ...base.public_article,
+      source_links: [{
+        title: 'Context-only reference',
+        url: 'https://example.com/context-doc',
+        source_role: 'primary'
+      }]
+    }
+  };
+
+  assert.throws(
+    () => mergePublicArticleFromLlm(base, llm),
+    error => {
+      assert.equal(error.code, 'invalid_public_source_links');
+      assert.ok(error.details.issues.some(issue => issue.reason === 'source_role_not_allowed_for_url'));
+      return true;
+    }
+  );
+});
+
+test('public_article fallback body paragraphs stay bucket aware', () => {
+  const tooling = publicArticleForSection(section(1, {
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    background: '',
+    camera_hal_perspective: '',
+    why_it_matters: '',
+    public_article: {
+      ...section(1).public_article,
+      body_paragraphs: []
+    }
+  }));
+  const adjacent = publicArticleForSection(section(2, {
+    relevance_bucket: 'android_platform_camera_adjacent',
+    background: '',
+    camera_hal_perspective: '',
+    why_it_matters: '',
+    public_article: {
+      ...section(2).public_article,
+      body_paragraphs: []
+    }
+  }));
+
+  assert.ok(tooling.body_paragraphs.some(paragraph => /prototype\/tooling/.test(paragraph)));
+  assert.ok(adjacent.body_paragraphs.some(paragraph => /app\/framework 계층/.test(paragraph)));
+  assert.equal(
+    [...tooling.body_paragraphs, ...adjacent.body_paragraphs]
+      .some(paragraph => paragraph.includes('공개 출처가 제공한 범위 안에서만 참고 동향')),
+    false
+  );
 });
 
 test('LLM section merge uses source_candidate_hash before title or URL', () => {

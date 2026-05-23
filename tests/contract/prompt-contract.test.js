@@ -62,6 +62,10 @@ test('article section contract prompt fixes the five normalized keys and guardra
   assert.match(prompt, /cpp_ai_tooling_fallback: build\/test\/debug workflow, sample\/prototype app, Camera API usage/);
   assert.match(prompt, /HAL runtime, stream, buffer, metadata 변경을 기본 action target으로 만들지 마세요/);
   assert.match(prompt, /reference_only\/watchlist: 직접 조치 문장이 아니라 관찰\/제한 문장/);
+  assert.match(prompt, /bucket scope에 맞는 구체 follow-up/);
+  assert.match(prompt, /direct HAL\/driver evidence가 있는 경우에만 stream, buffer, metadata, request\/result, vendor tag/);
+  assert.match(prompt, /app\/API\/tooling article에서는 permission, CameraX\/Camera2 usage, preview\/capture behavior, build\/test\/debug workflow/);
+  assert.doesNotMatch(prompt, /owner\/test\/log\/metric\/API\/stream\/buffer\/metadata follow-up/);
   assert.match(prompt, /verified_facts에 복사하면 안 됩니다/);
   assert.match(prompt, /do_not_claim은 source-backed fact나 public article content로 render하지 말고/);
 });

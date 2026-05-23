@@ -122,6 +122,18 @@ test('normalizeNewsSourceKey applies the cleanup source identity contract', () =
     'https://example.com/releases#1.4.0-alpha07'
   );
   assert.equal(
+    normalizeNewsSourceKey('https://developer.android.com/jetpack/androidx/releases/camera#1.6.1').key,
+    'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+  );
+  assert.equal(
+    normalizeNewsSourceKey('https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07').key,
+    'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07'
+  );
+  assert.equal(
+    normalizeNewsSourceKey('https://example.com/blog#overview').key,
+    'https://example.com/blog'
+  );
+  assert.equal(
     normalizeNewsSourceKey('https://example.com/CameraX').key === normalizeNewsSourceKey('https://example.com/camerax').key,
     false
   );

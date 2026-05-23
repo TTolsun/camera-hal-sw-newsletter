@@ -169,10 +169,6 @@ function normalizedCheckpoint(value) {
   return String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
-function allNoAction(checkpoints) {
-  return checkpoints.length > 0 && checkpoints.every(item => item === NO_IMMEDIATE_ACTION_TEXT);
-}
-
 function repeatedCheckpointErrors(articleCheckpoints) {
   const errors = [];
   const comparable = articleCheckpoints

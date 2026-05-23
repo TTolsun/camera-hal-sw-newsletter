@@ -489,10 +489,11 @@ function fallbackParagraphs(section = {}) {
     section.background,
     section.camera_hal_perspective || section.why_it_matters
   ]);
-  while (paragraphs.length < 2) {
-    paragraphs.push('이 항목은 공개 출처가 제공한 범위 안에서만 참고 동향으로 공유합니다.');
-  }
-  return paragraphs.slice(0, 4);
+  if (paragraphs.length >= 2) return paragraphs.slice(0, 4);
+  return [
+    ...paragraphs,
+    ...buildBucketAwareFallbackParagraphs(section)
+  ].slice(0, 4);
 }
 
 function sectionBucket(section = {}) {
@@ -544,6 +545,33 @@ function buildLowImpactFallbackCheckpoints(section = {}) {
   return [
     `${component}와 직접 연결된 공개 출처의 Camera API나 component 변화만 확인합니다.`,
     'HAL/driver 변경 근거가 없으면 request/result나 vendor tag 변화로 해석하지 않습니다.'
+  ];
+}
+
+function buildBucketAwareFallbackParagraphs(section = {}) {
+  const bucket = sectionBucket(section);
+  const component = publicComponentText(section);
+  if (/cpp_ai_tooling|tooling|native/i.test(bucket)) {
+    return [
+      '이 항목은 Camera HAL runtime 변경이 아니라, Camera API를 사용하는 prototype/tooling 흐름을 이해하기 위한 참고 신호입니다.',
+      '독자에게 필요한 확인 범위는 Camera 권한, CameraX/Camera2 usage, build/test/debug workflow 수준에 머무릅니다.'
+    ];
+  }
+  if (/android_platform_camera_adjacent|android_camera_api|android_camera|multimedia|CameraX|Camera2/i.test(bucket)) {
+    return [
+      '이 항목은 HAL API 변경이 아니라, CameraX preview가 다양한 화면 조건에서 어떻게 동작하는지 확인할 때 참고할 app/framework 계층의 신호입니다.',
+      '확인 범위는 preview/capture behavior, rotation, crop, app compatibility처럼 앱에서 관찰 가능한 동작으로 제한합니다.'
+    ];
+  }
+  if (/direct|camera_driver|image_pipeline|direct_aosp_camera|camera_stack/i.test(bucket)) {
+    return [
+      `${component}는 공개 출처가 직접 뒷받침하는 범위 안에서만 HAL runtime 검증 후보로 다룹니다.`,
+      'request/result, stream, buffer, metadata 표현은 source가 해당 계약을 실제로 말할 때만 사용합니다.'
+    ];
+  }
+  return [
+    `${component}는 공개 출처가 확인한 Camera API나 component 변화 범위 안에서만 해석합니다.`,
+    '직접 HAL/driver 근거가 없으면 vendor pipeline 영향으로 확대하지 않습니다.'
   ];
 }
 
@@ -872,7 +900,39 @@ function mergePublicArticleFromLlm(baseSection = {}, llmSection = {}, capsule = 
     }
   }
   merged.public_article = publicArticleForSection(merged, { allowLegacyFallback: false });
+  const sourceIssues = publicSourceLinkMergeIssues(merged);
+  if (sourceIssues.length > 0) {
+    throw publicArticleMergeError('invalid_public_source_links', 'LLM public_article source_links failed provenance validation.', {
+      issues: sourceIssues
+    });
+  }
   return merged;
+}
+
+function publicSourceLinkMergeIssues(section = {}) {
+  const issues = [];
+  const allowedSourceUrlRoles = allowedPublicSourceUrlRoleMap(section);
+  ensureArray(section.public_article?.source_links).forEach((source, sourceIndex) => {
+    const linkIssues = sourceLinkIssues(source, sourceIndex, {
+      allowedSourceUrlRoles,
+      allowRelatedContext: section.allow_related_context_source_links === true
+    });
+    const urlError = publicUrlError(source?.url);
+    if (!urlError && allowedSourceUrlRoles.size === 0) {
+      linkIssues.push({
+        type: 'invalid_source_link',
+        index: sourceIndex,
+        field: 'url',
+        reason: 'url_not_in_allowed_source_set',
+        value: source?.url
+      });
+    }
+    issues.push(...linkIssues.filter(issue => (
+      issue.type === 'invalid_source_link' ||
+      issue.type === 'unexpected_source_link_keys'
+    )));
+  });
+  return issues;
 }
 
 function validatePublicArticle(section = {}, index = 0) {
