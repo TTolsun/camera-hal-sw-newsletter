@@ -12,11 +12,11 @@
     "anchor_added_count": 0,
     "material_content_change_count": 0,
     "no_meaningful_change_count": 1,
-    "generated_candidate_count": 1,
-    "candidate_allowed_count": 1,
-    "main_article_allowed_count": 1,
+    "generated_candidate_count": 0,
+    "candidate_allowed_count": 0,
+    "main_article_allowed_count": 0,
     "watchlist_only_count": 0,
-    "duplicate_event_evidence_count": 0,
+    "duplicate_event_evidence_count": 1,
     "monitor_diagnostic_count": 0,
     "event_type_counts": {
       "no_meaningful_change": 1,
@@ -54,8 +54,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-05-22T00:00:00.000Z",
-        "seen_count": 1,
+        "last_seen_at": "2026-05-23T00:00:00.000Z",
+        "seen_count": 2,
         "status": 200
       },
       "current_values": {
@@ -1737,8 +1737,8 @@
           }
         ],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-05-22T00:00:00.000Z",
-        "seen_count": 1,
+        "last_seen_at": "2026-05-23T00:00:00.000Z",
+        "seen_count": 2,
         "status": 200
       },
       "current_values": {
@@ -3380,15 +3380,15 @@
       "effective_date": "2020-06-10",
       "date_source": "release_row_date",
       "date_confidence": 95,
-      "candidate_allowed": true,
-      "main_article_allowed": true,
+      "candidate_allowed": false,
+      "main_article_allowed": false,
       "release_row_date": "2020-06-10",
       "release_row_version": "1.0.0-alpha12",
       "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha12",
       "release_row_hash": "eb68d3f7ac5d322e5b1ea380557f4a7d",
-      "duplicate_processed": false,
+      "duplicate_processed": true,
       "needs_editor_date_review": false,
-      "reason": "Release row content changed."
+      "reason": "Duplicate processed source_event_id."
     }
   ],
   "diagnostics": []

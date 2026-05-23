@@ -7,15 +7,15 @@ Date: 2026-05-23
 - Sources: 47 (registry=47, synthetic=0)
 - Collected candidates: 39
 - Unregistered candidates: 0
-- Eligible candidates: 4
+- Eligible candidates: 2
 - Selected candidates: 3
 - Rendered main articles: 2
-- Source gap candidates: 35
+- Source gap candidates: 37
 - Generic noise candidates: 28
 - Duplicate candidates: 1
-- Recommendations: NO_RECENT_SIGNAL: 40, KEEP_AND_FIX_PARSER: 6, KEEP_AND_MONITOR: 1
+- Recommendations: NO_RECENT_SIGNAL: 41, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 1, KEEP_AND_FIX_PARSER: 5
 - Selected main source quality coverage: 4/4
-- Main-eligible source quality coverage: 2/2
+- Main-eligible source quality coverage: 1/1
 - Conditional source promoted/blocked: 0/12
 - Unknown source quality: 0
 - Source quality field drift: 0
@@ -29,10 +29,10 @@ Date: 2026-05-23
 | source_url_quality | engineering_blog_with_camera_evidence | 12 |
 | source_url_quality | official_site_update_row | 4 |
 | source_url_quality | undated_reference_page | 2 |
-| source_quality_status | blocked | 35 |
-| source_quality_status | allowed | 5 |
-| blocker | source_gap_risk | 35 |
-| blocker | reference_only | 31 |
+| source_quality_status | blocked | 37 |
+| source_quality_status | allowed | 3 |
+| blocker | source_gap_risk | 37 |
+| blocker | reference_only | 33 |
 | blocker | undated_reference_page | 2 |
 
 
@@ -46,7 +46,7 @@ Date: 2026-05-23
 
 | Source | Recommendation | Collected | Eligible | Source Gap | Top Reason |
 | --- | --- | --- | --- | --- | --- |
-| android-developers-latest-updates | KEEP_AND_FIX_PARSER | 2 | 1 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
+| android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 3 | 0 | 3 | No RSS item, no published date, no concrete release/API/behavior change detected. |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 21 | 2 | 19 | main_eligible=false |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
@@ -67,6 +67,7 @@ _없음_
 | android-weekly | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | anthropic-news | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | aosp-site-updates | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| camerax-release-notes | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | claude-code-changelog | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | collabora-blog | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cppcon-news | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -101,13 +102,12 @@ _없음_
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| android-developers-latest-updates | KEEP_AND_FIX_PARSER | 30 | 2 | 0.5 | 1 | 0 | 0.5 | 0 | 0 |
+| android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 3 | 0 | 0 | 0 | 1 | 0 | 0 |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 28.09 | 21 | 0.0952 | 1 | 1 | 0.9048 | 0.8571 | 1 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 12 | 0 | 0 | 0 | 1 | 0.5833 | 0 |
-| camerax-release-notes | KEEP_AND_MONITOR | 35 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 
 ## Warnings
 
