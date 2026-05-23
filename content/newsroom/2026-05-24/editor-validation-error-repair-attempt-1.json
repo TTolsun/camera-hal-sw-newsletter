@@ -1,0 +1,35 @@
+{
+  "name": "EditorSemanticValidationError",
+  "message": "Editor output failed public article contract validation.",
+  "details": {
+    "field": "sections.public_article",
+    "expectedKeys": [
+      "headline",
+      "lead",
+      "body_paragraphs",
+      "camera_hal_takeaway",
+      "reader_checkpoints",
+      "source_links",
+      "story_contract_version",
+      "source_subtitle",
+      "editorial_story",
+      "decision_metadata"
+    ],
+    "actualCount": 1,
+    "sectionCount": 1,
+    "issues": [
+      {
+        "index": 1,
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX를 통한 기기 간 적응형 카메라 미리보기 구현",
+        "type": "insufficient_concrete_public_checkpoints",
+        "actualCount": 1,
+        "expectedMinCount": 2
+      }
+    ]
+  },
+  "field": "sections.public_article",
+  "stage": "editor attempt 1/2",
+  "attempt": 1,
+  "repairAttempted": true,
+  "repairSucceeded": false
+}

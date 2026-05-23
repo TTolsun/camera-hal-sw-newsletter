@@ -1,5 +1,15 @@
 [
   {
+    "date": "2026-05-24",
+    "archive_status": "stable_archive",
+    "historical_cleanup_reviewed": true,
+    "known_limitations": [
+      "review_only_publication"
+    ],
+    "historical_cleanup_context": "review_only_publication",
+    "public_visibility": "listed"
+  },
+  {
     "date": "2026-05-23",
     "archive_status": "stable_archive",
     "historical_cleanup_reviewed": true,
