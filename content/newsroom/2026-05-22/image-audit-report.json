@@ -33,7 +33,7 @@
   "articles": [
     {
       "index": 1,
-      "headline": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+      "headline": "Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화",
       "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
       "image_candidate_count": 3,
       "valid_image_candidate_count": 2,
@@ -87,7 +87,7 @@
     },
     {
       "index": 2,
-      "headline": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+      "headline": "Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동",
       "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
       "image_candidate_count": 3,
       "valid_image_candidate_count": 2,

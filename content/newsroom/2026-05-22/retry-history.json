@@ -2,7 +2,7 @@
   {
     "attempt": 1,
     "model": "deterministic-fallback-public-issue",
-    "score": 92,
+    "score": 89,
     "threshold": 85,
     "status": "PUBLIC_ISSUE_CREATED",
     "rendered_main_article_count": 2,
@@ -17,19 +17,39 @@
         "action": "rebuild-from-bound-candidate",
         "fallback": false,
         "reason": "rebuild-from-bound-candidate"
-      },
-      {
-        "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
-        "category": "Android Native Tooling",
-        "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-        "source": "Android Developers Blog",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "action": "demote-to-watch",
-        "fallback": true,
-        "reason": "demote-to-watch"
       }
     ],
     "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
       {
         "category": "field-hygiene",
         "points": 8,

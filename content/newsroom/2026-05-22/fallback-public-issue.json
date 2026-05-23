@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "generated_at": "2026-05-23T11:12:33.523Z",
+  "generated_at": "2026-05-23T19:42:07.428Z",
   "fallback_public_issue_status": "CREATED",
   "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
   "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
@@ -20,8 +20,14 @@
   "fallback_public_issue_removed_blockers": false,
   "fallback_public_issue_removed_article_count": 0,
   "base_draft_source": "editor-draft.json",
-  "preserve_article_count": 0,
+  "preserve_article_count": 1,
   "final_article_count": 2,
+  "headline_generation": {
+    "source": "llm",
+    "stage": "fallback-public-title-editor",
+    "override_count": 4,
+    "reason": "llm_headlines_generated"
+  },
   "demoted_articles": [],
   "fallback_articles": [
     {
@@ -33,16 +39,6 @@
       "action": "rebuild-from-bound-candidate",
       "fallback": false,
       "reason": "rebuild-from-bound-candidate"
-    },
-    {
-      "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
-      "category": "Android Native Tooling",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "source": "Android Developers Blog",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "action": "demote-to-watch",
-      "fallback": true,
-      "reason": "demote-to-watch"
     }
   ],
   "rejected_candidates": []

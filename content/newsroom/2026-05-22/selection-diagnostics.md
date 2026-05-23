@@ -40,14 +40,14 @@ Source/parser recovery hint:
 
 Homepage Headline:
 - decision: retained_current_above_margin
-- current_headline_key: url:https://goo.gle/AdaptiveApps_IO26
+- current_headline_key: url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
 - replacement_headline_key: unknown
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
-- runtime_decayed_score: 100
-- previous_stored_current_score: 100
-- last_scored_at: 2026-05-23
+- runtime_decayed_score: 98
+- previous_stored_current_score: 98
+- last_scored_at: 2026-05-24
 - scored_at: 2026-05-22
 - included_as_latest: true
 - latest_inclusion_mode: selected_normally

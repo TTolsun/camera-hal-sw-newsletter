@@ -27,7 +27,7 @@
           <span class="issue-date">2026-05-22</span>
         </div>
         <h1>Camera HAL SW Newsletter</h1>
-        <p class="subtitle">이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.</p>
+        <p class="subtitle">이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동.</p>
         <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
         <div class="actions newsletter-actions issue-actions">
           <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
@@ -47,38 +47,42 @@
         </div>
       </section>
 
-      <section class="section" id="article-jetpack-compose-camerax-preview">
-        <h2>2. Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트</h2>
-        <div class="card issue-section article-card has-image camera-hal">
+      <section class="section" id="article-jetpack-compose-camerax">
+        <h2>2. Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화</h2>
+        <div class="card issue-section article-card story-article has-image camera-hal">
           <figure class="article-media">
             <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png" alt="Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트" loading="lazy" decoding="async">
             <figcaption class="article-image-caption">이미지: <a href="https://goo.gle/AdaptiveApps_IO26">Android Developers Blog</a></figcaption>
           </figure>
           
-          <h3>Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트</h3>
+          <h3>Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화</h3>
+          <p class="article-source-subtitle">Android Developers Blog · Tue, 19 May 2026 13:00:00 +0000</p>
           <p class="article-lead">Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.</p>
           <p>Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.</p>
           <p>이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다.</p>
-          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>이 소식은 HAL API 변경이 아니라, 다양한 화면 크기에서 CameraX preview가 어떻게 보이는지 확인하라는 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 preview aspect ratio, rotation, crop 동작의 앱 호환성만 확인하면 됩니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.</li><li>이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.</li></ul></div>
+          <p>앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage할 때 확인합니다.</p>
+          <p>CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다. 이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.</p>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">Camera HAL / Driver 관점에서 확인할 점</strong><p>이 소식은 HAL API 변경이 아니라, 다양한 화면 크기에서 CameraX preview가 어떻게 보이는지 확인하라는 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 preview aspect ratio, rotation, crop 동작의 앱 호환성만 확인하면 됩니다.</p><ul><li>CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.</li><li>이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.</li></ul></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a></li></ul></div>
         </div>
       </section>
 
-      <section class="section" id="article-google-ai-studio-native-android-camera-api">
-        <h2>3. Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인</h2>
-        <div class="card issue-section article-card has-image tooling-watch">
+      <section class="section" id="article-google-ai-studio-native-android-api">
+        <h2>3. Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동</h2>
+        <div class="card issue-section article-card story-article has-image tooling-watch">
           <figure class="article-media">
             <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png" alt="Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인" loading="lazy" decoding="async">
             <figcaption class="article-image-caption">이미지: <a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Android Developers Blog</a></figcaption>
           </figure>
           
-          <h3>Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인</h3>
+          <h3>Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동</h3>
+          <p class="article-source-subtitle">Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000</p>
           <p class="article-lead">Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.</p>
           <p>Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.</p>
           <p>Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다.</p>
-          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.</li><li>이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.</li></ul></div>
+          <p>Camera HAL 본체가 아니라 host/native tooling이나 prototype 코드 검토 과정에서 build, logging, Camera API 사용 범위를 확인합니다.</p>
+          <p>AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다. 이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.</p>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">Android Native / Tooling 관점에서 확인할 점</strong><p>이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.</p><ul><li>AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.</li><li>이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.</li></ul></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Build native Android apps in Google AI Studio</a></li></ul></div>
         </div>
       </section>

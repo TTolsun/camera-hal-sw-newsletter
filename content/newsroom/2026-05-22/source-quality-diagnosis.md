@@ -8,7 +8,7 @@ Date: 2026-05-22
 - 최종 사용 가능 후보 수: 4
 - Primary Camera Stack 후보 수: 2
 - Android multimedia camera output 후보 수: 0
-- 주요 진단: 파서 추출 실패, 분류 체계 누락, Fallback 기사만 남음, Source discovery 중복 또는 무효
+- 주요 진단: 파서 추출 실패, 분류 체계 누락, Source discovery 중복 또는 무효
 - 결론: 실제 뉴스 부족보다는 후보 추출/분류/source discovery 단계 손실 가능성이 큽니다.
 
 ## 진단 플래그
@@ -19,7 +19,7 @@ Date: 2026-05-22
 | 파서 추출 실패 | `parser_extraction_failure` | true | android-compatibility-definition-document has KEEP_AND_FIX_PARSER recommendation. |
 | 소스 풀 부족 위험 | `source_gap_risk` | false | 진단 신호 없음 |
 | 분류 체계 누락 | `taxonomy_missing` | true | 1 camera-relevant candidate(s) were not mapped to a known camera bucket. |
-| Fallback 기사만 남음 | `fallback_only_composition` | true | composition_mode indicates fallback composition: FALLBACK_COMPOSITION. |
+| Fallback 기사만 남음 | `fallback_only_composition` | false | 진단 신호 없음 |
 | Source discovery 중복 또는 무효 | `duplicate_or_noop_source_discovery` | true | Gemini discovery produced 26 candidate(s) but gemini_new_unique_url_count=0. |
 
 ## 소스별 진단

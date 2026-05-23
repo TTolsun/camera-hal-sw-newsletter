@@ -9,21 +9,18 @@
       "body_paragraphs",
       "camera_hal_takeaway",
       "reader_checkpoints",
-      "source_links"
+      "source_links",
+      "story_contract_version",
+      "source_subtitle",
+      "editorial_story",
+      "decision_metadata"
     ],
-    "actualCount": 2,
-    "sectionCount": 2,
+    "actualCount": 1,
+    "sectionCount": 1,
     "issues": [
       {
         "index": 1,
-        "headline": "Google I/O 2026: Jetpack Compose와 CameraX를 통한 적응형 카메라 미리보기 구현",
-        "type": "insufficient_concrete_public_checkpoints",
-        "actualCount": 0,
-        "expectedMinCount": 2
-      },
-      {
-        "index": 2,
-        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원",
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX를 활용한 멀티 디바이스 적응형 카메라 미리보기 구현",
         "type": "insufficient_concrete_public_checkpoints",
         "actualCount": 0,
         "expectedMinCount": 2
