@@ -1231,6 +1231,96 @@ test('story contract rejects unsupported future public contract versions', () =>
   );
 });
 
+test('story repair does not downgrade unsupported future public contract versions', async () => {
+  const draft = storyEditor({
+    public_contract_version: 'story-v2'
+  });
+
+  await assert.rejects(
+    () => repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: { candidates: [] },
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.equal(error.repairAttempted, false);
+      assert.equal(error.repairSucceeded, false);
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_public_contract_version' &&
+        issue.value === 'story-v2'
+      ));
+      assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_public_contract_version'));
+      return true;
+    }
+  );
+});
+
+test('story repair does not downgrade unsupported future section story versions', async () => {
+  const draft = storyEditor({
+    sections: [
+      {
+        ...section(1),
+        public_article: storyPublicArticle(section(1), {
+          story_contract_version: 2
+        })
+      },
+      { ...section(2), public_article: storyPublicArticle(section(2)) },
+      { ...section(3), public_article: storyPublicArticle(section(3)) }
+    ]
+  });
+
+  await assert.rejects(
+    () => repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: { candidates: [] },
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.equal(error.repairAttempted, false);
+      assert.equal(error.repairSucceeded, false);
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_story_contract_version' &&
+        issue.value === 2
+      ));
+      assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_story_contract_version'));
+      return true;
+    }
+  );
+});
+
+test('story repair does not downgrade unsupported future generation contract versions', async () => {
+  const draft = storyEditor({
+    generation_contract_version: 2
+  });
+
+  await assert.rejects(
+    () => repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: { candidates: [] },
+      normalizeSection,
+      requireStoryContract: true
+    }),
+    error => {
+      assert.equal(error.details.field, 'sections.public_article');
+      assert.equal(error.repairAttempted, false);
+      assert.equal(error.repairSucceeded, false);
+      assert.ok(error.details.issues.some(issue =>
+        issue.type === 'unsupported_generation_contract_version' &&
+        issue.value === 2
+      ));
+      assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_generation_contract_version'));
+      return true;
+    }
+  );
+});
+
 test('story v1 repair fills legacy public article markers and story fields deterministically', async () => {
   const draft = editor();
 

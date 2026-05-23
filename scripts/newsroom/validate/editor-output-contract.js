@@ -32,6 +32,7 @@ const {
   STORY_CONTRACT_VERSION,
   STORY_PUBLIC_CONTRACT_VERSION,
   publicArticleForSection,
+  storyContractMarkers,
   validatePublicArticle
 } = require('../common/public-article-contract');
 const {
@@ -415,10 +416,29 @@ function completeStoryPublicArticle(section = {}) {
   };
 }
 
+function unsupportedStoryMarkerReasonCodes(value = {}) {
+  const sections = ensureArray(value?.sections);
+  const targets = sections.length > 0 ? sections : [{ public_article: {} }];
+  const codes = [];
+  for (const section of targets) {
+    const markers = storyContractMarkers(value, section, { requireStoryContract: false });
+    codes.push(...ensureArray(markers.unsupported).map(issue => issue.type));
+  }
+  return uniqueText(codes);
+}
+
 function deterministicallyRepairEditorSchema(value, options = {}) {
   const repaired = cloneJson(value);
   let changed = false;
   const reasonCodes = [];
+  const unsupportedStoryMarkerCodes = unsupportedStoryMarkerReasonCodes(repaired);
+  if (unsupportedStoryMarkerCodes.length > 0) {
+    return {
+      editor: null,
+      reason_codes: unsupportedStoryMarkerCodes,
+      repairable: false
+    };
+  }
   if (options.requireStoryContract === true) {
     if (repaired.public_contract_version !== STORY_PUBLIC_CONTRACT_VERSION) {
       repaired.public_contract_version = STORY_PUBLIC_CONTRACT_VERSION;
@@ -986,6 +1006,10 @@ function isRepairableSemanticField(field) {
   return REPAIRABLE_SEMANTIC_FIELDS.has(text(field));
 }
 
+function isUnsupportedStoryMarkerRepairBlock(reasonCodes = []) {
+  return ensureArray(reasonCodes).some(code => /^unsupported_.*contract_version$/.test(text(code)));
+}
+
 async function repairEditorOutputContract({
   value,
   date,
@@ -1053,6 +1077,17 @@ async function repairEditorOutputContract({
     }
 
     if (!isRepairableSemanticField(repairField)) {
+      error.stage = stage;
+      attachSemanticStatus(error, {
+        editor_semantic_validation: initialDetails,
+        repairAttempted: false,
+        repairSucceeded: false
+      });
+      throw error;
+    }
+
+    if (deterministicRepair?.repairable === false ||
+      isUnsupportedStoryMarkerRepairBlock(deterministicRepairFailureReasonCodes)) {
       error.stage = stage;
       attachSemanticStatus(error, {
         editor_semantic_validation: initialDetails,

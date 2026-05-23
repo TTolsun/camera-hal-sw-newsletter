@@ -1499,6 +1499,7 @@ module.exports = {
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
   requiresStoryContract,
+  storyContractMarkers,
   publicProseLeakageIssues,
   publicArticleForSection,
   publicUrlError,
