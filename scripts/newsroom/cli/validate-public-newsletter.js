@@ -62,11 +62,11 @@ function publicArticlePathLabel(keyPath = []) {
   return keyPath.map(item => /^\d+$/.test(item) ? '[]' : item).join('.');
 }
 
-function collectPublicArticleSections(value, keyPath = [], parent = null) {
+function collectPublicArticleSections(value, keyPath = [], parent = null, root = value) {
   const sections = [];
   if (Array.isArray(value)) {
     value.forEach((item, index) => {
-      sections.push(...collectPublicArticleSections(item, keyPath.concat(String(index)), parent));
+      sections.push(...collectPublicArticleSections(item, keyPath.concat(String(index)), parent, root));
     });
     return sections;
   }
@@ -76,6 +76,7 @@ function collectPublicArticleSections(value, keyPath = [], parent = null) {
     if (key === 'public_article' && isPlainObject(item)) {
       sections.push({
         keyPath: itemPath,
+        issue: root,
         section: {
           ...value,
           public_article: item
@@ -83,15 +84,15 @@ function collectPublicArticleSections(value, keyPath = [], parent = null) {
       });
       continue;
     }
-    sections.push(...collectPublicArticleSections(item, itemPath, value));
+    sections.push(...collectPublicArticleSections(item, itemPath, value, root));
   }
   return sections;
 }
 
 function publicArticlePathIssues(value, label) {
   const issues = [];
-  for (const [index, { keyPath, section }] of collectPublicArticleSections(value).entries()) {
-    for (const issue of validatePublicArticle(section, index)) {
+  for (const [index, { keyPath, section, issue: rootIssue }] of collectPublicArticleSections(value).entries()) {
+    for (const issue of validatePublicArticle(section, index, { issue: rootIssue })) {
       issues.push(`${label}:${publicArticlePathLabel(keyPath)} failed: ${issue.type}${issue.key ? ` ${issue.key}` : ''}${issue.reason ? ` ${issue.reason}` : ''}${issue.message ? ` ${issue.message}` : ''}`);
     }
   }

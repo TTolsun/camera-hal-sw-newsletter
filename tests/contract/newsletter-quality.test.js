@@ -996,6 +996,60 @@ test('quality threshold does not override hard blockers at high scores', () => {
   }), 'NEEDS_FIX');
 });
 
+test('quality gate allows product/version-only source title mentions in story briefing', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07';
+  const storySection = section({
+    headline: 'CameraX 1.4.0-alpha07 업데이트: preview/capture 호환성 확인',
+    url
+  });
+  storySection.public_article = {
+    ...storySection.public_article,
+    story_contract_version: 1,
+    headline: storySection.headline,
+    source_subtitle: 'Android Developers · CameraX',
+    editorial_story: {
+      reader_scenario: '앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage하는 상황을 가정합니다.',
+      what_happened: 'CameraX release note는 app/framework 계층의 preview/capture 호환성 검증 신호로 다룹니다.',
+      why_it_matters: 'HAL 직접 변경이 아니라 app/framework 호환성 확인 범위로 제한합니다.',
+      field_scenario: 'CameraX preview와 capture path를 regression check 후보로 확인합니다.',
+      not_to_overclaim: 'HAL runtime 변경으로 확대하지 않습니다.',
+      editor_take: 'source 범위 안에서만 실무 확인 항목으로 다룹니다.'
+    },
+    decision_metadata: {
+      impact: 'Medium',
+      scope: ['Framework'],
+      action: ['Watch', 'Test'],
+      overclaim_risk: 'Medium'
+    }
+  };
+  const rest = validSections().slice(1);
+  const report = buildNewsletterQualityReport(
+    '2026-05-03',
+    {
+      public_contract_version: 'story-v1',
+      generation_contract_version: 1,
+      briefing: [
+        'CameraX 1.4.0-alpha07은 preview/capture 호환성 검증 범위만 확인합니다.',
+        '직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.',
+        '편집자는 source와 article 표현을 최종 확인합니다.'
+      ],
+      sections: [storySection, ...rest]
+    },
+    {
+      candidates: [
+        scopedCandidate(url, 'android_platform_camera_adjacent', {
+          title: 'CameraX 1.4.0-alpha07'
+        }),
+        ...reporterCandidatesFor(rest)
+      ]
+    },
+    { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 }
+  );
+
+  assert.equal(report.deductions.some(item => item.reason === 'Briefing bullet includes a raw source title phrase.'), false);
+  assert.equal(report.deductions.some(item => item.reason === 'Public headline exactly copies the source title.'), false);
+});
+
 test('quality gate rejects unknown source event and date source enums on selected articles', () => {
   const targetUrl = 'https://example.com/source-event-enum-drift';
   const report = reportFor([

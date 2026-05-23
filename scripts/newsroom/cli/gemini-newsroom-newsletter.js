@@ -102,6 +102,9 @@ const {
   pruneResolvedFallbackImageFactCheckItems
 } = require('../common/fact-check-repair');
 const {
+  GENERATION_CONTRACT_VERSION,
+  STORY_CONTRACT_VERSION,
+  STORY_PUBLIC_CONTRACT_VERSION,
   mergePublicArticleFromLlm
 } = require('../common/public-article-contract');
 const {
@@ -222,7 +225,12 @@ function articleSectionContractPrompt() {
 function publicArticleContractPrompt() {
   return [
     'Public article contract: 모든 main article은 public_article을 포함해야 합니다.',
-    'public_article fields: headline, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, source_links.',
+    'Story v1 output은 top-level public_contract_version="story-v1", generation_contract_version=1을 포함해야 하며 각 public_article은 story_contract_version=1을 포함해야 합니다.',
+    'public_article fields: story_contract_version, headline, source_subtitle, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, editorial_story, source_links.',
+    'editorial_story fields: reader_scenario, what_happened, why_it_matters, field_scenario, not_to_overclaim, editor_take.',
+    'reader_scenario는 source-confirmed incident가 아니라 독자가 마주칠 수 있는 가정형 현업 장면으로 쓰세요. 실제 발생 사실처럼 단정하지 마세요.',
+    'what_happened에는 source-confirmed fact만 쓰고, HAL 해석이나 권고는 why_it_matters, field_scenario, editor_take로 분리하세요.',
+    'Gemini는 decision_metadata를 생성하지 마세요. impact/scope/action/overclaim_risk는 deterministic builder가 public output 직전에 생성하거나 overwrite합니다.',
     'Gemini는 public article writer입니다. selected article capsule과 deterministic metadata 안에서 source fact와 source-bound engineering inference를 자연스러운 한국어 기사 문장으로 작성할 수 있습니다.',
     'Gemini는 deterministic judgment를 바꿀 수 없습니다: HAL impact level, source eligibility, source_gap_risk, main/supporting 승격, source link, do_not_claim.',
     'public_article은 한국어 독자-facing technical newsletter prose로 작성하세요. validation report, checklist, enum, schema/debug field name을 노출하지 마세요.',
@@ -1087,8 +1095,17 @@ function validateEditor(value, date, reporter = { candidates: [] }, options = {}
   return validateEditorOutputContract(value, date, {
     reporter,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
-    strictClaims: options.strictClaims === true
+    strictClaims: options.strictClaims === true,
+    requireStoryContract: options.requireStoryContract === true
   });
+}
+
+function editorRequestsStoryContract(editor = {}) {
+  return editor?.public_contract_version === STORY_PUBLIC_CONTRACT_VERSION ||
+    Number(editor?.generation_contract_version) >= GENERATION_CONTRACT_VERSION ||
+    ensureArray(editor?.sections).some(section =>
+      Number(section?.public_article?.story_contract_version) >= STORY_CONTRACT_VERSION
+    );
 }
 
 function buildEditorRetryContract({
@@ -1178,9 +1195,10 @@ function recordLastKnownValidEditor(editor, {
   factCheck = null,
   qualityReport = null,
   attempt = 0,
-  strictClaims = true
+  strictClaims = true,
+  requireStoryContract = false
 } = {}) {
-  const validated = validateEditor(cloneJson(editor), date, reporter, { strictClaims });
+  const validated = validateEditor(cloneJson(editor), date, reporter, { strictClaims, requireStoryContract });
   generationRunState.lastKnownValidEditor = cloneJson(validated);
   generationRunState.lastKnownValidReporter = cloneJson(reporter);
   generationRunState.lastKnownValidFactCheck = cloneJson(factCheck);
@@ -1466,7 +1484,11 @@ function writeReviewableRepairFailureArtifacts({
   }
 
   const fallbackReporter = cloneJson(reporter || generationRunState.lastKnownValidReporter || { candidates: [] });
-  const fallbackEditor = validateEditor(cloneJson(generationRunState.lastKnownValidEditor), date, fallbackReporter, { strictClaims: true });
+  const fallbackRequiresStoryContract = editorRequestsStoryContract(generationRunState.lastKnownValidEditor);
+  const fallbackEditor = validateEditor(cloneJson(generationRunState.lastKnownValidEditor), date, fallbackReporter, {
+    strictClaims: true,
+    requireStoryContract: fallbackRequiresStoryContract
+  });
   const fallbackFactCheck = fallbackFactCheckForRepairFailure(error, factCheck || generationRunState.lastKnownValidFactCheck);
   const existingQualityReport = qualityReport || generationRunState.lastKnownValidQualityReport;
   const fallbackQualityReport = existingQualityReport?.metrics
@@ -1667,6 +1689,7 @@ async function repairEditorSemanticWithLlm({
       'Validation repair에 필요한 local edit가 아니면 한국어 reader-facing prose를 보존하세요. 새로 쓰는 reader-facing text는 반드시 한국어여야 합니다.',
       'Article을 추가, 제거, 재정렬, 교체하지 마세요.',
       'Validation error가 명시적으로 해당 field를 가리키지 않으면 article headline, category, source URL, image field, action_items, references를 변경하지 마세요.',
+      publicArticleContractPrompt(),
       'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
       'sections.blocked_context failure는 article sources와 headline에서 blocked context URL/title을 제거하세요. Blocked context는 diagnostic context로만 남길 수 있습니다.',
       'sections.claims failure는 source-backed verified_facts[], confirmed_facts[], concrete evidence_summary field마다 matching claim_type=fact claim이 있도록 claims를 추가하거나 조정하세요.',
@@ -1703,6 +1726,7 @@ async function validateOrRepairEditor(value, {
     stage: editorStage,
     newsroomDir,
     strictClaims: true,
+    requireStoryContract: true,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
     repairFn: async ({ invalidEditor, validationError }) => repairEditorSemanticWithLlm({
       date,
@@ -3275,7 +3299,7 @@ async function main() {
     attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
     await resolveIssueArticleImages(editor, { root });
     warnResolvedImageFallbacks(editor);
-    editor = recordLastKnownValidEditor(editor, { date, reporter, attempt });
+    editor = recordLastKnownValidEditor(editor, { date, reporter, attempt, requireStoryContract: true });
     writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor });
     writeJson(path.join(newsroomDir, `editor-draft-attempt-${attempt}.json`), editor);
     fs.writeFileSync(path.join(newsroomDir, `editor-draft-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
@@ -3322,7 +3346,7 @@ async function main() {
       seedEvidencePack: readSeedEvidencePackForDate(date)
     });
     generationRunState.qualityReport = qualityReport;
-    editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
+    editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true });
     writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
     writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
     fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
@@ -3426,7 +3450,7 @@ async function main() {
         editor = validateEditor({
           ...editor,
           sections: repairMerged.sections
-        }, date, reporter, { strictClaims: true });
+        }, date, reporter, { strictClaims: true, requireStoryContract: true });
         attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
         await resolveIssueArticleImages(editor, { root });
         warnResolvedImageFallbacks(editor);
@@ -3480,7 +3504,7 @@ async function main() {
           seedEvidencePack: readSeedEvidencePackForDate(date)
         });
         generationRunState.qualityReport = qualityReport;
-        editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
+        editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true });
         writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
         writeJson(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.json`), qualityReport);
         fs.writeFileSync(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
@@ -3570,7 +3594,7 @@ async function main() {
           editor = validateEditor({
             ...editor,
             sections: completionMerged.sections
-          }, date, reporter, { strictClaims: true });
+          }, date, reporter, { strictClaims: true, requireStoryContract: true });
           attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
           await resolveIssueArticleImages(editor, { root });
           warnResolvedImageFallbacks(editor);
@@ -3614,7 +3638,7 @@ async function main() {
             seedEvidencePack: readSeedEvidencePackForDate(date)
           });
           generationRunState.qualityReport = qualityReport;
-          editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt });
+          editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true });
           writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
           writeJson(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.json`), qualityReport);
           fs.writeFileSync(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
@@ -3728,7 +3752,7 @@ async function main() {
     removedSections,
     reporter
   });
-  editor = validateEditor(staleScrub.editor, date, reporter, { strictClaims: true });
+  editor = validateEditor(staleScrub.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
   factCheck = pruneResolvedStaleFactCheckItems(factCheck, staleScrub.report);
   factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
   generationRunState.factCheck = factCheck;

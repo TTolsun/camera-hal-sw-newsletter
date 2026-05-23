@@ -1,4 +1,5 @@
 const string = { type: 'STRING' };
+const number = { type: 'NUMBER' };
 const stringArray = { type: 'ARRAY', items: string };
 const briefingArray = { type: 'ARRAY', items: string, minItems: 3, maxItems: 3 };
 const source = {
@@ -22,14 +23,48 @@ const publicSourceLink = {
   required: ['title', 'url']
 };
 
+const editorialStory = {
+  type: 'OBJECT',
+  properties: {
+    reader_scenario: string,
+    what_happened: string,
+    why_it_matters: string,
+    field_scenario: string,
+    not_to_overclaim: string,
+    editor_take: string
+  },
+  required: [
+    'reader_scenario',
+    'what_happened',
+    'why_it_matters',
+    'field_scenario',
+    'not_to_overclaim',
+    'editor_take'
+  ]
+};
+
+const decisionMetadata = {
+  type: 'OBJECT',
+  properties: {
+    impact: string,
+    scope: stringArray,
+    action: stringArray,
+    overclaim_risk: string
+  }
+};
+
 const publicArticle = {
   type: 'OBJECT',
   properties: {
+    story_contract_version: number,
+    source_subtitle: string,
     headline: string,
     lead: string,
     body_paragraphs: stringArray,
     camera_hal_takeaway: string,
     reader_checkpoints: stringArray,
+    editorial_story: editorialStory,
+    decision_metadata: decisionMetadata,
     source_links: {
       type: 'ARRAY',
       items: publicSourceLink
@@ -37,10 +72,13 @@ const publicArticle = {
   },
   required: [
     'headline',
+    'source_subtitle',
     'lead',
     'body_paragraphs',
     'camera_hal_takeaway',
     'reader_checkpoints',
+    'story_contract_version',
+    'editorial_story',
     'source_links'
   ]
 };
@@ -456,6 +494,8 @@ const editorSchema = {
   type: 'OBJECT',
   properties: {
     date: string,
+    public_contract_version: string,
+    generation_contract_version: number,
     title: string,
     summary: string,
     briefing: briefingArray,
@@ -493,7 +533,7 @@ const editorSchema = {
       items: source
     }
   },
-  required: ['date', 'title', 'summary', 'briefing', 'sections', 'action_items', 'references']
+  required: ['date', 'public_contract_version', 'generation_contract_version', 'title', 'summary', 'briefing', 'sections', 'action_items', 'references']
 };
 
 const editorCompletionSchema = {

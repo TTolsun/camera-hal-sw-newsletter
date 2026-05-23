@@ -27,6 +27,11 @@ const {
 } = require('../common/hal-signal-quality');
 const {
   PUBLIC_ARTICLE_REQUIRED_KEYS,
+  PUBLIC_ARTICLE_STORY_REQUIRED_KEYS,
+  GENERATION_CONTRACT_VERSION,
+  STORY_CONTRACT_VERSION,
+  STORY_PUBLIC_CONTRACT_VERSION,
+  publicArticleForSection,
   validatePublicArticle
 } = require('../common/public-article-contract');
 const {
@@ -340,11 +345,99 @@ function buildArticleSectionsFromLegacyFields(section = {}) {
   };
 }
 
-function deterministicallyRepairEditorSchema(value) {
+function sourceSubtitleFromSection(section = {}, publicArticle = {}) {
+  const firstSource = ensureArray(publicArticle.source_links)[0] || ensureArray(section.sources)[0] || {};
+  return text(firstSource.title || firstSource.publisher || section.category || publicArticle.headline || section.headline);
+}
+
+function headlineRepairSuffix(section = {}, publicArticle = {}) {
+  const combined = [
+    section.relevance_bucket,
+    section.category,
+    section.headline,
+    publicArticle.headline
+  ].map(text).join(' ');
+  if (/soc_platform|thermal|isp/i.test(combined)) return 'preview latency 검증 포인트';
+  if (/camera_driver|image_pipeline|libcamera/i.test(combined)) return 'stream/buffer 검증 포인트';
+  if (/android_platform|camerax|camera2/i.test(combined)) return 'preview/capture 호환성 확인';
+  if (/tooling|cpp|native/i.test(combined)) return 'native tooling 확인 범위';
+  return 'Camera HAL 검토 포인트';
+}
+
+function storyHeadlineFromSection(section = {}, publicArticle = {}) {
+  const headline = text(publicArticle.headline || section.headline || section.category || 'Camera HAL 관련 소식');
+  const normalizedHeadline = headline.toLowerCase();
+  const sourceTitles = [
+    ...ensureArray(section.sources),
+    ...ensureArray(publicArticle.source_links)
+  ]
+    .map(source => text(source?.title))
+    .filter(Boolean);
+  if (sourceTitles.some(title => title.toLowerCase() === normalizedHeadline)) {
+    return `${headline}: ${headlineRepairSuffix(section, publicArticle)}`;
+  }
+  return headline;
+}
+
+function buildStoryFromPublicArticle(section = {}, publicArticle = {}) {
+  const headline = text(publicArticle.headline || section.headline || section.category || 'Camera HAL 관련 소식');
+  const checkpoints = ensureArray(publicArticle.reader_checkpoints).filter(Boolean);
+  const limitations = uniqueText([
+    publicArticle.editorial_story?.not_to_overclaim,
+    ...ensureArray(section.do_not_overstate),
+    ...ensureArray(section.hal_signal_capsule?.do_not_overstate)
+  ]);
+  return {
+    reader_scenario: `${headline}을 Camera HAL / Driver / Native tooling 리뷰 범위에 넣을지 판단하는 현업 상황을 가정합니다.`,
+    what_happened: text(publicArticle.lead || section.what_changed || section.evidence_summary),
+    why_it_matters: text(publicArticle.camera_hal_takeaway || section.camera_hal_perspective || section.why_it_matters),
+    field_scenario: checkpoints.join(' ') || text(section.camera_hal_checks || section.action_items),
+    not_to_overclaim: limitations.join(' ') || 'source가 직접 말하지 않는 HAL runtime, driver branch, vendor tag, pipeline 영향으로 확대하지 않습니다.',
+    editor_take: text(section.team_summary || publicArticle.camera_hal_takeaway || `${headline}은 source 범위 안에서만 확인합니다.`)
+  };
+}
+
+function completeStoryPublicArticle(section = {}) {
+  const publicArticle = publicArticleForSection(section);
+  const headline = storyHeadlineFromSection(section, publicArticle);
+  publicArticle.headline = headline;
+  return {
+    ...publicArticle,
+    headline,
+    story_contract_version: STORY_CONTRACT_VERSION,
+    source_subtitle: text(publicArticle.source_subtitle) || sourceSubtitleFromSection(section, publicArticle),
+    editorial_story: {
+      ...buildStoryFromPublicArticle(section, publicArticle),
+      ...(publicArticle.editorial_story && typeof publicArticle.editorial_story === 'object'
+        ? Object.fromEntries(Object.entries(publicArticle.editorial_story).map(([key, value]) => [key, text(value)]))
+        : {})
+    }
+  };
+}
+
+function deterministicallyRepairEditorSchema(value, options = {}) {
   const repaired = cloneJson(value);
   let changed = false;
   const reasonCodes = [];
+  if (options.requireStoryContract === true) {
+    if (repaired.public_contract_version !== STORY_PUBLIC_CONTRACT_VERSION) {
+      repaired.public_contract_version = STORY_PUBLIC_CONTRACT_VERSION;
+      changed = true;
+    }
+    const generationContractVersion = Number(repaired.generation_contract_version);
+    if (
+      !Number.isFinite(generationContractVersion) ||
+      generationContractVersion < GENERATION_CONTRACT_VERSION
+    ) {
+      repaired.generation_contract_version = GENERATION_CONTRACT_VERSION;
+      changed = true;
+    }
+  }
   for (const section of ensureArray(repaired?.sections)) {
+    if (options.requireStoryContract === true) {
+      section.public_article = completeStoryPublicArticle(section);
+      changed = true;
+    }
     const normalized = normalizeArticleSections(section);
     if (!(normalized.diagnostics.article_sections_present && normalized.diagnostics.complete)) {
       const candidate = buildArticleSectionsFromLegacyFields(section);
@@ -428,15 +521,18 @@ function validateArticleSectionContract(value) {
   }
 }
 
-function validatePublicArticleContract(value) {
+function validatePublicArticleContract(value, options = {}) {
   const issues = [];
   ensureArray(value.sections).forEach((section, index) => {
-    issues.push(...validatePublicArticle(section, index));
+    issues.push(...validatePublicArticle(section, index, {
+      issue: value,
+      requireStoryContract: options.requireStoryContract === true
+    }));
   });
   if (issues.length > 0) {
     throw semanticError('Editor output failed public article contract validation.', {
       field: 'sections.public_article',
-      expectedKeys: PUBLIC_ARTICLE_REQUIRED_KEYS,
+      expectedKeys: options.requireStoryContract === true ? PUBLIC_ARTICLE_STORY_REQUIRED_KEYS : PUBLIC_ARTICLE_REQUIRED_KEYS,
       actualCount: issues.length,
       sectionCount: ensureArray(value.sections).length,
       issues
@@ -774,7 +870,9 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateSectionCount(value);
 
   value.sections = value.sections.map((section, index) => normalizeSection(section, index, reporter));
-  validatePublicArticleContract(value);
+  validatePublicArticleContract(value, {
+    requireStoryContract: options.requireStoryContract === true
+  });
   validateArticleSectionContract(value);
   validateHalSignalCapsules(value);
   validateFieldHygiene(value);
@@ -897,13 +995,15 @@ async function repairEditorOutputContract({
   newsroomDir,
   normalizeSection,
   strictClaims = false,
+  requireStoryContract = false,
   repairFn
 }) {
   const invalidEditor = cloneJson(value);
   const validate = candidate => validateEditorOutputContract(candidate, date, {
     reporter,
     normalizeSection,
-    strictClaims
+    strictClaims,
+    requireStoryContract
   });
 
   try {
@@ -919,8 +1019,8 @@ async function repairEditorOutputContract({
     const repairField = error.details?.field || error.field || '';
     let deterministicRepair = null;
     let deterministicRepairFailureReasonCodes = [];
-    if (repairField === 'sections.article_sections' || repairField === 'sections.hal_signal_capsule') {
-      deterministicRepair = deterministicallyRepairEditorSchema(invalidEditor);
+    if (repairField === 'sections.article_sections' || repairField === 'sections.hal_signal_capsule' || repairField === 'sections.public_article') {
+      deterministicRepair = deterministicallyRepairEditorSchema(invalidEditor, { requireStoryContract });
       deterministicRepairFailureReasonCodes = ensureArray(deterministicRepair?.reason_codes);
       if (deterministicRepairFailureReasonCodes.length > 0) {
         error.deterministic_repair_failure_reason_codes = deterministicRepairFailureReasonCodes;

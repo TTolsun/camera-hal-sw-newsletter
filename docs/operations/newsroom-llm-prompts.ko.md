@@ -257,4 +257,4 @@ Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
 출력/schema: `editorSchema` 또는 `editorCompletionSchema` 내부 `public_article`
 
-주요 guardrail: `public_article`에는 `headline`, `lead`, `body_paragraphs`, `camera_hal_takeaway`, `reader_checkpoints`, `source_links`를 포함합니다. `article_sections`와 `hal_signal_capsule`은 reader-facing prose로 render하지 않습니다. Local path, `.tmp` path, GitHub Actions artifact URL, editorial-only source role을 public source link로 쓰지 않습니다.
+주요 guardrail: story v1 output은 top-level `public_contract_version="story-v1"`, `generation_contract_version=1`와 article-level `public_article.story_contract_version=1`을 포함합니다. `public_article`에는 `headline`, `source_subtitle`, `lead`, `body_paragraphs`, `camera_hal_takeaway`, `reader_checkpoints`, `editorial_story`, `source_links`를 포함하고, `decision_metadata`는 LLM이 쓰지 않으며 deterministic builder가 생성하거나 overwrite합니다. `editorial_story.reader_scenario`는 가정형 현업 장면으로 쓰고, `what_happened`에는 source-confirmed fact만 둡니다. `article_sections`와 `hal_signal_capsule`은 reader-facing prose로 render하지 않습니다. Local path, `.tmp` path, GitHub Actions artifact URL, editorial-only source role을 public source link로 쓰지 않습니다.

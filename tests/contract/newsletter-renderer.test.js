@@ -68,6 +68,37 @@ function issue(overrides = {}) {
   };
 }
 
+function storyIssue() {
+  const base = issue();
+  return {
+    ...base,
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1,
+    sections: base.sections.map(section => ({
+      ...section,
+      public_article: {
+        ...section.public_article,
+        story_contract_version: 1,
+        source_subtitle: 'Android Developers · CameraX release note',
+        editorial_story: {
+          reader_scenario: 'CameraX preview 회귀를 triage하면서 app/framework 변경이 HAL 검증 범위에 들어오는지 확인해야 하는 상황을 가정합니다.',
+          what_happened: 'Android Developers가 CameraX 변경점을 공개했습니다.',
+          why_it_matters: 'Camera HAL 독자는 이 항목을 preview/capture regression 범위 지정에 참고할 수 있습니다.',
+          field_scenario: 'Camera ITS와 preview latency log를 비교하는 리뷰 흐름에 연결합니다.',
+          not_to_overclaim: 'source가 직접 말하지 않는 HAL runtime 변경으로 확대하지 않습니다.',
+          editor_take: '검증 범위는 app/framework 관찰 항목으로 제한하는 편이 안전합니다.'
+        },
+        decision_metadata: {
+          impact: 'Medium',
+          scope: ['Framework'],
+          action: ['Watch', 'Test'],
+          overclaim_risk: 'Medium'
+        }
+      }
+    }))
+  };
+}
+
 function textFromHtml(html) {
   return html
     .replace(/<[^>]*>/g, ' ')
@@ -184,4 +215,27 @@ test('newsletter renderer sanitizes legacy sections through compatibility projec
   assert.doesNotMatch(markdown, /quality gate/);
   assert.doesNotMatch(markdown, /candidate/);
   assert.doesNotMatch(markdown, /Publication 전에 source URL/);
+});
+
+test('newsletter renderer renders story v1 labels without raw story keys', () => {
+  const markdown = buildMarkdown(storyIssue());
+  const html = buildHtml(storyIssue());
+
+  for (const label of ['현업 장면', '확인된 변화', '왜 봐야 하나', '디버깅/리뷰 시나리오', '편집자 판단', '영향도', '범위', '권장 행동', '과장 위험']) {
+    assert.match(markdown, new RegExp(label));
+    assert.match(html, new RegExp(label));
+  }
+  for (const leaked of [
+    /story_contract_version/,
+    /source_subtitle/,
+    /source_links/,
+    /decision_metadata/,
+    /editorial_story/,
+    /reader_scenario/,
+    /what_happened/,
+    /not_to_overclaim/
+  ]) {
+    assert.doesNotMatch(markdown, leaked);
+    assert.doesNotMatch(html, leaked);
+  }
 });

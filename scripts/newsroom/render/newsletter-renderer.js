@@ -224,7 +224,7 @@ function articleTagsHtml(section, headingCategory) {
 function normalizedSections(issue) {
   const usedAnchors = new Set();
   return ensureArray(issue.sections).map((section, index) => {
-    const publicArticle = publicArticleForSection(section);
+    const publicArticle = publicArticleForSection(section, { issue });
     const category = publicArticle.headline || section.headline || section.category || `Main Article ${index + 1}`;
     return {
       heading: `## ${index + 2}. ${category}`,
@@ -269,6 +269,59 @@ function bodyParagraphsForRender(publicArticle) {
     .filter(paragraph => !duplicatesPerspectiveParagraph(paragraph, perspective));
 }
 
+function isStoryArticle(publicArticle = {}) {
+  return Number(publicArticle.story_contract_version) >= 1 &&
+    publicArticle.editorial_story &&
+    typeof publicArticle.editorial_story === 'object';
+}
+
+const DECISION_LABELS_KO = Object.freeze({
+  impact: '영향도',
+  scope: '범위',
+  action: '권장 행동',
+  overclaim_risk: '과장 위험'
+});
+
+const DECISION_VALUES_KO = Object.freeze({
+  Low: '낮음',
+  Medium: '보통',
+  High: '높음',
+  Ignore: '무시',
+  Watch: '주시',
+  Test: '테스트',
+  Adopt: '도입 검토'
+});
+
+function renderDecisionValue(value) {
+  if (Array.isArray(value)) return value.map(renderDecisionValue).filter(Boolean).join(' / ');
+  return DECISION_VALUES_KO[value] || String(value || '').trim();
+}
+
+function decisionMetadataLine(metadata = {}) {
+  const parts = [
+    ['impact', metadata.impact],
+    ['scope', metadata.scope],
+    ['action', metadata.action],
+    ['overclaim_risk', metadata.overclaim_risk]
+  ]
+    .map(([key, value]) => {
+      const rendered = renderDecisionValue(value);
+      return rendered ? `${DECISION_LABELS_KO[key]}: ${rendered}` : '';
+    })
+    .filter(Boolean);
+  return parts.join(' · ');
+}
+
+function storyFieldMarkdown(label, value) {
+  if (!value) return '';
+  return `### ${label}\n\n${value}\n`;
+}
+
+function storyFieldHtml(label, value, className) {
+  if (!value) return '';
+  return `<div class="article-block story-block ${escapeHtml(className)}"><strong class="article-block-title">${escapeHtml(label)}</strong>${paragraphHtml(value)}</div>`;
+}
+
 function articleSectionContractRows(issue, qualityReport = null) {
   return buildArticleSectionContractRows(ensureArray(issue?.sections), {
     articleResults: ensureArray(qualityReport?.article_results)
@@ -286,9 +339,39 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
 }
 
 function publicArticleMarkdown(issue, heading, section) {
-  const publicArticle = publicArticleForSection(section);
+  const publicArticle = publicArticleForSection(section, { issue });
   const perspectiveLabel = articlePerspectiveLabel(issue, section);
   const bodyParagraphs = bodyParagraphsForRender(publicArticle);
+  if (isStoryArticle(publicArticle)) {
+    const story = publicArticle.editorial_story || {};
+    const metadata = decisionMetadataLine(publicArticle.decision_metadata);
+    return `${heading}
+
+${articleImageMarkdown(section, publicArticle)}
+
+${publicArticle.source_subtitle ? `_${publicArticle.source_subtitle}_\n\n` : ''}${metadata ? `> ${metadata}\n\n` : ''}${publicArticle.lead}
+
+${storyFieldMarkdown('현업 장면', story.reader_scenario)}
+${storyFieldMarkdown('확인된 변화', story.what_happened)}
+${storyFieldMarkdown('왜 봐야 하나', story.why_it_matters)}
+${storyFieldMarkdown('디버깅/리뷰 시나리오', story.field_scenario)}
+${bodyParagraphs.join('\n\n')}
+
+**${perspectiveLabel}**
+
+${publicArticle.camera_hal_takeaway}
+
+### 확인할 점
+
+${bulletsMarkdown(publicArticle.reader_checkpoints)}
+
+${storyFieldMarkdown('편집자 판단', story.editor_take)}
+${storyFieldMarkdown('과장 금지', story.not_to_overclaim)}
+**출처**
+
+${sourceListMarkdown(publicArticle.source_links)}
+`;
+  }
   return `${heading}
 
 ${articleImageMarkdown(section, publicArticle)}
@@ -331,9 +414,34 @@ ${sourceListMarkdown(issue.references)}
 }
 
 function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, section) {
-  const publicArticle = publicArticleForSection(section);
+  const publicArticle = publicArticleForSection(section, { issue });
   const perspectiveLabel = articlePerspectiveLabel(issue, section);
   const bodyParagraphs = bodyParagraphsForRender(publicArticle);
+  if (isStoryArticle(publicArticle)) {
+    const story = publicArticle.editorial_story || {};
+    const metadata = decisionMetadataLine(publicArticle.decision_metadata);
+    return `      <section class="section" id="${escapeHtml(anchorId)}">
+        <h2>${escapeHtml(htmlHeading)}</h2>
+        <div class="card issue-section article-card story-article ${resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image'} ${escapeHtml(className)}">
+          ${articleMediaHtml(section, publicArticle)}
+          ${articleTagsHtml(section, headingCategory)}
+          <h3>${escapeHtml(publicArticle.headline)}</h3>
+          ${publicArticle.source_subtitle ? `<p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>` : ''}
+          ${metadata ? `<p class="article-decision-metadata">${escapeHtml(metadata)}</p>` : ''}
+          <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
+          ${storyFieldHtml('현업 장면', story.reader_scenario, 'reader-scenario')}
+          ${storyFieldHtml('확인된 변화', story.what_happened, 'what-happened')}
+          ${storyFieldHtml('왜 봐야 하나', story.why_it_matters, 'why-it-matters')}
+          ${storyFieldHtml('디버깅/리뷰 시나리오', story.field_scenario, 'field-scenario')}
+          ${bodyParagraphs.map(paragraphHtml).join('\n          ')}
+          <div class="article-block"><strong class="article-block-title">${escapeHtml(perspectiveLabel)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul>${bulletsHtml(publicArticle.reader_checkpoints)}</ul></div>
+          ${storyFieldHtml('편집자 판단', story.editor_take, 'editor-take')}
+          ${storyFieldHtml('과장 금지', story.not_to_overclaim, 'not-to-overclaim')}
+          <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
+        </div>
+      </section>`;
+  }
   return `      <section class="section" id="${escapeHtml(anchorId)}">
         <h2>${escapeHtml(htmlHeading)}</h2>
         <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image'} ${escapeHtml(className)}">

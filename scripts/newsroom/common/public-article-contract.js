@@ -1,4 +1,4 @@
-const PUBLIC_ARTICLE_REQUIRED_KEYS = Object.freeze([
+const PUBLIC_ARTICLE_BASE_REQUIRED_KEYS = Object.freeze([
   'headline',
   'lead',
   'body_paragraphs',
@@ -6,6 +6,46 @@ const PUBLIC_ARTICLE_REQUIRED_KEYS = Object.freeze([
   'reader_checkpoints',
   'source_links'
 ]);
+
+const STORY_CONTRACT_VERSION = 1;
+const STORY_PUBLIC_CONTRACT_VERSION = 'story-v1';
+const GENERATION_CONTRACT_VERSION = 1;
+
+const PUBLIC_ARTICLE_STORY_KEYS = Object.freeze([
+  'story_contract_version',
+  'source_subtitle',
+  'editorial_story',
+  'decision_metadata'
+]);
+
+const PUBLIC_ARTICLE_REQUIRED_KEYS = PUBLIC_ARTICLE_BASE_REQUIRED_KEYS;
+
+const PUBLIC_ARTICLE_STORY_REQUIRED_KEYS = Object.freeze([
+  ...PUBLIC_ARTICLE_BASE_REQUIRED_KEYS,
+  'story_contract_version',
+  'source_subtitle',
+  'editorial_story',
+  'decision_metadata'
+]);
+
+const PUBLIC_ARTICLE_ALLOWED_KEYS = Object.freeze([
+  ...PUBLIC_ARTICLE_BASE_REQUIRED_KEYS,
+  ...PUBLIC_ARTICLE_STORY_KEYS
+]);
+
+const EDITORIAL_STORY_KEYS = Object.freeze([
+  'reader_scenario',
+  'what_happened',
+  'why_it_matters',
+  'field_scenario',
+  'not_to_overclaim',
+  'editor_take'
+]);
+
+const DECISION_IMPACT_VALUES = Object.freeze(['Low', 'Medium', 'High']);
+const DECISION_SCOPE_VALUES = Object.freeze(['HAL', 'Driver', 'Sensor', 'Tooling', 'AI', 'Framework', 'SoC']);
+const DECISION_ACTION_VALUES = Object.freeze(['Ignore', 'Watch', 'Test', 'Adopt']);
+const DECISION_RISK_VALUES = Object.freeze(['Low', 'Medium', 'High']);
 
 const PUBLIC_SOURCE_LINK_ALLOWED_KEYS = Object.freeze([
   'title',
@@ -80,6 +120,17 @@ function normalizePublicSourceRole(value) {
 }
 
 const HARD_PUBLIC_IDENTIFIERS = Object.freeze([
+  'story_contract_version',
+  'source_subtitle',
+  'source_links',
+  'decision_metadata',
+  'editorial_story',
+  'reader_scenario',
+  'what_happened',
+  'why_it_matters',
+  'field_scenario',
+  'not_to_overclaim',
+  'editor_take',
   'source_gap_risk',
   'finalSelectionEligibility',
   'candidate_pool_preflight',
@@ -340,6 +391,50 @@ function isPlainObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+function contractVersion(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function hasOwn(value, key) {
+  return Object.prototype.hasOwnProperty.call(value || {}, key);
+}
+
+function storyContractMarkers(issue = {}, section = {}, options = {}) {
+  const article = isPlainObject(section.public_article) ? section.public_article : {};
+  const hasIssueStoryMarker = issue.public_contract_version === STORY_PUBLIC_CONTRACT_VERSION;
+  const hasGenerationMarker = contractVersion(issue.generation_contract_version) >= GENERATION_CONTRACT_VERSION;
+  const hasSectionStoryMarker = contractVersion(article.story_contract_version) >= STORY_CONTRACT_VERSION;
+  const hasStoryField = PUBLIC_ARTICLE_STORY_KEYS.some(key => hasOwn(article, key));
+  const markerCount = [
+    hasIssueStoryMarker,
+    hasGenerationMarker,
+    hasSectionStoryMarker
+  ].filter(Boolean).length;
+  const complete = markerCount === 3;
+  const requiredByCaller = options.requireStoryContract === true;
+  return {
+    hasIssueStoryMarker,
+    hasGenerationMarker,
+    hasSectionStoryMarker,
+    hasStoryField,
+    markerCount,
+    complete,
+    required: complete || requiredByCaller,
+    mismatch: (markerCount > 0 && markerCount < 3) ||
+      (markerCount === 0 && hasStoryField) ||
+      (requiredByCaller && !complete)
+  };
+}
+
+function requiresStoryContract(issue = {}, section = {}, options = {}) {
+  return storyContractMarkers(issue, section, options).required;
+}
+
+function detectStoryContractMismatch(issue = {}, section = {}, options = {}) {
+  return storyContractMarkers(issue, section, options).mismatch;
+}
+
 function publicUrlError(value) {
   const raw = compactText(value);
   if (!raw) return 'missing_url';
@@ -500,6 +595,224 @@ function sectionBucket(section = {}) {
   return compactText(section.relevance_bucket || section.bucket || section.impact_claim_level || section.category);
 }
 
+function combinedSectionText(section = {}, issue = {}) {
+  return compactText([
+    issue.publication_mode,
+    issue.public_contract_version,
+    section.relevance_bucket,
+    section.impact_claim_level,
+    section.actionability_level,
+    section.effective_actionability_level,
+    section.signal_quality_status,
+    section.article_type,
+    section.category,
+    section.headline,
+    section.source_quality_status,
+    section.finalSelectionEligibility,
+    section.public_article?.editorial_story,
+    section.public_article?.headline,
+    section.public_article?.lead,
+    section.public_article?.body_paragraphs,
+    section.public_article?.camera_hal_takeaway,
+    section.public_article?.reader_checkpoints
+  ]);
+}
+
+function hasSourceGapRisk(section = {}, issue = {}) {
+  return section.source_gap_risk === true ||
+    issue.source_gap_risk === true ||
+    /source_gap_risk\s*[:=]\s*true/i.test(combinedSectionText(section, issue));
+}
+
+function hasForbiddenOrWatchlistPromotion(section = {}, issue = {}) {
+  const combined = combinedSectionText(section, issue);
+  return section.reference_only === true ||
+    section.briefing_only === true ||
+    section.main_eligible === false ||
+    /finalSelectionEligibility\s*[:=]\s*(?:watchlist|exclude|reference_only)/i.test(combined) ||
+    /generic_tech_watchlist|forbidden|watchlist|exclude/i.test(sectionBucket(section));
+}
+
+function hasMissingSourceEligibility(section = {}) {
+  const quality = compactText(section.source_quality_status || section.source_url_quality);
+  const allowed = section.main_article_source_allowed;
+  return allowed === false || /blocked|unknown/i.test(quality);
+}
+
+function storyText(section = {}, key = '') {
+  return compactText(section.public_article?.editorial_story?.[key]);
+}
+
+function hasDirectHalOverclaimFinding(section = {}, issue = {}) {
+  const publicText = combinedSectionText(section, issue);
+  const directWords = /직접\s*HAL|direct\s+HAL|HAL\s+(?:API|runtime|contract|buffer|stream|metadata)|request\/result|vendor\s+tag/i;
+  const limitationWords = /직접\s*(?:말하지|언급하지|근거가 없|해석하지|확대하지)|do not|not claim|not overstate|범위.*제한|source.*범위/i;
+  if (!directWords.test(publicText)) return false;
+  if (limitationWords.test(publicText)) return false;
+  const impact = compactText(section.impact_claim_level);
+  const axes = ensureArray(section.hal_impact_axes || section.hal_signal_capsule?.impact_axes).map(compactText);
+  const directImpact = /direct_hal_change|camera_stack_direct/i.test(impact) ||
+    axes.some(axis => /direct_hal|framework_hal_contract|stream_buffer_metadata/i.test(axis));
+  return !directImpact;
+}
+
+function hasDoNotOverstateBoundary(section = {}) {
+  return ensureArray(section.do_not_overstate).length > 0 ||
+    ensureArray(section.hal_signal_capsule?.do_not_overstate).length > 0 ||
+    Boolean(storyText(section, 'not_to_overclaim'));
+}
+
+function isFallbackOnly(section = {}, issue = {}) {
+  return issue.fallback_only === true ||
+    section.fallback_only === true ||
+    issue.publication_mode === 'fallback_public' ||
+    /cpp_ai_tooling_fallback|fallback|tooling/i.test(sectionBucket(section));
+}
+
+function isDirectHalSourceConfirmed(section = {}) {
+  const impact = compactText(section.impact_claim_level);
+  const bucket = sectionBucket(section);
+  const axes = ensureArray(section.hal_impact_axes || section.hal_signal_capsule?.impact_axes).map(compactText);
+  const directImpact = /direct_hal_change|camera_stack_direct/i.test(impact) ||
+    /direct_aosp_camera|camera_driver_image_pipeline/i.test(bucket) ||
+    axes.some(axis => /direct_hal|framework_hal_contract|stream_buffer_metadata|driver_image_pipeline/i.test(axis));
+  return directImpact && !hasSourceGapRisk(section) && !hasForbiddenOrWatchlistPromotion(section);
+}
+
+function deriveOverclaimRisk(section = {}, issue = {}) {
+  // High-risk blockers must be evaluated before direct-HAL positive signals.
+  if (hasSourceGapRisk(section, issue)) return 'High';
+  if (hasForbiddenOrWatchlistPromotion(section, issue)) return 'High';
+  if (hasMissingSourceEligibility(section, issue)) return 'High';
+  if (hasDirectHalOverclaimFinding(section, issue)) return 'High';
+  if (hasDoNotOverstateBoundary(section, issue)) return 'Medium';
+  if (isFallbackOnly(section, issue)) return 'Medium';
+  if (isDirectHalSourceConfirmed(section, issue)) return 'Low';
+  return 'Medium';
+}
+
+function normalizeEnumArray(value, allowed, fallback = []) {
+  const values = Array.isArray(value) ? value : [value];
+  const seen = new Set();
+  const output = [];
+  for (const item of values) {
+    const normalized = compactText(item);
+    const canonical = allowed.find(value => value.toLowerCase() === normalized.toLowerCase());
+    if (!canonical || seen.has(canonical)) continue;
+    seen.add(canonical);
+    output.push(canonical);
+  }
+  return output.length > 0 ? output : fallback;
+}
+
+function deriveReaderImpact(section = {}, issue = {}) {
+  if (hasSourceGapRisk(section, issue) || hasForbiddenOrWatchlistPromotion(section, issue)) return 'Low';
+  if (isDirectHalSourceConfirmed(section, issue) || /strong_signal|owner_metric_log/i.test(combinedSectionText(section, issue))) return 'High';
+  if (/concrete_check|measurable_test|framework|driver|sensor|tooling/i.test(combinedSectionText(section, issue))) return 'Medium';
+  return 'Low';
+}
+
+function addScope(scopes, value) {
+  if (DECISION_SCOPE_VALUES.includes(value) && !scopes.includes(value)) scopes.push(value);
+}
+
+function structuredScopeText(section = {}) {
+  return compactText([
+    section.relevance_bucket,
+    section.impact_claim_level,
+    section.actionability_level,
+    section.effective_actionability_level,
+    section.signal_quality_status,
+    section.article_type,
+    section.category,
+    section.headline,
+    section.api_or_component,
+    section.apiOrComponent,
+    section.component,
+    section.soc_signal_type,
+    section.tooling_workflow_type,
+    section.hal_impact_axes,
+    section.hal_signal_capsule?.impact_axes,
+    section.source_candidate_url
+  ]);
+}
+
+function deriveReaderScope(section = {}, issue = {}) {
+  const scopes = [];
+  const structured = structuredScopeText(section);
+  const bucket = sectionBucket(section);
+  const axes = ensureArray(section.hal_impact_axes || section.hal_signal_capsule?.impact_axes).map(compactText);
+  const directHal = isDirectHalSourceConfirmed(section, issue);
+  if (directHal) addScope(scopes, 'HAL');
+  if (/driver|v4l2|libcamera|image_pipeline/i.test(structured)) addScope(scopes, 'Driver');
+  if (/sensor/i.test(structured)) addScope(scopes, 'Sensor');
+  if (/tooling|c\+\+|clang|llvm|gcc|build|debug/i.test(structured)) addScope(scopes, 'Tooling');
+  if (/\bAI\b|ai_studio|agent|LLM|inference|model/i.test(structured)) addScope(scopes, 'AI');
+  if (/camerax|camera2|framework|android_platform|android_camera_api|compose|navigation/i.test(structured)) addScope(scopes, 'Framework');
+  if (/soc|isp|npu|cpu|gpu|thermal|power|platform/i.test(structured)) addScope(scopes, 'SoC');
+  if (scopes.length === 0) addScope(scopes, /tooling|cpp_ai/i.test(bucket) ? 'Tooling' : 'Framework');
+  return scopes;
+}
+
+function actionRank(action) {
+  return DECISION_ACTION_VALUES.indexOf(action);
+}
+
+function normalizeDecisionActions(actions = [], section = {}, issue = {}, overclaimRisk = 'Medium') {
+  const normalized = normalizeEnumArray(actions, DECISION_ACTION_VALUES, ['Watch']);
+  let output = normalized;
+  if (normalized.includes('Ignore')) {
+    output = ['Ignore'];
+  }
+  if (hasSourceGapRisk(section, issue) || overclaimRisk === 'High' || isFallbackOnly(section, issue)) {
+    output = output.filter(action => action !== 'Adopt');
+  }
+  if (output.includes('Adopt') && !output.includes('Test')) {
+    output = ['Test', ...output];
+  }
+  output = [...new Set(output)].sort((left, right) => actionRank(left) - actionRank(right));
+  return output.length > 0 ? output : ['Watch'];
+}
+
+function deriveReaderAction(section = {}, issue = {}, overclaimRisk = 'Medium') {
+  if (hasSourceGapRisk(section, issue) || hasForbiddenOrWatchlistPromotion(section, issue)) return ['Watch'];
+  const combined = combinedSectionText(section, issue);
+  let actions = ['Watch'];
+  if (/test|measure|metric|Camera ITS|CTS|VTS|검증|테스트|측정|비교|점검/i.test(combined)) {
+    actions.push('Test');
+  }
+  if (
+    overclaimRisk !== 'High' &&
+    !isFallbackOnly(section, issue) &&
+    /owner_metric_log|measurable_test|direct_hal_change|camera_stack_direct/i.test(combined)
+  ) {
+    actions.push('Adopt');
+  }
+  return normalizeDecisionActions(actions, section, issue, overclaimRisk);
+}
+
+function deriveDecisionMetadata(section = {}, issue = {}) {
+  const overclaimRisk = deriveOverclaimRisk(section, issue);
+  return {
+    impact: deriveReaderImpact(section, issue),
+    scope: deriveReaderScope(section, issue),
+    action: deriveReaderAction(section, issue, overclaimRisk),
+    overclaim_risk: overclaimRisk
+  };
+}
+
+function normalizeDecisionMetadata(value = {}, section = {}, issue = {}) {
+  return deriveDecisionMetadata(section, issue);
+}
+
+function normalizeEditorialStory(value = {}) {
+  const story = isPlainObject(value) ? value : {};
+  return EDITORIAL_STORY_KEYS.reduce((output, key) => {
+    output[key] = compactText(story[key]);
+    return output;
+  }, {});
+}
+
 function publicComponentText(section = {}) {
   return publicSafeText(
     section.api_or_component ||
@@ -596,8 +909,9 @@ function fallbackCheckpoints(section = {}) {
   ].slice(0, 3);
 }
 
-function publicArticleForSection(section = {}, { allowLegacyFallback = true } = {}) {
+function publicArticleForSection(section = {}, { allowLegacyFallback = true, issue = {}, requireStoryContract = false } = {}) {
   const raw = isPlainObject(section.public_article) ? section.public_article : {};
+  const storyState = storyContractMarkers(issue, section, { requireStoryContract });
   const sourceLinks = ensureArray(raw.source_links)
     .map(normalizeSourceLink)
     .filter(Boolean);
@@ -609,6 +923,13 @@ function publicArticleForSection(section = {}, { allowLegacyFallback = true } = 
     reader_checkpoints: normalizeStringArray(raw.reader_checkpoints),
     source_links: sourceLinks
   };
+  const storyEnabled = storyState.required || storyState.hasStoryField;
+  if (storyEnabled) {
+    normalized.story_contract_version = STORY_CONTRACT_VERSION;
+    normalized.source_subtitle = compactText(raw.source_subtitle);
+    normalized.editorial_story = normalizeEditorialStory(raw.editorial_story);
+    normalized.decision_metadata = normalizeDecisionMetadata(raw.decision_metadata, section, issue);
+  }
 
   if (!allowLegacyFallback) return normalized;
 
@@ -620,6 +941,10 @@ function publicArticleForSection(section = {}, { allowLegacyFallback = true } = 
   }
   if (normalized.reader_checkpoints.length === 0) normalized.reader_checkpoints = fallbackCheckpoints(section);
   if (normalized.source_links.length === 0) normalized.source_links = sourceLinksFromSection(section);
+  if (storyEnabled && !normalized.source_subtitle) {
+    const firstSource = normalized.source_links[0] || ensureArray(section.sources)[0] || {};
+    normalized.source_subtitle = publicSafeText(firstSource.title || firstSource.publisher || section.category || normalized.headline);
+  }
   return normalized;
 }
 
@@ -935,7 +1260,51 @@ function publicSourceLinkMergeIssues(section = {}) {
   return issues;
 }
 
-function validatePublicArticle(section = {}, index = 0) {
+function publicArticleAllowedKeysFor(storyState) {
+  return storyState.required || storyState.hasStoryField || storyState.markerCount > 0
+    ? PUBLIC_ARTICLE_ALLOWED_KEYS
+    : PUBLIC_ARTICLE_BASE_REQUIRED_KEYS;
+}
+
+function validateDecisionMetadataShape(metadata = {}, index, headline) {
+  const issues = [];
+  if (!isPlainObject(metadata)) {
+    return [{ index: index + 1, headline, type: 'invalid_decision_metadata', reason: 'not_object' }];
+  }
+  if (!DECISION_IMPACT_VALUES.includes(metadata.impact)) {
+    issues.push({ index: index + 1, headline, type: 'invalid_decision_metadata', key: 'impact', allowed: DECISION_IMPACT_VALUES });
+  }
+  if (!DECISION_RISK_VALUES.includes(metadata.overclaim_risk)) {
+    issues.push({ index: index + 1, headline, type: 'invalid_decision_metadata', key: 'overclaim_risk', allowed: DECISION_RISK_VALUES });
+  }
+  const scope = ensureArray(metadata.scope);
+  if (scope.length === 0 || scope.some(item => !DECISION_SCOPE_VALUES.includes(item))) {
+    issues.push({ index: index + 1, headline, type: 'invalid_decision_metadata', key: 'scope', allowed: DECISION_SCOPE_VALUES });
+  }
+  const action = ensureArray(metadata.action);
+  if (action.length === 0 || action.some(item => !DECISION_ACTION_VALUES.includes(item))) {
+    issues.push({ index: index + 1, headline, type: 'invalid_decision_metadata', key: 'action', allowed: DECISION_ACTION_VALUES });
+  }
+  if (action.includes('Ignore') && action.length > 1) {
+    issues.push({ index: index + 1, headline, type: 'invalid_decision_metadata', key: 'action', reason: 'ignore_is_exclusive' });
+  }
+  if (action.includes('Adopt') && !action.includes('Test')) {
+    issues.push({ index: index + 1, headline, type: 'invalid_decision_metadata', key: 'action', reason: 'adopt_requires_test' });
+  }
+  if (metadata.overclaim_risk === 'High' && action.includes('Adopt')) {
+    issues.push({ index: index + 1, headline, type: 'invalid_decision_metadata', key: 'action', reason: 'adopt_blocked_by_high_overclaim_risk' });
+  }
+  return issues;
+}
+
+function scenarioLooksFactual(value) {
+  const normalized = compactText(value);
+  if (!normalized) return false;
+  if (/가정|상황|할 수 있|가능성|확인해야|검토해야|점검할/i.test(normalized)) return false;
+  return /발생했|발생했다|깨졌|고장|누수|drop|드롭|crash|regression|회귀가 발생|문제가 발생/i.test(normalized);
+}
+
+function validatePublicArticle(section = {}, index = 0, options = {}) {
   const issues = [];
   const headline = compactText(section.headline || section.category || `article ${index + 1}`);
   if (!isPlainObject(section.public_article)) {
@@ -943,15 +1312,36 @@ function validatePublicArticle(section = {}, index = 0) {
       index: index + 1,
       headline,
       type: 'missing_public_article',
-      keys: PUBLIC_ARTICLE_REQUIRED_KEYS
+      keys: options.requireStoryContract === true ? PUBLIC_ARTICLE_STORY_REQUIRED_KEYS : PUBLIC_ARTICLE_REQUIRED_KEYS
     }];
   }
   const raw = section.public_article;
-  const unexpected = Object.keys(raw).filter(key => !PUBLIC_ARTICLE_REQUIRED_KEYS.includes(key));
+  const issue = options.issue || {};
+  const storyState = storyContractMarkers(issue, section, {
+    requireStoryContract: options.requireStoryContract === true
+  });
+  if (storyState.mismatch) {
+    issues.push({
+      index: index + 1,
+      headline,
+      type: 'story_contract_version_mismatch',
+      marker_count: storyState.markerCount,
+      has_issue_story_marker: storyState.hasIssueStoryMarker,
+      has_generation_marker: storyState.hasGenerationMarker,
+      has_section_story_marker: storyState.hasSectionStoryMarker,
+      has_story_field: storyState.hasStoryField
+    });
+  }
+  const allowedKeys = publicArticleAllowedKeysFor(storyState);
+  const unexpected = Object.keys(raw).filter(key => !allowedKeys.includes(key));
   if (unexpected.length > 0) {
     issues.push({ index: index + 1, headline, type: 'unexpected_public_article_keys', keys: unexpected });
   }
-  const normalized = publicArticleForSection(section, { allowLegacyFallback: false });
+  const normalized = publicArticleForSection(section, {
+    allowLegacyFallback: false,
+    issue,
+    requireStoryContract: storyState.required
+  });
   for (const key of ['headline', 'lead', 'camera_hal_takeaway']) {
     if (!normalized[key]) issues.push({ index: index + 1, headline, type: 'empty_public_article_field', key });
   }
@@ -965,12 +1355,42 @@ function validatePublicArticle(section = {}, index = 0) {
   if (normalized.source_links.length === 0) {
     issues.push({ index: index + 1, headline, type: 'empty_public_article_field', key: 'source_links' });
   }
+  if (storyState.required || storyState.hasStoryField) {
+    if (contractVersion(raw.story_contract_version) < STORY_CONTRACT_VERSION) {
+      issues.push({ index: index + 1, headline, type: 'missing_story_public_article_field', key: 'story_contract_version' });
+    }
+    if (!compactText(raw.source_subtitle)) {
+      issues.push({ index: index + 1, headline, type: 'missing_story_public_article_field', key: 'source_subtitle' });
+    }
+    if (!isPlainObject(raw.editorial_story)) {
+      issues.push({ index: index + 1, headline, type: 'missing_story_public_article_field', key: 'editorial_story' });
+    } else {
+      const story = normalizeEditorialStory(raw.editorial_story);
+      for (const key of EDITORIAL_STORY_KEYS) {
+        if (!story[key]) {
+          issues.push({ index: index + 1, headline, type: 'empty_editorial_story_field', key });
+        }
+      }
+      if (scenarioLooksFactual(story.reader_scenario)) {
+        issues.push({
+          index: index + 1,
+          headline,
+          type: 'reader_scenario_factual_boundary',
+          key: 'reader_scenario',
+          reason: 'reader_scenario_must_be_hypothetical'
+        });
+      }
+    }
+    issues.push(...validateDecisionMetadataShape(normalized.decision_metadata, index, headline));
+  }
   for (const [field, value] of Object.entries({
     headline: normalized.headline,
     lead: normalized.lead,
     camera_hal_takeaway: normalized.camera_hal_takeaway,
     body_paragraphs: normalized.body_paragraphs,
-    reader_checkpoints: normalized.reader_checkpoints
+    reader_checkpoints: normalized.reader_checkpoints,
+    source_subtitle: normalized.source_subtitle || '',
+    editorial_story: normalized.editorial_story || {}
   })) {
     for (const message of publicProseLeakageIssues(value, `public_article.${field}`)) {
       issues.push({ index: index + 1, headline, type: 'public_article_leakage', key: field, message });
@@ -991,15 +1411,29 @@ function validatePublicArticle(section = {}, index = 0) {
 }
 
 module.exports = {
+  DECISION_ACTION_VALUES,
+  DECISION_IMPACT_VALUES,
+  DECISION_RISK_VALUES,
+  DECISION_SCOPE_VALUES,
+  EDITORIAL_STORY_KEYS,
+  GENERATION_CONTRACT_VERSION,
   NO_IMMEDIATE_ACTION_TEXT,
+  PUBLIC_ARTICLE_ALLOWED_KEYS,
+  PUBLIC_ARTICLE_BASE_REQUIRED_KEYS,
   PUBLIC_ARTICLE_REQUIRED_KEYS,
+  PUBLIC_ARTICLE_STORY_REQUIRED_KEYS,
+  STORY_CONTRACT_VERSION,
+  STORY_PUBLIC_CONTRACT_VERSION,
   PUBLIC_SOURCE_LINK_ALLOWED_KEYS,
   PUBLIC_SOURCE_ROLES,
   allowedPublicSourceUrlKeys,
   allowedPublicSourceUrlRoleMap,
+  deriveDecisionMetadata,
+  detectStoryContractMismatch,
   isConcreteCheckpoint,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
+  requiresStoryContract,
   publicProseLeakageIssues,
   publicArticleForSection,
   publicUrlError,

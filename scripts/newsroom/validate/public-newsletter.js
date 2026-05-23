@@ -155,7 +155,7 @@ function mainArticleBlocks(markdown) {
 }
 
 function checkpointItems(articleText) {
-  const match = String(articleText || '').match(/###\s+확인할 점\s+([\s\S]*?)(?:\n\*\*(?:Sources|출처)\*\*|\n##\s+|$)/);
+  const match = String(articleText || '').match(/#{3,4}\s+확인할 점\s+([\s\S]*?)(?:\n\*\*(?:Sources|출처)\*\*|\n#{2,4}\s+|$)/);
   if (!match) return [];
   return match[1]
     .split(/\r?\n/)
@@ -330,6 +330,17 @@ function publicJsonTextValues(value, keyPath = []) {
 function validatePublicJsonText(json = '', label = 'public.json') {
   const raw = typeof json === 'string' ? json : JSON.stringify(json || {});
   const forbidden = [
+    'story_contract_version',
+    'source_subtitle',
+    'source_links',
+    'decision_metadata',
+    'editorial_story',
+    'reader_scenario',
+    'what_happened',
+    'why_it_matters',
+    'field_scenario',
+    'not_to_overclaim',
+    'editor_take',
     'processed_source_event_ids',
     'processed_evidence_ids',
     'previous_values',
