@@ -98,9 +98,23 @@ function newsletterHtml(date, {
   ].join('\n');
 }
 
-function rootIndexHtml(extra = '') {
+function rootNavHtml(navLabels = ['Latest', 'Archive', 'GitHub']) {
+  const navHrefs = ['#latest', '#archive', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
+  const navHtml = navLabels
+    .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
+    .join('');
+  return [
+    '<nav class="site-nav content-wrap" aria-label="Primary navigation">',
+    '<a class="site-brand" href="index.html">Camera HAL SW Newsletter</a>',
+    `<div class="nav-links">${navHtml}</div>`,
+    '</nav>'
+  ].join('\n');
+}
+
+function rootIndexHtml(extra = '', { navLabels = null } = {}) {
   return [
     '<!doctype html><html><body>',
+    navLabels ? rootNavHtml(navLabels) : '',
     '<div id="latest-card"></div>',
     '<div id="archive-list"></div>',
     extra,
@@ -479,6 +493,37 @@ test('strict validate-site rejects localized issue site nav labels', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ Sources \/ GitHub/);
+});
+
+test('validate-site accepts root homepage nav without Sources link', () => {
+  const root = tempRoot('validate-site-root-nav-labels-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
+    navLabels: ['Latest', 'Archive', 'GitHub']
+  }));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('validate-site rejects root homepage nav with stale Sources link', () => {
+  const root = tempRoot('validate-site-root-nav-sources-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
+    navLabels: ['Latest', 'Archive', 'Sources', 'GitHub']
+  }));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ GitHub in index\.html/);
 });
 
 test('validate-site fails fallback_public without badge or publication notice', () => {
