@@ -16,6 +16,7 @@ const {
   seedFetchReportPath,
   seedMergeReportPath
 } = require('../../scripts/newsroom/common/artifact-paths');
+const { readJsonFixture } = require('../helpers/fixture-loader');
 
 function tempRoot() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'seed-url-evidence-'));
@@ -113,6 +114,35 @@ test('seed URL safety rejects non-public URLs and private DNS resolution', async
     () => assertPublicHttpsUrl('https://[febf::1]/news', { lookupImpl: null }),
     /blocked_internal_host/
   );
+});
+
+test('private URL seed intent fixture is blocked before fetch', async () => {
+  const fixture = readJsonFixture('seed-evidence/bad/private-url-intent.json');
+  const root = tempRoot();
+  const date = fixture.collection_intent.newsletter_date;
+  const result = await runSeedEvidenceExpansion({
+    root,
+    date,
+    manualPayload: {
+      schema_version: 5,
+      date,
+      newsletter_date: date,
+      candidates: []
+    },
+    collectionIntent: {
+      payload: fixture.collection_intent
+    },
+    lookupImpl: publicLookup,
+    fetchImpl: async () => {
+      throw new Error('private fixture URL should be blocked before fetch');
+    }
+  });
+
+  assert.equal(result.stats.seed_used, true);
+  assert.equal(result.stats.seed_candidate_count, 0);
+  assert.equal(result.stats.seed_blocked_url_count, 1);
+  assert.equal(result.seedPayload.failures[0].reason, fixture.expected.reason);
+  assert.equal(readJson(seedFetchReportPath(root, date)).blocked_url_count, 1);
 });
 
 test('seed fetch follows public manual redirects and relative locations', async () => {
@@ -328,6 +358,30 @@ test('seed merge preserves blocked linked evidence diagnostics for duplicate man
   assert.equal(merged.compact_evidence.linked_context.includes(blockedFact), false);
   assert.equal(merged.compact_evidence.evidence_urls.includes(blockedUrl), false);
   assert.deepEqual(report.decisions[0].added_evidence_ids, ['seed-1-primary-01']);
+});
+
+test('seed workflow-shape fixtures cover seed-only and seed-plus-Gemini merge output', () => {
+  for (const fixturePath of [
+    'seed-evidence/workflow-shapes/seed-only-merged-candidates.json',
+    'seed-evidence/workflow-shapes/seed-plus-gemini-merged-candidates.json'
+  ]) {
+    const fixture = readJsonFixture(fixturePath);
+    const { mergedCandidates, report } = mergeSeedCandidates(
+      fixture.manual_candidates,
+      fixture.seed_candidates
+    );
+
+    assert.equal(mergedCandidates.length, fixture.expected.mergedCount, fixturePath);
+    assert.equal(report.new_seed_candidate_count, fixture.expected.newSeedCandidateCount, fixturePath);
+    assert.equal(report.enriched_duplicate_count, fixture.expected.enrichedDuplicateCount, fixturePath);
+
+    for (const candidate of mergedCandidates) {
+      assert.ok(candidate.evidence_pack_ids.length > 0, `${fixturePath} must preserve seed evidence pack ids`);
+      assert.ok(candidate.primary_evidence_ids.length > 0, `${fixturePath} must preserve primary evidence ids`);
+      const refs = candidate.seed_evidence_pack_refs || [candidate.source_extraction_ref].filter(Boolean);
+      assert.equal(refs.includes('seed-evidence-pack.json#/packs/0'), true);
+    }
+  }
 });
 
 test('seed expansion writes evidence pack, seed candidates, reports, and compact evidence', async () => {

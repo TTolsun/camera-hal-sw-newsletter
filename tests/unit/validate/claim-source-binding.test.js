@@ -7,6 +7,7 @@ const {
   stableSourceExtractionItemId,
   validateArticleClaims
 } = require('../../../scripts/newsroom/validate/claim-source-binding');
+const { readJsonFixture } = require('../../helpers/fixture-loader');
 
 function section(overrides = {}) {
   return {
@@ -530,6 +531,36 @@ test('missing seed evidence pack preserves candidate-local validation behavior',
   });
   assert.equal(result.claim_results[0].status, 'bound');
   assert.equal(result.issues.some(item => /^seed_evidence_pack_/.test(item.reason_code)), false);
+});
+
+test('missing evidence id mapping fixture remains unresolved', () => {
+  const fixture = readJsonFixture('seed-evidence/bad/missing-evidence-id-mapping.json');
+  const missingEvidenceId = fixture.section.claims[0].evidence_ids[0];
+  const result = validateArticleClaims({
+    section: section(fixture.section),
+    candidate: candidate(fixture.candidate),
+    seedEvidencePack: fixture.seed_evidence_pack,
+    strict: true
+  });
+
+  assert.equal(result.claim_results[0].status, 'needs_fix');
+  assert.equal(result.claim_results[0].invalid_evidence_ids.includes(missingEvidenceId), true);
+  assert.ok(result.claim_results[0].issues.some(item => item.reason_code === fixture.expected.reason));
+});
+
+test('keyword hint fixture cannot be used as source-backed evidence', () => {
+  const fixture = readJsonFixture('seed-evidence/bad/keyword-hint-used-as-fact.json');
+  const keywordEvidenceId = fixture.section.claims[0].evidence_ids[0];
+  const result = validateArticleClaims({
+    section: section(fixture.section),
+    candidate: candidate(fixture.candidate),
+    seedEvidencePack: fixture.seed_evidence_pack,
+    strict: true
+  });
+
+  assert.equal(result.claim_results[0].status, 'needs_fix');
+  assert.equal(result.claim_results[0].invalid_evidence_ids.includes(keywordEvidenceId), true);
+  assert.ok(result.claim_results[0].issues.some(item => item.reason_code === fixture.expected.reason));
 });
 
 test('seed pack can merge by primary_evidence_ids without pack id or ref', () => {

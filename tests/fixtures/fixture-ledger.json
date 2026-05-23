@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "entries": [
     {
       "path": "linked-evidence/camerax-release-row.html",
@@ -7,7 +7,10 @@
       "allowedUse": "linked-evidence",
       "expectedStatus": "n/a",
       "protectedPolicy": "linked evidence extraction from CameraX release rows",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "linked_evidence"
+      ]
     },
     {
       "path": "linked-evidence/github-pr-resolved.html",
@@ -15,7 +18,10 @@
       "allowedUse": "linked-evidence",
       "expectedStatus": "n/a",
       "protectedPolicy": "linked evidence resolver structured GitHub payload",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "linked_evidence"
+      ]
     },
     {
       "path": "linked-evidence/long-evidence.html",
@@ -23,7 +29,10 @@
       "allowedUse": "linked-evidence",
       "expectedStatus": "n/a",
       "protectedPolicy": "linked evidence excerpt truncation",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "linked_evidence"
+      ]
     },
     {
       "path": "linked-evidence/mixed-links.txt",
@@ -31,7 +40,10 @@
       "allowedUse": "linked-evidence",
       "expectedStatus": "n/a",
       "protectedPolicy": "linked evidence URL extraction",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "linked_evidence"
+      ]
     },
     {
       "path": "linked-evidence/rss-summary-with-anchor.xml",
@@ -39,7 +51,10 @@
       "allowedUse": "linked-evidence",
       "expectedStatus": "n/a",
       "protectedPolicy": "source-aware linked evidence baseline for RSS summary anchor preservation",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "linked_evidence"
+      ]
     },
     {
       "path": "linked-evidence/android-blog-article-links.html",
@@ -47,7 +62,10 @@
       "allowedUse": "linked-evidence",
       "expectedStatus": "n/a",
       "protectedPolicy": "source-aware linked evidence baseline for article body links before role classification",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "linked_evidence"
+      ]
     },
     {
       "path": "quality/bad/freebsd-source-label-regression.json",
@@ -55,7 +73,11 @@
       "allowedUse": "bad",
       "expectedStatus": "DEMOTE",
       "protectedPolicy": "generic IT item cannot pass as Camera HAL main article",
-      "generatedArtifact": true
+      "generatedArtifact": true,
+      "relatedRules": [
+        "quality_gate",
+        "artifact_provenance"
+      ]
     },
     {
       "path": "quality/bad/generic-ai-main-article.json",
@@ -63,7 +85,10 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "generic AI item without HAL connection cannot pass main article quality",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/bad/missing-source-url-main-article.json",
@@ -71,7 +96,10 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "main article fixtures must retain source URL evidence",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/bad/source-gap-risk-main-article.json",
@@ -79,7 +107,10 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "source_gap_risk=true cannot pass main article quality",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/bad/reference-only-promoted-main-article.json",
@@ -87,7 +118,10 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "reference-only watch pages cannot be promoted to main article PASS fixtures",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/bad/undated-evidence-main-article.json",
@@ -95,7 +129,10 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "main article fixtures must have dated source evidence",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/bad/weak-hal-actionability-main-article.json",
@@ -103,7 +140,10 @@
       "allowedUse": "bad",
       "expectedStatus": "DEMOTE",
       "protectedPolicy": "generic IT item without concrete Camera HAL actionability cannot pass as a main article",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/bad/duplicate-source-url-main-articles.json",
@@ -111,7 +151,10 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "duplicate source URLs across main articles remain quality blockers",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/bad/stale-claim-hard-failure.json",
@@ -119,7 +162,10 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "unresolved stale claim hard failures block publication quality",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/bad/unsupported-release-claim.json",
@@ -127,7 +173,10 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "unsupported release claims stay quality blockers",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/good/camerax-curated.json",
@@ -135,7 +184,10 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated CameraX quality gate PASS sample",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "quality/good/libcamera-driver-pipeline-curated.json",
@@ -143,7 +195,10 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated libcamera driver pipeline PASS sample with dated source evidence",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "quality_gate"
+      ]
     },
     {
       "path": "seed-evidence/bad/blocked-evidence-used-as-fact.json",
@@ -151,7 +206,46 @@
       "allowedUse": "bad",
       "expectedStatus": "FAIL",
       "protectedPolicy": "blocked seed evidence cannot be promoted to source-backed fact",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence",
+        "source_binding"
+      ]
+    },
+    {
+      "path": "seed-evidence/bad/private-url-intent.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "private seed URLs cannot enter seed evidence expansion",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence"
+      ]
+    },
+    {
+      "path": "seed-evidence/bad/missing-evidence-id-mapping.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "seed claims cannot invent missing evidence id mappings",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence",
+        "source_binding"
+      ]
+    },
+    {
+      "path": "seed-evidence/bad/keyword-hint-used-as-fact.json",
+      "source": "synthetic",
+      "allowedUse": "bad",
+      "expectedStatus": "FAIL",
+      "protectedPolicy": "keyword hints cannot be promoted to source-backed facts",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence",
+        "source_binding"
+      ]
     },
     {
       "path": "seed-evidence/good/valid-collection-intent.json",
@@ -159,7 +253,10 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated collection intent seed artifact shape remains non-generated",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence"
+      ]
     },
     {
       "path": "seed-evidence/good/valid-seed-candidate-compact-evidence.json",
@@ -167,7 +264,10 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated compact_evidence seed candidate remains non-generated",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence"
+      ]
     },
     {
       "path": "seed-evidence/good/valid-seed-evidence-pack.json",
@@ -175,7 +275,34 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated seed evidence pack remains non-generated and source-backed",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence"
+      ]
+    },
+    {
+      "path": "seed-evidence/workflow-shapes/seed-only-merged-candidates.json",
+      "source": "synthetic",
+      "allowedUse": "workflow-shape",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "seed-only merged candidate shape remains workflow-only and non-generated",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence",
+        "workflow_shape"
+      ]
+    },
+    {
+      "path": "seed-evidence/workflow-shapes/seed-plus-gemini-merged-candidates.json",
+      "source": "synthetic",
+      "allowedUse": "workflow-shape",
+      "expectedStatus": "PASS",
+      "protectedPolicy": "seed plus Gemini merged candidate shape preserves manual editorial fields",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "seed_evidence",
+        "workflow_shape"
+      ]
     },
     {
       "path": "selection/bad/candidate-only-without-crosscheck.json",
@@ -183,7 +310,10 @@
       "allowedUse": "bad",
       "expectedStatus": "EXCLUDE",
       "protectedPolicy": "candidate-only source requiring cross-check cannot become a final main article",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/bad/duplicate-url-main-candidates.json",
@@ -191,7 +321,10 @@
       "allowedUse": "bad",
       "expectedStatus": "EXCLUDE",
       "protectedPolicy": "duplicate candidate URLs cannot create independent final main articles",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/bad/missing-url-main-candidate.json",
@@ -199,7 +332,10 @@
       "allowedUse": "bad",
       "expectedStatus": "EXCLUDE",
       "protectedPolicy": "main candidate fixtures require source URLs",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/bad/source-gap-main-article.json",
@@ -207,7 +343,10 @@
       "allowedUse": "bad",
       "expectedStatus": "EXCLUDE",
       "protectedPolicy": "source gap candidates cannot become final main articles",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/bad/watchlist-reference-main-article.json",
@@ -215,7 +354,10 @@
       "allowedUse": "bad",
       "expectedStatus": "EXCLUDE",
       "protectedPolicy": "watchlist/reference-only candidates cannot become final main articles",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/bad/weak-hal-generic-ai-main-candidate.json",
@@ -223,7 +365,10 @@
       "allowedUse": "bad",
       "expectedStatus": "NOT_SELECTED",
       "protectedPolicy": "generic AI candidates without concrete Camera HAL connection cannot become final main articles",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/bad/undated-reference-promotion-candidate.json",
@@ -231,7 +376,10 @@
       "allowedUse": "bad",
       "expectedStatus": "EXCLUDE",
       "protectedPolicy": "undated reference/watch candidates cannot be promoted to final main articles",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/good/dated-aosp-camera-main-candidate.json",
@@ -239,7 +387,10 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated dated AOSP Camera candidate can be a final main article input",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/good/camerax-main-candidate.json",
@@ -247,7 +398,10 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated CameraX deterministic selection PASS sample",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "selection/good/libcamera-driver-pipeline-main-candidate.json",
@@ -255,7 +409,10 @@
       "allowedUse": "good",
       "expectedStatus": "PASS",
       "protectedPolicy": "curated libcamera driver pipeline candidate can be a final main article input",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "selection"
+      ]
     },
     {
       "path": "source-effectiveness/basic-source-effectiveness.json",
@@ -263,7 +420,10 @@
       "allowedUse": "workflow-shape",
       "expectedStatus": "PASS",
       "protectedPolicy": "source effectiveness report shape and aggregation",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "workflow_shape"
+      ]
     },
     {
       "path": "source-html/android-developers-roundup-rss.xml",
@@ -271,7 +431,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "Android Developers roundup RSS child topic extraction remains additive",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/android-latest-updates-camera.html",
@@ -279,7 +442,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "Android Latest Updates camera row extraction",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/android-latest-updates-camerax-cards.html",
@@ -287,7 +453,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "Android Latest Updates CameraX card extraction",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/android-latest-updates-camerax-table.html",
@@ -295,7 +464,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "Android Latest Updates CameraX table extraction",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/android-latest-updates-camerax-1.6.1.html",
@@ -303,7 +475,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "Android Latest Updates CameraX 1.6.1 row preserves concrete versioned release evidence",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/android-latest-updates-camerax-link-only.html",
@@ -311,7 +486,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "bad",
       "protectedPolicy": "Android Latest Updates link-only row must not synthesize CameraX release-note behavior",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/android-security-bulletin.html",
@@ -319,7 +497,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "Android security release-note child item preservation",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/aosp-camera-documentation.html",
@@ -327,7 +508,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "AOSP camera documentation remains watch/reference path",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/aosp-site-updates-camera.html",
@@ -335,7 +519,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "AOSP Site Updates month-level camera child rows",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/aosp-site-updates-paragraph-camera.html",
@@ -343,7 +530,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "AOSP Site Updates paragraph camera child rows",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/camerax-release-notes.html",
@@ -351,7 +541,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "CameraX dated release child entry extraction",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/camerax-release-notes-1.6.html",
@@ -359,7 +552,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "CameraX version heading normalization",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/camerax-release-notes-live-structure.html",
@@ -367,7 +563,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "CameraX live release heading structure preserves source_extraction without promoting Viewfinder table rows",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/camerax-release-notes-artifact-table-only.html",
@@ -375,7 +574,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "bad",
       "protectedPolicy": "CameraX artifact/Maven table-only rows are not main article release items",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/claude-code-changelog-dated.html",
@@ -383,7 +585,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "Claude Code dated changelog extraction",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/claude-code-changelog-undated.html",
@@ -391,7 +596,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "undated changelog does not become dated release evidence",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/libcamera-release-v0.7.1.html",
@@ -399,7 +607,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "libcamera dated release announcement extraction",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/llvm-release-notes.html",
@@ -407,7 +618,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "toolchain release-note child item preservation",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     },
     {
       "path": "source-html/samsung-mobile-security.html",
@@ -415,7 +629,10 @@
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
       "protectedPolicy": "Samsung Mobile Security monthly SMR extraction",
-      "generatedArtifact": false
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
     }
   ]
 }

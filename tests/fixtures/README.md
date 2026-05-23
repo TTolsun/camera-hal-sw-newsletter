@@ -36,7 +36,7 @@ JSON fixture는 가능하면 아래 필드를 둡니다.
 
 ## Fixture ledger
 
-`fixture-ledger.json` is the source of truth for committed fixture provenance.
+`fixture-ledger.json` schemaVersion 2 is the source of truth for committed fixture provenance.
 Every committed fixture file must have exactly one ledger entry with:
 
 - `path`: fixture-relative path using `/` separators.
@@ -45,6 +45,15 @@ Every committed fixture file must have exactly one ledger entry with:
 - `expectedStatus`: expected pass/fail class for JSON gate fixtures, or `n/a` for source text/html fixtures.
 - `protectedPolicy`: the regression contract protected by the fixture.
 - `generatedArtifact`: `true` only for minimized generated regression samples outside `good/`.
+- `relatedRules`: non-empty rule tags from `quality_gate`, `selection`, `source_binding`,
+  `seed_evidence`, `linked_evidence`, `parser_contract`, `workflow_shape`, or
+  `artifact_provenance`.
+
+Ledger v2 keeps provenance compact:
+
+- `curated` maps to curated/reference fixtures.
+- `synthetic` maps to hand-authored reduced examples.
+- `minimized-generated-regression` is allowed only when reduced from generated output and must stay non-public, minimized, and regression-scoped.
 
 `good/` fixtures must be curated, non-generated, and PASS-only. `bad/` fixtures must not expect `PASS`.
 
@@ -71,9 +80,15 @@ Current fixture layout is the repository contract:
 - `selection/bad/`
 - `seed-evidence/good/`
 - `seed-evidence/bad/`
+- `seed-evidence/workflow-shapes/`
 
 Do not migrate fixtures to `good/quality/` or `bad/quality/` as part of generated artifact cleanup.
 Fixture layout migration must be handled as a separate scoped change.
+
+`seed-evidence/workflow-shapes/`는 generated artifact 사본이 아니라 seed-only,
+seed-plus-Gemini 같은 merge output contract를 최소 synthetic input으로 표현하는
+domain-first fixture 위치입니다. 이 경로의 ledger entry는 `allowedUse: "workflow-shape"`와
+`relatedRules: ["seed_evidence", "workflow_shape"]`를 포함해야 합니다.
 
 ## Seed evidence artifact boundary
 

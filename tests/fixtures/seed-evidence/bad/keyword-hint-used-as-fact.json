@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "generated": false,
+    "source": "synthetic",
+    "artifact_name": "seed-candidates.json"
+  },
+  "policyFlags": {
+    "source_gap_risk": true,
+    "reference_only": false,
+    "finalSelectionEligibility": "main",
+    "hasDatedEvidence": true,
+    "generic_ai_without_hal_connection": false
+  },
+  "expected": {
+    "status": "FAIL",
+    "reason": "keyword_hint_is_not_evidence"
+  },
+  "section": {
+    "claims": [
+      {
+        "claim_id": "claim-keyword-hint",
+        "text": "CameraX 1.6.1 is a Camera HAL change because the keyword hint said so.",
+        "claim_type": "fact",
+        "evidence_ids": [
+          "keyword_hint:camerax-1.6.1"
+        ],
+        "source_urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        ],
+        "impact_level": "direct_hal_contract",
+        "overclaim_risk": "high"
+      }
+    ]
+  },
+  "candidate": {
+    "title": "CameraX 1.6.1 release notes",
+    "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+    "source_extraction_ref": "seed-evidence-pack.json#/packs/0",
+    "evidence_pack_ids": [
+      "seed-camerax-pack"
+    ],
+    "primary_evidence_ids": [
+      "seed-camerax-primary-01"
+    ],
+    "linked_evidence_ids": [],
+    "compact_evidence": {
+      "primary_facts": [
+        "CameraX 1.6.1 release date: 2026-05-06."
+      ],
+      "linked_context": [],
+      "do_not_claim": [
+        "Keyword hints are discovery hints, not source-backed facts.",
+        "Do not claim direct Camera HAL changes from CameraX release notes."
+      ],
+      "evidence_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ]
+    }
+  },
+  "seed_evidence_pack": {
+    "schema_version": 1,
+    "report_type": "seed_evidence_pack",
+    "packs": [
+      {
+        "evidence_pack_id": "seed-camerax-pack",
+        "seed_id": "seed-camerax",
+        "seed_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "final_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "title": "CameraX 1.6.1 release notes",
+        "primary_evidence": [
+          {
+            "evidence_id": "seed-camerax-primary-01",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+            "title": "CameraX 1.6.1 release notes",
+            "published_at": "2026-05-06",
+            "source_backed_items": [
+              "CameraX 1.6.1 release date: 2026-05-06."
+            ]
+          }
+        ],
+        "linked_evidence": [],
+        "do_not_claim": [
+          "Keyword hints are discovery hints, not source-backed facts."
+        ]
+      }
+    ]
+  }
+}

@@ -47,11 +47,14 @@ Fixture policy는 `tests/contract/fixture-policy.test.js`와 `npm.cmd run check:
 
 핵심 규칙:
 
+- `fixture-ledger.json`의 `path`는 항상 `tests/fixtures` 기준 relative path이며 fixture id로 재해석하지 않습니다.
+- Ledger entry는 v2 metadata인 `relatedRules`를 non-empty enum array로 선언해야 합니다.
 - `good/` fixture sample은 사람이 검수한 curated, non-generated sample이어야 합니다.
 - Generated newsletter artifact 전체를 `good/` 또는 golden fixture로 복사하지 않습니다.
 - `bad/` fixture의 `expected.status`는 `PASS`가 될 수 없습니다.
 - `source_gap_risk=true`, `reference_only=true`, `finalSelectionEligibility=watchlist`, `finalSelectionEligibility=exclude`, `hasDatedEvidence=false`, Camera HAL 연결 없는 generic AI/IT sample은 main article PASS golden이 될 수 없습니다.
 - Generated output에서 회귀 가치가 있으면 전체 artifact가 아니라 최소 JSON/text input만 regression fixture로 축약하고 provenance를 ledger에 남깁니다.
+- Seed evidence merge shape fixture는 domain-first 위치인 `tests/fixtures/seed-evidence/workflow-shapes/`에 둡니다.
 
 ## Helpers
 
