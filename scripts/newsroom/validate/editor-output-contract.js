@@ -416,15 +416,25 @@ function completeStoryPublicArticle(section = {}) {
   };
 }
 
-function unsupportedStoryMarkerReasonCodes(value = {}) {
+function unsupportedStoryMarkerIssues(value = {}) {
   const sections = ensureArray(value?.sections);
   const targets = sections.length > 0 ? sections : [{ public_article: {} }];
-  const codes = [];
-  for (const section of targets) {
+  const issues = [];
+  targets.forEach((section, index) => {
     const markers = storyContractMarkers(value, section, { requireStoryContract: false });
-    codes.push(...ensureArray(markers.unsupported).map(issue => issue.type));
-  }
-  return uniqueText(codes);
+    for (const issue of ensureArray(markers.unsupported)) {
+      issues.push({
+        index: index + 1,
+        headline: text(section.headline || section.category || `article ${index + 1}`),
+        ...issue
+      });
+    }
+  });
+  return issues;
+}
+
+function unsupportedStoryMarkerReasonCodes(value = {}) {
+  return uniqueText(unsupportedStoryMarkerIssues(value).map(issue => issue.type));
 }
 
 function deterministicallyRepairEditorSchema(value, options = {}) {
@@ -1029,6 +1039,47 @@ async function repairEditorOutputContract({
     strictClaims,
     requireStoryContract
   });
+  const unsupportedStoryMarkerPreflightIssues = unsupportedStoryMarkerIssues(invalidEditor);
+  if (unsupportedStoryMarkerPreflightIssues.length > 0) {
+    const reasonCodes = uniqueText(unsupportedStoryMarkerPreflightIssues.map(issue => issue.type));
+    const error = semanticError('Editor output contains unsupported story contract marker.', {
+      field: 'sections.public_article',
+      actualCount: unsupportedStoryMarkerPreflightIssues.length,
+      sectionCount: ensureArray(invalidEditor?.sections).length,
+      issues: unsupportedStoryMarkerPreflightIssues
+    });
+    error.deterministic_repair_failure_reason_codes = reasonCodes;
+    const initialDetails = {
+      ...serializeEditorValidationError(error, {
+        deterministic_repair_failure_reason_codes: reasonCodes
+      }),
+      stage,
+      attempt
+    };
+    if (newsroomDir) {
+      writeEditorValidationDiagnostics({
+        newsroomDir,
+        attempt,
+        phase: 'attempt',
+        output: invalidEditor,
+        error,
+        extra: {
+          stage,
+          attempt,
+          repairAttempted: false,
+          repairSucceeded: false,
+          deterministic_repair_failure_reason_codes: reasonCodes
+        }
+      });
+    }
+    error.stage = stage;
+    attachSemanticStatus(error, {
+      editor_semantic_validation: initialDetails,
+      repairAttempted: false,
+      repairSucceeded: false
+    });
+    throw error;
+  }
 
   try {
     const editor = validate(value);
