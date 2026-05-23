@@ -39,6 +39,9 @@ const {
   buildReviewArtifactInventory,
   renderGeneratedArtifactsSummary
 } = require('../common/review-artifact-inventory');
+const {
+  renderEditorPrSummary
+} = require('../common/editor-pr-summary');
 
 const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
   '이번 주 핵심 메시지',
@@ -211,6 +214,7 @@ function renderStatusSection(status, handoff = null) {
     `편집자 검토 필요: ${booleanText(status.editor_review_required)}`,
     `editor_review_required=${booleanText(status.editor_review_required)}`,
     `부족한 후보 경로: ${booleanText(status.underfilled)}`,
+    ...renderStatusCompositionLines(status),
     `Stale claim 상태: ${valueOrUnknown(status.stale_claim_status)}`,
     `Stale claim 요약: removed=${valueOrUnknown(status.stale_claim_removed_count ?? 0)}; hard_failures=${valueOrUnknown(status.stale_claim_hard_failure_count ?? 0)}`,
     `상태 일관성 오류: ${ensureArray(status.consistency_errors).length > 0 ? status.consistency_errors.join('; ') : '없음'} (consistency_errors: ${ensureArray(status.consistency_errors).length > 0 ? status.consistency_errors.join('; ') : 'none'})`,
@@ -929,6 +933,201 @@ function renderReviewOnlyStatus(status, handoff, root, date) {
     `- failure_reason: ${failureReason}`,
     ''
   ].join('\n');
+}
+
+function renderStatusCompositionLines(status = {}) {
+  const lines = ['선택/구성 요약:'];
+  const hasValue = value => value !== null && value !== undefined && value !== '';
+  const add = (label, value) => {
+    if (hasValue(value)) lines.push(`${label}: ${valueOrUnknown(value)}`);
+  };
+  const addBoolean = (label, value, suffix = '') => {
+    if (value === true || value === false) lines.push(`${label}: ${booleanText(value)}${suffix}`);
+  };
+  const addCount = (label, key) => {
+    const value = countFromStatus(status, key);
+    if (hasValue(value)) lines.push(`${label}: ${valueOrUnknown(value)}`);
+  };
+
+  add('composition_mode', status.composition_mode);
+  add('selection_composition_mode', status.selection_composition_mode ?? status.composition_mode);
+  addBoolean('final_publish_ready', status.final_publish_ready);
+  addBoolean('editor_review_required', status.editor_review_required);
+  addBoolean('review_gate_passed', status.review_gate_passed);
+  addBoolean('publish_gate_passed', status.publish_gate_passed, ' (후보 선택 발행 조건)');
+  if (ensureArray(status.publish_gate_reason_codes).length > 0) {
+    lines.push(`publish_gate_reason_codes: ${ensureArray(status.publish_gate_reason_codes).join('; ')}`);
+  }
+  if (ensureArray(status.publish_gate_reason_summary).length > 0) {
+    lines.push(`publish_gate_reason_summary: ${ensureArray(status.publish_gate_reason_summary)
+      .map(item => `${item.code || 'unknown'} actual=${valueOrUnknown(item.actual)} required=${valueOrUnknown(item.required)}`)
+      .join('; ')}`);
+  }
+  add('deterministic_selected_count', status.deterministic_selected_count ?? status.selected_article_count);
+  add('rendered_main_article_count', status.rendered_main_article_count ?? status.final_selected_article_count ?? status.selected_article_count);
+  add('reserve_candidate_count', status.reserve_candidate_count);
+  add('input_candidate_count', status.input_candidate_count);
+  add('eligible_candidate_count', status.eligible_candidate_count);
+  add('selected_article_count', status.selected_article_count);
+  addCount('direct_aosp_camera count', 'direct_aosp_camera_count');
+  addCount('camera_driver_image_pipeline count', 'camera_driver_image_pipeline_count');
+  addCount('android_platform_camera_adjacent count', 'android_platform_camera_adjacent_count');
+  addCount('soc_platform_signal count', 'soc_platform_signal_count');
+  addCount('cpp_ai_tooling_fallback count', 'cpp_ai_tooling_fallback_count');
+  addCount('generic_tech_watchlist count', 'generic_tech_watchlist_count');
+  addCount('primary_camera_stack_topic_count', 'primary_camera_stack_topic_count');
+  addCount('supporting_main_article_count', 'supporting_main_article_count');
+  addCount('forbidden_main_article_count', 'forbidden_main_article_count');
+  add('composition reason', status.composition_reason);
+  const notes = renderCompositionNotes(status)
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean);
+  if (lines.length === 1 && notes.length === 0) return [];
+  return [...lines, ...notes];
+}
+
+function numericStatusValue(value) {
+  const number = Number(value ?? 0);
+  return Number.isFinite(number) ? number : 0;
+}
+
+function finalNewsletterHardBlockers(status = {}) {
+  const blockers = [];
+  const mustFixCount = numericStatusValue(status.must_fix_count);
+  const sourceGapCount = numericStatusValue(status.source_gap_count);
+  const staleHardFailureCount = numericStatusValue(status.stale_claim_hard_failure_count);
+
+  if (mustFixCount > 0) blockers.push(`fact-check must_fix ${mustFixCount}건`);
+  if (sourceGapCount > 0) blockers.push(`source gap ${sourceGapCount}건`);
+  if (status.quality_status && status.quality_status !== 'PASS') {
+    blockers.push(`quality_status=${status.quality_status}`);
+  }
+  if (status.fact_check_status && status.fact_check_status !== 'PASS') {
+    blockers.push(`fact_check_status=${status.fact_check_status}`);
+  }
+  if (status.stale_claim_status === 'NEEDS_FIX' || staleHardFailureCount > 0) {
+    blockers.push(`stale claim hard failure ${staleHardFailureCount}건`);
+  }
+  if (status.validate_outcome && status.validate_outcome !== 'success') {
+    blockers.push(`validate_outcome=${status.validate_outcome}`);
+  }
+  if (ensureArray(status.consistency_errors).length > 0) {
+    blockers.push(`consistency_errors ${ensureArray(status.consistency_errors).length}건`);
+  }
+  if (status.publish_gate_passed === false) {
+    blockers.push('publish_gate_passed=false');
+  }
+  if (status.repair_failure_kind) {
+    blockers.push(`repair_failure_kind=${status.repair_failure_kind}`);
+  }
+  if (status.fallback_public_issue_failed === true || status.fallback_public_issue_failed === 'true') {
+    blockers.push('fallback_public_issue_failed=true');
+  }
+  if (status.fallback_public_issue_error && status.fallback_public_issue_error !== 'none') {
+    blockers.push(`fallback_public_issue_error=${status.fallback_public_issue_error}`);
+  }
+
+  return blockers;
+}
+
+function finalNewsletterHandoff(status = {}, handoff = null) {
+  if (handoff?.diagnosticsOnly) {
+    return {
+      nextStep: 'blocked',
+      label: '진단 전용',
+      reason: 'diagnostics_only=true이고 public_newsletter_ready=false입니다. merge해도 홈페이지에 표시되지 않습니다.'
+    };
+  }
+  if (status.final_publish_ready === true && status.validate_outcome === 'success') {
+    return {
+      nextStep: 'run_03',
+      label: 'AI 자동 발행 가능',
+      reason: 'final_publish_ready=true, publish_gate_passed=true, validate_outcome=success입니다.'
+    };
+  }
+  if (handoff?.reviewPublicationReady) {
+    return {
+      nextStep: 'strengthen_candidates',
+      label: '편집장 승인 시 공개 가능(단, publish-ready 아님)',
+      reason: 'review_publication_ready=true이고 public_newsletter_ready=true이지만 final_publish_ready=false입니다.'
+    };
+  }
+  return {
+    nextStep: 'rerun_required',
+    label: '수정 필요/실패',
+    reason: 'hard blocker, validation, fact-check, quality 상태를 확인해야 합니다.'
+  };
+}
+
+function finalNewsletterVerdict(status = {}, handoff = null) {
+  if (handoff?.diagnosticsOnly) {
+    return {
+      label: '진단 전용',
+      action: 'merge하지 말고 failure diagnostics와 repair artifact를 확인하세요.',
+      firstLook: 'public_newsletter_ready=false입니다. merge해도 홈페이지에 표시되지 않습니다.'
+    };
+  }
+  if (status.final_publish_ready === true && status.validate_outcome === 'success') {
+    return {
+      label: 'AI 자동 발행 가능',
+      action: '최종 편집 검토 후 merge할 수 있습니다.',
+      firstLook: 'final_publish_ready=true이며 quality/fact-check/validation gate가 통과했습니다.'
+    };
+  }
+  if (handoff?.reviewPublicationReady) {
+    return {
+      label: '편집장 승인 시 공개 가능(단, publish-ready 아님)',
+      action: '편집장 승인 시 공개 가능하지만, AI 자동 발행 기준을 통과한 publish-ready PR은 아닙니다. publish-ready label 금지.',
+      firstLook: 'merge 시 홈페이지 표시 가능 여부와 review-only 사유를 먼저 확인하세요.'
+    };
+  }
+  return {
+    label: '수정 필요/실패',
+    action: 'quality/fact-check/source gap/stale claim 문제를 해결한 뒤 재실행하거나 수동 수정하세요.',
+    firstLook: 'hard blocker, warning, failure_reason을 먼저 확인하세요.'
+  };
+}
+
+function renderFinalNewsletterEditorSummary(status = {}, handoff = null, date = '') {
+  const finalHandoff = finalNewsletterHandoff(status, handoff);
+  const verdict = finalNewsletterVerdict(status, handoff);
+  const hardBlockers = finalNewsletterHardBlockers(status);
+  const hardBlockerSummary = hardBlockers.length === 0
+    ? '없음'
+    : hardBlockers.slice(0, 3).join('; ');
+  const publishReadyLabelChecklist = status.final_publish_ready === true
+    ? { label: 'publish-ready label 적용 여부 확인', checked: true }
+    : { label: 'publish-ready label 금지 여부 확인', checked: true };
+  return renderEditorPrSummary({
+    stage: 'final_newsletter',
+    verdict,
+    handoff: finalHandoff,
+    summaryRows: [
+      ['생성 단계', '최종 뉴스레터 생성'],
+      ['기준 날짜', date || 'unknown'],
+      ['publication_mode', handoff?.publicationMode || 'unknown'],
+      ['homepage_visibility', handoff?.homepageVisibility || 'unknown'],
+      ['public_newsletter_ready', booleanText(handoff?.publicNewsletterReady)],
+      ['homepage_visible_after_merge', booleanText(handoff?.homepageVisibleAfterMerge)]
+    ],
+    checklistItems: [
+      { label: 'source gap 여부 확인', checked: Number(status.source_gap_count || 0) === 0 },
+      { label: 'hard blocker 여부 확인', checked: status.quality_status === 'PASS' && status.fact_check_status === 'PASS' },
+      { label: 'HAL 관련성과 과장 claim 확인', checked: false },
+      publishReadyLabelChecklist,
+      { label: '편집장 수동 판단 필요 항목 확인', checked: false }
+    ],
+    resultRows: [
+      ['final_publish_ready', booleanText(status.final_publish_ready), status.final_publish_ready === true ? 'AI 자동 발행 가능' : 'AI 자동 발행 기준 미충족'],
+      ['review_publication_ready', booleanText(handoff?.reviewPublicationReady), handoff?.reviewPublicationReady ? '편집장 승인 시 공개 가능' : '아님'],
+      ['diagnostics_only', booleanText(handoff?.diagnosticsOnly), handoff?.diagnosticsOnly ? 'merge해도 홈페이지 미노출' : '아님'],
+      ['publish_gate_passed', booleanText(status.publish_gate_passed), status.publish_gate_passed === true ? '통과' : '미통과'],
+      ['quality score', valueOrUnknown(status.quality_score), `기준 ${valueOrUnknown(status.quality_threshold)}; ${status.quality_status || 'unknown'}`],
+      ['hard blocker', hardBlockers.length, hardBlockerSummary],
+      ['warning', valueOrUnknown(status.quality_deduction_count ?? 0), Number(status.quality_deduction_count || 0) > 0 ? '확인 필요' : '없음']
+    ]
+  });
 }
 
 function renderPublicationDecisionSummary(status, handoff) {
@@ -1885,7 +2084,7 @@ function renderEditorialDecisionSummary(root, date, status = {}, handoff = null)
     `- 보조/짧은 소식 판단 기사 수: ${supportingRows.length}`,
     `- 보류(Hold) 후보 수: ${holdRows.length}`,
     `- 표시된 후보: ${displayedCandidateCount}개 / 전체 후보: ${totalCandidateCount}개`,
-    `- 생략된 후보: ${omittedCandidateCount > 0 ? `${omittedCandidateCount}개, 전체 후보는 \`후보 기사 추적\`과 \`Evidence Pack 요약\`을 확인하세요.` : '없음'}`,
+    `- 생략된 후보: ${omittedCandidateCount > 0 ? `${omittedCandidateCount}개, 전체 후보는 \`후보 기사 추적\` 또는 관련 JSON artifact에서 확인하세요.` : '없음'}`,
     `- 핵심 우려: ${concerns.length > 0 ? concerns.join('; ') : 'none'}`,
     '',
     renderEditorialLegend()
@@ -2448,8 +2647,6 @@ function buildNewsroomPrBody(options = {}) {
     handoffOptions.changedArtifacts = options.changedArtifacts;
   }
   const handoff = resolveReviewHandoff(handoffOptions);
-  const editorBrief = date ? readTextIfExists(path.join(root, 'content', 'newsroom', date, 'editor-in-chief-brief.md')) : '';
-  const editorBriefSections = extractEditorBriefSections(editorBrief);
   const lines = [];
   const pushSection = section => {
     if (section) lines.push(section, '');
@@ -2458,6 +2655,8 @@ function buildNewsroomPrBody(options = {}) {
   const reviewOnlyStatus = renderReviewOnlyStatus(status, handoff, root, date);
   const publicationDecisionSummary = renderPublicationDecisionSummary(status, handoff);
   const editorialDecisionSummary = renderEditorialDecisionSummary(root, date, status, handoff);
+
+  pushSection(renderFinalNewsletterEditorSummary(status, handoff, date));
 
   if (handoff?.diagnosticsOnly) {
     pushSection(reviewOnlyStatus);
@@ -2469,33 +2668,15 @@ function buildNewsroomPrBody(options = {}) {
     pushSection(publicationDecisionSummary);
     pushSection(editorialDecisionSummary);
   }
-  pushSection(renderRawInputProvenance(status, date));
-  pushSection(renderPriorityOverridePolicy());
   pushSection(renderStatusSection(status, handoff));
-  pushSection(editorBriefSections);
 
   lines.push(
-    renderEditorApprovedPublicationPolicy(),
-    renderCompositionSummary(status),
-    renderCompositionNotes(status),
-    renderArticleStructureContract(root, date),
     renderPublicNewsletterReadiness(root, date, handoff),
     renderCandidatePoolPreflight(root, date, status),
     renderFailureDiagnostics(root, date, status, handoff),
     renderPublicNewsletterNotice(status, handoff),
-    renderFallbackPublicIssueNotes(root, date),
-    renderFinalSelectionStatus(status),
-    renderHalSignalQualitySummary(root, date, status),
-    renderSourceQualityGateSummary(root, date),
-    renderSourceQualityDiagnosisSummary(root, date),
-    renderNewsletterImageAuditSummary(root, date),
-    renderSeedEvidenceUsageSummary(root, date),
-    renderSourceChangeEventsSummary(root, date),
-    renderEvidencePackSummary(root, date),
-    renderCandidateTraceability(root, date),
-    renderHomepageHeadlineDecision(root, date, status),
     renderHomepageHeadlineDesignReview(status, date),
-    renderEditorActionGuidance(status, date),
+    renderCandidateTraceability(root, date),
     renderGeneratedArtifacts(date, status, root, options.changedArtifacts)
   );
 

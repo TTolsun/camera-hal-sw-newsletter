@@ -1,13 +1,31 @@
 # Newsroom PR Report 읽는 법
 
-이 문서는 weekly newsroom PR body를 검토할 때 먼저 볼 순서를 정리합니다. 자세한 gate 계약은 `docs/newsroom-workflow.md`를 기준으로 확인하세요.
+이 문서는 newsroom workflow가 만든 PR body를 검토할 때 먼저 볼 순서를 정리합니다. 자세한 gate 계약은 `docs/newsroom-workflow.md`를 기준으로 확인하세요.
 
 ## 먼저 볼 것
 
-1. `Diagnostics-only Status`: `diagnostics_only=true`이면 public newsletter files가 없어 merge해도 홈페이지에 표시되지 않습니다.
-2. `발행 상태 요약`: `review_publication_ready`, `homepage_visible_after_merge`, `final_publish_ready`를 확인합니다.
-3. `편집자 기사 판단 요약`: 후보 article을 `메인(Main)`, `보조(Supporting)`, `짧은 소식(Short)`, `관찰(Watch)`, `보류(Hold)`, `제외(Exclude)`로 봅니다.
-4. `편집자 결론`: 발행 권고, 가장 좋은 main article, fallback dominance, count mismatch warning을 확인합니다.
+모든 newsroom PR은 상단의 `최종 판단`, `이번 PR 요약`, `반드시 확인할 항목`, `주요 결과`를 먼저 봅니다. `상세 report`는 PR body에 원본 로그를 붙이는 영역이 아니라, 필요한 artifact 경로와 최소 원인만 안내하는 영역입니다.
+
+## 01 PR 읽는 순서
+
+1. `최종 판단`에서 RAW 후보 수집 성공 여부와 `02` 진행 가능 여부를 확인합니다.
+2. `주요 결과`에서 후보 수, source 수, direct Camera/HAL 후보 수, generic/watch 후보 수를 봅니다.
+3. `반드시 확인할 항목`에서 private/internal URL fetch, `source_gap_risk` 우회, quality threshold 변경, `03` re-crawl 금지 항목을 확인합니다.
+4. `상세 report`에서 RAW candidate artifact와 source change event artifact 경로를 확인합니다. source snapshot 원문은 PR body가 아니라 artifact에서 확인합니다.
+
+## 02 PR 읽는 순서
+
+1. `최종 판단`에서 Gemini discovery가 새 publishable 후보를 찾았는지 확인합니다.
+2. `주요 결과`에서 manual/Gemini/신규/publishable/중복 후보 수를 봅니다.
+3. parser/source/taxonomy gap 요약을 보고 source 보강 또는 parser fixture 보완이 필요한지 판단합니다.
+4. 원본 rejected proposal 목록은 PR body에 붙이지 않습니다. `proposal_validation_report`와 `source_discovery_feedback_report` artifact에서 필요한 경우만 확인합니다.
+
+## 03 PR 읽는 순서
+
+1. `최종 판단`에서 `AI 자동 발행 가능`, `편집장 승인 시 공개 가능(단, publish-ready 아님)`, `진단 전용`, `수정 필요/실패` 중 어떤 상태인지 확인합니다.
+2. `발행 상태 요약`에서 `final_publish_ready`, `review_publication_ready`, `diagnostics_only`, `homepage_visible_after_merge`를 확인합니다.
+3. `생성 상태`에서 quality/fact-check/stale claim, `must_fix_count`, `source_gap_count`, `validate_ok`, compact `선택/구성 요약`을 확인합니다.
+4. `편집자 기사 판단 요약`과 `후보 기사 추적`에서 HAL 관련성, source 근거, 과장 claim 위험을 확인합니다.
 
 ## 판단 Label 의미
 
@@ -27,7 +45,7 @@
 - `report-only`: 품질/팩트체크 report 연결용으로만 표시된 항목입니다.
 - `merged`: 같은 source/event cluster로 병합되어 별도 main article로 다루지 않는 후보입니다.
 
-`score`는 편집 판단을 대체하지 않으므로 `편집자 기사 판단 요약` table에는 표시하지 않습니다. 점수와 세부 diagnostics는 기존 `Evidence Pack 요약`, 품질 report, `후보 기사 추적` section에서 확인합니다.
+`score`는 편집 판단을 대체하지 않으므로 `편집자 기사 판단 요약` table에는 표시하지 않습니다. 점수와 세부 diagnostics는 PR body에 모두 펼치지 않고 `quality-report`, `evidence-pack-summary.json`, `hal-signal-quality-report` 등 artifact에서 확인합니다.
 
 ## 주의할 경고
 

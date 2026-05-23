@@ -63,6 +63,9 @@ const {
   readRuntimeConfig
 } = require('../common/runtime-config');
 const {
+  renderEditorPrSummary
+} = require('../common/editor-pr-summary');
+const {
   runGeminiSourceDiscovery
 } = require('../collect/gemini-source-discovery');
 const {
@@ -93,6 +96,15 @@ const {
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
 const SEED_ONLY_LLM_CREDENTIALS_MISSING = 'SEED_ONLY_LLM_CREDENTIALS_MISSING';
 
+const REJECTED_REASON_LABELS = {
+  duplicate_source: '이미 수집된 후보와 중복',
+  parser_gap: 'source extraction 보강 필요',
+  source_gap: '기사 근거 부족',
+  taxonomy_gap: 'bucket/classifier 또는 허용 domain 보강 필요',
+  credential_failure: 'Gemini 실행 불가',
+  other: '기타 확인 필요'
+};
+
 function parseArgs(argv = process.argv.slice(2)) {
   const args = {};
   for (let index = 0; index < argv.length; index += 1) {
@@ -119,6 +131,130 @@ function findManualCandidatePath(root, date) {
   throw new Error(`Missing manual candidate artifact: ${manualCandidatesRelPath(date)} or ${collectedCandidatesRelPath(date)}`);
 }
 
+function normalizeRejectedReason(reason = '') {
+  const value = String(reason || '').toLowerCase();
+  if (/credential|auth|api[_ -]?key/.test(value)) return 'credential_failure';
+  if (/duplicate|already|manual/.test(value)) return 'duplicate_source';
+  if (/parser|extract|not_extractable/.test(value)) return 'parser_gap';
+  if (/source[_ -]?gap|evidence|missing_source/.test(value)) return 'source_gap';
+  if (/domain|taxonomy|bucket|policy|not_allowed|scope/.test(value)) return 'taxonomy_gap';
+  return 'other';
+}
+
+function rejectedReasonSummary(rejectedProposals = [], status = '') {
+  const counts = new Map();
+  if (status === FAILED_LLM_CREDENTIALS) {
+    counts.set('credential_failure', 1);
+  }
+  for (const item of Array.isArray(rejectedProposals) ? rejectedProposals : []) {
+    const key = normalizeRejectedReason(item?.rejected_reason || item?.reason || item?.message);
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([key, count]) => ({
+      key,
+      count,
+      interpretation: REJECTED_REASON_LABELS[key] || REJECTED_REASON_LABELS.other
+    }))
+    .sort((a, b) => a.key.localeCompare(b.key));
+}
+
+function numberStat(stats, key) {
+  const value = Number(stats?.[key] ?? 0);
+  return Number.isFinite(value) ? value : 0;
+}
+
+function sourceDiscoveryHandoff({
+  status,
+  stats = null,
+  mergedCandidateRelPath = '',
+  sourceDiscoveryFeedbackReport = null
+} = {}) {
+  const mergedCount = numberStat(stats, 'merged_candidate_count');
+  const geminiPublishableCount = numberStat(stats, 'gemini_publishable_candidate_count');
+  const seedPublishableCount = numberStat(stats, 'seed_publishable_candidate_count');
+  const publishableCount = geminiPublishableCount + seedPublishableCount;
+  const newUniqueCount = numberStat(stats, 'gemini_new_unique_url_count') +
+    numberStat(stats, 'seed_new_unique_url_count');
+  const hasMergedArtifact = Boolean(mergedCandidateRelPath);
+  if (status === FAILED_LLM_CREDENTIALS || !hasMergedArtifact || mergedCount === 0) {
+    return {
+      nextStep: 'blocked',
+      label: '진행 불가',
+      reason: status === FAILED_LLM_CREDENTIALS
+        ? 'Gemini source discovery credential preflight가 실패했습니다.'
+        : 'merged-candidates artifact가 없거나 후보 수가 0개입니다.'
+    };
+  }
+  if (publishableCount > 0) {
+    return {
+      nextStep: 'run_03',
+      label: '03 진행 가능',
+      reason: seedPublishableCount > 0 && geminiPublishableCount === 0
+        ? 'Seed evidence expansion에서 publishable 후보가 확인되었습니다.'
+        : 'Gemini 또는 seed discovery에서 publishable 후보가 확인되었습니다.'
+    };
+  }
+  if (newUniqueCount === 0 || sourceDiscoveryFeedbackReport?.status === 'WARNING') {
+    return {
+      nextStep: 'strengthen_candidates',
+      label: '03 진행 가능하나 후보 보강 권장',
+      reason: 'merged artifact는 생성되었지만 Gemini 신규 publishable 후보가 없거나 parser/source gap이 남아 있습니다.'
+    };
+  }
+  return {
+    nextStep: 'run_03',
+    label: '03 진행 가능',
+    reason: 'merged candidate artifact가 생성되었습니다.'
+  };
+}
+
+function sourceDiscoveryVerdict({
+  status,
+  stats = null,
+  handoff = {},
+  sourceDiscoveryFeedbackReport = null
+} = {}) {
+  if (handoff.nextStep === 'blocked') {
+    return {
+      label: '실패',
+      action: 'credential 또는 artifact 문제를 해결한 뒤 02를 다시 실행하세요.',
+      firstLook: 'merged artifact와 credential failure 여부를 먼저 확인하세요.'
+    };
+  }
+  if (sourceDiscoveryFeedbackReport?.status === 'WARNING') {
+    return {
+      label: '검토 필요',
+      action: 'parser/source feedback을 확인하고 후보 보강 여부를 판단하세요.',
+      firstLook: `parser/source feedback warning이 있습니다. parser_gap_count=${sourceDiscoveryFeedbackReport.parser_gap_count ?? 0}`
+    };
+  }
+  const geminiPublishableCount = numberStat(stats, 'gemini_publishable_candidate_count');
+  const seedPublishableCount = numberStat(stats, 'seed_publishable_candidate_count');
+  const publishableCount = geminiPublishableCount + seedPublishableCount;
+  if (publishableCount > 0) {
+    return {
+      label: '검토 가능',
+      action: 'merged 후보를 확인한 뒤 03 final newsletter generation으로 진행할 수 있습니다.',
+      firstLook: seedPublishableCount > 0 && geminiPublishableCount === 0
+        ? `${seedPublishableCount}개 seed publishable 후보가 있습니다.`
+        : `${publishableCount}개 publishable 후보가 있습니다.`
+    };
+  }
+  if (status === 'PASS') {
+    return {
+      label: '검토 필요',
+      action: '후보 품질을 확인하고 필요하면 source를 보강한 뒤 03 진행 여부를 판단하세요.',
+      firstLook: 'Gemini 신규 publishable 후보가 없습니다.'
+    };
+  }
+  return {
+    label: '검토 필요',
+    action: 'source discovery report와 artifact를 확인하세요.',
+    firstLook: '상세 report의 status와 rejected proposal을 확인하세요.'
+  };
+}
+
 function renderReport({
   date,
   status,
@@ -128,17 +264,11 @@ function renderReport({
   geminiCandidateCount,
   mergeMode,
   discoveryStats = null,
-  summary = '',
   sourceCandidateRelPath = '',
   geminiCandidateRelPath = '',
   mergedCandidateRelPath = '',
   manifestRelPath = '',
-  proposalRelPath = '',
   proposalValidationReportRelPath = '',
-  usageReportRelPath = '',
-  sourceQualityReportRelPath = '',
-  sourceClustersRelPath = '',
-  evidenceValidationReportRelPath = '',
   seedEvidenceRefs = {},
   sourceDiscoveryFeedbackReportRelPath = '',
   sourceDiscoveryFeedbackReportMarkdownRelPath = '',
@@ -146,99 +276,94 @@ function renderReport({
   rejectedProposals = []
 }) {
   const stats = discoveryStats && typeof discoveryStats === 'object' ? discoveryStats : null;
-  const countLines = stats
-    ? Object.entries(stats).map(([key, value]) => `${key}=${value}`)
-    : [`gemini_candidate_count=${geminiCandidateCount}`];
-  const reportSummary = summary ||
-    (status === FAILED_LLM_CREDENTIALS
-      ? 'Gemini source discovery credential preflight failed.'
-      : sourceDiscoveryStatsSummary(stats || {}, { llmUsed }));
+  const handoff = sourceDiscoveryHandoff({
+    status,
+    stats,
+    mergedCandidateRelPath,
+    sourceDiscoveryFeedbackReport
+  });
+  const verdict = sourceDiscoveryVerdict({
+    status,
+    stats,
+    handoff,
+    sourceDiscoveryFeedbackReport
+  });
+  const rejectedSummary = rejectedReasonSummary(rejectedProposals, status);
+  const rejectedRows = rejectedSummary.length > 0
+    ? rejectedSummary.map(item => [`rejected: ${item.key}`, item.count, item.interpretation])
+    : [['rejected proposal', 0, '없음']];
   const lines = [
     `# Gemini Source Discovery Report - ${date}`,
     '',
-    `status=${status}`,
-    `status_detail=${statusDetail}`,
-    `disabled_pass_through=${disabledPassThrough ? 'true' : 'false'}`,
-    `llm_used=${llmUsed ? 'true' : 'false'}`,
-    `merge_mode=${mergeMode}`,
-    `summary=${reportSummary}`,
-    ...countLines,
+    renderEditorPrSummary({
+      stage: 'source_discovery',
+      verdict,
+      handoff,
+      summaryRows: [
+        ['생성 단계', 'Gemini source discovery'],
+        ['기준 날짜', date],
+        ['status_detail', statusDetail || 'none'],
+        ['merge_mode', mergeMode],
+        ['merged candidate artifact', mergedCandidateRelPath || '없음'],
+        ['source discovery feedback', sourceDiscoveryFeedbackReportRelPath || '없음']
+      ],
+      checklistItems: [
+        {
+          label: 'Gemini 또는 seed publishable 후보 여부 확인',
+          checked: numberStat(stats, 'gemini_publishable_candidate_count') + numberStat(stats, 'seed_publishable_candidate_count') > 0
+        },
+        { label: 'manual 후보와 중복만 생성했는지 확인', checked: false },
+        { label: 'parser/source/taxonomy gap 확인', checked: false },
+        { label: 'merged-candidates artifact 정상 생성 확인', checked: Boolean(mergedCandidateRelPath) },
+        { label: '03 진행 전 source_gap 후보가 main으로 승격되지 않았는지 확인', checked: false }
+      ],
+      resultRows: [
+        ['manual 후보', stats?.manual_candidate_count ?? 'unknown', '입력'],
+        ['Gemini 후보', stats?.gemini_candidate_count ?? geminiCandidateCount ?? 'unknown', llmUsed ? '실행됨' : '비활성/pass-through'],
+        ['Gemini 신규 unique 후보', stats?.gemini_new_unique_url_count ?? 'unknown', Number(stats?.gemini_new_unique_url_count ?? 0) > 0 ? '있음' : '없음'],
+        ['Gemini publishable 후보', stats?.gemini_publishable_candidate_count ?? 0, Number(stats?.gemini_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
+        ['seed 후보', stats?.seed_candidate_count ?? 0, Number(stats?.seed_candidate_count ?? 0) > 0 ? '있음' : '없음'],
+        ['seed 신규 unique 후보', stats?.seed_new_unique_url_count ?? 0, Number(stats?.seed_new_unique_url_count ?? 0) > 0 ? '있음' : '없음'],
+        ['seed publishable 후보', stats?.seed_publishable_candidate_count ?? 0, Number(stats?.seed_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
+        ['중복 후보', stats?.gemini_manual_duplicate_url_count ?? 0, Number(stats?.gemini_manual_duplicate_url_count ?? 0) > 0 ? '확인 필요' : '낮음'],
+        ['parser gap', sourceDiscoveryFeedbackReport?.parser_gap_count ?? 0, Number(sourceDiscoveryFeedbackReport?.parser_gap_count ?? 0) > 0 ? '보강 필요' : '없음'],
+        ['Gemini parser failure', sourceDiscoveryFeedbackReport?.gemini_parser_failure_count ?? 0, Number(sourceDiscoveryFeedbackReport?.gemini_parser_failure_count ?? 0) > 0 ? '보강 필요' : '없음'],
+        ...rejectedRows
+      ]
+    }),
+    '- 원본 후보와 merged 후보는 아래 artifact에서 확인하세요.',
+    `- source_candidate_artifact: ${sourceCandidateRelPath || '없음'}`,
+    `- gemini_candidate_artifact: ${geminiCandidateRelPath || '없음'}`,
+    `- merged_candidate_artifact: ${mergedCandidateRelPath || '없음'}`,
+    `- merged_candidate_manifest: ${manifestRelPath || '없음'}`,
+    `- proposal_validation_report: ${proposalValidationReportRelPath || '없음'}`,
+    `- source_discovery_feedback_report: ${sourceDiscoveryFeedbackReportMarkdownRelPath || sourceDiscoveryFeedbackReportRelPath || '없음'}`,
+    '- rejected proposal 원문: proposal_validation_report artifact에서 확인하세요.',
+    '- parser/source feedback 원문: source_discovery_feedback_report artifact에서 확인하세요.',
+    '- PR body에는 편집장 1차 판단에 필요한 요약만 남깁니다.',
     ''
   ];
 
   if (status === FAILED_LLM_CREDENTIALS) {
     lines.push(
-      'Enabled Gemini source discovery requires selected LLM provider credentials.',
+      '- Gemini source discovery credential preflight가 실패했습니다.',
       'Candidate artifacts were not modified.',
       ''
     );
   } else {
     if (statusDetail === SEED_ONLY_LLM_CREDENTIALS_MISSING) {
       lines.push(
-        'Gemini credentials were missing after approved seed evidence expansion.',
-        'Seed evidence artifacts and seed-only merged candidates were written; Gemini discovery was skipped.',
+        '- approved seed evidence expansion 후 Gemini credentials가 없어 Gemini discovery는 건너뛰었습니다.',
+        '- Seed evidence artifacts와 seed-only merged candidates는 생성되었습니다.',
         ''
       );
     }
-    lines.push(
-      `source_candidate_artifact=${sourceCandidateRelPath}`,
-      `gemini_source_proposals=${proposalRelPath}`,
-      `proposal_validation_report=${proposalValidationReportRelPath}`,
-      `gemini_candidate_artifact=${geminiCandidateRelPath}`,
-      `merged_candidate_artifact=${mergedCandidateRelPath}`,
-      `merged_candidate_manifest=${manifestRelPath}`,
-      `gemini_usage_report=${usageReportRelPath}`,
-      `source_quality_report=${sourceQualityReportRelPath}`,
-      `source_clusters=${sourceClustersRelPath}`,
-      `evidence_validation_report=${evidenceValidationReportRelPath}`,
-      `seed_candidate_artifact=${seedEvidenceRefs.seed_candidate_artifact || ''}`,
-      `seed_evidence_pack=${seedEvidenceRefs.seed_evidence_pack || ''}`,
-      `seed_evidence_pack_markdown=${seedEvidenceRefs.seed_evidence_pack_markdown || ''}`,
-      `seed_fetch_report=${seedEvidenceRefs.seed_fetch_report || ''}`,
-      `seed_fetch_report_markdown=${seedEvidenceRefs.seed_fetch_report_markdown || ''}`,
-      `seed_merge_report=${seedEvidenceRefs.seed_merge_report || ''}`,
-      `seed_merge_report_markdown=${seedEvidenceRefs.seed_merge_report_markdown || ''}`,
-      `source_discovery_feedback_report=${sourceDiscoveryFeedbackReportRelPath}`,
-      `source_discovery_feedback_report_markdown=${sourceDiscoveryFeedbackReportMarkdownRelPath}`,
-      ''
-    );
-    lines.push(
-      '## Priority Override / Legacy Compatibility',
-      '',
-      'This PR is part of #185 seed evidence workflow migration.',
-      'The seed evidence workflow is prioritized over legacy-pattern cleanup, but source/evidence/security/publish safety remains non-negotiable.',
-      '',
-      '### Required checks for this PR',
-      '- [ ] Targeted #185 unit tests pass',
-      '- [ ] Targeted workflow tests pass',
-      '- [ ] `npm.cmd run validate` passes',
-      '- [ ] Source/evidence/security gates are not weakened',
-      '',
-      '### Legacy-pattern failures',
-      '| Test | Failure reason | Classification | Follow-up |',
-      '| --- | --- | --- | --- |',
-      '| none | none | none | none |',
-      '',
-      '### Non-negotiable gates',
-      '- [ ] No private/internal URL fetch',
-      '- [ ] No source_gap_risk bypass',
-      '- [ ] No quality threshold lowering',
-      '- [ ] No 03 re-crawl',
-      '- [ ] No Gemini proposal promoted without deterministic validation',
-      ''
-    );
-    if (sourceDiscoveryFeedbackReport) {
-      lines.push(...renderSourceDiscoveryFeedbackSummary(
-        sourceDiscoveryFeedbackReport,
-        sourceDiscoveryFeedbackReportMarkdownRelPath
-      ));
-    }
-    if (rejectedProposals.length > 0) {
-      lines.push('## Rejected proposals', '');
-      for (const item of rejectedProposals) {
-        lines.push(`- ${item.rejected_reason}: ${item.url || 'n/a'}${item.message ? ` (${item.message})` : ''}`);
-      }
-      lines.push('');
+    if (seedEvidenceRefs.seed_candidate_artifact || seedEvidenceRefs.seed_evidence_pack) {
+      lines.push(
+        `- seed_candidate_artifact: ${seedEvidenceRefs.seed_candidate_artifact || '없음'}`,
+        `- seed_evidence_pack: ${seedEvidenceRefs.seed_evidence_pack || '없음'}`,
+        ''
+      );
     }
   }
 
@@ -1324,7 +1449,9 @@ module.exports = {
   SEED_ONLY_LLM_CREDENTIALS_MISSING,
   buildSourceDiscoveryFeedbackReport,
   findManualCandidatePath,
+  normalizeRejectedReason,
   parseArgs,
+  rejectedReasonSummary,
   renderReport,
   renderSourceDiscoveryFeedbackMarkdown,
   run,

@@ -16,12 +16,13 @@
 ## PR Review Flow
 
 - PR body의 새 editor-facing 요약은 [Newsroom PR Report 읽는 법](./newsroom-pr-report.ko.md)을 기준으로 확인합니다.
+- `01`, `02`, `03` PR은 모두 상단의 `최종 판단`, `이번 PR 요약`, `반드시 확인할 항목`, `주요 결과`를 먼저 확인합니다. PR body에는 원본 key/value report를 길게 붙이지 않고, `상세 report`에는 artifact pointer와 최소 원인만 남깁니다.
 - `final_publish_ready=false`는 AI 자동 발행 기준 미충족을 뜻합니다. `review_publication_ready=true`이고 `homepage_visible_after_merge=true`인 PR은 편집장 merge로 공개 승인할 수 있습니다.
 - `diagnostics_only=true`인 PR은 public newsletter files가 없으므로 merge해도 홈페이지에 표시되지 않습니다. PR body의 missing public files reason을 먼저 확인합니다.
 - `Validate Site and Images` (`.github/workflows/validate-site.yml`)는 quality/fact-check 문제를 non-blocking annotation으로 보고하고, structural validation만 blocking으로 처리합니다.
 
 - PR body에서 `final_publish_ready`, `review_publication_ready`, `diagnostics_only`, article count, labels, selection diagnostics를 먼저 확인합니다.
-- `editor-in-chief-brief.md`로 핵심 메시지와 review order를 확인합니다.
+- 추가 맥락이 필요하면 `editor-in-chief-brief.md`, `quality-report.md`, `fact-check-report.md` 같은 artifact를 직접 확인합니다. 이 상세 내용은 PR body에 반복하지 않습니다.
 - `fact-check-report.md`에 unresolved `must_fix`가 있으면 발행 가능한 PR로 보지 않습니다.
 - `quality-report.md`에서 hard blocker와 soft deduction을 분리해 봅니다.
 - source gap, duplicate source URL, missing action item, weak Camera HAL perspective는 발행 전 수정 대상입니다.

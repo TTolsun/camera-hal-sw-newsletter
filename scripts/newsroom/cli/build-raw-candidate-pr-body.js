@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 
 const {
   kstDate,
@@ -19,6 +18,9 @@ const {
 const {
   readRuntimeConfig
 } = require('../common/runtime-config');
+const {
+  renderEditorPrSummary
+} = require('../common/editor-pr-summary');
 
 const DIRECT_CAMERA_BUCKETS = new Set([
   BUCKETS.DIRECT_AOSP_CAMERA,
@@ -94,6 +96,50 @@ function percent(value) {
   return `${Math.round(value * 100)}%`;
 }
 
+function rawCandidateHandoff(summary = {}, artifactExists = false) {
+  if (!artifactExists || summary.candidateCount === 0) {
+    return {
+      nextStep: 'blocked',
+      label: '진행 불가',
+      reason: 'RAW artifact가 없거나 후보 수가 0개입니다.'
+    };
+  }
+  if (summary.directCameraBucketCount === 0) {
+    return {
+      nextStep: 'strengthen_candidates',
+      label: '후보 보강 권장',
+      reason: '후보는 있지만 direct Camera/HAL 후보가 부족합니다.'
+    };
+  }
+  return {
+    nextStep: 'run_02',
+    label: '02 진행 가능',
+    reason: 'RAW artifact와 Camera HAL 직접 후보가 확인되었습니다.'
+  };
+}
+
+function rawCandidateVerdict(summary = {}, handoff = {}) {
+  if (handoff.nextStep === 'blocked') {
+    return {
+      label: '실패',
+      action: 'RAW 후보를 보강한 뒤 01을 다시 실행하세요.',
+      firstLook: 'RAW artifact 존재 여부와 후보 수를 먼저 확인하세요.'
+    };
+  }
+  if (handoff.nextStep === 'strengthen_candidates') {
+    return {
+      label: '검토 필요',
+      action: 'Camera HAL 직접 후보를 보강한 뒤 다음 단계 진행 여부를 판단하세요.',
+      firstLook: 'direct Camera/HAL 후보 수가 부족합니다.'
+    };
+  }
+  return {
+    label: '검토 가능',
+    action: 'RAW 후보를 확인한 뒤 02 Gemini source discovery로 진행할 수 있습니다.',
+    firstLook: `${summary.candidateCount}개 후보 중 direct Camera/HAL 후보 ${summary.directCameraBucketCount}개가 있습니다.`
+  };
+}
+
 function loadRawCandidatePayload(root, date) {
   const manualPath = manualCandidatesPath(root, date);
   if (fs.existsSync(manualPath)) {
@@ -111,50 +157,6 @@ function loadRawCandidatePayload(root, date) {
   };
 }
 
-function loadSourceChangeEvents(root, date) {
-  const relPath = `content/source-events/${date}/source-change-events.json`;
-  const filePath = path.join(root, relPath);
-  if (!fs.existsSync(filePath)) return { relPath, report: null };
-  return { relPath, report: readJson(filePath) };
-}
-
-function renderSourceChangeEventSummary(root, date) {
-  const { relPath, report } = loadSourceChangeEvents(root, date);
-  if (!report) {
-    return [
-      '## Source Snapshot Changes',
-      '',
-      '- source change event report: unavailable',
-      `- expected path: ${relPath}`,
-      ''
-    ];
-  }
-  const summary = report.summary || {};
-  return [
-    '## Source Snapshot Changes',
-    '',
-    `- source change event report: ${relPath}`,
-    `- monitored_source_count: ${summary.monitored_source_count ?? 'unknown'}`,
-    `- snapshot_page_count: ${summary.snapshot_page_count ?? 'unknown'}`,
-    `- generated_candidate_count: ${summary.generated_candidate_count ?? 'unknown'}`,
-    `- duplicate_event_evidence_count: ${summary.duplicate_event_evidence_count ?? 'unknown'}`,
-    `- monitor_diagnostic_count: ${summary.monitor_diagnostic_count ?? 'unknown'}`,
-    '',
-    '## Source Change Events',
-    '',
-    `- event_type_counts: ${JSON.stringify(summary.event_type_counts || {})}`,
-    '',
-    '## Evidence Identity / Duplicate Guard',
-    '',
-    '- `processed_source_event_ids` and `processed_evidence_ids` are snapshot state, not public content.',
-    '',
-    '## Date Quality',
-    '',
-    '- Review `date_source`, `date_confidence`, `effective_date`, `needs_editor_date_review`, and `main_article_allowed` in the source event report.',
-    ''
-  ];
-}
-
 function buildRawCandidatePrBody({
   root = process.cwd(),
   date
@@ -164,61 +166,44 @@ function buildRawCandidatePrBody({
   const manifest = fs.existsSync(manifestPath) ? readJson(manifestPath) : null;
   const summary = summarizeRawCandidates(input.payload, manifest);
   const branchName = `newsroom-raw/${date}`;
+  const rawArtifactExists = fs.existsSync(input.path);
+  const handoff = rawCandidateHandoff(summary, rawArtifactExists);
+  const verdict = rawCandidateVerdict(summary, handoff);
+  const compatibilityArtifact = collectedCandidatesRelPath(date);
 
   return [
     `# RAW Candidate Collection - ${date}`,
     '',
-    '## RAW Candidate Summary',
-    '',
-    `- candidate_count: ${summary.candidateCount}`,
-    `- source_count: ${summary.sourceCount ?? 'unknown'}`,
-    `- official_ratio: ${percent(summary.officialRatio)} (${summary.officialCount}/${summary.candidateCount})`,
-    `- generic_noise_count: ${summary.genericNoiseCount}`,
-    `- direct_camera_bucket_count: ${summary.directCameraBucketCount}`,
-    `- CameraX_count: ${summary.cameraXCount}`,
-    `- SoC_platform_count: ${summary.socPlatformCount}`,
-    `- collection_intent_status: ${manifest?.collection_intent_status || 'none'}`,
-    `- seed_url_count: ${manifest?.seed_url_count ?? 0}`,
-    `- keyword_hint_count: ${manifest?.keyword_hint_count ?? 0}`,
-    '',
-    '## Artifact Contract',
-    '',
-    `- RAW candidate artifact: ${input.relPath}`,
-    `- compatibility artifact: ${collectedCandidatesRelPath(date)}`,
-    `- RAW manifest: ${rawCandidateManifestRelPath(date)}`,
-    `- collection intent: ${manifest?.collection_intent || 'none'}`,
-    `- branch: ${branchName}`,
-    '',
-    ...renderSourceChangeEventSummary(root, date),
-    '## Priority Override / Legacy Compatibility',
-    '',
-    'This PR is part of #185 seed evidence workflow migration.',
-    'The seed evidence workflow is prioritized over legacy-pattern cleanup, but source/evidence/security/publish safety remains non-negotiable.',
-    '',
-    '### Required checks for this PR',
-    '- [ ] Targeted #185 unit tests pass',
-    '- [ ] Targeted workflow tests pass',
-    '- [ ] `npm.cmd run validate` passes',
-    '- [ ] Source/evidence/security gates are not weakened',
-    '',
-    '### Legacy-pattern failures',
-    '| Test | Failure reason | Classification | Follow-up |',
-    '| --- | --- | --- | --- |',
-    '| none | none | none | none |',
-    '',
-    '### Non-negotiable gates',
-    '- [ ] No private/internal URL fetch',
-    '- [ ] No source_gap_risk bypass',
-    '- [ ] No quality threshold lowering',
-    '- [ ] No 03 re-crawl',
-    '- [ ] No Gemini proposal promoted without deterministic validation',
-    '',
-    '## Editor Checklist',
-    '',
-    '- RAW artifact는 merge 후 Final Generation의 immutable input입니다.',
-    '- v1에서는 candidate artifact를 수동 수정하지 않습니다.',
-    '- Stage 3은 이 RAW artifact 또는 valid merged artifact만 읽고 collect를 재실행하지 않습니다.',
-    '- source_gap_risk 후보는 final generation 전에 source/parser gap을 확인합니다.',
+    renderEditorPrSummary({
+      stage: 'manual_source_collect',
+      verdict,
+      handoff,
+      summaryRows: [
+        ['생성 단계', 'RAW 후보 수집'],
+        ['기준 날짜', date],
+        ['RAW candidate artifact', input.relPath],
+        ['compatibility artifact', compatibilityArtifact],
+        ['branch', branchName]
+      ],
+      checklistItems: [
+        { label: '후보 수집 artifact가 정상 생성됨', checked: rawArtifactExists },
+        { label: '확인 필요: private/internal URL fetch 없음', checked: false },
+        { label: '확인 필요: source_gap_risk 우회 없음', checked: false },
+        { label: '확인 필요: quality threshold 변경 없음', checked: false },
+        { label: '확인 필요: 03 re-crawl 없음', checked: false },
+        { label: '확인 필요: Gemini proposal이 deterministic validation 없이 승격되지 않음', checked: false }
+      ],
+      resultRows: [
+        ['후보 수', summary.candidateCount, summary.candidateCount > 0 ? '있음' : '없음'],
+        ['source 수', summary.sourceCount ?? 'unknown', summary.sourceCount ? '확인 필요' : '알 수 없음'],
+        ['direct Camera/HAL 후보', summary.directCameraBucketCount, summary.directCameraBucketCount > 0 ? '있음' : '부족'],
+        ['generic/watch 후보', summary.genericNoiseCount, summary.genericNoiseCount > 0 ? '검토 필요' : '낮음'],
+        ['official ratio', `${percent(summary.officialRatio)} (${summary.officialCount}/${summary.candidateCount})`, summary.officialCount > 0 ? '확인됨' : '부족']
+      ]
+    }),
+    '- 원본 후보는 위 `RAW candidate artifact`에서 확인하세요.',
+    `- source change event report: content/source-events/${date}/source-change-events.json`,
+    '- PR body에는 편집장 1차 판단에 필요한 요약만 남깁니다.',
     ''
   ].join('\n');
 }
@@ -238,5 +223,7 @@ if (require.main === module) {
 module.exports = {
   buildRawCandidatePrBody,
   hasCameraXSignal,
+  rawCandidateHandoff,
+  rawCandidateVerdict,
   summarizeRawCandidates
 };
