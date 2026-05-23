@@ -28,7 +28,7 @@ function renderRows(headers, rows) {
   const safeRows = Array.isArray(rows) ? rows : [];
   const lines = [
     `| ${headers.join(' | ')} |`,
-    `| ${headers.map((_, index) => index === 0 ? '---' : '---').join(' | ')} |`
+    `| ${headers.map(() => '---').join(' | ')} |`
   ];
   if (safeRows.length === 0) {
     lines.push(`| ${headers.map((_, index) => index === 0 ? '없음' : '알 수 없음').join(' | ')} |`);
@@ -104,6 +104,8 @@ function renderEditorPrSummary({
     ...renderRows(['항목', '값', '판단'], resultRows),
     '',
     '## 상세 report',
+    '',
+    '아래 항목은 상세 판단용 요약과 artifact pointer입니다. 원본 로그와 전체 artifact는 생성 산출물에서 확인하세요.',
     ''
   ].join('\n');
 }

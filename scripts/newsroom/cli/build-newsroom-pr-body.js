@@ -987,6 +987,50 @@ function renderStatusCompositionLines(status = {}) {
   return [...lines, ...notes];
 }
 
+function numericStatusValue(value) {
+  const number = Number(value ?? 0);
+  return Number.isFinite(number) ? number : 0;
+}
+
+function finalNewsletterHardBlockers(status = {}) {
+  const blockers = [];
+  const mustFixCount = numericStatusValue(status.must_fix_count);
+  const sourceGapCount = numericStatusValue(status.source_gap_count);
+  const staleHardFailureCount = numericStatusValue(status.stale_claim_hard_failure_count);
+
+  if (mustFixCount > 0) blockers.push(`fact-check must_fix ${mustFixCount}건`);
+  if (sourceGapCount > 0) blockers.push(`source gap ${sourceGapCount}건`);
+  if (status.quality_status && status.quality_status !== 'PASS') {
+    blockers.push(`quality_status=${status.quality_status}`);
+  }
+  if (status.fact_check_status && status.fact_check_status !== 'PASS') {
+    blockers.push(`fact_check_status=${status.fact_check_status}`);
+  }
+  if (status.stale_claim_status === 'NEEDS_FIX' || staleHardFailureCount > 0) {
+    blockers.push(`stale claim hard failure ${staleHardFailureCount}건`);
+  }
+  if (status.validate_outcome && status.validate_outcome !== 'success') {
+    blockers.push(`validate_outcome=${status.validate_outcome}`);
+  }
+  if (ensureArray(status.consistency_errors).length > 0) {
+    blockers.push(`consistency_errors ${ensureArray(status.consistency_errors).length}건`);
+  }
+  if (status.publish_gate_passed === false) {
+    blockers.push('publish_gate_passed=false');
+  }
+  if (status.repair_failure_kind) {
+    blockers.push(`repair_failure_kind=${status.repair_failure_kind}`);
+  }
+  if (status.fallback_public_issue_failed === true || status.fallback_public_issue_failed === 'true') {
+    blockers.push('fallback_public_issue_failed=true');
+  }
+  if (status.fallback_public_issue_error && status.fallback_public_issue_error !== 'none') {
+    blockers.push(`fallback_public_issue_error=${status.fallback_public_issue_error}`);
+  }
+
+  return blockers;
+}
+
 function finalNewsletterHandoff(status = {}, handoff = null) {
   if (handoff?.diagnosticsOnly) {
     return {
@@ -1048,7 +1092,10 @@ function finalNewsletterVerdict(status = {}, handoff = null) {
 function renderFinalNewsletterEditorSummary(status = {}, handoff = null, date = '') {
   const finalHandoff = finalNewsletterHandoff(status, handoff);
   const verdict = finalNewsletterVerdict(status, handoff);
-  const hardBlockerCount = Number(status.must_fix_count || 0) + Number(status.source_gap_count || 0);
+  const hardBlockers = finalNewsletterHardBlockers(status);
+  const hardBlockerSummary = hardBlockers.length === 0
+    ? '없음'
+    : hardBlockers.slice(0, 3).join('; ');
   const publishReadyLabelChecklist = status.final_publish_ready === true
     ? { label: 'publish-ready label 적용 여부 확인', checked: true }
     : { label: 'publish-ready label 금지 여부 확인', checked: true };
@@ -1077,7 +1124,7 @@ function renderFinalNewsletterEditorSummary(status = {}, handoff = null, date = 
       ['diagnostics_only', booleanText(handoff?.diagnosticsOnly), handoff?.diagnosticsOnly ? 'merge해도 홈페이지 미노출' : '아님'],
       ['publish_gate_passed', booleanText(status.publish_gate_passed), status.publish_gate_passed === true ? '통과' : '미통과'],
       ['quality score', valueOrUnknown(status.quality_score), `기준 ${valueOrUnknown(status.quality_threshold)}; ${status.quality_status || 'unknown'}`],
-      ['hard blocker', hardBlockerCount, hardBlockerCount === 0 ? '없음' : '있음'],
+      ['hard blocker', hardBlockers.length, hardBlockerSummary],
       ['warning', valueOrUnknown(status.quality_deduction_count ?? 0), Number(status.quality_deduction_count || 0) > 0 ? '확인 필요' : '없음']
     ]
   });

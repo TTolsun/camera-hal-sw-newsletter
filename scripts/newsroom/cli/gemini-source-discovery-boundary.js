@@ -159,15 +159,23 @@ function rejectedReasonSummary(rejectedProposals = [], status = '') {
     .sort((a, b) => a.key.localeCompare(b.key));
 }
 
+function numberStat(stats, key) {
+  const value = Number(stats?.[key] ?? 0);
+  return Number.isFinite(value) ? value : 0;
+}
+
 function sourceDiscoveryHandoff({
   status,
   stats = null,
   mergedCandidateRelPath = '',
   sourceDiscoveryFeedbackReport = null
 } = {}) {
-  const mergedCount = Number(stats?.merged_candidate_count ?? 0);
-  const publishableCount = Number(stats?.gemini_publishable_candidate_count ?? 0);
-  const newUniqueCount = Number(stats?.gemini_new_unique_url_count ?? 0);
+  const mergedCount = numberStat(stats, 'merged_candidate_count');
+  const geminiPublishableCount = numberStat(stats, 'gemini_publishable_candidate_count');
+  const seedPublishableCount = numberStat(stats, 'seed_publishable_candidate_count');
+  const publishableCount = geminiPublishableCount + seedPublishableCount;
+  const newUniqueCount = numberStat(stats, 'gemini_new_unique_url_count') +
+    numberStat(stats, 'seed_new_unique_url_count');
   const hasMergedArtifact = Boolean(mergedCandidateRelPath);
   if (status === FAILED_LLM_CREDENTIALS || !hasMergedArtifact || mergedCount === 0) {
     return {
@@ -182,7 +190,9 @@ function sourceDiscoveryHandoff({
     return {
       nextStep: 'run_03',
       label: '03 진행 가능',
-      reason: 'Gemini 또는 seed discovery에서 publishable 후보가 확인되었습니다.'
+      reason: seedPublishableCount > 0 && geminiPublishableCount === 0
+        ? 'Seed evidence expansion에서 publishable 후보가 확인되었습니다.'
+        : 'Gemini 또는 seed discovery에서 publishable 후보가 확인되었습니다.'
     };
   }
   if (newUniqueCount === 0 || sourceDiscoveryFeedbackReport?.status === 'WARNING') {
@@ -219,11 +229,16 @@ function sourceDiscoveryVerdict({
       firstLook: `parser/source feedback warning이 있습니다. parser_gap_count=${sourceDiscoveryFeedbackReport.parser_gap_count ?? 0}`
     };
   }
-  if (Number(stats?.gemini_publishable_candidate_count ?? 0) > 0) {
+  const geminiPublishableCount = numberStat(stats, 'gemini_publishable_candidate_count');
+  const seedPublishableCount = numberStat(stats, 'seed_publishable_candidate_count');
+  const publishableCount = geminiPublishableCount + seedPublishableCount;
+  if (publishableCount > 0) {
     return {
       label: '검토 가능',
       action: 'merged 후보를 확인한 뒤 03 final newsletter generation으로 진행할 수 있습니다.',
-      firstLook: `${stats.gemini_publishable_candidate_count}개 Gemini publishable 후보가 있습니다.`
+      firstLook: seedPublishableCount > 0 && geminiPublishableCount === 0
+        ? `${seedPublishableCount}개 seed publishable 후보가 있습니다.`
+        : `${publishableCount}개 publishable 후보가 있습니다.`
     };
   }
   if (status === 'PASS') {
@@ -293,7 +308,10 @@ function renderReport({
         ['source discovery feedback', sourceDiscoveryFeedbackReportRelPath || '없음']
       ],
       checklistItems: [
-        { label: 'Gemini 신규 publishable 후보 여부 확인', checked: Number(stats?.gemini_publishable_candidate_count ?? 0) > 0 },
+        {
+          label: 'Gemini 또는 seed publishable 후보 여부 확인',
+          checked: numberStat(stats, 'gemini_publishable_candidate_count') + numberStat(stats, 'seed_publishable_candidate_count') > 0
+        },
         { label: 'manual 후보와 중복만 생성했는지 확인', checked: false },
         { label: 'parser/source/taxonomy gap 확인', checked: false },
         { label: 'merged-candidates artifact 정상 생성 확인', checked: Boolean(mergedCandidateRelPath) },
@@ -304,6 +322,9 @@ function renderReport({
         ['Gemini 후보', stats?.gemini_candidate_count ?? geminiCandidateCount ?? 'unknown', llmUsed ? '실행됨' : '비활성/pass-through'],
         ['Gemini 신규 unique 후보', stats?.gemini_new_unique_url_count ?? 'unknown', Number(stats?.gemini_new_unique_url_count ?? 0) > 0 ? '있음' : '없음'],
         ['Gemini publishable 후보', stats?.gemini_publishable_candidate_count ?? 0, Number(stats?.gemini_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
+        ['seed 후보', stats?.seed_candidate_count ?? 0, Number(stats?.seed_candidate_count ?? 0) > 0 ? '있음' : '없음'],
+        ['seed 신규 unique 후보', stats?.seed_new_unique_url_count ?? 0, Number(stats?.seed_new_unique_url_count ?? 0) > 0 ? '있음' : '없음'],
+        ['seed publishable 후보', stats?.seed_publishable_candidate_count ?? 0, Number(stats?.seed_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
         ['중복 후보', stats?.gemini_manual_duplicate_url_count ?? 0, Number(stats?.gemini_manual_duplicate_url_count ?? 0) > 0 ? '확인 필요' : '낮음'],
         ['parser gap', sourceDiscoveryFeedbackReport?.parser_gap_count ?? 0, Number(sourceDiscoveryFeedbackReport?.parser_gap_count ?? 0) > 0 ? '보강 필요' : '없음'],
         ['Gemini parser failure', sourceDiscoveryFeedbackReport?.gemini_parser_failure_count ?? 0, Number(sourceDiscoveryFeedbackReport?.gemini_parser_failure_count ?? 0) > 0 ? '보강 필요' : '없음'],
@@ -317,6 +338,8 @@ function renderReport({
     `- merged_candidate_manifest: ${manifestRelPath || '없음'}`,
     `- proposal_validation_report: ${proposalValidationReportRelPath || '없음'}`,
     `- source_discovery_feedback_report: ${sourceDiscoveryFeedbackReportMarkdownRelPath || sourceDiscoveryFeedbackReportRelPath || '없음'}`,
+    '- rejected proposal 원문: proposal_validation_report artifact에서 확인하세요.',
+    '- parser/source feedback 원문: source_discovery_feedback_report artifact에서 확인하세요.',
     '- PR body에는 편집장 1차 판단에 필요한 요약만 남깁니다.',
     ''
   ];

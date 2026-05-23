@@ -1468,6 +1468,7 @@ test('editor PR summary renderer keeps stable top-level sections and escapes tab
   assert.match(body, /Camera\\\|HAL/);
   assert.match(body, /\| empty \| 알 수 없음 \|/);
   assert.match(body, /편집장 액션: 산출물과 검증 결과를 확인하세요\./);
+  assert.match(body, /아래 항목은 상세 판단용 요약과 artifact pointer입니다/);
   assert.doesNotMatch(body, /<details>/);
 });
 
@@ -1539,6 +1540,30 @@ test('source discovery PR report normalizes top rejected reasons and handoff sta
   });
   assert.match(passThrough, /next_step: strengthen_candidates/);
   assert.match(passThrough, /03 진행 가능하나 후보 보강 권장/);
+
+  const seedPublishable = renderSourceDiscoveryReport({
+    date,
+    status: 'PASS',
+    disabledPassThrough: true,
+    llmUsed: false,
+    geminiCandidateCount: 0,
+    mergeMode: 'seed_evidence_expansion',
+    discoveryStats: {
+      manual_candidate_count: 1,
+      gemini_candidate_count: 0,
+      gemini_new_unique_url_count: 0,
+      gemini_publishable_candidate_count: 0,
+      gemini_manual_duplicate_url_count: 0,
+      seed_candidate_count: 1,
+      seed_new_unique_url_count: 1,
+      seed_publishable_candidate_count: 1,
+      merged_candidate_count: 2
+    },
+    mergedCandidateRelPath: `content/collected-news/${date}/merged-candidates.json`
+  });
+  assert.match(seedPublishable, /next_step: run_03/);
+  assert.match(seedPublishable, /Seed evidence expansion에서 publishable 후보가 확인되었습니다/);
+  assert.match(seedPublishable, /\| seed publishable 후보 \| 1 \| 있음 \|/);
 
   const parserWarning = renderSourceDiscoveryReport({
     date,
@@ -2878,6 +2903,66 @@ test('diagnostics-only PR body keeps status first and shows insufficient evidenc
   assert.doesNotMatch(top, /public newsletter files는 생성되었습니다/);
   assert.match(body, /편집자 기사 판단 요약을 생성할 충분한 evidence가 없습니다\./);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
+});
+
+test('newsroom PR body top summary counts final hard blockers beyond must-fix and source gap', () => {
+  const root = tempRoot();
+  const date = '2026-05-10';
+  writeMinimalEvidencePackSummary(root, date);
+
+  const qualityBody = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'success',
+    status: traceStatus({
+      must_fix_count: 0,
+      source_gap_count: 0,
+      quality_status: 'NEEDS_FIX',
+      fact_check_status: 'PASS',
+      stale_claim_status: 'PASS',
+      stale_claim_hard_failure_count: 0,
+      validate_outcome: 'success',
+      publish_gate_passed: true
+    })
+  });
+  const qualityResults = extractMarkdownSection(qualityBody, '주요 결과');
+  assert.match(qualityResults, /\| hard blocker \| 1 \| quality_status=NEEDS_FIX \|/);
+
+  const staleBody = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'success',
+    status: traceStatus({
+      must_fix_count: 0,
+      source_gap_count: 0,
+      quality_status: 'PASS',
+      fact_check_status: 'PASS',
+      stale_claim_status: 'NEEDS_FIX',
+      stale_claim_hard_failure_count: 1,
+      validate_outcome: 'success',
+      publish_gate_passed: true
+    })
+  });
+  const staleResults = extractMarkdownSection(staleBody, '주요 결과');
+  assert.match(staleResults, /\| hard blocker \| 1 \| stale claim hard failure 1건 \|/);
+
+  const validationBody = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'failure',
+    status: traceStatus({
+      must_fix_count: 0,
+      source_gap_count: 0,
+      quality_status: 'PASS',
+      fact_check_status: 'PASS',
+      stale_claim_status: 'PASS',
+      stale_claim_hard_failure_count: 0,
+      validate_outcome: 'failure',
+      publish_gate_passed: true
+    })
+  });
+  const validationResults = extractMarkdownSection(validationBody, '주요 결과');
+  assert.match(validationResults, /\| hard blocker \| 1 \| validate_outcome=failure \|/);
 });
 
 test('validate-pr-body treats editorial decision summary as optional but complete when present', () => {

@@ -187,11 +187,11 @@ function buildRawCandidatePrBody({
       ],
       checklistItems: [
         { label: '후보 수집 artifact가 정상 생성됨', checked: rawArtifactExists },
-        { label: 'private/internal URL fetch 없음', checked: false },
-        { label: 'source_gap_risk 우회 없음', checked: false },
-        { label: 'quality threshold 변경 없음', checked: false },
-        { label: '03 re-crawl 없음', checked: false },
-        { label: 'Gemini proposal이 deterministic validation 없이 승격되지 않음', checked: false }
+        { label: '확인 필요: private/internal URL fetch 없음', checked: false },
+        { label: '확인 필요: source_gap_risk 우회 없음', checked: false },
+        { label: '확인 필요: quality threshold 변경 없음', checked: false },
+        { label: '확인 필요: 03 re-crawl 없음', checked: false },
+        { label: '확인 필요: Gemini proposal이 deterministic validation 없이 승격되지 않음', checked: false }
       ],
       resultRows: [
         ['후보 수', summary.candidateCount, summary.candidateCount > 0 ? '있음' : '없음'],
