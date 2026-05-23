@@ -657,12 +657,6 @@ pre code {
   min-height: 74px;
 }
 
-.footer-inner p {
-  margin-bottom: 0;
-  color: var(--text);
-  font-weight: 800;
-}
-
 .footer-links {
   display: flex;
   flex-wrap: wrap;
@@ -670,6 +664,10 @@ pre code {
 }
 
 .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-height);
+  min-width: var(--control-height);
   color: var(--muted);
   font-size: 0.92rem;
   font-weight: 700;
