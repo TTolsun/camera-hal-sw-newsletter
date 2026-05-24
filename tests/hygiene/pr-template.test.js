@@ -38,12 +38,17 @@ test('default PR template points contributors to split templates', () => {
   assert.match(text, /PR 유형 선택/);
   assert.match(text, /newsletter\.md/);
   assert.match(text, /code-docs\.md/);
+  assert.match(text, /PR body는 한글로 작성/);
+  assert.match(text, /영어 식별자는 한국어 설명/);
 });
 
 test('newsletter PR template keeps publication checklist guardrails', () => {
   const text = readTemplate('.github', 'PULL_REQUEST_TEMPLATE', 'newsletter.md');
 
   assert.match(text, /^## 뉴스레터 발행 PR$/m);
+  assert.match(text, /### 작성 원칙/);
+  assert.match(text, /PR body는 한글로 작성/);
+  assert.match(text, /영어 식별자는 한국어 설명/);
   assert.match(text, /newsletters\/YYYY-MM-DD\/newsletter\.md/);
   assert.match(text, /fact-check must_fix|must_fix/);
   assert.match(text, /source gap/i);
@@ -55,6 +60,9 @@ test('code docs PR template keeps code safety checklist guardrails', () => {
   const text = readTemplate('.github', 'PULL_REQUEST_TEMPLATE', 'code-docs.md');
 
   assert.match(text, /^## 코드 \/ 문서 \/ 리팩토링 PR$/m);
+  assert.match(text, /### 작성 원칙/);
+  assert.match(text, /PR body는 한글로 작성/);
+  assert.match(text, /영어 식별자는 한국어 설명/);
   assert.match(text, /generated artifact를 불필요하게 수정하지 않았다/);
   assert.match(text, /quality gate, hard blocker, source binding.+약화하지 않았다/);
   assert.match(text, /qualityGatePolicy\.threshold/);

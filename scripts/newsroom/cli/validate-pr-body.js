@@ -23,6 +23,23 @@ const EVIDENCE_PACK_SELECTED_HEADING = '선택된 Main Article 근거';
 const EVIDENCE_PACK_EXCLUDED_HEADING = '제외 후보 근거';
 const EVIDENCE_PACK_DIAGNOSTICS_HEADING = 'Needs-fix / Review-only 진단';
 const EVIDENCE_PACK_CHECKLIST_HEADING = '사람 검토 체크리스트';
+const REQUESTED_TYPES = new Set(['auto', 'newsletter', 'code-docs']);
+const BODY_KIND_HEADINGS = [
+  ['generated-newsletter', '생성 상태'],
+  ['newsletter-template', '뉴스레터 발행 PR'],
+  ['code-docs-template', '코드 / 문서 / 리팩토링 PR'],
+  ['root-selector', 'PR 유형 선택']
+];
+const BODY_KIND_LABELS = {
+  'generated-newsletter': '자동 생성 뉴스레터 PR body(generated-newsletter)',
+  'newsletter-template': '수동 뉴스레터 발행 template body(newsletter-template)',
+  'code-docs-template': '코드/문서/리팩토링 template body(code-docs-template)',
+  'root-selector': '루트 선택 안내 template(root-selector)',
+  unknown: '알 수 없는 PR body(unknown)',
+  ambiguous: '여러 유형 heading이 섞인 PR body(ambiguous)',
+  'type-mismatch': '요청 type과 body kind가 맞지 않는 PR body(type-mismatch)',
+  'invalid-type': '허용되지 않는 --type 값(invalid-type)'
+};
 
 function toText(value) {
   return String(value ?? '');
@@ -120,6 +137,14 @@ function datePatternForValidation(date = '') {
 
 function exactHeadingCount(text, level, heading) {
   return countMatches(text, new RegExp(`^${'#'.repeat(level)} ${escapeRegExp(heading)}$`, 'gm'));
+}
+
+function hasHeading(text, level, heading) {
+  return new RegExp(`^${'#'.repeat(level)}\\s+${escapeRegExp(heading)}\\s*$`, 'm').test(toText(text));
+}
+
+function hasSubheading(section, heading) {
+  return new RegExp(`^###\\s+${escapeRegExp(heading)}\\s*$`, 'm').test(toText(section));
 }
 
 function extractSubsection(section, heading) {
@@ -748,6 +773,188 @@ function parseStatusSection(section) {
   };
 }
 
+function detectedBodyKinds(text) {
+  return BODY_KIND_HEADINGS
+    .filter(([, heading]) => hasHeading(text, 2, heading))
+    .map(([kind]) => kind);
+}
+
+function detectBodyKind(text) {
+  const detected = detectedBodyKinds(text);
+  if (detected.length > 1) return 'ambiguous';
+  return detected[0] || 'unknown';
+}
+
+function normalizeRequestedType(value) {
+  return String(value || 'auto').trim() || 'auto';
+}
+
+function resolveBodyKind(text, requestedType = 'auto') {
+  const normalizedType = normalizeRequestedType(requestedType);
+  const detectedKinds = detectedBodyKinds(text);
+  const detectedKind = detectedKinds.length > 1 ? 'ambiguous' : (detectedKinds[0] || 'unknown');
+  if (!REQUESTED_TYPES.has(normalizedType)) {
+    return {
+      bodyKind: 'invalid-type',
+      requestedType: normalizedType,
+      detectedKind,
+      detectedKinds
+    };
+  }
+  if (normalizedType === 'auto') {
+    return {
+      bodyKind: detectedKind,
+      requestedType: normalizedType,
+      detectedKind,
+      detectedKinds
+    };
+  }
+  if (
+    normalizedType === 'newsletter' &&
+    (detectedKind === 'generated-newsletter' || detectedKind === 'newsletter-template')
+  ) {
+    return {
+      bodyKind: detectedKind,
+      requestedType: normalizedType,
+      detectedKind,
+      detectedKinds
+    };
+  }
+  if (normalizedType === 'code-docs' && detectedKind === 'code-docs-template') {
+    return {
+      bodyKind: detectedKind,
+      requestedType: normalizedType,
+      detectedKind,
+      detectedKinds
+    };
+  }
+  return {
+    bodyKind: 'type-mismatch',
+    requestedType: normalizedType,
+    detectedKind,
+    detectedKinds
+  };
+}
+
+function bodyKindLabel(kind) {
+  return BODY_KIND_LABELS[kind] || kind;
+}
+
+function hasValidationCommand(text, scriptName) {
+  return new RegExp(`\\bnpm(?:\\.cmd)?\\s+run\\s+${escapeRegExp(scriptName)}\\b`).test(toText(text));
+}
+
+function validateRequiredSubheadings(section, headings, label, errors) {
+  for (const heading of headings) {
+    if (!hasSubheading(section, heading)) {
+      errors.push(`${label} body에는 "### ${heading}" 섹션이 필요합니다.`);
+    }
+  }
+}
+
+function validateRequiredPatterns(section, items, label, errors) {
+  const source = toText(section);
+  for (const item of items) {
+    if (!item.pattern.test(source)) {
+      errors.push(`${label} body에는 "${item.label}" 항목이 필요합니다.`);
+    }
+  }
+}
+
+function validateValidationCommands(section, label, errors) {
+  if (!hasValidationCommand(section, 'test')) {
+    errors.push(`${label} body의 Validation 섹션에는 "npm run test" 또는 "npm.cmd run test"가 필요합니다.`);
+  }
+  if (!hasValidationCommand(section, 'validate')) {
+    errors.push(`${label} body의 Validation 섹션에는 "npm run validate" 또는 "npm.cmd run validate"가 필요합니다.`);
+  }
+}
+
+function validateNewsletterTemplateBodyText(text, options = {}) {
+  text = toText(text);
+  const errors = [];
+  const sections = extractSections(text);
+  const count = exactHeadingCount(text, 2, '뉴스레터 발행 PR');
+  if (count !== 1) {
+    errors.push(`뉴스레터 발행 PR body에는 "## 뉴스레터 발행 PR" heading이 정확히 하나 필요합니다. 현재 ${count}개입니다.`);
+  }
+  const body = sectionByHeading(sections, ['뉴스레터 발행 PR']);
+  if (!body) {
+    errors.push('뉴스레터 발행 PR body 내용을 찾을 수 없습니다.');
+    return { ok: false, errors };
+  }
+  validateRequiredSubheadings(body, [
+    'Public artifact',
+    'Editorial quality',
+    'Source / fact-check',
+    'Validation'
+  ], '뉴스레터 발행 PR', errors);
+  validateRequiredPatterns(body, [
+    { label: 'newsletters/YYYY-MM-DD/newsletter.md 또는 실제 날짜 newsletter.md', pattern: /newsletters\/(?:YYYY-MM-DD|\d{4}-\d{2}-\d{2})\/newsletter\.md/ },
+    { label: 'newsletters/YYYY-MM-DD/index.html 또는 실제 날짜 index.html', pattern: /newsletters\/(?:YYYY-MM-DD|\d{4}-\d{2}-\d{2})\/index\.html/ },
+    { label: 'data/newsletters.json', pattern: /data\/newsletters\.json/ },
+    { label: '기사 품질 정책 config/newsletter-policy.json', pattern: /config\/newsletter-policy\.json/ },
+    { label: '확인한 사실', pattern: /확인한 사실/ },
+    { label: '배경지식', pattern: /배경지식/ },
+    { label: 'Camera HAL 관점', pattern: /Camera HAL(?:\s*\/\s*Driver)? 관점|Camera HAL/i },
+    { label: '실행 항목', pattern: /실행 항목/ },
+    { label: '팀 공유 포인트', pattern: /팀 공유 포인트/ },
+    { label: 'TODO 없음', pattern: /TODO/ },
+    { label: 'Sources 또는 출처', pattern: /Sources|출처/ },
+    { label: 'References 또는 참고자료', pattern: /References|참고자료/ },
+    { label: 'source gap', pattern: /source gap/i },
+    { label: 'fact-check must_fix', pattern: /fact-check must_fix|must_fix/i },
+    { label: 'watch/reference page dated evidence', pattern: /watch\/reference page|dated evidence/i }
+  ], '뉴스레터 발행 PR', errors);
+  validateValidationCommands(body, '뉴스레터 발행 PR', errors);
+  return {
+    ok: errors.length === 0,
+    errors,
+    bodyKind: options.bodyKind || 'newsletter-template'
+  };
+}
+
+function validateCodeDocsTemplateBodyText(text, options = {}) {
+  text = toText(text);
+  const errors = [];
+  const sections = extractSections(text);
+  const count = exactHeadingCount(text, 2, '코드 / 문서 / 리팩토링 PR');
+  if (count !== 1) {
+    errors.push(`코드/문서/리팩토링 PR body에는 "## 코드 / 문서 / 리팩토링 PR" heading이 정확히 하나 필요합니다. 현재 ${count}개입니다.`);
+  }
+  const body = sectionByHeading(sections, ['코드 / 문서 / 리팩토링 PR']);
+  if (!body) {
+    errors.push('코드/문서/리팩토링 PR body 내용을 찾을 수 없습니다.');
+    return { ok: false, errors };
+  }
+  validateRequiredSubheadings(body, [
+    'Scope',
+    'Code safety',
+    'Docs',
+    'Validation'
+  ], '코드/문서/리팩토링 PR', errors);
+  validateRequiredPatterns(body, [
+    { label: '한 관심사만 담기', pattern: /한 관심사/ },
+    { label: 'generated artifact 불필요 수정 금지', pattern: /generated artifact를 불필요하게 수정하지 않았다/ },
+    { label: 'unrelated cleanup 금지', pattern: /unrelated cleanup/ },
+    { label: 'quality gate, hard blocker, source binding 보호', pattern: /quality gate, hard blocker, source binding.+약화하지 않았다/ },
+    { label: 'qualityGatePolicy.threshold 설명', pattern: /qualityGatePolicy\.threshold/ },
+    { label: 'qualityGatePolicy.hardFailConditions regression test', pattern: /qualityGatePolicy\.hardFailConditions/ },
+    { label: 'final_publish_ready 검증', pattern: /final_publish_ready/ },
+    { label: 'artifact_final_publish_ready 검증', pattern: /artifact_final_publish_ready/ },
+    { label: 'workflow 동작 변경 test', pattern: /workflow 동작 변경/ },
+    { label: 'compatibility wrapper/shim 보호', pattern: /compatibility wrapper\/shim/ },
+    { label: 'README / AGENTS / docs 충돌 확인', pattern: /README \/ AGENTS \/ docs/ },
+    { label: 'archive 문서 주의', pattern: /archive 문서/ }
+  ], '코드/문서/리팩토링 PR', errors);
+  validateValidationCommands(body, '코드/문서/리팩토링 PR', errors);
+  return {
+    ok: errors.length === 0,
+    errors,
+    bodyKind: options.bodyKind || 'code-docs-template'
+  };
+}
+
 function parseArgs(argv) {
   const options = {};
   let filePath = '';
@@ -759,6 +966,11 @@ function parseArgs(argv) {
     } else if (arg === '--root') {
       options.root = argv[index + 1] || '';
       index += 1;
+    } else if (arg === '--type') {
+      options.type = argv[index + 1] || '';
+      index += 1;
+    } else if (arg === '--require-publish-status-consistency') {
+      options.requirePublishStatusConsistency = true;
     } else if (!filePath) {
       filePath = arg;
     } else {
@@ -768,7 +980,7 @@ function parseArgs(argv) {
   return { filePath, options };
 }
 
-function validatePrBodyText(text, options = {}) {
+function validateGeneratedNewsletterBodyText(text, options = {}) {
   text = toText(text);
   const errors = [];
   const sections = extractSections(text);
@@ -872,7 +1084,86 @@ function validatePrBodyText(text, options = {}) {
 
   return {
     ok: errors.length === 0,
-    errors
+    errors,
+    bodyKind: options.bodyKind || 'generated-newsletter'
+  };
+}
+
+function validatePrBodyText(text, options = {}) {
+  text = toText(text);
+  const resolved = resolveBodyKind(text, options.type);
+  const common = {
+    bodyKind: resolved.bodyKind,
+    detectedKind: resolved.detectedKind,
+    requestedType: resolved.requestedType
+  };
+
+  if (resolved.bodyKind === 'invalid-type') {
+    return {
+      ok: false,
+      errors: [`PR body --type 값이 올바르지 않습니다: ${resolved.requestedType}. 허용값: ${[...REQUESTED_TYPES].join(', ')}.`],
+      ...common
+    };
+  }
+  if (resolved.bodyKind === 'type-mismatch') {
+    return {
+      ok: false,
+      errors: [`PR body type 불일치: --type ${resolved.requestedType} 요청은 현재 body kind ${bodyKindLabel(resolved.detectedKind)}와 맞지 않습니다.`],
+      ...common
+    };
+  }
+  if (resolved.bodyKind === 'ambiguous') {
+    return {
+      ok: false,
+      errors: [`PR body 유형이 모호합니다. 여러 유형 heading이 함께 있습니다: ${resolved.detectedKinds.map(bodyKindLabel).join(', ')}.`],
+      ...common
+    };
+  }
+  if (resolved.bodyKind === 'root-selector') {
+    return {
+      ok: false,
+      errors: ['PR body가 루트 선택 안내 template입니다. 뉴스레터 발행 또는 코드/문서/리팩토링 template을 선택해 한글 PR body를 작성해야 합니다.'],
+      ...common
+    };
+  }
+  if (resolved.bodyKind === 'unknown') {
+    return {
+      ok: false,
+      errors: ['PR body 유형을 판정할 수 없습니다. "## 생성 상태", "## 뉴스레터 발행 PR", "## 코드 / 문서 / 리팩토링 PR" 중 하나가 필요합니다.'],
+      ...common
+    };
+  }
+  if (resolved.bodyKind === 'generated-newsletter') {
+    return {
+      ...validateGeneratedNewsletterBodyText(text, {
+        ...options,
+        bodyKind: resolved.bodyKind
+      }),
+      ...common
+    };
+  }
+  if (resolved.bodyKind === 'newsletter-template') {
+    return {
+      ...validateNewsletterTemplateBodyText(text, {
+        ...options,
+        bodyKind: resolved.bodyKind
+      }),
+      ...common
+    };
+  }
+  if (resolved.bodyKind === 'code-docs-template') {
+    return {
+      ...validateCodeDocsTemplateBodyText(text, {
+        ...options,
+        bodyKind: resolved.bodyKind
+      }),
+      ...common
+    };
+  }
+  return {
+    ok: false,
+    errors: [`지원하지 않는 PR body kind입니다: ${bodyKindLabel(resolved.bodyKind)}.`],
+    ...common
   };
 }
 
@@ -882,10 +1173,14 @@ function validatePrBodyFile(filePath, options = {}) {
     requireHomepageHeadlineDesignReview: true,
     ...options
   });
-  const resolved = resolvePublishStatus(options);
-  if (resolved.consistencyErrors.length > 0) {
-    result.errors.push(`Artifact consistency errors: ${resolved.consistencyErrors.join('; ')}`);
-    result.ok = false;
+  const shouldValidatePublishStatus = result.bodyKind === 'generated-newsletter' &&
+    (options.date || options.requirePublishStatusConsistency === true);
+  if (shouldValidatePublishStatus) {
+    const resolved = resolvePublishStatus(options);
+    if (resolved.consistencyErrors.length > 0) {
+      result.errors.push(`Artifact consistency errors: ${resolved.consistencyErrors.join('; ')}`);
+      result.ok = false;
+    }
   }
   return result;
 }
@@ -893,7 +1188,7 @@ function validatePrBodyFile(filePath, options = {}) {
 function main() {
   const { filePath, options } = parseArgs(process.argv.slice(2));
   if (!filePath) {
-    console.error('Usage: node scripts/validate-pr-body.js <pr-body.md> [--date YYYY-MM-DD] [--root <repo-root>]');
+    console.error('Usage: node scripts/validate-pr-body.js <pr-body.md> [--type auto|newsletter|code-docs] [--date YYYY-MM-DD] [--root <repo-root>] [--require-publish-status-consistency]');
     process.exit(1);
   }
   const result = validatePrBodyFile(filePath, options);
@@ -901,7 +1196,7 @@ function main() {
     console.error(result.errors.map(error => `- ${error}`).join('\n'));
     process.exit(1);
   }
-  console.log('Validated newsroom PR body.');
+  console.log('Validated PR body.');
 }
 
 if (require.main === module) {
@@ -909,9 +1204,13 @@ if (require.main === module) {
 }
 
 module.exports = {
+  detectBodyKind,
   extractSections,
   extractStatusSection,
+  hasHeading,
   parseStatusSection,
+  resolveBodyKind,
   validatePrBodyFile,
+  validateGeneratedNewsletterBodyText,
   validatePrBodyText
 };

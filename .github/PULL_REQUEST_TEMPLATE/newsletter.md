@@ -1,5 +1,11 @@
 ## 뉴스레터 발행 PR
 
+### 작성 원칙
+
+- [ ] PR body는 한글로 작성했다.
+- [ ] 파일명, 명령어, 코드 식별자, JSON key, enum 값, URL, 외부 제품명은 원문을 유지했다.
+- [ ] `final_publish_ready` 같은 영어 식별자는 한국어 설명을 함께 적었다.
+
 ### Public artifact
 
 - [ ] `newsletters/YYYY-MM-DD/newsletter.md`를 작성했다.
