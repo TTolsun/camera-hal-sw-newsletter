@@ -30,6 +30,12 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - Android Developers Blog - Camera (`rss-source`): https://android-developers.googleblog.com/search?q=CameraX
 - Android Developers Latest Updates (`release-note-watch`): https://developer.android.com/latest-updates
 - CameraX Release Notes (`release-note-watch`): https://developer.android.com/jetpack/androidx/releases/camera
+- Media3 Release Notes (`release-note-watch`, `android-media`): https://developer.android.com/jetpack/androidx/releases/media3
+- MediaRecorder Documentation (`documentation-watch`, `reference_only`): https://developer.android.com/media/platform/mediarecorder
+- Android Supported Media Formats (`documentation-watch`, `reference_only`): https://developer.android.com/media/platform/supported-formats
+- Photo Picker Documentation (`documentation-watch`, `reference_only`): https://developer.android.com/training/data-storage/shared/photo-picker
+- MediaStore Reference (`documentation-watch`, `reference_only`): https://developer.android.com/reference/android/provider/MediaStore
+- MediaCodec Reference (`documentation-watch`, `reference_only`): https://developer.android.com/reference/android/media/MediaCodec
 - AOSP Camera Documentation (`documentation-watch`, `official_documentation_reference`): https://source.android.com/docs/core/camera
 - AOSP What's New / Release Notes (`release-note-watch`): https://source.android.com/docs/whatsnew
 - AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
@@ -38,6 +44,8 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb
 - Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
 - Android Developer Newsletter (`documentation-watch`): https://developer.android.com/newsletter
+
+Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/behavior, camera output path 연결이 모두 있을 때만 `android_multimedia_camera_output` 후보로 봅니다. MediaCodec, MediaRecorder, MediaStore, Photo Picker, supported formats 문서는 reference/background source이며 단독 기사 후보가 아닙니다.
 
 ### 후보 / 교차 확인 출처
 

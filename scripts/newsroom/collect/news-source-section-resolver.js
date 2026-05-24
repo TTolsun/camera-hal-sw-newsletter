@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const DEFAULT_SECTION_MAP = {
   android: 'Android / AOSP / Camera',
+  'android-media': 'Android Media / Camera Output',
   'camera-api': 'Android / AOSP / Camera',
   'camera-hal': 'Android / AOSP / Camera',
   aosp: 'Android / AOSP / Camera',

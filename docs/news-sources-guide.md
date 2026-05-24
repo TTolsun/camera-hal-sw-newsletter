@@ -55,6 +55,7 @@ registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd 
 `sectionMap`은 source category를 editorial grouping section으로 매핑합니다. source entry는 `category`만 보관하고, collector가 `sectionMap[category]`에서 `section`과 `source_section`을 파생합니다.
 
 - `Android / AOSP / Camera`
+- `Android Media / Camera Output`
 - `Linux Camera / Driver`
 - `C++ / Native / Toolchain`
 - `Embedded / Semiconductor`
@@ -75,6 +76,7 @@ newsroom generator는 이미지를 browse하거나 image URL을 만들어내면 
 2. `sourceUrl`은 public source 또는 tag page로 설정합니다.
 3. `rssUrl`은 feed URL이 확인된 경우에만 설정합니다. RSS URL을 추측하지 않습니다.
 4. 위 mapping에서 `category`를 선택합니다. source entry에 `section`을 직접 추가하지 않습니다.
+   - `android-media`는 official Android media reference/release-note discovery grouping입니다. article relevance 판단은 source category가 아니라 기사 단위 `relevance_bucket`과 scope score가 담당합니다.
 5. optional, noisy, paywalled, broad trend source는 editor가 regular collection에 포함하기 전까지 `enabled: false`로 둡니다.
 6. community/newsletter/paywall-prone source는 `candidateOnly: true`를 사용합니다.
 7. media/community/vendor-reporting source는 `requiresCrossCheck: true`를 사용합니다.

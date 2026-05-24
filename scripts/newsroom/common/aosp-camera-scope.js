@@ -22,7 +22,7 @@ const BUCKET_DEFINITIONS = Object.freeze({
   [BUCKETS.DIRECT_AOSP_CAMERA]: 'AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence.',
   [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 'Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence.',
   [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 'Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path.',
-  [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 'Android camera-output or multimedia evidence such as APV, Ultra HDR, HDR video, MediaProvider, MediaStore, gallery output, media output, video call, camera/audio sync, social app camera capture, or captured image/video result behavior.',
+  [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 'Android camera-output or multimedia evidence such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, media output, video call camera path, camera/audio sync, social app camera capture, or captured image/video result behavior.',
   [BUCKETS.SOC_PLATFORM_SIGNAL]: 'Public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact.',
   [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 'C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence.',
   [BUCKETS.GENERIC_TECH_WATCHLIST]: 'General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion.'
@@ -138,7 +138,8 @@ const DIRECT_CAMERA_RUNTIME_CONTEXT_PATTERNS = [
 const MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS = [
   /\bcamera\s+output\b/i,
   /\bgallery\s+output\b/i,
-  /\bmedia\s+output\b/i,
+  /\b(?:camera|capture|captured|recording|gallery)\b[^.\n]{0,100}\bmedia\s+output\b/i,
+  /\bmedia\s+output\b[^.\n]{0,100}\b(?:camera|capture|captured|recording|gallery)\b/i,
   /\bcamera\s*\/\s*audio\s+sync\b/i,
   /\baudio\s*\/\s*video\s+sync\b[^.\n]{0,120}\b(?:camera|preview|video\s+(?:recording|call)|capture)\b/i,
   /\b(?:camera|preview|video\s+(?:recording|call)|capture)\b[^.\n]{0,120}\baudio\s*\/\s*video\s+sync\b/i,
@@ -154,37 +155,95 @@ const MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS = [
   /\bHDR\s+video\b/i,
   /\bAPV\b/i,
   /\bAdvanced\s+Professional\s+Video\b/i,
-  /\bvideo\s+call\b/i
+  /\bMediaCodec\b/i,
+  /\bMedia3\b/i,
+  /\bMediaRecorder\b/i,
+  /\bSurfaceView\b/i,
+  /\bTextureView\b/i,
+  /\bWebRTC\b/i,
+  /\bvideo\s+call\b[^.\n]{0,100}\b(?:camera|capture|preview|A\/V|audio\s*\/\s*video|sync|switch(?:ing)?)\b/i,
+  /\b(?:camera|capture|preview|A\/V|audio\s*\/\s*video|sync|switch(?:ing)?)\b[^.\n]{0,100}\bvideo\s+call\b/i,
+  /\bcamera-generated\b[^.\n]{0,100}\bplayback\b/i,
+  /\bcamera-recorded\b[^.\n]{0,100}\bplayback\b/i,
+  /\bcaptured\s+video\b[^.\n]{0,100}\bplayback\b/i,
+  /\brecording\s+validation\b/i,
+  /\bcamera\s+generated\s+(?:image|video)\b/i
 ];
 
 const MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS = [
   /\bMediaProvider\b/i,
   /\bmedia\s+provider\b/i,
   /\bMediaStore\b/i,
-  /\bmedia\s+store\b/i
+  /\bmedia\s+store\b/i,
+  /\bPhoto\s+Picker\b/i,
+  /\bphoto\s+picker\b/i,
+  /\bEXIF\b/i
 ];
 
 const CAMERA_OUTPUT_CONTEXT_PATTERNS = [
   /\bcamera\b/i,
   /\bcaptur(?:e|ed|es|ing)\b/i,
+  /\brecord(?:ed|ing)?\b/i,
   /\bpreview\b/i,
   /\bvideo\s+recording\b/i,
   /\bgallery\s+output\b/i,
+  /\bgallery\s*\/\s*media\s+access\b/i,
+  /\bmedia\s+access\b/i,
   /\bmedia\s+output\b/i,
   /\bcamera\s+output\b/i,
+  /\bsharing\b/i,
   /\bsocial\s+app\s+camera\b/i,
   /\bcaptured\s+image\b/i,
-  /\bcaptured\s+video\b/i
+  /\bcaptured\s+video\b/i,
+  /\bWebRTC\b[^.\n]{0,100}\bcamera\b/i,
+  /\bcamera\b[^.\n]{0,100}\bWebRTC\b/i,
+  /\bcamera\s+switch(?:ing)?\b/i
 ];
 
 const STORAGE_CAMERA_OUTPUT_CONTEXT_PATTERNS = [
   /\bcamera\b/i,
   /\bcaptur(?:e|ed|es|ing)\b/i,
+  /\brecord(?:ed|ing)?\b/i,
   /\bgallery\s+output\b/i,
+  /\bgallery\s*\/\s*media\s+access\b/i,
+  /\bmedia\s+access\b/i,
   /\bmedia\s+output\b/i,
   /\bcamera\s+output\b/i,
   /\bcaptured\s+image\b/i,
-  /\bcaptured\s+video\b/i
+  /\bcaptured\s+video\b/i,
+  /\bsharing\b/i,
+  /\bindex(?:ing)?\b[^.\n]{0,100}\b(?:camera|capture|captured|photo|video)\b/i,
+  /\b(?:camera|capture|captured|photo|video)\b[^.\n]{0,100}\bindex(?:ing)?\b/i
+];
+
+const MULTIMEDIA_ENGINEERING_CHANGE_PATTERNS = [
+  /\brelease\s+notes?\b/i,
+  /\bversion\s+\d+\.\d+/i,
+  /\bAPI\b/i,
+  /\bbehavior\b/i,
+  /\bbug\s+fix\b/i,
+  /\bfix(?:ed|es)?\b/i,
+  /\bregression\b/i,
+  /\bcompatibility\b/i,
+  /\blatency\b/i,
+  /\bjank\b/i,
+  /\bframe\s+(?:drop|drops|dropped|timing|pacing|latency)\b/i,
+  /\bA\/V\s+sync\b/i,
+  /\baudio\s*\/\s*video\s+sync\b/i,
+  /\bsync\b[^.\n]{0,80}\b(?:camera|preview|recording|video\s+call|capture)\b/i,
+  /\b(?:camera|preview|recording|video\s+call|capture)\b[^.\n]{0,80}\bsync\b/i,
+  /\bperformance\b/i,
+  /\bencode(?:r|d|s|ing)?\b/i,
+  /\bdecode(?:r|d|s|ing)?\b/i,
+  /\btranscod(?:e|ed|es|ing)\b/i,
+  /\bformat\s+(?:support|compatibility|negotiation)\b/i,
+  /\badd(?:ed|s)?\b/i,
+  /\bchange(?:d|s)?\b/i,
+  /\bintroduc(?:e|ed|es|ing)\b/i,
+  /\bsupport(?:ed|s)?\b/i,
+  /\bupdate(?:d|s)?\b/i,
+  /\bimprove(?:d|s|ment)?\b/i,
+  /\bavailable\b/i
 ];
 
 const SOC_PATTERNS = [
@@ -350,17 +409,30 @@ function detectNativeAndroidToolingWorkflow(candidate = {}) {
 }
 
 function multimediaCameraOutputHits(value) {
+  if (/\b(?:without|no|lacks?|missing)\b[^.\n]{0,100}\b(?:camera\s+output|camera-generated|captured\s+(?:image|video)|media\s+access)\b[^.\n]{0,80}\b(?:impact|path|relevance|change)\b/i.test(value)) {
+    return [];
+  }
+  if (/\b(?:camera\s+output|camera-generated|captured\s+(?:image|video)|media\s+access)\b[^.\n]{0,100}\b(?:without|no|lacks?|missing)\b[^.\n]{0,80}\b(?:impact|path|relevance|change)\b/i.test(value)) {
+    return [];
+  }
   const strongHits = patternHits(MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS, value);
   const outputContextHits = patternHits(CAMERA_OUTPUT_CONTEXT_PATTERNS, value);
   const storageContextHits = patternHits(STORAGE_CAMERA_OUTPUT_CONTEXT_PATTERNS, value);
+  const engineeringHits = patternHits(MULTIMEDIA_ENGINEERING_CHANGE_PATTERNS, value);
+  if (engineeringHits.length === 0) return [];
+  const gatedOutputHits = outputContextHits.length > 0
+    ? patternHits(MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS, value)
+    : [];
+  const gatedStorageHits = storageContextHits.length > 0
+    ? patternHits(MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS, value)
+    : [];
+  if (strongHits.length === 0 && gatedOutputHits.length === 0 && gatedStorageHits.length === 0) return [];
   return [
     ...strongHits,
-    ...(outputContextHits.length > 0
-      ? patternHits(MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS, value)
-      : []),
-    ...(storageContextHits.length > 0
-      ? patternHits(MULTIMEDIA_CAMERA_OUTPUT_STORAGE_PATTERNS, value)
-      : [])
+    ...gatedOutputHits,
+    ...gatedStorageHits,
+    ...outputContextHits,
+    ...engineeringHits
   ];
 }
 
@@ -471,12 +543,12 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
     bucket = bucketHint;
     evidenceTerms = multimediaCameraOutputTerms;
-  } else if (androidAdjacentTerms.length > 0 && hasArticleCameraBehavior) {
-    bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
-    evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms];
   } else if (multimediaCameraOutputTerms.length > 0) {
     bucket = BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT;
     evidenceTerms = multimediaCameraOutputTerms;
+  } else if (androidAdjacentTerms.length > 0 && hasArticleCameraBehavior) {
+    bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
+    evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms];
   } else if (
     socTerms.length > 0 &&
     socCameraImpactTerms.length > 0 &&

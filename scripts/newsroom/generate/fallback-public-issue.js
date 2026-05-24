@@ -705,7 +705,17 @@ function categoryForCandidate(candidate, fallback = false) {
   if (candidate.relevance_bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) return 'Camera Driver / Image Pipeline';
   if (candidate.relevance_bucket === BUCKETS.DIRECT_AOSP_CAMERA) return 'AOSP Camera / Android Camera';
   if (candidate.relevance_bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) return fallback ? 'Adjacent Watch / Android Camera' : 'Android Platform / CameraX';
-  if (candidate.relevance_bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) return fallback ? 'Adjacent Watch / Camera Output' : 'Camera Output / Multimedia Supporting';
+  if (candidate.relevance_bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
+    const body = text(candidate);
+    if (/\bMediaCodec\b/i.test(body)) return fallback ? 'Adjacent Watch / MediaCodec' : 'Camera Output / MediaCodec';
+    if (/\bMedia3\b/i.test(body)) return fallback ? 'Adjacent Watch / Media3' : 'Camera Output / Media3';
+    if (/\bPhoto\s+Picker\b/i.test(body)) return fallback ? 'Adjacent Watch / Photo Picker' : 'Camera Output / Photo Picker';
+    if (/\bWebRTC\b/i.test(body)) return fallback ? 'Adjacent Watch / WebRTC' : 'Camera Output / WebRTC';
+    if (/\bA\/V\s+Sync\b|\baudio\s*\/\s*video\s+sync\b/i.test(body)) return fallback ? 'Adjacent Watch / A/V Sync' : 'Camera Output / A/V Sync';
+    if (/\bpreview\b/i.test(body)) return fallback ? 'Adjacent Watch / Preview' : 'Camera Output / Preview';
+    if (/\bgallery\b|\bMediaStore\b/i.test(body)) return fallback ? 'Adjacent Watch / Gallery' : 'Camera Output / Gallery';
+    return fallback ? 'Adjacent Watch / Camera Output' : 'Camera Output / Media Pipeline';
+  }
   if (candidate.relevance_bucket === BUCKETS.SOC_PLATFORM_SIGNAL) return 'Adjacent Watch / SoC Platform';
   if (
     candidate.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK &&

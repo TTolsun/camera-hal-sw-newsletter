@@ -14,7 +14,7 @@ const MONTH_DAY_TIME_YEAR_PATTERN = new RegExp(`\\b(${MONTHS})\\s+(\\d{1,2})\\s+
 const RFC_DATE_PATTERN = new RegExp(`\\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\\s+(\\d{1,2})\\s+(${MONTHS})\\s+(20\\d{2})\\b`, 'i');
 const MONTH_YEAR_PATTERN = new RegExp(`\\b(${MONTHS})\\s+(20\\d{2})\\b`, 'i');
 const SMR_PATTERN = /\b(?:SMR[-\s]?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[-\s]?20\d{2}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+20\d{2}\s+SMR|Security Maintenance Release)\b/i;
-const VERSION_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|Claude Code\s+v?\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|SMR[-\s]?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[-\s]?20\d{2}|v?\d+\.\d+\.\d+(?:[-\w.]*)?)\b/i;
+const VERSION_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|Media3\s+\d+\.\d+\.\d+(?:[-\w.]*)?|Claude Code\s+v?\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|SMR[-\s]?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[-\s]?20\d{2}|v?\d+\.\d+\.\d+(?:[-\w.]*)?)\b/i;
 const BEHAVIOR_PATTERN = /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|remove(?:d|s)?|deprecat(?:ed|es)|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?|migrat(?:ed|es|ion)|security|vulnerability|CVE|bulletin|release(?:d|s)?|compatibility|requirement|API|behavior)\b/i;
 const MONTH_NUMBER = {
   jan: '01',
@@ -139,6 +139,16 @@ function componentFromText(text = '', fallback = '') {
     'PreviewView',
     'CameraController',
     'CameraEffect',
+    'Media3',
+    'MediaCodec',
+    'MediaRecorder',
+    'MediaStore',
+    'Photo Picker',
+    'SurfaceView',
+    'TextureView',
+    'WebRTC',
+    'A/V Sync',
+    'Android media pipeline',
     'CDD',
     'CDD camera orientation',
     'CTS',
@@ -389,6 +399,12 @@ function normalizeCameraXVersion(value = '', fallback = '') {
   return version;
 }
 
+function normalizeMedia3Version(value = '', fallback = '') {
+  const version = firstVersion(`${value} ${fallback}`);
+  const match = String(version).match(/\b(?:Media3\s+)?v?(\d+\.\d+\.\d+(?:[-\w.]*)?)\b/i);
+  return match ? `Media3 ${match[1]}` : version || fallback;
+}
+
 function parserItemKey(item) {
   return `${item.url}|${item.title}`.toLowerCase();
 }
@@ -566,7 +582,7 @@ function versionedReleaseRowExtraction({
     adapterId: source.id || 'android-developers-latest-updates',
     sourceType: 'release_note',
     source: {
-      name: 'CameraX Release Notes',
+      name: source.name || 'Release Notes',
       url: releaseUrl || source.sourceUrl || source.url
     },
     parentSource: {
@@ -687,6 +703,56 @@ function linkedItems(html, source, options = {}) {
 
 function parseCameraXReleaseNotes(html, source) {
   return parseSourceWithAdapters(html, source);
+}
+
+function parseMedia3ReleaseNotes(html, source) {
+  const items = headingBlocks(html, source.url)
+    .map(block => {
+      const version = normalizeMedia3Version(block.title, block.url);
+      if (!/^Media3\s+\d+\.\d+\.\d+/i.test(version)) return null;
+      const evidenceText = `${block.title} ${block.body}`;
+      const date = firstDate(evidenceText);
+      const component = componentFromText(evidenceText, 'Media3 / Android media pipeline');
+      const behavior = firstBehavior(block.body || block.title);
+      if (!date || !version || !component || !behavior) return null;
+      const links = extractOutgoingLinksFromHtml(block.body, {
+        baseUrl: block.url,
+        sourceField: 'release_note_block'
+      });
+      const extraction = versionedReleaseRowExtraction({
+        source,
+        heading: block.title || version,
+        releaseUrl: block.url,
+        date,
+        version,
+        component,
+        behavior,
+        links,
+        diagnosticReason: ''
+      });
+      return {
+        source,
+        title: `${source.name || 'Media3 Release Notes'} - ${version}`,
+        url: block.url,
+        publishedAt: date,
+        datePrecision: 'day',
+        parentUrl: source.url,
+        parentTitle: source.name,
+        sourceSection: source.section || '',
+        summary: behavior,
+        sourceKind: 'release_note_item',
+        collectionMode: 'release-note-item',
+        version_or_release: version,
+        api_or_component: component,
+        behavior_change: behavior,
+        source_extraction: extraction,
+        extraction_quality: extraction.extraction_quality,
+        outgoing_links: links
+      };
+    })
+    .filter(Boolean)
+    .filter(hasReleaseItemEvidence);
+  return uniqueParserItems(items).slice(0, 12);
 }
 
 function parseAospWhatsNew(html, source) {
@@ -979,6 +1045,7 @@ function parseSamsungMobileSecurityUpdates(html, source) {
 const PARSERS = {
   'android-developers-latest-updates': parseAndroidLatestUpdates,
   'camerax-release-notes': parseCameraXReleaseNotes,
+  'androidx-media3-release-notes': parseMedia3ReleaseNotes,
   'aosp-whats-new-release-notes': parseAospWhatsNew,
   'aosp-site-updates': parseAospSiteUpdates,
   'android-security-bulletin': parseAndroidSecurityBulletin,

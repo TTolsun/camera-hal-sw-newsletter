@@ -583,11 +583,98 @@ test('collector forces official documentation reference source out of final arti
   }));
 
   assert.equal(candidate.source_role, 'official_documentation_reference');
-  assert.equal(candidate.source_quality.source_url_quality, 'official_documentation_reference');
+  assert.ok(['official_documentation_reference', 'undated_reference_page'].includes(candidate.source_quality.source_url_quality));
   assert.equal(candidate.finalSelectionEligibility, 'exclude');
   assert.equal(candidate.main_eligible, false);
   assert.equal(candidate.reference_only, true);
   assert.equal(candidate.url, 'https://source.android.com/docs/core/camera');
+});
+
+test('Media3 release notes promote only concrete camera-output items', () => {
+  const media3Source = source({
+    id: 'androidx-media3-release-notes',
+    name: 'Media3 Release Notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/media3',
+    sourceUrl: 'https://developer.android.com/jetpack/androidx/releases/media3',
+    sourceRole: 'official_release_source',
+    sourceUrlQualityHint: 'official_release_note_anchor',
+    mainArticlePolicy: 'allowed',
+    requiresCrossCheckDefault: false,
+    evidenceGranularityHint: 'versioned_release_row',
+    sourceQualityNotes: ['official source'],
+    category: 'android-media',
+    section: 'Android Media / Camera Output',
+    priority: 'medium',
+    reliability: 'official',
+    keywords: ['Media3', 'MediaCodec', 'camera output', 'recording', 'A/V sync']
+  });
+  const html = `
+    <h2 id="media3">Media3</h2>
+    <p>Code Sample API Reference androidx.media3.common Support libraries for media use cases. Version 1.8.0 was updated on May 20, 2026.</p>
+    <h2 id="1.8.0">Version 1.8.0</h2>
+    <p>May 20, 2026</p>
+    <ul>
+      <li>Fixed Media3 audio/video sync regression when playing back camera-recorded videos in video call validation flows.</li>
+    </ul>
+    <h2 id="1.7.0">Version 1.7.0</h2>
+    <p>May 10, 2026</p>
+    <ul>
+      <li>Improved ExoPlayer streaming-only playback buffering for OTT apps.</li>
+    </ul>
+  `;
+  const items = parseSourceSpecificItems(html, media3Source).map(item => normalizeCandidate(item));
+  const cameraOutput = items.find(item => item.version_or_release === 'Media3 1.8.0');
+  const streamingOnly = items.find(item => item.version_or_release === 'Media3 1.7.0');
+
+  assert.equal(items.length, 2);
+  assert.equal(items.some(item => item.url.endsWith('#media3')), false);
+  assert.ok(cameraOutput);
+  assert.equal(cameraOutput.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.equal(cameraOutput.reference_only, false);
+  assert.equal(cameraOutput.source_gap_risk, false);
+  assert.ok(['main', 'short'].includes(cameraOutput.finalSelectionEligibility));
+  assert.ok(streamingOnly);
+  assert.notEqual(streamingOnly.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.equal(streamingOnly.finalSelectionEligibility, 'watchlist');
+});
+
+test('official Android media reference docs remain reference-only without dated camera-output change', () => {
+  const candidate = normalizeCandidate(raw({
+    source: source({
+      id: 'android-mediacodec-reference',
+      name: 'MediaCodec Reference',
+      url: 'https://developer.android.com/reference/android/media/MediaCodec',
+      sourceUrl: 'https://developer.android.com/reference/android/media/MediaCodec',
+      sourceRole: 'official_documentation_reference',
+      sourceUrlQualityHint: 'official_documentation_reference',
+      mainArticlePolicy: 'reference_only',
+      requiresCrossCheckDefault: false,
+      evidenceGranularityHint: 'reference_page',
+      sourceQualityNotes: ['reference/background source only'],
+      category: 'android-media',
+      section: 'Android Media / Camera Output',
+      reliability: 'official',
+      keywords: ['MediaCodec', 'Android media']
+    }),
+    title: 'MediaCodec Reference',
+    url: 'https://developer.android.com/reference/android/media/MediaCodec?hl=ko',
+    publishedAt: '',
+    summary: 'Reference documentation for MediaCodec lifecycle and buffers.',
+    sourceKind: 'documentation_page',
+    collectionMode: 'html-watch-page',
+    version_or_release: '',
+    api_or_component: 'MediaCodec',
+    behavior_change: ''
+  }));
+
+  assert.equal(candidate.source_role, 'official_documentation_reference');
+  assert.ok(['official_documentation_reference', 'undated_reference_page'].includes(candidate.source_quality.source_url_quality));
+  assert.equal(candidate.finalSelectionEligibility, 'exclude');
+  assert.equal(candidate.main_eligible, false);
+  assert.equal(candidate.reference_only, true);
+  assert.equal(candidate.source_quality.main_article_source_allowed, false);
+  assert.ok(candidate.source_quality.main_article_source_blockers.includes('reference_only'));
+  assert.notEqual(candidate.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
 });
 
 test('collector keeps article-level ICamera and Linux camera pipeline candidates selectable', () => {

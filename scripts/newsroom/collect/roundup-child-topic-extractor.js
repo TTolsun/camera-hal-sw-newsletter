@@ -6,9 +6,12 @@ const STRONG_TOPIC_PATTERN = /\b(?:CameraX|Camera2|Camera\b|VideoCapture|Preview
 const STRONG_NON_SCREEN_TOPIC_PATTERN = /\b(?:CameraX|Camera2|VideoCapture|PreviewView|Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video|image\s+pipeline)\b/i;
 const BROAD_TOPIC_PATTERN = /\b(?:media|gallery|video(?:\s+call)?|audio)\b/i;
 const BROAD_CONTEXT_PATTERN = /\b(?:capture|camera\s+output|media\s+framework|video\s+capture|preview|gallery\s+output|HDR|Ultra\s+HDR)\b/i;
+const MEDIA_PIPELINE_COMPONENT_PATTERN = /\b(?:MediaCodec|Media3|MediaRecorder|MediaStore|Photo\s+Picker|SurfaceView|TextureView|WebRTC)\b/i;
+const MEDIA_CAMERA_OUTPUT_ANCHOR_PATTERN = /\b(?:camera|captur(?:e|ed|es|ing)|record(?:ed|ing)?|preview|gallery\s*\/\s*media\s+access|media\s+access|camera\s+output|gallery\s+output|sharing|captured\s+(?:image|video)|camera\s+switch(?:ing)?)\b/i;
+const MEDIA_ENGINEERING_CHANGE_PATTERN = /\b(?:release\s+notes?|API|behavior|bug|fix(?:ed|es)?|regression|compatibility|latency|jank|frame\s+(?:drop|drops|timing|pacing)|A\/V\s+sync|audio\s*\/\s*video\s+sync|sync|performance|add(?:ed|s)?|change(?:d|s)?|introduc(?:e|ed|es|ing)|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?)\b/i;
 const ROUNDUP_BEHAVIOR_CHANGE_PATTERN = /\b(?:announce(?:d|s)?|introduc(?:e|ed|es|ing)|bring(?:s|ing)?|brought|enable(?:d|s)?|let\s+developers|available|preview|can\s+use|support(?:ed|s)?|improve(?:d|s|ment)?|add(?:ed|s)?|update(?:d|s)?)\b/i;
 const DIRECT_CAMERA_API_PATTERN = /\b(?:CameraX|Camera2|VideoCapture|PreviewView|ImageCapture|ImageAnalysis)\b/i;
-const MULTIMEDIA_CAMERA_OUTPUT_PATTERN = /\b(?:APV|Advanced\s+Professional\s+Video|Ultra\s+HDR|HDR\s+video|camera\s+output|media\s+framework|gallery\s+output|media\s+output|video\s+call|camera\s*\/\s*audio\s+sync|social\s+app\s+camera\s+capture|camera\s+capture\s+result)\b/i;
+const MULTIMEDIA_CAMERA_OUTPUT_PATTERN = /\b(?:APV|Advanced\s+Professional\s+Video|Ultra\s+HDR|HDR\s+video|camera\s+output|media\s+framework|gallery\s+output|camera\s*\/\s*audio\s+sync|social\s+app\s+camera\s+capture|camera\s+capture\s+result)\b/i;
 
 function decodeContent(value = '') {
   return decodeHtml(String(value || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1'));
@@ -100,6 +103,13 @@ function hasTopicTrigger(value = '') {
   if (hasScreenRecording && !hasFrontCamera && !STRONG_NON_SCREEN_TOPIC_PATTERN.test(text)) {
     return false;
   }
+  if (
+    MEDIA_PIPELINE_COMPONENT_PATTERN.test(text) &&
+    MEDIA_CAMERA_OUTPUT_ANCHOR_PATTERN.test(text) &&
+    MEDIA_ENGINEERING_CHANGE_PATTERN.test(text)
+  ) {
+    return true;
+  }
   if (STRONG_TOPIC_PATTERN.test(text)) return true;
   if (hasScreenRecording && hasFrontCamera && /\bAndroid\b/i.test(text)) return true;
   return BROAD_TOPIC_PATTERN.test(text) &&
@@ -119,6 +129,9 @@ function componentFor(value = '') {
   const text = clean(value);
   if (/\bCameraX\b|VideoCapture|PreviewView/i.test(text)) return 'CameraX / Android camera APIs';
   if (/\bCamera2\b/i.test(text)) return 'Camera2 / Android camera framework';
+  if (/\b(?:MediaCodec|Media3|MediaRecorder|MediaStore|Photo\s+Picker|SurfaceView|TextureView|WebRTC)\b/i.test(text)) {
+    return 'Android media/camera output';
+  }
   if (/\b(?:APV|Advanced\s+Professional\s+Video|Ultra\s+HDR|HDR\s+video|video\s+capture|camera\s+output|media\s+framework|gallery\s+output)\b/i.test(text)) {
     return 'Android media/camera output';
   }
@@ -128,7 +141,14 @@ function componentFor(value = '') {
 
 function bucketHintFor(value = '') {
   if (DIRECT_CAMERA_API_PATTERN.test(value)) return 'direct_aosp_camera';
-  if (MULTIMEDIA_CAMERA_OUTPUT_PATTERN.test(value)) return 'android_multimedia_camera_output';
+  if (
+    MULTIMEDIA_CAMERA_OUTPUT_PATTERN.test(value) ||
+    (
+      MEDIA_PIPELINE_COMPONENT_PATTERN.test(value) &&
+      MEDIA_CAMERA_OUTPUT_ANCHOR_PATTERN.test(value) &&
+      MEDIA_ENGINEERING_CHANGE_PATTERN.test(value)
+    )
+  ) return 'android_multimedia_camera_output';
   return 'android_platform_camera_adjacent';
 }
 

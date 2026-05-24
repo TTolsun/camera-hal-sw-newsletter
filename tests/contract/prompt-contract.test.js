@@ -58,7 +58,11 @@ test('article section contract prompt fixes the five normalized keys and guardra
   assert.match(prompt, /Action target scope:/);
   assert.match(prompt, /direct_camera_hal\/direct_aosp_camera\/camera_driver_image_pipeline: source가 직접 뒷받침할 때만 request\/result, metadata, stream, buffer, vendor tag, HAL contract/);
   assert.match(prompt, /android_camera_api\/android_platform_camera_adjacent: CameraX\/Camera2, preview\/capture, permission, app compatibility, Surface 연결/);
-  assert.match(prompt, /android_multimedia_camera_output: media output path, codec, capture\/export, app-visible behavior/);
+  assert.match(prompt, /android_multimedia_camera_output: Camera HAL 직접 변경으로 쓰지 말고 camera output path, preview, recording, camera-generated playback/);
+  assert.match(prompt, /MediaCodec\/Media3\/MediaRecorder\/Photo Picker\/WebRTC\/A\/V sync/);
+  assert.match(prompt, /what changed, affected camera output path, why Camera HAL\/Android camera engineers should care, direct\/indirect\/downstream impact/);
+  assert.match(prompt, /public article에서는 direct\/indirect\/downstream impact를 enum이 아니라 자연스러운 한국어 설명 문장/);
+  assert.match(prompt, /generic player, streaming-only, music, DRM\/player-only, OTT-only, audio-only/);
   assert.match(prompt, /cpp_ai_tooling_fallback: build\/test\/debug workflow, sample\/prototype app, Camera API usage/);
   assert.match(prompt, /HAL runtime, stream, buffer, metadata 변경을 기본 action target으로 만들지 마세요/);
   assert.match(prompt, /reference_only\/watchlist: 직접 조치 문장이 아니라 관찰\/제한 문장/);
@@ -121,6 +125,7 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /Public-facing impact wording과 claim-level classification은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
   assert.match(prompt, /source가 직접 말하지 않는 HAL\/driver\/runtime 영향은 없다고 제한/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
+  assert.match(prompt, /android_multimedia_camera_output article의 camera_hal_takeaway는 Camera HAL 직접 변경이 아니라 camera-generated output/);
   assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);
   assert.match(prompt, /validation report, checklist, enum, schema\/debug field name/);
   assert.match(prompt, /claim\/schema contract와 public prose contract를 섞지 마세요/);

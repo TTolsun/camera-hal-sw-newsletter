@@ -117,6 +117,10 @@ function buildProposalPrompt({ date, manualCandidates = [], sourceRegistry = {} 
     '',
     'Discovery intent만 제안하세요. Newsletter article은 작성하지 마세요.',
     '제공된 registry domain 또는 linked evidence domain의 known source URL만 반환하세요.',
+    'Official Android media/camera-output discovery intent를 우선 고려하세요: Media3 release notes, MediaCodec, MediaRecorder, MediaStore, Photo Picker, preview/surface, WebRTC camera, A/V sync, gallery/media access, sharing, and camera-generated playback paths.',
+    'Official Android media source라도 날짜가 있는 item-level release/change evidence와 camera-output/media-pipeline relevance가 모두 있어야 합니다. official source quality만으로 topic relevance를 우회하지 마세요.',
+    'Reference docs(MediaCodec, MediaRecorder, MediaStore, Photo Picker training docs, supported formats)는 standalone article 후보가 아니라 context/reference source입니다. dated release-note item 또는 다른 dated source가 concrete change를 제공할 때만 보강 근거로 제안하세요.',
+    'Reject generic consumer multimedia discovery intent: generic playback/player-only, streaming-only, music, DRM/player-only, OTT-only, audio-only, or gallery UI updates without camera-generated output/access impact.',
     '',
     'Manual candidates 요약:',
     JSON.stringify(candidateSummary, null, 2),
@@ -167,6 +171,16 @@ function parserSource(source = {}, url = '') {
         sourceUrl: url
       };
     }
+    if (parsed.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/media3\b/.test(parsed.pathname)) {
+      return {
+        ...source,
+        sourceRegistryUrl: source.sourceUrl || source.url || '',
+        id: 'androidx-media3-release-notes',
+        name: 'Media3 Release Notes',
+        url,
+        sourceUrl: url
+      };
+    }
     if (parsed.hostname === 'developer.android.com' && parsed.pathname.replace(/\/+$/, '') === '/latest-updates') {
       return {
         ...source,
@@ -195,6 +209,9 @@ function adapterHintForSource(source = {}, url = '') {
     if (parsed.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parsed.pathname)) {
       return 'android-developers-jetpack-release';
     }
+    if (parsed.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/media3\b/.test(parsed.pathname)) {
+      return 'android-developers-media3-release';
+    }
     if (parsed.hostname === 'developer.android.com' && parsed.pathname.replace(/\/+$/, '') === '/latest-updates') {
       return 'android-developers-latest-updates';
     }
@@ -202,6 +219,7 @@ function adapterHintForSource(source = {}, url = '') {
     // Fall back to source identity below.
   }
   if (id === 'camerax-release-notes') return 'android-developers-jetpack-release';
+  if (id === 'androidx-media3-release-notes') return 'android-developers-media3-release';
   if (id === 'android-developers-latest-updates') return 'android-developers-latest-updates';
   return id || null;
 }
@@ -210,15 +228,16 @@ function parserBackedReleaseSource(source = {}, url = '') {
   const id = text(source.id || source.source_id).toLowerCase();
   const hint = text(source.evidenceGranularityHint || source.evidence_granularity_hint).toLowerCase();
   const mode = text(source.collectionModeHint || source.collection_mode_hint).toLowerCase();
-  if (['camerax-release-notes', 'android-developers-latest-updates'].includes(id)) return true;
+  if (['camerax-release-notes', 'androidx-media3-release-notes', 'android-developers-latest-updates'].includes(id)) return true;
   if (hint === 'versioned_release_row') return true;
-  if (mode === 'release-note-watch' && /release|latest-updates|androidx\/releases\/camera/i.test(`${source.sourceUrl || ''} ${source.url || ''}`)) {
+  if (mode === 'release-note-watch' && /release|latest-updates|androidx\/releases\/(?:camera|media3)/i.test(`${source.sourceUrl || ''} ${source.url || ''}`)) {
     return true;
   }
   try {
     const parsed = new URL(url);
     return parsed.hostname === 'developer.android.com' &&
       (/\/jetpack\/androidx\/releases\/camera\b/.test(parsed.pathname) ||
+        /\/jetpack\/androidx\/releases\/media3\b/.test(parsed.pathname) ||
         parsed.pathname.replace(/\/+$/, '') === '/latest-updates');
   } catch {
     return false;
@@ -229,6 +248,9 @@ function suggestedFixtureCase(source = {}, url = '') {
   const adapter = adapterHintForSource(source, url);
   if (adapter === 'android-developers-jetpack-release') {
     return 'Add or update a CameraX release-note fixture with version/date/component/behavior evidence.';
+  }
+  if (adapter === 'android-developers-media3-release') {
+    return 'Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.';
   }
   if (adapter === 'android-developers-latest-updates') {
     return 'Add or update an Android Developers Latest Updates release-row fixture and linked release-note fixture.';
@@ -618,6 +640,7 @@ async function runGeminiSourceDiscovery({
 
 module.exports = {
   PROPOSAL_TYPE,
+  buildProposalPrompt,
   normalizeProposalPayload,
   promoteProposalUrls,
   proposalResponseSchema,

@@ -1264,6 +1264,35 @@ const SCOPE_SCORE_FIELDS = Object.freeze([
   'native_tooling_relevance'
 ]);
 
+const TOPIC_TIER_BUCKETS = Object.freeze({
+  direct_camera: Object.freeze([
+    BUCKETS.DIRECT_AOSP_CAMERA,
+    BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
+    BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+  ]),
+  multimedia: Object.freeze([
+    BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT
+  ]),
+  platform: Object.freeze([
+    BUCKETS.SOC_PLATFORM_SIGNAL
+  ]),
+  fallback: Object.freeze([
+    BUCKETS.CPP_AI_TOOLING_FALLBACK
+  ]),
+  watchlist: Object.freeze([
+    BUCKETS.GENERIC_TECH_WATCHLIST
+  ])
+});
+
+function topicTierDistribution(scopeBucketCounts = {}) {
+  return Object.fromEntries(
+    Object.entries(TOPIC_TIER_BUCKETS).map(([tier, buckets]) => [
+      tier,
+      buckets.reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0)
+    ])
+  );
+}
+
 function optionalNumber(value) {
   if (value === undefined || value === null || String(value).trim() === '') return null;
   const parsed = Number(value);
@@ -1725,6 +1754,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const socPlatformSignalCount = scopeBucketCounts[BUCKETS.SOC_PLATFORM_SIGNAL] || 0;
   const cppAiToolingFallbackCount = scopeBucketCounts[BUCKETS.CPP_AI_TOOLING_FALLBACK] || 0;
   const genericTechWatchlistCount = scopeBucketCounts[BUCKETS.GENERIC_TECH_WATCHLIST] || 0;
+  const topicTierCounts = topicTierDistribution(scopeBucketCounts);
   const primaryCameraStackCount = articlePolicy.primaryCameraStack.buckets
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
   const supportingMainArticleCount = articlePolicy.supportingMainBuckets
@@ -2110,6 +2140,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       composition_mode: compositionMode,
       section_count_details: sectionCountDetails,
       relevance_bucket_counts: scopeBucketCounts,
+      topic_tier_distribution: topicTierCounts,
+      topic_tier_distribution_source: 'relevance_bucket',
+      topic_tier_bucket_map: TOPIC_TIER_BUCKETS,
       ai_article_count: sections.filter(hasValidAiRelevance).length,
       fact_check_status: factCheck.status || 'UNKNOWN',
       must_fix_count: mustFixCount,
@@ -2261,6 +2294,7 @@ function buildQualityReportMarkdown(report) {
 - composition_mode: ${metrics.composition_mode || 'UNKNOWN'}
 - Newsletter Policy gate: ${publishGateCriteriaText()}
 - Relevance bucket counts: ${JSON.stringify(metrics.relevance_bucket_counts || {})}
+- Topic tier distribution (${metrics.topic_tier_distribution_source || 'relevance_bucket'}): ${JSON.stringify(metrics.topic_tier_distribution || {})}
 - AI article count: ${metrics.ai_article_count}
 ${compositionFailure}
 

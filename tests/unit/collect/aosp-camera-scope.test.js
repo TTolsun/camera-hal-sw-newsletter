@@ -108,6 +108,41 @@ test('classifies Android multimedia camera output as supporting, not primary', (
   }
 });
 
+test('accepts multimedia scope only with camera-output anchor and engineering signal', () => {
+  const cases = [
+    {
+      title: 'MediaCodec encoder latency regression fixed for camera recording',
+      summary: 'Android release notes describe a MediaCodec behavior change that improves camera recording encode latency.'
+    },
+    {
+      title: 'A/V sync fix for recorded video playback in video calls',
+      summary: 'Media3 fixes audio/video sync when camera-recorded clips are played back for video communication validation.'
+    },
+    {
+      title: 'SurfaceView preview jank regression fixed',
+      summary: 'Android updates SurfaceView preview behavior to reduce frame drop jank for camera preview output.'
+    },
+    {
+      title: 'Photo Picker access update for captured camera videos',
+      summary: 'Android changes Photo Picker and MediaStore compatibility for camera-generated video sharing.'
+    },
+    {
+      title: 'WebRTC camera switching compatibility update',
+      summary: 'A WebRTC camera switching regression fix changes video-call camera capture behavior.'
+    },
+    {
+      title: 'Media3 playback fix for camera-generated HDR video output',
+      summary: 'Media3 release notes fix camera-generated playback compatibility for captured HDR video output.'
+    }
+  ].map(classifyAospCameraStackCandidate);
+
+  for (const item of cases) {
+    assert.equal(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+    assert.equal(item.counts_as_primary_camera_topic, false);
+    assert.ok(item.multimedia_camera_output_relevance >= 3);
+  }
+});
+
 test('keeps audio and media playback UI out of multimedia camera-output bucket', () => {
   const audio = classifyAospCameraStackCandidate({
     title: 'Android audio routing update',
@@ -125,6 +160,35 @@ test('keeps audio and media playback UI out of multimedia camera-output bucket',
   assert.equal(audio.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
   assert.equal(playback.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
   assert.equal(compose.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+});
+
+test('rejects generic Media3 playback, streaming, OTT, gallery UI, and audio-only updates', () => {
+  const rejected = [
+    classifyAospCameraStackCandidate({
+      title: 'Media3 release fixes ExoPlayer playback controls',
+      summary: 'The release improves generic player UI behavior for media playback.'
+    }),
+    classifyAospCameraStackCandidate({
+      title: 'Streaming playback update improves OTT app buffering',
+      summary: 'Media3 updates streaming-only playback performance for TV clients.'
+    }),
+    classifyAospCameraStackCandidate({
+      title: 'Music app DRM update',
+      summary: 'The audio-only release fixes DRM behavior for music playback.'
+    }),
+    classifyAospCameraStackCandidate({
+      title: 'Gallery UI consumer update',
+      summary: 'The consumer gallery app changes layout and sharing buttons without camera output access impact.'
+    }),
+    classifyAospCameraStackCandidate({
+      title: 'MediaCodec reference page updated',
+      summary: 'The documentation page describes MediaCodec lifecycle concepts.'
+    })
+  ];
+
+  for (const item of rejected) {
+    assert.notEqual(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  }
 });
 
 test('requires camera-output context for weak multimedia terms', () => {
@@ -149,6 +213,26 @@ test('requires camera-output context for weak multimedia terms', () => {
   assert.notEqual(mediaProvider.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
   assert.notEqual(videoCallUi.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
   assert.notEqual(ultraHdrDisplay.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+});
+
+test('direct camera candidates keep direct bucket despite multimedia source context', () => {
+  const direct = classifyAospCameraStackCandidate({
+    title: 'CameraX 1.7.0 fixes Camera2 interop behavior',
+    summary: 'CameraX release notes change Camera2 interop validation for VideoCapture.',
+    category: 'android-media',
+    source_category: 'android-media',
+    source: 'Media3 Release Notes'
+  });
+  const aosp = classifyAospCameraStackCandidate({
+    title: 'AOSP CameraProvider AIDL update changes camera3 session metadata',
+    summary: 'The Android Camera framework update changes ICameraDeviceSession request/result behavior.',
+    category: 'android-media'
+  });
+
+  assert.equal(direct.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
+  assert.equal(direct.editorial_priority, 1);
+  assert.equal(aosp.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
+  assert.equal(aosp.counts_as_primary_camera_topic, true);
 });
 
 test('keeps capture result metadata direct while captured output remains multimedia', () => {
