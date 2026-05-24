@@ -6,8 +6,7 @@ const {
   buildHalPerspective,
   buildOverclaimGuardrails,
   buildStaticBackgroundContext,
-  cleanBehaviorChange,
-  inferImpactClaimLevel
+  cleanBehaviorChange
 } = require('./article-field-builder');
 const {
   normalizeHalSignalFields
@@ -172,7 +171,6 @@ function compactDerivedHints(value) {
   if (!value || typeof value !== 'object') return null;
   return {
     relevance_bucket_hint: text(value.relevance_bucket_hint),
-    impact_claim_level_hint: text(value.impact_claim_level_hint),
     hal_boundary: text(value.hal_boundary),
     validation_targets: ensureArray(value.validation_targets).slice(0, 6).map(item => compactText(item, 120)),
     device_specific_notes: ensureArray(value.device_specific_notes).slice(0, 4).map(item => compactText(item, 120)),
@@ -366,11 +364,7 @@ function isFinalSelected(candidate) {
 
 function buildArticleCapsule(candidate, contextCandidates = []) {
   const cleanedBehavior = cleanBehaviorChange(candidate);
-  const impactClaimLevel = inferImpactClaimLevel(candidate);
-  const fieldCandidate = {
-    ...candidate,
-    impact_claim_level: impactClaimLevel
-  };
+  const fieldCandidate = { ...candidate };
   const halSignal = normalizeHalSignalFields(fieldCandidate);
   const sourceQuality = normalizeSourceQuality(fieldCandidate);
   const sourceQualityDrift = sourceQualityFieldDrift(fieldCandidate);
@@ -423,7 +417,6 @@ function buildArticleCapsule(candidate, contextCandidates = []) {
       counts_as_fallback_topic: bool(candidate.counts_as_fallback_topic),
       evidence_origin: text(candidate.evidence_origin)
     },
-    impact_claim_level: impactClaimLevel,
     hal_impact_axes: halSignal.hal_impact_axes,
     reader_owners: halSignal.reader_owners,
     actionability_level: halSignal.actionability_level,

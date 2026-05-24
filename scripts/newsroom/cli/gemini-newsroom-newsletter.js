@@ -53,9 +53,6 @@ const {
   buildStaticBackgroundContextReport
 } = require('../generate/background-context');
 const {
-  inferImpactClaimLevel
-} = require('../generate/article-field-builder');
-const {
   annotateCandidatesWithCache,
   buildSummaryCacheReport,
   buildSummaryCacheReportMarkdown,
@@ -229,16 +226,17 @@ function publicArticleContractPrompt() {
     'public_article fields: story_contract_version, headline, source_subtitle, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, editorial_story, source_links.',
     'public_article.headline은 source title을 그대로 복사하지 말고, source_extraction/behavior_change/source_fact_bundle과 기사 본문을 바탕으로 Gemini가 새로 작성하세요. 단, headline과 lead/body는 source-confirmed 핵심 변경점을 누락하거나 generic CameraX/Android framing으로 대체하면 안 됩니다.',
     'editorial_story fields: reader_scenario, what_happened, why_it_matters, field_scenario, not_to_overclaim, editor_take.',
-    'body_paragraphs는 기사 본문입니다. 모든 기사에 같은 작성 기준을 적용하고, fallback_public, relevance_bucket, impact_claim_level 때문에 본문을 짧은 generic 문장이나 Camera HAL 관련성 설명으로 축약하지 마세요.',
+    'body_paragraphs는 기사 본문입니다. 모든 기사에 같은 작성 기준을 적용하고, fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장이나 Camera HAL 관련성 설명으로 축약하지 마세요.',
     'body_paragraphs는 원문이 말한 발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획을 3-5개 자연스러운 문단으로 충실하게 설명하세요. source_fact_bundle.facts, source_extraction evidence_blocks, behavior_change, summary에 있는 구체 명사와 source-confirmed detail을 보존하세요.',
-    'Camera HAL 관련성 판단은 deterministic metadata와 validation layer가 담당합니다. Gemini는 source-bound public article writer이며, 본문에서는 원문 기사 내용 자체를 먼저 설명하세요.',
+    '기사 선택, source eligibility, main/supporting 승격 같은 발행 판단은 deterministic metadata와 validation layer가 담당합니다. Gemini는 source-bound public article writer이며, 본문에서는 원문 기사 내용 자체를 먼저 설명하세요.',
     '공개 기사에는 "현업 장면", "확인된 변화", "왜 봐야 하나", "디버깅/리뷰 시나리오", "편집자 판단", "과장 금지" 같은 라벨 문구를 쓰지 마세요. 공개 렌더링은 "Camera HAL/Driver 관점에서의 의미" 섹션만 따로 둡니다.',
     'reader_scenario는 source-confirmed incident가 아니라 독자가 마주칠 수 있는 가정형 현업 장면을 자연스러운 문장으로 쓰세요. "상황을 가정합니다"처럼 편집 메모처럼 쓰지 말고, 실제 발생 사실처럼 단정하지도 마세요.',
     'what_happened에는 source-confirmed fact만 쓰고, HAL 해석이나 권고는 why_it_matters, field_scenario, editor_take로 분리하세요. 다만 body_paragraphs에는 이 내용을 독자-facing 기사 문장으로 자연스럽게 합쳐 쓰세요.',
     'not_to_overclaim과 editor_take는 내부 구조화 필드입니다. public article prose에는 "편집자 판단", "과장 금지", "overclaim", "validation report" 같은 편집/검증 용어를 노출하지 말고 필요한 제한은 자연스러운 설명으로만 표현하세요.',
-    'Gemini는 decision_metadata를 생성하지 마세요. impact/scope/action/overclaim_risk는 deterministic builder가 public output 직전에 생성하거나 overwrite합니다.',
-    'Gemini는 public article writer입니다. selected article capsule과 deterministic metadata 안에서 source fact와 source-bound engineering inference를 자연스러운 한국어 기사 문장으로 작성할 수 있습니다.',
-    'Gemini는 deterministic judgment를 바꿀 수 없습니다: HAL impact level, source eligibility, source_gap_risk, main/supporting 승격, source link, do_not_claim.',
+    'Gemini는 decision_metadata를 생성하지 마세요. publication scope/action/overclaim_risk는 deterministic builder가 public output 직전에 생성하거나 overwrite합니다.',
+    'Gemini는 public article writer입니다. selected article capsule과 source facts를 바탕으로 기사 영향성을 직접 판단하고 source-bound engineering inference를 자연스러운 한국어 기사 문장으로 작성하세요.',
+    '기사 영향성 판단은 public_article.camera_hal_takeaway, article_sections.hal_driver_impact, claims[].impact_level에 원문 근거 기반으로 작성하세요. source가 직접 말하지 않는 HAL/driver/runtime 영향은 없다고 제한하세요.',
+    'Gemini는 deterministic publication judgment를 바꿀 수 없습니다: source eligibility, source_gap_risk, main/supporting 승격, source link, do_not_claim.',
     'public_article은 한국어 독자-facing technical newsletter prose로 작성하세요. validation report, checklist, enum, schema/debug field name을 노출하지 마세요.',
     'claim/schema contract와 public prose contract를 섞지 마세요. enum, diagnostic term, internal field name은 public_article 문장에 쓰지 마세요.',
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
@@ -255,7 +253,7 @@ function articleClaimContractPrompt() {
     '각 claims[] item은 claim_id, text, claim_type, evidence_ids, source_urls, impact_level, overclaim_risk를 포함해야 합니다.',
     'claim_type은 fact, inference, recommendation, risk_note, limitation 중 하나여야 합니다.',
     'claim impact_level은 direct_hal_contract, camera_framework_behavior, app_api_or_framework_adjacent, driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd, performance_latency_thermal, soc_resource_contention, native_tooling_workflow, no_hal_runtime_impact, unknown 중 하나여야 합니다.',
-    'candidate impact_claim_level 값인 direct_hal_change, camera_stack_direct, android_framework_adjacent, tooling_supporting, watch_only를 claims[].impact_level에 그대로 복사하지 마세요.',
+    'claims[].impact_level은 candidate metadata enum을 복사하지 말고 source facts, behavior_change, source_extraction, article_sections.hal_driver_impact를 보고 직접 판단하세요.',
     'source-backed verified_facts[], confirmed_facts[], 또는 구체적인 evidence_summary text에는 대응되는 claim_type=fact claim이 최소 1개 있어야 합니다.',
     'Fact claims는 제공된 seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, source_extraction facts의 item-level evidence ids를 cite해야 합니다. evidence_pack_ids만으로 fact support를 만들지 마세요.',
     'evidence URL에 fragment가 있으면 source_urls에서 release/version/section URL fragment를 보존하세요. 특히 CameraX release-note anchor를 보존해야 합니다.',
@@ -712,7 +710,6 @@ function normalizeBackgroundContextReport(value, date, fallbackReport) {
         url: stringOrEmpty(item?.url || fallback.url),
         source_candidate_hash: stringOrEmpty(item?.source_candidate_hash || fallback.source_candidate_hash),
         relevance_bucket: stringOrEmpty(item?.relevance_bucket || fallback.relevance_bucket),
-        impact_claim_level: stringOrEmpty(item?.impact_claim_level || fallback.impact_claim_level),
         background_context: stringOrEmpty(item?.background_context || fallback.background_context),
         background_basis: stringOrEmpty(item?.background_basis || 'supplied capsule and model knowledge'),
         background_confidence: stringOrEmpty(item?.background_confidence || 'medium'),
@@ -733,10 +730,10 @@ async function buildBackgroundContextReport({ date, articleCapsuleReport, common
         '한국어 technical background만 반환하세요. web browsing은 하지 마세요.',
         '제공된 article capsules와 Android Camera, CameraX, Camera2, Camera HAL, libcamera, V4L2, SoC, native build/test/debug workflows에 대한 model knowledge만 사용하세요.',
         'raw source table text, UI fragments, release table dumps, source snippets를 background_context에 복사하지 마세요.',
-        'title, url, source_candidate_hash, impact_claim_level은 제공된 article capsule 또는 static fallback item에서 정확히 보존하세요.',
+        'title, url, source_candidate_hash는 제공된 article capsule 또는 static fallback item에서 정확히 보존하세요.',
         'background_basis는 context가 external source lookup이 아니라 supplied capsule metadata와 model knowledge에 기반했음을 설명해야 합니다.',
         'background_sources_used는 출력하지 마세요. 대신 background_basis를 사용하세요.',
-        'background_context는 what_changed와 구분하고 claim strength는 impact_claim_level에 맞추세요.',
+        'background_context는 what_changed와 구분하고, HAL/driver 영향성은 source facts가 직접 뒷받침하는 범위로만 설명하세요.',
         'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI capsule은 Android UI/platform 개념 배경을 간단히 설명하고 camera preview/capture UX 검증과 연결하세요. direct HAL change로 승격하지 마세요.',
         'schema와 일치하는 JSON만 반환하세요.'
       ].join('\n'),
@@ -871,8 +868,8 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.counts_as_driver_topic = booleanFromCandidate(collected, candidate, 'counts_as_driver_topic');
     candidate.counts_as_soc_topic = booleanFromCandidate(collected, candidate, 'counts_as_soc_topic');
     candidate.counts_as_fallback_topic = booleanFromCandidate(collected, candidate, 'counts_as_fallback_topic');
-    candidate.impact_claim_level = stringOrEmpty(collected.impact_claim_level || candidate.impact_claim_level) ||
-      inferImpactClaimLevel(candidate);
+    delete candidate.impact_claim_level;
+    delete candidate.impactClaimLevel;
     candidate.evidence_origin = stringOrEmpty(collected.evidence_origin || candidate.evidence_origin || 'unknown');
     candidate.source_hint = stringOrEmpty(collected.source_hint || candidate.source_hint || collected.usageHint || collected.source_usage_hint);
     candidate.article_group_key = stringOrEmpty(collected.article_group_key || candidate.article_group_key || candidateGroupKey(collected));
@@ -1050,7 +1047,6 @@ function sourceCandidateMetadataForSection(section, reporter) {
     counts_as_driver_topic: candidate.counts_as_driver_topic === true,
     counts_as_soc_topic: candidate.counts_as_soc_topic === true,
     counts_as_fallback_topic: candidate.counts_as_fallback_topic === true,
-    impact_claim_level: candidate.impact_claim_level || inferImpactClaimLevel(candidate),
     finalSelectionEligibility: candidate.finalSelectionEligibility || candidate.final_selection_eligibility || '',
     source_gap_risk: candidate.source_gap_risk === true,
     main_article_readiness: candidate.main_article_readiness || null,
@@ -2110,7 +2106,6 @@ function sectionSummary(section, index) {
     headline: section.headline,
     category: section.category,
     relevance_bucket: section.relevance_bucket || '',
-    impact_claim_level: section.impact_claim_level || '',
     urls: sectionUrls(section),
     source_titles: ensureArray(section.sources).map(source => source.title).filter(Boolean)
   };
@@ -3164,7 +3159,8 @@ async function main() {
         'cross_check_status는 not-required, official-source, cross-checked, needs-cross-check 중 하나여야 합니다.',
         'Candidate-only 또는 requiresCrossCheck lead는 cross_check_status가 official-source 또는 cross-checked가 아니면 선택하지 마세요.',
         'SoC/platform, C++, native, toolchain, Linux, AI fallback item은 reporter-stage evidence와 relevance rule을 만족할 때만 reporter-selected 상태로 남길 수 있습니다.',
-        'capsule/candidate metadata의 editorial_priority, relevance_bucket, impact_claim_level, aosp_camera_directness, driver_stack_relevance, soc_platform_relevance, native_tooling_relevance, counts_as_* flags, evidence_origin, source_hint를 보존하세요.',
+        '각 candidate의 영향성은 source facts를 보고 evidence_notes와 behavior_change에 설명하세요. HAL/driver 직접 영향이 아니면 앱/API/tooling/debug/repro 맥락의 참고 의미로 제한하세요.',
+        'capsule/candidate metadata의 editorial_priority, relevance_bucket, aosp_camera_directness, driver_stack_relevance, soc_platform_relevance, native_tooling_relevance, counts_as_* flags, evidence_origin, source_hint를 보존하세요.',
         'collected candidate JSON의 imageCandidates를 정확히 보존하세요. image URL을 만들거나, image URL을 다시 쓰거나, image candidate를 추가하지 마세요.',
         lockedSections.length > 0 ? 'retry context에 있는 locked article URLs, titles, sources, source-date-title 조합과 중복되는 candidate를 선택하지 마세요.' : '',
         '모든 candidate에 대해 다음 numeric score를 제공하세요:',
@@ -3238,7 +3234,7 @@ async function main() {
         'marketing tone은 피하세요. 모든 article에는 confirmed_facts, background, camera_hal_perspective, action_items, team_summary, sources를 포함하세요.',
         'background는 background-context.json의 background_context를 먼저 사용하세요. 없으면 article capsule의 background_context_static을 사용합니다. raw source UI/table snippet을 background에 복사하지 마세요.',
         'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI article은 바로 결론으로 가지 말고 Compose/Navigation/adaptive UI가 왜 camera preview/capture UX 검증과 연결되는지 한 문단의 배경설명을 먼저 제공하세요.',
-        'candidate 또는 background context의 impact_claim_level을 보존하고 claim strength 제어에 사용하세요: direct_hal_change, camera_stack_direct, android_framework_adjacent, tooling_supporting, watch_only.',
+        'candidate와 background context의 source facts를 보고 article_sections.hal_driver_impact, public_article.camera_hal_takeaway, claims[].impact_level에서 기사 영향성을 직접 판단하세요.',
         '모든 article은 evidence_summary, specificity_checks, source_verification_notes를 포함해야 합니다.',
         'candidate metadata에 field가 있으면 모든 main article은 release date, version/release, API/component 또는 library/artifact, concrete behavior change, relevance_bucket, AOSP Camera / driver / SoC / native tooling relevance를 명시해야 합니다.',
         'specificity_checks에는 version, release date, API/component, source page, behavior change, 또는 source가 rolling/watch page인 경우 정확한 source gap 같은 구체 evidence를 적으세요.',

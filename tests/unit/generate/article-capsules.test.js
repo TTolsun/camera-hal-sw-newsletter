@@ -91,6 +91,23 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.deepEqual(capsule.source_fact_bundle.facts, []);
   assert.ok(capsule.evidence.length > 0);
   assert.ok(capsule.estimated_tokens <= 1100);
+  assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
+});
+
+test('article capsule does not pass deterministic impact claim level to LLM writer', () => {
+  const capsule = buildArticleCapsule(candidate({
+    impact_claim_level: 'direct_hal_change',
+    impactClaimLevel: 'camera_stack_direct',
+    derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
+      impact_claim_level_hint: 'direct_hal_change',
+      hal_boundary: 'direct HAL change'
+    }
+  }));
+
+  assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
+  assert.equal(capsule.derived_editorial_hints.impact_claim_level_hint, undefined);
+  assert.equal(capsule.derived_editorial_hints.relevance_bucket_hint, 'direct_aosp_camera');
 });
 
 test('article capsule carries related context labels without making them facts', () => {

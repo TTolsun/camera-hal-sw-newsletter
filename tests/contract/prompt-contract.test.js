@@ -95,9 +95,11 @@ test('public article contract prompt keeps public output separate from diagnosti
     'source_links',
     'source-bound engineering inference',
     'selected article capsule',
-    'deterministic metadata',
-    'deterministic judgment',
-    'HAL impact level',
+    'source facts',
+    'article_sections.hal_driver_impact',
+    'public_article.camera_hal_takeaway',
+    'claims[].impact_level',
+    'deterministic publication judgment',
     'source eligibility',
     'source_gap_risk',
     'main/supporting 승격',
@@ -110,10 +112,12 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /가정형 현업 장면/);
   assert.match(prompt, /source-confirmed fact/);
   assert.match(prompt, /모든 기사에 같은 작성 기준/);
-  assert.match(prompt, /fallback_public, relevance_bucket, impact_claim_level 때문에 본문을 짧은 generic 문장/);
+  assert.match(prompt, /fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장/);
   assert.match(prompt, /3-5개 자연스러운 문단/);
   assert.match(prompt, /발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획/);
-  assert.match(prompt, /Camera HAL 관련성 판단은 deterministic metadata와 validation layer가 담당/);
+  assert.match(prompt, /기사 선택, source eligibility, main\/supporting 승격 같은 발행 판단/);
+  assert.match(prompt, /기사 영향성 판단은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
+  assert.match(prompt, /source가 직접 말하지 않는 HAL\/driver\/runtime 영향은 없다고 제한/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
   assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);
   assert.match(prompt, /validation report, checklist, enum, schema\/debug field name/);

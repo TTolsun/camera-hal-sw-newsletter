@@ -520,7 +520,6 @@ function normalizeCandidate(candidate, sourceOrder) {
     counts_as_driver_topic: candidate.counts_as_driver_topic ?? classification.counts_as_driver_topic ?? false,
     counts_as_soc_topic: candidate.counts_as_soc_topic ?? classification.counts_as_soc_topic ?? false,
     counts_as_fallback_topic: candidate.counts_as_fallback_topic ?? classification.counts_as_fallback_topic ?? false,
-    impact_claim_level: candidate.impact_claim_level || candidate.impactClaimLevel || '',
     evidence_origin: candidate.evidence_origin || classification.evidence_origin || 'candidate_metadata',
     _artifact_role: candidate._artifact_role || '',
     _source_order: sourceOrder
@@ -1208,7 +1207,7 @@ function publicCheckpointsForCandidate(candidate, section) {
 
 function publicTakeawayForCandidate(candidate, section, component) {
   const bucket = text(candidate.relevance_bucket || section.relevance_bucket);
-  const impact = text(candidate.impact_claim_level || section.impact_claim_level);
+  const impact = inferImpactClaimLevel(candidate);
   const title = text(candidate.title || section.headline || component);
   const behavior = sourceBehaviorText(candidate, section);
   if (/direct|camera_stack/i.test(impact) || /direct|driver|image_pipeline/i.test(bucket)) {
@@ -1343,7 +1342,6 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
     specificity_checks: [
       `finalSelectionEligibility=${candidate.finalSelectionEligibility}`,
       `relevance_bucket=${candidate.relevance_bucket}`,
-      `impact_claim_level=${impactClaimLevel}`,
       `source_gap_risk=${String(candidate.source_gap_risk)}`
     ],
     source_verification_notes: [
@@ -1377,7 +1375,6 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
       candidate.relevance_reason
     ].map(text).join(' ')),
     article_type: candidate.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK ? 'tooling-watch' : 'camera-hal',
-    impact_claim_level: impactClaimLevel,
     overclaim_guardrails: guardrails,
     field_builder_warnings: fieldWarnings,
     removed_source_fragments: ensureArray(cleaned.removed_fragments),

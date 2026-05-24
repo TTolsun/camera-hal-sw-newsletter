@@ -4749,7 +4749,8 @@ test('fallback builder recovers run 25590436113 shape with source-bound anchor c
   );
   for (const section of finalEditor.sections) {
     assert.notEqual(section.background, section.what_changed);
-    assert.equal(section.impact_claim_level, 'android_framework_adjacent');
+    assert.equal(Object.hasOwn(section, 'impact_claim_level'), false);
+    assert.match(section.public_article.camera_hal_takeaway, /HAL|CameraX|app|framework/i);
   }
   assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === camerax13.source_candidate_hash), false);
   assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === libcamera.source_candidate_hash), false);
