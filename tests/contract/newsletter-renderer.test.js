@@ -153,7 +153,8 @@ test('newsletter renderer keeps generated issue nav labels in English', () => {
   const html = buildHtml(issue());
   const labels = siteNavLabels(html);
 
-  assert.deepEqual(labels.slice(0, 4), ['Latest', 'Archive', 'Sources', 'GitHub']);
+  assert.deepEqual(labels.slice(0, 3), ['Latest', 'Archive', 'GitHub']);
+  assert.equal(labels.includes('Sources'), false);
   assert.equal(labels.includes('\ucd5c\uc2e0\ud638'), false);
   assert.equal(labels.includes('\uc544\uce74\uc774\ube0c'), false);
   assert.equal(labels.includes('\ucd9c\ucc98'), false);
@@ -164,13 +165,12 @@ test('shared site header renders consistent root-relative links', () => {
   const issueHeader = siteHeaderHtml({ rootPath: '../../' });
 
   assert.match(homeHeader, /href="index\.html#latest"/);
-  assert.match(homeHeader, /href="docs\/news-sources\.md"/);
+  assert.doesNotMatch(homeHeader, /docs\/news-sources\.md/);
   assert.match(issueHeader, /href="\.\.\/\.\.\/index\.html#latest"/);
-  assert.match(issueHeader, /href="\.\.\/\.\.\/docs\/news-sources\.md"/);
-  assert.deepEqual(siteNavLabels(`<header class="site-header" data-site-header data-site-root="../../"></header><script src="../../assets/js/site-header.js" defer></script>`).slice(0, 4), [
+  assert.doesNotMatch(issueHeader, /\.\.\/\.\.\/docs\/news-sources\.md/);
+  assert.deepEqual(siteNavLabels(`<header class="site-header" data-site-header data-site-root="../../"></header><script src="../../assets/js/site-header.js" defer></script>`).slice(0, 3), [
     'Latest',
     'Archive',
-    'Sources',
     'GitHub'
   ]);
 });

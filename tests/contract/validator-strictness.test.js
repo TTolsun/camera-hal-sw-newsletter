@@ -71,10 +71,10 @@ function newsletterMarkdown(date, articleCount, { todo = false } = {}) {
 
 function newsletterHtml(date, {
   tags = ['camera-hal'],
-  navLabels = ['Latest', 'Archive', 'Sources', 'GitHub']
+  navLabels = ['Latest', 'Archive', 'GitHub']
 } = {}) {
   const tagHtml = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-  const navHrefs = ['#latest', '#archive', 'docs/news-sources.md', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
+  const navHrefs = ['#latest', '#archive', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
   const navHtml = navLabels
     .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
     .join('');
@@ -98,8 +98,8 @@ function newsletterHtml(date, {
   ].join('\n');
 }
 
-function rootNavHtml(navLabels = ['Latest', 'Archive', 'Sources', 'GitHub']) {
-  const navHrefs = ['#latest', '#archive', 'docs/news-sources.md', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
+function rootNavHtml(navLabels = ['Latest', 'Archive', 'GitHub']) {
+  const navHrefs = ['#latest', '#archive', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
   const navHtml = navLabels
     .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
     .join('');
@@ -144,7 +144,7 @@ function writeSiteFixture(root, {
   editorApprovedException = false,
   dataTags = ['camera-hal'],
   htmlTags = dataTags,
-  navLabels = ['Latest', 'Archive', 'Sources', 'GitHub'],
+  navLabels = ['Latest', 'Archive', 'GitHub'],
   sourceGapCount = null,
   staleClaimHardFailure = false,
   qualityDeductions = null,
@@ -493,16 +493,16 @@ test('strict validate-site rejects localized issue site nav labels', () => {
   writeSiteFixture(root, {
     strict: true,
     articleCount: articlePolicy.mainArticleCount.min,
-    navLabels: ['\ucd5c\uc2e0\ud638', '\uc544\uce74\uc774\ube0c', '\ucd9c\ucc98', 'GitHub']
+    navLabels: ['\ucd5c\uc2e0\ud638', '\uc544\uce74\uc774\ube0c', 'GitHub']
   });
 
   const result = runScript(validateSitePath, root);
 
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ Sources \/ GitHub/);
+  assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ GitHub/);
 });
 
-test('validate-site rejects root homepage nav without shared Sources link', () => {
+test('validate-site accepts root homepage nav without Sources link', () => {
   const root = tempRoot('validate-site-root-nav-labels-');
   writeSiteFixture(root, {
     strict: true,
@@ -514,11 +514,10 @@ test('validate-site rejects root homepage nav without shared Sources link', () =
 
   const result = runScript(validateSitePath, root);
 
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ Sources \/ GitHub in index\.html/);
+  assert.equal(result.status, 0, result.stderr);
 });
 
-test('validate-site accepts root homepage nav with shared Sources link', () => {
+test('validate-site rejects root homepage nav with stale Sources link', () => {
   const root = tempRoot('validate-site-root-nav-sources-');
   writeSiteFixture(root, {
     strict: true,
@@ -530,7 +529,8 @@ test('validate-site accepts root homepage nav with shared Sources link', () => {
 
   const result = runScript(validateSitePath, root);
 
-  assert.equal(result.status, 0, result.stderr);
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ GitHub in index\.html/);
 });
 
 test('validate-site accepts shared root site header component', () => {

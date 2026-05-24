@@ -267,7 +267,7 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
 }
 
 function siteHeaderExpectedLabels() {
-  return ['Latest', 'Archive', 'Sources', 'GitHub'];
+  return ['Latest', 'Archive', 'GitHub'];
 }
 
 function escapeRegex(value) {
