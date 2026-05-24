@@ -150,6 +150,10 @@ pre code {
   backdrop-filter: blur(16px);
 }
 
+.site-header[data-site-header]:empty {
+  min-height: 61px;
+}
+
 .site-nav {
   display: flex;
   align-items: center;

@@ -98,8 +98,8 @@ function newsletterHtml(date, {
   ].join('\n');
 }
 
-function rootNavHtml(navLabels = ['Latest', 'Archive', 'GitHub']) {
-  const navHrefs = ['#latest', '#archive', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
+function rootNavHtml(navLabels = ['Latest', 'Archive', 'Sources', 'GitHub']) {
+  const navHrefs = ['#latest', '#archive', 'docs/news-sources.md', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
   const navHtml = navLabels
     .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
     .join('');
@@ -111,10 +111,17 @@ function rootNavHtml(navLabels = ['Latest', 'Archive', 'GitHub']) {
   ].join('\n');
 }
 
-function rootIndexHtml(extra = '', { navLabels = null } = {}) {
+function rootSiteHeaderComponentHtml() {
+  return [
+    '<script src="assets/js/site-header.js" defer></script>',
+    '<header class="site-header" data-site-header></header>'
+  ].join('\n');
+}
+
+function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = true } = {}) {
   return [
     '<!doctype html><html><body>',
-    navLabels ? rootNavHtml(navLabels) : '',
+    navLabels ? rootNavHtml(navLabels) : (siteHeaderComponent ? rootSiteHeaderComponentHtml() : ''),
     '<div id="latest-card"></div>',
     '<div id="archive-list"></div>',
     extra,
@@ -495,7 +502,7 @@ test('strict validate-site rejects localized issue site nav labels', () => {
   assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ Sources \/ GitHub/);
 });
 
-test('validate-site accepts root homepage nav without Sources link', () => {
+test('validate-site rejects root homepage nav without shared Sources link', () => {
   const root = tempRoot('validate-site-root-nav-labels-');
   writeSiteFixture(root, {
     strict: true,
@@ -507,10 +514,11 @@ test('validate-site accepts root homepage nav without Sources link', () => {
 
   const result = runScript(validateSitePath, root);
 
-  assert.equal(result.status, 0, result.stderr);
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ Sources \/ GitHub in index\.html/);
 });
 
-test('validate-site rejects root homepage nav with stale Sources link', () => {
+test('validate-site accepts root homepage nav with shared Sources link', () => {
   const root = tempRoot('validate-site-root-nav-sources-');
   writeSiteFixture(root, {
     strict: true,
@@ -522,8 +530,36 @@ test('validate-site rejects root homepage nav with stale Sources link', () => {
 
   const result = runScript(validateSitePath, root);
 
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('validate-site accepts shared root site header component', () => {
+  const root = tempRoot('validate-site-root-header-component-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'index.html'), rootIndexHtml());
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('validate-site rejects shared site header component without script', () => {
+  const root = tempRoot('validate-site-root-header-component-script-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
+    siteHeaderComponent: false
+  }).replace('<div id="latest-card"></div>', '<header class="site-header" data-site-header></header>\n<div id="latest-card"></div>'));
+
+  const result = runScript(validateSitePath, root);
+
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be Latest \/ Archive \/ GitHub in index\.html/);
+  assert.match(result.stderr, /Shared site header in index\.html must load assets\/js\/site-header\.js/);
 });
 
 test('validate-site fails fallback_public without badge or publication notice', () => {
