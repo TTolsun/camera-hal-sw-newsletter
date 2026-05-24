@@ -1421,7 +1421,7 @@ function validateTargetedRepairResult({
 
   validateEditor({
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'targeted repair validation',
     briefing: ['validation', 'validation', 'validation'],
     sections: after,

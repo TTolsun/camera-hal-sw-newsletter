@@ -55,7 +55,7 @@ function newsletterMarkdown(date, articleCount, { todo = false } = {}) {
     ].join('\n');
   });
   return [
-    '# Camera HAL SW Newsletter',
+    '# Camera HAL / SW Newsletter',
     '',
     '## 1. 이번 주 3줄 브리핑',
     '- Camera stack validation signal one.',
@@ -82,7 +82,7 @@ function newsletterHtml(date, {
     '<!doctype html>',
     '<html><body>',
     '<nav class="site-nav content-wrap" aria-label="Primary navigation">',
-    '<a class="site-brand" href="index.html">Camera HAL SW Newsletter</a>',
+    '<a class="site-brand" href="index.html">Camera HAL / SW Newsletter</a>',
     `<div class="nav-links">${navHtml}</div>`,
     '</nav>',
     '<main>',
@@ -105,7 +105,7 @@ function rootNavHtml(navLabels = ['Latest', 'Archive', 'GitHub']) {
     .join('');
   return [
     '<nav class="site-nav content-wrap" aria-label="Primary navigation">',
-    '<a class="site-brand" href="index.html">Camera HAL SW Newsletter</a>',
+    '<a class="site-brand" href="index.html">Camera HAL / SW Newsletter</a>',
     `<div class="nav-links">${navHtml}</div>`,
     '</nav>'
   ].join('\n');
@@ -154,7 +154,7 @@ function writeSiteFixture(root, {
   const count = articleCount ?? Math.max(0, articlePolicy.mainArticleCount.min - 1);
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
-    title: 'Camera HAL SW Newsletter',
+    title: 'Camera HAL / SW Newsletter',
     summary: 'Summary',
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
@@ -226,7 +226,7 @@ function fallbackNewsletterMarkdown(date, articleCount, { notice = true } = {}) 
   if (!notice) return markdown;
   return markdown.replace(
     '\n## 1.',
-    '\n> Tooling Watch Edition: C++ / Tooling Watch\n> Direct camera anchor was not available this week.\n\n## 1.'
+    '\n> Tooling Watch Edition\n> Direct camera anchor was not available this week.\n\n## 1.'
   );
 }
 
@@ -235,7 +235,7 @@ function fallbackNewsletterHtml(date, { tags, notice = true } = {}) {
   if (!notice) return html;
   return html.replace(
     '<section class="issue-briefing">',
-    '<div class="publication-notice" role="note"><p>Tooling Watch Edition: C++ / Tooling Watch</p><p>Direct camera anchor was not available this week.</p></div>\n<section class="issue-briefing">'
+    '<div class="publication-notice" role="note"><p>Tooling Watch Edition</p><p>Direct camera anchor was not available this week.</p></div>\n<section class="issue-briefing">'
   );
 }
 
@@ -253,8 +253,8 @@ function writeFallbackPublicSiteFixture(root, {
   const articleCount = articlePolicy.mainArticleCount.min;
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
-    title: 'Tooling Watch Edition: C++ / Tooling Watch',
-    summary: 'Tooling Watch Edition: C++ / Tooling Watch - Summary',
+    title: 'Tooling Watch Edition',
+    summary: 'Tooling Watch Edition - Summary',
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
     tags,
@@ -331,7 +331,7 @@ function homepageHeadlineState({
 function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {}) {
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
-    title: 'Camera HAL SW Newsletter',
+    title: 'Camera HAL / SW Newsletter',
     summary: 'Summary',
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
@@ -360,7 +360,7 @@ function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {})
 function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictReport = false } = {}) {
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
-    title: 'Camera HAL SW Newsletter',
+    title: 'Camera HAL / SW Newsletter',
     summary: 'Summary',
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,
@@ -386,7 +386,7 @@ function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictRep
 function writeReviewOnlyQualityStatus(root, date, overrides = {}) {
   writeJson(path.join(root, 'data', 'newsletters.json'), [{
     date,
-    title: 'Camera HAL SW Newsletter',
+    title: 'Camera HAL / SW Newsletter',
     summary: 'Summary',
     html: `newsletters/${date}/index.html`,
     md: `newsletters/${date}/newsletter.md`,

@@ -2524,7 +2524,7 @@ function renderPublicNewsletterNotice(status = {}, handoff = null) {
         'fallback-only composition은 metadata, PR body, quality report, public UI 전체에서 Tooling Watch Edition으로 명확히 표시된 경우에만 homepage-visible public issue를 만들 수 있습니다.',
         '',
         '수정된 acceptance criteria:',
-        '- C++/tooling fallback만으로는 normal homepage-visible Camera HAL newsletter를 만들 수 없습니다.',
+        '- tooling fallback만으로는 normal homepage-visible Camera HAL newsletter를 만들 수 없습니다.',
         '- fallback-only composition은 fallback disclosure metadata와 UI notice가 모두 있을 때만 homepage-visible Tooling Watch Edition을 만들 수 있습니다.'
       ].join('\n');
     }

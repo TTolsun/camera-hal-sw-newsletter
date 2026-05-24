@@ -1,4 +1,4 @@
-# Camera HAL SW 뉴스레터 - YYYY-MM-DD
+# Camera HAL / SW Newsletter - YYYY-MM-DD
 
 ## 1. 이번 주 3줄 브리핑
 

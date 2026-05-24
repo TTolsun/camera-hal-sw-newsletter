@@ -168,7 +168,7 @@ function fallbackHeadlineArticlePayload(section = {}, index = 0) {
 
 function fallbackTitleSystemInstruction() {
   return [
-    'You write concise Korean public article headlines for Camera HAL SW Newsletter review-only fallback artifacts.',
+    'You write concise Korean public article headlines for Camera HAL / SW Newsletter review-only fallback artifacts.',
     'Return JSON only. Do not copy the source title verbatim.',
     'Use the supplied source title, what_changed, confirmed facts, public article draft, and source_extraction.',
     'The headline must reflect the concrete source-confirmed article content, not a generic CameraX or Android template.',

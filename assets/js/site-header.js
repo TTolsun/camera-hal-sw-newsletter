@@ -35,7 +35,7 @@
       .join('\n        ');
     return `<nav class="site-nav content-wrap" aria-label="Primary navigation">
       <a class="site-brand" href="${escapeHtml(brandHref)}" aria-label="${escapeHtml(BRAND_LABEL)}">
-        <span>Camera HAL </span><span class="brand-separator" aria-hidden="true"></span><span>SW Newsletter</span>
+        <span>Camera HAL</span><span class="brand-separator" aria-hidden="true">/</span><span>SW Newsletter</span>
       </a>
       <div class="nav-links">
         ${links}

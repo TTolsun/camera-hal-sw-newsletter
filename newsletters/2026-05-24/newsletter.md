@@ -1,10 +1,10 @@
-# AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-24
+# Camera HAL / SW Newsletter - 2026-05-24
 
-Tooling Watch Edition: C++ / Tooling Watch - 이번 2026-05-24호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Google AI Studio, 프롬프트 기반 Camera API 연동 native Android 앱 생성 지원.
+Tooling Watch Edition: Android Native Tooling - 이번 2026-05-24호는 1개 기사(구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동)를 정리했습니다.
 
 
-> Tooling Watch Edition: C++ / Tooling Watch
-> 이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 참고 issue로 발행되었습니다.
+> Tooling Watch Edition: Android Native Tooling
+> 이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 Android native tooling 중심의 참고 issue로 발행되었습니다.
 > Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.
 
 
@@ -12,9 +12,9 @@ Tooling Watch Edition: C++ / Tooling Watch - 이번 2026-05-24호는 Camera HAL 
 
 - Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.
 - 직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.
-- 직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.
+- 프로토타입 검토 시 Camera permission, lifecycle, device capability 처리는 별도 검증 대상으로 분리해야 합니다.
 
-## 2. Google AI Studio, 프롬프트 기반 Camera API 연동 native Android 앱 생성 지원
+## 2. 구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동
 
 
 ![Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png)
@@ -49,4 +49,3 @@ AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prot
 ## 참고자료
 
 - [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)
-- [CameraX Release Notes - CameraX 1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)

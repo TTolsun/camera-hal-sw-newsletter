@@ -19,7 +19,7 @@ const {
 
 function writePublicIssue(root, date, text = '') {
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), [
-    '# Camera HAL SW Newsletter',
+    '# Camera HAL / SW Newsletter',
     '',
     text || 'Historical public newsletter body.',
     ''

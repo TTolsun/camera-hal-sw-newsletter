@@ -1,4 +1,4 @@
-# AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-11
+# Camera HAL / SW Newsletter - 2026-05-11
 
 이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
 

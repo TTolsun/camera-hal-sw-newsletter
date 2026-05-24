@@ -1,4 +1,4 @@
-# AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-22
+# Camera HAL / SW Newsletter - 2026-05-22
 
 이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동.
 

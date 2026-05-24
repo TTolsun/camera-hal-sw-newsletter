@@ -172,9 +172,8 @@ pre code {
   white-space: nowrap;
 }
 
-.brand-separator::before {
+.brand-separator {
   margin: 0 0.35em;
-  content: "/";
 }
 
 .nav-links {

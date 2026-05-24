@@ -1645,7 +1645,7 @@ function defaultIssue(date) {
     date,
     public_contract_version: 'story-v1',
     generation_contract_version: 1,
-    title: `AOSP Camera / Driver / SoC Platform 뉴스레터 - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: '이번 호는 deterministic fallback public issue builder가 공식 source 기반 후보만 사용해 구성했습니다.',
     briefing: [
       '공식 source 기반 후보를 우선 검토했습니다.',
@@ -1708,13 +1708,10 @@ function ensureThreeBriefingBullets(issue, fallbackCount, demotedRecords) {
   return bullets.slice(0, 3);
 }
 
-function uniqueReferences(sections, demotedRecords) {
+function uniqueReferences(sections) {
   const references = [];
   const seen = new Set();
-  for (const source of [
-    ...sections.flatMap(section => ensureArray(section.sources)),
-    ...demotedRecords.flatMap(record => ensureArray(record.sources))
-  ]) {
+  for (const source of sections.flatMap(section => ensureArray(section.sources))) {
     const url = normalizeUrl(source?.url);
     if (!url || seen.has(url)) continue;
     seen.add(url);
@@ -1982,7 +1979,7 @@ function buildFallbackPublicIssue(options = {}) {
   applyPublicationDecision(issue, publicationDecision);
   const basePublicSummary = publicIssueSummary(date, issue.sections);
   issue.summary = publicationDecision.fallback_only
-    ? `Tooling Watch Edition: C++ / Tooling Watch - ${basePublicSummary}`
+    ? `Tooling Watch Edition - ${basePublicSummary}`
     : basePublicSummary;
   issue.review_publication_ready = true;
   issue.publication_notice = publicationDecision.fallback_only
@@ -1996,7 +1993,7 @@ function buildFallbackPublicIssue(options = {}) {
   }
   issue.briefing = publicBriefingBullets(issue.sections);
   issue.action_items = fallbackActionItems(issue, reportedFallbackCount, reportedDemotedRecords);
-  issue.references = uniqueReferences(issue.sections, reportedDemotedRecords);
+  issue.references = uniqueReferences(issue.sections);
 
   const fallbackFactCheck = {
     ...factCheck,

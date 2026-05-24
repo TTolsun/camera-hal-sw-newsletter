@@ -884,8 +884,8 @@ function validateEditorOutputContract(value, date, options = {}) {
     });
   }
   if (value.date !== date) value.date = date;
-  value.title = value.title || `Camera HAL SW 뉴스레터 - ${date}`;
-  if (!value.title.includes(date)) value.title = `Camera HAL SW 뉴스레터 - ${date}`;
+  value.title = value.title || `Camera HAL / SW Newsletter - ${date}`;
+  if (!value.title.includes(date)) value.title = `Camera HAL / SW Newsletter - ${date}`;
   if (!value.summary) {
     throw semanticError('Editor output is missing summary.', {
       field: 'summary',

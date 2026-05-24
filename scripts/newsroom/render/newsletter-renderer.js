@@ -182,8 +182,8 @@ function publicationNoticeLines(issue) {
       return issue.publication_notice.map(String).filter(Boolean);
     }
     return [
-      'Tooling Watch Edition: C++ / Tooling Watch',
-      '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 참고 issue로 발행되었습니다.',
+      'Tooling Watch Edition',
+      '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 Android native tooling / build/test/debug workflow 중심의 참고 issue로 발행되었습니다.',
       'Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.'
     ];
   }
@@ -433,7 +433,7 @@ function buildPublicHtml(issue) {
           <span class="issue-kicker">주간 뉴스레터</span>
           <span class="issue-date">${escapeHtml(issue.date)}</span>
         </div>
-        <h1>Camera HAL SW Newsletter</h1>
+        <h1>Camera HAL / SW Newsletter</h1>
         <p class="subtitle">${escapeHtml(issue.summary)}</p>
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
         <div class="actions newsletter-actions issue-actions">

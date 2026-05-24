@@ -66,7 +66,7 @@ test('broken external selectedImage is replaced with local fallback in final iss
   try {
     const issue = {
       date: '2026-05-04',
-      title: 'Camera HAL SW Newsletter - 2026-05-04',
+      title: 'Camera HAL / SW Newsletter - 2026-05-04',
       summary: 'Image fallback contract test.',
       briefing: ['One', 'Two', 'Three'],
       sections: [section()],

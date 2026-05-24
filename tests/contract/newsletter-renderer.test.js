@@ -13,7 +13,7 @@ const {
 function issue(overrides = {}) {
   return {
     date: '2026-05-03',
-    title: 'Camera HAL SW Newsletter - 2026-05-03',
+    title: 'Camera HAL / SW Newsletter - 2026-05-03',
     summary: 'Weekly summary for Camera HAL readers.',
     briefing: ['Brief one', 'Brief two', 'Brief three'],
     sections: [{
@@ -122,7 +122,7 @@ function siteNavLabels(html) {
   assert.match(html, /<script src="\.\.\/\.\.\/assets\/js\/site-header\.js" defer><\/script>/);
   return [...siteHeader.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
     .map(match => textFromHtml(match[1]))
-    .filter(label => label && label !== 'Camera HAL SW Newsletter' && label !== 'Camera HAL / SW Newsletter');
+    .filter(label => label && label !== 'Camera HAL / SW Newsletter');
 }
 
 test('newsletter renderer uses public_article for public markdown and HTML', () => {

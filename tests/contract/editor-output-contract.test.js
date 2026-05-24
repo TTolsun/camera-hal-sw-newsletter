@@ -113,7 +113,7 @@ function section(index, overrides = {}) {
 function editor(overrides = {}) {
   return {
     date: DATE,
-    title: `Camera HAL SW Newsletter - ${DATE}`,
+    title: `Camera HAL / SW Newsletter - ${DATE}`,
     summary: 'Summary',
     briefing: ['one', 'two', 'three'],
     sections: [section(1), section(2), section(3)],
@@ -2449,15 +2449,15 @@ test('editor field hygiene rejects internal classification in confirmed facts', 
   );
 });
 
-test('editor title fallback keeps existing Korean title contract', () => {
+test('editor title fallback keeps canonical newsletter title contract', () => {
   const missingTitle = editor({ title: '' });
-  const mismatchedTitle = editor({ title: 'Camera HAL SW Newsletter - 2026-05-07' });
+  const mismatchedTitle = editor({ title: 'Camera HAL / SW Newsletter - 2026-05-07' });
 
   validateEditorOutputContract(missingTitle, DATE, { normalizeSection });
   validateEditorOutputContract(mismatchedTitle, DATE, { normalizeSection });
 
-  assert.equal(missingTitle.title, `Camera HAL SW 뉴스레터 - ${DATE}`);
-  assert.equal(mismatchedTitle.title, `Camera HAL SW 뉴스레터 - ${DATE}`);
+  assert.equal(missingTitle.title, `Camera HAL / SW Newsletter - ${DATE}`);
+  assert.equal(mismatchedTitle.title, `Camera HAL / SW Newsletter - ${DATE}`);
 });
 
 test('excessive briefing items are repaired and initial diagnostics are written', async () => {

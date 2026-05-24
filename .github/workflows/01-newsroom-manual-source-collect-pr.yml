@@ -110,7 +110,7 @@ jobs:
         with:
           script: |
             const labels = [
-              { name: 'newsletter', color: '1b58b5', description: 'Camera HAL SW Newsletter' },
+              { name: 'newsletter', color: '1b58b5', description: 'Camera HAL / SW Newsletter' },
               { name: 'aosp-camera', color: '0e8a16', description: 'AOSP Camera and camera stack scope' },
               { name: 'editor-review', color: 'fbca04', description: 'Editor-in-chief review required' },
               { name: 'raw-candidates', color: 'c5def5', description: 'RAW newsroom candidate review' }

@@ -53,7 +53,7 @@ function policySection(headline, url, bucket = 'direct_aosp_camera', overrides =
 function editorWithSections(sections) {
   return {
     date: DATE,
-    title: `Camera HAL SW 뉴스레터 - ${DATE}`,
+    title: `Camera HAL / SW Newsletter - ${DATE}`,
     summary: 'Summary',
     briefing: ['one', 'two', 'three'],
     sections,

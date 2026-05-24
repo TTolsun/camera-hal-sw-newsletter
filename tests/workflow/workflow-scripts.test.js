@@ -312,7 +312,7 @@ function onePublishableSupportingEditorDraft(date, candidate) {
   const evidenceText = candidate.source_extraction.release.sections[0].items[0].text;
   return {
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'A single source-backed SoC camera workload signal is ready for Camera HAL validation planning.',
     briefing: [
       'Snapdragon ISP camera thermal behavior needs preview latency review.',
@@ -490,7 +490,7 @@ function writeMinimalPublishArtifacts(root, date, overrides = {}) {
 function writePublicNewsletterArtifacts(root, date, overrides = {}) {
   const issue = overrides.issue || {
     date,
-    title: overrides.title || `Camera HAL SW 뉴스레터 - ${date}`,
+    title: overrides.title || `Camera HAL / SW Newsletter - ${date}`,
     summary: overrides.summary || '공개 뉴스레터 요약입니다.',
     briefing: ['첫 번째 요약입니다.', '두 번째 요약입니다.', '세 번째 요약입니다.'],
     sections: [
@@ -544,7 +544,7 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
   writeJson(path.join(root, 'data', 'newsletters.json'), [
     {
       date,
-      title: overrides.title || `Camera HAL SW 뉴스레터 - ${date}`,
+      title: overrides.title || `Camera HAL / SW Newsletter - ${date}`,
       summary: overrides.summary || '공개 뉴스레터 요약입니다.',
       html: `newsletters/${date}/index.html`,
       md: `newsletters/${date}/newsletter.md`,
@@ -556,7 +556,7 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
 function writeNewsletterIndex(root, items) {
   writeJson(path.join(root, 'data', 'newsletters.json'), items.map(item => ({
     date: item.date,
-    title: item.title || `Camera HAL SW Newsletter - ${item.date}`,
+    title: item.title || `Camera HAL / SW Newsletter - ${item.date}`,
     summary: item.summary || 'Public issue summary',
     html: `newsletters/${item.date}/index.html`,
     md: `newsletters/${item.date}/newsletter.md`,
@@ -751,7 +751,7 @@ function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
   });
   const editor = {
     date,
-    title: `Camera HAL SW 뉴스레터 - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'PR #39 regression fixture.',
     briefing: ['libcamera update.', 'CameraX update.', 'GCC 16.1 tooling item.'],
     sections: [
@@ -878,7 +878,7 @@ function writeRun25590436113LikeFallbackFixture(root, options = {}) {
   const candidates = [camerax14, libcamera, gcc, cameraxAnchorless, ...safeCandidates];
   const editor = {
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Run 25590436113 fallback regression fixture.',
     briefing: ['CameraX wording needs repair.', 'libcamera has a source gap.', 'GCC fallback is not publishable.'],
     sections: [
@@ -1019,7 +1019,7 @@ function writeEditorialReviewableArtifacts(root, date, overrides = {}) {
   };
   const editor = {
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Review-only draft',
     briefing: ['one', 'two', 'three'],
     sections: [],
@@ -1089,7 +1089,7 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
   };
   const editor = {
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Fallback draft',
     briefing: ['one', 'two', 'three'],
     sections: [],
@@ -4016,9 +4016,9 @@ test('fallback builder publishes fallback-only issue as disclosed fallback_publi
   assert.equal(newsletterData.homepage_badge, 'Tooling Watch Edition');
   assert.equal(newsletterData.camera_anchor_count, 0);
   assert.deepEqual(newsletterData.tags, ['Tooling Watch Edition', 'Tooling Watch']);
-  assert.match(markdown, /Tooling Watch Edition: C\+\+ \/ Tooling Watch/);
+  assert.match(markdown, /Tooling Watch Edition/);
   assert.match(html, /class="publication-notice"/);
-  assert.match(html, /Tooling Watch Edition: C\+\+ \/ Tooling Watch/);
+  assert.match(html, /Tooling Watch Edition/);
   assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
 
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
@@ -4141,7 +4141,7 @@ test('review-only public issue keeps review publication notice', () => {
   });
   const issue = {
     date,
-    title: `Camera HAL SW 뉴스레터 - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: '검토 발행본입니다.',
     briefing: ['Camera anchor가 남아 있습니다.', '공개 source 범위 안에서 해석합니다.', 'Camera HAL 직접 변경으로 과장하지 않습니다.'],
     publication_mode: 'review_only',
@@ -4177,7 +4177,7 @@ test('fallback public issue uses tooling perspective label', () => {
   });
   const issue = {
     date,
-    title: `Tooling Watch Edition: C++ / Tooling Watch - ${date}`,
+    title: `Tooling Watch Edition - ${date}`,
     summary: 'Tooling Watch Edition issue',
     briefing: ['Tooling watch item입니다.', 'Camera anchor는 없습니다.', '편집자 검토가 필요합니다.'],
     publication_mode: 'fallback_public',
@@ -4762,6 +4762,31 @@ test('fallback builder recovers run 25590436113 shape with source-bound anchor c
   assert.equal(outputs.public_newsletter_ready, 'true');
 });
 
+test('fallback builder excludes demoted article sources from public references', () => {
+  const root = tempRoot();
+  const { date, libcamera, gcc } = writeRun25590436113LikeFallbackFixture(root);
+
+  buildFallbackPublicIssue({ root, date });
+
+  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
+  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
+  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
+  const referencesSection = extractMarkdownSection(publicMarkdown, '참고자료');
+
+  assert.equal(
+    fallbackReport.demoted_articles.some(item => item.sources?.some(source => source.url === libcamera.url)),
+    true
+  );
+  assert.equal(
+    fallbackReport.demoted_articles.some(item => item.sources?.some(source => source.url === gcc.url)),
+    true
+  );
+  assert.equal(finalEditor.references.some(source => source.url === libcamera.url), false);
+  assert.equal(finalEditor.references.some(source => source.url === gcc.url), false);
+  assert.equal(referencesSection.includes(libcamera.url), false);
+  assert.equal(referencesSection.includes(gcc.url), false);
+});
+
 test('fallback builder writes public files when one safe article is available', () => {
   const root = tempRoot();
   const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
@@ -4829,7 +4854,7 @@ test('fallback builder includes selected native tooling supporting article after
   };
   const editor = {
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Workflow 3 fallback should keep source-ready supporting tooling.',
     briefing: ['Compose CameraX item.', 'AI Studio tooling item.', 'Review-only public issue.'],
     sections: [regressionSection(compose)],
@@ -5208,7 +5233,7 @@ test('ensure CLI persists a rendered public article when selected headline is no
   writePublicNewsletterArtifacts(root, date, {
     issue: {
       date,
-      title: `Camera HAL SW 뉴스레터 - ${date}`,
+      title: `Camera HAL / SW Newsletter - ${date}`,
       summary: '공개 뉴스레터 요약입니다.',
       briefing: ['첫 번째 요약입니다.', '두 번째 요약입니다.', '세 번째 요약입니다.'],
       sections: [
@@ -5490,7 +5515,7 @@ test('public newsletter readiness requires valid data/newsletters.json entry for
     ['missing date entry', [], /data\/newsletters\.json missing date entry/],
     ['path mismatch', [{
       date,
-      title: 'Camera HAL SW Newsletter',
+      title: 'Camera HAL / SW Newsletter',
       summary: 'Path mismatch fixture',
       html: `newsletters/${date}/wrong-index.html`,
       md: `newsletters/${date}/wrong-newsletter.md`,
@@ -6512,7 +6537,7 @@ test('newsroom PR body omits article structure contract detail when editor draft
   });
   writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), {
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Summary',
     briefing: ['one', 'two', 'three'],
     sections: [{

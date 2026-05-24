@@ -319,7 +319,7 @@ jobs:
         with:
           script: |
             const labels = [
-              { name: 'newsletter', color: '1b58b5', description: 'Camera HAL SW Newsletter' },
+              { name: 'newsletter', color: '1b58b5', description: 'Camera HAL / SW Newsletter' },
               { name: 'aosp-camera', color: '0e8a16', description: 'AOSP Camera and camera stack scope' },
               { name: 'editor-review', color: 'fbca04', description: 'Editor-in-chief review required' },
               { name: 'needs-fix', color: 'd73a4a', description: 'Generated newsletter is not ready to publish' },
@@ -355,7 +355,7 @@ jobs:
           branch: newsroom-final/${{ steps.meta.outputs.date }}
           base: main
           delete-branch: true
-          title: "[Newsletter] Camera HAL SW Newsletter - ${{ steps.meta.outputs.date }}"
+          title: "[Newsletter] Camera HAL / SW Newsletter - ${{ steps.meta.outputs.date }}"
           body: ${{ steps.pr-body.outputs.body }}
 
       - name: Add pull request labels

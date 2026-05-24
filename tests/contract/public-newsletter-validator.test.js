@@ -14,7 +14,7 @@ function markdown(overrides = {}) {
     ['libcamera path의 sensor mode selection 회귀 가능성을 확인합니다.', 'frame timing과 format negotiation test 필요 여부를 점검합니다.'],
     ['Android native owner가 Clang build log와 camera module 경고를 확인합니다.', 'HAL/driver 변경 근거는 없음으로 제한해 release note 범위만 추적합니다.']
   ];
-  return `# Camera HAL SW Newsletter - 2026-05-18
+  return `# Camera HAL / SW Newsletter - 2026-05-18
 
 이번 호는 Camera HAL 독자가 확인할 만한 공개 출처 동향을 요약합니다.
 
@@ -211,9 +211,9 @@ test('public newsletter validator rejects legacy fallback wording and allows Too
   const legacyFallbackHtml = html('<div class="publication-notice"><p>Fallback Edition: C++ / Tooling Watch</p></div>');
   const toolingMarkdown = markdown().replace(
     '이번 호는 Camera HAL 독자가 확인할 만한 공개 출처 동향을 요약합니다.',
-    'Tooling Watch Edition: C++ / Tooling Watch. This tooling-watch issue is clearly labeled.'
+    'Tooling Watch Edition. This tooling-watch issue is clearly labeled.'
   );
-  const toolingHtml = html('<div class="publication-notice"><p>Tooling Watch Edition: C++ / Tooling Watch</p></div>');
+  const toolingHtml = html('<div class="publication-notice"><p>Tooling Watch Edition</p></div>');
 
   const legacyErrors = validatePublicNewsletterArtifacts({
     markdown: legacyFallbackMarkdown,

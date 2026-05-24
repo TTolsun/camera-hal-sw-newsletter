@@ -56,7 +56,7 @@ function writeRequiredArtifacts(root, date, overrides = {}) {
   const url = 'https://example.com/camerax';
   const editor = {
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Summary',
     briefing: ['one', 'two', 'three'],
     sections: [section(url, overrides.section)],

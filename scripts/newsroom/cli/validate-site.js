@@ -182,6 +182,11 @@ function textFromHtml(html) {
     .trim();
 }
 
+function publicationNoticeText(html) {
+  const match = String(html || '').match(/<[^>]+class=["'][^"']*\bpublication-notice\b[^>]*>[\s\S]*?<\/(?:div|section|aside)>/i);
+  return match ? textFromHtml(match[0]) : '';
+}
+
 function sameOrderedValues(left, right) {
   if (left.length !== right.length) return false;
   return left.every((value, index) => value === right[index]);
@@ -258,10 +263,10 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
   if (cameraAnchorCount === 0 && tags.includes('Camera HAL')) {
     fail(`Newsletter ${item.date} fallback-only metadata must not expose Camera HAL as a homepage tag.`);
   }
-  if (!/class=["'][^"']*\bpublication-notice\b/i.test(html) || !/Tooling Watch Edition: C\+\+ \/ Tooling Watch/.test(textFromHtml(html))) {
+  if (!/Tooling Watch Edition/.test(publicationNoticeText(html))) {
     fail(`Newsletter ${item.date} fallback_public HTML must show a visible Tooling Watch Edition publication notice.`);
   }
-  if (!/Tooling Watch Edition: C\+\+ \/ Tooling Watch/.test(markdown)) {
+  if (!/Tooling Watch Edition/.test(markdown)) {
     fail(`Newsletter ${item.date} fallback_public markdown must disclose Tooling Watch Edition status.`);
   }
 }
@@ -301,7 +306,7 @@ function validateSiteNavLabels(content, relPath) {
 
   const labels = [...siteNavMatch[0].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
     .map(match => textFromHtml(match[1]))
-    .filter(label => label && label !== 'Camera HAL SW Newsletter' && label !== 'Camera HAL / SW Newsletter');
+    .filter(label => label && label !== 'Camera HAL / SW Newsletter');
   const expected = siteHeaderExpectedLabels();
   const actual = labels.slice(0, expected.length);
   const matchesExpected = actual.length === expected.length &&

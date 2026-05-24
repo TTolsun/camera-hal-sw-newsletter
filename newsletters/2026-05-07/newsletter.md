@@ -1,4 +1,4 @@
-# AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-07
+# Camera HAL / SW Newsletter - 2026-05-07
 
 이번 2026-05-07호는 2개 기사(libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트, libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
 

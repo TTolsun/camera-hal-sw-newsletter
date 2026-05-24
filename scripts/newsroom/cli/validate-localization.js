@@ -38,6 +38,7 @@ const generatedPathParts = new Set([
 
 const mojibakePattern = /[\uFFFD\uF900-\uFAFF]/;
 const hangulPattern = /[가-힣]/;
+const canonicalNewsletterTitlePattern = /^Camera HAL \/ SW Newsletter - \d{4}-\d{2}-\d{2}$/;
 
 const staleEnglishPhrases = [
   'Project Structure & Module Organization',
@@ -108,13 +109,16 @@ function readJson(rel) {
 function checkNewsletterData() {
   const items = readJson(path.join('data', 'newsletters.json'));
   for (const item of items) {
-    if (!hangulPattern.test(String(item.title || ''))) {
+    const title = String(item.title || '');
+    const expectedCanonicalTitle = item.date ? `Camera HAL / SW Newsletter - ${item.date}` : '';
+    const canonicalNewsletterTitle = canonicalNewsletterTitlePattern.test(title) && title === expectedCanonicalTitle;
+    if (!hangulPattern.test(title) && !canonicalNewsletterTitle) {
       errors.push(`data/newsletters.json: ${item.date} title에 한국어 표시값이 없습니다.`);
     }
     if (!hangulPattern.test(String(item.summary || ''))) {
       errors.push(`data/newsletters.json: ${item.date} summary에 한국어 표시값이 없습니다.`);
     }
-    addLongEnglishProseErrors(`data/newsletters.json: ${item.date} title`, item.title || '');
+    addLongEnglishProseErrors(`data/newsletters.json: ${item.date} title`, title);
     addLongEnglishProseErrors(`data/newsletters.json: ${item.date} summary`, item.summary || '');
   }
 }

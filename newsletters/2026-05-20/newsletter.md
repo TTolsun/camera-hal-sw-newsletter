@@ -1,4 +1,4 @@
-# AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-20
+# Camera HAL / SW Newsletter - 2026-05-20
 
 이번 2026-05-20호는 2개 기사(Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
 

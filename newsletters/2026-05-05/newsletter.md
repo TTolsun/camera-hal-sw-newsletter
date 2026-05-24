@@ -1,4 +1,4 @@
-# Camera HAL SW 뉴스레터 - 2026-05-05
+# Camera HAL / SW Newsletter - 2026-05-05
 
 이번 2026-05-05호는 4개 기사(Claude Code 2.1.128: Camera HAL workflow review 범위, 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위, Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위, C++26 assert(): Camera HAL debug-build 검토 범위)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
 

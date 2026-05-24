@@ -66,7 +66,7 @@ function publicIssue(date, overrides = {}) {
   }));
   return {
     date,
-    title: `Camera HAL SW Newsletter - ${date}`,
+    title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Weekly Camera HAL software update.',
     briefing: [
       'CameraX release gives HAL teams a validation signal.',

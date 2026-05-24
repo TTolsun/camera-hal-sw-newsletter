@@ -113,6 +113,28 @@ test('localization validator reports homepage headline display errors in readabl
   assert.doesNotMatch(result.stderr, /\?\?\?쒓뎅|媛믪씠/);
 });
 
+test('localization validator allows canonical English newsletter brand titles', () => {
+  const root = tempRoot();
+  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+    date: '2026-05-24',
+    title: 'Camera HAL / SW Newsletter - 2026-05-24',
+    summary: '카메라 뉴스 요약',
+    tags: []
+  }]);
+  writeJson(path.join(root, 'data', 'news-sources.json'), {
+    sources: []
+  });
+
+  const result = spawnSync(process.execPath, [
+    repoPath('scripts', 'newsroom', 'cli', 'validate-localization.js')
+  ], {
+    cwd: root,
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 0);
+});
+
 test('prompt host files do not keep long English prose instructions', () => {
   const promptHostFiles = [
     ['scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'],

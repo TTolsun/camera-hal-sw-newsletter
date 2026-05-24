@@ -43,7 +43,7 @@ function issue(overrides = {}) {
   const date = overrides.date || '2026-05-09';
   return {
     date,
-    title: 'Camera HAL SW Newsletter',
+    title: 'Camera HAL / SW Newsletter',
     summary: 'Weekly Camera HAL software update.',
     briefing: overrides.briefing || [
       'CameraX release gives HAL teams a validation signal.',
