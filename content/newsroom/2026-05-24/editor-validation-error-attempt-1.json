@@ -20,8 +20,8 @@
     "issues": [
       {
         "index": 1,
-        "headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 전환과 카메라 프리뷰 및 캡처 UX 검증 요구사항",
-        "type": "insufficient_concrete_public_checkpoints",
+        "headline": "Google I/O 2026: Jetpack Compose 및 CameraX를 통한 다중 윈도우 카메라 미리보기 최적화",
+        "type": "insufficient_concrete_internal_reader_checkpoints",
         "actualCount": 1,
         "expectedMinCount": 2
       }

@@ -75,7 +75,7 @@
         "counts_as_fallback_topic": true,
         "counts_as_supporting_main_article": true,
         "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "tooling_supporting",
+        "guardrail_impact_class": "tooling_support",
         "evidence_origin": "article_text",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -86,7 +86,7 @@
         "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       },
-      "impact_claim_level": "tooling_supporting",
+      "guardrail_impact_class": "tooling_support",
       "hal_impact_axes": [
         "native_tooling_workflow",
         "framework_hal_contract",
@@ -276,7 +276,7 @@
         "counts_as_fallback_topic": true,
         "counts_as_supporting_main_article": true,
         "counts_as_forbidden_main_article": false,
-        "impact_claim_level": "tooling_supporting",
+        "guardrail_impact_class": "tooling_support",
         "evidence_origin": "article_text",
         "metadata_source": "merged",
         "binding_status": "bound",

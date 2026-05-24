@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "date": "2026-05-24",
-  "generated_at": "2026-05-24T06:49:19.392Z",
+  "generated_at": "2026-05-24T13:59:58.484Z",
   "capsule_token_target": "700-1100",
   "shortlisted_capsule_count": 2,
   "selected_capsule_count": 2,
@@ -12,8 +12,6 @@
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 13:00:00 +0000",
-      "source_event_id": "android-developers-blog:8-building-seamless-android-experiences-across-devices-with-jetpack-compose",
-      "needs_editor_date_review": false,
       "topic_type": "android-camera",
       "editorial_priority": 3,
       "relevance_bucket": "android_platform_camera_adjacent",
@@ -74,7 +72,6 @@
         "counts_as_fallback_topic": false,
         "evidence_origin": "article_text"
       },
-      "impact_claim_level": "android_framework_adjacent",
       "hal_impact_axes": [
         "camerax_app_compatibility"
       ],
@@ -91,15 +88,7 @@
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release",
         "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": false,
-        "evidence_granularity": "article_level_concrete_source_fact",
-        "source_quality_notes": [
-          "official source"
-        ]
+        "main_article_source_allowed": true
       },
       "source_quality_reason": "Source policy allows this candidate with concrete source evidence.",
       "source_role": "official_release_source",
@@ -124,7 +113,26 @@
         ]
       },
       "component": "CameraX / Android camera APIs",
-      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
+      "source_fact_bundle": {
+        "source_url": "https://goo.gle/AdaptiveApps_IO26",
+        "canonical_url": "https://goo.gle/adaptiveapps_io26",
+        "source_title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+        "fact_count": 2,
+        "facts": [
+          {
+            "kind": "behavior_change",
+            "role": "primary",
+            "text": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size."
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "8: Building seamless Android experiences across devices with Jetpack Compose. The Android ecosystem is now Adaptive by Default , moving fluidly across phones, foldables, tablets, cars, XR, and expanding usages with Googlebook and connected displays. With over 580 million large-screen devices, and..."
+          }
+        ],
+        "supporting_source_urls": []
+      },
+      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
       "background_context_static": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective_static": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "overclaim_guardrails": [
@@ -135,7 +143,7 @@
       "evidence": [
         "api_or_component: CameraX / Android camera APIs",
         "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "summary: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid..."
+        "evidence_note: api_or_component: CameraX / Android camera APIs"
       ],
       "seed_evidence": null,
       "source_extraction": {
@@ -230,16 +238,26 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal,...",
-      "estimated_tokens": 2284
+      "do_not_overstate": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
+      "do_not_claim": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal,....",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
+      "estimated_tokens": 2558
     },
     {
       "title": "Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
-      "source_event_id": "android-developers-blog:build-native-android-apps-in-google-ai-studio",
-      "needs_editor_date_review": false,
       "topic_type": "cpp",
       "editorial_priority": 6,
       "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -329,7 +347,6 @@
         "counts_as_fallback_topic": true,
         "evidence_origin": "article_text"
       },
-      "impact_claim_level": "tooling_supporting",
       "hal_impact_axes": [
         "native_tooling_workflow"
       ],
@@ -345,15 +362,7 @@
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release",
         "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": false,
-        "evidence_granularity": "article_level_concrete_source_fact",
-        "source_quality_notes": [
-          "official source"
-        ]
+        "main_article_source_allowed": true
       },
       "source_quality_reason": "Source policy allows this candidate with concrete source evidence.",
       "source_role": "official_release_source",
@@ -379,7 +388,36 @@
         ]
       },
       "component": "Google AI Studio",
-      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Andr...",
+      "source_fact_bundle": {
+        "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source_title": "Build native Android apps in Google AI Studio",
+        "fact_count": 4,
+        "facts": [
+          {
+            "kind": "behavior_change",
+            "role": "primary",
+            "text": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt."
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "Google AI Studio에서 Android 앱을 빌드하는 단계별 가이드"
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "주요 기능 및 이점"
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "예제 코드 또는 튜토리얼"
+          }
+        ],
+        "supporting_source_urls": []
+      },
+      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
@@ -390,7 +428,7 @@
       "evidence": [
         "api_or_component: Google AI Studio",
         "behavior_change: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Andr...",
-        "summary: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps..."
+        "evidence_note: api_or_component: Google AI Studio"
       ],
       "seed_evidence": null,
       "source_extraction": null,
@@ -476,9 +514,21 @@
           "validationStatus": "ok"
         }
       ],
+      "do_not_overstate": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
+      "do_not_claim": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device A...",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 2634
+      "estimated_tokens": 2843
     }
   ],
   "selected_capsules": [
@@ -487,8 +537,6 @@
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 13:00:00 +0000",
-      "source_event_id": "android-developers-blog:8-building-seamless-android-experiences-across-devices-with-jetpack-compose",
-      "needs_editor_date_review": false,
       "topic_type": "android-camera",
       "editorial_priority": 3,
       "relevance_bucket": "android_platform_camera_adjacent",
@@ -549,7 +597,6 @@
         "counts_as_fallback_topic": false,
         "evidence_origin": "article_text"
       },
-      "impact_claim_level": "android_framework_adjacent",
       "hal_impact_axes": [
         "camerax_app_compatibility"
       ],
@@ -566,15 +613,7 @@
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release",
         "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": false,
-        "evidence_granularity": "article_level_concrete_source_fact",
-        "source_quality_notes": [
-          "official source"
-        ]
+        "main_article_source_allowed": true
       },
       "source_quality_reason": "Source policy allows this candidate with concrete source evidence.",
       "source_role": "official_release_source",
@@ -599,7 +638,26 @@
         ]
       },
       "component": "CameraX / Android camera APIs",
-      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
+      "source_fact_bundle": {
+        "source_url": "https://goo.gle/AdaptiveApps_IO26",
+        "canonical_url": "https://goo.gle/adaptiveapps_io26",
+        "source_title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+        "fact_count": 2,
+        "facts": [
+          {
+            "kind": "behavior_change",
+            "role": "primary",
+            "text": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size."
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "8: Building seamless Android experiences across devices with Jetpack Compose. The Android ecosystem is now Adaptive by Default , moving fluidly across phones, foldables, tablets, cars, XR, and expanding usages with Googlebook and connected displays. With over 580 million large-screen devices, and..."
+          }
+        ],
+        "supporting_source_urls": []
+      },
+      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
       "background_context_static": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective_static": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "overclaim_guardrails": [
@@ -610,7 +668,7 @@
       "evidence": [
         "api_or_component: CameraX / Android camera APIs",
         "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "summary: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid..."
+        "evidence_note: api_or_component: CameraX / Android camera APIs"
       ],
       "seed_evidence": null,
       "source_extraction": {
@@ -705,16 +763,26 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal,...",
-      "estimated_tokens": 2284
+      "do_not_overstate": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
+      "do_not_claim": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal,....",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
+      "estimated_tokens": 2558
     },
     {
       "title": "Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
-      "source_event_id": "android-developers-blog:build-native-android-apps-in-google-ai-studio",
-      "needs_editor_date_review": false,
       "topic_type": "cpp",
       "editorial_priority": 6,
       "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -804,7 +872,6 @@
         "counts_as_fallback_topic": true,
         "evidence_origin": "article_text"
       },
-      "impact_claim_level": "tooling_supporting",
       "hal_impact_axes": [
         "native_tooling_workflow"
       ],
@@ -820,15 +887,7 @@
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release",
         "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": false,
-        "evidence_granularity": "article_level_concrete_source_fact",
-        "source_quality_notes": [
-          "official source"
-        ]
+        "main_article_source_allowed": true
       },
       "source_quality_reason": "Source policy allows this candidate with concrete source evidence.",
       "source_role": "official_release_source",
@@ -854,7 +913,36 @@
         ]
       },
       "component": "Google AI Studio",
-      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Andr...",
+      "source_fact_bundle": {
+        "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source_title": "Build native Android apps in Google AI Studio",
+        "fact_count": 4,
+        "facts": [
+          {
+            "kind": "behavior_change",
+            "role": "primary",
+            "text": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt."
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "Google AI Studio에서 Android 앱을 빌드하는 단계별 가이드"
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "주요 기능 및 이점"
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "예제 코드 또는 튜토리얼"
+          }
+        ],
+        "supporting_source_urls": []
+      },
+      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
@@ -865,7 +953,7 @@
       "evidence": [
         "api_or_component: Google AI Studio",
         "behavior_change: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Andr...",
-        "summary: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps..."
+        "evidence_note: api_or_component: Google AI Studio"
       ],
       "seed_evidence": null,
       "source_extraction": null,
@@ -951,9 +1039,21 @@
           "validationStatus": "ok"
         }
       ],
+      "do_not_overstate": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
+      "do_not_claim": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device A...",
+      "fallback_guard_notes": [
+        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
+        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
+      ],
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 2634
+      "estimated_tokens": 2843
     }
   ],
   "reserve_capsules": [
@@ -985,7 +1085,6 @@
         "counts_as_fallback_topic": false,
         "evidence_origin": "article_text"
       },
-      "impact_claim_level": "direct_hal_change",
       "hal_impact_axes": [
         "framework_hal_contract",
         "driver_image_pipeline",
@@ -1007,15 +1106,7 @@
         "source_role": "official_release_source",
         "source_url_quality": "official_site_update_row",
         "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": false,
-        "evidence_granularity": "dated_site_update_row",
-        "source_quality_notes": [
-          "official source"
-        ]
+        "main_article_source_allowed": true
       },
       "source_quality_reason": "Source policy allows this candidate with concrete source evidence.",
       "source_role": "official_release_source",
@@ -1040,6 +1131,70 @@
         ]
       },
       "component": "CameraX / androidx.camera",
+      "source_fact_bundle": {
+        "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+        "source_title": "CameraX Release Notes - CameraX 1.6.1",
+        "fact_count": 11,
+        "facts": [
+          {
+            "kind": "behavior_change",
+            "role": "primary",
+            "text": "Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )"
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle."
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "Fixed a crash that happens in all CameraX apps that run on the upcoming Android 17 devices due to a unknown dynamic range mode being added which CameraX didn't handle it appropriately. The same fix is also cherry picked in 1.5.2. Please DO update your CameraX version to either 1.5.2 or 1.6.0 to a..."
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "The feature group API now provides consistent results when PREVIEW_STABILIZATION is used with VideoCapture . This corrects a bug that caused inconsistent results when a Preview use case was not also active. ( Ifed82 , b/449913903 )"
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "Fixed an issue where unsupported preferred features were incorrectly made available. Features are now correctly filtered when their required use cases are not met. ( I38db8 , b/449532342 )"
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "Fixed glitchy video result on Samsung Galaxy S6. ( I612d9 , b/235127608 )"
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "Fixed an issue where CameraInfo#isFeatureGroupSupported could incorrectly return true for PREVIEW_STABILIZATION if the SessionConfig in the query was already configured with other features. ( I2c355c , b/437816469 )"
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "Excluded problematic YUV format output sizes from Samsung Z Fold 4 device. The received images have distortion issue when using those output sizes. ( I776bf , b/460322307 )"
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "Fixed a device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound. ( I0f183 , b/458197367 )"
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "Fixes an issue on some devices where using the flash with the ultra-wide camera may result in underexposed images. ( Ib7530 , b/444590340 )"
+          },
+          {
+            "kind": "source_extraction",
+            "role": "primary",
+            "text": "Updated the ExifInterface dependency to include a fix for parsing JPEGs with 0xFF padding, which resolves image capture failures on devices where the JPEG encoder adds fill bytes before markers. ( I0eb49 )"
+          }
+        ],
+        "supporting_source_urls": []
+      },
       "what_changed": "Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )",
       "background_context_static": "Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
       "camera_hal_perspective_static": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
@@ -1214,7 +1369,6 @@
       },
       "derived_editorial_hints": {
         "relevance_bucket_hint": "direct_aosp_camera",
-        "impact_claim_level_hint": "android_framework_adjacent",
         "hal_boundary": "framework_adjacent_not_direct_hal_contract",
         "validation_targets": [
           "VideoCapture stream and stabilization validation",
@@ -1326,7 +1480,7 @@
         "Do not use artifact version tables as behavior-change evidence."
       ],
       "soc_signal_type": "platform_signal",
-      "estimated_tokens": 3132
+      "estimated_tokens": 3779
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-24",
-  "generated_at": "2026-05-24T06:50:10.892Z",
+  "generated_at": "2026-05-24T14:00:56.458Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -228,7 +228,7 @@
       "relevance_bucket": "android_platform_camera_adjacent",
       "article_group_key": "article:https://goo.gle/adaptiveapps_io26",
       "tooling_workflow_type": "",
-      "source_event_id": "android-developers-blog:8-building-seamless-android-experiences-across-devices-with-jetpack-compose",
+      "source_event_id": "",
       "evidence_id": "",
       "event_type": "",
       "effective_date": "",
@@ -274,7 +274,7 @@
       "key_evidence": [
         "api_or_component: CameraX / Android camera APIs",
         "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "summary: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid..."
+        "evidence_note: api_or_component: CameraX / Android camera APIs"
       ],
       "selection_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {
@@ -297,7 +297,7 @@
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "article_group_key": "android_native_tooling_workflow",
       "tooling_workflow_type": "native_tooling_workflow",
-      "source_event_id": "android-developers-blog:build-native-android-apps-in-google-ai-studio",
+      "source_event_id": "",
       "evidence_id": "",
       "event_type": "",
       "effective_date": "",
@@ -360,7 +360,7 @@
       "key_evidence": [
         "api_or_component: Google AI Studio",
         "behavior_change: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Andr...",
-        "summary: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps..."
+        "evidence_note: api_or_component: Google AI Studio"
       ],
       "selection_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {

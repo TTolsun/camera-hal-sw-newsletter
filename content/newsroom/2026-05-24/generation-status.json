@@ -11,13 +11,13 @@
   "quality_threshold": 85,
   "quality_deduction_count": 3,
   "quota_error_count": 0,
-  "invalid_json_count": 1,
+  "invalid_json_count": 0,
   "model_usage": {
     "reporter attempt 1/2": {
       "gemini-2.5-flash": {
-        "requests": 2,
+        "requests": 1,
         "successes": 1,
-        "invalid_json": 1,
+        "invalid_json": 0,
         "quota_errors": 0,
         "api_errors": 0
       }
@@ -116,8 +116,8 @@
     "candidate_count": 42
   },
   "run_context": {
-    "github_run_id": "26354257766",
-    "github_sha": "c304c23a0526cca5a7db0d631852286c09446ff2",
+    "github_run_id": "26363251912",
+    "github_sha": "3216b10963d802f9b3c627564c223ce64d97854f",
     "github_ref": "refs/heads/main"
   },
   "raw_artifact_validation_error": null,
@@ -143,8 +143,8 @@
       "issues": [
         {
           "index": 1,
-          "headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 전환과 카메라 프리뷰 및 캡처 UX 검증 요구사항",
-          "type": "insufficient_concrete_public_checkpoints",
+          "headline": "Google I/O 2026: Jetpack Compose 및 CameraX를 통한 다중 윈도우 카메라 미리보기 최적화",
+          "type": "insufficient_concrete_internal_reader_checkpoints",
           "actualCount": 1,
           "expectedMinCount": 2
         }
@@ -175,8 +175,8 @@
         "issues": [
           {
             "index": 1,
-            "headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 전환과 카메라 프리뷰 및 캡처 UX 검증 요구사항",
-            "type": "insufficient_concrete_public_checkpoints",
+            "headline": "Google I/O 2026: Jetpack Compose 및 CameraX를 통한 다중 윈도우 카메라 미리보기 최적화",
+            "type": "insufficient_concrete_internal_reader_checkpoints",
             "actualCount": 1,
             "expectedMinCount": 2
           }
@@ -345,7 +345,7 @@
     "replacement_headline_key": null,
     "previous_stored_current_score": 98,
     "runtime_decayed_score": 98,
-    "last_scored_at": "2026-05-22",
+    "last_scored_at": "2026-05-24",
     "scored_at": "2026-05-24",
     "retained": true,
     "replaced": false,
