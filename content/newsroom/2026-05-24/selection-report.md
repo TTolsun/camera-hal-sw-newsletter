@@ -36,7 +36,7 @@
 - public_render_reconciliation_reason: unknown
 - previous_stored_current_score: 98
 - runtime_decayed_score: 98
-- last_scored_at: 2026-05-22
+- last_scored_at: 2026-05-24
 - scored_at: 2026-05-24
 - latest_inclusion_mode: selected_normally
 - injected_from_snapshot: false
