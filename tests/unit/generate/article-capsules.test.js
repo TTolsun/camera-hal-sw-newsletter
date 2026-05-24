@@ -87,6 +87,8 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.equal(capsule.conditional_evidence_type, '');
   assert.equal(capsule.selection.final_selected, true);
   assert.deepEqual(capsule.related_context_candidates, []);
+  assert.equal(capsule.source_fact_bundle.source_url, 'https://example.com/camera-hal-metadata?utm=1');
+  assert.deepEqual(capsule.source_fact_bundle.facts, []);
   assert.ok(capsule.evidence.length > 0);
   assert.ok(capsule.estimated_tokens <= 1100);
 });
@@ -207,6 +209,39 @@ test('article capsule report separates shortlist and selected capsule inputs', (
   assert.equal(capsuleInputFromReport(report, 'selected').candidates.length, 1);
   assert.equal(capsuleInputFromReport(report, 'reserve').candidates.length, 1);
   assert.equal(capsuleInputForCandidates('2026-05-03', [selected], report).candidates[0].url, selected.url);
+});
+
+test('article capsule report enriches selected article with same-source child facts', () => {
+  const selected = candidate({
+    title: 'Build native Android apps in Google AI Studio',
+    url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    article_group_key: 'android_native_tooling_workflow',
+    behavior_change: 'Google AI Studio can build entire Android apps from a prompt.'
+  });
+  const child = candidate({
+    title: 'Start building today - Build native Android apps in Google AI Studio',
+    url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today',
+    parent_url: selected.url,
+    parent_title: selected.title,
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    article_group_key: 'android_native_tooling_workflow',
+    source_extraction: {
+      evidence_blocks: [{
+        source_text: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using native Android APIs.'
+      }]
+    }
+  });
+  const report = buildArticleCapsuleReport('2026-05-03', {
+    date: '2026-05-03',
+    shortlisted_candidates: [selected, child],
+    selected_articles: [selected],
+    reserve_candidates: []
+  });
+
+  const selectedCapsule = capsuleInputFromReport(report, 'selected').candidates[0];
+  assert.ok(selectedCapsule.source_fact_bundle.facts.some(fact => /Accelerometer and Bluetooth/.test(fact.text)));
+  assert.ok(selectedCapsule.source_fact_bundle.supporting_source_urls.includes(child.url));
 });
 
 test('compact selection context omits full candidate arrays', () => {

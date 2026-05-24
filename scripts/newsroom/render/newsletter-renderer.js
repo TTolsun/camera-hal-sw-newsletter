@@ -150,11 +150,11 @@ function sectionRelevanceBucket(section = {}) {
 }
 
 function articlePerspectiveLabel(issue, section) {
-  const fallbackIssue = issue?.publication_mode === 'fallback_public' || issue?.fallback_only === true;
-  if (fallbackIssue || sectionRelevanceBucket(section) === 'cpp_ai_tooling_fallback') {
-    return 'Android Native / Tooling 관점';
-  }
-  return 'Camera HAL / Driver 관점';
+  return 'Camera HAL/Driver 관점';
+}
+
+function articlePerspectiveHeading(issue, section) {
+  return `${articlePerspectiveLabel(issue, section)}에서의 의미`;
 }
 
 function issueTags(issue) {
@@ -287,14 +287,10 @@ function uniquePublicParagraphs(values, existingValues = []) {
 }
 
 function storyBodyParagraphsForRender(publicArticle) {
-  const story = publicArticle?.editorial_story || {};
-  return uniquePublicParagraphs([
-    ...bodyParagraphsForRender(publicArticle),
-    story.what_happened,
-    story.why_it_matters,
-    story.reader_scenario,
-    story.field_scenario
-  ], [publicArticle?.lead, publicArticle?.camera_hal_takeaway]);
+  return uniquePublicParagraphs(
+    bodyParagraphsForRender(publicArticle),
+    [publicArticle?.lead, publicArticle?.camera_hal_takeaway]
+  );
 }
 
 function isStoryArticle(publicArticle = {}) {
@@ -321,7 +317,7 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
 
 function publicArticleMarkdown(issue, heading, section) {
   const publicArticle = publicArticleForSection(section, { issue });
-  const perspectiveLabel = articlePerspectiveLabel(issue, section);
+  const perspectiveHeading = articlePerspectiveHeading(issue, section);
   const bodyParagraphs = isStoryArticle(publicArticle)
     ? storyBodyParagraphsForRender(publicArticle)
     : bodyParagraphsForRender(publicArticle);
@@ -334,11 +330,9 @@ ${publicArticle.source_subtitle ? `_${publicArticle.source_subtitle}_\n\n` : ''}
 
 ${bodyParagraphs.join('\n\n')}
 
-### ${perspectiveLabel}에서 확인할 점
+### ${perspectiveHeading}
 
 ${publicArticle.camera_hal_takeaway}
-
-${bulletsMarkdown(publicArticle.reader_checkpoints)}
 
 **출처**
 
@@ -353,11 +347,9 @@ ${publicArticle.lead}
 
 ${bodyParagraphs.join('\n\n')}
 
-### ${perspectiveLabel}에서 확인할 점
+### ${perspectiveHeading}
 
 ${publicArticle.camera_hal_takeaway}
-
-${bulletsMarkdown(publicArticle.reader_checkpoints)}
 
 **출처**
 
@@ -386,7 +378,7 @@ ${sourceListMarkdown(issue.references)}
 
 function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, section) {
   const publicArticle = publicArticleForSection(section, { issue });
-  const perspectiveLabel = articlePerspectiveLabel(issue, section);
+  const perspectiveHeading = articlePerspectiveHeading(issue, section);
   const bodyParagraphs = isStoryArticle(publicArticle)
     ? storyBodyParagraphsForRender(publicArticle)
     : bodyParagraphsForRender(publicArticle);
@@ -400,7 +392,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
           ${publicArticle.source_subtitle ? `<p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>` : ''}
           <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
           ${bodyParagraphs.map(paragraphHtml).join('\n          ')}
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">${escapeHtml(`${perspectiveLabel}에서 확인할 점`)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}<ul>${bulletsHtml(publicArticle.reader_checkpoints)}</ul></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
         </div>
       </section>`;
@@ -413,7 +405,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
           <h3>${escapeHtml(publicArticle.headline)}</h3>
           <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
           ${bodyParagraphs.map(paragraphHtml).join('\n          ')}
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">${escapeHtml(`${perspectiveLabel}에서 확인할 점`)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}<ul>${bulletsHtml(publicArticle.reader_checkpoints)}</ul></div>
+          <div class="article-block reader-checkpoints"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
         </div>
       </section>`;

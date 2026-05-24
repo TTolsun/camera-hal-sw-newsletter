@@ -61,6 +61,9 @@ const {
 const {
   deriveDecisionMetadata
 } = require('../common/public-article-contract');
+const {
+  buildArticleSourceFactBundle
+} = require('./source-fact-bundle');
 
 const REQUIRED_PRESERVE_FIELDS = [
   'headline',
@@ -556,10 +559,15 @@ function candidatePoolFromArtifacts({ root, date }) {
   const collected = readJsonIfExists(path.join(collectedDir, 'candidates.json'));
   if (collected) pushCandidateList(raw, collected.candidates, 'collected');
 
-  const seen = new Set();
-  return raw
+  const normalized = raw
     .map((candidate, index) => normalizeCandidate(candidate, index))
-    .filter(Boolean)
+    .filter(Boolean);
+  const enriched = normalized.map(candidate => ({
+    ...candidate,
+    source_fact_bundle: buildArticleSourceFactBundle(candidate, normalized)
+  }));
+  const seen = new Set();
+  return enriched
     .filter(candidate => {
       const key = normalizeUrl(candidate.url);
       if (!key || seen.has(key)) return false;
@@ -897,6 +905,153 @@ function longEnglishSourceText(value) {
   return /\b(?:[A-Za-z][A-Za-z0-9+/#.-]*[\s,;:()/-]+){14,}[A-Za-z][A-Za-z0-9+/#.-]*\b/.test(text(value));
 }
 
+function sourceFactTexts(candidate = {}, section = {}) {
+  const bundle = candidate.source_fact_bundle || section.source_fact_bundle || buildArticleSourceFactBundle(candidate, [section]);
+  const fromBundle = ensureArray(bundle?.facts).map(fact => text(fact?.text || fact));
+  return unique([
+    ...fromBundle,
+    section.what_changed,
+    candidate.behavior_change,
+    candidate.behaviorChange,
+    candidate.summary,
+    ...ensureArray(candidate?.source_extraction?.evidence_blocks).map(block => text(block?.source_text || block?.text)),
+    ...sourceExtractionItems(candidate).map(item => text(item?.source_text || item?.text))
+  ])
+    .map(value => value.replace(/\s+/g, ' ').trim())
+    .filter(value => value.length >= 20)
+    .filter(value => !/source URL|published date|deterministic fallback|quality gate|fallback builder/i.test(value))
+    .slice(0, 10);
+}
+
+const GENERIC_TERM_STOPWORDS = new Set([
+  'Starting',
+  'Today',
+  'Build',
+  'Start',
+  'Android',
+  'Android apps',
+  'Android APIs',
+  'APIs',
+  'Android developers',
+  'Personal',
+  'Hardware',
+  'Hardware-enabled',
+  'AI-powered',
+  'Official',
+  'Source',
+  'Posted',
+  'Android Developers',
+  'Google'
+]);
+
+function normalizeSourceTerm(value) {
+  const term = text(value)
+    .replace(/^the\s+/i, '')
+    .replace(/^(?:for|to|with|using)\s+/i, '')
+    .replace(/\s+using\b.*$/i, '')
+    .replace(/\s+with\b.*$/i, '')
+    .replace(/\s+integrations?$/i, '')
+    .replace(/\s+support$/i, '')
+    .replace(/[.;:]+$/g, '')
+    .trim();
+  if (!term || term.length < 3 || GENERIC_TERM_STOPWORDS.has(term)) return '';
+  if (/^prompt$/i.test(term)) return '프롬프트 기반 생성';
+  if (/^native Android(?: apps?)?$/i.test(term)) return 'native Android 앱';
+  if (/^Camera$/i.test(term)) return 'Camera API';
+  return term;
+}
+
+function technicalTermsFromText(value) {
+  const body = text(value);
+  const matches = [
+    ...body.matchAll(/\bnative Android(?: apps?)?\b/gi),
+    ...body.matchAll(/\b[A-Z][A-Za-z0-9+/#-]*(?:\s+[A-Z][A-Za-z0-9+/#-]*){0,3}\b/g),
+    ...body.matchAll(/\b[A-Za-z]+[A-Z][A-Za-z0-9+/#-]*\b/g),
+    ...body.matchAll(/\b[A-Z]{2,}(?:\/[A-Z][A-Za-z0-9+-]+)?\b/g),
+    ...body.matchAll(/\b[a-z]+(?:-[a-z]+){1,3}\b/g)
+  ];
+  return matches.map(match => normalizeSourceTerm(match[0])).filter(Boolean);
+}
+
+function enumeratedTermsFromText(value) {
+  const output = [];
+  const body = text(value);
+  const patterns = [
+    /\b(?:include|includes|including|such as|can use|feature|features|support(?:s|ed)?|from just a)\s+([^.;]+)/gi,
+    /(?:포함|지원|사용|예시로)\s*([^.;。]+)/g
+  ];
+  for (const pattern of patterns) {
+    for (const match of body.matchAll(pattern)) {
+      const raw = text(match[1]).replace(/\busing\b.*$/i, '');
+      for (const part of raw.split(/\s*,\s*|\s+and\s+|\s+or\s+|,\s*그리고\s*|그리고\s*/i)) {
+        const term = normalizeSourceTerm(part);
+        if (term) output.push(term);
+      }
+    }
+  }
+  return output;
+}
+
+function sourceTermsFromFacts(facts = []) {
+  return unique(ensureArray(facts).flatMap(fact => [
+    ...enumeratedTermsFromText(fact),
+    ...technicalTermsFromText(fact)
+  ])).slice(0, 12);
+}
+
+function koreanFactPhrase(value) {
+  const fact = text(value);
+  if (!fact) return '';
+  if (/[가-힣]/.test(fact)) return fact.replace(/\.$/, '');
+  const terms = sourceTermsFromFacts([fact]);
+  if (terms.length > 0) return `${terms.slice(0, 5).join(', ')} 관련 내용`;
+  const quoted = fact
+    .replace(/^Posted by\b[^.]{0,180}\bStarting today\b/i, 'Starting today')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (quoted.length <= 120 && !longEnglishSourceText(quoted)) return quoted.replace(/\.$/, '');
+  return '';
+}
+
+function sourceFactBodyParagraphs(candidate = {}, section = {}, component = '') {
+  const facts = sourceFactTexts(candidate, section);
+  const terms = sourceTermsFromFacts(facts);
+  if (facts.length < 2 && terms.length < 3) return [];
+
+  const source = firstText(candidate.source, candidate.publisher, ensureArray(section.sources)[0]?.title, '공개 출처');
+  const title = text(candidate.title || section.headline || component);
+  const date = firstText(candidate.published_date, candidate.publishedAt, section.published_date);
+  const datePhrase = date ? `${date}에 ` : '';
+  const primaryFact = koreanFactPhrase(facts[0]) || `${component || title} 관련 업데이트`;
+  const componentPhrase = component || firstText(candidate.api_or_component, candidate.component, section.category, title);
+  const termChunks = [];
+  for (let index = 0; index < terms.length; index += 6) {
+    termChunks.push(terms.slice(index, index + 6));
+  }
+  const paragraphs = [
+    `${source}는 ${datePhrase}${title} 내용을 공개했습니다. 원문에서 확인되는 핵심은 ${primaryFact}입니다.`
+  ];
+
+  if (termChunks[0]?.length > 0) {
+    paragraphs.push(`원문은 ${termChunks[0].join(', ')}를 주요 구성 요소로 다룹니다. 이는 ${componentPhrase}의 지원 범위, 적용 예시, 개발 흐름을 이해하기 위한 정보입니다.`);
+  }
+  if (termChunks[1]?.length > 0) {
+    paragraphs.push(`추가로 확인되는 항목은 ${termChunks[1].join(', ')}입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.`);
+  }
+
+  const remainingFact = facts.slice(1).map(koreanFactPhrase).find(value =>
+    value && !paragraphs.some(paragraph => paragraph.includes(value))
+  );
+  if (remainingFact && paragraphs.length < 4) {
+    paragraphs.push(`원문 세부 내용으로는 ${remainingFact}도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.`);
+  }
+
+  return paragraphs
+    .filter(Boolean)
+    .filter(paragraph => !longEnglishSourceText(paragraph))
+    .slice(0, 4);
+}
+
 function publicChangeSummary(candidate, section, component) {
   const title = text(candidate.title || section.headline);
   const change = text(sourceBehaviorText(candidate, section));
@@ -932,6 +1087,8 @@ function publicLeadText(candidate, section, headline) {
 function publicBodyParagraphs(candidate, section, component) {
   const title = text(candidate.title || section.headline);
   const change = publicChangeSummary(candidate, section, component);
+  const factParagraphs = sourceFactBodyParagraphs(candidate, section, component);
+  if (factParagraphs.length >= 3) return factParagraphs;
   if (/Building seamless Android experiences across devices/i.test(title) || /Jetpack Compose is the definitive engine/i.test(change)) {
     return [
       'Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.',
@@ -1056,7 +1213,7 @@ function publicTakeawayForCandidate(candidate, section, component) {
   const behavior = sourceBehaviorText(candidate, section);
   if (/direct|camera_stack/i.test(impact) || /direct|driver|image_pipeline/i.test(bucket)) {
     if (isCameraXCandidate(candidate, section) && isListenableFutureCompileFix(behavior)) {
-      return '이 항목은 AOSP Camera HAL 변경이 아니라 CameraX 1.6.0 채택 앱이나 샘플, 검증 도구의 빌드 안정성 패치로 보는 것이 안전합니다. HAL/driver 영향은 별도 source evidence가 있을 때만 판단합니다.';
+      return 'AOSP Camera HAL에는 직접 영향이 확인되지 않았습니다. 이 항목은 CameraX 1.6.0 채택 앱이나 샘플, 검증 도구의 빌드 안정성 패치로 보는 것이 안전합니다. HAL/driver 영향은 별도 source evidence가 있을 때만 판단합니다.';
     }
     if (isCameraXCandidate(candidate, section)) {
       return '이 항목은 CameraX release note의 source-confirmed 변경점을 app/framework 계층에서 먼저 확인하는 항목입니다. HAL/driver 영향은 release note나 별도 검증이 직접 뒷받침할 때만 확장합니다.';
@@ -1070,7 +1227,7 @@ function publicTakeawayForCandidate(candidate, section, component) {
     return '이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.';
   }
   if (isCameraXCandidate(candidate, section) && isListenableFutureCompileFix(behavior)) {
-    return '이 항목은 AOSP Camera HAL 변경이 아니라 CameraX 1.6.0 채택 앱이나 샘플, 검증 도구의 빌드 안정성 패치로 보는 것이 안전합니다. HAL/driver 영향은 별도 source evidence가 있을 때만 판단합니다.';
+    return 'AOSP Camera HAL에는 직접 영향이 확인되지 않았습니다. 이 항목은 CameraX 1.6.0 채택 앱이나 샘플, 검증 도구의 빌드 안정성 패치로 보는 것이 안전합니다. HAL/driver 영향은 별도 source evidence가 있을 때만 판단합니다.';
   }
   if (isCameraXCandidate(candidate, section)) {
     return '이 항목은 CameraX release note의 source-confirmed 변경점을 app/framework 계층에서 먼저 확인하는 항목입니다. HAL/driver 영향은 release note나 별도 검증이 직접 뒷받침할 때만 확장합니다.';
@@ -1225,6 +1382,7 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
     field_builder_warnings: fieldWarnings,
     removed_source_fragments: ensureArray(cleaned.removed_fragments),
     source_extraction: candidate.source_extraction || null,
+    source_fact_bundle: candidate.source_fact_bundle || buildArticleSourceFactBundle(candidate, [candidate]),
     derived_editorial_hints: candidate.derived_editorial_hints || null,
     extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
     background_basis: backgroundContext

@@ -4203,9 +4203,9 @@ test('fallback public issue uses tooling perspective label', () => {
   const markdown = buildMarkdown(issue);
   const html = buildHtml(issue);
 
-  assert.match(markdown, /### Android Native \/ Tooling 관점에서 확인할 점/);
-  assert.match(html, /Android Native \/ Tooling 관점에서 확인할 점/);
-  assert.doesNotMatch(markdown, /### Camera HAL \/ Driver 관점에서 확인할 점/);
+  assert.match(markdown, /### Camera HAL\/Driver 관점에서의 의미/);
+  assert.match(html, /Camera HAL\/Driver 관점에서의 의미/);
+  assert.doesNotMatch(markdown, /### Android Native \/ Tooling 관점에서 확인할 점/);
 });
 
 test('reviewable artifact resolver rejects candidate shortage when deterministic artifact is missing', () => {
@@ -4810,7 +4810,31 @@ test('fallback builder includes selected native tooling supporting article after
     article_group_key: 'android_native_tooling_workflow',
     native_tooling_relevance: 4,
     impact_claim_level: 'tooling_supporting',
+    behavior_change: 'Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.',
     summary: 'Google AI Studio added native Android app generation workflow support for Android developers.'
+  };
+  const aiStudioChild = {
+    ...regressionCandidate({
+      title: 'Start building today - Build native Android apps in Google AI Studio',
+      url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today',
+      bucket: 'cpp_ai_tooling_fallback',
+      fallback: true
+    }),
+    source: 'Android Developers Blog',
+    component: 'Google AI Studio',
+    article_group_key: 'android_native_tooling_workflow',
+    parent_url: aiStudio.url,
+    parent_title: aiStudio.title,
+    finalSelectionEligibility: 'watchlist',
+    source_extraction: {
+      mode: 'roundup_child_topic',
+      evidence_blocks: [{
+        heading: 'Start building today',
+        source_text: 'Start building today. Personal utilities and simple social apps include habit trackers, study quizzes, or event itineraries. Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs. AI-powered experiences can feature Gemini API integrations.'
+      }]
+    },
+    behavior_change: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs.',
+    summary: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs.'
   };
   const editor = {
     date,
@@ -4871,10 +4895,11 @@ test('fallback builder includes selected native tooling supporting article after
   writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
   writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), {
     date,
-    candidates: [compose, aiStudio]
+    candidates: [compose, aiStudio, aiStudioChild]
   });
   writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: [compose, aiStudio],
+    shortlisted_candidates: [compose, aiStudio, aiStudioChild],
     reserve_candidates: [],
     composition_summary: {
       supporting_main_article_count: 1
@@ -4882,6 +4907,7 @@ test('fallback builder includes selected native tooling supporting article after
   });
   writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
     selected_capsules: [compose, aiStudio],
+    shortlisted_capsules: [compose, aiStudio, aiStudioChild],
     reserve_capsules: []
   });
 
@@ -4897,7 +4923,11 @@ test('fallback builder includes selected native tooling supporting article after
     finalEditor.sections.map(section => section.headline).join(' | ')
   );
   assert.match(publicMarkdown, /Build native Android apps in Google AI Studio/);
-  assert.match(publicMarkdown, /AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX\/Camera2 사용 방식을 확인합니다\./);
+  assert.match(publicMarkdown, /프롬프트 기반 생성/);
+  assert.match(publicMarkdown, /native Android 앱/);
+  assert.match(publicMarkdown, /Camera API/);
+  assert.match(publicMarkdown, /Gemini API/);
+  assert.match(publicMarkdown, /Camera HAL\/Driver 관점에서의 의미/);
   assert.doesNotMatch(publicMarkdown, /API\/component\/date|stream\/metadata|compatibility test scenario|현재\s+device matrix와\s+맞는지/);
   assert.equal(fallbackReport.fallback_articles.some(item => item.action === 'selected-native-tooling-supporting'), true);
   assert.equal(result.status.public_newsletter_ready, true);

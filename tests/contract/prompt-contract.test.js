@@ -75,6 +75,7 @@ test('public article contract prompt keeps public output separate from diagnosti
 
   for (const marker of [
     'public_article',
+    'source_fact_bundle',
     'public_contract_version="story-v1"',
     'generation_contract_version=1',
     'story_contract_version=1',
@@ -108,6 +109,12 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /독자-facing/);
   assert.match(prompt, /가정형 현업 장면/);
   assert.match(prompt, /source-confirmed fact/);
+  assert.match(prompt, /모든 기사에 같은 작성 기준/);
+  assert.match(prompt, /fallback_public, relevance_bucket, impact_claim_level 때문에 본문을 짧은 generic 문장/);
+  assert.match(prompt, /3-5개 자연스러운 문단/);
+  assert.match(prompt, /발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획/);
+  assert.match(prompt, /Camera HAL 관련성 판단은 deterministic metadata와 validation layer가 담당/);
+  assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
   assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);
   assert.match(prompt, /validation report, checklist, enum, schema\/debug field name/);
   assert.match(prompt, /claim\/schema contract와 public prose contract를 섞지 마세요/);
@@ -190,5 +197,6 @@ test('public article prompt does not force internal triage fallback prose', () =
   assert.match(source, /validation report, checklist, enum, schema\/debug field name을 노출하지 마세요/);
   assert.match(source, /claim\/schema contract와 public prose contract를 섞지 마세요/);
   assert.match(source, /reader_checkpoints는 최소 2개/);
+  assert.match(source, /body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 public prose를 대체하지 마세요/);
   assert.match(source, /validator token을 조합한 문장을 쓰지 마세요/);
 });

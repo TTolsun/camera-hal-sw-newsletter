@@ -21,6 +21,9 @@ const {
   candidateGroupKey,
   compactContextCandidate
 } = require('../common/article-groups');
+const {
+  buildArticleSourceFactBundle
+} = require('./source-fact-bundle');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -57,6 +60,19 @@ function normalizeUrl(value) {
     return parsed.toString().replace(/\/$/, '').toLowerCase();
   } catch {
     return raw.replace(/[?#].*$/, '').replace(/\/$/, '').toLowerCase();
+  }
+}
+
+function normalizeUrlExact(value) {
+  const raw = text(value);
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    parsed.search = '';
+    parsed.hostname = parsed.hostname.toLowerCase();
+    return parsed.toString().replace(/\/$/, '').toLowerCase();
+  } catch {
+    return raw.replace(/[?].*$/, '').replace(/\/$/, '').toLowerCase();
   }
 }
 
@@ -300,10 +316,19 @@ function capsuleSourceQualityFlatFields(sourceQuality) {
 
 function compactSourceQuality(sourceQuality = {}) {
   const normalized = normalizeSourceQuality({ source_quality: sourceQuality });
-  return Object.fromEntries(Object.entries(normalized).filter(([, value]) => {
-    if (Array.isArray(value)) return value.length > 0;
-    return value !== '';
-  }));
+  const compact = {
+    source_role: normalized.source_role,
+    source_url_quality: normalized.source_url_quality,
+    source_quality_status: normalized.source_quality_status,
+    main_article_source_allowed: normalized.main_article_source_allowed
+  };
+  if (ensureArray(normalized.main_article_source_blockers).length > 0) {
+    compact.main_article_source_blockers = normalized.main_article_source_blockers;
+  }
+  if (normalized.requires_cross_check === true) compact.requires_cross_check = true;
+  if (normalized.requires_conditional_evidence === true) compact.requires_conditional_evidence = true;
+  if (text(normalized.conditional_evidence_type)) compact.conditional_evidence_type = normalized.conditional_evidence_type;
+  return Object.fromEntries(Object.entries(compact).filter(([, value]) => value !== ''));
 }
 
 function compactImageCandidates(candidate) {
@@ -339,7 +364,7 @@ function isFinalSelected(candidate) {
   return bool(candidate.selected);
 }
 
-function buildArticleCapsule(candidate) {
+function buildArticleCapsule(candidate, contextCandidates = []) {
   const cleanedBehavior = cleanBehaviorChange(candidate);
   const impactClaimLevel = inferImpactClaimLevel(candidate);
   const fieldCandidate = {
@@ -412,6 +437,7 @@ function buildArticleCapsule(candidate) {
     source_quality_field_drift: sourceQualityDrift,
     main_article_readiness: readiness,
     component: compactText(candidate.api_or_component || candidate.version_or_release, 160),
+    source_fact_bundle: buildArticleSourceFactBundle(candidate, contextCandidates),
     what_changed: compactText(cleanedBehavior.text || candidate.behavior_change || candidate.summary || summaryCacheText(candidate), MAX_TEXT),
     background_context_static: compactText(buildStaticBackgroundContext(fieldCandidate), MAX_TEXT),
     camera_hal_perspective_static: compactText(buildHalPerspective(fieldCandidate), MAX_TEXT),
@@ -517,14 +543,23 @@ function buildArticleCapsule(candidate) {
 }
 
 function capsuleMap(capsules) {
-  return new Map(ensureArray(capsules).map(capsule => [normalizeUrl(capsule.url), capsule]));
+  const exact = new Map();
+  const normalized = new Map();
+  for (const capsule of ensureArray(capsules)) {
+    const exactKey = normalizeUrlExact(capsule.url);
+    const normalizedKey = normalizeUrl(capsule.url);
+    if (exactKey && !exact.has(exactKey)) exact.set(exactKey, capsule);
+    if (normalizedKey && !normalized.has(normalizedKey)) normalized.set(normalizedKey, capsule);
+  }
+  return { exact, normalized };
 }
 
 function capsulesForCandidates(candidates, capsules = []) {
   const byUrl = capsuleMap(capsules);
   return ensureArray(candidates).map(candidate => {
+    const exactKey = normalizeUrlExact(candidateUrl(candidate));
     const key = normalizeUrl(candidateUrl(candidate));
-    return byUrl.get(key) || buildArticleCapsule(candidate);
+    return byUrl.exact.get(exactKey) || byUrl.normalized.get(key) || buildArticleCapsule(candidate);
   });
 }
 
@@ -532,7 +567,7 @@ function buildArticleCapsuleReport(date, shortlistReport, reporterInput = null) 
   const shortlistedCandidates = ensureArray(reporterInput?.candidates).length > 0
     ? ensureArray(reporterInput.candidates)
     : ensureArray(shortlistReport?.shortlisted_candidates);
-  const shortlistedCapsules = shortlistedCandidates.map(buildArticleCapsule);
+  const shortlistedCapsules = shortlistedCandidates.map(candidate => buildArticleCapsule(candidate, shortlistedCandidates));
   const selectedCapsules = capsulesForCandidates(
     ensureArray(shortlistReport?.selected_articles),
     shortlistedCapsules
