@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-24",
-  "generated_at": "2026-05-24T06:50:04.767Z",
+  "generated_at": "2026-05-24T14:00:50.046Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -84,7 +84,7 @@
     "replacement_headline_key": null,
     "previous_stored_current_score": 98,
     "runtime_decayed_score": 98,
-    "last_scored_at": "2026-05-22",
+    "last_scored_at": "2026-05-24",
     "scored_at": "2026-05-24",
     "retained": true,
     "replaced": false,
