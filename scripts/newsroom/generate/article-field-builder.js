@@ -3,11 +3,11 @@ const {
   classifyAospCameraStackCandidate
 } = require('../common/aosp-camera-scope');
 
-const IMPACT_CLAIM_LEVELS = Object.freeze({
-  DIRECT_HAL_CHANGE: 'direct_hal_change',
-  CAMERA_STACK_DIRECT: 'camera_stack_direct',
-  ANDROID_FRAMEWORK_ADJACENT: 'android_framework_adjacent',
-  TOOLING_SUPPORTING: 'tooling_supporting',
+const GUARDRAIL_IMPACT_CLASSES = Object.freeze({
+  DIRECT_HAL_CONTRACT: 'direct_hal_contract',
+  CAMERA_STACK_SOURCE: 'camera_stack_source',
+  FRAMEWORK_ADJACENT: 'framework_adjacent',
+  TOOLING_SUPPORT: 'tooling_support',
   WATCH_ONLY: 'watch_only'
 });
 
@@ -194,37 +194,25 @@ function cleanBehaviorChange(candidate = {}) {
   };
 }
 
-function inferImpactClaimLevel(candidate = {}) {
-  const explicit = text(candidate.impact_claim_level || candidate.impactClaimLevel);
-  if (Object.values(IMPACT_CLAIM_LEVELS).includes(explicit)) return explicit;
+function inferGuardrailImpactClass(candidate = {}) {
+  const explicit = text(candidate.guardrail_impact_class || candidate.guardrailImpactClass);
+  if (Object.values(GUARDRAIL_IMPACT_CLASSES).includes(explicit)) return explicit;
 
   const bucket = candidateBucket(candidate);
   const directness = Number(candidate.aosp_camera_directness || 0);
   if (bucket === BUCKETS.DIRECT_AOSP_CAMERA) {
-    return directness >= 3 ? IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE : IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT;
+    return directness >= 3 ? GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT : GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT;
   }
-  if (bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) return IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT;
-  if (bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) return IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT;
-  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) return IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT;
-  if (bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) return IMPACT_CLAIM_LEVELS.TOOLING_SUPPORTING;
+  if (bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) return GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE;
+  if (bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) return GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT;
+  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) return GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT;
+  if (bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) return GUARDRAIL_IMPACT_CLASSES.TOOLING_SUPPORT;
   if (bucket === BUCKETS.SOC_PLATFORM_SIGNAL) {
     return hasDirectCameraPipelineEvidence(candidate)
-      ? IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT
-      : IMPACT_CLAIM_LEVELS.WATCH_ONLY;
+      ? GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE
+      : GUARDRAIL_IMPACT_CLASSES.WATCH_ONLY;
   }
-  return IMPACT_CLAIM_LEVELS.WATCH_ONLY;
-}
-
-function stripExplicitImpactClaimLevel(candidate = {}) {
-  if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) return {};
-  const sanitized = { ...candidate };
-  delete sanitized.impact_claim_level;
-  delete sanitized.impactClaimLevel;
-  return sanitized;
-}
-
-function inferGuardrailImpactClaimLevel(candidate = {}) {
-  return inferImpactClaimLevel(stripExplicitImpactClaimLevel(candidate));
+  return GUARDRAIL_IMPACT_CLASSES.WATCH_ONLY;
 }
 
 function buildConfirmedFacts(candidate = {}) {
@@ -245,41 +233,41 @@ function buildConfirmedFacts(candidate = {}) {
 
 function buildStaticBackgroundContext(candidate = {}) {
   const bucket = candidateBucket(candidate);
-  const impact = inferImpactClaimLevel(candidate);
-  if (impact === IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE) {
+  const impact = inferGuardrailImpactClass(candidate);
+  if (impact === GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT) {
     return 'Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.';
   }
-  if (impact === IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT || bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) {
+  if (impact === GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE || bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) {
     return 'Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.';
   }
   if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
     return 'Camera output / multimedia supporting items are not direct HAL contract evidence; treat them as capture output, preview/video/gallery/video-call behavior, and downstream validation signals.';
   }
-  if (impact === IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT || bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
+  if (impact === GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT || bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
     return 'CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.';
   }
-  if (impact === IMPACT_CLAIM_LEVELS.TOOLING_SUPPORTING || bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) {
+  if (impact === GUARDRAIL_IMPACT_CLASSES.TOOLING_SUPPORT || bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) {
     return 'Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.';
   }
   return '이 항목은 background 또는 watchlist material입니다. main Camera HAL claim으로 승격하기 전에 follow-up source evidence를 추적할 가치가 있는지 판단하는 용도로 사용합니다.';
 }
 
 function buildHalPerspective(candidate = {}) {
-  const impact = inferImpactClaimLevel(candidate);
+  const impact = inferGuardrailImpactClass(candidate);
   const bucket = candidateBucket(candidate);
-  if (impact === IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE) {
+  if (impact === GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT) {
     return 'Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.';
   }
-  if (impact === IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT) {
+  if (impact === GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE) {
     return 'Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.';
   }
   if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
     return 'Do not infer a HAL API change; review preview, video, gallery, video-call, and captured image/video output quality or compatibility regressions.';
   }
-  if (impact === IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT) {
+  if (impact === GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT) {
     return 'CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.';
   }
-  if (impact === IMPACT_CLAIM_LEVELS.TOOLING_SUPPORTING) {
+  if (impact === GUARDRAIL_IMPACT_CLASSES.TOOLING_SUPPORT) {
     return 'build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.';
   }
   return 'Dated camera-stack evidence가 더 강한 claim을 뒷받침하기 전까지 briefing 또는 watchlist context로 유지합니다.';
@@ -287,12 +275,12 @@ function buildHalPerspective(candidate = {}) {
 
 function buildOverclaimGuardrails(candidate = {}) {
   const bucket = candidateBucket(candidate);
-  const impact = inferImpactClaimLevel(candidate);
+  const impact = inferGuardrailImpactClass(candidate);
   const guardrails = [
     'Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.',
     'Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.'
   ];
-  if (impact !== IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE) {
+  if (impact !== GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT) {
     guardrails.push('이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.');
   }
   if (bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
@@ -439,8 +427,8 @@ function hasDirectHalChangeClaim(value) {
 }
 
 function directHalOverclaim(section = {}) {
-  const impact = text(section.impact_claim_level || section.impactClaimLevel);
-  if (!impact || impact === IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE) return '';
+  const impact = text(section.guardrail_impact_class || section.guardrailImpactClass);
+  if (!impact || impact === GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT) return '';
   for (const snippet of sectionSnippets(section)) {
     if (isNegatedOrGuardrailSnippet(snippet)) continue;
     if (hasDirectHalChangeClaim(snippet)) return snippet;
@@ -491,11 +479,11 @@ function findFieldHygieneIssues(section = {}, options = {}) {
     issues.push({
       type: 'overclaim_guardrail',
       field: 'camera_hal_perspective',
-      impact_claim_level: text(section.impact_claim_level || section.impactClaimLevel),
+      guardrail_impact_class: text(section.guardrail_impact_class || section.guardrailImpactClass),
       snippet: compactText(overclaimSnippet, MAX_FRAGMENT_LENGTH),
       severity: 'hard',
       blocking: true,
-      reason: 'Article claims direct HAL API or contract impact without direct_hal_change impact_claim_level.'
+      reason: 'Article claims direct HAL API or contract impact without a direct HAL guardrail impact class.'
     });
   }
   for (const classification of confirmedFactClassificationLeaks(section)) {
@@ -512,7 +500,7 @@ function findFieldHygieneIssues(section = {}, options = {}) {
 }
 
 module.exports = {
-  IMPACT_CLAIM_LEVELS,
+  GUARDRAIL_IMPACT_CLASSES,
   OVERLAP_THRESHOLD,
   RAW_ARTIFACT_PATTERNS,
   buildConfirmedFacts,
@@ -521,8 +509,7 @@ module.exports = {
   buildStaticBackgroundContext,
   cleanBehaviorChange,
   findFieldHygieneIssues,
-  inferGuardrailImpactClaimLevel,
-  inferImpactClaimLevel,
+  inferGuardrailImpactClass,
   normalizedTokenOverlap,
   rawArtifactMatches
 };

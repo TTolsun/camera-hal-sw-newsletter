@@ -259,7 +259,6 @@ function onePublishableSupportingCandidate(date) {
     counts_as_driver_topic: false,
     counts_as_soc_topic: true,
     counts_as_fallback_topic: false,
-    impact_claim_level: 'soc_resource_contention',
     evidence_origin: 'source_extraction',
     source_hint: 'official-source',
     camera_hal_relevance_score: 2,
@@ -405,7 +404,6 @@ function onePublishableSupportingEditorDraft(date, candidate) {
       counts_as_primary_camera_topic: false,
       counts_as_soc_topic: true,
       counts_as_fallback_topic: false,
-      impact_claim_level: 'soc_resource_contention',
       evidence_origin: 'source_extraction',
       source_hint: 'official-source'
     }],
@@ -620,7 +618,6 @@ function cameraXRegressionExtraction(title, url) {
     extraction_quality: sourceExtraction.extraction_quality,
     derived_editorial_hints: {
       relevance_bucket_hint: 'direct_aosp_camera',
-      impact_claim_level_hint: 'android_framework_adjacent',
       hal_boundary: 'framework_adjacent_not_direct_hal_contract',
       validation_targets: ['Camera2 interop regression validation', 'Camera ITS smoke validation'],
       device_specific_notes: [],
@@ -658,11 +655,6 @@ function regressionCandidate({ title, url, bucket, fallback = false }) {
     counts_as_driver_topic: bucket === 'camera_driver_image_pipeline',
     counts_as_soc_topic: false,
     counts_as_fallback_topic: fallback,
-    impact_claim_level: fallback
-      ? 'tooling_supporting'
-      : bucket === 'camera_driver_image_pipeline'
-        ? 'camera_stack_direct'
-        : 'android_framework_adjacent',
     evidence_origin: 'fixture',
     ...cameraXRegressionExtraction(title, url)
   };
@@ -697,7 +689,6 @@ function regressionSection(item, overrides = {}) {
     counts_as_driver_topic: item.counts_as_driver_topic,
     counts_as_soc_topic: item.counts_as_soc_topic,
     counts_as_fallback_topic: item.counts_as_fallback_topic,
-    impact_claim_level: item.impact_claim_level,
     evidence_origin: item.evidence_origin,
     source_extraction: item.source_extraction || null,
     derived_editorial_hints: item.derived_editorial_hints || null,
@@ -4810,7 +4801,6 @@ test('fallback builder includes selected native tooling supporting article after
     tooling_workflow_type: 'native_tooling_workflow',
     article_group_key: 'android_native_tooling_workflow',
     native_tooling_relevance: 4,
-    impact_claim_level: 'tooling_supporting',
     behavior_change: 'Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.',
     summary: 'Google AI Studio added native Android app generation workflow support for Android developers.'
   };

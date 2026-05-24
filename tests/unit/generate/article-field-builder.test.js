@@ -2,14 +2,14 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  IMPACT_CLAIM_LEVELS,
+  GUARDRAIL_IMPACT_CLASSES,
   buildConfirmedFacts,
   buildHalPerspective,
   buildOverclaimGuardrails,
   buildStaticBackgroundContext,
   cleanBehaviorChange,
   findFieldHygieneIssues,
-  inferImpactClaimLevel
+  inferGuardrailImpactClass
 } = require('../../../scripts/newsroom/generate/article-field-builder');
 
 function cameraXCandidate(overrides = {}) {
@@ -76,7 +76,6 @@ test('cleanBehaviorChange prefers source_extraction release bullet over metadata
 
 test('confirmed facts use Korean source-fact labels and exclude internal classification', () => {
   const facts = buildConfirmedFacts(cameraXCandidate({
-    impact_claim_level: 'android_framework_adjacent',
     source_gap_risk: true
   }));
   const joined = facts.join('\n');
@@ -98,11 +97,11 @@ test('static background stays separate from cleaned behavior', () => {
   assert.doesNotMatch(background, /camera-viewfinder/);
 });
 
-test('impact_claim_level controls HAL perspective strength', () => {
+test('guardrail impact class controls HAL perspective strength', () => {
   const direct = buildHalPerspective({
     relevance_bucket: 'direct_aosp_camera',
     aosp_camera_directness: 5,
-    impact_claim_level: IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE
+    guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT
   });
   const adjacent = buildHalPerspective(cameraXCandidate());
   const tooling = buildHalPerspective({
@@ -112,7 +111,7 @@ test('impact_claim_level controls HAL perspective strength', () => {
   assert.match(direct, /HAL API|metadata|request\/result|stream|buffer/);
   assert.match(adjacent, /CameraX|Camera2/);
   assert.match(tooling, /build|test|debug|tooling/);
-  assert.equal(inferImpactClaimLevel(cameraXCandidate()), IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT);
+  assert.equal(inferGuardrailImpactClass(cameraXCandidate()), GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT);
 });
 
 test('multimedia camera-output fields avoid CameraX Camera2 and direct HAL wording', () => {
@@ -121,7 +120,7 @@ test('multimedia camera-output fields avoid CameraX Camera2 and direct HAL wordi
   const perspective = buildHalPerspective(candidate);
   const guardrails = buildOverclaimGuardrails(candidate).join('\n');
 
-  assert.equal(inferImpactClaimLevel(candidate), IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT);
+  assert.equal(inferGuardrailImpactClass(candidate), GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT);
   assert.match(background, /Camera output|multimedia|preview\/video\/gallery\/video-call/);
   assert.match(perspective, /preview|video|gallery|video-call|captured image\/video output/);
   assert.doesNotMatch(`${background}\n${perspective}`, /CameraX|Camera2/);
@@ -131,26 +130,26 @@ test('multimedia camera-output fields avoid CameraX Camera2 and direct HAL wordi
 
 test('SoC platform signal stays watch-only unless camera pipeline evidence is present', () => {
   assert.equal(
-    inferImpactClaimLevel({
+    inferGuardrailImpactClass({
       title: 'Tensor G6 improves NPU power management',
       summary: 'The platform update changes CPU, GPU, NPU, power, and thermal behavior.',
       relevance_bucket: 'soc_platform_signal'
     }),
-    IMPACT_CLAIM_LEVELS.WATCH_ONLY
+    GUARDRAIL_IMPACT_CLASSES.WATCH_ONLY
   );
   assert.equal(
-    inferImpactClaimLevel({
+    inferGuardrailImpactClass({
       title: 'Tensor ISP update improves image sensor pipeline',
       summary: 'The platform update names ISP, image sensor, MIPI CSI, and camera pipeline behavior.',
       relevance_bucket: 'soc_platform_signal'
     }),
-    IMPACT_CLAIM_LEVELS.CAMERA_STACK_DIRECT
+    GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE
   );
 });
 
 test('derived editorial hints do not count as source evidence for impact inference', () => {
   assert.equal(
-    inferImpactClaimLevel({
+    inferGuardrailImpactClass({
       title: 'Tensor G6 improves scheduler behavior',
       summary: 'The platform update changes CPU, GPU, NPU, power, and thermal behavior.',
       relevance_bucket: 'soc_platform_signal',
@@ -159,7 +158,7 @@ test('derived editorial hints do not count as source evidence for impact inferen
         do_not_claim: ['Do not claim direct Camera HAL API changes.']
       }
     }),
-    IMPACT_CLAIM_LEVELS.WATCH_ONLY
+    GUARDRAIL_IMPACT_CLASSES.WATCH_ONLY
   );
 });
 
@@ -174,7 +173,7 @@ test('field hygiene rejects internal classification in confirmed facts', () => {
       'impact_claim_level=android_framework_adjacent.',
       'source_gap_risk=false.'
     ],
-    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+    guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
   });
 
   assert.ok(issues.some(item => item.type === 'internal_classification_in_confirmed_facts'));
@@ -223,7 +222,7 @@ test('field hygiene detects Korean direct HAL overclaims for non-direct impact l
       what_changed: 'CameraX compatibility behavior changed.',
       background: 'CameraX is above Camera2.',
       camera_hal_perspective,
-      impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+      guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
     });
     const overclaim = issues.find(item => item.type === 'overclaim_guardrail');
     assert.ok(overclaim, `${camera_hal_perspective} should be detected`);
@@ -232,18 +231,18 @@ test('field hygiene detects Korean direct HAL overclaims for non-direct impact l
   }
 });
 
-test('field hygiene allows direct HAL claims only for direct_hal_change impact level', () => {
+test('field hygiene allows direct HAL claims only for direct HAL guardrail impact class', () => {
   const directIssues = findFieldHygieneIssues({
     what_changed: 'Camera HAL changed request behavior.',
     background: 'The source is a direct HAL change.',
     camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.',
-    impact_claim_level: IMPACT_CLAIM_LEVELS.DIRECT_HAL_CHANGE
+    guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT
   });
   const adjacentIssues = findFieldHygieneIssues({
     what_changed: 'CameraX compatibility behavior changed.',
     background: 'CameraX is above Camera2.',
     camera_hal_perspective: 'This is direct HAL API behavior.',
-    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+    guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
   });
 
   assert.equal(directIssues.some(item => item.type === 'overclaim_guardrail'), false);
@@ -255,13 +254,13 @@ test('field hygiene does not treat standalone stream buffer request result or gu
     what_changed: 'CameraX compatibility behavior changed.',
     background: 'CameraX is above Camera2.',
     camera_hal_perspective: 'stream buffer request/result 관찰 포인트입니다.',
-    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+    guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
   });
   const guardrail = findFieldHygieneIssues({
     what_changed: 'CameraX compatibility behavior changed.',
     background: 'CameraX is above Camera2.',
     camera_hal_perspective: '직접 HAL API 변경으로 단정하지 않습니다. source evidence가 없으면 HAL contract impact를 claim하지 않습니다.',
-    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+    guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
   });
 
   assert.equal(standalone.some(item => item.type === 'overclaim_guardrail'), false);
@@ -277,7 +276,7 @@ test('field hygiene keeps not and no from masking positive direct HAL overclaims
       what_changed: 'CameraX compatibility behavior changed.',
       background: 'CameraX is above Camera2.',
       camera_hal_perspective,
-      impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+      guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
     });
     assert.ok(
       issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true),
@@ -293,7 +292,7 @@ test('field hygiene keeps not and no from masking positive direct HAL overclaims
       what_changed: 'CameraX compatibility behavior changed.',
       background: 'CameraX is above Camera2.',
       camera_hal_perspective,
-      impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+      guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
     });
     assert.equal(issues.some(item => item.type === 'overclaim_guardrail'), false);
   }
@@ -305,7 +304,7 @@ test('overclaim guardrails and field hygiene catch direct HAL overclaim', () => 
     what_changed: 'CameraX 1.6.1 updated app-facing compatibility behavior.',
     background: 'CameraX is an Android framework layer above Camera2.',
     camera_hal_perspective: 'This is a direct HAL API contract change for stream buffers.',
-    impact_claim_level: IMPACT_CLAIM_LEVELS.ANDROID_FRAMEWORK_ADJACENT
+    guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
   });
 
   assert.ok(guardrails.some(item => item.includes('direct HAL API')));

@@ -42,7 +42,7 @@ const {
   buildStaticBackgroundContext,
   cleanBehaviorChange,
   findFieldHygieneIssues,
-  inferImpactClaimLevel
+  inferGuardrailImpactClass
 } = require('./article-field-builder');
 const {
   decodeHtml,
@@ -1207,7 +1207,7 @@ function publicCheckpointsForCandidate(candidate, section) {
 
 function publicTakeawayForCandidate(candidate, section, component) {
   const bucket = text(candidate.relevance_bucket || section.relevance_bucket);
-  const impact = inferImpactClaimLevel(candidate);
+  const impact = inferGuardrailImpactClass(candidate);
   const title = text(candidate.title || section.headline || component);
   const behavior = sourceBehaviorText(candidate, section);
   if (/direct|camera_stack/i.test(impact) || /direct|driver|image_pipeline/i.test(bucket)) {
@@ -1317,27 +1317,27 @@ function buildSectionFromCandidate(candidate, { fallback = false, backgroundCont
     url: candidate.url
   };
   const cleaned = cleanBehaviorChange(candidate);
-  const impactClaimLevel = inferImpactClaimLevel(candidate);
+  const guardrailImpactClass = inferGuardrailImpactClass(candidate);
   const background = firstText(
     backgroundContext?.background_context,
     backgroundContext?.background,
-    buildStaticBackgroundContext({ ...candidate, impact_claim_level: impactClaimLevel })
+    buildStaticBackgroundContext({ ...candidate, guardrail_impact_class: guardrailImpactClass })
   );
-  const halPerspective = buildHalPerspective({ ...candidate, impact_claim_level: impactClaimLevel });
-  const guardrails = buildOverclaimGuardrails({ ...candidate, impact_claim_level: impactClaimLevel });
+  const halPerspective = buildHalPerspective({ ...candidate, guardrail_impact_class: guardrailImpactClass });
+  const guardrails = buildOverclaimGuardrails({ ...candidate, guardrail_impact_class: guardrailImpactClass });
   const fieldWarnings = unique([
     ...ensureArray(cleaned.warnings),
     ...findFieldHygieneIssues({
       what_changed: cleaned.text,
       background,
       camera_hal_perspective: halPerspective,
-      impact_claim_level: impactClaimLevel
+      guardrail_impact_class: guardrailImpactClass
     }).map(item => item.type)
   ]);
   const section = {
     category,
     headline,
-    confirmed_facts: buildConfirmedFacts({ ...candidate, impact_claim_level: impactClaimLevel }),
+    confirmed_facts: buildConfirmedFacts(candidate),
     evidence_summary: `${candidate.source} source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.`,
     specificity_checks: [
       `finalSelectionEligibility=${candidate.finalSelectionEligibility}`,

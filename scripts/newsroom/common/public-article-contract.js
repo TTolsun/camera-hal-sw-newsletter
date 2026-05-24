@@ -645,7 +645,7 @@ function fallbackParagraphs(section = {}) {
 }
 
 function sectionBucket(section = {}) {
-  return compactText(section.relevance_bucket || section.bucket || section.impact_claim_level || section.category);
+  return compactText(section.relevance_bucket || section.bucket || section.category);
 }
 
 function combinedSectionText(section = {}, issue = {}) {
@@ -653,7 +653,6 @@ function combinedSectionText(section = {}, issue = {}) {
     issue.publication_mode,
     issue.public_contract_version,
     section.relevance_bucket,
-    section.impact_claim_level,
     section.actionability_level,
     section.effective_actionability_level,
     section.signal_quality_status,
@@ -710,10 +709,8 @@ function hasDirectHalOverclaimFinding(section = {}, issue = {}) {
   const limitationWords = /직접\s*(?:말하지|언급하지|근거가 없|해석하지|확대하지)|do not|not claim|not overstate|범위.*제한|source.*범위/i;
   if (!directWords.test(publicText)) return false;
   if (limitationWords.test(publicText)) return false;
-  const impact = compactText(section.impact_claim_level);
   const axes = ensureArray(section.hal_impact_axes || section.hal_signal_capsule?.impact_axes).map(compactText);
-  const directImpact = /direct_hal_change|camera_stack_direct/i.test(impact) ||
-    axes.some(axis => /direct_hal|framework_hal_contract|stream_buffer_metadata/i.test(axis));
+  const directImpact = axes.some(axis => /direct_hal|framework_hal_contract|stream_buffer_metadata/i.test(axis));
   return !directImpact;
 }
 
@@ -733,11 +730,9 @@ function isFallbackOnly(section = {}, issue = {}) {
 }
 
 function isDirectHalSourceConfirmed(section = {}) {
-  const impact = compactText(section.impact_claim_level);
   const bucket = sectionBucket(section);
   const axes = ensureArray(section.hal_impact_axes || section.hal_signal_capsule?.impact_axes).map(compactText);
-  const directImpact = /direct_hal_change|camera_stack_direct/i.test(impact) ||
-    /direct_aosp_camera|camera_driver_image_pipeline/i.test(bucket) ||
+  const directImpact = /direct_aosp_camera|camera_driver_image_pipeline/i.test(bucket) ||
     axes.some(axis => /direct_hal|framework_hal_contract|stream_buffer_metadata|driver_image_pipeline/i.test(axis));
   return directImpact && !hasSourceGapRisk(section) && !hasForbiddenOrWatchlistPromotion(section);
 }
@@ -782,7 +777,6 @@ function addScope(scopes, value) {
 function structuredScopeText(section = {}) {
   return compactText([
     section.relevance_bucket,
-    section.impact_claim_level,
     section.actionability_level,
     section.effective_actionability_level,
     section.signal_quality_status,
@@ -847,7 +841,7 @@ function deriveReaderAction(section = {}, issue = {}, overclaimRisk = 'Medium') 
   if (
     overclaimRisk !== 'High' &&
     !isFallbackOnly(section, issue) &&
-    /owner_metric_log|measurable_test|direct_hal_change|camera_stack_direct/i.test(combined)
+    /owner_metric_log|measurable_test|direct_hal_contract|camera_stack_source/i.test(combined)
   ) {
     actions.push('Adopt');
   }

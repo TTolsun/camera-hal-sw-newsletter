@@ -634,8 +634,7 @@ function sourceExtractionBackfill(raw) {
     behavior_change: String(bullet || raw.behavior_change || '').trim(),
     summary: String(bullet || raw.summary || '').trim(),
     relevanceBucketHint: raw.relevanceBucketHint,
-    relevance_bucket_hint: raw.relevance_bucket_hint,
-    impact_claim_level: raw.impact_claim_level
+    relevance_bucket_hint: raw.relevance_bucket_hint
   };
 }
 

@@ -34,7 +34,6 @@ function candidate(overrides = {}) {
     title: 'CameraX release notes',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
     source_candidate_hash: 'candidate-hash',
-    impact_claim_level: 'android_framework_adjacent',
     evidence_pack_ids: ['seed-camerax-pack'],
     primary_evidence_ids: ['seed-camerax-primary-01'],
     linked_evidence_ids: ['seed-camerax-linked-01'],
