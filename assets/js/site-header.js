@@ -4,7 +4,6 @@
   const NAV_ITEMS = [
     { label: 'Latest', path: 'index.html#latest' },
     { label: 'Archive', path: 'index.html#archive' },
-    { label: 'Sources', path: 'docs/news-sources.md' },
     { label: 'GitHub', href: GITHUB_URL }
   ];
 
