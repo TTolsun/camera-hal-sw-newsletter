@@ -5,10 +5,10 @@
 ## Attempt 1: PUBLIC_ISSUE_CREATED
 
 - model: deterministic-fallback-public-issue
-- score: 88
+- score: 97
 - threshold: 85
-- rendered_main_article_count: 2
-- demoted_article_count: 0
-- selected_article_headlines: CameraX Release Notes - CameraX 1.6.1; Android Native Tooling: Build native Android apps in Google AI Studio
-- demoted_sections: none
+- rendered_main_article_count: 1
+- demoted_article_count: 1
+- selected_article_headlines: Android Native Tooling: Build native Android apps in Google AI Studio
+- demoted_sections: CameraX Release Notes - CameraX 1.6.1
 - repair_actions: fallback-public-issue-builder

@@ -47,13 +47,13 @@ Source/parser recovery hint:
 
 Homepage Headline:
 - decision: retained_current_above_margin
-- current_headline_key: url:https://goo.gle/AdaptiveApps_IO26
+- current_headline_key: url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
 - replacement_headline_key: unknown
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
 - runtime_decayed_score: 98
-- previous_stored_current_score: 100
+- previous_stored_current_score: 98
 - last_scored_at: 2026-05-22
 - scored_at: 2026-05-24
 - included_as_latest: true
@@ -100,7 +100,7 @@ npm.cmd run validate
 {
   "schema_version": 3,
   "date": "2026-05-24",
-  "generated_at": "2026-05-23T17:45:39.557Z",
+  "generated_at": "2026-05-24T06:41:53.835Z",
   "input_candidate_count": 42,
   "eligible_candidate_count": 3,
   "deterministic_selected_count": 2,
@@ -978,10 +978,6 @@ npm.cmd run validate
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
-      "included_as_headline_latest": true,
-      "headline_latest_inclusion_mode": "selected_normally",
-      "injected_from_headline_snapshot": false,
-      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -1416,6 +1412,10 @@ npm.cmd run validate
           "article_group_key": "android_native_tooling_workflow"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -2030,10 +2030,6 @@ npm.cmd run validate
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
-      "included_as_headline_latest": true,
-      "headline_latest_inclusion_mode": "selected_normally",
-      "injected_from_headline_snapshot": false,
-      "snapshot_revalidated": true,
       "primary_selected": true,
       "reserve_candidate": false,
       "selection_stage": "deterministic-primary",
@@ -2468,6 +2464,10 @@ npm.cmd run validate
           "article_group_key": "android_native_tooling_workflow"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "primary_selected": true,
       "reserve_candidate": false,
       "selection_stage": "deterministic-primary",
@@ -3787,10 +3787,6 @@ npm.cmd run validate
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
-      "included_as_headline_latest": true,
-      "headline_latest_inclusion_mode": "selected_normally",
-      "injected_from_headline_snapshot": false,
-      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -4225,6 +4221,10 @@ npm.cmd run validate
           "article_group_key": "android_native_tooling_workflow"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -28967,9 +28967,9 @@ npm.cmd run validate
   "headline_decision": {
     "decision": "retained_current_above_margin",
     "reason": "retained_current_above_margin",
-    "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "current_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
     "replacement_headline_key": null,
-    "previous_stored_current_score": 100,
+    "previous_stored_current_score": 98,
     "runtime_decayed_score": 98,
     "last_scored_at": "2026-05-22",
     "scored_at": "2026-05-24",
@@ -28996,23 +28996,20 @@ npm.cmd run validate
     "schemaVersion": 1,
     "updated_at": "2026-05-24T00:00:00+09:00",
     "current_headline": {
-      "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
-      "title": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
-      "summary": "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
-      "source_url": "https://goo.gle/AdaptiveApps_IO26",
-      "newsletter_date": "2026-05-23",
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "title": "Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동",
+      "summary": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "newsletter_date": "2026-05-24",
       "newsletter_url": "newsletters/2026-05-22/index.html",
-      "newsletter_article_url": "newsletters/2026-05-22/index.html#article-jetpack-compose-camerax-preview",
-      "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-      "image_alt": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
-      "selected_at": "2026-05-23",
-      "base_score": 100,
+      "selected_at": "2026-05-24",
+      "base_score": 98,
       "current_score": 98,
       "last_scored_at": "2026-05-24",
       "date_evidence": {
-        "date": "Tue, 19 May 2026 13:00:00 +0000",
+        "date": "Tue, 19 May 2026 12:45:00 +0000",
         "date_field": "published_date",
-        "evidence_level": "dated-concrete-evidence",
+        "evidence_level": "dated-rss-article",
         "publish_ready_date_evidence": true
       },
       "quality_flags": {
@@ -29024,19 +29021,22 @@ npm.cmd run validate
       "score_breakdown": {
         "base_score": 100,
         "official_source_bonus": 8,
-        "camera_bucket_bonus": 6,
+        "camera_bucket_bonus": 0,
         "driver_or_soc_bonus": 0,
-        "fallback_penalty": 0,
+        "fallback_penalty": 10,
         "generic_topic_penalty": 0,
         "source_gap_penalty": 0,
         "watch_page_penalty": 0,
         "minimum_headline_score": 40,
-        "total": 100
+        "total": 98
       },
       "snapshot": {
-        "category": "android_platform_camera_adjacent",
+        "category": "cpp_ai_tooling_fallback",
         "source_name": "Android Developers Blog"
-      }
+      },
+      "newsletter_article_url": "newsletters/2026-05-22/index.html#article-google-ai-studio-native-android-api",
+      "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+      "image_alt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인"
     },
     "headline_history": [],
     "policy": {
@@ -29775,10 +29775,6 @@ npm.cmd run validate
         "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
       }
     ],
-    "included_as_headline_latest": true,
-    "headline_latest_inclusion_mode": "selected_normally",
-    "injected_from_headline_snapshot": false,
-    "snapshot_revalidated": true,
     "final_selected": true,
     "selection_stage": "deterministic-primary",
     "primary_selected": true,
@@ -30213,6 +30209,10 @@ npm.cmd run validate
         "article_group_key": "android_native_tooling_workflow"
       }
     ],
+    "included_as_headline_latest": true,
+    "headline_latest_inclusion_mode": "selected_normally",
+    "injected_from_headline_snapshot": false,
+    "snapshot_revalidated": true,
     "final_selected": true,
     "selection_stage": "deterministic-primary",
     "primary_selected": true,
