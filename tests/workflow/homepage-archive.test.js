@@ -87,7 +87,7 @@ async function renderHomepage(newsletters, headlineState = null) {
   await context.__headlineReady;
   await context.__homepageReady;
 
-  return { elements, errors };
+  return { elements, errors, context };
 }
 
 function newsletter(date, title = `Issue ${date}`) {
@@ -116,7 +116,11 @@ test('homepage keeps the latest issue visible and shows an archive empty state f
   assert.match(elements['latest-card'].innerHTML, /2026-05-09/);
   assert.match(elements['latest-card'].innerHTML, /Current issue/);
   assert.match(elements['latest-card'].innerHTML, /<span class="status-chip">Latest<\/span>/);
+  assert.match(elements['latest-card'].innerHTML, /<div class="tag-row latest-tags"><span class="tag">Camera HAL<\/span><\/div>/);
+  assert.match(elements['latest-card'].innerHTML, /<a class="button button-primary" href="newsletters\/2026-05-09\/index\.html">최신호 보기<\/a>/);
+  assert.match(elements['latest-card'].innerHTML, /<a class="button button-secondary" href="newsletters\/2026-05-09\/newsletter\.md">Markdown<\/a>/);
   assert.doesNotMatch(elements['latest-card'].innerHTML, /Latest issue/);
+  assert.doesNotMatch(elements['latest-card'].innerHTML, />기사 보기<\/a>/);
   assert.match(elements['archive-list'].innerHTML, /이전 뉴스레터가 없습니다/);
 });
 
@@ -136,7 +140,9 @@ test('homepage excludes the latest issue from archive after sorting a copy', asy
   assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-09/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-08/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-07/);
+  assert.match(elements['archive-list'].innerHTML, /<article class="archive-card">/);
   assert.match(elements['archive-list'].innerHTML, /기사 보기/);
+  assert.match(elements['archive-list'].innerHTML, /Markdown/);
   assert.doesNotMatch(elements['archive-list'].innerHTML, /이슈 보기/);
   assert.deepEqual(items.map(item => item.date), originalOrder);
 });
@@ -220,13 +226,137 @@ test('homepage renders valid headline state with article URL priority, image, an
   });
 
   assert.equal(elements.headline.hidden, false);
+  assert.match(elements['headline-card'].innerHTML, /<figure class="headline-media">/);
   assert.match(elements['headline-card'].innerHTML, /&lt;Camera HAL headline&gt;/);
   assert.match(elements['headline-card'].innerHTML, /Summary &amp; details/);
-  assert.match(elements['headline-card'].innerHTML, /<img src="https:\/\/example\.com\/headline\.png" alt="&lt;Camera preview image&gt;"/);
+  assert.match(elements['headline-card'].innerHTML, /<img src="https:\/\/example\.com\/headline\.png" alt="&lt;Camera preview image&gt;" loading="lazy" decoding="async" data-homepage-image-fallback>/);
+  assert.match(elements['headline-card'].innerHTML, /<div class="tag-row headline-tags"><span class="tag">Camera HAL<\/span><\/div>/);
+  assert.match(elements['headline-card'].innerHTML, /class="card-title clamp-2"/);
+  assert.match(elements['headline-card'].innerHTML, /class="card-summary clamp-3"/);
   assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html#article-camerax-preview"/);
   assert.match(elements['headline-card'].innerHTML, /기사 보기/);
+  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/newsletter\.md">Markdown<\/a>/);
   assert.match(elements['headline-card'].innerHTML, /Headline/);
   assert.doesNotMatch(elements['headline-card'].innerHTML, /rel="noopener"/);
+});
+
+test('homepage headline renders missing image fallback without hiding metadata', async () => {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
+    schemaVersion: 1,
+    current_headline: {
+      article_identity_key: 'url:https://example.com/source',
+      title: 'Camera HAL headline',
+      summary: 'Camera HAL summary',
+      source_url: 'https://example.com/source',
+      newsletter_date: '2026-05-23',
+      newsletter_url: 'newsletters/2026-05-23/index.html',
+      selected_at: '2026-05-23',
+      snapshot: {
+        source_name: 'Example Source'
+      }
+    },
+    headline_history: []
+  });
+
+  assert.equal(elements.headline.hidden, false);
+  assert.match(elements['headline-card'].innerHTML, /<div class="headline-media is-image-unavailable" aria-hidden="true">/);
+  assert.match(elements['headline-card'].innerHTML, /이미지 없음/);
+  assert.match(elements['headline-card'].innerHTML, /2026-05-23/);
+  assert.match(elements['headline-card'].innerHTML, /Example Source/);
+});
+
+test('homepage headline image error handler hides broken image and marks fallback state', async () => {
+  const { context } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
+    schemaVersion: 1,
+    current_headline: {
+      article_identity_key: 'url:https://example.com/source',
+      title: 'Camera HAL headline',
+      summary: 'Camera HAL summary',
+      source_url: 'https://example.com/source',
+      newsletter_date: '2026-05-23',
+      newsletter_url: 'newsletters/2026-05-23/index.html',
+      image_url: 'https://example.com/broken.png',
+      image_alt: 'Broken image',
+      selected_at: '2026-05-23',
+      snapshot: {
+        source_name: 'Example Source'
+      }
+    },
+    headline_history: []
+  });
+  const addedClasses = [];
+  const image = {
+    hidden: false,
+    closest(selector) {
+      assert.equal(selector, '.headline-media');
+      return {
+        classList: {
+          add(value) {
+            addedClasses.push(value);
+          }
+        }
+      };
+    }
+  };
+
+  context.handleHomepageImageError({ currentTarget: image });
+
+  assert.equal(image.hidden, true);
+  assert.deepEqual(addedClasses, ['is-image-unavailable']);
+});
+
+test('homepage headline omits malformed matched tags while keeping source metadata', async () => {
+  const malformedNewsletter = {
+    ...newsletter('2026-05-23', 'Current issue'),
+    tags: 'Camera HAL'
+  };
+  const { elements } = await renderHomepage([malformedNewsletter], {
+    schemaVersion: 1,
+    current_headline: {
+      article_identity_key: 'url:https://example.com/source',
+      title: 'Camera HAL headline',
+      summary: 'Camera HAL summary',
+      source_url: 'https://example.com/source',
+      newsletter_date: '2026-05-23',
+      newsletter_url: 'newsletters/2026-05-23/index.html',
+      selected_at: '2026-05-23',
+      snapshot: {
+        source_name: 'Example Source'
+      }
+    },
+    headline_history: []
+  });
+
+  assert.equal(elements.headline.hidden, false);
+  assert.doesNotMatch(elements['headline-card'].innerHTML, /headline-tags/);
+  assert.match(elements['headline-card'].innerHTML, /2026-05-23/);
+  assert.match(elements['headline-card'].innerHTML, /Example Source/);
+});
+
+test('homepage clamps long card copy without truncating escaped DOM text', async () => {
+  const longTitle = '<Camera HAL headline with a very long title that should stay fully present in the DOM>';
+  const longSummary = 'Summary & details with enough words to represent a long homepage card summary that is visually clamped but not removed from the markup.';
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
+    schemaVersion: 1,
+    current_headline: {
+      article_identity_key: 'url:https://example.com/source',
+      title: longTitle,
+      summary: longSummary,
+      source_url: 'https://example.com/source',
+      newsletter_date: '2026-05-23',
+      newsletter_url: 'newsletters/2026-05-23/index.html',
+      selected_at: '2026-05-23',
+      snapshot: {
+        source_name: 'Example Source'
+      }
+    },
+    headline_history: []
+  });
+
+  assert.match(elements['headline-card'].innerHTML, /class="card-title clamp-2"/);
+  assert.match(elements['headline-card'].innerHTML, /&lt;Camera HAL headline with a very long title that should stay fully present in the DOM&gt;/);
+  assert.match(elements['headline-card'].innerHTML, /class="card-summary clamp-3"/);
+  assert.match(elements['headline-card'].innerHTML, /Summary &amp; details with enough words to represent a long homepage card summary that is visually clamped but not removed from the markup\./);
 });
 
 test('homepage headline falls back to external source CTA when no newsletter URL is available', async () => {
@@ -247,4 +377,13 @@ test('homepage headline falls back to external source CTA when no newsletter URL
   assert.match(elements['headline-card'].innerHTML, /출처/);
   assert.match(elements['headline-card'].innerHTML, /href="https:\/\/example\.com\/source" rel="noopener"/);
   assert.match(elements['headline-card'].innerHTML, /원문 보기/);
+});
+
+test('homepage exposes clear Featured and Latest heading rows without changing heading levels', () => {
+  const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+
+  assert.match(html, /<section id="headline"[\s\S]*?<div class="section-heading section-heading-row">[\s\S]*?<h2 id="headline-title">Featured Headline<\/h2>/);
+  assert.match(html, /<section id="latest"[\s\S]*?<div class="section-heading section-heading-row">[\s\S]*?<h2 id="latest-title">Latest Newsletter<\/h2>/);
+  assert.match(html, /<article id="headline-card" class="headline-card"><\/article>/);
+  assert.match(html, /<div id="latest-card" class="newsletter-card latest-newsletter-card loading-card">/);
 });

@@ -57,19 +57,25 @@
     </section>
 
     <section id="headline" class="section headline-section content-wrap" aria-labelledby="headline-title" hidden>
-      <div class="section-heading">
-        <p class="eyebrow">HEADLINE</p>
-        <h2 id="headline-title">Featured Headline</h2>
+      <div class="section-heading section-heading-row">
+        <span class="section-heading-mark" aria-hidden="true"></span>
+        <div>
+          <p class="eyebrow">HEADLINE</p>
+          <h2 id="headline-title">Featured Headline</h2>
+        </div>
       </div>
       <article id="headline-card" class="headline-card"></article>
     </section>
 
     <section id="latest" class="section content-wrap" aria-labelledby="latest-title">
-      <div class="section-heading">
-        <p class="eyebrow">LATEST</p>
-        <h2 id="latest-title">Latest Newsletter</h2>
+      <div class="section-heading section-heading-row">
+        <span class="section-heading-mark" aria-hidden="true"></span>
+        <div>
+          <p class="eyebrow">LATEST</p>
+          <h2 id="latest-title">Latest Newsletter</h2>
+        </div>
       </div>
-      <div id="latest-card" class="newsletter-card loading-card">
+      <div id="latest-card" class="newsletter-card latest-newsletter-card loading-card">
         <p class="muted">최신 뉴스레터를 불러오는 중입니다.</p>
       </div>
     </section>
@@ -106,9 +112,19 @@
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#039;');
 
-    const renderTags = (tags = []) => tags
+    const visibleTags = tags => (Array.isArray(tags) ? tags : [])
+      .map(tag => String(tag ?? '').trim())
+      .filter(Boolean);
+
+    const renderTags = (tags = []) => visibleTags(tags)
       .map(tag => `<span class="tag">${escapeHtml(tag)}</span>`)
       .join('');
+
+    const renderTagRow = (tags = [], className = '') => {
+      const tagHtml = renderTags(tags);
+      const classes = ['tag-row', className].filter(Boolean).join(' ');
+      return tagHtml ? `<div class="${classes}">${tagHtml}</div>` : '';
+    };
 
     const renderHomepageBadge = issue => {
       if (!issue || !issue.homepage_badge) return '';
@@ -139,19 +155,81 @@
       return isHttpsUrl(raw) ? raw : safeInternalPath(raw);
     };
 
+    async function fetchHomepageNewsletters() {
+      const response = await fetch('data/newsletters.json', { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch newsletters.json: ${response.status}`);
+      }
+
+      const newsletters = await response.json();
+      if (!Array.isArray(newsletters)) {
+        throw new Error('newsletters.json must contain an array');
+      }
+
+      return newsletters;
+    }
+
     function hideHomepageHeadline() {
       const headlineSection = document.getElementById('headline');
       if (headlineSection) headlineSection.hidden = true;
     }
 
-    function renderHeadlineCta(headline) {
+    function handleHomepageImageError(event) {
+      const image = event && event.currentTarget;
+      if (!image) return;
+      image.hidden = true;
+      const media = typeof image.closest === 'function' ? image.closest('.headline-media') : null;
+      if (media && media.classList) media.classList.add('is-image-unavailable');
+    }
+
+    function attachHomepageImageFallbacks(root) {
+      if (!root || typeof root.querySelectorAll !== 'function') return;
+      for (const image of root.querySelectorAll('[data-homepage-image-fallback]')) {
+        image.addEventListener('error', handleHomepageImageError, { once: true });
+      }
+    }
+
+    function findHeadlineNewsletter(headline, newsletters = []) {
+      const date = String(headline && headline.newsletter_date || '').trim();
+      if (!date) return null;
+      return newsletters.find(item => item && item.date === date) || null;
+    }
+
+    function renderHeadlineMedia(headline) {
+      const imageSrc = safeImageSrc(headline.image_url);
+      const fallback = '<span class="headline-media-fallback" aria-hidden="true">이미지 없음</span>';
+      if (!imageSrc) {
+        return `<div class="headline-media is-image-unavailable" aria-hidden="true">${fallback}</div>`;
+      }
+
+      return `<figure class="headline-media">
+              <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(headline.image_alt || headline.title)}" loading="lazy" decoding="async" data-homepage-image-fallback>
+              ${fallback}
+            </figure>`;
+    }
+
+    function renderHeadlineCta(headline, matchedNewsletter) {
       const internalHref = safeInternalPath(headline.newsletter_article_url) || safeInternalPath(headline.newsletter_url);
       const sourceHref = isExternalUrl(headline.source_url) ? headline.source_url : '';
       const href = internalHref || sourceHref;
-      if (!href) return '';
-      const rel = sourceHref && !internalHref ? ' rel="noopener"' : '';
-      const label = internalHref ? '기사 보기' : '원문 보기';
-      return `<a class="button button-primary" href="${escapeHtml(href)}"${rel}>${escapeHtml(label)}</a>`;
+      const primaryLink = href
+        ? `<a class="button button-primary" href="${escapeHtml(href)}"${sourceHref && !internalHref ? ' rel="noopener"' : ''}>${escapeHtml(internalHref ? '기사 보기' : '원문 보기')}</a>`
+        : '';
+      const mdLink = matchedNewsletter && matchedNewsletter.md
+        ? `<a class="button button-secondary" href="${escapeHtml(matchedNewsletter.md)}">Markdown</a>`
+        : '';
+      return `${primaryLink}${mdLink}`;
+    }
+
+    function renderHeadlineMeta(headline, sourceName) {
+      const date = headline.newsletter_date || headline.selected_at || '';
+      const dateChip = date ? `<span class="issue-date">${escapeHtml(date)}</span>` : '';
+      const badge = headline.newsletter_date ? '<span class="status-chip">Headline</span>' : '';
+      return `<div class="card-meta headline-meta">
+              ${dateChip}
+              ${badge}
+              <span class="headline-source">${escapeHtml(sourceName)}</span>
+            </div>`;
     }
 
     async function loadHomepageHeadline() {
@@ -171,30 +249,26 @@
         const sourceName = headline.snapshot && headline.snapshot.source_name
           ? headline.snapshot.source_name
           : '출처';
-        const badge = headline.newsletter_date
-          ? '<span class="status-chip">Headline</span>'
-          : '';
-        const imageSrc = safeImageSrc(headline.image_url);
-        const headlineMedia = imageSrc
-          ? `<figure class="headline-media">
-              <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(headline.image_alt || headline.title)}" loading="lazy" decoding="async">
-            </figure>`
-          : '';
+        let newsletters = [];
+        try {
+          newsletters = await fetchHomepageNewsletters();
+        } catch (newsletterError) {
+          console.error(newsletterError);
+        }
+        const matchedNewsletter = findHeadlineNewsletter(headline, newsletters);
         headlineCard.innerHTML = `
-          ${headlineMedia}
+          ${renderHeadlineMedia(headline)}
           <div class="headline-body">
-            <div class="card-meta">
-              <span class="issue-date">${escapeHtml(headline.newsletter_date || headline.selected_at || '')}</span>
-              ${badge}
-            </div>
-            <h3>${escapeHtml(headline.title)}</h3>
-            <p>${escapeHtml(headline.summary)}</p>
-            <div class="headline-source">${escapeHtml(sourceName)}</div>
+            ${renderTagRow(matchedNewsletter && matchedNewsletter.tags, 'headline-tags')}
+            <h3 class="card-title clamp-2">${escapeHtml(headline.title)}</h3>
+            <p class="card-summary clamp-3">${escapeHtml(headline.summary)}</p>
+            ${renderHeadlineMeta(headline, sourceName)}
             <div class="card-actions">
-              ${renderHeadlineCta(headline)}
+              ${renderHeadlineCta(headline, matchedNewsletter)}
             </div>
           </div>
         `;
+        attachHomepageImageFallbacks(headlineCard);
         headlineSection.hidden = false;
       } catch (error) {
         hideHomepageHeadline();
@@ -207,15 +281,7 @@
       const archiveEl = document.getElementById('archive-list');
 
       try {
-        const response = await fetch('data/newsletters.json', { cache: 'no-store' });
-        if (!response.ok) {
-          throw new Error(`Failed to fetch newsletters.json: ${response.status}`);
-        }
-
-        const newsletters = await response.json();
-        if (!Array.isArray(newsletters)) {
-          throw new Error('newsletters.json must contain an array');
-        }
+        const newsletters = await fetchHomepageNewsletters();
 
         const sortedNewsletters = [...newsletters].sort((a, b) => b.date.localeCompare(a.date));
 
@@ -235,9 +301,9 @@
             <span class="status-chip">Latest</span>
             ${renderHomepageBadge(latest)}
           </div>
-          <h3>${escapeHtml(latest.title)}</h3>
-          <p>${escapeHtml(latest.summary)}</p>
-          <div class="tag-row">${renderTags(latest.tags)}</div>
+          <h3 class="card-title clamp-2">${escapeHtml(latest.title)}</h3>
+          <p class="card-summary clamp-3">${escapeHtml(latest.summary)}</p>
+          ${renderTagRow(latest.tags, 'latest-tags')}
           <div class="card-actions">
             ${renderIssueActions(latest, '최신호 보기')}
           </div>
