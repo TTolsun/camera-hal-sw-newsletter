@@ -96,6 +96,8 @@ test('public article contract prompt keeps public output separate from diagnosti
     'source-bound engineering inference',
     'selected article capsule',
     'source facts',
+    'public-facing impact wording',
+    'claim-level classification',
     'article_sections.hal_driver_impact',
     'public_article.camera_hal_takeaway',
     'claims[].impact_level',
@@ -116,7 +118,7 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /3-5개 자연스러운 문단/);
   assert.match(prompt, /발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획/);
   assert.match(prompt, /기사 선택, source eligibility, main\/supporting 승격 같은 발행 판단/);
-  assert.match(prompt, /기사 영향성 판단은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
+  assert.match(prompt, /Public-facing impact wording과 claim-level classification은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
   assert.match(prompt, /source가 직접 말하지 않는 HAL\/driver\/runtime 영향은 없다고 제한/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
   assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);

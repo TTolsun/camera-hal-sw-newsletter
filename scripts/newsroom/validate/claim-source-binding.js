@@ -1020,7 +1020,6 @@ function hasPositiveSupportWording(value) {
 }
 
 function evidenceHasDirectHalSupport(claim, evidenceIndex, candidate = {}) {
-  if (text(candidate.impact_claim_level) === 'direct_hal_change') return true;
   const evidenceText = evidenceTextForClaim(claim, evidenceIndex);
   return DIRECT_HAL_WORDING.test(evidenceText);
 }
@@ -1255,6 +1254,7 @@ function validateArticleClaims({
     ...ensureArray(objectValue(candidate.derived_editorial_hints).do_not_claim),
     ...ensureArray(section.do_not_overstate),
     ...ensureArray(objectValue(section.hal_signal_capsule).do_not_overstate),
+    articleSections.hal_driver_impact,
     ...articleSections.do_not_claim,
     ...articleSections.known_limitations,
     ...evidenceIndex.seedPackDoNotClaim

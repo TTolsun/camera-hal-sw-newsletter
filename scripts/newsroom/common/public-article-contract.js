@@ -671,6 +671,14 @@ function combinedSectionText(section = {}, issue = {}) {
   ]);
 }
 
+function sanitizeSectionForPublicDecision(section = {}) {
+  if (!isPlainObject(section)) return {};
+  const sanitized = { ...section };
+  delete sanitized.impact_claim_level;
+  delete sanitized.impactClaimLevel;
+  return sanitized;
+}
+
 function hasSourceGapRisk(section = {}, issue = {}) {
   return section.source_gap_risk === true ||
     issue.source_gap_risk === true ||
@@ -847,11 +855,12 @@ function deriveReaderAction(section = {}, issue = {}, overclaimRisk = 'Medium') 
 }
 
 function deriveDecisionMetadata(section = {}, issue = {}) {
-  const overclaimRisk = deriveOverclaimRisk(section, issue);
+  const decisionSection = sanitizeSectionForPublicDecision(section);
+  const overclaimRisk = deriveOverclaimRisk(decisionSection, issue);
   return {
-    impact: deriveReaderImpact(section, issue),
-    scope: deriveReaderScope(section, issue),
-    action: deriveReaderAction(section, issue, overclaimRisk),
+    impact: deriveReaderImpact(decisionSection, issue),
+    scope: deriveReaderScope(decisionSection, issue),
+    action: deriveReaderAction(decisionSection, issue, overclaimRisk),
     overclaim_risk: overclaimRisk
   };
 }

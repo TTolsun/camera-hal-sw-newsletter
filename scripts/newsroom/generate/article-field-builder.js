@@ -215,6 +215,18 @@ function inferImpactClaimLevel(candidate = {}) {
   return IMPACT_CLAIM_LEVELS.WATCH_ONLY;
 }
 
+function stripExplicitImpactClaimLevel(candidate = {}) {
+  if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) return {};
+  const sanitized = { ...candidate };
+  delete sanitized.impact_claim_level;
+  delete sanitized.impactClaimLevel;
+  return sanitized;
+}
+
+function inferGuardrailImpactClaimLevel(candidate = {}) {
+  return inferImpactClaimLevel(stripExplicitImpactClaimLevel(candidate));
+}
+
 function buildConfirmedFacts(candidate = {}) {
   const facts = [];
   const source = firstText(candidate.source, candidate.source_name, candidate.sourceTitle, 'Source');
@@ -509,6 +521,7 @@ module.exports = {
   buildStaticBackgroundContext,
   cleanBehaviorChange,
   findFieldHygieneIssues,
+  inferGuardrailImpactClaimLevel,
   inferImpactClaimLevel,
   normalizedTokenOverlap,
   rawArtifactMatches

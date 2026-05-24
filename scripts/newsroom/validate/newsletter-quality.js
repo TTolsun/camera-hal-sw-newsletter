@@ -26,7 +26,7 @@ const {
 } = require('../evidence/impact-classifier');
 const {
   findFieldHygieneIssues,
-  inferImpactClaimLevel
+  inferGuardrailImpactClaimLevel
 } = require('../generate/article-field-builder');
 const {
   ARTICLE_SECTION_KEYS,
@@ -699,7 +699,7 @@ function hasCameraXValidationChecklist(section = {}, hints = {}) {
 }
 
 function hasDirectHalOverclaim(section = {}, candidate = {}) {
-  const level = text(section.impact_claim_level || candidate?.impact_claim_level);
+  const level = inferGuardrailImpactClaimLevel({ ...candidate, ...section });
   if (level === 'direct_hal_change') return false;
   return /\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|vendor\s+HAL|HAL\s+contract|camera\s+provider\s+contract)\b/i
     .test(articleTextWithLegacyFields(section));
@@ -1305,7 +1305,7 @@ function scopeFromStructuredFields(value, origin) {
     counts_as_driver_topic: bool(value.counts_as_driver_topic, bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE),
     counts_as_soc_topic: bool(value.counts_as_soc_topic, bucket === BUCKETS.SOC_PLATFORM_SIGNAL),
     counts_as_fallback_topic: bool(value.counts_as_fallback_topic, bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK),
-    impact_claim_level: text(value.impact_claim_level || value.impactClaimLevel) || inferImpactClaimLevel(value),
+    impact_claim_level: inferGuardrailImpactClaimLevel(value),
     evidence_origin: text(value.evidence_origin) || origin,
     missing_score_fields: missingScoreFields,
     metadata_source: origin,
@@ -1441,7 +1441,8 @@ function sectionCountDetail(section, scope, index) {
     counts_as_fallback_topic: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK,
     counts_as_supporting_main_article: countsAsSupportingMain,
     counts_as_forbidden_main_article: countsAsForbiddenMain,
-    impact_claim_level: text(scope?.impact_claim_level) || inferImpactClaimLevel({ ...section, relevance_bucket: bucket }),
+    impact_claim_level: text(scope?.impact_claim_level) ||
+      inferGuardrailImpactClaimLevel({ ...section, relevance_bucket: bucket }),
     evidence_origin: scope?.evidence_origin || 'unknown',
     metadata_source: scope?.metadata_source || scope?.count_source || 'unknown',
     binding_status: scope?.binding_status || 'unknown',
@@ -1497,7 +1498,8 @@ function buildArticleResults(sections, deductions, factCheck, sectionCountDetail
       sources: sectionSourceSummary(section),
       section_contract: articleSectionSummary(section),
       scope_count: sectionCountDetails[index] || null,
-      impact_claim_level: text(section.impact_claim_level) || text(sectionCountDetails[index]?.impact_claim_level),
+      impact_claim_level: text(sectionCountDetails[index]?.impact_claim_level) ||
+        inferGuardrailImpactClaimLevel(section),
       hal_impact_axes: ensureArray(section.hal_impact_axes).length > 0
         ? ensureArray(section.hal_impact_axes)
         : ensureArray(halSignal.capsule?.impact_axes),
@@ -1787,7 +1789,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       camera_hal_perspective: articleSections.hal_driver_impact,
       action_items: articleSections.action_items,
       team_summary: articleSections.team_share_points,
-      impact_claim_level: text(section.impact_claim_level) || text(sectionCountDetails[index]?.impact_claim_level)
+      impact_claim_level: text(sectionCountDetails[index]?.impact_claim_level) ||
+        inferGuardrailImpactClaimLevel(section)
     })) {
       boundedDeduct(
         state,

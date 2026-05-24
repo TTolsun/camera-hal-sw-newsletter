@@ -11,7 +11,7 @@ const {
 } = require('../common/newsletter-policy');
 const {
   findFieldHygieneIssues,
-  inferImpactClaimLevel
+  inferGuardrailImpactClaimLevel
 } = require('../generate/article-field-builder');
 const {
   ARTICLE_SECTION_ALLOWED_KEYS,
@@ -248,8 +248,7 @@ function validateEditorArticlePolicy(value, reporter = {}) {
 function validateFieldHygiene(value) {
   const issues = [];
   ensureArray(value.sections).forEach((section, index) => {
-    const impactClaimLevel = text(section.impact_claim_level || section.impactClaimLevel) ||
-      inferImpactClaimLevel(section);
+    const impactClaimLevel = inferGuardrailImpactClaimLevel(section);
     const sectionIssues = findFieldHygieneIssues({
       ...section,
       impact_claim_level: impactClaimLevel

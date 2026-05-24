@@ -1421,6 +1421,28 @@ test('story v1 deterministic metadata overrides aggressive LLM metadata', () => 
   assert.deepEqual(metadata, deriveDecisionMetadata(result.sections[0], result));
 });
 
+test('story v1 decision metadata ignores stale direct impact_claim_level', () => {
+  const base = section(1, {
+    category: 'Android Platform / CameraX',
+    headline: 'CameraX app compatibility update',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    impact_claim_level: 'direct_hal_change',
+    hal_impact_axes: [],
+    hal_signal_capsule: {
+      ...section(1).hal_signal_capsule,
+      impact_axes: []
+    }
+  });
+
+  const metadata = deriveDecisionMetadata(base, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(metadata.scope.includes('HAL'), false);
+  assert.equal(metadata.scope.includes('Framework'), true);
+});
+
 test('story v1 deterministic metadata separates tooling scope from fallback-only policy', () => {
   const tooling = section(1, {
     category: 'Android Native Tooling',
@@ -2278,10 +2300,35 @@ test('editor field hygiene rejects Korean HAL overclaim for non-direct impact le
   );
 });
 
+test('editor field hygiene ignores stale direct impact_claim_level on adjacent sections', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: 'android_platform_camera_adjacent',
+        impact_claim_level: 'direct_hal_change',
+        camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
+      return true;
+    }
+  );
+});
+
 test('editor field hygiene allows direct HAL claims for direct_hal_change and guardrail wording', () => {
   const directDraft = editor({
     sections: [
       section(1, {
+        aosp_camera_directness: 5,
         impact_claim_level: 'direct_hal_change',
         camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
       }),
