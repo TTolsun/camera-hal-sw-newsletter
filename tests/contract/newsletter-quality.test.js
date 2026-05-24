@@ -1462,8 +1462,12 @@ test('quality gate counts multimedia camera output as supporting, not primary', 
   assert.equal(report.metrics.primary_camera_stack_count, 2);
   assert.equal(report.metrics.android_multimedia_camera_output_count, 1);
   assert.equal(report.metrics.supporting_main_article_count, 1);
+  assert.equal(report.metrics.topic_tier_distribution_source, 'relevance_bucket');
+  assert.equal(report.metrics.topic_tier_distribution.direct_camera, 2);
+  assert.equal(report.metrics.topic_tier_distribution.multimedia, 1);
   assert.equal(report.article_results[2].scope_count.counts_as_primary_camera_topic, false);
   assert.match(report.article_results[2].scope_count.count_reason, /supporting_main_article_count/);
+  assert.match(buildQualityReportMarkdown(report), /Topic tier distribution \(relevance_bucket\): .*"multimedia":1/);
 });
 
 test('quality gate falls back to reporter scores when section metadata has only a bucket', () => {

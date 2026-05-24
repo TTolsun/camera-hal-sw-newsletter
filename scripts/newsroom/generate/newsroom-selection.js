@@ -113,8 +113,8 @@ function normalizeUrl(value) {
     const parsed = new URL(raw);
     const hash = parsed.hash;
     const preserveHash = parsed.hostname.toLowerCase() === 'developer.android.com' &&
-      parsed.pathname === '/jetpack/androidx/releases/camera' &&
-      /^#(?:camera-[a-z0-9-]+-)?\d+\.\d+\.\d+(?:[-\w.]*)?$/i.test(hash);
+      ['/jetpack/androidx/releases/camera', '/jetpack/androidx/releases/media3'].includes(parsed.pathname) &&
+      /^#(?:(?:camera-[a-z0-9-]+|media3)-)?\d+\.\d+\.\d+(?:[-\w.]*)?$/i.test(hash);
     if (!preserveHash) parsed.hash = '';
     parsed.search = '';
     parsed.hostname = parsed.hostname.toLowerCase();
@@ -192,7 +192,7 @@ function cameraReleasePageKey(candidate) {
     const parsed = new URL(raw);
     if (
       parsed.hostname.toLowerCase() === 'developer.android.com' &&
-      parsed.pathname === '/jetpack/androidx/releases/camera'
+      ['/jetpack/androidx/releases/camera', '/jetpack/androidx/releases/media3'].includes(parsed.pathname)
     ) {
       parsed.hash = '';
       parsed.search = '';
@@ -493,11 +493,18 @@ function hasStorageCameraOutputContext(body = '') {
 }
 
 function hasConcreteMultimediaCameraOutputComponent(candidate) {
+  const scope = candidateScope(candidate);
+  if (
+    scope.relevance_bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT &&
+    number(scope.multimedia_camera_output_relevance) >= MIN_SCOPE_RELEVANCE
+  ) {
+    return true;
+  }
   const body = candidateBody(candidate);
   const hasStrongOutput = /\b(?:camera\s+output|media\s+output|gallery\s+output|social\s+app\s+camera\s+capture|captured\s+image\s*\/\s*video\s+output|captured\s+image\s+and\s+video\s+output|captured\s+(?:image|video)\s+output|camera\s+output\s+result)\b/i.test(body);
-  const hasContextRequiredOutput = /\b(?:Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video|video\s+call)\b/i.test(body) &&
+  const hasContextRequiredOutput = /\b(?:Ultra\s+HDR|HDR\s+video|APV|Advanced\s+Professional\s+Video|MediaCodec|Media3|MediaRecorder|SurfaceView|TextureView|WebRTC|video\s+call)\b/i.test(body) &&
     hasCameraOutputContext(body);
-  const hasStorageOutput = /\b(?:MediaProvider|media\s+provider|MediaStore|media\s+store)\b/i.test(body) &&
+  const hasStorageOutput = /\b(?:MediaProvider|media\s+provider|MediaStore|media\s+store|Photo\s+Picker|photo\s+picker|EXIF)\b/i.test(body) &&
     hasStorageCameraOutputContext(body);
   return hasStrongOutput || hasContextRequiredOutput || hasStorageOutput ||
     /\bcamera\s*\/\s*audio\s+sync\b/i.test(body) ||

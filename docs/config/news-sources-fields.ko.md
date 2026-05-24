@@ -16,6 +16,7 @@
 
 ```json
 {
+  "android-media": "Android Media / Camera Output",
   "camera-api": "Android / AOSP / Camera",
   "cpp": "C++ / Native / Toolchain",
   "ai": "AI / SW Engineering Trends"
@@ -55,6 +56,7 @@ collector는 런타임 normalized source 객체와 `content/collected-news/YYYY-
 5. `collectionModeHint`는 collector가 지원하는 경우에만 넣고, unsupported mode를 문서만 보고 invent하지 않습니다.
 6. `priority`, `reliability`, `enabled`, `candidateOnly`, `requiresCrossCheck`는 publication risk 기준으로 보수적으로 정합니다.
 7. `usageHint`와 `keywords`는 AOSP Camera, Camera Driver, SoC Platform, C++, AI/SW engineering 관점의 후보 발굴 의도를 드러내게 작성합니다. 실제 main article 분류는 source keyword만이 아니라 기사 title/summary/API/component/behavior evidence에서 나온 `relevance_bucket`을 우선합니다.
+   - `android-media` category는 Media3, MediaCodec, MediaRecorder, MediaStore, Photo Picker 같은 official Android media 출처를 묶는 discovery grouping입니다. 단독 keyword나 official source 품질만으로 main article 후보가 되지 않습니다.
 8. source 추가 후 `npm run collect`, `npm run test`, `npm run validate`를 실행하고, 생성된 candidates에서 watch/reference 후보가 final main article로 올라가지 않는지 확인합니다.
 
 ## Source quality contract fields

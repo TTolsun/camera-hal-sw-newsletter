@@ -37,6 +37,17 @@ const { readJsonFixture, readTextFixture } = require('../helpers/fixture-loader'
 
 const FALLBACK_WINDOW_TEST_MIN_ARTICLES = 3;
 
+test('Issue #238 scope expansion leaves publication count policy unchanged', () => {
+  assert.deepEqual(articlePolicy.mainArticleCount, { min: 1, max: 5 });
+  assert.equal(articlePolicy.primaryCameraStack.minRequired, 0);
+  assert.equal(publishReadyCompositionPolicy.supportingMainMaxAllowed, 1);
+  assert.ok(articlePolicy.supportingMainBuckets.includes('android_multimedia_camera_output'));
+  assert.equal(
+    Object.prototype.hasOwnProperty.call(articlePolicy.primaryCameraStack, 'directCameraMinimum'),
+    false
+  );
+});
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const hasHeadlineState = Object.prototype.hasOwnProperty.call(options, 'homepageHeadlineState');
   return buildShortlistReportBase(date, collectedCandidates, {

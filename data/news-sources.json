@@ -2,6 +2,7 @@
   "schemaVersion": 2,
   "sectionMap": {
     "android": "Android / AOSP / Camera",
+    "android-media": "Android Media / Camera Output",
     "aosp": "Android / AOSP / Camera",
     "camera-api": "Android / AOSP / Camera",
     "camera-hal": "Android / AOSP / Camera",
@@ -298,6 +299,194 @@
       "sourceQualityNotes": [
         "official source",
         "preserve version/date fragment anchors"
+      ]
+    },
+    {
+      "id": "androidx-media3-release-notes",
+      "name": "Media3 Release Notes",
+      "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "rssUrl": null,
+      "collectionModeHint": "release-note-watch",
+      "category": "android-media",
+      "priority": "medium",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "Media3 release note에서 camera output, recording, preview, gallery/media access, sharing, video call, A/V sync 관련 날짜/버전/컴포넌트/동작 변경만 확인",
+      "keywords": [
+        "Media3",
+        "MediaCodec",
+        "MediaRecorder",
+        "camera output",
+        "recording",
+        "preview",
+        "A/V sync",
+        "video call"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_release_note_anchor",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "versioned_release_row",
+      "sourceQualityNotes": [
+        "official source",
+        "promote only dated item-level Media3 changes with camera-output relevance",
+        "generic player, streaming, music, DRM, OTT, and audio-only changes remain watchlist or excluded"
+      ]
+    },
+    {
+      "id": "android-mediarecorder-reference",
+      "name": "MediaRecorder Documentation",
+      "sourceUrl": "https://developer.android.com/media/platform/mediarecorder",
+      "rssUrl": null,
+      "collectionModeHint": "documentation-watch",
+      "category": "android-media",
+      "priority": "medium",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "MediaRecorder recording pipeline과 camera-generated video output 배경 확인용 reference입니다. 단독 main article 후보로 승격하지 않습니다.",
+      "keywords": [
+        "MediaRecorder",
+        "recording",
+        "video recording",
+        "camera output",
+        "Android media"
+      ],
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
+      ]
+    },
+    {
+      "id": "android-supported-formats-reference",
+      "name": "Android Supported Media Formats",
+      "sourceUrl": "https://developer.android.com/media/platform/supported-formats",
+      "rssUrl": null,
+      "collectionModeHint": "documentation-watch",
+      "category": "android-media",
+      "priority": "medium",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "Camera recording/export, codec format, HDR video, media compatibility 배경 확인용 reference입니다. 단독 main article 후보로 승격하지 않습니다.",
+      "keywords": [
+        "supported formats",
+        "MediaCodec",
+        "HDR video",
+        "recording",
+        "camera output",
+        "Android media"
+      ],
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
+      ]
+    },
+    {
+      "id": "android-photo-picker-reference",
+      "name": "Photo Picker Documentation",
+      "sourceUrl": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "rssUrl": null,
+      "collectionModeHint": "documentation-watch",
+      "category": "android-media",
+      "priority": "medium",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "Photo Picker와 camera-generated image/video access, sharing, privacy, compatibility 배경 확인용 reference입니다. 단독 main article 후보로 승격하지 않습니다.",
+      "keywords": [
+        "Photo Picker",
+        "camera output access",
+        "gallery",
+        "sharing",
+        "privacy",
+        "MediaStore"
+      ],
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
+      ]
+    },
+    {
+      "id": "android-mediastore-reference",
+      "name": "MediaStore Reference",
+      "sourceUrl": "https://developer.android.com/reference/android/provider/MediaStore",
+      "rssUrl": null,
+      "collectionModeHint": "documentation-watch",
+      "category": "android-media",
+      "priority": "low",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "MediaStore, camera-generated image/video indexing/access/metadata/sharing 배경 확인용 reference입니다. 단독 main article 후보로 승격하지 않습니다.",
+      "keywords": [
+        "MediaStore",
+        "camera output access",
+        "gallery",
+        "indexing",
+        "metadata",
+        "sharing"
+      ],
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
+      ]
+    },
+    {
+      "id": "android-mediacodec-reference",
+      "name": "MediaCodec Reference",
+      "sourceUrl": "https://developer.android.com/reference/android/media/MediaCodec",
+      "rssUrl": null,
+      "collectionModeHint": "documentation-watch",
+      "category": "android-media",
+      "priority": "low",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "MediaCodec encode/decode, camera recording, preview/video output, A/V sync 배경 확인용 reference입니다. 단독 main article 후보로 승격하지 않습니다.",
+      "keywords": [
+        "MediaCodec",
+        "encode",
+        "decode",
+        "camera recording",
+        "A/V sync",
+        "Android media"
+      ],
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "reference_page",
+      "sourceQualityNotes": [
+        "official source",
+        "reference/background source only"
       ]
     },
     {

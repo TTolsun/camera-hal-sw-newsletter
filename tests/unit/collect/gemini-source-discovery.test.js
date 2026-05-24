@@ -23,6 +23,7 @@ const {
   run: runSourceDiscoveryBoundary
 } = require('../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
 const {
+  buildProposalPrompt,
   promoteProposalUrls
 } = require('../../../scripts/newsroom/collect/gemini-source-discovery');
 const {
@@ -151,6 +152,24 @@ async function fetchWithoutParserEvidence() {
     text: async () => '<html><head><title>CameraX release notes</title><meta name="datePublished" content="2026-05-15"></head></html>'
   };
 }
+
+test('source discovery prompt includes official Android media scope and rejection guardrails', () => {
+  const prompt = buildProposalPrompt({
+    date: '2026-05-16',
+    manualCandidates: [],
+    sourceRegistry: registry()
+  });
+
+  assert.match(prompt, /Official Android media\/camera-output discovery intent/);
+  assert.match(prompt, /Media3 release notes/);
+  assert.match(prompt, /MediaCodec/);
+  assert.match(prompt, /Photo Picker/);
+  assert.match(prompt, /camera-output\/media-pipeline relevance/);
+  assert.match(prompt, /official source quality만으로 topic relevance를 우회하지 마세요/);
+  assert.match(prompt, /Reference docs\(MediaCodec, MediaRecorder, MediaStore, Photo Picker training docs, supported formats\)/);
+  assert.match(prompt, /generic playback\/player-only/);
+  assert.match(prompt, /audio-only/);
+});
 
 test('enabled boundary writes seed-only artifacts when Gemini credentials are missing after approved seed expansion', async () => {
   const root = tempRoot();

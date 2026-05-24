@@ -23,6 +23,11 @@ const RELEASE_ANCHOR_ALLOWLIST = Object.freeze([
     pattern: /^#(?:camera-[a-z0-9-]+-)?\d+\.\d+\.\d+(?:[-\w.]*)?$/i
   },
   {
+    host: 'developer.android.com',
+    path: '/jetpack/androidx/releases/media3',
+    pattern: /^#(?:media3-)?\d+\.\d+\.\d+(?:[-\w.]*)?$/i
+  },
+  {
     host: 'source.android.com',
     pathPrefix: '/',
     pattern: /^#[a-z0-9][a-z0-9._-]*$/i

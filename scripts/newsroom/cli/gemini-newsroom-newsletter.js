@@ -207,7 +207,9 @@ function articleSectionContractPrompt() {
     'Action target scope:',
     '- direct_camera_hal/direct_aosp_camera/camera_driver_image_pipeline: source가 직접 뒷받침할 때만 request/result, metadata, stream, buffer, vendor tag, HAL contract를 사용할 수 있습니다.',
     '- android_camera_api/android_platform_camera_adjacent: CameraX/Camera2, preview/capture, permission, app compatibility, Surface 연결 수준으로 제한하세요.',
-    '- android_multimedia_camera_output: media output path, codec, capture/export, app-visible behavior 수준으로 제한하세요.',
+    '- android_multimedia_camera_output: Camera HAL 직접 변경으로 쓰지 말고 camera output path, preview, recording, camera-generated playback, gallery/media access, sharing, video communication, MediaCodec/Media3/MediaRecorder/Photo Picker/WebRTC/A/V sync 같은 downstream media-pipeline behavior 수준으로 제한하세요.',
+    '- android_multimedia_camera_output article은 what changed, affected camera output path, why Camera HAL/Android camera engineers should care, direct/indirect/downstream impact를 모두 설명해야 합니다. public article에서는 direct/indirect/downstream impact를 enum이 아니라 자연스러운 한국어 설명 문장으로 쓰세요.',
+    '- Media3/MediaCodec/Photo Picker 같은 official Android media source라도 generic player, streaming-only, music, DRM/player-only, OTT-only, audio-only, gallery UI-only 변경이면 reject/downgrade하고 Camera HAL 직접 조치로 쓰지 마세요.',
     '- cpp_ai_tooling_fallback: build/test/debug workflow, sample/prototype app, Camera API usage 수준으로 제한하세요. HAL runtime, stream, buffer, metadata 변경을 기본 action target으로 만들지 마세요.',
     '- reference_only/watchlist: 직접 조치 문장이 아니라 관찰/제한 문장으로만 작성하세요.',
     'article_sections.team_share_points는 팀 리뷰 때 공유할 핵심 takeaway string이어야 합니다.',
@@ -241,6 +243,7 @@ function publicArticleContractPrompt() {
     'claim/schema contract와 public prose contract를 섞지 마세요. enum, diagnostic term, internal field name은 public_article 문장에 쓰지 마세요.',
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
     'camera_hal_takeaway는 별도 섹션에 들어갈 "Camera HAL/Driver 관점에서의 의미"입니다. 직접 HAL/Driver 변경이면 실제 확인 포인트를 쓰고, 직접 변경이 아니면 직접 영향은 없지만 앱/API/tooling/debug/repro 맥락에서 어떤 참고 의미가 있는지만 제한적으로 쓰세요.',
+    'android_multimedia_camera_output article의 camera_hal_takeaway는 Camera HAL 직접 변경이 아니라 camera-generated output, preview/recording, gallery/media access, sharing, video communication, A/V sync 같은 downstream validation 의미로 제한해 쓰세요.',
     'reader_checkpoints는 최소 2개이며 내부 QA/checklist용 필드입니다. Markdown/HTML에 직접 렌더링되지 않으므로, public body나 "Camera HAL/Driver 관점에서의 의미" 섹션을 대체하지 마세요. 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하되 body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요.',
     'API/component/date, stream/metadata, compatibility test scenario처럼 validator token을 조합한 문장을 쓰지 마세요.',
     'source가 HAL/driver 변경을 직접 말하지 않으면 vendor pipeline, stream, metadata, buffer 변경으로 확대하지 마세요.'

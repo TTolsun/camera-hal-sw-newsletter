@@ -276,6 +276,10 @@ const reporterCandidate = {
     counts_as_fallback_topic: { type: 'BOOLEAN' },
     evidence_origin: string,
     source_hint: string,
+    article_tier: string,
+    topic_area: string,
+    camera_output_relevance: { type: 'NUMBER' },
+    newsletter_relevance: { type: 'NUMBER' },
     camera_hal_relevance_score: { type: 'NUMBER' },
     android_camera_relevance_score: { type: 'NUMBER' },
     practical_actionability_score: { type: 'NUMBER' },
@@ -419,6 +423,10 @@ const section = {
     counts_as_fallback_topic: { type: 'BOOLEAN' },
     evidence_origin: string,
     source_hint: string,
+    article_tier: string,
+    topic_area: string,
+    camera_output_relevance: { type: 'NUMBER' },
+    newsletter_relevance: { type: 'NUMBER' },
     imageCandidates: {
       type: 'ARRAY',
       items: imageCandidate
