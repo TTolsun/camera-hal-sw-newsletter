@@ -1440,6 +1440,87 @@ test('story v1 decision metadata ignores stale direct impact_claim_level', () =>
   assert.equal(metadata.scope.includes('Framework'), true);
 });
 
+test('story v1 decision metadata promotes direct HAL source signals without legacy enum text', () => {
+  const base = section(1, {
+    category: 'AOSP Camera HAL',
+    headline: 'Camera provider request result contract update',
+    relevance_bucket: 'direct_aosp_camera',
+    actionability_level: 'concrete_check',
+    effective_actionability_level: 'concrete_check',
+    guardrail_impact_class: 'direct_hal_contract',
+    do_not_overstate: [],
+    hal_signal_capsule: {
+      ...section(1).hal_signal_capsule,
+      do_not_overstate: []
+    },
+    public_article: storyPublicArticle(section(1), {
+      headline: 'Camera provider request result contract update',
+      lead: 'AOSP Camera source confirmed a provider contract change.',
+      body_paragraphs: [
+        'The source describes the camera provider contract update for HAL owners.',
+        'The article keeps the scope on request/result behavior and source-backed integration review.'
+      ],
+      camera_hal_takeaway: 'HAL owners should treat the source-backed provider contract change as a direct verification target.',
+      reader_checkpoints: [
+        'Review the camera provider request/result contract against the affected branch.',
+        'Compare integration logs for the source-backed provider contract update.'
+      ],
+      editorial_story: {
+        ...storyPublicArticle(section(1)).editorial_story,
+        not_to_overclaim: ''
+      }
+    })
+  });
+
+  const metadata = deriveDecisionMetadata(base, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(metadata.impact, 'High');
+  assert.equal(metadata.overclaim_risk, 'Low');
+  assert.equal(metadata.scope.includes('HAL'), true);
+  assert.equal(metadata.action.includes('Test'), true);
+  assert.equal(metadata.action.includes('Adopt'), true);
+});
+
+test('story v1 decision metadata does not promote guardrail enum without source scope', () => {
+  const base = section(1, {
+    category: 'Android Platform / CameraX',
+    headline: 'CameraX app compatibility update',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    actionability_level: 'concrete_check',
+    effective_actionability_level: 'concrete_check',
+    guardrail_impact_class: 'direct_hal_contract',
+    hal_impact_axes: [],
+    hal_signal_capsule: {
+      ...section(1).hal_signal_capsule,
+      impact_axes: []
+    },
+    public_article: storyPublicArticle(section(1), {
+      headline: 'CameraX app compatibility update',
+      lead: 'CameraX source confirmed an app compatibility update.',
+      body_paragraphs: [
+        'The source describes app-facing CameraX compatibility behavior.',
+        'The article keeps the scope above the HAL boundary.'
+      ],
+      camera_hal_takeaway: 'This is an app/framework compatibility signal, not a direct HAL contract change.',
+      reader_checkpoints: [
+        'Review CameraX app compatibility behavior in a sample app.',
+        'Keep the source scope above the HAL boundary.'
+      ]
+    })
+  });
+
+  const metadata = deriveDecisionMetadata(base, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(metadata.scope.includes('HAL'), false);
+  assert.equal(metadata.action.includes('Adopt'), false);
+});
+
 test('story v1 deterministic metadata separates tooling scope from fallback-only policy', () => {
   const tooling = section(1, {
     category: 'Android Native Tooling',

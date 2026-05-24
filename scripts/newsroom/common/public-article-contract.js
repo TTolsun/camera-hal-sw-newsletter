@@ -834,14 +834,15 @@ function normalizeDecisionActions(actions = [], section = {}, issue = {}, overcl
 function deriveReaderAction(section = {}, issue = {}, overclaimRisk = 'Medium') {
   if (hasSourceGapRisk(section, issue) || hasForbiddenOrWatchlistPromotion(section, issue)) return ['Watch'];
   const combined = combinedSectionText(section, issue);
+  const directHal = isDirectHalSourceConfirmed(section, issue);
   let actions = ['Watch'];
-  if (/test|measure|metric|Camera ITS|CTS|VTS|검증|테스트|측정|비교|점검/i.test(combined)) {
+  if (directHal || /test|measure|metric|Camera ITS|CTS|VTS|검증|테스트|측정|비교|점검/i.test(combined)) {
     actions.push('Test');
   }
   if (
     overclaimRisk !== 'High' &&
     !isFallbackOnly(section, issue) &&
-    /owner_metric_log|measurable_test|direct_hal_contract|camera_stack_source/i.test(combined)
+    (directHal || /owner_metric_log|measurable_test/i.test(combined))
   ) {
     actions.push('Adopt');
   }
