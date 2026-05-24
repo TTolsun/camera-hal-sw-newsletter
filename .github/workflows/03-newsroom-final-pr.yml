@@ -305,7 +305,7 @@ jobs:
         run: |
           mkdir -p .tmp
           node scripts/build-newsroom-pr-body.js > .tmp/newsroom-pr-body.md
-          node scripts/validate-pr-body.js .tmp/newsroom-pr-body.md --date "${{ steps.meta.outputs.date }}"
+          node scripts/validate-pr-body.js .tmp/newsroom-pr-body.md --type newsletter --date "${{ steps.meta.outputs.date }}" --require-publish-status-consistency
           {
             echo "body<<EOF"
             cat .tmp/newsroom-pr-body.md

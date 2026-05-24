@@ -38,8 +38,10 @@ const {
   resolvePublishStatus
 } = require('../../scripts/newsroom/common/publish-status');
 const {
+  detectBodyKind,
   extractSections,
   extractStatusSection,
+  resolveBodyKind,
   validatePrBodyFile,
   validatePrBodyText
 } = require('../../scripts/validate-pr-body');
@@ -2345,8 +2347,8 @@ test('validate-pr-body handles non-string input without throwing', () => {
   for (const input of [null, undefined, 42]) {
     const result = validatePrBodyText(input);
     assert.equal(result.ok, false, String(input));
-    assert.match(result.errors.join('\n'), /must contain exactly one/);
-    assert.match(result.errors.join('\n'), /missing/);
+    assert.equal(result.bodyKind, 'unknown');
+    assert.match(result.errors.join('\n'), /유형을 판정할 수 없습니다/);
   }
 
   assert.equal(extractSections(null).size, 0);
@@ -2354,6 +2356,175 @@ test('validate-pr-body handles non-string input without throwing', () => {
   assert.equal(extractSections(42).size, 0);
   assert.equal(extractStatusSection(null), '');
   assert.equal(extractStatusSection(42), '');
+});
+
+test('validate-pr-body detects body kind before applying type-specific contracts', () => {
+  assert.equal(detectBodyKind(newsletterTemplateBody()), 'newsletter-template');
+  assert.equal(detectBodyKind(codeDocsTemplateBody()), 'code-docs-template');
+  assert.deepEqual(resolveBodyKind(newsletterTemplateBody(), 'newsletter'), {
+    bodyKind: 'newsletter-template',
+    requestedType: 'newsletter',
+    detectedKind: 'newsletter-template',
+    detectedKinds: ['newsletter-template']
+  });
+  assert.equal(resolveBodyKind(codeDocsTemplateBody(), 'newsletter').bodyKind, 'type-mismatch');
+  assert.equal(resolveBodyKind(newsletterTemplateBody(), 'foo').bodyKind, 'invalid-type');
+});
+
+test('validate-pr-body accepts generated and template newsletter bodies through newsletter type', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+  const generatedBody = buildNewsroomPrBody({ root, date, validateOutcome: 'success' });
+  const generatedResult = validatePrBodyText(generatedBody, { type: 'newsletter', date });
+  assert.equal(generatedResult.ok, true, JSON.stringify(generatedResult, null, 2));
+  assert.equal(generatedResult.bodyKind, 'generated-newsletter');
+
+  const templateResult = validatePrBodyText(newsletterTemplateBody(), { type: 'newsletter' });
+  assert.equal(templateResult.ok, true, JSON.stringify(templateResult, null, 2));
+  assert.equal(templateResult.bodyKind, 'newsletter-template');
+});
+
+test('validate-pr-body rejects body type mismatches and ambiguous bodies', () => {
+  const newsletterAsCodeDocs = validatePrBodyText(newsletterTemplateBody(), { type: 'code-docs' });
+  assert.equal(newsletterAsCodeDocs.ok, false);
+  assert.equal(newsletterAsCodeDocs.bodyKind, 'type-mismatch');
+  assert.match(newsletterAsCodeDocs.errors.join('\n'), /type 불일치/);
+
+  const codeDocsAsNewsletter = validatePrBodyText(codeDocsTemplateBody(), { type: 'newsletter' });
+  assert.equal(codeDocsAsNewsletter.ok, false);
+  assert.equal(codeDocsAsNewsletter.bodyKind, 'type-mismatch');
+  assert.match(codeDocsAsNewsletter.errors.join('\n'), /type 불일치/);
+
+  const ambiguous = validatePrBodyText(`${newsletterTemplateBody()}\n${codeDocsTemplateBody()}`, { type: 'auto' });
+  assert.equal(ambiguous.ok, false);
+  assert.equal(ambiguous.bodyKind, 'ambiguous');
+  assert.match(ambiguous.errors.join('\n'), /유형이 모호합니다/);
+});
+
+test('validate-pr-body rejects selector-only, unknown, and invalid type bodies', () => {
+  const rootSelector = validatePrBodyText('## PR 유형 선택\n\n- Newsletter publication PR', { type: 'auto' });
+  assert.equal(rootSelector.ok, false);
+  assert.equal(rootSelector.bodyKind, 'root-selector');
+  assert.match(rootSelector.errors.join('\n'), /선택 안내 template/);
+
+  const unknown = validatePrBodyText('## 변경 요약\n\n- 한글 PR body만 작성했습니다.', { type: 'auto' });
+  assert.equal(unknown.ok, false);
+  assert.equal(unknown.bodyKind, 'unknown');
+  assert.match(unknown.errors.join('\n'), /유형을 판정할 수 없습니다/);
+
+  const invalidType = validatePrBodyText(codeDocsTemplateBody(), { type: 'invalid' });
+  assert.equal(invalidType.ok, false);
+  assert.equal(invalidType.bodyKind, 'invalid-type');
+  assert.match(invalidType.errors.join('\n'), /허용값: auto, newsletter, code-docs/);
+});
+
+test('validate-pr-body accepts npm.cmd validation commands in template bodies', () => {
+  const result = validatePrBodyText(codeDocsTemplateBody({
+    testCommand: 'npm.cmd run test',
+    validateCommand: 'npm.cmd run validate'
+  }), { type: 'code-docs' });
+
+  assert.equal(result.ok, true, JSON.stringify(result, null, 2));
+  assert.equal(result.bodyKind, 'code-docs-template');
+});
+
+test('validate-pr-body rejects template bodies with missing validation commands', () => {
+  const body = codeDocsTemplateBody().replace(/- \[ \] `npm run validate`\n/, '');
+  const result = validatePrBodyText(body, { type: 'code-docs' });
+
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /npm run validate/);
+
+  const commandOutsideValidation = codeDocsTemplateBody()
+    .replace('### Scope', '### Scope\n\n- [ ] `npm.cmd run validate`를 Scope 섹션에 적었다.')
+    .replace(/- \[ \] `npm run validate`\n/, '');
+  const sectionScoped = validatePrBodyText(commandOutsideValidation, { type: 'code-docs' });
+  assert.equal(sectionScoped.ok, false);
+  assert.match(sectionScoped.errors.join('\n'), /Validation 섹션/);
+});
+
+test('validate-pr-body requires publish status consistency flag to use generated newsletter bodies', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  const templatePath = path.join(root, '.tmp', 'newsletter-template-pr-body.md');
+  writeText(templatePath, newsletterTemplateBody());
+  const templateWithoutFlag = validatePrBodyFile(templatePath, {
+    root,
+    date,
+    type: 'newsletter'
+  });
+  assert.equal(templateWithoutFlag.ok, true, JSON.stringify(templateWithoutFlag, null, 2));
+  assert.equal(templateWithoutFlag.bodyKind, 'newsletter-template');
+
+  const templateWithFlag = validatePrBodyFile(templatePath, {
+    root,
+    date,
+    type: 'newsletter',
+    requirePublishStatusConsistency: true
+  });
+  assert.equal(templateWithFlag.ok, false);
+  assert.equal(templateWithFlag.bodyKind, 'newsletter-template');
+  assert.match(templateWithFlag.errors.join('\n'), /generated-newsletter/);
+
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true,
+    status: {
+      fact_check_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    factCheck: {
+      status: 'NEEDS_FIX',
+      must_fix: [{ issue: 'unresolved must_fix' }]
+    }
+  });
+  const generatedPath = path.join(root, '.tmp', 'newsroom-pr-body.md');
+  writeText(generatedPath, buildNewsroomPrBody({ root, date, validateOutcome: 'success' }));
+  const generatedResult = validatePrBodyFile(generatedPath, {
+    root,
+    date,
+    type: 'newsletter',
+    requirePublishStatusConsistency: true,
+    requireHomepageHeadlineDesignReview: false
+  });
+  assert.equal(generatedResult.ok, false);
+  assert.equal(generatedResult.bodyKind, 'generated-newsletter');
+  assert.match(generatedResult.errors.join('\n'), /consistency_errors|Artifact consistency errors/);
+});
+
+test('validate-pr-body root wrapper CLI handles type-aware template validation', () => {
+  const root = tempRoot();
+  const bodyPath = path.join(root, 'code-docs-pr-body.md');
+  writeText(bodyPath, codeDocsTemplateBody({
+    testCommand: 'npm.cmd run test',
+    validateCommand: 'npm.cmd run validate'
+  }));
+
+  const valid = spawnSync(process.execPath, [
+    path.join(__dirname, '..', '..', 'scripts', 'validate-pr-body.js'),
+    bodyPath,
+    '--type',
+    'code-docs'
+  ], {
+    cwd: root,
+    encoding: 'utf8'
+  });
+  assert.equal(valid.status, 0, valid.stderr);
+  assert.match(valid.stdout, /Validated PR body/);
+
+  const invalid = spawnSync(process.execPath, [
+    path.join(__dirname, '..', '..', 'scripts', 'validate-pr-body.js'),
+    bodyPath,
+    '--type',
+    'foo'
+  ], {
+    cwd: root,
+    encoding: 'utf8'
+  });
+  assert.notEqual(invalid.status, 0);
+  assert.match(invalid.stderr, /허용값: auto, newsletter, code-docs/);
 });
 
 function traceCandidate(overrides = {}) {
@@ -2393,6 +2564,98 @@ function traceStatus(overrides = {}) {
     consistency_errors: [],
     ...overrides
   };
+}
+
+function newsletterTemplateBody(overrides = {}) {
+  const validationTestCommand = overrides.testCommand || 'npm run test';
+  const validationValidateCommand = overrides.validateCommand || 'npm run validate';
+  return `## 뉴스레터 발행 PR
+
+### 작성 원칙
+
+- [ ] PR body는 한글로 작성했다.
+- [ ] 파일명, 명령어, 코드 식별자, JSON key, enum 값, URL, 외부 제품명은 원문을 유지했다.
+- [ ] \`final_publish_ready\` 같은 영어 식별자는 한국어 설명을 함께 적었다.
+
+### Public artifact
+
+- [ ] \`newsletters/2026-05-08/newsletter.md\`를 작성했다.
+- [ ] \`newsletters/2026-05-08/index.html\`을 작성했다.
+- [ ] \`data/newsletters.json\`을 업데이트했다.
+- [ ] HTML에서 Archive 링크가 동작한다.
+- [ ] HTML에서 Markdown 원본 링크가 동작한다.
+
+### Editorial quality
+
+- [ ] 주요 기사 구성이 \`config/newsletter-policy.json\`을 따른다.
+- [ ] 3줄 브리핑은 정확히 3줄이다.
+- [ ] 각 주요 기사에 \`확인한 사실\`이 있다.
+- [ ] 각 주요 기사에 \`배경지식\`이 있다.
+- [ ] 각 주요 기사에 \`Camera HAL 관점\`이 있다.
+- [ ] 각 주요 기사에 \`실행 항목\`이 있다.
+- [ ] 각 주요 기사에 \`팀 공유 포인트\`가 있다.
+- [ ] 추정은 추정이라고 표시했다.
+- [ ] \`TODO\`가 남아 있지 않다.
+
+### Source / fact-check
+
+- [ ] 각 주요 기사에 \`Sources\` 또는 \`출처\`가 있다.
+- [ ] 마지막에 \`References\` 또는 \`참고자료\`가 있다.
+- [ ] 출처가 본문 주장과 직접 연결된다.
+- [ ] source gap이 없다.
+- [ ] fact-check must_fix가 없다.
+- [ ] watch/reference page가 dated evidence 없이 main article로 승격되지 않았다.
+- [ ] AI/C++ 기사가 포함된 경우 Camera HAL workflow와 연결된다.
+
+### Validation
+
+- [ ] \`${validationTestCommand}\`
+- [ ] \`${validationValidateCommand}\`
+- [ ] 필요한 targeted test를 실행했다.
+`;
+}
+
+function codeDocsTemplateBody(overrides = {}) {
+  const validationTestCommand = overrides.testCommand || 'npm run test';
+  const validationValidateCommand = overrides.validateCommand || 'npm run validate';
+  return `## 코드 / 문서 / 리팩토링 PR
+
+### 작성 원칙
+
+- [ ] PR body는 한글로 작성했다.
+- [ ] 파일명, 명령어, 코드 식별자, JSON key, enum 값, URL, 외부 제품명은 원문을 유지했다.
+- [ ] \`final_publish_ready\`, \`artifact_final_publish_ready\` 같은 영어 식별자는 한국어 설명을 함께 적었다.
+
+### Scope
+
+- [ ] PR 하나에 한 관심사만 담았다.
+- [ ] 뉴스레터 generated artifact를 불필요하게 수정하지 않았다.
+- [ ] public newsletter content 변경이 있으면 이유를 설명했다.
+- [ ] unrelated cleanup을 섞지 않았다.
+
+### Code safety
+
+- [ ] quality gate, hard blocker, source binding, image fallback 정책을 약화하지 않았다.
+- [ ] \`qualityGatePolicy.threshold\` 변경이 있으면 PR 본문에 이유와 검증 결과를 명시했다.
+- [ ] \`qualityGatePolicy.hardFailConditions\` 변경이 있으면 condition별 regression test와 문서 갱신을 포함했다.
+- [ ] \`publish-ready\` 판단에 영향을 주는 변경이 있으면 \`final_publish_ready\` / \`artifact_final_publish_ready\` 검증을 포함했다.
+- [ ] workflow 동작 변경이 있으면 테스트를 추가했다.
+- [ ] compatibility wrapper/shim을 명시적 이유 없이 제거하지 않았다.
+- [ ] generated artifact path를 바꿨다면 workflow, docs, tests를 함께 갱신했다.
+
+### Docs
+
+- [ ] 문서는 가능한 한 한국어로 설명했다.
+- [ ] 파일명, 명령어, 코드 식별자, JSON key, enum 값, URL, 외부 제품명은 원문을 유지했다.
+- [ ] README / AGENTS / docs 간 설명이 충돌하지 않는다.
+- [ ] archive 문서를 current guidance처럼 보이게 만들지 않았다.
+
+### Validation
+
+- [ ] \`${validationTestCommand}\`
+- [ ] \`${validationValidateCommand}\`
+- [ ] 관련 targeted test를 실행했다.
+`;
 }
 
 function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
@@ -6966,7 +7229,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_MOBILE_COVERAGE: covered/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION: none/);
   assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
-  assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
+  assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --type newsletter --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --require-publish-status-consistency/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true';/);
   assert.match(workflow, /const diagnosticsOnly = '\$\{\{ steps\.meta\.outputs\.diagnostics_only \}\}' === 'true';/);
