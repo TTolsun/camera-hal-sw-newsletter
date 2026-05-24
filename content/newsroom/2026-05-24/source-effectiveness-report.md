@@ -7,16 +7,16 @@ Date: 2026-05-24
 - Sources: 47 (registry=47, synthetic=0)
 - Collected candidates: 39
 - Unregistered candidates: 0
-- Eligible candidates: 3
+- Eligible candidates: 2
 - Selected candidates: 2
 - Rendered main articles: 2
-- Source gap candidates: 36
-- Generic noise candidates: 29
+- Source gap candidates: 37
+- Generic noise candidates: 28
 - Duplicate candidates: 1
-- Recommendations: NO_RECENT_SIGNAL: 41, KEEP_AND_FIX_PARSER: 6
+- Recommendations: NO_RECENT_SIGNAL: 41, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 1, KEEP_AND_FIX_PARSER: 5
 - Selected main source quality coverage: 3/3
 - Main-eligible source quality coverage: 1/1
-- Conditional source promoted/blocked: 0/13
+- Conditional source promoted/blocked: 0/12
 - Unknown source quality: 0
 - Source quality field drift: 0
 - Legacy source quality warnings: 0
@@ -26,13 +26,13 @@ Date: 2026-05-24
 | Metric | Key | Count |
 | --- | --- | --- |
 | source_url_quality | official_dated_release | 22 |
-| source_url_quality | engineering_blog_with_camera_evidence | 13 |
-| source_url_quality | official_site_update_row | 3 |
+| source_url_quality | engineering_blog_with_camera_evidence | 12 |
+| source_url_quality | official_site_update_row | 4 |
 | source_url_quality | undated_reference_page | 2 |
-| source_quality_status | blocked | 36 |
-| source_quality_status | allowed | 4 |
-| blocker | source_gap_risk | 36 |
-| blocker | reference_only | 32 |
+| source_quality_status | blocked | 37 |
+| source_quality_status | allowed | 3 |
+| blocker | source_gap_risk | 37 |
+| blocker | reference_only | 33 |
 | blocker | undated_reference_page | 2 |
 
 
@@ -40,19 +40,19 @@ Date: 2026-05-24
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| android-developers-latest-updates | KEEP_AND_FIX_PARSER | 15 | 2 | 1 | 0 | 1 |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 13.09 | 21 | 2 | 2 | 1 |
+| android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 3 | 0 | 0 | 1 |
 
 ## Sources Needing Parser Repair
 
 | Source | Recommendation | Collected | Eligible | Source Gap | Top Reason |
 | --- | --- | --- | --- | --- | --- |
-| android-developers-latest-updates | KEEP_AND_FIX_PARSER | 2 | 1 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
+| android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 3 | 0 | 3 | No RSS item, no published date, no concrete release/API/behavior change detected. |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 21 | 2 | 19 | main_eligible=false |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 13 | 0 | 13 | main_eligible=false |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 12 | 0 | 12 | main_eligible=false |
 
 ## Generic Noise / Downgrade Candidates
 
@@ -103,12 +103,12 @@ _없음_
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| android-developers-latest-updates | KEEP_AND_FIX_PARSER | 15 | 2 | 0.5 | 0 | 0 | 0.5 | 0 | 0 |
+| android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 3 | 0 | 0 | 0 | 1 | 0 | 0 |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 13.09 | 21 | 0.0952 | 1 | 0.5 | 0.9048 | 0.8571 | 1 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 13 | 0 | 0 | 0 | 1 | 0.6154 | 0 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 12 | 0 | 0 | 0 | 1 | 0.5833 | 0 |
 
 ## Warnings
 
