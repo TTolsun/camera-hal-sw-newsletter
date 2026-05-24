@@ -87,8 +87,25 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.equal(capsule.conditional_evidence_type, '');
   assert.equal(capsule.selection.final_selected, true);
   assert.deepEqual(capsule.related_context_candidates, []);
+  assert.equal(capsule.source_fact_bundle.source_url, 'https://example.com/camera-hal-metadata?utm=1');
+  assert.deepEqual(capsule.source_fact_bundle.facts, []);
   assert.ok(capsule.evidence.length > 0);
   assert.ok(capsule.estimated_tokens <= 1100);
+  assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
+});
+
+test('article capsule strips legacy impact fields before LLM writer input', () => {
+  const capsule = buildArticleCapsule(candidate({
+    impact_claim_level: 'direct_hal_change',
+    impactClaimLevel: 'camera_stack_direct',
+    derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
+      hal_boundary: 'direct HAL change'
+    }
+  }));
+
+  assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
+  assert.equal(capsule.derived_editorial_hints.relevance_bucket_hint, 'direct_aosp_camera');
 });
 
 test('article capsule carries related context labels without making them facts', () => {
@@ -156,6 +173,102 @@ test('article capsule preserves camelCase canonical sourceQuality without drifti
   assert.deepEqual(capsule.source_quality_field_drift, []);
 });
 
+test('article capsule keeps blocked source quality blockers in compact writer input', () => {
+  const capsule = buildArticleCapsule(candidate({
+    source_quality: {
+      source_role: 'tech_media_lead_source',
+      source_url_quality: 'tech_media_lead_requires_cross_check',
+      source_quality_status: 'blocked',
+      main_article_source_allowed: false,
+      main_article_source_allowed_reason: 'Source requires primary confirmation before main promotion.',
+      main_article_source_blockers: ['cross_check_required_but_missing'],
+      cross_check_status: 'required_missing',
+      requires_cross_check: true,
+      requires_conditional_evidence: true,
+      conditional_evidence_type: 'primary_confirmation',
+      evidence_granularity: 'article_with_primary_confirmation',
+      source_quality_notes: ['Must be confirmed by a primary source.']
+    }
+  }));
+
+  assert.equal(capsule.source_quality.source_role, 'tech_media_lead_source');
+  assert.equal(capsule.source_quality.source_url_quality, 'tech_media_lead_requires_cross_check');
+  assert.equal(capsule.source_quality.source_quality_status, 'blocked');
+  assert.equal(capsule.source_quality.main_article_source_allowed, false);
+  assert.deepEqual(capsule.source_quality.main_article_source_blockers, ['cross_check_required_but_missing']);
+  assert.equal(capsule.source_quality.requires_cross_check, true);
+  assert.equal(capsule.source_quality.requires_conditional_evidence, true);
+  assert.equal(capsule.source_quality.conditional_evidence_type, 'primary_confirmation');
+  assert.equal(capsule.cross_check_status, 'required_missing');
+  assert.equal(capsule.evidence_granularity, 'article_with_primary_confirmation');
+  assert.equal(capsule.main_article_readiness.source_ready, false);
+  assert.equal(capsule.main_article_readiness.ready, false);
+  assert.ok(capsule.main_article_readiness.blockers.includes('main_article_source_allowed_false'));
+  assert.ok(capsule.main_article_readiness.blockers.includes('cross_check_required_but_missing'));
+  assert.ok(capsule.do_not_claim.some(item => /primary confirmation/.test(item)));
+});
+
+test('article capsule preserves conditional evidence requirements for allowed conditional sources', () => {
+  const capsule = buildArticleCapsule(candidate({
+    source_quality: {
+      source_role: 'project_release_source',
+      source_url_quality: 'project_release',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      main_article_source_allowed_reason: 'Project release evidence is allowed with native HAL workflow evidence.',
+      main_article_source_blockers: [],
+      cross_check_status: 'not_required',
+      requires_cross_check: false,
+      requires_conditional_evidence: true,
+      conditional_evidence_type: 'project_release_evidence',
+      evidence_granularity: 'project_release_note',
+      source_quality_notes: ['Allowed only with project release evidence.']
+    }
+  }));
+
+  assert.equal(capsule.source_quality.source_url_quality, 'project_release');
+  assert.equal(capsule.source_quality.source_quality_status, 'allowed');
+  assert.equal(capsule.source_quality.main_article_source_allowed, true);
+  assert.equal(capsule.source_quality.requires_conditional_evidence, true);
+  assert.equal(capsule.source_quality.conditional_evidence_type, 'project_release_evidence');
+  assert.equal(capsule.requires_conditional_evidence, true);
+  assert.equal(capsule.conditional_evidence_type, 'project_release_evidence');
+  assert.equal(capsule.main_article_readiness.source_ready, true);
+  assert.equal(capsule.main_article_readiness.blockers.includes('main_article_source_allowed_false'), false);
+  assert.equal(capsule.main_article_readiness.blockers.includes('unknown_source_quality'), false);
+});
+
+test('article capsule keeps cross-check-required sources distinct from official sources', () => {
+  const capsule = buildArticleCapsule(candidate({
+    source_quality: {
+      source_role: 'tech_media_lead_source',
+      source_url_quality: 'tech_media_lead_requires_cross_check',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      main_article_source_allowed_reason: 'Primary confirmation satisfied.',
+      main_article_source_blockers: [],
+      cross_check_status: 'required_satisfied',
+      requires_cross_check: true,
+      requires_conditional_evidence: true,
+      conditional_evidence_type: 'primary_confirmation',
+      evidence_granularity: 'article_with_primary_confirmation',
+      source_quality_notes: []
+    },
+    primary_confirmation: true
+  }));
+
+  assert.equal(capsule.source_quality.source_role, 'tech_media_lead_source');
+  assert.equal(capsule.source_quality.source_url_quality, 'tech_media_lead_requires_cross_check');
+  assert.equal(capsule.source_quality.requires_cross_check, true);
+  assert.equal(capsule.source_quality.requires_conditional_evidence, true);
+  assert.equal(capsule.cross_check_status, 'required_satisfied');
+  assert.equal(capsule.evidence_granularity, 'article_with_primary_confirmation');
+  assert.notEqual(capsule.source_quality.source_role, 'official_release_source');
+  assert.notEqual(capsule.source_quality.source_url_quality, 'official_release_note_anchor');
+  assert.equal(capsule.source_fact_bundle.source_url, 'https://example.com/camera-hal-metadata?utm=1');
+  assert.equal(capsule.main_article_readiness.source_ready, true);
+});
+
 test('article capsule carries compact seed evidence by id instead of full evidence pack', () => {
   const capsule = buildArticleCapsule(candidate({
     seed_ids: ['seed-camerax'],
@@ -207,6 +320,39 @@ test('article capsule report separates shortlist and selected capsule inputs', (
   assert.equal(capsuleInputFromReport(report, 'selected').candidates.length, 1);
   assert.equal(capsuleInputFromReport(report, 'reserve').candidates.length, 1);
   assert.equal(capsuleInputForCandidates('2026-05-03', [selected], report).candidates[0].url, selected.url);
+});
+
+test('article capsule report enriches selected article with same-source child facts', () => {
+  const selected = candidate({
+    title: 'Build native Android apps in Google AI Studio',
+    url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    article_group_key: 'android_native_tooling_workflow',
+    behavior_change: 'Google AI Studio can build entire Android apps from a prompt.'
+  });
+  const child = candidate({
+    title: 'Start building today - Build native Android apps in Google AI Studio',
+    url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today',
+    parent_url: selected.url,
+    parent_title: selected.title,
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    article_group_key: 'android_native_tooling_workflow',
+    source_extraction: {
+      evidence_blocks: [{
+        source_text: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using native Android APIs.'
+      }]
+    }
+  });
+  const report = buildArticleCapsuleReport('2026-05-03', {
+    date: '2026-05-03',
+    shortlisted_candidates: [selected, child],
+    selected_articles: [selected],
+    reserve_candidates: []
+  });
+
+  const selectedCapsule = capsuleInputFromReport(report, 'selected').candidates[0];
+  assert.ok(selectedCapsule.source_fact_bundle.facts.some(fact => /Accelerometer and Bluetooth/.test(fact.text)));
+  assert.ok(selectedCapsule.source_fact_bundle.supporting_source_urls.includes(child.url));
 });
 
 test('compact selection context omits full candidate arrays', () => {

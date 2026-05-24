@@ -1,6 +1,5 @@
 const {
-  buildStaticBackgroundContext,
-  inferImpactClaimLevel
+  buildStaticBackgroundContext
 } = require('./article-field-builder');
 
 function ensureArray(value) {
@@ -32,21 +31,17 @@ function stableUniqueItems(items) {
 }
 
 function buildStaticBackgroundContextReport(date, capsuleReport = {}) {
-  const contexts = stableUniqueItems(capsuleItems(capsuleReport)).map(capsule => {
-    const impactClaimLevel = inferImpactClaimLevel(capsule);
-    return {
-      title: text(capsule.title),
-      url: text(capsule.url),
-      source_candidate_hash: text(capsule.source_candidate_hash || capsule.url_hash),
-      relevance_bucket: text(capsule.relevance_bucket),
-      impact_claim_level: impactClaimLevel,
-      background_context: text(capsule.background_context_static) ||
-        buildStaticBackgroundContext({ ...capsule, impact_claim_level: impactClaimLevel }),
-      background_basis: 'supplied article capsule metadata 기반 deterministic static fallback',
-      background_confidence: 'medium',
-      background_warnings: ensureArray(capsule.behavior_cleaning?.warnings)
-    };
-  });
+  const contexts = stableUniqueItems(capsuleItems(capsuleReport)).map(capsule => ({
+    title: text(capsule.title),
+    url: text(capsule.url),
+    source_candidate_hash: text(capsule.source_candidate_hash || capsule.url_hash),
+    relevance_bucket: text(capsule.relevance_bucket),
+    background_context: text(capsule.background_context_static) ||
+      buildStaticBackgroundContext(capsule),
+    background_basis: 'supplied article capsule metadata 기반 deterministic static fallback',
+    background_confidence: 'medium',
+    background_warnings: ensureArray(capsule.behavior_cleaning?.warnings)
+  }));
   return {
     schema_version: 1,
     date,

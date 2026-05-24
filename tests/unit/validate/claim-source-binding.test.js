@@ -34,7 +34,6 @@ function candidate(overrides = {}) {
     title: 'CameraX release notes',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
     source_candidate_hash: 'candidate-hash',
-    impact_claim_level: 'android_framework_adjacent',
     evidence_pack_ids: ['seed-camerax-pack'],
     primary_evidence_ids: ['seed-camerax-primary-01'],
     linked_evidence_ids: ['seed-camerax-linked-01'],
@@ -198,6 +197,44 @@ test('do_not_claim blocks direct HAL fact claims without direct evidence', () =>
   const reasons = result.claim_results[0].issues.map(item => item.reason_code);
   assert.ok(reasons.includes('do_not_claim_violation'));
   assert.ok(reasons.includes('direct_hal_claim_without_direct_evidence'));
+});
+
+test('stale candidate impact_claim_level does not satisfy direct HAL claim evidence', () => {
+  const result = validateArticleClaims({
+    section: section({
+      headline: 'Google AI Studio native Android tooling update',
+      article_sections: {
+        ...section().article_sections,
+        hal_driver_impact: 'No direct HAL runtime impact is confirmed; treat this as Android app tooling context.'
+      },
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'Google AI Studio changes Camera HAL runtime behavior.',
+        claim_type: 'fact',
+        evidence_ids: ['ai-studio-primary-01'],
+        source_urls: ['https://developers.googleblog.com/ai-studio-native-android-apps'],
+        impact_level: 'direct_hal_contract',
+        overclaim_risk: 'high'
+      }]
+    }),
+    candidate: candidate({
+      title: 'Google AI Studio native Android app generation',
+      url: 'https://developers.googleblog.com/ai-studio-native-android-apps',
+      relevance_bucket: 'cpp_ai_tooling_fallback',
+      impact_claim_level: 'direct_hal_change',
+      primary_evidence_ids: ['ai-studio-primary-01'],
+      compact_evidence: {
+        primary_facts: ['Google AI Studio can generate native Android apps from a prompt.'],
+        linked_context: ['Generated apps can use Android APIs such as Camera, GPS, and Bluetooth.'],
+        do_not_claim: [],
+        evidence_urls: ['https://developers.googleblog.com/ai-studio-native-android-apps']
+      }
+    }),
+    strict: true
+  });
+  const reasons = result.claim_results[0].issues.map(item => item.reason_code);
+  assert.ok(reasons.includes('direct_hal_claim_without_direct_evidence'));
+  assert.ok(reasons.includes('do_not_claim_violation'));
 });
 
 test('article_sections.do_not_claim blocks direct HAL fact claims', () => {

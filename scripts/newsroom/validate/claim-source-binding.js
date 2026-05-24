@@ -35,11 +35,6 @@ const CLAIM_IMPACT_LEVELS = Object.freeze([
 const CLAIM_IMPACT_LEVEL_VALUES = new Set(CLAIM_IMPACT_LEVELS);
 
 const CLAIM_IMPACT_LEVEL_ALIASES = Object.freeze({
-  direct_hal_change: 'direct_hal_contract',
-  camera_stack_direct: 'camera_framework_behavior',
-  android_framework_adjacent: 'app_api_or_framework_adjacent',
-  tooling_supporting: 'native_tooling_workflow',
-  watch_only: 'no_hal_runtime_impact',
   camerax_app_compatibility: 'app_api_or_framework_adjacent',
   framework_hal_contract: 'camera_framework_behavior'
 });
@@ -1020,7 +1015,6 @@ function hasPositiveSupportWording(value) {
 }
 
 function evidenceHasDirectHalSupport(claim, evidenceIndex, candidate = {}) {
-  if (text(candidate.impact_claim_level) === 'direct_hal_change') return true;
   const evidenceText = evidenceTextForClaim(claim, evidenceIndex);
   return DIRECT_HAL_WORDING.test(evidenceText);
 }
@@ -1255,6 +1249,7 @@ function validateArticleClaims({
     ...ensureArray(objectValue(candidate.derived_editorial_hints).do_not_claim),
     ...ensureArray(section.do_not_overstate),
     ...ensureArray(objectValue(section.hal_signal_capsule).do_not_overstate),
+    articleSections.hal_driver_impact,
     ...articleSections.do_not_claim,
     ...articleSections.known_limitations,
     ...evidenceIndex.seedPackDoNotClaim

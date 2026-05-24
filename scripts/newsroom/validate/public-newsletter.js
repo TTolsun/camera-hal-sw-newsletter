@@ -155,7 +155,7 @@ function mainArticleBlocks(markdown) {
 }
 
 function checkpointItems(articleText) {
-  const match = String(articleText || '').match(/#{3,4}\s+(?:(?:Camera HAL \/ Driver|Android Native \/ Tooling)\s+관점에서\s+)?확인할 점\s+([\s\S]*?)(?:\n\*\*(?:Sources|출처)\*\*|\n#{2,4}\s+|$)/);
+  const match = String(articleText || '').match(/#{3,4}\s+(?:(?:Camera HAL\s*\/\s*Driver|Android Native \/ Tooling)\s+관점(?:에서의 의미|에서 확인할 점)?|확인할 점)\s+([\s\S]*?)(?:\n\*\*(?:Sources|출처)\*\*|\n#{2,4}\s+|$)/);
   if (!match) return [];
   return match[1]
     .split(/\r?\n/)
@@ -178,7 +178,7 @@ function repeatedCheckpointErrors(articleCheckpoints) {
 
   const first = comparable[0].items.join('\n');
   if (comparable.every(item => item.items.join('\n') === first)) {
-    errors.push('Public reader_checkpoints are identical across all articles.');
+    errors.push('Public checkpoint bullet lists are identical across all articles.');
     return errors;
   }
 
@@ -189,7 +189,7 @@ function repeatedCheckpointErrors(articleCheckpoints) {
       const overlap = rightItems.filter(item => leftSet.has(item)).length;
       const denominator = Math.min(comparable[left].items.length, rightItems.length);
       if (denominator > 0 && overlap / denominator >= 0.7) {
-        errors.push(`Public reader_checkpoints overlap 70% or more between article ${comparable[left].index + 1} and article ${comparable[right].index + 1}.`);
+        errors.push(`Public checkpoint bullet lists overlap 70% or more between article ${comparable[left].index + 1} and article ${comparable[right].index + 1}.`);
       }
     }
   }
@@ -256,12 +256,6 @@ function validatePublicMarkdown(markdown, label = 'newsletter.md', options = {})
   for (const article of mainArticleBlocks(markdown)) {
     const items = checkpointItems(article.text);
     articleCheckpoints.push(items);
-    if (items.length === 0) {
-      errors.push(`${label} article ${article.number} is missing reader checkpoints.`);
-    }
-    if (items.length < 2) {
-      errors.push(`${label} article ${article.number} must include at least 2 reader checkpoints.`);
-    }
     for (const item of items) {
       if (item === NO_IMMEDIATE_ACTION_TEXT) {
         errors.push(`${label} article ${article.number} has generic fallback checkpoint: ${item}`);

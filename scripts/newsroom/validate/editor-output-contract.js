@@ -11,7 +11,7 @@ const {
 } = require('../common/newsletter-policy');
 const {
   findFieldHygieneIssues,
-  inferImpactClaimLevel
+  inferGuardrailImpactClass
 } = require('../generate/article-field-builder');
 const {
   ARTICLE_SECTION_ALLOWED_KEYS,
@@ -248,17 +248,16 @@ function validateEditorArticlePolicy(value, reporter = {}) {
 function validateFieldHygiene(value) {
   const issues = [];
   ensureArray(value.sections).forEach((section, index) => {
-    const impactClaimLevel = text(section.impact_claim_level || section.impactClaimLevel) ||
-      inferImpactClaimLevel(section);
+    const guardrailImpactClass = inferGuardrailImpactClass(section);
     const sectionIssues = findFieldHygieneIssues({
       ...section,
-      impact_claim_level: impactClaimLevel
+      guardrail_impact_class: guardrailImpactClass
     });
     for (const issue of sectionIssues.filter(item => item.blocking !== false)) {
       issues.push({
         index: index + 1,
         headline: text(section.headline || section.category || `article ${index + 1}`),
-        impact_claim_level: impactClaimLevel,
+        guardrail_impact_class: guardrailImpactClass,
         ...issue
       });
     }

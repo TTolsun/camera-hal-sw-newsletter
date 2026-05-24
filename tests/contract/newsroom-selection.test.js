@@ -269,7 +269,6 @@ function cameraXReleaseCandidate(version, overrides = {}) {
     extraction_quality: extraction.extraction_quality,
     derived_editorial_hints: {
       relevance_bucket_hint: 'direct_aosp_camera',
-      impact_claim_level_hint: 'android_framework_adjacent',
       hal_boundary: 'framework_adjacent_not_direct_hal_contract',
       validation_targets: ['Camera2 interop regression validation'],
       device_specific_notes: [],

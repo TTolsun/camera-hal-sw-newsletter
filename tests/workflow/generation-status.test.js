@@ -63,7 +63,6 @@ test('background context schema requires identity fields for stable matching', (
     'title',
     'url',
     'source_candidate_hash',
-    'impact_claim_level',
     'background_context',
     'background_basis',
     'background_confidence',

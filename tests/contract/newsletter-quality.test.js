@@ -388,7 +388,6 @@ const hardFailRegressionCases = new Map([
           },
           derived_editorial_hints: {
             relevance_bucket_hint: 'direct_aosp_camera',
-            impact_claim_level_hint: 'android_framework_adjacent',
             hal_boundary: 'framework_adjacent_not_direct_hal_contract',
             validation_targets: ['Camera2 interop regression validation'],
             device_specific_notes: [],
@@ -439,7 +438,7 @@ for (const regression of hardFailRegressionCases.values()) {
   });
 }
 
-test('impact_claim_level_hint alone does not permit direct HAL claim', () => {
+test('derived editorial hints do not permit direct HAL claim', () => {
   const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
   const cameraXSection = section({
     headline: 'CameraX direct HAL overclaim',
@@ -461,7 +460,6 @@ test('impact_claim_level_hint alone does not permit direct HAL claim', () => {
       team_share_points: 'Watch CameraX compatibility.'
     },
     derived_editorial_hints: {
-      impact_claim_level_hint: 'direct_hal_change',
       hal_boundary: 'framework_adjacent_not_direct_hal_contract',
       validation_targets: ['Camera ITS metadata validation']
     }
@@ -473,7 +471,6 @@ test('impact_claim_level_hint alone does not permit direct HAL claim', () => {
     api_or_component: 'CameraX / androidx.camera',
     behavior_change: 'Fixed ListenableFuture compile error.',
     derived_editorial_hints: {
-      impact_claim_level_hint: 'direct_hal_change',
       hal_boundary: 'framework_adjacent_not_direct_hal_contract',
       validation_targets: ['Camera ITS metadata validation'],
       do_not_claim: ['Do not claim direct Camera HAL API changes.']
@@ -510,7 +507,7 @@ test('impact_claim_level_hint alone does not permit direct HAL claim', () => {
   assert.equal(report.status, 'NEEDS_FIX');
   assert.ok(report.deductions.some(item =>
     item.category === 'source-integrity' &&
-    item.reason.includes('direct HAL contract/API claim lacks direct_hal_change source evidence')
+    item.reason.includes('direct HAL contract/API claim lacks direct source evidence')
   ));
 });
 
@@ -898,7 +895,6 @@ test('claim validation allows cautious CameraX risk_note without direct HAL over
         },
         derived_editorial_hints: {
           relevance_bucket_hint: 'direct_aosp_camera',
-          impact_claim_level_hint: 'android_framework_adjacent',
           hal_boundary: 'framework_adjacent_not_direct_hal_contract',
           validation_targets: ['stream buffer regression validation'],
           device_specific_notes: [],

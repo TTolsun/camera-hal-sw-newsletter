@@ -349,7 +349,6 @@ function buildDerivedHints(extraction) {
   if (/Samsung|device[-\s]specific|Pixel/i.test(body)) warnings.push('device_specific_release_note');
   return {
     relevance_bucket_hint: 'direct_aosp_camera',
-    impact_claim_level_hint: 'android_framework_adjacent',
     hal_boundary: 'framework_adjacent_not_direct_hal_contract',
     validation_targets: validationTargetsForExtraction(extraction),
     device_specific_notes: /Samsung|device[-\s]specific|Pixel/i.test(body)

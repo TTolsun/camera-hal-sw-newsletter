@@ -83,6 +83,10 @@ function storyIssue() {
         ...section.public_article,
         story_contract_version: 1,
         source_subtitle: 'Android Developers · CameraX release note',
+        body_paragraphs: [
+          'Android Developers가 CameraX 변경점을 공개했습니다. 본문은 공개 출처가 말한 app/framework 계층의 변경 내용을 먼저 설명합니다.',
+          'Camera HAL 독자는 이 항목을 preview/capture regression 범위 지정에 참고할 수 있습니다.'
+        ],
         editorial_story: {
           reader_scenario: 'CameraX preview 회귀를 triage하면서 app/framework 변경이 HAL 검증 범위에 들어오는지 확인해야 하는 상황을 가정합니다.',
           what_happened: 'Android Developers가 CameraX 변경점을 공개했습니다.',
@@ -126,11 +130,12 @@ test('newsletter renderer uses public_article for public markdown and HTML', () 
   const html = buildHtml(issue());
 
   assert.match(markdown, /CameraX release gives HAL teams a target/);
-  assert.match(markdown, /Camera HAL \/ Driver 관점/);
-  assert.match(markdown, /Run Camera ITS preview latency checks/);
+  assert.match(markdown, /Camera HAL\/Driver 관점에서의 의미/);
+  assert.doesNotMatch(markdown, /Run Camera ITS preview latency checks/);
   assert.match(markdown, /\[Source article\]\(https:\/\/example\.com\/source\)/);
   assert.match(html, /CameraX release gives HAL teams a target/);
-  assert.match(html, /reader-checkpoints/);
+  assert.match(html, /camera-hal-takeaway/);
+  assert.doesNotMatch(html, /reader-checkpoints/);
 
   for (const leaked of [
     /HAL Signal Capsule/,
@@ -222,10 +227,11 @@ test('newsletter renderer sanitizes legacy sections through compatibility projec
 
   assert.match(markdown, /Internal Watch headline must not render/);
   assert.match(markdown, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
-  assert.match(markdown, /Camera HAL \/ Driver 관점/);
-  assert.match(markdown, /Camera API를 호출한다면, Camera 권한과 preview\/capture 호출 흐름만 확인합니다/);
+  assert.match(markdown, /Camera HAL\/Driver 관점에서의 의미/);
+  assert.doesNotMatch(markdown, /Camera API를 호출한다면, Camera 권한과 preview\/capture 호출 흐름만 확인합니다/);
   assert.match(html, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
-  assert.match(html, /reader-checkpoints/);
+  assert.match(html, /camera-hal-takeaway/);
+  assert.doesNotMatch(html, /reader-checkpoints/);
   assert.doesNotMatch(markdown, /HAL Signal Capsule/);
   assert.doesNotMatch(html, /hal-signal-capsule/);
   assert.doesNotMatch(markdown, /Review-only/);
@@ -245,10 +251,10 @@ test('newsletter renderer renders story v1 as natural prose without public story
   const html = buildHtml(storyIssue());
 
   assert.match(markdown, /Android Developers가 CameraX 변경점을 공개했습니다/);
-  assert.match(markdown, /Camera ITS와 preview latency log를 비교하는 리뷰 흐름/);
-  assert.match(markdown, /### Camera HAL \/ Driver 관점에서 확인할 점/);
+  assert.doesNotMatch(markdown, /Camera ITS와 preview latency log를 비교하는 리뷰 흐름/);
+  assert.match(markdown, /### Camera HAL\/Driver 관점에서의 의미/);
   assert.match(html, /Android Developers가 CameraX 변경점을 공개했습니다/);
-  assert.match(html, /Camera HAL \/ Driver 관점에서 확인할 점/);
+  assert.match(html, /Camera HAL\/Driver 관점에서의 의미/);
   assert.doesNotMatch(html, /article-decision-metadata/);
   for (const label of [
     /^### 현업 장면/m,
@@ -289,7 +295,7 @@ test('newsletter renderer does not treat unsupported future story versions as st
   const markdown = buildMarkdown(futureIssue);
   const html = buildHtml(futureIssue);
 
-  assert.doesNotMatch(markdown, /Android Developers/);
+  assert.doesNotMatch(markdown, /Android Developers · CameraX release note/);
   assert.doesNotMatch(markdown, /story_contract_version/);
   assert.doesNotMatch(html, /story-article/);
   assert.doesNotMatch(html, /article-decision-metadata/);

@@ -269,17 +269,15 @@ test('public newsletter validator accepts compact story v1 public prose section'
       '',
       'CameraX preview 회귀를 triage할 때 Camera ITS와 preview latency log를 비교합니다.',
       '',
-      '### Camera HAL / Driver 관점에서 확인할 점',
+      '### Camera HAL/Driver 관점에서의 의미',
       '',
       '검증 범위는 app/framework 관찰 항목으로 제한합니다.',
       '',
-      '- CameraX preview path에서 Camera ITS smoke test를 실행합니다.',
-      '- preview latency와 stream metadata 차이를 비교합니다.'
     ].join('\n')
   );
   const errors = validatePublicNewsletterArtifacts({
     markdown: storyMarkdown,
-    html: html('<p>Android Developers가 CameraX 변경점을 공개했습니다.</p><h3>Camera HAL / Driver 관점에서 확인할 점</h3>')
+    html: html('<p>Android Developers가 CameraX 변경점을 공개했습니다.</p><h3>Camera HAL/Driver 관점에서의 의미</h3>')
   });
 
   assert.deepEqual(errors, []);
@@ -451,7 +449,7 @@ test('public newsletter validator allows natural technical prose with concrete t
   assert.deepEqual(errors, []);
 });
 
-test('public newsletter validator fails numbered article without reader checkpoints', () => {
+test('public newsletter validator allows numbered article without public checkpoint bullet list', () => {
   const broken = markdown().replace(
     [
       '### 확인할 점',
@@ -468,7 +466,7 @@ test('public newsletter validator fails numbered article without reader checkpoi
     html: html()
   });
 
-  assert.ok(errors.some(error => /missing reader checkpoints/.test(error)));
+  assert.deepEqual(errors, []);
 });
 
 test('public newsletter validator rejects long English prose in article paragraphs', () => {

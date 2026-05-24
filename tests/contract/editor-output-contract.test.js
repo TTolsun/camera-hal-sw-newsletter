@@ -169,7 +169,6 @@ function reporterForClaimTests(url = 'https://example.com/source-1') {
       relevance_bucket: 'direct_aosp_camera',
       aosp_camera_directness: 5,
       counts_as_primary_camera_topic: true,
-      impact_claim_level: 'camera_stack_direct',
       primary_evidence_ids: ['evidence-1'],
       compact_evidence: {
         primary_facts: ['Fact 1'],
@@ -779,7 +778,6 @@ test('strict editor claim binding maps source and HAL signal impact aliases with
           links: [{ url }]
         }]
       },
-      impact_claim_level: 'direct_hal_change',
       finalSelectionEligibility: 'main',
       hasDatedEvidence: true,
       source_gap_risk: false,
@@ -1391,7 +1389,6 @@ test('story v1 repair fills legacy public article markers and story fields deter
 test('story v1 deterministic metadata overrides aggressive LLM metadata', () => {
   const base = section(1, {
     relevance_bucket: 'cpp_ai_tooling_fallback',
-    impact_claim_level: 'tooling_supporting',
     source_gap_risk: true,
     public_article: storyPublicArticle(section(1), {
       decision_metadata: {
@@ -1421,12 +1418,114 @@ test('story v1 deterministic metadata overrides aggressive LLM metadata', () => 
   assert.deepEqual(metadata, deriveDecisionMetadata(result.sections[0], result));
 });
 
+test('story v1 decision metadata ignores stale direct impact_claim_level', () => {
+  const base = section(1, {
+    category: 'Android Platform / CameraX',
+    headline: 'CameraX app compatibility update',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    impact_claim_level: 'direct_hal_change',
+    hal_impact_axes: [],
+    hal_signal_capsule: {
+      ...section(1).hal_signal_capsule,
+      impact_axes: []
+    }
+  });
+
+  const metadata = deriveDecisionMetadata(base, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(metadata.scope.includes('HAL'), false);
+  assert.equal(metadata.scope.includes('Framework'), true);
+});
+
+test('story v1 decision metadata promotes direct HAL source signals without legacy enum text', () => {
+  const base = section(1, {
+    category: 'AOSP Camera HAL',
+    headline: 'Camera provider request result contract update',
+    relevance_bucket: 'direct_aosp_camera',
+    actionability_level: 'concrete_check',
+    effective_actionability_level: 'concrete_check',
+    guardrail_impact_class: 'direct_hal_contract',
+    do_not_overstate: [],
+    hal_signal_capsule: {
+      ...section(1).hal_signal_capsule,
+      do_not_overstate: []
+    },
+    public_article: storyPublicArticle(section(1), {
+      headline: 'Camera provider request result contract update',
+      lead: 'AOSP Camera source confirmed a provider contract change.',
+      body_paragraphs: [
+        'The source describes the camera provider contract update for HAL owners.',
+        'The article keeps the scope on request/result behavior and source-backed integration review.'
+      ],
+      camera_hal_takeaway: 'HAL owners should treat the source-backed provider contract change as a direct verification target.',
+      reader_checkpoints: [
+        'Review the camera provider request/result contract against the affected branch.',
+        'Compare integration logs for the source-backed provider contract update.'
+      ],
+      editorial_story: {
+        ...storyPublicArticle(section(1)).editorial_story,
+        not_to_overclaim: ''
+      }
+    })
+  });
+
+  const metadata = deriveDecisionMetadata(base, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(metadata.impact, 'High');
+  assert.equal(metadata.overclaim_risk, 'Low');
+  assert.equal(metadata.scope.includes('HAL'), true);
+  assert.equal(metadata.action.includes('Test'), true);
+  assert.equal(metadata.action.includes('Adopt'), true);
+});
+
+test('story v1 decision metadata does not promote guardrail enum without source scope', () => {
+  const base = section(1, {
+    category: 'Android Platform / CameraX',
+    headline: 'CameraX app compatibility update',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    actionability_level: 'concrete_check',
+    effective_actionability_level: 'concrete_check',
+    guardrail_impact_class: 'direct_hal_contract',
+    hal_impact_axes: [],
+    hal_signal_capsule: {
+      ...section(1).hal_signal_capsule,
+      impact_axes: []
+    },
+    public_article: storyPublicArticle(section(1), {
+      headline: 'CameraX app compatibility update',
+      lead: 'CameraX source confirmed an app compatibility update.',
+      body_paragraphs: [
+        'The source describes app-facing CameraX compatibility behavior.',
+        'The article keeps the scope above the HAL boundary.'
+      ],
+      camera_hal_takeaway: 'This is an app/framework compatibility signal, not a direct HAL contract change.',
+      reader_checkpoints: [
+        'Review CameraX app compatibility behavior in a sample app.',
+        'Keep the source scope above the HAL boundary.'
+      ]
+    })
+  });
+
+  const metadata = deriveDecisionMetadata(base, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+
+  assert.equal(metadata.scope.includes('HAL'), false);
+  assert.equal(metadata.action.includes('Adopt'), false);
+});
+
 test('story v1 deterministic metadata separates tooling scope from fallback-only policy', () => {
   const tooling = section(1, {
     category: 'Android Native Tooling',
     headline: 'NDK camera test utility update',
     relevance_bucket: 'android_native_tooling_workflow',
-    impact_claim_level: 'tooling_supporting',
     actionability_level: 'measurable_test',
     effective_actionability_level: 'measurable_test',
     source_gap_risk: false,
@@ -1440,7 +1539,6 @@ test('story v1 deterministic metadata separates tooling scope from fallback-only
     category: 'Tooling Watch / Fallback',
     headline: 'AI tooling fallback note',
     relevance_bucket: 'cpp_ai_tooling_fallback',
-    impact_claim_level: 'tooling_supporting',
     actionability_level: 'measurable_test',
     effective_actionability_level: 'measurable_test',
     source_gap_risk: false,
@@ -1471,7 +1569,6 @@ test('story v1 deterministic metadata scope ignores generic story prose boilerpl
     category: 'SoC Platform Signal',
     headline: 'Snapdragon ISP camera thermal note',
     relevance_bucket: 'soc_platform_signal',
-    impact_claim_level: 'soc_resource_contention',
     hal_impact_axes: ['performance_latency_thermal', 'stream_buffer_metadata'],
     soc_signal_type: 'isp_thermal_camera_workload'
   });
@@ -1525,7 +1622,6 @@ test('story v1 reader_scenario must stay hypothetical', () => {
 
 test('LLM public_article merge preserves deterministic article fields', () => {
   const base = section(1, {
-    impact_claim_level: 'android_framework_adjacent',
     finalSelectionEligibility: 'main',
     source_gap_risk: true,
     main_article_readiness: { status: 'blocked' },
@@ -1533,7 +1629,6 @@ test('LLM public_article merge preserves deterministic article fields', () => {
   });
   const llm = {
     ...base,
-    impact_claim_level: 'direct_hal_change',
     finalSelectionEligibility: 'main',
     source_gap_risk: false,
     main_article_readiness: { status: 'ready' },
@@ -1545,7 +1640,6 @@ test('LLM public_article merge preserves deterministic article fields', () => {
   };
 
   const merged = mergePublicArticleFromLlm(base, llm, {
-    impact_claim_level: base.impact_claim_level,
     finalSelectionEligibility: base.finalSelectionEligibility,
     source_gap_risk: base.source_gap_risk,
     main_article_readiness: base.main_article_readiness,
@@ -1553,7 +1647,6 @@ test('LLM public_article merge preserves deterministic article fields', () => {
   });
 
   assert.equal(merged.public_article.headline, 'Rewritten public headline');
-  assert.equal(merged.impact_claim_level, 'android_framework_adjacent');
   assert.equal(merged.source_gap_risk, true);
   assert.deepEqual(merged.main_article_readiness, { status: 'blocked' });
   assert.deepEqual(merged.do_not_claim, ['Do not claim HAL driver changes.']);
@@ -2206,7 +2299,6 @@ test('editor field hygiene rejects direct HAL contract overclaim for adjacent im
     sections: [
       section(1, {
         relevance_bucket: 'android_platform_camera_adjacent',
-        impact_claim_level: 'android_framework_adjacent',
         camera_hal_perspective: 'This is a direct HAL API contract change for stream buffers.'
       }),
       section(2),
@@ -2234,7 +2326,6 @@ test('editor field hygiene does not let standalone not or no hide HAL overclaims
       sections: [
         section(1, {
           relevance_bucket: 'android_platform_camera_adjacent',
-          impact_claim_level: 'android_framework_adjacent',
           camera_hal_perspective
         }),
         section(2),
@@ -2259,7 +2350,6 @@ test('editor field hygiene rejects Korean HAL overclaim for non-direct impact le
     sections: [
       section(1, {
         relevance_bucket: 'android_platform_camera_adjacent',
-        impact_claim_level: 'android_framework_adjacent',
         camera_hal_perspective: '이 항목은 HAL request/result에 직접 영향이 있습니다.'
       }),
       section(2),
@@ -2278,11 +2368,35 @@ test('editor field hygiene rejects Korean HAL overclaim for non-direct impact le
   );
 });
 
-test('editor field hygiene allows direct HAL claims for direct_hal_change and guardrail wording', () => {
+test('editor field hygiene ignores stale direct impact_claim_level on adjacent sections', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        relevance_bucket: 'android_platform_camera_adjacent',
+        impact_claim_level: 'direct_hal_change',
+        camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
+      }),
+      section(2),
+      section(3)
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.field_hygiene');
+      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
+      return true;
+    }
+  );
+});
+
+test('editor field hygiene allows direct HAL claims for direct source scope and guardrail wording', () => {
   const directDraft = editor({
     sections: [
       section(1, {
-        impact_claim_level: 'direct_hal_change',
+        aosp_camera_directness: 5,
         camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
       }),
       section(2),
@@ -2293,7 +2407,6 @@ test('editor field hygiene allows direct HAL claims for direct_hal_change and gu
     sections: [
       section(1, {
         relevance_bucket: 'android_platform_camera_adjacent',
-        impact_claim_level: 'android_framework_adjacent',
         camera_hal_perspective: '직접 HAL API 변경으로 단정하지 않습니다. source evidence가 없으면 HAL contract impact를 claim하지 않습니다.'
       }),
       section(2),
