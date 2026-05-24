@@ -1089,14 +1089,14 @@ function checkpointConcreteIssues(section = {}, checkpoints = [], index = 0, hea
   const normalized = checkpoints.map(normalizedCheckpointText).filter(Boolean);
   const unique = new Set(normalized);
   if (unique.size < normalized.length) {
-    issues.push({ index: index + 1, headline, type: 'duplicate_public_checkpoint' });
+    issues.push({ index: index + 1, headline, type: 'duplicate_internal_reader_checkpoint' });
   }
   const prefixes = new Set();
   for (const item of normalized) {
     const prefix = item.split(/\s+/).slice(0, 6).join(' ');
     if (!prefix) continue;
     if (prefixes.has(prefix)) {
-      issues.push({ index: index + 1, headline, type: 'duplicate_public_checkpoint_prefix', prefix });
+      issues.push({ index: index + 1, headline, type: 'duplicate_internal_reader_checkpoint_prefix', prefix });
       break;
     }
     prefixes.add(prefix);
@@ -1106,7 +1106,7 @@ function checkpointConcreteIssues(section = {}, checkpoints = [], index = 0, hea
     issues.push({
       index: index + 1,
       headline,
-      type: 'insufficient_concrete_public_checkpoints',
+      type: 'insufficient_concrete_internal_reader_checkpoints',
       actualCount: concrete.length,
       expectedMinCount: 2
     });

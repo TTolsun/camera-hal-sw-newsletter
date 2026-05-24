@@ -125,7 +125,10 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /validation report, checklist, enum, schema\/debug field name/);
   assert.match(prompt, /claim\/schema contract와 public prose contract를 섞지 마세요/);
   assert.match(prompt, /primary 또는 seed evidence URL/);
-  assert.match(prompt, /최소 2개/);
+  assert.match(prompt, /reader_checkpoints는 최소 2개/);
+  assert.match(prompt, /내부 QA\/checklist용 필드/);
+  assert.match(prompt, /Markdown\/HTML에 직접 렌더링되지 않으므로/);
+  assert.match(prompt, /public body나 "Camera HAL\/Driver 관점에서의 의미" 섹션을 대체하지 마세요/);
   assert.match(prompt, /독자가 실제로 확인할 행동/);
   assert.match(prompt, /source 범위 제한/);
   assert.match(prompt, /API\/component\/date/);
@@ -203,6 +206,8 @@ test('public article prompt does not force internal triage fallback prose', () =
   assert.match(source, /validation report, checklist, enum, schema\/debug field name을 노출하지 마세요/);
   assert.match(source, /claim\/schema contract와 public prose contract를 섞지 마세요/);
   assert.match(source, /reader_checkpoints는 최소 2개/);
-  assert.match(source, /body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 public prose를 대체하지 마세요/);
+  assert.match(source, /reader_checkpoints는 최소 2개이며 내부 QA\/checklist용 필드입니다/);
+  assert.match(source, /Markdown\/HTML에 직접 렌더링되지 않으므로/);
+  assert.match(source, /body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요/);
   assert.match(source, /validator token을 조합한 문장을 쓰지 마세요/);
 });

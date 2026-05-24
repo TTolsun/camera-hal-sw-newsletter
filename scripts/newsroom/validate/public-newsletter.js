@@ -178,7 +178,7 @@ function repeatedCheckpointErrors(articleCheckpoints) {
 
   const first = comparable[0].items.join('\n');
   if (comparable.every(item => item.items.join('\n') === first)) {
-    errors.push('Public reader_checkpoints are identical across all articles.');
+    errors.push('Public checkpoint bullet lists are identical across all articles.');
     return errors;
   }
 
@@ -189,7 +189,7 @@ function repeatedCheckpointErrors(articleCheckpoints) {
       const overlap = rightItems.filter(item => leftSet.has(item)).length;
       const denominator = Math.min(comparable[left].items.length, rightItems.length);
       if (denominator > 0 && overlap / denominator >= 0.7) {
-        errors.push(`Public reader_checkpoints overlap 70% or more between article ${comparable[left].index + 1} and article ${comparable[right].index + 1}.`);
+        errors.push(`Public checkpoint bullet lists overlap 70% or more between article ${comparable[left].index + 1} and article ${comparable[right].index + 1}.`);
       }
     }
   }

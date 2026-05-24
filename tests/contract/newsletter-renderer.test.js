@@ -134,7 +134,8 @@ test('newsletter renderer uses public_article for public markdown and HTML', () 
   assert.doesNotMatch(markdown, /Run Camera ITS preview latency checks/);
   assert.match(markdown, /\[Source article\]\(https:\/\/example\.com\/source\)/);
   assert.match(html, /CameraX release gives HAL teams a target/);
-  assert.match(html, /reader-checkpoints/);
+  assert.match(html, /camera-hal-takeaway/);
+  assert.doesNotMatch(html, /reader-checkpoints/);
 
   for (const leaked of [
     /HAL Signal Capsule/,
@@ -229,7 +230,8 @@ test('newsletter renderer sanitizes legacy sections through compatibility projec
   assert.match(markdown, /Camera HAL\/Driver 관점에서의 의미/);
   assert.doesNotMatch(markdown, /Camera API를 호출한다면, Camera 권한과 preview\/capture 호출 흐름만 확인합니다/);
   assert.match(html, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
-  assert.match(html, /reader-checkpoints/);
+  assert.match(html, /camera-hal-takeaway/);
+  assert.doesNotMatch(html, /reader-checkpoints/);
   assert.doesNotMatch(markdown, /HAL Signal Capsule/);
   assert.doesNotMatch(html, /hal-signal-capsule/);
   assert.doesNotMatch(markdown, /Review-only/);

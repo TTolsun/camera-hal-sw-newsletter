@@ -449,7 +449,7 @@ test('public newsletter validator allows natural technical prose with concrete t
   assert.deepEqual(errors, []);
 });
 
-test('public newsletter validator allows numbered article without public reader checkpoints', () => {
+test('public newsletter validator allows numbered article without public checkpoint bullet list', () => {
   const broken = markdown().replace(
     [
       '### 확인할 점',

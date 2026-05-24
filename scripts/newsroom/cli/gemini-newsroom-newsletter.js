@@ -241,7 +241,7 @@ function publicArticleContractPrompt() {
     'claim/schema contract와 public prose contract를 섞지 마세요. enum, diagnostic term, internal field name은 public_article 문장에 쓰지 마세요.',
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
     'camera_hal_takeaway는 별도 섹션에 들어갈 "Camera HAL/Driver 관점에서의 의미"입니다. 직접 HAL/Driver 변경이면 실제 확인 포인트를 쓰고, 직접 변경이 아니면 직접 영향은 없지만 앱/API/tooling/debug/repro 맥락에서 어떤 참고 의미가 있는지만 제한적으로 쓰세요.',
-    'reader_checkpoints는 최소 2개이며, 내부 검증용으로 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하세요. body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 public prose를 대체하지 마세요.',
+    'reader_checkpoints는 최소 2개이며 내부 QA/checklist용 필드입니다. Markdown/HTML에 직접 렌더링되지 않으므로, public body나 "Camera HAL/Driver 관점에서의 의미" 섹션을 대체하지 마세요. 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하되 body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요.',
     'API/component/date, stream/metadata, compatibility test scenario처럼 validator token을 조합한 문장을 쓰지 마세요.',
     'source가 HAL/driver 변경을 직접 말하지 않으면 vendor pipeline, stream, metadata, buffer 변경으로 확대하지 마세요.'
   ].join('\n');

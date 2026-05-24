@@ -392,7 +392,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
           ${publicArticle.source_subtitle ? `<p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>` : ''}
           <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
           ${bodyParagraphs.map(paragraphHtml).join('\n          ')}
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
         </div>
       </section>`;
@@ -405,7 +405,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
           <h3>${escapeHtml(publicArticle.headline)}</h3>
           <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
           ${bodyParagraphs.map(paragraphHtml).join('\n          ')}
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
         </div>
       </section>`;
