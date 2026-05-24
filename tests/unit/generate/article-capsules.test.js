@@ -173,6 +173,102 @@ test('article capsule preserves camelCase canonical sourceQuality without drifti
   assert.deepEqual(capsule.source_quality_field_drift, []);
 });
 
+test('article capsule keeps blocked source quality blockers in compact writer input', () => {
+  const capsule = buildArticleCapsule(candidate({
+    source_quality: {
+      source_role: 'tech_media_lead_source',
+      source_url_quality: 'tech_media_lead_requires_cross_check',
+      source_quality_status: 'blocked',
+      main_article_source_allowed: false,
+      main_article_source_allowed_reason: 'Source requires primary confirmation before main promotion.',
+      main_article_source_blockers: ['cross_check_required_but_missing'],
+      cross_check_status: 'required_missing',
+      requires_cross_check: true,
+      requires_conditional_evidence: true,
+      conditional_evidence_type: 'primary_confirmation',
+      evidence_granularity: 'article_with_primary_confirmation',
+      source_quality_notes: ['Must be confirmed by a primary source.']
+    }
+  }));
+
+  assert.equal(capsule.source_quality.source_role, 'tech_media_lead_source');
+  assert.equal(capsule.source_quality.source_url_quality, 'tech_media_lead_requires_cross_check');
+  assert.equal(capsule.source_quality.source_quality_status, 'blocked');
+  assert.equal(capsule.source_quality.main_article_source_allowed, false);
+  assert.deepEqual(capsule.source_quality.main_article_source_blockers, ['cross_check_required_but_missing']);
+  assert.equal(capsule.source_quality.requires_cross_check, true);
+  assert.equal(capsule.source_quality.requires_conditional_evidence, true);
+  assert.equal(capsule.source_quality.conditional_evidence_type, 'primary_confirmation');
+  assert.equal(capsule.cross_check_status, 'required_missing');
+  assert.equal(capsule.evidence_granularity, 'article_with_primary_confirmation');
+  assert.equal(capsule.main_article_readiness.source_ready, false);
+  assert.equal(capsule.main_article_readiness.ready, false);
+  assert.ok(capsule.main_article_readiness.blockers.includes('main_article_source_allowed_false'));
+  assert.ok(capsule.main_article_readiness.blockers.includes('cross_check_required_but_missing'));
+  assert.ok(capsule.do_not_claim.some(item => /primary confirmation/.test(item)));
+});
+
+test('article capsule preserves conditional evidence requirements for allowed conditional sources', () => {
+  const capsule = buildArticleCapsule(candidate({
+    source_quality: {
+      source_role: 'project_release_source',
+      source_url_quality: 'project_release',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      main_article_source_allowed_reason: 'Project release evidence is allowed with native HAL workflow evidence.',
+      main_article_source_blockers: [],
+      cross_check_status: 'not_required',
+      requires_cross_check: false,
+      requires_conditional_evidence: true,
+      conditional_evidence_type: 'project_release_evidence',
+      evidence_granularity: 'project_release_note',
+      source_quality_notes: ['Allowed only with project release evidence.']
+    }
+  }));
+
+  assert.equal(capsule.source_quality.source_url_quality, 'project_release');
+  assert.equal(capsule.source_quality.source_quality_status, 'allowed');
+  assert.equal(capsule.source_quality.main_article_source_allowed, true);
+  assert.equal(capsule.source_quality.requires_conditional_evidence, true);
+  assert.equal(capsule.source_quality.conditional_evidence_type, 'project_release_evidence');
+  assert.equal(capsule.requires_conditional_evidence, true);
+  assert.equal(capsule.conditional_evidence_type, 'project_release_evidence');
+  assert.equal(capsule.main_article_readiness.source_ready, true);
+  assert.equal(capsule.main_article_readiness.blockers.includes('main_article_source_allowed_false'), false);
+  assert.equal(capsule.main_article_readiness.blockers.includes('unknown_source_quality'), false);
+});
+
+test('article capsule keeps cross-check-required sources distinct from official sources', () => {
+  const capsule = buildArticleCapsule(candidate({
+    source_quality: {
+      source_role: 'tech_media_lead_source',
+      source_url_quality: 'tech_media_lead_requires_cross_check',
+      source_quality_status: 'allowed',
+      main_article_source_allowed: true,
+      main_article_source_allowed_reason: 'Primary confirmation satisfied.',
+      main_article_source_blockers: [],
+      cross_check_status: 'required_satisfied',
+      requires_cross_check: true,
+      requires_conditional_evidence: true,
+      conditional_evidence_type: 'primary_confirmation',
+      evidence_granularity: 'article_with_primary_confirmation',
+      source_quality_notes: []
+    },
+    primary_confirmation: true
+  }));
+
+  assert.equal(capsule.source_quality.source_role, 'tech_media_lead_source');
+  assert.equal(capsule.source_quality.source_url_quality, 'tech_media_lead_requires_cross_check');
+  assert.equal(capsule.source_quality.requires_cross_check, true);
+  assert.equal(capsule.source_quality.requires_conditional_evidence, true);
+  assert.equal(capsule.cross_check_status, 'required_satisfied');
+  assert.equal(capsule.evidence_granularity, 'article_with_primary_confirmation');
+  assert.notEqual(capsule.source_quality.source_role, 'official_release_source');
+  assert.notEqual(capsule.source_quality.source_url_quality, 'official_release_note_anchor');
+  assert.equal(capsule.source_fact_bundle.source_url, 'https://example.com/camera-hal-metadata?utm=1');
+  assert.equal(capsule.main_article_readiness.source_ready, true);
+});
+
 test('article capsule carries compact seed evidence by id instead of full evidence pack', () => {
   const capsule = buildArticleCapsule(candidate({
     seed_ids: ['seed-camerax'],
