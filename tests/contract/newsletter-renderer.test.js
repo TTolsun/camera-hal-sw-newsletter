@@ -6,6 +6,9 @@ const {
   buildHtml,
   buildMarkdown
 } = require('../../scripts/newsroom/render/newsletter-renderer');
+const {
+  siteHeaderHtml
+} = require('../../assets/js/site-header');
 
 function issue(overrides = {}) {
   return {
@@ -108,10 +111,14 @@ function textFromHtml(html) {
 
 function siteNavLabels(html) {
   const siteNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*\bsite-nav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
-  assert.ok(siteNavMatch, 'generated issue HTML must include .site-nav');
-  return [...siteNavMatch[0].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
+  const siteHeader = siteNavMatch
+    ? siteNavMatch[0]
+    : siteHeaderHtml({ rootPath: '../../' });
+  assert.match(html, /<header class="site-header" data-site-header data-site-root="\.\.\/\.\.\/"><\/header>/);
+  assert.match(html, /<script src="\.\.\/\.\.\/assets\/js\/site-header\.js" defer><\/script>/);
+  return [...siteHeader.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
     .map(match => textFromHtml(match[1]))
-    .filter(label => label && label !== 'Camera HAL SW Newsletter');
+    .filter(label => label && label !== 'Camera HAL SW Newsletter' && label !== 'Camera HAL / SW Newsletter');
 }
 
 test('newsletter renderer uses public_article for public markdown and HTML', () => {
@@ -150,6 +157,22 @@ test('newsletter renderer keeps generated issue nav labels in English', () => {
   assert.equal(labels.includes('\ucd5c\uc2e0\ud638'), false);
   assert.equal(labels.includes('\uc544\uce74\uc774\ube0c'), false);
   assert.equal(labels.includes('\ucd9c\ucc98'), false);
+});
+
+test('shared site header renders consistent root-relative links', () => {
+  const homeHeader = siteHeaderHtml();
+  const issueHeader = siteHeaderHtml({ rootPath: '../../' });
+
+  assert.match(homeHeader, /href="index\.html#latest"/);
+  assert.match(homeHeader, /href="docs\/news-sources\.md"/);
+  assert.match(issueHeader, /href="\.\.\/\.\.\/index\.html#latest"/);
+  assert.match(issueHeader, /href="\.\.\/\.\.\/docs\/news-sources\.md"/);
+  assert.deepEqual(siteNavLabels(`<header class="site-header" data-site-header data-site-root="../../"></header><script src="../../assets/js/site-header.js" defer></script>`).slice(0, 4), [
+    'Latest',
+    'Archive',
+    'Sources',
+    'GitHub'
+  ]);
 });
 
 test('newsletter renderer renders a single main article without empty sections', () => {

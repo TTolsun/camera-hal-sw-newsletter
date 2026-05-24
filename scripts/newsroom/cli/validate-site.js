@@ -266,16 +266,43 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
   }
 }
 
+function siteHeaderExpectedLabels() {
+  return ['Latest', 'Archive', 'Sources', 'GitHub'];
+}
+
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function hasSiteHeaderComponent(content) {
+  return /<header\b[^>]*\bdata-site-header\b/i.test(content);
+}
+
+function expectedSiteHeaderScript(relPath) {
+  return relPath === 'index.html'
+    ? 'assets/js/site-header.js'
+    : '../../assets/js/site-header.js';
+}
+
+function hasSiteHeaderScript(content, relPath) {
+  const expected = expectedSiteHeaderScript(relPath);
+  const pattern = new RegExp(`<script\\b[^>]*\\bsrc=["']${escapeRegex(expected)}["'][^>]*>\\s*</script>`, 'i');
+  return pattern.test(content);
+}
+
 function validateSiteNavLabels(content, relPath) {
   const siteNavMatch = content.match(/<nav\b[^>]*class=["'][^"']*\bsite-nav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
-  if (!siteNavMatch) return;
+  if (!siteNavMatch) {
+    if (hasSiteHeaderComponent(content) && !hasSiteHeaderScript(content, relPath)) {
+      fail(`Shared site header in ${relPath} must load ${expectedSiteHeaderScript(relPath)}.`);
+    }
+    return;
+  }
 
   const labels = [...siteNavMatch[0].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
     .map(match => textFromHtml(match[1]))
-    .filter(label => label && label !== 'Camera HAL SW Newsletter');
-  const expected = relPath === 'index.html'
-    ? ['Latest', 'Archive', 'GitHub']
-    : ['Latest', 'Archive', 'Sources', 'GitHub'];
+    .filter(label => label && label !== 'Camera HAL SW Newsletter' && label !== 'Camera HAL / SW Newsletter');
+  const expected = siteHeaderExpectedLabels();
   const actual = labels.slice(0, expected.length);
   const matchesExpected = actual.length === expected.length &&
     expected.every((label, index) => actual[index] === label);
