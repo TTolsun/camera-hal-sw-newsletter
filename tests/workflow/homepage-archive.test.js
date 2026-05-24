@@ -102,6 +102,18 @@ function newsletter(date, title = `Issue ${date}`) {
   };
 }
 
+function fallbackNewsletter(date, title = `Issue ${date}`) {
+  return {
+    ...newsletter(date, title),
+    tags: ['Tooling Watch Edition', 'Tooling Watch'],
+    publication_mode: 'fallback_public',
+    homepage_visibility: 'visible_with_fallback_badge',
+    fallback_only: true,
+    camera_anchor_count: 0,
+    homepage_badge: 'Tooling Watch Edition'
+  };
+}
+
 function archiveCards(html) {
   return [...String(html).matchAll(/<article class="archive-card">([\s\S]*?)<\/article>/g)]
     .map(match => match[1]);
@@ -339,6 +351,20 @@ test('homepage shows review publication issues when data entry paths are present
   assert.match(elements['latest-card'].innerHTML, /Review publication issue/);
   assert.match(elements['latest-card'].innerHTML, /newsletters\/2026-05-14\/index\.html/);
   assert.match(elements['archive-list'].innerHTML, /2026-05-13/);
+});
+
+test('latest card shows only Latest beside the date while archive keeps fallback badges', async () => {
+  const { elements } = await renderHomepage([
+    fallbackNewsletter('2026-05-20', 'Archived fallback issue'),
+    fallbackNewsletter('2026-05-24', 'Current fallback issue')
+  ]);
+  const [archiveCard] = archiveCards(elements['archive-list'].innerHTML);
+  const latestMeta = elements['latest-card'].innerHTML.match(/<div class="card-meta">([\s\S]*?)<\/div>/)?.[1] || '';
+
+  assert.match(latestMeta, /<span class="issue-date">2026-05-24<\/span>\s*<span class="status-chip">Latest<\/span>/);
+  assert.doesNotMatch(latestMeta, /Tooling Watch Edition/);
+  assert.match(elements['latest-card'].innerHTML, /Current fallback issue/);
+  assert.match(archiveCard, /<span class="status-chip">Tooling Watch Edition<\/span>/);
 });
 
 test('homepage and archive accept single-article public issues as normal entries', async () => {
