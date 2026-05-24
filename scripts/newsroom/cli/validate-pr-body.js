@@ -906,7 +906,7 @@ function validateNewsletterTemplateBodyText(text, options = {}) {
     { label: 'fact-check must_fix', pattern: /fact-check must_fix|must_fix/i },
     { label: 'watch/reference page dated evidence', pattern: /watch\/reference page|dated evidence/i }
   ], '뉴스레터 발행 PR', errors);
-  validateValidationCommands(body, '뉴스레터 발행 PR', errors);
+  validateValidationCommands(extractSubsection(body, 'Validation'), '뉴스레터 발행 PR', errors);
   return {
     ok: errors.length === 0,
     errors,
@@ -947,7 +947,7 @@ function validateCodeDocsTemplateBodyText(text, options = {}) {
     { label: 'README / AGENTS / docs 충돌 확인', pattern: /README \/ AGENTS \/ docs/ },
     { label: 'archive 문서 주의', pattern: /archive 문서/ }
   ], '코드/문서/리팩토링 PR', errors);
-  validateValidationCommands(body, '코드/문서/리팩토링 PR', errors);
+  validateValidationCommands(extractSubsection(body, 'Validation'), '코드/문서/리팩토링 PR', errors);
   return {
     ok: errors.length === 0,
     errors,
@@ -1173,6 +1173,11 @@ function validatePrBodyFile(filePath, options = {}) {
     requireHomepageHeadlineDesignReview: true,
     ...options
   });
+  if (options.requirePublishStatusConsistency === true && result.bodyKind !== 'generated-newsletter') {
+    result.errors.push('--require-publish-status-consistency는 자동 생성 뉴스레터 PR body(generated-newsletter)에서만 사용할 수 있습니다.');
+    result.ok = false;
+    return result;
+  }
   const shouldValidatePublishStatus = result.bodyKind === 'generated-newsletter' &&
     (options.date || options.requirePublishStatusConsistency === true);
   if (shouldValidatePublishStatus) {

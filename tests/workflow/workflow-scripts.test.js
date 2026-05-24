@@ -2437,21 +2437,37 @@ test('validate-pr-body rejects template bodies with missing validation commands'
 
   assert.equal(result.ok, false);
   assert.match(result.errors.join('\n'), /npm run validate/);
+
+  const commandOutsideValidation = codeDocsTemplateBody()
+    .replace('### Scope', '### Scope\n\n- [ ] `npm.cmd run validate`를 Scope 섹션에 적었다.')
+    .replace(/- \[ \] `npm run validate`\n/, '');
+  const sectionScoped = validatePrBodyText(commandOutsideValidation, { type: 'code-docs' });
+  assert.equal(sectionScoped.ok, false);
+  assert.match(sectionScoped.errors.join('\n'), /Validation 섹션/);
 });
 
-test('validate-pr-body applies publish status consistency only to generated newsletter bodies', () => {
+test('validate-pr-body requires publish status consistency flag to use generated newsletter bodies', () => {
   const root = tempRoot();
   const date = '2026-05-08';
   const templatePath = path.join(root, '.tmp', 'newsletter-template-pr-body.md');
   writeText(templatePath, newsletterTemplateBody());
-  const templateResult = validatePrBodyFile(templatePath, {
+  const templateWithoutFlag = validatePrBodyFile(templatePath, {
+    root,
+    date,
+    type: 'newsletter'
+  });
+  assert.equal(templateWithoutFlag.ok, true, JSON.stringify(templateWithoutFlag, null, 2));
+  assert.equal(templateWithoutFlag.bodyKind, 'newsletter-template');
+
+  const templateWithFlag = validatePrBodyFile(templatePath, {
     root,
     date,
     type: 'newsletter',
     requirePublishStatusConsistency: true
   });
-  assert.equal(templateResult.ok, true, JSON.stringify(templateResult, null, 2));
-  assert.equal(templateResult.bodyKind, 'newsletter-template');
+  assert.equal(templateWithFlag.ok, false);
+  assert.equal(templateWithFlag.bodyKind, 'newsletter-template');
+  assert.match(templateWithFlag.errors.join('\n'), /generated-newsletter/);
 
   writeMinimalPublishArtifacts(root, date, {
     finalPublishReady: true,
