@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "date": "2026-05-24",
-  "generated_at": "2026-05-23T17:45:39.557Z",
+  "generated_at": "2026-05-24T06:41:53.835Z",
   "input_candidate_count": 42,
   "eligible_candidate_count": 3,
   "deterministic_selected_count": 2,
@@ -879,10 +879,6 @@
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
-      "included_as_headline_latest": true,
-      "headline_latest_inclusion_mode": "selected_normally",
-      "injected_from_headline_snapshot": false,
-      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -1317,6 +1313,10 @@
           "article_group_key": "android_native_tooling_workflow"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -1931,10 +1931,6 @@
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
-      "included_as_headline_latest": true,
-      "headline_latest_inclusion_mode": "selected_normally",
-      "injected_from_headline_snapshot": false,
-      "snapshot_revalidated": true,
       "primary_selected": true,
       "reserve_candidate": false,
       "selection_stage": "deterministic-primary",
@@ -2369,6 +2365,10 @@
           "article_group_key": "android_native_tooling_workflow"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "primary_selected": true,
       "reserve_candidate": false,
       "selection_stage": "deterministic-primary",
@@ -3688,10 +3688,6 @@
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
-      "included_as_headline_latest": true,
-      "headline_latest_inclusion_mode": "selected_normally",
-      "injected_from_headline_snapshot": false,
-      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -4126,6 +4122,10 @@
           "article_group_key": "android_native_tooling_workflow"
         }
       ],
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "final_selected": true,
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
@@ -28868,9 +28868,9 @@
   "headline_decision": {
     "decision": "retained_current_above_margin",
     "reason": "retained_current_above_margin",
-    "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "current_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
     "replacement_headline_key": null,
-    "previous_stored_current_score": 100,
+    "previous_stored_current_score": 98,
     "runtime_decayed_score": 98,
     "last_scored_at": "2026-05-22",
     "scored_at": "2026-05-24",
@@ -28883,10 +28883,7 @@
     "revalidation_failure_reason": "",
     "selected_normally": true,
     "latest_inclusion_required": true,
-    "removed_due_to_headline_inclusion_count": 0,
-    "public_rendered_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-    "public_render_reconciled": true,
-    "public_render_reconciliation_reason": "selected_headline_not_rendered_in_public_issue"
+    "removed_due_to_headline_inclusion_count": 0
   },
   "headline_latest_inclusion": {
     "included": true,
@@ -28901,7 +28898,7 @@
     "updated_at": "2026-05-24T00:00:00+09:00",
     "current_headline": {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "title": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+      "title": "Google AI Studio, 프롬프트 기반 Camera API 연동 native Android 앱 생성 지원",
       "summary": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
       "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "newsletter_date": "2026-05-24",
@@ -28938,7 +28935,7 @@
         "category": "cpp_ai_tooling_fallback",
         "source_name": "Android Developers Blog"
       },
-      "newsletter_article_url": "newsletters/2026-05-24/index.html#article-google-ai-studio-native-android-camera-api",
+      "newsletter_article_url": "newsletters/2026-05-24/index.html#article-google-ai-studio-camera-api-native-android",
       "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
       "image_alt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인"
     },
@@ -29012,12 +29009,7 @@
   "final_input_candidate_count": 42,
   "final_eligible_candidate_count": 3,
   "final_selected_article_count": 2,
-  "headline_public_render_reconciliation": {
-    "applied": true,
-    "previous_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
-    "rendered_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-    "reason": "selected_headline_not_rendered_in_public_issue"
-  },
+  "headline_public_render_reconciliation": null,
   "article_exposure_coverage": {
     "mode": "forward_only",
     "coverage_starts_at": "2026-05-23",

@@ -3,573 +3,13 @@
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-05-24",
-  "summary": "이번 2026-05-24호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: CameraX 1.6.1 업데이트: preview/capture 호환성 확인, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+  "summary": "Tooling Watch Edition: C++ / Tooling Watch - 이번 2026-05-24호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Google AI Studio, 프롬프트 기반 Camera API 연동 native Android 앱 생성 지원.",
   "briefing": [
-    "CameraX release note는 app/framework 계층의 preview/capture 호환성 검증 신호로 다룹니다.",
     "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
+    "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.",
     "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다."
   ],
   "sections": [
-    {
-      "category": "AOSP Camera / Android Camera",
-      "headline": "CameraX Release Notes - CameraX 1.6.1",
-      "confirmed_facts": [
-        "Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.",
-        "버전/릴리스: CameraX 1.6.1.",
-        "관련 컴포넌트: CameraX / androidx.camera.",
-        "확인된 변경점: Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )"
-      ],
-      "evidence_summary": "Android Developers Latest Updates source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.",
-      "specificity_checks": [
-        "finalSelectionEligibility=short",
-        "relevance_bucket=direct_aosp_camera",
-        "impact_claim_level=direct_hal_change",
-        "source_gap_risk=false"
-      ],
-      "source_verification_notes": [
-        "확인한 사실에는 source URL, date, component, version, 정제된 behavior metadata만 사용했습니다.",
-        "Fallback reconstruction 전에 main-candidate eligibility check를 통과한 항목입니다.",
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "what_changed": "Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )",
-      "background": "Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
-      "camera_hal_perspective": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
-      "camera_hal_checks": [
-        "Source evidence가 Camera HAL, Camera2, CameraX, driver, image pipeline, stream, buffer, metadata behavior를 실제로 말하는지 확인합니다.",
-        "Source evidence가 뒷받침할 때만 CTS/VTS, Camera ITS, request/result, stream, buffer, metadata follow-up으로 승격합니다."
-      ],
-      "action_items": [
-        "발행 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
-        "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
-      ],
-      "action_hints": [],
-      "team_summary": "CameraX Release Notes - CameraX 1.6.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다.",
-      "why_it_matters": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
-      "is_ai_related": false,
-      "article_type": "camera-hal",
-      "impact_claim_level": "direct_hal_change",
-      "overclaim_guardrails": [
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "field_builder_warnings": [],
-      "removed_source_fragments": [],
-      "source_extraction": {
-        "adapter_id": "android-developers-jetpack-release",
-        "source_type": "release_note",
-        "evidence_granularity": "versioned_release_row",
-        "mode": "versioned_release_row",
-        "heading": "Version 1.6.1",
-        "bullets": [
-          "Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )"
-        ],
-        "links": [
-          {
-            "role": "parent_source",
-            "text": "CameraX Release Notes",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "CameraX 1.6.1",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
-          },
-          {
-            "role": "related",
-            "text": "these commits",
-            "url": "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera"
-          },
-          {
-            "role": "issue_or_bug",
-            "text": "Ic8cba",
-            "url": "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e"
-          },
-          {
-            "role": "issue_or_bug",
-            "text": "b/497571473",
-            "url": "https://issuetracker.google.com/issues/497571473"
-          },
-          {
-            "role": "parent_source",
-            "text": "Android Developers Latest Updates",
-            "url": "https://developer.android.com/latest-updates"
-          }
-        ],
-        "source": {
-          "name": "CameraX Release Notes",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
-        },
-        "release": {
-          "version": "CameraX 1.6.1",
-          "date": "May 06, 2026",
-          "component": "CameraX / androidx.camera",
-          "sections": [
-            {
-              "category": "bug_fixes",
-              "heading": "Bug Fixes",
-              "items": [
-                {
-                  "text": "Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )",
-                  "source_text": "Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )",
-                  "links": [
-                    {
-                      "text": "Ic8cba",
-                      "url": "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e"
-                    },
-                    {
-                      "text": "b/497571473",
-                      "url": "https://issuetracker.google.com/issues/497571473"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/497571473"
-                  ],
-                  "artifact_names": []
-                }
-              ]
-            }
-          ]
-        },
-        "extraction_quality": {
-          "has_concrete_behavior_change": true,
-          "used_fallback": false,
-          "raw_table_used_as_body": false,
-          "main_article_allowed": true,
-          "used_versioned_release_row_extractor": true,
-          "used_empty_evidence_fallback": false,
-          "warnings": []
-        },
-        "minor_line_context": {
-          "version": "CameraX 1.6.0",
-          "date": "March 25, 2026",
-          "component": "CameraX / androidx.camera",
-          "sections": [
-            {
-              "category": "release_notes",
-              "heading": "1. Migrated to a High-Performance, Unified Camera Stack",
-              "items": [
-                {
-                  "text": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-                  "source_text": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-                  "links": [],
-                  "issue_ids": [],
-                  "artifact_names": []
-                }
-              ]
-            },
-            {
-              "category": "bug_fixes",
-              "heading": "Bug Fixes",
-              "items": [
-                {
-                  "text": "Fixed a crash that happens in all CameraX apps that run on the upcoming Android 17 devices due to a unknown dynamic range mode being added which CameraX didn't handle it appropriately. The same fix is also cherry picked in 1.5.2. Please DO update your CameraX version to either 1.5.2 or 1.6.0 to avoid the crash when Android 17 is published . ( Ibd7b5 )",
-                  "source_text": "Fixed a crash that happens in all CameraX apps that run on the upcoming Android 17 devices due to a unknown dynamic range mode being added which CameraX didn't handle it appropriately. The same fix is also cherry picked in 1.5.2. Please DO update your CameraX version to either 1.5.2 or 1.6.0 to avoid the crash when Android 17 is published . ( Ibd7b5 )",
-                  "links": [
-                    {
-                      "text": "Ibd7b5",
-                      "url": "https://android-review.googlesource.com/#/q/Ibd7b5f532f7af0f43415aaef09cc9ce5f26763f6"
-                    }
-                  ],
-                  "issue_ids": [],
-                  "artifact_names": []
-                },
-                {
-                  "text": "The feature group API now provides consistent results when PREVIEW_STABILIZATION is used with VideoCapture . This corrects a bug that caused inconsistent results when a Preview use case was not also active. ( Ifed82 , b/449913903 )",
-                  "source_text": "The feature group API now provides consistent results when PREVIEW_STABILIZATION is used with VideoCapture . This corrects a bug that caused inconsistent results when a Preview use case was not also active. ( Ifed82 , b/449913903 )",
-                  "links": [
-                    {
-                      "text": "Ifed82",
-                      "url": "https://android-review.googlesource.com/#/q/Ifed82d0d9ce2cfdb407523535d9e4c8c4a51f46d"
-                    },
-                    {
-                      "text": "b/449913903",
-                      "url": "https://issuetracker.google.com/issues/449913903"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/449913903"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixed an issue where unsupported preferred features were incorrectly made available. Features are now correctly filtered when their required use cases are not met. ( I38db8 , b/449532342 )",
-                  "source_text": "Fixed an issue where unsupported preferred features were incorrectly made available. Features are now correctly filtered when their required use cases are not met. ( I38db8 , b/449532342 )",
-                  "links": [
-                    {
-                      "text": "I38db8",
-                      "url": "https://android-review.googlesource.com/#/q/I38db88ca0ae9c2cd87b49ceffddd7980b3178576"
-                    },
-                    {
-                      "text": "b/449532342",
-                      "url": "https://issuetracker.google.com/issues/449532342"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/449532342"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixed glitchy video result on Samsung Galaxy S6. ( I612d9 , b/235127608 )",
-                  "source_text": "Fixed glitchy video result on Samsung Galaxy S6. ( I612d9 , b/235127608 )",
-                  "links": [
-                    {
-                      "text": "I612d9",
-                      "url": "https://android-review.git.corp.google.com/#/q/I612d902c2aa36dfd5b77a53a59a5646cadf96272"
-                    },
-                    {
-                      "text": "b/235127608",
-                      "url": "https://issuetracker.google.com/issues/235127608"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/235127608"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixed an issue where CameraInfo#isFeatureGroupSupported could incorrectly return true for PREVIEW_STABILIZATION if the SessionConfig in the query was already configured with other features. ( I2c355c , b/437816469 )",
-                  "source_text": "Fixed an issue where CameraInfo#isFeatureGroupSupported could incorrectly return true for PREVIEW_STABILIZATION if the SessionConfig in the query was already configured with other features. ( I2c355c , b/437816469 )",
-                  "links": [
-                    {
-                      "text": "I2c355c",
-                      "url": "https://android-review.googlesource.com/#/q/I2c355c533f737d1797a7427d37661781cd1480b2"
-                    },
-                    {
-                      "text": "b/437816469",
-                      "url": "https://issuetracker.google.com/issues/437816469"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/437816469"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Excluded problematic YUV format output sizes from Samsung Z Fold 4 device. The received images have distortion issue when using those output sizes. ( I776bf , b/460322307 )",
-                  "source_text": "Excluded problematic YUV format output sizes from Samsung Z Fold 4 device. The received images have distortion issue when using those output sizes. ( I776bf , b/460322307 )",
-                  "links": [
-                    {
-                      "text": "I776bf",
-                      "url": "https://android-review.googlesource.com/#/q/I776bf1f9447fba5b6354b597fb8067d25419756a"
-                    },
-                    {
-                      "text": "b/460322307",
-                      "url": "https://issuetracker.google.com/issues/460322307"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/460322307"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixed a device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound. ( I0f183 , b/458197367 )",
-                  "source_text": "Fixed a device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound. ( I0f183 , b/458197367 )",
-                  "links": [
-                    {
-                      "text": "I0f183",
-                      "url": "https://android-review.googlesource.com/#/q/I0f183808184febdcb203e8f5658e7663d8dc44b9"
-                    },
-                    {
-                      "text": "b/458197367",
-                      "url": "https://issuetracker.google.com/issues/458197367"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/458197367"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixes an issue on some devices where using the flash with the ultra-wide camera may result in underexposed images. ( Ib7530 , b/444590340 )",
-                  "source_text": "Fixes an issue on some devices where using the flash with the ultra-wide camera may result in underexposed images. ( Ib7530 , b/444590340 )",
-                  "links": [
-                    {
-                      "text": "Ib7530",
-                      "url": "https://android-review.googlesource.com/#/q/Ib75308343ede2999677ffce021affa013d175668"
-                    },
-                    {
-                      "text": "b/444590340",
-                      "url": "https://issuetracker.google.com/issues/444590340"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/444590340"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Updated the ExifInterface dependency to include a fix for parsing JPEGs with 0xFF padding, which resolves image capture failures on devices where the JPEG encoder adds fill bytes before markers. ( I0eb49 )",
-                  "source_text": "Updated the ExifInterface dependency to include a fix for parsing JPEGs with 0xFF padding, which resolves image capture failures on devices where the JPEG encoder adds fill bytes before markers. ( I0eb49 )",
-                  "links": [
-                    {
-                      "text": "I0eb49",
-                      "url": "https://android-review.googlesource.com/#/q/I0eb49797f167c36511bc5a2ea5c31a920f598b6d"
-                    }
-                  ],
-                  "issue_ids": [],
-                  "artifact_names": []
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "derived_editorial_hints": {
-        "relevance_bucket_hint": "direct_aosp_camera",
-        "impact_claim_level_hint": "android_framework_adjacent",
-        "hal_boundary": "framework_adjacent_not_direct_hal_contract",
-        "validation_targets": [
-          "VideoCapture stream and stabilization validation",
-          "SessionConfig feature combination validation"
-        ],
-        "device_specific_notes": [
-          "Samsung Galaxy S6.",
-          "Samsung Z Fold 4 device.",
-          "device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound."
-        ],
-        "do_not_claim": [
-          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
-          "Do not use artifact version tables as behavior-change evidence."
-        ],
-        "main_article_allowed_hint": true,
-        "warnings": [
-          "device_specific_release_note"
-        ]
-      },
-      "extraction_quality": {
-        "has_concrete_behavior_change": true,
-        "used_fallback": false,
-        "raw_table_used_as_body": false,
-        "main_article_allowed": true,
-        "used_versioned_release_row_extractor": true,
-        "used_empty_evidence_fallback": false,
-        "warnings": []
-      },
-      "background_basis": "article-field-builder deterministic static background",
-      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
-      "relevance_bucket": "direct_aosp_camera",
-      "editorial_priority": 1,
-      "aosp_camera_directness": 3,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": true,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "sources": [
-        {
-          "title": "CameraX Release Notes - CameraX 1.6.1",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
-        }
-      ],
-      "imageCandidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vb08cbdb02acf7f66ad9727ddfba9d81df8806422eb5dd63dba194c9c8c7997f7/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        }
-      ],
-      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
-      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "imageAttribution": "Android Developers Latest Updates",
-      "imageAlt": "CameraX 1.6.1 업데이트: preview/capture 호환성 확인",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
-      "article_sections": {
-        "verified_facts": [
-          "Android Developers Latest Updates가 May 06, 2026에 게시 또는 업데이트한 항목입니다.",
-          "버전/릴리스: CameraX 1.6.1.",
-          "관련 컴포넌트: CameraX / androidx.camera.",
-          "확인된 변경점: Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )"
-        ],
-        "background_context": "Camera HAL owner는 변경을 HAL API, metadata contract, stream, buffer, request/result 동작 변경으로 다루기 전에 source evidence를 확인해야 합니다.",
-        "hal_driver_impact": "Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.",
-        "action_items": [
-          "발행 전에 source URL과 published date가 article text와 맞는지 확인합니다.",
-          "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-          "Upstream release note나 downstream evidence가 더 구체적인 impact를 제공하면 다음 issue에서 재평가합니다."
-        ],
-        "team_share_points": "CameraX Release Notes - CameraX 1.6.1은 deterministic reconstruction 이후 public issue에 남길 수 있는 source-bound camera-stack metadata를 갖춘 항목입니다."
-      },
-      "public_article": {
-        "story_contract_version": 1,
-        "headline": "CameraX 1.6.1 업데이트: preview/capture 호환성 확인",
-        "source_subtitle": "Android Developers Latest Updates · CameraX 1.6.1",
-        "lead": "CameraX release note는 app/framework 계층의 preview/capture 호환성 검증 신호로 다룹니다.",
-        "body_paragraphs": [
-          "CameraX release note는 app/framework 계층의 preview/capture 호환성 검증 신호로 다룹니다.",
-          "이 항목은 공개 출처가 말한 범위 안에서 Camera HAL / Driver / Native tooling 독자가 참고할 수 있는 실무 맥락으로만 해석합니다."
-        ],
-        "camera_hal_takeaway": "CameraX Release Notes - CameraX 1.6.1은 공개 출처가 직접 말한 CameraX / androidx.camera 변화 범위 안에서 HAL request/result, stream, buffer, metadata validation 영향을 확인할 후보입니다.",
-        "reader_checkpoints": [
-          "CameraX / androidx.camera가 request/result, stream configuration, buffer lifecycle 중 어떤 HAL 계약과 연결되는지 source 근거 안에서 확인합니다.",
-          "source가 직접 뒷받침하지 않는 driver branch, vendor tag, pipeline 변경 주장은 분리합니다."
-        ],
-        "editorial_story": {
-          "reader_scenario": "앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage하는 상황을 가정합니다.",
-          "what_happened": "CameraX release note는 app/framework 계층의 preview/capture 호환성 검증 신호로 다룹니다.",
-          "why_it_matters": "CameraX Release Notes - CameraX 1.6.1은 공개 출처가 직접 말한 CameraX / androidx.camera 변화 범위 안에서 HAL request/result, stream, buffer, metadata validation 영향을 확인할 후보입니다.",
-          "field_scenario": "CameraX / androidx.camera가 request/result, stream configuration, buffer lifecycle 중 어떤 HAL 계약과 연결되는지 source 근거 안에서 확인합니다. source가 직접 뒷받침하지 않는 driver branch, vendor tag, pipeline 변경 주장은 분리합니다.",
-          "not_to_overclaim": "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so. Do not use artifact version tables as behavior-change evidence. Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다. Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다.",
-          "editor_take": "CameraX 1.6.1 업데이트: preview/capture 호환성 확인은 source 범위 안에서만 실무 확인 항목으로 다루는 것이 안전합니다."
-        },
-        "decision_metadata": {
-          "impact": "High",
-          "scope": [
-            "HAL",
-            "Driver",
-            "Framework",
-            "SoC"
-          ],
-          "action": [
-            "Watch",
-            "Test"
-          ],
-          "overclaim_risk": "Medium"
-        },
-        "source_links": [
-          {
-            "title": "CameraX Release Notes - CameraX 1.6.1",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-            "publisher": "Android Developers Latest Updates",
-            "source_role": "primary"
-          }
-        ]
-      },
-      "imageSelection": {
-        "reasonCode": "selected",
-        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
-        "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-        "attribution": "Android Developers Latest Updates",
-        "licenseStatus": "unknown",
-        "validationStatus": "ok",
-        "validationSource": "candidate_metadata",
-        "candidateUrl": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
-        "exclusionEvidence": [
-          {
-            "candidate_url": "https://developer.android.com/_static/images/translated.svg?hl=it",
-            "reasonCode": "svg_rejected",
-            "reasonLabel": "SVG 이미지 제외",
-            "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
-            "sourceKind": "article-img",
-            "contentType": "image/svg+xml",
-            "validationStatus": "ok",
-            "valid": false
-          }
-        ]
-      },
-      "resolvedImage": {
-        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
-        "src": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": "selected image candidate"
-      },
-      "hal_impact_axes": [
-        "framework_hal_contract",
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
-        "cts_vts_its_cdd",
-        "camerax_app_compatibility"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_driver_owner",
-        "camera_test_owner"
-      ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "actionability_upgrade_reason": "",
-      "actionability_upgrade_evidence": null,
-      "signal_quality_status": "strong_signal",
-      "do_not_overstate": [
-        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
-        "Do not use artifact version tables as behavior-change evidence.",
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
-        "Do not use artifact version tables as behavior-change evidence.",
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "soc_signal_type": "platform_signal",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "hal_signal_capsule": {
-        "why_now": "CameraX Release Notes - CameraX 1.6.1는 날짜가 확인된 HAL 검토 신호로 포함했습니다.",
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_framework_owner",
-          "camerax_app_compat_owner",
-          "camera_driver_owner",
-          "camera_test_owner"
-        ],
-        "check_within_2_weeks": "관련 camera stack owner가 follow-up validation 필요 여부를 확인합니다.",
-        "impact_axes": [
-          "framework_hal_contract",
-          "driver_image_pipeline",
-          "stream_buffer_metadata",
-          "cts_vts_its_cdd",
-          "camerax_app_compatibility"
-        ],
-        "do_not_overstate": [
-          "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-          "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-        ]
-      }
-    },
     {
       "category": "Android Native Tooling",
       "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
@@ -710,7 +150,7 @@
       },
       "public_article": {
         "story_contract_version": 1,
-        "headline": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+        "headline": "Google AI Studio, 프롬프트 기반 Camera API 연동 native Android 앱 생성 지원",
         "source_subtitle": "Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000",
         "lead": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
         "body_paragraphs": [
@@ -723,12 +163,12 @@
           "이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다."
         ],
         "editorial_story": {
-          "reader_scenario": "Camera HAL 본체가 아니라 host/native tooling이나 prototype 코드 검토 중 build, logging, Camera API 사용 범위를 확인해야 하는 장면을 가정합니다.",
+          "reader_scenario": "Camera HAL 본체가 아니라 host/native tooling이나 prototype 코드 검토 과정에서 build, logging, Camera API 사용 범위를 확인합니다.",
           "what_happened": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
           "why_it_matters": "이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.",
           "field_scenario": "AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다. 이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.",
           "not_to_overclaim": "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다. Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다. 이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다. Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
-          "editor_take": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인은 source 범위 안에서만 실무 확인 항목으로 다루는 것이 안전합니다."
+          "editor_take": "Google AI Studio, 프롬프트 기반 Camera API 연동 native Android 앱 생성 지원은 source 범위 안에서만 실무 확인 항목으로 다루는 것이 안전합니다."
         },
         "decision_metadata": {
           "impact": "High",
@@ -857,27 +297,32 @@
   ],
   "references": [
     {
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
-    },
-    {
       "title": "Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
     }
   ],
-  "publication_mode": "review_only",
-  "homepage_visibility": "normal",
+  "publication_mode": "fallback_public",
+  "homepage_visibility": "visible_with_fallback_badge",
   "normal_public_ready": false,
   "automatic_publish_ready": false,
   "public_artifact_ready": true,
-  "fallback_public_ready": false,
-  "fallback_only": false,
-  "camera_anchor_count": 1,
+  "fallback_public_ready": true,
+  "fallback_only": true,
+  "camera_anchor_count": 0,
   "fallback_section_count": 1,
-  "homepage_badge": "",
+  "homepage_badge": "Tooling Watch Edition",
   "review_publication_ready": true,
   "publication_notice": [
-    "검토 발행본입니다.",
-    "각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다."
+    "Tooling Watch Edition: C++ / Tooling Watch",
+    "이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 참고 issue로 발행되었습니다.",
+    "Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다."
+  ],
+  "tags": [
+    "Tooling Watch Edition",
+    "Tooling Watch"
   ]
 }
