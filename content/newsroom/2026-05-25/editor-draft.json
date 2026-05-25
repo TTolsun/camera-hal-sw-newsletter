@@ -348,7 +348,7 @@
           "추가로 확인되는 항목은 Building, Adaptive, Default, Googlebook, With, large-screen입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.",
           "원문 세부 내용으로는 Building, Jetpack Compose, Adaptive, Default, Googlebook 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다."
         ],
-        "camera_hal_takeaway": "이 소식은 HAL API 변경이 아니라, 다양한 화면 크기에서 CameraX preview가 어떻게 보이는지 확인하라는 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 preview aspect ratio, rotation, crop 동작의 앱 호환성만 확인하면 됩니다.",
+        "camera_hal_takeaway": "이 소식은 HAL API 변경 고지가 아니라 app/framework 계층의 호환성 점검 신호입니다. Camera HAL / Driver 팀은 CameraX preview의 aspect ratio, rotation, crop 동작이 폴더블, 태블릿, 멀티윈도우 환경에서 기존 앱과 다르게 보이지 않는지 확인하는 참고 항목으로 보면 됩니다.",
         "reader_checkpoints": [
           "CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.",
           "이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다."
@@ -356,7 +356,7 @@
         "editorial_story": {
           "reader_scenario": "앱/framework 변경이 preview/capture 검증 범위에 들어오는지 triage할 때 확인합니다.",
           "what_happened": "Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.",
-          "why_it_matters": "이 소식은 HAL API 변경이 아니라, 다양한 화면 크기에서 CameraX preview가 어떻게 보이는지 확인하라는 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 preview aspect ratio, rotation, crop 동작의 앱 호환성만 확인하면 됩니다.",
+          "why_it_matters": "이 소식은 HAL API 변경 고지가 아니라 app/framework 계층의 호환성 점검 신호입니다. Camera HAL / Driver 팀은 CameraX preview의 aspect ratio, rotation, crop 동작이 폴더블, 태블릿, 멀티윈도우 환경에서 기존 앱과 다르게 보이지 않는지 확인하는 참고 항목으로 보면 됩니다.",
           "field_scenario": "CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다. 이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.",
           "not_to_overclaim": "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다. Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다. 이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다. CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다.",
           "editor_take": "Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화은 source 범위 안에서만 실무 확인 항목으로 다루는 것이 안전합니다."

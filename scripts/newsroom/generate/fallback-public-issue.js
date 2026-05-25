@@ -535,6 +535,35 @@ function pushCandidateList(target, value, artifactRole = '') {
   }
 }
 
+function reporterAttemptNumber(fileName) {
+  const match = /^reporter-candidates-attempt-(\d+)\.json$/.exec(String(fileName || ''));
+  return match ? Number(match[1]) : 0;
+}
+
+function readReporterCandidatesArtifact(newsroomDir, date, options = {}) {
+  const canonicalPath = path.join(newsroomDir, 'reporter-candidates.json');
+  const canonical = readJsonIfExists(canonicalPath);
+  if (canonical) return canonical;
+
+  if (!fs.existsSync(newsroomDir)) return { date, candidates: [] };
+  const attemptFiles = fs.readdirSync(newsroomDir)
+    .filter(fileName => reporterAttemptNumber(fileName) > 0)
+    .sort((a, b) => reporterAttemptNumber(b) - reporterAttemptNumber(a));
+  for (const fileName of attemptFiles) {
+    const attemptReporter = readJsonIfExists(path.join(newsroomDir, fileName));
+    if (!attemptReporter || !Array.isArray(attemptReporter.candidates)) continue;
+    const reporter = {
+      ...attemptReporter,
+      date: attemptReporter.date || date
+    };
+    if (options.writeCanonical) {
+      writeJson(canonicalPath, reporter);
+    }
+    return reporter;
+  }
+  return { date, candidates: [] };
+}
+
 function candidatePoolFromArtifacts({ root, date }) {
   const newsroomDir = path.join(root, 'content', 'newsroom', date);
   const collectedDir = path.join(root, 'content', 'collected-news', date);
@@ -553,7 +582,7 @@ function candidatePoolFromArtifacts({ root, date }) {
     pushCandidateList(raw, capsules.shortlisted_capsules, 'shortlisted');
     pushCandidateList(raw, capsules.reserve_capsules, 'reserve');
   }
-  const reporter = readJsonIfExists(path.join(newsroomDir, 'reporter-candidates.json'));
+  const reporter = readReporterCandidatesArtifact(newsroomDir, date, { writeCanonical: true });
   if (reporter) pushCandidateList(raw, reporter.candidates, 'reporter');
   const collected = readJsonIfExists(path.join(collectedDir, 'candidates.json'));
   if (collected) pushCandidateList(raw, collected.candidates, 'collected');
@@ -1101,7 +1130,7 @@ function publicBodyParagraphs(candidate, section, component) {
   if (/Building seamless Android experiences across devices/i.test(title) || /Jetpack Compose is the definitive engine/i.test(change)) {
     return [
       'Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.',
-      '이 내용은 HAL API 변경 고지가 아니라 app/framework layer validation signal입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 잡는 참고로 쓰면 됩니다.'
+      '이 내용은 HAL API 변경 고지가 아니라 app/framework 계층의 호환성 점검 신호입니다. Camera HAL / Driver 팀은 preview aspect ratio, rotation, stream configuration, Surface 연결에서 회귀 테스트 범위를 좁히는 참고로 볼 수 있습니다.'
     ];
   }
   if (/Start building today|Google AI Studio/i.test(title) || /Hardware-enabled experiences/i.test(change)) {
@@ -1230,7 +1259,7 @@ function publicTakeawayForCandidate(candidate, section, component) {
     return `${title}은 공개 출처가 직접 말한 ${component || 'camera stack'} 변화 범위 안에서 HAL request/result, stream, buffer, metadata validation 영향을 확인할 후보입니다.`;
   }
   if (/Building seamless Android experiences across devices/i.test(title)) {
-    return '이 소식은 HAL API 변경이 아니라, 다양한 화면 크기에서 CameraX preview가 어떻게 보이는지 확인하라는 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 preview aspect ratio, rotation, crop 동작의 앱 호환성만 확인하면 됩니다.';
+    return '이 소식은 HAL API 변경 고지가 아니라 app/framework 계층의 호환성 점검 신호입니다. Camera HAL / Driver 팀은 CameraX preview의 aspect ratio, rotation, crop 동작이 폴더블, 태블릿, 멀티윈도우 환경에서 기존 앱과 다르게 보이지 않는지 확인하는 참고 항목으로 보면 됩니다.';
   }
   if (/Start building today|Google AI Studio/i.test(title)) {
     return '이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.';
@@ -1242,7 +1271,7 @@ function publicTakeawayForCandidate(candidate, section, component) {
     return '이 항목은 CameraX release note의 source-confirmed 변경점을 app/framework 계층에서 먼저 확인하는 항목입니다. HAL/driver 영향은 release note나 별도 검증이 직접 뒷받침할 때만 확장합니다.';
   }
   if (/android_platform|android_camera|multimedia|CameraX|Camera2/i.test(bucket)) {
-    return '이 소식은 HAL API 변경이 아니라 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 CameraX/Camera2 preview와 capture path의 앱 호환성만 확인하면 됩니다.';
+    return '이 소식은 HAL API 변경 고지가 아니라 app/framework 계층의 호환성 점검 신호입니다. Camera HAL / Driver 팀은 CameraX/Camera2 preview와 capture path가 기존 앱 동작과 다르게 보이지 않는지 확인하는 참고 항목으로 보면 됩니다.';
   }
   if (/soc_platform/i.test(bucket)) {
     return `${title}은 SoC/platform signal입니다. vendor BSP, ISP, driver branch, device matrix 영향은 별도 source evidence가 있을 때만 확인합니다.`;
@@ -1250,7 +1279,7 @@ function publicTakeawayForCandidate(candidate, section, component) {
   if (/cpp_ai_tooling|tooling/i.test(bucket) || /tooling/i.test(impact)) {
     return '이 소식은 native tooling workflow 참고 항목입니다. production HAL runtime behavior 변경 근거는 아니며, prototype이 Camera API를 호출할 때 권한 선언과 CameraX/Camera2 사용 방식을 확인하는 수준으로 제한합니다.';
   }
-  return `${title}은 공개 출처 범위 안의 watch signal입니다. HAL/driver 변경으로 확대 해석하지 않고 release note와 compatibility 확인 범위로 제한합니다.`;
+  return `${title}은 공개 출처 범위 안의 watch signal입니다. HAL/driver 변경 근거가 확인되지 않으면 release note와 compatibility 확인 범위로 제한합니다.`;
 }
 
 function sourceSubtitleForCandidate(candidate, section) {
@@ -1791,7 +1820,7 @@ function buildFallbackPublicIssue(options = {}) {
     source_gap_count: 0,
     final_comment: 'Fallback public issue builder created a structurally publishable editor-review issue.'
   };
-  const reporter = readJsonIfExists(path.join(newsroomDir, 'reporter-candidates.json')) || { date, candidates: [] };
+  const reporter = readReporterCandidatesArtifact(newsroomDir, date, { writeCanonical: true });
   const shortlist = readJsonIfExists(path.join(newsroomDir, 'shortlisted-candidates.json')) || {};
   const backgroundContextReport = options.backgroundContextReport ||
     readJsonIfExists(path.join(newsroomDir, 'background-context.json')) || {};

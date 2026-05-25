@@ -6,7 +6,7 @@
     "shortlisted_candidates": "content/newsroom/2026-05-25/shortlisted-candidates.json",
     "source_registry": "data/news-sources.json",
     "optional_artifacts": {
-      "reporter_candidates": null,
+      "reporter_candidates": "content/newsroom/2026-05-25/reporter-candidates.json",
       "editor_draft": "content/newsroom/2026-05-25/editor-draft.json",
       "fact_check_report": "content/newsroom/2026-05-25/fact-check-report.json",
       "quality_report": "content/newsroom/2026-05-25/quality-report.json"
@@ -3298,7 +3298,5 @@
       "sample_excluded_urls": []
     }
   ],
-  "warnings": [
-    "Missing optional artifact content/newsroom/2026-05-25/reporter-candidates.json; related metrics remain zero or artifact-limited."
-  ]
+  "warnings": []
 }

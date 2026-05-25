@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T05:35:26.324Z",
+  "generated_at": "2026-05-25T05:52:37.325Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -23,7 +23,6 @@
       "content/newsroom/2026-05-25/stale-claim-report.json"
     ],
     "missing": [
-      "content/newsroom/2026-05-25/reporter-candidates.json",
       "content/newsroom/2026-05-25/repair-failure.json",
       "content/newsroom/2026-05-25/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-25/stale-claim-report.json"
@@ -34,6 +33,7 @@
       "content/newsroom/2026-05-25/shortlisted-candidates.json",
       "content/collected-news/2026-05-25/candidates.json",
       "content/newsroom/2026-05-25/article-capsules.json",
+      "content/newsroom/2026-05-25/reporter-candidates.json",
       "content/newsroom/2026-05-25/quality-report.json",
       "content/newsroom/2026-05-25/fact-check-report.json",
       "content/newsroom/2026-05-25/source-effectiveness-report.json",
@@ -498,7 +498,6 @@
     ],
     "source_gap_warnings": [],
     "missing_artifacts": [
-      "content/newsroom/2026-05-25/reporter-candidates.json",
       "content/newsroom/2026-05-25/repair-failure.json",
       "content/newsroom/2026-05-25/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-25/stale-claim-report.json"
@@ -506,7 +505,6 @@
     "invalid_artifacts": []
   },
   "warnings": [
-    "Missing optional artifact: content/newsroom/2026-05-25/reporter-candidates.json",
     "Missing optional artifact: content/newsroom/2026-05-25/repair-failure.json",
     "Missing optional artifact: content/newsroom/2026-05-25/fallback-public-issue-diagnostics.json",
     "Missing optional artifact: content/newsroom/2026-05-25/stale-claim-report.json",
