@@ -7146,13 +7146,15 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /llm_model:/);
   assert.match(workflow, /llm_fallback_models:/);
-  assert.match(workflow, /allow_pro:\s*[\s\S]*?default: "false"/);
+  assert.doesNotMatch(workflow, /allow_pro/);
   assert.match(workflow, /llm_model:\s*[\s\S]*?default: ""/);
   assert.match(workflow, /LLM_PROVIDER=\$\{INPUT_LLM_PROVIDER\}/);
   assert.match(workflow, /LLM_MODEL=\$\{INPUT_LLM_MODEL\}/);
   assert.match(workflow, /LLM_FALLBACK_MODELS=\$\{INPUT_LLM_FALLBACK_MODELS\}/);
   assert.match(workflow, /Workflow inputs must be single-line values\./);
-  assert.match(workflow, /NEWSROOM_ALLOW_PRO_ON_MANUAL: \$\{\{ github\.event\.inputs\.allow_pro \|\| 'false' \}\}/);
+  assert.doesNotMatch(workflow, /NEWSROOM_ALLOW_PRO_ON_MANUAL/);
+  assert.doesNotMatch(workflow, /NEWSROOM_ALLOW_PRO_ON_SCHEDULE/);
+  assert.doesNotMatch(workflow, /NEWSROOM_PRO_ESCALATION/);
   assert.match(workflow, /NEWSROOM_REPORTER_MODEL: \$\{\{ vars\.NEWSROOM_REPORTER_MODEL \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_EDITOR_MODEL: \$\{\{ vars\.NEWSROOM_EDITOR_MODEL \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_FACTCHECK_MODEL: \$\{\{ vars\.NEWSROOM_FACTCHECK_MODEL \|\| '' \}\}/);
@@ -7186,6 +7188,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
   const workflowDocs = fs.readFileSync(path.join(__dirname, '..', '..', 'docs', 'newsroom-workflow.md'), 'utf8');
   assert.doesNotMatch(workflowDocs, /^LLM_MODEL=$/m);
+  assert.doesNotMatch(workflowDocs, /allow_pro=true/);
+  assert.doesNotMatch(workflowDocs, /NEWSROOM_ALLOW_PRO/);
+  assert.doesNotMatch(workflowDocs, /NEWSROOM_PRO_ESCALATION/);
   assert.match(generateStep, /continue-on-error:\s*true/);
   assert.match(ensurePublicStep, /node scripts\/ensure-public-newsletter-artifacts\.js/);
   assert.match(resolveMetaStep, /node scripts\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);

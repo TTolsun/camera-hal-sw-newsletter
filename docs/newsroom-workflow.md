@@ -135,7 +135,7 @@ Gemini request에는 stage별 thinking budget을 적용합니다. 기본값은 r
 
 `NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 운영 기준으로 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
 
-scheduled run의 기본 fallback은 `gemini-2.5-flash-lite`까지만 사용합니다. Stage별 기본 모델은 reporter/fact-checker가 `gemini-2.5-flash`, editor/repair가 `gemini-3.5-flash`, public article judge가 `gemini-2.5-flash-lite`입니다. `gemini-2.5-pro`는 manual `workflow_dispatch`에서 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`일 때만 사용할 수 있습니다. Pro가 실제 호출되면 workflow log와 cost report의 `pro_policy` / `pro_model` 필드에 남습니다. Pro 계열 모델은 thinking disable을 지원하지 않거나 최소 budget 제약이 있을 수 있으므로, requested budget이 `0`인 Pro 호출은 `thinkingConfig`를 생략하고 cost report warning에 남깁니다.
+Stage별 기본 모델은 reporter/fact-checker가 `gemini-2.5-flash`, editor/repair가 `gemini-3.5-flash`, public article judge가 `gemini-2.5-flash-lite`이고 기본 fallback은 `gemini-2.5-flash-lite`입니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call-level `pro_model` audit marker를 유지하지만 정상 run에서는 항상 `false`여야 하며, report-level 정책은 `Pro policy: disabled`로 고정됩니다.
 
 Stage별 model routing은 아래 순서를 따릅니다. `LLM_MODEL` 또는 `GEMINI_MODEL`이 명시되면 모든 stage primary model을 override합니다. 그렇지 않으면 `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`이 해당 stage만 override하고, 비어 있는 stage는 code default를 사용합니다. `LLM_FALLBACK_MODELS` 또는 `GEMINI_FALLBACK_MODELS`는 모든 stage primary 뒤에 붙는 fallback chain입니다.
 
@@ -143,7 +143,6 @@ Stage별 model routing은 아래 순서를 따릅니다. `LLM_MODEL` 또는 `GEM
 | --- | --- | --- | --- | --- | --- |
 | env 없음 | `gemini-2.5-flash` | `gemini-3.5-flash` | `gemini-2.5-flash` | `gemini-3.5-flash` | `gemini-2.5-flash-lite` |
 | `NEWSROOM_EDITOR_MODEL=gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-3.5-flash` | `gemini-2.5-flash-lite` |
-| `LLM_MODEL=gemini-2.5-pro`, `allow_pro=true` | `gemini-2.5-pro` | `gemini-2.5-pro` | `gemini-2.5-pro` | `gemini-2.5-pro` | `gemini-2.5-pro` |
 | `LLM_FALLBACK_MODELS=gemini-2.5-flash-lite` | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback |
 
 fact-checker는 새 글을 쓰는 stage가 아니라 source gap, unsupported claim, dated evidence 누락, forbidden bucket, 과장된 HAL impact 같은 structured violation을 탐지하는 stage입니다. source binding과 hard blocker의 최종 방어선은 deterministic validator이므로 fact-checker 기본값은 `gemini-2.5-flash`로 유지하고, 문장 작성과 보완 품질이 더 중요한 editor/repair에 `gemini-3.5-flash`를 사용합니다.
@@ -155,13 +154,13 @@ fact-checker는 새 글을 쓰는 stage가 아니라 source gap, unsupported cla
 - deterministic scoring이 LLM 호출 전에 Camera HAL / Android Camera 후보를 먼저 줄입니다.
 - `article-capsules.json`이 full context 대신 compact capsule만 Gemini에 전달합니다.
 - quality retry는 전체 뉴스레터 재생성이 아니라 실패 section repair 또는 replace로 제한합니다.
-- scheduled run은 Flash/Flash-Lite 및 stage별 code default만 사용하고 Pro는 명시적인 manual high-quality run에서만 사용합니다. Stage 3 수동 실행에서 `llm_model`을 비워 두면 code default stage model이 사용됩니다.
+- scheduled run과 manual run은 Flash/Flash-Lite 및 stage별 code default를 기본으로 사용합니다. Stage 3 수동 실행에서 `llm_model`을 비워 두면 code default stage model이 사용되며, Gemini Pro 계열 모델명은 runtime validation에서 차단됩니다.
 
 운영자가 비용 원인을 확인할 때는 아래 순서로 artifact를 봅니다.
 
 | 확인 대상 | 위치 | 판단 기준 |
 | --- | --- | --- |
-| cost report(비용 리포트) | `.tmp/newsroom-cost-report.json`, `content/newsroom/YYYY-MM-DD/cost-report.md` | stage/model/attempt별 estimated cost, `thinking_tokens`, `cached_tokens`, Pro 호출 여부를 확인합니다. |
+| cost report(비용 리포트) | `.tmp/newsroom-cost-report.json`, `content/newsroom/YYYY-MM-DD/cost-report.md` | stage/model/attempt별 estimated cost, `thinking_tokens`, `cached_tokens`, `pro_model=false` 유지 여부를 확인합니다. |
 | selection report(기사 선정 리포트) | `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`, `article-capsules.json`, PR 본문 selection diagnostics | 후보가 8-12개 수준으로 제한됐는지, generic AI/C++가 HAL 후보를 밀어내지 않았는지 확인합니다. |
 | quality report(품질 리포트) | `content/newsroom/YYYY-MM-DD/quality-report.json`, `quality-report.md` | hard fail과 soft deduction을 분리해 보고, `article_results`의 `PASS` / `DEMOTE` / `FAIL`과 repair action을 확인합니다. |
 | generation status artifact(생성 상태 결과 파일) | `.tmp/newsletter-generation-status.json` | `publish_ready`, `quality_status`, `final_selected_article_count_for_gate`, failure reason을 확인합니다. |
@@ -169,7 +168,7 @@ fact-checker는 새 글을 쓰는 stage가 아니라 source gap, unsupported cla
 
 ## Safe Scheduled Defaults
 
-현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, public article judge `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash-lite`입니다. workflow YAML은 `allow_pro` 값을 fallback list로 조합하지 않고 `NEWSROOM_ALLOW_PRO_ON_MANUAL` 정책 플래그만 JS runtime으로 전달합니다. JS model policy는 Pro fallback을 자동으로 추가하지 않습니다. Pro를 쓰려면 `llm_model=gemini-2.5-pro` 같은 explicit model selection과 `allow_pro=true`를 함께 지정해야 합니다.
+현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, public article judge `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
 
 scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default이고, 나머지는 workflow와 runtime config의 기본값을 사용합니다.
 
@@ -197,12 +196,9 @@ NEWSROOM_MAX_QUALITY_RETRIES=1
 NEWSROOM_MAX_SECTION_REPAIRS=1
 NEWSROOM_WARN_COST_USD=0.15
 NEWSROOM_MAX_COST_USD=0.25
-NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false
-NEWSROOM_ALLOW_PRO_ON_MANUAL=false
-NEWSROOM_PRO_ESCALATION=manual
 ```
 
-manual high-quality run(수동 고품질 실행)의 기본 입력은 `allow_pro=false`, `llm_model=""`입니다. 이때 workflow는 `LLM_MODEL`을 전달하지 않으므로 code default stage model을 사용하고 Pro를 호출하지 않습니다. 모든 stage를 Pro로 승격하려면 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`로 바꿉니다. JS model policy는 Pro fallback을 자동으로 추가하지 않으며, provider가 `gemini`인 `workflow_dispatch` 실행에서 explicit Pro model이 설정되고 `allow_pro=true`일 때만 Pro 사용을 허용합니다.
+manual high-quality run(수동 고품질 실행)의 기본 입력은 `llm_model=""`입니다. 이때 workflow는 `LLM_MODEL`을 전달하지 않으므로 code default stage model을 사용합니다. 수동 실행에서도 `llm_model`, `llm_fallback_models`, stage별 model variable에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
 
 ## Seed Evidence Workflow Priority
 
@@ -283,14 +279,11 @@ NEWSROOM_MAX_QUALITY_RETRIES=1
 NEWSROOM_MAX_SECTION_REPAIRS=1
 NEWSROOM_WARN_COST_USD=0.15
 NEWSROOM_MAX_COST_USD=0.25
-NEWSROOM_ALLOW_PRO_ON_SCHEDULE=false
-NEWSROOM_ALLOW_PRO_ON_MANUAL=false
-NEWSROOM_PRO_ESCALATION=manual
 ```
 
 ### 수동 Final Generation 실행
 
-GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`는 optional이며, 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다. 특정 날짜를 재생성하려면 `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. 기본 수동 실행은 `allow_pro=false`, `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. 모든 stage primary를 Pro로 승격해야 할 때만 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`로 바꿉니다.
+GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`는 optional이며, 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다. 특정 날짜를 재생성하려면 `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. 기본 수동 실행은 `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. `llm_model` 또는 `llm_fallback_models`에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
 
 ## Editor-in-Chief Review
 

@@ -13,14 +13,6 @@ on:
         required: false
         default: ""
         type: string
-      allow_pro:
-        description: "Allow Gemini Pro for this manual run."
-        required: false
-        default: "false"
-        type: choice
-        options:
-          - "false"
-          - "true"
       llm_provider:
         description: "LLM provider override for manual runs. default uses code defaults."
         required: false
@@ -80,9 +72,6 @@ jobs:
       NEWSROOM_MAX_SECTION_REPAIRS: ${{ vars.NEWSROOM_MAX_SECTION_REPAIRS || '1' }}
       NEWSROOM_WARN_COST_USD: ${{ vars.NEWSROOM_WARN_COST_USD || '0.15' }}
       NEWSROOM_MAX_COST_USD: ${{ vars.NEWSROOM_MAX_COST_USD || '0.25' }}
-      NEWSROOM_ALLOW_PRO_ON_SCHEDULE: "false"
-      NEWSROOM_ALLOW_PRO_ON_MANUAL: ${{ github.event.inputs.allow_pro || 'false' }}
-      NEWSROOM_PRO_ESCALATION: manual
       NEWSROOM_BACKGROUND_CONTEXT_STAGE: ${{ vars.NEWSROOM_BACKGROUND_CONTEXT_STAGE || 'gemini' }}
       NEWSROOM_LINKED_EVIDENCE_MODE: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MODE || 'extract_only' }}
       NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE || '8' }}

@@ -11,7 +11,7 @@
 - GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 실행합니다.
 - Stage 2/3 manual run의 `newsletter_date`는 optional입니다. 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve되며, resolved date는 workflow log에 출력됩니다.
 - 특정 날짜를 재생성하려면 `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다.
-- Stage 3 manual final generation의 기본 입력은 `allow_pro=false`, `llm_model=""`입니다. 기본 실행은 code default stage model을 primary로 사용하고 Pro를 호출하지 않습니다. 모든 stage primary를 Pro로 승격해야 할 때만 `llm_model=gemini-2.5-pro`와 `allow_pro=true`를 함께 명시합니다.
+- Stage 3 manual final generation의 기본 입력은 `llm_model=""`입니다. 기본 실행은 code default stage model을 primary로 사용합니다. Gemini Pro 계열 모델명은 `llm_model`, `llm_fallback_models`, stage별 model variable 어디에 들어와도 `doctor:config` 단계에서 실패합니다.
 - 실행 후 `cost-report.md`, `summary-cache-report.md`, `retry-history.md`를 확인해 비용과 retry 범위를 봅니다.
 
 ## PR Review Flow

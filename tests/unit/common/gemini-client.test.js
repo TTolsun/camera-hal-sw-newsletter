@@ -384,38 +384,11 @@ test('stage-specific model routing selects the configured model for each newsroo
   assert.equal(client.getGeminiCostCalls()[3].resolved_by, 'NEWSROOM_JUDGE_MODEL');
 });
 
-test('Pro models omit thinkingBudget 0 and record the limitation in cost report', async () => {
-  const client = loadClient({
-    GEMINI_MODEL: 'gemini-2.5-pro',
-    GITHUB_EVENT_NAME: 'workflow_dispatch',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
-  });
-  const FakeGoogleGenAI = fakeGemini([{
-    text: () => '{"ok":true}',
-    usageMetadata: {
-      promptTokenCount: 1000,
-      candidatesTokenCount: 100,
-      thoughtsTokenCount: 25,
-      totalTokenCount: 1125
-    }
-  }]);
-
-  const result = await client.callGeminiJson('reporter attempt 1/1', 'system', 'prompt', {}, {
-    GoogleGenAI: FakeGoogleGenAI
-  });
-
-  assert.deepEqual(result, { ok: true });
-  assert.equal(FakeGoogleGenAI.requests[0].config.thinkingConfig, undefined);
-  const [call] = client.getGeminiCostCalls();
-  assert.equal(call.thinking_tokens, 25);
-  assert.equal(call.thinking_budget_requested, 0);
-  assert.equal(call.thinking_budget_applied, null);
-  assert.match(call.thinking_budget_note, /Pro may not support disabling thinking/);
-  const report = client.buildCostReport({
-    date: '2026-05-04',
-    calls: client.getGeminiCostCalls()
-  });
-  assert.ok(report.warnings.some(item => item.includes('did not apply thinkingBudget=0')));
+test('configured Gemini Pro model is rejected before API calls', () => {
+  assert.throws(
+    () => loadClient({ GEMINI_MODEL: 'gemini-2.5-pro' }),
+    /Gemini Pro models are disabled; configured Pro model\(s\): gemini-2\.5-pro/
+  );
 });
 
 test('usage metadata extraction supports Gemini SDK camelCase fields', () => {
@@ -455,14 +428,6 @@ test('cost estimation separates cached input and output including thinking token
   assert.equal(cost.estimated_cost_usd, 0.000191);
   assert.equal(cost.pricing_usd_per_million.input_usd_per_million, 0.1);
   assert.equal(cost.pricing_usd_per_million.cached_input_usd_per_million, 0.01);
-});
-
-test('pro pricing switches at the large prompt threshold', () => {
-  const client = loadClient();
-
-  assert.equal(client.findPricing('gemini-2.5-pro', 200000).input_usd_per_million, 1.25);
-  assert.equal(client.findPricing('gemini-2.5-pro', 200001).input_usd_per_million, 2.5);
-  assert.equal(client.findPricing('gemini-2.5-pro', 200001).output_usd_per_million, 15);
 });
 
 test('Gemini 3.5 Flash pricing uses official standard rates for stable model only', () => {
@@ -533,6 +498,10 @@ test('cost report aggregates calls and emits warning-only threshold messages', (
   assert.equal(report.warnings.some(item => item.includes('NEWSROOM_MAX_COST_USD')), false);
   assert.match(client.buildCostReportMarkdown(report), /Estimated cost USD: 0\.001650/);
   assert.match(client.buildCostReportMarkdown(report), /\| Provider \| Stage \| Group \| Primary \| Attempt Model \| Resolved By \| Fallbacks \|/);
+  assert.match(client.buildCostReportMarkdown(report), /Pro policy: disabled/);
+  assert.doesNotMatch(client.buildCostReportMarkdown(report), /Pro escalation/);
+  assert.doesNotMatch(client.buildCostReportMarkdown(report), /Pro model allowed/);
+  assert.doesNotMatch(client.buildCostReportMarkdown(report), /manual_pro_fallback/);
 });
 
 test('default stage model synthetic usage keeps cost thresholds warning-only', () => {
@@ -610,35 +579,31 @@ test('default stage model synthetic usage keeps cost thresholds warning-only', (
   assert.ok(report.warnings.every(item => !item.includes('failed')));
 });
 
-test('manual Pro usage is marked in cost calls and report warnings', async () => {
-  const client = loadClient({
-    GEMINI_MODEL: 'gemini-2.5-pro',
-    GITHUB_EVENT_NAME: 'workflow_dispatch',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
-  });
-  const FakeGoogleGenAI = fakeGemini([{
-    text: () => '{"ok":true}',
-    usageMetadata: {
-      promptTokenCount: 1000,
-      candidatesTokenCount: 100,
-      totalTokenCount: 1100
-    }
-  }]);
-
-  const result = await client.callGeminiJson('manual pro stage', 'system', 'prompt', {}, {
-    GoogleGenAI: FakeGoogleGenAI
-  });
-
-  assert.deepEqual(result, { ok: true });
-  const [call] = client.getGeminiCostCalls();
-  assert.equal(call.model, 'gemini-2.5-pro');
-  assert.equal(call.pro_model, true);
+test('cost report keeps call-level Pro audit marker while policy remains disabled', () => {
+  const client = loadClient();
   const report = client.buildCostReport({
     date: '2026-05-04',
-    calls: client.getGeminiCostCalls()
+    calls: [{
+      provider: 'gemini',
+      stage: 'synthetic audit',
+      stage_group: 'reporter',
+      model: 'gemini-2.5-pro',
+      attempt: 1,
+      prompt_tokens: 1000,
+      output_tokens: 100,
+      thinking_tokens: 0,
+      cached_tokens: 0,
+      total_tokens: 1100,
+      billable_input_tokens: 1000,
+      billable_output_tokens: 100,
+      estimated_cost_usd: 0.00055,
+      pro_model: true
+    }]
   });
-  assert.equal(report.pro_policy.pro_model_configured, true);
-  assert.equal(report.pro_policy.pro_model_allowed, true);
-  assert.ok(report.warnings.some(item => item.includes('Gemini Pro was used')));
-  assert.match(client.buildCostReportMarkdown(report), /Pro model configured: yes/);
+  assert.deepEqual(report.pro_policy, { status: 'disabled' });
+  assert.ok(report.warnings.some(item => item.includes('Pro policy is disabled')));
+  assert.match(client.buildCostReportMarkdown(report), /\| gemini \| synthetic audit /);
+  assert.match(client.buildCostReportMarkdown(report), /Pro policy: disabled/);
+  assert.doesNotMatch(client.buildCostReportMarkdown(report), /Pro escalation/);
+  assert.doesNotMatch(client.buildCostReportMarkdown(report), /Pro model allowed/);
 });

@@ -1,4 +1,3 @@
-const GEMINI_PRO_FALLBACK_MODEL = 'gemini-2.5-pro';
 const LLM_STAGE_GROUPS = Object.freeze({
   REPORTER: 'reporter',
   EDITOR: 'editor',
@@ -15,11 +14,6 @@ function normalizeModelName(value) {
 
 function isGeminiProModel(value) {
   return /^gemini-[\w.-]*pro\b/.test(normalizeModelName(value));
-}
-
-function shouldAppendGeminiProFallback(config) {
-  void config;
-  return false;
 }
 
 function dedupeModels(models) {
@@ -75,9 +69,6 @@ function configuredModelsForStage(config, stage) {
     primaryModelForStage(config, stage),
     ...fallbackModels(config)
   ].filter(Boolean);
-  if (shouldAppendGeminiProFallback(config)) {
-    models.push(GEMINI_PRO_FALLBACK_MODEL);
-  }
   return dedupeModels(models);
 }
 
@@ -87,45 +78,19 @@ function configuredModels(config) {
       ...LLM_STAGE_GROUP_VALUES.map(group => config.llmStageModels[group]),
       ...fallbackModels(config)
     ];
-    if (shouldAppendGeminiProFallback(config)) {
-      models.push(GEMINI_PRO_FALLBACK_MODEL);
-    }
     return dedupeModels(models);
   }
   return configuredModelsForStage(config, LLM_STAGE_GROUPS.REPORTER);
 }
 
-function geminiProPolicySummary(config) {
-  const models = configuredModels(config);
-  const proModels = models.filter(isGeminiProModel);
-  const eventName = String(config?.githubEventName || '').trim();
-  const allowed = proModels.length > 0 &&
-    (
-      (eventName === 'schedule' && config.newsroomAllowProOnSchedule === true) ||
-      (eventName === 'workflow_dispatch' && config.newsroomAllowProOnManual === true)
-    );
-  return {
-    escalation: config?.newsroomProEscalation || 'manual',
-    github_event_name: eventName,
-    allow_pro_on_schedule: config?.newsroomAllowProOnSchedule === true,
-    allow_pro_on_manual: config?.newsroomAllowProOnManual === true,
-    pro_model_configured: proModels.length > 0,
-    pro_model_allowed: Boolean(allowed),
-    pro_models: proModels
-  };
-}
-
 module.exports = {
-  GEMINI_PRO_FALLBACK_MODEL,
   LLM_STAGE_GROUPS,
   UNKNOWN_STAGE_ROUTING_WARNING,
   configuredModels,
   configuredModelsForStage,
-  geminiProPolicySummary,
   isGeminiProModel,
   modelGroupInfoForStage,
   modelGroupForStage,
   normalizeModelName,
-  primaryModelForStage,
-  shouldAppendGeminiProFallback
+  primaryModelForStage
 };

@@ -19,7 +19,6 @@ const {
 const geminiProvider = require('./providers/gemini-provider');
 const internalProvider = require('./providers/internal-provider');
 const {
-  GEMINI_PRO_FALLBACK_MODEL,
   modelGroupInfoForStage
 } = require('./model-policy');
 
@@ -112,11 +111,7 @@ function recordUsageMetadata(stage, provider, modelName, attempt, response, requ
 
 function routingForAttempt(baseRouting, modelName, modelIndex) {
   const isPrimary = modelIndex === 0;
-  const attemptResolvedBy = isPrimary
-    ? baseRouting.primary_resolved_by
-    : modelName === GEMINI_PRO_FALLBACK_MODEL
-      ? 'manual_pro_fallback'
-      : 'fallback';
+  const attemptResolvedBy = isPrimary ? baseRouting.primary_resolved_by : 'fallback';
   return {
     ...baseRouting,
     attempt_model: modelName,
