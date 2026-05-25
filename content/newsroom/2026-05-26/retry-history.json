@@ -1,0 +1,73 @@
+[
+  {
+    "attempt": 1,
+    "model": "deterministic-fallback-public-issue",
+    "score": 97,
+    "threshold": 85,
+    "status": "PUBLIC_ISSUE_CREATED",
+    "rendered_main_article_count": 2,
+    "demoted_article_count": 0,
+    "reserve_candidates_used": [
+      {
+        "headline": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+        "category": "Android Platform / CameraX",
+        "url": "https://goo.gle/AdaptiveApps_IO26",
+        "source": "Android Developers Blog",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "action": "rebuild-from-bound-candidate",
+        "fallback": false,
+        "reason": "hard failure replacement"
+      },
+      {
+        "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+        "category": "Android Native Tooling",
+        "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source": "Android Developers Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "action": "selected-native-tooling-supporting",
+        "fallback": false,
+        "reason": "selected source-ready native tooling supporting article"
+      }
+    ],
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "Android Native Tooling: Build native Android apps in Google AI Studio"
+    ],
+    "demoted_sections": [],
+    "repair_actions": [
+      "fallback-public-issue-builder"
+    ]
+  }
+]
