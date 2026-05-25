@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-25",
+  "generated_at": "2026-05-25T04:16:11.137Z",
+  "stage": "static-fallback",
+  "background_contexts": [
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "background_context": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
+      "background_basis": "supplied article capsule metadata 기반 deterministic static fallback",
+      "background_confidence": "medium",
+      "background_warnings": []
+    },
+    {
+      "title": "Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
+      "background_basis": "supplied article capsule metadata 기반 deterministic static fallback",
+      "background_confidence": "medium",
+      "background_warnings": []
+    }
+  ]
+}

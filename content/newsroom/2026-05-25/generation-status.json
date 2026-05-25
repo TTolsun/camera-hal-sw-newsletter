@@ -1,0 +1,375 @@
+{
+  "date": "2026-05-25",
+  "status": "NEEDS_FIX",
+  "failure_stage": "reporter attempt 1/2",
+  "failure_reason": "[reporter attempt 1/2] Gemini API failed with non-retryable error on model gemini-2.5-flash: {\"error\":{\"code\":400,\"message\":\"The specified schema produces a constraint that has too many states for serving. Typical causes of this error are schemas with lots of text (for example, very long property or enum names), schemas with long array length limits (especially when nested), or schemas using complex value matchers (for example, integers or numbers with minimum/maximum bounds or strings with complex formats like date-time)\",\"status\":\"INVALID_ARGUMENT\"}}",
+  "fact_check_status": "PASS",
+  "must_fix_count": 0,
+  "quality_status": "PASS",
+  "quality_attempt_count": 1,
+  "quality_score": 97,
+  "quality_threshold": 85,
+  "quality_deduction_count": 3,
+  "quota_error_count": 0,
+  "invalid_json_count": 0,
+  "model_usage": {
+    "reporter attempt 1/2": {
+      "gemini-2.5-flash": {
+        "requests": 1,
+        "successes": 0,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 1
+      }
+    }
+  },
+  "model_routing": {
+    "reporter attempt 1/2": {
+      "stage": "reporter attempt 1/2",
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
+    }
+  },
+  "candidate_input": {
+    "mode": "artifact",
+    "candidate_artifact": "content/collected-news/2026-05-25/manual-candidates.json",
+    "candidate_artifact_hash": "7df3aad620b41adc969206683735377402737ac52299745c0a7d3091d4868d82",
+    "manifest": "content/collected-news/2026-05-25/raw-candidate-manifest.json",
+    "manifest_type": "raw_candidate",
+    "manifest_status": "validated",
+    "llm_used": false,
+    "merge_mode": "",
+    "candidate_count": 40
+  },
+  "run_context": {
+    "github_run_id": "26382880738",
+    "github_sha": "e4ae1bb50de2fe2dfcac8b73a21f0930895867b8",
+    "github_ref": "refs/heads/main"
+  },
+  "raw_artifact_validation_error": null,
+  "editor_semantic_validation": null,
+  "repairAttempted": false,
+  "repairSucceeded": false,
+  "input_candidate_count": 40,
+  "eligible_candidate_count": 2,
+  "selected_article_count": 2,
+  "deterministic_selected_count": 2,
+  "rendered_main_article_count": 2,
+  "selected_group_count": 2,
+  "rendered_group_count": null,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://goo.gle/adaptiveapps_io26",
+    "android_native_tooling_workflow"
+  ],
+  "rendered_group_keys": [],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "group_coverage_ok": null,
+  "reserve_candidate_count": 0,
+  "demoted_article_count": 0,
+  "locked_article_count": null,
+  "fallback_topic_count": 1,
+  "reporter_candidate_count": null,
+  "reporter_selected_count": null,
+  "final_input_candidate_count": 40,
+  "final_eligible_candidate_count": 2,
+  "final_selected_article_count": 2,
+  "reporter_selected_but_final_excluded_count": null,
+  "ai_selected_article_count": 2,
+  "underfilled": false,
+  "publish_ready": false,
+  "selection_publish_ready": false,
+  "final_publish_ready": false,
+  "review_gate_passed": true,
+  "publish_gate_passed": false,
+  "min_final_articles": 1,
+  "max_final_articles": 5,
+  "absolute_min_reviewable_articles": 0,
+  "min_non_fallback_publish_ready_articles": 0,
+  "composition_mode": "NEEDS_FIX",
+  "selection_composition_mode": "NEEDS_FIX",
+  "composition_reason": "Article Composition Policy passed with 1 Primary Camera Stack article(s) and 1 supporting main article(s).",
+  "composition_summary": {
+    "selected_article_count": 2,
+    "bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 1,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 1,
+    "fallback_topic_count": 1
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 2,
+    "bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 1,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 1,
+    "fallback_topic_count": 1
+  },
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 2,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 0,
+    "required_reserve_candidate_count": 0,
+    "primary_camera_stack_candidate_count": 1,
+    "required_primary_camera_stack_candidate_count": 0,
+    "camera_stack_candidate_count": 1,
+    "required_camera_stack_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 0,
+    "camera_adjacent_candidate_count": 1,
+    "supporting_candidate_count": 1,
+    "selected_article_count": 2,
+    "selected_primary_camera_stack_count": 1
+  },
+  "shortage_reason_codes": [],
+  "publish_gate_reason_codes": [],
+  "publish_gate_reason_summary": [],
+  "publish_ready_composition_policy": {
+    "primaryCameraStackMinRequired": 0,
+    "directAospCameraOrDriverMinRequired": 0,
+    "supportingMainMaxAllowed": 1,
+    "directAospCameraOrDriverBuckets": [
+      "direct_aosp_camera",
+      "camera_driver_image_pipeline"
+    ]
+  },
+  "source_parser_hints": [
+    {
+      "code": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
+      "source_id": "unknown",
+      "reason": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "editor_review_required": true,
+  "non_fallback_reviewable_article_count": 1,
+  "eligible_non_fallback_reviewable_article_count": 1,
+  "primary_camera_stack_topic_count": 1,
+  "supporting_main_article_count": 1,
+  "forbidden_main_article_count": 0,
+  "direct_aosp_camera_count": 0,
+  "camera_driver_image_pipeline_count": 0,
+  "android_platform_camera_adjacent_count": 1,
+  "android_multimedia_camera_output_count": 0,
+  "soc_platform_signal_count": 0,
+  "cpp_ai_tooling_fallback_count": 1,
+  "generic_tech_watchlist_count": 0,
+  "selection_warnings": [],
+  "selection_errors": [],
+  "selection_shortage_hints": [
+    "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+    "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
+    "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+  ],
+  "headline_decision": {
+    "decision": "retained_current_above_margin",
+    "reason": "retained_current_above_margin",
+    "current_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+    "replacement_headline_key": null,
+    "previous_stored_current_score": 98,
+    "runtime_decayed_score": 96,
+    "last_scored_at": "2026-05-24",
+    "scored_at": "2026-05-25",
+    "retained": true,
+    "replaced": false,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": true,
+    "mode": "selected_normally",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": null,
+  "exclusion_reason_summary": [
+    {
+      "reason": "main_eligible=false",
+      "count": 37
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 37
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 33
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 28
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 28
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 9
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 6
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 6
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 3
+    },
+    {
+      "reason": "source_extraction.used_fallback=true",
+      "count": 3
+    }
+  ],
+  "final_exclusion_reason_summary": [
+    {
+      "reason": "main_eligible=false",
+      "count": 37
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 37
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 33
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 28
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 28
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 9
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 6
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 6
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 3
+    },
+    {
+      "reason": "source_extraction.used_fallback=true",
+      "count": 3
+    }
+  ],
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "generation_status": "NEEDS_FIX",
+  "fallback_public_issue": true,
+  "fallback_public_issue_status": "CREATED",
+  "fallback_public_issue_demoted_article_count": 0,
+  "fallback_public_issue_removed_blockers": false,
+  "fallback_public_issue_removed_article_count": 0,
+  "fallback_public_issue_added_article_count": 2,
+  "fallback_public_issue_preserve_article_count": 2,
+  "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
+  "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
+  "editor_review_reason": "AI 자동 발행 기준을 통과하지 못했으므로 merge 발행 전에 편집자 검토가 필요합니다.",
+  "publication_mode": "review_only",
+  "homepage_visibility": "normal",
+  "normal_public_ready": false,
+  "automatic_publish_ready": false,
+  "public_artifact_ready": true,
+  "fallback_public_ready": false,
+  "fallback_only": false,
+  "camera_anchor_count": 1,
+  "homepage_badge": "",
+  "content_quality_score": 97,
+  "camera_relevance_score": 97,
+  "publication_mode_decision": "review_only: public files exist for editor-approved publication, but automatic normal publish gate remains closed.",
+  "original_fact_check_status": "PASS",
+  "original_must_fix_count": 0,
+  "original_source_gap_count": 0,
+  "source_gap_count": 0,
+  "artifact_final_publish_ready": false,
+  "validate_ok": true,
+  "public_newsletter_ready": true,
+  "review_publication_ready": true,
+  "diagnostics_only": false,
+  "homepage_visible_after_merge": true,
+  "public_state": "REVIEW_ONLY_PUBLIC_CREATED",
+  "run_mode": "review_only_public",
+  "effective_homepage_visible": true,
+  "existing_public_artifact_detected": true,
+  "retention_valid": false,
+  "retention_error": "",
+  "public_artifact_policy": "latest_review_publication_ready",
+  "public_artifact_source": "latest_run",
+  "reconciliation_required": false,
+  "reconciliation_action": "upserted_latest_public_entry",
+  "reconciliation_reason": "latest run created a structurally valid review-only public issue",
+  "failure_kind": "editorial_reviewable"
+}
